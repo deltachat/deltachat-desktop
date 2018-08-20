@@ -1,0 +1,25 @@
+{
+  "name": "deltachat-desktop",
+  "version": "1.0.0",
+  "description": "Desktop Application for delta.chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git"
+  },
+  "keywords": [
+    "deltachat",
+    "email",
+    "messaging",
+    "desktop"
+  ],
+  "author": "Karissa McKelvey",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/deltachat/deltachat-desktop/issues"
+  },
+  "homepage": "https://github.com/deltachat/deltachat-desktop#readme"
+}
