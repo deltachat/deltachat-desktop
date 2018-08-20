@@ -1,5 +1,8 @@
 module.exports = {
-  init
+  init,
+  setWindowFocus,
+  onToggleAlwaysOnTop,
+  onToggleFullScreen
 }
 
 const electron = require('electron')
@@ -12,6 +15,20 @@ const config = require('../config')
 function init () {
   menu = electron.Menu.buildFromTemplate(getMenuTemplate())
   electron.Menu.setApplicationMenu(menu)
+}
+
+
+function onToggleAlwaysOnTop (flag) {
+  getMenuItem('Float on Top').checked = flag
+}
+
+function onToggleFullScreen (flag) {
+  getMenuItem('Full Screen').checked = flag
+}
+
+function setWindowFocus (flag) {
+  getMenuItem('Full Screen').enabled = flag
+  getMenuItem('Float on Top').enabled = flag
 }
 
 function getMenuTemplate () {
@@ -115,4 +132,13 @@ function getMenuTemplate () {
     }
   ]
   return template
+}
+
+function getMenuItem (label) {
+  for (let i = 0; i < menu.items.length; i++) {
+    const menuItem = menu.items[i].submenu.items.find(function (item) {
+      return item.label === label
+    })
+    if (menuItem) return menuItem
+  }
 }

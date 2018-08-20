@@ -14,6 +14,9 @@ const PORTABLE_PATH = IS_TEST
 const IS_PRODUCTION = isProduction()
 const IS_PORTABLE = isPortable()
 
+const UI_HEADER_HEIGHT = 38
+const UI_MESSAGE_HEIGHT = 100
+
 module.exports = {
   APP_FILE_ICON: path.join(__dirname, '..', 'static', 'DeltaChatFile'),
   APP_ICON: path.join(__dirname, '..', 'static', 'DeltaChat'),
@@ -46,6 +49,13 @@ module.exports = {
   WINDOW_ABOUT: 'file://' + path.join(__dirname, '..', 'static', 'about.html'),
   WINDOW_MAIN: 'file://' + path.join(__dirname, '..', 'static', 'main.html'),
 
+  WINDOW_INITIAL_BOUNDS: {
+    width: 500,
+    height: UI_HEADER_HEIGHT + (UI_MESSAGE_HEIGHT * 6) // header + 6 messages
+  },
+
+  UI_HEADER_HEIGHT,
+  UI_MESSAGE_HEIGHT,
   WINDOW_MIN_WIDTH: 425
 }
 

@@ -22,6 +22,7 @@ function log (...args) {
 }
 
 function error (...args) {
+  console.error(...args)
   if (app.ipcReady) {
     windows.main.send('error', ...args)
   } else {

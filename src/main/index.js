@@ -3,10 +3,13 @@ console.time('init')
 const electron = require('electron')
 const app = electron.app
 
+const parallel = require('run-parallel')
+
 const config = require('../config')
 const ipc = require('./ipc')
 const log = require('./log')
 const menu = require('./menu')
+const State = require('../renderer/lib/state')
 const windows = require('./windows')
 
 let shouldQuit = false
@@ -17,6 +20,10 @@ if (config.IS_PRODUCTION) {
   // in production mode too.
   process.env.NODE_ENV = 'production'
 }
+
+// (On Windows and Linux, we get a flag. On MacOS, we get special API.)
+const hidden = argv.includes('--hidden') ||
+  (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
 
 if (process.platform === 'win32') {
   const squirrelWin32 = require('./squirrel-win32')
@@ -54,14 +61,17 @@ function init () {
   app.ipcReady = false // main window has finished loading and IPC is ready
   app.isQuitting = false
 
-  app.on('ready', () => onReady(null))
+  parallel({
+    appReady: (cb) => app.on('ready', () => cb(null)),
+    state: (cb) => State.load(cb)
+  }, onReady)
 
   function onReady (err, results) {
     if (err) throw err
 
     isReady = true
 
-    windows.main.init()
+    windows.main.init(results.state, {hidden})
     menu.init()
 
     // Report uncaught exceptions

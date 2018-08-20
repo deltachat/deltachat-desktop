@@ -94,13 +94,6 @@ function init (state, options) {
   }, 1000))
 
   win.on('close', e => {
-    if (process.platform !== 'darwin') {
-      const tray = require('../tray')
-      if (!tray.hasTray()) {
-        app.quit()
-        return
-      }
-    }
     if (!app.isQuitting) {
       e.preventDefault()
       hide()
@@ -228,20 +221,10 @@ function toggleFullScreen (flag) {
 
 function onWindowBlur () {
   menu.setWindowFocus(false)
-
-  if (process.platform !== 'darwin') {
-    const tray = require('../tray')
-    tray.setWindowFocus(false)
-  }
 }
 
 function onWindowFocus () {
   menu.setWindowFocus(true)
-
-  if (process.platform !== 'darwin') {
-    const tray = require('../tray')
-    tray.setWindowFocus(true)
-  }
 }
 
 function getIconPath () {
