@@ -1,3 +1,6 @@
+const path = require('path')
+const DeltaChat = require('deltachat-node')
+
 module.exports = {
   init
 }
@@ -8,6 +11,9 @@ const app = electron.app
 
 const menu = require('./menu')
 const windows = require('./windows')
+const config = require('../config')
+
+let dc
 
 function init () {
   const ipc = electron.ipcMain
@@ -24,6 +30,14 @@ function init () {
   ipc.on('setProgress', (e, ...args) => main.setProgress(...args))
   ipc.on('setTitle', (e, ...args) => main.setTitle(...args))
   ipc.on('show', () => main.show())
-  ipc.on('toggleFullScreen', (e, ...args) => main.toggleFullScreen(...args))
   ipc.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
+
+  /** DELTACHAT **/
+  ipc.on('login', function (e, credentials) {
+    dc = new DeltaChat({
+      addr: credentials.email,
+      mail_pw: credentials.password,
+      cwd: path.join(config.CONFIG_PATH, 'db') // where to store?
+    })
+  })
 }

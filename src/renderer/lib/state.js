@@ -68,6 +68,7 @@ function getDefaultState () {
 function setupStateSaved (cb) {
   const saved = {
     prefs: {}, // for user-defined preferences
+    credentials: {},
     version: config.APP_VERSION /* make sure we can upgrade gracefully later */
   }
   cb(null, saved)

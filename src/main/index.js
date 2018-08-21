@@ -11,6 +11,7 @@ const log = require('./log')
 const menu = require('./menu')
 const State = require('../renderer/lib/state')
 const windows = require('./windows')
+const delta = require('./deltachat')
 
 let shouldQuit = false
 let argv = sliceArgv(process.argv)
@@ -70,8 +71,9 @@ function init () {
     if (err) throw err
 
     isReady = true
+    const state = results.state
 
-    windows.main.init(results.state, {hidden})
+    windows.main.init(state, {hidden})
     menu.init()
     if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
 
@@ -156,4 +158,3 @@ function processArgv (argv) {
     }
   })
 }
-
