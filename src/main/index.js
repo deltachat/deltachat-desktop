@@ -73,6 +73,7 @@ function init () {
 
     windows.main.init(results.state, {hidden})
     menu.init()
+    if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
 
     // Report uncaught exceptions
     process.on('uncaughtException', (err) => {
