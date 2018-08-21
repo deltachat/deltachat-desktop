@@ -15,7 +15,7 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
-  - ./scripts/travis-before-install.sh
+  - ./bin/travis-before-install.sh
 
 install:
   - npm install
