@@ -88,12 +88,6 @@ function load (cb) {
     const state = getDefaultState()
     state.saved = saved
 
-    if (process.type === 'renderer') {
-      // Perf optimization: Save require() calls in the main process
-      const migrations = require('./migrations')
-      migrations.run(state)
-    }
-
     cb(null, state)
   }
 }
