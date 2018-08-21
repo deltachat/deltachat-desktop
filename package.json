@@ -35,7 +35,7 @@
     "application-config": "^1.0.1",
     "arch": "^2.1.1",
     "debounce": "^1.2.0",
-    "deltachat-node": "^0.5.1",
+    "deltachat-node": "deltachat/deltachat-node#no-need-to-nullify",
     "location-history": "^1.1.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
