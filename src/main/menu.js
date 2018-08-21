@@ -1,8 +1,7 @@
 module.exports = {
   init,
   setWindowFocus,
-  onToggleAlwaysOnTop,
-  onToggleFullScreen
+  onToggleAlwaysOnTop
 }
 
 const electron = require('electron')
@@ -22,12 +21,8 @@ function onToggleAlwaysOnTop (flag) {
   getMenuItem('Float on Top').checked = flag
 }
 
-function onToggleFullScreen (flag) {
-  getMenuItem('Full Screen').checked = flag
-}
 
 function setWindowFocus (flag) {
-  getMenuItem('Full Screen').enabled = flag
   getMenuItem('Float on Top').enabled = flag
 }
 
@@ -62,14 +57,6 @@ function getMenuTemplate () {
     {
       label: 'View',
       submenu: [
-        {
-          label: 'Full Screen',
-          type: 'checkbox',
-          accelerator: process.platform === 'darwin'
-            ? 'Ctrl+Command+F'
-            : 'F11',
-          click: () => windows.main.toggleFullScreen()
-        },
         {
           label: 'Float on Top',
           type: 'checkbox',

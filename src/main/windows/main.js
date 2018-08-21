@@ -10,7 +10,6 @@ const main = module.exports = {
   show,
   toggleAlwaysOnTop,
   toggleDevTools,
-  toggleFullScreen,
   win: null
 }
 
@@ -58,7 +57,6 @@ function init (state, options) {
   }
 
   win.webContents.on('dom-ready', () => {
-    menu.onToggleFullScreen(main.win.isFullScreen())
   })
 
   win.webContents.on('will-navigate', (e, url) => {
@@ -72,18 +70,6 @@ function init (state, options) {
 
   win.on('hide', onWindowBlur)
   win.on('show', onWindowFocus)
-
-  win.on('enter-full-screen', () => {
-    menu.onToggleFullScreen(true)
-    send('fullscreenChanged', true)
-    win.setMenuBarVisibility(false)
-  })
-
-  win.on('leave-full-screen', () => {
-    menu.onToggleFullScreen(false)
-    send('fullscreenChanged', false)
-    win.setMenuBarVisibility(true)
-  })
 
   win.on('move', debounce(e => {
     send('windowBoundsChanged', e.sender.getBounds())
@@ -125,12 +111,6 @@ function setAspectRatio (aspectRatio) {
 }
 
 function setBounds (bounds, maximize) {
-  // Do nothing in fullscreen
-  if (!main.win || main.win.isFullScreen()) {
-    log(`setBounds: not setting bounds because we're in full screen`)
-    return
-  }
-
   // Maximize or minimize, if the second argument is present
   if (maximize === true && !main.win.isMaximized()) {
     log('setBounds: maximizing')
@@ -198,25 +178,8 @@ function toggleDevTools () {
   if (main.win.webContents.isDevToolsOpened()) {
     main.win.webContents.closeDevTools()
   } else {
-    main.win.webContents.openDevTools({ detach: true })
+    main.win.webContents.openDevTools({ mode: 'detach' })
   }
-}
-
-function toggleFullScreen (flag) {
-  if (!main.win || !main.win.isVisible()) {
-    return
-  }
-
-  if (flag == null) flag = !main.win.isFullScreen()
-
-  log(`toggleFullScreen ${flag}`)
-
-  if (flag) {
-    // Fullscreen and aspect ratio do not play well together. (Mac)
-    main.win.setAspectRatio(0)
-  }
-
-  main.win.setFullScreen(flag)
 }
 
 function onWindowBlur () {
