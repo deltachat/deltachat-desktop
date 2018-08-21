@@ -23,7 +23,6 @@ function init (credentials) {
 
   dc.on('ALL', (event, data1, data2) => {
     log(event, data1, data2)
-    windows.main.dispatch('render')
   })
 
   dc.on('DC_EVENT_MSGS_CHANGES', (chatId, msgId) => {
