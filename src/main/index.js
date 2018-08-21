@@ -11,7 +11,6 @@ const log = require('./log')
 const menu = require('./menu')
 const State = require('../renderer/lib/state')
 const windows = require('./windows')
-const delta = require('./deltachat')
 
 let shouldQuit = false
 let argv = sliceArgv(process.argv)
