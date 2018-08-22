@@ -9,7 +9,7 @@ const app = electron.app
 const menu = require('./menu')
 const windows = require('./windows')
 
-const Controller = require('./controller')
+const DeltaChat = require('./deltachat')
 
 function init () {
   const ipc = electron.ipcMain
@@ -28,7 +28,9 @@ function init () {
   ipc.on('show', () => main.show())
   ipc.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
 
-  const controller = new Controller()
+  // Our wrapper for controlling deltachat instances
+  const dc = new DeltaChat()
 
-  ipc.on('init', (e, ...args) => controller.init(...args))
+  // Create a new instance
+  ipc.on('init', (e, ...args) => dc.init(...args))
 }
