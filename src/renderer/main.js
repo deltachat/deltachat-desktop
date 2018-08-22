@@ -24,8 +24,6 @@ function onState (err, _state) {
     }
   })
 
-  State.on('stateSaved', () => ipcRenderer.send('stateSaved'))
-
   app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
 
   setupIpc()
@@ -54,7 +52,12 @@ function setupIpc () {
   ipcRenderer.on('log', (e, ...args) => console.log(...args))
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
   ipcRenderer.on('dispatch', (e, ...args) => dispatch(...args))
+
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
+
+  ipcRenderer.send('ipcReady')
+
+  State.on('stateSaved', () => ipcRenderer.send('stateSaved'))
 }
 
 function onWindowBoundsChanged (e, newBounds) {
