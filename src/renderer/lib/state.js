@@ -44,6 +44,11 @@ function getDefaultState () {
     },
     modal: null, /* modal popover */
     errors: [], /* user-facing errors */
+    deltachat: {
+      chats: [],
+      ready: false,
+      statuses: []
+    },
 
     /*
      * Saved state is read from and written to a file every time the app runs.

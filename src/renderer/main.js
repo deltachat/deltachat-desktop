@@ -1,7 +1,6 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 
-
 const {ipcRenderer} = require('electron')
 const config = require('../config')
 const State = require('./lib/state')
@@ -28,7 +27,7 @@ function onState (err, _state) {
 
   setupIpc()
 
-  // setInterval(update, 1000)
+  setInterval(update, 1000)
 }
 
 const dispatchHandlers = {
@@ -66,6 +65,8 @@ function onWindowBoundsChanged (e, newBounds) {
 }
 
 function update () {
+  const deltachat = ipcRenderer.sendSync('render')
+  state.deltachat = deltachat
   app.setState(state)
   updateElectron()
 }

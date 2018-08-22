@@ -33,4 +33,11 @@ function init () {
 
   // Create a new instance
   ipc.on('init', (e, ...args) => dc.init(...args))
+  ipc.on('render', (event) => {
+    event.returnValue = {
+      ready: dc.ready,
+      chats: dc.chats(),
+      statuses: dc.statuses()
+    }
+  })
 }

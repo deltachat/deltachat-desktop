@@ -7,23 +7,16 @@ const config = require('../config')
 
 const MAX_PAGE_LENGTH = 20000
 
-class ChatMessage {
-  constructor (messageId, dc) {
-    this.messageId = messageId
-    this._dc = dc
-  }
-
-  repr () {
-    const msg = this._dc.getMessage(this.messageId)
-    if (msg === null) return ''
-
-    const fromId = msg.getFromId()
-    const isMe = () => fromId === 1
-    const contact = this._dc.getContact(fromId)
-
-    return {
-      contact, isMe, fromId, msg
-    }
+function ChatMessage (messageId, dc) {
+  var msg = dc.getMessage(messageId)
+  if (!msg) return {messageId}
+  var fromId = msg.getFromId()
+  return {
+    messageId,
+    msg,
+    fromId,
+    isMe: fromId === 1,
+    contact: dc.getContact(fromId)
   }
 }
 
@@ -62,19 +55,6 @@ class StatusPage extends AbstractPage {
   }
 }
 
-class StarPage extends AbstractPage {
-  constructor (dc) {
-    super('stars')
-    this._dc = dc
-  }
-
-  lines () {
-    return this._dc.getStarredMessages().map(messageId => {
-      return new ChatMessage(messageId, this._dc)
-    })
-  }
-}
-
 class ChatPage extends AbstractPage {
   constructor (chatId, dc) {
     super('')
@@ -87,7 +67,7 @@ class ChatPage extends AbstractPage {
   }
 
   appendMessage (messageId) {
-    this.append(new ChatMessage(messageId, this._dc))
+    this.append(ChatMessage(messageId, this._dc))
   }
 
   deleteMessage (messageId) {
@@ -102,11 +82,15 @@ class ChatPage extends AbstractPage {
 
 class DeltaChatController {
   // The Controller is the container for a deltachat instance
+  constructor () {
+    this._chats = []
+    this._statusPage = new StatusPage()
+    this._dc = null
+    this.ready = false
+  }
 
   init (credentials) {
     var self = this
-    this._page = 0
-    this._pages = []
 
     // Creates a separate DB file for each login
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
@@ -119,6 +103,7 @@ class DeltaChatController {
 
     dc.open(function () {
       log('Ready')
+      self.ready = true
       self.loadChats()
     })
 
@@ -148,12 +133,12 @@ class DeltaChatController {
     dc.on('DC_EVENT_ERROR', (code, error) => {
       self.error(`${error} (code = ${code})`)
     })
+  }
 
-    this._starPage = new StarPage(dc)
-    this._pages.push(this._starPage)
-
-    this._statusPage = new StatusPage()
-    this._pages.push(this._statusPage)
+  getStarredMessages () {
+    return this._dc.getStarredMessages().map(messageId => {
+      return ChatMessage(messageId, this._dc)
+    })
   }
 
   loadChats () {
@@ -191,12 +176,20 @@ class DeltaChatController {
   }
 
   _getChatPage (chatId) {
-    let page = this._pages.find(p => p.chatId === chatId)
+    let page = this._chats.find(p => p.chatId === chatId)
     if (!page) {
       page = new ChatPage(chatId, this._dc)
-      this._pages.push(page)
+      this._chats.push(page)
     }
     return page
+  }
+
+  chats () {
+    return this._chats
+  }
+
+  statuses () {
+    return this._statusPage.lines()
   }
 
   deleteMessage (chatId, messageId) {
@@ -211,28 +204,22 @@ class DeltaChatController {
   }
 
   deleteChat (chatId) {
-    const index = this._pages.findIndex(page => {
+    const index = this._chats.findIndex(page => {
       return page.chatId === chatId
     })
     if (index !== -1) {
       this._dc.deleteChat(chatId)
-      if (index <= this._page) {
-        this._page--
-      }
-      this._pages.splice(index, 1)
+      this._chats.splice(index, 1)
     }
   }
 
   archiveChat (chatId) {
-    const index = this._pages.findIndex(page => {
+    const index = this._chats.findIndex(page => {
       return page.chatId === chatId
     })
     if (index !== -1) {
       this._dc.archiveChat(chatId, true)
-      if (index <= this._page) {
-        this._page--
-      }
-      this._pages.splice(index, 1)
+      this._chats.splice(index, 1)
     }
   }
 
@@ -261,6 +248,7 @@ class DeltaChatController {
 
   result (line) {
     this._statusPage.append(line)
+    log(line)
   }
 
   warning (line) {
