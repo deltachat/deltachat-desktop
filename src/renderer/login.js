@@ -25,7 +25,7 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     }
-    ipcRenderer.send('login', credentials)
+    ipcRenderer.send('init', credentials)
     event.preventDefault()
   }
 

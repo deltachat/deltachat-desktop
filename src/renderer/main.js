@@ -51,6 +51,7 @@ function dispatch (action, ...args) {
 }
 
 function setupIpc () {
+  ipcRenderer.on('log', (e, ...args) => console.log(...args))
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
   ipcRenderer.on('dispatch', (e, ...args) => dispatch(...args))
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)

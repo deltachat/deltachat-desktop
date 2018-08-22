@@ -44,17 +44,6 @@ class AbstractPage {
     return this._name
   }
 
-  pageUp (height) {
-    const rest = this._allLines.length - height
-    if (rest > 0) {
-      this._scrollback = Math.min(this._scrollback + 1, rest)
-    }
-  }
-
-  pageDown () {
-    this._scrollback = Math.max(0, this._scrollback - 1)
-  }
-
   append (line) {
     this._lines.push(line)
     if (this._lines.length > MAX_PAGE_LENGTH) {
@@ -111,7 +100,7 @@ class ChatPage extends AbstractPage {
   }
 }
 
-class Controller {
+class DeltaChatController {
   // The Controller is the container for a deltachat instance
 
   init (credentials) {
@@ -120,14 +109,16 @@ class Controller {
     this._pages = []
 
     // Creates a separate DB file for each login
-    const dc = this._dc = new DeltaChat({
+    const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
+    log('Using deltachat instance', cwd)
+    var dc = this._dc = new DeltaChat({
       addr: credentials.email,
       mail_pw: credentials.password,
-      cwd: path.join(config.CONFIG_PATH, credentials.email)
+      cwd
     })
-    dc.open()
 
-    dc.on('ready', function () {
+    dc.open(function () {
+      log('Ready')
       self.loadChats()
     })
 
@@ -199,6 +190,15 @@ class Controller {
     this._getChatPage(chatId).appendMessage(messageId)
   }
 
+  _getChatPage (chatId) {
+    let page = this._pages.find(p => p.chatId === chatId)
+    if (!page) {
+      page = new ChatPage(chatId, this._dc)
+      this._pages.push(page)
+    }
+    return page
+  }
+
   deleteMessage (chatId, messageId) {
     this._dc.deleteMessages(messageId)
     this._getChatPage(chatId).deleteMessage(messageId)
@@ -256,6 +256,7 @@ class Controller {
 
   info (line) {
     this._statusPage.append(line)
+    log(line)
   }
 
   result (line) {
@@ -264,75 +265,17 @@ class Controller {
 
   warning (line) {
     this._statusPage.append(line)
+    log.error(line)
   }
 
   error (line) {
     this._statusPage.append(line)
-  }
-
-  currentPage () {
-    return this._pages[this._page]
-  }
-
-  currentPageIndex () {
-    return this._page
-  }
-
-  setCurrentPageIndex (index) {
-    if (index >= 0 && index <= this._pages.length - 1) {
-      this._page = index
-    }
-  }
-
-  isChat () {
-    return typeof this.currentPage().chatId === 'number'
-  }
-
-  nextPage () {
-    this._page = ((this._page + 1) % this._pages.length)
-  }
-
-  prevPage () {
-    const newPage = this._page - 1
-    this._page = newPage < 0 ? this._pages.length - 1 : newPage
-  }
-
-  _selectChatPage (chatId) {
-    const index = this._pages.findIndex(p => p.chatId === chatId)
-    if (index !== -1) {
-      this._page = index
-    }
-  }
-
-  _getChatPage (chatId) {
-    let page = this._pages.find(p => p.chatId === chatId)
-    if (!page) {
-      page = new ChatPage(chatId, this._dc)
-      // TODO we might want to tweak current this._page here
-      this._pages.push(page)
-      this._sortPages()
-    }
-    return page
+    log.error(line)
   }
 
   _getChats () {
     return this._dc.getChats(CONSTANTS.DC_GCL_NO_SPECIALS)
   }
-
-  _sortPages () {
-    this._pages.sort((left, right) => {
-      const leftName = left.name()
-      const rightName = right.name()
-      if (leftName === 'debug' ||
-          leftName === 'status' ||
-          leftName === 'stars') return -1
-
-      if (leftName < rightName) return -1
-      if (leftName === rightName) return 0
-
-      return 1
-    })
-  }
 }
 
-module.exports = Controller
+module.exports = DeltaChatController
