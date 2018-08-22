@@ -93,7 +93,6 @@ function dispatch (...args) {
 
 function hide () {
   if (!main.win) return
-  dispatch('backToList')
   main.win.hide()
 }
 

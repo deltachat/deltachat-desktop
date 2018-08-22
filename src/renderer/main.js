@@ -24,6 +24,8 @@ function onState (err, _state) {
     }
   })
 
+  State.on('stateSaved', () => ipcRenderer.send('stateSaved'))
+
   app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
 
   setupIpc()
@@ -31,8 +33,32 @@ function onState (err, _state) {
   // setInterval(update, 1000)
 }
 
+const dispatchHandlers = {
+  'stateSave': () => State.save(state)
+}
+
+// Events from the UI never modify state directly. Instead they call dispatch()
+function dispatch (action, ...args) {
+  // Log dispatch calls, for debugging
+  console.log('dispatch: %s %o', action, args)
+
+  const handler = dispatchHandlers[action]
+  if (handler) handler(...args)
+  else console.error('Missing dispatch handler: ' + action)
+
+  // Update the virtual DOM
+  update()
+}
+
 function setupIpc () {
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
+  ipcRenderer.on('dispatch', (e, ...args) => dispatch(...args))
+  ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
+}
+
+function onWindowBoundsChanged (e, newBounds) {
+  state.saved.bounds = newBounds
+  dispatch('stateSave')
 }
 
 function update () {
