@@ -6,8 +6,8 @@ class Login extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      email: this.props.credentials.email || process.env.DELTACHAT_EMAIL,
-      password: this.props.credentials.password || process.env.DELTACHAT_PASSWORD
+      email: this.props.credentials.email || process.env.DC_ADDR,
+      password: this.props.credentials.password || process.env.DC_MAIL_PW
     }
 
     this.handleChange = this.handleChange.bind(this)
