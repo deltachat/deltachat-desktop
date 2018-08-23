@@ -58,4 +58,8 @@ For Windows, you'll need Windows 10 with a 1366x768 screen.
 When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse
 or keyboard while the tests are running.
 
+## License
 
+Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
+
+Copyright © 2018 Delta Chat contributors.
