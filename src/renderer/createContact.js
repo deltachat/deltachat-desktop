@@ -42,6 +42,7 @@ class CreateContact extends React.Component {
       } else {
         console.log(`Failed, I guess. returned ${id}`)
       }
+      ipcRenderer.send('render')
     }
 
     // TODO: better frontend email validation

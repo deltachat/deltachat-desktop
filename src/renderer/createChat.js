@@ -29,7 +29,8 @@ class CreateChat extends React.Component {
     var contact = ipcRenderer.sendSync('dispatchSync', 'getContact', contactId)
     if (!contact) return this.handleError(new Error(`Invalid contact id ${contactId}`))
     var chatId = ipcRenderer.sendSync('createChatByContactId', contactId)
-    console.log('created chat with id', chatId)
+    console.log('created chat', chatId)
+    ipcRenderer.send('render')
   }
 
   shouldComponentUpdate (nextProps, nextState) {

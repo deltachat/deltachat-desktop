@@ -93,7 +93,7 @@ class DeltaChatController {
     }
   }
 
-  init (credentials) {
+  init (credentials, cb) {
     var self = this
 
     // Creates a separate DB file for each login
@@ -112,6 +112,7 @@ class DeltaChatController {
       log('Ready')
       self.ready = true
       self.loadChats()
+      if (cb) cb()
     })
 
     dc.on('ALL', (event, data1, data2) => {

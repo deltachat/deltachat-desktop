@@ -26,33 +26,18 @@ function onState (err, _state) {
   app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
 
   setupIpc()
-
-  setInterval(update, 1000)
-}
-
-const dispatchHandlers = {
-  'stateSave': () => State.save(state)
-}
-
-// Events from the UI never modify state directly. Instead they call dispatch()
-function dispatch (action, ...args) {
-  // Log dispatch calls, for debugging
-  console.log('dispatch: %s %o', action, args)
-
-  const handler = dispatchHandlers[action]
-  if (handler) handler(...args)
-  else console.error('Missing dispatch handler: ' + action)
-
-  // Update the virtual DOM
-  update()
 }
 
 function setupIpc () {
   ipcRenderer.on('log', (e, ...args) => console.log(...args))
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
-  ipcRenderer.on('dispatch', (e, ...args) => dispatch(...args))
+  ipcRenderer.on('stateSave', (e) => State.save(state))
 
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
+
+  ipcRenderer.on('render', (e, deltachat) => {
+    update(deltachat)
+  })
 
   ipcRenderer.send('ipcReady')
 
@@ -61,11 +46,10 @@ function setupIpc () {
 
 function onWindowBoundsChanged (e, newBounds) {
   state.saved.bounds = newBounds
-  dispatch('stateSave')
+  State.save(state)
 }
 
-function update () {
-  const deltachat = ipcRenderer.sendSync('render')
+function update (deltachat) {
   state.deltachat = deltachat
   app.setState(state)
   updateElectron()

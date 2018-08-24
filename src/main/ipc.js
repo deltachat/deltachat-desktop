@@ -34,7 +34,11 @@ function init () {
   const dc = new DeltaChat()
 
   // Create a new instance
-  ipc.on('init', (e, ...args) => dc.init(...args))
+  ipc.on('init', (e, ...args) => {
+    dc.init(...args, function () {
+      render()
+    })
+  })
 
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
@@ -46,11 +50,13 @@ function init () {
   ipc.on('dispatch', (e, ...args) => dc.dispatch(...args))
 
   // This needs to be JSON serializable for rendering to the frontend.
-  ipc.on('render', (e) => {
-    e.returnValue = dc.render()
-  })
+  ipc.on('render', render)
 
   ipc.on('createChatByContactId', (e, ...args) => {
     e.returnValue = dc.createChatByContactId(...args)
   })
+
+  function render () {
+    windows.main.send('render', dc.render())
+  }
 }
