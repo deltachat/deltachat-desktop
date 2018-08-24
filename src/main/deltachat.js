@@ -85,6 +85,7 @@ class DeltaChatController {
   constructor () {
     this._chats = []
     this._statusPage = new StatusPage()
+    this._deadDrops = []
     this._dc = null
     this.ready = false
     this.credentials = {
@@ -147,6 +148,18 @@ class DeltaChatController {
     return this._dc.getStarredMessages().map(messageId => {
       return ChatMessage(messageId, this._dc)
     })
+  }
+
+  queueDeadDropMessage (message) {
+    const contactId = message.getFromId()
+
+    const index = this._deadDrops.findIndex(obj => {
+      return obj.contactId === contactId
+    })
+
+    if (index !== -1) return
+    const contact = this._dc.getContact(contactId)
+    this._deadDrops.push(contact)
   }
 
   loadChats () {
