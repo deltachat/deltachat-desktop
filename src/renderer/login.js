@@ -1,5 +1,4 @@
 const React = require('react')
-
 const {ipcRenderer} = require('electron')
 
 class Login extends React.Component {

@@ -87,6 +87,10 @@ class DeltaChatController {
     this._statusPage = new StatusPage()
     this._dc = null
     this.ready = false
+    this.credentials = {
+      email: null,
+      cwd: null
+    }
   }
 
   init (credentials) {
@@ -100,6 +104,8 @@ class DeltaChatController {
       mail_pw: credentials.password,
       cwd
     })
+    self.credentials.email = credentials.email
+    self.credentials.cwd = cwd
 
     dc.open(function () {
       log('Ready')
@@ -142,13 +148,23 @@ class DeltaChatController {
   }
 
   loadChats () {
-    this._getChats().forEach(id => this._loadChat(id))
+    var chats = this._getChats()
+    log('got chats', chats)
+    chats.forEach(id => this._loadChat(id))
   }
 
   _loadChat (chatId) {
+    log('loading chat', chatId)
     const chat = this._getChatPage(chatId)
     const messageIds = this._dc.getChatMessages(chatId, 0, 0)
     messageIds.forEach(id => chat.appendMessage(id))
+  }
+
+  dispatch (name, ...args) {
+    var handler = this._dc[name]
+    if (!handler) throw new Error(`fn with name ${name} does not exist`)
+    console.log('dispatch', handler, args)
+    return handler.bind(this._dc)(...args)
   }
 
   chatWithContact (contactId) {
@@ -176,6 +192,7 @@ class DeltaChatController {
   }
 
   _getChatPage (chatId) {
+    console.log('get chat page', chatId)
     let page = this._chats.find(p => p.chatId === chatId)
     if (!page) {
       page = new ChatPage(chatId, this._dc)
@@ -262,7 +279,22 @@ class DeltaChatController {
   }
 
   _getChats () {
-    return this._dc.getChats(CONSTANTS.DC_GCL_NO_SPECIALS)
+    return this._dc.getChats(CONSTANTS.DC_CHAT_ID_DEADDROP)
+  }
+
+  contacts (...args) {
+    if (!this._dc) return []
+    else return this._dc.getContacts(...args)
+  }
+
+  render () {
+    return {
+      credentials: this.credentials,
+      ready: this.ready,
+      chats: this.chats(),
+      statuses: this.statuses(),
+      contacts: this.contacts()
+    }
   }
 }
 

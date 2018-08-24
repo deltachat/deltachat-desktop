@@ -1,6 +1,7 @@
 const React = require('react')
 
 const Login = require('./login')
+const Home = require('./home')
 
 // const Stars = require('./stars')
 // const Status = require('./status')
@@ -17,12 +18,11 @@ class App extends React.Component {
     const state = this.props.state
     const deltachat = state.deltachat
 
-    console.log(deltachat.chats)
-
     return (
       <IntlProvider locale={locale}>
         <div>
           { !deltachat.ready && <Login credentials={state.saved.credentials} /> }
+          { deltachat.ready && <Home deltachat={state.deltachat} /> }
         </div>
       </IntlProvider>
     )

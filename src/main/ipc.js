@@ -12,6 +12,8 @@ const windows = require('./windows')
 const DeltaChat = require('./deltachat')
 
 function init () {
+  // Events dispatched by buttons from the frontend
+
   const ipc = electron.ipcMain
 
   ipc.once('ipcReady', function (e) {
@@ -33,11 +35,22 @@ function init () {
 
   // Create a new instance
   ipc.on('init', (e, ...args) => dc.init(...args))
-  ipc.on('render', (event) => {
-    event.returnValue = {
-      ready: dc.ready,
-      chats: dc.chats(),
-      statuses: dc.statuses()
-    }
+
+  // Calls a function directly in the deltachat-node instance and returns the
+  // value (sync)
+  ipc.on('dispatchSync', (e, ...args) => {
+    e.returnValue = dc.dispatch(...args)
+  })
+
+  // Calls the function without returning the value (async)
+  ipc.on('dispatch', (e, ...args) => dc.dispatch(...args))
+
+  // This needs to be JSON serializable for rendering to the frontend.
+  ipc.on('render', (e) => {
+    e.returnValue = dc.render()
+  })
+
+  ipc.on('createChatByContactId', (e, ...args) => {
+    e.returnValue = dc.createChatByContactId(...args)
   })
 }
