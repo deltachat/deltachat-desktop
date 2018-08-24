@@ -107,7 +107,8 @@ class DeltaChatController {
     self.credentials.email = credentials.email
     self.credentials.cwd = cwd
 
-    dc.open(function () {
+    dc.open(function (err) {
+      if (err) return log.error(err)
       log('Ready')
       self.ready = true
       self.loadChats()
