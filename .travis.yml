@@ -1,6 +1,6 @@
 sudo: true
 
-node_js: 
+node_js:
   - 10
 
 addons:
@@ -22,9 +22,6 @@ install:
 
 script:
   - npm test
-
-after_success:
-  - npm run coverage
 
 notifications:
   email: false

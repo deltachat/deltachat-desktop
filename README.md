@@ -2,6 +2,8 @@
 
 > Desktop Application for delta.chat
 
+[![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
+
 ## How to Contribute
 
 ### Get the code
