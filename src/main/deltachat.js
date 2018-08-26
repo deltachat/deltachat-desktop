@@ -95,8 +95,6 @@ class DeltaChatController {
   }
 
   init (credentials, cb) {
-    var self = this
-
     // Creates a separate DB file for each login
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
@@ -105,14 +103,14 @@ class DeltaChatController {
       mail_pw: credentials.password,
       cwd
     })
-    self.credentials.email = credentials.email
-    self.credentials.cwd = cwd
+    this.credentials.email = credentials.email
+    this.credentials.cwd = cwd
 
-    dc.open(function (err) {
+    dc.open(err => {
       if (err) throw err
       log('Ready')
-      self.ready = true
-      self.loadChats()
+      this.ready = true
+      this.loadChats()
       if (cb) cb()
     })
 
@@ -125,22 +123,22 @@ class DeltaChatController {
       if (msg === null) return
 
       if (msg.getState().isPending()) {
-        self.appendMessage(chatId, msgId)
+        this.appendMessage(chatId, msgId)
       } else if (msg.isDeadDrop()) {
-        self.queueDeadDropMessage(msg)
+        this.queueDeadDropMessage(msg)
       }
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      self.appendMessage(chatId, msgId)
+      this.appendMessage(chatId, msgId)
     })
 
     dc.on('DC_EVENT_WARNING', function (warning) {
-      self.warning(warning)
+      this.warning(warning)
     })
 
     dc.on('DC_EVENT_ERROR', (code, error) => {
-      self.error(`${error} (code = ${code})`)
+      this.error(`${error} (code = ${code})`)
     })
   }
 
