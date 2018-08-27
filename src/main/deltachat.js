@@ -5,77 +5,66 @@ const path = require('path')
 const log = require('./log')
 const config = require('../config')
 
-const MAX_PAGE_LENGTH = 20000
+class ChatMessage {
+  constructor (messageId, dc) {
+    var msg = dc.getMessage(messageId)
+    this.fromId = msg && msg.getFromId()
+    if (!this.fromId) return
 
-function ChatMessage (messageId, dc) {
-  var msg = dc.getMessage(messageId)
-  if (!msg) return {messageId}
-  var fromId = msg.getFromId()
-  return {
-    messageId,
-    msg,
-    fromId,
-    isMe: fromId === 1,
-    contact: dc.getContact(fromId)
+    this.msg = msg
+    this.messageId = messageId
+    this.isMe = this.fromId === 1
+    this.contact = dc.getContact(this.fromId)
+  }
+
+  toJson () {
+    return {
+      fromId: this.fromId,
+      messageId: this.messageId,
+      isMe: this.isMe,
+      contact: this.contact.toJson(),
+      msg: this.msg.toJson()
+    }
   }
 }
 
-class AbstractPage {
-  constructor (name, config) {
-    this._name = name
-    this._lines = []
-    this._allLines = []
-    this._scrollback = 0
-    this._config = config
+class ChatPage {
+  constructor (chatId, dc) {
+    this._messages = []
+    this.chatId = chatId
+    this._dc = dc
+    this.chat = this._dc.getChat(this.chatId)
+    this.name = this.chat.getName()
   }
 
-  lines () {
-    return this._lines
-  }
-
-  name () {
-    return this._name
+  messages () {
+    return this._messages
   }
 
   append (line) {
-    this._lines.push(line)
-    if (this._lines.length > MAX_PAGE_LENGTH) {
-      this._lines.shift()
-    }
+    this._messages.push(line)
   }
 
   clear () {
-    this._lines = []
-  }
-}
-
-class StatusPage extends AbstractPage {
-  constructor () {
-    super('status')
-  }
-}
-
-class ChatPage extends AbstractPage {
-  constructor (chatId, dc) {
-    super('')
-    this.chatId = chatId
-    this._dc = dc
+    this._messages = []
   }
 
-  name () {
-    return `#${this._dc.getChat(this.chatId).getName()}`
+  toJson () {
+    var chat = this.chat.toJson()
+    chat.messages = this._messages.map((m) => m.toJson())
+    return chat
   }
 
   appendMessage (messageId) {
-    this.append(ChatMessage(messageId, this._dc))
+    this.append(new ChatMessage(messageId, this._dc))
   }
 
   deleteMessage (messageId) {
-    const index = this._lines.findIndex(line => {
-      return line.messageId === messageId
+    const index = this._messages.findIndex(m => {
+      return m.messageId === messageId
     })
     if (index !== -1) {
-      this._lines.splice(index, 1)
+      this._messages.splice(index, 1)
     }
   }
 }
@@ -84,8 +73,6 @@ class DeltaChatController {
   // The Controller is the container for a deltachat instance
   constructor () {
     this._chats = []
-    this._statusPage = new StatusPage()
-    this._deadDrops = []
     this._dc = null
     this.ready = false
     this.credentials = {
@@ -94,8 +81,9 @@ class DeltaChatController {
     }
   }
 
-  init (credentials, cb) {
+  init (credentials, render) {
     // Creates a separate DB file for each login
+     var self = this
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
     var dc = this._dc = new DeltaChat({
@@ -109,18 +97,19 @@ class DeltaChatController {
     dc.open(err => {
       if (err) throw err
       log('Ready')
-      this.ready = true
-      this.loadChats()
-      if (cb) cb()
+      self.ready = true
+      self.loadChats()
+      render()
     })
 
     dc.on('ALL', (event, data1, data2) => {
       log(event, data1, data2)
     })
 
-    dc.on('DC_EVENT_MSGS_CHANGES', (chatId, msgId) => {
+    dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+      log('event msgs changes', chatId, msgId)
       const msg = dc.getMessage(msgId)
-      if (msg === null) return
+      if (!msg) return
 
       if (msg.getState().isPending()) {
         this.appendMessage(chatId, msgId)
@@ -130,34 +119,23 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.appendMessage(chatId, msgId)
+      log('incoming message', chatId, msgId)
+      self.appendMessage(chatId, msgId)
     })
 
     dc.on('DC_EVENT_WARNING', function (warning) {
-      this.warning(warning)
+      self.warning(warning)
     })
 
     dc.on('DC_EVENT_ERROR', (code, error) => {
-      this.error(`${error} (code = ${code})`)
+      self.error(`${error} (code = ${code})`)
     })
   }
 
   getStarredMessages () {
     return this._dc.getStarredMessages().map(messageId => {
-      return ChatMessage(messageId, this._dc)
+      return new ChatMessage(messageId, this._dc)
     })
-  }
-
-  queueDeadDropMessage (message) {
-    const contactId = message.getFromId()
-
-    const index = this._deadDrops.findIndex(obj => {
-      return obj.contactId === contactId
-    })
-
-    if (index !== -1) return
-    const contact = this._dc.getContact(contactId)
-    this._deadDrops.push(contact)
   }
 
   loadChats () {
@@ -173,14 +151,16 @@ class DeltaChatController {
     messageIds.forEach(id => chat.appendMessage(id))
   }
 
-  dispatch (name, ...args) {
-    var handler = this._dc[name]
-    if (!handler) throw new Error(`fn with name ${name} does not exist`)
-    console.log('dispatch', handler, args)
-    return handler.bind(this._dc)(...args)
+  createChat (...args) {
+    this._dc.createChat(...args)
+  }
+
+  createContact (...args) {
+    this._dc.createContact(...args)
   }
 
   chatWithContact (contactId) {
+    log('chat with contact', contactId)
     const contact = this._dc.getContact(contactId)
     if (this._dc.getContacts().indexOf(contactId) === -1) {
       const address = contact.getAddress()
@@ -190,10 +170,10 @@ class DeltaChatController {
     }
     const chatId = this.createChatByContactId(contactId)
     this._loadChat(chatId)
-    this._selectChatPage(chatId)
   }
 
   blockContact (contactId) {
+    log('block contact', contactId)
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
@@ -205,7 +185,6 @@ class DeltaChatController {
   }
 
   _getChatPage (chatId) {
-    console.log('get chat page', chatId)
     let page = this._chats.find(p => p.chatId === chatId)
     if (!page) {
       page = new ChatPage(chatId, this._dc)
@@ -215,11 +194,7 @@ class DeltaChatController {
   }
 
   chats () {
-    return this._chats
-  }
-
-  statuses () {
-    return this._statusPage.lines()
+    return this._chats.map((c) => c.toJson())
   }
 
   deleteMessage (chatId, messageId) {
@@ -257,9 +232,6 @@ class DeltaChatController {
     const currChatId = this.currentPage().chatId
     this._dc.archiveChat(chatId, false)
     this._loadChat(chatId)
-    if (typeof currChatId === 'number') {
-      this._selectChatPage(currChatId)
-    }
   }
 
   onEnter (line) {
@@ -272,27 +244,23 @@ class DeltaChatController {
   }
 
   info (line) {
-    this._statusPage.append(line)
     log(line)
   }
 
   result (line) {
-    this._statusPage.append(line)
     log(line)
   }
 
   warning (line) {
-    this._statusPage.append(line)
     log.error(line)
   }
 
   error (line) {
-    this._statusPage.append(line)
     log.error(line)
   }
 
   _getChats () {
-    return this._dc.getChats(CONSTANTS.DC_CHAT_ID_DEADDROP)
+    return this._dc.getChats()
   }
 
   contacts (...args) {
@@ -304,9 +272,7 @@ class DeltaChatController {
     return {
       credentials: this.credentials,
       ready: this.ready,
-      chats: this.chats(),
-      statuses: this.statuses(),
-      contacts: this.contacts()
+      chats: this.chats()
     }
   }
 }

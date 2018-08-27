@@ -8,6 +8,7 @@ const app = electron.app
 
 const menu = require('./menu')
 const windows = require('./windows')
+const log = require('./log')
 
 const DeltaChat = require('./deltachat')
 
@@ -35,26 +36,32 @@ function init () {
 
   // Create a new instance
   ipc.on('init', (e, ...args) => {
-    dc.init(...args, function () {
-      render()
-    })
+    dc.init(...args, render)
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
-    e.returnValue = dc.dispatch(...args)
+    e.returnValue = dispatch(...args)
+    render()
   })
 
   // Calls the function without returning the value (async)
-  ipc.on('dispatch', (e, ...args) => dc.dispatch(...args))
+  ipc.on('dispatch', (e, ...args) => {
+    console.log('returnValue', e.returnValue)
+    dispatch(...args)
+    render()
+  })
 
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
 
-  ipc.on('createChatByContactId', (e, ...args) => {
-    e.returnValue = dc.createChatByContactId(...args)
-  })
+  function dispatch (name, ...args) {
+    var handler = dc[name]
+    if (!handler) throw new Error(`fn with name ${name} does not exist`)
+    log('dispatch', handler, args)
+    return handler.bind(dc)(...args)
+  }
 
   function render () {
     windows.main.send('render', dc.render())
