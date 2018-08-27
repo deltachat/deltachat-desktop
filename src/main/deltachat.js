@@ -265,14 +265,15 @@ class DeltaChatController {
 
   contacts (...args) {
     if (!this._dc) return []
-    else return this._dc.getContacts(...args)
+    else return this._dc.getContacts(...args).map((id) => this._dc.getContact(id).toJson())
   }
 
   render () {
     return {
       credentials: this.credentials,
       ready: this.ready,
-      chats: this.chats()
+      chats: this.chats(),
+      contacts: this.contacts()
     }
   }
 }

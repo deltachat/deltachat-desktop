@@ -1,35 +1,11 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
-class CreateChat extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      contactId: null
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+const ChatView = require('./chatview')
 
+class CreateChat extends React.Component {
   handleError (err) {
     this.setState({error: err.message})
-  }
-
-  handleChange (event) {
-    var state = {}
-    state[event.target.id] = event.target.value
-    delete state.error
-    this.setState(state)
-  }
-
-  handleSubmit (event) {
-    event.preventDefault()
-
-    const {contactId} = this.state
-    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contactId)
-    if (!chatId) return this.handleError(new Error(`Invalid contact id ${contactId}`))
-    console.log('created chat', chatId)
-    ipcRenderer.send('render')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -37,14 +13,24 @@ class CreateChat extends React.Component {
     return (this.state !== nextState)
   }
 
+  chooseContact (contact) {
+    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
+    if (!chatId) return this.handleError(new Error(`Invalid contact id ${contact.id}`))
+    this.props.changeScreen(ChatView, {chatId})
+  }
+
   render () {
+    const {deltachat} = this.props
+
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.error && <div>{this.state.error}</div>}
-          <input id='contactId' type='contactId' value={this.state.contactId} onChange={this.handleChange} />
-          <input type='submit' value='Submit' />
-        </form>
+        <div>
+          {deltachat.contacts.map((contact) => {
+            return (<div onClick={this.chooseContact.bind(this, contact)}>
+              {contact.nameAndAddr}
+            </div>)
+          })}
+        </div>
       </div>
     )
   }

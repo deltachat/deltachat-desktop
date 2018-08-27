@@ -3,6 +3,7 @@ const {ipcRenderer} = require('electron')
 
 const CreateChat = require('./createChat')
 const CreateContact = require('./createContact')
+const ChatView = require('./chatview')
 
 class Chats extends React.Component {
   constructor (props) {
@@ -11,6 +12,10 @@ class Chats extends React.Component {
       deadDropContact: false
     }
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
+  }
+
+  onChatClick (chat) {
+    this.props.changeScreen(ChatView, {chatId: chat.id})
   }
 
   onCreateContact () {
@@ -25,8 +30,9 @@ class Chats extends React.Component {
     this.props.changeScreen(CreateChat)
   }
 
-  onDeadDropClick (deadDropContact) {
-    this.setState({deadDropContact})
+  onDeadDropClick (chat) {
+    // TODO: get contact from chat?
+    this.setState({deadDropContact: chat})
   }
 
   render () {
@@ -47,19 +53,18 @@ class Chats extends React.Component {
 
         <div className='list-messages'>
           {deltachat.chats.map((chat) => {
+            console.log(chat)
             if (!chat) return
             if (chat.id === 1) {
-              var contact = chat.messages[0].contact
               return (<div>
-                <button onClick={this.onDeadDropClick.bind(this, contact)}>
-                  New message from {contact.address}
+                <button onClick={this.onDeadDropClick.bind(this, chat)}>
+                  New message from {chat.name}
                 </button>
               </div>)
             }
             return (
-              <div>
+              <div onClick={this.onChatClick.bind(this, chat)}>
                 {chat.summary.timestamp}
-
                 {chat.name}
                 <div id='summary'>{chat.summary.text2}</div>
               </div>
