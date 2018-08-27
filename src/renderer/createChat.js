@@ -26,9 +26,8 @@ class CreateChat extends React.Component {
     event.preventDefault()
 
     const {contactId} = this.state
-    var contact = ipcRenderer.sendSync('dispatchSync', 'getContact', contactId)
-    if (!contact) return this.handleError(new Error(`Invalid contact id ${contactId}`))
-    var chatId = ipcRenderer.sendSync('createChatByContactId', contactId)
+    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contactId)
+    if (!chatId) return this.handleError(new Error(`Invalid contact id ${contactId}`))
     console.log('created chat', chatId)
     ipcRenderer.send('render')
   }
@@ -42,7 +41,7 @@ class CreateChat extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          {this.state.error && <div>this.state.error</div>}
+          {this.state.error && <div>{this.state.error}</div>}
           <input id='contactId' type='contactId' value={this.state.contactId} onChange={this.handleChange} />
           <input type='submit' value='Submit' />
         </form>

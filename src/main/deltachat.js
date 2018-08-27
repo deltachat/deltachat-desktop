@@ -31,10 +31,9 @@ class ChatMessage {
 class ChatPage {
   constructor (chatId, dc) {
     this._messages = []
-    this.chatId = chatId
     this._dc = dc
+    this.chatId = chatId
     this.chat = this._dc.getChat(this.chatId)
-    this.name = this.chat.getName()
   }
 
   messages () {
@@ -52,6 +51,7 @@ class ChatPage {
   toJson () {
     var chat = this.chat.toJson()
     chat.messages = this._messages.map((m) => m.toJson())
+    chat.summary = this.summary.toJson()
     return chat
   }
 
@@ -83,7 +83,7 @@ class DeltaChatController {
 
   init (credentials, render) {
     // Creates a separate DB file for each login
-     var self = this
+    var self = this
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
     var dc = this._dc = new DeltaChat({
@@ -139,14 +139,26 @@ class DeltaChatController {
   }
 
   loadChats () {
-    var chats = this._getChats()
-    log('got chats', chats)
-    chats.forEach(id => this._loadChat(id))
+    var list = this._dc.getChatList()
+    this._chatList = list
+    var count = list.getCount()
+    log('got', count, 'chats')
+    for (let i = 0; i < count; i++) {
+      this._loadChatPage(list.getChatId(i))
+    }
   }
 
-  _loadChat (chatId) {
-    log('loading chat', chatId)
-    const chat = this._getChatPage(chatId)
+  getChatSummary (chatId) {
+    log('getting chat summary', chatId)
+    const index = this._chats.findIndex(page => {
+      return page.chatId === chatId
+    })
+    if (index < 0) return this.error(`summary for ${index} does not exist`)
+    return this._chatList.getSummary(index)
+  }
+
+  loadMessages (chatId) {
+    const chat = this._loadChatPage(chatId)
     const messageIds = this._dc.getChatMessages(chatId, 0, 0)
     messageIds.forEach(id => chat.appendMessage(id))
   }
@@ -181,15 +193,16 @@ class DeltaChatController {
   }
 
   appendMessage (chatId, messageId) {
-    this._getChatPage(chatId).appendMessage(messageId)
+    this._loadChatPage(chatId).appendMessage(messageId)
   }
 
-  _getChatPage (chatId) {
+  _loadChatPage (chatId) {
     let page = this._chats.find(p => p.chatId === chatId)
     if (!page) {
       page = new ChatPage(chatId, this._dc)
       this._chats.push(page)
     }
+    page.summary = this.getChatSummary(chatId)
     return page
   }
 
@@ -199,12 +212,14 @@ class DeltaChatController {
 
   deleteMessage (chatId, messageId) {
     this._dc.deleteMessages(messageId)
-    this._getChatPage(chatId).deleteMessage(messageId)
+    this._loadChatPage(chatId).deleteMessage(messageId)
   }
 
   createChatByContactId (contactId) {
+    const contact = this._dc.getContact(contactId)
+    if (!contact) return 0
     const chatId = this._dc.createChatByContactId(contactId)
-    this._getChatPage(chatId)
+    this._loadChatPage(chatId)
     return chatId
   }
 
@@ -225,21 +240,6 @@ class DeltaChatController {
     if (index !== -1) {
       this._dc.archiveChat(chatId, true)
       this._chats.splice(index, 1)
-    }
-  }
-
-  unArchiveChat (chatId) {
-    const currChatId = this.currentPage().chatId
-    this._dc.archiveChat(chatId, false)
-    this._loadChat(chatId)
-  }
-
-  onEnter (line) {
-    const page = this.currentPage()
-    if (typeof page.chatId === 'number') {
-      // TODO this seems to take some time, measure this and log
-      // to debug window
-      this._dc.sendTextMessage(page.chatId, line)
     }
   }
 

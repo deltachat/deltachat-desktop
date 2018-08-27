@@ -42,13 +42,13 @@ function init () {
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
+    console.log('e', e)
     e.returnValue = dispatch(...args)
     render()
   })
 
   // Calls the function without returning the value (async)
   ipc.on('dispatch', (e, ...args) => {
-    console.log('returnValue', e.returnValue)
     dispatch(...args)
     render()
   })
@@ -57,10 +57,10 @@ function init () {
   ipc.on('render', render)
 
   function dispatch (name, ...args) {
+    console.log('dispatch', name, ...args)
     var handler = dc[name]
     if (!handler) throw new Error(`fn with name ${name} does not exist`)
-    log('dispatch', handler, args)
-    return handler.bind(dc)(...args)
+    return handler.call(dc, ...args)
   }
 
   function render () {

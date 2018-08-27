@@ -58,7 +58,10 @@ class Chats extends React.Component {
             }
             return (
               <div>
+                {chat.summary.timestamp}
+
                 {chat.name}
+                <div id='summary'>{chat.summary.text2}</div>
               </div>
             )
           })}
