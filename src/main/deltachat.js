@@ -168,6 +168,10 @@ class DeltaChatController {
     messageIds.forEach(id => chat.appendMessage(id))
   }
 
+  sendMessage (...args) {
+    return this._dc.sendTextMessage(...args)
+  }
+
   createChat (...args) {
     return this._dc.createChat(...args)
   }

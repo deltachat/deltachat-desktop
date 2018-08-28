@@ -4,7 +4,26 @@ const {ipcRenderer} = require('electron')
 const Back = require('./back')
 
 class ChatView extends React.Component {
-  comonentWillUnmount () {
+  constructor (props) {
+    super(props)
+    this.state = {
+      value: undefined
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange (e) {
+    var value = e.target.value
+    this.setState({value})
+  }
+
+  writeMessage () {
+    var chatId = this.props.screenProps.chatId
+    ipcRenderer.send('dispatch', 'sendMessage', chatId, this.state.value)
+    this.setState({value: undefined})
+  }
+
+  componentWillUnmount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'clearChatPage', chatId)
   }
@@ -30,6 +49,10 @@ class ChatView extends React.Component {
         {chat.messages.map((message) => {
           return (<div> {message.msg.text} </div>)
         })}
+      </div>
+      <div>
+        <input onChange={this.handleChange} id='writeMessage' value={this.state.value} type='text' placeholder='Say something...' />
+        <button type='submit' onClick={this.writeMessage.bind(this)}>Send</button>
       </div>
     </div>)
   }
