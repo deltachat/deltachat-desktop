@@ -48,6 +48,7 @@ class ChatView extends React.Component {
     const chat = this.getChat()
 
     return (<div>
+      {this.state.error && this.state.error}
       <Back onClick={this.props.changeScreen} />
       <div>
         {chat.messages.map((message) => {

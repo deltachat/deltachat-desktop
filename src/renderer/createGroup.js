@@ -8,7 +8,7 @@ class CreateGroup extends React.Component {
     super(props)
     this.state = {
       group: {},
-      name: 'My Group'
+      name: undefined
     }
   }
 
@@ -64,6 +64,7 @@ class CreateGroup extends React.Component {
   createGroup () {
     var contacts = Object.keys(this.state.group).map((id) => this.state.group[id])
     if (!contacts.length) return this.handleError(new Error('Add at least one contact to the group'))
+    if (!this.state.name) return this.handleError(new Error('Group name required.'))
     var {chatId, results} = ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', contacts, this.state.name)
     this.props.changeScreen('ChatView', {chatId})
   }
@@ -78,6 +79,7 @@ class CreateGroup extends React.Component {
 
     return (
       <div>
+        {this.state.error && this.state.error}
         <div>
           <Back onClick={this.props.changeScreen} />
           <button onClick={this.createGroup.bind(this)}>Create Group</button>

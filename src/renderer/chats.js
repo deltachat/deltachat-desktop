@@ -37,6 +37,7 @@ class Chats extends React.Component {
 
     return (
       <div>
+        {this.state.error && this.state.error}
         <DeadDropDialog deadDropContact={deadDropContact} onDeadDropClose={this.onDeadDropClose} />
         <div className='header'>
           <div>

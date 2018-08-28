@@ -66,12 +66,12 @@ class CreateContact extends React.Component {
   render () {
     return (
       <div>
+        {this.state.error && this.state.error}
         <div>
           <Back onClick={this.back} />
         </div>
         <div>
           <form onSubmit={this.handleSubmit}>
-            {this.state.error && this.state.error}
             <input placeholder='E-Mail Address' id='email' type='text' value={this.state.email} onChange={this.handleChange} />
             <input placeholder='Name' id='name' type='name' value={this.state.name} onChange={this.handleChange} />
             <input type='submit' value='Submit' />

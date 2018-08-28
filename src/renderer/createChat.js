@@ -39,6 +39,7 @@ class CreateChat extends React.Component {
 
     return (
       <div>
+        {this.state.error && this.state.error}
         <div>
           <Back onClick={this.props.changeScreen} />
           <button
