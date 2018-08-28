@@ -2,21 +2,24 @@ const React = require('react')
 const {ipcRenderer} = require('electron')
 
 const Chats = require('./chats')
+const ChatView = require('./chatview')
+const CreateChat = require('./createChat')
+const CreateContact = require('./createContact')
 
 class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      Screen: Chats,
+      screen: 'Chats',
       screenProps: {}
     }
     this.changeScreen = this.changeScreen.bind(this)
   }
 
-  changeScreen (Screen, screenProps) {
-    if (!Screen) Screen = Chats
+  changeScreen (screen, screenProps) {
+    if (!screen) screen = Chats
     if (!screenProps) screenProps = {}
-    this.setState({Screen, screenProps})
+    this.setState({screen, screenProps})
     ipcRenderer.send('render')
   }
 
@@ -24,8 +27,23 @@ class Home extends React.Component {
     // renderer/main.js polls every second and updates the deltachat
     // property with current state of database.
     const {deltachat} = this.props
-    const {Screen, screenProps} = this.state
-    console.log('rendering', Screen, deltachat)
+    const {screen, screenProps} = this.state
+
+    var Screen
+    switch (screen) {
+      case 'CreateChat':
+        Screen = CreateChat
+        break
+      case 'CreateContact':
+        Screen = CreateContact
+        break
+      case 'ChatView':
+        Screen = ChatView
+        break
+      default:
+        Screen = Chats
+        break
+    }
 
     return (
       <div>

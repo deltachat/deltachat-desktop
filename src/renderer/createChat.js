@@ -1,7 +1,7 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
-const ChatView = require('./chatview')
+const Back = require('./back')
 
 class CreateChat extends React.Component {
   handleError (err) {
@@ -13,10 +13,14 @@ class CreateChat extends React.Component {
     return (this.state !== nextState)
   }
 
+  createContact () {
+    this.props.changeScreen('CreateContact')
+  }
+
   chooseContact (contact) {
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
     if (!chatId) return this.handleError(new Error(`Invalid contact id ${contact.id}`))
-    this.props.changeScreen(ChatView, {chatId})
+    this.props.changeScreen('ChatView', {chatId})
   }
 
   render () {
@@ -24,6 +28,10 @@ class CreateChat extends React.Component {
 
     return (
       <div>
+        <div>
+          <Back onClick={this.props.changeScreen} />
+          <button onClick={this.createContact.bind(this)}>Create Contact</button>
+        </div>
         <div>
           {deltachat.contacts.map((contact) => {
             return (<div onClick={this.chooseContact.bind(this, contact)}>

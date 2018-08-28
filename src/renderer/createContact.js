@@ -1,6 +1,8 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
+const Back = require('./back')
+
 class CreateContact extends React.Component {
   constructor (props) {
     super(props)
@@ -11,6 +13,11 @@ class CreateContact extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.back = this.back.bind(this)
+  }
+
+  back () {
+    this.props.changeScreen('CreateChat')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -31,7 +38,7 @@ class CreateContact extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault()
-
+    const {changeScreen} = this.props
     const {name, email} = this.state
 
     function createContact () {
@@ -42,7 +49,8 @@ class CreateContact extends React.Component {
       } else {
         console.log(`Failed, I guess. returned ${id}`)
       }
-      ipcRenderer.send('render')
+      var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', id)
+      changeScreen('ChatView', {chatId})
     }
 
     // TODO: better frontend email validation
@@ -59,12 +67,17 @@ class CreateContact extends React.Component {
   render () {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.error && this.state.error}
-          <input placeholder='E-Mail Address' id='email' type='text' value={this.state.email} onChange={this.handleChange} />
-          <input placeholder='Name' id='name' type='name' value={this.state.name} onChange={this.handleChange} />
-          <input type='submit' value='Submit' />
-        </form>
+        <div>
+          <Back onClick={this.back} />
+        </div>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            {this.state.error && this.state.error}
+            <input placeholder='E-Mail Address' id='email' type='text' value={this.state.email} onChange={this.handleChange} />
+            <input placeholder='Name' id='name' type='name' value={this.state.name} onChange={this.handleChange} />
+            <input type='submit' value='Submit' />
+          </form>
+        </div>
       </div>
     )
   }

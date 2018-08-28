@@ -1,10 +1,6 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
-const CreateChat = require('./createChat')
-const CreateContact = require('./createContact')
-const ChatView = require('./chatview')
-
 class Chats extends React.Component {
   constructor (props) {
     super(props)
@@ -15,11 +11,7 @@ class Chats extends React.Component {
   }
 
   onChatClick (chat) {
-    this.props.changeScreen(ChatView, {chatId: chat.id})
-  }
-
-  onCreateContact () {
-    this.props.changeScreen(CreateContact)
+    this.props.changeScreen('ChatView', {chatId: chat.id})
   }
 
   onDeadDropClose () {
@@ -27,7 +19,7 @@ class Chats extends React.Component {
   }
 
   onCreateChat () {
-    this.props.changeScreen(CreateChat)
+    this.props.changeScreen('CreateChat')
   }
 
   onDeadDropClick (chat) {

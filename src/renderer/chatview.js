@@ -1,16 +1,12 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
-class ChatView extends React.Component {
-  constructor (props) {
-    super(props)
-    this.back = this.back.bind(this)
-  }
+const Back = require('./back')
 
-  back () {
+class ChatView extends React.Component {
+  comonentWillUnmount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'clearChatPage', chatId)
-    this.props.changeScreen()
   }
 
   componentDidMount () {
@@ -29,9 +25,7 @@ class ChatView extends React.Component {
     var chat = deltachat.chats[index]
 
     return (<div>
-      <div>
-        <button onClick={this.back}>Back</button>
-      </div>
+      <Back onClick={this.props.changeScreen} />
       <div>
         {chat.messages.map((message) => {
           return (<div> {message.msg.text} </div>)

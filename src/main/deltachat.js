@@ -169,11 +169,11 @@ class DeltaChatController {
   }
 
   createChat (...args) {
-    this._dc.createChat(...args)
+    return this._dc.createChat(...args)
   }
 
   createContact (...args) {
-    this._dc.createContact(...args)
+    return this._dc.createContact(...args)
   }
 
   chatWithContact (contactId) {
