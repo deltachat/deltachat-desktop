@@ -60,6 +60,24 @@ For Windows, you'll need Windows 10 with a 1366x768 screen.
 When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse
 or keyboard while the tests are running.
 
+### Update translations
+
+Install the [transifex-client](https://docs.transifex.com/client) and get added to the Delta Chat Desktop project.
+
+When you add new strings that need to be translated, run:
+
+```
+tx push --source
+```
+
+And periodically we can run the following command to get the new translation
+strings from translators:
+
+```
+tx pull --all
+```
+
+
 ## License
 
 Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.

@@ -1,0 +1,6 @@
+{
+  "loginFormButton": {
+    "message": "Login",
+    "description": "Shown in the login form"
+  }
+}
