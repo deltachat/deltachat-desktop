@@ -72,7 +72,8 @@ class Message extends React.Component {
   render () {
     const {message} = this.props
     switch (message.msg.type) {
-      case CONSTANTS.DC_MSG_IMAGE || CONSTANTS.DC_MSG_GIF:
+      case CONSTANTS.DC_MSG_IMAGE:
+      case CONSTANTS.DC_MSG_GIF:
         return (<div key={message.id}> <img src={message.msg.file} /></div>)
       default:
         return (<div key={message.id}> {message.msg.text} </div>)
