@@ -8,7 +8,6 @@ const app = electron.app
 
 const menu = require('./menu')
 const windows = require('./windows')
-const log = require('./log')
 
 const DeltaChat = require('./deltachat')
 
@@ -56,7 +55,6 @@ function init () {
   ipc.on('render', render)
 
   function dispatch (name, ...args) {
-    console.log('dispatch', name, ...args)
     var handler = dc[name]
     if (!handler) throw new Error(`fn with name ${name} does not exist`)
     return handler.call(dc, ...args)

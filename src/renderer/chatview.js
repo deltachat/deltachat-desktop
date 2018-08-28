@@ -52,7 +52,7 @@ class ChatView extends React.Component {
       <Back onClick={this.props.changeScreen} />
       <div>
         {chat.messages.map((message) => {
-          return (<div> {message.msg.text} </div>)
+          return (<div key={message.id}> {message.msg.text} </div>)
         })}
       </div>
       <div>
