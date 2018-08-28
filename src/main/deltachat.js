@@ -148,6 +148,11 @@ class DeltaChatController {
     }
   }
 
+  clearChatPage (chatId) {
+    var chat = this._loadChatPage(chatId)
+    chat.clear()
+  }
+
   getChatSummary (chatId) {
     log('getting chat summary', chatId)
     const index = this._chats.findIndex(page => {

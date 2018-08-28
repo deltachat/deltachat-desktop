@@ -1,16 +1,23 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
-const Chats = require('./chats')
 
 class ChatView extends React.Component {
+  constructor (props) {
+    super(props)
+    this.back = this.back.bind(this)
+  }
+
   back () {
-    this.props.changeScreen(Chats)
+    var chatId = this.props.screenProps.chatId
+    ipcRenderer.send('dispatch', 'clearChatPage', chatId)
+    this.props.changeScreen()
   }
 
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadMessages', chatId)
   }
+
   render () {
     const {deltachat} = this.props
     var chatId = this.props.screenProps.chatId
@@ -23,7 +30,7 @@ class ChatView extends React.Component {
 
     return (<div>
       <div>
-        <button onClick={this.back.bind(this)}>Back</button>
+        <button onClick={this.back}>Back</button>
       </div>
       <div>
         {chat.messages.map((message) => {
