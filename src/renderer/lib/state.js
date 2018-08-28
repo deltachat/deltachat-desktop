@@ -35,7 +35,6 @@ function getDefaultState () {
       progress: -1,
       badge: null
     },
-    location: new LocationHistory(),
     window: {
       bounds: null, /* {x, y, width, height } */
       isFocused: true,
@@ -46,8 +45,8 @@ function getDefaultState () {
     errors: [], /* user-facing errors */
     deltachat: {
       chats: [],
-      ready: false,
-      statuses: []
+      credentials: {},
+      ready: false
     },
 
     /*
@@ -72,7 +71,7 @@ function getDefaultState () {
 /* If the saved state file doesn't exist yet, here's what we use instead */
 function setupStateSaved (cb) {
   const saved = {
-    prefs: {}, // for user-defined preferences
+    locale: null,
     credentials: {},
     version: config.APP_VERSION /* make sure we can upgrade gracefully later */
   }

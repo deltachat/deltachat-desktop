@@ -1,4 +1,5 @@
 const React = require('react')
+const {ipcRenderer} = require('electron')
 
 const Login = require('./login')
 const Home = require('./home')
@@ -14,12 +15,11 @@ addLocaleData(enLocaleData)
 
 class App extends React.Component {
   render () {
-    const locale = navigator.language.slice(0, 2)
-    const state = this.props.state
+    const {state} = this.props
     const deltachat = state.deltachat
 
     return (
-      <IntlProvider locale={locale}>
+      <IntlProvider locale={window.localeData.locale}>
         <div>
           { !deltachat.ready && <Login credentials={state.saved.credentials} /> }
           { deltachat.ready && <Home deltachat={state.deltachat} /> }

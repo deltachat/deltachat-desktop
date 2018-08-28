@@ -37,6 +37,7 @@
     "debounce": "^1.2.0",
     "deltachat-node": "^0.9.0",
     "location-history": "^1.1.0",
+    "lodash.merge": "^4.6.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-intl": "^2.4.0"

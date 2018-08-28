@@ -6,6 +6,7 @@ const electron = require('electron')
 
 const app = electron.app
 
+const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
 
@@ -29,6 +30,10 @@ function init () {
   ipc.on('setTitle', (e, ...args) => main.setTitle(...args))
   ipc.on('show', () => main.show())
   ipc.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
+  ipc.on('chooseLanguage', (e, locale) => {
+    localize.setup(app, locale)
+    menu.chooseLanguage(locale)
+  })
 
   // Our wrapper for controlling deltachat instances
   const dc = new DeltaChat()
@@ -53,6 +58,10 @@ function init () {
 
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
+  ipc.on('locale-data', (e, locale) => {
+    if (locale) app.localeData = localize.setup(app, locale)
+    e.returnValue = app.localeData
+  })
 
   function dispatch (name, ...args) {
     var handler = dc[name]

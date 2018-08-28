@@ -1,33 +1,90 @@
 module.exports = {
   init,
+  chooseLanguage,
   setWindowFocus,
   onToggleAlwaysOnTop
 }
 
 const electron = require('electron')
+const fs = require('fs')
+const path = require('path')
 
+const app = electron.app
+
+let template = null
 let menu = null
 
+const log = require('./log')
 const windows = require('./windows')
 const config = require('../config')
 
 function init () {
-  menu = electron.Menu.buildFromTemplate(getMenuTemplate())
+  template = getMenuTemplate()
+  menu = electron.Menu.buildFromTemplate(setLabels(template))
   electron.Menu.setApplicationMenu(menu)
 }
-
 
 function onToggleAlwaysOnTop (flag) {
   getMenuItem('Float on Top').checked = flag
 }
 
-
 function setWindowFocus (flag) {
   getMenuItem('Float on Top').enabled = flag
 }
 
+function chooseLanguage () {
+  log('choosing language', app.localeData.locale)
+  template = setLabels(template)
+  menu = electron.Menu.buildFromTemplate(template)
+  electron.Menu.setApplicationMenu(menu)
+}
+
+function setLabels (menu) {
+  // JANKY
+  // Electron doesn't allow us to modify the menu with a new template,
+  // so we must modify the labels directly in order to change
+  // the menu item labels when the user changes languages
+  const translate = app.translate
+
+  menu[0].submenu[0].submenu = getAvailableLanguages()
+  return doTranslation(menu)
+
+  function doTranslation (menu) {
+    menu = menu.map((item) => {
+      if (item.translate) {
+        item.label = translate(item.translate)
+      }
+      if (item.submenu) doTranslation(item.submenu)
+      return item
+    })
+    return menu
+  }
+}
+
+function getAvailableLanguages () {
+  var locales = fs.readdirSync(path.join(__dirname, '..', '..', '_locales'))
+  return locales.map((l) => {
+    var locale = l.split('.json')[0]
+    return {
+      label: locale,
+      type: 'radio',
+      checked: locale === app.localeData.locale,
+      click: () => windows.main.chooseLanguage(locale)
+    }
+  })
+}
+
 function getMenuTemplate () {
   const template = [
+    {
+      translate: 'menu.preferences',
+      submenu: [
+        {
+          translate: 'menu.preferences.language',
+          submenu: getAvailableLanguages()
+        }
+      ]
+    },
     {
       label: 'Edit',
       submenu: [

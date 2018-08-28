@@ -7,6 +7,7 @@ const main = module.exports = {
   setBounds,
   setProgress,
   setTitle,
+  chooseLanguage,
   show,
   toggleAlwaysOnTop,
   toggleDevTools,
@@ -195,3 +196,6 @@ function getIconPath () {
     : config.APP_ICON + '.png'
 }
 
+function chooseLanguage (locale) {
+  main.win.send('chooseLanguage', locale)
+}

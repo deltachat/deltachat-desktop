@@ -29,11 +29,14 @@ class Login extends React.Component {
   }
 
   render () {
+
+    const tx = window.translate
+
     return (
       <form onSubmit={this.handleSubmit}>
         <input id='email' type='text' value={this.state.email} onChange={this.handleChange} />
         <input id='password' type='password' value={this.state.password} onChange={this.handleChange} />
-        <input type='submit' value='Submit' />
+        <input type='submit' value={tx('login.button')} />
       </form>
     )
   }

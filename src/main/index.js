@@ -5,6 +5,7 @@ const app = electron.app
 
 const parallel = require('run-parallel')
 
+const localize = require('../localize')
 const config = require('../config')
 const ipc = require('./ipc')
 const log = require('./log')
@@ -28,7 +29,6 @@ const hidden = argv.includes('--hidden') ||
 if (process.platform === 'win32') {
   const squirrelWin32 = require('./squirrel-win32')
   shouldQuit = squirrelWin32.handleEvent(argv[0])
-  argv = argv.filter((arg) => !arg.includes('--squirrel'))
 }
 
 if (!shouldQuit && !config.IS_PORTABLE) {
@@ -72,6 +72,7 @@ function init () {
     isReady = true
     const state = results.state
 
+    localize.setup(app, state.saved.locale || app.getLocale())
     windows.main.init(state, {hidden})
     menu.init()
     if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
@@ -88,7 +89,6 @@ function init () {
 
   app.once('ipcReady', function () {
     log('Command line args:', argv)
-    processArgv(argv)
     console.timeEnd('init')
   })
 
@@ -116,8 +116,6 @@ function onAppOpen (newArgv) {
   if (app.ipcReady) {
     log('Second app instance opened, but was prevented:', newArgv)
     windows.main.show()
-
-    processArgv(newArgv)
   } else {
     argv.push(...newArgv)
   }
@@ -131,29 +129,4 @@ function sliceArgv (argv) {
   return argv.slice(config.IS_PRODUCTION ? 1
     : config.IS_TEST ? 4
       : 2)
-}
-
-function processArgv (argv) {
-  let torrentIds = []
-  argv.forEach(function (arg) {
-    if (arg === '-n' || arg === '-o' || arg === '-u') {
-      // Critical path: Only load the 'dialog' package if it is needed
-      const dialog = require('./dialog')
-      if (arg === '-n') {
-        dialog.openSeedDirectory()
-      } else if (arg === '-o') {
-        dialog.openTorrentFile()
-      } else if (arg === '-u') {
-        dialog.openTorrentAddress()
-      }
-    } else if (arg === '--hidden') {
-      // Ignore hidden argument, already being handled
-    } else if (arg.startsWith('-psn')) {
-      // Ignore Mac launchd "process serial number" argument
-    } else if (arg.startsWith('--')) {
-      // Ignore Spectron flags
-    } else if (arg === 'data:,') {
-      // Ignore weird Spectron argument
-    }
-  })
 }

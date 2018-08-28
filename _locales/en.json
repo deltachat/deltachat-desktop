@@ -1,6 +1,14 @@
 {
-  "loginFormButton": {
+  "login.button": {
     "message": "Login",
     "description": "Shown in the login form"
+  },
+  "menu.preferences": {
+    "message": "Preferences",
+    "description": "Preferences label in the menu"
+  },
+  "menu.preferences.language": {
+    "message": "Choose Language...",
+    "description": "Choose language label in the menu"
   }
 }
