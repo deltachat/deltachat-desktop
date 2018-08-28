@@ -27,6 +27,10 @@ class Chats extends React.Component {
     this.setState({deadDropContact: chat})
   }
 
+  componentDidMount () {
+    ipcRenderer.send('dispatch', 'loadChats')
+  }
+
   render () {
     const {deltachat} = this.props
     const {deadDropContact} = this.state

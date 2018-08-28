@@ -20,7 +20,7 @@ class ChatView extends React.Component {
   writeMessage () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, this.state.value)
-    this.setState({value: undefined})
+    this.setState({value: ''})
   }
 
   componentWillUnmount () {

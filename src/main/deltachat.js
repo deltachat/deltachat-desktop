@@ -107,7 +107,7 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      log('event msgs changes', chatId, msgId)
+      log('event msgs changed', chatId, msgId)
       const msg = dc.getMessage(msgId)
       if (!msg) return
 
@@ -116,11 +116,13 @@ class DeltaChatController {
       } else if (msg.isDeadDrop()) {
         this.queueDeadDropMessage(msg)
       }
+      render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       log('incoming message', chatId, msgId)
       self.appendMessage(chatId, msgId)
+      render()
     })
 
     dc.on('DC_EVENT_WARNING', function (warning) {
