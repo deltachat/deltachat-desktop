@@ -208,11 +208,10 @@ class DeltaChatController {
   }
 
   _loadChatPage (chatId) {
-    let page = this._chats.find(p => p.chatId === chatId)
-    if (!page) {
-      page = new ChatPage(chatId, this._dc)
-      this._chats.push(page)
-    }
+    let index = this._chats.findIndex(p => p.chatId === chatId)
+    let page = new ChatPage(chatId, this._dc)
+    if (index > -1) this._chats[index] = page
+    else this._chats.push(page)
     page.summary = this.getChatSummary(chatId)
     return page
   }
@@ -277,6 +276,14 @@ class DeltaChatController {
   contacts (...args) {
     if (!this._dc) return []
     else return this._dc.getContacts(...args).map((id) => this._dc.getContact(id).toJson())
+  }
+
+  createUnverifiedGroup (contacts, name) {
+    var chatId = this._dc.createUnverifiedGroupChat(name)
+    var results = contacts.map((c) => {
+      this._dc.addContactToChat(chatId, c.id)
+    })
+    return {chatId, results}
   }
 
   render () {

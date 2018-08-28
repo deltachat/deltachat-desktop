@@ -31,17 +31,21 @@ class ChatView extends React.Component {
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadMessages', chatId)
+    const chat = this.getChat()
+    this.setState({value: chat.textDraft})
   }
 
-  render () {
+  getChat () {
     const {deltachat} = this.props
     var chatId = this.props.screenProps.chatId
-
     var index = deltachat.chats.findIndex((chat) => {
       return chat.id === chatId
     })
+    return deltachat.chats[index]
+  }
 
-    var chat = deltachat.chats[index]
+  render () {
+    const chat = this.getChat()
 
     return (<div>
       <Back onClick={this.props.changeScreen} />
@@ -51,7 +55,12 @@ class ChatView extends React.Component {
         })}
       </div>
       <div>
-        <input onChange={this.handleChange} id='writeMessage' value={this.state.value} type='text' placeholder='Say something...' />
+        <input
+          onChange={this.handleChange}
+          id='writeMessage'
+          value={this.state.value}
+          type='text'
+          placeholder='Say something...' />
         <button type='submit' onClick={this.writeMessage.bind(this)}>Send</button>
       </div>
     </div>)

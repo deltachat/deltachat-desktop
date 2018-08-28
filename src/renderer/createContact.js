@@ -37,8 +37,8 @@ class CreateContact extends React.Component {
   }
 
   handleSubmit (event) {
+    var self = this
     event.preventDefault()
-    const {changeScreen} = this.props
     const {name, email} = this.state
 
     function createContact () {
@@ -49,8 +49,7 @@ class CreateContact extends React.Component {
       } else {
         console.log(`Failed, I guess. returned ${id}`)
       }
-      var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', id)
-      changeScreen('ChatView', {chatId})
+      self.props.screenProps.onContactCreateSuccess(id)
     }
 
     // TODO: better frontend email validation

@@ -4,6 +4,7 @@ const {ipcRenderer} = require('electron')
 const Chats = require('./chats')
 const ChatView = require('./chatview')
 const CreateChat = require('./createChat')
+const CreateGroup = require('./createGroup')
 const CreateContact = require('./createContact')
 
 class Home extends React.Component {
@@ -36,6 +37,9 @@ class Home extends React.Component {
         break
       case 'CreateContact':
         Screen = CreateContact
+        break
+      case 'CreateGroup':
+        Screen = CreateGroup
         break
       case 'ChatView':
         Screen = ChatView

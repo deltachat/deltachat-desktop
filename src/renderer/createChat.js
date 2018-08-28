@@ -13,8 +13,19 @@ class CreateChat extends React.Component {
     return (this.state !== nextState)
   }
 
+  onContactCreateSuccess (contactId) {
+    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contactId)
+    this.props.changeScreen('ChatView', {chatId})
+  }
+
   createContact () {
-    this.props.changeScreen('CreateContact')
+    this.props.changeScreen('CreateContact', {
+      onContactCreateSuccess: this.onContactCreateSuccess.bind(this)
+    })
+  }
+
+  createGroup () {
+    this.props.changeScreen('CreateGroup')
   }
 
   chooseContact (contact) {
@@ -30,7 +41,14 @@ class CreateChat extends React.Component {
       <div>
         <div>
           <Back onClick={this.props.changeScreen} />
-          <button onClick={this.createContact.bind(this)}>Create Contact</button>
+          <button
+            onClick={this.createContact.bind(this)}>
+              Create Contact
+          </button>
+          <button
+            onClick={this.createGroup.bind(this)}>
+              Create Group
+          </button>
         </div>
         <div>
           {deltachat.contacts.map((contact) => {
