@@ -1,4 +1,5 @@
 const React = require('react')
+const CONSTANTS = require('deltachat-node/constants')
 const {ipcRenderer} = require('electron')
 
 const Back = require('./back')
@@ -46,14 +47,13 @@ class ChatView extends React.Component {
 
   render () {
     const chat = this.getChat()
+    console.log(chat.messages)
 
     return (<div>
       {this.state.error && this.state.error}
       <Back onClick={this.props.changeScreen} />
       <div>
-        {chat.messages.map((message) => {
-          return (<div key={message.id}> {message.msg.text} </div>)
-        })}
+        {chat.messages.map((message) => <Message message={message} />)}
       </div>
       <div>
         <input
@@ -65,6 +65,18 @@ class ChatView extends React.Component {
         <button type='submit' onClick={this.writeMessage.bind(this)}>Send</button>
       </div>
     </div>)
+  }
+}
+
+class Message extends React.Component {
+  render () {
+    const {message} = this.props
+    switch (message.msg.type) {
+      case CONSTANTS.DC_MSG_IMAGE || CONSTANTS.DC_MSG_GIF:
+        return (<div key={message.id}> <img src={message.msg.file} /></div>)
+      default:
+        return (<div key={message.id}> {message.msg.text} </div>)
+    }
   }
 }
 
