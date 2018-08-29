@@ -4,6 +4,13 @@ const {ipcRenderer} = require('electron')
 const Back = require('./back')
 
 class CreateChat extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      error: null
+    }
+  }
+
   handleError (err) {
     this.setState({error: err.message})
   }
@@ -36,10 +43,11 @@ class CreateChat extends React.Component {
 
   render () {
     const {deltachat} = this.props
+    const {error} = this.state
 
     return (
       <div>
-        {this.state.error && this.state.error}
+        {error && error}
         <div>
           <Back onClick={this.props.changeScreen} />
           <button
