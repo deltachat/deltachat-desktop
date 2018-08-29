@@ -1,5 +1,6 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
+const {ConversationListItem} = require('conversations')
 
 class Chats extends React.Component {
   constructor (props) {
@@ -50,7 +51,6 @@ class Chats extends React.Component {
 
         <div className='list-messages'>
           {deltachat.chats.map((chat) => {
-            console.log(chat)
             if (!chat) return
             if (chat.id === 1) {
               return (<div>
@@ -60,11 +60,16 @@ class Chats extends React.Component {
               </div>)
             }
             return (
-              <div onClick={this.onChatClick.bind(this, chat)}>
-                {chat.summary.timestamp}
-                {chat.name}
-                <div id='summary'>{chat.summary.text2}</div>
-              </div>
+              <ConversationListItem
+                onClick={this.onChatClick.bind(this, chat)}
+                phoneNumber="(202) 555-0011"
+                name={chat.name}
+                lastUpdated={chat.summary.timestamp}
+                lastMessage={{
+                  text: chat.summary.text2,
+                  status: 'sent'
+                }}
+                i18n={window.translate} />
             )
           })}
         </div>
