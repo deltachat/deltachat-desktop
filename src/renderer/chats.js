@@ -64,7 +64,7 @@ class Chats extends React.Component {
                 onClick={this.onChatClick.bind(this, chat)}
                 phoneNumber="(202) 555-0011"
                 name={chat.name}
-                lastUpdated={chat.summary.timestamp}
+                lastUpdated={chat.summary.timestamp * 1000}
                 lastMessage={{
                   text: chat.summary.text2,
                   status: 'sent'
