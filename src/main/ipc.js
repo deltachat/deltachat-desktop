@@ -3,6 +3,7 @@ module.exports = {
 }
 
 const electron = require('electron')
+const fs = require('fs')
 
 const app = electron.app
 
@@ -33,6 +34,12 @@ function init () {
   ipc.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
     menu.chooseLanguage(locale)
+  })
+
+  // Called once to get the conversations css string
+  ipc.on('get-css', (e) => {
+    var p = require.resolve('conversations/build/manifest.css')
+    e.returnValue = fs.readFileSync(p).toString()
   })
 
   // Our wrapper for controlling deltachat instances

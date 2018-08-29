@@ -1,6 +1,8 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 
+const insertCss = require('insert-css')
+
 const {ipcRenderer} = require('electron')
 const State = require('./lib/state')
 const localize = require('../localize')
@@ -16,6 +18,10 @@ function onState (err, _state) {
   state = window.state = _state
 
   setupLocaleData(state.saved.locale)
+
+  const conversationsCss = ipcRenderer.sendSync('get-css')
+  insertCss(conversationsCss)
+
   app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
 
   setupIpc()

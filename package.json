@@ -36,11 +36,15 @@
     "arch": "^2.1.1",
     "debounce": "^1.2.0",
     "deltachat-node": "^0.9.0",
+    "emoji-panel": "^0.5.2",
+    "insert-css": "^2.0.0",
+    "intl-tel-input": "^13.0.3",
     "location-history": "^1.1.0",
     "lodash.merge": "^4.6.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-intl": "^2.4.0"
+    "react-intl": "^2.4.0",
+    "run-parallel": "^1.1.9"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
