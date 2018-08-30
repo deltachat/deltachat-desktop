@@ -110,7 +110,7 @@ class RenderMessage extends React.Component {
     }
 
     var props = {
-      id: message.messageId,
+      id: message.id,
       i18n: window.translate,
       conversationType: 'direct', // or group
       direction,

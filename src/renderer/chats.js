@@ -1,6 +1,6 @@
 const React = require('react')
-const {ipcRenderer} = require('electron')
-const {ConversationListItem} = require('conversations')
+const { ipcRenderer } = require('electron')
+const { ConversationListItem } = require('conversations')
 
 class Chats extends React.Component {
   constructor (props) {
@@ -12,11 +12,11 @@ class Chats extends React.Component {
   }
 
   onChatClick (chat) {
-    this.props.changeScreen('ChatView', {chatId: chat.id})
+    this.props.changeScreen('ChatView', { chatId: chat.id })
   }
 
   onDeadDropClose () {
-    this.setState({deadDropContact: false})
+    this.setState({ deadDropContact: false })
   }
 
   onCreateChat () {
@@ -25,7 +25,7 @@ class Chats extends React.Component {
 
   onDeadDropClick (chat) {
     // TODO: get contact from chat?
-    this.setState({deadDropContact: chat})
+    this.setState({ deadDropContact: chat })
   }
 
   componentDidMount () {
@@ -33,8 +33,9 @@ class Chats extends React.Component {
   }
 
   render () {
-    const {deltachat} = this.props
-    const {deadDropContact} = this.state
+    var self = this
+    const { deltachat } = this.props
+    const { deadDropContact } = this.state
 
     return (
       <div>

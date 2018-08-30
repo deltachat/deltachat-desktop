@@ -147,7 +147,7 @@ class DeltaChatController {
     var count = list.getCount()
     log('got', count, 'chats')
     for (let i = 0; i < count; i++) {
-      this._loadChatPage(list.getChatId(i))
+      this._loadChatPage(list.getChatId(i), list.getSummary(i))
     }
   }
 
@@ -156,19 +156,10 @@ class DeltaChatController {
     chat.clear()
   }
 
-  getChatSummary (chatId) {
-    log('getting chat summary', chatId)
-    const index = this._chats.findIndex(page => {
-      return page.chatId === chatId
-    })
-    if (index < 0) return this.error(`summary for ${index} does not exist`)
-    return this._chatList.getSummary(index)
-  }
-
   loadMessages (chatId) {
     const chat = this._loadChatPage(chatId)
     const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-    messageIds.forEach(id => chat.appendMessage(id))
+    messageIds.forEach(chat.appendMessage.bind(chat))
   }
 
   sendMessage (...args) {
@@ -208,18 +199,21 @@ class DeltaChatController {
     this._loadChatPage(chatId).appendMessage(messageId)
   }
 
-  _loadChatPage (chatId) {
-    let page = this._chats.find(p => p.chatId === chatId)
+  _loadChatPage (chatId, summary) {
+    let page = this._chats[chatId]
     if (!page) {
       page = new ChatPage(chatId, this._dc)
-      this._chats.push(page)
+      this._chats[chatId] = page
     }
-    page.summary = this.getChatSummary(chatId)
+    if (summary) page.summary = summary
     return page
   }
 
   chats () {
-    return this._chats.map((c) => c.toJson())
+    var chats = this._chats
+    return Object.keys(chats).map((id) => chats[id].toJson()).sort(function (a, b) {
+      return a.summary.timestamp < b.summary.timestamp
+    })
   }
 
   deleteMessage (chatId, messageId) {
