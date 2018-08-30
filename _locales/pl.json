@@ -1,14 +1,78 @@
 {
     "login.button": {
-        "message": "Login",
+        "message": "Zaloguj",
         "description": "Shown in the login form"
     },
     "menu.preferences": {
-        "message": "Preferences",
+        "message": "Właściwości",
         "description": "Preferences label in the menu"
     },
     "menu.preferences.language": {
-        "message": "Choose Language...",
+        "message": "Wybierz język…",
         "description": "Choose language label in the menu"
+    },
+    "timestampFormat_M": {
+        "message": "MMM D",
+        "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
+    },
+    "from": {
+        "message": "From",
+        "description": "Label for the sender of a message"
+    },
+    "to": {
+        "message": "To",
+        "description": "Label for the receiver of a message"
+    },
+    "sent": {
+        "message": "Sent",
+        "description": "Label for the time a message was sent"
+    },
+    "received": {
+        "message": "Received",
+        "description": "Label for the time a message was received"
+    },
+    "sendMessage": {
+        "message": "Send a message",
+        "description": "Placeholder text in the message entry field"
+    },
+    "groupMembers": {
+        "message": "Group members",
+        "description": ""
+    },
+    "showMembers": {
+        "message": "Show members",
+        "description": ""
+    },
+    "timestamp_s": {
+        "message": "now",
+        "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
+    },
+    "timestamp_m": {
+        "message": "1 minute",
+        "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
+    },
+    "timestamp_h": {
+        "message": "1 hour",
+        "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
+    },
+    "justNow": {
+        "message": "now",
+        "description": "Shown if a message is very recent, less than 60 seconds old"
+    },
+    "hoursAgoShort": {
+        "message": "$hours$ hr",
+        "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
+    },
+    "hoursAgo": {
+        "message": "$hours$ hr ago",
+        "description": "Contracted form of 'X hours ago' which works both for singular and plural"
+    },
+    "minutesAgoShort": {
+        "message": "$minutes$ min",
+        "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
+    },
+    "minutesAgo": {
+        "message": "$minutes$ min ago",
+        "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     }
 }
