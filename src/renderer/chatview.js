@@ -93,7 +93,8 @@ class RenderMessage extends React.Component {
       conversationType: 'direct', // or group
       direction,
       contact,
-      authorName: message.contact.name,
+      authorName: message.contact.displayName,
+      authorPhoneNumber: message.contact.address,
       status: convertMessageStatus(message.msg.state),
       timestamp,
       key: message.id
