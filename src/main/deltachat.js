@@ -23,7 +23,8 @@ class ChatMessage {
       messageId: this.messageId,
       isMe: this.isMe,
       contact: this.contact.toJson(),
-      msg: this.msg.toJson()
+      msg: this.msg.toJson(),
+      filemime: this.msg.getFilemime()
     }
   }
 }
