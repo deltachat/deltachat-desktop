@@ -1,4 +1,68 @@
 {
+  "moreInfo": {
+    "message": "More Info...",
+    "description":
+    "Shown on the drop-down menu for an individual message, takes you to message detail screen"
+  },
+  "downloadAttachment": {
+    "message": "Download Attachment",
+    "description":
+    "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
+  },
+  "imageAttachmentAlt": {
+    "message": "Image attached to message",
+    "description": "Used in alt tag of image attachment"
+  },
+  "videoAttachmentAlt": {
+    "message": "Screenshot of video attached to message",
+    "description": "Used in alt tag of video attachment preview"
+  },
+  "lightboxImageAlt": {
+    "message": "Image sent in conversation",
+    "description":
+    "Used in the alt tag for the image shown in a full-screen lightbox view"
+  },
+  "replyToMessage": {
+    "message": "Reply to Message",
+    "description":
+    "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
+  },
+  "deleteMessage": {
+    "message": "Delete Message",
+    "description":
+    "Shown on the drop-down menu for an individual message, deletes single message"
+  },
+  "deleteMessages": {
+    "message": "Delete messages",
+    "description": "Menu item for deleting messages, title case."
+  },
+  "messageDetail": {
+    "message": "Message Detail"
+  },
+  "audio": {
+    "message": "Audio",
+    "description":
+    "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
+  },
+  "video": {
+    "message": "Video",
+    "description":
+    "Shown in a quotation of a message containing a video if no text was originally provided with that video"
+  },
+  "photo": {
+    "message": "Photo",
+    "description":
+    "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "delete": {
+    "message": "Delete"
+  },
   "login.button": {
     "message": "Login",
     "description": "Shown in the login form"
