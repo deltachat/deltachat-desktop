@@ -1,11 +1,9 @@
 const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 
 const { ConversationHeader, Message } = require('conversations').conversation
 const { ConversationContext } = require('conversations').styleguide
-
-const Back = require('./back')
 
 var theme = 'light-theme' // user prefs?
 
@@ -16,17 +14,23 @@ class ChatView extends React.Component {
       value: undefined
     }
     this.handleChange = this.handleChange.bind(this)
+    this.shouldAutoScroll = true
+    this.scrollTop = 0
   }
 
   handleChange (e) {
     var value = e.target.value
-    this.setState({value})
+    this.setState({ value })
   }
 
   writeMessage () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, this.state.value)
-    this.setState({value: ''})
+    this.setState({ value: '' })
+  }
+
+  componentDidUpdate (prevProps) {
+    this.scrollToBottom()
   }
 
   componentWillUnmount () {
@@ -38,11 +42,14 @@ class ChatView extends React.Component {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadMessages', chatId)
     const chat = this.getChat()
-    this.setState({value: chat.textDraft})
+    this.setState({ value: chat.textDraft })
+
+    var messagesDiv = document.querySelector('.message-list')
+    if (messagesDiv) messagesDiv.scrollTop = this.scrollTop
   }
 
   getChat () {
-    const {deltachat} = this.props
+    const { deltachat } = this.props
     var chatId = this.props.screenProps.chatId
     var index = deltachat.chats.findIndex((chat) => {
       return chat.id === chatId
@@ -50,9 +57,27 @@ class ChatView extends React.Component {
     return deltachat.chats[index]
   }
 
+  scrollToBottom (force) {
+    if (!force && !this.shouldAutoScroll) return
+    var messagesDiv = document.querySelector('.message-list')
+    if (messagesDiv) {
+      messagesDiv.scrollTop = messagesDiv.scrollHeight
+    }
+  }
+
   render () {
+    var self = this
     const chat = this.getChat()
     const showBackButton = true
+
+    var onscroll = (event) => {
+      var node = event.target
+      if (node.scrollHeight <= node.clientHeight + node.scrollTop) {
+        self.shouldAutoScroll = true
+      } else {
+        self.shouldAutoScroll = false
+      }
+    }
 
     return (<div>
       {this.state.error && this.state.error}
@@ -66,13 +91,15 @@ class ChatView extends React.Component {
         isVerified={chat.isVerified}
         id={chat.id}
       />
-      <ConversationContext theme={theme}>
-        {chat.messages.map((message) =>
-          <li>
-            <RenderMessage message={message} />
-          </li>
-        )}
-      </ConversationContext>
+      <div className='window__main' onScroll={onscroll}>
+        <ConversationContext className='messages' theme={theme}>
+          {chat.messages.map((message) =>
+            <li>
+              <RenderMessage message={message} />
+            </li>
+          )}
+        </ConversationContext>
+      </div>
       <div>
         <input
           onChange={this.handleChange}
