@@ -2,7 +2,7 @@ const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
 const {ipcRenderer} = require('electron')
 
-const { Message } = require('conversations').conversation
+const { ConversationHeader, Message } = require('conversations').conversation
 const { ConversationContext } = require('conversations').styleguide
 
 const Back = require('./back')
@@ -52,10 +52,20 @@ class ChatView extends React.Component {
 
   render () {
     const chat = this.getChat()
+    const showBackButton = true
 
     return (<div>
       {this.state.error && this.state.error}
-      <Back onClick={this.props.changeScreen} />
+      <ConversationHeader
+        i18n={window.translate}
+        isMe={chat.isSelfTalk}
+        showBackButton={showBackButton}
+        onGoBack={this.props.changeScreen}
+        name={chat.name}
+        avatarPath={chat.profileImage}
+        isVerified={chat.isVerified}
+        id={chat.id}
+      />
       <ConversationContext theme={theme}>
         {chat.messages.map((message) =>
           <li>
