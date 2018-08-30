@@ -52,7 +52,7 @@ class ChatPage {
   toJson () {
     var chat = this.chat.toJson()
     chat.messages = this._messages.map((m) => m.toJson())
-    chat.summary = this.summary.toJson()
+    chat.summary = this.summary && this.summary.toJson()
     return chat
   }
 

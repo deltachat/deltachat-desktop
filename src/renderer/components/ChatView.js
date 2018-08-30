@@ -4,6 +4,15 @@ const { ipcRenderer } = require('electron')
 
 const Composer = require('./Composer')
 
+const {
+  Alignment,
+  Classes,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button
+} = require('@blueprintjs/core')
+
 const { Message } = require('conversations').conversation
 const { ConversationContext } = require('conversations').styleguide
 
@@ -51,14 +60,26 @@ class ChatView extends React.Component {
     }
   }
 
+  openMenu () {
+    // TODO: open a menu
+  }
+
   render () {
-    var self = this
     const chat = this.getChat()
 
     return (
-      <div className='window'>
+      <div>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <NavbarHeading>{chat.name}</NavbarHeading>
+            <Button className={Classes.MINIMAL} icon='menu' onClick={this.openMenu} />
+          </NavbarGroup>
+        </Navbar>
         {this.state.error && this.state.error}
-        <div className='window__main'>
+        <div className='window'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
               return (<li>

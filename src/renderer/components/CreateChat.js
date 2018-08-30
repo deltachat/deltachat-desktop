@@ -1,7 +1,16 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
-const Back = require('./Back')
+const ContactListItem = require('./ContactListItem')
+
+const {
+  Alignment,
+  Classes,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button
+} = require('@blueprintjs/core')
 
 class CreateChat extends React.Component {
   constructor (props) {
@@ -38,7 +47,7 @@ class CreateChat extends React.Component {
   chooseContact (contact) {
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
     if (!chatId) return this.handleError(new Error(`Invalid contact id ${contact.id}`))
-    this.props.changeScreen('ChatView', {chatId})
+    this.props.changeScreen('ChatView', { chatId })
   }
 
   render () {
@@ -48,26 +57,36 @@ class CreateChat extends React.Component {
     return (
       <div>
         {error && error}
-        <div>
-          <Back onClick={this.props.changeScreen} />
-          <button
-            onClick={this.createContact.bind(this)}>
-              Create Contact
-          </button>
-          <button
-            onClick={this.createGroup.bind(this)}>
-              Create Group
-          </button>
-        </div>
-        <div>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+            <NavbarHeading>Create Chat</NavbarHeading>
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <Button
+              className={Classes.MINIMAL}
+              icon='plus'
+              onClick={this.createContact.bind(this)}
+              text='Contact' />
+            <Button
+              className={Classes.MINIMAL}
+              icon='plus'
+              onClick={this.createGroup.bind(this)}
+              text='Group' />
+          </NavbarGroup>
+        </Navbar>
+        <div className='window'>
           {deltachat.contacts.map((contact) => {
-            return (<div onClick={this.chooseContact.bind(this, contact)}>
-              {contact.nameAndAddr}
-            </div>)
+            return (<ContactListItem
+              contact={contact}
+              onClick={this.chooseContact.bind(this)}
+            />
+            )
           })}
         </div>
       </div>
     )
   }
 }
+
 module.exports = CreateChat

@@ -11,13 +11,15 @@ body {
   flex-direction: column;
   min-width: 560px;
   height: 100%;
-}
-
-.window__main {
-  padding-bottom: 40px;
+  padding-top: 50px; /* fixed navbar */
+  margin: 10px;
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.conversation {
+  padding-bottom: 40px;
 }
 
 .composer {
@@ -27,5 +29,5 @@ body {
 }
 
 .composer button {
-  width: 50px;
+  max-width: 100px;
 }
