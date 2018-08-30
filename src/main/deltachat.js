@@ -114,8 +114,6 @@ class DeltaChatController {
 
       if (msg.getState().isPending()) {
         this.appendMessage(chatId, msgId)
-      } else if (msg.isDeadDrop()) {
-        this.queueDeadDropMessage(msg)
       }
       render()
     })

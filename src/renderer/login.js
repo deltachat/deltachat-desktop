@@ -1,5 +1,6 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
+const { Button } = require('@blueprintjs/core')
 
 class Login extends React.Component {
   constructor (props) {
@@ -36,7 +37,7 @@ class Login extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <input id='email' type='text' value={this.state.email} onChange={this.handleChange} />
         <input id='password' type='password' value={this.state.password} onChange={this.handleChange} />
-        <input type='submit' value={tx('login.button')} />
+        <Button type='submit'> {tx('login.button')} </Button>
       </form>
     )
   }

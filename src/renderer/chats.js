@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('conversations')
+const { Button } = require('@blueprintjs/core')
 
 class Chats extends React.Component {
   constructor (props) {
@@ -45,9 +46,9 @@ class Chats extends React.Component {
           <div>
             {deltachat.credentials.email}
           </div>
-          <button onClick={this.onCreateChat.bind(this)}>
+          <Button onClick={this.onCreateChat.bind(this)}>
             + Chat
-          </button>
+          </Button>
         </div>
 
         {deltachat.chats.map((chat) => {
@@ -55,9 +56,9 @@ class Chats extends React.Component {
           if (chat.id === 1) {
             return (<div>
               // dead drop
-              <button onClick={this.onDeadDropClick.bind(this, chat)}>
+              <Button onClick={this.onDeadDropClick.bind(this, chat)}>
                 New message from {chat.name}
-              </button>
+              </Button>
             </div>)
           }
           return (
@@ -109,9 +110,9 @@ class DeadDropDialog extends React.Component {
         <h3>Chat with {deadDropContact.address}?</h3>
 
         <div>
-          <button onClick={this.yes}> Yes </button>
-          <button onClick={this.no}> No </button>
-          <button onClick={this.never}> Never </button>
+          <Button onClick={this.yes}> Yes </Button>
+          <Button onClick={this.no}> No </Button>
+          <Button onClick={this.never}> Never </Button>
         </div>
       </div>
     )
