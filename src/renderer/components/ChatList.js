@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('conversations')
 const { Button } = require('@blueprintjs/core')
 
-class Chats extends React.Component {
+class ChatList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,7 +34,6 @@ class Chats extends React.Component {
   }
 
   render () {
-    var self = this
     const { deltachat } = this.props
     const { deadDropContact } = this.state
 
@@ -103,7 +102,7 @@ class DeadDropDialog extends React.Component {
   }
 
   render () {
-    const {deadDropContact} = this.props
+    const { deadDropContact } = this.props
     if (!deadDropContact) return <div />
     return (
       <div>
@@ -119,4 +118,4 @@ class DeadDropDialog extends React.Component {
   }
 }
 
-module.exports = Chats
+module.exports = ChatList

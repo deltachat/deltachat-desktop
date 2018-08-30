@@ -1,7 +1,7 @@
 const React = require('react')
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 
-const Back = require('./back')
+const Back = require('./Back')
 
 class CreateChat extends React.Component {
   constructor (props) {
@@ -42,8 +42,8 @@ class CreateChat extends React.Component {
   }
 
   render () {
-    const {deltachat} = this.props
-    const {error} = this.state
+    const { deltachat } = this.props
+    const { error } = this.state
 
     return (
       <div>

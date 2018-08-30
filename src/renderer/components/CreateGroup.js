@@ -1,7 +1,7 @@
 const React = require('react')
 const {ipcRenderer} = require('electron')
 
-const Back = require('./back')
+const Back = require('./Back')
 
 class CreateGroup extends React.Component {
   constructor (props) {

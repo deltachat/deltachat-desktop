@@ -2,8 +2,9 @@ const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
-const WriteMessage = require('./write')
-const { ConversationHeader, Message } = require('conversations').conversation
+const Composer = require('./Composer')
+
+const { Message } = require('conversations').conversation
 const { ConversationContext } = require('conversations').styleguide
 
 var theme = 'light-theme' // user prefs?
@@ -14,17 +15,11 @@ class ChatView extends React.Component {
     this.state = {
       error: false
     }
-    this.shouldAutoScroll = true
-    this.scrollTop = 0
   }
 
   writeMessage (message) {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, message)
-  }
-
-  componentDidUpdate (prevProps) {
-    this.scrollToBottom()
   }
 
   componentWillUnmount () {
@@ -37,9 +32,7 @@ class ChatView extends React.Component {
     ipcRenderer.send('dispatch', 'loadMessages', chatId)
     const chat = this.getChat()
     this.setState({ value: chat.textDraft })
-
-    var messagesDiv = document.querySelector('.message-list')
-    if (messagesDiv) messagesDiv.scrollTop = this.scrollTop
+    this.scrollToBottom()
   }
 
   getChat () {
@@ -52,8 +45,7 @@ class ChatView extends React.Component {
   }
 
   scrollToBottom (force) {
-    if (!force && !this.shouldAutoScroll) return
-    var messagesDiv = document.querySelector('.window__main')
+    var messagesDiv = document.querySelector('.message-list')
     if (messagesDiv) {
       messagesDiv.scrollTop = messagesDiv.scrollHeight
     }
@@ -62,40 +54,22 @@ class ChatView extends React.Component {
   render () {
     var self = this
     const chat = this.getChat()
-    const showBackButton = true
 
-    var onscroll = (event) => {
-      var node = event.target
-      if (node.scrollHeight <= node.clientHeight + node.scrollTop) {
-        self.shouldAutoScroll = true
-      } else {
-        self.shouldAutoScroll = false
-      }
-    }
-
-    return (<div className='window'>
-      {this.state.error && this.state.error}
-      <ConversationHeader
-        i18n={window.translate}
-        isMe={chat.isSelfTalk}
-        showBackButton={showBackButton}
-        onGoBack={this.props.changeScreen}
-        name={chat.name}
-        avatarPath={chat.profileImage}
-        isVerified={chat.isVerified}
-        id={chat.id}
-      />
-      <div className='window__main' onscroll={onscroll}>
-        <ConversationContext theme={theme}>
-          {chat.messages.map((message) =>
-            <li>
-              <RenderMessage message={message} />
-            </li>
-          )}
-        </ConversationContext>
+    return (
+      <div className='window'>
+        {this.state.error && this.state.error}
+        <div className='window__main'>
+          <ConversationContext theme={theme}>
+            {chat.messages.map((message) => {
+              return (<li>
+                <RenderMessage message={message} />
+              </li>)
+            })}
+          </ConversationContext>
+        </div>
+        <Composer onSubmit={this.writeMessage.bind(this)} />
       </div>
-      <WriteMessage onSubmit={this.writeMessage.bind(this)} />
-    </div>)
+    )
   }
 }
 
@@ -118,8 +92,7 @@ class RenderMessage extends React.Component {
       authorName: message.contact.displayName,
       authorPhoneNumber: message.contact.address,
       status: convertMessageStatus(message.msg.state),
-      timestamp,
-      key: message.id
+      timestamp
     }
 
     if (message.msg.file) {

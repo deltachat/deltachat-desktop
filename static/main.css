@@ -1,4 +1,31 @@
+html {
+  height: auto;
+}
 body {
+  height: auto;
   background-color: white;
 }
 
+.window {
+  display: flex;
+  flex-direction: column;
+  min-width: 560px;
+  height: 100%;
+}
+
+.window__main {
+  padding-bottom: 40px;
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.composer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+.composer button {
+  width: 50px;
+}

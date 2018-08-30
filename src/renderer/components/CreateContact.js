@@ -1,7 +1,7 @@
 const React = require('react')
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 
-const Back = require('./back')
+const Back = require('./Back')
 
 class CreateContact extends React.Component {
   constructor (props) {
@@ -39,7 +39,7 @@ class CreateContact extends React.Component {
   handleSubmit (event) {
     var self = this
     event.preventDefault()
-    const {name, email} = this.state
+    const { name, email } = this.state
 
     function createContact () {
       var id = ipcRenderer.sendSync('dispatchSync', 'createContact', name, email)

@@ -3,10 +3,10 @@ const ReactDOM = require('react-dom')
 
 const insertCss = require('insert-css')
 
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 const State = require('./lib/state')
 const localize = require('../localize')
-const App = require('./app')
+const App = require('./App')
 
 State.load(onState)
 

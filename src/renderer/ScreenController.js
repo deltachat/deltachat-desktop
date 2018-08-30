@@ -1,34 +1,34 @@
 const React = require('react')
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron')
 
-const Chats = require('./chats')
-const ChatView = require('./chatview')
-const CreateChat = require('./createChat')
-const CreateGroup = require('./createGroup')
-const CreateContact = require('./createContact')
+const ChatList = require('./components/ChatList')
+const ChatView = require('./components/ChatView')
+const CreateChat = require('./components/CreateChat')
+const CreateGroup = require('./components/CreateGroup')
+const CreateContact = require('./components/CreateContact')
 
 class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      screen: 'Chats',
+      screen: 'ChatList',
       screenProps: {}
     }
     this.changeScreen = this.changeScreen.bind(this)
   }
 
   changeScreen (screen, screenProps) {
-    if (!screen) screen = Chats
+    if (!screen) screen = ChatList
     if (!screenProps) screenProps = {}
-    this.setState({screen, screenProps})
+    this.setState({ screen, screenProps })
     ipcRenderer.send('render')
   }
 
   render () {
     // renderer/main.js polls every second and updates the deltachat
     // property with current state of database.
-    const {deltachat} = this.props
-    const {screen, screenProps} = this.state
+    const { deltachat } = this.props
+    const { screen, screenProps } = this.state
 
     var Screen
     switch (screen) {
@@ -45,18 +45,16 @@ class Home extends React.Component {
         Screen = ChatView
         break
       default:
-        Screen = Chats
+        Screen = ChatList
         break
     }
 
     return (
-      <div>
-        <Screen
-          screenProps={screenProps}
-          changeScreen={this.changeScreen}
-          deltachat={deltachat}
-        />
-      </div>
+      <Screen
+        screenProps={screenProps}
+        changeScreen={this.changeScreen}
+        deltachat={deltachat}
+      />
     )
   }
 }

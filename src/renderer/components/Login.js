@@ -30,7 +30,6 @@ class Login extends React.Component {
   }
 
   render () {
-
     const tx = window.translate
 
     return (

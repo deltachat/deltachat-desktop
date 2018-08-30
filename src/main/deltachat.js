@@ -20,7 +20,7 @@ class ChatMessage {
   toJson () {
     return {
       fromId: this.fromId,
-      messageId: this.messageId,
+      id: this.messageId,
       isMe: this.isMe,
       contact: this.contact.toJson(),
       msg: this.msg.toJson(),
@@ -104,7 +104,7 @@ class DeltaChatController {
     })
 
     dc.on('ALL', (event, data1, data2) => {
-      log(event, data1, data2)
+      // log(event, data1, data2)
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
