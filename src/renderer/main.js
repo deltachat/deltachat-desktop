@@ -20,7 +20,7 @@ function onState (err, _state) {
   setupLocaleData(state.saved.locale)
 
   const conversationsCss = ipcRenderer.sendSync('get-css')
-  insertCss(conversationsCss)
+  insertCss(conversationsCss, { prepend: true })
 
   app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
 

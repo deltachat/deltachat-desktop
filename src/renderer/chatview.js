@@ -2,6 +2,7 @@ const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
+const WriteMessage = require('./write')
 const { ConversationHeader, Message } = require('conversations').conversation
 const { ConversationContext } = require('conversations').styleguide
 
@@ -11,22 +12,15 @@ class ChatView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: undefined
+      error: false
     }
-    this.handleChange = this.handleChange.bind(this)
     this.shouldAutoScroll = true
     this.scrollTop = 0
   }
 
-  handleChange (e) {
-    var value = e.target.value
-    this.setState({ value })
-  }
-
-  writeMessage () {
+  writeMessage (message) {
     var chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'sendMessage', chatId, this.state.value)
-    this.setState({ value: '' })
+    ipcRenderer.send('dispatch', 'sendMessage', chatId, message)
   }
 
   componentDidUpdate (prevProps) {
@@ -59,7 +53,7 @@ class ChatView extends React.Component {
 
   scrollToBottom (force) {
     if (!force && !this.shouldAutoScroll) return
-    var messagesDiv = document.querySelector('.message-list')
+    var messagesDiv = document.querySelector('.window__main')
     if (messagesDiv) {
       messagesDiv.scrollTop = messagesDiv.scrollHeight
     }
@@ -79,7 +73,7 @@ class ChatView extends React.Component {
       }
     }
 
-    return (<div>
+    return (<div className='window'>
       {this.state.error && this.state.error}
       <ConversationHeader
         i18n={window.translate}
@@ -91,8 +85,8 @@ class ChatView extends React.Component {
         isVerified={chat.isVerified}
         id={chat.id}
       />
-      <div className='window__main' onScroll={onscroll}>
-        <ConversationContext className='messages' theme={theme}>
+      <div className='window__main' onscroll={onscroll}>
+        <ConversationContext theme={theme}>
           {chat.messages.map((message) =>
             <li>
               <RenderMessage message={message} />
@@ -100,15 +94,7 @@ class ChatView extends React.Component {
           )}
         </ConversationContext>
       </div>
-      <div>
-        <input
-          onChange={this.handleChange}
-          id='writeMessage'
-          value={this.state.value}
-          type='text'
-          placeholder='Say something...' />
-        <button type='submit' onClick={this.writeMessage.bind(this)}>Send</button>
-      </div>
+      <WriteMessage onSubmit={this.writeMessage.bind(this)} />
     </div>)
   }
 }
@@ -116,7 +102,6 @@ class ChatView extends React.Component {
 class RenderMessage extends React.Component {
   render () {
     const { message } = this.props
-    console.log(message)
     const timestamp = message.msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
     const contact = {

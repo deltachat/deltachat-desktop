@@ -49,30 +49,30 @@ class Chats extends React.Component {
           </button>
         </div>
 
-        <div className='list-messages'>
-          {deltachat.chats.map((chat) => {
-            if (!chat) return
-            if (chat.id === 1) {
-              return (<div>
-                <button onClick={this.onDeadDropClick.bind(this, chat)}>
-                  New message from {chat.name}
-                </button>
-              </div>)
-            }
-            return (
-              <ConversationListItem
-                onClick={this.onChatClick.bind(this, chat)}
-                phoneNumber="(202) 555-0011"
-                name={chat.name}
-                lastUpdated={chat.summary.timestamp * 1000}
-                lastMessage={{
-                  text: chat.summary.text2,
-                  status: 'sent'
-                }}
-                i18n={window.translate} />
-            )
-          })}
-        </div>
+        {deltachat.chats.map((chat) => {
+          if (!chat) return
+          if (chat.id === 1) {
+            return (<div>
+              // dead drop
+              <button onClick={this.onDeadDropClick.bind(this, chat)}>
+                New message from {chat.name}
+              </button>
+            </div>)
+          }
+          return (
+            <ConversationListItem
+              key={chat.id}
+              onClick={this.onChatClick.bind(this, chat)}
+              phoneNumber={chat.summary.text1}
+              name={chat.name}
+              lastUpdated={chat.summary.timestamp * 1000}
+              lastMessage={{
+                text: chat.summary.text2,
+                status: 'sent'
+              }}
+              i18n={window.translate} />
+          )
+        })}
       </div>
     )
   }
