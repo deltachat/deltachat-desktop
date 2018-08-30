@@ -9,7 +9,6 @@ body {
 .window {
   display: flex;
   flex-direction: column;
-  min-width: 560px;
   height: 100%;
   padding-top: 50px; /* fixed navbar */
   margin: 10px;

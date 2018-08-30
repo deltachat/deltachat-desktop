@@ -65,7 +65,7 @@ class CreateChat extends React.Component {
           <NavbarGroup align={Alignment.RIGHT}>
             <Button
               className={Classes.MINIMAL}
-              icon='plus'
+              icon='new-person'
               onClick={this.createContact.bind(this)}
               text='Contact' />
             <Button

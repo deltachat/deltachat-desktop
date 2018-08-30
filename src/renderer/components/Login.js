@@ -1,6 +1,15 @@
 const React = require('react')
-const {ipcRenderer} = require('electron')
-const { Button } = require('@blueprintjs/core')
+const { ipcRenderer } = require('electron')
+
+const {
+  Alignment,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button,
+  InputGroup,
+  FormGroup
+} = require('@blueprintjs/core')
 
 class Login extends React.Component {
   constructor (props) {
@@ -33,11 +42,36 @@ class Login extends React.Component {
     const tx = window.translate
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input id='email' type='text' value={this.state.email} onChange={this.handleChange} />
-        <input id='password' type='password' value={this.state.password} onChange={this.handleChange} />
-        <Button type='submit'> {tx('login.button')} </Button>
-      </form>
+      <div>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <NavbarHeading>Welcome to Delta.Chat</NavbarHeading>
+          </NavbarGroup>
+        </Navbar>
+        <div className='window'>
+          <form onSubmit={this.handleSubmit}>
+            <FormGroup label='E-Mail Address' placeholder='E-Mail Address' labelFor='email' labelInfo='(required)'>
+              <InputGroup
+                id='email'
+                type='text'
+                value={this.state.email}
+                leftIcon='envelope'
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup label='Password' placeholder='Password' labelFor='password'>
+              <InputGroup
+                id='name'
+                leftIcon='lock'
+                type='password'
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <Button type='submit' text={tx('login.button')} />
+          </form>
+        </div>
+      </div>
     )
   }
 }

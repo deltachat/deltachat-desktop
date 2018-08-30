@@ -1,7 +1,16 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
-const Back = require('./Back')
+const {
+  Alignment,
+  Classes,
+  InputGroup,
+  FormGroup,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Button
+} = require('@blueprintjs/core')
 
 class CreateContact extends React.Component {
   constructor (props) {
@@ -67,19 +76,38 @@ class CreateContact extends React.Component {
     return (
       <div>
         {this.state.error && this.state.error}
-        <div>
-          <Back onClick={this.back} />
-        </div>
-        <div>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
+            <NavbarHeading>Create Contact</NavbarHeading>
+          </NavbarGroup>
+        </Navbar>
+        <div className='window'>
           <form onSubmit={this.handleSubmit}>
-            <input placeholder='E-Mail Address' id='email' type='text' value={this.state.email} onChange={this.handleChange} />
-            <input placeholder='Name' id='name' type='name' value={this.state.name} onChange={this.handleChange} />
-            <input type='submit' value='Submit' />
+            <FormGroup label='E-Mail Address' placeholder='E-Mail Address' labelFor='email' labelInfo='(required)'>
+              <InputGroup
+                id='email'
+                type='text'
+                value={this.state.email}
+                leftIcon='envelope'
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup label='Name' placeholder='Name' labelFor='name'>
+              <InputGroup
+                id='name'
+                leftIcon='person'
+                type='text'
+                value={this.state.name}
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <Button type='submit' text='Add Contact' />
           </form>
         </div>
       </div>
     )
   }
 }
-module.exports = CreateContact
 
+module.exports = CreateContact
