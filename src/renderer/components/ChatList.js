@@ -17,7 +17,7 @@ class ChatList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      deadDropContact: false
+      deadDropChat: false
     }
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
@@ -28,7 +28,7 @@ class ChatList extends React.Component {
   }
 
   onDeadDropClose () {
-    this.setState({ deadDropContact: false })
+    this.setState({ deadDropChat: false })
   }
 
   onCreateChat () {
@@ -36,8 +36,8 @@ class ChatList extends React.Component {
   }
 
   onDeadDropClick (chat) {
-    // TODO: get contact from chat?
-    this.setState({ deadDropContact: chat })
+    console.log(chat)
+    this.setState({ deadDropChat: chat })
   }
 
   componentDidMount () {
@@ -50,12 +50,12 @@ class ChatList extends React.Component {
 
   render () {
     const { deltachat } = this.props
-    const { deadDropContact } = this.state
+    const { deadDropChat } = this.state
 
     return (
       <div>
         {this.state.error && this.state.error}
-        <DeadDropDialog deadDropContact={deadDropContact} onDeadDropClose={this.onDeadDropClose} />
+        <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} />
@@ -68,27 +68,37 @@ class ChatList extends React.Component {
         <div className='window'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
+            const i18n = window.translate
             if (chat.id === 1) {
-              return (<div>
-                // dead drop
-                <Button onClick={this.onDeadDropClick.bind(this, chat)}>
-                  New message from {chat.name}
-                </Button>
-              </div>)
+              const name = `New message from ${chat.name}`
+              return (
+                <ConversationListItem
+                  name={name}
+                  i18n={i18n}
+                  color={'purple'}
+                  phoneNumber={chat.summary.text1}
+                  lastUpdated={chat.summary.timestamp * 1000}
+                  lastMessage={{
+                    text: chat.summary.text2,
+                    status: 'delivered'
+                  }}
+                  onClick={this.onDeadDropClick.bind(this, chat)}
+                />)
+            } else {
+              return (
+                <ConversationListItem
+                  key={chat.id}
+                  onClick={this.onChatClick.bind(this, chat)}
+                  phoneNumber={chat.summary.text1}
+                  name={chat.name}
+                  lastUpdated={chat.summary.timestamp * 1000}
+                  lastMessage={{
+                    text: chat.summary.text2,
+                    status: 'sent' // TODO: interpret data from summary to get correct state
+                  }}
+                  i18n={i18n} />
+              )
             }
-            return (
-              <ConversationListItem
-                key={chat.id}
-                onClick={this.onChatClick.bind(this, chat)}
-                phoneNumber={chat.summary.text1}
-                name={chat.name}
-                lastUpdated={chat.summary.timestamp * 1000}
-                lastMessage={{
-                  text: chat.summary.text2,
-                  status: 'sent'
-                }}
-                i18n={window.translate} />
-            )
           })}
         </div>
       </div>
@@ -100,40 +110,40 @@ class DeadDropDialog extends React.Component {
   constructor (props) {
     super(props)
     this.yes = this.yes.bind(this)
-    this.no = this.no.bind(this)
     this.never = this.never.bind(this)
     this.close = this.close.bind(this)
   }
 
   yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropContact.id)
-    this.props.deadDropClose()
-  }
-
-  no () {
-    this.props.deadDropClose()
+    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat.fromId)
+    this.close()
   }
 
   close () {
-    this.props.deadDropClose()
+    this.props.onClose()
   }
 
   never () {
-    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropContact.id)
-    this.props.deadDropClose()
+    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropChat.fromId)
+    this.close()
   }
 
   render () {
-    const { deadDropContact } = this.props
-    if (!deadDropContact) return <div />
-    const title = `Chat with ${deadDropContact.address}?`
+    const { deadDropChat } = this.props
+    var name = deadDropChat && deadDropChat.summary.text1
+    const title = `Chat with ${name}?`
+    const isOpen = deadDropChat !== false
+    console.log(deadDropChat)
     return (
-      <Dialog title={title} icon='info-sign' onClose={this.no} canOutsideClickClose={false}>
-        <h3>{title}</h3>
-
+      <Dialog
+        isOpen={isOpen}
+        title={title}
+        icon='info-sign'
+        onClose={this.close}
+        canOutsideClickClose={false}>
         <ButtonGroup>
           <Button onClick={this.yes}> Yes </Button>
-          <Button onClick={this.no}> No </Button>
+          <Button onClick={this.close}> No </Button>
           <Button onClick={this.never}> Never </Button>
         </ButtonGroup>
       </Dialog>

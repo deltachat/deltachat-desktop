@@ -53,6 +53,7 @@ class ChatPage {
     var chat = this.chat.toJson()
     chat.messages = this._messages.map((m) => m.toJson())
     chat.summary = this.summary && this.summary.toJson()
+    chat.fromId = this.fromId
     return chat
   }
 
@@ -143,7 +144,6 @@ class DeltaChatController {
     var list = this._dc.getChatList()
     this._chatList = list
     var count = list.getCount()
-    log('got', count, 'chats')
     for (let i = 0; i < count; i++) {
       this._loadChatPage(list.getChatId(i), list.getSummary(i))
     }
@@ -182,7 +182,7 @@ class DeltaChatController {
       this.info(`Added contact ${name} (${address})`)
     }
     const chatId = this.createChatByContactId(contactId)
-    this._loadChat(chatId)
+    this._loadChatPage(chatId)
   }
 
   blockContact (contactId) {
@@ -204,6 +204,12 @@ class DeltaChatController {
       this._chats[chatId] = page
     }
     if (summary) page.summary = summary
+    if (chatId === 1) {
+      // dead drop
+      const messageIds = this._dc.getChatMessages(chatId, 0, 0)
+      const msg = this._dc.getMessage(messageIds[0])
+      page.fromId = msg.getFromId()
+    }
     return page
   }
 
