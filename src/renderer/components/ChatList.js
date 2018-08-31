@@ -59,7 +59,6 @@ class ChatList extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} />
-            <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <Button className={Classes.MINIMAL} icon='plus' text='Chat' onClick={this.onCreateChat} />
