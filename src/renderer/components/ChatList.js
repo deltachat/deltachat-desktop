@@ -2,25 +2,32 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('conversations')
 
+const KeyTransferDialog = require('./dialogs/KeyTransfer')
+const DeadDropDialog = require('./dialogs/DeadDrop')
+
 const {
   Alignment,
   Classes,
   Navbar,
   NavbarGroup,
-  NavbarHeading,
-  Button,
-  ButtonGroup,
-  Dialog
+  Position,
+  Menu,
+  MenuItem,
+  Popover,
+  Button
 } = require('@blueprintjs/core')
 
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      deadDropChat: false
+      deadDropChat: false,
+      keyTransfer: false
     }
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
+    this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
+    this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
   }
 
   onChatClick (chat) {
@@ -36,7 +43,6 @@ class ChatList extends React.Component {
   }
 
   onDeadDropClick (chat) {
-    console.log(chat)
     this.setState({ deadDropChat: chat })
   }
 
@@ -48,20 +54,37 @@ class ChatList extends React.Component {
     // TODO
   }
 
+  onKeyTransferComplete () {
+    this.setState({ keyTransfer: false })
+  }
+
+  initiateKeyTransfer () {
+    this.setState({ keyTransfer: true })
+  }
+
   render () {
     const { deltachat } = this.props
-    const { deadDropChat } = this.state
+    const { deadDropChat, keyTransfer } = this.state
+    const tx = window.translate
+
+    const menu = (<Menu>
+      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
+    </Menu>)
 
     return (
       <div>
         {this.state.error && this.state.error}
+        <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} />
+            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text='Logout' />
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <Button className={Classes.MINIMAL} icon='plus' text='Chat' onClick={this.onCreateChat} />
+            <Popover content={menu} position={Position.RIGHT_TOP}>
+              <Button className={Classes.MINIMAL} icon='menu' />
+            </Popover>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
@@ -101,51 +124,6 @@ class ChatList extends React.Component {
           })}
         </div>
       </div>
-    )
-  }
-}
-
-class DeadDropDialog extends React.Component {
-  constructor (props) {
-    super(props)
-    this.yes = this.yes.bind(this)
-    this.never = this.never.bind(this)
-    this.close = this.close.bind(this)
-  }
-
-  yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat.fromId)
-    this.close()
-  }
-
-  close () {
-    this.props.onClose()
-  }
-
-  never () {
-    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropChat.fromId)
-    this.close()
-  }
-
-  render () {
-    const { deadDropChat } = this.props
-    var name = deadDropChat && deadDropChat.summary.text1
-    const title = `Chat with ${name}?`
-    const isOpen = deadDropChat !== false
-    console.log(deadDropChat)
-    return (
-      <Dialog
-        isOpen={isOpen}
-        title={title}
-        icon='info-sign'
-        onClose={this.close}
-        canOutsideClickClose={false}>
-        <ButtonGroup>
-          <Button onClick={this.yes}> Yes </Button>
-          <Button onClick={this.close}> No </Button>
-          <Button onClick={this.never}> Never </Button>
-        </ButtonGroup>
-      </Dialog>
     )
   }
 }

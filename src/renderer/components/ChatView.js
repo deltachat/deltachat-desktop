@@ -2,12 +2,16 @@ const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
+const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 
 const {
   Alignment,
   Classes,
   Navbar,
+  Position,
+  Menu,
+  Popover,
   NavbarGroup,
   NavbarHeading,
   Button
@@ -22,8 +26,10 @@ class ChatView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      error: false
+      error: false,
+      setupMessage: false
     }
+    this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
   }
 
   writeMessage (message) {
@@ -60,31 +66,45 @@ class ChatView extends React.Component {
     }
   }
 
-  openMenu () {
-    // TODO: open a menu
+  clickSetupMessage (setupMessage) {
+    this.setState({ setupMessage })
+  }
+
+  onSetupMessageClose () {
+    // TODO: go back to main chat screen
+    this.setState({ setupMessage: false })
   }
 
   render () {
+    const { setupMessage } = this.state
     const chat = this.getChat()
 
     return (
       <div>
+        <SetupMessageDialog setupMessage={setupMessage} onClose={this.onSetupMessageClose} />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>{chat.name}</NavbarHeading>
-            <Button className={Classes.MINIMAL} icon='menu' onClick={this.openMenu} />
+            <Popover content={<Menu>...</Menu>} position={Position.RIGHT_TOP}>
+              <Button className={Classes.MINIMAL} icon='menu' />
+            </Popover>
           </NavbarGroup>
         </Navbar>
         {this.state.error && this.state.error}
         <div className='window'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
-              return (<li>
-                <RenderMessage message={message} />
-              </li>)
+              const msg = <RenderMessage message={message} />
+              if (message.msg.isSetupmessage) {
+                return <li onClick={this.clickSetupMessage.bind(this, message)}>
+                  {msg}
+                </li>
+              }
+
+              return <li>{msg}</li>
             })}
           </ConversationContext>
         </div>
