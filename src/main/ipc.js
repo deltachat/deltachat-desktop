@@ -63,6 +63,16 @@ function init () {
     render()
   })
 
+  ipc.on('initiateKeyTransfer', (e, ...args) => {
+    var resp = dc.initiateKeyTransfer(...args)
+    windows.main.send('initiateKeyTransferResp', resp)
+  })
+
+  ipc.on('continueKeyTransfer', (e, ...args) => {
+    var resp = dc.continueKeyTransfer(...args)
+    windows.main.send('continueKeyTransferResp', resp)
+  })
+
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
   ipc.on('locale-data', (e, locale) => {

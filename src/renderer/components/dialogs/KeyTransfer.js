@@ -56,23 +56,25 @@ class KeyTransferDialog extends React.Component {
       loading: false,
       key: false
     }
-    this.ready = this.ready.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
+    this.initiateKeyTransferResp = this.initiateKeyTransferResp.bind(this)
   }
 
-  ready (key) {
+  initiateKeyTransferResp (e, key) {
     this.setState({ loading: false, key })
   }
 
-  componentDidUpdate () {
-    if (this.state.loading) {
-      var key = ipcRenderer.sendSync('dispatchSync', 'initiateKeyTransfer')
-      this.ready(key)
-    }
+  componentDidMount () {
+    ipcRenderer.on('initiateKeyTransferResp', this.initiateKeyTransferResp)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('initiateKeyTransferResp', this.initiateKeyTransferResp)
   }
 
   initiateKeyTransfer () {
     this.setState({ loading: true })
+    ipcRenderer.send('initiateKeyTransfer')
   }
 
   render () {
