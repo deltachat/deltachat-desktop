@@ -25,3 +25,10 @@ script:
 
 notifications:
   email: false
+
+deploy:
+  provider: script
+  script: npm run dist
+  on:
+    branch: master
+skip_cleanup: true

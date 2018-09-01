@@ -9,6 +9,8 @@
     "test-integration": "npm run build && node ./test",
     "watch": "nodemon --exec \"npm run start\" --ext js,css --ignore build/ --ignore dist/",
     "start": "npm run build && electron .",
+    "pack": "build --dir",
+    "dist": "build --publish=onTagOrDraft",
     "dev": "npm run build && electron . --debug --disable-http-cache"
   },
   "repository": {
@@ -51,6 +53,7 @@
     "run-parallel": "^1.1.9"
   },
   "devDependencies": {
+    "electron-builder": "^20.28.3",
     "babel-eslint": "^8.2.6",
     "buble": "^0.19.3",
     "electron": "^2.0.7",
@@ -61,5 +64,12 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "build": {
+    "appId": "com.deltachat.desktop",
+    "linux": {
+      "icon": "./static/icon.png"
+    }
   }
+
 }
