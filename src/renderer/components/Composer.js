@@ -1,7 +1,6 @@
 const React = require('react')
 
 const { ControlGroup, Button, InputGroup } = require('@blueprintjs/core')
-console.log(ControlGroup, Button,InputGroup)
 
 class Composer extends React.Component {
   constructor (props) {
@@ -44,7 +43,7 @@ class Composer extends React.Component {
   }
 
   handleChange (e) {
-    this.setState({ value: e.target.value, error: false})
+    this.setState({ value: e.target.value, error: false })
   }
 
   addAttachment () {
@@ -53,7 +52,7 @@ class Composer extends React.Component {
 
   render () {
     const addAttachmentButton = (
-      <Button minimal={true} icon='paperclip' onClick={this.addAttachment.bind(this)} />
+      <Button minimal icon='paperclip' onClick={this.addAttachment.bind(this)} />
     )
     return (
       <ControlGroup className='composer' fill vertical={false}>

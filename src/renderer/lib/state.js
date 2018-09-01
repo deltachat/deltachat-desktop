@@ -1,6 +1,6 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
-const {EventEmitter} = require('events')
+const { EventEmitter } = require('events')
 
 const config = require('../../config')
 
@@ -23,8 +23,6 @@ const State = module.exports = Object.assign(new EventEmitter(), {
 })
 
 function getDefaultState () {
-  const LocationHistory = require('location-history')
-
   return {
     /*
      * Temporary state disappears once the program exits.
@@ -111,4 +109,3 @@ function saveImmediate (state, cb) {
     else State.emit('stateSaved')
   })
 }
-

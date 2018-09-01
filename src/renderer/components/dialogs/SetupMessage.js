@@ -2,7 +2,6 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const {
-  Spinner,
   InputGroup,
   Classes,
   Button,

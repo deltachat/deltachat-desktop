@@ -1,4 +1,3 @@
-const CONSTANTS = require('deltachat-node/constants')
 const DeltaChat = require('deltachat-node')
 const path = require('path')
 
@@ -291,7 +290,7 @@ class DeltaChatController {
     var results = contacts.map((c) => {
       this._dc.addContactToChat(chatId, c.id)
     })
-    return {chatId, results}
+    return { chatId, results }
   }
 
   render () {

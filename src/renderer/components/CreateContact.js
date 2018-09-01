@@ -35,7 +35,7 @@ class CreateContact extends React.Component {
   }
 
   handleError (err) {
-    this.setState({error: err.message})
+    this.setState({ error: err.message })
   }
 
   handleChange (event) {

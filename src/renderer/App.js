@@ -1,5 +1,4 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
 
 const Login = require('./components/Login')
 const ScreenController = require('./ScreenController')

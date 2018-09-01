@@ -80,7 +80,6 @@ class KeyTransferDialog extends React.Component {
   render () {
     const { isOpen, onClose } = this.props
     const { loading, key } = this.state
-    const tx = window.translate
 
     let body
     if (loading) body = <KeyLoadingPanel />

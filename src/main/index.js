@@ -73,14 +73,14 @@ function init () {
     const state = results.state
 
     localize.setup(app, state.saved.locale || app.getLocale())
-    windows.main.init(state, {hidden})
+    windows.main.init(state, { hidden })
     menu.init()
     if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
 
     // Report uncaught exceptions
     process.on('uncaughtException', (err) => {
       console.error(err)
-      const error = {message: err.message, stack: err.stack}
+      const error = { message: err.message, stack: err.stack }
       windows.main.dispatch('uncaughtError', 'main', error)
     })
   }

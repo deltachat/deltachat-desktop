@@ -21,7 +21,7 @@ class CreateChat extends React.Component {
   }
 
   handleError (err) {
-    this.setState({error: err.message})
+    this.setState({ error: err.message })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -31,7 +31,7 @@ class CreateChat extends React.Component {
 
   onContactCreateSuccess (contactId) {
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contactId)
-    this.props.changeScreen('ChatView', {chatId})
+    this.props.changeScreen('ChatView', { chatId })
   }
 
   createContact () {

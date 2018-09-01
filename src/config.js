@@ -129,4 +129,3 @@ function isProduction () {
     return !/\/electron$/.test(process.execPath)
   }
 }
-

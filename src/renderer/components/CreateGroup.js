@@ -36,7 +36,7 @@ class CreateGroup extends React.Component {
   }
 
   handleError (err) {
-    this.setState({error: err.message})
+    this.setState({ error: err.message })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
