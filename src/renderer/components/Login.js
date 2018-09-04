@@ -61,7 +61,7 @@ class Login extends React.Component {
             </FormGroup>
             <FormGroup label='Password' placeholder='Password' labelFor='password'>
               <InputGroup
-                id='name'
+                id='password'
                 leftIcon='lock'
                 type='password'
                 value={this.state.password}
