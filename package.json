@@ -64,7 +64,7 @@
   "build": {
     "appId": "com.deltachat.desktop",
     "linux": {
-      "icon": "./static/icon.png"
+      "icon": "./static/deltachat.png"
     }
   }
 }
