@@ -31,4 +31,4 @@ deploy:
   script: npm run dist
   on:
     branch: master
-skip_cleanup: true
+skip_cleanup: false
