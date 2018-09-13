@@ -74,7 +74,7 @@ class DeltaChatController {
   // The Controller is the container for a deltachat instance
   constructor () {
     this._chats = []
-    this._dc = null
+    this._dc = new DeltaChat()
     this.ready = false
     this.credentials = {
       email: null,
@@ -87,20 +87,27 @@ class DeltaChatController {
     var self = this
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
-    var dc = this._dc = new DeltaChat({
-      addr: credentials.email,
-      mail_pw: credentials.password,
-      cwd
-    })
+    var dc = this._dc
     this.credentials.email = credentials.email
     this.credentials.cwd = cwd
 
-    dc.open(err => {
+    dc.open(cwd, err => {
       if (err) throw err
-      log('Ready')
-      self.ready = true
-      self.loadChats()
-      render()
+      const onReady = () => {
+        log('Ready')
+        self.ready = true
+        self.loadChats()
+        render()
+      }
+      if (!dc.isConfigured()) {
+        dc.once('ready', onReady)
+        dc.configure({
+          addr: credentials.email,
+          mail_pw: credentials.password
+        })
+      } else {
+        onReady()
+      }
     })
 
     dc.on('ALL', (event, data1, data2) => {
