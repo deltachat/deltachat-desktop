@@ -9,8 +9,8 @@
     "test-integration": "npm run build && node ./test",
     "watch": "nodemon --exec \"npm run start\" --ext js,css --ignore build/ --ignore dist/",
     "start": "npm run build && electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder --publish=onTagOrDraft",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && electron . --debug --disable-http-cache"
   },
   "repository": {
