@@ -28,7 +28,6 @@
   "bugs": {
     "url": "https://github.com/deltachat/deltachat-desktop/issues"
   },
-  "release": "build",
   "engines": {
     "node": ">=10.7.0"
   },
