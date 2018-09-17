@@ -67,6 +67,10 @@
       "buildResources": "src"
     },
     "linux": {
+      "maintainer": {
+        "name": "DeltaChat Developers",
+        "email": "delta@codespeak.net"
+      },
       "target": [ "AppImage", "deb" ],
       "category": "Utility",
       "icon": "./static/deltachat.png"
