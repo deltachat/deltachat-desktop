@@ -65,6 +65,24 @@
     "parser": "babel-eslint"
   },
   "build": {
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "icon": "static/icon.icns"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 220,
+          "y": 200
+        },
+        {
+          "x": 448,
+          "y": 200,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
     "appId": "com.deltachat.desktop",
     "directories": {
       "buildResources": "src"
