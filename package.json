@@ -68,6 +68,8 @@
       "buildResources": "src"
     },
     "linux": {
+      "target": [ "AppImage", "deb" ],
+      "category": "Utility",
       "icon": "./static/deltachat.png"
     }
   }
