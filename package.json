@@ -23,7 +23,10 @@
     "messaging",
     "desktop"
   ],
-  "author": "Karissa McKelvey",
+  "author": {
+    "name": "DeltaChat Developers",
+    "email": "delta-systems@codespeak.net"
+  },
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/deltachat/deltachat-desktop/issues"
@@ -67,10 +70,6 @@
       "buildResources": "src"
     },
     "linux": {
-      "maintainer": {
-        "name": "DeltaChat Developers",
-        "email": "delta@codespeak.net"
-      },
       "target": [ "AppImage", "deb" ],
       "category": "Utility",
       "icon": "./static/deltachat.png"
