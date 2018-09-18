@@ -78,6 +78,14 @@ strings from translators:
 tx pull --all
 ```
 
+### Deploy workflow
+
+1. Create a draft release on github, e.g. `vX.Y.Z`
+1. Change `version` field in `package.json` to `X.Y.Z`
+1. Commit and push modified `package.json` (repeat until release is ready)
+1. Once done, publish the release on github, which will create the tag
+
+Also see https://www.electron.build/configuration/publish
 
 ## License
 
