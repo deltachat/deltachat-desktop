@@ -111,7 +111,7 @@ class DeltaChatController {
     })
 
     dc.on('ALL', (event, data1, data2) => {
-      // log(event, data1, data2)
+      log(event, data1, data2)
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
