@@ -29,14 +29,15 @@ class CreateChat extends React.Component {
     return (this.state !== nextState)
   }
 
-  onContactCreateSuccess (contactId) {
+  createChatByContactId (contactId) {
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contactId)
-    this.props.changeScreen('ChatView', { chatId })
+    if (!chatId) return this.handleError(new Error(`Invalid contact id ${contactId}`))
+    this.props.changeScreen('ChatList', { chatId })
   }
 
   createContact () {
     this.props.changeScreen('CreateContact', {
-      onContactCreateSuccess: this.onContactCreateSuccess.bind(this)
+      onContactCreateSuccess: this.createChatByContactId.bind(this)
     })
   }
 
@@ -45,9 +46,7 @@ class CreateChat extends React.Component {
   }
 
   chooseContact (contact) {
-    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
-    if (!chatId) return this.handleError(new Error(`Invalid contact id ${contact.id}`))
-    this.props.changeScreen('ChatView', { chatId })
+    this.createChatByContactId(contact.id)
   }
 
   render () {
