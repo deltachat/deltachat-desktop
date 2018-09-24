@@ -23,13 +23,16 @@ class CreateChat extends React.Component {
   }
 
   chooseContact (contact) {
+    const tx = window.translate
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
-    if (!chatId) return this.props.userFeedback({ type: 'error', text: `Invalid contact id ${contact.id}` })
+    if (!chatId) return this.props.userFeedback({ type: 'error', text: tx('createChatError') })
     this.props.changeScreen('ChatView', { chatId })
   }
 
   render () {
     const { deltachat } = this.props
+
+    const tx = window.translate
 
     return (
       <div>
@@ -43,7 +46,7 @@ class CreateChat extends React.Component {
               className={Classes.MINIMAL}
               icon='plus'
               onClick={this.createGroup.bind(this)}
-              text='Group' />
+              text={tx('createGroup')} />
           </NavbarGroup>
         </Navbar>
         <div className='window'>

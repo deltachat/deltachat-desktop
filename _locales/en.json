@@ -1,4 +1,25 @@
 {
+  "emailValidationFailed": {
+    "message": "E-mail address required."
+  },
+  "createChatError": {
+    "message": "Could not create chat."
+  },
+  "newMessageFrom": {
+    "message": "New message from"
+  },
+  "addContact": {
+    "message": "Add Contact"
+  },
+  "createGroup": {
+    "message": "Group"
+  },
+  "addChat": {
+    "message": "Create Chat"
+  },
+  "contactCreateSuccess": {
+    "message": "Contact created successfully."
+  },
   "initiateKeyTransferTitle": {
     "message": "Initiate Key Transfer"
   },

@@ -34,10 +34,6 @@ class CreateContact extends React.Component {
     return (this.state !== nextState)
   }
 
-  handleError (err) {
-    this.setState({ error: err.message })
-  }
-
   handleChange (event) {
     var state = {}
     state[event.target.id] = event.target.value
@@ -47,6 +43,7 @@ class CreateContact extends React.Component {
 
   handleSubmit (event) {
     var self = this
+    const tx = window.translate
     event.preventDefault()
     const { name, email } = this.state
 
@@ -62,14 +59,14 @@ class CreateContact extends React.Component {
     } else if (email.length) {
       createContact(email.split('@')[0], email)
     } else {
-      return this.handleError(new Error('Email required.'))
+      return this.props.userFeedback({ type: 'error', text: tx('emailValidationFailed.') })
     }
   }
 
   render () {
+    const tx = window.translate
     return (
       <div>
-        {this.state.error && this.state.error}
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
@@ -96,7 +93,7 @@ class CreateContact extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button type='submit' text='Add Contact' />
+            <Button type='submit' text={tx('addContact')} />
           </form>
         </div>
       </div>

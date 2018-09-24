@@ -41,10 +41,13 @@ class ChatList extends React.Component {
 
   onCreateContact () {
     var self = this
+
+    const tx = window.translate
+
     var onSubmit = (id) => {
       if (id !== 0) {
-        self.props.userFeedback({ type: 'success', text: 'Contact created successfully.' })
-        this.props.changeScreen('ChatList')
+        self.props.userFeedback({ type: 'success', text: tx('contactCreateSuccess') })
+        self.props.changeScreen('ChatList')
       }
     }
     this.props.changeScreen('CreateContact', { onSubmit })
@@ -77,11 +80,12 @@ class ChatList extends React.Component {
   render () {
     const { deltachat } = this.props
     const { deadDropChat, keyTransfer } = this.state
-    const tx = window.translate
 
     const menu = (<Menu>
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
+
+    const tx = window.translate
 
     return (
       <div>
@@ -92,8 +96,8 @@ class ChatList extends React.Component {
             <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text='Logout' />
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <Button className={Classes.MINIMAL} icon='plus' text='Contact' onClick={this.onCreateContact} />
-            <Button className={Classes.MINIMAL} icon='plus' text='Chat' onClick={this.onCreateChat} />
+            <Button className={Classes.MINIMAL} icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
+            <Button className={Classes.MINIMAL} icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
             <Popover content={menu} position={Position.RIGHT_TOP}>
               <Button className={Classes.MINIMAL} icon='menu' />
             </Popover>
@@ -104,7 +108,7 @@ class ChatList extends React.Component {
             if (!chat) return
             const i18n = window.translate
             if (chat.id === 1) {
-              const name = `New message from ${chat.name}`
+              const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
                 <ConversationListItem
                   name={name}
