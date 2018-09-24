@@ -15,6 +15,20 @@ $ cd deltachat-desktop
 $ npm install
 ```
 
+### Troubleshooting
+
+If you get errors running `npm install`, you might need meson>=46 and to
+uninstall libetpan-dev globally.
+
+On linux:
+```
+sudo apt-get install python3-pip
+sudo pip3 install meson
+sudo apt-get remove libetpan-dev
+```
+
+Then try running `npm install` again.
+
 ### Run the app
 
 ```
