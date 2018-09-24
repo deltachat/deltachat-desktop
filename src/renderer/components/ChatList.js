@@ -73,7 +73,6 @@ class ChatList extends React.Component {
 
     return (
       <div>
-        {this.state.error && this.state.error}
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>

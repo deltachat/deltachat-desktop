@@ -47,14 +47,15 @@ function init () {
 
   // Create a new instance
   ipc.on('init', (e, ...args) => {
-    dc.init(...args, render)
+    dc.init(...args, render, onError)
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
-    e.returnValue = dispatch(...args)
+    var ret = dispatch(...args)
     render()
+    e.returnValue = ret
   })
 
   // Calls the function without returning the value (async)
@@ -79,6 +80,10 @@ function init () {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
   })
+
+  function onError (msg) {
+    windows.main.send('error', msg)
+  }
 
   function dispatch (name, ...args) {
     var handler = dc[name]

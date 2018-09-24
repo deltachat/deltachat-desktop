@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
+const Login = require('./components/Login')
 const ChatList = require('./components/ChatList')
 const ChatView = require('./components/ChatView')
 const CreateChat = require('./components/CreateChat')
@@ -12,9 +13,11 @@ class Home extends React.Component {
     super(props)
     this.state = {
       screen: 'ChatList',
-      screenProps: {}
+      screenProps: {},
+      message: false
     }
     this.changeScreen = this.changeScreen.bind(this)
+    this.userFeedback = this.userFeedback.bind(this)
   }
 
   changeScreen (screen, screenProps) {
@@ -24,10 +27,25 @@ class Home extends React.Component {
     ipcRenderer.send('render')
   }
 
+  userFeedback (message) {
+    var self = this
+    setTimeout(function () {
+      self.setState({ message: false })
+    }, 3000)
+    self.setState({ message })
+  }
+
+  componentDidMount () {
+    var self = this
+    ipcRenderer.on('error', function (e, text) {
+      self.userFeedback({ type: 'error', text })
+    })
+  }
+
   render () {
     // renderer/main.js polls every second and updates the deltachat
     // property with current state of database.
-    const { deltachat } = this.props
+    const { credentials, deltachat } = this.props
     const { screen, screenProps } = this.state
 
     var Screen
@@ -49,12 +67,26 @@ class Home extends React.Component {
         break
     }
 
+    var type = this.state.message.type
+    var classNames = `user-feedback ${type}`
+
     return (
-      <Screen
-        screenProps={screenProps}
-        changeScreen={this.changeScreen}
-        deltachat={deltachat}
-      />
+      <div>
+        {this.state.message && (
+          <div className={classNames}>
+            {this.state.message.text}
+          </div>
+        )}
+        {!deltachat.ready
+          ? <Login credentials={credentials} />
+          : <Screen
+            screenProps={screenProps}
+            userFeedback={this.userFeedback}
+            changeScreen={this.changeScreen}
+            deltachat={deltachat}
+          />
+        }
+      </div>
     )
   }
 }

@@ -195,8 +195,7 @@ class DeltaChatController {
       this._dc.createContact(name, address)
       this.info(`Added contact ${name} (${address})`)
     }
-    const chatId = this.createChatByContactId(contactId)
-    this._loadChatPage(chatId)
+    this.loadChats()
   }
 
   blockContact (contactId) {
@@ -243,7 +242,7 @@ class DeltaChatController {
     const contact = this._dc.getContact(contactId)
     if (!contact) return 0
     const chatId = this._dc.createChatByContactId(contactId)
-    this._loadChatPage(chatId)
+    this.loadChats()
     return chatId
   }
 
