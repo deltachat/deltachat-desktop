@@ -4,7 +4,7 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "build": "buble src --output build",
+    "build": "buble src --output es5",
     "test": "standard",
     "test-integration": "npm run build && node ./test",
     "watch": "nodemon --exec \"npm run start\" --ext js,css --ignore build/ --ignore dist/",
@@ -84,9 +84,6 @@
       ]
     },
     "appId": "com.deltachat.desktop",
-    "directories": {
-      "buildResources": "src"
-    },
     "linux": {
       "target": [
         "AppImage",
