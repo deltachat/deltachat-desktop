@@ -8,9 +8,12 @@ const Composer = require('./Composer')
 const {
   Alignment,
   Classes,
+  Navbar,
   Position,
   Menu,
   Popover,
+  NavbarGroup,
+  NavbarHeading,
   Button
 } = require('@blueprintjs/core')
 
@@ -30,19 +33,30 @@ class ChatView extends React.Component {
   }
 
   writeMessage (message) {
-    var chatId = this.props.chat.id
+    var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, message)
   }
 
   componentWillUnmount () {
-    var chatId = this.props.chat.id
+    var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'clearChatPage', chatId)
   }
 
   componentDidMount () {
-    const chat = this.props.chat
+    var chatId = this.props.screenProps.chatId
+    ipcRenderer.send('dispatch', 'loadMessages', chatId)
+    const chat = this.getChat()
     this.setState({ value: chat.textDraft })
     this.scrollToBottom()
+  }
+
+  getChat () {
+    const { deltachat } = this.props
+    var chatId = this.props.screenProps.chatId
+    var index = deltachat.chats.findIndex((chat) => {
+      return chat.id === chatId
+    })
+    return deltachat.chats[index]
   }
 
   scrollToBottom (force) {
@@ -63,14 +77,24 @@ class ChatView extends React.Component {
 
   render () {
     const { setupMessage } = this.state
-    const { chat } = this.props
+    const chat = this.getChat()
 
-    console.log('got chat', chat)
     return (
       <div>
         <SetupMessageDialog setupMessage={setupMessage} onClose={this.onSetupMessageClose} />
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <NavbarHeading>{chat.name}</NavbarHeading>
+            <Popover content={<Menu>...</Menu>} position={Position.RIGHT_TOP}>
+              <Button className={Classes.MINIMAL} icon='menu' />
+            </Popover>
+          </NavbarGroup>
+        </Navbar>
         {this.state.error && this.state.error}
-        <div>
+        <div className='window'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
               const msg = <RenderMessage message={message} />

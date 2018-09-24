@@ -51,7 +51,7 @@ class ChatPage {
   toJson () {
     var chat = this.chat.toJson()
     chat.messages = this._messages.map((m) => m.toJson())
-    chat.summary = this.summary ? this.summary.toJson() : {}
+    chat.summary = this.summary && this.summary.toJson()
     chat.fromId = this.fromId
     return chat
   }
@@ -155,20 +155,6 @@ class DeltaChatController {
     }
   }
 
-  getChatIndexForChatId (chatId) {
-    var list = this._chatList
-    var count = list.getCount()
-    var index = null
-    for (let i = 0; i < count; i++) {
-      var id = list.getChatId(i)
-      if (id === chatId) {
-        index = id
-        break
-      }
-    }
-    return index
-  }
-
   clearChatPage (chatId) {
     var chat = this._loadChatPage(chatId)
     chat.clear()
@@ -231,21 +217,12 @@ class DeltaChatController {
       page = new ChatPage(chatId, this._dc)
       this._chats[chatId] = page
     }
-    if (!summary) {
-      log('getting chatId', chatId)
-      var index = this.getChatIndexForChatId(chatId)
-      if (index) summary = this._chatList.getSummary(index)
-    }
     if (summary) page.summary = summary
     if (chatId === 1) {
       // dead drop
       const messageIds = this._dc.getChatMessages(chatId, 0, 0)
       const msg = this._dc.getMessage(messageIds[0])
       page.fromId = msg.getFromId()
-    } else {
-      // TODO: this will be slow for lots of messages
-      const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-      messageIds.forEach(page.appendMessage.bind(page))
     }
     return page
   }
