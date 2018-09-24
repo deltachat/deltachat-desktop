@@ -44,16 +44,6 @@ class CreateGroup extends React.Component {
     return (this.state !== nextState)
   }
 
-  onContactCreateSuccess (contactId) {
-    this.addToGroup(this.getContact(contactId))
-  }
-
-  createContact () {
-    this.props.changeScreen('CreateContact', {
-      onContactCreateSuccess: this.onContactCreateSuccess.bind(this)
-    })
-  }
-
   getContact (contactOrContactId) {
     const { deltachat } = this.props
     const contactId = contactOrContactId.id || contactOrContactId
@@ -77,7 +67,8 @@ class CreateGroup extends React.Component {
     if (!contacts.length) return this.handleError(new Error('Add at least one contact to the group'))
     if (!this.state.name) return this.handleError(new Error('Group name required.'))
     var { chatId } = ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', contacts, this.state.name)
-    this.props.changeScreen('ChatView', { chatId })
+    // TODO: redirect to chatview screen without breaking it this.props.changeScreen('ChatView', { chatId })
+    this.props.changeScreen('ChatList')
   }
 
   handleNameChange (e) {
@@ -117,7 +108,7 @@ class CreateGroup extends React.Component {
                 type='text'
                 id='name'
                 value={this.state.name}
-                onChange={this.handleNameChange}
+                onChange={this.handleNameChange.bind(this)}
                 placeholder='Group Name' />
               <Button
                 onClick={this.createGroup.bind(this)}
