@@ -87,13 +87,6 @@ class CreateGroup extends React.Component {
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
             <NavbarHeading>Create Chat</NavbarHeading>
           </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Button
-              className={Classes.MINIMAL}
-              icon='new-person'
-              onClick={this.createContact.bind(this)}
-              text='Contact' />
-          </NavbarGroup>
         </Navbar>
         <div className='window'>
           <div>
