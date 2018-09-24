@@ -9,6 +9,9 @@ BEGIN {
 while (<>) {
   next if $seen{$_};
   next if /(support\@greenkeeper.io)/;
+  next if /(karissa\@users.noreply.github.com)/;
+  next if /(ralphtheninja\@users.noreply.github.com)/;
+  next if /(greenkeeper\[bot\]\@users.noreply.github.com)/;
   next if /(ungoldman\@gmail.com)/;
   next if /(dc\@DCs-MacBook.local)/;
   next if /(rolandoguedes\@gmail.com)/;
