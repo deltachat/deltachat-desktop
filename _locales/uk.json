@@ -1,6 +1,6 @@
 {
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Почати переправлення ключу",
         "description": ""
     },
     "initiateKeyTransfer": {
@@ -12,63 +12,63 @@
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Дізнатися більше...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Завантажити додаток",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Додане до повідомлення зображення",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Скриншот відео, доданого до повідомлення",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Зображення надіслано у розмові",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Відповісти на повідомлення",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Видалити повідомлення",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Видалити повідомлення",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Більше про повідомлення",
         "description": ""
     },
     "audio": {
-        "message": "Audio",
+        "message": "Авдіо",
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
-        "message": "Video",
+        "message": "Відео",
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Світлина",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
-        "message": "OK",
+        "message": "Добре",
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Скасувати",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Видалити",
         "description": ""
     },
     "login.button": {
@@ -84,67 +84,67 @@
         "description": "Choose language label in the menu"
     },
     "timestampFormat_M": {
-        "message": "MMM D",
+        "message": "МММ Д",
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "Від",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "До",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Надіслано",
         "description": "Label for the time a message was sent"
     },
     "received": {
-        "message": "Received",
+        "message": "Отримано",
         "description": "Label for the time a message was received"
     },
     "sendMessage": {
-        "message": "Send a message",
+        "message": "Надіслати повідомлення",
         "description": "Placeholder text in the message entry field"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Учасники спільноти",
         "description": ""
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Показати учасників",
         "description": ""
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "зараз",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
-        "message": "1 minute",
+        "message": "1 хвилина",
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "1 година",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "зараз",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
-        "message": "$hours$ hr",
+        "message": "$hours$гдн",
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "$hours$гдн тому",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
-        "message": "$minutes$ min",
+        "message": "$minutes$хв",
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "$minutes$ хв тому",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     }
 }

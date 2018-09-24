@@ -1,30 +1,30 @@
 {
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Inicjowanie transferu klucza",
         "description": ""
     },
     "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
+        "message": "'Tranfer klucza automatycznego szyfrowania' wymaga, aby klient poczty na drugim urządzeniu był zgodny z automatycznym szyfrowaniem.\\n\\nMożesz wysłać klucz do siebie. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
+        "message": "Klucz został wysłany do ciebie. Przejdź do innego urządzenia i otwórz wiadomość konfiguracyjną. Zostanie wyświetlona prośba o podanie kodu konfiguracyjnego. Wpisz następujące cyfry w podpowiedzi. Gdy skończysz, drugie urządzenie będzie gotowe do użycia funkcji automatycznego szyfrowania.",
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Więcej inforamcji",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Pobierz załącznik",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Obraz załączony do wiadomości",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Zrzut ekranu z filmu wideo załączono do wiadomości",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
@@ -32,19 +32,19 @@
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Odpowiedz na wiadomość",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Usuń wiadomość",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Usuń wiadomości",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Szczegóły wiadomości",
         "description": ""
     },
     "audio": {
@@ -52,11 +52,11 @@
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
-        "message": "Video",
+        "message": "Wideo",
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Zdjęcie",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
@@ -64,11 +64,11 @@
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Anuluj",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Usuń",
         "description": ""
     },
     "login.button": {

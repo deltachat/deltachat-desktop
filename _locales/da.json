@@ -12,7 +12,7 @@
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Mere information...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
@@ -32,23 +32,23 @@
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Svare besked",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Slette besked",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Slette beskeder",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Besked detaljer",
         "description": ""
     },
     "audio": {
-        "message": "Audio",
+        "message": "Lyd",
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
@@ -56,19 +56,19 @@
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Billede",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
-        "message": "OK",
+        "message": "O.k.",
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Annullere",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Slette",
         "description": ""
     },
     "login.button": {
@@ -88,63 +88,63 @@
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "Fra",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "Til",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Sendt",
         "description": "Label for the time a message was sent"
     },
     "received": {
-        "message": "Received",
+        "message": "Modtaget",
         "description": "Label for the time a message was received"
     },
     "sendMessage": {
-        "message": "Send a message",
+        "message": "Send en besked",
         "description": "Placeholder text in the message entry field"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Gruppe medlemmer",
         "description": ""
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Vis medlemmer",
         "description": ""
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "nu",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
-        "message": "1 minute",
+        "message": "1 minut",
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "1 time",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "nu",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
-        "message": "$hours$ hr",
+        "message": "$hours$ timer",
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "$hours$ timer siden",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
-        "message": "$minutes$ min",
+        "message": "$minutes$ minutter",
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "$minutes$ minutter siden",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     }
 }

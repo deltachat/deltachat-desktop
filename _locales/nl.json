@@ -1,6 +1,6 @@
 {
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Sleuteloverdracht beginnen",
         "description": ""
     },
     "initiateKeyTransfer": {
@@ -12,39 +12,39 @@
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Meer informatie...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Bijlage downloaden",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Afbeelding bijgevoegd bij bericht",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Schermafbeelding van video bijgevoegd bij bericht",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Afbeelding verstuurd in gesprek",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Bericht beantwoorden",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Bericht verwijderen",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Berichten verwijderen",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Berichtinformatie",
         "description": ""
     },
     "audio": {
@@ -56,19 +56,19 @@
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Foto",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
-        "message": "OK",
+        "message": "Oké",
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Annuleren",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Verwijderen",
         "description": ""
     },
     "login.button": {

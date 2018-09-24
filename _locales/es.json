@@ -12,15 +12,15 @@
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Más información...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Descargar adjunto",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Imagen adjunta al mensaje",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {

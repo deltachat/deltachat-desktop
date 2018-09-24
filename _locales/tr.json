@@ -1,6 +1,6 @@
 {
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Anahtar Aktarımını Başlat",
         "description": ""
     },
     "initiateKeyTransfer": {
@@ -12,11 +12,11 @@
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Daha çok Bilgi...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Eki İndirin",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
