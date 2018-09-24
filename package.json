@@ -66,8 +66,7 @@
   },
   "build": {
     "mac": {
-      "category": "public.app-category.social-networking",
-      "icon": "static/icon.icns"
+      "category": "public.app-category.social-networking"
     },
     "dmg": {
       "contents": [
@@ -89,8 +88,7 @@
         "AppImage",
         "deb"
       ],
-      "category": "Utility",
-      "icon": "./static/deltachat.png"
+      "category": "Utility"
     }
   }
 }
