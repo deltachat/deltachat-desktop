@@ -81,11 +81,11 @@ class ChatList extends React.Component {
     const { deltachat } = this.props
     const { deadDropChat, keyTransfer } = this.state
 
+    const tx = window.translate
+
     const menu = (<Menu>
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
-
-    const tx = window.translate
 
     return (
       <div>
