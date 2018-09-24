@@ -1,5 +1,5 @@
 dist/
-build/
+es5/
 package-lock.json
 
 # Logs

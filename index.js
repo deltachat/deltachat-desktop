@@ -1,1 +1,1 @@
-require('./build/main')
+require('./es5/main')
