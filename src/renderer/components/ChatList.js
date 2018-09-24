@@ -26,6 +26,7 @@ class ChatList extends React.Component {
     }
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
+    this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
   }
@@ -36,6 +37,17 @@ class ChatList extends React.Component {
 
   onDeadDropClose () {
     this.setState({ deadDropChat: false })
+  }
+
+  onCreateContact () {
+    var self = this
+    var onSubmit = (id) => {
+      if (id !== 0) {
+        self.props.userFeedback({ type: 'success', text: 'Contact created successfully.' })
+        this.props.changeScreen('ChatList')
+      }
+    }
+    this.props.changeScreen('CreateContact', { onSubmit })
   }
 
   onCreateChat () {
@@ -80,6 +92,7 @@ class ChatList extends React.Component {
             <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text='Logout' />
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
+            <Button className={Classes.MINIMAL} icon='plus' text='Contact' onClick={this.onCreateContact} />
             <Button className={Classes.MINIMAL} icon='plus' text='Chat' onClick={this.onCreateChat} />
             <Popover content={menu} position={Position.RIGHT_TOP}>
               <Button className={Classes.MINIMAL} icon='menu' />

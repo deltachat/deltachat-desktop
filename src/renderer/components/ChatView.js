@@ -45,8 +45,6 @@ class ChatView extends React.Component {
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadMessages', chatId)
-    const chat = this.getChat()
-    this.setState({ value: chat.textDraft })
     this.scrollToBottom()
   }
 
@@ -78,6 +76,7 @@ class ChatView extends React.Component {
   render () {
     const { setupMessage } = this.state
     const chat = this.getChat()
+    this.state.value = chat.textDraft
 
     return (
       <div>

@@ -26,7 +26,7 @@ class CreateContact extends React.Component {
   }
 
   back () {
-    this.props.changeScreen('CreateChat')
+    this.props.changeScreen('ChatList')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -52,13 +52,7 @@ class CreateContact extends React.Component {
 
     function createContact () {
       var id = ipcRenderer.sendSync('dispatchSync', 'createContact', name, email)
-
-      if (id !== 0) {
-        console.log(`Contact ${id} created or updated.`)
-      } else {
-        console.log(`Failed, I guess. returned ${id}`)
-      }
-      self.props.screenProps.onContactCreateSuccess(id)
+      self.props.screenProps.onSubmit(id)
     }
 
     // TODO: better frontend email validation
