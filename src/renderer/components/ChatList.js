@@ -44,8 +44,8 @@ class ChatList extends React.Component {
 
     const tx = window.translate
 
-    var onSubmit = (id) => {
-      if (id !== 0) {
+    var onSubmit = (chatId) => {
+      if (chatId !== 0) {
         self.props.userFeedback({ type: 'success', text: tx('contactCreateSuccess') })
         self.props.changeScreen('ChatList')
       }

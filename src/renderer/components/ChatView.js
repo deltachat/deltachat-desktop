@@ -44,7 +44,7 @@ class ChatView extends React.Component {
 
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'loadMessages', chatId)
+    ipcRenderer.send('dispatch', 'loadChats', chatId)
     this.scrollToBottom()
   }
 

@@ -146,12 +146,16 @@ class DeltaChatController {
     })
   }
 
-  loadChats () {
+  loadChats (_chatId) {
     var list = this._dc.getChatList()
     this._chatList = list
     var count = list.getCount()
     for (let i = 0; i < count; i++) {
-      this._loadChatPage(list.getChatId(i), list.getSummary(i))
+      var chatId = list.getChatId(i)
+      this._loadChatPage(chatId, {
+        summary: list.getSummary(i),
+        loadMessages: _chatId === chatId
+      })
     }
   }
 
@@ -210,19 +214,21 @@ class DeltaChatController {
     this._loadChatPage(chatId).appendMessage(messageId)
   }
 
-  _loadChatPage (chatId, summary) {
+  _loadChatPage (chatId, opts) {
+    if (!opts) opts = {}
     let page = this._chats[chatId]
     if (!page) {
       page = new ChatPage(chatId, this._dc)
       this._chats[chatId] = page
     }
-    if (summary) page.summary = summary
     if (chatId === 1) {
       // dead drop
       const messageIds = this._dc.getChatMessages(chatId, 0, 0)
       const msg = this._dc.getMessage(messageIds[0])
       page.fromId = msg.getFromId()
     }
+    if (opts.summary) page.summary = opts.summary
+    if (opts.loadMessages) this.loadMessages(chatId)
     return page
   }
 
