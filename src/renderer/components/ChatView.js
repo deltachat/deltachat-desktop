@@ -76,6 +76,7 @@ class ChatView extends React.Component {
   render () {
     const { setupMessage } = this.state
     const chat = this.getChat()
+    if (!chat) return <div />
     this.state.value = chat.textDraft
 
     return (
