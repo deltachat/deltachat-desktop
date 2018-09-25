@@ -66,7 +66,7 @@ class ChatList extends React.Component {
   }
 
   logout () {
-    // TODO
+    ipcRenderer.send('logout')
   }
 
   onKeyTransferComplete () {
