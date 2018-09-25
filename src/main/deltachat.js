@@ -2,7 +2,6 @@ const DeltaChat = require('deltachat-node')
 const path = require('path')
 
 const log = require('./log')
-const config = require('../config')
 
 function messageIdToJson (messageId, dc) {
   const msg = dc.getMessage(messageId)
@@ -38,7 +37,8 @@ function chatIdToJson (chatId, dc) {
 
 class DeltaChatController {
   // The Controller is the container for a deltachat instance
-  constructor () {
+  constructor (cwd) {
+    this.cwd = cwd
     this.ready = false
     this.credentials = {
       email: null,
@@ -55,7 +55,7 @@ class DeltaChatController {
 
   init (credentials, render) {
     // Creates a separate DB file for each login
-    const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
+    const cwd = path.join(this.cwd, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
     var dc = this._dc

@@ -1,11 +1,13 @@
 const Application = require('spectron').Application
 const cpFile = require('cp-file')
+const electronPath = require('electron')
 const fs = require('fs')
 const path = require('path')
 const PNG = require('pngjs').PNG
 const rimraf = require('rimraf')
+const mkdirp = require('mkdirp')
 
-const config = require('./config')
+const config = require('../src/config')
 
 module.exports = {
   createApp,
@@ -23,8 +25,8 @@ module.exports = {
 // Takes a Tape test. Makes some basic assertions to verify that the app loaded correctly.
 function createApp (t) {
   return new Application({
-    path: path.join(__dirname, '..', 'node_modules', '.bin',
-      'electron' + (process.platform === 'win32' ? '.cmd' : '')),
+    path: electronPath,
+    args: [path.join(__dirname, '..')],
     env: { NODE_ENV: 'test' },
     waitTimeout: 10e3
   })
@@ -35,16 +37,6 @@ function waitForLoad (app, t, opts) {
   if (!opts) opts = {}
   return app.start().then(function () {
     return app.client.waitUntilWindowLoaded()
-  }).then(function () {
-    // Switch to the main window. Index 0 is apparently the hidden window...
-    return app.client.windowByIndex(1)
-  }).then(function () {
-    return app.client.waitUntilWindowLoaded()
-  }).then(function () {
-    return app.webContents.getTitle()
-  }).then(function (title) {
-    // Note the window title is Delta Chat (Alpha) this is the HTML <title>
-    t.equal(title, 'Main Window', 'html title')
   })
 }
 
@@ -136,6 +128,7 @@ function compareIgnoringTransparency (bufActual, bufExpected) {
 // Resets the test directory, containing config.json, downloads, etc
 function resetTestDataDir () {
   rimraf.sync(config.TEST_DIR)
+  mkdirp.sync(config.TEST_DIR)
 }
 
 function deleteTestDataDir () {
@@ -161,4 +154,3 @@ function copy (pathFrom, pathTo) {
     console.log('ignoring windows copy EPERM error', err)
   }
 }
-

@@ -3,6 +3,7 @@ console.time('init')
 const electron = require('electron')
 const app = electron.app
 
+const path = require('path')
 const parallel = require('run-parallel')
 
 const localize = require('../localize')
@@ -56,7 +57,8 @@ function onReady (err, results) {
   })
 }
 
-ipc.init()
+var cwd = config.IS_TEST ? config.TEST_DIR : config.CONFIG_PATH
+ipc.init(cwd)
 
 app.once('ipcReady', function () {
   log('Command line args:', argv)

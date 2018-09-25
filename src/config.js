@@ -17,6 +17,7 @@ module.exports = {
   APP_WINDOW_TITLE: APP_NAME + ' (BETA)',
 
   CONFIG_PATH: getConfigPath(),
+  TEST_DIR: path.join(getConfigPath(), 'test-data'),
 
   GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',
   GITHUB_URL_ISSUES: 'https://github.com/deltachat/deltachat-desktop/issues',
