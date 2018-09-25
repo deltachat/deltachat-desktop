@@ -96,8 +96,18 @@ class ChatList extends React.Component {
             <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <Button className={Classes.MINIMAL} icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
-            <Button className={Classes.MINIMAL} icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
+            <Button
+              className={Classes.MINIMAL}
+              icon='plus'
+              id='add-contact'
+              text={tx('addContact')}
+              onClick={this.onCreateContact} />
+            <Button
+              className={Classes.MINIMAL}
+              icon='plus'
+              id='add-chat'
+              text={tx('addChat')}
+              onClick={this.onCreateChat} />
             <Popover content={menu} position={Position.RIGHT_TOP}>
               <Button className={Classes.MINIMAL} icon='menu' />
             </Popover>
