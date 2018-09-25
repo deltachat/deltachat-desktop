@@ -65,13 +65,15 @@ function init () {
   })
 
   ipc.on('initiateKeyTransfer', (e, ...args) => {
-    var resp = dc.initiateKeyTransfer(...args)
-    windows.main.send('initiateKeyTransferResp', resp)
+    dc.initiateKeyTransfer(function (err, resp) {
+      windows.main.send('initiateKeyTransferResp', err, resp)
+    })
   })
 
-  ipc.on('continueKeyTransfer', (e, ...args) => {
-    var resp = dc.continueKeyTransfer(...args)
-    windows.main.send('continueKeyTransferResp', resp)
+  ipc.on('continueKeyTransfer', (e, messageId, setupCode) => {
+    dc.continueKeyTransfer(messageId, setupCode, function (err) {
+      windows.main.send('continueKeyTransferResp', err)
+    })
   })
 
   // This needs to be JSON serializable for rendering to the frontend.

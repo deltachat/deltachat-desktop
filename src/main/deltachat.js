@@ -163,6 +163,21 @@ class DeltaChatController {
     }
   }
 
+  getSummaryByChatId (chatId) {
+    var index = this.getChatIndex(chatId)
+    return this._chatList.getSummary(index)
+  }
+
+  getChatIndex (_chatId) {
+    var list = this._dc.getChatList()
+    this._chatList = list
+    var count = list.getCount()
+    for (let i = 0; i < count; i++) {
+      var chatId = list.getChatId(i)
+      if (chatId === _chatId) return i
+    }
+  }
+
   clearChatPage (chatId) {
     var chat = this._loadChatPage(chatId)
     chat.clear()
@@ -231,7 +246,7 @@ class DeltaChatController {
       const msg = this._dc.getMessage(messageIds[0])
       page.fromId = msg.getFromId()
     }
-    if (opts.summary) page.summary = opts.summary
+    page.summary = opts.summary || this.getSummaryByChatId(chatId)
     if (opts.loadMessages) this.loadMessages(chatId)
     return page
   }
