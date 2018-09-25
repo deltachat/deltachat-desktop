@@ -91,6 +91,10 @@ class DeltaChatController {
     this.credentials.email = credentials.email
     this.credentials.cwd = cwd
 
+    if (dc.isOpen()) {
+      dc.close()
+    }
+
     dc.open(cwd, err => {
       if (err) throw err
       const onReady = () => {
