@@ -67,6 +67,7 @@ class CreateGroup extends React.Component {
     if (!contacts.length) return this.handleError(new Error('Add at least one contact to the group'))
     if (!this.state.name) return this.handleError(new Error('Group name required.'))
     var { chatId } = ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', contacts, this.state.name)
+    console.log('chatId', chatId)
     // TODO: redirect to chatview screen without breaking it this.props.changeScreen('ChatView', { chatId })
     this.props.changeScreen('ChatList')
   }
