@@ -81,6 +81,13 @@ class DeltaChatController {
     }
   }
 
+  logout () {
+    this.dc = null
+    this.configuring = false
+    this.ready = false
+    this._render()
+  }
+
   init (credentials, render) {
     // Creates a separate DB file for each login
     var self = this
@@ -90,6 +97,7 @@ class DeltaChatController {
     var dc = this._dc
     this.credentials.email = credentials.email
     this.credentials.cwd = cwd
+    this._render = render
 
     dc.open(cwd, err => {
       if (err) throw err
@@ -118,10 +126,7 @@ class DeltaChatController {
       if (event === 2041) {
         log('DC_EVENT_CONFIGURE_PROGRESS', data1)
         if (Number(data1) === 0) { // login failed
-          self.dc = null
-          self.configuring = false
-          self.ready = false
-          render()
+          self.logout()
         }
       }
     })
