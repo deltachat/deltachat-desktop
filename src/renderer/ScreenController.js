@@ -78,7 +78,7 @@ class Home extends React.Component {
           </div>
         )}
         {!deltachat.ready
-          ? <Login credentials={credentials} />
+          ? <Login credentials={credentials} deltachat={deltachat} />
           : <Screen
             screenProps={screenProps}
             userFeedback={this.userFeedback}

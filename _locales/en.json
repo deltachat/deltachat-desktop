@@ -95,6 +95,10 @@
   "delete": {
     "message": "Delete"
   },
+  "login.cancel": {
+    "message": "Cancel",
+    "description": "Shown in the login form"
+  },
   "login.button": {
     "message": "Login",
     "description": "Shown in the login form"

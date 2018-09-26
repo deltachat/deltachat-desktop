@@ -38,8 +38,17 @@ class Login extends React.Component {
     event.preventDefault()
   }
 
+  cancelClick (event) {
+    ipcRenderer.send('dispatch', 'logout')
+    this.setState({ email: null, password: null })
+    event.stopPropagation()
+  }
+
   render () {
+    const { deltachat } = this.props
     const tx = window.translate
+
+    var loading = deltachat.configuring
 
     return (
       <div>
@@ -68,7 +77,8 @@ class Login extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button type='submit' text={tx('login.button')} />
+            <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />
+            <Button disabled={loading} type='submit' text={tx('login.button')} />
           </form>
         </div>
       </div>

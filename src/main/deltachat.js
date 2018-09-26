@@ -74,7 +74,6 @@ class DeltaChatController {
   // The Controller is the container for a deltachat instance
   constructor () {
     this._chats = []
-    this._dc = new DeltaChat()
     this.ready = false
     this.credentials = {
       email: null,
@@ -82,33 +81,41 @@ class DeltaChatController {
     }
   }
 
+  logout () {
+    this.dc = null
+    this.configuring = false
+    this.ready = false
+    this._render()
+  }
+
   init (credentials, render) {
     // Creates a separate DB file for each login
     var self = this
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
+    this._dc = new DeltaChat()
     var dc = this._dc
     this.credentials.email = credentials.email
     this.credentials.cwd = cwd
-
-    if (dc.isOpen()) {
-      dc.close()
-    }
+    this._render = render
 
     dc.open(cwd, err => {
       if (err) throw err
       const onReady = () => {
         log('Ready')
         self.ready = true
+        self.configuring = false
         self.loadChats()
         render()
       }
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
+        self.configuring = true
         dc.configure({
           addr: credentials.email,
           mail_pw: credentials.password
         })
+        render()
       } else {
         onReady()
       }
@@ -116,6 +123,12 @@ class DeltaChatController {
 
     dc.on('ALL', (event, data1, data2) => {
       log(event, data1, data2)
+      if (event === 2041) {
+        log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        if (Number(data1) === 0) { // login failed
+          self.logout()
+        }
+      }
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
@@ -311,6 +324,7 @@ class DeltaChatController {
 
   render () {
     return {
+      configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
       chats: this.chats(),
