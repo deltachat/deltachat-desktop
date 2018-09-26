@@ -96,15 +96,18 @@ class DeltaChatController {
       const onReady = () => {
         log('Ready')
         self.ready = true
+        self.configuring = false
         self.loadChats()
         render()
       }
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
+        self.configuring = true
         dc.configure({
           addr: credentials.email,
           mail_pw: credentials.password
         })
+        render()
       } else {
         onReady()
       }
@@ -112,13 +115,14 @@ class DeltaChatController {
 
     dc.on('ALL', (event, data1, data2) => {
       log(event, data1, data2)
-    })
-
-    dc.on('DC_EVENT_CONFIGURE_PROGESS', (data1) => {
-      log('configure prgress', data1)
-      if (data1 === 0) { // login failed
-        self.dc = null
-        self.ready = false
+      if (event === 2041) {
+        log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        if (Number(data1) === 0) { // login failed
+          self.dc = null
+          self.configuring = false
+          self.ready = false
+          render()
+        }
       }
     })
 
@@ -315,6 +319,7 @@ class DeltaChatController {
 
   render () {
     return {
+      configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
       chats: this.chats(),

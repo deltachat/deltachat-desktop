@@ -16,8 +16,7 @@ class Login extends React.Component {
     super(props)
     this.state = {
       email: this.props.credentials.email || process.env.DC_ADDR,
-      password: this.props.credentials.password || process.env.DC_MAIL_PW,
-      loading: false
+      password: this.props.credentials.password || process.env.DC_MAIL_PW
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -35,13 +34,15 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     }
-    this.setState({ loading: true })
     ipcRenderer.send('init', credentials)
     event.preventDefault()
   }
 
   render () {
+    const { deltachat } = this.props
     const tx = window.translate
+
+    var loading = deltachat.configuring
 
     return (
       <div>
@@ -70,7 +71,7 @@ class Login extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button disabled={this.state.loading} type='submit' text={tx('login.button')} />
+            <Button disabled={loading} type='submit' text={tx('login.button')} />
           </form>
         </div>
       </div>
