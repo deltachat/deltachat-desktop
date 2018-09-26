@@ -43,7 +43,7 @@ function init () {
   })
 
   // Our wrapper for controlling deltachat instances
-  const dc = new DeltaChat()
+  var dc = new DeltaChat()
 
   // Create a new instance
   ipc.on('init', (e, ...args) => {
@@ -79,6 +79,12 @@ function init () {
   ipc.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
+  })
+
+  ipc.on('logout', (e) => {
+    dc.logout()
+    dc = new DeltaChat()
+    render()
   })
 
   function onError (msg) {

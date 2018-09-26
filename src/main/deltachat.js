@@ -144,6 +144,14 @@ class DeltaChatController {
     })
   }
 
+  logout () {
+    var dc = this._dc
+    if (dc.isOpen()) {
+      dc.close()
+    }
+    this.ready = false
+  }
+
   getStarredMessages () {
     return this._dc.getStarredMessages().map(messageId => {
       return new ChatMessage(messageId, this._dc)
