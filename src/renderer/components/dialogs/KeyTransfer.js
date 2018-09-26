@@ -31,7 +31,9 @@ class KeyViewPanel extends React.Component {
 
 class KeyLoadingPanel extends React.Component {
   render () {
-    return <Spinner size={50} intent='success' />
+    return <div>
+      <Spinner hasValue={false} size={Spinner.SIZE_STANDARD} intent='success' />
+    </div>
   }
 }
 
@@ -60,7 +62,7 @@ class KeyTransferDialog extends React.Component {
     this.initiateKeyTransferResp = this.initiateKeyTransferResp.bind(this)
   }
 
-  initiateKeyTransferResp (e, key) {
+  initiateKeyTransferResp (e, err, key) {
     this.setState({ loading: false, key })
   }
 
@@ -73,8 +75,8 @@ class KeyTransferDialog extends React.Component {
   }
 
   initiateKeyTransfer () {
-    this.setState({ loading: true })
     ipcRenderer.send('initiateKeyTransfer')
+    this.setState({ loading: true })
   }
 
   render () {

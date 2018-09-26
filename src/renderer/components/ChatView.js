@@ -81,7 +81,11 @@ class ChatView extends React.Component {
 
     return (
       <div>
-        <SetupMessageDialog setupMessage={setupMessage} onClose={this.onSetupMessageClose} />
+        <SetupMessageDialog
+          userFeedback={this.props.userFeedback}
+          setupMessage={setupMessage}
+          onClose={this.onSetupMessageClose}
+        />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
