@@ -151,15 +151,13 @@ function getMenuTemplate () {
         {
           label: 'Learn more about ' + config.APP_NAME,
           click: () => {
-            const shell = require('./shell')
-            shell.openExternal(config.HOME_PAGE_URL)
+            electron.shell.openExternal(config.HOME_PAGE_URL)
           }
         },
         {
           label: 'Contribute on GitHub',
           click: () => {
-            const shell = require('./shell')
-            shell.openExternal(config.GITHUB_URL)
+            electron.shell.openExternal(config.GITHUB_URL)
           }
         },
         {
@@ -168,8 +166,7 @@ function getMenuTemplate () {
         {
           label: 'Report an Issue...',
           click: () => {
-            const shell = require('./shell')
-            shell.openExternal(config.GITHUB_URL_ISSUES)
+            electron.shell.openExternal(config.GITHUB_URL_ISSUES)
           }
         }
       ]
