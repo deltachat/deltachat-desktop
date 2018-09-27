@@ -20,6 +20,7 @@ addons:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX=g++-7; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig; fi
   - ./bin/travis-before-install.sh
 
 install:

@@ -10,17 +10,11 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
    # Install meson
    sudo pip3 install meson
 
-   # Install ninja-build
+   # Install ninja
    wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
    unzip ninja-linux.zip
    sudo cp ninja /usr/bin
+
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    # Upgrade pip
-    sudo -H pip3 install --upgrade pip
-
-    # Install meson
-    sudo -H pip3 install meson
-
-    # Install ninja
-    brew install ninja
+    brew install meson ninja
 fi
