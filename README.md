@@ -43,6 +43,8 @@ On linux:
 sudo apt-get install python3-pip
 sudo pip3 install meson
 sudo apt-get remove libetpan-dev
+sudo apt-get remove libsasl2-dev
+sudo apt-get install libssl1.0-dev
 ```
 
 Then try running `npm install` again.
