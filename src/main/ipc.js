@@ -65,7 +65,7 @@ function init () {
   })
 
   ipc.on('initiateKeyTransfer', (e, ...args) => {
-    dc.initiateKeyTransfer(function (err, resp) {
+    dc.initiateKeyTransfer((err, resp) => {
       windows.main.send('initiateKeyTransferResp', err, resp)
     })
   })
