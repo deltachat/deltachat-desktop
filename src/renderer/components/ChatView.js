@@ -1,5 +1,4 @@
 const React = require('react')
-const path = require('path')
 const CONSTANTS = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
