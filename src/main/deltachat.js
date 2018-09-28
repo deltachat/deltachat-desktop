@@ -52,7 +52,10 @@ class ChatPage {
     var chat = this.chat.toJson()
     chat.messages = this._messages.map((m) => m.toJson())
     chat.summary = this.summary && this.summary.toJson()
-    chat.fromId = this.fromId
+    if (this.fromId) {
+      var contact = this._dc.getContact(this.fromId)
+      if (contact) chat.contact = contact.toJson()
+    }
     return chat
   }
 
@@ -224,14 +227,15 @@ class DeltaChatController {
 
   chatWithContact (contactId) {
     log('chat with contact', contactId)
-    const contact = this._dc.getContact(contactId)
     if (this._dc.getContacts().indexOf(contactId) === -1) {
+      const contact = this._dc.getContact(contactId)
       const address = contact.getAddress()
       const name = contact.getName() || address.split('@')[0]
       this._dc.createContact(name, address)
       this.info(`Added contact ${name} (${address})`)
+      this.createChatByContactId(contactId)
+      this.loadChats()
     }
-    this.loadChats()
   }
 
   blockContact (contactId) {

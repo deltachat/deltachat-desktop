@@ -17,7 +17,8 @@ class DeadDropDialog extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat.fromId)
+    console.log(this.props.deadDropChat)
+    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat.contact.id)
     this.close()
   }
 
@@ -26,14 +27,15 @@ class DeadDropDialog extends React.Component {
   }
 
   never () {
-    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropChat.fromId)
+    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropChat.contact.id)
     this.close()
   }
 
   render () {
     const { deadDropChat } = this.props
-    var name = deadDropChat && deadDropChat.summary.text1
-    const title = `Chat with ${name}?`
+    var nameAndAddr = deadDropChat && deadDropChat.contact && deadDropChat.contact.nameAndAddr
+    const title = 'Chat request'
+    const body = `Chat with ${nameAndAddr}?`
     const isOpen = deadDropChat !== false
     return (
       <Dialog
@@ -43,6 +45,7 @@ class DeadDropDialog extends React.Component {
         onClose={this.close}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
+          <h2>{body}</h2>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <ButtonGroup>
