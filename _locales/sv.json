@@ -1,0 +1,178 @@
+{
+    "emailValidationFailed": {
+        "message": "Mejladress är obligatorisk.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Chatten kunde inte skapas.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "Nytt meddelande från",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Lägg till kontakt",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Grupp",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Skapa Chatt",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Kontakt skapades.",
+        "description": ""
+    },
+    "initiateKeyTransferTitle": {
+        "message": "Påbörja utbyte av nycklar",
+        "description": ""
+    },
+    "initiateKeyTransfer": {
+        "message": "Ett meddelande för att sätta upp Autocrypt delar den informationen med andra Autocrypt-anpassade applikationer på ett säkert sätt. Informationen krypteras med en kod som visas här och som måste matas in på den mottagande enheten.",
+        "description": "Seen before starting the setup transfer"
+    },
+    "showKeyTransferMessage": {
+        "message": "Din nyckel har skickats till dig själv. Du bör nu fått ett meddelande på den andra enheten. Öppna meddelandet och skriv in koden som nu visas. När du har gjort det är den andra enheten redo att använda Autocrypt.",
+        "description": "Shown while viewing the transfer key"
+    },
+    "moreInfo": {
+        "message": "Mer information...",
+        "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
+    },
+    "downloadAttachment": {
+        "message": "Ladda ner bifogad fil",
+        "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
+    },
+    "imageAttachmentAlt": {
+        "message": "Bild bifogad till meddelande",
+        "description": "Used in alt tag of image attachment"
+    },
+    "videoAttachmentAlt": {
+        "message": "Skärmdump av video bifogad till meddelande",
+        "description": "Used in alt tag of video attachment preview"
+    },
+    "lightboxImageAlt": {
+        "message": "Bild skickad i konversation",
+        "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
+    },
+    "replyToMessage": {
+        "message": "Svara på meddelande",
+        "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
+    },
+    "deleteMessage": {
+        "message": "Radera meddelande",
+        "description": "Shown on the drop-down menu for an individual message, deletes single message"
+    },
+    "deleteMessages": {
+        "message": "Radera meddelanden",
+        "description": "Menu item for deleting messages, title case."
+    },
+    "messageDetail": {
+        "message": "Meddelandedetaljer",
+        "description": ""
+    },
+    "audio": {
+        "message": "Ljud",
+        "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
+    },
+    "video": {
+        "message": "Video",
+        "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
+    },
+    "photo": {
+        "message": "Foto",
+        "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
+    },
+    "ok": {
+        "message": "OK",
+        "description": ""
+    },
+    "cancel": {
+        "message": "Avbryt",
+        "description": ""
+    },
+    "delete": {
+        "message": "Radera",
+        "description": ""
+    },
+    "login.button": {
+        "message": "Logga in",
+        "description": "Shown in the login form"
+    },
+    "menu.preferences": {
+        "message": "Inställningar",
+        "description": "Preferences label in the menu"
+    },
+    "menu.preferences.language": {
+        "message": "Välj språk...",
+        "description": "Choose language label in the menu"
+    },
+    "timestampFormat_M": {
+        "message": "D MMM",
+        "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
+    },
+    "from": {
+        "message": "Från",
+        "description": "Label for the sender of a message"
+    },
+    "to": {
+        "message": "Till",
+        "description": "Label for the receiver of a message"
+    },
+    "sent": {
+        "message": "Skickat",
+        "description": "Label for the time a message was sent"
+    },
+    "received": {
+        "message": "Mottaget",
+        "description": "Label for the time a message was received"
+    },
+    "sendMessage": {
+        "message": "Skicka meddelande",
+        "description": "Placeholder text in the message entry field"
+    },
+    "groupMembers": {
+        "message": "Gruppmedlemmar",
+        "description": ""
+    },
+    "showMembers": {
+        "message": "Visa medlemmar",
+        "description": ""
+    },
+    "timestamp_s": {
+        "message": "nu",
+        "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
+    },
+    "timestamp_m": {
+        "message": "1 minut",
+        "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
+    },
+    "timestamp_h": {
+        "message": "1 timme",
+        "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
+    },
+    "justNow": {
+        "message": "nu",
+        "description": "Shown if a message is very recent, less than 60 seconds old"
+    },
+    "hoursAgoShort": {
+        "message": "$hours$ tim",
+        "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
+    },
+    "hoursAgo": {
+        "message": "$hours$ tim sedan",
+        "description": "Contracted form of 'X hours ago' which works both for singular and plural"
+    },
+    "minutesAgoShort": {
+        "message": "$minutes$ min",
+        "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
+    },
+    "minutesAgo": {
+        "message": "$minutes$ min sedan",
+        "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    }
+}
