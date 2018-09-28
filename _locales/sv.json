@@ -99,6 +99,10 @@
         "message": "Radera",
         "description": ""
     },
+    "login.cancel": {
+        "message": "Avbryt",
+        "description": "Shown in the login form"
+    },
     "login.button": {
         "message": "Logga in",
         "description": "Shown in the login form"
