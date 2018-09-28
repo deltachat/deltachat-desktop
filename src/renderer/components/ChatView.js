@@ -1,9 +1,14 @@
 const React = require('react')
 const CONSTANTS = require('deltachat-node/constants')
-const { ipcRenderer } = require('electron')
+const { remote, ipcRenderer } = require('electron')
+const fs = remote.require('fs')
+const render = require('render-media')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
+const {
+  Dialog
+} = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
@@ -29,7 +34,8 @@ class ChatView extends React.Component {
     super(props)
     this.state = {
       error: false,
-      setupMessage: false
+      setupMessage: false,
+      attachmentMessage: null
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
@@ -69,8 +75,16 @@ class ChatView extends React.Component {
     doc.scrollTop = doc.scrollHeight
   }
 
-  clickSetupMessage (setupMessage) {
+  onClickAttachment (attachmentMessage) {
+    this.setState({ attachmentMessage })
+  }
+
+  onClickSetupMessage (setupMessage) {
     this.setState({ setupMessage })
+  }
+
+  onCloseAttachmentView () {
+    this.setState({ attachmentMessage: null })
   }
 
   onSetupMessageClose () {
@@ -79,18 +93,13 @@ class ChatView extends React.Component {
   }
 
   render () {
-    const { setupMessage } = this.state
+    const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
     if (!chat) return <div />
     this.state.value = chat.textDraft
 
     return (
       <div>
-        <SetupMessageDialog
-          userFeedback={this.props.userFeedback}
-          setupMessage={setupMessage}
-          onClose={this.onSetupMessageClose}
-        />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
@@ -103,13 +112,23 @@ class ChatView extends React.Component {
             </Popover>
           </NavbarGroup>
         </Navbar>
-        {this.state.error && this.state.error}
+
+        <SetupMessageDialog
+          userFeedback={this.props.userFeedback}
+          setupMessage={setupMessage}
+          onClose={this.onSetupMessageClose}
+        />
+        <RenderMedia
+          url={attachmentMessage && attachmentMessage.msg.file}
+          close={this.onCloseAttachmentView.bind(this)}
+        />
+
         <div id='the-conversation'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
-              const msg = <RenderMessage message={message} />
+              const msg = <RenderMessage message={message} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
-                return <li onClick={this.clickSetupMessage.bind(this, message)}>
+                return <li onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
                 </li>
               }
@@ -124,9 +143,28 @@ class ChatView extends React.Component {
   }
 }
 
+class RenderMedia extends React.Component {
+  componentDidUpdate () {
+    const { url } = this.props
+    if (url) {
+      var file = {
+        name: url,
+        createReadStream: function (opts) {
+          return fs.createReadStream(url, opts)
+        }
+      }
+      render.append(file, '#render-media')
+    }
+  }
+  render () {
+    const { url, close } = this.props
+    return <Dialog id='render-media' isOpen={Boolean(url)} onClose={close} />
+  }
+}
+
 class RenderMessage extends React.Component {
   render () {
-    const { message } = this.props
+    const { onClickAttachment, message } = this.props
     const timestamp = message.msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
     const contact = {
@@ -140,6 +178,7 @@ class RenderMessage extends React.Component {
       conversationType: 'direct', // or group
       direction,
       contact,
+      onClickAttachment,
       authorName: message.contact.displayName,
       authorPhoneNumber: message.contact.address,
       status: convertMessageStatus(message.msg.state),
@@ -147,7 +186,7 @@ class RenderMessage extends React.Component {
     }
 
     if (message.msg.file) {
-      props.attachment = { url: message.msg.file, contentType: message.filemime }
+      props.attachment = { url: message.msg.file, contentType: message.filemime, filename: message.msg.text }
     } else {
       props.text = message.msg.text
     }
