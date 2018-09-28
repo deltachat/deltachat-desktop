@@ -5,6 +5,8 @@ const { ipcRenderer } = require('electron')
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 
+let MutationObserver = window.MutationObserver
+
 const {
   Alignment,
   Classes,
@@ -49,7 +51,7 @@ class ChatView extends React.Component {
     ipcRenderer.send('dispatch', 'loadChats', chatId)
     this.conversationDiv = document.querySelector('#the-conversation')
     this.observer = new MutationObserver(this.scrollToBottom)
-    this.observer.observe(this.conversationDiv, {attributes: true, childList: true, subtree: true})
+    this.observer.observe(this.conversationDiv, { attributes: true, childList: true, subtree: true })
     this.scrollToBottom()
   }
 
