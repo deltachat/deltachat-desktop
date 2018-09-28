@@ -187,7 +187,8 @@ class RenderMessage extends React.Component {
       direction,
       contact,
       onClickAttachment,
-      authorName: message.contact.displayName,
+      authorAvatarPath: message.contact.profileImage,
+      authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,
       status: convertMessageStatus(message.msg.state),
       timestamp
