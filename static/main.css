@@ -50,3 +50,6 @@ body {
 .user-feedback.success {
   background-color: green;
 }
+img {
+  max-width: 500px;
+}

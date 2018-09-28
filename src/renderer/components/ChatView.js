@@ -1,14 +1,12 @@
 const React = require('react')
-const from = require('from2')
+const path = require('path')
 const CONSTANTS = require('deltachat-node/constants')
-const { remote, ipcRenderer } = require('electron')
-const fs = remote.require('fs')
-const render = require('render-media')
+const { ipcRenderer } = require('electron')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 const {
-  Dialog
+  Overlay
 } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
@@ -25,8 +23,7 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { Message } = require('conversations').conversation
-const { ConversationContext } = require('conversations').styleguide
+const { ConversationContext, Message } = require('conversations')
 
 var theme = 'light-theme' // user prefs?
 
@@ -120,6 +117,7 @@ class ChatView extends React.Component {
           onClose={this.onSetupMessageClose}
         />
         <RenderMedia
+          filemime={attachmentMessage && attachmentMessage.filemime}
           url={attachmentMessage && attachmentMessage.msg.file}
           close={this.onCloseAttachmentView.bind(this)}
         />
@@ -144,31 +142,31 @@ class ChatView extends React.Component {
 }
 
 class RenderMedia extends React.Component {
-  constructor (props) {
-    super(props)
-    this.ref = React.createRef()
-  }
-  onOpened () {
-    const { url } = this.props
-    if (url) {
-      var data = fs.readFileSync(url)
-      var file = {
-        name: url,
-        createReadStream: function (opts) {
-          return from([data])
-        }
-      }
-      render.append(file, this.ref.current)
-    }
-  }
   render () {
-    const { url, close } = this.props
-    this.el = document.createElement('div')
-    return <Dialog isOpen={Boolean(url)}
-      onOpened={this.onOpened.bind(this)}
+    const { url, filemime, close } = this.props
+    let elm = <div />
+    // TODO: there must be a stable external library for figuring out the right
+    // html element to render
+    if (filemime) {
+      var contentType = convertContentType(filemime)
+      switch (contentType.split('/')[0]) {
+        case 'image':
+          elm = <img src={url} />
+          break
+        case 'audio':
+          elm = <audio src={url} controls='true' />
+          break
+        case 'video':
+          elm = <video src={url} controls='true' />
+          break
+        default:
+          elm = <iframe width='100%' height='100%' src={url} />
+      }
+    }
+    return <Overlay isOpen={Boolean(url)}
       onClose={close}>
-      <div ref={this.ref} />
-    </Dialog>
+      {elm}
+    </Overlay>
   }
 }
 
@@ -196,13 +194,18 @@ class RenderMessage extends React.Component {
     }
 
     if (message.msg.file) {
-      props.attachment = { url: message.msg.file, contentType: message.filemime, filename: message.msg.text }
+      props.attachment = { url: message.msg.file, contentType: convertContentType(message.filemime), filename: message.msg.text }
     } else {
       props.text = message.msg.text
     }
 
     return (<Message {...props} />)
   }
+}
+
+function convertContentType (filemime) {
+  if (filemime === 'application/octet-stream') return 'audio/ogg'
+  return filemime
 }
 
 function convertMessageStatus (s) {
