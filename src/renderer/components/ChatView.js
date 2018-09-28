@@ -94,6 +94,7 @@ class ChatView extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+            <img src={chat.profileImage} /> {chat.name}: {chat.subtitle}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>{chat.name}</NavbarHeading>
