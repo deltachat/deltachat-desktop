@@ -1,4 +1,5 @@
 const React = require('react')
+const from = require('from2')
 const CONSTANTS = require('deltachat-node/constants')
 const { remote, ipcRenderer } = require('electron')
 const fs = remote.require('fs')
@@ -132,7 +133,6 @@ class ChatView extends React.Component {
                   {msg}
                 </li>
               }
-
               return <li>{msg}</li>
             })}
           </ConversationContext>
@@ -144,21 +144,31 @@ class ChatView extends React.Component {
 }
 
 class RenderMedia extends React.Component {
-  componentDidUpdate () {
+  constructor (props) {
+    super(props)
+    this.ref = React.createRef()
+  }
+  onOpened () {
     const { url } = this.props
     if (url) {
+      var data = fs.readFileSync(url)
       var file = {
         name: url,
         createReadStream: function (opts) {
-          return fs.createReadStream(url, opts)
+          return from([data])
         }
       }
-      render.append(file, '#render-media')
+      render.append(file, this.ref.current)
     }
   }
   render () {
     const { url, close } = this.props
-    return <Dialog id='render-media' isOpen={Boolean(url)} onClose={close} />
+    this.el = document.createElement('div')
+    return <Dialog isOpen={Boolean(url)}
+      onOpened={this.onOpened.bind(this)}
+      onClose={close}>
+      <div ref={this.ref} />
+    </Dialog>
   }
 }
 
