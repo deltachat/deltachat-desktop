@@ -4,6 +4,9 @@ const { ipcRenderer } = require('electron')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
+const {
+  Overlay
+} = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
@@ -19,8 +22,7 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { Message } = require('conversations').conversation
-const { ConversationContext } = require('conversations').styleguide
+const { ConversationContext, Message } = require('conversations')
 
 var theme = 'light-theme' // user prefs?
 
@@ -29,7 +31,8 @@ class ChatView extends React.Component {
     super(props)
     this.state = {
       error: false,
-      setupMessage: false
+      setupMessage: false,
+      attachmentMessage: null
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
@@ -49,7 +52,7 @@ class ChatView extends React.Component {
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadChats', chatId)
-    this.conversationDiv = document.querySelector('#the-conversation')
+    this.conversationDiv = document.querySelector('.message-list')
     this.observer = new MutationObserver(this.scrollToBottom)
     this.observer.observe(this.conversationDiv, { attributes: true, childList: true, subtree: true })
     this.scrollToBottom()
@@ -69,8 +72,16 @@ class ChatView extends React.Component {
     doc.scrollTop = doc.scrollHeight
   }
 
-  clickSetupMessage (setupMessage) {
+  onClickAttachment (attachmentMessage) {
+    this.setState({ attachmentMessage })
+  }
+
+  onClickSetupMessage (setupMessage) {
     this.setState({ setupMessage })
+  }
+
+  onCloseAttachmentView () {
+    this.setState({ attachmentMessage: null })
   }
 
   onSetupMessageClose () {
@@ -79,18 +90,13 @@ class ChatView extends React.Component {
   }
 
   render () {
-    const { setupMessage } = this.state
+    const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
     if (!chat) return <div />
     this.state.value = chat.textDraft
 
     return (
       <div>
-        <SetupMessageDialog
-          userFeedback={this.props.userFeedback}
-          setupMessage={setupMessage}
-          onClose={this.onSetupMessageClose}
-        />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
@@ -103,17 +109,27 @@ class ChatView extends React.Component {
             </Popover>
           </NavbarGroup>
         </Navbar>
-        {this.state.error && this.state.error}
+
+        <SetupMessageDialog
+          userFeedback={this.props.userFeedback}
+          setupMessage={setupMessage}
+          onClose={this.onSetupMessageClose}
+        />
+        <RenderMedia
+          filemime={attachmentMessage && attachmentMessage.filemime}
+          url={attachmentMessage && attachmentMessage.msg.file}
+          close={this.onCloseAttachmentView.bind(this)}
+        />
+
         <div id='the-conversation'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
-              const msg = <RenderMessage message={message} />
+              const msg = <RenderMessage message={message} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
-                return <li onClick={this.clickSetupMessage.bind(this, message)}>
+                return <li onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
                 </li>
               }
-
               return <li>{msg}</li>
             })}
           </ConversationContext>
@@ -124,9 +140,38 @@ class ChatView extends React.Component {
   }
 }
 
+class RenderMedia extends React.Component {
+  render () {
+    const { url, filemime, close } = this.props
+    let elm = <div />
+    // TODO: there must be a stable external library for figuring out the right
+    // html element to render
+    if (filemime) {
+      var contentType = convertContentType(filemime)
+      switch (contentType.split('/')[0]) {
+        case 'image':
+          elm = <img src={url} />
+          break
+        case 'audio':
+          elm = <audio src={url} controls='true' />
+          break
+        case 'video':
+          elm = <video src={url} controls='true' />
+          break
+        default:
+          elm = <iframe width='100%' height='100%' src={url} />
+      }
+    }
+    return <Overlay isOpen={Boolean(url)}
+      onClose={close}>
+      {elm}
+    </Overlay>
+  }
+}
+
 class RenderMessage extends React.Component {
   render () {
-    const { message } = this.props
+    const { onClickAttachment, message } = this.props
     const timestamp = message.msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
     const contact = {
@@ -140,20 +185,27 @@ class RenderMessage extends React.Component {
       conversationType: 'direct', // or group
       direction,
       contact,
-      authorName: message.contact.displayName,
+      onClickAttachment,
+      authorAvatarPath: message.contact.profileImage,
+      authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,
       status: convertMessageStatus(message.msg.state),
       timestamp
     }
 
     if (message.msg.file) {
-      props.attachment = { url: message.msg.file, contentType: message.filemime }
+      props.attachment = { url: message.msg.file, contentType: convertContentType(message.filemime), filename: message.msg.text }
     } else {
       props.text = message.msg.text
     }
 
     return (<Message {...props} />)
   }
+}
+
+function convertContentType (filemime) {
+  if (filemime === 'application/octet-stream') return 'audio/ogg'
+  return filemime
 }
 
 function convertMessageStatus (s) {

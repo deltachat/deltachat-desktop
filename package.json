@@ -40,7 +40,7 @@
     "@blueprintjs/core": "^3.4.0",
     "application-config": "^1.0.1",
     "arch": "^2.1.1",
-    "conversations": "^1.2.0",
+    "conversations": "^2.0.0",
     "debounce": "^1.2.0",
     "deltachat-node": "^0.18.0",
     "emoji-panel": "^0.5.2",
