@@ -85,7 +85,7 @@ class DeltaChatController {
     this.dc = null
     this.configuring = false
     this.ready = false
-    this._render()
+    if (typeof this._render === 'function') this._render()
   }
 
   init (credentials, render) {
