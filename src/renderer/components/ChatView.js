@@ -30,6 +30,7 @@ class ChatView extends React.Component {
       setupMessage: false
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   writeMessage (message) {
@@ -40,11 +41,15 @@ class ChatView extends React.Component {
   componentWillUnmount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'clearChatPage', chatId)
+    this.observer.disconnect()
   }
 
   componentDidMount () {
     var chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'loadChats', chatId)
+    this.conversationDiv = document.querySelector('#the-conversation')
+    this.observer = new MutationObserver(this.scrollToBottom)
+    this.observer.observe(this.conversationDiv, {attributes: true, childList: true, subtree: true})
     this.scrollToBottom()
   }
 
@@ -58,10 +63,8 @@ class ChatView extends React.Component {
   }
 
   scrollToBottom (force) {
-    var messagesDiv = document.querySelector('.message-list')
-    if (messagesDiv) {
-      messagesDiv.scrollTop = messagesDiv.scrollHeight
-    }
+    var doc = document.querySelector('html')
+    doc.scrollTop = doc.scrollHeight
   }
 
   clickSetupMessage (setupMessage) {
@@ -98,7 +101,7 @@ class ChatView extends React.Component {
           </NavbarGroup>
         </Navbar>
         {this.state.error && this.state.error}
-        <div className='window'>
+        <div id='the-conversation'>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
               const msg = <RenderMessage message={message} />
