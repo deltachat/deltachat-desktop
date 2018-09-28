@@ -35,19 +35,19 @@ $ npm install
 
 ### Troubleshooting
 
-If you get errors running `npm install`, you might need meson>=46 and to
-uninstall libetpan-dev globally.
+If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` and `libsasl2-dev` can't be installed globally.
 
-On linux:
+On Linux (e.g. Debian Stretch):
+
 ```
-sudo apt-get install python3-pip
+sudo apt-get install python3-pip ninja-build libssl1.0-dev
 sudo pip3 install meson
-sudo apt-get remove libetpan-dev
-sudo apt-get remove libsasl2-dev
-sudo apt-get install libssl1.0-dev
+sudo apt-get remove libetpan-dev libsasl2-dev
 ```
 
 Then try running `npm install` again.
+
+Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for additional information.
 
 ### Run the app
 
