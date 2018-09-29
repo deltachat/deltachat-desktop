@@ -136,7 +136,7 @@ class DeltaChatController {
       const msg = dc.getMessage(msgId)
       if (!msg) return
 
-      if (msg.getState().isPending()) {
+      if (msg.getState().isPending() || msg.getState().isDelivered()) {
         this.appendMessage(chatId, msgId)
       }
       render()
