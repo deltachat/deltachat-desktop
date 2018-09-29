@@ -11,10 +11,9 @@ class ChatMessage {
   }
 
   toJson () {
-    var msg = this._dc.getMessage(this._messageId)
-    var fromId = msg && msg.getFromId()
-    var contact = fromId && this._dc.getContact(fromId)
-
+    const msg = this._dc.getMessage(this._messageId)
+    const fromId = msg && msg.getFromId()
+    const contact = fromId && this._dc.getContact(fromId)
     return {
       fromId,
       id: this._messageId,
