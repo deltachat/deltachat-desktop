@@ -6,24 +6,22 @@ const config = require('../config')
 
 class ChatMessage {
   constructor (messageId, dc) {
-    var msg = dc.getMessage(messageId)
-    this.fromId = msg && msg.getFromId()
-    if (!this.fromId) return
-
-    this.msg = msg
-    this.messageId = messageId
-    this.isMe = this.fromId === 1
-    this.contact = dc.getContact(this.fromId)
+    this._messageId = messageId
+    this._dc = dc
   }
 
   toJson () {
+    var msg = this._dc.getMessage(this._messageId)
+    var fromId = msg && msg.getFromId()
+    var contact = fromId && this._dc.getContact(fromId)
+
     return {
-      fromId: this.fromId,
-      id: this.messageId,
-      isMe: this.isMe,
-      contact: this.contact.toJson(),
-      msg: this.msg.toJson(),
-      filemime: this.msg.getFilemime()
+      fromId,
+      id: this._messageId,
+      isMe: fromId === 1,
+      contact: contact ? contact.toJson() : {},
+      msg: msg.toJson(),
+      filemime: msg.getFilemime()
     }
   }
 }
@@ -148,6 +146,21 @@ class DeltaChatController {
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       log('incoming message', chatId, msgId)
       self.appendMessage(chatId, msgId)
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+      log('message delivered', chatId, msgId)
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
+      log('message failed to deliver', chatId, msgId)
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+      log('message read', chatId, msgId)
       render()
     })
 
