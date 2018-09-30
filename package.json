@@ -88,6 +88,9 @@
         "deb"
       ],
       "category": "Utility"
-    }
+    },
+    "files": [
+      "!node_modules/deltachat-node/deltachat-core${/*}"
+    ]
   }
 }
