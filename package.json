@@ -43,7 +43,6 @@
     "conversations": "^2.0.0",
     "debounce": "^1.2.0",
     "deltachat-node": "^0.18.0",
-    "emoji-panel": "^0.5.2",
     "insert-css": "^2.0.0",
     "intl-tel-input": "^14.0.1",
     "lodash.merge": "^4.6.1",
