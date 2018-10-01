@@ -35,14 +35,14 @@ $ npm install
 
 ### Troubleshooting
 
-If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` and `libsasl2-dev` can't be installed globally.
+If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` can't be installed globally.
 
 On Linux (e.g. Debian Stretch):
 
 ```
 sudo apt-get install python3-pip ninja-build libssl1.0-dev
 sudo pip3 install meson
-sudo apt-get remove libetpan-dev libsasl2-dev
+sudo apt-get remove libetpan-dev
 ```
 
 Then try running `npm install` again.
