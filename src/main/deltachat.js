@@ -90,7 +90,6 @@ class DeltaChatController {
 
   init (credentials, render) {
     // Creates a separate DB file for each login
-    var self = this
     const cwd = path.join(config.CONFIG_PATH, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
@@ -103,14 +102,14 @@ class DeltaChatController {
       if (err) throw err
       const onReady = () => {
         log('Ready')
-        self.ready = true
-        self.configuring = false
-        self.loadChats()
+        this.ready = true
+        this.configuring = false
+        this.loadChats()
         render()
       }
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
-        self.configuring = true
+        this.configuring = true
         dc.configure({
           addr: credentials.email,
           mail_pw: credentials.password
@@ -126,7 +125,7 @@ class DeltaChatController {
       if (event === 2041) {
         log('DC_EVENT_CONFIGURE_PROGRESS', data1)
         if (Number(data1) === 0) { // login failed
-          self.logout()
+          this.logout()
         }
       }
     })
@@ -144,7 +143,7 @@ class DeltaChatController {
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       log('incoming message', chatId, msgId)
-      self.appendMessage(chatId, msgId)
+      this.appendMessage(chatId, msgId)
       render()
     })
 
@@ -163,12 +162,12 @@ class DeltaChatController {
       render()
     })
 
-    dc.on('DC_EVENT_WARNING', function (warning) {
-      self.warning(warning)
+    dc.on('DC_EVENT_WARNING', (warning) => {
+      this.warning(warning)
     })
 
     dc.on('DC_EVENT_ERROR', (code, error) => {
-      self.error(`${error} (code = ${code})`)
+      this.error(`${error} (code = ${code})`)
     })
   }
 
@@ -329,7 +328,7 @@ class DeltaChatController {
   }
 
   warning (line) {
-    log.error(line)
+    log('WARNING', line)
   }
 
   error (line) {
