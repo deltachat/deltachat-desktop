@@ -40,9 +40,9 @@ If you get errors running `npm install`, you might need to install `meson`, `nin
 On Linux (e.g. Debian Stretch):
 
 ```
-sudo apt-get install python3-pip ninja-build libssl1.0-dev
-sudo pip3 install meson
-sudo apt-get remove libetpan-dev
+$ sudo apt-get install python3-pip ninja-build libssl1.0-dev
+$ sudo pip3 install meson
+$ sudo apt-get remove libetpan-dev
 ```
 
 Then try running `npm install` again.
@@ -57,11 +57,16 @@ $ npm start
 
 ### Watch the code
 
-Restart the app automatically every time code changes.
+Restart the electron app or reload browser parts automatically every time code changes.
 
 ```
 $ npm run watch
 ```
+
+This sets up two watchers, via the following scripts:
+
+* `watch-build` which rebuilds `es5/` folder each time anything in `src/` changes
+* `watch-electron` which restarts electron if any backend code is changed (everything under `src/` _but_ `src/renderer/`), the app in turn uses `electron-reload` to monitor `es5/renderer/` and `static/` folders
 
 ### Run linters
 
