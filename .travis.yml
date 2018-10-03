@@ -37,6 +37,6 @@ deploy:
   provider: script
   script: npm run dist
   on:
-    branch: master
+    all_branches: true
   skip_cleanup: true
 
