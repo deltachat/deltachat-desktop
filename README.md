@@ -66,7 +66,7 @@ $ npm run watch
 This sets up two watchers, via the following scripts:
 
 * `watch-build` which rebuilds `es5/` folder each time anything in `src/` changes
-* `watch-electron` which restarts electron if any backend code is changed (everything under `src/` _but_ `src/renderer/`), the app in turn uses `electron-reload` to monitor `es5/renderer/` and `static/` folders
+* `watch-electron` which restarts electron if any backend code is changed (everything under `src/` _except_ `src/renderer/`) and uses `electron-reload` to monitor `es5/renderer/` and `static/` folders to refresh the renderer.
 
 ### Run linters
 
