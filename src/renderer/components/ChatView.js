@@ -179,11 +179,31 @@ class RenderMessage extends React.Component {
       onClick: () => console.log('clicking contact', message.fromId)
     }
 
+    function onReply () {
+      console.log('reply to', message)
+    }
+
+    function onDownload (message) {
+      console.log('downloading', message)
+    }
+
+    function onDelete (message) {
+      console.log('deleting', message)
+    }
+
+    function onShowDetail () {
+      console.log('show detail', message)
+    }
+
     var props = {
       id: message.id,
       i18n: window.translate,
       conversationType: 'direct', // or group
       direction,
+      onDownload,
+      onReply,
+      onDelete,
+      onShowDetail,
       contact,
       onClickAttachment,
       authorAvatarPath: message.contact.profileImage,
