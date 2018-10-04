@@ -39,7 +39,6 @@ function chatIdToJson (chatId, dc) {
 class DeltaChatController {
   // The Controller is the container for a deltachat instance
   constructor () {
-    this._chats = []
     this.ready = false
     this.credentials = {
       email: null,
@@ -199,23 +198,15 @@ class DeltaChatController {
   }
 
   deleteChat (chatId) {
-    const index = this._chats.findIndex(page => {
-      return page.chatId === chatId
-    })
-    if (index !== -1) {
-      this._dc.deleteChat(chatId)
-      this._chats.splice(index, 1)
-    }
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
+    this._dc.deleteChat(chatId)
   }
 
   archiveChat (chatId) {
-    const index = this._chats.findIndex(page => {
-      return page.chatId === chatId
-    })
-    if (index !== -1) {
-      this._dc.archiveChat(chatId, true)
-      this._chats.splice(index, 1)
-    }
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
+    this._dc.archiveChat(chatId, true)
   }
 
   info (line) {
