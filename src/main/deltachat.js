@@ -26,10 +26,6 @@ class ChatPage {
     this.chat = this._dc.getChat(this.chatId)
   }
 
-  clear () {
-    this._messages = []
-  }
-
   toJson () {
     var chat = this.chat.toJson()
     const messageIds = this._dc.getChatMessages(this.chatId, 0, 0)
@@ -172,11 +168,6 @@ class DeltaChatController {
       var chatId = list.getChatId(i)
       if (chatId === _chatId) return i
     }
-  }
-
-  clearChatPage (chatId) {
-    var chat = this._loadChatPage(chatId)
-    chat.clear()
   }
 
   loadMessages (chatId) {}

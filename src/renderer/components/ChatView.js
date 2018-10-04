@@ -44,8 +44,6 @@ class ChatView extends React.Component {
   }
 
   componentWillUnmount () {
-    var chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'clearChatPage', chatId)
     this.observer.disconnect()
   }
 
