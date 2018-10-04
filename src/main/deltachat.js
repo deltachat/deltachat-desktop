@@ -26,10 +26,6 @@ class ChatPage {
     this.chat = this._dc.getChat(this.chatId)
   }
 
-  messages () {
-    return this._messages
-  }
-
   clear () {
     this._messages = []
   }
