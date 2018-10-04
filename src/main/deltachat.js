@@ -20,7 +20,6 @@ function messageIdToJson (messageId, dc) {
 
 class ChatPage {
   constructor (chatId, dc) {
-    this._messages = []
     this._dc = dc
     this.chatId = chatId
     this.chat = this._dc.getChat(this.chatId)
@@ -36,15 +35,6 @@ class ChatPage {
       if (contact) chat.contact = contact.toJson()
     }
     return chat
-  }
-
-  deleteMessage (messageId) {
-    const index = this._messages.findIndex(m => {
-      return m.messageId === messageId
-    })
-    if (index !== -1) {
-      this._messages.splice(index, 1)
-    }
   }
 }
 
@@ -239,8 +229,9 @@ class DeltaChatController {
   }
 
   deleteMessage (chatId, messageId) {
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
     this._dc.deleteMessages(messageId)
-    this._loadChatPage(chatId).deleteMessage(messageId)
   }
 
   createChatByContactId (contactId) {
