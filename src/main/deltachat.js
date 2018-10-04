@@ -30,10 +30,6 @@ class ChatPage {
     return this._messages
   }
 
-  append (line) {
-    this._messages.push(line)
-  }
-
   clear () {
     this._messages = []
   }
@@ -49,8 +45,6 @@ class ChatPage {
     }
     return chat
   }
-
-  appendMessage (messageId) {}
 
   deleteMessage (messageId) {
     const index = this._messages.findIndex(m => {
@@ -124,18 +118,11 @@ class DeltaChatController {
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       log('event msgs changed', chatId, msgId)
-      const msg = dc.getMessage(msgId)
-      if (!msg) return
-
-      if (msg.getState().isPending() || msg.getState().isDelivered()) {
-        this.appendMessage(chatId, msgId)
-      }
-      render()
+      if (dc.getMessage(msgId)) render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       log('incoming message', chatId, msgId)
-      this.appendMessage(chatId, msgId)
       render()
     })
 
@@ -196,11 +183,7 @@ class DeltaChatController {
     chat.clear()
   }
 
-  loadMessages (chatId) {
-    const chat = this._loadChatPage(chatId)
-    const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-    messageIds.forEach(chat.appendMessage.bind(chat))
-  }
+  loadMessages (chatId) {}
 
   sendMessage (...args) {
     return this._dc.sendTextMessage(...args)
@@ -241,10 +224,6 @@ class DeltaChatController {
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
     this.warning(`Blocked contact ${name} (id = ${contactId})`)
-  }
-
-  appendMessage (chatId, messageId) {
-    this._loadChatPage(chatId).appendMessage(messageId)
   }
 
   _loadChatPage (chatId, opts) {
