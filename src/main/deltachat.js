@@ -19,8 +19,8 @@ class ChatMessage {
       id: this._messageId,
       isMe: fromId === 1,
       contact: contact ? contact.toJson() : {},
-      msg: msg.toJson(),
-      filemime: msg.getFilemime()
+      msg: msg && msg.toJson(),
+      filemime: msg && msg.getFilemime()
     }
   }
 }
