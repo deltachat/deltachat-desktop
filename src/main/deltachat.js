@@ -18,24 +18,22 @@ function messageIdToJson (messageId, dc) {
   }
 }
 
-class ChatPage {
-  constructor (chatId, dc) {
-    this._dc = dc
-    this.chatId = chatId
-    this.chat = this._dc.getChat(this.chatId)
-  }
-
-  toJson () {
-    var chat = this.chat.toJson()
-    const messageIds = this._dc.getChatMessages(this.chatId, 0, 0)
-    chat.messages = messageIds.map(id => messageIdToJson(id, this._dc))
-    chat.summary = this.summary && this.summary.toJson()
-    if (this.fromId) {
-      var contact = this._dc.getContact(this.fromId)
-      if (contact) chat.contact = contact.toJson()
+function chatIdToJson (chatId, dc) {
+  const chat = dc.getChat(chatId).toJson()
+  const messageIds = dc.getChatMessages(chatId, 0, 0)
+  chat.messages = messageIds.map(id => messageIdToJson(id, dc))
+  if (chatId === 1) {
+    // dead drop
+    const msg = dc.getMessage(messageIds[0])
+    const fromId = msg.getFromId()
+    if (fromId) {
+      const contact = dc.getContact(fromId)
+      if (contact) {
+        chat.contact = contact.toJson()
+      }
     }
-    return chat
   }
+  return chat
 }
 
 class DeltaChatController {
@@ -72,7 +70,6 @@ class DeltaChatController {
         log('Ready')
         this.ready = true
         this.configuring = false
-        this.loadChats()
         render()
       }
       if (!dc.isConfigured()) {
@@ -132,16 +129,6 @@ class DeltaChatController {
     })
   }
 
-  loadChats () {
-    var list = this._dc.getChatList()
-    this._chatList = list
-    var count = list.getCount()
-    for (let i = 0; i < count; i++) {
-      var chatId = list.getChatId(i)
-      this._loadChatPage(chatId, list.getSummary(i))
-    }
-  }
-
   sendMessage (...args) {
     return this._dc.sendTextMessage(...args)
   }
@@ -171,7 +158,6 @@ class DeltaChatController {
       this._dc.createContact(name, address)
       this.info(`Added contact ${name} (${address})`)
       this.createChatByContactId(contactId)
-      this.loadChats()
     }
   }
 
@@ -183,25 +169,19 @@ class DeltaChatController {
     this.warning(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  _loadChatPage (chatId, summary) {
-    let page = this._chats[chatId]
-    if (!page) {
-      page = new ChatPage(chatId, this._dc)
-      this._chats[chatId] = page
-    }
-    if (chatId === 1) {
-      // dead drop
-      const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-      const msg = this._dc.getMessage(messageIds[0])
-      page.fromId = msg.getFromId()
-    }
-    page.summary = summary
-    return page
-  }
-
   chats () {
-    var chats = this._chats
-    return Object.keys(chats).map((id) => chats[id].toJson()).sort(function (a, b) {
+    const chats = []
+    const list = this._dc.getChatList()
+    const count = list.getCount()
+
+    for (let i = 0; i < count; i++) {
+      const chatId = list.getChatId(i)
+      const chat = chatIdToJson(chatId, this._dc)
+      chat.summary = list.getSummary(i).toJson()
+      chats.push(chat)
+    }
+
+    return chats.sort((a, b) => {
       return a.summary.timestamp < b.summary.timestamp
     })
   }
@@ -215,9 +195,7 @@ class DeltaChatController {
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
     if (!contact) return 0
-    const chatId = this._dc.createChatByContactId(contactId)
-    this.loadChats()
-    return chatId
+    return this._dc.createChatByContactId(contactId)
   }
 
   deleteChat (chatId) {

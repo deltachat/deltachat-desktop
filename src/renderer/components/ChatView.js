@@ -48,8 +48,6 @@ class ChatView extends React.Component {
   }
 
   componentDidMount () {
-    var chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'loadChats', chatId)
     this.conversationDiv = document.querySelector('.message-list')
     this.observer = new MutationObserver(this.scrollToBottom)
     this.observer.observe(this.conversationDiv, { attributes: true, childList: true, subtree: true })
