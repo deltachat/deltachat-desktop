@@ -171,12 +171,6 @@ class DeltaChatController {
     })
   }
 
-  getStarredMessages () {
-    return this._dc.getStarredMessages().map(messageId => {
-      return new ChatMessage(messageId, this._dc)
-    })
-  }
-
   loadChats (_chatId) {
     var list = this._dc.getChatList()
     this._chatList = list
