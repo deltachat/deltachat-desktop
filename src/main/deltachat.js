@@ -4,24 +4,17 @@ const path = require('path')
 const log = require('./log')
 const config = require('../config')
 
-class ChatMessage {
-  constructor (messageId, dc) {
-    this._messageId = messageId
-    this._dc = dc
-  }
-
-  toJson () {
-    const msg = this._dc.getMessage(this._messageId)
-    const fromId = msg && msg.getFromId()
-    const contact = fromId && this._dc.getContact(fromId)
-    return {
-      fromId,
-      id: this._messageId,
-      isMe: fromId === 1,
-      contact: contact ? contact.toJson() : {},
-      msg: msg && msg.toJson(),
-      filemime: msg && msg.getFilemime()
-    }
+function messageIdToJson (messageId, dc) {
+  const msg = dc.getMessage(messageId)
+  const fromId = msg && msg.getFromId()
+  const contact = fromId && dc.getContact(fromId)
+  return {
+    fromId,
+    id: messageId,
+    isMe: fromId === 1,
+    contact: contact ? contact.toJson() : {},
+    msg: msg && msg.toJson(),
+    filemime: msg && msg.getFilemime()
   }
 }
 
@@ -47,7 +40,8 @@ class ChatPage {
 
   toJson () {
     var chat = this.chat.toJson()
-    chat.messages = this._messages.map((m) => m.toJson())
+    const messageIds = this._dc.getChatMessages(this.chatId, 0, 0)
+    chat.messages = messageIds.map(id => messageIdToJson(id, this._dc))
     chat.summary = this.summary && this.summary.toJson()
     if (this.fromId) {
       var contact = this._dc.getContact(this.fromId)
@@ -56,9 +50,7 @@ class ChatPage {
     return chat
   }
 
-  appendMessage (messageId) {
-    this.append(new ChatMessage(messageId, this._dc))
-  }
+  appendMessage (messageId) {}
 
   deleteMessage (messageId) {
     const index = this._messages.findIndex(m => {
