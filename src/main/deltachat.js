@@ -139,8 +139,7 @@ class DeltaChatController {
     for (let i = 0; i < count; i++) {
       var chatId = list.getChatId(i)
       this._loadChatPage(chatId, {
-        summary: list.getSummary(i),
-        loadMessages: _chatId === chatId
+        summary: list.getSummary(i)
       })
     }
   }
@@ -159,8 +158,6 @@ class DeltaChatController {
       if (chatId === _chatId) return i
     }
   }
-
-  loadMessages (chatId) {}
 
   sendMessage (...args) {
     return this._dc.sendTextMessage(...args)
@@ -217,7 +214,6 @@ class DeltaChatController {
       page.fromId = msg.getFromId()
     }
     page.summary = opts.summary || this.getSummaryByChatId(chatId)
-    if (opts.loadMessages) this.loadMessages(chatId)
     return page
   }
 
