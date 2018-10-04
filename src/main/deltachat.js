@@ -274,10 +274,6 @@ class DeltaChatController {
     log.error(line)
   }
 
-  _getChats () {
-    return this._dc.getChats()
-  }
-
   contacts (...args) {
     if (!this._dc) return []
     else return this._dc.getContacts(...args).map((id) => this._dc.getContact(id).toJson())
