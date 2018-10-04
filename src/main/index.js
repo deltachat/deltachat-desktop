@@ -57,7 +57,6 @@ function init () {
 
   const ipcMain = electron.ipcMain
 
-  let isReady = false // app ready, windows can be created
   app.ipcReady = false // main window has finished loading and IPC is ready
   app.isQuitting = false
 
@@ -69,7 +68,6 @@ function init () {
   function onReady (err, results) {
     if (err) throw err
 
-    isReady = true
     const state = results.state
 
     localize.setup(app, state.saved.locale || app.getLocale())
@@ -90,9 +88,18 @@ function init () {
   app.once('ipcReady', function () {
     log('Command line args:', argv)
     console.timeEnd('init')
+
+    var win = windows.main.win
+    win.on('close', e => {
+      if (!app.isQuitting) {
+        e.preventDefault()
+        windows.main.hide()
+        quit(e)
+      }
+    })
   })
 
-  app.on('before-quit', function (e) {
+  function quit (e) {
     if (app.isQuitting) return
 
     app.isQuitting = true
@@ -103,10 +110,14 @@ function init () {
       console.error('Saving state took too long. Quitting.')
       app.quit()
     }, 4000) // quit after 4 secs, at most
+  }
+
+  app.on('before-quit', function (e) {
+    quit(e)
   })
 
-  app.on('activate', function () {
-    if (isReady) windows.main.show()
+  app.on('window-all-closed', function (e) {
+    quit(e)
   })
 }
 

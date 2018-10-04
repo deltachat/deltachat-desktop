@@ -81,10 +81,6 @@ function init (state, options) {
   }, 1000))
 
   win.on('close', e => {
-    if (!app.isQuitting) {
-      e.preventDefault()
-      hide()
-    }
   })
 }
 

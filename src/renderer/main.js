@@ -31,6 +31,8 @@ function setupIpc () {
   ipcRenderer.on('log', (e, ...args) => console.log(...args))
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
   ipcRenderer.on('stateSave', (e) => State.save(state))
+  ipcRenderer.on('stateSaveImmediate', (e) => State.saveImmediate(state))
+
   ipcRenderer.on('chooseLanguage', onChooseLanguage)
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
 
