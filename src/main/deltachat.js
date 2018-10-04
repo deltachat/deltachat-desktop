@@ -132,15 +132,13 @@ class DeltaChatController {
     })
   }
 
-  loadChats (_chatId) {
+  loadChats () {
     var list = this._dc.getChatList()
     this._chatList = list
     var count = list.getCount()
     for (let i = 0; i < count; i++) {
       var chatId = list.getChatId(i)
-      this._loadChatPage(chatId, {
-        summary: list.getSummary(i)
-      })
+      this._loadChatPage(chatId, list.getSummary(i))
     }
   }
 
@@ -200,8 +198,7 @@ class DeltaChatController {
     this.warning(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  _loadChatPage (chatId, opts) {
-    if (!opts) opts = {}
+  _loadChatPage (chatId, summary) {
     let page = this._chats[chatId]
     if (!page) {
       page = new ChatPage(chatId, this._dc)
@@ -213,7 +210,7 @@ class DeltaChatController {
       const msg = this._dc.getMessage(messageIds[0])
       page.fromId = msg.getFromId()
     }
-    page.summary = opts.summary || this.getSummaryByChatId(chatId)
+    page.summary = summary || this.getSummaryByChatId(chatId)
     return page
   }
 
