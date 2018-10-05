@@ -50,6 +50,7 @@ class Login extends React.Component {
 
   render () {
     const { logins, deltachat } = this.props
+    const { email, password } = this.state
     const tx = window.translate
 
     var loading = deltachat.configuring
@@ -73,7 +74,7 @@ class Login extends React.Component {
               <InputGroup
                 id='email'
                 type='text'
-                value={this.state.email}
+                value={email}
                 leftIcon='envelope'
                 onChange={this.handleChange}
               />
@@ -83,11 +84,11 @@ class Login extends React.Component {
                 id='password'
                 leftIcon='lock'
                 type='password'
-                value={this.state.password}
+                value={password}
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button disabled={loading} type='submit' text={tx('login.button')} />
+            <Button disabled={loading || !(email && password)} type='submit' text={tx('login.button')} />
             <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />
           </form>
         </div>
