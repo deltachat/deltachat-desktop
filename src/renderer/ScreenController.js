@@ -45,7 +45,7 @@ class Home extends React.Component {
   render () {
     // renderer/main.js polls every second and updates the deltachat
     // property with current state of database.
-    const { credentials, deltachat } = this.props
+    const { logins, deltachat } = this.props
     const { screen, screenProps } = this.state
 
     var Screen
@@ -78,7 +78,7 @@ class Home extends React.Component {
           </div>
         )}
         {!deltachat.ready
-          ? <Login credentials={credentials} deltachat={deltachat} />
+          ? <Login logins={logins} deltachat={deltachat} />
           : <Screen
             screenProps={screenProps}
             userFeedback={this.userFeedback}

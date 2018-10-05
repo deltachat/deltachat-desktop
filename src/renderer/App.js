@@ -1,3 +1,4 @@
+const { remote } = require('electron')
 const React = require('react')
 const ScreenController = require('./ScreenController')
 
@@ -13,7 +14,7 @@ class App extends React.Component {
     return (
       <IntlProvider locale={window.localeData.locale}>
         <ScreenController
-          credentials={state.saved.credentials}
+          logins={remote.app.logins}
           deltachat={state.deltachat} />
       </IntlProvider>
     )

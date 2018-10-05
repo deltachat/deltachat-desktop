@@ -15,8 +15,8 @@ class Login extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      email: this.props.credentials.email || process.env.DC_ADDR,
-      password: this.props.credentials.password || process.env.DC_MAIL_PW
+      email: process.env.DC_ADDR,
+      password: process.env.DC_MAIL_PW
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -41,11 +41,17 @@ class Login extends React.Component {
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
     this.setState({ email: '', password: '' })
+    event.preventDefault()
     event.stopPropagation()
   }
 
+  onClickLogin (login) {
+    ipcRenderer.send('init', { email: login, password: true })
+  }
+
   render () {
-    const { deltachat } = this.props
+    const { logins, deltachat } = this.props
+    const { email, password } = this.state
     const tx = window.translate
 
     var loading = deltachat.configuring
@@ -58,12 +64,18 @@ class Login extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
+          <ul>
+            {logins.map((login) => <li key={login}>
+              <Button onClick={this.onClickLogin.bind(this, login)}> {login}</Button>
+            </li>
+            )}
+          </ul>
           <form onSubmit={this.handleSubmit}>
             <FormGroup label='E-Mail Address' placeholder='E-Mail Address' labelFor='email' labelInfo='(required)'>
               <InputGroup
                 id='email'
                 type='text'
-                value={this.state.email}
+                value={email}
                 leftIcon='envelope'
                 onChange={this.handleChange}
               />
@@ -73,12 +85,12 @@ class Login extends React.Component {
                 id='password'
                 leftIcon='lock'
                 type='password'
-                value={this.state.password}
+                value={password}
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button disabled={loading} type='submit' text={tx('login.button')} />
-            <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />
+            <Button disabled={loading || !(email && password)} type='submit' text={tx('login.button')} />
+            {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>
       </div>

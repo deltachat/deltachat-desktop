@@ -10,6 +10,7 @@ const {
   Classes,
   Navbar,
   NavbarGroup,
+  NavbarHeading,
   Position,
   Menu,
   MenuItem,
@@ -92,6 +93,7 @@ class ChatList extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text='Logout' />
+            <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <Button className={Classes.MINIMAL} icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
