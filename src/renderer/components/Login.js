@@ -41,6 +41,7 @@ class Login extends React.Component {
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
     this.setState({ email: '', password: '' })
+    event.preventDefault()
     event.stopPropagation()
   }
 
@@ -89,7 +90,7 @@ class Login extends React.Component {
               />
             </FormGroup>
             <Button disabled={loading || !(email && password)} type='submit' text={tx('login.button')} />
-            <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />
+            {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>
       </div>
