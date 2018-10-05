@@ -36,6 +36,7 @@ class ChatView extends React.Component {
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
+    this.conversationDiv = React.createRef()
   }
 
   writeMessage (message) {
@@ -44,13 +45,16 @@ class ChatView extends React.Component {
   }
 
   componentWillUnmount () {
-    this.observer.disconnect()
+    if (this.observer) this.observer.disconnect()
+  }
+
+  componentDidUpdate () {
+    if (this.observer || !this.conversationDiv.current) return
+    this.observer = new MutationObserver(this.scrollToBottom)
+    this.observer.observe(this.conversationDiv.current, { attributes: true, childList: true, subtree: true })
   }
 
   componentDidMount () {
-    this.conversationDiv = document.querySelector('.message-list')
-    this.observer = new MutationObserver(this.scrollToBottom)
-    this.observer.observe(this.conversationDiv, { attributes: true, childList: true, subtree: true })
     this.scrollToBottom()
   }
 
@@ -117,7 +121,7 @@ class ChatView extends React.Component {
           close={this.onCloseAttachmentView.bind(this)}
         />
 
-        <div id='the-conversation'>
+        <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext theme={theme}>
             {chat.messages.map((message) => {
               const msg = <RenderMessage message={message} onClickAttachment={this.onClickAttachment.bind(this, message)} />
