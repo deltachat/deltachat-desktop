@@ -51,7 +51,8 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-intl": "^2.4.0",
-    "run-parallel": "^1.1.9"
+    "run-parallel": "^1.1.9",
+    "run-series": "^1.1.8"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.0",

@@ -7,6 +7,7 @@ const parallel = require('run-parallel')
 
 const localize = require('../localize')
 const config = require('../config')
+const logins = require('./logins')
 const ipc = require('./ipc')
 const log = require('./log')
 const menu = require('./menu')
@@ -61,6 +62,7 @@ function init () {
   app.isQuitting = false
 
   parallel({
+    logins: (cb) => logins(config.CONFIG_PATH, cb),
     appReady: (cb) => app.on('ready', () => cb(null)),
     state: (cb) => State.load(cb)
   }, onReady)
@@ -69,6 +71,7 @@ function init () {
     if (err) throw err
 
     const state = results.state
+    app.logins = results.logins
 
     localize.setup(app, state.saved.locale || app.getLocale())
     windows.main.init(state, { hidden })

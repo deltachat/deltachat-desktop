@@ -14,7 +14,6 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top: 50px; /* fixed navbar */
   margin: 10px;
   flex-grow: 1;
   overflow-x: hidden;
@@ -56,4 +55,12 @@ body {
 }
 img {
   max-width: 500px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0px;
+}
+ul li button {
+  min-width: 200px;
 }
