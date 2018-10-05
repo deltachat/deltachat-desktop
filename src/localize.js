@@ -4,7 +4,6 @@ module.exports = {
 }
 
 const merge = require('lodash.merge')
-const fs = require('fs')
 const path = require('path')
 
 const log = require('./main/log')
@@ -44,16 +43,14 @@ function normalizeLocaleName (locale) {
 }
 
 function getLocaleMessages (locale) {
-  const onDiskLocale = locale.replace('-', '_')
-
-  const targetFile = path.join(
-    __dirname,
-    '..',
-    '_locales',
-    onDiskLocale + '.json'
+  return require(
+    path.join(
+      __dirname,
+      '..',
+      '_locales',
+      locale.replace('-', '_') + '.json'
+    )
   )
-
-  return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
 }
 
 function setup (app, name) {
