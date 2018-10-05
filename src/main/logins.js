@@ -20,15 +20,20 @@ function getLogins (dir, cb) {
     })
   })
 }
+
 function getConfig (filename) {
   return (next) => {
     var dc = new DeltaChat()
+    function done (err, addr) {
+      dc = null
+      next(err, addr)
+    }
     dc.open(filename, err => {
-      if (err) return next(err)
+      if (err) return done(err)
       if (dc.isConfigured()) {
-        return next(null, dc.getConfig('addr'))
+        return done(null, dc.getConfig('addr'))
       }
-      next()
+      done()
     })
   }
 }
