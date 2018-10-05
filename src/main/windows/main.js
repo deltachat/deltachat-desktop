@@ -17,8 +17,6 @@ const main = module.exports = {
 const electron = require('electron')
 const debounce = require('debounce')
 
-const app = electron.app
-
 const config = require('../../config')
 const log = require('../log')
 const menu = require('../menu')
