@@ -61,9 +61,7 @@ class ChatList extends React.Component {
     this.setState({ deadDropChat: chat })
   }
 
-  componentDidMount () {
-    ipcRenderer.send('dispatch', 'loadChats')
-  }
+  componentDidMount () {}
 
   logout () {
     ipcRenderer.send('dispatch', 'logout')

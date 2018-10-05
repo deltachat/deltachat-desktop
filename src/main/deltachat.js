@@ -4,76 +4,41 @@ const path = require('path')
 const log = require('./log')
 const config = require('../config')
 
-class ChatMessage {
-  constructor (messageId, dc) {
-    this._messageId = messageId
-    this._dc = dc
-  }
-
-  toJson () {
-    const msg = this._dc.getMessage(this._messageId)
-    const fromId = msg && msg.getFromId()
-    const contact = fromId && this._dc.getContact(fromId)
-    return {
-      fromId,
-      id: this._messageId,
-      isMe: fromId === 1,
-      contact: contact ? contact.toJson() : {},
-      msg: msg && msg.toJson(),
-      filemime: msg && msg.getFilemime()
-    }
+function messageIdToJson (messageId, dc) {
+  const msg = dc.getMessage(messageId)
+  const fromId = msg && msg.getFromId()
+  const contact = fromId && dc.getContact(fromId)
+  return {
+    fromId,
+    id: messageId,
+    isMe: fromId === 1,
+    contact: contact ? contact.toJson() : {},
+    msg: msg && msg.toJson(),
+    filemime: msg && msg.getFilemime()
   }
 }
 
-class ChatPage {
-  constructor (chatId, dc) {
-    this._messages = []
-    this._dc = dc
-    this.chatId = chatId
-    this.chat = this._dc.getChat(this.chatId)
-  }
-
-  messages () {
-    return this._messages
-  }
-
-  append (line) {
-    this._messages.push(line)
-  }
-
-  clear () {
-    this._messages = []
-  }
-
-  toJson () {
-    var chat = this.chat.toJson()
-    chat.messages = this._messages.map((m) => m.toJson())
-    chat.summary = this.summary && this.summary.toJson()
-    if (this.fromId) {
-      var contact = this._dc.getContact(this.fromId)
-      if (contact) chat.contact = contact.toJson()
-    }
-    return chat
-  }
-
-  appendMessage (messageId) {
-    this.append(new ChatMessage(messageId, this._dc))
-  }
-
-  deleteMessage (messageId) {
-    const index = this._messages.findIndex(m => {
-      return m.messageId === messageId
-    })
-    if (index !== -1) {
-      this._messages.splice(index, 1)
+function chatIdToJson (chatId, dc) {
+  const chat = dc.getChat(chatId).toJson()
+  const messageIds = dc.getChatMessages(chatId, 0, 0)
+  chat.messages = messageIds.map(id => messageIdToJson(id, dc))
+  if (chatId === 1) {
+    // dead drop
+    const msg = dc.getMessage(messageIds[0])
+    const fromId = msg.getFromId()
+    if (fromId) {
+      const contact = dc.getContact(fromId)
+      if (contact) {
+        chat.contact = contact.toJson()
+      }
     }
   }
+  return chat
 }
 
 class DeltaChatController {
   // The Controller is the container for a deltachat instance
   constructor () {
-    this._chats = []
     this.ready = false
     this.credentials = {
       email: null,
@@ -104,7 +69,6 @@ class DeltaChatController {
         log('Ready')
         this.ready = true
         this.configuring = false
-        this.loadChats()
         render()
       }
       if (!dc.isConfigured()) {
@@ -132,18 +96,11 @@ class DeltaChatController {
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       log('event msgs changed', chatId, msgId)
-      const msg = dc.getMessage(msgId)
-      if (!msg) return
-
-      if (msg.getState().isPending() || msg.getState().isDelivered()) {
-        this.appendMessage(chatId, msgId)
-      }
-      render()
+      if (dc.getMessage(msgId)) render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       log('incoming message', chatId, msgId)
-      this.appendMessage(chatId, msgId)
       render()
     })
 
@@ -169,51 +126,6 @@ class DeltaChatController {
     dc.on('DC_EVENT_ERROR', (code, error) => {
       this.error(`${error} (code = ${code})`)
     })
-  }
-
-  getStarredMessages () {
-    return this._dc.getStarredMessages().map(messageId => {
-      return new ChatMessage(messageId, this._dc)
-    })
-  }
-
-  loadChats (_chatId) {
-    var list = this._dc.getChatList()
-    this._chatList = list
-    var count = list.getCount()
-    for (let i = 0; i < count; i++) {
-      var chatId = list.getChatId(i)
-      this._loadChatPage(chatId, {
-        summary: list.getSummary(i),
-        loadMessages: _chatId === chatId
-      })
-    }
-  }
-
-  getSummaryByChatId (chatId) {
-    var index = this.getChatIndex(chatId)
-    return this._chatList.getSummary(index)
-  }
-
-  getChatIndex (_chatId) {
-    var list = this._dc.getChatList()
-    this._chatList = list
-    var count = list.getCount()
-    for (let i = 0; i < count; i++) {
-      var chatId = list.getChatId(i)
-      if (chatId === _chatId) return i
-    }
-  }
-
-  clearChatPage (chatId) {
-    var chat = this._loadChatPage(chatId)
-    chat.clear()
-  }
-
-  loadMessages (chatId) {
-    const chat = this._loadChatPage(chatId)
-    const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-    messageIds.forEach(chat.appendMessage.bind(chat))
   }
 
   sendMessage (...args) {
@@ -245,7 +157,6 @@ class DeltaChatController {
       this._dc.createContact(name, address)
       this.info(`Added contact ${name} (${address})`)
       this.createChatByContactId(contactId)
-      this.loadChats()
     }
   }
 
@@ -257,66 +168,45 @@ class DeltaChatController {
     this.warning(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  appendMessage (chatId, messageId) {
-    this._loadChatPage(chatId).appendMessage(messageId)
-  }
-
-  _loadChatPage (chatId, opts) {
-    if (!opts) opts = {}
-    let page = this._chats[chatId]
-    if (!page) {
-      page = new ChatPage(chatId, this._dc)
-      this._chats[chatId] = page
-    }
-    if (chatId === 1) {
-      // dead drop
-      const messageIds = this._dc.getChatMessages(chatId, 0, 0)
-      const msg = this._dc.getMessage(messageIds[0])
-      page.fromId = msg.getFromId()
-    }
-    page.summary = opts.summary || this.getSummaryByChatId(chatId)
-    if (opts.loadMessages) this.loadMessages(chatId)
-    return page
-  }
-
   chats () {
-    var chats = this._chats
-    return Object.keys(chats).map((id) => chats[id].toJson()).sort(function (a, b) {
+    const chats = []
+    const list = this._dc.getChatList()
+    const count = list.getCount()
+
+    for (let i = 0; i < count; i++) {
+      const chatId = list.getChatId(i)
+      const chat = chatIdToJson(chatId, this._dc)
+      chat.summary = list.getSummary(i).toJson()
+      chats.push(chat)
+    }
+
+    return chats.sort((a, b) => {
       return a.summary.timestamp < b.summary.timestamp
     })
   }
 
   deleteMessage (chatId, messageId) {
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
     this._dc.deleteMessages(messageId)
-    this._loadChatPage(chatId).deleteMessage(messageId)
   }
 
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
     if (!contact) return 0
-    const chatId = this._dc.createChatByContactId(contactId)
-    this.loadChats()
-    return chatId
+    return this._dc.createChatByContactId(contactId)
   }
 
   deleteChat (chatId) {
-    const index = this._chats.findIndex(page => {
-      return page.chatId === chatId
-    })
-    if (index !== -1) {
-      this._dc.deleteChat(chatId)
-      this._chats.splice(index, 1)
-    }
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
+    this._dc.deleteChat(chatId)
   }
 
   archiveChat (chatId) {
-    const index = this._chats.findIndex(page => {
-      return page.chatId === chatId
-    })
-    if (index !== -1) {
-      this._dc.archiveChat(chatId, true)
-      this._chats.splice(index, 1)
-    }
+    // TODO dispatch this call from view and re-render (if we get
+    // an event for this, we can re-render there)
+    this._dc.archiveChat(chatId, true)
   }
 
   info (line) {
@@ -333,10 +223,6 @@ class DeltaChatController {
 
   error (line) {
     log.error(line)
-  }
-
-  _getChats () {
-    return this._dc.getChats()
   }
 
   contacts (...args) {
