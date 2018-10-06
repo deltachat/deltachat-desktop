@@ -27,30 +27,11 @@ if (config.IS_PRODUCTION) {
 const hidden = argv.includes('--hidden') ||
   (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
 
-if (!shouldQuit && !config.IS_PORTABLE) {
-  // Prevent multiple instances of app from running at same time. New instances
-  // signal this instance and quit. Note: This feature creates a lock file in
-  // %APPDATA%\Roaming\DeltaChat so we do not do it for the Portable App since
-  // we want to be "silent" as well as "portable".
-  shouldQuit = app.makeSingleInstance(onAppOpen)
-  if (shouldQuit) {
-    app.quit()
-  }
-}
-
 if (!shouldQuit) {
   init()
 }
 
 function init () {
-  if (config.IS_PORTABLE) {
-    const path = require('path')
-    // Put all user data into the "Portable Settings" folder
-    app.setPath('userData', config.CONFIG_PATH)
-    // Put Electron crash files, etc. into the "Portable Settings\Temp" folder
-    app.setPath('temp', path.join(config.CONFIG_PATH, 'Temp'))
-  }
-
   const ipcMain = electron.ipcMain
 
   app.ipcReady = false // main window has finished loading and IPC is ready
@@ -117,17 +98,6 @@ function init () {
   app.on('window-all-closed', function (e) {
     quit(e)
   })
-}
-
-function onAppOpen (newArgv) {
-  newArgv = sliceArgv(newArgv)
-
-  if (app.ipcReady) {
-    log('Second app instance opened, but was prevented:', newArgv)
-    windows.main.show()
-  } else {
-    argv.push(...newArgv)
-  }
 }
 
 // Remove leading args.

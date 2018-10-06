@@ -5,11 +5,7 @@ const APP_NAME = 'DeltaChat'
 const APP_VERSION = require('../package.json').version
 
 const IS_TEST = isTest()
-const PORTABLE_PATH = IS_TEST
-  ? path.join(process.platform === 'win32' ? 'C:\\Windows\\Temp' : '/tmp', 'DeltaChatTest')
-  : path.join(path.dirname(process.execPath), 'Portable Settings')
 const IS_PRODUCTION = isProduction()
-const IS_PORTABLE = isPortable()
 
 const UI_HEADER_HEIGHT = 38
 const UI_MESSAGE_HEIGHT = 100
@@ -28,7 +24,6 @@ module.exports = {
 
   HOME_PAGE_URL: 'https://delta.chat',
 
-  IS_PORTABLE: IS_PORTABLE,
   IS_PRODUCTION: IS_PRODUCTION,
   IS_TEST: IS_TEST,
 
@@ -56,28 +51,6 @@ function getConfigPath () {
 
 function isTest () {
   return process.env.NODE_ENV === 'test'
-}
-
-function isPortable () {
-  if (IS_TEST) {
-    return true
-  }
-
-  if (process.platform !== 'win32' || !IS_PRODUCTION) {
-    // Fast path: Non-Windows platforms should not check for path on disk
-    return false
-  }
-
-  const fs = require('fs')
-
-  try {
-    // This line throws if the "Portable Settings" folder does not exist, and does
-    // nothing otherwise.
-    fs.accessSync(PORTABLE_PATH, fs.constants.R_OK | fs.constants.W_OK)
-    return true
-  } catch (err) {
-    return false
-  }
 }
 
 function isProduction () {
