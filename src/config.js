@@ -27,8 +27,6 @@ module.exports = {
 
   DELAYED_INIT: 3000 /* 3 seconds */,
 
-  DEFAULT_DOWNLOAD_PATH: getDefaultDownloadPath(),
-
   GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',
   GITHUB_URL_ISSUES: 'https://github.com/deltachat/deltachat-desktop/issues',
   GITHUB_URL_RAW: 'https://raw.githubusercontent.com/deltachat/deltachat-desktop/master',
@@ -62,14 +60,6 @@ function getConfigPath () {
     return PORTABLE_PATH
   } else {
     return path.dirname(appConfig.filePath)
-  }
-}
-
-function getDefaultDownloadPath () {
-  if (IS_PORTABLE) {
-    return path.join(getConfigPath(), 'Downloads')
-  } else {
-    return getPath('downloads')
   }
 }
 
