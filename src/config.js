@@ -35,7 +35,6 @@ module.exports = {
 
   STATIC_PATH: path.join(__dirname, '..', 'static'),
 
-  WINDOW_ABOUT: 'file://' + path.join(__dirname, '..', 'static', 'about.html'),
   WINDOW_MAIN: 'file://' + path.join(__dirname, '..', 'static', 'main.html'),
 
   WINDOW_INITIAL_BOUNDS: {
