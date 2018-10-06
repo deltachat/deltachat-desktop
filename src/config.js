@@ -55,19 +55,6 @@ function getConfigPath () {
   }
 }
 
-function getPath (key) {
-  if (!process.versions.electron) {
-    // Node.js process
-    return ''
-  } else if (process.type === 'renderer') {
-    // Electron renderer process
-    return electron.remote.app.getPath(key)
-  } else {
-    // Electron main process
-    return electron.app.getPath(key)
-  }
-}
-
 function isTest () {
   return process.env.NODE_ENV === 'test'
 }
