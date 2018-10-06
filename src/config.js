@@ -24,8 +24,6 @@ module.exports = {
 
   CONFIG_PATH: getConfigPath(),
 
-  DELAYED_INIT: 3000 /* 3 seconds */,
-
   GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',
   GITHUB_URL_ISSUES: 'https://github.com/deltachat/deltachat-desktop/issues',
   GITHUB_URL_RAW: 'https://raw.githubusercontent.com/deltachat/deltachat-desktop/master',
