@@ -47,8 +47,8 @@ module.exports = {
 }
 
 function getConfigPath () {
-  if (IS_PORTABLE) {
-    return PORTABLE_PATH
+  if (IS_TEST) {
+    return path.join(process.platform === 'win32' ? 'C:\\Windows\\Temp' : '/tmp', 'DeltaChatTest')
   } else {
     return path.dirname(appConfig.filePath)
   }
