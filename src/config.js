@@ -4,7 +4,6 @@ const electron = require('electron')
 const arch = require('arch')
 
 const APP_NAME = 'DeltaChat'
-const APP_TEAM = 'DeltaChat'
 const APP_VERSION = require('../package.json').version
 
 const IS_TEST = isTest()
@@ -21,7 +20,6 @@ module.exports = {
   APP_FILE_ICON: path.join(__dirname, '..', 'static', 'DeltaChatFile'),
   APP_ICON: path.join(__dirname, '..', 'static', 'DeltaChat'),
   APP_NAME: APP_NAME,
-  APP_TEAM: APP_TEAM,
   APP_VERSION: APP_VERSION,
   APP_WINDOW_TITLE: APP_NAME + ' (BETA)',
 
