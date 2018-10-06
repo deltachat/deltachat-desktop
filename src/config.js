@@ -1,6 +1,5 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
-const electron = require('electron')
 
 const APP_NAME = 'DeltaChat'
 const APP_VERSION = require('../package.json').version
