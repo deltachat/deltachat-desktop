@@ -1,7 +1,6 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
 const electron = require('electron')
-const arch = require('arch')
 
 const APP_NAME = 'DeltaChat'
 const APP_VERSION = require('../package.json').version
@@ -33,8 +32,6 @@ module.exports = {
   IS_PORTABLE: IS_PORTABLE,
   IS_PRODUCTION: IS_PRODUCTION,
   IS_TEST: IS_TEST,
-
-  OS_SYSARCH: arch() === 'x64' ? 'x64' : 'ia32',
 
   STATIC_PATH: path.join(__dirname, '..', 'static'),
 
