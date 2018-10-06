@@ -27,11 +27,6 @@ if (config.IS_PRODUCTION) {
 const hidden = argv.includes('--hidden') ||
   (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
 
-if (process.platform === 'win32') {
-  const squirrelWin32 = require('./squirrel-win32')
-  shouldQuit = squirrelWin32.handleEvent(argv[0])
-}
-
 if (!shouldQuit && !config.IS_PORTABLE) {
   // Prevent multiple instances of app from running at same time. New instances
   // signal this instance and quit. Note: This feature creates a lock file in
