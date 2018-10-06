@@ -8,9 +8,11 @@ test('basic: login', function (t) {
   const app = setup.createApp()
   setup.waitForLoad(app, t)
     .then(() => app.client.click('button'))
-    .then(() => app.client.waitUntilTextExists('.bp3-navbar', 'Logout')
-    .then(() => setup.endTest(app, t),
-      (err) => setup.endTest(app, t, err || 'error'))
+    .then(() => app.client.waitUntilTextExists('.bp3-navbar', 'Logout'))
+    .then(
+      () => setup.endTest(app, t),
+      (err) => setup.endTest(app, t, err || 'error')
+    )
 })
 
 test('basic: add contact', function (t) {
@@ -30,6 +32,8 @@ test('basic: add contact', function (t) {
     .then(() => app.client.waitUntilTextExists('.window', 'theiremail@email.com'))
     .then(() => app.client.click('.module-contact-list-item'))
     .then(() => app.client.waitUntilTextExists('.window', 'theiremail@email.com'))
-    .then(() => setup.endTest(app, t),
-      (err) => setup.endTest(app, t, err || 'error'))
+    .then(
+      () => setup.endTest(app, t),
+      (err) => setup.endTest(app, t, err || 'error')
+    )
 })

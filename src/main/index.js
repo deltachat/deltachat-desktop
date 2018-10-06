@@ -3,7 +3,6 @@ console.time('init')
 const electron = require('electron')
 const app = electron.app
 
-const path = require('path')
 const parallel = require('run-parallel')
 
 const localize = require('../localize')

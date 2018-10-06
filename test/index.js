@@ -9,8 +9,10 @@ test('app runs', function (t) {
   const app = setup.createApp()
   setup.waitForLoad(app, t)
     .then(() => setup.wait())
-    .then(() => setup.endTest(app, t),
-      (err) => setup.endTest(app, t, err || 'error'))
+    .then(
+      () => setup.endTest(app, t),
+      (err) => setup.endTest(app, t, err || 'error')
+    )
 
   require('./basic-functions')
 })
