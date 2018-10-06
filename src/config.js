@@ -17,7 +17,6 @@ const UI_HEADER_HEIGHT = 38
 const UI_MESSAGE_HEIGHT = 100
 
 module.exports = {
-  APP_FILE_ICON: path.join(__dirname, '..', 'static', 'DeltaChatFile'),
   APP_ICON: path.join(__dirname, '..', 'static', 'DeltaChat'),
   APP_NAME: APP_NAME,
   APP_VERSION: APP_VERSION,
