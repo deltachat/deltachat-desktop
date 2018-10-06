@@ -36,7 +36,6 @@ module.exports = {
 
   OS_SYSARCH: arch() === 'x64' ? 'x64' : 'ia32',
 
-  ROOT_PATH: path.join(__dirname, '..'),
   STATIC_PATH: path.join(__dirname, '..', 'static'),
 
   WINDOW_ABOUT: 'file://' + path.join(__dirname, '..', 'static', 'about.html'),
