@@ -34,8 +34,13 @@ function chatIdToJson (chatId, dc) {
   return chat
 }
 
+/**
+ * The Controller is the container for a deltachat instance
+ */
 class DeltaChatController {
-  // The Controller is the container for a deltachat instance
+  /**
+   * Created and owned by ipc on the backend
+   */
   constructor (cwd) {
     this.cwd = cwd
     this.ready = false
@@ -45,13 +50,9 @@ class DeltaChatController {
     }
   }
 
-  logout () {
-    this.dc = null
-    this.configuring = false
-    this.ready = false
-    if (typeof this._render === 'function') this._render()
-  }
-
+  /**
+   * Dispatched when logging in from Login
+   */
   login (credentials, render) {
     // Creates a separate DB file for each login
     const cwd = path.join(this.cwd, Buffer.from(credentials.email).toString('hex'))
@@ -119,30 +120,62 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
-      this.warning(warning)
+      this._warning(warning)
     })
 
     dc.on('DC_EVENT_ERROR', (code, error) => {
-      this.error(`${error} (code = ${code})`)
+      this._error(`${error} (code = ${code})`)
     })
   }
 
+  /**
+   * Dispatched when logging out from ChatList
+   */
+  logout () {
+    this.dc = null
+    this.configuring = false
+    this.ready = false
+    if (typeof this._render === 'function') this._render()
+  }
+
+  /**
+   * Dispatched when sending a message in ChatView
+   */
   sendMessage (...args) {
     return this._dc.sendTextMessage(...args)
   }
 
+  /**
+   * TODO: Not yet dispatched from any view
+   */
+  deleteMessage (chatId, messageId) {
+    this._dc.deleteMessages(messageId)
+  }
+
+  /**
+   * Dispatched in KeyTransfer dialog
+   */
   initiateKeyTransfer (...args) {
     return this._dc.initiateKeyTransfer(...args)
   }
 
+  /**
+   * Dispatched in SetupMessage dialog
+   */
   continueKeyTransfer (...args) {
     return this._dc.continueKeyTransfer(...args)
   }
 
+  /**
+   * Dispatched when creating contact in CreateContact
+   */
   createContact (...args) {
     return this._dc.createContact(...args)
   }
 
+  /**
+   * Dispatched when accepting a chat in DeadDrop
+   */
   chatWithContact (contactId) {
     log('chat with contact', contactId)
     if (this._dc.getContacts().indexOf(contactId) === -1) {
@@ -155,15 +188,69 @@ class DeltaChatController {
     }
   }
 
+  /**
+   * Dispatched when denying a chat in DeadDrop
+   */
   blockContact (contactId) {
     log('block contact', contactId)
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
-    this.warning(`Blocked contact ${name} (id = ${contactId})`)
+    this._warning(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  chats () {
+  /**
+   * Dispatched when creating a chat in CreateChat
+   */
+  createChatByContactId (contactId) {
+    const contact = this._dc.getContact(contactId)
+    if (!contact) return 0
+    return this._dc.createChatByContactId(contactId)
+  }
+
+  /**
+   * TODO: Not yet dispatched from any view
+   */
+  deleteChat (chatId) {
+    this._dc.deleteChat(chatId)
+  }
+
+  /**
+   * TODO: Not yet dispatched from any view
+   */
+  archiveChat (chatId) {
+    this._dc.archiveChat(chatId, true)
+  }
+
+  /**
+   * Dispatched when creating an unverified group in CreateGroup
+   */
+  createUnverifiedGroup (contacts, name) {
+    var chatId = this._dc.createUnverifiedGroupChat(name)
+    var results = contacts.map((c) => {
+      this._dc.addContactToChat(chatId, c.id)
+    })
+    return { chatId, results }
+  }
+
+  /**
+   * Returns the state in json format
+   */
+  render () {
+    return {
+      configuring: this.configuring,
+      credentials: this.credentials,
+      ready: this.ready,
+      chats: this._chats(),
+      contacts: this._contacts()
+    }
+  }
+
+  /**
+   * Internal
+   * Returns chats in json format
+   */
+  _chats () {
     const chats = []
     const list = this._dc.getChatList()
     const count = list.getCount()
@@ -179,60 +266,23 @@ class DeltaChatController {
     })
   }
 
-  deleteMessage (chatId, messageId) {
-    // TODO dispatch this call from view and re-render (if we get
-    // an event for this, we can re-render there)
-    this._dc.deleteMessages(messageId)
-  }
-
-  createChatByContactId (contactId) {
-    const contact = this._dc.getContact(contactId)
-    if (!contact) return 0
-    return this._dc.createChatByContactId(contactId)
-  }
-
-  deleteChat (chatId) {
-    // TODO dispatch this call from view and re-render (if we get
-    // an event for this, we can re-render there)
-    this._dc.deleteChat(chatId)
-  }
-
-  archiveChat (chatId) {
-    // TODO dispatch this call from view and re-render (if we get
-    // an event for this, we can re-render there)
-    this._dc.archiveChat(chatId, true)
-  }
-
-  warning (line) {
-    log('WARNING', line)
-  }
-
-  error (line) {
-    log.error(line)
-  }
-
-  contacts (...args) {
+  /**
+   * Internal
+   * Returns contacts in json format
+   */
+  _contacts (...args) {
     if (!this._dc) return []
-    else return this._dc.getContacts(...args).map((id) => this._dc.getContact(id).toJson())
-  }
-
-  createUnverifiedGroup (contacts, name) {
-    var chatId = this._dc.createUnverifiedGroupChat(name)
-    var results = contacts.map((c) => {
-      this._dc.addContactToChat(chatId, c.id)
+    return this._dc.getContacts(...args).map(id => {
+      return this._dc.getContact(id).toJson()
     })
-    return { chatId, results }
   }
 
-  render () {
-    return {
-      configuring: this.configuring,
-      credentials: this.credentials,
-      ready: this.ready,
-      chats: this.chats(),
-      contacts: this.contacts()
-    }
-  }
+  /**
+   * Internal
+   * Logging methods
+   */
+  _warning (line) { log('WARNING', line) }
+  _error (line) { log.error(line) }
 }
 
 module.exports = DeltaChatController
