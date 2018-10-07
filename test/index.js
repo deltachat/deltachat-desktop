@@ -3,10 +3,7 @@ process.env.NODE_ENV = 'test'
 const test = require('tape')
 const setup = require('./setup')
 
-test.onFinish(setup.deleteTestDataDir)
-
 test('app runs', function (t) {
-  setup.resetTestDataDir()
   const app = setup.createApp(t)
   setup.waitForLoad(app, t)
     .then(

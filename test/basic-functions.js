@@ -3,9 +3,8 @@ const test = require('tape')
 const setup = require('./setup')
 
 test('basic: login', function (t) {
-  setup.resetTestDataDir()
   t.timeoutAfter(20e3)
-  const app = setup.createApp()
+  const app = setup.createApp(t)
   setup.waitForLoad(app, t)
     .then(() => app.client.click('button'))
     .then(() => app.client.waitUntilTextExists('.bp3-navbar', 'Logout'))
@@ -16,9 +15,8 @@ test('basic: login', function (t) {
 })
 
 test('basic: add contact', function (t) {
-  setup.resetTestDataDir()
   t.timeoutAfter(20e3)
-  const app = setup.createApp()
+  const app = setup.createApp(t)
   setup.waitForLoad(app, t)
     .then(() => app.client.click('button'))
     .then(() => app.client.waitUntilTextExists('.bp3-navbar', 'Logout'))

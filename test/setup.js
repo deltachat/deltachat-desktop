@@ -5,7 +5,6 @@ const fs = require('fs')
 const path = require('path')
 const PNG = require('pngjs').PNG
 const tempy = require('tempy')
-const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 
 const config = require('../src/config')
@@ -18,8 +17,6 @@ module.exports = {
   compareFiles,
   waitForLoad,
   wait,
-  resetTestDataDir,
-  deleteTestDataDir,
   copy
 }
 
@@ -127,16 +124,6 @@ function compareIgnoringTransparency (bufActual, bufExpected) {
   const l2Distance = Math.round(Math.sqrt(sumSquareDiff))
   console.log('screenshot diff l2 distance: ' + l2Distance + ', rms: ' + rms)
   return l2Distance < 5000 && rms < 100
-}
-
-// Resets the test directory, containing config.json, downloads, etc
-function resetTestDataDir () {
-  rimraf.sync(config.TEST_DIR)
-  mkdirp.sync(config.TEST_DIR)
-}
-
-function deleteTestDataDir () {
-  rimraf.sync(config.TEST_DIR)
 }
 
 // Makes sure two files have identical contents
