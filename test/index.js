@@ -1,3 +1,5 @@
+process.env.NODE_ENV = 'test'
+
 const test = require('tape')
 const setup = require('./setup')
 
@@ -14,5 +16,5 @@ test('app runs', function (t) {
       (err) => setup.endTest(app, t, err || 'error')
     )
 
-  require('./basic-functions')
+  // require('./basic-functions')
 })
