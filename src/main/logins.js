@@ -6,15 +6,16 @@ const DeltaChat = require('deltachat-node')
 module.exports = getLogins
 
 function getLogins (dir, cb) {
-  var tasks = []
-  fs.readdir(dir, (err, dirs) => {
+  const tasks = []
+  fs.readdir(dir, (err, files) => {
     if (err) return cb(err)
-    dirs.forEach((filename) => {
-      if (path.extname(filename) !== '.json') {
-        tasks.push(getConfig(path.join(dir, filename)))
+    files.forEach(filename => {
+      const fullPath = path.join(dir, filename)
+      if (fs.statSync(fullPath).isDirectory()) {
+        tasks.push(getConfig(fullPath))
       }
     })
-    series(tasks, function (err, logins) {
+    series(tasks, (err, logins) => {
       if (err) return cb(err)
       cb(null, logins.filter((l) => typeof l === 'string'))
     })
@@ -22,7 +23,7 @@ function getLogins (dir, cb) {
 }
 
 function getConfig (filename) {
-  return (next) => {
+  return next => {
     var dc = new DeltaChat()
     function done (err, addr) {
       dc = null
