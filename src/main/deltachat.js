@@ -131,10 +131,6 @@ class DeltaChatController {
     return this._dc.sendTextMessage(...args)
   }
 
-  createChat (...args) {
-    return this._dc.createChat(...args)
-  }
-
   initiateKeyTransfer (...args) {
     return this._dc.initiateKeyTransfer(...args)
   }
