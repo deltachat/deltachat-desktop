@@ -34,7 +34,7 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     }
-    ipcRenderer.send('init', credentials)
+    ipcRenderer.send('login', credentials)
     event.preventDefault()
   }
 
@@ -46,7 +46,7 @@ class Login extends React.Component {
   }
 
   onClickLogin (login) {
-    ipcRenderer.send('init', { email: login, password: true })
+    ipcRenderer.send('login', { email: login, password: true })
   }
 
   render () {

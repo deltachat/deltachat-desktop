@@ -46,8 +46,8 @@ function init (cwd) {
   const dc = new DeltaChat(cwd)
 
   // Create a new instance
-  ipc.on('init', (e, ...args) => {
-    dc.init(...args, render, onError)
+  ipc.on('login', (e, ...args) => {
+    dc.login(...args, render, onError)
   })
 
   // Calls a function directly in the deltachat-node instance and returns the

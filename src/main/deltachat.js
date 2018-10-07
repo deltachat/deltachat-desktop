@@ -52,7 +52,7 @@ class DeltaChatController {
     if (typeof this._render === 'function') this._render()
   }
 
-  init (credentials, render) {
+  login (credentials, render) {
     // Creates a separate DB file for each login
     const cwd = path.join(this.cwd, Buffer.from(credentials.email).toString('hex'))
     log('Using deltachat instance', cwd)
