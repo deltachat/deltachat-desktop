@@ -1,6 +1,5 @@
 const DeltaChat = require('deltachat-node')
 const path = require('path')
-
 const log = require('./log')
 
 function messageIdToJson (messageId, dc) {
@@ -155,7 +154,7 @@ class DeltaChatController {
       const address = contact.getAddress()
       const name = contact.getName() || address.split('@')[0]
       this._dc.createContact(name, address)
-      this.info(`Added contact ${name} (${address})`)
+      log(`Added contact ${name} (${address})`)
       this.createChatByContactId(contactId)
     }
   }
@@ -172,7 +171,6 @@ class DeltaChatController {
     const chats = []
     const list = this._dc.getChatList()
     const count = list.getCount()
-
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
       const chat = chatIdToJson(chatId, this._dc)
@@ -207,14 +205,6 @@ class DeltaChatController {
     // TODO dispatch this call from view and re-render (if we get
     // an event for this, we can re-render there)
     this._dc.archiveChat(chatId, true)
-  }
-
-  info (line) {
-    log(line)
-  }
-
-  result (line) {
-    log(line)
   }
 
   warning (line) {
