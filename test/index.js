@@ -6,11 +6,16 @@ const setup = require('./setup')
 test.onFinish(setup.deleteTestDataDir)
 
 test('app runs', function (t) {
-  t.timeoutAfter(10e3)
   setup.resetTestDataDir()
-  const app = setup.createApp()
+  const app = setup.createApp(t)
   setup.waitForLoad(app, t)
-    .then(() => setup.wait())
+    .then(
+      () => app.client.waitUntilTextExists(
+        '.bp3-navbar-heading',
+        'Welcome to Delta.Chat',
+        20e3
+      )
+    )
     .then(
       () => setup.endTest(app, t),
       (err) => setup.endTest(app, t, err || 'error')

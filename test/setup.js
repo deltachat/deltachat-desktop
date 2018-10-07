@@ -8,6 +8,7 @@ const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 
 const config = require('../src/config')
+mkdirp.sync(config.CONFIG_PATH)
 
 module.exports = {
   createApp,
