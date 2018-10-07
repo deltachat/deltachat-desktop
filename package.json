@@ -58,7 +58,7 @@
     "babel-eslint": "^10.0.0",
     "buble": "^0.19.3",
     "depcheck": "^0.6.11",
-    "electron": "^2.0.7",
+    "electron": "^3.0.3",
     "electron-builder": "^20.28.3",
     "electron-reload": "^1.2.5",
     "nodemon": "^1.18.3",
