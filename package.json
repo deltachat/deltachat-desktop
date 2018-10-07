@@ -8,7 +8,7 @@
     "watch-build": "nodemon -w src/ -e js -x \"npm run build\"",
     "watch-electron": "nodemon -w src/ -e js -w _locales -e json -i src/renderer/ -x \"npm run dev\"",
     "test": "standard",
-    "test-integration": "npm run build && node ./test",
+    "test-integration": "node test",
     "start": "npm run build && electron .",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder --publish=onTagOrDraft",
