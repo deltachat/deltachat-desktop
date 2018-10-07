@@ -56,7 +56,8 @@ function onReady (err, results) {
   })
 }
 
-var cwd = config.IS_TEST ? config.TEST_DIR : config.CONFIG_PATH
+var cwd = process.env.TEST_DIR || config.CONFIG_PATH
+log('cwd', cwd)
 ipc.init(cwd)
 
 app.once('ipcReady', function () {
