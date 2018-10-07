@@ -7,7 +7,7 @@ const PNG = require('pngjs').PNG
 const tempy = require('tempy')
 const mkdirp = require('mkdirp')
 
-const config = require('../src/config')
+const config = require('../../src/config')
 mkdirp.sync(config.CONFIG_PATH)
 
 module.exports = {
@@ -27,7 +27,7 @@ function createApp (t) {
   t.pass(`test dir ${dir}`)
   return new Application({
     path: electronPath,
-    args: [path.join(__dirname, '..')],
+    args: [path.join(__dirname, '..', '..')],
     env: { NODE_ENV: 'test', TEST_DIR: dir },
     waitTimeout: 10e3
   })
