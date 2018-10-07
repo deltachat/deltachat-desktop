@@ -13,7 +13,7 @@ const windows = require('./windows')
 
 const DeltaChat = require('./deltachat')
 
-function init () {
+function init (cwd) {
   // Events dispatched by buttons from the frontend
 
   const ipc = electron.ipcMain
@@ -43,7 +43,7 @@ function init () {
   })
 
   // Our wrapper for controlling deltachat instances
-  const dc = new DeltaChat()
+  const dc = new DeltaChat(cwd)
 
   // Create a new instance
   ipc.on('init', (e, ...args) => {
