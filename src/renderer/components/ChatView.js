@@ -39,9 +39,9 @@ class ChatView extends React.Component {
     this.conversationDiv = React.createRef()
   }
 
-  writeMessage (message) {
+  writeMessage (text) {
     var chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'sendMessage', chatId, message)
+    ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
   componentWillUnmount () {

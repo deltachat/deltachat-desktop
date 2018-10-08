@@ -143,8 +143,10 @@ class DeltaChatController {
   /**
    * Dispatched when sending a message in ChatView
    */
-  sendMessage (...args) {
-    return this._dc.sendTextMessage(...args)
+  sendMessage (chatId, text) {
+    const msg = this._dc.messageNew()
+    msg.setText(text)
+    this._dc.sendMessage(chatId, msg)
   }
 
   /**
