@@ -17,24 +17,15 @@ function getLogins (dir, cb) {
     })
     series(tasks, (err, logins) => {
       if (err) return cb(err)
-      cb(null, logins.filter((l) => typeof l === 'string'))
+      cb(null, logins.filter(i => {
+        return i && typeof i.addr === 'string'
+      }).map(i => i.addr))
     })
   })
 }
 
-function getConfig (filename) {
+function getConfig (cwd) {
   return next => {
-    var dc = new DeltaChat()
-    function done (err, addr) {
-      dc = null
-      next(err, addr)
-    }
-    dc.open(filename, err => {
-      if (err) return done(err)
-      if (dc.isConfigured()) {
-        return done(null, dc.getConfig('addr'))
-      }
-      done()
-    })
+    DeltaChat.getConfig(cwd, next)
   }
 }
