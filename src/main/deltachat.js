@@ -132,9 +132,11 @@ class DeltaChatController {
    * Dispatched when logging out from ChatList
    */
   logout () {
+    this._dc.close()
     this._dc = null
     this.configuring = false
     this.ready = false
+    log('Logged out')
     if (typeof this._render === 'function') this._render()
   }
 
