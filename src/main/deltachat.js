@@ -132,7 +132,7 @@ class DeltaChatController {
    * Dispatched when logging out from ChatList
    */
   logout () {
-    this.dc = null
+    this._dc = null
     this.configuring = false
     this.ready = false
     if (typeof this._render === 'function') this._render()
@@ -251,6 +251,7 @@ class DeltaChatController {
    * Returns chats in json format
    */
   _chats () {
+    if (!this._dc) return []
     const chats = []
     const list = this._dc.getChatList()
     const count = list.getCount()
