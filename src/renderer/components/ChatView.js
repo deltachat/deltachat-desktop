@@ -51,7 +51,7 @@ class ChatView extends React.Component {
   componentDidUpdate () {
     if (this.observer || !this.conversationDiv.current) return
     this.observer = new MutationObserver(this.scrollToBottom)
-    this.observer.observe(this.conversationDiv.current, { attributes: true, childList: true, subtree: true })
+    this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
   }
 
   componentDidMount () {
