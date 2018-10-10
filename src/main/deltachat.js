@@ -150,9 +150,10 @@ class DeltaChatController {
   }
 
   /**
-   * TODO: Not yet dispatched from any view
+   * Dispatched from RenderMessage#onDelete in ChatView
    */
-  deleteMessage (chatId, messageId) {
+  deleteMessage (messageId) {
+    log('deleting message', messageId)
     this._dc.deleteMessages(messageId)
   }
 

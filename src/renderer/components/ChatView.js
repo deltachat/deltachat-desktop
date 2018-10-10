@@ -172,23 +172,24 @@ class RenderMedia extends React.Component {
 class RenderMessage extends React.Component {
   render () {
     const { onClickAttachment, message } = this.props
-    const timestamp = message.msg.timestamp * 1000
+    const { msg, fromId, id } = message
+    const timestamp = msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
     const contact = {
-      onSendMessage: () => console.log('send a message to', message.fromId),
-      onClick: () => console.log('clicking contact', message.fromId)
+      onSendMessage: () => console.log('send a message to', fromId),
+      onClick: () => console.log('clicking contact', fromId)
     }
 
     function onReply () {
       console.log('reply to', message)
     }
 
-    function onDownload (message) {
-      console.log('downloading', message)
+    function onDownload (el) {
+      console.log('downloading', el)
     }
 
-    function onDelete (message) {
-      console.log('deleting', message)
+    function onDelete (el) {
+      ipcRenderer.send('dispatch', 'deleteMessage', id)
     }
 
     function onShowDetail () {
@@ -196,7 +197,7 @@ class RenderMessage extends React.Component {
     }
 
     var props = {
-      id: message.id,
+      id,
       i18n: window.translate,
       conversationType: 'direct', // or group
       direction,
@@ -209,14 +210,14 @@ class RenderMessage extends React.Component {
       authorAvatarPath: message.contact.profileImage,
       authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,
-      status: convertMessageStatus(message.msg.state),
+      status: convertMessageStatus(msg.state),
       timestamp
     }
 
-    if (message.msg.file) {
-      props.attachment = { url: message.msg.file, contentType: convertContentType(message.filemime), filename: message.msg.text }
+    if (msg.file) {
+      props.attachment = { url: msg.file, contentType: convertContentType(message.filemime), filename: msg.text }
     } else {
-      props.text = message.msg.text
+      props.text = msg.text
     }
 
     return (<Message {...props} />)
