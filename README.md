@@ -57,16 +57,11 @@ $ npm start
 
 ### Watch the code
 
-Restart the electron app or reload browser parts automatically every time code changes.
+Restart the electron app automatically every time code changes.
 
 ```
 $ npm run watch
 ```
-
-This sets up two watchers, via the following scripts:
-
-* `watch-build` which rebuilds `es5/` folder each time anything in `src/` changes
-* `watch-electron` which restarts electron if any backend code is changed (everything under `src/` _except_ `src/renderer/`) and uses `electron-reload` to monitor `es5/renderer/` and `static/` folders to refresh the renderer.
 
 ### Run linters
 

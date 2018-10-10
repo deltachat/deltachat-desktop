@@ -4,15 +4,13 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "watch": "npm run watch-build & npm run watch-electron",
-    "watch-build": "nodemon -w src/ -e js -x \"npm run build\"",
-    "watch-electron": "nodemon -w src/ -e js -w _locales -e json -i src/renderer/ -x \"npm run dev\"",
+    "watch": "nodemon -w src/ -w _locales/ -w static/ -e js,json,css,html -x \"npm run dev\"",
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "start": "npm run build && electron .",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder --publish=onTagOrDraft",
-    "dev": "electron reload.js --debug --disable-http-cache",
+    "dev": "npm run build && electron . --debug --disable-http-cache",
     "build": "buble src --output es5"
   },
   "repository": {
@@ -60,7 +58,6 @@
     "depcheck": "^0.6.11",
     "electron": "^2.0.7",
     "electron-builder": "^20.28.3",
-    "electron-reload": "^1.2.5",
     "nodemon": "^1.18.3",
     "pngjs": "^3.3.3",
     "rimraf": "^2.6.2",
