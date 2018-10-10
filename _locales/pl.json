@@ -1,4 +1,32 @@
 {
+    "emailValidationFailed": {
+        "message": "Wymagany adres e-mail.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Nie można utworzyć czatu.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "Nowa wiadomość od",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Dodaj kontakt",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Grupa",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Utwórz czat",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Kontakt został pomyślnie utworzony.",
+        "description": ""
+    },
     "initiateKeyTransferTitle": {
         "message": "Inicjowanie transferu klucza",
         "description": ""
@@ -28,7 +56,7 @@
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Obraz wysłany w rozmowie",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
@@ -70,6 +98,10 @@
     "delete": {
         "message": "Usuń",
         "description": ""
+    },
+    "login.cancel": {
+        "message": "Anuluj",
+        "description": "Shown in the login form"
     },
     "login.button": {
         "message": "Zaloguj",
@@ -146,5 +178,9 @@
     "minutesAgo": {
         "message": "$minutes$ min. temu",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Nie można wyświetlić wideo ze zrzutu ekranu",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }

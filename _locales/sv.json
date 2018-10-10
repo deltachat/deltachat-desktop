@@ -178,5 +178,9 @@
     "minutesAgo": {
         "message": "$minutes$ min sedan",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Kan inte visa videobild.",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }

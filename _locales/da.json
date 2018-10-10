@@ -1,4 +1,32 @@
 {
+    "emailValidationFailed": {
+        "message": "E-mail address required.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Could not create chat.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "New message from",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Add Contact",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Group",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Create Chat",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Contact created successfully.",
+        "description": ""
+    },
     "initiateKeyTransferTitle": {
         "message": "Initiate Key Transfer",
         "description": ""
@@ -70,6 +98,10 @@
     "delete": {
         "message": "Slette",
         "description": ""
+    },
+    "login.cancel": {
+        "message": "Cancel",
+        "description": "Shown in the login form"
     },
     "login.button": {
         "message": "Logind",
@@ -146,5 +178,9 @@
     "minutesAgo": {
         "message": "$minutes$ minutter siden",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Can't display video screenshot",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }

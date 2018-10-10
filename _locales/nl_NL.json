@@ -1,4 +1,32 @@
 {
+    "emailValidationFailed": {
+        "message": "E-mailadres vereist.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Kan gesprek niet creëren.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "Nieuw bericht van",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Contactpersoon toevoegen",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Groep",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Gesprek creëren",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Contactpersoon gecreëerd.",
+        "description": ""
+    },
     "initiateKeyTransferTitle": {
         "message": "Sleuteloverdracht beginnen",
         "description": ""
@@ -70,6 +98,10 @@
     "delete": {
         "message": "Verwijderen",
         "description": ""
+    },
+    "login.cancel": {
+        "message": "Annuleren",
+        "description": "Shown in the login form"
     },
     "login.button": {
         "message": "Inloggen",
@@ -146,5 +178,9 @@
     "minutesAgo": {
         "message": "$minutes$ min geleden",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Kan video-schermafbeelding niet tonen",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }

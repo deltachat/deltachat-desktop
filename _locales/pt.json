@@ -1,62 +1,90 @@
 {
+    "emailValidationFailed": {
+        "message": "É preciso um e-mail.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Impossível criar conversa.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "Nova mensagem de",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Adicionar contato",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Grupo",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Criar conversa",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Contato criado.",
+        "description": ""
+    },
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Transferir chave",
         "description": ""
     },
     "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
+        "message": "A 'mensagem de configuração Autocrypt' compartilha sua chave criptográfica com aplicativos compatíveis. O processo é criptografado pelo código de configuração que será aqui exibido e deverá ser digitado no outro dispositivo.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
+        "message": "Sua chave foi enviada. Abra o aplicativo no seu outro dispositivo e abra a mensagem de configuração. Ser-lhe-á solicitado o código de configuração. Digite-o e, uma vez tenha o feito, seu dispositivo estará pronto para usar o Autocrypt.",
         "description": "Shown while viewing the transfer key"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Mais info...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Baixar anexo",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Imagem anexada à mensagem",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Screenshot do vídeo anexado à mensagem",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Imagem enviada à conversa",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Responder a mensagem",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Apagar mensagem",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Apagar mensagens",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Detalhes da mensagem",
         "description": ""
     },
     "audio": {
-        "message": "Audio",
+        "message": "Áudio",
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
-        "message": "Video",
+        "message": "Vídeo",
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Foto",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
@@ -64,71 +92,75 @@
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Cancelar",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Apagar",
         "description": ""
+    },
+    "login.cancel": {
+        "message": "Cancelar",
+        "description": "Shown in the login form"
     },
     "login.button": {
         "message": "Login",
         "description": "Shown in the login form"
     },
     "menu.preferences": {
-        "message": "Preferences",
+        "message": "Preferências",
         "description": "Preferences label in the menu"
     },
     "menu.preferences.language": {
-        "message": "Choose Language...",
+        "message": "Escolher idioma...",
         "description": "Choose language label in the menu"
     },
     "timestampFormat_M": {
-        "message": "MMM D",
+        "message": "D MMM",
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "De",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "Para",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Enviado",
         "description": "Label for the time a message was sent"
     },
     "received": {
-        "message": "Received",
+        "message": "Recebido",
         "description": "Label for the time a message was received"
     },
     "sendMessage": {
-        "message": "Send a message",
+        "message": "Enviar mensagem",
         "description": "Placeholder text in the message entry field"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Membros do grupo",
         "description": ""
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Exibir membros",
         "description": ""
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "agora",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
-        "message": "1 minute",
+        "message": "1 minuto",
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "1 hora",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "agora",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
@@ -136,7 +168,7 @@
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "$hours$ hr atrás",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
@@ -144,7 +176,11 @@
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "$minutes$ min atrás",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Can't display video screenshot",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }

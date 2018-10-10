@@ -1,4 +1,32 @@
 {
+    "emailValidationFailed": {
+        "message": "Введите адрес эл. почты.",
+        "description": ""
+    },
+    "createChatError": {
+        "message": "Невозможно создать чат.",
+        "description": ""
+    },
+    "newMessageFrom": {
+        "message": "Новое сообщение от",
+        "description": ""
+    },
+    "addContact": {
+        "message": "Добавить Контакт",
+        "description": ""
+    },
+    "createGroup": {
+        "message": "Группа",
+        "description": ""
+    },
+    "addChat": {
+        "message": "Создать Чат",
+        "description": ""
+    },
+    "contactCreateSuccess": {
+        "message": "Контакт успешно создан.",
+        "description": ""
+    },
     "initiateKeyTransferTitle": {
         "message": "Инициировать передачу ключа",
         "description": ""
@@ -28,7 +56,7 @@
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Отправленное изображение",
+        "message": "Изображение отправлено в процессе диалога",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
@@ -70,6 +98,10 @@
     "delete": {
         "message": "Удалить",
         "description": ""
+    },
+    "login.cancel": {
+        "message": "Отмена",
+        "description": "Shown in the login form"
     },
     "login.button": {
         "message": "Вход",
@@ -146,5 +178,9 @@
     "minutesAgo": {
         "message": "$minutes$ мин. назад",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
+    },
+    "videoScreenshotFailedToLoad": {
+        "message": "Can't display video screenshot",
+        "description": "Error message when video screenshot can't be shown in a video message"
     }
 }
