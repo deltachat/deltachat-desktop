@@ -1,4 +1,5 @@
 const DeltaChat = require('deltachat-node')
+const electron = require('electron')
 const path = require('path')
 const log = require('./log')
 
@@ -69,6 +70,10 @@ class DeltaChatController {
         log('Ready')
         this.ready = true
         this.configuring = false
+        const addr = credentials.email
+        if (!electron.app.logins.includes(addr)) {
+          electron.app.logins.push(addr)
+        }
         render()
       }
       if (!dc.isConfigured()) {
