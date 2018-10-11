@@ -182,5 +182,109 @@
     "videoScreenshotFailedToLoad": {
         "message": "Video ekran görüntüsü görüntülenemiyor",
         "description": "Error message when video screenshot can't be shown in a video message"
+    },
+    "language.ca": {
+        "message": "Catalan",
+        "description": ""
+    },
+    "language.da": {
+        "message": "Danish",
+        "description": ""
+    },
+    "language.de": {
+        "message": "German",
+        "description": ""
+    },
+    "language.en": {
+        "message": "English",
+        "description": ""
+    },
+    "language.es": {
+        "message": "Spanish",
+        "description": ""
+    },
+    "language.eu": {
+        "message": "Basque",
+        "description": ""
+    },
+    "language.fr": {
+        "message": "French",
+        "description": ""
+    },
+    "language.hr": {
+        "message": "Croatian",
+        "description": ""
+    },
+    "language.hu": {
+        "message": "Hungarian",
+        "description": ""
+    },
+    "language.it": {
+        "message": "Italian",
+        "description": ""
+    },
+    "language.ja_JP": {
+        "message": "Japanese",
+        "description": ""
+    },
+    "language.ko": {
+        "message": "Korean",
+        "description": ""
+    },
+    "language.nb_NO": {
+        "message": "Norwegian Bokmål",
+        "description": ""
+    },
+    "language.nl": {
+        "message": "Dutch",
+        "description": ""
+    },
+    "language.nl_NL": {
+        "message": "Dutch (Netherlands)",
+        "description": ""
+    },
+    "language.pl": {
+        "message": "Polish",
+        "description": ""
+    },
+    "language.pt": {
+        "message": "Portuguese",
+        "description": ""
+    },
+    "language.ru": {
+        "message": "Russian",
+        "description": ""
+    },
+    "language.sq": {
+        "message": "Albanian",
+        "description": ""
+    },
+    "language.sr": {
+        "message": "Serbian",
+        "description": ""
+    },
+    "language.sv": {
+        "message": "Swedish",
+        "description": ""
+    },
+    "language.ta": {
+        "message": "Tamil",
+        "description": ""
+    },
+    "language.te": {
+        "message": "Telegu",
+        "description": ""
+    },
+    "language.tr": {
+        "message": "Turkish",
+        "description": ""
+    },
+    "language.uk": {
+        "message": "Ukrainian",
+        "description": ""
+    },
+    "language.zh_CN": {
+        "message": "Chinese",
+        "description": ""
     }
 }

@@ -1,34 +1,34 @@
 {
     "emailValidationFailed": {
-        "message": "E-mail address required.",
+        "message": "E-Mail-Adresse erforderlich.",
         "description": ""
     },
     "createChatError": {
-        "message": "Could not create chat.",
+        "message": "Chat konnte nicht erstellt werden.",
         "description": ""
     },
     "newMessageFrom": {
-        "message": "New message from",
+        "message": "Neue Nachricht von",
         "description": ""
     },
     "addContact": {
-        "message": "Add Contact",
+        "message": "Kontakt hinzufügen",
         "description": ""
     },
     "createGroup": {
-        "message": "Group",
+        "message": "Gruppe",
         "description": ""
     },
     "addChat": {
-        "message": "Create Chat",
+        "message": "Chat erstellen",
         "description": ""
     },
     "contactCreateSuccess": {
-        "message": "Contact created successfully.",
+        "message": "Kontakt erfolgreich erstellt.",
         "description": ""
     },
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Schlüsselübertragung initiieren",
         "description": ""
     },
     "initiateKeyTransfer": {
@@ -44,35 +44,35 @@
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Anhang herunterladen",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "An die Nachricht angehängtes Bild",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Bildschirmfoto des an die Nachricht angehängten Videos",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "In der Unterhaltung gesendetes Bild",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Auf Nachricht antworten",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Nachricht löschen",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Nachrichten löschen",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Nachrichtendetail",
         "description": ""
     },
     "audio": {
@@ -84,7 +84,7 @@
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Foto",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
@@ -92,95 +92,199 @@
         "description": ""
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Abbrechen",
         "description": ""
     },
     "delete": {
-        "message": "Delete",
+        "message": "Löschen",
         "description": ""
     },
     "login.cancel": {
-        "message": "Cancel",
+        "message": "Abbrechen",
         "description": "Shown in the login form"
     },
     "login.button": {
-        "message": "Login",
+        "message": "Anmelden",
         "description": "Shown in the login form"
     },
     "menu.preferences": {
-        "message": "Preferences",
+        "message": "Einstellungen",
         "description": "Preferences label in the menu"
     },
     "menu.preferences.language": {
-        "message": "Choose Language...",
+        "message": "Sprache auswählen...",
         "description": "Choose language label in the menu"
     },
     "timestampFormat_M": {
-        "message": "MMM D",
+        "message": "MMM T",
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "Von",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "An",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Gesendet",
         "description": "Label for the time a message was sent"
     },
     "received": {
-        "message": "Received",
+        "message": "Empfangen",
         "description": "Label for the time a message was received"
     },
     "sendMessage": {
-        "message": "Send a message",
+        "message": "Nachricht senden",
         "description": "Placeholder text in the message entry field"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Gruppenmitglieder",
         "description": ""
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Mitglieder anzeigen",
         "description": ""
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "jetzt",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
-        "message": "1 minute",
+        "message": "1 Minute",
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "1 Stunde",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "jetzt",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
-        "message": "$hours$ hr",
+        "message": "$hours$ Std.",
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "vor $hours$ Std.",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
-        "message": "$minutes$ min",
+        "message": "$minutes$ Min.",
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "vor $minutes$ Min.",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     },
     "videoScreenshotFailedToLoad": {
-        "message": "Can't display video screenshot",
+        "message": "Videobildschirmfoto kann nicht angezeigt werden",
         "description": "Error message when video screenshot can't be shown in a video message"
+    },
+    "language.ca": {
+        "message": "Catalan",
+        "description": ""
+    },
+    "language.da": {
+        "message": "Danish",
+        "description": ""
+    },
+    "language.de": {
+        "message": "German",
+        "description": ""
+    },
+    "language.en": {
+        "message": "English",
+        "description": ""
+    },
+    "language.es": {
+        "message": "Spanish",
+        "description": ""
+    },
+    "language.eu": {
+        "message": "Basque",
+        "description": ""
+    },
+    "language.fr": {
+        "message": "French",
+        "description": ""
+    },
+    "language.hr": {
+        "message": "Croatian",
+        "description": ""
+    },
+    "language.hu": {
+        "message": "Hungarian",
+        "description": ""
+    },
+    "language.it": {
+        "message": "Italian",
+        "description": ""
+    },
+    "language.ja_JP": {
+        "message": "Japanese",
+        "description": ""
+    },
+    "language.ko": {
+        "message": "Korean",
+        "description": ""
+    },
+    "language.nb_NO": {
+        "message": "Norwegian Bokmål",
+        "description": ""
+    },
+    "language.nl": {
+        "message": "Dutch",
+        "description": ""
+    },
+    "language.nl_NL": {
+        "message": "Dutch (Netherlands)",
+        "description": ""
+    },
+    "language.pl": {
+        "message": "Polish",
+        "description": ""
+    },
+    "language.pt": {
+        "message": "Portuguese",
+        "description": ""
+    },
+    "language.ru": {
+        "message": "Russian",
+        "description": ""
+    },
+    "language.sq": {
+        "message": "Albanian",
+        "description": ""
+    },
+    "language.sr": {
+        "message": "Serbian",
+        "description": ""
+    },
+    "language.sv": {
+        "message": "Swedish",
+        "description": ""
+    },
+    "language.ta": {
+        "message": "Tamil",
+        "description": ""
+    },
+    "language.te": {
+        "message": "Telegu",
+        "description": ""
+    },
+    "language.tr": {
+        "message": "Turkish",
+        "description": ""
+    },
+    "language.uk": {
+        "message": "Ukrainian",
+        "description": ""
+    },
+    "language.zh_CN": {
+        "message": "Chinese",
+        "description": ""
     }
 }
