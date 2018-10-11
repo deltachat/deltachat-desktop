@@ -192,5 +192,83 @@
   "videoScreenshotFailedToLoad": {
     "message": "Can't display video screenshot",
     "description": "Error message when video screenshot can't be shown in a video message"
+  },
+  "language.ca": {
+    "message": "Catalan"
+  },
+  "language.da": {
+    "message": "Danish"
+  },
+  "language.de": {
+    "message": "German"
+  },
+  "language.en": {
+    "message": "English"
+  },
+  "language.es": {
+    "message": "Spanish"
+  },
+  "language.eu": {
+    "message": "Basque"
+  },
+  "language.fr": {
+    "message": "French"
+  },
+  "language.hr": {
+    "message": "Croatian"
+  },
+  "language.hu": {
+    "message": "Hungarian"
+  },
+  "language.it": {
+    "message": "Italian"
+  },
+  "language.ja_JP": {
+    "message": "Japanese"
+  },
+  "language.ko": {
+    "message": "Korean"
+  },
+  "language.nb_NO": {
+    "message": "Norwegian Bokmål"
+  },
+  "language.nl": {
+    "message": "Dutch"
+  },
+  "language.nl_NL": {
+    "message": "Dutch (Netherlands)"
+  },
+  "language.pl": {
+    "message": "Polish"
+  },
+  "language.pt": {
+    "message": "Portuguese"
+  },
+  "language.ru": {
+    "message": "Russian"
+  },
+  "language.sq": {
+    "message": "Albanian"
+  },
+  "language.sr": {
+    "message": "Serbian"
+  },
+  "language.sv": {
+    "message": "Swedish"
+  },
+  "language.ta": {
+    "message": "Tamil"
+  },
+  "language.te": {
+    "message": "Telegu"
+  },
+  "language.tr": {
+    "message": "Turkish"
+  },
+  "language.uk": {
+    "message": "Ukrainian"
+  },
+  "language.zh_CN": {
+    "message": "Chinese"
   }
 }

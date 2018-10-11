@@ -66,7 +66,7 @@ function getAvailableLanguages () {
   return locales.map((l) => {
     var locale = l.split('.json')[0]
     return {
-      label: locale,
+      label: app.translate(`language.${locale}`),
       type: 'radio',
       checked: locale === app.localeData.locale,
       click: () => windows.main.chooseLanguage(locale)
