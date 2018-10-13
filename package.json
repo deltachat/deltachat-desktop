@@ -39,7 +39,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
     "application-config": "^1.0.1",
-    "conversations": "^2.0.2",
+    "conversations": "ralphtheninja/conversations",
     "debounce": "^1.2.0",
     "deltachat-node": "^0.20.0",
     "insert-css": "^2.0.0",

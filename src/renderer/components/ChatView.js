@@ -184,6 +184,10 @@ class RenderMessage extends React.Component {
       console.log('reply to', message)
     }
 
+    function onForward () {
+      console.log('forwarding message', id)
+    }
+
     function onDownload (el) {
       console.log('downloading', el)
     }
@@ -203,6 +207,7 @@ class RenderMessage extends React.Component {
       direction,
       onDownload,
       onReply,
+      onForward,
       onDelete,
       onShowDetail,
       contact,
