@@ -92,7 +92,7 @@ class ChatList extends React.Component {
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text='Logout' />
+            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
             <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
