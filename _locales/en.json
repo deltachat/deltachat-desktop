@@ -231,6 +231,10 @@
     "message": "English",
     "description": "Menu alternative in Preferences -> Choose Language..."
   },
+  "language.eo": {
+    "message": "Esperanto",
+    "description": "Menu alternative in Preferences -> Choose Language..."
+  },
   "language.es": {
     "message": "Spanish",
     "description": "Menu alternative in Preferences -> Choose Language..."
