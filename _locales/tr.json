@@ -1,6 +1,6 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Oturumu Kapat",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
@@ -66,6 +66,10 @@
     "replyToMessage": {
         "message": "İletiyi Yanıtla",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
+    },
+    "forwardMessage": {
+        "message": "Forward Message...",
+        "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
         "message": "İletiyi Sil",

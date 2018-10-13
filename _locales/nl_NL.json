@@ -67,6 +67,10 @@
         "message": "Bericht beantwoorden",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
+    "forwardMessage": {
+        "message": "Forward Message...",
+        "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
+    },
     "deleteMessage": {
         "message": "Bericht verwijderen",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
