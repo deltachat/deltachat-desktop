@@ -59,7 +59,7 @@ class CreateContact extends React.Component {
     } else if (email.length) {
       createContact(email.split('@')[0], email)
     } else {
-      return this.props.userFeedback({ type: 'error', text: tx('emailValidationFailed.') })
+      return this.props.userFeedback({ type: 'error', text: tx('emailValidationFailed') })
     }
   }
 
