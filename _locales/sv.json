@@ -1,4 +1,8 @@
 {
+    "logout": {
+        "message": "Logga ut",
+        "description": "Text for a logout button"
+    },
     "emailValidationFailed": {
         "message": "Mejladress är obligatorisk.",
         "description": ""

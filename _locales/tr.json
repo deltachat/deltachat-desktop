@@ -1,4 +1,8 @@
 {
+    "logout": {
+        "message": "Logout",
+        "description": "Text for a logout button"
+    },
     "emailValidationFailed": {
         "message": "E-posta adresi gerekli.",
         "description": ""
@@ -184,107 +188,107 @@
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
-        "message": "Catalan",
+        "message": "Katalanca",
         "description": ""
     },
     "language.da": {
-        "message": "Danish",
+        "message": "Danca",
         "description": ""
     },
     "language.de": {
-        "message": "German",
+        "message": "Almanca",
         "description": ""
     },
     "language.en": {
-        "message": "English",
+        "message": "İngilizce",
         "description": ""
     },
     "language.es": {
-        "message": "Spanish",
+        "message": "İspanyolca",
         "description": ""
     },
     "language.eu": {
-        "message": "Basque",
+        "message": "Baskça",
         "description": ""
     },
     "language.fr": {
-        "message": "French",
+        "message": "Fransızca",
         "description": ""
     },
     "language.hr": {
-        "message": "Croatian",
+        "message": "Hırvatça",
         "description": ""
     },
     "language.hu": {
-        "message": "Hungarian",
+        "message": "Macarca",
         "description": ""
     },
     "language.it": {
-        "message": "Italian",
+        "message": "İtalyanca",
         "description": ""
     },
     "language.ja_JP": {
-        "message": "Japanese",
+        "message": "Japonca",
         "description": ""
     },
     "language.ko": {
-        "message": "Korean",
+        "message": "Korece",
         "description": ""
     },
     "language.nb_NO": {
-        "message": "Norwegian Bokmål",
+        "message": "Norveççe Bokmål",
         "description": ""
     },
     "language.nl": {
-        "message": "Dutch",
+        "message": "Felemenkçe",
         "description": ""
     },
     "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
+        "message": "Felemenkçe (Hollanda)",
         "description": ""
     },
     "language.pl": {
-        "message": "Polish",
+        "message": "Lehçe",
         "description": ""
     },
     "language.pt": {
-        "message": "Portuguese",
+        "message": "Portekizce",
         "description": ""
     },
     "language.ru": {
-        "message": "Russian",
+        "message": "Rusça",
         "description": ""
     },
     "language.sq": {
-        "message": "Albanian",
+        "message": "Arnavutça",
         "description": ""
     },
     "language.sr": {
-        "message": "Serbian",
+        "message": "Sırpça",
         "description": ""
     },
     "language.sv": {
-        "message": "Swedish",
+        "message": "İsveççe",
         "description": ""
     },
     "language.ta": {
-        "message": "Tamil",
+        "message": "Tamilce",
         "description": ""
     },
     "language.te": {
-        "message": "Telegu",
+        "message": "Teluguca",
         "description": ""
     },
     "language.tr": {
-        "message": "Turkish",
+        "message": "Türkçe",
         "description": ""
     },
     "language.uk": {
-        "message": "Ukrainian",
+        "message": "Ukraynaca",
         "description": ""
     },
     "language.zh_CN": {
-        "message": "Chinese",
+        "message": "Çince",
         "description": ""
     }
 }

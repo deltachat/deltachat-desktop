@@ -1,4 +1,8 @@
 {
+    "logout": {
+        "message": "Logout",
+        "description": "Text for a logout button"
+    },
     "emailValidationFailed": {
         "message": "É preciso um e-mail.",
         "description": ""
