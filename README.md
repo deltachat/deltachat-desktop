@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+<center><img src="screenshot.png"/></center>
+
 ## Configuration and databases
 
 The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
