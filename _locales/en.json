@@ -4,28 +4,36 @@
     "description": "Text for a logout button"
   },
   "emailValidationFailed": {
-    "message": "E-mail address required."
+    "message": "E-mail address required.",
+    "description": "Error message if an invalid email address was given when creating a contact"
   },
   "createChatError": {
-    "message": "Could not create chat."
+    "message": "Could not create chat.",
+    "description": "Error message if a chat could not be created"
   },
   "newMessageFrom": {
-    "message": "New message from"
+    "message": "New message from",
+    "description": "Displayed when a chat request is recieved"
   },
   "addContact": {
-    "message": "Add Contact"
+    "message": "Add Contact",
+    "description": "Add contact button label"
   },
   "createGroup": {
-    "message": "Group"
+    "message": "Group",
+    "description": "Create group button label"
   },
   "addChat": {
-    "message": "Create Chat"
+    "message": "Create Chat",
+    "description": "Create chat button label"
   },
   "contactCreateSuccess": {
-    "message": "Contact created successfully."
+    "message": "Contact created successfully.",
+    "description": "Information to the user when a contact was created successfully"
   },
   "initiateKeyTransferTitle": {
-    "message": "Initiate Key Transfer"
+    "message": "Initiate Key Transfer",
+    "description": "Menu alternative to initiate key transfer"
   },
   "initiateKeyTransfer": {
     "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
@@ -72,7 +80,8 @@
     "description": "Menu item for deleting messages, title case."
   },
   "messageDetail": {
-    "message": "Message Detail"
+    "message": "Message Detail",
+    "description": "TODO: used where?"
   },
   "audio": {
     "message": "Audio",
@@ -87,13 +96,16 @@
     "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
   },
   "ok": {
-    "message": "OK"
+    "message": "OK",
+    "description": "TODO: used where?"
   },
   "cancel": {
-    "message": "Cancel"
+    "message": "Cancel",
+    "description": "TODO: used where?"
   },
   "delete": {
-    "message": "Delete"
+    "message": "Delete",
+    "description": "TODO: used where?"
   },
   "login.cancel": {
     "message": "Cancel",
@@ -136,10 +148,12 @@
     "description": "Placeholder text in the message entry field"
   },
   "groupMembers": {
-    "message": "Group members"
+    "message": "Group members",
+    "description": "TODO: used where?"
   },
   "showMembers": {
-    "message": "Show members"
+    "message": "Show members",
+    "description": "TODO: used where?"
   },
  "timestamp_s": {
     "message": "now",
@@ -202,81 +216,107 @@
     "description": "Error message when video screenshot can't be shown in a video message"
   },
   "language.ca": {
-    "message": "Catalan"
+    "message": "Catalan",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.da": {
-    "message": "Danish"
+    "message": "Danish",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.de": {
-    "message": "German"
+    "message": "German",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.en": {
-    "message": "English"
+    "message": "English",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.es": {
-    "message": "Spanish"
+    "message": "Spanish",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.eu": {
-    "message": "Basque"
+    "message": "Basque",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.fr": {
-    "message": "French"
+    "message": "French",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.hr": {
-    "message": "Croatian"
+    "message": "Croatian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.hu": {
-    "message": "Hungarian"
+    "message": "Hungarian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.it": {
-    "message": "Italian"
+    "message": "Italian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.ja_JP": {
-    "message": "Japanese"
+    "message": "Japanese",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.ko": {
-    "message": "Korean"
+    "message": "Korean",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.nb_NO": {
-    "message": "Norwegian Bokmål"
+    "message": "Norwegian Bokmål",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.nl": {
-    "message": "Dutch"
+    "message": "Dutch",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.nl_NL": {
-    "message": "Dutch (Netherlands)"
+    "message": "Dutch (Netherlands)",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.pl": {
-    "message": "Polish"
+    "message": "Polish",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.pt": {
-    "message": "Portuguese"
+    "message": "Portuguese",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.ru": {
-    "message": "Russian"
+    "message": "Russian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.sq": {
-    "message": "Albanian"
+    "message": "Albanian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.sr": {
-    "message": "Serbian"
+    "message": "Serbian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.sv": {
-    "message": "Swedish"
+    "message": "Swedish",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.ta": {
-    "message": "Tamil"
+    "message": "Tamil",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.te": {
-    "message": "Telegu"
+    "message": "Telegu",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.tr": {
-    "message": "Turkish"
+    "message": "Turkish",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.uk": {
-    "message": "Ukrainian"
+    "message": "Ukrainian",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   },
   "language.zh_CN": {
-    "message": "Chinese"
+    "message": "Chinese",
+    "description": "Menu alternative in Preferences -> Choose Language..."
   }
 }
