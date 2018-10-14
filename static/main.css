@@ -20,6 +20,13 @@ body {
   overflow-y: auto;
 }
 
+.bp3-navbar-heading {
+  max-width: 250px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .conversation {
   padding-bottom: 40px;
 }
