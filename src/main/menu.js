@@ -1,6 +1,5 @@
 module.exports = {
   init,
-  chooseLanguage,
   onToggleAlwaysOnTop
 }
 
@@ -17,6 +16,7 @@ const windows = require('./windows')
 const config = require('../config')
 
 function init () {
+  log('rebuilding menu with language', app.localeData.locale)
   const template = getMenuTemplate()
   menu = electron.Menu.buildFromTemplate(setLabels(template))
   electron.Menu.setApplicationMenu(menu)
@@ -24,13 +24,6 @@ function init () {
 
 function onToggleAlwaysOnTop (flag) {
   getMenuItem('Float on Top').checked = flag
-}
-
-function chooseLanguage () {
-  log('choosing language', app.localeData.locale)
-  const template = getMenuTemplate()
-  menu = electron.Menu.buildFromTemplate(setLabels(template))
-  electron.Menu.setApplicationMenu(menu)
 }
 
 function setLabels (menu) {
