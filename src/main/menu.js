@@ -15,7 +15,8 @@ function init () {
   log('rebuilding menu with language', app.localeData.locale)
   const template = getMenuTemplate()
   const menu = electron.Menu.buildFromTemplate(setLabels(template))
-  getMenuItem(menu, 'Float on Top').checked = windows.main.isAlwaysOnTop()
+  const item = getMenuItem(menu, app.translate('menu.view.floatontop'))
+  if (item) item.checked = windows.main.isAlwaysOnTop()
   electron.Menu.setApplicationMenu(menu)
 }
 
@@ -65,36 +66,42 @@ function getMenuTemplate () {
       ]
     },
     {
-      label: 'Edit',
+      translate: 'menu.edit',
       submenu: [
         {
+          translate: 'menu.edit.undo',
           role: 'undo'
         },
         {
+          translate: 'menu.edit.redo',
           role: 'redo'
         },
         {
           type: 'separator'
         },
         {
+          translate: 'menu.edit.cut',
           role: 'cut'
         },
         {
+          translate: 'menu.edit.copy',
           role: 'copy'
         },
         {
+          translate: 'menu.edit.delete',
           role: 'delete'
         },
         {
+          translate: 'menu.edit.selectall',
           role: 'selectall'
         }
       ]
     },
     {
-      label: 'View',
+      translate: 'menu.view',
       submenu: [
         {
-          label: 'Float on Top',
+          translate: 'menu.view.floatontop',
           type: 'checkbox',
           click: () => windows.main.toggleAlwaysOnTop()
         },
@@ -102,7 +109,7 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Go Back',
+          translate: 'menu.view.goback',
           accelerator: 'Esc',
           click: () => windows.main.dispatch('escapeBack')
         },
@@ -110,10 +117,10 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Developer',
+          translate: 'menu.view.developer',
           submenu: [
             {
-              label: 'Developer Tools',
+              translate: 'menu.view.developer.tools',
               accelerator: process.platform === 'darwin'
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
@@ -124,17 +131,17 @@ function getMenuTemplate () {
       ]
     },
     {
-      label: 'Help',
+      translate: 'menu.help',
       role: 'help',
       submenu: [
         {
-          label: 'Learn more about ' + config.APP_NAME,
+          translate: 'menu.help.learn',
           click: () => {
             electron.shell.openExternal(config.HOME_PAGE_URL)
           }
         },
         {
-          label: 'Contribute on GitHub',
+          translate: 'menu.help.contribute',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL)
           }
@@ -143,7 +150,7 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Report an Issue...',
+          translate: 'menu.help.report',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL_ISSUES)
           }
