@@ -64,12 +64,6 @@ function init (state, options) {
     e.preventDefault()
   })
 
-  win.on('blur', onWindowBlur)
-  win.on('focus', onWindowFocus)
-
-  win.on('hide', onWindowBlur)
-  win.on('show', onWindowFocus)
-
   win.on('move', debounce(e => {
     send('windowBoundsChanged', e.sender.getBounds())
   }, 1000))
@@ -174,14 +168,6 @@ function toggleDevTools () {
   } else {
     main.win.webContents.openDevTools({ mode: 'detach' })
   }
-}
-
-function onWindowBlur () {
-  menu.setWindowFocus(false)
-}
-
-function onWindowFocus () {
-  menu.setWindowFocus(true)
 }
 
 function getIconPath () {

@@ -1,7 +1,6 @@
 module.exports = {
   init,
   chooseLanguage,
-  setWindowFocus,
   onToggleAlwaysOnTop
 }
 
@@ -26,10 +25,6 @@ function init () {
 
 function onToggleAlwaysOnTop (flag) {
   getMenuItem('Float on Top').checked = flag
-}
-
-function setWindowFocus (flag) {
-  getMenuItem('Float on Top').enabled = flag
 }
 
 function chooseLanguage () {
