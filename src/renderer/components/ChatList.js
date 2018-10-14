@@ -117,6 +117,7 @@ class ChatList extends React.Component {
           {deltachat.chats.map((chat) => {
             if (!chat) return
             const i18n = window.translate
+            const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
             if (chat.id === 1) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
@@ -125,7 +126,7 @@ class ChatList extends React.Component {
                   i18n={i18n}
                   color={'purple'}
                   phoneNumber={chat.summary.text1}
-                  lastUpdated={chat.summary.timestamp * 1000}
+                  lastUpdated={lastUpdated}
                   lastMessage={{
                     text: chat.summary.text2,
                     status: 'delivered'
@@ -139,7 +140,7 @@ class ChatList extends React.Component {
                   onClick={this.onChatClick.bind(this, chat)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
-                  lastUpdated={chat.summary.timestamp * 1000}
+                  lastUpdated={lastUpdated}
                   lastMessage={{
                     text: chat.summary.text2,
                     status: 'sent' // TODO: interpret data from summary to get correct state
