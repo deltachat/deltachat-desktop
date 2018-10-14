@@ -83,6 +83,8 @@ class ChatList extends React.Component {
     const tx = window.translate
 
     const menu = (<Menu>
+      <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
+      <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
 
@@ -96,18 +98,6 @@ class ChatList extends React.Component {
             <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <Button
-              className={Classes.MINIMAL}
-              icon='plus'
-              id='add-contact'
-              text={tx('addContact')}
-              onClick={this.onCreateContact} />
-            <Button
-              className={Classes.MINIMAL}
-              icon='plus'
-              id='add-chat'
-              text={tx('addChat')}
-              onClick={this.onCreateChat} />
             <Popover content={menu} position={Position.RIGHT_TOP}>
               <Button className={Classes.MINIMAL} icon='menu' />
             </Popover>
