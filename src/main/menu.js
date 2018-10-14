@@ -5,20 +5,17 @@ module.exports = {
 const electron = require('electron')
 const fs = require('fs')
 const path = require('path')
-
-const app = electron.app
-
-let menu = null
-
 const log = require('./log')
 const windows = require('./windows')
 const config = require('../config')
 
+const app = electron.app
+
 function init () {
   log('rebuilding menu with language', app.localeData.locale)
   const template = getMenuTemplate()
-  menu = electron.Menu.buildFromTemplate(setLabels(template))
-  getMenuItem('Float on Top').checked = windows.main.isAlwaysOnTop()
+  const menu = electron.Menu.buildFromTemplate(setLabels(template))
+  getMenuItem(menu, 'Float on Top').checked = windows.main.isAlwaysOnTop()
   electron.Menu.setApplicationMenu(menu)
 }
 
@@ -157,7 +154,7 @@ function getMenuTemplate () {
   ]
 }
 
-function getMenuItem (label) {
+function getMenuItem (menu, label) {
   for (let i = 0; i < menu.items.length; i++) {
     const menuItem = menu.items[i].submenu.items.find(function (item) {
       return item.label === label
