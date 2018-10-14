@@ -20,7 +20,6 @@ const debounce = require('debounce')
 
 const config = require('../../config')
 const log = require('../log')
-const menu = require('../menu')
 
 function init (state, options) {
   if (main.win) {
