@@ -150,11 +150,9 @@ function show () {
 }
 
 // Sets whether the window should always show on top of other windows
-function toggleAlwaysOnTop (flag) {
+function toggleAlwaysOnTop () {
   if (!main.win) return
-  if (flag == null) {
-    flag = !main.win.isAlwaysOnTop()
-  }
+  const flag = !main.win.isAlwaysOnTop()
   log(`toggleAlwaysOnTop ${flag}`)
   main.win.setAlwaysOnTop(flag)
   menu.onToggleAlwaysOnTop(flag)
