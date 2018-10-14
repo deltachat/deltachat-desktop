@@ -1,6 +1,5 @@
 module.exports = {
-  init,
-  onToggleAlwaysOnTop
+  init
 }
 
 const electron = require('electron')
@@ -19,11 +18,8 @@ function init () {
   log('rebuilding menu with language', app.localeData.locale)
   const template = getMenuTemplate()
   menu = electron.Menu.buildFromTemplate(setLabels(template))
+  getMenuItem('Float on Top').checked = windows.main.isAlwaysOnTop()
   electron.Menu.setApplicationMenu(menu)
-}
-
-function onToggleAlwaysOnTop (flag) {
-  getMenuItem('Float on Top').checked = flag
 }
 
 function setLabels (menu) {

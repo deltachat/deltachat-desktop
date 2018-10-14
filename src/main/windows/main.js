@@ -10,6 +10,7 @@ const main = module.exports = {
   chooseLanguage,
   show,
   toggleAlwaysOnTop,
+  isAlwaysOnTop,
   toggleDevTools,
   win: null
 }
@@ -149,13 +150,15 @@ function show () {
   main.win.show()
 }
 
-// Sets whether the window should always show on top of other windows
 function toggleAlwaysOnTop () {
   if (!main.win) return
   const flag = !main.win.isAlwaysOnTop()
   log(`toggleAlwaysOnTop ${flag}`)
   main.win.setAlwaysOnTop(flag)
-  menu.onToggleAlwaysOnTop(flag)
+}
+
+function isAlwaysOnTop () {
+  return main.win ? main.win.isAlwaysOnTop() : false
 }
 
 function toggleDevTools () {
