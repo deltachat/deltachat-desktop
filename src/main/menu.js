@@ -10,7 +10,6 @@ const path = require('path')
 
 const app = electron.app
 
-let template = null
 let menu = null
 
 const log = require('./log')
@@ -18,7 +17,7 @@ const windows = require('./windows')
 const config = require('../config')
 
 function init () {
-  template = getMenuTemplate()
+  const template = getMenuTemplate()
   menu = electron.Menu.buildFromTemplate(setLabels(template))
   electron.Menu.setApplicationMenu(menu)
 }
@@ -29,8 +28,8 @@ function onToggleAlwaysOnTop (flag) {
 
 function chooseLanguage () {
   log('choosing language', app.localeData.locale)
-  template = setLabels(template)
-  menu = electron.Menu.buildFromTemplate(template)
+  const template = getMenuTemplate()
+  menu = electron.Menu.buildFromTemplate(setLabels(template))
   electron.Menu.setApplicationMenu(menu)
 }
 
@@ -70,7 +69,7 @@ function getAvailableLanguages () {
 }
 
 function getMenuTemplate () {
-  const template = [
+  return [
     {
       translate: 'menu.preferences',
       submenu: [
@@ -167,7 +166,6 @@ function getMenuTemplate () {
       ]
     }
   ]
-  return template
 }
 
 function getMenuItem (label) {
