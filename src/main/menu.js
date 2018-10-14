@@ -26,18 +26,18 @@ function setLabels (menu) {
   // the menu item labels when the user changes languages
   const translate = app.translate
 
-  return doTranslation(menu)
+  doTranslation(menu)
 
   function doTranslation (menu) {
-    menu = menu.map((item) => {
+    menu.forEach(item => {
       if (item.translate) {
         item.label = translate(item.translate)
       }
       if (item.submenu) doTranslation(item.submenu)
-      return item
     })
-    return menu
   }
+
+  return menu
 }
 
 function getAvailableLanguages () {
