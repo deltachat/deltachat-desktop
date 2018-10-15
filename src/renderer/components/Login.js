@@ -60,7 +60,7 @@ class Login extends React.Component {
       <div>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>Welcome to Delta.Chat</NavbarHeading>
+            <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
@@ -71,7 +71,7 @@ class Login extends React.Component {
             )}
           </ul>
           <form onSubmit={this.handleSubmit}>
-            <FormGroup label='E-Mail Address' placeholder='E-Mail Address' labelFor='email' labelInfo='(required)'>
+            <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
               <InputGroup
                 id='email'
                 type='text'
@@ -80,7 +80,7 @@ class Login extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <FormGroup label='Password' placeholder='Password' labelFor='password'>
+            <FormGroup label={tx('login.password')} placeholder='Password' labelFor='password' labelInfo={`(${tx('login.required')})`}>
               <InputGroup
                 id='password'
                 leftIcon='lock'

@@ -107,6 +107,22 @@
     "message": "Delete",
     "description": "TODO: used where?"
   },
+  "login.welcome": {
+    "message": "Welcome to Delta.Chat",
+    "description": "Welcome message at the top of the login screen"
+  },
+  "login.email": {
+    "message": "E-Mail Address",
+    "description": "Label above input field for e-mail address"
+  },
+  "login.password": {
+    "message": "Password",
+    "description": "Label above input field for password"
+  },
+  "login.required": {
+    "message": "required",
+    "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
+  },
   "login.cancel": {
     "message": "Cancel",
     "description": "Shown in the login form"
