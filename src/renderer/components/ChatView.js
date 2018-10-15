@@ -8,18 +8,6 @@ const { Overlay } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
-const {
-  Alignment,
-  Classes,
-  Navbar,
-  Position,
-  Menu,
-  Popover,
-  NavbarGroup,
-  NavbarHeading,
-  Button
-} = require('@blueprintjs/core')
-
 const { ConversationContext, Message } = require('conversations')
 
 var theme = 'light-theme' // user prefs?
@@ -96,19 +84,6 @@ class ChatView extends React.Component {
 
     return (
       <div class='ChatView'>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <img src={chat.profileImage} />
-            <NavbarHeading>{chat.name}</NavbarHeading>
-            <div>{chat.subtitle}</div>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={<Menu>...</Menu>} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}

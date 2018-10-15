@@ -2,25 +2,10 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('conversations')
 
-const KeyTransferDialog = require('./dialogs/KeyTransfer')
-const DeadDropDialog = require('./dialogs/DeadDrop')
-
-const {
-  Alignment,
-  Classes,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Position,
-  Menu,
-  MenuItem,
-  Popover,
-  Button
-} = require('@blueprintjs/core')
-
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
+    console.log(props)
     this.state = {
       deadDropChat: false,
       keyTransfer: false
@@ -75,31 +60,12 @@ class ChatList extends React.Component {
 
   render () {
     const { deltachat } = this.props
-    const { deadDropChat, keyTransfer } = this.state
 
     const tx = window.translate
 
-    const menu = (<Menu>
-      <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
-      <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
-      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
-    </Menu>)
-
     return (
       <div class='ChatList'>
-        <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
-        <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
-            <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={menu} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
+
         <div className='window'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
