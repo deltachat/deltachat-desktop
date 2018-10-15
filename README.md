@@ -24,6 +24,7 @@ Each database is a sqlite file that represents the account for a given email add
 * `_locales`: source files for translations
 * `bin`: misc. scripts
 * `build`: files needed only at build time (for electron-builder)
+* `conversations`: react components pulled out of signal
 
 ## How to Contribute
 
