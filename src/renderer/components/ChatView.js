@@ -22,7 +22,7 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { ConversationContext, Message } = require('conversations')
+const { ConversationContext, Message } = require('./conversations')
 
 var theme = 'light-theme' // user prefs?
 

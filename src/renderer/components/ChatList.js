@@ -1,6 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
-const { ConversationListItem } = require('conversations')
+const { ConversationListItem } = require('./conversations')
 
 const KeyTransferDialog = require('./dialogs/KeyTransfer')
 const DeadDropDialog = require('./dialogs/DeadDrop')

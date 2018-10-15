@@ -1,0 +1,100 @@
+@font-face {
+  font-family: 'Roboto-Light';
+  src: url('fonts/Roboto-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+$roboto: Roboto, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+$roboto-light: Roboto-Light, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+// New colors
+
+$color-signal-blue: #2090ea;
+$color-core-green: #4caf50;
+$color-core-red: #f44336;
+
+$color-signal-blue-025: rgba($color-signal-blue, 0.25);
+$color-signal-blue-050: rgba($color-signal-blue, 0.5);
+
+$color-white: #ffffff;
+$color-white-02: rgba($color-white, 0.2);
+$color-white-04: rgba($color-white, 0.4);
+$color-white-06: rgba($color-white, 0.6);
+$color-white-07: rgba($color-white, 0.7);
+$color-white-075: rgba($color-white, 0.75);
+$color-white-085: rgba($color-white, 0.85);
+$color-light-02: #f9fafa;
+$color-light-10: #eeefef;
+$color-light-35: #a4a6a9;
+$color-light-45: #8b8e91;
+$color-light-60: #62656a;
+$color-light-90: #070c14;
+
+$color-dark-05: #efefef;
+$color-dark-30: #a8a9aa;
+$color-dark-55: #88898c;
+$color-dark-60: #797a7c;
+$color-dark-70: #414347;
+$color-dark-85: #1a1c20;
+$color-black: #000000;
+$color-black-008: rgba($color-black, 0.08);
+$color-black-008-no-tranparency: #ededed;
+$color-black-016-no-tranparency: #d9d9d9;
+$color-black-012: rgba($color-black, 0.12);
+$color-black-02: rgba($color-black, 0.2);
+$color-black-04: rgba($color-black, 0.4);
+$color-black-06: rgba($color-black, 0.6);
+
+$color-signal-blue-mix: mix($color-signal-blue-025, $color-white-04);
+
+$color-conversation-grey: #757575;
+$color-conversation-blue: #1976d2;
+$color-conversation-cyan: #00838f;
+$color-conversation-deep_orange: #bf360c;
+$color-conversation-green: #2e7d32;
+$color-conversation-indigo: #3949ab;
+$color-conversation-pink: #d81b60;
+$color-conversation-purple: #8e24aa;
+$color-conversation-red: #d32f2f;
+$color-conversation-teal: #00796b;
+
+// Old colors
+
+$blue_l: #a2d2f4;
+$blue: #2090ea;
+$grey_l: #f3f3f3;
+$grey_l1: #bdbdbd;
+$grey_l1_5: #e6e6e6;
+$grey_l2: #d9d9d9; // ~ Equivalent to darken($grey_l, 10%), unreliably compiles
+$grey_l3: darken($grey_l, 20%);
+$grey_l4: darken($grey_l, 40%);
+$grey: #616161;
+$grey_d: #454545;
+
+// A few layout variables used cross-file
+
+$header-height: 48px;
+$button-height: 24px;
+
+$border-radius: 5px;
+
+$font-size: 14px;
+$font-size-small: (13/14) + em;
