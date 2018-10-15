@@ -18,10 +18,6 @@ class CreateChat extends React.Component {
     return (this.state !== nextState)
   }
 
-  createGroup () {
-    this.props.changeScreen('CreateGroup')
-  }
-
   chooseContact (contact) {
     const tx = window.translate
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
@@ -39,13 +35,6 @@ class CreateChat extends React.Component {
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
             <NavbarHeading>{tx('addChat')}</NavbarHeading>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Button
-              className={Classes.MINIMAL}
-              icon='plus'
-              onClick={this.createGroup.bind(this)}
-              text={tx('createGroup')} />
           </NavbarGroup>
         </Navbar>
         <div className='window'>

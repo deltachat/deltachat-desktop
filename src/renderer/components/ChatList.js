@@ -27,6 +27,7 @@ class ChatList extends React.Component {
     }
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
+    this.onCreateGroup = this.onCreateGroup.bind(this)
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -58,6 +59,10 @@ class ChatList extends React.Component {
     this.props.changeScreen('CreateChat')
   }
 
+  onCreateGroup () {
+    this.props.changeScreen('CreateGroup')
+  }
+
   onDeadDropClick (chat) {
     this.setState({ deadDropChat: chat })
   }
@@ -85,6 +90,7 @@ class ChatList extends React.Component {
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
+      <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
 
