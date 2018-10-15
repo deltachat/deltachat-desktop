@@ -4,14 +4,19 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon -w src/ -w _locales/ -w static/ -e js,json,css,html -x \"npm run dev\"",
+    "watch": "nodemon -w src/ -w _locales/ -w static/  -e js,json,css,html -x \"npm run dev\"",
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "start": "npm run build && electron .",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && electron . --debug --disable-http-cache",
-    "build": "buble src --output es5"
+    "build": "npm run conversations-build && buble src --output es5",
+    "conversations-build": "cd conversations && npm run build",
+    "conversations-build-ts": "cd conversations && npm run build-ts",
+    "conversations-build-css": "cd conversations && npm run build-css",
+    "conversations-clean": "cd conversations && npm run build-clean",
+    "postinstall": "cd conversations && npm install"
   },
   "repository": {
     "type": "git",
@@ -39,7 +44,6 @@
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
     "application-config": "^1.0.1",
-    "conversations": "ralphtheninja/conversations",
     "debounce": "^1.2.0",
     "deltachat-node": "^0.20.0",
     "insert-css": "^2.0.0",
@@ -67,6 +71,9 @@
     "tempy": "^0.2.1"
   },
   "standard": {
+    "ignore": [
+      "conversations"
+    ],
     "parser": "babel-eslint"
   },
   "build": {

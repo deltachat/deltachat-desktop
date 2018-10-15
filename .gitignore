@@ -63,3 +63,7 @@ typings/
 
 # next.js build output
 .next
+
+# conversations
+conversations/node_modules
+conversations/build

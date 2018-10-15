@@ -1,5 +1,5 @@
 const React = require('react')
-const { ContactListItem } = require('conversations')
+const { ContactListItem } = require('./conversations')
 
 module.exports = function (props) {
   const contact = props.contact

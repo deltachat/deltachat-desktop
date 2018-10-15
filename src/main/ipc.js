@@ -38,7 +38,7 @@ function init (cwd) {
 
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
-    var p = require.resolve('conversations/build/manifest.css')
+    var p = require.resolve('../../conversations/build/manifest.css')
     e.returnValue = fs.readFileSync(p).toString()
   })
 

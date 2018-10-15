@@ -1,0 +1,468 @@
+.conversation {
+  background-color: $color-white;
+  position: relative;
+
+  .panel,
+  .panel-wrapper {
+    overflow-y: scroll;
+  }
+
+  .panel {
+    .container {
+      padding-top: 20px;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  }
+
+  .main.panel,
+  .panel-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: initial;
+  }
+
+  .main.panel {
+    .discussion-container {
+      flex-grow: 1;
+      position: relative;
+      max-width: 100%;
+      margin: 0;
+
+      .bar-container {
+        height: 5px;
+      }
+
+      .message-list {
+        -webkit-padding-start: 0px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 10px 0 0 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+    }
+  }
+}
+
+.message-detail-wrapper {
+  height: calc(100% - 48px);
+  width: 100%;
+  overflow-y: auto;
+}
+
+.discussion-container {
+  background-color: $color-white;
+}
+
+.key-verification {
+  label {
+    display: block;
+    margin: 10px 0;
+    font-size: $font-size-small;
+  }
+
+  .icon {
+    height: 1.25em;
+    width: 1.25em;
+    vertical-align: text-bottom;
+    display: inline-block;
+
+    &.verified {
+      @include color-svg('../images/verified-check.svg', $color-light-90);
+    }
+    &.shield {
+      @include color-svg('../images/shield.svg', $color-light-90);
+    }
+  }
+
+  .key,
+  .placeholder {
+    padding: 0 1em;
+    -webkit-user-select: text;
+  }
+  .key {
+    font-family: monospace;
+    padding: 10px;
+    margin: 20px auto 20px auto;
+    width: 16em;
+    background: $grey_l;
+    border: solid 1px $grey_l2;
+    border-radius: $border-radius;
+  }
+  .placeholder {
+    font-weight: bold;
+  }
+  .qr {
+    border-radius: 200px;
+    border: solid 1px $grey_l2;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    padding: 25px;
+    margin: 10px auto;
+    canvas {
+      display: none;
+    }
+    img {
+      display: inline-block;
+      max-width: 100%;
+    }
+  }
+
+  .summary {
+    margin: 30px 0 10px;
+    text-align: center;
+  }
+
+  div.verify {
+    text-align: center;
+  }
+  button.verify {
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px;
+    margin: 0;
+  }
+}
+
+.message-container,
+.message-list {
+  list-style: none;
+
+  li {
+    margin-bottom: 10px;
+
+    .message-wrapper {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    &::after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: ' ';
+      clear: both;
+      height: 0;
+    }
+  }
+}
+
+.group {
+  .message-container,
+  .message-list {
+    li .message-wrapper {
+      margin-left: 44px;
+    }
+  }
+}
+
+.contact-detail-pane {
+  overflow-y: scroll;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.bottom-bar .module-quote {
+  margin: 0;
+}
+
+// We need to use the wrapper because the conversation view calculates the height of all
+//   things in the composition area. A margin on an inner div won't be included in that
+//   height calculation.
+.bottom-bar .quote-wrapper {
+  margin-right: 5px;
+  margin-bottom: 6px;
+  margin-top: 3px;
+}
+
+.send .quote-wrapper {
+  margin-left: 37px;
+  margin-right: 73px;
+  margin-bottom: 5px;
+}
+
+.bottom-bar {
+  box-sizing: content-box;
+  $button-width: 36px;
+
+  form.active {
+    textarea {
+      border: solid 1px $blue;
+    }
+  }
+
+  form.send {
+    background: $color-white;
+
+    &.video-attachment {
+      .image-container {
+        position: relative;
+      }
+
+      .outer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .play.icon {
+          height: 30px;
+          width: 30px;
+
+          @include color-svg('../images/play.svg', white);
+        }
+      }
+    }
+  }
+
+  .attachment-previews {
+    padding: 0 36px;
+    margin-bottom: 3px;
+
+    .attachment-preview {
+      padding: 13px 10px 0;
+    }
+    img {
+      border: 2px solid #ddd;
+      border-radius: $border-radius;
+      max-height: 100px;
+    }
+
+    .close {
+      position: absolute;
+      top: 5px;
+      right: 2px;
+      background: #999;
+
+      &:hover {
+        background: $grey;
+      }
+    }
+  }
+
+  .flex {
+    display: flex;
+    flex-direction: row;
+
+    .send-message {
+      flex-grow: 1;
+    }
+  }
+
+  .choose-file {
+    float: left;
+    height: 36px;
+  }
+  .send-message {
+    display: block;
+    max-height: 100px;
+    padding: 10px;
+    margin-bottom: 6px;
+    border-radius: 20px;
+    background-color: $color-light-02;
+    color: $color-light-90;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    outline: 0;
+    z-index: 5;
+    resize: none;
+    font-size: 1em;
+    font-family: inherit;
+
+    &[disabled='disabled'] {
+      background: transparent;
+    }
+  }
+  .capture-audio {
+    float: right;
+    height: 36px;
+  }
+  .android-length-warning {
+    padding: 10px;
+    max-width: 150px;
+  }
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 62px;
+
+  text-align: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 4px;
+  z-index: 100;
+
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0;
+
+  background-color: $color-light-60;
+  color: $color-white;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+}
+
+.confirmation-dialog {
+  .content {
+    max-width: 350px;
+    margin: 100px auto;
+    padding: 1em;
+    background: white;
+    border-radius: $border-radius;
+    overflow: auto;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.3);
+
+    .buttons {
+      margin-top: 10px;
+
+      button {
+        float: right;
+        margin-left: 10px;
+        background-color: $grey_l;
+        border-radius: $border-radius;
+        padding: 5px 8px;
+        border: 1px solid $grey_l2;
+
+        &:hover {
+          background-color: $grey_l2;
+          border-color: $grey_l3;
+        }
+      }
+    }
+  }
+}
+
+.permissions-popup,
+.debug-log-window {
+  .modal {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .confirmation-dialog .content {
+    box-shadow: 0px 0px 0px 0px;
+    max-width: 1000px;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+  }
+}
+
+.conversation-loading-screen {
+  z-index: 99;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  background-color: $color-white;
+
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .container {
+    position: absolute;
+    left: 50%;
+    width: 120px;
+    transform: translate(-50%, 0);
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+    border: 3px solid $blue;
+    border-radius: 50%;
+    float: left;
+    margin: 0 6px;
+    transform: scale(0);
+
+    animation: loading 1500ms ease infinite 0ms;
+    &:nth-child(2) {
+      animation: loading 1500ms ease infinite 333ms;
+    }
+    &:nth-child(3) {
+      animation: loading 1500ms ease infinite 666ms;
+    }
+  }
+}
+
+.module-last-seen-indicator {
+  padding-top: 25px;
+  padding-bottom: 35px;
+  margin-left: 28px;
+  margin-right: 28px;
+}
+
+.module-last-seen-indicator__bar {
+  background-color: $color-light-60;
+  width: 100%;
+  height: 4px;
+}
+
+.module-last-seen-indicator__text {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+
+  text-align: center;
+  color: $color-light-90;
+}
+
+.module-scroll-down {
+  z-index: 100;
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+}
+
+.module-scroll-down__button {
+  height: 44px;
+  width: 44px;
+  border-radius: 22px;
+  text-align: center;
+  background-color: $color-light-35;
+  border: none;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+  outline: none;
+
+  &:hover {
+    background-color: $color-light-45;
+  }
+}
+
+.module-scroll-down__button--new-messages {
+  background-color: $color-signal-blue;
+
+  &:hover {
+    background-color: #1472bd;
+  }
+}
+
+.module-scroll-down__icon {
+  @include color-svg('../images/down.svg', $color-white);
+  height: 100%;
+  width: 100%;
+}
