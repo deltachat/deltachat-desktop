@@ -88,9 +88,14 @@ class ChatView extends React.Component {
   }
 
   render () {
+    console.log('ChatView Render', this.props.chatId)
+    const { attachmentMessage, setupMessage } = this.state
+    const chat = this.getChat()
+    if (!chat) return (<div>No Chat selected</div>)
+    this.state.value = chat.textDraft
 
     return (
-      <div>
+      <div class='ChatView'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
@@ -104,19 +109,6 @@ class ChatView extends React.Component {
             </Popover>
           </NavbarGroup>
         </Navbar>
-      </div>
-    )
-  }
-
-  render () {
-    console.log('ChatView Render', this.props.chatId)
-    const { attachmentMessage, setupMessage } = this.state
-    const chat = this.getChat()
-    if (!chat) return (<div>No Chat selected</div>)
-    this.state.value = chat.textDraft
-
-    return (
-      <div class="ChatView">
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}

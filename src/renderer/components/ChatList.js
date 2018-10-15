@@ -18,8 +18,6 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-
-
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
@@ -88,7 +86,7 @@ class ChatList extends React.Component {
     </Menu>)
 
     return (
-      <div class="ChatList">
+      <div class='ChatList'>
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>

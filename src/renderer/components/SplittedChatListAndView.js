@@ -13,9 +13,8 @@ class SplittedChatListAndView extends React.Component {
   onChatClick (chat) {
     console.log('Selected chatId', chat.id)
     this.setState({
-        chatId: chat.id
-    });
-
+      chatId: chat.id
+    })
   }
 
   render () {
