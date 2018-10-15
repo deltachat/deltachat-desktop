@@ -4,9 +4,7 @@ const { ipcRenderer } = require('electron')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
-const {
-  Overlay
-} = require('@blueprintjs/core')
+const { Overlay } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
@@ -40,7 +38,7 @@ class ChatView extends React.Component {
   }
 
   writeMessage (text) {
-    var chatId = this.props.screenProps.chatId
+    var chatId = this.props.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
@@ -60,7 +58,7 @@ class ChatView extends React.Component {
 
   getChat () {
     const { deltachat } = this.props
-    var chatId = this.props.screenProps.chatId
+    var chatId = this.props.chatId
     var index = deltachat.chats.findIndex((chat) => {
       return chat.id === chatId
     })
@@ -90,10 +88,6 @@ class ChatView extends React.Component {
   }
 
   render () {
-    const { attachmentMessage, setupMessage } = this.state
-    const chat = this.getChat()
-    if (!chat) return <div />
-    this.state.value = chat.textDraft
 
     return (
       <div>
@@ -110,7 +104,19 @@ class ChatView extends React.Component {
             </Popover>
           </NavbarGroup>
         </Navbar>
+      </div>
+    )
+  }
 
+  render () {
+    console.log('ChatView Render', this.props.chatId)
+    const { attachmentMessage, setupMessage } = this.state
+    const chat = this.getChat()
+    if (!chat) return (<div>No Chat selected</div>)
+    this.state.value = chat.textDraft
+
+    return (
+      <div class="ChatView">
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}

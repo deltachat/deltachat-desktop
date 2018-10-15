@@ -57,9 +57,11 @@ body {
 .user-feedback.error {
   background-color: red;
 }
+
 .user-feedback.success {
   background-color: green;
 }
+
 img {
   max-width: 500px;
 }
@@ -70,4 +72,16 @@ ul {
 }
 ul li button {
   min-width: 200px;
+}
+
+.ChatList {
+  width: 30%;
+  float: left;
+}
+
+.ChatView {
+  width: 70%;
+  float: right;
+  height: 800px;
+  overflow-y: scroll;
 }

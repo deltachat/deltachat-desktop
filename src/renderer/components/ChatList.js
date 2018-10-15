@@ -18,6 +18,8 @@ const {
   Button
 } = require('@blueprintjs/core')
 
+
+
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
@@ -30,10 +32,7 @@ class ChatList extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-  }
-
-  onChatClick (chat) {
-    this.props.changeScreen('ChatView', { chatId: chat.id })
+    this.onChatClick = props.onChatClick
   }
 
   onDeadDropClose () {
@@ -89,7 +88,7 @@ class ChatList extends React.Component {
     </Menu>)
 
     return (
-      <div>
+      <div class="ChatList">
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <Navbar fixedToTop>
