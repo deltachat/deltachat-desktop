@@ -2,8 +2,8 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const Login = require('./components/Login')
-const ChatList = require('./components/ChatList')
-const ChatView = require('./components/ChatView')
+const SplittedChatListAndView = require('./components/SplittedChatListAndView')
+//
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
 const CreateContact = require('./components/CreateContact')
@@ -21,7 +21,7 @@ class Home extends React.Component {
   }
 
   changeScreen (screen, screenProps) {
-    if (!screen) screen = ChatList
+    if (!screen) screen = SplittedChatListAndView
     if (!screenProps) screenProps = {}
     this.setState({ screen, screenProps })
     ipcRenderer.send('render')
@@ -59,11 +59,8 @@ class Home extends React.Component {
       case 'CreateGroup':
         Screen = CreateGroup
         break
-      case 'ChatView':
-        Screen = ChatView
-        break
       default:
-        Screen = ChatList
+        Screen = SplittedChatListAndView
         break
     }
 
