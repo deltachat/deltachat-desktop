@@ -10,6 +10,7 @@ const main = module.exports = {
   chooseLanguage,
   show,
   toggleAlwaysOnTop,
+  isAlwaysOnTop,
   toggleDevTools,
   win: null
 }
@@ -19,7 +20,6 @@ const debounce = require('debounce')
 
 const config = require('../../config')
 const log = require('../log')
-const menu = require('../menu')
 
 function init (state, options) {
   if (main.win) {
@@ -63,12 +63,6 @@ function init (state, options) {
     // before our drag-and-drop handlers have been initialized.
     e.preventDefault()
   })
-
-  win.on('blur', onWindowBlur)
-  win.on('focus', onWindowFocus)
-
-  win.on('hide', onWindowBlur)
-  win.on('show', onWindowFocus)
 
   win.on('move', debounce(e => {
     send('windowBoundsChanged', e.sender.getBounds())
@@ -155,15 +149,15 @@ function show () {
   main.win.show()
 }
 
-// Sets whether the window should always show on top of other windows
-function toggleAlwaysOnTop (flag) {
+function toggleAlwaysOnTop () {
   if (!main.win) return
-  if (flag == null) {
-    flag = !main.win.isAlwaysOnTop()
-  }
+  const flag = !main.win.isAlwaysOnTop()
   log(`toggleAlwaysOnTop ${flag}`)
   main.win.setAlwaysOnTop(flag)
-  menu.onToggleAlwaysOnTop(flag)
+}
+
+function isAlwaysOnTop () {
+  return main.win ? main.win.isAlwaysOnTop() : false
 }
 
 function toggleDevTools () {
@@ -174,14 +168,6 @@ function toggleDevTools () {
   } else {
     main.win.webContents.openDevTools({ mode: 'detach' })
   }
-}
-
-function onWindowBlur () {
-  menu.setWindowFocus(false)
-}
-
-function onWindowFocus () {
-  menu.setWindowFocus(true)
 }
 
 function getIconPath () {

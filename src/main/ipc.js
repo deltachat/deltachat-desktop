@@ -33,7 +33,7 @@ function init (cwd) {
   ipc.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipc.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
-    menu.chooseLanguage(locale)
+    menu.init()
   })
 
   // Called once to get the conversations css string

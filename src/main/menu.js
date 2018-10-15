@@ -1,41 +1,22 @@
 module.exports = {
-  init,
-  chooseLanguage,
-  setWindowFocus,
-  onToggleAlwaysOnTop
+  init
 }
 
 const electron = require('electron')
 const fs = require('fs')
 const path = require('path')
-
-const app = electron.app
-
-let template = null
-let menu = null
-
 const log = require('./log')
 const windows = require('./windows')
 const config = require('../config')
 
+const app = electron.app
+
 function init () {
-  template = getMenuTemplate()
-  menu = electron.Menu.buildFromTemplate(setLabels(template))
-  electron.Menu.setApplicationMenu(menu)
-}
-
-function onToggleAlwaysOnTop (flag) {
-  getMenuItem('Float on Top').checked = flag
-}
-
-function setWindowFocus (flag) {
-  getMenuItem('Float on Top').enabled = flag
-}
-
-function chooseLanguage () {
-  log('choosing language', app.localeData.locale)
-  template = setLabels(template)
-  menu = electron.Menu.buildFromTemplate(template)
+  log('rebuilding menu with language', app.localeData.locale)
+  const template = getMenuTemplate()
+  const menu = electron.Menu.buildFromTemplate(setLabels(template))
+  const item = getMenuItem(menu, app.translate('menu.view.floatontop'))
+  if (item) item.checked = windows.main.isAlwaysOnTop()
   electron.Menu.setApplicationMenu(menu)
 }
 
@@ -46,19 +27,18 @@ function setLabels (menu) {
   // the menu item labels when the user changes languages
   const translate = app.translate
 
-  menu[0].submenu[0].submenu = getAvailableLanguages()
-  return doTranslation(menu)
+  doTranslation(menu)
 
   function doTranslation (menu) {
-    menu = menu.map((item) => {
+    menu.forEach(item => {
       if (item.translate) {
         item.label = translate(item.translate)
       }
       if (item.submenu) doTranslation(item.submenu)
-      return item
     })
-    return menu
   }
+
+  return menu
 }
 
 function getAvailableLanguages () {
@@ -75,7 +55,7 @@ function getAvailableLanguages () {
 }
 
 function getMenuTemplate () {
-  const template = [
+  return [
     {
       translate: 'menu.preferences',
       submenu: [
@@ -86,36 +66,42 @@ function getMenuTemplate () {
       ]
     },
     {
-      label: 'Edit',
+      translate: 'menu.edit',
       submenu: [
         {
+          translate: 'menu.edit.undo',
           role: 'undo'
         },
         {
+          translate: 'menu.edit.redo',
           role: 'redo'
         },
         {
           type: 'separator'
         },
         {
+          translate: 'menu.edit.cut',
           role: 'cut'
         },
         {
+          translate: 'menu.edit.copy',
           role: 'copy'
         },
         {
+          translate: 'menu.edit.delete',
           role: 'delete'
         },
         {
+          translate: 'menu.edit.selectall',
           role: 'selectall'
         }
       ]
     },
     {
-      label: 'View',
+      translate: 'menu.view',
       submenu: [
         {
-          label: 'Float on Top',
+          translate: 'menu.view.floatontop',
           type: 'checkbox',
           click: () => windows.main.toggleAlwaysOnTop()
         },
@@ -123,7 +109,7 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Go Back',
+          translate: 'menu.view.goback',
           accelerator: 'Esc',
           click: () => windows.main.dispatch('escapeBack')
         },
@@ -131,10 +117,10 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Developer',
+          translate: 'menu.view.developer',
           submenu: [
             {
-              label: 'Developer Tools',
+              translate: 'menu.view.developer.tools',
               accelerator: process.platform === 'darwin'
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
@@ -145,17 +131,17 @@ function getMenuTemplate () {
       ]
     },
     {
-      label: 'Help',
+      translate: 'menu.help',
       role: 'help',
       submenu: [
         {
-          label: 'Learn more about ' + config.APP_NAME,
+          translate: 'menu.help.learn',
           click: () => {
             electron.shell.openExternal(config.HOME_PAGE_URL)
           }
         },
         {
-          label: 'Contribute on GitHub',
+          translate: 'menu.help.contribute',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL)
           }
@@ -164,7 +150,7 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          label: 'Report an Issue...',
+          translate: 'menu.help.report',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL_ISSUES)
           }
@@ -172,10 +158,9 @@ function getMenuTemplate () {
       ]
     }
   ]
-  return template
 }
 
-function getMenuItem (label) {
+function getMenuItem (menu, label) {
   for (let i = 0; i < menu.items.length; i++) {
     const menuItem = menu.items[i].submenu.items.find(function (item) {
       return item.label === label
