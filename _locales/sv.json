@@ -20,8 +20,16 @@
         "description": "Add contact button label"
     },
     "createGroup": {
-        "message": "Grupp",
+        "message": "Skapa grupp",
         "description": "Create group button label"
+    },
+    "groupName": {
+        "message": "Gruppnamn",
+        "description": "Placeholder text for group name input field"
+    },
+    "groupNameRequired": {
+        "message": "Gruppen måste ha ett namn.",
+        "description": "Information to user when creating group with empty name"
     },
     "addChat": {
         "message": "Skapa chatt",

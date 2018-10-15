@@ -63,9 +63,10 @@ class CreateGroup extends React.Component {
   }
 
   createGroup () {
+    const tx = window.translate
     var contacts = Object.keys(this.state.group).map((id) => this.state.group[id])
     if (!contacts.length) return this.handleError(new Error('Add at least one contact to the group'))
-    if (!this.state.name) return this.handleError(new Error('Group name required.'))
+    if (!this.state.name) return this.handleError(new Error(tx('groupNameRequired')))
     ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', contacts, this.state.name)
     this.props.changeScreen('ChatList')
   }
@@ -76,6 +77,7 @@ class CreateGroup extends React.Component {
 
   render () {
     const { deltachat } = this.props
+    const tx = window.translate
     const { group } = this.state
 
     return (
@@ -84,7 +86,7 @@ class CreateGroup extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <NavbarHeading>Create Chat</NavbarHeading>
+            <NavbarHeading>{tx('createGroup')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
@@ -101,10 +103,10 @@ class CreateGroup extends React.Component {
                 id='name'
                 value={this.state.name}
                 onChange={this.handleNameChange.bind(this)}
-                placeholder='Group Name' />
+                placeholder={tx('groupName')} />
               <Button
                 onClick={this.createGroup.bind(this)}
-                text='Create Group' />
+                text={tx('createGroup')} />
             </ControlGroup>
           </div>
           {deltachat.contacts.map((contact) => {

@@ -31,7 +31,6 @@ class CreateChat extends React.Component {
 
   render () {
     const { deltachat } = this.props
-
     const tx = window.translate
 
     return (
@@ -39,7 +38,7 @@ class CreateChat extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <NavbarHeading>Create Chat</NavbarHeading>
+            <NavbarHeading>{tx('addChat')}</NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <Button
