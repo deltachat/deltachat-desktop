@@ -5,35 +5,35 @@
     },
     "emailValidationFailed": {
         "message": "Wymagany adres e-mail.",
-        "description": ""
+        "description": "Error message if an invalid email address was given when creating a contact"
     },
     "createChatError": {
         "message": "Nie można utworzyć czatu.",
-        "description": ""
+        "description": "Error message if a chat could not be created"
     },
     "newMessageFrom": {
         "message": "Nowa wiadomość od",
-        "description": ""
+        "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
         "message": "Dodaj kontakt",
-        "description": ""
+        "description": "Add contact button label"
     },
     "createGroup": {
         "message": "Grupa",
-        "description": ""
+        "description": "Create group button label"
     },
     "addChat": {
         "message": "Utwórz czat",
-        "description": ""
+        "description": "Create chat button label"
     },
     "contactCreateSuccess": {
         "message": "Kontakt został pomyślnie utworzony.",
-        "description": ""
+        "description": "Information to the user when a contact was created successfully"
     },
     "initiateKeyTransferTitle": {
         "message": "Inicjowanie transferu klucza",
-        "description": ""
+        "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
         "message": "'Tranfer klucza automatycznego szyfrowania' wymaga, aby klient poczty na drugim urządzeniu był zgodny z automatycznym szyfrowaniem.\\n\\nMożesz wysłać klucz do siebie. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.",
@@ -81,7 +81,7 @@
     },
     "messageDetail": {
         "message": "Szczegóły wiadomości",
-        "description": ""
+        "description": "TODO: used where?"
     },
     "audio": {
         "message": "Audio",
@@ -97,15 +97,31 @@
     },
     "ok": {
         "message": "OK",
-        "description": ""
+        "description": "TODO: used where?"
     },
     "cancel": {
         "message": "Anuluj",
-        "description": ""
+        "description": "TODO: used where?"
     },
     "delete": {
         "message": "Usuń",
-        "description": ""
+        "description": "TODO: used where?"
+    },
+    "login.welcome": {
+        "message": "Welcome to Delta.Chat",
+        "description": "Welcome message at the top of the login screen"
+    },
+    "login.email": {
+        "message": "E-Mail Address",
+        "description": "Label above input field for e-mail address"
+    },
+    "login.password": {
+        "message": "Password",
+        "description": "Label above input field for password"
+    },
+    "login.required": {
+        "message": "required",
+        "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
     },
     "login.cancel": {
         "message": "Anuluj",
@@ -122,6 +138,70 @@
     "menu.preferences.language": {
         "message": "Wybierz język…",
         "description": "Choose language label in the menu"
+    },
+    "menu.edit": {
+        "message": "Edit",
+        "description": "Edit menu label"
+    },
+    "menu.edit.undo": {
+        "message": "Undo",
+        "description": "Undo menu item label"
+    },
+    "menu.edit.redo": {
+        "message": "Redo",
+        "description": "Redo menu item label"
+    },
+    "menu.edit.cut": {
+        "message": "Cut",
+        "description": "Cut menu item label"
+    },
+    "menu.edit.copy": {
+        "message": "Copy",
+        "description": "Copy menu item label"
+    },
+    "menu.edit.delete": {
+        "message": "Delete",
+        "description": "Delete menu item label"
+    },
+    "menu.edit.selectall": {
+        "message": "Select All",
+        "description": "Select All menu item label"
+    },
+    "menu.view": {
+        "message": "View",
+        "description": "View menu label"
+    },
+    "menu.view.floatontop": {
+        "message": "Float on Top",
+        "description": "Float on Top menu item label"
+    },
+    "menu.view.goback": {
+        "message": "Go Back",
+        "description": "Go Back menu item label"
+    },
+    "menu.view.developer": {
+        "message": "Developer",
+        "description": "Developer menu item label"
+    },
+    "menu.view.developer.tools": {
+        "message": "Developer Tools",
+        "description": "Developer Tools menu item label"
+    },
+    "menu.help": {
+        "message": "Help",
+        "description": "Help menu label"
+    },
+    "menu.help.learn": {
+        "message": "Learn more about DeltaChat",
+        "description": "Learn more about DeltaChat menu item label"
+    },
+    "menu.help.contribute": {
+        "message": "Contribute on GitHub",
+        "description": "Contribute on GitHub menu item label"
+    },
+    "menu.help.report": {
+        "message": "Report an Issue...",
+        "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {
         "message": "MMM D",
@@ -149,11 +229,11 @@
     },
     "groupMembers": {
         "message": "Członkowie grupy",
-        "description": ""
+        "description": "TODO: used where?"
     },
     "showMembers": {
         "message": "Pokaż członków",
-        "description": ""
+        "description": "TODO: used where?"
     },
     "timestamp_s": {
         "message": "teraz",
@@ -193,106 +273,110 @@
     },
     "language.ca": {
         "message": "Kataloński",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.da": {
         "message": "Duński",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.de": {
         "message": "Niemiecki",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.en": {
         "message": "Angielski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "language.eo": {
+        "message": "Esperanto",
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.es": {
         "message": "Hiszpański",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eu": {
         "message": "Baskijski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.fr": {
         "message": "Francuski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hr": {
         "message": "Chorwacki",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hu": {
         "message": "Węgierski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.it": {
         "message": "Włoski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ja_JP": {
         "message": "Japoński",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ko": {
         "message": "Koreański",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nb_NO": {
         "message": "Norweski Bokmål",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl": {
         "message": "Holenderski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl_NL": {
         "message": "Holenderski (Holandia)",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pl": {
         "message": "Polski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pt": {
         "message": "Portugalski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ru": {
         "message": "Rosyjski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sq": {
         "message": "Albański",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sr": {
         "message": "Serbski",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sv": {
         "message": "Szwedzki",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ta": {
         "message": "Tamil",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.te": {
         "message": "Telegu",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.tr": {
         "message": "Turecki",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.uk": {
         "message": "Ukraiński",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.zh_CN": {
         "message": "Chiński",
-        "description": ""
+        "description": "Menu alternative in Preferences -> Choose Language..."
     }
 }
