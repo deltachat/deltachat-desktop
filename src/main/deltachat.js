@@ -219,9 +219,10 @@ class DeltaChatController {
   }
 
   /**
-   * TODO: Not yet dispatched from any view
+   * Dispatched from menu alternative in ChatView
    */
   deleteChat (chatId) {
+    log('deleting chat', chatId)
     this._dc.deleteChat(chatId)
   }
 

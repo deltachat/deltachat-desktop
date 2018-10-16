@@ -34,6 +34,7 @@ class ChatView extends React.Component {
       attachmentMessage: null
     }
     this.onArchiveChat = this.onArchiveChat.bind(this)
+    this.onDeleteChat = this.onDeleteChat.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
@@ -42,6 +43,12 @@ class ChatView extends React.Component {
   onArchiveChat () {
     const chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'archiveChat', chatId)
+    this.props.changeScreen()
+  }
+
+  onDeleteChat () {
+    const chatId = this.props.screenProps.chatId
+    ipcRenderer.send('dispatch', 'deleteChat', chatId)
     this.props.changeScreen()
   }
 
@@ -104,6 +111,7 @@ class ChatView extends React.Component {
     const tx = window.translate
     const menu = (<Menu>
       <MenuItem icon='compressed' text={tx('archiveChat')} onClick={this.onArchiveChat} />
+      <MenuItem icon='delete' text={tx('deleteChat')} onClick={this.onDeleteChat} />
     </Menu>)
 
     return (

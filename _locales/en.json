@@ -39,6 +39,10 @@
         "message": "Archive Chat",
         "description": "Archive chat menu item label"
     },
+    "deleteChat": {
+        "message": "Delete Chat",
+        "description": "Delete chat menu item label"
+    },
     "contactCreateSuccess": {
         "message": "Contact created successfully.",
         "description": "Information to the user when a contact was created successfully"
