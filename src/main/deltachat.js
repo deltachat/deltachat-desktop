@@ -226,9 +226,10 @@ class DeltaChatController {
   }
 
   /**
-   * TODO: Not yet dispatched from any view
+   * Dispatched from menu alternative in ChatView
    */
   archiveChat (chatId) {
+    log('archiving chat', chatId)
     this._dc.archiveChat(chatId, true)
   }
 

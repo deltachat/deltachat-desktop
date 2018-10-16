@@ -33,7 +33,11 @@
     },
     "addChat": {
         "message": "Create Chat",
-        "description": "Create chat button label"
+        "description": "Create chat menu item label"
+    },
+    "archiveChat": {
+        "message": "Archive Chat",
+        "description": "Archive chat menu item label"
     },
     "contactCreateSuccess": {
         "message": "Contact created successfully.",

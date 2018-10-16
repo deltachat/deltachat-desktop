@@ -4,9 +4,7 @@ const { ipcRenderer } = require('electron')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
-const {
-  Overlay
-} = require('@blueprintjs/core')
+const { Overlay } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
@@ -16,6 +14,7 @@ const {
   Navbar,
   Position,
   Menu,
+  MenuItem,
   Popover,
   NavbarGroup,
   NavbarHeading,
@@ -34,13 +33,20 @@ class ChatView extends React.Component {
       setupMessage: false,
       attachmentMessage: null
     }
+    this.onArchiveChat = this.onArchiveChat.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
   }
 
+  onArchiveChat () {
+    const chatId = this.props.screenProps.chatId
+    ipcRenderer.send('dispatch', 'archiveChat', chatId)
+    this.props.changeScreen()
+  }
+
   writeMessage (text) {
-    var chatId = this.props.screenProps.chatId
+    const chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
@@ -95,6 +101,11 @@ class ChatView extends React.Component {
     if (!chat) return <div />
     this.state.value = chat.textDraft
 
+    const tx = window.translate
+    const menu = (<Menu>
+      <MenuItem icon='compressed' text={tx('archiveChat')} onClick={this.onArchiveChat} />
+    </Menu>)
+
     return (
       <div>
         <Navbar fixedToTop>
@@ -105,7 +116,7 @@ class ChatView extends React.Component {
             <div>{chat.subtitle}</div>
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={<Menu>...</Menu>} position={Position.RIGHT_TOP}>
+            <Popover content={menu} position={Position.RIGHT_TOP}>
               <Button className={Classes.MINIMAL} icon='menu' />
             </Popover>
           </NavbarGroup>

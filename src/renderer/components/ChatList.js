@@ -1,4 +1,5 @@
 const React = require('react')
+const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('./conversations')
 
@@ -112,6 +113,7 @@ class ChatList extends React.Component {
         <div className='window'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
+            if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
             if (chat.id === 1) {
