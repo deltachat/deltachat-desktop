@@ -51,6 +51,7 @@
     "insert-css": "^2.0.0",
     "intl-tel-input": "^14.0.1",
     "linkify-it": "^2.0.3",
+    "lodash": "^4.17.11",
     "lodash.merge": "^4.6.1",
     "moment": "^2.22.2",
     "react": "^16.4.2",
