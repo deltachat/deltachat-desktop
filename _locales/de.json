@@ -20,12 +20,28 @@
         "description": "Add contact button label"
     },
     "createGroup": {
-        "message": "Gruppe",
+        "message": "Create Group",
         "description": "Create group button label"
+    },
+    "groupName": {
+        "message": "Group Name",
+        "description": "Placeholder text for group name input field"
+    },
+    "groupNameRequired": {
+        "message": "Group name required.",
+        "description": "Information to user when creating group with empty name"
     },
     "addChat": {
         "message": "Chat erstellen",
-        "description": "Create chat button label"
+        "description": "Create chat menu item label"
+    },
+    "archiveChat": {
+        "message": "Archive Chat",
+        "description": "Archive chat menu item label"
+    },
+    "deleteChat": {
+        "message": "Delete Chat",
+        "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
         "message": "Kontakt erfolgreich erstellt.",

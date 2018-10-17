@@ -28,12 +28,20 @@
         "description": "Placeholder text for group name input field"
     },
     "groupNameRequired": {
-        "message": "Gruppen måste ha ett namn.",
+        "message": "Gruppnamn nödvändigt.",
         "description": "Information to user when creating group with empty name"
     },
     "addChat": {
         "message": "Skapa chatt",
-        "description": "Create chat button label"
+        "description": "Create chat menu item label"
+    },
+    "archiveChat": {
+        "message": "Arkivera chat",
+        "description": "Archive chat menu item label"
+    },
+    "deleteChat": {
+        "message": "Radera chat",
+        "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
         "message": "Kontakt skapades.",

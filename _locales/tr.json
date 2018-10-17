@@ -20,12 +20,28 @@
         "description": "Add contact button label"
     },
     "createGroup": {
-        "message": "Grup",
+        "message": "Grup Oluştur",
         "description": "Create group button label"
+    },
+    "groupName": {
+        "message": "Grup Adı",
+        "description": "Placeholder text for group name input field"
+    },
+    "groupNameRequired": {
+        "message": "Grup adı gerekli.",
+        "description": "Information to user when creating group with empty name"
     },
     "addChat": {
         "message": "Sohbet Oluştur",
-        "description": "Create chat button label"
+        "description": "Create chat menu item label"
+    },
+    "archiveChat": {
+        "message": "Sohbeti Arşivle",
+        "description": "Archive chat menu item label"
+    },
+    "deleteChat": {
+        "message": "Sohbeti Sil",
+        "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
         "message": "Kişi başarıyla oluşturuldu.",
@@ -108,19 +124,19 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to Delta.Chat",
+        "message": "Oturum açma ekranının üstündeki hoş geldiniz iletisi",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "E-posta Adresi",
         "description": "Label above input field for e-mail address"
     },
     "login.password": {
-        "message": "Password",
+        "message": "Parola",
         "description": "Label above input field for password"
     },
     "login.required": {
-        "message": "required",
+        "message": "gerekli",
         "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
     },
     "login.cancel": {
@@ -140,67 +156,67 @@
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Düzenle",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Geri Al",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Yenile",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Kes",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Kopyala",
         "description": "Copy menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Sil",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Tümünü Seç",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Gör",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Float on Top",
+        "message": "Üste Uzat",
         "description": "Float on Top menu item label"
     },
     "menu.view.goback": {
-        "message": "Go Back",
+        "message": "Geri Git",
         "description": "Go Back menu item label"
     },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Geliştirici",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Geliştirici Araçları",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Yardım",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "DeltaChat hakkında daha fazlasını öğrenin",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "GitHub'da katkıda bulunun",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Bir Sorun Raporla...",
         "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {

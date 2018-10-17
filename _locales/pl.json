@@ -1,6 +1,6 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Wyloguj",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
@@ -20,12 +20,28 @@
         "description": "Add contact button label"
     },
     "createGroup": {
-        "message": "Grupa",
+        "message": "Utwórz grupę",
         "description": "Create group button label"
+    },
+    "groupName": {
+        "message": "Nazwa grupy",
+        "description": "Placeholder text for group name input field"
+    },
+    "groupNameRequired": {
+        "message": "Nazwa grupy jest wymagana",
+        "description": "Information to user when creating group with empty name"
     },
     "addChat": {
         "message": "Utwórz czat",
-        "description": "Create chat button label"
+        "description": "Create chat menu item label"
+    },
+    "archiveChat": {
+        "message": "Archive Chat",
+        "description": "Archive chat menu item label"
+    },
+    "deleteChat": {
+        "message": "Usuń czat",
+        "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
         "message": "Kontakt został pomyślnie utworzony.",
@@ -68,7 +84,7 @@
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "forwardMessage": {
-        "message": "Forward Message...",
+        "message": "Przekaż wiadomość",
         "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
@@ -108,19 +124,19 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to Delta.Chat",
+        "message": "Witamy w Delta.Chat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "Adres e-mail",
         "description": "Label above input field for e-mail address"
     },
     "login.password": {
-        "message": "Password",
+        "message": "Hasło",
         "description": "Label above input field for password"
     },
     "login.required": {
-        "message": "required",
+        "message": "wymagane",
         "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
     },
     "login.cancel": {
@@ -140,35 +156,35 @@
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Edytuj",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Cofnij",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Przywróć",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Wytnij",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Kopiuj",
         "description": "Copy menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Usuń",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Zaznacz wszystko",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Pokaż",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
@@ -176,31 +192,31 @@
         "description": "Float on Top menu item label"
     },
     "menu.view.goback": {
-        "message": "Go Back",
+        "message": "Wróć",
         "description": "Go Back menu item label"
     },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Deweloper",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Narzędzia dwelopera",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Pomoc",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "Dowiedz się więcej o DeltaChat",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "Wsparcie na GitHub",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Zgłoś problem…",
         "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {
