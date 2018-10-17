@@ -44,16 +44,6 @@ class CreateGroup extends React.Component {
     return (this.state !== nextState)
   }
 
-  getContact (contactOrContactId) {
-    const { deltachat } = this.props
-    const contactId = contactOrContactId.id || contactOrContactId
-    var index = deltachat.contacts.findIndex((c) => {
-      return c.id === contactId
-    })
-    if (index === -1) return this.handleError(`contact with id ${contactId} not found`)
-    return deltachat.contacts[index]
-  }
-
   contactInGroup (contact) {
     return this.state.group[contact.id]
   }
