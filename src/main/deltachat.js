@@ -224,6 +224,23 @@ class DeltaChatController {
   }
 
   /**
+   * Dispatched when from EditGroup
+   */
+  getChatContacts (chatId) {
+    return this._dc.getChatContacts(chatId)
+  }
+
+  /**
+   * Dispatched from EditGroup
+   */
+  modifyGroup (chatId, name, contactIds) {
+    log('setting chat', chatId, 'name to', name)
+    this._dc.setChatName(chatId, name)
+    contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
+    return true
+  }
+
+  /**
    * Dispatched from menu alternative in ChatView
    */
   deleteChat (chatId) {

@@ -1,5 +1,5 @@
 const React = require('react')
-const CONSTANTS = require('deltachat-node/constants')
+const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
@@ -35,6 +35,7 @@ class ChatView extends React.Component {
     }
     this.onArchiveChat = this.onArchiveChat.bind(this)
     this.onDeleteChat = this.onDeleteChat.bind(this)
+    this.onEditGroup = this.onEditGroup.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
@@ -50,6 +51,11 @@ class ChatView extends React.Component {
     const chatId = this.props.screenProps.chatId
     ipcRenderer.send('dispatch', 'deleteChat', chatId)
     this.props.changeScreen()
+  }
+
+  onEditGroup () {
+    const chat = this.getChat()
+    this.props.changeScreen('EditGroup', { chatId: chat.id, chatName: chat.name })
   }
 
   writeMessage (text) {
@@ -73,8 +79,8 @@ class ChatView extends React.Component {
 
   getChat () {
     const { deltachat } = this.props
-    var chatId = this.props.screenProps.chatId
-    var index = deltachat.chats.findIndex((chat) => {
+    const { chatId } = this.props.screenProps
+    const index = deltachat.chats.findIndex(chat => {
       return chat.id === chatId
     })
     return deltachat.chats[index]
@@ -102,16 +108,29 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
+  isGroup () {
+    const chat = this.getChat()
+    return [
+      C.DC_CHAT_TYPE_GROUP,
+      C.DC_CHAT_TYPE_VERIFIED_GROUP
+    ].includes(chat && chat.type)
+  }
+
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
-    if (!chat) return <div />
+    if (!chat) return (<div />)
+
     this.state.value = chat.textDraft
 
+    const isGroup = this.isGroup()
     const tx = window.translate
+    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
+    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
     const menu = (<Menu>
-      <MenuItem icon='compressed' text={tx('archiveChat')} onClick={this.onArchiveChat} />
-      <MenuItem icon='delete' text={tx('deleteChat')} onClick={this.onDeleteChat} />
+      <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
+      <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
+      {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup} /> : null}
     </Menu>)
 
     return (
@@ -256,21 +275,21 @@ function convertContentType (filemime) {
 
 function convertMessageStatus (s) {
   switch (s) {
-    case CONSTANTS.DC_STATE_IN_FRESH:
+    case C.DC_STATE_IN_FRESH:
       return 'sent'
-    case CONSTANTS.DC_STATE_OUT_FAILED:
+    case C.DC_STATE_OUT_FAILED:
       return 'error'
-    case CONSTANTS.DC_STATE_IN_SEEN:
+    case C.DC_STATE_IN_SEEN:
       return 'read'
-    case CONSTANTS.DC_STATE_IN_NOTICED:
+    case C.DC_STATE_IN_NOTICED:
       return 'read'
-    case CONSTANTS.DC_STATE_OUT_DELIVERED:
+    case C.DC_STATE_OUT_DELIVERED:
       return 'delivered'
-    case CONSTANTS.DC_STATE_OUT_MDN_RCVD:
+    case C.DC_STATE_OUT_MDN_RCVD:
       return 'read'
-    case CONSTANTS.DC_STATE_OUT_PENDING:
+    case C.DC_STATE_OUT_PENDING:
       return 'sending'
-    case CONSTANTS.DC_STATE_UNDEFINED:
+    case C.DC_STATE_UNDEFINED:
       return 'error'
   }
 }
