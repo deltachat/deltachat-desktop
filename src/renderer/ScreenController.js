@@ -6,6 +6,7 @@ const ChatList = require('./components/ChatList')
 const ChatView = require('./components/ChatView')
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
+const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 
 class Home extends React.Component {
@@ -58,6 +59,9 @@ class Home extends React.Component {
         break
       case 'CreateGroup':
         Screen = CreateGroup
+        break
+      case 'EditGroup':
+        Screen = EditGroup
         break
       case 'ChatView':
         Screen = ChatView

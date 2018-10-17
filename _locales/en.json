@@ -21,7 +21,23 @@
     },
     "createGroup": {
         "message": "Create Group",
-        "description": "Create group button label"
+        "description": "Create group menu item label"
+    },
+    "archiveGroup": {
+        "message": "Archive Group",
+        "description": "Archive group menu item label"
+    },
+    "deleteGroup": {
+        "message": "Delete Group",
+        "description": "Delete group menu item label"
+    },
+    "editGroup": {
+        "message": "Edit Group",
+        "description": "Edit group menu item label"
+    },
+    "save": {
+        "message": "Save",
+        "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
         "message": "Group Name",
