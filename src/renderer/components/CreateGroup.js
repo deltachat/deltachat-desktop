@@ -53,7 +53,6 @@ class CreateGroup extends React.Component {
   }
 
   createGroup () {
-    const tx = window.translate
     const contactIds = Object.keys(this.state.group)
     ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', this.state.name, contactIds)
     this.props.changeScreen('ChatList')
@@ -72,7 +71,6 @@ class CreateGroup extends React.Component {
   render () {
     const { deltachat } = this.props
     const tx = window.translate
-    const { group } = this.state
 
     return (
       <div>
