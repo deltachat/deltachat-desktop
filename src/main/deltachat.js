@@ -242,12 +242,10 @@ class DeltaChatController {
   /**
    * Dispatched when creating an unverified group in CreateGroup
    */
-  createUnverifiedGroup (contacts, name) {
-    var chatId = this._dc.createUnverifiedGroupChat(name)
-    var results = contacts.map((c) => {
-      this._dc.addContactToChat(chatId, c.id)
-    })
-    return { chatId, results }
+  createUnverifiedGroup (name, contactIds) {
+    const chatId = this._dc.createUnverifiedGroupChat(name)
+    contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
+    return { chatId }
   }
 
   /**

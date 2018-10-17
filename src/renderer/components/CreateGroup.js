@@ -45,7 +45,7 @@ class CreateGroup extends React.Component {
   }
 
   contactInGroup (contact) {
-    return this.state.group[contact.id]
+    return !!this.state.group[contact.id]
   }
 
   toggleContact (contact) {
@@ -54,10 +54,10 @@ class CreateGroup extends React.Component {
 
   createGroup () {
     const tx = window.translate
-    var contacts = Object.keys(this.state.group).map((id) => this.state.group[id])
-    if (!contacts.length) return this.handleError(new Error('Add at least one contact to the group'))
+    const contactIds = Object.keys(this.state.group)
+    if (!contactIds.length) return this.handleError(new Error('Add at least one contact to the group'))
     if (!this.state.name) return this.handleError(new Error(tx('groupNameRequired')))
-    ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', contacts, this.state.name)
+    ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', this.state.name, contactIds)
     this.props.changeScreen('ChatList')
   }
 
@@ -99,7 +99,7 @@ class CreateGroup extends React.Component {
                 text={tx('createGroup')} />
             </ControlGroup>
           </div>
-          {deltachat.contacts.map((contact) => {
+          {deltachat.contacts.map(contact => {
             return (
               <ContactListItem
                 color={this.contactInGroup(contact) ? 'green' : ''}
