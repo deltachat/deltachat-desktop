@@ -19,7 +19,7 @@ class CreateGroup extends React.Component {
     super(props)
     this.state = {
       group: {},
-      name: undefined
+      name: ''
     }
   }
 
@@ -33,10 +33,6 @@ class CreateGroup extends React.Component {
     const group = this.state.group
     delete group[contactId]
     this.setState({ group })
-  }
-
-  handleError (err) {
-    this.setState({ error: err.message })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -59,14 +55,18 @@ class CreateGroup extends React.Component {
   createGroup () {
     const tx = window.translate
     const contactIds = Object.keys(this.state.group)
-    if (!contactIds.length) return this.handleError(new Error('Add at least one contact to the group'))
-    if (!this.state.name) return this.handleError(new Error(tx('groupNameRequired')))
     ipcRenderer.sendSync('dispatchSync', 'createUnverifiedGroup', this.state.name, contactIds)
     this.props.changeScreen('ChatList')
   }
 
   handleNameChange (e) {
     this.setState({ name: e.target.value })
+  }
+
+  isButtonDisabled () {
+    if (!this.state.name.length) return true
+    if (!Object.keys(this.state.group).length) return true
+    return false
   }
 
   render () {
@@ -76,7 +76,6 @@ class CreateGroup extends React.Component {
 
     return (
       <div>
-        {this.state.error && this.state.error}
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
@@ -93,6 +92,7 @@ class CreateGroup extends React.Component {
                 onChange={this.handleNameChange.bind(this)}
                 placeholder={tx('groupName')} />
               <Button
+                disabled={this.isButtonDisabled()}
                 onClick={this.createGroup.bind(this)}
                 text={tx('createGroup')} />
             </ControlGroup>
