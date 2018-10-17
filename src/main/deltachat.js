@@ -273,10 +273,7 @@ class DeltaChatController {
       chat.summary = list.getSummary(i).toJson()
       chats.push(chat)
     }
-
-    return chats.sort((a, b) => {
-      return a.summary.timestamp < b.summary.timestamp
-    })
+    return chats
   }
 
   /**
