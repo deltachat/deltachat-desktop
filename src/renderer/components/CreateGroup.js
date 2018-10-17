@@ -23,15 +23,15 @@ class CreateGroup extends React.Component {
     }
   }
 
-  addToGroup (contact) {
-    var group = this.state.group
-    group[contact.id] = contact
+  addToGroup (contactId) {
+    const group = this.state.group
+    group[contactId] = true
     this.setState({ group })
   }
 
-  removeFromGroup (contact) {
-    var group = this.state.group
-    delete group[contact.id]
+  removeFromGroup (contactId) {
+    const group = this.state.group
+    delete group[contactId]
     this.setState({ group })
   }
 
@@ -44,12 +44,16 @@ class CreateGroup extends React.Component {
     return (this.state !== nextState)
   }
 
-  contactInGroup (contact) {
-    return !!this.state.group[contact.id]
+  contactInGroup (contactId) {
+    return !!this.state.group[contactId]
   }
 
-  toggleContact (contact) {
-    this.contactInGroup(contact) ? this.removeFromGroup(contact) : this.addToGroup(contact)
+  toggleContact (contactId) {
+    if (this.contactInGroup(contactId)) {
+      this.removeFromGroup(contactId)
+    } else {
+      this.addToGroup(contactId)
+    }
   }
 
   createGroup () {
@@ -96,8 +100,8 @@ class CreateGroup extends React.Component {
           {deltachat.contacts.map(contact => {
             return (
               <ContactListItem
-                color={this.contactInGroup(contact) ? 'green' : ''}
-                onClick={this.toggleContact.bind(this, contact)}
+                color={this.contactInGroup(contact.id) ? 'green' : ''}
+                onClick={this.toggleContact.bind(this, contact.id)}
                 contact={contact}
               />
             )
