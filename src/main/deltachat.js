@@ -214,8 +214,13 @@ class DeltaChatController {
    */
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
-    if (!contact) return 0
-    return this._dc.createChatByContactId(contactId)
+    if (!contact) {
+      this._warning('no contact could be found with id', contactId)
+      return 0
+    }
+    const chatId = this._dc.createChatByContactId(contactId)
+    log('created chat', chatId, 'with contact', contactId)
+    return chatId
   }
 
   /**
