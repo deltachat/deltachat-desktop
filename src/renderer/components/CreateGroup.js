@@ -81,12 +81,6 @@ class CreateGroup extends React.Component {
         </Navbar>
         <div className='window'>
           <div>
-            {Object.keys(group).map((id) => {
-              var contact = group[id]
-              return contact.address
-            }).join(', ')}
-          </div>
-          <div>
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
