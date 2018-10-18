@@ -42,13 +42,13 @@ class ChatView extends React.Component {
   }
 
   onArchiveChat () {
-    const chatId = this.props.chat.id
+    const { chatId } = this.props
     ipcRenderer.send('dispatch', 'archiveChat', chatId)
     this.props.changeScreen()
   }
 
   onDeleteChat () {
-    const chatId = this.props.chat.id
+    const { chatId } = this.props
     ipcRenderer.send('dispatch', 'deleteChat', chatId)
     this.props.changeScreen()
   }
@@ -59,7 +59,7 @@ class ChatView extends React.Component {
   }
 
   writeMessage (text) {
-    const chatId = this.props.chat.id
+    const { chatId } = this.props
     ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
@@ -78,8 +78,9 @@ class ChatView extends React.Component {
   }
 
   getChat () {
+    const { chatId } = this.props
+    if (chatId === null) return null
     const { deltachat } = this.props
-    const { chatId } = this.props.chat
     const index = deltachat.chats.findIndex(chat => {
       return chat.id === chatId
     })
@@ -119,7 +120,7 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const chat = this.props.chat
+    const chat = this.getChat()
     if (!chat) return (<div className="ChatView"><p>No chat selected</p></div>)
 
     this.state.value = chat.textDraft
