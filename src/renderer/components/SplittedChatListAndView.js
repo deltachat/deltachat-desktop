@@ -45,20 +45,22 @@ class SplittedChatListAndView extends React.Component {
 
     return (
       <div>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
-            <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <img src={chat ? chat.profileImage : null} />
-            <NavbarHeading>{chat ? chat.name : 'No chat selected'}</NavbarHeading>
-            <div>{chat ? chat.subtitle : ''}</div>
-            <Popover content={menu} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
+        <div className="Navbar">
+          <Navbar fixedToTop>
+            <NavbarGroup align={Alignment.LEFT}>
+              <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
+              <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
+            </NavbarGroup>
+            <NavbarGroup align={Alignment.RIGHT}>
+              <img src={chat ? chat.profileImage : null} />
+              <NavbarHeading>{chat ? chat.name : 'No chat selected'}</NavbarHeading>
+              <div>{chat ? chat.subtitle : ''}</div>
+              <Popover content={menu} position={Position.RIGHT_TOP}>
+                <Button className={Classes.MINIMAL} icon='menu' />
+              </Popover>
+            </NavbarGroup>
+          </Navbar>
+        </div>
 
         <ChatList
           screenProps={this.props.screenProps}

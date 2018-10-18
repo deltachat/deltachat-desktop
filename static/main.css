@@ -102,3 +102,7 @@ ul li button {
 .ChatView {
   float: right;
 }
+
+.Navbar img {
+    height: 50px;
+}
