@@ -90,7 +90,7 @@ class ChatList extends React.Component {
       <div className="ChatList">
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <div className='window'>
+        <div className='ConversationList'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
             if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return

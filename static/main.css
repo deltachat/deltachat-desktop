@@ -20,6 +20,7 @@ body {
   overflow-y: auto;
 }
 
+
 .bp3-navbar-heading {
   max-width: 250px;
   overflow-x: hidden;
@@ -79,7 +80,7 @@ ul li button {
 }
 
 .ChatList {
-  width: 20%;
+  width: 30%;
   float: left;
 }
 
@@ -92,7 +93,7 @@ ul li button {
 }
 
 .ChatView, .InputMessage .composer {
-  width: 80%;
+  width: 70%;
 }
 
 .InputMessage .composer {
@@ -102,6 +103,7 @@ ul li button {
 .ChatView {
   float: right;
 }
+
 
 .Navbar img {
     height: 50px;
