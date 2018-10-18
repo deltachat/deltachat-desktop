@@ -7,7 +7,7 @@ body {
 }
 
 #root {
-  padding-top: 50px;
+
 }
 
 .window {
@@ -70,4 +70,35 @@ ul {
 }
 ul li button {
   min-width: 200px;
+}
+
+.ChatList, .ChatView, .Login {
+  height: calc(100vh - 50px - 40px);
+  margin-top: 50px;
+  overflow: scroll;
+}
+
+.ChatList {
+  width: 20%;
+  float: left;
+}
+
+.ChatList .window {
+  height: calc(100% - 20px);
+}
+
+.ChatList .module-conversation-list-item {
+  height: 52px;
+}
+
+.ChatView, .InputMessage .composer {
+  width: 80%;
+}
+
+.InputMessage .composer {
+  padding: 4px 10px;
+}
+
+.ChatView {
+  float: right;
 }

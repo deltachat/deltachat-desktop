@@ -34,10 +34,6 @@ class ChatList extends React.Component {
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
   }
 
-  onChatClick (chat) {
-    this.props.changeScreen('ChatView', { chatId: chat.id })
-  }
-
   onDeadDropClose () {
     this.setState({ deadDropChat: false })
   }
@@ -88,28 +84,12 @@ class ChatList extends React.Component {
 
     const tx = window.translate
 
-    const menu = (<Menu>
-      <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
-      <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
-      <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
-      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
-    </Menu>)
+
 
     return (
-      <div>
+      <div className="ChatList">
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
-            <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={menu} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
         <div className='window'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
@@ -135,7 +115,7 @@ class ChatList extends React.Component {
               return (
                 <ConversationListItem
                   key={chat.id}
-                  onClick={this.onChatClick.bind(this, chat)}
+                  onClick={this.props.onChatClick.bind(this, chat)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
                   lastUpdated={lastUpdated}

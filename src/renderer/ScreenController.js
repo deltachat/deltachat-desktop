@@ -8,6 +8,7 @@ const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
+const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 
 class Home extends React.Component {
   constructor (props) {
@@ -66,7 +67,7 @@ class Home extends React.Component {
         Screen = ChatView
         break
       default:
-        Screen = ChatList
+        Screen = SplittedChatListAndView
         break
     }
 

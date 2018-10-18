@@ -42,13 +42,13 @@ class ChatView extends React.Component {
   }
 
   onArchiveChat () {
-    const chatId = this.props.screenProps.chatId
+    const chatId = this.props.chat.id
     ipcRenderer.send('dispatch', 'archiveChat', chatId)
     this.props.changeScreen()
   }
 
   onDeleteChat () {
-    const chatId = this.props.screenProps.chatId
+    const chatId = this.props.chat.id
     ipcRenderer.send('dispatch', 'deleteChat', chatId)
     this.props.changeScreen()
   }
@@ -59,7 +59,7 @@ class ChatView extends React.Component {
   }
 
   writeMessage (text) {
-    const chatId = this.props.screenProps.chatId
+    const chatId = this.props.chat.id
     ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
@@ -79,7 +79,7 @@ class ChatView extends React.Component {
 
   getChat () {
     const { deltachat } = this.props
-    const { chatId } = this.props.screenProps
+    const { chatId } = this.props.chat
     const index = deltachat.chats.findIndex(chat => {
       return chat.id === chatId
     })
@@ -87,7 +87,8 @@ class ChatView extends React.Component {
   }
 
   scrollToBottom (force) {
-    var doc = document.querySelector('html')
+    console.log('scroll')
+    var doc = document.querySelector('.ChatView')
     doc.scrollTop = doc.scrollHeight
   }
 
@@ -118,8 +119,8 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const chat = this.getChat()
-    if (!chat) return (<div />)
+    const chat = this.props.chat
+    if (!chat) return (<div className="ChatView"><p>No chat selected</p></div>)
 
     this.state.value = chat.textDraft
 
@@ -134,21 +135,7 @@ class ChatView extends React.Component {
     </Menu>)
 
     return (
-      <div>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <img src={chat.profileImage} />
-            <NavbarHeading>{chat.name}</NavbarHeading>
-            <div>{chat.subtitle}</div>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={menu} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
-
+      <div className="ChatView">
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}
@@ -173,7 +160,9 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <Composer onSubmit={this.writeMessage.bind(this)} />
+        <div className="InputMessage">
+          <Composer onSubmit={this.writeMessage.bind(this)} />
+        </div>
       </div>
     )
   }
