@@ -220,6 +220,11 @@ class DeltaChatController {
     }
     const chatId = this._dc.createChatByContactId(contactId)
     log('created chat', chatId, 'with contact', contactId)
+    const chat = this._dc.getChat(chatId)
+    if (chat && chat.getArchived()) {
+      log('chat was archived, unarchiving it')
+      this._dc.archiveChat(chatId, 0)
+    }
     return chatId
   }
 
