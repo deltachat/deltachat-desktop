@@ -22,7 +22,7 @@ class Home extends React.Component {
   }
 
   changeScreen (screen, screenProps) {
-    if (!screen) screen = ChatList
+    if (!screen) screen = 'ChatList'
     if (!screenProps) screenProps = {}
     this.setState({ screen, screenProps })
     ipcRenderer.send('render')
