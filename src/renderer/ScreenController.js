@@ -25,7 +25,6 @@ class Home extends React.Component {
     if (!screen) screen = 'ChatList'
     if (!screenProps) screenProps = {}
     this.setState({ screen, screenProps })
-    ipcRenderer.send('render')
   }
 
   userFeedback (message) {
