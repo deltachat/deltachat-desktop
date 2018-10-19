@@ -12,7 +12,7 @@ class Home extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      screen: 'ChatList',
+      screen: 'SplittedChatListAndView',
       screenProps: {},
       message: false
     }
@@ -20,9 +20,7 @@ class Home extends React.Component {
     this.userFeedback = this.userFeedback.bind(this)
   }
 
-  changeScreen (screen, screenProps) {
-    if (!screen) screen = 'ChatList'
-    if (!screenProps) screenProps = {}
+  changeScreen (screen = 'SplittedChatListAndView', screenProps = {}) {
     this.setState({ screen, screenProps })
   }
 
