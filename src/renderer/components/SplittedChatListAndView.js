@@ -130,15 +130,18 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
+  componentWillReceiveProps() {
+    if(!this.getSelectedChat()) {
+      this.setState({ selectedChatId: this.getInitiallySelectedChatId()})
+    }
+  }
+
   render () {
     const { deltachat } = this.props
     const { selectedChatId, deadDropChat, keyTransfer } = this.state
 
     let selectedChat = this.getSelectedChat()
-    if (!selectedChat) {
-      this.setState({ selectedChatId: this.getInitiallySelectedChatId()})
-      selectedChat = this.getSelectedChat()
-    }
+    
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
