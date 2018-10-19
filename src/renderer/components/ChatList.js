@@ -110,6 +110,7 @@ class ChatList extends React.Component {
                     status: 'delivered'
                   }}
                   onClick={this.onDeadDropClick.bind(this, chat)}
+                  isSelected={chat.id === this.props.selectedChatId}
                 />)
             } else {
               return (
@@ -123,7 +124,8 @@ class ChatList extends React.Component {
                     text: chat.summary.text2,
                     status: 'sent' // TODO: interpret data from summary to get correct state
                   }}
-                  i18n={i18n} />
+                  i18n={i18n}
+                  isSelected={chat.id === this.props.selectedChatId} />
               )
             }
           })}
