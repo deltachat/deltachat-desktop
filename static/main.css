@@ -127,3 +127,7 @@ ul li button {
 .Navbar .bp3-popover-wrapper {
   margin-left: auto;
 }
+
+.bp3-overlay-open .bp3-transition-container {
+  top: -50px !important;
+}
