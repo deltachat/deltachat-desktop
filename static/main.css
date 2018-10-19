@@ -12,14 +12,17 @@ body {
 
 .window {
   display: flex;
-  height: calc(100vh - 50px);
-  margin-top: 50px;
   flex-direction: column;
   flex-grow: 1;
   overflow: auto;
   padding: 10px 10px;
 }
 
+
+.window, .below-navbar {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+}
 
 .bp3-navbar-heading {
   max-width: 250px;
@@ -77,21 +80,17 @@ ul li button {
   height: auto;
 }
 
-.ChatView {
+.ChatView #the-conversation {
   height: calc(100vh - 50px - 40px);
-  margin-top: 50px;
   overflow: scroll;
-
 }
 
 .ChatList {
   width: 30%;
+  height: 100%;
   float: left;
   border-right: 1px solid rgba(16, 22, 26, 0.1);
-}
-
-.ChatList .window {
-  height: calc(100% - 20px);
+  overflow-y: auto;
 }
 
 .ChatList .module-conversation-list-item {

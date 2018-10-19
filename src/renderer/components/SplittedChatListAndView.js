@@ -171,19 +171,21 @@ class SplittedChatListAndView extends React.Component {
         </div>
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <ChatList
-          screenProps={this.props.screenProps}
-          userFeedback={this.props.userFeedback}
-          changeScreen={this.props.changeScreen}
-          deltachat={this.props.deltachat}
-          onChatClick={this.onChatClick}
-          selectedChatId={selectedChatId} />
-        <ChatView
-          screenProps={this.props.screenProps}
-          userFeedback={this.props.userFeedback}
-          changeScreen={this.props.changeScreen}
-          chatId={selectedChatId}
-          deltachat={this.props.deltachat} />
+        <div className="below-navbar">
+          <ChatList
+            screenProps={this.props.screenProps}
+            userFeedback={this.props.userFeedback}
+            changeScreen={this.props.changeScreen}
+            deltachat={this.props.deltachat}
+            onChatClick={this.onChatClick}
+            selectedChatId={selectedChatId} />
+          <ChatView
+            screenProps={this.props.screenProps}
+            userFeedback={this.props.userFeedback}
+            changeScreen={this.props.changeScreen}
+            chatId={selectedChatId}
+            deltachat={this.props.deltachat} />
+          </div>
 
       </div>
     )
