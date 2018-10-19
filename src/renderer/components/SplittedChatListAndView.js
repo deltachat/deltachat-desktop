@@ -46,7 +46,8 @@ class SplittedChatListAndView extends React.Component {
   // Returns the chat which will be shown on startup
   getInitiallySelectedChatId () {
     const { chats } = this.props.deltachat
-    return chats.length ? chats[0].id : null
+    const chat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+    return chat ? chat.id : null
   }
 
   getSelectedChat () {
