@@ -17,7 +17,6 @@ class GroupBase extends React.Component {
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
-    this.state.readOnly = this.state.readOnly || []
   }
 
   addToGroup (contactId) {
@@ -42,8 +41,6 @@ class GroupBase extends React.Component {
   }
 
   toggleContact (contactId) {
-    if (this.state.readOnly.includes(contactId)) return
-
     if (this.contactInGroup(contactId)) {
       this.removeFromGroup(contactId)
     } else {

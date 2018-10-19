@@ -236,10 +236,11 @@ class DeltaChatController {
   /**
    * Dispatched from EditGroup
    */
-  modifyGroup (chatId, name, contactIds) {
+  modifyGroup (chatId, name, remove, add) {
     log('setting chat', chatId, 'name to', name)
     this._dc.setChatName(chatId, name)
-    contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
+    remove.forEach(id => this._dc.removeContactFromChat(chatId, id))
+    add.forEach(id => this._dc.addContactToChat(chatId, id))
     return true
   }
 
