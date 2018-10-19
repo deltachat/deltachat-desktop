@@ -44,20 +44,14 @@ class SplittedChatListAndView extends React.Component {
 
   // Returns the chat which will be shown on startup
   getInitiallySelectedChatId () {
-    const { deltachat } = this.props
-    if (deltachat.chats.length === 0) return null
-    return deltachat.chats[0].id
+    const { chats } = this.props.deltachat
+    return chats.length ? chats[0].id : null
   }
 
   getSelectedChat () {
-    const { deltachat } = this.props
-
-    let selectedChat = null
-    for (let i = 0; i < deltachat.chats.length; i++) {
-      let chat = deltachat.chats[i]
-      if (chat.id === this.state.selectedChatId) selectedChat = chat
-    }
-    return selectedChat
+    const { chats } = this.props.deltachat
+    const { selectedChatId } = this.state
+    return chats.find(chat => chat.id === selectedChatId)
   }
 
   onChatClick (chatId) {
@@ -66,11 +60,13 @@ class SplittedChatListAndView extends React.Component {
 
   onArchiveChat () {
     ipcRenderer.send('dispatch', 'archiveChat', this.state.selectedChatId)
+    this.setInitiallySelectedChatId()
     this.props.changeScreen()
   }
 
   onDeleteChat () {
     ipcRenderer.send('dispatch', 'deleteChat', this.state.selectedChatId)
+    this.setInitiallySelectedChatId()
     this.props.changeScreen()
   }
 
@@ -129,17 +125,14 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-  componentWillReceiveProps () {
-    if (!this.getSelectedChat()) {
-      this.setState({ selectedChatId: this.getInitiallySelectedChatId() })
-    }
+  setInitiallySelectedChatId () {
+    this.setState({ selectedChatId: this.getInitiallySelectedChatId() })
   }
 
   render () {
     const { deltachat } = this.props
     const { selectedChatId, deadDropChat, keyTransfer } = this.state
-
-    let selectedChat = this.getSelectedChat()
+    const selectedChat = this.getSelectedChat()
 
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
