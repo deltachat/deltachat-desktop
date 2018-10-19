@@ -17,7 +17,6 @@ class DeadDropDialog extends React.Component {
   }
 
   yes () {
-    console.log(this.props.deadDropChat)
     ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat.contact.id)
     this.close()
   }

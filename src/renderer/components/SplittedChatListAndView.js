@@ -70,7 +70,6 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onDeleteChat () {
-    console.log('hallo')
     ipcRenderer.send('dispatch', 'deleteChat', this.state.selectedChatId)
     this.props.changeScreen()
   }
