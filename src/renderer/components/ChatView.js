@@ -26,8 +26,8 @@ class ChatView extends React.Component {
   }
 
   writeMessage (text) {
-    const { chatId } = this.props
-    ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
+    const { chat } = this.props
+    ipcRenderer.send('dispatch', 'sendMessage', chat.id, text)
   }
 
   componentWillUnmount () {
@@ -42,16 +42,6 @@ class ChatView extends React.Component {
 
   componentDidMount () {
     this.scrollToBottom()
-  }
-
-  getChat () {
-    const { chatId } = this.props
-    if (chatId === null) return null
-    const { deltachat } = this.props
-    const index = deltachat.chats.findIndex(chat => {
-      return chat.id === chatId
-    })
-    return deltachat.chats[index]
   }
 
   scrollToBottom (force) {
@@ -78,10 +68,7 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const chat = this.getChat()
-    if (!chat) return null
-
-    this.state.value = chat.textDraft
+    const { messages } = this.props.chat
 
     return (
       <div className='ChatView'>
@@ -98,7 +85,7 @@ class ChatView extends React.Component {
 
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext theme={theme}>
-            {chat.messages.map((message) => {
+            {messages.map(message => {
               const msg = <RenderMessage message={message} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
                 return <li onClick={this.onClickSetupMessage.bind(this, message)}>

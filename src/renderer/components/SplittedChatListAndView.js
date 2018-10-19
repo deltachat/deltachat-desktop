@@ -181,12 +181,15 @@ class SplittedChatListAndView extends React.Component {
             onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChatId} />
-          <ChatView
-            screenProps={this.props.screenProps}
-            userFeedback={this.props.userFeedback}
-            changeScreen={this.props.changeScreen}
-            chatId={selectedChatId}
-            deltachat={this.props.deltachat} />
+          {
+            selectedChat &&
+              (<ChatView
+                screenProps={this.props.screenProps}
+                userFeedback={this.props.userFeedback}
+                changeScreen={this.props.changeScreen}
+                chat={selectedChat}
+                deltachat={this.props.deltachat} />)
+          }
         </div>
 
       </div>
