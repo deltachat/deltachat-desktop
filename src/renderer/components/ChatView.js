@@ -8,19 +8,6 @@ const { Overlay } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
-const {
-  Alignment,
-  Classes,
-  Navbar,
-  Position,
-  Menu,
-  MenuItem,
-  Popover,
-  NavbarGroup,
-  NavbarHeading,
-  Button
-} = require('@blueprintjs/core')
-
 const { ConversationContext, Message } = require('./conversations')
 
 var theme = 'light-theme' // user prefs?
@@ -33,33 +20,13 @@ class ChatView extends React.Component {
       setupMessage: false,
       attachmentMessage: null
     }
-    this.onArchiveChat = this.onArchiveChat.bind(this)
-    this.onDeleteChat = this.onDeleteChat.bind(this)
-    this.onEditGroup = this.onEditGroup.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
   }
 
-  onArchiveChat () {
-    const chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'archiveChat', chatId)
-    this.props.changeScreen()
-  }
-
-  onDeleteChat () {
-    const chatId = this.props.screenProps.chatId
-    ipcRenderer.send('dispatch', 'deleteChat', chatId)
-    this.props.changeScreen()
-  }
-
-  onEditGroup () {
-    const chat = this.getChat()
-    this.props.changeScreen('EditGroup', { chatId: chat.id, chatName: chat.name })
-  }
-
   writeMessage (text) {
-    const chatId = this.props.screenProps.chatId
+    const { chatId } = this.props
     ipcRenderer.send('dispatch', 'sendMessage', chatId, text)
   }
 
@@ -78,8 +45,9 @@ class ChatView extends React.Component {
   }
 
   getChat () {
+    const { chatId } = this.props
+    if (chatId === null) return null
     const { deltachat } = this.props
-    const { chatId } = this.props.screenProps
     const index = deltachat.chats.findIndex(chat => {
       return chat.id === chatId
     })
@@ -87,8 +55,8 @@ class ChatView extends React.Component {
   }
 
   scrollToBottom (force) {
-    var doc = document.querySelector('html')
-    doc.scrollTop = doc.scrollHeight
+    var doc = document.querySelector('.ChatView')
+    if (doc) doc.scrollTop = doc.scrollHeight
   }
 
   onClickAttachment (attachmentMessage) {
@@ -108,47 +76,15 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
-  isGroup () {
-    const chat = this.getChat()
-    return [
-      C.DC_CHAT_TYPE_GROUP,
-      C.DC_CHAT_TYPE_VERIFIED_GROUP
-    ].includes(chat && chat.type)
-  }
-
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
-    if (!chat) return (<div />)
+    if (!chat) return null
 
     this.state.value = chat.textDraft
 
-    const isGroup = this.isGroup()
-    const tx = window.translate
-    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
-    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
-    const menu = (<Menu>
-      <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
-      <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
-      {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup} /> : null}
-    </Menu>)
-
     return (
-      <div>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <img src={chat.profileImage} />
-            <NavbarHeading>{chat.name}</NavbarHeading>
-            <div>{chat.subtitle}</div>
-          </NavbarGroup>
-          <NavbarGroup align={Alignment.RIGHT}>
-            <Popover content={menu} position={Position.RIGHT_TOP}>
-              <Button className={Classes.MINIMAL} icon='menu' />
-            </Popover>
-          </NavbarGroup>
-        </Navbar>
-
+      <div className='ChatView'>
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}
@@ -173,7 +109,9 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <Composer onSubmit={this.writeMessage.bind(this)} />
+        <div className='InputMessage'>
+          <Composer onSubmit={this.writeMessage.bind(this)} />
+        </div>
       </div>
     )
   }

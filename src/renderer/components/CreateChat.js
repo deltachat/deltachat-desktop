@@ -38,13 +38,15 @@ class CreateChat extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
-          {deltachat.contacts.map((contact) => {
-            return (<ContactListItem
-              contact={contact}
-              onClick={this.chooseContact.bind(this)}
-            />
-            )
-          })}
+          <div className='CreateChat'>
+            {deltachat.contacts.map((contact) => {
+              return (<ContactListItem
+                contact={contact}
+                onClick={this.chooseContact.bind(this)}
+              />
+              )
+            })}
+          </div>
         </div>
       </div>
     )

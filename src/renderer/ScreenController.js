@@ -2,12 +2,11 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const Login = require('./components/Login')
-const ChatList = require('./components/ChatList')
-const ChatView = require('./components/ChatView')
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
+const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 
 class Home extends React.Component {
   constructor (props) {
@@ -62,11 +61,8 @@ class Home extends React.Component {
       case 'EditGroup':
         Screen = EditGroup
         break
-      case 'ChatView':
-        Screen = ChatView
-        break
       default:
-        Screen = ChatList
+        Screen = SplittedChatListAndView
         break
     }
 

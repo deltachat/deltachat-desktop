@@ -7,17 +7,21 @@ body {
 }
 
 #root {
-  padding-top: 50px;
+
 }
 
 .window {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  margin: 10px;
   flex-grow: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
+  padding: 10px 10px;
+}
+
+
+.window, .below-navbar {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
 }
 
 .bp3-navbar-heading {
@@ -70,4 +74,73 @@ ul {
 }
 ul li button {
   min-width: 200px;
+}
+
+.Login .window {
+  height: auto;
+}
+
+.ChatView #the-conversation {
+  height: calc(100vh - 50px - 40px);
+  overflow: scroll;
+}
+
+.ChatList {
+  width: 30%;
+  height: 100%;
+  float: left;
+  border-right: 1px solid rgba(16, 22, 26, 0.1);
+  overflow-y: auto;
+}
+
+.ChatList .module-conversation-list-item {
+  height: 52px;
+  padding: 0px;
+}
+
+.ChatView, .InputMessage .composer {
+  width: 70%;
+}
+
+.InputMessage .composer {
+  padding: 4px 10px;
+}
+
+.ChatView {
+  float: right;
+}
+
+
+.Navbar img {
+    height: 50px;
+}
+
+.Navbar .bp3-align-left {
+  width: 30%;
+}
+
+.Navbar .bp3-align-right {
+  width: 70%;
+  float: none;
+}
+
+.Navbar .bp3-popover-wrapper {
+  margin-left: auto;
+}
+
+.bp3-overlay-open .bp3-transition-container {
+  top: -50px !important;
+}
+
+
+
+.ChatList-NoChats {
+  height: 52px;
+  text-align: center;
+  padding-top: calc((52px - 14px) / 2);
+  padding: 5px;
+}
+
+.ChatList-NoChats p {
+  margin: 0 auto;
 }
