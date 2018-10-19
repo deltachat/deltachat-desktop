@@ -20,27 +20,40 @@ class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedChat: this.getDefaultChat()
+      selectedChatId: this.getInitialChatId()
     }
 
     this.onChatClick = this.onChatClick.bind(this)
   }
 
   // Returns the chat which will be shown on startup
-  getDefaultChat() {
+  getInitialChatId() {
     const { deltachat } = this.props
-    return deltachat.chats[0]
+    if(deltachat.chats.length == 0) return null
+    return deltachat.chats[0].id
   }
 
-  onChatClick (chat) {
-    console.log('xx', chat)
-    this.setState({ selectedChat: chat })
+  getSelectedChat() {
+    const { deltachat } = this.props
+
+    let selectedChat = null
+    for (let i = 0; i<deltachat.chats.length; i++) {
+      let chat = deltachat.chats[i]
+      if(chat.id === this.state.selectedChatId) selectedChat = chat
+    }
+    return selectedChat
+  }
+
+  onChatClick (chatId) {
+    this.setState({ selectedChatId: chatId })
   }
 
   render () {
     const { deltachat } = this.props
-    const { selectedChat } = this.state
+    const { selectedChatId } = this.state
     const tx = window.translate
+
+    const selectedChat = this.getSelectedChat()
 
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
@@ -74,12 +87,12 @@ class SplittedChatListAndView extends React.Component {
           changeScreen={this.props.changeScreen}
           deltachat={this.props.deltachat}
           onChatClick={this.onChatClick}
-          selectedChatId={selectedChat.id}/>
+          selectedChatId={selectedChatId}/>
         <ChatView
           screenProps={this.props.screenProps}
           userFeedback={this.props.userFeedback}
           changeScreen={this.props.changeScreen}
-          chatId={selectedChat.id}
+          chatId={selectedChatId}
           deltachat={this.props.deltachat}/>
 
       </div>
