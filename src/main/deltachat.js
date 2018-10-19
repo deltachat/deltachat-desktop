@@ -188,14 +188,12 @@ class DeltaChatController {
    */
   chatWithContact (contactId) {
     log('chat with contact', contactId)
-    if (this._dc.getContacts().indexOf(contactId) === -1) {
-      const contact = this._dc.getContact(contactId)
-      const address = contact.getAddress()
-      const name = contact.getName() || address.split('@')[0]
-      this._dc.createContact(name, address)
-      log(`Added contact ${name} (${address})`)
-      this.createChatByContactId(contactId)
-    }
+    const contact = this._dc.getContact(contactId)
+    const address = contact.getAddress()
+    const name = contact.getName() || address.split('@')[0]
+    this._dc.createContact(name, address)
+    log(`Added contact ${name} (${address})`)
+    this.createChatByContactId(contactId)
   }
 
   /**

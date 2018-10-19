@@ -34,6 +34,7 @@ class SplittedChatListAndView extends React.Component {
     this.onArchiveChat = this.onArchiveChat.bind(this)
     this.onDeleteChat = this.onDeleteChat.bind(this)
     this.onEditGroup = this.onEditGroup.bind(this)
+    this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
     this.onCreateGroup = this.onCreateGroup.bind(this)
@@ -173,6 +174,7 @@ class SplittedChatListAndView extends React.Component {
             userFeedback={this.props.userFeedback}
             changeScreen={this.props.changeScreen}
             deltachat={this.props.deltachat}
+            onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChatId} />
           <ChatView

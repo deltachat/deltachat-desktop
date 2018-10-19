@@ -5,7 +5,6 @@ const { ConversationListItem } = require('./conversations')
 class ChatList extends React.Component {
   render () {
     const { deltachat, selectedChatId } = this.props
-
     const tx = window.translate
 
     if (!selectedChatId) {
@@ -37,14 +36,14 @@ class ChatList extends React.Component {
                     text: chat.summary.text2,
                     status: 'delivered'
                   }}
-                  onClick={this.onDeadDropClick.bind(this, chat)}
+                  onClick={this.props.onDeadDropClick.bind(null, chat)}
                   isSelected={chat.id === selectedChatId}
                 />)
             } else {
               return (
                 <ConversationListItem
                   key={chat.id}
-                  onClick={this.props.onChatClick.bind(this, chat.id)}
+                  onClick={this.props.onChatClick.bind(null, chat.id)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
                   lastUpdated={lastUpdated}
