@@ -135,7 +135,10 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChatId, deadDropChat, keyTransfer } = this.state
 
     let selectedChat = this.getSelectedChat()
-    if (!selectedChat) selectedChat = this.getInitiallySelectedChatId()
+    if (!selectedChat) {
+      this.setState({ selectedChatId: this.getInitiallySelectedChatId()})
+      selectedChat = this.getSelectedChat()
+    }
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
@@ -145,10 +148,10 @@ class SplittedChatListAndView extends React.Component {
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
-      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
-      <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
-      <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
+      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} /> : null}
+      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
+      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
 
     return (
