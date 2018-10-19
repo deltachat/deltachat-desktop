@@ -61,13 +61,11 @@ class SplittedChatListAndView extends React.Component {
   onArchiveChat () {
     ipcRenderer.send('dispatch', 'archiveChat', this.state.selectedChatId)
     this.setInitiallySelectedChatId()
-    this.props.changeScreen()
   }
 
   onDeleteChat () {
     ipcRenderer.send('dispatch', 'deleteChat', this.state.selectedChatId)
     this.setInitiallySelectedChatId()
-    this.props.changeScreen()
   }
 
   onEditGroup (selectedChat) {
