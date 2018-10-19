@@ -60,13 +60,15 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onArchiveChat () {
-    ipcRenderer.send('dispatch', 'archiveChat', this.state.selectedChatId)
-    this.setInitiallySelectedChatId()
+    const chatId = this.state.selectedChatId
+    this.state.selectedChatId = null
+    ipcRenderer.send('dispatch', 'archiveChat', chatId)
   }
 
   onDeleteChat () {
-    ipcRenderer.send('dispatch', 'deleteChat', this.state.selectedChatId)
-    this.setInitiallySelectedChatId()
+    const chatId = this.state.selectedChatId
+    this.state.selectedChatId = null
+    ipcRenderer.send('dispatch', 'deleteChat', chatId)
   }
 
   onEditGroup (selectedChat) {
@@ -124,15 +126,16 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-  setInitiallySelectedChatId () {
-    this.setState({ selectedChatId: this.getInitiallySelectedChatId() })
-  }
-
   render () {
     const { deltachat } = this.props
-    const { selectedChatId, deadDropChat, keyTransfer } = this.state
-    const selectedChat = this.getSelectedChat()
+    const { deadDropChat, keyTransfer } = this.state
+    let { selectedChatId } = this.state
 
+    if (!selectedChatId) {
+      selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
+    }
+
+    const selectedChat = this.getSelectedChat()
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
