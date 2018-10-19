@@ -1,4 +1,9 @@
 const React = require('react')
+const C = require('deltachat-node/constants')
+const { ipcRenderer } = require('electron')
+
+const KeyTransferDialog = require('./dialogs/KeyTransfer')
+const DeadDropDialog = require('./dialogs/DeadDrop')
 
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -20,14 +25,25 @@ class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedChatId: this.getInitialChatId()
+      deadDropChat: false,
+      keyTransfer: false,
+      selectedChatId: this.getInitiallySelectedChatId()
     }
 
     this.onChatClick = this.onChatClick.bind(this)
+    this.onArchiveChat = this.onArchiveChat.bind(this)
+    this.onDeleteChat = this.onDeleteChat.bind(this)
+    this.onEditGroup = this.onEditGroup.bind(this)
+    this.onDeadDropClose = this.onDeadDropClose.bind(this)
+    this.onCreateChat = this.onCreateChat.bind(this)
+    this.onCreateGroup = this.onCreateGroup.bind(this)
+    this.onCreateContact = this.onCreateContact.bind(this)
+    this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
+    this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
   }
 
   // Returns the chat which will be shown on startup
-  getInitialChatId() {
+  getInitiallySelectedChatId() {
     const { deltachat } = this.props
     if(deltachat.chats.length == 0) return null
     return deltachat.chats[0].id
@@ -48,18 +64,97 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ selectedChatId: chatId })
   }
 
-  render () {
-    const { deltachat } = this.props
-    const { selectedChatId } = this.state
+  onArchiveChat () {
+
+    ipcRenderer.send('dispatch', 'archiveChat', this.state.selectedChatId)
+    this.props.changeScreen()
+  }
+
+  onDeleteChat () {
+    console.log('hallo')
+    ipcRenderer.send('dispatch', 'deleteChat', this.state.selectedChatId)
+    this.props.changeScreen()
+  }
+
+  onEditGroup (selectedChat) {
+    this.props.changeScreen('EditGroup', { chatId: selectedChat.id, chatName: selectedChat.name })
+  }
+
+
+
+  onDeadDropClose () {
+    this.setState({ deadDropChat: false })
+  }
+
+  onCreateContact () {
+    var self = this
+
     const tx = window.translate
 
-    const selectedChat = this.getSelectedChat()
+    var onSubmit = (chatId) => {
+      if (chatId !== 0) {
+        self.props.userFeedback({ type: 'success', text: tx('contactCreateSuccess') })
+        self.props.changeScreen('ChatList')
+      }
+    }
+    this.props.changeScreen('CreateContact', { onSubmit })
+  }
+
+  onCreateChat () {
+    this.props.changeScreen('CreateChat')
+  }
+
+  onCreateGroup () {
+    this.props.changeScreen('CreateGroup')
+  }
+
+  onDeadDropClick (chat) {
+    this.setState({ deadDropChat: chat })
+  }
+
+  componentDidMount () {}
+
+  logout () {
+    ipcRenderer.send('dispatch', 'logout')
+  }
+
+  onKeyTransferComplete () {
+    this.setState({ keyTransfer: false })
+  }
+
+  initiateKeyTransfer () {
+    this.setState({ keyTransfer: true })
+  }
+
+  selectedChatIsGroup (selectedChat) {
+    return [
+      C.DC_CHAT_TYPE_GROUP,
+      C.DC_CHAT_TYPE_VERIFIED_GROUP
+    ].includes(selectedChat && selectedChat.type)
+  }
+
+
+  render () {
+    const { deltachat } = this.props
+    const { selectedChatId, deadDropChat, keyTransfer } = this.state
+
+    let selectedChat = this.getSelectedChat()
+    if(!selectedChat) selectedChat = this.getInitiallySelectedChatId()
+    const isGroup = this.selectedChatIsGroup(selectedChat)
+    const tx = window.translate
+    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
+    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
+
+
 
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
+      <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
+      <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
+{isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
     </Menu>)
 
     return (
@@ -80,7 +175,8 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </div>
-
+        <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <ChatList
           screenProps={this.props.screenProps}
           userFeedback={this.props.userFeedback}

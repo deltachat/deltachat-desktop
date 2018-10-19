@@ -33,30 +33,12 @@ class ChatView extends React.Component {
       setupMessage: false,
       attachmentMessage: null
     }
-    this.onArchiveChat = this.onArchiveChat.bind(this)
-    this.onDeleteChat = this.onDeleteChat.bind(this)
-    this.onEditGroup = this.onEditGroup.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
   }
 
-  onArchiveChat () {
-    const { chatId } = this.props
-    ipcRenderer.send('dispatch', 'archiveChat', chatId)
-    this.props.changeScreen()
-  }
 
-  onDeleteChat () {
-    const { chatId } = this.props
-    ipcRenderer.send('dispatch', 'deleteChat', chatId)
-    this.props.changeScreen()
-  }
-
-  onEditGroup () {
-    const chat = this.getChat()
-    this.props.changeScreen('EditGroup', { chatId: chat.id, chatName: chat.name })
-  }
 
   writeMessage (text) {
     const { chatId } = this.props
@@ -110,13 +92,6 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
-  isGroup () {
-    const chat = this.getChat()
-    return [
-      C.DC_CHAT_TYPE_GROUP,
-      C.DC_CHAT_TYPE_VERIFIED_GROUP
-    ].includes(chat && chat.type)
-  }
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
@@ -125,15 +100,6 @@ class ChatView extends React.Component {
 
     this.state.value = chat.textDraft
 
-    const isGroup = this.isGroup()
-    const tx = window.translate
-    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
-    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
-    const menu = (<Menu>
-      <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
-      <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
-      {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup} /> : null}
-    </Menu>)
 
     return (
       <div className="ChatView">

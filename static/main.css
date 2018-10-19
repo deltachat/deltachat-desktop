@@ -12,12 +12,12 @@ body {
 
 .window {
   display: flex;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
   flex-direction: column;
-  height: 100%;
-  margin: 10px;
   flex-grow: 1;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
+  padding: 10px 10px;
 }
 
 
@@ -71,12 +71,6 @@ ul {
 }
 ul li button {
   min-width: 200px;
-}
-
-.ChatList, .Login {
-  height: calc(100vh - 50px);
-  margin-top: 50px;
-  overflow: auto;
 }
 
 .Login .window {

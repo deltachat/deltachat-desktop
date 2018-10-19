@@ -74,7 +74,7 @@ class GroupBase extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
-          <div>
+          <div className='GroupBase'>
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
@@ -87,16 +87,16 @@ class GroupBase extends React.Component {
                 onClick={this.onSubmit.bind(this)}
                 text={tx(this.state.buttonLabel)} />
             </ControlGroup>
+            {deltachat.contacts.map((contact) => {
+              return (
+                <ContactListItem
+                  color={this.contactInGroup(contact.id) ? 'green' : ''}
+                  onClick={this.toggleContact.bind(this, contact.id)}
+                  contact={contact}
+                />
+              )
+            })}
           </div>
-          {deltachat.contacts.map((contact) => {
-            return (
-              <ContactListItem
-                color={this.contactInGroup(contact.id) ? 'green' : ''}
-                onClick={this.toggleContact.bind(this, contact.id)}
-                contact={contact}
-              />
-            )
-          })}
         </div>
       </div>
     )
