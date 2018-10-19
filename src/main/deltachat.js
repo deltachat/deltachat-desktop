@@ -1,4 +1,5 @@
 const DeltaChat = require('deltachat-node')
+const C = require('deltachat-node/constants')
 const electron = require('electron')
 const path = require('path')
 const log = require('./log')
@@ -10,7 +11,7 @@ function messageIdToJson (messageId, dc) {
   return {
     fromId,
     id: messageId,
-    isMe: fromId === 1,
+    isMe: fromId === C.DC_CONTACT_ID_SELF,
     contact: contact ? contact.toJson() : {},
     msg: msg && msg.toJson(),
     filemime: msg && msg.getFilemime()
@@ -21,8 +22,7 @@ function chatIdToJson (chatId, dc) {
   const chat = dc.getChat(chatId).toJson()
   const messageIds = dc.getChatMessages(chatId, 0, 0)
   chat.messages = messageIds.map(id => messageIdToJson(id, dc))
-  if (chatId === 1) {
-    // dead drop
+  if (chatId === C.DC_CHAT_ID_DEADDROP) {
     const msg = dc.getMessage(messageIds[0])
     const fromId = msg.getFromId()
     if (fromId) {
@@ -245,7 +245,7 @@ class DeltaChatController {
   }
 
   /**
-   * Dispatched from menu alternative in ChatView
+   * Dispatched from menu alternative in SplittedChatListAndView
    */
   deleteChat (chatId) {
     log('deleting chat', chatId)
@@ -253,7 +253,7 @@ class DeltaChatController {
   }
 
   /**
-   * Dispatched from menu alternative in ChatView
+   * Dispatched from menu alternative in SplittedChatListAndView
    */
   archiveChat (chatId) {
     log('archiving chat', chatId)
@@ -267,6 +267,14 @@ class DeltaChatController {
     const chatId = this._dc.createUnverifiedGroupChat(name)
     contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
     return { chatId }
+  }
+
+  /**
+   * Dispatched from menu alternative in SplittedChatListAndView
+   */
+  leaveGroup (chatId) {
+    log('leaving chat', chatId)
+    this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
   /**

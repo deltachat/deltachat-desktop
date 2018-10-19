@@ -76,6 +76,12 @@ class SplittedChatListAndView extends React.Component {
     this.props.changeScreen('EditGroup', { chatId: selectedChat.id, chatName: selectedChat.name })
   }
 
+  onLeaveGroup (selectedChat) {
+    const chatId = this.state.selectedChatId
+    this.state.selectedChatId = null
+    ipcRenderer.send('dispatch', 'leaveGroup', chatId)
+  }
+
   onDeadDropClose () {
     this.setState({ deadDropChat: false })
   }
@@ -149,6 +155,7 @@ class SplittedChatListAndView extends React.Component {
       {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} /> : null}
       {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
+      {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
     </Menu>)
 

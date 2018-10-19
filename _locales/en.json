@@ -35,6 +35,10 @@
         "message": "Edit Group",
         "description": "Edit group menu item label"
     },
+    "leaveGroup": {
+        "message": "Leave Group",
+        "description": "Leave group menu item label"
+    },
     "save": {
         "message": "Save",
         "description": "Save button label (e.g. when editing groups)"
