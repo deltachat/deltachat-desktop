@@ -79,14 +79,13 @@ class ChatList extends React.Component {
   }
 
   render () {
-    const { deltachat } = this.props
+    const { deltachat, selectedChatId } = this.props
     const { deadDropChat, keyTransfer } = this.state
 
     const tx = window.translate
 
-
-
     return (
+
       <div className="ChatList">
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
@@ -110,7 +109,7 @@ class ChatList extends React.Component {
                     status: 'delivered'
                   }}
                   onClick={this.onDeadDropClick.bind(this, chat)}
-                  isSelected={chat.id === this.props.selectedChatId}
+                  isSelected={chat.id === selectedChatId}
                 />)
             } else {
               return (
@@ -125,7 +124,7 @@ class ChatList extends React.Component {
                     status: 'sent' // TODO: interpret data from summary to get correct state
                   }}
                   i18n={i18n}
-                  isSelected={chat.id === this.props.selectedChatId} />
+                  isSelected={chat.id === selectedChatId} />
               )
             }
           })}

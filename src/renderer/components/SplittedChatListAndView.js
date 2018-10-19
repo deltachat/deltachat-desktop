@@ -20,10 +20,16 @@ class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedChat: {}
+      selectedChat: this.getDefaultChat()
     }
 
     this.onChatClick = this.onChatClick.bind(this)
+  }
+
+  // Returns the chat which will be shown on startup
+  getDefaultChat() {
+    const { deltachat } = this.props
+    return deltachat.chats[0]
   }
 
   onChatClick (chat) {
