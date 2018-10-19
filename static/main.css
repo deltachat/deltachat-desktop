@@ -108,3 +108,16 @@ ul li button {
 .Navbar img {
     height: 50px;
 }
+
+.Navbar .bp3-align-left {
+  width: 30%;
+}
+
+.Navbar .bp3-align-right {
+  width: 70%;
+  float: none;
+}
+
+.Navbar .bp3-popover-wrapper {
+  margin-left: auto;
+}
