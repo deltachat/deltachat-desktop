@@ -20,7 +20,7 @@ class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      chatId: null
+      selectedChat: {}
     }
 
     this.onChatClick = this.onChatClick.bind(this)
@@ -28,12 +28,12 @@ class SplittedChatListAndView extends React.Component {
 
   onChatClick (chat) {
     console.log('xx', chat)
-    this.setState({ chatId: chat.id })
+    this.setState({ selectedChat: chat })
   }
 
   render () {
     const { deltachat } = this.props
-    const { chat } = this.state
+    const { selectedChat } = this.state
     const tx = window.translate
 
     const menu = (<Menu>
@@ -52,9 +52,9 @@ class SplittedChatListAndView extends React.Component {
               <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              <img src={chat ? chat.profileImage : null} />
-              <NavbarHeading>{chat ? chat.name : 'No chat selected'}</NavbarHeading>
-              <div>{chat ? chat.subtitle : ''}</div>
+              <img src={selectedChat ? selectedChat.profileImage : null} />
+              <NavbarHeading>{selectedChat ? selectedChat.name : 'No chat selected'}</NavbarHeading>
+              <div>{selectedChat ? selectedChat.subtitle : ''}</div>
               <Popover content={menu} position={Position.RIGHT_TOP}>
                 <Button className={Classes.MINIMAL} icon='menu' />
               </Popover>
@@ -72,7 +72,7 @@ class SplittedChatListAndView extends React.Component {
           screenProps={this.props.screenProps}
           userFeedback={this.props.userFeedback}
           changeScreen={this.props.changeScreen}
-          chatId={this.state.chatId}
+          chatId={selectedChat.id}
           deltachat={this.props.deltachat}/>
 
       </div>
