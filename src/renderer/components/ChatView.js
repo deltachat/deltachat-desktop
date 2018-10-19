@@ -56,7 +56,7 @@ class ChatView extends React.Component {
 
   scrollToBottom (force) {
     var doc = document.querySelector('.ChatView')
-    if(doc) doc.scrollTop = doc.scrollHeight
+    if (doc) doc.scrollTop = doc.scrollHeight
   }
 
   onClickAttachment (attachmentMessage) {

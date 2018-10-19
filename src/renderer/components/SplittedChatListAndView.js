@@ -130,9 +130,9 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-  componentWillReceiveProps() {
-    if(!this.getSelectedChat()) {
-      this.setState({ selectedChatId: this.getInitiallySelectedChatId()})
+  componentWillReceiveProps () {
+    if (!this.getSelectedChat()) {
+      this.setState({ selectedChatId: this.getInitiallySelectedChatId() })
     }
   }
 
@@ -177,7 +177,7 @@ class SplittedChatListAndView extends React.Component {
         </div>
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <div className="below-navbar">
+        <div className='below-navbar'>
           <ChatList
             screenProps={this.props.screenProps}
             userFeedback={this.props.userFeedback}
@@ -191,7 +191,7 @@ class SplittedChatListAndView extends React.Component {
             changeScreen={this.props.changeScreen}
             chatId={selectedChatId}
             deltachat={this.props.deltachat} />
-          </div>
+        </div>
 
       </div>
     )
