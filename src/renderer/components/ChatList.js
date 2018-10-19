@@ -8,10 +8,14 @@ class ChatList extends React.Component {
 
     const tx = window.translate
 
-    return (
-
+    if(!selectedChatId) return (
       <div className='ChatList'>
+        <div className='ChatList-NoChats'><p>You have no chats, feel free to start a new one :)</p></div>
+      </div>
+    )
 
+    return (
+      <div className='ChatList'>
         <div className='ConversationList'>
           {deltachat.chats.map((chat) => {
             if (!chat) return

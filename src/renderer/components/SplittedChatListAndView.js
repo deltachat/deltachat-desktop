@@ -141,7 +141,7 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChatId, deadDropChat, keyTransfer } = this.state
 
     let selectedChat = this.getSelectedChat()
-    
+
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
@@ -167,7 +167,7 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
               <img src={selectedChat ? selectedChat.profileImage : null} />
-              <NavbarHeading>{selectedChat ? selectedChat.name : 'No chat selected'}</NavbarHeading>
+              <NavbarHeading>{selectedChat ? selectedChat.name : ''}</NavbarHeading>
               <div>{selectedChat ? selectedChat.subtitle : ''}</div>
               <Popover content={menu} position={Position.RIGHT_TOP}>
                 <Button className={Classes.MINIMAL} icon='menu' />

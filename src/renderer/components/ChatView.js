@@ -55,9 +55,8 @@ class ChatView extends React.Component {
   }
 
   scrollToBottom (force) {
-    console.log('scroll')
     var doc = document.querySelector('.ChatView')
-    doc.scrollTop = doc.scrollHeight
+    if(doc) doc.scrollTop = doc.scrollHeight
   }
 
   onClickAttachment (attachmentMessage) {
@@ -80,7 +79,7 @@ class ChatView extends React.Component {
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
-    if (!chat) return (<div className='ChatView'><p>No chat selected</p></div>)
+    if (!chat) return null
 
     this.state.value = chat.textDraft
 

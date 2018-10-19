@@ -131,3 +131,16 @@ ul li button {
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
 }
+
+
+
+.ChatList-NoChats {
+  height: 52px;
+  text-align: center;
+  padding-top: calc((52px - 14px) / 2);
+  padding: 5px;
+}
+
+.ChatList-NoChats p {
+  margin: 0 auto;
+}
