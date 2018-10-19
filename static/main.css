@@ -73,15 +73,27 @@ ul li button {
   min-width: 200px;
 }
 
-.ChatList, .ChatView, .Login {
+.ChatList, .Login {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+  overflow: auto;
+}
+
+.Login .window {
+  height: auto;
+}
+
+.ChatView {
   height: calc(100vh - 50px - 40px);
   margin-top: 50px;
   overflow: scroll;
+
 }
 
 .ChatList {
   width: 30%;
   float: left;
+  border-right: 1px solid rgba(16, 22, 26, 0.1);
 }
 
 .ChatList .window {
@@ -90,6 +102,7 @@ ul li button {
 
 .ChatList .module-conversation-list-item {
   height: 52px;
+  padding: 0px;
 }
 
 .ChatView, .InputMessage .composer {
