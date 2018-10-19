@@ -1,29 +1,8 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
-const { ipcRenderer } = require('electron')
 const { ConversationListItem } = require('./conversations')
 
-
-
-const {
-  Alignment,
-  Classes,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Position,
-  Menu,
-  MenuItem,
-  Popover,
-  Button
-} = require('@blueprintjs/core')
-
 class ChatList extends React.Component {
-  constructor (props) {
-    super(props)
-
-  }
-
   render () {
     const { deltachat, selectedChatId } = this.props
 
@@ -31,7 +10,7 @@ class ChatList extends React.Component {
 
     return (
 
-      <div className="ChatList">
+      <div className='ChatList'>
 
         <div className='ConversationList'>
           {deltachat.chats.map((chat) => {

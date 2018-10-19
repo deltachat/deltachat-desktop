@@ -8,19 +8,6 @@ const { Overlay } = require('@blueprintjs/core')
 
 let MutationObserver = window.MutationObserver
 
-const {
-  Alignment,
-  Classes,
-  Navbar,
-  Position,
-  Menu,
-  MenuItem,
-  Popover,
-  NavbarGroup,
-  NavbarHeading,
-  Button
-} = require('@blueprintjs/core')
-
 const { ConversationContext, Message } = require('./conversations')
 
 var theme = 'light-theme' // user prefs?
@@ -37,8 +24,6 @@ class ChatView extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
   }
-
-
 
   writeMessage (text) {
     const { chatId } = this.props
@@ -92,17 +77,15 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
-
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const chat = this.getChat()
-    if (!chat) return (<div className="ChatView"><p>No chat selected</p></div>)
+    if (!chat) return (<div className='ChatView'><p>No chat selected</p></div>)
 
     this.state.value = chat.textDraft
 
-
     return (
-      <div className="ChatView">
+      <div className='ChatView'>
         <SetupMessageDialog
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}
@@ -127,7 +110,7 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <div className="InputMessage">
+        <div className='InputMessage'>
           <Composer onSubmit={this.writeMessage.bind(this)} />
         </div>
       </div>

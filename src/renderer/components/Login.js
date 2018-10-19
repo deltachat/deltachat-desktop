@@ -57,7 +57,7 @@ class Login extends React.Component {
     var loading = deltachat.configuring
 
     return (
-      <div className="Login">
+      <div className='Login'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>{tx('login.welcome')}</NavbarHeading>

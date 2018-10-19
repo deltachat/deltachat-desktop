@@ -43,19 +43,19 @@ class SplittedChatListAndView extends React.Component {
   }
 
   // Returns the chat which will be shown on startup
-  getInitiallySelectedChatId() {
+  getInitiallySelectedChatId () {
     const { deltachat } = this.props
-    if(deltachat.chats.length == 0) return null
+    if (deltachat.chats.length === 0) return null
     return deltachat.chats[0].id
   }
 
-  getSelectedChat() {
+  getSelectedChat () {
     const { deltachat } = this.props
 
     let selectedChat = null
-    for (let i = 0; i<deltachat.chats.length; i++) {
+    for (let i = 0; i < deltachat.chats.length; i++) {
       let chat = deltachat.chats[i]
-      if(chat.id === this.state.selectedChatId) selectedChat = chat
+      if (chat.id === this.state.selectedChatId) selectedChat = chat
     }
     return selectedChat
   }
@@ -65,7 +65,6 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onArchiveChat () {
-
     ipcRenderer.send('dispatch', 'archiveChat', this.state.selectedChatId)
     this.props.changeScreen()
   }
@@ -79,8 +78,6 @@ class SplittedChatListAndView extends React.Component {
   onEditGroup (selectedChat) {
     this.props.changeScreen('EditGroup', { chatId: selectedChat.id, chatName: selectedChat.name })
   }
-
-
 
   onDeadDropClose () {
     this.setState({ deadDropChat: false })
@@ -133,19 +130,16 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-
   render () {
     const { deltachat } = this.props
     const { selectedChatId, deadDropChat, keyTransfer } = this.state
 
     let selectedChat = this.getSelectedChat()
-    if(!selectedChat) selectedChat = this.getInitiallySelectedChatId()
+    if (!selectedChat) selectedChat = this.getInitiallySelectedChatId()
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
-
-
 
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
@@ -154,12 +148,12 @@ class SplittedChatListAndView extends React.Component {
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
       <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} />
       <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} />
-{isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
+      {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
     </Menu>)
 
     return (
       <div>
-        <div className="Navbar">
+        <div className='Navbar'>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
@@ -183,13 +177,13 @@ class SplittedChatListAndView extends React.Component {
           changeScreen={this.props.changeScreen}
           deltachat={this.props.deltachat}
           onChatClick={this.onChatClick}
-          selectedChatId={selectedChatId}/>
+          selectedChatId={selectedChatId} />
         <ChatView
           screenProps={this.props.screenProps}
           userFeedback={this.props.userFeedback}
           changeScreen={this.props.changeScreen}
           chatId={selectedChatId}
-          deltachat={this.props.deltachat}/>
+          deltachat={this.props.deltachat} />
 
       </div>
     )
