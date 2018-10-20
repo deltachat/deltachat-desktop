@@ -7,6 +7,14 @@ class EditGroup extends GroupBase {
   constructor (props) {
     const { chatId, chatName } = props.screenProps
     const group = {}
+
+    super(props, {
+      buttonLabel: 'save',
+      group: group,
+      name: chatName,
+      heading: 'editGroup'
+    })
+
     this.before = ipcRenderer.sendSync(
       'dispatchSync',
       'getChatContacts',
@@ -14,12 +22,6 @@ class EditGroup extends GroupBase {
       .filter(id => id !== C.DC_CONTACT_ID_SELF)
       .map(id => Number(id))
     this.before.forEach(id => { group[id] = true })
-    super(props, {
-      buttonLabel: 'save',
-      group: group,
-      name: chatName,
-      heading: 'editGroup'
-    })
   }
 
   onSubmit () {
