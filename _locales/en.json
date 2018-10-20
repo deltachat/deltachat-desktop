@@ -195,6 +195,10 @@
         "message": "Copy",
         "description": "Copy menu item label"
     },
+    "menu.edit.paste": {
+        "message": "Paste",
+        "description": "Paste menu item label"
+    },
     "menu.edit.delete": {
         "message": "Delete",
         "description": "Delete menu item label"

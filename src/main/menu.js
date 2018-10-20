@@ -88,6 +88,10 @@ function getMenuTemplate () {
           role: 'copy'
         },
         {
+          translate: 'menu.edit.paste',
+          role: 'paste'
+        },
+        {
           translate: 'menu.edit.delete',
           role: 'delete'
         },
