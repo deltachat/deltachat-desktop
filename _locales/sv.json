@@ -21,7 +21,27 @@
     },
     "createGroup": {
         "message": "Skapa grupp",
-        "description": "Create group button label"
+        "description": "Create group menu item label"
+    },
+    "archiveGroup": {
+        "message": "Arkivera grupp",
+        "description": "Archive group menu item label"
+    },
+    "deleteGroup": {
+        "message": "Radera grupp",
+        "description": "Delete group menu item label"
+    },
+    "editGroup": {
+        "message": "Ändra grupp",
+        "description": "Edit group menu item label"
+    },
+    "leaveGroup": {
+        "message": "Lämna grupp",
+        "description": "Leave group menu item label"
+    },
+    "save": {
+        "message": "Spara",
+        "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
         "message": "Gruppnamn",
@@ -48,7 +68,7 @@
         "description": "Information to the user when a contact was created successfully"
     },
     "initiateKeyTransferTitle": {
-        "message": "Påbörja utbyte av nycklar",
+        "message": "Starta nyckelutbyte",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
@@ -242,6 +262,14 @@
     "sendMessage": {
         "message": "Skicka meddelande",
         "description": "Placeholder text in the message entry field"
+    },
+    "sendFailed": {
+        "message": "Meddelandet kunde inte skickas",
+        "description": "Error message when failed to send message"
+    },
+    "retrySend": {
+        "message": "Skicka meddelande igen",
+        "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
         "message": "Gruppmedlemmar",

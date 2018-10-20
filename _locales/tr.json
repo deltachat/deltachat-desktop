@@ -21,7 +21,27 @@
     },
     "createGroup": {
         "message": "Grup Oluştur",
-        "description": "Create group button label"
+        "description": "Create group menu item label"
+    },
+    "archiveGroup": {
+        "message": "Grubu Arşivle",
+        "description": "Archive group menu item label"
+    },
+    "deleteGroup": {
+        "message": "Grubu Sil",
+        "description": "Delete group menu item label"
+    },
+    "editGroup": {
+        "message": "Grubu Düzenle",
+        "description": "Edit group menu item label"
+    },
+    "leaveGroup": {
+        "message": "Gruptan Ayrıl",
+        "description": "Leave group menu item label"
+    },
+    "save": {
+        "message": "Kaydet",
+        "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
         "message": "Grup Adı",
@@ -124,7 +144,7 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Oturum açma ekranının üstündeki hoş geldiniz iletisi",
+        "message": "Delta.Chat'e Hoş Geldiniz",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
@@ -164,7 +184,7 @@
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Yenile",
+        "message": "Yinele",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
@@ -188,7 +208,7 @@
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Üste Uzat",
+        "message": "Üstte Yüzer",
         "description": "Float on Top menu item label"
     },
     "menu.view.goback": {
@@ -242,6 +262,14 @@
     "sendMessage": {
         "message": "Bir ileti gönder",
         "description": "Placeholder text in the message entry field"
+    },
+    "sendFailed": {
+        "message": "Failed to send message",
+        "description": "Error message when failed to send message"
+    },
+    "retrySend": {
+        "message": "Resend Message",
+        "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
         "message": "Grup üyeleri",

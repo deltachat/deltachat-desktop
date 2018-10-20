@@ -21,7 +21,27 @@
     },
     "createGroup": {
         "message": "Groep creëren",
-        "description": "Create group button label"
+        "description": "Create group menu item label"
+    },
+    "archiveGroup": {
+        "message": "Groep archiveren",
+        "description": "Archive group menu item label"
+    },
+    "deleteGroup": {
+        "message": "Groep verwijderen",
+        "description": "Delete group menu item label"
+    },
+    "editGroup": {
+        "message": "Groep bewerken",
+        "description": "Edit group menu item label"
+    },
+    "leaveGroup": {
+        "message": "Groep verlaten",
+        "description": "Leave group menu item label"
+    },
+    "save": {
+        "message": "Opslaan",
+        "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
         "message": "Groepsnaam",
@@ -242,6 +262,14 @@
     "sendMessage": {
         "message": "Bericht versturen",
         "description": "Placeholder text in the message entry field"
+    },
+    "sendFailed": {
+        "message": "Failed to send message",
+        "description": "Error message when failed to send message"
+    },
+    "retrySend": {
+        "message": "Resend Message",
+        "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
         "message": "Groepsleden",
