@@ -195,6 +195,10 @@
         "message": "Kopiera",
         "description": "Copy menu item label"
     },
+    "menu.edit.paste": {
+        "message": "Klistra in",
+        "description": "Paste menu item label"
+    },
     "menu.edit.delete": {
         "message": "Ta bort",
         "description": "Delete menu item label"
@@ -255,13 +259,21 @@
         "message": "Skickat",
         "description": "Label for the time a message was sent"
     },
+    "send": {
+        "message": "Skicka",
+        "description": "Button label for sending a message"
+    },
     "received": {
         "message": "Mottaget",
         "description": "Label for the time a message was received"
     },
-    "sendMessage": {
-        "message": "Skicka meddelande",
+    "writeMessage": {
+        "message": "Skriv ett meddelande",
         "description": "Placeholder text in the message entry field"
+    },
+    "writeMessageAriaLabel": {
+        "message": "Skriv ett meddelande och tryck på enter",
+        "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
         "message": "Meddelandet kunde inte skickas",

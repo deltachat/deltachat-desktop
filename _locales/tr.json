@@ -195,6 +195,10 @@
         "message": "Kopyala",
         "description": "Copy menu item label"
     },
+    "menu.edit.paste": {
+        "message": "Yapıştır",
+        "description": "Paste menu item label"
+    },
     "menu.edit.delete": {
         "message": "Sil",
         "description": "Delete menu item label"
@@ -255,20 +259,28 @@
         "message": "Gönderilme",
         "description": "Label for the time a message was sent"
     },
+    "send": {
+        "message": "Send",
+        "description": "Button label for sending a message"
+    },
     "received": {
         "message": "Alınma",
         "description": "Label for the time a message was received"
     },
-    "sendMessage": {
-        "message": "Bir ileti gönder",
+    "writeMessage": {
+        "message": "Write a message",
         "description": "Placeholder text in the message entry field"
     },
+    "writeMessageAriaLabel": {
+        "message": "Type a message and press enter",
+        "description": "Aria-label explanation of sending a message"
+    },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "İletiyi gönderme başarısız",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "İletiyi Yeniden Gönder",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {

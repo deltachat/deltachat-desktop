@@ -195,6 +195,10 @@
         "message": "Copy",
         "description": "Copy menu item label"
     },
+    "menu.edit.paste": {
+        "message": "Paste",
+        "description": "Paste menu item label"
+    },
     "menu.edit.delete": {
         "message": "Delete",
         "description": "Delete menu item label"
@@ -255,13 +259,21 @@
         "message": "Inviato",
         "description": "Label for the time a message was sent"
     },
+    "send": {
+        "message": "Send",
+        "description": "Button label for sending a message"
+    },
     "received": {
         "message": "Ricevuto",
         "description": "Label for the time a message was received"
     },
-    "sendMessage": {
-        "message": "Invia messaggio",
+    "writeMessage": {
+        "message": "Write a message",
         "description": "Placeholder text in the message entry field"
+    },
+    "writeMessageAriaLabel": {
+        "message": "Type a message and press enter",
+        "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
         "message": "Failed to send message",
