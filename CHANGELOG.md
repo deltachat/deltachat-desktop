@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2018-10-20
+
+### Added
+* Add functionality to edit groups, e.g. group name, adding and removing members (@ralphtheninja)
+* Add functionality to leave group (@ralphtheninja)
+
+### Changed
+* Consolidate chat list and chat view (@jikstra)
+* Upgrade `deltachat-node` to `^0.21.0` (@ralphtheninja)
+* Update translations (@ralphtheninja)
+
+### Fixed
+* Use default sort order from core in chat list (@ralphtheninja)
+* If creating a chat that is already archived, unarchive it (@ralphtheninja)
+* Fix issues with author name in group chats (@ralphtheninja)
+
 ## [1.4.0] - 2018-10-16
 
 ### Added
@@ -28,5 +44,6 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.4.0
