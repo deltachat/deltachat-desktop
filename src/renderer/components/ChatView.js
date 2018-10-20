@@ -10,6 +10,11 @@ let MutationObserver = window.MutationObserver
 
 const { ConversationContext, Message } = require('./conversations')
 
+const GROUP_TYPES = [
+  C.DC_CHAT_TYPE_GROUP,
+  C.DC_CHAT_TYPE_VERIFIED_GROUP
+]
+
 var theme = 'light-theme' // user prefs?
 
 class ChatView extends React.Component {
@@ -82,7 +87,9 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const { messages } = this.props.chat
+    const { chat } = this.props
+    const { messages } = chat
+    const conversationType = convertChatType(chat.type)
 
     return (
       <div className='ChatView'>
@@ -100,7 +107,7 @@ class ChatView extends React.Component {
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext theme={theme}>
             {messages.map(message => {
-              const msg = <RenderMessage message={message} onClickAttachment={this.onClickAttachment.bind(this, message)} />
+              const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
                 return <li onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
@@ -149,7 +156,7 @@ class RenderMedia extends React.Component {
 
 class RenderMessage extends React.Component {
   render () {
-    const { onClickAttachment, message } = this.props
+    const { onClickAttachment, message, conversationType } = this.props
     const { msg, fromId, id } = message
     const timestamp = msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
@@ -181,7 +188,7 @@ class RenderMessage extends React.Component {
     var props = {
       id,
       i18n: window.translate,
-      conversationType: 'direct', // or group
+      conversationType,
       direction,
       onDownload,
       onReply,
@@ -210,6 +217,10 @@ class RenderMessage extends React.Component {
 function convertContentType (filemime) {
   if (filemime === 'application/octet-stream') return 'audio/ogg'
   return filemime
+}
+
+function convertChatType (type) {
+  return GROUP_TYPES.includes(type) ? 'group' : 'direct'
 }
 
 function convertMessageStatus (s) {
