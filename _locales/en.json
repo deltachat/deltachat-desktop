@@ -263,6 +263,14 @@
         "message": "Send a message",
         "description": "Placeholder text in the message entry field"
     },
+    "sendFailed": {
+        "message": "Failed to send message",
+        "description": "Error message when failed to send message"
+    },
+    "retrySend": {
+        "message": "Resend Message",
+        "description": "Menu alternative in message context menu for resending a message"
+    },
     "groupMembers": {
         "message": "Group members",
         "description": "TODO: used where?"
