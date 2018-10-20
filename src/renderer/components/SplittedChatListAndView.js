@@ -77,9 +77,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onLeaveGroup (selectedChat) {
-    const chatId = this.state.selectedChatId
-    this.state.selectedChatId = null
-    ipcRenderer.send('dispatch', 'leaveGroup', chatId)
+    ipcRenderer.send('dispatch', 'leaveGroup', this.state.selectedChatId)
   }
 
   onDeadDropClose () {
