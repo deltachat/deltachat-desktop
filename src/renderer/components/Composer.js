@@ -51,6 +51,7 @@ class Composer extends React.Component {
   }
 
   render () {
+    const tx = window.translate
     const addAttachmentButton = (
       <Button minimal icon='paperclip' onClick={this.addAttachment.bind(this)} />
     )
@@ -61,12 +62,12 @@ class Composer extends React.Component {
           large
           value={this.state.value}
           onKeyDown={this.onKeyDown.bind(this)}
-          aria-label='Type a message and press enter'
+          aria-label={tx('writeMessageAriaLabel')}
           onChange={this.handleChange}
-          placeholder='Write a message'
+          placeholder={tx('writeMessage')}
           rightElement={addAttachmentButton}
         />
-        <Button onClick={this.sendMessage}>Send</Button>
+        <Button onClick={this.sendMessage}>{tx('send')}</Button>
       </ControlGroup>
     )
   }

@@ -259,13 +259,21 @@
         "message": "Sent",
         "description": "Label for the time a message was sent"
     },
+    "send": {
+        "message": "Send",
+        "description": "Button label for sending a message"
+    },
     "received": {
         "message": "Received",
         "description": "Label for the time a message was received"
     },
-    "sendMessage": {
-        "message": "Send a message",
+    "writeMessage": {
+        "message": "Write a message",
         "description": "Placeholder text in the message entry field"
+    },
+    "writeMessageAriaLabel": {
+        "message": "Type a message and press enter",
+        "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
         "message": "Failed to send message",
