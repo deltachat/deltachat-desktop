@@ -89,6 +89,7 @@ class ChatView extends React.Component {
     const { attachmentMessage, setupMessage } = this.state
     const { chat } = this.props
     const { messages } = chat
+    const conversationType = convertChatType(chat.type)
 
     return (
       <div className='ChatView'>
@@ -106,7 +107,7 @@ class ChatView extends React.Component {
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext theme={theme}>
             {messages.map(message => {
-              const msg = <RenderMessage message={message} chat={chat} onClickAttachment={this.onClickAttachment.bind(this, message)} />
+              const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
                 return <li onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
@@ -155,7 +156,7 @@ class RenderMedia extends React.Component {
 
 class RenderMessage extends React.Component {
   render () {
-    const { onClickAttachment, message, chat } = this.props
+    const { onClickAttachment, message, conversationType } = this.props
     const { msg, fromId, id } = message
     const timestamp = msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
@@ -187,7 +188,7 @@ class RenderMessage extends React.Component {
     var props = {
       id,
       i18n: window.translate,
-      conversationType: convertChatType(chat.type),
+      conversationType,
       direction,
       onDownload,
       onReply,
