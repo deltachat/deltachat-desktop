@@ -21,6 +21,7 @@ class ChatView extends React.Component {
       attachmentMessage: null
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
+    this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
   }
@@ -35,20 +36,31 @@ class ChatView extends React.Component {
   }
 
   componentDidUpdate () {
-    if (this.observer || !this.conversationDiv.current) return
-    this.observer = new MutationObserver(this.scrollToBottom)
-    this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
+    if (!this.observer && this.conversationDiv.current) {
+      this.observer = new MutationObserver(this.scrollToBottom)
+      this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
+    }
+
+    this.focusInputMessage()
   }
 
   componentDidMount () {
     this.scrollToBottom()
+    this.focusInputMessage()
   }
 
   scrollToBottom (force) {
     var doc = document.querySelector('.ChatView #the-conversation')
-    if(!doc) return console.log(`Didn't find .ChatView #the-conversation element`)
+    if (!doc) return console.log(`Didn't find .ChatView #the-conversation element`)
 
     doc.scrollTop = doc.scrollHeight
+  }
+
+  focusInputMessage () {
+    let el = document.querySelector('.InputMessage input')
+    if (!el) return console.log(`Didn't find .InputMessage input element`)
+
+    el.focus()
   }
 
   onClickAttachment (attachmentMessage) {
