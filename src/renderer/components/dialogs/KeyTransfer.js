@@ -20,7 +20,7 @@ class KeyViewPanel extends React.Component {
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <ButtonGroup>
-              <Button onClick={this.props.onClose}> Done </Button>
+              <Button onClick={this.props.onClose}>{tx('done')}</Button>
             </ButtonGroup>
           </div>
         </div>
@@ -82,6 +82,7 @@ class KeyTransferDialog extends React.Component {
   render () {
     const { isOpen, onClose } = this.props
     const { loading, key } = this.state
+    const tx = window.translate
 
     let body
     if (loading) body = <KeyLoadingPanel />
@@ -90,7 +91,7 @@ class KeyTransferDialog extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title='Autocrypt Key Transfer'
+        title={tx('autocryptKeyTransfer')}
         icon='exchange'
         onClose={onClose}
         canOutsideClickClose={false}>

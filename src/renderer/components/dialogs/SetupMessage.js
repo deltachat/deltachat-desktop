@@ -44,7 +44,7 @@ class SetupMessagePanel extends React.Component {
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <ButtonGroup>
-            <Button onClick={this.onClick.bind(this)}> Transfer Key </Button>
+            <Button onClick={this.onClick.bind(this)}>{tx('transferKey')}</Button>
           </ButtonGroup>
         </div>
       </div>
