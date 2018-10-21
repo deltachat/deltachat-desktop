@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron')
 
 const KeyTransferDialog = require('./dialogs/KeyTransfer')
 const DeadDropDialog = require('./dialogs/DeadDrop')
+const AboutDialog = require('./dialogs/About')
 
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -27,6 +28,8 @@ class SplittedChatListAndView extends React.Component {
     this.state = {
       deadDropChat: false,
       keyTransfer: false,
+      showAbout: false,
+      aboutInfo: {},
       selectedChatId: this.getInitiallySelectedChatId()
     }
 
@@ -34,13 +37,19 @@ class SplittedChatListAndView extends React.Component {
     this.onArchiveChat = this.onArchiveChat.bind(this)
     this.onDeleteChat = this.onDeleteChat.bind(this)
     this.onEditGroup = this.onEditGroup.bind(this)
+
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
+
     this.onCreateChat = this.onCreateChat.bind(this)
     this.onCreateGroup = this.onCreateGroup.bind(this)
     this.onCreateContact = this.onCreateContact.bind(this)
+
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
+
+    this.onShowAbout = this.showAbout.bind(this, true)
+    this.onCloseAbout = this.showAbout.bind(this, false)
   }
 
   // Returns the chat which will be shown on startup
@@ -110,7 +119,24 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ deadDropChat: chat })
   }
 
-  componentDidMount () {}
+  showAbout (showAbout) {
+    let aboutInfo = {}
+    if (showAbout) {
+      aboutInfo = ipcRenderer.sendSync(
+        'dispatchSyncNoRender',
+        'getInfo'
+      )
+    }
+    this.setState({ showAbout, aboutInfo })
+  }
+
+  componentDidMount () {
+    ipcRenderer.on('showAboutDialog', this.onShowAbout)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
+  }
 
   logout () {
     ipcRenderer.send('dispatch', 'logout')
@@ -133,7 +159,7 @@ class SplittedChatListAndView extends React.Component {
 
   render () {
     const { deltachat } = this.props
-    const { deadDropChat, keyTransfer } = this.state
+    const { deadDropChat, keyTransfer, showAbout, aboutInfo } = this.state
     let { selectedChatId } = this.state
 
     if (!selectedChatId) {
@@ -177,6 +203,7 @@ class SplittedChatListAndView extends React.Component {
         </div>
         <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
+        { showAbout && (<AboutDialog info={aboutInfo} isOpen={showAbout} onClose={this.onCloseAbout} />) }
         <div className='below-navbar'>
           <ChatList
             screenProps={this.props.screenProps}

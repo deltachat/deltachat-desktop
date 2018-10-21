@@ -146,6 +146,13 @@ class DeltaChatController {
   }
 
   /**
+   * Dispatched when showing the AboutDialog in SplittedChatListAndView
+   */
+  getInfo () {
+    return this._dc.getInfo()
+  }
+
+  /**
    * Dispatched when sending a message in ChatView
    */
   sendMessage (chatId, text) {

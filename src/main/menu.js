@@ -158,6 +158,12 @@ function getMenuTemplate () {
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL_ISSUES)
           }
+        },
+        {
+          translate: 'menu.help.about',
+          click: () => {
+            windows.main.send('showAboutDialog')
+          }
         }
       ]
     }

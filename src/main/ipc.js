@@ -58,6 +58,10 @@ function init (cwd) {
     e.returnValue = ret
   })
 
+  ipc.on('dispatchSyncNoRender', (e, ...args) => {
+    e.returnValue = dispatch(...args)
+  })
+
   // Calls the function without returning the value (async)
   ipc.on('dispatch', (e, ...args) => {
     dispatch(...args)
