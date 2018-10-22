@@ -67,6 +67,14 @@
         "message": "Contact created successfully.",
         "description": "Information to the user when a contact was created successfully"
     },
+    "autocryptKeyTransfer": {
+        "message": "Autocrypt Key Transfer",
+        "description": "Dialog title during Autocrypt key transfer"
+    },
+    "transferKey": {
+        "message": "Transfer Key",
+        "description": "Button label during Autocrypt key transfer"
+    },
     "initiateKeyTransferTitle": {
         "message": "Почати переправлення ключу",
         "description": "Menu alternative to initiate key transfer"
@@ -78,6 +86,10 @@
     "showKeyTransferMessage": {
         "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
         "description": "Shown while viewing the transfer key"
+    },
+    "done": {
+        "message": "Done",
+        "description": "Button label when key transfer is done"
     },
     "moreInfo": {
         "message": "Дізнатися більше...",

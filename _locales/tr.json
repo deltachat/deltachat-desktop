@@ -67,17 +67,29 @@
         "message": "Kişi başarıyla oluşturuldu.",
         "description": "Information to the user when a contact was created successfully"
     },
+    "autocryptKeyTransfer": {
+        "message": "Autocrypt Anahtarı Aktarımı",
+        "description": "Dialog title during Autocrypt key transfer"
+    },
+    "transferKey": {
+        "message": "Anahtarı Aktar",
+        "description": "Button label during Autocrypt key transfer"
+    },
     "initiateKeyTransferTitle": {
         "message": "Anahtar Aktarımı Başlat",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
-        "message": "Bir 'Autocrypt Ayarlama İletisi' uçtan uca kurulumunuzu diğer Autocrypt uyumlu uygulamalarla güvenli olarak paylaşır. Ayarlama, burada görüntülenen bir ayarlama kodu tarafından şifrelenir ve diğer aygıtta yazılmalıdır.",
+        "message": "Bir 'Autocrypt Ayarlama İletisi' uçtan uca ayarlamanızı diğer Autocrypt uyumlu uygulamalarla güvenli olarak paylaşır. Ayarlama, burada görüntülenen bir ayarlama kodu tarafından şifrelenir ve diğer aygıtta yazılmalıdır.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Ayarlamanız kendinize gönderildi. Diğer aygıta geçin ve ayarlama iletisini açın. Bir ayarlama kodu girmeniz istenmelidir. Aşağıdaki sayıları isteme yazın. İşiniz bittiğinde, diğer aygıtınız Autocrypt kullanmak için hazır olacak.",
+        "message": "Anahtarınız kendinize gönderildi. Diğer aygıta geçin ve ayarlama iletisini açın. Bir ayarlama kodu girmeniz istenmelidir. Aşağıdaki sayıları isteme yazın. İşiniz bittiğinde, diğer aygıtınız Autocrypt kullanmak için hazır olacak.",
         "description": "Shown while viewing the transfer key"
+    },
+    "done": {
+        "message": "Bitti",
+        "description": "Button label when key transfer is done"
     },
     "moreInfo": {
         "message": "Daha Fazla Bilgi...",
@@ -260,7 +272,7 @@
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Gönder",
         "description": "Button label for sending a message"
     },
     "received": {
@@ -268,11 +280,11 @@
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Bir ileti yaz",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Bir ileti yazın ve enter'a basın",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {

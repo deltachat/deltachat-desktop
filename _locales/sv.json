@@ -67,6 +67,14 @@
         "message": "Kontakt skapades.",
         "description": "Information to the user when a contact was created successfully"
     },
+    "autocryptKeyTransfer": {
+        "message": "Autocrypt nyckelöverföring",
+        "description": "Dialog title during Autocrypt key transfer"
+    },
+    "transferKey": {
+        "message": "Överför nyckel",
+        "description": "Button label during Autocrypt key transfer"
+    },
     "initiateKeyTransferTitle": {
         "message": "Starta nyckelutbyte",
         "description": "Menu alternative to initiate key transfer"
@@ -76,8 +84,12 @@
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Din nyckel har skickats till dig själv. Du bör nu fått ett meddelande på den andra enheten. Öppna meddelandet och skriv in koden som nu visas. När du har gjort det är den andra enheten redo att använda Autocrypt.",
+        "message": "Din nyckel har skickats till dig själv. Du bör nu fått ett meddelande på den andra enheten. Byt till den andra enhten, öppna meddelandet och skriv in koden som nu visas. När du har gjort det är den andra enheten redo att använda Autocrypt.",
         "description": "Shown while viewing the transfer key"
+    },
+    "done": {
+        "message": "Klar",
+        "description": "Button label when key transfer is done"
     },
     "moreInfo": {
         "message": "Mer information...",

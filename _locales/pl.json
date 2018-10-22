@@ -24,23 +24,23 @@
         "description": "Create group menu item label"
     },
     "archiveGroup": {
-        "message": "Archive Group",
+        "message": "Archiwizuj grupę",
         "description": "Archive group menu item label"
     },
     "deleteGroup": {
-        "message": "Delete Group",
+        "message": "Usuń grupę",
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
+        "message": "Edytuj grupę",
         "description": "Edit group menu item label"
     },
     "leaveGroup": {
-        "message": "Leave Group",
+        "message": "Opuść grupę",
         "description": "Leave group menu item label"
     },
     "save": {
-        "message": "Save",
+        "message": "Zapisz",
         "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
@@ -56,7 +56,7 @@
         "description": "Create chat menu item label"
     },
     "archiveChat": {
-        "message": "Archive Chat",
+        "message": "Archiwizuj czat",
         "description": "Archive chat menu item label"
     },
     "deleteChat": {
@@ -67,17 +67,29 @@
         "message": "Kontakt został pomyślnie utworzony.",
         "description": "Information to the user when a contact was created successfully"
     },
+    "autocryptKeyTransfer": {
+        "message": "Transfer klucza Autocrypt",
+        "description": "Dialog title during Autocrypt key transfer"
+    },
+    "transferKey": {
+        "message": "Transferuj klucz",
+        "description": "Button label during Autocrypt key transfer"
+    },
     "initiateKeyTransferTitle": {
         "message": "Inicjowanie transferu klucza",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
-        "message": "'Tranfer klucza automatycznego szyfrowania' wymaga, aby klient poczty na drugim urządzeniu był zgodny z automatycznym szyfrowaniem.\\n\\nMożesz wysłać klucz do siebie. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.",
+        "message": "'Wiadomość konfiguracyjna automatycznego szyfrowania' bezpiecznie udostępnia twoją konfigurację end-to-end innym aplikacjom zgodnym z Autocrypt. Klucz zostanie zaszyfrowany za pomocą wyświetlonego tutaj kodu konfiguracyjnego, który należy wpisać na drugim urządzeniu.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
         "message": "Klucz został wysłany do ciebie. Przejdź do innego urządzenia i otwórz wiadomość konfiguracyjną. Zostanie wyświetlona prośba o podanie kodu konfiguracyjnego. Wpisz następujące cyfry w podpowiedzi. Gdy skończysz, drugie urządzenie będzie gotowe do użycia funkcji automatycznego szyfrowania.",
         "description": "Shown while viewing the transfer key"
+    },
+    "done": {
+        "message": "Gotowe",
+        "description": "Button label when key transfer is done"
     },
     "moreInfo": {
         "message": "Więcej inforamcji",
@@ -196,7 +208,7 @@
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Wklej",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
@@ -268,19 +280,19 @@
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Napisz wiadomość",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Napisz wiadomość i naciśnij Enter",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Nie udało się wysłać wiadomości",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Wyślij ponownie wiadomość",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {

@@ -67,6 +67,14 @@
         "message": "Contactpersoon gecreëerd.",
         "description": "Information to the user when a contact was created successfully"
     },
+    "autocryptKeyTransfer": {
+        "message": "Autocrypt-sleuteloverdracht",
+        "description": "Dialog title during Autocrypt key transfer"
+    },
+    "transferKey": {
+        "message": "Sleutel overdragen",
+        "description": "Button label during Autocrypt key transfer"
+    },
     "initiateKeyTransferTitle": {
         "message": "Sleuteloverdracht beginnen",
         "description": "Menu alternative to initiate key transfer"
@@ -78,6 +86,10 @@
     "showKeyTransferMessage": {
         "message": "De sleutel is aan jezelf verstuurd. Schakel over naar het andere apparaat en open het instelbericht. Hierna wordt je gevraagd om een code. Voer de volgende getallen in in het daarvoor bestemde veld. Als je klaar bent, dan is je andere apparaat gereed voor Autocrypt.",
         "description": "Shown while viewing the transfer key"
+    },
+    "done": {
+        "message": "Klaar",
+        "description": "Button label when key transfer is done"
     },
     "moreInfo": {
         "message": "Meer informatie...",
@@ -196,7 +208,7 @@
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Plakken",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
@@ -260,7 +272,7 @@
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Versturen",
         "description": "Button label for sending a message"
     },
     "received": {
@@ -268,19 +280,19 @@
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Typ een bericht",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Typ een bericht en druk op enter",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Kan bericht niet versturen",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Bericht opnieuw versturen",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
