@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2018-10-23
+
+### Added
+* Add `Paste` menu item, fixes #161 (@ralphtheninja)
+
+### Changed
+* Update translations from transifex (@ralphtheninja)
+* Translate message input field and send button (@ralphtheninja)
+* Translate Autocrypt key transfer dialogs (@ralphtheninja)
+* Move avatar out of message and display it next to the message (@jikstra)
+* Upgrade `electron` devDependency to `^3.0.5` (@ralphtheninja)
+* Upgrade `spectron` devDependency to `^5.0.0` (@ralphtheninja)
+
+### Removed
+* Remove `babel-eslint` devDependency (@ralphtheninja)
+
 ## [1.5.0] - 2018-10-20
 
 ### Added
@@ -11,7 +27,7 @@
 ### Changed
 * Consolidate chat list and chat view (@jikstra)
 * Upgrade `deltachat-node` to `^0.21.0` (@ralphtheninja)
-* Update translations (@ralphtheninja)
+* Update translations from transifex (@ralphtheninja)
 
 ### Fixed
 * Use default sort order from core in chat list (@ralphtheninja)
@@ -44,6 +60,7 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.4.0
