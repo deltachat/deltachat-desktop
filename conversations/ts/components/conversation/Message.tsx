@@ -899,6 +899,7 @@ export class Message extends React.Component<Props, State> {
           expiring ? 'module-message--expired' : null
         )}
       >
+        {this.renderAvatar()}
         {this.renderError(direction === 'incoming')}
         {this.renderMenu(direction === 'outgoing', triggerId)}
         <div
@@ -913,11 +914,10 @@ export class Message extends React.Component<Props, State> {
           {this.renderAuthor()}
           {this.renderQuote()}
           {this.renderAttachment()}
-          {this.renderEmbeddedContact()}
+
           {this.renderText()}
           {this.renderMetadata()}
           {this.renderSendMessageButton()}
-          {this.renderAvatar()}
         </div>
         {this.renderError(direction === 'outgoing')}
         {this.renderMenu(direction === 'incoming', triggerId)}
