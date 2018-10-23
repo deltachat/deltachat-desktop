@@ -1,5 +1,4 @@
 const main = module.exports = {
-  dispatch,
   hide,
   init,
   send,
@@ -74,10 +73,6 @@ function init (state, options) {
 
   win.on('close', e => {
   })
-}
-
-function dispatch (...args) {
-  send('dispatch', ...args)
 }
 
 function hide () {
