@@ -8,6 +8,7 @@ const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
+const AboutDialog = require('./components/dialogs/About')
 
 class Home extends React.Component {
   constructor (props) {
@@ -15,10 +16,16 @@ class Home extends React.Component {
     this.state = {
       screen: 'SplittedChatListAndView',
       screenProps: {},
+      showAbout: false,
+      aboutInfo: {},
       message: false
     }
+
     this.changeScreen = this.changeScreen.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
+
+    this.onShowAbout = this.showAbout.bind(this, true)
+    this.onCloseAbout = this.showAbout.bind(this, false)
   }
 
   changeScreen (screen = 'SplittedChatListAndView', screenProps = {}) {
@@ -38,13 +45,27 @@ class Home extends React.Component {
     ipcRenderer.on('error', function (e, text) {
       self.userFeedback({ type: 'error', text })
     })
+    ipcRenderer.on('showAboutDialog', this.onShowAbout)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
+  }
+
+  showAbout (showAbout) {
+    let aboutInfo = {}
+    if (showAbout) {
+      aboutInfo = ipcRenderer.sendSync(
+        'dispatchSyncNoRender',
+        'getInfo'
+      )
+    }
+    this.setState({ showAbout, aboutInfo })
   }
 
   render () {
-    // renderer/main.js polls every second and updates the deltachat
-    // property with current state of database.
     const { logins, deltachat } = this.props
-    const { screen, screenProps } = this.state
+    const { screen, screenProps, showAbout, aboutInfo } = this.state
 
     var Screen
     switch (screen) {
@@ -87,6 +108,7 @@ class Home extends React.Component {
             deltachat={deltachat}
           />
         }
+        { showAbout && (<AboutDialog info={aboutInfo} isOpen={showAbout} onClose={this.onCloseAbout} />) }
       </div>
     )
   }

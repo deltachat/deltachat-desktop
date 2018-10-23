@@ -84,8 +84,6 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ deadDropChat: chat })
   }
 
-  componentDidMount () {}
-
   logout () {
     ipcRenderer.send('dispatch', 'logout')
   }
