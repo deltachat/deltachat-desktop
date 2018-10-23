@@ -113,14 +113,6 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          translate: 'menu.view.goback',
-          accelerator: 'Esc',
-          click: () => windows.main.dispatch('escapeBack')
-        },
-        {
-          type: 'separator'
-        },
-        {
           translate: 'menu.view.developer',
           submenu: [
             {

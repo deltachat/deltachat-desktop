@@ -227,10 +227,6 @@
         "message": "Float on Top",
         "description": "Float on Top menu item label"
     },
-    "menu.view.goback": {
-        "message": "Go Back",
-        "description": "Go Back menu item label"
-    },
     "menu.view.developer": {
         "message": "Developer",
         "description": "Developer menu item label"
