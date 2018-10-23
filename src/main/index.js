@@ -91,8 +91,11 @@ app.on('before-quit', e => quit(e))
 app.on('window-all-closed', e => quit(e))
 
 app.on('web-contents-created', (e, contents) => {
-  contents.on('will-navigate', (event, navigationUrl) => {
-    event.preventDefault()
+  contents.on('will-navigate', (e, navigationUrl) => {
+    e.preventDefault()
+  })
+  contents.on('new-window', (e, navigationUrl) => {
+    e.preventDefault()
   })
 })
 
