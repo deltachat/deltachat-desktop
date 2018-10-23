@@ -153,6 +153,17 @@ class DeltaChatController {
   }
 
   /**
+   * Dispatched when showing the AboutDialog (owned by ScreenController)
+   */
+  getInfo () {
+    if (this.ready === true) {
+      return this._dc.getInfo()
+    } else {
+      return DeltaChat.getSystemInfo()
+    }
+  }
+
+  /**
    * Dispatched when sending a message in ChatView
    */
   sendMessage (chatId, text) {
