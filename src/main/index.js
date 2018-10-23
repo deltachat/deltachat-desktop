@@ -60,7 +60,7 @@ var cwd = process.env.TEST_DIR || config.CONFIG_PATH
 log('cwd', cwd)
 ipc.init(cwd)
 
-app.once('ipcReady', function () {
+app.once('ipcReady', () => {
   log('Command line args:', argv)
   console.timeEnd('init')
 
@@ -87,12 +87,13 @@ function quit (e) {
   }, 4000) // quit after 4 secs, at most
 }
 
-app.on('before-quit', function (e) {
-  quit(e)
-})
+app.on('before-quit', e => quit(e))
+app.on('window-all-closed', e => quit(e))
 
-app.on('window-all-closed', function (e) {
-  quit(e)
+app.on('web-contents-created', (e, contents) => {
+  contents.on('will-navigate', (event, navigationUrl) => {
+    event.preventDefault()
+  })
 })
 
 // Remove leading args.
