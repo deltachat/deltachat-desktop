@@ -52,7 +52,7 @@ function onReady (err, results) {
   process.on('uncaughtException', (err) => {
     console.error(err)
     const error = { message: err.message, stack: err.stack }
-    windows.main.dispatch('uncaughtError', 'main', error)
+    windows.main.send('uncaughtError', 'main', error)
   })
 }
 

@@ -41,6 +41,10 @@ function setupIpc () {
   ipcRenderer.on('chooseLanguage', onChooseLanguage)
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
 
+  ipcRenderer.on('uncaughtError', (e, ...args) => {
+    console.log('uncaughtError in', ...args)
+  })
+
   ipcRenderer.on('render', (e, deltachat) => {
     update(deltachat)
   })
