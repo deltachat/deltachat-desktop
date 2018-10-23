@@ -79,7 +79,7 @@ function quit (e) {
 
   app.isQuitting = true
   e.preventDefault()
-  windows.main.dispatch('stateSaveImmediate') // try to save state on exit
+  windows.main.send('stateSaveImmediate')
   ipcMain.once('stateSaved', () => app.quit())
   setTimeout(() => {
     console.error('Saving state took too long. Quitting.')
