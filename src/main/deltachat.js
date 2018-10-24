@@ -268,6 +268,9 @@ class DeltaChatController {
     this._dc.archiveChat(chatId, archive)
   }
 
+  /**
+   * Dispatched from SplittedChatListAndView
+   */
   showArchivedChats (show) {
     this._showArchivedChats = show
     this._render()
@@ -286,7 +289,7 @@ class DeltaChatController {
    * Dispatched from menu alternative in SplittedChatListAndView
    */
   leaveGroup (chatId) {
-    log('leaving chat', chatId)
+    log('leaving chat')
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
@@ -310,7 +313,7 @@ class DeltaChatController {
       ready: this.ready,
       contacts: this._contacts(),
       showArchivedChats,
-      selectedChat: this.selectedChat(showArchivedChats ? archivedChats : chats),
+      selectedChat: this._selectedChat(showArchivedChats ? archivedChats : chats),
       chats,
       archivedChats
     }
@@ -338,7 +341,7 @@ class DeltaChatController {
     return this._chats(C.DC_GCL_ARCHIVED_ONLY)
   }
 
-  selectedChat (chats) {
+  _selectedChat (chats) {
     if (!chats) return null
     let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
 

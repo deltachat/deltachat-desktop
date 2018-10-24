@@ -54,8 +54,8 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'selectChat', chatId)
   }
 
-  onArchiveChat (selectedChat, isArchived) {
-    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, !isArchived)
+  onArchiveChat (selectedChat, archive) {
+    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, archive)
   }
 
   onDeleteChat (selectedChat) {
@@ -63,7 +63,10 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onEditGroup (selectedChat) {
-    this.props.changeScreen('EditGroup', { chatId: selectedChat.id, chatName: selectedChat.name })
+    this.props.changeScreen('EditGroup', {
+      chatId: selectedChat.id,
+      chatName: selectedChat.name
+    })
   }
 
   onLeaveGroup (selectedChat) {
@@ -81,7 +84,10 @@ class SplittedChatListAndView extends React.Component {
 
     var onSubmit = (chatId) => {
       if (chatId !== 0) {
-        self.props.userFeedback({ type: 'success', text: tx('contactCreateSuccess') })
+        self.props.userFeedback({
+          type: 'success',
+          text: tx('contactCreateSuccess')
+        })
         self.props.changeScreen('ChatList')
       }
     }
@@ -123,19 +129,22 @@ class SplittedChatListAndView extends React.Component {
 
   render () {
     const { deltachat } = this.props
+    const { selectedChat, showArchivedChats } = deltachat
     const { deadDropChat, keyTransfer } = this.state
-    let { selectedChat } = deltachat
 
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
+
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
+    const unArchiveMsg = isGroup ? tx('unArchiveGroup') : tx('unArchiveChat')
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
 
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
-      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, deltachat.showArchivedChats)} /> : null}
+      {selectedChat && !showArchivedChats ? <MenuItem icon='import' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, true)} /> : null}
+      {selectedChat && showArchivedChats ? <MenuItem icon='export' text={unArchiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, false)} /> : null}
       {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
@@ -148,7 +157,7 @@ class SplittedChatListAndView extends React.Component {
         <div className='Navbar'>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              { deltachat.showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
+              { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
               <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -165,14 +174,11 @@ class SplittedChatListAndView extends React.Component {
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <div className='below-navbar'>
           <ChatList
-            chats={deltachat.showArchivedChats ? deltachat.archivedChats : deltachat.chats}
-            screenProps={this.props.screenProps}
-            userFeedback={this.props.userFeedback}
-            changeScreen={this.props.changeScreen}
+            chats={showArchivedChats ? deltachat.archivedChats : deltachat.chats}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
-            showArchivedChats={deltachat.showArchivedChats}
+            showArchivedChats={showArchivedChats}
             selectedChatId={selectedChat ? selectedChat.id : null}
           />
           {
