@@ -155,6 +155,7 @@ class SplittedChatListAndView extends React.Component {
       selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
     }
 
+    // TODO: We shouldn't do this on a render, maybe before? Maybe even in deltachat.js?
     this.markNoticedChatIfNeeded(selectedChatId)
 
     const selectedChat = this.getSelectedChat()
