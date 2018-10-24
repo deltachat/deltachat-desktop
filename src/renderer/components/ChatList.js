@@ -44,11 +44,13 @@ class ChatList extends React.Component {
                 />)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
-                <ConversationListItem
-                  key={chat.id}
-                  onClick={this.props.onShowArchivedChats}
-                  name={chat.name}
-                  i18n={i18n} />
+                <div className='ShowArchivedChats'>
+                  <ConversationListItem
+                    key={chat.id}
+                    onClick={this.props.onShowArchivedChats}
+                    name={chat.name}
+                    i18n={i18n} />
+                </div>
               )
             } else {
               return (
