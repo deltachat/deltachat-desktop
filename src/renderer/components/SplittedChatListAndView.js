@@ -40,7 +40,6 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.markSelectedChatNoticedIfNeeded = this.markSelectedChatNoticedIfNeeded.bind(this)
   }
 
   onChatClick (chatId) {
@@ -103,11 +102,6 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  markSelectedChatNoticedIfNeeded () {
-    const { selectedChatId } = this.state
-    if (selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
-  }
-
   initiateKeyTransfer () {
     this.setState({ keyTransfer: true })
   }
@@ -124,9 +118,7 @@ class SplittedChatListAndView extends React.Component {
     const { deadDropChat, keyTransfer } = this.state
 
     const selectedChat = deltachat.selectedChat
-    const selectedChatId = selectedChat.id
 
-    console.log('s', selectedChatId, selectedChat)
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
@@ -171,7 +163,7 @@ class SplittedChatListAndView extends React.Component {
             deltachat={this.props.deltachat}
             onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
-            selectedChatId={selectedChatId}
+            selectedChatId={selectedChat.id}
           />
           {
             selectedChat &&
