@@ -282,6 +282,11 @@ class DeltaChatController {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
+  markNoticedChat(chatId) {
+    log('mark noticed chat', chatId)
+    this._dc.markNoticedChat(chatId)
+  }
+
   /**
    * Returns the state in json format
    */
