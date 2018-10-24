@@ -285,10 +285,9 @@ class DeltaChatController {
   }
 
   selectChat(chatId) {
-    log('selecting chat with id', chatId)
+    log('selecting chat with id', chatId, this)
     this._selectedChatId = chatId
-    electron.ipcMain.emit('render')
-    log(electron)
+    this._render()
   }
 
   /**
@@ -296,6 +295,7 @@ class DeltaChatController {
    */
   render () {
     let chats = this._chats()
+    console.log('render')
 
     return {
       configuring: this.configuring,
@@ -303,7 +303,7 @@ class DeltaChatController {
       ready: this.ready,
       chats: chats,
       contacts: this._contacts(),
-      selectedChatId: this.selectedChatId(chats)
+      selectedChat: this.selectedChat(chats)
     }
   }
 
@@ -325,13 +325,22 @@ class DeltaChatController {
     return chats
   }
 
-  selectedChatId(chats) {
-    if(!this._selectedChatId || !chats.find(chatId => chatId == this._selectedChatId)) {
-      let selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+  selectedChat(chats) {
+    if(!chats) return null
+
+    let selectedChat = chats.find(({id}) => id === this._selectedChatId)
+
+    if(!selectedChat) {
+      selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
       this._selectedChatId = selectedChat ? selectedChat.id : null
     }
-    log('s1', this._selectedChatId)
-    return this._selectedChatId
+
+    if(selectedChat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(selectedChat.id)
+      selectedChat.freshMessageCounter = 0
+    }
+
+    return selectedChat
   }
 
   /**

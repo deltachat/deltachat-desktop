@@ -127,8 +127,8 @@ class SplittedChatListAndView extends React.Component {
     const { deltachat } = this.props
     const { deadDropChat, keyTransfer } = this.state
 
-    const selectedChatId = deltachat.selectedChatId
-    const selectedChat = deltachat.chats.find(chat => chat.id === selectedChatId)
+    const selectedChat = deltachat.selectedChat
+    const selectedChatId = selectedChat.id
 
     console.log('s', selectedChatId, selectedChat)
     const isGroup = this.selectedChatIsGroup(selectedChat)
