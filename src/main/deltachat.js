@@ -32,6 +32,7 @@ function chatIdToJson (chatId, dc) {
       }
     }
   }
+  chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
   return chat
 }
 
@@ -280,6 +281,11 @@ class DeltaChatController {
   leaveGroup (chatId) {
     log('leaving chat', chatId)
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
+  }
+
+  markNoticedChat (chatId) {
+    log('mark noticed chat', chatId)
+    this._dc.markNoticedChat(chatId)
   }
 
   /**

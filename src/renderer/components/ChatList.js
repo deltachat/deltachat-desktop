@@ -23,6 +23,9 @@ class ChatList extends React.Component {
             if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
+
+            // Don't show freshMessageCounter on selected chat
+            const freshMessageCounter = chat.id === selectedChatId ? null : chat.freshMessageCounter
             if (chat.id === 1) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
@@ -38,6 +41,7 @@ class ChatList extends React.Component {
                   }}
                   onClick={this.props.onDeadDropClick.bind(null, chat)}
                   isSelected={chat.id === selectedChatId}
+                  unreadCount={freshMessageCounter}
                 />)
             } else {
               return (
@@ -52,7 +56,8 @@ class ChatList extends React.Component {
                     status: 'sent' // TODO: interpret data from summary to get correct state
                   }}
                   i18n={i18n}
-                  isSelected={chat.id === selectedChatId} />
+                  isSelected={chat.id === selectedChatId}
+                  unreadCount={freshMessageCounter} />
               )
             }
           })}

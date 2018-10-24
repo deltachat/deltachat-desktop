@@ -27,7 +27,7 @@ class SplittedChatListAndView extends React.Component {
     this.state = {
       deadDropChat: false,
       keyTransfer: false,
-      selectedChatId: this.getInitiallySelectedChatId()
+      selectedChatId: null
     }
 
     this.onChatClick = this.onChatClick.bind(this)
@@ -41,6 +41,7 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
+    this.markSelectedChatNoticedIfNeeded = this.markSelectedChatNoticedIfNeeded.bind(this)
   }
 
   // Returns the chat which will be shown on startup
@@ -57,6 +58,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onChatClick (chatId) {
+    this.markNoticedChatIfNeeded(chatId)
     this.setState({ selectedChatId: chatId })
   }
 
@@ -120,6 +122,11 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
+  markSelectedChatNoticedIfNeeded () {
+    const { selectedChatId } = this.state
+    if (selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
+  }
+
   initiateKeyTransfer () {
     this.setState({ keyTransfer: true })
   }
@@ -131,6 +138,14 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
+  markNoticedChatIfNeeded (chatId) {
+    const { chats } = this.props.deltachat
+    const chat = chats.find(chat => chat.id === chatId)
+    if (chat.freshMessageCounter > 0) {
+      ipcRenderer.send('dispatch', 'markNoticedChat', chat.id)
+    }
+  }
+
   render () {
     const { deltachat } = this.props
     const { deadDropChat, keyTransfer } = this.state
@@ -139,6 +154,9 @@ class SplittedChatListAndView extends React.Component {
     if (!selectedChatId) {
       selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
     }
+
+    // TODO: We shouldn't do this on a render, maybe before? Maybe even in deltachat.js?
+    this.markNoticedChatIfNeeded(selectedChatId)
 
     const selectedChat = this.getSelectedChat()
     const isGroup = this.selectedChatIsGroup(selectedChat)
@@ -185,7 +203,8 @@ class SplittedChatListAndView extends React.Component {
             deltachat={this.props.deltachat}
             onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
-            selectedChatId={selectedChatId} />
+            selectedChatId={selectedChatId}
+          />
           {
             selectedChat &&
               (<ChatView
