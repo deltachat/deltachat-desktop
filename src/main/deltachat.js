@@ -50,6 +50,8 @@ class DeltaChatController {
       email: null,
       cwd: null
     }
+    this._selectedChatId = null
+    this._showArchivedChats = false
   }
 
   /**
@@ -259,19 +261,17 @@ class DeltaChatController {
   }
 
   /**
-   * Dispatched from SplittedChatListAndView
-   */
-  getArchivedChats () {
-    log('getting archived chats')
-    return this._chats(C.DC_GCL_ARCHIVED_ONLY)
-  }
-
-  /**
    * Dispatched from menu alternative in SplittedChatListAndView
    */
-  archiveChat (chatId) {
+  archiveChat (chatId, archive) {
     log('archiving chat', chatId)
-    this._dc.archiveChat(chatId, true)
+    this._dc.archiveChat(chatId, archive)
+  }
+
+
+  showArchivedChats (show) {
+    this._showArchivedChats = show
+    this._render()
   }
 
   /**
@@ -291,23 +291,33 @@ class DeltaChatController {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  markNoticedChat (chatId) {
-    log('mark noticed chat', chatId)
-    this._dc.markNoticedChat(chatId)
+  selectChat (chatId) {
+    log('selecting chat with id', chatId, this)
+    this._selectedChatId = chatId
+    this._render()
   }
 
   /**
    * Returns the state in json format
    */
   render () {
+    let showArchivedChats = this._showArchivedChats
+    let chats = this._chats()
+    let archivedChats = this._archivedChats()
+
     return {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
-      chats: this._chats(),
-      contacts: this._contacts()
+      contacts: this._contacts(),
+      showArchivedChats,
+      selectedChat: this.selectedChat(showArchivedChats ? archivedChats : chats),
+      chats,
+      archivedChats
     }
   }
+
+
 
   /**
    * Internal
@@ -326,6 +336,30 @@ class DeltaChatController {
     }
     return chats
   }
+
+  _archivedChats () {
+    return this._chats(C.DC_GCL_ARCHIVED_ONLY)
+  }
+
+  selectedChat (chats) {
+   if (!chats) return null
+   let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
+
+   if (!selectedChat) {
+     selectedChat = chats.find(({ id }) => id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+     if (!selectedChat) {
+       this._selectedChatId = null
+       return null
+     }
+     this._selectedChatId = selectedChat.id
+   }
+   if (selectedChat.freshMessageCounter > 0) {
+     this._dc.markNoticedChat(selectedChat.id)
+     selectedChat.freshMessageCounter = 0
+   }
+   return selectedChat
+ }
+
 
   /**
    * Internal

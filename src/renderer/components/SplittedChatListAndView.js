@@ -26,10 +26,8 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      archivedChats: null,
       deadDropChat: false,
       keyTransfer: false,
-      selectedChatId: null
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
@@ -46,56 +44,22 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.markSelectedChatNoticedIfNeeded = this.markSelectedChatNoticedIfNeeded.bind(this)
-  }
-
-  // Returns the chat which will be shown on startup
-  getInitiallySelectedChatId () {
-    const chats = this.getChats()
-    const chat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
-    return chat ? chat.id : null
-  }
-
-  getSelectedChat () {
-    const chats = this.getChats()
-    const { selectedChatId } = this.state
-    return chats.find(chat => chat.id === selectedChatId)
-  }
-
-  getChats () {
-    if (Array.isArray(this.state.archivedChats)) {
-      return this.state.archivedChats
-    } else {
-      return this.props.deltachat.chats
-    }
   }
 
   showArchivedChats (show) {
-    let archivedChats = null
-    if (show) {
-      archivedChats = ipcRenderer.sendSync(
-        'dispatchSync',
-        'getArchivedChats'
-      )
-    }
-    this.setState({ archivedChats, selectedChatId: null })
+    ipcRenderer.send('dispatch', 'showArchivedChats', show)
   }
 
   onChatClick (chatId) {
-    this.markNoticedChatIfNeeded(chatId)
-    this.setState({ selectedChatId: chatId })
+    ipcRenderer.send('dispatch', 'selectChat', chatId)
   }
 
-  onArchiveChat () {
-    const chatId = this.state.selectedChatId
-    this.state.selectedChatId = null
-    ipcRenderer.send('dispatch', 'archiveChat', chatId)
+  onArchiveChat (selectedChat, isArchived) {
+    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, !isArchived)
   }
 
-  onDeleteChat () {
-    const chatId = this.state.selectedChatId
-    this.state.selectedChatId = null
-    ipcRenderer.send('dispatch', 'deleteChat', chatId)
+  onDeleteChat (selectedChat) {
+    ipcRenderer.send('dispatch', 'deleteChat',  selectedChat.id)
   }
 
   onEditGroup (selectedChat) {
@@ -103,7 +67,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onLeaveGroup (selectedChat) {
-    ipcRenderer.send('dispatch', 'leaveGroup', this.state.selectedChatId)
+    ipcRenderer.send('dispatch', 'leaveGroup',  selectedChat.id)
   }
 
   onDeadDropClose () {
@@ -146,11 +110,6 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  markSelectedChatNoticedIfNeeded () {
-    const { selectedChatId } = this.state
-    if (selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
-  }
-
   initiateKeyTransfer () {
     this.setState({ keyTransfer: true })
   }
@@ -162,41 +121,22 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-  markNoticedChatIfNeeded (chatId) {
-    const chats = this.getChats()
-    const chat = chats.find(chat => chat.id === chatId)
-    if (chat.freshMessageCounter > 0) {
-      ipcRenderer.send('dispatch', 'markNoticedChat', chat.id)
-    }
-  }
-
   render () {
     const { deltachat } = this.props
-    const chats = this.getChats()
     const { deadDropChat, keyTransfer } = this.state
-    let { selectedChatId } = this.state
+    let { selectedChat } = deltachat
 
-    if (!selectedChatId) {
-      selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
-    }
-
-    // TODO: We shouldn't do this on a render, maybe before? Maybe even in deltachat.js?
-    this.markNoticedChatIfNeeded(selectedChatId)
-
-    const selectedChat = this.getSelectedChat()
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
 
-    const showArchivedChats = Array.isArray(this.state.archivedChats)
-
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
-      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} /> : null}
-      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} /> : null}
+      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, deltachat.showArchivedChats)} /> : null}
+      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
@@ -208,7 +148,7 @@ class SplittedChatListAndView extends React.Component {
         <div className='Navbar'>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
+              { deltachat.showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
               <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -225,14 +165,15 @@ class SplittedChatListAndView extends React.Component {
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <div className='below-navbar'>
           <ChatList
-            chats={chats}
+            chats={deltachat.showArchivedChats ? deltachat.archivedChats : deltachat.chats}
             screenProps={this.props.screenProps}
             userFeedback={this.props.userFeedback}
             changeScreen={this.props.changeScreen}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
-            selectedChatId={selectedChatId}
+            showArchivedChats={deltachat.showArchivedChats}
+            selectedChatId={selectedChat ? selectedChat.id : null}
           />
           {
             selectedChat &&

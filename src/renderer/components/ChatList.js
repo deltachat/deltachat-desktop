@@ -4,13 +4,14 @@ const { ConversationListItem } = require('./conversations')
 
 class ChatList extends React.Component {
   render () {
-    const { chats, selectedChatId } = this.props
+    const { chats, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
 
     if (!selectedChatId) {
+      let msg = showArchivedChats ? 'No archived chats' : 'You have no chats, feel free to start a new one :)'
       return (
         <div className='ChatList'>
-          <div className='ChatList-NoChats'><p>You have no chats, feel free to start a new one :)</p></div>
+          <div className='ChatList-NoChats'><p>{msg}</p></div>
         </div>
       )
     }
@@ -24,7 +25,6 @@ class ChatList extends React.Component {
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
 
             // Don't show freshMessageCounter on selected chat
-            const freshMessageCounter = chat.id === selectedChatId ? null : chat.freshMessageCounter
             if (chat.id === 1) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
@@ -40,7 +40,7 @@ class ChatList extends React.Component {
                   }}
                   onClick={this.props.onDeadDropClick.bind(null, chat)}
                   isSelected={chat.id === selectedChatId}
-                  unreadCount={freshMessageCounter}
+                  unreadCount={chat.freshMessageCounter}
                 />)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
@@ -66,7 +66,7 @@ class ChatList extends React.Component {
                   }}
                   i18n={i18n}
                   isSelected={chat.id === selectedChatId}
-                  unreadCount={freshMessageCounter} />
+                  unreadCount={chat.freshMessageCounter} />
               )
             }
           })}
