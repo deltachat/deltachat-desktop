@@ -16,7 +16,7 @@ function translate (messages) {
       console.error(
         `i18n: Attempted to get translation for nonexistent key '${key}'`
       )
-      return ''
+      return key
     }
 
     const { message } = entry
