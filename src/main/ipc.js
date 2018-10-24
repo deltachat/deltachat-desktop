@@ -10,7 +10,7 @@ const app = electron.app
 const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
-
+const log = require('./log')
 const DeltaChat = require('./deltachat')
 
 function init (cwd) {
@@ -91,6 +91,7 @@ function init (cwd) {
   }
 
   function render () {
+    log('RENDER')
     windows.main.send('render', dc.render())
   }
 }
