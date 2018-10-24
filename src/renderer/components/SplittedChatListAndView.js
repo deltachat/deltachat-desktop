@@ -47,16 +47,12 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'selectChat', chatId)
   }
 
-  onArchiveChat () {
-    const chatId = this.state.selectedChatId
-    this.state.selectedChatId = null
-    ipcRenderer.send('dispatch', 'archiveChat', chatId)
+  onArchiveChat (selectedChat) {
+    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id)
   }
 
-  onDeleteChat () {
-    const chatId = this.state.selectedChatId
-    this.state.selectedChatId = null
-    ipcRenderer.send('dispatch', 'deleteChat', chatId)
+  onDeleteChat (selectedChat) {
+    ipcRenderer.send('dispatch', 'deleteChat', selectedChat.id)
   }
 
   onEditGroup (selectedChat) {
@@ -64,7 +60,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onLeaveGroup (selectedChat) {
-    ipcRenderer.send('dispatch', 'leaveGroup', this.state.selectedChatId)
+    ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
   }
 
   onDeadDropClose () {
@@ -140,8 +136,8 @@ class SplittedChatListAndView extends React.Component {
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
       <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
-      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat} /> : null}
-      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat} /> : null}
+      {selectedChat ? <MenuItem icon='compressed' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat)} /> : null}
+      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
