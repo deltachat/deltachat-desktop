@@ -126,7 +126,7 @@ class SplittedChatListAndView extends React.Component {
 
   onWindowFocus () {
     const { selectedChatId } = this.state
-    if(selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
+    if (selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
   }
 
   initiateKeyTransfer () {
