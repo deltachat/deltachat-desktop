@@ -32,7 +32,7 @@ function chatIdToJson (chatId, dc) {
       }
     }
   }
-  chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
+  chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
   return chat
 }
 

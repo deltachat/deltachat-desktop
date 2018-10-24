@@ -41,6 +41,9 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
+    this.onWindowFocus = this.onWindowFocus.bind(this)
+
+    window.onfocus = this.onWindowFocus
   }
 
   // Returns the chat which will be shown on startup
@@ -119,6 +122,11 @@ class SplittedChatListAndView extends React.Component {
 
   onKeyTransferComplete () {
     this.setState({ keyTransfer: false })
+  }
+
+  onWindowFocus () {
+    const { selectedChatId } = this.state
+    if(selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
   }
 
   initiateKeyTransfer () {
