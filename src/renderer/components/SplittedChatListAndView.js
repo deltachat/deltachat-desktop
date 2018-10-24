@@ -41,7 +41,6 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.markNoticedChatIfNeeded = this.markNoticedChatIfNeeded.bind(this)
   }
 
   // Returns the chat which will be shown on startup
