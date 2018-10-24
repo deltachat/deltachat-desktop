@@ -136,10 +136,8 @@ class SplittedChatListAndView extends React.Component {
   markNoticedChatIfNeeded (chatId) {
     const { chats } = this.props.deltachat
     const chat = chats.find(chat => chat.id === chatId)
-    if(chat.freshMessageCounter > 0) {
-      const { deltachat } = this.props
+    if (chat.freshMessageCounter > 0) {
       ipcRenderer.send('dispatch', 'markNoticedChat', chat.id)
-      //this.props.changeScreen()
     }
   }
 
