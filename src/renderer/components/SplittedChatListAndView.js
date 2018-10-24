@@ -41,9 +41,9 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.onWindowFocus = this.onWindowFocus.bind(this)
+    this.markSelectedChatNoticedIfNeeded = this.markSelectedChatNoticedIfNeeded.bind(this)
 
-    window.onfocus = this.onWindowFocus
+    window.onfocus = this.markSelectedChatNoticed
   }
 
   // Returns the chat which will be shown on startup
@@ -124,7 +124,7 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  onWindowFocus () {
+  markSelectedChatNoticedIfNeeded () {
     const { selectedChatId } = this.state
     if (selectedChatId) this.markNoticedChatIfNeeded(selectedChatId)
   }
@@ -155,8 +155,9 @@ class SplittedChatListAndView extends React.Component {
 
     if (!selectedChatId) {
       selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
-      this.markNoticedChatIfNeeded(selectedChatId)
     }
+
+    this.markNoticedChatIfNeeded(selectedChatId)
 
     const selectedChat = this.getSelectedChat()
     const isGroup = this.selectedChatIsGroup(selectedChat)
@@ -203,7 +204,8 @@ class SplittedChatListAndView extends React.Component {
             deltachat={this.props.deltachat}
             onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
-            selectedChatId={selectedChatId} />
+            selectedChatId={selectedChatId}
+            />
           {
             selectedChat &&
               (<ChatView

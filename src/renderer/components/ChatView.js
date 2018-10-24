@@ -29,6 +29,8 @@ class ChatView extends React.Component {
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
+
+    console.log(this.conversationDiv)
   }
 
   writeMessage (text) {
