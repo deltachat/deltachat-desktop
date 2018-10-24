@@ -295,7 +295,6 @@ class DeltaChatController {
    */
   render () {
     let chats = this._chats()
-    console.log('render')
 
     return {
       configuring: this.configuring,
