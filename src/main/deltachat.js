@@ -279,12 +279,12 @@ class DeltaChatController {
   /**
    * Dispatched from menu alternative in SplittedChatListAndView
    */
-  leaveGroup (chatId) {selectChat
+  leaveGroup (chatId) {
     log('leaving chat', chatId)
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  selectChat(chatId) {
+  selectChat (chatId) {
     log('selecting chat with id', chatId, this)
     this._selectedChatId = chatId
     this._render()
@@ -301,9 +301,9 @@ class DeltaChatController {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
-      chats: chats,
       contacts: this._contacts(),
-      selectedChat: this.selectedChat(chats)
+      selectedChat: this.selectedChat(chats),
+      chats
     }
   }
 
@@ -325,17 +325,17 @@ class DeltaChatController {
     return chats
   }
 
-  selectedChat(chats) {
-    if(!chats) return null
+  selectedChat (chats) {
+    if (!chats) return null
 
-    let selectedChat = chats.find(({id}) => id === this._selectedChatId)
+    let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
 
-    if(!selectedChat) {
+    if (!selectedChat) {
       selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
       this._selectedChatId = selectedChat ? selectedChat.id : null
     }
 
-    if(selectedChat.freshMessageCounter > 0) {
+    if (selectedChat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
