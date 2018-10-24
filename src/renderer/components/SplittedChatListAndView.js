@@ -27,7 +27,7 @@ class SplittedChatListAndView extends React.Component {
 
     this.state = {
       deadDropChat: false,
-      keyTransfer: false,
+      keyTransfer: false
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
@@ -59,7 +59,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onDeleteChat (selectedChat) {
-    ipcRenderer.send('dispatch', 'deleteChat',  selectedChat.id)
+    ipcRenderer.send('dispatch', 'deleteChat', selectedChat.id)
   }
 
   onEditGroup (selectedChat) {
@@ -67,7 +67,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onLeaveGroup (selectedChat) {
-    ipcRenderer.send('dispatch', 'leaveGroup',  selectedChat.id)
+    ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
   }
 
   onDeadDropClose () {

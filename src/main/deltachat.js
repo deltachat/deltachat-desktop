@@ -268,7 +268,6 @@ class DeltaChatController {
     this._dc.archiveChat(chatId, archive)
   }
 
-
   showArchivedChats (show) {
     this._showArchivedChats = show
     this._render()
@@ -317,8 +316,6 @@ class DeltaChatController {
     }
   }
 
-
-
   /**
    * Internal
    * Returns chats in json format
@@ -342,24 +339,23 @@ class DeltaChatController {
   }
 
   selectedChat (chats) {
-   if (!chats) return null
-   let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
+    if (!chats) return null
+    let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
 
-   if (!selectedChat) {
-     selectedChat = chats.find(({ id }) => id !== C.DC_CHAT_ID_ARCHIVED_LINK)
-     if (!selectedChat) {
-       this._selectedChatId = null
-       return null
-     }
-     this._selectedChatId = selectedChat.id
-   }
-   if (selectedChat.freshMessageCounter > 0) {
-     this._dc.markNoticedChat(selectedChat.id)
-     selectedChat.freshMessageCounter = 0
-   }
-   return selectedChat
- }
-
+    if (!selectedChat) {
+      selectedChat = chats.find(({ id }) => id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+      if (!selectedChat) {
+        this._selectedChatId = null
+        return null
+      }
+      this._selectedChatId = selectedChat.id
+    }
+    if (selectedChat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(selectedChat.id)
+      selectedChat.freshMessageCounter = 0
+    }
+    return selectedChat
+  }
 
   /**
    * Internal
