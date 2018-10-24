@@ -262,7 +262,7 @@ class DeltaChatController {
    * Dispatched from SplittedChatListAndView
    */
   getArchivedChats () {
-    log('getting archived chats', C.DC_GCL_ARCHIVED_ONLY)
+    log('getting archived chats')
     return this._chats(C.DC_GCL_ARCHIVED_ONLY)
   }
 
