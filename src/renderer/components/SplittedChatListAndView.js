@@ -173,6 +173,7 @@ class SplittedChatListAndView extends React.Component {
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
+      <MenuItem icon='log-out' text={tx('logout')} onClick={this.logout} />
     </Menu>)
 
     return (
@@ -180,7 +181,6 @@ class SplittedChatListAndView extends React.Component {
         <div className='Navbar'>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              <Button className={Classes.MINIMAL} icon='log-out' onClick={this.logout} text={tx('logout')} />
               <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
