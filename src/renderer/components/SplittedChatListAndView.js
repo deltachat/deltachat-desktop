@@ -26,8 +26,7 @@ class SplittedChatListAndView extends React.Component {
     super(props)
     this.state = {
       deadDropChat: false,
-      keyTransfer: false,
-      selectedChatId: null
+      keyTransfer: false
     }
 
     this.onChatClick = this.onChatClick.bind(this)
@@ -44,22 +43,8 @@ class SplittedChatListAndView extends React.Component {
     this.markSelectedChatNoticedIfNeeded = this.markSelectedChatNoticedIfNeeded.bind(this)
   }
 
-  // Returns the chat which will be shown on startup
-  getInitiallySelectedChatId () {
-    const { chats } = this.props.deltachat
-    const chat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
-    return chat ? chat.id : null
-  }
-
-  getSelectedChat () {
-    const { chats } = this.props.deltachat
-    const { selectedChatId } = this.state
-    return chats.find(chat => chat.id === selectedChatId)
-  }
-
   onChatClick (chatId) {
-    this.markNoticedChatIfNeeded(chatId)
-    this.setState({ selectedChatId: chatId })
+    ipcRenderer.send('dispatch', 'selectChat', chatId)
   }
 
   onArchiveChat () {
@@ -138,27 +123,14 @@ class SplittedChatListAndView extends React.Component {
     ].includes(selectedChat && selectedChat.type)
   }
 
-  markNoticedChatIfNeeded (chatId) {
-    const { chats } = this.props.deltachat
-    const chat = chats.find(chat => chat.id === chatId)
-    if (chat.freshMessageCounter > 0) {
-      ipcRenderer.send('dispatch', 'markNoticedChat', chat.id)
-    }
-  }
-
   render () {
     const { deltachat } = this.props
     const { deadDropChat, keyTransfer } = this.state
-    let { selectedChatId } = this.state
 
-    if (!selectedChatId) {
-      selectedChatId = this.state.selectedChatId = this.getInitiallySelectedChatId()
-    }
+    const selectedChatId = deltachat.selectedChatId
+    const selectedChat = deltachat.chats.find(chat => chat.id === selectedChatId)
 
-    // TODO: We shouldn't do this on a render, maybe before? Maybe even in deltachat.js?
-    this.markNoticedChatIfNeeded(selectedChatId)
-
-    const selectedChat = this.getSelectedChat()
+    console.log('s', selectedChatId, selectedChat)
     const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')

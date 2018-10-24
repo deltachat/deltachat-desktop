@@ -50,6 +50,7 @@ class DeltaChatController {
       email: null,
       cwd: null
     }
+    this._selectedChatId = null
   }
 
   /**
@@ -278,26 +279,31 @@ class DeltaChatController {
   /**
    * Dispatched from menu alternative in SplittedChatListAndView
    */
-  leaveGroup (chatId) {
+  leaveGroup (chatId) {selectChat
     log('leaving chat', chatId)
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  markNoticedChat (chatId) {
-    log('mark noticed chat', chatId)
-    this._dc.markNoticedChat(chatId)
+  selectChat(chatId) {
+    log('selecting chat with id', chatId)
+    this._selectedChatId = chatId
+    electron.ipcMain.emit('render')
+    log(electron)
   }
 
   /**
    * Returns the state in json format
    */
   render () {
+    let chats = this._chats()
+
     return {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
-      chats: this._chats(),
-      contacts: this._contacts()
+      chats: chats,
+      contacts: this._contacts(),
+      selectedChatId: this.selectedChatId(chats)
     }
   }
 
@@ -317,6 +323,15 @@ class DeltaChatController {
       chats.push(chat)
     }
     return chats
+  }
+
+  selectedChatId(chats) {
+    if(!this._selectedChatId || !chats.find(chatId => chatId == this._selectedChatId)) {
+      let selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+      this._selectedChatId = selectedChat ? selectedChat.id : null
+    }
+    log('s1', this._selectedChatId)
+    return this._selectedChatId
   }
 
   /**
