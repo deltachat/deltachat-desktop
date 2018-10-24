@@ -331,7 +331,13 @@ class DeltaChatController {
 
     if (!selectedChat) {
       selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
-      this._selectedChatId = selectedChat ? selectedChat.id : null
+
+      if(!selectedChat) {
+        this._selectedChatId = null
+        return null
+      }
+
+      this._selectedChatId = selectedChat.id
     }
 
     if (selectedChat.freshMessageCounter > 0) {
