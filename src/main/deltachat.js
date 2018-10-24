@@ -99,28 +99,33 @@ class DeltaChatController {
       }
     })
 
+    dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
+      log('EVENT contacts changed', contactId)
+      render()
+    })
+
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      log('event msgs changed', chatId, msgId)
-      if (dc.getMessage(msgId)) render()
+      log('EVENT msgs changed', chatId, msgId)
+      render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      log('incoming message', chatId, msgId)
+      log('EVENT incoming msg', chatId, msgId)
       render()
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      log('message delivered', chatId, msgId)
+      log('EVENT msg delivered', chatId, msgId)
       render()
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
-      log('message failed to deliver', chatId, msgId)
+      log('EVENT msg failed to deliver', chatId, msgId)
       render()
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      log('message read', chatId, msgId)
+      log('EVENT msg read', chatId, msgId)
       render()
     })
 

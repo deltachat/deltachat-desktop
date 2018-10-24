@@ -53,15 +53,12 @@ function init (cwd) {
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
-    var ret = dispatch(...args)
-    render()
-    e.returnValue = ret
+    e.returnValue = dispatch(...args)
   })
 
   // Calls the function without returning the value (async)
   ipc.on('dispatch', (e, ...args) => {
     dispatch(...args)
-    render()
   })
 
   ipc.on('initiateKeyTransfer', (e, ...args) => {
