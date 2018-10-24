@@ -1,6 +1,6 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Esci",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
@@ -20,35 +20,39 @@
         "description": "Add contact button label"
     },
     "createGroup": {
-        "message": "Create Group",
+        "message": "Crea gruppo",
         "description": "Create group menu item label"
     },
     "archiveGroup": {
-        "message": "Archive Group",
+        "message": "Archivia gruppo",
         "description": "Archive group menu item label"
     },
+    "unArchiveGroup": {
+        "message": "Unarchive Group",
+        "description": "Unarchive group menu item label"
+    },
     "deleteGroup": {
-        "message": "Delete Group",
+        "message": "Elimina gruppo",
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
+        "message": "Modifica gruppo",
         "description": "Edit group menu item label"
     },
     "leaveGroup": {
-        "message": "Leave Group",
+        "message": "Abbandona gruppo",
         "description": "Leave group menu item label"
     },
     "save": {
-        "message": "Save",
+        "message": "Salva",
         "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
-        "message": "Group Name",
+        "message": "Nome del gruppo",
         "description": "Placeholder text for group name input field"
     },
     "groupNameRequired": {
-        "message": "Group name required.",
+        "message": "Nome del gruppo obbligatorio",
         "description": "Information to user when creating group with empty name"
     },
     "addChat": {
@@ -56,11 +60,15 @@
         "description": "Create chat menu item label"
     },
     "archiveChat": {
-        "message": "Archive Chat",
+        "message": "Archivia chat",
         "description": "Archive chat menu item label"
     },
+    "unArchiveChat": {
+        "message": "Unarchive Chat",
+        "description": "Unarchive chat menu item label"
+    },
     "deleteChat": {
-        "message": "Delete Chat",
+        "message": "Elimina chiave",
         "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
@@ -68,11 +76,11 @@
         "description": "Information to the user when a contact was created successfully"
     },
     "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
+        "message": "Trasferimento chiave Autocrypt",
         "description": "Dialog title during Autocrypt key transfer"
     },
     "transferKey": {
-        "message": "Transfer Key",
+        "message": "Trasferisci chiave",
         "description": "Button label during Autocrypt key transfer"
     },
     "initiateKeyTransferTitle": {
@@ -88,7 +96,7 @@
         "description": "Shown while viewing the transfer key"
     },
     "done": {
-        "message": "Done",
+        "message": "Fatto",
         "description": "Button label when key transfer is done"
     },
     "moreInfo": {
@@ -116,7 +124,7 @@
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "forwardMessage": {
-        "message": "Forward Message...",
+        "message": "Inoltra messaggio...",
         "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
@@ -156,11 +164,11 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to Delta.Chat",
+        "message": "Benvenuto in Delta.Chat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "Indirizzo email",
         "description": "Label above input field for e-mail address"
     },
     "login.password": {
@@ -168,7 +176,7 @@
         "description": "Label above input field for password"
     },
     "login.required": {
-        "message": "required",
+        "message": "obbligatorio",
         "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
     },
     "login.cancel": {
@@ -188,71 +196,67 @@
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Modifica",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Annulla",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Ripristina",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Taglia",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Copia",
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Incolla",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Elimina",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Seleziona tutto",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Visualizza",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Float on Top",
+        "message": "Sempre in primo piano",
         "description": "Float on Top menu item label"
     },
-    "menu.view.goback": {
-        "message": "Go Back",
-        "description": "Go Back menu item label"
-    },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Sviluppo",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Strumenti di sviluppo",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Aiuto",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "Ulteriori informazioni",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "Contribuisci su GitHub",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Segnala un problema...",
         "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {
@@ -272,7 +276,7 @@
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Invia",
         "description": "Button label for sending a message"
     },
     "received": {
@@ -280,19 +284,19 @@
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Componi un messaggio",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Scrivi un messaggio e premi Invio",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Invio messaggio fallito",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Reinvia il messaggio",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
@@ -336,23 +340,23 @@
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     },
     "videoScreenshotFailedToLoad": {
-        "message": "Can't display video screenshot",
+        "message": "Screenshot video non visualizzabile",
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
-        "message": "Catalan",
+        "message": "Catalano",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.da": {
-        "message": "Danish",
+        "message": "Danese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.de": {
-        "message": "German",
+        "message": "Tedesco",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.en": {
-        "message": "English",
+        "message": "Inglese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eo": {
@@ -360,71 +364,71 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.es": {
-        "message": "Spanish",
+        "message": "Spagnolo",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eu": {
-        "message": "Basque",
+        "message": "Basco",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.fr": {
-        "message": "French",
+        "message": "Francese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hr": {
-        "message": "Croatian",
+        "message": "Croato",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hu": {
-        "message": "Hungarian",
+        "message": "Ungherese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.it": {
-        "message": "Italian",
+        "message": "Italiano",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ja_JP": {
-        "message": "Japanese",
+        "message": "Giapponese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ko": {
-        "message": "Korean",
+        "message": "Koreano",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nb_NO": {
-        "message": "Norwegian Bokmål",
+        "message": "Norvegese Bokmål",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl": {
-        "message": "Dutch",
+        "message": "Olandese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
+        "message": "Olandese (Olanda)",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pl": {
-        "message": "Polish",
+        "message": "Polacco",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pt": {
-        "message": "Portuguese",
+        "message": "Portoghese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ru": {
-        "message": "Russian",
+        "message": "Russo",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sq": {
-        "message": "Albanian",
+        "message": "Albanese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sr": {
-        "message": "Serbian",
+        "message": "Serbo",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sv": {
-        "message": "Swedish",
+        "message": "Svedese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ta": {
@@ -436,15 +440,15 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.tr": {
-        "message": "Turkish",
+        "message": "Turco",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.uk": {
-        "message": "Ukrainian",
+        "message": "Ucraino",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.zh_CN": {
-        "message": "Chinese",
+        "message": "Cinese",
         "description": "Menu alternative in Preferences -> Choose Language..."
     }
 }

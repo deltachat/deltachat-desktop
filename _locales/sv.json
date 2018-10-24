@@ -27,6 +27,10 @@
         "message": "Arkivera grupp",
         "description": "Archive group menu item label"
     },
+    "unArchiveGroup": {
+        "message": "Oarkivera grupp",
+        "description": "Unarchive group menu item label"
+    },
     "deleteGroup": {
         "message": "Radera grupp",
         "description": "Delete group menu item label"
@@ -58,6 +62,10 @@
     "archiveChat": {
         "message": "Arkivera chat",
         "description": "Archive chat menu item label"
+    },
+    "unArchiveChat": {
+        "message": "Oarkivera chatt",
+        "description": "Unarchive chat menu item label"
     },
     "deleteChat": {
         "message": "Radera chat",
@@ -226,10 +234,6 @@
     "menu.view.floatontop": {
         "message": "Flyta ovanpå",
         "description": "Float on Top menu item label"
-    },
-    "menu.view.goback": {
-        "message": "Tillbaka",
-        "description": "Go Back menu item label"
     },
     "menu.view.developer": {
         "message": "Utvecklare",

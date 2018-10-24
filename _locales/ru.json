@@ -27,6 +27,10 @@
         "message": "Переместить группу в архив",
         "description": "Archive group menu item label"
     },
+    "unArchiveGroup": {
+        "message": "Unarchive Group",
+        "description": "Unarchive group menu item label"
+    },
     "deleteGroup": {
         "message": "Удалить группу",
         "description": "Delete group menu item label"
@@ -58,6 +62,10 @@
     "archiveChat": {
         "message": "Архивировать чат",
         "description": "Archive chat menu item label"
+    },
+    "unArchiveChat": {
+        "message": "Unarchive Chat",
+        "description": "Unarchive chat menu item label"
     },
     "deleteChat": {
         "message": "Удалить чат",
@@ -226,10 +234,6 @@
     "menu.view.floatontop": {
         "message": "Поверх остальных окон ",
         "description": "Float on Top menu item label"
-    },
-    "menu.view.goback": {
-        "message": "Вернуться",
-        "description": "Go Back menu item label"
     },
     "menu.view.developer": {
         "message": "Разработчикам",
