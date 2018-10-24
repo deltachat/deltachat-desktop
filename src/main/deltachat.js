@@ -330,9 +330,9 @@ class DeltaChatController {
     let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
 
     if (!selectedChat) {
-      selectedChat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
+      selectedChat = chats.find(({ id }) => id !== C.DC_CHAT_ID_ARCHIVED_LINK)
 
-      if(!selectedChat) {
+      if (!selectedChat) {
         this._selectedChatId = null
         return null
       }
