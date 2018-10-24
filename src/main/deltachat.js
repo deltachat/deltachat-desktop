@@ -259,6 +259,14 @@ class DeltaChatController {
   }
 
   /**
+   * Dispatched from SplittedChatListAndView
+   */
+  getArchivedChats () {
+    log('getting archived chats', C.DC_GCL_ARCHIVED_ONLY)
+    return this._chats(C.DC_GCL_ARCHIVED_ONLY)
+  }
+
+  /**
    * Dispatched from menu alternative in SplittedChatListAndView
    */
   archiveChat (chatId) {
@@ -305,10 +313,10 @@ class DeltaChatController {
    * Internal
    * Returns chats in json format
    */
-  _chats () {
+  _chats (listFlags = 0) {
     if (!this._dc) return []
     const chats = []
-    const list = this._dc.getChatList()
+    const list = this._dc.getChatList(listFlags)
     const count = list.getCount()
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
