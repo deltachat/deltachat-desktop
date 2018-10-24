@@ -20,7 +20,6 @@ class ChatList extends React.Component {
         <div className='ConversationList'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
-            console.log(chat)
             if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
