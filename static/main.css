@@ -102,6 +102,10 @@ ul li button {
   width: 70%;
 }
 
+.ShowArchivedChats .module-conversation-list-item__avatar {
+  visibility: hidden;
+}
+
 .InputMessage .composer {
   padding: 4px 10px;
 }
