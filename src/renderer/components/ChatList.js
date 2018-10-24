@@ -20,6 +20,7 @@ class ChatList extends React.Component {
         <div className='ConversationList'>
           {deltachat.chats.map((chat) => {
             if (!chat) return
+            console.log(chat)
             if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
@@ -38,6 +39,7 @@ class ChatList extends React.Component {
                   }}
                   onClick={this.props.onDeadDropClick.bind(null, chat)}
                   isSelected={chat.id === selectedChatId}
+                  unreadCount={chat.freshMessageCounter}
                 />)
             } else {
               return (
@@ -52,7 +54,8 @@ class ChatList extends React.Component {
                     status: 'sent' // TODO: interpret data from summary to get correct state
                   }}
                   i18n={i18n}
-                  isSelected={chat.id === selectedChatId} />
+                  isSelected={chat.id === selectedChatId}
+                  unreadCount={chat.freshMessageCounter} />
               )
             }
           })}

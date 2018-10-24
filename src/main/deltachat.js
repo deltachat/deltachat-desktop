@@ -307,7 +307,9 @@ class DeltaChatController {
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
       const chat = chatIdToJson(chatId, this._dc)
+      const freshMessageCounter = this._dc.getFreshMessageCount(chatId)
       chat.summary = list.getSummary(i).toJson()
+      chat.freshMessageCounter = freshMessageCounter
       chats.push(chat)
     }
     return chats
