@@ -205,7 +205,7 @@ class SplittedChatListAndView extends React.Component {
             onDeadDropClick={this.onDeadDropClick}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChatId}
-            />
+          />
           {
             selectedChat &&
               (<ChatView
