@@ -24,11 +24,16 @@ const {
 class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
+
     this.state = {
+      archivedChats: null,
       deadDropChat: false,
       keyTransfer: false,
       selectedChatId: null
     }
+
+    this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
+    this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
 
     this.onChatClick = this.onChatClick.bind(this)
     this.onArchiveChat = this.onArchiveChat.bind(this)
@@ -46,15 +51,34 @@ class SplittedChatListAndView extends React.Component {
 
   // Returns the chat which will be shown on startup
   getInitiallySelectedChatId () {
-    const { chats } = this.props.deltachat
+    const chats = this.getChats()
     const chat = chats.find(chat => chat.id !== C.DC_CHAT_ID_ARCHIVED_LINK)
     return chat ? chat.id : null
   }
 
   getSelectedChat () {
-    const { chats } = this.props.deltachat
+    const chats = this.getChats()
     const { selectedChatId } = this.state
     return chats.find(chat => chat.id === selectedChatId)
+  }
+
+  getChats () {
+    if (Array.isArray(this.state.archivedChats)) {
+      return this.state.archivedChats
+    } else {
+      return this.props.deltachat.chats
+    }
+  }
+
+  showArchivedChats (show) {
+    let archivedChats = null
+    if (show) {
+      archivedChats = ipcRenderer.sendSync(
+        'dispatchSync',
+        'getArchivedChats'
+      )
+    }
+    this.setState({ archivedChats, selectedChatId: null })
   }
 
   onChatClick (chatId) {
@@ -139,7 +163,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   markNoticedChatIfNeeded (chatId) {
-    const { chats } = this.props.deltachat
+    const chats = this.getChats()
     const chat = chats.find(chat => chat.id === chatId)
     if (chat.freshMessageCounter > 0) {
       ipcRenderer.send('dispatch', 'markNoticedChat', chat.id)
@@ -148,6 +172,7 @@ class SplittedChatListAndView extends React.Component {
 
   render () {
     const { deltachat } = this.props
+    const chats = this.getChats()
     const { deadDropChat, keyTransfer } = this.state
     let { selectedChatId } = this.state
 
@@ -163,6 +188,8 @@ class SplittedChatListAndView extends React.Component {
     const tx = window.translate
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
+
+    const showArchivedChats = Array.isArray(this.state.archivedChats)
 
     const menu = (<Menu>
       <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
@@ -181,6 +208,7 @@ class SplittedChatListAndView extends React.Component {
         <div className='Navbar'>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
+              { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
               <NavbarHeading>{deltachat.credentials.email}</NavbarHeading>
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -197,11 +225,12 @@ class SplittedChatListAndView extends React.Component {
         <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <div className='below-navbar'>
           <ChatList
+            chats={chats}
             screenProps={this.props.screenProps}
             userFeedback={this.props.userFeedback}
             changeScreen={this.props.changeScreen}
-            deltachat={this.props.deltachat}
             onDeadDropClick={this.onDeadDropClick}
+            onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChatId}
           />

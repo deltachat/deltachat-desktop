@@ -4,7 +4,7 @@ const { ConversationListItem } = require('./conversations')
 
 class ChatList extends React.Component {
   render () {
-    const { deltachat, selectedChatId } = this.props
+    const { chats, selectedChatId } = this.props
     const tx = window.translate
 
     if (!selectedChatId) {
@@ -18,9 +18,8 @@ class ChatList extends React.Component {
     return (
       <div className='ChatList'>
         <div className='ConversationList'>
-          {deltachat.chats.map((chat) => {
+          {chats.map((chat) => {
             if (!chat) return
-            if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
 
@@ -43,6 +42,14 @@ class ChatList extends React.Component {
                   isSelected={chat.id === selectedChatId}
                   unreadCount={freshMessageCounter}
                 />)
+            } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+              return (
+                <ConversationListItem
+                  key={chat.id}
+                  onClick={this.props.onShowArchivedChats}
+                  name={chat.name}
+                  i18n={i18n} />
+              )
             } else {
               return (
                 <ConversationListItem
