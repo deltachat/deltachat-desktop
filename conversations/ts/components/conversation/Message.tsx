@@ -51,7 +51,7 @@ export interface Props {
   disableMenu?: boolean;
   text?: string;
   id?: string;
-  shield?: boolean;
+  padlock?: boolean;
   collapseMetadata?: boolean;
   direction: 'incoming' | 'outgoing';
   timestamp: number;
@@ -245,7 +245,7 @@ export class Message extends React.Component<Props, State> {
 
   public renderMetadata() {
     const {
-      shield,
+      padlock,
       attachment,
       collapseMetadata,
       direction,
@@ -279,6 +279,14 @@ export class Message extends React.Component<Props, State> {
             : null
         )}
       >
+        {padlock === true && status !== 'error' ? (
+          <div
+            className={classNames(
+              'module-message__metadata__padlock-icon',
+              `module-message__metadata__padlock-icon--${direction}`,
+            )}
+          />
+        ) : null}
         {showError ? (
           <span
             className={classNames(
@@ -301,13 +309,6 @@ export class Message extends React.Component<Props, State> {
             module="module-message__metadata__date"
           />
         )}
-        {shield === true && status !== 'error' ? (
-          <div
-            className={classNames(
-              'module-message__metadata__shield-icon',
-            )}
-          />
-        ) : null}
         {expirationLength && expirationTimestamp ? (
           <ExpireTimer
             direction={direction}

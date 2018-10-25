@@ -186,7 +186,7 @@ class RenderMessage extends React.Component {
     }
 
     const props = {
-      shield: msg.showPadlock,
+      padlock: msg.showPadlock,
       id,
       i18n: window.translate,
       conversationType,
