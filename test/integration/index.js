@@ -9,7 +9,7 @@ test('app runs', function (t) {
     .then(
       () => app.client.waitUntilTextExists(
         '.bp3-navbar-heading',
-        'Welcome to Delta.Chat',
+        'Welcome to DeltaChat',
         20e3
       )
     )

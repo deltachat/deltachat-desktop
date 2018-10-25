@@ -37,7 +37,7 @@
   "engines": {
     "node": ">=10.7.0"
   },
-  "productName": "Delta.Chat",
+  "productName": "DeltaChat",
   "homepage": "https://delta.chat",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",

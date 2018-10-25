@@ -100,7 +100,7 @@ or keyboard while the tests are running.
 
 ### Update translations
 
-Install the [transifex-client](https://docs.transifex.com/client) and get added to the Delta Chat Desktop project.
+Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat Desktop` project.
 
 When you add new strings that need to be translated, run:
 
@@ -128,4 +128,4 @@ Also see https://www.electron.build/configuration/publish
 
 Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 
-Copyright © 2018 Delta Chat contributors.
+Copyright © 2018 `DeltaChat` contributors.
