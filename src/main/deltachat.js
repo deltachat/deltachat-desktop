@@ -294,7 +294,7 @@ class DeltaChatController {
   }
 
   selectChat (chatId) {
-    log('selecting chat with id', chatId, this)
+    log('selecting chat with id', chatId)
     this._selectedChatId = chatId
     this._render()
   }
