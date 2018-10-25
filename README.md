@@ -1,6 +1,6 @@
 # deltachat-desktop
 
-> Desktop Application for delta.chat
+> Desktop Application for [delta.chat](https://delta.chat)
 
 [![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
