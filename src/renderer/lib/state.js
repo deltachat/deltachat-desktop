@@ -28,16 +28,10 @@ function getDefaultState () {
      * Temporary state disappears once the program exits.
      * It can contain complex objects like open connections, etc.
      */
-    prev: { /* used for state diffing in updateElectron() */
-      title: null,
-      progress: -1,
-      badge: null
-    },
     window: {
       bounds: null, /* {x, y, width, height } */
       isFocused: true,
-      isFullScreen: false,
-      title: config.APP_WINDOW_TITLE
+      isFullScreen: false
     },
     modal: null, /* modal popover */
     errors: [], /* user-facing errors */
