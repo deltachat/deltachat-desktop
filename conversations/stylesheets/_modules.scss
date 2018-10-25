@@ -526,6 +526,22 @@
   flex-grow: 1;
 }
 
+.module-message__metadata__padlock-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 2px;
+  margin-bottom: 3px;
+}
+
+.module-message__metadata__padlock-icon--incoming {
+  @include color-svg('../images/padlock.svg', $color-light-35, 125%);
+}
+
+.module-message__metadata__padlock-icon--outgoing {
+  @include color-svg('../images/padlock.svg', $color-core-green, 125%);
+}
+
 .module-message__metadata__status-icon {
   width: 12px;
   height: 12px;
