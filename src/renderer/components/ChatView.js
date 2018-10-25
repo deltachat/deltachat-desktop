@@ -185,7 +185,8 @@ class RenderMessage extends React.Component {
       console.log('show detail', message)
     }
 
-    var props = {
+    const props = {
+      shield: msg.showPadlock,
       id,
       i18n: window.translate,
       conversationType,

@@ -526,6 +526,15 @@
   flex-grow: 1;
 }
 
+.module-message__metadata__shield-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 2px;
+  @include color-svg('../images/shield.svg', $color-light-35);
+}
+
 .module-message__metadata__status-icon {
   width: 12px;
   height: 12px;
