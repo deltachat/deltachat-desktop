@@ -164,7 +164,7 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welkom bij Delta.Chat",
+        "message": "Welkom bij DeltaChat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
