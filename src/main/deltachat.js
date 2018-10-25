@@ -45,26 +45,19 @@ class DeltaChatController {
    */
   constructor (cwd) {
     this.cwd = cwd
-    this.ready = false
-    this.credentials = {
-      email: null,
-      cwd: null
-    }
-    this._selectedChatId = null
-    this._showArchivedChats = false
+    this._resetState()
   }
 
   /**
    * Dispatched when logging in from Login
    */
-  login (credentials, render) {
+  login ({ email, password }, render) {
     // Creates a separate DB file for each login
-    const cwd = path.join(this.cwd, Buffer.from(credentials.email).toString('hex'))
+    const cwd = path.join(this.cwd, Buffer.from(email).toString('hex'))
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
     var dc = this._dc
-    this.credentials.email = credentials.email
-    this.credentials.cwd = cwd
+    this.credentials = { email }
     this._render = render
 
     dc.open(cwd, err => {
@@ -73,9 +66,8 @@ class DeltaChatController {
         log('Ready')
         this.ready = true
         this.configuring = false
-        const addr = credentials.email
-        if (!electron.app.logins.includes(addr)) {
-          electron.app.logins.push(addr)
+        if (!electron.app.logins.includes(email)) {
+          electron.app.logins.push(email)
         }
         render()
       }
@@ -83,8 +75,8 @@ class DeltaChatController {
         dc.once('ready', onReady)
         this.configuring = true
         dc.configure({
-          addr: credentials.email,
-          mail_pw: credentials.password
+          addr: email,
+          mail_pw: password
         })
         render()
       } else {
@@ -147,8 +139,9 @@ class DeltaChatController {
   logout () {
     this._dc.close()
     this._dc = null
-    this.configuring = false
-    this.ready = false
+
+    this._resetState()
+
     log('Logged out')
     if (typeof this._render === 'function') this._render()
   }
@@ -377,6 +370,18 @@ class DeltaChatController {
    */
   _warning (line) { log('WARNING', line) }
   _error (line) { log.error(line) }
+
+  /**
+   * Internal
+   * Reset state related to login
+   */
+  _resetState () {
+    this.ready = false
+    this.configuring = false
+    this.credentials = { email: '' }
+    this._selectedChatId = null
+    this._showArchivedChats = false
+  }
 }
 
 module.exports = DeltaChatController

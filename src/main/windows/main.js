@@ -136,7 +136,11 @@ function setProgress (progress) {
 
 function setTitle (title) {
   if (!main.win) return
-  main.win.setTitle(title)
+  if (title) {
+    main.win.setTitle(`${config.APP_WINDOW_TITLE} - ${title}`)
+  } else {
+    main.win.setTitle(config.APP_WINDOW_TITLE)
+  }
 }
 
 function show () {

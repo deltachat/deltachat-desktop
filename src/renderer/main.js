@@ -76,12 +76,4 @@ function onWindowBoundsChanged (e, newBounds) {
 function update (deltachat) {
   state.deltachat = deltachat
   app.setState(state)
-  updateElectron()
-}
-
-function updateElectron () {
-  if (state.window.title !== state.prev.title) {
-    state.prev.title = state.window.title
-    ipcRenderer.send('setTitle', state.window.title)
-  }
 }
