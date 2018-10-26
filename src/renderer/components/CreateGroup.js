@@ -9,6 +9,12 @@ class CreateGroup extends GroupBase {
     })
   }
 
+  isButtonDisabled () {
+    if (!this.state.name.length) return true
+    if (!Object.keys(this.state.group).length) return true
+    return false
+  }
+
   onSubmit () {
     const contactIds = Object.keys(this.state.group)
     ipcRenderer.sendSync(

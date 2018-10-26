@@ -24,6 +24,10 @@ class EditGroup extends GroupBase {
     this.before.forEach(id => { group[id] = true })
   }
 
+  isButtonDisabled () {
+    return !this.state.name.length
+  }
+
   onSubmit () {
     const after = Object.keys(this.state.group).map(id => Number(id))
     const remove = differ(this.before, after)

@@ -52,12 +52,6 @@ class GroupBase extends React.Component {
     this.setState({ name: e.target.value })
   }
 
-  isButtonDisabled () {
-    if (!this.state.name.length) return true
-    if (!Object.keys(this.state.group).length) return true
-    return false
-  }
-
   render () {
     const { deltachat } = this.props
     const tx = window.translate
