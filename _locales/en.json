@@ -19,6 +19,10 @@
         "message": "Add Contact",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Name",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
         "message": "Create Group",
         "description": "Create group menu item label"

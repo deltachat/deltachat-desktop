@@ -70,12 +70,12 @@ class CreateContact extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
-            <NavbarHeading>Create Contact</NavbarHeading>
+            <NavbarHeading>{tx('addContact')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
           <form onSubmit={this.handleSubmit}>
-            <FormGroup label='E-Mail Address' placeholder='E-Mail Address' labelFor='email' labelInfo='(required)'>
+            <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
               <InputGroup
                 id='email'
                 type='text'
@@ -84,7 +84,7 @@ class CreateContact extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <FormGroup label='Name' placeholder='Name' labelFor='name'>
+            <FormGroup label={tx('name')} placeholder='Name' labelFor='name'>
               <InputGroup
                 id='name'
                 leftIcon='person'
