@@ -8,7 +8,7 @@ class ChatList extends React.Component {
     const tx = window.translate
 
     if (!selectedChatId) {
-      const msg = showArchivedChats ? 'No archived chats' : 'You have no chats, feel free to start a new one :)'
+      const msg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
       return (
         <div className='ChatList'>
           <div className='ChatList-NoChats'><p>{msg}</p></div>

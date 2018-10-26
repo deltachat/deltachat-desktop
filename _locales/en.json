@@ -67,6 +67,14 @@
         "message": "Unarchive Chat",
         "description": "Unarchive chat menu item label"
     },
+    "noChats": {
+        "message": "No chats",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "No archived chats",
+        "description": "Message shown to user when there are no archived chats"
+    },
     "deleteChat": {
         "message": "Delete Chat",
         "description": "Delete chat menu item label"
