@@ -6,7 +6,7 @@ const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 const { Overlay } = require('@blueprintjs/core')
 
-let MutationObserver = window.MutationObserver
+const MutationObserver = window.MutationObserver
 
 const { ConversationContext, Message } = require('./conversations')
 
@@ -14,8 +14,6 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
-
-var theme = 'light-theme' // user prefs?
 
 class ChatView extends React.Component {
   constructor (props) {
@@ -105,7 +103,7 @@ class ChatView extends React.Component {
         />
 
         <div id='the-conversation' ref={this.conversationDiv}>
-          <ConversationContext theme={theme}>
+          <ConversationContext>
             {messages.map(message => {
               const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
