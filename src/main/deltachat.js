@@ -24,12 +24,16 @@ function chatIdToJson (chatId, dc) {
   chat.messages = messageIds.map(id => messageIdToJson(id, dc))
   if (chatId === C.DC_CHAT_ID_DEADDROP) {
     const msg = dc.getMessage(messageIds[0])
-    const fromId = msg.getFromId()
-    if (fromId) {
-      const contact = dc.getContact(fromId)
-      if (contact) {
-        chat.contact = contact.toJson()
-      }
+    const fromId = msg && msg.getFromId()
+
+    if (!fromId) {
+      log.warning('Ignoring DEADDROP due to missing fromId')
+      return null
+    }
+
+    const contact = dc.getContact(fromId)
+    if (contact) {
+      chat.contact = contact.toJson()
     }
   }
   chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
@@ -324,8 +328,10 @@ class DeltaChatController {
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
       const chat = chatIdToJson(chatId, this._dc)
-      chat.summary = list.getSummary(i).toJson()
-      chats.push(chat)
+      if (chat) {
+        chat.summary = list.getSummary(i).toJson()
+        chats.push(chat)
+      }
     }
     return chats
   }
