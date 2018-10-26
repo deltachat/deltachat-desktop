@@ -6,18 +6,11 @@ class ChatList extends React.Component {
   render () {
     const { chats, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
-
-    if (!selectedChatId) {
-      const msg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
-      return (
-        <div className='ChatList'>
-          <div className='ChatList-NoChats'><p>{msg}</p></div>
-        </div>
-      )
-    }
+    const missingChatsMsg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
 
     return (
       <div className='ChatList'>
+        { !selectedChatId && (<div className='ChatList-NoChats'><p>{missingChatsMsg}</p></div>) }
         <div className='ConversationList'>
           {chats.map((chat) => {
             if (!chat) return
