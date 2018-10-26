@@ -125,11 +125,11 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
-      this._warning(warning)
+      log.warning(warning)
     })
 
-    dc.on('DC_EVENT_ERROR', (code, error) => {
-      this._error(`${error} (code = ${code})`)
+    dc.on('DC_EVENT_ERROR', (code, err) => {
+      log.error(`${err} (code = ${code})`)
     })
   }
 
@@ -205,7 +205,7 @@ class DeltaChatController {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
-    this._warning(`Blocked contact ${name} (id = ${contactId})`)
+    log.warning(`Blocked contact ${name} (id = ${contactId})`)
   }
 
   /**
@@ -214,7 +214,7 @@ class DeltaChatController {
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
     if (!contact) {
-      this._warning('no contact could be found with id', contactId)
+      log.warning('no contact could be found with id', contactId)
       return 0
     }
     const chatId = this._dc.createChatByContactId(contactId)
@@ -363,13 +363,6 @@ class DeltaChatController {
       return this._dc.getContact(id).toJson()
     })
   }
-
-  /**
-   * Internal
-   * Logging methods
-   */
-  _warning (line) { log('WARNING', line) }
-  _error (line) { log.error(line) }
 
   /**
    * Internal

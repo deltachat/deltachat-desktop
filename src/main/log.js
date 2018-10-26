@@ -1,4 +1,8 @@
+// TODO we have a dependency order here since we require 'windows' below,
+// which in turn also requires this file
+
 module.exports = log
+module.exports.warning = warning
 module.exports.error = error
 
 /**
@@ -19,6 +23,10 @@ function log (...args) {
   } else {
     app.once('ipcReady', () => windows.main.send('log', ...args))
   }
+}
+
+function warning (...args) {
+  log('WARNING', ...args)
 }
 
 function error (...args) {
