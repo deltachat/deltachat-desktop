@@ -462,5 +462,9 @@
     "language.zh_CN": {
         "message": "Chinese",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "Emoji of $1$",
+        "description": "Used with aria-label for emojis"
     }
 }
