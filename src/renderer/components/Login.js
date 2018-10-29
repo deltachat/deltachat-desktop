@@ -17,9 +17,9 @@ class Login extends React.Component {
     super(props)
     this.state = {
       addr: process.env.DC_ADDR,
-      mailPw: process.env.DC_MAIL_PW,
       showAdvanced: false,
       mailUser: null,
+      mailPw: process.env.DC_MAIL_PW,
       mailServer: null,
       mailPort: null,
       mailSecurity: null,
@@ -77,8 +77,9 @@ class Login extends React.Component {
   render () {
     console.log(this.state)
     const { logins, deltachat } = this.props
-    const { email, mailPw, mailUser, mailServer, mailPort, mailSecurity, sendUser, sendServer, sendPort, sendSecurity } = this.state
+    const { email, mailUser, mailPw, mailServer, mailPort, mailSecurity, sendUser, sendPw, sendServer, sendPort, sendSecurity } = this.state
     const tx = window.translate
+
 
     var loading = deltachat.configuring
 
@@ -127,6 +128,15 @@ class Login extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
+              <FormGroup label={tx('login.mailPw')} placeholder='IMAP-Password' labelFor='mailPw' labelInfo={`(${tx('login.automatic')})`}>
+                <InputGroup
+                  id='mailPw'
+                  type='text'
+                  value={mailPw}
+                  leftIcon='envelope'
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
               <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mailServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='mailServer'
@@ -145,15 +155,6 @@ class Login extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
-                <InputGroup
-                  id='imap-login'
-                  type='text'
-                  value={mailUser}
-                  leftIcon='envelope'
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
               <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
                 <div class="bp3-select .modifier">
                   <select id="mailSecurity" value={this.state.mailSecurity} onChange={this.handleChange}>
@@ -165,7 +166,7 @@ class Login extends React.Component {
                 </div>
               </FormGroup>
               <h2>{tx('login.outbox')}</h2>
-              <FormGroup label={tx('login.sendUser')} placeholder='IMAP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendUser')} placeholder='SMTP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='sendUser'
                   type='text'
@@ -174,7 +175,16 @@ class Login extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.sendServer')} placeholder='IMAP-Server' labelFor='sendServer' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='sendPw' labelInfo={`(${tx('login.automatic')})`}>
+                <InputGroup
+                  id='sendPw'
+                  type='text'
+                  value={sendPw}
+                  leftIcon='envelope'
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <FormGroup label={tx('login.sendServer')} placeholder='SMTP-Server' labelFor='sendServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='sendServer'
                   type='text'
@@ -183,20 +193,11 @@ class Login extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.sendPort')} placeholder='IMAP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendPort')} placeholder='SMTP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='sendPort'
                   type='text'
                   value={sendPort}
-                  leftIcon='envelope'
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-              <FormGroup label={tx('login.sendUser')} placeholder='IMAP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
-                <InputGroup
-                  id='smtp-login'
-                  type='text'
-                  value={sendUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
