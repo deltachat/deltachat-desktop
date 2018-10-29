@@ -5,7 +5,7 @@ const instance = new EmojiConvertor();
 instance.init_unified();
 instance.init_colons();
 instance.img_sets.apple.path =
-  'node_modules/emoji-datasource-apple/img/apple/64/';
+  '../node_modules/deltachat-emoji/img/';
 instance.include_title = true;
 instance.replace_mode = 'img';
 instance.supports_css = false; // needed to avoid spans with background-image
