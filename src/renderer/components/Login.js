@@ -27,7 +27,7 @@ class Login extends React.Component {
       sendPw: null,
       sendServer: null,
       sendPort: null,
-      sendSecurity: null,
+      sendSecurity: null
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -54,13 +54,15 @@ class Login extends React.Component {
       send_port: this.state.sendPort
     }
 
-    //TODO: Implement security
+    console.log('b', credentials)
+
+    // TODO: Implement security
     ipcRenderer.send('login', credentials)
     event.preventDefault()
   }
 
-  handleShowAdvanced() {
-    this.setState({showAdvanced: !this.state.showAdvanced})
+  handleShowAdvanced () {
+    this.setState({ showAdvanced: !this.state.showAdvanced })
   }
 
   cancelClick (event) {
@@ -77,12 +79,11 @@ class Login extends React.Component {
   render () {
     console.log(this.state)
     const { logins, deltachat } = this.props
-    const { email, mailUser, mailPw, mailServer, mailPort, mailSecurity, sendUser, sendPw, sendServer, sendPort, sendSecurity } = this.state
+    const { addr, mailUser, mailPw, mailServer, mailPort, mailSecurity, sendUser, sendPw, sendServer, sendPort, sendSecurity } = this.state
     const tx = window.translate
 
-
     var loading = deltachat.configuring
-
+    console.log(loading, addr, mailPw)
     return (
       <div className='Login'>
         <Navbar fixedToTop>
@@ -100,9 +101,9 @@ class Login extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
               <InputGroup
-                id='email'
+                id='addr'
                 type='text'
-                value={email}
+                value={addr}
                 leftIcon='envelope'
                 onChange={this.handleChange}
               />
@@ -128,15 +129,6 @@ class Login extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.mailPw')} placeholder='IMAP-Password' labelFor='mailPw' labelInfo={`(${tx('login.automatic')})`}>
-                <InputGroup
-                  id='mailPw'
-                  type='text'
-                  value={mailPw}
-                  leftIcon='envelope'
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
               <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mailServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='mailServer'
@@ -156,12 +148,12 @@ class Login extends React.Component {
                 />
               </FormGroup>
               <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
-                <div class="bp3-select .modifier">
-                  <select id="mailSecurity" value={this.state.mailSecurity} onChange={this.handleChange}>
-                    <option value="">{tx('login.security.automatic')}</option>
-                    <option value="ssl">SSL/TLS</option>
-                    <option value="starttls">STARTTLS</option>
-                    <option value="plain">{tx('login.security.disable')}</option>
+                <div class='bp3-select .modifier'>
+                  <select id='mailSecurity' value={mailSecurity} onChange={this.handleChange}>
+                    <option value=''>{tx('login.security.automatic')}</option>
+                    <option value='ssl'>SSL/TLS</option>
+                    <option value='starttls'>STARTTLS</option>
+                    <option value='plain'>{tx('login.security.disable')}</option>
                   </select>
                 </div>
               </FormGroup>
@@ -203,17 +195,17 @@ class Login extends React.Component {
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='sendSecurity' labelInfo={`(${tx('login.automatic')})`}>
-                <div class="bp3-select .modifier">
-                  <select id="sendSecurity" value={this.state.sendSecurity} onChange={this.handleChange}>
-                    <option value="">{tx('login.security.automatic')}</option>
-                    <option value="ssl">SSL/TLS</option>
-                    <option value="starttls">STARTTLS</option>
-                    <option value="plain">{tx('login.security.disable')}</option>
+                <div class='bp3-select .modifier'>
+                  <select id='sendSecurity' value={sendSecurity} onChange={this.handleChange}>
+                    <option value=''>{tx('login.security.automatic')}</option>
+                    <option value='ssl'>SSL/TLS</option>
+                    <option value='starttls'>STARTTLS</option>
+                    <option value='plain'>{tx('login.security.disable')}</option>
                   </select>
                 </div>
               </FormGroup>
             </Collapse>
-            <Button disabled={loading || !(email && mailPw)} type='submit' text={tx('login.button')} />
+            <Button disabled={loading || (!addr || !mailPw)} type='submit' text={tx('login.button')} />
             {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>
@@ -221,8 +213,5 @@ class Login extends React.Component {
     )
   }
 }
-
-
-
 
 module.exports = Login

@@ -57,7 +57,7 @@ class DeltaChatController {
    */
   login (credentials, render) {
     // Creates a separate DB file for each login
-    console.log(credentials)
+    console.log('a', credentials)
     const cwd = path.join(this.cwd, Buffer.from(credentials.addr).toString('hex'))
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
@@ -375,7 +375,7 @@ class DeltaChatController {
   _resetState () {
     this.ready = false
     this.configuring = false
-    this.credentials = { addr : '' }
+    this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
   }

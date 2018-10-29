@@ -227,6 +227,10 @@
         "message": "SMTP-Loginname",
         "description": "Label above input field for smtp login name"
     },
+    "login.sendPw": {
+        "message": "SMTP-Password",
+        "description": "Label above input field for smtp password"
+    },
     "login.sendServer": {
         "message": "SMTP-Server",
         "description": "Label above input field for smtp server host"
