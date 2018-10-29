@@ -191,6 +191,58 @@
         "message": "required",
         "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
     },
+    "login.inbox": {
+        "message": "Inbox",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.imapLogin": {
+        "message": "IMAP-Loginname",
+        "description": "Label above input field for imap login name"
+    },
+    "login.imapServer": {
+        "message": "IMAP-Server",
+        "description": "Label above input field for imap server host"
+    },
+    "login.imapPort": {
+        "message": "IMAP-Port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.imapSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Off",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatic",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Outbox",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.smtpLogin": {
+        "message": "SMTP-Loginname",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.smtpServer": {
+        "message": "SMTP-Server",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.smtpPort": {
+        "message": "SMTP-Port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.smtpSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatic",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
+    },
     "login.cancel": {
         "message": "Cancel",
         "description": "Shown in the login form"
