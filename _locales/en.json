@@ -185,11 +185,11 @@
     },
     "login.mailPw": {
         "message": "Password",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "required",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
     "login.inbox": {
         "message": "Inbox",
