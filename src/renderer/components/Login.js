@@ -16,18 +16,18 @@ class Login extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      email: process.env.DC_ADDR,
-      password: process.env.DC_MAIL_PW,
+      addr: process.env.DC_ADDR,
+      mailPw: process.env.DC_MAIL_PW,
       showAdvanced: false,
-      imapLogin: null,
-      imapServer: null,
-      imapPort: null,
-      imapSecurity: null,
-      smtpLogin: null,
-      smtpPassword: null,
-      smtpServer: null,
-      smtpPort: null,
-      smtpSecurity: null,
+      mailUser: null,
+      mailServer: null,
+      mailPort: null,
+      mailSecurity: null,
+      sendUser: null,
+      sendPw: null,
+      sendServer: null,
+      sendPort: null,
+      sendSecurity: null,
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -43,16 +43,18 @@ class Login extends React.Component {
 
   handleSubmit (event) {
     var credentials = {
-      addr: this.state.email,
-      mail_pw: this.state.password,
-      mail_user: this.state.imapLogin,
-      mail_server: this.state.imapServer,
-      mail_port: this.state.imapPort,
-      send_server: this.state.smtpServer,
-      send_user: this.state.smtpLogin,
-      send_pw: this.state.smtpPassword,
-      send_port: this.state.smtpPort
+      addr: this.state.addr,
+      mail_pw: this.state.mailPw,
+      mail_user: this.state.mailUser,
+      mail_server: this.state.mailServer,
+      mail_port: this.state.mailPort,
+      send_server: this.state.sendServer,
+      send_user: this.state.sendUser,
+      send_pw: this.state.sendPw,
+      send_port: this.state.sendPort
     }
+
+    //TODO:
     ipcRenderer.send('login', credentials)
     event.preventDefault()
   }
@@ -63,19 +65,19 @@ class Login extends React.Component {
 
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
-    this.setState({ email: '', password: '' })
+    this.setState({ addr: '', mailPw: '' })
     event.preventDefault()
     event.stopPropagation()
   }
 
   onClickLogin (login) {
-    ipcRenderer.send('login', { email: login, password: true })
+    ipcRenderer.send('login', { addr: login, mailPw: true })
   }
 
   render () {
     console.log(this.state)
     const { logins, deltachat } = this.props
-    const { email, password, imapLogin, imapServer, imapPort, imapSecurity, smtpLogin, smtpServer, smtpPort, smtpSecurity } = this.state
+    const { email, mailPw, mailUser, mailServer, mailPort, mailSecurity, sendUser, sendServer, sendPort, sendSecurity } = this.state
     const tx = window.translate
 
     var loading = deltachat.configuring
@@ -104,57 +106,57 @@ class Login extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <FormGroup label={tx('login.password')} placeholder='Password' labelFor='password' labelInfo={`(${tx('login.required')})`}>
+            <FormGroup label={tx('login.mailPw')} placeholder='Password' labelFor='mailPw' labelInfo={`(${tx('login.required')})`}>
               <InputGroup
-                id='password'
+                id='mailPw'
                 leftIcon='lock'
-                type='password'
-                value={password}
+                type='mailPw'
+                value={mailPw}
                 onChange={this.handleChange}
               />
             </FormGroup>
             <Button onClick={this.handleShowAdvanced}>{(this.state.showAdvanced ? '-' : '+') + ' Advanced' }</Button>
             <Collapse isOpen={this.state.showAdvanced}>
               <h2>{tx('login.inbox')}</h2>
-              <FormGroup label={tx('login.imapLogin')} placeholder='IMAP-Loginname' labelFor='imapLogin' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='imapLogin'
+                  id='mailUser'
                   type='text'
-                  value={imapLogin}
+                  value={mailUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.imapServer')} placeholder='IMAP-Server' labelFor='imapServer' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mailServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='imapServer'
+                  id='mailServer'
                   type='text'
-                  value={imapLogin}
+                  value={mailUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.imapPort')} placeholder='IMAP-Port' labelFor='imapPort' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailPort')} placeholder='IMAP-Port' labelFor='mailPort' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='imapPort'
+                  id='mailPort'
                   type='text'
-                  value={imapPort}
+                  value={mailPort}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.imapLogin')} placeholder='IMAP-Loginname' labelFor='imapLogin' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='imap-login'
                   type='text'
-                  value={imapLogin}
+                  value={mailUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.imapSecurity')} placeholder='Security' labelFor='imapSecurity' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
                 <div class="bp3-select .modifier">
-                  <select id="imapSecurity" value={this.state.imapSecurity} onChange={this.handleChange}>
+                  <select id="mailSecurity" value={this.state.mailSecurity} onChange={this.handleChange}>
                     <option value="">{tx('login.security.automatic')}</option>
                     <option value="ssl">SSL/TLS</option>
                     <option value="starttls">STARTTLS</option>
@@ -163,45 +165,45 @@ class Login extends React.Component {
                 </div>
               </FormGroup>
               <h2>{tx('login.outbox')}</h2>
-              <FormGroup label={tx('login.smtpLogin')} placeholder='IMAP-Loginname' labelFor='smtpLogin' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendUser')} placeholder='IMAP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='smtpLogin'
+                  id='sendUser'
                   type='text'
-                  value={smtpLogin}
+                  value={sendUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.smtpServer')} placeholder='IMAP-Server' labelFor='smtpServer' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendServer')} placeholder='IMAP-Server' labelFor='sendServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='smtpServer'
+                  id='sendServer'
                   type='text'
-                  value={smtpLogin}
+                  value={sendUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.smtpPort')} placeholder='IMAP-Port' labelFor='smtpPort' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendPort')} placeholder='IMAP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='smtpPort'
+                  id='sendPort'
                   type='text'
-                  value={smtpPort}
+                  value={sendPort}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.smtpLogin')} placeholder='IMAP-Loginname' labelFor='smtpLogin' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendUser')} placeholder='IMAP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='smtp-login'
                   type='text'
-                  value={smtpLogin}
+                  value={sendUser}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.smtpSecurity')} placeholder='Security' labelFor='smtpSecurity' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='sendSecurity' labelInfo={`(${tx('login.automatic')})`}>
                 <div class="bp3-select .modifier">
-                  <select id="smtpSecurity" value={this.state.smtpSecurity} onChange={this.handleChange}>
+                  <select id="sendSecurity" value={this.state.sendSecurity} onChange={this.handleChange}>
                     <option value="">{tx('login.security.automatic')}</option>
                     <option value="ssl">SSL/TLS</option>
                     <option value="starttls">STARTTLS</option>
@@ -210,7 +212,7 @@ class Login extends React.Component {
                 </div>
               </FormGroup>
             </Collapse>
-            <Button disabled={loading || !(email && password)} type='submit' text={tx('login.button')} />
+            <Button disabled={loading || !(email && mailPw)} type='submit' text={tx('login.button')} />
             {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>

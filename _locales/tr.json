@@ -171,13 +171,13 @@
         "message": "E-posta Adresi",
         "description": "Label above input field for e-mail address"
     },
-    "login.password": {
+    "login.mailPw": {
         "message": "Parola",
-        "description": "Label above input field for password"
+        "description": "Label above input field for mailPw"
     },
     "login.required": {
         "message": "gerekli",
-        "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
     },
     "login.cancel": {
         "message": "İptal",

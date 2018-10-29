@@ -183,31 +183,31 @@
         "message": "E-Mail Address",
         "description": "Label above input field for e-mail address"
     },
-    "login.password": {
+    "login.mailPw": {
         "message": "Password",
-        "description": "Label above input field for password"
+        "description": "Label above input field for mailPw"
     },
     "login.required": {
         "message": "required",
-        "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
     },
     "login.inbox": {
         "message": "Inbox",
         "description": "Describes the advanced section for inbox (imap)"
     },
-    "login.imapLogin": {
+    "login.mailUser": {
         "message": "IMAP-Loginname",
         "description": "Label above input field for imap login name"
     },
-    "login.imapServer": {
+    "login.mailServer": {
         "message": "IMAP-Server",
         "description": "Label above input field for imap server host"
     },
-    "login.imapPort": {
+    "login.mailPort": {
         "message": "IMAP-Port",
         "description": "Label above input field for imap server port"
     },
-    "login.imapSecurity": {
+    "login.mailSecurity": {
         "message": "Security",
         "description": "Label above selection box for imap security"
     },
@@ -223,19 +223,19 @@
         "message": "Outbox",
         "description": "Describes the advanced section for outbox (smtp)"
     },
-    "login.smtpLogin": {
+    "login.sendUser": {
         "message": "SMTP-Loginname",
         "description": "Label above input field for smtp login name"
     },
-    "login.smtpServer": {
+    "login.sendServer": {
         "message": "SMTP-Server",
         "description": "Label above input field for smtp server host"
     },
-    "login.smtpPort": {
+    "login.sendPort": {
         "message": "SMTP-Port",
         "description": "Label above input field for smtp server port"
     },
-    "login.smtpSecurity": {
+    "login.sendSecurity": {
         "message": "Security",
         "description": "Label above selection box for smtp security"
     },
