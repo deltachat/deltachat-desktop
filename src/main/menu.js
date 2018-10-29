@@ -57,15 +57,6 @@ function getAvailableLanguages () {
 function getMenuTemplate () {
   return [
     {
-      translate: 'menu.preferences',
-      submenu: [
-        {
-          translate: 'menu.preferences.language',
-          submenu: getAvailableLanguages()
-        }
-      ]
-    },
-    {
       translate: 'menu.edit',
       submenu: [
         {
@@ -123,6 +114,15 @@ function getMenuTemplate () {
               click: () => windows.main.toggleDevTools()
             }
           ]
+        }
+      ]
+    },
+    {
+      translate: 'menu.preferences',
+      submenu: [
+        {
+          translate: 'menu.preferences.language',
+          submenu: getAvailableLanguages()
         }
       ]
     },
