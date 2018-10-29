@@ -13,9 +13,32 @@ const {
 } = require('@blueprintjs/core')
 
 class CreateChat extends React.Component {
+  constructor (props) {
+    super(props)
+    this.onCreateGroup = this.onCreateGroup.bind(this)
+    this.onCreateContact = this.onCreateContact.bind(this)
+    this.chooseContact = this.chooseContact.bind(this)
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     // we don't care about the props for now, really.
     return (this.state !== nextState)
+  }
+
+  onCreateGroup () {
+    this.props.changeScreen('CreateGroup')
+  }
+
+  onCreateContact () {
+    var self = this
+
+    var onSubmit = (contactId) => {
+      if (contactId !== 0) {
+        self.chooseContact({ id: contactId })
+      }
+    }
+
+    this.props.changeScreen('CreateContact', { onSubmit })
   }
 
   chooseContact (contact) {
@@ -39,6 +62,8 @@ class CreateChat extends React.Component {
         </Navbar>
         <div className='window'>
           <div className='CreateChat'>
+            <button onClick={this.onCreateContact}>{tx('addContact')}</button>
+            <button onClick={this.onCreateGroup}>{tx('createGroup')}</button>
             {deltachat.contacts.map((contact) => {
               return (<ContactListItem
                 contact={contact}
