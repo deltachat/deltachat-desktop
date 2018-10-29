@@ -7,6 +7,20 @@
 
 <center><img src="screenshot.png"/></center>
 
+### Run the app
+
+```
+$ npm start
+```
+
+### Watch the code
+
+It is recommended to run this watch command in a separate terminal
+
+```
+$ npm run watch
+```
+
 ## Configuration and databases
 
 The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
@@ -51,20 +65,6 @@ $ sudo apt-get remove libetpan-dev
 Then try running `npm install` again.
 
 Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for additional information.
-
-### Run the app
-
-```
-$ npm start
-```
-
-### Watch the code
-
-Restart the electron app automatically every time code changes.
-
-```
-$ npm run watch
-```
 
 ### Run linters
 
