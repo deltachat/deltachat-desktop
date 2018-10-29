@@ -18,10 +18,10 @@ function messageIdToJson (messageId, dc) {
   }
 }
 
-function chatIdToJson (chatId, dc) {
+function chatIdToJson (chatId, dc, loadMessages) {
   const chat = dc.getChat(chatId).toJson()
   const messageIds = dc.getChatMessages(chatId, 0, 0)
-  chat.messages = messageIds.map(id => messageIdToJson(id, dc))
+  chat.messages = loadMessages ? messageIds.map(id => messageIdToJson(id, dc)) : []
   chat.contacts = dc.getChatContacts(chatId).map(id => {
     return dc.getContact(id).toJson()
   })
@@ -369,7 +369,8 @@ class DeltaChatController {
     const count = list.getCount()
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
-      const chat = chatIdToJson(chatId, this._dc)
+      const loadMessages = this._selectedChatId === chatId
+      const chat = chatIdToJson(chatId, this._dc, loadMessages)
       if (chat) {
         chat.summary = list.getSummary(i).toJson()
         chats.push(chat)
