@@ -26,7 +26,7 @@ class CreateContact extends React.Component {
   }
 
   back () {
-    this.props.changeScreen('ChatList')
+    this.props.changeScreen('CreateChat')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
