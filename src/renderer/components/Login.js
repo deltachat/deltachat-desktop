@@ -54,8 +54,6 @@ class Login extends React.Component {
       send_port: this.state.sendPort
     }
 
-    console.log('b', credentials)
-
     // TODO: Implement security
     ipcRenderer.send('login', credentials)
     event.preventDefault()
@@ -77,13 +75,11 @@ class Login extends React.Component {
   }
 
   render () {
-    console.log(this.state)
     const { logins, deltachat } = this.props
     const { addr, mailUser, mailPw, mailServer, mailPort, mailSecurity, sendUser, sendPw, sendServer, sendPort, sendSecurity } = this.state
     const tx = window.translate
 
     var loading = deltachat.configuring
-    console.log(loading, addr, mailPw)
     return (
       <div className='Login'>
         <Navbar fixedToTop>
