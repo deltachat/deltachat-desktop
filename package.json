@@ -11,9 +11,10 @@
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && npm run start",
-    "build": "npm run build-ts && npm run build-css && npm run build-es5",
-    "build-ts": "cd conversations && tsc",
-    "build-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
+    "build": "npm run build-es5 && npm run build-conversations",
+    "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
+    "build-conversations-ts": "cd conversations && tsc",
+    "build-conversations-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
     "build-es5": "buble src --output es5"
   },
   "repository": {
