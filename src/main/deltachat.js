@@ -228,6 +228,7 @@ class DeltaChatController {
       log('chat was archived, unarchiving it')
       this._dc.archiveChat(chatId, 0)
     }
+    this.selectChat(chatId)
     return chatId
   }
 
@@ -279,6 +280,7 @@ class DeltaChatController {
   createUnverifiedGroup (name, contactIds) {
     const chatId = this._dc.createUnverifiedGroupChat(name)
     contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
+    this.selectChat(chatId)
     return { chatId }
   }
 

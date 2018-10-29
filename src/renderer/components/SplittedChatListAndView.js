@@ -40,8 +40,6 @@ class SplittedChatListAndView extends React.Component {
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.onCreateChat = this.onCreateChat.bind(this)
-    this.onCreateGroup = this.onCreateGroup.bind(this)
-    this.onCreateContact = this.onCreateContact.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
   }
@@ -77,29 +75,8 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ deadDropChat: false })
   }
 
-  onCreateContact () {
-    var self = this
-
-    const tx = window.translate
-
-    var onSubmit = (chatId) => {
-      if (chatId !== 0) {
-        self.props.userFeedback({
-          type: 'success',
-          text: tx('contactCreateSuccess')
-        })
-        self.props.changeScreen('ChatList')
-      }
-    }
-    this.props.changeScreen('CreateContact', { onSubmit })
-  }
-
   onCreateChat () {
     this.props.changeScreen('CreateChat')
-  }
-
-  onCreateGroup () {
-    this.props.changeScreen('CreateGroup')
   }
 
   onDeadDropClick (chat) {
@@ -140,9 +117,7 @@ class SplittedChatListAndView extends React.Component {
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
 
     const menu = (<Menu>
-      <MenuItem icon='plus' text={tx('addContact')} onClick={this.onCreateContact} />
       <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
-      <MenuItem icon='plus' text={tx('createGroup')} onClick={this.onCreateGroup} />
       {selectedChat && !showArchivedChats ? <MenuItem icon='import' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, true)} /> : null}
       {selectedChat && showArchivedChats ? <MenuItem icon='export' text={unArchiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, false)} /> : null}
       {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
