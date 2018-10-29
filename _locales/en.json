@@ -183,13 +183,69 @@
         "message": "E-Mail Address",
         "description": "Label above input field for e-mail address"
     },
-    "login.password": {
+    "login.mailPw": {
         "message": "Password",
-        "description": "Label above input field for password"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "required",
-        "description": "Word within parenthesis to let the user know that e-mail and password are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Inbox",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP-Loginname",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP-Server",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP-Port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Off",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatic",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Outbox",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP-Loginname",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP-Password",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP-Server",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP-Port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatic",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "Cancel",

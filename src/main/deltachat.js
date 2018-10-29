@@ -55,13 +55,13 @@ class DeltaChatController {
   /**
    * Dispatched when logging in from Login
    */
-  login ({ email, password }, render) {
+  login (credentials, render) {
     // Creates a separate DB file for each login
-    const cwd = path.join(this.cwd, Buffer.from(email).toString('hex'))
+    const cwd = path.join(this.cwd, Buffer.from(credentials.addr).toString('hex'))
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
     var dc = this._dc
-    this.credentials = { email }
+    this.credentials = credentials
     this._render = render
 
     dc.open(cwd, err => {
@@ -70,18 +70,15 @@ class DeltaChatController {
         log('Ready')
         this.ready = true
         this.configuring = false
-        if (!electron.app.logins.includes(email)) {
-          electron.app.logins.push(email)
+        if (!electron.app.logins.includes(credentials.addr)) {
+          electron.app.logins.push(credentials.addr)
         }
         render()
       }
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
         this.configuring = true
-        dc.configure({
-          addr: email,
-          mail_pw: password
-        })
+        dc.configure(credentials)
         render()
       } else {
         onReady()
@@ -379,7 +376,7 @@ class DeltaChatController {
   _resetState () {
     this.ready = false
     this.configuring = false
-    this.credentials = { email: '' }
+    this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
   }
