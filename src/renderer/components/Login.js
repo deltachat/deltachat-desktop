@@ -54,7 +54,7 @@ class Login extends React.Component {
       send_port: this.state.sendPort
     }
 
-    //TODO:
+    //TODO: Implement security
     ipcRenderer.send('login', credentials)
     event.preventDefault()
   }
@@ -131,7 +131,7 @@ class Login extends React.Component {
                 <InputGroup
                   id='mailServer'
                   type='text'
-                  value={mailUser}
+                  value={mailServer}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
@@ -178,7 +178,7 @@ class Login extends React.Component {
                 <InputGroup
                   id='sendServer'
                   type='text'
-                  value={sendUser}
+                  value={sendServer}
                   leftIcon='envelope'
                   onChange={this.handleChange}
                 />
