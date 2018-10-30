@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const C = require('deltachat-node/constants')
 
 const {
   Alignment,
@@ -15,30 +16,62 @@ const {
 class Login extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      addr: process.env.DC_ADDR,
-      showAdvanced: false,
-      mailUser: null,
-      mailPw: process.env.DC_MAIL_PW,
-      mailServer: null,
-      mailPort: null,
-      mailSecurity: null,
-      sendUser: null,
-      sendPw: null,
-      sendServer: null,
-      sendPort: null,
-      sendSecurity: null
-    }
+    this.state = this._defaultState(false)
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleShowAdvanced = this.handleShowAdvanced.bind(this)
   }
 
+  _defaultState(showAdvanced) {
+    return {
+      addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
+      mailUser: '',
+      mailPw: process.env.DC_MAIL_PW ? process.env.DC_MAIL_PW : '',
+      mailServer: '',
+      mailPort: '',
+      mailSecurity: '',
+      sendUser: '',
+      sendPw: '',
+      sendServer: '',
+      sendPort: '',
+      sendSecurity: '',
+      showAdvanced: showAdvanced,
+    }
+  }
+
   handleChange (event) {
     var state = {}
     state[event.target.id] = event.target.value
     this.setState(state)
+  }
+
+
+  translateSecurityToServerFlags(mailSecurity, sendSecurity) {
+    let serverFlags = []
+    if(mailSecurity) {
+      let imapFlag
+      if(mailSecurity === 'ssl') {
+        imapFlag = C.DC_LP_IMAP_SOCKET_SSL
+      } else if(mailSecurity === 'starttls') {
+        imapFlag = C.DC_LP_IMAP_SOCKET_STARTTLS
+      } else if(mailSecurity === 'plain') {
+        imapFlag = C.DC_LP_SMTP_SOCKET_PLAIN
+      }
+      if(imapFlag) serverFlags.push(imapFlag)
+    }
+    if(sendSecurity) {
+      let smtpFlag
+      if(mailSecurity === 'ssl') {
+        smtpFlag = C.DC_LP_SMTP_SOCKET_SSL
+      } else if(mailSecurity === 'starttls') {
+        smtpFlag = C.DC_LP_SMTP_SOCKET_STARTTLS
+      } else if(mailSecurity === 'plain') {
+        smtpFlag = C.DC_MAX_GET_INFO_LEN
+      }
+      if(smtpFlag) serverFlags.push(smtpFlag)
+    }
+    return serverFlags.length > 0 ? serverFlags : null
   }
 
   handleSubmit (event) {
@@ -51,7 +84,18 @@ class Login extends React.Component {
       send_server: this.state.sendServer,
       send_user: this.state.sendUser,
       send_pw: this.state.sendPw,
-      send_port: this.state.sendPort
+      send_port: this.state.sendPort,
+      server_flags: this.translateSecurityToServerFlags(
+        this.state.mailSecurity,
+        this.state.sendSecurity
+      )
+    }
+
+    // Remove all properties where value is an empty string, gets us around
+    // React not liking state properties where the value is null/undefined if
+    // bound to an input value
+    for(let key in credentials) {
+      if(credentials[key] === '') delete credentials[key]
     }
 
     // TODO: Implement security
@@ -65,7 +109,7 @@ class Login extends React.Component {
 
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
-    this.setState({ addr: '', mailPw: '' })
+    this.setState(this._defaultState(this.state.showAdvanced))
     event.preventDefault()
     event.stopPropagation()
   }
@@ -144,7 +188,7 @@ class Login extends React.Component {
                 />
               </FormGroup>
               <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
-                <div class='bp3-select .modifier'>
+                <div className='bp3-select .modifier'>
                   <select id='mailSecurity' value={mailSecurity} onChange={this.handleChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
@@ -191,7 +235,7 @@ class Login extends React.Component {
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='sendSecurity' labelInfo={`(${tx('login.automatic')})`}>
-                <div class='bp3-select .modifier'>
+                <div className='bp3-select .modifier'>
                   <select id='sendSecurity' value={sendSecurity} onChange={this.handleChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
