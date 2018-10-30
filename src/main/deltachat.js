@@ -55,7 +55,7 @@ class DeltaChatController {
   /**
    * Dispatched when logging in from Login
    */
-  login (credentials, render) {
+  login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
     const cwd = path.join(this.cwd, Buffer.from(credentials.addr).toString('hex'))
     log('Using deltachat instance', cwd)
@@ -63,6 +63,8 @@ class DeltaChatController {
     var dc = this._dc
     this.credentials = credentials
     this._render = render
+
+    this.setCoreStrings(coreStrings)
 
     dc.open(cwd, err => {
       if (err) throw err
@@ -289,9 +291,27 @@ class DeltaChatController {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
+  /**
+   * Dispatched from SplittedChatListAndView and used internally
+   */
   selectChat (chatId) {
     log('selecting chat with id', chatId)
     this._selectedChatId = chatId
+    this._render()
+  }
+
+  /**
+   * Called when this controller is created and when current
+   * locale changes
+   */
+  setCoreStrings (strings) {
+    if (!this._dc) return
+
+    this._dc.clearStringTable()
+    Object.keys(strings).forEach(key => {
+      this._dc.setStringTable(Number(key), strings[key])
+    })
+
     this._render()
   }
 
