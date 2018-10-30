@@ -164,8 +164,8 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </div>
-        <dialogs.KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
-        <dialogs.DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
+        <dialogs.KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <div className='below-navbar'>
           <ChatList
             chats={showArchivedChats ? deltachat.archivedChats : deltachat.chats}
