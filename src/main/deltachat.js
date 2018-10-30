@@ -200,6 +200,14 @@ class DeltaChatController {
     this.createChatByContactId(contactId)
   }
 
+  unblockContact (contactId) {
+    log('unblock contact', contactId)
+    const contact = this._dc.getContact(contactId)
+    this._dc.blockContact(contactId, false)
+    const name = contact.getNameAndAddress()
+    log.warning(`Unblocked contact ${name} (id = ${contactId})`)
+  }
+
   /**
    * Dispatched when denying a chat in DeadDrop
    */
