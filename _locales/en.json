@@ -191,6 +191,10 @@
         "message": "required",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
+    "login.advanced": {
+        "message": "Advanced",
+        "description": "Advanced settings button label"
+    },
     "login.inbox": {
         "message": "Inbox",
         "description": "Describes the advanced section for inbox (imap)"

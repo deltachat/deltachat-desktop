@@ -113,7 +113,7 @@ class Login extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button onClick={this.handleShowAdvanced}>{(this.state.showAdvanced ? '-' : '+') + ' Advanced' }</Button>
+            <Button onClick={this.handleShowAdvanced}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
             <Collapse isOpen={this.state.showAdvanced}>
               <h2>{tx('login.inbox')}</h2>
               <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
