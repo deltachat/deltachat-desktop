@@ -22,6 +22,7 @@ function chatIdToJson (chatId, dc) {
   const chat = dc.getChat(chatId).toJson()
   const messageIds = dc.getChatMessages(chatId, 0, 0)
   chat.messages = messageIds.map(id => messageIdToJson(id, dc))
+  chat.contacts = dc.getChatContacts(chatId)
   if (chatId === C.DC_CHAT_ID_DEADDROP) {
     const msg = dc.getMessage(messageIds[0])
     const fromId = msg && msg.getFromId()
@@ -200,6 +201,15 @@ class DeltaChatController {
     this.createChatByContactId(contactId)
   }
 
+  unblockContact (contactId) {
+    log('unblock contact', contactId)
+    const contact = this._dc.getContact(contactId)
+    this._dc.blockContact(contactId, false)
+    const name = contact.getNameAndAddress()
+    log.warning(`Unblocked contact ${name} (id = ${contactId})`)
+    return true
+  }
+
   /**
    * Dispatched when denying a chat in DeadDrop
    */
@@ -209,6 +219,7 @@ class DeltaChatController {
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
     log.warning(`Blocked contact ${name} (id = ${contactId})`)
+    return true
   }
 
   /**
@@ -328,6 +339,7 @@ class DeltaChatController {
       credentials: this.credentials,
       ready: this.ready,
       contacts: this._contacts(),
+      blockedContacts: this._blockedContacts(),
       showArchivedChats,
       selectedChat: this._selectedChat(showArchivedChats ? archivedChats : chats),
       chats,
@@ -373,6 +385,13 @@ class DeltaChatController {
       selectedChat.freshMessageCounter = 0
     }
     return selectedChat
+  }
+
+  _blockedContacts (...args) {
+    if (!this._dc) return []
+    return this._dc.getBlockedContacts(...args).map(id => {
+      return this._dc.getContact(id).toJson()
+    })
   }
 
   /**

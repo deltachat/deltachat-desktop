@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
+const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
@@ -58,6 +59,9 @@ class Home extends React.Component {
         break
       case 'EditGroup':
         Screen = EditGroup
+        break
+      case 'UnblockContacts':
+        Screen = UnblockContacts
         break
       default:
         Screen = SplittedChatListAndView
