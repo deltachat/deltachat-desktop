@@ -23,7 +23,7 @@ class Login extends React.Component {
     this.handleShowAdvanced = this.handleShowAdvanced.bind(this)
   }
 
-  _defaultState(showAdvanced) {
+  _defaultState (showAdvanced) {
     return {
       addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
       mailUser: '',
@@ -36,7 +36,7 @@ class Login extends React.Component {
       sendServer: '',
       sendPort: '',
       sendSecurity: '',
-      showAdvanced: showAdvanced,
+      showAdvanced: showAdvanced
     }
   }
 
@@ -46,30 +46,29 @@ class Login extends React.Component {
     this.setState(state)
   }
 
-
-  translateSecurityToServerFlags(mailSecurity, sendSecurity) {
+  translateSecurityToServerFlags (mailSecurity, sendSecurity) {
     let serverFlags = []
-    if(mailSecurity) {
+    if (mailSecurity) {
       let imapFlag
-      if(mailSecurity === 'ssl') {
+      if (mailSecurity === 'ssl') {
         imapFlag = C.DC_LP_IMAP_SOCKET_SSL
-      } else if(mailSecurity === 'starttls') {
+      } else if (mailSecurity === 'starttls') {
         imapFlag = C.DC_LP_IMAP_SOCKET_STARTTLS
-      } else if(mailSecurity === 'plain') {
+      } else if (mailSecurity === 'plain') {
         imapFlag = C.DC_LP_SMTP_SOCKET_PLAIN
       }
-      if(imapFlag) serverFlags.push(imapFlag)
+      if (imapFlag) serverFlags.push(imapFlag)
     }
-    if(sendSecurity) {
+    if (sendSecurity) {
       let smtpFlag
-      if(mailSecurity === 'ssl') {
+      if (mailSecurity === 'ssl') {
         smtpFlag = C.DC_LP_SMTP_SOCKET_SSL
-      } else if(mailSecurity === 'starttls') {
+      } else if (mailSecurity === 'starttls') {
         smtpFlag = C.DC_LP_SMTP_SOCKET_STARTTLS
-      } else if(mailSecurity === 'plain') {
+      } else if (mailSecurity === 'plain') {
         smtpFlag = C.DC_MAX_GET_INFO_LEN
       }
-      if(smtpFlag) serverFlags.push(smtpFlag)
+      if (smtpFlag) serverFlags.push(smtpFlag)
     }
     return serverFlags.length > 0 ? serverFlags : null
   }
@@ -94,8 +93,8 @@ class Login extends React.Component {
     // Remove all properties where value is an empty string, gets us around
     // React not liking state properties where the value is null/undefined if
     // bound to an input value
-    for(let key in credentials) {
-      if(credentials[key] === '') delete credentials[key]
+    for (let key in credentials) {
+      if (credentials[key] === '') delete credentials[key]
     }
 
     // TODO: Implement security
