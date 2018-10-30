@@ -19,6 +19,10 @@
         "message": "Lägg till kontakt",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Namn",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
         "message": "Skapa grupp",
         "description": "Create group menu item label"
@@ -66,6 +70,14 @@
     "unArchiveChat": {
         "message": "Oarkivera chatt",
         "description": "Unarchive chat menu item label"
+    },
+    "noChats": {
+        "message": "Inga chattar",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "Inga arkiverade chattar",
+        "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
         "message": "Radera chat",
@@ -173,11 +185,67 @@
     },
     "login.mailPw": {
         "message": "Lösenord",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "nödvändig",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Inkorg",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP loginnamn",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP server",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Säkerhet",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Av",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatisk",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Utkorg",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP loginnamn",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP lösenord",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP server",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Säkerhet",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatisk",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "Avbryt",
@@ -450,5 +518,189 @@
     "language.zh_CN": {
         "message": "Kinesiska",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "Emoji av $1$",
+        "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+        "message": "Välkommen till Delta Chat",
+        "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+        "message": "Välj eller skapa en ny chatt",
+        "description": "Suggestion of what to do when no chats are selected"
+    },
+    "DC_STR_NOMESSAGES": {
+        "message": "Inga meddelanden.",
+        "description": ""
+    },
+    "DC_STR_SELF": {
+        "message": "Mig",
+        "description": ""
+    },
+    "DC_STR_DRAFT": {
+        "message": "Utkast",
+        "description": ""
+    },
+    "DC_STR_MEMBER": {
+        "message": "%1$s medlemmar",
+        "description": ""
+    },
+    "DC_STR_CONTACT": {
+        "message": "%1$s kontakter",
+        "description": ""
+    },
+    "DC_STR_VOICEMESSAGE": {
+        "message": "Röstmeddelande",
+        "description": ""
+    },
+    "DC_STR_DEADDROP": {
+        "message": "Brevlåda",
+        "description": ""
+    },
+    "DC_STR_IMAGE": {
+        "message": "Bild",
+        "description": ""
+    },
+    "DC_STR_GIF": {
+        "message": "GIF",
+        "description": ""
+    },
+    "DC_STR_VIDEO": {
+        "message": "Video",
+        "description": ""
+    },
+    "DC_STR_AUDIO": {
+        "message": "Ljud",
+        "description": ""
+    },
+    "DC_STR_FILE": {
+        "message": "Fil",
+        "description": ""
+    },
+    "DC_STR_ENCRYPTEDMSG": {
+        "message": "Krypterat meddelande",
+        "description": ""
+    },
+    "DC_STR_STATUSLINE": {
+        "message": "Skickat från Delta Chat: https://delta.chat",
+        "description": ""
+    },
+    "DC_STR_NEWGROUPDRAFT": {
+        "message": "Hej, jag har precis skapat gruppen \"%1$s\" till oss.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPNAME": {
+        "message": "Gruppnamnet ändrades från \"%1$s\" till \"%2$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGCHANGED": {
+        "message": "Gruppbilden ändrades.",
+        "description": ""
+    },
+    "DC_STR_MSGADDMEMBER": {
+        "message": "Medlem %1$s lades till.",
+        "description": ""
+    },
+    "DC_STR_MSGDELMEMBER": {
+        "message": "Medlem %1$s togs bort.",
+        "description": ""
+    },
+    "DC_STR_MSGGROUPLEFT": {
+        "message": "Lämnade gruppen.",
+        "description": ""
+    },
+    "DC_STR_SELFNOTINGRP": {
+        "message": "Du måste vara medlem av gruppen för att ha tillåtelse att göra detta.",
+        "description": ""
+    },
+    "DC_STR_NONETWORK": {
+        "message": "Inget nätverk tillgängligt.",
+        "description": ""
+    },
+    "DC_STR_E2E_AVAILABLE": {
+        "message": "End-to-end kryptering tillgänglig.",
+        "description": ""
+    },
+    "DC_STR_ENCR_TRANSP": {
+        "message": "Transportkryptering.",
+        "description": ""
+    },
+    "DC_STR_ENCR_NONE": {
+        "message": "Ingen kryptering.",
+        "description": ""
+    },
+    "DC_STR_FINGERPRINTS": {
+        "message": "Fingeravtryck",
+        "description": ""
+    },
+    "DC_STR_READRCPT": {
+        "message": "Returkvitto",
+        "description": ""
+    },
+    "DC_STR_READRCPT_MAILBODY": {
+        "message": "Detta är ett returkvitto till följande meddelande \"%1$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGDELETED": {
+        "message": "Gruppbilden togs bort.",
+        "description": ""
+    },
+    "DC_STR_E2E_PREFERRED": {
+        "message": "End-to-end kryptering föredras.",
+        "description": ""
+    },
+    "DC_STR_ARCHIVEDCHATS": {
+        "message": "Arkiverade chattar",
+        "description": ""
+    },
+    "DC_STR_STARREDMSGS": {
+        "message": "Stjärnmärkta meddelanden",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_SUBJECT": {
+        "message": "Uppsättningsmeddelande för Autocrypt",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_BODY": {
+        "message": "Detta är uppsättningsmeddelandet för Autocrypt som används för att skicka nycklar mellan klienter.\n\nFör att kunna avkryptera och använda din nyckel, öppna meddelandet i en Autocrypt-kompatibel klient och skriv in uppsättningskoden som visas på den genererande enheten.",
+        "description": ""
+    },
+    "DC_STR_SELFTALK_SUBTITLE": {
+        "message": "Meddelanden jag skickat till mig själv",
+        "description": ""
+    },
+    "DC_STR_CANTDECRYPT_MSG_BODY": {
+        "message": "Det här meddelandet var krypterat till en annan uppsättning.",
+        "description": ""
+    },
+    "DC_STR_CANNOT_LOGIN": {
+        "message": "Kunde inte logga in som %1$s.",
+        "description": ""
+    },
+    "DC_STR_SERVER_RESPONSE": {
+        "message": "Svar från %1$s: %2$s",
+        "description": ""
+    },
+    "dialogs.blockContact": {
+        "message": "Blockera $1$?",
+        "description": "Dialog to confirm blocking contact"
+    },
+    "dialogs.unblockContact": {
+        "message": "Avblockera $1$?",
+        "description": "Dialog to confirm unblocking contact"
+    },
+    "blockContact": {
+        "message": "Blockera kontakt",
+        "description": "Menu option to block current contact"
+    },
+    "unblockContacts": {
+        "message": "Avblockera kontakter",
+        "description": "Menu option to unblock contacts"
+    },
+    "unblockContacts.noneBlocked": {
+        "message": "Du har inga blockerade kontakter",
+        "description": "Shown when there are no blocked contacts yet"
     }
 }

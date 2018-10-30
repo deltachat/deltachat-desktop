@@ -19,6 +19,10 @@
         "message": "Dodaj kontakt",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Nazwa",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
         "message": "Utwórz grupę",
         "description": "Create group menu item label"
@@ -28,7 +32,7 @@
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Przywróć grupę z archiwum",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
@@ -64,8 +68,16 @@
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "Przywróć czat z archiwum",
         "description": "Unarchive chat menu item label"
+    },
+    "noChats": {
+        "message": "Brak czatów",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "Brak archiwalnych czatów",
+        "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
         "message": "Usuń czat",
@@ -173,11 +185,67 @@
     },
     "login.mailPw": {
         "message": "Hasło",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "wymagane",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Skrzynka odbiorcza",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP nazwa logowania",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP serwer",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Zabezpieczenie",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Wyłączone",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatyczne",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Skrzynka nadawcza",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP nazwa logowania",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP hasło",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP serwer",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Zabezpieczenie",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatyczne",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "Anuluj",
@@ -276,7 +344,7 @@
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Wyślij",
         "description": "Button label for sending a message"
     },
     "received": {
@@ -450,5 +518,189 @@
     "language.zh_CN": {
         "message": "Chiński",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "Emoji of $1$",
+        "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+        "message": "Witamy w Delta Chat",
+        "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+        "message": "Wybież czat lub utwórz nowy czat",
+        "description": "Suggestion of what to do when no chats are selected"
+    },
+    "DC_STR_NOMESSAGES": {
+        "message": "Brak wiadomości,",
+        "description": ""
+    },
+    "DC_STR_SELF": {
+        "message": "Ja",
+        "description": ""
+    },
+    "DC_STR_DRAFT": {
+        "message": "Szkic",
+        "description": ""
+    },
+    "DC_STR_MEMBER": {
+        "message": "członków – %1$s",
+        "description": ""
+    },
+    "DC_STR_CONTACT": {
+        "message": "kontaktó – %1$s",
+        "description": ""
+    },
+    "DC_STR_VOICEMESSAGE": {
+        "message": "Wiadomość głosowa",
+        "description": ""
+    },
+    "DC_STR_DEADDROP": {
+        "message": "Skrzynka pocztowa",
+        "description": ""
+    },
+    "DC_STR_IMAGE": {
+        "message": "Obraz",
+        "description": ""
+    },
+    "DC_STR_GIF": {
+        "message": "GIF",
+        "description": ""
+    },
+    "DC_STR_VIDEO": {
+        "message": "Wideo",
+        "description": ""
+    },
+    "DC_STR_AUDIO": {
+        "message": "Audio",
+        "description": ""
+    },
+    "DC_STR_FILE": {
+        "message": "Plik",
+        "description": ""
+    },
+    "DC_STR_ENCRYPTEDMSG": {
+        "message": "Zaszyfrowana wiadomość",
+        "description": ""
+    },
+    "DC_STR_STATUSLINE": {
+        "message": "Wysłane z mojego komunikatora Delta Chat: https://delta.chat",
+        "description": ""
+    },
+    "DC_STR_NEWGROUPDRAFT": {
+        "message": "Witaj, właśnie utworzyłem dla nas grupę \"%1$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPNAME": {
+        "message": "Zmieniono nazwę grupy z \"%1$s\" na \"%2$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGCHANGED": {
+        "message": "Zmieniono obraz grupy.",
+        "description": ""
+    },
+    "DC_STR_MSGADDMEMBER": {
+        "message": "Dodano członka %1$s",
+        "description": ""
+    },
+    "DC_STR_MSGDELMEMBER": {
+        "message": "Usunięto członka %1$s",
+        "description": ""
+    },
+    "DC_STR_MSGGROUPLEFT": {
+        "message": "Group left.",
+        "description": ""
+    },
+    "DC_STR_SELFNOTINGRP": {
+        "message": "Aby wykonać tę akcję, musisz być członkiem grupy.",
+        "description": ""
+    },
+    "DC_STR_NONETWORK": {
+        "message": "Sieć niedostępna.",
+        "description": ""
+    },
+    "DC_STR_E2E_AVAILABLE": {
+        "message": "Pełne szyfrowanie jest dostępne.",
+        "description": ""
+    },
+    "DC_STR_ENCR_TRANSP": {
+        "message": "Szyfrowanie transportu.",
+        "description": ""
+    },
+    "DC_STR_ENCR_NONE": {
+        "message": "Brak szyfrowania.",
+        "description": ""
+    },
+    "DC_STR_FINGERPRINTS": {
+        "message": "Odcisk palca",
+        "description": ""
+    },
+    "DC_STR_READRCPT": {
+        "message": "Potwierdzenie odbioru",
+        "description": ""
+    },
+    "DC_STR_READRCPT_MAILBODY": {
+        "message": "To jest potwierdzenie odbioru wiadomości \"%1$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGDELETED": {
+        "message": "Usunięto obraz grupy.",
+        "description": ""
+    },
+    "DC_STR_E2E_PREFERRED": {
+        "message": "Preferowane pełne szyfrowanie.",
+        "description": ""
+    },
+    "DC_STR_ARCHIVEDCHATS": {
+        "message": "Archived chats",
+        "description": ""
+    },
+    "DC_STR_STARREDMSGS": {
+        "message": "Wiadomości oznaczone gwiazdką",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_SUBJECT": {
+        "message": "Wiadomość konfiguracyjna automatycznego szyfrowania",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_BODY": {
+        "message": "Jest to wiadomość konfiguracyjna automatycznego szyfrowania służąca do przesyłania klucza między klientami.\n\nAby odszyfrować i użyć klucza, otwórz wiadomość w kliencie zgodnym z automatycznym szyfrowaniem i wprowadź kod konfiguracyjny przedstawiony na urządzeniu generującym.",
+        "description": ""
+    },
+    "DC_STR_SELFTALK_SUBTITLE": {
+        "message": "Wiadomości, które wysłałem do siebie",
+        "description": ""
+    },
+    "DC_STR_CANTDECRYPT_MSG_BODY": {
+        "message": "Ta wiadomość została zaszyfrowana w celu przeprowadzenia innej konfiguracji.",
+        "description": ""
+    },
+    "DC_STR_CANNOT_LOGIN": {
+        "message": "Nie można się zalogować jako %1$s.",
+        "description": ""
+    },
+    "DC_STR_SERVER_RESPONSE": {
+        "message": "Response from %1$s: %2$s",
+        "description": ""
+    },
+    "dialogs.blockContact": {
+        "message": "Block $1$?",
+        "description": "Dialog to confirm blocking contact"
+    },
+    "dialogs.unblockContact": {
+        "message": "Unblock $1$?",
+        "description": "Dialog to confirm unblocking contact"
+    },
+    "blockContact": {
+        "message": "Block Contact",
+        "description": "Menu option to block current contact"
+    },
+    "unblockContacts": {
+        "message": "Unblock Contacts",
+        "description": "Menu option to unblock contacts"
+    },
+    "unblockContacts.noneBlocked": {
+        "message": "No blocked contacts yet",
+        "description": "Shown when there are no blocked contacts yet"
     }
 }

@@ -19,6 +19,10 @@
         "message": "Kişiyi Ekle",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Ad",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
         "message": "Grup Oluştur",
         "description": "Create group menu item label"
@@ -28,7 +32,7 @@
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Grubu Arşivden Çıkart",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
@@ -64,8 +68,16 @@
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "Sohbeti Arşivden Çıkart",
         "description": "Unarchive chat menu item label"
+    },
+    "noChats": {
+        "message": "Sohbet yok",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "Arşivlenen sohbet yok",
+        "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
         "message": "Sohbeti Sil",
@@ -173,11 +185,67 @@
     },
     "login.mailPw": {
         "message": "Parola",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "gerekli",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Gelen Kutusu",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP Oturum Açma Adı",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP Sunucusu",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP Bağlantı Noktası",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Güvenlik",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Kapalı",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Otomatik",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Giden Kutusu",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP Oturum Açma Adı",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP Parolası",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP Sunucusu",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP Bağlantı Noktası",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Güvenlik",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "otomatik",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "İptal",
@@ -260,7 +328,7 @@
         "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {
-        "message": "AAA G",
+        "message": "D MMM",
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
@@ -450,5 +518,189 @@
     "language.zh_CN": {
         "message": "Çince",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "$1$ emojisi",
+        "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+        "message": "Delta Chat'e hoş geldiniz",
+        "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+        "message": "Bir sohbet seçin ya da yeni bir sohbet oluşturun",
+        "description": "Suggestion of what to do when no chats are selected"
+    },
+    "DC_STR_NOMESSAGES": {
+        "message": "İleti yok.",
+        "description": ""
+    },
+    "DC_STR_SELF": {
+        "message": "Ben",
+        "description": ""
+    },
+    "DC_STR_DRAFT": {
+        "message": "Taslak",
+        "description": ""
+    },
+    "DC_STR_MEMBER": {
+        "message": "%1$s üye",
+        "description": ""
+    },
+    "DC_STR_CONTACT": {
+        "message": "%1$s kişi",
+        "description": ""
+    },
+    "DC_STR_VOICEMESSAGE": {
+        "message": "Sesli ileti",
+        "description": ""
+    },
+    "DC_STR_DEADDROP": {
+        "message": "Posta kutusu",
+        "description": ""
+    },
+    "DC_STR_IMAGE": {
+        "message": "Görsel",
+        "description": ""
+    },
+    "DC_STR_GIF": {
+        "message": "GIF",
+        "description": ""
+    },
+    "DC_STR_VIDEO": {
+        "message": "Video",
+        "description": ""
+    },
+    "DC_STR_AUDIO": {
+        "message": "Ses",
+        "description": ""
+    },
+    "DC_STR_FILE": {
+        "message": "Dosya",
+        "description": ""
+    },
+    "DC_STR_ENCRYPTEDMSG": {
+        "message": "Şifreli ileti",
+        "description": ""
+    },
+    "DC_STR_STATUSLINE": {
+        "message": "Delta Chat Messenger'ımla gönderildi: https://delta.chat",
+        "description": ""
+    },
+    "DC_STR_NEWGROUPDRAFT": {
+        "message": "Merhaba, yalnızca bizim için \"%1$s\" grubunu oluşturdum.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPNAME": {
+        "message": "Grup adı \"%1$s\" iken \"%2$s\" olarak değiştirildi.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGCHANGED": {
+        "message": "Grup görseli değiştirildi.",
+        "description": ""
+    },
+    "DC_STR_MSGADDMEMBER": {
+        "message": "%1$s üyesi eklendi.",
+        "description": ""
+    },
+    "DC_STR_MSGDELMEMBER": {
+        "message": "%1$s üyesi kaldırıldı.",
+        "description": ""
+    },
+    "DC_STR_MSGGROUPLEFT": {
+        "message": "Gruptan ayrılındı.",
+        "description": ""
+    },
+    "DC_STR_SELFNOTINGRP": {
+        "message": "Bu eylemi yürütmek için grubun bir üyesi olmalısınız.",
+        "description": ""
+    },
+    "DC_STR_NONETWORK": {
+        "message": "Kullanılabilir ağ yok.",
+        "description": ""
+    },
+    "DC_STR_E2E_AVAILABLE": {
+        "message": "Uçtan uca şifreleme kullanılabilir.",
+        "description": ""
+    },
+    "DC_STR_ENCR_TRANSP": {
+        "message": "Şifreleme taşınıyor.",
+        "description": ""
+    },
+    "DC_STR_ENCR_NONE": {
+        "message": "Şifreleme yok.",
+        "description": ""
+    },
+    "DC_STR_FINGERPRINTS": {
+        "message": "Parmak izleri",
+        "description": ""
+    },
+    "DC_STR_READRCPT": {
+        "message": "Alındı onayı",
+        "description": ""
+    },
+    "DC_STR_READRCPT_MAILBODY": {
+        "message": "Bu, \"%1$s\" iletisi için bir alındı onayıdır.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGDELETED": {
+        "message": "Grup görseli silindi.",
+        "description": ""
+    },
+    "DC_STR_E2E_PREFERRED": {
+        "message": "Uçtan uca şifreleme tercih edildi.",
+        "description": ""
+    },
+    "DC_STR_ARCHIVEDCHATS": {
+        "message": "Arşivlenen sohbetler",
+        "description": ""
+    },
+    "DC_STR_STARREDMSGS": {
+        "message": "Yıldızlanan iletiler",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_SUBJECT": {
+        "message": "Autocrypt Ayarlama İletisi",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_BODY": {
+        "message": "Bu, istemciler arasında anahtarınızı aktarmak için kullanılan Autocrypt Ayarlama İletisi.\n\nŞifreyi çözmek ve anahtarınızı kullanmak için Autocrypt-uyumlu bir istemcide iletiyi açın ve oluşturan aygıtta sunulan ayarlama kodunu girin.",
+        "description": ""
+    },
+    "DC_STR_SELFTALK_SUBTITLE": {
+        "message": "İletiler kendime gönderildi",
+        "description": ""
+    },
+    "DC_STR_CANTDECRYPT_MSG_BODY": {
+        "message": "Bu ileti başka bir ayarlama için şifrelendi.",
+        "description": ""
+    },
+    "DC_STR_CANNOT_LOGIN": {
+        "message": "%1$s olarak oturum açılamıyor.",
+        "description": ""
+    },
+    "DC_STR_SERVER_RESPONSE": {
+        "message": "%1$s sunucusunun yanıtı: %2$s",
+        "description": ""
+    },
+    "dialogs.blockContact": {
+        "message": "Block $1$?",
+        "description": "Dialog to confirm blocking contact"
+    },
+    "dialogs.unblockContact": {
+        "message": "Unblock $1$?",
+        "description": "Dialog to confirm unblocking contact"
+    },
+    "blockContact": {
+        "message": "Block Contact",
+        "description": "Menu option to block current contact"
+    },
+    "unblockContacts": {
+        "message": "Unblock Contacts",
+        "description": "Menu option to unblock contacts"
+    },
+    "unblockContacts.noneBlocked": {
+        "message": "No blocked contacts yet",
+        "description": "Shown when there are no blocked contacts yet"
     }
 }

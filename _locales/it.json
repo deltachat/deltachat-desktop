@@ -19,6 +19,10 @@
         "message": "Aggiungi contatto",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Name",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
         "message": "Crea gruppo",
         "description": "Create group menu item label"
@@ -66,6 +70,14 @@
     "unArchiveChat": {
         "message": "Unarchive Chat",
         "description": "Unarchive chat menu item label"
+    },
+    "noChats": {
+        "message": "No chats",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "No archived chats",
+        "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
         "message": "Elimina chiave",
@@ -164,7 +176,7 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Benvenuto in DeltaChat",
+        "message": "Welcome to DeltaChat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
@@ -173,11 +185,67 @@
     },
     "login.mailPw": {
         "message": "Password",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
         "message": "obbligatorio",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Inbox",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP-Loginname",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP-Server",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP-Port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Off",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatic",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Outbox",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP-Loginname",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP-Password",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP-Server",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP-Port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatic",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "Annulla",
@@ -450,5 +518,189 @@
     "language.zh_CN": {
         "message": "Cinese",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "Emoji of $1$",
+        "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+        "message": "Welcome to Delta Chat",
+        "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+        "message": "Select a chat or create a new chat",
+        "description": "Suggestion of what to do when no chats are selected"
+    },
+    "DC_STR_NOMESSAGES": {
+        "message": "No messages.",
+        "description": ""
+    },
+    "DC_STR_SELF": {
+        "message": "Me",
+        "description": ""
+    },
+    "DC_STR_DRAFT": {
+        "message": "Draft",
+        "description": ""
+    },
+    "DC_STR_MEMBER": {
+        "message": "%1$s member(s)",
+        "description": ""
+    },
+    "DC_STR_CONTACT": {
+        "message": "%1$s contact(s)",
+        "description": ""
+    },
+    "DC_STR_VOICEMESSAGE": {
+        "message": "Voice message",
+        "description": ""
+    },
+    "DC_STR_DEADDROP": {
+        "message": "Mailbox",
+        "description": ""
+    },
+    "DC_STR_IMAGE": {
+        "message": "Image",
+        "description": ""
+    },
+    "DC_STR_GIF": {
+        "message": "GIF",
+        "description": ""
+    },
+    "DC_STR_VIDEO": {
+        "message": "Video",
+        "description": ""
+    },
+    "DC_STR_AUDIO": {
+        "message": "Audio",
+        "description": ""
+    },
+    "DC_STR_FILE": {
+        "message": "File",
+        "description": ""
+    },
+    "DC_STR_ENCRYPTEDMSG": {
+        "message": "Encrypted message",
+        "description": ""
+    },
+    "DC_STR_STATUSLINE": {
+        "message": "Sent with my Delta Chat Messenger: https://delta.chat",
+        "description": ""
+    },
+    "DC_STR_NEWGROUPDRAFT": {
+        "message": "Hello, I've just created the group \"%1$s\" for us.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPNAME": {
+        "message": "Group name changed from \"%1$s\" to \"%2$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGCHANGED": {
+        "message": "Group image changed.",
+        "description": ""
+    },
+    "DC_STR_MSGADDMEMBER": {
+        "message": "Member %1$s added.",
+        "description": ""
+    },
+    "DC_STR_MSGDELMEMBER": {
+        "message": "Member %1$s removed.",
+        "description": ""
+    },
+    "DC_STR_MSGGROUPLEFT": {
+        "message": "Group left.",
+        "description": ""
+    },
+    "DC_STR_SELFNOTINGRP": {
+        "message": "You must be a member of the group to perform this action.",
+        "description": ""
+    },
+    "DC_STR_NONETWORK": {
+        "message": "No network available.",
+        "description": ""
+    },
+    "DC_STR_E2E_AVAILABLE": {
+        "message": "End-to-end encryption available.",
+        "description": ""
+    },
+    "DC_STR_ENCR_TRANSP": {
+        "message": "Transport-encryption.",
+        "description": ""
+    },
+    "DC_STR_ENCR_NONE": {
+        "message": "No encryption.",
+        "description": ""
+    },
+    "DC_STR_FINGERPRINTS": {
+        "message": "Fingerprints",
+        "description": ""
+    },
+    "DC_STR_READRCPT": {
+        "message": "Return receipt",
+        "description": ""
+    },
+    "DC_STR_READRCPT_MAILBODY": {
+        "message": "This is a return receipt for the message \"%1$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGDELETED": {
+        "message": "Group image deleted.",
+        "description": ""
+    },
+    "DC_STR_E2E_PREFERRED": {
+        "message": "End-to-end encryption preferred.",
+        "description": ""
+    },
+    "DC_STR_ARCHIVEDCHATS": {
+        "message": "Archived chats",
+        "description": ""
+    },
+    "DC_STR_STARREDMSGS": {
+        "message": "Starred messages",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_SUBJECT": {
+        "message": "Autocrypt Setup Message",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_BODY": {
+        "message": "This is the Autocrypt Setup Message used to transfer your key between clients.\n\nTo decrypt and use your key, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.",
+        "description": ""
+    },
+    "DC_STR_SELFTALK_SUBTITLE": {
+        "message": "Messages I sent to myself",
+        "description": ""
+    },
+    "DC_STR_CANTDECRYPT_MSG_BODY": {
+        "message": "This message was encrypted for another setup.",
+        "description": ""
+    },
+    "DC_STR_CANNOT_LOGIN": {
+        "message": "Cannot login as %1$s.",
+        "description": ""
+    },
+    "DC_STR_SERVER_RESPONSE": {
+        "message": "Response from %1$s: %2$s",
+        "description": ""
+    },
+    "dialogs.blockContact": {
+        "message": "Block $1$?",
+        "description": "Dialog to confirm blocking contact"
+    },
+    "dialogs.unblockContact": {
+        "message": "Unblock $1$?",
+        "description": "Dialog to confirm unblocking contact"
+    },
+    "blockContact": {
+        "message": "Block Contact",
+        "description": "Menu option to block current contact"
+    },
+    "unblockContacts": {
+        "message": "Unblock Contacts",
+        "description": "Menu option to unblock contacts"
+    },
+    "unblockContacts.noneBlocked": {
+        "message": "No blocked contacts yet",
+        "description": "Shown when there are no blocked contacts yet"
     }
 }

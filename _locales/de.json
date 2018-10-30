@@ -1,6 +1,6 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Abmelden",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
@@ -19,40 +19,44 @@
         "message": "Kontakt hinzufügen",
         "description": "Add contact button label"
     },
+    "name": {
+        "message": "Name",
+        "description": "Name label in Add Contact view"
+    },
     "createGroup": {
-        "message": "Create Group",
+        "message": "Gruppe erstellen",
         "description": "Create group menu item label"
     },
     "archiveGroup": {
-        "message": "Archive Group",
+        "message": "Gruppe archivieren",
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Gruppe aus dem Archiv holen",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
-        "message": "Delete Group",
+        "message": "Gruppe löschen",
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
+        "message": "Gruppe bearbeiten",
         "description": "Edit group menu item label"
     },
     "leaveGroup": {
-        "message": "Leave Group",
+        "message": "Gruppe verlassen",
         "description": "Leave group menu item label"
     },
     "save": {
-        "message": "Save",
+        "message": "Speichern",
         "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
-        "message": "Group Name",
+        "message": "Gruppenname",
         "description": "Placeholder text for group name input field"
     },
     "groupNameRequired": {
-        "message": "Group name required.",
+        "message": "Gruppenname wird benötigt.",
         "description": "Information to user when creating group with empty name"
     },
     "addChat": {
@@ -60,15 +64,23 @@
         "description": "Create chat menu item label"
     },
     "archiveChat": {
-        "message": "Archive Chat",
+        "message": "Chat archivieren",
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "Chat aus dem Archiv holen",
         "description": "Unarchive chat menu item label"
     },
+    "noChats": {
+        "message": "Keine Chats",
+        "description": "Message shown to user when there are no chats"
+    },
+    "noArchivedChats": {
+        "message": "Keine archivierten Chats",
+        "description": "Message shown to user when there are no archived chats"
+    },
     "deleteChat": {
-        "message": "Delete Chat",
+        "message": "Chat löschen",
         "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
@@ -76,11 +88,11 @@
         "description": "Information to the user when a contact was created successfully"
     },
     "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
+        "message": "Autocrypt Schlüsselübertragung",
         "description": "Dialog title during Autocrypt key transfer"
     },
     "transferKey": {
-        "message": "Transfer Key",
+        "message": "Schlüssel übertragen",
         "description": "Button label during Autocrypt key transfer"
     },
     "initiateKeyTransferTitle": {
@@ -88,19 +100,19 @@
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
+        "message": "Eine 'Autocrypt-Setup-Nachricht' überträgt Ihr Ende-zu-Ende-Setup sicher auf ein anderes Autocrypt-kompatibes Gerät. Ihr Setup wird mit einem Setup-Code geschützt; dieser wird hier angezeigt und muss auf dem anderen Gerät eingetippt werden.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
+        "message": "Ihr Setup wurde an Sie selbst verschickt. Wechseln sie nun zum anderen Gerät und öffnen die Setup-Nachricht. Sie werden dann aufgefordert einen Setup-Code einzugeben. Tippen Sie dort die folgenden Zahlen ein. Wenn Sie fertig sind, ist Autocrypt auf dem anderen Gerät eingerichtet.",
         "description": "Shown while viewing the transfer key"
     },
     "done": {
-        "message": "Done",
+        "message": "Fertig",
         "description": "Button label when key transfer is done"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Mehr Information",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
@@ -124,7 +136,7 @@
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "forwardMessage": {
-        "message": "Forward Message...",
+        "message": "Nachricht weiterleiten...",
         "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
@@ -164,20 +176,76 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to DeltaChat",
+        "message": "Herzlich willkommen im DeltaChat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "E-Mail Adresse",
         "description": "Label above input field for e-mail address"
     },
     "login.mailPw": {
         "message": "Password",
-        "description": "Label above input field for mailPw"
+        "description": "Label above input field for mail password"
     },
     "login.required": {
-        "message": "required",
-        "description": "Word within parenthesis to let the user know that e-mail and mailPw are required input when logging in"
+        "message": "benötigt",
+        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.inbox": {
+        "message": "Inbox",
+        "description": "Describes the advanced section for inbox (imap)"
+    },
+    "login.mailUser": {
+        "message": "IMAP-Loginname",
+        "description": "Label above input field for imap login name"
+    },
+    "login.mailServer": {
+        "message": "IMAP-Server",
+        "description": "Label above input field for imap server host"
+    },
+    "login.mailPort": {
+        "message": "IMAP-Port",
+        "description": "Label above input field for imap server port"
+    },
+    "login.mailSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for imap security"
+    },
+    "login.security.disable": {
+        "message": "Off",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.security.automatic": {
+        "message": "Automatic",
+        "description": "Text for disabling imap transport security"
+    },
+    "login.outbox": {
+        "message": "Outbox",
+        "description": "Describes the advanced section for outbox (smtp)"
+    },
+    "login.sendUser": {
+        "message": "SMTP-Loginname",
+        "description": "Label above input field for smtp login name"
+    },
+    "login.sendPw": {
+        "message": "SMTP-Password",
+        "description": "Label above input field for smtp password"
+    },
+    "login.sendServer": {
+        "message": "SMTP-Server",
+        "description": "Label above input field for smtp server host"
+    },
+    "login.sendPort": {
+        "message": "SMTP-Port",
+        "description": "Label above input field for smtp server port"
+    },
+    "login.sendSecurity": {
+        "message": "Security",
+        "description": "Label above selection box for smtp security"
+    },
+    "login.automatic": {
+        "message": "automatic",
+        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
         "message": "Abbrechen",
@@ -196,39 +264,39 @@
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Bearbeiten",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Rückgängig",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Wiederherstellen",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Ausschneiden",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Kopieren",
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Einfügen",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Löschen",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Alle auswählen",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Ansicht",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
@@ -236,27 +304,27 @@
         "description": "Float on Top menu item label"
     },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Entwickler",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Entwickler Werkzeuge",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Hilfe",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "Mehr über DeltaChat erfahren",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "Auf GitHub mithelfen",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Ein Problem melden...",
         "description": "Report an Issue... menu item label"
     },
     "timestampFormat_M": {
@@ -276,7 +344,7 @@
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Senden",
         "description": "Button label for sending a message"
     },
     "received": {
@@ -284,19 +352,19 @@
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Nachricht schreiben",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Tippe eine Nachricht ein und drücke Enter",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Senden der Nachricht fehlgeschlagen",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Nachricht erneut senden",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
@@ -344,19 +412,19 @@
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
-        "message": "Catalan",
+        "message": "Katalanisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.da": {
-        "message": "Danish",
+        "message": "Dänisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.de": {
-        "message": "German",
+        "message": "Deutsch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.en": {
-        "message": "English",
+        "message": "Englisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eo": {
@@ -364,71 +432,71 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.es": {
-        "message": "Spanish",
+        "message": "Spanisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eu": {
-        "message": "Basque",
+        "message": "Baskisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.fr": {
-        "message": "French",
+        "message": "Französisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hr": {
-        "message": "Croatian",
+        "message": "Kroatisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hu": {
-        "message": "Hungarian",
+        "message": "Ungarisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.it": {
-        "message": "Italian",
+        "message": "Italienisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ja_JP": {
-        "message": "Japanese",
+        "message": "Japanisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ko": {
-        "message": "Korean",
+        "message": "Koreanisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nb_NO": {
-        "message": "Norwegian Bokmål",
+        "message": "Norwegisches Bokmål",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl": {
-        "message": "Dutch",
+        "message": "Niederländisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
+        "message": "Niederländische(Niederlande)",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pl": {
-        "message": "Polish",
+        "message": "Polnisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pt": {
-        "message": "Portuguese",
+        "message": "Portugiesisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ru": {
-        "message": "Russian",
+        "message": "Russisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sq": {
-        "message": "Albanian",
+        "message": "Albanisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sr": {
-        "message": "Serbian",
+        "message": "Serbisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sv": {
-        "message": "Swedish",
+        "message": "Schwedisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ta": {
@@ -436,19 +504,203 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.te": {
-        "message": "Telegu",
+        "message": "Telugu",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.tr": {
-        "message": "Turkish",
+        "message": "Türkisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.uk": {
-        "message": "Ukrainian",
+        "message": "Ukrainisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.zh_CN": {
-        "message": "Chinese",
+        "message": "Chinesisch",
         "description": "Menu alternative in Preferences -> Choose Language..."
+    },
+    "emojiAlt": {
+        "message": "Emoji of $1$",
+        "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+        "message": "Welcome to Delta Chat",
+        "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+        "message": "Select a chat or create a new chat",
+        "description": "Suggestion of what to do when no chats are selected"
+    },
+    "DC_STR_NOMESSAGES": {
+        "message": "No messages.",
+        "description": ""
+    },
+    "DC_STR_SELF": {
+        "message": "Me",
+        "description": ""
+    },
+    "DC_STR_DRAFT": {
+        "message": "Draft",
+        "description": ""
+    },
+    "DC_STR_MEMBER": {
+        "message": "%1$s member(s)",
+        "description": ""
+    },
+    "DC_STR_CONTACT": {
+        "message": "%1$s contact(s)",
+        "description": ""
+    },
+    "DC_STR_VOICEMESSAGE": {
+        "message": "Voice message",
+        "description": ""
+    },
+    "DC_STR_DEADDROP": {
+        "message": "Mailbox",
+        "description": ""
+    },
+    "DC_STR_IMAGE": {
+        "message": "Image",
+        "description": ""
+    },
+    "DC_STR_GIF": {
+        "message": "GIF",
+        "description": ""
+    },
+    "DC_STR_VIDEO": {
+        "message": "Video",
+        "description": ""
+    },
+    "DC_STR_AUDIO": {
+        "message": "Audio",
+        "description": ""
+    },
+    "DC_STR_FILE": {
+        "message": "File",
+        "description": ""
+    },
+    "DC_STR_ENCRYPTEDMSG": {
+        "message": "Encrypted message",
+        "description": ""
+    },
+    "DC_STR_STATUSLINE": {
+        "message": "Sent with my Delta Chat Messenger: https://delta.chat",
+        "description": ""
+    },
+    "DC_STR_NEWGROUPDRAFT": {
+        "message": "Hello, I've just created the group \"%1$s\" for us.",
+        "description": ""
+    },
+    "DC_STR_MSGGRPNAME": {
+        "message": "Group name changed from \"%1$s\" to \"%2$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGCHANGED": {
+        "message": "Group image changed.",
+        "description": ""
+    },
+    "DC_STR_MSGADDMEMBER": {
+        "message": "Member %1$s added.",
+        "description": ""
+    },
+    "DC_STR_MSGDELMEMBER": {
+        "message": "Member %1$s removed.",
+        "description": ""
+    },
+    "DC_STR_MSGGROUPLEFT": {
+        "message": "Group left.",
+        "description": ""
+    },
+    "DC_STR_SELFNOTINGRP": {
+        "message": "You must be a member of the group to perform this action.",
+        "description": ""
+    },
+    "DC_STR_NONETWORK": {
+        "message": "No network available.",
+        "description": ""
+    },
+    "DC_STR_E2E_AVAILABLE": {
+        "message": "End-to-end encryption available.",
+        "description": ""
+    },
+    "DC_STR_ENCR_TRANSP": {
+        "message": "Transport-encryption.",
+        "description": ""
+    },
+    "DC_STR_ENCR_NONE": {
+        "message": "No encryption.",
+        "description": ""
+    },
+    "DC_STR_FINGERPRINTS": {
+        "message": "Fingerprints",
+        "description": ""
+    },
+    "DC_STR_READRCPT": {
+        "message": "Return receipt",
+        "description": ""
+    },
+    "DC_STR_READRCPT_MAILBODY": {
+        "message": "This is a return receipt for the message \"%1$s\".",
+        "description": ""
+    },
+    "DC_STR_MSGGRPIMGDELETED": {
+        "message": "Group image deleted.",
+        "description": ""
+    },
+    "DC_STR_E2E_PREFERRED": {
+        "message": "End-to-end encryption preferred.",
+        "description": ""
+    },
+    "DC_STR_ARCHIVEDCHATS": {
+        "message": "Archived chats",
+        "description": ""
+    },
+    "DC_STR_STARREDMSGS": {
+        "message": "Starred messages",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_SUBJECT": {
+        "message": "Autocrypt Setup Message",
+        "description": ""
+    },
+    "DC_STR_AC_SETUP_MSG_BODY": {
+        "message": "This is the Autocrypt Setup Message used to transfer your key between clients.\n\nTo decrypt and use your key, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.",
+        "description": ""
+    },
+    "DC_STR_SELFTALK_SUBTITLE": {
+        "message": "Messages I sent to myself",
+        "description": ""
+    },
+    "DC_STR_CANTDECRYPT_MSG_BODY": {
+        "message": "This message was encrypted for another setup.",
+        "description": ""
+    },
+    "DC_STR_CANNOT_LOGIN": {
+        "message": "Cannot login as %1$s.",
+        "description": ""
+    },
+    "DC_STR_SERVER_RESPONSE": {
+        "message": "Response from %1$s: %2$s",
+        "description": ""
+    },
+    "dialogs.blockContact": {
+        "message": "Block $1$?",
+        "description": "Dialog to confirm blocking contact"
+    },
+    "dialogs.unblockContact": {
+        "message": "Unblock $1$?",
+        "description": "Dialog to confirm unblocking contact"
+    },
+    "blockContact": {
+        "message": "Block Contact",
+        "description": "Menu option to block current contact"
+    },
+    "unblockContacts": {
+        "message": "Unblock Contacts",
+        "description": "Menu option to unblock contacts"
+    },
+    "unblockContacts.noneBlocked": {
+        "message": "No blocked contacts yet",
+        "description": "Shown when there are no blocked contacts yet"
     }
 }
