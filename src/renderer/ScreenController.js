@@ -56,7 +56,7 @@ class Home extends React.Component {
     let aboutInfo = {}
     if (showAbout) {
       aboutInfo = ipcRenderer.sendSync(
-        'dispatchSyncNoRender',
+        'dispatchSync',
         'getInfo'
       )
     }
