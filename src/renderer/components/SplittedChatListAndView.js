@@ -2,8 +2,7 @@ const React = require('react')
 const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
-const KeyTransferDialog = require('./dialogs/KeyTransfer')
-const DeadDropDialog = require('./dialogs/DeadDrop')
+const dialogs = require('./dialogs')
 
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -42,6 +41,8 @@ class SplittedChatListAndView extends React.Component {
     this.onCreateChat = this.onCreateChat.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
+    this.onUnblockContacts = this.onUnblockContacts.bind(this)
+    this.onBlockContact = this.onBlockContact.bind(this)
   }
 
   showArchivedChats (show) {
@@ -93,6 +94,10 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
+  onUnblockContacts () {
+    this.props.changeScreen('UnblockContacts')
+  }
+
   initiateKeyTransfer () {
     this.setState({ keyTransfer: true })
   }
@@ -102,6 +107,19 @@ class SplittedChatListAndView extends React.Component {
       C.DC_CHAT_TYPE_GROUP,
       C.DC_CHAT_TYPE_VERIFIED_GROUP
     ].includes(selectedChat && selectedChat.type)
+  }
+
+  onBlockContact (selectedChat) {
+    const tx = window.translate
+    if (selectedChat && selectedChat.contacts.length) {
+      var contact = selectedChat.contacts[0]
+      var message = tx('dialogs.blockContact', contact.displayName)
+      dialogs.confirmation(message, function (response) {
+        if (response === 1) {
+          ipcRenderer.sendSync('dispatchSync', 'blockContact', contact)
+        }
+      })
+    }
   }
 
   render () {
@@ -121,8 +139,10 @@ class SplittedChatListAndView extends React.Component {
       {selectedChat && !showArchivedChats ? <MenuItem icon='import' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, true)} /> : null}
       {selectedChat && showArchivedChats ? <MenuItem icon='export' text={unArchiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, false)} /> : null}
       {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
+      {selectedChat && !isGroup ? <MenuItem icon='blocked-person' text={tx('blockContact')} onClick={this.onBlockContact.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
       {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
+      <MenuItem icon='blocked-person' text={tx('unblockContacts')} onClick={this.onUnblockContacts} />
       <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
       <MenuItem icon='log-out' text={tx('logout')} onClick={this.logout} />
     </Menu>)
@@ -144,8 +164,8 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </div>
-        <KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
-        <DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
+        <dialogs.KeyTransferDialog isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <dialogs.DeadDropDialog deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <div className='below-navbar'>
           <ChatList
             chats={showArchivedChats ? deltachat.archivedChats : deltachat.chats}

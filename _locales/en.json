@@ -682,5 +682,25 @@
   "DC_STR_SERVER_RESPONSE": {
     "message": "Response from %1$s: %2$s",
     "description": ""
+  },
+  "dialogs.blockContact": {
+    "message": "Block $1$?",
+    "description": "Dialog to confirm blocking contact"
+  },
+  "dialogs.unblockContact": {
+    "message": "Unblock $1$?",
+    "description": "Dialog to confirm unblocking contact"
+  },
+  "blockContact": {
+    "message": "Block Contact",
+    "description": "Menu option to block current contact"
+  },
+  "unblockContacts": {
+    "message": "Unblock Contacts",
+    "description": "Menu option to unblock contacts"
+  },
+  "unblockContacts.noneBlocked": {
+    "message": "No blocked contacts yet",
+    "description": "Shown when there are no blocked contacts yet"
   }
 }
