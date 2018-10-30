@@ -85,7 +85,6 @@
     "electron-builder": "^20.28.3",
     "glob-watcher": "^5.0.1",
     "node-sass": "^4.9.4",
-    "nodemon": "^1.18.3",
     "pngjs": "^3.3.3",
     "rimraf": "^2.6.2",
     "sinon": "^7.0.0",
