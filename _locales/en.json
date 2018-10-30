@@ -522,5 +522,13 @@
     "emojiAlt": {
         "message": "Emoji of $1$",
         "description": "Used with aria-label for emojis"
+    },
+    "chatView.nochatselectedHeader": {
+      "message": "Welcome to Delta Chat",
+      "description": "Header message when no chats are available"
+    },
+    "chatView.nochatselectedSuggestion": {
+      "message": "Select a chat or create a new chat",
+      "description": "Suggestion of what to do when no chats are selected"
     }
 }

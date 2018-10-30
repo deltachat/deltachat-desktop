@@ -18,6 +18,11 @@ body {
   padding: 10px 10px;
 }
 
+.centered {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
 
 .window, .below-navbar {
   height: calc(100vh - 50px);
