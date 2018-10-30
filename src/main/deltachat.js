@@ -22,7 +22,9 @@ function chatIdToJson (chatId, dc) {
   const chat = dc.getChat(chatId).toJson()
   const messageIds = dc.getChatMessages(chatId, 0, 0)
   chat.messages = messageIds.map(id => messageIdToJson(id, dc))
-  chat.contacts = dc.getChatContacts(chatId)
+  chat.contacts = dc.getChatContacts(chatId).map(id => {
+    return dc.getContact(id).toJson()
+  })
   if (chatId === C.DC_CHAT_ID_DEADDROP) {
     const msg = dc.getMessage(messageIds[0])
     const fromId = msg && msg.getFromId()
