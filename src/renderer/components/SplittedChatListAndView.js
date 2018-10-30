@@ -156,13 +156,18 @@ class SplittedChatListAndView extends React.Component {
             selectedChatId={selectedChat ? selectedChat.id : null}
           />
           {
-            selectedChat &&
-              (<ChatView
+            selectedChat
+              ? (<ChatView
                 screenProps={this.props.screenProps}
                 userFeedback={this.props.userFeedback}
                 changeScreen={this.props.changeScreen}
                 chat={selectedChat}
                 deltachat={this.props.deltachat} />)
+              : (
+                <div className='window centered'>
+                  <h1>{tx('chatView.nochatselectedHeader')}</h1>
+                  <p>{tx('chatView.nochatselectedSuggestion')}</p>
+                </div>)
           }
         </div>
 

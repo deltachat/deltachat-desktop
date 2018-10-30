@@ -10,7 +10,7 @@ class ChatList extends React.Component {
 
     return (
       <div className='ChatList'>
-        { !selectedChatId && (<div className='ChatList-NoChats'><p>{missingChatsMsg}</p></div>) }
+        { !chats.length && (<div className='ChatList-NoChats'><p>{missingChatsMsg}</p></div>) }
         <div className='ConversationList'>
           {chats.map((chat) => {
             if (!chat) return
