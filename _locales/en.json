@@ -695,6 +695,10 @@
     "message": "Unblock $1$?",
     "description": "Dialog to confirm unblocking contact"
   },
+  "dialogs.deleteChat": {
+    "message": "Delete chat $1$?",
+    "description": "Dialog to confirm deleting a chat"
+  },
   "dialogs.confirmation.no": {
     "message": "No",
     "description": "No button label in confirmation dialog"
