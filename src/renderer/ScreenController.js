@@ -17,7 +17,6 @@ class Home extends React.Component {
       screen: 'SplittedChatListAndView',
       screenProps: {},
       showAbout: false,
-      aboutInfo: {},
       message: false
     }
 
@@ -53,19 +52,12 @@ class Home extends React.Component {
   }
 
   showAbout (showAbout) {
-    let aboutInfo = {}
-    if (showAbout) {
-      aboutInfo = ipcRenderer.sendSync(
-        'dispatchSync',
-        'getInfo'
-      )
-    }
-    this.setState({ showAbout, aboutInfo })
+    this.setState({ showAbout })
   }
 
   render () {
     const { logins, deltachat } = this.props
-    const { screen, screenProps, showAbout, aboutInfo } = this.state
+    const { screen, screenProps, showAbout } = this.state
 
     var Screen
     switch (screen) {
@@ -108,7 +100,7 @@ class Home extends React.Component {
             deltachat={deltachat}
           />
         }
-        { showAbout && (<AboutDialog info={aboutInfo} isOpen={showAbout} onClose={this.onCloseAbout} />) }
+        { showAbout && (<AboutDialog isOpen={showAbout} onClose={this.onCloseAbout} />) }
       </div>
     )
   }
