@@ -200,7 +200,9 @@ class Login extends React.Component {
               <FormGroup label={tx('login.mailPort')} placeholder='IMAP-Port' labelFor='mailPort' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='mailPort'
-                  type='text'
+                  type='number'
+                  min='0'
+                  max='65535'
                   value={mailPort}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
@@ -241,7 +243,9 @@ class Login extends React.Component {
               <FormGroup label={tx('login.sendPort')} placeholder='SMTP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='sendPort'
-                  type='text'
+                  type='number'
+                  min='0'
+                  max='65535'
                   value={sendPort}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
