@@ -10,20 +10,24 @@ const {
   Button,
   InputGroup,
   FormGroup,
-  Collapse
+  Collapse,
+  Tooltip,
+  Intent
 } = require('@blueprintjs/core')
 
 class Login extends React.Component {
   constructor (props) {
     super(props)
-    this.state = this._defaultState(false)
+    this.state = this._defaultState(false, false, false)
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleShowAdvanced = this.handleShowAdvanced.bind(this)
+    this.handleShowPasswordMail = this.handleShowPasswordMail.bind(this)
+    this.handleShowPasswordSend = this.handleShowPasswordSend.bind(this)
   }
 
-  _defaultState (showAdvanced) {
+  _defaultState (showAdvanced, showPasswordMail, showPasswordSend) {
     return {
       addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
       mailUser: '',
@@ -36,7 +40,9 @@ class Login extends React.Component {
       sendServer: '',
       sendPort: '',
       sendSecurity: '',
-      showAdvanced: showAdvanced
+      showAdvanced: showAdvanced,
+      showPasswordMail: showPasswordMail,
+      showPasswordSend: showPasswordSend
     }
   }
 
@@ -106,9 +112,18 @@ class Login extends React.Component {
     this.setState({ showAdvanced: !this.state.showAdvanced })
   }
 
+  handleShowPasswordMail() {
+    this.setState({ showPasswordMail: !this.state.showPasswordMail })
+  }
+
+  handleShowPasswordSend() {
+    this.setState({ showPasswordSend: !this.state.showPasswordSend })
+  }
+
+
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
-    this.setState(this._defaultState(this.state.showAdvanced))
+    this.setState(this._defaultState(this.state.showAdvanced, this.state.showPasswordMail, this.state.showPasswordSend))
     event.preventDefault()
     event.stopPropagation()
   }
@@ -119,10 +134,45 @@ class Login extends React.Component {
 
   render () {
     const { logins, deltachat } = this.props
-    const { addr, mailUser, mailPw, mailServer, mailPort, mailSecurity, sendUser, sendPw, sendServer, sendPort, sendSecurity } = this.state
+
+    const {
+      addr,
+      mailUser,
+      mailPw,
+      mailServer,
+      mailPort,
+      mailSecurity,
+      sendUser,
+      sendPw,
+      sendServer,
+      sendPort,
+      sendSecurity,
+      showPasswordMail,
+      showPasswordSend
+    } = this.state
+
     const tx = window.translate
 
     var loading = deltachat.configuring
+
+    const lockButtonMail = (
+        <Button
+          icon={showPasswordMail ? "unlock" : "lock"}
+          intent={Intent.WARNING}
+          minimal={true}
+          onClick={this.handleShowPasswordMail}
+        />
+    );
+
+    const lockButtonSend = (
+      <Button
+        icon={showPasswordSend ? "unlock" : "lock"}
+        intent={Intent.WARNING}
+        minimal={true}
+        onClick={this.handleShowPasswordSend}
+      />
+    );
+
     return (
       <div className='Login'>
         <Navbar fixedToTop>
@@ -151,9 +201,11 @@ class Login extends React.Component {
               <InputGroup
                 id='mailPw'
                 leftIcon='lock'
-                type='mailPw'
+                type={showPasswordMail ? "text" : "password"}
                 value={mailPw}
                 onChange={this.handleChange}
+                placeholder="Enter your password..."
+                rightElement={lockButtonMail}
               />
             </FormGroup>
             <Button onClick={this.handleShowAdvanced}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
@@ -209,9 +261,12 @@ class Login extends React.Component {
               <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='sendPw' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
                   id='sendPw'
-                  type='text'
+                  leftIcon='lock'
+                  type={showPasswordSend ? "text" : "password"}
                   value={sendPw}
                   leftIcon='envelope'
+                  placeholder="Enter your password..."
+                  rightElement={lockButtonSend}
                   onChange={this.handleChange}
                 />
               </FormGroup>
