@@ -19,6 +19,6 @@ function confirmation (message, cb) {
     buttons: [tx('dialogs.confirmation.no'), tx('dialogs.confirmation.yes')]
   }
   remote.dialog.showMessageBox(opts, response => {
-    cb(response === 1)
+    cb(response === 1) // eslint-disable-line
   })
 }
