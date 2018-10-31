@@ -48,7 +48,6 @@ class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
-    console.log('handleCredentialsChange', event.target.id, event.target.value)
     this.setState({ credentials: { [event.target.id]: event.target.value } })
   }
 
@@ -86,7 +85,6 @@ class Login extends React.Component {
   }
 
   handleUISwitchStateProperty (key) {
-    console.log('a', this.state.ui[key])
     this.setState({ ui: { [key]: !this.state.ui[key] } })
   }
 
@@ -104,7 +102,7 @@ class Login extends React.Component {
   renderPasswordInput (keyShowPassword, keyValue) {
     const tx = window.translate
 
-    let lockButton = (
+    const lockButton = (
       <Button
         icon={this.state[keyShowPassword] ? 'unlock' : 'lock'}
         intent={Intent.WARNING}
@@ -129,7 +127,6 @@ class Login extends React.Component {
   render () {
     const { logins, deltachat } = this.props
 
-    console.log(this.state)
     const {
       addr,
       mailUser,
