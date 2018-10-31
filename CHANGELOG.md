@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 
+## [1.7.2] - 2018-10-31
+
+### Changed
+* Update translations from transifex (@ralphtheninja)
+* Make conversations build only when necessary to improve build time (@karissa)
+* Move `Preferences` menu (@karissa)
+* Consolidate `'New Chat'` menu (@karissa)
+* Upgrade `deltachat-node` to `^0.23.0` (@ralphtheninja)
+* Translate strings coming from `deltachat-core` (@ralphtheninja)
+
+### Added
+* Add watch script for development (@karissa)
+* Implement advanced login settings (@jikstra)
+* Add functionality for blocking/unblocking contacts (@karissa)
+
+### Removed
+* Remove `nodemon` devDependency (@ralphtheninja)
+
+### Fixed
+* Don't select recent chat by default (@karissa)
+
+## [1.7.1] - 2018-10-29
+
+### Fixed
+* Downgrade to electron 2 (fixes window bug on Debian) (@substack)
+
 ## [1.7.0] - 2018-10-25
 
 ### Changed
@@ -91,7 +117,9 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...HEAD
+[1.7.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.1...v1.7.2
+[1.7.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.0...v1.5.0
