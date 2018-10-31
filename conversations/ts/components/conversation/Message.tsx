@@ -441,8 +441,7 @@ export class Message extends React.Component<Props, State> {
         </div>
       );
     } else if (isVideo(attachment)) {
-      const { screenshot } = attachment;
-      if (imageBroken || !screenshot || !screenshot.url) {
+      if (imageBroken || !attachment.url) {
         return (
           <div
             role="button"
@@ -458,7 +457,7 @@ export class Message extends React.Component<Props, State> {
       }
 
       // Calculating height to prevent reflow when image loads
-      const height = Math.max(MINIMUM_IMG_HEIGHT, screenshot.height || 0);
+      const height = Math.max(MINIMUM_IMG_HEIGHT, 0);
 
       return (
         <div
@@ -474,12 +473,11 @@ export class Message extends React.Component<Props, State> {
               : null
           )}
         >
-          <img
+          <video
             onError={this.handleImageErrorBound}
             className="module-message__img-attachment"
-            alt={i18n('videoAttachmentAlt')}
             height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
-            src={screenshot.url}
+            src={attachment.url}
           />
           <div
             className={classNames(
