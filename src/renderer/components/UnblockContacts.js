@@ -22,8 +22,8 @@ class UnblockContacts extends React.Component {
   onContactClick (contact) {
     const tx = window.translate
     var message = tx('dialogs.unblockContact', contact.displayName)
-    dialogs.confirmation(message, function (response) {
-      if (response === 1) {
+    dialogs.confirmation(message, yes => {
+      if (yes) {
         ipcRenderer.sendSync('dispatchSync', 'unblockContact', contact.id)
       }
     })

@@ -114,8 +114,8 @@ class SplittedChatListAndView extends React.Component {
     if (selectedChat && selectedChat.contacts.length) {
       var contact = selectedChat.contacts[0]
       var message = tx('dialogs.blockContact', contact.displayName)
-      dialogs.confirmation(message, function (response) {
-        if (response === 1) {
+      dialogs.confirmation(message, yes => {
+        if (yes) {
           ipcRenderer.sendSync('dispatchSync', 'blockContact', contact.id)
         }
       })
