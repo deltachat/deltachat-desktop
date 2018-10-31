@@ -204,7 +204,11 @@ class RenderMessage extends React.Component {
     }
 
     if (msg.file) {
-      props.attachment = { url: msg.file, contentType: convertContentType(message.filemime), filename: msg.text }
+      props.attachment = {
+        url: msg.file,
+        contentType: convertContentType(message.filemime),
+        filename: msg.text
+      }
     } else {
       props.text = msg.text
     }
