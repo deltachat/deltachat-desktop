@@ -22,6 +22,7 @@ class Login extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.renderPasswordInput = this.renderPasswordInput.bind(this)
   }
 
   _defaultState (showAdvanced, showPasswordMail, showPasswordSend) {
@@ -44,6 +45,7 @@ class Login extends React.Component {
   }
 
   handleChange (event) {
+    console.log('handleChange', event.target.id, event.target.value)
     var state = {}
     state[event.target.id] = event.target.value
     this.setState(state)
@@ -123,6 +125,29 @@ class Login extends React.Component {
     ipcRenderer.send('login', { addr: login, mailPw: true })
   }
 
+  renderPasswordInput(keyShowPassword, keyValue) {
+    let lockButton = (
+        <Button
+          icon={this.state[keyShowPassword] ? "unlock" : "lock"}
+          intent={Intent.WARNING}
+          minimal={true}
+          onClick={this.handleSwitchStateProperty.bind(this, keyShowPassword)}
+        />
+    );
+
+    return (
+      <InputGroup
+        id={keyValue}
+        leftIcon='lock'
+        type={this.state[keyShowPassword] ? "text" : "password"}
+        value={this.state[keyValue]}
+        onChange={this.handleChange}
+        placeholder="Enter your password..."
+        rightElement={lockButton}
+      />
+    )
+  }
+
   render () {
     const { logins, deltachat } = this.props
 
@@ -145,24 +170,6 @@ class Login extends React.Component {
     const tx = window.translate
 
     var loading = deltachat.configuring
-
-    const lockButtonMail = (
-        <Button
-          icon={showPasswordMail ? "unlock" : "lock"}
-          intent={Intent.WARNING}
-          minimal={true}
-          onClick={this.handleSwitchStateProperty.bind(this, 'showPasswordMail')}
-        />
-    );
-
-    const lockButtonSend = (
-      <Button
-        icon={showPasswordSend ? "unlock" : "lock"}
-        intent={Intent.WARNING}
-        minimal={true}
-        onClick={this.handleSwitchStateProperty.bind(this, 'showPasswordSend')}
-      />
-    );
 
     return (
       <div className='Login'>
@@ -189,15 +196,7 @@ class Login extends React.Component {
               />
             </FormGroup>
             <FormGroup label={tx('login.mailPw')} placeholder='Password' labelFor='mailPw' labelInfo={`(${tx('login.required')})`}>
-              <InputGroup
-                id='mailPw'
-                leftIcon='lock'
-                type={showPasswordMail ? "text" : "password"}
-                value={mailPw}
-                onChange={this.handleChange}
-                placeholder="Enter your password..."
-                rightElement={lockButtonMail}
-              />
+              {this.renderPasswordInput('showPasswordMail', 'mailPw')}
             </FormGroup>
             <Button onClick={this.handleSwitchStateProperty.bind(this, 'showAdvanced')}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
             <Collapse isOpen={this.state.showAdvanced}>
@@ -250,16 +249,7 @@ class Login extends React.Component {
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='sendPw' labelInfo={`(${tx('login.automatic')})`}>
-                <InputGroup
-                  id='sendPw'
-                  leftIcon='lock'
-                  type={showPasswordSend ? "text" : "password"}
-                  value={sendPw}
-                  leftIcon='envelope'
-                  placeholder="Enter your password..."
-                  rightElement={lockButtonSend}
-                  onChange={this.handleChange}
-                />
+                {this.renderPasswordInput('showPasswordSend', 'sendPw')}
               </FormGroup>
               <FormGroup label={tx('login.sendServer')} placeholder='SMTP-Server' labelFor='sendServer' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
