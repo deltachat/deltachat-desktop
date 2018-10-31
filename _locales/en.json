@@ -695,6 +695,14 @@
     "message": "Unblock $1$?",
     "description": "Dialog to confirm unblocking contact"
   },
+  "dialogs.confirmation.no": {
+    "message": "No",
+    "description": "No button label in confirmation dialog"
+  },
+  "dialogs.confirmation.yes": {
+    "message": "Yes",
+    "description": "Yes button label in confirmation dialog"
+  },
   "blockContact": {
     "message": "Block Contact",
     "description": "Menu option to block current contact"

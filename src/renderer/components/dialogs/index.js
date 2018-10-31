@@ -12,10 +12,13 @@ module.exports = {
 }
 
 function confirmation (message, cb) {
-  var opts = {
+  const tx = window.translate
+  const opts = {
     type: 'question',
     message: message,
-    buttons: ['No', 'Yes']
+    buttons: [tx('dialogs.confirmation.no'), tx('dialogs.confirmation.yes')]
   }
-  remote.dialog.showMessageBox(opts, cb)
+  remote.dialog.showMessageBox(opts, response => {
+    cb(response === 1)
+  })
 }
