@@ -153,7 +153,7 @@ class DeltaChatController {
   }
 
   /**
-   * Dispatched when showing the AboutDialog (owned by ScreenController)
+   * TODO: Currently not used
    */
   getInfo () {
     if (this.ready === true) {
