@@ -11,7 +11,6 @@ const {
   InputGroup,
   FormGroup,
   Collapse,
-  Tooltip,
   Intent
 } = require('@blueprintjs/core')
 
@@ -44,13 +43,13 @@ class Login extends React.Component {
       sendPw: '',
       sendServer: '',
       sendPort: '',
-      sendSecurity: '',
+      sendSecurity: ''
     }
   }
 
   handleCredentialsChange (event) {
     console.log('handleCredentialsChange', event.target.id, event.target.value)
-    this.setState({credentials: {[event.target.id]: event.target.value}})
+    this.setState({ credentials: { [event.target.id]: event.target.value } })
   }
 
   translateSecurityToServerFlags (mailSecurity, sendSecurity) {
@@ -86,15 +85,14 @@ class Login extends React.Component {
     event.preventDefault()
   }
 
-  handleUISwitchStateProperty(key) {
+  handleUISwitchStateProperty (key) {
     console.log('a', this.state.ui[key])
-    this.setState({ui: {[key]: !this.state.ui[key]}})
+    this.setState({ ui: { [key]: !this.state.ui[key] } })
   }
-
 
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
-    this.setState({credentials: this._defaultCredentials()})
+    this.setState({ credentials: this._defaultCredentials() })
     event.preventDefault()
     event.stopPropagation()
   }
@@ -103,23 +101,23 @@ class Login extends React.Component {
     ipcRenderer.send('login', { addr: login, mailPw: true })
   }
 
-  renderPasswordInput(keyShowPassword, keyValue) {
+  renderPasswordInput (keyShowPassword, keyValue) {
     const tx = window.translate
 
     let lockButton = (
-        <Button
-          icon={this.state[keyShowPassword] ? "unlock" : "lock"}
-          intent={Intent.WARNING}
-          minimal={true}
-          onClick={this.handleUISwitchStateProperty.bind(this, keyShowPassword)}
-        />
-    );
+      <Button
+        icon={this.state[keyShowPassword] ? 'unlock' : 'lock'}
+        intent={Intent.WARNING}
+        minimal
+        onClick={this.handleUISwitchStateProperty.bind(this, keyShowPassword)}
+      />
+    )
 
     return (
       <InputGroup
         id={keyValue}
         leftIcon='lock'
-        type={this.state[keyShowPassword] ? "text" : "password"}
+        type={this.state[keyShowPassword] ? 'text' : 'password'}
         value={this.state[keyValue]}
         onChange={this.handleCredentialsChange}
         placeholder={tx('login.enterPassword')}
@@ -140,17 +138,12 @@ class Login extends React.Component {
       mailPort,
       mailSecurity,
       sendUser,
-      sendPw,
       sendServer,
       sendPort,
       sendSecurity
     } = this.state.credentials
 
-    const {
-      showPasswordMail,
-      showPasswordSend,
-      showAdvanced
-    } = this.state.ui
+    const { showAdvanced } = this.state.ui
 
     const tx = window.translate
 
