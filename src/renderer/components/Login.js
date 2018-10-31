@@ -18,14 +18,21 @@ const {
 class Login extends React.Component {
   constructor (props) {
     super(props)
-    this.state = this._defaultState(false, false, false)
+    this.state = {
+      credentials: this._defaultCredentials(),
+      ui: {
+        showAdvanced: false,
+        showPasswordMail: false,
+        showPasswordSend: false
+      }
+    }
 
-    this.handleChange = this.handleChange.bind(this)
+    this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.renderPasswordInput = this.renderPasswordInput.bind(this)
   }
 
-  _defaultState (showAdvanced, showPasswordMail, showPasswordSend) {
+  _defaultCredentials () {
     return {
       addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
       mailUser: '',
@@ -38,17 +45,12 @@ class Login extends React.Component {
       sendServer: '',
       sendPort: '',
       sendSecurity: '',
-      showAdvanced: showAdvanced,
-      showPasswordMail: showPasswordMail,
-      showPasswordSend: showPasswordSend
     }
   }
 
-  handleChange (event) {
-    console.log('handleChange', event.target.id, event.target.value)
-    var state = {}
-    state[event.target.id] = event.target.value
-    this.setState(state)
+  handleCredentialsChange (event) {
+    console.log('handleCredentialsChange', event.target.id, event.target.value)
+    this.setState({credentials: {[event.target.id]: event.target.value}})
   }
 
   translateSecurityToServerFlags (mailSecurity, sendSecurity) {
@@ -79,44 +81,20 @@ class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    var credentials = {
-      addr: this.state.addr,
-      mail_pw: this.state.mailPw,
-      mail_user: this.state.mailUser,
-      mail_server: this.state.mailServer,
-      mail_port: this.state.mailPort,
-      send_server: this.state.sendServer,
-      send_user: this.state.sendUser,
-      send_pw: this.state.sendPw,
-      send_port: this.state.sendPort,
-      server_flags: this.translateSecurityToServerFlags(
-        this.state.mailSecurity,
-        this.state.sendSecurity
-      )
-    }
-
-    // Remove all properties where value is an empty string, gets us around
-    // React not liking state properties where the value is null/undefined if
-    // bound to an input value
-    for (let key in credentials) {
-      if (credentials[key] === '') delete credentials[key]
-    }
-
     // TODO: Implement security
-    ipcRenderer.send('login', credentials)
+    ipcRenderer.send('login', this.state.credentials)
     event.preventDefault()
   }
 
-  handleSwitchStateProperty(key) {
-    let state = {}
-    state[key] = !this.state[key]
-    this.setState(state)
+  handleUISwitchStateProperty(key) {
+    console.log('a', this.state.ui[key])
+    this.setState({ui: {[key]: !this.state.ui[key]}})
   }
 
 
   cancelClick (event) {
     ipcRenderer.send('dispatch', 'logout')
-    this.setState(this._defaultState(this.state.showAdvanced, this.state.showPasswordMail, this.state.showPasswordSend))
+    this.setState({credentials: this._defaultCredentials()})
     event.preventDefault()
     event.stopPropagation()
   }
@@ -126,12 +104,14 @@ class Login extends React.Component {
   }
 
   renderPasswordInput(keyShowPassword, keyValue) {
+    const tx = window.translate
+
     let lockButton = (
         <Button
           icon={this.state[keyShowPassword] ? "unlock" : "lock"}
           intent={Intent.WARNING}
           minimal={true}
-          onClick={this.handleSwitchStateProperty.bind(this, keyShowPassword)}
+          onClick={this.handleUISwitchStateProperty.bind(this, keyShowPassword)}
         />
     );
 
@@ -141,8 +121,8 @@ class Login extends React.Component {
         leftIcon='lock'
         type={this.state[keyShowPassword] ? "text" : "password"}
         value={this.state[keyValue]}
-        onChange={this.handleChange}
-        placeholder="Enter your password..."
+        onChange={this.handleCredentialsChange}
+        placeholder={tx('login.enterPassword')}
         rightElement={lockButton}
       />
     )
@@ -151,6 +131,7 @@ class Login extends React.Component {
   render () {
     const { logins, deltachat } = this.props
 
+    console.log(this.state)
     const {
       addr,
       mailUser,
@@ -162,10 +143,14 @@ class Login extends React.Component {
       sendPw,
       sendServer,
       sendPort,
-      sendSecurity,
+      sendSecurity
+    } = this.state.credentials
+
+    const {
       showPasswordMail,
-      showPasswordSend
-    } = this.state
+      showPasswordSend,
+      showAdvanced
+    } = this.state.ui
 
     const tx = window.translate
 
@@ -192,14 +177,14 @@ class Login extends React.Component {
                 type='text'
                 value={addr}
                 leftIcon='envelope'
-                onChange={this.handleChange}
+                onChange={this.handleCredentialsChange}
               />
             </FormGroup>
             <FormGroup label={tx('login.mailPw')} placeholder='Password' labelFor='mailPw' labelInfo={`(${tx('login.required')})`}>
               {this.renderPasswordInput('showPasswordMail', 'mailPw')}
             </FormGroup>
-            <Button onClick={this.handleSwitchStateProperty.bind(this, 'showAdvanced')}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
-            <Collapse isOpen={this.state.showAdvanced}>
+            <Button onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>{(showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
+            <Collapse isOpen={showAdvanced}>
               <h2>{tx('login.inbox')}</h2>
               <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
@@ -207,7 +192,7 @@ class Login extends React.Component {
                   type='text'
                   value={mailUser}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mailServer' labelInfo={`(${tx('login.automatic')})`}>
@@ -216,7 +201,7 @@ class Login extends React.Component {
                   type='text'
                   value={mailServer}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.mailPort')} placeholder='IMAP-Port' labelFor='mailPort' labelInfo={`(${tx('login.automatic')})`}>
@@ -225,12 +210,12 @@ class Login extends React.Component {
                   type='text'
                   value={mailPort}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
                 <div className='bp3-select .modifier'>
-                  <select id='mailSecurity' value={mailSecurity} onChange={this.handleChange}>
+                  <select id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
                     <option value='starttls'>STARTTLS</option>
@@ -245,7 +230,7 @@ class Login extends React.Component {
                   type='text'
                   value={sendUser}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='sendPw' labelInfo={`(${tx('login.automatic')})`}>
@@ -257,7 +242,7 @@ class Login extends React.Component {
                   type='text'
                   value={sendServer}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendPort')} placeholder='SMTP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
@@ -266,12 +251,12 @@ class Login extends React.Component {
                   type='text'
                   value={sendPort}
                   leftIcon='envelope'
-                  onChange={this.handleChange}
+                  onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
               <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='sendSecurity' labelInfo={`(${tx('login.automatic')})`}>
                 <div className='bp3-select .modifier'>
-                  <select id='sendSecurity' value={sendSecurity} onChange={this.handleChange}>
+                  <select id='sendSecurity' value={sendSecurity} onChange={this.handleCredentialsChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
                     <option value='starttls'>STARTTLS</option>

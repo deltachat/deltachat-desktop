@@ -183,6 +183,10 @@
         "message": "E-Mail Address",
         "description": "Label above input field for e-mail address"
     },
+    "login.enterPassword": {
+      "message": "Enter your password...",
+      "description": "Text telling user to enter his password"      
+    },
     "login.mailPw": {
         "message": "Password",
         "description": "Label above input field for mail password"
