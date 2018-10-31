@@ -22,9 +22,6 @@ class Login extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleShowAdvanced = this.handleShowAdvanced.bind(this)
-    this.handleShowPasswordMail = this.handleShowPasswordMail.bind(this)
-    this.handleShowPasswordSend = this.handleShowPasswordSend.bind(this)
   }
 
   _defaultState (showAdvanced, showPasswordMail, showPasswordSend) {
@@ -108,16 +105,10 @@ class Login extends React.Component {
     event.preventDefault()
   }
 
-  handleShowAdvanced () {
-    this.setState({ showAdvanced: !this.state.showAdvanced })
-  }
-
-  handleShowPasswordMail() {
-    this.setState({ showPasswordMail: !this.state.showPasswordMail })
-  }
-
-  handleShowPasswordSend() {
-    this.setState({ showPasswordSend: !this.state.showPasswordSend })
+  handleSwitchStateProperty(key) {
+    let state = {}
+    state[key] = !this.state[key]
+    this.setState(state)
   }
 
 
@@ -160,7 +151,7 @@ class Login extends React.Component {
           icon={showPasswordMail ? "unlock" : "lock"}
           intent={Intent.WARNING}
           minimal={true}
-          onClick={this.handleShowPasswordMail}
+          onClick={this.handleSwitchStateProperty.bind(this, 'showPasswordMail')}
         />
     );
 
@@ -169,7 +160,7 @@ class Login extends React.Component {
         icon={showPasswordSend ? "unlock" : "lock"}
         intent={Intent.WARNING}
         minimal={true}
-        onClick={this.handleShowPasswordSend}
+        onClick={this.handleSwitchStateProperty.bind(this, 'showPasswordSend')}
       />
     );
 
@@ -208,7 +199,7 @@ class Login extends React.Component {
                 rightElement={lockButtonMail}
               />
             </FormGroup>
-            <Button onClick={this.handleShowAdvanced}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
+            <Button onClick={this.handleSwitchStateProperty.bind(this, 'showAdvanced')}>{(this.state.showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
             <Collapse isOpen={this.state.showAdvanced}>
               <h2>{tx('login.inbox')}</h2>
               <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
