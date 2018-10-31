@@ -3,7 +3,6 @@ const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 
 const dialogs = require('./dialogs')
-
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 
@@ -57,8 +56,14 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, archive)
   }
 
-  onDeleteChat (selectedChat) {
-    ipcRenderer.send('dispatch', 'deleteChat', selectedChat.id)
+  onDeleteChat (chat) {
+    const tx = window.translate
+    const message = tx('dialogs.deleteChat', chat.name)
+    dialogs.confirmation(message, yes => {
+      if (yes) {
+        ipcRenderer.send('dispatch', 'deleteChat', chat.id)
+      }
+    })
   }
 
   onEditGroup (selectedChat) {
