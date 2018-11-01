@@ -7,40 +7,68 @@ const {
   Classes,
   Button,
   ButtonGroup,
-  Dialog
+  Dialog,
+  NumericInput
 } = require('@blueprintjs/core')
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      key: ''
+      key: Array(9).fill('')
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChangeKey = this.handleChangeKey.bind(this)
   }
 
-  handleChange (event) {
+  handleChangeKey (event) {
     // TODO: insert - automatically in between every 4 characters
     // TODO: lint the value for correct setup message format
-    this.setState({ key: event.target.value, message: false })
+    if(event.target.value < 0 || event.target.value > 9999) {
+      return false
+    }
+    let updatedkey = this.state.key
+    updatedkey[Number(event.target.id)] = event.target.value
+    this.setState({key: updatedkey})
   }
 
   onClick (event) {
-    this.props.continueKeyTransfer(this.state.key)
+    this.props.continueKeyTransfer(this.state.key.join(''))
+  }
+
+  renderInputKey() {
+    let inputs = []
+    for(let i = 0; i<9; i++) {
+      inputs.push(
+        <input
+          type="number"
+          value={this.state.key[i]}
+          id={i}
+          onChange={this.handleChangeKey}
+          min='0'
+          max='9999'
+          size="4"
+        />
+      )
+
+      if (i!==8) {
+        inputs.push(<div class="seperator"></div>)
+      }
+    }
+    return inputs
   }
 
   render () {
     const tx = window.translate
+    console.log(this.state)
 
     return (<div>
       {this.props.message && <h3>{this.props.message}</h3>}
       <p>
         {tx('showKeyTransferMessage')}
       </p>
-      <InputGroup
-        onChange={this.handleChange}
-        value={this.state.key}
-      />
+      <div class="InputTransferKey">
+        {this.renderInputKey()}
+      </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <ButtonGroup>
