@@ -117,7 +117,7 @@ class Login extends React.Component {
         id={keyValue}
         leftIcon='lock'
         type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
-        value={this.state.value[keyValue]}
+        value={this.state.credentials[keyValue]}
         onChange={this.handleCredentialsChange}
         placeholder={tx('login.enterPassword')}
         rightElement={lockButton}
