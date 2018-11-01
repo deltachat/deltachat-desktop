@@ -80,7 +80,6 @@ class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    // TODO: Implement security
     ipcRenderer.send('login', this.state.credentials)
     event.preventDefault()
   }
@@ -117,8 +116,8 @@ class Login extends React.Component {
       <InputGroup
         id={keyValue}
         leftIcon='lock'
-        type={this.state[keyShowPassword] ? 'text' : 'password'}
-        value={this.state[keyValue]}
+        type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
+        value={this.state.value[keyValue]}
         onChange={this.handleCredentialsChange}
         placeholder={tx('login.enterPassword')}
         rightElement={lockButton}
