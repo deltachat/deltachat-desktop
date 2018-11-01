@@ -18,15 +18,14 @@ function messageIdToJson (messageId, dc) {
   }
 }
 
-function chatIdToJson (chatId, dc, loadMessages) {
+function chatIdToJson (chatId, dc, idx, limit) {
   const chat = dc.getChat(chatId).toJson()
-  const messageIds = dc.getChatMessages(chatId, 0, 0)
-  chat.messages = loadMessages ? messageIds.map(id => messageIdToJson(id, dc)) : []
+  chat.messageIds = dc.getChatMessages(chatId, 0, 0)
   chat.contacts = dc.getChatContacts(chatId).map(id => {
     return dc.getContact(id).toJson()
   })
   if (chatId === C.DC_CHAT_ID_DEADDROP) {
-    const msg = dc.getMessage(messageIds[0])
+    const msg = dc.getMessage(chat.messageIds[0])
     const fromId = msg && msg.getFromId()
 
     if (!fromId) {
@@ -35,9 +34,7 @@ function chatIdToJson (chatId, dc, loadMessages) {
     }
 
     const contact = dc.getContact(fromId)
-    if (contact) {
-      chat.contact = contact.toJson()
-    }
+    if (contact) chat.contact = contact.toJson()
   }
   chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
   return chat
@@ -313,12 +310,23 @@ class DeltaChatController {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
+<<<<<<< HEAD
   /**
    * Dispatched from SplittedChatListAndView and used internally
    */
+=======
+  renderMoreChats () {
+    this._startMessageIdx = Math.max(this._startMessageIdx - 1, 0)
+    log('rendering', this._startMessageIdx, this._limit)
+    this._render()
+  }
+
+>>>>>>> almost : load only the visible messages
   selectChat (chatId) {
     log('selecting chat with id', chatId)
     this._selectedChatId = chatId
+    this._startMessageIdx = null
+    this._limit = 50
     this._render()
   }
 
@@ -344,6 +352,7 @@ class DeltaChatController {
     let showArchivedChats = this._showArchivedChats
     let chats = this._chats()
     let archivedChats = this._archivedChats()
+    var selectedChat = this._selectedChat(showArchivedChats ? archivedChats : chats)
 
     return {
       configuring: this.configuring,
@@ -352,10 +361,23 @@ class DeltaChatController {
       contacts: this._contacts(),
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
-      selectedChat: this._selectedChat(showArchivedChats ? archivedChats : chats),
+      selectedChat,
       chats,
-      archivedChats
+      archivedChats,
+      visibleMessages: this._visibleMessages(selectedChat)
     }
+  }
+
+  _visibleMessages (chat) {
+    if (!chat) return []
+    if (!this._startMessageIdx) {
+      this._startMessageIdx = Math.max(chat.messageIds.length - this._limit, 0)
+    }
+    log('loading messages', chat.id, this._startMessageIdx, this._limit)
+    var start = this._startMessageIdx
+    var end = start + this._limit
+    var visibleMessageIds = chat.messageIds.splice(start, end)
+    return visibleMessageIds.map(id => messageIdToJson(id, this._dc))
   }
 
   /**
@@ -369,8 +391,7 @@ class DeltaChatController {
     const count = list.getCount()
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
-      const loadMessages = this._selectedChatId === chatId
-      const chat = chatIdToJson(chatId, this._dc, loadMessages)
+      const chat = chatIdToJson(chatId, this._dc)
       if (chat) {
         chat.summary = list.getSummary(i).toJson()
         chats.push(chat)
@@ -426,6 +447,8 @@ class DeltaChatController {
     this.configuring = false
     this.credentials = { addr: '' }
     this._selectedChatId = null
+    this._startMessageIdx = null
+    this._limit = 50
     this._showArchivedChats = false
   }
 }

@@ -7,6 +7,7 @@ const Composer = require('./Composer')
 const { Overlay } = require('@blueprintjs/core')
 
 const MutationObserver = window.MutationObserver
+const IntersectionObserver = window.IntersectionObserver
 
 const { ConversationContext, Message } = require('./conversations')
 
@@ -26,7 +27,9 @@ class ChatView extends React.Component {
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
+    this.renderMoreChats = this.renderMoreChats.bind(this)
     this.conversationDiv = React.createRef()
+    this.topMessageDiv = React.createRef()
   }
 
   writeMessage (text) {
@@ -35,21 +38,43 @@ class ChatView extends React.Component {
   }
 
   componentWillUnmount () {
-    if (this.observer) this.observer.disconnect()
+    if (this.scrollObserver) this.scrollObserver.disconnect()
+    if (this.loadMoreObserver) this.loadMoreObserver.disconnect()
+  }
+
+  attachLoadMoreObserver () {
+    if (!this.loadMoreObserver && this.topMessageDiv.current) {
+      this.loadMoreObserver = new IntersectionObserver(this.renderMoreChats)
+      this.loadMoreObserver.observe(this.topMessageDiv.current, {
+        threshold: 0.2
+      })
+    }
+  }
+
+  attachScrollObserver () {
+    if (!this.scrollObserver && this.conversationDiv.current) {
+      this.scrollObserver = new MutationObserver(this.scrollToBottom)
+      this.scrollObserver.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
+    }
   }
 
   componentDidUpdate () {
-    if (!this.observer && this.conversationDiv.current) {
-      this.observer = new MutationObserver(this.scrollToBottom)
-      this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
-    }
-
+    this.attachLoadMoreObserver()
+    this.attachScrollObserver()
     this.focusInputMessage()
   }
 
   componentDidMount () {
     this.scrollToBottom()
     this.focusInputMessage()
+    this.attachLoadMoreObserver()
+  }
+
+  renderMoreChats () {
+    const { chat, visibleMessages } = this.props
+    if (chat.messageIds.length > visibleMessages.length) {
+      ipcRenderer.send('dispatch', 'renderMoreChats')
+    }
   }
 
   scrollToBottom (force) {
@@ -85,8 +110,7 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const { chat } = this.props
-    const { messages } = chat
+    const { chat, visibleMessages } = this.props
     const conversationType = convertChatType(chat.type)
 
     return (
@@ -104,8 +128,12 @@ class ChatView extends React.Component {
 
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
-            {messages.map(message => {
-              const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
+            {visibleMessages.map(message => {
+              const msg = <RenderMessage
+                message={message}
+                conversationType={conversationType}
+                onClickAttachment={this.onClickAttachment.bind(this, message)}
+              />
               if (message.msg.isSetupmessage) {
                 return <li onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
