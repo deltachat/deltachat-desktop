@@ -10,13 +10,27 @@ const {
 } = require('@blueprintjs/core')
 
 class KeyViewPanel extends React.Component {
+  formatAutocryptKey(autocryptKey) {
+    const splittedAutocryptKey = autocryptKey.split('-')
+    return splittedAutocryptKey.map((e, i) => {
+      const isLast = (i + 1) === splittedAutocryptKey.length
+      const isNThird = (i + 1) % 3 === 0
+
+      const addLineBreak = !isLast && isNThird
+      const addDash = !isLast
+
+      return e + (addDash ? ' - ' : '') + (addLineBreak ? "\n" : '')
+    }).join('')
+  }
+
   render () {
-    const { autocryptKey } = this.props
+    const formattedAutocryptKey = this.formatAutocryptKey(this.props.autocryptKey)
+
     const tx = window.translate
     return (
       <div>
         <p>{tx('showKeyTransferMessage')}</p>
-        <p>{autocryptKey}</p>
+        <pre>{formattedAutocryptKey}</pre>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <ButtonGroup>
