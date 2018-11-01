@@ -12,7 +12,7 @@ class ChatList extends React.Component {
       <div className='ChatList'>
         { !chats.length && (<div className='ChatList-NoChats'><p>{missingChatsMsg}</p></div>) }
         <div className='ConversationList'>
-          {chats.map((chat) => {
+          {chats.map((chat, i) => {
             if (!chat) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
@@ -22,6 +22,7 @@ class ChatList extends React.Component {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
                 <ConversationListItem
+                  key={i}
                   name={name}
                   i18n={i18n}
                   color={'purple'}
@@ -37,9 +38,8 @@ class ChatList extends React.Component {
                 />)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
-                <div className='ShowArchivedChats'>
+                <div key={i} className='ShowArchivedChats'>
                   <ConversationListItem
-                    key={chat.id}
                     onClick={this.props.onShowArchivedChats}
                     name={chat.name}
                     i18n={i18n} />
@@ -48,7 +48,7 @@ class ChatList extends React.Component {
             } else {
               return (
                 <ConversationListItem
-                  key={chat.id}
+                  key={i}
                   onClick={this.props.onChatClick.bind(null, chat.id)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
