@@ -48,7 +48,8 @@ class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
-    this.setState({ credentials: { [event.target.id]: event.target.value } })
+    let stateCredentials = Object.assign(this.state.credentials, { [event.target.id]: event.target.value })
+    this.setState(stateCredentials)
   }
 
   translateSecurityToServerFlags (mailSecurity, sendSecurity) {
@@ -85,7 +86,8 @@ class Login extends React.Component {
   }
 
   handleUISwitchStateProperty (key) {
-    this.setState({ ui: { [key]: !this.state.ui[key] } })
+    let stateUi = Object.assign(this.state.ui, { [key]: !this.state.ui[key] })
+    this.setState(stateUi)
   }
 
   cancelClick (event) {
