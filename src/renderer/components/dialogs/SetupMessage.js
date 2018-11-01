@@ -3,12 +3,10 @@ const { ipcRenderer } = require('electron')
 
 const {
   Spinner,
-  InputGroup,
   Classes,
   Button,
   ButtonGroup,
-  Dialog,
-  NumericInput
+  Dialog
 } = require('@blueprintjs/core')
 
 class SetupMessagePanel extends React.Component {
@@ -23,35 +21,35 @@ class SetupMessagePanel extends React.Component {
   handleChangeKey (event) {
     // TODO: insert - automatically in between every 4 characters
     // TODO: lint the value for correct setup message format
-    if(event.target.value < 0 || event.target.value > 9999) {
+    if (event.target.value < 0 || event.target.value > 9999) {
       return false
     }
     let updatedkey = this.state.key
     updatedkey[Number(event.target.id)] = event.target.value
-    this.setState({key: updatedkey})
+    this.setState({ key: updatedkey })
   }
 
   onClick (event) {
     this.props.continueKeyTransfer(this.state.key.join(''))
   }
 
-  renderInputKey() {
+  renderInputKey () {
     let inputs = []
-    for(let i = 0; i<9; i++) {
+    for (let i = 0; i < 9; i++) {
       inputs.push(
         <input
-          type="number"
+          type='number'
           value={this.state.key[i]}
           id={i}
           onChange={this.handleChangeKey}
           min='0'
           max='9999'
-          size="4"
+          size='4'
         />
       )
 
-      if (i!==8) {
-        inputs.push(<div class="seperator"></div>)
+      if (i !== 8) {
+        inputs.push(<div class='seperator' />)
       }
     }
     return inputs
@@ -66,7 +64,7 @@ class SetupMessagePanel extends React.Component {
       <p>
         {tx('showKeyTransferMessage')}
       </p>
-      <div class="InputTransferKey">
+      <div class='InputTransferKey'>
         {this.renderInputKey()}
       </div>
       <div className={Classes.DIALOG_FOOTER}>

@@ -10,7 +10,7 @@ const {
 } = require('@blueprintjs/core')
 
 class KeyViewPanel extends React.Component {
-  formatAutocryptKey(autocryptKey) {
+  formatAutocryptKey (autocryptKey) {
     const splittedAutocryptKey = autocryptKey.split('-')
     return splittedAutocryptKey.map((e, i) => {
       const isLast = (i + 1) === splittedAutocryptKey.length
@@ -19,7 +19,7 @@ class KeyViewPanel extends React.Component {
       const addLineBreak = !isLast && isNThird
       const addDash = !isLast
 
-      return e + (addDash ? ' - ' : '') + (addLineBreak ? "\n" : '')
+      return e + (addDash ? ' - ' : '') + (addLineBreak ? '\n' : '')
     }).join('')
   }
 
