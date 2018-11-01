@@ -43,8 +43,6 @@ class ChatView extends React.Component {
       this.observer = new MutationObserver(this.scrollToBottom)
       this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
     }
-
-    this.focusInputMessage()
   }
 
   componentDidMount () {

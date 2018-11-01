@@ -173,6 +173,14 @@ class DeltaChatController {
   }
 
   /**
+   * Update query for rendering chats with search input
+   */
+  searchChats (query) {
+    this._query = query
+    this._render()
+  }
+
+  /**
    * Dispatched from RenderMessage#onDelete in ChatView
    */
   deleteMessage (messageId) {
@@ -369,7 +377,7 @@ class DeltaChatController {
   _chats (listFlags = 0) {
     if (!this._dc) return []
     const chats = []
-    const list = this._dc.getChatList(listFlags)
+    const list = this._dc.getChatList(listFlags, this._query)
     const count = list.getCount()
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
@@ -430,6 +438,7 @@ class DeltaChatController {
     this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
+    this._query = ''
   }
 }
 
