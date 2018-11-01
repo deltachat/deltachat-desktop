@@ -204,14 +204,16 @@ class DeltaChatController {
   /**
    * Dispatched when accepting a chat in DeadDrop
    */
-  chatWithContact (contactId) {
-    log('chat with contact', contactId)
-    const contact = this._dc.getContact(contactId)
+  chatWithContact (deadDropChat) {
+    log('chat with dead drop', deadDropChat)
+    const contact = this._dc.getContact(deadDropChat.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    this.createChatByContactId(contactId)
+    var message = deadDropChat.messages[0]
+    if (!message) log.warning('no message for deaddropchat?')
+    else this._dc.createChatByMessageId(message.id)
   }
 
   unblockContact (contactId) {
