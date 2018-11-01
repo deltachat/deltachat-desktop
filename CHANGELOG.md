@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [1.7.3] - 2018-11-02
+
+### Added
+* Add about dialog (@jikstra, @ralphtheninja)
+* Add confirmation dialog when deleting chat (@ralphtheninja)
+* Hide password by default and add button to show it (@jikstra)
+
+### Fixed
+* Translate buttons in confirmation dialog (@ralphtheninja)
+* Install `libssl-dev` on Travis (@ralphtheninja)
+* Contact requests properly resolve when request is from a group chat (@karissa)
+* Add key for chatlist to remove console warning (@karissa)
+
 ## [1.7.2] - 2018-10-31
 
 ### Changed
@@ -117,7 +130,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...HEAD
+[1.7.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.6.0...v1.7.0
