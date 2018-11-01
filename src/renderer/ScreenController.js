@@ -100,7 +100,7 @@ class Home extends React.Component {
             deltachat={deltachat}
           />
         }
-        { showAbout && (<AboutDialog isOpen={showAbout} onClose={this.onCloseAbout} />) }
+        <AboutDialog isOpen={showAbout} onClose={this.onCloseAbout} />
       </div>
     )
   }
