@@ -738,5 +738,13 @@
   "remove": {
     "message": "Remove",
     "description": "Button label for removing chat profile image"
+  },
+  "searchAriaLabel": {
+    "message": "Search",
+    "description": "Aria-label for search"
+  },
+  "searchPlaceholder": {
+    "message": "Search",
+    "description": "Placeholder for search"
   }
 }

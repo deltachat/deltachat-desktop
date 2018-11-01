@@ -79,6 +79,7 @@ function quit (e) {
 
   app.isQuitting = true
   e.preventDefault()
+
   windows.main.send('stateSaveImmediate')
   ipcMain.once('stateSaved', () => app.quit())
   setTimeout(() => {
