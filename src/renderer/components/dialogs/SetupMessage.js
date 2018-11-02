@@ -19,52 +19,47 @@ class SetupMessagePanel extends React.Component {
   }
 
   handleChangeKey (event) {
-    // TODO: insert - automatically in between every 4 characters
-    // TODO: lint the value for correct setup message format
-    if (event.target.value < 0 || event.target.value > 9999) {
-      return false
-    }
+    const value = Number(event.target.value)
+
+    if (isNaN(value) || value < 0 || value > 9999)  return false
     let updatedkey = this.state.key
-    updatedkey[Number(event.target.id)] = event.target.value
+    updatedkey[Number(event.target.id)] = value
     this.setState({ key: updatedkey })
   }
 
   onClick (event) {
-    this.props.continueKeyTransfer(this.state.key.join(''))
+    const autocryptKey = this.state.key.join('')
+    this.props.continueKeyTransfer(autocryptKey)
   }
 
   renderInputKey () {
     let inputs = []
     for (let i = 0; i < 9; i++) {
       inputs.push(
-        <input
-          type='number'
-          value={this.state.key[i]}
-          id={i}
-          onChange={this.handleChangeKey}
-          min='0'
-          max='9999'
-          size='4'
-        />
+        <div className="partial" key={i}>
+          <input
+            key={i}
+            id={i}
+            type='number'
+            value={this.state.key[i]}
+            onChange={this.handleChangeKey}
+          />
+        {i !== 8 ? <div className='centered separator'>-</div> : null}
+        </div>
       )
-
-      if (i !== 8) {
-        inputs.push(<div class='seperator' />)
-      }
     }
     return inputs
   }
 
   render () {
     const tx = window.translate
-    console.log(this.state)
 
     return (<div>
       {this.props.message && <h3>{this.props.message}</h3>}
       <p>
         {tx('showKeyTransferMessage')}
       </p>
-      <div class='InputTransferKey'>
+      <div className='InputTransferKey'>
         {this.renderInputKey()}
       </div>
       <div className={Classes.DIALOG_FOOTER}>

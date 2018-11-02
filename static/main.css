@@ -204,15 +204,21 @@ ul li button {
 
 .InputTransferKey {
   display: grid;
-  grid-template-columns: 100px 10px 100px 10px 100px 10px;
+  grid-template-columns: auto auto auto;
   grid-gap: 10px;
-  padding-bottom: 10px;
+  padding: 10px 20px 20px 10px;
 }
 
-.InputTransferKey .seperator {
-  text-align: center;
+.InputTransferKey .partial {
+  width: 100%;
 }
 
-.InputTransferKey .seperator::after {
-  content: '-';
+.InputTransferKey .partial input {
+  width: 66%;
+  float: left;
+}
+
+.InputTransferKey .partial .separator {
+  width: 33%;
+  float: right;
 }
