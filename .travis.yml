@@ -16,7 +16,7 @@ addons:
       - python3-pip
       - python3.5
       - g++-7
-      - libssl-dev
+      - libssl1.1-dev
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC=gcc-7; fi
