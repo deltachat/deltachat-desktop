@@ -213,7 +213,7 @@ class RenderMessage extends React.Component {
       props.text = msg.text
     }
 
-    return (<Message {...props} />)
+    return (<div className='MessageWrapper'><Message {...props} /></div>)
   }
 }
 
