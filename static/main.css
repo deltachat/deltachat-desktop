@@ -125,7 +125,6 @@ ul li button {
   float: right;
 }
 
-
 .Navbar img {
     height: 50px;
 }
@@ -146,8 +145,6 @@ ul li button {
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
 }
-
-
 
 .ChatList-NoChats {
   height: 52px;
@@ -176,4 +173,9 @@ ul li button {
 .module-message__author-default-avatar {
   position: static;
   margin-right: 8px;
+}
+
+.MessageWrapper .module-message__metadata {
+  margin-top: 10px;
+  margin-bottom: -7px;
 }
