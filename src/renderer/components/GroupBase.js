@@ -1,4 +1,5 @@
 const React = require('react')
+const path = require('path')
 const { dialog } = require('electron').remote
 const ContactListItem = require('./ContactListItem')
 const {
@@ -12,7 +13,13 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const DEFAULT_IMAGE = '../images/group_default.png'
+const DEFAULT_IMAGE = path.join(
+  __dirname,
+  '../../..',
+  'images/group_default.png'
+)
+
+console.log('DEFAULT_IMAGE', DEFAULT_IMAGE)
 
 class GroupBase extends React.Component {
   constructor (props, state) {
