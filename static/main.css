@@ -13,6 +13,7 @@ body {
 input:focus {
   outline: 0 !important;
 }
+
 .window {
   display: flex;
   flex-direction: column;
@@ -119,6 +120,7 @@ ul li button {
 }
 
 .InputMessage input:focus {
+  outline: 0;
   -webkit-box-shadow: unset;
   box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
 }
@@ -147,6 +149,8 @@ ul li button {
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
 }
+
+
 
 .ChatList-NoChats {
   height: 52px;
@@ -195,4 +199,26 @@ ul li button {
 .RemoveGroupImage {
   width: 100px;
   margin-bottom: 4px;
+}
+
+
+.InputTransferKey {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  padding: 10px 20px 20px 10px;
+}
+
+.InputTransferKey .partial {
+  width: 100%;
+}
+
+.InputTransferKey .partial input {
+  width: 66%;
+  float: left;
+}
+
+.InputTransferKey .partial .separator {
+  width: 33%;
+  float: right;
 }

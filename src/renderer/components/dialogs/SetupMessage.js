@@ -3,7 +3,6 @@ const { ipcRenderer } = require('electron')
 
 const {
   Spinner,
-  InputGroup,
   Classes,
   Button,
   ButtonGroup,
@@ -14,19 +13,42 @@ class SetupMessagePanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      key: ''
+      key: Array(9).fill('')
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChangeKey = this.handleChangeKey.bind(this)
   }
 
-  handleChange (event) {
-    // TODO: insert - automatically in between every 4 characters
-    // TODO: lint the value for correct setup message format
-    this.setState({ key: event.target.value, message: false })
+  handleChangeKey (event) {
+    const value = Number(event.target.value)
+
+    if (isNaN(value) || value < 0 || value > 9999) return false
+    let updatedkey = this.state.key
+    updatedkey[Number(event.target.id)] = value
+    this.setState({ key: updatedkey })
   }
 
   onClick (event) {
-    this.props.continueKeyTransfer(this.state.key)
+    const autocryptKey = this.state.key.join('')
+    this.props.continueKeyTransfer(autocryptKey)
+  }
+
+  renderInputKey () {
+    let inputs = []
+    for (let i = 0; i < 9; i++) {
+      inputs.push(
+        <div className='partial' key={i}>
+          <input
+            key={i}
+            id={i}
+            type='number'
+            value={this.state.key[i]}
+            onChange={this.handleChangeKey}
+          />
+          {i !== 8 ? <div className='centered separator'>-</div> : null}
+        </div>
+      )
+    }
+    return inputs
   }
 
   render () {
@@ -37,10 +59,9 @@ class SetupMessagePanel extends React.Component {
       <p>
         {tx('showKeyTransferMessage')}
       </p>
-      <InputGroup
-        onChange={this.handleChange}
-        value={this.state.key}
-      />
+      <div className='InputTransferKey'>
+        {this.renderInputKey()}
+      </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <ButtonGroup>
