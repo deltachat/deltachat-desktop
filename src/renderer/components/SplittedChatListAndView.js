@@ -66,11 +66,8 @@ class SplittedChatListAndView extends React.Component {
     })
   }
 
-  onEditGroup (selectedChat) {
-    this.props.changeScreen('EditGroup', {
-      chatId: selectedChat.id,
-      chatName: selectedChat.name
-    })
+  onEditGroup (chat) {
+    this.props.changeScreen('EditGroup', { chat })
   }
 
   onLeaveGroup (selectedChat) {

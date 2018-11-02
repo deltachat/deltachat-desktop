@@ -1,4 +1,6 @@
 const React = require('react')
+const path = require('path')
+const { dialog } = require('electron').remote
 const ContactListItem = require('./ContactListItem')
 const {
   Alignment,
@@ -11,12 +13,21 @@ const {
   Button
 } = require('@blueprintjs/core')
 
+const DEFAULT_IMAGE = path.join(
+  __dirname,
+  '../../..',
+  'images/group_default.png'
+)
+
+console.log('DEFAULT_IMAGE', DEFAULT_IMAGE)
+
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
+    this.state.image = this.state.image || ''
   }
 
   addToGroup (contactId) {
@@ -52,9 +63,27 @@ class GroupBase extends React.Component {
     this.setState({ name: e.target.value })
   }
 
+  onSelectGroupImage () {
+    const tx = window.translate
+    dialog.showOpenDialog({
+      title: tx('selectGroupImage'),
+      filters: [ { name: 'Images', extensions: [ 'jpg', 'png', 'gif' ] } ],
+      properties: [ 'openFile' ]
+    }, files => {
+      if (Array.isArray(files) && files.length > 0) {
+        this.setState({ image: files[0] })
+      }
+    })
+  }
+
+  onRemoveImage () {
+    this.setState({ image: '' })
+  }
+
   render () {
     const { deltachat } = this.props
     const tx = window.translate
+    const image = this.state.image || DEFAULT_IMAGE
 
     return (
       <div>
@@ -66,6 +95,10 @@ class GroupBase extends React.Component {
         </Navbar>
         <div className='window'>
           <div className='GroupBase'>
+            <div className='SelectGroupImage'>
+              <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
+              <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
+            </div>
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'

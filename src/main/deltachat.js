@@ -265,9 +265,10 @@ class DeltaChatController {
   /**
    * Dispatched from EditGroup
    */
-  modifyGroup (chatId, name, remove, add) {
-    log('setting chat', chatId, 'name to', name)
+  modifyGroup (chatId, name, image, remove, add) {
+    log('modify group', chatId, name, image, remove, add)
     this._dc.setChatName(chatId, name)
+    this._dc.setChatProfileImage(chatId, image)
     remove.forEach(id => this._dc.removeContactFromChat(chatId, id))
     add.forEach(id => this._dc.addContactToChat(chatId, id))
     return true
@@ -300,8 +301,9 @@ class DeltaChatController {
   /**
    * Dispatched when creating an unverified group in CreateGroup
    */
-  createUnverifiedGroup (name, contactIds) {
+  createUnverifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createUnverifiedGroupChat(name)
+    this._dc.setChatProfileImage(chatId, image)
     contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
     this.selectChat(chatId)
     return { chatId }
