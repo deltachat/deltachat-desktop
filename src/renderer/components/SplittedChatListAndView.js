@@ -1,6 +1,7 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
+const { InputGroup } = require('@blueprintjs/core')
 
 const dialogs = require('./dialogs')
 const ChatList = require('./ChatList')
@@ -25,7 +26,8 @@ class SplittedChatListAndView extends React.Component {
 
     this.state = {
       deadDropChat: false,
-      keyTransfer: false
+      keyTransfer: false,
+      queryStr: ''
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
@@ -42,6 +44,11 @@ class SplittedChatListAndView extends React.Component {
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onUnblockContacts = this.onUnblockContacts.bind(this)
     this.onBlockContact = this.onBlockContact.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
+  }
+
+  componentDidMount () {
+    this.searchChats('')
   }
 
   showArchivedChats (show) {
@@ -72,6 +79,11 @@ class SplittedChatListAndView extends React.Component {
 
   onLeaveGroup (selectedChat) {
     ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+  }
+
+  searchChats (queryStr) {
+    this.setState({ queryStr })
+    ipcRenderer.send('dispatch', 'searchChats', queryStr)
   }
 
   onDeadDropClose () {
@@ -122,6 +134,10 @@ class SplittedChatListAndView extends React.Component {
     }
   }
 
+  handleSearchChange (event) {
+    this.searchChats(event.target.value)
+  }
+
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
@@ -153,6 +169,15 @@ class SplittedChatListAndView extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
+              <InputGroup
+                type='search'
+                aria-label={tx('searchAriaLabel')}
+                large
+                placeholder={tx('searchPlaceholder')}
+                value={this.state.queryStr}
+                onChange={this.handleSearchChange}
+                leftIcon='search'
+              />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
               <img src={selectedChat ? selectedChat.profileImage : null} />
