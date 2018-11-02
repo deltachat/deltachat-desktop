@@ -6,6 +6,8 @@ const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 const { Overlay } = require('@blueprintjs/core')
 
+const { TrackVisibility } = require('react-on-screen')
+
 const MutationObserver = window.MutationObserver
 const IntersectionObserver = window.IntersectionObserver
 
@@ -70,13 +72,6 @@ class ChatView extends React.Component {
     this.attachLoadMoreObserver()
   }
 
-  renderMoreChats () {
-    const { chat, visibleMessages } = this.props
-    if (chat.messageIds.length > visibleMessages.length) {
-      ipcRenderer.send('dispatch', 'renderMoreChats')
-    }
-  }
-
   scrollToBottom (force) {
     var doc = document.querySelector('.ChatView #the-conversation')
     if (!doc) return console.log(`Didn't find .ChatView #the-conversation element`)
@@ -110,7 +105,7 @@ class ChatView extends React.Component {
 
   render () {
     const { attachmentMessage, setupMessage } = this.state
-    const { chat, visibleMessages } = this.props
+    const { chat } = this.props
     const conversationType = convertChatType(chat.type)
 
     return (
@@ -128,17 +123,14 @@ class ChatView extends React.Component {
 
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
-            {visibleMessages.map(message => {
-              const msg = <RenderMessage
-                message={message}
-                conversationType={conversationType}
-                onClickAttachment={this.onClickAttachment.bind(this, message)}
-              />
-              if (message.msg.isSetupmessage) {
-                return <li onClick={this.onClickSetupMessage.bind(this, message)}>
-                  {msg}
-                </li>
-              }
+            {chat.messageIds.map(messageId => {
+              const msg = <TrackVisibility>
+                <RenderMessage
+                  messageId={messageId}
+                  conversationType={conversationType}
+                  onClickAttachment={this.onClickAttachment.bind(this, messageId)}
+                />
+              </TrackVisibility>
               return <li>{msg}</li>
             })}
           </ConversationContext>
@@ -182,7 +174,9 @@ class RenderMedia extends React.Component {
 
 class RenderMessage extends React.Component {
   render () {
-    const { onClickAttachment, message, conversationType } = this.props
+    const { visible, onClickAttachment, messageId, conversationType } = this.props
+    if (!visible) return <div>...</div>
+    const message = ipcRenderer.sendSync('dispatchSync', 'getChatMessage', messageId)
     const { msg, fromId, id } = message
     const timestamp = msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'
@@ -211,6 +205,10 @@ class RenderMessage extends React.Component {
       console.log('show detail', message)
     }
 
+    function _onClickAttachment (event) {
+      onClickAttachment(message)
+    }
+
     const props = {
       padlock: msg.showPadlock,
       id,
@@ -223,7 +221,7 @@ class RenderMessage extends React.Component {
       onDelete,
       onShowDetail,
       contact,
-      onClickAttachment,
+      onClickAttachment: _onClickAttachment,
       authorAvatarPath: message.contact.profileImage,
       authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,

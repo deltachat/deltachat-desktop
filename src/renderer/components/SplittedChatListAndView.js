@@ -127,7 +127,7 @@ class SplittedChatListAndView extends React.Component {
 
   render () {
     const { deltachat } = this.props
-    const { visibleMessages, selectedChat, showArchivedChats } = deltachat
+    const { selectedChat, showArchivedChats } = deltachat
     const { deadDropChat, keyTransfer } = this.state
 
     const isGroup = this.selectedChatIsGroup(selectedChat)
@@ -181,7 +181,6 @@ class SplittedChatListAndView extends React.Component {
           {
             selectedChat
               ? (<ChatView
-                visibleMessages={visibleMessages}
                 screenProps={this.props.screenProps}
                 userFeedback={this.props.userFeedback}
                 changeScreen={this.props.changeScreen}

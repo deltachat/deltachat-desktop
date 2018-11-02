@@ -18,7 +18,7 @@ function messageIdToJson (messageId, dc) {
   }
 }
 
-function chatIdToJson (chatId, dc, idx, limit) {
+function chatIdToJson (chatId, dc) {
   const chat = dc.getChat(chatId).toJson()
   chat.messageIds = dc.getChatMessages(chatId, 0, 0)
   chat.contacts = dc.getChatContacts(chatId).map(id => {
@@ -310,23 +310,10 @@ class DeltaChatController {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-<<<<<<< HEAD
-  /**
-   * Dispatched from SplittedChatListAndView and used internally
-   */
-=======
-  renderMoreChats () {
-    this._startMessageIdx = Math.max(this._startMessageIdx - 1, 0)
-    log('rendering', this._startMessageIdx, this._limit)
-    this._render()
-  }
-
->>>>>>> almost : load only the visible messages
   selectChat (chatId) {
     log('selecting chat with id', chatId)
     this._selectedChatId = chatId
     this._startMessageIdx = null
-    this._limit = 50
     this._render()
   }
 
@@ -363,21 +350,12 @@ class DeltaChatController {
       showArchivedChats,
       selectedChat,
       chats,
-      archivedChats,
-      visibleMessages: this._visibleMessages(selectedChat)
+      archivedChats
     }
   }
 
-  _visibleMessages (chat) {
-    if (!chat) return []
-    if (!this._startMessageIdx) {
-      this._startMessageIdx = Math.max(chat.messageIds.length - this._limit, 0)
-    }
-    log('loading messages', chat.id, this._startMessageIdx, this._limit)
-    var start = this._startMessageIdx
-    var end = start + this._limit
-    var visibleMessageIds = chat.messageIds.splice(start, end)
-    return visibleMessageIds.map(id => messageIdToJson(id, this._dc))
+  getChatMessage (messageId) {
+    return messageIdToJson(messageId, this._dc)
   }
 
   /**
@@ -447,8 +425,6 @@ class DeltaChatController {
     this.configuring = false
     this.credentials = { addr: '' }
     this._selectedChatId = null
-    this._startMessageIdx = null
-    this._limit = 50
     this._showArchivedChats = false
   }
 }
