@@ -187,6 +187,7 @@ ul li button {
 .GroupImage {
   width: 100px;
   height: 100px;
+  cursor: pointer;
 }
 
 .RemoveGroupImage {
