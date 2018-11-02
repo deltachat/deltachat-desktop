@@ -730,5 +730,13 @@
   "unblockContacts.noneBlocked": {
     "message": "No blocked contacts yet",
     "description": "Shown when there are no blocked contacts yet"
+  },
+  "selectGroupImage": {
+    "message": "Select Group Image",
+    "description": "Window title for file picker when selecting chat profile image"
+  },
+  "remove": {
+    "message": "Remove",
+    "description": "Button label for removing chat profile image"
   }
 }

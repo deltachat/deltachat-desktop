@@ -21,6 +21,7 @@ class CreateGroup extends GroupBase {
       'dispatchSync',
       'createUnverifiedGroup',
       this.state.name,
+      this.state.image,
       contactIds
     )
     this.props.changeScreen('ChatList')

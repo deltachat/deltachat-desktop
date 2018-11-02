@@ -5,20 +5,21 @@ const differ = require('array-differ')
 
 class EditGroup extends GroupBase {
   constructor (props) {
-    const { chatId, chatName } = props.screenProps
+    const { chat } = props.screenProps
     const group = {}
 
     super(props, {
       buttonLabel: 'save',
       group: group,
-      name: chatName,
+      name: chat.name,
+      image: chat.profileImage,
       heading: 'editGroup'
     })
 
     this.before = ipcRenderer.sendSync(
       'dispatchSync',
       'getChatContacts',
-      chatId)
+      chat.id)
       .filter(id => id !== C.DC_CONTACT_ID_SELF)
       .map(id => Number(id))
     this.before.forEach(id => { group[id] = true })
@@ -32,13 +33,14 @@ class EditGroup extends GroupBase {
     const after = Object.keys(this.state.group).map(id => Number(id))
     const remove = differ(this.before, after)
     const add = differ(after, this.before)
-    const { chatId } = this.props.screenProps
+    const { chat } = this.props.screenProps
 
     ipcRenderer.send(
       'dispatch',
       'modifyGroup',
-      chatId,
+      chat.id,
       this.state.name,
+      this.state.image,
       remove,
       add
     )
