@@ -16,7 +16,7 @@ addons:
       - python3-pip
       - python3.5
       - g++-7
-      - libssl1.1-dev
+      - libssl-dev
 
 before_install:
   - ldconfig -p | grep libssl
