@@ -21,7 +21,7 @@ class SetupMessagePanel extends React.Component {
   handleChangeKey (event) {
     const value = Number(event.target.value)
 
-    if (isNaN(value) || value < 0 || value > 9999)  return false
+    if (isNaN(value) || value < 0 || value > 9999) return false
     let updatedkey = this.state.key
     updatedkey[Number(event.target.id)] = value
     this.setState({ key: updatedkey })
@@ -36,7 +36,7 @@ class SetupMessagePanel extends React.Component {
     let inputs = []
     for (let i = 0; i < 9; i++) {
       inputs.push(
-        <div className="partial" key={i}>
+        <div className='partial' key={i}>
           <input
             key={i}
             id={i}
@@ -44,7 +44,7 @@ class SetupMessagePanel extends React.Component {
             value={this.state.key[i]}
             onChange={this.handleChangeKey}
           />
-        {i !== 8 ? <div className='centered separator'>-</div> : null}
+          {i !== 8 ? <div className='centered separator'>-</div> : null}
         </div>
       )
     }
