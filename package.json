@@ -42,7 +42,7 @@
   "homepage": "https://delta.chat",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
-    "@sindresorhus/is": "^0.12.0",
+    "@sindresorhus/is": "^0.13.0",
     "application-config": "^1.0.1",
     "array-differ": "^2.0.3",
     "debounce": "^1.2.0",
