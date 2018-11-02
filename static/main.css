@@ -179,3 +179,17 @@ ul li button {
   margin-top: 10px;
   margin-bottom: -7px;
 }
+
+.SelectGroupImage {
+  width: 100px;
+}
+
+.GroupImage {
+  width: 100px;
+  height: 100px;
+}
+
+.RemoveGroupImage {
+  width: 100px;
+  margin-bottom: 4px;
+}
