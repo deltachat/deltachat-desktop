@@ -61,7 +61,6 @@
     "react-contextmenu": "^2.9.4",
     "react-dom": "^16.4.2",
     "react-intl": "^2.4.0",
-    "react-on-screen": "^2.1.0",
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8"
   },

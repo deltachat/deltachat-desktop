@@ -6,8 +6,6 @@ const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
 const { Overlay } = require('@blueprintjs/core')
 
-const { TrackVisibility } = require('react-on-screen')
-
 const MutationObserver = window.MutationObserver
 const IntersectionObserver = window.IntersectionObserver
 
@@ -29,7 +27,6 @@ class ChatView extends React.Component {
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
-    this.renderMoreChats = this.renderMoreChats.bind(this)
     this.conversationDiv = React.createRef()
     this.topMessageDiv = React.createRef()
   }
@@ -124,14 +121,13 @@ class ChatView extends React.Component {
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messageIds.map(messageId => {
-              const msg = <TrackVisibility>
+              return <li>
                 <RenderMessage
                   messageId={messageId}
                   conversationType={conversationType}
                   onClickAttachment={this.onClickAttachment.bind(this, messageId)}
                 />
-              </TrackVisibility>
-              return <li>{msg}</li>
+              </li>
             })}
           </ConversationContext>
         </div>
@@ -174,8 +170,7 @@ class RenderMedia extends React.Component {
 
 class RenderMessage extends React.Component {
   render () {
-    const { visible, onClickAttachment, messageId, conversationType } = this.props
-    if (!visible) return <div>...</div>
+    const { onClickAttachment, messageId, conversationType } = this.props
     const message = ipcRenderer.sendSync('dispatchSync', 'getChatMessage', messageId)
     const { msg, fromId, id } = message
     const timestamp = msg.timestamp * 1000
