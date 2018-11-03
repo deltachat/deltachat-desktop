@@ -9,6 +9,8 @@ const { Overlay } = require('@blueprintjs/core')
 const MutationObserver = window.MutationObserver
 const IntersectionObserver = window.IntersectionObserver
 
+const { List, InfiniteLoader } = require('react-virtualized')
+
 const { ConversationContext, Message } = require('./conversations')
 
 const GROUP_TYPES = [
@@ -29,6 +31,7 @@ class ChatView extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
     this.topMessageDiv = React.createRef()
+    this.visibleMessages = {}
   }
 
   writeMessage (text) {
@@ -38,16 +41,6 @@ class ChatView extends React.Component {
 
   componentWillUnmount () {
     if (this.scrollObserver) this.scrollObserver.disconnect()
-    if (this.loadMoreObserver) this.loadMoreObserver.disconnect()
-  }
-
-  attachLoadMoreObserver () {
-    if (!this.loadMoreObserver && this.topMessageDiv.current) {
-      this.loadMoreObserver = new IntersectionObserver(this.renderMoreChats)
-      this.loadMoreObserver.observe(this.topMessageDiv.current, {
-        threshold: 0.2
-      })
-    }
   }
 
   attachScrollObserver () {
@@ -58,15 +51,12 @@ class ChatView extends React.Component {
   }
 
   componentDidUpdate () {
-    this.attachLoadMoreObserver()
     this.attachScrollObserver()
     this.focusInputMessage()
   }
 
   componentDidMount () {
     this.scrollToBottom()
-    this.focusInputMessage()
-    this.attachLoadMoreObserver()
   }
 
   scrollToBottom (force) {
@@ -100,6 +90,47 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
+  getMessage (index) {
+    return this.visibleMessages[this.props.chat.messageIds[index]]
+  }
+
+  isRowLoaded ({ index }) {
+    return !!this.getMessage(index)
+  }
+
+  loadMoreRows ({ startIndex, stopIndex }) {
+    var self = this
+    const chat = self.props.chat
+    const messageIds = chat.messageIds.slice(startIndex, stopIndex + 1)
+    console.log('loading more rows', startIndex, stopIndex)
+
+    return new Promise(resolve => {
+      var messages = ipcRenderer.sendSync('dispatchSync', 'getChatMessages', messageIds)
+      messages.map((msg) => {
+        self.visibleMessages[msg.id] = msg
+      })
+      console.log(self.visibleMessages)
+      resolve()
+    })
+  }
+
+  rowRenderer ({ key, index, style }) {
+    console.log('row renderer', key, index, style)
+    const conversationType = convertChatType(this.props.chat.type)
+    var message = this.getMessage(index)
+    let body = <div>'loading'</div>
+    if (message) {
+      console.log('rendering', index, message)
+      body = <RenderMessage
+        message={message}
+        conversationType={conversationType}
+        onClickAttachment={this.onClickAttachment.bind(this, message)}
+      />
+    }
+
+    return <div key={key}>{body}</div>
+  }
+
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const { chat } = this.props
@@ -118,19 +149,23 @@ class ChatView extends React.Component {
           close={this.onCloseAttachmentView.bind(this)}
         />
 
-        <div id='the-conversation' ref={this.conversationDiv}>
-          <ConversationContext>
-            {chat.messageIds.map(messageId => {
-              return <li>
-                <RenderMessage
-                  messageId={messageId}
-                  conversationType={conversationType}
-                  onClickAttachment={this.onClickAttachment.bind(this, messageId)}
-                />
-              </li>
-            })}
-          </ConversationContext>
-        </div>
+        <InfiniteLoader
+          isRowLoaded={this.isRowLoaded.bind(this)}
+          loadMoreRows={this.loadMoreRows.bind(this)}
+          rowCount={chat.messageIds.length}>
+          {({ onRowsRendered, registerChild }) => (
+            <List
+              height={700}
+              onRowsRendered={onRowsRendered}
+              ref={registerChild}
+              rowCount={chat.messageIds.length}
+              rowHeight={40}
+              scrollToIndex={chat.messageIds.length - 1}
+              rowRenderer={this.rowRenderer.bind(this)}
+              width={400}
+            />
+          )}
+        </InfiniteLoader>
         <div className='InputMessage'>
           <Composer onSubmit={this.writeMessage.bind(this)} />
         </div>
@@ -170,8 +205,7 @@ class RenderMedia extends React.Component {
 
 class RenderMessage extends React.Component {
   render () {
-    const { onClickAttachment, messageId, conversationType } = this.props
-    const message = ipcRenderer.sendSync('dispatchSync', 'getChatMessage', messageId)
+    const { onClickAttachment, message, conversationType } = this.props
     const { msg, fromId, id } = message
     const timestamp = msg.timestamp * 1000
     const direction = message.isMe ? 'outgoing' : 'incoming'

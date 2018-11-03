@@ -354,8 +354,8 @@ class DeltaChatController {
     }
   }
 
-  getChatMessage (messageId) {
-    return messageIdToJson(messageId, this._dc)
+  getChatMessages (messageIds) {
+    return messageIds.map((id) => messageIdToJson(id, this._dc))
   }
 
   /**
