@@ -1,14 +1,14 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
+const { Overlay } = require('@blueprintjs/core')
 
 const SetupMessageDialog = require('./dialogs/SetupMessage')
 const Composer = require('./Composer')
-const { Overlay } = require('@blueprintjs/core')
+const RenderMedia = require('./RenderMedia')
+const { ConversationContext, Message } = require('./conversations')
 
 const MutationObserver = window.MutationObserver
-
-const { ConversationContext, Message } = require('./conversations')
 
 const SCROLL_BUFFER = 70
 
@@ -23,7 +23,7 @@ class ChatView extends React.Component {
     this.state = {
       error: false,
       setupMessage: false,
-      attachmentMessage: null
+      attachmentMessage: {}
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
@@ -36,9 +36,9 @@ class ChatView extends React.Component {
     if (this.observer) this.observer.disconnect()
   }
 
-  writeMessage (text) {
+  writeMessage (opts) {
     const { chat } = this.props
-    ipcRenderer.send('dispatch', 'sendMessage', chat.id, text)
+    ipcRenderer.send('dispatch', 'sendMessage', chat.id, opts.text, opts.filename)
   }
 
   fetchNextMessages () {
@@ -96,7 +96,7 @@ class ChatView extends React.Component {
   }
 
   onCloseAttachmentView () {
-    this.setState({ attachmentMessage: null })
+    this.setState({ attachmentMessage: {} })
   }
 
   onSetupMessageClose () {
@@ -109,6 +109,7 @@ class ChatView extends React.Component {
     const { chat } = this.props
     const conversationType = convertChatType(chat.type)
     const tx = window.translate
+    const url = attachmentMessage.msg && attachmentMessage.msg.file
 
     return (
       <div className='ChatView'>
@@ -117,11 +118,17 @@ class ChatView extends React.Component {
           setupMessage={setupMessage}
           onClose={this.onSetupMessageClose}
         />
-        <RenderMedia
-          filemime={attachmentMessage && attachmentMessage.filemime}
-          url={attachmentMessage && attachmentMessage.msg.file}
-          close={this.onCloseAttachmentView.bind(this)}
-        />
+        <Overlay
+          className='attachment-overlay'
+          isOpen={Boolean(url)}
+          onClose={this.onCloseAttachmentView.bind(this)}>
+          <div>
+            <RenderMedia
+              filemime={convertContentType(attachmentMessage.filemime)}
+              url={url}
+            />
+          </div>
+        </Overlay>
 
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
@@ -146,35 +153,6 @@ class ChatView extends React.Component {
         </div>
       </div>
     )
-  }
-}
-
-class RenderMedia extends React.Component {
-  render () {
-    const { url, filemime, close } = this.props
-    let elm = <div />
-    // TODO: there must be a stable external library for figuring out the right
-    // html element to render
-    if (filemime) {
-      var contentType = convertContentType(filemime)
-      switch (contentType.split('/')[0]) {
-        case 'image':
-          elm = <img src={url} />
-          break
-        case 'audio':
-          elm = <audio src={url} controls='true' />
-          break
-        case 'video':
-          elm = <video src={url} controls='true' />
-          break
-        default:
-          elm = <iframe width='100%' height='100%' src={url} />
-      }
-    }
-    return <Overlay isOpen={Boolean(url)}
-      onClose={close}>
-      {elm}
-    </Overlay>
   }
 }
 
@@ -243,13 +221,14 @@ class RenderMessage extends React.Component {
   }
 }
 
-function convertContentType (filemime) {
-  if (filemime === 'application/octet-stream') return 'audio/ogg'
-  return filemime
-}
-
 function convertChatType (type) {
   return GROUP_TYPES.includes(type) ? 'group' : 'direct'
+}
+
+function convertContentType (filemime) {
+  if (!filemime) return
+  if (filemime === 'application/octet-stream') return 'audio/ogg'
+  return filemime
 }
 
 function convertMessageStatus (s) {
