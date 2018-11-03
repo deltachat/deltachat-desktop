@@ -16,12 +16,16 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
    sudo cp ninja /usr/bin
 
    # Install openssl 1.1.0i
+   ldconfig -p | grep libssl
+   readlink /usr/lib/x86_64-linux-gnu/libssl.so
    wget --quiet https://www.openssl.org/source/openssl-1.1.0i.tar.gz
    tar xfz openssl-1.1.0i.tar.gz
    cd openssl-1.1.0i
    ./config --prefix=/usr --libdir=lib/x86_64-linux-gnu
    make -j $(nproc)
    sudo make install_sw install_ssldirs
+   ldconfig -p | grep libssl
+   readlink /usr/lib/x86_64-linux-gnu/libssl.so
 
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew install meson ninja
