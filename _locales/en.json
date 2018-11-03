@@ -560,11 +560,11 @@
     "description": ""
   },
   "DC_STR_MEMBER": {
-    "message": "%1$s member(s)",
+    "message": "%1$s members",
     "description": ""
   },
   "DC_STR_CONTACT": {
-    "message": "%1$s contact(s)",
+    "message": "%1$s contacts",
     "description": ""
   },
   "DC_STR_VOICEMESSAGE": {
