@@ -6,6 +6,11 @@ body {
   background-color: white;
 }
 
+.thumbnail {
+  max-width: 50px;
+  max-height: 50px;
+}
+
 #root {
 
 }
@@ -232,3 +237,9 @@ ul li button {
   height: 0.75em;
   margin-right: 2px;
 }
+
+.attachment-overlay {
+  display: flex;
+  justify-content: center;
+}
+

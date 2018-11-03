@@ -1,12 +1,14 @@
 const React = require('react')
 
 const { ControlGroup, Button, InputGroup } = require('@blueprintjs/core')
+const { remote } = require('electron')
 
 class Composer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: '',
+      filename: null,
+      text: '',
       error: false
     }
     this.minimumHeight = 48
@@ -18,7 +20,7 @@ class Composer extends React.Component {
 
   onKeyDown (e) {
     if (e.keyCode === 13 && e.shiftKey) {
-      this.setState({ value: this.state.value + '\n' })
+      this.setState({ text: this.state.text + '\n' })
       e.preventDefault()
       e.stopPropagation()
     } else if (e.keyCode === 13 && !e.shiftKey) {
@@ -33,39 +35,48 @@ class Composer extends React.Component {
   }
 
   sendMessage () {
-    if (!this.state.value) return this.handleError()
-    this.props.onSubmit(this.state.value)
+    if (!this.state.text) return this.handleError()
+    this.props.onSubmit({
+      text: this.state.text
+    })
     this.clearInput()
   }
 
   clearInput () {
-    this.setState({ value: '' })
+    this.setState({ text: '', filename: null })
   }
 
   handleChange (e) {
-    this.setState({ value: e.target.value, error: false })
+    this.setState({ text: e.target.text, error: false })
   }
 
-  addAttachment () {
-    console.log('adding attachment')
+  addFilename () {
+    remote.dialog.showOpenDialog({
+      properties: ['openFile']
+    }, (filenames) => {
+      if (filenames && filenames[0]) {
+        this.props.onSubmit({ filename: filenames[0] })
+      }
+    })
   }
 
   render () {
     const tx = window.translate
-    const addAttachmentButton = (
-      <Button minimal icon='paperclip' onClick={this.addAttachment.bind(this)} />
+    const addFilenameButton = (
+      <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
     )
+
     return (
       <ControlGroup className='composer' fill vertical={false}>
         <InputGroup
           intent={this.state.error ? 'danger' : 'none'}
           large
-          value={this.state.value}
+          value={this.state.text}
           onKeyDown={this.onKeyDown.bind(this)}
           aria-label={tx('writeMessageAriaLabel')}
           onChange={this.handleChange}
           placeholder={tx('writeMessage')}
-          rightElement={addAttachmentButton}
+          rightElement={addFilenameButton}
         />
         <Button onClick={this.sendMessage}>{tx('send')}</Button>
       </ControlGroup>
