@@ -26,6 +26,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start && sleep 3; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig; fi
   - ./bin/travis-before-install.sh
+  - ldconfig -p | grep libssl
+  - readlink /usr/lib/x86_64-linux-gnu/libssl.so
 
 install:
   - npm install
