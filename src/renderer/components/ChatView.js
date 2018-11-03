@@ -136,6 +136,11 @@ class ChatView extends React.Component {
     const { chat } = this.props
     const conversationType = convertChatType(chat.type)
 
+    function calculateRowHeight ({ index }) {
+      // TODO
+      return 50
+    }
+
     return (
       <div className='ChatView'>
         <SetupMessageDialog
@@ -159,7 +164,7 @@ class ChatView extends React.Component {
               onRowsRendered={onRowsRendered}
               ref={registerChild}
               rowCount={chat.messageIds.length}
-              rowHeight={40}
+              rowHeight={calculateRowHeight}
               scrollToIndex={chat.messageIds.length - 1}
               rowRenderer={this.rowRenderer.bind(this)}
               width={400}
