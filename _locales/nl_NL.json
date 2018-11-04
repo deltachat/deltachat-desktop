@@ -183,6 +183,10 @@
         "message": "E-mailadres",
         "description": "Label above input field for e-mail address"
     },
+    "login.enterPassword": {
+        "message": "Enter your password...",
+        "description": "Text telling user to enter his password"
+    },
     "login.mailPw": {
         "message": "Wachtwoord",
         "description": "Label above input field for mail password"
@@ -190,6 +194,10 @@
     "login.required": {
         "message": "vereist",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.advanced": {
+        "message": "Geavanceerd",
+        "description": "Advanced settings button label"
     },
     "login.inbox": {
         "message": "Postvak IN",
@@ -326,6 +334,14 @@
     "menu.help.report": {
         "message": "Probleem melden...",
         "description": "Report an Issue... menu item label"
+    },
+    "menu.help.about": {
+        "message": "Over DeltaChat",
+        "description": "About menu item"
+    },
+    "aboutDeltaChat": {
+        "message": "Over DeltaChat",
+        "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
         "message": "D MM",
@@ -544,11 +560,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$ lid/leden",
+        "message": "%1$s members",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contactpersoon/contactpersonen",
+        "message": "%1$s contacts",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -609,7 +625,7 @@
     },
     "DC_STR_MSGGROUPLEFT": {
         "message": "Groep verlaten.",
-        "description": ""
+        "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
         "message": "Je moet lid van de groep zijn om deze actie uit te kunnen voeren.",
@@ -684,23 +700,51 @@
         "description": ""
     },
     "dialogs.blockContact": {
-        "message": "Block $1$?",
+        "message": "Wil je $1$ blokkeren?",
         "description": "Dialog to confirm blocking contact"
     },
     "dialogs.unblockContact": {
-        "message": "Unblock $1$?",
+        "message": "Wil je $1$ deblokkeren?",
         "description": "Dialog to confirm unblocking contact"
     },
+    "dialogs.deleteChat": {
+        "message": "Wil je het gesprek $1$ verwijderen?",
+        "description": "Dialog to confirm deleting a chat"
+    },
+    "dialogs.confirmation.no": {
+        "message": "Nee",
+        "description": "No button label in confirmation dialog"
+    },
+    "dialogs.confirmation.yes": {
+        "message": "Ja",
+        "description": "Yes button label in confirmation dialog"
+    },
     "blockContact": {
-        "message": "Block Contact",
+        "message": "Contactpersoon blokkeren",
         "description": "Menu option to block current contact"
     },
     "unblockContacts": {
-        "message": "Unblock Contacts",
+        "message": "Contactpersonen deblokkeren",
         "description": "Menu option to unblock contacts"
     },
     "unblockContacts.noneBlocked": {
-        "message": "No blocked contacts yet",
+        "message": "Nog geen geblokkeerde contactpersonen",
         "description": "Shown when there are no blocked contacts yet"
+    },
+    "selectGroupImage": {
+        "message": "Select Group Image",
+        "description": "Window title for file picker when selecting chat profile image"
+    },
+    "remove": {
+        "message": "Remove",
+        "description": "Button label for removing chat profile image"
+    },
+    "searchAriaLabel": {
+        "message": "Search",
+        "description": "Aria-label for search"
+    },
+    "searchPlaceholder": {
+        "message": "Search",
+        "description": "Placeholder for search"
     }
 }

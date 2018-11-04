@@ -183,6 +183,10 @@
         "message": "E-Mail Address",
         "description": "Label above input field for e-mail address"
     },
+    "login.enterPassword": {
+        "message": "Enter your password...",
+        "description": "Text telling user to enter his password"
+    },
     "login.mailPw": {
         "message": "Password",
         "description": "Label above input field for mail password"
@@ -190,6 +194,10 @@
     "login.required": {
         "message": "required",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.advanced": {
+        "message": "Advanced",
+        "description": "Advanced settings button label"
     },
     "login.inbox": {
         "message": "Inbox",
@@ -326,6 +334,14 @@
     "menu.help.report": {
         "message": "Report an Issue...",
         "description": "Report an Issue... menu item label"
+    },
+    "menu.help.about": {
+        "message": "About DeltaChat",
+        "description": "About menu item"
+    },
+    "aboutDeltaChat": {
+        "message": "About DeltaChat",
+        "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
         "message": "D MMM",
@@ -544,11 +560,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s member(s)",
+        "message": "%1$s members",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contact(s)",
+        "message": "%1$s contacts",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -608,8 +624,8 @@
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Group left.",
-        "description": ""
+        "message": "Left group.",
+        "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
         "message": "You must be a member of the group to perform this action.",
@@ -691,6 +707,18 @@
         "message": "Unblock $1$?",
         "description": "Dialog to confirm unblocking contact"
     },
+    "dialogs.deleteChat": {
+        "message": "Delete chat $1$?",
+        "description": "Dialog to confirm deleting a chat"
+    },
+    "dialogs.confirmation.no": {
+        "message": "No",
+        "description": "No button label in confirmation dialog"
+    },
+    "dialogs.confirmation.yes": {
+        "message": "Yes",
+        "description": "Yes button label in confirmation dialog"
+    },
     "blockContact": {
         "message": "Block Contact",
         "description": "Menu option to block current contact"
@@ -702,5 +730,21 @@
     "unblockContacts.noneBlocked": {
         "message": "No blocked contacts yet",
         "description": "Shown when there are no blocked contacts yet"
+    },
+    "selectGroupImage": {
+        "message": "Select Group Image",
+        "description": "Window title for file picker when selecting chat profile image"
+    },
+    "remove": {
+        "message": "Remove",
+        "description": "Button label for removing chat profile image"
+    },
+    "searchAriaLabel": {
+        "message": "Search",
+        "description": "Aria-label for search"
+    },
+    "searchPlaceholder": {
+        "message": "Search",
+        "description": "Placeholder for search"
     }
 }
