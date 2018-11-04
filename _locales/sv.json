@@ -183,6 +183,10 @@
         "message": "Mejladress",
         "description": "Label above input field for e-mail address"
     },
+    "login.enterPassword": {
+        "message": "Mata in ditt lösenord...",
+        "description": "Text telling user to enter his password"
+    },
     "login.mailPw": {
         "message": "Lösenord",
         "description": "Label above input field for mail password"
@@ -190,6 +194,10 @@
     "login.required": {
         "message": "nödvändig",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
+    },
+    "login.advanced": {
+        "message": "Avancerat",
+        "description": "Advanced settings button label"
     },
     "login.inbox": {
         "message": "Inkorg",
@@ -300,7 +308,7 @@
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Flyta ovanpå",
+        "message": "Behåll fönstret längst fram",
         "description": "Float on Top menu item label"
     },
     "menu.view.developer": {
@@ -326,6 +334,14 @@
     "menu.help.report": {
         "message": "Skicka feedback...",
         "description": "Report an Issue... menu item label"
+    },
+    "menu.help.about": {
+        "message": "Om DeltaChat",
+        "description": "About menu item"
+    },
+    "aboutDeltaChat": {
+        "message": "Om DeltaChat",
+        "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
         "message": "D MMM",
@@ -609,7 +625,7 @@
     },
     "DC_STR_MSGGROUPLEFT": {
         "message": "Lämnade gruppen.",
-        "description": ""
+        "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
         "message": "Du måste vara medlem av gruppen för att ha tillåtelse att göra detta.",
@@ -691,6 +707,18 @@
         "message": "Avblockera $1$?",
         "description": "Dialog to confirm unblocking contact"
     },
+    "dialogs.deleteChat": {
+        "message": "Radera chatt $1$?",
+        "description": "Dialog to confirm deleting a chat"
+    },
+    "dialogs.confirmation.no": {
+        "message": "Nej",
+        "description": "No button label in confirmation dialog"
+    },
+    "dialogs.confirmation.yes": {
+        "message": "Ja",
+        "description": "Yes button label in confirmation dialog"
+    },
     "blockContact": {
         "message": "Blockera kontakt",
         "description": "Menu option to block current contact"
@@ -702,5 +730,21 @@
     "unblockContacts.noneBlocked": {
         "message": "Du har inga blockerade kontakter",
         "description": "Shown when there are no blocked contacts yet"
+    },
+    "selectGroupImage": {
+        "message": "Välj gruppbild",
+        "description": "Window title for file picker when selecting chat profile image"
+    },
+    "remove": {
+        "message": "Radera",
+        "description": "Button label for removing chat profile image"
+    },
+    "searchAriaLabel": {
+        "message": "Sök",
+        "description": "Aria-label for search"
+    },
+    "searchPlaceholder": {
+        "message": "Sök",
+        "description": "Placeholder for search"
     }
 }
