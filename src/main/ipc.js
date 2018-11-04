@@ -87,7 +87,7 @@ function init (cwd) {
   function render () {
     log('RENDER')
     const json = dc.render()
-    windows.main.setTitle(json.credentials.email)
+    windows.main.setTitle(json.credentials.addr)
     windows.main.send('render', json)
   }
 }
