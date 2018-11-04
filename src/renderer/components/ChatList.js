@@ -18,7 +18,7 @@ class ChatList extends React.Component {
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
 
             // Don't show freshMessageCounter on selected chat
-            if (chat.id === 1) {
+            if (chat.id === C.DC_CHAT_ID_DEADDROP) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
                 <ConversationListItem
