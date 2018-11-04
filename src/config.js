@@ -1,9 +1,9 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
-const version = require('../package.json').version
 
 const APP_NAME = 'DeltaChat'
-const APP_VERSION = require('../package.json').version
+const version = require('../package.json').version
+const APP_VERSION = `${version}-PREVIEW`
 
 const IS_TEST = isTest()
 const IS_PRODUCTION = isProduction()
@@ -15,7 +15,7 @@ module.exports = {
   APP_ICON: path.join(__dirname, '..', 'static', 'DeltaChat'),
   APP_NAME: APP_NAME,
   APP_VERSION: APP_VERSION,
-  APP_WINDOW_TITLE: `${APP_NAME} (preview-${version})`,
+  APP_WINDOW_TITLE: `${APP_NAME} (${APP_VERSION})`,
 
   CONFIG_PATH: getConfigPath(),
   TEST_DIR: path.join(getConfigPath(), 'test-data'),
