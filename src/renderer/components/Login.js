@@ -34,16 +34,16 @@ class Login extends React.Component {
   _defaultCredentials () {
     return {
       addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
-      mailUser: '',
-      mailPw: process.env.DC_MAIL_PW ? process.env.DC_MAIL_PW : '',
-      mailServer: '',
-      mailPort: '',
-      mailSecurity: '',
-      sendUser: '',
-      sendPw: '',
-      sendServer: '',
-      sendPort: '',
-      sendSecurity: ''
+      mail_user: '',
+      mail_pw: process.env.DC_MAIL_PW ? process.env.DC_MAIL_PW : '',
+      mail_server: '',
+      mail_port: '',
+      mail_security: '',
+      send_user: '',
+      send_pw: '',
+      send_server: '',
+      send_port: '',
+      send_security: ''
     }
   }
 
@@ -52,26 +52,26 @@ class Login extends React.Component {
     this.setState(stateCredentials)
   }
 
-  translateSecurityToServerFlags (mailSecurity, sendSecurity) {
+  translateSecurityToServerFlags (mail_security, send_security) {
     let serverFlags = []
-    if (mailSecurity) {
+    if (mail_security) {
       let imapFlag
-      if (mailSecurity === 'ssl') {
+      if (mail_security === 'ssl') {
         imapFlag = C.DC_LP_IMAP_SOCKET_SSL
-      } else if (mailSecurity === 'starttls') {
+      } else if (mail_security === 'starttls') {
         imapFlag = C.DC_LP_IMAP_SOCKET_STARTTLS
-      } else if (mailSecurity === 'plain') {
+      } else if (mail_security === 'plain') {
         imapFlag = C.DC_LP_SMTP_SOCKET_PLAIN
       }
       if (imapFlag) serverFlags.push(imapFlag)
     }
-    if (sendSecurity) {
+    if (send_security) {
       let smtpFlag
-      if (mailSecurity === 'ssl') {
+      if (mail_security === 'ssl') {
         smtpFlag = C.DC_LP_SMTP_SOCKET_SSL
-      } else if (mailSecurity === 'starttls') {
+      } else if (mail_security === 'starttls') {
         smtpFlag = C.DC_LP_SMTP_SOCKET_STARTTLS
-      } else if (mailSecurity === 'plain') {
+      } else if (mail_security === 'plain') {
         smtpFlag = C.DC_MAX_GET_INFO_LEN
       }
       if (smtpFlag) serverFlags.push(smtpFlag)
@@ -97,7 +97,7 @@ class Login extends React.Component {
   }
 
   onClickLogin (login) {
-    ipcRenderer.send('login', { addr: login, mailPw: true })
+    ipcRenderer.send('login', { addr: login, mail_pw: true })
   }
 
   renderPasswordInput (keyShowPassword, keyValue) {
@@ -130,15 +130,15 @@ class Login extends React.Component {
 
     const {
       addr,
-      mailUser,
-      mailPw,
-      mailServer,
-      mailPort,
-      mailSecurity,
-      sendUser,
-      sendServer,
-      sendPort,
-      sendSecurity
+      mail_user,
+      mail_pw,
+      mail_server,
+      mail_port,
+      mail_security,
+      send_user,
+      send_server,
+      send_port,
+      send_security
     } = this.state.credentials
 
     const { showAdvanced } = this.state.ui
@@ -171,44 +171,44 @@ class Login extends React.Component {
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
-            <FormGroup label={tx('login.mailPw')} placeholder='Password' labelFor='mailPw' labelInfo={`(${tx('login.required')})`}>
-              {this.renderPasswordInput('showPasswordMail', 'mailPw')}
+            <FormGroup label={tx('login.mailPw')} placeholder='Password' labelFor='mail_pw' labelInfo={`(${tx('login.required')})`}>
+              {this.renderPasswordInput('showPasswordMail', 'mail_pw')}
             </FormGroup>
             <Button onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>{(showAdvanced ? '-' : '+') + ' ' + tx('login.advanced') }</Button>
             <Collapse isOpen={showAdvanced}>
               <h2>{tx('login.inbox')}</h2>
-              <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mailUser' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailUser')} placeholder='IMAP-Loginname' labelFor='mail_user' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='mailUser'
+                  id='mail_user'
                   type='text'
-                  value={mailUser}
+                  value={mail_user}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mailServer' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailServer')} placeholder='IMAP-Server' labelFor='mail_server' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='mailServer'
+                  id='mail_server'
                   type='text'
-                  value={mailServer}
+                  c={mail_server}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.mailPort')} placeholder='IMAP-Port' labelFor='mailPort' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailPort')} placeholder='IMAP-Port' labelFor='mail_port' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='mailPort'
+                  id='mail_port'
                   type='number'
                   min='0'
                   max='65535'
-                  value={mailPort}
+                  value={mail_port}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mailSecurity' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.mailSecurity')} placeholder='Security' labelFor='mail_security' labelInfo={`(${tx('login.automatic')})`}>
                 <div className='bp3-select .modifier'>
-                  <select id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
+                  <select id='mail_security' value={mail_security} onChange={this.handleCredentialsChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
                     <option value='starttls'>STARTTLS</option>
@@ -217,41 +217,41 @@ class Login extends React.Component {
                 </div>
               </FormGroup>
               <h2>{tx('login.outbox')}</h2>
-              <FormGroup label={tx('login.sendUser')} placeholder='SMTP-Loginname' labelFor='sendUser' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendUser')} placeholder='SMTP-Loginname' labelFor='send_user' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='sendUser'
+                  id='send_user'
                   type='text'
-                  value={sendUser}
+                  value={send_user}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='sendPw' labelInfo={`(${tx('login.automatic')})`}>
-                {this.renderPasswordInput('showPasswordSend', 'sendPw')}
+              <FormGroup label={tx('login.sendPw')} placeholder='SMTP-Password' labelFor='send_pw' labelInfo={`(${tx('login.automatic')})`}>
+                {this.renderPasswordInput('showPasswordSend', 'send_pw')}
               </FormGroup>
-              <FormGroup label={tx('login.sendServer')} placeholder='SMTP-Server' labelFor='sendServer' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendServer')} placeholder='SMTP-Server' labelFor='send_server' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='sendServer'
+                  id='send_server'
                   type='text'
-                  value={sendServer}
+                  value={send_server}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.sendPort')} placeholder='SMTP-Port' labelFor='sendPort' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendPort')} placeholder='SMTP-Port' labelFor='send_port' labelInfo={`(${tx('login.automatic')})`}>
                 <InputGroup
-                  id='sendPort'
+                  id='send_port'
                   type='number'
                   min='0'
                   max='65535'
-                  value={sendPort}
+                  value={send_port}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />
               </FormGroup>
-              <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='sendSecurity' labelInfo={`(${tx('login.automatic')})`}>
+              <FormGroup label={tx('login.sendSecurity')} placeholder='Security' labelFor='send_security' labelInfo={`(${tx('login.automatic')})`}>
                 <div className='bp3-select .modifier'>
-                  <select id='sendSecurity' value={sendSecurity} onChange={this.handleCredentialsChange}>
+                  <select id='send_security' value={send_security} onChange={this.handleCredentialsChange}>
                     <option value=''>{tx('login.security.automatic')}</option>
                     <option value='ssl'>SSL/TLS</option>
                     <option value='starttls'>STARTTLS</option>
@@ -260,7 +260,7 @@ class Login extends React.Component {
                 </div>
               </FormGroup>
             </Collapse>
-            <Button disabled={loading || (!addr || !mailPw)} type='submit' text={tx('login.button')} />
+            <Button disabled={loading || (!addr || !mail_pw)} type='submit' text={tx('login.button')} />
             {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>
