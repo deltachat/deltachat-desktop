@@ -63,7 +63,8 @@
     "react-dom": "^16.4.2",
     "react-intl": "^2.4.0",
     "run-parallel": "^1.1.9",
-    "run-series": "^1.1.8"
+    "run-series": "^1.1.8",
+    "snake-case": "^2.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.6",

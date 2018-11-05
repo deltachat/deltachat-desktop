@@ -2,6 +2,7 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const electron = require('electron')
 const path = require('path')
+const snakeCase = require('snake-case')
 const log = require('./log')
 
 function messageIdToJson (messageId, dc) {
@@ -83,7 +84,7 @@ class DeltaChatController {
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
         this.configuring = true
-        dc.configure(credentials)
+        dc.configure(snakeCaseKeys(credentials))
         render()
       } else {
         onReady()
@@ -440,6 +441,14 @@ class DeltaChatController {
     this._showArchivedChats = false
     this._query = ''
   }
+}
+
+function snakeCaseKeys (obj) {
+  const result = {}
+  Object.keys(obj).forEach(key => {
+    result[snakeCase(key)] = obj[key]
+  })
+  return result
 }
 
 module.exports = DeltaChatController
