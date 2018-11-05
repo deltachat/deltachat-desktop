@@ -19,8 +19,6 @@ const DEFAULT_IMAGE = path.join(
   'images/group_default.png'
 )
 
-console.log('DEFAULT_IMAGE', DEFAULT_IMAGE)
-
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
