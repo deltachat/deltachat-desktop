@@ -2,7 +2,6 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const electron = require('electron')
 const path = require('path')
-const snakeCase = require('snake-case')
 const log = require('./log')
 
 function messageIdToJson (messageId, dc) {
@@ -444,11 +443,17 @@ class DeltaChatController {
 }
 
 function snakeCaseKeys (obj) {
-  const result = {}
-  Object.keys(obj).forEach(key => {
-    result[snakeCase(key)] = obj[key]
-  })
-  return result
+  return {
+    addr: obj.addr,
+    mail_user: obj.mailUser,
+    mail_pw: obj.mailPw,
+    mail_server: obj.mailServer,
+    mail_port: obj.mailPort,
+    send_user: obj.sendUser,
+    send_pw: obj.sendPw,
+    send_server: obj.sendServer,
+    send_port: obj.sendPort
+  }
 }
 
 module.exports = DeltaChatController
