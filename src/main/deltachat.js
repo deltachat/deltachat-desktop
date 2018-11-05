@@ -452,8 +452,53 @@ function snakeCaseKeys (obj) {
     send_user: obj.sendUser,
     send_pw: obj.sendPw,
     send_server: obj.sendServer,
-    send_port: obj.sendPort
+    send_port: obj.sendPort,
+    server_flags: translateSecurityToServerFlags(obj)
   }
+}
+
+function translateSecurityToServerFlags ({ mailSecurity, sendSecurity }) {
+  const flags = []
+
+  if (mailSecurity) {
+    if (mailSecurity === 'ssl') {
+      flags.push(C.DC_LP_IMAP_SOCKET_SSL)
+    } else if (mailSecurity === 'starttls') {
+      flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
+    } else if (mailSecurity === 'plain') {
+      flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
+    }
+  }
+
+  if (sendSecurity) {
+    if (mailSecurity === 'ssl') {
+      flags.push(C.DC_LP_SMTP_SOCKET_SSL)
+    } else if (mailSecurity === 'starttls') {
+      flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
+    } else if (mailSecurity === 'plain') {
+      flags.push(C.DC_MAX_GET_INFO_LEN)
+    }
+  }
+
+  if (!flags.length) return null
+
+  return flags.reduce((flag, acc) => {
+    return acc | flag
+  }, 0)
+}
+
+if (!module.parent) {
+  // TODO move this to unit tests
+  console.log(translateSecurityToServerFlags({
+    mailSecurity: 'ssl',
+    sendSecurity: 'ssl'
+  }))
+  console.log(C.DC_LP_IMAP_SOCKET_SSL | C.DC_LP_SMTP_SOCKET_SSL)
+  console.log(translateSecurityToServerFlags({
+    mailSecurity: 'starttls',
+    sendSecurity: 'starttls'
+  }))
+  console.log(C.DC_LP_IMAP_SOCKET_STARTTLS | C.DC_LP_SMTP_SOCKET_STARTTLS)
 }
 
 module.exports = DeltaChatController

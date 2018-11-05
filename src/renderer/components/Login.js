@@ -1,6 +1,5 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
-const C = require('deltachat-node/constants')
 
 const {
   Alignment,
@@ -50,33 +49,6 @@ class Login extends React.Component {
   handleCredentialsChange (event) {
     let stateCredentials = Object.assign(this.state.credentials, { [event.target.id]: event.target.value })
     this.setState(stateCredentials)
-  }
-
-  translateSecurityToServerFlags (mailSecurity, sendSecurity) {
-    let serverFlags = []
-    if (mailSecurity) {
-      let imapFlag
-      if (mailSecurity === 'ssl') {
-        imapFlag = C.DC_LP_IMAP_SOCKET_SSL
-      } else if (mailSecurity === 'starttls') {
-        imapFlag = C.DC_LP_IMAP_SOCKET_STARTTLS
-      } else if (mailSecurity === 'plain') {
-        imapFlag = C.DC_LP_SMTP_SOCKET_PLAIN
-      }
-      if (imapFlag) serverFlags.push(imapFlag)
-    }
-    if (sendSecurity) {
-      let smtpFlag
-      if (mailSecurity === 'ssl') {
-        smtpFlag = C.DC_LP_SMTP_SOCKET_SSL
-      } else if (mailSecurity === 'starttls') {
-        smtpFlag = C.DC_LP_SMTP_SOCKET_STARTTLS
-      } else if (mailSecurity === 'plain') {
-        smtpFlag = C.DC_MAX_GET_INFO_LEN
-      }
-      if (smtpFlag) serverFlags.push(smtpFlag)
-    }
-    return serverFlags.length > 0 ? serverFlags : null
   }
 
   handleSubmit (event) {
