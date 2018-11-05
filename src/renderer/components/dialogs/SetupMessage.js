@@ -30,7 +30,6 @@ class SetupMessagePanel extends React.Component {
 
   onClick (event) {
     const autocryptKey = this.state.key.join('')
-    console.log(autocryptKey)
     this.props.continueKeyTransfer(autocryptKey)
   }
 
