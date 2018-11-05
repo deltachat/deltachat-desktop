@@ -460,24 +460,20 @@ function snakeCaseKeys (obj) {
 function translateSecurityToServerFlags ({ mailSecurity, sendSecurity }) {
   const flags = []
 
-  if (mailSecurity) {
-    if (mailSecurity === 'ssl') {
-      flags.push(C.DC_LP_IMAP_SOCKET_SSL)
-    } else if (mailSecurity === 'starttls') {
-      flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
-    } else if (mailSecurity === 'plain') {
-      flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
-    }
+  if (mailSecurity === 'ssl') {
+    flags.push(C.DC_LP_IMAP_SOCKET_SSL)
+  } else if (mailSecurity === 'starttls') {
+    flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
+  } else if (mailSecurity === 'plain') {
+    flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
   }
 
-  if (sendSecurity) {
-    if (mailSecurity === 'ssl') {
-      flags.push(C.DC_LP_SMTP_SOCKET_SSL)
-    } else if (mailSecurity === 'starttls') {
-      flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
-    } else if (mailSecurity === 'plain') {
-      flags.push(C.DC_MAX_GET_INFO_LEN)
-    }
+  if (sendSecurity === 'ssl') {
+    flags.push(C.DC_LP_SMTP_SOCKET_SSL)
+  } else if (sendSecurity === 'starttls') {
+    flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
+  } else if (sendSecurity === 'plain') {
+    flags.push(C.DC_MAX_GET_INFO_LEN)
   }
 
   if (!flags.length) return null
