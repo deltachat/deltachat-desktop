@@ -19,9 +19,10 @@ class SetupMessagePanel extends React.Component {
   }
 
   handleChangeKey (event) {
-    const value = Number(event.target.value)
-
-    if (isNaN(value) || value < 0 || value > 9999) return false
+    const value = event.target.value
+    const valueNumber = Number(value)
+    if (value.length > 4 || isNaN(valueNumber) || valueNumber < 0 || valueNumber > 9999) return false
+    
     let updatedkey = this.state.key
     updatedkey[Number(event.target.id)] = value
     this.setState({ key: updatedkey })
@@ -29,6 +30,7 @@ class SetupMessagePanel extends React.Component {
 
   onClick (event) {
     const autocryptKey = this.state.key.join('')
+    console.log(autocryptKey)
     this.props.continueKeyTransfer(autocryptKey)
   }
 
