@@ -151,7 +151,7 @@ class SplittedChatListAndView extends React.Component {
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
 
     const menu = (<Menu>
-      <MenuItem icon='plus' text={tx('addChat')} onClick={this.onCreateChat} />
+      <MenuItem icon='plus' text={tx('newChat')} onClick={this.onCreateChat} />
       {selectedChat && !showArchivedChats ? <MenuItem icon='import' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, true)} /> : null}
       {selectedChat && showArchivedChats ? <MenuItem icon='export' text={unArchiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, false)} /> : null}
       {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}

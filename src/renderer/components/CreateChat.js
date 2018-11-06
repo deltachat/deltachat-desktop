@@ -57,7 +57,7 @@ class CreateChat extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <NavbarHeading>{tx('addChat')}</NavbarHeading>
+            <NavbarHeading>{tx('newChat')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
