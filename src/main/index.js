@@ -4,6 +4,7 @@ const electron = require('electron')
 const app = electron.app
 
 const parallel = require('run-parallel')
+const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
 const config = require('../config')
@@ -13,6 +14,9 @@ const log = require('./log')
 const menu = require('./menu')
 const State = require('../renderer/lib/state')
 const windows = require('./windows')
+
+// Ensure CONFIG_PATH exists.
+mkdirp.sync(config.CONFIG_PATH)
 
 let argv = sliceArgv(process.argv)
 
