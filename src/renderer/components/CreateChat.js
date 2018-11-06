@@ -62,8 +62,8 @@ class CreateChat extends React.Component {
         </Navbar>
         <div className='window'>
           <div className='CreateChat'>
+            <button onClick={this.onCreateGroup}>{tx('newGroup')}</button>
             <button onClick={this.onCreateContact}>{tx('addContact')}</button>
-            <button onClick={this.onCreateGroup}>{tx('createGroup')}</button>
             {deltachat.contacts.map((contact) => {
               return (<ContactListItem
                 contact={contact}
