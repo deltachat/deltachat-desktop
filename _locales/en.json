@@ -16,16 +16,16 @@
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Add Contact",
+        "message": "Add contact",
         "description": "Add contact button label"
     },
     "name": {
         "message": "Name",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Create Group",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "New group",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Archive Group",
