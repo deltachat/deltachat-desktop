@@ -59,9 +59,9 @@
         "message": "Group name required.",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Create Chat",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "New chat",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Archive Chat",
