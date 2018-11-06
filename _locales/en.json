@@ -91,6 +91,10 @@
         "message": "Autocrypt Key Transfer",
         "description": "Dialog title during Autocrypt key transfer"
     },
+    "setupMessageInfo": {
+        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "description": "Text for the autocrypt setup message"
+    },
     "transferKey": {
         "message": "Transfer Key",
         "description": "Button label during Autocrypt key transfer"
