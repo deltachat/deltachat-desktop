@@ -1,6 +1,5 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
-const mkdirp = require('mkdirp')
 
 const APP_NAME = 'DeltaChat'
 const version = require('../package.json').version
@@ -43,8 +42,6 @@ module.exports = {
   UI_MESSAGE_HEIGHT,
   WINDOW_MIN_WIDTH: 450
 }
-
-mkdirp.sync(module.exports.CONFIG_PATH)
 
 function getConfigPath () {
   if (IS_TEST) {
