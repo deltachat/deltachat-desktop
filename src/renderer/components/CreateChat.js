@@ -57,13 +57,13 @@ class CreateChat extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <NavbarHeading>{tx('addChat')}</NavbarHeading>
+            <NavbarHeading>{tx('newChat')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
           <div className='CreateChat'>
+            <button onClick={this.onCreateGroup}>{tx('newGroup')}</button>
             <button onClick={this.onCreateContact}>{tx('addContact')}</button>
-            <button onClick={this.onCreateGroup}>{tx('createGroup')}</button>
             {deltachat.contacts.map((contact) => {
               return (<ContactListItem
                 contact={contact}

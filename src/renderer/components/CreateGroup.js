@@ -4,8 +4,8 @@ const GroupBase = require('./GroupBase')
 class CreateGroup extends GroupBase {
   constructor (props) {
     super(props, {
-      buttonLabel: 'createGroup',
-      heading: 'createGroup'
+      buttonLabel: 'newGroup',
+      heading: 'newGroup'
     })
   }
 
