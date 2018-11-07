@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+## [1.7.4] - 2018-11-07
+
+### Changed
+* Upgrade `@sindresorhus/is` to `^0.13.0` (@greenkeeper)
+* Update UI for Autocrypt key exchange (@jikstra)
+* Main window and about dialog should show same version (@ralphtheninja)
+* Tweak language resources for `New chat`, `New group` and `Add contact` (@ralphtheninja)
+
+### Added
+* Add search box for chat list (@karissa)
+* Add group image (@ralphtheninja)
+
+### Fixed
+* Fix rendering of video messages (@ralphtheninja)
+* Add back currently logged in user to main window title (@ralphtheninja)
+* Make links clickable in About dialog (@ralphtheninja)
+* Ensure `CONFIG_PATH` exists at startup (@ralphtheninja)
+* Tweak Autocrypt Setup Message (@ralphtheninja)
+* Pass configuration settings to core in `snake_key` format (@ralphtheninja)
+
 ## [1.7.3] - 2018-11-02
 
 ### Added
@@ -130,7 +150,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...HEAD
+[1.7.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...v1.7.4
 [1.7.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.0...v1.7.1
