@@ -22,12 +22,10 @@ const DEFAULT_IMAGE = path.join(
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
-
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
     this.state.image = this.state.image || ''
-
     this.back = this.back.bind(this)
   }
 
