@@ -26,6 +26,7 @@ class GroupBase extends React.Component {
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
     this.state.image = this.state.image || ''
+    this.back = this.back.bind(this)
   }
 
   addToGroup (contactId) {
@@ -78,6 +79,10 @@ class GroupBase extends React.Component {
     this.setState({ image: '' })
   }
 
+  back () {
+    this.props.changeScreen('CreateChat')
+  }
+
   render () {
     const { deltachat } = this.props
     const tx = window.translate
@@ -87,7 +92,7 @@ class GroupBase extends React.Component {
       <div>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
             <NavbarHeading>{tx(this.state.heading)}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
