@@ -86,6 +86,7 @@ class ChatView extends React.Component {
     const { chat } = this.props
     const { messages } = chat
     const conversationType = convertChatType(chat.type)
+    const tx = window.translate
 
     return (
       <div className='ChatView'>
@@ -103,9 +104,11 @@ class ChatView extends React.Component {
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {messages.map(message => {
+              // TODO styled-components
               const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
               if (message.msg.isSetupmessage) {
-                return <li onClick={this.onClickSetupMessage.bind(this, message)}>
+                message.msg.text = tx('setupMessageInfo')
+                return <li className='SetupMessage' onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
                 </li>
               }
@@ -201,7 +204,7 @@ class RenderMessage extends React.Component {
       timestamp
     }
 
-    if (msg.file) {
+    if (msg.file && !msg.isSetupmessage) {
       props.attachment = {
         url: msg.file,
         contentType: convertContentType(message.filemime),

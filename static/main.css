@@ -222,3 +222,7 @@ ul li button {
   width: 33%;
   float: right;
 }
+
+.SetupMessage .module-message__text {
+  color: #ed824e;
+}
