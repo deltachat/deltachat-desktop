@@ -52,8 +52,12 @@
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
-        "description": "Edit group menu item label"
+        "message": "Edit group",
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Edit verified group",
+        "description": "Edit verified group text label"
     },
     "leaveGroup": {
         "message": "Leave Group",
