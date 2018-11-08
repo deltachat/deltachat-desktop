@@ -131,7 +131,7 @@ class GroupBase extends React.Component {
             </div>
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
-            <QrCode qrCode={qrCode} onClose={this.closeQrCode}/>
+            <QrCode qrCode={qrCode} onClose={this.closeQrCode} />
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
