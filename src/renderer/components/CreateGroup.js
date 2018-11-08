@@ -9,7 +9,7 @@ class CreateGroup extends GroupBase {
       buttonLabel: label,
       heading: label,
       showVerifiedContacts: verified,
-      showQrVerifyCode: verified
+      showQrVerifyCodeButton: verified
     })
   }
 

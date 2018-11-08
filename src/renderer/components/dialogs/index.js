@@ -1,14 +1,16 @@
 const { remote } = require('electron')
 
-const KeyTransfer = require('./KeyTransfer')
 const SetupMessage = require('./SetupMessage')
 const DeadDrop = require('./DeadDrop')
+const KeyTransfer = require('./KeyTransfer')
+const QrCode = require('./QrCode')
 
 module.exports = {
   confirmation,
   SetupMessage,
   DeadDrop,
-  KeyTransfer
+  KeyTransfer,
+  QrCode
 }
 
 function confirmation (message, cb) {

@@ -224,6 +224,9 @@ class DeltaChatController {
     else this._dc.createChatByMessageId(message.id)
   }
 
+  /**
+   * Dispatched from UnblockContacts
+   */
   unblockContact (contactId) {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, false)
@@ -347,6 +350,15 @@ class DeltaChatController {
     })
 
     this._render()
+  }
+
+  /**
+   * Dispatched from GroupBase when showing a QR code for:
+   * - "Joining a verified group" protocol
+   * - "Setup verified contact" protocol (chatId = 0)
+   */
+  getQrCode (chatId = 0) {
+    return this._dc.getSecurejoinQrCode(chatId)
   }
 
   /**
