@@ -16,6 +16,7 @@ class CreateChat extends React.Component {
   constructor (props) {
     super(props)
     this.onCreateGroup = this.onCreateGroup.bind(this)
+    this.onCreateVerifiedGroup = this.onCreateVerifiedGroup.bind(this)
     this.onCreateContact = this.onCreateContact.bind(this)
     this.chooseContact = this.chooseContact.bind(this)
   }
@@ -27,6 +28,10 @@ class CreateChat extends React.Component {
 
   onCreateGroup () {
     this.props.changeScreen('CreateGroup')
+  }
+
+  onCreateVerifiedGroup () {
+    this.props.changeScreen('CreateGroup', { verified: true })
   }
 
   onCreateContact () {
@@ -63,6 +68,7 @@ class CreateChat extends React.Component {
         <div className='window'>
           <div className='CreateChat'>
             <button onClick={this.onCreateGroup}>{tx('newGroup')}</button>
+            <button onClick={this.onCreateVerifiedGroup}>{tx('newVerifiedGroup')}</button>
             <button onClick={this.onCreateContact}>{tx('addContact')}</button>
             {deltachat.contacts.map((contact) => {
               return (<ContactListItem

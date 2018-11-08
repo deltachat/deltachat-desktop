@@ -10,10 +10,11 @@ class EditGroup extends GroupBase {
 
     super(props, {
       buttonLabel: 'save',
+      heading: 'editGroup',
       group: group,
       name: chat.name,
       image: chat.profileImage,
-      heading: 'editGroup'
+      showQrInviteCode: chat.isVerified
     })
 
     this.before = ipcRenderer.sendSync(
