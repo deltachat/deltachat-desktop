@@ -79,12 +79,21 @@ class GroupBase extends React.Component {
     this.setState({ image: '' })
   }
 
+  onShowQrVerifyCode () {
+    console.log('TODO: show qr verify code')
+  }
+
+  onShowQrInviteCode () {
+    console.log('TODO: show qr invite code')
+  }
+
   back () {
     this.props.changeScreen('CreateChat')
   }
 
   render () {
-    const { deltachat } = this.props
+    const contacts = this._getContacts()
+    const { showQrVerifyCode, showQrInviteCode } = this.state
     const tx = window.translate
     const image = this.state.image || DEFAULT_IMAGE
 
@@ -102,6 +111,8 @@ class GroupBase extends React.Component {
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
               <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
             </div>
+            { showQrVerifyCode && (<button className='QrVerifyCode' onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
+            { showQrInviteCode && (<button className='QrInviteCode' onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
@@ -114,7 +125,7 @@ class GroupBase extends React.Component {
                 onClick={this.onSubmit.bind(this)}
                 text={tx(this.state.buttonLabel)} />
             </ControlGroup>
-            {deltachat.contacts.map((contact) => {
+            {contacts.map((contact) => {
               return (
                 <ContactListItem
                   color={this.contactInGroup(contact.id) ? 'green' : ''}
@@ -127,6 +138,14 @@ class GroupBase extends React.Component {
         </div>
       </div>
     )
+  }
+
+  _getContacts () {
+    const { contacts } = this.props.deltachat
+    if (this.state.showVerifiedContacts) {
+      return contacts.filter(c => c.isVerified === true)
+    }
+    return contacts
   }
 }
 

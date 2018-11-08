@@ -3,9 +3,13 @@ const GroupBase = require('./GroupBase')
 
 class CreateGroup extends GroupBase {
   constructor (props) {
+    const { verified } = props.screenProps
+    const label = verified ? 'newVerifiedGroup' : 'newGroup'
     super(props, {
-      buttonLabel: 'newGroup',
-      heading: 'newGroup'
+      buttonLabel: label,
+      heading: label,
+      showVerifiedContacts: verified,
+      showQrVerifyCode: verified
     })
   }
 

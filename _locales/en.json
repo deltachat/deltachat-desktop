@@ -27,6 +27,18 @@
         "message": "New group",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "New verified group",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Show QR verify code",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Show QR invite code",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Archive Group",
         "description": "Archive group menu item label"
