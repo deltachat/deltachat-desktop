@@ -129,8 +129,8 @@ class GroupBase extends React.Component {
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
               <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
             </div>
-            { showQrVerifyCodeButton && (<button className='QrVerifyCode' onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
-            { showQrInviteCodeButton && (<button className='QrInviteCode' onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
+            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
+            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
             <QrCode qrCode={qrCode} onClose={this.closeQrCode}/>
             <ControlGroup fill vertical={false}>
               <InputGroup
