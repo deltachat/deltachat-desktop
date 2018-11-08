@@ -59,6 +59,10 @@
         "message": "Edit verified group",
         "description": "Edit verified group text label"
     },
+    "qrCode": {
+        "message": "QR Code",
+        "description": "Window labelf for QR code dialog"
+    },
     "leaveGroup": {
         "message": "Leave Group",
         "description": "Leave group menu item label"

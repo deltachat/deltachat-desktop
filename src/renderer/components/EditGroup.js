@@ -15,7 +15,8 @@ class EditGroup extends GroupBase {
       name: chat.name,
       image: chat.profileImage,
       showVerifiedContacts: chat.isVerified,
-      showQrInviteCode: chat.isVerified
+      showQrInviteCodeButton: chat.isVerified,
+      chatId: chat.id
     })
 
     this.before = ipcRenderer.sendSync(
