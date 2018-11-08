@@ -59,6 +59,7 @@ class ChatList extends React.Component {
                   }}
                   i18n={i18n}
                   isSelected={chat.id === selectedChatId}
+                  isVerified={chat.isVerified}
                   unreadCount={chat.freshMessageCounter} />
               )
             }
