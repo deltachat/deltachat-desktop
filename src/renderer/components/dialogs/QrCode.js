@@ -18,9 +18,9 @@ class QrCodeDialog extends React.Component {
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
           <QRCode
-            bgColor="#FFFFFF"
-            fgColor="#000000"
-            level="Q"
+            bgColor='#FFFFFF'
+            fgColor='#000000'
+            level='Q'
             style={{ width: 256 }}
             value={qrCode}
           />
