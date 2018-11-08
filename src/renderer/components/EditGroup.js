@@ -10,10 +10,11 @@ class EditGroup extends GroupBase {
 
     super(props, {
       buttonLabel: 'save',
-      heading: 'editGroup',
+      heading: chat.isVerified ? 'editVerifiedGroup' : 'editGroup',
       group: group,
       name: chat.name,
       image: chat.profileImage,
+      showVerifiedContacts: chat.isVerified,
       showQrInviteCode: chat.isVerified
     })
 
