@@ -52,6 +52,7 @@ class ChatList extends React.Component {
                   onClick={this.props.onChatClick.bind(null, chat.id)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
+                  avatarPath={chat.profileImage}
                   lastUpdated={lastUpdated}
                   lastMessage={{
                     text: chat.summary.text2,

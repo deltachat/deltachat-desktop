@@ -35,10 +35,7 @@ export class ConversationListItem extends React.Component<Props> {
     const {
       avatarPath,
       color,
-      i18n,
-      name,
-      phoneNumber,
-      profileName,
+      name
     } = this.props;
 
     if (!avatarPath) {
@@ -57,14 +54,9 @@ export class ConversationListItem extends React.Component<Props> {
       );
     }
 
-    const title = `${name || phoneNumber}${
-      !name && profileName ? ` ~${profileName}` : ''
-    }`;
-
     return (
       <img
         className="module-conversation-list-item__avatar"
-        alt={i18n('contactAvatarAlt', [title])}
         src={avatarPath}
       />
     );
