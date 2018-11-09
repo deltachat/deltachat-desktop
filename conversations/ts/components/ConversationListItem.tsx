@@ -16,6 +16,7 @@ interface Props {
   lastUpdated: number;
   unreadCount: number;
   isSelected: boolean;
+  isVerified?: boolean;
 
   lastMessage?: {
     status: 'sending' | 'sent' | 'delivered' | 'read' | 'error';
@@ -62,6 +63,19 @@ export class ConversationListItem extends React.Component<Props> {
     );
   }
 
+  public renderVerified() {
+    if (this.props.isVerified) {
+      return (
+        <img
+          className="module-conversation-list-item__is-verified"
+          src='../images/verified.png'
+        />
+      );
+    }
+
+    return null;
+  }
+
   public renderHeader() {
     const {
       unreadCount,
@@ -82,6 +96,7 @@ export class ConversationListItem extends React.Component<Props> {
               : null
           )}
         >
+          {this.renderVerified()}
           <ContactName
             phoneNumber={phoneNumber}
             name={name}

@@ -1,7 +1,7 @@
+const { ipcRenderer } = require('electron')
 const React = require('react')
 const path = require('path')
 const { dialog } = require('electron').remote
-const ContactListItem = require('./ContactListItem')
 const {
   Alignment,
   Classes,
@@ -12,6 +12,9 @@ const {
   NavbarHeading,
   Button
 } = require('@blueprintjs/core')
+
+const ContactListItem = require('./ContactListItem')
+const { QrCode } = require('./dialogs')
 
 const DEFAULT_IMAGE = path.join(
   __dirname,
@@ -26,7 +29,9 @@ class GroupBase extends React.Component {
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
     this.state.image = this.state.image || ''
+    this.state.qrCode = ''
     this.back = this.back.bind(this)
+    this.closeQrCode = this.closeQrCode.bind(this)
   }
 
   addToGroup (contactId) {
@@ -79,12 +84,34 @@ class GroupBase extends React.Component {
     this.setState({ image: '' })
   }
 
+  onShowQrVerifyCode () {
+    this.setState({
+      qrCode: ipcRenderer.sendSync('dispatchSync', 'getQrCode')
+    })
+  }
+
+  onShowQrInviteCode () {
+    const { chatId } = this.state
+    this.setState({
+      qrCode: ipcRenderer.sendSync('dispatchSync', 'getQrCode', chatId)
+    })
+  }
+
+  closeQrCode () {
+    this.setState({ qrCode: '' })
+  }
+
   back () {
     this.props.changeScreen('CreateChat')
   }
 
   render () {
-    const { deltachat } = this.props
+    const contacts = this._getContacts()
+    const {
+      showQrVerifyCodeButton,
+      showQrInviteCodeButton,
+      qrCode
+    } = this.state
     const tx = window.translate
     const image = this.state.image || DEFAULT_IMAGE
 
@@ -102,6 +129,9 @@ class GroupBase extends React.Component {
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
               <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
             </div>
+            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
+            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
+            <QrCode qrCode={qrCode} onClose={this.closeQrCode} />
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
@@ -114,7 +144,7 @@ class GroupBase extends React.Component {
                 onClick={this.onSubmit.bind(this)}
                 text={tx(this.state.buttonLabel)} />
             </ControlGroup>
-            {deltachat.contacts.map((contact) => {
+            {contacts.map((contact) => {
               return (
                 <ContactListItem
                   color={this.contactInGroup(contact.id) ? 'green' : ''}
@@ -127,6 +157,14 @@ class GroupBase extends React.Component {
         </div>
       </div>
     )
+  }
+
+  _getContacts () {
+    const { contacts } = this.props.deltachat
+    if (this.state.showVerifiedContacts) {
+      return contacts.filter(c => c.isVerified === true)
+    }
+    return contacts
   }
 }
 

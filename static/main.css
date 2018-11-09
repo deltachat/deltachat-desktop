@@ -226,3 +226,9 @@ ul li button {
 .SetupMessage .module-message__text {
   color: #ed824e;
 }
+
+.module-conversation-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}

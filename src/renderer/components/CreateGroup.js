@@ -3,9 +3,13 @@ const GroupBase = require('./GroupBase')
 
 class CreateGroup extends GroupBase {
   constructor (props) {
+    const { verified } = props.screenProps
+    const label = verified ? 'newVerifiedGroup' : 'newGroup'
     super(props, {
-      buttonLabel: 'newGroup',
-      heading: 'newGroup'
+      buttonLabel: label,
+      heading: label,
+      showVerifiedContacts: verified,
+      showQrVerifyCodeButton: verified
     })
   }
 
@@ -17,9 +21,10 @@ class CreateGroup extends GroupBase {
 
   onSubmit () {
     const contactIds = Object.keys(this.state.group)
+    const { verified } = this.props.screenProps
     ipcRenderer.sendSync(
       'dispatchSync',
-      'createUnverifiedGroup',
+      verified ? 'createVerifiedGroup' : 'createUnverifiedGroup',
       this.state.name,
       this.state.image,
       contactIds

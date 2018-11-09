@@ -224,6 +224,9 @@ class DeltaChatController {
     else this._dc.createChatByMessageId(message.id)
   }
 
+  /**
+   * Dispatched from UnblockContacts
+   */
   unblockContact (contactId) {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, false)
@@ -307,10 +310,22 @@ class DeltaChatController {
   }
 
   /**
+   * Dispatched when creating a verified group in CreateGroup
+   */
+  createVerifiedGroup (name, image, contactIds) {
+    const chatId = this._dc.createVerifiedGroupChat(name)
+    return this._setGroupData(chatId, image, contactIds)
+  }
+
+  /**
    * Dispatched when creating an unverified group in CreateGroup
    */
   createUnverifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createUnverifiedGroupChat(name)
+    return this._setGroupData(chatId, image, contactIds)
+  }
+
+  _setGroupData (chatId, image, contactIds) {
     this._dc.setChatProfileImage(chatId, image)
     contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
     this.selectChat(chatId)
@@ -347,6 +362,15 @@ class DeltaChatController {
     })
 
     this._render()
+  }
+
+  /**
+   * Dispatched from GroupBase when showing a QR code for:
+   * - "Joining a verified group" protocol
+   * - "Setup verified contact" protocol (chatId = 0)
+   */
+  getQrCode (chatId = 0) {
+    return this._dc.getSecurejoinQrCode(chatId)
   }
 
   /**
