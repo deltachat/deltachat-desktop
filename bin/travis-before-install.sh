@@ -16,5 +16,5 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
    sudo cp ninja /usr/bin
 
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    brew install meson ninja
+    brew install meson ninja libressl
 fi
