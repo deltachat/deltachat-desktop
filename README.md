@@ -74,13 +74,14 @@ You might also need the following system dependencies:
 * `libssl-dev`
 * `libsasl2-dev`
 * `libsqlite3-dev`
+* `zlib1g-dev`
 
 Also, `libetpan-dev` at the moment can't be installed globally.
 
 To fix these issues do:
 
 ```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev
+sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
 sudo apt-get remove libetpan-dev
 ```
 
