@@ -52,19 +52,42 @@ $ npm install
 
 ### Troubleshooting
 
-If you get errors running `npm install`, you might need to install `meson`, `ninja` and `libssl1.0-dev`. Also, `libetpan-dev` can't be installed globally.
+This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
-On Linux (e.g. Debian Stretch):
+If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
+
+If `meson` is missing:
 
 ```
-$ sudo apt-get install python3-pip ninja-build libssl1.0-dev
-$ sudo pip3 install meson
-$ sudo apt-get remove libetpan-dev
+sudo apt-get install python3-pip
+sudo pip3 install meson
+```
+
+If `ninja` is missing:
+
+```
+sudo apt-get install ninja-build
+```
+
+You might also need the following system dependencies:
+
+* `libssl-dev`
+* `libsasl2-dev`
+* `libsqlite3-dev`
+* `zlib1g-dev`
+
+Also, `libetpan-dev` at the moment can't be installed globally.
+
+To fix these issues do:
+
+```
+sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
+sudo apt-get remove libetpan-dev
 ```
 
 Then try running `npm install` again.
 
-Please see [build instructions](https://github.com/deltachat/deltachat-core#build) for additional information.
+Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
 ### Run linters
 
