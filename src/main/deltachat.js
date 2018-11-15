@@ -4,44 +4,7 @@ const electron = require('electron')
 const path = require('path')
 const log = require('./log')
 
-function messageIdToJson (messageId, dc) {
-  const msg = dc.getMessage(messageId)
-  const fromId = msg && msg.getFromId()
-  const contact = fromId && dc.getContact(fromId)
-  return {
-    fromId,
-    id: messageId,
-    isMe: fromId === C.DC_CONTACT_ID_SELF,
-    contact: contact ? contact.toJson() : {},
-    msg: msg && msg.toJson(),
-    filemime: msg && msg.getFilemime()
-  }
-}
-
-function chatIdToJson (chatId, dc) {
-  const chat = dc.getChat(chatId).toJson()
-  const messageIds = dc.getChatMessages(chatId, 0, 0)
-  chat.messages = messageIds.map(id => messageIdToJson(id, dc))
-  chat.contacts = dc.getChatContacts(chatId).map(id => {
-    return dc.getContact(id).toJson()
-  })
-  if (chatId === C.DC_CHAT_ID_DEADDROP) {
-    const msg = dc.getMessage(messageIds[0])
-    const fromId = msg && msg.getFromId()
-
-    if (!fromId) {
-      log.warning('Ignoring DEADDROP due to missing fromId')
-      return null
-    }
-
-    const contact = dc.getContact(fromId)
-    if (contact) {
-      chat.contact = contact.toJson()
-    }
-  }
-  chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
-  return chat
-}
+const PAGE_SIZE = 20
 
 /**
  * The Controller is the container for a deltachat instance
@@ -345,6 +308,7 @@ class DeltaChatController {
    */
   selectChat (chatId) {
     log('selecting chat with id', chatId)
+    this._pages = 1
     this._selectedChatId = chatId
     this._render()
   }
@@ -394,6 +358,47 @@ class DeltaChatController {
     }
   }
 
+  _messageIdToJson (messageId) {
+    const dc = this._dc
+    const msg = dc.getMessage(messageId)
+    const fromId = msg && msg.getFromId()
+    const contact = fromId && dc.getContact(fromId)
+    return {
+      fromId,
+      id: messageId,
+      isMe: fromId === C.DC_CONTACT_ID_SELF,
+      contact: contact ? contact.toJson() : {},
+      msg: msg && msg.toJson(),
+      filemime: msg && msg.getFilemime()
+    }
+  }
+
+  _chatIdToJson (chatId) {
+    const dc = this._dc
+    const chat = dc.getChat(chatId).toJson()
+    chat.messageIds = dc.getChatMessages(chatId, 0, 0)
+    chat.messages = []
+    chat.contacts = dc.getChatContacts(chatId).map(id => {
+      return dc.getContact(id).toJson()
+    })
+    if (chatId === C.DC_CHAT_ID_DEADDROP) {
+      const msg = dc.getMessage(chat.messageIds[0])
+      const fromId = msg && msg.getFromId()
+
+      if (!fromId) {
+        log.warning('Ignoring DEADDROP due to missing fromId')
+        return null
+      }
+
+      const contact = dc.getContact(fromId)
+      if (contact) {
+        chat.contact = contact.toJson()
+      }
+    }
+    chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
+    return chat
+  }
+
   /**
    * Internal
    * Returns chats in json format
@@ -405,13 +410,18 @@ class DeltaChatController {
     const count = list.getCount()
     for (let i = 0; i < count; i++) {
       const chatId = list.getChatId(i)
-      const chat = chatIdToJson(chatId, this._dc)
+      const chat = this._chatIdToJson(chatId)
       if (chat) {
         chat.summary = list.getSummary(i).toJson()
         chats.push(chat)
       }
     }
     return chats
+  }
+
+  fetchMessages () {
+    this._pages++
+    this._render()
   }
 
   _archivedChats () {
@@ -431,6 +441,10 @@ class DeltaChatController {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
+
+    const ids = selectedChat.messageIds
+    var messageIds = ids.splice(ids.length - this._pages * PAGE_SIZE, ids.length)
+    selectedChat.messages = messageIds.map((id) => this._messageIdToJson(id))
     return selectedChat
   }
 
@@ -462,6 +476,7 @@ class DeltaChatController {
     this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
+    this._pages = 1
     this._query = ''
   }
 }

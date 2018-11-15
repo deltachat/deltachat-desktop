@@ -10,6 +10,8 @@ const MutationObserver = window.MutationObserver
 
 const { ConversationContext, Message } = require('./conversations')
 
+const SCROLL_BUFFER = 70
+
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
   C.DC_CHAT_TYPE_VERIFIED_GROUP
@@ -27,6 +29,11 @@ class ChatView extends React.Component {
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
+    this.lastId = this.props.chat.id
+  }
+
+  componentWillUnmount () {
+    if (this.observer) this.observer.disconnect()
   }
 
   writeMessage (text) {
@@ -34,27 +41,43 @@ class ChatView extends React.Component {
     ipcRenderer.send('dispatch', 'sendMessage', chat.id, text)
   }
 
-  componentWillUnmount () {
-    if (this.observer) this.observer.disconnect()
+  fetchNextMessages () {
+    this.scrollPrepare()
+    ipcRenderer.send('dispatch', 'fetchMessages')
   }
 
-  componentDidUpdate () {
-    if (!this.observer && this.conversationDiv.current) {
-      this.observer = new MutationObserver(this.scrollToBottom)
-      this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
-    }
+  handleScroll () {
+    if (!this.lastId || this.lastId === this.props.chat.id) this.restoreScroll()
+    else this.scrollToBottom()
+    this.lastId = this.props.chat && this.props.chat.id
+  }
+
+  restoreScroll () {
+    this.doc.scrollTop = this.doc.scrollHeight - this.previousScrollHeightMinusTop + SCROLL_BUFFER
+  }
+
+  scrollPrepare () {
+    this.previousScrollHeightMinusTop = this.doc.scrollHeight - this.doc.scrollTop + SCROLL_BUFFER
+  }
+
+  onScroll () {
+    if (this.doc.scrollTop <= SCROLL_BUFFER) this.fetchNextMessages()
   }
 
   componentDidMount () {
+    this.doc = document.querySelector('.ChatView #the-conversation')
+    if (!this.doc) return console.log(`Didn't find .ChatView #the-conversation element`)
+    if (!this.observer && this.conversationDiv.current) {
+      this.observer = new MutationObserver(this.handleScroll.bind(this))
+      this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
+    }
+    this.doc.onscroll = this.onScroll.bind(this)
     this.scrollToBottom()
     this.focusInputMessage()
   }
 
   scrollToBottom (force) {
-    var doc = document.querySelector('.ChatView #the-conversation')
-    if (!doc) return console.log(`Didn't find .ChatView #the-conversation element`)
-
-    doc.scrollTop = doc.scrollHeight
+    this.doc.scrollTop = this.doc.scrollHeight
   }
 
   focusInputMessage () {
@@ -84,7 +107,6 @@ class ChatView extends React.Component {
   render () {
     const { attachmentMessage, setupMessage } = this.state
     const { chat } = this.props
-    const { messages } = chat
     const conversationType = convertChatType(chat.type)
     const tx = window.translate
 
@@ -103,9 +125,12 @@ class ChatView extends React.Component {
 
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
-            {messages.map(message => {
-              // TODO styled-components
-              const msg = <RenderMessage message={message} conversationType={conversationType} onClickAttachment={this.onClickAttachment.bind(this, message)} />
+            {chat.messages.map(message => {
+              const msg = <RenderMessage
+                message={message}
+                conversationType={conversationType}
+                onClickAttachment={this.onClickAttachment.bind(this, message)}
+              />
               if (message.msg.isSetupmessage) {
                 message.msg.text = tx('setupMessageInfo')
                 return <li className='SetupMessage' onClick={this.onClickSetupMessage.bind(this, message)}>
