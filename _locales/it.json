@@ -23,9 +23,9 @@
         "message": "Nome",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Crea gruppo",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "Nuovo gruppo",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Archivia gruppo",
@@ -59,9 +59,9 @@
         "message": "Nome del gruppo obbligatorio",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Inizia conversazione",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "Nuova chat",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Archivia chat",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Trasferimento chiave Autocrypt",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "Questo è un messaggio di configurazione Autocrypt per trasferire le impostazioni end-to-end tra dispositivi.\n\nPer decifrarlo e usare le impostazioni, clicca su questo messaggio.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Trasferisci chiave",
@@ -184,7 +188,7 @@
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Inserisci la password...",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
@@ -560,11 +564,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "%1$s membri",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contacts",
+        "message": "%1$s contatti",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -732,19 +736,19 @@
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Scegli immagine del gruppo",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Rimuovi",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Cerca",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Cerca",
         "description": "Placeholder for search"
     }
 }

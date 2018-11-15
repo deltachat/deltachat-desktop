@@ -16,16 +16,16 @@
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Добавить Контакт",
+        "message": "Add contact",
         "description": "Add contact button label"
     },
     "name": {
         "message": "Name",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Создать группу",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "New group",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Переместить группу в архив",
@@ -59,9 +59,9 @@
         "message": "Имя группы не может быть пустым.",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Создать Чат",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "New chat",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Архивировать чат",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Передача ключа с использованием Autocrypt",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Передать ключ",

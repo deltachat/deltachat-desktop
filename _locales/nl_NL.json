@@ -23,9 +23,9 @@
         "message": "Naam",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Groep creëren",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "Nieuwe groep",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Groep archiveren",
@@ -59,9 +59,9 @@
         "message": "Groepsnaam vereist.",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Gesprek creëren",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "Nieuw gesprek",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Gesprek archiveren",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Autocrypt-sleuteloverdracht",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "Dit is het Autocrypt-instelbericht. Dit wordt gebruikt om je sleutel uit te wisselen tussen clients.\n\nOm je instellingen te gebruiken, moet je op dit bericht klikken.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Sleutel overdragen",
@@ -184,7 +188,7 @@
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Voer je wachtwoord in...",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
@@ -560,11 +564,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "%1$s leden",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contacts",
+        "message": "%1$s contactpersonen",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -732,19 +736,19 @@
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Kies groepsafbeelding",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Verwijderen",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Zoeken",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Zoeken",
         "description": "Placeholder for search"
     }
 }

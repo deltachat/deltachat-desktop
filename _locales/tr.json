@@ -16,16 +16,16 @@
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Kişiyi Ekle",
+        "message": "Kişiyi ekle",
         "description": "Add contact button label"
     },
     "name": {
         "message": "Ad",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Grup Oluştur",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "Yeni grup",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Grubu Arşivle",
@@ -59,9 +59,9 @@
         "message": "Grup adı gerekli.",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Sohbet Oluştur",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "Yeni sohbet",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Sohbeti Arşivle",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Autocrypt Anahtarı Aktarımı",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "Bu, uçtan uca ayarlamanızı istemciler arasında aktarmak için kullanılan Autocrypt Ayarlama İletisi.\n\nŞifreyi çözmek ve ayarlamanızı kullanmak için bu iletiyi tıklayın.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Anahtarı Aktar",
@@ -184,7 +188,7 @@
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Parolanızı girin...",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
@@ -336,11 +340,11 @@
         "description": "Report an Issue... menu item label"
     },
     "menu.help.about": {
-        "message": "About DeltaChat",
+        "message": "DeltaChat Hakkında",
         "description": "About menu item"
     },
     "aboutDeltaChat": {
-        "message": "About DeltaChat",
+        "message": "DeltaChat Hakkında",
         "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
@@ -560,11 +564,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "%1$s üye",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contacts",
+        "message": "%1$s kişi",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -624,7 +628,7 @@
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Left group.",
+        "message": "Gruptan ayrılındı.",
         "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
@@ -640,7 +644,7 @@
         "description": ""
     },
     "DC_STR_ENCR_TRANSP": {
-        "message": "Şifreleme taşınıyor.",
+        "message": "Taşınan şifreleme.",
         "description": ""
     },
     "DC_STR_ENCR_NONE": {
@@ -732,19 +736,19 @@
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Grup Görseli Seç",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Kaldır",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Ara",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Ara",
         "description": "Placeholder for search"
     }
 }
