@@ -23,9 +23,9 @@
         "message": "Namn",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Skapa grupp",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "Ny grupp",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Arkivera grupp",
@@ -59,9 +59,9 @@
         "message": "Gruppnamn nödvändigt.",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Skapa chatt",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "Ny chatt",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Arkivera chat",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Autocrypt nyckelöverföring",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Överför nyckel",

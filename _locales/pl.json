@@ -23,9 +23,9 @@
         "message": "Nazwa",
         "description": "Name label in Add Contact view"
     },
-    "createGroup": {
-        "message": "Utwórz grupę",
-        "description": "Create group menu item label"
+    "newGroup": {
+        "message": "Nowa grupa",
+        "description": "New group button and text label"
     },
     "archiveGroup": {
         "message": "Archiwizuj grupę",
@@ -59,9 +59,9 @@
         "message": "Nazwa grupy jest wymagana",
         "description": "Information to user when creating group with empty name"
     },
-    "addChat": {
-        "message": "Utwórz czat",
-        "description": "Create chat menu item label"
+    "newChat": {
+        "message": "Nowy czat",
+        "description": "New chat button and text label"
     },
     "archiveChat": {
         "message": "Archiwizuj czat",
@@ -90,6 +90,10 @@
     "autocryptKeyTransfer": {
         "message": "Transfer klucza Autocrypt",
         "description": "Dialog title during Autocrypt key transfer"
+    },
+    "setupMessageInfo": {
+        "message": "Jest to wiadomość konfiguracyjna automatycznego szyfrowania służąca do przesyłania klucza między klientami.\n\nAby odszyfrować i użyć klucza, kliknij na tą wiadomość.",
+        "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
         "message": "Transferuj klucz",
@@ -184,7 +188,7 @@
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Wprowadź hasło",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
@@ -196,7 +200,7 @@
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
     "login.advanced": {
-        "message": "Advanced",
+        "message": "Zaawansowane",
         "description": "Advanced settings button label"
     },
     "login.inbox": {
@@ -336,11 +340,11 @@
         "description": "Report an Issue... menu item label"
     },
     "menu.help.about": {
-        "message": "About DeltaChat",
+        "message": "O DeltaChat",
         "description": "About menu item"
     },
     "aboutDeltaChat": {
-        "message": "About DeltaChat",
+        "message": "O DeltaChat",
         "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
@@ -536,7 +540,7 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "emojiAlt": {
-        "message": "Emoji of $1$",
+        "message": "Emoji z $1$",
         "description": "Used with aria-label for emojis"
     },
     "chatView.nochatselectedHeader": {
@@ -560,11 +564,11 @@
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "członków – %1$s",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contacts",
+        "message": "kontaktów – %1$s",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
@@ -624,7 +628,7 @@
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Left group.",
+        "message": "Opuścił grupę.",
         "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
@@ -668,7 +672,7 @@
         "description": ""
     },
     "DC_STR_ARCHIVEDCHATS": {
-        "message": "Archived chats",
+        "message": "Archiwalne czaty",
         "description": ""
     },
     "DC_STR_STARREDMSGS": {
@@ -696,55 +700,55 @@
         "description": ""
     },
     "DC_STR_SERVER_RESPONSE": {
-        "message": "Response from %1$s: %2$s",
+        "message": "Odpowiedź od %1$s: %2$s",
         "description": ""
     },
     "dialogs.blockContact": {
-        "message": "Block $1$?",
+        "message": "Zablokować $1$?",
         "description": "Dialog to confirm blocking contact"
     },
     "dialogs.unblockContact": {
-        "message": "Unblock $1$?",
+        "message": "Odblokować $1$?",
         "description": "Dialog to confirm unblocking contact"
     },
     "dialogs.deleteChat": {
-        "message": "Delete chat $1$?",
+        "message": "Usunąć czat $1$?",
         "description": "Dialog to confirm deleting a chat"
     },
     "dialogs.confirmation.no": {
-        "message": "No",
+        "message": "Nie",
         "description": "No button label in confirmation dialog"
     },
     "dialogs.confirmation.yes": {
-        "message": "Yes",
+        "message": "Tak",
         "description": "Yes button label in confirmation dialog"
     },
     "blockContact": {
-        "message": "Block Contact",
+        "message": "Blokuj kontakt",
         "description": "Menu option to block current contact"
     },
     "unblockContacts": {
-        "message": "Unblock Contacts",
+        "message": "Odblokuj kontakt",
         "description": "Menu option to unblock contacts"
     },
     "unblockContacts.noneBlocked": {
-        "message": "No blocked contacts yet",
+        "message": "Nie ma zablokowanych kontaktów",
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Wybierz obraz grupy",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Usuń",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Szukaj",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Szukaj",
         "description": "Placeholder for search"
     }
 }
