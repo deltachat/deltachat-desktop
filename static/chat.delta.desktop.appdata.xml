@@ -1,0 +1,56 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<component type="desktop">
+  <id>chat.delta.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPLv3</project_license>
+  <name>Delta Chat</name>
+  <summary>Delta Chat email-based messenger</summary>
+  
+  <description>
+The messenger with the broadest audience in the world.
+Free, independent, email compatible.
+  </description>
+  
+​  <launchable type="desktop-id">chat.delta.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/deltachat/deltachat-desktop/raw/master/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+
+  <kudos>
+  </kudos>
+
+ <url type="homepage">https://delta.chat/</url>
+
+  <releases>
+    <release version="v1.7.4" date="2018-11-07"/>
+    <release version="v1.7.3" date="2018-11-02"/>
+​  </releases>
+   
+ <update_contact>tobiasmue@gnome.org</update_contact>
+
+ <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">intense</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">intense</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+ </content_rating>
+</component>
