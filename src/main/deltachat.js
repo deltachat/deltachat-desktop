@@ -46,7 +46,7 @@ class DeltaChatController {
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
         this.configuring = true
-        dc.configure(snakeCaseKeys(credentials))
+        dc.configure(addServerFlags(credentials))
         render()
       } else {
         onReady()
@@ -486,22 +486,13 @@ class DeltaChatController {
   }
 }
 
-function snakeCaseKeys (obj) {
-  return {
-    addr: obj.addr,
-    mail_user: obj.mailUser,
-    mail_pw: obj.mailPw,
-    mail_server: obj.mailServer,
-    mail_port: obj.mailPort,
-    send_user: obj.sendUser,
-    send_pw: obj.sendPw,
-    send_server: obj.sendServer,
-    send_port: obj.sendPort,
-    server_flags: translateSecurityToServerFlags(obj)
-  }
+function addServerFlags (credentials) {
+  return Object.assign({}, credentials, {
+    serverFlags: serverFlags(credentials)
+  })
 }
 
-function translateSecurityToServerFlags ({ mailSecurity, sendSecurity }) {
+function serverFlags ({ mailSecurity, sendSecurity }) {
   const flags = []
 
   if (mailSecurity === 'ssl') {
@@ -529,12 +520,12 @@ function translateSecurityToServerFlags ({ mailSecurity, sendSecurity }) {
 
 if (!module.parent) {
   // TODO move this to unit tests
-  console.log(translateSecurityToServerFlags({
+  console.log(serverFlags({
     mailSecurity: 'ssl',
     sendSecurity: 'ssl'
   }))
   console.log(C.DC_LP_IMAP_SOCKET_SSL | C.DC_LP_SMTP_SOCKET_SSL)
-  console.log(translateSecurityToServerFlags({
+  console.log(serverFlags({
     mailSecurity: 'starttls',
     sendSecurity: 'starttls'
   }))
