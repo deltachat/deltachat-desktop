@@ -53,11 +53,11 @@ class ChatView extends React.Component {
   }
 
   restoreScroll () {
-    this.doc.scrollTop = this.doc.scrollHeight - this.previousScrollHeightMinusTop + SCROLL_BUFFER
+    this.doc.scrollTop = this.doc.scrollHeight - this.previousScrollHeightMinusTop
   }
 
   scrollPrepare () {
-    this.previousScrollHeightMinusTop = this.doc.scrollHeight - this.doc.scrollTop + SCROLL_BUFFER
+    this.previousScrollHeightMinusTop = this.doc.scrollHeight - this.doc.scrollTop
   }
 
   onScroll () {
