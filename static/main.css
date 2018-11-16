@@ -127,7 +127,12 @@ ul li button {
 }
 
 .Navbar img {
-    height: 50px;
+  height: 40px;
+  margin-left: 5px;
+}
+
+.Navbar .bp3-navbar-heading {
+  margin-left: 5px;
 }
 
 .Navbar .bp3-align-left {
@@ -146,8 +151,6 @@ ul li button {
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
 }
-
-
 
 .ChatList-NoChats {
   height: 52px;
