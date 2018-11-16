@@ -133,11 +133,11 @@ class ChatView extends React.Component {
               />
               if (message.msg.isSetupmessage) {
                 message.msg.text = tx('setupMessageInfo')
-                return <li className='SetupMessage' onClick={this.onClickSetupMessage.bind(this, message)}>
+                return <li key={message.id} className='SetupMessage' onClick={this.onClickSetupMessage.bind(this, message)}>
                   {msg}
                 </li>
               }
-              return <li>{msg}</li>
+              return <li key={message.id}>{msg}</li>
             })}
           </ConversationContext>
         </div>
