@@ -770,5 +770,9 @@
   "searchPlaceholder": {
     "message": "Search",
     "description": "Placeholder for search"
+  },
+  "deleteThisMessage": {
+    "message": "Delete This Message",
+    "description": "Delete button in the message detail dialog"
   }
 }

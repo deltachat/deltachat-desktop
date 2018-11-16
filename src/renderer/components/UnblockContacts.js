@@ -2,7 +2,7 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const dialogs = require('./dialogs')
-const ContactListItem = require('./ContactListItem')
+const { RenderContact } = require('./Contact')
 
 const {
   Alignment,
@@ -45,7 +45,7 @@ class UnblockContacts extends React.Component {
         <div className='window'>
           {!blockedContacts.length && <h1 className='centered'>{tx('unblockContacts.noneBlocked')}</h1>}
           {blockedContacts.map((contact) => {
-            return (<ContactListItem
+            return (<RenderContact
               contact={contact}
               onClick={this.onContactClick.bind(this, contact)}
             />
