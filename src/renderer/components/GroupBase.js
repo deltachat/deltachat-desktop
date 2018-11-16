@@ -28,7 +28,6 @@ class GroupBase extends React.Component {
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
-    this.state.image = this.state.image || ''
     this.state.qrCode = ''
     this.back = this.back.bind(this)
     this.closeQrCode = this.closeQrCode.bind(this)
