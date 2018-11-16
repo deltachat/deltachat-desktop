@@ -32,6 +32,10 @@ class EditGroup extends GroupBase {
     return !this.state.name.length
   }
 
+  back () {
+    this.props.changeScreen('ChatList')
+  }
+
   onSubmit () {
     const after = Object.keys(this.state.group).map(id => Number(id))
     const remove = differ(this.before, after)
