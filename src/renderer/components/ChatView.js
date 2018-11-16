@@ -1,21 +1,15 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
-const { Overlay } = require('@blueprintjs/core')
 
-const SetupMessageDialog = require('./dialogs/SetupMessage')
+const dialogs = require('./dialogs')
 const Composer = require('./Composer')
 const RenderMedia = require('./RenderMedia')
-const { ConversationContext, Message } = require('./conversations')
+const Message = require('./Message')
+const { ConversationContext } = require('./conversations')
 
 const MutationObserver = window.MutationObserver
 
 const SCROLL_BUFFER = 70
-
-const GROUP_TYPES = [
-  C.DC_CHAT_TYPE_GROUP,
-  C.DC_CHAT_TYPE_VERIFIED_GROUP
-]
 
 class ChatView extends React.Component {
   constructor (props) {
@@ -23,7 +17,8 @@ class ChatView extends React.Component {
     this.state = {
       error: false,
       setupMessage: false,
-      attachmentMessage: {}
+      attachmentMessage: {},
+      messageDetail: {}
     }
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
@@ -104,47 +99,44 @@ class ChatView extends React.Component {
     this.setState({ setupMessage: false })
   }
 
+  onShowDetail (message) {
+    this.setState({ messageDetail: message })
+  }
+
+  onMessageDetailClose () {
+    this.setState({ messageDetail: {} })
+  }
+
   render () {
-    const { attachmentMessage, setupMessage } = this.state
+    const { attachmentMessage, setupMessage, messageDetail } = this.state
     const { chat } = this.props
-    const conversationType = convertChatType(chat.type)
-    const tx = window.translate
-    const url = attachmentMessage.msg && attachmentMessage.msg.file
 
     return (
       <div className='ChatView'>
-        <SetupMessageDialog
+        <dialogs.SetupMessage
           userFeedback={this.props.userFeedback}
           setupMessage={setupMessage}
           onClose={this.onSetupMessageClose}
         />
-        <Overlay
-          className='attachment-overlay'
-          isOpen={Boolean(url)}
-          onClose={this.onCloseAttachmentView.bind(this)}>
-          <div>
-            <RenderMedia
-              filemime={convertContentType(attachmentMessage.filemime)}
-              url={url}
-            />
-          </div>
-        </Overlay>
-
+        <RenderMedia
+          message={attachmentMessage}
+          onClose={this.onCloseAttachmentView}
+        />
+        <dialogs.MessageDetail
+          message={messageDetail}
+          onClose={this.onMessageDetailClose.bind(this)}
+        />
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
-            {chat.messages.map(message => {
-              const msg = <RenderMessage
-                message={message}
-                conversationType={conversationType}
-                onClickAttachment={this.onClickAttachment.bind(this, message)}
-              />
-              if (message.msg.isSetupmessage) {
-                message.msg.text = tx('setupMessageInfo')
-                return <li key={message.id} className='SetupMessage' onClick={this.onClickSetupMessage.bind(this, message)}>
-                  {msg}
-                </li>
-              }
-              return <li key={message.id}>{msg}</li>
+            {chat.messages.map(rawMessage => {
+              var message = Message.convert(rawMessage)
+              return Message.render({
+                message,
+                chat,
+                onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
+                onShowDetail: this.onShowDetail.bind(this, message),
+                onClickAttachment: this.onClickAttachment.bind(this, message)
+              })
             })}
           </ConversationContext>
         </div>
@@ -153,102 +145,6 @@ class ChatView extends React.Component {
         </div>
       </div>
     )
-  }
-}
-
-class RenderMessage extends React.Component {
-  render () {
-    const { onClickAttachment, message, conversationType } = this.props
-    const { msg, fromId, id } = message
-    const timestamp = msg.timestamp * 1000
-    const direction = message.isMe ? 'outgoing' : 'incoming'
-    const contact = {
-      onSendMessage: () => console.log('send a message to', fromId),
-      onClick: () => console.log('clicking contact', fromId)
-    }
-
-    function onReply () {
-      console.log('reply to', message)
-    }
-
-    function onForward () {
-      console.log('forwarding message', id)
-    }
-
-    function onDownload (el) {
-      console.log('downloading', el)
-    }
-
-    function onDelete (el) {
-      ipcRenderer.send('dispatch', 'deleteMessage', id)
-    }
-
-    function onShowDetail () {
-      console.log('show detail', message)
-    }
-
-    const props = {
-      padlock: msg.showPadlock,
-      id,
-      i18n: window.translate,
-      conversationType,
-      direction,
-      onDownload,
-      onReply,
-      onForward,
-      onDelete,
-      onShowDetail,
-      contact,
-      onClickAttachment,
-      authorAvatarPath: message.contact.profileImage,
-      authorName: message.contact.name,
-      authorPhoneNumber: message.contact.address,
-      status: convertMessageStatus(msg.state),
-      timestamp
-    }
-
-    if (msg.file && !msg.isSetupmessage) {
-      props.attachment = {
-        url: msg.file,
-        contentType: convertContentType(message.filemime),
-        filename: msg.text
-      }
-    } else {
-      props.text = msg.text
-    }
-
-    return (<div className='MessageWrapper'><Message {...props} /></div>)
-  }
-}
-
-function convertChatType (type) {
-  return GROUP_TYPES.includes(type) ? 'group' : 'direct'
-}
-
-function convertContentType (filemime) {
-  if (!filemime) return
-  if (filemime === 'application/octet-stream') return 'audio/ogg'
-  return filemime
-}
-
-function convertMessageStatus (s) {
-  switch (s) {
-    case C.DC_STATE_IN_FRESH:
-      return 'sent'
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_IN_SEEN:
-      return 'read'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_UNDEFINED:
-      return 'error'
   }
 }
 
