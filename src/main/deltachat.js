@@ -242,7 +242,10 @@ class DeltaChatController {
   modifyGroup (chatId, name, image, remove, add) {
     log('modify group', chatId, name, image, remove, add)
     this._dc.setChatName(chatId, name)
-    this._dc.setChatProfileImage(chatId, image)
+    const chat = this._dc.getChat(chatId)
+    if (chat.getProfileImage() !== image) {
+      this._dc.setChatProfileImage(chatId, image || '')
+    }
     remove.forEach(id => this._dc.removeContactFromChat(chatId, id))
     add.forEach(id => this._dc.addContactToChat(chatId, id))
     return true
