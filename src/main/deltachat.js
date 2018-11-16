@@ -445,6 +445,7 @@ class DeltaChatController {
     const ids = selectedChat.messageIds
     var messageIds = ids.splice(ids.length - this._pages * PAGE_SIZE, ids.length)
     selectedChat.messages = messageIds.map((id) => this._messageIdToJson(id))
+    this._dc.markSeenMessages(messageIds)
     return selectedChat
   }
 
