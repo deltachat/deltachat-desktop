@@ -5,6 +5,7 @@ const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
+const MessageDetail = require('./components/MessageDetail')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
@@ -63,6 +64,9 @@ class Home extends React.Component {
     switch (screen) {
       case 'CreateChat':
         Screen = CreateChat
+        break
+      case 'MessageDetail':
+        Screen = MessageDetail
         break
       case 'CreateContact':
         Screen = CreateContact
