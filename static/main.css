@@ -92,6 +92,7 @@ ul li button {
 .ChatView #the-conversation {
   height: calc(100vh - 50px - 40px);
   overflow: scroll;
+  background: white;
 }
 
 .ChatList {
@@ -102,13 +103,9 @@ ul li button {
   overflow-y: auto;
 }
 
-.ChatList .module-conversation-list-item {
-  height: 52px;
-  padding: 0px;
-}
-
 .ChatView, .InputMessage .composer {
   width: 70%;
+  background-color: #eeefef;
 }
 
 .ShowArchivedChats .module-conversation-list-item__avatar {
