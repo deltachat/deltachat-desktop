@@ -23,7 +23,6 @@ class Home extends React.Component {
 
     this.changeScreen = this.changeScreen.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
-
     this.onShowAbout = this.showAbout.bind(this, true)
     this.onCloseAbout = this.showAbout.bind(this, false)
   }

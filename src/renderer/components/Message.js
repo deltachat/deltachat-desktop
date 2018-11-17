@@ -1,7 +1,8 @@
 const React = require('react')
+const path = require('path')
 const C = require('deltachat-node/constants')
 const { Message } = require('./conversations')
-const { ipcRenderer } = require('electron')
+const { remote, ipcRenderer } = require('electron')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -79,7 +80,12 @@ function convert (message) {
   }
 
   message.onDownload = () => {
-    console.log('downloading')
+    var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
+    remote.dialog.showSaveDialog({
+      defaultPath
+    }, (filename) => {
+      if (filename) ipcRenderer.send('saveFile', message.msg.file, filename)
+    })
   }
 
   message.onDelete = (el) => {

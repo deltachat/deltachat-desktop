@@ -71,6 +71,12 @@ function init (cwd) {
     })
   })
 
+  ipc.on('saveFile', (e, source, target) => {
+    fs.copyFile(source, target, function (err) {
+      if (err) windows.main.send('error', err.message)
+    })
+  })
+
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
   ipc.on('locale-data', (e, locale) => {
