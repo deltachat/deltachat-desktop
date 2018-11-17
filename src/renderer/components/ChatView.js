@@ -1,6 +1,5 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
-const { Overlay } = require('@blueprintjs/core')
 
 const dialogs = require('./dialogs')
 const Composer = require('./Composer')
