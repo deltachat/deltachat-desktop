@@ -1,7 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
-const ContactListItem = require('./ContactListItem')
+const { RenderContact } = require('./Contact')
 
 const {
   Alignment,
@@ -71,7 +71,7 @@ class CreateChat extends React.Component {
             <button onClick={this.onCreateVerifiedGroup}>{tx('newVerifiedGroup')}</button>
             <button onClick={this.onCreateContact}>{tx('addContact')}</button>
             {deltachat.contacts.map((contact) => {
-              return (<ContactListItem
+              return (<RenderContact
                 contact={contact}
                 onClick={this.chooseContact.bind(this)}
               />

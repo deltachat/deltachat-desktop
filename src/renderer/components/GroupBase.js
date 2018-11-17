@@ -13,7 +13,7 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const ContactListItem = require('./ContactListItem')
+const { RenderContact } = require('./Contact')
 const { QrCode } = require('./dialogs')
 
 const DEFAULT_IMAGE = path.join(
@@ -145,7 +145,7 @@ class GroupBase extends React.Component {
             </ControlGroup>
             {contacts.map((contact) => {
               return (
-                <ContactListItem
+                <RenderContact
                   color={this.contactInGroup(contact.id) ? 'green' : ''}
                   onClick={this.toggleContact.bind(this, contact.id)}
                   contact={contact}
