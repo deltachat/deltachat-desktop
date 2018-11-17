@@ -60,15 +60,12 @@ class RenderMessage extends React.Component {
       authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,
       status: msg.status,
+      text: msg.text,
       direction: msg.direction,
       timestamp: msg.sentAt
     }
 
-    if (msg.attachment.url && !msg.isSetupmessage) {
-      props.attachment = msg.attachment
-    } else {
-      props.text = msg.text
-    }
+    if (msg.attachment.url && !msg.isSetupmessage) props.attachment = msg.attachment
 
     return (<div className='MessageWrapper'><Message {...props} /></div>)
   }
