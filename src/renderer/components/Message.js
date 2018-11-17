@@ -25,7 +25,6 @@ function render (props) {
   return <li key={message.id}>{body}</li>
 }
 
-
 /**
  * RenderMessage takes a message already created with Message.convert
  * and returns a React component of that message from the Conversations
