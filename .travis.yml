@@ -35,11 +35,3 @@ script:
 
 notifications:
   email: false
-
-deploy:
-  provider: script
-  script: npm run dist
-  on:
-    all_branches: true
-  skip_cleanup: true
-
