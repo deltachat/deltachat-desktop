@@ -774,5 +774,9 @@
   "deleteThisMessage": {
     "message": "Delete This Message",
     "description": "Delete button in the message detail dialog"
+  },
+  "messageDetailTitle": {
+    "message": "Message Detail",
+    "description": "Message Detail title on dialog"
   }
 }
