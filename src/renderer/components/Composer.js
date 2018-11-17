@@ -47,7 +47,7 @@ class Composer extends React.Component {
   }
 
   handleChange (e) {
-    this.setState({ text: e.target.text, error: false })
+    this.setState({ text: e.target.value, error: false })
   }
 
   addFilename () {
