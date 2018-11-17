@@ -108,6 +108,11 @@ class ChatView extends React.Component {
     this.setState({ messageDetail: {} })
   }
 
+  onDeleteMessage (message) {
+    message.onDelete()
+    this.onMessageDetailClose()
+  }
+
   render () {
     const { attachmentMessage, setupMessage, messageDetail } = this.state
     const { chat } = this.props
@@ -124,6 +129,7 @@ class ChatView extends React.Component {
           onClose={this.onCloseAttachmentView}
         />
         <dialogs.MessageDetail
+          onDelete={this.onDeleteMessage.bind(this, messageDetail)}
           message={messageDetail}
           onClose={this.onMessageDetailClose.bind(this)}
         />
