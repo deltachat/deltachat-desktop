@@ -17,6 +17,7 @@
 * Add `appstream` data (@muelli)
 * Send messages with a file attachment (@karissa)
 * Add message details dialog (@karissa)
+* Allow user to save a file attachment to disk (@karissa)
 
 ### Fixed
 * Back button should go back to create chat screen from both create group and add contact (@karissa)
