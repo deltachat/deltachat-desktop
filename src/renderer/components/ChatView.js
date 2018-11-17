@@ -20,6 +20,10 @@ class ChatView extends React.Component {
       attachmentMessage: {},
       messageDetail: {}
     }
+
+    this.writeMessage = this.writeMessage.bind(this)
+    this.onMessageDetailClose = this.onMessageDetailClose.bind(this)
+    this.onCloseAttachmentView = this.onCloseAttachmentView.bind(this)
     this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
@@ -130,7 +134,7 @@ class ChatView extends React.Component {
         <dialogs.MessageDetail
           onDelete={this.onDeleteMessage.bind(this, messageDetail)}
           message={messageDetail}
-          onClose={this.onMessageDetailClose.bind(this)}
+          onClose={this.onMessageDetailClose}
         />
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
@@ -147,7 +151,7 @@ class ChatView extends React.Component {
           </ConversationContext>
         </div>
         <div className='InputMessage'>
-          <Composer onSubmit={this.writeMessage.bind(this)} />
+          <Composer onSubmit={this.writeMessage} />
         </div>
       </div>
     )

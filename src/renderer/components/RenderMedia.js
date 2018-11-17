@@ -5,10 +5,10 @@ class RenderMedia extends React.Component {
   render () {
     const { message, onClose } = this.props
     let elm = <div />
-    if (!message.attachment) return elm
-
-    const url = message.attachment.url
-    const contentType = message.attachment.contentType
+    if (!message || !message.msg || !message.msg.attachment) return elm
+    const attachment = message.msg.attachment
+    const url = attachment.url
+    const contentType = attachment.contentType
 
     // TODO: there must be a stable external library for figuring out the right
     // html element to render
