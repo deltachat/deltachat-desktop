@@ -8,7 +8,7 @@ const {
 
 class MessageDetailDialog extends React.Component {
   render () {
-    var { message, onDelete, onClose } = this.props
+    var { chat, message, onDelete, onClose } = this.props
     var isOpen = !!message.msg
 
     const tx = window.translate
@@ -18,8 +18,14 @@ class MessageDetailDialog extends React.Component {
       var msg = message.msg
       msg.disableMenu = true
       msg.onDelete = onDelete
+      let contacts
+      if (message.isMe) {
+        contacts = chat.contacts.map(convertContactProps)
+      } else {
+        contacts = [convertContactProps(message.contact)]
+      }
       body = <MessageDetail
-        contacts={[convertContactProps(message.contact)]}
+        contacts={contacts}
         status={msg.status}
         message={msg}
         sentAt={msg.sentAt}

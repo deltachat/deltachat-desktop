@@ -133,6 +133,7 @@ class ChatView extends React.Component {
         />
         <dialogs.MessageDetail
           onDelete={this.onDeleteMessage.bind(this, messageDetail)}
+          chat={chat}
           message={messageDetail}
           onClose={this.onMessageDetailClose}
         />
