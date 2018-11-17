@@ -8,7 +8,7 @@ const {
 
 class MessageDetailDialog extends React.Component {
   render () {
-    var { message, onClose } = this.props
+    var { message, onDelete, onClose } = this.props
     var isOpen = !!message.msg
     var title = 'Message Detail'
 
@@ -16,6 +16,7 @@ class MessageDetailDialog extends React.Component {
     if (isOpen) {
       var msg = message.msg
       msg.disableMenu = true
+      msg.onDelete = onDelete
       body = <MessageDetail
         contacts={[convertContactProps(message.contact)]}
         status={msg.status}

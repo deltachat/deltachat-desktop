@@ -25,6 +25,13 @@ function render (props) {
   return <li key={message.id}>{body}</li>
 }
 
+
+/**
+ * RenderMessage takes a message already created with Message.convert
+ * and returns a React component of that message from the Conversations
+ * library. This class mostly just converts the necessary properties to what
+ * is expected by Conversations.Message
+ */
 class RenderMessage extends React.Component {
   render () {
     const { onShowDetail, onClickAttachment, chat } = this.props
@@ -38,31 +45,15 @@ class RenderMessage extends React.Component {
       onClick: () => console.log('clicking contact', fromId)
     }
 
-    function onReply () {
-      console.log('reply to', message)
-    }
-
-    function onForward () {
-      console.log('forwarding message', id)
-    }
-
-    function onDownload (el) {
-      console.log('downloading', el)
-    }
-
-    function onDelete (el) {
-      ipcRenderer.send('dispatch', 'deleteMessage', id)
-    }
-
     const props = {
       padlock: msg.showPadlock,
       id,
       i18n: window.translate,
       conversationType,
-      onDownload,
-      onReply,
-      onForward,
-      onDelete,
+      onDownload: message.onDownload,
+      onReply: message.onReply,
+      onForward: message.onForward,
+      onDelete: message.onDelete,
       onShowDetail,
       contact,
       onClickAttachment,
@@ -85,6 +76,22 @@ class RenderMessage extends React.Component {
 }
 
 function convert (message) {
+  message.onReply = () => {
+    console.log('reply to', message)
+  }
+
+  message.onForward = () => {
+    console.log('forward to')
+  }
+
+  message.onDownload = () => {
+    console.log('downloading')
+  }
+
+  message.onDelete = (el) => {
+    ipcRenderer.send('dispatch', 'deleteMessage', message.id)
+  }
+
   if (message.msg.isSetupmessage) message.msg.text = tx('setupMessageInfo')
   message.msg = Object.assign(message.msg, {
     sentAt: message.msg.timestamp * 1000,
