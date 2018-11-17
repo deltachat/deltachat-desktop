@@ -6,11 +6,13 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
+const tx = window.translate
+
 class MessageDetailDialog extends React.Component {
   render () {
     var { message, onDelete, onClose } = this.props
     var isOpen = !!message.msg
-    var title = 'Message Detail'
+    var title = tx('messageDetailTitle')
 
     let body = <div />
     if (isOpen) {
