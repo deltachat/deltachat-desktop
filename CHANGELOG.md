@@ -2,6 +2,30 @@
 
 ## [Unreleased]
 
+## [1.7.5] - 2018-11-17
+
+### Changed
+* Load messages on demand using a paging model (@karissa)
+* Improve troubleshooting section in README (@ralphtheninja)
+* CSS tweaks to chat view (@karissa)
+* Mark messages as seen when fetched (@karissa)
+* Tweak group image and chat name margin (@ralphtheninja)
+
+### Added
+* Add verified groups with QR codes for group invite and user verification (@ralphtheninja)
+* Add group image to chat list (@ralphtheninja)
+* Add `appstream` data (@muelli)
+* Send messages with a file attachment (@karissa)
+* Add message details dialog (@karissa)
+
+### Fixed
+* Back button should go back to create chat screen from both create group and add contact (@karissa)
+* Back button for edit group should go back to split view (@alfaslash)
+* Add unique 'key' for messages in order to remove React warning (@karissa)
+* Prevent the scrollbar from jiggling when new message arrives (@karissa)
+* Only try setting group image if it's different (@ralphtheninja)
+* Reference correct target when sending a message (@karissa)
+
 ## [1.7.4] - 2018-11-07
 
 ### Changed
@@ -150,7 +174,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.5...HEAD
+[1.7.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...v1.7.5
 [1.7.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...v1.7.4
 [1.7.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.1...v1.7.2
