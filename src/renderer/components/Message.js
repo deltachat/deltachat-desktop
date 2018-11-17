@@ -3,8 +3,6 @@ const C = require('deltachat-node/constants')
 const { Message } = require('./conversations')
 const { ipcRenderer } = require('electron')
 
-const tx = window.translate
-
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
   C.DC_CHAT_TYPE_VERIFIED_GROUP
@@ -60,15 +58,12 @@ class RenderMessage extends React.Component {
       authorName: message.contact.name,
       authorPhoneNumber: message.contact.address,
       status: msg.status,
+      text: msg.text,
       direction: msg.direction,
       timestamp: msg.sentAt
     }
 
-    if (msg.attachment.url && !msg.isSetupmessage) {
-      props.attachment = msg.attachment
-    } else {
-      props.text = msg.text
-    }
+    if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
 
     return (<div className='MessageWrapper'><Message {...props} /></div>)
   }
@@ -91,18 +86,23 @@ function convert (message) {
     ipcRenderer.send('dispatch', 'deleteMessage', message.id)
   }
 
-  if (message.msg.isSetupmessage) message.msg.text = tx('setupMessageInfo')
-  message.msg = Object.assign(message.msg, {
-    sentAt: message.msg.timestamp * 1000,
-    receivedAt: message.msg.receivedTimestamp * 1000,
-    attachment: {
-      url: message.msg.file,
-      contentType: convertContentType(message.filemime),
-      filename: message.msg.text
-    },
+  var msg = message.msg
+
+  if (msg.isSetupmessage) msg.text = window.translate('setupMessageInfo')
+  msg = Object.assign(msg, {
+    sentAt: msg.timestamp * 1000,
+    receivedAt: msg.receivedTimestamp * 1000,
     direction: message.isMe ? 'outgoing' : 'incoming',
-    status: convertMessageStatus(message.msg.state)
+    status: convertMessageStatus(msg.state)
   })
+
+  if (msg.file) {
+    msg.attachment = {
+      url: msg.file,
+      contentType: convertContentType(message.filemime),
+      filename: msg.text
+    }
+  }
   return message
 }
 
