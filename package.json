@@ -47,7 +47,7 @@
     "array-differ": "^2.0.3",
     "debounce": "^1.2.0",
     "deltachat-emoji": "^1.0.0",
-    "deltachat-node": "^0.23.0",
+    "deltachat-node": "^0.24.0",
     "emoji-js-clean": "^4.0.0",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",
