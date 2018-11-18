@@ -3,7 +3,7 @@ Please fill in as much as you can below (leaving out if not applicable is ok). T
 -->
 
 - Platform (linux/mac/windows):
-- Version:
+- Delta Chat Desktop Version:
 - Expected behavior:
 - Actual behavior:
 - Steps to reproduce the problem:
