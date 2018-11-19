@@ -8,15 +8,15 @@
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "start": "electron . --debug --disable-http-cache",
-    "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder --publish=onTagOrDraft",
+    "pack": "npm run build:prod && electron-builder --dir",
+    "dist": "npm run build:prod && electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && npm run start",
     "build": "npm run build:dev && npm run build-conversations",
     "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
     "build-conversations-ts": "cd conversations && tsc",
     "build-conversations-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
     "build:dev": "webpack --mode=development --progress --profile --colors",
-    "build:prod": "webpack --mode=production --profile --colors"
+    "build:prod": "webpack --mode=production --profile --colors && npm run build-conversations"
   },
   "repository": {
     "type": "git",
