@@ -6,6 +6,7 @@ const Menu = require('./Menu')
 const dialogs = require('./dialogs')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
+const Centered = require('./helpers/Centered')
 
 const {
   Alignment,
@@ -17,6 +18,46 @@ const {
   Popover,
   Button
 } = require('@blueprintjs/core')
+
+const styled = require('styled-components').default
+
+const NavbarWrapper = styled.div`
+  img {
+    height: 40px;
+    margin-left: 5px;
+  }
+
+  .bp3-navbar {
+    padding: 0px;
+  }
+
+  .bp3-navbar-heading {
+    margin-left: 5px;
+    max-width: 250px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bp3-align-left {
+    width: 30%;
+    padding-left: 1%;
+  }
+
+  .bp3-align-right {
+    width: 70%;
+    float: none;
+  }
+
+  .bp3-popover-wrapper {
+    margin-left: auto;
+  }
+`
+
+const BelowNavbar = styled.div`
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+`
 
 class SplittedChatListAndView extends React.Component {
   constructor (props) {
@@ -91,7 +132,7 @@ class SplittedChatListAndView extends React.Component {
 
     return (
       <div>
-        <div className='Navbar'>
+        <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
@@ -114,10 +155,10 @@ class SplittedChatListAndView extends React.Component {
               </Popover>
             </NavbarGroup>
           </Navbar>
-        </div>
+        </NavbarWrapper>
         <dialogs.KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
-        <div className='below-navbar'>
+        <BelowNavbar>
           <ChatList
             chats={showArchivedChats ? deltachat.archivedChats : deltachat.chats}
             onDeadDropClick={this.onDeadDropClick}
@@ -135,12 +176,15 @@ class SplittedChatListAndView extends React.Component {
                 chat={selectedChat}
                 deltachat={this.props.deltachat} />)
               : (
-                <div className='window centered'>
-                  <h1>{tx('chatView.nochatselectedHeader')}</h1>
-                  <p>{tx('chatView.nochatselectedSuggestion')}</p>
-                </div>)
+                <Centered>
+                  <div className='window'>
+                    <h1>{tx('chatView.nochatselectedHeader')}</h1>
+                    <p>{tx('chatView.nochatselectedSuggestion')}</p>
+                  </div>
+                </Centered>
+              )
           }
-        </div>
+        </BelowNavbar>
 
       </div>
     )

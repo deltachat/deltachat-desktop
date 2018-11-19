@@ -13,6 +13,14 @@ const {
   Intent
 } = require('@blueprintjs/core')
 
+const styled = require('styled-components').default
+
+const LoginWrapper = styled.div`
+  .window {
+    height: auto;
+  }
+`
+
 class Login extends React.Component {
   constructor (props) {
     super(props)
@@ -120,7 +128,7 @@ class Login extends React.Component {
     var loading = deltachat.configuring
 
     return (
-      <div className='Login'>
+      <LoginWrapper>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
@@ -236,7 +244,7 @@ class Login extends React.Component {
             {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
           </form>
         </div>
-      </div>
+      </LoginWrapper>
     )
   }
 }

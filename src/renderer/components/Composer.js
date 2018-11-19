@@ -2,6 +2,19 @@ const React = require('react')
 
 const { ControlGroup, Button, InputGroup } = require('@blueprintjs/core')
 const { remote } = require('electron')
+const styled = require('styled-components').default
+
+const ComposerWrapper = styled.div`
+  .composer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+  }
+
+  .composer button {
+    max-width: 100px;
+  }
+`
 
 class Composer extends React.Component {
   constructor (props) {
@@ -67,19 +80,21 @@ class Composer extends React.Component {
     )
 
     return (
-      <ControlGroup className='composer' fill vertical={false}>
-        <InputGroup
-          intent={this.state.error ? 'danger' : 'none'}
-          large
-          value={this.state.text}
-          onKeyDown={this.onKeyDown.bind(this)}
-          aria-label={tx('writeMessageAriaLabel')}
-          onChange={this.handleChange}
-          placeholder={tx('writeMessage')}
-          rightElement={addFilenameButton}
-        />
-        <Button onClick={this.sendMessage}>{tx('send')}</Button>
-      </ControlGroup>
+      <ComposerWrapper>
+        <ControlGroup className='composer' fill vertical={false}>
+          <InputGroup
+            intent={this.state.error ? 'danger' : 'none'}
+            large
+            value={this.state.text}
+            onKeyDown={this.onKeyDown.bind(this)}
+            aria-label={tx('writeMessageAriaLabel')}
+            onChange={this.handleChange}
+            placeholder={tx('writeMessage')}
+            rightElement={addFilenameButton}
+          />
+          <Button onClick={this.sendMessage}>{tx('send')}</Button>
+        </ControlGroup>
+      </ComposerWrapper>
     )
   }
 }

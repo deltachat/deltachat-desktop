@@ -3,6 +3,7 @@ const { ipcRenderer } = require('electron')
 
 const dialogs = require('./dialogs')
 const { RenderContact } = require('./Contact')
+const Centered = require('./helpers/Centered')
 
 const {
   Alignment,
@@ -43,7 +44,7 @@ class UnblockContacts extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
-          {!blockedContacts.length && <h1 className='centered'>{tx('unblockContacts.noneBlocked')}</h1>}
+          {!blockedContacts.length && <Centered><h1>{tx('unblockContacts.noneBlocked')}</h1></Centered>}
           {blockedContacts.map((contact) => {
             return (<RenderContact
               contact={contact}
