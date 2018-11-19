@@ -8,7 +8,7 @@ watch([
   './conversations/build',
   '!./es5'
 ], function (done) {
-  var p = child.spawn('npm', ['run', 'build-es5'])
+  var p = child.spawn('npm', ['run', 'build:dev'])
   p.stdout.pipe(process.stdout)
   p.stderr.pipe(process.stderr)
   p.on('close', done)
