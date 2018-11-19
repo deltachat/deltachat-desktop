@@ -5,6 +5,7 @@ watch([
   './src/',
   './_locales/*.json',
   './static',
+  '!./static/bundle.js',
   './conversations/build',
   '!./es5'
 ], function (done) {
