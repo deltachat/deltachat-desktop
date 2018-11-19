@@ -11,7 +11,7 @@
     "pack": "npm run build:prod && electron-builder --dir",
     "dist": "npm run build:prod && electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && npm run start",
-    "build": "npm run build:dev && npm run build-conversations",
+    "build": "npm run build-conversations && npm run build:dev",
     "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
     "build-conversations-ts": "cd conversations && tsc",
     "build-conversations-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
