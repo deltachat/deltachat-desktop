@@ -1,5 +1,5 @@
 dist/
-es5/
+static/bundle.js
 package-lock.json
 
 # Logs

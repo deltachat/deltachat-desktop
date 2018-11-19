@@ -1,1 +1,1 @@
-require('./es5/main')
+require('./src/main')
