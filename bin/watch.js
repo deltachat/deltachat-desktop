@@ -4,7 +4,7 @@ var child = require('child_process')
 watch([
   './src/',
   './_locales/*.json',
-  './conversations/build',
+  './conversations/build'
 ], function (done) {
   var p = child.spawn('npm', ['run', 'build-js'])
   p.stdout.pipe(process.stdout)
