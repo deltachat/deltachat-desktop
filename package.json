@@ -9,7 +9,7 @@
     "test-integration": "node test/integration",
     "start": "electron . --debug --disable-http-cache",
     "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder --publish=onTagOrDraft",
+    "dist": "electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && npm run start",
     "build": "npm run build-conversations && npm run build-js",
     "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
