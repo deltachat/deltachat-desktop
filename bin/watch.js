@@ -4,12 +4,9 @@ var child = require('child_process')
 watch([
   './src/',
   './_locales/*.json',
-  './static',
-  '!./static/bundle.js',
-  './conversations/build',
-  '!./es5'
+  './conversations/build'
 ], function (done) {
-  var p = child.spawn('npm', ['run', 'build:dev'])
+  var p = child.spawn('npm', ['run', 'build-js'])
   p.stdout.pipe(process.stdout)
   p.stderr.pipe(process.stderr)
   p.on('close', done)
