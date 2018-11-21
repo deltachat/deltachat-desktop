@@ -89,7 +89,7 @@ export class ContactListItem extends React.Component<Props> {
           </div>
           <div className="module-contact-list-item__text__additional-data">
             {showVerified ? (
-              <div className="module-contact-list-item__text__verified-icon" />
+              <img className="module-contact-list-item__text__verified-icon" src='../images/verified.png' />
             ) : null}
             {showVerified ? ` ${i18n('verified')}` : null}
             {showVerified && showNumber ? ' ∙ ' : null}

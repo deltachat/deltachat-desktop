@@ -59,6 +59,10 @@
         "message": "Edit verified group",
         "description": "Edit verified group text label"
     },
+    "verified": {
+        "message": "verified",
+        "description": "Label shown next to icon for a verified contact"
+    },
     "qrCode": {
         "message": "QR Code",
         "description": "Window labelf for QR code dialog"

@@ -232,12 +232,6 @@ ul li button {
   color: #ed824e;
 }
 
-.module-conversation-list-item__is-verified {
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 2px;
-}
-
 .attachment-overlay {
   display: flex;
   justify-content: center;
