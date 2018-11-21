@@ -7,14 +7,11 @@ const {
 
 class ContactDetailDialog extends React.Component {
   render () {
-    var { contactId, onClose } = this.props
-    var isOpen = !!contactId
+    const { contactId, onClose } = this.props
+    const isOpen = !!contactId
 
     const tx = window.translate
-    let body = <div />
-    if (isOpen) {
-      body = <div>{contactId}</div>
-    }
+    const body = isOpen ? <div>{contactId}</div> : <div />
 
     return (
       <Dialog
