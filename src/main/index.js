@@ -118,7 +118,7 @@ app.once('ready', () => {
   electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
     fun({
       responseHeaders: {
-          ...details.responseHeaders,
+        ...details.responseHeaders,
         'Content-Security-Policy': ['default-src \'none\'']
       }
     })
