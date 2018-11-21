@@ -113,7 +113,7 @@ class KeyTransferDialog extends React.Component {
   render () {
     const { setupMessage, onClose } = this.props
     const { loading } = this.state
-    const isOpen = setupMessage !== false
+    const isOpen = !!setupMessage
 
     let body
     if (loading) body = <Spinner size={50} intent='success' />

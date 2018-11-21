@@ -781,6 +781,10 @@
   },
   "messageDetailTitle": {
     "message": "Message Detail",
-    "description": "Message Detail title on dialog"
+    "description": "Message Detail title for dialog"
+  },
+  "contactDetailTitle": {
+    "message": "Contact Detail",
+    "description": "Contact Detail title for dialog"
   }
 }

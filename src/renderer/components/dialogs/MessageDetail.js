@@ -1,6 +1,6 @@
 const React = require('react')
-const { MessageDetail } = require('./conversations')
-const { convertContactProps } = require('./Contact')
+const { MessageDetail } = require('../conversations')
+const { convertContactProps } = require('../Contact')
 const {
   Classes,
   Dialog
@@ -9,7 +9,7 @@ const {
 class MessageDetailDialog extends React.Component {
   render () {
     var { chat, message, onDelete, onClose } = this.props
-    var isOpen = !!message.msg
+    var isOpen = !!message
 
     const tx = window.translate
 
