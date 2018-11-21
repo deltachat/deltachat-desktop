@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'deltachat/linux-stretch-node-11:1.1'
+      image 'deltachat/debian-stretch-node-11'
     }
   }
   stages {
@@ -29,12 +29,18 @@ pipeline {
       }
     }
     stage('Deploy') {
+      when { branch 'master' }
       environment {
         GH_TOKEN = credentials('github-token')
       }
       steps {
         sh 'npm run dist'
       }
+    }
+  }
+  post {
+    always {
+      sh 'rm -rf node_modules/ dist/'
     }
   }
 }
