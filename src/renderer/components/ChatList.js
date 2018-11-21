@@ -1,6 +1,26 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
 const { ConversationListItem } = require('./conversations')
+const styled = require('styled-components').default
+
+const ChatListWrapper = styled.div`
+  width: 30%;
+  height: 100%;
+  float: left;
+  border-right: 1px solid rgba(16, 22, 26, 0.1);
+  overflow-y: auto;
+`
+
+const ChatListNoChats = styled.div`
+  height: 52px;
+  text-align: center;
+  padding-top: calc((52px - 14px) / 2);
+  padding: 5px;
+
+  p {
+    margin: 0 auto;
+  }
+`
 
 class ChatList extends React.Component {
   render () {
@@ -9,8 +29,8 @@ class ChatList extends React.Component {
     const missingChatsMsg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
 
     return (
-      <div className='ChatList'>
-        { !chats.length && (<div className='ChatList-NoChats'><p>{missingChatsMsg}</p></div>) }
+      <ChatListWrapper>
+        { !chats.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
         <div className='ConversationList'>
           {chats.map((chat, i) => {
             if (!chat) return
@@ -66,7 +86,7 @@ class ChatList extends React.Component {
             }
           })}
         </div>
-      </div>
+      </ChatListWrapper>
     )
   }
 }

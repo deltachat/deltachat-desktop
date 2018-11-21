@@ -1,5 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
+const Centered = require('../helpers/Centered')
 
 const {
   Spinner,
@@ -8,6 +10,27 @@ const {
   ButtonGroup,
   Dialog
 } = require('@blueprintjs/core')
+
+const InputTransferKey = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  padding: 10px 20px 20px 10px;
+`
+
+const SetupMessagePartialInputWrapper = styled.div`
+  width: 100%;
+
+  input {
+    width: 66%;
+    float: left;
+  }
+`
+
+const SetupMessagePartialInputSeperator = styled(Centered)`
+  width: 33%;
+  float: right;
+`
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
@@ -37,7 +60,7 @@ class SetupMessagePanel extends React.Component {
     let inputs = []
     for (let i = 0; i < 9; i++) {
       inputs.push(
-        <div className='partial' key={i}>
+        <SetupMessagePartialInputWrapper key={i}>
           <input
             key={i}
             id={i}
@@ -45,8 +68,8 @@ class SetupMessagePanel extends React.Component {
             value={this.state.key[i]}
             onChange={this.handleChangeKey}
           />
-          {i !== 8 ? <div className='centered separator'>-</div> : null}
-        </div>
+          {i !== 8 ? <SetupMessagePartialInputSeperator>-</SetupMessagePartialInputSeperator> : null}
+        </SetupMessagePartialInputWrapper>
       )
     }
     return inputs
@@ -60,9 +83,9 @@ class SetupMessagePanel extends React.Component {
       <p>
         {tx('showKeyTransferMessage')}
       </p>
-      <div className='InputTransferKey'>
+      <InputTransferKey>
         {this.renderInputKey()}
-      </div>
+      </InputTransferKey>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <ButtonGroup>

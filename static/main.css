@@ -20,6 +20,8 @@ input:focus {
 }
 
 .window {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -27,36 +29,8 @@ input:focus {
   padding: 10px 10px;
 }
 
-.centered {
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-}
-
-.window, .below-navbar {
-  height: calc(100vh - 50px);
-  margin-top: 50px;
-}
-
-.bp3-navbar-heading {
-  max-width: 250px;
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
 .conversation {
   padding-bottom: 40px;
-}
-
-.composer {
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-}
-
-.composer button {
-  max-width: 100px;
 }
 
 .user-feedback {
@@ -90,82 +64,12 @@ ul li button {
   min-width: 200px;
 }
 
-.Login .window {
-  height: auto;
-}
-
-.ChatView #the-conversation {
-  height: calc(100vh - 50px - 40px);
-  overflow: scroll;
-  background: white;
-}
-
-.ChatList {
-  width: 30%;
-  height: 100%;
-  float: left;
-  border-right: 1px solid rgba(16, 22, 26, 0.1);
-  overflow-y: auto;
-}
-
-.ChatView, .InputMessage .composer {
-  width: 70%;
-  background-color: #eeefef;
-}
-
 .ShowArchivedChats .module-conversation-list-item__avatar {
   visibility: hidden;
 }
 
-.InputMessage .composer {
-  padding: 4px 10px;
-}
-
-.InputMessage input:focus {
-  outline: 0;
-  -webkit-box-shadow: unset;
-  box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
-}
-
-.ChatView {
-  float: right;
-}
-
-.Navbar img {
-  height: 40px;
-  margin-left: 5px;
-}
-
-.Navbar .bp3-navbar-heading {
-  margin-left: 5px;
-}
-
-.Navbar .bp3-align-left {
-  width: 30%;
-}
-
-.Navbar .bp3-align-right {
-  width: 70%;
-  float: none;
-}
-
-.Navbar .bp3-popover-wrapper {
-  margin-left: auto;
-}
-
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
-}
-
-.ChatList-NoChats {
-  height: 52px;
-  text-align: center;
-  padding-top: calc((52px - 14px) / 2);
-  padding: 5px;
-}
-
-.ChatList-NoChats p {
-  margin: 0 auto;
 }
 
 .module-message__author-default-avatar__label {
@@ -206,28 +110,6 @@ ul li button {
   margin-bottom: 4px;
 }
 
-
-.InputTransferKey {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-gap: 10px;
-  padding: 10px 20px 20px 10px;
-}
-
-.InputTransferKey .partial {
-  width: 100%;
-}
-
-.InputTransferKey .partial input {
-  width: 66%;
-  float: left;
-}
-
-.InputTransferKey .partial .separator {
-  width: 33%;
-  float: right;
-}
-
 .SetupMessage .module-message__text {
   color: #ed824e;
 }
@@ -237,3 +119,8 @@ ul li button {
   justify-content: center;
 }
 
+.module-conversation-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}
