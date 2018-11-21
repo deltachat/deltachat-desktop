@@ -386,7 +386,7 @@ class DeltaChatController {
       return dc.getContact(id).toJson()
     })
     if (chatId === C.DC_CHAT_ID_DEADDROP) {
-      const msg = dc.getMessage(chat.messageIds[0])
+      const msg = dc.getMessage(chat.messageIds[chat.messageIds.length - 1])
       const fromId = msg && msg.getFromId()
 
       if (!fromId) {
