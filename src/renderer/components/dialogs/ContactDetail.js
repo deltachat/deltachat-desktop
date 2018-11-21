@@ -1,6 +1,5 @@
 const React = require('react')
-const { contactDetail } = require('../conversations')
-const { convertContactProps } = require('../Contact')
+
 const {
   Classes,
   Dialog
