@@ -31,9 +31,23 @@ function render (props) {
  * is expected by Conversations.Message
  */
 class RenderMessage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.el = React.createRef()
+  }
+
+  componentDidMount () {
+    var as = this.el.current.querySelectorAll('a')
+    as.forEach((a) => {
+      a.onclick = (event) => {
+        event.preventDefault()
+        remote.shell.openExternal(a.href)
+      }
+    })
+  }
+
   render () {
-    const { onShowDetail, onClickAttachment, chat } = this.props
-    const message = this.props.message
+    const { onShowDetail, onClickAttachment, chat, message } = this.props
     const { fromId, id } = message
     const msg = message.msg
     const conversationType = convertChatType(chat.type)
@@ -66,7 +80,7 @@ class RenderMessage extends React.Component {
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
 
-    return (<div className='MessageWrapper'><Message {...props} /></div>)
+    return (<div ref={this.el} className='MessageWrapper'><Message {...props} /></div>)
   }
 }
 
