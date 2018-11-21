@@ -1478,14 +1478,16 @@
 }
 
 .module-contact-list-item__text__verified-icon {
-  @include color-svg('../images/verified-check.svg', $color-light-60);
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  vertical-align: text-bottom;
-
+  width: 0.75em;
+  height: 0.75em;
   // Trying to account for the whitespace around the check mark
   margin-bottom: -1px;
+}
+
+.module-conversation-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
 }
 
 // Module: Conversation Header
