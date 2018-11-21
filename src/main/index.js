@@ -113,3 +113,14 @@ function sliceArgv (argv) {
     : config.IS_TEST ? 4
       : 2)
 }
+
+app.once('ready', () => {
+  electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
+    fun({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': ['default-src \'none\'']
+      }
+    })
+  })
+})
