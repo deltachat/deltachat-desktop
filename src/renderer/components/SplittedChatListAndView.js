@@ -1,8 +1,8 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 const { InputGroup } = require('@blueprintjs/core')
 
+const Menu = require('./Menu')
 const dialogs = require('./dialogs')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -14,8 +14,6 @@ const {
   NavbarGroup,
   NavbarHeading,
   Position,
-  Menu,
-  MenuItem,
   Popover,
   Button
 } = require('@blueprintjs/core')
@@ -32,18 +30,11 @@ class SplittedChatListAndView extends React.Component {
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
-
     this.onChatClick = this.onChatClick.bind(this)
-    this.onArchiveChat = this.onArchiveChat.bind(this)
-    this.onDeleteChat = this.onDeleteChat.bind(this)
-    this.onEditGroup = this.onEditGroup.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
-    this.onCreateChat = this.onCreateChat.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.onUnblockContacts = this.onUnblockContacts.bind(this)
-    this.onBlockContact = this.onBlockContact.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
@@ -59,28 +50,6 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'selectChat', chatId)
   }
 
-  onArchiveChat (selectedChat, archive) {
-    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, archive)
-  }
-
-  onDeleteChat (chat) {
-    const tx = window.translate
-    const message = tx('dialogs.deleteChat', chat.name)
-    dialogs.confirmation(message, yes => {
-      if (yes) {
-        ipcRenderer.send('dispatch', 'deleteChat', chat.id)
-      }
-    })
-  }
-
-  onEditGroup (chat) {
-    this.props.changeScreen('EditGroup', { chat })
-  }
-
-  onLeaveGroup (selectedChat) {
-    ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
-  }
-
   searchChats (queryStr) {
     this.setState({ queryStr })
     ipcRenderer.send('dispatch', 'searchChats', queryStr)
@@ -90,48 +59,16 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ deadDropChat: false })
   }
 
-  onCreateChat () {
-    this.props.changeScreen('CreateChat')
-  }
-
   onDeadDropClick (chat) {
     this.setState({ deadDropChat: chat })
-  }
-
-  logout () {
-    ipcRenderer.send('dispatch', 'logout')
   }
 
   onKeyTransferComplete () {
     this.setState({ keyTransfer: false })
   }
 
-  onUnblockContacts () {
-    this.props.changeScreen('UnblockContacts')
-  }
-
   initiateKeyTransfer () {
     this.setState({ keyTransfer: true })
-  }
-
-  selectedChatIsGroup (selectedChat) {
-    return [
-      C.DC_CHAT_TYPE_GROUP,
-      C.DC_CHAT_TYPE_VERIFIED_GROUP
-    ].includes(selectedChat && selectedChat.type)
-  }
-
-  onBlockContact (selectedChat) {
-    const tx = window.translate
-    if (selectedChat && selectedChat.contacts.length) {
-      var contact = selectedChat.contacts[0]
-      var message = tx('dialogs.blockContact', contact.displayName)
-      dialogs.confirmation(message, yes => {
-        if (yes) {
-          ipcRenderer.sendSync('dispatchSync', 'blockContact', contact.id)
-        }
-      })
-    }
   }
 
   handleSearchChange (event) {
@@ -143,25 +80,14 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChat, showArchivedChats } = deltachat
     const { deadDropChat, keyTransfer } = this.state
 
-    const isGroup = this.selectedChatIsGroup(selectedChat)
     const tx = window.translate
 
-    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
-    const unArchiveMsg = isGroup ? tx('unArchiveGroup') : tx('unArchiveChat')
-    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
-
-    const menu = (<Menu>
-      <MenuItem icon='plus' text={tx('newChat')} onClick={this.onCreateChat} />
-      {selectedChat && !showArchivedChats ? <MenuItem icon='import' text={archiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, true)} /> : null}
-      {selectedChat && showArchivedChats ? <MenuItem icon='export' text={unArchiveMsg} onClick={this.onArchiveChat.bind(this, selectedChat, false)} /> : null}
-      {selectedChat ? <MenuItem icon='delete' text={deleteMsg} onClick={this.onDeleteChat.bind(this, selectedChat)} /> : null}
-      {selectedChat && !isGroup ? <MenuItem icon='blocked-person' text={tx('blockContact')} onClick={this.onBlockContact.bind(this, selectedChat)} /> : null}
-      {isGroup ? <MenuItem icon='edit' text={tx('editGroup')} onClick={this.onEditGroup.bind(this, selectedChat)} /> : null}
-      {isGroup ? <MenuItem icon='log-out' text={tx('leaveGroup')} onClick={this.onLeaveGroup.bind(this, selectedChat)} /> : null}
-      <MenuItem icon='blocked-person' text={tx('unblockContacts')} onClick={this.onUnblockContacts} />
-      <MenuItem icon='exchange' text={tx('initiateKeyTransferTitle')} onClick={this.initiateKeyTransfer} />
-      <MenuItem icon='log-out' text={tx('logout')} onClick={this.logout} />
-    </Menu>)
+    const menu = <Menu
+      changeScreen={this.props.changeScreen}
+      selectedChat={selectedChat}
+      initiateKeyTransfer={this.initiateKeyTransfer}
+      showArchivedChats={showArchivedChats}
+    />
 
     return (
       <div>
