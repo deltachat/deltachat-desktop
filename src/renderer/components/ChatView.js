@@ -3,7 +3,6 @@ const { ipcRenderer } = require('electron')
 
 const dialogs = require('./dialogs')
 const Composer = require('./Composer')
-const RenderMedia = require('./RenderMedia')
 const Message = require('./Message')
 const { ConversationContext } = require('./conversations')
 
@@ -16,15 +15,11 @@ class ChatView extends React.Component {
     super(props)
     this.state = {
       error: false,
-      setupMessage: false,
-      attachmentMessage: {},
-      messageDetail: {}
+      dialogProps: false
     }
 
     this.writeMessage = this.writeMessage.bind(this)
-    this.onMessageDetailClose = this.onMessageDetailClose.bind(this)
-    this.onCloseAttachmentView = this.onCloseAttachmentView.bind(this)
-    this.onSetupMessageClose = this.onSetupMessageClose.bind(this)
+    this.onCloseDialog = this.onCloseDialog.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
@@ -86,56 +81,47 @@ class ChatView extends React.Component {
     el.focus()
   }
 
-  onClickAttachment (attachmentMessage) {
-    this.setState({ attachmentMessage })
-  }
-
-  onClickSetupMessage (setupMessage) {
-    this.setState({ setupMessage })
-  }
-
-  onCloseAttachmentView () {
-    this.setState({ attachmentMessage: {} })
-  }
-
-  onSetupMessageClose () {
-    // TODO: go back to main chat screen
-    this.setState({ setupMessage: false })
-  }
-
-  onShowDetail (message) {
-    this.setState({ messageDetail: message })
-  }
-
-  onMessageDetailClose () {
-    this.setState({ messageDetail: {} })
-  }
-
   onDeleteMessage (message) {
     message.onDelete()
     this.onMessageDetailClose()
   }
 
+  onClickAttachment (attachmentMessage) {
+    this.setState({ dialogProps: { attachmentMessage } })
+  }
+
+  onClickSetupMessage (setupMessage) {
+    this.setState({ dialogProps: { setupMessage } })
+  }
+
+  onShowDetail (messageDetail) {
+    this.setState({ dialogProps: { messageDetail } })
+  }
+
+  onCloseDialog () {
+    this.setState({ dialogProps: false })
+  }
+
   render () {
-    const { attachmentMessage, setupMessage, messageDetail } = this.state
+    const { dialogProps, messageDetail } = this.state
     const { chat } = this.props
 
     return (
       <div className='ChatView'>
         <dialogs.SetupMessage
           userFeedback={this.props.userFeedback}
-          setupMessage={setupMessage}
-          onClose={this.onSetupMessageClose}
+          setupMessage={dialogProps.setupMessage}
+          onClose={this.onCloseDialog}
         />
-        <RenderMedia
-          message={attachmentMessage}
-          onClose={this.onCloseAttachmentView}
+        <dialogs.RenderMedia
+          message={dialogProps.attachmentMessage}
+          onClose={this.onCloseDialog}
         />
         <dialogs.MessageDetail
           onDelete={this.onDeleteMessage.bind(this, messageDetail)}
           chat={chat}
-          message={messageDetail}
-          onClose={this.onMessageDetailClose}
+          message={dialogProps.messageDetail}
+          onClose={this.onCloseDialog}
         />
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>

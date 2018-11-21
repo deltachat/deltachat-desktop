@@ -54,7 +54,7 @@ class RenderMessage extends React.Component {
 
     const contact = {
       onSendMessage: () => console.log('send a message to', fromId),
-      onClick: () => console.log('clicking contact', fromId)
+      onClick: () => { console.log('click contact') }
     }
 
     const props = {
