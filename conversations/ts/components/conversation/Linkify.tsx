@@ -1,10 +1,10 @@
 import React from 'react';
 
-import LinkifyIt from 'linkify-it';
-
 import { RenderTextCallback } from '../../types/Util';
 
-const linkify = LinkifyIt();
+const LinkifyIt = require('linkify-it')
+
+const linkify = LinkifyIt({ multiDashDomains: true });
 
 interface Props {
   text: string;
