@@ -7,7 +7,7 @@
     "watch": "node bin/watch",
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
-    "start": "electron . --debug --disable-http-cache",
+    "start": "npm run build && electron . --debug --disable-http-cache",
     "pack": "npm run build && electron-builder --dir",
     "dist": "electron-builder --publish=onTagOrDraft",
     "dev": "npm run build && npm run start",
