@@ -74,7 +74,6 @@
     "@types/filesize": "^3.6.0",
     "@types/google-libphonenumber": "^7.4.17",
     "@types/jquery": "^3.3.19",
-    "@types/linkify-it": "^2.0.3",
     "@types/lodash": "^4.14.117",
     "@types/mocha": "^5.2.5",
     "@types/qs": "^6.5.1",
