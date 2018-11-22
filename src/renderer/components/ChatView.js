@@ -58,6 +58,7 @@ class ChatView extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
     this.lastId = this.props.chat.id
+    this.previousScrollHeightMinusTop = null
   }
 
   componentWillUnmount () {
@@ -75,13 +76,19 @@ class ChatView extends React.Component {
   }
 
   handleScroll () {
-    if (!this.lastId || this.lastId === this.props.chat.id) this.restoreScroll()
-    else this.scrollToBottom()
+    if (this.previousScrollHeightMinusTop !== null &&
+       (!this.lastId || this.lastId === this.props.chat.id)) {
+      this.restoreScroll()
+    } else {
+      this.scrollToBottom()
+    }
+
     this.lastId = this.props.chat && this.props.chat.id
   }
 
   restoreScroll () {
     this.doc.scrollTop = this.doc.scrollHeight - this.previousScrollHeightMinusTop
+    this.previousScrollHeightMinusTop = null
   }
 
   scrollPrepare () {
