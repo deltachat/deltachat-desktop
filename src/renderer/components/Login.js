@@ -10,8 +10,11 @@ const {
   InputGroup,
   FormGroup,
   Collapse,
-  Intent
+  Intent,
+  Callout
 } = require('@blueprintjs/core')
+
+const ClickableLink = require('./helpers/ClickableLink')
 
 const styled = require('styled-components').default
 
@@ -135,6 +138,9 @@ class Login extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
+          <Callout intent='danger' title='Single folder incompatibility'>
+            To improve the user experience with Delta.Chat using multiple devices, we had to change the behaviour of Delta.Chat. Therefore, beginning with this release, we aren't compatible with the <b>old android client</b> which you can currently find in the f-droid store. Please use the <b>new development</b> version. You can find it <ClickableLink href="https://github.com/deltachat/deltachat-android-ii/releases">here</ClickableLink>.
+          </Callout>
           <ul>
             {logins.map((login) => <li key={login}>
               <Button onClick={this.onClickLogin.bind(this, login)}> {login}</Button>
