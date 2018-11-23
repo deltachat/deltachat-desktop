@@ -2,6 +2,7 @@ pipeline {
   agent {
     docker {
       image 'deltachat/debian-stretch-node-11'
+      args '-v "$HOME":/home/jenkins:rw,z'
       alwaysPull true
     }
   }
