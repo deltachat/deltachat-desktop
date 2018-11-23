@@ -130,6 +130,8 @@ class SplittedChatListAndView extends React.Component {
       showArchivedChats={showArchivedChats}
     />
 
+    console.log(deltachat)
+
     return (
       <div>
         <NavbarWrapper>
@@ -160,11 +162,11 @@ class SplittedChatListAndView extends React.Component {
         <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <BelowNavbar>
           <ChatList
-            chats={showArchivedChats ? deltachat.archivedChats : deltachat.chats}
+            chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
-            showArchivedChats={showArchivedChats}
+            showArchivedChats={deltachat.showArchivedChats}
             selectedChatId={selectedChat ? selectedChat.id : null}
           />
           {
