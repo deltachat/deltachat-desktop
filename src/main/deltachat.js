@@ -178,14 +178,12 @@ class DeltaChatController {
    */
   chatWithContact (deadDropChat) {
     log('chat with dead drop', deadDropChat)
-    const contact = this._dc.getContact(deadDropChat.contact.id)
+    const contact = this._dc.getContact(deadDropChat.deaddrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    var message = deadDropChat.messages[0]
-    if (!message) log.warning('no message for deaddropchat?')
-    else this._dc.createChatByMessageId(message.id)
+    this._dc.createChatByMessageId(deadDropChat.deaddrop.messageId)
   }
 
   /**
@@ -373,12 +371,29 @@ class DeltaChatController {
     const chatList = []
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
-      const chat = this._chatIdToJson(chatId)
+      const chat = this._dc.getChat(chatId).toJson()
 
       if (!chat) continue
 
       chat.summary = list.getSummary(i).toJson()
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
+      if(chat.id === C.DC_CHAT_ID_DEADDROP) {
+        const messageId = list.getMessageId(i)
+        const msg = this._dc.getMessage(messageId)
+        const fromId = msg && msg.getFromId()
+
+        if (!fromId) {
+          log.warning('Ignoring DEADDROP due to missing fromId')
+          continue
+        }
+
+        const contact = this._dc.getContact(fromId)
+
+        chat.deaddrop = {
+          messageId,
+          contact: contact.toJson()
+        }
+      }
 
       chatList.push(chat)
     }
@@ -386,11 +401,6 @@ class DeltaChatController {
     return chatList
   }
 
-  _chatIdToJson (chatId) {
-    const chat = this._dc.getChat(chatId).toJson()
-    chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
-    return chat
-  }
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
