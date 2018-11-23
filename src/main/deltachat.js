@@ -377,7 +377,7 @@ class DeltaChatController {
 
       chat.summary = list.getSummary(i).toJson()
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
-      if(chat.id === C.DC_CHAT_ID_DEADDROP) {
+      if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
         const msg = this._dc.getMessage(messageId)
         const fromId = msg && msg.getFromId()
@@ -400,7 +400,6 @@ class DeltaChatController {
 
     return chatList
   }
-
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
