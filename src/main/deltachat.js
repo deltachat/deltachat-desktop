@@ -351,7 +351,6 @@ class DeltaChatController {
     let chatList = this._chatList(showArchivedChats)
     let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
 
-
     return {
       configuring: this.configuring,
       credentials: this.credentials,
@@ -364,7 +363,7 @@ class DeltaChatController {
     }
   }
 
-  _chatList(showArchivedChats) {
+  _chatList (showArchivedChats) {
     if (!this._dc) return []
 
     const listFlags = showArchivedChats ? C.DC_GCL_ARCHIVED_ONLY : 0
@@ -376,7 +375,7 @@ class DeltaChatController {
       const chatId = list.getChatId(i)
       const chat = this._chatIdToJson(chatId)
 
-      if(!chat) continue
+      if (!chat) continue
 
       chat.summary = list.getSummary(i).toJson()
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
@@ -388,39 +387,19 @@ class DeltaChatController {
   }
 
   _chatIdToJson (chatId) {
-    const dc = this._dc
-    const chat = dc.getChat(chatId).toJson()
-    chat.messageIds = dc.getChatMessages(chatId, 0, 0)
-    chat.messages = []
-    chat.contacts = dc.getChatContacts(chatId).map(id => {
-      return dc.getContact(id).toJson()
-    })
-    if (chatId === C.DC_CHAT_ID_DEADDROP) {
-      const msg = dc.getMessage(chat.messageIds[0])
-      const fromId = msg && msg.getFromId()
-
-      if (!fromId) {
-        log.warning('Ignoring DEADDROP due to missing fromId')
-        return null
-      }
-
-      const contact = dc.getContact(fromId)
-      if (contact) {
-        chat.contact = contact.toJson()
-      }
-    }
-    chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
+    const chat = this._dc.getChat(chatId).toJson()
+    chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
     return chat
   }
 
-  _selectedChat(showArchivedChats, chatList, selectedChatId) {
+  _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
-    if(!selectedChat) {
+    if (!selectedChat) {
       this._selectedChatId = null
       return null
     }
 
-    if(selectedChat.freshMessageCounter > 0) {
+    if (selectedChat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
@@ -435,7 +414,7 @@ class DeltaChatController {
     return selectedChat
   }
 
-  _messagesToRender(messageIds) {
+  _messagesToRender (messageIds) {
     const countMessages = messageIds.length
     const messageIdsToRender = messageIds.splice(
       countMessages - this._pages * PAGE_SIZE,
@@ -444,14 +423,14 @@ class DeltaChatController {
     return messageIdsToRender.map(id => this._messageIdToJson(id))
   }
 
-  _messageIdToJson(id) {
+  _messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const contact = fromId ? this._dc.getContact(fromId) : {}
 
-    return {id, msg: msg.toJson(), filemime, fromId, isMe, contact}
+    return { id, msg: msg.toJson(), filemime, fromId, isMe, contact }
   }
 
   fetchMessages () {
