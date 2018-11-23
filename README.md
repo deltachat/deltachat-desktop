@@ -7,6 +7,8 @@
 
 <center><img src="screenshot.png"/></center>
 
+**If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
+
 ### Run the app
 
 ```

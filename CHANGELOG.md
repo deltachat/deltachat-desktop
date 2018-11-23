@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2018-11-23
+
+### Changed
+* Simplify and refactor dialogs (@karissa)
+* Refactor hamburger menu code (@karissa)
+* Use `webpack` instead of `buble` (@karissa)
+* Stop deploying from Travis (old Ubuntu caused problems with Debian and libssl) (@ralphtheninja)
+* Options passed to node bindings should be in camelCase (@ralphtheninja)
+* Upgrade `deltachat-node` dependency from `^0.23.0` to `^0.24.0` (@ralphtheninja)
+
+### Added
+* Introduce `styled-components` (@jikstra)
+* Add single folder banner (@jikstra)
+* Add `Content-Security-Policy` (@karissa)
+* Add verified icon for verified users (@ralphtheninja)
+* Add `jenkins/Jenkinsfile.linux` for building and deploying on [Jenkins](https://ci.delta.chat) (@ralphtheninja)
+
+### Fixed
+* Fix chat view scroll jumping (@jikstra)
+* Fix links containing a double dash `--` (@jikstra)
+* Clicking links opens up window in external browser (@karissa)
+* `libetpan-dev` can be installed globally without messing up compilation (@ralphtheninja)
+
+**Historical Note** This release contains an update to `deltachat-core` which contains the single folder implementation. See the [upgrade guide](UPGRADING.md) for more details.
+
 ## [1.7.5] - 2018-11-17
 
 ### Changed
@@ -175,7 +200,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.5...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.5...v2.0.0
 [1.7.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...v1.7.5
 [1.7.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...v1.7.4
 [1.7.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...v1.7.3
