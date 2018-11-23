@@ -414,9 +414,7 @@ class DeltaChatController {
   }
 
   _selectedChat(showArchivedChats, chatList, selectedChatId) {
-    if (!chatList) return null
-
-    let selectedChat = chatList.find(({ id }) => id === selectedChatId)
+    let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
     if(!selectedChat) {
       this._selectedChatId = null
       return null
@@ -426,18 +424,24 @@ class DeltaChatController {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
+    this._dc.markSeenMessages(selectedChat.messageIds)
 
     selectedChat.messageIds = this._dc.getChatMessages(selectedChatId, 0, 0)
-
-    selectedChat.messages = selectedChat.messageIds.map(id => this._messageIdToJson(id))
-
+    selectedChat.messages = this._messagesToRender(selectedChat.messageIds)
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
       return this._dc.getContact(id).toJson()
     })
 
-    this._dc.markSeenMessages(selectedChat.messageIds)
-
     return selectedChat
+  }
+
+  _messagesToRender(messageIds) {
+    const countMessages = messageIds.length
+    const messageIdsToRender = messageIds.splice(
+      countMessages - this._pages * PAGE_SIZE,
+      countMessages)
+
+    return messageIdsToRender.map(id => this._messageIdToJson(id))
   }
 
   _messageIdToJson(id) {
