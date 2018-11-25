@@ -178,14 +178,12 @@ class DeltaChatController {
    */
   chatWithContact (deadDropChat) {
     log('chat with dead drop', deadDropChat)
-    const contact = this._dc.getContact(deadDropChat.contact.id)
+    const contact = this._dc.getContact(deadDropChat.deaddrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    var message = deadDropChat.messages[0]
-    if (!message) log.warning('no message for deaddropchat?')
-    else this._dc.createChatByMessageId(message.id)
+    this._dc.createChatByMessageId(deadDropChat.deaddrop.messageId)
   }
 
   /**
@@ -345,9 +343,11 @@ class DeltaChatController {
    * Returns the state in json format
    */
   render () {
+    let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
-    let chats = this._chats()
-    let archivedChats = this._archivedChats()
+
+    let chatList = this._chatList(showArchivedChats)
+    let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
 
     return {
       configuring: this.configuring,
@@ -356,101 +356,95 @@ class DeltaChatController {
       contacts: this._contacts(),
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
-      selectedChat: this._selectedChat(showArchivedChats ? archivedChats : chats),
-      chats,
-      archivedChats
+      chatList,
+      selectedChat
     }
   }
 
-  _messageIdToJson (messageId) {
-    const dc = this._dc
-    const msg = dc.getMessage(messageId)
-    const fromId = msg && msg.getFromId()
-    const contact = fromId && dc.getContact(fromId)
-    return {
-      fromId,
-      id: messageId,
-      isMe: fromId === C.DC_CONTACT_ID_SELF,
-      contact: contact ? contact.toJson() : {},
-      msg: msg && msg.toJson(),
-      filemime: msg && msg.getFilemime()
-    }
-  }
-
-  _chatIdToJson (chatId) {
-    const dc = this._dc
-    const chat = dc.getChat(chatId).toJson()
-    chat.messageIds = dc.getChatMessages(chatId, 0, 0)
-    chat.messages = []
-    chat.contacts = dc.getChatContacts(chatId).map(id => {
-      return dc.getContact(id).toJson()
-    })
-    if (chatId === C.DC_CHAT_ID_DEADDROP) {
-      const msg = dc.getMessage(chat.messageIds[0])
-      const fromId = msg && msg.getFromId()
-
-      if (!fromId) {
-        log.warning('Ignoring DEADDROP due to missing fromId')
-        return null
-      }
-
-      const contact = dc.getContact(fromId)
-      if (contact) {
-        chat.contact = contact.toJson()
-      }
-    }
-    chat.freshMessageCounter = dc.getFreshMessageCount(chatId)
-    return chat
-  }
-
-  /**
-   * Internal
-   * Returns chats in json format
-   */
-  _chats (listFlags = 0) {
+  _chatList (showArchivedChats) {
     if (!this._dc) return []
-    const chats = []
+
+    const listFlags = showArchivedChats ? C.DC_GCL_ARCHIVED_ONLY : 0
     const list = this._dc.getChatList(listFlags, this._query)
-    const count = list.getCount()
-    for (let i = 0; i < count; i++) {
+    const listCount = list.getCount()
+
+    const chatList = []
+    for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
-      const chat = this._chatIdToJson(chatId)
-      if (chat) {
-        chat.summary = list.getSummary(i).toJson()
-        chats.push(chat)
+      const chat = this._dc.getChat(chatId).toJson()
+
+      if (!chat) continue
+
+      chat.summary = list.getSummary(i).toJson()
+      chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
+      if (chat.id === C.DC_CHAT_ID_DEADDROP) {
+        const messageId = list.getMessageId(i)
+        const msg = this._dc.getMessage(messageId)
+        const fromId = msg && msg.getFromId()
+
+        if (!fromId) {
+          log.warning('Ignoring DEADDROP due to missing fromId')
+          continue
+        }
+
+        const contact = this._dc.getContact(fromId)
+
+        chat.deaddrop = {
+          messageId,
+          contact: contact.toJson()
+        }
       }
+
+      chatList.push(chat)
     }
-    return chats
+
+    return chatList
+  }
+
+  _selectedChat (showArchivedChats, chatList, selectedChatId) {
+    let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
+    if (!selectedChat) {
+      this._selectedChatId = null
+      return null
+    }
+
+    if (selectedChat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(selectedChat.id)
+      selectedChat.freshMessageCounter = 0
+    }
+    this._dc.markSeenMessages(selectedChat.messageIds)
+
+    selectedChat.messageIds = this._dc.getChatMessages(selectedChatId, 0, 0)
+    selectedChat.messages = this._messagesToRender(selectedChat.messageIds)
+    selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
+      return this._dc.getContact(id).toJson()
+    })
+
+    return selectedChat
+  }
+
+  _messagesToRender (messageIds) {
+    const countMessages = messageIds.length
+    const messageIdsToRender = messageIds.splice(
+      countMessages - this._pages * PAGE_SIZE,
+      countMessages)
+
+    return messageIdsToRender.map(id => this._messageIdToJson(id))
+  }
+
+  _messageIdToJson (id) {
+    const msg = this._dc.getMessage(id)
+    const filemime = msg && msg.getFilemime()
+    const fromId = msg && msg.getFromId()
+    const isMe = fromId === C.DC_CONTACT_ID_SELF
+    const contact = fromId ? this._dc.getContact(fromId) : {}
+
+    return { id, msg: msg.toJson(), filemime, fromId, isMe, contact }
   }
 
   fetchMessages () {
     this._pages++
     this._render()
-  }
-
-  _archivedChats () {
-    return this._chats(C.DC_GCL_ARCHIVED_ONLY)
-  }
-
-  _selectedChat (chats) {
-    if (!chats) return null
-    let selectedChat = chats.find(({ id }) => id === this._selectedChatId)
-
-    if (!selectedChat) {
-      this._selectedChatId = null
-      return null
-    }
-    this._selectedChatId = selectedChat.id
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
-    }
-
-    const ids = selectedChat.messageIds
-    var messageIds = ids.splice(ids.length - this._pages * PAGE_SIZE, ids.length)
-    selectedChat.messages = messageIds.map((id) => this._messageIdToJson(id))
-    this._dc.markSeenMessages(messageIds)
-    return selectedChat
   }
 
   _blockedContacts (...args) {

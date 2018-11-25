@@ -32,7 +32,7 @@ class DeadDropDialog extends React.Component {
 
   render () {
     const { deadDropChat } = this.props
-    var nameAndAddr = deadDropChat && deadDropChat.contact && deadDropChat.contact.nameAndAddr
+    var nameAndAddr = deadDropChat && deadDropChat.deaddrop.contact && deadDropChat.deaddrop.contact.nameAndAddr
     const title = 'Chat request'
     const body = `Chat with ${nameAndAddr}?`
     const isOpen = deadDropChat !== false

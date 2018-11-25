@@ -24,15 +24,15 @@ const ChatListNoChats = styled.div`
 
 class ChatList extends React.Component {
   render () {
-    const { chats, selectedChatId, showArchivedChats } = this.props
+    const { chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
 
     return (
       <ChatListWrapper>
-        { !chats.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
+        { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
         <div className='ConversationList'>
-          {chats.map((chat, i) => {
+          {chatList.map((chat, i) => {
             if (!chat) return
             const i18n = window.translate
             const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
