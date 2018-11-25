@@ -130,8 +130,6 @@ class SplittedChatListAndView extends React.Component {
       showArchivedChats={showArchivedChats}
     />
 
-    console.log(deltachat)
-
     return (
       <div>
         <NavbarWrapper>
