@@ -4,7 +4,7 @@ import LinkifyIt from 'linkify-it';
 
 import { RenderTextCallback } from '../../types/Util';
 
-const linkify = LinkifyIt(null, {multiDashDomains: true});
+const linkify = LinkifyIt();
 
 interface Props {
   text: string;
