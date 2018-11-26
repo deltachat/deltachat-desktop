@@ -95,6 +95,12 @@ ul li button {
   margin-bottom: -7px;
 }
 
+.MessageWrapper .infoText {
+  text-align: center;
+  font-style: italic;
+  color: #757575;
+}
+
 .SelectGroupImage {
   width: 100px;
 }
@@ -124,3 +130,4 @@ ul li button {
   height: 0.75em;
   margin-right: 2px;
 }
+

@@ -79,8 +79,12 @@ class RenderMessage extends React.Component {
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
+    let body
+    if (message.isInfo) {
+      body = <div className='infoText'>{msg.text}</div>
+    } else body = <Message {...props} />
 
-    return (<div ref={this.el} className='MessageWrapper'><Message {...props} /></div>)
+    return (<div ref={this.el} className='MessageWrapper'>{body}</div>)
   }
 }
 
