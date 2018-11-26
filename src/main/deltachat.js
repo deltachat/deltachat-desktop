@@ -437,7 +437,7 @@ class DeltaChatController {
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
-    const contact = fromId ? this._dc.getContact(fromId) : {}
+    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
 
     return { id, msg: msg.toJson(), filemime, fromId, isMe, contact }
   }
