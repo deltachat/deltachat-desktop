@@ -72,35 +72,6 @@ ul li button {
   top: -50px !important;
 }
 
-.module-message__author-default-avatar__label {
-  background-color: black;
-  top: -121px;
-  left: -10px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  background-color: #757575;
-  color: #ffffff;
-  font-size: 25px;
-  line-height: 36px;
-}
-
-.module-message__author-default-avatar {
-  position: static;
-  margin-right: 8px;
-}
-
-.MessageWrapper .module-message__metadata {
-  margin-top: 10px;
-  margin-bottom: -7px;
-}
-
-.MessageWrapper .infoText {
-  text-align: center;
-  font-style: italic;
-  color: #757575;
-}
-
 .SelectGroupImage {
   width: 100px;
 }
@@ -114,10 +85,6 @@ ul li button {
 .RemoveGroupImage {
   width: 100px;
   margin-bottom: 4px;
-}
-
-.SetupMessage .module-message__text {
-  color: #ed824e;
 }
 
 .attachment-overlay {
