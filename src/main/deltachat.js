@@ -129,9 +129,10 @@ class DeltaChatController {
   /**
    * Dispatched when sending a message in ChatView
    */
-  sendMessage (chatId, text, attachment) {
-    const msg = this._dc.messageNew()
-    if (attachment) msg.setFile(attachment)
+  sendMessage (chatId, text, filename, opts) {
+    const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
+    const msg = this._dc.messageNew(viewType)
+    if (filename) msg.setFile(filename)
     if (text) msg.setText(text)
     this._dc.sendMessage(chatId, msg)
   }
