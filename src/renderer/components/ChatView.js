@@ -71,6 +71,8 @@ class ChatView extends React.Component {
   }
 
   fetchNextMessages () {
+    const chat = this.props.chat
+    if (chat.totalMessages === chat.messages.length) return
     this.scrollPrepare()
     ipcRenderer.send('dispatch', 'fetchMessages')
   }

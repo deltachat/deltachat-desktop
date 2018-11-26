@@ -415,6 +415,7 @@ class DeltaChatController {
     this._dc.markSeenMessages(selectedChat.messageIds)
 
     selectedChat.messageIds = this._dc.getChatMessages(selectedChatId, 0, 0)
+    selectedChat.totalMessages = selectedChat.messageIds.length
     selectedChat.messages = this._messagesToRender(selectedChat.messageIds)
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
       return this._dc.getContact(id).toJson()
