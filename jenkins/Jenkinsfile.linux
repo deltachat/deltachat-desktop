@@ -28,7 +28,6 @@ pipeline {
       }
     }
     stage('Deploy') {
-      when { branch 'master' }
       environment {
         GH_TOKEN = credentials('github-token')
       }
