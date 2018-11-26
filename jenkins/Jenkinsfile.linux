@@ -22,6 +22,14 @@ pipeline {
         sh 'npm test'
       }
     }
+    stage('Integration Tests') {
+      steps {
+        sh '/usr/bin/xvfb-chromium &'
+        sh 'sleep 5'
+        sh 'export DISPLAY=:99'
+        sh 'npm run test-integration'
+      }
+    }
     stage('Deploy') {
       when { branch 'master' }
       environment {
