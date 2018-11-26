@@ -8,7 +8,15 @@ const ComposerWrapper = styled.div`
   .composer {
     position: fixed;
     bottom: 0px;
-    width: 100%;
+    width: 70%;
+    background-color: #eeefef;
+    padding: 4px 10px;
+  }
+
+  input:focus {
+    outline: 0;
+    -webkit-box-shadow: unset;
+    box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
   }
 
   .composer button {
@@ -43,6 +51,15 @@ class Composer extends React.Component {
     }
   }
 
+  componentDidMount () {
+    // TODO: this only happens on the first render
+    // ideally, we'd pass the current chat id into the component
+    // and focus the input message every time
+    // the component changes chat ids, while rendering any cached unsent
+    // previous message text (aka "draft" message)
+    this.focusInputMessage()
+  }
+
   handleError () {
     this.setState({ error: true })
   }
@@ -61,6 +78,12 @@ class Composer extends React.Component {
 
   handleChange (e) {
     this.setState({ text: e.target.value, error: false })
+  }
+
+  focusInputMessage () {
+    let el = document.querySelector(`.${ComposerWrapper.styledComponentId} input`)
+    if (!el) return console.log(`Didn't find .ComposerWrapper input element`)
+    el.focus()
   }
 
   addFilename () {
