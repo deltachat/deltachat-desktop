@@ -151,8 +151,7 @@ function convertContentType (message) {
   var filemime = message.filemime
   if (!filemime) return 'image/jpg'
   if (filemime === 'application/octet-stream') {
-    var s = message.msg.viewType
-    switch (s) {
+    switch (message.msg.viewType) {
       case C.DC_MSG_IMAGE:
         return 'image/jpg'
       case C.DC_MSG_VOICE:
