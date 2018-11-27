@@ -98,7 +98,7 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_ERROR', (error) => {
-      log.error(`ERROR: ${error})`)
+      log.error(error)
     })
   }
 
