@@ -426,9 +426,9 @@ class DeltaChatController {
   _messagesToRender (messageIds) {
     const countMessages = messageIds.length
     const messageIdsToRender = messageIds.splice(
-      countMessages - this._pages * PAGE_SIZE,
-      countMessages)
-
+      Math.max(countMessages - (this._pages * PAGE_SIZE), 0),
+      countMessages
+    )
     return messageIdsToRender.map(id => this._messageIdToJson(id))
   }
 
