@@ -23,20 +23,6 @@ const ChatViewWrapper = styled.div`
   }
 `
 
-const InputMessage = styled.div`
-  .composer {
-    width: 70%;
-    background-color: #eeefef;
-    padding: 4px 10px;
-  }
-
-  input:focus {
-    outline: 0;
-    -webkit-box-shadow: unset;
-    box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
-  }
-`
-
 const RenderMediaWrapper = styled.div`
   .attachment-overlay {
     display: flex;
@@ -54,7 +40,6 @@ class ChatView extends React.Component {
 
     this.writeMessage = this.writeMessage.bind(this)
     this.onCloseDialog = this.onCloseDialog.bind(this)
-    this.focusInputMessage = this.focusInputMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
     this.lastId = this.props.chat.id
@@ -110,18 +95,10 @@ class ChatView extends React.Component {
     }
     this.doc.onscroll = this.onScroll.bind(this)
     this.scrollToBottom()
-    this.focusInputMessage()
   }
 
   scrollToBottom (force) {
     this.doc.scrollTop = this.doc.scrollHeight
-  }
-
-  focusInputMessage () {
-    let el = document.querySelector(`.${InputMessage.styledComponentId} input`)
-    if (!el) return console.log(`Didn't find .InputMessage input element`)
-
-    el.focus()
   }
 
   onDeleteMessage (message) {
@@ -182,9 +159,7 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <InputMessage>
-          <Composer onSubmit={this.writeMessage} />
-        </InputMessage>
+        <Composer onSubmit={this.writeMessage} />
       </ChatViewWrapper>
     )
   }
