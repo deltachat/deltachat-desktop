@@ -97,8 +97,8 @@ class DeltaChatController {
       log.warning(warning)
     })
 
-    dc.on('DC_EVENT_ERROR', (code, err) => {
-      log.error(`${err} (code = ${code})`)
+    dc.on('DC_EVENT_ERROR', (error) => {
+      log.error(`ERROR: ${error})`)
     })
   }
 
