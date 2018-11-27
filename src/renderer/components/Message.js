@@ -159,7 +159,7 @@ function convert (message) {
   if (msg.file) {
     msg.attachment = {
       url: msg.file,
-      contentType: convertContentType(message.filemime),
+      contentType: convertContentType(message),
       filename: msg.text
     }
   }
@@ -187,9 +187,19 @@ function convertMessageStatus (s) {
   }
 }
 
-function convertContentType (filemime) {
+function convertContentType (message) {
+  var filemime = message.filemime
   if (!filemime) return 'image/jpg'
-  if (filemime === 'application/octet-stream') return 'audio/ogg'
+  if (filemime === 'application/octet-stream') {
+    switch (message.msg.viewType) {
+      case C.DC_MSG_IMAGE:
+        return 'image/jpg'
+      case C.DC_MSG_VOICE:
+        return 'audio/ogg'
+      default:
+        return 'application/octect-stream'
+    }
+  }
   return filemime
 }
 
