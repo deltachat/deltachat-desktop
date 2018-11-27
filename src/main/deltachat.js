@@ -440,7 +440,15 @@ class DeltaChatController {
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
 
-    return { id, msg: msg.toJson(), filemime, fromId, isMe, contact }
+    return {
+      id,
+      msg: msg.toJson(),
+      filemime,
+      fromId,
+      isMe,
+      contact,
+      isInfo: msg.isInfo()
+    }
   }
 
   fetchMessages () {

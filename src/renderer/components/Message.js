@@ -1,6 +1,7 @@
 const React = require('react')
 const path = require('path')
 const C = require('deltachat-node/constants')
+const styled = require('styled-components').default
 const { Message } = require('./conversations')
 const { remote, ipcRenderer } = require('electron')
 
@@ -9,16 +10,53 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
 
+const SetupMessage = styled.li`
+  .module-message__text {
+    color: #ed824e;
+  }
+`
+
+const InfoMessage = styled.div`
+  text-align: center;
+  font-style: italic;
+  color: #757575;
+`
+
+const MessageWrapper = styled.div`
+  .module-message__metadata {
+    margin-top: 10px;
+    margin-bottom: -7px;
+  }
+
+  .module-message__author-default-avatar__label {
+    background-color: black;
+    top: -121px;
+    left: -10px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #757575;
+    color: #ffffff;
+    font-size: 25px;
+    line-height: 36px;
+  }
+
+  .module-message__author-default-avatar {
+    position: static;
+    margin-right: 8px;
+  }
+
+`
+
 function render (props) {
   const { message, onClickSetupMessage } = props
   let body = <RenderMessage {...props} />
 
   if (message.msg.isSetupmessage) {
-    return <li key={message.id}
-      className='SetupMessage'
+    return <SetupMessage key={message.id}
       onClick={onClickSetupMessage}>
       {body}
-    </li>
+    </SetupMessage>
   }
 
   return <li key={message.id}>{body}</li>
@@ -37,6 +75,7 @@ class RenderMessage extends React.Component {
   }
 
   componentDidMount () {
+    if (!this.el.current) return
     var as = this.el.current.querySelectorAll('a')
     as.forEach((a) => {
       a.onclick = (event) => {
@@ -79,8 +118,9 @@ class RenderMessage extends React.Component {
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
+    if (message.isInfo) return <InfoMessage>{msg.text}</InfoMessage>
 
-    return (<div ref={this.el} className='MessageWrapper'><Message {...props} /></div>)
+    return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
   }
 }
 
