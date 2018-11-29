@@ -782,5 +782,35 @@
   "contactDetailTitle": {
     "message": "Contact Detail",
     "description": "Contact Detail title for dialog"
+  },
+  "settingsTitle": {
+    "message": "Settings",
+    "description": "Title for settings dialog"
+  },
+  "importBackup": {
+    "message": "Import Backup",
+    "description": "Button in settings for importing a backup"
+  },
+  "exportBackup": {
+    "message": "Export Backup",
+    "description": "Button in settings for exporting a backup"
+  },
+  "settingsBackupSection": {
+    "message": "Backups"
+  },
+  "settingsAutocryptSection": {
+    "message": "Autocrypt"
+  },
+  "backupConfirmationMessage": {
+    "message": "Exported files will contain your end-to-end Autocrypt setup! Keep them in a safe place or delete them as soon as possible.",
+    "description": "Shown as a confirmation message before exporting a backup"
+  },
+  "autocryptDescription": {
+    "message": "Autocrypt is a new and open specification for automatic end-to-end email encryption.\n\nYour end-to-end setup is created automatically as needed and you can transfer it between devices with Autocrypt Setup Messages",
+    "description": "Shown as a description for the button that initiates a key transfer"
+  },
+  "imexProgressTitle": {
+    "message": "Backup Progress",
+    "description": "Title when showing progress for backing up"
   }
 }
