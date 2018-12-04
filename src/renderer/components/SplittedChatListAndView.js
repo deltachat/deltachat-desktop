@@ -8,6 +8,8 @@ const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const Centered = require('./helpers/Centered')
 
+const StyleVariables = require('./style-variables')
+
 const {
   Alignment,
   Classes,
@@ -29,6 +31,8 @@ const NavbarWrapper = styled.div`
 
   .bp3-navbar {
     padding: 0px;
+    background-color: ${StyleVariables.colors.deltaPrimaryBg};
+    color: ${StyleVariables.colors.deltaPrimaryFg};
   }
 
   .bp3-navbar-heading {
@@ -37,11 +41,13 @@ const NavbarWrapper = styled.div`
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: bold;
   }
 
   .bp3-align-left {
     width: 30%;
-    padding-left: 1%;
+    padding-left: 2%;
   }
 
   .bp3-align-right {
@@ -51,6 +57,29 @@ const NavbarWrapper = styled.div`
 
   .bp3-popover-wrapper {
     margin-left: auto;
+  }
+
+  .bp3-icon > svg:not([fill]) {
+    fill: ${StyleVariables.colors.deltaPrimaryFg};
+  }
+
+  .bp3-icon-search {
+    margin-left: 0px !important;
+  }
+
+  .bp3-input[type="search"] {
+    background-color: ${StyleVariables.colors.deltaPrimaryBg};
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: unset;
+    color: ${StyleVariables.colors.deltaPrimaryFg};
+    padding-left: unset !important;
+    margin-left: 40px;
+    width: calc(100% - 40px);
+  }
+
+  .bp3-input[type="search"]::placeholder {
+    color: ${StyleVariables.colors.deltaPrimaryFgLight}
   }
 `
 

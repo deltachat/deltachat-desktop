@@ -3,12 +3,30 @@ const C = require('deltachat-node/constants')
 const { ConversationListItem } = require('./conversations')
 const styled = require('styled-components').default
 
+const StyleVariables = require('./style-variables');
+
 const ChatListWrapper = styled.div`
   width: 30%;
   height: 100%;
   float: left;
   border-right: 1px solid rgba(16, 22, 26, 0.1);
   overflow-y: auto;
+
+  span.module-contact-name {
+    font-weight: 200;
+    font-size: medium;
+    color: #232323;
+  }
+
+  .module-conversation-list-item:hover {
+    background-color: ${StyleVariables.colors.deltaHover}
+  }
+
+  .module-conversation-list-item--is-selected {
+    background-color: ${StyleVariables.colors.deltaSelected};
+  }
+
+}
 `
 
 const ChatListNoChats = styled.div`

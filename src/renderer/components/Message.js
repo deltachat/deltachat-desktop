@@ -17,9 +17,18 @@ const SetupMessage = styled.li`
 `
 
 const InfoMessage = styled.div`
+  width: 100%;
   text-align: center;
-  font-style: italic;
-  color: #757575;
+
+  p {
+    display: inline-block;
+    text-align: center;
+    font-style: italic;
+    padding: 12px;
+    background-color: lightgrey;
+    border-radius: 10px;
+    opacity: 0.8;
+  }
 `
 
 const MessageWrapper = styled.div`
@@ -46,6 +55,16 @@ const MessageWrapper = styled.div`
     margin-right: 8px;
   }
 
+  .module-message__img-attachment {
+    object-fit: unset;
+    width: auto;
+    height: auto;
+    min-height: unset;
+  }
+
+  .module-message__img-border-overlay {
+    box-shadow: unset;
+  }
 `
 
 function render (props) {
@@ -118,7 +137,7 @@ class RenderMessage extends React.Component {
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-    if (message.isInfo) return <InfoMessage>{msg.text}</InfoMessage>
+    if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
 
     return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
   }
