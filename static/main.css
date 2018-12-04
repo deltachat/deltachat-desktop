@@ -98,3 +98,7 @@ ul li button {
   margin-right: 2px;
 }
 
+.bp3-button{
+  user-select: none;
+  cursor: default;
+}
