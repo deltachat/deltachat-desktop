@@ -7,6 +7,7 @@ const dialogs = require('./dialogs')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const Centered = require('./helpers/Centered')
+const Unselectable = require('./helpers/Unselectable')
 
 const {
   Alignment,
@@ -176,12 +177,14 @@ class SplittedChatListAndView extends React.Component {
                 chat={selectedChat}
                 deltachat={this.props.deltachat} />)
               : (
-                <Centered>
-                  <div className='window'>
-                    <h1>{tx('chatView.nochatselectedHeader')}</h1>
-                    <p>{tx('chatView.nochatselectedSuggestion')}</p>
-                  </div>
-                </Centered>
+                <Unselectable>
+                  <Centered>
+                    <div className='window '>
+                      <h1>{tx('chatView.nochatselectedHeader')}</h1>
+                      <p>{tx('chatView.nochatselectedSuggestion')}</p>
+                    </div>
+                  </Centered>
+                </Unselectable>
               )
           }
         </BelowNavbar>

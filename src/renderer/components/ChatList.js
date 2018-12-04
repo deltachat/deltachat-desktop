@@ -2,6 +2,7 @@ const React = require('react')
 const C = require('deltachat-node/constants')
 const { ConversationListItem } = require('./conversations')
 const styled = require('styled-components').default
+const Unselectable = require('./helpers/Unselectable')
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -58,12 +59,14 @@ class ChatList extends React.Component {
                 />)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
-                <div key={i} className='ShowArchivedChats'>
-                  <ConversationListItem
-                    onClick={this.props.onShowArchivedChats}
-                    name={chat.name}
-                    i18n={i18n} />
-                </div>
+                <Unselectable>
+                  <div key={i} className='ShowArchivedChats'>
+                    <ConversationListItem
+                      onClick={this.props.onShowArchivedChats}
+                      name={chat.name}
+                      i18n={i18n} />
+                  </div>
+                </Unselectable>
               )
             } else {
               return (
