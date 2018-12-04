@@ -3,7 +3,7 @@ const C = require('deltachat-node/constants')
 const { ConversationListItem } = require('./conversations')
 const styled = require('styled-components').default
 
-const StyleVariables = require('./style-variables');
+const StyleVariables = require('./style-variables')
 
 const ChatListWrapper = styled.div`
   width: 30%;
