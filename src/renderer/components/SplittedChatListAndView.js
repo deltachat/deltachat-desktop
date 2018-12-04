@@ -47,7 +47,7 @@ const NavbarWrapper = styled.div`
 
   .bp3-align-left {
     width: 30%;
-    padding-left: 2%;
+    padding-left: 2vw;
   }
 
   .bp3-align-right {
@@ -61,6 +61,7 @@ const NavbarWrapper = styled.div`
 
   .bp3-icon > svg:not([fill]) {
     fill: ${StyleVariables.colors.deltaPrimaryFg};
+    transform: rotate(90deg);
   }
 
   .bp3-icon-search {
@@ -81,6 +82,24 @@ const NavbarWrapper = styled.div`
   .bp3-input[type="search"]::placeholder {
     color: ${StyleVariables.colors.deltaPrimaryFgLight}
   }
+
+  .bp3-button.bp3-minimal {
+    min-width: 0px;
+    min-height: 0px;
+    margin-right: 1vw;
+  }
+`
+
+const NavbarGroupName = styled.div`
+  font-size: medium;
+  font-weight: bold;
+
+`
+
+const NavbarGroupSubtitle = styled.div`
+  font-size: small;
+  font-weight: 100;
+  color: ${StyleVariables.colors.deltaPrimaryFgLight};
 `
 
 const BelowNavbar = styled.div`
@@ -177,10 +196,12 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
               <img src={selectedChat ? selectedChat.profileImage : null} />
-              <NavbarHeading>{selectedChat ? selectedChat.name : ''}</NavbarHeading>
-              <div>{selectedChat ? selectedChat.subtitle : ''}</div>
+              <NavbarHeading>
+                <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
+                <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
+              </NavbarHeading>
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className={Classes.MINIMAL} icon='menu' />
+                <Button className={Classes.MINIMAL} icon='more' />
               </Popover>
             </NavbarGroup>
           </Navbar>

@@ -26,6 +26,14 @@ const ChatListWrapper = styled.div`
     background-color: ${StyleVariables.colors.deltaSelected};
   }
 
+  .module-conversation-list-item__header__name {
+    width: 90%;
+  }
+
+  .module-conversation-list-item__message__status-icon {
+    margin-left: calc(100% - 90% - 12px);
+  }
+
 }
 `
 

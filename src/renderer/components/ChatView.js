@@ -33,16 +33,31 @@ const ChatViewWrapper = styled.div`
   }
 
   .module-message__container {
-    border-radius: 16px 16px 16px 1px;
+    &, & .module-message__attachment-container {
+      border-radius: 16px 16px 16px 1px;
+    }
   }
 
   .module-message__container--incoming {
-    background-color: ${StyleVariables.colors.deltaPrimaryFg};
+    background-color: ${StyleVariables.colors.deltaChatMessageBubbleOther};
   }
 
   .module-message__container--outgoing {
-    background-color: #eeefef;
-    border-radius: 16px 16px 1px 16px !important;
+    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelf};
+
+    &, & .module-message__attachment-container {
+      border-radius: 16px 16px 1px 16px;
+    }
+  }
+
+  .module-message__attachment-container--with-content-above {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+  }
+
+  .module-message__attachment-container--with-content-below {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
   }
 
   .module-message__text--incoming {

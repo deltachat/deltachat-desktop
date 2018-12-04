@@ -4,6 +4,7 @@ const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const { Message } = require('./conversations')
 const { remote, ipcRenderer } = require('electron')
+const StyleVariables = require('./style-variables')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -19,15 +20,18 @@ const SetupMessage = styled.li`
 const InfoMessage = styled.div`
   width: 100%;
   text-align: center;
+  margin: 26px 0px;
 
   p {
     display: inline-block;
     text-align: center;
     font-style: italic;
-    padding: 12px;
-    background-color: lightgrey;
+    font-weight: bold;
+    padding: 7px 14px;
+    background-color: ${StyleVariables.colors.deltaInfoMessageBubbleBg};
     border-radius: 10px;
-    opacity: 0.8;
+    opacity: 0.44;
+    color: ${StyleVariables.colors.deltaInfoMessageBubbleColor};
   }
 `
 
@@ -35,6 +39,7 @@ const MessageWrapper = styled.div`
   .module-message__metadata {
     margin-top: 10px;
     margin-bottom: -7px;
+    float: right;
   }
 
   .module-message__author-default-avatar__label {
