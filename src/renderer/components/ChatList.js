@@ -52,20 +52,20 @@ class ChatList extends React.Component {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
                 <ContactRequestItemWrapper>
-                <ConversationListItem
-                    className="contactrequest"
-                  key={i}
-                  name={name}
-                  i18n={i18n}
-                  phoneNumber={chat.summary.text1}
-                  lastUpdated={lastUpdated}
-                  lastMessage={{
-                    text: chat.summary.text2,
-                    status: 'delivered'
-                  }}
-                  onClick={this.props.onDeadDropClick.bind(null, chat)}
-                  isSelected={chat.id === selectedChatId}
-                  unreadCount={chat.freshMessageCounter}
+                  <ConversationListItem
+                    className='contactrequest'
+                    key={i}
+                    name={name}
+                    i18n={i18n}
+                    phoneNumber={chat.summary.text1}
+                    lastUpdated={lastUpdated}
+                    lastMessage={{
+                      text: chat.summary.text2,
+                      status: 'delivered'
+                    }}
+                    onClick={this.props.onDeadDropClick.bind(null, chat)}
+                    isSelected={chat.id === selectedChatId}
+                    unreadCount={chat.freshMessageCounter}
                   />
                 </ContactRequestItemWrapper>)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
