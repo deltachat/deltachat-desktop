@@ -432,20 +432,20 @@ class DeltaChatController {
       countMessages
     )
 
-    if(messageIdsToRender.length == 0) return []
+    if (messageIdsToRender.length === 0) return []
 
     console.log(messageIdsToRender.length, messageIdsToRender)
 
     let messages = Array(messageIdsToRender.length - 1)
 
-    for(let i = messageIdsToRender.length - 1; i > 0; i--) {
+    for (let i = messageIdsToRender.length - 1; i > 0; i--) {
       let id = messageIdsToRender[i]
       console.log(id)
       let json = this._messageIdToJson(id)
 
-      if(id === C.DC_MSG_ID_DAYMARKER) {
+      if (id === C.DC_MSG_ID_DAYMARKER) {
         json.daymarker = {
-          timestamp:  messages[i+1].msg.timestamp,
+          timestamp: messages[i + 1].msg.timestamp,
           id: 'd' + i
         }
       }
