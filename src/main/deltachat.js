@@ -415,7 +415,7 @@ class DeltaChatController {
     }
     this._dc.markSeenMessages(selectedChat.messageIds)
 
-    var messageIds = this._dc.getChatMessages(selectedChatId, 0, 0)
+    var messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
     selectedChat.totalMessages = messageIds.length
     selectedChat.messages = this._messagesToRender(messageIds)
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
@@ -431,7 +431,30 @@ class DeltaChatController {
       Math.max(countMessages - (this._pages * PAGE_SIZE), 0),
       countMessages
     )
-    return messageIdsToRender.map(id => this._messageIdToJson(id))
+
+    if(messageIdsToRender.length == 0) return []
+
+    console.log(messageIdsToRender.length, messageIdsToRender)
+
+    let messages = Array(messageIdsToRender.length - 1)
+
+    for(let i = messageIdsToRender.length - 1; i > 0; i--) {
+      let id = messageIdsToRender[i]
+      console.log(id)
+      let json = this._messageIdToJson(id)
+
+      if(id === C.DC_MSG_ID_DAYMARKER) {
+        json.daymarker = {
+          timestamp:  messages[i+1].msg.timestamp,
+          id: 'd' + i
+        }
+      }
+      messages[i] = json
+    }
+
+    console.log(messages)
+
+    return messages
   }
 
   _messageIdToJson (id) {

@@ -5,6 +5,7 @@ const styled = require('styled-components').default
 const { Message } = require('./conversations')
 const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')
+const moment = require('moment')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -17,7 +18,7 @@ const SetupMessage = styled.li`
   }
 `
 
-const InfoMessage = styled.div`
+const InfoMessage = styled.li`
   width: 100%;
   text-align: center;
   margin: 26px 0px;
@@ -35,7 +36,7 @@ const InfoMessage = styled.div`
   }
 `
 
-const MessageWrapper = styled.div`
+const MessageWrapper = styled.li`
   .module-message__metadata {
     margin-top: 10px;
     margin-bottom: -7px;
@@ -74,8 +75,22 @@ const MessageWrapper = styled.div`
 
 function render (props) {
   const { message, onClickSetupMessage } = props
-  let body = <RenderMessage {...props} />
 
+  if (message.id === C.DC_MSG_ID_DAYMARKER) {
+    return (
+      <InfoMessage id={message.daymarker.id}>
+        <p>
+          {moment.unix(message.daymarker.timestamp).calendar(null, {
+            lastDay: '',
+            lastWeek: 'LL',
+            sameElse: 'LL'
+          })}
+        </p>
+      </InfoMessage>
+    )
+  }
+
+  let body = <RenderMessage {...props} />
   if (message.msg.isSetupmessage) {
     return <SetupMessage key={message.id}
       onClick={onClickSetupMessage}>
