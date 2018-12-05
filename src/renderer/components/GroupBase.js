@@ -16,7 +16,7 @@ const {
 const { RenderContact } = require('./Contact')
 const { QrCode } = require('./dialogs')
 
-const DEFAULT_IMAGE = path.join(
+const DEFAULT_IMAGE = path.resolve(
   __dirname,
   '../../..',
   'images/group_default.png'
