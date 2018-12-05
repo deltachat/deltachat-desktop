@@ -1,158 +1,182 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Déconnexion",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
-        "message": "E-mail address required.",
+        "message": "Adresse e-mail requise",
         "description": "Error message if an invalid email address was given when creating a contact"
     },
     "createChatError": {
-        "message": "Could not create chat.",
+        "message": "Impossible de créer la conversation",
         "description": "Error message if a chat could not be created"
     },
     "newMessageFrom": {
-        "message": "New message from",
+        "message": "Nouveau message de",
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Add contact",
+        "message": "Ajouter un contact",
         "description": "Add contact button label"
     },
     "name": {
-        "message": "Name",
+        "message": "Nom",
         "description": "Name label in Add Contact view"
     },
     "newGroup": {
-        "message": "New group",
+        "message": "Nouveau groupe",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Nouveau groupe vérifié",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Afficher le QR code de vérification",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Afficher le QR code d'invitation",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
-        "message": "Archive Group",
+        "message": "Archiver le groupe",
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Retirer des archives",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
-        "message": "Delete Group",
+        "message": "Effacer le groupe",
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
-        "description": "Edit group menu item label"
+        "message": "éditer le groupe",
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Éditer le groupe vérifié",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "vérifié",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "Qr Code",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
-        "message": "Leave Group",
+        "message": "Quitter le groupe",
         "description": "Leave group menu item label"
     },
     "save": {
-        "message": "Save",
+        "message": "Sauvegarder",
         "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
-        "message": "Group Name",
+        "message": "Nom du groupe",
         "description": "Placeholder text for group name input field"
     },
     "groupNameRequired": {
-        "message": "Group name required.",
+        "message": "Un nom pour le groupe est requis",
         "description": "Information to user when creating group with empty name"
     },
     "newChat": {
-        "message": "New chat",
+        "message": "Nouvelle conversation",
         "description": "New chat button and text label"
     },
     "archiveChat": {
-        "message": "Archive Chat",
+        "message": "Archiver la conversation",
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "retirer la conservation des archives",
         "description": "Unarchive chat menu item label"
     },
     "noChats": {
-        "message": "No chats",
+        "message": "Pas de conversation",
         "description": "Message shown to user when there are no chats"
     },
     "noArchivedChats": {
-        "message": "No archived chats",
+        "message": "Pas de conversation archivées",
         "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
-        "message": "Delete Chat",
+        "message": "effacer la conversation",
         "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
-        "message": "Contact created successfully.",
+        "message": "Succès de la création du contact",
         "description": "Information to the user when a contact was created successfully"
     },
     "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
+        "message": "Transfer de la clef Autocrypt",
         "description": "Dialog title during Autocrypt key transfer"
     },
     "setupMessageInfo": {
-        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "message": "Ceci est le message de configuration d'Autocrypt utilisé pour transférer vos préférences de chiffrement de bouts en bouts.\n\nPour le décrypter et utiliser votre configuration, cliquez ce message.",
         "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
-        "message": "Transfer Key",
+        "message": "Transfer de la Clef",
         "description": "Button label during Autocrypt key transfer"
     },
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Commencer le transfer de la Clef",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
+        "message": "un \"message de configuration d'Autocrypt\" partage de façon sécurisée vos paramètres de chiffrement de bouts en bouts avec d'autres applications compatibles avec Autocrypt. la configuration sera chiffrée par un code de configuration affiché ici, qui dois être écrit dans l'autre appareil.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
+        "message": "Votre clef a vous a été envoyée. Passez sur l'autre appareil et ouvrez le message de configuration, un \"code de configuration\" vous sera demandé, tapez les chiffres suivants dans le champs. Une fois fait, votre autre appareil sera prêt à utiliser Autocrypt. ",
         "description": "Shown while viewing the transfer key"
     },
     "done": {
-        "message": "Done",
+        "message": "Fait",
         "description": "Button label when key transfer is done"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Plus d'informations ...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Téléchargez la pièce jointe",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Images contenues dans le message",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Vignette de la vidéo attachée au message",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Image envoyée dans la conversation",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Répondre au Message",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "forwardMessage": {
-        "message": "Forward Message...",
+        "message": "Transmettre le Message ...",
         "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Effacer le Message",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Effacer les messages",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Détails du Message",
         "description": "TODO: used where?"
     },
     "audio": {
@@ -160,7 +184,7 @@
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
-        "message": "Video",
+        "message": "Vidéo",
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
@@ -168,183 +192,183 @@
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
-        "message": "OK",
+        "message": "Ok",
         "description": "TODO: used where?"
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Annuler",
         "description": "TODO: used where?"
     },
     "delete": {
-        "message": "Delete",
+        "message": "Effacer",
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to DeltaChat",
+        "message": "Bienvenu·e dans DeltaChat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "Adresse E-mail",
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Entrez votre mot de passe ",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
-        "message": "Password",
+        "message": "Mot de passe",
         "description": "Label above input field for mail password"
     },
     "login.required": {
-        "message": "required",
+        "message": "requis",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
     "login.advanced": {
-        "message": "Advanced",
+        "message": "Avancé",
         "description": "Advanced settings button label"
     },
     "login.inbox": {
-        "message": "Inbox",
+        "message": "Messages entrants",
         "description": "Describes the advanced section for inbox (imap)"
     },
     "login.mailUser": {
-        "message": "IMAP-Loginname",
+        "message": "Login IMAP",
         "description": "Label above input field for imap login name"
     },
     "login.mailServer": {
-        "message": "IMAP-Server",
+        "message": "Serveur IMAP",
         "description": "Label above input field for imap server host"
     },
     "login.mailPort": {
-        "message": "IMAP-Port",
+        "message": "Port IMAP",
         "description": "Label above input field for imap server port"
     },
     "login.mailSecurity": {
-        "message": "Security",
+        "message": "Sécurité",
         "description": "Label above selection box for imap security"
     },
     "login.security.disable": {
-        "message": "Off",
+        "message": "Déclenché",
         "description": "Text for disabling imap transport security"
     },
     "login.security.automatic": {
-        "message": "Automatic",
+        "message": "Automatique",
         "description": "Text for disabling imap transport security"
     },
     "login.outbox": {
-        "message": "Outbox",
+        "message": "Messages sortants",
         "description": "Describes the advanced section for outbox (smtp)"
     },
     "login.sendUser": {
-        "message": "SMTP-Loginname",
+        "message": "Login SMTP",
         "description": "Label above input field for smtp login name"
     },
     "login.sendPw": {
-        "message": "SMTP-Password",
+        "message": "Mot de passe SMTP",
         "description": "Label above input field for smtp password"
     },
     "login.sendServer": {
-        "message": "SMTP-Server",
+        "message": "Serveur SMTP",
         "description": "Label above input field for smtp server host"
     },
     "login.sendPort": {
-        "message": "SMTP-Port",
+        "message": "Port SMTP",
         "description": "Label above input field for smtp server port"
     },
     "login.sendSecurity": {
-        "message": "Security",
+        "message": "Sécurité",
         "description": "Label above selection box for smtp security"
     },
     "login.automatic": {
-        "message": "automatic",
+        "message": "automatique",
         "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
-        "message": "Cancel",
+        "message": "Annuler",
         "description": "Shown in the login form"
     },
     "login.button": {
-        "message": "Login",
+        "message": "Connection",
         "description": "Shown in the login form"
     },
     "menu.preferences": {
-        "message": "Preferences",
+        "message": "Préferences",
         "description": "Preferences label in the menu"
     },
     "menu.preferences.language": {
-        "message": "Choose Language...",
+        "message": "Choisir la langue",
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Éditer",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Annuler",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Refaire",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Couper",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Copier",
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Coller",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Effacer",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Tout séléctionner",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Voir",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Float on Top",
+        "message": "Flotter en haut",
         "description": "Float on Top menu item label"
     },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Programmeur",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Outils pour développeurs",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Aide",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "En savoir plus sur DeltaChat",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "Contribuer sur GitHub",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Signaler un problème ...",
         "description": "Report an Issue... menu item label"
     },
     "menu.help.about": {
-        "message": "About DeltaChat",
+        "message": "À propos de DeltaChat",
         "description": "About menu item"
     },
     "aboutDeltaChat": {
-        "message": "About DeltaChat",
+        "message": "À propos de DeltaChat",
         "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
@@ -352,51 +376,51 @@
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "De",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "À",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Envoyé",
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Envoyé",
         "description": "Button label for sending a message"
     },
     "received": {
-        "message": "Received",
+        "message": "Reçu",
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Écrire un message",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Écrivez un message et tapez sur entrée",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Échec de l'envoi du message",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Renvoyer le Message",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Membres du groupe",
         "description": "TODO: used where?"
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Afficher les membres",
         "description": "TODO: used where?"
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "maintenant",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
@@ -404,19 +428,19 @@
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "1 heure",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "maintenant",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
-        "message": "$hours$ hr",
+        "message": "$hours$ h",
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "il y a $hours$ h",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
@@ -424,11 +448,11 @@
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "il y a $minutes$ min",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     },
     "videoScreenshotFailedToLoad": {
-        "message": "Can't display video screenshot",
+        "message": "Impossible d'afficher la capture d'écran de la vidéo",
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
@@ -436,15 +460,15 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.da": {
-        "message": "Danish",
+        "message": "Danois",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.de": {
-        "message": "German",
+        "message": "Allemand",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.en": {
-        "message": "English",
+        "message": "Anglais",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eo": {
@@ -452,7 +476,7 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.es": {
-        "message": "Spanish",
+        "message": "Espagnol",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eu": {
@@ -460,63 +484,63 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.fr": {
-        "message": "French",
+        "message": "Français",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hr": {
-        "message": "Croatian",
+        "message": "Croate",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hu": {
-        "message": "Hungarian",
+        "message": "Hongrois",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.it": {
-        "message": "Italian",
+        "message": "Italien",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ja_JP": {
-        "message": "Japanese",
+        "message": "Japonais",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ko": {
-        "message": "Korean",
+        "message": "Coréen",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nb_NO": {
-        "message": "Norwegian Bokmål",
+        "message": "Norvégien Bokmål",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl": {
-        "message": "Dutch",
+        "message": "Flamand",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
+        "message": "Néerlandais",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pl": {
-        "message": "Polish",
+        "message": "Polonais",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pt": {
-        "message": "Portuguese",
+        "message": "Portugais",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ru": {
-        "message": "Russian",
+        "message": "Russe",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sq": {
-        "message": "Albanian",
+        "message": "Albanien",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sr": {
-        "message": "Serbian",
+        "message": "Serbe",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sv": {
-        "message": "Swedish",
+        "message": "Suédois",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ta": {
@@ -528,43 +552,43 @@
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.tr": {
-        "message": "Turkish",
+        "message": "Turque",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.uk": {
-        "message": "Ukrainian",
+        "message": "Ukrainien",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.zh_CN": {
-        "message": "Chinese",
+        "message": "Chinois",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "emojiAlt": {
-        "message": "Emoji of $1$",
+        "message": "Emoji de $1$",
         "description": "Used with aria-label for emojis"
     },
     "chatView.nochatselectedHeader": {
-        "message": "Welcome to Delta Chat",
+        "message": "Bienvenu·e dans DeltaChat",
         "description": "Header message when no chats are available"
     },
     "chatView.nochatselectedSuggestion": {
-        "message": "Select a chat or create a new chat",
+        "message": "Sélectionnez une conversation ou en créer une nouvelle",
         "description": "Suggestion of what to do when no chats are selected"
     },
     "DC_STR_NOMESSAGES": {
-        "message": "No messages.",
+        "message": "Pas de message.",
         "description": ""
     },
     "DC_STR_SELF": {
-        "message": "Me",
+        "message": "Moi",
         "description": ""
     },
     "DC_STR_DRAFT": {
-        "message": "Draft",
+        "message": "Brouillon",
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "%1$s membres",
         "description": ""
     },
     "DC_STR_CONTACT": {
@@ -572,11 +596,11 @@
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
-        "message": "Voice message",
+        "message": "Message Vocal",
         "description": ""
     },
     "DC_STR_DEADDROP": {
-        "message": "Mailbox",
+        "message": "Messages",
         "description": ""
     },
     "DC_STR_IMAGE": {
@@ -588,7 +612,7 @@
         "description": ""
     },
     "DC_STR_VIDEO": {
-        "message": "Video",
+        "message": "Vidéo",
         "description": ""
     },
     "DC_STR_AUDIO": {
@@ -596,51 +620,47 @@
         "description": ""
     },
     "DC_STR_FILE": {
-        "message": "File",
+        "message": "Fichier",
         "description": ""
     },
     "DC_STR_ENCRYPTEDMSG": {
-        "message": "Encrypted message",
+        "message": "Message chiffré",
         "description": ""
     },
     "DC_STR_STATUSLINE": {
-        "message": "Sent with my Delta Chat Messenger: https://delta.chat",
+        "message": "Envoyé par la messagerie Delta Chat: https://delta.chat",
         "description": ""
     },
     "DC_STR_NEWGROUPDRAFT": {
-        "message": "Hello, I've just created the group \"%1$s\" for us.",
+        "message": "Bonjour, je viens de créer le groupe \"%1$s\" pour nous.",
         "description": ""
     },
     "DC_STR_MSGGRPNAME": {
-        "message": "Group name changed from \"%1$s\" to \"%2$s\".",
+        "message": "Le nom du groupe a changé de \"%1$s\" à \"%2$s\".",
         "description": ""
     },
     "DC_STR_MSGGRPIMGCHANGED": {
-        "message": "Group image changed.",
+        "message": "L'image du groupe a changé.",
         "description": ""
     },
     "DC_STR_MSGADDMEMBER": {
-        "message": "Member %1$s added.",
+        "message": "Membre %1$s ajouté",
         "description": ""
     },
     "DC_STR_MSGDELMEMBER": {
-        "message": "Member %1$s removed.",
+        "message": "Membre %1$s retiré.",
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Left group.",
+        "message": "Quitter le groupe",
         "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
-        "message": "You must be a member of the group to perform this action.",
-        "description": ""
-    },
-    "DC_STR_NONETWORK": {
-        "message": "No network available.",
+        "message": "Vous devez être membre du groupe pour effectuer cette action.",
         "description": ""
     },
     "DC_STR_E2E_AVAILABLE": {
-        "message": "End-to-end encryption available.",
+        "message": "Chiffrement de bout en bout disponible.",
         "description": ""
     },
     "DC_STR_ENCR_TRANSP": {
@@ -648,31 +668,31 @@
         "description": ""
     },
     "DC_STR_ENCR_NONE": {
-        "message": "No encryption.",
+        "message": "Pas de chiffrement.",
         "description": ""
     },
     "DC_STR_FINGERPRINTS": {
-        "message": "Fingerprints",
+        "message": "Empreintes",
         "description": ""
     },
     "DC_STR_READRCPT": {
-        "message": "Return receipt",
+        "message": "Avis de retour",
         "description": ""
     },
     "DC_STR_READRCPT_MAILBODY": {
-        "message": "This is a return receipt for the message \"%1$s\".",
+        "message": "Avis de retour pour le message \"%1$s\".",
         "description": ""
     },
     "DC_STR_MSGGRPIMGDELETED": {
-        "message": "Group image deleted.",
+        "message": "Image du groupe effacée.",
         "description": ""
     },
     "DC_STR_E2E_PREFERRED": {
-        "message": "End-to-end encryption preferred.",
+        "message": "Chiffrement de bout en bout préféré.",
         "description": ""
     },
     "DC_STR_ARCHIVEDCHATS": {
-        "message": "Archived chats",
+        "message": "Conversations archivées",
         "description": ""
     },
     "DC_STR_STARREDMSGS": {
@@ -680,7 +700,7 @@
         "description": ""
     },
     "DC_STR_AC_SETUP_MSG_SUBJECT": {
-        "message": "Autocrypt Setup Message",
+        "message": "Message de configuration Autocrypt",
         "description": ""
     },
     "DC_STR_AC_SETUP_MSG_BODY": {
@@ -688,39 +708,39 @@
         "description": ""
     },
     "DC_STR_SELFTALK_SUBTITLE": {
-        "message": "Messages I sent to myself",
+        "message": "Messages envoyés à moi-même",
         "description": ""
     },
     "DC_STR_CANTDECRYPT_MSG_BODY": {
-        "message": "This message was encrypted for another setup.",
+        "message": "Ce message a été chiffré pour une autre configuration.",
         "description": ""
     },
     "DC_STR_CANNOT_LOGIN": {
-        "message": "Cannot login as %1$s.",
+        "message": "Connexion impossible en tant que %1$s.",
         "description": ""
     },
     "DC_STR_SERVER_RESPONSE": {
-        "message": "Response from %1$s: %2$s",
+        "message": "Réponse de %1$s: %2$s",
         "description": ""
     },
     "dialogs.blockContact": {
-        "message": "Block $1$?",
+        "message": "Bloquer $1 $?",
         "description": "Dialog to confirm blocking contact"
     },
     "dialogs.unblockContact": {
-        "message": "Unblock $1$?",
+        "message": "Débloquer $1 $?",
         "description": "Dialog to confirm unblocking contact"
     },
     "dialogs.deleteChat": {
-        "message": "Delete chat $1$?",
+        "message": "Effacer la conversation $1 $?",
         "description": "Dialog to confirm deleting a chat"
     },
     "dialogs.confirmation.no": {
-        "message": "No",
+        "message": "Non",
         "description": "No button label in confirmation dialog"
     },
     "dialogs.confirmation.yes": {
-        "message": "Yes",
+        "message": "Oui",
         "description": "Yes button label in confirmation dialog"
     },
     "blockContact": {
@@ -740,15 +760,27 @@
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Effacer",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Chercher",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Chercher",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Effacer ce Message",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Détails du Message",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Information du Contact",
+        "description": "Contact Detail title for dialog"
     }
 }

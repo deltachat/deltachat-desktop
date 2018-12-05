@@ -16,23 +16,35 @@
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Add contact",
+        "message": "Добавить контакт",
         "description": "Add contact button label"
     },
     "name": {
-        "message": "Name",
+        "message": "Имя",
         "description": "Name label in Add Contact view"
     },
     "newGroup": {
-        "message": "New group",
+        "message": "Новая группа",
         "description": "New group button and text label"
+    },
+    "newVerifiedGroup": {
+        "message": "Новая подтвержденная группа",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Показать QR код проверки подлинности",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Показать QR код приглашения",
+        "description": "Label for button to show QR code for joining a verified group"
     },
     "archiveGroup": {
         "message": "Переместить группу в архив",
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Разархивировать группу",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
@@ -41,7 +53,19 @@
     },
     "editGroup": {
         "message": "Редактировать группу",
-        "description": "Edit group menu item label"
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Редактировать доверенную группу",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "подтверждённый",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "QR код",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Выйти из группы",
@@ -60,7 +84,7 @@
         "description": "Information to user when creating group with empty name"
     },
     "newChat": {
-        "message": "New chat",
+        "message": "Новый чат",
         "description": "New chat button and text label"
     },
     "archiveChat": {
@@ -68,15 +92,15 @@
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "Разархивировать чат",
         "description": "Unarchive chat menu item label"
     },
     "noChats": {
-        "message": "No chats",
+        "message": "Нет чатов",
         "description": "Message shown to user when there are no chats"
     },
     "noArchivedChats": {
-        "message": "No archived chats",
+        "message": "Нет архивных чатов",
         "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
@@ -180,7 +204,7 @@
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to DeltaChat",
+        "message": "Добро пожаловать в DeltaChat",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
@@ -188,11 +212,11 @@
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Введите пароль...",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
-        "message": "Password",
+        "message": "Пароль",
         "description": "Label above input field for mail password"
     },
     "login.required": {
@@ -200,7 +224,7 @@
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
     "login.advanced": {
-        "message": "Advanced",
+        "message": "Расширенные настройки",
         "description": "Advanced settings button label"
     },
     "login.inbox": {
@@ -228,7 +252,7 @@
         "description": "Text for disabling imap transport security"
     },
     "login.security.automatic": {
-        "message": "Automatic",
+        "message": "Автоматически",
         "description": "Text for disabling imap transport security"
     },
     "login.outbox": {
@@ -256,7 +280,7 @@
         "description": "Label above selection box for smtp security"
     },
     "login.automatic": {
-        "message": "automatic",
+        "message": "автоматически",
         "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
@@ -340,11 +364,11 @@
         "description": "Report an Issue... menu item label"
     },
     "menu.help.about": {
-        "message": "About DeltaChat",
+        "message": "О DeltaChat",
         "description": "About menu item"
     },
     "aboutDeltaChat": {
-        "message": "About DeltaChat",
+        "message": "О DeltaChat",
         "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
@@ -428,7 +452,7 @@
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     },
     "videoScreenshotFailedToLoad": {
-        "message": "Ошибка отображения снимка экрана видеофайла",
+        "message": "Скриншот видео не может быть показан",
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
@@ -544,15 +568,15 @@
         "description": "Used with aria-label for emojis"
     },
     "chatView.nochatselectedHeader": {
-        "message": "Welcome to Delta Chat",
+        "message": "Добро пожаловать в Delta Chat",
         "description": "Header message when no chats are available"
     },
     "chatView.nochatselectedSuggestion": {
-        "message": "Select a chat or create a new chat",
+        "message": "Выберите чат или создайте новый",
         "description": "Suggestion of what to do when no chats are selected"
     },
     "DC_STR_NOMESSAGES": {
-        "message": "No messages.",
+        "message": "Нет сообщений.",
         "description": ""
     },
     "DC_STR_SELF": {
@@ -560,7 +584,7 @@
         "description": ""
     },
     "DC_STR_DRAFT": {
-        "message": "Draft",
+        "message": "Черновик",
         "description": ""
     },
     "DC_STR_MEMBER": {
@@ -572,7 +596,7 @@
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
-        "message": "Voice message",
+        "message": "Голосовое сообщение",
         "description": ""
     },
     "DC_STR_DEADDROP": {
@@ -580,7 +604,7 @@
         "description": ""
     },
     "DC_STR_IMAGE": {
-        "message": "Image",
+        "message": "Изображение",
         "description": ""
     },
     "DC_STR_GIF": {
@@ -588,59 +612,55 @@
         "description": ""
     },
     "DC_STR_VIDEO": {
-        "message": "Video",
+        "message": "Видео",
         "description": ""
     },
     "DC_STR_AUDIO": {
-        "message": "Audio",
+        "message": "Аудио",
         "description": ""
     },
     "DC_STR_FILE": {
-        "message": "File",
+        "message": "Файл",
         "description": ""
     },
     "DC_STR_ENCRYPTEDMSG": {
-        "message": "Encrypted message",
+        "message": "Зашифрованное сообщение",
         "description": ""
     },
     "DC_STR_STATUSLINE": {
-        "message": "Sent with my Delta Chat Messenger: https://delta.chat",
+        "message": "Отправлено с помощью Delta Chat Messenger: https://delta.chat",
         "description": ""
     },
     "DC_STR_NEWGROUPDRAFT": {
-        "message": "Hello, I've just created the group \"%1$s\" for us.",
+        "message": "Приветствую, я только что создал группу \"%1$s\" для нас.",
         "description": ""
     },
     "DC_STR_MSGGRPNAME": {
-        "message": "Group name changed from \"%1$s\" to \"%2$s\".",
+        "message": "Название группы изменилось с \"%1$s\" на \"%2$s\".",
         "description": ""
     },
     "DC_STR_MSGGRPIMGCHANGED": {
-        "message": "Group image changed.",
+        "message": "Изображение группы изменено.",
         "description": ""
     },
     "DC_STR_MSGADDMEMBER": {
-        "message": "Member %1$s added.",
+        "message": "Участник %1$s присоединился.",
         "description": ""
     },
     "DC_STR_MSGDELMEMBER": {
-        "message": "Member %1$s removed.",
+        "message": "Участник %1$s покинул группу.",
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Left group.",
+        "message": "Покинуть группу.",
         "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
-        "message": "You must be a member of the group to perform this action.",
-        "description": ""
-    },
-    "DC_STR_NONETWORK": {
-        "message": "No network available.",
+        "message": "Вы должны быть участником группы для выполнения этого действия.",
         "description": ""
     },
     "DC_STR_E2E_AVAILABLE": {
-        "message": "End-to-end encryption available.",
+        "message": "Доступно end-to-end шифрование.",
         "description": ""
     },
     "DC_STR_ENCR_TRANSP": {
@@ -648,15 +668,15 @@
         "description": ""
     },
     "DC_STR_ENCR_NONE": {
-        "message": "No encryption.",
+        "message": "Не зашифровано.",
         "description": ""
     },
     "DC_STR_FINGERPRINTS": {
-        "message": "Fingerprints",
+        "message": "Отпечатки",
         "description": ""
     },
     "DC_STR_READRCPT": {
-        "message": "Return receipt",
+        "message": "Уведомление о получении",
         "description": ""
     },
     "DC_STR_READRCPT_MAILBODY": {
@@ -664,19 +684,19 @@
         "description": ""
     },
     "DC_STR_MSGGRPIMGDELETED": {
-        "message": "Group image deleted.",
+        "message": "Изображение группы удалено.",
         "description": ""
     },
     "DC_STR_E2E_PREFERRED": {
-        "message": "End-to-end encryption preferred.",
+        "message": "Предпочитать end-to-end шифрование.",
         "description": ""
     },
     "DC_STR_ARCHIVEDCHATS": {
-        "message": "Archived chats",
+        "message": "Архивированные чаты",
         "description": ""
     },
     "DC_STR_STARREDMSGS": {
-        "message": "Starred messages",
+        "message": "Отмеченные сообщения",
         "description": ""
     },
     "DC_STR_AC_SETUP_MSG_SUBJECT": {
@@ -688,67 +708,79 @@
         "description": ""
     },
     "DC_STR_SELFTALK_SUBTITLE": {
-        "message": "Messages I sent to myself",
+        "message": "Мои сохраненные сообщения",
         "description": ""
     },
     "DC_STR_CANTDECRYPT_MSG_BODY": {
-        "message": "This message was encrypted for another setup.",
+        "message": "Это сообщение было зашифровано с другими настройками.",
         "description": ""
     },
     "DC_STR_CANNOT_LOGIN": {
-        "message": "Cannot login as %1$s.",
+        "message": "Невозможно авторизоваться как %1$s.",
         "description": ""
     },
     "DC_STR_SERVER_RESPONSE": {
-        "message": "Response from %1$s: %2$s",
+        "message": "Ответ от %1$s: %2$s",
         "description": ""
     },
     "dialogs.blockContact": {
-        "message": "Block $1$?",
+        "message": "Заблокировать $1$?",
         "description": "Dialog to confirm blocking contact"
     },
     "dialogs.unblockContact": {
-        "message": "Unblock $1$?",
+        "message": "Разблокировать $1$?",
         "description": "Dialog to confirm unblocking contact"
     },
     "dialogs.deleteChat": {
-        "message": "Delete chat $1$?",
+        "message": "Удалить чат $1$?",
         "description": "Dialog to confirm deleting a chat"
     },
     "dialogs.confirmation.no": {
-        "message": "No",
+        "message": "Нет",
         "description": "No button label in confirmation dialog"
     },
     "dialogs.confirmation.yes": {
-        "message": "Yes",
+        "message": "Да",
         "description": "Yes button label in confirmation dialog"
     },
     "blockContact": {
-        "message": "Block Contact",
+        "message": "Заблокировать контакт",
         "description": "Menu option to block current contact"
     },
     "unblockContacts": {
-        "message": "Unblock Contacts",
+        "message": "Разблокировать контакты",
         "description": "Menu option to unblock contacts"
     },
     "unblockContacts.noneBlocked": {
-        "message": "No blocked contacts yet",
+        "message": "Заблокированных контактов пока нет",
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Выбрать изображение группы",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Удалить",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Поиск",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Поиск",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Удалить сообщение",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Информация о сообщении",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Информация о контакте",
+        "description": "Contact Detail title for dialog"
     }
 }
