@@ -566,7 +566,7 @@
   @include color-svg('../images/check-circle-outline.svg', $color-light-35);
 }
 .module-message__metadata__status-icon--delivered {
-  @include color-svg('../images/double-check.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', $color-light-35);
   width: 18px;
 }
 .module-message__metadata__status-icon--read {
@@ -1779,7 +1779,7 @@
   @include color-svg('../images/check-circle-outline.svg', $color-light-35);
 }
 .module-message-detail__contact__status-icon--delivered {
-  @include color-svg('../images/double-check.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', $color-light-35);
   width: 18px;
 }
 .module-message-detail__contact__status-icon--read {
@@ -2197,7 +2197,7 @@
   @include color-svg('../images/check-circle-outline.svg', $color-light-35);
 }
 .module-conversation-list-item__message__status-icon--delivered {
-  @include color-svg('../images/double-check.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', $color-light-35);
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--read {

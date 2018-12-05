@@ -23,7 +23,7 @@ export class ConversationContext extends React.Component<Props> {
         className={classNames(theme || 'light-theme', ios ? 'ios-theme' : null)}
       >
         <div className={classNames('conversation', type || 'private')}>
-          <div className="discussion-container" style={{ padding: '0.5em' }}>
+          <div className="discussion-container" style={{ padding: '0 0.5em' }}>
             <ul className="message-list">{this.props.children}</ul>
           </div>
         </div>
