@@ -4,6 +4,8 @@ const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const { Message } = require('./conversations')
 const { remote, ipcRenderer } = require('electron')
+const StyleVariables = require('./style-variables')
+const moment = require('moment')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -16,16 +18,29 @@ const SetupMessage = styled.li`
   }
 `
 
-const InfoMessage = styled.div`
+const InfoMessage = styled.li`
+  width: 100%;
   text-align: center;
-  font-style: italic;
-  color: #757575;
+  margin: 26px 0px;
+
+  p {
+    display: inline-block;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    padding: 7px 14px;
+    background-color: ${StyleVariables.colors.deltaInfoMessageBubbleBg};
+    border-radius: 10px;
+    opacity: 0.44;
+    color: ${StyleVariables.colors.deltaInfoMessageBubbleColor};
+  }
 `
 
-const MessageWrapper = styled.div`
+const MessageWrapper = styled.li`
   .module-message__metadata {
     margin-top: 10px;
     margin-bottom: -7px;
+    float: right;
   }
 
   .module-message__author-default-avatar__label {
@@ -46,12 +61,36 @@ const MessageWrapper = styled.div`
     margin-right: 8px;
   }
 
+  .module-message__img-attachment {
+    object-fit: unset;
+    width: auto;
+    height: auto;
+    min-height: unset;
+  }
+
+  .module-message__img-border-overlay {
+    box-shadow: unset;
+  }
 `
 
 function render (props) {
   const { message, onClickSetupMessage } = props
-  let body = <RenderMessage {...props} />
 
+  if (message.id === C.DC_MSG_ID_DAYMARKER) {
+    return (
+      <InfoMessage id={message.daymarker.id}>
+        <p>
+          {moment.unix(message.daymarker.timestamp).calendar(null, {
+            lastDay: '',
+            lastWeek: 'LL',
+            sameElse: 'LL'
+          })}
+        </p>
+      </InfoMessage>
+    )
+  }
+
+  let body = <RenderMessage {...props} />
   if (message.msg.isSetupmessage) {
     return <SetupMessage key={message.id}
       onClick={onClickSetupMessage}>
@@ -118,7 +157,7 @@ class RenderMessage extends React.Component {
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-    if (message.isInfo) return <InfoMessage>{msg.text}</InfoMessage>
+    if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
 
     return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
   }

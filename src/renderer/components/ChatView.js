@@ -6,6 +6,7 @@ const Composer = require('./Composer')
 const Message = require('./Message')
 const { ConversationContext } = require('./conversations')
 const styled = require('styled-components').default
+const StyleVariables = require('./style-variables')
 
 const MutationObserver = window.MutationObserver
 
@@ -19,8 +20,58 @@ const ChatViewWrapper = styled.div`
   #the-conversation {
     height: calc(100vh - 50px - 40px);
     overflow: scroll;
-    background: white;
+    background-image: url("../images/background_hd.jpg");
+    background-size: cover;
   }
+
+  .conversation, .discussion-container {
+    background-color: inherit;
+  }
+
+  .module-message__author-default-avatar {
+    align-self: flex-end;
+  }
+
+  .module-message__container {
+    &, & .module-message__attachment-container {
+      border-radius: 16px 16px 16px 1px;
+    }
+  }
+
+  .module-message__container--incoming {
+    background-color: ${StyleVariables.colors.deltaChatMessageBubbleOther};
+  }
+
+  .module-message__container--outgoing {
+    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelf};
+
+    &, & .module-message__attachment-container {
+      border-radius: 16px 16px 1px 16px;
+    }
+  }
+
+  .module-message__attachment-container--with-content-above {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+  }
+
+  .module-message__attachment-container--with-content-below {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+  }
+
+  .module-message__text--incoming {
+    color: unset;
+  }
+
+  .module-message__author, .module-message__text {
+    color: ${StyleVariables.colors.deltaChatPrimaryFg};
+  }
+
+  .module-message__metadata__date--incoming {
+    color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+  }
+}
 `
 
 const RenderMediaWrapper = styled.div`
