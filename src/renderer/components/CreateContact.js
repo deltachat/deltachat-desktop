@@ -12,6 +12,8 @@ const {
   Button
 } = require('@blueprintjs/core')
 
+const NavbarWrapper = require('./NavbarWrapper')
+
 class CreateContact extends React.Component {
   constructor (props) {
     super(props)
@@ -67,12 +69,14 @@ class CreateContact extends React.Component {
     const tx = window.translate
     return (
       <div>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
-            <NavbarHeading>{tx('addContact')}</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
+        <NavbarWrapper>
+          <Navbar fixedToTop>
+            <NavbarGroup align={Alignment.LEFT}>
+              <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
+              <NavbarHeading>{tx('addContact')}</NavbarHeading>
+            </NavbarGroup>
+          </Navbar>
+        </NavbarWrapper>
         <div className='window'>
           <form onSubmit={this.handleSubmit}>
             <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
