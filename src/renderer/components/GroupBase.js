@@ -1,6 +1,5 @@
 const { ipcRenderer } = require('electron')
 const React = require('react')
-const path = require('path')
 const { dialog } = require('electron').remote
 
 const {
