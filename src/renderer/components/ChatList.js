@@ -56,7 +56,7 @@ const ContactRequestItemWrapper = styled.div`
 
   .module-conversation-list-item:hover {
     background-color:#bbb;
-  }  
+  }
 `
 
 class ChatList extends React.Component {
@@ -78,10 +78,9 @@ class ChatList extends React.Component {
             if (chat.id === C.DC_CHAT_ID_DEADDROP) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
-                <ContactRequestItemWrapper>
+                <ContactRequestItemWrapper key={i}>
                   <ConversationListItem
                     className='contactrequest'
-                    key={i}
                     name={name}
                     i18n={i18n}
                     phoneNumber={chat.summary.text1}
@@ -97,8 +96,8 @@ class ChatList extends React.Component {
                 </ContactRequestItemWrapper>)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
-                <Unselectable>
-                  <div key={i} className='ShowArchivedChats'>
+                <Unselectable key={i}>
+                  <div className='ShowArchivedChats'>
                     <ConversationListItem
                       onClick={this.props.onShowArchivedChats}
                       name={chat.name}
