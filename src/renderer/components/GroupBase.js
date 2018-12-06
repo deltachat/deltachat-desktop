@@ -18,12 +18,6 @@ const { RenderContact } = require('./Contact')
 const { QrCode } = require('./dialogs')
 const NavbarWrapper = require('./NavbarWrapper')
 
-const DEFAULT_IMAGE = path.resolve(
-  __dirname,
-  '../../..',
-  'images/group_default.png'
-)
-
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
@@ -114,7 +108,7 @@ class GroupBase extends React.Component {
       qrCode
     } = this.state
     const tx = window.translate
-    const image = this.state.image || DEFAULT_IMAGE
+    const image = this.state.image || '../images/group_default.png'
 
     return (
       <div>
