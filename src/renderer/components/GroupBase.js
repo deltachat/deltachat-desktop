@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 const React = require('react')
 const path = require('path')
 const { dialog } = require('electron').remote
+
 const {
   Alignment,
   Classes,
@@ -15,6 +16,7 @@ const {
 
 const { RenderContact } = require('./Contact')
 const { QrCode } = require('./dialogs')
+const NavbarWrapper = require('./NavbarWrapper')
 
 const DEFAULT_IMAGE = path.resolve(
   __dirname,
@@ -116,12 +118,14 @@ class GroupBase extends React.Component {
 
     return (
       <div>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
-            <NavbarHeading>{tx(this.state.heading)}</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
+        <NavbarWrapper>
+          <Navbar fixedToTop>
+            <NavbarGroup align={Alignment.LEFT}>
+              <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
+              <NavbarHeading>{tx(this.state.heading)}</NavbarHeading>
+            </NavbarGroup>
+          </Navbar>
+        </NavbarWrapper>
         <div className='window'>
           <div className='GroupBase'>
             <div className='SelectGroupImage'>

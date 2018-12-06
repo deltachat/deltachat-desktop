@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
 const {
   Alignment,
@@ -15,8 +16,7 @@ const {
 } = require('@blueprintjs/core')
 
 const ClickableLink = require('./helpers/ClickableLink')
-
-const styled = require('styled-components').default
+const NavbarWrapper = require('./NavbarWrapper')
 
 const LoginWrapper = styled.div`
   .window {
@@ -132,11 +132,13 @@ class Login extends React.Component {
 
     return (
       <LoginWrapper>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
+        <NavbarWrapper>
+          <Navbar fixedToTop>
+            <NavbarGroup align={Alignment.LEFT}>
+              <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
+            </NavbarGroup>
+          </Navbar>
+        </NavbarWrapper>
         <div className='window'>
           <Callout intent='danger' title='Single folder incompatibility'>
             To improve the user experience with Delta Chat using multiple devices, we experimentally changed the behaviour of Delta Chat. Therefore, beginning with this release, we aren't compatible with the <b>old android client</b> which you can currently find in the f-droid store. Please use the <b>new development</b> version. You can find it <ClickableLink href='https://github.com/deltachat/deltachat-android-ii/releases'>here</ClickableLink>.
