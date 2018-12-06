@@ -91,7 +91,7 @@ function render (props) {
         </p>
       </InfoMessage>
     )
-  } else if(message.msg.isSetupmessage) {
+  } else if (message.msg.isSetupmessage) {
     body = (
       <SetupMessage key={message.id}
         onClick={onClickSetupMessage}>
