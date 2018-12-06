@@ -12,8 +12,11 @@
 ### Run the app
 
 ```
+$ npm run build
 $ npm start
 ```
+
+The first `npm run build` step is optional and only needed if code has changed or if the app has never been built before.
 
 ### Watch the code
 
