@@ -71,6 +71,14 @@ const MessageWrapper = styled.li`
   .module-message__img-border-overlay {
     box-shadow: unset;
   }
+
+  .module-message__metadata__date {
+    color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
+  }
+
+  .module-message__metadata__status-icon--read {
+    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
+  }
 `
 
 function render (props) {
