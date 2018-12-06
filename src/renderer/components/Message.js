@@ -12,13 +12,13 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
 
-const SetupMessage = styled.li`
+const SetupMessage = styled.div`
   .module-message__text {
     color: #ed824e;
   }
 `
 
-const InfoMessage = styled.li`
+const InfoMessage = styled.div`
   width: 100%;
   text-align: center;
   margin: 26px 0px;
@@ -36,7 +36,7 @@ const InfoMessage = styled.li`
   }
 `
 
-const MessageWrapper = styled.li`
+const MessageWrapper = styled.div`
   .module-message__metadata {
     margin-top: 10px;
     margin-bottom: -7px;
@@ -84,9 +84,12 @@ const MessageWrapper = styled.li`
 function render (props) {
   const { message, onClickSetupMessage } = props
 
+  let key = message.id
+  let body
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
-    return (
-      <InfoMessage id={message.daymarker.id}>
+    key = message.daymarker.id
+    body = (
+      <InfoMessage>
         <p>
           {moment.unix(message.daymarker.timestamp).calendar(null, {
             lastDay: '',
@@ -96,17 +99,18 @@ function render (props) {
         </p>
       </InfoMessage>
     )
+  } else if (message.msg.isSetupmessage) {
+    body = (
+      <SetupMessage key={message.id}
+        onClick={onClickSetupMessage}>
+        {body}
+      </SetupMessage>
+    )
+  } else {
+    body = <RenderMessage {...props} />
   }
 
-  let body = <RenderMessage {...props} />
-  if (message.msg.isSetupmessage) {
-    return <SetupMessage key={message.id}
-      onClick={onClickSetupMessage}>
-      {body}
-    </SetupMessage>
-  }
-
-  return <li key={message.id}>{body}</li>
+  return <li key={key}>{body}</li>
 }
 
 /**
