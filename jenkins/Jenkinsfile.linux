@@ -32,7 +32,7 @@ pipeline {
         GH_TOKEN = credentials('github-token')
       }
       steps {
-        sh 'npm run dist'
+        sh 'npm run dist-ci'
       }
     }
   }
