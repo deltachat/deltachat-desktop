@@ -79,6 +79,10 @@ const MessageWrapper = styled.div`
   .module-message__metadata__status-icon--read {
     background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
   }
+
+  .module-message__buttons__reply {
+    display: none;
+  }
 `
 
 function render (props) {
