@@ -2,47 +2,70 @@ const React = require('react')
 
 const { ControlGroup, Button, TextArea } = require('@blueprintjs/core')
 const { remote } = require('electron')
+const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
 
 const ComposerWrapper = styled.div`
   height: 40px;
+  background-color: ${StyleVariables.colors.deltaPrimaryFg};
+`
 
-  .composer {
-    position: fixed;
-    bottom: 0px;
-    width: 70%;
-    background-color: #eeefef;
-    padding: 4px 10px;
+const AttachmentButtonWrapper = styled.div`
+  float: left;
+  button {
+    margin-right: 10px;
   }
 
-  input:focus {
-    outline: 0;
-    -webkit-box-shadow: unset;
-    box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
-  }
+  .bp3-button.bp3-minimal {
+    width: 40px;
+    height: 40px;
 
-  .composer button {
-    max-width: 100px;
-  }
-
-  .composer textarea {
-    resize: unset;
-    box-shadow: none;
-    background-color: #eeefef;
-    padding: 0px;
-
-
-    &:focus {
-      outline: none;
+    &:hover {
+      background: none;
+      cursor: pointer;
     }
   }
 `
 
-const AttachmentButtonWrapper = styled.div`
-  flex: none !important;
-  button {
-    margin-right: 10px;
+
+const MessageInput = styled.textarea`
+  float: left;
+  width: calc(100% - 100px);
+  resize: unset;
+  padding: 0px;
+  border-color: transparent;
+  height: 40px;
+  line-height: 38px;
+
+
+  &:focus {
+    outline: none;
   }
+`
+const SendButtonCircleWrapper = styled.div`
+  width: 33px;
+  height: 33px;
+  float: right;
+  margin-top: 2px;
+  margin-right: 5px;
+  background-color: ${StyleVariables.colors.deltaPrimaryBg};
+  border-radius: 180px;
+`
+
+const SendButton = styled.button`
+  height: 25px;
+  width: 25px;
+  margin-top: 6px;
+  margin-left: 8px;
+  padding-left: 16px;
+  background-image: url(../images/send-button.png);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  border: none;
+  cursor: pointer;
+  vertical-align: middle;
+  background-size: contain;
 `
 
 class Composer extends React.Component {
@@ -122,22 +145,22 @@ class Composer extends React.Component {
 
     return (
       <ComposerWrapper>
-        <ControlGroup className='composer' fill vertical={false}>
-          <AttachmentButtonWrapper>
-            <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
-          </AttachmentButtonWrapper>
-          <TextArea
-            intent={this.state.error ? 'danger' : 'none'}
-            large
-            rows='1'
-            value={this.state.text}
-            onKeyDown={this.onKeyDown.bind(this)}
-            aria-label={tx('writeMessageAriaLabel')}
-            onChange={this.handleChange}
-            placeholder={tx('writeMessage')}
-          />
-          <Button onClick={this.sendMessage}>{tx('send')}</Button>
-        </ControlGroup>
+        <AttachmentButtonWrapper>
+          <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
+        </AttachmentButtonWrapper>
+        <MessageInput
+          intent={this.state.error ? 'danger' : 'none'}
+          large
+          rows='1'
+          value={this.state.text}
+          onKeyDown={this.onKeyDown.bind(this)}
+          aria-label={tx('writeMessageAriaLabel')}
+          onChange={this.handleChange}
+          placeholder={tx('writeMessage')}
+        />
+        <SendButtonCircleWrapper>
+          <SendButton onClick={this.sendMessage}/>
+        </SendButtonCircleWrapper>
       </ComposerWrapper>
     )
   }
