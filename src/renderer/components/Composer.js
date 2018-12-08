@@ -50,6 +50,7 @@ const SendButtonCircleWrapper = styled.div`
   margin-right: 5px;
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
+  cursor: pointer;
 `
 
 const SendButton = styled.button`
@@ -63,7 +64,6 @@ const SendButton = styled.button`
   background-repeat: no-repeat;
   background-position: 0px 0px;
   border: none;
-  cursor: pointer;
   vertical-align: middle;
   background-size: contain;
 `
@@ -158,8 +158,8 @@ class Composer extends React.Component {
           onChange={this.handleChange}
           placeholder={tx('writeMessage')}
         />
-        <SendButtonCircleWrapper>
-          <SendButton onClick={this.sendMessage} />
+        <SendButtonCircleWrapper onClick={this.sendMessage}>
+          <SendButton  />
         </SendButtonCircleWrapper>
       </ComposerWrapper>
     )
