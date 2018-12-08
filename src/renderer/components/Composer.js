@@ -159,7 +159,7 @@ class Composer extends React.Component {
           placeholder={tx('writeMessage')}
         />
         <SendButtonCircleWrapper onClick={this.sendMessage}>
-          <SendButton  />
+          <SendButton />
         </SendButtonCircleWrapper>
       </ComposerWrapper>
     )
