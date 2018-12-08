@@ -434,9 +434,9 @@ class DeltaChatController {
 
     if (messageIdsToRender.length === 0) return []
 
-    let messages = Array(messageIdsToRender.length - 1)
+    let messages = Array(messageIdsToRender.length)
 
-    for (let i = messageIdsToRender.length - 1; i > 0; i--) {
+    for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
       let id = messageIdsToRender[i]
       let json = this._messageIdToJson(id)
 
