@@ -1,6 +1,6 @@
 const React = require('react')
 
-const { ControlGroup, Button, TextArea } = require('@blueprintjs/core')
+const { Button } = require('@blueprintjs/core')
 const { remote } = require('electron')
 const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
@@ -27,7 +27,6 @@ const AttachmentButtonWrapper = styled.div`
     }
   }
 `
-
 
 const MessageInput = styled.textarea`
   float: left;
@@ -160,7 +159,7 @@ class Composer extends React.Component {
           placeholder={tx('writeMessage')}
         />
         <SendButtonCircleWrapper>
-          <SendButton onClick={this.sendMessage}/>
+          <SendButton onClick={this.sendMessage} />
         </SendButtonCircleWrapper>
       </ComposerWrapper>
     )
