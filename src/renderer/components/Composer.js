@@ -8,6 +8,7 @@ const styled = require('styled-components').default
 const ComposerWrapper = styled.div`
   height: 40px;
   background-color: ${StyleVariables.colors.deltaPrimaryFg};
+  border-left: 1px solid rgba(16,22,26,0.1);
 `
 
 const AttachmentButtonWrapper = styled.div`
