@@ -129,7 +129,7 @@ class Composer extends React.Component {
           <TextArea
             intent={this.state.error ? 'danger' : 'none'}
             large
-            rows="1"
+            rows='1'
             value={this.state.text}
             onKeyDown={this.onKeyDown.bind(this)}
             aria-label={tx('writeMessageAriaLabel')}
