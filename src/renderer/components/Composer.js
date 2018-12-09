@@ -54,8 +54,8 @@ const SendButtonCircleWrapper = styled.div`
 `
 
 const SendButton = styled.button`
-  height: 25px;
-  width: 25px;
+  height: 24px;
+  width: 24px;
   margin-top: 5px;
   margin-left: 8px;
   padding-left: 16px;
