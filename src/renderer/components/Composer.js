@@ -43,10 +43,10 @@ const MessageInput = styled.textarea`
   }
 `
 const SendButtonCircleWrapper = styled.div`
-  width: 33px;
-  height: 33px;
+  width: 32px;
+  height: 32px;
   float: right;
-  margin-top: 2px;
+  margin-top: 3px;
   margin-right: 5px;
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
@@ -56,7 +56,7 @@ const SendButtonCircleWrapper = styled.div`
 const SendButton = styled.button`
   height: 25px;
   width: 25px;
-  margin-top: 6px;
+  margin-top: 5px;
   margin-left: 8px;
   padding-left: 16px;
   background-image: url(../images/send-button.png);
