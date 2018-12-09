@@ -27,6 +27,18 @@
         "message": "Ny grupp",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Ny verifierad grupp",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Visa QR-kod för verifiering",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Visa QR-kod för inbjudning",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Arkivera grupp",
         "description": "Archive group menu item label"
@@ -41,7 +53,19 @@
     },
     "editGroup": {
         "message": "Ändra grupp",
-        "description": "Edit group menu item label"
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Ändra verifierad grupp",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "verifierad",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "QR-kod",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Lämna grupp",
@@ -92,7 +116,7 @@
         "description": "Dialog title during Autocrypt key transfer"
     },
     "setupMessageInfo": {
-        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "message": "Detta är ett uppsättningsmeddelande för Autocrypt för att föra över krypteringsnyckel mellan klienter.\n\nKlicka på det här meddelandet för börja överföring av din krypteringsnyckel.",
         "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
@@ -635,10 +659,6 @@
         "message": "Du måste vara medlem av gruppen för att ha tillåtelse att göra detta.",
         "description": ""
     },
-    "DC_STR_NONETWORK": {
-        "message": "Inget nätverk tillgängligt.",
-        "description": ""
-    },
     "DC_STR_E2E_AVAILABLE": {
         "message": "End-to-end kryptering tillgänglig.",
         "description": ""
@@ -750,5 +770,17 @@
     "searchPlaceholder": {
         "message": "Sök",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Radera meddelande",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Meddelandedetaljer",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Kontaktdetaljer",
+        "description": "Contact Detail title for dialog"
     }
 }

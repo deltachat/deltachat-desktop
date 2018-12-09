@@ -27,6 +27,18 @@
         "message": "Nowa grupa",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Nowa zweryfikowana grupa",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Pokaż weryfikacyjny kod QR",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Pokaż kod QR zaproszenia",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Archiwizuj grupę",
         "description": "Archive group menu item label"
@@ -41,7 +53,19 @@
     },
     "editGroup": {
         "message": "Edytuj grupę",
-        "description": "Edit group menu item label"
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Edytuj zweryfikowanę grupę",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "zweryfikowany",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "Kod QR",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Opuść grupę",
@@ -635,10 +659,6 @@
         "message": "Aby wykonać tę akcję, musisz być członkiem grupy.",
         "description": ""
     },
-    "DC_STR_NONETWORK": {
-        "message": "Sieć niedostępna.",
-        "description": ""
-    },
     "DC_STR_E2E_AVAILABLE": {
         "message": "Pełne szyfrowanie jest dostępne.",
         "description": ""
@@ -750,5 +770,17 @@
     "searchPlaceholder": {
         "message": "Szukaj",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Usuń tą wiadomość",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Szczegóły wiadomości",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Szczegóły kontaktu",
+        "description": "Contact Detail title for dialog"
     }
 }

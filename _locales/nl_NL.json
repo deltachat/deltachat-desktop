@@ -27,6 +27,18 @@
         "message": "Nieuwe groep",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Nieuwe goedgekeurde groep",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "QR-verificatiecode tonen",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "QR-uitnodigingscode tonen",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Groep archiveren",
         "description": "Archive group menu item label"
@@ -41,7 +53,19 @@
     },
     "editGroup": {
         "message": "Groep bewerken",
-        "description": "Edit group menu item label"
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Goedgekeurde groep bewerken",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "goedgekeurd",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "QR-code",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Groep verlaten",
@@ -635,10 +659,6 @@
         "message": "Je moet lid van de groep zijn om deze actie uit te kunnen voeren.",
         "description": ""
     },
-    "DC_STR_NONETWORK": {
-        "message": "Geen netwerk beschikbaar.",
-        "description": ""
-    },
     "DC_STR_E2E_AVAILABLE": {
         "message": "End-to-end-versleuteling beschikbaar.",
         "description": ""
@@ -750,5 +770,17 @@
     "searchPlaceholder": {
         "message": "Zoeken",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Dit bericht verwijderen",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Berichtinformatie",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Contactinformatie",
+        "description": "Contact Detail title for dialog"
     }
 }

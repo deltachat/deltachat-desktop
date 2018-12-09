@@ -2,6 +2,7 @@ const React = require('react')
 const C = require('deltachat-node/constants')
 const { ConversationListItem } = require('./conversations')
 const styled = require('styled-components').default
+const Unselectable = require('./helpers/Unselectable')
 
 const StyleVariables = require('./style-variables')
 
@@ -48,6 +49,16 @@ const ChatListNoChats = styled.div`
   }
 `
 
+const ContactRequestItemWrapper = styled.div`
+  .module-conversation-list-item {
+    background-color:#ccc;
+  }
+
+  .module-conversation-list-item:hover {
+    background-color:#bbb;
+  }
+`
+
 class ChatList extends React.Component {
   render () {
     const { chatList, selectedChatId, showArchivedChats } = this.props
@@ -67,29 +78,32 @@ class ChatList extends React.Component {
             if (chat.id === C.DC_CHAT_ID_DEADDROP) {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
-                <ConversationListItem
-                  key={i}
-                  name={name}
-                  i18n={i18n}
-                  color={'purple'}
-                  phoneNumber={chat.summary.text1}
-                  lastUpdated={lastUpdated}
-                  lastMessage={{
-                    text: chat.summary.text2,
-                    status: 'delivered'
-                  }}
-                  onClick={this.props.onDeadDropClick.bind(null, chat)}
-                  isSelected={chat.id === selectedChatId}
-                  unreadCount={chat.freshMessageCounter}
-                />)
+                <ContactRequestItemWrapper key={i}>
+                  <ConversationListItem
+                    className='contactrequest'
+                    name={name}
+                    i18n={i18n}
+                    phoneNumber={chat.summary.text1}
+                    lastUpdated={lastUpdated}
+                    lastMessage={{
+                      text: chat.summary.text2,
+                      status: 'delivered'
+                    }}
+                    onClick={this.props.onDeadDropClick.bind(null, chat)}
+                    isSelected={chat.id === selectedChatId}
+                    unreadCount={chat.freshMessageCounter}
+                  />
+                </ContactRequestItemWrapper>)
             } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
               return (
-                <div key={i} className='ShowArchivedChats'>
-                  <ConversationListItem
-                    onClick={this.props.onShowArchivedChats}
-                    name={chat.name}
-                    i18n={i18n} />
-                </div>
+                <Unselectable key={i}>
+                  <div className='ShowArchivedChats'>
+                    <ConversationListItem
+                      onClick={this.props.onShowArchivedChats}
+                      name={chat.name}
+                      i18n={i18n} />
+                  </div>
+                </Unselectable>
               )
             } else {
               return (

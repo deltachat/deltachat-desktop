@@ -27,6 +27,18 @@
         "message": "Yeni grup",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Yeni doğrulanan grup",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "QR doğrulama kodunu göster",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "QR davet kodunu göster",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Grubu Arşivle",
         "description": "Archive group menu item label"
@@ -40,8 +52,20 @@
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Grubu Düzenle",
-        "description": "Edit group menu item label"
+        "message": "Grubu düzenle",
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Doğrulanan grubu düzenle",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "doğrulanan",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "QR Kodu",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Gruptan Ayrıl",
@@ -635,10 +659,6 @@
         "message": "Bu eylemi yürütmek için grubun bir üyesi olmalısınız.",
         "description": ""
     },
-    "DC_STR_NONETWORK": {
-        "message": "Kullanılabilir ağ yok.",
-        "description": ""
-    },
     "DC_STR_E2E_AVAILABLE": {
         "message": "Uçtan uca şifreleme kullanılabilir.",
         "description": ""
@@ -750,5 +770,17 @@
     "searchPlaceholder": {
         "message": "Ara",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Bu İletiyi Sil",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "İleti Ayrıntısı",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Kişi Ayrıntısı",
+        "description": "Contact Detail title for dialog"
     }
 }

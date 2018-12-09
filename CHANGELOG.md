@@ -2,6 +2,38 @@
 
 ## [Unreleased]
 
+## [2.1.0] - 2018-12-06
+
+### Changed
+* Update translations (@ralphtheninja)
+* Make buttons unselectable (@Simon-Laux)
+* Redesign of chat list and chat view (@jikstra)
+* Upgrade `deltachat-node` dependency to `^0.27.0` (@ralphtheninja)
+* Cleanup composer css and move focus message to composer (@karissa)
+* Display info text differentely than regular messages (@karissa)
+* Use `version-unchanged` to shortcut `electron-builder` on master branch for faster builds (@ralphtheninja)
+* Wrap integration tests with `xvfb-run` (@ralphtheninja)
+* Refactor state render (@jikstra)
+* Update `AUTHORS.md` (@jikstra, @ralphtheninja)
+
+### Added
+* Add `Unselectable` helper component (@Simon-Laux)
+
+### Removed
+* Remove `DC_STR_NONETWORK` (#300) (@ralphtheninja)
+
+### Fixed
+* Fix broken default group image (#382) (@ralphtheninja)
+* Fix deaddrop background (#247) (@Simon-Laux)
+* Upgrade `linkify-it` dependency to `^2.1.0` (#325) (@jikstra)
+* Properly set `viewType` when sending an attachment image (@karissa)
+* Error code was removed from `DC_EVENT_ERROR` event (@ralphtheninja)
+* Don't fetch more messages if all the messages have already been fetched (#353) (@karissa)
+* Render all available messages in a page (#354) (@karissa)
+* Fix broken integration tests (#357) (@ralphtheninja)
+* Fix deaddrop accept (#332) (@jikstra)
+* Turn contact into json before passing to frontend (#360)
+
 ## [2.0.0] - 2018-11-23
 
 ### Changed
@@ -200,7 +232,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.5...v2.0.0
 [1.7.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...v1.7.5
 [1.7.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...v1.7.4

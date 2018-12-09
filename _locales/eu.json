@@ -1,350 +1,374 @@
 {
     "logout": {
-        "message": "Logout",
+        "message": "Amaitu saioa",
         "description": "Text for a logout button"
     },
     "emailValidationFailed": {
-        "message": "E-mail address required.",
+        "message": "E-mail helbidea derrigorrezkoa da.",
         "description": "Error message if an invalid email address was given when creating a contact"
     },
     "createChatError": {
-        "message": "Could not create chat.",
+        "message": "Ezin izan da txata sortu.",
         "description": "Error message if a chat could not be created"
     },
     "newMessageFrom": {
-        "message": "New message from",
+        "message": "Igorle honen mezu berria:",
         "description": "Displayed when a chat request is recieved"
     },
     "addContact": {
-        "message": "Add contact",
+        "message": "Gehitu kontaktua",
         "description": "Add contact button label"
     },
     "name": {
-        "message": "Name",
+        "message": "Izena",
         "description": "Name label in Add Contact view"
     },
     "newGroup": {
-        "message": "New group",
+        "message": "Talde berria",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Egiaztatutako talde berria",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Erakutsi egiaztaketa QR kodea",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Erakutsi gonbidapen QR kodea",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
-        "message": "Archive Group",
+        "message": "Artxibatu taldea",
         "description": "Archive group menu item label"
     },
     "unArchiveGroup": {
-        "message": "Unarchive Group",
+        "message": "Berreskuratu taldea artxibotik",
         "description": "Unarchive group menu item label"
     },
     "deleteGroup": {
-        "message": "Delete Group",
+        "message": "Ezabatu taldea",
         "description": "Delete group menu item label"
     },
     "editGroup": {
-        "message": "Edit Group",
-        "description": "Edit group menu item label"
+        "message": "Editatu taldea",
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Editatu egiaztatutako taldea",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "egiaztatuta",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "QR kodea",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
-        "message": "Leave Group",
+        "message": "Atera taldetik",
         "description": "Leave group menu item label"
     },
     "save": {
-        "message": "Save",
+        "message": "Gorde",
         "description": "Save button label (e.g. when editing groups)"
     },
     "groupName": {
-        "message": "Group Name",
+        "message": "Taldearen izena",
         "description": "Placeholder text for group name input field"
     },
     "groupNameRequired": {
-        "message": "Group name required.",
+        "message": "taldearen izena derrigorrezkoa da.",
         "description": "Information to user when creating group with empty name"
     },
     "newChat": {
-        "message": "New chat",
+        "message": "Txat berria",
         "description": "New chat button and text label"
     },
     "archiveChat": {
-        "message": "Archive Chat",
+        "message": "Artxibatu txata",
         "description": "Archive chat menu item label"
     },
     "unArchiveChat": {
-        "message": "Unarchive Chat",
+        "message": "Berreskuratu txata artxibotik",
         "description": "Unarchive chat menu item label"
     },
     "noChats": {
-        "message": "No chats",
+        "message": "Txatik ez",
         "description": "Message shown to user when there are no chats"
     },
     "noArchivedChats": {
-        "message": "No archived chats",
+        "message": "Artxibatutako txatik ez",
         "description": "Message shown to user when there are no archived chats"
     },
     "deleteChat": {
-        "message": "Delete Chat",
+        "message": "Ezabatu txata",
         "description": "Delete chat menu item label"
     },
     "contactCreateSuccess": {
-        "message": "Contact created successfully.",
+        "message": "Kontaktua ongi sortu da.",
         "description": "Information to the user when a contact was created successfully"
     },
     "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
+        "message": "Autocrypt gakoaren transferentzia",
         "description": "Dialog title during Autocrypt key transfer"
     },
     "setupMessageInfo": {
-        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
+        "message": "hau Autocrypt ezartzeko mezua da, muturretik muturrerako ezarpena garraiatzeko erabilia.\n\nZure ezarpena deszifratu eta erabiltzeko, sakatu mezu honetan.",
         "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
-        "message": "Transfer Key",
+        "message": "Transferitu gakoa",
         "description": "Button label during Autocrypt key transfer"
     },
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Hasi gakoaren transferentzia",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
+        "message": "'Autocrypt ezarpen mezu, bat modu seguruan partekatzen du zure muturretik muturrerako ezarpena Autocrypt-ekin bateragarriak diren beste aplikazioekin. Ezarpena zifratuta izango da bistaratuko den ezarpen kode batekin eta beste gailuan idatzi beharko da.",
         "description": "Seen before starting the setup transfer"
     },
     "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
+        "message": "Zure gakoa zure buruari bidali diozu. Aldatu beste gailura eta ireki ezarpen mezua. Ezarpen kode bat eskatuko zaizu. Idatzi beheko digituak han. Behin eginda, beste gailua AutoCrypt erabiltzeko prest egongo da.",
         "description": "Shown while viewing the transfer key"
     },
     "done": {
-        "message": "Done",
+        "message": "Egina",
         "description": "Button label when key transfer is done"
     },
     "moreInfo": {
-        "message": "More Info...",
+        "message": "Informazio gehiago...",
         "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
     },
     "downloadAttachment": {
-        "message": "Download Attachment",
+        "message": "Deskargatu eranskina",
         "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
     },
     "imageAttachmentAlt": {
-        "message": "Image attached to message",
+        "message": "Irudia mezura erantsia",
         "description": "Used in alt tag of image attachment"
     },
     "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
+        "message": "Bideoaren pantaila-argazkia mezura erantsia",
         "description": "Used in alt tag of video attachment preview"
     },
     "lightboxImageAlt": {
-        "message": "Image sent in conversation",
+        "message": "Irudia elkarrizketan bidalia",
         "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
     },
     "replyToMessage": {
-        "message": "Reply to Message",
+        "message": "Erantzun mezuari",
         "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
     },
     "forwardMessage": {
-        "message": "Forward Message...",
+        "message": "Birbidali mezua...",
         "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
     },
     "deleteMessage": {
-        "message": "Delete Message",
+        "message": "Ezabatu mezua",
         "description": "Shown on the drop-down menu for an individual message, deletes single message"
     },
     "deleteMessages": {
-        "message": "Delete messages",
+        "message": "Ezabatu mezuak",
         "description": "Menu item for deleting messages, title case."
     },
     "messageDetail": {
-        "message": "Message Detail",
+        "message": "Mezuaren xehetasunak",
         "description": "TODO: used where?"
     },
     "audio": {
-        "message": "Audio",
+        "message": "Audioa",
         "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
     },
     "video": {
-        "message": "Video",
+        "message": "Bideoa",
         "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
     },
     "photo": {
-        "message": "Photo",
+        "message": "Argazkia",
         "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
     },
     "ok": {
-        "message": "OK",
+        "message": "Ados",
         "description": "TODO: used where?"
     },
     "cancel": {
-        "message": "Cancel",
+        "message": "Utzi",
         "description": "TODO: used where?"
     },
     "delete": {
-        "message": "Delete",
+        "message": "Ezabatu",
         "description": "TODO: used where?"
     },
     "login.welcome": {
-        "message": "Welcome to DeltaChat",
+        "message": "Ongi etorri DeltaChat-era",
         "description": "Welcome message at the top of the login screen"
     },
     "login.email": {
-        "message": "E-Mail Address",
+        "message": "E-mail helbidea",
         "description": "Label above input field for e-mail address"
     },
     "login.enterPassword": {
-        "message": "Enter your password...",
+        "message": "Sartu zure pasahitza",
         "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
-        "message": "Password",
+        "message": "Pasahitza",
         "description": "Label above input field for mail password"
     },
     "login.required": {
-        "message": "required",
+        "message": "derrigorrezkoa",
         "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
     },
     "login.advanced": {
-        "message": "Advanced",
+        "message": "Aurreratua",
         "description": "Advanced settings button label"
     },
     "login.inbox": {
-        "message": "Inbox",
+        "message": "Sarrera ontzia",
         "description": "Describes the advanced section for inbox (imap)"
     },
     "login.mailUser": {
-        "message": "IMAP-Loginname",
+        "message": "IMAP erabiltzaile-izena",
         "description": "Label above input field for imap login name"
     },
     "login.mailServer": {
-        "message": "IMAP-Server",
+        "message": "IMAP zerbitzaria",
         "description": "Label above input field for imap server host"
     },
     "login.mailPort": {
-        "message": "IMAP-Port",
+        "message": "IMAP ataka",
         "description": "Label above input field for imap server port"
     },
     "login.mailSecurity": {
-        "message": "Security",
+        "message": "Segurtasuna",
         "description": "Label above selection box for imap security"
     },
     "login.security.disable": {
-        "message": "Off",
+        "message": "Desaktibatu",
         "description": "Text for disabling imap transport security"
     },
     "login.security.automatic": {
-        "message": "Automatic",
+        "message": "Automatikoa",
         "description": "Text for disabling imap transport security"
     },
     "login.outbox": {
-        "message": "Outbox",
+        "message": "Irteera ontzia",
         "description": "Describes the advanced section for outbox (smtp)"
     },
     "login.sendUser": {
-        "message": "SMTP-Loginname",
+        "message": "SMTP erabiltzaile-izena",
         "description": "Label above input field for smtp login name"
     },
     "login.sendPw": {
-        "message": "SMTP-Password",
+        "message": "SMTP pasahitza",
         "description": "Label above input field for smtp password"
     },
     "login.sendServer": {
-        "message": "SMTP-Server",
+        "message": "SMTP zerbitzaria",
         "description": "Label above input field for smtp server host"
     },
     "login.sendPort": {
-        "message": "SMTP-Port",
+        "message": "SMTP ataka",
         "description": "Label above input field for smtp server port"
     },
     "login.sendSecurity": {
-        "message": "Security",
+        "message": "Segurtasuna",
         "description": "Label above selection box for smtp security"
     },
     "login.automatic": {
-        "message": "automatic",
+        "message": "automatikoa",
         "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
     },
     "login.cancel": {
-        "message": "Cancel",
+        "message": "Utzi",
         "description": "Shown in the login form"
     },
     "login.button": {
-        "message": "Login",
+        "message": "Hasi saioa",
         "description": "Shown in the login form"
     },
     "menu.preferences": {
-        "message": "Preferences",
+        "message": "Hobespenak",
         "description": "Preferences label in the menu"
     },
     "menu.preferences.language": {
-        "message": "Choose Language...",
+        "message": "Hautatu hizkuntza...",
         "description": "Choose language label in the menu"
     },
     "menu.edit": {
-        "message": "Edit",
+        "message": "Editatu",
         "description": "Edit menu label"
     },
     "menu.edit.undo": {
-        "message": "Undo",
+        "message": "Desegin",
         "description": "Undo menu item label"
     },
     "menu.edit.redo": {
-        "message": "Redo",
+        "message": "Berregin",
         "description": "Redo menu item label"
     },
     "menu.edit.cut": {
-        "message": "Cut",
+        "message": "Ebaki",
         "description": "Cut menu item label"
     },
     "menu.edit.copy": {
-        "message": "Copy",
+        "message": "Kopiatu",
         "description": "Copy menu item label"
     },
     "menu.edit.paste": {
-        "message": "Paste",
+        "message": "Itsatsi",
         "description": "Paste menu item label"
     },
     "menu.edit.delete": {
-        "message": "Delete",
+        "message": "Ezabatu",
         "description": "Delete menu item label"
     },
     "menu.edit.selectall": {
-        "message": "Select All",
+        "message": "Hautatu guztiak",
         "description": "Select All menu item label"
     },
     "menu.view": {
-        "message": "View",
+        "message": "Ikusi",
         "description": "View menu label"
     },
     "menu.view.floatontop": {
-        "message": "Float on Top",
+        "message": "Flotatu gainetik",
         "description": "Float on Top menu item label"
     },
     "menu.view.developer": {
-        "message": "Developer",
+        "message": "Garatzailea",
         "description": "Developer menu item label"
     },
     "menu.view.developer.tools": {
-        "message": "Developer Tools",
+        "message": "Garapen tresnak",
         "description": "Developer Tools menu item label"
     },
     "menu.help": {
-        "message": "Help",
+        "message": "Laguntza",
         "description": "Help menu label"
     },
     "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
+        "message": "Ikasi gehiago DeltaChat-i buruz",
         "description": "Learn more about DeltaChat menu item label"
     },
     "menu.help.contribute": {
-        "message": "Contribute on GitHub",
+        "message": "Hartu parte GitHub bidez ",
         "description": "Contribute on GitHub menu item label"
     },
     "menu.help.report": {
-        "message": "Report an Issue...",
+        "message": "Eman arazo baten berri...",
         "description": "Report an Issue... menu item label"
     },
     "menu.help.about": {
-        "message": "About DeltaChat",
+        "message": "DeltaChat-i buruz",
         "description": "About menu item"
     },
     "aboutDeltaChat": {
-        "message": "About DeltaChat",
+        "message": "DeltaChat-i buruz",
         "description": "Window title on about dialog"
     },
     "timestampFormat_M": {
@@ -352,403 +376,411 @@
         "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
     },
     "from": {
-        "message": "From",
+        "message": "Nork:",
         "description": "Label for the sender of a message"
     },
     "to": {
-        "message": "To",
+        "message": "Nori:",
         "description": "Label for the receiver of a message"
     },
     "sent": {
-        "message": "Sent",
+        "message": "Bidalita",
         "description": "Label for the time a message was sent"
     },
     "send": {
-        "message": "Send",
+        "message": "Bidali",
         "description": "Button label for sending a message"
     },
     "received": {
-        "message": "Received",
+        "message": "Jasota",
         "description": "Label for the time a message was received"
     },
     "writeMessage": {
-        "message": "Write a message",
+        "message": "Idatzi mezu bat",
         "description": "Placeholder text in the message entry field"
     },
     "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
+        "message": "Idatzi mezu bat eta sakatu enter tekla",
         "description": "Aria-label explanation of sending a message"
     },
     "sendFailed": {
-        "message": "Failed to send message",
+        "message": "Huts egin du mezua bidaltzean",
         "description": "Error message when failed to send message"
     },
     "retrySend": {
-        "message": "Resend Message",
+        "message": "Birbidali mezua",
         "description": "Menu alternative in message context menu for resending a message"
     },
     "groupMembers": {
-        "message": "Group members",
+        "message": "Taldeko kideak",
         "description": "TODO: used where?"
     },
     "showMembers": {
-        "message": "Show members",
+        "message": "Erakutsi kideak",
         "description": "TODO: used where?"
     },
     "timestamp_s": {
-        "message": "now",
+        "message": "orain",
         "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_m": {
-        "message": "1 minute",
+        "message": "minutu 1",
         "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
     },
     "timestamp_h": {
-        "message": "1 hour",
+        "message": "ordu 1",
         "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
     },
     "justNow": {
-        "message": "now",
+        "message": "orain",
         "description": "Shown if a message is very recent, less than 60 seconds old"
     },
     "hoursAgoShort": {
-        "message": "$hours$ hr",
+        "message": "$hours$ ordu",
         "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
     },
     "hoursAgo": {
-        "message": "$hours$ hr ago",
+        "message": "duela $hours$ ordu",
         "description": "Contracted form of 'X hours ago' which works both for singular and plural"
     },
     "minutesAgoShort": {
-        "message": "$minutes$ min",
+        "message": "$minutes$ minutu",
         "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
     },
     "minutesAgo": {
-        "message": "$minutes$ min ago",
+        "message": "duela $minutes$ minutu",
         "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
     },
     "videoScreenshotFailedToLoad": {
-        "message": "Can't display video screenshot",
+        "message": "Ezin dira bideoen pantaila-argazkiak bistaratu",
         "description": "Error message when video screenshot can't be shown in a video message"
     },
     "language.ca": {
-        "message": "Catalan",
+        "message": "Katalana",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.da": {
-        "message": "Danish",
+        "message": "Daniera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.de": {
-        "message": "German",
+        "message": "Alemana",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.en": {
-        "message": "English",
+        "message": "Ingelesa",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eo": {
-        "message": "Esperanto",
+        "message": "Esperantoa",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.es": {
-        "message": "Spanish",
+        "message": "Gaztelania",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.eu": {
-        "message": "Basque",
+        "message": "Euskara",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.fr": {
-        "message": "French",
+        "message": "Frantzesa",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hr": {
-        "message": "Croatian",
+        "message": "Koraziera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.hu": {
-        "message": "Hungarian",
+        "message": "Hungariera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.it": {
-        "message": "Italian",
+        "message": "Italiera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ja_JP": {
-        "message": "Japanese",
+        "message": "Japoniera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ko": {
-        "message": "Korean",
+        "message": "Koreera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nb_NO": {
-        "message": "Norwegian Bokmål",
+        "message": "Norvegiako Bokmål",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl": {
-        "message": "Dutch",
+        "message": "Nederlandera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
+        "message": "Nederlandera (Holanda)",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pl": {
-        "message": "Polish",
+        "message": "Poloniera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.pt": {
-        "message": "Portuguese",
+        "message": "Portugesa",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ru": {
-        "message": "Russian",
+        "message": "Errusiera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sq": {
-        "message": "Albanian",
+        "message": "Albaniera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sr": {
-        "message": "Serbian",
+        "message": "Serbiera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.sv": {
-        "message": "Swedish",
+        "message": "Suediera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.ta": {
-        "message": "Tamil",
+        "message": "Tamilera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.te": {
-        "message": "Telegu",
+        "message": "Teluguera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.tr": {
-        "message": "Turkish",
+        "message": "Turkiera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.uk": {
-        "message": "Ukrainian",
+        "message": "Ukrainera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "language.zh_CN": {
-        "message": "Chinese",
+        "message": "Txinera",
         "description": "Menu alternative in Preferences -> Choose Language..."
     },
     "emojiAlt": {
-        "message": "Emoji of $1$",
+        "message": "$1$ emojia",
         "description": "Used with aria-label for emojis"
     },
     "chatView.nochatselectedHeader": {
-        "message": "Welcome to Delta Chat",
+        "message": "Ongi etorri Delta Chat-era",
         "description": "Header message when no chats are available"
     },
     "chatView.nochatselectedSuggestion": {
-        "message": "Select a chat or create a new chat",
+        "message": "Hautatu txat bat edo sortu txat berri bat",
         "description": "Suggestion of what to do when no chats are selected"
     },
     "DC_STR_NOMESSAGES": {
-        "message": "No messages.",
+        "message": "Mezurik ez.",
         "description": ""
     },
     "DC_STR_SELF": {
-        "message": "Me",
+        "message": "Ni",
         "description": ""
     },
     "DC_STR_DRAFT": {
-        "message": "Draft",
+        "message": "Zirriborroa",
         "description": ""
     },
     "DC_STR_MEMBER": {
-        "message": "%1$s members",
+        "message": "%1$s kide",
         "description": ""
     },
     "DC_STR_CONTACT": {
-        "message": "%1$s contacts",
+        "message": "%1$s kontaktu",
         "description": ""
     },
     "DC_STR_VOICEMESSAGE": {
-        "message": "Voice message",
+        "message": "Ahots-mezua",
         "description": ""
     },
     "DC_STR_DEADDROP": {
-        "message": "Mailbox",
+        "message": "Postontzia",
         "description": ""
     },
     "DC_STR_IMAGE": {
-        "message": "Image",
+        "message": "Irudia",
         "description": ""
     },
     "DC_STR_GIF": {
-        "message": "GIF",
+        "message": "GIFa",
         "description": ""
     },
     "DC_STR_VIDEO": {
-        "message": "Video",
+        "message": "Bideoa",
         "description": ""
     },
     "DC_STR_AUDIO": {
-        "message": "Audio",
+        "message": "Audioa",
         "description": ""
     },
     "DC_STR_FILE": {
-        "message": "File",
+        "message": "Fitxategia",
         "description": ""
     },
     "DC_STR_ENCRYPTEDMSG": {
-        "message": "Encrypted message",
+        "message": "Zifratutako mezua",
         "description": ""
     },
     "DC_STR_STATUSLINE": {
-        "message": "Sent with my Delta Chat Messenger: https://delta.chat",
+        "message": "Delta Chat mezulariarekin bidalita:  https://delta.chat",
         "description": ""
     },
     "DC_STR_NEWGROUPDRAFT": {
-        "message": "Hello, I've just created the group \"%1$s\" for us.",
+        "message": "Kaitxo, \"%1$s\" taldea sortu dut guretzat.",
         "description": ""
     },
     "DC_STR_MSGGRPNAME": {
-        "message": "Group name changed from \"%1$s\" to \"%2$s\".",
+        "message": "Taldearen izena \"%1$s\" izatetik \"%2$s\" izatera aldatu da.",
         "description": ""
     },
     "DC_STR_MSGGRPIMGCHANGED": {
-        "message": "Group image changed.",
+        "message": "Taldeko irudia aldatuta.",
         "description": ""
     },
     "DC_STR_MSGADDMEMBER": {
-        "message": "Member %1$s added.",
+        "message": "%1$s kidea gehituta.",
         "description": ""
     },
     "DC_STR_MSGDELMEMBER": {
-        "message": "Member %1$s removed.",
+        "message": "%1$s kidea kenduta.",
         "description": ""
     },
     "DC_STR_MSGGROUPLEFT": {
-        "message": "Left group.",
+        "message": "Taldetik atera da.",
         "description": "This message is sent out to a group when someone leaves the group."
     },
     "DC_STR_SELFNOTINGRP": {
-        "message": "You must be a member of the group to perform this action.",
-        "description": ""
-    },
-    "DC_STR_NONETWORK": {
-        "message": "No network available.",
+        "message": "Taldeko kidea izan behar zara hau egiteko.",
         "description": ""
     },
     "DC_STR_E2E_AVAILABLE": {
-        "message": "End-to-end encryption available.",
+        "message": "Muturretik muturrerako zifratzea eskuragarri.",
         "description": ""
     },
     "DC_STR_ENCR_TRANSP": {
-        "message": "Transport-encryption.",
+        "message": "Garraioaren zifratzea.",
         "description": ""
     },
     "DC_STR_ENCR_NONE": {
-        "message": "No encryption.",
+        "message": "Zifratzerik ez.",
         "description": ""
     },
     "DC_STR_FINGERPRINTS": {
-        "message": "Fingerprints",
+        "message": "Hatz-markak",
         "description": ""
     },
     "DC_STR_READRCPT": {
-        "message": "Return receipt",
+        "message": "Bueltatu irakurragiria",
         "description": ""
     },
     "DC_STR_READRCPT_MAILBODY": {
-        "message": "This is a return receipt for the message \"%1$s\".",
+        "message": "Hau \"%1$s\" mezuaren irakurragiri bat da.",
         "description": ""
     },
     "DC_STR_MSGGRPIMGDELETED": {
-        "message": "Group image deleted.",
+        "message": "Taldeko irudia ezabatuta.",
         "description": ""
     },
     "DC_STR_E2E_PREFERRED": {
-        "message": "End-to-end encryption preferred.",
+        "message": "Muturretik muturretako zifratzea hobetsita.",
         "description": ""
     },
     "DC_STR_ARCHIVEDCHATS": {
-        "message": "Archived chats",
+        "message": "Artxibatutako txatak",
         "description": ""
     },
     "DC_STR_STARREDMSGS": {
-        "message": "Starred messages",
+        "message": "Izardun mezuak",
         "description": ""
     },
     "DC_STR_AC_SETUP_MSG_SUBJECT": {
-        "message": "Autocrypt Setup Message",
+        "message": "AutoCrypt ezartzeko mezua",
         "description": ""
     },
     "DC_STR_AC_SETUP_MSG_BODY": {
-        "message": "This is the Autocrypt Setup Message used to transfer your key between clients.\n\nTo decrypt and use your key, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.",
+        "message": "hau Autocrypt ezartzeko mezua da, bezeroen artean zure gakoa garraiatzeko erabilia.\n\nZure gakoa deszifratu eta erabiltzeko, ireki mezua Autocrypt-ekin bateragarria den bezero batean eta idatzi gailu sortzailean bistaratutako ezarpen kodea.",
         "description": ""
     },
     "DC_STR_SELFTALK_SUBTITLE": {
-        "message": "Messages I sent to myself",
+        "message": "Nire buruari bidalitako mezuak",
         "description": ""
     },
     "DC_STR_CANTDECRYPT_MSG_BODY": {
-        "message": "This message was encrypted for another setup.",
+        "message": "Mezu hau beste ezarpen baterako zifratu da.",
         "description": ""
     },
     "DC_STR_CANNOT_LOGIN": {
-        "message": "Cannot login as %1$s.",
+        "message": "Ezin izan da %1$s gisa saioa hasi.",
         "description": ""
     },
     "DC_STR_SERVER_RESPONSE": {
-        "message": "Response from %1$s: %2$s",
+        "message": "%1$s(r)en erantzuna: %2$s",
         "description": ""
     },
     "dialogs.blockContact": {
-        "message": "Block $1$?",
+        "message": "Blokeatu $1$?",
         "description": "Dialog to confirm blocking contact"
     },
     "dialogs.unblockContact": {
-        "message": "Unblock $1$?",
+        "message": "Desblokeatu $1$?",
         "description": "Dialog to confirm unblocking contact"
     },
     "dialogs.deleteChat": {
-        "message": "Delete chat $1$?",
+        "message": "Ezabatu $1$ txata?",
         "description": "Dialog to confirm deleting a chat"
     },
     "dialogs.confirmation.no": {
-        "message": "No",
+        "message": "Ez",
         "description": "No button label in confirmation dialog"
     },
     "dialogs.confirmation.yes": {
-        "message": "Yes",
+        "message": "Bai",
         "description": "Yes button label in confirmation dialog"
     },
     "blockContact": {
-        "message": "Block Contact",
+        "message": "Blokeatu kontaktua",
         "description": "Menu option to block current contact"
     },
     "unblockContacts": {
-        "message": "Unblock Contacts",
+        "message": "Desblokeatu kontaktuak",
         "description": "Menu option to unblock contacts"
     },
     "unblockContacts.noneBlocked": {
-        "message": "No blocked contacts yet",
+        "message": "Blokeatutako kontakturik ez oraindik",
         "description": "Shown when there are no blocked contacts yet"
     },
     "selectGroupImage": {
-        "message": "Select Group Image",
+        "message": "Hautatu taldearen irudia",
         "description": "Window title for file picker when selecting chat profile image"
     },
     "remove": {
-        "message": "Remove",
+        "message": "Kendu",
         "description": "Button label for removing chat profile image"
     },
     "searchAriaLabel": {
-        "message": "Search",
+        "message": "Bilatu",
         "description": "Aria-label for search"
     },
     "searchPlaceholder": {
-        "message": "Search",
+        "message": "Bilatu",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Ezabatu mezu hau",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Mezuaren xehetasunak",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Kontaktuaren xehetasunak",
+        "description": "Contact Detail title for dialog"
     }
 }

@@ -27,6 +27,18 @@
         "message": "Nuovo gruppo",
         "description": "New group button and text label"
     },
+    "newVerifiedGroup": {
+        "message": "Nuovo gruppo verificato",
+        "description": "New verified group button and text label"
+    },
+    "showQrVerifyCode": {
+        "message": "Mostra codice QR di verifica",
+        "description": "Label for button to show QR code for contact verification"
+    },
+    "showQrInviteCode": {
+        "message": "Mostra codice QR di invito",
+        "description": "Label for button to show QR code for joining a verified group"
+    },
     "archiveGroup": {
         "message": "Archivia gruppo",
         "description": "Archive group menu item label"
@@ -41,7 +53,19 @@
     },
     "editGroup": {
         "message": "Modifica gruppo",
-        "description": "Edit group menu item label"
+        "description": "Edit group text label"
+    },
+    "editVerifiedGroup": {
+        "message": "Modifica gruppo verificato",
+        "description": "Edit verified group text label"
+    },
+    "verified": {
+        "message": "verified",
+        "description": "Label shown next to icon for a verified contact"
+    },
+    "qrCode": {
+        "message": "Codice QR",
+        "description": "Window labelf for QR code dialog"
     },
     "leaveGroup": {
         "message": "Abbandona gruppo",
@@ -635,10 +659,6 @@
         "message": "Devi essere un membro del gruppo per effettuare questa operazione.",
         "description": ""
     },
-    "DC_STR_NONETWORK": {
-        "message": "Nessuna rete disponibile.",
-        "description": ""
-    },
     "DC_STR_E2E_AVAILABLE": {
         "message": "Crittografica end-to-end disponibile.",
         "description": ""
@@ -750,5 +770,17 @@
     "searchPlaceholder": {
         "message": "Cerca",
         "description": "Placeholder for search"
+    },
+    "deleteThisMessage": {
+        "message": "Elimina questo messaggio",
+        "description": "Delete button in the message detail dialog"
+    },
+    "messageDetailTitle": {
+        "message": "Dettagli messaggio",
+        "description": "Message Detail title for dialog"
+    },
+    "contactDetailTitle": {
+        "message": "Contact Detail",
+        "description": "Contact Detail title for dialog"
     }
 }
