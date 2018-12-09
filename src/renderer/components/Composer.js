@@ -46,7 +46,7 @@ const SendButtonCircleWrapper = styled.div`
   width: 32px;
   height: 32px;
   float: right;
-  margin-top: 3px;
+  margin-top: 4px;
   margin-right: 5px;
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
