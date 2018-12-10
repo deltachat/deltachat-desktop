@@ -84,6 +84,10 @@ const MessageWrapper = styled.div`
   .module-message__buttons__reply {
     display: none;
   }
+
+  .module-message__text--incoming a {
+    color: #070c14;
+  }
 `
 
 function render (props) {
