@@ -1,268 +1,834 @@
 const React = require('react')
-const path = require('path')
-const C = require('deltachat-node/constants')
-const styled = require('styled-components').default
-const { Message } = require('./conversations')
-const { remote, ipcRenderer } = require('electron')
-const StyleVariables = require('./style-variables')
-const moment = require('moment')
+const classNames = require('classnames')
+const { MessageBody, Quote, EmbeddedContact, Timestamp } = require('./conversations')
+const { ExpireTimer, getIncrement } = require('../../../conversations/build/components/conversation/ExpireTimer')
+const ContactName = require('./ContactName')
+const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
+const {
+  isImageTypeSupported,
+  isVideoTypeSupported
+} = require('../../../conversations/build/util/GoogleChrome')
 
-const GROUP_TYPES = [
-  C.DC_CHAT_TYPE_GROUP,
-  C.DC_CHAT_TYPE_VERIFIED_GROUP
-]
+const MIME = require('../../../conversations/build/types/MIME')
 
-const SetupMessage = styled.div`
-  .module-message__text {
-    color: #ed824e;
-  }
-`
+const MINIMUM_IMG_HEIGHT = 150
+const MAXIMUM_IMG_HEIGHT = 300
+const EXPIRATION_CHECK_MINIMUM = 2000
+const EXPIRED_DELAY = 600
 
-const InfoMessage = styled.div`
-  width: 100%;
-  text-align: center;
-  margin: 26px 0px;
-
-  p {
-    display: inline-block;
-    text-align: center;
-    font-style: italic;
-    font-weight: bold;
-    padding: 7px 14px;
-    background-color: ${StyleVariables.colors.deltaInfoMessageBubbleBg};
-    border-radius: 10px;
-    opacity: 0.44;
-    color: ${StyleVariables.colors.deltaInfoMessageBubbleColor};
-  }
-`
-
-const MessageWrapper = styled.div`
-  .module-message__metadata {
-    margin-top: 10px;
-    margin-bottom: -7px;
-    float: right;
-  }
-
-  .module-message__author-default-avatar__label {
-    background-color: black;
-    top: -121px;
-    left: -10px;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    background-color: #757575;
-    color: #ffffff;
-    font-size: 25px;
-    line-height: 36px;
-  }
-
-  .module-message__author-default-avatar {
-    position: static;
-    margin-right: 8px;
-  }
-
-  .module-message__img-attachment {
-    object-fit: unset;
-    width: auto;
-    height: auto;
-    min-height: unset;
-  }
-
-  .module-message__img-border-overlay {
-    box-shadow: unset;
-  }
-
-  .module-message__metadata__date {
-    color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
-  }
-
-  .module-message__metadata__status-icon--read {
-    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
-  }
-
-  .module-message__buttons__reply {
-    display: none;
-  }
-`
-
-function render (props) {
-  const { message, onClickSetupMessage } = props
-
-  let key = message.id
-  let body
-  if (message.id === C.DC_MSG_ID_DAYMARKER) {
-    key = message.daymarker.id
-    body = (
-      <InfoMessage>
-        <p>
-          {moment.unix(message.daymarker.timestamp).calendar(null, {
-            lastDay: '',
-            lastWeek: 'LL',
-            sameElse: 'LL'
-          })}
-        </p>
-      </InfoMessage>
-    )
-  } else if (message.msg.isSetupmessage) {
-    body = (
-      <SetupMessage key={message.id}
-        onClick={onClickSetupMessage}>
-        {body}
-      </SetupMessage>
-    )
-  } else {
-    body = <RenderMessage {...props} />
-  }
-
-  return <li key={key}>{body}</li>
+function isImage (attachment) {
+  return (
+    attachment &&
+    attachment.contentType &&
+    isImageTypeSupported(attachment.contentType)
+  )
 }
 
-/**
- * RenderMessage takes a message already created with Message.convert
- * and returns a React component of that message from the Conversations
- * library. This class mostly just converts the necessary properties to what
- * is expected by Conversations.Message
- */
-class RenderMessage extends React.Component {
+function hasImage (attachment) {
+  return attachment && attachment.url
+}
+
+function isVideo (attachment) {
+  return (
+    attachment &&
+    attachment.contentType &&
+    isVideoTypeSupported(attachment.contentType)
+  )
+}
+
+function hasVideoScreenshot (attachment) {
+  return attachment && attachment.screenshot && attachment.screenshot.url
+}
+
+function isAudio (attachment) {
+  return (
+    attachment && attachment.contentType && MIME.isAudio(attachment.contentType)
+  )
+}
+
+function getExtension ({ fileName, contentType }) {
+  if (fileName && fileName.indexOf('.') >= 0) {
+    const lastPeriod = fileName.lastIndexOf('.')
+    const extension = fileName.slice(lastPeriod + 1)
+    if (extension.length) {
+      return extension
+    }
+  }
+
+  const slash = contentType.indexOf('/')
+  if (slash >= 0) {
+    return contentType.slice(slash + 1)
+  }
+
+  return null
+}
+
+class Message extends React.Component {
   constructor (props) {
     super(props)
-    this.el = React.createRef()
+
+    this.captureMenuTrigger = this.captureMenuTrigger.bind(this)
+    this.showMenu = this.showMenu.bind(this)
+
+    this.menuTriggerRef = null
+    this.expirationCheckInterval = null
+    this.expiredTimeout = null
+
+    this.state = {
+      expiring: false,
+      expired: false,
+      imageBroken: false
+    }
   }
 
   componentDidMount () {
-    if (!this.el.current) return
-    var as = this.el.current.querySelectorAll('a')
-    as.forEach((a) => {
-      a.onclick = (event) => {
-        event.preventDefault()
-        remote.shell.openExternal(a.href)
+    const { expirationLength } = this.props
+    if (!expirationLength) {
+      return
+    }
+
+    const increment = getIncrement(expirationLength)
+    const checkFrequency = Math.max(EXPIRATION_CHECK_MINIMUM, increment)
+
+    this.checkExpired()
+
+    this.expirationCheckInterval = setInterval(() => {
+      this.checkExpired()
+    }, checkFrequency)
+  }
+
+  componentWillUnmount () {
+    if (this.expirationCheckInterval) {
+      clearInterval(this.expirationCheckInterval)
+    }
+    if (this.expiredTimeout) {
+      clearTimeout(this.expiredTimeout)
+    }
+  }
+
+  checkExpired () {
+    const now = Date.now()
+    const { expirationTimestamp, expirationLength } = this.props
+
+    if (!expirationTimestamp || !expirationLength) {
+      return
+    }
+
+    if (now >= expirationTimestamp) {
+      this.setState({
+        expiring: true
+      })
+
+      const setExpired = () => {
+        this.setState({
+          expired: true
+        })
       }
+      this.expiredTimeout = setTimeout(setExpired, EXPIRED_DELAY)
+    }
+  }
+
+  handleImageError () {
+    // tslint:disable-next-line no-console
+    console.log('Message: Image failed to load; failing over to placeholder')
+    this.setState({
+      imageBroken: true
     })
+  }
+
+  renderAvatar () {
+    const {
+      authorName,
+      authorPhoneNumber,
+      authorProfileName,
+      authorAvatarPath,
+      authorColor,
+      collapseMetadata,
+      conversationType,
+      direction,
+      i18n
+    } = this.props
+
+    const title = `${authorName || authorPhoneNumber}${
+      !authorName && authorProfileName ? ` ~${authorProfileName}` : ''
+    }`
+
+    if (
+      collapseMetadata ||
+      conversationType !== 'group' ||
+      direction === 'outgoing'
+    ) {
+      return
+    }
+
+    if (!authorAvatarPath) {
+      const label = authorName ? (authorName.trim()[0] || '#') : '#'
+      const color = authorColor || 'green'
+
+      return (
+        <div className={classNames(
+          'module-message__author-default-avatar'
+        )}
+        >
+          <div
+            style={{ 'backgroundColor': color }}
+            className='module-message__author-default-avatar__label'>
+            {label}
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className='module-message__author-avatar'>
+        <img alt={i18n('contactAvatarAlt', [title])} src={authorAvatarPath} />
+      </div>
+    )
+  }
+
+  renderError (isCorrectSide) {
+    const { status, direction } = this.props
+
+    if (!isCorrectSide || status !== 'error') {
+      return null
+    }
+
+    return (
+      <div className='module-message__error-container'>
+        <div
+          className={classNames(
+            'module-message__error',
+            `module-message__error--${direction}`
+          )}
+        />
+      </div>
+    )
+  }
+
+  renderAuthor () {
+    const {
+      authorName,
+      authorPhoneNumber,
+      authorProfileName,
+      conversationType,
+      direction,
+      i18n,
+      authorColor
+    } = this.props
+
+    const title = authorName || authorPhoneNumber
+
+    if (direction !== 'incoming' || conversationType !== 'group' || !title) {
+      return null
+    }
+
+    return (
+      <div className='module-message__author'>
+        <ContactName
+          phoneNumber={authorPhoneNumber}
+          name={authorName}
+          profileName={authorProfileName}
+          module='module-message__author'
+          i18n={i18n}
+          color={authorColor}
+        />
+      </div>
+    )
+  }
+
+  renderText () {
+    const { text, i18n, direction, status } = this.props
+
+    const contents =
+      direction === 'incoming' && status === 'error'
+        ? i18n('incomingError')
+        : text
+
+    if (!contents) {
+      return null
+    }
+
+    return (
+      <div
+        dir='auto'
+        className={classNames(
+          'module-message__text',
+          `module-message__text--${direction}`,
+          status === 'error' && direction === 'incoming'
+            ? 'module-message__text--error'
+            : null
+        )}
+      >
+        <MessageBody text={contents || ''} i18n={i18n} />
+      </div>
+    )
+  }
+
+  renderQuote () {
+    const { conversationType, direction, i18n, quote } = this.props
+
+    if (!quote) {
+      return null
+    }
+
+    const withContentAbove =
+      conversationType === 'group' && direction === 'incoming'
+
+    return (
+      <Quote
+        i18n={i18n}
+        onClick={quote.onClick}
+        text={quote.text}
+        attachment={quote.attachment}
+        isIncoming={direction === 'incoming'}
+        authorPhoneNumber={quote.authorPhoneNumber}
+        authorProfileName={quote.authorProfileName}
+        authorName={quote.authorName}
+        authorColor={quote.authorColor}
+        referencedMessageNotFound={quote.referencedMessageNotFound}
+        isFromMe={quote.isFromMe}
+        withContentAbove={withContentAbove}
+      />
+    )
+  }
+
+  renderEmbeddedContact () {
+    const {
+      collapseMetadata,
+      contact,
+      conversationType,
+      direction,
+      i18n,
+      text
+    } = this.props
+    if (!contact) {
+      return null
+    }
+
+    const withCaption = Boolean(text)
+    const withContentAbove =
+      conversationType === 'group' && direction === 'incoming'
+    const withContentBelow = withCaption || !collapseMetadata
+
+    return (
+      <EmbeddedContact
+        contact={contact}
+        hasSignalAccount={contact.hasSignalAccount}
+        isIncoming={direction === 'incoming'}
+        i18n={i18n}
+        onClick={contact.onClick}
+        withContentAbove={withContentAbove}
+        withContentBelow={withContentBelow}
+      />
+    )
+  }
+
+  renderSendMessageButton () {
+    const { contact, i18n } = this.props
+    if (!contact || !contact.hasSignalAccount) {
+      return null
+    }
+
+    return (
+      <div
+        role='button'
+        onClick={contact.onSendMessage}
+        className='module-message__send-message-button'
+      >
+        {i18n('sendMessageToContact')}
+      </div>
+    )
+  }
+
+  renderAttachment () {
+    const {
+      i18n,
+      attachment,
+      text,
+      collapseMetadata,
+      conversationType,
+      direction,
+      quote,
+      onClickAttachment
+    } = this.props
+    const { imageBroken } = this.state
+
+    if (!attachment) {
+      return null
+    }
+
+    const withCaption = Boolean(text)
+    // For attachments which aren't full-frame
+    const withContentBelow = withCaption || !collapseMetadata
+    const withContentAbove =
+      quote || (conversationType === 'group' && direction === 'incoming')
+
+    if (isImage(attachment)) {
+      if (imageBroken || !attachment.url) {
+        return (
+          <div
+            className={classNames(
+              'module-message__broken-image',
+              `module-message__broken-image--${direction}`
+            )}
+          >
+            {i18n('imageFailedToLoad')}
+          </div>
+        )
+      }
+
+      // Calculating height to prevent reflow when image loads
+      const height = Math.max(MINIMUM_IMG_HEIGHT, attachment.height || 0)
+
+      return (
+        <div
+          onClick={onClickAttachment}
+          role='button'
+          className={classNames(
+            'module-message__attachment-container',
+            withCaption
+              ? 'module-message__attachment-container--with-content-below'
+              : null,
+            withContentAbove
+              ? 'module-message__attachment-container--with-content-above'
+              : null
+          )}
+        >
+          <img
+            onError={this.handleImageErrorBound}
+            className='module-message__img-attachment'
+            height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
+            src={attachment.url}
+            alt={i18n('imageAttachmentAlt')}
+          />
+          <div
+            className={classNames(
+              'module-message__img-border-overlay',
+              withCaption
+                ? 'module-message__img-border-overlay--with-content-below'
+                : null,
+              withContentAbove
+                ? 'module-message__img-border-overlay--with-content-above'
+                : null
+            )}
+          />
+          {!withCaption && !collapseMetadata ? (
+            <div className='module-message__img-overlay' />
+          ) : null}
+        </div>
+      )
+    } else if (isVideo(attachment)) {
+      if (imageBroken || !attachment.url) {
+        return (
+          <div
+            role='button'
+            onClick={onClickAttachment}
+            className={classNames(
+              'module-message__broken-video-screenshot',
+              `module-message__broken-video-screenshot--${direction}`
+            )}
+          >
+            {i18n('videoScreenshotFailedToLoad')}
+          </div>
+        )
+      }
+
+      // Calculating height to prevent reflow when image loads
+      const height = Math.max(MINIMUM_IMG_HEIGHT, 0)
+
+      return (
+        <div
+          onClick={onClickAttachment}
+          role='button'
+          className={classNames(
+            'module-message__attachment-container',
+            withCaption
+              ? 'module-message__attachment-container--with-content-below'
+              : null,
+            withContentAbove
+              ? 'module-message__attachment-container--with-content-above'
+              : null
+          )}
+        >
+          <video
+            onError={this.handleImageErrorBound}
+            className='module-message__img-attachment'
+            height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
+            src={attachment.url}
+          />
+          <div
+            className={classNames(
+              'module-message__img-border-overlay',
+              withCaption
+                ? 'module-message__img-border-overlay--with-content-below'
+                : null,
+              withContentAbove
+                ? 'module-message__img-border-overlay--with-content-above'
+                : null
+            )}
+          />
+          {!withCaption && !collapseMetadata ? (
+            <div className='module-message__img-overlay' />
+          ) : null}
+          <div className='module-message__video-overlay__circle'>
+            <div className='module-message__video-overlay__play-icon' />
+          </div>
+        </div>
+      )
+    } else if (isAudio(attachment)) {
+      return (
+        <audio
+          controls
+          className={classNames(
+            'module-message__audio-attachment',
+            withContentBelow
+              ? 'module-message__audio-attachment--with-content-below'
+              : null,
+            withContentAbove
+              ? 'module-message__audio-attachment--with-content-above'
+              : null
+          )}
+        >
+          <source src={attachment.url} />
+        </audio>
+      )
+    } else {
+      const { fileName, fileSize, contentType } = attachment
+      const extension = getExtension({ contentType, fileName })
+
+      return (
+        <div
+          className={classNames(
+            'module-message__generic-attachment',
+            withContentBelow
+              ? 'module-message__generic-attachment--with-content-below'
+              : null,
+            withContentAbove
+              ? 'module-message__generic-attachment--with-content-above'
+              : null
+          )}
+        >
+          <div className='module-message__generic-attachment__icon'>
+            {extension ? (
+              <div className='module-message__generic-attachment__icon__extension'>
+                {extension}
+              </div>
+            ) : null}
+          </div>
+          <div className='module-message__generic-attachment__text'>
+            <div
+              className={classNames(
+                'module-message__generic-attachment__file-name',
+                `module-message__generic-attachment__file-name--${direction}`
+              )}
+            >
+              {fileName}
+            </div>
+            <div
+              className={classNames(
+                'module-message__generic-attachment__file-size',
+                `module-message__generic-attachment__file-size--${direction}`
+              )}
+            >
+              {fileSize}
+            </div>
+          </div>
+        </div>
+      )
+    }
+  }
+
+  renderMetadata () {
+    const {
+      padlock,
+      attachment,
+      collapseMetadata,
+      direction,
+      expirationLength,
+      expirationTimestamp,
+      i18n,
+      status,
+      text,
+      timestamp
+    } = this.props
+    const { imageBroken } = this.state
+
+    if (collapseMetadata) {
+      return null
+    }
+
+    const withImageNoCaption = Boolean(
+      !text &&
+        !imageBroken &&
+        ((isImage(attachment) && hasImage(attachment)) ||
+          (isVideo(attachment) && hasVideoScreenshot(attachment)))
+    )
+    const showError = status === 'error' && direction === 'outgoing'
+
+    return (
+      <div
+        className={classNames(
+          'module-message__metadata',
+          withImageNoCaption
+            ? 'module-message__metadata--with-image-no-caption'
+            : null
+        )}
+      >
+        {padlock === true && status !== 'error' ? (
+          <div
+            className={classNames(
+              'module-message__metadata__padlock-icon',
+              `module-message__metadata__padlock-icon--${direction}`
+            )}
+          />
+        ) : null}
+        {showError ? (
+          <span
+            className={classNames(
+              'module-message__metadata__date',
+              `module-message__metadata__date--${direction}`,
+              withImageNoCaption
+                ? 'module-message__metadata__date--with-image-no-caption'
+                : null
+            )}
+          >
+            {i18n('sendFailed')}
+          </span>
+        ) : (
+          <Timestamp
+            i18n={i18n}
+            timestamp={timestamp}
+            extended
+            direction={direction}
+            withImageNoCaption={withImageNoCaption}
+            module='module-message__metadata__date'
+          />
+        )}
+        {expirationLength && expirationTimestamp ? (
+          <ExpireTimer
+            direction={direction}
+            expirationLength={expirationLength}
+            expirationTimestamp={expirationTimestamp}
+            withImageNoCaption={withImageNoCaption}
+          />
+        ) : null}
+        <span className='module-message__metadata__spacer' />
+        {direction === 'outgoing' && status !== 'error' ? (
+          <div
+            className={classNames(
+              'module-message__metadata__status-icon',
+              `module-message__metadata__status-icon--${status}`,
+              withImageNoCaption
+                ? 'module-message__metadata__status-icon--with-image-no-caption'
+                : null
+            )}
+          />
+        ) : null}
+      </div>
+    )
+  }
+
+  captureMenuTrigger (triggerRef) {
+    this.menuTriggerRef = triggerRef
+  }
+
+  showMenu (event) {
+    if (this.menuTriggerRef) {
+      this.menuTriggerRef.handleContextClick(event)
+    }
+  }
+
+  renderMenu (isCorrectSide, triggerId) {
+    const {
+      attachment,
+      direction,
+      disableMenu,
+      onDownload,
+      onReply
+    } = this.props
+
+    if (!isCorrectSide || disableMenu) {
+      return null
+    }
+
+    const downloadButton = attachment ? (
+      <div
+        onClick={onDownload}
+        role='button'
+        className={classNames(
+          'module-message__buttons__download',
+          `module-message__buttons__download--${direction}`
+        )}
+      />
+    ) : null
+
+    const replyButton = (
+      <div
+        onClick={onReply}
+        role='button'
+        className={classNames(
+          'module-message__buttons__reply',
+          `module-message__buttons__download--${direction}`
+        )}
+      />
+    )
+
+    const menuButton = (
+      <ContextMenuTrigger id={triggerId} ref={this.captureMenuTrigger}>
+        <div
+          role='button'
+          onClick={this.showMenu}
+          className={classNames(
+            'module-message__buttons__menu',
+            `module-message__buttons__download--${direction}`
+          )}
+        />
+      </ContextMenuTrigger>
+    )
+
+    const first = direction === 'incoming' ? downloadButton : menuButton
+    const last = direction === 'incoming' ? menuButton : downloadButton
+
+    return (
+      <div
+        className={classNames(
+          'module-message__buttons',
+          `module-message__buttons--${direction}`
+        )}
+      >
+        {first}
+        {replyButton}
+        {last}
+      </div>
+    )
+  }
+
+  renderContextMenu (triggerId) {
+    const {
+      attachment,
+      direction,
+      status,
+      onDelete,
+      onDownload,
+      onReply,
+      onForward,
+      onRetrySend,
+      onShowDetail,
+      i18n
+    } = this.props
+
+    const showRetry = status === 'error' && direction === 'outgoing'
+
+    return (
+      <ContextMenu id={triggerId}>
+        {attachment ? (
+          <MenuItem
+            attributes={{
+              className: 'module-message__context__download'
+            }}
+            onClick={onDownload}
+          >
+            {i18n('downloadAttachment')}
+          </MenuItem>
+        ) : null}
+        <MenuItem
+          attributes={{
+            className: 'module-message__context__reply'
+          }}
+          onClick={onReply}
+        >
+          {i18n('replyToMessage')}
+        </MenuItem>
+        <MenuItem
+          attributes={{
+            className: 'module-message__context__forward'
+          }}
+          onClick={onForward}
+        >
+          {i18n('forwardMessage')}
+        </MenuItem>
+        <MenuItem
+          attributes={{
+            className: 'module-message__context__more-info'
+          }}
+          onClick={onShowDetail}
+        >
+          {i18n('moreInfo')}
+        </MenuItem>
+        {showRetry ? (
+          <MenuItem
+            attributes={{
+              className: 'module-message__context__retry-send'
+            }}
+            onClick={onRetrySend}
+          >
+            {i18n('retrySend')}
+          </MenuItem>
+        ) : null}
+        <MenuItem
+          attributes={{
+            className: 'module-message__context__delete-message'
+          }}
+          onClick={onDelete}
+        >
+          {i18n('deleteMessage')}
+        </MenuItem>
+      </ContextMenu>
+    )
   }
 
   render () {
-    const { onShowDetail, onClickAttachment, chat, message } = this.props
-    const { fromId, id } = message
-    const msg = message.msg
-    const conversationType = convertChatType(chat.type)
-
-    const contact = {
-      onSendMessage: () => console.log('send a message to', fromId),
-      onClick: () => { console.log('click contact') }
-    }
-
-    const props = {
-      padlock: msg.showPadlock,
+    const {
+      authorPhoneNumber,
+      authorColor,
+      direction,
       id,
-      i18n: window.translate,
-      conversationType,
-      onDownload: message.onDownload,
-      onReply: message.onReply,
-      onForward: message.onForward,
-      onDelete: message.onDelete,
-      onShowDetail,
-      contact,
-      onClickAttachment,
-      authorAvatarPath: message.contact.profileImage,
-      authorName: message.contact.name,
-      authorPhoneNumber: message.contact.address,
-      status: msg.status,
-      text: msg.text,
-      direction: msg.direction,
-      timestamp: msg.sentAt
+      timestamp
+    } = this.props
+    const { expired, expiring } = this.state
+
+    // This id is what connects our triple-dot click with our associated pop-up menu.
+    //   It needs to be unique.
+    const triggerId = String(id || `${authorPhoneNumber}-${timestamp}`)
+
+    if (expired) {
+      return null
     }
 
-    if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-    if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
+    return (
+      <div
+        className={classNames(
+          'module-message',
+          `module-message--${direction}`,
+          expiring ? 'module-message--expired' : null
+        )}
+      >
+        {this.renderAvatar()}
+        {this.renderError(direction === 'incoming')}
+        {this.renderMenu(direction === 'outgoing', triggerId)}
+        <div
+          className={classNames(
+            'module-message__container',
+            `module-message__container--${direction}`,
+            direction === 'incoming'
+              ? `module-message__container--incoming-${authorColor}`
+              : null
+          )}
+        >
+          {this.renderAuthor()}
+          {this.renderQuote()}
+          {this.renderAttachment()}
 
-    return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
+          {this.renderText()}
+          {this.renderMetadata()}
+          {this.renderSendMessageButton()}
+        </div>
+        {this.renderError(direction === 'outgoing')}
+        {this.renderMenu(direction === 'incoming', triggerId)}
+        {this.renderContextMenu(triggerId)}
+      </div>
+    )
   }
 }
 
-function convert (message) {
-  message.onReply = () => {
-    console.log('reply to', message)
-  }
-
-  message.onForward = () => {
-    console.log('forward to')
-  }
-
-  message.onDownload = () => {
-    var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
-    remote.dialog.showSaveDialog({
-      defaultPath
-    }, (filename) => {
-      if (filename) ipcRenderer.send('saveFile', message.msg.file, filename)
-    })
-  }
-
-  message.onDelete = (el) => {
-    ipcRenderer.send('dispatch', 'deleteMessage', message.id)
-  }
-
-  var msg = message.msg
-
-  if (msg.isSetupmessage) msg.text = window.translate('setupMessageInfo')
-  msg = Object.assign(msg, {
-    sentAt: msg.timestamp * 1000,
-    receivedAt: msg.receivedTimestamp * 1000,
-    direction: message.isMe ? 'outgoing' : 'incoming',
-    status: convertMessageStatus(msg.state)
-  })
-
-  if (msg.file) {
-    msg.attachment = {
-      url: msg.file,
-      contentType: convertContentType(message),
-      filename: msg.text
-    }
-  }
-  return message
-}
-
-function convertMessageStatus (s) {
-  switch (s) {
-    case C.DC_STATE_IN_FRESH:
-      return 'sent'
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_IN_SEEN:
-      return 'read'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_UNDEFINED:
-      return 'error'
-  }
-}
-
-function convertContentType (message) {
-  var filemime = message.filemime
-  if (!filemime) return 'image/jpg'
-  if (filemime === 'application/octet-stream') {
-    switch (message.msg.viewType) {
-      case C.DC_MSG_IMAGE:
-        return 'image/jpg'
-      case C.DC_MSG_VOICE:
-        return 'audio/ogg'
-      default:
-        return 'application/octect-stream'
-    }
-  }
-  return filemime
-}
-
-function convertChatType (type) {
-  return GROUP_TYPES.includes(type) ? 'group' : 'direct'
-}
-
-module.exports = {
-  convert,
-  render
-}
+module.exports = Message

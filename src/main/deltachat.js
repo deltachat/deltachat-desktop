@@ -373,6 +373,7 @@ class DeltaChatController {
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
       const chat = this._dc.getChat(chatId).toJson()
+      chat.color = '#' + chat.color.toString(16)
 
       if (!chat) continue
 
@@ -398,7 +399,6 @@ class DeltaChatController {
 
       chatList.push(chat)
     }
-
     return chatList
   }
 
@@ -457,7 +457,10 @@ class DeltaChatController {
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
-    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    if (contact.color) {
+      contact.color = '#' + contact.color.toString(16)
+    }
 
     return {
       id,
