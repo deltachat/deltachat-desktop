@@ -8,7 +8,7 @@ const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
-const AboutDialog = require('./components/dialogs/About')
+const dialogs = require('./components/dialogs')
 
 class Home extends React.Component {
   constructor (props) {
@@ -44,6 +44,9 @@ class Home extends React.Component {
       self.userFeedback({ type: 'error', text })
     })
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+      self.userFeedback({ type: 'success', text: `${filename} created.` })
+    })
   }
 
   componentWillUnmount () {
@@ -99,7 +102,8 @@ class Home extends React.Component {
             deltachat={deltachat}
           />
         }
-        <AboutDialog isOpen={showAbout} onClose={this.onCloseAbout} />
+        <dialogs.About isOpen={showAbout} onClose={this.onCloseAbout} />
+        <dialogs.ImexProgress />
       </div>
     )
   }

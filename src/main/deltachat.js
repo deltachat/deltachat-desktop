@@ -1,6 +1,7 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const electron = require('electron')
+const events = require('events')
 const path = require('path')
 const log = require('./log')
 
@@ -9,11 +10,12 @@ const PAGE_SIZE = 20
 /**
  * The Controller is the container for a deltachat instance
  */
-class DeltaChatController {
+class DeltaChatController extends events.EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
   constructor (cwd) {
+    super()
     this.cwd = cwd
     this._resetState()
   }
@@ -61,6 +63,14 @@ class DeltaChatController {
           this.logout()
         }
       }
+    })
+
+    dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
+      this.emit('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+    })
+
+    dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
+      this.emit('DC_EVENT_IMEX_PROGRESS', progress)
     })
 
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
@@ -338,6 +348,14 @@ class DeltaChatController {
    */
   getQrCode (chatId = 0) {
     return this._dc.getSecurejoinQrCode(chatId)
+  }
+
+  backupImport (filename) {
+    this._dc.importExport(C.DC_IMEX_IMPORT_BACKUP, filename)
+  }
+
+  backupExport (directory) {
+    this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
   }
 
   /**

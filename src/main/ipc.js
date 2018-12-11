@@ -48,6 +48,14 @@ function init (cwd) {
     dc.login(...args, render, txCoreStrings())
   })
 
+  dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
+    windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+  })
+
+  dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
+    windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
+  })
+
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
