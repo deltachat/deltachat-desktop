@@ -40,11 +40,6 @@ function init (cwd, state) {
     menu.init()
   })
 
-  var settings = {
-    markRead: true,
-    notifications: true,
-    showNotificationContent: true
-  }
   setupNotifications(dc, state.saved)
 
   // Called once to get the conversations css string
