@@ -522,7 +522,8 @@ class DeltaChatController extends events.EventEmitter {
   }
 
   getContacts (listFlags, queryStr) {
-    return this._dc.getContacts(listFlags, queryStr).map(id => {
+    var distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
+    return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
   }
