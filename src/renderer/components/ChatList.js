@@ -1,6 +1,6 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
-const { ConversationListItem } = require('./conversations')
+const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
 const Unselectable = require('./helpers/Unselectable')
 
@@ -10,7 +10,6 @@ const ChatListWrapper = styled.div`
   width: 30%;
   height: 100%;
   float: left;
-  border-right: 1px solid rgba(16, 22, 26, 0.1);
   overflow-y: auto;
 
   span.module-contact-name {
@@ -79,7 +78,7 @@ class ChatList extends React.Component {
               const name = `${tx('newMessageFrom')} ${chat.name}`
               return (
                 <ContactRequestItemWrapper key={i}>
-                  <ConversationListItem
+                  <ChatListItem
                     className='contactrequest'
                     name={name}
                     i18n={i18n}
@@ -98,7 +97,7 @@ class ChatList extends React.Component {
               return (
                 <Unselectable key={i}>
                   <div className='ShowArchivedChats'>
-                    <ConversationListItem
+                    <ChatListItem
                       onClick={this.props.onShowArchivedChats}
                       name={chat.name}
                       i18n={i18n} />
@@ -107,12 +106,13 @@ class ChatList extends React.Component {
               )
             } else {
               return (
-                <ConversationListItem
+                <ChatListItem
                   key={i}
                   onClick={this.props.onChatClick.bind(null, chat.id)}
                   phoneNumber={chat.summary.text1}
                   name={chat.name}
                   avatarPath={chat.profileImage}
+                  color={chat.color}
                   lastUpdated={lastUpdated}
                   lastMessage={{
                     text: chat.summary.text2,
@@ -121,7 +121,8 @@ class ChatList extends React.Component {
                   i18n={i18n}
                   isSelected={chat.id === selectedChatId}
                   isVerified={chat.isVerified}
-                  unreadCount={chat.freshMessageCounter} />
+                  unreadCount={chat.freshMessageCounter}
+                />
               )
             }
           })}

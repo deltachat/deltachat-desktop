@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron')
 
 const dialogs = require('./dialogs')
 const Composer = require('./Composer')
-const Message = require('./Message')
+const MessageWrapper = require('./MessageWrapper')
 const { ConversationContext } = require('./conversations')
 const styled = require('styled-components').default
 const StyleVariables = require('./style-variables')
@@ -199,8 +199,8 @@ class ChatView extends React.Component {
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {
-              var message = Message.convert(rawMessage)
-              return Message.render({
+              var message = MessageWrapper.convert(rawMessage)
+              return MessageWrapper.render({
                 message,
                 chat,
                 onClickSetupMessage: this.onClickSetupMessage.bind(this, message),

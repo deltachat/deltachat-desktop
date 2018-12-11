@@ -1,6 +1,7 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const electron = require('electron')
+const events = require('events')
 const path = require('path')
 const log = require('./log')
 
@@ -9,11 +10,12 @@ const PAGE_SIZE = 20
 /**
  * The Controller is the container for a deltachat instance
  */
-class DeltaChatController {
+class DeltaChatController extends events.EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
   constructor (cwd) {
+    super()
     this.cwd = cwd
     this._resetState()
   }
@@ -63,6 +65,14 @@ class DeltaChatController {
       }
     })
 
+    dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
+      this.emit('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+    })
+
+    dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
+      this.emit('DC_EVENT_IMEX_PROGRESS', progress)
+    })
+
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
       log('EVENT contacts changed', contactId)
       render()
@@ -74,6 +84,7 @@ class DeltaChatController {
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+      this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
       log('EVENT incoming msg', chatId, msgId)
       render()
     })
@@ -340,6 +351,14 @@ class DeltaChatController {
     return this._dc.getSecurejoinQrCode(chatId)
   }
 
+  backupImport (filename) {
+    this._dc.importExport(C.DC_IMEX_IMPORT_BACKUP, filename)
+  }
+
+  backupExport (directory) {
+    this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
+  }
+
   /**
    * Returns the state in json format
    */
@@ -362,6 +381,10 @@ class DeltaChatController {
     }
   }
 
+  _integerToHexColor (integerColor) {
+    return '#' + integerColor.toString(16)
+  }
+
   _chatList (showArchivedChats) {
     if (!this._dc) return []
 
@@ -373,6 +396,7 @@ class DeltaChatController {
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
       const chat = this._dc.getChat(chatId).toJson()
+      chat.color = this._integerToHexColor(chat.color)
 
       if (!chat) continue
 
@@ -398,7 +422,6 @@ class DeltaChatController {
 
       chatList.push(chat)
     }
-
     return chatList
   }
 
@@ -438,7 +461,7 @@ class DeltaChatController {
 
     for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
       let id = messageIdsToRender[i]
-      let json = this._messageIdToJson(id)
+      let json = this.messageIdToJson(id)
 
       if (id === C.DC_MSG_ID_DAYMARKER) {
         json.daymarker = {
@@ -452,12 +475,15 @@ class DeltaChatController {
     return messages
   }
 
-  _messageIdToJson (id) {
+  messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
-    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    if (contact.color) {
+      contact.color = this._integerToHexColor(contact.color)
+    }
 
     return {
       id,

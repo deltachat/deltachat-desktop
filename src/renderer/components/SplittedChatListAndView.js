@@ -1,11 +1,22 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const { InputGroup } = require('@blueprintjs/core')
+
+const Settings = require('./Settings')
+const dialogs = require('./dialogs')
+const Menu = require('./Menu')
+const ChatList = require('./ChatList')
+const ChatView = require('./ChatView')
+const Centered = require('./helpers/Centered')
+
+const Unselectable = require('./helpers/Unselectable')
+const StyleVariables = require('./style-variables')
+const NavbarWrapper = require('./NavbarWrapper')
 
 const {
   Alignment,
   Classes,
-  InputGroup,
   Navbar,
   NavbarGroup,
   NavbarHeading,
@@ -13,15 +24,6 @@ const {
   Popover,
   Button
 } = require('@blueprintjs/core')
-
-const Menu = require('./Menu')
-const dialogs = require('./dialogs')
-const ChatList = require('./ChatList')
-const ChatView = require('./ChatView')
-const Centered = require('./helpers/Centered')
-const Unselectable = require('./helpers/Unselectable')
-const StyleVariables = require('./style-variables')
-const NavbarWrapper = require('./NavbarWrapper')
 
 const NavbarGroupName = styled.div`
   font-size: medium;
@@ -42,18 +44,18 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
+      settings: false,
       deadDropChat: false,
-      keyTransfer: false,
       queryStr: ''
     }
 
+    this.openSettings = this.openSettings.bind(this)
+    this.onCloseSettings = this.onCloseSettings.bind(this)
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onDeadDropClose = this.onDeadDropClose.bind(this)
-    this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
-    this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
@@ -82,29 +84,29 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ deadDropChat: chat })
   }
 
-  onKeyTransferComplete () {
-    this.setState({ keyTransfer: false })
-  }
-
-  initiateKeyTransfer () {
-    this.setState({ keyTransfer: true })
-  }
-
   handleSearchChange (event) {
     this.searchChats(event.target.value)
+  }
+
+  openSettings () {
+    this.setState({ settings: true })
+  }
+
+  onCloseSettings () {
+    this.setState({ settings: false })
   }
 
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
-    const { deadDropChat, keyTransfer } = this.state
+    const { deadDropChat, settings } = this.state
 
     const tx = window.translate
 
     const menu = <Menu
+      openSettings={this.openSettings}
       changeScreen={this.props.changeScreen}
       selectedChat={selectedChat}
-      initiateKeyTransfer={this.initiateKeyTransfer}
       showArchivedChats={showArchivedChats}
     />
 
@@ -136,7 +138,7 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <dialogs.KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <Settings isOpen={settings} onClose={this.onCloseSettings} />
         <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <BelowNavbar>
           <ChatList

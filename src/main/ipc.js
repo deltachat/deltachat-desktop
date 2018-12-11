@@ -2,10 +2,12 @@ module.exports = {
   init
 }
 
-const electron = require('electron')
-const fs = require('fs')
+const {
+  app,
+  ipcMain
+} = require('electron')
 
-const app = electron.app
+const fs = require('fs')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -13,11 +15,12 @@ const windows = require('./windows')
 const log = require('./log')
 const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
+const setupNotifications = require('./notifications')
 
 function init (cwd) {
   // Events dispatched by buttons from the frontend
 
-  const ipc = electron.ipcMain
+  const ipc = ipcMain
   const main = windows.main
   const dc = new DeltaChat(cwd)
 
@@ -37,6 +40,14 @@ function init (cwd) {
     menu.init()
   })
 
+  // TODO: expose settings through UI
+  var settings = {
+    markRead: true,
+    notifications: true,
+    showNotificationContent: true
+  }
+  setupNotifications(dc, settings)
+
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
     const p = require.resolve('../../conversations/build/manifest.css')
@@ -46,6 +57,14 @@ function init (cwd) {
   // Create a new instance
   ipc.on('login', (e, ...args) => {
     dc.login(...args, render, txCoreStrings())
+  })
+
+  dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
+    windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+  })
+
+  dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
+    windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
   // Calls a function directly in the deltachat-node instance and returns the

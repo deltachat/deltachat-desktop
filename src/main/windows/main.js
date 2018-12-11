@@ -73,6 +73,12 @@ function init (state, options) {
 
   win.on('close', e => {
   })
+  win.on('blur', e => {
+    win.hidden = true
+  })
+  win.on('focus', e => {
+    win.hidden = false
+  })
 }
 
 function hide () {
