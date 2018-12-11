@@ -816,5 +816,9 @@
   "imageFailedToLoad": {
     "message": "Image failed to load",
     "description": "Shown when image failed to load"
+  },
+  "newMessageNotification": {
+    "message": "New Message!",
+    "description": "Shown as a placeholder when notification details are turned off"
   }
 }

@@ -457,7 +457,7 @@ class DeltaChatController extends events.EventEmitter {
 
     for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
       let id = messageIdsToRender[i]
-      let json = this._messageIdToJson(id)
+      let json = this.messageIdToJson(id)
 
       if (id === C.DC_MSG_ID_DAYMARKER) {
         json.daymarker = {
@@ -471,7 +471,7 @@ class DeltaChatController extends events.EventEmitter {
     return messages
   }
 
-  _messageIdToJson (id) {
+  messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()

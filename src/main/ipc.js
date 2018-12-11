@@ -4,10 +4,9 @@ module.exports = {
 
 const {
   app,
-  ipcMain,
-  Notification
+  ipcMain
 } = require('electron')
-const path = require('path')
+
 const fs = require('fs')
 
 const localize = require('../localize')
@@ -16,6 +15,7 @@ const windows = require('./windows')
 const log = require('./log')
 const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
+const setupNotifications = require('./notifications')
 
 function init (cwd) {
   // Events dispatched by buttons from the frontend
@@ -23,16 +23,10 @@ function init (cwd) {
   const ipc = ipcMain
   const main = windows.main
   const dc = new DeltaChat(cwd)
-  let notify
 
   ipc.once('ipcReady', function (e) {
     app.ipcReady = true
     app.emit('ipcReady')
-    notify = new Notification({
-      title: 'Delta Chat',
-      body: 'New Message!',
-      icon: path.join(__dirname, '..', '..', '..', 'dist', 'icon.icns')
-    })
   })
 
   ipc.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
@@ -46,11 +40,13 @@ function init (cwd) {
     menu.init()
   })
 
-  if (Notification.isSupported()) {
-    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      if (notify) notify.show()
-    })
+  // TODO: expose settings through UI
+  var settings = {
+    markRead: true,
+    notifications: true,
+    showNotificationContent: true
   }
+  setupNotifications(dc, settings)
 
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
