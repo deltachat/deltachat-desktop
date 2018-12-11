@@ -44,6 +44,7 @@ class Login extends React.Component {
   _defaultCredentials () {
     return {
       addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
+      imapFolder: '',
       mailUser: '',
       mailPw: process.env.DC_MAIL_PW ? process.env.DC_MAIL_PW : '',
       mailServer: '',
@@ -113,6 +114,7 @@ class Login extends React.Component {
 
     const {
       addr,
+      imapFolder,
       mailUser,
       mailPw,
       mailServer,
@@ -190,6 +192,15 @@ class Login extends React.Component {
                   min='0'
                   max='65535'
                   value={mailPort}
+                  leftIcon='envelope'
+                  onChange={this.handleCredentialsChange}
+                />
+              </FormGroup>
+              <FormGroup label={tx('login.imapFolder')} placeholder='IMAP-Folder' labelFor='imapFolder' labelInfo={`(${tx('default')}: INBOX)`}>
+                <InputGroup
+                  id='imapFolder'
+                  type='text'
+                  value={imapFolder}
                   leftIcon='envelope'
                   onChange={this.handleCredentialsChange}
                 />

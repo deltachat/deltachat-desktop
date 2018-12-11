@@ -213,7 +213,7 @@
     },
     "login.enterPassword": {
       "message": "Enter your password...",
-      "description": "Text telling user to enter his password"      
+      "description": "Text telling user to enter his password"
     },
     "login.mailPw": {
         "message": "Password",
@@ -242,6 +242,14 @@
     "login.mailPort": {
         "message": "IMAP-Port",
         "description": "Label above input field for imap server port"
+    },
+    "login.imapFolder": {
+        "message": "IMAP-Folder",
+        "description": "Label above input field for imap folder"
+    },
+    "default": {
+        "message": "default",
+        "description": "Label to the right of imap folder input describing the default value for imap folder"
     },
     "login.mailSecurity": {
         "message": "Security",
