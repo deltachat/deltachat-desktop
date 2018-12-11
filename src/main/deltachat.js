@@ -381,6 +381,10 @@ class DeltaChatController extends events.EventEmitter {
     }
   }
 
+  _integerToHexColor (integerColor) {
+    return '#' + integerColor.toString(16)
+  }
+
   _chatList (showArchivedChats) {
     if (!this._dc) return []
 
@@ -392,6 +396,7 @@ class DeltaChatController extends events.EventEmitter {
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
       const chat = this._dc.getChat(chatId).toJson()
+      chat.color = this._integerToHexColor(chat.color)
 
       if (!chat) continue
 
@@ -417,7 +422,6 @@ class DeltaChatController extends events.EventEmitter {
 
       chatList.push(chat)
     }
-
     return chatList
   }
 
@@ -476,7 +480,10 @@ class DeltaChatController extends events.EventEmitter {
     const filemime = msg && msg.getFilemime()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
-    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    if (contact.color) {
+      contact.color = this._integerToHexColor(contact.color)
+    }
 
     return {
       id,
