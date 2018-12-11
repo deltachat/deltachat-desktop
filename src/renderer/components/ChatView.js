@@ -173,23 +173,31 @@ class ChatView extends React.Component {
     this.setState({ dialogProps: false })
   }
 
+  onForward (forwardMessage) {
+    this.setState({ dialogProps: { forwardMessage } })
+  }
+
   render () {
     const { dialogProps, messageDetail } = this.state
     const { chat } = this.props
 
     return (
       <ChatViewWrapper ref={this.ChatViewWrapperRef}>
-        <dialogs.SetupMessage
-          userFeedback={this.props.userFeedback}
-          setupMessage={dialogProps.setupMessage}
-          onClose={this.onCloseDialog}
-        />
         <RenderMediaWrapper>
           <dialogs.RenderMedia
             message={dialogProps.attachmentMessage}
             onClose={this.onCloseDialog}
           />
         </RenderMediaWrapper>
+        <dialogs.SetupMessage
+          userFeedback={this.props.userFeedback}
+          setupMessage={dialogProps.setupMessage}
+          onClose={this.onCloseDialog}
+        />
+        <dialogs.ForwardMessage
+          forwardMessage={dialogProps.forwardMessage}
+          onClose={this.onCloseDialog}
+        />
         <dialogs.MessageDetail
           onDelete={this.onDeleteMessage.bind(this, messageDetail)}
           chat={chat}
@@ -200,6 +208,10 @@ class ChatView extends React.Component {
           <ConversationContext>
             {chat.messages.map(rawMessage => {
               var message = MessageWrapper.convert(rawMessage)
+              message.onReply = () => {
+                console.log('reply to', message)
+              }
+              message.onForward = this.onForward.bind(this, message)
               return MessageWrapper.render({
                 message,
                 chat,
