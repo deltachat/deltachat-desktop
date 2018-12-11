@@ -30,7 +30,7 @@ module.exports = function (dc, settings) {
       notify.on('click', () => {
         dc.selectChat(chatId)
         app.focus()
-        notify.close()
+        notify = null
       })
       notify.on('close', () => {
         notify = null
