@@ -9,6 +9,8 @@ const {
   isVideoTypeSupported
 } = require('../../../conversations/build/util/GoogleChrome')
 
+const { ipcRenderer } = require('electron')
+
 const MIME = require('../../../conversations/build/types/MIME')
 
 const MINIMUM_IMG_HEIGHT = 150
@@ -61,6 +63,11 @@ function getExtension ({ fileName, contentType }) {
   }
 
   return null
+}
+
+function dragAttachmentOut (attachment, dragEvent) {
+  dragEvent.preventDefault()
+  ipcRenderer.send('ondragstart', attachment.url)
 }
 
 class Message extends React.Component {
@@ -508,7 +515,11 @@ class Message extends React.Component {
               : null
           )}
         >
-          <div className='module-message__generic-attachment__icon'>
+          <div
+            className='module-message__generic-attachment__icon'
+            draggable='true'
+            onDragStart={dragAttachmentOut.bind(null, attachment)}
+          >
             {extension ? (
               <div className='module-message__generic-attachment__icon__extension'>
                 {extension}
