@@ -57,7 +57,9 @@ function getDefaultState () {
      * Also accessible via `require('application-config')('DeltaChat').filePath`
      */
     saved: {
-      markRead: true
+      markRead: true,
+      notifications: true,
+      showNotificationContent: true
     }
   }
 }

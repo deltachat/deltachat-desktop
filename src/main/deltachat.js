@@ -14,10 +14,16 @@ class DeltaChatController extends events.EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  constructor (cwd) {
+  constructor (cwd, saved) {
     super()
     this.cwd = cwd
     this._resetState()
+    if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
+    this._saved = saved
+  }
+
+  updateSettings (saved) {
+    this._saved = saved
   }
 
   /**
@@ -436,7 +442,9 @@ class DeltaChatController extends events.EventEmitter {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
-    this._dc.markSeenMessages(selectedChat.messageIds)
+    if (this._saved.markRead) {
+      this._dc.markSeenMessages(selectedChat.messageIds)
+    }
 
     var messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
     selectedChat.totalMessages = messageIds.length

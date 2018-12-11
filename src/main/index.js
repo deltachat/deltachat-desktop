@@ -47,6 +47,10 @@ function onReady (err, results) {
   const state = results.state
   app.logins = results.logins
 
+  var cwd = process.env.TEST_DIR || config.CONFIG_PATH
+  log('cwd', cwd)
+  ipc.init(cwd, state)
+
   localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(state, { hidden })
   menu.init()
@@ -59,10 +63,6 @@ function onReady (err, results) {
     windows.main.send('uncaughtError', 'main', error)
   })
 }
-
-var cwd = process.env.TEST_DIR || config.CONFIG_PATH
-log('cwd', cwd)
-ipc.init(cwd)
 
 app.once('ipcReady', () => {
   log('Command line args:', argv)

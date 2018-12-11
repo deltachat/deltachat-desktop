@@ -30,8 +30,6 @@ class Settings extends React.Component {
       keyTransfer: false,
       saved: props.saved
     }
-    console.log(props)
-    console.log(this.state.saved)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
@@ -83,6 +81,7 @@ class Settings extends React.Component {
     this.state.saved[key] = value
     this.setState({ saved: this.state.saved })
     State.save({ saved: this.state.saved })
+    ipcRenderer.send('updateSettings', this.state.saved)
   }
 
   render () {
