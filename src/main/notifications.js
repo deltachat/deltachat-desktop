@@ -7,6 +7,8 @@ const {
 } = require('electron')
 
 module.exports = function (dc, settings) {
+  if (!Notification.isSupported()) return
+
   let notify
 
   function getMsgBody (msgId) {
@@ -17,24 +19,22 @@ module.exports = function (dc, settings) {
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
 
-  if (Notification.isSupported()) {
-    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      if (!notify && settings.notifications && windows.main.win.hidden) {
-        notify = new Notification({
-          title: config.APP_NAME,
-          body: getMsgBody(msgId),
-          icon: config.APP_ICON
-        })
-        notify.show()
-        notify.on('click', () => {
-          dc.selectChat(chatId)
-          app.focus()
-          notify.close()
-        })
-        notify.on('close', () => {
-          notify = null
-        })
-      }
-    })
-  }
+  dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+    if (!notify && settings.notifications && windows.main.win.hidden) {
+      notify = new Notification({
+        title: config.APP_NAME,
+        body: getMsgBody(msgId),
+        icon: config.APP_ICON
+      })
+      notify.show()
+      notify.on('click', () => {
+        dc.selectChat(chatId)
+        app.focus()
+        notify.close()
+      })
+      notify.on('close', () => {
+        notify = null
+      })
+    }
+  })
 }
