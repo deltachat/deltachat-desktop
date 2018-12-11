@@ -362,7 +362,7 @@ class DeltaChatController {
     }
   }
 
-  _integerToHexColor(integerColor) {
+  _integerToHexColor (integerColor) {
     return '#' + integerColor.toString(16)
   }
 
