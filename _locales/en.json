@@ -812,5 +812,9 @@
   "imexProgressTitle": {
     "message": "Backup Progress",
     "description": "Title when showing progress for backing up"
+  },
+  "imageFailedToLoad": {
+    "message": "Image failed to load",
+    "description": "Shown when image failed to load"
   }
 }
