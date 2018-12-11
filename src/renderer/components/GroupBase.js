@@ -102,7 +102,6 @@ class GroupBase extends React.Component {
 
   render () {
     const {
-      deltachat,
       showQrVerifyCodeButton,
       showQrInviteCodeButton,
       qrCode
