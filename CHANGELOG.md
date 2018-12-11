@@ -2,7 +2,26 @@
 
 ## [Unreleased]
 
-## [2.1.0] - 2018-12-06
+## [0.90.0] - 2018-12-11
+
+### Changed
+* Upgrade `deltachat-node` dependency to `^0.28.0` (@ralphtheninja)
+* Deploy on Mac for Travis (@ralphtheninja)
+* Disable reply button (#400) (@jikstra)
+
+### Added
+* Add colored avatars (@jikstra)
+* Add notifications (#246) (@karissa)
+* Add import/export backup in settings dialog (#267) (@karissa)
+* Add multiline composer (#394) (@jikstra)
+
+### Fixed
+* Add `imageFailedToLoad` translation (#385) (@karissa)
+* Fix accidentally skipped message (#378) (@jikstra)
+
+**Historical Note** We decided to change the versionining scheme to be more in line with the android app.
+
+## 2.1.0 - 2018-12-06
 
 ### Changed
 * Update translations (@ralphtheninja)
@@ -34,7 +53,7 @@
 * Fix deaddrop accept (#332) (@jikstra)
 * Turn contact into json before passing to frontend (#360)
 
-## [2.0.0] - 2018-11-23
+## 2.0.0 - 2018-11-23
 
 ### Changed
 * Simplify and refactor dialogs (@karissa)
@@ -59,7 +78,7 @@
 
 **Historical Note** This release contains an update to `deltachat-core` which contains the single folder implementation. See the [upgrade guide](UPGRADING.md) for more details.
 
-## [1.7.5] - 2018-11-17
+## 1.7.5 - 2018-11-17
 
 ### Changed
 * Load messages on demand using a paging model (@karissa)
@@ -84,7 +103,7 @@
 * Only try setting group image if it's different (@ralphtheninja)
 * Reference correct target when sending a message (@karissa)
 
-## [1.7.4] - 2018-11-07
+## 1.7.4 - 2018-11-07
 
 ### Changed
 * Upgrade `@sindresorhus/is` to `^0.13.0` (@greenkeeper)
@@ -104,7 +123,7 @@
 * Tweak Autocrypt Setup Message (@ralphtheninja)
 * Pass configuration settings to core in `snake_key` format (@ralphtheninja)
 
-## [1.7.3] - 2018-11-02
+## 1.7.3 - 2018-11-02
 
 ### Added
 * Add about dialog (@jikstra, @ralphtheninja)
@@ -117,7 +136,7 @@
 * Contact requests properly resolve when request is from a group chat (@karissa)
 * Add key for chatlist to remove console warning (@karissa)
 
-## [1.7.2] - 2018-10-31
+## 1.7.2 - 2018-10-31
 
 ### Changed
 * Update translations from transifex (@ralphtheninja)
@@ -138,12 +157,12 @@
 ### Fixed
 * Don't select recent chat by default (@karissa)
 
-## [1.7.1] - 2018-10-29
+## 1.7.1 - 2018-10-29
 
 ### Fixed
 * Downgrade to electron 2 (fixes window bug on Debian) (@substack)
 
-## [1.7.0] - 2018-10-25
+## 1.7.0 - 2018-10-25
 
 ### Changed
 * Update translations from transifex (@ralphtheninja)
@@ -174,7 +193,7 @@
 * Propagate `'uncaughtError'` event to render process and log it (@ralphtheninja)
 * Let unknown translations fall back to resource key (@ralphtheninja)
 
-## [1.6.0] - 2018-10-23
+## 1.6.0 - 2018-10-23
 
 ### Changed
 * Update translations from transifex (@ralphtheninja)
@@ -190,7 +209,7 @@
 ### Removed
 * Remove `babel-eslint` devDependency (@ralphtheninja)
 
-## [1.5.0] - 2018-10-20
+## 1.5.0 - 2018-10-20
 
 ### Changed
 * Consolidate chat list and chat view (@jikstra)
@@ -206,7 +225,7 @@
 * If creating a chat that is already archived, unarchive it (@ralphtheninja)
 * Fix issues with author name in group chats (@ralphtheninja)
 
-## [1.4.0] - 2018-10-16
+## 1.4.0 - 2018-10-16
 
 ### Changed
 * Pull in `conversations` module (@jikstra)
@@ -232,15 +251,5 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.1.0...HEAD
-[2.1.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.0.0...v2.1.0
-[2.0.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.5...v2.0.0
-[1.7.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.4...v1.7.5
-[1.7.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.3...v1.7.4
-[1.7.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.2...v1.7.3
-[1.7.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.1...v1.7.2
-[1.7.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.7.0...v1.7.1
-[1.7.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.6.0...v1.7.0
-[1.6.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...v1.6.0
-[1.5.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.4.0
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.0...HEAD
+[0.90.0]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.0
