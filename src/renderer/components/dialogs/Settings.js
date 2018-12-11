@@ -9,10 +9,13 @@ const {
   ButtonGroup,
   Classes,
   Button,
-  Dialog
+  Dialog,
+  Switch
 } = require('@blueprintjs/core')
 
-const dialogs = require('./dialogs')
+const KeyTransfer = require('./KeyTransfer')
+const confirmationDialog = require('./confirmationDialog')
+const State = require('../../lib/state')
 
 const SettingsDialog = styled.div`
   .bp3-card:not(:last-child){
@@ -24,12 +27,16 @@ class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      keyTransfer: false
+      keyTransfer: false,
+      saved: props.saved
     }
+    console.log(props)
+    console.log(this.state.saved)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
+    this.handleSettingsChange = this.handleSettingsChange.bind(this)
   }
 
   onKeyTransferComplete () {
@@ -54,7 +61,7 @@ class Settings extends React.Component {
     var confirmOpts = {
       buttons: [tx('cancel'), tx('exportBackup')]
     }
-    dialogs.confirmation(tx('backupConfirmationMessage'), confirmOpts, response => {
+    confirmationDialog(tx('backupConfirmationMessage'), confirmOpts, response => {
       if (!response) return
       var opts = {
         title: tx('exportBackup'),
@@ -72,16 +79,22 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: true })
   }
 
+  handleSettingsChange (key, value) {
+    this.state.saved[key] = value
+    this.setState({ saved: this.state.saved })
+    State.save({ saved: this.state.saved })
+  }
+
   render () {
     const { isOpen, onClose } = this.props
-    const { keyTransfer } = this.state
+    const { saved, keyTransfer } = this.state
 
     const tx = window.translate
     const title = tx('settingsTitle')
 
     return (
       <div>
-        <dialogs.KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={isOpen}
           title={title}
@@ -91,7 +104,9 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAutocryptSection')}</H5>
               <p>{tx('autocryptDescription')}</p>
-              <Button onClick={this.initiateKeyTransfer}>{tx('initiateKeyTransferTitle')}</Button>
+              <Button onClick={this.initiateKeyTransfer}>
+                {tx('initiateKeyTransferTitle')}
+              </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsBackupSection')}</H5>
@@ -99,6 +114,14 @@ class Settings extends React.Component {
                 <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
                 <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
               </ButtonGroup>
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('settingsOptionsSection')}</H5>
+              <Switch
+                checked={saved.markRead}
+                label='Mark incoming messages as read'
+                onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
+              />
             </Card>
           </SettingsDialog>
         </Dialog>

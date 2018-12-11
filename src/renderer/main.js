@@ -38,6 +38,12 @@ function setupIpc () {
   ipcRenderer.on('stateSave', (e) => State.save(state))
   ipcRenderer.on('stateSaveImmediate', (e) => State.saveImmediate(state))
 
+  ipcRenderer.on('updateSettings', (e, key, value) => {
+    console.log('got', key, value)
+    // state.saved[key] = value
+    //State.save(state)
+  })
+
   ipcRenderer.on('chooseLanguage', onChooseLanguage)
   ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
 

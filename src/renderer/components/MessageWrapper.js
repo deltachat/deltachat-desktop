@@ -94,6 +94,7 @@ function render (props) {
 
   let key = message.id
   let body
+
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
     key = message.daymarker.id
     body = (

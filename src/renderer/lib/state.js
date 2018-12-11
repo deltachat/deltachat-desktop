@@ -56,7 +56,9 @@ function getDefaultState () {
      *
      * Also accessible via `require('application-config')('DeltaChat').filePath`
      */
-    saved: {}
+    saved: {
+      markRead: true
+    }
   }
 }
 
@@ -64,8 +66,8 @@ function getDefaultState () {
 function setupStateSaved (cb) {
   const saved = {
     locale: null,
-    credentials: {},
-    version: config.APP_VERSION /* make sure we can upgrade gracefully later */
+    version: config.APP_VERSION,
+    markRead: true
   }
   cb(null, saved)
 }
@@ -83,7 +85,8 @@ function load (cb) {
   function onSavedState (err, saved) {
     if (err) return cb(err)
     const state = getDefaultState()
-    state.saved = saved
+    // override default savable settings with saved ones
+    state.saved = Object.assign(state.saved, saved)
 
     cb(null, state)
   }
@@ -95,8 +98,6 @@ function saveImmediate (state, cb) {
 
   // Clean up, so that we're not saving any pending state
   const copy = Object.assign({}, state.saved)
-  // Remove torrents pending addition to the list, where we haven't finished
-  // reading the torrent file or file(s) to seed & don't have an infohash
 
   appConfig.write(copy, (err) => {
     if (err) console.error(err)

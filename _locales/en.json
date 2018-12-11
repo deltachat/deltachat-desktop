@@ -801,6 +801,9 @@
   "settingsAutocryptSection": {
     "message": "Autocrypt"
   },
+  "settingsOptionsSection": {
+    "message": "Options"
+  },
   "backupConfirmationMessage": {
     "message": "Exported files will contain your end-to-end Autocrypt setup! Keep them in a safe place or delete them as soon as possible.",
     "description": "Shown as a confirmation message before exporting a backup"
