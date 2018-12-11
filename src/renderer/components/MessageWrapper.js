@@ -2,7 +2,6 @@ const React = require('react')
 const path = require('path')
 const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
-// const { Message } = require('./conversations')
 const Message = require('./Message')
 const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')

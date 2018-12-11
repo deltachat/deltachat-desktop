@@ -106,22 +106,6 @@ class ChatList extends React.Component {
               )
             } else {
               return (
-                /* <ConversationListItem
-                  key={i}
-                  onClick={this.props.onChatClick.bind(null, chat.id)}
-                  phoneNumber={chat.summary.text1}
-                  name={chat.name}
-                  avatarPath={chat.profileImage}
-                  color={chat.color.toString(16)}
-                  lastUpdated={lastUpdated}
-                  lastMessage={{
-                    text: chat.summary.text2,
-                    status: 'sent' // TODO: interpret data from summary to get correct state
-                  }}
-                  i18n={i18n}
-                  isSelected={chat.id === selectedChatId}
-                  isVerified={chat.isVerified}
-                  unreadCount={chat.freshMessageCounter} /> */
                 <ChatListItem
                   key={i}
                   onClick={this.props.onChatClick.bind(null, chat.id)}
