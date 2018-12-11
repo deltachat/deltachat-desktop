@@ -2,10 +2,13 @@ module.exports = {
   init
 }
 
-const electron = require('electron')
+const {
+  app,
+  ipcMain,
+  Notification
+} = require('electron')
+const path = require('path')
 const fs = require('fs')
-
-const app = electron.app
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -17,13 +20,19 @@ const C = require('deltachat-node/constants')
 function init (cwd) {
   // Events dispatched by buttons from the frontend
 
-  const ipc = electron.ipcMain
+  const ipc = ipcMain
   const main = windows.main
   const dc = new DeltaChat(cwd)
+  let notify
 
   ipc.once('ipcReady', function (e) {
     app.ipcReady = true
     app.emit('ipcReady')
+    notify = new Notification({
+      title: 'Delta Chat',
+      body: 'New Message!',
+      icon: path.join(__dirname, '..', '..', '..', 'dist', 'icon.icns')
+    })
   })
 
   ipc.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
@@ -36,6 +45,12 @@ function init (cwd) {
     dc.setCoreStrings(txCoreStrings())
     menu.init()
   })
+
+  if (Notification.isSupported()) {
+    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+      if (notify) notify.show()
+    })
+  }
 
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
