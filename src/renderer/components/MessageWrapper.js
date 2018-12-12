@@ -111,7 +111,7 @@ function render (props) {
     body = (
       <SetupMessage key={message.id}
         onClick={onClickSetupMessage}>
-        {body}
+        <RenderMessage {...props} />
       </SetupMessage>
     )
   } else {
