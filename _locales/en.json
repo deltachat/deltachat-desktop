@@ -299,6 +299,14 @@
         "message": "Choose Language...",
         "description": "Choose language label in the menu"
     },
+    "menu.file": {
+        "message": "File",
+        "description": "File menu label"
+    },
+    "menu.file.quit": {
+        "message": "Quit",
+        "description": "Quit menu item label"
+    },
     "menu.edit": {
         "message": "Edit",
         "description": "Edit menu label"
