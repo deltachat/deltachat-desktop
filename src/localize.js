@@ -4,7 +4,6 @@ module.exports = {
 }
 
 const merge = require('lodash.merge')
-const fs = require('fs')
 const path = require('path')
 
 const log = require('./main/log')
@@ -20,13 +19,9 @@ function translate (messages) {
     }
 
     const { message } = entry
-    if (Array.isArray(substitutions)) {
-      return substitutions.reduce(
-        (result, substitution) => result.replace(/\$.+?\$/, substitution),
-        message
-      )
-    } else if (substitutions) {
-      return message.replace(/\$.+?\$/, substitutions)
+    if (substitutions) {
+      const val = substitutions.quantity ? entry[substitutions.quantity] : message
+      return val.replace(/\$.+?\$/, substitutions)
     }
 
     return message
@@ -53,7 +48,7 @@ function getLocaleMessages (locale) {
     onDiskLocale + '.json'
   )
 
-  return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
+  return (targetFile)
 }
 
 function setup (app, name) {
@@ -81,3 +76,4 @@ function setup (app, name) {
 
   return localeData
 }
+
