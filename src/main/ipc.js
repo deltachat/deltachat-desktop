@@ -90,6 +90,13 @@ function init (cwd, state) {
     })
   })
 
+  ipcMain.on('ondragstart', (event, filePath) => {
+    event.sender.startDrag({
+      file: filePath,
+      icon: ''
+    })
+  })
+
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
   ipc.on('locale-data', (e, locale) => {
