@@ -379,7 +379,6 @@ class DeltaChatController extends events.EventEmitter {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
-      contacts: this._contacts(),
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
       chatList,
@@ -509,6 +508,12 @@ class DeltaChatController extends events.EventEmitter {
     this._render()
   }
 
+  forwardMessage (msgId, contactId) {
+    var chatId = this._dc.getChatIdByContactId(contactId)
+    this._dc.forwardMessages(msgId, chatId)
+    this.selectChat(chatId)
+  }
+
   _blockedContacts (...args) {
     if (!this._dc) return []
     return this._dc.getBlockedContacts(...args).map(id => {
@@ -516,13 +521,9 @@ class DeltaChatController extends events.EventEmitter {
     })
   }
 
-  /**
-   * Internal
-   * Returns contacts in json format
-   */
-  _contacts (...args) {
-    if (!this._dc) return []
-    return this._dc.getContacts(...args).map(id => {
+  getContacts (listFlags, queryStr) {
+    var distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
+    return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
   }

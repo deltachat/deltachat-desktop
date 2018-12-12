@@ -186,14 +186,6 @@ class RenderMessage extends React.Component {
 }
 
 function convert (message) {
-  message.onReply = () => {
-    console.log('reply to', message)
-  }
-
-  message.onForward = () => {
-    console.log('forward to')
-  }
-
   message.onDownload = () => {
     var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
     remote.dialog.showSaveDialog({

@@ -9,6 +9,7 @@ const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
+const ContactList = require('./components/ContactList')
 
 class Home extends React.Component {
   constructor (props) {
@@ -81,6 +82,9 @@ class Home extends React.Component {
         break
       case 'EditGroup':
         Screen = EditGroup
+        break
+      case 'ContactList':
+        Screen = ContactList
         break
       case 'UnblockContacts':
         Screen = UnblockContacts

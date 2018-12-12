@@ -13,9 +13,9 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { RenderContact } = require('./Contact')
 const { QrCode } = require('./dialogs')
 const NavbarWrapper = require('./NavbarWrapper')
+const ContactList = require('./ContactList')
 
 class GroupBase extends React.Component {
   constructor (props, state) {
@@ -49,7 +49,8 @@ class GroupBase extends React.Component {
     return !!this.state.group[contactId]
   }
 
-  toggleContact (contactId) {
+  toggleContact (contact) {
+    var contactId = contact.id
     if (this.contactInGroup(contactId)) {
       this.removeFromGroup(contactId)
     } else {
@@ -100,7 +101,6 @@ class GroupBase extends React.Component {
   }
 
   render () {
-    const contacts = this._getContacts()
     const {
       showQrVerifyCodeButton,
       showQrInviteCodeButton,
@@ -121,13 +121,6 @@ class GroupBase extends React.Component {
         </NavbarWrapper>
         <div className='window'>
           <div className='GroupBase'>
-            <div className='SelectGroupImage'>
-              <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
-              <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
-            </div>
-            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
-            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
-            <QrCode qrCode={qrCode} onClose={this.closeQrCode} />
             <ControlGroup fill vertical={false}>
               <InputGroup
                 type='text'
@@ -140,27 +133,23 @@ class GroupBase extends React.Component {
                 onClick={this.onSubmit.bind(this)}
                 text={tx(this.state.buttonLabel)} />
             </ControlGroup>
-            {contacts.map((contact) => {
-              return (
-                <RenderContact
-                  color={this.contactInGroup(contact.id) ? 'green' : ''}
-                  onClick={this.toggleContact.bind(this, contact.id)}
-                  contact={contact}
-                />
-              )
-            })}
+            <div className='SelectGroupImage'>
+              <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
+              <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
+            </div>
+            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
+            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
+            <QrCode qrCode={qrCode} onClose={this.closeQrCode} />
+            <ContactList
+              childProps={(contact) => {
+                return { color: this.contactInGroup(contact.id) ? 'green' : '' }
+              }}
+              onContactClick={this.toggleContact.bind(this)}
+            />
           </div>
         </div>
       </div>
     )
-  }
-
-  _getContacts () {
-    const { contacts } = this.props.deltachat
-    if (this.state.showVerifiedContacts) {
-      return contacts.filter(c => c.isVerified === true)
-    }
-    return contacts
   }
 }
 

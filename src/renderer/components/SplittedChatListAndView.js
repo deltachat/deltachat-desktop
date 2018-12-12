@@ -1,13 +1,13 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
-const { InputGroup } = require('@blueprintjs/core')
 
 const dialogs = require('./dialogs')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const Centered = require('./helpers/Centered')
+const SearchInput = require('./SearchInput.js')
 
 const Unselectable = require('./helpers/Unselectable')
 const StyleVariables = require('./style-variables')
@@ -104,14 +104,9 @@ class SplittedChatListAndView extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
-              <InputGroup
-                type='search'
-                aria-label={tx('searchAriaLabel')}
-                large
-                placeholder={tx('searchPlaceholder')}
-                value={this.state.queryStr}
+              <SearchInput
                 onChange={this.handleSearchChange}
-                leftIcon='search'
+                value={this.state.queryStr}
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
