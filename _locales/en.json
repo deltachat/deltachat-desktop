@@ -1,824 +1,1046 @@
 {
-    "logout": {
-        "message": "Logout",
-        "description": "Text for a logout button"
-    },
-    "emailValidationFailed": {
-        "message": "E-mail address required.",
-        "description": "Error message if an invalid email address was given when creating a contact"
-    },
-    "createChatError": {
-        "message": "Could not create chat.",
-        "description": "Error message if a chat could not be created"
-    },
-    "newMessageFrom": {
-        "message": "New message from",
-        "description": "Displayed when a chat request is recieved"
-    },
-    "addContact": {
-        "message": "Add contact",
-        "description": "Add contact button label"
-    },
-    "name": {
-        "message": "Name",
-        "description": "Name label in Add Contact view"
-    },
-    "newGroup": {
-        "message": "New group",
-        "description": "New group button and text label"
-    },
-    "newVerifiedGroup": {
-        "message": "New verified group",
-        "description": "New verified group button and text label"
-    },
-    "showQrVerifyCode": {
-        "message": "Show QR verify code",
-        "description": "Label for button to show QR code for contact verification"
-    },
-    "showQrInviteCode": {
-        "message": "Show QR invite code",
-        "description": "Label for button to show QR code for joining a verified group"
-    },
-    "archiveGroup": {
-        "message": "Archive Group",
-        "description": "Archive group menu item label"
-    },
-    "unArchiveGroup": {
-        "message": "Unarchive Group",
-        "description": "Unarchive group menu item label"
-    },
-    "deleteGroup": {
-        "message": "Delete Group",
-        "description": "Delete group menu item label"
-    },
-    "editGroup": {
-        "message": "Edit group",
-        "description": "Edit group text label"
-    },
-    "editVerifiedGroup": {
-        "message": "Edit verified group",
-        "description": "Edit verified group text label"
-    },
-    "verified": {
-        "message": "verified",
-        "description": "Label shown next to icon for a verified contact"
-    },
-    "qrCode": {
-        "message": "QR Code",
-        "description": "Window labelf for QR code dialog"
-    },
-    "leaveGroup": {
-        "message": "Leave Group",
-        "description": "Leave group menu item label"
-    },
-    "save": {
-        "message": "Save",
-        "description": "Save button label (e.g. when editing groups)"
-    },
-    "groupName": {
-        "message": "Group Name",
-        "description": "Placeholder text for group name input field"
-    },
-    "groupNameRequired": {
-        "message": "Group name required.",
-        "description": "Information to user when creating group with empty name"
-    },
-    "newChat": {
-        "message": "New chat",
-        "description": "New chat button and text label"
-    },
-    "archiveChat": {
-        "message": "Archive Chat",
-        "description": "Archive chat menu item label"
-    },
-    "unArchiveChat": {
-        "message": "Unarchive Chat",
-        "description": "Unarchive chat menu item label"
-    },
-    "noChats": {
-        "message": "No chats",
-        "description": "Message shown to user when there are no chats"
-    },
-    "noArchivedChats": {
-        "message": "No archived chats",
-        "description": "Message shown to user when there are no archived chats"
-    },
-    "deleteChat": {
-        "message": "Delete Chat",
-        "description": "Delete chat menu item label"
-    },
-    "contactCreateSuccess": {
-        "message": "Contact created successfully.",
-        "description": "Information to the user when a contact was created successfully"
-    },
-    "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
-        "description": "Dialog title during Autocrypt key transfer"
-    },
-    "setupMessageInfo": {
-        "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, click on this message.",
-        "description": "Text for the autocrypt setup message"
-    },
-    "transferKey": {
-        "message": "Transfer Key",
-        "description": "Button label during Autocrypt key transfer"
-    },
-    "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
-        "description": "Menu alternative to initiate key transfer"
-    },
-    "initiateKeyTransfer": {
-        "message": "An 'Autocrypt Setup Message' securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.",
-        "description": "Seen before starting the setup transfer"
-    },
-    "showKeyTransferMessage": {
-        "message": "Your key has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt. Once you're done, your other device will be ready to use Autocrypt.",
-        "description": "Shown while viewing the transfer key"
-    },
-    "done": {
-        "message": "Done",
-        "description": "Button label when key transfer is done"
-    },
-    "moreInfo": {
-        "message": "More Info...",
-        "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
-    },
-    "downloadAttachment": {
-        "message": "Download Attachment",
-        "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
-    },
-    "imageAttachmentAlt": {
-        "message": "Image attached to message",
-        "description": "Used in alt tag of image attachment"
-    },
-    "videoAttachmentAlt": {
-        "message": "Screenshot of video attached to message",
-        "description": "Used in alt tag of video attachment preview"
-    },
-    "lightboxImageAlt": {
-        "message": "Image sent in conversation",
-        "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
-    },
-    "replyToMessage": {
-        "message": "Reply to Message",
-        "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
-    },
-    "forwardMessage": {
-        "message": "Forward Message...",
-        "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
-    },
-    "deleteMessage": {
-        "message": "Delete Message",
-        "description": "Shown on the drop-down menu for an individual message, deletes single message"
-    },
-    "deleteMessages": {
-        "message": "Delete messages",
-        "description": "Menu item for deleting messages, title case."
-    },
-    "messageDetail": {
-        "message": "Message Detail",
-        "description": "TODO: used where?"
-    },
-    "audio": {
-        "message": "Audio",
-        "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
-    },
-    "video": {
-        "message": "Video",
-        "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
-    },
-    "photo": {
-        "message": "Photo",
-        "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
-    },
-    "ok": {
-        "message": "OK",
-        "description": "TODO: used where?"
-    },
-    "cancel": {
-        "message": "Cancel",
-        "description": "TODO: used where?"
-    },
-    "delete": {
-        "message": "Delete",
-        "description": "TODO: used where?"
-    },
-    "login.welcome": {
-        "message": "Welcome to DeltaChat",
-        "description": "Welcome message at the top of the login screen"
-    },
-    "login.email": {
-        "message": "E-Mail Address",
-        "description": "Label above input field for e-mail address"
-    },
-    "login.enterPassword": {
-      "message": "Enter your password...",
-      "description": "Text telling user to enter his password"      
-    },
-    "login.mailPw": {
-        "message": "Password",
-        "description": "Label above input field for mail password"
-    },
-    "login.required": {
-        "message": "required",
-        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
-    },
-    "login.advanced": {
-        "message": "Advanced",
-        "description": "Advanced settings button label"
-    },
-    "login.inbox": {
-        "message": "Inbox",
-        "description": "Describes the advanced section for inbox (imap)"
-    },
-    "login.mailUser": {
-        "message": "IMAP-Loginname",
-        "description": "Label above input field for imap login name"
-    },
-    "login.mailServer": {
-        "message": "IMAP-Server",
-        "description": "Label above input field for imap server host"
-    },
-    "login.mailPort": {
-        "message": "IMAP-Port",
-        "description": "Label above input field for imap server port"
-    },
-    "login.mailSecurity": {
-        "message": "Security",
-        "description": "Label above selection box for imap security"
-    },
-    "login.security.disable": {
-        "message": "Off",
-        "description": "Text for disabling imap transport security"
-    },
-    "login.security.automatic": {
-        "message": "Automatic",
-        "description": "Text for disabling imap transport security"
-    },
-    "login.outbox": {
-        "message": "Outbox",
-        "description": "Describes the advanced section for outbox (smtp)"
-    },
-    "login.sendUser": {
-        "message": "SMTP-Loginname",
-        "description": "Label above input field for smtp login name"
-    },
-    "login.sendPw": {
-        "message": "SMTP-Password",
-        "description": "Label above input field for smtp password"
-    },
-    "login.sendServer": {
-        "message": "SMTP-Server",
-        "description": "Label above input field for smtp server host"
-    },
-    "login.sendPort": {
-        "message": "SMTP-Port",
-        "description": "Label above input field for smtp server port"
-    },
-    "login.sendSecurity": {
-        "message": "Security",
-        "description": "Label above selection box for smtp security"
-    },
-    "login.automatic": {
-        "message": "automatic",
-        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
-    },
-    "login.cancel": {
-        "message": "Cancel",
-        "description": "Shown in the login form"
-    },
-    "login.button": {
-        "message": "Login",
-        "description": "Shown in the login form"
-    },
-    "menu.preferences": {
-        "message": "Preferences",
-        "description": "Preferences label in the menu"
-    },
-    "menu.preferences.language": {
-        "message": "Choose Language...",
-        "description": "Choose language label in the menu"
-    },
-    "menu.edit": {
-        "message": "Edit",
-        "description": "Edit menu label"
-    },
-    "menu.edit.undo": {
-        "message": "Undo",
-        "description": "Undo menu item label"
-    },
-    "menu.edit.redo": {
-        "message": "Redo",
-        "description": "Redo menu item label"
-    },
-    "menu.edit.cut": {
-        "message": "Cut",
-        "description": "Cut menu item label"
-    },
-    "menu.edit.copy": {
-        "message": "Copy",
-        "description": "Copy menu item label"
-    },
-    "menu.edit.paste": {
-        "message": "Paste",
-        "description": "Paste menu item label"
-    },
-    "menu.edit.delete": {
-        "message": "Delete",
-        "description": "Delete menu item label"
-    },
-    "menu.edit.selectall": {
-        "message": "Select All",
-        "description": "Select All menu item label"
-    },
-    "menu.view": {
-        "message": "View",
-        "description": "View menu label"
-    },
-    "menu.view.floatontop": {
-        "message": "Float on Top",
-        "description": "Float on Top menu item label"
-    },
-    "menu.view.developer": {
-        "message": "Developer",
-        "description": "Developer menu item label"
-    },
-    "menu.view.developer.tools": {
-        "message": "Developer Tools",
-        "description": "Developer Tools menu item label"
-    },
-    "menu.help": {
-        "message": "Help",
-        "description": "Help menu label"
-    },
-    "menu.help.learn": {
-        "message": "Learn more about DeltaChat",
-        "description": "Learn more about DeltaChat menu item label"
-    },
-    "menu.help.contribute": {
-        "message": "Contribute on GitHub",
-        "description": "Contribute on GitHub menu item label"
-    },
-    "menu.help.report": {
-        "message": "Report an Issue...",
-        "description": "Report an Issue... menu item label"
-    },
-    "menu.help.about": {
-        "message": "About DeltaChat",
-        "description": "About menu item"
-    },
-    "aboutDeltaChat": {
-        "message": "About DeltaChat",
-        "description": "Window title on about dialog"
-    },
-    "timestampFormat_M": {
-        "message": "MMM D",
-        "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
-    },
-    "from": {
-        "message": "From",
-        "description": "Label for the sender of a message"
-    },
-    "to": {
-        "message": "To",
-        "description": "Label for the receiver of a message"
-    },
-    "sent": {
-        "message": "Sent",
-        "description": "Label for the time a message was sent"
-    },
-    "send": {
-        "message": "Send",
-        "description": "Button label for sending a message"
-    },
-    "received": {
-        "message": "Received",
-        "description": "Label for the time a message was received"
-    },
-    "writeMessage": {
-        "message": "Write a message",
-        "description": "Placeholder text in the message entry field"
-    },
-    "writeMessageAriaLabel": {
-        "message": "Type a message and press enter",
-        "description": "Aria-label explanation of sending a message"
-    },
-    "sendFailed": {
-        "message": "Failed to send message",
-        "description": "Error message when failed to send message"
-    },
-    "retrySend": {
-        "message": "Resend Message",
-        "description": "Menu alternative in message context menu for resending a message"
-    },
-    "groupMembers": {
-        "message": "Group members",
-        "description": "TODO: used where?"
-    },
-    "showMembers": {
-        "message": "Show members",
-        "description": "TODO: used where?"
-    },
-    "timestamp_s": {
-        "message": "now",
-        "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
-    },
-    "timestamp_m": {
-        "message": "1 minute",
-        "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
-    },
-    "timestamp_h": {
-        "message": "1 hour",
-        "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
-    },
-    "justNow": {
-        "message": "now",
-        "description": "Shown if a message is very recent, less than 60 seconds old"
-    },
-    "hoursAgoShort": {
-        "message": "$hours$ hr",
-        "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
-    },
-    "hoursAgo": {
-        "message": "$hours$ hr ago",
-        "description": "Contracted form of 'X hours ago' which works both for singular and plural"
-    },
-    "minutesAgoShort": {
-        "message": "$minutes$ min",
-        "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
-    },
-    "minutesAgo": {
-        "message": "$minutes$ min ago",
-        "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
-    },
-    "videoScreenshotFailedToLoad": {
-        "message": "Can't display video screenshot",
-        "description": "Error message when video screenshot can't be shown in a video message"
-    },
-    "language.ca": {
-        "message": "Catalan",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.da": {
-        "message": "Danish",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.de": {
-        "message": "German",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.en": {
-        "message": "English",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.eo": {
-        "message": "Esperanto",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.es": {
-        "message": "Spanish",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.eu": {
-        "message": "Basque",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.fr": {
-        "message": "French",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.hr": {
-        "message": "Croatian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.hu": {
-        "message": "Hungarian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.it": {
-        "message": "Italian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ja_JP": {
-        "message": "Japanese",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ko": {
-        "message": "Korean",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nb_NO": {
-        "message": "Norwegian Bokmål",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nl": {
-        "message": "Dutch",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nl_NL": {
-        "message": "Dutch (Netherlands)",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.pl": {
-        "message": "Polish",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.pt": {
-        "message": "Portuguese",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ru": {
-        "message": "Russian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sq": {
-        "message": "Albanian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sr": {
-        "message": "Serbian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sv": {
-        "message": "Swedish",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ta": {
-        "message": "Tamil",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.te": {
-        "message": "Telegu",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.tr": {
-        "message": "Turkish",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.uk": {
-        "message": "Ukrainian",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.zh_CN": {
-        "message": "Chinese",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "emojiAlt": {
-        "message": "Emoji of $1$",
-        "description": "Used with aria-label for emojis"
-    },
-    "chatView.nochatselectedHeader": {
-      "message": "Welcome to Delta Chat",
-      "description": "Header message when no chats are available"
-    },
-    "chatView.nochatselectedSuggestion": {
-      "message": "Select a chat or create a new chat",
-      "description": "Suggestion of what to do when no chats are selected"
-    },
-  "DC_STR_NOMESSAGES": {
-    "message": "No messages.",
-    "description": ""
+  "app_name": {
+    "message": "Delta Chat"
   },
-  "DC_STR_SELF": {
-    "message": "Me",
-    "description": ""
+  "language_name": {
+    "message": "English"
   },
-  "DC_STR_DRAFT": {
-    "message": "Draft",
-    "description": ""
+  "ok": {
+    "message": "OK"
   },
-  "DC_STR_MEMBER": {
-    "message": "%1$s members",
-    "description": ""
+  "cancel": {
+    "message": "Cancel"
   },
-  "DC_STR_CONTACT": {
-    "message": "%1$s contacts",
-    "description": ""
+  "yes": {
+    "message": "Yes"
   },
-  "DC_STR_VOICEMESSAGE": {
-    "message": "Voice message",
-    "description": ""
+  "no": {
+    "message": "No"
   },
-  "DC_STR_DEADDROP": {
-    "message": "Mailbox",
-    "description": ""
+  "on": {
+    "message": "On"
   },
-  "DC_STR_IMAGE": {
-    "message": "Image",
-    "description": ""
+  "off": {
+    "message": "Off"
   },
-  "DC_STR_GIF": {
-    "message": "GIF",
-    "description": ""
+  "def": {
+    "message": "Default"
   },
-  "DC_STR_VIDEO": {
-    "message": "Video",
-    "description": ""
+  "custom": {
+    "message": "Custom"
   },
-  "DC_STR_AUDIO": {
-    "message": "Audio",
-    "description": ""
+  "none": {
+    "message": "None"
   },
-  "DC_STR_FILE": {
-    "message": "File",
-    "description": ""
+  "open": {
+    "message": "Open"
   },
-  "DC_STR_ENCRYPTEDMSG": {
-    "message": "Encrypted message",
-    "description": ""
+  "not_now": {
+    "message": "Not now"
   },
-  "DC_STR_STATUSLINE": {
-    "message": "Sent with my Delta Chat Messenger: https://delta.chat",
-    "description": ""
+  "never": {
+    "message": "Never"
   },
-  "DC_STR_NEWGROUPDRAFT": {
-    "message": "Hello, I've just created the group \"%1$s\" for us.",
-    "description": ""
+  "one_moment": {
+    "message": "One moment…"
   },
-  "DC_STR_MSGGRPNAME": {
-    "message": "Group name changed from \"%1$s\" to \"%2$s\".",
-    "description": ""
+  "done": {
+    "message": "Done"
   },
-  "DC_STR_MSGGRPIMGCHANGED": {
-    "message": "Group image changed.",
-    "description": ""
+  "undo": {
+    "message": "Undo"
   },
-  "DC_STR_MSGADDMEMBER": {
-    "message": "Member %1$s added.",
-    "description": ""
+  "error": {
+    "message": "Error"
   },
-  "DC_STR_MSGDELMEMBER": {
-    "message": "Member %1$s removed.",
-    "description": ""
+  "error_no_network": {
+    "message": "Network unavailable."
   },
-  "DC_STR_MSGGROUPLEFT": {
-    "message": "Left group.",
-    "description": "This message is sent out to a group when someone leaves the group."
+  "no_app_to_handle_data": {
+    "message": "Can\\'t find an app to handle this type of data."
   },
-  "DC_STR_SELFNOTINGRP": {
-    "message": "You must be a member of the group to perform this action.",
-    "description": ""
+  "no_browser_installed": {
+    "message": "No browser installed."
   },
-  "DC_STR_E2E_AVAILABLE": {
-    "message": "End-to-end encryption available.",
-    "description": ""
+  "file_not_found": {
+    "message": "Could not find %1$s."
   },
-  "DC_STR_ENCR_TRANSP": {
-    "message": "Transport-encryption.",
-    "description": ""
+  "copied_to_clipboard": {
+    "message": "Copied to clipboard."
   },
-  "DC_STR_ENCR_NONE": {
-    "message": "No encryption.",
-    "description": ""
+  "contacts_headline": {
+    "message": "Contacts"
   },
-  "DC_STR_FINGERPRINTS": {
-    "message": "Fingerprints",
-    "description": ""
+  "email_address": {
+    "message": "Email address"
   },
-  "DC_STR_READRCPT": {
-    "message": "Return receipt",
-    "description": ""
+  "bad_email_address": {
+    "message": "Bad email address."
   },
-  "DC_STR_READRCPT_MAILBODY": {
-    "message": "This is a return receipt for the message \"%1$s\".",
-    "description": ""
+  "password": {
+    "message": "Password"
   },
-  "DC_STR_MSGGRPIMGDELETED": {
-    "message": "Group image deleted.",
-    "description": ""
+  "now": {
+    "message": "Now"
   },
-  "DC_STR_E2E_PREFERRED": {
-    "message": "End-to-end encryption preferred.",
-    "description": ""
+  "n_min_ago": {
+    "message": "%d min"
   },
-  "DC_STR_ARCHIVEDCHATS": {
-    "message": "Archived chats",
-    "description": ""
+  "today": {
+    "message": "Today"
   },
-  "DC_STR_STARREDMSGS": {
-    "message": "Starred messages",
-    "description": ""
+  "yesterday": {
+    "message": "Yesterday"
   },
-  "DC_STR_AC_SETUP_MSG_SUBJECT": {
-    "message": "Autocrypt Setup Message",
-    "description": ""
+  "this_week": {
+    "message": "This week"
   },
-  "DC_STR_AC_SETUP_MSG_BODY": {
-    "message": "This is the Autocrypt Setup Message used to transfer your key between clients.\n\nTo decrypt and use your key, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.",
-    "description": ""
+  "this_month": {
+    "message": "This month"
   },
-  "DC_STR_SELFTALK_SUBTITLE": {
-    "message": "Messages I sent to myself",
-    "description": ""
+  "self": {
+    "message": "Me"
   },
-  "DC_STR_CANTDECRYPT_MSG_BODY": {
-    "message": "This message was encrypted for another setup.",
-    "description": ""
+  "draft": {
+    "message": "Draft"
   },
-  "DC_STR_CANNOT_LOGIN": {
-    "message": "Cannot login as %1$s.",
-    "description": ""
+  "image": {
+    "message": "Image"
   },
-  "DC_STR_SERVER_RESPONSE": {
-    "message": "Response from %1$s: %2$s",
-    "description": ""
+  "gif": {
+    "message": "Gif"
   },
-  "dialogs.blockContact": {
-    "message": "Block $1$?",
-    "description": "Dialog to confirm blocking contact"
+  "audio": {
+    "message": "Audio"
   },
-  "dialogs.unblockContact": {
-    "message": "Unblock $1$?",
-    "description": "Dialog to confirm unblocking contact"
+  "video": {
+    "message": "Video"
   },
-  "dialogs.deleteChat": {
-    "message": "Delete chat $1$?",
-    "description": "Dialog to confirm deleting a chat"
+  "contact": {
+    "message": "Contact"
   },
-  "dialogs.confirmation.no": {
-    "message": "No",
-    "description": "No button label in confirmation dialog"
+  "camera": {
+    "message": "Camera"
   },
-  "dialogs.confirmation.yes": {
-    "message": "Yes",
-    "description": "Yes button label in confirmation dialog"
+  "location": {
+    "message": "Location"
   },
-  "blockContact": {
-    "message": "Block Contact",
-    "description": "Menu option to block current contact"
+  "gallery": {
+    "message": "Gallery"
   },
-  "unblockContacts": {
-    "message": "Unblock Contacts",
-    "description": "Menu option to unblock contacts"
+  "file": {
+    "message": "File"
   },
-  "unblockContacts.noneBlocked": {
-    "message": "No blocked contacts yet",
-    "description": "Shown when there are no blocked contacts yet"
+  "unknown": {
+    "message": "Unknown"
   },
-  "selectGroupImage": {
-    "message": "Select Group Image",
-    "description": "Window title for file picker when selecting chat profile image"
+  "green": {
+    "message": "Green"
   },
-  "remove": {
-    "message": "Remove",
-    "description": "Button label for removing chat profile image"
+  "red": {
+    "message": "Red"
   },
-  "searchAriaLabel": {
-    "message": "Search",
-    "description": "Aria-label for search"
+  "blue": {
+    "message": "Blue"
   },
-  "searchPlaceholder": {
-    "message": "Search",
-    "description": "Placeholder for search"
+  "orange": {
+    "message": "Orange"
   },
-  "deleteThisMessage": {
-    "message": "Delete This Message",
-    "description": "Delete button in the message detail dialog"
+  "cyan": {
+    "message": "Cyan"
   },
-  "messageDetailTitle": {
-    "message": "Message Detail",
-    "description": "Message Detail title for dialog"
+  "magenta": {
+    "message": "Magenta"
   },
-  "contactDetailTitle": {
-    "message": "Contact Detail",
-    "description": "Contact Detail title for dialog"
+  "white": {
+    "message": "White"
   },
-  "settingsTitle": {
-    "message": "Settings",
-    "description": "Title for settings dialog"
+  "small": {
+    "message": "Small"
   },
-  "importBackup": {
-    "message": "Import Backup",
-    "description": "Button in settings for importing a backup"
+  "normal": {
+    "message": "Normal"
   },
-  "exportBackup": {
-    "message": "Export Backup",
-    "description": "Button in settings for exporting a backup"
+  "large": {
+    "message": "Large"
   },
-  "settingsBackupSection": {
-    "message": "Backups"
+  "extra_large": {
+    "message": "Extra large"
   },
-  "settingsAutocryptSection": {
+  "fast": {
+    "message": "Fast"
+  },
+  "slow": {
+    "message": "Slow"
+  },
+  "message_delivered": {
+    "message": "Message delivered"
+  },
+  "message_read": {
+    "message": "Message read"
+  },
+  "menu_new_contact": {
+    "message": "New contact"
+  },
+  "menu_new_chat": {
+    "message": "New chat"
+  },
+  "menu_new_group": {
+    "message": "New group"
+  },
+  "menu_new_verified_group": {
+    "message": "New verified group"
+  },
+  "menu_send": {
+    "message": "Send"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Toggle emoji keyboard"
+  },
+  "menu_edit_group": {
+    "message": "Edit group"
+  },
+  "menu_archive_chat": {
+    "message": "Archive chat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Unarchive chat"
+  },
+  "menu_add_attachment": {
+    "message": "Add attachment"
+  },
+  "menu_leave_group": {
+    "message": "Leave group"
+  },
+  "menu_delete_chat": {
+    "message": "Delete chat"
+  },
+  "menu_delete_messages": {
+    "message": "Delete messages"
+  },
+  "menu_delete_image": {
+    "message": "Delete image"
+  },
+  "menu_message_details": {
+    "message": "Message details"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Copy to clipboard"
+  },
+  "menu_forward": {
+    "message": "Forward message"
+  },
+  "menu_resend": {
+    "message": "Resend message"
+  },
+  "menu_reply": {
+    "message": "Reply to message"
+  },
+  "menu_mute": {
+    "message": "Mute notifications"
+  },
+  "menu_unmute": {
+    "message": "Unmute"
+  },
+  "menu_export_attachment": {
+    "message": "Export attachment"
+  },
+  "menu_all_media": {
+    "message": "All media"
+  },
+  "menu_share": {
+    "message": "Share"
+  },
+  "menu_block_contact": {
+    "message": "Block contact"
+  },
+  "menu_unblock_contact": {
+    "message": "Unblock contact"
+  },
+  "menu_play": {
+    "message": "Play"
+  },
+  "menu_pause": {
+    "message": "Pause"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Scroll to the bottom"
+  },
+  "menu_invite": {
+    "message": "Invite friends"
+  },
+  "menu_help": {
+    "message": "Help"
+  },
+  "menu_select_all": {
+    "message": "Select all"
+  },
+  "menu_expand": {
+    "message": "Expand"
+  },
+  "menu_edit_name": {
+    "message": "Edit name"
+  },
+  "menu_settings": {
+    "message": "Settings"
+  },
+  "menu_advanced": {
+    "message": "Advanced"
+  },
+  "menu_deaddrop": {
+    "message": "Contact requests"
+  },
+  "menu_view_profile": {
+    "message": "View profile"
+  },
+  "mute_for_one_hour": {
+    "message": "Mute for 1 hour"
+  },
+  "mute_for_two_hours": {
+    "message": "Mute for 2 hours"
+  },
+  "mute_for_one_day": {
+    "message": "Mute for 1 day"
+  },
+  "mute_for_seven_days": {
+    "message": "Mute for 7 days"
+  },
+  "mute_for_one_year": {
+    "message": "Mute for 1 year"
+  },
+  "ask_leave_group": {
+    "message": "Are you sure you want to leave this group?"
+  },
+  "ask_forward": {
+    "message": "Forward messages to %1$s?"
+  },
+  "ask_export_attachment": {
+    "message": "Export attachment? Exporting attachments will allow any other apps on your device to access them.\\n\\nContinue?"
+  },
+  "ask_block_contact": {
+    "message": "Block this contact? You will no longer receive messages and calls from this contact."
+  },
+  "ask_unblock_contact": {
+    "message": "Unblock this contact? You will once again be able to receive messages and calls from this contact."
+  },
+  "ask_delete_contacts": {
+    "message": "Delete contacts? This will permanently delete the selected contacts.\\n\\nContacts with ongoing chats and contacts from the system\\'s address book cannot be deleted permanently."
+  },
+  "ask_start_chat_with": {
+    "message": "Chat with %1$s?"
+  },
+  "contacts_title": {
+    "message": "Contacts"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Enter name or email address"
+  },
+  "contacts_type_email_above": {
+    "message": "Type email address above"
+  },
+  "contacts_empty_hint": {
+    "message": "No contacts."
+  },
+  "chat_archived_chats_title": {
+    "message": "Archived chats"
+  },
+  "chat_please_enter_message": {
+    "message": "Please enter a message."
+  },
+  "chat_camera_unavailable": {
+    "message": "Camera unavailable."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Unable to record audio."
+  },
+  "chat_no_messages_hint": {
+    "message": "Send message to %1$s:\\n\\n• It is okay if %2$s does not use Delta Chat.\\n\\n• Delivering the first message may take a while."
+  },
+  "chat_new_group_hint": {
+    "message": "Compose the first message, allowing others to reply within this group.\\n\\n• It is okay if not all members use Delta Chat.\\n\\n• Delivering the first message may take a while."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Slide to cancel"
+  },
+  "chat_record_explain": {
+    "message": "Tap and hold to record a voice message, release to send"
+  },
+  "chat_no_chats_yet_hint": {
+    "message": "Give your inbox something to write home about. Get started by messaging a friend."
+  },
+  "chat_all_done_hint": {
+    "message": "Inbox zeeerrro"
+  },
+  "chat_all_done_explain": {
+    "message": "Zip. Zilch. Zero. Nada.\\nYou\\'re all caught up!"
+  },
+  "chat_share_with_title": {
+    "message": "Share with"
+  },
+  "chat_input_placeholder": {
+    "message": "Message"
+  },
+  "chat_archived_label": {
+    "message": "Archived"
+  },
+  "chat_no_messages": {
+    "message": "No messages."
+  },
+  "search": {
+    "message": "Search"
+  },
+  "search_explain": {
+    "message": "Search for chats, contacts, and messages"
+  },
+  "search_no_result_for_x": {
+    "message": "No results found for \\\"%s\\\""
+  },
+  "search_chats_header": {
+    "message": "Chats"
+  },
+  "search_contacts_header": {
+    "message": "Contacts"
+  },
+  "search_msgs_header": {
+    "message": "Messages"
+  },
+  "group_name": {
+    "message": "Group name"
+  },
+  "group_avatar": {
+    "message": "Group avatar"
+  },
+  "group_create_button": {
+    "message": "Create group"
+  },
+  "group_please_enter_group_name": {
+    "message": "Please enter a name for the group."
+  },
+  "group_add_members": {
+    "message": "Add members"
+  },
+  "profile_encryption": {
+    "message": "Encryption"
+  },
+  "media_preview": {
+    "message": "Media preview"
+  },
+  "media_tab_media": {
+    "message": "Media"
+  },
+  "media_tab_documents": {
+    "message": "Documents"
+  },
+  "media_no_media_hint": {
+    "message": "No media."
+  },
+  "media_no_documents_hint": {
+    "message": "No documents"
+  },
+  "invite_slogan": {
+    "message": "Friends don\\'t let friends locked in messaging silos."
+  },
+  "invite_default_text": {
+    "message": "Let\\'s switch to Delta Chat - %1$s - you can text me at %2$s"
+  },
+  "welcome_intro1_headline": {
+    "message": "Delta Chat dev"
+  },
+  "welcome_intro1_message": {
+    "message": [
+      "The messenger with the ",
+      " in the world. ",
+      " and ",
+      "."
+    ]
+  },
+  "welcome_intro2_headline": {
+    "message": "Independent"
+  },
+  "welcome_intro2_message": {
+    "message": " The app only uses your mail server."
+  },
+  "welcome_intro3_headline": {
+    "message": "Fast"
+  },
+  "welcome_intro3_message": {
+    "message": [
+      " in seconds.",
+      "Rapid interface."
+    ]
+  },
+  "welcome_intro4_headline": {
+    "message": "Powerful"
+  },
+  "welcome_intro4_message": {
+    "message": " chats, images, videos, audio messages and more. Multi-client capable."
+  },
+  "welcome_intro5_headline": {
+    "message": "Free"
+  },
+  "welcome_intro5_message": {
+    "message": [
+      " is free forever.",
+      "Open-source. No ads. No subscription. No vendor lock-in."
+    ]
+  },
+  "welcome_intro6_headline": {
+    "message": "Encrypted"
+  },
+  "welcome_intro6_message": {
+    "message": " with all common algorithms. Messages stay on your servers."
+  },
+  "welcome_intro7_headline": {
+    "message": "Trustworthy"
+  },
+  "welcome_intro7_message": {
+    "message": " is safe for business use, compatible and standards-based."
+  },
+  "welcome_start_messaging": {
+    "message": "Start Messaging"
+  },
+  "login_title": {
+    "message": "Login"
+  },
+  "login_header": {
+    "message": "Login to Delta Chat"
+  },
+  "login_subheader": {
+    "message": "For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help."
+  },
+  "login_inbox": {
+    "message": "Inbox"
+  },
+  "login_imap_login": {
+    "message": "IMAP login-name"
+  },
+  "login_imap_server": {
+    "message": "IMAP server"
+  },
+  "login_imap_port": {
+    "message": "IMAP port"
+  },
+  "login_imap_security": {
+    "message": "IMAP Security"
+  },
+  "login_outbox": {
+    "message": "Outbox"
+  },
+  "login_smtp_login": {
+    "message": "SMTP login-name"
+  },
+  "login_smtp_password": {
+    "message": "SMTP Password"
+  },
+  "login_smtp_server": {
+    "message": "SMTP server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP Security"
+  },
+  "login_info_gmail_text": {
+    "message": "For GMail Accounts you need to create an App-Password if you have 2FA enabled. If this setting is not available, you need to enable Less Secure Apps."
+  },
+  "login_error_mail": {
+    "message": "Please enter a valid email address"
+  },
+  "login_error_server": {
+    "message": "Please enter a valid server / IP address"
+  },
+  "login_error_port": {
+    "message": "Please enter a valid port (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Please enter a valid email address and a password"
+  },
+  "import_backup_title": {
+    "message": "Import backup"
+  },
+  "import_backup_ask": {
+    "message": "Backup found at \\\"%1$s\\\".\\n\\nDo you want to import and use all data and settings from it?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "No backups found.\\n\\nCopy the backup to \\\"%1$s\\\" and try again. Alternatively, press \\\"Start messaging\\\" to go with the normal setup process."
+  },
+  "pref_summary_privacy": {
+    "message": "Screen lock %1$s, Read receipts %2$s"
+  },
+  "pref_summary_appearance": {
+    "message": "Theme %1$s, Language %2$s, Background %3$s"
+  },
+  "pref_summary_on": {
+    "message": "on"
+  },
+  "pref_summary_off": {
+    "message": "off"
+  },
+  "pref_summary_default": {
+    "message": "default"
+  },
+  "pref_summary_custom": {
+    "message": "custom"
+  },
+  "pref_using_custom": {
+    "message": "Using custom: %s"
+  },
+  "pref_using_default": {
+    "message": "Using default: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Your profile info"
+  },
+  "pref_profile_photo": {
+    "message": "Profile photo"
+  },
+  "pref_trim_headline": {
+    "message": "Message trimming"
+  },
+  "pref_trim_option": {
+    "message": "Delete old messages"
+  },
+  "pref_trim_option_explain": {
+    "message": "Automatically delete older messages once a chat exceeds a specified length"
+  },
+  "pref_trim_length_limit": {
+    "message": "Chat length limit"
+  },
+  "pref_trim_length_limit_summary": {
+    "message": "%d messages per chat"
+  },
+  "pref_trim_now_button": {
+    "message": "Trim all chats now"
+  },
+  "pref_trim_now_ask": {
+    "message": "Delete all old messages now? This will immediately trim all chats to the %d most recent messages."
+  },
+  "pref_blocked_contacts": {
+    "message": "Blocked contacts"
+  },
+  "pref_profile_photo_remove_ask": {
+    "message": "Remove profile photo?"
+  },
+  "pref_help_url": {
+    "message": "https://delta.chat/en/help"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Password and account settings"
+  },
+  "pref_who_can_see_this_information": {
+    "message": "Who can see this information?"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Your profile picture and name will be shown alongside your messages when communicating with other users. Already sent information can not be deleted or removed."
+  },
+  "pref_your_name": {
+    "message": "Your name"
+  },
+  "pref_default_status_label": {
+    "message": "Status text"
+  },
+  "pref_default_status_text": {
+    "message": "Sent with my Delta Chat Messenger: https://delta.chat"
+  },
+  "pref_enter_sends": {
+    "message": "Enter key sends"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Pressing the Enter key will send text messages"
+  },
+  "pref_vibrate": {
+    "message": "Vibrate"
+  },
+  "pref_chat_settings": {
+    "message": "Chat settings"
+  },
+  "pref_change_secret": {
+    "message": "Change secret"
+  },
+  "pref_change_secret_explain": {
+    "message": "Change your pin / pattern / fingerprint via system settings"
+  },
+  "pref_screen_security": {
+    "message": "Screen security"
+  },
+  "pref_screen_security_explain": {
+    "message": "Block screenshots in the recents list and inside the app"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "To apply the screen security setting please restart the app."
+  },
+  "pref_notifications": {
+    "message": "Notifications"
+  },
+  "pref_notifications_show": {
+    "message": "Show"
+  },
+  "pref_notifications_priority": {
+    "message": "Priority"
+  },
+  "pref_led_color": {
+    "message": "LED color"
+  },
+  "pref_led_pattern": {
+    "message": "LED blink pattern"
+  },
+  "pref_sound": {
+    "message": "Sound"
+  },
+  "pref_silent": {
+    "message": "Silent"
+  },
+  "pref_repeat_notify": {
+    "message": "Repeat alerts"
+  },
+  "pref_privacy": {
+    "message": "Privacy"
+  },
+  "pref_chats_and_media": {
+    "message": "Chats and media"
+  },
+  "pref_light_theme": {
+    "message": "Light"
+  },
+  "pref_dark_theme": {
+    "message": "Dark"
+  },
+  "pref_appearance": {
+    "message": "Appearance"
+  },
+  "pref_theme": {
+    "message": "Theme"
+  },
+  "pref_language": {
+    "message": "Language"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Incognito keyboard"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Request keyboard to disable personalized learning"
+  },
+  "pref_read_receipts": {
+    "message": "Read receipts"
+  },
+  "pref_read_receipts_explain": {
+    "message": "If read receipts are disabled, you won\\'t be able to see read receipts from others."
+  },
+  "pref_manage_keys": {
+    "message": "Manage keys"
+  },
+  "pref_use_system_emoji": {
+    "message": "Use system emoji"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Disable Delta Chat\\'s built-in emoji support"
+  },
+  "pref_app_access": {
+    "message": "App access"
+  },
+  "pref_communication": {
+    "message": "Communication"
+  },
+  "pref_chats": {
+    "message": "Chats"
+  },
+  "pref_messages": {
+    "message": "Messages"
+  },
+  "pref_in_chat_sounds": {
+    "message": "In-chat sounds"
+  },
+  "pref_message_text_size": {
+    "message": "Message font size"
+  },
+  "pref_view_log": {
+    "message": "View log"
+  },
+  "pref_other": {
+    "message": "Other"
+  },
+  "pref_backup": {
+    "message": "Backup"
+  },
+  "pref_backup_explain": {
+    "message": "Backup chats to external storage"
+  },
+  "pref_backup_export_explain": {
+    "message": "A backup helps you to set up a new installation on this or on another device.\\n\\nThe backup will contain all messages, contacts and chats and your end-to-end Autocrypt setup. Keep the backup file in a safe place or delete it as soon as possible."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Start backup"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Backup written successfully to %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Manage keys"
+  },
+  "pref_managekeys_ask_for_storage_permission": {
+    "message": "Delta Chat needs access to your files to import/export keys."
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Export secret keys"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Export secret keys to \\\"%1$s\\\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Import secret keys"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Import secret keys from \\\"%1$s\\\"?\\n\\n• Existing secret keys will not be deleted\\n\\n• The last imported key will be used as the new default key unless it has the word \\\"legacy\\\" in its filename"
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Secret keys written successfully to \\\"%1$s\\\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Secret keys imported from \\\"%1$s\\\"."
+  },
+  "pref_background": {
+    "message": "Chat-Background"
+  },
+  "autocrypt": {
     "message": "Autocrypt"
   },
-  "backupConfirmationMessage": {
-    "message": "Exported files will contain your end-to-end Autocrypt setup! Keep them in a safe place or delete them as soon as possible.",
-    "description": "Shown as a confirmation message before exporting a backup"
+  "autocrypt_explain": {
+    "message": "Autocrypt is a new and open specification for automatic end-to-end email encryption.\\n\\nYour end-to-end setup is created automatically as needed and you can transfer it between devices with Autocrypt Setup Messages."
   },
-  "autocryptDescription": {
-    "message": "Autocrypt is a new and open specification for automatic end-to-end email encryption.\n\nYour end-to-end setup is created automatically as needed and you can transfer it between devices with Autocrypt Setup Messages",
-    "description": "Shown as a description for the button that initiates a key transfer"
+  "autocrypt_send_asm_title": {
+    "message": "Send Autocrypt Setup Message"
   },
-  "imexProgressTitle": {
-    "message": "Backup Progress",
-    "description": "Title when showing progress for backing up"
+  "autocrypt_send_asm_explain_before": {
+    "message": "An \\\"Autocrypt Setup Message\\\" securely shares your end-to-end setup with other Autocrypt-compliant apps.\\n\\nThe setup will be encrypted by a setup code which is displayed here and must be typed on the other device."
   },
-  "imageFailedToLoad": {
-    "message": "Image failed to load",
-    "description": "Shown when image failed to load"
+  "autocrypt_send_asm_button": {
+    "message": "Send Autocrypt Setup Message"
   },
-  "newMessageNotification": {
-    "message": "New Message!",
-    "description": "Shown as a placeholder when notification details are turned off"
+  "autocrypt_send_asm_explain_after": {
+    "message": "Your setup has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt:\\n\\n%1$s\\n\\nOnce you\\'re done, your other device will be ready to use Autocrypt."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Prefer end-to-end encryption"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt Setup Message"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\\n\\nTo decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device."
+  },
+  "autocrypt_asm_click_body": {
+    "message": "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\\n\\nTo decrypt and use your setup, tap or click on this message."
+  },
+  "autocrypt_continue_transfer_title": {
+    "message": "Autocrypt Setup Message"
+  },
+  "autocrypt_continue_transfer_please_enter_code": {
+    "message": "Please enter the setup code that is displayed on the other device."
+  },
+  "autocrypt_continue_transfer_succeeded": {
+    "message": "End-to-end setup transferred. This device is now ready to use Autocrypt with the same setup as the other device."
+  },
+  "autocrypt_continue_transfer_retry": {
+    "message": "Retry"
+  },
+  "autocrypt_bad_setup_code": {
+    "message": "Bad setup code. Please try again.\\n\\nIf you do not remember the setup code, just send another Autocrypt Setup Message from the other device."
+  },
+  "screenlock_title": {
+    "message": "Screen lock"
+  },
+  "screenlock_explain": {
+    "message": "Lock Delta Chat access with Android screen lock or fingerprint"
+  },
+  "screenlock_authentication_failed": {
+    "message": "Authentication failed."
+  },
+  "screenlock_unlock_title": {
+    "message": "Unlock Delta Chat"
+  },
+  "screenlock_unlock_description": {
+    "message": "Please enter your system defined secret to unlock Delta Chat."
+  },
+  "screenlock_inactivity_timeout": {
+    "message": "Inactivity timeout lock"
+  },
+  "screenlock_inactivity_timeout_explain": {
+    "message": "Auto-lock Delta Chat after a specified time interval of inactivity"
+  },
+  "screenlock_inactivity_timeout_interval": {
+    "message": "Inactivity timeout interval"
+  },
+  "qrscan_title": {
+    "message": "Scan QR code"
+  },
+  "qrscan_hint": {
+    "message": "Place your camera over the QR code"
+  },
+  "qrscan_ask_join_verified_group": {
+    "message": "Do you want to join the verified group \\\"%1$s\\\"?"
+  },
+  "qrscan_ask_fingerprint_ask_oob": {
+    "message": "Verify contact and start chatting with \\\"%1$s\\\"?"
+  },
+  "qrscan_ask_chatting_fingerprint_ok": {
+    "message": "Contact \\\"%1$s\\\" verified. Start chatting?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "The scanned fingerprint does \\\"not match\\\" the fingerprint last seen for \\\"%1$s\\\"."
+  },
+  "qrscan_no_addr_found": {
+    "message": "This QR code contains a fingerprint but no email address.\\n\\nFor an out-of-band-verification, please establish an encrpyted connection to the recipient first."
+  },
+  "qrscan_contains_text": {
+    "message": "Scanned QR code text:\\n\\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Scanned QR code URL:\\n\\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Fingerprint"
+  },
+  "qrscan_x_verified_introduce_myself": {
+    "message": "%1$s verified, introduce myself …"
+  },
+  "qrshow_title": {
+    "message": "Show QR verify code"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s joins."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s verified."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s securely joined the group."
+  },
+  "qrshow_join_verified_group_hint": {
+    "message": "Scan this to join the verified group \\\"%1$s\\\"."
+  },
+  "qrshow_join_verified_group_title": {
+    "message": "QR invite code"
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR verify code"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "\\\"%1$s\\\"Scan this to set up a verified contact."
+  },
+  "notify_n_messages_in_m_chats": {
+    "message": "%1$d new messages in %2$d chats"
+  },
+  "notify_most_recent_from": {
+    "message": "Most recent from: %1$s"
+  },
+  "notify_media_message_with_text": {
+    "message": "Media message: %s"
+  },
+  "notify_mark_all_read": {
+    "message": "Mark all as read"
+  },
+  "notify_mark_read": {
+    "message": "Mark read"
+  },
+  "notify_media_message": {
+    "message": "Media message"
+  },
+  "notify_reply_button": {
+    "message": "Reply"
+  },
+  "notify_new_message": {
+    "message": "New message"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Background connection enabled"
+  },
+  "notify_priority_high": {
+    "message": "High"
+  },
+  "notify_priority_max": {
+    "message": "Max"
+  },
+  "notify_name_and_message": {
+    "message": "Name and message"
+  },
+  "notify_name_only": {
+    "message": "Name only"
+  },
+  "notify_no_name_or_message": {
+    "message": "No name or message"
+  },
+  "notify_repeat_one_time": {
+    "message": "One time"
+  },
+  "notify_repeat_two_times": {
+    "message": "Two times"
+  },
+  "notify_repeat_three_times": {
+    "message": "Three times"
+  },
+  "notify_repeat_five_times": {
+    "message": "Five times"
+  },
+  "notify_repeat_ten_times": {
+    "message": "Ten times"
+  },
+  "perm_required_title": {
+    "message": "Permission required"
+  },
+  "perm_continue": {
+    "message": "Continue"
+  },
+  "perm_not_now": {
+    "message": "Not now"
+  },
+  "perm_explain_need_for_camera_access": {
+    "message": "To capture photos and video, allow Delta Chat access to the camera."
+  },
+  "perm_explain_need_for_mic_access": {
+    "message": "To send audio messages, allow Delta Chat access to your microphone."
+  },
+  "perm_explain_need_for_storage_access": {
+    "message": "Delta Chat needs access to your files in order to export files or to create backups."
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat requires the Camera permission in order to take photos or videos, but it has been permanently denied. Please continue to the app settings menu, select \\\"Permissions\\\", and enable \\\"Camera\\\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat requires the Microphone permission in order to send audio messages, but it has been permanently denied. Please continue to app settings, select \\\"Permissions\\\", and enable \\\"Microphone\\\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat requires the Storage permission in order to attach or export photos, videos, or audio, but it has been permanently denied. Please continue to the app settings menu, select \\\"Permissions\\\", and enable \\\"Storage\\\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat requires Location permission in order to attach a location, but it has been permanently denied. Please continue to the app settings menu, select \\\"Permissions\\\", and enable \\\"Location\\\"."
+  },
+  "n_minutes": {
+    "one": "%d minute",
+    "other": "%d minutes"
+  },
+  "n_hours": {
+    "one": "%d hour",
+    "other": "%d hours"
+  },
+  "ask_delete_chat": {
+    "one": "Delete this chat? It will no longer be shown in the chat list, its messages will remain on the server.",
+    "other": "Delete %1%d chats? They will no longer be shown in the chat list, their messages will remain on the server."
+  },
+  "ask_delete_messages": {
+    "one": "Delete the message here and on the server?",
+    "other": "Delete %1$d messages here and one the server?"
+  },
+  "chat_archived": {
+    "one": "Chat archived",
+    "other": "%d chats archived"
+  },
+  "chat_unarchived": {
+    "one": "Chat unarchived",
+    "other": "%d chat unarchived"
+  },
+  "chat_n_unread_messages": {
+    "one": "%d unread message",
+    "other": "%d unread messages"
   }
 }

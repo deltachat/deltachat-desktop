@@ -1,786 +1,396 @@
 {
-    "logout": {
-        "message": "Uitloggen",
-        "description": "Text for a logout button"
-    },
-    "emailValidationFailed": {
-        "message": "E-mailadres vereist.",
-        "description": "Error message if an invalid email address was given when creating a contact"
-    },
-    "createChatError": {
-        "message": "Kan gesprek niet creëren.",
-        "description": "Error message if a chat could not be created"
-    },
-    "newMessageFrom": {
-        "message": "Nieuw bericht van",
-        "description": "Displayed when a chat request is recieved"
-    },
-    "addContact": {
-        "message": "Contactpersoon toevoegen",
-        "description": "Add contact button label"
-    },
-    "name": {
-        "message": "Naam",
-        "description": "Name label in Add Contact view"
-    },
-    "newGroup": {
-        "message": "Nieuwe groep",
-        "description": "New group button and text label"
-    },
-    "newVerifiedGroup": {
-        "message": "Nieuwe goedgekeurde groep",
-        "description": "New verified group button and text label"
-    },
-    "showQrVerifyCode": {
-        "message": "QR-verificatiecode tonen",
-        "description": "Label for button to show QR code for contact verification"
-    },
-    "showQrInviteCode": {
-        "message": "QR-uitnodigingscode tonen",
-        "description": "Label for button to show QR code for joining a verified group"
-    },
-    "archiveGroup": {
-        "message": "Groep archiveren",
-        "description": "Archive group menu item label"
-    },
-    "unArchiveGroup": {
-        "message": "Groep de-archiveren",
-        "description": "Unarchive group menu item label"
-    },
-    "deleteGroup": {
-        "message": "Groep verwijderen",
-        "description": "Delete group menu item label"
-    },
-    "editGroup": {
-        "message": "Groep bewerken",
-        "description": "Edit group text label"
-    },
-    "editVerifiedGroup": {
-        "message": "Goedgekeurde groep bewerken",
-        "description": "Edit verified group text label"
-    },
-    "verified": {
-        "message": "goedgekeurd",
-        "description": "Label shown next to icon for a verified contact"
-    },
-    "qrCode": {
-        "message": "QR-code",
-        "description": "Window labelf for QR code dialog"
-    },
-    "leaveGroup": {
-        "message": "Groep verlaten",
-        "description": "Leave group menu item label"
-    },
-    "save": {
-        "message": "Opslaan",
-        "description": "Save button label (e.g. when editing groups)"
-    },
-    "groupName": {
-        "message": "Groepsnaam",
-        "description": "Placeholder text for group name input field"
-    },
-    "groupNameRequired": {
-        "message": "Groepsnaam vereist.",
-        "description": "Information to user when creating group with empty name"
-    },
-    "newChat": {
-        "message": "Nieuw gesprek",
-        "description": "New chat button and text label"
-    },
-    "archiveChat": {
-        "message": "Gesprek archiveren",
-        "description": "Archive chat menu item label"
-    },
-    "unArchiveChat": {
-        "message": "Gesprek de-archiveren",
-        "description": "Unarchive chat menu item label"
-    },
-    "noChats": {
-        "message": "Geen gesprekken",
-        "description": "Message shown to user when there are no chats"
-    },
-    "noArchivedChats": {
-        "message": "Geen gearchiveerde gesprekken",
-        "description": "Message shown to user when there are no archived chats"
-    },
-    "deleteChat": {
-        "message": "Gesprek verwijderen",
-        "description": "Delete chat menu item label"
-    },
-    "contactCreateSuccess": {
-        "message": "Contactpersoon gecreëerd.",
-        "description": "Information to the user when a contact was created successfully"
-    },
-    "autocryptKeyTransfer": {
-        "message": "Autocrypt-sleuteloverdracht",
-        "description": "Dialog title during Autocrypt key transfer"
-    },
-    "setupMessageInfo": {
-        "message": "Dit is het Autocrypt-instelbericht. Dit wordt gebruikt om je sleutel uit te wisselen tussen clients.\n\nOm je instellingen te gebruiken, moet je op dit bericht klikken.",
-        "description": "Text for the autocrypt setup message"
-    },
-    "transferKey": {
-        "message": "Sleutel overdragen",
-        "description": "Button label during Autocrypt key transfer"
-    },
-    "initiateKeyTransferTitle": {
-        "message": "Sleuteloverdracht beginnen",
-        "description": "Menu alternative to initiate key transfer"
-    },
-    "initiateKeyTransfer": {
-        "message": "Een 'Autocrypt-instelbericht' deel je end-to-end-instellingen veilig met andere Autocrypt-achtige apps. Het instellen is versleuteld met een instelcode die hier wordt getoond en moet worden overgetypt op het andere apparaat.",
-        "description": "Seen before starting the setup transfer"
-    },
-    "showKeyTransferMessage": {
-        "message": "De sleutel is aan jezelf verstuurd. Schakel over naar het andere apparaat en open het instelbericht. Hierna wordt je gevraagd om een code. Voer de volgende getallen in in het daarvoor bestemde veld. Als je klaar bent, dan is je andere apparaat gereed voor Autocrypt.",
-        "description": "Shown while viewing the transfer key"
-    },
-    "done": {
-        "message": "Klaar",
-        "description": "Button label when key transfer is done"
-    },
-    "moreInfo": {
-        "message": "Meer informatie...",
-        "description": "Shown on the drop-down menu for an individual message, takes you to message detail screen"
-    },
-    "downloadAttachment": {
-        "message": "Bijlage downloaden",
-        "description": "Shown in a message's triple-dot menu if there isn't room for a dedicated download button"
-    },
-    "imageAttachmentAlt": {
-        "message": "Afbeelding bijgevoegd bij bericht",
-        "description": "Used in alt tag of image attachment"
-    },
-    "videoAttachmentAlt": {
-        "message": "Schermafbeelding van video bijgevoegd aan bericht",
-        "description": "Used in alt tag of video attachment preview"
-    },
-    "lightboxImageAlt": {
-        "message": "Afbeelding verstuurd in gesprek",
-        "description": "Used in the alt tag for the image shown in a full-screen lightbox view"
-    },
-    "replyToMessage": {
-        "message": "Bericht beantwoorden",
-        "description": "Shown in triple-dot menu next to message to allow user to start crafting a message with a quotation"
-    },
-    "forwardMessage": {
-        "message": "Bericht doorsturen...",
-        "description": "Shown in triple-dot menu next to message to allow user to forward a message to another chat"
-    },
-    "deleteMessage": {
-        "message": "Bericht verwijderen",
-        "description": "Shown on the drop-down menu for an individual message, deletes single message"
-    },
-    "deleteMessages": {
-        "message": "Berichten verwijderen",
-        "description": "Menu item for deleting messages, title case."
-    },
-    "messageDetail": {
-        "message": "Berichtinformatie",
-        "description": "TODO: used where?"
-    },
-    "audio": {
-        "message": "Audio",
-        "description": "Shown in a quotation of a message containing an audio attachment if no text was originally provided with that attachment"
-    },
-    "video": {
-        "message": "Video",
-        "description": "Shown in a quotation of a message containing a video if no text was originally provided with that video"
-    },
-    "photo": {
-        "message": "Foto",
-        "description": "Shown in a quotation of a message containing a photo if no text was originally provided with that image"
-    },
-    "ok": {
-        "message": "Oké",
-        "description": "TODO: used where?"
-    },
-    "cancel": {
-        "message": "Annuleren",
-        "description": "TODO: used where?"
-    },
-    "delete": {
-        "message": "Verwijderen",
-        "description": "TODO: used where?"
-    },
-    "login.welcome": {
-        "message": "Welkom bij DeltaChat",
-        "description": "Welcome message at the top of the login screen"
-    },
-    "login.email": {
-        "message": "E-mailadres",
-        "description": "Label above input field for e-mail address"
-    },
-    "login.enterPassword": {
-        "message": "Voer je wachtwoord in...",
-        "description": "Text telling user to enter his password"
-    },
-    "login.mailPw": {
-        "message": "Wachtwoord",
-        "description": "Label above input field for mail password"
-    },
-    "login.required": {
-        "message": "vereist",
-        "description": "Word within parenthesis to let the user know that e-mail and mail password are required input when logging in"
-    },
-    "login.advanced": {
-        "message": "Geavanceerd",
-        "description": "Advanced settings button label"
-    },
-    "login.inbox": {
-        "message": "Postvak IN",
-        "description": "Describes the advanced section for inbox (imap)"
-    },
-    "login.mailUser": {
-        "message": "IMAP-inlognaam",
-        "description": "Label above input field for imap login name"
-    },
-    "login.mailServer": {
-        "message": "IMAP-server",
-        "description": "Label above input field for imap server host"
-    },
-    "login.mailPort": {
-        "message": "IMAP-poort",
-        "description": "Label above input field for imap server port"
-    },
-    "login.mailSecurity": {
-        "message": "Beveiliging",
-        "description": "Label above selection box for imap security"
-    },
-    "login.security.disable": {
-        "message": "Uitgeschakeld",
-        "description": "Text for disabling imap transport security"
-    },
-    "login.security.automatic": {
-        "message": "Automatisch",
-        "description": "Text for disabling imap transport security"
-    },
-    "login.outbox": {
-        "message": "Postvak UIT",
-        "description": "Describes the advanced section for outbox (smtp)"
-    },
-    "login.sendUser": {
-        "message": "SMTP-inlognaam",
-        "description": "Label above input field for smtp login name"
-    },
-    "login.sendPw": {
-        "message": "SMTP-wachtwoord",
-        "description": "Label above input field for smtp password"
-    },
-    "login.sendServer": {
-        "message": "SMTP-server",
-        "description": "Label above input field for smtp server host"
-    },
-    "login.sendPort": {
-        "message": "SMTP-poort",
-        "description": "Label above input field for smtp server port"
-    },
-    "login.sendSecurity": {
-        "message": "Beveiliging",
-        "description": "Label above selection box for smtp security"
-    },
-    "login.automatic": {
-        "message": "automatisch",
-        "description": "Word within parenthesis to let the user know that this input field is retrieved automatically and there's no need to fill it in manually"
-    },
-    "login.cancel": {
-        "message": "Annuleren",
-        "description": "Shown in the login form"
-    },
-    "login.button": {
-        "message": "Inloggen",
-        "description": "Shown in the login form"
-    },
-    "menu.preferences": {
-        "message": "Voorkeuren",
-        "description": "Preferences label in the menu"
-    },
-    "menu.preferences.language": {
-        "message": "Taal kiezen...",
-        "description": "Choose language label in the menu"
-    },
-    "menu.edit": {
-        "message": "Bewerken",
-        "description": "Edit menu label"
-    },
-    "menu.edit.undo": {
-        "message": "Ongedaan maken",
-        "description": "Undo menu item label"
-    },
-    "menu.edit.redo": {
-        "message": "Opnieuw",
-        "description": "Redo menu item label"
-    },
-    "menu.edit.cut": {
-        "message": "Knippen",
-        "description": "Cut menu item label"
-    },
-    "menu.edit.copy": {
-        "message": "Kopiëren",
-        "description": "Copy menu item label"
-    },
-    "menu.edit.paste": {
-        "message": "Plakken",
-        "description": "Paste menu item label"
-    },
-    "menu.edit.delete": {
-        "message": "Verwijderen",
-        "description": "Delete menu item label"
-    },
-    "menu.edit.selectall": {
-        "message": "Alles selecteren",
-        "description": "Select All menu item label"
-    },
-    "menu.view": {
-        "message": "Bekijken",
-        "description": "View menu label"
-    },
-    "menu.view.floatontop": {
-        "message": "Altijd bovenop",
-        "description": "Float on Top menu item label"
-    },
-    "menu.view.developer": {
-        "message": "Ontwikkelaar",
-        "description": "Developer menu item label"
-    },
-    "menu.view.developer.tools": {
-        "message": "Hulpmiddelen voor ontwikkelaars",
-        "description": "Developer Tools menu item label"
-    },
-    "menu.help": {
-        "message": "Hulp",
-        "description": "Help menu label"
-    },
-    "menu.help.learn": {
-        "message": "Meer informatie over DeltaChat",
-        "description": "Learn more about DeltaChat menu item label"
-    },
-    "menu.help.contribute": {
-        "message": "Bijdragen op GitHub",
-        "description": "Contribute on GitHub menu item label"
-    },
-    "menu.help.report": {
-        "message": "Probleem melden...",
-        "description": "Report an Issue... menu item label"
-    },
-    "menu.help.about": {
-        "message": "Over DeltaChat",
-        "description": "About menu item"
-    },
-    "aboutDeltaChat": {
-        "message": "Over DeltaChat",
-        "description": "Window title on about dialog"
-    },
-    "timestampFormat_M": {
-        "message": "D MM",
-        "description": "Timestamp format string for displaying month and day (but not the year) of a date within the current year, ex: use 'MMM D' for 'Aug 8', or 'D MMM' for '8 Aug'."
-    },
-    "from": {
-        "message": "Van",
-        "description": "Label for the sender of a message"
-    },
-    "to": {
-        "message": "Aan",
-        "description": "Label for the receiver of a message"
-    },
-    "sent": {
-        "message": "Verstuurd",
-        "description": "Label for the time a message was sent"
-    },
-    "send": {
-        "message": "Versturen",
-        "description": "Button label for sending a message"
-    },
-    "received": {
-        "message": "Ontvangen",
-        "description": "Label for the time a message was received"
-    },
-    "writeMessage": {
-        "message": "Typ een bericht",
-        "description": "Placeholder text in the message entry field"
-    },
-    "writeMessageAriaLabel": {
-        "message": "Typ een bericht en druk op enter",
-        "description": "Aria-label explanation of sending a message"
-    },
-    "sendFailed": {
-        "message": "Kan bericht niet versturen",
-        "description": "Error message when failed to send message"
-    },
-    "retrySend": {
-        "message": "Bericht opnieuw versturen",
-        "description": "Menu alternative in message context menu for resending a message"
-    },
-    "groupMembers": {
-        "message": "Groepsleden",
-        "description": "TODO: used where?"
-    },
-    "showMembers": {
-        "message": "Leden tonen",
-        "description": "TODO: used where?"
-    },
-    "timestamp_s": {
-        "message": "zojuist",
-        "description": "Brief timestamp for messages sent less than a minute ago. Displayed in the conversation list and message bubble."
-    },
-    "timestamp_m": {
-        "message": "1 minuut",
-        "description": "Brief timestamp for messages sent about one minute ago. Displayed in the conversation list and message bubble."
-    },
-    "timestamp_h": {
-        "message": "1 uur",
-        "description": "Brief timestamp for messages sent about one hour ago. Displayed in the conversation list and message bubble."
-    },
-    "justNow": {
-        "message": "zojuist",
-        "description": "Shown if a message is very recent, less than 60 seconds old"
-    },
-    "hoursAgoShort": {
-        "message": "$hours$ uur",
-        "description": "Even further contracted form of 'X hours ago' which works both for singular and plural, used in the left pane"
-    },
-    "hoursAgo": {
-        "message": "$hours$ uur geleden",
-        "description": "Contracted form of 'X hours ago' which works both for singular and plural"
-    },
-    "minutesAgoShort": {
-        "message": "$minutes$ min",
-        "description": "Even further contracted form of 'X minutes ago' which works both for singular and plural, used in the left pane"
-    },
-    "minutesAgo": {
-        "message": "$minutes$ min geleden",
-        "description": "Contracted form of 'X minutes ago' which works both for singular and plural"
-    },
-    "videoScreenshotFailedToLoad": {
-        "message": "Kan video-schermafbeelding niet tonen",
-        "description": "Error message when video screenshot can't be shown in a video message"
-    },
-    "language.ca": {
-        "message": "Catalaans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.da": {
-        "message": "Deens",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.de": {
-        "message": "Duits",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.en": {
-        "message": "Engels",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.eo": {
-        "message": "Esperanto",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.es": {
-        "message": "Spaans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.eu": {
-        "message": "Basks",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.fr": {
-        "message": "Frans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.hr": {
-        "message": "Kroatisch",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.hu": {
-        "message": "Hongaars",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.it": {
-        "message": "Italiaans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ja_JP": {
-        "message": "Japans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ko": {
-        "message": "Koreaans",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nb_NO": {
-        "message": "Noors (Bokmål)",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nl": {
-        "message": "Nederlands",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.nl_NL": {
-        "message": "Nederlands (Nederland)",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.pl": {
-        "message": "Pools",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.pt": {
-        "message": "Portugees",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ru": {
-        "message": "Russisch",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sq": {
-        "message": "Albanees",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sr": {
-        "message": "Servisch",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.sv": {
-        "message": "Zweeds",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.ta": {
-        "message": "Tamil",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.te": {
-        "message": "Telegu",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.tr": {
-        "message": "Turks",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.uk": {
-        "message": "Oekraïens",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "language.zh_CN": {
-        "message": "Chinees",
-        "description": "Menu alternative in Preferences -> Choose Language..."
-    },
-    "emojiAlt": {
-        "message": "Emoji van $1$",
-        "description": "Used with aria-label for emojis"
-    },
-    "chatView.nochatselectedHeader": {
-        "message": "Welkom bij Delta Chat",
-        "description": "Header message when no chats are available"
-    },
-    "chatView.nochatselectedSuggestion": {
-        "message": "Kies of creëer een gesprek",
-        "description": "Suggestion of what to do when no chats are selected"
-    },
-    "DC_STR_NOMESSAGES": {
-        "message": "Geen berichten.",
-        "description": ""
-    },
-    "DC_STR_SELF": {
-        "message": "Ik",
-        "description": ""
-    },
-    "DC_STR_DRAFT": {
-        "message": "Concept",
-        "description": ""
-    },
-    "DC_STR_MEMBER": {
-        "message": "%1$s leden",
-        "description": ""
-    },
-    "DC_STR_CONTACT": {
-        "message": "%1$s contactpersonen",
-        "description": ""
-    },
-    "DC_STR_VOICEMESSAGE": {
-        "message": "Spraakbericht",
-        "description": ""
-    },
-    "DC_STR_DEADDROP": {
-        "message": "E-mail",
-        "description": ""
-    },
-    "DC_STR_IMAGE": {
-        "message": "Afbeelding",
-        "description": ""
-    },
-    "DC_STR_GIF": {
-        "message": "GIF",
-        "description": ""
-    },
-    "DC_STR_VIDEO": {
-        "message": "Video",
-        "description": ""
-    },
-    "DC_STR_AUDIO": {
-        "message": "Audio",
-        "description": ""
-    },
-    "DC_STR_FILE": {
-        "message": "Bestand",
-        "description": ""
-    },
-    "DC_STR_ENCRYPTEDMSG": {
-        "message": "Versleuteld bericht",
-        "description": ""
-    },
-    "DC_STR_STATUSLINE": {
-        "message": "Verstuurd met mijn Delta Chat Messenger: https://delta.chat",
-        "description": ""
-    },
-    "DC_STR_NEWGROUPDRAFT": {
-        "message": "Hallo, ik heb zojuist een groep voor ons gecreëerd: \"%1$s\".",
-        "description": ""
-    },
-    "DC_STR_MSGGRPNAME": {
-        "message": "De groepsnaam is gewijzigd van \"%1$s\" in \"%2$s\".",
-        "description": ""
-    },
-    "DC_STR_MSGGRPIMGCHANGED": {
-        "message": "Groepsafbeelding gewijzigd.",
-        "description": ""
-    },
-    "DC_STR_MSGADDMEMBER": {
-        "message": "Lid \"%1$s\" toegevoegd.",
-        "description": ""
-    },
-    "DC_STR_MSGDELMEMBER": {
-        "message": "Lid \"%1$s\" verwijderd.",
-        "description": ""
-    },
-    "DC_STR_MSGGROUPLEFT": {
-        "message": "Groep verlaten.",
-        "description": "This message is sent out to a group when someone leaves the group."
-    },
-    "DC_STR_SELFNOTINGRP": {
-        "message": "Je moet lid van de groep zijn om deze actie uit te kunnen voeren.",
-        "description": ""
-    },
-    "DC_STR_E2E_AVAILABLE": {
-        "message": "End-to-end-versleuteling beschikbaar.",
-        "description": ""
-    },
-    "DC_STR_ENCR_TRANSP": {
-        "message": "Overdrachtsversleuteling.",
-        "description": ""
-    },
-    "DC_STR_ENCR_NONE": {
-        "message": "Geen versleuteling.",
-        "description": ""
-    },
-    "DC_STR_FINGERPRINTS": {
-        "message": "Vingerafdrukken",
-        "description": ""
-    },
-    "DC_STR_READRCPT": {
-        "message": "Retourbericht",
-        "description": ""
-    },
-    "DC_STR_READRCPT_MAILBODY": {
-        "message": "Dit is een retourbericht voor het bericht \"%1$s\".",
-        "description": ""
-    },
-    "DC_STR_MSGGRPIMGDELETED": {
-        "message": "Groepsafbeelding gewijzigd.",
-        "description": ""
-    },
-    "DC_STR_E2E_PREFERRED": {
-        "message": "Voorkeur voor end-to-end-versleuteling.",
-        "description": ""
-    },
-    "DC_STR_ARCHIVEDCHATS": {
-        "message": "Gearchiveerde gesprekken",
-        "description": ""
-    },
-    "DC_STR_STARREDMSGS": {
-        "message": "Favoriete berichten",
-        "description": ""
-    },
-    "DC_STR_AC_SETUP_MSG_SUBJECT": {
-        "message": "Autocrypt-instelbericht",
-        "description": ""
-    },
-    "DC_STR_AC_SETUP_MSG_BODY": {
-        "message": "Dit is een Autocrypt-instelbericht. Dit wordt gebruikt om je sleutel uit te wisselen tussen clients.\n\nOm je sleutel te ontsleutelen en gebruiken, moet je het bericht openen in een met Autocrypt compatibele client en de getoonde instelcode invoeren.",
-        "description": ""
-    },
-    "DC_STR_SELFTALK_SUBTITLE": {
-        "message": "Berichten die ik aan mijzelf heb verstuurd",
-        "description": ""
-    },
-    "DC_STR_CANTDECRYPT_MSG_BODY": {
-        "message": "Dit bericht is versleuteld voor een andere instelling.",
-        "description": ""
-    },
-    "DC_STR_CANNOT_LOGIN": {
-        "message": "Kan niet inloggen als \"%1$s\".",
-        "description": ""
-    },
-    "DC_STR_SERVER_RESPONSE": {
-        "message": "Antwoord van %1$s: %2$s",
-        "description": ""
-    },
-    "dialogs.blockContact": {
-        "message": "Wil je $1$ blokkeren?",
-        "description": "Dialog to confirm blocking contact"
-    },
-    "dialogs.unblockContact": {
-        "message": "Wil je $1$ deblokkeren?",
-        "description": "Dialog to confirm unblocking contact"
-    },
-    "dialogs.deleteChat": {
-        "message": "Wil je het gesprek $1$ verwijderen?",
-        "description": "Dialog to confirm deleting a chat"
-    },
-    "dialogs.confirmation.no": {
-        "message": "Nee",
-        "description": "No button label in confirmation dialog"
-    },
-    "dialogs.confirmation.yes": {
-        "message": "Ja",
-        "description": "Yes button label in confirmation dialog"
-    },
-    "blockContact": {
-        "message": "Contactpersoon blokkeren",
-        "description": "Menu option to block current contact"
-    },
-    "unblockContacts": {
-        "message": "Contactpersonen deblokkeren",
-        "description": "Menu option to unblock contacts"
-    },
-    "unblockContacts.noneBlocked": {
-        "message": "Nog geen geblokkeerde contactpersonen",
-        "description": "Shown when there are no blocked contacts yet"
-    },
-    "selectGroupImage": {
-        "message": "Kies groepsafbeelding",
-        "description": "Window title for file picker when selecting chat profile image"
-    },
-    "remove": {
-        "message": "Verwijderen",
-        "description": "Button label for removing chat profile image"
-    },
-    "searchAriaLabel": {
-        "message": "Zoeken",
-        "description": "Aria-label for search"
-    },
-    "searchPlaceholder": {
-        "message": "Zoeken",
-        "description": "Placeholder for search"
-    },
-    "deleteThisMessage": {
-        "message": "Dit bericht verwijderen",
-        "description": "Delete button in the message detail dialog"
-    },
-    "messageDetailTitle": {
-        "message": "Berichtinformatie",
-        "description": "Message Detail title for dialog"
-    },
-    "contactDetailTitle": {
-        "message": "Contactinformatie",
-        "description": "Contact Detail title for dialog"
-    }
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "language_name": {
+    "message": "Engels"
+  },
+  "ok": {
+    "message": "Oké"
+  },
+  "cancel": {
+    "message": "Annuleren"
+  },
+  "yes": {
+    "message": "Ja"
+  },
+  "no": {
+    "message": "Nee"
+  },
+  "on": {
+    "message": "Aan"
+  },
+  "off": {
+    "message": "Uit"
+  },
+  "def": {
+    "message": "Standaard"
+  },
+  "custom": {
+    "message": "Aangepast"
+  },
+  "none": {
+    "message": "Geen"
+  },
+  "open": {
+    "message": "Openen"
+  },
+  "not_now": {
+    "message": "Niet nu"
+  },
+  "never": {
+    "message": "Nooit"
+  },
+  "one_moment": {
+    "message": "Even geduld..."
+  },
+  "done": {
+    "message": "Klaar"
+  },
+  "undo": {
+    "message": "Ongedaan maken"
+  },
+  "error": {
+    "message": "Fout"
+  },
+  "error_no_network": {
+    "message": "Geen netwerk beschikbaar."
+  },
+  "no_app_to_handle_data": {
+    "message": "Kan geen app vinden die deze gegevens kan behandelen."
+  },
+  "no_browser_installed": {
+    "message": "Geen webbrowser geïnstalleerd."
+  },
+  "file_not_found": {
+    "message": "Kan %1$s niet vinden."
+  },
+  "copied_to_clipboard": {
+    "message": "Gekopieerd naar klembord."
+  },
+  "contacts_headline": {
+    "message": "Contactpersonen"
+  },
+  "email_address": {
+    "message": "E-mailadres"
+  },
+  "bad_email_address": {
+    "message": "Ongeldig e-mailadres."
+  },
+  "password": {
+    "message": "Wachtwoord"
+  },
+  "now": {
+    "message": "Nu"
+  },
+  "n_min_ago": {
+    "message": "%d min"
+  },
+  "today": {
+    "message": "Vandaag"
+  },
+  "yesterday": {
+    "message": "Gisteren"
+  },
+  "this_week": {
+    "message": "Deze week"
+  },
+  "this_month": {
+    "message": "Deze maand"
+  },
+  "self": {
+    "message": "Mij"
+  },
+  "draft": {
+    "message": "Concept"
+  },
+  "image": {
+    "message": "Afbeelding"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "contact": {
+    "message": "Contactpersoon"
+  },
+  "camera": {
+    "message": "Camera"
+  },
+  "location": {
+    "message": "Locatie"
+  },
+  "gallery": {
+    "message": "Galerij"
+  },
+  "file": {
+    "message": "Bestand"
+  },
+  "unknown": {
+    "message": "Onbekend"
+  },
+  "green": {
+    "message": "Groen"
+  },
+  "red": {
+    "message": "Rood"
+  },
+  "blue": {
+    "message": "Blauw"
+  },
+  "orange": {
+    "message": "Oranje"
+  },
+  "cyan": {
+    "message": "Groenblauw"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Wit"
+  },
+  "small": {
+    "message": "Klei"
+  },
+  "normal": {
+    "message": "Normaal"
+  },
+  "large": {
+    "message": "Groot"
+  },
+  "extra_large": {
+    "message": "Extra groot"
+  },
+  "fast": {
+    "message": "Snel"
+  },
+  "slow": {
+    "message": "Langzaam"
+  },
+  "message_delivered": {
+    "message": "Bericht afgeleverd"
+  },
+  "message_read": {
+    "message": "Bericht gelezen"
+  },
+  "menu_new_contact": {
+    "message": "Nieuwe contactpersoon"
+  },
+  "menu_new_chat": {
+    "message": "Nieuw gesprek"
+  },
+  "menu_new_group": {
+    "message": "Nieuwe groep"
+  },
+  "menu_new_verified_group": {
+    "message": "Nieuwe goedgekeurde groep"
+  },
+  "menu_send": {
+    "message": "Versturen"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Emoji-toetsenbord tonen/verbergen"
+  },
+  "menu_edit_group": {
+    "message": "Groep bewerken"
+  },
+  "menu_archive_chat": {
+    "message": "Gesprek archiveren"
+  },
+  "menu_unarchive_chat": {
+    "message": "Gesprek de-archiveren"
+  },
+  "menu_add_attachment": {
+    "message": "Bijlage toevoegen"
+  },
+  "menu_leave_group": {
+    "message": "Groep verlaten"
+  },
+  "menu_delete_chat": {
+    "message": "Gesprek verwijderen"
+  },
+  "menu_delete_messages": {
+    "message": "Berichten verwijderen"
+  },
+  "menu_delete_image": {
+    "message": "Afbeelding verwijderen"
+  },
+  "menu_message_details": {
+    "message": "Berichtgegevens"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopiëren naar klembord"
+  },
+  "menu_forward": {
+    "message": "Bericht doorsturen"
+  },
+  "menu_resend": {
+    "message": "Bericht opnieuw versturen"
+  },
+  "menu_reply": {
+    "message": "Bericht beantwoorden"
+  },
+  "menu_mute": {
+    "message": "Meldingen dempen"
+  },
+  "menu_unmute": {
+    "message": "Ontdempen"
+  },
+  "menu_export_attachment": {
+    "message": "Bijlage exporteren"
+  },
+  "menu_all_media": {
+    "message": "Alle media"
+  },
+  "menu_share": {
+    "message": "Delen"
+  },
+  "menu_block_contact": {
+    "message": "Contactpersoon blokkeren"
+  },
+  "menu_unblock_contact": {
+    "message": "Contactpersoon deblokkeren"
+  },
+  "menu_play": {
+    "message": "Afspelen"
+  },
+  "menu_pause": {
+    "message": "Pauzeren"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Naar onderkant schuiven"
+  },
+  "menu_invite": {
+    "message": "Vrienden uitnodigen"
+  },
+  "menu_help": {
+    "message": "Hulp"
+  },
+  "menu_select_all": {
+    "message": "Alles selecteren"
+  },
+  "menu_expand": {
+    "message": "Uitvouwen"
+  },
+  "menu_edit_name": {
+    "message": "Naam bewerken"
+  },
+  "menu_settings": {
+    "message": "Instellingen"
+  },
+  "menu_advanced": {
+    "message": "Geavanceerd"
+  },
+  "menu_deaddrop": {
+    "message": "Contactpersoonverzoeken"
+  },
+  "menu_view_profile": {
+    "message": "Profiel bekijken"
+  },
+  "mute_for_one_hour": {
+    "message": "1 uur lang dempen"
+  },
+  "mute_for_two_hours": {
+    "message": "2 uur lang dempen"
+  },
+  "mute_for_one_day": {
+    "message": "1 dag dempen"
+  },
+  "mute_for_seven_days": {
+    "message": "7 dagen dempen"
+  },
+  "mute_for_one_year": {
+    "message": "1 jaar dempen"
+  },
+  "ask_leave_group": {
+    "message": "Weet je zeker dat je deze groep wilt verlaten?"
+  },
+  "ask_forward": {
+    "message": "Wil je de berichten doorsturen aan %1$s?"
+  },
+  "ask_export_attachment": {
+    "message": "Als je de bijlage exporteert, geef je andere apps op je apparaat toegang om hem uit te lezen.\\n\\nWil je doorgaan?"
+  },
+  "ask_block_contact": {
+    "message": "Wil je deze contactpersoon blokkeren? Hij/zij kan je geen berichten en oproepen meer sturen."
+  },
+  "ask_unblock_contact": {
+    "message": "Wil je deze contactpersoon deblokkeren? Hij/zij kan je wederom berichten en oproepen sturen."
+  },
+  "ask_delete_contacts": {
+    "message": "Wil je de geselecteerde contactpersonen verwijderen? Ze worden permanent verwijderd.\\n\\nPersonen met actieve gesprekken en personen afkomstig uit het adresboek van het systeem kunnen niet permanent worden verwijderd."
+  },
+  "ask_start_chat_with": {
+    "message": "Wil je een gesprek voeren met %1$s?"
+  },
+  "contacts_title": {
+    "message": "Contactpersonen"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Voer een naam of e-mailadres in."
+  },
+  "contacts_type_email_above": {
+    "message": "Typ het e-mailadres hierboven"
+  },
+  "contacts_empty_hint": {
+    "message": "Geen contactpersonen."
+  },
+  "chat_archived_chats_title": {
+    "message": "Gearchiveerde gesprekken"
+  },
+  "chat_please_enter_message": {
+    "message": "Voer een bericht in."
+  },
+  "chat_camera_unavailable": {
+    "message": "Camera niet beschikbaar."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Kan geen audio opnemen."
+  },
+  "chat_no_messages_hint": {
+    "message": "Bericht versturen aan %1$s:\\n\\n• %2$s hoeft Delta Chat niet te gebruiken.\\n\\n• Het afleveren van het eerste bericht kan even duren."
+  },
+  "chat_new_group_hint": {
+    "message": "Stel het eerste bericht op, zodat anderen binnen deze groep kunnen reageren.\\n\\n• Niet alle leden hoeven Delta Chat te gebruiken.\\n\\n• Het afleveren van het eerste bericht kan even duren."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Veeg opzij om te annuleren"
+  },
+  "chat_record_explain": {
+    "message": "Houdt ingedrukt om een spraakbericht op te nemen; laat los om te versturen"
+  },
+  "n_minutes": {
+    "one": "%d minuut",
+    "other": "%d minuten"
+  },
+  "n_hours": {
+    "one": "%d uur",
+    "other": "%d uur"
+  },
+  "ask_delete_chat": {
+    "one": "Dit gesprek verwijderen? Het wordt niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server.",
+    "other": "Wil je %1% gesprekken verwijderen? Ze worden niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server."
+  },
+  "ask_delete_messages": {
+    "one": "Wil je het bericht verwijderen, zowel hier als op de server?",
+    "other": "Wil je %1$d berichten verwijderen, zowel hier als op de server?"
+  },
+  "chat_archived": {
+    "one": "Gesprek gearchiveerd",
+    "other": "%d gesprekken gearchiveerd"
+  },
+  "chat_unarchived": {
+    "one": "Gesprek gede-archiveerd",
+    "other": "%d gesprekken gede-archiveerd"
+  },
+  "chat_n_unread_messages": {
+    "one": "%d ongelezen bericht",
+    "other": "%d ongelezen berichten"
+  }
 }

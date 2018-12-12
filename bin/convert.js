@@ -6,13 +6,18 @@ var LOCALES_DIR = path.join(__dirname, '..', '_locales')
 console.log('Converting translations from xml to json...')
 fs.readdir(LOCALES_DIR, (err, filenames) => {
   if (err) throw err
-  filenames.forEach(xmlToJson)
+  filenames.filter((filename) => path.extname(filename) === '.xml').forEach(xmlToJson)
 })
 
 function xmlToJson (filename) {
   filename = path.resolve(LOCALES_DIR, filename)
   var xml = fs.readFileSync(filename, 'utf-8').toString()
-  var js = converter.xml2js(xml, { compact: true })
+  try {
+    var js = converter.xml2js(xml, { compact: true })
+  } catch (err) {
+    console.error('Error converting translation file:', filename)
+    throw err
+  }
   var res = {}
 
   function error (val) {

@@ -125,20 +125,16 @@ or keyboard while the tests are running.
 
 ### Update translations
 
-Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat Desktop` project.
-
-When you add new strings that need to be translated, run:
-
-```
-tx push --source
-```
+Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat App` project.
 
 And periodically we can run the following command to get the new translation
 strings from translators:
 
 ```
-tx pull --all
+npm run translations
 ```
+
+This converts the translations from xml to json. Commit these new translations to the repository.
 
 ### Deploy workflow
 
