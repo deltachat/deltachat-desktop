@@ -17,12 +17,12 @@ const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 
-function init (cwd) {
+function init (cwd, state) {
   // Events dispatched by buttons from the frontend
 
   const ipc = ipcMain
   const main = windows.main
-  const dc = new DeltaChat(cwd)
+  const dc = new DeltaChat(cwd, state.saved)
 
   ipc.once('ipcReady', function (e) {
     app.ipcReady = true
@@ -40,13 +40,7 @@ function init (cwd) {
     menu.init()
   })
 
-  // TODO: expose settings through UI
-  var settings = {
-    markRead: true,
-    notifications: true,
-    showNotificationContent: true
-  }
-  setupNotifications(dc, settings)
+  setupNotifications(dc, state.saved)
 
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
@@ -101,6 +95,10 @@ function init (cwd) {
   ipc.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
+  })
+
+  ipc.on('updateSettings', (e, saved) => {
+    dc.updateSettings(saved)
   })
 
   function dispatch (name, ...args) {

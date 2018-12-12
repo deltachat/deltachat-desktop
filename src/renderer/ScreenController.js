@@ -17,12 +17,15 @@ class Home extends React.Component {
       screen: 'SplittedChatListAndView',
       screenProps: {},
       showAbout: false,
+      showSettings: false,
       message: false
     }
 
     this.changeScreen = this.changeScreen.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
+    this.onShowSettings = this.showSettings.bind(this, true)
+    this.onCloseSettings = this.showSettings.bind(this, false)
     this.onCloseAbout = this.showAbout.bind(this, false)
   }
 
@@ -57,9 +60,13 @@ class Home extends React.Component {
     this.setState({ showAbout })
   }
 
+  showSettings (showSettings) {
+    this.setState({ showSettings })
+  }
+
   render () {
-    const { logins, deltachat } = this.props
-    const { screen, screenProps, showAbout } = this.state
+    const { saved, logins, deltachat } = this.props
+    const { screen, screenProps, showAbout, showSettings } = this.state
 
     var Screen
     switch (screen) {
@@ -96,13 +103,16 @@ class Home extends React.Component {
         {!deltachat.ready
           ? <Login logins={logins} deltachat={deltachat} />
           : <Screen
+            saved={saved}
             screenProps={screenProps}
+            openSettings={this.onShowSettings}
             userFeedback={this.userFeedback}
             changeScreen={this.changeScreen}
             deltachat={deltachat}
           />
         }
         <dialogs.About isOpen={showAbout} onClose={this.onCloseAbout} />
+        <dialogs.Settings isOpen={showSettings} onClose={this.onCloseSettings} saved={saved} />
         <dialogs.ImexProgress />
       </div>
     )
