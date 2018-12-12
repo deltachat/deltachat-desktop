@@ -5,12 +5,14 @@ module.exports = {
 
 const merge = require('lodash.merge')
 const path = require('path')
+const fs = require('fs')
 
 const log = require('./main/log')
 
 function translate (messages) {
-  function getMessage (key, substitutions) {
+  function getMessage (key, substitutions, opts) {
     const entry = messages[key]
+    if (!opts) opts = {}
     if (!entry) {
       console.error(
         `i18n: Attempted to get translation for nonexistent key '${key}'`
@@ -20,7 +22,7 @@ function translate (messages) {
 
     const { message } = entry
     if (substitutions) {
-      const val = substitutions.quantity ? entry[substitutions.quantity] : message
+      const val = opts.quantity ? entry[opts.quantity] : message
       return val.replace(/\$.+?\$/, substitutions)
     }
 
@@ -48,7 +50,7 @@ function getLocaleMessages (locale) {
     onDiskLocale + '.json'
   )
 
-  return (targetFile)
+  return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
 }
 
 function setup (app, name) {
