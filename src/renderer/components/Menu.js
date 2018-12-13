@@ -67,6 +67,10 @@ class Controller {
     this.props.changeScreen('UnblockContacts')
   }
 
+  onContactRequests () {
+    ipcRenderer.send('dispatch', 'contactRequests')
+  }
+
   logout () {
     ipcRenderer.send('dispatch', 'logout')
   }
@@ -134,6 +138,11 @@ class DeltaMenu extends React.Component {
         icon='settings'
         text={tx('settingsTitle')}
         onClick={openSettings}
+      />
+      <MenuItem
+        icon='person'
+        text='Contact Requests'
+        onClick={controller.onContactRequests}
       />
       <MenuItem icon='log-out' text={tx('logout')} onClick={controller.logout} />
     </Menu>)
