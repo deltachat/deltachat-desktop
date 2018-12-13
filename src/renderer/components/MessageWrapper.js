@@ -243,22 +243,22 @@ function convertMessageStatus (s) {
 
 function convertContentType (message) {
   const filemime = message.filemime
+
   if (!filemime) return 'application/octet-stream'
-  if (filemime === 'application/octet-stream') {
-    switch (message.msg.viewType) {
-      case C.DC_MSG_IMAGE:
-        return 'image/jpg'
-      case C.DC_MSG_VOICE:
-        return 'audio/ogg'
-      case C.DC_MSG_FILE:
-        const type = mime.lookup(message.msg.file)
-        if (type) return type
-        else return 'application/octet-stream'
-      default:
-        return 'application/octet-stream'
-    }
+  if (filemime !== 'application/octet-stream') return filemime
+
+  switch (message.msg.viewType) {
+    case C.DC_MSG_IMAGE:
+      return 'image/jpg'
+    case C.DC_MSG_VOICE:
+      return 'audio/ogg'
+    case C.DC_MSG_FILE:
+      const type = mime.lookup(message.msg.file)
+      if (type) return type
+      else return 'application/octet-stream'
+    default:
+      return 'application/octet-stream'
   }
-  return filemime
 }
 
 function convertChatType (type) {
