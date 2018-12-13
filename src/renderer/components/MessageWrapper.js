@@ -6,6 +6,7 @@ const Message = require('./Message')
 const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')
 const moment = require('moment')
+const mime = require('mime-types')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -241,16 +242,20 @@ function convertMessageStatus (s) {
 }
 
 function convertContentType (message) {
-  var filemime = message.filemime
-  if (!filemime) return 'image/jpg'
+  const filemime = message.filemime
+  if (!filemime) return 'application/octet-stream'
   if (filemime === 'application/octet-stream') {
     switch (message.msg.viewType) {
       case C.DC_MSG_IMAGE:
         return 'image/jpg'
       case C.DC_MSG_VOICE:
         return 'audio/ogg'
+      case C.DC_MSG_FILE:
+        const type = mime.lookup(message.msg.file)
+        if (type) return type
+        else return 'application/octet-stream'
       default:
-        return 'application/octect-stream'
+        return 'application/octet-stream'
     }
   }
   return filemime
