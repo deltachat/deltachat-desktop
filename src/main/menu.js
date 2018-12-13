@@ -57,6 +57,15 @@ function getAvailableLanguages () {
 function getMenuTemplate () {
   return [
     {
+      translate: 'menu.file',
+      submenu: [
+        {
+          translate: 'menu.file.quit',
+          role: 'quit'
+        }
+      ]
+    },
+    {
       translate: 'menu.edit',
       submenu: [
         {

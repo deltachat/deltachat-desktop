@@ -94,6 +94,7 @@ function render (props) {
 
   let key = message.id
   let body
+
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
     key = message.daymarker.id
     body = (
@@ -111,7 +112,7 @@ function render (props) {
     body = (
       <SetupMessage key={message.id}
         onClick={onClickSetupMessage}>
-        {body}
+        <RenderMessage {...props} />
       </SetupMessage>
     )
   } else {
@@ -185,14 +186,6 @@ class RenderMessage extends React.Component {
 }
 
 function convert (message) {
-  message.onReply = () => {
-    console.log('reply to', message)
-  }
-
-  message.onForward = () => {
-    console.log('forward to')
-  }
-
   message.onDownload = () => {
     var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
     remote.dialog.showSaveDialog({

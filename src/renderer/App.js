@@ -15,6 +15,7 @@ class App extends React.Component {
       <IntlProvider locale={window.localeData.locale}>
         <ScreenController
           logins={remote.app.logins}
+          saved={state.saved}
           deltachat={state.deltachat} />
       </IntlProvider>
     )

@@ -10,7 +10,7 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { RenderContact } = require('./Contact')
+const ContactList = require('./ContactList')
 const NavbarWrapper = require('./NavbarWrapper')
 
 class CreateChat extends React.Component {
@@ -55,7 +55,7 @@ class CreateChat extends React.Component {
   }
 
   render () {
-    const { deltachat } = this.props
+    const { contacts } = this.props
     const tx = window.translate
 
     return (
@@ -73,13 +73,10 @@ class CreateChat extends React.Component {
             <button onClick={this.onCreateGroup}>{tx('newGroup')}</button>
             <button onClick={this.onCreateVerifiedGroup}>{tx('newVerifiedGroup')}</button>
             <button onClick={this.onCreateContact}>{tx('addContact')}</button>
-            {deltachat.contacts.map((contact) => {
-              return (<RenderContact
-                contact={contact}
-                onClick={this.chooseContact.bind(this)}
-              />
-              )
-            })}
+            <ContactList
+              contacts={contacts}
+              onContactClick={this.chooseContact.bind(this)}
+            />
           </div>
         </div>
       </div>

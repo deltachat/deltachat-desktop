@@ -1,14 +1,13 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
-const { InputGroup } = require('@blueprintjs/core')
 
-const Settings = require('./Settings')
 const dialogs = require('./dialogs')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const Centered = require('./helpers/Centered')
+const SearchInput = require('./SearchInput.js')
 
 const Unselectable = require('./helpers/Unselectable')
 const StyleVariables = require('./style-variables')
@@ -44,13 +43,10 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      settings: false,
       deadDropChat: false,
       queryStr: ''
     }
 
-    this.openSettings = this.openSettings.bind(this)
-    this.onCloseSettings = this.onCloseSettings.bind(this)
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
@@ -88,23 +84,15 @@ class SplittedChatListAndView extends React.Component {
     this.searchChats(event.target.value)
   }
 
-  openSettings () {
-    this.setState({ settings: true })
-  }
-
-  onCloseSettings () {
-    this.setState({ settings: false })
-  }
-
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
-    const { deadDropChat, settings } = this.state
+    const { deadDropChat } = this.state
 
     const tx = window.translate
 
     const menu = <Menu
-      openSettings={this.openSettings}
+      openSettings={this.props.openSettings}
       changeScreen={this.props.changeScreen}
       selectedChat={selectedChat}
       showArchivedChats={showArchivedChats}
@@ -116,14 +104,9 @@ class SplittedChatListAndView extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
-              <InputGroup
-                type='search'
-                aria-label={tx('searchAriaLabel')}
-                large
-                placeholder={tx('searchPlaceholder')}
-                value={this.state.queryStr}
+              <SearchInput
                 onChange={this.handleSearchChange}
-                leftIcon='search'
+                value={this.state.queryStr}
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -138,7 +121,6 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <Settings isOpen={settings} onClose={this.onCloseSettings} />
         <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <BelowNavbar>
           <ChatList

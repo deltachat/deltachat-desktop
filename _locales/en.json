@@ -299,6 +299,14 @@
         "message": "Choose Language...",
         "description": "Choose language label in the menu"
     },
+    "menu.file": {
+        "message": "File",
+        "description": "File menu label"
+    },
+    "menu.file.quit": {
+        "message": "Quit",
+        "description": "Quit menu item label"
+    },
     "menu.edit": {
         "message": "Edit",
         "description": "Edit menu label"
@@ -801,6 +809,9 @@
   "settingsAutocryptSection": {
     "message": "Autocrypt"
   },
+  "settingsOptionsSection": {
+    "message": "Options"
+  },
   "backupConfirmationMessage": {
     "message": "Exported files will contain your end-to-end Autocrypt setup! Keep them in a safe place or delete them as soon as possible.",
     "description": "Shown as a confirmation message before exporting a backup"
@@ -820,5 +831,9 @@
   "newMessageNotification": {
     "message": "New Message!",
     "description": "Shown as a placeholder when notification details are turned off"
+  },
+  "forwardMessageTitle": {
+    "message": "Forward Message",
+    "description": "Title in the dialog for choosing a contact to forward to"
   }
 }
