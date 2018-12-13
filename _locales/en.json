@@ -839,5 +839,14 @@
   "forwardMessageTitle": {
     "message": "Forward Message",
     "description": "Title in the dialog for choosing a contact to forward to"
+  },
+  "settingsUpdateAccount": {
+    "message": "Update account"
+  },
+  "settingsAdvancedTitle": {
+    "message": "Advanced Settings"
+  },
+  "settingsAccountTitle": {
+    "message": "Update Account"
   }
 }

@@ -28,9 +28,9 @@ class Login extends React.Component {
 
   _defaultCredentials () {
     return {
-      addr: process.env.DC_ADDR ? process.env.DC_ADDR : '',
+      addr: process.env.DC_ADDR || this.props.addr || '',
       mailUser: '',
-      mailPw: process.env.DC_MAIL_PW ? process.env.DC_MAIL_PW : '',
+      mailPw: process.env.DC_MAIL_PW || this.props.mailPw || '',
       mailServer: '',
       mailPort: '',
       mailSecurity: '',
@@ -48,8 +48,7 @@ class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    if (this.props.onSubmit) this.props.onSubmit(this.state.credentials)
-    else ipcRenderer.send('login', this.state.credentials)
+    this.props.onSubmit(this.state.credentials)
     event.preventDefault()
   }
 
@@ -210,8 +209,18 @@ class Login extends React.Component {
             </div>
           </FormGroup>
         </Collapse>
-        <Button disabled={loading || (!addr || !mailPw)} type='submit' text={tx('login.button')} />
-        {loading && <Button text={tx('login.cancel')} onClick={this.cancelClick.bind(this)} />}
+        {React.Children.map(this.props.children, (child) => {
+          var props = {}
+          if (child.props.type === 'submit') {
+            props.disabled = loading || (!addr || !mailPw)
+          }
+          if (child.props.type === 'cancel') {
+            props.onClick = this.cancelClick.bind(this)
+            if (!loading) return
+          }
+          return React.cloneElement(child, props)
+        })}
+
       </form>
     )
   }

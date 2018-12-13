@@ -37,6 +37,7 @@ class Settings extends React.Component {
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
+    this.onLoginSubmit = this.onLoginSubmit.bind(this)
   }
 
   onKeyTransferComplete () {
@@ -86,8 +87,14 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', this.state.saved)
   }
 
+  onLoginSubmit (event) {
+    console.log('what do we do here??')
+    // TODO: this should happen after whatever we did seems to be fine.
+    this.props.userFeedback({ type: 'success', text: 'Account updated successfully' })
+  }
+
   render () {
-    const { isOpen, onClose } = this.props
+    const { deltachat, isOpen, onClose } = this.props
     const { advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
@@ -98,26 +105,34 @@ class Settings extends React.Component {
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={advancedSettings}
-          title='AdvancedSettings'
-          icon='envelope'
+          title={tx('settingsAdvancedTitle')}
+          icon='settings'
           onClose={() => this.setState({ advancedSettings: false })}>
-          <Card elevation={Elevation.ONE}>
-            <H5>{tx('settingsBackupSection')}</H5>
-            <ButtonGroup>
-              <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
-              <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
-            </ButtonGroup>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <Login loading={false} />
-          </Card>
+          <SettingsDialog className={Classes.DIALOG_BODY}>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('settingsAccountTitle')}</H5>
+              <Login
+                addr={deltachat.credentials.addr}
+                onSubmit={this.onLoginSubmit}
+                loading={deltachat.configuring}>
+                <Button type='submit' text={tx('settingsUpdateAccount')} />
+                <Button type='cancel' text={tx('login.cancel')} />
+              </Login>
+            </Card>
+          </SettingsDialog>
         </Dialog>
         <Dialog
-          isOpen={isOpen}
+          isOpen={isOpen && !keyTransfer && !advancedSettings}
           title={title}
-          icon='info-sign'
+          icon='settings'
           onClose={onClose}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
+            <Card elevation={Elevation.ONE}>
+              <H5>{deltachat.credentials.addr}</H5>
+              <Button onClick={() => this.setState({ advancedSettings: true })}>
+                Account Settings
+              </Button>
+            </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAutocryptSection')}</H5>
               <p>{tx('autocryptDescription')}</p>
@@ -126,7 +141,11 @@ class Settings extends React.Component {
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <Button onClick={() => this.setState({ advancedSettings: true })}>Advanced</Button>
+              <H5>{tx('settingsBackupSection')}</H5>
+              <ButtonGroup>
+                <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
+                <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
+              </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsOptionsSection')}</H5>

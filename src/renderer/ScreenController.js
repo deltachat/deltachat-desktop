@@ -65,6 +65,10 @@ class Home extends React.Component {
     })
   }
 
+  handleLogin (credentials) {
+    ipcRenderer.send('login', credentials)
+  }
+
   componentWillUnmount () {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
   }
@@ -108,6 +112,7 @@ class Home extends React.Component {
 
     var type = this.state.message.type
     var classNames = `user-feedback ${type}`
+    const tx = window.translate
 
     return (
       <div>
@@ -118,7 +123,11 @@ class Home extends React.Component {
         )}
         {!deltachat.ready
           ? <LoginScreen logins={logins}>
-            <Login loading={deltachat.configuring} />
+            <Login onSubmit={this.handleLogin}
+              loading={deltachat.configuring}>
+              <Button type='submit' text={tx('login.button')} />
+              <Button type='cancel' text={tx('login.cancel')} />
+            </Login>
           </LoginScreen>
           : <Screen
             saved={saved}
@@ -130,13 +139,17 @@ class Home extends React.Component {
           />
         }
         <dialogs.About isOpen={showAbout} onClose={this.onCloseAbout} />
-        <dialogs.Settings isOpen={showSettings} onClose={this.onCloseSettings} saved={saved} />
+        <dialogs.Settings
+          userFeedback={this.userFeedback}
+          deltachat={deltachat}
+          isOpen={showSettings}
+          onClose={this.onCloseSettings}
+          saved={saved} />
         <dialogs.ImexProgress />
       </div>
     )
   }
 }
-
 
 const LoginWrapper = styled.div`
   .window {
