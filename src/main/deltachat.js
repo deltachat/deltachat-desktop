@@ -407,6 +407,8 @@ class DeltaChatController extends events.EventEmitter {
 
       chat.summary = list.getSummary(i).toJson()
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
+      chat.isGroup = isGroupChat(chat)
+
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
         const msg = this._dc.getMessage(messageId)
@@ -547,6 +549,13 @@ function addServerFlags (credentials) {
   return Object.assign({}, credentials, {
     serverFlags: serverFlags(credentials)
   })
+}
+
+function isGroupChat (chat) {
+  return [
+    C.DC_CHAT_TYPE_GROUP,
+    C.DC_CHAT_TYPE_VERIFIED_GROUP
+  ].includes(chat && chat.type)
 }
 
 function serverFlags ({ mailSecurity, sendSecurity }) {

@@ -1,6 +1,5 @@
 const React = require('react')
 const classNames = require('classnames')
-
 const { MessageBody, Timestamp } = require('./conversations')
 const ContactName = require('./ContactName')
 
@@ -63,6 +62,19 @@ class ChatListItem extends React.Component {
     return null
   }
 
+  renderGroupIcon () {
+    if (this.props.isGroup) {
+      return (
+        <img
+          className='module-conversation-list-item__is-group'
+          src='../images/group-icon.png'
+        />
+      )
+    }
+
+    return null
+  }
+
   renderHeader () {
     const {
       unreadCount,
@@ -84,6 +96,7 @@ class ChatListItem extends React.Component {
           )}
         >
           {this.renderVerified()}
+          {this.renderGroupIcon()}
           <ContactName
             phoneNumber={phoneNumber}
             name={name}

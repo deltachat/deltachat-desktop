@@ -1,13 +1,12 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 const autobind = require('class-autobind').default
-
-const dialogs = require('./dialogs')
 const {
   Menu,
   MenuItem
 } = require('@blueprintjs/core')
+
+const dialogs = require('./dialogs')
 
 class Controller {
   constructor (props) {
@@ -77,7 +76,7 @@ class DeltaMenu extends React.Component {
 
     const tx = window.translate
 
-    const isGroup = selectedChatIsGroup(selectedChat)
+    const isGroup = selectedChat.isGroup
     const controller = new Controller(this.props)
 
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
@@ -133,13 +132,6 @@ class DeltaMenu extends React.Component {
       <MenuItem icon='log-out' text={tx('logout')} onClick={controller.logout} />
     </Menu>)
   }
-}
-
-function selectedChatIsGroup (chat) {
-  return [
-    C.DC_CHAT_TYPE_GROUP,
-    C.DC_CHAT_TYPE_VERIFIED_GROUP
-  ].includes(chat && chat.type)
 }
 
 module.exports = DeltaMenu
