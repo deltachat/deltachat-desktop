@@ -841,12 +841,12 @@
     "description": "Title in the dialog for choosing a contact to forward to"
   },
   "settingsUpdateAccount": {
-    "message": "Update account"
+    "message": "Update Account Settings"
   },
   "settingsAdvancedTitle": {
     "message": "Advanced Settings"
   },
   "settingsAccountTitle": {
-    "message": "Update Account"
+    "message": "Account Settings"
   }
 }

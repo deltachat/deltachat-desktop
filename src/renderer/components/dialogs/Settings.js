@@ -130,7 +130,7 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{deltachat.credentials.addr}</H5>
               <Button onClick={() => this.setState({ advancedSettings: true })}>
-                Account Settings
+                {tx('settingsAccountTitle')}
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
