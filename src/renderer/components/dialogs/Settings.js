@@ -105,7 +105,7 @@ class Settings extends React.Component {
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={advancedSettings}
-          title={tx('settingsAdvancedTitle')}
+          title={tx('settingsAccountTitle')}
           icon='settings'
           onClose={() => this.setState({ advancedSettings: false })}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
