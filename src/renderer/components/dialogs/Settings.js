@@ -13,6 +13,7 @@ const {
   Switch
 } = require('@blueprintjs/core')
 
+const Login = require('../Login')
 const KeyTransfer = require('./KeyTransfer')
 const confirmationDialog = require('./confirmationDialog')
 const State = require('../../lib/state')
@@ -28,7 +29,8 @@ class Settings extends React.Component {
     super(props)
     this.state = {
       keyTransfer: false,
-      saved: props.saved
+      saved: props.saved,
+      advancedSettings: false
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -86,7 +88,7 @@ class Settings extends React.Component {
 
   render () {
     const { isOpen, onClose } = this.props
-    const { saved, keyTransfer } = this.state
+    const { advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
     const title = tx('settingsTitle')
@@ -94,6 +96,22 @@ class Settings extends React.Component {
     return (
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <Dialog
+          isOpen={advancedSettings}
+          title='AdvancedSettings'
+          icon='envelope'
+          onClose={() => this.setState({ advancedSettings: false })}>
+          <Card elevation={Elevation.ONE}>
+            <H5>{tx('settingsBackupSection')}</H5>
+            <ButtonGroup>
+              <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
+              <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
+            </ButtonGroup>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <Login loading={false} />
+          </Card>
+        </Dialog>
         <Dialog
           isOpen={isOpen}
           title={title}
@@ -108,11 +126,7 @@ class Settings extends React.Component {
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settingsBackupSection')}</H5>
-              <ButtonGroup>
-                <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
-                <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
-              </ButtonGroup>
+              <Button onClick={() => this.setState({ advancedSettings: true })}>Advanced</Button>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsOptionsSection')}</H5>

@@ -1,6 +1,18 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
+const {
+  Alignment,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Callout,
+  Button
+} = require('@blueprintjs/core')
+
+const NavbarWrapper = require('./components/NavbarWrapper')
+const ClickableLink = require('./components/helpers/ClickableLink')
 const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
@@ -105,7 +117,9 @@ class Home extends React.Component {
           </div>
         )}
         {!deltachat.ready
-          ? <Login logins={logins} deltachat={deltachat} />
+          ? <LoginScreen logins={logins}>
+            <Login loading={deltachat.configuring} />
+          </LoginScreen>
           : <Screen
             saved={saved}
             screenProps={screenProps}
@@ -121,6 +135,46 @@ class Home extends React.Component {
       </div>
     )
   }
+}
+
+
+const LoginWrapper = styled.div`
+  .window {
+    height: auto;
+  }
+`
+
+function LoginScreen (props) {
+  const tx = window.translate
+  const children = props.children
+
+  function onClickLogin (login) {
+    ipcRenderer.send('login', { addr: login, mailPw: true })
+  }
+
+  return (
+    <LoginWrapper>
+      <NavbarWrapper>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
+          </NavbarGroup>
+        </Navbar>
+      </NavbarWrapper>
+      <div className='window'>
+        <Callout intent='danger' title='Single folder incompatibility'>
+          To improve the user experience with Delta Chat using multiple devices, we experimentally changed the behaviour of Delta Chat. Therefore, beginning with this release, we aren't compatible with the <b>old android client</b> which you can currently find in the f-droid store. Please use the <b>new development</b> version. You can find it <ClickableLink href='https://github.com/deltachat/deltachat-android-ii/releases'>here</ClickableLink>.
+        </Callout>
+        <ul>
+          {props.logins.map((login) => <li key={login}>
+            <Button onClick={() => onClickLogin(login)}> {login}</Button>
+          </li>
+          )}
+        </ul>
+        {children}
+      </div>
+    </LoginWrapper>
+  )
 }
 
 module.exports = Home
