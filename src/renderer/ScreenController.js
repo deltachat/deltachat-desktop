@@ -23,6 +23,7 @@ class Home extends React.Component {
     }
 
     this.changeScreen = this.changeScreen.bind(this)
+    this.onError = this.onError.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.onShowSettings = this.showSettings.bind(this, true)
@@ -44,9 +45,7 @@ class Home extends React.Component {
 
   componentDidMount () {
     var self = this
-    ipcRenderer.on('error', function (e, text) {
-      self.userFeedback({ type: 'error', text })
-    })
+    ipcRenderer.on('error', this.onError)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
       self.userFeedback({ type: 'success', text: `${filename} created.` })
@@ -55,6 +54,12 @@ class Home extends React.Component {
 
   componentWillUnmount () {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
+    ipcRenderer.removeListener('showAboutDialog', this.onError)
+  }
+
+  onError (event, error) {
+    const text = error ? error.toString() : 'Unknown'
+    this.userFeedback({ type: 'error', text })
   }
 
   showAbout (showAbout) {

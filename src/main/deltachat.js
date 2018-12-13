@@ -115,6 +115,12 @@ class DeltaChatController extends events.EventEmitter {
     })
 
     dc.on('DC_EVENT_ERROR', (error) => {
+      this.emit('DC_EVENT_ERROR', error)
+      log.error(error)
+    })
+
+    dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
+      this.emit('DC_EVENT_NETWORK_ERROR', error)
       log.error(error)
     })
   }

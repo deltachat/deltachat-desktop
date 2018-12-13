@@ -61,6 +61,14 @@ function init (cwd, state) {
     windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
+  dc.on('DC_EVENT_ERROR', (error) => {
+    windows.main.send('error', error.toString())
+  })
+
+  dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
+    windows.main.send('error', error.toString())
+  })
+
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
