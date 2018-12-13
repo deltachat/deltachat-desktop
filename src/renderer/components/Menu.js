@@ -82,7 +82,7 @@ class DeltaMenu extends React.Component {
 
     const tx = window.translate
 
-    const isGroup = selectedChat.isGroup
+    const isGroup = selectedChat && selectedChat.isGroup
     const controller = new Controller(this.props)
 
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
