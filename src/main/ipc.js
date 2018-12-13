@@ -65,7 +65,7 @@ function init (cwd, state) {
     windows.main.send('error', error.toString())
   })
 
-  dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
+  dc.on('DC_EVENT_NETWORK_ERROR', (first, error) => {
     windows.main.send('error', error.toString())
   })
 
