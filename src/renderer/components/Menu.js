@@ -7,7 +7,6 @@ const {
 } = require('@blueprintjs/core')
 
 const dialogs = require('./dialogs')
-const { isGroupChat } = require('../common')
 
 class Controller {
   constructor (props) {
@@ -77,7 +76,7 @@ class DeltaMenu extends React.Component {
 
     const tx = window.translate
 
-    const isGroup = isGroupChat(selectedChat)
+    const isGroup = selectedChat.isGroup
     const controller = new Controller(this.props)
 
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
