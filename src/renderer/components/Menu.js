@@ -25,7 +25,13 @@ class Controller {
 
   onLeaveGroup () {
     const selectedChat = this.props.selectedChat
-    ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+    const tx = window.translate
+    const message = tx('dialogs.leaveGroup', selectedChat.name)
+    dialogs.confirmation(message, yes => {
+      if (yes) {
+        ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+      }
+    })
   }
 
   onArchiveChat (archive) {
