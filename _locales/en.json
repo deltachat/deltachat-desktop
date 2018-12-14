@@ -839,5 +839,11 @@
   "forwardMessageTitle": {
     "message": "Forward Message",
     "description": "Title in the dialog for choosing a contact to forward to"
+  },
+  "chatRequestTitle": {
+    "message": "Chat Request"
+  },
+  "chatRequestWith": {
+    "message": "Chat with $1?"
   }
 }

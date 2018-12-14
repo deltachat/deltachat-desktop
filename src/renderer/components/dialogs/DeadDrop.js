@@ -33,11 +33,14 @@ class DeadDropDialog extends React.Component {
 
   render () {
     const { deadDrop } = this.props
-    var nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
 
-    const title = 'Chat request'
-    const body = `Chat with ${nameAndAddr}?`
     const isOpen = !!deadDrop
+    const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
+
+    const tx = window.translate
+    const title = tx('chatRequestTitle')
+    const body = tx('chatRequestWith', nameAndAddr)
+
     return (
       <Dialog
         isOpen={isOpen}
