@@ -8,11 +8,11 @@ const QrCode = require('./QrCode')
 const ImexProgress = require('./ImexProgress')
 const About = require('./About')
 const Settings = require('./Settings')
-const confirmation = require('./confirmationDialog')
 const ForwardMessage = require('./ForwardMessage')
+const confirmation = require('./confirmationDialog')
+const encrInfo = require('./EncrInfo')
 
 module.exports = {
-  confirmation,
   SetupMessage,
   ContactDetail,
   DeadDrop,
@@ -23,5 +23,7 @@ module.exports = {
   ImexProgress,
   About,
   Settings,
-  ForwardMessage
+  ForwardMessage,
+  confirmation,
+  encrInfo
 }

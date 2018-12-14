@@ -74,6 +74,12 @@ class Controller {
   logout () {
     ipcRenderer.send('dispatch', 'logout')
   }
+
+  onEncrInfo () {
+    var chat = this.props.selectedChat
+    if (chat.contacts.length === 1) dialogs.encrInfo(chat.contacts[0].id)
+    // TODO: show contactList dialog, then pick the contact
+  }
 }
 
 class DeltaMenu extends React.Component {
@@ -108,6 +114,10 @@ class DeltaMenu extends React.Component {
           icon='delete'
           text={deleteMsg}
           onClick={controller.onDeleteChat} />
+        <MenuItem
+          icon='lock'
+          text='Show Encryption Info'
+          onClick={controller.onEncrInfo} />
         {isGroup
           ? (
             <div>
