@@ -844,5 +844,8 @@
   },
   "contactRequestMenu": {
     "message": "Contact Requests"
+  },
+  "encryptionInfoMenu": {
+    "message": "Show Encryption Info"
   }
 }

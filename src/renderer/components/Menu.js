@@ -116,7 +116,7 @@ class DeltaMenu extends React.Component {
           onClick={controller.onDeleteChat} />
         <MenuItem
           icon='lock'
-          text='Show Encryption Info'
+          text={tx('encryptionInfoMenu')}
           onClick={controller.onEncrInfo} />
         {isGroup
           ? (
