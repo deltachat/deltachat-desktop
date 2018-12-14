@@ -10,6 +10,7 @@ const ImexProgress = require('./ImexProgress')
 const About = require('./About')
 const Settings = require('./Settings')
 const ForwardMessage = require('./ForwardMessage')
+const EncrInfo = require('./EncrInfo')
 
 const allDialogs = [
   SetupMessage,
@@ -22,7 +23,8 @@ const allDialogs = [
   ImexProgress,
   About,
   Settings,
-  ForwardMessage
+  ForwardMessage,
+  EncrInfo
 ]
 
 class Controller extends React.Component {
@@ -55,7 +57,7 @@ class Controller extends React.Component {
   }
 
   render () {
-    const { saved, deltachat, userFeedback } = this.props
+    const { saved, userFeedback } = this.props
     const { dialogs } = this.state
 
     return (
@@ -66,8 +68,8 @@ class Controller extends React.Component {
             isOpen: dialog.props !== false,
             onClose: () => this.close(name),
             userFeedback,
-            deltachat: deltachat,
-            saved: saved
+            saved: saved,
+            key: name
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})

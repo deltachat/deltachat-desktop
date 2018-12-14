@@ -847,5 +847,8 @@
   },
   "encryptionInfoMenu": {
     "message": "Show Encryption Info"
+  },
+  "encryptionInfoTitle": {
+    "message": "Encryption Information"
   }
 }

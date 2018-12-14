@@ -76,7 +76,7 @@ class Controller {
   }
 
   onEncrInfo () {
-    this.props.openDialog('EncrInfo', this.props.selectedChat)
+    this.props.openDialog('EncrInfo', { chat: this.props.selectedChat })
   }
 }
 
