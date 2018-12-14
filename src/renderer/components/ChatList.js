@@ -3,7 +3,6 @@ const C = require('deltachat-node/constants')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
 const Unselectable = require('./helpers/Unselectable')
-
 const StyleVariables = require('./style-variables')
 
 const ChatListWrapper = styled.div`
@@ -121,6 +120,7 @@ class ChatList extends React.Component {
                   i18n={i18n}
                   isSelected={chat.id === selectedChatId}
                   isVerified={chat.isVerified}
+                  isGroup={chat.isGroup}
                   unreadCount={chat.freshMessageCounter}
                 />
               )
