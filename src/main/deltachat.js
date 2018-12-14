@@ -194,14 +194,14 @@ class DeltaChatController extends events.EventEmitter {
   /**
    * Dispatched when accepting a chat in DeadDrop
    */
-  chatWithContact (deadDropChat) {
-    log('chat with dead drop', deadDropChat)
-    const contact = this._dc.getContact(deadDropChat.deaddrop.contact.id)
+  chatWithContact (deadDrop) {
+    log('chat with dead drop', deadDrop)
+    const contact = this._dc.getContact(deadDrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    this._dc.createChatByMessageId(deadDropChat.deaddrop.messageId)
+    this._dc.createChatByMessageId(deadDrop.messageId)
   }
 
   /**
@@ -411,20 +411,7 @@ class DeltaChatController extends events.EventEmitter {
 
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
-        const msg = this._dc.getMessage(messageId)
-        const fromId = msg && msg.getFromId()
-
-        if (!fromId) {
-          log.warning('Ignoring DEADDROP due to missing fromId')
-          continue
-        }
-
-        const contact = this._dc.getContact(fromId)
-
-        chat.deaddrop = {
-          messageId,
-          contact: contact.toJson()
-        }
+        chat.deaddrop = this._deadDropMessage(messageId)
       }
 
       chatList.push(chat)
@@ -432,8 +419,29 @@ class DeltaChatController extends events.EventEmitter {
     return chatList
   }
 
+  _deadDropMessage (messageId) {
+    const msg = this._dc.getMessage(messageId)
+    const fromId = msg && msg.getFromId()
+
+    if (!fromId) {
+      log.warning('Ignoring DEADDROP due to missing fromId')
+      return
+    }
+
+    const contact = this._dc.getContact(fromId)
+
+    return {
+      messageId,
+      contact: contact.toJson()
+    }
+  }
+
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
+    if (selectedChatId === C.DC_CHAT_ID_DEADDROP) {
+      selectedChat = this._dc.getChat(selectedChatId)
+      if (selectedChat) selectedChat = selectedChat.toJson()
+    }
     if (!selectedChat) {
       this._selectedChatId = null
       return null
@@ -528,6 +536,10 @@ class DeltaChatController extends events.EventEmitter {
     return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
+  }
+
+  contactRequests () {
+    this.selectChat(C.DC_CHAT_ID_DEADDROP)
   }
 
   /**

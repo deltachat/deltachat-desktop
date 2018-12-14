@@ -43,7 +43,7 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      deadDropChat: false,
+      contactRequest: false,
       queryStr: ''
     }
 
@@ -73,11 +73,11 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onDeadDropClose () {
-    this.setState({ deadDropChat: false })
+    this.setState({ contactRequest: false })
   }
 
-  onDeadDropClick (chat) {
-    this.setState({ deadDropChat: chat })
+  onDeadDropClick (contactRequest) {
+    this.setState({ contactRequest })
   }
 
   handleSearchChange (event) {
@@ -87,7 +87,7 @@ class SplittedChatListAndView extends React.Component {
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
-    const { deadDropChat } = this.state
+    const { contactRequest } = this.state
 
     const tx = window.translate
 
@@ -121,7 +121,10 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
+        <dialogs.DeadDrop
+          deadDrop={contactRequest}
+          onClose={this.onDeadDropClose}
+        />
         <BelowNavbar>
           <ChatList
             chatList={deltachat.chatList}
@@ -135,6 +138,7 @@ class SplittedChatListAndView extends React.Component {
             selectedChat
               ? (<ChatView
                 screenProps={this.props.screenProps}
+                onDeadDropClick={this.onDeadDropClick}
                 userFeedback={this.props.userFeedback}
                 changeScreen={this.props.changeScreen}
                 chat={selectedChat}

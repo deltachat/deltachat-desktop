@@ -91,7 +91,7 @@ const MessageWrapper = styled.div`
 `
 
 function render (props) {
-  const { message, onClickSetupMessage } = props
+  const { message, onClickSetupMessage, onClickContactRequest } = props
 
   let key = message.id
   let body
@@ -115,6 +115,13 @@ function render (props) {
         onClick={onClickSetupMessage}>
         <RenderMessage {...props} />
       </SetupMessage>
+    )
+  } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
+    body = (
+      <div key={message.id}
+        onClick={onClickContactRequest}>
+        <RenderMessage {...props} />
+      </div>
     )
   } else {
     body = <RenderMessage {...props} />

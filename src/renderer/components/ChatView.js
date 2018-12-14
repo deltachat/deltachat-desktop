@@ -179,7 +179,7 @@ class ChatView extends React.Component {
 
   render () {
     const { dialogProps, messageDetail } = this.state
-    const { chat } = this.props
+    const { onDeadDropClick, chat } = this.props
 
     return (
       <ChatViewWrapper ref={this.ChatViewWrapperRef}>
@@ -215,6 +215,7 @@ class ChatView extends React.Component {
               return MessageWrapper.render({
                 message,
                 chat,
+                onClickContactRequest: () => onDeadDropClick(message),
                 onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
                 onShowDetail: this.onShowDetail.bind(this, message),
                 onClickAttachment: this.onClickAttachment.bind(this, message)
