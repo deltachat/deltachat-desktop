@@ -840,10 +840,13 @@
     "message": "Forward Message",
     "description": "Title in the dialog for choosing a contact to forward to"
   },
-  "chatRequestTitle": {
-    "message": "Chat Request"
+  "contactRequestTitle": {
+    "message": "Contact Request"
   },
-  "chatRequestWith": {
+  "chatWith": {
     "message": "Chat with $1?"
+  },
+  "contactRequestMenu": {
+    "message": "Contact Requests"
   }
 }
