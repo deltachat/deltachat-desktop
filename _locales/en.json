@@ -663,10 +663,6 @@
     "message": "Left group.",
     "description": "This message is sent out to a group when someone leaves the group."
   },
-  "DC_STR_SELFNOTINGRP": {
-    "message": "You must be a member of the group to perform this action.",
-    "description": ""
-  },
   "DC_STR_E2E_AVAILABLE": {
     "message": "End-to-end encryption available.",
     "description": ""
@@ -732,16 +728,20 @@
     "description": ""
   },
   "dialogs.blockContact": {
-    "message": "Block $1$?",
+    "message": "Block \"$1$\"?",
     "description": "Dialog to confirm blocking contact"
   },
   "dialogs.unblockContact": {
-    "message": "Unblock $1$?",
+    "message": "Unblock \"$1$\"?",
     "description": "Dialog to confirm unblocking contact"
   },
   "dialogs.deleteChat": {
-    "message": "Delete chat $1$?",
+    "message": "Delete chat \"$1$\"?",
     "description": "Dialog to confirm deleting a chat"
+  },
+  "dialogs.leaveGroup": {
+    "message": "Leave group \"$1$?\"",
+    "description": "Dialog to confirm leaving a group"
   },
   "dialogs.confirmation.no": {
     "message": "No",
