@@ -87,6 +87,11 @@ const MessageWrapper = styled.div`
   .module-message__text--incoming a {
     color: #070c14;
   }
+  
+  .module-message__generic-attachment__file-size--incoming,
+  .module-message__generic-attachment__file-name--incoming {
+    color: black;
+  }
 `
 
 function render (props) {
@@ -210,10 +215,13 @@ function convert (message) {
   })
 
   if (msg.file) {
+    var filename = msg.text || '[filename]'
     msg.attachment = {
       url: msg.file,
       contentType: convertContentType(message),
-      filename: msg.text
+      filename: filename, // Can we remove (filename property without CamelCase) without breaking something ?
+      fileName: filename,
+      fileSize: '[?] bytes'
     }
   }
   return message
