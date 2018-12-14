@@ -7,6 +7,7 @@ const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')
 const moment = require('moment')
 const mime = require('mime-types')
+const filesizeConverter = require('filesize')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -226,7 +227,7 @@ function convert (message) {
       contentType: convertContentType(message),
       filename: filename, // Can we remove (filename property without CamelCase) without breaking something ?
       fileName: filename,
-      fileSize: `${message.filesize} bytes`
+      fileSize: filesizeConverter(message.filesize)
     }
   }
   return message
