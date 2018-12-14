@@ -1,8 +1,8 @@
 const React = require('react')
 const { Classes, Dialog } = require('@blueprintjs/core')
-const { QRCode } = require('react-qr-svg')
+const qr = require('react-qr-svg')
 
-class QrCodeDialog extends React.Component {
+class QrCode extends React.Component {
   render () {
     const { qrCode, onClose } = this.props
     const isOpen = !!qrCode
@@ -17,17 +17,18 @@ class QrCodeDialog extends React.Component {
         style={{ width: 296 }}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
-          <QRCode
+          {qrCode && <qr.QRCode
             bgColor='#FFFFFF'
             fgColor='#000000'
             level='Q'
             style={{ width: 256 }}
             value={qrCode}
           />
+          }
         </div>
       </Dialog>
     )
   }
 }
 
-module.exports = QrCodeDialog
+module.exports = QrCode

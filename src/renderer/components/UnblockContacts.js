@@ -1,7 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
-const dialogs = require('./dialogs')
+const confirmation = require('./dialogs/confirmationDialog')
 const { RenderContact } = require('./Contact')
 const Centered = require('./helpers/Centered')
 
@@ -23,7 +23,7 @@ class UnblockContacts extends React.Component {
   onContactClick (contact) {
     const tx = window.translate
     var message = tx('dialogs.unblockContact', contact.displayName)
-    dialogs.confirmation(message, yes => {
+    confirmation(message, yes => {
       if (yes) {
         ipcRenderer.sendSync('dispatchSync', 'unblockContact', contact.id)
       }

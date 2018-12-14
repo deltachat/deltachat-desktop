@@ -8,7 +8,7 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
-class DeadDropDialog extends React.Component {
+class DeadDrop extends React.Component {
   constructor (props) {
     super(props)
     this.yes = this.yes.bind(this)
@@ -65,4 +65,4 @@ class DeadDropDialog extends React.Component {
   }
 }
 
-module.exports = DeadDropDialog
+module.exports = DeadDrop

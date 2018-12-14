@@ -65,7 +65,7 @@ class InitiatePanel extends React.Component {
   }
 }
 
-class KeyTransferDialog extends React.Component {
+class KeyTransfer extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -117,4 +117,4 @@ class KeyTransferDialog extends React.Component {
   }
 }
 
-module.exports = KeyTransferDialog
+module.exports = KeyTransfer
