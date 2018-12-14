@@ -93,6 +93,10 @@ const MessageWrapper = styled.div`
   .module-message__generic-attachment__file-name--incoming {
     color: black;
   }
+
+  .module-message__generic-attachment__icon__extension{
+    font-family: monospace;
+  }
 `
 
 function render (props) {
