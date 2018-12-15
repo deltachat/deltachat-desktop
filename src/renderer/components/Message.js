@@ -13,6 +13,8 @@ const { ipcRenderer } = require('electron')
 
 const MIME = require('../../../conversations/build/types/MIME')
 
+const mimeTypes = require('mime-types')
+
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
 const EXPIRATION_CHECK_MINIMUM = 2000
@@ -57,12 +59,7 @@ function getExtension ({ fileName, contentType }) {
     }
   }
 
-  const slash = contentType.indexOf('/')
-  if (slash >= 0) {
-    return contentType.slice(slash + 1)
-  }
-
-  return null
+  return mimeTypes.extension(contentType) || null
 }
 
 function dragAttachmentOut (attachment, dragEvent) {
@@ -519,10 +516,11 @@ class Message extends React.Component {
             className='module-message__generic-attachment__icon'
             draggable='true'
             onDragStart={dragAttachmentOut.bind(null, attachment)}
+            title={contentType}
           >
             {extension ? (
               <div className='module-message__generic-attachment__icon__extension'>
-                {extension}
+                { contentType === 'application/octet-stream' ? '' : extension}
               </div>
             ) : null}
           </div>

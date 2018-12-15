@@ -501,6 +501,8 @@ class DeltaChatController extends events.EventEmitter {
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
+    const filename = msg && msg.getFilename()
+    const filesize = msg && msg.getFilebytes()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
@@ -512,6 +514,8 @@ class DeltaChatController extends events.EventEmitter {
       id,
       msg: msg.toJson(),
       filemime,
+      filename,
+      filesize,
       fromId,
       isMe,
       contact,
