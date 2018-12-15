@@ -228,12 +228,10 @@ function convert (message) {
   })
 
   if (msg.file) {
-    var filename = message.filename || msg.text
     msg.attachment = {
       url: msg.file,
       contentType: convertContentType(message),
-      filename: filename, // Can we remove (filename property without CamelCase) without breaking something ?
-      fileName: filename,
+      fileName: message.filename || msg.text,
       fileSize: filesizeConverter(message.filesize)
     }
   }
