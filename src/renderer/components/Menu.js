@@ -129,6 +129,8 @@ class DeltaMenu extends React.Component {
         }
         <Menu.Divider />
       </div>
+    } else {
+      chatMenu = <Menu.Divider />
     }
 
     return (<Menu>
