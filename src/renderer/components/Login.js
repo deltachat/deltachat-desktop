@@ -90,7 +90,7 @@ class Login extends React.Component {
   }
 
   render () {
-    const { loading } = this.props
+    const { addrDisabled, loading } = this.props
 
     const {
       addr,
@@ -114,6 +114,7 @@ class Login extends React.Component {
         <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
           <InputGroup
             id='addr'
+            disabled={addrDisabled}
             type='text'
             value={addr}
             leftIcon='envelope'

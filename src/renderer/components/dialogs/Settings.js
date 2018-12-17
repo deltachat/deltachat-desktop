@@ -114,7 +114,8 @@ class Settings extends React.Component {
               <Login
                 addr={deltachat.credentials.addr}
                 onSubmit={this.onLoginSubmit}
-                loading={deltachat.configuring}>
+                loading={deltachat.configuring}
+                addrDisabled>
                 <Button type='submit' text={tx('settingsUpdateAccount')} />
                 <Button type='cancel' text={tx('login.cancel')} />
               </Login>
