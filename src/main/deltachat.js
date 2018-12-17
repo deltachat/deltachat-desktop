@@ -207,7 +207,8 @@ class DeltaChatController extends events.EventEmitter {
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    this._dc.createChatByMessageId(deadDrop.messageId)
+    var chatId = this._dc.createChatByMessageId(deadDrop.id)
+    if (chatId) this.selectChat(chatId)
   }
 
   /**
@@ -425,8 +426,8 @@ class DeltaChatController extends events.EventEmitter {
     return chatList
   }
 
-  _deadDropMessage (messageId) {
-    const msg = this._dc.getMessage(messageId)
+  _deadDropMessage (id) {
+    const msg = this._dc.getMessage(id)
     const fromId = msg && msg.getFromId()
 
     if (!fromId) {
@@ -435,7 +436,7 @@ class DeltaChatController extends events.EventEmitter {
     }
 
     const contact = this._dc.getContact(fromId).toJson()
-    return { messageId, contact }
+    return { id, contact }
   }
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
