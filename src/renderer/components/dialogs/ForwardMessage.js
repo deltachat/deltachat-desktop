@@ -7,7 +7,7 @@ const {
 
 const ContactList = require('../ContactList')
 
-class ForwardMessageDialog extends React.Component {
+class ForwardMessage extends React.Component {
   onContactClick (contact) {
     ipcRenderer.send('dispatch',
       'forwardMessage',
@@ -39,4 +39,4 @@ class ForwardMessageDialog extends React.Component {
   }
 }
 
-module.exports = ForwardMessageDialog
+module.exports = ForwardMessage

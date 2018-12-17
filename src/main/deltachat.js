@@ -552,6 +552,10 @@ class DeltaChatController extends events.EventEmitter {
     this.selectChat(C.DC_CHAT_ID_DEADDROP)
   }
 
+  getEncrInfo (contactId) {
+    return this._dc.getContactEncryptionInfo(contactId)
+  }
+
   /**
    * Internal
    * Reset state related to login

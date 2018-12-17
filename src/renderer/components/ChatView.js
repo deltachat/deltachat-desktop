@@ -1,11 +1,10 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
-const dialogs = require('./dialogs')
 const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
 const { ConversationContext } = require('./conversations')
-const styled = require('styled-components').default
 const StyleVariables = require('./style-variables')
 
 const MutationObserver = window.MutationObserver
@@ -74,23 +73,14 @@ const ChatViewWrapper = styled.div`
 }
 `
 
-const RenderMediaWrapper = styled.div`
-  .attachment-overlay {
-    display: flex;
-    justify-content: center;
-  }
-`
-
 class ChatView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      error: false,
-      dialogProps: false
+      error: false
     }
 
     this.writeMessage = this.writeMessage.bind(this)
-    this.onCloseDialog = this.onCloseDialog.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
     this.lastId = this.props.chat.id
@@ -152,58 +142,31 @@ class ChatView extends React.Component {
     this.doc.scrollTop = this.doc.scrollHeight
   }
 
-  onDeleteMessage (message) {
-    message.onDelete()
-    this.onMessageDetailClose()
-  }
-
-  onClickAttachment (attachmentMessage) {
-    this.setState({ dialogProps: { attachmentMessage } })
+  onClickAttachment (message) {
+    this.props.openDialog('RenderMedia', { message })
   }
 
   onClickSetupMessage (setupMessage) {
-    this.setState({ dialogProps: { setupMessage } })
+    this.props.openDialog('SetupMessage', { setupMessage })
   }
 
-  onShowDetail (messageDetail) {
-    this.setState({ dialogProps: { messageDetail } })
-  }
-
-  onCloseDialog () {
-    this.setState({ dialogProps: false })
+  onShowDetail (message) {
+    const { chat } = this.props
+    this.props.openDialog('MessageDetail', {
+      message,
+      chat
+    })
   }
 
   onForward (forwardMessage) {
-    this.setState({ dialogProps: { forwardMessage } })
+    this.props.openDialog('ForwardMessage', { forwardMessage })
   }
 
   render () {
-    const { dialogProps, messageDetail } = this.state
     const { onDeadDropClick, chat } = this.props
 
     return (
       <ChatViewWrapper ref={this.ChatViewWrapperRef}>
-        <RenderMediaWrapper>
-          <dialogs.RenderMedia
-            message={dialogProps.attachmentMessage}
-            onClose={this.onCloseDialog}
-          />
-        </RenderMediaWrapper>
-        <dialogs.SetupMessage
-          userFeedback={this.props.userFeedback}
-          setupMessage={dialogProps.setupMessage}
-          onClose={this.onCloseDialog}
-        />
-        <dialogs.ForwardMessage
-          forwardMessage={dialogProps.forwardMessage}
-          onClose={this.onCloseDialog}
-        />
-        <dialogs.MessageDetail
-          onDelete={this.onDeleteMessage.bind(this, messageDetail)}
-          chat={chat}
-          message={dialogProps.messageDetail}
-          onClose={this.onCloseDialog}
-        />
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {

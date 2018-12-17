@@ -1,5 +1,13 @@
 const React = require('react')
+const styled = require('styled-components').default
 const { Overlay } = require('@blueprintjs/core')
+
+const RenderMediaWrapper = styled.div`
+  .attachment-overlay {
+    display: flex;
+    justify-content: center;
+  }
+`
 
 class RenderMedia extends React.Component {
   render () {
@@ -25,11 +33,13 @@ class RenderMedia extends React.Component {
       default:
         elm = <iframe width='100%' height='100%' src={url} />
     }
-    return <Overlay isOpen={Boolean(url)}
-      className='attachment-overlay'
-      onClose={onClose}>
-      {elm}
-    </Overlay>
+    return <RenderMediaWrapper>
+      <Overlay isOpen={Boolean(url)}
+        className='attachment-overlay'
+        onClose={onClose}>
+        {elm}
+      </Overlay>
+    </RenderMediaWrapper>
   }
 }
 

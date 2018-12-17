@@ -2,7 +2,6 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 
-const dialogs = require('./dialogs')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -43,15 +42,12 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      contactRequest: false,
       queryStr: ''
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
-    this.onDeadDropClick = this.onDeadDropClick.bind(this)
-    this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
@@ -72,12 +68,8 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'searchChats', queryStr)
   }
 
-  onDeadDropClose () {
-    this.setState({ contactRequest: false })
-  }
-
-  onDeadDropClick (contactRequest) {
-    this.setState({ contactRequest })
+  onDeadDropClick (deadDrop) {
+    this.props.openDialog('DeadDrop', { deadDrop })
   }
 
   handleSearchChange (event) {
@@ -87,12 +79,11 @@ class SplittedChatListAndView extends React.Component {
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
-    const { contactRequest } = this.state
 
     const tx = window.translate
 
     const menu = <Menu
-      openSettings={this.props.openSettings}
+      openDialog={this.props.openDialog}
       changeScreen={this.props.changeScreen}
       selectedChat={selectedChat}
       showArchivedChats={showArchivedChats}
@@ -121,10 +112,6 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <dialogs.DeadDrop
-          deadDrop={contactRequest}
-          onClose={this.onDeadDropClose}
-        />
         <BelowNavbar>
           <ChatList
             chatList={deltachat.chatList}
@@ -141,6 +128,7 @@ class SplittedChatListAndView extends React.Component {
                 onDeadDropClick={this.onDeadDropClick}
                 userFeedback={this.props.userFeedback}
                 changeScreen={this.props.changeScreen}
+                openDialog={this.props.openDialog}
                 chat={selectedChat}
                 deltachat={this.props.deltachat} />)
               : (
