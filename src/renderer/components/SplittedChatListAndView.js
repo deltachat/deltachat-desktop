@@ -49,6 +49,7 @@ class SplittedChatListAndView extends React.Component {
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
+    this.onDeadDropClick = this.onDeadDropClick.bind(this)
   }
 
   componentDidMount () {

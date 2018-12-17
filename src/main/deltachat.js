@@ -434,12 +434,8 @@ class DeltaChatController extends events.EventEmitter {
       return
     }
 
-    const contact = this._dc.getContact(fromId)
-
-    return {
-      messageId,
-      contact: contact.toJson()
-    }
+    const contact = this._dc.getContact(fromId).toJson()
+    return { messageId, contact }
   }
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {

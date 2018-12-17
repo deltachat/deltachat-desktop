@@ -840,7 +840,7 @@
     "message": "Contact Request"
   },
   "chatWith": {
-    "message": "Chat with $1?"
+    "message": "Chat with \"$1$?\"?"
   },
   "contactRequestMenu": {
     "message": "Contact Requests"
