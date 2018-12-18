@@ -138,6 +138,7 @@ class DeltaChatController extends events.EventEmitter {
   }
 
   close () {
+    if (!this._dc) return
     this._dc.close()
     this._dc = null
   }
