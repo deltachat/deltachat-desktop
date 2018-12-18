@@ -130,13 +130,16 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched when logging out from ChatList
    */
   logout () {
-    this._dc.close()
-    this._dc = null
-
+    this.close()
     this._resetState()
 
     log('Logged out')
     if (typeof this._render === 'function') this._render()
+  }
+
+  close () {
+    this._dc.close()
+    this._dc = null
   }
 
   /**

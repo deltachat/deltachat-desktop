@@ -131,6 +131,7 @@ function init (cwd, state) {
     tmp.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
       if (Number(data1) === 0) { // login failed
         windows.main.send('error', 'Login failed')
+        tmp.close()
       }
     })
 
@@ -142,6 +143,7 @@ function init (cwd, state) {
       if (tmpJson.ready) {
         dc.login(credentials, render, txCoreStrings())
         windows.main.send('success', 'Configuration success!')
+        tmp.close()
       }
     }
 
