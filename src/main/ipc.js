@@ -22,6 +22,7 @@ function init (cwd, state) {
 
   const ipc = ipcMain
   const main = windows.main
+  console.log(state)
   const dc = new DeltaChat(cwd, state.saved)
 
   ipc.once('ipcReady', function (e) {
@@ -114,6 +115,10 @@ function init (cwd, state) {
 
   ipc.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
+  })
+
+  ipc.on('retrieveAdvancedSettingsObj', (e, ...args) => {
+    windows.main.send('retrieveAdvancedSettingsObjResp', dc.getAdvancedSettings())
   })
 
   function dispatch (name, ...args) {

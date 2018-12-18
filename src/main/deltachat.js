@@ -372,6 +372,13 @@ class DeltaChatController extends events.EventEmitter {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
   }
 
+  getAdvancedSettings() {
+    return {
+      addr: this._dc.getConfig('addr'),
+      mailPw: this._dc.getConfig('mail_pw')
+    }
+  }
+
   /**
    * Returns the state in json format
    */

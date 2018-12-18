@@ -38,6 +38,16 @@ class Settings extends React.Component {
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
+    this.onAdvancedSettingsOpen = this.onAdvancedSettingsOpen.bind(this)
+    this.retrieveAdvancedSettingsObjResp = this.retrieveAdvancedSettingsObjResp.bind(this)
+  }
+
+  componentDidMount () {
+    ipcRenderer.on('retrieveAdvancedSettingsObjResp', this.retrieveAdvancedSettingsObjResp)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('retrieveAdvancedSettingsObjResp', this.retrieveAdvancedSettingsObjResp)
   }
 
   onKeyTransferComplete () {
@@ -93,9 +103,20 @@ class Settings extends React.Component {
     this.props.userFeedback({ type: 'success', text: 'Account updated successfully' })
   }
 
+  onAdvancedSettingsOpen () {
+    ipcRenderer.send('retrieveAdvancedSettingsObj')
+  }
+
+  retrieveAdvancedSettingsObjResp (e, advancedSettingsObj) {
+    console.log('retrieveAdvancedSettingsObjResp', advancedSettingsObj)
+    this.setState({ advancedSettings: advancedSettingsObj })
+  }
+
   render () {
     const { deltachat, isOpen, onClose } = this.props
     const { advancedSettings, saved, keyTransfer } = this.state
+
+    console.log(deltachat.credentials)
 
     const tx = window.translate
     const title = tx('settingsTitle')
@@ -104,7 +125,7 @@ class Settings extends React.Component {
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
-          isOpen={advancedSettings}
+          isOpen={advancedSettings !== false}
           title={tx('settingsAccountTitle')}
           icon='settings'
           onClose={() => this.setState({ advancedSettings: false })}>
@@ -112,7 +133,7 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAccountTitle')}</H5>
               <Login
-                addr={deltachat.credentials.addr}
+                {...advancedSettings}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
@@ -130,7 +151,7 @@ class Settings extends React.Component {
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
               <H5>{deltachat.credentials.addr}</H5>
-              <Button onClick={() => this.setState({ advancedSettings: true })}>
+              <Button onClick={this.onAdvancedSettingsOpen}>
                 {tx('settingsAccountTitle')}
               </Button>
             </Card>
