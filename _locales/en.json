@@ -865,5 +865,17 @@
   },
   "settingsMarkRead": {
     "message": "Receive and send read receipts"
+  },
+  "Images": {
+    "message": "Images"
+  },
+  "Videos": {
+    "message": "Videos"
+  },
+  "documents": {
+    "message": "Documents"
+  },
+  "Audio": {
+    "message": "Audio"
   }
 }
