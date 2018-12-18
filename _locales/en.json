@@ -859,5 +859,8 @@
   },
   "encryptionInfoTitle": {
     "message": "Encryption Information"
+  },
+  "endToEndSetup": {
+    "message": "Prefer end-to-end encryption"
   }
 }

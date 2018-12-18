@@ -372,6 +372,10 @@ class DeltaChatController extends events.EventEmitter {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
   }
 
+  setConfig (key, value) {
+    return this._dc.setConfig(key, String(value))
+  }
+
   getAdvancedSettings () {
     return {
       addr: this._dc.getConfig('addr'),
@@ -384,7 +388,8 @@ class DeltaChatController extends events.EventEmitter {
       sendPw: this._dc.getConfig('send_pw'),
       sendServer: this._dc.getConfig('send_server'),
       sendPort: this._dc.getConfig('send_port'),
-      sendSecurity: this._dc.getConfig('send_security')
+      sendSecurity: this._dc.getConfig('send_security'),
+      e2ee_enabled: this._dc.getConfig('e2ee_enabled')
     }
   }
 

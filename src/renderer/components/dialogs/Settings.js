@@ -30,7 +30,8 @@ class Settings extends React.Component {
     this.state = {
       keyTransfer: false,
       saved: props.saved,
-      advancedSettings: false
+      advancedSettings: {},
+      userDetails: false
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -38,16 +39,16 @@ class Settings extends React.Component {
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
-    this.onAdvancedSettingsOpen = this.onAdvancedSettingsOpen.bind(this)
-    this.retrieveAdvancedSettingsObjResp = this.retrieveAdvancedSettingsObjResp.bind(this)
+    this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
   }
 
-  componentDidMount () {
-    ipcRenderer.on('retrieveAdvancedSettingsObjResp', this.retrieveAdvancedSettingsObjResp)
-  }
-
-  componentWillUnmount () {
-    ipcRenderer.removeListener('retrieveAdvancedSettingsObjResp', this.retrieveAdvancedSettingsObjResp)
+  componentDidUpdate (prevProps) {
+    if (this.props.isOpen && !prevProps.isOpen) {
+      var advancedSettings = ipcRenderer.sendSync('dispatchSync', 'getAdvancedSettings')
+      advancedSettings.e2ee_enabled = !!Number(advancedSettings.e2ee_enabled)
+      console.log(advancedSettings.e2ee_enabled)
+      this.setState({ advancedSettings })
+    }
   }
 
   onKeyTransferComplete () {
@@ -97,26 +98,22 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', this.state.saved)
   }
 
+  handleEncryptionToggle () {
+    let val = 1
+    if (this.state.advancedSettings.e2ee_enabled) val = 0
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
+    this.setState({ advancedSettings: { e2ee_enabled: val } })
+  }
+
   onLoginSubmit (event) {
     console.log('what do we do here??')
     // TODO: this should happen after whatever we did seems to be fine.
     this.props.userFeedback({ type: 'success', text: 'Account updated successfully' })
   }
 
-  onAdvancedSettingsOpen () {
-    ipcRenderer.send('retrieveAdvancedSettingsObj')
-  }
-
-  retrieveAdvancedSettingsObjResp (e, advancedSettingsObj) {
-    console.log('retrieveAdvancedSettingsObjResp', advancedSettingsObj)
-    this.setState({ advancedSettings: advancedSettingsObj })
-  }
-
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { advancedSettings, saved, keyTransfer } = this.state
-
-    console.log(deltachat.credentials)
+    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
     const title = tx('settingsTitle')
@@ -125,10 +122,10 @@ class Settings extends React.Component {
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
-          isOpen={advancedSettings !== false}
+          isOpen={userDetails !== false}
           title={tx('settingsAccountTitle')}
           icon='settings'
-          onClose={() => this.setState({ advancedSettings: false })}>
+          onClose={() => this.setState({ userDetails: false })}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAccountTitle')}</H5>
@@ -144,14 +141,14 @@ class Settings extends React.Component {
           </SettingsDialog>
         </Dialog>
         <Dialog
-          isOpen={isOpen && !keyTransfer && !advancedSettings}
+          isOpen={isOpen && !keyTransfer && !userDetails}
           title={title}
           icon='settings'
           onClose={onClose}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
               <H5>{deltachat.credentials.addr}</H5>
-              <Button onClick={this.onAdvancedSettingsOpen}>
+              <Button onClick={() => this.setState({ userDetails: true })}>
                 {tx('settingsAccountTitle')}
               </Button>
             </Card>
@@ -161,6 +158,11 @@ class Settings extends React.Component {
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('initiateKeyTransferTitle')}
               </Button>
+              <Switch
+                checked={advancedSettings.e2ee_enabled}
+                label={tx('endToEndSetup')}
+                onChange={this.handleEncryptionToggle}
+              />
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsBackupSection')}</H5>
