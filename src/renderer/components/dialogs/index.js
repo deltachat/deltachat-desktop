@@ -57,7 +57,7 @@ class Controller extends React.Component {
   }
 
   render () {
-    const { saved, userFeedback } = this.props
+    const { saved, userFeedback, deltachat } = this.props
     const { dialogs } = this.state
 
     return (
@@ -68,7 +68,8 @@ class Controller extends React.Component {
             isOpen: dialog.props !== false,
             onClose: () => this.close(name),
             userFeedback,
-            saved: saved,
+            saved,
+            deltachat,
             key: name
           }
 

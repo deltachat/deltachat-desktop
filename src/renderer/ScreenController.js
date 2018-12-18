@@ -1,6 +1,18 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
+const {
+  Alignment,
+  Navbar,
+  NavbarGroup,
+  NavbarHeading,
+  Callout,
+  Button
+} = require('@blueprintjs/core')
+
+const NavbarWrapper = require('./components/NavbarWrapper')
+const ClickableLink = require('./components/helpers/ClickableLink')
 const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
@@ -22,7 +34,9 @@ class Home extends React.Component {
 
     this.changeScreen = this.changeScreen.bind(this)
     this.onError = this.onError.bind(this)
+    this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
+    this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
@@ -34,30 +48,41 @@ class Home extends React.Component {
   }
 
   userFeedback (message) {
-    var self = this
-    setTimeout(function () {
-      self.setState({ message: false })
-    }, 3000)
-    self.setState({ message })
+    if (message !== false && this.state.message) return // one at a time, cowgirl
+    this.setState({ message })
+  }
+
+  userFeedbackClick () {
+    this.userFeedback(false)
   }
 
   componentDidMount () {
     var self = this
     ipcRenderer.on('error', this.onError)
+    ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
       self.userFeedback({ type: 'success', text: `${filename} created.` })
     })
   }
 
+  handleLogin (credentials) {
+    ipcRenderer.send('login', credentials)
+  }
+
   componentWillUnmount () {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
+    ipcRenderer.removeListener('success', this.onSuccess)
   }
 
   onError (event, error) {
     const text = error ? error.toString() : 'Unknown'
     this.userFeedback({ type: 'error', text })
+  }
+
+  onSuccess (event, text) {
+    this.userFeedback({ type: 'success', text })
   }
 
   showAbout (showAbout) {
@@ -103,16 +128,24 @@ class Home extends React.Component {
 
     var type = this.state.message.type
     var classNames = `user-feedback ${type}`
+    const tx = window.translate
 
     return (
       <div>
         {this.state.message && (
-          <div className={classNames}>
+          <div onClick={this.userFeedbackClick}
+            className={classNames}>
             {this.state.message.text}
           </div>
         )}
         {!deltachat.ready
-          ? <Login logins={logins} deltachat={deltachat} />
+          ? <LoginScreen logins={logins}>
+            <Login onSubmit={this.handleLogin}
+              loading={deltachat.configuring}>
+              <Button type='submit' text={tx('login.button')} />
+              <Button type='cancel' text={tx('login.cancel')} />
+            </Login>
+          </LoginScreen>
           : <Screen
             saved={saved}
             screenProps={screenProps}
@@ -131,6 +164,45 @@ class Home extends React.Component {
       </div>
     )
   }
+}
+
+const LoginWrapper = styled.div`
+  .window {
+    height: auto;
+  }
+`
+
+function LoginScreen (props) {
+  const tx = window.translate
+  const children = props.children
+
+  function onClickLogin (login) {
+    ipcRenderer.send('login', { addr: login, mailPw: true })
+  }
+
+  return (
+    <LoginWrapper>
+      <NavbarWrapper>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
+          </NavbarGroup>
+        </Navbar>
+      </NavbarWrapper>
+      <div className='window'>
+        <Callout intent='danger' title='Single folder incompatibility'>
+          To improve the user experience with Delta Chat using multiple devices, we experimentally changed the behaviour of Delta Chat. Therefore, beginning with this release, we aren't compatible with the <b>old android client</b> which you can currently find in the f-droid store. Please use the <b>new development</b> version. You can find it <ClickableLink href='https://github.com/deltachat/deltachat-android-ii/releases'>here</ClickableLink>.
+        </Callout>
+        <ul>
+          {props.logins.map((login) => <li key={login}>
+            <Button onClick={() => onClickLogin(login)}> {login}</Button>
+          </li>
+          )}
+        </ul>
+        {children}
+      </div>
+    </LoginWrapper>
+  )
 }
 
 module.exports = Home

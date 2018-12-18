@@ -7,7 +7,9 @@ const {
   ipcMain
 } = require('electron')
 
+const path = require('path')
 const fs = require('fs')
+const os = require('os')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -62,11 +64,17 @@ function init (cwd, state) {
   })
 
   dc.on('DC_EVENT_ERROR', (error) => {
-    windows.main.send('error', error.toString())
+    windows.main.send('error', error)
   })
 
-  dc.on('DC_EVENT_NETWORK_ERROR', (first, error) => {
-    windows.main.send('error', error.toString())
+  dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+    windows.main.send('error', error)
+  })
+
+  dc.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
+    if (Number(data1) === 0) { // login failed
+      windows.main.send('error', 'Login failed!')
+    }
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
@@ -114,6 +122,33 @@ function init (cwd, state) {
 
   ipc.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
+  })
+
+  ipc.on('updateCredentials', (e, credentials) => {
+    var dir = path.join(os.tmpdir(), Date.now().toString())
+    if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
+    var tmp = new DeltaChat(dir, state.saved)
+
+    tmp.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
+      if (Number(data1) === 0) { // login failed
+        windows.main.send('error', 'Login failed')
+        tmp.close()
+      }
+    })
+
+    function fakeRender () {
+      var json = dc.render()
+      var tmpJson = tmp.render()
+      json.configuring = tmpJson.configuring
+      windows.main.send('render', json)
+      if (tmpJson.ready) {
+        dc.login(credentials, render, txCoreStrings())
+        windows.main.send('success', 'Configuration success!')
+        tmp.close()
+      }
+    }
+
+    tmp.login(credentials, fakeRender, txCoreStrings())
   })
 
   function dispatch (name, ...args) {

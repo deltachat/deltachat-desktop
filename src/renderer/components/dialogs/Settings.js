@@ -1,7 +1,9 @@
 const React = require('react')
+const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
 const styled = require('styled-components').default
 
+const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 const {
   Elevation,
   H5,
@@ -13,6 +15,7 @@ const {
   Switch
 } = require('@blueprintjs/core')
 
+const Login = require('../Login')
 const KeyTransfer = require('./KeyTransfer')
 const confirmationDialog = require('./confirmationDialog')
 const State = require('../../lib/state')
@@ -28,13 +31,26 @@ class Settings extends React.Component {
     super(props)
     this.state = {
       keyTransfer: false,
-      saved: props.saved
+      saved: props.saved,
+      advancedSettings: {},
+      userDetails: false,
+      mailPw: MAGIC_PW
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
+    this.onLoginSubmit = this.onLoginSubmit.bind(this)
+    this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
+  }
+
+  componentDidUpdate (prevProps) {
+    if (this.props.isOpen && !prevProps.isOpen) {
+      var advancedSettings = ipcRenderer.sendSync('dispatchSync', 'getAdvancedSettings')
+      advancedSettings.e2ee_enabled = !!Number(advancedSettings.e2ee_enabled)
+      this.setState({ advancedSettings })
+    }
   }
 
   onKeyTransferComplete () {
@@ -84,9 +100,22 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', this.state.saved)
   }
 
+  handleEncryptionToggle () {
+    let val = 1
+    if (this.state.advancedSettings.e2ee_enabled) val = 0
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
+    this.setState({ advancedSettings: { e2ee_enabled: val } })
+  }
+
+  onLoginSubmit (config) {
+    this.props.userFeedback(false)
+    if (config.mailPw === MAGIC_PW) delete config.mailPw
+    ipcRenderer.send('updateCredentials', config)
+  }
+
   render () {
-    const { isOpen, onClose } = this.props
-    const { saved, keyTransfer } = this.state
+    const { deltachat, isOpen, onClose } = this.props
+    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
     const title = tx('settingsTitle')
@@ -95,14 +124,45 @@ class Settings extends React.Component {
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
-          isOpen={isOpen}
+          isOpen={userDetails !== false}
+          title={tx('settingsAccountTitle')}
+          icon='settings'
+          onClose={() => this.setState({ userDetails: false })}>
+          <SettingsDialog className={Classes.DIALOG_BODY}>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('settingsAccountTitle')}</H5>
+              <Login
+                {...advancedSettings}
+                mailPw={this.state.mailPw}
+                onSubmit={this.onLoginSubmit}
+                loading={deltachat.configuring}
+                addrDisabled>
+                <Button type='submit' text={tx('settingsUpdateAccount')} />
+                <Button type='cancel' text={tx('login.cancel')} />
+              </Login>
+            </Card>
+          </SettingsDialog>
+        </Dialog>
+        <Dialog
+          isOpen={isOpen && !keyTransfer && !userDetails}
           title={title}
-          icon='info-sign'
+          icon='settings'
           onClose={onClose}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
+              <H5>{deltachat.credentials.addr}</H5>
+              <Button onClick={() => this.setState({ userDetails: true })}>
+                {tx('settingsAccountTitle')}
+              </Button>
+            </Card>
+            <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAutocryptSection')}</H5>
               <p>{tx('autocryptDescription')}</p>
+              <Switch
+                checked={advancedSettings.e2ee_enabled}
+                label={tx('settingsEndToEndSetup')}
+                onChange={this.handleEncryptionToggle}
+              />
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('initiateKeyTransferTitle')}
               </Button>
@@ -118,7 +178,7 @@ class Settings extends React.Component {
               <H5>{tx('settingsOptionsSection')}</H5>
               <Switch
                 checked={saved && saved.markRead}
-                label='Mark incoming messages as read'
+                label={tx('settingsMarkRead')}
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
               />
             </Card>

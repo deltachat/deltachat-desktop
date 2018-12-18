@@ -65,6 +65,7 @@ class DeltaChatController extends events.EventEmitter {
       log(event, data1, data2)
       if (event === 2041) {
         log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        this.emit('DC_EVENT_CONFIGURE_PROGRESS', data1, data2)
         if (Number(data1) === 0) { // login failed
           this.logout()
         }
@@ -119,8 +120,8 @@ class DeltaChatController extends events.EventEmitter {
       log.error(error)
     })
 
-    dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
-      this.emit('DC_EVENT_NETWORK_ERROR', error)
+    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+      this.emit('DC_EVENT_ERROR_NETWORK', first, error)
       log.error(error)
     })
   }
@@ -129,13 +130,17 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched when logging out from ChatList
    */
   logout () {
-    this._dc.close()
-    this._dc = null
-
+    this.close()
     this._resetState()
 
     log('Logged out')
     if (typeof this._render === 'function') this._render()
+  }
+
+  close () {
+    if (!this._dc) return
+    this._dc.close()
+    this._dc = null
   }
 
   /**
@@ -370,6 +375,30 @@ class DeltaChatController extends events.EventEmitter {
 
   backupExport (directory) {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
+  }
+
+  setConfig (key, value) {
+    return this._dc.setConfig(key, String(value))
+  }
+
+  getConfig (key) {
+    return this._dc.getConfig(key)
+  }
+
+  getAdvancedSettings () {
+    return {
+      addr: this._dc.getConfig('addr'),
+      mailUser: this._dc.getConfig('mail_user'),
+      mailServer: this._dc.getConfig('mail_server'),
+      mailPort: this._dc.getConfig('mail_port'),
+      mailSecurity: this._dc.getConfig('mail_security'),
+      sendUser: this._dc.getConfig('send_user'),
+      sendPw: this._dc.getConfig('send_pw'),
+      sendServer: this._dc.getConfig('send_server'),
+      sendPort: this._dc.getConfig('send_port'),
+      sendSecurity: this._dc.getConfig('send_security'),
+      e2ee_enabled: this._dc.getConfig('e2ee_enabled')
+    }
   }
 
   /**
