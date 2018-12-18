@@ -105,10 +105,9 @@ class Settings extends React.Component {
     this.setState({ advancedSettings: { e2ee_enabled: val } })
   }
 
-  onLoginSubmit (event) {
-    console.log('what do we do here??')
-    // TODO: this should happen after whatever we did seems to be fine.
-    this.props.userFeedback({ type: 'success', text: 'Account updated successfully' })
+  onLoginSubmit (config) {
+    this.props.userFeedback(false)
+    ipcRenderer.send('updateCredentials', config)
   }
 
   render () {
@@ -158,6 +157,7 @@ class Settings extends React.Component {
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('initiateKeyTransferTitle')}
               </Button>
+              <H5></H5>
               <Switch
                 checked={advancedSettings.e2ee_enabled}
                 label={tx('settingsEndToEndSetup')}

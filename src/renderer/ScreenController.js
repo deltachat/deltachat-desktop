@@ -34,7 +34,9 @@ class Home extends React.Component {
 
     this.changeScreen = this.changeScreen.bind(this)
     this.onError = this.onError.bind(this)
+    this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
+    this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
@@ -46,16 +48,18 @@ class Home extends React.Component {
   }
 
   userFeedback (message) {
-    var self = this
-    setTimeout(function () {
-      self.setState({ message: false })
-    }, 3000)
-    self.setState({ message })
+    if (message !== false && this.state.message) return // one at a time, cowgirl
+    this.setState({ message })
+  }
+
+  userFeedbackClick () {
+    this.userFeedback(false)
   }
 
   componentDidMount () {
     var self = this
     ipcRenderer.on('error', this.onError)
+    ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
       self.userFeedback({ type: 'success', text: `${filename} created.` })
@@ -69,11 +73,16 @@ class Home extends React.Component {
   componentWillUnmount () {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
+    ipcRenderer.removeListener('success', this.onSuccess)
   }
 
   onError (event, error) {
     const text = error ? error.toString() : 'Unknown'
     this.userFeedback({ type: 'error', text })
+  }
+
+  onSuccess (event, text) {
+    this.userFeedback({ type: 'success', text })
   }
 
   showAbout (showAbout) {
@@ -124,7 +133,8 @@ class Home extends React.Component {
     return (
       <div>
         {this.state.message && (
-          <div className={classNames}>
+          <div onClick={this.userFeedbackClick}
+            className={classNames}>
             {this.state.message.text}
           </div>
         )}

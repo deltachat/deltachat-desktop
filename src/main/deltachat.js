@@ -65,6 +65,7 @@ class DeltaChatController extends events.EventEmitter {
       log(event, data1, data2)
       if (event === 2041) {
         log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        this.emit('DC_EVENT_CONFIGURE_PROGRESS', data1, data2)
         if (Number(data1) === 0) { // login failed
           this.logout()
         }
@@ -119,8 +120,8 @@ class DeltaChatController extends events.EventEmitter {
       log.error(error)
     })
 
-    dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
-      this.emit('DC_EVENT_NETWORK_ERROR', error)
+    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+      this.emit('DC_EVENT_ERROR_NETWORK', first, error)
       log.error(error)
     })
   }
