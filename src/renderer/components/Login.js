@@ -29,16 +29,16 @@ class Login extends React.Component {
   _defaultCredentials () {
     return {
       addr: process.env.DC_ADDR || this.props.addr || '',
-      mailUser: '',
+      mailUser: this.props.mailUser || '',
       mailPw: process.env.DC_MAIL_PW || this.props.mailPw || '',
-      mailServer: '',
-      mailPort: '',
-      mailSecurity: '',
-      sendUser: '',
-      sendPw: '',
-      sendServer: '',
-      sendPort: '',
-      sendSecurity: ''
+      mailServer: this.props.mailServer || '',
+      mailPort: this.props.mailPort || '',
+      mailSecurity: this.props.mailSecurity || '',
+      sendUser: this.props.sendUser || '',
+      sendPw: this.props.sendPw || '',
+      sendServer: this.props.sendServer || '',
+      sendPort: this.props.sendPort || '',
+      sendSecurity: this.props.sendSecurity || ''
     }
   }
 
