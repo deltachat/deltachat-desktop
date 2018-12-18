@@ -483,13 +483,14 @@ class DeltaChatController extends events.EventEmitter {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messageIds)
-    }
-
     var messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
     selectedChat.totalMessages = messageIds.length
     selectedChat.messages = this._messagesToRender(messageIds)
+
+    if (this._saved.markRead) {
+      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+    }
+
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
       return this._dc.getContact(id).toJson()
     })
