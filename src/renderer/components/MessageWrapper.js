@@ -78,7 +78,7 @@ const MessageWrapper = styled.div`
     color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
   }
 
-  .module-message__metadata__status-icon--read {
+  .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
     background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
   }
 
@@ -89,7 +89,7 @@ const MessageWrapper = styled.div`
   .module-message__text--incoming a {
     color: #070c14;
   }
-  
+
   .module-message__generic-attachment__file-size--incoming,
   .module-message__generic-attachment__file-name--incoming {
     color: black;
