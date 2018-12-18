@@ -112,7 +112,7 @@
         "description": "Information to the user when a contact was created successfully"
     },
     "autocryptKeyTransfer": {
-        "message": "Autocrypt Key Transfer",
+        "message": "Autocrypt Transfer",
         "description": "Dialog title during Autocrypt key transfer"
     },
     "setupMessageInfo": {
@@ -120,11 +120,11 @@
         "description": "Text for the autocrypt setup message"
     },
     "transferKey": {
-        "message": "Transfer Key",
+        "message": "Begin Transfer",
         "description": "Button label during Autocrypt key transfer"
     },
     "initiateKeyTransferTitle": {
-        "message": "Initiate Key Transfer",
+        "message": "Send Autocrypt Setup Message",
         "description": "Menu alternative to initiate key transfer"
     },
     "initiateKeyTransfer": {
