@@ -663,10 +663,6 @@
     "message": "Left group.",
     "description": "This message is sent out to a group when someone leaves the group."
   },
-  "DC_STR_SELFNOTINGRP": {
-    "message": "You must be a member of the group to perform this action.",
-    "description": ""
-  },
   "DC_STR_E2E_AVAILABLE": {
     "message": "End-to-end encryption available.",
     "description": ""
@@ -848,5 +844,20 @@
   },
   "settingsAccountTitle": {
     "message": "Account Settings"
+  },
+  "contactRequestTitle": {
+    "message": "Contact Request"
+  },
+  "chatWith": {
+    "message": "Chat with \"$1$?\"?"
+  },
+  "contactRequestMenu": {
+    "message": "Contact Requests"
+  },
+  "encryptionInfoMenu": {
+    "message": "Show Encryption Info"
+  },
+  "encryptionInfoTitle": {
+    "message": "Encryption Information"
   }
 }

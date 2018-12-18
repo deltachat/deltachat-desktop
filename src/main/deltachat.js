@@ -115,6 +115,12 @@ class DeltaChatController extends events.EventEmitter {
     })
 
     dc.on('DC_EVENT_ERROR', (error) => {
+      this.emit('DC_EVENT_ERROR', error)
+      log.error(error)
+    })
+
+    dc.on('DC_EVENT_NETWORK_ERROR', (error) => {
+      this.emit('DC_EVENT_NETWORK_ERROR', error)
       log.error(error)
     })
   }
@@ -194,14 +200,15 @@ class DeltaChatController extends events.EventEmitter {
   /**
    * Dispatched when accepting a chat in DeadDrop
    */
-  chatWithContact (deadDropChat) {
-    log('chat with dead drop', deadDropChat)
-    const contact = this._dc.getContact(deadDropChat.deaddrop.contact.id)
+  chatWithContact (deadDrop) {
+    log('chat with dead drop', deadDrop)
+    const contact = this._dc.getContact(deadDrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    this._dc.createChatByMessageId(deadDropChat.deaddrop.messageId)
+    var chatId = this._dc.createChatByMessageId(deadDrop.id)
+    if (chatId) this.selectChat(chatId)
   }
 
   /**
@@ -411,20 +418,7 @@ class DeltaChatController extends events.EventEmitter {
 
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
-        const msg = this._dc.getMessage(messageId)
-        const fromId = msg && msg.getFromId()
-
-        if (!fromId) {
-          log.warning('Ignoring DEADDROP due to missing fromId')
-          continue
-        }
-
-        const contact = this._dc.getContact(fromId)
-
-        chat.deaddrop = {
-          messageId,
-          contact: contact.toJson()
-        }
+        chat.deaddrop = this._deadDropMessage(messageId)
       }
 
       chatList.push(chat)
@@ -432,8 +426,25 @@ class DeltaChatController extends events.EventEmitter {
     return chatList
   }
 
+  _deadDropMessage (id) {
+    const msg = this._dc.getMessage(id)
+    const fromId = msg && msg.getFromId()
+
+    if (!fromId) {
+      log.warning('Ignoring DEADDROP due to missing fromId')
+      return
+    }
+
+    const contact = this._dc.getContact(fromId).toJson()
+    return { id, contact }
+  }
+
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
+    if (selectedChatId === C.DC_CHAT_ID_DEADDROP) {
+      selectedChat = this._dc.getChat(selectedChatId)
+      if (selectedChat) selectedChat = selectedChat.toJson()
+    }
     if (!selectedChat) {
       this._selectedChatId = null
       return null
@@ -487,6 +498,8 @@ class DeltaChatController extends events.EventEmitter {
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
+    const filename = msg && msg.getFilename()
+    const filesize = msg && msg.getFilebytes()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
@@ -498,6 +511,8 @@ class DeltaChatController extends events.EventEmitter {
       id,
       msg: msg.toJson(),
       filemime,
+      filename,
+      filesize,
       fromId,
       isMe,
       contact,
@@ -528,6 +543,14 @@ class DeltaChatController extends events.EventEmitter {
     return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
+  }
+
+  contactRequests () {
+    this.selectChat(C.DC_CHAT_ID_DEADDROP)
+  }
+
+  getEncrInfo (contactId) {
+    return this._dc.getContactEncryptionInfo(contactId)
   }
 
   /**

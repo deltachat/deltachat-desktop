@@ -7,6 +7,7 @@ const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')
 const moment = require('moment')
 const mime = require('mime-types')
+const filesizeConverter = require('filesize')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -88,10 +89,19 @@ const MessageWrapper = styled.div`
   .module-message__text--incoming a {
     color: #070c14;
   }
+  
+  .module-message__generic-attachment__file-size--incoming,
+  .module-message__generic-attachment__file-name--incoming {
+    color: black;
+  }
+
+  .module-message__generic-attachment__icon__extension{
+    font-family: monospace;
+  }
 `
 
 function render (props) {
-  const { message, onClickSetupMessage } = props
+  const { message, onClickSetupMessage, onClickContactRequest } = props
 
   let key = message.id
   let body
@@ -115,6 +125,13 @@ function render (props) {
         onClick={onClickSetupMessage}>
         <RenderMessage {...props} />
       </SetupMessage>
+    )
+  } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
+    body = (
+      <div key={message.id}
+        onClick={onClickContactRequest}>
+        <RenderMessage {...props} />
+      </div>
     )
   } else {
     body = <RenderMessage {...props} />
@@ -214,7 +231,8 @@ function convert (message) {
     msg.attachment = {
       url: msg.file,
       contentType: convertContentType(message),
-      filename: msg.text
+      fileName: message.filename || msg.text,
+      fileSize: filesizeConverter(message.filesize)
     }
   }
   return message

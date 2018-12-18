@@ -97,7 +97,7 @@ class SetupMessagePanel extends React.Component {
   }
 }
 
-class KeyTransferDialog extends React.Component {
+class SetupMessage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -161,4 +161,4 @@ class KeyTransferDialog extends React.Component {
   }
 }
 
-module.exports = KeyTransferDialog
+module.exports = SetupMessage

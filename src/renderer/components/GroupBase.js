@@ -13,7 +13,6 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const { QrCode } = require('./dialogs')
 const NavbarWrapper = require('./NavbarWrapper')
 const ContactList = require('./ContactList')
 
@@ -23,9 +22,7 @@ class GroupBase extends React.Component {
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
-    this.state.qrCode = ''
     this.back = this.back.bind(this)
-    this.closeQrCode = this.closeQrCode.bind(this)
   }
 
   addToGroup (contactId) {
@@ -80,20 +77,14 @@ class GroupBase extends React.Component {
   }
 
   onShowQrVerifyCode () {
-    this.setState({
-      qrCode: ipcRenderer.sendSync('dispatchSync', 'getQrCode')
-    })
+    const qrCode = ipcRenderer.sendSync('dispatchSync', 'getQrCode')
+    this.props.openDialog('QrCode', { qrCode })
   }
 
   onShowQrInviteCode () {
     const { chatId } = this.state
-    this.setState({
-      qrCode: ipcRenderer.sendSync('dispatchSync', 'getQrCode', chatId)
-    })
-  }
-
-  closeQrCode () {
-    this.setState({ qrCode: '' })
+    const qrCode = ipcRenderer.sendSync('dispatchSync', 'getQrCode', chatId)
+    this.props.openDialog('QrCode', { qrCode })
   }
 
   back () {
@@ -103,8 +94,7 @@ class GroupBase extends React.Component {
   render () {
     const {
       showQrVerifyCodeButton,
-      showQrInviteCodeButton,
-      qrCode
+      showQrInviteCodeButton
     } = this.state
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
@@ -139,7 +129,6 @@ class GroupBase extends React.Component {
             </div>
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
-            <QrCode qrCode={qrCode} onClose={this.closeQrCode} />
             <ContactList
               childProps={(contact) => {
                 return { color: this.contactInGroup(contact.id) ? 'green' : '' }

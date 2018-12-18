@@ -61,6 +61,14 @@ function init (cwd, state) {
     windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
+  dc.on('DC_EVENT_ERROR', (error) => {
+    windows.main.send('error', error.toString())
+  })
+
+  dc.on('DC_EVENT_NETWORK_ERROR', (first, error) => {
+    windows.main.send('error', error.toString())
+  })
+
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipc.on('dispatchSync', (e, ...args) => {
@@ -146,7 +154,6 @@ function txCoreStrings () {
   strings[C.DC_STR_MSGADDMEMBER] = tx('DC_STR_MSGADDMEMBER')
   strings[C.DC_STR_MSGDELMEMBER] = tx('DC_STR_MSGDELMEMBER')
   strings[C.DC_STR_MSGGROUPLEFT] = tx('DC_STR_MSGGROUPLEFT')
-  strings[C.DC_STR_SELFNOTINGRP] = tx('DC_STR_SELFNOTINGRP')
   strings[C.DC_STR_E2E_AVAILABLE] = tx('DC_STR_E2E_AVAILABLE')
   strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
   strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')

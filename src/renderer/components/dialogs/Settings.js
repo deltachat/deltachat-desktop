@@ -151,7 +151,7 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsOptionsSection')}</H5>
               <Switch
-                checked={saved.markRead}
+                checked={saved && saved.markRead}
                 label='Mark incoming messages as read'
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
               />

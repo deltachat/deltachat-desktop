@@ -5,7 +5,7 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
-class ContactDetailDialog extends React.Component {
+class ContactDetail extends React.Component {
   render () {
     const { contactId, onClose } = this.props
     const isOpen = !!contactId
@@ -27,4 +27,4 @@ class ContactDetailDialog extends React.Component {
   }
 }
 
-module.exports = ContactDetailDialog
+module.exports = ContactDetail
