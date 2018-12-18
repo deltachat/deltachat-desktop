@@ -154,15 +154,14 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsAutocryptSection')}</H5>
               <p>{tx('autocryptDescription')}</p>
-              <Button onClick={this.initiateKeyTransfer}>
-                {tx('initiateKeyTransferTitle')}
-              </Button>
-              <H5></H5>
               <Switch
                 checked={advancedSettings.e2ee_enabled}
                 label={tx('settingsEndToEndSetup')}
                 onChange={this.handleEncryptionToggle}
               />
+              <Button onClick={this.initiateKeyTransfer}>
+                {tx('initiateKeyTransferTitle')}
+              </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('settingsBackupSection')}</H5>
