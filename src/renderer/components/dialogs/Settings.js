@@ -160,7 +160,7 @@ class Settings extends React.Component {
               </Button>
               <Switch
                 checked={advancedSettings.e2ee_enabled}
-                label={tx('endToEndSetup')}
+                label={tx('settingsEndToEndSetup')}
                 onChange={this.handleEncryptionToggle}
               />
             </Card>
@@ -175,7 +175,7 @@ class Settings extends React.Component {
               <H5>{tx('settingsOptionsSection')}</H5>
               <Switch
                 checked={saved && saved.markRead}
-                label='Mark incoming messages as read'
+                label={tx('settingsMarkRead')}
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
               />
             </Card>

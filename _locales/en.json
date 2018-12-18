@@ -860,7 +860,10 @@
   "encryptionInfoTitle": {
     "message": "Encryption Information"
   },
-  "endToEndSetup": {
+  "settingsEndToEndSetup": {
     "message": "Prefer end-to-end encryption"
+  },
+  "settingsMarkRead": {
+    "message": "Receive and send read receipts"
   }
 }
