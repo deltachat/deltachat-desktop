@@ -1,7 +1,9 @@
 const React = require('react')
+const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
 const styled = require('styled-components').default
 
+const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 const {
   Elevation,
   H5,
@@ -31,7 +33,8 @@ class Settings extends React.Component {
       keyTransfer: false,
       saved: props.saved,
       advancedSettings: {},
-      userDetails: false
+      userDetails: false,
+      mailPw: MAGIC_PW
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -46,7 +49,6 @@ class Settings extends React.Component {
     if (this.props.isOpen && !prevProps.isOpen) {
       var advancedSettings = ipcRenderer.sendSync('dispatchSync', 'getAdvancedSettings')
       advancedSettings.e2ee_enabled = !!Number(advancedSettings.e2ee_enabled)
-      console.log(advancedSettings.e2ee_enabled)
       this.setState({ advancedSettings })
     }
   }
@@ -107,6 +109,7 @@ class Settings extends React.Component {
 
   onLoginSubmit (config) {
     this.props.userFeedback(false)
+    if (config.mailPw === MAGIC_PW) delete config.mailPw
     ipcRenderer.send('updateCredentials', config)
   }
 
@@ -130,6 +133,7 @@ class Settings extends React.Component {
               <H5>{tx('settingsAccountTitle')}</H5>
               <Login
                 {...advancedSettings}
+                mailPw={this.state.mailPw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>

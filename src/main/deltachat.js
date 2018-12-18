@@ -381,11 +381,14 @@ class DeltaChatController extends events.EventEmitter {
     return this._dc.setConfig(key, String(value))
   }
 
+  getConfig (key) {
+    return this._dc.getConfig(key)
+  }
+
   getAdvancedSettings () {
     return {
       addr: this._dc.getConfig('addr'),
       mailUser: this._dc.getConfig('mail_user'),
-      mailPw: this._dc.getConfig('mail_pw'),
       mailServer: this._dc.getConfig('mail_server'),
       mailPort: this._dc.getConfig('mail_port'),
       mailSecurity: this._dc.getConfig('mail_security'),

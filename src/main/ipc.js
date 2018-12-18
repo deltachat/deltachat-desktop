@@ -126,6 +126,7 @@ function init (cwd, state) {
 
   ipc.on('updateCredentials', (e, credentials) => {
     var dir = path.join(os.tmpdir(), Date.now().toString())
+    if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
     var tmp = new DeltaChat(dir, state.saved)
 
     tmp.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
