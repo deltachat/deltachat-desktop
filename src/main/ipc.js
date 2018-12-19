@@ -66,7 +66,7 @@ function init (cwd, state) {
   ipc.on('forgetLogin', (e, addr) => {
     var targetDir = dc.getPath(addr)
     rimraf.sync(targetDir)
-    app.logins.splice(app.logins.indexOf(addr))
+    app.logins.splice(app.logins.indexOf(addr), 1)
     render()
   })
 
