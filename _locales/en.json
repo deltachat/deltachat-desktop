@@ -877,5 +877,15 @@
   },
   "Audio": {
     "message": "Audio"
+  },
+  "forgetLoginConfirmation": {
+    "message": "Delete this login? Everything will be deleted, including your end-to-end setup, contacts, chats, messages, and media. This action is final and can not be reversed."
+  },
+  "loginNewAccountTitle": {
+    "message": "Login with a new account"
+  },
+  "loginKnownAccountsTitle": {
+    "message": "Known Accounts"
   }
 }
+
