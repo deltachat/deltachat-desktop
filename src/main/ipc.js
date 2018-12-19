@@ -7,6 +7,7 @@ const {
   ipcMain
 } = require('electron')
 
+const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
@@ -64,7 +65,7 @@ function init (cwd, state) {
 
   ipc.on('forgetLogin', (e, addr) => {
     var targetDir = dc.getPath(addr)
-    fs.rmdirSync(targetDir)
+    rimraf.sync(targetDir)
     app.logins.splice(app.logins.indexOf(addr))
     render()
   })
