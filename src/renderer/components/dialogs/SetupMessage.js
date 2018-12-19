@@ -4,39 +4,46 @@ const styled = require('styled-components').default
 const Centered = require('../helpers/Centered')
 
 const {
+  Card,
+  Icon,
   Spinner,
   Classes,
   Button,
   ButtonGroup,
-  Dialog
+  Dialog,
+  InputGroup
 } = require('@blueprintjs/core')
 
 const InputTransferKey = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: 10px;
-  padding: 10px 20px 20px 10px;
+  padding: 20px 10px 20px 30px;
 `
 
 const SetupMessagePartialInputWrapper = styled.div`
   width: 100%;
 
-  input {
+  .bp3-input {
     width: 66%;
     float: left;
   }
 `
 
 const SetupMessagePartialInputSeperator = styled(Centered)`
-  width: 33%;
+  width: 20%;
   float: right;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
 `
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      key: Array(9).fill('')
+      key: props.autocryptKey
     }
     this.handleChangeKey = this.handleChangeKey.bind(this)
   }
@@ -47,8 +54,13 @@ class SetupMessagePanel extends React.Component {
     if (value.length > 4 || isNaN(valueNumber) || valueNumber < 0 || valueNumber > 9999) return false
 
     let updatedkey = this.state.key
-    updatedkey[Number(event.target.id)] = value
+    var index = Number(event.target.getAttribute('data-index'))
+    updatedkey[index] = value
     this.setState({ key: updatedkey })
+    if (value.length === 4) {
+      var next = index += 1
+      if (next <= 8) document.getElementById('autocrypt-input-' + next).focus()
+    }
   }
 
   onClick (event) {
@@ -61,14 +73,18 @@ class SetupMessagePanel extends React.Component {
     for (let i = 0; i < 9; i++) {
       inputs.push(
         <SetupMessagePartialInputWrapper key={i}>
-          <input
+          <InputGroup
             key={i}
-            id={i}
+            data-index={i}
+            id={'autocrypt-input-' + i}
             type='number'
             value={this.state.key[i]}
             onChange={this.handleChangeKey}
           />
-          {i !== 8 ? <SetupMessagePartialInputSeperator>-</SetupMessagePartialInputSeperator> : null}
+          {i !== 8 &&
+          i !== 2 &&
+          i !== 5 &&
+            <SetupMessagePartialInputSeperator><Icon icon='small-minus' /></SetupMessagePartialInputSeperator>}
         </SetupMessagePartialInputWrapper>
       )
     }
@@ -79,10 +95,9 @@ class SetupMessagePanel extends React.Component {
     const tx = window.translate
 
     return (<div>
-      {this.props.message && <h3>{this.props.message}</h3>}
-      <p>
-        {tx('showKeyTransferMessage')}
-      </p>
+      <Card>
+        {tx('autocryptEnterMessage')}
+      </Card>
       <InputTransferKey>
         {this.renderInputKey()}
       </InputTransferKey>
@@ -101,22 +116,22 @@ class SetupMessage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: false,
-      message: ''
+      autocryptKey: Array(9).fill(''),
+      loading: false
     }
     this.continueKeyTransfer = this.continueKeyTransfer.bind(this)
     this.continueKeyTransferResp = this.continueKeyTransferResp.bind(this)
   }
 
   continueKeyTransferResp (e, err) {
-    let message
+    const tx = window.translate
     if (err) {
-      message = 'Incorrect Setup Key'
-      this.setState({ loading: false, message })
+      this.setState({ loading: false })
+      this.props.userFeedback({ type: 'error', text: tx('autocryptIncorrect') })
     } else {
       this.setState({ loading: false })
-      this.props.userFeedback({ type: 'success', text: 'Successfully transferred key.' })
-      this.props.onClose()
+      this.props.userFeedback({ type: 'success', text: tx('autocryptCorrect') })
+      this.onClose()
     }
   }
 
@@ -124,24 +139,34 @@ class SetupMessage extends React.Component {
     ipcRenderer.on('continueKeyTransferResp', this.continueKeyTransferResp)
   }
 
+  componentDidUpdate (prevProps) {
+    if (!prevProps || (!prevProps.setupMessage && this.props.setupMessage)) {
+      this.setState({ autocryptKey: Array(9).fill('') })
+    }
+  }
+
   componentWillUnmount () {
     ipcRenderer.removeListener('continueKeyTransferResp', this.continueKeyTransferResp)
   }
 
   continueKeyTransfer (key) {
-    this.setState({ loading: true })
+    this.setState({ key, loading: true })
     ipcRenderer.send('continueKeyTransfer', this.props.setupMessage.msg.id, key)
   }
 
   render () {
     const { setupMessage, onClose } = this.props
-    const { loading } = this.state
+    const { autocryptKey, loading } = this.state
     const isOpen = !!setupMessage
 
     let body
-    if (loading) body = <Spinner size={50} intent='success' />
-    else {
+    if (loading) {
+      body = <div>
+        <Spinner size={50} intent='success' />
+      </div>
+    } else {
       body = <SetupMessagePanel
+        autocryptKey={autocryptKey}
         message={this.state.message}
         continueKeyTransfer={this.continueKeyTransfer} />
     }
