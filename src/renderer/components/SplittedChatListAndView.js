@@ -2,6 +2,7 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 
+const Media = require('./Media')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
@@ -42,7 +43,8 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      queryStr: ''
+      queryStr: '',
+      media: false
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
@@ -107,8 +109,12 @@ class SplittedChatListAndView extends React.Component {
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
               </NavbarHeading>
+              {selectedChat && <Button
+                onClick={() => this.setState({ media: !this.state.media })}
+                minimal
+                icon={this.state.media ? 'chat' : 'media'} />}
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className={Classes.MINIMAL} icon='more' />
+                <Button minimal icon='more' />
               </Popover>
             </NavbarGroup>
           </Navbar>
@@ -124,14 +130,18 @@ class SplittedChatListAndView extends React.Component {
           />
           {
             selectedChat
-              ? (<ChatView
-                screenProps={this.props.screenProps}
-                onDeadDropClick={this.onDeadDropClick}
-                userFeedback={this.props.userFeedback}
-                changeScreen={this.props.changeScreen}
+              ? this.state.media ? <Media
                 openDialog={this.props.openDialog}
                 chat={selectedChat}
-                deltachat={this.props.deltachat} />)
+              />
+                : (<ChatView
+                  screenProps={this.props.screenProps}
+                  onDeadDropClick={this.onDeadDropClick}
+                  userFeedback={this.props.userFeedback}
+                  changeScreen={this.props.changeScreen}
+                  openDialog={this.props.openDialog}
+                  chat={selectedChat}
+                  deltachat={this.props.deltachat} />)
               : (
                 <Unselectable>
                   <Centered>

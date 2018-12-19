@@ -583,6 +583,11 @@ class DeltaChatController extends events.EventEmitter {
     return this._dc.getContactEncryptionInfo(contactId)
   }
 
+  getChatMedia (msgType, orMsgType) {
+    var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType, orMsgType)
+    return mediaMessages.map(this.messageIdToJson.bind(this))
+  }
+
   /**
    * Internal
    * Reset state related to login
