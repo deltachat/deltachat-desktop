@@ -142,7 +142,7 @@ class Home extends React.Component {
         )}
         {!deltachat.ready
           ? <LoginScreen logins={logins}>
-            <H5>Login with a new account</H5>
+            <H5>{tx('loginNewAccountTitle')}</H5>
             <Login onSubmit={this.handleLogin} loading={deltachat.configuring}>
               <Button type='submit' text={tx('login.button')} />
               <Button type='cancel' text={tx('login.cancel')} />
@@ -238,7 +238,7 @@ function LoginScreen (props) {
       </NavbarWrapper>
       <div className='window'>
         <Card>
-          <H5>Known Accounts</H5>
+          <H5>{tx('loginKnownAccountsTitle')}</H5>
           <ul>
             {props.logins.map((login) => <LoginItem key={login}>
               <Button large minimal onClick={() => onClickLogin(login)}>
