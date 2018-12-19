@@ -104,7 +104,6 @@ button.emoji {
 }
 
 // Import emoji panel css and override paths
-@import '../node_modules/emoji-panel/lib/emoji-panel-apple-32.css';
 @font-face {
   font-family: 'apple-category';
   src: url(../node_modules/emoji-panel/lib/asset/apple.ttf) format('truetype');
