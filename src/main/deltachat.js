@@ -584,6 +584,7 @@ class DeltaChatController extends events.EventEmitter {
   }
 
   getChatMedia (msgType, orMsgType) {
+    if (!this._selectedChatId) return
     var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType, orMsgType)
     return mediaMessages.map(this.messageIdToJson.bind(this))
   }

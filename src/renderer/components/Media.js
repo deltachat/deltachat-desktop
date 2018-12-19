@@ -70,14 +70,15 @@ const GROUPS = {
   }
 }
 
+var DEFAULT_STATE = {
+  id: 'images',
+  msgTypes: GROUPS.images.values,
+  medias: []
+}
 class Media extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      id: 'images',
-      msgTypes: GROUPS.images.values,
-      medias: []
-    }
+    this.state = DEFAULT_STATE
   }
 
   componentDidMount () {
@@ -91,7 +92,7 @@ class Media extends React.Component {
   }
 
   componentWillUnmount () {
-    this.onSelect('images')
+    this.setState(DEFAULT_STATE)
   }
 
   onSelect (id) {
