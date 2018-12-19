@@ -3,6 +3,9 @@ const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 
 const {
+  H5,
+  Card,
+  Intent,
   Alignment,
   Navbar,
   NavbarGroup,
@@ -139,8 +142,8 @@ class Home extends React.Component {
         )}
         {!deltachat.ready
           ? <LoginScreen logins={logins}>
-            <Login onSubmit={this.handleLogin}
-              loading={deltachat.configuring}>
+            <H5>Login with a new account</H5>
+            <Login onSubmit={this.handleLogin} loading={deltachat.configuring}>
               <Button type='submit' text={tx('login.button')} />
               <Button type='cancel' text={tx('login.cancel')} />
             </Login>
@@ -166,8 +169,46 @@ class Home extends React.Component {
 }
 
 const LoginWrapper = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: calc(100vh);
+
+  .bp3-card {
+    margin-top: 20px;
+  }
+
   .window {
+    max-width: 400px;
     height: auto;
+  }
+`
+
+const LoginItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  border-right: 1px solid grey;
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  min-width: 300px;
+  border-radius: 0;
+
+  :hover {
+    button.bp3-intent-danger {
+      display: inline-flex;
+    }
+  }
+
+  button.bp3-intent-danger {
+    display: none;
+  }
+
+  &:first-child {
+    border-top: 1px solid grey;
+  }
+
+  button.bp3-large {
+    width: 90%;
   }
 `
 
@@ -196,14 +237,21 @@ function LoginScreen (props) {
         </Navbar>
       </NavbarWrapper>
       <div className='window'>
-        <ul>
-          {props.logins.map((login) => <li key={login}>
-            <Button onClick={() => onClickLogin(login)}> {login}</Button>
-            <Button minimal icon='cross' onClick={() => forgetLogin(login)} />
-          </li>
-          )}
-        </ul>
-        {children}
+        <Card>
+          <H5>Known Accounts</H5>
+          <ul>
+            {props.logins.map((login) => <LoginItem key={login}>
+              <Button large minimal onClick={() => onClickLogin(login)}>
+                {login}
+              </Button>
+              <Button intent={Intent.DANGER} minimal icon='cross' onClick={() => forgetLogin(login)} />
+            </LoginItem>
+            )}
+          </ul>
+        </Card>
+        <Card>
+          {children}
+        </Card>
       </div>
     </LoginWrapper>
   )
