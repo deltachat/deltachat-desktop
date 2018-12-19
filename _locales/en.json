@@ -886,6 +886,15 @@
   },
   "loginKnownAccountsTitle": {
     "message": "Known Accounts"
+  },
+  "autocryptIncorrect": {
+    "message": "Incorrect setup code, please try again."
+  },
+  "autocryptCorrect": {
+    "message": "Successfully transferred Autocrypt setup!"
+  },
+  "autocryptEnterMessage": {
+    "message": "Please enter the setup code that is displayed on the other device."
   }
 }
 
