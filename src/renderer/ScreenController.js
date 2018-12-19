@@ -7,12 +7,10 @@ const {
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Callout,
   Button
 } = require('@blueprintjs/core')
 
 const NavbarWrapper = require('./components/NavbarWrapper')
-const ClickableLink = require('./components/helpers/ClickableLink')
 const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
