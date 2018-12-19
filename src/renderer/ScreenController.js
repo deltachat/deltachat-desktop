@@ -7,12 +7,10 @@ const {
   Navbar,
   NavbarGroup,
   NavbarHeading,
-  Callout,
   Button
 } = require('@blueprintjs/core')
 
 const NavbarWrapper = require('./components/NavbarWrapper')
-const ClickableLink = require('./components/helpers/ClickableLink')
 const UnblockContacts = require('./components/UnblockContacts')
 const Login = require('./components/Login')
 const CreateChat = require('./components/CreateChat')
@@ -190,9 +188,6 @@ function LoginScreen (props) {
         </Navbar>
       </NavbarWrapper>
       <div className='window'>
-        <Callout intent='danger' title='Single folder incompatibility'>
-          To improve the user experience with Delta Chat using multiple devices, we experimentally changed the behaviour of Delta Chat. Therefore, beginning with this release, we aren't compatible with the <b>old android client</b> which you can currently find in the f-droid store. Please use the <b>new development</b> version. You can find it <ClickableLink href='https://github.com/deltachat/deltachat-android-ii/releases'>here</ClickableLink>.
-        </Callout>
         <ul>
           {props.logins.map((login) => <li key={login}>
             <Button onClick={() => onClickLogin(login)}> {login}</Button>
