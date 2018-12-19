@@ -1,6 +1,5 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
-const electron = require('electron')
 const events = require('events')
 const path = require('path')
 const log = require('./log')
@@ -26,12 +25,16 @@ class DeltaChatController extends events.EventEmitter {
     this._saved = saved
   }
 
+  getPath (addr) {
+    return path.join(this.cwd, Buffer.from(addr).toString('hex'))
+  }
+
   /**
    * Dispatched when logging in from Login
    */
   login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
-    const cwd = path.join(this.cwd, Buffer.from(credentials.addr).toString('hex'))
+    const cwd = this.getPath(credentials.addr)
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
     var dc = this._dc
@@ -46,9 +49,7 @@ class DeltaChatController extends events.EventEmitter {
         log('Ready')
         this.ready = true
         this.configuring = false
-        if (!electron.app.logins.includes(credentials.addr)) {
-          electron.app.logins.push(credentials.addr)
-        }
+        this.emit('ready')
         render()
       }
       if (!dc.isConfigured()) {

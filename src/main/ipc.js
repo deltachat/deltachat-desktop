@@ -24,7 +24,14 @@ function init (cwd, state) {
 
   const ipc = ipcMain
   const main = windows.main
+
   const dc = new DeltaChat(cwd, state.saved)
+
+  dc.on('ready', function () {
+    if (!app.logins.includes(dc.credentials.addr)) {
+      app.logins.push(dc.credentials.addr)
+    }
+  })
 
   ipc.once('ipcReady', function (e) {
     app.ipcReady = true
@@ -53,6 +60,13 @@ function init (cwd, state) {
   // Create a new instance
   ipc.on('login', (e, ...args) => {
     dc.login(...args, render, txCoreStrings())
+  })
+
+  ipc.on('forgetLogin', (e, addr) => {
+    var targetDir = dc.getPath(addr)
+    fs.rmdirSync(targetDir)
+    app.logins.splice(app.logins.indexOf(addr))
+    render()
   })
 
   dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {

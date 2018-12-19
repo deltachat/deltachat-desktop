@@ -20,6 +20,7 @@ const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
 const ContactList = require('./components/ContactList')
+const confirmation = require('./components/dialogs/confirmationDialog')
 
 class Home extends React.Component {
   constructor (props) {
@@ -178,6 +179,13 @@ function LoginScreen (props) {
     ipcRenderer.send('login', { addr: login, mailPw: true })
   }
 
+  function forgetLogin (login) {
+    const message = tx('forgetLoginConfirmation')
+    confirmation(message, (yes) => {
+      if (yes) ipcRenderer.send('forgetLogin', login)
+    })
+  }
+
   return (
     <LoginWrapper>
       <NavbarWrapper>
@@ -191,6 +199,7 @@ function LoginScreen (props) {
         <ul>
           {props.logins.map((login) => <li key={login}>
             <Button onClick={() => onClickLogin(login)}> {login}</Button>
+            <Button minimal icon='cross' onClick={() => forgetLogin(login)} />
           </li>
           )}
         </ul>
