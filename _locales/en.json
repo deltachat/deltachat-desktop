@@ -2,9 +2,6 @@
   "app_name": {
     "message": "Delta Chat"
   },
-  "language_name": {
-    "message": "English"
-  },
   "ok": {
     "message": "OK"
   },
@@ -52,6 +49,9 @@
   },
   "error": {
     "message": "Error"
+  },
+  "error_x": {
+    "message": "Error: %1$s"
   },
   "error_no_network": {
     "message": "Network unavailable."
@@ -112,6 +112,9 @@
   },
   "audio": {
     "message": "Audio"
+  },
+  "voice_message": {
+    "message": "Voice message"
   },
   "video": {
     "message": "Video"
@@ -318,10 +321,10 @@
     "message": "Export attachment? Exporting attachments will allow any other apps on your device to access them.\\n\\nContinue?"
   },
   "ask_block_contact": {
-    "message": "Block this contact? You will no longer receive messages and calls from this contact."
+    "message": "Block this contact? You will no longer receive messages from this contact."
   },
   "ask_unblock_contact": {
-    "message": "Unblock this contact? You will once again be able to receive messages and calls from this contact."
+    "message": "Unblock this contact? You will once again be able to receive messages from this contact."
   },
   "ask_delete_contacts": {
     "message": "Delete contacts? This will permanently delete the selected contacts.\\n\\nContacts with ongoing chats and contacts from the system\\'s address book cannot be deleted permanently."
@@ -354,7 +357,7 @@
     "message": "Unable to record audio."
   },
   "chat_no_messages_hint": {
-    "message": "Send message to %1$s:\\n\\n• It is okay if %2$s does not use Delta Chat.\\n\\n• Delivering the first message may take a while."
+    "message": "Send message to %1$s:\\n\\n• It is okay if %2$s does not use Delta Chat.\\n\\n• Delivering the first message may take a while and may be unencrypted."
   },
   "chat_new_group_hint": {
     "message": "Compose the first message, allowing others to reply within this group.\\n\\n• It is okay if not all members use Delta Chat.\\n\\n• Delivering the first message may take a while."
@@ -386,6 +389,9 @@
   "chat_no_messages": {
     "message": "No messages."
   },
+  "chat_self_talk_subtitle": {
+    "message": "Messages I sent to myself"
+  },
   "search": {
     "message": "Search"
   },
@@ -394,15 +400,6 @@
   },
   "search_no_result_for_x": {
     "message": "No results found for \\\"%s\\\""
-  },
-  "search_chats_header": {
-    "message": "Chats"
-  },
-  "search_contacts_header": {
-    "message": "Contacts"
-  },
-  "search_msgs_header": {
-    "message": "Messages"
   },
   "group_name": {
     "message": "Group name"
@@ -418,6 +415,12 @@
   },
   "group_add_members": {
     "message": "Add members"
+  },
+  "group_hello_draft": {
+    "message": "Hello, I\\'ve just created the group \\\"%1$s\\\" for us."
+  },
+  "group_self_not_in_group": {
+    "message": "You must be a member of the group to perform this action."
   },
   "profile_encryption": {
     "message": "Encryption"
@@ -444,57 +447,46 @@
     "message": "Let\\'s switch to Delta Chat - %1$s - you can text me at %2$s"
   },
   "welcome_intro1_headline": {
-    "message": "Delta Chat dev"
+    "message": "Delta Chat"
   },
   "welcome_intro1_message": {
-    "message": [
-      "The messenger with the ",
-      " in the world. ",
-      " and ",
-      "."
-    ]
+    "message": "The messenger with the broadest audience in the world. Free and independent."
   },
   "welcome_intro2_headline": {
     "message": "Independent"
   },
   "welcome_intro2_message": {
-    "message": " The app only uses your mail server."
+    "message": "There is no Delta Chat server. The app only uses your mail server."
   },
   "welcome_intro3_headline": {
     "message": "Fast"
   },
   "welcome_intro3_message": {
-    "message": [
-      " in seconds.",
-      "Rapid interface."
-    ]
+    "message": "Push messages in seconds.\\nRapid interface."
   },
   "welcome_intro4_headline": {
     "message": "Powerful"
   },
   "welcome_intro4_message": {
-    "message": " chats, images, videos, audio messages and more. Multi-client capable."
+    "message": "Unlimited chats, images, videos, audio messages and more. Multi-client capable."
   },
   "welcome_intro5_headline": {
     "message": "Free"
   },
   "welcome_intro5_message": {
-    "message": [
-      " is free forever.",
-      "Open-source. No ads. No subscription. No vendor lock-in."
-    ]
+    "message": "Delta Chat is free forever. Open-source. No ads. No subscription. No vendor lock-in."
   },
   "welcome_intro6_headline": {
     "message": "Encrypted"
   },
   "welcome_intro6_message": {
-    "message": " with all common algorithms. Messages stay on your servers."
+    "message": "Encrypted with all common algorithms. Messages stay on your servers."
   },
   "welcome_intro7_headline": {
     "message": "Trustworthy"
   },
   "welcome_intro7_message": {
-    "message": " is safe for business use, compatible and standards-based."
+    "message": "Delta Chat is safe for business use, compatible and standards-based."
   },
   "welcome_start_messaging": {
     "message": "Start Messaging"
@@ -503,7 +495,7 @@
     "message": "Login"
   },
   "login_header": {
-    "message": "Login to Delta Chat"
+    "message": "Login to your server"
   },
   "login_subheader": {
     "message": "For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help."
@@ -564,6 +556,15 @@
   },
   "import_backup_no_backup_found": {
     "message": "No backups found.\\n\\nCopy the backup to \\\"%1$s\\\" and try again. Alternatively, press \\\"Start messaging\\\" to go with the normal setup process."
+  },
+  "login_error_cannot_login": {
+    "message": "Cannot login as \\\"%1$s\\\". Please check if the email-address and the password are correct."
+  },
+  "login_error_server_response": {
+    "message": "Response from %1$s: %2$s\\n\\nSome providers place additional information in your inbox; you can check them it eg. in the web frontend. Consult your provider or friends if you run into problems."
+  },
+  "forward_to": {
+    "message": "Forward to …"
   },
   "pref_summary_privacy": {
     "message": "Screen lock %1$s, Read receipts %2$s"
@@ -847,6 +848,33 @@
   "autocrypt_bad_setup_code": {
     "message": "Bad setup code. Please try again.\\n\\nIf you do not remember the setup code, just send another Autocrypt Setup Message from the other device."
   },
+  "systemmsg_group_name_changed": {
+    "message": "Group name changed from \\\"%1$s\\\" to \\\"%2$s\\\"."
+  },
+  "systemmsg_group_image_changed": {
+    "message": "Group image changed."
+  },
+  "systemmsg_group_image_deleted": {
+    "message": "Group image deleted."
+  },
+  "systemmsg_member_added": {
+    "message": "Member %1$s added."
+  },
+  "systemmsg_member_removed": {
+    "message": "Member %1$s removed."
+  },
+  "systemmsg_group_left": {
+    "message": "Group left."
+  },
+  "systemmsg_read_receipt_subject": {
+    "message": "Read receipt"
+  },
+  "systemmsg_read_receipt_body": {
+    "message": "This is a read receipt for the message \\\"%1$s\\\".\\n\\nIt means that message was displayed on the recipient\\'s device, not necessarily that the content was read."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "This message cannot be decrypted.\\n\\n• It might already help to simply reply to this message and ask the sender to send the message again.\\n\\n• In case you re-installed Delta Chat or another email program on this or another device you may want to send an Autocrypt Setup Message from there."
+  },
   "screenlock_title": {
     "message": "Screen lock"
   },
@@ -926,7 +954,7 @@
     "message": "QR verify code"
   },
   "qrshow_join_contact_hint": {
-    "message": "\\\"%1$s\\\"Scan this to set up a verified contact."
+    "message": "\\\"%1$s\\\" Scan this to set up a verified contact."
   },
   "notify_n_messages_in_m_chats": {
     "message": "%1$d new messages in %2$d chats"
@@ -1023,13 +1051,29 @@
     "one": "%d hour",
     "other": "%d hours"
   },
+  "n_chats": {
+    "one": "1 chat",
+    "other": "%1$d chats"
+  },
+  "n_contacts": {
+    "one": "1 contact",
+    "other": "%1$d contacts"
+  },
+  "n_messages": {
+    "one": "1 message",
+    "other": "%1$d messages"
+  },
+  "n_members": {
+    "one": "1 member",
+    "other": "%1$d members"
+  },
   "ask_delete_chat": {
     "one": "Delete this chat? It will no longer be shown in the chat list, its messages will remain on the server.",
-    "other": "Delete %1%d chats? They will no longer be shown in the chat list, their messages will remain on the server."
+    "other": "Delete %d chats? They will no longer be shown in the chat list, their messages will remain on the server."
   },
   "ask_delete_messages": {
     "one": "Delete the message here and on the server?",
-    "other": "Delete %1$d messages here and one the server?"
+    "other": "Delete %1$d messages here and on the server?"
   },
   "chat_archived": {
     "one": "Chat archived",
@@ -1037,7 +1081,7 @@
   },
   "chat_unarchived": {
     "one": "Chat unarchived",
-    "other": "%d chat unarchived"
+    "other": "%d chats unarchived"
   },
   "chat_n_unread_messages": {
     "one": "%d unread message",

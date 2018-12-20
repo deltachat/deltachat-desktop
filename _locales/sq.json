@@ -1,1 +1,1066 @@
-{}
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Anuloje"
+  },
+  "yes": {
+    "message": "Po"
+  },
+  "no": {
+    "message": "Jo"
+  },
+  "on": {
+    "message": "On"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "def": {
+    "message": "Parazgjedhje"
+  },
+  "custom": {
+    "message": "Vetjake"
+  },
+  "none": {
+    "message": "Asnjë"
+  },
+  "open": {
+    "message": "Hap"
+  },
+  "not_now": {
+    "message": "Jo tani"
+  },
+  "never": {
+    "message": "Kurrë"
+  },
+  "one_moment": {
+    "message": "Një çast…"
+  },
+  "done": {
+    "message": "U bë"
+  },
+  "undo": {
+    "message": "Zhbëje"
+  },
+  "error": {
+    "message": "Gabim"
+  },
+  "error_x": {
+    "message": "Gabim: %1$s"
+  },
+  "error_no_network": {
+    "message": "Rrjet i pakapshëm."
+  },
+  "no_app_to_handle_data": {
+    "message": "S\\’gjendet dot një aplikacion për trajtimin e këtij lloji të dhënash."
+  },
+  "no_browser_installed": {
+    "message": "S’ka shfletues të instaluar."
+  },
+  "file_not_found": {
+    "message": "S’u gjet dot %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "U kopjua në të papastër."
+  },
+  "contacts_headline": {
+    "message": "Kontakte"
+  },
+  "email_address": {
+    "message": "Adresë email"
+  },
+  "bad_email_address": {
+    "message": "Adresë email e keqe."
+  },
+  "password": {
+    "message": "Fjalëkalim"
+  },
+  "now": {
+    "message": "Tani"
+  },
+  "n_min_ago": {
+    "message": "%d min."
+  },
+  "today": {
+    "message": "Sot"
+  },
+  "yesterday": {
+    "message": "Dje"
+  },
+  "this_week": {
+    "message": "Këtë javë"
+  },
+  "this_month": {
+    "message": "Këtë muaj"
+  },
+  "self": {
+    "message": "Unë"
+  },
+  "draft": {
+    "message": "Skicë"
+  },
+  "image": {
+    "message": "Figurë"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "voice_message": {
+    "message": "Mesazh zanor"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "camera": {
+    "message": "Kamerë"
+  },
+  "location": {
+    "message": "Vendndodhje"
+  },
+  "gallery": {
+    "message": "Galeri"
+  },
+  "file": {
+    "message": "Kartelë"
+  },
+  "unknown": {
+    "message": "E panjohur"
+  },
+  "green": {
+    "message": "E gjelbër"
+  },
+  "red": {
+    "message": "E kuqe"
+  },
+  "blue": {
+    "message": "Blu"
+  },
+  "orange": {
+    "message": "Portokalli"
+  },
+  "white": {
+    "message": "E bardhë"
+  },
+  "small": {
+    "message": "Të vogla"
+  },
+  "normal": {
+    "message": "Normale"
+  },
+  "large": {
+    "message": "Të mëdha"
+  },
+  "extra_large": {
+    "message": "Ekstra të mëdha"
+  },
+  "fast": {
+    "message": "Shpejt"
+  },
+  "slow": {
+    "message": "Ngadalë"
+  },
+  "message_delivered": {
+    "message": "Mesazhi u dorëzua"
+  },
+  "message_read": {
+    "message": "Mesazhi u lexua"
+  },
+  "menu_new_contact": {
+    "message": "Kontakt i ri"
+  },
+  "menu_new_chat": {
+    "message": "Fjalosje e re"
+  },
+  "menu_new_group": {
+    "message": "Grup i ri"
+  },
+  "menu_new_verified_group": {
+    "message": "Grup i ri i verifikuar"
+  },
+  "menu_send": {
+    "message": "Dërgoje"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Shfaq/fshih tastierë "
+  },
+  "menu_edit_group": {
+    "message": "Përpunoni grup"
+  },
+  "menu_archive_chat": {
+    "message": "Arkivoje fjalosjen"
+  },
+  "menu_unarchive_chat": {
+    "message": "Çarkivoje fjalosjen"
+  },
+  "menu_add_attachment": {
+    "message": "Shtoni bashkëngjitje"
+  },
+  "menu_leave_group": {
+    "message": "Braktiseni grupin"
+  },
+  "menu_delete_chat": {
+    "message": "Fshije fjalosjen"
+  },
+  "menu_delete_messages": {
+    "message": "Fshiji mesazhet"
+  },
+  "menu_delete_image": {
+    "message": "Fshije figurën"
+  },
+  "menu_message_details": {
+    "message": "Hollësi mesazhi"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopjoje në të papastër"
+  },
+  "menu_forward": {
+    "message": "Përcille mesazhin"
+  },
+  "menu_resend": {
+    "message": "Ridërgoje mesazhin"
+  },
+  "menu_reply": {
+    "message": "Përgjigju mesazhit"
+  },
+  "menu_mute": {
+    "message": "Heshto njoftimet"
+  },
+  "menu_unmute": {
+    "message": "Çheshtoji"
+  },
+  "menu_export_attachment": {
+    "message": "Eksporto bashkëngjitje"
+  },
+  "menu_all_media": {
+    "message": "Krejt mediat"
+  },
+  "menu_share": {
+    "message": "Ndajeni me të tjerë"
+  },
+  "menu_block_contact": {
+    "message": "Bllokoje kontaktin"
+  },
+  "menu_unblock_contact": {
+    "message": "Zhbllokoje kontaktin"
+  },
+  "menu_play": {
+    "message": "Luaje"
+  },
+  "menu_pause": {
+    "message": "Pushoje"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Rrëshqit drejt fundit"
+  },
+  "menu_invite": {
+    "message": "Ftoni shokë"
+  },
+  "menu_help": {
+    "message": "Nidhmë"
+  },
+  "menu_select_all": {
+    "message": "Përzgjidhi krejt"
+  },
+  "menu_expand": {
+    "message": "Zgjeroje"
+  },
+  "menu_edit_name": {
+    "message": "Përpunoni emrin"
+  },
+  "menu_settings": {
+    "message": "Rregullime"
+  },
+  "menu_advanced": {
+    "message": "Të mëtejshme"
+  },
+  "menu_deaddrop": {
+    "message": "Kërkesa kontakti"
+  },
+  "menu_view_profile": {
+    "message": "Shihini profilin"
+  },
+  "mute_for_one_hour": {
+    "message": "Heshtoji për 1 orë"
+  },
+  "mute_for_two_hours": {
+    "message": "Heshtoji për 2 orë"
+  },
+  "mute_for_one_day": {
+    "message": "Heshtoji për 1 ditë"
+  },
+  "mute_for_seven_days": {
+    "message": "Heshtoji për 7 ditë"
+  },
+  "mute_for_one_year": {
+    "message": "Heshtoji për 1 vit"
+  },
+  "ask_leave_group": {
+    "message": "Jeni i sigurt se doni ta braktisni këtë grup?"
+  },
+  "ask_forward": {
+    "message": "Të përcillen mesazhet te %1$s?"
+  },
+  "ask_export_attachment": {
+    "message": "Të eksportohet bashkëngjitja? Eksportimi i bashkëngjitjeve do t\\’i lejojë çfarëdo aplikacioni tjetër në pajisjen tuaj t\\’i përdorë ato.\\n\\nTë vazhdohet?"
+  },
+  "ask_delete_contacts": {
+    "message": "Të fshihen kontaktet? Kjo do të bëjë të fshihen përgjithmonë kontaktet e përzgjedhur.\\n\\nKontaktet me fjalosje në zhvillim e sipër dhe kontaktet prej libri adresash të sistemit s’mund të fshihen përgjithmonë."
+  },
+  "ask_start_chat_with": {
+    "message": "Të bisedohet me %1$s?"
+  },
+  "contacts_title": {
+    "message": "Kontakte"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Jepni emër ose adresë email"
+  },
+  "contacts_type_email_above": {
+    "message": "Shtypni më sipër adresën email"
+  },
+  "contacts_empty_hint": {
+    "message": "S’ka kontakte."
+  },
+  "chat_archived_chats_title": {
+    "message": "Fjalosje të arkivuara"
+  },
+  "chat_please_enter_message": {
+    "message": "Ju lutemi, jepni një mesazh."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamerë jo gati."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "S’arrihet të incizohet audio."
+  },
+  "chat_no_messages_hint": {
+    "message": "Dërgoni mesazh te %1$s:\\n\\n• S’ka problem nëse %2$s s\\’përdor Delta Chat.\\n\\n• Dërgimi i mesazhit të parë mund të zgjasë ca dhe mund të jetë i pafshehtëzuar."
+  },
+  "chat_new_group_hint": {
+    "message": "Hartoni mesazhin e parë, duke u lejuar të tjerëve të përgjigjen brenda këtij grupi.\\n\\n• S’ka problem nëse Delta Chat-in s’e përdorin  të tërë anëtarë.\\n\\n• Dërgimi i mesazhit të parë mund të zgjasë ca."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Rrëshqiteni që të anulohet"
+  },
+  "chat_record_explain": {
+    "message": "Prekeni dhe mbajeni të prekur që të incizoni një mesazh zanor; lëshojeni, që të dërgohet"
+  },
+  "chat_no_chats_yet_hint": {
+    "message": "Jepini kutisë tuaj të email-eve diçka që ta shkruani në darkë. Fillojani duke i dërguar një mesazh një shoku."
+  },
+  "chat_all_done_hint": {
+    "message": "Zero të marrë"
+  },
+  "chat_all_done_explain": {
+    "message": "Hiç. Fare. Zero.\\nJanë qëruar!"
+  },
+  "chat_share_with_title": {
+    "message": "Ndajeni me "
+  },
+  "chat_input_placeholder": {
+    "message": "Mesazh"
+  },
+  "chat_archived_label": {
+    "message": "Arkivuar"
+  },
+  "chat_no_messages": {
+    "message": "S’ka mesazhe."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Mesazhe që i kam dërguar vetes"
+  },
+  "search": {
+    "message": "Kërko"
+  },
+  "search_explain": {
+    "message": "Kërkoni për fjalosje, kontakte dhe mesazhe."
+  },
+  "search_no_result_for_x": {
+    "message": "S’u gjetën përfundime për \\\"%s\\\""
+  },
+  "group_name": {
+    "message": "Emër grupi"
+  },
+  "group_avatar": {
+    "message": "Avatar grupi"
+  },
+  "group_create_button": {
+    "message": "Krijoni grup"
+  },
+  "group_please_enter_group_name": {
+    "message": "Ju lutemi, jepni një emër për grupin."
+  },
+  "group_add_members": {
+    "message": "Shtoni anëtarë"
+  },
+  "group_hello_draft": {
+    "message": "Tungjatjeta, Sapo krijova për ne grupin \\\"%1$s\\\"."
+  },
+  "group_self_not_in_group": {
+    "message": "Duhet të jeni anëtar i grupit që të kryeni këtë veprim."
+  },
+  "profile_encryption": {
+    "message": "Fshehtëzim"
+  },
+  "media_preview": {
+    "message": "Paraparje media"
+  },
+  "media_tab_media": {
+    "message": "Media"
+  },
+  "media_tab_documents": {
+    "message": "Dokumente"
+  },
+  "media_no_media_hint": {
+    "message": "S’ka media."
+  },
+  "media_no_documents_hint": {
+    "message": "S’ka dokumente"
+  },
+  "invite_default_text": {
+    "message": "Le të hidhemi në Delta Chat - %1$s - mund të më dërgoni mesazhe tekst te %2$s"
+  },
+  "welcome_intro1_headline": {
+    "message": "Delta Chat"
+  },
+  "welcome_intro1_message": {
+    "message": "Shkëmbyesi i mesazheve me publikun më të gjerë në botë. I lirë dhe i pavarur."
+  },
+  "welcome_intro2_headline": {
+    "message": "I pavarur"
+  },
+  "welcome_intro2_message": {
+    "message": "S’ka shërbyes Delta Chat. Aplikacioni përdor vetëm shërbyesin tuaj të email-eve."
+  },
+  "welcome_intro3_headline": {
+    "message": "I shpejtë"
+  },
+  "welcome_intro3_message": {
+    "message": "Dërgoni mesazhe brenda sekondash.\\nNdërfaqe e shpejtë."
+  },
+  "welcome_intro4_headline": {
+    "message": "I fuqishëm"
+  },
+  "welcome_intro4_message": {
+    "message": "Biseda, figura, video, mesazhe audio të pakufizuara, dhe më tepër. I aftë për multi-klient."
+  },
+  "welcome_intro5_headline": {
+    "message": "I lirë"
+  },
+  "welcome_intro5_message": {
+    "message": "Delta Chat është përgjithmonë i lirë.\\nMe burim të hapur. Pa reklama. Pa pajtime. Pa kyçje nga tregtues."
+  },
+  "welcome_intro6_headline": {
+    "message": "I fshehtëzuar"
+  },
+  "welcome_intro6_message": {
+    "message": "Fshehtëzuar me krejt algoritmet e zakonshëm. Mesazhet mbeten në shërbyesit tuaj."
+  },
+  "welcome_intro7_headline": {
+    "message": "I besueshëm"
+  },
+  "welcome_intro7_message": {
+    "message": "Delta Chat-i është i parrezik për përdorim nga bizneset, i përputhshëm dhe i bazuar në standarde."
+  },
+  "welcome_start_messaging": {
+    "message": "Filloni të Shkëmbeni Mesazhe"
+  },
+  "login_title": {
+    "message": "Hyrje"
+  },
+  "login_header": {
+    "message": "Hyrje te shërbyesi juaj"
+  },
+  "login_subheader": {
+    "message": "Për shërbime të njohura email-i, rregullimet shtesë caktohen automatikisht. Ndonjëherë shërbyesi IMAP lyp të aktivizohet te pjesa e dukshme web. Për ndihmë këshillohuni me shërbimin tuaj email ose shokë tuajt."
+  },
+  "login_inbox": {
+    "message": "Të marrë"
+  },
+  "login_imap_login": {
+    "message": "Emër hyrjeje në IMAP"
+  },
+  "login_imap_server": {
+    "message": "Shërbyes IMAP"
+  },
+  "login_imap_port": {
+    "message": "Portë IMAP"
+  },
+  "login_imap_security": {
+    "message": "Siguri IMAP"
+  },
+  "login_outbox": {
+    "message": "Të dërguar"
+  },
+  "login_smtp_login": {
+    "message": "Emër hyrjeje SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Fjalëkalim SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Shërbyes SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Portë SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Siguri SMTP"
+  },
+  "login_info_gmail_text": {
+    "message": "Për llogari GMail lypset të krijoni një App-Password, nëse keni të aktivizuar mirëfilltësimin dyfaktorësh. Nëse ky rregullim s’gjendet, lypset të aktivizoni Aplikacione Më Pak të Sigurta."
+  },
+  "login_error_mail": {
+    "message": "Ju lutemi, jepni një adresë email të vlefshme"
+  },
+  "login_error_server": {
+    "message": "Ju lutemi, jepni një shërbyes / adresë IP të vlefshme"
+  },
+  "login_error_port": {
+    "message": "Ju lutemi, jepni një portë të vlefshme (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Ju lutemi, jepni një adresë email dhe fjalëkalim të vlefshëm"
+  },
+  "import_backup_title": {
+    "message": "Importo kopjeruajtje"
+  },
+  "import_backup_ask": {
+    "message": "U gjet kopjeruajtje te \\\"%1$s\\\".\\n\\nDoni të importohen dhe përdoren krejt të dhënat dhe rregullimet prej atij?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "S’u gjetën kopjeruajtje.\\n\\nKopjojeni kopjeruajtjen te \\\"%1$s\\\" dhe riprovoni. Ndryshe, shtypni \\\"Filloni të shkëmbeni mesazhe\\\", që të vazhdoni me procesin normal të rregullimit."
+  },
+  "login_error_cannot_login": {
+    "message": "S’bëhet dot hyrja si %1$s. Ju lutemi, shihni nëse adresa email dhe fjalëkalimi janë të saktë."
+  },
+  "login_error_server_response": {
+    "message": "Përgjigje nga %1$s: %2$s\\n\\nDisa shërbime vendosin të dhëna shtesë te kutia juaj e mesazheve të marrë; mund t’i shihni, për shembull, te pjesa e dukshme web. Nëse hasni probleme, këshillohuni me shërbimin tuaj ose shokë."
+  },
+  "pref_summary_privacy": {
+    "message": "Kyçje ekrani %1$s, Lexoni dëftesa %2$s"
+  },
+  "pref_summary_appearance": {
+    "message": "Temë %1$s, Gjuhë %2$s, Sfond %3$s"
+  },
+  "pref_summary_on": {
+    "message": "on"
+  },
+  "pref_summary_off": {
+    "message": "off"
+  },
+  "pref_summary_default": {
+    "message": "parazgjedhje"
+  },
+  "pref_summary_custom": {
+    "message": "vetjake"
+  },
+  "pref_using_custom": {
+    "message": "Po përdoret vetjak: %s"
+  },
+  "pref_using_default": {
+    "message": "Po përdoret parazgjedhje: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Të dhëna tuajat të profilit"
+  },
+  "pref_profile_photo": {
+    "message": "Foto profili"
+  },
+  "pref_trim_headline": {
+    "message": "Qethje mesazhi"
+  },
+  "pref_trim_option": {
+    "message": "Fshiji mesazhet e vjetër"
+  },
+  "pref_trim_option_explain": {
+    "message": "Fshiji automatikisht mesazhet më të vjetër, pasi një bisedë tejkalon një gjatësi të caktuar"
+  },
+  "pref_trim_length_limit": {
+    "message": "Kufi gjatësie fjalosjeje"
+  },
+  "pref_trim_length_limit_summary": {
+    "message": "%d mesazhe për fjalosje"
+  },
+  "pref_trim_now_button": {
+    "message": "Qethi krejt fjalosjet tani"
+  },
+  "pref_trim_now_ask": {
+    "message": "Të fshihen krejt mesazhet e vjetër tani? Kjo do të sjellë qethjen e menjëhershme të %d mesazheve më të rinj."
+  },
+  "pref_blocked_contacts": {
+    "message": "Kontakte të bllokuar"
+  },
+  "pref_profile_photo_remove_ask": {
+    "message": "Të hiqet fotoja e profilit?"
+  },
+  "pref_help_url": {
+    "message": "https://delta.chat/en/help"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Rregullime fjalëkalimi dhe llogarie"
+  },
+  "pref_who_can_see_this_information": {
+    "message": "Kush mund ta shohë këtë informacion?"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Fotoja dhe emri juaj i profilit do të shfaqen tok me mesazhet, kur komunikoni me përdorues të tjerë. Informacioni i dërguar tashmë s’mund të fshihet apo të hiqet."
+  },
+  "pref_your_name": {
+    "message": "Emri juaj"
+  },
+  "pref_default_status_label": {
+    "message": "Tekst gjendjeje"
+  },
+  "pref_default_status_text": {
+    "message": "Dërguar me Delta Chat Messenger: https://delta.chat"
+  },
+  "pref_enter_sends": {
+    "message": "Tasti Enter dërgon"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Shtypja e tastit Enter do të dërgojë mesazhe tekst"
+  },
+  "pref_vibrate": {
+    "message": "Dridhu"
+  },
+  "pref_chat_settings": {
+    "message": "Rregullime fjalosjeje"
+  },
+  "pref_change_secret": {
+    "message": "Ndryshoni të fshehtën"
+  },
+  "pref_change_secret_explain": {
+    "message": "Ndryshojeni pin-in / rregullsinë / shenjat tuaja të gishtave përmes rregullimeve të sistemit"
+  },
+  "pref_screen_security": {
+    "message": "Siguri ekrani"
+  },
+  "pref_screen_security_explain": {
+    "message": "Bllokoji fotot e ekranit te lista e të freskëtëve dhe brenda aplikacionit"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "QË të hyjnë në fuqi rregullimet mbi sigurinë e ekranit, ju lutemi, rinisni aplikacionin."
+  },
+  "pref_notifications": {
+    "message": "Njoftime"
+  },
+  "pref_notifications_show": {
+    "message": "Shfaqi"
+  },
+  "pref_notifications_priority": {
+    "message": "Përparësi"
+  },
+  "pref_led_color": {
+    "message": "Ngjyrë LED-i"
+  },
+  "pref_led_pattern": {
+    "message": "Rregullsi xixëllimi LED-i"
+  },
+  "pref_sound": {
+    "message": "Tingull"
+  },
+  "pref_silent": {
+    "message": "Heshtazi"
+  },
+  "pref_repeat_notify": {
+    "message": "Përsëriti sinjalizimet"
+  },
+  "pref_privacy": {
+    "message": "Privatësi"
+  },
+  "pref_chats_and_media": {
+    "message": "Fjalosje dhe media"
+  },
+  "pref_light_theme": {
+    "message": "E çelët"
+  },
+  "pref_dark_theme": {
+    "message": "E errët"
+  },
+  "pref_appearance": {
+    "message": "Dukje"
+  },
+  "pref_theme": {
+    "message": "Temë"
+  },
+  "pref_language": {
+    "message": "Gjuhë"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Kërkoji tastierës të çaktivizojë nxënie të personalizuar"
+  },
+  "pref_read_receipts": {
+    "message": "Lexoni dëftesa"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Nëse leximi i dëftesave është i çaktivizuar, s’do të jeni në gjendje të shihni mesazh \"Lexoni dëftesa\" prej të tjerësh"
+  },
+  "pref_manage_keys": {
+    "message": "Administroni kyçe"
+  },
+  "pref_use_system_emoji": {
+    "message": [
+      "Përdor ",
+      " sistemi"
+    ]
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Çaktivizo mbulimin e brendshëm Delta Chat për emoji-t"
+  },
+  "pref_communication": {
+    "message": "Komunikim"
+  },
+  "pref_chats": {
+    "message": "Fjalosje"
+  },
+  "pref_messages": {
+    "message": "Mesazhe"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Tinguj brenda bisede"
+  },
+  "pref_message_text_size": {
+    "message": "Madhësi shkronjash mesazhi"
+  },
+  "pref_view_log": {
+    "message": "Shihni regjistrin"
+  },
+  "pref_other": {
+    "message": "Të tjera"
+  },
+  "pref_backup": {
+    "message": "Kopjeruajtje"
+  },
+  "pref_backup_explain": {
+    "message": "Kopjeruaji fjalosjet në depozitim të jashtëm"
+  },
+  "pref_backup_export_explain": {
+    "message": "Një kopjeruajtje ju lejon të rregulloni një instalim të ri në këtë apo në një tjetër pajisje.\\n\\nKopjeruajtja do të përmbajë krejt mesazhet, kontaktet dhe fjalosjet, si dhe rregullimin tuaj për Autocrypt skaj-më-skaj. Mbajeni kartelën e kopjeruajtjes diku të parrezikuar, përndryshe fshijeni as më shpejt që të jetë e mundur."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Fillo kopjeruajtjen"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Kopjeruajtje e shkruar me sukses te %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Administroni kyçe"
+  },
+  "pref_managekeys_ask_for_storage_permission": {
+    "message": "Delta Chat lyp hyrje në kartelat tuaja që të importojë/eksportojë kyçe."
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Eksportoni kyçe të fshehtë"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Të eksportohen kyçet e fshehtë te \\\"%1$s\\\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importoni kyçe të fshehtë"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Të importohen kyçe të fshehtë prej \\\"%1$s\\\"?\\n\\n• Kyçet e fshehtë ekzistues s’do të fshihen\\n\\n• Kyçi i fundit i importuar do të përdoret si kyçi i ri parazgjedhje, hiq rastin ku përmban te emri i kartelës fjalën \\\"legacy\\\""
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Kyçe të fshehtë shkruar me sukses te \\\"%1$s\\\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "U importuan kyçe të fshehtë nga \\\"%1$s\\\"."
+  },
+  "autocrypt": {
+    "message": "Autocrypt"
+  },
+  "autocrypt_explain": {
+    "message": "Autocrypt-i është një protokoll i ri dhe i hapur për fshehtëzim automatik email-esh skaj-më-skaj.\\n\\nRregullimi skaj-më-skaj për ju krijohet vetvetiu kur duhet dhe mund ta shpërngulni nga një pajisje në tjetër përmes Mesazhesh Rregullimi Autocrypt-i."
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Dërgo Mesazh Rregullimi Autocrypt-i"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Një \\\"Mesazh Rregullimi Autocrypt-i\\\" ua jep, në mënyrë të parrezikuar, rregullimin tuaj skaj-më-skaj pajisjeve të tjera që përdorin Autocrypt-in.\\n\\nRregullimi do të fshehtëzohet përmes një kodi rregullimi i cili shfaqet këtu dhe duhet dhënë te pajisja tjetër."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Dërgo Mesazh Rregullimi Autocrypt-i"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Rregullimi juaj u dërgua te ju. Kaloni te pajisja tjetër dhe hapni mesazhin e rregullimit. Do t’ju kërkohet një kod rregullimi. Shtypni atje shifrat vijuese:\\n\\n%1$s\\n\\nPasi të keni mbaruar, pajisja juaj tjetër do të jetë gati të përdorë Autocrypt-in."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Parapëlqe fshehtëzim skaj-më-skaj"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Mesazh Rregullimi Autocrypt-i"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Ky është Mesazhi i Rregullimit të Autocrypt-it i përdorur për të shpërngulur rregullimin tuaj skaj-më-skaj në klientë të tjerë.\\n\\nQë ta shfshehtëzoni rregullimin tuaj, hapeni mesazhin te një klient që mund të përdorë Autocrypt-in dhe jepni kodin e rregullimit të treguar te pajisja që e prodhoi."
+  },
+  "autocrypt_asm_click_body": {
+    "message": "Ky është mesazhi i Rregullimit të Autocrypt-it i përdorur për të shpërngulur mes klientësh rregullimin tuaj skaj-më-skaj.\\n\\nPër ta fshehtëzuar dhe përdorur rregullimin tuaj, prekni ose klikoni mbi këtë mesazh."
+  },
+  "autocrypt_continue_transfer_title": {
+    "message": "Mesazh Rregullimi Autocrypt-i"
+  },
+  "autocrypt_continue_transfer_please_enter_code": {
+    "message": "Ju lutemi, jepni kodin e rregullimit që është shfaqur te pajisja tjetër."
+  },
+  "autocrypt_continue_transfer_succeeded": {
+    "message": "Rregullimi skaj-më-skaj u shpërngul. Kjo pajisje tani është gati të përdorë Autocrypt-in me të njëjtin rregullim si pajisja tjetër."
+  },
+  "autocrypt_continue_transfer_retry": {
+    "message": "Riprovo"
+  },
+  "autocrypt_bad_setup_code": {
+    "message": "Kod i gabuar rregullimi. Ju lutemi, riprovoni.\\n\\nNëse s’e mbani mend kodin e rregullimit, thjesht dërgoni një tjetër Mesazh Rregullimi Autocrypt-i prej pajisjes tjetër."
+  },
+  "systemmsg_group_name_changed": {
+    "message": "Emri i grupit u ndryshua nga \\\"%1$s\\\" në \\\"%2$s\\\"."
+  },
+  "systemmsg_group_image_changed": {
+    "message": "Figura e grupit ndryshoi."
+  },
+  "systemmsg_group_image_deleted": {
+    "message": "Figura e grupit u fshi."
+  },
+  "systemmsg_member_added": {
+    "message": "U shtua anëtari %1$s."
+  },
+  "systemmsg_member_removed": {
+    "message": "U hoq anëtari %1$s."
+  },
+  "systemmsg_group_left": {
+    "message": "U braktis grupi."
+  },
+  "systemmsg_read_receipt_subject": {
+    "message": "Dëftesë leximi"
+  },
+  "systemmsg_read_receipt_body": {
+    "message": "Kjo është dëftesë leximi për mesazhin \\\"%1$s\\\".\\n\\nDo të thotë që mesazhi u shfaq te pajisja e marrësit, jo domosdo që lënda u lexua."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Ky mesazh s’mund të shfshehtëzohet.\\n\\n• Mundet që të ndihmojë dërgimi thjesht i një përgjigjeje këtij mesazhi dhe t’i kërkohet dërguesit ta ridërgojë mesazhin.\\n\\n• Në rast se ri-instaluat Delta Chat-in apo një tjetër program email-esh në këtë apo në një tjetër pajisje, mund të donit të dërgonit një Mesazh Rregullimi Autocrypt-i që prej andej."
+  },
+  "screenlock_title": {
+    "message": "Kyçje ekrani"
+  },
+  "screenlock_explain": {
+    "message": "Kyçe përdorimin e Delta Chat-it përmes kyçjesh ekrani apo shenja gishtash në Android"
+  },
+  "screenlock_authentication_failed": {
+    "message": "Mirëfilltësimi dështoi."
+  },
+  "screenlock_unlock_title": {
+    "message": "Shkyçe Delta Chat-in"
+  },
+  "screenlock_unlock_description": {
+    "message": "Që të shkyçet Delta Chat-i, ju lutemi, jepni të fshehtën e përcaktuar nga sistemi juaj."
+  },
+  "screenlock_inactivity_timeout": {
+    "message": "Kyçje pas afati mosveprimtarie"
+  },
+  "screenlock_inactivity_timeout_explain": {
+    "message": "Vetëkyçje Delta Chat-i pas një intervali të caktuar kohe mosveprimtarie"
+  },
+  "screenlock_inactivity_timeout_interval": {
+    "message": "Interval afati mosveprimtarie"
+  },
+  "qrscan_title": {
+    "message": "Skanoni kod QR"
+  },
+  "qrscan_hint": {
+    "message": "Vendoseni kamerën tuaj përmbi kodin QR"
+  },
+  "qrscan_ask_join_verified_group": {
+    "message": "Doni të bëheni pjesë e grupit të verifikuar \\\"%1$s\\\"?"
+  },
+  "qrscan_ask_fingerprint_ask_oob": {
+    "message": "Të verifikohet kontakti dhe të fillohet të bisedohet me \\\"%1$s\\\"?"
+  },
+  "qrscan_ask_chatting_fingerprint_ok": {
+    "message": "Kontakti \\\"%1$s\\\" u verifikua. Të fillohet të bisedohet?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Shenjat e gishtave të skanuar \\\"nuk përputhen\\\" me shenjat e gishtave parë së fundi për \\\"%1$s\\\"."
+  },
+  "qrscan_no_addr_found": {
+    "message": [
+      "Ky kod QR përmban shenja gishtash, por jo adresë email.\\n\\nPër një verifikim ",
+      ", ju lutemi, së pari vendosni me marrësin një lidhje të fshehtëzuar."
+    ]
+  },
+  "qrscan_contains_text": {
+    "message": "Tekst kodi QR të skanuar:\\n\\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "URL kodi QR të skanuar:\\n\\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Shenja gishtash"
+  },
+  "qrscan_x_verified_introduce_myself": {
+    "message": "%1$s u verifikua, po prezantoj veten…"
+  },
+  "qrshow_title": {
+    "message": "Shfaq kod QR verifikimi"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s vjen."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s u verifikua."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s erdhi në grup në mënyrë të sigurt."
+  },
+  "qrshow_join_verified_group_hint": {
+    "message": "Skanojeni që të hyni te grupi i verifikuar \\\"%1$s\\\"."
+  },
+  "qrshow_join_verified_group_title": {
+    "message": "Kod QR ftese"
+  },
+  "qrshow_join_contact_title": {
+    "message": "Kod QR verifikimi"
+  },
+  "notify_n_messages_in_m_chats": {
+    "message": "%1$d mesazhe të rinj në %2$d fjalosje"
+  },
+  "notify_most_recent_from": {
+    "message": "Më të rejat nga: %1$s"
+  },
+  "notify_media_message_with_text": {
+    "message": "Mesazh media: %s"
+  },
+  "notify_mark_all_read": {
+    "message": "Vëru shenjë të tërave si të lexuar"
+  },
+  "notify_mark_read": {
+    "message": "Vëri shenjë si i lexuar"
+  },
+  "notify_media_message": {
+    "message": "Mesazh media"
+  },
+  "notify_reply_button": {
+    "message": "Përgjigju"
+  },
+  "notify_new_message": {
+    "message": "Mesazh i ri"
+  },
+  "notify_background_connection_enabled": {
+    "message": "U vendos lidhje në prapaskenë"
+  },
+  "notify_priority_high": {
+    "message": "E lartë"
+  },
+  "notify_priority_max": {
+    "message": "Maksimale"
+  },
+  "notify_name_and_message": {
+    "message": "Emër dhe mesazh"
+  },
+  "notify_name_only": {
+    "message": "Vetëm emër"
+  },
+  "notify_no_name_or_message": {
+    "message": "Pa emër apo mesazh"
+  },
+  "notify_repeat_one_time": {
+    "message": "Një herë"
+  },
+  "notify_repeat_two_times": {
+    "message": "Dy herë"
+  },
+  "notify_repeat_three_times": {
+    "message": "Tri herë"
+  },
+  "notify_repeat_five_times": {
+    "message": "Pesë herë"
+  },
+  "notify_repeat_ten_times": {
+    "message": "Dhjetë herë"
+  },
+  "perm_required_title": {
+    "message": "Lypset leje"
+  },
+  "perm_continue": {
+    "message": "Vazhdo"
+  },
+  "perm_not_now": {
+    "message": "Jo tani"
+  },
+  "perm_explain_need_for_camera_access": {
+    "message": "Që të bëhen foto dhe video, lejojeni Delta Chat-in të përdorë kamerën."
+  },
+  "perm_explain_need_for_mic_access": {
+    "message": "Që të dërgoni mesazhe audio, lejojeni Delta Chat-in të përdorë mikrofonin tuaj."
+  },
+  "perm_explain_need_for_storage_access": {
+    "message": "Delta Chat-i lyp hyrje në kartelat tuaja që të mund të eksportojë të tilla apo të krijojë kopjeruajtje."
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat lyp leje mbi Kamerën që të mund të bëjë foto apo video, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \\\"Leje\\\", dhe aktivizojini për \\\"Kamerën\\\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat lyp leje mbi Mikrofonin që të mund të dërgojë mesazhe audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \\\"Leje\\\", dhe aktivizojini për \\\"Mikrofonin\\\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat lyp leje mbi Depozitimin që të mund të bashkëngjisë apo eksportojë foto, video ose audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \\\"Leje\\\", dhe aktivizojini për \\\"Depozitimin\\\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat lyp leje mbi Vendndodhjen që të mund të bashkëngjisë një vendndodhje, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \\\"Leje\\\", dhe aktivizojini për \\\"Vendndodhjen\\\"."
+  },
+  "n_minutes": {
+    "one": "%d minutë",
+    "other": "%d minuta"
+  },
+  "n_hours": {
+    "one": "%d orë",
+    "other": "%d orë"
+  },
+  "n_chats": {
+    "one": "1 fjalosje",
+    "other": "%1$d fjalosje"
+  },
+  "n_contacts": {
+    "one": "1 kontakt",
+    "other": "%1$d kontakte"
+  },
+  "n_messages": {
+    "one": "1 mesazh",
+    "other": "%1$d mesazhe"
+  },
+  "n_members": {
+    "one": "1 anëtar",
+    "other": "%1$d anëtarë"
+  },
+  "ask_delete_chat": {
+    "one": "Të fshihet kjo fjalosje? S’do të shfaqet më te lista e fjalosjeve, mesazhet e saj do të mbeten në shërbyes.",
+    "other": "Të fshihen %d fjalosje? Ato s’do të shfaqen më te lista e fjalosjeve, mesazhet e tyre do të mbeten në shërbyes."
+  },
+  "ask_delete_messages": {
+    "one": "Të fshihet mesazhi këtu dhe te shërbyesi?",
+    "other": "Të fshihen %1$d mesazhet këtu dhe te shërbyesi?"
+  },
+  "chat_archived": {
+    "one": "Fjalosja u arkivua",
+    "other": "U arkivuan %d fjalosje"
+  },
+  "chat_unarchived": {
+    "one": "U çarkivua fjalosja",
+    "other": "U çarkivuan %d fjalosje"
+  },
+  "chat_n_unread_messages": {
+    "one": "%d mesazh i palexuar",
+    "other": "%d mesazhe të palexuar"
+  }
+}

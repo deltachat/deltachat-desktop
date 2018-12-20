@@ -1,1 +1,317 @@
-{}
+{
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Скасувати"
+  },
+  "yes": {
+    "message": "Так"
+  },
+  "no": {
+    "message": "Ні"
+  },
+  "on": {
+    "message": "Увімкн."
+  },
+  "off": {
+    "message": "Вимкн."
+  },
+  "custom": {
+    "message": "Персональне налаштування"
+  },
+  "none": {
+    "message": "Не задано"
+  },
+  "open": {
+    "message": "Відкрити"
+  },
+  "not_now": {
+    "message": "Не зараз"
+  },
+  "never": {
+    "message": "Ніколи"
+  },
+  "one_moment": {
+    "message": "Зачекайте, будь ласка..."
+  },
+  "done": {
+    "message": "Виконано"
+  },
+  "undo": {
+    "message": "Скасувати"
+  },
+  "error": {
+    "message": "Помилка"
+  },
+  "error_x": {
+    "message": "Помилка: %1$s"
+  },
+  "error_no_network": {
+    "message": "Мережа недоступна."
+  },
+  "no_app_to_handle_data": {
+    "message": "Додаток, що дозволяє обробляти цей тип даних, не знайдено."
+  },
+  "no_browser_installed": {
+    "message": "Не встановлено браузер."
+  },
+  "file_not_found": {
+    "message": "Не вдалося знайти %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Скопійовано до буферу обміну."
+  },
+  "contacts_headline": {
+    "message": "Контакти"
+  },
+  "email_address": {
+    "message": "Адреса електронної пошти"
+  },
+  "bad_email_address": {
+    "message": "Невірна адреса електронної пошти."
+  },
+  "password": {
+    "message": "Пароль"
+  },
+  "now": {
+    "message": "Зараз"
+  },
+  "today": {
+    "message": "Сьогодні"
+  },
+  "yesterday": {
+    "message": "Вчора"
+  },
+  "this_week": {
+    "message": "Цього тижня"
+  },
+  "this_month": {
+    "message": "Цього місяця"
+  },
+  "image": {
+    "message": "Зображення"
+  },
+  "audio": {
+    "message": "Аудіо"
+  },
+  "voice_message": {
+    "message": "Голосове повідомлення"
+  },
+  "video": {
+    "message": "Відео"
+  },
+  "contact": {
+    "message": "Контакт"
+  },
+  "location": {
+    "message": "Розташування"
+  },
+  "gallery": {
+    "message": "Галерея"
+  },
+  "file": {
+    "message": "Файл"
+  },
+  "unknown": {
+    "message": "Невідомо"
+  },
+  "green": {
+    "message": "Зелений"
+  },
+  "red": {
+    "message": "Червоний"
+  },
+  "blue": {
+    "message": "Синій"
+  },
+  "orange": {
+    "message": "Помаранчевий"
+  },
+  "cyan": {
+    "message": "Блакитний"
+  },
+  "magenta": {
+    "message": "Пурпурний"
+  },
+  "white": {
+    "message": "Білий"
+  },
+  "small": {
+    "message": "Маленький"
+  },
+  "normal": {
+    "message": "Звичайний"
+  },
+  "large": {
+    "message": "Великий"
+  },
+  "extra_large": {
+    "message": "Величезний"
+  },
+  "fast": {
+    "message": "Швидко"
+  },
+  "slow": {
+    "message": "Повільно"
+  },
+  "message_delivered": {
+    "message": "Повідомлення доставлено"
+  },
+  "message_read": {
+    "message": "Повідомлення прочитано"
+  },
+  "menu_new_contact": {
+    "message": "Новий контакт"
+  },
+  "menu_new_chat": {
+    "message": "Новий чат"
+  },
+  "menu_new_group": {
+    "message": "Нова група"
+  },
+  "menu_new_verified_group": {
+    "message": "Нова підтверджена група"
+  },
+  "menu_send": {
+    "message": "Відправити"
+  },
+  "menu_edit_group": {
+    "message": "Редагувати групу"
+  },
+  "menu_archive_chat": {
+    "message": "Архівувати чат"
+  },
+  "menu_unarchive_chat": {
+    "message": "Розархівувати чат"
+  },
+  "menu_add_attachment": {
+    "message": "Додати вкладення"
+  },
+  "menu_leave_group": {
+    "message": "Залишити групу"
+  },
+  "menu_delete_chat": {
+    "message": "Видалити чат"
+  },
+  "menu_delete_messages": {
+    "message": "Видалити повідомлення"
+  },
+  "menu_delete_image": {
+    "message": "Видалити зображення"
+  },
+  "menu_message_details": {
+    "message": "Деталі повідомлення"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Копіювати в буфер обміну"
+  },
+  "menu_forward": {
+    "message": "Переслати повідомлення"
+  },
+  "menu_resend": {
+    "message": "Повторно надіслати повідомлення"
+  },
+  "menu_reply": {
+    "message": "Відповісти на повідомлення"
+  },
+  "menu_mute": {
+    "message": "Вимкнути сповіщення"
+  },
+  "menu_unmute": {
+    "message": "Увімкнути сповіщення"
+  },
+  "menu_export_attachment": {
+    "message": "Експортувати вкладення"
+  },
+  "menu_all_media": {
+    "message": "Всі матеріали"
+  },
+  "menu_share": {
+    "message": "Поділитися"
+  },
+  "menu_block_contact": {
+    "message": "Заблокувати контакт"
+  },
+  "menu_unblock_contact": {
+    "message": "Розблокувати контакт"
+  },
+  "menu_play": {
+    "message": "Грати"
+  },
+  "menu_pause": {
+    "message": "Пауза"
+  },
+  "menu_invite": {
+    "message": "Запросити друзів"
+  },
+  "menu_help": {
+    "message": "Допомога"
+  },
+  "menu_select_all": {
+    "message": "Вибрати все"
+  },
+  "menu_expand": {
+    "message": "Розширити"
+  },
+  "menu_edit_name": {
+    "message": "Редагувати ім\\'я"
+  },
+  "menu_settings": {
+    "message": "Налаштування"
+  },
+  "menu_view_profile": {
+    "message": "Переглянути профіль"
+  },
+  "mute_for_one_hour": {
+    "message": "Відключити сповіщення на 1 годину"
+  },
+  "mute_for_two_hours": {
+    "message": "Відключити сповіщення на 2 години"
+  },
+  "mute_for_one_day": {
+    "message": "Відключити сповіщення на 1 день"
+  },
+  "mute_for_seven_days": {
+    "message": "Відключити сповіщення на 7 днів"
+  },
+  "mute_for_one_year": {
+    "message": "Відключити сповіщення на 1 рік"
+  },
+  "ask_leave_group": {
+    "message": "Ви впевнені, що хочете залишити цю групу?"
+  },
+  "contacts_title": {
+    "message": "Контакти"
+  },
+  "n_minutes": {
+    "one": "%dхвилина",
+    "few": "%dхвилини",
+    "many": "%dхвилин",
+    "other": "%dхвилини"
+  },
+  "n_hours": {
+    "one": "%dгодина",
+    "few": "%dгодини",
+    "many": "%dгодин",
+    "other": "%dгодин"
+  },
+  "n_chats": {
+    "one": "1 чат",
+    "few": "%1$dчати",
+    "many": "%1$dчатів",
+    "other": "%1$dчатів"
+  },
+  "n_contacts": {
+    "one": "1 контакт",
+    "few": "%1$dконтакти",
+    "many": "%1$dконтактів",
+    "other": "%1$dконтактів"
+  },
+  "n_messages": {
+    "one": "1 повідомлення",
+    "few": "%1$dповідомлення",
+    "many": "%1$dповідомлень",
+    "other": "%1$dповідомлень"
+  }
+}

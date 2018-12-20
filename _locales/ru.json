@@ -1,1 +1,815 @@
-{}
+{
+  "app_name": {
+    "message": "Дельта Чат"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Отмена"
+  },
+  "yes": {
+    "message": "Да"
+  },
+  "no": {
+    "message": "Нет"
+  },
+  "on": {
+    "message": "Вкл"
+  },
+  "off": {
+    "message": "Выкл"
+  },
+  "def": {
+    "message": "По умолчанию"
+  },
+  "custom": {
+    "message": "Персональная настройка"
+  },
+  "none": {
+    "message": "Не задано"
+  },
+  "open": {
+    "message": "Открыть"
+  },
+  "not_now": {
+    "message": "Не сейчас"
+  },
+  "never": {
+    "message": "Никогда"
+  },
+  "one_moment": {
+    "message": "Ожидание ответа..."
+  },
+  "done": {
+    "message": "Выполнено"
+  },
+  "undo": {
+    "message": "Отмена"
+  },
+  "error": {
+    "message": "Ошибка"
+  },
+  "error_x": {
+    "message": "Ошибка: %1$s"
+  },
+  "error_no_network": {
+    "message": "Сеть недоступна."
+  },
+  "no_app_to_handle_data": {
+    "message": "Приложение, позволяющее обрабатывать этот тип данных, не найдено."
+  },
+  "no_browser_installed": {
+    "message": "Не установлен браузер"
+  },
+  "file_not_found": {
+    "message": "Невозможно найти %1$s"
+  },
+  "copied_to_clipboard": {
+    "message": "Скопировано в буфер обмена."
+  },
+  "contacts_headline": {
+    "message": "Контакты"
+  },
+  "email_address": {
+    "message": "Адрес email"
+  },
+  "bad_email_address": {
+    "message": "Неправильный адрес email."
+  },
+  "password": {
+    "message": "Пароль"
+  },
+  "now": {
+    "message": "Сейчас"
+  },
+  "n_min_ago": {
+    "message": "%d минута"
+  },
+  "today": {
+    "message": "Сегодня"
+  },
+  "yesterday": {
+    "message": "Вчера"
+  },
+  "this_week": {
+    "message": "На этой неделе"
+  },
+  "this_month": {
+    "message": "В этом месяце"
+  },
+  "image": {
+    "message": "Изображение"
+  },
+  "gif": {
+    "message": "Гиф"
+  },
+  "audio": {
+    "message": "Аудио"
+  },
+  "voice_message": {
+    "message": "Голосовое сообщение"
+  },
+  "video": {
+    "message": "Видео"
+  },
+  "contact": {
+    "message": "Контакт"
+  },
+  "camera": {
+    "message": "Камера"
+  },
+  "location": {
+    "message": "Местоположение"
+  },
+  "gallery": {
+    "message": "Галерея"
+  },
+  "file": {
+    "message": "Файл"
+  },
+  "unknown": {
+    "message": "Неизвестно"
+  },
+  "green": {
+    "message": "Зелёный"
+  },
+  "red": {
+    "message": "Красный"
+  },
+  "blue": {
+    "message": "Синий"
+  },
+  "orange": {
+    "message": "Оранжевый"
+  },
+  "cyan": {
+    "message": "Голубой"
+  },
+  "magenta": {
+    "message": "Пурпурный"
+  },
+  "white": {
+    "message": "Белый"
+  },
+  "small": {
+    "message": "Маленький"
+  },
+  "normal": {
+    "message": "Обычный"
+  },
+  "large": {
+    "message": "Большой"
+  },
+  "extra_large": {
+    "message": "Огромный"
+  },
+  "fast": {
+    "message": "Быстро"
+  },
+  "slow": {
+    "message": "Медленно"
+  },
+  "message_delivered": {
+    "message": "Сообщение доставлено"
+  },
+  "message_read": {
+    "message": "Сообщение прочитано"
+  },
+  "menu_new_contact": {
+    "message": "Новый контакт"
+  },
+  "menu_new_chat": {
+    "message": "Новый чат"
+  },
+  "menu_new_group": {
+    "message": "Новая группа"
+  },
+  "menu_new_verified_group": {
+    "message": "Новая подтвержденная группа"
+  },
+  "menu_send": {
+    "message": "Отправить"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Включить эмодзи клавиатуру"
+  },
+  "menu_edit_group": {
+    "message": "Редактировать группу"
+  },
+  "menu_archive_chat": {
+    "message": "Активный чат"
+  },
+  "menu_unarchive_chat": {
+    "message": "Неактивный чат"
+  },
+  "menu_add_attachment": {
+    "message": "Прикрепить вложение"
+  },
+  "menu_leave_group": {
+    "message": "Покинуть группу"
+  },
+  "menu_delete_chat": {
+    "message": "Удалить чат"
+  },
+  "menu_delete_messages": {
+    "message": "Удалить сообщения"
+  },
+  "menu_delete_image": {
+    "message": "Удалить изображение"
+  },
+  "menu_message_details": {
+    "message": "Подробности сообщения"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Скопировать в буфер обмена"
+  },
+  "menu_forward": {
+    "message": "Переслать сообщение"
+  },
+  "menu_resend": {
+    "message": "Продублировать сообщение"
+  },
+  "menu_reply": {
+    "message": "Ответь на сообщение"
+  },
+  "menu_mute": {
+    "message": "Отключить уведомления"
+  },
+  "menu_unmute": {
+    "message": "Включить уведомления"
+  },
+  "menu_export_attachment": {
+    "message": "Экспортировать вложение"
+  },
+  "menu_all_media": {
+    "message": "Все материалы"
+  },
+  "menu_share": {
+    "message": "Поделиться"
+  },
+  "menu_block_contact": {
+    "message": "Заблокировать контакт"
+  },
+  "menu_unblock_contact": {
+    "message": "Разблокировать контакт"
+  },
+  "menu_play": {
+    "message": "Играть"
+  },
+  "menu_pause": {
+    "message": "Пауза"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Перейти к концу"
+  },
+  "menu_invite": {
+    "message": "Пригласить друзей"
+  },
+  "menu_help": {
+    "message": "Помощь"
+  },
+  "menu_select_all": {
+    "message": "Выбрать все"
+  },
+  "menu_expand": {
+    "message": "Расширить"
+  },
+  "menu_edit_name": {
+    "message": "Изменить имя"
+  },
+  "menu_settings": {
+    "message": "Настройки"
+  },
+  "menu_advanced": {
+    "message": "Дополнительно"
+  },
+  "menu_view_profile": {
+    "message": "Просмотреть профиль"
+  },
+  "mute_for_one_hour": {
+    "message": "Отключить оповещения на 1 час"
+  },
+  "mute_for_two_hours": {
+    "message": "Отключить оповещения на 2 часа"
+  },
+  "mute_for_one_day": {
+    "message": "Отключить оповещения на 1 день"
+  },
+  "mute_for_seven_days": {
+    "message": "Отключить оповещения на 7 дней"
+  },
+  "mute_for_one_year": {
+    "message": "Отключить оповещения на 1 год"
+  },
+  "ask_leave_group": {
+    "message": "Вы уверены, что хотите покинуть эту группу?"
+  },
+  "ask_block_contact": {
+    "message": "Заблокировать контакт? Вы более не сможете получать от него сообщения."
+  },
+  "ask_unblock_contact": {
+    "message": "Разблокировать контакт? Вы вновь сможете получать от него сообщения."
+  },
+  "ask_delete_contacts": {
+    "message": "Удалить контакты?Это действие навсегда удалит выбранные контакты.\nКонтакты из действующих чатов и из адресной книги системы нельзя удалить навсегда."
+  },
+  "contacts_title": {
+    "message": "Контакты"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Введите имя или адрес электронной почты"
+  },
+  "contacts_type_email_above": {
+    "message": "Введите e-mail адрес выше."
+  },
+  "contacts_empty_hint": {
+    "message": "Нет контактов."
+  },
+  "chat_archived_chats_title": {
+    "message": "Чаты в архиве"
+  },
+  "chat_please_enter_message": {
+    "message": "Пожалуйста введите сообщение."
+  },
+  "chat_camera_unavailable": {
+    "message": "Камера недоступна."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Запись аудио невозможна."
+  },
+  "chat_record_explain": {
+    "message": "Нажмите и удерживайте для записи голосового сообщения, отпустите для отправки"
+  },
+  "chat_all_done_hint": {
+    "message": "Входящих нееетт.."
+  },
+  "chat_share_with_title": {
+    "message": "Поделиться"
+  },
+  "chat_input_placeholder": {
+    "message": "Сообщение"
+  },
+  "chat_archived_label": {
+    "message": "Заархивировано"
+  },
+  "chat_no_messages": {
+    "message": "Нет сообщений."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Отправлено самому себе"
+  },
+  "search": {
+    "message": "Поиск"
+  },
+  "search_no_result_for_x": {
+    "message": "Не найдено \\\"%s\\\""
+  },
+  "group_name": {
+    "message": "Название группы"
+  },
+  "group_avatar": {
+    "message": "Аватар группы"
+  },
+  "group_create_button": {
+    "message": "Создать группу"
+  },
+  "group_please_enter_group_name": {
+    "message": "Введите название группы"
+  },
+  "group_add_members": {
+    "message": "Добавить участников"
+  },
+  "group_hello_draft": {
+    "message": "Привет, я только что создал группу \\\"%1$s\\\"  для нас"
+  },
+  "group_self_not_in_group": {
+    "message": "Необходимо быть членом группы для данного действия"
+  },
+  "profile_encryption": {
+    "message": "Шифрование"
+  },
+  "media_preview": {
+    "message": "Превью медиа"
+  },
+  "media_tab_media": {
+    "message": "Медиа"
+  },
+  "media_tab_documents": {
+    "message": "Документы"
+  },
+  "media_no_media_hint": {
+    "message": "Нет медиа"
+  },
+  "media_no_documents_hint": {
+    "message": "Нет документов"
+  },
+  "invite_default_text": {
+    "message": "Давайте перейдём на Delta Chat %1$s -  вы можете написать мне на %2$s"
+  },
+  "welcome_intro1_headline": {
+    "message": "Дельта Чат"
+  },
+  "welcome_intro1_message": {
+    "message": "Мессенджер с самой широкой аудиторией в мире. Бесплатный и свободныйt."
+  },
+  "welcome_intro2_headline": {
+    "message": "Независимое"
+  },
+  "welcome_intro2_message": {
+    "message": "Приложение не использует сервера. Используется только ваша почта."
+  },
+  "welcome_intro3_headline": {
+    "message": "Быстрый"
+  },
+  "welcome_intro3_message": {
+    "message": "Доставляет сообщения за считанные секунды. Быстрый интерфейс."
+  },
+  "welcome_intro4_headline": {
+    "message": "Мощный"
+  },
+  "welcome_intro4_message": {
+    "message": "Безлимитные чаты, отправка фотографий, видео, аудио сообщений и другое. Поддерживает множество клиентов."
+  },
+  "welcome_intro5_headline": {
+    "message": "Бесплатный"
+  },
+  "welcome_intro5_message": {
+    "message": "Дельта Чат всегда бесплатен. С открытым исходным кодом. Никакой рекламы. Никаких платных подписок. Независим от поставщика."
+  },
+  "welcome_intro6_headline": {
+    "message": "Зашифровано"
+  },
+  "welcome_intro6_message": {
+    "message": "Зашифрован с использованием популярных алгоритмов. Сообщения остаются на ваших серверах."
+  },
+  "welcome_intro7_headline": {
+    "message": "Доверенный"
+  },
+  "welcome_intro7_message": {
+    "message": "Delta Chat безопасен для бизнеса, сочетаем с другими технологиями и основан на стандартах."
+  },
+  "welcome_start_messaging": {
+    "message": "Начать общение"
+  },
+  "login_title": {
+    "message": "Логин"
+  },
+  "login_header": {
+    "message": "Логин на ваш сервер"
+  },
+  "login_inbox": {
+    "message": "Входящие"
+  },
+  "login_imap_login": {
+    "message": "IMAP логин"
+  },
+  "login_imap_server": {
+    "message": "IMAP сервер"
+  },
+  "login_imap_port": {
+    "message": "IMAP порт"
+  },
+  "login_imap_security": {
+    "message": "параметры безопасности IMAP"
+  },
+  "login_outbox": {
+    "message": "Исходящие"
+  },
+  "login_smtp_login": {
+    "message": "SMTP логин"
+  },
+  "login_smtp_password": {
+    "message": "SMTP пароль"
+  },
+  "login_smtp_server": {
+    "message": "SMTP сервер"
+  },
+  "login_smtp_port": {
+    "message": "SMTP порт"
+  },
+  "login_smtp_security": {
+    "message": "настройки безопасности SMTP"
+  },
+  "login_info_gmail_text": {
+    "message": "Если вы пользуетесь GMail и у вас включена 2х-факторная авторизация, вам необходимо создать специальный пароль для приложений - App-Password. Если эти настройки недоступны, вам надо активировать параметр Less Secure Apps."
+  },
+  "login_error_mail": {
+    "message": "Укажите действующий емейл адресс"
+  },
+  "login_error_server": {
+    "message": "Укажите действующий сервер / АйПи адресс"
+  },
+  "login_error_port": {
+    "message": "Укажите действующий порт (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Пожалуйста укажите верные емайл и пароль"
+  },
+  "import_backup_title": {
+    "message": "Импортировать бекап"
+  },
+  "login_error_cannot_login": {
+    "message": "Не удалось войти как \\\"%1$s\\\". Пожалуйста проверьте правильность ввода email и пароля."
+  },
+  "forward_to": {
+    "message": "Переслать..."
+  },
+  "pref_summary_default": {
+    "message": "по- умолчанию"
+  },
+  "pref_profile_info_headline": {
+    "message": "Информация вашего профиля"
+  },
+  "pref_profile_photo": {
+    "message": "Фото профиля"
+  },
+  "pref_trim_option": {
+    "message": "Удалить старые сообщения"
+  },
+  "pref_trim_option_explain": {
+    "message": "Автоматически удалять старые сообщения по достижении указанного лимита"
+  },
+  "pref_trim_length_limit": {
+    "message": "Лимит длинны чата"
+  },
+  "pref_blocked_contacts": {
+    "message": "Заблокированные контакты"
+  },
+  "pref_profile_photo_remove_ask": {
+    "message": "Удалить фото профиля?"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Настройки пароля и аккаунта"
+  },
+  "pref_who_can_see_this_information": {
+    "message": "Кто может видеть эту информацию?"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Изображение профиля и имя будет отображаться в чатах с другими пользователями. Отправленная информация не может быть удалена или отозвана."
+  },
+  "pref_your_name": {
+    "message": "Ваше имя"
+  },
+  "pref_default_status_label": {
+    "message": "Статус"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Нажатие клавиши Enter отправит текстовые сообщения"
+  },
+  "pref_chat_settings": {
+    "message": "Настройки чата"
+  },
+  "pref_screen_security": {
+    "message": "Безопасность экрана"
+  },
+  "pref_notifications": {
+    "message": "Уведомления"
+  },
+  "pref_notifications_show": {
+    "message": "Показать"
+  },
+  "pref_notifications_priority": {
+    "message": "Приоритет"
+  },
+  "pref_led_color": {
+    "message": "Цвет светодиода "
+  },
+  "pref_sound": {
+    "message": "Звук"
+  },
+  "pref_silent": {
+    "message": "Беззвучный"
+  },
+  "pref_privacy": {
+    "message": "Приватность"
+  },
+  "pref_light_theme": {
+    "message": "Светлый"
+  },
+  "pref_dark_theme": {
+    "message": "Темный"
+  },
+  "pref_theme": {
+    "message": "Тема"
+  },
+  "pref_language": {
+    "message": "Язык"
+  },
+  "pref_manage_keys": {
+    "message": "Управление ключами"
+  },
+  "pref_use_system_emoji": {
+    "message": "Использовать системные смайлы"
+  },
+  "pref_app_access": {
+    "message": "Доступ приложения"
+  },
+  "pref_communication": {
+    "message": "Связь"
+  },
+  "pref_chats": {
+    "message": "Чаты"
+  },
+  "pref_messages": {
+    "message": "Сообщения"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Звук в чате"
+  },
+  "pref_message_text_size": {
+    "message": "Размер шрифта сообщения"
+  },
+  "pref_view_log": {
+    "message": "Посмотреть лог"
+  },
+  "pref_other": {
+    "message": "Другое"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Начать бекап"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Управление ключами"
+  },
+  "pref_managekeys_ask_for_storage_permission": {
+    "message": "Приложению необходим доступ к файлам для импорта/экспорта ключей"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Экспортировать секретные ключи"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Импортировать секретные ключи"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Импортировать секретные ключи из \\\"%1$s\\\"?\\n\\n• Существующие секретные ключи не будут удалены\\n\\n• Последний импортированный ключ будет использован как новый ключ по умолчанию если он не содержит слова \\\"legacy\\\" в названии файла"
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Секретные ключи импортированы из \\\"%1$s\\\"."
+  },
+  "autocrypt_continue_transfer_retry": {
+    "message": "Повторить"
+  },
+  "systemmsg_group_image_changed": {
+    "message": "Название чата изменено."
+  },
+  "systemmsg_group_left": {
+    "message": "Группа покинута"
+  },
+  "screenlock_title": {
+    "message": "Блокировка экрана"
+  },
+  "screenlock_authentication_failed": {
+    "message": "Не пройдена аутентификация"
+  },
+  "screenlock_unlock_title": {
+    "message": "Разблокировать Дельта Чат"
+  },
+  "screenlock_inactivity_timeout": {
+    "message": "Блокировка при бездействии"
+  },
+  "screenlock_inactivity_timeout_explain": {
+    "message": "Заблокировать приложение через определенный период времени"
+  },
+  "qrscan_title": {
+    "message": "Сканировать QR код"
+  },
+  "qrscan_hint": {
+    "message": "Наведите Вашу камеру на QR код"
+  },
+  "qrscan_ask_chatting_fingerprint_ok": {
+    "message": "Контакт \\\"%1$s\\\" верифицирован. Начать чат?"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Отпечаток"
+  },
+  "qrshow_join_verified_group_title": {
+    "message": "QR код приглашения"
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR код подтверждения"
+  },
+  "notify_mark_all_read": {
+    "message": "Отметить всё как прочитанное"
+  },
+  "notify_mark_read": {
+    "message": "Отметить как прочитанное"
+  },
+  "notify_reply_button": {
+    "message": "Ответить"
+  },
+  "notify_new_message": {
+    "message": "Новое сообщение"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Соединение в фоновом режиме включено"
+  },
+  "notify_priority_max": {
+    "message": "Максимум"
+  },
+  "notify_name_and_message": {
+    "message": "Имена и сообщения"
+  },
+  "notify_name_only": {
+    "message": "Только имена"
+  },
+  "notify_repeat_one_time": {
+    "message": "Один раз"
+  },
+  "notify_repeat_two_times": {
+    "message": "Два раза"
+  },
+  "notify_repeat_three_times": {
+    "message": "Три раза"
+  },
+  "notify_repeat_five_times": {
+    "message": "Пять раз"
+  },
+  "notify_repeat_ten_times": {
+    "message": "Десять раз"
+  },
+  "perm_required_title": {
+    "message": "Требуется разрешение"
+  },
+  "perm_continue": {
+    "message": "Продолжить"
+  },
+  "perm_not_now": {
+    "message": "Не сейчас"
+  },
+  "perm_explain_need_for_camera_access": {
+    "message": "Для захвата фото и видео, разрешите доступ к камере"
+  },
+  "perm_explain_need_for_mic_access": {
+    "message": "Для отправки аудио сообщений, разрешите доступ к микрофону"
+  },
+  "perm_explain_need_for_storage_access": {
+    "message": "Приложению необходим доступ к файлам для экспорта и создания бэкапов"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Для съемки фотографий или видео приложению требуется разрешение использовать камеру, но сейчас камера заблокирована. Перейдите в меню настроек приложения, выберите \\\"Права доступа\\\" и включите \\\"Камера\\\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Для отправки аудио сообщений приложению нужно разрешение использовать микрофон, но сейчас микрофон заблокирован. Перейдите в меню настроек приложения, выберите \\\"Права доступа\\\" и включите \\\"Микрофон\\\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Для вложения или экспорта фотографий, видео или аудио файлов приложению нужно разрешение на хранение, но сейчас хранение заблокировано. Перейдите в меню настроек приложения, выберите \\\"Права доступа\\\" и включите функцию \\\"Хранение\\\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Чтобы прикрепить местоположение, приложению нужно разрешить доступ к вашему \\\"Расположению\\\", но сейчас местоположение заблокировано. Пожалуйста, перейдите в меню настроек приложения, выберите \\\"Права доступа\\\" и включите \\\"Расположение\\\"."
+  },
+  "n_minutes": {
+    "one": "%d минута",
+    "few": "%d минуты",
+    "many": "%d минут",
+    "other": "%d минут"
+  },
+  "n_hours": {
+    "one": "%d час",
+    "few": "%d часа",
+    "many": "%d часов",
+    "other": "%d часов"
+  },
+  "n_contacts": {
+    "one": "1 контакт",
+    "few": "Контакты %1$d",
+    "many": "Контакты %1$d",
+    "other": "Контакты %1$d"
+  },
+  "n_messages": {
+    "one": "1 сообщение",
+    "few": "Сообщения %1$d",
+    "many": "Сообщения %1$d",
+    "other": "Сообщения %1$d"
+  },
+  "n_members": {
+    "one": "1 участник",
+    "few": "Участники %1$d",
+    "many": "Участники %1$d",
+    "other": "Участники %1$d"
+  },
+  "ask_delete_chat": {
+    "one": "Удалить этот чат?Он более не будет виден в списке чатов,его сообщения останутся на сервере.",
+    "few": "Удалить %d чатов?Они более не будут видны в списке чатов,их сообщения останутся на сервере.",
+    "many": "Удалить %d чатов?Они более не будут видны в списке чатов,их сообщения останутся на сервере.",
+    "other": "Удалить %d чатов?Они более не будут видны в списке чатов,их сообщения останутся на сервере."
+  },
+  "ask_delete_messages": {
+    "one": "Удалить сообщение отсюда и с сервера?",
+    "few": "Удалить %1$d сообщений отсюда и с сервера?",
+    "many": "Удалить %1$d сообщений отсюда и с сервера?",
+    "other": "Удалить %1$d сообщений отсюда и с сервера?"
+  },
+  "chat_archived": {
+    "one": "Чат заархивирован.",
+    "few": "%d чатов были заархивированы.",
+    "many": "%d чатов были заархивированы.",
+    "other": "%dчатов были заархивированы."
+  },
+  "chat_n_unread_messages": {
+    "one": "%dнепрочитанное сообщение",
+    "few": "%d непрочитанных сообщений",
+    "many": "%d непрочитанных сообщений",
+    "other": "%d непрочитанных сообщений"
+  }
+}

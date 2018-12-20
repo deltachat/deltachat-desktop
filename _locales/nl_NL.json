@@ -2,9 +2,6 @@
   "app_name": {
     "message": "Delta Chat"
   },
-  "language_name": {
-    "message": "Engels"
-  },
   "ok": {
     "message": "Oké"
   },
@@ -52,6 +49,9 @@
   },
   "error": {
     "message": "Fout"
+  },
+  "error_x": {
+    "message": "Fout: %1$s"
   },
   "error_no_network": {
     "message": "Geen netwerk beschikbaar."
@@ -113,6 +113,9 @@
   "audio": {
     "message": "Audio"
   },
+  "voice_message": {
+    "message": "Spraakbericht"
+  },
   "video": {
     "message": "Video"
   },
@@ -156,7 +159,7 @@
     "message": "Wit"
   },
   "small": {
-    "message": "Klei"
+    "message": "Klein"
   },
   "normal": {
     "message": "Normaal"
@@ -318,10 +321,10 @@
     "message": "Als je de bijlage exporteert, geef je andere apps op je apparaat toegang om hem uit te lezen.\\n\\nWil je doorgaan?"
   },
   "ask_block_contact": {
-    "message": "Wil je deze contactpersoon blokkeren? Hij/zij kan je geen berichten en oproepen meer sturen."
+    "message": "Wil je deze contactpersoon blokkeren? Hij/zij kan je geen berichten meer sturen."
   },
   "ask_unblock_contact": {
-    "message": "Wil je deze contactpersoon deblokkeren? Hij/zij kan je wederom berichten en oproepen sturen."
+    "message": "Wil je deze contactpersoon deblokkeren? Hij/zij kan je wederom berichten sturen."
   },
   "ask_delete_contacts": {
     "message": "Wil je de geselecteerde contactpersonen verwijderen? Ze worden permanent verwijderd.\\n\\nPersonen met actieve gesprekken en personen afkomstig uit het adresboek van het systeem kunnen niet permanent worden verwijderd."
@@ -354,7 +357,7 @@
     "message": "Kan geen audio opnemen."
   },
   "chat_no_messages_hint": {
-    "message": "Bericht versturen aan %1$s:\\n\\n• %2$s hoeft Delta Chat niet te gebruiken.\\n\\n• Het afleveren van het eerste bericht kan even duren."
+    "message": "Bericht versturen aan %1$s:\\n\\n• %2$s hoeft Delta Chat niet te gebruiken.\\n\\n• Het afleveren van het eerste bericht kan even duren en onversleuteld zijn."
   },
   "chat_new_group_hint": {
     "message": "Stel het eerste bericht op, zodat anderen binnen deze groep kunnen reageren.\\n\\n• Niet alle leden hoeven Delta Chat te gebruiken.\\n\\n• Het afleveren van het eerste bericht kan even duren."
@@ -365,6 +368,681 @@
   "chat_record_explain": {
     "message": "Houdt ingedrukt om een spraakbericht op te nemen; laat los om te versturen"
   },
+  "chat_no_chats_yet_hint": {
+    "message": "Geef je Postvak IN iets om over naar huis te schrijven. Begin door een bericht te sturen aan een vriend(in)."
+  },
+  "chat_all_done_hint": {
+    "message": "Postvak nullllll"
+  },
+  "chat_all_done_explain": {
+    "message": "Niks. Noppes. Nakkes. Nada. \\nJe bent helemaal bij!"
+  },
+  "chat_share_with_title": {
+    "message": "Delen met"
+  },
+  "chat_input_placeholder": {
+    "message": "Bericht"
+  },
+  "chat_archived_label": {
+    "message": "Gearchiveerd"
+  },
+  "chat_no_messages": {
+    "message": "Geen berichten."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Aan mijzelf gestuurde berichten"
+  },
+  "search": {
+    "message": "Zoeken"
+  },
+  "search_explain": {
+    "message": "Zoek naar gesprekken, contactpersonen en berichten"
+  },
+  "search_no_result_for_x": {
+    "message": "Geen resultaten gevonden voor \\\"%s\\\""
+  },
+  "group_name": {
+    "message": "Groepsnaam"
+  },
+  "group_avatar": {
+    "message": "Groepsafbeelding"
+  },
+  "group_create_button": {
+    "message": "Groep creëren"
+  },
+  "group_please_enter_group_name": {
+    "message": "Voer een naam in voor de groep."
+  },
+  "group_add_members": {
+    "message": "Deelnemers toevoegen"
+  },
+  "group_hello_draft": {
+    "message": "Hallo, ik heb zojuist de groep \\\"%1$s\\\" voor ons gemaakt."
+  },
+  "group_self_not_in_group": {
+    "message": "Je moet lid zijn van de groep om deze actie uit te voeren."
+  },
+  "profile_encryption": {
+    "message": "Versleuteling"
+  },
+  "media_preview": {
+    "message": "Mediavoorbeeld"
+  },
+  "media_tab_media": {
+    "message": "Media"
+  },
+  "media_tab_documents": {
+    "message": "Documenten"
+  },
+  "media_no_media_hint": {
+    "message": "Geen media."
+  },
+  "media_no_documents_hint": {
+    "message": "Geen documenten"
+  },
+  "invite_slogan": {
+    "message": "Vrienden houden vrienden niet opgesloten in berichtsilo\\'s."
+  },
+  "invite_default_text": {
+    "message": "Laten we overgaan op Delta Chat - %1$s - je kunt me een bericht sturen op %2$s"
+  },
+  "welcome_intro1_headline": {
+    "message": "Delta Chat"
+  },
+  "welcome_intro1_message": {
+    "message": "De berichtapp met het breedste publiek ter wereld. Gratis en onafhankelijk."
+  },
+  "welcome_intro2_headline": {
+    "message": "Onafhankelijk"
+  },
+  "welcome_intro2_message": {
+    "message": "Er is geen Delta Chat-server; de app gebruikt alleen je mailserver."
+  },
+  "welcome_intro3_headline": {
+    "message": "Snel"
+  },
+  "welcome_intro3_message": {
+    "message": "Verstuur berichten binnen een paar seconden.\\nSnelle gebruikersomgeving."
+  },
+  "welcome_intro4_headline": {
+    "message": "Krachtig"
+  },
+  "welcome_intro4_message": {
+    "message": "Ongelimiteerd aantal gesprekken, afbeeldingen, video\\'s, spraakberichten en meer. Kan omgaan met meerdere clients."
+  },
+  "welcome_intro5_headline": {
+    "message": "Gratis"
+  },
+  "welcome_intro5_message": {
+    "message": "Delta Chat zal altijd gratis blijven. Open source. Geen reclame. Geen abonnement. Onafhankelijk."
+  },
+  "welcome_intro6_headline": {
+    "message": "Versleuteld"
+  },
+  "welcome_intro6_message": {
+    "message": "Versleuteld met alle bekende algoritmen. Berichten blijven op jouw server."
+  },
+  "welcome_intro7_headline": {
+    "message": "Betrouwbaar"
+  },
+  "welcome_intro7_message": {
+    "message": "Delta Chat is veilig voor zakelijk gebruik, compatibel en gebaseerd op standaarden."
+  },
+  "welcome_start_messaging": {
+    "message": "Beginnen"
+  },
+  "login_title": {
+    "message": "Inloggen"
+  },
+  "login_header": {
+    "message": "Inloggen op je server"
+  },
+  "login_subheader": {
+    "message": "Bij bekende e-mailproviders gaat het instellen vrijwel geheel automatisch. Soms moet je IMAP inschakelen in de webversie van je e-mailclient. Vraag je e-mailprovider of vrienden om hulp."
+  },
+  "login_inbox": {
+    "message": "Postvak IN"
+  },
+  "login_imap_login": {
+    "message": "IMAP-inlognaam"
+  },
+  "login_imap_server": {
+    "message": "IMAP-server"
+  },
+  "login_imap_port": {
+    "message": "IMAP-poort"
+  },
+  "login_imap_security": {
+    "message": "IMAP-beveiliging"
+  },
+  "login_outbox": {
+    "message": "Postvak UIT"
+  },
+  "login_smtp_login": {
+    "message": "SMTP-inlognaam"
+  },
+  "login_smtp_password": {
+    "message": "SMTP-wachtwoord"
+  },
+  "login_smtp_server": {
+    "message": "SMTP-server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP-poort"
+  },
+  "login_smtp_security": {
+    "message": "SMTP-beveiliging"
+  },
+  "login_info_gmail_text": {
+    "message": "Bij een Gmail-account moet je een app-wachtwoord creëren als je authenticatie in twee stappen hebt ingeschaked. Als dit niet beschikbaar is, schakel dan Minder veilige apps in."
+  },
+  "login_error_mail": {
+    "message": "Voer een geldig e-mailadres in"
+  },
+  "login_error_server": {
+    "message": "Voer een geldig(e) IP-adres/server in"
+  },
+  "login_error_port": {
+    "message": "Voer een geldige poort in (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Voer een geldig e-mailadres en wachtwoord in"
+  },
+  "import_backup_title": {
+    "message": "Back-up importeren"
+  },
+  "import_backup_ask": {
+    "message": "Back-up aangetroffen in \\\"%1$s\\\".\\n\\nWil je de instellingen en gegevens daaruit importeren?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Geen back-ups aangetroffen.\\n\\nKopieer de back-up naar \\\"%1$s\\\" en probeer het opnieuw of druk op \\\"Beginnen\\\" om het normale instelproces te doorlopen."
+  },
+  "login_error_cannot_login": {
+    "message": "Kan niet inloggen als \\\"%1$s\\\". Controleer het e-mailadres en wachtwoord."
+  },
+  "login_error_server_response": {
+    "message": "Antwoord van %1$s: %2$s\\n\\nSommige providers plaatsen extra informatie in je Postvak IN. Je kunt dit controleren in bijv. de webversie. Neem contact op met je provider of vrienden als je problemen ervaart."
+  },
+  "forward_to": {
+    "message": "Doorsturen naar..."
+  },
+  "pref_summary_privacy": {
+    "message": "Schermvergrendeling %1$s, Leesbevestigingen %2$s"
+  },
+  "pref_summary_appearance": {
+    "message": "Thema %1$s, Taal %2$s, Achtergrond %3$s"
+  },
+  "pref_summary_on": {
+    "message": "aan"
+  },
+  "pref_summary_off": {
+    "message": "uit"
+  },
+  "pref_summary_default": {
+    "message": "standaard"
+  },
+  "pref_summary_custom": {
+    "message": "aangepast"
+  },
+  "pref_using_custom": {
+    "message": "Aangepast wordt gebruikt: %s"
+  },
+  "pref_using_default": {
+    "message": "Standaard wordt gebruikt: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Jouw profielinformatie"
+  },
+  "pref_profile_photo": {
+    "message": "Profielfoto"
+  },
+  "pref_trim_headline": {
+    "message": "Gespreksinkorting"
+  },
+  "pref_trim_option": {
+    "message": "Oude berichten verwijderen"
+  },
+  "pref_trim_option_explain": {
+    "message": "Oudere berichten automatisch verwijderen na het overschrijden van de opgegeven lengte"
+  },
+  "pref_trim_length_limit": {
+    "message": "Lengtelimiet"
+  },
+  "pref_trim_length_limit_summary": {
+    "message": "%d berichten per gesprek"
+  },
+  "pref_trim_now_button": {
+    "message": "Alle gesprekken nu inkorten"
+  },
+  "pref_trim_now_ask": {
+    "message": "Wil je alle oude berichten nu verwijderen? Alle gesprekken worden direct ingekort tot de %d recentste berichten."
+  },
+  "pref_blocked_contacts": {
+    "message": "Geblokkeerde contactpersonen"
+  },
+  "pref_profile_photo_remove_ask": {
+    "message": "Profielfoto verwijderen?"
+  },
+  "pref_help_url": {
+    "message": "https://delta.chat/en/help"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Wachtwoord en accountinstellingen"
+  },
+  "pref_who_can_see_this_information": {
+    "message": "Wie kan deze informatie bekijken?"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Je profielfoto en -naam worden in gesprekken naast jouw berichten getoond. Reeds verstuurde informatie kan niet worden verwijderd of teruggehaald."
+  },
+  "pref_your_name": {
+    "message": "Je naam"
+  },
+  "pref_default_status_label": {
+    "message": "Statustekst"
+  },
+  "pref_default_status_text": {
+    "message": "Verstuurd met mijn Delta Chat Messenger: https://delta.chat"
+  },
+  "pref_enter_sends": {
+    "message": "Versturen met Enter-toets"
+  },
+  "pref_enter_sends_explain": {
+    "message": "De Enter-toets gebruiken om tekstberichten te versturen"
+  },
+  "pref_vibrate": {
+    "message": "Trillen"
+  },
+  "pref_chat_settings": {
+    "message": "Gespreksinstellingen"
+  },
+  "pref_change_secret": {
+    "message": "Geheim wijzigen"
+  },
+  "pref_change_secret_explain": {
+    "message": "Wijzig je pincode/patroon/vingerafdruk via de systeeminstellingen"
+  },
+  "pref_screen_security": {
+    "message": "Schermbeveiliging"
+  },
+  "pref_screen_security_explain": {
+    "message": "Geen schermafdrukken tonen in de \\'recent\\'-lijst en binnen de app"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Herstart de app om de wijzigingen toe te passen."
+  },
+  "pref_notifications": {
+    "message": "Meldingen"
+  },
+  "pref_notifications_show": {
+    "message": "Tonen"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioriteit"
+  },
+  "pref_led_color": {
+    "message": "LED-kleur"
+  },
+  "pref_led_pattern": {
+    "message": "LED-knipperpatroon"
+  },
+  "pref_sound": {
+    "message": "Geluid"
+  },
+  "pref_silent": {
+    "message": "Stil"
+  },
+  "pref_repeat_notify": {
+    "message": "Alarmeringen herhalen"
+  },
+  "pref_privacy": {
+    "message": "Privacy"
+  },
+  "pref_chats_and_media": {
+    "message": "Gesprekken en media"
+  },
+  "pref_light_theme": {
+    "message": "Licht"
+  },
+  "pref_dark_theme": {
+    "message": "Donker"
+  },
+  "pref_appearance": {
+    "message": "Uiterlijk"
+  },
+  "pref_theme": {
+    "message": "Thema"
+  },
+  "pref_language": {
+    "message": "Taal"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Incognito-toetsenbord"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Toetsenbord verzoeken om gepersonaliseerd leren uit te schakelen"
+  },
+  "pref_read_receipts": {
+    "message": "Leesbevestigingen"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Als leesbevestigingen zijn uitgeschakeld, dan zie je geen leesbevestigingen van anderen."
+  },
+  "pref_manage_keys": {
+    "message": "Sleutels beheren"
+  },
+  "pref_use_system_emoji": {
+    "message": "Systeememoji gebruiken"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Delta Chat\\'s ingebouwde emoji-ondersteuning uitschakelen"
+  },
+  "pref_app_access": {
+    "message": "App-toegang"
+  },
+  "pref_communication": {
+    "message": "Communicatie"
+  },
+  "pref_chats": {
+    "message": "Gesprekken"
+  },
+  "pref_messages": {
+    "message": "Berichten"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Gespreksgeluiden"
+  },
+  "pref_message_text_size": {
+    "message": "Lettertypegrootte van berichten"
+  },
+  "pref_view_log": {
+    "message": "Logboek bekijken"
+  },
+  "pref_other": {
+    "message": "Overig"
+  },
+  "pref_backup": {
+    "message": "Back-up"
+  },
+  "pref_backup_explain": {
+    "message": "Gesprekken back-uppen naar externe opslag"
+  },
+  "pref_backup_export_explain": {
+    "message": "Een back-up helpt je om een nieuwe installatie in te stellen op dit of een ander apparaat.\\n\\nDe back-up bevat alle berichten, contactpersonen en gesprekken en tevens je end-to-end Autocrypt-instellingen. Bewaar het back-upbestand op een veilige plaats of verwijder het zo snel mogelijk."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Back-up starten"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Back-up weggeschreven naar %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Sleutels beheren"
+  },
+  "pref_managekeys_ask_for_storage_permission": {
+    "message": "Delta Chat heeft toegang nodig tot je bestanden om sleutels te im- en exporteren."
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Geheime sleutels exporteren"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Geheime sleutels exporteren naar \\\"%1$s\\\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Geheime sleutels importeren"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Wil je geheime sleutels importeren uit \\\"%1$s\\\"?\\n\\n• Bestaande geheime sleutels worden niet verwijderd.\\n\\n• De laatst geïmporteerde sleutel wordt als standaard gebruikt tenzij de bestandsnaam \\\"legacy\\\" bevat."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Geheime sleutels weggeschreven naar \\\"%1$s\\\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Geheime sleutels geïmporteerd uit \\\"%1$s\\\"."
+  },
+  "pref_background": {
+    "message": "Gespreksachtergrond"
+  },
+  "autocrypt": {
+    "message": "Autocrypt"
+  },
+  "autocrypt_explain": {
+    "message": "Autocrypt is een nieuwe, open specificatie voor het automatisch instellen van end-to-end e-mailversleuteling.\\n\\nJe end-to-end-instellingen worden, indien nodig, automatisch gecreëerd en kunnen worden overgezet naar andere apparaten middels Autocrypt-instelberichten."
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Autocrypt-instelbericht versturen"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Een \\\"Autocrypt-instelbericht\\\" deelt je end-to-end-instellingen op een veilige manier met andere met Autocrypt compatibele apps.\\n\\nDe instellingen zijn versleuteld middels een code die hier wordt getoond en moet worden overgetypt op het andere apparaat."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Autocrypt-instelbericht versturen"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Je instellingen zijn naar jezelf verstuurd. Schakel over naar het andere apparaat en open het instelbericht. Je zou nu moeten worden gevraagd om een code. Typ de volgende getallen in het invoerveld:\\n\\n%1$s\\n\\nZodra je klaar bent, is je andere apparaat klaar voor gebruik."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Voorkeur voor end-to-end-versleuteling"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt-instelbericht"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Dit is het Autocrypt-instelbericht dat wordt gebruikt om je end-to-end-instellingen over te zetten naar andere clients.\\n\\nOm het te ontsleutelen en gebruiken, open je het bericht in een met Autocrypt compatibele app en voer je de code in die wordt getoond op het genererende apparaat."
+  },
+  "autocrypt_asm_click_body": {
+    "message": "Dit is het Autocrypt-instelbericht dat wordt gebruikt om je end-to-end-instellingen over te zetten naar andere clients.\\n\\nOm het te ontsleutelen en gebruiken, druk je op dit bericht."
+  },
+  "autocrypt_continue_transfer_title": {
+    "message": "Autocrypt-instelbericht"
+  },
+  "autocrypt_continue_transfer_please_enter_code": {
+    "message": "Voer de code die wordt getoond op het andere apparaat."
+  },
+  "autocrypt_continue_transfer_succeeded": {
+    "message": "End-to-end-instellingen overgezet. Dit apparaat is nu klaar voor gebruik i.c.m. Autocrypt, met dezelfde instellingen als het andere apparaat."
+  },
+  "autocrypt_continue_transfer_retry": {
+    "message": "Opnieuw"
+  },
+  "autocrypt_bad_setup_code": {
+    "message": "Onjuist code; probeer het opnieuw.\\n\\nAls je je code niet meer weet, verstuurd dan nog een Autocrypt-instelbericht vanaf het andere apparaat."
+  },
+  "systemmsg_group_name_changed": {
+    "message": "Groepsnaam gewijzigd van \\\"%1$s\\\" in \\\"%2$s\\\"."
+  },
+  "systemmsg_group_image_changed": {
+    "message": "Groepsafbeelding gewijzigd."
+  },
+  "systemmsg_group_image_deleted": {
+    "message": "Groepsafbeelding verwijderd."
+  },
+  "systemmsg_member_added": {
+    "message": "Deelnemer \\\"%1$s\\\" toegevoegd."
+  },
+  "systemmsg_member_removed": {
+    "message": "Deelnemer \\\"%1$s\\\" verwijderd."
+  },
+  "systemmsg_group_left": {
+    "message": "Groep verlaten."
+  },
+  "systemmsg_read_receipt_subject": {
+    "message": "Leesbevestiging"
+  },
+  "systemmsg_read_receipt_body": {
+    "message": "Dit is een leesbevestiging voor het bericht \\\"%1$s\\\".\\n\\nDit betekent dat het bericht getoond is op het apparaat van de ontvanger, maar niet dat het ook gelezen is."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Dit bericht kan niet worden ontsleuteld.\\n\\n• Het kan helpen om dit bericht te beantwoorden en de afzender te vragen het opnieuw te versturen.\\n\\n• Als je Delta Chat of een andere e-mailapp opnieuw hebt geïnstalleerd op dit of een ander apparaat, verstuur het instelbericht dan opnieuw."
+  },
+  "screenlock_title": {
+    "message": "Schermvergrendeling"
+  },
+  "screenlock_explain": {
+    "message": "Delta Chat-toegang vergrendelen met Android-schermvergrendeling of vingerafdruk"
+  },
+  "screenlock_authentication_failed": {
+    "message": "Authenticatie mislukt."
+  },
+  "screenlock_unlock_title": {
+    "message": "Delta Chat ontgrendelen"
+  },
+  "screenlock_unlock_description": {
+    "message": "Voer je op het systeem opgegeven geheim in om Delta Chat te ontgrendelen."
+  },
+  "screenlock_inactivity_timeout": {
+    "message": "Vergrendling na inactiviteit"
+  },
+  "screenlock_inactivity_timeout_explain": {
+    "message": "Delta Chat automatisch vergrendelen na een opgegeven periode van inactiviteit"
+  },
+  "screenlock_inactivity_timeout_interval": {
+    "message": "Periode van inactiviteit"
+  },
+  "qrscan_title": {
+    "message": "QR-code scannen"
+  },
+  "qrscan_hint": {
+    "message": "Plaatst je camera boven de QR-code"
+  },
+  "qrscan_ask_join_verified_group": {
+    "message": "Wil je lid worden van de goedgekeurde groep \\\"%1$s\\\"?"
+  },
+  "qrscan_ask_fingerprint_ask_oob": {
+    "message": "Wil je de contactpersoon \\\"%1$s\\\" goedkeuren en een gesprek beginnen?"
+  },
+  "qrscan_ask_chatting_fingerprint_ok": {
+    "message": "Contactpersoon \\\"%1$s\\\" goedgekeurd. Wil je een gesprek beginnen?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "De gescande vingerafdruk komt niet overeen met de vorige voor \\\"%1$s\\\"."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Deze QR-code bevat een vingerafdruk, maar geen e-mailadres.\\n\\nVoor out-of-band-goedkeuring, moet je eerst een beveiligde verbinding opzetten met de ontvanger."
+  },
+  "qrscan_contains_text": {
+    "message": "Gescande QR-codetekst:\\n\\n %1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Gescande QR-code-URL:\\n\\n %1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Vingerafdruk"
+  },
+  "qrscan_x_verified_introduce_myself": {
+    "message": "%1$s goedgekeurd; vertel iets over mezelf..."
+  },
+  "qrshow_title": {
+    "message": "QR-goedkeuringscode tonen"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s is lid geworden."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s is goedgekeurd."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s is veilig lid geworden van de groep."
+  },
+  "qrshow_join_verified_group_hint": {
+    "message": "Scan dit om lid te worden van de goedgekeurde groep \\\"%1$s\\\"."
+  },
+  "qrshow_join_verified_group_title": {
+    "message": "QR-uitnodgingscode"
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR-goedkeuringscode"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "\\\"%1$s\\\" Scan dit om een goedgekeurde contactpersoon in te stellen."
+  },
+  "notify_n_messages_in_m_chats": {
+    "message": "%1$d nieuwe berichten in %2$d gesprekken"
+  },
+  "notify_most_recent_from": {
+    "message": "Recentste van: %1$s"
+  },
+  "notify_media_message_with_text": {
+    "message": "Mediabericht: %s"
+  },
+  "notify_mark_all_read": {
+    "message": "Alles markeren als gelezen"
+  },
+  "notify_mark_read": {
+    "message": "Markeren als gelezen"
+  },
+  "notify_media_message": {
+    "message": "Mediabericht"
+  },
+  "notify_reply_button": {
+    "message": "Antwoord"
+  },
+  "notify_new_message": {
+    "message": "Nieuw bericht"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Achtergrondverbinding ingeschakeld"
+  },
+  "notify_priority_high": {
+    "message": "Hoog"
+  },
+  "notify_priority_max": {
+    "message": "Maximaal"
+  },
+  "notify_name_and_message": {
+    "message": "Naam en bericht"
+  },
+  "notify_name_only": {
+    "message": "Alleen naam"
+  },
+  "notify_no_name_or_message": {
+    "message": "Geen naam of bericht"
+  },
+  "notify_repeat_one_time": {
+    "message": "Eénmalig"
+  },
+  "notify_repeat_two_times": {
+    "message": "Tweemaal"
+  },
+  "notify_repeat_three_times": {
+    "message": "Driemaal"
+  },
+  "notify_repeat_five_times": {
+    "message": "Vijfmaal"
+  },
+  "notify_repeat_ten_times": {
+    "message": "Tienmaal"
+  },
+  "perm_required_title": {
+    "message": "Machtiging vereist"
+  },
+  "perm_continue": {
+    "message": "Doorgaan"
+  },
+  "perm_not_now": {
+    "message": "Niet nu"
+  },
+  "perm_explain_need_for_camera_access": {
+    "message": "Delta Chat heeft toegang nodig tot de camera om foto\\'s en video\\'s te kunnen vastleggen."
+  },
+  "perm_explain_need_for_mic_access": {
+    "message": "Delta Chat heeft toegang nodig tot je microfoon om audioberichten te kunnen versturen."
+  },
+  "perm_explain_need_for_storage_access": {
+    "message": "Delta Chat heeft toegang nodig tot je bestanden om bestanden te kunnen exporteren of back-ups te kunnen maken."
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat vereist de cameramachtiging om foto\\'s en video\\'s te kunnen maken, maar je hebt dit permanent geweigerd. Ga naar de appinstellingen, kies \\\"Machtigingen\\\" en schakel \\\"Camera\\\" in."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat vereist de microfoonmachtiging om audioberichten te kunnen versturen, maar je hebt dit permanent geweigerd. Ga naar de appinstellingen, kies \\\"Machtigingen\\\" en schakel \\\"Microfoon\\\" in."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat vereist de opslagmachtiging om foto\\'s, video\\'s of audio te kunnen bijvoegen of exporteren, maar je hebt dit permanent geweigerd. Ga naar de appinstellingen, kies \\\"Machtigingen\\\" en schakel \\\"Opslag\\\" in."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat vereist de locatiemachtiging om je locatie in te kunnen voegen, maar je hebt dit permanent geweigerd. Ga naar de appinstellingen, kies \\\"Machtigingen\\\" en schakel Locatie\\\" in."
+  },
   "n_minutes": {
     "one": "%d minuut",
     "other": "%d minuten"
@@ -373,9 +1051,25 @@
     "one": "%d uur",
     "other": "%d uur"
   },
+  "n_chats": {
+    "one": "1 gesprek",
+    "other": "%1$d gesprekken"
+  },
+  "n_contacts": {
+    "one": "1 contactpersoon",
+    "other": "%1$d contactpersonen"
+  },
+  "n_messages": {
+    "one": "1 bericht",
+    "other": "%1$d berichten"
+  },
+  "n_members": {
+    "one": "1 lid",
+    "other": "%1$d leden"
+  },
   "ask_delete_chat": {
-    "one": "Dit gesprek verwijderen? Het wordt niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server.",
-    "other": "Wil je %1% gesprekken verwijderen? Ze worden niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server."
+    "one": "Wil je dit gesprek verwijderen? Het worden niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server.",
+    "other": "Wil je %d gesprekken verwijderen? Ze worden niet langer getoond in de gesprekslijst, maar de berichten blijven bewaard op de server."
   },
   "ask_delete_messages": {
     "one": "Wil je het bericht verwijderen, zowel hier als op de server?",
@@ -386,7 +1080,7 @@
     "other": "%d gesprekken gearchiveerd"
   },
   "chat_unarchived": {
-    "one": "Gesprek gede-archiveerd",
+    "one": "Gesprek ge-dearchiveerd",
     "other": "%d gesprekken gede-archiveerd"
   },
   "chat_n_unread_messages": {
