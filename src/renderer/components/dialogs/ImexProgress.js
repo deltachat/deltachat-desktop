@@ -9,7 +9,7 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
-class ImexProgressDialog extends React.Component {
+class ImexProgress extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -44,4 +44,4 @@ class ImexProgressDialog extends React.Component {
     )
   }
 }
-module.exports = ImexProgressDialog
+module.exports = ImexProgress

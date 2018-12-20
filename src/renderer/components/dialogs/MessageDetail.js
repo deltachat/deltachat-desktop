@@ -1,14 +1,14 @@
 const React = require('react')
-const { MessageDetail } = require('../conversations')
+const conversations = require('../conversations')
 const { convertContactProps } = require('../Contact')
 const {
   Classes,
   Dialog
 } = require('@blueprintjs/core')
 
-class MessageDetailDialog extends React.Component {
+class MessageDetail extends React.Component {
   render () {
-    var { chat, message, onDelete, onClose } = this.props
+    var { chat, message, onClose } = this.props
     var isOpen = !!message
 
     const tx = window.translate
@@ -17,14 +17,14 @@ class MessageDetailDialog extends React.Component {
     if (isOpen) {
       var msg = message.msg
       msg.disableMenu = true
-      msg.onDelete = onDelete
+      msg.onDelete = message.onDelete
       let contacts
       if (message.isMe) {
         contacts = chat.contacts.map(convertContactProps)
       } else {
         contacts = [convertContactProps(message.contact)]
       }
-      body = <MessageDetail
+      body = <conversations.MessageDetail
         contacts={contacts}
         status={msg.status}
         message={msg}
@@ -48,4 +48,4 @@ class MessageDetailDialog extends React.Component {
   }
 }
 
-module.exports = MessageDetailDialog
+module.exports = MessageDetail

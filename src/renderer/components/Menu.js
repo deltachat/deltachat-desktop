@@ -1,9 +1,8 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const { ipcRenderer } = require('electron')
 const autobind = require('class-autobind').default
+const confirmation = require('./dialogs/confirmationDialog')
 
-const dialogs = require('./dialogs')
 const {
   Menu,
   MenuItem
@@ -25,7 +24,13 @@ class Controller {
 
   onLeaveGroup () {
     const selectedChat = this.props.selectedChat
-    ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+    const tx = window.translate
+    const message = tx('dialogs.leaveGroup', selectedChat.name)
+    confirmation(message, yes => {
+      if (yes) {
+        ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+      }
+    })
   }
 
   onArchiveChat (archive) {
@@ -39,7 +44,7 @@ class Controller {
     if (selectedChat && selectedChat.contacts.length) {
       var contact = selectedChat.contacts[0]
       var message = tx('dialogs.blockContact', contact.displayName)
-      dialogs.confirmation(message, yes => {
+      confirmation(message, yes => {
         if (yes) {
           ipcRenderer.sendSync('dispatchSync', 'blockContact', contact.id)
         }
@@ -51,7 +56,7 @@ class Controller {
     const selectedChat = this.props.selectedChat
     const tx = window.translate
     const message = tx('dialogs.deleteChat', selectedChat.name)
-    dialogs.confirmation(message, yes => {
+    confirmation(message, yes => {
       if (yes) {
         ipcRenderer.send('dispatch', 'deleteChat', selectedChat.id)
       }
@@ -62,22 +67,30 @@ class Controller {
     this.props.changeScreen('UnblockContacts')
   }
 
+  onContactRequests () {
+    ipcRenderer.send('dispatch', 'contactRequests')
+  }
+
   logout () {
     ipcRenderer.send('dispatch', 'logout')
+  }
+
+  onEncrInfo () {
+    this.props.openDialog('EncrInfo', { chat: this.props.selectedChat })
   }
 }
 
 class DeltaMenu extends React.Component {
   render () {
     const {
-      openSettings,
+      openDialog,
       selectedChat,
       showArchivedChats
     } = this.props
 
     const tx = window.translate
 
-    const isGroup = selectedChatIsGroup(selectedChat)
+    const isGroup = selectedChat && selectedChat.isGroup
     const controller = new Controller(this.props)
 
     const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
@@ -99,6 +112,10 @@ class DeltaMenu extends React.Component {
           icon='delete'
           text={deleteMsg}
           onClick={controller.onDeleteChat} />
+        <MenuItem
+          icon='lock'
+          text={tx('encryptionInfoMenu')}
+          onClick={controller.onEncrInfo} />
         {isGroup
           ? (
             <div>
@@ -120,6 +137,8 @@ class DeltaMenu extends React.Component {
         }
         <Menu.Divider />
       </div>
+    } else {
+      chatMenu = <Menu.Divider />
     }
 
     return (<Menu>
@@ -128,18 +147,16 @@ class DeltaMenu extends React.Component {
       <MenuItem
         icon='settings'
         text={tx('settingsTitle')}
-        onClick={openSettings}
+        onClick={() => openDialog('Settings')}
+      />
+      <MenuItem
+        icon='person'
+        text={tx('contactRequestMenu')}
+        onClick={controller.onContactRequests}
       />
       <MenuItem icon='log-out' text={tx('logout')} onClick={controller.logout} />
     </Menu>)
   }
-}
-
-function selectedChatIsGroup (chat) {
-  return [
-    C.DC_CHAT_TYPE_GROUP,
-    C.DC_CHAT_TYPE_VERIFIED_GROUP
-  ].includes(chat && chat.type)
 }
 
 module.exports = DeltaMenu

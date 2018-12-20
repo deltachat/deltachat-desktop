@@ -17,7 +17,7 @@ class ClickableLink extends React.Component {
   }
 }
 
-class AboutDialog extends React.Component {
+class About extends React.Component {
   render () {
     const { isOpen, onClose } = this.props
     const tx = window.translate
@@ -42,4 +42,4 @@ class AboutDialog extends React.Component {
   }
 }
 
-module.exports = AboutDialog
+module.exports = About

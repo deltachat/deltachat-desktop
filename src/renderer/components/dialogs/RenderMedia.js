@@ -1,5 +1,18 @@
 const React = require('react')
-const { Overlay } = require('@blueprintjs/core')
+const styled = require('styled-components').default
+const { Button, Overlay } = require('@blueprintjs/core')
+
+const RenderMediaWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`
+
+const Exit = styled.div`
+  float: right;
+  position: absolute;
+  right: 0;
+`
 
 class RenderMedia extends React.Component {
   render () {
@@ -23,12 +36,22 @@ class RenderMedia extends React.Component {
         elm = <video src={url} controls='true' />
         break
       default:
-        elm = <iframe width='100%' height='100%' src={url} />
+        elm = null
     }
     return <Overlay isOpen={Boolean(url)}
       className='attachment-overlay'
       onClose={onClose}>
-      {elm}
+      <RenderMediaWrapper>
+        {elm &&
+          <Exit>
+            <Button minimal large onClick={onClose} icon='cross' />
+          </Exit>
+        }
+        {elm}
+        <Button large onClick={message.onDownload} icon='download'>
+          {message.filename}
+        </Button>
+      </RenderMediaWrapper>
     </Overlay>
   }
 }

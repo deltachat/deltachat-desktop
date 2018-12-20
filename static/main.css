@@ -88,7 +88,9 @@ ul li button {
 }
 
 .attachment-overlay {
+  height: calc(100vh - 40px - 50px);
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
@@ -98,10 +100,13 @@ ul li button {
   margin-right: 2px;
 }
 
-.bp3-button{
-  user-select: none;
-  cursor: default;
+.module-conversation-list-item__is-group {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+  filter: invert(100%);
 }
+
 
 ::-webkit-scrollbar {
   width: 6px;

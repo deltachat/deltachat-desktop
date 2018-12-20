@@ -8,7 +8,7 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
-class DeadDropDialog extends React.Component {
+class DeadDrop extends React.Component {
   constructor (props) {
     super(props)
     this.yes = this.yes.bind(this)
@@ -17,7 +17,7 @@ class DeadDropDialog extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDropChat)
+    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDrop)
     this.close()
   }
 
@@ -26,16 +26,21 @@ class DeadDropDialog extends React.Component {
   }
 
   never () {
-    ipcRenderer.send('dispatch', 'blockContact', this.props.deadDropChat.contact.id)
+    var contactId = this.props.deadDrop.contact.id
+    ipcRenderer.send('dispatch', 'blockContact', contactId)
     this.close()
   }
 
   render () {
-    const { deadDropChat } = this.props
-    var nameAndAddr = deadDropChat && deadDropChat.deaddrop.contact && deadDropChat.deaddrop.contact.nameAndAddr
-    const title = 'Chat request'
-    const body = `Chat with ${nameAndAddr}?`
-    const isOpen = deadDropChat !== false
+    const { deadDrop } = this.props
+
+    const isOpen = !!deadDrop
+    const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
+
+    const tx = window.translate
+    const title = tx('contactRequestTitle')
+    const body = tx('chatWith', nameAndAddr)
+
     return (
       <Dialog
         isOpen={isOpen}
@@ -60,4 +65,4 @@ class DeadDropDialog extends React.Component {
   }
 }
 
-module.exports = DeadDropDialog
+module.exports = DeadDrop

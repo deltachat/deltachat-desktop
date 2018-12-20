@@ -125,8 +125,8 @@ class Composer extends React.Component {
   }
 
   focusInputMessage () {
-    let el = document.querySelector(`.${ComposerWrapper.styledComponentId} input`)
-    if (!el) return console.log(`Didn't find .ComposerWrapper input element`)
+    let el = document.querySelector(`.${ComposerWrapper.styledComponentId} textarea`)
+    if (!el) return console.log(`Didn't find .ComposerWrapper textarea element`)
     el.focus()
   }
 

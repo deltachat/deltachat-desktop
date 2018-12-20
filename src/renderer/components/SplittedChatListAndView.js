@@ -1,14 +1,13 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
-const { InputGroup } = require('@blueprintjs/core')
 
-const Settings = require('./Settings')
-const dialogs = require('./dialogs')
+const Media = require('./Media')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const Centered = require('./helpers/Centered')
+const SearchInput = require('./SearchInput.js')
 
 const Unselectable = require('./helpers/Unselectable')
 const StyleVariables = require('./style-variables')
@@ -44,19 +43,15 @@ class SplittedChatListAndView extends React.Component {
     super(props)
 
     this.state = {
-      settings: false,
-      deadDropChat: false,
-      queryStr: ''
+      queryStr: '',
+      media: false
     }
 
-    this.openSettings = this.openSettings.bind(this)
-    this.onCloseSettings = this.onCloseSettings.bind(this)
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
-    this.onDeadDropClick = this.onDeadDropClick.bind(this)
-    this.onDeadDropClose = this.onDeadDropClose.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
+    this.onDeadDropClick = this.onDeadDropClick.bind(this)
   }
 
   componentDidMount () {
@@ -76,35 +71,22 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('dispatch', 'searchChats', queryStr)
   }
 
-  onDeadDropClose () {
-    this.setState({ deadDropChat: false })
-  }
-
-  onDeadDropClick (chat) {
-    this.setState({ deadDropChat: chat })
+  onDeadDropClick (deadDrop) {
+    this.props.openDialog('DeadDrop', { deadDrop })
   }
 
   handleSearchChange (event) {
     this.searchChats(event.target.value)
   }
 
-  openSettings () {
-    this.setState({ settings: true })
-  }
-
-  onCloseSettings () {
-    this.setState({ settings: false })
-  }
-
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
-    const { deadDropChat, settings } = this.state
 
     const tx = window.translate
 
     const menu = <Menu
-      openSettings={this.openSettings}
+      openDialog={this.props.openDialog}
       changeScreen={this.props.changeScreen}
       selectedChat={selectedChat}
       showArchivedChats={showArchivedChats}
@@ -116,14 +98,9 @@ class SplittedChatListAndView extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               { showArchivedChats && (<Button className={Classes.MINIMAL} icon='undo' onClick={this.onHideArchivedChats} />) }
-              <InputGroup
-                type='search'
-                aria-label={tx('searchAriaLabel')}
-                large
-                placeholder={tx('searchPlaceholder')}
-                value={this.state.queryStr}
+              <SearchInput
                 onChange={this.handleSearchChange}
-                leftIcon='search'
+                value={this.state.queryStr}
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -132,14 +109,16 @@ class SplittedChatListAndView extends React.Component {
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
               </NavbarHeading>
+              {selectedChat && <Button
+                onClick={() => this.setState({ media: !this.state.media })}
+                minimal
+                icon={this.state.media ? 'chat' : 'media'} />}
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className={Classes.MINIMAL} icon='more' />
+                <Button minimal icon='more' />
               </Popover>
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <Settings isOpen={settings} onClose={this.onCloseSettings} />
-        <dialogs.DeadDrop deadDropChat={deadDropChat} onClose={this.onDeadDropClose} />
         <BelowNavbar>
           <ChatList
             chatList={deltachat.chatList}
@@ -151,12 +130,18 @@ class SplittedChatListAndView extends React.Component {
           />
           {
             selectedChat
-              ? (<ChatView
-                screenProps={this.props.screenProps}
-                userFeedback={this.props.userFeedback}
-                changeScreen={this.props.changeScreen}
+              ? this.state.media ? <Media
+                openDialog={this.props.openDialog}
                 chat={selectedChat}
-                deltachat={this.props.deltachat} />)
+              />
+                : (<ChatView
+                  screenProps={this.props.screenProps}
+                  onDeadDropClick={this.onDeadDropClick}
+                  userFeedback={this.props.userFeedback}
+                  changeScreen={this.props.changeScreen}
+                  openDialog={this.props.openDialog}
+                  chat={selectedChat}
+                  deltachat={this.props.deltachat} />)
               : (
                 <Unselectable>
                   <Centered>

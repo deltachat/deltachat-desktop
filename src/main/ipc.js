@@ -7,7 +7,10 @@ const {
   ipcMain
 } = require('electron')
 
+const rimraf = require('rimraf')
+const path = require('path')
 const fs = require('fs')
+const os = require('os')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -17,12 +20,19 @@ const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 
-function init (cwd) {
+function init (cwd, state) {
   // Events dispatched by buttons from the frontend
 
   const ipc = ipcMain
   const main = windows.main
-  const dc = new DeltaChat(cwd)
+
+  const dc = new DeltaChat(cwd, state.saved)
+
+  dc.on('ready', function () {
+    if (!app.logins.includes(dc.credentials.addr)) {
+      app.logins.push(dc.credentials.addr)
+    }
+  })
 
   ipc.once('ipcReady', function (e) {
     app.ipcReady = true
@@ -40,13 +50,7 @@ function init (cwd) {
     menu.init()
   })
 
-  // TODO: expose settings through UI
-  var settings = {
-    markRead: true,
-    notifications: true,
-    showNotificationContent: true
-  }
-  setupNotifications(dc, settings)
+  setupNotifications(dc, state.saved)
 
   // Called once to get the conversations css string
   ipc.on('get-css', (e) => {
@@ -59,12 +63,33 @@ function init (cwd) {
     dc.login(...args, render, txCoreStrings())
   })
 
+  ipc.on('forgetLogin', (e, addr) => {
+    var targetDir = dc.getPath(addr)
+    rimraf.sync(targetDir)
+    app.logins.splice(app.logins.indexOf(addr), 1)
+    render()
+  })
+
   dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
     windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
 
   dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
     windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
+  })
+
+  dc.on('DC_EVENT_ERROR', (error) => {
+    windows.main.send('error', error)
+  })
+
+  dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+    windows.main.send('error', error)
+  })
+
+  dc.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
+    if (Number(data1) === 0) { // login failed
+      windows.main.send('error', 'Login failed!')
+    }
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
@@ -96,11 +121,49 @@ function init (cwd) {
     })
   })
 
+  ipcMain.on('ondragstart', (event, filePath) => {
+    event.sender.startDrag({
+      file: filePath,
+      icon: ''
+    })
+  })
+
   // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
   ipc.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
+  })
+
+  ipc.on('updateSettings', (e, saved) => {
+    dc.updateSettings(saved)
+  })
+
+  ipc.on('updateCredentials', (e, credentials) => {
+    var dir = path.join(os.tmpdir(), Date.now().toString())
+    if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
+    var tmp = new DeltaChat(dir, state.saved)
+
+    tmp.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
+      if (Number(data1) === 0) { // login failed
+        windows.main.send('error', 'Login failed')
+        tmp.close()
+      }
+    })
+
+    function fakeRender () {
+      var json = dc.render()
+      var tmpJson = tmp.render()
+      json.configuring = tmpJson.configuring
+      windows.main.send('render', json)
+      if (tmpJson.ready) {
+        dc.login(credentials, render, txCoreStrings())
+        windows.main.send('success', 'Configuration success!')
+        tmp.close()
+      }
+    }
+
+    tmp.login(credentials, fakeRender, txCoreStrings())
   })
 
   function dispatch (name, ...args) {
@@ -141,7 +204,6 @@ function txCoreStrings () {
   strings[C.DC_STR_MSGADDMEMBER] = tx('DC_STR_MSGADDMEMBER')
   strings[C.DC_STR_MSGDELMEMBER] = tx('DC_STR_MSGDELMEMBER')
   strings[C.DC_STR_MSGGROUPLEFT] = tx('DC_STR_MSGGROUPLEFT')
-  strings[C.DC_STR_SELFNOTINGRP] = tx('DC_STR_SELFNOTINGRP')
   strings[C.DC_STR_E2E_AVAILABLE] = tx('DC_STR_E2E_AVAILABLE')
   strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
   strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')

@@ -1,6 +1,5 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
-const electron = require('electron')
 const events = require('events')
 const path = require('path')
 const log = require('./log')
@@ -14,10 +13,20 @@ class DeltaChatController extends events.EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  constructor (cwd) {
+  constructor (cwd, saved) {
     super()
     this.cwd = cwd
     this._resetState()
+    if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
+    this._saved = saved
+  }
+
+  updateSettings (saved) {
+    this._saved = saved
+  }
+
+  getPath (addr) {
+    return path.join(this.cwd, Buffer.from(addr).toString('hex'))
   }
 
   /**
@@ -25,7 +34,7 @@ class DeltaChatController extends events.EventEmitter {
    */
   login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
-    const cwd = path.join(this.cwd, Buffer.from(credentials.addr).toString('hex'))
+    const cwd = this.getPath(credentials.addr)
     log('Using deltachat instance', cwd)
     this._dc = new DeltaChat()
     var dc = this._dc
@@ -40,9 +49,7 @@ class DeltaChatController extends events.EventEmitter {
         log('Ready')
         this.ready = true
         this.configuring = false
-        if (!electron.app.logins.includes(credentials.addr)) {
-          electron.app.logins.push(credentials.addr)
-        }
+        this.emit('ready')
         render()
       }
       if (!dc.isConfigured()) {
@@ -59,6 +66,7 @@ class DeltaChatController extends events.EventEmitter {
       log(event, data1, data2)
       if (event === 2041) {
         log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        this.emit('DC_EVENT_CONFIGURE_PROGRESS', data1, data2)
         if (Number(data1) === 0) { // login failed
           this.logout()
         }
@@ -109,6 +117,12 @@ class DeltaChatController extends events.EventEmitter {
     })
 
     dc.on('DC_EVENT_ERROR', (error) => {
+      this.emit('DC_EVENT_ERROR', error)
+      log.error(error)
+    })
+
+    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+      this.emit('DC_EVENT_ERROR_NETWORK', first, error)
       log.error(error)
     })
   }
@@ -117,13 +131,17 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched when logging out from ChatList
    */
   logout () {
-    this._dc.close()
-    this._dc = null
-
+    this.close()
     this._resetState()
 
     log('Logged out')
     if (typeof this._render === 'function') this._render()
+  }
+
+  close () {
+    if (!this._dc) return
+    this._dc.close()
+    this._dc = null
   }
 
   /**
@@ -188,14 +206,15 @@ class DeltaChatController extends events.EventEmitter {
   /**
    * Dispatched when accepting a chat in DeadDrop
    */
-  chatWithContact (deadDropChat) {
-    log('chat with dead drop', deadDropChat)
-    const contact = this._dc.getContact(deadDropChat.deaddrop.contact.id)
+  chatWithContact (deadDrop) {
+    log('chat with dead drop', deadDrop)
+    const contact = this._dc.getContact(deadDrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log(`Added contact ${name} (${address})`)
-    this._dc.createChatByMessageId(deadDropChat.deaddrop.messageId)
+    var chatId = this._dc.createChatByMessageId(deadDrop.id)
+    if (chatId) this.selectChat(chatId)
   }
 
   /**
@@ -359,6 +378,30 @@ class DeltaChatController extends events.EventEmitter {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
   }
 
+  setConfig (key, value) {
+    return this._dc.setConfig(key, String(value))
+  }
+
+  getConfig (key) {
+    return this._dc.getConfig(key)
+  }
+
+  getAdvancedSettings () {
+    return {
+      addr: this._dc.getConfig('addr'),
+      mailUser: this._dc.getConfig('mail_user'),
+      mailServer: this._dc.getConfig('mail_server'),
+      mailPort: this._dc.getConfig('mail_port'),
+      mailSecurity: this._dc.getConfig('mail_security'),
+      sendUser: this._dc.getConfig('send_user'),
+      sendPw: this._dc.getConfig('send_pw'),
+      sendServer: this._dc.getConfig('send_server'),
+      sendPort: this._dc.getConfig('send_port'),
+      sendSecurity: this._dc.getConfig('send_security'),
+      e2ee_enabled: this._dc.getConfig('e2ee_enabled')
+    }
+  }
+
   /**
    * Returns the state in json format
    */
@@ -373,7 +416,6 @@ class DeltaChatController extends events.EventEmitter {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
-      contacts: this._contacts(),
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
       chatList,
@@ -402,22 +444,11 @@ class DeltaChatController extends events.EventEmitter {
 
       chat.summary = list.getSummary(i).toJson()
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
+      chat.isGroup = isGroupChat(chat)
+
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
-        const msg = this._dc.getMessage(messageId)
-        const fromId = msg && msg.getFromId()
-
-        if (!fromId) {
-          log.warning('Ignoring DEADDROP due to missing fromId')
-          continue
-        }
-
-        const contact = this._dc.getContact(fromId)
-
-        chat.deaddrop = {
-          messageId,
-          contact: contact.toJson()
-        }
+        chat.deaddrop = this._deadDropMessage(messageId)
       }
 
       chatList.push(chat)
@@ -425,8 +456,25 @@ class DeltaChatController extends events.EventEmitter {
     return chatList
   }
 
+  _deadDropMessage (id) {
+    const msg = this._dc.getMessage(id)
+    const fromId = msg && msg.getFromId()
+
+    if (!fromId) {
+      log.warning('Ignoring DEADDROP due to missing fromId')
+      return
+    }
+
+    const contact = this._dc.getContact(fromId).toJson()
+    return { id, contact }
+  }
+
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
+    if (selectedChatId === C.DC_CHAT_ID_DEADDROP) {
+      selectedChat = this._dc.getChat(selectedChatId)
+      if (selectedChat) selectedChat = selectedChat.toJson()
+    }
     if (!selectedChat) {
       this._selectedChatId = null
       return null
@@ -436,11 +484,14 @@ class DeltaChatController extends events.EventEmitter {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
-    this._dc.markSeenMessages(selectedChat.messageIds)
-
     var messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
     selectedChat.totalMessages = messageIds.length
     selectedChat.messages = this._messagesToRender(messageIds)
+
+    if (this._saved.markRead) {
+      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+    }
+
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
       return this._dc.getContact(id).toJson()
     })
@@ -478,6 +529,8 @@ class DeltaChatController extends events.EventEmitter {
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     const filemime = msg && msg.getFilemime()
+    const filename = msg && msg.getFilename()
+    const filesize = msg && msg.getFilebytes()
     const fromId = msg && msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
@@ -489,6 +542,8 @@ class DeltaChatController extends events.EventEmitter {
       id,
       msg: msg.toJson(),
       filemime,
+      filename,
+      filesize,
       fromId,
       isMe,
       contact,
@@ -501,6 +556,12 @@ class DeltaChatController extends events.EventEmitter {
     this._render()
   }
 
+  forwardMessage (msgId, contactId) {
+    var chatId = this._dc.getChatIdByContactId(contactId)
+    this._dc.forwardMessages(msgId, chatId)
+    this.selectChat(chatId)
+  }
+
   _blockedContacts (...args) {
     if (!this._dc) return []
     return this._dc.getBlockedContacts(...args).map(id => {
@@ -508,15 +569,25 @@ class DeltaChatController extends events.EventEmitter {
     })
   }
 
-  /**
-   * Internal
-   * Returns contacts in json format
-   */
-  _contacts (...args) {
-    if (!this._dc) return []
-    return this._dc.getContacts(...args).map(id => {
+  getContacts (listFlags, queryStr) {
+    var distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
+    return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
+  }
+
+  contactRequests () {
+    this.selectChat(C.DC_CHAT_ID_DEADDROP)
+  }
+
+  getEncrInfo (contactId) {
+    return this._dc.getContactEncryptionInfo(contactId)
+  }
+
+  getChatMedia (msgType, orMsgType) {
+    if (!this._selectedChatId) return
+    var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType, orMsgType)
+    return mediaMessages.map(this.messageIdToJson.bind(this))
   }
 
   /**
@@ -538,6 +609,13 @@ function addServerFlags (credentials) {
   return Object.assign({}, credentials, {
     serverFlags: serverFlags(credentials)
   })
+}
+
+function isGroupChat (chat) {
+  return [
+    C.DC_CHAT_TYPE_GROUP,
+    C.DC_CHAT_TYPE_VERIFIED_GROUP
+  ].includes(chat && chat.type)
 }
 
 function serverFlags ({ mailSecurity, sendSecurity }) {

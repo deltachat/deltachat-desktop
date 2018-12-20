@@ -4,64 +4,10 @@ const { MessageBody, Quote, EmbeddedContact, Timestamp } = require('./conversati
 const { ExpireTimer, getIncrement } = require('../../../conversations/build/components/conversation/ExpireTimer')
 const ContactName = require('./ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const {
-  isImageTypeSupported,
-  isVideoTypeSupported
-} = require('../../../conversations/build/util/GoogleChrome')
+const Attachment = require('./Attachment')
 
-const MIME = require('../../../conversations/build/types/MIME')
-
-const MINIMUM_IMG_HEIGHT = 150
-const MAXIMUM_IMG_HEIGHT = 300
 const EXPIRATION_CHECK_MINIMUM = 2000
 const EXPIRED_DELAY = 600
-
-function isImage (attachment) {
-  return (
-    attachment &&
-    attachment.contentType &&
-    isImageTypeSupported(attachment.contentType)
-  )
-}
-
-function hasImage (attachment) {
-  return attachment && attachment.url
-}
-
-function isVideo (attachment) {
-  return (
-    attachment &&
-    attachment.contentType &&
-    isVideoTypeSupported(attachment.contentType)
-  )
-}
-
-function hasVideoScreenshot (attachment) {
-  return attachment && attachment.screenshot && attachment.screenshot.url
-}
-
-function isAudio (attachment) {
-  return (
-    attachment && attachment.contentType && MIME.isAudio(attachment.contentType)
-  )
-}
-
-function getExtension ({ fileName, contentType }) {
-  if (fileName && fileName.indexOf('.') >= 0) {
-    const lastPeriod = fileName.lastIndexOf('.')
-    const extension = fileName.slice(lastPeriod + 1)
-    if (extension.length) {
-      return extension
-    }
-  }
-
-  const slash = contentType.indexOf('/')
-  if (slash >= 0) {
-    return contentType.slice(slash + 1)
-  }
-
-  return null
-}
 
 class Message extends React.Component {
   constructor (props) {
@@ -76,8 +22,7 @@ class Message extends React.Component {
 
     this.state = {
       expiring: false,
-      expired: false,
-      imageBroken: false
+      expired: false
     }
   }
 
@@ -126,14 +71,6 @@ class Message extends React.Component {
       }
       this.expiredTimeout = setTimeout(setExpired, EXPIRED_DELAY)
     }
-  }
-
-  handleImageError () {
-    // tslint:disable-next-line no-console
-    console.log('Message: Image failed to load; failing over to placeholder')
-    this.setState({
-      imageBroken: true
-    })
   }
 
   renderAvatar () {
@@ -292,6 +229,10 @@ class Message extends React.Component {
     )
   }
 
+  renderAttachment () {
+    return Attachment.render(this.props)
+  }
+
   renderEmbeddedContact () {
     const {
       collapseMetadata,
@@ -340,204 +281,6 @@ class Message extends React.Component {
     )
   }
 
-  renderAttachment () {
-    const {
-      i18n,
-      attachment,
-      text,
-      collapseMetadata,
-      conversationType,
-      direction,
-      quote,
-      onClickAttachment
-    } = this.props
-    const { imageBroken } = this.state
-
-    if (!attachment) {
-      return null
-    }
-
-    const withCaption = Boolean(text)
-    // For attachments which aren't full-frame
-    const withContentBelow = withCaption || !collapseMetadata
-    const withContentAbove =
-      quote || (conversationType === 'group' && direction === 'incoming')
-
-    if (isImage(attachment)) {
-      if (imageBroken || !attachment.url) {
-        return (
-          <div
-            className={classNames(
-              'module-message__broken-image',
-              `module-message__broken-image--${direction}`
-            )}
-          >
-            {i18n('imageFailedToLoad')}
-          </div>
-        )
-      }
-
-      // Calculating height to prevent reflow when image loads
-      const height = Math.max(MINIMUM_IMG_HEIGHT, attachment.height || 0)
-
-      return (
-        <div
-          onClick={onClickAttachment}
-          role='button'
-          className={classNames(
-            'module-message__attachment-container',
-            withCaption
-              ? 'module-message__attachment-container--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__attachment-container--with-content-above'
-              : null
-          )}
-        >
-          <img
-            onError={this.handleImageErrorBound}
-            className='module-message__img-attachment'
-            height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
-            src={attachment.url}
-            alt={i18n('imageAttachmentAlt')}
-          />
-          <div
-            className={classNames(
-              'module-message__img-border-overlay',
-              withCaption
-                ? 'module-message__img-border-overlay--with-content-below'
-                : null,
-              withContentAbove
-                ? 'module-message__img-border-overlay--with-content-above'
-                : null
-            )}
-          />
-          {!withCaption && !collapseMetadata ? (
-            <div className='module-message__img-overlay' />
-          ) : null}
-        </div>
-      )
-    } else if (isVideo(attachment)) {
-      if (imageBroken || !attachment.url) {
-        return (
-          <div
-            role='button'
-            onClick={onClickAttachment}
-            className={classNames(
-              'module-message__broken-video-screenshot',
-              `module-message__broken-video-screenshot--${direction}`
-            )}
-          >
-            {i18n('videoScreenshotFailedToLoad')}
-          </div>
-        )
-      }
-
-      // Calculating height to prevent reflow when image loads
-      const height = Math.max(MINIMUM_IMG_HEIGHT, 0)
-
-      return (
-        <div
-          onClick={onClickAttachment}
-          role='button'
-          className={classNames(
-            'module-message__attachment-container',
-            withCaption
-              ? 'module-message__attachment-container--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__attachment-container--with-content-above'
-              : null
-          )}
-        >
-          <video
-            onError={this.handleImageErrorBound}
-            className='module-message__img-attachment'
-            height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
-            src={attachment.url}
-          />
-          <div
-            className={classNames(
-              'module-message__img-border-overlay',
-              withCaption
-                ? 'module-message__img-border-overlay--with-content-below'
-                : null,
-              withContentAbove
-                ? 'module-message__img-border-overlay--with-content-above'
-                : null
-            )}
-          />
-          {!withCaption && !collapseMetadata ? (
-            <div className='module-message__img-overlay' />
-          ) : null}
-          <div className='module-message__video-overlay__circle'>
-            <div className='module-message__video-overlay__play-icon' />
-          </div>
-        </div>
-      )
-    } else if (isAudio(attachment)) {
-      return (
-        <audio
-          controls
-          className={classNames(
-            'module-message__audio-attachment',
-            withContentBelow
-              ? 'module-message__audio-attachment--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__audio-attachment--with-content-above'
-              : null
-          )}
-        >
-          <source src={attachment.url} />
-        </audio>
-      )
-    } else {
-      const { fileName, fileSize, contentType } = attachment
-      const extension = getExtension({ contentType, fileName })
-
-      return (
-        <div
-          className={classNames(
-            'module-message__generic-attachment',
-            withContentBelow
-              ? 'module-message__generic-attachment--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__generic-attachment--with-content-above'
-              : null
-          )}
-        >
-          <div className='module-message__generic-attachment__icon'>
-            {extension ? (
-              <div className='module-message__generic-attachment__icon__extension'>
-                {extension}
-              </div>
-            ) : null}
-          </div>
-          <div className='module-message__generic-attachment__text'>
-            <div
-              className={classNames(
-                'module-message__generic-attachment__file-name',
-                `module-message__generic-attachment__file-name--${direction}`
-              )}
-            >
-              {fileName}
-            </div>
-            <div
-              className={classNames(
-                'module-message__generic-attachment__file-size',
-                `module-message__generic-attachment__file-size--${direction}`
-              )}
-            >
-              {fileSize}
-            </div>
-          </div>
-        </div>
-      )
-    }
-  }
-
   renderMetadata () {
     const {
       padlock,
@@ -551,7 +294,6 @@ class Message extends React.Component {
       text,
       timestamp
     } = this.props
-    const { imageBroken } = this.state
 
     if (collapseMetadata) {
       return null
@@ -559,9 +301,8 @@ class Message extends React.Component {
 
     const withImageNoCaption = Boolean(
       !text &&
-        !imageBroken &&
-        ((isImage(attachment) && hasImage(attachment)) ||
-          (isVideo(attachment) && hasVideoScreenshot(attachment)))
+        ((Attachment.isImage(attachment) && Attachment.hasImage(attachment)) ||
+          (Attachment.isVideo(attachment) && Attachment.hasVideoScreenshot(attachment)))
     )
     const showError = status === 'error' && direction === 'outgoing'
 

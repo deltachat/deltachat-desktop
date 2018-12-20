@@ -6,6 +6,8 @@ const Message = require('./Message')
 const { remote, ipcRenderer } = require('electron')
 const StyleVariables = require('./style-variables')
 const moment = require('moment')
+const mime = require('mime-types')
+const filesizeConverter = require('filesize')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -76,7 +78,7 @@ const MessageWrapper = styled.div`
     color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
   }
 
-  .module-message__metadata__status-icon--read {
+  .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
     background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
   }
 
@@ -87,13 +89,23 @@ const MessageWrapper = styled.div`
   .module-message__text--incoming a {
     color: #070c14;
   }
+
+  .module-message__generic-attachment__file-size--incoming,
+  .module-message__generic-attachment__file-name--incoming {
+    color: black;
+  }
+
+  .module-message__generic-attachment__icon__extension{
+    font-family: monospace;
+  }
 `
 
 function render (props) {
-  const { message, onClickSetupMessage } = props
+  const { message, onClickSetupMessage, onClickContactRequest } = props
 
   let key = message.id
   let body
+
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
     key = message.daymarker.id
     body = (
@@ -113,6 +125,13 @@ function render (props) {
         onClick={onClickSetupMessage}>
         <RenderMessage {...props} />
       </SetupMessage>
+    )
+  } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
+    body = (
+      <div key={message.id}
+        onClick={onClickContactRequest}>
+        <RenderMessage {...props} />
+      </div>
     )
   } else {
     body = <RenderMessage {...props} />
@@ -185,14 +204,6 @@ class RenderMessage extends React.Component {
 }
 
 function convert (message) {
-  message.onReply = () => {
-    console.log('reply to', message)
-  }
-
-  message.onForward = () => {
-    console.log('forward to')
-  }
-
   message.onDownload = () => {
     var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
     remote.dialog.showSaveDialog({
@@ -220,7 +231,8 @@ function convert (message) {
     msg.attachment = {
       url: msg.file,
       contentType: convertContentType(message),
-      filename: msg.text
+      fileName: message.filename || msg.text,
+      fileSize: filesizeConverter(message.filesize)
     }
   }
   return message
@@ -248,19 +260,23 @@ function convertMessageStatus (s) {
 }
 
 function convertContentType (message) {
-  var filemime = message.filemime
-  if (!filemime) return 'image/jpg'
-  if (filemime === 'application/octet-stream') {
-    switch (message.msg.viewType) {
-      case C.DC_MSG_IMAGE:
-        return 'image/jpg'
-      case C.DC_MSG_VOICE:
-        return 'audio/ogg'
-      default:
-        return 'application/octect-stream'
-    }
+  const filemime = message.filemime
+
+  if (!filemime) return 'application/octet-stream'
+  if (filemime !== 'application/octet-stream') return filemime
+
+  switch (message.msg.viewType) {
+    case C.DC_MSG_IMAGE:
+      return 'image/jpg'
+    case C.DC_MSG_VOICE:
+      return 'audio/ogg'
+    case C.DC_MSG_FILE:
+      const type = mime.lookup(message.msg.file)
+      if (type) return type
+      else return 'application/octet-stream'
+    default:
+      return 'application/octet-stream'
   }
-  return filemime
 }
 
 function convertChatType (type) {

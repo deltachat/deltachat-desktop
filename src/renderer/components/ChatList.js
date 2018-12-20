@@ -3,7 +3,6 @@ const C = require('deltachat-node/constants')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
 const Unselectable = require('./helpers/Unselectable')
-
 const StyleVariables = require('./style-variables')
 
 const ChatListWrapper = styled.div`
@@ -60,7 +59,7 @@ const ContactRequestItemWrapper = styled.div`
 
 class ChatList extends React.Component {
   render () {
-    const { chatList, selectedChatId, showArchivedChats } = this.props
+    const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
 
@@ -88,7 +87,7 @@ class ChatList extends React.Component {
                       text: chat.summary.text2,
                       status: 'delivered'
                     }}
-                    onClick={this.props.onDeadDropClick.bind(null, chat)}
+                    onClick={() => onDeadDropClick(chat.deaddrop)}
                     isSelected={chat.id === selectedChatId}
                     unreadCount={chat.freshMessageCounter}
                   />
@@ -121,6 +120,7 @@ class ChatList extends React.Component {
                   i18n={i18n}
                   isSelected={chat.id === selectedChatId}
                   isVerified={chat.isVerified}
+                  isGroup={chat.isGroup}
                   unreadCount={chat.freshMessageCounter}
                 />
               )
