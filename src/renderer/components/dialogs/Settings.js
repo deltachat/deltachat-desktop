@@ -45,6 +45,8 @@ class Settings extends React.Component {
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
+    this.onKeysExport = this.onKeysExport.bind(this)
+    this.onKeysImport = this.onKeysImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
   }
@@ -66,6 +68,36 @@ class Settings extends React.Component {
 
   onKeyTransferComplete () {
     this.setState({ keyTransfer: false })
+  }
+
+  onKeysImport () {
+    var opts = {
+      title: window.translate('keysImport'),
+      defaultPath: remote.app.getPath('downloads'),
+      properties: ['openDirectory']
+    }
+    remote.dialog.showOpenDialog(opts, filenames => {
+      if (!filenames || !filenames.length) return
+      ipcRenderer.send('dispatch', 'keysImport', filenames[0])
+    })
+  }
+
+  onKeysExport () {
+    // TODO: ask for the user's password and check it using
+    // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
+    const tx = window.translate
+    confirmationDialog(tx('keysExportConfirmationMessage'), response => {
+      if (!response) return
+      var opts = {
+        title: window.translate('keysExport'),
+        defaultPath: remote.app.getPath('downloads'),
+        properties: ['openDirectory']
+      }
+      remote.dialog.showOpenDialog(opts, filenames => {
+        if (!filenames || !filenames.length) return
+        ipcRenderer.send('dispatch', 'keysExport', filenames[0])
+      })
+    })
   }
 
   onBackupImport () {
@@ -190,6 +222,13 @@ class Settings extends React.Component {
               <ButtonGroup>
                 <Button onClick={this.onBackupExport}>{tx('pref_backup_export_start_button')}</Button>
                 <Button onClick={this.onBackupImport}>{tx('import_backup_title')}</Button>
+              </ButtonGroup>
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('settingsManageKeys')}</H5>
+              <ButtonGroup>
+                <Button onClick={this.onKeysExport}>{tx('keysExport')}...</Button>
+                <Button onClick={this.onKeysImport}>{tx('keysImport')}...</Button>
               </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
