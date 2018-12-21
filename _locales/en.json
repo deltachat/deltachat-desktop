@@ -895,6 +895,18 @@
   },
   "autocryptEnterMessage": {
     "message": "Please enter the setup code that is displayed on the other device."
+  },
+  "keysImport": {
+    "message": "Import keys"
+  },
+  "keysExport": {
+    "message": "Export keys"
+  },
+  "keysExportConfirmationMessage": {
+    "message": "Exporting your end-to-end setup! Keep these keys in a safe place and delete them as soon as they are not needed anymore."
+  },
+  "settingsManageKeys": {
+    "message": "Manage Keys"
   }
 }
 

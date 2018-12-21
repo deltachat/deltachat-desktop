@@ -370,8 +370,16 @@ class DeltaChatController extends events.EventEmitter {
     return this._dc.getSecurejoinQrCode(chatId)
   }
 
-  backupImport (filename) {
-    this._dc.importExport(C.DC_IMEX_IMPORT_BACKUP, filename)
+  checkPassword (password) {
+    return password === this.getConfig('mail_pw')
+  }
+
+  keysImport (directory) {
+    this._dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory)
+  }
+
+  keysExport (directory) {
+    this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
   }
 
   backupExport (directory) {
