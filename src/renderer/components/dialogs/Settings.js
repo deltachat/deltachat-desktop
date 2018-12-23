@@ -12,7 +12,8 @@ const {
   Classes,
   Button,
   Dialog,
-  Switch
+  Switch,
+  Callout
 } = require('@blueprintjs/core')
 
 const Login = require('../Login')
@@ -118,27 +119,27 @@ class Settings extends React.Component {
     const { userDetails, advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
-    const title = tx('settingsTitle')
+    const title = tx('menu_settings')
 
     return (
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={userDetails !== false}
-          title={tx('settingsAccountTitle')}
+          title={tx('pref_password_and_account_settings')}
           icon='settings'
           onClose={() => this.setState({ userDetails: false })}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settingsAccountTitle')}</H5>
+              <H5>{tx('pref_password_and_account_settings')}</H5>
               <Login
                 {...advancedSettings}
                 mailPw={this.state.mailPw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
-                <Button type='submit' text={tx('settingsUpdateAccount')} />
-                <Button type='cancel' text={tx('login.cancel')} />
+                <Button type='submit' text={tx('login_title')} />
+                <Button type='cancel' text={tx('cancel')} />
               </Login>
             </Card>
           </SettingsDialog>
@@ -152,33 +153,34 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{deltachat.credentials.addr}</H5>
               <Button onClick={() => this.setState({ userDetails: true })}>
-                {tx('settingsAccountTitle')}
+                {tx('pref_password_and_account_settings')}
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settingsAutocryptSection')}</H5>
-              <p>{tx('autocryptDescription')}</p>
+              <H5>{tx('autocrypt')}</H5>
+              <Callout>{tx('autocrypt_explain')}</Callout>
+              <br/>
               <Switch
                 checked={advancedSettings.e2ee_enabled}
-                label={tx('settingsEndToEndSetup')}
+                label={tx('autocrypt_prefer_e2ee')}
                 onChange={this.handleEncryptionToggle}
               />
               <Button onClick={this.initiateKeyTransfer}>
-                {tx('initiateKeyTransferTitle')}
+                {tx('autocrypt_send_asm_button')}
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settingsBackupSection')}</H5>
+              <H5>{tx('pref_backup')}</H5>
               <ButtonGroup>
-                <Button onClick={this.onBackupExport}>{tx('exportBackup')}...</Button>
-                <Button onClick={this.onBackupImport}>{tx('importBackup')}...</Button>
+                <Button onClick={this.onBackupExport}>{tx('pref_backup_export_start_button')}</Button>
+                <Button onClick={this.onBackupImport}>{tx('import_backup_title')}</Button>
               </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settingsOptionsSection')}</H5>
+              <H5>{tx('pref_privacy')}</H5>
               <Switch
                 checked={saved && saved.markRead}
-                label={tx('settingsMarkRead')}
+                label={tx('pref_read_receipts')}
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
               />
             </Card>
