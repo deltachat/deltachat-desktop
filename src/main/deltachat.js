@@ -50,6 +50,7 @@ class DeltaChatController extends events.EventEmitter {
         this.ready = true
         this.configuring = false
         this.emit('ready')
+        log('dc_get_info', dc.getInfo())
         render()
       }
       if (!dc.isConfigured()) {
