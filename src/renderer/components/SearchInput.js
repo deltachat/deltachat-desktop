@@ -7,7 +7,7 @@ module.exports = function (props) {
     type='search'
     aria-label={tx('searchAriaLabel')}
     large
-    placeholder={tx('searchPlaceholder')}
+    placeholder={tx('search')}
     leftIcon='search'
     {...props}
   />

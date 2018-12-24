@@ -93,8 +93,6 @@ class DeltaMenu extends React.Component {
     const isGroup = selectedChat && selectedChat.isGroup
     const controller = new Controller(this.props)
 
-    const archiveMsg = isGroup ? tx('archiveGroup') : tx('archiveChat')
-    const unArchiveMsg = isGroup ? tx('unArchiveGroup') : tx('unArchiveChat')
     const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
 
     let chatMenu = <div />
@@ -103,14 +101,14 @@ class DeltaMenu extends React.Component {
       chatMenu = <div>
         <Menu.Divider />
         {showArchivedChats
-          ? <MenuItem icon='export' text={unArchiveMsg}
+          ? <MenuItem icon='export' text={tx('menu_unarchive_chat')}
             onClick={() => controller.onArchiveChat(false)} />
-          : <MenuItem icon='import' text={archiveMsg}
+          : <MenuItem icon='import' text={tx('menu_archive_chat')}
             onClick={() => controller.onArchiveChat(true)} />
         }
         <MenuItem
           icon='delete'
-          text={deleteMsg}
+          text={tx('menu_delete_chat')}
           onClick={controller.onDeleteChat} />
         <MenuItem
           icon='lock'
@@ -121,17 +119,17 @@ class DeltaMenu extends React.Component {
             <div>
               <MenuItem
                 icon='edit'
-                text={tx('editGroup')}
+                text={tx('menu_edit_group')}
                 onClick={controller.onEditGroup}
               />
               <MenuItem
-                icon='log-out' text={tx('leaveGroup')}
+                icon='log-out' text={tx('menu_leave_group')}
                 onClick={controller.onLeaveGroup}
               />
             </div>
           ) : <MenuItem
             icon='blocked-person'
-            text={tx('blockContact')}
+            text={tx('menu_block_contact')}
             onClick={controller.onBlockContact}
           />
         }
