@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.97.0] - 2018-12-24
+
+### Changed
+* Upgrade `deltachat-node` to `0.30.0` (@ralphtheninja)
+
 ## [0.96.0] - 2018-12-11
 
 ### Added
@@ -279,6 +284,7 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...HEAD
+[0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
