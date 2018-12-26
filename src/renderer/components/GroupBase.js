@@ -130,6 +130,9 @@ class GroupBase extends React.Component {
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('show_qr_verify_code_desktop')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('show_qr_invite_code_desktop')}</button>) }
             <ContactList
+              sortFunc={(contactA, contactB) => {
+                return Number(this.contactInGroup(contactB.id)) - Number(this.contactInGroup(contactA.id))
+              }}
               childProps={(contact) => {
                 return { color: this.contactInGroup(contact.id) ? 'green' : '' }
               }}
