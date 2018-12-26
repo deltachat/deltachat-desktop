@@ -39,6 +39,9 @@ module.exports = styled.div`
 
   .bp3-icon > svg:not([fill]) {
     fill: ${StyleVariables.colors.deltaPrimaryFg};
+  }
+
+  .icon-rotated > .bp3-icon > svg:not([fill]){
     transform: rotate(90deg);
   }
 
