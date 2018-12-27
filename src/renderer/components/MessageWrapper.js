@@ -137,7 +137,7 @@ function render (props) {
     body = <RenderMessage {...props} />
   }
 
-  return <li tabindex='-1' key={key}>{body}</li>
+  return <li key={key}>{body}</li>
 }
 
 /**
