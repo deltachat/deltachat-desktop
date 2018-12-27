@@ -57,55 +57,55 @@ function getAvailableLanguages () {
 function getMenuTemplate () {
   return [
     {
-      translate: 'menu.file',
+      translate: 'global_menu_file_desktop',
       submenu: [
         {
-          translate: 'menu.file.quit',
+          translate: 'global_menu_file_quit_desktop',
           role: 'quit'
         }
       ]
     },
     {
-      translate: 'menu.edit',
+      translate: 'global_menu_edit_desktop',
       submenu: [
         {
-          translate: 'menu.edit.undo',
+          translate: 'global_menu_edit_undo_desktop',
           role: 'undo'
         },
         {
-          translate: 'menu.edit.redo',
+          translate: 'global_menu_edit_redo_desktop',
           role: 'redo'
         },
         {
           type: 'separator'
         },
         {
-          translate: 'menu.edit.cut',
+          translate: 'global_menu_edit_cut_desktop',
           role: 'cut'
         },
         {
-          translate: 'menu.edit.copy',
+          translate: 'global_menu_edit_copy_desktop',
           role: 'copy'
         },
         {
-          translate: 'menu.edit.paste',
+          translate: 'global_menu_edit_paste_desktop',
           role: 'paste'
         },
         {
-          translate: 'menu.edit.delete',
+          translate: 'global_menu_edit_delete_desktop',
           role: 'delete'
         },
         {
-          translate: 'menu.edit.selectall',
+          translate: 'global_menu_edit_selectall_desktop',
           role: 'selectall'
         }
       ]
     },
     {
-      translate: 'menu.view',
+      translate: 'global_menu_view_desktop',
       submenu: [
         {
-          translate: 'menu.view.floatontop',
+          translate: 'global_menu_view_floatontop_desktop',
           type: 'checkbox',
           click: () => windows.main.toggleAlwaysOnTop()
         },
@@ -113,10 +113,10 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          translate: 'menu.view.developer',
+          translate: 'global_menu_view_developer_desktop',
           submenu: [
             {
-              translate: 'menu.view.developer.tools',
+              translate: 'global_menu_view_developer_tools_desktop',
               accelerator: process.platform === 'darwin'
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
@@ -127,26 +127,26 @@ function getMenuTemplate () {
       ]
     },
     {
-      translate: 'menu.preferences',
+      translate: 'global_menu_preferences_desktop',
       submenu: [
         {
-          translate: 'menu.preferences.language',
+          translate: 'global_menu_preferences_language_desktop',
           submenu: getAvailableLanguages()
         }
       ]
     },
     {
-      translate: 'menu.help',
+      translate: 'global_menu_help_desktop',
       role: 'help',
       submenu: [
         {
-          translate: 'menu.help.learn',
+          translate: 'global_menu_help_learn_desktop',
           click: () => {
             electron.shell.openExternal(config.HOME_PAGE_URL)
           }
         },
         {
-          translate: 'menu.help.contribute',
+          translate: 'global_menu_help_contribute_desktop',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL)
           }
@@ -155,13 +155,13 @@ function getMenuTemplate () {
           type: 'separator'
         },
         {
-          translate: 'menu.help.report',
+          translate: 'global_menu_help_report_desktop',
           click: () => {
             electron.shell.openExternal(config.GITHUB_URL_ISSUES)
           }
         },
         {
-          translate: 'menu.help.about',
+          translate: 'global_menu_help_about_desktop',
           click: () => {
             windows.main.send('showAboutDialog')
           }
@@ -173,6 +173,7 @@ function getMenuTemplate () {
 
 function getMenuItem (menu, label) {
   for (let i = 0; i < menu.items.length; i++) {
+    console.log( menu.items[i])
     const menuItem = menu.items[i].submenu.items.find(function (item) {
       return item.label === label
     })

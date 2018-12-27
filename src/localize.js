@@ -17,7 +17,7 @@ function translate (messages) {
     if (!opts) opts = {}
     if (!entry) {
       console.error(
-        `translation: Attempted to get translation for nonexistent key '${key}'`
+        ` 	🌐translation: Attempted to get translation for nonexistent key '${key}'`
       )
       return key
     }
@@ -29,7 +29,7 @@ function translate (messages) {
       return val.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
           console.error(
-            `translation: Missing ${c}th argument for key '${key}'`
+            ` 	🌐translation: Missing ${c}th argument for key '${key}'`
           )
         }
         let replacement = substitutions[c].toString()
@@ -62,7 +62,11 @@ function getLocaleMessages (locale) {
     onDiskLocale + '.json'
   )
 
-  return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
+  try {
+    return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
+  } catch(err) {
+    throw new Error(`JSON parse error in language file '${targetFile}'`, err)
+  }
 }
 
 function setup (app, name) {
