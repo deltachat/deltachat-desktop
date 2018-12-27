@@ -17,7 +17,7 @@ function translate (messages) {
     if (!opts) opts = {}
     if (!entry) {
       console.error(
-        `translation: Attempted to get translation for nonexistent key '${key}'`
+        `%c[Translations]%c Attempted to get translation for nonexistent key %c'${key}'`, 'color:olive;background:white', '', 'background:yellow'
       )
       return key
     }
@@ -29,7 +29,7 @@ function translate (messages) {
       return val.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
           console.error(
-            `translation: Missing ${c}th argument for key '${key}'`
+            `%c[Translations]%c Missing ${c}th argument for key %c'${key}'`, 'color:olive;background:white', 'background:yellow'
           )
         }
         let replacement = substitutions[c].toString()
