@@ -240,7 +240,7 @@ function LoginScreen (props) {
       </NavbarWrapper>
       <div className='window'>
         <Card>
-          <H5>{tx('login_known_accounts_title')}</H5>
+          <H5>{tx('login_known_accounts_title_desktop')}</H5>
           <ul>
             {props.logins.map((login) => <LoginItem key={login}>
               <Button large minimal onClick={() => onClickLogin(login)}>

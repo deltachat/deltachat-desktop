@@ -1086,11 +1086,5 @@
   "chat_n_unread_messages": {
     "one": "%d unread message",
     "other": "%d unread messages"
-  },
-  "login_title_desktop": {
-    "message": "Welcome to DeltaChat"
-  },
-  "login_known_accounts_title_desktop": {
-    "message": "Known accounts"
   }
 }
