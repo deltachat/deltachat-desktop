@@ -86,6 +86,10 @@ function init (cwd, state) {
     windows.main.send('error', error)
   })
 
+  dc.on('DC_EVENT_SELF_NOT_IN_GROUP', (error) => {
+    windows.main.send('error', error)
+  })
+
   dc.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
     if (Number(data1) === 0) { // login failed
       windows.main.send('error', 'Login failed!')

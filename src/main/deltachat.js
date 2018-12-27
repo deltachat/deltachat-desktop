@@ -126,6 +126,11 @@ class DeltaChatController extends events.EventEmitter {
       this.emit('DC_EVENT_ERROR_NETWORK', first, error)
       log.error(error)
     })
+
+    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
+      this.emit('DC_EVENT_SELF_NOT_IN_GROUP', error)
+      log.error(error)
+    })
   }
 
   /**
