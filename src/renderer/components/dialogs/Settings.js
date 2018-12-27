@@ -159,7 +159,7 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
-              <br/>
+              <br />
               <Switch
                 checked={advancedSettings.e2ee_enabled}
                 label={tx('autocrypt_prefer_e2ee')}

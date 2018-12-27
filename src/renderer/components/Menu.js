@@ -93,8 +93,6 @@ class DeltaMenu extends React.Component {
     const isGroup = selectedChat && selectedChat.isGroup
     const controller = new Controller(this.props)
 
-    const deleteMsg = isGroup ? tx('deleteGroup') : tx('deleteChat')
-
     let chatMenu = <div />
 
     if (selectedChat) {

@@ -21,3 +21,19 @@ test('that translation files are valid json', t => {
     t.end()
   })
 })
+
+test('test translation method', t => {
+  const l = require('../../src/localize')
+  const translate = l.translate({
+    'test_a': {
+      message: 'foo %1$s %2$s blubb'
+    },
+    'test_b': {
+      message: 'fo2o %s %d blu2bb'
+    }
+  })
+
+  t.equal(translate('test_a', ['asd', 'dsa']), 'foo asd dsa blubb')
+  t.equal(translate('test_b', ['asd', 'dsa']), 'fo2o asd dsa blu2bb')
+  t.end()
+})

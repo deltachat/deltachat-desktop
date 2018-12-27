@@ -44,14 +44,14 @@ export function formatRelativeTime(
   } else if (diff.days() >= 1 || !isToday(timestamp)) {
     return timestamp.format(formats.d);
   } else if (diff.hours() >= 1) {
-    const key = extended ? 'hoursAgo' : 'hoursAgoShort';
+    const key = 'n_hours';
 
-    return i18n(key, [String(diff.hours())]);
+    return i18n(key, diff.hours(), { quantity: diff.hours() == 1 ? 'one' : 'other'});
   } else if (diff.minutes() >= 1) {
-    const key = extended ? 'minutesAgo' : 'minutesAgoShort';
+    const key = 'n_minutes';
 
-    return i18n(key, [String(diff.minutes())]);
+    return i18n(key, diff.minutes(), { quantity: diff.minutes() == 1 ? 'one' : 'other'});
   }
 
-  return i18n('justNow');
+  return i18n('now');
 }

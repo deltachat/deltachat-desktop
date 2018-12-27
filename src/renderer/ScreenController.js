@@ -234,13 +234,13 @@ function LoginScreen (props) {
       <NavbarWrapper>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>{tx('login_title')}</NavbarHeading>
+            <NavbarHeading>{tx('login_title_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
       </NavbarWrapper>
       <div className='window'>
         <Card>
-          <H5>{tx('loginKnownAccountsTitle')}</H5>
+          <H5>{tx('login_known_accounts_title')}</H5>
           <ul>
             {props.logins.map((login) => <LoginItem key={login}>
               <Button large minimal onClick={() => onClickLogin(login)}>

@@ -191,8 +191,8 @@ class Login extends React.Component {
             />
           </FormGroup>
           <FormGroup
-            label={tx('login_smtp_passwrd')}
-            placeholder={tx('login_smtp_passwrd')}
+            label={tx('login_smtp_password')}
+            placeholder={tx('login_smtp_password')}
             labelFor='sendPw'>
             {this.renderPasswordInput('showPasswordSend', 'sendPw')}
           </FormGroup>

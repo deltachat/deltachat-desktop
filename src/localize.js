@@ -1,6 +1,7 @@
 module.exports = {
   setup,
-  translate
+  translate,
+  getLocaleMessages
 }
 
 const merge = require('lodash.merge')
@@ -11,11 +12,12 @@ const log = require('./main/log')
 
 function translate (messages) {
   function getMessage (key, substitutions, opts) {
+    if (!Array.isArray(substitutions)) substitutions = [substitutions]
     const entry = messages[key]
     if (!opts) opts = {}
     if (!entry) {
       console.error(
-        `i18n: Attempted to get translation for nonexistent key '${key}'`
+        `translation: Attempted to get translation for nonexistent key '${key}'`
       )
       return key
     }
@@ -23,7 +25,17 @@ function translate (messages) {
     const { message } = entry
     if (substitutions) {
       const val = opts.quantity ? entry[opts.quantity] : message
-      return val.replace(/\$.+?\$/, substitutions)
+      let c = 0
+      return val.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
+        if (typeof substitutions[c] === 'undefined') {
+          console.error(
+            `translation: Missing ${c}th argument for key '${key}'`
+          )
+        }
+        let replacement = substitutions[c].toString()
+        c++
+        return replacement
+      })
     }
 
     return message
@@ -78,4 +90,3 @@ function setup (app, name) {
 
   return localeData
 }
-
