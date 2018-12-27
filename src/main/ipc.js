@@ -78,15 +78,7 @@ function init (cwd, state) {
     windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
-  dc.on('DC_EVENT_ERROR', (error) => {
-    windows.main.send('error', error)
-  })
-
-  dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
-    windows.main.send('error', error)
-  })
-
-  dc.on('DC_EVENT_SELF_NOT_IN_GROUP', (error) => {
+  dc.on('error', (error) => {
     windows.main.send('error', error)
   })
 
