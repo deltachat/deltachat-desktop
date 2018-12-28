@@ -627,6 +627,8 @@
   flex-direction: row;
   align-items: center;
   text-align: center;
+
+  user-select: none;
 }
 
 .module-message__author-default-avatar--grey {
