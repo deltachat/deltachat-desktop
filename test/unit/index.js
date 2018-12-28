@@ -30,10 +30,18 @@ test('test translation method', t => {
     },
     'test_b': {
       message: 'fo2o %s %d blu2bb'
+    },
+    'test_c': {
+      other: '%n foo',
+      one: '1 foo'
     }
   })
 
   t.equal(translate('test_a', ['asd', 'dsa']), 'foo asd dsa blubb')
   t.equal(translate('test_b', ['asd', 'dsa']), 'fo2o asd dsa blu2bb')
+  t.equal(translate('test_b'), 'fo2o %s %d blu2bb')
+  t.equal(translate('test_c', null, 'one'), '1 foo')
+  t.equal(translate('test_c', 10, 'other'), '10 foo')
+
   t.end()
 })

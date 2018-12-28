@@ -43,10 +43,11 @@ function setLabels (menu) {
 
 function getAvailableLanguages () {
   var locales = fs.readdirSync(path.join(__dirname, '..', '..', '_locales'))
+  locales = locales.filter((locale) => !locale.startsWith('_'))
   return locales.map((l) => {
     var locale = l.split('.json')[0]
     return {
-      label: app.translate(`language.${locale}`),
+      label: app.translate(`language_${locale}`),
       type: 'radio',
       checked: locale === app.localeData.locale,
       click: () => windows.main.chooseLanguage(locale)
