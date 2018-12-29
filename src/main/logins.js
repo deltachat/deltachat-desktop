@@ -10,6 +10,7 @@ function getLogins (dir, cb) {
   fs.readdir(dir, (err, files) => {
     if (err) return cb(err)
     files.forEach(filename => {
+      if (!fs.existsSync(path.join(dir, filename, 'db.sqlite'))) return
       const fullPath = path.join(dir, filename)
       if (fs.statSync(fullPath).isDirectory()) {
         tasks.push(getConfig(fullPath))
