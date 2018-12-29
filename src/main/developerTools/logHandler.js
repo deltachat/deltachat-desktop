@@ -19,7 +19,13 @@ var wsUpState = false
 function log (channel, level, message, errorCode, payload) {
   logDB.push({ channel, level, message, errorCode, payload })
 
-  const writeToLog = () => wstream.write(`"${channel}",${level},"${message}","${errorCode}",${JSON.stringify(payload)}\n`)
+  if (payload) {
+    var payloadForLogfile = JSON.stringify(payload)
+    if (payloadForLogfile.charAt(0) !== '"') {
+      payloadForLogfile = JSON.stringify(payloadForLogfile)
+    }
+  }
+  const writeToLog = () => wstream.write(`"${channel}",${level},"${message}","${errorCode}",${payloadForLogfile}\n`)
   if (wsUpState) {
     writeToLog()
   } else {
