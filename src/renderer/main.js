@@ -13,6 +13,8 @@ const State = require('./lib/state')
 const localize = require('../localize')
 const App = require('./App')
 
+const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
+
 State.load(onState)
 
 let app
@@ -33,7 +35,10 @@ function onState (err, _state) {
 }
 
 function setupIpc () {
-  ipcRenderer.on('log', (e, ...args) => console.log(...args))
+  ipcRenderer.on('log', (e, channel, lvl, ...args) => {
+    const variant = LoggerVariants[lvl]
+    variant(lvl, channel, ...args)
+  })
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
   ipcRenderer.on('stateSave', (e) => State.save(state))
   ipcRenderer.on('stateSaveImmediate', (e) => State.saveImmediate(state))

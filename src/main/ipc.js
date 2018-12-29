@@ -15,7 +15,7 @@ const os = require('os')
 const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
-const log = require('./log')
+const log = require('../logger').getLogger('main/ipc')
 const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
@@ -169,7 +169,7 @@ function init (cwd, state) {
   }
 
   function render () {
-    log('RENDER')
+    log.debug('RENDER')
     const json = dc.render()
     windows.main.setTitle(json.credentials.addr)
     windows.main.send('render', json)

@@ -10,10 +10,18 @@ const localize = require('../localize')
 const config = require('../config')
 const logins = require('./logins')
 const ipc = require('./ipc')
-const log = require('./log')
 const menu = require('./menu')
 const State = require('../renderer/lib/state')
 const windows = require('./windows')
+const logHandler = require('./developerTools/logHandler')
+const log = require('../logger').getLogger('main/index')
+
+// Setup Logger
+require('../logger').setLogHandler(logHandler)
+logHandler.setupWriteStream()
+process.on('exit', function () {
+  logHandler.closeWriteStream()
+})
 
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
@@ -48,7 +56,7 @@ function onReady (err, results) {
   app.logins = results.logins
 
   var cwd = process.env.TEST_DIR || config.CONFIG_PATH
-  log('cwd', cwd)
+  log.info('cwd', 'cwd', cwd)
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
@@ -65,7 +73,7 @@ function onReady (err, results) {
 }
 
 app.once('ipcReady', () => {
-  log('Command line args:', argv)
+  log.info(`Command line args: ${argv}`, 'cmd_args', argv)
   console.timeEnd('init')
 
   var win = windows.main.win
