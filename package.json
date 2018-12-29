@@ -48,6 +48,7 @@
     "debounce": "^1.2.0",
     "deltachat-node": "^0.35.0",
     "emoji-js-clean": "^4.0.0",
+    "error-stack-parser": "^2.0.2",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",
     "insert-css": "^2.0.0",

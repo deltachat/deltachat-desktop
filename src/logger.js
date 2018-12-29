@@ -1,3 +1,4 @@
+const esp = require('error-stack-parser')
 const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
 var handler
 
@@ -23,6 +24,12 @@ function log (channel, lvl, ...args) {
     console.log(channel, ...args)
   }
 }
+
+function getStackTrace () {
+  const stack = esp.parse(new Error('Get Stacktrace'))
+  return stack.slice(2, stack.length)
+}
+
 class Logger {
   /**
      * {string} channel The part/module where the message was logged. Like 'Tanslations'
@@ -57,7 +64,7 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   warn (message, errorCode = undefined, payload = undefined) {
-    log(this.channel, 1, message, errorCode, payload)
+    log(this.channel, 1, message, errorCode, payload, getStackTrace())
   }
   /**
      * Log a message on **error** level
@@ -67,7 +74,7 @@ class Logger {
      */
   error (message, errorCode = undefined, payload = undefined) {
     // TODO add stacktrace to payload
-    log(this.channel, 3, message, errorCode, payload)
+    log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
   /**
      * Log a message on critical level
@@ -77,7 +84,7 @@ class Logger {
      */
   critical (message, errorCode = undefined, payload = undefined) {
     // TODO add stacktrace to payload
-    log(this.channel, 4, message, errorCode, payload)
+    log(this.channel, 4, message, errorCode, payload, getStackTrace())
   }
 }
 

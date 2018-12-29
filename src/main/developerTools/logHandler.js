@@ -15,9 +15,10 @@ var wsUpState = false
  * @param {string} message the message (human readable)
  * @param {string} errorCode (optional) machine readable error code (string in snake_case)
  * @param {any|string} payload (optional) JSON payload or any other object that can be converted to a JSON string
+ * @param {} stacktrace (optional) for errors -> gets converted to json
  */
-function log (channel, level, message, errorCode, payload) {
-  logDB.push({ channel, level, message, errorCode, payload })
+function log (channel, level, message, errorCode, payload, stacktrace) {
+  logDB.push({ channel, level, message, errorCode, payload, stacktrace })
 
   if (payload) {
     var payloadForLogfile = JSON.stringify(payload)
@@ -25,7 +26,7 @@ function log (channel, level, message, errorCode, payload) {
       payloadForLogfile = JSON.stringify(payloadForLogfile)
     }
   }
-  const writeToLog = () => wstream.write(`"${channel}",${level},"${message}","${errorCode}",${payloadForLogfile}\n`)
+  const writeToLog = () => wstream.write(`"${channel}",${level},"${message}","${errorCode}",${payloadForLogfile},${JSON.stringify(stacktrace)}\n`)
   if (wsUpState) {
     writeToLog()
   } else {
@@ -52,7 +53,7 @@ function setupWriteStream () {
     log('logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
     console.log(`Logfile: ${logFilePath}`)
     wstream = createWriteStream(logFilePath, { flags: 'w' })
-    wstream.write('channel, level, message, errorCode, payload\n')
+    wstream.write('channel, level, message, errorCode, payload, stacktrace\n')
     eventEmitter.emit('ws_online')
     wsUpState = true
   })
