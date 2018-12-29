@@ -39,9 +39,9 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
   if (channel === 'logger' || channel === 'core' || channel.indexOf('main') !== -1) {
     // send also to 'normal' dev console
     if (app.ipcReady) {
-      windows.main.send('log', ...arguments)
+      windows.main.send('log', channel, level, message, errorCode, payload, stacktrace)
     } else {
-      app.once('ipcReady', () => windows.main.send('log', ...arguments))
+      app.once('ipcReady', () => windows.main.send('log', channel, level, message, errorCode, payload, stacktrace))
     }
   }
 }
