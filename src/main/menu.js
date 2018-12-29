@@ -8,6 +8,7 @@ const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
 const config = require('../config')
+const { getFullLogFilePath } = require('./developerTools/logHandler')
 
 const app = electron.app
 
@@ -128,6 +129,10 @@ function getMenuTemplate () {
             {
               translate: 'menu.view.developer.open.log.folder',
               click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
+            },
+            {
+              translate: 'menu.view.developer.open.current.log.file',
+              click: () => electron.shell.openItem(getFullLogFilePath())
             }
           ]
         }

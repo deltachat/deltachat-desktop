@@ -8,6 +8,7 @@ var eventEmitter = new events.EventEmitter()
 var logDB = []
 var wstream
 var wsUpState = false
+var fullLogFilePath
 /**
  * Internal logger - please don't call directly unless you know what your doing
  * @param {string} timestamp timestamp
@@ -53,6 +54,7 @@ function setupWriteStream () {
     if (err) throw err
     log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
     console.log(`Logfile: ${logFilePath}`)
+    fullLogFilePath = logFilePath
     wstream = createWriteStream(logFilePath, { flags: 'w' })
     wstream.once('ready', () => {
       wstream.write('timestamp, channel, level, message, errorCode, payload, stacktrace\n')
@@ -67,4 +69,4 @@ function closeWriteStream () {
   wsUpState = false
 }
 
-module.exports = { log, setupWriteStream, closeWriteStream }
+module.exports = { log, setupWriteStream, closeWriteStream, getFullLogFilePath: () => fullLogFilePath }
