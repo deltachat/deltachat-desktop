@@ -20,7 +20,7 @@ function translate (messages) {
 
     if (!entry) {
       console.error(
-        ` 	🌐translation: Attempted to get translation for nonexistent key '${key}'`
+        `%c[Translations]%c Attempted to get translation for nonexistent key %c'${key}'`, 'color:olive;background:white', '', 'background:yellow'
       )
       return key
     }
@@ -45,7 +45,7 @@ function translate (messages) {
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
           console.error(
-            ` 	🌐translation: Missing ${c}th argument for key '${key}'`
+            `%c[Translations]%c Missing ${c}th argument for key %c'${key}'`, 'color:olive;background:white', 'background:yellow'
           )
         }
         return substitutions[c++].toString()
@@ -78,7 +78,7 @@ function getLocaleMessages (locale) {
 
   try {
     return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
-  } catch(err) {
+  } catch (err) {
     throw new Error(`JSON parse error in language file '${targetFile}'`, err)
   }
 }
