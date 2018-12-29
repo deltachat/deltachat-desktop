@@ -207,5 +207,9 @@
   },
   "encrypted_message": {
     "message": "Encrypted message"
+  },
+  "about_deltachat_heading_desktop": {
+      "message": "About DeltaChat",
+      "description": "Window title on about dialog"
   }
 }
