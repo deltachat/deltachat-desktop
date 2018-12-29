@@ -1,9 +1,28 @@
+const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
 var handler
+
+var OPTIONS = {
+  logDebug: true,
+  alsoLogInLocalConsole: true
+}
+
 /** specify function that passes the message to the logger in the main process */
 function setLogHandler (LogHandler) {
   handler = LogHandler
 }
 
+function log (channel, lvl, ...args) {
+  if (handler) {
+    handler(channel, lvl, ...args)
+    if (OPTIONS.alsoLogInLocalConsole) {
+      const variant = LoggerVariants[lvl]
+      variant(channel, ...args)
+    }
+  } else {
+    console.log('Failed to log message - Handler not initilized yet')
+    console.log(channel, ...args)
+  }
+}
 class Logger {
   /**
      * {string} channel The part/module where the message was logged. Like 'Tanslations'
@@ -11,6 +30,7 @@ class Logger {
   constructor (channel) {
     this.channel = channel
   }
+
   /**
      * Log a message on **debug** level
      * @param {string} message the message (human readable)
@@ -18,7 +38,8 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   debug (message, errorCode = undefined, payload = undefined) {
-    handler.log(this.channel, 0, message, errorCode, payload)
+    if (!OPTIONS.logDebug) return
+    log(this.channel, 0, message, errorCode, payload)
   }
   /**
      * Log a message on **info** level
@@ -27,7 +48,7 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   info (message, errorCode = undefined, payload = undefined) {
-    handler.log(this.channel, 1, message, errorCode, payload)
+    log(this.channel, 1, message, errorCode, payload)
   }
   /**
      * Log a message on **warning** level
@@ -36,7 +57,7 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   warn (message, errorCode = undefined, payload = undefined) {
-    handler.log(this.channel, 1, message, errorCode, payload)
+    log(this.channel, 1, message, errorCode, payload)
   }
   /**
      * Log a message on **error** level
@@ -46,7 +67,7 @@ class Logger {
      */
   error (message, errorCode = undefined, payload = undefined) {
     // TODO add stacktrace to payload
-    handler.log(this.channel, 3, message, errorCode, payload)
+    log(this.channel, 3, message, errorCode, payload)
   }
   /**
      * Log a message on critical level
@@ -56,7 +77,7 @@ class Logger {
      */
   critical (message, errorCode = undefined, payload = undefined) {
     // TODO add stacktrace to payload
-    handler.log(this.channel, 4, message, errorCode, payload)
+    log(this.channel, 4, message, errorCode, payload)
   }
 }
 

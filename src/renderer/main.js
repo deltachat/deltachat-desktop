@@ -12,6 +12,7 @@ const { ipcRenderer } = require('electron')
 const State = require('./lib/state')
 const localize = require('../localize')
 const App = require('./App')
+const log = require('../logger').getLogger('renderer/main')
 
 const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
 
@@ -21,7 +22,7 @@ let app
 let state
 
 function onState (err, _state) {
-  if (err) console.error(err)
+  if (err) log.error('onState', null, err)
   state = window.state = _state
 
   setupLocaleData(state.saved.locale)
@@ -37,7 +38,7 @@ function onState (err, _state) {
 function setupIpc () {
   ipcRenderer.on('log', (e, channel, lvl, ...args) => {
     const variant = LoggerVariants[lvl]
-    variant(lvl, channel, ...args)
+    variant(channel, ...args)
   })
   ipcRenderer.on('error', (e, ...args) => console.error(...args))
   ipcRenderer.on('stateSave', (e) => State.save(state))

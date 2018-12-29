@@ -17,7 +17,7 @@ const logHandler = require('./developerTools/logHandler')
 const log = require('../logger').getLogger('main/index')
 
 // Setup Logger
-require('../logger').setLogHandler(logHandler)
+require('../logger').setLogHandler(logHandler.log)
 logHandler.setupWriteStream()
 process.on('exit', function () {
   logHandler.closeWriteStream()
@@ -69,6 +69,7 @@ function onReady (err, results) {
     console.error(err)
     const error = { message: err.message, stack: err.stack }
     windows.main.send('uncaughtError', 'main', error)
+    log.error('uncaughtError', 'uncaught_error', error)
   })
 }
 

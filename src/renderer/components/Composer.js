@@ -4,6 +4,7 @@ const { Button } = require('@blueprintjs/core')
 const { remote } = require('electron')
 const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
+const log = require('../../logger').getLogger('renderer/composer')
 
 const ComposerWrapper = styled.div`
   height: 40px;
@@ -127,7 +128,7 @@ class Composer extends React.Component {
 
   focusInputMessage () {
     let el = document.querySelector(`.${ComposerWrapper.styledComponentId} textarea`)
-    if (!el) return console.log(`Didn't find .ComposerWrapper textarea element`)
+    if (!el) return log.warn(`Didn't find .ComposerWrapper textarea element`)
     el.focus()
   }
 

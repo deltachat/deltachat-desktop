@@ -3,6 +3,7 @@ const path = require('path')
 const { EventEmitter } = require('events')
 
 const config = require('../../config')
+const log = require('../../logger').getLogger('renderer/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
@@ -68,7 +69,7 @@ function getDefaultState () {
 function load (cb) {
   appConfig.read(function (err, saved) {
     if (err) {
-      console.log('Missing configuration file. Using default values.')
+      log.info('Missing configuration file. Using default values.')
     }
     const state = getDefaultState()
     state.saved = Object.assign(state.saved, err ? {} : saved)
@@ -78,13 +79,14 @@ function load (cb) {
 
 // Write state.saved to the JSON state file
 function saveImmediate (state, cb) {
-  console.log('Saving state to ' + appConfig.filePath)
+  log.info('Saving state to ' + appConfig.filePath)
 
   // Clean up, so that we're not saving any pending state
   const copy = Object.assign({}, state.saved)
 
   appConfig.write(copy, (err) => {
-    if (err) console.error(err)
-    else State.emit('stateSaved')
+    if (err) {
+      log.error('State save failed', null, err)
+    } else State.emit('stateSaved')
   })
 }
