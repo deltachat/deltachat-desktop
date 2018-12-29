@@ -4,7 +4,7 @@ var handler
 
 var OPTIONS = {
   logDebug: true,
-  alsoLogInLocalConsole: true
+  alsoLogInLocalConsole: false
 }
 
 /** specify function that passes the message to the logger in the main process */
@@ -13,8 +13,9 @@ function setLogHandler (LogHandler) {
 }
 
 function log (channel, lvl, ...args) {
+  var timestamp = new Date().toISOString()
   if (handler) {
-    handler(channel, lvl, ...args)
+    handler(timestamp, channel, lvl, ...args)
     if (OPTIONS.alsoLogInLocalConsole) {
       const variant = LoggerVariants[lvl]
       variant(channel, ...args)
