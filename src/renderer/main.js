@@ -57,6 +57,8 @@ function setupIpc () {
   ipcRenderer.send('ipcReady')
 
   State.on('stateSaved', () => ipcRenderer.send('stateSaved'))
+
+  require('../logger').setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
 }
 
 function setupLocaleData (locale) {

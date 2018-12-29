@@ -19,6 +19,7 @@ const log = require('../logger').getLogger('main/ipc')
 const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
+const logHandler = require('./developerTools/logHandler')
 
 function init (cwd, state) {
   // Events dispatched by buttons from the frontend
@@ -49,6 +50,8 @@ function init (cwd, state) {
     dc.setCoreStrings(txCoreStrings())
     menu.init()
   })
+
+  ipc.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
 
