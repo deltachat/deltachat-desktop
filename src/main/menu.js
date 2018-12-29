@@ -124,6 +124,10 @@ function getMenuTemplate () {
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
               click: () => windows.main.toggleDevTools()
+            },
+            {
+              translate: 'menu.view.developer.open.log.folder',
+              click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
             }
           ]
         }
