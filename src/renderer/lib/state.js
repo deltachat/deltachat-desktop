@@ -86,7 +86,7 @@ function saveImmediate (state, cb) {
 
   appConfig.write(copy, (err) => {
     if (err) {
-      log.error('State save failed', null, err)
+      log.error('State save failed', err)
     } else State.emit('stateSaved')
   })
 }

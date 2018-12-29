@@ -45,7 +45,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  debug (message, errorCode = undefined, payload = undefined) {
+  debug (message, payload = undefined, errorCode = undefined) {
     if (!OPTIONS.logDebug) return
     log(this.channel, 0, message, errorCode, payload)
   }
@@ -55,7 +55,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  info (message, errorCode = undefined, payload = undefined) {
+  info (message, payload = undefined, errorCode = undefined) {
     log(this.channel, 1, message, errorCode, payload)
   }
   /**
@@ -64,7 +64,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  warn (message, errorCode = undefined, payload = undefined) {
+  warn (message, payload = undefined, errorCode = undefined) {
     log(this.channel, 1, message, errorCode, payload, getStackTrace())
   }
   /**
@@ -73,7 +73,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  error (message, errorCode = undefined, payload = undefined) {
+  error (message, payload = undefined, errorCode = undefined) {
     // TODO add stacktrace to payload
     log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
@@ -83,7 +83,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  critical (message, errorCode = undefined, payload = undefined) {
+  critical (message, payload = undefined, errorCode = undefined) {
     // TODO add stacktrace to payload
     log(this.channel, 4, message, errorCode, payload, getStackTrace())
   }

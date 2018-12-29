@@ -175,7 +175,7 @@ class ChatView extends React.Component {
             {chat.messages.map(rawMessage => {
               var message = MessageWrapper.convert(rawMessage)
               message.onReply = () => {
-                log.debug('reply to', null, message)
+                log.debug('reply to', message)
               }
               message.onForward = this.onForward.bind(this, message)
               return MessageWrapper.render({

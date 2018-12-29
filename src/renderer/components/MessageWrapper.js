@@ -171,7 +171,7 @@ class RenderMessage extends React.Component {
     const conversationType = convertChatType(chat.type)
 
     const contact = {
-      onSendMessage: () => log.debug('send a message to', null, fromId),
+      onSendMessage: () => log.debug('send a message to', fromId),
       onClick: () => { log.debug('click contact') }
     }
 

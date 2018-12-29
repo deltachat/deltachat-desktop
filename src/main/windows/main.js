@@ -112,13 +112,13 @@ function setBounds (bounds, maximize) {
   const willBeMaximized = typeof maximize === 'boolean' ? maximize : main.win.isMaximized()
   // Assuming we're not maximized or maximizing, set the window size
   if (!willBeMaximized) {
-    log.debug(`setBounds: setting bounds to ${JSON.stringify(bounds)}`, 'set_bounds_to', JSON.stringify(bounds))
+    log.debug(`setBounds: setting bounds to ${JSON.stringify(bounds)}`, bounds, 'set_bounds_to')
     if (bounds.x === null && bounds.y === null) {
       // X and Y not specified? By default, center on current screen
       const scr = electron.screen.getDisplayMatching(main.win.getBounds())
       bounds.x = Math.round(scr.bounds.x + (scr.bounds.width / 2) - (bounds.width / 2))
       bounds.y = Math.round(scr.bounds.y + (scr.bounds.height / 2) - (bounds.height / 2))
-      log.debug(`setBounds: centered to ${JSON.stringify(bounds)}`, 'set_bounds_centered_to', JSON.stringify(bounds))
+      log.debug(`setBounds: centered to ${JSON.stringify(bounds)}`, bounds, 'set_bounds_centered_to')
     }
     // Resize the window's content area (so window border doesn't need to be taken
     // into account)

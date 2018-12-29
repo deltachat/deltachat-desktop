@@ -8,7 +8,6 @@ var eventEmitter = new events.EventEmitter()
 var logDB = []
 var wstream
 var wsUpState = false
-// IDEA: Should we also log on where the log function was called?
 /**
  * Internal logger - please don't call directly unless you know what your doing
  * @param {string} timestamp timestamp
@@ -55,9 +54,11 @@ function setupWriteStream () {
     log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
     console.log(`Logfile: ${logFilePath}`)
     wstream = createWriteStream(logFilePath, { flags: 'w' })
-    wstream.write('timestamp, channel, level, message, errorCode, payload, stacktrace\n')
-    eventEmitter.emit('ws_online')
-    wsUpState = true
+    wstream.once('ready', () => {
+      wstream.write('timestamp, channel, level, message, errorCode, payload, stacktrace\n')
+      eventEmitter.emit('ws_online')
+      wsUpState = true
+    })
   })
 }
 
