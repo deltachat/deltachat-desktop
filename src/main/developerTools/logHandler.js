@@ -28,7 +28,12 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
       payloadForLogfile = JSON.stringify(payloadForLogfile)
     }
   }
-  const writeToLog = () => wstream.write(`${timestamp},"${channel}",${level},"${message}","${errorCode}",${payloadForLogfile},${JSON.stringify(stacktrace)}\n`)
+
+  const logString = `${timestamp}|=|=|"${channel}"|=|=|${level}|=|=|"${message}"|=|=|"${errorCode}"|=|=|${payloadForLogfile}|=|=|${JSON.stringify(stacktrace)}`
+    .replace(/\t/g, '  ').replace(/\n|(:?\r\n)/g, '') // Cleanup
+    .replace(/\|=\|=\|/g, String.fromCharCode(9))
+
+  const writeToLog = () => wstream.write(`${logString}\n`)
   if (wsUpState) {
     writeToLog()
   } else {
@@ -57,7 +62,7 @@ function setupWriteStream () {
     fullLogFilePath = logFilePath
     wstream = createWriteStream(logFilePath, { flags: 'w' })
     wstream.once('ready', () => {
-      wstream.write('timestamp, channel, level, message, errorCode, payload, stacktrace\n')
+      wstream.write('timestamp|=|=|channel|=|=|level|=|=|message|=|=|errorCode|=|=|payload|=|=|stacktrace\n'.replace(/\|=\|=\|/g, String.fromCharCode(9)))
       eventEmitter.emit('ws_online')
       wsUpState = true
     })
