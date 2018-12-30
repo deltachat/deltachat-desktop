@@ -29,7 +29,7 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
     }
   }
 
-  const logString = `${timestamp}|=|=|"${channel}"|=|=|${level}|=|=|"${message}"|=|=|"${errorCode}"|=|=|${payloadForLogfile}|=|=|${JSON.stringify(stacktrace)}`
+  const logString = `${timestamp}|=|=|"${channel}"|=|=|${level}|=|=|"${message}"|=|=|"${errorCode || ''}"|=|=|${payloadForLogfile || ''}|=|=|${JSON.stringify(stacktrace || '')}`
     .replace(/\t/g, '  ').replace(/\n|(:?\r\n)/g, '') // Cleanup
     .replace(/\|=\|=\|/g, String.fromCharCode(9))
 
