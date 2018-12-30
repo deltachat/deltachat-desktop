@@ -14,16 +14,16 @@ function setLogHandler (LogHandler) {
 
 function log (channel, lvl, ...args) {
   var timestamp = new Date().toISOString()
-  if (handler) {
+  if (!handler) {
+    console.log('Failed to log message - Handler not initilized yet')
+    console.log(channel, ...args)
+    throw Error('Failed to log message - Handler not initilized yet')
+  }
     handler(timestamp, channel, lvl, ...args)
     if (OPTIONS.alsoLogInLocalConsole) {
       const variant = LoggerVariants[lvl]
       variant(channel, ...args)
     }
-  } else {
-    console.log('Failed to log message - Handler not initilized yet')
-    console.log(channel, ...args)
-  }
 }
 
 function getStackTrace () {
