@@ -19,11 +19,11 @@ function log (channel, lvl, ...args) {
     console.log(channel, ...args)
     throw Error('Failed to log message - Handler not initilized yet')
   }
-    handler(timestamp, channel, lvl, ...args)
-    if (OPTIONS.alsoLogInLocalConsole) {
-      const variant = LoggerVariants[lvl]
-      variant(channel, ...args)
-    }
+  handler(timestamp, channel, lvl, ...args)
+  if (OPTIONS.alsoLogInLocalConsole) {
+    const variant = LoggerVariants[lvl]
+    variant(channel, ...args)
+  }
 }
 
 function getStackTrace () {
