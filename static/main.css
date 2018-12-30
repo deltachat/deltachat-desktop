@@ -128,3 +128,7 @@ ul li button {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+.bp3-button{
+  user-select: none;
+}
