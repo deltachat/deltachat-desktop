@@ -42,7 +42,7 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
 
   // TODO send update ipc to debug Window somehow
 
-  if (channel === 'logger' || channel === 'core' || channel.indexOf('main') !== -1) {
+  if (channel === 'logger' || channel === 'core' || channel.includes('main')) {
     // send also to 'normal' dev console
     if (app.ipcReady) {
       windows.main.send('log', channel, level, message, errorCode, payload, stacktrace)
