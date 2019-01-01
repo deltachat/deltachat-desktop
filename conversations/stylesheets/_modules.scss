@@ -627,6 +627,8 @@
   flex-direction: row;
   align-items: center;
   text-align: center;
+
+  user-select: none;
 }
 
 .module-message__author-default-avatar--grey {
@@ -664,9 +666,6 @@
   width: 100%;
   font-size: 18px;
   color: $color-white;
-
-  // Because it just doesn't look properly centered
-  padding-right: 1px;
 }
 
 // Module: Expire Timer

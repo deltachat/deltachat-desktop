@@ -10,6 +10,9 @@ const ChatListWrapper = styled.div`
   height: 100%;
   float: left;
   overflow-y: auto;
+  border-right: 1px solid #b9b9b9;
+  box-shadow: 0 0 4px 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+  user-select: none;
 
   span.module-contact-name {
     font-weight: 200;

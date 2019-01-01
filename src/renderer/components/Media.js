@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   padding: 10px;
 `
 const MediaGallery = styled.div`
-  height: calc(100vh - 50px - 40px);
+  height: calc(100vh - 50px - 40px - 10px);
   overflow: scroll;
   padding-top: 20px;
 `

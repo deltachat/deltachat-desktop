@@ -50,6 +50,7 @@ class DeltaChatController extends events.EventEmitter {
         this.ready = true
         this.configuring = false
         this.emit('ready')
+        log('dc_get_info', dc.getInfo())
         render()
       }
       if (!dc.isConfigured()) {
@@ -116,14 +117,21 @@ class DeltaChatController extends events.EventEmitter {
       log.warning(warning)
     })
 
-    dc.on('DC_EVENT_ERROR', (error) => {
-      this.emit('DC_EVENT_ERROR', error)
+    const onError = error => {
+      this.emit('error', error)
       log.error(error)
+    }
+
+    dc.on('DC_EVENT_ERROR', (error) => {
+      onError(error)
     })
 
     dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
-      this.emit('DC_EVENT_ERROR_NETWORK', first, error)
-      log.error(error)
+      onError(error)
+    })
+
+    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
+      onError(error)
     })
   }
 

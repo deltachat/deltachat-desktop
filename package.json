@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "0.90.1",
+  "version": "0.97.0",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "class-autobind": "^0.1.4",
     "debounce": "^1.2.0",
     "deltachat-emoji": "^1.0.0",
-    "deltachat-node": "^0.28.2",
+    "deltachat-node": "^0.30.0",
     "emoji-js-clean": "^4.0.0",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",

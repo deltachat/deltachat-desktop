@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+## [0.97.0] - 2018-12-24
+
+### Changed
+* Upgrade `deltachat-node` to `0.30.0` (@ralphtheninja)
+
+## [0.96.0] - 2018-12-11
+
+### Added
+* Improve experience for inputting Autocrypt setup codes (@karissa)
+* Media view for chats (@karissa)
+* See encryption info for contacts in a chat (@karissa)
+* List contact requests (@karissa)
+* File->Quit in the menu to quit the application (@ralphtheninja)
+* Drag a file out of the chat window to the filesystem to copy it locally (@Simon-Laux)
+* Settings option for sending read receipts (@karissa)
+* Settings option for preferring encryption (@karissa)
+* Forget account button in the Login screen (@karissa)
+* Update account settings while logged in (@karissa)
+
+### Fixed
+* Make button hover state a pointer cursor (@karissa)
+* Read and delivered checkmarks are now green (@Jikstra )
+* Display filename and size for downloadable files in messages (@Simon-Laux)
+* Richer file messages, including displaying webm videos (@ralphtheninja)
+* Ask user before leaving group (@ralphtheninja)
+* Mark messages read properly (@karissa)
+* Small bug with exporting backups (@Jikstra)
+
+### Changed
+* Upgrade `deltachat-node` to `0.29.0` (@ralphtheninja)
+* Remove single-folder compatibility message (@karissa)
+* Update to electron `3.0` (@karissa)
+
 ## [0.90.1] - 2018-12-11
 
 ### Changed
@@ -251,5 +284,7 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...HEAD
+[0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
+[0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
