@@ -80,14 +80,12 @@ function getLocaleMessages (locale) {
 function setup (app, name) {
   let locale = normalizeLocaleName(name)
   // default to english when string not found
-  const experimental = getLocaleMessages('_experimental_en')
   const english = getLocaleMessages('en')
   let messages
 
   try {
     messages = getLocaleMessages(locale)
     messages = merge(english, messages)
-    messages = merge(messages, experimental)
   } catch (e) {
     log.error(`Could not load messages for ${locale} ${e.stack}`)
     locale = 'en'
