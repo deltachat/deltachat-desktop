@@ -147,7 +147,7 @@ class SplittedChatListAndView extends React.Component {
                 <Unselectable>
                   <Centered>
                     <div className='window '>
-                      <h1>{tx('no_chat_selected_header_desktop')}</h1>
+                      <h1>{tx('welcome_desktop')}</h1>
                       <p>{tx('no_chat_selected_suggestion_desktop')}</p>
                     </div>
                   </Centered>

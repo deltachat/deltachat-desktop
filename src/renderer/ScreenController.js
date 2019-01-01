@@ -234,7 +234,7 @@ function LoginScreen (props) {
       <NavbarWrapper>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>{tx('login_title_desktop')}</NavbarHeading>
+            <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
       </NavbarWrapper>

@@ -498,7 +498,7 @@
     <string name="encrypted_message">Encrypted message</string>
 
     <!-- desktop specific strings -->
-    <string name="login_title_desktop">Welcome to DeltaChat</string>
+    <string name="welcome_desktop">Welcome to DeltaChat</string>
     <string name="login_known_accounts_title_desktop">Known accounts</string>
     <string name="global_menu_preferences_desktop">Preferences</string>
     <string name="global_menu_preferences_language_desktop">Choose Language...</string>
@@ -521,8 +521,6 @@
     <string name="global_menu_help_contribute_desktop">Contribute on GitHub</string>
     <string name="global_menu_help_report_desktop">Report an Issue...</string>
     <string name="global_menu_help_about_desktop">About DeltaChat</string>
-    <!-- TODO unify with login_title_desktop -->
-    <string name="no_chat_selected_header_desktop">Welcome to Delta Chat</string>
     <string name="no_chat_selected_suggestion_desktop">Select a chat or create a new chat</string>
     <string name="write_message_desktop">Write a message</string>
     <string name="about_deltachat_heading_desktop">About DeltaChat</string>
