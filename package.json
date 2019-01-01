@@ -8,16 +8,16 @@
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "dev": "npm run build && npm run start",
-    "translations": "tx pull --all && node bin/convert",
     "start": "electron . --debug --disable-http-cache",
     "pack": "npm run build && electron-builder --dir",
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
-    "build": "npm run build-conversations && npm run build-js",
+    "build": "npm run build-conversations && npm run build-js && npm run build-translations",
     "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
     "build-conversations-ts": "cd conversations && tsc",
     "build-conversations-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
-    "build-js": "webpack --mode=development --progress --profile --colors"
+    "build-js": "webpack --mode=development --progress --profile --colors",
+    "build-translations": "node bin/convert"
   },
   "repository": {
     "type": "git",
