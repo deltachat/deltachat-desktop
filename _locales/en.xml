@@ -489,10 +489,6 @@
     <string name="language_tr">Turkish</string>
     <string name="language_uk">Ukrainian</string>
     <string name="language_zh_CN">Chinese</string>
-    <string name="language_"></string>
-    <string name="language_"></string>
-    <string name="language_"></string>
-    <string name="language_"></string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Encrypted message</string>
