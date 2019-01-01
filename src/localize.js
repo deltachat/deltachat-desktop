@@ -1,32 +1,49 @@
 module.exports = {
   setup,
-  translate
+  translate,
+  getLocaleMessages
 }
 
 const merge = require('lodash.merge')
-const fs = require('fs')
 const path = require('path')
-
+const fs = require('fs')
 const log = require('./main/log')
 
 function translate (messages) {
-  function getMessage (key, substitutions) {
+  function getMessage (key, substitutions, opts) {
+    if (typeof opts === 'string') opts = { quantity: opts }
+    if (!opts) opts = {}
+
     const entry = messages[key]
+
     if (!entry) {
-      console.error(
-        `i18n: Attempted to get translation for nonexistent key '${key}'`
-      )
+      console.error(`[TRANSLATIONS] Missing translation for key '${key}'`)
       return key
     }
 
-    const { message } = entry
-    if (Array.isArray(substitutions)) {
-      return substitutions.reduce(
-        (result, substitution) => result.replace(/\$.+?\$/, substitution),
-        message
-      )
-    } else if (substitutions) {
-      return message.replace(/\$.+?\$/, substitutions)
+    let message = entry.message
+    if (opts.quantity) {
+      if (typeof entry[opts.quantity] !== 'undefined') {
+        message = entry[opts.quantity]
+      } else {
+        console.error(
+          `[TRANSLATIONS] Missing quantity '${opts.quantity}' for key '${key}'`
+        )
+      }
+    }
+
+    if (substitutions) {
+      if (!Array.isArray(substitutions)) {
+        substitutions = [substitutions]
+      }
+
+      let c = 0
+      return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
+        if (typeof substitutions[c] === 'undefined') {
+          console.error(`[TRANSLATIONS] Missing ${c} argument for key %c'${key}'`)
+        }
+        return substitutions[c++].toString()
+      })
     }
 
     return message
@@ -53,7 +70,11 @@ function getLocaleMessages (locale) {
     onDiskLocale + '.json'
   )
 
-  return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
+  try {
+    return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
+  } catch (err) {
+    throw new Error(`JSON parse error in language file '${targetFile}'`, err)
+  }
 }
 
 function setup (app, name) {

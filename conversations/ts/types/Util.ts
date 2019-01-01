@@ -5,7 +5,7 @@ export type RenderTextCallback = (
   }
 ) => JSX.Element | string;
 
-export type Localizer = (key: string, values?: Array<string>) => string;
+export type Localizer = (key: string, substitutions?: Array<any>|any, opts?: any) => string;
 
 export type Color =
   | 'gray'

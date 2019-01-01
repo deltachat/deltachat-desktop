@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common strings without special context -->
+    <string name="app_name">大尔他</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="yes">是</string>
+    <string name="no">不是</string>
+    <string name="on">开着</string>
+    <string name="off">关着</string>
+    <string name="def">默认</string>
+    <string name="custom">定制</string>
+    <string name="none">没有</string>
+    <string name="open">打开</string>
+    <string name="one_moment">稍等</string>
+    <string name="error">错误</string>
+    <string name="password">密码</string>
+    <string name="now">现在</string>
+    <string name="n_min_ago">%d 分钟</string>
+    <string name="today">今天</string>
+    </resources>

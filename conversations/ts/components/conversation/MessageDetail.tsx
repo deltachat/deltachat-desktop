@@ -78,7 +78,7 @@ export class MessageDetail extends React.Component<Props> {
           onClick={message.onDelete}
           className="module-message-detail__delete-button"
         >
-          {i18n('deleteThisMessage')}
+          {i18n('delete_message_desktop')}
         </button>
       </div>
     );

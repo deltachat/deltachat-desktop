@@ -22,8 +22,7 @@ class UnblockContacts extends React.Component {
 
   onContactClick (contact) {
     const tx = window.translate
-    var message = tx('dialogs.unblockContact', contact.displayName)
-    confirmation(message, yes => {
+    confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
         ipcRenderer.sendSync('dispatchSync', 'unblockContact', contact.id)
       }
@@ -40,11 +39,11 @@ class UnblockContacts extends React.Component {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-            <NavbarHeading>{tx('unblockContacts')}</NavbarHeading>
+            <NavbarHeading>{tx('unblock_contacts_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
         <div className='window'>
-          {!blockedContacts.length && <Centered><h1>{tx('unblockContacts.noneBlocked')}</h1></Centered>}
+          {!blockedContacts.length && <Centered><h1>{tx('none_blocked_desktop')}</h1></Centered>}
           {blockedContacts.map((contact) => {
             return (<RenderContact
               contact={contact}

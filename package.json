@@ -12,11 +12,12 @@
     "pack": "npm run build && electron-builder --dir",
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
-    "build": "npm run build-conversations && npm run build-js",
+    "build": "npm run build-conversations && npm run build-js && npm run build-translations",
     "build-conversations": "npm run build-conversations-ts && npm run build-conversations-css",
     "build-conversations-ts": "cd conversations && tsc",
     "build-conversations-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
-    "build-js": "webpack --mode=development --progress --profile --colors"
+    "build-js": "webpack --mode=development --progress --profile --colors",
+    "build-translations": "node bin/convert"
   },
   "repository": {
     "type": "git",
@@ -107,7 +108,8 @@
     "version-changed": "^1.1.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "xml-js": "^1.6.8"
   },
   "build": {
     "mac": {

@@ -469,7 +469,7 @@ class Message extends React.Component {
             }}
             onClick={onDownload}
           >
-            {i18n('downloadAttachment')}
+            {i18n('download_attachment_desktop')}
           </MenuItem>
         ) : null}
         <MenuItem
@@ -478,7 +478,7 @@ class Message extends React.Component {
           }}
           onClick={onReply}
         >
-          {i18n('replyToMessage')}
+          {i18n('reply_to_message_desktop')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -486,7 +486,7 @@ class Message extends React.Component {
           }}
           onClick={onForward}
         >
-          {i18n('forwardMessage')}
+          {i18n('menu_forward')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -494,7 +494,7 @@ class Message extends React.Component {
           }}
           onClick={onShowDetail}
         >
-          {i18n('moreInfo')}
+          {i18n('more_info_desktop')}
         </MenuItem>
         {showRetry ? (
           <MenuItem
@@ -512,7 +512,7 @@ class Message extends React.Component {
           }}
           onClick={onDelete}
         >
-          {i18n('deleteMessage')}
+          {i18n('delete_message_desktop')}
         </MenuItem>
       </ContextMenu>
     )

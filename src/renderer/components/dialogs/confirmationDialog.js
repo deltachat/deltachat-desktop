@@ -7,7 +7,7 @@ module.exports = function confirmation (message, opts, cb) {
   var defaultOpts = {
     type: 'question',
     message: message,
-    buttons: [tx('dialogs.confirmation.no'), tx('dialogs.confirmation.yes')]
+    buttons: [tx('no'), tx('yes')]
   }
   remote.dialog.showMessageBox(Object.assign(defaultOpts, opts), response => {
     cb(response === 1) // eslint-disable-line

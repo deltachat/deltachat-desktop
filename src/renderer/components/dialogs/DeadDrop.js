@@ -38,8 +38,8 @@ class DeadDrop extends React.Component {
     const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
 
     const tx = window.translate
-    const title = tx('contactRequestTitle')
-    const body = tx('chatWith', nameAndAddr)
+    const title = tx('contact_request_title_desktop')
+    const body = tx('ask_start_chat_with', nameAndAddr)
 
     return (
       <Dialog

@@ -125,7 +125,6 @@ function render (props) {
           className='module-message__img-attachment'
           height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
           src={attachment.url}
-          alt={i18n('imageAttachmentAlt')}
         />
         <div
           className={classNames(

@@ -4,7 +4,7 @@ const GroupBase = require('./GroupBase')
 class CreateGroup extends GroupBase {
   constructor (props) {
     const { verified } = props.screenProps
-    const label = verified ? 'newVerifiedGroup' : 'newGroup'
+    const label = verified ? 'menu_new_verified_group' : 'menu_new_group'
     super(props, {
       buttonLabel: label,
       heading: label,

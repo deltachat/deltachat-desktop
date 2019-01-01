@@ -62,7 +62,7 @@ class GroupBase extends React.Component {
   onSelectGroupImage () {
     const tx = window.translate
     dialog.showOpenDialog({
-      title: tx('selectGroupImage'),
+      title: tx('select_group_image_desktop'),
       filters: [ { name: 'Images', extensions: [ 'jpg', 'png', 'gif' ] } ],
       properties: [ 'openFile' ]
     }, files => {
@@ -117,7 +117,7 @@ class GroupBase extends React.Component {
                 id='name'
                 value={this.state.name}
                 onChange={this.handleNameChange.bind(this)}
-                placeholder={tx('groupName')} />
+                placeholder={tx('group_name_desktop')} />
               <Button
                 disabled={this.isButtonDisabled()}
                 onClick={this.onSubmit.bind(this)}
@@ -125,10 +125,10 @@ class GroupBase extends React.Component {
             </ControlGroup>
             <div className='SelectGroupImage'>
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
-              <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove')}</button>
+              <button disabled={!this.state.image} className='RemoveGroupImage' onClick={this.onRemoveImage.bind(this)}>{tx('remove_desktop')}</button>
             </div>
-            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('showQrVerifyCode')}</button>) }
-            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('showQrInviteCode')}</button>) }
+            { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('show_qr_verify_code_desktop')}</button>) }
+            { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('show_qr_invite_code_desktop')}</button>) }
             <ContactList
               childProps={(contact) => {
                 return { color: this.contactInGroup(contact.id) ? 'green' : '' }

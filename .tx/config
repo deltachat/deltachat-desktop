@@ -1,10 +1,10 @@
 [main]
 host = https://www.transifex.com
 
-[delta-chat-desktop.en-json]
-file_filter = _locales/<lang>.json
+[delta-chat-app.stringsxml]
+file_filter = _locales/<lang>.xml
 minimum_perc = 0
-source_file = _locales/en.json
-source_lang = en
-type = CHROME
+source_file = _locales/xx.xml
+source_lang = xx
+type = ANDROID
 

@@ -17,12 +17,10 @@ function getImageTag({
   match,
   sizeClass,
   key,
-  i18n,
 }: {
   match: any;
   sizeClass: string | undefined;
   key: string | number;
-  i18n: Localizer;
 }) {
   const result = getReplacementData(match[0], match[1], match[2]);
 
@@ -39,8 +37,6 @@ function getImageTag({
       key={key}
       src={img.path}
       // We can't use alt or it will be what is captured when a user copies message
-      //   contents ("Emoji of ':1'"). Instead, we want the title to be copied (':+1:').
-      aria-label={i18n('emojiAlt', [title || ''])}
       className={classNames('emoji', sizeClass)}
       data-codepoints={img.full_idx}
       title={`:${title}:`}
@@ -63,7 +59,7 @@ export class Emojify extends React.Component<Props> {
   };
 
   public render() {
-    const { text, sizeClass, renderNonEmoji, i18n } = this.props;
+    const { text, sizeClass, renderNonEmoji } = this.props;
     const results: Array<any> = [];
     const regex = getRegex();
 
@@ -87,7 +83,7 @@ export class Emojify extends React.Component<Props> {
         results.push(renderNonEmoji({ text: textWithNoEmoji, key: count++ }));
       }
 
-      results.push(getImageTag({ match, sizeClass, key: count++, i18n }));
+      results.push(getImageTag({ match, sizeClass, key: count++ }));
 
       last = regex.lastIndex;
       match = regex.exec(text);

@@ -60,11 +60,12 @@ class Home extends React.Component {
 
   componentDidMount () {
     var self = this
+    const tx = window.translate
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-      self.userFeedback({ type: 'success', text: `${filename} created.` })
+      self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
     })
   }
 
@@ -79,7 +80,8 @@ class Home extends React.Component {
   }
 
   onError (event, error) {
-    const text = error ? error.toString() : 'Unknown'
+    const tx = window.translate
+    const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
 
@@ -142,10 +144,10 @@ class Home extends React.Component {
         )}
         {!deltachat.ready
           ? <LoginScreen logins={logins}>
-            <H5>{tx('loginNewAccountTitle')}</H5>
+            <H5>{tx('login_title')}</H5>
             <Login onSubmit={this.handleLogin} loading={deltachat.configuring}>
-              <Button type='submit' text={tx('login.button')} />
-              <Button type='cancel' text={tx('login.cancel')} />
+              <Button type='submit' text={tx('login_title')} />
+              <Button type='cancel' text={tx('cancel')} />
             </Login>
           </LoginScreen>
           : <Screen
@@ -221,7 +223,7 @@ function LoginScreen (props) {
   }
 
   function forgetLogin (login) {
-    const message = tx('forgetLoginConfirmation')
+    const message = tx('forget_login_confirmation_desktop')
     confirmation(message, (yes) => {
       if (yes) ipcRenderer.send('forgetLogin', login)
     })
@@ -232,13 +234,13 @@ function LoginScreen (props) {
       <NavbarWrapper>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>{tx('login.welcome')}</NavbarHeading>
+            <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
       </NavbarWrapper>
       <div className='window'>
         <Card>
-          <H5>{tx('loginKnownAccountsTitle')}</H5>
+          <H5>{tx('login_known_accounts_title_desktop')}</H5>
           <ul>
             {props.logins.map((login) => <LoginItem key={login}>
               <Button large minimal onClick={() => onClickLogin(login)}>

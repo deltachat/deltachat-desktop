@@ -37,7 +37,7 @@ class MessageDetail extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('messageDetailTitle')}
+        title={tx('menu_message_details')}
         icon='info-sign'
         onClose={onClose}>
         <div className={Classes.DIALOG_BODY}>

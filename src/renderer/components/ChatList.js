@@ -64,7 +64,7 @@ class ChatList extends React.Component {
   render () {
     const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
-    const missingChatsMsg = tx(showArchivedChats ? 'noArchivedChats' : 'noChats')
+    const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
 
     return (
       <ChatListWrapper>
@@ -77,7 +77,7 @@ class ChatList extends React.Component {
 
             // Don't show freshMessageCounter on selected chat
             if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-              const name = `${tx('newMessageFrom')} ${chat.name}`
+              const name = `${tx('new_message_from_desktop')} ${chat.name}`
               return (
                 <ContactRequestItemWrapper key={i}>
                   <ChatListItem

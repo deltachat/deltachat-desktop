@@ -25,7 +25,7 @@ class About extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('aboutDeltaChat')}
+        title={tx('about_deltachat_heading_desktop')}
         icon='info-sign'
         onClose={onClose}
         canOutsideClickClose={false}>

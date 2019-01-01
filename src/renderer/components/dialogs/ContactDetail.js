@@ -16,7 +16,7 @@ class ContactDetail extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('contactDetailTitle')}
+        title={tx('contact_detail_title_desktop')}
         icon='info-sign'
         onClose={onClose}>
         <div className={Classes.DIALOG_BODY}>
