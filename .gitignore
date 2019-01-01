@@ -1,7 +1,6 @@
 dist/
 static/bundle.js
 package-lock.json
-_locales/*.xml
 
 # Logs
 logs

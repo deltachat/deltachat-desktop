@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">O.k.</string>
+    <string name="cancel">Annullere</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nej</string>
+    <string name="on">Til</string>
+    <string name="off">Fra</string>
+    <string name="def">Standard</string>
+    <string name="custom">Tilpasset</string>
+    <string name="none">Ingen</string>
+    <string name="open">Åbne</string>
+    <string name="not_now">Ikke nu</string>
+    <string name="never">Aldrig</string>
+    <string name="one_moment">Et øjeblik…</string>
+    <string name="done">Færdig</string>
+    <string name="undo">Genskabe</string>
+    <string name="error">Fejl</string>
+    <string name="error_x">Fejl: %1$s</string>
+    <string name="error_no_network">Netværk utilgængelig</string>
+    <string name="no_app_to_handle_data">Kan ikke finde et program til håndtering af denne type data.</string>
+    <string name="no_browser_installed">Ingen netlæser installeret.</string>
+    <string name="file_not_found">Kunne ikke finde %1$s.</string>
+    <string name="copied_to_clipboard">Kopieret til klippebord</string>
+    <string name="contacts_headline">Kontakter</string>
+    <string name="email_address">E-post adresse</string>
+    <string name="bad_email_address">Ugyldig e-post adresse.</string>
+    <string name="password">Adgangskode</string>
+    <string name="now">Nu</string>
+    <string name="n_min_ago">%d min.</string>
+    <string name="today">I dag</string>
+    <string name="yesterday">I går</string>
+    <string name="this_week">Denne uge</string>
+    <string name="this_month">Denne uge</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minuter</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d timer</item>
+    </plurals>
+    <plurals name="n_chats">
+        <item quantity="one">1 samtale</item>
+        <item quantity="other">%1$d samtaler</item>
+    </plurals>
+    <plurals name="n_contacts">
+        <item quantity="one">1 kontakt</item>
+        <item quantity="other">%1$d kontakter</item>
+    </plurals>
+    <plurals name="n_messages">
+        <item quantity="one">1 besked</item>
+        <item quantity="other">%1$d beskeder</item>
+    </plurals>
+    <plurals name="n_members">
+        <item quantity="one">1 medlem</item>
+        <item quantity="other">%1$d medlemmer</item>
+    </plurals>
+
+    <string name="self">Undertegnede</string>
+    <string name="draft">Kladde</string>
+    <string name="image">Billede</string>
+    <string name="gif">Gif</string>
+    <string name="audio">Lyd</string>
+    <string name="voice_message">Tale besked</string>
+    <string name="video">Video</string>
+    <string name="contact">Kontakt</string>
+    <string name="camera">Kamera</string>
+    <string name="location">Placering</string>
+    <string name="gallery">Galleri</string>
+    <string name="file">Fil</string>
+    <string name="unknown">Ukendt</string>
+
+    <string name="green">Grøn</string>
+    <string name="red">Rød</string>
+    <string name="blue">Blå</string>
+    <string name="orange">Orange</string>
+    <string name="cyan">Turkis</string>
+    <string name="magenta">Magentarød</string>
+    <string name="white">Hvid</string>
+
+    <string name="small">Lille</string>
+    <string name="normal">Normal</string>
+    <string name="large">Stor</string>
+    <string name="extra_large">Ekstra stor</string>
+
+    <string name="fast">Hurtig</string>
+    <string name="slow">Langsom</string>
+
+    <string name="message_delivered">Besked leveret</string>
+    <string name="message_read">Besked læst</string>
+
+
+    <!-- menu labels (or icon, buttons...) -->
+    <string name="menu_new_contact">Ny kontakt</string>
+    <string name="menu_new_chat">Ny samtale</string>
+    <string name="menu_new_group">Ny gruppe</string>
+    <string name="menu_new_verified_group">Ny efterprøvet gruppe</string>
+    <string name="menu_send">Sende</string>
+    <string name="menu_toggle_keyboard">Skifte emoji tastatur</string>
+    <string name="menu_edit_group">Redigere gruppe</string>
+    <string name="menu_archive_chat">Arkivere samtale</string>
+    <string name="menu_unarchive_chat">Fjerne samtale fra arkiv</string>
+    <string name="menu_add_attachment">Tilføje vedhæftet</string>
+    <string name="menu_leave_group">Forlade gruppe</string>
+    <string name="menu_delete_chat">Slette samtale</string>
+    <string name="menu_delete_messages">Slette beskeder</string>
+    <string name="menu_delete_image">Slette billede</string>
+    <string name="menu_message_details">Besked detaljer</string>
+    <string name="menu_copy_to_clipboard">Kopiere til klippebord</string>
+    <string name="menu_forward">Videresende besked</string>
+    <string name="menu_resend">Gensende besked</string>
+    <string name="menu_reply">Svare besked</string>
+    <string name="menu_mute">Dæmpe påmindelser</string>
+    <string name="menu_unmute">Lyd</string>
+    <string name="menu_export_attachment">Eksportere vedhæftet</string>
+    <string name="menu_all_media">Alle medier</string>
+    <string name="menu_share">Dele</string>
+    <string name="menu_block_contact">Bolkere kontakt</string>
+    <string name="menu_unblock_contact">Fjerne kontakt blokering</string>
+    <string name="menu_play">Afspille</string>
+    <string name="menu_pause">Pause</string>
+    <string name="menu_scroll_to_bottom">Rulle til bunden</string>
+    <string name="menu_invite">Invitere venner</string>
+    <string name="menu_help">Hjælp</string>
+    <string name="menu_select_all">Vælge alle</string>
+    <string name="menu_expand">Udvide</string>
+    <string name="menu_edit_name">Redigere navn</string>
+    <string name="menu_settings">Opsætning</string>
+    <string name="menu_advanced">Avanceret</string>
+    <string name="menu_deaddrop">Kontakt forespørgseler</string>
+    <string name="menu_view_profile">Vise profil</string>
+
+    <string name="mute_for_one_hour">Dæmpe i 1 time</string>
+    <string name="mute_for_two_hours">Dæmpe i 2 timer</string>
+    <string name="mute_for_one_day">Dæmpe i 1 dag</string>
+    <string name="mute_for_seven_days">Dæmpe i 7 dage</string>
+    <string name="mute_for_one_year">Dæmpe i 1 år</string>
+
+
+    <!-- get confirmations -->
+    <string name="ask_leave_group">Forlade denne gruppe?</string>
+    <string name="ask_forward">Videresende beskeder til %1$s?</string>
+    <string name="ask_start_chat_with">Samtale med %1$s?</string>
+
+
+    <!-- contact list -->
+    <string name="contacts_title">Kontakter</string>
+    <string name="contacts_enter_name_or_email">Indtaste navn eller e-post adresse</string>
+    <string name="contacts_type_email_above">Indtaste e-post adresse ovenover</string>
+    <string name="contacts_empty_hint">Ingen kontakter</string>
+
+
+    <!-- chatlist and chat view -->
+    <plurals name="chat_archived">
+        <item quantity="one">Samtale arkiveret</item>
+        <item quantity="other">%d samtaler arkiveret</item>
+    </plurals>
+    <plurals name="chat_unarchived">
+        <item quantity="one">Samtale fjernet fra arkiv</item>
+        <item quantity="other">%d samtaler fjernet fra arkiv</item>
+    </plurals>
+    <string name="chat_archived_chats_title">Arkiverede samtaler</string>
+    <string name="chat_please_enter_message">Indtast besked</string>
+    <string name="chat_camera_unavailable">Kamera ikke tilgængelig</string>
+    <string name="chat_unable_to_record_audio">Kan ikke optage lyd.</string>
+    <plurals name="chat_n_unread_messages">
+        <item quantity="one">%d ikke læst besked</item>
+        <item quantity="other">%d ikke læste beskeder</item>
+    </plurals>
+    <string name="chat_record_slide_to_cancel">Trække for at annullere</string>
+    <string name="chat_all_done_hint">Indbakke tom</string>
+    <string name="chat_all_done_explain">Der er ikke mere!</string>
+    <string name="chat_share_with_title">Dele med</string>
+    <string name="chat_input_placeholder">Besked</string>
+    <string name="chat_archived_label">Arkiveret</string>
+    <string name="chat_no_messages">Ingen beskeder</string>
+    <string name="chat_self_talk_subtitle">Beskeder sendt til undertegnede</string>
+
+    <!-- search -->
+    <string name="search">Søge</string>
+    <string name="search_explain">Søge efter samtaler, kontakter og beskeder</string>
+    <string name="search_no_result_for_x">Ingen resultater fundet for  \"%s\"</string>
+
+
+    <!-- create/edit groups, contact/group profile -->
+    <string name="group_name">Gruppe navn</string>
+    <string name="group_avatar">Gruppe ikon</string>
+    <string name="group_create_button">Oprette gruppe</string>
+    <string name="group_please_enter_group_name">Indtast et navn til gruppen.</string>
+    <string name="group_add_members">Tilføje medlemmer</string>
+    <string name="group_hello_draft">Hej, har lige oprettet gruppen  \"%1$s\" til os.</string>
+    <string name="profile_encryption">Kryptering</string>
+
+
+    <!-- chat media view -->
+    <string name="media_preview">Medie forhåndvisning</string>
+    <string name="media_tab_media">Medie</string>
+    <string name="media_tab_documents">Dokumenter</string>
+    <string name="media_no_media_hint">Ingen medie</string>
+    <string name="media_no_documents_hint">Ingen dokumenter</string>
+
+
+    <string name="invite_default_text">Skift til Delta Chat - %1$s - skriv til mig på %2$s</string>
+
+
+    <!-- welcome and login -->
+    <string name="welcome_intro1_headline">Delta Chat</string>
+    <string name="welcome_intro2_headline">Uafhængig</string>
+    <string name="welcome_intro2_message">Der er ingen Delta Chat server. Programmet bruger kun din e-post server.</string>
+    <string name="welcome_intro3_headline">Hurtig</string>
+    <string name="welcome_intro4_headline">Kraftfuld</string>
+    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
+    <string name="welcome_intro5_headline">Fri</string>
+    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
+    <string name="welcome_intro5_message">Delta Chat er fri for altid. Åben kildekode. Ingen reklamer. Intet abonnement. Ingen leverandør låsning.</string>
+    <string name="welcome_intro6_headline">Krypteret</string>
+    <string name="welcome_intro7_headline">Troværdig</string>
+    <string name="welcome_start_messaging">Start skrivning</string>
+    <string name="login_title">Logind</string>
+    <string name="login_header">Logind til server</string>
+    <string name="login_inbox">Indbakke</string>
+    <string name="login_imap_login">IMAP logind navn</string>
+    <string name="login_imap_server">IMAP server</string>
+    <string name="login_imap_port">IMAP port</string>
+    <string name="login_imap_security">IMAP sikkerhed</string>
+    <string name="login_outbox">Udbakke</string>
+    <string name="login_smtp_login">SMTP login navn</string>
+    <string name="login_smtp_password">SMTP adgangskode</string>
+    <string name="login_smtp_server">SMTP server</string>
+    <string name="login_smtp_port">SMTP port</string>
+    <string name="login_smtp_security">SMTP sikkerhed</string>
+    <string name="login_error_mail">Indtast gyldig e-post adresse</string>
+    <string name="login_error_server">Indtast gyldig server / IP adresse</string>
+    <string name="login_error_port">Indtast gyldig port (1–65535)</string>
+    <string name="login_error_required_fields">Indtast gyldig e-post adresse og adgangskode</string>
+    <string name="import_backup_title">Importere sikkerhedskopi</string>
+    <!-- share and forward messages -->
+    <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
+    <string name="forward_to">Videresende til …</string>
+
+    <!-- preferences -->
+    <string name="pref_summary_privacy">Skærm lås %1$s, læs kvitteringer %2$s</string>
+    <string name="pref_summary_on">til</string>
+    <string name="pref_summary_off">fra</string>
+    <string name="pref_summary_default">standard</string>
+    <string name="pref_summary_custom">tilpasset</string>
+    <string name="pref_using_custom">Bruger tilpasset: %s</string>
+    <string name="pref_using_default">Bruger standard: %s</string>
+    <string name="pref_profile_info_headline">Profil information</string>
+    <string name="pref_profile_photo">Profil billede</string>
+    <string name="pref_trim_headline">Trimme besked</string>
+    <string name="pref_trim_option">Slette gamle beskeder</string>
+    <string name="pref_trim_length_limit">Samtale længde grænse</string>
+    <string name="pref_trim_length_limit_summary">%d beskeder pr. samtale</string>
+    <string name="pref_trim_now_button">Trimme alle samtaler</string>
+    <string name="pref_blocked_contacts">Blokerede kontakter</string>
+    <string name="pref_profile_photo_remove_ask">Fjerne profil billede?</string>
+    <string name="pref_help_url">https://delta.chat/en/help</string>
+    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
+    <string name="pref_password_and_account_settings">Adgangskode og konto opsætning</string>
+    <string name="pref_who_can_see_this_information">Hvem kan se denne information?</string>
+    <string name="pref_your_name">Nanv</string>
+    <string name="pref_default_status_label">Status tekst</string>
+    <string name="pref_default_status_text">Sendt med Delta Chat Messenger: https://delta.chat</string>
+    <string name="pref_enter_sends">Enter tast sender</string>
+    <string name="pref_enter_sends_explain">Tryk på enter tast vil sende tekst beskeden</string>
+    <string name="pref_vibrate">Vibrere</string>
+    <string name="pref_chat_settings">Samtale opsætning</string>
+    <string name="pref_change_secret">Ændre hemmelighed</string>
+    <string name="pref_change_secret_explain">Ændre PIN / mønster / fingeraftryk via system opsætning</string>
+    <string name="pref_screen_security">Skærm sikkerhed</string>
+    <string name="pref_screen_security_explain">Blokere skærmaftryk i nylig liste og i programmet</string>
+    <string name="pref_notifications">Påmindelser</string>
+    <string name="pref_notifications_show">Vise</string>
+    <string name="pref_notifications_priority">Prioritet</string>
+    <string name="pref_led_color">LED farve</string>
+    <string name="pref_led_pattern">LED blinke mønster</string>
+    <string name="pref_sound">Lyd</string>
+    <string name="pref_silent">Stille</string>
+    <string name="pref_repeat_notify">Gentage alarmer</string>
+    <string name="pref_privacy">Privatliv</string>
+    <string name="pref_chats_and_media">Samtaler og medie</string>
+    <string name="pref_light_theme">Lys</string>
+    <string name="pref_dark_theme">Mørk</string>
+    <string name="pref_appearance">Udseende</string>
+    <string name="pref_theme">Tema</string>
+    <string name="pref_language">Sprog</string>
+    <string name="pref_incognito_keyboard">Inkognito tastatur</string>
+    <string name="pref_read_receipts">Læse modtagelse</string>
+    <string name="pref_manage_keys">Håndtere nøgler</string>
+    <string name="pref_use_system_emoji">Bruge system emoji</string>
+    <string name="pref_use_system_emoji_explain">Deaktivere Delta Chat\'s indbygget emoji understøttelse</string>
+    <string name="pref_app_access">Program adgang</string>
+    <string name="pref_communication">Kommunikation</string>
+    <string name="pref_chats">Samtaler</string>
+    <string name="pref_messages">Beskeder</string>
+    <string name="pref_in_chat_sounds">I samtale lyde</string>
+    <string name="pref_message_text_size">Besked tekststørrelse</string>
+    <string name="pref_view_log">Vise log</string>
+    <string name="pref_other">Andet</string>
+    <string name="pref_backup">Sikkerhedskopi</string>
+    <string name="pref_backup_explain">Sikkerhedskopiere samtaler til eksternt lager</string>
+    <string name="pref_backup_export_start_button">Starte sikkerhedskopiering</string>
+    <string name="pref_backup_written_to_x">Sikkerhedskopi skrevet til %1$s</string>
+    <string name="pref_managekeys_menu_title">Håndtere nøgler</string>
+    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat behøver fil adgang for importere/eksportere nøgler.</string>
+    <string name="pref_managekeys_export_secret_keys">Eksportere hemmelige nøgler</string>
+    <string name="pref_managekeys_export_explain">Eksportere hemmelige nøgler til \"%1$s\"?</string>
+    <string name="pref_managekeys_import_secret_keys">Importere hemmelige nøgler</string>
+    <string name="pref_managekeys_secret_keys_exported_to_x">Hemmelige nøgler skrevet til \"%1$s\".</string>
+    <string name="pref_managekeys_secret_keys_imported_from_x">Hemmelige nøgler importeret fra \"%1$s\".</string>
+    <string name="pref_background">Samtale baggrund</string>
+    <string name="pref_imap_folder_handling">IMAP mappe håndtering</string>
+    <string name="pref_watch_inbox_folder">Overvåge indbakke mappe</string>
+    <string name="pref_watch_sent_folder">Overvåge sendt mappe</string>
+    <string name="pref_watch_mvbox_folder">Overvåge DeltaChat mappe</string>
+    <string name="pref_auto_folder_moves">Flytter automatisk til DeltaChat mappe</string>
+    <string name="pref_auto_folder_moves_explain">Samtaler er flyttet for at undgå rodet indbakke mappe</string>
+
+
+    <!-- autocrypt -->
+    <string name="autocrypt">Autocrypt</string>
+    <string name="autocrypt_send_asm_title">Sende Autocrypt opsætning besked</string>
+    <string name="autocrypt_send_asm_button">Sende autocrypt  opsætning besked</string>
+    <string name="autocrypt_prefer_e2ee">Foretrække ende-til-ende kryptering</string>
+    <string name="autocrypt_asm_subject">Autocrypt opsætning besked</string>
+    <string name="autocrypt_continue_transfer_title">Autocrypt opsætning besked</string>
+    <string name="autocrypt_continue_transfer_please_enter_code">Indtast opsætning kode vist på den anden enhed. </string>
+    <string name="autocrypt_continue_transfer_retry">Prøv igen</string>
+    <!-- system messages -->
+    <string name="systemmsg_group_name_changed">Gruppe navn ændret fra \"%1$s\" til \"%2$s\".</string>
+    <string name="systemmsg_group_image_changed">Gruppe billede ændret.</string>
+    <string name="systemmsg_group_image_deleted">Gruppe billede slettet.</string>
+    <string name="systemmsg_member_added">Medlem %1$s tilføjet.</string>
+    <string name="systemmsg_member_removed">Medlem %1$s fjernet.</string>
+    <string name="systemmsg_group_left">Gruppe forladt</string>
+    <string name="systemmsg_read_receipt_subject">Læse modtagelse</string>
+    <!-- screen lock -->
+    <string name="screenlock_title">Skærm lås</string>
+    <string name="screenlock_explain">Lås Delta Chat adgang med Android skærmlås eller fingeraftryk</string>
+    <string name="screenlock_authentication_failed">Godkendelse mislykket.</string>
+    <string name="screenlock_unlock_title">Lås Delta Chat op</string>
+    <string name="screenlock_unlock_description">Indtast system bestemt hemmelighed for at låse Delta Chat op.</string>
+    <string name="screenlock_inactivity_timeout">Inaktivitet tidsudløb lås</string>
+    <string name="screenlock_inactivity_timeout_explain">Autolås Delta Chat efter angiven tidsinterval med inaktivitet</string>
+    <string name="screenlock_inactivity_timeout_interval">Inaktivitet tidsudløb interval</string>
+
+
+    <!-- qr code stuff -->
+    <string name="qrscan_title">Skanne QR kode</string>
+    <string name="qrscan_hint">Placere kamera over QR kode</string>
+    <string name="qrscan_ask_join_verified_group">Tilslutte efterprøvet gruppe \"%1$s\"?</string>
+    <string name="qrscan_ask_fingerprint_ask_oob">Efterprøve kontakt og start samtale med \"%1$s\"?</string>
+    <string name="qrscan_ask_chatting_fingerprint_ok">Kontakt \"%1$s\" efterprøvet. Start samtale?</string>
+    <string name="qrscan_fingerprint_mismatch">Skannet fingeraftryk passer ikke sammen med seneste for \"%1$s\".</string>
+    <string name="qrscan_contains_text">Skannet QR kode tekst:\n\n%1$s</string>
+    <string name="qrscan_contains_url">Skannet QR kode URL:\n\n%1$s</string>
+    <string name="qrscan_fingerprint_label">Fingeraftryk</string>
+    <string name="qrscan_x_verified_introduce_myself">%1$s efterprøvet, introducere…</string>
+    <string name="qrshow_title">Vise QR efterprøv kode</string>
+    <string name="qrshow_x_joining">%1$s tilslutter.</string>
+    <string name="qrshow_x_verified">%1$s efterprøvet.</string>
+    <string name="qrshow_x_has_joined_group">%1$s sikkert tilsluttet gruppen.</string>
+    <string name="qrshow_join_verified_group_hint">Skanne for at tilslutte efterprøvet gruppe \"%1$s\".</string>
+    <string name="qrshow_join_verified_group_title">QR inviteringskode </string>
+    <string name="qrshow_join_contact_title">QR efterprøve kode</string>
+    <string name="qrshow_join_contact_hint">\"%1$s\" skanne for at opsætte efterprøvet kontakt.</string>
+
+
+    <!-- notifications  -->
+    <string name="notify_n_messages_in_m_chats">%1$d nye beskeder i %2$d samtaler</string>
+    <string name="notify_most_recent_from">Nylig fra: %1$s</string>
+    <string name="notify_media_message_with_text">Medie besked: %s</string>
+    <string name="notify_mark_all_read">Vælge alle som læst</string>
+    <string name="notify_mark_read">Vælge læst</string>
+    <string name="notify_media_message">Medie besked</string>
+    <string name="notify_reply_button">Svare</string>
+    <string name="notify_new_message">Ny besked</string>
+    <string name="notify_background_connection_enabled">Baggrunds forbindelse aktiveret</string>
+    <string name="notify_priority_high">Høj</string>
+    <string name="notify_priority_max">Maks</string>
+    <string name="notify_name_and_message">Navn og besked</string>
+    <string name="notify_name_only">Kun navn</string>
+    <string name="notify_no_name_or_message">Ingen navn eller besked</string>
+    <string name="notify_repeat_one_time">Én gang</string>
+    <string name="notify_repeat_two_times">To gange</string>
+    <string name="notify_repeat_three_times">Tre gange</string>
+    <string name="notify_repeat_five_times">Fem gange</string>
+    <string name="notify_repeat_ten_times">10 gange</string>
+
+
+    <!-- permissions -->
+    <string name="perm_required_title">Tilladelse påkrævet</string>
+    <string name="perm_continue">Fortsætte</string>
+    <string name="perm_not_now">Ikke nu</string>
+    <string name="perm_explain_need_for_camera_access">For at fange billeder og video, tillad Delta Chat adgang til kamera.</string>
+    <string name="perm_explain_need_for_mic_access">For at sende lyd beskeder, tillad Delta Chat mikrofon adgang.</string>
+    <string name="perm_explain_need_for_storage_access">Delta Chat behøver fil adgang for at kunne eksportere filer eller oprette sikkerhedskopier.</string>
+    </resources>
