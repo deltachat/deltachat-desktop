@@ -32,7 +32,7 @@ class ImexProgress extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('imexProgressTitle')}
+        title={tx('imex_progress_title_desktop')}
         icon='exchange'
         canEscapeKeyClose={false}
         isCloseButtonShown={false}

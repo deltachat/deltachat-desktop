@@ -104,7 +104,7 @@ export class ConversationHeader extends React.Component<Props> {
         {isVerified ? (
           <span>
             <span className="module-conversation-header__title__verified-icon" />
-            {i18n('verified')}
+            {i18n('verified_desktop')}
           </span>
         ) : null}
       </div>
@@ -230,7 +230,7 @@ export class ConversationHeader extends React.Component<Props> {
         {!isGroup ? (
           <MenuItem onClick={onResetSession}>{i18n('resetSession')}</MenuItem>
         ) : null}
-        <MenuItem onClick={onDeleteMessages}>{i18n('deleteMessages')}</MenuItem>
+        <MenuItem onClick={onDeleteMessages}>{i18n('menu_delete_messages')}</MenuItem>
       </ContextMenu>
     );
   }

@@ -3,12 +3,12 @@ import { Localizer } from '../types/Util';
 
 const getExtendedFormats = (i18n: Localizer) => ({
   y: 'lll',
-  M: `${i18n('timestampFormat_M') || 'MMM D'} LT`,
+  M: `${i18n('timestamp_format_m_desktop') || 'MMM D'} LT`,
   d: 'ddd LT',
 });
 const getShortFormats = (i18n: Localizer) => ({
   y: 'll',
-  M: i18n('timestampFormat_M') || 'MMM D',
+  M: i18n('timestamp_format_m_desktop') || 'MMM D',
   d: 'ddd',
 });
 

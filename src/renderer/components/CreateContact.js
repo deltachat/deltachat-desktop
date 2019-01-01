@@ -61,7 +61,7 @@ class CreateContact extends React.Component {
     } else if (email.length) {
       createContact(email.split('@')[0], email)
     } else {
-      return this.props.userFeedback({ type: 'error', text: tx('emailValidationFailed') })
+      return this.props.userFeedback({ type: 'error', text: tx('email_validation_failed_desktop') })
     }
   }
 
@@ -73,13 +73,13 @@ class CreateContact extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
-              <NavbarHeading>{tx('addContact')}</NavbarHeading>
+              <NavbarHeading>{tx('add_contact_desktop')}</NavbarHeading>
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
         <div className='window'>
           <form onSubmit={this.handleSubmit}>
-            <FormGroup label={tx('login.email')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login.required')})`}>
+            <FormGroup label={tx('email_address')} placeholder='E-Mail Address' labelFor='email' labelInfo={`(${tx('login_required_desktop')})`}>
               <InputGroup
                 id='email'
                 type='text'
@@ -88,7 +88,7 @@ class CreateContact extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <FormGroup label={tx('name')} placeholder='Name' labelFor='name'>
+            <FormGroup label={tx('name_desktop')} placeholder='Name' labelFor='name'>
               <InputGroup
                 id='name'
                 leftIcon='person'
@@ -97,7 +97,7 @@ class CreateContact extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            <Button type='submit' text={tx('addContact')} />
+            <Button type='submit' text={tx('add_contact_desktop')} />
           </form>
         </div>
       </div>

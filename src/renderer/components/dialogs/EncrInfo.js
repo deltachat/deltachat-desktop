@@ -52,7 +52,7 @@ class EncrInfo extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('encryptionInfoTitle')}
+        title={tx('encryption_info_title_desktop')}
         icon='lock'
         onClose={this.onClose}
         canOutsideClickClose={false}>

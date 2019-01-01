@@ -61,7 +61,7 @@ class Settings extends React.Component {
   onBackupImport () {
     const tx = window.translate
     var opts = {
-      title: tx('importBackup'),
+      title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
     }
@@ -74,12 +74,12 @@ class Settings extends React.Component {
   onBackupExport () {
     const tx = window.translate
     var confirmOpts = {
-      buttons: [tx('cancel'), tx('exportBackup')]
+      buttons: [tx('cancel'), tx('export_backup_desktop')]
     }
-    confirmationDialog(tx('backupConfirmationMessage'), confirmOpts, response => {
+    confirmationDialog(tx('pref_backup_export_explain'), confirmOpts, response => {
       if (!response) return
       var opts = {
-        title: tx('exportBackup'),
+        title: tx('export_backup_desktop'),
         defaultPath: remote.app.getPath('downloads'),
         properties: ['openDirectory']
       }

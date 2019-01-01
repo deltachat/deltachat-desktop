@@ -223,7 +223,7 @@ function LoginScreen (props) {
   }
 
   function forgetLogin (login) {
-    const message = tx('forgetLoginConfirmation')
+    const message = tx('forget_login_confirmation_desktop')
     confirmation(message, (yes) => {
       if (yes) ipcRenderer.send('forgetLogin', login)
     })

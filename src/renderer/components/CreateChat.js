@@ -50,7 +50,7 @@ class CreateChat extends React.Component {
   chooseContact (contact) {
     const tx = window.translate
     var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
-    if (!chatId) return this.props.userFeedback({ type: 'error', text: tx('createChatError') })
+    if (!chatId) return this.props.userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
     this.props.changeScreen('ChatView', { chatId })
   }
 
@@ -64,15 +64,15 @@ class CreateChat extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
-              <NavbarHeading>{tx('newChat')}</NavbarHeading>
+              <NavbarHeading>{tx('menu_new_chat')}</NavbarHeading>
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
         <div className='window'>
           <div className='CreateChat'>
-            <button onClick={this.onCreateGroup}>{tx('newGroup')}</button>
-            <button onClick={this.onCreateVerifiedGroup}>{tx('newVerifiedGroup')}</button>
-            <button onClick={this.onCreateContact}>{tx('addContact')}</button>
+            <button onClick={this.onCreateGroup}>{tx('menu_new_group')}</button>
+            <button onClick={this.onCreateVerifiedGroup}>{tx('menu_new_verified_group')}</button>
+            <button onClick={this.onCreateContact}>{tx('add_contact_desktop')}</button>
             <ContactList
               contacts={contacts}
               onContactClick={this.chooseContact.bind(this)}

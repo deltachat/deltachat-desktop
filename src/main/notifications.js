@@ -13,7 +13,7 @@ module.exports = function (dc, settings) {
 
   function getMsgBody (msgId) {
     const tx = app.translate
-    if (!settings.showNotificationContent) return tx('newMessageNotification')
+    if (!settings.showNotificationContent) return tx('notify_new_message')
     var json = dc.messageIdToJson(msgId)
     var summary = json.msg.summary
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`

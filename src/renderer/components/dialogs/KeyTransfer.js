@@ -29,7 +29,7 @@ class KeyViewPanel extends React.Component {
     const tx = window.translate
     return (
       <div>
-        <p>{tx('showKeyTransferMessage')}</p>
+        <p>{tx('show_key_transfer_message_desktop')}</p>
         <pre>{formattedAutocryptKey}</pre>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
@@ -56,9 +56,9 @@ class InitiatePanel extends React.Component {
     const tx = window.translate
     return (
       <div>
-        <p>{tx('initiateKeyTransfer')}</p>
+        <p>{tx('initiate_key_transfer_desktop')}</p>
         <ButtonGroup>
-          <Button onClick={this.props.onClick} text={tx('initiateKeyTransferTitle')} />
+          <Button onClick={this.props.onClick} text={tx('initiate_key_transfer_title_desktop')} />
         </ButtonGroup>
       </div>
     )
@@ -105,7 +105,7 @@ class KeyTransfer extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('autocryptKeyTransfer')}
+        title={tx('autocrypt_key_transfer_desktop')}
         icon='exchange'
         onClose={onClose}
         canOutsideClickClose={false}>

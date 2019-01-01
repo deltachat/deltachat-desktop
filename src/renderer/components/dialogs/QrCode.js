@@ -11,7 +11,7 @@ class QrCode extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('qrCode')}
+        title={tx('qrscan_title')}
         icon='barcode'
         onClose={onClose}
         style={{ width: 296 }}

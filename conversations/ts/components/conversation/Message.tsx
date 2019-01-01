@@ -422,7 +422,6 @@ export class Message extends React.Component<Props, State> {
             className="module-message__img-attachment"
             height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
             src={attachment.url}
-            alt={i18n('imageAttachmentAlt')}
           />
           <div
             className={classNames(
@@ -832,7 +831,7 @@ export class Message extends React.Component<Props, State> {
             }}
             onClick={onDownload}
           >
-            {i18n('downloadAttachment')}
+            {i18n('download_attachment_desktop')}
           </MenuItem>
         ) : null}
         <MenuItem
@@ -841,7 +840,7 @@ export class Message extends React.Component<Props, State> {
           }}
           onClick={onReply}
         >
-          {i18n('replyToMessage')}
+          {i18n('reply_to_message_desktop')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -849,7 +848,7 @@ export class Message extends React.Component<Props, State> {
           }}
           onClick={onForward}
         >
-          {i18n('forwardMessage')}
+          {i18n('menu_forward')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -857,7 +856,7 @@ export class Message extends React.Component<Props, State> {
           }}
           onClick={onShowDetail}
         >
-          {i18n('moreInfo')}
+          {i18n('more_info_desktop')}
         </MenuItem>
         {showRetry ? (
           <MenuItem
@@ -875,7 +874,7 @@ export class Message extends React.Component<Props, State> {
           }}
           onClick={onDelete}
         >
-          {i18n('deleteMessage')}
+          {i18n('delete_message_desktop')}
         </MenuItem>
       </ContextMenu>
     );

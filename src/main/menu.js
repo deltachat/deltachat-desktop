@@ -15,7 +15,7 @@ function init () {
   log('rebuilding menu with language', app.localeData.locale)
   const template = getMenuTemplate()
   const menu = electron.Menu.buildFromTemplate(setLabels(template))
-  const item = getMenuItem(menu, app.translate('menu.view.floatontop'))
+  const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))
   if (item) item.checked = windows.main.isAlwaysOnTop()
   electron.Menu.setApplicationMenu(menu)
 }
@@ -174,7 +174,6 @@ function getMenuTemplate () {
 
 function getMenuItem (menu, label) {
   for (let i = 0; i < menu.items.length; i++) {
-    console.log( menu.items[i])
     const menuItem = menu.items[i].submenu.items.find(function (item) {
       return item.label === label
     })

@@ -25,7 +25,7 @@ class ForwardMessage extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('forwardMessageTitle')}
+        title={tx('menu_forward')}
         icon='info-sign'
         onClose={onClose}>
         <div className={Classes.DIALOG_BODY}>

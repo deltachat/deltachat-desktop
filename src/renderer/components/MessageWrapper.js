@@ -219,7 +219,7 @@ function convert (message) {
 
   var msg = message.msg
 
-  if (msg.isSetupmessage) msg.text = window.translate('setupMessageInfo')
+  if (msg.isSetupmessage) msg.text = window.translate('autocrypt_asm_click_body')
   msg = Object.assign(msg, {
     sentAt: msg.timestamp * 1000,
     receivedAt: msg.receivedTimestamp * 1000,

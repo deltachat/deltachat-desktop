@@ -96,7 +96,7 @@ class SetupMessagePanel extends React.Component {
 
     return (<div>
       <Card>
-        {tx('autocryptEnterMessage')}
+        {tx('autocrypt_continue_transfer_please_enter_code')}
       </Card>
       <InputTransferKey>
         {this.renderInputKey()}
@@ -104,7 +104,7 @@ class SetupMessagePanel extends React.Component {
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           <ButtonGroup>
-            <Button onClick={this.onClick.bind(this)}>{tx('transferKey')}</Button>
+            <Button onClick={this.onClick.bind(this)}>{tx('transfer_key_desktop')}</Button>
           </ButtonGroup>
         </div>
       </div>
@@ -127,10 +127,10 @@ class SetupMessage extends React.Component {
     const tx = window.translate
     if (err) {
       this.setState({ loading: false })
-      this.props.userFeedback({ type: 'error', text: tx('autocryptIncorrect') })
+      this.props.userFeedback({ type: 'error', text: tx('autocrypt_incorrect_desktop') })
     } else {
       this.setState({ loading: false })
-      this.props.userFeedback({ type: 'success', text: tx('autocryptCorrect') })
+      this.props.userFeedback({ type: 'success', text: tx('autocrypt_correct_desktop') })
       this.onClose()
     }
   }
@@ -158,6 +158,7 @@ class SetupMessage extends React.Component {
     const { setupMessage, onClose } = this.props
     const { autocryptKey, loading } = this.state
     const isOpen = !!setupMessage
+    const tx = window.translate
 
     let body
     if (loading) {
@@ -174,7 +175,7 @@ class SetupMessage extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title='Autocrypt Key Transfer'
+        title={tx('autocrypt_key_transfer_desktop')}
         icon='exchange'
         onClose={onClose}
         canOutsideClickClose={false}>

@@ -7,36 +7,32 @@ module.exports = {
 const merge = require('lodash.merge')
 const path = require('path')
 const fs = require('fs')
-
-
 const log = require('./main/log')
 
 function translate (messages) {
   function getMessage (key, substitutions, opts) {
-    if(typeof opts === 'string') opts = {quantity: opts}
-    if(!opts) opts = {}
+    if (typeof opts === 'string') opts = { quantity: opts }
+    if (!opts) opts = {}
 
     const entry = messages[key]
 
     if (!entry) {
-      console.error(
-        `%c[Translations]%c Attempted to get translation for nonexistent key %c'${key}'`, 'color:olive;background:white', '', 'background:yellow'
-      )
+      console.error(`[TRANSLATIONS] Missing translation for key '${key}'`)
       return key
     }
 
     let message = entry.message
-    if(opts.quantity) {
-      if(typeof entry[opts.quantity] !== 'undefined') {
+    if (opts.quantity) {
+      if (typeof entry[opts.quantity] !== 'undefined') {
         message = entry[opts.quantity]
       } else {
         console.error(
-          ` 	🌐translation: Missing quantity  '${opts.quantity}' for key '${key}'`
+          `[TRANSLATIONS] Missing quantity '${opts.quantity}' for key '${key}'`
         )
       }
     }
 
-    if(substitutions) {
+    if (substitutions) {
       if (!Array.isArray(substitutions)) {
         substitutions = [substitutions]
       }
@@ -44,9 +40,7 @@ function translate (messages) {
       let c = 0
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
-          console.error(
-            `%c[Translations]%c Missing ${c}th argument for key %c'${key}'`, 'color:olive;background:white', 'background:yellow'
-          )
+          console.error(`[TRANSLATIONS] Missing ${c} argument for key %c'${key}'`)
         }
         return substitutions[c++].toString()
       })

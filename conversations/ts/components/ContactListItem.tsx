@@ -61,7 +61,7 @@ export class ContactListItem extends React.Component<Props> {
     } = this.props;
 
     const title = name ? name : phoneNumber;
-    const displayName = isMe ? i18n('me') : title;
+    const displayName = isMe ? i18n('me_desktop') : title;
 
     const profileElement =
       !isMe && profileName && !name ? (
@@ -91,7 +91,7 @@ export class ContactListItem extends React.Component<Props> {
             {showVerified ? (
               <img className="module-contact-list-item__text__verified-icon" src='../images/verified.png' />
             ) : null}
-            {showVerified ? ` ${i18n('verified')}` : null}
+            {showVerified ? ` ${i18n('verified_desktop')}` : null}
             {showVerified && showNumber ? ' ∙ ' : null}
             {showNumber ? phoneNumber : null}
           </div>

@@ -154,9 +154,8 @@ class Composer extends React.Component {
           rows='1'
           value={this.state.text}
           onKeyDown={this.onKeyDown.bind(this)}
-          aria-label={tx('writeMessageAriaLabel')}
           onChange={this.handleChange}
-          placeholder={tx('writeMessage')}
+          placeholder={tx('write_message_desktop')}
         />
         <SendButtonCircleWrapper onClick={this.sendMessage}>
           <SendButton />
