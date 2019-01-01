@@ -51,10 +51,10 @@ class ContactList extends React.Component {
   }
 
   render () {
-    const { childProps, onContactClick, sortFunc } = this.props
+    const { childProps, onContactClick, filter } = this.props
     let contacts = this.props.contacts
     if (!contacts) contacts = this._getContacts()
-    if (sortFunc) contacts = contacts.sort(sortFunc)
+    if (filter) contacts = contacts.filter(filter)
     return <div>
       <SearchInput
         onChange={this.handleSearch}

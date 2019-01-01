@@ -23,18 +23,23 @@ class GroupBase extends React.Component {
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
     this.back = this.back.bind(this)
+    this.state.changedContacts = this.state.changedContacts || {}
   }
 
   addToGroup (contactId) {
     const group = this.state.group
     group[contactId] = true
-    this.setState({ group })
+    const changedContacts = this.state.changedContacts
+    changedContacts[contactId] = (typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
+    this.setState({ group, changedContacts })
   }
 
   removeFromGroup (contactId) {
     const group = this.state.group
     delete group[contactId]
-    this.setState({ group })
+    const changedContacts = this.state.changedContacts
+    changedContacts[contactId] = (typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
+    this.setState({ group, changedContacts })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -44,6 +49,11 @@ class GroupBase extends React.Component {
 
   contactInGroup (contactId) {
     return !!this.state.group[contactId]
+  }
+
+  contactInGroupStateChanged (contactId) {
+    const changedContacts = this.state.changedContacts
+    return !(typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
   }
 
   toggleContact (contact) {
@@ -129,15 +139,31 @@ class GroupBase extends React.Component {
             </div>
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('show_qr_verify_code_desktop')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('show_qr_invite_code_desktop')}</button>) }
-            <ContactList
-              sortFunc={(contactA, contactB) => {
-                return Number(this.contactInGroup(contactB.id)) - Number(this.contactInGroup(contactA.id))
-              }}
-              childProps={(contact) => {
-                return { color: this.contactInGroup(contact.id) ? 'green' : '' }
-              }}
-              onContactClick={this.toggleContact.bind(this)}
-            />
+            <table>
+              <thead><tr><th>Groupmembers</th><th>Not in this group</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <ContactList
+                      filter={(contact) => this.contactInGroup(contact.id)}
+                      childProps={(contact) => {
+                        return { color: !this.contactInGroupStateChanged(contact.id) ? 'green' : 'yellow' }
+                      }}
+                      onContactClick={this.toggleContact.bind(this)}
+                    />
+                  </td>
+                  <td>
+                    <ContactList
+                      filter={(contact) => !this.contactInGroup(contact.id)}
+                      childProps={(contact) => {
+                        return { color: this.contactInGroupStateChanged(contact.id) ? 'red' : '' }
+                      }}
+                      onContactClick={this.toggleContact.bind(this)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
