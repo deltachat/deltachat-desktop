@@ -473,6 +473,7 @@
     <string name="language_hr">Croatian</string>
     <string name="language_hu">Hungarian</string>
     <string name="language_it">Italian</string>
+    <string name="language_id">Indonesian</string>
     <string name="language_ja_JP">Japanese</string>
     <string name="language_ko">Korean</string>
     <string name="language_nb_NO">Norwegian Bokmål</string>
@@ -481,6 +482,7 @@
     <string name="language_pl">Polish</string>
     <string name="language_pt">Portuguese</string>
     <string name="language_ru">Russian</string>
+    <string name="language_ru_RU">Russian (Russia)</string>
     <string name="language_sq">Albanian</string>
     <string name="language_sr">Serbian</string>
     <string name="language_sv">Swedish</string>
