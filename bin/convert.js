@@ -36,8 +36,12 @@ function xmlToJson (filename) {
   js.resources.string.forEach((string) => {
     var name = string._attributes.name
     if (!name) return error(string)
+    var text = string._text
+    if (typeof text === 'string') {
+      text = text.replace(/\\n/g, '\n')
+    }
     res[name] = {
-      'message': string._text
+      'message': text
     }
   })
 
