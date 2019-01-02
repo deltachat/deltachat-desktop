@@ -1,9 +1,3 @@
-module.exports = {
-  setup,
-  translate,
-  getLocaleMessages
-}
-
 const merge = require('lodash.merge')
 const path = require('path')
 const fs = require('fs')
@@ -52,53 +46,48 @@ function translate (messages) {
   return getMessage
 }
 
-function normalizeLocaleName (locale) {
-  if (/^en-/.test(locale)) {
-    return 'en'
-  }
+function setup (app, locale) {
+  const english = getLocaleMessages(localeFile('en'))
 
-  return locale
-}
-
-function getLocaleMessages (locale) {
-  const onDiskLocale = locale.replace('-', '_')
-
-  const targetFile = path.join(
-    __dirname,
-    '..',
-    '_locales',
-    onDiskLocale + '.json'
-  )
-
-  try {
-    return JSON.parse(fs.readFileSync(targetFile, 'utf-8'))
-  } catch (err) {
-    throw new Error(`JSON parse error in language file '${targetFile}'`, err)
-  }
-}
-
-function setup (app, name) {
-  let locale = normalizeLocaleName(name)
-  // default to english when string not found
-  const english = getLocaleMessages('en')
   let messages
+  let file = localeFile(locale)
 
-  try {
-    messages = getLocaleMessages(locale)
-    messages = merge(english, messages)
-  } catch (e) {
-    log.error(`Could not load messages for ${locale} ${e.stack}`)
+  if (!fs.existsSync(file)) {
+    locale = locale.split('-')[0]
+    file = localeFile(locale)
+  }
+
+  if (fs.existsSync(file)) {
+    try {
+      messages = getLocaleMessages(file)
+      messages = merge(english, messages)
+    } catch (e) {
+      log.error(`Could not load messages for ${locale} ${e.stack}`)
+      locale = 'en'
+      messages = english
+    }
+  } else {
     locale = 'en'
     messages = english
   }
 
-  var localeData = {
-    messages,
-    locale
-  }
-
+  const localeData = { messages, locale }
   app.localeData = localeData
   app.translate = translate(app.localeData.messages)
-
   return localeData
 }
+
+function localeFile (locale) {
+  const onDiskLocale = locale.replace('-', '_')
+  return path.join(__dirname, '..', '_locales', onDiskLocale + '.json')
+}
+
+function getLocaleMessages (file) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf-8'))
+  } catch (err) {
+    throw new Error(`JSON parse error in language file '${file}'`)
+  }
+}
+
+module.exports = { setup, translate }
