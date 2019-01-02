@@ -541,7 +541,7 @@
     <string name="add_contact_desktop">Add contact</string>
     <string name="login_required_desktop">required</string>
     <string name="name_desktop">Name</string>
-    <string name="autocrypt_key_transfer_desktop">Autcrypt key transfer</string>
+    <string name="autocrypt_key_transfer_desktop">Autocrypt key transfer</string>
     <string name="initiate_key_transfer_title_desktop">Initiate key transfer</string>
     <string name="initiate_key_transfer_desktop">An Autocrypt Setup Message securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code which is displayed here and must be typed on the other device.</string>
     <string name="reply_to_message_desktop">Reply to message</string>
