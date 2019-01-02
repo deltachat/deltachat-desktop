@@ -7,6 +7,7 @@ const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
+/* *CONFIG* */
 const config = require('../config')
 const logins = require('./logins')
 const ipc = require('./ipc')
@@ -25,7 +26,7 @@ process.on('exit', function () {
 
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
-
+/* *CONFIG* */
 let argv = sliceArgv(process.argv)
 
 if (config.IS_PRODUCTION) {
@@ -33,7 +34,7 @@ if (config.IS_PRODUCTION) {
   // in production mode too.
   process.env.NODE_ENV = 'production'
 }
-
+/* *CONFIG* */
 // (On Windows and Linux, we get a flag. On MacOS, we get special API.)
 const hidden = argv.includes('--hidden') ||
   (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
@@ -62,6 +63,7 @@ function onReady (err, results) {
   localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(state, { hidden })
   menu.init()
+  /* *CONFIG* */
   if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
 
   // Report uncaught exceptions
@@ -74,6 +76,7 @@ function onReady (err, results) {
 }
 
 app.once('ipcReady', () => {
+  /* *CONFIG* */
   log.info(`Command line args: ${argv}`, argv, 'cmd_args')
   console.timeEnd('init')
 
@@ -118,6 +121,7 @@ app.on('web-contents-created', (e, contents) => {
 // Development: 2 args, eg: electron .
 // Test: 4 args, eg: electron -r .../mocks.js .
 function sliceArgv (argv) {
+  /* *CONFIG* */
   return argv.slice(config.IS_PRODUCTION ? 1
     : config.IS_TEST ? 4
       : 2)

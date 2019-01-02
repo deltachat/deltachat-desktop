@@ -1,6 +1,7 @@
 const React = require('react')
 const { remote } = require('electron')
 const { Classes, Dialog } = require('@blueprintjs/core')
+/* *CONFIG* */
 const { APP_VERSION } = require('../../../config')
 const Unselectable = require('../helpers/Unselectable')
 

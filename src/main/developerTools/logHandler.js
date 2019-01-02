@@ -42,6 +42,7 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
 
   // TODO send update ipc to debug Window somehow
 
+  /* *CONFIG* */ // For turning this behavior on:
   if (channel === 'logger' || channel === 'core' || channel.includes('main')) {
     // send also to 'normal' dev console
     if (app.ipcReady) {

@@ -2,6 +2,7 @@ const esp = require('error-stack-parser')
 const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
 var handler
 
+/* *CONFIG* */
 var OPTIONS = {
   logDebug: true,
   alsoLogInLocalConsole: false

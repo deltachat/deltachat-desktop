@@ -1,4 +1,5 @@
 const windows = require('./windows')
+/* *CONFIG* */
 const config = require('../config')
 
 const {

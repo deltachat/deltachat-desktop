@@ -17,6 +17,7 @@ const main = module.exports = {
 const electron = require('electron')
 const debounce = require('debounce')
 
+/* *CONFIG* */
 const config = require('../../config')
 const log = require('../../logger').getLogger('main/mainWindow')
 

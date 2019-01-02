@@ -27,6 +27,7 @@ class Login extends React.Component {
   }
 
   _defaultCredentials () {
+    /* *CONFIG* */
     return {
       addr: process.env.DC_ADDR || this.props.addr || '',
       mailUser: this.props.mailUser || '',

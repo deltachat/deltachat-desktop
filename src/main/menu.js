@@ -7,6 +7,7 @@ const fs = require('fs')
 const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
+/* *CONFIG* */
 const config = require('../config')
 const { getFullLogFilePath } = require('./developerTools/logHandler')
 
