@@ -147,6 +147,11 @@ class DeltaMenu extends React.Component {
         text={tx('menu_deaddrop')}
         onClick={controller.onContactRequests}
       />
+      <MenuItem
+        icon='blocked-person'
+        text={tx('unblock_contacts_desktop')}
+        onClick={controller.onUnblockContacts}
+      />
       <MenuItem icon='log-out' text={tx('logout_desktop')} onClick={controller.logout} />
     </Menu>)
   }
