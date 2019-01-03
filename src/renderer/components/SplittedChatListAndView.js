@@ -84,6 +84,7 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChat, showArchivedChats } = deltachat
 
     const tx = window.translate
+    const profileImage = selectedChat && selectedChat.profileImage
 
     const menu = <Menu
       openDialog={this.props.openDialog}
@@ -105,7 +106,7 @@ class SplittedChatListAndView extends React.Component {
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              <img src={selectedChat ? selectedChat.profileImage : null} />
+              {profileImage && <img src={profileImage} />}
               <NavbarHeading>
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
