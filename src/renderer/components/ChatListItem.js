@@ -1,7 +1,7 @@
 const React = require('react')
 const classNames = require('classnames')
 const { MessageBody, Timestamp } = require('./conversations')
-const ContactName = require('./ContactName')
+const ContactName = require('./conversations/ContactName')
 
 class ChatListItem extends React.Component {
   renderAvatar () {

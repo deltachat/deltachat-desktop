@@ -1,10 +1,10 @@
 const React = require('react')
 const classNames = require('classnames')
-const { MessageBody, Quote, EmbeddedContact, Timestamp } = require('./conversations')
+const { MessageBody, Quote, EmbeddedContact, Timestamp } = require('../conversations')
 const { ExpireTimer, getIncrement } = require('./ExpireTimer')
 const ContactName = require('./ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const Attachment = require('./Attachment')
+const Attachment = require('../Attachment')
 
 const EXPIRATION_CHECK_MINIMUM = 2000
 const EXPIRED_DELAY = 600
