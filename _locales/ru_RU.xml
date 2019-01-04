@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Дельта Чат</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="none">Ничего</string>
+    <string name="open">Открыть</string>
+    <string name="not_now">Не сейчас</string>
+    <string name="never">Никогда</string>
+    <string name="one_moment">Один момент...</string>
+    <string name="error">Ошибка</string>
+    <string name="error_no_network">Сеть не доступна</string>
+    <string name="contacts_headline">Контакты</string>
+    <string name="password">Пароль</string>
+    <string name="now">Сейчас</string>
+    <string name="today">Сегодня</string>
+    <string name="this_week">На этой неделе</string>
+    <string name="this_month">В этом месяце</string>
     </resources>

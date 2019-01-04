@@ -16,6 +16,7 @@
     <string name="error">错误</string>
     <string name="password">密码</string>
     <string name="now">现在</string>
+    <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d 分钟</string>
     <string name="today">今天</string>
     </resources>
