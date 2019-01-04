@@ -4,7 +4,7 @@ host = https://www.transifex.com
 [delta-chat-app.stringsxml]
 file_filter = _locales/<lang>.xml
 minimum_perc = 0
-source_file = _locales/xx.xml
-source_lang = xx
+source_file = _locales/en.xml
+source_lang = en
 type = ANDROID
 
