@@ -133,14 +133,23 @@ or keyboard while the tests are running.
 
 Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat App` project.
 
-And periodically we can run the following command to get the new translation
-strings from translators:
+And periodically we can run the following command to get the new translation strings from translators:
 
 ```
-npm run translations
+tx pull --all
 ```
 
-This converts the translations from xml to json. Commit these new translations to the repository.
+Note that this command updated `_locales/*.xml`. In order to convert from xml to json you can do:
+
+```
+npm run build-translations
+```
+
+When you need to modify language strings, this should be done in `_locales/en.xml`. To sync with Transifex you do:
+
+```
+tx push --source
+```
 
 ### Deploy workflow
 
