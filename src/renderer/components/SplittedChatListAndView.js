@@ -52,6 +52,8 @@ class SplittedChatListAndView extends React.Component {
     this.onChatClick = this.onChatClick.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
+
+    this.chatView = React.createRef()
   }
 
   componentDidMount () {
@@ -64,6 +66,11 @@ class SplittedChatListAndView extends React.Component {
 
   onChatClick (chatId) {
     ipcRenderer.send('dispatch', 'selectChat', chatId)
+    try {
+      this.chatView.current.composerRef.current.focusInputMessage()
+    } catch (error) {
+      console.debug(error)
+    }
   }
 
   searchChats (queryStr) {
@@ -137,6 +144,7 @@ class SplittedChatListAndView extends React.Component {
                 chat={selectedChat}
               />
                 : (<ChatView
+                  ref={this.chatView}
                   screenProps={this.props.screenProps}
                   onDeadDropClick={this.onDeadDropClick}
                   userFeedback={this.props.userFeedback}
