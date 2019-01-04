@@ -1,7 +1,7 @@
 const React = require('react')
 const classNames = require('classnames')
 const { MessageBody, Quote, EmbeddedContact, Timestamp } = require('./conversations')
-const { ExpireTimer, getIncrement } = require('../../../conversations/build/components/conversation/ExpireTimer')
+const { ExpireTimer, getIncrement } = require('./ExpireTimer')
 const ContactName = require('./ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('./Attachment')

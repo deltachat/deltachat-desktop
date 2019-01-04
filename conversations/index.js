@@ -9,7 +9,6 @@ const { ContactDetail } = require('./build/components/conversation/ContactDetail
 const { ConversationHeader } = require('./build/components/conversation/ConversationHeader')
 const { EmbeddedContact } = require('./build/components/conversation/EmbeddedContact')
 const { Emojify } = require('./build/components/conversation/Emojify')
-const { ExpireTimer } = require('./build/components/conversation/ExpireTimer')
 const { GroupNotification } = require('./build/components/conversation/GroupNotification')
 const { Linkify } = require('./build/components/conversation/Linkify')
 const { MessageBody } = require('./build/components/conversation/MessageBody')
@@ -33,7 +32,6 @@ module.exports = {
   ConversationHeader,
   EmbeddedContact,
   Emojify,
-  ExpireTimer,
   GroupNotification,
   Linkify,
   MessageBody,
