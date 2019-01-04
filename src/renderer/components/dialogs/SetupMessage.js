@@ -131,7 +131,7 @@ class SetupMessage extends React.Component {
     } else {
       this.setState({ loading: false })
       this.props.userFeedback({ type: 'success', text: tx('autocrypt_correct_desktop') })
-      this.onClose()
+      this.props.onClose()
     }
   }
 
