@@ -15,7 +15,7 @@
     "build": "npm run build-css && npm run build-js && npm run build-translations",
     "build-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
-    "build-translations": "node bin/convert"
+    "build-translations": "node bin/convert-translations-from-xml-to-json.js"
   },
   "repository": {
     "type": "git",
