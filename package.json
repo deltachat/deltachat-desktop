@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git#feat_mv_and_sentbox_threads"
+    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git"
   },
   "keywords": [
     "deltachat",
@@ -48,7 +48,7 @@
     "class-autobind": "^0.1.4",
     "debounce": "^1.2.0",
     "deltachat-emoji": "^1.0.0",
-    "deltachat-node": "^0.30.0",
+    "deltachat-node": "git://github.com/deltachat/deltachat-node.git#feat_mv_and_sentbox_threads",
     "emoji-js-clean": "^4.0.0",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",

@@ -27,6 +27,11 @@ const SettingsDialog = styled.div`
   }
 `
 
+function flipDeltaBoolean(value) {
+  if(value == '1') return '0'
+  return '1'
+}
+
 class Settings extends React.Component {
   constructor (props) {
     super(props)
@@ -35,7 +40,8 @@ class Settings extends React.Component {
       saved: props.saved,
       advancedSettings: {},
       userDetails: false,
-      mailPw: MAGIC_PW
+      mailPw: MAGIC_PW,
+      settings: {}
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -46,11 +52,15 @@ class Settings extends React.Component {
     this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
   }
 
+  componentDidMount() {
+    console.log('hallo')
+  }
+
   componentDidUpdate (prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
-      var advancedSettings = ipcRenderer.sendSync('dispatchSync', 'getAdvancedSettings')
-      advancedSettings.e2ee_enabled = !!Number(advancedSettings.e2ee_enabled)
-      this.setState({ advancedSettings })
+      let settings = ipcRenderer.sendSync('dispatchSync', 'getConfigFor', ['inbox_watch', 'sentbox_watch', 'mvbox_watch', 'mvbox_move'])
+      console.log(settings)
+      this.setState({settings})
     }
   }
 
@@ -101,6 +111,14 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', this.state.saved)
   }
 
+  handleDeltaSettingsChange (key, value) {
+    console.log(`handleSettingsChange ${key}:${value}`)
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
+    let settings = this.state.settings
+    settings[key] = String(value)
+    this.setState({ settings })
+  }
+
   handleEncryptionToggle () {
     let val = 1
     if (this.state.advancedSettings.e2ee_enabled) val = 0
@@ -122,10 +140,11 @@ class Settings extends React.Component {
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
+    const { userDetails, advancedSettings, saved, keyTransfer, settings } = this.state
 
     const tx = window.translate
     const title = tx('menu_settings')
+    console.log(settings)
 
     return (
       <div>
@@ -193,24 +212,24 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
               <Switch
-                checked={saved && saved.inbox_watch}
+                checked={settings.inbox_watch == '1'}
                 label={tx('pref_watch_inbox_folder')}
-                onChange={() => this.handleSettingsChange('inbox_watch', !this.state.saved.inbox_watch)}
+                onChange={() => this.handleDeltaSettingsChange('inbox_watch', flipDeltaBoolean(settings.inbox_watch))}
               />
               <Switch
-                checked={saved && saved.sentbox_watch}
+                checked={settings.sentbox_watch == '1'}
                 label={tx('pref_watch_sent_folder')}
-                onChange={() => this.handleSettingsChange('sentbox_watch', !this.state.saved.sentbox_watch)}
+                onChange={() => this.handleDeltaSettingsChange('sentbox_watch', flipDeltaBoolean(settings.sentbox_watch))}
               />
               <Switch
-                checked={saved && saved.mvbox_watch}
+                checked={settings.mvbox_watch == '1'}
                 label={tx('pref_watch_mvbox_folder')}
-                onChange={() => this.handleSettingsChange('mvbox_watch', !this.state.saved.mvbox_watch)}
+                onChange={() => this.handleDeltaSettingsChange('mvbox_watch', flipDeltaBoolean(settings.mvbox_watch))}
               />
               <Switch
-                checked={saved && saved.mvbox_move}
+                checked={settings.mvbox_move == '1'}
                 label={tx('pref_auto_folder_moves')}
-                onChange={() => this.handleSettingsChange('mvbox_move', !this.state.saved.mvbox_move)}
+                onChange={() => this.handleDeltaSettingsChange('mvbox_move', flipDeltaBoolean(settings.mvbox_move))}
               />
             </Card>
           </SettingsDialog>
