@@ -53,8 +53,15 @@ class Settings extends React.Component {
 
   componentDidUpdate (prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
-      let settings = ipcRenderer.sendSync('dispatchSync', 'getConfigFor', ['inbox_watch', 'sentbox_watch', 'mvbox_watch', 'mvbox_move'])
-      console.log(settings)
+      const settings = ipcRenderer.sendSync(
+        'dispatchSync',
+        'getConfigFor', [
+          'inbox_watch',
+          'sentbox_watch',
+          'mvbox_watch',
+          'mvbox_move'
+        ]
+      )
       this.setState({ settings })
     }
   }
@@ -65,7 +72,7 @@ class Settings extends React.Component {
 
   onBackupImport () {
     const tx = window.translate
-    var opts = {
+    const opts = {
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
@@ -107,18 +114,16 @@ class Settings extends React.Component {
   }
 
   handleDeltaSettingsChange (key, value) {
-    console.log(`handleSettingsChange ${key}:${value}`)
     ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
-    let settings = this.state.settings
+    const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
   }
 
   handleEncryptionToggle () {
-    let val = 1
-    if (this.state.advancedSettings.e2ee_enabled) val = 0
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
-    this.setState({ advancedSettings: { e2ee_enabled: val } })
+    const value = this.state.advancedSettings.e2ee_enabled ? 0 : 1
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', value)
+    this.setState({ advancedSettings: { e2ee_enabled: value } })
   }
 
   handleSetConfig (key, value) {
@@ -138,7 +143,6 @@ class Settings extends React.Component {
 
     const tx = window.translate
     const title = tx('menu_settings')
-    console.log(settings)
 
     return (
       <div>
