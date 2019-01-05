@@ -2,6 +2,32 @@
 
 ## [Unreleased]
 
+## [0.98.0] - 2019-01-05
+
+### Changed
+* Use language fallback for missing language variants (@ralphtheninja)
+* Translations now based on xml and shared with other Delta Chat projects (@karissa, @jikstra, @ralphtheninja)
+* Made more elements unselectable (@Simon-Laux)
+* Improve build/run instructions (@obestwalter)
+* Upgrade `deltachat-node` to `^0.35.0` (@ralphtheninja)
+
+### Added
+* Add divider between chat list and chat view (@Simon-Laux)
+* Write output of `dc.getInfo()` to console (@ralphtheninja)
+
+### Removed
+* Remove all `.ts`/`.tsx` based code (@ralphtheninja)
+
+### Fixed
+* Message input field keeps focus (@Simon-Laux)
+* Fix issue with Autocrypt setup dialog not closing (@ralphtheninja)
+* Add back menu item for unblocking contacts (@ralphtheninja)
+* Fix group image issue (@ralphtheninja)
+* Only run `dc.getConfig()` on valid account folders (@Simon-Laux)
+* Handle `DC_EVENT_SELF_NOT_IN_GROUP` error (@ralphtheninja)
+* Fix icon rotation (@Simon-Laux)
+* Fix issues related to media height (@Simon-Laux)
+
 ## [0.97.0] - 2018-12-24
 
 ### Changed
@@ -284,7 +310,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...HEAD
+[0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
