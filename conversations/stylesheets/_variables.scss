@@ -30,8 +30,10 @@
   src: url('fonts/noto/emoji/NotoColorEmoji.ttf') format('truetype');
 }
 
-$roboto: Roboto, NotoEmoji, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
-$roboto-light: Roboto-Light, NotoEmoji, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
+$emojifonts: 'Apple Color Emoji', NotoEmoji;
+
+$roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
+$roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 
 // New colors
 
