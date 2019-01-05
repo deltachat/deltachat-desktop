@@ -108,6 +108,13 @@ class Settings extends React.Component {
     this.setState({ advancedSettings: { e2ee_enabled: val } })
   }
 
+  handleWatchDeltachatFolderToggle () {
+    let val = 1
+    if (this.state.advancedSettings.e2ee_enabled) val = 0
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
+    this.setState({ advancedSettings: { e2ee_enabled: val } })
+  }
+
   onLoginSubmit (config) {
     this.props.userFeedback(false)
     if (config.mailPw === MAGIC_PW) delete config.mailPw
@@ -182,6 +189,29 @@ class Settings extends React.Component {
                 checked={saved && saved.markRead}
                 label={tx('pref_read_receipts')}
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
+              />
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_imap_folder_handling')}</H5>
+              <Switch
+                checked={saved && saved.inbox_watch}
+                label={tx('pref_watch_inbox_folder')}
+                onChange={() => this.handleSettingsChange('inbox_watch', !this.state.saved.inbox_watch)}
+              />
+              <Switch
+                checked={saved && saved.sentbox_watch}
+                label={tx('pref_watch_sent_folder')}
+                onChange={() => this.handleSettingsChange('sentbox_watch', !this.state.saved.sentbox_watch)}
+              />
+              <Switch
+                checked={saved && saved.mvbox_watch}
+                label={tx('pref_watch_mvbox_folder')}
+                onChange={() => this.handleSettingsChange('mvbox_watch', !this.state.saved.mvbox_watch)}
+              />
+              <Switch
+                checked={saved && saved.mvbox_move}
+                label={tx('pref_auto_folder_moves')}
+                onChange={() => this.handleSettingsChange('mvbox_move', !this.state.saved.mvbox_move)}
               />
             </Card>
           </SettingsDialog>
