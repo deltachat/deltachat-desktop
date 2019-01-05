@@ -48,7 +48,7 @@
     "class-autobind": "^0.1.4",
     "debounce": "^1.2.0",
     "deltachat-emoji": "^1.0.0",
-    "deltachat-node": "git://github.com/deltachat/deltachat-node.git#feat_mv_and_sentbox_threads",
+    "deltachat-node": "^0.35.0",
     "emoji-js-clean": "^4.0.0",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",
