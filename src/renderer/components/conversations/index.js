@@ -11,4 +11,3 @@ exports.Timestamp = require('./Timestamp')
 exports.ContactName = require('./ContactName')
 exports.ContactListItem = require('./ContactListItem')
 exports.ConversationContext = require('./ConversationContext')
-
