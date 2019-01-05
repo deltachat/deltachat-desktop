@@ -108,11 +108,9 @@ class Settings extends React.Component {
     this.setState({ advancedSettings: { e2ee_enabled: val } })
   }
 
-  handleWatchDeltachatFolderToggle () {
-    let val = 1
-    if (this.state.advancedSettings.e2ee_enabled) val = 0
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
-    this.setState({ advancedSettings: { e2ee_enabled: val } })
+  handleSetConfig(key, value) {
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
+    this.setState({ key, value })
   }
 
   onLoginSubmit (config) {
@@ -120,6 +118,7 @@ class Settings extends React.Component {
     if (config.mailPw === MAGIC_PW) delete config.mailPw
     ipcRenderer.send('updateCredentials', config)
   }
+
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
