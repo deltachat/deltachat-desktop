@@ -1,11 +1,14 @@
 const React = require('react')
-const conversations = require('../conversations')
+// TODO rename to MessageDetail
+const MessageDetailBase = require('../conversations/MessageDetail')
 const { convertContactProps } = require('../Contact')
 const {
   Classes,
   Dialog
 } = require('@blueprintjs/core')
 
+// TODO rename this to MessageDetailWrapper and use
+// MessageDetail as base component
 class MessageDetail extends React.Component {
   render () {
     var { chat, message, onClose } = this.props
@@ -24,7 +27,7 @@ class MessageDetail extends React.Component {
       } else {
         contacts = [convertContactProps(message.contact)]
       }
-      body = <conversations.MessageDetail
+      body = <MessageDetailBase
         contacts={contacts}
         status={msg.status}
         message={msg}

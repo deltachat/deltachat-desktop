@@ -1,13 +1,11 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const classNames = require('classnames')
+const mimeTypes = require('mime-types')
 
 const {
-  isImageTypeSupported, isVideoTypeSupported
-} = require('../../../conversations/build/util/GoogleChrome')
-const MIME = require('../../../conversations/build/types/MIME')
-
-const mimeTypes = require('mime-types')
+  isImageTypeSupported, isVideoTypeSupported, MIME
+} = require('./conversations')
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
