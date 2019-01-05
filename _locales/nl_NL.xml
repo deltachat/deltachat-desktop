@@ -360,6 +360,7 @@
     <string name="pref_managekeys_secret_keys_imported_from_x">Geheime sleutels geïmporteerd uit \"%1$s\".</string>
     <string name="pref_background">Gespreksachtergrond</string>
     <string name="pref_imap_folder_handling">Controleren in IMAP-mappen</string>
+    <string name="pref_imap_folder_warn_disable_defaults">Als je deze optie uitschakelt, zorg er dan voor dat je server en overige clients goed ingesteld zijn.\n\nAls dat niet zo is, dan werkt het misschien helemaal niet.</string>
     <string name="pref_watch_inbox_folder">Postvak IN controleren op nieuwe berichten</string>
     <string name="pref_watch_sent_folder">Map Verzonden controleren op nieuwe berichten</string>
     <string name="pref_watch_mvbox_folder">DeltaChat-map controleren op nieuwe berichten</string>
@@ -473,6 +474,7 @@
     <string name="language_eo">Esperanto</string>
     <string name="language_es">Spaans</string>
     <string name="language_eu">Basks</string>
+    <string name="language_fr">Frans</string>
     <string name="language_hr">Kroatisch</string>
     <string name="language_hu">Hongaars</string>
     <string name="language_it">Italiaans</string>
@@ -546,12 +548,14 @@
     <string name="name_desktop">Naam</string>
     <string name="autocrypt_key_transfer_desktop">Autocrypt-sleuteloverdracht</string>
     <string name="initiate_key_transfer_title_desktop">Sleuteloverdracht starten</string>
+    <string name="initiate_key_transfer_desktop">Een Autocrypt-instelbericht deelt je end-to-end-instellingen op een veilige manier met andere met Autocrypt compatibele apps. De instellingen zijn versleuteld middels een code die hier wordt getoond en moet worden overgetypt op het andere apparaat.</string>
     <string name="reply_to_message_desktop">Bericht beantwoorden</string>
     <string name="select_group_image_desktop">Kies een groepsafbeelding</string>
     <string name="imex_progress_title_desktop">Voortgang van back-up</string>
     <string name="download_attachment_desktop">Bijlage downloaden</string>
     <string name="export_backup_desktop">Back-up exporteren</string>
     <string name="transfer_key_desktop">Sleuteloverdracht</string>
+    <string name="show_key_transfer_message_desktop">Je sleutel is naar jezelf verstuurd. Schakel over naar het andere apparaat en open het instelbericht. Je zou nu moeten worden gevraagd om een code. Typ de volgende getallen in het invoerveld. Zodra je klaar bent, is je andere apparaat klaar voor gebruik.</string>
     <string name="new_message_from_desktop">Nieuw bericht van</string>
     <string name="unblock_contacts_desktop">Contactpersonen deblokkeren</string>
     <string name="none_blocked_desktop">Nog geen geblokkeerde contactpersonen</string>
