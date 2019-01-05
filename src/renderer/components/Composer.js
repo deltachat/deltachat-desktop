@@ -114,6 +114,7 @@ class Composer extends React.Component {
       text: this.state.text
     })
     this.clearInput()
+    this.focusInputMessage()
   }
 
   clearInput () {
