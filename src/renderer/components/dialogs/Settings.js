@@ -28,8 +28,7 @@ const SettingsDialog = styled.div`
 `
 
 function flipDeltaBoolean (value) {
-  if (value === '1') return '0'
-  return '1'
+  return value === '1' ? '0' : '1'
 }
 
 class Settings extends React.Component {
@@ -50,10 +49,6 @@ class Settings extends React.Component {
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
     this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
-  }
-
-  componentDidMount () {
-    console.log('hallo')
   }
 
   componentDidUpdate (prevProps) {
