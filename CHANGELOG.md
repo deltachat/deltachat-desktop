@@ -12,6 +12,7 @@
 * Upgrade `deltachat-node` to `^0.35.0` (@ralphtheninja)
 
 ### Added
+* Add settings for configuring `mvbox` and `sentbox` threads (@jikstra)
 * Add divider between chat list and chat view (@Simon-Laux)
 * Write output of `dc.getInfo()` to console (@ralphtheninja)
 
