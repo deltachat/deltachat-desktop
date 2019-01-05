@@ -42,23 +42,21 @@ span.emoji-inner {
 
 .emoji-container {
   margin-bottom: -1px;
-}
-
-.emoji-container.small {
   font-size: 1.25em;
   line-height: 1em;
 }
+
+.emoji-container.small {
+  font-size: 1.35em;
+}
 .emoji-container.medium {
   font-size: 1.75em;
-  line-height: 1em;
 }
 .emoji-container.large {
   font-size: 2.5em;
-  line-height: 1em;
 }
 .emoji-container.jumbo {
   font-size: 3em;
-  line-height: 1em;
 }
 
 // we need these, or we'll make conversation items too big in the left-nav
