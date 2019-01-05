@@ -27,8 +27,8 @@ const SettingsDialog = styled.div`
   }
 `
 
-function flipDeltaBoolean(value) {
-  if(value == '1') return '0'
+function flipDeltaBoolean (value) {
+  if (value === '1') return '0'
   return '1'
 }
 
@@ -52,7 +52,7 @@ class Settings extends React.Component {
     this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     console.log('hallo')
   }
 
@@ -60,7 +60,7 @@ class Settings extends React.Component {
     if (this.props.isOpen && !prevProps.isOpen) {
       let settings = ipcRenderer.sendSync('dispatchSync', 'getConfigFor', ['inbox_watch', 'sentbox_watch', 'mvbox_watch', 'mvbox_move'])
       console.log(settings)
-      this.setState({settings})
+      this.setState({ settings })
     }
   }
 
@@ -126,7 +126,7 @@ class Settings extends React.Component {
     this.setState({ advancedSettings: { e2ee_enabled: val } })
   }
 
-  handleSetConfig(key, value) {
+  handleSetConfig (key, value) {
     ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
     this.setState({ key, value })
   }
@@ -136,7 +136,6 @@ class Settings extends React.Component {
     if (config.mailPw === MAGIC_PW) delete config.mailPw
     ipcRenderer.send('updateCredentials', config)
   }
-
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
@@ -212,22 +211,22 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
               <Switch
-                checked={settings.inbox_watch == '1'}
+                checked={settings.inbox_watch === '1'}
                 label={tx('pref_watch_inbox_folder')}
                 onChange={() => this.handleDeltaSettingsChange('inbox_watch', flipDeltaBoolean(settings.inbox_watch))}
               />
               <Switch
-                checked={settings.sentbox_watch == '1'}
+                checked={settings.sentbox_watch === '1'}
                 label={tx('pref_watch_sent_folder')}
                 onChange={() => this.handleDeltaSettingsChange('sentbox_watch', flipDeltaBoolean(settings.sentbox_watch))}
               />
               <Switch
-                checked={settings.mvbox_watch == '1'}
+                checked={settings.mvbox_watch === '1'}
                 label={tx('pref_watch_mvbox_folder')}
                 onChange={() => this.handleDeltaSettingsChange('mvbox_watch', flipDeltaBoolean(settings.mvbox_watch))}
               />
               <Switch
-                checked={settings.mvbox_move == '1'}
+                checked={settings.mvbox_move === '1'}
                 label={tx('pref_auto_folder_moves')}
                 onChange={() => this.handleDeltaSettingsChange('mvbox_move', flipDeltaBoolean(settings.mvbox_move))}
               />

@@ -397,7 +397,7 @@ class DeltaChatController extends events.EventEmitter {
 
   getConfigFor (keys) {
     let config = {}
-    for(let key of keys) {
+    for (let key of keys) {
       config[key] = this.getConfig(key)
     }
     return config
