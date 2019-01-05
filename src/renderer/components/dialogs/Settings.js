@@ -27,6 +27,10 @@ const SettingsDialog = styled.div`
   }
 `
 
+function flipDeltaBoolean (value) {
+  return value === '1' ? '0' : '1'
+}
+
 class Settings extends React.Component {
   constructor (props) {
     super(props)
@@ -35,7 +39,8 @@ class Settings extends React.Component {
       saved: props.saved,
       advancedSettings: {},
       userDetails: false,
-      mailPw: MAGIC_PW
+      mailPw: MAGIC_PW,
+      settings: {}
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -43,14 +48,21 @@ class Settings extends React.Component {
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
-    this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
   }
 
   componentDidUpdate (prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
-      var advancedSettings = ipcRenderer.sendSync('dispatchSync', 'getAdvancedSettings')
-      advancedSettings.e2ee_enabled = !!Number(advancedSettings.e2ee_enabled)
-      this.setState({ advancedSettings })
+      const settings = ipcRenderer.sendSync(
+        'dispatchSync',
+        'getConfigFor', [
+          'inbox_watch',
+          'sentbox_watch',
+          'mvbox_watch',
+          'mvbox_move',
+          'e2ee_enabled'
+        ]
+      )
+      this.setState({ settings })
     }
   }
 
@@ -60,7 +72,7 @@ class Settings extends React.Component {
 
   onBackupImport () {
     const tx = window.translate
-    var opts = {
+    const opts = {
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
@@ -101,17 +113,28 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', this.state.saved)
   }
 
-  handleEncryptionToggle () {
-    let val = 1
-    if (this.state.advancedSettings.e2ee_enabled) val = 0
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', val)
-    this.setState({ advancedSettings: { e2ee_enabled: val } })
+  handleDeltaSettingsChange (key, value) {
+    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
+    const settings = this.state.settings
+    settings[key] = String(value)
+    this.setState({ settings })
   }
 
   onLoginSubmit (config) {
     this.props.userFeedback(false)
     if (config.mailPw === MAGIC_PW) delete config.mailPw
     ipcRenderer.send('updateCredentials', config)
+  }
+
+  renderSwitch (configKey, label) {
+    let configValue = this.state.settings[configKey]
+    return (
+      <Switch
+        checked={configValue === '1'}
+        label={label}
+        onChange={() => this.handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))}
+      />
+    )
   }
 
   render () {
@@ -160,11 +183,7 @@ class Settings extends React.Component {
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
               <br />
-              <Switch
-                checked={advancedSettings.e2ee_enabled}
-                label={tx('autocrypt_prefer_e2ee')}
-                onChange={this.handleEncryptionToggle}
-              />
+              { this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
               </Button>
@@ -183,6 +202,13 @@ class Settings extends React.Component {
                 label={tx('pref_read_receipts')}
                 onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
               />
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_imap_folder_handling')}</H5>
+              { this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
+              { this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
+              { this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
+              { this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
             </Card>
           </SettingsDialog>
         </Dialog>
