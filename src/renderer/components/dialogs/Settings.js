@@ -48,7 +48,6 @@ class Settings extends React.Component {
     this.onBackupImport = this.onBackupImport.bind(this)
     this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
-    this.handleEncryptionToggle = this.handleEncryptionToggle.bind(this)
   }
 
   componentDidUpdate (prevProps) {
@@ -59,7 +58,8 @@ class Settings extends React.Component {
           'inbox_watch',
           'sentbox_watch',
           'mvbox_watch',
-          'mvbox_move'
+          'mvbox_move',
+          'e2ee_enabled'
         ]
       )
       this.setState({ settings })
@@ -120,26 +120,26 @@ class Settings extends React.Component {
     this.setState({ settings })
   }
 
-  handleEncryptionToggle () {
-    const value = this.state.advancedSettings.e2ee_enabled ? 0 : 1
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', 'e2ee_enabled', value)
-    this.setState({ advancedSettings: { e2ee_enabled: value } })
-  }
-
-  handleSetConfig (key, value) {
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
-    this.setState({ key, value })
-  }
-
   onLoginSubmit (config) {
     this.props.userFeedback(false)
     if (config.mailPw === MAGIC_PW) delete config.mailPw
     ipcRenderer.send('updateCredentials', config)
   }
 
+  renderSwitch (configKey, label) {
+    let configValue = this.state.settings[configKey]
+    return (
+      <Switch
+        checked={configValue === '1'}
+        label={label}
+        onChange={() => this.handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))}
+      />
+    )
+  }
+
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, advancedSettings, saved, keyTransfer, settings } = this.state
+    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
 
     const tx = window.translate
     const title = tx('menu_settings')
@@ -183,11 +183,7 @@ class Settings extends React.Component {
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
               <br />
-              <Switch
-                checked={advancedSettings.e2ee_enabled}
-                label={tx('autocrypt_prefer_e2ee')}
-                onChange={this.handleEncryptionToggle}
-              />
+              { this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
               </Button>
@@ -209,26 +205,10 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
-              <Switch
-                checked={settings.inbox_watch === '1'}
-                label={tx('pref_watch_inbox_folder')}
-                onChange={() => this.handleDeltaSettingsChange('inbox_watch', flipDeltaBoolean(settings.inbox_watch))}
-              />
-              <Switch
-                checked={settings.sentbox_watch === '1'}
-                label={tx('pref_watch_sent_folder')}
-                onChange={() => this.handleDeltaSettingsChange('sentbox_watch', flipDeltaBoolean(settings.sentbox_watch))}
-              />
-              <Switch
-                checked={settings.mvbox_watch === '1'}
-                label={tx('pref_watch_mvbox_folder')}
-                onChange={() => this.handleDeltaSettingsChange('mvbox_watch', flipDeltaBoolean(settings.mvbox_watch))}
-              />
-              <Switch
-                checked={settings.mvbox_move === '1'}
-                label={tx('pref_auto_folder_moves')}
-                onChange={() => this.handleDeltaSettingsChange('mvbox_move', flipDeltaBoolean(settings.mvbox_move))}
-              />
+              { this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
+              { this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
+              { this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
+              { this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
             </Card>
           </SettingsDialog>
         </Dialog>
