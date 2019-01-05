@@ -21,9 +21,17 @@
   src: url('fonts/Roboto-Bold.ttf') format('truetype');
   font-weight: bold;
 }
+@font-face {
+  font-family: 'NotoMono';
+  src: url('fonts/noto/mono/NotoMono-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'NotoEmoji';
+  src: url('fonts/noto/emoji/NotoColorEmoji.ttf') format('truetype');
+}
 
-$roboto: Roboto, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-$roboto-light: Roboto-Light, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+$roboto: Roboto, NotoEmoji, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
+$roboto-light: Roboto-Light, NotoEmoji, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 
 // New colors
 
