@@ -1,5 +1,5 @@
 const React = require('react')
-const { Emojify } = require('../conversations')
+const Emojify = require('./Emojify')
 
 class ContactName extends React.Component {
   render () {
