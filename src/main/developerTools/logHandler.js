@@ -9,6 +9,7 @@ var logDB = []
 var wstream
 var wsUpState = false
 var fullLogFilePath
+const CONFIG_LOG_MAIN_TO_CHROME_CONSOLE = false
 /**
  * Internal logger - please don't call directly unless you know what your doing
  * @param {string} timestamp timestamp
@@ -43,7 +44,9 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
   // TODO send update ipc to debug Window somehow
 
   /* *CONFIG* */ // For turning this behavior on:
-  if (channel === 'logger' || channel === 'core' || channel.includes('main')) {
+  if (
+    channel === 'logger' || (CONFIG_LOG_MAIN_TO_CHROME_CONSOLE && (channel === 'core' || channel.includes('main')))
+  ) {
     // send also to 'normal' dev console
     if (app.ipcReady) {
       windows.main.send('log', channel, level, message, errorCode, payload, stacktrace)

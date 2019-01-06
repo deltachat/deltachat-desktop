@@ -5,7 +5,8 @@ var handler
 /* *CONFIG* */
 var OPTIONS = {
   logDebug: true,
-  alsoLogInLocalConsole: false
+  // You need to activate the Verbose logging level in chrome dev console to see debug log
+  alsoLogInLocalConsole: true
 }
 
 /** specify function that passes the message to the logger in the main process */
