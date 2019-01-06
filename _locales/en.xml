@@ -66,9 +66,11 @@
     <string name="draft">Draft</string>
     <string name="image">Image</string>
     <string name="gif">Gif</string>
+    <string name="images">Images</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Voice message</string>
     <string name="video">Video</string>
+    <string name="documents">Documents</string>
     <string name="contact">Contact</string>
     <string name="camera">Camera</string>
     <string name="location">Location</string>
