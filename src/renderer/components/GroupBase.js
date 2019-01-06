@@ -16,6 +16,16 @@ const {
 const NavbarWrapper = require('./NavbarWrapper')
 const ContactList = require('./ContactList')
 
+const styled = require('styled-components').default
+
+const GroupMemberTable = styled.table`
+    width:100%;
+    td{
+      width 50%;
+      vertical-align: top;
+    }
+`
+
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
@@ -139,8 +149,8 @@ class GroupBase extends React.Component {
             </div>
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('show_qr_verify_code_desktop')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('show_qr_invite_code_desktop')}</button>) }
-            <table>
-              <thead><tr><th>Groupmembers</th><th>Not in this group</th></tr></thead>
+            <GroupMemberTable>
+              <thead><tr><th>{tx('in_this_group_desktop')}</th><th>{tx('not_in_this_group_desktop')}</th></tr></thead>
               <tbody>
                 <tr>
                   <td>
@@ -163,7 +173,7 @@ class GroupBase extends React.Component {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </GroupMemberTable>
           </div>
         </div>
       </div>
