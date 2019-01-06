@@ -53,28 +53,25 @@ const MediaGalleryItem = styled.div`
 
 const GROUPS = {
   images: {
-    key: 'Images',
     values: [C.DC_MSG_GIF, C.DC_MSG_IMAGE]
   },
-  videos: {
-    key: 'Videos',
+  video: {
     values: [C.DC_MSG_VIDEO]
   },
   audio: {
-    key: 'Audio',
     values: [C.DC_MSG_AUDIO, C.DC_MSG_VOICE]
   },
   documents: {
-    key: 'Documents',
     values: [C.DC_MSG_FILE]
   }
 }
 
-var DEFAULT_STATE = {
+const DEFAULT_STATE = {
   id: 'images',
   msgTypes: GROUPS.images.values,
   medias: []
 }
+
 class Media extends React.Component {
   constructor (props) {
     super(props)
@@ -120,7 +117,7 @@ class Media extends React.Component {
             key={id}
             disabled={this.state.id === id}
             onClick={() => this.onSelect(id)}>
-            {tx(GROUPS[id].key)}
+            {tx(id)}
           </Button>
         })}
       </ButtonGroup>
