@@ -146,7 +146,7 @@ class MessageDetail extends React.Component {
               </tr>
             ))}
             <tr>
-              <td className='module-message-detail__label'>{i18n('sent')}</td>
+              <td className='module-message-detail__label'>{i18n('message_detail_sent_desktop')}</td>
               <td>
                 {moment(sentAt).format('LLLL')}{' '}
                 <span className='module-message-detail__unix-timestamp'>
@@ -157,7 +157,7 @@ class MessageDetail extends React.Component {
             {receivedAt ? (
               <tr>
                 <td className='module-message-detail__label'>
-                  {i18n('received')}
+                  {i18n('message_detail_received_desktop')}
                 </td>
                 <td>
                   {moment(receivedAt).format('LLLL')}{' '}
@@ -169,7 +169,7 @@ class MessageDetail extends React.Component {
             ) : null}
             <tr>
               <td className='module-message-detail__label'>
-                {message.direction === 'incoming' ? i18n('from') : i18n('to')}
+                {message.direction === 'incoming' ? i18n('message_detail_from_desktop') : i18n('message_detail_to_desktop')}
               </td>
             </tr>
           </tbody>

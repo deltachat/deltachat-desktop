@@ -568,5 +568,9 @@
     <string name="me_desktop">me</string>
     <string name="in_this_group_desktop">Group members</string>
     <string name="not_in_this_group_desktop">Potential group members (not in group)</string>
+    <string name="message_detail_sent_desktop">sent</string>
+    <string name="message_detail_received_desktop">received</string>
+    <string name="message_detail_from_desktop">from</string>
+    <string name="message_detail_to_desktop">to</string>
 
 </resources>
