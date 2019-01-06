@@ -1,33 +1,19 @@
 const React = require('react')
 const classNames = require('classnames')
-const is = require('@sindresorhus/is')
 
 const {
-  findImage,
-  getRegex,
-  getReplacementData,
-  getTitle
+  getRegex
 } = require('./emoji')
 
 // Some of this logic taken from emoji-js/replacement
 function getImageTag ({ match, sizeClass, key }) {
-  const result = getReplacementData(match[0], match[1], match[2])
-
-  if (is.string(result)) {
-    return <span key={key}>{match[0]}</span>
-  }
-
-  const img = findImage(result.value, result.variation)
-  const title = getTitle(result.value)
-
   return (
-    <img
+    <span
       key={key}
-      src={img.path}
-      className={classNames('emoji', sizeClass)}
-      data-codepoints={img.full_idx}
-      title={`:${title}:`}
-    />
+      className={classNames('emoji-container', sizeClass)}
+    >
+      {match[0]}
+    </span>
   )
 }
 
