@@ -40,16 +40,16 @@ Each database is a sqlite file that represents the account for a given email add
 
 ## Code structure
 
-* `static`: static files used directly in the app
-* `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
-* `src`: the original javascript source files, both for main and renderer
-* `es5`: the compiled es5 source files for front-end
-* `dist`: the final distributions and executables for all supported platforms
-* `.tx`: configuration files for transifex
-* `_locales`: source files for translations
-* `bin`: misc. scripts
-* `build`: files needed only at build time (for electron-builder)
-* `conversations`: react components pulled out of signal
+- `static`: static files used directly in the app
+- `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
+- `src`: the original javascript source files, both for main and renderer
+- `es5`: the compiled es5 source files for front-end
+- `dist`: the final distributions and executables for all supported platforms
+- `.tx`: configuration files for transifex
+- `_locales`: source files for translations
+- `bin`: misc. scripts
+- `build`: files needed only at build time (for electron-builder)
+- `conversations`: react components pulled out of signal
 
 ## How to Contribute
 
@@ -82,10 +82,10 @@ sudo apt-get install ninja-build
 
 You might also need the following system dependencies:
 
-* `libssl-dev`
-* `libsasl2-dev`
-* `libsqlite3-dev`
-* `zlib1g-dev`
+- `libssl-dev`
+- `libsasl2-dev`
+- `libsqlite3-dev`
+- `zlib1g-dev`
 
 To fix these issues do:
 
@@ -112,14 +112,14 @@ $ npm run test-integration
 The integration tests use Spectron and Tape. They click through the app, taking screenshots and
 comparing each one to a reference. Why screenshots?
 
-* Ad-hoc checking makes the tests a lot more work to write
-* Even diffing the whole HTML is not as thorough as screenshot diffing. For example, it wouldn't
+- Ad-hoc checking makes the tests a lot more work to write
+- Even diffing the whole HTML is not as thorough as screenshot diffing. For example, it wouldn't
   catch an bug where hitting ESC from a video doesn't correctly restore window size.
-* Chrome's own integration tests use screenshot diffing iirc
-* Small UI changes will break a few tests, but the fix is as easy as deleting the offending
+- Chrome's own integration tests use screenshot diffing iirc
+- Small UI changes will break a few tests, but the fix is as easy as deleting the offending
   screenshots and running the tests, which will recreate them with the new look.
-* The resulting Github PR will then show, pixel by pixel, the exact UI changes that were made! See
-  https://github.com/blog/817-behold-image-view-modes
+- The resulting Github PR will then show, pixel by pixel, the exact UI changes that were made! See
+  <https://github.com/blog/817-behold-image-view-modes>
 
 For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have
 the same resolution as a 2016 12" Macbook.
@@ -154,11 +154,11 @@ tx push --source
 ### Deploy workflow
 
 1. Create a draft release on github, e.g. `vX.Y.Z`
-1. Change `version` field in `package.json` to `X.Y.Z`
-1. Commit and push modified `package.json` (repeat until release is ready)
-1. Once done, publish the release on github, which will create the tag
+2. Change `version` field in `package.json` to `X.Y.Z`
+3. Commit and push modified `package.json` (repeat until release is ready)
+4. Once done, publish the release on github, which will create the tag
 
-Also see https://www.electron.build/configuration/publish
+Also see <https://www.electron.build/configuration/publish>
 
 ## License
 

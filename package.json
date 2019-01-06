@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "node bin/watch",
-    "test": "standard && node test/unit",
+    "test": "standard && hallmark && node test/unit",
     "test-integration": "node test/integration",
     "dev": "npm run build && npm run start",
     "start": "electron . --debug --disable-http-cache",
@@ -15,7 +15,8 @@
     "build": "npm run build-css && npm run build-js && npm run build-translations",
     "build-css": "cd conversations && node-sass stylesheets/manifest.scss build/manifest.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
-    "build-translations": "node bin/convert-translations-from-xml-to-json.js"
+    "build-translations": "node bin/convert-translations-from-xml-to-json.js",
+    "hallmark": "hallmark --fix"
   },
   "repository": {
     "type": "git",
@@ -79,6 +80,7 @@
     "electron": "^3.0.11",
     "electron-builder": "^20.28.3",
     "glob-watcher": "^5.0.1",
+    "hallmark": "^0.1.0",
     "node-sass": "^4.9.4",
     "pngjs": "^3.3.3",
     "rimraf": "^2.6.2",
