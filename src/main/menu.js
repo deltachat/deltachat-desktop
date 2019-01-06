@@ -5,14 +5,16 @@ module.exports = {
 const electron = require('electron')
 const fs = require('fs')
 const path = require('path')
-const log = require('./log')
+const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
+/* *CONFIG* */
 const config = require('../config')
+const { getFullLogFilePath } = require('./developerTools/logHandler')
 
 const app = electron.app
 
 function init () {
-  log('rebuilding menu with language', app.localeData.locale)
+  log.info('rebuilding menu with language', app.localeData.locale, 'rebuild_menu_lang')
   const template = getMenuTemplate()
   const menu = electron.Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))
@@ -124,6 +126,14 @@ function getMenuTemplate () {
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
               click: () => windows.main.toggleDevTools()
+            },
+            {
+              translate: 'menu.view.developer.open.log.folder',
+              click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
+            },
+            {
+              translate: 'menu.view.developer.open.current.log.file',
+              click: () => electron.shell.openItem(getFullLogFilePath())
             }
           ]
         }

@@ -574,5 +574,7 @@
     <string name="message_detail_received_desktop">received</string>
     <string name="message_detail_from_desktop">from</string>
     <string name="message_detail_to_desktop">to</string>
+    <string name="menu.view.developer.open.log.folder">Open Log Folder</string>
+    <string name="menu.view.developer.open.current.log.file">Open Current Logfile</string>
 
 </resources>

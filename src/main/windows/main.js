@@ -17,8 +17,9 @@ const main = module.exports = {
 const electron = require('electron')
 const debounce = require('debounce')
 
+/* *CONFIG* */
 const config = require('../../config')
-const log = require('../log')
+const log = require('../../logger').getLogger('main/mainWindow')
 
 function init (state, options) {
   if (main.win) {
@@ -102,23 +103,23 @@ function setAspectRatio (aspectRatio) {
 function setBounds (bounds, maximize) {
   // Maximize or minimize, if the second argument is present
   if (maximize === true && !main.win.isMaximized()) {
-    log('setBounds: maximizing')
+    log.debug('setBounds: maximizing')
     main.win.maximize()
   } else if (maximize === false && main.win.isMaximized()) {
-    log('setBounds: unmaximizing')
+    log.debug('setBounds: unmaximizing')
     main.win.unmaximize()
   }
 
   const willBeMaximized = typeof maximize === 'boolean' ? maximize : main.win.isMaximized()
   // Assuming we're not maximized or maximizing, set the window size
   if (!willBeMaximized) {
-    log(`setBounds: setting bounds to ${JSON.stringify(bounds)}`)
+    log.debug(`setBounds: setting bounds to ${JSON.stringify(bounds)}`, bounds, 'set_bounds_to')
     if (bounds.x === null && bounds.y === null) {
       // X and Y not specified? By default, center on current screen
       const scr = electron.screen.getDisplayMatching(main.win.getBounds())
       bounds.x = Math.round(scr.bounds.x + (scr.bounds.width / 2) - (bounds.width / 2))
       bounds.y = Math.round(scr.bounds.y + (scr.bounds.height / 2) - (bounds.height / 2))
-      log(`setBounds: centered to ${JSON.stringify(bounds)}`)
+      log.debug(`setBounds: centered to ${JSON.stringify(bounds)}`, bounds, 'set_bounds_centered_to')
     }
     // Resize the window's content area (so window border doesn't need to be taken
     // into account)
@@ -128,7 +129,7 @@ function setBounds (bounds, maximize) {
       main.win.setBounds(bounds, true)
     }
   } else {
-    log('setBounds: not setting bounds because of window maximization')
+    log.debug('setBounds: not setting bounds because of window maximization')
   }
 }
 
@@ -157,7 +158,7 @@ function show () {
 function toggleAlwaysOnTop () {
   if (!main.win) return
   const flag = !main.win.isAlwaysOnTop()
-  log(`toggleAlwaysOnTop ${flag}`)
+  log.info(`toggleAlwaysOnTop ${flag}`)
   main.win.setAlwaysOnTop(flag)
 }
 
@@ -167,7 +168,7 @@ function isAlwaysOnTop () {
 
 function toggleDevTools () {
   if (!main.win) return
-  log('toggleDevTools')
+  log.info('toggleDevTools')
   if (main.win.webContents.isDevToolsOpened()) {
     main.win.webContents.closeDevTools()
   } else {

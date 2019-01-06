@@ -2,7 +2,7 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const events = require('events')
 const path = require('path')
-const log = require('./log')
+const log = require('../logger').getLogger('core')
 
 const PAGE_SIZE = 20
 
@@ -29,13 +29,17 @@ class DeltaChatController extends events.EventEmitter {
     return path.join(this.cwd, Buffer.from(addr).toString('hex'))
   }
 
+  logCoreEvent (event, payload) {
+    log.debug('Core Event', event, payload)
+  }
+
   /**
    * Dispatched when logging in from Login
    */
   login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
     const cwd = this.getPath(credentials.addr)
-    log('Using deltachat instance', cwd)
+    log.info('Using deltachat instance', cwd, 'dc_instance')
     this._dc = new DeltaChat()
     var dc = this._dc
     this.credentials = credentials
@@ -46,11 +50,11 @@ class DeltaChatController extends events.EventEmitter {
     dc.open(cwd, err => {
       if (err) throw err
       const onReady = () => {
-        log('Ready')
+        log.info('Ready')
         this.ready = true
         this.configuring = false
         this.emit('ready')
-        log('dc_get_info', dc.getInfo())
+        log.info('dc_get_info', dc.getInfo(), 'dc_get_info')
         render()
       }
       if (!dc.isConfigured()) {
@@ -64,9 +68,9 @@ class DeltaChatController extends events.EventEmitter {
     })
 
     dc.on('ALL', (event, data1, data2) => {
-      log(event, data1, data2)
+      log.debug('ALL event', { event, data1, data2 }, event)
       if (event === 2041) {
-        log('DC_EVENT_CONFIGURE_PROGRESS', data1)
+        this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', data1)
         this.emit('DC_EVENT_CONFIGURE_PROGRESS', data1, data2)
         if (Number(data1) === 0) { // login failed
           this.logout()
@@ -83,38 +87,38 @@ class DeltaChatController extends events.EventEmitter {
     })
 
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
-      log('EVENT contacts changed', contactId)
+      this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
       render()
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      log('EVENT msgs changed', chatId, msgId)
+      this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
-      log('EVENT incoming msg', chatId, msgId)
+      this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      log('EVENT msg delivered', chatId, msgId)
+      this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
-      log('EVENT msg failed to deliver', chatId, msgId)
+      this.logCoreEvent('EVENT msg failed to deliver', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      log('EVENT msg read', chatId, msgId)
+      this.logCoreEvent('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
-      log.warning(warning)
+      log.warn(warning)
     })
 
     const onError = error => {
@@ -142,7 +146,7 @@ class DeltaChatController extends events.EventEmitter {
     this.close()
     this._resetState()
 
-    log('Logged out')
+    log.info('Logged out')
     if (typeof this._render === 'function') this._render()
   }
 
@@ -186,7 +190,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from RenderMessage#onDelete in ChatView
    */
   deleteMessage (messageId) {
-    log('deleting message', messageId)
+    log.info('deleting message', messageId, 'deleting_message')
     this._dc.deleteMessages(messageId)
   }
 
@@ -215,12 +219,12 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched when accepting a chat in DeadDrop
    */
   chatWithContact (deadDrop) {
-    log('chat with dead drop', deadDrop)
+    log.info('chat with dead drop', deadDrop)
     const contact = this._dc.getContact(deadDrop.contact.id)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
-    log(`Added contact ${name} (${address})`)
+    log.info(`Added contact ${name} (${address})`)
     var chatId = this._dc.createChatByMessageId(deadDrop.id)
     if (chatId) this.selectChat(chatId)
   }
@@ -232,7 +236,7 @@ class DeltaChatController extends events.EventEmitter {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, false)
     const name = contact.getNameAndAddress()
-    log(`Unblocked contact ${name} (id = ${contactId})`)
+    log.info(`Unblocked contact ${name} (id = ${contactId})`)
     return true
   }
 
@@ -243,7 +247,7 @@ class DeltaChatController extends events.EventEmitter {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
-    log(`Blocked contact ${name} (id = ${contactId})`)
+    log.debug(`Blocked contact ${name} (id = ${contactId})`)
     return true
   }
 
@@ -253,14 +257,14 @@ class DeltaChatController extends events.EventEmitter {
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
     if (!contact) {
-      log.warning('no contact could be found with id', contactId)
+      log.warn('no contact could be found with id', contactId)
       return 0
     }
     const chatId = this._dc.createChatByContactId(contactId)
-    log('created chat', chatId, 'with contact', contactId)
+    log.debug(`created chat ${chatId} with contact' ${contactId}`)
     const chat = this._dc.getChat(chatId)
     if (chat && chat.getArchived()) {
-      log('chat was archived, unarchiving it')
+      log.debug('chat was archived, unarchiving it')
       this._dc.archiveChat(chatId, 0)
     }
     this.selectChat(chatId)
@@ -278,7 +282,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from EditGroup
    */
   modifyGroup (chatId, name, image, remove, add) {
-    log('modify group', chatId, name, image, remove, add)
+    log.debug('action - modify group', { chatId, name, image, remove, add })
     this._dc.setChatName(chatId, name)
     const chat = this._dc.getChat(chatId)
     if (chat.getProfileImage() !== image) {
@@ -293,7 +297,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from menu alternative in SplittedChatListAndView
    */
   deleteChat (chatId) {
-    log('deleting chat', chatId)
+    log.debug('action - deleting chat', chatId)
     this._dc.deleteChat(chatId)
   }
 
@@ -301,7 +305,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from menu alternative in SplittedChatListAndView
    */
   archiveChat (chatId, archive) {
-    log('archiving chat', chatId)
+    log.debug('action - archiving chat', chatId)
     this._dc.archiveChat(chatId, archive)
   }
 
@@ -340,7 +344,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from menu alternative in SplittedChatListAndView
    */
   leaveGroup (chatId) {
-    log('leaving chat')
+    log.debug('action - leaving chat')
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
@@ -348,7 +352,7 @@ class DeltaChatController extends events.EventEmitter {
    * Dispatched from SplittedChatListAndView and used internally
    */
   selectChat (chatId) {
-    log('selecting chat with id', chatId)
+    log.debug('action - selecting chat with id', chatId)
     this._pages = 1
     this._selectedChatId = chatId
     this._render()
@@ -478,7 +482,7 @@ class DeltaChatController extends events.EventEmitter {
     const fromId = msg && msg.getFromId()
 
     if (!fromId) {
-      log.warning('Ignoring DEADDROP due to missing fromId')
+      log.warn('Ignoring DEADDROP due to missing fromId')
       return
     }
 

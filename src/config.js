@@ -1,3 +1,4 @@
+/* *CONFIG* */
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
 

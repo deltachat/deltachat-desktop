@@ -6,6 +6,7 @@ const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
 const { ConversationContext } = require('./conversations')
 const StyleVariables = require('./style-variables')
+const log = require('../../logger').getLogger('renderer/chatView')
 
 const MutationObserver = window.MutationObserver
 
@@ -131,7 +132,7 @@ class ChatView extends React.Component {
 
   componentDidMount () {
     this.doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #the-conversation`)
-    if (!this.doc) return console.log(`Didn't find .ChatViewWrapper #the-conversation element`)
+    if (!this.doc) return log.warn(`Didn't find .ChatViewWrapper #the-conversation element`)
     if (!this.observer && this.conversationDiv.current) {
       this.observer = new MutationObserver(this.handleScroll.bind(this))
       this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
@@ -174,7 +175,7 @@ class ChatView extends React.Component {
             {chat.messages.map(rawMessage => {
               var message = MessageWrapper.convert(rawMessage)
               message.onReply = () => {
-                console.log('reply to', message)
+                log.debug('reply to', message)
               }
               message.onForward = this.onForward.bind(this, message)
               return MessageWrapper.render({

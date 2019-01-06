@@ -7,17 +7,26 @@ const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
+/* *CONFIG* */
 const config = require('../config')
 const logins = require('./logins')
 const ipc = require('./ipc')
-const log = require('./log')
 const menu = require('./menu')
 const State = require('../renderer/lib/state')
 const windows = require('./windows')
+const logHandler = require('./developerTools/logHandler')
+const log = require('../logger').getLogger('main/index')
+
+// Setup Logger
+require('../logger').setLogHandler(logHandler.log)
+logHandler.setupWriteStream()
+process.on('exit', function () {
+  logHandler.closeWriteStream()
+})
 
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
-
+/* *CONFIG* */
 let argv = sliceArgv(process.argv)
 
 if (config.IS_PRODUCTION) {
@@ -25,7 +34,7 @@ if (config.IS_PRODUCTION) {
   // in production mode too.
   process.env.NODE_ENV = 'production'
 }
-
+/* *CONFIG* */
 // (On Windows and Linux, we get a flag. On MacOS, we get special API.)
 const hidden = argv.includes('--hidden') ||
   (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
@@ -48,12 +57,13 @@ function onReady (err, results) {
   app.logins = results.logins
 
   var cwd = process.env.TEST_DIR || config.CONFIG_PATH
-  log('cwd', cwd)
+  log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(state, { hidden })
   menu.init()
+  /* *CONFIG* */
   if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
 
   // Report uncaught exceptions
@@ -61,11 +71,13 @@ function onReady (err, results) {
     console.error(err)
     const error = { message: err.message, stack: err.stack }
     windows.main.send('uncaughtError', 'main', error)
+    log.error('uncaughtError', error, 'uncaught_error')
   })
 }
 
 app.once('ipcReady', () => {
-  log('Command line args:', argv)
+  /* *CONFIG* */
+  log.info(`Command line args: ${argv}`, argv, 'cmd_args')
   console.timeEnd('init')
 
   var win = windows.main.win
@@ -109,6 +121,7 @@ app.on('web-contents-created', (e, contents) => {
 // Development: 2 args, eg: electron .
 // Test: 4 args, eg: electron -r .../mocks.js .
 function sliceArgv (argv) {
+  /* *CONFIG* */
   return argv.slice(config.IS_PRODUCTION ? 1
     : config.IS_TEST ? 4
       : 2)
