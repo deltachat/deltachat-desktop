@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [Unreleased][unreleased]
 
 ## [0.98.1] - 2019-01-06
 
@@ -363,7 +363,7 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...HEAD
 
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
 
