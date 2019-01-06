@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.98.1] - 2019-01-06
+
+### Changed
+* Use google noto emojis and remove image emojis (@Simon-Laux)
+* Tweak functionality in edit group page (@Simon-Laux)
+
 ## [0.98.0] - 2019-01-05
 
 ### Changed
@@ -311,7 +317,8 @@
 * Do not scroll to bottom when opening message context menu (@ralphtheninja)
 * Make sure `Float on Top` menu item stays checked/unchecked when language is changed (@ralphtheninja)
 
-[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...HEAD
+[Unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...HEAD
+[0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
