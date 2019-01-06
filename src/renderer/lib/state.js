@@ -59,39 +59,21 @@ function getDefaultState () {
     saved: {
       markRead: true,
       notifications: true,
-      showNotificationContent: true
+      showNotificationContent: true,
+      locale: 'en'
     }
   }
-}
-
-/* If the saved state file doesn't exist yet, here's what we use instead */
-function setupStateSaved (cb) {
-  const saved = {
-    locale: null,
-    version: config.APP_VERSION,
-    markRead: true
-  }
-  cb(null, saved)
 }
 
 function load (cb) {
   appConfig.read(function (err, saved) {
-    if (err || !saved.version) {
-      console.log('Missing config file: Creating new one')
-      setupStateSaved(onSavedState)
-    } else {
-      onSavedState(null, saved)
+    if (err) {
+      console.log('Missing configuration file. Using default values.')
     }
-  })
-
-  function onSavedState (err, saved) {
-    if (err) return cb(err)
     const state = getDefaultState()
-    // override default savable settings with saved ones
-    state.saved = Object.assign(state.saved, saved)
-
+    state.saved = Object.assign(state.saved, err ? {} : saved)
     cb(null, state)
-  }
+  })
 }
 
 // Write state.saved to the JSON state file
