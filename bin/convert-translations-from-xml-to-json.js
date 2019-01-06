@@ -1,24 +1,31 @@
 const converter = require('xml-js')
 const path = require('path')
 const fs = require('fs')
+const LOCALES_DIR = path.join(__dirname, '..', '_locales')
 
-var LOCALES_DIR = path.join(__dirname, '..', '_locales')
-console.log('Converting translations from xml to json...')
-fs.readdir(LOCALES_DIR, (err, filenames) => {
+const start = Date.now()
+process.stdout.write('Converting translations from xml to json... ')
+fs.readdir(LOCALES_DIR, (err, files) => {
   if (err) throw err
-  filenames.filter((filename) => path.extname(filename) === '.xml').forEach(xmlToJson)
+  const xmlFiles = files.filter(filename => path.extname(filename) === '.xml')
+  xmlFiles
+    .map(filename => path.resolve(LOCALES_DIR, filename))
+    .forEach(xmlToJson)
+  const time = Date.now() - start
+  process.stdout.write(`(converted ${xmlFiles.length} files in ${time} ms)\n`)
 })
 
 function xmlToJson (filename) {
-  filename = path.resolve(LOCALES_DIR, filename)
-  var xml = fs.readFileSync(filename, 'utf-8').toString()
+  const xml = fs.readFileSync(filename, 'utf-8').toString()
+
   try {
     var js = converter.xml2js(xml, { compact: true })
   } catch (err) {
     console.error('Error converting translation file:', filename)
     throw err
   }
-  var res = {}
+
+  const res = {}
 
   function error (val) {
     // a single malformed translation won't render the whole build useless
@@ -26,17 +33,16 @@ function xmlToJson (filename) {
   }
 
   function done () {
-    var newFile = filename.replace(path.extname(filename), '') + '.json'
-    console.log('Writing', newFile)
+    const newFile = filename.replace(path.extname(filename), '') + '.json'
     fs.writeFileSync(newFile, JSON.stringify(res, null, 2))
   }
 
   if (!js.resources || !js.resources.string || !js.resources.plurals) return done()
 
   js.resources.string.forEach((string) => {
-    var name = string._attributes.name
+    const name = string._attributes.name
     if (!name) return error(string)
-    var text = string._text
+    let text = string._text
     if (typeof text === 'string') {
       text = text.replace(/\\n/g, '\n')
     }
@@ -46,11 +52,11 @@ function xmlToJson (filename) {
   })
 
   js.resources.plurals.forEach((plural) => {
-    var name = plural._attributes.name
+    const name = plural._attributes.name
     if (!name) return error(plural)
-    var items = {}
+    const items = {}
     plural.item.forEach((i) => {
-      var quantity = i._attributes.quantity
+      const quantity = i._attributes.quantity
       if (!quantity) return error(plural)
       items[quantity] = i._text
     })
