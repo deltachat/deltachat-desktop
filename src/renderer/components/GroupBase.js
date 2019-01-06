@@ -16,6 +16,16 @@ const {
 const NavbarWrapper = require('./NavbarWrapper')
 const ContactList = require('./ContactList')
 
+const styled = require('styled-components').default
+
+const GroupMemberTable = styled.table`
+    width:100%;
+    td{
+      width 50%;
+      vertical-align: top;
+    }
+`
+
 class GroupBase extends React.Component {
   constructor (props, state) {
     super(props)
@@ -23,18 +33,23 @@ class GroupBase extends React.Component {
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
     this.back = this.back.bind(this)
+    this.state.changedContacts = this.state.changedContacts || {}
   }
 
   addToGroup (contactId) {
     const group = this.state.group
     group[contactId] = true
-    this.setState({ group })
+    const changedContacts = this.state.changedContacts
+    changedContacts[contactId] = (typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
+    this.setState({ group, changedContacts })
   }
 
   removeFromGroup (contactId) {
     const group = this.state.group
     delete group[contactId]
-    this.setState({ group })
+    const changedContacts = this.state.changedContacts
+    changedContacts[contactId] = (typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
+    this.setState({ group, changedContacts })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -44,6 +59,11 @@ class GroupBase extends React.Component {
 
   contactInGroup (contactId) {
     return !!this.state.group[contactId]
+  }
+
+  contactInGroupStateChanged (contactId) {
+    const changedContacts = this.state.changedContacts
+    return !(typeof changedContacts[contactId] === 'undefined' || changedContacts[contactId] === false)
   }
 
   toggleContact (contact) {
@@ -129,12 +149,31 @@ class GroupBase extends React.Component {
             </div>
             { showQrVerifyCodeButton && (<button onClick={this.onShowQrVerifyCode.bind(this)}>{tx('show_qr_verify_code_desktop')}</button>) }
             { showQrInviteCodeButton && (<button onClick={this.onShowQrInviteCode.bind(this)}>{tx('show_qr_invite_code_desktop')}</button>) }
-            <ContactList
-              childProps={(contact) => {
-                return { color: this.contactInGroup(contact.id) ? 'green' : '' }
-              }}
-              onContactClick={this.toggleContact.bind(this)}
-            />
+            <GroupMemberTable>
+              <thead><tr><th>{tx('in_this_group_desktop')}</th><th>{tx('not_in_this_group_desktop')}</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <ContactList
+                      filter={(contact) => this.contactInGroup(contact.id)}
+                      childProps={(contact) => {
+                        return { color: !this.contactInGroupStateChanged(contact.id) ? 'green' : 'yellow' }
+                      }}
+                      onContactClick={this.toggleContact.bind(this)}
+                    />
+                  </td>
+                  <td>
+                    <ContactList
+                      filter={(contact) => !this.contactInGroup(contact.id)}
+                      childProps={(contact) => {
+                        return { color: this.contactInGroupStateChanged(contact.id) ? 'red' : '' }
+                      }}
+                      onContactClick={this.toggleContact.bind(this)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </GroupMemberTable>
           </div>
         </div>
       </div>
