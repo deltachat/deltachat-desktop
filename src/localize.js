@@ -2,7 +2,7 @@ const merge = require('lodash.merge')
 const path = require('path')
 const fs = require('fs')
 
-const log = require('./logger').getLogger('translate')
+const log = require('./logger').getLogger('translations')
 
 function translate (messages) {
   function getMessage (key, substitutions, opts) {
@@ -12,7 +12,7 @@ function translate (messages) {
     const entry = messages[key]
 
     if (!entry) {
-      console.error(`[TRANSLATIONS] Missing translation for key '${key}'`)
+      log.error(`Missing translation for key '${key}'`, key, 'translations_missing_key')
       return key
     }
 
@@ -21,8 +21,8 @@ function translate (messages) {
       if (typeof entry[opts.quantity] !== 'undefined') {
         message = entry[opts.quantity]
       } else {
-        console.error(
-          `[TRANSLATIONS] Missing quantity '${opts.quantity}' for key '${key}'`
+        log.error(
+          `Missing quantity '${opts.quantity}' for key '${key}'`, { quantity: opts.quantity }, 'translations_missing_quantity'
         )
       }
     }
@@ -35,7 +35,7 @@ function translate (messages) {
       let c = 0
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
-          console.error(`[TRANSLATIONS] Missing ${c} argument for key %c'${key}'`)
+          log.error(`Missing ${c} argument for key %c'${key}'`, { index: c, key }, 'translations_missing_argument')
         }
         return substitutions[c++].toString()
       })
@@ -63,7 +63,7 @@ function setup (app, locale) {
       messages = getLocaleMessages(file)
       messages = merge(english, messages)
     } catch (e) {
-      log.error(`Could not load messages for ${locale} ${e.stack}`)
+      log.error(`Could not load messages for ${locale}`, locale)
       locale = 'en'
       messages = english
     }
