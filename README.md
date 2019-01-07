@@ -109,20 +109,17 @@ It's also handy to run this watch command in a separate terminal
 $ npm run watch
 ```
 
-### Run linters
+### Tests
 
-```
-$ npm test
-```
+Running `npm test` does the following:
 
-### Run integration tests
+* runs `standard` as code linter
+* runs `hallmark` as markdown linter
+* runs the unit tests defined in `tests/index.js`
 
-```
-$ npm run test-integration
-```
+Running `npm run test-integaration` executes the integration tests.
 
-The integration tests use Spectron and Tape. They click through the app, taking screenshots and
-comparing each one to a reference. Why screenshots?
+The integration tests use `spectron` and `tape`. They click through the app, taking screenshots and comparing each one to a reference. Why screenshots?
 
 - Ad-hoc checking makes the tests a lot more work to write
 - Even diffing the whole HTML is not as thorough as screenshot diffing. For example, it wouldn't
@@ -133,13 +130,11 @@ comparing each one to a reference. Why screenshots?
 - The resulting Github PR will then show, pixel by pixel, the exact UI changes that were made! See
   <https://github.com/blog/817-behold-image-view-modes>
 
-For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have
-the same resolution as a 2016 12" Macbook.
+For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have the same resolution as a 2016 12" Macbook.
 
 For Windows, you'll need Windows 10 with a 1366x768 screen.
 
-When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse
-or keyboard while the tests are running.
+When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse or keyboard while the tests are running.
 
 ### Update translations
 
