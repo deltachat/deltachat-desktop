@@ -30,19 +30,6 @@ The configuration files and database are stored at [application-config's default
 
 Each database is a sqlite file that represents the account for a given email address.
 
-## Code structure
-
-- `static`: static files used directly in the app
-- `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
-- `src`: the original javascript source files, both for main and renderer
-- `es5`: the compiled es5 source files for front-end
-- `dist`: the final distributions and executables for all supported platforms
-- `.tx`: configuration files for transifex
-- `_locales`: source files for translations
-- `bin`: misc. scripts
-- `build`: files needed only at build time (for electron-builder)
-- `conversations`: react components pulled out of signal
-
 ## Troubleshooting
 
 This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
@@ -88,6 +75,19 @@ $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
 $ npm install
 ```
+
+### Code Structure
+
+- `static`: static files used directly in the app
+- `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
+- `src`: the original javascript source files, both for main and renderer
+- `es5`: the compiled es5 source files for front-end
+- `dist`: the final distributions and executables for all supported platforms
+- `.tx`: configuration files for transifex
+- `_locales`: source files for translations
+- `bin`: misc. scripts
+- `build`: files needed only at build time (for electron-builder)
+- `conversations`: react components pulled out of signal
 
 ### Watch the code
 
