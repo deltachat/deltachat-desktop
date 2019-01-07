@@ -11,6 +11,16 @@
 
 ## Table of Contents
 
+<details><summary>Click to expand</summary>
+
+- [Install](#install)
+- [Configuration and Databases](#configuration-and-databases)
+- [Troubleshooting](#troubleshooting)
+- [How to Contribute](#how-to-contribute)
+- [License](#license)
+
+</details>
+
 ## Install
 
 ### From Source
@@ -115,9 +125,9 @@ $ npm run watch
 
 Running `npm test` does the following:
 
-* runs `standard` as code linter
-* runs `hallmark` as markdown linter
-* runs the unit tests defined in `tests/index.js`
+- runs `standard` as code linter
+- runs `hallmark` as markdown linter
+- runs the unit tests defined in `tests/index.js`
 
 Running `npm run test-integaration` executes the integration tests.
 
