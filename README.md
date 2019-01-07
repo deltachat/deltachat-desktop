@@ -9,6 +9,8 @@
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
+## Table of Contents
+
 ## Install
 
 ### From Source
