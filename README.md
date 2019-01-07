@@ -96,16 +96,34 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 
 ### Code Structure
 
-- `static`: static files used directly in the app
-- `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
-- `src`: the original javascript source files, both for main and renderer
-- `es5`: the compiled es5 source files for front-end
-- `dist`: the final distributions and executables for all supported platforms
-- `.tx`: configuration files for transifex
-- `_locales`: source files for translations
-- `bin`: misc. scripts
-- `build`: files needed only at build time (for electron-builder)
-- `conversations`: react components pulled out of signal
+Some important folders and files:
+
+```
+├── bin                    # various helper scripts
+├── build                  # files needed only at build time
+├── conversations
+│   ├── build
+│   │   └── manifest.css   # css bundle built from stylesheets
+│   └── stylesheets        # stylesheets pulled out from signal
+├── images                 # image files used in conversations
+├── index.js               # entry point for the main process
+├── jenkins                # pipelines for building on Jenkins
+├── _locales               # translation files in xml and json
+├── src
+│   ├── main               # javascript for the main process
+│   └── renderer           # javascript for the renderer process
+├── static
+│   ├── bundle.js          # javascript bundle built by webpack
+│   ├── fonts              # fonts
+│   ├── main.css           # main css file
+│   └── main.html          # main html file in renderer process
+├── test
+│   ├── integration        # integration tests
+│   └── unit               # unit tests
+├── .travis.yml            # build script for Travis
+├── .tx                    # configuration for Transifex
+└── webpack.config.js      # configuration for webpack
+```
 
 ### Run the Code
 
@@ -127,7 +145,7 @@ Running `npm test` does the following:
 
 - runs `standard` as code linter
 - runs `hallmark` as markdown linter
-- runs the unit tests defined in `tests/index.js`
+- runs the unit tests
 
 Running `npm run test-integaration` executes the integration tests.
 
