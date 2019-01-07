@@ -89,9 +89,15 @@ $ npm install
 - `build`: files needed only at build time (for electron-builder)
 - `conversations`: react components pulled out of signal
 
-### Watch the code
+### Run the Code
 
-It is recommended to run this watch command in a separate terminal
+While developing the following command will build the app and start `electron` in debug mode with http cache disabled:
+
+```
+$ npm run dev
+```
+
+It's also handy to run this watch command in a separate terminal
 
 ```
 $ npm run watch
