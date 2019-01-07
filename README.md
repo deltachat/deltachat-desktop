@@ -25,9 +25,9 @@
 
 The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions.
 
-### Debian
+### Linux
 
-For debian based systems we offer two variants. An `.AppImage` and a `.deb` file.
+For common linux based systems we offer two variants. An `.AppImage` and a `.deb` file.
 
 To install a `.AppImage` based release:
 
