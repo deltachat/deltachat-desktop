@@ -9,20 +9,34 @@
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
-### Build the app
+## Install
+
+### From Source
+
+Get the code:
+
+```
+$ git clone https://github.com/deltachat/deltachat-desktop.git
+$ cd deltachat-desktop
+```
+
+Install dependencies:
 
 ```
 $ npm install
+```
+
+Build the app (only needed if the code has changed or if the app has never been built before):
+
+```
 $ npm run build
 ```
 
-### Run the app
+Start the application:
 
 ```
 $ npm start
 ```
-
-The first `npm run build` step is optional and only needed if code has changed or if the app has never been built before.
 
 ## Configuration and databases
 
@@ -67,14 +81,6 @@ Then try running `npm install` again.
 Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
 ## How to Contribute
-
-### Get the code
-
-```
-$ git clone https://github.com/deltachat/deltachat-desktop.git
-$ cd deltachat-desktop
-$ npm install
-```
 
 ### Code Structure
 
