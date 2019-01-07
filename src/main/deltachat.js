@@ -391,7 +391,7 @@ class DeltaChatController extends events.EventEmitter {
   }
 
   setConfig (key, value) {
-    log(`Setting config ${key}:${value}`)
+    log.info(`Setting config ${key}:${value}`)
     return this._dc.setConfig(key, String(value))
   }
 
