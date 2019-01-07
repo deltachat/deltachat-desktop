@@ -144,7 +144,6 @@ $ npm run watch
 Running `npm test` does the following:
 
 - runs `standard` as code linter
-- runs `hallmark` as markdown linter
 - runs the unit tests
 
 Running `npm run test-integaration` executes the integration tests.
