@@ -38,7 +38,7 @@ Start the application:
 $ npm start
 ```
 
-## Configuration and databases
+## Configuration and Databases
 
 The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
 
@@ -158,7 +158,7 @@ When you need to modify language strings, this should be done in `_locales/en.xm
 tx push --source
 ```
 
-### Deploy workflow
+### Deploy Workflow
 
 1. Create a draft release on github, e.g. `vX.Y.Z`
 2. Change `version` field in `package.json` to `X.Y.Z`
