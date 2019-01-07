@@ -31,15 +31,15 @@ For common linux based systems we offer two variants. An `.AppImage` and a `.deb
 
 To install a `.AppImage` based release:
 
-* Download the binary
-* Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
-* Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
+- Download the binary
+- Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
+- Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
 
 To install a `.deb` based release:
 
-* Click on the link for the `.deb` file
-* Some systems enable installing it directly by clicking
-* If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
+- Click on the link for the `.deb` file
+- Some systems enable installing it directly by clicking
+- If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
 
 ### From Source
 
@@ -204,6 +204,10 @@ When you need to modify language strings, this should be done in `_locales/en.xm
 ```
 tx push --source
 ```
+
+### CI
+
+For Continuous Integration we currently use both Travis and Jenkins. Travis is used for Mac and Jenkins for Linux. Once we support Windows we will most likely use Travis for Windows.
 
 ### Deploy Workflow
 
