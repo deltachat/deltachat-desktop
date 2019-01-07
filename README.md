@@ -23,6 +23,24 @@
 
 ## Install
 
+The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions.
+
+### Debian
+
+For debian based systems we offer two variants. An `.AppImage` and a `.deb` file.
+
+To install a `.AppImage` based release:
+
+* Download the binary
+* Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
+* Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
+
+To install a `.deb` based release:
+
+* Click on the link for the `.deb` file
+* Some systems enable installing it directly by clicking
+* If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
+
 ### From Source
 
 Get the code:
