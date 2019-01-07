@@ -136,7 +136,7 @@ For Windows, you'll need Windows 10 with a 1366x768 screen.
 
 When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse or keyboard while the tests are running.
 
-### Update translations
+### Translations
 
 Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat App` project.
 
@@ -146,13 +146,13 @@ And periodically we can run the following command to get the new translation str
 tx pull --all
 ```
 
-Note that this command updated `_locales/*.xml`. In order to convert from xml to json you can do:
+Note that this command updated `_locales/*.xml`. Run the following command to convert from xml to json:
 
 ```
 npm run build-translations
 ```
 
-When you need to modify language strings, this should be done in `_locales/en.xml`. To sync with Transifex you do:
+When you need to modify language strings, this should be done in `_locales/en.xml`. Run the following command to sync with Transifex:
 
 ```
 tx push --source
