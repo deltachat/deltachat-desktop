@@ -24,14 +24,6 @@ $ npm start
 
 The first `npm run build` step is optional and only needed if code has changed or if the app has never been built before.
 
-### Watch the code
-
-It is recommended to run this watch command in a separate terminal
-
-```
-$ npm run watch
-```
-
 ## Configuration and databases
 
 The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
@@ -95,6 +87,14 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
 $ npm install
+```
+
+### Watch the code
+
+It is recommended to run this watch command in a separate terminal
+
+```
+$ npm run watch
 ```
 
 ### Run linters
