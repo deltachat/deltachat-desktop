@@ -51,17 +51,7 @@ Each database is a sqlite file that represents the account for a given email add
 - `build`: files needed only at build time (for electron-builder)
 - `conversations`: react components pulled out of signal
 
-## How to Contribute
-
-### Get the code
-
-```
-$ git clone https://github.com/deltachat/deltachat-desktop.git
-$ cd deltachat-desktop
-$ npm install
-```
-
-### Troubleshooting
+## Troubleshooting
 
 This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
@@ -96,6 +86,16 @@ sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
 Then try running `npm install` again.
 
 Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
+
+## How to Contribute
+
+### Get the code
+
+```
+$ git clone https://github.com/deltachat/deltachat-desktop.git
+$ cd deltachat-desktop
+$ npm install
+```
 
 ### Run linters
 
