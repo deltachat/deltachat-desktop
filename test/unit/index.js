@@ -49,6 +49,14 @@ test('that translation files are valid json', t => {
             return false
           }
 
+          str = '\\\\\\"'
+          regex = new RegExp(str, 'g')
+          match = regex.exec(v2)
+          if (match) {
+            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
+            return false
+          }
+
           return true
         })
       })
