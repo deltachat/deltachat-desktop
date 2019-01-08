@@ -239,7 +239,7 @@ function LoginScreen (props) {
         </Navbar>
       </NavbarWrapper>
       <div className='window'>
-        <Card>
+        { props.logins.length > 0 && <Card>
           <H5>{tx('login_known_accounts_title_desktop')}</H5>
           <ul>
             {props.logins.map((login) => <LoginItem key={login}>
@@ -251,6 +251,7 @@ function LoginScreen (props) {
             )}
           </ul>
         </Card>
+        }
         <Card>
           {children}
         </Card>
