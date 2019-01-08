@@ -32,14 +32,23 @@ test('that translation files are valid json', t => {
             )
             return false
           }
-          if (/\\n/.test(v2)) {
-            console.error(`> ${JSON.stringify(v2)} contains \\\\n (${file} -> ${k1} -> ${k2})`)
+
+          let str = '\\\\n'
+          let regex = new RegExp(str, 'g')
+          let match = regex.exec(v2)
+          if (match) {
+            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
             return false
           }
-          if (/\\'/.test(v2)) {
-            console.error(`> ${JSON.stringify(v2)} contains \\\\' (${file} -> ${k1} -> ${k2})`)
+
+          str = "\\\\'"
+          regex = new RegExp(str, 'g')
+          match = regex.exec(v2)
+          if (match) {
+            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
             return false
           }
+
           return true
         })
       })

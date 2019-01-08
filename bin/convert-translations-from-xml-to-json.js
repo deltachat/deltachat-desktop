@@ -44,10 +44,10 @@ function xmlToJson (filename) {
     if (!name) return error(string)
     let text = string._text
     if (typeof text === 'string') {
-      text = text.replace(/\\n/g, '\n')
+      text = text.replace(new RegExp('\\\\n', 'g'), '\n')
     }
     if (typeof text === 'string') {
-      text = text.replace(/\\'/g, '\'')
+      text = text.replace(new RegExp("\\\\'", 'g'), "'")
     }
     res[name] = {
       'message': text
