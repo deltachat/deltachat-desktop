@@ -32,6 +32,10 @@ test('that translation files are valid json', t => {
             )
             return false
           }
+          if (/\\n/.test(v2)) {
+            console.error(`> ${JSON.stringify(v2)} contains \\\\n (${file} -> ${k1} -> ${k2})`)
+            return false
+          }
           return true
         })
       })
