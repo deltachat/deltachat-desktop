@@ -2,13 +2,14 @@
 <component type="desktop">
   <id>chat.delta.desktop</id>
   <metadata_license>CC0</metadata_license>
-  <project_license>GPLv3</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <name>Delta Chat</name>
   <summary>Delta Chat email-based messenger</summary>
   
   <description>
-The messenger with the broadest audience in the world.
+    <p>The messenger with the broadest audience in the world.
 Free, independent, email compatible.
+    </p>
   </description>
   
 ​  <launchable type="desktop-id">chat.delta.desktop</launchable>
@@ -19,15 +20,93 @@ Free, independent, email compatible.
     </screenshot>
   </screenshots>
 
-  <kudos>
-  </kudos>
 
  <url type="homepage">https://delta.chat/</url>
 
   <releases>
-    <release version="v1.7.4" date="2018-11-07"/>
-    <release version="v1.7.3" date="2018-11-02"/>
-​  </releases>
+    <release version="v0.98.1" date="2019-01-06">
+        <description>
+        <p>
+        Changed
+
+            Use google noto emojis and remove image emojis (@Simon-Laux)
+            Tweak functionality in edit group page (@Simon-Laux)
+        </p>
+        </description>    
+    </release>
+    <release version="v0.98.0" date="2019-01-05">
+        <description>
+        <p>
+        Changed
+
+            Use language fallback for missing language variants (@ralphtheninja)
+            Translations now based on xml and shared with other Delta Chat projects (@karissa, @Jikstra, @ralphtheninja)
+            Made more elements unselectable (@Simon-Laux)
+            Improve build/run instructions (@obestwalter)
+            Upgrade deltachat-node to ^0.35.0 (@ralphtheninja)
+
+        Added
+
+            Add settings for configuring mvbox and sentbox threads (@Jikstra)
+            Add divider between chat list and chat view (@Simon-Laux)
+            Write output of dc.getInfo() to console (@ralphtheninja)
+
+        Removed
+
+            Remove all .ts/.tsx based code (@ralphtheninja)
+
+        Fixed
+
+            Message input field keeps focus (@Simon-Laux)
+            Fix issue with Autocrypt setup dialog not closing (@ralphtheninja)
+            Add back menu item for unblocking contacts (@ralphtheninja)
+            Fix group image issue (@ralphtheninja)
+            Only run dc.getConfig() on valid account folders (@Simon-Laux)
+            Handle DC_EVENT_SELF_NOT_IN_GROUP error (@ralphtheninja)
+            Fix icon rotation (@Simon-Laux)
+            Fix issues related to media height (@Simon-Laux)
+        </p>
+        </description>
+    </release>
+    <release version="v0.97.0" date="2018-12-24" />
+    <release version="v0.96.0" date="2018-12-21">
+        <description>
+        <p>Added:
+            <ul>
+            <li>Improve experience for inputting Autocrypt setup codes </li>
+            <li>Media view for chats</li>
+            <li>See encryption info for contacts in a chat</li>
+            <li>List contact requests</li>
+            <li>File-&gt;Quit in the menu to quit the application</li>
+            <li>Drag a file out of the chat window to the filesystem to copy it locally</li>
+            <li>Settings option for sending read receipts </li>
+            <li>Settings option for preferring encryption </li>
+            <li>Forget account button in the Login screen </li>
+            <li>Update account settings while logged in </li>
+            </ul>
+        </p>
+        <p>Fixed:
+            <ul>
+            <li>Make button hover state a pointer cursor </li>
+            <li>Read and delivered checkmarks are now green </li>
+            <li>Display filename and size for downloadable files in messages </li>
+            <li>Richer file messages, including displaying webm videos </li>
+            <li>Ask user before leaving group </li>
+            <li>Mark messages read properly </li>
+            <li>Small bug with exporting backups </li>
+            </ul>
+        </p>
+        <p>Changed:
+            <ul>
+            <li>Upgrade deltachat-node to 0.29.0 </li>
+            <li>Remove single-folder compatibility message </li>
+            <li>Update to electron 3.0</li>
+            </ul>
+        </p>
+        </description>
+   </release>
+​    <release version="v0.90.1" date="2018-12-11" />
+  </releases>
    
  <update_contact>tobiasmue@gnome.org</update_contact>
 
