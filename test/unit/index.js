@@ -14,20 +14,32 @@ test('that translation files are valid json', t => {
       jsonFiles.map(name),
       'each xml file has a corresponding json file'
     )
+    const testFile = file => {
+      let json = null
+      try {
+        json = require(file)
+      } catch (e) {
+        console.error(e.message)
+        return false
+      }
+      return Object.keys(json).every(k1 => {
+        const v1 = json[k1]
+        return Object.keys(v1).every(k2 => {
+          const v2 = v1[k2]
+          if (typeof v2 !== 'string') {
+            console.error(
+              `> ${JSON.stringify(v2)} not a string (${file} -> ${k1} -> ${k2})`
+            )
+            return false
+          }
+          return true
+        })
+      })
+    }
     t.is(
-      jsonFiles.every(f => {
-        let ok = false
-        const fullPath = path.join(dir, f)
-        try {
-          require(fullPath)
-          ok = true
-        } catch (e) {
-          console.error(e)
-        }
-        return ok
-      }),
+      jsonFiles.every(f => testFile(path.join(dir, f))),
       true,
-      'json is valid'
+      'valid json and valid strings'
     )
     t.end()
   })
