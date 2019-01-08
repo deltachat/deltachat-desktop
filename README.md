@@ -9,59 +9,72 @@
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
-### Build the app
+## Table of Contents
+
+<details><summary>Click to expand</summary>
+
+- [Install](#install)
+- [Configuration and Databases](#configuration-and-databases)
+- [Troubleshooting](#troubleshooting)
+- [How to Contribute](#how-to-contribute)
+- [License](#license)
+
+</details>
+
+## Install
+
+The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions.
+
+### Linux
+
+For common linux based systems we offer two variants. An `.AppImage` and a `.deb` file.
+
+To install a `.AppImage` based release:
+
+- Download the binary
+- Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
+- Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
+
+To install a `.deb` based release:
+
+- Click on the link for the `.deb` file
+- Some systems enable installing it directly by clicking
+- If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
+
+### From Source
+
+Get the code:
+
+```
+$ git clone https://github.com/deltachat/deltachat-desktop.git
+$ cd deltachat-desktop
+```
+
+Install dependencies:
 
 ```
 $ npm install
+```
+
+Build the app (only needed if the code has changed or if the app has never been built before):
+
+```
 $ npm run build
 ```
 
-### Run the app
+Start the application:
 
 ```
 $ npm start
 ```
 
-The first `npm run build` step is optional and only needed if code has changed or if the app has never been built before.
-
-### Watch the code
-
-It is recommended to run this watch command in a separate terminal
-
-```
-$ npm run watch
-```
-
-## Configuration and databases
+## Configuration and Databases
 
 The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
 
 Each database is a sqlite file that represents the account for a given email address.
 
-## Code structure
-
-- `static`: static files used directly in the app
-- `images`: image files used for the 'conversations' module. This should probably be moved to the module at some point..
-- `src`: the original javascript source files, both for main and renderer
-- `es5`: the compiled es5 source files for front-end
-- `dist`: the final distributions and executables for all supported platforms
-- `.tx`: configuration files for transifex
-- `_locales`: source files for translations
-- `bin`: misc. scripts
-- `build`: files needed only at build time (for electron-builder)
-- `conversations`: react components pulled out of signal
-
-## How to Contribute
-
-### Get the code
-
-```
-$ git clone https://github.com/deltachat/deltachat-desktop.git
-$ cd deltachat-desktop
-$ npm install
-```
-
-### Troubleshooting
+## Troubleshooting
 
 This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
@@ -97,20 +110,63 @@ Then try running `npm install` again.
 
 Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
-### Run linters
+## How to Contribute
+
+### Code Structure
+
+Some important folders and files:
 
 ```
-$ npm test
+├── bin                    # various helper scripts
+├── build                  # files needed only at build time
+├── conversations
+│   ├── build
+│   │   └── manifest.css   # css bundle built from stylesheets
+│   └── stylesheets        # stylesheets pulled out from signal
+├── images                 # image files used in conversations
+├── index.js               # entry point for the main process
+├── jenkins                # pipelines for building on Jenkins
+├── _locales               # translation files in xml and json
+├── src
+│   ├── main               # javascript for the main process
+│   └── renderer           # javascript for the renderer process
+├── static
+│   ├── bundle.js          # javascript bundle built by webpack
+│   ├── fonts              # fonts
+│   ├── main.css           # main css file
+│   └── main.html          # main html file in renderer process
+├── test
+│   ├── integration        # integration tests
+│   └── unit               # unit tests
+├── .travis.yml            # build script for Travis
+├── .tx                    # configuration for Transifex
+└── webpack.config.js      # configuration for webpack
 ```
 
-### Run integration tests
+### Run the Code
+
+While developing the following command will build the app and start `electron` in debug mode with http cache disabled:
 
 ```
-$ npm run test-integration
+$ npm run dev
 ```
 
-The integration tests use Spectron and Tape. They click through the app, taking screenshots and
-comparing each one to a reference. Why screenshots?
+It's also handy to run this watch command in a separate terminal
+
+```
+$ npm run watch
+```
+
+### Tests
+
+Running `npm test` does the following:
+
+- runs `standard` as code linter
+- runs the unit tests
+
+Running `npm run test-integaration` executes the integration tests.
+
+The integration tests use `spectron` and `tape`. They click through the app, taking screenshots and comparing each one to a reference. Why screenshots?
 
 - Ad-hoc checking makes the tests a lot more work to write
 - Even diffing the whole HTML is not as thorough as screenshot diffing. For example, it wouldn't
@@ -121,15 +177,13 @@ comparing each one to a reference. Why screenshots?
 - The resulting Github PR will then show, pixel by pixel, the exact UI changes that were made! See
   <https://github.com/blog/817-behold-image-view-modes>
 
-For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have
-the same resolution as a 2016 12" Macbook.
+For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have the same resolution as a 2016 12" Macbook.
 
 For Windows, you'll need Windows 10 with a 1366x768 screen.
 
-When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse
-or keyboard while the tests are running.
+When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse or keyboard while the tests are running.
 
-### Update translations
+### Translations
 
 Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat App` project.
 
@@ -139,19 +193,23 @@ And periodically we can run the following command to get the new translation str
 tx pull --all
 ```
 
-Note that this command updated `_locales/*.xml`. In order to convert from xml to json you can do:
+Note that this command updated `_locales/*.xml`. Run the following command to convert from xml to json:
 
 ```
 npm run build-translations
 ```
 
-When you need to modify language strings, this should be done in `_locales/en.xml`. To sync with Transifex you do:
+When you need to modify language strings, this should be done in `_locales/en.xml`. Run the following command to sync with Transifex:
 
 ```
 tx push --source
 ```
 
-### Deploy workflow
+### CI
+
+For Continuous Integration we currently use both Travis and Jenkins. Travis is used for Mac and Jenkins for Linux. Once we support Windows we will most likely use Travis for Windows.
+
+### Deploy Workflow
 
 1. Create a draft release on github, e.g. `vX.Y.Z`
 2. Change `version` field in `package.json` to `X.Y.Z`
