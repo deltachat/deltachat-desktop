@@ -6,18 +6,29 @@ test('that translation files are valid json', t => {
   const dir = path.join(__dirname, '../../_locales')
   fs.readdir(dir, (err, files) => {
     t.error(err, 'no error reading folder')
-    files.forEach(filename => {
-      if (path.extname(filename) === '.json') {
-        const fullPath = path.join(dir, filename)
+    const xmlFiles = files.filter(f => path.extname(f) === '.xml')
+    const jsonFiles = files.filter(f => path.extname(f) === '.json')
+    const name = f => f.split('.')[0]
+    t.deepEqual(
+      xmlFiles.map(name),
+      jsonFiles.map(name),
+      'each xml file has a corresponding json file'
+    )
+    t.is(
+      jsonFiles.every(f => {
+        let ok = false
+        const fullPath = path.join(dir, f)
         try {
           require(fullPath)
-          t.pass(`${fullPath} valid json`)
+          ok = true
         } catch (e) {
-          t.fail(`${fullPath} invalid json`)
           console.error(e)
         }
-      }
-    })
+        return ok
+      }),
+      true,
+      'json is valid'
+    )
     t.end()
   })
 })
