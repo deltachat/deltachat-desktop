@@ -177,13 +177,14 @@ const LoginWrapper = styled.div`
   height: calc(100vh);
 
   .bp3-card {
+    width: 400px;
     margin-top: 20px;
   }
 
-  .window {
-    max-width: 400px;
-    height: auto;
+  .window { 
+    padding-left: calc((100vw - 400px) / 2)
   }
+
 `
 
 const LoginItem = styled.li`
