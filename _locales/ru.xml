@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- common strings without special context -->
-    <string name="app_name">Дельта Чат</string>
+    <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
     <string name="yes">Да</string>
@@ -25,8 +25,8 @@
     <string name="file_not_found">Невозможно найти %1$s</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена.</string>
     <string name="contacts_headline">Контакты</string>
-    <string name="email_address">Адрес email</string>
-    <string name="bad_email_address">Неправильный адрес email.</string>
+    <string name="email_address">Адрес эл.почты</string>
+    <string name="bad_email_address">Неправильный адрес эл.почты.</string>
     <string name="password">Пароль</string>
     <string name="now">Сейчас</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
@@ -67,12 +67,15 @@
         <item quantity="other">%1$d участников</item>
     </plurals>
 
+    <string name="self">Мои</string>
     <string name="draft">Черновик</string>
     <string name="image">Изображение</string>
     <string name="gif">Гиф</string>
+    <string name="images">Изображения</string>
     <string name="audio">Аудио</string>
     <string name="voice_message">Голосовое сообщение</string>
     <string name="video">Видео</string>
+    <string name="documents">Документы</string>
     <string name="contact">Контакт</string>
     <string name="camera">Камера</string>
     <string name="location">Местоположение</string>
@@ -84,7 +87,7 @@
     <string name="red">Красный</string>
     <string name="blue">Синий</string>
     <string name="orange">Оранжевый</string>
-    <string name="cyan">Голубой</string>
+    <string name="cyan">Сине-зелёный</string>
     <string name="magenta">Пурпурный</string>
     <string name="white">Белый</string>
 
@@ -108,8 +111,8 @@
     <string name="menu_send">Отправить</string>
     <string name="menu_toggle_keyboard">Включить эмодзи клавиатуру</string>
     <string name="menu_edit_group">Редактировать группу</string>
-    <string name="menu_archive_chat">Активный чат</string>
-    <string name="menu_unarchive_chat">Неактивный чат</string>
+    <string name="menu_archive_chat">Архивированный чат</string>
+    <string name="menu_unarchive_chat">Разархивированный чат</string>
     <string name="menu_add_attachment">Прикрепить вложение</string>
     <string name="menu_leave_group">Покинуть группу</string>
     <string name="menu_delete_chat">Удалить чат</string>
@@ -285,12 +288,12 @@
     <string name="login_smtp_password">SMTP пароль</string>
     <string name="login_smtp_server">SMTP сервер</string>
     <string name="login_smtp_port">SMTP порт</string>
-    <string name="login_smtp_security">настройки безопасности SMTP</string>
-    <string name="login_info_gmail_text">Если вы пользуетесь GMail и у вас включена 2х-факторная авторизация, вам необходимо создать специальный пароль для приложений - App-Password. Если эти настройки недоступны, вам надо активировать параметр Less Secure Apps.</string>
-    <string name="login_error_mail">Укажите действующий адрес электронной почты</string>
-    <string name="login_error_server">Укажите действующий сервер / IP адрес</string>
-    <string name="login_error_port">Укажите действующий порт (1-65535)</string>
-    <string name="login_error_required_fields">Пожалуйста укажите верные емайл и пароль</string>
+    <string name="login_smtp_security">Настройки безопасности SMTP</string>
+    <string name="login_info_gmail_text">Если Вы пользуетесь GMail и у вас включена двухфакторная аутентификация, Вам нужно создать специальный пароль для приложений - App-Password. Если эти настройки недоступны, Вам нужно активировать параметр Less Secure Apps.</string>
+    <string name="login_error_mail">Укажите действительный адрес электронной почты</string>
+    <string name="login_error_server">Укажите действительный сервер / IP адрес</string>
+    <string name="login_error_port">Укажите действительный порт (1-65535)</string>
+    <string name="login_error_required_fields">Пожалуйста, укажите верные адрес электронной почты и пароль</string>
     <string name="import_backup_title">Импортировать бекап</string>
     <string name="import_backup_ask">Найдена резервная копия на \"%1$s\".
 
@@ -299,7 +302,7 @@
 
 Поместите резервную копию в \"%1$s\" и попробуйте снова. Так же вы можете нажать \"Начать общение\" для продолжения обычной \"чистой\" установки</string>
     <!-- Translators: %1$s will be replaced by the email address -->
-    <string name="login_error_cannot_login">Не удалось войти как \"%1$s\". Пожалуйста проверьте правильность ввода email и пароля.</string>
+    <string name="login_error_cannot_login">Не удалось войти как \"%1$s\". Пожалуйста, проверьте правильность ввода email и пароля.</string>
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Переслать...</string>
@@ -307,7 +310,7 @@
     <string name="pref_summary_appearance">Тема %1$s, язык %2$s, заставка %3$s</string>
     <string name="pref_summary_on">вкл</string>
     <string name="pref_summary_off">выкл</string>
-    <string name="pref_summary_default">по- умолчанию</string>
+    <string name="pref_summary_default">по умолчанию</string>
     <string name="pref_summary_custom">персонализованно</string>
     <string name="pref_using_custom">Использовать персонализованно: %s</string>
     <string name="pref_using_default">Использовать по умолчанию: %s</string>
