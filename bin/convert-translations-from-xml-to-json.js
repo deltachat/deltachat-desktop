@@ -45,8 +45,6 @@ function xmlToJson (filename) {
     let text = string._text
     if (typeof text === 'string') {
       text = text.replace(new RegExp('\\\\n', 'g'), '\n')
-    }
-    if (typeof text === 'string') {
       text = text.replace(new RegExp("\\\\'", 'g'), "'")
     }
     res[name] = {
