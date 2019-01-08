@@ -46,6 +46,9 @@ function xmlToJson (filename) {
     if (typeof text === 'string') {
       text = text.replace(/\\n/g, '\n')
     }
+    if (typeof text === 'string') {
+      text = text.replace(/\\'/g, '\'')
+    }
     res[name] = {
       'message': text
     }
