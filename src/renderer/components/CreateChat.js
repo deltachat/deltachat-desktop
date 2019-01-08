@@ -10,8 +10,28 @@ const {
   Button
 } = require('@blueprintjs/core')
 
+const styled = require('styled-components').default
+const StyleVariables = require('./style-variables')
+
 const ContactList = require('./ContactList')
 const NavbarWrapper = require('./NavbarWrapper')
+
+const OvalDeltaButton = styled.button`
+  background-color: ${StyleVariables.colors.deltaPrimaryBg} 
+  padding: 10px
+  border-style: none
+  border-radius: 180px
+  margin: 10px
+  font-weight: bold
+  color: ${StyleVariables.colors.deltaPrimaryFg} 
+  &:focus {
+    outline: none
+  }
+  &:hover {
+    background-color: ${StyleVariables.colors.deltaHover} 
+    color: ${StyleVariables.colors.deltaPrimaryBg} 
+  }
+`
 
 class CreateChat extends React.Component {
   constructor (props) {
@@ -70,9 +90,9 @@ class CreateChat extends React.Component {
         </NavbarWrapper>
         <div className='window'>
           <div className='CreateChat'>
-            <button onClick={this.onCreateGroup}>{tx('menu_new_group')}</button>
-            <button onClick={this.onCreateVerifiedGroup}>{tx('menu_new_verified_group')}</button>
-            <button onClick={this.onCreateContact}>{tx('add_contact_desktop')}</button>
+            <OvalDeltaButton onClick={this.onCreateGroup}>{tx('menu_new_group')}</OvalDeltaButton>
+            <OvalDeltaButton onClick={this.onCreateVerifiedGroup}>{tx('menu_new_verified_group') + ' (experimental)'}</OvalDeltaButton>
+            <OvalDeltaButton onClick={this.onCreateContact}>{tx('add_contact_desktop')}</OvalDeltaButton>
             <ContactList
               contacts={contacts}
               onContactClick={this.chooseContact.bind(this)}
