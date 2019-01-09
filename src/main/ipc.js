@@ -55,12 +55,6 @@ function init (cwd, state) {
 
   setupNotifications(dc, state.saved)
 
-  // Called once to get the conversations css string
-  ipc.on('get-css', (e) => {
-    const p = require.resolve('../../conversations/build/manifest.css')
-    e.returnValue = fs.readFileSync(p).toString()
-  })
-
   // Create a new instance
   ipc.on('login', (e, ...args) => {
     dc.login(...args, render, txCoreStrings())
