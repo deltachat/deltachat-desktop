@@ -14,6 +14,12 @@
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
+  - [Linux](#linux)
+    - [AppImage](#appimage)
+    - [Debian/Ubuntu](#debian/ubuntu)
+    - [Arch Linux](#arch-linux)
+  - [Mac OS](#mac-os)
+  - [From Source](#from)
 - [Configuration and Databases](#configuration-and-databases)
 - [Troubleshooting](#troubleshooting)
 - [How to Contribute](#how-to-contribute)
@@ -23,11 +29,14 @@
 
 ## Install
 
-The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions.
+The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
 
 ### Linux
 
-For common linux based systems we offer two variants. An `.AppImage` and a `.deb` file.
+#### AppImage
+
+AppImages are a generic way to install software accross most linux distributions
+and systems.
 
 To install a `.AppImage` based release:
 
@@ -35,11 +44,35 @@ To install a `.AppImage` based release:
 - Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
 - Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
 
-To install a `.deb` based release:
+#### Debian/Ubuntu
 
 - Click on the link for the `.deb` file
 - Some systems enable installing it directly by clicking
 - If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
+
+#### Arch Linux
+
+**WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
+
+If you have a AUR helper like yay installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
+
+Otherwise you can still do it manually:
+```
+# Download the latest snapshot of the PKGBUILD
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz
+# extract the archive and rm the archive file afterwards
+tar xzfv deltachat-desktop-git.tar.gz && rm deltachat-desktop-git.tar.gz
+# cd into extracted folder
+cd deltachat-desktop-git
+# build package
+makepkg -si
+# install package (you need to replace <version> with whatever version makepkg built)
+sudo pacman -U deltachat-desktop-git-<version>.tar.xz
+```
+
+#### Mac OS
+
+Simply install the `.dmg` file as you do it with all other software on mac.
 
 ### From Source
 
