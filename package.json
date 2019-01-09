@@ -13,7 +13,7 @@
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
     "build": "npm run build-css && npm run build-js && npm run build-translations",
-    "build-css": "node-sass css/conversations/manifest.scss conversations/build/manifest.css",
+    "build-css": "node-sass css/conversations/manifest.scss static/conversations.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
     "build-translations": "node bin/convert-translations-from-xml-to-json.js",
     "hallmark": "hallmark --fix"
@@ -52,7 +52,6 @@
     "error-stack-parser": "^2.0.2",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",
-    "insert-css": "^2.0.0",
     "intl-tel-input": "^14.0.1",
     "linkify-it": "^2.1.0",
     "lodash": "^4.17.11",
