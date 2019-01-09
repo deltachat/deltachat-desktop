@@ -91,7 +91,7 @@ class CreateChat extends React.Component {
         <div className='window'>
           <div className='CreateChat'>
             <OvalDeltaButton onClick={this.onCreateGroup}>{tx('menu_new_group')}</OvalDeltaButton>
-            <OvalDeltaButton onClick={this.onCreateVerifiedGroup}>{tx('menu_new_verified_group') + ' (experimental)'}</OvalDeltaButton>
+            <OvalDeltaButton onClick={this.onCreateVerifiedGroup}>{tx('menu_new_verified_group')}</OvalDeltaButton>
             <OvalDeltaButton onClick={this.onCreateContact}>{tx('add_contact_desktop')}</OvalDeltaButton>
             <ContactList
               contacts={contacts}
