@@ -242,7 +242,7 @@
     <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
     <string name="welcome_intro5_headline">Özgür</string>
     <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat sonsuza dek özgürdür.\nAçık kaynaklı. Reklâm yok. Abonelik yok. Satıcı kilidi yok.</string>
+    <string name="welcome_intro5_message">Delta Chat sonsuza dek özgürdür. Açık kaynaklı. Reklâm yok. Abonelik yok. Satıcı kilidi yok.</string>
     <string name="welcome_intro6_headline">Şifreli</string>
     <string name="welcome_intro6_message">Tüm yaygın algoritmalarla şifrelidir. İletiler sunucularınızda kalır.</string>
     <string name="welcome_intro7_headline">Güvenilir</string>
