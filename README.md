@@ -17,8 +17,8 @@
   - [Linux](#linux)
     - [AppImage](#appimage)
     - [Debian/Ubuntu](#debian/ubuntu)
-    - [Arch Linux](#arch linux)
-  - [macOS](#macOS)
+    - [Arch Linux](#arch-linux)
+  - [Mac OS](#mac-os)
   - [From Source](#from)
 - [Configuration and Databases](#configuration-and-databases)
 - [Troubleshooting](#troubleshooting)
@@ -52,11 +52,9 @@ To install a `.AppImage` based release:
 
 #### Arch Linux
 
-******WARNING: Currently the AUR package compiles from latest master. This can be
-more recent as the latest release, introduce new features but also new bugs.** 
+**WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
 
-If you have a AUR helper like yay installed, you can install it by running
-`yay -S deltachat-desktop-git` and following the instruction in your terminal.
+If you have a AUR helper like yay installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
 
 Otherwise you can still do it manually:
 ```
@@ -72,8 +70,7 @@ makepkg -si
 sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ```
 
-
-#### macOS
+#### Mac OS
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
