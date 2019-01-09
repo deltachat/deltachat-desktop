@@ -33,37 +33,20 @@ test('that translation files are valid json', t => {
             return false
           }
 
-          let str = '\\\\n'
-          let regex = new RegExp(str, 'g')
-          let match = regex.exec(v2)
-          if (match) {
-            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
-            return false
+          function testString (str) {
+            const regex = new RegExp(str, 'g')
+            const match = regex.exec(v2)
+            if (match) {
+              console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
+              return false
+            }
+            return true
           }
 
-          str = "\\\\'"
-          regex = new RegExp(str, 'g')
-          match = regex.exec(v2)
-          if (match) {
-            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
-            return false
-          }
-
-          str = '\\\\\\"'
-          regex = new RegExp(str, 'g')
-          match = regex.exec(v2)
-          if (match) {
-            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
-            return false
-          }
-
-          str = '\\\\'
-          regex = new RegExp(str, 'g')
-          match = regex.exec(v2)
-          if (match) {
-            console.error(`> ${JSON.stringify(v2)} contains ${str} (${file} -> ${k1} -> ${k2}) (index: ${match.index})`)
-            return false
-          }
+          if (!testString('\\\\n')) return false
+          if (!testString("\\\\'")) return false
+          if (!testString('\\\\\\"')) return false
+          if (!testString('\\\\')) return false
 
           return true
         })
