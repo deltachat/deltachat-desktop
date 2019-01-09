@@ -47,6 +47,7 @@ function xmlToJson (filename) {
       text = text.replace(new RegExp('\\\\n', 'g'), '\n')
       text = text.replace(new RegExp("\\\\'", 'g'), "'")
       text = text.replace(new RegExp('\\\\\\"', 'g'), '"')
+      text = text.replace(new RegExp('\\\\', 'g'), '')
     }
     res[name] = {
       'message': text
