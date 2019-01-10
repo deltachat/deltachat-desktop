@@ -28,12 +28,6 @@ process.on('exit', function () {
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
 
-if (config.IS_PRODUCTION) {
-  // When Electron is running in production mode (packaged app), then run React
-  // in production mode too.
-  process.env.NODE_ENV = 'production'
-}
-
 const ipcMain = electron.ipcMain
 
 app.ipcReady = false // main window has finished loading and IPC is ready
