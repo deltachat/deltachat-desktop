@@ -47,7 +47,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  debug (message, payload = undefined, errorCode = undefined) {
+  debug (message, payload, errorCode) {
     if (!OPTIONS.logDebug) return
     log(this.channel, 0, message, errorCode, payload)
   }
@@ -57,7 +57,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  info (message, payload = undefined, errorCode = undefined) {
+  info (message, payload, errorCode) {
     log(this.channel, 1, message, errorCode, payload)
   }
   /**
@@ -66,7 +66,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  warn (message, payload = undefined, errorCode = undefined) {
+  warn (message, payload, errorCode) {
     log(this.channel, 1, message, errorCode, payload, getStackTrace())
   }
   /**
@@ -75,7 +75,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  error (message, payload = undefined, errorCode = undefined) {
+  error (message, payload, errorCode) {
     // TODO add stacktrace to payload
     log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
@@ -85,7 +85,7 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  critical (message, payload = undefined, errorCode = undefined) {
+  critical (message, payload, errorCode) {
     // TODO add stacktrace to payload
     log(this.channel, 4, message, errorCode, payload, getStackTrace())
   }
