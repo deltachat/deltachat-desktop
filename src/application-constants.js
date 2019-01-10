@@ -34,6 +34,21 @@ function gitHubLicenseUrl () {
   return `${gitHubUrl()}/blob/master/LICENSE`
 }
 
+function windowDefaults () {
+  const headerHeight = 38
+  const messageHeight = 100
+  return {
+    bounds: {
+      width: 500,
+      height: headerHeight + messageHeight * 6
+    },
+    headerHeight,
+    minWidth: 450,
+    minHeight: 450,
+    main: 'file://' + path.join(__dirname, '..', 'static', 'main.html')
+  }
+}
+
 module.exports = {
   appName,
   appVersion,
@@ -42,5 +57,6 @@ module.exports = {
   homePageUrl,
   gitHubUrl,
   gitHubIssuesUrl,
-  gitHubLicenseUrl
+  gitHubLicenseUrl,
+  windowDefaults
 }

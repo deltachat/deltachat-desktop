@@ -16,13 +16,12 @@ const main = module.exports = {
 
 const electron = require('electron')
 const debounce = require('debounce')
-
-/* *CONFIG* */
-const config = require('../../config')
 const {
   appIcon,
-  appWindowTitle
+  appWindowTitle,
+  windowDefaults
 } = require('../../application-constants')
+
 const log = require('../../logger').getLogger('main/mainWindow')
 
 function init (state, options) {
@@ -30,7 +29,11 @@ function init (state, options) {
     return main.win.show()
   }
 
-  const initialBounds = Object.assign(config.WINDOW_INITIAL_BOUNDS, state.saved.bounds)
+  const defaults = windowDefaults()
+  const initialBounds = Object.assign(
+    defaults.bounds,
+    state.saved.bounds
+  )
 
   const win = main.win = new electron.BrowserWindow({
     backgroundColor: '#282828',
@@ -38,8 +41,8 @@ function init (state, options) {
     darkTheme: true, // Forces dark theme (GTK+3)
     height: initialBounds.height,
     icon: appIcon(),
-    minHeight: config.WINDOW_MIN_HEIGHT,
-    minWidth: config.WINDOW_MIN_WIDTH,
+    minHeight: defaults.minHeight,
+    minWidth: defaults.minWidth,
     show: false,
     title: appWindowTitle(),
     titleBarStyle: 'hidden-inset', // Hide title bar (Mac)
@@ -49,14 +52,14 @@ function init (state, options) {
     y: initialBounds.y
   })
 
-  win.loadURL(config.WINDOW_MAIN)
+  win.loadURL(defaults.main)
 
   win.once('ready-to-show', () => {
     if (!options.hidden) win.show()
   })
 
   if (win.setSheetOffset) {
-    win.setSheetOffset(config.UI_HEADER_HEIGHT)
+    win.setSheetOffset(defaults.headerHeight)
   }
 
   win.webContents.on('will-navigate', (e, url) => {
