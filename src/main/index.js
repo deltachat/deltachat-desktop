@@ -9,6 +9,7 @@ const mkdirp = require('mkdirp')
 const localize = require('../localize')
 /* *CONFIG* */
 const config = require('../config')
+const rc = require('../rc')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
@@ -63,8 +64,8 @@ function onReady (err, results) {
   localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(state, { hidden })
   menu.init()
-  /* *CONFIG* */
-  if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
+
+  if (rc.debug) windows.main.toggleDevTools()
 
   // Report uncaught exceptions
   process.on('uncaughtException', (err) => {
