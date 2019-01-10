@@ -1,9 +1,17 @@
 const esp = require('error-stack-parser')
-const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
-var handler
+
+const LoggerVariants = [
+  { log: console.debug, prefix: 'DEBUG' },
+  { log: console.info, prefix: 'INFO' },
+  { log: console.warn, prefix: 'WARNING' },
+  { log: console.error, prefix: 'ERROR' },
+  { log: console.error, prefix: 'CRITICAL' }
+]
+
+let handler
 
 /* *CONFIG* */
-var OPTIONS = {
+const OPTIONS = {
   logDebug: true,
   // You need to activate the Verbose logging level in chrome dev console to see debug log
   alsoLogInLocalConsole: true
@@ -24,7 +32,7 @@ function log (channel, lvl, ...args) {
   handler(timestamp, channel, lvl, ...args)
   if (OPTIONS.alsoLogInLocalConsole) {
     const variant = LoggerVariants[lvl]
-    variant(channel, ...args)
+    variant.log(variant.prefix, channel, ...args)
   }
 }
 
