@@ -18,9 +18,29 @@ function appIcon () {
   return path.join(__dirname, '..', 'images', 'deltachat.png')
 }
 
+function homePageUrl () {
+  return 'https://delta.chat'
+}
+
+function gitHubUrl () {
+  return 'https://github.com/deltachat/deltachat-desktop'
+}
+
+function gitHubIssuesUrl () {
+  return `${gitHubUrl()}/issues`
+}
+
+function gitHubLicenseUrl () {
+  return `${gitHubUrl()}/blob/master/LICENSE`
+}
+
 module.exports = {
   appName,
   appVersion,
   appWindowTitle,
-  appIcon
+  appIcon,
+  homePageUrl,
+  gitHubUrl,
+  gitHubIssuesUrl,
+  gitHubLicenseUrl
 }

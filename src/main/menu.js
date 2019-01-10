@@ -7,8 +7,11 @@ const fs = require('fs')
 const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
-/* *CONFIG* */
-const config = require('../config')
+const {
+  homePageUrl,
+  gitHubUrl,
+  gitHubIssuesUrl
+} = require('../application-constants')
 const { getFullLogFilePath } = require('./developerTools/logHandler')
 
 const app = electron.app
@@ -155,13 +158,13 @@ function getMenuTemplate () {
         {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
-            electron.shell.openExternal(config.HOME_PAGE_URL)
+            electron.shell.openExternal(homePageUrl())
           }
         },
         {
           translate: 'global_menu_help_contribute_desktop',
           click: () => {
-            electron.shell.openExternal(config.GITHUB_URL)
+            electron.shell.openExternal(gitHubUrl())
           }
         },
         {
@@ -170,7 +173,7 @@ function getMenuTemplate () {
         {
           translate: 'global_menu_help_report_desktop',
           click: () => {
-            electron.shell.openExternal(config.GITHUB_URL_ISSUES)
+            electron.shell.openExternal(gitHubIssuesUrl())
           }
         },
         {

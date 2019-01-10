@@ -8,11 +8,6 @@ const UI_MESSAGE_HEIGHT = 100
 module.exports = {
   CONFIG_PATH: getConfigPath(),
 
-  GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',
-  GITHUB_URL_ISSUES: 'https://github.com/deltachat/deltachat-desktop/issues',
-
-  HOME_PAGE_URL: 'https://delta.chat',
-
   STATIC_PATH: path.join(__dirname, '..', 'static'),
 
   WINDOW_MAIN: 'file://' + path.join(__dirname, '..', 'static', 'main.html'),
