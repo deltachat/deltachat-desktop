@@ -27,8 +27,6 @@ process.on('exit', function () {
 
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
-/* *CONFIG* */
-let argv = sliceArgv(process.argv)
 
 if (config.IS_PRODUCTION) {
   // When Electron is running in production mode (packaged app), then run React
@@ -73,11 +71,8 @@ function onReady (err, results) {
 }
 
 app.once('ipcReady', () => {
-  /* *CONFIG* */
-  log.info(`Command line args: ${argv}`, argv, 'cmd_args')
   console.timeEnd('init')
-
-  var win = windows.main.win
+  const win = windows.main.win
   win.on('close', e => {
     if (!app.isQuitting) {
       e.preventDefault()
@@ -112,17 +107,6 @@ app.on('web-contents-created', (e, contents) => {
     e.preventDefault()
   })
 })
-
-// Remove leading args.
-// Production: 1 arg, eg: /Applications/DeltaChat.app/Contents/MacOS/DeltaChat
-// Development: 2 args, eg: electron .
-// Test: 4 args, eg: electron -r .../mocks.js .
-function sliceArgv (argv) {
-  /* *CONFIG* */
-  return argv.slice(config.IS_PRODUCTION ? 1
-    : config.IS_TEST ? 4
-      : 2)
-}
 
 app.once('ready', () => {
   electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
