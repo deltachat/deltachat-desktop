@@ -9,6 +9,7 @@ const mkdirp = require('mkdirp')
 const localize = require('../localize')
 /* *CONFIG* */
 const config = require('../config')
+const rc = require('../rc')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
@@ -26,18 +27,6 @@ process.on('exit', function () {
 
 // Ensure CONFIG_PATH exists.
 mkdirp.sync(config.CONFIG_PATH)
-/* *CONFIG* */
-let argv = sliceArgv(process.argv)
-
-if (config.IS_PRODUCTION) {
-  // When Electron is running in production mode (packaged app), then run React
-  // in production mode too.
-  process.env.NODE_ENV = 'production'
-}
-/* *CONFIG* */
-// (On Windows and Linux, we get a flag. On MacOS, we get special API.)
-const hidden = argv.includes('--hidden') ||
-  (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
 
 const ipcMain = electron.ipcMain
 
@@ -61,10 +50,10 @@ function onReady (err, results) {
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
-  windows.main.init(state, { hidden })
+  windows.main.init(state, { hidden: false })
   menu.init()
-  /* *CONFIG* */
-  if (argv.indexOf('--debug') > -1) windows.main.toggleDevTools()
+
+  if (rc.debug) windows.main.toggleDevTools()
 
   // Report uncaught exceptions
   process.on('uncaughtException', (err) => {
@@ -76,11 +65,8 @@ function onReady (err, results) {
 }
 
 app.once('ipcReady', () => {
-  /* *CONFIG* */
-  log.info(`Command line args: ${argv}`, argv, 'cmd_args')
   console.timeEnd('init')
-
-  var win = windows.main.win
+  const win = windows.main.win
   win.on('close', e => {
     if (!app.isQuitting) {
       e.preventDefault()
@@ -115,17 +101,6 @@ app.on('web-contents-created', (e, contents) => {
     e.preventDefault()
   })
 })
-
-// Remove leading args.
-// Production: 1 arg, eg: /Applications/DeltaChat.app/Contents/MacOS/DeltaChat
-// Development: 2 args, eg: electron .
-// Test: 4 args, eg: electron -r .../mocks.js .
-function sliceArgv (argv) {
-  /* *CONFIG* */
-  return argv.slice(config.IS_PRODUCTION ? 1
-    : config.IS_TEST ? 4
-      : 2)
-}
 
 app.once('ready', () => {
   electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {

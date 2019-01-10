@@ -7,7 +7,6 @@ const version = require('../package.json').version
 const APP_VERSION = `${version}-PREVIEW`
 
 const IS_TEST = isTest()
-const IS_PRODUCTION = isProduction()
 
 const UI_HEADER_HEIGHT = 38
 const UI_MESSAGE_HEIGHT = 100
@@ -27,7 +26,6 @@ module.exports = {
 
   HOME_PAGE_URL: 'https://delta.chat',
 
-  IS_PRODUCTION: IS_PRODUCTION,
   IS_TEST: IS_TEST,
 
   STATIC_PATH: path.join(__dirname, '..', 'static'),
@@ -55,20 +53,4 @@ function getConfigPath () {
 
 function isTest () {
   return process.env.NODE_ENV === 'test'
-}
-
-function isProduction () {
-  if (!process.versions.electron) {
-    // Node.js process
-    return false
-  }
-  if (process.platform === 'darwin') {
-    return !/\/Electron\.app\//.test(process.execPath)
-  }
-  if (process.platform === 'win32') {
-    return !/\\electron\.exe$/.test(process.execPath)
-  }
-  if (process.platform === 'linux') {
-    return !/\/electron$/.test(process.execPath)
-  }
 }
