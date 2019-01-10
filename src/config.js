@@ -6,8 +6,6 @@ const APP_NAME = 'DeltaChat'
 const version = require('../package.json').version
 const APP_VERSION = `${version}-PREVIEW`
 
-const IS_TEST = isTest()
-
 const UI_HEADER_HEIGHT = 38
 const UI_MESSAGE_HEIGHT = 100
 
@@ -26,8 +24,6 @@ module.exports = {
 
   HOME_PAGE_URL: 'https://delta.chat',
 
-  IS_TEST: IS_TEST,
-
   STATIC_PATH: path.join(__dirname, '..', 'static'),
 
   WINDOW_MAIN: 'file://' + path.join(__dirname, '..', 'static', 'main.html'),
@@ -44,13 +40,9 @@ module.exports = {
 }
 
 function getConfigPath () {
-  if (IS_TEST) {
+  if (process.env.NODE_ENV === 'test') {
     return path.join(process.platform === 'win32' ? 'C:\\Windows\\Temp' : '/tmp', 'DeltaChatTest')
   } else {
     return path.dirname(appConfig.filePath)
   }
-}
-
-function isTest () {
-  return process.env.NODE_ENV === 'test'
 }
