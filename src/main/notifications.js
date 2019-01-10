@@ -1,7 +1,5 @@
 const windows = require('./windows')
-/* *CONFIG* */
-const config = require('../config')
-const { appIcon } = require('../application-constants')
+const { appName, appIcon } = require('../application-constants')
 
 const {
   app,
@@ -24,7 +22,7 @@ module.exports = function (dc, settings) {
   dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
     if (!notify && settings.notifications && windows.main.win.hidden) {
       notify = new Notification({
-        title: config.APP_NAME,
+        title: appName(),
         body: getMsgBody(msgId),
         icon: appIcon()
       })

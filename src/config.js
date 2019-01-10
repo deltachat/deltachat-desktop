@@ -2,18 +2,10 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
 
-const APP_NAME = 'DeltaChat'
-const version = require('../package.json').version
-const APP_VERSION = `${version}-PREVIEW`
-
 const UI_HEADER_HEIGHT = 38
 const UI_MESSAGE_HEIGHT = 100
 
 module.exports = {
-  APP_NAME: APP_NAME,
-  APP_VERSION: APP_VERSION,
-  APP_WINDOW_TITLE: `${APP_NAME} (${APP_VERSION})`,
-
   CONFIG_PATH: getConfigPath(),
 
   GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',

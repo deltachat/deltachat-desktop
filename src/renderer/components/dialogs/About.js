@@ -1,8 +1,7 @@
 const React = require('react')
 const { remote } = require('electron')
 const { Classes, Dialog } = require('@blueprintjs/core')
-/* *CONFIG* */
-const { APP_VERSION } = require('../../../config')
+const { appVersion } = require('../../../application-constants')
 const Unselectable = require('../helpers/Unselectable')
 
 class ClickableLink extends React.Component {
@@ -32,7 +31,7 @@ class About extends React.Component {
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
           <Unselectable>
-            <p style={{ color: 'grey' }}>{`Version ${APP_VERSION}`}</p>
+            <p style={{ color: 'grey' }}>{`Version ${appVersion()}`}</p>
             <p>Official Delta Chat Desktop app.</p>
             <p>This software is licensed under <ClickableLink href='https://github.com/deltachat/deltachat-desktop/blob/master/LICENSE' text='GNU GPL version 3' />.</p>
             <p>Source code is available on <ClickableLink href='https://github.com/deltachat/deltachat-desktop' text='GitHub' />.</p>

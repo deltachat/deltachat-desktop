@@ -19,7 +19,10 @@ const debounce = require('debounce')
 
 /* *CONFIG* */
 const config = require('../../config')
-const { appIcon } = require('../../application-constants')
+const {
+  appIcon,
+  appWindowTitle
+} = require('../../application-constants')
 const log = require('../../logger').getLogger('main/mainWindow')
 
 function init (state, options) {
@@ -38,7 +41,7 @@ function init (state, options) {
     minHeight: config.WINDOW_MIN_HEIGHT,
     minWidth: config.WINDOW_MIN_WIDTH,
     show: false,
-    title: config.APP_WINDOW_TITLE,
+    title: appWindowTitle(),
     titleBarStyle: 'hidden-inset', // Hide title bar (Mac)
     useContentSize: true, // Specify web page size without OS chrome
     width: initialBounds.width,
@@ -145,9 +148,9 @@ function setProgress (progress) {
 function setTitle (title) {
   if (!main.win) return
   if (title) {
-    main.win.setTitle(`${config.APP_WINDOW_TITLE} - ${title}`)
+    main.win.setTitle(`${appWindowTitle()} - ${title}`)
   } else {
-    main.win.setTitle(config.APP_WINDOW_TITLE)
+    main.win.setTitle(appWindowTitle())
   }
 }
 
