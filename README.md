@@ -152,10 +152,8 @@ Some important folders and files:
 ```
 ├── bin                    # various helper scripts
 ├── build                  # files needed only at build time
-├── conversations
-│   ├── build
-│   │   └── manifest.css   # css bundle built from stylesheets
-│   └── stylesheets        # stylesheets pulled out from signal
+├── css                    # styelsheets which need preprocessing
+│   └── conversations      # stylesheets pulled out from signal
 ├── images                 # image files used in conversations
 ├── index.js               # entry point for the main process
 ├── jenkins                # pipelines for building on Jenkins
@@ -165,6 +163,7 @@ Some important folders and files:
 │   └── renderer           # javascript for the renderer process
 ├── static
 │   ├── bundle.js          # javascript bundle built by webpack
+│   └── conversations.css  # css bundle built from conversations scss files
 │   ├── fonts              # fonts
 │   ├── main.css           # main css file
 │   └── main.html          # main html file in renderer process

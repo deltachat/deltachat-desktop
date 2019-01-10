@@ -66,5 +66,4 @@ typings/
 .next
 
 # conversations
-conversations/node_modules
-conversations/build
+static/conversations.css
