@@ -18,7 +18,6 @@ module.exports = {
   },
 
   UI_HEADER_HEIGHT,
-  UI_MESSAGE_HEIGHT,
   WINDOW_MIN_WIDTH: 450,
   WINDOW_MIN_HEIGHT: 450
 }
