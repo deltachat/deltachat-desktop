@@ -10,7 +10,6 @@ module.exports = {
 
   GITHUB_URL: 'https://github.com/deltachat/deltachat-desktop',
   GITHUB_URL_ISSUES: 'https://github.com/deltachat/deltachat-desktop/issues',
-  GITHUB_URL_RAW: 'https://raw.githubusercontent.com/deltachat/deltachat-desktop/master',
 
   HOME_PAGE_URL: 'https://delta.chat',
 
