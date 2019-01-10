@@ -51,6 +51,7 @@ class Logger {
     if (!OPTIONS.logDebug) return
     log(this.channel, 0, message, errorCode, payload)
   }
+
   /**
      * Log a message on **info** level
      * @param {string} message the message (human readable)
@@ -60,6 +61,7 @@ class Logger {
   info (message, payload, errorCode) {
     log(this.channel, 1, message, errorCode, payload)
   }
+
   /**
      * Log a message on **warning** level
      * @param {string} message the message (human readable)
@@ -67,8 +69,9 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   warn (message, payload, errorCode) {
-    log(this.channel, 1, message, errorCode, payload, getStackTrace())
+    log(this.channel, 2, message, errorCode, payload, getStackTrace())
   }
+
   /**
      * Log a message on **error** level
      * @param {string} message the message (human readable)
@@ -79,6 +82,7 @@ class Logger {
     // TODO add stacktrace to payload
     log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
+
   /**
      * Log a message on critical level
      * @param {string} message the message (human readable)
