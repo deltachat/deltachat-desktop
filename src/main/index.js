@@ -35,10 +35,6 @@ if (config.IS_PRODUCTION) {
   // in production mode too.
   process.env.NODE_ENV = 'production'
 }
-/* *CONFIG* */
-// (On Windows and Linux, we get a flag. On MacOS, we get special API.)
-const hidden = argv.includes('--hidden') ||
-  (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAsHidden)
 
 const ipcMain = electron.ipcMain
 
@@ -62,7 +58,7 @@ function onReady (err, results) {
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
-  windows.main.init(state, { hidden })
+  windows.main.init(state, { hidden: false })
   menu.init()
 
   if (rc.debug) windows.main.toggleDevTools()
