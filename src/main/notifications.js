@@ -1,6 +1,7 @@
 const windows = require('./windows')
 /* *CONFIG* */
 const config = require('../config')
+const { appIcon } = require('../application-constants')
 
 const {
   app,
@@ -25,7 +26,7 @@ module.exports = function (dc, settings) {
       notify = new Notification({
         title: config.APP_NAME,
         body: getMsgBody(msgId),
-        icon: config.APP_ICON
+        icon: appIcon()
       })
       notify.show()
       notify.on('click', () => {

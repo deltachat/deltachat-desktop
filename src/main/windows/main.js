@@ -19,6 +19,7 @@ const debounce = require('debounce')
 
 /* *CONFIG* */
 const config = require('../../config')
+const { appIcon } = require('../../application-constants')
 const log = require('../../logger').getLogger('main/mainWindow')
 
 function init (state, options) {
@@ -33,7 +34,7 @@ function init (state, options) {
     backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
     height: initialBounds.height,
-    icon: getIconPath(), // Window icon (Windows, Linux)
+    icon: appIcon(),
     minHeight: config.WINDOW_MIN_HEIGHT,
     minWidth: config.WINDOW_MIN_WIDTH,
     show: false,
@@ -174,12 +175,6 @@ function toggleDevTools () {
   } else {
     main.win.webContents.openDevTools({ mode: 'detach' })
   }
-}
-
-function getIconPath () {
-  return process.platform === 'win32'
-    ? config.APP_ICON + '.ico'
-    : config.APP_ICON + '.png'
 }
 
 function chooseLanguage (locale) {
