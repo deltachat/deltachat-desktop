@@ -1,3 +1,4 @@
+const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
 const version = require('../package.json').version
 
@@ -49,6 +50,14 @@ function windowDefaults () {
   }
 }
 
+function getConfigPath () {
+  if (process.env.NODE_ENV === 'test') {
+    return path.join(process.platform === 'win32' ? 'C:\\Windows\\Temp' : '/tmp', 'DeltaChatTest')
+  } else {
+    return path.dirname(appConfig.filePath)
+  }
+}
+
 module.exports = {
   appName,
   appVersion,
@@ -58,5 +67,6 @@ module.exports = {
   gitHubUrl,
   gitHubIssuesUrl,
   gitHubLicenseUrl,
-  windowDefaults
+  windowDefaults,
+  getConfigPath
 }

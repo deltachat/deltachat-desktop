@@ -7,8 +7,8 @@ const PNG = require('pngjs').PNG
 const tempy = require('tempy')
 const mkdirp = require('mkdirp')
 
-const config = require('../../src/config')
-mkdirp.sync(config.CONFIG_PATH)
+const { getConfigPath } = require('../../src/application-constants')
+mkdirp.sync(getConfigPath())
 
 module.exports = {
   createApp,

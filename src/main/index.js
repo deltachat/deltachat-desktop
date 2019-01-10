@@ -7,8 +7,7 @@ const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
-/* *CONFIG* */
-const config = require('../config')
+const { getConfigPath } = require('../application-constants')
 const rc = require('../rc')
 const logins = require('./logins')
 const ipc = require('./ipc')
@@ -25,8 +24,7 @@ process.on('exit', function () {
   logHandler.closeWriteStream()
 })
 
-// Ensure CONFIG_PATH exists.
-mkdirp.sync(config.CONFIG_PATH)
+mkdirp.sync(getConfigPath())
 
 const ipcMain = electron.ipcMain
 
@@ -34,7 +32,7 @@ app.ipcReady = false // main window has finished loading and IPC is ready
 app.isQuitting = false
 
 parallel({
-  logins: (cb) => logins(config.CONFIG_PATH, cb),
+  logins: (cb) => logins(getConfigPath(), cb),
   appReady: (cb) => app.on('ready', () => cb(null)),
   state: (cb) => State.load(cb)
 }, onReady)
@@ -45,7 +43,7 @@ function onReady (err, results) {
   const state = results.state
   app.logins = results.logins
 
-  var cwd = process.env.TEST_DIR || config.CONFIG_PATH
+  var cwd = process.env.TEST_DIR || getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
