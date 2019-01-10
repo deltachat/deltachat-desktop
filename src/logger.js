@@ -1,5 +1,7 @@
 const esp = require('error-stack-parser')
-const rc = require('./rc')
+const { app, remote } = require('electron')
+
+const rc = remote ? remote.app.rc : app.rc
 
 const LoggerVariants = [
   { log: console.debug, prefix: 'DEBUG' },
