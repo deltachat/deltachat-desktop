@@ -59,9 +59,6 @@ function init (state, options) {
     win.setSheetOffset(config.UI_HEADER_HEIGHT)
   }
 
-  win.webContents.on('dom-ready', () => {
-  })
-
   win.webContents.on('will-navigate', (e, url) => {
     // Prevent drag-and-drop from navigating the Electron window, which can happen
     // before our drag-and-drop handlers have been initialized.
