@@ -3,8 +3,7 @@ const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
 
 module.exports = {
-  CONFIG_PATH: getConfigPath(),
-  STATIC_PATH: path.join(__dirname, '..', 'static')
+  CONFIG_PATH: getConfigPath()
 }
 
 function getConfigPath () {
