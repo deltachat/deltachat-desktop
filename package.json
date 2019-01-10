@@ -8,7 +8,7 @@
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "dev": "npm run build && npm run start",
-    "start": "electron . --debug --disable-http-cache",
+    "start": "electron . --debug --log-debug --log-to-console --disable-http-cache",
     "pack": "npm run build && electron-builder --dir",
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",

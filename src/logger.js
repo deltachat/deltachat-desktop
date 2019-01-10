@@ -1,4 +1,5 @@
 const esp = require('error-stack-parser')
+const rc = require('./rc')
 
 const LoggerVariants = [
   { log: console.debug, prefix: 'DEBUG' },
@@ -9,13 +10,6 @@ const LoggerVariants = [
 ]
 
 let handler
-
-/* *CONFIG* */
-const OPTIONS = {
-  logDebug: true,
-  // You need to activate the Verbose logging level in chrome dev console to see debug log
-  alsoLogInLocalConsole: true
-}
 
 /** specify function that passes the message to the logger in the main process */
 function setLogHandler (LogHandler) {
@@ -30,7 +24,7 @@ function log (channel, lvl, ...args) {
     throw Error('Failed to log message - Handler not initilized yet')
   }
   handler(timestamp, channel, lvl, ...args)
-  if (OPTIONS.alsoLogInLocalConsole) {
+  if (rc['log-to-console']) {
     const variant = LoggerVariants[lvl]
     variant.log(variant.prefix, channel, ...args)
   }
@@ -56,7 +50,7 @@ class Logger {
      * @param {string} payload (optional) JSON payload
      */
   debug (message, payload, errorCode) {
-    if (!OPTIONS.logDebug) return
+    if (!rc['log-debug']) return
     log(this.channel, 0, message, errorCode, payload)
   }
 
