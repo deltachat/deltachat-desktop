@@ -1,13 +1,17 @@
 const esp = require('error-stack-parser')
-const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
-var handler
+const { app, remote } = require('electron')
 
-/* *CONFIG* */
-var OPTIONS = {
-  logDebug: true,
-  // You need to activate the Verbose logging level in chrome dev console to see debug log
-  alsoLogInLocalConsole: true
-}
+const rc = remote ? remote.app.rc : app ? app.rc : {}
+
+const LoggerVariants = [
+  { log: console.debug, prefix: 'DEBUG' },
+  { log: console.info, prefix: 'INFO' },
+  { log: console.warn, prefix: 'WARNING' },
+  { log: console.error, prefix: 'ERROR' },
+  { log: console.error, prefix: 'CRITICAL' }
+]
+
+let handler
 
 /** specify function that passes the message to the logger in the main process */
 function setLogHandler (LogHandler) {
@@ -22,9 +26,9 @@ function log (channel, lvl, ...args) {
     throw Error('Failed to log message - Handler not initilized yet')
   }
   handler(timestamp, channel, lvl, ...args)
-  if (OPTIONS.alsoLogInLocalConsole) {
+  if (rc['log-to-console']) {
     const variant = LoggerVariants[lvl]
-    variant(channel, ...args)
+    variant.log(variant.prefix, channel, ...args)
   }
 }
 
@@ -47,45 +51,49 @@ class Logger {
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  debug (message, payload = undefined, errorCode = undefined) {
-    if (!OPTIONS.logDebug) return
+  debug (message, payload, errorCode) {
+    if (!rc['log-debug']) return
     log(this.channel, 0, message, errorCode, payload)
   }
+
   /**
      * Log a message on **info** level
      * @param {string} message the message (human readable)
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  info (message, payload = undefined, errorCode = undefined) {
+  info (message, payload, errorCode) {
     log(this.channel, 1, message, errorCode, payload)
   }
+
   /**
      * Log a message on **warning** level
      * @param {string} message the message (human readable)
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  warn (message, payload = undefined, errorCode = undefined) {
-    log(this.channel, 1, message, errorCode, payload, getStackTrace())
+  warn (message, payload, errorCode) {
+    log(this.channel, 2, message, errorCode, payload, getStackTrace())
   }
+
   /**
      * Log a message on **error** level
      * @param {string} message the message (human readable)
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  error (message, payload = undefined, errorCode = undefined) {
+  error (message, payload, errorCode) {
     // TODO add stacktrace to payload
     log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
+
   /**
      * Log a message on critical level
      * @param {string} message the message (human readable)
      * @param {string} errorCode (optional) machine readable error code (string in snake_case)
      * @param {string} payload (optional) JSON payload
      */
-  critical (message, payload = undefined, errorCode = undefined) {
+  critical (message, payload, errorCode) {
     // TODO add stacktrace to payload
     log(this.channel, 4, message, errorCode, payload, getStackTrace())
   }

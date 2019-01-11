@@ -3,12 +3,13 @@ console.time('init')
 const electron = require('electron')
 const app = electron.app
 
+const rc = app.rc = require('../rc')
+
 const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
 const { getConfigPath } = require('../application-constants')
-const rc = require('../rc')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
