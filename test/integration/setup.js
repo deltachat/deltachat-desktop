@@ -4,11 +4,6 @@ const electronPath = require('electron')
 const fs = require('fs')
 const path = require('path')
 const PNG = require('pngjs').PNG
-const tempy = require('tempy')
-const mkdirp = require('mkdirp')
-
-const { getConfigPath } = require('../../src/application-constants')
-mkdirp.sync(getConfigPath())
 
 module.exports = {
   createApp,
@@ -22,13 +17,11 @@ module.exports = {
 
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
 // Takes a Tape test. Makes some basic assertions to verify that the app loaded correctly.
-function createApp (t) {
-  const dir = tempy.directory()
-  t.pass(`test dir ${dir}`)
+function createApp () {
   return new Application({
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
-    env: { NODE_ENV: 'test', TEST_DIR: dir },
+    env: { NODE_ENV: 'test' },
     waitTimeout: 10e3
   })
 }

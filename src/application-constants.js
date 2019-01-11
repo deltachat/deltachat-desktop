@@ -1,5 +1,6 @@
 const appConfig = require('application-config')('DeltaChat')
 const path = require('path')
+const tempy = require('tempy')
 const version = require('../package.json').version
 
 function appName () {
@@ -52,7 +53,7 @@ function windowDefaults () {
 
 function getConfigPath () {
   if (process.env.NODE_ENV === 'test') {
-    return path.join(process.platform === 'win32' ? 'C:\\Windows\\Temp' : '/tmp', 'DeltaChatTest')
+    return tempy.directory()
   } else {
     return path.dirname(appConfig.filePath)
   }

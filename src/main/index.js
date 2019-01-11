@@ -43,7 +43,7 @@ function onReady (err, results) {
   const state = results.state
   app.logins = results.logins
 
-  var cwd = process.env.TEST_DIR || getConfigPath()
+  const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
