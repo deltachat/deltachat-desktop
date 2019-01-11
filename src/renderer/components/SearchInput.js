@@ -9,11 +9,6 @@ const SearchInputWrapper = styled.div`
   .bp3-input-group {
     width: 100%
   }
-
-  input[type="search"]::-webkit-search-cancel-button {
-    /* Remove default */
-    -webkit-appearance: none;
-  }
 `
 
 class SearchInput extends React.Component {
