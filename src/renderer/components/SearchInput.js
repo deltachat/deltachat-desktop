@@ -2,8 +2,6 @@ const React = require('react')
 const { InputGroup } = require('@blueprintjs/core')
 const styled = require('styled-components').default
 
-
-
 const SearchInputWrapper = styled.div`
   width: 100%
   .bp3-input-group {
@@ -12,13 +10,12 @@ const SearchInputWrapper = styled.div`
 `
 
 class SearchInput extends React.Component {
-  render() {
-
+  render () {
     const tx = window.translate
     return (
       <SearchInputWrapper>
         <InputGroup
-          type='search'   
+          type='search'
           large
           placeholder={tx('search')}
           leftIcon='search'
