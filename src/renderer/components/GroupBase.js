@@ -114,7 +114,8 @@ class GroupBase extends React.Component {
   render () {
     const {
       showQrVerifyCodeButton,
-      showQrInviteCodeButton
+      showQrInviteCodeButton,
+      showVerifiedContacts
     } = this.state
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
@@ -160,6 +161,7 @@ class GroupBase extends React.Component {
                         return { color: !this.contactInGroupStateChanged(contact.id) ? 'green' : 'yellow' }
                       }}
                       onContactClick={this.toggleContact.bind(this)}
+                      showVerifiedContacts={showVerifiedContacts}
                     />
                   </td>
                   <td>
@@ -169,6 +171,7 @@ class GroupBase extends React.Component {
                         return { color: this.contactInGroupStateChanged(contact.id) ? 'red' : '' }
                       }}
                       onContactClick={this.toggleContact.bind(this)}
+                      showVerifiedContacts={showVerifiedContacts}
                     />
                   </td>
                 </tr>
