@@ -4,7 +4,7 @@ const test = require('tape')
 const setup = require('./setup')
 
 test('app runs', function (t) {
-  const app = setup.createApp(t)
+  const app = setup.createApp()
   setup.waitForLoad(app, t)
     .then(
       () => app.client.waitUntilTextExists(

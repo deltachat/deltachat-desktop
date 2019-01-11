@@ -1,13 +1,8 @@
 const appConfig = require('application-config')('DeltaChat')
-const path = require('path')
 const { EventEmitter } = require('events')
-/* *CONFIG* */
-const config = require('../../config')
 const log = require('../../logger').getLogger('renderer/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
-
-appConfig.filePath = path.join(config.CONFIG_PATH, 'config.json')
 
 const State = module.exports = Object.assign(new EventEmitter(), {
   load,

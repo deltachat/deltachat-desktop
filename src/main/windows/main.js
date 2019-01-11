@@ -16,9 +16,12 @@ const main = module.exports = {
 
 const electron = require('electron')
 const debounce = require('debounce')
+const {
+  appIcon,
+  appWindowTitle,
+  windowDefaults
+} = require('../../application-constants')
 
-/* *CONFIG* */
-const config = require('../../config')
 const log = require('../../logger').getLogger('main/mainWindow')
 
 function init (state, options) {
@@ -26,18 +29,22 @@ function init (state, options) {
     return main.win.show()
   }
 
-  const initialBounds = Object.assign(config.WINDOW_INITIAL_BOUNDS, state.saved.bounds)
+  const defaults = windowDefaults()
+  const initialBounds = Object.assign(
+    defaults.bounds,
+    state.saved.bounds
+  )
 
   const win = main.win = new electron.BrowserWindow({
     backgroundColor: '#282828',
     backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
     height: initialBounds.height,
-    icon: getIconPath(), // Window icon (Windows, Linux)
-    minHeight: config.WINDOW_MIN_HEIGHT,
-    minWidth: config.WINDOW_MIN_WIDTH,
+    icon: appIcon(),
+    minHeight: defaults.minHeight,
+    minWidth: defaults.minWidth,
     show: false,
-    title: config.APP_WINDOW_TITLE,
+    title: appWindowTitle(),
     titleBarStyle: 'hidden-inset', // Hide title bar (Mac)
     useContentSize: true, // Specify web page size without OS chrome
     width: initialBounds.width,
@@ -45,18 +52,15 @@ function init (state, options) {
     y: initialBounds.y
   })
 
-  win.loadURL(config.WINDOW_MAIN)
+  win.loadURL(defaults.main)
 
   win.once('ready-to-show', () => {
     if (!options.hidden) win.show()
   })
 
   if (win.setSheetOffset) {
-    win.setSheetOffset(config.UI_HEADER_HEIGHT)
+    win.setSheetOffset(defaults.headerHeight)
   }
-
-  win.webContents.on('dom-ready', () => {
-  })
 
   win.webContents.on('will-navigate', (e, url) => {
     // Prevent drag-and-drop from navigating the Electron window, which can happen
@@ -144,9 +148,9 @@ function setProgress (progress) {
 function setTitle (title) {
   if (!main.win) return
   if (title) {
-    main.win.setTitle(`${config.APP_WINDOW_TITLE} - ${title}`)
+    main.win.setTitle(`${appWindowTitle()} - ${title}`)
   } else {
-    main.win.setTitle(config.APP_WINDOW_TITLE)
+    main.win.setTitle(appWindowTitle())
   }
 }
 
@@ -174,12 +178,6 @@ function toggleDevTools () {
   } else {
     main.win.webContents.openDevTools({ mode: 'detach' })
   }
-}
-
-function getIconPath () {
-  return process.platform === 'win32'
-    ? config.APP_ICON + '.ico'
-    : config.APP_ICON + '.png'
 }
 
 function chooseLanguage (locale) {
