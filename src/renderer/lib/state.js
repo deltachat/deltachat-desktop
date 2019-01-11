@@ -1,5 +1,4 @@
 const appConfig = require('application-config')('DeltaChat')
-const path = require('path')
 const { EventEmitter } = require('events')
 const log = require('../../logger').getLogger('renderer/state')
 
