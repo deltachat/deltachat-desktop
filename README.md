@@ -14,12 +14,6 @@
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
-  - [Linux](#linux)
-    - [AppImage](#appimage)
-    - [Debian/Ubuntu](#debian/ubuntu)
-    - [Arch Linux](#arch-linux)
-  - [Mac OS](#mac-os)
-  - [From Source](#from)
 - [Configuration and Databases](#configuration-and-databases)
 - [Troubleshooting](#troubleshooting)
 - [How to Contribute](#how-to-contribute)
@@ -57,6 +51,7 @@ To install a `.AppImage` based release:
 If you have a AUR helper like yay installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
 
 Otherwise you can still do it manually:
+
 ```
 # Download the latest snapshot of the PKGBUILD
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz

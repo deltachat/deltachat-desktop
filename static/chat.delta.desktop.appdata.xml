@@ -24,6 +24,44 @@ Free, independent, email compatible.
  <url type="homepage">https://delta.chat/</url>
 
   <releases>
+    <release version="v0.98.2" date="2019-01-11">
+        <description>
+        <p>
+        Changed
+
+            Tweak search button (@jikstra)
+            Convert src/config.js to src/applications-constants.js with a functional API (@ralphtheninja)
+            Improve css building for conversations stylesheets (@jikstra)
+            Update install instructions in README (@jikstra, @ralphtheninja)
+            Restyle create chat buttons (@jikstra)
+            Update outdated watch script (@ralphtheninja)
+            Hide known accounts section when it's empty (@Simon-Laux)
+            Set minimum window height to 450px (@jikstra)
+            Upgrade deltachat-node to ^0.36.0 for Mac OS prebuilt binaries (@ralphtheninja)
+            Make unit tests less spammy (@ralphtheninja)
+            Simplify state load (@ralphtheninja)
+            Make converting translations less spammy (@ralphtheninja)
+
+        Added
+
+            Add rc module for configuration (@ralphtheninja)
+            Add logging functionality (@Simon-Laux)
+            Add hallmark module for markdown linting (@ralphtheninja)
+
+        Removed
+
+            Remove bin/clean.js (@ralphtheninja)
+            Clean up unused configuration code (@ralphtheninja)
+
+        Fixed
+
+            Fix non verified contacts in verified groups (@ralphtheninja)
+            Fix escaped characters in translations (@ralphtheninja)
+            Adjust login form so it's not hidden below navigation bar (@jikstra)
+            Fix broken rimraf dependency (@jikstra)
+        </p>
+        </description>    
+    </release>
     <release version="v0.98.1" date="2019-01-06">
         <description>
         <p>

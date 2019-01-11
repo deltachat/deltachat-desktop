@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "0.98.1",
+  "version": "0.98.2",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
