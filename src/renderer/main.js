@@ -21,7 +21,7 @@ let state
 
 function onState (err, _state) {
   if (err) log.error('onState', err)
-  state = window.state = _state
+  state = _state
 
   setupLocaleData(state.saved.locale)
 
