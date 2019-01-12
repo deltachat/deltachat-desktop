@@ -25,7 +25,7 @@ const dialogs = require('./components/dialogs')
 const ContactList = require('./components/ContactList')
 const confirmation = require('./components/dialogs/confirmationDialog')
 
-class Home extends React.Component {
+class ScreenController extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -261,4 +261,4 @@ function LoginScreen (props) {
   )
 }
 
-module.exports = Home
+module.exports = ScreenController
