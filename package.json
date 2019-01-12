@@ -81,7 +81,7 @@
     "cp-file": "^6.0.0",
     "depcheck": "^0.6.11",
     "devtron": "^1.4.0",
-    "electron": "^3.0.11",
+    "electron": "^4.0.1",
     "electron-builder": "^20.28.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^0.1.0",
