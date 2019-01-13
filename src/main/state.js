@@ -80,6 +80,6 @@ function saveImmediate (state, cb) {
     if (err) {
       log.error('State save failed', err)
     }
-    cb(err)
+    cb && cb(err)
   })
 }
