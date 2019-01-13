@@ -118,6 +118,7 @@ function init (cwd, state) {
 
   ipc.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
+    app.saveState()
   })
 
   ipc.on('updateCredentials', (e, credentials) => {
