@@ -45,12 +45,17 @@ function onReady (err, results) {
   // TODO logins should be part of state
   app.logins = results.logins
 
+  app.saveState = () => {
+    const saved = app.state.saved
+    State.save({ saved })
+  }
+
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
-  windows.main.init(state, { hidden: false })
+  windows.main.init(app, { hidden: false })
   menu.init()
 
   if (rc.debug) windows.main.toggleDevTools()

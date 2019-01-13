@@ -24,11 +24,12 @@ const {
 
 const log = require('../../logger').getLogger('main/mainWindow')
 
-function init (state, options) {
+function init (app, options) {
   if (main.win) {
     return main.win.show()
   }
 
+  const state = app.state
   const defaults = windowDefaults()
   const initialBounds = Object.assign(
     defaults.bounds,
@@ -70,12 +71,12 @@ function init (state, options) {
 
   win.on('move', debounce(e => {
     state.saved.bounds = e.sender.getBounds()
-    // TODO save state
+    app.saveState()
   }, 1000))
 
   win.on('resize', debounce(e => {
     state.saved.bounds = e.sender.getBounds()
-    // TODO save state
+    app.saveState()
   }, 1000))
 
   win.on('close', e => {})

@@ -58,9 +58,8 @@ function getAvailableLanguages () {
         type: 'radio',
         checked: locale === app.localeData.locale,
         click: () => {
-          // TODO save state, maybe we should save
-          // it when we come back to the backend instead
           app.state.saved.locale = locale
+          app.saveState()
           windows.main.chooseLanguage(locale)
         }
       }
