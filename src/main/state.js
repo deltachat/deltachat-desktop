@@ -31,6 +31,7 @@ function getDefaultState () {
     },
     modal: null, /* modal popover */
     errors: [], /* user-facing errors */
+    logins: [],
     deltachat: {
       chats: [],
       credentials: {},

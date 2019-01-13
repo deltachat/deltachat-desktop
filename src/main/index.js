@@ -42,12 +42,10 @@ function onReady (err, results) {
   if (err) throw err
 
   const state = app.state = results.state
-  // TODO logins should be part of state
-  app.logins = results.logins
+  state.logins = results.logins
 
   app.saveState = () => {
-    const saved = app.state.saved
-    State.save({ saved })
+    State.save({ saved: state.saved })
   }
 
   const cwd = getConfigPath()

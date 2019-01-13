@@ -1,12 +1,6 @@
-module.exports = {
-  init
-}
+module.exports = { init }
 
-const {
-  app,
-  ipcMain
-} = require('electron')
-
+const { app, ipcMain } = require('electron')
 const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
@@ -22,16 +16,13 @@ const setupNotifications = require('./notifications')
 const logHandler = require('./developerTools/logHandler')
 
 function init (cwd, state) {
-  // Events dispatched by buttons from the frontend
-
   const ipc = ipcMain
   const main = windows.main
-
   const dc = new DeltaChat(cwd, state.saved)
 
   dc.on('ready', function () {
-    if (!app.logins.includes(dc.credentials.addr)) {
-      app.logins.push(dc.credentials.addr)
+    if (!state.logins.includes(dc.credentials.addr)) {
+      state.logins.push(dc.credentials.addr)
     }
   })
 
@@ -63,7 +54,7 @@ function init (cwd, state) {
   ipc.on('forgetLogin', (e, addr) => {
     var targetDir = dc.getPath(addr)
     rimraf.sync(targetDir)
-    app.logins.splice(app.logins.indexOf(addr), 1)
+    state.logins.splice(state.logins.indexOf(addr), 1)
     render()
   })
 
@@ -114,11 +105,8 @@ function init (cwd, state) {
     })
   })
 
-  ipcMain.on('ondragstart', (event, filePath) => {
-    event.sender.startDrag({
-      file: filePath,
-      icon: ''
-    })
+  ipc.on('ondragstart', (event, filePath) => {
+    event.sender.startDrag({ file: filePath, icon: '' })
   })
 
   ipc.on('render', render)

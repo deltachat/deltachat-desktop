@@ -13,7 +13,7 @@ class App extends React.Component {
     return (
       <IntlProvider locale={window.localeData.locale}>
         <ScreenController
-          logins={remote.app.logins}
+          logins={state.logins}
           saved={state.saved}
           deltachat={state.deltachat} />
       </IntlProvider>
