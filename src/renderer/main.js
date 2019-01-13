@@ -9,16 +9,18 @@ const ReactDOM = require('react-dom')
 const { remote, ipcRenderer } = require('electron')
 const localize = require('../localize')
 const App = require('./App')
-const log = require('../logger').getLogger('renderer/main')
+const logger = require('../logger')
 
 const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
-
 const STATE_WRAPPER = {}
 const state = STATE_WRAPPER.state = remote.app.state
 
 setupLocaleData(state.saved.locale)
 
-const app = ReactDOM.render(<App STATE_WRAPPER={STATE_WRAPPER} />, document.querySelector('#root'))
+const app = ReactDOM.render(
+  <App STATE_WRAPPER={STATE_WRAPPER} />,
+  document.querySelector('#root')
+)
 
 ipcRenderer.on('log', (e, channel, lvl, ...args) => {
   const variant = LoggerVariants[lvl]
@@ -40,7 +42,7 @@ ipcRenderer.on('render', (e, state) => {
 
 ipcRenderer.send('ipcReady')
 
-require('../logger').setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
+logger.setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
 
 function onChooseLanguage (e, locale) {
   setupLocaleData(locale)
