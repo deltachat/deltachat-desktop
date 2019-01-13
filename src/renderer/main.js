@@ -20,31 +20,27 @@ setupLocaleData(state.saved.locale)
 
 const app = ReactDOM.render(<App STATE_WRAPPER={STATE_WRAPPER} />, document.querySelector('#root'))
 
-setupIpc()
+ipcRenderer.on('log', (e, channel, lvl, ...args) => {
+  const variant = LoggerVariants[lvl]
+  variant(channel, ...args)
+})
 
-function setupIpc () {
-  ipcRenderer.on('log', (e, channel, lvl, ...args) => {
-    const variant = LoggerVariants[lvl]
-    variant(channel, ...args)
-  })
+ipcRenderer.on('error', (e, ...args) => console.error(...args))
 
-  ipcRenderer.on('error', (e, ...args) => console.error(...args))
+ipcRenderer.on('chooseLanguage', onChooseLanguage)
 
-  ipcRenderer.on('chooseLanguage', onChooseLanguage)
+ipcRenderer.on('uncaughtError', (e, ...args) => {
+  console.log('uncaughtError in', ...args)
+})
 
-  ipcRenderer.on('uncaughtError', (e, ...args) => {
-    console.log('uncaughtError in', ...args)
-  })
+ipcRenderer.on('render', (e, state) => {
+  STATE_WRAPPER.state = state
+  app.setState(state)
+})
 
-  ipcRenderer.on('render', (e, state) => {
-    STATE_WRAPPER.state = state
-    app.setState(state)
-  })
+ipcRenderer.send('ipcReady')
 
-  ipcRenderer.send('ipcReady')
-
-  require('../logger').setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
-}
+require('../logger').setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
 
 function onChooseLanguage (e, locale) {
   setupLocaleData(locale)
