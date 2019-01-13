@@ -19,7 +19,6 @@ const {
 const Login = require('../Login')
 const KeyTransfer = require('./KeyTransfer')
 const confirmationDialog = require('./confirmationDialog')
-const State = require('../../lib/state')
 
 const SettingsDialog = styled.div`
   .bp3-card:not(:last-child){
@@ -107,10 +106,10 @@ class Settings extends React.Component {
   }
 
   handleSettingsChange (key, value) {
-    this.state.saved[key] = value
-    this.setState({ saved: this.state.saved })
-    State.save({ saved: this.state.saved })
-    ipcRenderer.send('updateSettings', this.state.saved)
+    const { saved } = this.state
+    saved[key] = value
+    this.setState({ saved })
+    ipcRenderer.send('updateSettings', saved)
   }
 
   handleDeltaSettingsChange (key, value) {

@@ -69,21 +69,18 @@ function init (state, options) {
   })
 
   win.on('move', debounce(e => {
-    send('windowBoundsChanged', e.sender.getBounds())
+    state.saved.bounds = e.sender.getBounds()
+    // TODO save state
   }, 1000))
 
   win.on('resize', debounce(e => {
-    send('windowBoundsChanged', e.sender.getBounds())
+    state.saved.bounds = e.sender.getBounds()
+    // TODO save state
   }, 1000))
 
-  win.on('close', e => {
-  })
-  win.on('blur', e => {
-    win.hidden = true
-  })
-  win.on('focus', e => {
-    win.hidden = false
-  })
+  win.on('close', e => {})
+  win.on('blur', e => { win.hidden = true })
+  win.on('focus', e => { win.hidden = false })
 }
 
 function hide () {

@@ -121,8 +121,8 @@ function init (cwd, state) {
     })
   })
 
-  // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
+
   ipc.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
@@ -145,11 +145,11 @@ function init (cwd, state) {
     })
 
     function fakeRender () {
-      var json = dc.render()
-      var tmpJson = tmp.render()
-      json.configuring = tmpJson.configuring
-      windows.main.send('render', json)
-      if (tmpJson.ready) {
+      const deltachat = dc.render()
+      const tmpDeltachat = tmp.render()
+      deltachat.configuring = tmpDeltachat.configuring
+      sendState(deltachat)
+      if (tmpDeltachat.ready) {
         dc.login(credentials, render, txCoreStrings())
         windows.main.send('success', 'Configuration success!')
         tmp.close()
@@ -167,9 +167,14 @@ function init (cwd, state) {
 
   function render () {
     log.debug('RENDER')
-    const json = dc.render()
-    windows.main.setTitle(json.credentials.addr)
-    windows.main.send('render', json)
+    const deltachat = dc.render()
+    windows.main.setTitle(deltachat.credentials.addr)
+    sendState(deltachat)
+  }
+
+  function sendState (deltachat) {
+    Object.assign(state, { deltachat })
+    windows.main.send('render', state)
   }
 }
 

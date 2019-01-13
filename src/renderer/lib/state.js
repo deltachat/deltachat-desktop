@@ -68,6 +68,7 @@ function load (cb) {
     }
     const state = getDefaultState()
     state.saved = Object.assign(state.saved, err ? {} : saved)
+    // TODO immediately save state if no file could be found
     cb(null, state)
   })
 }

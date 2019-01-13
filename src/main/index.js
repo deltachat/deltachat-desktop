@@ -29,7 +29,7 @@ mkdirp.sync(getConfigPath())
 
 const ipcMain = electron.ipcMain
 
-app.ipcReady = false // main window has finished loading and IPC is ready
+app.ipcReady = false
 app.isQuitting = false
 
 parallel({
@@ -41,7 +41,8 @@ parallel({
 function onReady (err, results) {
   if (err) throw err
 
-  const state = results.state
+  const state = app.state = results.state
+  // TODO logins should be part of state
   app.logins = results.logins
 
   const cwd = getConfigPath()
@@ -81,12 +82,20 @@ function quit (e) {
   app.isQuitting = true
   e.preventDefault()
 
-  windows.main.send('stateSaveImmediate')
-  ipcMain.once('stateSaved', () => app.quit())
+  function doQuit () {
+    console.log('Quitting now. Bye.')
+    app.quit()
+  }
+
+  // TODO pass doQuit as callback instead of using the
+  // stateSaved event
+  State.once('stateSaved', doQuit)
+  State.saveImmediate(app.state)
+
   setTimeout(() => {
     console.error('Saving state took too long. Quitting.')
-    app.quit()
-  }, 4000) // quit after 4 secs, at most
+    doQuit()
+  }, 4000)
 }
 
 app.on('before-quit', e => quit(e))

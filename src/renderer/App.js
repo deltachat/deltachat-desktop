@@ -9,8 +9,7 @@ addLocaleData(enLocaleData)
 
 class App extends React.Component {
   render () {
-    const { state } = this.props
-
+    const { state } = this.props.STATE_WRAPPER
     return (
       <IntlProvider locale={window.localeData.locale}>
         <ScreenController
