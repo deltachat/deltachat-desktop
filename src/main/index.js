@@ -42,9 +42,7 @@ function onReady (err, results) {
   const state = app.state = results.state
   state.logins = results.logins
 
-  app.saveState = () => {
-    State.save({ saved: state.saved })
-  }
+  app.saveState = () => State.save({ saved: state.saved })
 
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
