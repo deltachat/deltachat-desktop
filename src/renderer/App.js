@@ -1,4 +1,3 @@
-const { remote } = require('electron')
 const React = require('react')
 const ScreenController = require('./ScreenController')
 

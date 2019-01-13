@@ -27,8 +27,6 @@ process.on('exit', function () {
 
 mkdirp.sync(getConfigPath())
 
-const ipcMain = electron.ipcMain
-
 app.ipcReady = false
 app.isQuitting = false
 
