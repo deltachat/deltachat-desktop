@@ -73,16 +73,13 @@ function load (cb) {
   })
 }
 
-// Write state.saved to the JSON state file
 function saveImmediate (state, cb) {
   log.info('Saving state to ' + appConfig.filePath)
-
-  // Clean up, so that we're not saving any pending state
   const copy = Object.assign({}, state.saved)
-
-  appConfig.write(copy, (err) => {
+  appConfig.write(copy, err => {
     if (err) {
       log.error('State save failed', err)
-    } else State.emit('stateSaved')
+    }
+    cb(err)
   })
 }

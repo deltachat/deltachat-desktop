@@ -87,10 +87,7 @@ function quit (e) {
     app.quit()
   }
 
-  // TODO pass doQuit as callback instead of using the
-  // stateSaved event
-  State.once('stateSaved', doQuit)
-  State.saveImmediate(app.state)
+  State.saveImmediate(app.state, doQuit)
 
   setTimeout(() => {
     console.error('Saving state took too long. Quitting.')
