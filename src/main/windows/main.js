@@ -24,11 +24,12 @@ const {
 
 const log = require('../../logger').getLogger('main/mainWindow')
 
-function init (state, options) {
+function init (app, options) {
   if (main.win) {
     return main.win.show()
   }
 
+  const state = app.state
   const defaults = windowDefaults()
   const initialBounds = Object.assign(
     defaults.bounds,
@@ -69,21 +70,18 @@ function init (state, options) {
   })
 
   win.on('move', debounce(e => {
-    send('windowBoundsChanged', e.sender.getBounds())
+    state.saved.bounds = e.sender.getBounds()
+    app.saveState()
   }, 1000))
 
   win.on('resize', debounce(e => {
-    send('windowBoundsChanged', e.sender.getBounds())
+    state.saved.bounds = e.sender.getBounds()
+    app.saveState()
   }, 1000))
 
-  win.on('close', e => {
-  })
-  win.on('blur', e => {
-    win.hidden = true
-  })
-  win.on('focus', e => {
-    win.hidden = false
-  })
+  win.on('close', e => {})
+  win.on('blur', e => { win.hidden = true })
+  win.on('focus', e => { win.hidden = false })
 }
 
 function hide () {

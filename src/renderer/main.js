@@ -6,77 +6,51 @@ window.eval = global.eval = function () {
 const React = require('react')
 const ReactDOM = require('react-dom')
 
-const { ipcRenderer } = require('electron')
-const State = require('./lib/state')
+const { remote, ipcRenderer } = require('electron')
 const localize = require('../localize')
 const App = require('./App')
-const log = require('../logger').getLogger('renderer/main')
+const logger = require('../logger')
 
 const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
+const STATE_WRAPPER = {}
+const state = STATE_WRAPPER.state = remote.app.state
 
-State.load(onState)
+setupLocaleData(state.saved.locale)
 
-let app
-let state
+const app = ReactDOM.render(
+  <App STATE_WRAPPER={STATE_WRAPPER} />,
+  document.querySelector('#root')
+)
 
-function onState (err, _state) {
-  if (err) log.error('onState', err)
-  state = _state
+ipcRenderer.on('log', (e, channel, lvl, ...args) => {
+  const variant = LoggerVariants[lvl]
+  variant(channel, ...args)
+})
 
-  setupLocaleData(state.saved.locale)
+ipcRenderer.on('error', (e, ...args) => console.error(...args))
 
-  app = ReactDOM.render(<App state={state} />, document.querySelector('#root'))
+ipcRenderer.on('chooseLanguage', onChooseLanguage)
 
-  setupIpc()
-}
+ipcRenderer.on('uncaughtError', (e, ...args) => {
+  console.log('uncaughtError in', ...args)
+})
 
-function setupIpc () {
-  ipcRenderer.on('log', (e, channel, lvl, ...args) => {
-    const variant = LoggerVariants[lvl]
-    variant(channel, ...args)
-  })
-  ipcRenderer.on('error', (e, ...args) => console.error(...args))
-  ipcRenderer.on('stateSave', (e) => State.save(state))
-  ipcRenderer.on('stateSaveImmediate', (e) => State.saveImmediate(state))
+ipcRenderer.on('render', (e, state) => {
+  STATE_WRAPPER.state = state
+  app.setState(state)
+})
 
-  ipcRenderer.on('chooseLanguage', onChooseLanguage)
-  ipcRenderer.on('windowBoundsChanged', onWindowBoundsChanged)
+ipcRenderer.send('ipcReady')
 
-  ipcRenderer.on('uncaughtError', (e, ...args) => {
-    console.log('uncaughtError in', ...args)
-  })
-
-  ipcRenderer.on('render', (e, deltachat) => {
-    update(deltachat)
-  })
-
-  ipcRenderer.send('ipcReady')
-
-  State.on('stateSaved', () => ipcRenderer.send('stateSaved'))
-
-  require('../logger').setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
-}
-
-function setupLocaleData (locale) {
-  // if no locale provided, uses app.getLocale() under the hood.
-  window.localeData = ipcRenderer.sendSync('locale-data', locale)
-  window.translate = localize.translate(window.localeData.messages)
-}
+logger.setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
 
 function onChooseLanguage (e, locale) {
   setupLocaleData(locale)
-  state.saved.locale = locale
-  State.save(state)
   app.forceUpdate()
-  ipcRenderer.send('chooseLanguage', locale) // update menu language
+  ipcRenderer.send('chooseLanguage', locale)
 }
 
-function onWindowBoundsChanged (e, newBounds) {
-  state.saved.bounds = newBounds
-  State.save(state)
-}
-
-function update (deltachat) {
-  state.deltachat = deltachat
-  app.setState(state)
+function setupLocaleData (locale) {
+  window.localeData = ipcRenderer.sendSync('locale-data', locale)
+  window.translate = localize.translate(window.localeData.messages)
 }

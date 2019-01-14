@@ -13,7 +13,7 @@ const { getConfigPath } = require('../application-constants')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
-const State = require('../renderer/lib/state')
+const State = require('./state')
 const windows = require('./windows')
 const logHandler = require('./developerTools/logHandler')
 const log = require('../logger').getLogger('main/index')
@@ -27,9 +27,7 @@ process.on('exit', function () {
 
 mkdirp.sync(getConfigPath())
 
-const ipcMain = electron.ipcMain
-
-app.ipcReady = false // main window has finished loading and IPC is ready
+app.ipcReady = false
 app.isQuitting = false
 
 parallel({
@@ -41,15 +39,17 @@ parallel({
 function onReady (err, results) {
   if (err) throw err
 
-  const state = results.state
-  app.logins = results.logins
+  const state = app.state = results.state
+  state.logins = results.logins
+
+  app.saveState = () => State.save({ saved: state.saved })
 
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
   localize.setup(app, state.saved.locale || app.getLocale())
-  windows.main.init(state, { hidden: false })
+  windows.main.init(app, { hidden: false })
   menu.init()
 
   if (rc.debug) windows.main.toggleDevTools()
@@ -81,12 +81,17 @@ function quit (e) {
   app.isQuitting = true
   e.preventDefault()
 
-  windows.main.send('stateSaveImmediate')
-  ipcMain.once('stateSaved', () => app.quit())
+  function doQuit () {
+    console.log('Quitting now. Bye.')
+    app.quit()
+  }
+
+  State.saveImmediate(app.state, doQuit)
+
   setTimeout(() => {
     console.error('Saving state took too long. Quitting.')
-    app.quit()
-  }, 4000) // quit after 4 secs, at most
+    doQuit()
+  }, 4000)
 }
 
 app.on('before-quit', e => quit(e))

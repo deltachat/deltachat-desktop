@@ -1,12 +1,6 @@
-module.exports = {
-  init
-}
+module.exports = { init }
 
-const {
-  app,
-  ipcMain
-} = require('electron')
-
+const { app, ipcMain } = require('electron')
 const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
@@ -22,16 +16,13 @@ const setupNotifications = require('./notifications')
 const logHandler = require('./developerTools/logHandler')
 
 function init (cwd, state) {
-  // Events dispatched by buttons from the frontend
-
   const ipc = ipcMain
   const main = windows.main
-
   const dc = new DeltaChat(cwd, state.saved)
 
   dc.on('ready', function () {
-    if (!app.logins.includes(dc.credentials.addr)) {
-      app.logins.push(dc.credentials.addr)
+    if (!state.logins.includes(dc.credentials.addr)) {
+      state.logins.push(dc.credentials.addr)
     }
   })
 
@@ -63,7 +54,7 @@ function init (cwd, state) {
   ipc.on('forgetLogin', (e, addr) => {
     var targetDir = dc.getPath(addr)
     rimraf.sync(targetDir)
-    app.logins.splice(app.logins.indexOf(addr), 1)
+    state.logins.splice(state.logins.indexOf(addr), 1)
     render()
   })
 
@@ -114,15 +105,12 @@ function init (cwd, state) {
     })
   })
 
-  ipcMain.on('ondragstart', (event, filePath) => {
-    event.sender.startDrag({
-      file: filePath,
-      icon: ''
-    })
+  ipc.on('ondragstart', (event, filePath) => {
+    event.sender.startDrag({ file: filePath, icon: '' })
   })
 
-  // This needs to be JSON serializable for rendering to the frontend.
   ipc.on('render', render)
+
   ipc.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
@@ -130,6 +118,7 @@ function init (cwd, state) {
 
   ipc.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
+    app.saveState()
   })
 
   ipc.on('updateCredentials', (e, credentials) => {
@@ -145,11 +134,11 @@ function init (cwd, state) {
     })
 
     function fakeRender () {
-      var json = dc.render()
-      var tmpJson = tmp.render()
-      json.configuring = tmpJson.configuring
-      windows.main.send('render', json)
-      if (tmpJson.ready) {
+      const deltachat = dc.render()
+      const tmpDeltachat = tmp.render()
+      deltachat.configuring = tmpDeltachat.configuring
+      sendState(deltachat)
+      if (tmpDeltachat.ready) {
         dc.login(credentials, render, txCoreStrings())
         windows.main.send('success', 'Configuration success!')
         tmp.close()
@@ -167,9 +156,14 @@ function init (cwd, state) {
 
   function render () {
     log.debug('RENDER')
-    const json = dc.render()
-    windows.main.setTitle(json.credentials.addr)
-    windows.main.send('render', json)
+    const deltachat = dc.render()
+    windows.main.setTitle(deltachat.credentials.addr)
+    sendState(deltachat)
+  }
+
+  function sendState (deltachat) {
+    Object.assign(state, { deltachat })
+    windows.main.send('render', state)
   }
 }
 

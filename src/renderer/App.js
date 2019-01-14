@@ -1,4 +1,3 @@
-const { remote } = require('electron')
 const React = require('react')
 const ScreenController = require('./ScreenController')
 
@@ -9,12 +8,11 @@ addLocaleData(enLocaleData)
 
 class App extends React.Component {
   render () {
-    const { state } = this.props
-
+    const { state } = this.props.STATE_WRAPPER
     return (
       <IntlProvider locale={window.localeData.locale}>
         <ScreenController
-          logins={remote.app.logins}
+          logins={state.logins}
           saved={state.saved}
           deltachat={state.deltachat} />
       </IntlProvider>

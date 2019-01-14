@@ -57,7 +57,11 @@ function getAvailableLanguages () {
         label: app.translate(`language_${locale}`),
         type: 'radio',
         checked: locale === app.localeData.locale,
-        click: () => windows.main.chooseLanguage(locale)
+        click: () => {
+          app.state.saved.locale = locale
+          app.saveState()
+          windows.main.chooseLanguage(locale)
+        }
       }
     })
 }
