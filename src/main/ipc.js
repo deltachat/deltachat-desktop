@@ -16,7 +16,6 @@ const setupNotifications = require('./notifications')
 const logHandler = require('./developerTools/logHandler')
 
 function init (cwd, state) {
-  const ipc = ipcMain
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
 
@@ -42,32 +41,32 @@ function init (cwd, state) {
     }
   })
 
-  ipc.once('ipcReady', function (e) {
+  ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
   })
 
-  ipc.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
-  ipc.on('setBounds', (e, ...args) => main.setBounds(...args))
-  ipc.on('setProgress', (e, ...args) => main.setProgress(...args))
-  ipc.on('show', () => main.show())
-  ipc.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
-  ipc.on('chooseLanguage', (e, locale) => {
+  ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
+  ipcMain.on('setBounds', (e, ...args) => main.setBounds(...args))
+  ipcMain.on('setProgress', (e, ...args) => main.setProgress(...args))
+  ipcMain.on('show', () => main.show())
+  ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
+  ipcMain.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
     dc.setCoreStrings(txCoreStrings())
     menu.init()
   })
 
-  ipc.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
+  ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
 
   // Create a new instance
-  ipc.on('login', (e, ...args) => {
+  ipcMain.on('login', (e, ...args) => {
     dc.login(...args, render, txCoreStrings())
   })
 
-  ipc.on('forgetLogin', (e, addr) => {
+  ipcMain.on('forgetLogin', (e, addr) => {
     var targetDir = dc.getPath(addr)
     rimraf.sync(targetDir)
     state.logins.splice(state.logins.indexOf(addr), 1)
@@ -76,56 +75,56 @@ function init (cwd, state) {
 
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
-  ipc.on('dispatchSync', (e, ...args) => {
+  ipcMain.on('dispatchSync', (e, ...args) => {
     e.returnValue = dispatch(...args)
   })
 
   // Calls the function without returning the value (async)
-  ipc.on('dispatch', (e, ...args) => {
+  ipcMain.on('dispatch', (e, ...args) => {
     dispatch(...args)
   })
 
-  ipc.on('initiateKeyTransfer', (e, ...args) => {
+  ipcMain.on('initiateKeyTransfer', (e, ...args) => {
     dc.initiateKeyTransfer((err, resp) => {
       windows.main.send('initiateKeyTransferResp', err, resp)
     })
   })
 
-  ipc.on('continueKeyTransfer', (e, messageId, setupCode) => {
-    dc.continueKeyTransfer(messageId, setupCode, function (err) {
+  ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
+    dc.continueKeyTransfer(messageId, setupCode, err => {
       windows.main.send('continueKeyTransferResp', err)
     })
   })
 
-  ipc.on('saveFile', (e, source, target) => {
-    fs.copyFile(source, target, function (err) {
+  ipcMain.on('saveFile', (e, source, target) => {
+    fs.copyFile(source, target, err => {
       if (err) windows.main.send('error', err.message)
     })
   })
 
-  ipc.on('ondragstart', (event, filePath) => {
+  ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: '' })
   })
 
-  ipc.on('render', render)
+  ipcMain.on('render', render)
 
-  ipc.on('locale-data', (e, locale) => {
+  ipcMain.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
     e.returnValue = app.localeData
   })
 
-  ipc.on('updateSettings', (e, saved) => {
+  ipcMain.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
     app.saveState()
   })
 
-  ipc.on('updateCredentials', (e, credentials) => {
+  ipcMain.on('updateCredentials', (e, credentials) => {
     var dir = path.join(os.tmpdir(), Date.now().toString())
     if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
     var tmp = new DeltaChat(dir, state.saved)
 
-    tmp.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
-      if (Number(data1) === 0) { // login failed
+    tmp.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
+      if (Number(data1) === 0) {
         windows.main.send('error', 'Login failed')
         tmp.close()
       }
