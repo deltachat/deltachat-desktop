@@ -26,18 +26,18 @@ function init (cwd, state) {
   })
 
   dc.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
-    windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+    main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
 
   dc.on('DC_EVENT_IMEX_PROGRESS', progress => {
-    windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
+    main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
   dc.on('error', error => windows.main.send('error', error))
 
   dc.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
     if (Number(data1) === 0) {
-      windows.main.send('error', 'Login failed!')
+      main.send('error', 'Login failed!')
     }
   })
 
@@ -86,19 +86,19 @@ function init (cwd, state) {
 
   ipcMain.on('initiateKeyTransfer', (e, ...args) => {
     dc.initiateKeyTransfer((err, resp) => {
-      windows.main.send('initiateKeyTransferResp', err, resp)
+      main.send('initiateKeyTransferResp', err, resp)
     })
   })
 
   ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
     dc.continueKeyTransfer(messageId, setupCode, err => {
-      windows.main.send('continueKeyTransferResp', err)
+      main.send('continueKeyTransferResp', err)
     })
   })
 
   ipcMain.on('saveFile', (e, source, target) => {
     fs.copyFile(source, target, err => {
-      if (err) windows.main.send('error', err.message)
+      if (err) main.send('error', err.message)
     })
   })
 
@@ -125,7 +125,7 @@ function init (cwd, state) {
 
     tmp.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
       if (Number(data1) === 0) {
-        windows.main.send('error', 'Login failed')
+        main.send('error', 'Login failed')
         tmp.close()
       }
     })
@@ -137,7 +137,7 @@ function init (cwd, state) {
       sendState(deltachat)
       if (tmpDeltachat.ready) {
         dc.login(credentials, render, txCoreStrings())
-        windows.main.send('success', 'Configuration success!')
+        main.send('success', 'Configuration success!')
         tmp.close()
       }
     }
@@ -154,13 +154,13 @@ function init (cwd, state) {
   function render () {
     log.debug('RENDER')
     const deltachat = dc.render()
-    windows.main.setTitle(deltachat.credentials.addr)
+    main.setTitle(deltachat.credentials.addr)
     sendState(deltachat)
   }
 
   function sendState (deltachat) {
     Object.assign(state, { deltachat })
-    windows.main.send('render', state)
+    main.send('render', state)
   }
 }
 
