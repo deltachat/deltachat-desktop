@@ -2,7 +2,7 @@
 <resources>
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
-    <string name="ok">Vale</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
@@ -12,10 +12,11 @@
     <string name="custom">Personalizado</string>
     <string name="none">Ninguno</string>
     <string name="open">Abrir</string>
+    <string name="delete">Eliminar</string>
     <string name="not_now">Ahora no</string>
     <string name="never">Nunca</string>
     <string name="one_moment">Un momento...</string>
-    <string name="done">Listo</string>
+    <string name="done">Hecho</string>
     <string name="undo">Deshacer</string>
     <string name="error">Error</string>
     <string name="error_x">Error: %1$s</string>
@@ -69,6 +70,7 @@
     <string name="images">Imágenes</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Mensaje de voz</string>
+    <string name="forwarded_message">Mensaje reenviado</string>
     <string name="video">Video</string>
     <string name="documents">Documentos</string>
     <string name="contact">Contacto</string>
@@ -280,8 +282,6 @@
     <string name="forward_to">Reenviar a ...</string>
 
     <!-- preferences -->
-    <string name="pref_summary_privacy">Bloqueo de pantalla %1$s, Recibos de lectura %2$s</string>
-    <string name="pref_summary_appearance">Tema %1$s, Idioma %2$s, Fondo %3$s</string>
     <string name="pref_summary_on">activado</string>
     <string name="pref_summary_off">desactivado</string>
     <string name="pref_summary_default">por defecto</string>
@@ -360,7 +360,6 @@
     <string name="pref_managekeys_import_explain">Importar claves secretas de \"%1$s\"?\n\n• Las claves secretas existentes no se eliminarán\n\n• La última clave importada se usará como la nueva clave predeterminada a menos que tenga la palabra \"legacy\" en su nombre de archivo.</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Claves secretas escritas exitosamente a \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Claves secretas importadas de \"%1$s\".</string>
-    <string name="pref_background">Fondo de chat</string>
     <string name="pref_imap_folder_handling">Manejo de carpetas IMAP</string>
     <string name="pref_imap_folder_warn_disable_defaults">Si deshabilita esta opción, asegúrese de que su servidor y sus otros clientes estén configurados en consecuencia.\n\nDe lo contrario, las cosas pueden no funcionar en absoluto.</string>
     <string name="pref_watch_inbox_folder">Monitorear la Bandeja de Entrada</string>
@@ -494,7 +493,6 @@
     <string name="language_sr">Serbio</string>
     <string name="language_sv">Sueco</string>
     <string name="language_ta">Tamil</string>
-    <string name="language_te">Telegu</string>
     <string name="language_tr">Turco</string>
     <string name="language_uk">Ucraniano</string>
     <string name="language_zh_CN">Chino</string>

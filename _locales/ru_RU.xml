@@ -8,15 +8,124 @@
     <string name="no">Нет</string>
     <string name="none">Ничего</string>
     <string name="open">Открыть</string>
+    <string name="delete">Удалить</string>
     <string name="not_now">Не сейчас</string>
     <string name="never">Никогда</string>
     <string name="one_moment">Один момент...</string>
     <string name="error">Ошибка</string>
+    <string name="error_x">Ошибка: %1$s</string>
     <string name="error_no_network">Сеть не доступна</string>
+    <string name="no_browser_installed">Браузер не установлен</string>
+    <string name="copied_to_clipboard">Скопировано в буфер обмена.</string>
     <string name="contacts_headline">Контакты</string>
+    <string name="email_address">Почтовый адрес</string>
+    <string name="bad_email_address">Не правильный почтовый адрес</string>
     <string name="password">Пароль</string>
     <string name="now">Сейчас</string>
     <string name="today">Сегодня</string>
+    <string name="yesterday">Вчера</string>
     <string name="this_week">На этой неделе</string>
     <string name="this_month">В этом месяце</string>
+    <string name="self">Я</string>
+    <string name="image">Изображение</string>
+    <string name="images">Изображения</string>
+    <string name="audio">Аудио</string>
+    <string name="voice_message">Голосовое сообщение</string>
+    <string name="video">Видео</string>
+    <string name="documents">Документы</string>
+    <string name="contact">Контакт</string>
+    <string name="camera">Камера</string>
+    <string name="location">Местоположение</string>
+    <string name="gallery">Галерея</string>
+    <string name="file">Файл</string>
+    <string name="unknown">Не известно</string>
+
+    <string name="green">Зеленый</string>
+    <string name="red">Красный</string>
+    <string name="blue">Голубой</string>
+    <string name="orange">Оранжевый</string>
+    <string name="cyan">Бирюзовый</string>
+    <string name="magenta">Фиолетовый</string>
+    <string name="white">Белый</string>
+
+    <string name="small">Маленький</string>
+    <string name="normal">Нормальный</string>
+    <string name="large">Большой</string>
+    <string name="extra_large">Очень большой</string>
+
+    <string name="fast">Быстро</string>
+    <string name="slow">Медленно</string>
+
+    <string name="message_delivered">Сообщение отправлено</string>
+    <!-- menu labels (or icon, buttons...) -->
+    <string name="menu_new_contact">Новый контакт</string>
+    <string name="menu_new_chat">Новый чат</string>
+    <string name="menu_new_group">Новая группа</string>
+    <string name="menu_new_verified_group">Новая проверенная группа</string>
+    <string name="menu_send">Отправить</string>
+    <string name="menu_toggle_keyboard">Переключить эмодзи клавиатуру</string>
+    <string name="menu_edit_group">Редактировать группу</string>
+    <string name="menu_add_attachment">Прикрепить</string>
+    <string name="menu_leave_group">Покинуть группу</string>
+    <string name="menu_delete_chat">Удалить чат</string>
+    <string name="menu_delete_messages">Удалить сообщения</string>
+    <string name="menu_delete_image">Удалить изображение</string>
+    <string name="menu_message_details">Детали изображения</string>
+    <string name="menu_copy_to_clipboard">Копировать</string>
+    <string name="menu_forward">Переслать сообщение</string>
+    <string name="menu_resend">Переотправить сообщение</string>
+    <string name="menu_reply">Ответить сообщению</string>
+    <string name="menu_all_media">Все медиа</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_block_contact">Заблокировать контакт</string>
+    <string name="menu_unblock_contact">Разблокировать контакт</string>
+    <string name="menu_pause">Пауза</string>
+    <string name="menu_invite">Пригласить друзей</string>
+    <string name="menu_help">Помощь</string>
+    <string name="menu_select_all">Выбрать всё</string>
+    <string name="menu_expand">Расширить</string>
+    <string name="menu_edit_name">Редактировать имя</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_view_profile">Просмотреть профиль</string>
+
+    <!-- get confirmations -->
+    <string name="ask_leave_group">Вы уверены что хотите выйти из группы?</string>
+    <string name="ask_forward">Переслать сообщения %1$s?</string>
+    <string name="ask_block_contact">Заблокировать контакт? Вы больше не сможете получать сообщения от этого контакта.</string>
+    <string name="ask_unblock_contact">Разблокировать контакт? Вы сможете получать сообщения от этого контакта.</string>
+    <!-- contact list -->
+    <string name="contacts_title">Контакты</string>
+    <string name="contacts_enter_name_or_email">Введите имя или адрес почты</string>
+    <string name="contacts_empty_hint">Нет контактов.</string>
+
+
+    <string name="chat_please_enter_message">Пожалуйста введите сообщение.</string>
+    <string name="chat_camera_unavailable">Камера не доступна.</string>
+    <string name="chat_unable_to_record_audio">Невозможно записать звук.</string>
+    <string name="chat_record_explain">Нажмите и удерживайте для записи звука, отпустите чтобы отправить</string>
+    <string name="chat_input_placeholder">Сообщение</string>
+    <string name="chat_no_messages">Нет сообщений.</string>
+    <!-- search -->
+    <string name="search">Поиск</string>
+    <!-- create/edit groups, contact/group profile -->
+    <string name="group_name">Название группы</string>
+    <string name="group_avatar">Фотография группы</string>
+    <string name="group_create_button">Создать группу</string>
+    <string name="group_please_enter_group_name">Введите имя для группы</string>
+    <string name="group_hello_draft">Привет, я создал группу \"%1$s\" для нас.</string>
+    <!-- chat media view -->
+    <string name="media_preview">Предпросмотр медиа</string>
+    <string name="media_tab_media">Медиа</string>
+    <string name="media_tab_documents">Документы</string>
+    <string name="media_no_media_hint">Нет медиа.</string>
+    <string name="media_no_documents_hint">Нет документов</string>
+
+
+    <!-- welcome and login -->
+    <string name="welcome_intro1_headline">Дельта чат</string>
+    <string name="welcome_intro3_headline">Быстро</string>
+    <string name="welcome_intro4_headline">Мощный</string>
+    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
+    <string name="welcome_intro5_headline">Свобода</string>
+    <string name="welcome_intro6_headline">Зашифрован</string>
     </resources>

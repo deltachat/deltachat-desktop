@@ -69,6 +69,7 @@
     <string name="images">Billeder</string>
     <string name="audio">Lyd</string>
     <string name="voice_message">Tale besked</string>
+    <string name="forwarded_message">Videresendt besked</string>
     <string name="video">Video</string>
     <string name="documents">Dokumenter</string>
     <string name="contact">Kontakt</string>
@@ -212,6 +213,8 @@
     <string name="media_no_documents_hint">Ingen dokumenter</string>
 
 
+    <!-- invite -->
+    <string name="invite_slogan">Venner lader ikke venner være låst i besked siloer.</string>
     <string name="invite_default_text">Skift til Delta Chat - %1$s - skriv til mig på %2$s</string>
 
 
@@ -227,6 +230,7 @@
     <string name="welcome_intro5_message">Delta Chat er fri for altid. Åben kildekode. Ingen reklamer. Intet abonnement. Ingen leverandør låsning.</string>
     <string name="welcome_intro6_headline">Krypteret</string>
     <string name="welcome_intro7_headline">Troværdig</string>
+    <string name="welcome_intro7_message">Delta Chat er sikker til erhvervsmæssig brug, kompatibel og standard baseret.</string>
     <string name="welcome_start_messaging">Start skrivning</string>
     <string name="login_title">Logind</string>
     <string name="login_header">Logind til server</string>
@@ -246,12 +250,14 @@
     <string name="login_error_port">Indtast gyldig port (1–65535)</string>
     <string name="login_error_required_fields">Indtast gyldig e-post adresse og adgangskode</string>
     <string name="import_backup_title">Importere sikkerhedskopi</string>
+    <string name="import_backup_ask">Sikkerhedskopi fundet hos \"%1$s\".\n\nImportere og bruge al data og opsætning fra den?</string>
+    <!-- Translators: %1$s will be replaced by the email address -->
+    <string name="login_error_cannot_login">Kan ikke logge ind som  \"%1$s\". Kontrollere om e-post adresse og adgangskode er korrekt.</string>
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Videresende til …</string>
 
     <!-- preferences -->
-    <string name="pref_summary_privacy">Skærm lås %1$s, læs kvitteringer %2$s</string>
     <string name="pref_summary_on">til</string>
     <string name="pref_summary_off">fra</string>
     <string name="pref_summary_default">standard</string>
@@ -262,9 +268,11 @@
     <string name="pref_profile_photo">Profil billede</string>
     <string name="pref_trim_headline">Trimme besked</string>
     <string name="pref_trim_option">Slette gamle beskeder</string>
+    <string name="pref_trim_option_explain">Automatisk slette ældre beskeder når samtale overskrider en angivet længde. </string>
     <string name="pref_trim_length_limit">Samtale længde grænse</string>
     <string name="pref_trim_length_limit_summary">%d beskeder pr. samtale</string>
     <string name="pref_trim_now_button">Trimme alle samtaler</string>
+    <string name="pref_trim_now_ask">Slette alle ældre beskeder? Dette vil trimme alle samtaler til %d mest nylige beskeder.</string>
     <string name="pref_blocked_contacts">Blokerede kontakter</string>
     <string name="pref_profile_photo_remove_ask">Fjerne profil billede?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
@@ -282,6 +290,7 @@
     <string name="pref_change_secret_explain">Ændre PIN / mønster / fingeraftryk via system opsætning</string>
     <string name="pref_screen_security">Skærm sikkerhed</string>
     <string name="pref_screen_security_explain">Blokere skærmaftryk i nylig liste og i programmet</string>
+    <string name="pref_screen_security_please_restart_hint">Genstart programmet for at anvende skærm sikkerhed.</string>
     <string name="pref_notifications">Påmindelser</string>
     <string name="pref_notifications_show">Vise</string>
     <string name="pref_notifications_priority">Prioritet</string>
@@ -301,6 +310,7 @@
     <string name="pref_incognito_keyboard">Inkognito tastatur</string>
     <string name="pref_incognito_keyboard_explain">Anmod tastatur om at deaktivere personlig indlæring</string>
     <string name="pref_read_receipts">Læse modtagelse</string>
+    <string name="pref_read_receipts_explain">Hvis læst kvittering er deaktiveret vil læst kvittering fra andre ikke blive vist.</string>
     <string name="pref_manage_keys">Håndtere nøgler</string>
     <string name="pref_use_system_emoji">Bruge system emoji</string>
     <string name="pref_use_system_emoji_explain">Deaktivere Delta Chat\'s indbygget emoji understøttelse</string>
@@ -323,7 +333,6 @@
     <string name="pref_managekeys_import_secret_keys">Importere hemmelige nøgler</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Hemmelige nøgler skrevet til \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Hemmelige nøgler importeret fra \"%1$s\".</string>
-    <string name="pref_background">Samtale baggrund</string>
     <string name="pref_imap_folder_handling">IMAP mappe håndtering</string>
     <string name="pref_watch_inbox_folder">Overvåge indbakke mappe</string>
     <string name="pref_watch_sent_folder">Overvåge sendt mappe</string>
@@ -437,7 +446,6 @@
     <string name="language_sr">Serbisk</string>
     <string name="language_sv">Svensk</string>
     <string name="language_ta">Tamilsk</string>
-    <string name="language_te">Telegu</string>
     <string name="language_tr">Tyrkisk</string>
     <string name="language_uk">Ukrainsk</string>
     <string name="language_zh_CN">Kinesisk</string>
@@ -469,6 +477,7 @@
     <string name="global_menu_help_contribute_desktop">Bidrage på GitHub</string>
     <string name="global_menu_help_report_desktop">Rapportere en sag...</string>
     <string name="global_menu_help_about_desktop">Om DeltaChat</string>
+    <string name="no_chat_selected_suggestion_desktop">Vælg samtale eller opret en ny samtale</string>
     <string name="write_message_desktop">Skrive en besked</string>
     <string name="about_deltachat_heading_desktop">Om DeltaChat</string>
     <string name="encryption_info_title_desktop">Kryptering information</string>

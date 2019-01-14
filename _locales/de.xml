@@ -12,6 +12,7 @@
     <string name="custom">Benutzerdefiniert</string>
     <string name="none">Keine</string>
     <string name="open">Öffnen</string>
+    <string name="delete">Löschen</string>
     <string name="not_now">Nicht jetzt</string>
     <string name="never">Nie</string>
     <string name="one_moment">Einen Moment…</string>
@@ -69,6 +70,7 @@
     <string name="images">Bilder</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Sprachnachricht</string>
+    <string name="forwarded_message">Weitergeleitete Nachricht</string>
     <string name="video">Video</string>
     <string name="documents">Dokumente</string>
     <string name="contact">Kontakt</string>
@@ -165,8 +167,8 @@
 
     <!-- contact list -->
     <string name="contacts_title">Kontakte</string>
-    <string name="contacts_enter_name_or_email">Geben Sie einen Namen oder eine E-Mail-Adresse ein</string>
-    <string name="contacts_type_email_above">Geben Sie oben eine E-Mail-Adresse ein</string>
+    <string name="contacts_enter_name_or_email">Namen oder E-Mail-Adresse eingeben</string>
+    <string name="contacts_type_email_above">Oben eine E-Mail-Adresse eingeben</string>
     <string name="contacts_empty_hint">Keine Kontakte.</string>
 
 
@@ -180,7 +182,7 @@
         <item quantity="other">%d Chats dearchiviert </item>
     </plurals>
     <string name="chat_archived_chats_title">Archivierte Chats</string>
-    <string name="chat_please_enter_message">Bitte geben Sie eine Nachricht ein.</string>
+    <string name="chat_please_enter_message">Bitte eine Nachricht eingeben.</string>
     <string name="chat_camera_unavailable">Kamera nicht verfügbar.</string>
     <string name="chat_unable_to_record_audio">Es ist nicht möglich, Audio aufzunehmen.</string>
     <plurals name="chat_n_unread_messages">
@@ -191,7 +193,7 @@
     <string name="chat_new_group_hint">Verfassen Sie die erste Nachricht, damit andere innerhalb dieser Gruppe antworten können.\n\n-- Es ist in Ordnung, wenn nicht alle Mitglieder Delta Chat verwenden.\n\n-- Die Zustellung der ersten Nachricht kann einige Zeit dauern.</string>
     <string name="chat_record_slide_to_cancel">Schieben um abzubrechen</string>
     <string name="chat_record_explain">Tippen und halten, um eine Sprachnachricht aufzunehmen, loslassen um zu senden. </string>
-    <string name="chat_no_chats_yet_hint">Geben Sie Ihrem Posteingang etwas, was sie empfangen können. Fangen Sie an, indem Sie einem Freund eine Nachricht schicken.</string>
+    <string name="chat_no_chats_yet_hint">Geben Sie Ihrem Posteingang etwas zu tun. Fangen Sie an, indem Sie einem Freund eine Nachricht schicken.</string>
     <string name="chat_all_done_hint">Inbox zeeerrro</string>
     <string name="chat_all_done_explain">Zip. Zilch. Zero. Nada.\nAlle aufgeholt!</string>
     <string name="chat_share_with_title">Teilen mit</string>
@@ -210,8 +212,8 @@
     <string name="group_name">Gruppen-Name</string>
     <string name="group_avatar">Gruppen-Avatar</string>
     <string name="group_create_button">Gruppe erstellen</string>
-    <string name="group_please_enter_group_name">Bitte vergeben Sie einen Gruppennamen</string>
-    <string name="group_add_members">Teilnehmer hinzufügen</string>
+    <string name="group_please_enter_group_name">Bitte einen Gruppennamen eingeben.</string>
+    <string name="group_add_members">Mitglied hinzufügen</string>
     <string name="group_hello_draft">Hallo, Ich habe gerade die Gruppe \"%1$s\" für uns erstellt.</string>
     <string name="group_self_not_in_group">Du musst ein Mitglied der Gruppe sein, um diese Aktion durchführen zu können.</string>
     <string name="profile_encryption">Verschlüsselung</string>
@@ -282,8 +284,6 @@ Einige Anbieter fügen zusätzliche Informationen beim Eingang der Nachricht hin
     <string name="forward_to">Weiterleiten zu ...</string>
 
     <!-- preferences -->
-    <string name="pref_summary_privacy">Bildschirmsperre %1$s, Lesebestätigung %2$s</string>
-    <string name="pref_summary_appearance">Design %1$s, Sprache %2$s, Hintergrund %3$s</string>
     <string name="pref_summary_on">an</string>
     <string name="pref_summary_off">aus</string>
     <string name="pref_summary_default">standard</string>
@@ -362,7 +362,7 @@ Einige Anbieter fügen zusätzliche Informationen beim Eingang der Nachricht hin
     <string name="pref_managekeys_import_explain">Geheime Schlüssel von \"%1$s\" importieren?\n\n\"• Bereits vorhandene Schlüssel werden nicht gelöscht\n\n• Der zuletzt importierte Schlüssel wird als neuer Standardschlüssel verwendet, außer der Dateiname beinhaltet das Wort \"legacy\"</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Geheime Schlüssel erfolgreich nach \"%1$s\" geschrieben.</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Geheime Schlüssel von \"%1$s\" importiert.</string>
-    <string name="pref_background">Chat-Hintergrund</string>
+    <string name="pref_background">Hintergrund</string>
     <string name="pref_imap_folder_handling">IMAP-Ordnereinstellungen</string>
     <string name="pref_imap_folder_warn_disable_defaults">Wenn Sie diese Option deaktivieren, stellen Sie sicher, dass Ihr Server und Ihre anderen Clients entsprechend konfiguriert sind.\n\n\nAndere Dinge funktionieren möglicherweise überhaupt nicht.</string>
     <string name="pref_watch_inbox_folder">Posteingang beobachten</string>
@@ -407,7 +407,7 @@ Einige Anbieter fügen zusätzliche Informationen beim Eingang der Nachricht hin
     <string name="screenlock_explain">Sperren Sie den Delta Chat Zugang mit Android Bildschirmsperre oder Fingerabdruck.</string>
     <string name="screenlock_authentication_failed">Die Authentifizierung ist fehlgeschlagen.</string>
     <string name="screenlock_unlock_title">Delta Chat entsperren</string>
-    <string name="screenlock_unlock_description">Bitte geben Sie Ihr vom System definiertes Geheimnis ein, um Delta Chat freizuschalten.</string>
+    <string name="screenlock_unlock_description">Den System-Entsperrcode eingeben, um Delta Chat freizuschalten.</string>
     <string name="screenlock_inactivity_timeout">Sperre bei Überschreitung der Inaktivitätzeit</string>
     <string name="screenlock_inactivity_timeout_explain">Automatisches Sperren des Delta-Chats nach einem bestimmten Zeitintervall der Inaktivität</string>
     <string name="screenlock_inactivity_timeout_interval">Inaktivitäts Zeitüberschreitung</string>
@@ -496,7 +496,6 @@ Einige Anbieter fügen zusätzliche Informationen beim Eingang der Nachricht hin
     <string name="language_sr">Serbisch</string>
     <string name="language_sv">Schwedisch</string>
     <string name="language_ta">Tamil</string>
-    <string name="language_te">Telegu</string>
     <string name="language_tr">Türkisch</string>
     <string name="language_uk">Ukrainisch</string>
     <string name="language_zh_CN">Chinesisch</string>
@@ -506,7 +505,7 @@ Einige Anbieter fügen zusätzliche Informationen beim Eingang der Nachricht hin
 
     <!-- desktop specific strings -->
     <string name="welcome_desktop">Willkommen zu DeltaChat</string>
-    <string name="login_known_accounts_title_desktop">Benaknnte Konten</string>
+    <string name="login_known_accounts_title_desktop">Bekannte Konten</string>
     <string name="global_menu_preferences_desktop">Einstellungen</string>
     <string name="global_menu_preferences_language_desktop">Wähle Sprache...</string>
     <string name="global_menu_file_desktop">Datei</string>

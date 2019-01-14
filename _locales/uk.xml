@@ -271,7 +271,7 @@
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Переслати...</string>
 
-    <string name="pref_summary_appearance">Тема %1$s, мова %2$s, заставка %3$s</string>
+    <!-- preferences -->
     <string name="pref_summary_on">увімкн.</string>
     <string name="pref_summary_off">вимкн.</string>
     <string name="pref_summary_default">за замовчуванням</string>
