@@ -154,7 +154,6 @@ class Settings extends React.Component {
           onClose={() => this.setState({ userDetails: false })}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_password_and_account_settings')}</H5>
               <Login
                 {...advancedSettings}
                 mailPw={this.state.mailPw}
