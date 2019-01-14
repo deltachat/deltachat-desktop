@@ -20,9 +20,25 @@ function init (cwd, state) {
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
 
-  dc.on('ready', function () {
+  dc.on('ready', () => {
     if (!state.logins.includes(dc.credentials.addr)) {
       state.logins.push(dc.credentials.addr)
+    }
+  })
+
+  dc.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
+    windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+  })
+
+  dc.on('DC_EVENT_IMEX_PROGRESS', progress => {
+    windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
+  })
+
+  dc.on('error', error => windows.main.send('error', error))
+
+  dc.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
+    if (Number(data1) === 0) {
+      windows.main.send('error', 'Login failed!')
     }
   })
 
@@ -56,24 +72,6 @@ function init (cwd, state) {
     rimraf.sync(targetDir)
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
-  })
-
-  dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
-    windows.main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
-  })
-
-  dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
-    windows.main.send('DC_EVENT_IMEX_PROGRESS', progress)
-  })
-
-  dc.on('error', (error) => {
-    windows.main.send('error', error)
-  })
-
-  dc.on('DC_EVENT_CONFIGURE_PROGRESS', function (data1) {
-    if (Number(data1) === 0) { // login failed
-      windows.main.send('error', 'Login failed!')
-    }
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
