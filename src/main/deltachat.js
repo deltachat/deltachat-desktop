@@ -69,12 +69,13 @@ class DeltaChatController extends events.EventEmitter {
 
     dc.on('ALL', (event, data1, data2) => {
       log.debug('ALL event', { event, data1, data2 }, event)
-      if (event === 2041) {
-        this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', data1)
-        this.emit('DC_EVENT_CONFIGURE_PROGRESS', data1, data2)
-        if (Number(data1) === 0) { // login failed
-          this.logout()
-        }
+    })
+
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+      this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', progress)
+      if (Number(progress) === 0) { // login failed
+        this.emit('DC_EVENT_LOGIN_FAILED')
+        this.logout()
       }
     })
 
