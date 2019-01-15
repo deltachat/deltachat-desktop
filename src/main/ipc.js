@@ -33,13 +33,9 @@ function init (cwd, state) {
     main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
-  dc.on('error', error => windows.main.send('error', error))
+  dc.on('error', error => main.send('error', error))
 
-  dc.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
-    if (Number(data1) === 0) {
-      main.send('error', 'Login failed!')
-    }
-  })
+  dc.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
 
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
@@ -119,16 +115,11 @@ function init (cwd, state) {
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {
-    var dir = path.join(os.tmpdir(), Date.now().toString())
+    const dir = path.join(os.tmpdir(), Date.now().toString())
     if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
-    var tmp = new DeltaChat(dir, state.saved)
+    const tmp = new DeltaChat(dir, state.saved)
 
-    tmp.on('DC_EVENT_CONFIGURE_PROGRESS', data1 => {
-      if (Number(data1) === 0) {
-        main.send('error', 'Login failed')
-        tmp.close()
-      }
-    })
+    tmp.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
 
     function fakeRender () {
       const deltachat = dc.render()
