@@ -25,6 +25,14 @@ process.on('exit', function () {
   logHandler.closeWriteStream()
 })
 
+// Report uncaught exceptions
+process.on('uncaughtException', (err) => {
+  const error = { message: err.message, stack: err.stack }
+  windows.main.send('uncaughtError', 'main', error)
+  log.error('uncaughtError', error, 'uncaught_error')
+  throw err
+})
+
 mkdirp.sync(getConfigPath())
 
 app.ipcReady = false
@@ -44,23 +52,16 @@ function onReady (err, results) {
 
   app.saveState = () => State.save({ saved: state.saved })
 
+  localize.setup(app, state.saved.locale || app.getLocale())
+
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
-  localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(app, { hidden: false })
   menu.init()
 
   if (rc.debug) windows.main.toggleDevTools()
-
-  // Report uncaught exceptions
-  process.on('uncaughtException', (err) => {
-    console.error(err)
-    const error = { message: err.message, stack: err.stack }
-    windows.main.send('uncaughtError', 'main', error)
-    log.error('uncaughtError', error, 'uncaught_error')
-  })
 }
 
 app.once('ipcReady', () => {

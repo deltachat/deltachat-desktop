@@ -1,6 +1,6 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
-const events = require('events')
+const EventEmitter = require('events').EventEmitter
 const path = require('path')
 const log = require('../logger').getLogger('core')
 
@@ -9,7 +9,7 @@ const PAGE_SIZE = 20
 /**
  * The Controller is the container for a deltachat instance
  */
-class DeltaChatController extends events.EventEmitter {
+class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
@@ -53,7 +53,7 @@ class DeltaChatController extends events.EventEmitter {
         log.info('Ready')
         this.ready = true
         this.configuring = false
-        this.emit('ready')
+        this.emit('ready', this.credentials)
         log.info('dc_get_info', dc.getInfo(), 'dc_get_info')
         render()
       }
@@ -148,6 +148,7 @@ class DeltaChatController extends events.EventEmitter {
     this._resetState()
 
     log.info('Logged out')
+    this.emit('logout')
     if (typeof this._render === 'function') this._render()
   }
 
