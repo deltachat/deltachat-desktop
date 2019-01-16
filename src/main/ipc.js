@@ -19,10 +19,12 @@ function init (cwd, state) {
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
 
-  dc.on('ready', () => {
-    if (!state.logins.includes(dc.credentials.addr)) {
-      state.logins.push(dc.credentials.addr)
+  dc.on('ready', credentials => {
+    if (!state.logins.includes(credentials.addr)) {
+      state.logins.push(credentials.addr)
     }
+    state.saved.credentials = credentials
+    app.saveState()
   })
 
   dc.on('logout', () => {
@@ -64,8 +66,6 @@ function init (cwd, state) {
 
   // Create a new instance
   ipcMain.on('login', (e, credentials) => {
-    state.saved.credentials = credentials
-    app.saveState()
     dc.login(credentials, render, txCoreStrings())
   })
 

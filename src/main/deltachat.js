@@ -53,7 +53,7 @@ class DeltaChatController extends EventEmitter {
         log.info('Ready')
         this.ready = true
         this.configuring = false
-        this.emit('ready')
+        this.emit('ready', this.credentials)
         log.info('dc_get_info', dc.getInfo(), 'dc_get_info')
         render()
       }
