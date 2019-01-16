@@ -36,7 +36,8 @@ function getDefaultState () {
       markRead: true,
       notifications: true,
       showNotificationContent: true,
-      locale: 'en'
+      locale: 'en',
+      credentials: null
     }
   }
 }

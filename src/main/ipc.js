@@ -25,6 +25,11 @@ function init (cwd, state) {
     }
   })
 
+  dc.on('logout', () => {
+    state.saved.credentials = null
+    app.saveState()
+  })
+
   dc.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
     main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
@@ -58,8 +63,10 @@ function init (cwd, state) {
   setupNotifications(dc, state.saved)
 
   // Create a new instance
-  ipcMain.on('login', (e, ...args) => {
-    dc.login(...args, render, txCoreStrings())
+  ipcMain.on('login', (e, credentials) => {
+    state.saved.credentials = credentials
+    app.saveState()
+    dc.login(credentials, render, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
@@ -152,6 +159,10 @@ function init (cwd, state) {
   function sendState (deltachat) {
     Object.assign(state, { deltachat })
     main.send('render', state)
+  }
+
+  if (state.saved.credentials) {
+    dc.login(state.saved.credentials, render, txCoreStrings())
   }
 }
 

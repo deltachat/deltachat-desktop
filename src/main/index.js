@@ -44,11 +44,12 @@ function onReady (err, results) {
 
   app.saveState = () => State.save({ saved: state.saved })
 
+  localize.setup(app, state.saved.locale || app.getLocale())
+
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
   ipc.init(cwd, state)
 
-  localize.setup(app, state.saved.locale || app.getLocale())
   windows.main.init(app, { hidden: false })
   menu.init()
 
