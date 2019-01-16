@@ -161,12 +161,10 @@ function init (cwd, state) {
     main.send('render', state)
   }
 
-  let savedCredentials = state.saved.credentials
-  console.log(savedCredentials, typeof savedCredentials)
+  const savedCredentials = state.saved.credentials
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    console.log(savedCredentials)
     dc.login(savedCredentials, render, txCoreStrings())
   }
 }
