@@ -25,6 +25,14 @@ process.on('exit', function () {
   logHandler.closeWriteStream()
 })
 
+// Report uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error(err)
+  const error = { message: err.message, stack: err.stack }
+  windows.main.send('uncaughtError', 'main', error)
+  log.error('uncaughtError', error, 'uncaught_error')
+})
+
 mkdirp.sync(getConfigPath())
 
 app.ipcReady = false
@@ -55,13 +63,6 @@ function onReady (err, results) {
 
   if (rc.debug) windows.main.toggleDevTools()
 
-  // Report uncaught exceptions
-  process.on('uncaughtException', (err) => {
-    console.error(err)
-    const error = { message: err.message, stack: err.stack }
-    windows.main.send('uncaughtError', 'main', error)
-    log.error('uncaughtError', error, 'uncaught_error')
-  })
 }
 
 app.once('ipcReady', () => {
