@@ -31,10 +31,6 @@ ipcRenderer.on('error', (e, ...args) => console.error(...args))
 
 ipcRenderer.on('chooseLanguage', onChooseLanguage)
 
-ipcRenderer.on('uncaughtError', (e, ...args) => {
-  console.log('uncaughtError in', ...args)
-})
-
 ipcRenderer.on('render', (e, state) => {
   STATE_WRAPPER.state = state
   app.setState(state)

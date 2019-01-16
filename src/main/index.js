@@ -28,7 +28,6 @@ process.on('exit', function () {
 // Report uncaught exceptions
 process.on('uncaughtException', (err) => {
   const error = { message: err.message, stack: err.stack }
-  windows.main.send('uncaughtError', 'main', error)
   log.error('uncaughtError', error, 'uncaught_error')
   throw err
 })
