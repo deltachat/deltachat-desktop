@@ -62,7 +62,6 @@ function onReady (err, results) {
   menu.init()
 
   if (rc.debug) windows.main.toggleDevTools()
-
 }
 
 app.once('ipcReady', () => {
