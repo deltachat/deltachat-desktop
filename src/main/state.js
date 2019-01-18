@@ -1,4 +1,4 @@
-const appConfig = require('application-config')('DeltaChat')
+const appConfig = require('../application-config')
 const { EventEmitter } = require('events')
 const log = require('../logger').getLogger('renderer/state')
 

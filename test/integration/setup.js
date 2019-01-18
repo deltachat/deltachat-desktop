@@ -3,6 +3,7 @@ const cpFile = require('cp-file')
 const electronPath = require('electron')
 const fs = require('fs')
 const path = require('path')
+const tempy = require('tempy')
 const PNG = require('pngjs').PNG
 
 module.exports = {
@@ -18,10 +19,12 @@ module.exports = {
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
 // Takes a Tape test. Makes some basic assertions to verify that the app loaded correctly.
 function createApp () {
+  const TEST_DIR = tempy.directory()
+  console.log(`createApp TEST_DIR: ${TEST_DIR}`)
   return new Application({
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
-    env: { NODE_ENV: 'test' },
+    env: { TEST_DIR },
     waitTimeout: 10e3
   })
 }

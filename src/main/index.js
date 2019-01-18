@@ -18,6 +18,8 @@ const windows = require('./windows')
 const logHandler = require('./developerTools/logHandler')
 const log = require('../logger').getLogger('main/index')
 
+mkdirp.sync(getConfigPath())
+
 // Setup Logger
 require('../logger').setLogHandler(logHandler.log)
 logHandler.setupWriteStream()
@@ -31,8 +33,6 @@ process.on('uncaughtException', (err) => {
   log.error('uncaughtError', error, 'uncaught_error')
   throw err
 })
-
-mkdirp.sync(getConfigPath())
 
 app.ipcReady = false
 app.isQuitting = false
