@@ -1,5 +1,5 @@
 const { createWriteStream } = require('fs')
-const { resolve: pathResolve } = require('path')
+const path = require('path')
 const { getLogsPath } = require('../application-constants')
 var events = require('events')
 var eventEmitter = new events.EventEmitter()
@@ -39,7 +39,7 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
 
 function setupWriteStream () {
   const logDir = getLogsPath()
-  const logFilePath = pathResolve(`${logDir}/${(new Date()).toISOString()}.csv`)
+  const logFilePath = path.join(logDir, `${(new Date()).toISOString()}.csv`)
   log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
   console.log(`Logfile: ${logFilePath}`)
   fullLogFilePath = logFilePath
