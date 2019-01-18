@@ -55,7 +55,7 @@ function getConfigPath () {
 }
 
 function getLogsPath () {
-  return `${getConfigPath()}/logs`
+  return path.join(getConfigPath(), 'logs')
 }
 
 module.exports = {
