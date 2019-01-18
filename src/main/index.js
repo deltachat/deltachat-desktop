@@ -1,12 +1,16 @@
 console.time('init')
 
+// Setup folders
+const mkdirp = require('mkdirp')
+const { getConfigPath, getLogsPath } = require('../application-constants')
+mkdirp.sync(getConfigPath())
+mkdirp.sync(getLogsPath())
+
 const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 const parallel = require('run-parallel')
-const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
-const { getConfigPath, getLogsPath } = require('../application-constants')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
@@ -14,9 +18,6 @@ const State = require('./state')
 const windows = require('./windows')
 const logHandler = require('./log-handler')
 const log = require('../logger').getLogger('main/index')
-
-mkdirp.sync(getConfigPath())
-mkdirp.sync(getLogsPath())
 
 // Setup Logger
 require('../logger').setLogHandler(logHandler.log)
