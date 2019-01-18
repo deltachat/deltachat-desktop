@@ -1,6 +1,5 @@
-const appConfig = require('application-config')('DeltaChat')
+const appConfig = require('./application-config')
 const path = require('path')
-const tempy = require('tempy')
 const version = require('../package.json').version
 
 function appName () {
@@ -52,11 +51,11 @@ function windowDefaults () {
 }
 
 function getConfigPath () {
-  if (process.env.NODE_ENV === 'test') {
-    return tempy.directory()
-  } else {
-    return path.dirname(appConfig.filePath)
-  }
+  return path.dirname(appConfig.filePath)
+}
+
+function getLogsPath () {
+  return `${getConfigPath()}/logs`
 }
 
 module.exports = {
@@ -69,5 +68,6 @@ module.exports = {
   gitHubIssuesUrl,
   gitHubLicenseUrl,
   windowDefaults,
-  getConfigPath
+  getConfigPath,
+  getLogsPath
 }

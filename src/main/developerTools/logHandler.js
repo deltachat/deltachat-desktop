@@ -3,6 +3,7 @@ const mkdirp = require('mkdirp')
 const { resolve: pathResolve } = require('path')
 const { app } = require('electron')
 const windows = require('../windows')
+const { getLogsPath } = require('../../application-constants')
 var events = require('events')
 var eventEmitter = new events.EventEmitter()
 var logDB = []
@@ -57,7 +58,7 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
 }
 
 function setupWriteStream () {
-  const logDir = `${app.getPath('userData')}/logs`
+  const logDir = getLogsPath()
   const logFilePath = pathResolve(`${logDir}/${(new Date()).toISOString()}.csv`)
   mkdirp(logDir, function (err) {
     if (err) throw err
