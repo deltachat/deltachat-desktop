@@ -13,9 +13,8 @@ const log = require('../logger').getLogger('main/ipc')
 const DeltaChat = require('./deltachat')
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
-const logHandler = require('./log-handler')
 
-function init (cwd, state) {
+function init (cwd, state, logHandler) {
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
 

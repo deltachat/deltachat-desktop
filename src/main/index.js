@@ -8,6 +8,14 @@ mkdirp.sync(getLogsPath())
 
 const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
+
+// Setup Logger
+const logHandler = require('./log-handler')()
+const logger = require('../logger')
+const log = logger.getLogger('main/index')
+logger.setLogHandler(logHandler.log)
+process.on('exit', logHandler.end)
+
 const parallel = require('run-parallel')
 
 const localize = require('../localize')
@@ -16,15 +24,6 @@ const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
 const windows = require('./windows')
-const logHandler = require('./log-handler')
-const log = require('../logger').getLogger('main/index')
-
-// Setup Logger
-require('../logger').setLogHandler(logHandler.log)
-logHandler.setupWriteStream()
-process.on('exit', function () {
-  logHandler.closeWriteStream()
-})
 
 // Report uncaught exceptions
 process.on('uncaughtException', (err) => {
@@ -54,7 +53,7 @@ function onReady (err, results) {
 
   const cwd = getConfigPath()
   log.info('cwd', cwd, 'cwd')
-  ipc.init(cwd, state)
+  ipc.init(cwd, state, logHandler)
 
   windows.main.init(app, { hidden: false })
   menu.init()
