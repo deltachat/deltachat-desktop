@@ -15,7 +15,7 @@ const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
 const windows = require('./windows')
-const logHandler = require('./developerTools/logHandler')
+const logHandler = require('./log-handler')
 const log = require('../logger').getLogger('main/index')
 
 mkdirp.sync(getConfigPath())

@@ -12,7 +12,7 @@ const {
   gitHubUrl,
   gitHubIssuesUrl
 } = require('../application-constants')
-const { getFullLogFilePath } = require('./developerTools/logHandler')
+const { getFullLogFilePath } = require('./log-handler')
 
 const app = electron.app
 
