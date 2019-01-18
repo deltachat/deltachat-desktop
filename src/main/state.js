@@ -54,7 +54,7 @@ function load (cb) {
 }
 
 function saveImmediate (state, cb) {
-  log.info('Saving state to ' + appConfig.filePath)
+  log.info(`Saving state to ${appConfig.filePath}`)
   const copy = Object.assign({}, state.saved)
   appConfig.write(copy, err => {
     if (err) {

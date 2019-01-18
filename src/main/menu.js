@@ -12,7 +12,7 @@ const {
 } = require('../application-constants')
 
 function init () {
-  log.info('rebuilding menu with language', app.localeData.locale, 'rebuild_menu_lang')
+  log.info(`rebuilding menu with locale ${app.localeData.locale}`)
   const template = getMenuTemplate()
   const menu = Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))

@@ -28,7 +28,7 @@ const windows = require('./windows')
 // Report uncaught exceptions
 process.on('uncaughtException', (err) => {
   const error = { message: err.message, stack: err.stack }
-  log.error('uncaughtError', error, 'uncaught_error')
+  log.error('uncaughtError', error)
   throw err
 })
 
@@ -52,7 +52,7 @@ function onReady (err, results) {
   localize.setup(app, state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
-  log.info('cwd', cwd, 'cwd')
+  log.info(`cwd ${cwd}`)
   ipc.init(cwd, state, logHandler)
 
   windows.main.init(app, { hidden: false })
