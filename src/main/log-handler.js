@@ -6,11 +6,11 @@ const windows = require('./windows')
 const { getLogsPath } = require('../application-constants')
 var events = require('events')
 var eventEmitter = new events.EventEmitter()
-var logDB = []
 var wstream
 var wsUpState = false
 var fullLogFilePath
 const CONFIG_LOG_MAIN_TO_CHROME_CONSOLE = false
+
 /**
  * Internal logger - please don't call directly unless you know what your doing
  * @param {string} timestamp timestamp
@@ -22,8 +22,6 @@ const CONFIG_LOG_MAIN_TO_CHROME_CONSOLE = false
  * @param {StackFrame} stacktrace (optional) for errors -> gets converted to json
  */
 function log (timestamp, channel, level, message, errorCode, payload, stacktrace) {
-  logDB.push({ channel, level, message, errorCode, payload, stacktrace, timestamp })
-
   if (payload) {
     var payloadForLogfile = JSON.stringify(payload)
     if (payloadForLogfile.charAt(0) !== '"') {
