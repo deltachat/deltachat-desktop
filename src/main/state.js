@@ -1,6 +1,6 @@
 const appConfig = require('../application-config')
 const { EventEmitter } = require('events')
-const log = require('../logger').getLogger('renderer/state')
+const log = require('../logger').getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 

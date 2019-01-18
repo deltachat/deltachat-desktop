@@ -2,7 +2,7 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const EventEmitter = require('events').EventEmitter
 const path = require('path')
-const log = require('../logger').getLogger('core')
+const log = require('../logger').getLogger('main/deltachat')
 
 const PAGE_SIZE = 20
 
