@@ -1,8 +1,6 @@
-module.exports = {
-  init
-}
+module.exports = { init }
 
-const electron = require('electron')
+const { app, Menu, shell } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const log = require('../logger').getLogger('main/menu')
@@ -14,15 +12,13 @@ const {
 } = require('../application-constants')
 const { getFullLogFilePath } = require('./log-handler')
 
-const app = electron.app
-
 function init () {
   log.info('rebuilding menu with language', app.localeData.locale, 'rebuild_menu_lang')
   const template = getMenuTemplate()
-  const menu = electron.Menu.buildFromTemplate(setLabels(template))
+  const menu = Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))
   if (item) item.checked = windows.main.isAlwaysOnTop()
-  electron.Menu.setApplicationMenu(menu)
+  Menu.setApplicationMenu(menu)
 }
 
 function setLabels (menu) {
@@ -136,11 +132,11 @@ function getMenuTemplate () {
             },
             {
               translate: 'menu.view.developer.open.log.folder',
-              click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
+              click: () => shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
             },
             {
               translate: 'menu.view.developer.open.current.log.file',
-              click: () => electron.shell.openItem(getFullLogFilePath())
+              click: () => shell.openItem(getFullLogFilePath())
             }
           ]
         }
@@ -162,13 +158,13 @@ function getMenuTemplate () {
         {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
-            electron.shell.openExternal(homePageUrl())
+            shell.openExternal(homePageUrl())
           }
         },
         {
           translate: 'global_menu_help_contribute_desktop',
           click: () => {
-            electron.shell.openExternal(gitHubUrl())
+            shell.openExternal(gitHubUrl())
           }
         },
         {
@@ -177,7 +173,7 @@ function getMenuTemplate () {
         {
           translate: 'global_menu_help_report_desktop',
           click: () => {
-            electron.shell.openExternal(gitHubIssuesUrl())
+            shell.openExternal(gitHubIssuesUrl())
           }
         },
         {
