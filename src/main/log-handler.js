@@ -1,15 +1,12 @@
 const { createWriteStream } = require('fs')
 const mkdirp = require('mkdirp')
 const { resolve: pathResolve } = require('path')
-const { app } = require('electron')
-const windows = require('./windows')
 const { getLogsPath } = require('../application-constants')
 var events = require('events')
 var eventEmitter = new events.EventEmitter()
 var wstream
 var wsUpState = false
 var fullLogFilePath
-const CONFIG_LOG_MAIN_TO_CHROME_CONSOLE = false
 
 /**
  * Internal logger - please don't call directly unless you know what your doing
@@ -38,20 +35,6 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
     writeToLog()
   } else {
     eventEmitter.once('ws_online', () => writeToLog())
-  }
-
-  // TODO send update ipc to debug Window somehow
-
-  /* *CONFIG* */ // For turning this behavior on:
-  if (
-    channel === 'logger' || (CONFIG_LOG_MAIN_TO_CHROME_CONSOLE && (channel === 'core' || channel.includes('main')))
-  ) {
-    // send also to 'normal' dev console
-    if (app.ipcReady) {
-      windows.main.send('log', channel, level, message, errorCode, payload, stacktrace)
-    } else {
-      app.once('ipcReady', () => windows.main.send('log', channel, level, message, errorCode, payload, stacktrace))
-    }
   }
 }
 

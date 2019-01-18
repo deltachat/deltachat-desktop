@@ -11,7 +11,6 @@ const localize = require('../localize')
 const App = require('./App')
 const logger = require('../logger')
 
-const LoggerVariants = [console.debug, console.info, console.warn, console.error, console.error]
 const STATE_WRAPPER = {}
 const state = STATE_WRAPPER.state = remote.app.state
 
@@ -21,11 +20,6 @@ const app = ReactDOM.render(
   <App STATE_WRAPPER={STATE_WRAPPER} />,
   document.querySelector('#root')
 )
-
-ipcRenderer.on('log', (e, channel, lvl, ...args) => {
-  const variant = LoggerVariants[lvl]
-  variant(channel, ...args)
-})
 
 ipcRenderer.on('error', (e, ...args) => console.error(...args))
 
