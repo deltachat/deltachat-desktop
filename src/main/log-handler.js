@@ -10,7 +10,6 @@ module.exports = () => {
   const handler = {
     /**
      * Internal logger - please don't call directly unless you know what your doing
-     * @param {string} timestamp timestamp
      * @param {string} channel The part/module where the message was logged. Like 'Tanslations'
      * @param {Number} level The level of importance. 0 for debug, 1 for info, 2 for warning, 3 for error, 4 for critical error
      * @param {string} message the message (human readable)
@@ -18,7 +17,8 @@ module.exports = () => {
      * @param {any|string} payload (optional) JSON payload or any other object that can be converted to a JSON string
      * @param {StackFrame} stacktrace (optional) for errors -> gets converted to json
      */
-    log: (timestamp, channel, level, message, errorCode, payload, stacktrace) => {
+    log: (channel, level, message, errorCode, payload, stacktrace) => {
+      const timestamp = new Date().toISOString()
       if (payload) {
         var payloadForLogfile = JSON.stringify(payload)
         if (payloadForLogfile.charAt(0) !== '"') {
@@ -36,7 +36,6 @@ module.exports = () => {
   }
 
   handler.log(
-    (new Date()).toISOString(),
     'logger',
     1,
     `Logfile: ${file}`,

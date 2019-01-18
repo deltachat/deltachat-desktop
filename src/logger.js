@@ -19,13 +19,12 @@ function setLogHandler (LogHandler) {
 }
 
 function log (channel, lvl, ...args) {
-  var timestamp = new Date().toISOString()
   if (!handler) {
     console.log('Failed to log message - Handler not initilized yet')
     console.log(channel, ...args)
     throw Error('Failed to log message - Handler not initilized yet')
   }
-  handler(timestamp, channel, lvl, ...args)
+  handler(channel, lvl, ...args)
   if (rc['log-to-console']) {
     const variant = LoggerVariants[lvl]
     variant.log(variant.prefix, channel, ...args)

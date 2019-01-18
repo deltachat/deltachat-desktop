@@ -30,9 +30,9 @@ ipcRenderer.on('render', (e, state) => {
   app.setState(state)
 })
 
-ipcRenderer.send('ipcReady')
+logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
 
-logger.setLogHandler((...args) => { ipcRenderer.send('handleLogMessage', ...args) })
+ipcRenderer.send('ipcReady')
 
 function onChooseLanguage (e, locale) {
   setupLocaleData(locale)
