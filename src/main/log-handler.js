@@ -6,8 +6,8 @@ module.exports = () => {
   const dir = getLogsPath()
   const file = path.join(dir, `${(new Date()).toISOString()}.log`)
   const stream = createWriteStream(file, { flags: 'w' })
-
-  const handler = {
+  console.log(`Logfile: ${file}`)
+  return {
     /**
      * Internal log handler. Do not call directly!
      */
@@ -22,8 +22,4 @@ module.exports = () => {
     },
     end: () => stream.end()
   }
-
-  console.log(`Logfile: ${file}`)
-
-  return handler
 }
