@@ -4,7 +4,7 @@ const { getLogsPath } = require('../application-constants')
 
 module.exports = () => {
   const dir = getLogsPath()
-  const file = path.join(dir, `${(new Date()).toISOString()}.csv`)
+  const file = path.join(dir, `${(new Date()).toISOString()}.log`)
   const stream = createWriteStream(file, { flags: 'w' })
 
   const handler = {
