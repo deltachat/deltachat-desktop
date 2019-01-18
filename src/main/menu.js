@@ -10,7 +10,6 @@ const {
   gitHubUrl,
   gitHubIssuesUrl
 } = require('../application-constants')
-const { getFullLogFilePath } = require('./log-handler')
 
 function init () {
   log.info('rebuilding menu with language', app.localeData.locale, 'rebuild_menu_lang')
@@ -129,14 +128,6 @@ function getMenuTemplate () {
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
               click: () => windows.main.toggleDevTools()
-            },
-            {
-              translate: 'menu.view.developer.open.log.folder',
-              click: () => shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
-            },
-            {
-              translate: 'menu.view.developer.open.current.log.file',
-              click: () => shell.openItem(getFullLogFilePath())
             }
           ]
         }

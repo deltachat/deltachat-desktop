@@ -5,7 +5,6 @@ var events = require('events')
 var eventEmitter = new events.EventEmitter()
 var wstream
 var wsUpState = false
-var fullLogFilePath
 
 /**
  * Internal logger - please don't call directly unless you know what your doing
@@ -42,7 +41,6 @@ function setupWriteStream () {
   const logFilePath = path.join(logDir, `${(new Date()).toISOString()}.csv`)
   log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
   console.log(`Logfile: ${logFilePath}`)
-  fullLogFilePath = logFilePath
   wstream = createWriteStream(logFilePath, { flags: 'w' })
   wstream.once('ready', () => {
     wstream.write('timestamp|=|=|channel|=|=|level|=|=|message|=|=|errorCode|=|=|payload|=|=|stacktrace\n'.replace(/\|=\|=\|/g, String.fromCharCode(9)))
@@ -56,4 +54,8 @@ function closeWriteStream () {
   wsUpState = false
 }
 
-module.exports = { log, setupWriteStream, closeWriteStream, getFullLogFilePath: () => fullLogFilePath }
+module.exports = {
+  log,
+  setupWriteStream,
+  closeWriteStream
+}
