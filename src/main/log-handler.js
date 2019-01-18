@@ -1,5 +1,4 @@
 const { createWriteStream } = require('fs')
-const mkdirp = require('mkdirp')
 const { resolve: pathResolve } = require('path')
 const { getLogsPath } = require('../application-constants')
 var events = require('events')
@@ -41,17 +40,14 @@ function log (timestamp, channel, level, message, errorCode, payload, stacktrace
 function setupWriteStream () {
   const logDir = getLogsPath()
   const logFilePath = pathResolve(`${logDir}/${(new Date()).toISOString()}.csv`)
-  mkdirp(logDir, function (err) {
-    if (err) throw err
-    log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
-    console.log(`Logfile: ${logFilePath}`)
-    fullLogFilePath = logFilePath
-    wstream = createWriteStream(logFilePath, { flags: 'w' })
-    wstream.once('ready', () => {
-      wstream.write('timestamp|=|=|channel|=|=|level|=|=|message|=|=|errorCode|=|=|payload|=|=|stacktrace\n'.replace(/\|=\|=\|/g, String.fromCharCode(9)))
-      eventEmitter.emit('ws_online')
-      wsUpState = true
-    })
+  log((new Date()).toISOString(), 'logger', 1, `Logfile: ${logFilePath}`, 'log_file_init', logFilePath)
+  console.log(`Logfile: ${logFilePath}`)
+  fullLogFilePath = logFilePath
+  wstream = createWriteStream(logFilePath, { flags: 'w' })
+  wstream.once('ready', () => {
+    wstream.write('timestamp|=|=|channel|=|=|level|=|=|message|=|=|errorCode|=|=|payload|=|=|stacktrace\n'.replace(/\|=\|=\|/g, String.fromCharCode(9)))
+    eventEmitter.emit('ws_online')
+    wsUpState = true
   })
 }
 

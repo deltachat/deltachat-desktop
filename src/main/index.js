@@ -9,7 +9,7 @@ const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
-const { getConfigPath } = require('../application-constants')
+const { getConfigPath, getLogsPath } = require('../application-constants')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
@@ -19,6 +19,7 @@ const logHandler = require('./log-handler')
 const log = require('../logger').getLogger('main/index')
 
 mkdirp.sync(getConfigPath())
+mkdirp.sync(getLogsPath())
 
 // Setup Logger
 require('../logger').setLogHandler(logHandler.log)
