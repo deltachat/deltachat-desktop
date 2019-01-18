@@ -2,19 +2,25 @@
   "name": "deltachat-desktop",
   "version": "0.99.0",
   "description": "Desktop Application for delta.chat",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "watch": "node bin/watch",
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "dev": "npm run build && npm run start",
-    "start": "electron . --debug --log-debug --log-to-console --disable-http-cache",
-    "pack": "npm run build && electron-builder --dir",
+    "start": "electron ./build --debug --log-debug --log-to-console --disable-http-cache",
+    "pack": "npm run build:prod && npm run pack-prepare && electron-builder --dir",
+    "pack-prepare": "node bin/electron-builder-prepare.js",
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
-    "build": "npm run build-css && npm run build-js && npm run build-translations",
-    "build-css": "node-sass css/conversations/manifest.scss static/conversations.css",
-    "build-js": "webpack --mode=development --progress --profile --colors",
+    "build": "npm run build-css && npm run build-translations && npm run build-frontend && npm run build-backend",
+    "build:prod": "npm run build-css:prod && npm run build-translations && npm run build-frontend:prod && npm run build-backend:prod",
+    "build-css": "node-sass css/conversations/manifest.scss build/static/conversations.css",
+    "build-css:prod": "node-sass --output-style compressed css/conversations/manifest.scss build/static/conversations.css",
+    "build-frontend": "webpack --progress --profile --colors --config webpack.frontend.dev.config.js",
+    "build-frontend:prod": "webpack --progress --profile --colors --config webpack.frontend.prod.config.js",
+    "build-backend": "webpack --progress --profile --colors --config webpack.backend.dev.config.js",
+    "build-backend:prod": "webpack --progress --profile --colors --config webpack.backend.prod.config.js",
     "build-translations": "node bin/convert-translations-from-xml-to-json.js && node bin/extract_local_language_names.js",
     "hallmark": "hallmark --fix"
   },
@@ -42,6 +48,9 @@
   "productName": "DeltaChat",
   "homepage": "https://delta.chat",
   "dependencies": {
+    "deltachat-node": "^0.39.0"
+  },
+  "devDependencies": {
     "@blueprintjs/core": "^3.4.0",
     "application-config": "^1.0.1",
     "array-differ": "^2.0.3",
@@ -68,15 +77,14 @@
     "rimraf": "^2.6.2",
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8",
-    "styled-components": "^4.1.1"
-  },
-  "devDependencies": {
+    "styled-components": "^4.1.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "chai": "^4.2.0",
+    "copy-webpack-plugin": "^4.6.0",
     "cp-file": "^6.0.0",
     "depcheck": "^0.6.11",
     "devtron": "^1.4.0",
@@ -124,7 +132,11 @@
       "category": "Utility"
     },
     "files": [
+      "!node_modules/deltachat-node/prebuilds${/*}",
       "!node_modules/deltachat-node/deltachat-core${/*}"
-    ]
+    ],
+    "directories": {
+      "app": "./build"
+    }
   }
 }

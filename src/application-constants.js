@@ -38,6 +38,7 @@ function gitHubLicenseUrl () {
 function windowDefaults () {
   const headerHeight = 38
   const messageHeight = 100
+  console.log('xyu', __dirname)
   return {
     bounds: {
       width: 500,
@@ -46,7 +47,7 @@ function windowDefaults () {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${path.join(__dirname, '..', 'static', 'main.html')}`
+    main: `file://${path.join(__dirname, 'static', 'main.html')}`
   }
 }
 

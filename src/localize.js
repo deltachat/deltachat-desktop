@@ -1,5 +1,4 @@
 const merge = require('lodash.merge')
-const path = require('path')
 const fs = require('fs')
 
 const log = require('./logger').getLogger('localize')
@@ -78,13 +77,16 @@ function setup (app, locale) {
 
 function localeFile (locale) {
   const onDiskLocale = locale.replace('-', '_')
-  return path.join(__dirname, '..', '_locales', onDiskLocale + '.json')
+  return onDiskLocale
 }
 
 function getLocaleMessages (file) {
   try {
-    return JSON.parse(fs.readFileSync(file, 'utf-8'))
+    return require('../_locales/' + file + '.json')
   } catch (err) {
+    console.log(process.cwd())
+    console.log(__dirname, file)
+    console.log(err)
     throw new Error(`JSON parse error in language file '${file}'`)
   }
 }

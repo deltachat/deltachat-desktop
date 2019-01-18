@@ -67,3 +67,5 @@ typings/
 
 # conversations
 static/conversations.css
+
+build

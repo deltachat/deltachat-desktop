@@ -1,24 +1,28 @@
-module.exports = { init }
+module.exports = {
+  init
+}
 
-const { app, Menu, shell } = require('electron')
+const electron = require('electron')
+const fs = require('fs')
+const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
 const {
   homePageUrl,
   gitHubUrl,
-  gitHubIssuesUrl,
-  getLogsPath
+  gitHubIssuesUrl
 } = require('../application-constants')
+const { getFullLogFilePath } = require('./developerTools/logHandler')
 
-const languages = require('../../_locales/_languages.json')
+const app = electron.app
 
-function init (logHandler) {
-  log.info(`rebuilding menu with locale ${app.localeData.locale}`)
-  const template = getMenuTemplate(logHandler)
-  const menu = Menu.buildFromTemplate(setLabels(template))
+function init () {
+  log.info('rebuilding menu with language', app.localeData.locale, 'rebuild_menu_lang')
+  const template = getMenuTemplate()
+  const menu = electron.Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))
   if (item) item.checked = windows.main.isAlwaysOnTop()
-  Menu.setApplicationMenu(menu)
+  electron.Menu.setApplicationMenu(menu)
 }
 
 function setLabels (menu) {
@@ -43,21 +47,26 @@ function setLabels (menu) {
 }
 
 function getAvailableLanguages () {
-  return languages.map(({ locale, name }) => {
-    return {
-      label: name,
-      type: 'radio',
-      checked: locale === app.localeData.locale,
-      click: () => {
-        app.state.saved.locale = locale
-        app.saveState()
-        windows.main.chooseLanguage(locale)
+  return fs.readdirSync(path.join(__dirname, '_locales'))
+    .filter(l => {
+      return !l.startsWith('_') && l.endsWith('.json')
+    })
+    .map(l => {
+      const locale = l.split('.json')[0]
+      return {
+        label: app.translate(`language_${locale}`),
+        type: 'radio',
+        checked: locale === app.localeData.locale,
+        click: () => {
+          app.state.saved.locale = locale
+          app.saveState()
+          windows.main.chooseLanguage(locale)
+        }
       }
-    }
-  })
+    })
 }
 
-function getMenuTemplate (logHandler) {
+function getMenuTemplate () {
   return [
     {
       translate: 'global_menu_file_desktop',
@@ -127,11 +136,11 @@ function getMenuTemplate (logHandler) {
             },
             {
               translate: 'menu.view.developer.open.log.folder',
-              click: () => shell.openItem(getLogsPath())
+              click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
             },
             {
               translate: 'menu.view.developer.open.current.log.file',
-              click: () => shell.openItem(logHandler.logFilePath())
+              click: () => electron.shell.openItem(getFullLogFilePath())
             }
           ]
         }
@@ -153,13 +162,13 @@ function getMenuTemplate (logHandler) {
         {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
-            shell.openExternal(homePageUrl())
+            electron.shell.openExternal(homePageUrl())
           }
         },
         {
           translate: 'global_menu_help_contribute_desktop',
           click: () => {
-            shell.openExternal(gitHubUrl())
+            electron.shell.openExternal(gitHubUrl())
           }
         },
         {
@@ -168,7 +177,7 @@ function getMenuTemplate (logHandler) {
         {
           translate: 'global_menu_help_report_desktop',
           click: () => {
-            shell.openExternal(gitHubIssuesUrl())
+            electron.shell.openExternal(gitHubIssuesUrl())
           }
         },
         {
