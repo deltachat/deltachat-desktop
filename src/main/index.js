@@ -1,10 +1,7 @@
 console.time('init')
 
-const electron = require('electron')
-const app = electron.app
-
+const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
-
 const parallel = require('run-parallel')
 const mkdirp = require('mkdirp')
 
@@ -108,7 +105,7 @@ app.on('web-contents-created', (e, contents) => {
 })
 
 app.once('ready', () => {
-  electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
+  session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
     fun({
       responseHeaders: {
         ...details.responseHeaders,
