@@ -50,7 +50,10 @@ function init (app, options) {
     useContentSize: true, // Specify web page size without OS chrome
     width: initialBounds.width,
     x: initialBounds.x,
-    y: initialBounds.y
+    y: initialBounds.y,
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
 
   win.loadURL(defaults.main)
