@@ -10,6 +10,9 @@ module.exports = () => {
   return {
     /**
      * Internal log handler. Do not call directly!
+     * @param {string} channel The part/module where the message was logged from, e.g. 'main/deltachat'
+     * @param {string} level DEBUG, INFO, WARNING, ERROR or CRITICAL
+     * @param {string} ...args Variadic parameters. Stringified before logged to file
      */
     log: (channel, level, ...args) => {
       const timestamp = new Date().toISOString()
