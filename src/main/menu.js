@@ -8,12 +8,13 @@ const windows = require('./windows')
 const {
   homePageUrl,
   gitHubUrl,
-  gitHubIssuesUrl
+  gitHubIssuesUrl,
+  getLogsPath
 } = require('../application-constants')
 
-function init () {
+function init (logHandler) {
   log.info(`rebuilding menu with locale ${app.localeData.locale}`)
-  const template = getMenuTemplate()
+  const template = getMenuTemplate(logHandler)
   const menu = Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(menu, app.translate('global_menu_view_floatontop_desktop'))
   if (item) item.checked = windows.main.isAlwaysOnTop()
@@ -61,7 +62,7 @@ function getAvailableLanguages () {
     })
 }
 
-function getMenuTemplate () {
+function getMenuTemplate (logHandler) {
   return [
     {
       translate: 'global_menu_file_desktop',
@@ -128,6 +129,14 @@ function getMenuTemplate () {
                 ? 'Alt+Command+I'
                 : 'Ctrl+Shift+I',
               click: () => windows.main.toggleDevTools()
+            },
+            {
+              translate: 'menu.view.developer.open.log.folder',
+              click: () => shell.openItem(getLogsPath())
+            },
+            {
+              translate: 'menu.view.developer.open.current.log.file',
+              click: () => shell.openItem(logHandler.logFilePath())
             }
           ]
         }

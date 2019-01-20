@@ -4,9 +4,9 @@ const { getLogsPath } = require('../application-constants')
 
 module.exports = () => {
   const dir = getLogsPath()
-  const file = path.join(dir, `${(new Date()).toISOString()}.log`)
-  const stream = createWriteStream(file, { flags: 'w' })
-  console.log(`Logfile: ${file}`)
+  const fileName = path.join(dir, `${(new Date()).toISOString()}.log`)
+  const stream = createWriteStream(fileName, { flags: 'w' })
+  console.log(`Logfile: ${fileName}`)
   return {
     /**
      * Internal log handler. Do not call directly!
@@ -23,6 +23,7 @@ module.exports = () => {
       ].concat(args.map(arg => JSON.stringify(arg)))
       stream.write(`${out.join('\t')}\n`)
     },
-    end: () => stream.end()
+    end: () => stream.end(),
+    logFilePath: () => fileName
   }
 }

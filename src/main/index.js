@@ -56,7 +56,7 @@ function onReady (err, results) {
   ipc.init(cwd, state, logHandler)
 
   windows.main.init(app, { hidden: false })
-  menu.init()
+  menu.init(logHandler)
 
   if (rc.debug) windows.main.toggleDevTools()
 }
