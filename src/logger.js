@@ -42,23 +42,23 @@ class Logger {
 
   debug (...args) {
     if (!rc['log-debug']) return
-    log(this.channel, 0, ...args)
+    log(this.channel, 0, [], ...args)
   }
 
   info (...args) {
-    log(this.channel, 1, ...args)
+    log(this.channel, 1, [], ...args)
   }
 
   warn (...args) {
-    log(this.channel, 2, ...args, getStackTrace())
+    log(this.channel, 2, getStackTrace(), ...args)
   }
 
   error (...args) {
-    log(this.channel, 3, ...args, getStackTrace())
+    log(this.channel, 3, getStackTrace(), ...args)
   }
 
   critical (...args) {
-    log(this.channel, 4, ...args, getStackTrace())
+    log(this.channel, 4, getStackTrace(), ...args)
   }
 }
 

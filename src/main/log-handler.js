@@ -12,14 +12,16 @@ module.exports = () => {
      * Internal log handler. Do not call directly!
      * @param {string} channel The part/module where the message was logged from, e.g. 'main/deltachat'
      * @param {string} level DEBUG, INFO, WARNING, ERROR or CRITICAL
+     * @param {array} stacktrace Stack trace if WARNING, ERROR or CRITICAL
      * @param {string} ...args Variadic parameters. Stringified before logged to file
      */
-    log: (channel, level, ...args) => {
+    log: (channel, level, stacktrace, ...args) => {
       const timestamp = new Date().toISOString()
       const out = [
         timestamp,
         channel,
-        level
+        level,
+        stacktrace
       ].concat(args.map(arg => JSON.stringify(arg)))
       stream.write(`${out.join('\t')}\n`)
     },
