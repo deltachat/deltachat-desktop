@@ -50,27 +50,30 @@ function translate (messages) {
 function setup (app, locale) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
+  let messages
+
   let localeFile = retrieveLocaleFile(locale)
   let localeMessages = getLocaleMessages(localeFile)
 
-  if(!localeMessages && locale.indexOf('-') !== -1) {
+  if (!localeMessages && locale.indexOf('-') !== -1) {
     // We couldn't load the file for the locale but it's a dialect. Try to fall
     // back to the main language (example: de-CH -> de)
     locale = locale.split('-')[0]
     localeFile = retrieveLocaleFile(locale)
     localeMessages = getLocaleMessages(localeFile)
-  } else if(!localeMessages) {
+  } else if (!localeMessages) {
     log.error(`Could not load messages for ${locale}`, locale)
     locale = 'en'
     messages = messagesEnglish
   }
-  
-  if(localeMessages) {
-      messages = merge(messagesEnglish, localeMessages)
+
+  if (localeMessages) {
+    messages = merge(messagesEnglish, localeMessages)
   }
 
-  let experimentalMessages = getLocaleMessages(retrieveLocaleFile('_experimental_en'))
-  if(experimentalMessages) {
+  let experimentalFile = retrieveLocaleFile('_experimental_en')
+  let experimentalMessages = getLocaleMessages(experimentalFile)
+  if (experimentalMessages) {
     messages = merge(messages, experimentalMessages)
   } else {
     log.debug(`No experimental language file (${experimentalFile}) found`)
