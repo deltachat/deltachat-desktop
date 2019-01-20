@@ -2,7 +2,8 @@ dist/
 static/bundle.js
 package-lock.json
 _locales/*.json
-
+!_locales/_*.json
+:
 # Logs
 logs
 *.log

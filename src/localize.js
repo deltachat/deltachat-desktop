@@ -55,7 +55,16 @@ function setup (app, locale) {
 
   if (!fs.existsSync(file)) {
     locale = locale.split('-')[0]
+<<<<<<< HEAD
     file = localeFile(locale)
+=======
+    localeFile = retrieveLocaleFile(locale)
+    localeMessages = getLocaleMessages(localeFile)
+  } else if (!localeMessages) {
+    log.error(`Could not load messages for ${locale}`)
+    locale = 'en'
+    messages = messagesEnglish
+>>>>>>> Implement instruction text to login form. We use experimental language strings, yeyy
   }
 
   if (localeMessages) {
