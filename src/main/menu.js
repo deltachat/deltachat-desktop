@@ -1,8 +1,6 @@
 module.exports = { init }
 
 const { app, Menu, shell } = require('electron')
-const fs = require('fs')
-const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
 const {
