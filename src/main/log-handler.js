@@ -21,7 +21,7 @@ module.exports = () => {
         channel,
         level
       ].concat(args.map(arg => JSON.stringify(arg)))
-      stream.write(`${out.join(' ')}\n`)
+      stream.write(`${out.join('\t')}\n`)
     },
     end: () => stream.end()
   }
