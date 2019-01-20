@@ -18,7 +18,7 @@ const ChatViewWrapper = styled.div`
   float: right;
 
   #the-conversation {
-    height: calc(100vh - 50px - 40px);
+    height: calc(100vh - 50px - 43px);
     overflow: scroll;
     background-image: url("../images/background_hd.jpg");
     background-size: cover;

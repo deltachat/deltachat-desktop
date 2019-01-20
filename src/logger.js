@@ -13,6 +13,7 @@ const LoggerVariants = [
 
 let handler
 
+/** specify function that passes the message to the logger in the main process */
 function setLogHandler (LogHandler) {
   handler = LogHandler
 }
@@ -25,7 +26,8 @@ function log (channel, level, ...args) {
   }
   handler(channel, variant.level, ...args)
   if (rc['log-to-console']) {
-    variant.log(channel, variant.level, ...args)
+    const variant = LoggerVariants[lvl]
+    variant.log(variant.prefix, channel, ...args)
   }
 }
 
@@ -35,32 +37,72 @@ function getStackTrace () {
 }
 
 class Logger {
+  /**
+     * {string} channel The part/module where the message was logged. Like 'Tanslations'
+     */
   constructor (channel) {
     this.channel = channel
   }
 
-  debug (...args) {
+  /**
+     * Log a message on **debug** level
+     * @param {string} message the message (human readable)
+     * @param {string} errorCode (optional) machine readable error code (string in snake_case)
+     * @param {string} payload (optional) JSON payload
+     */
+  debug (message, payload, errorCode) {
     if (!rc['log-debug']) return
-    log(this.channel, 0, [], ...args)
+    log(this.channel, 0, message, errorCode, payload)
   }
 
-  info (...args) {
-    log(this.channel, 1, [], ...args)
+  /**
+     * Log a message on **info** level
+     * @param {string} message the message (human readable)
+     * @param {string} errorCode (optional) machine readable error code (string in snake_case)
+     * @param {string} payload (optional) JSON payload
+     */
+  info (message, payload, errorCode) {
+    log(this.channel, 1, message, errorCode, payload)
   }
 
-  warn (...args) {
-    log(this.channel, 2, getStackTrace(), ...args)
+  /**
+     * Log a message on **warning** level
+     * @param {string} message the message (human readable)
+     * @param {string} errorCode (optional) machine readable error code (string in snake_case)
+     * @param {string} payload (optional) JSON payload
+     */
+  warn (message, payload, errorCode) {
+    log(this.channel, 2, message, errorCode, payload, getStackTrace())
   }
 
-  error (...args) {
-    log(this.channel, 3, getStackTrace(), ...args)
+  /**
+     * Log a message on **error** level
+     * @param {string} message the message (human readable)
+     * @param {string} errorCode (optional) machine readable error code (string in snake_case)
+     * @param {string} payload (optional) JSON payload
+     */
+  error (message, payload, errorCode) {
+    // TODO add stacktrace to payload
+    log(this.channel, 3, message, errorCode, payload, getStackTrace())
   }
 
-  critical (...args) {
-    log(this.channel, 4, getStackTrace(), ...args)
+  /**
+     * Log a message on critical level
+     * @param {string} message the message (human readable)
+     * @param {string} errorCode (optional) machine readable error code (string in snake_case)
+     * @param {string} payload (optional) JSON payload
+     */
+  critical (message, payload, errorCode) {
+    // TODO add stacktrace to payload
+    log(this.channel, 4, message, errorCode, payload, getStackTrace())
   }
 }
 
+/**
+ * Creates a new Logger
+ * @param {string} channel The part/module where the message was logged. Like 'Tanslations'
+ * @returns {Logger}
+*/
 function getLogger (channel) {
   return new Logger(channel)
 }
