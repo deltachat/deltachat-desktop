@@ -2,6 +2,34 @@
 
 ## [Unreleased][unreleased]
 
+## [0.99.0] - 2019-01-20
+
+### Changed 
+
+- Update copyright year in readme ([@jikstra](https://github.com/jikstra))
+- Use path.join() for getLogsPath() ([@ralphtheninja](https://github.com/ralphtheninja))
+- Upgrade bindings ([#595](https://github.com/deltachat/deltachat-desktop/issues/595)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- Wrap application-config module for proper appConfig during production and testing ([#598](https://github.com/deltachat/deltachat-desktop/issues/598)) ([@ralphtheninja](https://github.com/ralphtheninja)) 
+- Use electron v4 ([#581](https://github.com/deltachat/deltachat-desktop/issues/581)) ([@ralphtheninja](https://github.com/ralphtheninja)) 
+- Misc cleanup ([#588](https://github.com/deltachat/deltachat-desktop/issues/588)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- State refactor ([#583](https://github.com/deltachat/deltachat-desktop/issues/583)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- Update translations ([@ralphtheninja](https://github.com/ralphtheninja))
+- Rename Home component to ScreenController ([@ralphtheninja](https://github.com/ralphtheninja))
+
+### Added
+
+- Login automatically if last credentials were saved in state ([#589](https://github.com/deltachat/deltachat-desktop/issues/589)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- Add devtron ([@ralphtheninja](https://github.com/ralphtheninja))
+
+### Removed
+
+- Remove password and account settings label ([#538](https://github.com/deltachat/deltachat-desktop/issues/538)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- Remove window.state, not used ([@ralphtheninja](https://github.com/ralphtheninja))
+
+### Fixed
+
+- Do not send uncaughtError to render process, just log and die ([#593](https://github.com/deltachat/deltachat-desktop/issues/593)) ([@ralphtheninja](https://github.com/ralphtheninja))
+
 ## [0.98.2] - 2019-01-11
 
 ### Changed
