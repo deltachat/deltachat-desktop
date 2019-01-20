@@ -19,7 +19,7 @@ module.exports = () => {
       const timestamp = new Date().toISOString()
       let line = [ timestamp, channel, level ]
       line = line
-        .concat([ stacktrace, ...args])
+        .concat([ stacktrace, ...args ])
         .map(JSON.stringify)
       stream.write(`${line.join('\t')}\n`)
     },
