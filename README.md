@@ -249,4 +249,4 @@ Also see <https://www.electron.build/configuration/publish>
 
 Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
 
-Copyright © 2018 `DeltaChat` contributors.
+Copyright © 2019 `DeltaChat` contributors.
