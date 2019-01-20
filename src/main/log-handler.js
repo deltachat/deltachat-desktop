@@ -17,13 +17,11 @@ module.exports = () => {
      */
     log: (channel, level, stacktrace, ...args) => {
       const timestamp = new Date().toISOString()
-      const out = [
-        timestamp,
-        channel,
-        level,
-        stacktrace
-      ].concat(args.map(arg => JSON.stringify(arg)))
-      stream.write(`${out.join('\t')}\n`)
+      let line = [ timestamp, channel, level ]
+      line = line
+        .concat([ stacktrace, ...args])
+        .map(JSON.stringify)
+      stream.write(`${line.join('\t')}\n`)
     },
     end: () => stream.end(),
     logFilePath: () => fileName
