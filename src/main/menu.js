@@ -1,8 +1,6 @@
 module.exports = { init }
 
 const { app, Menu, shell } = require('electron')
-const fs = require('fs')
-const path = require('path')
 const log = require('../logger').getLogger('main/menu')
 const windows = require('./windows')
 const {
@@ -11,6 +9,8 @@ const {
   gitHubIssuesUrl,
   getLogsPath
 } = require('../application-constants')
+
+const languages = require('../../_locales/_languages.json')
 
 function init (logHandler) {
   log.info(`rebuilding menu with locale ${app.localeData.locale}`)
@@ -43,23 +43,18 @@ function setLabels (menu) {
 }
 
 function getAvailableLanguages () {
-  return fs.readdirSync(path.join(__dirname, '..', '..', '_locales'))
-    .filter(l => {
-      return !l.startsWith('_') && l.endsWith('.json')
-    })
-    .map(l => {
-      const locale = l.split('.json')[0]
-      return {
-        label: app.translate(`language_${locale}`),
-        type: 'radio',
-        checked: locale === app.localeData.locale,
-        click: () => {
-          app.state.saved.locale = locale
-          app.saveState()
-          windows.main.chooseLanguage(locale)
-        }
+  return languages.map(({ locale, name }) => {
+    return {
+      label: name,
+      type: 'radio',
+      checked: locale === app.localeData.locale,
+      click: () => {
+        app.state.saved.locale = locale
+        app.saveState()
+        windows.main.chooseLanguage(locale)
       }
-    })
+    }
+  })
 }
 
 function getMenuTemplate (logHandler) {

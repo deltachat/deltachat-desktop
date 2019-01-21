@@ -15,7 +15,7 @@
     "build": "npm run build-css && npm run build-js && npm run build-translations",
     "build-css": "node-sass css/conversations/manifest.scss static/conversations.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
-    "build-translations": "node bin/convert-translations-from-xml-to-json.js",
+    "build-translations": "node bin/convert-translations-from-xml-to-json.js && node bin/extract_local_language_names.js",
     "hallmark": "hallmark --fix"
   },
   "repository": {
