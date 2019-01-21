@@ -1,36 +1,34 @@
 console.time('init')
 
-const electron = require('electron')
-const app = electron.app
+// Setup folders
+const mkdirp = require('mkdirp')
+const { getConfigPath, getLogsPath } = require('../application-constants')
+mkdirp.sync(getConfigPath())
+mkdirp.sync(getLogsPath())
 
+const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 
+// Setup Logger
+const logHandler = require('./log-handler')()
+const logger = require('../logger')
+const log = logger.getLogger('main/index')
+logger.setLogHandler(logHandler.log)
+process.on('exit', logHandler.end)
+
 const parallel = require('run-parallel')
-const mkdirp = require('mkdirp')
 
 const localize = require('../localize')
-const { getConfigPath } = require('../application-constants')
 const logins = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
 const windows = require('./windows')
-const logHandler = require('./developerTools/logHandler')
-const log = require('../logger').getLogger('main/index')
-
-mkdirp.sync(getConfigPath())
-
-// Setup Logger
-require('../logger').setLogHandler(logHandler.log)
-logHandler.setupWriteStream()
-process.on('exit', function () {
-  logHandler.closeWriteStream()
-})
 
 // Report uncaught exceptions
 process.on('uncaughtException', (err) => {
   const error = { message: err.message, stack: err.stack }
-  log.error('uncaughtError', error, 'uncaught_error')
+  log.error('uncaughtError', error)
   throw err
 })
 
@@ -54,11 +52,11 @@ function onReady (err, results) {
   localize.setup(app, state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
-  log.info('cwd', cwd, 'cwd')
-  ipc.init(cwd, state)
+  log.info(`cwd ${cwd}`)
+  ipc.init(cwd, state, logHandler)
 
   windows.main.init(app, { hidden: false })
-  menu.init()
+  menu.init(logHandler)
 
   if (rc.debug) windows.main.toggleDevTools()
 }
@@ -107,7 +105,7 @@ app.on('web-contents-created', (e, contents) => {
 })
 
 app.once('ready', () => {
-  electron.session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
+  session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
     fun({
       responseHeaders: {
         ...details.responseHeaders,

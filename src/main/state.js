@@ -1,6 +1,6 @@
 const appConfig = require('../application-config')
 const { EventEmitter } = require('events')
-const log = require('../logger').getLogger('renderer/state')
+const log = require('../logger').getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
@@ -54,7 +54,7 @@ function load (cb) {
 }
 
 function saveImmediate (state, cb) {
-  log.info('Saving state to ' + appConfig.filePath)
+  log.info(`Saving state to ${appConfig.filePath}`)
   const copy = Object.assign({}, state.saved)
   appConfig.write(copy, err => {
     if (err) {
