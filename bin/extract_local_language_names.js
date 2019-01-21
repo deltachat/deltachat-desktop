@@ -1,10 +1,10 @@
-const { readdirSync, readFileSync, writeFileSync } = require('fs')
+const { readdirSync, writeFileSync } = require('fs')
 const { join } = require('path')
 
 const localeDir = join(__dirname, '..', '_locales')
 
 // English Lang as fallback
-const englishLang = JSON.parse(readFileSync(join(localeDir, 'en.json')))
+const englishLang = require(join(localeDir, 'en.json'))
 
 function getAvailableLanguages () {
   return readdirSync(localeDir)
@@ -13,7 +13,7 @@ function getAvailableLanguages () {
     })
     .map(l => {
       const locale = l.split('.json')[0]
-      const content = JSON.parse(readFileSync(join(localeDir, l)))
+      const content = require(join(localeDir, l))
       const localLangName = content[`language_${locale}`] || englishLang[`language_${locale}`]
       return {
         locale,
