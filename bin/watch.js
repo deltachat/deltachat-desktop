@@ -19,13 +19,11 @@ watch([ './src/*' ], function (done) {
   var p = child.spawn('npm', ['run', 'build-frontend'])
   p.stdout.pipe(process.stdout)
   p.stderr.pipe(process.stderr)
-  var p = child.spawn('npm', ['run', 'build-backend'])
-  p.stdout.pipe(process.stdout)
-  p.stderr.pipe(process.stderr)
   p.on('close', done)
 })
 
 watch([ './src/*' ], function (done) {
+  var p = child.spawn('npm', ['run', 'build-backend'])
   p.stdout.pipe(process.stdout)
   p.stderr.pipe(process.stderr)
   p.on('close', done)
