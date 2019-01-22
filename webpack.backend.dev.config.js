@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',
   entry: path.normalize(`${__dirname}/index.js`),
   target: 'electron-main',
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   node: {
     __dirname: false,
     __filename: false

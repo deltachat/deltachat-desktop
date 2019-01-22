@@ -12,7 +12,6 @@ const {
   gitHubUrl,
   gitHubIssuesUrl
 } = require('../application-constants')
-const { getFullLogFilePath } = require('./developerTools/logHandler')
 
 const app = electron.app
 
@@ -137,10 +136,6 @@ function getMenuTemplate () {
             {
               translate: 'menu.view.developer.open.log.folder',
               click: () => electron.shell.openItem(path.normalize(`${app.getPath('userData')}/logs`))
-            },
-            {
-              translate: 'menu.view.developer.open.current.log.file',
-              click: () => electron.shell.openItem(getFullLogFilePath())
             }
           ]
         }

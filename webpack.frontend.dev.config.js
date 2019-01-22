@@ -12,7 +12,7 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   externals: [nodeExternals()],
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   node: {
     __dirname: true
   },
