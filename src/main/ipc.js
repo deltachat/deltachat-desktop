@@ -56,7 +56,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
     dc.setCoreStrings(txCoreStrings())
-    menu.init()
+    menu.init(logHandler)
   })
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
