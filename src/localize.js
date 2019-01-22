@@ -46,46 +46,55 @@ function translate (messages) {
 }
 
 function setup (app, locale) {
-  const english = getLocaleMessages(localeFile('en'))
+  const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
   let messages
-  let file = localeFile(locale)
 
-  if (!fs.existsSync(file)) {
+  let localeFile = retrieveLocaleFile(locale)
+  let localeMessages = getLocaleMessages(localeFile)
+
+  if (!localeMessages && locale.indexOf('-') !== -1) {
+    // We couldn't load the file for the locale but it's a dialect. Try to fall
+    // back to the main language (example: de-CH -> de)
     locale = locale.split('-')[0]
-    file = localeFile(locale)
-  }
-
-  if (fs.existsSync(file)) {
-    try {
-      messages = getLocaleMessages(file)
-      messages = merge(english, messages)
-    } catch (e) {
-      log.error(`Could not load messages for ${locale}`)
-      locale = 'en'
-      messages = english
-    }
-  } else {
+    localeFile = retrieveLocaleFile(locale)
+    localeMessages = getLocaleMessages(localeFile)
+  } else if (!localeMessages) {
+    log.error(`Could not load messages for ${locale}`, locale)
     locale = 'en'
-    messages = english
+    messages = messagesEnglish
   }
 
+  if (localeMessages) {
+    messages = merge(messagesEnglish, localeMessages)
+  }
+
+  let experimentalFile = retrieveLocaleFile('_experimental_en')
+  let experimentalMessages = getLocaleMessages(experimentalFile)
+  if (experimentalMessages) {
+    messages = merge(messages, experimentalMessages)
+  } else {
+    log.debug(`No experimental language file (${experimentalFile}) found`)
+  }
+
+  console.log(messages['no_chat_selected_suggestion_desktop'])
   const localeData = { messages, locale }
   app.localeData = localeData
   app.translate = translate(app.localeData.messages)
   return localeData
 }
 
-function localeFile (locale) {
+function retrieveLocaleFile (locale) {
   const onDiskLocale = locale.replace('-', '_')
   return path.join(__dirname, '..', '_locales', onDiskLocale + '.json')
 }
 
 function getLocaleMessages (file) {
+  if (!fs.existsSync(file)) return false
   try {
     return JSON.parse(fs.readFileSync(file, 'utf-8'))
   } catch (err) {
-    throw new Error(`JSON parse error in language file '${file}'`)
+    throw new Error(`JSON parse error in language file '${file}'`, err)
   }
 }
 

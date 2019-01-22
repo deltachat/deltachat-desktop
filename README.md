@@ -145,29 +145,31 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 Some important folders and files:
 
 ```
-├── bin                    # various helper scripts
-├── build                  # files needed only at build time
-├── css                    # styelsheets which need preprocessing
-│   └── conversations      # stylesheets pulled out from signal
-├── images                 # image files used in conversations
-├── index.js               # entry point for the main process
-├── jenkins                # pipelines for building on Jenkins
-├── _locales               # translation files in xml and json
+├── bin                       # various helper scripts
+├── build                     # files needed only at build time
+├── css                       # styelsheets which need preprocessing
+│   └── conversations         # stylesheets pulled out from signal
+├── images                    # image files used in conversations
+├── index.js                  # entry point for the main process
+├── jenkins                   # pipelines for building on Jenkins
+├── _locales                  # translation files in xml and json
+│   ├── _experimental-en.json # can contain experimental language strings
+│   └── languages.json        # central file which keeps the human readable language names
 ├── src
-│   ├── main               # javascript for the main process
-│   └── renderer           # javascript for the renderer process
+│   ├── main                  # javascript for the main process
+│   └── renderer              # javascript for the renderer process
 ├── static
-│   ├── bundle.js          # javascript bundle built by webpack
-│   └── conversations.css  # css bundle built from conversations scss files
-│   ├── fonts              # fonts
-│   ├── main.css           # main css file
-│   └── main.html          # main html file in renderer process
+│   ├── bundle.js             # javascript bundle built by webpack
+│   └── conversations.css     # css bundle built from conversations scss files
+│   ├── fonts                 # fonts
+│   ├── main.css              # main css file
+│   └── main.html             # main html file in renderer process
 ├── test
-│   ├── integration        # integration tests
-│   └── unit               # unit tests
-├── .travis.yml            # build script for Travis
-├── .tx                    # configuration for Transifex
-└── webpack.config.js      # configuration for webpack
+│   ├── integration           # integration tests
+│   └── unit                  # unit tests
+├── .travis.yml               # build script for Travis
+├── .tx                       # configuration for Transifex
+└── webpack.config.js         # configuration for webpack
 ```
 
 ### Run the Code
@@ -183,6 +185,19 @@ It's also handy to run this watch command in a separate terminal
 ```
 $ npm run watch
 ```
+
+### Add experimental language strings
+
+Sometimes you need to add new language strings, but don't want to push them to
+transifex immediately because it's unsure if the string will be adjusted in the
+short future or it's unclear if the pr will even get merged or you simply don't
+have push rights to the transifex language repo. To still be able to implement
+new language strings, you can add them to the `_locales/_experimental-en.json`
+file. You can also overload every other language string if you need to.
+The syntax is the exact same as for all other `_locales/*.json` files. 
+
+Example:
+`{"foobar_desktop": {"message": "This is a test"}}`
 
 ### Tests
 

@@ -7,7 +7,9 @@ test('that translation files are valid json', t => {
   fs.readdir(dir, (err, files) => {
     t.error(err, 'no error reading folder')
     const xmlFiles = files.filter(f => path.extname(f) === '.xml')
-    const jsonFiles = files.filter(f => path.extname(f) === '.json' && path.basename(f) !== '_languages.json')
+    const jsonFiles = files.filter(f => path.extname(f) === '.json' &&
+                                        path.basename(f) !== '_languages.json' &&
+                                        path.basename(f) !== '_experimental_en.json')
     const name = f => f.split('.')[0]
     t.deepEqual(
       xmlFiles.map(name),
