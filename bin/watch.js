@@ -1,8 +1,31 @@
 var watch = require('glob-watcher')
 var child = require('child_process')
 
-watch([ './src/' ], function (done) {
-  var p = child.spawn('npm', ['run', 'build-js'])
+watch([ './src/main' ], function (done) {
+  var p = child.spawn('npm', ['run', 'build-backend'])
+  p.stdout.pipe(process.stdout)
+  p.stderr.pipe(process.stderr)
+  p.on('close', done)
+})
+
+watch([ './src/renderer' ], function (done) {
+  var p = child.spawn('npm', ['run', 'build-frontend'])
+  p.stdout.pipe(process.stdout)
+  p.stderr.pipe(process.stderr)
+  p.on('close', done)
+})
+
+watch([ './src/*' ], function (done) {
+  var p = child.spawn('npm', ['run', 'build-frontend'])
+  p.stdout.pipe(process.stdout)
+  p.stderr.pipe(process.stderr)
+  var p = child.spawn('npm', ['run', 'build-backend'])
+  p.stdout.pipe(process.stdout)
+  p.stderr.pipe(process.stderr)
+  p.on('close', done)
+})
+
+watch([ './src/*' ], function (done) {
   p.stdout.pipe(process.stdout)
   p.stderr.pipe(process.stderr)
   p.on('close', done)
