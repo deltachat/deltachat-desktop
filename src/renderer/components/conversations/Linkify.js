@@ -37,7 +37,7 @@ class Linkify extends React.Component {
           </a>
         )
       } else {
-        results.push(renderNonLink({ text, key: count++ }))
+        results.push(renderNonLink({ text: originalText, key: count++ }))
       }
 
       last = match.lastIndex
