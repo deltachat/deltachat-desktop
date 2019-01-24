@@ -26,8 +26,7 @@ function log (channel, level, ...args) {
   }
   handler(channel, variant.level, ...args)
   if (rc['log-to-console']) {
-    const variant = LoggerVariants[lvl]
-    variant.log(variant.prefix, channel, ...args)
+    variant.log(variant.level, channel, ...args)
   }
 }
 
