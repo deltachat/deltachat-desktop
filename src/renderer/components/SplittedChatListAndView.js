@@ -36,6 +36,7 @@ const NavbarGroupSubtitle = styled.div`
 const BelowNavbar = styled.div`
   height: calc(100vh - 50px);
   margin-top: 50px;
+  overflow: hidden;
 `
 
 class SplittedChatListAndView extends React.Component {

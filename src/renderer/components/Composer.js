@@ -15,9 +15,6 @@ const ComposerWrapper = styled.div`
 
 const AttachmentButtonWrapper = styled.div`
   float: left;
-  button {
-    margin-right: 10px;
-  }
 
   .bp3-button.bp3-minimal {
     width: 40px;
@@ -27,26 +24,32 @@ const AttachmentButtonWrapper = styled.div`
       background: none;
       cursor: pointer;
     }
+    &:focus {
+      outline: none;
+    }
   }
 `
 
 const IconButton = styled.button`
-    margin-right: 10px;
+    height: 40px;
+    width: 40px;
+    margin-right: 0px !important;
+    padding: 0px;
+    border: 0;
     background-size: contain;
     background-repeat: no-repeat;
     background-color: white;
-    height: 40px;
-    margin: 0 auto;
-    width: 40x;
-    margin: 0px;
-    border: 0;
+    &:focus {
+      outline: none;
+    }
 `
 
 const IconButtonSpan = styled.span`
-    background-image: url(../images/emoji.png);
+    display: block
     width: 25px
     height: 25px
-    display: block
+    margin: 0 auto;
+    background-image: url(../images/emoji.png);
     background-size: contain
 `
 
@@ -55,8 +58,8 @@ const EmojiPickerWrapper = styled.div`
 
   z-index: 10;
   width: 30%;
-  left: calc(30vw + 5px);
-  bottom: 45px;
+  right: 10px;
+  bottom: 50px;
 
   .emoji-mart-emoji-native, .emoji-mart {
     font-family: inherit
@@ -75,7 +78,7 @@ const EmojiPickerWrapper = styled.div`
 
 const MessageInput = styled.textarea`
   float: left;
-  width: calc(100% - 140px);
+  width: calc(100% - 120px);
   resize: unset;
   padding: 0px;
   border-color: transparent;
@@ -101,16 +104,15 @@ const SendButtonCircleWrapper = styled.div`
 const SendButton = styled.button`
   height: 24px;
   width: 24px;
-  margin-top: 5px;
-  margin-left: 8px;
+  margin: 4px;
   padding-left: 16px;
+  border: none;
   background-image: url(../images/send-button.png);
   background-color: transparent;
   background-repeat: no-repeat;
-  background-position: 0px 0px;
-  border: none;
-  vertical-align: middle;
+  background-position: 3px 1px;
   background-size: contain;
+  vertical-align: middle;
 `
 
 class Composer extends React.Component {
@@ -242,6 +244,16 @@ class Composer extends React.Component {
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
+        <MessageInput
+          ref={this.textareaRef}
+          intent={this.state.error ? 'danger' : 'none'}
+          large
+          rows='1'
+          value={this.state.text}
+          onKeyDown={this.onKeyDown.bind(this)}
+          onChange={this.handleChange}
+          placeholder={tx('write_message_desktop')}
+        />
         <AttachmentButtonWrapper ref={this.pickerButtonRef}>
           <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
             <IconButtonSpan />
@@ -259,16 +271,6 @@ class Composer extends React.Component {
             />
           </EmojiPickerWrapper>
         }
-        <MessageInput
-          ref={this.textareaRef}
-          intent={this.state.error ? 'danger' : 'none'}
-          large
-          rows='1'
-          value={this.state.text}
-          onKeyDown={this.onKeyDown.bind(this)}
-          onChange={this.handleChange}
-          placeholder={tx('write_message_desktop')}
-        />
         <SendButtonCircleWrapper onClick={this.sendMessage}>
           <SendButton />
         </SendButtonCircleWrapper>
