@@ -204,7 +204,6 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    console.log(emoji)
     let textareaElem = this.textareaRef.current
     let cursorPosition = textareaElem.selectionStart
 
