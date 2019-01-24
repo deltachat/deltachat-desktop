@@ -67,7 +67,7 @@ const EmojiPickerWrapper = styled.div`
       height: 100px;
     }
   }
-  
+
   @media only screen and (max-width: 1220px) {
     width: 50%;
   }
@@ -120,7 +120,7 @@ class Composer extends React.Component {
       filename: null,
       text: '',
       error: false,
-      showEmojiPicker: false,
+      showEmojiPicker: false
     }
     this.minimumHeight = 48
     this.defaultHeight = 17 + this.minimumHeight
@@ -129,10 +129,10 @@ class Composer extends React.Component {
     this.sendMessage = this.sendMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
-    
-    this.textareaRef = React.createRef();
-    this.pickerRef = React.createRef();
-    this.pickerButtonRef = React.createRef();
+
+    this.textareaRef = React.createRef()
+    this.pickerRef = React.createRef()
+    this.pickerButtonRef = React.createRef()
   }
 
   onKeyDown (e) {
@@ -194,42 +194,38 @@ class Composer extends React.Component {
   }
 
   showEmojiPicker (show) {
-    //this.setState({showEmojiPicker: true})
-
-    show ? 
-      document.addEventListener('mousemove', this.onMouseMove) : 
+    if (show) {
+      document.addEventListener('mousemove', this.onMouseMove)
+    } else {
       document.removeEventListener('mousemove', this.onMouseMove)
-    this.setState({showEmojiPicker: show})
-
+    }
+    this.setState({ showEmojiPicker: show })
   }
 
   onEmojiSelect (emoji) {
-    log.debug<(`EmojiPicker: Selected ${emoji.id}`)
-    console.log(emoji)
+    log.debug(`EmojiPicker: Selected ${emoji.id}`)
     let textareaElem = this.textareaRef.current
     let cursorPosition = textareaElem.selectionStart
-
     let updatedText = this.state.text.slice(0, cursorPosition) + emoji.native + this.state.text.slice(cursorPosition + 1)
-
-    this.setState({text: updatedText})    
+    this.setState({ text: updatedText })
   }
 
   onMouseMove (event) {
     let x = event.clientX
     let y = event.clientY
-    if(this.state.showEmojiPicker === false) return
-    
+    if (this.state.showEmojiPicker === false) return
+
     let bounding = this.pickerRef.current.getBoundingClientRect()
     let boundingButton = this.pickerButtonRef.current.getBoundingClientRect()
 
-    if(!this.insideBoundingRect(x, y, bounding, 10) &&
-       !this.insideBoundingRect(x, y, boundingButton, 10)) {
+    if (!this.insideBoundingRect(x, y, bounding, 10) &&
+        !this.insideBoundingRect(x, y, boundingButton, 10)) {
       log.debug(`Closing EmojiPicker x: ${x} y: ${y}`)
-      this.setState({showEmojiPicker: false})
+      this.setState({ showEmojiPicker: false })
     }
   }
 
-  insideBoundingRect(mouseX, mouseY, boundingRect, margin = 0) {
+  insideBoundingRect (mouseX, mouseY, boundingRect, margin = 0) {
     return mouseX >= boundingRect.x - margin &&
            mouseX <= boundingRect.x + boundingRect.width + margin &&
            mouseY >= boundingRect.y - margin &&
@@ -246,7 +242,7 @@ class Composer extends React.Component {
         </AttachmentButtonWrapper>
         <AttachmentButtonWrapper ref={this.pickerButtonRef}>
           <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
-            <IconButtonSpan/>
+            <IconButtonSpan />
           </IconButton>
         </AttachmentButtonWrapper>
         { this.state.showEmojiPicker &&
@@ -254,14 +250,14 @@ class Composer extends React.Component {
             <Picker
               title='Pick your emoji…'
               emoji='point_up'
-              style={{width: '100%', height: '100%'}}
-              native={true}
+              style={{ width: '100%', height: '100%' }}
+              native
               color={StyleVariables.colors.deltaPrimaryBg}
               onSelect={this.onEmojiSelect}
             />
           </EmojiPickerWrapper>
         }
-        <MessageInput 
+        <MessageInput
           ref={this.textareaRef}
           intent={this.state.error ? 'danger' : 'none'}
           large
