@@ -5,6 +5,7 @@ const { remote } = require('electron')
 const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
 const log = require('../../logger').getLogger('renderer/composer')
+const { Picker } = require('emoji-mart')
 
 const ComposerWrapper = styled.div`
   height: 40px;
@@ -29,9 +30,52 @@ const AttachmentButtonWrapper = styled.div`
   }
 `
 
+const IconButton = styled.button`
+    margin-right: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: white;
+    height: 40px;
+    margin: 0 auto;
+    width: 40x;
+    margin: 0px;
+    border: 0;
+`
+
+const IconButtonSpan = styled.span`
+    background-image: url(../images/emoji.png);
+    width: 25px
+    height: 25px
+    display: block
+    background-size: contain
+`
+
+const EmojiPickerWrapper = styled.div`
+  position: absolute;
+
+  z-index: 10;
+  width: 30%;
+  left: calc(30vw + 5px);
+  bottom: 45px;
+
+  .emoji-mart-emoji-native, .emoji-mart {
+    font-family: inherit
+  }
+
+  @media only screen and (max-height: 530px) {
+    .emoji-mart-scroll {
+      height: 100px;
+    }
+  }
+
+  @media only screen and (max-width: 1220px) {
+    width: 50%;
+  }
+`
+
 const MessageInput = styled.textarea`
   float: left;
-  width: calc(100% - 100px);
+  width: calc(100% - 140px);
   resize: unset;
   padding: 0px;
   border-color: transparent;
@@ -75,13 +119,20 @@ class Composer extends React.Component {
     this.state = {
       filename: null,
       text: '',
-      error: false
+      error: false,
+      showEmojiPicker: false
     }
     this.minimumHeight = 48
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
+    this.onEmojiSelect = this.onEmojiSelect.bind(this)
+    this.onMouseMove = this.onMouseMove.bind(this)
+
+    this.textareaRef = React.createRef()
+    this.pickerRef = React.createRef()
+    this.pickerButtonRef = React.createRef()
   }
 
   onKeyDown (e) {
@@ -142,6 +193,47 @@ class Composer extends React.Component {
     })
   }
 
+  showEmojiPicker (show) {
+    if (show) {
+      document.addEventListener('mousemove', this.onMouseMove)
+    } else {
+      document.removeEventListener('mousemove', this.onMouseMove)
+    }
+    this.setState({ showEmojiPicker: show })
+  }
+
+  onEmojiSelect (emoji) {
+    log.debug(`EmojiPicker: Selected ${emoji.id}`)
+    let textareaElem = this.textareaRef.current
+    let cursorPosition = textareaElem.selectionStart
+
+    let updatedText = this.state.text.slice(0, cursorPosition) + emoji.native + this.state.text.slice(cursorPosition + 1)
+
+    this.setState({ text: updatedText })
+  }
+
+  onMouseMove (event) {
+    let x = event.clientX
+    let y = event.clientY
+    if (this.state.showEmojiPicker === false) return
+
+    let bounding = this.pickerRef.current.getBoundingClientRect()
+    let boundingButton = this.pickerButtonRef.current.getBoundingClientRect()
+
+    if (!this.insideBoundingRect(x, y, bounding, 10) &&
+        !this.insideBoundingRect(x, y, boundingButton, 10)) {
+      log.debug(`Closing EmojiPicker x: ${x} y: ${y}`)
+      this.setState({ showEmojiPicker: false })
+    }
+  }
+
+  insideBoundingRect (mouseX, mouseY, boundingRect, margin = 0) {
+    return mouseX >= boundingRect.x - margin &&
+           mouseX <= boundingRect.x + boundingRect.width + margin &&
+           mouseY >= boundingRect.y - margin &&
+           mouseY <= boundingRect.y + boundingRect.height + margin
+  }
+
   render () {
     const tx = window.translate
 
@@ -150,7 +242,25 @@ class Composer extends React.Component {
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
+        <AttachmentButtonWrapper ref={this.pickerButtonRef}>
+          <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
+            <IconButtonSpan />
+          </IconButton>
+        </AttachmentButtonWrapper>
+        { this.state.showEmojiPicker &&
+          <EmojiPickerWrapper ref={this.pickerRef}>
+            <Picker
+              title='Pick your emoji…'
+              emoji='point_up'
+              style={{ width: '100%', height: '100%' }}
+              native
+              color={StyleVariables.colors.deltaPrimaryBg}
+              onSelect={this.onEmojiSelect}
+            />
+          </EmojiPickerWrapper>
+        }
         <MessageInput
+          ref={this.textareaRef}
           intent={this.state.error ? 'danger' : 'none'}
           large
           rows='1'
