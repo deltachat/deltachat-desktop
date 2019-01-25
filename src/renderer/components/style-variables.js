@@ -4,7 +4,6 @@ module.exports = {
     deltaPrimaryFg: '#ffffff',
     deltaPrimaryFgLight: '#d0d0d0',
     deltaHover: '#ececec',
-    deltaSelected: '#d9d9d9',
     deltaChatPrimaryFg: '#070c14',
     deltaChatPrimaryFgLight: '#62656a',
     deltaChatMessageBubbleSelf: '#efffde',
@@ -14,3 +13,5 @@ module.exports = {
     deltaChatMessageBubbleSelfStatusColor: '#4caf50'
   }
 }
+
+module.exports.colors.deltaSelected = module.exports.colors.deltaPrimaryBg
