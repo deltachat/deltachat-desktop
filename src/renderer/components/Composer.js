@@ -80,7 +80,7 @@ const EmojiPickerWrapper = styled.div`
     width: 272px;
 
     .emoji-mart-title-label {
-      font-size: 23px;
+      font-size: 20px;
     }
   }
 `
