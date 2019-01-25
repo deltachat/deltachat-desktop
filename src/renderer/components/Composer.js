@@ -65,6 +65,11 @@ const EmojiPickerWrapper = styled.div`
     font-family: inherit
   }
 
+  .emoji-mart-category .emoji-mart-emoji span {
+    height: auto !important;
+    width: auto !important;
+  }
+
   @media only screen and (max-height: 530px) {
     .emoji-mart-scroll {
       height: 100px;
