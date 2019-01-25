@@ -1,6 +1,7 @@
 module.exports = {
   colors: {
     deltaPrimaryBg: '#415e6b',
+    deltaPrimaryBgLight: '#4c6e7d',
     deltaPrimaryFg: '#ffffff',
     deltaPrimaryFgLight: '#d0d0d0',
     deltaHover: '#ececec',
@@ -14,4 +15,4 @@ module.exports = {
   }
 }
 
-module.exports.colors.deltaSelected = module.exports.colors.deltaPrimaryBg
+module.exports.colors.deltaSelected = module.exports.colors.deltaPrimaryBgLight
