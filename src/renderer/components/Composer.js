@@ -57,7 +57,7 @@ const EmojiPickerWrapper = styled.div`
   position: absolute;
 
   z-index: 10;
-  width: 350px;
+  width: 314px;
   right: 10px;
   bottom: 50px;
 
@@ -77,7 +77,7 @@ const EmojiPickerWrapper = styled.div`
   }
 
   @media only screen and (max-width: 600px) {
-    width: 300px;
+    width: 272px;
 
     .emoji-mart-title-label {
       font-size: 23px;
