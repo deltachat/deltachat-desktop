@@ -26,6 +26,19 @@ const ChatListWrapper = styled.div`
 
   .module-conversation-list-item--is-selected {
     background-color: ${StyleVariables.colors.deltaSelected};
+    color: ${StyleVariables.colors.deltaPrimaryFg};
+    
+    span.module-contact-name {
+      color: ${StyleVariables.colors.deltaPrimaryFg};
+    }
+
+    .module-conversation-list-item__is-group {
+      filter: unset; 
+    }
+
+    &:hover {
+      background-color: ${StyleVariables.colors.deltaSelected};
+    }
   }
 
   .module-conversation-list-item__header__name {
