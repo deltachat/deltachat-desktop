@@ -12,6 +12,7 @@
     <string name="custom">Custom</string>
     <string name="none">None</string>
     <string name="open">Open</string>
+    <string name="delete">Delete</string>
     <string name="not_now">Not now</string>
     <string name="never">Never</string>
     <string name="one_moment">One moment…</string>
@@ -69,6 +70,7 @@
     <string name="images">Images</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Voice message</string>
+    <string name="forwarded_message">Forwarded message</string>
     <string name="video">Video</string>
     <string name="documents">Documents</string>
     <string name="contact">Contact</string>
@@ -102,7 +104,7 @@
     <string name="menu_new_contact">New contact</string>
     <string name="menu_new_chat">New chat</string>
     <string name="menu_new_group">New group</string>
-    <string name="menu_new_verified_group">New verified group</string>
+    <string name="menu_new_verified_group">New verified group (experimental)</string>
     <string name="menu_send">Send</string>
     <string name="menu_toggle_keyboard">Toggle emoji keyboard</string>
     <string name="menu_edit_group">Edit group</string>
@@ -136,6 +138,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_advanced">Advanced</string>
     <string name="menu_deaddrop">Contact requests</string>
+    <string name="menu_deaddrop_subtitle">Press message to start chatting</string>
     <string name="menu_view_profile">View profile</string>
 
     <string name="mute_for_one_hour">Mute for 1 hour</string>
@@ -160,6 +163,7 @@
     <string name="ask_block_contact">Block this contact? You will no longer receive messages from this contact.</string>
     <string name="ask_unblock_contact">Unblock this contact? You will once again be able to receive messages from this contact.</string>
     <string name="ask_delete_contacts">Delete contacts? This will permanently delete the selected contacts.\n\nContacts with ongoing chats and contacts from the system\'s address book cannot be deleted permanently.</string>
+    <string name="cannot_delete_contacts_in_use">Cannot delete contacts with ongoing chats.</string>
     <string name="ask_start_chat_with">Chat with %1$s?</string>
 
 
@@ -275,13 +279,13 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Response from %1$s: %2$s\n\nSome providers place additional information in your inbox; you can check them it eg. in the web frontend. Consult your provider or friends if you run into problems.</string>
 
+
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Forward to …</string>
 
+
     <!-- preferences -->
-    <string name="pref_summary_privacy">Screen lock %1$s, Read receipts %2$s</string>
-    <string name="pref_summary_appearance">Theme %1$s, Language %2$s, Background %3$s</string>
     <string name="pref_summary_on">on</string>
     <string name="pref_summary_off">off</string>
     <string name="pref_summary_default">default</string>
@@ -300,12 +304,13 @@
     <string name="pref_blocked_contacts">Blocked contacts</string>
     <string name="pref_profile_photo_remove_ask">Remove profile photo?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_password_and_account_settings">Password and account settings</string>
     <string name="pref_who_can_see_this_information">Who can see this information?</string>
     <string name="pref_who_can_see_profile_explain">Your profile picture and name will be shown alongside your messages when communicating with other users. Already sent information can not be deleted or removed.</string>
     <string name="pref_your_name">Your name</string>
-    <string name="pref_default_status_label">Status text</string>
+    <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
+    <string name="pref_default_status_label">Signature text</string>
+    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_default_status_text">Sent with my Delta Chat Messenger: https://delta.chat</string>
     <string name="pref_enter_sends">Enter key sends</string>
     <string name="pref_enter_sends_explain">Pressing the Enter key will send text messages</string>
@@ -314,7 +319,8 @@
     <string name="pref_change_secret">Change secret</string>
     <string name="pref_change_secret_explain">Change your pin / pattern / fingerprint via system settings</string>
     <string name="pref_screen_security">Screen security</string>
-    <string name="pref_screen_security_explain">Block screenshots in the recents list and inside the app</string>
+    <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
+    <string name="pref_screen_security_explain">Request to block screenshots in the recents list and inside the app</string>
     <string name="pref_screen_security_please_restart_hint">To apply the screen security setting please restart the app.</string>
     <string name="pref_notifications">Notifications</string>
     <string name="pref_notifications_show">Show</string>
@@ -333,6 +339,7 @@
     <string name="pref_theme">Theme</string>
     <string name="pref_language">Language</string>
     <string name="pref_incognito_keyboard">Incognito keyboard</string>
+    <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
     <string name="pref_incognito_keyboard_explain">Request keyboard to disable personalized learning</string>
     <string name="pref_read_receipts">Read receipts</string>
     <string name="pref_read_receipts_explain">If read receipts are disabled, you won\'t be able to see read receipts from others.</string>
@@ -360,7 +367,7 @@
     <string name="pref_managekeys_import_explain">Import secret keys from \"%1$s\"?\n\n• Existing secret keys will not be deleted\n\n• The last imported key will be used as the new default key unless it has the word \"legacy\" in its filename</string>
     <string name="pref_managekeys_secret_keys_exported_to_x">Secret keys written successfully to \"%1$s\".</string>
     <string name="pref_managekeys_secret_keys_imported_from_x">Secret keys imported from \"%1$s\".</string>
-    <string name="pref_background">Chat-Background</string>
+    <string name="pref_background">Background</string>
     <string name="pref_imap_folder_handling">IMAP folder handling</string>
     <string name="pref_imap_folder_warn_disable_defaults">If you disable this option, make sure, your server and your other clients are configured accordingly.\n\nOtherwise things may not work at all.</string>
     <string name="pref_watch_inbox_folder">Watch Inbox folder</string>
@@ -398,6 +405,10 @@
     <string name="systemmsg_read_receipt_subject">Read receipt</string>
     <string name="systemmsg_read_receipt_body">This is a read receipt for the message \"%1$s\".\n\nIt means that message was displayed on the recipient\'s device, not necessarily that the content was read.</string>
     <string name="systemmsg_cannot_decrypt">This message cannot be decrypted.\n\n• It might already help to simply reply to this message and ask the sender to send the message again.\n\n• In case you re-installed Delta Chat or another email program on this or another device you may want to send an Autocrypt Setup Message from there.</string>
+    <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
+    <string name="systemmsg_action_by_me">%1$s by me.</string>
+    <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
+    <string name="systemmsg_action_by_user">%1$s by %2$s.</string>
 
 
     <!-- screen lock -->
@@ -414,23 +425,25 @@
     <!-- qr code stuff -->
     <string name="qrscan_title">Scan QR code</string>
     <string name="qrscan_hint">Place your camera over the QR code</string>
-    <string name="qrscan_ask_join_verified_group">Do you want to join the verified group \"%1$s\"?</string>
-    <string name="qrscan_ask_fingerprint_ask_oob">Verify contact and start chatting with \"%1$s\"?</string>
-    <string name="qrscan_ask_chatting_fingerprint_ok">Contact \"%1$s\" verified. Start chatting?</string>
-    <string name="qrscan_fingerprint_mismatch">The scanned fingerprint does \"not match\" the fingerprint last seen for \"%1$s\".</string>
-    <string name="qrscan_no_addr_found">This QR code contains a fingerprint but no email address.\n\nFor an out-of-band-verification, please establish an encrpyted connection to the recipient first.</string>
+    <string name="qrscan_ask_join_group">Do you want to join the group \"%1$s\"?</string>
+    <string name="qrscan_fingerprint_mismatch">The scanned fingerprint does not match the fingerprint last seen for %1$s</string>
+    <string name="qrscan_no_addr_found">This QR code contains a fingerprint but no email address.\n\nFor an out-of-band-verification, please establish an encrypted connection to the recipient first.</string>
     <string name="qrscan_contains_text">Scanned QR code text:\n\n%1$s</string>
     <string name="qrscan_contains_url">Scanned QR code URL:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Fingerprint</string>
     <string name="qrscan_x_verified_introduce_myself">%1$s verified, introduce myself …</string>
-    <string name="qrshow_title">Show QR verify code</string>
+    <string name="qrshow_title">QR invite code</string>
     <string name="qrshow_x_joining">%1$s joins.</string>
     <string name="qrshow_x_verified">%1$s verified.</string>
-    <string name="qrshow_x_has_joined_group">%1$s securely joined the group.</string>
-    <string name="qrshow_join_verified_group_hint">Scan this to join the verified group \"%1$s\".</string>
-    <string name="qrshow_join_verified_group_title">QR invite code</string>
-    <string name="qrshow_join_contact_title">QR verify code</string>
-    <string name="qrshow_join_contact_hint">\"%1$s\" Scan this to set up a verified contact.</string>
+    <string name="qrshow_x_has_joined_group">%1$s joined the group.</string>
+    <string name="qrshow_join_group_title">QR invite code</string>
+    <string name="qrshow_join_group_hint">Scan this to join the group \"%1$s\".</string>
+    <string name="qrshow_join_contact_title">QR invite code</string>
+    <string name="qrshow_join_contact_hint">Scan this to set up a contact with %1$s</string>
+    <string name="contact_verified">%1$s verified.</string>
+    <string name="contact_not_verified">Cannot verify %1$s</string>
+    <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
+    <string name="contact_setup_changed">Changed setup for %1$s</string>
 
 
     <!-- notifications  -->
@@ -494,7 +507,7 @@
     <string name="language_sr">Serbian</string>
     <string name="language_sv">Swedish</string>
     <string name="language_ta">Tamil</string>
-    <string name="language_te">Telegu</string>
+    <string name="language_te">Telugu</string>
     <string name="language_tr">Turkish</string>
     <string name="language_uk">Ukrainian</string>
     <string name="language_zh_CN">Chinese</string>
@@ -543,7 +556,7 @@
     <string name="group_name_desktop">Group name</string>
     <string name="remove_desktop">Remove</string>
     <string name="save_desktop">Save</string>
-    <string name="show_qr_verify_code_desktop">Show QR verify code</string>
+    <string name="show_qr_verify_code_desktop">Show QR invite code</string>
     <string name="show_qr_invite_code_desktop">Show QR invite code</string>
     <string name="add_contact_desktop">Add contact</string>
     <string name="login_required_desktop">required</string>
@@ -576,5 +589,19 @@
     <string name="message_detail_to_desktop">to</string>
     <string name="menu.view.developer.open.log.folder">Open Log Folder</string>
     <string name="menu.view.developer.open.current.log.file">Open Current Logfile</string>
+
+
+    <!-- deprecated on android, please remove if unused on desktop -->
+    <!-- see qrscan_ask_join_group -->
+    <string name="qrscan_ask_join_verified_group">Do you want to join the group \"%1$s\"?</string>
+    <!-- see ask_start_chat_with -->
+    <string name="qrscan_ask_fingerprint_ask_oob">Chat with %1$s?</string>
+    <!-- see ask_start_chat_with -->
+    <string name="qrscan_ask_chatting_fingerprint_ok">Chat with %1$s?</string>
+    <!-- see qrshow_join_group_title -->
+    <string name="qrshow_join_verified_group_title">QR invite code</string>
+    <!-- see qrshow_join_group_hint -->
+    <string name="qrshow_join_verified_group_hint">Scan this to join the group \"%1$s\".</string>
+
 
 </resources>
