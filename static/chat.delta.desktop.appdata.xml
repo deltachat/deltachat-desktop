@@ -1,18 +1,15 @@
 <!--<?xml version="1.0" encoding="UTF-8"?>-->
 <component type="desktop">
   <id>chat.delta.desktop</id>
-  <metadata_license>CC0</metadata_license>
+  <launchable type="desktop-id">chat.delta.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>Delta Chat</name>
   <summary>Delta Chat email-based messenger</summary>
-  
+
   <description>
-    <p>The messenger with the broadest audience in the world.
-Free, independent, email compatible.
-    </p>
+    <p>The messenger with the broadest audience in the world. Free, independent, email compatible.</p>
   </description>
-  
-​  <launchable type="desktop-id">chat.delta.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
@@ -20,154 +17,144 @@ Free, independent, email compatible.
     </screenshot>
   </screenshots>
 
-
- <url type="homepage">https://delta.chat/</url>
+  <url type="homepage">https://delta.chat/</url>
+  <url type="bugtracker">https://github.com/deltachat/deltachat-desktop/issues</url>
+  <url type="faq">https://delta.chat/en/help</url>
+  <url type="donation">https://delta.chat/en/contribute</url>
+  <url type="translate">https://www.transifex.com/delta-chat/public/</url>
 
   <releases>
     <release version="v0.98.2" date="2019-01-11">
-        <description>
-        <p>
-        Changed
+      <description>
+        <p>Changed:</p>
+        <ul>
+          <li>Tweak search button (@jikstra)</li>
+          <li>Convert src/config.js to src/applications-constants.js with a functional API (@ralphtheninja)</li>
+          <li>Improve css building for conversations stylesheets (@jikstra)</li>
+          <li>Update install instructions in README (@jikstra, @ralphtheninja)</li>
+          <li>Restyle create chat buttons (@jikstra)</li>
+          <li>Update outdated watch script (@ralphtheninja)</li>
+          <li>Hide known accounts section when it's empty (@Simon-Laux)</li>
+          <li>Set minimum window height to 450px (@jikstra)</li>
+          <li>Upgrade deltachat-node to ^0.36.0 for Mac OS prebuilt binaries (@ralphtheninja)</li>
+          <li>Make unit tests less spammy (@ralphtheninja)</li>
+          <li>Simplify state load (@ralphtheninja)</li>
+          <li>Make converting translations less spammy (@ralphtheninja)</li>
+        </ul>
 
-            Tweak search button (@jikstra)
-            Convert src/config.js to src/applications-constants.js with a functional API (@ralphtheninja)
-            Improve css building for conversations stylesheets (@jikstra)
-            Update install instructions in README (@jikstra, @ralphtheninja)
-            Restyle create chat buttons (@jikstra)
-            Update outdated watch script (@ralphtheninja)
-            Hide known accounts section when it's empty (@Simon-Laux)
-            Set minimum window height to 450px (@jikstra)
-            Upgrade deltachat-node to ^0.36.0 for Mac OS prebuilt binaries (@ralphtheninja)
-            Make unit tests less spammy (@ralphtheninja)
-            Simplify state load (@ralphtheninja)
-            Make converting translations less spammy (@ralphtheninja)
+        <p>Added:</p>
+        <ul>
+          <li>Add rc module for configuration (@ralphtheninja)</li>
+          <li>Add logging functionality (@Simon-Laux)</li>
+          <li>Add hallmark module for markdown linting (@ralphtheninja)</li>
+        </ul>
 
-        Added
+        <p>Removed:</p>
+        <ul>
+          <li>Remove bin/clean.js (@ralphtheninja)</li>
+          <li>Clean up unused configuration code (@ralphtheninja)</li>
+        </ul>
 
-            Add rc module for configuration (@ralphtheninja)
-            Add logging functionality (@Simon-Laux)
-            Add hallmark module for markdown linting (@ralphtheninja)
-
-        Removed
-
-            Remove bin/clean.js (@ralphtheninja)
-            Clean up unused configuration code (@ralphtheninja)
-
-        Fixed
-
-            Fix non verified contacts in verified groups (@ralphtheninja)
-            Fix escaped characters in translations (@ralphtheninja)
-            Adjust login form so it's not hidden below navigation bar (@jikstra)
-            Fix broken rimraf dependency (@jikstra)
-        </p>
-        </description>    
+        <p>Fixed:</p>
+        <ul>
+          <li>Fix non verified contacts in verified groups (@ralphtheninja)</li>
+          <li>Fix escaped characters in translations (@ralphtheninja)</li>
+          <li>Adjust login form so it's not hidden below navigation bar (@jikstra)</li>
+          <li>Fix broken rimraf dependency (@jikstra)</li>
+        </ul>
+      </description>
     </release>
     <release version="v0.98.1" date="2019-01-06">
-        <description>
-        <p>
-        Changed
+      <description>
+        <p>Changed:</p>
+        <ul>
+          <li>Use google noto emojis and remove image emojis (@Simon-Laux)</li>
+          <li>Tweak functionality in edit group page (@Simon-Laux)</li>
+        </ul>
 
-            Use google noto emojis and remove image emojis (@Simon-Laux)
-            Tweak functionality in edit group page (@Simon-Laux)
-        </p>
-        </description>    
+      </description>
     </release>
     <release version="v0.98.0" date="2019-01-05">
-        <description>
-        <p>
-        Changed
+      <description>
+        <p>Changed:</p>
+        <ul>
+          <li>Use language fallback for missing language variants (@ralphtheninja)</li>
+          <li>Translations now based on xml and shared with other Delta Chat projects (@karissa, @Jikstra, @ralphtheninja)</li>
+          <li>Made more elements unselectable (@Simon-Laux)</li>
+          <li>Improve build/run instructions (@obestwalter)</li>
+          <li>Upgrade deltachat-node to ^0.35.0 (@ralphtheninja)</li>
+        </ul>
 
-            Use language fallback for missing language variants (@ralphtheninja)
-            Translations now based on xml and shared with other Delta Chat projects (@karissa, @Jikstra, @ralphtheninja)
-            Made more elements unselectable (@Simon-Laux)
-            Improve build/run instructions (@obestwalter)
-            Upgrade deltachat-node to ^0.35.0 (@ralphtheninja)
+        <p>Added:</p>
+        <ul>
+          <li>Add settings for configuring mvbox and sentbox threads (@Jikstra)</li>
+          <li>Add divider between chat list and chat view (@Simon-Laux)</li>
+          <li>Write output of dc.getInfo() to console (@ralphtheninja)</li>
+        </ul>
 
-        Added
+        <p>Removed:</p>
+        <ul>
+          <li>Remove all .ts/.tsx based code (@ralphtheninja)</li>
+        </ul>
 
-            Add settings for configuring mvbox and sentbox threads (@Jikstra)
-            Add divider between chat list and chat view (@Simon-Laux)
-            Write output of dc.getInfo() to console (@ralphtheninja)
-
-        Removed
-
-            Remove all .ts/.tsx based code (@ralphtheninja)
-
-        Fixed
-
-            Message input field keeps focus (@Simon-Laux)
-            Fix issue with Autocrypt setup dialog not closing (@ralphtheninja)
-            Add back menu item for unblocking contacts (@ralphtheninja)
-            Fix group image issue (@ralphtheninja)
-            Only run dc.getConfig() on valid account folders (@Simon-Laux)
-            Handle DC_EVENT_SELF_NOT_IN_GROUP error (@ralphtheninja)
-            Fix icon rotation (@Simon-Laux)
-            Fix issues related to media height (@Simon-Laux)
-        </p>
-        </description>
+        <p>Fixed:</p>
+        <ul>
+          <li>Message input field keeps focus (@Simon-Laux)</li>
+          <li>Fix issue with Autocrypt setup dialog not closing (@ralphtheninja)</li>
+          <li>Add back menu item for unblocking contacts (@ralphtheninja)</li>
+          <li>Fix group image issue (@ralphtheninja)</li>
+          <li>Only run dc.getConfig() on valid account folders (@Simon-Laux)</li>
+          <li>Handle DC_EVENT_SELF_NOT_IN_GROUP error (@ralphtheninja)</li>
+          <li>Fix icon rotation (@Simon-Laux)</li>
+          <li>Fix issues related to media height (@Simon-Laux)</li>
+        </ul>
+      </description>
     </release>
-    <release version="v0.97.0" date="2018-12-24" />
+    <release version="v0.97.0" date="2018-12-24"/>
     <release version="v0.96.0" date="2018-12-21">
-        <description>
-        <p>Added:
-            <ul>
-            <li>Improve experience for inputting Autocrypt setup codes </li>
-            <li>Media view for chats</li>
-            <li>See encryption info for contacts in a chat</li>
-            <li>List contact requests</li>
-            <li>File-&gt;Quit in the menu to quit the application</li>
-            <li>Drag a file out of the chat window to the filesystem to copy it locally</li>
-            <li>Settings option for sending read receipts </li>
-            <li>Settings option for preferring encryption </li>
-            <li>Forget account button in the Login screen </li>
-            <li>Update account settings while logged in </li>
-            </ul>
-        </p>
-        <p>Fixed:
-            <ul>
-            <li>Make button hover state a pointer cursor </li>
-            <li>Read and delivered checkmarks are now green </li>
-            <li>Display filename and size for downloadable files in messages </li>
-            <li>Richer file messages, including displaying webm videos </li>
-            <li>Ask user before leaving group </li>
-            <li>Mark messages read properly </li>
-            <li>Small bug with exporting backups </li>
-            </ul>
-        </p>
-        <p>Changed:
-            <ul>
-            <li>Upgrade deltachat-node to 0.29.0 </li>
-            <li>Remove single-folder compatibility message </li>
-            <li>Update to electron 3.0</li>
-            </ul>
-        </p>
-        </description>
-   </release>
-​    <release version="v0.90.1" date="2018-12-11" />
-  </releases>
-   
- <update_contact>tobiasmue@gnome.org</update_contact>
+      <description>
+        <p>Added:</p>
+        <ul>
+          <li>Improve experience for inputting Autocrypt setup codes</li>
+          <li>Media view for chats</li>
+          <li>See encryption info for contacts in a chat</li>
+          <li>List contact requests</li>
+          <li>File-&gt;Quit in the menu to quit the application</li>
+          <li>Drag a file out of the chat window to the filesystem to copy it locally</li>
+          <li>Settings option for sending read receipts</li>
+          <li>Settings option for preferring encryption</li>
+          <li>Forget account button in the Login screen</li>
+          <li>Update account settings while logged in</li>
+        </ul>
 
- <content_rating type="oars-1.0">
-    <content_attribute id="violence-cartoon">none</content_attribute>
-    <content_attribute id="violence-fantasy">none</content_attribute>
-    <content_attribute id="violence-realistic">none</content_attribute>
-    <content_attribute id="violence-bloodshed">none</content_attribute>
-    <content_attribute id="violence-sexual">none</content_attribute>
-    <content_attribute id="drugs-alcohol">none</content_attribute>
-    <content_attribute id="drugs-narcotics">none</content_attribute>
-    <content_attribute id="drugs-tobacco">none</content_attribute>
-    <content_attribute id="sex-nudity">none</content_attribute>
-    <content_attribute id="sex-themes">none</content_attribute>
-    <content_attribute id="language-profanity">none</content_attribute>
-    <content_attribute id="language-humor">none</content_attribute>
-    <content_attribute id="language-discrimination">none</content_attribute>
+        <p>Fixed:</p>
+        <ul>
+          <li>Make button hover state a pointer cursor</li>
+          <li>Read and delivered checkmarks are now green</li>
+          <li>Display filename and size for downloadable files in messages</li>
+          <li>Richer file messages, including displaying webm videos</li>
+          <li>Ask user before leaving group</li>
+          <li>Mark messages read properly</li>
+          <li>Small bug with exporting backups</li>
+        </ul>
+
+        <p>Changed:</p>
+        <ul>
+          <li>Upgrade deltachat-node to 0.29.0</li>
+          <li>Remove single-folder compatibility message</li>
+          <li>Update to electron 3.0</li>
+        </ul>
+      </description>
+    </release>
+    <release version="v0.90.1" date="2018-12-11"/>
+  </releases>
+
+  <content_rating type="oars-1.0">
     <content_attribute id="social-chat">intense</content_attribute>
-    <content_attribute id="social-info">none</content_attribute>
     <content_attribute id="social-audio">intense</content_attribute>
-    <content_attribute id="social-location">none</content_attribute>
     <content_attribute id="social-contacts">intense</content_attribute>
-    <content_attribute id="money-purchasing">none</content_attribute>
-    <content_attribute id="money-gambling">none</content_attribute>
- </content_rating>
+  </content_rating>
+
+  <update_contact>tobiasmue@gnome.org</update_contact>
+
 </component>
