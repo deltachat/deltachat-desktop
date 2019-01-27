@@ -138,6 +138,33 @@ Then try running `npm install` again.
 
 Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
+### Logging
+
+#### Logging Options
+[?]
+
+
+#### Logfile
+
+The Logfiles can are found in:
+```
+Linux: ~/.config/DeltaChat/logs/
+Mac: "~/Library/Application Support/DeltaChat/logs" [?]
+Windows: [?]
+```
+You can also access the logfolder and the current logfile under the `View->Developer` menu:
+<center><img src="devMenu.png"/></center>
+
+##### Format
+The logfiles have the extention `.log`, the filename represents the point in time the log started.
+Basicaly the log files are **tab seperated** `csv`-files:
+```
+"2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
+```
+timestamp | location / module | level | stacktrace | arg1 | arg2 | ...
+---|---|---|---|---|---|---
+"2019-01-27T13:46:31.801Z"|"main/deltachat"|"INFO"|[]|"dc_get_info" | - | ...
+
 ## How to Contribute
 
 ### Code Structure
