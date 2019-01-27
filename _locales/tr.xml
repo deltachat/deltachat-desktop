@@ -102,7 +102,6 @@
     <string name="menu_new_contact">Yeni kişi</string>
     <string name="menu_new_chat">Yeni sohbet</string>
     <string name="menu_new_group">Yeni grup</string>
-    <string name="menu_new_verified_group">Yeni doğrulanan grup</string>
     <string name="menu_send">Gönder</string>
     <string name="menu_toggle_keyboard">Emoji klavyesine geç</string>
     <string name="menu_edit_group">Grubu düzenle</string>
@@ -274,9 +273,11 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">%1$s yanıtı: %2$s\n\nBazı sağlayıcılar, gelen kutunuza ek bilgiler yerleştirir; onları örneğin web ön ucunda denetleyebilirsiniz. Sorunlarla karşılaşırsanız sağlayıcınıza ya da arkadaşlarınıza danışın.</string>
 
+
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">İlet …</string>
+
 
     <!-- preferences -->
     <string name="pref_summary_on">açık</string>
@@ -296,12 +297,11 @@
     <string name="pref_blocked_contacts">Engellenen kişiler</string>
     <string name="pref_profile_photo_remove_ask">Profil fotoğrafı kaldırılsın mı?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_password_and_account_settings">Parola ve hesap ayarları</string>
     <string name="pref_who_can_see_this_information">Bu bilgiyi kim görebilir?</string>
     <string name="pref_who_can_see_profile_explain">Profil resminiz ve adınız diğer kullanıcılarla iletişim kurduğunuzda iletilerinizin yanında gösterilecek. Zaten gönderilen bilgiler silinmez ya da kaldırılmaz.</string>
     <string name="pref_your_name">Adınız</string>
-    <string name="pref_default_status_label">Durum metni</string>
+    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_default_status_text">Delta Chat Messenger\'ımla gönderildi: https://delta.chat</string>
     <string name="pref_enter_sends">Anahtar gönderilerini girin</string>
     <string name="pref_enter_sends_explain">Enter tuşuna basınca metin iletilerini gönderir</string>
@@ -309,7 +309,6 @@
     <string name="pref_chat_settings">Sohbet ayarları</string>
     <string name="pref_change_secret">Sırrı değiştir</string>
     <string name="pref_screen_security">Ekran güvenliği</string>
-    <string name="pref_screen_security_explain">Son kullanılanlar listesinde ve uygulama içerisinde ekran görüntülerini engelle</string>
     <string name="pref_screen_security_please_restart_hint">Ekran güvenliği ayarını uygulamak için lütfen uygulamayı yeniden başlatın.</string>
     <string name="pref_notifications">Bildirimler</string>
     <string name="pref_notifications_show">Göster</string>
@@ -328,6 +327,7 @@
     <string name="pref_theme">Tema</string>
     <string name="pref_language">Dil</string>
     <string name="pref_incognito_keyboard">Gizli klavye</string>
+    <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
     <string name="pref_incognito_keyboard_explain">Kişiselleştirilen öğrenmeyi etkisizleştirmek için klavye iste</string>
     <string name="pref_read_receipts">Okundu bilgileri</string>
     <string name="pref_read_receipts_explain">Okundu bilgileri etkisizleştirilirse diğerlerinden gelen okundu bilgilerini göremeyeceksiniz.</string>
@@ -379,7 +379,6 @@
     <string name="systemmsg_group_image_deleted">Grup görüntüsü silindi.</string>
     <string name="systemmsg_member_added">%1$s üyesi eklendi.</string>
     <string name="systemmsg_member_removed">%1$s üyesi kaldırıldı.</string>
-    <string name="systemmsg_group_left">Gruptan ayrılındı.</string>
     <string name="systemmsg_read_receipt_subject">Okundu bilgisi</string>
     <!-- screen lock -->
     <string name="screenlock_title">Ekran kilidi</string>
@@ -388,11 +387,8 @@
     <!-- qr code stuff -->
     <string name="qrscan_title">QR kodunu tara</string>
     <string name="qrscan_fingerprint_label">Parmak izi</string>
-    <string name="qrshow_title">QR doğrulama kodunu göster</string>
     <string name="qrshow_x_joining">%1$s katılır.</string>
     <string name="qrshow_x_verified">%1$s doğrulandı.</string>
-    <string name="qrshow_join_verified_group_title">QR davet kodu</string>
-    <string name="qrshow_join_contact_title">QR doğrulama kodu</string>
     <string name="notify_mark_read">Okundu olarak işaretle</string>
     <string name="notify_media_message">Medya iletisi</string>
     <string name="notify_reply_button">Yanıtla</string>
@@ -414,4 +410,6 @@
     <string name="perm_required_title">İzin gerekli</string>
     <string name="perm_continue">Devam et</string>
     <string name="perm_not_now">Şimdi değil</string>
+    <!-- see qrshow_join_group_title -->
+    <string name="qrshow_join_verified_group_title">QR davet kodu</string>
     </resources>
