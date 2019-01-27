@@ -9,7 +9,7 @@
 - Simplify logging ([#602](https://github.com/deltachat/deltachat-desktop/issues/602)) ([@ralphtheninja](https://github.com/ralphtheninja))
 - change language dropdown to use the local names ([@Simon-Laux](https://github.com/Simon-Laux))
 - Pass in logHandler to menu.init() from ipc ([@ralphtheninja](https://github.com/ralphtheninja))
-- Be explicit when ignoring _*.json, _languages.json should be ignored ([@ralphtheninja](https://github.com/ralphtheninja))
+- Be explicit when ignoring \_\*.json, \_languages.json should be ignored ([@ralphtheninja](https://github.com/ralphtheninja))
 - Selected chat now uses the delta (light) color ([@jikstra](https://github.com/jikstra))
 - Update translations ([@ralphtheninja](https://github.com/ralphtheninja))
 
@@ -26,7 +26,7 @@
 
 ## [0.99.0] - 2019-01-20
 
-### Changed 
+### Changed
 
 - Update copyright year in readme ([@jikstra](https://github.com/jikstra))
 - Use path.join() for getLogsPath() ([@ralphtheninja](https://github.com/ralphtheninja))
