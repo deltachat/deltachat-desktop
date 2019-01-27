@@ -143,19 +143,18 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 #### Logging Options
 Debug messages are disabled by default, enable them with the `--log-debug` flag.
 
-flag | effect
----|---
-`--log-debug` | Log debug messages
+flag               | effect
+-------------------|---------------------------------------------
+`--log-debug`      | Log debug messages
 `--log-to-console` | Output the log to stout / chrome dev console
 
 
 #### Logfile
 
-The Logfiles can are found in:
+The Logfiles can be found in:
 ```
 Linux: ~/.config/DeltaChat/logs/
-Mac: "~/Library/Application Support/DeltaChat/logs" [?]
-Windows: [?]
+Mac: "~/Library/Application Support/DeltaChat/logs"
 ```
 You can also access the logfolder and the current logfile under the `View->Developer` menu:
 <center><img src="devMenu.png"/></center>
@@ -167,7 +166,7 @@ Basicaly the log files are **tab seperated** `csv`-files:
 "2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
 ```
 timestamp | location / module | level | stacktrace | arg1 | arg2 | ...
----|---|---|---|---|---|---
+----------|-------------------|-------|------------|------|------|---
 "2019-01-27T13:46:31.801Z"|"main/deltachat"|"INFO"|[]|"dc_get_info" | - | ...
 
 ## How to Contribute
