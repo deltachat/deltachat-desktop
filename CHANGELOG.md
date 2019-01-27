@@ -2,6 +2,28 @@
 
 ## [Unreleased][unreleased]
 
+## [0.100.0] - 2019-01-27
+
+### Changed
+
+- Simplify logging ([#602](https://github.com/deltachat/deltachat-desktop/issues/602)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- change language dropdown to use the local names ([@Simon-Laux](https://github.com/Simon-Laux))
+- Pass in logHandler to menu.init() from ipc ([@ralphtheninja](https://github.com/ralphtheninja))
+- Be explicit when ignoring _*.json, _languages.json should be ignored ([@ralphtheninja](https://github.com/ralphtheninja))
+- Selected chat now uses the delta (light) color ([@jikstra](https://github.com/jikstra))
+- Update translations ([@ralphtheninja](https://github.com/ralphtheninja))
+
+### Added
+
+- Implement login instruction ([#607](https://github.com/deltachat/deltachat-desktop/issues/607)) ([@jikstra](https://github.com/jikstra))
+- Add emoji picker ([#615](https://github.com/deltachat/deltachat-desktop/issues/615)) ([@jikstra](https://github.com/jikstra))
+
+### Fixed
+
+- Fix message duplication ([#613](https://github.com/deltachat/deltachat-desktop/issues/613)) ([@Simon-Laux](https://github.com/Simon-Laux))
+- Appdata updates and cleanup ([@har9862](https://github.com/har9862))
+- For some reasons emoji-mart doesn't pull in a required dependency, we need to require it manually ([@jikstra](https://github.com/jikstra))
+
 ## [0.99.0] - 2019-01-20
 
 ### Changed 
@@ -426,7 +448,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...HEAD
+
+[0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
 
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
 
