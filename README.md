@@ -141,7 +141,12 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 ### Logging
 
 #### Logging Options
-[?]
+Debug messages are disabled by default, enable them with the `--log-debug` flag.
+
+flag | effect
+---|---
+`--log-debug` | Log debug messages
+`--log-to-console` | Output the log to stout / chrome dev console
 
 
 #### Logfile
