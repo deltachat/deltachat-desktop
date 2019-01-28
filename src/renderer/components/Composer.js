@@ -108,6 +108,10 @@ const SendButtonCircleWrapper = styled.div`
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
   cursor: pointer;
+  
+  &:focus {
+    outline: none;
+  }
 `
 
 const SendButton = styled.button`
@@ -122,6 +126,10 @@ const SendButton = styled.button`
   background-position: 3px 1px;
   background-size: contain;
   vertical-align: middle;
+  
+  &:focus {
+    outline: none;
+  }
 `
 
 class Composer extends React.Component {
