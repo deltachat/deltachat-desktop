@@ -89,6 +89,10 @@ function init (cwd, state, logHandler) {
     dc.archiveChat(chatId, archive)
   })
 
+  ipcMain.on('createChatByContactId', (e, contactId) => {
+    e.returnValue = dc.createChatByContactId(contactId)
+  })
+
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
 
   ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
