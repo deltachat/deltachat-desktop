@@ -120,11 +120,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dispatch(...args)
   })
 
-  // Calls the function without returning the value (async)
-  ipcMain.on('dispatch', (e, ...args) => {
-    dispatch(...args)
-  })
-
   ipcMain.on('initiateKeyTransfer', (e, ...args) => {
     dc.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
