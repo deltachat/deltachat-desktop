@@ -145,6 +145,10 @@ function init (cwd, state, logHandler) {
   ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
   ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
 
+  ipcMain.on('setConfig', (e, key, value) => {
+    e.returnValue = dc.setConfig(key, value)
+  })
+
   ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the

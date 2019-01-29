@@ -113,7 +113,7 @@ class Settings extends React.Component {
   }
 
   handleDeltaSettingsChange (key, value) {
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
+    ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
