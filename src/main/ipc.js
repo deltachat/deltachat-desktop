@@ -77,6 +77,8 @@ function init (cwd, state, logHandler) {
     dc.sendMessage(chatId, text, fileName)
   })
 
+  ipcMain.on('fetchMessages', e => dc.fetchMessages())
+
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
   ipcMain.on('dispatchSync', (e, ...args) => {
