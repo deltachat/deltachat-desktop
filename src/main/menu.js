@@ -43,7 +43,9 @@ function setLabels (menu) {
 }
 
 function getAvailableLanguages () {
-  return languages.map(({ locale, name }) => {
+  return languages.sort(
+    ({ name: name1 }, { name: name2 }) => name1 > name2 ? 1 : -1
+  ).map(({ locale, name }) => {
     return {
       label: name,
       type: 'radio',
