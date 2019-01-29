@@ -520,9 +520,9 @@ class DeltaChatController extends EventEmitter {
     this.selectChat(chatId)
   }
 
-  _blockedContacts (...args) {
+  _blockedContacts () {
     if (!this._dc) return []
-    return this._dc.getBlockedContacts(...args).map(id => {
+    return this._dc.getBlockedContacts().map(id => {
       return this._dc.getContact(id).toJson()
     })
   }
