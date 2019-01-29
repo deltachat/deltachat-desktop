@@ -89,6 +89,8 @@ function init (cwd, state, logHandler) {
     dc.archiveChat(chatId, archive)
   })
 
+  ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
+
   ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
 
   ipcMain.on('contactRequests', () => dc.contactRequests())

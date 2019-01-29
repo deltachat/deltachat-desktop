@@ -62,7 +62,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   showArchivedChats (show) {
-    ipcRenderer.send('dispatch', 'showArchivedChats', show)
+    ipcRenderer.send('showArchivedChats', show)
   }
 
   onChatClick (chatId) {
