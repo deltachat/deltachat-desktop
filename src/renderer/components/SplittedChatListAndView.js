@@ -37,10 +37,6 @@ const BelowNavbar = styled.div`
   margin-top: 50px;
   overflow: hidden;
 `
-const Welcome = styled.div`
-  user-select: none;
-  cursor: default;
-`
 
 class SplittedChatListAndView extends React.Component {
   constructor (props) {
@@ -160,10 +156,8 @@ class SplittedChatListAndView extends React.Component {
                   deltachat={this.props.deltachat} />)
               : (
                 <Centered>
-                  <Welcome>
-                    <h1>{tx('welcome_desktop')}</h1>
-                    <p>{tx('no_chat_selected_suggestion_desktop')}</p>
-                  </Welcome>
+                  <h1>{tx('welcome_desktop')}</h1>
+                  <p>{tx('no_chat_selected_suggestion_desktop')}</p>
                 </Centered>
               )
           }

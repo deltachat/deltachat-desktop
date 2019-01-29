@@ -125,6 +125,6 @@ ul li button {
   background: transparent;
 }
 
-.bp3-button{
+h1, p, .bp3-button {
   user-select: none;
 }
