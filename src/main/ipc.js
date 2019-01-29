@@ -93,6 +93,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
 
+  ipcMain.on('getContacts', (e, listFlags, queryStr) => {
+    e.returnValue = dc.getContacts(listFlags, queryStr)
+  })
+
   ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
 
   ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))
