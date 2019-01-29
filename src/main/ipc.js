@@ -109,6 +109,8 @@ function init (cwd, state, logHandler) {
     dc.forwardMessage(msgId, contactId)
   })
 
+  ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
+
   ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the
