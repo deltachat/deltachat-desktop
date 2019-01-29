@@ -124,6 +124,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('contactRequests', () => dc.contactRequests())
 
+  ipcMain.on('getEncrInfo', (e, contactId) => {
+    e.returnValue = dc.getEncrInfo(contactId)
+  })
+
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
   })
