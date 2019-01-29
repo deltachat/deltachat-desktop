@@ -129,6 +129,10 @@ function init (cwd, state, logHandler) {
     dc.forwardMessage(msgId, contactId)
   })
 
+  ipcMain.on('getQrCode', (e, chatId) => {
+    e.returnValue = dc.getQrCode(chatId)
+  })
+
   ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
   ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
 
