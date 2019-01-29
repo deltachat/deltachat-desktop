@@ -146,6 +146,7 @@ class ScreenController extends React.Component {
           ? <LoginScreen logins={logins}>
             <H5>{tx('login_title')}</H5>
             <Login onSubmit={this.handleLogin} loading={deltachat.configuring}>
+              <br />
               <Button type='submit' text={tx('login_title')} />
               <Button type='cancel' text={tx('cancel')} />
             </Login>
