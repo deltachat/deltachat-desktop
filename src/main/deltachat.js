@@ -33,9 +33,6 @@ class DeltaChatController extends EventEmitter {
     log.debug('Core Event', event, payload)
   }
 
-  /**
-   * Dispatched when logging in from Login
-   */
   login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
     const cwd = this.getPath(credentials.addr)
@@ -140,9 +137,6 @@ class DeltaChatController extends EventEmitter {
     })
   }
 
-  /**
-   * Dispatched when logging out from ChatList
-   */
   logout () {
     this.close()
     this._resetState()
@@ -169,9 +163,6 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  /**
-   * Dispatched when sending a message in ChatView
-   */
   sendMessage (chatId, text, filename, opts) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
@@ -188,38 +179,23 @@ class DeltaChatController extends EventEmitter {
     this._render()
   }
 
-  /**
-   * Dispatched from RenderMessage#onDelete in ChatView
-   */
   deleteMessage (id) {
     log.info(`deleting message ${id}`)
     this._dc.deleteMessages(id)
   }
 
-  /**
-   * Dispatched in KeyTransfer dialog
-   */
   initiateKeyTransfer (...args) {
     return this._dc.initiateKeyTransfer(...args)
   }
 
-  /**
-   * Dispatched in SetupMessage dialog
-   */
   continueKeyTransfer (...args) {
     return this._dc.continueKeyTransfer(...args)
   }
 
-  /**
-   * Dispatched when creating contact in CreateContact
-   */
   createContact (...args) {
     return this._dc.createContact(...args)
   }
 
-  /**
-   * Dispatched when accepting a chat in DeadDrop
-   */
   chatWithContact (deadDrop) {
     log.info(`chat with dead drop ${deadDrop}`)
     const contact = this._dc.getContact(deadDrop.contact.id)
@@ -231,9 +207,6 @@ class DeltaChatController extends EventEmitter {
     if (chatId) this.selectChat(chatId)
   }
 
-  /**
-   * Dispatched from UnblockContacts
-   */
   unblockContact (contactId) {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, false)
@@ -242,9 +215,6 @@ class DeltaChatController extends EventEmitter {
     return true
   }
 
-  /**
-   * Dispatched when denying a chat in DeadDrop
-   */
   blockContact (contactId) {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, true)
@@ -253,9 +223,6 @@ class DeltaChatController extends EventEmitter {
     return true
   }
 
-  /**
-   * Dispatched when creating a chat in CreateChat
-   */
   createChatByContactId (contactId) {
     const contact = this._dc.getContact(contactId)
     if (!contact) {
@@ -273,16 +240,10 @@ class DeltaChatController extends EventEmitter {
     return chatId
   }
 
-  /**
-   * Dispatched when from EditGroup
-   */
   getChatContacts (chatId) {
     return this._dc.getChatContacts(chatId)
   }
 
-  /**
-   * Dispatched from EditGroup
-   */
   modifyGroup (chatId, name, image, remove, add) {
     log.debug('action - modify group', { chatId, name, image, remove, add })
     this._dc.setChatName(chatId, name)
@@ -295,41 +256,26 @@ class DeltaChatController extends EventEmitter {
     return true
   }
 
-  /**
-   * Dispatched from menu alternative in SplittedChatListAndView
-   */
   deleteChat (chatId) {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
   }
 
-  /**
-   * Dispatched from menu alternative in SplittedChatListAndView
-   */
   archiveChat (chatId, archive) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
   }
 
-  /**
-   * Dispatched from SplittedChatListAndView
-   */
   showArchivedChats (show) {
     this._showArchivedChats = show
     this._render()
   }
 
-  /**
-   * Dispatched when creating a verified group in CreateGroup
-   */
   createVerifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createVerifiedGroupChat(name)
     return this._setGroupData(chatId, image, contactIds)
   }
 
-  /**
-   * Dispatched when creating an unverified group in CreateGroup
-   */
   createUnverifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createUnverifiedGroupChat(name)
     return this._setGroupData(chatId, image, contactIds)
@@ -342,17 +288,11 @@ class DeltaChatController extends EventEmitter {
     return { chatId }
   }
 
-  /**
-   * Dispatched from menu alternative in SplittedChatListAndView
-   */
   leaveGroup (chatId) {
     log.debug(`action - leaving chat ${chatId}`)
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  /**
-   * Dispatched from SplittedChatListAndView and used internally
-   */
   selectChat (chatId) {
     log.debug(`action - selecting chat ${chatId}`)
     this._pages = 1
@@ -375,11 +315,6 @@ class DeltaChatController extends EventEmitter {
     this._render()
   }
 
-  /**
-   * Dispatched from GroupBase when showing a QR code for:
-   * - "Joining a verified group" protocol
-   * - "Setup verified contact" protocol (chatId = 0)
-   */
   getQrCode (chatId = 0) {
     return this._dc.getSecurejoinQrCode(chatId)
   }
