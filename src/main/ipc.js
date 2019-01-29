@@ -83,6 +83,8 @@ function init (cwd, state, logHandler) {
     dc.modifyGroup(chatId, name, image, remove, add)
   })
 
+  ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
+
   ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the

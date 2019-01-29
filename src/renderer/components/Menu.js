@@ -27,7 +27,7 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_leave_group'), yes => {
       if (yes) {
-        ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+        ipcRenderer.send('leaveGroup', selectedChat.id)
       }
     })
   }
