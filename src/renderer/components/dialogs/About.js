@@ -6,7 +6,6 @@ const {
   gitHubUrl,
   gitHubLicenseUrl
 } = require('../../../application-constants')
-const Unselectable = require('../helpers/Unselectable')
 
 class ClickableLink extends React.Component {
   onClick () {
@@ -34,12 +33,10 @@ class About extends React.Component {
         onClose={onClose}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
-          <Unselectable>
-            <p style={{ color: 'grey' }}>{`Version ${appVersion()}`}</p>
-            <p>Official Delta Chat Desktop app.</p>
-            <p>This software is licensed under <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' />.</p>
-            <p>Source code is available on <ClickableLink href={gitHubUrl()} text='GitHub' />.</p>
-          </Unselectable>
+          <p style={{ color: 'grey' }}>{`Version ${appVersion()}`}</p>
+          <p>Official Delta Chat Desktop app.</p>
+          <p>This software is licensed under <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' />.</p>
+          <p>Source code is available on <ClickableLink href={gitHubUrl()} text='GitHub' />.</p>
         </div>
       </Dialog>
     )
