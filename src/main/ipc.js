@@ -154,12 +154,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('logout', () => dc.logout())
 
-  // Calls a function directly in the deltachat-node instance and returns the
-  // value (sync)
-  ipcMain.on('dispatchSync', (e, ...args) => {
-    e.returnValue = dispatch(...args)
-  })
-
   ipcMain.on('initiateKeyTransfer', (e) => {
     dc.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
@@ -215,12 +209,6 @@ function init (cwd, state, logHandler) {
 
     tmp.login(credentials, fakeRender, txCoreStrings())
   })
-
-  function dispatch (name, ...args) {
-    const handler = dc[name]
-    if (!handler) throw new Error(`fn with name ${name} does not exist`)
-    return handler.call(dc, ...args)
-  }
 
   function render () {
     log.debug('RENDER')
