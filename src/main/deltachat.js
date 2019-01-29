@@ -192,8 +192,8 @@ class DeltaChatController extends EventEmitter {
     return this._dc.continueKeyTransfer(...args)
   }
 
-  createContact (...args) {
-    return this._dc.createContact(...args)
+  createContact (name, email) {
+    return this._dc.createContact(name, email)
   }
 
   chatWithContact (deadDrop) {

@@ -50,7 +50,7 @@ class CreateContact extends React.Component {
     const { name, email } = this.state
 
     function createContact () {
-      var id = ipcRenderer.sendSync('dispatchSync', 'createContact', name, email)
+      const id = ipcRenderer.sendSync('createContact', name, email)
       self.props.screenProps.onSubmit(id)
     }
 
