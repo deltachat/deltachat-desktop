@@ -104,6 +104,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
 
   ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
+  ipcMain.on('unblockContact', (e, id) => dc.unblockContact(id))
 
   ipcMain.on('getContacts', (e, listFlags, queryStr) => {
     e.returnValue = dc.getContacts(listFlags, queryStr)
