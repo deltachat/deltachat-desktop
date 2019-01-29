@@ -93,6 +93,8 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))
 
+  ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
+
   ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
 
   ipcMain.on('contactRequests', () => dc.contactRequests())

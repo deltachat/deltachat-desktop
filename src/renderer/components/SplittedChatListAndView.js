@@ -76,7 +76,7 @@ class SplittedChatListAndView extends React.Component {
 
   searchChats (queryStr) {
     this.setState({ queryStr })
-    ipcRenderer.send('dispatch', 'searchChats', queryStr)
+    ipcRenderer.send('searchChats', queryStr)
   }
 
   onDeadDropClick (deadDrop) {
