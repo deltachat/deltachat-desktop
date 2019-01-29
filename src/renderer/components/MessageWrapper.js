@@ -214,9 +214,7 @@ function convert (message) {
     })
   }
 
-  message.onDelete = (el) => {
-    ipcRenderer.send('dispatch', 'deleteMessage', message.id)
-  }
+  message.onDelete = () => ipcRenderer.send('deleteMessage', message.id)
 
   var msg = message.msg
 

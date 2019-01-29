@@ -93,6 +93,8 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('contactRequests', () => dc.contactRequests())
 
+  ipcMain.on('deleteMessage', (e, id) => dc.deleteMessage(id))
+
   ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the

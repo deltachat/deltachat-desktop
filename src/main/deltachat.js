@@ -191,9 +191,9 @@ class DeltaChatController extends EventEmitter {
   /**
    * Dispatched from RenderMessage#onDelete in ChatView
    */
-  deleteMessage (messageId) {
-    log.info(`deleting message ${messageId}`)
-    this._dc.deleteMessages(messageId)
+  deleteMessage (id) {
+    log.info(`deleting message ${id}`)
+    this._dc.deleteMessages(id)
   }
 
   /**
