@@ -148,6 +148,9 @@ function init (cwd, state, logHandler) {
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dc.setConfig(key, value)
   })
+  ipcMain.on('getConfigFor', (e, keys) => {
+    e.returnValue = dc.getConfigFor(keys)
+  })
 
   ipcMain.on('logout', () => dc.logout())
 

@@ -52,7 +52,6 @@ class Settings extends React.Component {
   componentDidUpdate (prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
       const settings = ipcRenderer.sendSync(
-        'dispatchSync',
         'getConfigFor', [
           'inbox_watch',
           'sentbox_watch',
