@@ -271,11 +271,13 @@ class DeltaChatController extends EventEmitter {
     this._render()
   }
 
+  // TODO refactor
   createVerifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createVerifiedGroupChat(name)
     return this._setGroupData(chatId, image, contactIds)
   }
 
+  // TODO refactor
   createUnverifiedGroup (name, image, contactIds) {
     const chatId = this._dc.createUnverifiedGroupChat(name)
     return this._setGroupData(chatId, image, contactIds)
