@@ -81,7 +81,6 @@ class Login extends React.Component {
     return (
       <InputGroup
         id={keyValue}
-        leftIcon='lock'
         type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
         value={this.state.credentials[keyValue]}
         onChange={this.handleCredentialsChange}
@@ -122,7 +121,6 @@ class Login extends React.Component {
               disabled={addrDisabled}
               type='text'
               value={addr}
-              leftIcon='envelope'
               onChange={this.handleCredentialsChange}
             />
           </FormGroup>
@@ -143,7 +141,6 @@ class Login extends React.Component {
                 id='mailUser'
                 type='text'
                 value={mailUser}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -155,7 +152,6 @@ class Login extends React.Component {
                 id='mailServer'
                 type='text'
                 value={mailServer}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -169,7 +165,6 @@ class Login extends React.Component {
                 min='0'
                 max='65535'
                 value={mailPort}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -191,7 +186,6 @@ class Login extends React.Component {
                 id='sendUser'
                 type='text'
                 value={sendUser}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -209,7 +203,6 @@ class Login extends React.Component {
                 id='sendServer'
                 type='text'
                 value={sendServer}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -223,7 +216,6 @@ class Login extends React.Component {
                 min='0'
                 max='65535'
                 value={sendPort}
-                leftIcon='envelope'
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
