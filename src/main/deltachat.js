@@ -184,8 +184,8 @@ class DeltaChatController extends EventEmitter {
     this._dc.deleteMessages(id)
   }
 
-  initiateKeyTransfer (...args) {
-    return this._dc.initiateKeyTransfer(...args)
+  initiateKeyTransfer (cb) {
+    return this._dc.initiateKeyTransfer(cb)
   }
 
   continueKeyTransfer (...args) {
