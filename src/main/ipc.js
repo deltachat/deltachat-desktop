@@ -85,6 +85,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
 
+  ipcMain.on('archiveChat', (e, chatId, archive) => {
+    dc.archiveChat(chatId, archive)
+  })
+
   ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the
