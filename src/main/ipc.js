@@ -79,6 +79,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('fetchMessages', () => dc.fetchMessages())
 
+  ipcMain.on('getChatContacts', (e, chatId) => {
+    e.returnValue = dc.getChatContacts(chatId)
+  })
+
   ipcMain.on('modifyGroup', (e, chatId, name, image, remove, add) => {
     dc.modifyGroup(chatId, name, image, remove, add)
   })

@@ -19,10 +19,7 @@ class EditGroup extends GroupBase {
       chatId: chat.id
     })
 
-    this.before = ipcRenderer.sendSync(
-      'dispatchSync',
-      'getChatContacts',
-      chat.id)
+    this.before = ipcRenderer.sendSync('getChatContacts', chat.id)
       .filter(id => id !== C.DC_CONTACT_ID_SELF)
       .map(id => Number(id))
     this.before.forEach(id => { group[id] = true })
