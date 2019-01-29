@@ -77,11 +77,13 @@ function init (cwd, state, logHandler) {
     dc.sendMessage(chatId, text, fileName)
   })
 
-  ipcMain.on('fetchMessages', e => dc.fetchMessages())
+  ipcMain.on('fetchMessages', () => dc.fetchMessages())
 
   ipcMain.on('modifyGroup', (e, chatId, name, image, remove, add) => {
     dc.modifyGroup(chatId, name, image, remove, add)
   })
+
+  ipcMain.on('logout', () => dc.logout())
 
   // Calls a function directly in the deltachat-node instance and returns the
   // value (sync)
