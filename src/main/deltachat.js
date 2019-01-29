@@ -323,8 +323,8 @@ class DeltaChatController extends EventEmitter {
     this._dc.importExport(C.DC_IMEX_IMPORT_BACKUP, filename)
   }
 
-  backupExport (directory) {
-    this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, directory)
+  backupExport (dir) {
+    this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)
   }
 
   setConfig (key, value) {

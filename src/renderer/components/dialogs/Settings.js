@@ -96,7 +96,7 @@ class Settings extends React.Component {
       }
       remote.dialog.showOpenDialog(opts, filenames => {
         if (!filenames || !filenames.length) return
-        ipcRenderer.send('dispatch', 'backupExport', filenames[0])
+        ipcRenderer.send('backupExport', filenames[0])
       })
     })
   }
