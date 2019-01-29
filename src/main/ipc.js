@@ -123,6 +123,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('contactRequests', () => dc.contactRequests())
 
+  ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
+    e.returnValue = dc.getChatMedia(msgType1, msgType2)
+  })
+
   ipcMain.on('deleteMessage', (e, id) => dc.deleteMessage(id))
 
   ipcMain.on('forwardMessage', (e, msgId, contactId) => {

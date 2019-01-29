@@ -535,9 +535,9 @@ class DeltaChatController extends EventEmitter {
     return this._dc.getContactEncryptionInfo(contactId)
   }
 
-  getChatMedia (msgType, orMsgType) {
+  getChatMedia (msgType1, msgType2) {
     if (!this._selectedChatId) return
-    var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType, orMsgType)
+    var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
     return mediaMessages.map(this.messageIdToJson.bind(this))
   }
 
