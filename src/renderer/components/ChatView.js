@@ -96,7 +96,7 @@ class ChatView extends React.Component {
 
   writeMessage (opts) {
     const { chat } = this.props
-    ipcRenderer.send('dispatch', 'sendMessage', chat.id, opts.text, opts.filename)
+    ipcRenderer.send('sendMessage', chat.id, opts.text, opts.filename)
   }
 
   fetchNextMessages () {

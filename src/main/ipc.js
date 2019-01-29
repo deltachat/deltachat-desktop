@@ -63,16 +63,18 @@ function init (cwd, state, logHandler) {
 
   setupNotifications(dc, state.saved)
 
-  // Create a new instance
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
-    var targetDir = dc.getPath(addr)
-    rimraf.sync(targetDir)
+    rimraf.sync(dc.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
+  })
+
+  ipcMain.on('sendMessage', (e, chatId, text, fileName) => {
+    dc.sendMessage(chatId, text, fileName)
   })
 
   // Calls a function directly in the deltachat-node instance and returns the
