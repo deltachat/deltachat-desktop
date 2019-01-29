@@ -69,7 +69,7 @@ class Controller {
   }
 
   logout () {
-    ipcRenderer.send('dispatch', 'logout')
+    ipcRenderer.send('logout')
   }
 
   onEncrInfo () {
