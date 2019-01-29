@@ -17,7 +17,7 @@ class DeadDrop extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDrop)
+    ipcRenderer.send('chatWithContact', this.props.deadDrop)
     this.close()
   }
 
