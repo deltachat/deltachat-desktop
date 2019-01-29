@@ -65,7 +65,7 @@ class Controller {
   }
 
   onContactRequests () {
-    ipcRenderer.send('dispatch', 'contactRequests')
+    ipcRenderer.send('contactRequests')
   }
 
   logout () {
