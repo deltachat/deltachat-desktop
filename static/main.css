@@ -64,10 +64,6 @@ ul li button {
   min-width: 200px;
 }
 
-.ShowArchivedChats .module-conversation-list-item__avatar {
-  visibility: hidden;
-}
-
 .bp3-overlay-open .bp3-transition-container {
   top: -50px !important;
 }
