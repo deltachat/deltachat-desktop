@@ -188,8 +188,8 @@ class DeltaChatController extends EventEmitter {
     return this._dc.initiateKeyTransfer(cb)
   }
 
-  continueKeyTransfer (...args) {
-    return this._dc.continueKeyTransfer(...args)
+  continueKeyTransfer (messageId, setupCode, cb) {
+    return this._dc.continueKeyTransfer(messageId, setupCode, cb)
   }
 
   createContact (name, email) {
