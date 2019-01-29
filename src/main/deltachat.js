@@ -271,19 +271,10 @@ class DeltaChatController extends EventEmitter {
     this._render()
   }
 
-  // TODO refactor
-  createVerifiedGroup (name, image, contactIds) {
-    const chatId = this._dc.createVerifiedGroupChat(name)
-    return this._setGroupData(chatId, image, contactIds)
-  }
-
-  // TODO refactor
-  createUnverifiedGroup (name, image, contactIds) {
-    const chatId = this._dc.createUnverifiedGroupChat(name)
-    return this._setGroupData(chatId, image, contactIds)
-  }
-
-  _setGroupData (chatId, image, contactIds) {
+  createGroupChat (verified, name, image, contactIds) {
+    let chatId
+    if (verified) chatId = this._dc.createVerifiedGroupChat(name)
+    else chatId = this._dc.createUnverifiedGroupChat(name)
     this._dc.setChatProfileImage(chatId, image)
     contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
     this.selectChat(chatId)

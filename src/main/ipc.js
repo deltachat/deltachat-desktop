@@ -107,14 +107,8 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
 
-  // TODO refactor
-  ipcMain.on('createVerifiedGroup', (e, name, image, contactIds) => {
-    e.returnValue = dc.createVerifiedGroup(name, image, contactIds)
-  })
-
-  // TODO refactor
-  ipcMain.on('createUnverifiedGroup', (e, name, image, contactIds) => {
-    e.returnValue = dc.createUnverifiedGroup(name, image, contactIds)
+  ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
+    e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
 
   ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))

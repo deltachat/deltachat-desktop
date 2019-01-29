@@ -22,9 +22,9 @@ class CreateGroup extends GroupBase {
   onSubmit () {
     const contactIds = Object.keys(this.state.group)
     const { verified } = this.props.screenProps
-    // TODO refactor
     ipcRenderer.sendSync(
-      verified ? 'createVerifiedGroup' : 'createUnverifiedGroup',
+      'createGroupChat',
+      verified,
       this.state.name,
       this.state.image,
       contactIds
