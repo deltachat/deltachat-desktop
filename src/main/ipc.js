@@ -132,7 +132,7 @@ function init (cwd, state, logHandler) {
     e.returnValue = dispatch(...args)
   })
 
-  ipcMain.on('initiateKeyTransfer', (e, ...args) => {
+  ipcMain.on('initiateKeyTransfer', (e) => {
     dc.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
