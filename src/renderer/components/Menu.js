@@ -44,7 +44,7 @@ class Controller {
       var contact = selectedChat.contacts[0]
       confirmation(tx('ask_block_contact'), yes => {
         if (yes) {
-          ipcRenderer.sendSync('dispatchSync', 'blockContact', contact.id)
+          ipcRenderer.send('blockContact', contact.id)
         }
       })
     }
