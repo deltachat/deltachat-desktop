@@ -212,7 +212,6 @@ class DeltaChatController extends EventEmitter {
     this._dc.blockContact(contactId, false)
     const name = contact.getNameAndAddress()
     log.info(`Unblocked contact ${name} (id = ${contactId})`)
-    return true
   }
 
   blockContact (contactId) {
@@ -220,7 +219,6 @@ class DeltaChatController extends EventEmitter {
     this._dc.blockContact(contactId, true)
     const name = contact.getNameAndAddress()
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
-    return true
   }
 
   createChatByContactId (contactId) {
