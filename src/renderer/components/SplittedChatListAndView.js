@@ -66,7 +66,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onChatClick (chatId) {
-    ipcRenderer.send('dispatch', 'selectChat', chatId)
+    ipcRenderer.send('selectChat', chatId)
     try {
       this.chatView.current.composerRef.current.focusInputMessage()
     } catch (error) {
