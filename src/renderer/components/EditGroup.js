@@ -43,7 +43,6 @@ class EditGroup extends GroupBase {
     const { chat } = this.props.screenProps
 
     ipcRenderer.send(
-      'dispatch',
       'modifyGroup',
       chat.id,
       this.state.name,
