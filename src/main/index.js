@@ -1,13 +1,19 @@
 console.time('init')
 
+const { app, session } = require('electron')
+const rc = app.rc = require('../rc')
+
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  console.error('Only one instance allowed. Quitting.')
+  app.quit()
+}
+
 // Setup folders
 const mkdirp = require('mkdirp')
 const { getConfigPath, getLogsPath } = require('../application-constants')
 mkdirp.sync(getConfigPath())
 mkdirp.sync(getLogsPath())
-
-const { app, session } = require('electron')
-const rc = app.rc = require('../rc')
 
 // Setup Logger
 const logHandler = require('./log-handler')()
