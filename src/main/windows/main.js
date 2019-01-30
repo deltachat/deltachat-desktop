@@ -61,7 +61,7 @@ function init (app, options) {
   app.on('second-instance', () => {
     log.debug('Someone tried to run a second instance')
     if (win) {
-      if (win.isMinimized()) win.restore()
+      if (win.isMinimized()) win.show()
       win.focus()
     }
   })
