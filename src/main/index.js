@@ -3,8 +3,7 @@ console.time('init')
 const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 
-const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) {
+if (!app.requestSingleInstanceLock()) {
   console.error('Only one instance allowed. Quitting.')
   app.quit()
 }
