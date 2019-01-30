@@ -6,10 +6,8 @@ const Media = require('./Media')
 const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
-const Centered = require('./helpers/Centered')
 const SearchInput = require('./SearchInput.js')
 
-const Unselectable = require('./helpers/Unselectable')
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
 
@@ -37,6 +35,9 @@ const BelowNavbar = styled.div`
   height: calc(100vh - 50px);
   margin-top: 50px;
   overflow: hidden;
+`
+const Welcome = styled.div`
+  text-align: center;
 `
 
 class SplittedChatListAndView extends React.Component {
@@ -156,14 +157,10 @@ class SplittedChatListAndView extends React.Component {
                   chat={selectedChat}
                   deltachat={this.props.deltachat} />)
               : (
-                <Unselectable>
-                  <Centered>
-                    <div className='window '>
-                      <h1>{tx('welcome_desktop')}</h1>
-                      <p>{tx('no_chat_selected_suggestion_desktop')}</p>
-                    </div>
-                  </Centered>
-                </Unselectable>
+                <Welcome>
+                  <h1>{tx('welcome_desktop')}</h1>
+                  <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+                </Welcome>
               )
           }
         </BelowNavbar>

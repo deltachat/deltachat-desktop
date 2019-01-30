@@ -1,9 +1,9 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
 const confirmation = require('./dialogs/confirmationDialog')
 const { RenderContact } = require('./Contact')
-const Centered = require('./helpers/Centered')
 
 const {
   Alignment,
@@ -13,6 +13,10 @@ const {
   NavbarHeading,
   Button
 } = require('@blueprintjs/core')
+
+const NoneBlocked = styled.h1`
+  text-align: center;
+`
 
 class UnblockContacts extends React.Component {
   constructor (props) {
@@ -43,7 +47,7 @@ class UnblockContacts extends React.Component {
           </NavbarGroup>
         </Navbar>
         <div className='window'>
-          {!blockedContacts.length && <Centered><h1>{tx('none_blocked_desktop')}</h1></Centered>}
+          {!blockedContacts.length && <NoneBlocked>{tx('none_blocked_desktop')}</NoneBlocked>}
           {blockedContacts.map((contact) => {
             return (<RenderContact
               contact={contact}
