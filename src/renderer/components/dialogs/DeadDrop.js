@@ -17,7 +17,7 @@ class DeadDrop extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('dispatch', 'chatWithContact', this.props.deadDrop)
+    ipcRenderer.send('chatWithContact', this.props.deadDrop)
     this.close()
   }
 
@@ -26,8 +26,7 @@ class DeadDrop extends React.Component {
   }
 
   never () {
-    var contactId = this.props.deadDrop.contact.id
-    ipcRenderer.send('dispatch', 'blockContact', contactId)
+    ipcRenderer.send('blockContact', this.props.deadDrop.contact.id)
     this.close()
   }
 

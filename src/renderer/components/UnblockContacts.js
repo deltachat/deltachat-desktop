@@ -24,7 +24,7 @@ class UnblockContacts extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
-        ipcRenderer.sendSync('dispatchSync', 'unblockContact', contact.id)
+        ipcRenderer.send('unblockContact', contact.id)
       }
     })
   }

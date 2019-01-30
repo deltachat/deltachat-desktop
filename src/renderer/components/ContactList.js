@@ -44,10 +44,11 @@ class ContactList extends React.Component {
 
   _getContacts () {
     const listFlags = this.props.showVerifiedContacts ? C.DC_GCL_VERIFIED_ONLY : 0
-    const contacts = ipcRenderer.sendSync(
-      'dispatchSync', 'getContacts', listFlags, this.state.queryStr
+    return ipcRenderer.sendSync(
+      'getContacts',
+      listFlags,
+      this.state.queryStr
     )
-    return contacts
   }
 
   render () {

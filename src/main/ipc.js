@@ -63,30 +63,98 @@ function init (cwd, state, logHandler) {
 
   setupNotifications(dc, state.saved)
 
-  // Create a new instance
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
-    var targetDir = dc.getPath(addr)
-    rimraf.sync(targetDir)
+    rimraf.sync(dc.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
   })
 
-  // Calls a function directly in the deltachat-node instance and returns the
-  // value (sync)
-  ipcMain.on('dispatchSync', (e, ...args) => {
-    e.returnValue = dispatch(...args)
+  ipcMain.on('sendMessage', (e, chatId, text, fileName) => {
+    dc.sendMessage(chatId, text, fileName)
   })
 
-  // Calls the function without returning the value (async)
-  ipcMain.on('dispatch', (e, ...args) => {
-    dispatch(...args)
+  ipcMain.on('fetchMessages', () => dc.fetchMessages())
+
+  ipcMain.on('getChatContacts', (e, chatId) => {
+    e.returnValue = dc.getChatContacts(chatId)
   })
 
-  ipcMain.on('initiateKeyTransfer', (e, ...args) => {
+  ipcMain.on('modifyGroup', (e, chatId, name, image, remove, add) => {
+    dc.modifyGroup(chatId, name, image, remove, add)
+  })
+
+  ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
+
+  ipcMain.on('archiveChat', (e, chatId, archive) => {
+    dc.archiveChat(chatId, archive)
+  })
+
+  ipcMain.on('createChatByContactId', (e, contactId) => {
+    e.returnValue = dc.createChatByContactId(contactId)
+  })
+
+  ipcMain.on('createContact', (e, name, email) => {
+    e.returnValue = dc.createContact(name, email)
+  })
+
+  ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
+
+  ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
+  ipcMain.on('unblockContact', (e, id) => dc.unblockContact(id))
+
+  ipcMain.on('getContacts', (e, listFlags, queryStr) => {
+    e.returnValue = dc.getContacts(listFlags, queryStr)
+  })
+
+  ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
+
+  ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
+    e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
+  })
+
+  ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))
+
+  ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
+
+  ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
+
+  ipcMain.on('contactRequests', () => dc.contactRequests())
+
+  ipcMain.on('getEncrInfo', (e, contactId) => {
+    e.returnValue = dc.getEncrInfo(contactId)
+  })
+
+  ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
+    e.returnValue = dc.getChatMedia(msgType1, msgType2)
+  })
+
+  ipcMain.on('deleteMessage', (e, id) => dc.deleteMessage(id))
+
+  ipcMain.on('forwardMessage', (e, msgId, contactId) => {
+    dc.forwardMessage(msgId, contactId)
+  })
+
+  ipcMain.on('getQrCode', (e, chatId) => {
+    e.returnValue = dc.getQrCode(chatId)
+  })
+
+  ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
+  ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
+
+  ipcMain.on('setConfig', (e, key, value) => {
+    e.returnValue = dc.setConfig(key, value)
+  })
+  ipcMain.on('getConfigFor', (e, keys) => {
+    e.returnValue = dc.getConfigFor(keys)
+  })
+
+  ipcMain.on('logout', () => dc.logout())
+
+  ipcMain.on('initiateKeyTransfer', (e) => {
     dc.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
@@ -141,12 +209,6 @@ function init (cwd, state, logHandler) {
 
     tmp.login(credentials, fakeRender, txCoreStrings())
   })
-
-  function dispatch (name, ...args) {
-    const handler = dc[name]
-    if (!handler) throw new Error(`fn with name ${name} does not exist`)
-    return handler.call(dc, ...args)
-  }
 
   function render () {
     log.debug('RENDER')

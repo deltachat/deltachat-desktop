@@ -69,7 +69,7 @@ class CreateChat extends React.Component {
 
   chooseContact (contact) {
     const tx = window.translate
-    var chatId = ipcRenderer.sendSync('dispatchSync', 'createChatByContactId', contact.id)
+    const chatId = ipcRenderer.sendSync('createChatByContactId', contact.id)
     if (!chatId) return this.props.userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
     this.props.changeScreen('ChatView', { chatId })
   }

@@ -60,7 +60,7 @@ class Login extends React.Component {
   }
 
   cancelClick (event) {
-    ipcRenderer.send('dispatch', 'logout')
+    ipcRenderer.send('logout')
     this.setState({ credentials: this._defaultCredentials() })
     event.preventDefault()
     event.stopPropagation()

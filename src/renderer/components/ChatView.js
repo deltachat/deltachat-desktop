@@ -96,14 +96,14 @@ class ChatView extends React.Component {
 
   writeMessage (opts) {
     const { chat } = this.props
-    ipcRenderer.send('dispatch', 'sendMessage', chat.id, opts.text, opts.filename)
+    ipcRenderer.send('sendMessage', chat.id, opts.text, opts.filename)
   }
 
   fetchNextMessages () {
     const chat = this.props.chat
     if (chat.totalMessages === chat.messages.length) return
     this.scrollPrepare()
-    ipcRenderer.send('dispatch', 'fetchMessages')
+    ipcRenderer.send('fetchMessages')
   }
 
   handleScroll () {

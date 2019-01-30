@@ -62,11 +62,11 @@ class SplittedChatListAndView extends React.Component {
   }
 
   showArchivedChats (show) {
-    ipcRenderer.send('dispatch', 'showArchivedChats', show)
+    ipcRenderer.send('showArchivedChats', show)
   }
 
   onChatClick (chatId) {
-    ipcRenderer.send('dispatch', 'selectChat', chatId)
+    ipcRenderer.send('selectChat', chatId)
     try {
       if (this.chatView.current) {
         this.chatView.current.composerRef.current.focusInputMessage()
@@ -78,7 +78,7 @@ class SplittedChatListAndView extends React.Component {
 
   searchChats (queryStr) {
     this.setState({ queryStr })
-    ipcRenderer.send('dispatch', 'searchChats', queryStr)
+    ipcRenderer.send('searchChats', queryStr)
   }
 
   onDeadDropClick (deadDrop) {

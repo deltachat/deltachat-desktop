@@ -52,7 +52,6 @@ class Settings extends React.Component {
   componentDidUpdate (prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
       const settings = ipcRenderer.sendSync(
-        'dispatchSync',
         'getConfigFor', [
           'inbox_watch',
           'sentbox_watch',
@@ -78,7 +77,7 @@ class Settings extends React.Component {
     }
     remote.dialog.showOpenDialog(opts, filenames => {
       if (!filenames || !filenames.length) return
-      ipcRenderer.send('dispatch', 'backupImport', filenames[0])
+      ipcRenderer.send('backupImport', filenames[0])
     })
   }
 
@@ -96,7 +95,7 @@ class Settings extends React.Component {
       }
       remote.dialog.showOpenDialog(opts, filenames => {
         if (!filenames || !filenames.length) return
-        ipcRenderer.send('dispatch', 'backupExport', filenames[0])
+        ipcRenderer.send('backupExport', filenames[0])
       })
     })
   }
@@ -113,7 +112,7 @@ class Settings extends React.Component {
   }
 
   handleDeltaSettingsChange (key, value) {
-    ipcRenderer.sendSync('dispatchSync', 'setConfig', key, value)
+    ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })

@@ -27,14 +27,14 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_leave_group'), yes => {
       if (yes) {
-        ipcRenderer.send('dispatch', 'leaveGroup', selectedChat.id)
+        ipcRenderer.send('leaveGroup', selectedChat.id)
       }
     })
   }
 
   onArchiveChat (archive) {
     const selectedChat = this.props.selectedChat
-    ipcRenderer.send('dispatch', 'archiveChat', selectedChat.id, archive)
+    ipcRenderer.send('archiveChat', selectedChat.id, archive)
   }
 
   onBlockContact () {
@@ -44,7 +44,7 @@ class Controller {
       var contact = selectedChat.contacts[0]
       confirmation(tx('ask_block_contact'), yes => {
         if (yes) {
-          ipcRenderer.sendSync('dispatchSync', 'blockContact', contact.id)
+          ipcRenderer.send('blockContact', contact.id)
         }
       })
     }
@@ -55,7 +55,7 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_delete_chat_desktop'), yes => {
       if (yes) {
-        ipcRenderer.send('dispatch', 'deleteChat', selectedChat.id)
+        ipcRenderer.send('deleteChat', selectedChat.id)
       }
     })
   }
@@ -65,11 +65,11 @@ class Controller {
   }
 
   onContactRequests () {
-    ipcRenderer.send('dispatch', 'contactRequests')
+    ipcRenderer.send('contactRequests')
   }
 
   logout () {
-    ipcRenderer.send('dispatch', 'logout')
+    ipcRenderer.send('logout')
   }
 
   onEncrInfo () {

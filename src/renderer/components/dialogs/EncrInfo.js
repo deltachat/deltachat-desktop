@@ -31,7 +31,7 @@ class EncrInfo extends React.Component {
 
   _getEncrInfoForContactId (contactId) {
     log.debug(`_getEncrInfoForContactId ${contactId}`)
-    const encrInfo = ipcRenderer.sendSync('dispatchSync', 'getEncrInfo', contactId)
+    const encrInfo = ipcRenderer.sendSync('getEncrInfo', contactId)
     this.setState({ encrInfo })
   }
 

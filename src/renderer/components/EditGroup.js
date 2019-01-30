@@ -19,10 +19,7 @@ class EditGroup extends GroupBase {
       chatId: chat.id
     })
 
-    this.before = ipcRenderer.sendSync(
-      'dispatchSync',
-      'getChatContacts',
-      chat.id)
+    this.before = ipcRenderer.sendSync('getChatContacts', chat.id)
       .filter(id => id !== C.DC_CONTACT_ID_SELF)
       .map(id => Number(id))
     this.before.forEach(id => { group[id] = true })
@@ -43,7 +40,6 @@ class EditGroup extends GroupBase {
     const { chat } = this.props.screenProps
 
     ipcRenderer.send(
-      'dispatch',
       'modifyGroup',
       chat.id,
       this.state.name,
