@@ -58,6 +58,14 @@ function init (app, options) {
 
   win.loadURL(defaults.main)
 
+  app.on('second-instance', () => {
+    log.debug('Someone tried to run a second instance')
+    if (win) {
+      if (win.isMinimized()) win.show()
+      win.focus()
+    }
+  })
+
   win.once('ready-to-show', () => {
     if (!options.hidden) win.show()
   })
