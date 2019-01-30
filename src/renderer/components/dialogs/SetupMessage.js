@@ -1,7 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
-const Centered = require('../helpers/Centered')
 
 const {
   Card,
@@ -30,7 +29,7 @@ const SetupMessagePartialInputWrapper = styled.div`
   }
 `
 
-const SetupMessagePartialInputSeperator = styled(Centered)`
+const SetupMessagePartialInputSeperator = styled.div`
   width: 20%;
   float: right;
   display: flex;
