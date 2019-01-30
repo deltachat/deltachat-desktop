@@ -74,7 +74,6 @@ class SetupMessagePanel extends React.Component {
             key={i}
             data-index={i}
             id={'autocrypt-input-' + i}
-            type='number'
             value={this.state.key[i]}
             onChange={this.handleChangeKey}
           />
