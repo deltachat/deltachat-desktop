@@ -42,6 +42,7 @@ class ScreenController extends React.Component {
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
+    this.handleLogin = this.handleLogin.bind(this)
     this.dialogs = React.createRef()
   }
 
@@ -70,6 +71,7 @@ class ScreenController extends React.Component {
   }
 
   handleLogin (credentials) {
+    this.userFeedback(false)
     ipcRenderer.send('login', credentials)
   }
 
