@@ -8,7 +8,6 @@ const log = require('../../logger').getLogger('renderer/composer')
 const { Picker } = require('emoji-mart')
 
 const ComposerWrapper = styled.div`
-  height: 40px;
   background-color: ${StyleVariables.colors.deltaPrimaryFg};
   border-left: 1px solid rgba(16,22,26,0.1);
 `
@@ -91,8 +90,9 @@ const MessageInput = styled.textarea`
   resize: unset;
   padding: 0px;
   border-color: transparent;
-  height: 40px;
-  line-height: 38px;
+  height: 100%;
+  line-height: 24px;
+  padding-top: 8px;
 
 
   &:focus {
@@ -142,9 +142,13 @@ class Composer extends React.Component {
       showEmojiPicker: false
     }
     this.minimumHeight = 48
+
+    this.setComposerSize = this.props.setComposerSize
+
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleKeyUp = this.handleKeyUp.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
@@ -193,7 +197,28 @@ class Composer extends React.Component {
   }
 
   handleChange (e) {
+    /*
+    console.log(e)
+    console.log(this.textareaRef, this.textareaRef.current.scrollHeight)
+    let size = this.textareaRef.current.scrollHeight
+    let conversationElement = document.getElementById('the-conversation')
+
+    conversationElement.style.height = `calc(100vh - 50px - ${size}px)`
+
+    console.log(this.refs)
+    console.log('as', conversationElement.style.height, this.textareaRef.current.style.height )
+    */
+
+
     this.setState({ text: e.target.value, error: false })
+  }
+
+  handleKeyUp (e) {
+    let value = e.target.value
+    let n = this.findLessThanFourNewLines(value, "\n")
+    console.log('n', n)
+
+    this.setComposerSize(40 + n*40)
   }
 
   focusInputMessage () {
@@ -253,11 +278,23 @@ class Composer extends React.Component {
            mouseY <= boundingRect.y + boundingRect.height + margin
   }
 
+  findLessThanFourNewLines(str, find) {
+    if(!str) return 0
+
+    var count = 0;
+    for (let i = 0; i < str.length && count < 4; ++i) {
+      if (str.substring(i, i + find.length) == find) {
+        count++
+      }
+    }
+    return count;
+  }
+
   render () {
     const tx = window.translate
 
     return (
-      <ComposerWrapper>
+      <ComposerWrapper ref="ComposerWrapper">
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
@@ -265,10 +302,10 @@ class Composer extends React.Component {
           ref={this.textareaRef}
           intent={this.state.error ? 'danger' : 'none'}
           large
-          rows='1'
           value={this.state.text}
           onKeyDown={this.onKeyDown.bind(this)}
           onChange={this.handleChange}
+          onKeyUp={this.handleKeyUp}
           placeholder={tx('write_message_desktop')}
         />
         <AttachmentButtonWrapper ref={this.pickerButtonRef}>
