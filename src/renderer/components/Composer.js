@@ -33,6 +33,7 @@ const AttachmentButtonWrapper = styled.div`
 `
 
 const EmojiButtonWrapper = styled(AttachmentButtonWrapper)`
+  height: 40px;
   right: 40px;
 `
 
@@ -215,10 +216,13 @@ class Composer extends React.Component {
 
   handleChange (e) {
     this.setState({ text: e.target.value, error: false })
+    this.resizeComposer(e.target.value)
   }
 
   handleKeyUp (e) {
-    this.resizeComposer(e.target.value)
+    if (e.keyCode === 13 && e.shiftKey) {
+      this.resizeComposer(e.target.value)
+    }
   }
 
   resizeComposer(textareaValue) {
@@ -261,7 +265,6 @@ class Composer extends React.Component {
   insertStringAtCursorPosition(str) {
     let textareaElem = this.textareaRef.current
     let {selectionStart, selectionEnd} = textareaElem
-    console.log(selectionStart, selectionEnd)
     let textValue = this.state.text
 
     let textBeforeCursor = textValue.slice(0, selectionStart)
