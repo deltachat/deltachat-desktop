@@ -140,8 +140,11 @@ class Composer extends React.Component {
       text: '',
       error: false,
       showEmojiPicker: false
+
     }
     this.minimumHeight = 48
+
+    this.setCursorPosition = false
 
     this.setComposerSize = this.props.setComposerSize
 
@@ -178,6 +181,14 @@ class Composer extends React.Component {
     // the component changes chat ids, while rendering any cached unsent
     // previous message text (aka "draft" message)
     this.focusInputMessage()
+  }
+
+  componentDidUpdate () {
+    if(this.setCursorPosition) {
+      this.textareaRef.current.selectionStart = this.setCursorPosition
+      this.textareaRef.current.selectionEnd = this.setCursorPosition
+      this.setCursorPosition = false
+    }
   }
 
   handleError () {
@@ -246,15 +257,16 @@ class Composer extends React.Component {
 
   addStringAtCursorPosition(str) {
     let textareaElem = this.textareaRef.current
-    let cursorPosition = textareaElem.selectionStart
+    let {selectionStart, selectionEnd} = textareaElem
+    console.log(selectionStart, selectionEnd)
     let textValue = this.state.text
 
-    let textBeforeCursor = textValue.slice(0, cursorPosition)
-    let textAfterCursor = textValue.slice(cursorPosition)
+    let textBeforeCursor = textValue.slice(0, selectionStart)
+    let textAfterCursor = textValue.slice(selectionEnd)
     
     let updatedText = textBeforeCursor + str + textAfterCursor
 
-    
+    this.setCursorPosition = textareaElem.selectionStart + 1    
     this.setState({ text: updatedText })
   }
 
