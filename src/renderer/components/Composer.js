@@ -189,33 +189,25 @@ class Composer extends React.Component {
       text: this.state.text
     })
     this.clearInput()
+
     this.focusInputMessage()
   }
 
   clearInput () {
     this.setState({ text: '', filename: null })
+    this.resizeComposer('')
   }
 
   handleChange (e) {
-    /*
-    console.log(e)
-    console.log(this.textareaRef, this.textareaRef.current.scrollHeight)
-    let size = this.textareaRef.current.scrollHeight
-    let conversationElement = document.getElementById('the-conversation')
-
-    conversationElement.style.height = `calc(100vh - 50px - ${size}px)`
-
-    console.log(this.refs)
-    console.log('as', conversationElement.style.height, this.textareaRef.current.style.height )
-    */
-
-
     this.setState({ text: e.target.value, error: false })
   }
 
   handleKeyUp (e) {
-    let value = e.target.value
-    let n = this.findLessThanFourNewLines(value, "\n")
+    this.resizeComposer(e.target.value)
+  }
+
+  resizeComposer(textareaValue) {
+    let n = this.findLessThanFourNewLines(textareaValue, "\n")
     console.log('n', n)
 
     this.setComposerSize(40 + n*40)
