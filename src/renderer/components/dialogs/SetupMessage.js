@@ -41,9 +41,8 @@ const SetupMessagePartialInputSeperator = styled.div`
 class SetupMessagePanel extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      key: props.autocryptKey
-    }
+    this.state = { key: Array(9).fill('') }
+    this.state.key[0] = props.setupCodeBegin
     this.handleChangeKey = this.handleChangeKey.bind(this)
   }
 
@@ -63,8 +62,7 @@ class SetupMessagePanel extends React.Component {
   }
 
   onClick (event) {
-    const autocryptKey = this.state.key.join('')
-    this.props.continueKeyTransfer(autocryptKey)
+    this.props.continueKeyTransfer(this.state.key.join(''))
   }
 
   renderInputKey () {
@@ -76,7 +74,6 @@ class SetupMessagePanel extends React.Component {
             key={i}
             data-index={i}
             id={'autocrypt-input-' + i}
-            type='number'
             value={this.state.key[i]}
             onChange={this.handleChangeKey}
           />
@@ -114,10 +111,7 @@ class SetupMessagePanel extends React.Component {
 class SetupMessage extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      autocryptKey: Array(9).fill(''),
-      loading: false
-    }
+    this.state = { loading: false }
     this.continueKeyTransfer = this.continueKeyTransfer.bind(this)
     this.continueKeyTransferResp = this.continueKeyTransferResp.bind(this)
   }
@@ -138,12 +132,6 @@ class SetupMessage extends React.Component {
     ipcRenderer.on('continueKeyTransferResp', this.continueKeyTransferResp)
   }
 
-  componentDidUpdate (prevProps) {
-    if (!prevProps || (!prevProps.setupMessage && this.props.setupMessage)) {
-      this.setState({ autocryptKey: Array(9).fill('') })
-    }
-  }
-
   componentWillUnmount () {
     ipcRenderer.removeListener('continueKeyTransferResp', this.continueKeyTransferResp)
   }
@@ -155,9 +143,11 @@ class SetupMessage extends React.Component {
 
   render () {
     const { setupMessage, onClose } = this.props
-    const { autocryptKey, loading } = this.state
+    const { loading } = this.state
     const isOpen = !!setupMessage
     const tx = window.translate
+
+    const setupCodeBegin = setupMessage && setupMessage.setupCodeBegin
 
     let body
     if (loading) {
@@ -166,8 +156,7 @@ class SetupMessage extends React.Component {
       </div>
     } else {
       body = <SetupMessagePanel
-        autocryptKey={autocryptKey}
-        message={this.state.message}
+        setupCodeBegin={setupCodeBegin}
         continueKeyTransfer={this.continueKeyTransfer} />
     }
 

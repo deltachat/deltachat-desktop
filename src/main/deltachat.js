@@ -477,12 +477,13 @@ class DeltaChatController extends EventEmitter {
 
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
-    const filemime = msg && msg.getFilemime()
-    const filename = msg && msg.getFilename()
-    const filesize = msg && msg.getFilebytes()
-    const fromId = msg && msg.getFromId()
+    const filemime = msg.getFilemime()
+    const filename = msg.getFilename()
+    const filesize = msg.getFilebytes()
+    const fromId = msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
-    let contact = fromId ? this._dc.getContact(fromId).toJson() : {}
+    const setupCodeBegin = msg.getSetupcodebegin()
+    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
     if (contact.color) {
       contact.color = this._integerToHexColor(contact.color)
     }
@@ -496,7 +497,8 @@ class DeltaChatController extends EventEmitter {
       fromId,
       isMe,
       contact,
-      isInfo: msg.isInfo()
+      isInfo: msg.isInfo(),
+      setupCodeBegin
     }
   }
 

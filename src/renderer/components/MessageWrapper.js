@@ -206,7 +206,7 @@ class RenderMessage extends React.Component {
 
 function convert (message) {
   message.onDownload = () => {
-    var defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
+    const defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
     remote.dialog.showSaveDialog({
       defaultPath
     }, (filename) => {
@@ -216,10 +216,13 @@ function convert (message) {
 
   message.onDelete = () => ipcRenderer.send('deleteMessage', message.id)
 
-  var msg = message.msg
+  const msg = message.msg
 
-  if (msg.isSetupmessage) msg.text = window.translate('autocrypt_asm_click_body')
-  msg = Object.assign(msg, {
+  if (msg.isSetupmessage) {
+    msg.text = window.translate('autocrypt_asm_click_body')
+  }
+
+  Object.assign(msg, {
     sentAt: msg.timestamp * 1000,
     receivedAt: msg.receivedTimestamp * 1000,
     direction: message.isMe ? 'outgoing' : 'incoming',
@@ -234,6 +237,7 @@ function convert (message) {
       fileSize: filesizeConverter(message.filesize)
     }
   }
+
   return message
 }
 
