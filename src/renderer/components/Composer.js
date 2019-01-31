@@ -166,7 +166,7 @@ class Composer extends React.Component {
     this.sendMessage = this.sendMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
-    this.addStringAtCursorPosition = this.addStringAtCursorPosition.bind(this)
+    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
     this.pickerRef = React.createRef()
@@ -175,7 +175,7 @@ class Composer extends React.Component {
 
   onKeyDown (e) {
     if (e.keyCode === 13 && e.shiftKey) {
-      this.addStringAtCursorPosition('\n')
+      this.insertStringAtCursorPosition('\n')
       e.preventDefault()
       e.stopPropagation()
     } else if (e.keyCode === 13 && !e.shiftKey) {
@@ -263,10 +263,10 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    this.addStringAtCursorPosition(emoji.native)
+    this.insertStringAtCursorPosition(emoji.native)
   }
 
-  addStringAtCursorPosition(str) {
+  insertStringAtCursorPosition(str) {
     let textareaElem = this.textareaRef.current
     let {selectionStart, selectionEnd} = textareaElem
     console.log(selectionStart, selectionEnd)
@@ -277,7 +277,7 @@ class Composer extends React.Component {
     
     let updatedText = textBeforeCursor + str + textAfterCursor
 
-    this.setCursorPosition = textareaElem.selectionStart + 1    
+    this.setCursorPosition = textareaElem.selectionStart + str.length    
     this.setState({ text: updatedText })
   }
 
