@@ -152,6 +152,7 @@ class Composer extends React.Component {
     this.sendMessage = this.sendMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
+    this.addStringAtCursorPosition = this.addStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
     this.pickerRef = React.createRef()
@@ -160,7 +161,7 @@ class Composer extends React.Component {
 
   onKeyDown (e) {
     if (e.keyCode === 13 && e.shiftKey) {
-      this.setState({ text: this.state.text + '\n' })
+      this.addStringAtCursorPosition('\n')
       e.preventDefault()
       e.stopPropagation()
     } else if (e.keyCode === 13 && !e.shiftKey) {
@@ -240,11 +241,20 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
+    this.addStringAtCursorPosition(emoji.native)
+  }
+
+  addStringAtCursorPosition(str) {
     let textareaElem = this.textareaRef.current
     let cursorPosition = textareaElem.selectionStart
+    let textValue = this.state.text
 
-    let updatedText = this.state.text.slice(0, cursorPosition) + emoji.native + this.state.text.slice(cursorPosition + 1)
+    let textBeforeCursor = textValue.slice(0, cursorPosition)
+    let textAfterCursor = textValue.slice(cursorPosition)
+    
+    let updatedText = textBeforeCursor + str + textAfterCursor
 
+    
     this.setState({ text: updatedText })
   }
 
