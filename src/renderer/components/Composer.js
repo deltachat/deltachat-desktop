@@ -15,6 +15,9 @@ const ComposerWrapper = styled.div`
 const AttachmentButtonWrapper = styled.div`
   float: left;
 
+  position: absolute;
+  bottom: 0;
+
   .bp3-button.bp3-minimal {
     width: 40px;
     height: 40px;
@@ -27,6 +30,10 @@ const AttachmentButtonWrapper = styled.div`
       outline: none;
     }
   }
+`
+
+const EmojiButtonWrapper = styled(AttachmentButtonWrapper)`
+  right: 40px;
 `
 
 const IconButton = styled.button`
@@ -93,17 +100,21 @@ const MessageInput = styled.textarea`
   height: 100%;
   line-height: 24px;
   padding-top: 8px;
-
+  margin-left: 40px;
 
   &:focus {
     outline: none;
   }
 `
 const SendButtonCircleWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
   width: 32px;
   height: 32px;
   float: right;
   margin-top: 4px;
+  margin-bottom: 4px;
   margin-right: 5px;
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
@@ -314,11 +325,11 @@ class Composer extends React.Component {
           onKeyUp={this.handleKeyUp}
           placeholder={tx('write_message_desktop')}
         />
-        <AttachmentButtonWrapper ref={this.pickerButtonRef}>
+        <EmojiButtonWrapper ref={this.pickerButtonRef}>
           <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
             <IconButtonSpan />
           </IconButton>
-        </AttachmentButtonWrapper>
+        </EmojiButtonWrapper>
         { this.state.showEmojiPicker &&
           <EmojiPickerWrapper ref={this.pickerRef}>
             <Picker
