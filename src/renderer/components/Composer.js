@@ -15,7 +15,7 @@ const ComposerWrapper = styled.div`
 const AttachmentButtonWrapper = styled.div`
   float: left;
 
-  position: absolute;
+  position: fixed;
   bottom: 0;
 
   .bp3-button.bp3-minimal {
@@ -38,30 +38,30 @@ const EmojiButtonWrapper = styled(AttachmentButtonWrapper)`
 `
 
 const IconButton = styled.button`
-    height: 40px;
-    width: 40px;
-    margin-right: 0px !important;
-    padding: 0px;
-    border: 0;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-color: white;
-    &:focus {
-      outline: none;
-    }
+  height: 40px;
+  width: 40px;
+  margin-right: 0px !important;
+  padding: 0px;
+  border: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: white;
+  &:focus {
+    outline: none;
+  }
 `
 
 const IconButtonSpan = styled.span`
-    display: block
-    width: 25px
-    height: 25px
-    margin: 0 auto;
-    background-image: url(../images/emoji.png);
-    background-size: contain
+  display: block
+  width: 25px
+  height: 25px
+  margin: 0 auto;
+  background-image: url(../images/emoji.png);
+  background-size: contain
 `
 
 const EmojiPickerWrapper = styled.div`
-  position: absolute;
+  position: fixed;
 
   z-index: 10;
   width: 314px;
@@ -108,7 +108,7 @@ const MessageInput = styled.textarea`
   }
 `
 const SendButtonCircleWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   width: 32px;

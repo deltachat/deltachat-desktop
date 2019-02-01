@@ -6,13 +6,13 @@ const StyleVariables = require('./style-variables')
 
 const ChatListWrapper = styled.div`
   width: 30%;
-  height: 100%;
+  height: calc(100vh - 50px);
   float: left;
   overflow-y: auto;
   border-right: 1px solid #b9b9b9;
   box-shadow: 0 0 4px 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
   user-select: none;
-  margin-top: 54px;
+  margin-top: 50px;
 
   span.module-contact-name {
     font-weight: 200;

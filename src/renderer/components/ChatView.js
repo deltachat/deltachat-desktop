@@ -18,7 +18,8 @@ const ChatViewWrapper = styled.div`
   float: right;
   display: grid;
   grid-template-columns: auto;
-  height: 100vh;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
 
   #the-conversation {
     overflow: scroll;
