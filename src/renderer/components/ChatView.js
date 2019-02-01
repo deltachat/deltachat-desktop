@@ -16,9 +16,12 @@ const ChatViewWrapper = styled.div`
   width: 70%;
   background-color: #eeefef;
   float: right;
+  display: grid;
+  grid-template-columns: auto;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
 
   #the-conversation {
-    height: calc(100vh - 50px - 40px);
     overflow: scroll;
     background-image: url("../images/background_hd.jpg");
     background-size: cover;
@@ -78,7 +81,8 @@ class ChatView extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      error: false
+      error: false,
+      composerSize: 40
     }
 
     this.writeMessage = this.writeMessage.bind(this)
@@ -87,7 +91,8 @@ class ChatView extends React.Component {
     this.lastId = this.props.chat.id
     this.previousScrollHeightMinusTop = null
 
-    this.composerRef = React.createRef()
+    this.conversationRef = React.createRef()
+    this.refComposer = React.createRef()
   }
 
   componentWillUnmount () {
@@ -165,11 +170,17 @@ class ChatView extends React.Component {
     this.props.openDialog('ForwardMessage', { forwardMessage })
   }
 
+  setComposerSize (size) {
+    this.setState({ composerSize: size })
+  }
+
   render () {
     const { onDeadDropClick, chat } = this.props
 
     return (
-      <ChatViewWrapper ref={this.ChatViewWrapperRef}>
+      <ChatViewWrapper
+        style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
+        ref={this.ChatViewWrapperRef}>
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {
@@ -187,7 +198,11 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <Composer ref={this.composerRef} onSubmit={this.writeMessage} />
+        <Composer
+          ref={this.refComposer}
+          onSubmit={this.writeMessage}
+          setComposerSize={this.setComposerSize.bind(this)}
+        />
       </ChatViewWrapper>
     )
   }

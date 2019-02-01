@@ -31,12 +31,12 @@ const NavbarGroupSubtitle = styled.div`
   font-weight: 100;
   color: ${StyleVariables.colors.deltaPrimaryFgLight};
 `
-const BelowNavbar = styled.div`
+
+const Welcome = styled.div`
+  width: 70%;
+  float: right;
   height: calc(100vh - 50px);
   margin-top: 50px;
-  overflow: hidden;
-`
-const Welcome = styled.div`
   text-align: center;
 `
 
@@ -70,7 +70,7 @@ class SplittedChatListAndView extends React.Component {
     ipcRenderer.send('selectChat', chatId)
     try {
       if (this.chatView.current) {
-        this.chatView.current.composerRef.current.focusInputMessage()
+        this.chatView.current.refComposer.current.focusInputMessage()
       }
     } catch (error) {
       console.debug(error)
@@ -132,7 +132,7 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <BelowNavbar>
+        <div>
           <ChatList
             chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
@@ -163,7 +163,7 @@ class SplittedChatListAndView extends React.Component {
                 </Welcome>
               )
           }
-        </BelowNavbar>
+        </div>
 
       </div>
     )

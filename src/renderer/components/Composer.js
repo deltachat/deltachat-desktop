@@ -8,13 +8,15 @@ const log = require('../../logger').getLogger('renderer/composer')
 const { Picker } = require('emoji-mart')
 
 const ComposerWrapper = styled.div`
-  height: 40px;
   background-color: ${StyleVariables.colors.deltaPrimaryFg};
   border-left: 1px solid rgba(16,22,26,0.1);
 `
 
 const AttachmentButtonWrapper = styled.div`
   float: left;
+
+  position: fixed;
+  bottom: 0;
 
   .bp3-button.bp3-minimal {
     width: 40px;
@@ -30,31 +32,36 @@ const AttachmentButtonWrapper = styled.div`
   }
 `
 
+const EmojiButtonWrapper = styled(AttachmentButtonWrapper)`
+  height: 40px;
+  right: 40px;
+`
+
 const IconButton = styled.button`
-    height: 40px;
-    width: 40px;
-    margin-right: 0px !important;
-    padding: 0px;
-    border: 0;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-color: white;
-    &:focus {
-      outline: none;
-    }
+  height: 40px;
+  width: 40px;
+  margin-right: 0px !important;
+  padding: 0px;
+  border: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: white;
+  &:focus {
+    outline: none;
+  }
 `
 
 const IconButtonSpan = styled.span`
-    display: block
-    width: 25px
-    height: 25px
-    margin: 0 auto;
-    background-image: url(../images/emoji.png);
-    background-size: contain
+  display: block
+  width: 25px
+  height: 25px
+  margin: 0 auto;
+  background-image: url(../images/emoji.png);
+  background-size: contain
 `
 
 const EmojiPickerWrapper = styled.div`
-  position: absolute;
+  position: fixed;
 
   z-index: 10;
   width: 314px;
@@ -91,19 +98,34 @@ const MessageInput = styled.textarea`
   resize: unset;
   padding: 0px;
   border-color: transparent;
-  height: 40px;
-  line-height: 38px;
-
+  border-width: 0px;
+  height: 100%;
+  line-height: 24px;
+  height: calc(100% - 16px);
+  line-height: 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-left: 40px;
+  overflow-y: hidden;
 
   &:focus {
     outline: none;
   }
+
+  &.scroll {
+    overflow-y: scroll;
+  }
+
 `
 const SendButtonCircleWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
   width: 32px;
   height: 32px;
   float: right;
   margin-top: 4px;
+  margin-bottom: 4px;
   margin-right: 5px;
   background-color: ${StyleVariables.colors.deltaPrimaryBg};
   border-radius: 180px;
@@ -140,14 +162,23 @@ class Composer extends React.Component {
       text: '',
       error: false,
       showEmojiPicker: false
+
     }
     this.minimumHeight = 48
+
+    this.setCursorPosition = false
+
+    this.setComposerSize = this.props.setComposerSize
+
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleKeyUp = this.handleKeyUp.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
+    this.focusInputMessage = this.focusInputMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
+    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
     this.pickerRef = React.createRef()
@@ -156,7 +187,7 @@ class Composer extends React.Component {
 
   onKeyDown (e) {
     if (e.keyCode === 13 && e.shiftKey) {
-      this.setState({ text: this.state.text + '\n' })
+      this.insertStringAtCursorPosition('\n')
       e.preventDefault()
       e.stopPropagation()
     } else if (e.keyCode === 13 && !e.shiftKey) {
@@ -175,6 +206,14 @@ class Composer extends React.Component {
     this.focusInputMessage()
   }
 
+  componentDidUpdate () {
+    if (this.setCursorPosition) {
+      this.textareaRef.current.selectionStart = this.setCursorPosition
+      this.textareaRef.current.selectionEnd = this.setCursorPosition
+      this.setCursorPosition = false
+    }
+  }
+
   handleError () {
     this.setState({ error: true })
   }
@@ -185,15 +224,34 @@ class Composer extends React.Component {
       text: this.state.text
     })
     this.clearInput()
+
     this.focusInputMessage()
   }
 
   clearInput () {
     this.setState({ text: '', filename: null })
+    this.resizeComposer('')
   }
 
   handleChange (e) {
     this.setState({ text: e.target.value, error: false })
+    this.resizeComposer(e.target.value)
+  }
+
+  handleKeyUp (e) {
+    if (e.keyCode === 13 && e.shiftKey) {
+      this.resizeComposer(e.target.value)
+    }
+  }
+
+  resizeComposer (textareaValue) {
+    let n = this.findLessThanFourNewLines(textareaValue, '\n') + 1
+    this.setComposerSize(n * 24 + 16)
+    if (n > 4) {
+      this.textareaRef.current.classList.add('scroll')
+    } else {
+      this.textareaRef.current.classList.remove('scroll')
+    }
   }
 
   focusInputMessage () {
@@ -223,11 +281,20 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
+    this.insertStringAtCursorPosition(emoji.native)
+  }
+
+  insertStringAtCursorPosition (str) {
     let textareaElem = this.textareaRef.current
-    let cursorPosition = textareaElem.selectionStart
+    let { selectionStart, selectionEnd } = textareaElem
+    let textValue = this.state.text
 
-    let updatedText = this.state.text.slice(0, cursorPosition) + emoji.native + this.state.text.slice(cursorPosition + 1)
+    let textBeforeCursor = textValue.slice(0, selectionStart)
+    let textAfterCursor = textValue.slice(selectionEnd)
 
+    let updatedText = textBeforeCursor + str + textAfterCursor
+
+    this.setCursorPosition = textareaElem.selectionStart + str.length
     this.setState({ text: updatedText })
   }
 
@@ -253,11 +320,23 @@ class Composer extends React.Component {
            mouseY <= boundingRect.y + boundingRect.height + margin
   }
 
+  findLessThanFourNewLines (str, find) {
+    if (!str) return 0
+
+    var count = 0
+    for (let i = 0; i < str.length && count < 4; ++i) {
+      if (str.substring(i, i + find.length) === find) {
+        count++
+      }
+    }
+    return count
+  }
+
   render () {
     const tx = window.translate
 
     return (
-      <ComposerWrapper>
+      <ComposerWrapper ref='ComposerWrapper'>
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
@@ -265,17 +344,17 @@ class Composer extends React.Component {
           ref={this.textareaRef}
           intent={this.state.error ? 'danger' : 'none'}
           large
-          rows='1'
           value={this.state.text}
           onKeyDown={this.onKeyDown.bind(this)}
           onChange={this.handleChange}
+          onKeyUp={this.handleKeyUp}
           placeholder={tx('write_message_desktop')}
         />
-        <AttachmentButtonWrapper ref={this.pickerButtonRef}>
+        <EmojiButtonWrapper ref={this.pickerButtonRef}>
           <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
             <IconButtonSpan />
           </IconButton>
-        </AttachmentButtonWrapper>
+        </EmojiButtonWrapper>
         { this.state.showEmojiPicker &&
           <EmojiPickerWrapper ref={this.pickerRef}>
             <Picker
