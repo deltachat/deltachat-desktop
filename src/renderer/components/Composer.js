@@ -198,7 +198,7 @@ class Composer extends React.Component {
   }
 
   componentDidUpdate () {
-    if(this.setCursorPosition) {
+    if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
       this.setCursorPosition = false
@@ -235,13 +235,13 @@ class Composer extends React.Component {
     }
   }
 
-  resizeComposer(textareaValue) {
-    let n = this.findLessThanFourNewLines(textareaValue, "\n") + 1
-    this.setComposerSize( n * 24 + 16)
-    if(n > 4) {
-      this.textareaRef.current.classList.add('scroll');
+  resizeComposer (textareaValue) {
+    let n = this.findLessThanFourNewLines(textareaValue, '\n') + 1
+    this.setComposerSize(n * 24 + 16)
+    if (n > 4) {
+      this.textareaRef.current.classList.add('scroll')
     } else {
-      this.textareaRef.current.classList.remove('scroll');
+      this.textareaRef.current.classList.remove('scroll')
     }
   }
 
@@ -275,17 +275,17 @@ class Composer extends React.Component {
     this.insertStringAtCursorPosition(emoji.native)
   }
 
-  insertStringAtCursorPosition(str) {
+  insertStringAtCursorPosition (str) {
     let textareaElem = this.textareaRef.current
-    let {selectionStart, selectionEnd} = textareaElem
+    let { selectionStart, selectionEnd } = textareaElem
     let textValue = this.state.text
 
     let textBeforeCursor = textValue.slice(0, selectionStart)
     let textAfterCursor = textValue.slice(selectionEnd)
-    
+
     let updatedText = textBeforeCursor + str + textAfterCursor
 
-    this.setCursorPosition = textareaElem.selectionStart + str.length    
+    this.setCursorPosition = textareaElem.selectionStart + str.length
     this.setState({ text: updatedText })
   }
 
@@ -311,23 +311,23 @@ class Composer extends React.Component {
            mouseY <= boundingRect.y + boundingRect.height + margin
   }
 
-  findLessThanFourNewLines(str, find) {
-    if(!str) return 0
+  findLessThanFourNewLines (str, find) {
+    if (!str) return 0
 
-    var count = 0;
+    var count = 0
     for (let i = 0; i < str.length && count < 4; ++i) {
-      if (str.substring(i, i + find.length) == find) {
+      if (str.substring(i, i + find.length) === find) {
         count++
       }
     }
-    return count;
+    return count
   }
 
   render () {
     const tx = window.translate
 
     return (
-      <ComposerWrapper ref="ComposerWrapper">
+      <ComposerWrapper ref='ComposerWrapper'>
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
