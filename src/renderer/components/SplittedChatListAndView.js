@@ -33,10 +33,12 @@ const NavbarGroupSubtitle = styled.div`
   font-weight: 100;
   color: ${StyleVariables.colors.deltaPrimaryFgLight};
 `
-const BelowNavbar = styled.div`
+
+const Welcome = styled.div`
+  width: 70%;
+  float: right;
   height: calc(100vh - 50px);
   margin-top: 50px;
-  overflow: hidden;
 `
 
 class SplittedChatListAndView extends React.Component {
@@ -129,7 +131,7 @@ class SplittedChatListAndView extends React.Component {
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
-        <BelowNavbar>
+        <div>
           <ChatList
             chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
@@ -154,17 +156,17 @@ class SplittedChatListAndView extends React.Component {
                   chat={selectedChat}
                   deltachat={this.props.deltachat} />)
               : (
-                <Unselectable>
-                  <Centered>
-                    <div className='window '>
+                <Welcome>
+                  <Unselectable>
+                    <Centered>
                       <h1>{tx('welcome_desktop')}</h1>
                       <p>{tx('no_chat_selected_suggestion_desktop')}</p>
-                    </div>
-                  </Centered>
-                </Unselectable>
+                    </Centered>
+                  </Unselectable>
+                </Welcome>
               )
           }
-        </BelowNavbar>
+        </div>
 
       </div>
     )
