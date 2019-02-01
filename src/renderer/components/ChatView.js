@@ -91,7 +91,6 @@ class ChatView extends React.Component {
     this.lastId = this.props.chat.id
     this.previousScrollHeightMinusTop = null
 
-
     this.conversationRef = React.createRef()
   }
 
@@ -170,8 +169,8 @@ class ChatView extends React.Component {
     this.props.openDialog('ForwardMessage', { forwardMessage })
   }
 
-  setComposerSize(size) {
-    this.setState({composerSize: size})
+  setComposerSize (size) {
+    this.setState({ composerSize: size })
   }
 
   render () {
@@ -179,7 +178,7 @@ class ChatView extends React.Component {
 
     return (
       <ChatViewWrapper
-        style= {{gridTemplateRows: `auto ${this.state.composerSize}px`}}
+        style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
         ref={this.ChatViewWrapperRef}>
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
@@ -198,7 +197,7 @@ class ChatView extends React.Component {
             })}
           </ConversationContext>
         </div>
-        <Composer 
+        <Composer
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
         />
