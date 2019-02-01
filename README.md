@@ -35,7 +35,7 @@ and systems.
 To install a `.AppImage` based release:
 
 - Download the binary
-- Make it executable, e.g. `chown u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
+- Make it executable, e.g. `chmod u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
 - Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
 
 #### Debian/Ubuntu
