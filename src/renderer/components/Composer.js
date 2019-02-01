@@ -175,6 +175,7 @@ class Composer extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyUp = this.handleKeyUp.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
+    this.focusInputMessage = this.focusInputMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)

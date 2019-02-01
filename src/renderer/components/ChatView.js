@@ -92,6 +92,7 @@ class ChatView extends React.Component {
     this.previousScrollHeightMinusTop = null
 
     this.conversationRef = React.createRef()
+    this.refComposer = React.createRef()
   }
 
   componentWillUnmount () {
@@ -198,6 +199,7 @@ class ChatView extends React.Component {
           </ConversationContext>
         </div>
         <Composer
+          ref={this.refComposer}
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
         />
