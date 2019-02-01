@@ -64,10 +64,6 @@ ul li button {
   min-width: 200px;
 }
 
-.bp3-overlay-open .bp3-transition-container {
-  top: -50px !important;
-}
-
 .SelectGroupImage {
   width: 100px;
 }
