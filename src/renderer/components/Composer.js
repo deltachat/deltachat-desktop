@@ -98,14 +98,24 @@ const MessageInput = styled.textarea`
   resize: unset;
   padding: 0px;
   border-color: transparent;
+  border-width: 0px;
   height: 100%;
   line-height: 24px;
-  padding-top: 8px;
+  height: calc(100% - 16px);
+  line-height: 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   margin-left: 40px;
+  overflow-y: hidden;
 
   &:focus {
     outline: none;
   }
+
+  &.scroll {
+    overflow-y: scroll;
+  }
+
 `
 const SendButtonCircleWrapper = styled.div`
   position: fixed;
@@ -226,10 +236,13 @@ class Composer extends React.Component {
   }
 
   resizeComposer(textareaValue) {
-    let n = this.findLessThanFourNewLines(textareaValue, "\n")
-    console.log('n', n)
-
-    this.setComposerSize(40 + n*40)
+    let n = this.findLessThanFourNewLines(textareaValue, "\n") + 1
+    this.setComposerSize( n * 24 + 16)
+    if(n > 4) {
+      this.textareaRef.current.classList.add('scroll');
+    } else {
+      this.textareaRef.current.classList.remove('scroll');
+    }
   }
 
   focusInputMessage () {
