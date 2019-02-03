@@ -13,7 +13,8 @@ class ChatListItem extends React.Component {
     } = this.props
 
     if (!avatarPath) {
-      let initial = name.trim()[0] || '#'
+      const codepoint = name.codePointAt(0)
+      let initial = codepoint ? String.fromCodePoint(codepoint) : '#'
 
       return (
         <div
