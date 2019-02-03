@@ -2111,8 +2111,14 @@
   line-height: 18px;
 
   overflow-x: hidden;
+  overflow-y: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  .emoji-container {
+    font-size: inherit;
+    line-height: inherit;
+  }
 }
 
 .module-conversation-list-item__header__name--with-unread {
