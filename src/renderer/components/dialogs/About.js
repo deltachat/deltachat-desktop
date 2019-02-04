@@ -7,7 +7,7 @@ const {
   gitHubLicenseUrl
 } = require('../../../application-constants')
 
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, clipboard } = require('electron')
 
 class ClickableLink extends React.Component {
   onClick () {
@@ -22,7 +22,7 @@ class ClickableLink extends React.Component {
   }
 }
 
-const dcInfoStyle = { overflowX: 'scroll', backgroundColor: 'lightgrey' }
+const dcInfoStyle = { backgroundColor: 'lightgrey', width: '100%' }
 
 class DCInfo extends React.Component {
   constructor (props) {
@@ -47,9 +47,17 @@ class DCInfo extends React.Component {
     })
   }
 
+  copy2Clipboard () {
+    clipboard.writeText(JSON.stringify(this.state.content, null, 4))
+  }
+
   render () {
     return (
-      <div style={dcInfoStyle}>{JSON.stringify(this.state.content, null, 1)}</div>
+      <div>
+        <h3>DC Info:</h3>
+        <textarea readOnly style={dcInfoStyle} rows='20' value={JSON.stringify(this.state.content, null, 4)} />
+        <button onClick={this.copy2Clipboard.bind(this)}>Copy JSON</button>
+      </div>
     )
   }
 }
@@ -71,7 +79,6 @@ class About extends React.Component {
           <p>Official Delta Chat Desktop app.</p>
           <p>This software is licensed under <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' />.</p>
           <p>Source code is available on <ClickableLink href={gitHubUrl()} text='GitHub' />.</p>
-          <p>DC Info:</p>
           <DCInfo />
         </div>
       </Dialog>
