@@ -152,6 +152,10 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.getConfigFor(keys)
   })
 
+  ipcMain.on('getDCinfo', () => {
+    main.send('dcInfo', dc.getInfo())
+  })
+
   ipcMain.on('logout', () => dc.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
