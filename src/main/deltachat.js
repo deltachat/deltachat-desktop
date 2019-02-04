@@ -152,9 +152,6 @@ class DeltaChatController extends EventEmitter {
     this._dc = null
   }
 
-  /**
-   * TODO: Currently not used
-   */
   getInfo () {
     if (this.ready === true) {
       return this._dc.getInfo()
