@@ -51,11 +51,12 @@
 .module-message__buttons {
   position: absolute;
   top: 0;
-  bottom: 0;
+  right: 0;
   display: inline-flex;
   flex-direction: row;
   align-items: center;
   opacity: 0;
+  z-index: 10;
 }
 
 .module-message:hover .module-message__buttons {
@@ -63,11 +64,9 @@
 }
 
 .module-message__buttons--incoming {
-  left: 100%;
+  right: 10px;
 }
-.module-message__buttons--outgoing {
-  right: 100%;
-}
+
 
 .module-message__buttons__download {
   height: 24px;
@@ -469,6 +468,7 @@
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
+  margin-top: 10px;
 
   a {
     text-decoration: underline;
