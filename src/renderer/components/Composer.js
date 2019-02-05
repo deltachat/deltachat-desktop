@@ -351,7 +351,6 @@ class Composer extends React.Component {
           value={this.state.text}
           onKeyDown={this.onKeyDown.bind(this)}
           onChange={this.handleChange}
-          onKeyUp={this.handleKeyUp}
           placeholder={tx('write_message_desktop')}
         />
         <EmojiButtonWrapper ref={this.pickerButtonRef}>
