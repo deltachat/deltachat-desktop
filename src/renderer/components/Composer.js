@@ -99,9 +99,7 @@ const MessageInput = styled.textarea`
   padding: 0px;
   border-color: transparent;
   border-width: 0px;
-  height: 100%;
-  line-height: 24px;
-  height: calc(100% - 16px);
+  height: auto;
   line-height: 24px;
   margin-top: 8px;
   margin-bottom: 8px;
@@ -165,6 +163,7 @@ class Composer extends React.Component {
 
     }
     this.minimumHeight = 48
+    this.lastTextareaScrollHeight = null
 
     this.setCursorPosition = false
 
@@ -173,7 +172,6 @@ class Composer extends React.Component {
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.handleKeyUp = this.handleKeyUp.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
@@ -204,13 +202,19 @@ class Composer extends React.Component {
     // the component changes chat ids, while rendering any cached unsent
     // previous message text (aka "draft" message)
     this.focusInputMessage()
+
+    this.lastTextareaScrollHeight = this.textareaRef.current.scrollHeight
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevState) {
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
       this.setCursorPosition = false
+    }
+
+    if (prevState.text !== this.state.text) {
+      this.resizeTextareaAndComposer()
     }
   }
 
@@ -230,28 +234,39 @@ class Composer extends React.Component {
 
   clearInput () {
     this.setState({ text: '', filename: null })
-    this.resizeComposer('')
   }
 
   handleChange (e) {
     this.setState({ text: e.target.value, error: false })
-    this.resizeComposer(e.target.value)
   }
+  
 
-  handleKeyUp (e) {
-    if (e.keyCode === 13 && e.shiftKey) {
-      this.resizeComposer(e.target.value)
-    }
-  }
+  resizeTextareaAndComposer () {
+    let el = this.textareaRef.current
 
-  resizeComposer (textareaValue) {
-    let n = this.findLessThanFourNewLines(textareaValue, '\n') + 1
-    this.setComposerSize(n * 24 + 16)
-    if (n > 4) {
-      this.textareaRef.current.classList.add('scroll')
-    } else {
-      this.textareaRef.current.classList.remove('scroll')
+    // We need to set the textarea height first to `auto` to get the real needed
+    // scrollHeight. Ugly hack.
+    el.style.height = 'auto';
+    let scrollHeight = el.scrollHeight
+    let lastScrollHeight = this.lastTextareaScrollHeight
+
+    const maxScrollHeight = 9 * 24
+    if (scrollHeight > maxScrollHeight) {
+      el.style.height = maxScrollHeight + 'px'
+      this.lastTextareaScrollHeight = maxScrollHeight
+      return
     }
+    
+    if (scrollHeight <= maxScrollHeight) {
+      this.setComposerSize(scrollHeight + 16)
+      el.style.height = scrollHeight + 'px';
+
+      this.lastTextareaScrollHeight = scrollHeight
+    }
+
+    scrollHeight === maxScrollHeight ? 
+      el.classList.add('scroll') :
+      el.classList.remove('scroll')
   }
 
   focusInputMessage () {
@@ -320,18 +335,6 @@ class Composer extends React.Component {
            mouseY <= boundingRect.y + boundingRect.height + margin
   }
 
-  findLessThanFourNewLines (str, find) {
-    if (!str) return 0
-
-    var count = 0
-    for (let i = 0; i < str.length && count < 4; ++i) {
-      if (str.substring(i, i + find.length) === find) {
-        count++
-      }
-    }
-    return count
-  }
-
   render () {
     const tx = window.translate
 
@@ -342,6 +345,7 @@ class Composer extends React.Component {
         </AttachmentButtonWrapper>
         <MessageInput
           ref={this.textareaRef}
+          rows="1"
           intent={this.state.error ? 'danger' : 'none'}
           large
           value={this.state.text}
