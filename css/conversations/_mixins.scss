@@ -14,6 +14,13 @@
   background-color: $color;
 }
 
+@mixin color-svg-rotated($svg, $color, $size: 100%) {
+  -webkit-mask: url($svg) no-repeat center;
+  -webkit-mask-size: $size;
+  background-color: $color;
+  transform: rotate(90deg);
+}
+
 @mixin header-icon-white($svg) {
   @include color-svg($svg, rgba(255, 255, 255, 0.8));
   &:focus,
