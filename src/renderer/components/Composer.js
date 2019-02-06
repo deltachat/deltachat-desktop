@@ -163,7 +163,6 @@ class Composer extends React.Component {
 
     }
     this.minimumHeight = 48
-    this.lastTextareaScrollHeight = null
 
     this.setCursorPosition = false
 
@@ -202,8 +201,6 @@ class Composer extends React.Component {
     // the component changes chat ids, while rendering any cached unsent
     // previous message text (aka "draft" message)
     this.focusInputMessage()
-
-    this.lastTextareaScrollHeight = this.textareaRef.current.scrollHeight
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -239,34 +236,29 @@ class Composer extends React.Component {
   handleChange (e) {
     this.setState({ text: e.target.value, error: false })
   }
-  
 
   resizeTextareaAndComposer () {
     let el = this.textareaRef.current
 
     // We need to set the textarea height first to `auto` to get the real needed
     // scrollHeight. Ugly hack.
-    el.style.height = 'auto';
+    el.style.height = 'auto'
     let scrollHeight = el.scrollHeight
-    let lastScrollHeight = this.lastTextareaScrollHeight
 
     const maxScrollHeight = 9 * 24
     if (scrollHeight > maxScrollHeight) {
       el.style.height = maxScrollHeight + 'px'
-      this.lastTextareaScrollHeight = maxScrollHeight
       return
     }
-    
+
     if (scrollHeight <= maxScrollHeight) {
       this.setComposerSize(scrollHeight + 16)
-      el.style.height = scrollHeight + 'px';
-
-      this.lastTextareaScrollHeight = scrollHeight
+      el.style.height = scrollHeight + 'px'
     }
 
-    scrollHeight === maxScrollHeight ? 
-      el.classList.add('scroll') :
-      el.classList.remove('scroll')
+    scrollHeight === maxScrollHeight
+      ? el.classList.add('scroll')
+      : el.classList.remove('scroll')
   }
 
   focusInputMessage () {
@@ -345,7 +337,7 @@ class Composer extends React.Component {
         </AttachmentButtonWrapper>
         <MessageInput
           ref={this.textareaRef}
-          rows="1"
+          rows='1'
           intent={this.state.error ? 'danger' : 'none'}
           large
           value={this.state.text}
