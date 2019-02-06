@@ -220,6 +220,10 @@ class Composer extends React.Component {
 
   sendMessage () {
     if (!this.state.text) return this.handleError()
+    if (this.state.text.match(/^\s*$/)) {
+      log.debug(`Empty message: don't send it...`)
+      return
+    }
     this.props.onSubmit({
       text: this.state.text
     })
