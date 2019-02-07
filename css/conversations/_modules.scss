@@ -64,7 +64,13 @@
 }
 
 .module-message__buttons--incoming {
-  right: 10px;
+  right: 0;
+  top: 5px;
+}
+
+.module-message__buttons--outgoing {
+  right: 0;
+  top: 5px;
 }
 
 
@@ -79,12 +85,7 @@
   }
 }
 
-.module-message__buttons__download--incoming {
-  margin-left: 12px;
-}
-.module-message__buttons__download--outgoing {
-  margin-right: 12px;
-}
+
 
 .module-message__buttons__reply {
   height: 24px;
@@ -109,18 +110,18 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/ellipsis.svg', $color-light-45);
+  @include color-svg-rotated('../images/ellipsis.svg', $color-light-45);
   &:hover {
-    @include color-svg('../images/ellipsis.svg', $color-light-90);
+    @include color-svg-rotated('../images/ellipsis.svg', $color-light-90);
   }
 }
 
 .module-message__buttons__menu--incoming {
-  margin-left: 12px;
+  margin-left: 0;
 }
 
 .module_message__buttons__menu--outgoing {
-  margin-right: 12px;
+  margin-right: 0;
 }
 
 .module-message__error-container {
@@ -468,7 +469,6 @@
   word-wrap: break-word;
   word-break: break-word;
   white-space: pre-wrap;
-  margin-top: 10px;
 
   a {
     text-decoration: underline;
@@ -482,6 +482,10 @@
     text-decoration: underline;
     color: $color-white;
   }
+}
+
+.module-message__text {
+  margin-right: 10px;
 }
 
 .module-message__text--error {
