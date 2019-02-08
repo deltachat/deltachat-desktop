@@ -6,9 +6,7 @@ const path = require('path')
 const tempy = require('tempy')
 const PNG = require('pngjs').PNG
 
-const configPath = path.join(__dirname, 'fixtures/config.json')
-const testConfigJSON = fs.readFileSync(configPath)
-const testConfig = JSON.parse(testConfigJSON)
+const testConfig = require(path.join(__dirname, 'fixtures/config.json'))
 
 module.exports = {
   createApp,
