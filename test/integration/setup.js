@@ -39,9 +39,11 @@ function createApp () {
 function createAppWithConfig (overrideConfig) {
   const TEST_DIR = tempy.directory()
   console.log(`createApp TEST_DIR: ${TEST_DIR}`)
+  console.log('Override config:', JSON.stringify(overrideConfig))
   if (overrideConfig) {
     let extendedConfig = Object.assign(testConfig, overrideConfig)
     fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
+    console.log('config user:', extendedConfig.credentials.addr)
   }
   return new Application({
     path: electronPath,

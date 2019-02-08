@@ -52,6 +52,9 @@ test('Valid mail credentials results in success message', async (t) => {
     t.equal(text, 'Welcome to DeltaChat')
     setup.endTest(app, t)
   } catch (err) {
+    app.client.getMainProcessLogs().then(
+      (logs) => console.log(logs)
+    )
     setup.endTest(app, t, err || 'error')
   }
 })
@@ -65,6 +68,9 @@ test('App uses credentials from existing config file', async (t) => {
     await t.equal(text, 'Welcome to DeltaChat')
     setup.endTest(app, t)
   } catch (err) {
+    app.client.getMainProcessLogs().then(
+      (logs) => console.log(logs)
+    )
     setup.endTest(app, t, err || 'error')
   }
 })
@@ -78,6 +84,9 @@ test('App loads language from config file', async (t) => {
     await t.equal(text, 'Willkommen zu DeltaChat')
     setup.endTest(app, t)
   } catch (err) {
+    app.client.getMainProcessLogs().then(
+      (logs) => console.log(logs)
+    )
     setup.endTest(app, t, err || 'error')
   }
 })
