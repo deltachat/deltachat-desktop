@@ -211,7 +211,7 @@ class Composer extends React.Component {
       // Focus on the current selection, hack for focusing on newlines
       this.textareaRef.current.blur()
       this.textareaRef.current.focus()
-      
+
       this.setCursorPosition = false
     }
 
