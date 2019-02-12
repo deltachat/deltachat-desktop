@@ -207,6 +207,11 @@ class Composer extends React.Component {
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
+
+      // Focus on the current selection, hack for focusing on newlines
+      this.textareaRef.current.blur()
+      this.textareaRef.current.focus()
+
       this.setCursorPosition = false
     }
 
@@ -306,6 +311,7 @@ class Composer extends React.Component {
     let updatedText = textBeforeCursor + str + textAfterCursor
 
     this.setCursorPosition = textareaElem.selectionStart + str.length
+
     this.setState({ text: updatedText })
   }
 
