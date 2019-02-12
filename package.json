@@ -48,7 +48,7 @@
     "babel-runtime": "^6.26.0",
     "class-autobind": "^0.1.4",
     "debounce": "^1.2.0",
-    "deltachat-node": "^0.40.1",
+    "deltachat-node": "^0.40.2",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.9.2",
     "error-stack-parser": "^2.0.2",
