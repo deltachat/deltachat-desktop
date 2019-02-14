@@ -70,6 +70,7 @@ sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 Simply install the `.dmg` file as you do it with all other software on mac.
 
 If you are getting an openssl error message at the first start up you need to install openssl.
+
 ```
 $ brew install openssl
 ```
@@ -146,13 +147,13 @@ Please see [build instructions](https://github.com/deltachat/deltachat-core#buil
 ### Logging
 
 #### Logging Options
+
 Debug messages are disabled by default, enable them with the `--log-debug` flag.
 
-Flag               | Effect
--------------------|---------------------------------------------
-`--log-debug`      | Log debug messages
-`--log-to-console` | Output the log to stout / chrome dev console
-
+| Flag               | Effect                                       |
+| ------------------ | -------------------------------------------- |
+| `--log-debug`      | Log debug messages                           |
+| `--log-to-console` | Output the log to stout / chrome dev console |
 
 #### Log locations
 
@@ -164,18 +165,21 @@ Mac: ~/Library/Application Support/DeltaChat/logs
 ```
 
 You can also access the log folder and the current log file under the `View->Developer` menu:
+
 <center><img src="devMenu.png"/></center>
 
 ##### Format
 
 The log files have the extension `.log`, the file name represents the point in time the log started.
 Basically the log files are **tab separated** `csv`-files:
+
 ```
 "2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
 ```
-timestamp | location / module | level | stacktrace | arg1 | arg2 | ...
-----------|-------------------|-------|------------|------|------|---
-"2019-01-27T13:46:31.801Z"|"main/deltachat"|"INFO"|[]|"dc_get_info" | - | ...
+
+| timestamp                  | location / module | level  | stacktrace | arg1          | arg2 | ... |
+| -------------------------- | ----------------- | ------ | ---------- | ------------- | ---- | --- |
+| "2019-01-27T13:46:31.801Z" | "main/deltachat"  | "INFO" | \[]        | "dc_get_info" | -    | ... |
 
 ## How to Contribute
 

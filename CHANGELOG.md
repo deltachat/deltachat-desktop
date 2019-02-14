@@ -2,6 +2,43 @@
 
 ## [Unreleased][unreleased]
 
+## [0.101.0] - 2019-02-27
+
+### Changed
+
+- Sort languages alphabetically ([#640](https://github.com/deltachat/deltachat-desktop/issues/640)) ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Set this.chatView.current from the start ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Fix some typos and tweak logging docs  ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Update github issue template ([#647](https://github.com/deltachat/deltachat-desktop/issues/647)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Cleanup ipc ([#641](https://github.com/deltachat/deltachat-desktop/issues/641)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Hide error message when attempting to login ([#644](https://github.com/deltachat/deltachat-desktop/issues/644)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Add more detailed info about deltachat-core to About sreen ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Improve hanlde position for context menu of messages ([#666](https://github.com/deltachat/deltachat-desktop/issues/666)) ([**@nicodh**](https://github.com/nicodh))
+- Use vertical ellipsis for context handle ([#671](https://github.com/deltachat/deltachat-desktop/issues/671)) ([**@nicodh**](https://github.com/nicodh))
+- Update deltachat-node dependency to v0.40.2 ([#678](https://github.com/deltachat/deltachat-desktop/issues/678)) ([**@ralphtheninja**](https://github.com/ralphtheninja)) ([**@jikstra**](https://github.com/jikstra))
+
+### Added
+
+- Add logging documentation ([#628](https://github.com/deltachat/deltachat-desktop/issues/628)) ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Add line break between advanced button and login button ([#635](https://github.com/deltachat/deltachat-desktop/issues/635)) ([**@Jikstra**](https://github.com/Jikstra))
+- Prevent running multiple instances ([#649](https://github.com/deltachat/deltachat-desktop/issues/649)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Resize the composer based on the newlines in the text (multiline composer) ([#654](https://github.com/deltachat/deltachat-desktop/issues/654)) ([**@jikstra**](https://github.com/jikstra))
+- Added MAC install information to README ([#660](https://github.com/deltachat/deltachat-desktop/issues/660)) ([**@zafai**](https://github.com/zafai))
+
+### Removed
+
+- Remove misleading/Uninformative lefticons in login form ([#637](https://github.com/deltachat/deltachat-desktop/issues/637)) ([**@Jikstra**](https://github.com/Jikstra))
+- Remove style specific components ([#645](https://github.com/deltachat/deltachat-desktop/issues/645)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+
+### Fixed
+
+- Show leading digits in Autocrypt Setup ([#651](https://github.com/deltachat/deltachat-desktop/issues/651)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Change `chown` to `chmod` in README.md ([#655](https://github.com/deltachat/deltachat-desktop/issues/655)) /([**@naltun**](https://github.com/naltun))
+- Remove/Hide scrollbar in groupname & and fix emoji in avatar ([#661](https://github.com/deltachat/deltachat-desktop/issues/661)) ([**@Simon-Laux**](https://github.com/Simon-Laux))
+- Do not send empty messages (i.e. only spaces) ([#670](https://github.com/deltachat/deltachat-desktop/issues/670)) ([**@nicodh**](https://github.com/nicodh))
+- Fix layout breaking when pasting long multiline messages to composer
+- Focus the composer position on the current selection/cursor ([#677](https://github.com/deltachat/deltachat-desktop/issues/677)) ([**@jikstra**](https://github.com/jikstra))
+
 ## [0.100.0] - 2019-01-27
 
 ### Changed
@@ -31,8 +68,8 @@
 - Update copyright year in readme ([@jikstra](https://github.com/jikstra))
 - Use path.join() for getLogsPath() ([@ralphtheninja](https://github.com/ralphtheninja))
 - Upgrade bindings ([#595](https://github.com/deltachat/deltachat-desktop/issues/595)) ([@ralphtheninja](https://github.com/ralphtheninja))
-- Wrap application-config module for proper appConfig during production and testing ([#598](https://github.com/deltachat/deltachat-desktop/issues/598)) ([@ralphtheninja](https://github.com/ralphtheninja)) 
-- Use electron v4 ([#581](https://github.com/deltachat/deltachat-desktop/issues/581)) ([@ralphtheninja](https://github.com/ralphtheninja)) 
+- Wrap application-config module for proper appConfig during production and testing ([#598](https://github.com/deltachat/deltachat-desktop/issues/598)) ([@ralphtheninja](https://github.com/ralphtheninja))
+- Use electron v4 ([#581](https://github.com/deltachat/deltachat-desktop/issues/581)) ([@ralphtheninja](https://github.com/ralphtheninja))
 - Misc cleanup ([#588](https://github.com/deltachat/deltachat-desktop/issues/588)) ([@ralphtheninja](https://github.com/ralphtheninja))
 - State refactor ([#583](https://github.com/deltachat/deltachat-desktop/issues/583)) ([@ralphtheninja](https://github.com/ralphtheninja))
 - Update translations ([@ralphtheninja](https://github.com/ralphtheninja))
@@ -448,7 +485,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...HEAD
+
+[0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
 
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
 
