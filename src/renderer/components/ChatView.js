@@ -174,13 +174,22 @@ class ChatView extends React.Component {
     this.setState({ composerSize: size })
   }
 
+  onDrop (e) {
+    const files = e.target.files || e.dataTransfer.files
+    const { chat } = this.props
+    for (let i = 0; i < files.length; i++) {
+      const { path } = files[i]
+      ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
+    }
+  }
+
   render () {
     const { onDeadDropClick, chat } = this.props
 
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
-        ref={this.ChatViewWrapperRef}>
+        ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })}>
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {
