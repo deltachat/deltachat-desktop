@@ -155,6 +155,7 @@ class Settings extends React.Component {
               <Login
                 {...advancedSettings}
                 mailPw={this.state.mailPw}
+                addr={deltachat.credentials.addr}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>

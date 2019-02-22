@@ -112,8 +112,6 @@ class Login extends React.Component {
 
     return (
       <React.Fragment>
-        <Callout>{tx('login_instruction_desktop')}</Callout>
-        <br />
         <form onSubmit={this.handleSubmit}>
           <FormGroup label={tx('email_address')} placeholder={tx('email_address')} labelFor='email'>
             <InputGroup
@@ -231,6 +229,7 @@ class Login extends React.Component {
               </div>
             </FormGroup>
           </Collapse>
+          <br />
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
