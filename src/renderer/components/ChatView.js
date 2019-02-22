@@ -177,6 +177,8 @@ class ChatView extends React.Component {
   onDrop (e) {
     const files = e.target.files || e.dataTransfer.files
     const { chat } = this.props
+    e.preventDefault()
+    e.stopPropagation()
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
       ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
