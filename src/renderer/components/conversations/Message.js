@@ -543,6 +543,7 @@ class Message extends React.Component {
 
     return (
       <div
+        onContextMenu={this.showMenu}
         className={classNames(
           'module-message',
           `module-message--${direction}`,
@@ -553,6 +554,7 @@ class Message extends React.Component {
         {this.renderError(direction === 'incoming')}
         {this.renderMenu(direction === 'outgoing', triggerId)}
         <div
+          onContextMenu={this.showMenu}
           className={classNames(
             'module-message__container',
             `module-message__container--${direction}`,
