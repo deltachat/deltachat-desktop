@@ -800,6 +800,9 @@ textarea {
 .inbox:focus {
   outline: none;
 }
+button:focus {
+  outline: none;
+}
 
 .text-security .inbox {
   .name,
