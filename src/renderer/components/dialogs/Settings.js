@@ -164,7 +164,7 @@ class Settings extends React.Component {
     const title = tx('menu_settings')
     return (
       <div>
-        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete}/>
+        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={userDetails !== false}
           title={tx('pref_password_and_account_settings')}
@@ -180,7 +180,7 @@ class Settings extends React.Component {
                 loading={deltachat.configuring}
                 addrDisabled>
                 <Button type='submit' text={userDetails ? tx('update') : tx('login_title')} />
-                <Button type='cancel' text={tx('cancel')}/>
+                <Button type='cancel' text={tx('cancel')} />
               </Login>
             </Card>
           </SettingsDialog>
@@ -200,7 +200,7 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
-              <br/>
+              <br />
               {this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
