@@ -179,9 +179,15 @@ class ChatView extends React.Component {
     const { chat } = this.props
     e.preventDefault()
     e.stopPropagation()
+    // TODO maybe add a clause here for windows because that uses backslash instead of slash
+    const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
-      ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
+      if (!forbiddenPathRegEx.test(path)) {
+        ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
+      } else {
+        log.warn('Prevented a file from being send again while dragging it out')
+      }
     }
   }
 
