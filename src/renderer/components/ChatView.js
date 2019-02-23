@@ -185,13 +185,18 @@ class ChatView extends React.Component {
     }
   }
 
+  onDragOver (e) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   render () {
     const { onDeadDropClick, chat } = this.props
 
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
-        ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })}>
+        ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {
