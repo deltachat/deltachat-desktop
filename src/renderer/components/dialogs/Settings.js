@@ -57,9 +57,31 @@ class Settings extends React.Component {
           'sentbox_watch',
           'mvbox_watch',
           'mvbox_move',
-          'e2ee_enabled'
+          'e2ee_enabled',
+          'configured_mail_server',
+          'configured_mail_user',
+          'configured_mail_port',
+          'configured_mail_security',
+          'configured_send_user',
+          'configured_send_server',
+          'configured_send_port',
+          'configured_send_security',
+          'configured_e2ee_enabled'
         ]
       )
+      const advancedSettings = {
+        mailUser: settings['configured_mail_user'],
+        mailServer: settings['configured_mail_server'],
+        mailPort: settings['configured_mail_port'],
+        mailSecurity: settings['configured_mail_security'],
+        sendUser: settings['configured_send_user'],
+        sendPw: settings['configured_send_pw'],
+        sendServer: settings['configured_send_server'],
+        sendPort: settings['configured_send_port'],
+        sendSecurity: settings['configured_send_security'],
+        e2ee_enabled: settings['configured_e2ee_enabled']
+      }
+      this.setState({ advancedSettings })
       this.setState({ settings })
     }
   }
@@ -138,13 +160,11 @@ class Settings extends React.Component {
   render () {
     const { deltachat, isOpen, onClose } = this.props
     const { userDetails, advancedSettings, saved, keyTransfer } = this.state
-
     const tx = window.translate
     const title = tx('menu_settings')
-
     return (
       <div>
-        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete}/>
         <Dialog
           isOpen={userDetails !== false}
           title={tx('pref_password_and_account_settings')}
@@ -154,13 +174,13 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <Login
                 {...advancedSettings}
-                mailPw={this.state.mailPw}
+                mode={'update'}
                 addr={deltachat.credentials.addr}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
-                <Button type='submit' text={tx('login_title')} />
-                <Button type='cancel' text={tx('cancel')} />
+                <Button type='submit' text={userDetails ? tx('update') : tx('login_title')} />
+                <Button type='cancel' text={tx('cancel')}/>
               </Login>
             </Card>
           </SettingsDialog>
@@ -180,8 +200,8 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
-              <br />
-              { this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
+              <br/>
+              {this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
               </Button>
@@ -203,10 +223,10 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
-              { this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
-              { this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
-              { this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
-              { this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
+              {this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
+              {this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
+              {this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
+              {this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
             </Card>
           </SettingsDialog>
         </Dialog>
