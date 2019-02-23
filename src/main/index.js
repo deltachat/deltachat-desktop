@@ -21,6 +21,13 @@ const log = logger.getLogger('main/index')
 logger.setLogHandler(logHandler.log)
 process.on('exit', logHandler.end)
 
+// Report uncaught exceptions
+process.on('uncaughtException', (err) => {
+  const error = { message: err.message, stack: err.stack }
+  log.error('uncaughtError', error)
+  throw err
+})
+
 const parallel = require('run-parallel')
 
 const localize = require('../localize')
@@ -29,13 +36,6 @@ const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
 const windows = require('./windows')
-
-// Report uncaught exceptions
-process.on('uncaughtException', (err) => {
-  const error = { message: err.message, stack: err.stack }
-  log.error('uncaughtError', error)
-  throw err
-})
 
 app.ipcReady = false
 app.isQuitting = false
