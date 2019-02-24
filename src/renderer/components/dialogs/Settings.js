@@ -105,12 +105,12 @@ class Settings extends React.Component {
 
   onBackupExport () {
     const tx = window.translate
-    var confirmOpts = {
+    let confirmOpts = {
       buttons: [tx('cancel'), tx('export_backup_desktop')]
     }
     confirmationDialog(tx('pref_backup_export_explain'), confirmOpts, response => {
       if (!response) return
-      var opts = {
+      let opts = {
         title: tx('export_backup_desktop'),
         defaultPath: remote.app.getPath('downloads'),
         properties: ['openDirectory']

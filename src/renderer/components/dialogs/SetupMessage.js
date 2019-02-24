@@ -52,16 +52,16 @@ class SetupMessagePanel extends React.Component {
     if (value.length > 4 || isNaN(valueNumber) || valueNumber < 0 || valueNumber > 9999) return false
 
     let updatedkey = this.state.key
-    var index = Number(event.target.getAttribute('data-index'))
+    let index = Number(event.target.getAttribute('data-index'))
     updatedkey[index] = value
     this.setState({ key: updatedkey })
     if (value.length === 4) {
-      var next = index += 1
+      let next = index += 1
       if (next <= 8) document.getElementById('autocrypt-input-' + next).focus()
     }
   }
 
-  onClick (event) {
+  onClick () {
     this.props.continueKeyTransfer(this.state.key.join(''))
   }
 
