@@ -402,6 +402,24 @@ class DeltaChatController extends EventEmitter {
     return chatList
   }
 
+  _getGeneralFreshMessageCounter () {
+    const list = this._dc.getChatList(0, this._query)
+    const listCount = list.getCount()
+
+    var freshMessageCounter = 0
+    for (let i = 0; i < listCount; i++) {
+      const chatId = list.getChatId(i)
+      const chat = this._dc.getChat(chatId).toJson()
+
+      if (!chat) continue
+
+      if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
+        freshMessageCounter += this._dc.getFreshMessageCount(chatId)
+      }
+    }
+    return freshMessageCounter
+  }
+
   _deadDropMessage (id) {
     const msg = this._dc.getMessage(id)
     const fromId = msg && msg.getFromId()
