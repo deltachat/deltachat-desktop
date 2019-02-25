@@ -159,8 +159,8 @@ class Composer extends React.Component {
       filename: null,
       text: '',
       error: false,
-      showEmojiPicker: false
-
+      showEmojiPicker: false,
+      drafts: {}
     }
     this.minimumHeight = 48
 
@@ -195,15 +195,14 @@ class Composer extends React.Component {
   }
 
   componentDidMount () {
-    // TODO: this only happens on the first render
-    // ideally, we'd pass the current chat id into the component
-    // and focus the input message every time
-    // the component changes chat ids, while rendering any cached unsent
-    // previous message text (aka "draft" message)
     this.focusInputMessage()
   }
 
   componentDidUpdate (prevProps, prevState) {
+    if (prevProps && this.props.chatId !== prevProps.chatId) {
+      const lastMessageFromBuffer = this.state.drafts[this.props.chatId]
+      this.setState({ text: lastMessageFromBuffer || '' })
+    }
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
@@ -239,10 +238,14 @@ class Composer extends React.Component {
   }
 
   clearInput () {
+    const { chatId } = this.props
+    this.state.drafts[chatId] = ''
     this.setState({ text: '', filename: null })
   }
 
   handleChange (e) {
+    const { chatId } = this.props
+    this.state.drafts[chatId] = e.target.value
     this.setState({ text: e.target.value, error: false })
   }
 
@@ -303,6 +306,7 @@ class Composer extends React.Component {
   }
 
   insertStringAtCursorPosition (str) {
+    const { chatId } = this.props
     let textareaElem = this.textareaRef.current
     let { selectionStart, selectionEnd } = textareaElem
     let textValue = this.state.text
@@ -315,6 +319,7 @@ class Composer extends React.Component {
     this.setCursorPosition = textareaElem.selectionStart + str.length
 
     this.setState({ text: updatedText })
+    this.state.drafts[chatId] = updatedText
   }
 
   onMouseMove (event) {

@@ -176,7 +176,6 @@ class ChatView extends React.Component {
 
   render () {
     const { onDeadDropClick, chat } = this.props
-
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
@@ -202,6 +201,7 @@ class ChatView extends React.Component {
           ref={this.refComposer}
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
+          chatId={this.props.chat.id}
         />
       </ChatViewWrapper>
     )
