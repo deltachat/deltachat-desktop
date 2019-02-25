@@ -183,7 +183,7 @@ class ChatView extends React.Component {
     const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
-      if (!forbiddenPathRegEx.test(path)) {
+      if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
       } else {
         log.warn('Prevented a file from being send again while dragging it out')
