@@ -45,7 +45,10 @@ class Settings extends React.Component {
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
-    this.handleSettingsChange = this.handleSettingsChange.bind(this)
+    this.handleRCSettingsChange = this.handleRCSettingsChange.bind(this)
+    this.handleDeltaSettingsChange = this.handleDeltaSettingsChange.bind(this)
+    this.renderRCSwitch = this.renderRCSwitch.bind(this)
+    this.renderDeltaSwitch = this.renderDeltaSwitch.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
   }
 
@@ -72,19 +75,6 @@ class Settings extends React.Component {
           'configured_e2ee_enabled'
         ]
       )
-      const advancedSettings = {
-        mailUser: settings['configured_mail_user'],
-        mailServer: settings['configured_mail_server'],
-        mailPort: settings['configured_mail_port'],
-        mailSecurity: settings['configured_mail_security'],
-        sendUser: settings['configured_send_user'],
-        sendPw: settings['configured_send_pw'],
-        sendServer: settings['configured_send_server'],
-        sendPort: settings['configured_send_port'],
-        sendSecurity: settings['configured_send_security'],
-        e2ee_enabled: settings['configured_e2ee_enabled']
-      }
-      this.setState({ advancedSettings })
       this.setState({ settings })
     }
   }
@@ -129,13 +119,15 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: true })
   }
 
-  handleSettingsChange (key, value) {
+  // Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json)
+  handleRCSettingsChange (key, value) {
     const { saved } = this.state
     saved[key] = value
     this.setState({ saved })
     ipcRenderer.send('updateSettings', saved)
   }
 
+  // Saves settings to deltachat core
   handleDeltaSettingsChange (key, value) {
     ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
@@ -149,7 +141,18 @@ class Settings extends React.Component {
     ipcRenderer.send('updateCredentials', config)
   }
 
-  renderSwitch (configKey, label) {
+  renderRCSwitch (configKey, label) {
+    const { saved } = this.state
+    return (
+      <Switch
+        checked={saved && saved[configKey]}
+        label={label}
+        onChange={() => this.handleRCSettingsChange(configKey, !saved[configKey])}
+      />
+    )
+  }
+
+  renderDeltaSwitch (configKey, label) {
     let configValue = this.state.settings[configKey]
     return (
       <Switch
@@ -165,6 +168,7 @@ class Settings extends React.Component {
     const { userDetails, settings, advancedSettings, saved, keyTransfer } = this.state
     const tx = window.translate
     const title = tx('menu_settings')
+
     return (
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
@@ -202,10 +206,16 @@ class Settings extends React.Component {
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_chats_and_media')}</H5>
+              <Callout>{tx('pref_enter_sends_explain')}</Callout>
+              <br />
+              { this.renderRCSwitch('enterKeySends', tx('pref_enter_sends')) }
+            </Card>
+            <Card elevation={Elevation.ONE}>
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
               <br />
-              {this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
+              { this.renderDeltaSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
               </Button>
@@ -219,18 +229,14 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_privacy')}</H5>
-              <Switch
-                checked={saved && saved.markRead}
-                label={tx('pref_read_receipts')}
-                onChange={() => this.handleSettingsChange('markRead', !this.state.saved.markRead)}
-              />
+              { this.renderRCSwitch('markRead', tx('pref_read_receipts')) }
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
-              {this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
-              {this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-              {this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
-              {this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
+              { this.renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
+              { this.renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
+              { this.renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
+              { this.renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
             </Card>
           </SettingsDialog>
         </Dialog>

@@ -28,6 +28,7 @@ function init (app, options) {
   if (main.win) {
     return main.win.show()
   }
+  console.log('s', app.rc)
 
   const state = app.state
   const defaults = windowDefaults()
