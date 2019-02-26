@@ -174,13 +174,35 @@ class ChatView extends React.Component {
     this.setState({ composerSize: size })
   }
 
+  onDrop (e) {
+    const files = e.target.files || e.dataTransfer.files
+    const { chat } = this.props
+    e.preventDefault()
+    e.stopPropagation()
+    // TODO maybe add a clause here for windows because that uses backslash instead of slash
+    const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
+    for (let i = 0; i < files.length; i++) {
+      const { path } = files[i]
+      if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
+        ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
+      } else {
+        log.warn('Prevented a file from being send again while dragging it out')
+      }
+    }
+  }
+
+  onDragOver (e) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   render () {
     const { onDeadDropClick, chat } = this.props
 
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
-        ref={this.ChatViewWrapperRef}>
+        ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
         <div id='the-conversation' ref={this.conversationDiv}>
           <ConversationContext>
             {chat.messages.map(rawMessage => {
