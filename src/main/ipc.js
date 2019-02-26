@@ -22,6 +22,7 @@ const DeltaChat = (() => {
 })()
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
+const setupUnreadBadgeCounter = require('./unread-badge')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
@@ -71,6 +72,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
+  setupUnreadBadgeCounter(dc)
 
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
