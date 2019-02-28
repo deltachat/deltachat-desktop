@@ -50,7 +50,7 @@ input:focus {
   background-color: red;
 }
 .user-feedback.success {
-  background-color: green;
+  background-color: #4caf50;
 }
 img {
   max-width: 500px;
