@@ -177,7 +177,6 @@ class Composer extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
-
     this.textareaRef = React.createRef()
     this.pickerRef = React.createRef()
     this.pickerButtonRef = React.createRef()
@@ -247,14 +246,14 @@ class Composer extends React.Component {
     this.setState({ text: e.target.value, error: false })
   }
 
-  setComposerSize(size) {
+  setComposerSize (size) {
     this.composerSize = size
     this.props.setComposerSize(size)
   }
 
   resizeTextareaAndComposer () {
     const maxScrollHeight = 9 * 24
-    
+
     let el = this.textareaRef.current
 
     // We need to set the textarea height first to `auto` to get the real needed
@@ -262,7 +261,7 @@ class Composer extends React.Component {
     el.style.height = 'auto'
     let scrollHeight = el.scrollHeight
 
-    if(scrollHeight + 16 == this.composerSize) {
+    if (scrollHeight + 16 === this.composerSize) {
       console.log('earlyGuard')
       el.style.height = scrollHeight + 'px'
       return
