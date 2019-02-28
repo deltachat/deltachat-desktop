@@ -167,8 +167,6 @@ class Composer extends React.Component {
 
     this.setCursorPosition = false
 
-    this.setComposerSize = this.props.setComposerSize
-
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -249,11 +247,14 @@ class Composer extends React.Component {
     this.setState({ text: e.target.value, error: false })
   }
 
-  resizeTextareaAndComposer () {
-    console.log('resizeTextareaAndComposer')
-    console.time('resizeTextareaAndComposer')
-    const maxScrollHeight = 9 * 24
+  setComposerSize(size) {
+    this.composerSize = size
+    this.props.setComposerSize(size)
+  }
 
+  resizeTextareaAndComposer () {
+    const maxScrollHeight = 9 * 24
+    
     let el = this.textareaRef.current
 
     // We need to set the textarea height first to `auto` to get the real needed
@@ -261,31 +262,26 @@ class Composer extends React.Component {
     el.style.height = 'auto'
     let scrollHeight = el.scrollHeight
 
-    if(scrollHeight == this.composerSize) {
+    if(scrollHeight + 16 == this.composerSize) {
+      console.log('earlyGuard')
       el.style.height = scrollHeight + 'px'
-      console.log('Early guard')
-      console.timeEnd('resizeTextareaAndComposer')
       return
     }
 
     if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
       el.style.height = maxScrollHeight + 'px'
-      console.timeEnd('resizeTextareaAndComposer')
       return
     }
 
     if (scrollHeight < maxScrollHeight) {
-      this.composerSize = scrollHeight
       this.setComposerSize(scrollHeight + 16)
       el.style.height = scrollHeight + 'px'
       el.classList.remove('scroll')
     } else {
-      this.composerSize = scrollHeight
       this.setComposerSize(maxScrollHeight + 16)
       el.style.height = maxScrollHeight + 'px'
       el.classList.add('scroll')
     }
-    console.timeEnd('resizeTextareaAndComposer')
   }
 
   focusInputMessage () {
