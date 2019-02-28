@@ -66,7 +66,11 @@ class ScreenController extends React.Component {
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-      self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
+      if (filename.indexOf('bak') > -1) {
+        self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
+      } else {
+        self.userFeedback({ type: 'success', text: tx('keys_export_success_message', filename) })
+      }
     })
   }
 
