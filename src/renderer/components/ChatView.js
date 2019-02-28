@@ -87,6 +87,7 @@ class ChatView extends React.Component {
 
     this.writeMessage = this.writeMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
+    this.saveDraft = this.saveDraft.bind(this)
     this.conversationDiv = React.createRef()
     this.lastId = this.props.chat.id
     this.previousScrollHeightMinusTop = null
@@ -133,6 +134,12 @@ class ChatView extends React.Component {
 
   onScroll () {
     if (this.doc.scrollTop <= SCROLL_BUFFER) this.fetchNextMessages()
+  }
+
+  saveDraft (msg) {
+    console.log('saveDraft', msg)
+    const { chat } = this.props
+    ipcRenderer.send('setDraft', chat.id, msg)
   }
 
   componentDidMount () {
@@ -200,8 +207,9 @@ class ChatView extends React.Component {
         <Composer
           ref={this.refComposer}
           onSubmit={this.writeMessage}
+          onChange={this.saveDraft}
           setComposerSize={this.setComposerSize.bind(this)}
-          chatId={this.props.chat.id}
+          chat={this.props.chat}
         />
       </ChatViewWrapper>
     )

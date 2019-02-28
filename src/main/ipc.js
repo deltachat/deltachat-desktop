@@ -48,6 +48,11 @@ function init (cwd, state, logHandler) {
     main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
+  dc.on('DC_EVENT_MSGS_CHANGED', () => {
+    // this event should be triggered if a draft changed
+    log.debug('ipc.DC_EVENT_MSGS_CHANGED')
+  })
+
   dc.on('error', error => main.send('error', error))
 
   dc.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
@@ -221,6 +226,10 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
+  })
+
+  ipcMain.on('setDraft', (event, chatId, msg) => {
+    dc.setDraft(chatId, msg)
   })
 
   function render () {

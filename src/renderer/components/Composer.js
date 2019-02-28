@@ -196,12 +196,16 @@ class Composer extends React.Component {
 
   componentDidMount () {
     this.focusInputMessage()
+    const { chat } = this.props
+    console.log('draft', chat.draft)
+    this.setState({ text: chat.draft || '' })
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (prevProps && this.props.chatId !== prevProps.chatId) {
-      const lastMessageFromBuffer = this.state.drafts[this.props.chatId]
-      this.setState({ text: lastMessageFromBuffer || '' })
+    if (prevProps && this.props.chat.id !== prevProps.chat.id) {
+      const { chat } = this.props
+      console.log('draft', chat.draft)
+      this.setState({ text: chat.draft || '' })
     }
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
@@ -244,8 +248,7 @@ class Composer extends React.Component {
   }
 
   handleChange (e) {
-    const { chatId } = this.props
-    this.state.drafts[chatId] = e.target.value
+    this.props.onChange(e.target.value)
     this.setState({ text: e.target.value, error: false })
   }
 
