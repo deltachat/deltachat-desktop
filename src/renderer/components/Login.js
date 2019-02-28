@@ -51,10 +51,6 @@ class Login extends React.Component {
 
   handleSubmit (event) {
     let config = this.state.credentials
-    if (!this.state.ui.showAdvanced) {
-      // ignore advanced settings
-      config = { mailPw: config.mailPw, addr: config.addr }
-    }
     this.props.onSubmit(config)
     event.preventDefault()
   }

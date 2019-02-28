@@ -53,6 +53,8 @@ class Settings extends React.Component {
     if (this.props.isOpen && !prevProps.isOpen) {
       const settings = ipcRenderer.sendSync(
         'getConfigFor', [
+          'addr',
+          'mail_pw',
           'inbox_watch',
           'sentbox_watch',
           'mvbox_watch',
@@ -63,6 +65,7 @@ class Settings extends React.Component {
           'configured_mail_port',
           'configured_mail_security',
           'configured_send_user',
+          'configured_send_pw',
           'configured_send_server',
           'configured_send_port',
           'configured_send_security',
@@ -159,7 +162,7 @@ class Settings extends React.Component {
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
+    const { userDetails, settings, advancedSettings, saved, keyTransfer } = this.state
     const tx = window.translate
     const title = tx('menu_settings')
     return (
@@ -175,7 +178,8 @@ class Settings extends React.Component {
               <Login
                 {...advancedSettings}
                 mode={'update'}
-                addr={deltachat.credentials.addr}
+                addr={settings.addr}
+                mailPw={settings.mail_pw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
