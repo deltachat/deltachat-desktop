@@ -163,6 +163,7 @@ class Composer extends React.Component {
 
     }
     this.minimumHeight = 48
+    this.composerSize = 48
 
     this.setCursorPosition = false
 
@@ -170,12 +171,14 @@ class Composer extends React.Component {
 
     this.defaultHeight = 17 + this.minimumHeight
     this.clearInput = this.clearInput.bind(this)
+    this.onKeyDown = this.onKeyDown.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.focusInputMessage = this.focusInputMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
+
 
     this.textareaRef = React.createRef()
     this.pickerRef = React.createRef()
@@ -247,6 +250,8 @@ class Composer extends React.Component {
   }
 
   resizeTextareaAndComposer () {
+    console.log('resizeTextareaAndComposer')
+    console.time('resizeTextareaAndComposer')
     const maxScrollHeight = 9 * 24
 
     let el = this.textareaRef.current
@@ -256,20 +261,31 @@ class Composer extends React.Component {
     el.style.height = 'auto'
     let scrollHeight = el.scrollHeight
 
+    if(scrollHeight == this.composerSize) {
+      el.style.height = scrollHeight + 'px'
+      console.log('Early guard')
+      console.timeEnd('resizeTextareaAndComposer')
+      return
+    }
+
     if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
       el.style.height = maxScrollHeight + 'px'
+      console.timeEnd('resizeTextareaAndComposer')
       return
     }
 
     if (scrollHeight < maxScrollHeight) {
+      this.composerSize = scrollHeight
       this.setComposerSize(scrollHeight + 16)
       el.style.height = scrollHeight + 'px'
       el.classList.remove('scroll')
     } else {
+      this.composerSize = scrollHeight
       this.setComposerSize(maxScrollHeight + 16)
       el.style.height = maxScrollHeight + 'px'
       el.classList.add('scroll')
     }
+    console.timeEnd('resizeTextareaAndComposer')
   }
 
   focusInputMessage () {
@@ -353,7 +369,7 @@ class Composer extends React.Component {
           intent={this.state.error ? 'danger' : 'none'}
           large
           value={this.state.text}
-          onKeyDown={this.onKeyDown.bind(this)}
+          onKeyDown={this.onKeyDown}
           onChange={this.handleChange}
           placeholder={tx('write_message_desktop')}
         />
