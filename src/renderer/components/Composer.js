@@ -262,7 +262,6 @@ class Composer extends React.Component {
     let scrollHeight = el.scrollHeight
 
     if (scrollHeight + 16 === this.composerSize) {
-      console.log('earlyGuard')
       el.style.height = scrollHeight + 'px'
       return
     }
