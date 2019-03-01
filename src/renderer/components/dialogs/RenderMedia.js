@@ -6,12 +6,15 @@ const RenderMediaWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 70%;
+  position:absolute;
 `
 
 const Exit = styled.div`
   float: right;
   position: absolute;
   right: 0;
+  z-index: 2000;
 `
 
 class RenderMedia extends React.Component {
@@ -30,10 +33,10 @@ class RenderMedia extends React.Component {
         elm = <img src={url} />
         break
       case 'audio':
-        elm = <audio src={url} controls='true' />
+        elm = <audio src={url} controls='1' />
         break
       case 'video':
-        elm = <video src={url} controls='true' />
+        elm = <video src={url} controls='1' />
         break
       default:
         elm = null

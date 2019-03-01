@@ -52,9 +52,6 @@ input:focus {
 .user-feedback.success {
   background-color: #4caf50;
 }
-img {
-  max-width: 500px;
-}
 
 ul {
   list-style: none;
@@ -84,6 +81,11 @@ ul li button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.bp3-overlay-content img,
+.bp3-overlay-content video {
+  width: 100%;
 }
 
 .module-conversation-list-item__is-verified {
