@@ -55,13 +55,38 @@ class Settings extends React.Component {
     if (this.props.isOpen && !prevProps.isOpen) {
       const settings = ipcRenderer.sendSync(
         'getConfigFor', [
+          'addr',
+          'mail_pw',
           'inbox_watch',
           'sentbox_watch',
           'mvbox_watch',
           'mvbox_move',
-          'e2ee_enabled'
+          'e2ee_enabled',
+          'configured_mail_server',
+          'configured_mail_user',
+          'configured_mail_port',
+          'configured_mail_security',
+          'configured_send_user',
+          'configured_send_pw',
+          'configured_send_server',
+          'configured_send_port',
+          'configured_send_security',
+          'configured_e2ee_enabled'
         ]
       )
+      const advancedSettings = {
+        mailUser: settings['configured_mail_user'],
+        mailServer: settings['configured_mail_server'],
+        mailPort: settings['configured_mail_port'],
+        mailSecurity: settings['configured_mail_security'],
+        sendUser: settings['configured_send_user'],
+        sendPw: settings['configured_send_pw'],
+        sendServer: settings['configured_send_server'],
+        sendPort: settings['configured_send_port'],
+        sendSecurity: settings['configured_send_security'],
+        e2ee_enabled: settings['configured_e2ee_enabled']
+      }
+      this.setState({ advancedSettings })
       this.setState({ settings })
     }
   }
@@ -119,12 +144,12 @@ class Settings extends React.Component {
 
   onBackupExport () {
     const tx = window.translate
-    var confirmOpts = {
+    let confirmOpts = {
       buttons: [tx('cancel'), tx('export_backup_desktop')]
     }
     confirmationDialog(tx('pref_backup_export_explain'), confirmOpts, response => {
       if (!response) return
-      var opts = {
+      let opts = {
         title: tx('export_backup_desktop'),
         defaultPath: remote.app.getPath('downloads'),
         properties: ['openDirectory']
@@ -173,11 +198,9 @@ class Settings extends React.Component {
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, advancedSettings, saved, keyTransfer } = this.state
-
+    const { userDetails, settings, advancedSettings, saved, keyTransfer } = this.state
     const tx = window.translate
     const title = tx('menu_settings')
-
     return (
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
@@ -190,11 +213,13 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <Login
                 {...advancedSettings}
-                mailPw={this.state.mailPw}
+                mode={'update'}
+                addr={settings.addr}
+                mailPw={settings.mail_pw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
-                <Button type='submit' text={tx('login_title')} />
+                <Button type='submit' text={userDetails ? tx('update') : tx('login_title')} />
                 <Button type='cancel' text={tx('cancel')} />
               </Login>
             </Card>
@@ -216,7 +241,7 @@ class Settings extends React.Component {
               <H5>{tx('autocrypt')}</H5>
               <Callout>{tx('autocrypt_explain')}</Callout>
               <br />
-              { this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
+              {this.renderSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
                 {tx('autocrypt_send_asm_button')}
               </Button>
@@ -245,10 +270,10 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_imap_folder_handling')}</H5>
-              { this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
-              { this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
-              { this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
-              { this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
+              {this.renderSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
+              {this.renderSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
+              {this.renderSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
+              {this.renderSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
             </Card>
           </SettingsDialog>
         </Dialog>

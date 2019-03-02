@@ -212,7 +212,7 @@ function init (cwd, state, logHandler) {
     if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
     const tmp = new DeltaChat(dir, state.saved)
 
-    tmp.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
+    tmp.on('error', error => main.send('error', error))
 
     function fakeRender () {
       const deltachat = dc.render()

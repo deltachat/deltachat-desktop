@@ -50,7 +50,8 @@ class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    this.props.onSubmit(this.state.credentials)
+    let config = this.state.credentials
+    this.props.onSubmit(config)
     event.preventDefault()
   }
 
@@ -71,7 +72,8 @@ class Login extends React.Component {
 
     const lockButton = (
       <Button
-        icon={this.state[keyShowPassword] ? 'unlock' : 'lock'}
+        icon={this.state[keyShowPassword] ? 'eye-open' : 'eye-off'}
+        title={this.state[keyShowPassword] ? tx('hide_password') : tx('show_password')}
         intent={Intent.WARNING}
         minimal
         onClick={this.handleUISwitchStateProperty.bind(this, keyShowPassword)}
@@ -85,13 +87,17 @@ class Login extends React.Component {
         value={this.state.credentials[keyValue]}
         onChange={this.handleCredentialsChange}
         placeholder={tx('password')}
-        rightElement={lockButton}
+        rightElement={this.state.credentials[keyValue].length > 0 ? lockButton : null}
       />
     )
   }
 
+  renderLoginHeader (mode) {
+    return mode === 'update' ? null : <Callout>{window.translate('login_instruction_desktop')}</Callout>
+  }
+
   render () {
-    const { addrDisabled, loading } = this.props
+    const { addrDisabled, loading, mode } = this.props
 
     const {
       addr,
@@ -103,7 +109,8 @@ class Login extends React.Component {
       sendUser,
       sendServer,
       sendPort,
-      sendSecurity
+      sendSecurity,
+      sendPw
     } = this.state.credentials
 
     const { showAdvanced } = this.state.ui
@@ -112,8 +119,7 @@ class Login extends React.Component {
 
     return (
       <React.Fragment>
-        <Callout>{tx('login_instruction_desktop')}</Callout>
-        <br />
+        {this.renderLoginHeader(mode)}
         <form onSubmit={this.handleSubmit}>
           <FormGroup label={tx('email_address')} placeholder={tx('email_address')} labelFor='email'>
             <InputGroup
@@ -165,6 +171,7 @@ class Login extends React.Component {
                 min='0'
                 max='65535'
                 value={mailPort}
+                placeholder={tx('def')}
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -216,6 +223,7 @@ class Login extends React.Component {
                 min='0'
                 max='65535'
                 value={sendPort}
+                placeholder={tx('def')}
                 onChange={this.handleCredentialsChange}
               />
             </FormGroup>
@@ -231,10 +239,11 @@ class Login extends React.Component {
               </div>
             </FormGroup>
           </Collapse>
+          <br />
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
-              props.disabled = loading || (!addr || !mailPw)
+              props.disabled = loading || (!addr || !mailPw) || (showAdvanced && !sendPw)
             }
             if (child.props.type === 'cancel') {
               props.onClick = this.cancelClick.bind(this)

@@ -16,5 +16,13 @@
   },
   "settings_manage_keys": {
     "message": "Manage Keys"
+  "update": {
+    "message": "Update"
+  },
+  "show_password": {
+    "message": "Show password"
+  },
+  "hide_password": {
+    "message": "Hide password"
   }
 }

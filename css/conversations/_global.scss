@@ -796,8 +796,12 @@ textarea {
   }
 }
 
-//yellow border fix
-.inbox:focus {
+//yellow/blue border fix
+.inbox:focus,
+button:focus  {
+  outline: none;
+}
+button:focus {
   outline: none;
 }
 
