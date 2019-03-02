@@ -22,6 +22,7 @@ const DeltaChat = (() => {
 })()
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
+const setupUnreadBadgeCounter = require('./unread-badge')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
@@ -76,6 +77,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
+  setupUnreadBadgeCounter(dc)
 
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
@@ -211,7 +213,7 @@ function init (cwd, state, logHandler) {
     if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
     const tmp = new DeltaChat(dir, state.saved)
 
-    tmp.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
+    tmp.on('error', error => main.send('error', error))
 
     function fakeRender () {
       const deltachat = dc.render()

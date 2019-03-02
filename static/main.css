@@ -50,7 +50,7 @@ input:focus {
   background-color: red;
 }
 .user-feedback.success {
-  background-color: green;
+  background-color: #4caf50;
 }
 img {
   max-width: 500px;
@@ -121,6 +121,6 @@ ul li button {
   background: transparent;
 }
 
-h1, p, .bp3-button {
+h1, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   user-select: none;
 }
