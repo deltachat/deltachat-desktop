@@ -17,7 +17,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     
-    img {
+    img, video {
       max-width: 90vw;
       max-height: 100vh;
     }
@@ -66,24 +66,24 @@ class RenderMedia extends React.Component {
         elm = null
     }
     return (
-        <Overlay isOpen={Boolean(url)}
+      <Overlay isOpen={Boolean(url)}
         className='attachment-overlay'
         onClose={onClose}>
-          <OverlayGlobal />
-          <RenderMediaWrapper>
-            {elm &&
-              <CloseButtonWrapper>
-                <Button minimal onClick={onClose} icon='cross' />
-              </CloseButtonWrapper>
-            }
-            <Container>
-              {elm}
-            </Container>
-            <DownloadButtonWrapper>
-              <Button minimal onClick={message.onDownload} icon='download'/>
-            </DownloadButtonWrapper>
-          </RenderMediaWrapper>
-        </Overlay>
+        <OverlayGlobal />
+        <RenderMediaWrapper>
+          {elm &&
+            <CloseButtonWrapper>
+              <Button minimal onClick={onClose} icon='cross' />
+            </CloseButtonWrapper>
+          }
+          <Container>
+            {elm}
+          </Container>
+          <DownloadButtonWrapper>
+            <Button minimal onClick={message.onDownload} icon='download' />
+          </DownloadButtonWrapper>
+        </RenderMediaWrapper>
+      </Overlay>
     )
   }
 }
