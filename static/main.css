@@ -52,9 +52,6 @@ input:focus {
 .user-feedback.success {
   background-color: #4caf50;
 }
-img {
-  max-width: 500px;
-}
 
 ul {
   list-style: none;
@@ -77,13 +74,6 @@ ul li button {
 .RemoveGroupImage {
   width: 100px;
   margin-bottom: 4px;
-}
-
-.attachment-overlay {
-  height: calc(100vh - 40px - 50px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .module-conversation-list-item__is-verified {

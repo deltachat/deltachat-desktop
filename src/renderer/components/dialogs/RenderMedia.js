@@ -1,17 +1,44 @@
 const React = require('react')
 const styled = require('styled-components').default
+const createGlobalStyle = require('styled-components').createGlobalStyle
 const { Button, Overlay } = require('@blueprintjs/core')
 
-const RenderMediaWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+const OverlayGlobal = createGlobalStyle`
+  .bp3-overlay-backdrop {
+    background-color: rgba(16, 22, 26, 1);
+  }
 `
 
-const Exit = styled.div`
+const Container = styled.div`
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    img {
+      max-width: 90vw;
+      max-height: 100vh;
+    }
+`
+
+const RenderMediaWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+`
+
+const CloseButtonWrapper = styled.div`
   float: right;
   position: absolute;
   right: 0;
+`
+
+const DownloadButtonWrapper = styled.div`
+  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `
 
 class RenderMedia extends React.Component {
@@ -38,21 +65,26 @@ class RenderMedia extends React.Component {
       default:
         elm = null
     }
-    return <Overlay isOpen={Boolean(url)}
-      className='attachment-overlay'
-      onClose={onClose}>
-      <RenderMediaWrapper>
-        {elm &&
-          <Exit>
-            <Button minimal large onClick={onClose} icon='cross' />
-          </Exit>
-        }
-        {elm}
-        <Button large onClick={message.onDownload} icon='download'>
-          {message.filename}
-        </Button>
-      </RenderMediaWrapper>
-    </Overlay>
+    return (
+        <Overlay isOpen={Boolean(url)}
+        className='attachment-overlay'
+        onClose={onClose}>
+          <OverlayGlobal />
+          <RenderMediaWrapper>
+            {elm &&
+              <CloseButtonWrapper>
+                <Button minimal onClick={onClose} icon='cross' />
+              </CloseButtonWrapper>
+            }
+            <Container>
+              {elm}
+            </Container>
+            <DownloadButtonWrapper>
+              <Button minimal onClick={message.onDownload} icon='download'/>
+            </DownloadButtonWrapper>
+          </RenderMediaWrapper>
+        </Overlay>
+    )
   }
 }
 
