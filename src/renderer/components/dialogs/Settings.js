@@ -75,7 +75,7 @@ class Settings extends React.Component {
           'configured_e2ee_enabled'
         ]
       )
-      
+
       const advancedSettings = {
         mailUser: settings['configured_mail_user'],
         mailServer: settings['configured_mail_server'],
@@ -179,7 +179,7 @@ class Settings extends React.Component {
 
   render () {
     const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, settings, advancedSettings, saved, keyTransfer } = this.state
+    const { userDetails, settings, advancedSettings, keyTransfer } = this.state
     const tx = window.translate
     const title = tx('menu_settings')
 
