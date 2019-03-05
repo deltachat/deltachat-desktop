@@ -16,6 +16,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: black;
     
     img, video {
       max-width: 90vw;
@@ -58,10 +59,10 @@ class RenderMedia extends React.Component {
         elm = <img src={url} />
         break
       case 'audio':
-        elm = <audio src={url} controls='true' />
+        elm = <audio src={url} controls={1} />
         break
       case 'video':
-        elm = <video src={url} controls='true' />
+        elm = <video src={url} controls={1} />
         break
       default:
         elm = null
