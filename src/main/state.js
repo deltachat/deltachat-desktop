@@ -49,7 +49,6 @@ function load (cb) {
       log.info('Missing configuration file. Using default values.')
     }
     const state = getDefaultState()
-    console.log('s1', state)
     state.saved = Object.assign(state.saved, err ? {} : saved)
     cb(null, state)
   })
