@@ -141,7 +141,7 @@ class ComposerMessageInput extends React.Component {
   insertStringAtCursorPosition (str) {
     let textareaElem = this.textareaRef.current
     let { selectionStart, selectionEnd } = textareaElem
-    let textValue = this.state.text
+    let textValue = this.state.text ? this.state.text : ''
 
     let textBeforeCursor = textValue.slice(0, selectionStart)
     let textAfterCursor = textValue.slice(selectionEnd)
