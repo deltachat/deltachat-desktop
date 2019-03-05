@@ -21,6 +21,7 @@ class DeltaChatController extends EventEmitter {
     this._saved = saved
   }
 
+  // Save settings for RC
   updateSettings (saved) {
     this._saved = saved
   }
