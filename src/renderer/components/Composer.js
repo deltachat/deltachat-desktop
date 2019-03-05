@@ -141,7 +141,6 @@ class Composer extends React.Component {
       showEmojiPicker: false
 
     }
-
     this.sendMessage = this.sendMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)

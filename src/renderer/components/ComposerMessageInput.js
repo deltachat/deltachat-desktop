@@ -30,13 +30,19 @@ class ComposerMessageInput extends React.Component {
       text: props.text
     }
 
-    this.setComposerSize = this.props.setComposerSize
+    this.composerSize = 48
+    this.setComposerSize = this.setComposerSize.bind(this)
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
+  }
+
+  setComposerSize (size) {
+    this.composerSize = size
+    this.props.setComposerSize(size)
   }
 
   focus () {
@@ -110,6 +116,11 @@ class ComposerMessageInput extends React.Component {
     // scrollHeight. Ugly hack.
     el.style.height = 'auto'
     let scrollHeight = el.scrollHeight
+
+    if (scrollHeight + 16 === this.composerSize) {
+      el.style.height = scrollHeight + 'px'
+      return
+    }
 
     if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
       el.style.height = maxScrollHeight + 'px'
