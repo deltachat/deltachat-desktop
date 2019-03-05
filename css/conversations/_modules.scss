@@ -83,6 +83,10 @@
   &:hover {
     @include color-svg('../images/download.svg', $color-light-90);
   }
+  &.icon-medium {
+    height: 36px;
+    width: 36px;
+  }
 }
 
 

@@ -1,7 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const createGlobalStyle = require('styled-components').createGlobalStyle
-const { Button, Overlay } = require('@blueprintjs/core')
+const { Button, Icon, Overlay } = require('@blueprintjs/core')
 
 const OverlayGlobal = createGlobalStyle`
   .bp3-overlay-backdrop {
@@ -31,7 +31,8 @@ const RenderMediaWrapper = styled.div`
 const CloseButtonWrapper = styled.div`
   float: right;
   position: absolute;
-  right: 0;
+  right: 5px;
+  cursor: pointer;
 `
 
 const DownloadButtonWrapper = styled.div`
@@ -73,14 +74,14 @@ class RenderMedia extends React.Component {
         <RenderMediaWrapper>
           {elm &&
             <CloseButtonWrapper>
-              <Button minimal onClick={onClose} icon='cross' />
+              <Icon onClick={onClose} icon='cross' iconSize={32} color={'grey'} />
             </CloseButtonWrapper>
           }
           <Container>
             {elm}
           </Container>
           <DownloadButtonWrapper>
-            <Button minimal onClick={message.onDownload} icon='download' />
+            <div role='button' onClick={message.onDownload} className='module-message__buttons__download module-message__buttons__download--outgoing icon-medium' />
           </DownloadButtonWrapper>
         </RenderMediaWrapper>
       </Overlay>
