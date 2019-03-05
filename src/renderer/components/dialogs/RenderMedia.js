@@ -1,7 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const createGlobalStyle = require('styled-components').createGlobalStyle
-const { Button, Icon, Overlay } = require('@blueprintjs/core')
+const { Icon, Overlay } = require('@blueprintjs/core')
 
 const OverlayGlobal = createGlobalStyle`
   .bp3-overlay-backdrop {
