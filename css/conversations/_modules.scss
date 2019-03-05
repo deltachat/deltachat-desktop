@@ -89,6 +89,10 @@
   }
 }
 
+.attachment-overlay .module-message__buttons__download:hover {
+  @include color-svg('../images/download.svg', $color-light-10);
+}
+
 
 
 .module-message__buttons__reply {
@@ -354,6 +358,8 @@
 
 .module-message__audio-attachment {
   margin-top: 2px;
+  display: block;
+  margin-right: 30px;
 }
 
 .module-message__audio-attachment--with-content-below {
