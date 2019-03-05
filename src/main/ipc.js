@@ -163,6 +163,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dc.setConfig(key, value)
   })
+
   ipcMain.on('getConfigFor', (e, keys) => {
     e.returnValue = dc.getConfigFor(keys)
   })
@@ -205,6 +206,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
     app.saveState()
+    render()
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {

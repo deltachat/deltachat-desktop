@@ -198,7 +198,6 @@ class ChatView extends React.Component {
 
   render () {
     const { onDeadDropClick, chat } = this.props
-
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
