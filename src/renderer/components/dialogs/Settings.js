@@ -47,7 +47,6 @@ class Settings extends React.Component {
     this.onBackupImport = this.onBackupImport.bind(this)
     this.onKeysExport = this.onKeysExport.bind(this)
     this.onKeysImport = this.onKeysImport.bind(this)
-    this.handleSettingsChange = this.handleSettingsChange.bind(this)
     this.handleRCSettingsChange = this.handleRCSettingsChange.bind(this)
     this.handleDeltaSettingsChange = this.handleDeltaSettingsChange.bind(this)
     this.renderRCSwitch = this.renderRCSwitch.bind(this)
