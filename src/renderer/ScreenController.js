@@ -51,7 +51,7 @@ class ScreenController extends React.Component {
   }
 
   userFeedback (message) {
-    if (message !== false && this.state.message) return // one at a time, cowgirl
+    if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
   }
 
@@ -69,7 +69,8 @@ class ScreenController extends React.Component {
       if (filename.indexOf('bak') > -1) {
         self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
       } else {
-        self.userFeedback({ type: 'success', text: tx('keys_export_success_message', filename) })
+        // event is not triggered, when keys are exported?
+        self.userFeedback({ type: 'success', text: tx('pref_managekeys_secret_keys_exported_to_x', filename) })
       }
     })
   }

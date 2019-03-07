@@ -2,21 +2,6 @@
   "login_instruction_desktop": {
     "message": "Login with an existing e-mail account (use your e-mail credentials here)"
   },
-  "keys_import": {
-    "message": "Import keys"
-  },
-  "keys_export": {
-    "message": "Export keys"
-  },
-  "keys_export_confirmation_message": {
-    "message": "Exporting your end-to-end setup! Keep these keys in a safe place and delete them as soon as they are not needed anymore."
-  },
-  "keys_export_success_message": {
-    "message": "Keys successfully exported to %1$s"
-  },
-  "settings_manage_keys": {
-    "message": "Manage Keys"
-  },
   "update": {
     "message": "Update"
   },

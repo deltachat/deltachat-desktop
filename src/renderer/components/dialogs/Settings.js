@@ -101,35 +101,43 @@ class Settings extends React.Component {
 
   onKeysImport () {
     var opts = {
-      title: window.translate('keys_import'),
+      title: window.translate('pref_managekeys_import_explain'),
       defaultPath: remote.app.getPath('downloads'),
       properties: ['openDirectory']
     }
-    remote.dialog.showOpenDialog(opts, filenames => {
-      if (!filenames || !filenames.length) return
-      ipcRenderer.send('keysImport', filenames[0])
-    })
+    remote.dialog.showOpenDialog(
+      opts,
+      filenames => {
+        if (filenames && filenames.length) {
+          confirmationDialog(window.translate('pref_managekeys_import_explain', filenames[0]), response => {
+            if (!response) return
+            return ipcRenderer.send('keysImport', filenames[0])
+          })
+        }
+      }
+    )
   }
 
   onKeysExport () {
     // TODO: ask for the user's password and check it using
     // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
     const tx = window.translate
-    confirmationDialog(tx('keys_export_confirmation_message'), response => {
-      if (!response) return
-      var opts = {
-        title: window.translate('keys_export'),
-        defaultPath: remote.app.getPath('downloads'),
-        properties: ['openDirectory']
+
+    const opts = {
+      title: window.translate('pref_managekeys_export_secret_keys'),
+      defaultPath: remote.app.getPath('downloads'),
+      properties: ['openDirectory']
+    }
+
+    remote.dialog.showOpenDialog(opts, filenames => {
+      if (filenames && filenames.length) {
+        confirmationDialog(tx('pref_managekeys_export_explain').replace('%1$s', filenames[0]), response => {
+          if (!response) return
+          if (filenames && filenames.length) {
+            ipcRenderer.send('keysExport', filenames[0])
+          }
+        })
       }
-      remote.dialog.showOpenDialog(opts, filenames => {
-        if (!filenames || !filenames.length) {
-          console.log('No filenames')
-          return
-        }
-        console.log('filenames', filenames)
-        ipcRenderer.send('keysExport', filenames[0])
-      })
     })
   }
 
@@ -278,10 +286,10 @@ class Settings extends React.Component {
               </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('settings_manage_keys')}</H5>
+              <H5>{tx('pref_managekeys_menu_title')}</H5>
               <ButtonGroup>
-                <Button onClick={this.onKeysExport}>{tx('keys_export')}...</Button>
-                <Button onClick={this.onKeysImport}>{tx('keys_import')}...</Button>
+                <Button onClick={this.onKeysExport}>{tx('pref_managekeys_export_secret_keys')}...</Button>
+                <Button onClick={this.onKeysImport}>{tx('pref_managekeys_import_secret_keys')}...</Button>
               </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
