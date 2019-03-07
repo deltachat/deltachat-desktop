@@ -188,7 +188,7 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    this.insertStringAtCursorPosition(emoji.native)
+    this.messageInputRef.current.insertStringAtCursorPosition(emoji.native)
   }
 
   onMouseMove (event) {
