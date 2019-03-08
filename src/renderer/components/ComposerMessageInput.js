@@ -27,7 +27,7 @@ class ComposerMessageInput extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      text: props.text
+      text: ''
     }
 
     this.composerSize = 48
