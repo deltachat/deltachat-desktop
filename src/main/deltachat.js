@@ -333,6 +333,11 @@ class DeltaChatController extends EventEmitter {
     return config
   }
 
+  setDraft (chatId, msg) {
+    log.debug(`setDraft: ${msg}, ${chatId}`)
+    //this._dc.setDraft(chatId, msg)
+  }
+
   /**
    * Returns the state in json format
    */
@@ -444,6 +449,10 @@ class DeltaChatController extends EventEmitter {
     selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
       return this._dc.getContact(id).toJson()
     })
+
+    selectedChat.draft = this._dc.getDraft(selectedChatId)
+    if(selectedChat.draft == null) selectedChat.draft = 'test234 ' + selectedChatId
+    log.debug('getDraft:', selectedChat.draft)
 
     return selectedChat
   }

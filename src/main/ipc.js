@@ -227,6 +227,10 @@ function init (cwd, state, logHandler) {
     tmp.login(credentials, fakeRender, txCoreStrings())
   })
 
+  ipcMain.on('setDraft', (event, chatId, msg) => {
+    dc.setDraft(chatId, msg)
+  })
+  
   function render () {
     log.debug('RENDER')
     const deltachat = dc.render()

@@ -98,6 +98,10 @@ class ChatView extends React.Component {
   componentWillUnmount () {
     if (this.observer) this.observer.disconnect()
   }
+  
+  componentDidUpdate() {
+    console.log('ChatView updated!')
+  }
 
   writeMessage (opts) {
     const { chat } = this.props
@@ -221,6 +225,8 @@ class ChatView extends React.Component {
         </div>
         <Composer
           ref={this.refComposer}
+          chatId={chat.id}
+          draft={chat.draft}
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
         />

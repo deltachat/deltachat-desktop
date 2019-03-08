@@ -1,5 +1,6 @@
 const React = require('react')
 const styled = require('styled-components').default
+const { ipcRenderer } = require('electron')
 
 const MessageInputTextarea = styled.textarea`
   float: left;
@@ -27,7 +28,8 @@ class ComposerMessageInput extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      text: props.text
+      text: props.draft ? props.draft : '',
+      chatId: props.chatId
     }
 
     this.composerSize = 48
@@ -38,6 +40,16 @@ class ComposerMessageInput extends React.Component {
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
+  }
+
+  static getDerivedStateFromProps(props, current_state) {
+    if(current_state.chatId !== props.chatId) {
+      return {chatId: props.chatId, text: props.draft}
+    }
+    return null
+  }
+  componentDidUpdate() {
+    console.log('ComposerMessageInput updated!')
   }
 
   setComposerSize (size) {
@@ -76,6 +88,11 @@ class ComposerMessageInput extends React.Component {
 
   onChange (e) {
     this.setState({ text: e.target.value, error: false })
+    this.updateDraft()
+  }
+
+  updateDraft() {
+    ipcRenderer.send('setDraft', this.state.chatId, this.state.text)
   }
 
   keyEventToAction (e) {

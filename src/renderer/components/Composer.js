@@ -154,6 +154,10 @@ class Composer extends React.Component {
     this.setState({ error: true })
   }
 
+  componentDidUpdate() {
+    console.log('Composer updated!')
+  }
+  
   sendMessage () {
     let message = this.messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
@@ -226,6 +230,8 @@ class Composer extends React.Component {
               enterKeySends={enterKeySends}
               sendMessage={this.sendMessage}
               setComposerSize={this.props.setComposerSize}
+              chatId={this.props.chatId}
+              draft={this.props.draft}
             />
           )}
         </SettingsContext.Consumer>
