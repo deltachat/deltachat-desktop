@@ -1,6 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const { ipcRenderer } = require('electron')
+const debounce = require('debounce')
 
 const MessageInputTextarea = styled.textarea`
   float: left;
@@ -44,12 +45,9 @@ class ComposerMessageInput extends React.Component {
 
   static getDerivedStateFromProps(props, current_state) {
     if(current_state.chatId !== props.chatId) {
-      return {chatId: props.chatId, text: props.draft}
+      return {chatId: props.chatId, text: props.draft ? props.draft : ''}
     }
     return null
-  }
-  componentDidUpdate() {
-    console.log('ComposerMessageInput updated!')
   }
 
   setComposerSize (size) {
@@ -83,6 +81,7 @@ class ComposerMessageInput extends React.Component {
 
     if (prevState.text !== this.state.text) {
       this.resizeTextareaAndComposer()
+      this.updateDraft()
     }
   }
 

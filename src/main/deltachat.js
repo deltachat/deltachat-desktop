@@ -92,6 +92,10 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
+
+      // Don't rerender if a draft changes
+      if(msgId === 0) return;
+
       render()
     })
 
