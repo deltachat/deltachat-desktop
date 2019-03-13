@@ -333,9 +333,12 @@ class DeltaChatController extends EventEmitter {
     return config
   }
 
-  setDraft (chatId, msg) {
-    log.debug(`setDraft: ${msg}, ${chatId}`)
-    //this._dc.setDraft(chatId, msg)
+  setDraft (chatId, msgText) {
+    log.debug(`setDraft: ${msgText}, ${chatId}`)
+    let msg = this._dc.messageNew()
+    msg.setText(msgText)
+
+    this._dc.setDraft(chatId, msg)
   }
 
   /**
@@ -450,8 +453,12 @@ class DeltaChatController extends EventEmitter {
       return this._dc.getContact(id).toJson()
     })
 
-    selectedChat.draft = this._dc.getDraft(selectedChatId)
-    if(selectedChat.draft == null) selectedChat.draft = 'test234 ' + selectedChatId
+    let draft = this._dc.getDraft(selectedChatId)
+    if(draft) {
+      selectedChat.draft = draft.getText()
+    } else {
+      selectedChat.draft = ''
+    }
     log.debug('getDraft:', selectedChat.draft)
 
     return selectedChat
