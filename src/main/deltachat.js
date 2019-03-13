@@ -386,7 +386,6 @@ class DeltaChatController extends EventEmitter {
       if (!chat) continue
 
       chat.summary = list.getSummary(i).toJson()
-      console.log(chat)
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
       chat.isGroup = isGroupChat(chat)
 

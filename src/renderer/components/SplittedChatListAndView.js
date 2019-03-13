@@ -62,10 +62,6 @@ class SplittedChatListAndView extends React.Component {
     this.searchChats('')
   }
 
-  componentDidUpdate () {
-    console.log('SplittedChatListAndView updated!')
-  }
-
   showArchivedChats (show) {
     ipcRenderer.send('showArchivedChats', show)
   }

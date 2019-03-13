@@ -137,7 +137,6 @@ class ChatListItem extends React.Component {
     if (!lastMessage) {
       return null
     }
-    console.log(lastMessage)
 
     return (
       <div className='module-conversation-list-item__message'>

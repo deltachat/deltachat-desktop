@@ -99,10 +99,6 @@ class ChatView extends React.Component {
     if (this.observer) this.observer.disconnect()
   }
 
-  componentDidUpdate () {
-    console.log('ChatView updated!')
-  }
-
   writeMessage (opts) {
     const { chat } = this.props
     ipcRenderer.send('sendMessage', chat.id, opts.text, opts.filename)
