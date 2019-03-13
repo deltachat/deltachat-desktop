@@ -98,8 +98,8 @@ class ChatView extends React.Component {
   componentWillUnmount () {
     if (this.observer) this.observer.disconnect()
   }
-  
-  componentDidUpdate() {
+
+  componentDidUpdate () {
     console.log('ChatView updated!')
   }
 

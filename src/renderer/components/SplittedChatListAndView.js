@@ -62,7 +62,7 @@ class SplittedChatListAndView extends React.Component {
     this.searchChats('')
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     console.log('SplittedChatListAndView updated!')
   }
 

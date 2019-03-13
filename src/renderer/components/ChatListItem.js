@@ -1,8 +1,14 @@
 const React = require('react')
 const classNames = require('classnames')
+const styled = require('styled-components').default
 const {
   MessageBody, Timestamp, ContactName
 } = require('./conversations')
+
+const MessageText1 = styled.div`
+  float: left;
+  margin-right: 2px;
+`
 
 class ChatListItem extends React.Component {
   renderAvatar () {
@@ -143,8 +149,11 @@ class ChatListItem extends React.Component {
               : null
           )}
         >
+          { lastMessage.text1 !== null
+            ? <MessageText1>{lastMessage.text1 + ': ' }</MessageText1> : null
+          }
           <MessageBody
-            text={lastMessage.text || ''}
+            text={lastMessage.text2 || ''}
             disableJumbomoji
             disableLinks
             i18n={i18n}

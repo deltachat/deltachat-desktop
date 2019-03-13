@@ -94,7 +94,7 @@ class DeltaChatController extends EventEmitter {
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
 
       // Don't rerender if a draft changes
-      if(msgId === 0) return;
+      if (msgId === 0) return
 
       render()
     })
@@ -386,6 +386,7 @@ class DeltaChatController extends EventEmitter {
       if (!chat) continue
 
       chat.summary = list.getSummary(i).toJson()
+      console.log(chat)
       chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
       chat.isGroup = isGroupChat(chat)
 
@@ -458,7 +459,7 @@ class DeltaChatController extends EventEmitter {
     })
 
     let draft = this._dc.getDraft(selectedChatId)
-    if(draft) {
+    if (draft) {
       selectedChat.draft = draft.getText()
     } else {
       selectedChat.draft = ''

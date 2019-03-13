@@ -1,7 +1,6 @@
 const React = require('react')
 const styled = require('styled-components').default
 const { ipcRenderer } = require('electron')
-const debounce = require('debounce')
 
 const MessageInputTextarea = styled.textarea`
   float: left;
@@ -43,9 +42,9 @@ class ComposerMessageInput extends React.Component {
     this.textareaRef = React.createRef()
   }
 
-  static getDerivedStateFromProps(props, current_state) {
-    if(current_state.chatId !== props.chatId) {
-      return {chatId: props.chatId, text: props.draft ? props.draft : ''}
+  static getDerivedStateFromProps (props, currentState) {
+    if (currentState.chatId !== props.chatId) {
+      return { chatId: props.chatId, text: props.draft ? props.draft : '' }
     }
     return null
   }
@@ -90,7 +89,7 @@ class ComposerMessageInput extends React.Component {
     this.updateDraft()
   }
 
-  updateDraft() {
+  updateDraft () {
     ipcRenderer.send('setDraft', this.state.chatId, this.state.text)
   }
 

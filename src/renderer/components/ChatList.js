@@ -106,7 +106,7 @@ class ChatList extends React.Component {
                     phoneNumber={chat.summary.text1}
                     lastUpdated={lastUpdated}
                     lastMessage={{
-                      text: chat.summary.text2,
+                      text2: chat.summary.text2,
                       status: 'delivered'
                     }}
                     onClick={() => onDeadDropClick(chat.deaddrop)}
@@ -134,10 +134,12 @@ class ChatList extends React.Component {
                   color={chat.color}
                   lastUpdated={lastUpdated}
                   lastMessage={{
-                    text: chat.summary.text2,
+                    text1: chat.summary.text1,
+                    text1Meaning: chat.summary.text1Meaning,
+                    text2: chat.summary.text2,
                     status: 'sent' // TODO: interpret data from summary to get correct state
                   }}
-                  i18n={i18n}
+                  i18n={i18n}d
                   isSelected={chat.id === selectedChatId}
                   isVerified={chat.isVerified}
                   isGroup={chat.isGroup}

@@ -154,10 +154,10 @@ class Composer extends React.Component {
     this.setState({ error: true })
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     console.log('Composer updated!')
   }
-  
+
   sendMessage () {
     let message = this.messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
