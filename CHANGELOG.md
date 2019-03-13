@@ -2,6 +2,32 @@
 
 ## [Unreleased][unreleased]
 
+## [0.102.0] - 2019-03-12
+
+### Added
+
+- Send file by drag&drop to ChatView [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Add native badge count for osx and linux [#696](https://github.com/deltachat/deltachat-desktop/issues/696) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Add setting for changing newline/message sending with enter/shift-enter/ctr-enter [#662](https://github.com/deltachat/deltachat-desktop/issues/662) [**@Simon-Laux**](https://github.com/Simon-Laux) [**@Jikstra**](https://github.com/Jikstra)
+
+### Changed
+
+- Open context menu on right click [**@nicodh**](https://github.com/nicodh)
+- Change background color for success feedback [#703](https://github.com/deltachat/deltachat-desktop/issues/703) [**@nicodh**](https://github.com/nicodh)
+- Make elements on Settings screen unselectable [#705](https://github.com/deltachat/deltachat-desktop/issues/705) [**@nicodh**](https://github.com/nicodh)
+- Improved ui/ux of fullscreen images/videos [#710](https://github.com/deltachat/deltachat-desktop/issues/710) [**@nicodh**](https://github.com/nicodh) [**@jikstra**](https://github.com/jikstra)
+
+### Fixed
+
+- Log file catch when deltachat-node dependency is missing [#693](https://github.com/deltachat/deltachat-desktop/issues/693) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix updating login credentials in settings [#695](https://github.com/deltachat/deltachat-desktop/issues/695) [**@nicodh**](https://github.com/nicodh)
+- Fix multinline composer performance [#704](https://github.com/deltachat/deltachat-desktop/issues/704) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix showing media buttons [#717](https://github.com/deltachat/deltachat-desktop/issues/717) [**@Jikstra**](https://github.com/Jikstra)
+
+### Removed
+
+- Remove devtron so we can remove highlight.js [**@ralphtheninja**](https://github.com/ralphtheninja)
+
 ## [0.101.0] - 2019-02-27
 
 ### Changed
@@ -485,7 +511,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...HEAD
+
+[0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
 
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
 
