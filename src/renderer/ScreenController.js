@@ -69,7 +69,6 @@ class ScreenController extends React.Component {
       if (filename.indexOf('bak') > -1) {
         self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
       } else {
-        // event is not triggered, when keys are exported?
         self.userFeedback({ type: 'success', text: tx('pref_managekeys_secret_keys_exported_to_x', filename) })
       }
     })
