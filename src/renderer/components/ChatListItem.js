@@ -165,12 +165,13 @@ class ChatListItem extends React.Component {
   }
 
   render () {
-    const { unreadCount, onClick, isSelected } = this.props
+    const { unreadCount, onClick, isSelected, onContextMenu } = this.props
 
     return (
       <div
         role='button'
         onClick={onClick}
+        onContextMenu={onContextMenu}
         className={classNames(
           'module-conversation-list-item',
           unreadCount > 0 ? 'module-conversation-list-item--has-unread' : null,
