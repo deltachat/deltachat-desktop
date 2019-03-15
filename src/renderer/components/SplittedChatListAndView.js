@@ -141,6 +141,7 @@ class SplittedChatListAndView extends React.Component {
             showArchivedChats={deltachat.showArchivedChats}
             selectedChatId={selectedChat ? selectedChat.id : null}
             openDialog={this.props.openDialog}
+            changeScreen={this.props.changeScreen}
           />
           {
             selectedChat

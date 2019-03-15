@@ -134,10 +134,9 @@ class ChatContextMenu extends React.Component {
         {this.state.chat.isGroup
           ? (
             <div>
-              {/* FIXME Same as for onEncrInfo
               <MenuItem onClick={this.onEditGroup.bind(this)} >
                 <Icon icon='edit' /> {tx('menu_edit_group')}
-              </MenuItem> */}
+              </MenuItem>
               <MenuItem onClick={this.onLeaveGroup.bind(this)}>
                 <Icon icon='log-out' /> {tx('menu_leave_group')}
               </MenuItem>
@@ -165,16 +164,17 @@ class ChatContextMenu extends React.Component {
     })
   }
   onEncrInfo () {
-    console.log(this.props.openDialog)
     ipcRenderer.send('getChatById', this.state.chat.id)
     ipcRenderer.once('getChatById', (e, chat) => {
-      console.log(chat)
       this.props.openDialog('EncrInfo', { chat })
     })
   }
-  // onEditGroup () {
-  //   this.props.changeScreen('EditGroup', { chat: this.props.selectedChat })
-  // }
+  onEditGroup () {
+    ipcRenderer.send('getChatById', this.state.chat.id)
+    ipcRenderer.once('getChatById', (e, chat) => {
+      this.props.changeScreen('EditGroup', { chat })
+    })
+  }
   onLeaveGroup () {
     const selectedChat = this.state.chat
     const tx = window.translate
@@ -287,7 +287,8 @@ class ChatList extends React.Component {
         <ChatContextMenu
           ref={this.contextMenu}
           showArchivedChats={showArchivedChats}
-          openDialog={this.props.openDialog} />
+          openDialog={this.props.openDialog}
+          changeScreen={this.props.changeScreen} />
       </div>
     )
   }
