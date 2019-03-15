@@ -142,11 +142,9 @@ class ChatContextMenu extends React.Component {
               </MenuItem>
             </div>
           )
-          : null
-          // TODO Fix funtion to make this work
-          // <MenuItem onClick={this.onBlockContact.bind(this)}>
-          //   <Icon icon='blocked-person' /> {tx('menu_block_contact')}
-          // </MenuItem>
+          : <MenuItem onClick={this.onBlockContact.bind(this)}>
+            <Icon icon='blocked-person' /> {tx('menu_block_contact')}
+          </MenuItem>
         }
       </ContextMenu>
     )
@@ -187,15 +185,16 @@ class ChatContextMenu extends React.Component {
   }
 
   onBlockContact () {
-    const selectedChat = this.state.chat
     const tx = window.translate
-    // TODO FIXME somehow turn chatid into contact id, cause this methode here won't work:
-    const contactId = (selectedChat && selectedChat.contacts.length) ? selectedChat.contacts[0].id : undefined
-    if (!contactId) return
-    confirmation(tx('ask_block_contact'), yes => {
-      if (yes) {
-        ipcRenderer.send('blockContact', contactId)
-      }
+    ipcRenderer.send('getChatById', this.state.chat.id)
+    ipcRenderer.once('getChatById', (e, chat) => {
+      const contactId = (chat && chat.contacts.length) ? chat.contacts[0].id : undefined
+      if (!contactId) return
+      confirmation(tx('ask_block_contact'), yes => {
+        if (yes) {
+          ipcRenderer.send('blockContact', contactId)
+        }
+      })
     })
   }
 }
