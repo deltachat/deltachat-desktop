@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const path = require('path')
 
 const {
   H5,
@@ -69,7 +70,7 @@ class ScreenController extends React.Component {
       if (filename.indexOf('bak') > -1) {
         self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
       } else {
-        self.userFeedback({ type: 'success', text: tx('pref_managekeys_secret_keys_exported_to_x', filename) })
+        self.userFeedback({ type: 'success', text: tx('pref_managekeys_secret_keys_exported_to_x', path.dirname(filename)) })
       }
     })
   }
