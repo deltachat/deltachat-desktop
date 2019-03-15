@@ -127,6 +127,8 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))
 
+  ipcMain.on('getChatById', (e, chatId) => main.send('getChatById', dc._getChatById(chatId)))
+
   ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
 
   ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))

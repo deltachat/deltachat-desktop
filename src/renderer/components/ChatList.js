@@ -128,11 +128,9 @@ class ChatContextMenu extends React.Component {
         <MenuItem onClick={this.onDeleteChat.bind(this)}>
           <Icon icon='delete' /> {tx('menu_delete_chat')}
         </MenuItem>
-        {/* FIXME -> too much effort to get working at the moment,
-            see function below
         <MenuItem onClick={this.onEncrInfo.bind(this)}>
           <Icon icon='lock' /> {tx('encryption_info_desktop')}
-        </MenuItem> */}
+        </MenuItem>
         {this.state.chat.isGroup
           ? (
             <div>
@@ -166,12 +164,14 @@ class ChatContextMenu extends React.Component {
       }
     })
   }
-  // FIXME -> too much effort to get working at the moment,
-  // because it needs the selected chat object, which contains more data
-  // maybe it could work when it switches the selected chat when you press it
-  // onEncrInfo () {
-  //   this.props.openDialog('EncrInfo', { chat: this.state.chat })
-  // }
+  onEncrInfo () {
+    console.log(this.props.openDialog)
+    ipcRenderer.send('getChatById', this.state.chat.id)
+    ipcRenderer.once('getChatById', (e, chat) => {
+      console.log(chat)
+      this.props.openDialog('EncrInfo', { chat })
+    })
+  }
   // onEditGroup () {
   //   this.props.changeScreen('EditGroup', { chat: this.props.selectedChat })
   // }
@@ -278,13 +278,6 @@ class ChatList extends React.Component {
                     isGroup={chat.isGroup}
                     unreadCount={chat.freshMessageCounter}
                     onContextMenu={this.openMenu.bind(this, chat)}
-                    // Test function, because onContextMenu works not at the moment for ? reason
-                    // onClick={
-                    //   (e) => {
-                    //     this.props.onChatClick(chat.id, e)
-                    //     this.openMenu(chat, e)
-                    //   }
-                    // }
                   />
                 )
               }
@@ -292,7 +285,9 @@ class ChatList extends React.Component {
           </div>
         </ChatListWrapper>
         <ChatContextMenu
-          ref={this.contextMenu} showArchivedChats={showArchivedChats} />
+          ref={this.contextMenu}
+          showArchivedChats={showArchivedChats}
+          openDialog={this.props.openDialog} />
       </div>
     )
   }

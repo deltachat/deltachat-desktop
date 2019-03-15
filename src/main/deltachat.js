@@ -445,6 +445,41 @@ class DeltaChatController extends EventEmitter {
     return selectedChat
   }
 
+  _getChatById (chatId) {
+    if (!chatId) return null
+    const chat = this._dc.getChat(chatId).toJson()
+    if (!chat) return null
+
+    if (chatId === C.DC_CHAT_ID_DEADDROP) {
+      const chat = this._dc.getChat(C.DC_CHAT_ID_DEADDROP)
+      return (chat && Object.assign(chat.toJson(), { isDeaddrop: true })) || null
+    }
+
+    var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+    // This object is NOT created with object assign to promote consistency and to be easier to understand
+    return {
+      id: chat.id,
+      name: chat.name,
+      isVerified: chat.isVerified,
+      profileImage: chat.profileImage,
+
+      archived: chat.archived,
+      subtitle: chat.subtitle,
+      type: chat.type,
+      isUnpromoted: chat.isUnpromoted,
+      isSelfTalk: chat.isSelfTalk,
+
+      contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
+      totalMessages: messageIds.length,
+      messages: this._messagesToRender(messageIds),
+      color: this._integerToHexColor(chat.color),
+      summary: undefined,
+      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      isGroup: isGroupChat(chat),
+      isDeaddrop: false
+    }
+  }
+
   _messagesToRender (messageIds) {
     const countMessages = messageIds.length
     const messageIdsToRender = messageIds.splice(
