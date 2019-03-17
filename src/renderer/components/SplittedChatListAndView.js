@@ -54,6 +54,7 @@ class SplittedChatListAndView extends React.Component {
     this.onChatClick = this.onChatClick.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
+    this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
   }
@@ -92,6 +93,13 @@ class SplittedChatListAndView extends React.Component {
     this.searchChats(event.target.value)
   }
 
+  onMapIconClick (event) {
+    console.log('onMapIconClick')
+    // dummy point
+    const points = [[7.886120999999999, 47.9861059]]
+    this.props.openDialog('MapLayer', { points })
+  }
+
   render () {
     const { deltachat } = this.props
     const { selectedChat, showArchivedChats } = deltachat
@@ -128,6 +136,7 @@ class SplittedChatListAndView extends React.Component {
                 onClick={() => this.setState({ media: !this.state.media })}
                 minimal
                 icon={this.state.media ? 'chat' : 'media'} />}
+              {selectedChat && <Button minimal icon='map' onClick={this.onMapIconClick} />}
               <Popover content={menu} position={Position.RIGHT_TOP}>
                 <Button className='icon-rotated' minimal icon='more' />
               </Popover>
@@ -166,7 +175,6 @@ class SplittedChatListAndView extends React.Component {
               )
           }
         </div>
-
       </div>
     )
   }
