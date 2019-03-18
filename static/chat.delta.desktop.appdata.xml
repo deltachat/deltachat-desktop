@@ -1,109 +1,308 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>chat.delta.desktop</id>
-  <launchable type="desktop-id">chat.delta.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0-or-later</project_license>
+  <project_license>GPL-3.0+</project_license>
   <name>Delta Chat</name>
   <summary>Delta Chat email-based messenger</summary>
-
   <description>
-    <p>The messenger with the broadest audience in the world. Free, independent, email compatible.</p>
+    <p>Chat over email and head back to the future with us!</p>
+    <p>
+      Delta Chat is like Telegram or Whatsapp but without the tracking
+      or central control. Check out our GDPR compliancy statement.
+    </p>
+    <p>
+      Delta Chat doesn’t have their own servers but uses the most
+      massive and diverse open messaging system ever: the existing
+      e-mail server network.
+    </p>
+    <p>
+      Chat with anyone if you know their e-mail address, no need for
+      them to install DeltaChat! All you need is a standard e-mail
+      account.
+    </p>
   </description>
-
+  <launchable type="desktop-id">chat.delta.desktop.desktop</launchable>
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/deltachat/deltachat-desktop/raw/master/screenshot.png</image>
     </screenshot>
   </screenshots>
-
   <url type="homepage">https://delta.chat/</url>
-  <url type="bugtracker">https://github.com/deltachat/deltachat-desktop/issues</url>
-  <url type="faq">https://delta.chat/en/help</url>
-  <url type="donation">https://delta.chat/en/contribute</url>
-  <url type="translate">https://www.transifex.com/delta-chat/public/</url>
-
   <releases>
+    <release version="v0.102.0" date="2019-03-13">
+      <description>
+        <p>Added</p>
+        <ul>
+          <li>Send file by drag&amp;drop to ChatView @Simon-Laux</li>
+          <li>Add native badge count for osx and linux #696 @Simon-Laux</li>
+          <li>
+            Add setting for changing newline/message sending with
+            enter/shift-enter/ctr-enter #662 @Simon-Laux @Jikstra
+          </li>
+        </ul>
+        <p>Changed</p>
+        <ul>
+          <li>Open context menu on right click @nicodh</li>
+          <li>Change background color for success feedback #703 @nicodh</li>
+          <li>Make elements on Settings screen unselectable #705 @nicodh</li>
+          <li>Improved ui/ux of fullscreen images/videos #710 @nicodh @jikstra</li>
+        </ul>
+        <p>Fixed</p>
+        <ul>
+          <li>Log file catch when deltachat-node dependency is missing #693 @Simon-Laux</li>
+          <li>Fix updating login credentials in settings #695 @nicodh</li>
+          <li>Fix multinline composer performance #704 @Simon-Laux</li>
+          <li>Fix showing media buttons #717 @Jikstra</li>
+        </ul>
+        <p>Removed</p>
+        <ul>
+          <li>Remove devtron so we can remove highlight.js
+          @ralphtheninja</li>
+        </ul>
+      </description>
+    </release>
+    <release version="v0.101.0" date="2019-02-14">
+      <description>
+        <p>Changed</p>
+        <ul>
+          <li>Sort languages alphabetically (#640) (@Simon-Laux)</li>
+          <li>Set this.chatView.current from the start (@ralphtheninja)</li>
+          <li>Fix some typos and tweak logging docs (@ralphtheninja)</li>
+          <li>Update github issue template (#647) (@ralphtheninja)</li>
+          <li>Cleanup ipc (#641) (@ralphtheninja)</li>
+          <li>
+            Hide error message when attempting to login (#644)
+            (@ralphtheninja)
+          </li>
+          <li>
+            Add more detailed info about deltachat-core to About sreen
+            (@Simon-Laux)
+          </li>
+          <li>
+            Improve hanlde position for context menu of messages
+            (#666) (@nicodh)
+          </li>
+          <li>Use vertical ellipsis for context handle (#671) (@nicodh)</li>
+          <li>
+            Update deltachat-node dependency to v0.40.2 (#678)
+            (@ralphtheninja) (@jikstra)
+          </li>
+        </ul>
+        <p>Added</p>
+        <ul>
+          <li>Add logging documentation (#628) (@Simon-Laux)</li>
+          <li>
+            Add line break between advanced button and login button
+            (#635) (@Jikstra)
+          </li>
+          <li>Prevent running multiple instances (#649) (@ralphtheninja)</li>
+          <li>
+            Resize the composer based on the newlines in the text
+            (multiline composer) (#654) (@jikstra)
+          </li>
+          <li>Added MAC install information to README (#660) (@zafai)</li>
+        </ul>
+        <p>Removed</p>
+        <ul>
+          <li>
+            Remove misleading/Uninformative lefticons in login form
+            (#637) (@Jikstra)
+          </li>
+          <li>Remove style specific components (#645) (@ralphtheninja)</li>
+        </ul>
+        <p>Fixed</p>
+        <ul>
+          <li>
+            Show leading digits in Autocrypt Setup (#651)
+            (@ralphtheninja)
+          </li>
+          <li>Change chown to chmod in README.md (#655) /(@naltun)</li>
+          <li>
+            Remove/Hide scrollbar in groupname and fix emoji in avatar
+            (#661) (@Simon-Laux)
+          </li>
+          <li>
+            Do not send empty messages (i.e. only spaces) (#670)
+            (@nicodh)
+          </li>
+          <li>
+            Fix layout breaking when pasting long multiline messages
+            to composer
+          </li>
+          <li>
+            Focus the composer position on the current
+            selection/cursor (#677) (@jikstra)
+          </li>
+        </ul>
+      </description>
+    </release>
+    <release version="v0.100.0" date="2019-01-27">
+      <description>
+        <p>Changed</p>
+        <ul>
+          <li>Simplify logging (#602) (@ralphtheninja)</li>
+          <li>change language dropdown to use the local names (@Simon-Laux)</li>
+          <li>Pass in logHandler to menu.init() from ipc (@ralphtheninja)</li>
+          <li>
+            Be explicit when ignoring _*.json, _languages.json should
+            be ignored (@ralphtheninja)
+          </li>
+          <li>Selected chat now uses the delta (light) color (@jikstra)</li>
+          <li>Update translations (@ralphtheninja)</li>
+        </ul>
+        <p>Added</p>
+        <ul>
+          <li>Implement login instruction (#607) (@jikstra)</li>
+          <li>Add emoji picker (#615) (@jikstra)</li>
+        </ul>
+        <p>Fixed</p>
+        <ul>
+          <li>Fix message duplication (#613) (@Simon-Laux)</li>
+          <li>Appdata updates and cleanup (@har9862)</li>
+          <li>
+            For some reasons emoji-mart doesn't pull in a required
+            dependency, we need to require it manually (@jikstra)
+          </li>
+        </ul>
+      </description>
+    </release>
+    <release version="v0.99.0" date="2019-01-20">
+      <description>
+        <p>Changed</p>
+        <ul>
+          <li>Update copyright year in readme (@jikstra)</li>
+          <li>Use path.join() for getLogsPath() (@ralphtheninja)</li>
+          <li>Upgrade bindings (#595) (@ralphtheninja)</li>
+          <li>
+            Wrap application-config module for proper appConfig during
+            production and testing (#598) (@ralphtheninja)
+          </li>
+          <li>Use electron v4 (#581) (@ralphtheninja)</li>
+          <li>Misc cleanup (#588) (@ralphtheninja)</li>
+          <li>State refactor (#583) (@ralphtheninja)</li>
+          <li>Update translations (@ralphtheninja)</li>
+          <li>Rename Home component to ScreenController (@ralphtheninja)</li>
+        </ul>
+        <p>Added</p>
+        <ul>
+          <li>
+            Login automatically if last credentials were saved in
+            state (#589) (@ralphtheninja)
+          </li>
+          <li>Add devtron (@ralphtheninja)</li>
+        </ul>
+        <p>Removed</p>
+        <ul>
+          <li>Remove password and account settings label (#538) (@ralphtheninja)</li>
+          <li>Remove window.state, not used (@ralphtheninja)</li>
+        </ul>
+        <p>Fixed</p>
+        <ul>
+          <li>
+            Do not send uncaughtError to render process, just log and
+            die (#593) (@ralphtheninja)
+          </li>
+        </ul>
+      </description>
+    </release>
     <release version="v0.98.2" date="2019-01-11">
       <description>
-        <p>Changed:</p>
+        <p>Changed</p>
         <ul>
-          <li>Tweak search button (@jikstra)</li>
-          <li>Convert src/config.js to src/applications-constants.js with a functional API (@ralphtheninja)</li>
-          <li>Improve css building for conversations stylesheets (@jikstra)</li>
+          <li>Tweak search button (#568) (@jikstra)</li>
+          <li>
+            Convert src/config.js to src/applications-constants.js with a
+            functional API (#578) (@ralphtheninja)
+          </li>
+          <li>Improve css building for conversations stylesheets (#573) (@jikstra)</li>
           <li>Update install instructions in README (@jikstra, @ralphtheninja)</li>
-          <li>Restyle create chat buttons (@jikstra)</li>
+          <li>Restyle create chat buttons (#563) (@jikstra)</li>
           <li>Update outdated watch script (@ralphtheninja)</li>
-          <li>Hide known accounts section when it's empty (@Simon-Laux)</li>
+          <li>Hide known accounts section when it's empty (#567) (@Simon-Laux)</li>
           <li>Set minimum window height to 450px (@jikstra)</li>
-          <li>Upgrade deltachat-node to ^0.36.0 for Mac OS prebuilt binaries (@ralphtheninja)</li>
-          <li>Make unit tests less spammy (@ralphtheninja)</li>
-          <li>Simplify state load (@ralphtheninja)</li>
-          <li>Make converting translations less spammy (@ralphtheninja)</li>
+          <li>
+            Upgrade deltachat-node to ^0.36.0 for Mac OS prebuilt binaries
+            (#570) (@ralphtheninja)
+          </li>
+          <li>Make unit tests less spammy (#554) (@ralphtheninja)</li>
+          <li>Simplify state load (#540) (@ralphtheninja)</li>
+          <li>Make converting translations less spammy (#547) (@ralphtheninja)</li>
         </ul>
-
-        <p>Added:</p>
+        <p>Added</p>
         <ul>
-          <li>Add rc module for configuration (@ralphtheninja)</li>
-          <li>Add logging functionality (@Simon-Laux)</li>
-          <li>Add hallmark module for markdown linting (@ralphtheninja)</li>
+          <li>Add rc module for configuration (#574) (@ralphtheninja)</li>
+          <li>Add logging functionality (#497) (@Simon-Laux)</li>
+          <li>
+            Add hallmark module for markdown linting (#548)
+            (@ralphtheninja)
+          </li>
         </ul>
-
-        <p>Removed:</p>
+        <p>Removed</p>
         <ul>
           <li>Remove bin/clean.js (@ralphtheninja)</li>
           <li>Clean up unused configuration code (@ralphtheninja)</li>
         </ul>
-
-        <p>Fixed:</p>
+        <p>Fixed</p>
         <ul>
-          <li>Fix non verified contacts in verified groups (@ralphtheninja)</li>
-          <li>Fix escaped characters in translations (@ralphtheninja)</li>
-          <li>Adjust login form so it's not hidden below navigation bar (@jikstra)</li>
+          <li>
+            Fix non verified contacts in verified groups (#580)
+            (@ralphtheninja)
+          </li>
+          <li>Fix escaped characters in translations (#569) (@ralphtheninja)</li>
+          <li>
+            Adjust login form so it's not hidden below navigation bar
+            (#564) (@jikstra)
+          </li>
           <li>Fix broken rimraf dependency (@jikstra)</li>
         </ul>
       </description>
     </release>
     <release version="v0.98.1" date="2019-01-06">
       <description>
-        <p>Changed:</p>
+        <p>Changed</p>
         <ul>
           <li>Use google noto emojis and remove image emojis (@Simon-Laux)</li>
           <li>Tweak functionality in edit group page (@Simon-Laux)</li>
         </ul>
-
       </description>
     </release>
     <release version="v0.98.0" date="2019-01-05">
       <description>
-        <p>Changed:</p>
+        <p>Changed</p>
         <ul>
           <li>Use language fallback for missing language variants (@ralphtheninja)</li>
-          <li>Translations now based on xml and shared with other Delta Chat projects (@karissa, @Jikstra, @ralphtheninja)</li>
+          <li>
+            Translations now based on xml and shared with other Delta
+            Chat projects (@karissa, @Jikstra, @ralphtheninja)
+          </li>
           <li>Made more elements unselectable (@Simon-Laux)</li>
           <li>Improve build/run instructions (@obestwalter)</li>
           <li>Upgrade deltachat-node to ^0.35.0 (@ralphtheninja)</li>
         </ul>
-
-        <p>Added:</p>
+        <p>Added</p>
         <ul>
           <li>Add settings for configuring mvbox and sentbox threads (@Jikstra)</li>
           <li>Add divider between chat list and chat view (@Simon-Laux)</li>
           <li>Write output of dc.getInfo() to console (@ralphtheninja)</li>
         </ul>
-
-        <p>Removed:</p>
+        <p>Removed</p>
         <ul>
           <li>Remove all .ts/.tsx based code (@ralphtheninja)</li>
         </ul>
-
-        <p>Fixed:</p>
+        <p>Fixed</p>
         <ul>
           <li>Message input field keeps focus (@Simon-Laux)</li>
-          <li>Fix issue with Autocrypt setup dialog not closing (@ralphtheninja)</li>
+          <li>
+            Fix issue with Autocrypt setup dialog not closing
+            (@ralphtheninja)
+          </li>
           <li>Add back menu item for unblocking contacts (@ralphtheninja)</li>
           <li>Fix group image issue (@ralphtheninja)</li>
-          <li>Only run dc.getConfig() on valid account folders (@Simon-Laux)</li>
+          <li>
+            Only run dc.getConfig() on valid account folders
+            (@Simon-Laux)
+          </li>
           <li>Handle DC_EVENT_SELF_NOT_IN_GROUP error (@ralphtheninja)</li>
           <li>Fix icon rotation (@Simon-Laux)</li>
           <li>Fix issues related to media height (@Simon-Laux)</li>
@@ -115,46 +314,60 @@
       <description>
         <p>Added:</p>
         <ul>
-          <li>Improve experience for inputting Autocrypt setup codes</li>
+          <li>Improve experience for inputting Autocrypt setup codes </li>
           <li>Media view for chats</li>
           <li>See encryption info for contacts in a chat</li>
           <li>List contact requests</li>
           <li>File-&gt;Quit in the menu to quit the application</li>
-          <li>Drag a file out of the chat window to the filesystem to copy it locally</li>
-          <li>Settings option for sending read receipts</li>
-          <li>Settings option for preferring encryption</li>
-          <li>Forget account button in the Login screen</li>
-          <li>Update account settings while logged in</li>
+          <li>
+            Drag a file out of the chat window to the filesystem to
+            copy it locally
+          </li>
+          <li>Settings option for sending read receipts </li>
+          <li>Settings option for preferring encryption </li>
+          <li>Forget account button in the Login screen </li>
+          <li>Update account settings while logged in </li>
         </ul>
-
         <p>Fixed:</p>
         <ul>
-          <li>Make button hover state a pointer cursor</li>
-          <li>Read and delivered checkmarks are now green</li>
-          <li>Display filename and size for downloadable files in messages</li>
-          <li>Richer file messages, including displaying webm videos</li>
-          <li>Ask user before leaving group</li>
-          <li>Mark messages read properly</li>
-          <li>Small bug with exporting backups</li>
+          <li>Make button hover state a pointer cursor </li>
+          <li>Read and delivered checkmarks are now green </li>
+          <li>Display filename and size for downloadable files in messages </li>
+          <li>Richer file messages, including displaying webm videos </li>
+          <li>Ask user before leaving group </li>
+          <li>Mark messages read properly </li>
+          <li>Small bug with exporting backups </li>
         </ul>
-
         <p>Changed:</p>
         <ul>
-          <li>Upgrade deltachat-node to 0.29.0</li>
-          <li>Remove single-folder compatibility message</li>
+          <li>Upgrade deltachat-node to 0.29.0 </li>
+          <li>Remove single-folder compatibility message </li>
           <li>Update to electron 3.0</li>
         </ul>
       </description>
     </release>
-    <release version="v0.90.1" date="2018-12-11"/>
+​    <release version="v0.90.1" date="2018-12-11"/>
   </releases>
-
   <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
     <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
     <content_attribute id="social-audio">intense</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
     <content_attribute id="social-contacts">intense</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
   </content_rating>
-
-  <update_contact>tobiasmue@gnome.org</update_contact>
-
 </component>
