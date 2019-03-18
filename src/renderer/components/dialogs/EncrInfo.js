@@ -20,7 +20,7 @@ class EncrInfo extends React.Component {
     this.props.onClose()
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate () {
     const { chat } = this.props
     if (!chat) return
     let contacts = chat.contacts

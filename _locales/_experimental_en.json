@@ -1,5 +1,14 @@
 {
   "login_instruction_desktop": {
     "message": "Login with an existing e-mail account (use your e-mail credentials here)"
+  },
+  "update": {
+    "message": "Update"
+  },
+  "show_password": {
+    "message": "Show password"
+  },
+  "hide_password": {
+    "message": "Hide password"
   }
 }

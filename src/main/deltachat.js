@@ -21,6 +21,7 @@ class DeltaChatController extends EventEmitter {
     this._saved = saved
   }
 
+  // Save settings for RC
   updateSettings (saved) {
     this._saved = saved
   }
@@ -38,7 +39,7 @@ class DeltaChatController extends EventEmitter {
     const cwd = this.getPath(credentials.addr)
     log.info(`Using deltachat instance ${cwd}`)
     this._dc = new DeltaChat()
-    var dc = this._dc
+    const dc = this._dc
     this.credentials = credentials
     this._render = render
 
@@ -200,7 +201,7 @@ class DeltaChatController extends EventEmitter {
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log.info(`Added contact ${name} (${address})`)
-    var chatId = this._dc.createChatByMessageId(deadDrop.id)
+    const chatId = this._dc.createChatByMessageId(deadDrop.id)
     if (chatId) this.selectChat(chatId)
   }
 
@@ -332,22 +333,6 @@ class DeltaChatController extends EventEmitter {
     return config
   }
 
-  getAdvancedSettings () {
-    return {
-      addr: this._dc.getConfig('addr'),
-      mailUser: this._dc.getConfig('mail_user'),
-      mailServer: this._dc.getConfig('mail_server'),
-      mailPort: this._dc.getConfig('mail_port'),
-      mailSecurity: this._dc.getConfig('mail_security'),
-      sendUser: this._dc.getConfig('send_user'),
-      sendPw: this._dc.getConfig('send_pw'),
-      sendServer: this._dc.getConfig('send_server'),
-      sendPort: this._dc.getConfig('send_port'),
-      sendSecurity: this._dc.getConfig('send_security'),
-      e2ee_enabled: this._dc.getConfig('e2ee_enabled')
-    }
-  }
-
   /**
    * Returns the state in json format
    */
@@ -406,6 +391,24 @@ class DeltaChatController extends EventEmitter {
       })
     }
     return chatList
+  }
+
+  _getGeneralFreshMessageCounter () {
+    const list = this._dc.getChatList(0, this._query)
+    const listCount = list.getCount()
+
+    var freshMessageCounter = 0
+    for (let i = 0; i < listCount; i++) {
+      const chatId = list.getChatId(i)
+      const chat = this._dc.getChat(chatId).toJson()
+
+      if (!chat) continue
+
+      if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
+        freshMessageCounter += this._dc.getFreshMessageCount(chatId)
+      }
+    }
+    return freshMessageCounter
   }
 
   _deadDropMessage (id) {
@@ -533,7 +536,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   forwardMessage (msgId, contactId) {
-    var chatId = this._dc.getChatIdByContactId(contactId)
+    const chatId = this._dc.getChatIdByContactId(contactId)
     this._dc.forwardMessages(msgId, chatId)
     this.selectChat(chatId)
   }
@@ -546,7 +549,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   getContacts (listFlags, queryStr) {
-    var distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
+    const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
     return distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
@@ -562,7 +565,7 @@ class DeltaChatController extends EventEmitter {
 
   getChatMedia (msgType1, msgType2) {
     if (!this._selectedChatId) return
-    var mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
+    const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
     return mediaMessages.map(this.messageIdToJson.bind(this))
   }
 

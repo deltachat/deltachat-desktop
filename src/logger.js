@@ -21,6 +21,7 @@ function log (channel, level, ...args) {
   const variant = LoggerVariants[level]
   if (!handler) {
     console.log('Failed to log message - Handler not initilized yet')
+    console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
     throw Error('Failed to log message - Handler not initilized yet')
   }
   handler(channel, variant.level, ...args)

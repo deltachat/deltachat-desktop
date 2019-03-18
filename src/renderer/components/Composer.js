@@ -4,8 +4,11 @@ const { Button } = require('@blueprintjs/core')
 const { remote } = require('electron')
 const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
-const log = require('../../logger').getLogger('renderer/composer')
 const { Picker } = require('emoji-mart')
+
+const log = require('../../logger').getLogger('renderer/composer')
+const SettingsContext = require('../contexts/SettingsContext')
+const ComposerMessageInput = require('./ComposerMessageInput')
 
 const ComposerWrapper = styled.div`
   background-color: ${StyleVariables.colors.deltaPrimaryFg};
@@ -92,29 +95,6 @@ const EmojiPickerWrapper = styled.div`
   }
 `
 
-const MessageInput = styled.textarea`
-  float: left;
-  width: calc(100% - 120px);
-  resize: unset;
-  padding: 0px;
-  border-color: transparent;
-  border-width: 0px;
-  height: auto;
-  line-height: 24px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  margin-left: 40px;
-  overflow-y: hidden;
-
-  &:focus {
-    outline: none;
-  }
-
-  &.scroll {
-    overflow-y: scroll;
-  }
-
-`
 const SendButtonCircleWrapper = styled.div`
   position: fixed;
   bottom: 0;
@@ -157,67 +137,17 @@ class Composer extends React.Component {
     super(props)
     this.state = {
       filename: null,
-      text: '',
       error: false,
       showEmojiPicker: false
 
     }
-    this.minimumHeight = 48
-
-    this.setCursorPosition = false
-
-    this.setComposerSize = this.props.setComposerSize
-
-    this.defaultHeight = 17 + this.minimumHeight
-    this.clearInput = this.clearInput.bind(this)
-    this.handleChange = this.handleChange.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
-    this.focusInputMessage = this.focusInputMessage.bind(this)
     this.onEmojiSelect = this.onEmojiSelect.bind(this)
     this.onMouseMove = this.onMouseMove.bind(this)
-    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
-    this.textareaRef = React.createRef()
+    this.messageInputRef = React.createRef()
     this.pickerRef = React.createRef()
     this.pickerButtonRef = React.createRef()
-  }
-
-  onKeyDown (e) {
-    if (e.keyCode === 13 && e.shiftKey) {
-      this.insertStringAtCursorPosition('\n')
-      e.preventDefault()
-      e.stopPropagation()
-    } else if (e.keyCode === 13 && !e.shiftKey) {
-      this.sendMessage()
-      e.preventDefault()
-      e.stopPropagation()
-    }
-  }
-
-  componentDidMount () {
-    // TODO: this only happens on the first render
-    // ideally, we'd pass the current chat id into the component
-    // and focus the input message every time
-    // the component changes chat ids, while rendering any cached unsent
-    // previous message text (aka "draft" message)
-    this.focusInputMessage()
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (this.setCursorPosition) {
-      this.textareaRef.current.selectionStart = this.setCursorPosition
-      this.textareaRef.current.selectionEnd = this.setCursorPosition
-
-      // Focus on the current selection, hack for focusing on newlines
-      this.textareaRef.current.blur()
-      this.textareaRef.current.focus()
-
-      this.setCursorPosition = false
-    }
-
-    if (prevState.text !== this.state.text) {
-      this.resizeTextareaAndComposer()
-    }
   }
 
   handleError () {
@@ -225,57 +155,16 @@ class Composer extends React.Component {
   }
 
   sendMessage () {
-    if (!this.state.text) return this.handleError()
-    if (this.state.text.match(/^\s*$/)) {
+    let message = this.messageInputRef.current.getText()
+    if (message.match(/^\s*$/)) {
       log.debug(`Empty message: don't send it...`)
       return
     }
     this.props.onSubmit({
-      text: this.state.text
+      text: message
     })
-    this.clearInput()
-
-    this.focusInputMessage()
-  }
-
-  clearInput () {
-    this.setState({ text: '', filename: null })
-  }
-
-  handleChange (e) {
-    this.setState({ text: e.target.value, error: false })
-  }
-
-  resizeTextareaAndComposer () {
-    const maxScrollHeight = 9 * 24
-
-    let el = this.textareaRef.current
-
-    // We need to set the textarea height first to `auto` to get the real needed
-    // scrollHeight. Ugly hack.
-    el.style.height = 'auto'
-    let scrollHeight = el.scrollHeight
-
-    if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
-      el.style.height = maxScrollHeight + 'px'
-      return
-    }
-
-    if (scrollHeight < maxScrollHeight) {
-      this.setComposerSize(scrollHeight + 16)
-      el.style.height = scrollHeight + 'px'
-      el.classList.remove('scroll')
-    } else {
-      this.setComposerSize(maxScrollHeight + 16)
-      el.style.height = maxScrollHeight + 'px'
-      el.classList.add('scroll')
-    }
-  }
-
-  focusInputMessage () {
-    let el = document.querySelector(`.${ComposerWrapper.styledComponentId} textarea`)
-    if (!el) return log.warn(`Didn't find .ComposerWrapper textarea element`)
-    el.focus()
+    this.messageInputRef.current.clearText()
+    this.messageInputRef.current.focus()
   }
 
   addFilename () {
@@ -299,22 +188,7 @@ class Composer extends React.Component {
 
   onEmojiSelect (emoji) {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    this.insertStringAtCursorPosition(emoji.native)
-  }
-
-  insertStringAtCursorPosition (str) {
-    let textareaElem = this.textareaRef.current
-    let { selectionStart, selectionEnd } = textareaElem
-    let textValue = this.state.text
-
-    let textBeforeCursor = textValue.slice(0, selectionStart)
-    let textAfterCursor = textValue.slice(selectionEnd)
-
-    let updatedText = textBeforeCursor + str + textAfterCursor
-
-    this.setCursorPosition = textareaElem.selectionStart + str.length
-
-    this.setState({ text: updatedText })
+    this.messageInputRef.current.insertStringAtCursorPosition(emoji.native)
   }
 
   onMouseMove (event) {
@@ -340,23 +214,21 @@ class Composer extends React.Component {
   }
 
   render () {
-    const tx = window.translate
-
     return (
       <ComposerWrapper ref='ComposerWrapper'>
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>
-        <MessageInput
-          ref={this.textareaRef}
-          rows='1'
-          intent={this.state.error ? 'danger' : 'none'}
-          large
-          value={this.state.text}
-          onKeyDown={this.onKeyDown.bind(this)}
-          onChange={this.handleChange}
-          placeholder={tx('write_message_desktop')}
-        />
+        <SettingsContext.Consumer>
+          {({ enterKeySends }) => (
+            <ComposerMessageInput
+              ref={this.messageInputRef}
+              enterKeySends={enterKeySends}
+              sendMessage={this.sendMessage}
+              setComposerSize={this.props.setComposerSize}
+            />
+          )}
+        </SettingsContext.Consumer>
         <EmojiButtonWrapper ref={this.pickerButtonRef}>
           <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
             <IconButtonSpan />
@@ -381,5 +253,4 @@ class Composer extends React.Component {
     )
   }
 }
-
 module.exports = Composer

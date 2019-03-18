@@ -15,6 +15,7 @@ const Wrapper = styled.div`
   background-color: #eeefef;
   float: right;
   padding: 10px;
+  margin-top: 50px;
 `
 const MediaGallery = styled.div`
   height: calc(100vh - 50px - 40px - 10px);

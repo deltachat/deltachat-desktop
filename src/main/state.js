@@ -34,6 +34,7 @@ function getDefaultState () {
      */
     saved: {
       markRead: true,
+      enterKeySends: false,
       notifications: true,
       showNotificationContent: true,
       locale: 'en',

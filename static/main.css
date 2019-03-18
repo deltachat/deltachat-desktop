@@ -50,18 +50,20 @@ input:focus {
   background-color: red;
 }
 .user-feedback.success {
-  background-color: green;
-}
-img {
-  max-width: 500px;
+  background-color: #4caf50;
 }
 
 ul {
   list-style: none;
   padding-left: 0px;
 }
-ul li button {
+ul li {
   min-width: 200px;
+}
+
+button {
+  /*  This broke emoji mart after update */
+  /* min-width: 200px; */
 }
 
 .SelectGroupImage {
@@ -77,13 +79,6 @@ ul li button {
 .RemoveGroupImage {
   width: 100px;
   margin-bottom: 4px;
-}
-
-.attachment-overlay {
-  height: calc(100vh - 40px - 50px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .module-conversation-list-item__is-verified {
@@ -121,6 +116,6 @@ ul li button {
   background: transparent;
 }
 
-h1, p, .bp3-button {
+h1, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   user-select: none;
 }
