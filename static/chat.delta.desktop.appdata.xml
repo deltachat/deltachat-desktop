@@ -29,6 +29,10 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://delta.chat/</url>
+  <url type="bugtracker">https://github.com/deltachat/deltachat-desktop/issues</url>
+  <url type="faq">https://delta.chat/en/help</url>
+  <url type="donation">https://delta.chat/en/contribute</url>
+  <url type="translate">https://www.transifex.com/delta-chat/public/</url>
   <releases>
     <release version="v0.102.0" date="2019-03-13">
       <description>
