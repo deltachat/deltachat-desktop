@@ -387,20 +387,23 @@ class DeltaChatController extends EventEmitter {
 
       if (!chat) continue
 
-      chat.summary = list.getSummary(i).toJson()
-
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
         chat.deaddrop = this._deadDropMessage(messageId)
       }
 
-      // nullify unnessesary properties (TODO nullify ALL unnessesary properties)
-      // TODO after that (create new object like in _getChatById to show what is in the chatlist
-      // chat object and rename occurences in renderer from chat to chat list item)
-      chat.messages = null
-      chat.contacts = null
-
-      chatList.push(chat)
+      // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+      chatList.push({
+        id: chat.id,
+        summary: list.getSummary(i).toJson(),
+        name: chat.name,
+        deaddrop: chat.deaddrop,
+        freshMessageCounter: chat.freshMessageCounter,
+        profileImage: chat.profileImage,
+        color: chat.color,
+        isVerified: chat.isVerified,
+        isGroup: chat.isGroup
+      })
     }
     return chatList
   }
@@ -436,8 +439,9 @@ class DeltaChatController extends EventEmitter {
 
   _getChatById (chatId) {
     if (!chatId) return null
-    const chat = this._dc.getChat(chatId).toJson()
-    if (!chat) return null
+    const rawChat = this._dc.getChat(chatId)
+    if (!rawChat) return null
+    const chat = rawChat.toJson()
 
     if (chatId === C.DC_CHAT_ID_DEADDROP) {
       const chat = this._dc.getChat(C.DC_CHAT_ID_DEADDROP)

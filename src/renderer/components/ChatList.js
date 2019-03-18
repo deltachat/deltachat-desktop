@@ -92,7 +92,7 @@ class ChatContextMenu extends React.Component {
     this.contextMenu = React.createRef()
   }
 
-  show (chat, e) {
+  show (chatId, e) {
     e.preventDefault()
     e.stopPropagation()
     /*
@@ -102,9 +102,12 @@ class ChatContextMenu extends React.Component {
     */
     const ev = { detail: { id: 'chat-options', position: { x: e.clientX, y: e.clientY } } }
 
-    this.setState({ chat }, () => {
-      if (!this.contextMenu.current) return
-      this.contextMenu.current.handleShow(ev)
+    ipcRenderer.send('getChatById', chatId)
+    ipcRenderer.once('getChatById', (e, chat) => {
+      this.setState({ chat }, () => {
+        if (!this.contextMenu.current) return
+        this.contextMenu.current.handleShow(ev)
+      })
     })
   }
 
@@ -162,16 +165,10 @@ class ChatContextMenu extends React.Component {
     })
   }
   onEncrInfo () {
-    ipcRenderer.send('getChatById', this.state.chat.id)
-    ipcRenderer.once('getChatById', (e, chat) => {
-      this.props.openDialog('EncrInfo', { chat })
-    })
+    this.props.openDialog('EncrInfo', { chat: this.state.chat })
   }
   onEditGroup () {
-    ipcRenderer.send('getChatById', this.state.chat.id)
-    ipcRenderer.once('getChatById', (e, chat) => {
-      this.props.changeScreen('EditGroup', { chat })
-    })
+    this.props.changeScreen('EditGroup', { chat: this.state.chat })
   }
   onLeaveGroup () {
     const selectedChat = this.state.chat
@@ -186,15 +183,13 @@ class ChatContextMenu extends React.Component {
 
   onBlockContact () {
     const tx = window.translate
-    ipcRenderer.send('getChatById', this.state.chat.id)
-    ipcRenderer.once('getChatById', (e, chat) => {
-      const contactId = (chat && chat.contacts.length) ? chat.contacts[0].id : undefined
-      if (!contactId) return
-      confirmation(tx('ask_block_contact'), yes => {
-        if (yes) {
-          ipcRenderer.send('blockContact', contactId)
-        }
-      })
+    const chat = this.state.chat
+    const contactId = (chat && chat.contacts.length) ? chat.contacts[0].id : undefined
+    if (!contactId) return
+    confirmation(tx('ask_block_contact'), yes => {
+      if (yes) {
+        ipcRenderer.send('blockContact', contactId)
+      }
     })
   }
 }
@@ -206,10 +201,10 @@ class ChatList extends React.Component {
     this.contextMenu = React.createRef()
   }
 
-  openMenu (chat, e) {
+  openMenu (chatId, e) {
     e.persist()
-    console.log(chat, e)
-    this.contextMenu.current.show(chat, e)
+    console.log(chatId, e)
+    this.contextMenu.current.show(chatId, e)
   }
 
   render () {
@@ -222,38 +217,38 @@ class ChatList extends React.Component {
         <ChatListWrapper>
           { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
           <div className='ConversationList'>
-            {chatList.map((chat, i) => {
-              if (!chat) return
+            {chatList.map((chatListItem, i) => {
+              if (!chatListItem) return
               const i18n = window.translate
-              const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
+              const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
 
               // Don't show freshMessageCounter on selected chat
-              if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-                const name = `${tx('new_message_from_desktop')} ${chat.name}`
+              if (chatListItem.id === C.DC_CHAT_ID_DEADDROP) {
+                const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
                 return (
                   <ContactRequestItemWrapper key={i}>
                     <ChatListItem
                       className='contactrequest'
                       name={name}
                       i18n={i18n}
-                      phoneNumber={chat.summary.text1}
+                      phoneNumber={chatListItem.summary.text1}
                       lastUpdated={lastUpdated}
                       lastMessage={{
-                        text: chat.summary.text2,
+                        text: chatListItem.summary.text2,
                         status: 'delivered'
                       }}
-                      onClick={() => onDeadDropClick(chat.deaddrop)}
-                      isSelected={chat.id === selectedChatId}
-                      unreadCount={chat.freshMessageCounter}
+                      onClick={() => onDeadDropClick(chatListItem.deaddrop)}
+                      isSelected={chatListItem.id === selectedChatId}
+                      unreadCount={chatListItem.freshMessageCounter}
 
                     />
                   </ContactRequestItemWrapper>)
-              } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+              } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
                 return (
                   <ArchivedChats key={i}>
                     <ChatListItem
                       onClick={this.props.onShowArchivedChats}
-                      name={chat.name}
+                      name={chatListItem.name}
                       i18n={i18n} />
                   </ArchivedChats>
                 )
@@ -261,22 +256,22 @@ class ChatList extends React.Component {
                 return (
                   <ChatListItem
                     key={i}
-                    onClick={this.props.onChatClick.bind(null, chat.id)}
-                    phoneNumber={chat.summary.text1}
-                    name={chat.name}
-                    avatarPath={chat.profileImage}
-                    color={chat.color}
+                    onClick={this.props.onChatClick.bind(null, chatListItem.id)}
+                    phoneNumber={chatListItem.summary.text1}
+                    name={chatListItem.name}
+                    avatarPath={chatListItem.profileImage}
+                    color={chatListItem.color}
                     lastUpdated={lastUpdated}
                     lastMessage={{
-                      text: chat.summary.text2,
+                      text: chatListItem.summary.text2,
                       status: 'sent' // TODO: interpret data from summary to get correct state
                     }}
                     i18n={i18n}
-                    isSelected={chat.id === selectedChatId}
-                    isVerified={chat.isVerified}
-                    isGroup={chat.isGroup}
-                    unreadCount={chat.freshMessageCounter}
-                    onContextMenu={this.openMenu.bind(this, chat)}
+                    isSelected={chatListItem.id === selectedChatId}
+                    isVerified={chatListItem.isVerified}
+                    isGroup={chatListItem.isGroup}
+                    unreadCount={chatListItem.freshMessageCounter}
+                    onContextMenu={this.openMenu.bind(this, chatListItem.id)}
                   />
                 )
               }
