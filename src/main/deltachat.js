@@ -383,19 +383,22 @@ class DeltaChatController extends EventEmitter {
     const chatList = []
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
-      const chat = this._dc.getChat(chatId).toJson()
-      chat.color = this._integerToHexColor(chat.color)
+      const chat = this._getChatById(chatId)
 
       if (!chat) continue
 
       chat.summary = list.getSummary(i).toJson()
-      chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
-      chat.isGroup = isGroupChat(chat)
 
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
         chat.deaddrop = this._deadDropMessage(messageId)
       }
+
+      // nullify unnessesary properties (TODO nullify ALL unnessesary properties)
+      // TODO after that (create new object like in _getChatById to show what is in the chatlist
+      // chat object and rename occurences in renderer from chat to chat list item)
+      chat.messages = null
+      chat.contacts = null
 
       chatList.push(chat)
     }
@@ -416,31 +419,17 @@ class DeltaChatController extends EventEmitter {
   }
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
-    let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
-    if (selectedChatId === C.DC_CHAT_ID_DEADDROP) {
-      selectedChat = this._dc.getChat(selectedChatId)
-      if (selectedChat) selectedChat = selectedChat.toJson()
-    }
-    if (!selectedChat) {
-      this._selectedChatId = null
-      return null
-    }
+    let selectedChat = this._getChatById(selectedChatId)
+    if (!selectedChat) return null
 
     if (selectedChat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(selectedChat.id)
       selectedChat.freshMessageCounter = 0
     }
-    var messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
-    selectedChat.totalMessages = messageIds.length
-    selectedChat.messages = this._messagesToRender(messageIds)
 
     if (this._saved.markRead) {
       this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
     }
-
-    selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
-      return this._dc.getContact(id).toJson()
-    })
 
     return selectedChat
   }
@@ -452,7 +441,7 @@ class DeltaChatController extends EventEmitter {
 
     if (chatId === C.DC_CHAT_ID_DEADDROP) {
       const chat = this._dc.getChat(C.DC_CHAT_ID_DEADDROP)
-      return (chat && Object.assign(chat.toJson(), { isDeaddrop: true })) || null
+      return (chat && Object.assign(chat.toJson(), { isDeaddrop: true, messages: null, contacts: null })) || null
     }
 
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
