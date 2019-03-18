@@ -34,7 +34,7 @@ flatpak build.  This is maintained in [it's own
 repository](https://github.com/flathub/chat.delta.desktop), however a
 pre-built binary can be downloaded and installed from
 [flathub](https://flathub.org/apps/details/chat.delta.desktop) which
-also has a setupup guide for many Linux platforms.
+also has a setup guide for many Linux platforms.
 
 #### Arch Linux
 
