@@ -59,6 +59,7 @@ class EncrInfo extends React.Component {
         onClose={this.onClose}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
+          <pre>Chat name: { chat && chat.name }</pre>
           { encrInfo && <pre>{encrInfo}</pre>}
           { chat && chat.contacts.length > 1 && this._renderContactList()}
         </div>
