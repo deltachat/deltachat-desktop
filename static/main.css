@@ -114,3 +114,8 @@ ul li button {
 h1, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   user-select: none;
 }
+
+#map {
+  height: 500px;
+  width: 500px;
+}

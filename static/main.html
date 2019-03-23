@@ -8,8 +8,11 @@
                    style-src 'self' 'unsafe-inline';
                    font-src 'self';
                    script-src 'self';
-                   img-src 'self' https://unpkg.com https://*.tile.openstreetmap.org data: ;
-                   media-src 'self';"
+                   worker-src blob: ;
+                   child-src blob: ;
+                   img-src 'self' data: blob: ;
+                   media-src 'self';
+                   connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com"
     >
     <link rel="stylesheet" href="conversations.css">
     <link href="../node_modules/normalize.css/normalize.css" rel="stylesheet" />

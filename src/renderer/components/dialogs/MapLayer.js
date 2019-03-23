@@ -1,5 +1,5 @@
 const React = require('react')
-const OlMap = require('../OlMap')
+const Map = require('../Map')
 const { Dialog } = require('@blueprintjs/core')
 
 class MapLayer extends React.Component {
@@ -25,7 +25,7 @@ class MapLayer extends React.Component {
         icon='info-sign'
         onClose={this.close}
         canOutsideClickClose={false}>
-        <OlMap points={points} />
+        <Map points={points} />
       </Dialog>
     )
   }
