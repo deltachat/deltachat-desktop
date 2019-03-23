@@ -30,15 +30,8 @@ RUN true \
     && cp ninja /usr/bin
 
 # Set the working directory to /app
-WORKDIR /build
+WORKDIR /build-context
 
-# Copy the current directory contents into the container at /app
-COPY . /build
+COPY . /build-context
 
-#RUN bash -i -c 'npm install --build-from-source'
-#RUN bash -i -c 'npm run build'
-#RUN bash -i -c './node-modules/.bin/electron-builder --linux deb'
-
-# Don't stop docker
-CMD tail -f /dev/null
-
+RUN chmod +x /build-context/*.sh
