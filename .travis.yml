@@ -1,25 +1,64 @@
+sudo: required
 language: node_js
+dist: xenial
+
+addons:
+  apt:
+    packages:
+      - appstream-util
+      - desktop-file-utils
+      - python3-pip
+      - python3-setuptools
+      - libssl-dev
+      - libsqlite3-dev
+      - libbz2-dev
+      - zlib1g-dev
+      - libsasl2-dev
 
 node_js:
   - 10
 
 os:
   - osx
+  - linux
+
+before_install:
+  - if [ $(uname) = Linux ]; then
+        wget https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip;
+        unzip ninja-linux.zip;
+        chmod +x ninja;
+        sudo cp ninja /usr/bin;
+    fi
+  - if [ $(uname) = Linux ]; then
+        sudo pip3 install meson;
+    fi
 
 install:
   - npm install
 
 script:
+  - if [ $(uname) = Linux ]; then
+        desktop-file-validate static/chat.delta.desktop.desktop;
+    fi
+  - if [ $(uname) = Linux ]; then
+        appstream-util validate-relax static/chat.delta.desktop.appdata.xml;
+    fi
   - npm run build
   - npm test
-  - npm run test-integration
+  - if [ $(uname) != Linux ]; then
+        npm run test-integration;
+    fi
 
+# Only deploy for OSX, for linux we only release source.
 deploy:
+  skip_cleanup: true
   provider: script
   script: npm run dist-ci
   on:
+    repo: deltachat/deltachat-desktop
+    os: osx
     all_branches: true
-  skip_cleanup: true
+
 
 notifications:
   email: false
