@@ -1,0 +1,161 @@
+// Module: Group Notification
+
+.module-group-notification {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $color-light-60;
+  text-align: center;
+}
+
+.module-group-notification__change {
+  margin-top: 10px;
+}
+
+.module-group-notification__contact {
+  font-weight: 300;
+}
+
+// Module: Reset Session Notification
+
+.module-reset-session-notification {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $color-light-60;
+  text-align: center;
+}
+
+// Module: Safety Number Notification
+
+.module-safety-number-notification {
+  margin-top: 14px;
+  text-align: center;
+}
+
+.module-safety-number-notification__icon {
+  height: 24px;
+  width: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 7px;
+  @include color-svg('../images/shield.svg', $color-light-60);
+}
+
+.module-safety-number-notification__text {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $color-light-60;
+}
+
+.module-safety-number-notification__contact {
+  font-weight: 300;
+}
+
+.module-verification-notification__button {
+  margin-top: 5px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 18px;
+  padding: 12px;
+  color: $color-signal-blue;
+  background-color: $color-light-02;
+  border-radius: 4px;
+}
+
+// Module: Verification Notification
+
+.module-verification-notification {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $color-light-60;
+  text-align: center;
+}
+
+.module-verification-notification__contact {
+  font-weight: 300;
+}
+
+.module-verification-notification__icon--mark-verified {
+  height: 24px;
+  width: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 4px;
+  @include color-svg('../images/verified-check.svg', $color-light-60);
+}
+
+.module-verification-notification__icon--mark-not-verified {
+  height: 24px;
+  width: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 7px;
+  @include color-svg('../images/shield.svg', $color-light-60);
+}
+
+// Module: Timer Notification
+
+.module-timer-notification {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  color: $color-light-60;
+  text-align: center;
+}
+
+.module-timer-notification__icon-container {
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.module-timer-notification__icon {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  @include color-svg('../images/timer.svg', $color-light-60);
+}
+
+.module-timer-notification__icon--disabled {
+  @include color-svg('../images/timer-disabled.svg', $color-light-60);
+}
+
+.module-timer-notification__icon-label {
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+  margin-left: 6px;
+  text-transform: uppercase;
+
+  // Didn't seem centered otherwise
+  margin-top: 1px;
+}
+
+.module-timer-notification__message {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+}
+
+.module-notification--with-click-handler {
+  cursor: pointer;
+}
+
+.module-notification__icon {
+  height: 24px;
+  width: 24px;
+  margin-left: auto;
+  margin-right: auto;
+}
