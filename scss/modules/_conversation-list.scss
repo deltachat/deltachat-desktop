@@ -179,6 +179,19 @@
   margin-left: 6px;
 }
 
+.module-conversation-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}
+
+.module-conversation-list-item__is-group {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+  filter: invert(100%);
+}
+
 .module-conversation-list-item__message__status-icon--sending {
   @include color-svg('../images/sending.svg', $color-light-60);
   animation: module-conversation-list-item__message__status-icon--spinning 4s

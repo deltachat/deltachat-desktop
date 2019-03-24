@@ -13,7 +13,7 @@
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
     "build": "npm run build-css && npm run build-js && npm run build-translations",
-    "build-css": "node-sass css/manifest.scss static/conversations.css",
+    "build-css": "node-sass scss/manifest.scss static/main.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
     "build-translations": "node bin/convert-translations-from-xml-to-json.js && node bin/extract_local_language_names.js",
     "hallmark": "hallmark --fix"
