@@ -61,6 +61,10 @@ ul li {
   min-width: 200px;
 }
 
+.emoji-mart-category-list > li {
+  min-width: initial;
+}
+
 button {
   /*  This broke emoji mart after update */
   /* min-width: 200px; */
