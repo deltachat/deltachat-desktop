@@ -2,7 +2,7 @@ const React = require('react')
 const Map = require('../Map')
 const { Dialog } = require('@blueprintjs/core')
 
-class MapLayer extends React.Component {
+class MapDialog extends React.Component {
   constructor (props) {
     super(props)
     console.log(props)
@@ -14,21 +14,21 @@ class MapLayer extends React.Component {
   }
 
   render () {
-    const { points } = this.props
-    console.log(points)
-    let isOpen = !!points
+    const { selectedChat } = this.props
+    let isOpen = !!selectedChat
     const title = 'Karte'
     return (
       <Dialog
+        className='map-dialog'
         isOpen={isOpen}
         title={title}
         icon='info-sign'
         onClose={this.close}
         canOutsideClickClose={false}>
-        <Map points={points} />
+        <Map selectedChat={selectedChat} />
       </Dialog>
     )
   }
 }
 
-module.exports = MapLayer
+module.exports = MapDialog

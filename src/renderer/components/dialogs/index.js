@@ -11,7 +11,7 @@ const About = require('./About')
 const Settings = require('./Settings')
 const ForwardMessage = require('./ForwardMessage')
 const EncrInfo = require('./EncrInfo')
-const MapLayer = require('./MapLayer')
+const MapDialog = require('./MapDialog')
 
 const allDialogs = [
   SetupMessage,
@@ -26,7 +26,7 @@ const allDialogs = [
   Settings,
   ForwardMessage,
   EncrInfo,
-  MapLayer
+  MapDialog
 ]
 
 class Controller extends React.Component {

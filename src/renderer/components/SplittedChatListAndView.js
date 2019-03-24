@@ -70,7 +70,6 @@ class SplittedChatListAndView extends React.Component {
   onChatClick (chatId) {
     ipcRenderer.send('selectChat', chatId)
     console.log('chatId:', chatId)
-    ipcRenderer.send('getLocations', 10, 10)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
@@ -95,9 +94,9 @@ class SplittedChatListAndView extends React.Component {
 
   onMapIconClick (event) {
     console.log('onMapIconClick')
-    // dummy point
-    const points = [[7.886120999999999, 47.9861059]]
-    this.props.openDialog('MapLayer', { points })
+    const { deltachat } = this.props
+    const { selectedChat } = deltachat
+    this.props.openDialog('MapDialog', { selectedChat })
   }
 
   render () {

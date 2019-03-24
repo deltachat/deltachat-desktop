@@ -1,5 +1,8 @@
 const React = require('react')
+const { ipcRenderer } = require('electron')
 const mapboxgl = require('mapbox-gl')
+const moment = require('moment')
+const MapLayerFactory = require('./helpers/MapLayerFactory')
 
 class Map extends React.Component {
 
@@ -8,29 +11,71 @@ class Map extends React.Component {
     this.state = {
       points: []
     }
+    this.renderMap = this.renderMap.bind(this)
   }
 
   componentDidMount () {
-    const { points } = this.props
-    let center = points ? points[0] : [174.7910018, 41.3048126]
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
-    const map = new mapboxgl.Map(
+    this.componentDidMount = Date.now()
+    console.log('componentDidMount', Date.now())
+    mapboxgl.accessToken = MapLayerFactory.getAccessToken()
+    this.map = new mapboxgl.Map(
       {
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-        center: center, // starting position [lng, lat]
         zoom: 12 // starting zoom
       })
 
-    map.on('load', function (cb) {
-      console.log('On loaded!')
-      if (map.loaded()) {
-        var popup = new mapboxgl.Popup({ offset: 25 }).setText('Reported ')
-        new mapboxgl.Marker({
-          draggable: true
-        }).setLngLat(center).setPopup(popup).addTo(map)
-      }
-    })
+    this.map.on('load', this.renderMap)
+  }
+
+  renderMap () {
+    const { selectedChat } = this.props
+    const contacts = selectedChat.contacts
+
+    if (this.map.loaded()) {
+      console.log('map loaded', this.componentDidMount - Date.now())
+      let allPoints = []
+      let center = null
+      contacts.map(contact => {
+        let locationsForContact = ipcRenderer.sendSync('getLocations', selectedChat.id, contact.id)
+        if (locationsForContact && locationsForContact.length) {
+          let pointsForLayer = []
+          locationsForContact.map(point => pointsForLayer.push([point.lon, point.lat]))
+
+          this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact))
+          this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact))
+
+          let lastPoint = locationsForContact[locationsForContact.length - 1]
+          let lastDate = moment(lastPoint.tstamp * 1000).format('Y-m-d LT')
+          let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(contact.firstName + ' <br />Reported: ' + lastDate)
+          new mapboxgl.Marker({ color: '#' + contact.color.toString(16) })
+            .setLngLat([lastPoint.lon, lastPoint.lat])
+            .setPopup(popup)
+            .addTo(this.map)
+
+          allPoints = allPoints.concat(pointsForLayer) // needed for bounds
+          center = [lastPoint.lon, lastPoint.lat]
+        }
+      })
+      this.map.setCenter(center)
+
+      let bounds = new mapboxgl.LngLatBounds(allPoints)
+      this.map.fitBounds(bounds, { padding: 200 })
+
+      this.map.on('click', e => {
+        let features = this.map.queryRenderedFeatures(e.point)
+        const contactFeature = features.find(f => f.properties.contact !== undefined)
+        console.log(contactFeature)
+        if (contactFeature) {
+          new mapboxgl.Popup({ offset: [0, -15] })
+            .setLngLat(contactFeature.geometry.coordinates)
+            .setHTML(contactFeature.properties.contact + '<br />' + contactFeature.properties.reported)
+            .setLngLat(contactFeature.geometry.coordinates)
+            .addTo(this.map)
+        }
+      })
+      console.log('map rendered', this.componentDidMount - Date.now())
+    }
   }
 
   render () {
