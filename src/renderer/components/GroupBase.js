@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 const React = require('react')
 const { dialog } = require('electron').remote
 const contactsStore = require('../stores/contacts')
+const ScreenContext = require('../contexts/ScreenContext')
 
 const {
   Alignment,
@@ -120,25 +121,25 @@ class GroupBase extends React.Component {
 
   onShowQrVerifyCode () {
     const qrCode = ipcRenderer.sendSync('getQrCode')
-    this.props.openDialog('QrCode', { qrCode })
+    this.context.openDialog('QrCode', { qrCode })
   }
 
   onShowQrInviteCode () {
     const { chatId } = this.state
     const qrCode = ipcRenderer.sendSync('getQrCode', chatId)
-    this.props.openDialog('QrCode', { qrCode })
+    this.context.openDialog('QrCode', { qrCode })
   }
 
   back () {
-    this.props.changeScreen('CreateChat')
+    this.context.changeScreen('CreateChat')
   }
 
   render () {
-    const {
-      showQrVerifyCodeButton,
-      showQrInviteCodeButton,
-      showVerifiedContacts
-    } = this.state
+    const { verified } = this.props.screenProps
+    const { showQrInviteCodeButton } = this.state
+    const showQrVerifyCodeButton = verified
+    const showVerifiedContacts = verified
+    const label = verified ? 'menu_new_verified_group' : 'menu_new_group'
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
     const { contacts } = this.state
@@ -149,7 +150,7 @@ class GroupBase extends React.Component {
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
               <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
-              <NavbarHeading>{tx(this.state.heading)}</NavbarHeading>
+              <NavbarHeading>{tx(label)}</NavbarHeading>
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
@@ -165,7 +166,7 @@ class GroupBase extends React.Component {
               <Button
                 disabled={this.isButtonDisabled()}
                 onClick={this.onSubmit.bind(this)}
-                text={tx(this.state.buttonLabel)} />
+                text={tx(label)} />
             </ControlGroup>
             <div className='SelectGroupImage'>
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
@@ -208,5 +209,7 @@ class GroupBase extends React.Component {
     )
   }
 }
+
+GroupBase.contextType = ScreenContext
 
 module.exports = GroupBase

@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const ScreenContext = require('../contexts/ScreenContext')
 
 const confirmation = require('./dialogs/confirmationDialog')
 const { RenderContact } = require('./Contact')
@@ -62,7 +63,7 @@ class UnblockContacts extends React.Component {
       <div>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.props.changeScreen} />
+            <Button className={Classes.MINIMAL} icon='undo' onClick={this.context.changeScreen} />
             <NavbarHeading>{tx('unblock_contacts_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
@@ -81,5 +82,6 @@ class UnblockContacts extends React.Component {
     )
   }
 }
+UnblockContacts.contextType = ScreenContext
 
 module.exports = UnblockContacts

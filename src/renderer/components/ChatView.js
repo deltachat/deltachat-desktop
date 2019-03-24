@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const ScreenContext = require('../contexts/ScreenContext')
 
 const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
@@ -161,23 +162,23 @@ class ChatView extends React.Component {
   }
 
   onClickAttachment (message) {
-    this.props.openDialog('RenderMedia', { message })
+    this.context.openDialog('RenderMedia', { message })
   }
 
   onClickSetupMessage (setupMessage) {
-    this.props.openDialog('SetupMessage', { setupMessage })
+    this.context.openDialog('SetupMessage', { setupMessage })
   }
 
   onShowDetail (message) {
     const { chat } = this.props
-    this.props.openDialog('MessageDetail', {
+    this.context.openDialog('MessageDetail', {
       message,
       chat
     })
   }
 
   onForward (forwardMessage) {
-    this.props.openDialog('ForwardMessage', { forwardMessage })
+    this.context.openDialog('ForwardMessage', { forwardMessage })
   }
 
   setComposerSize (size) {
@@ -246,5 +247,6 @@ class ChatView extends React.Component {
     )
   }
 }
+ChatView.contextType = ScreenContext
 
 module.exports = ChatView
