@@ -1,5 +1,11 @@
 #!/bin/bash
-BUILD_NAME="ubuntu-18_10-rpgp"
+
+if [ -z ${BUILDER_NAME+x} ]; then
+  echo "Error: Environment variable BUILDER_NAME is unset. It should be set to
+  the first child folder name in \`/builder\` and is normally set in the Dockerfile
+  for this builder. Examples for values are \`ubuntu-16_04\` or \`ubunut-18_10-rpgp\`.";
+  exit 0
+fi
 
 # COMPILE DELTACHAT-CORE with RPGP
 cd /
@@ -38,8 +44,13 @@ npm run build
 npx electron-builder -c /build-context/electron-builder-ubuntu.json
 
 # EXTRACT ALREADY BUILT .DEB
-cd "/build/dist/$BUILD_NAME"
+cd "/build/dist/$BUILDER_NAME"
+
+# remove linux-unpacked files, we don't need them anymore
+rm -rf linux-unpacked
+
 NAME_DEB=`basename $(find ./ -maxdepth 1 -name *.deb -print -quit)`
+
 mkdir -p extract/DEBIAN
 dpkg-deb -x $NAME_DEB extract
 dpkg-deb -e $NAME_DEB extract/DEBIAN
@@ -53,4 +64,7 @@ cp /build-context/deltachat-desktop extract/opt/DeltaChat
 # Repack into .deb
 rm $NAME_DEB
 dpkg-deb -b extract $NAME_DEB
+
+# Clean up extract folder
+rm -rf extract
 

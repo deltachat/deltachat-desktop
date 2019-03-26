@@ -44,9 +44,11 @@ ENV PATH=/root/.cargo/bin:$PATH
 # Install rpgp
 RUN true \
     && cd / \
-    && https://github.com/rpgp/rpgp.git \
-    && cd rpgp/pgp-ffi \
-    && git checkout fix_makefile_pkgconfig_typo \
+    && git clone https://github.com/rpgp/rpgp.git
+
+# As rpgp is currently a huge github repo, split built into two layers
+RUN true \
+    && cd /rpgp/pgp-ffi \
     && PREFIX=/opt/DeltaChat/rpgp make install
 
 
