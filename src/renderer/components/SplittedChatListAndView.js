@@ -69,7 +69,6 @@ class SplittedChatListAndView extends React.Component {
 
   onChatClick (chatId) {
     ipcRenderer.send('selectChat', chatId)
-    console.log('chatId:', chatId)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
@@ -92,8 +91,7 @@ class SplittedChatListAndView extends React.Component {
     this.searchChats(event.target.value)
   }
 
-  onMapIconClick (event) {
-    console.log('onMapIconClick')
+  onMapIconClick () {
     const { deltachat } = this.props
     const { selectedChat } = deltachat
     this.props.openDialog('MapDialog', { selectedChat })
