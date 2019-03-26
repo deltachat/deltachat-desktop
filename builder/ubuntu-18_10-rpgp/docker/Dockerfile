@@ -1,5 +1,6 @@
 FROM ubuntu:18.10
 
+ENV BUILDER_NAME="ubuntu-18_10-rpgp"
 
 # Update system
 RUN true \
@@ -43,10 +44,11 @@ ENV PATH=/root/.cargo/bin:$PATH
 # Install rpgp
 RUN true \
     && cd / \
-    && git clone https://github.com/Jikstra/rpgp.git \
+    && https://github.com/rpgp/rpgp.git \
     && cd rpgp/pgp-ffi \
     && git checkout fix_makefile_pkgconfig_typo \
     && PREFIX=/opt/DeltaChat/rpgp make install
+
 
 # Set the working directory to /app
 WORKDIR /build-context
