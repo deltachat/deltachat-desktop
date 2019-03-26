@@ -43,6 +43,7 @@
   "homepage": "https://delta.chat",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
+    "@mapbox/geojson-extent": "^0.3.2",
     "application-config": "^1.0.1",
     "array-differ": "^2.0.3",
     "class-autobind": "^0.1.4",

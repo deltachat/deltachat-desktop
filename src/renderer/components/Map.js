@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const mapboxgl = require('mapbox-gl')
+const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment')
 const MapLayerFactory = require('./helpers/MapLayerFactory')
 
@@ -22,7 +23,8 @@ class Map extends React.Component {
       {
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-        zoom: 12 // starting zoom
+        zoom: 12, // starting zoom
+        attributionControl: false
       })
 
     this.map.on('load', this.renderMap)
@@ -41,8 +43,8 @@ class Map extends React.Component {
         if (locationsForContact && locationsForContact.length) {
           let pointsForLayer = []
           locationsForContact.map(point => pointsForLayer.push([point.lon, point.lat]))
-
-          this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact))
+          let layer = MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact)
+          this.map.addLayer(layer)
           this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact))
 
           let lastPoint = locationsForContact[locationsForContact.length - 1]
@@ -52,15 +54,13 @@ class Map extends React.Component {
             .setLngLat([lastPoint.lon, lastPoint.lat])
             .setPopup(popup)
             .addTo(this.map)
-
-          allPoints = allPoints.concat(pointsForLayer) // needed for bounds
+          allPoints = allPoints.concat(pointsForLayer)
           center = [lastPoint.lon, lastPoint.lat]
         }
       })
       this.map.setCenter(center)
 
-      let bounds = new mapboxgl.LngLatBounds(allPoints)
-      this.map.fitBounds(bounds, { padding: 200 })
+      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
 
       this.map.on('click', e => {
         let features = this.map.queryRenderedFeatures(e.point)
