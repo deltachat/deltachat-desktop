@@ -441,14 +441,15 @@ class DeltaChatController extends EventEmitter {
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
     let selectedChat = this._getChatById(selectedChatId)
     if (!selectedChat) return null
+    if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
+      if (selectedChat.freshMessageCounter > 0) {
+        this._dc.markNoticedChat(selectedChat.id)
+        selectedChat.freshMessageCounter = 0
+      }
 
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
-    }
-
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+      if (this._saved.markRead) {
+        this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+      }
     }
 
     return selectedChat
@@ -459,11 +460,6 @@ class DeltaChatController extends EventEmitter {
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
     const chat = rawChat.toJson()
-
-    if (chatId === C.DC_CHAT_ID_DEADDROP) {
-      const chat = this._dc.getChat(C.DC_CHAT_ID_DEADDROP)
-      return (chat && Object.assign(chat.toJson(), { isDeaddrop: true, messages: null, contacts: null })) || null
-    }
 
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     // This object is NOT created with object assign to promote consistency and to be easier to understand
@@ -486,7 +482,7 @@ class DeltaChatController extends EventEmitter {
       summary: undefined,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroupChat(chat),
-      isDeaddrop: false
+      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP
     }
   }
 

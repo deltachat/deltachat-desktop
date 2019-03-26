@@ -184,7 +184,7 @@ class ChatView extends React.Component {
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        ipcRenderer.send('sendMessage', chat.id, 'Droped File', path)
+        ipcRenderer.send('sendMessage', chat.id, null, path)
       } else {
         log.warn('Prevented a file from being send again while dragging it out')
       }
