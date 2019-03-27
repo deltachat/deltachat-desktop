@@ -5,7 +5,6 @@ const { Dialog } = require('@blueprintjs/core')
 class MapDialog extends React.Component {
   constructor (props) {
     super(props)
-    console.log(props)
     this.close = this.close.bind(this)
   }
 

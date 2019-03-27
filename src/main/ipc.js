@@ -195,10 +195,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('getLocations', (e, chatId, contactId) => {
-    log.debug('getLocations')
-    let res = dc.getLocations(chatId, contactId)
-    log.debug('getLocations result', res)
-    e.returnValue = res
+    e.returnValue = dc.getLocations(chatId, contactId)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
