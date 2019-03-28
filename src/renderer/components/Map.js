@@ -38,8 +38,9 @@ class Map extends React.Component {
 
     if (this.map.loaded()) {
       console.log('map loaded', this.componentDidMount - Date.now())
+      let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0)
       contacts.map(contact => {
-        let locationsForContact = ipcRenderer.sendSync('getLocations', selectedChat.id, contact.id)
+        let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
         if (locationsForContact && locationsForContact.length) {
           let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
 
