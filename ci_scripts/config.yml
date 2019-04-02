@@ -6,9 +6,18 @@ jobs:
     steps:
       - checkout
       - run: 
-          command: ci_scripts/ubuntu-16_04/build-image.sh
+          command: ci_scripts/build-image.sh ci_scripts/ubuntu-16_04
       - run: 
-          command: ci_scripts/ubuntu-16_04/build-package.sh
+          command: ci_scripts/build-package.sh ci_scripts/ubuntu-16_04
+
+  ubu1804:
+    machine: True
+    steps:
+      - checkout
+      - run: 
+          command: ci_scripts/build-image.sh ci_scripts/ubuntu-18_04
+      - run: 
+          command: ci_scripts/build-package.sh ci_scripts/ubuntu-18_04
 
 
 workflows:
@@ -16,3 +25,4 @@ workflows:
   build_all:
     jobs:
       - ubu1604
+      - ubu1804
