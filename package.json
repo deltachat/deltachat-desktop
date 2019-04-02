@@ -48,7 +48,7 @@
     "array-differ": "^2.0.3",
     "class-autobind": "^0.1.4",
     "debounce": "^1.2.0",
-    "deltachat-node": "^0.40.2",
+    "deltachat-node": "git+https://github.com/deltachat/deltachat-node.git#location-streaming",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.10.0",
     "error-stack-parser": "^2.0.2",
