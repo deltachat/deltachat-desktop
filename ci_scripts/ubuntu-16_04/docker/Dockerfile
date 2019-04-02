@@ -1,10 +1,9 @@
 FROM ubuntu:xenial
 
-
 # Update system
 RUN true \
-    && apt update \
-    && apt -y upgrade
+    && apt update 
+#    && apt -y upgrade
 
 # Install nvm & node
 RUN true \

@@ -1,0 +1,18 @@
+
+version: 2
+jobs:
+  ubu1604:
+    machine: True
+    steps:
+      - checkout
+      - run: 
+          command: ci_scripts/ubuntu-16_04/build-image.sh
+      - run: 
+          command: ci_scripts/ubuntu-16_04/build-package.sh
+
+
+workflows:
+  version: 2
+  build_all:
+    jobs:
+      - ubu1604
