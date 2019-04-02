@@ -11,6 +11,7 @@ class Map extends React.Component {
     this.state = {
       points: []
     }
+    this.initialTimeOffset = 48 // hours
     this.renderLayer = this.renderLayer.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
   }
@@ -22,11 +23,11 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map(
       {
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        zoom: 12,
+        style: 'mapbox://styles/mapbox/streets-v8',
+        zoom: 4,
+        center: [8, 48],
         attributionControl: false
       })
-
     this.map.on('load', this.renderLayer)
     this.map.on('click', this.onMapClick)
   }
@@ -36,33 +37,38 @@ class Map extends React.Component {
     const contacts = selectedChat.contacts
     let allPoints = []
 
-    if (this.map.loaded()) {
-      console.log('map loaded', this.componentDidMount - Date.now())
-      let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0)
-      contacts.map(contact => {
-        let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
-        if (locationsForContact && locationsForContact.length) {
-          let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
+    console.log('map loaded', this.componentDidMount - Date.now())
+    let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, moment().unix() - (this.initialTimeOffset * 3600), 0)
+    contacts.map(contact => {
+      let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
+      if (locationsForContact && locationsForContact.length) {
+        let pointsForLayer = locationsForContact.reduce(
+          (points, point) => {
+            if (point.acc > 0) {
+              points.push([point.lon, point.lat])
+            }
+            return points
+          },
+          []
+        )
+        this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact))
+        this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact))
 
-          this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact))
-          this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact))
-
-          let lastPoint = locationsForContact[locationsForContact.length - 1]
-          let lastDate = moment(lastPoint.tstamp * 1000).format('Y-m-d LT')
-          let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(contact.firstName + ' <br />Reported: ' + lastDate)
-          new mapboxgl.Marker({ color: '#' + contact.color.toString(16) })
-            .setLngLat([lastPoint.lon, lastPoint.lat])
-            .setPopup(popup)
-            .addTo(this.map)
-          allPoints = allPoints.concat(pointsForLayer)
-        }
-      })
-      if (allPoints.length > 0) {
-        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+        let lastPoint = locationsForContact[locationsForContact.length - 1]
+        let lastDate = moment(lastPoint.tstamp * 1000).format('Y-m-d LT')
+        let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(contact.firstName + ' <br />Reported: ' + lastDate)
+        new mapboxgl.Marker({ color: '#' + contact.color.toString(16) })
+          .setLngLat([lastPoint.lon, lastPoint.lat])
+          .setPopup(popup)
+          .addTo(this.map)
+        allPoints = allPoints.concat(pointsForLayer)
       }
-
-      console.log('map rendered', this.componentDidMount - Date.now())
+    })
+    if (allPoints.length > 0) {
+      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
     }
+
+    console.log('map rendered', this.componentDidMount - Date.now())
   }
 
   onMapClick (event) {

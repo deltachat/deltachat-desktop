@@ -194,8 +194,8 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.setLocation(latitude, longitude, accuracy)
   })
 
-  ipcMain.on('getLocations', (e, chatId, contactId) => {
-    e.returnValue = dc.getLocations(chatId, contactId)
+  ipcMain.on('getLocations', (e, chatId, contactId, timestampFrom, timestampTo) => {
+    e.returnValue = dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {

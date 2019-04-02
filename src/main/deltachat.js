@@ -340,9 +340,9 @@ class DeltaChatController extends EventEmitter {
     return res
   }
 
-  getLocations (chatId, contactId) {
+  getLocations (chatId, contactId, timestampFrom, timestampTo) {
     log.debug(`getLocations ${chatId}`)
-    let res = this._dc.getLocations(chatId, contactId)
+    let res = this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
     log.debug(`getLocations result: ${res}`)
     return res
   }
