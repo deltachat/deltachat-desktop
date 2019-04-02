@@ -4,4 +4,4 @@ DIR=${1:?specify directory of ubuntu docker dir}
 export BUILDER_NAME=$(basename $DIR)
 export DOCKERTAG=deltachat/desktop-$BUILDER_NAME 
 
-docker build -e BUILDER_NAME -t $DOCKERTAG $DIR
+docker build -t $DOCKERTAG $DIR
