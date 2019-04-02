@@ -37,7 +37,7 @@ RUN apt -y install python2
 # Install rust for rpgp
 RUN true \
     && apt -y install curl \
-    && curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+    && curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-2019-03-23 -y
 
 ENV PATH=/root/.cargo/bin:$PATH
 
