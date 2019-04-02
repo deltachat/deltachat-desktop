@@ -1,5 +1,7 @@
 #!/bin/bash
-SCRIPT=`realpath $0`
-SCRIPTPATH=`dirname $SCRIPT`
 
-docker build -t builder-deltachat-desktop-ubuntu-16_04 -f "$SCRIPTPATH/docker/Dockerfile" "$SCRIPTPATH/build-context"
+pushd ci_scripts/ubuntu-16_04
+
+docker build -t builder-deltachat-desktop-ubuntu-16_04 -f docker/Dockerfile build-context
+
+popd
