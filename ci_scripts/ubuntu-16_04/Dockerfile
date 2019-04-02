@@ -1,5 +1,8 @@
 FROM ubuntu:xenial
 
+RUN true \
+    && echo $DOCKERTAG 
+
 # Update system
 RUN true \
     && apt update 

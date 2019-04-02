@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR=${1:?specify directory of ubuntu docker dir}
-DOCKERTAG=deltachat/desktop-$(basename $DIR)
+export BUILDER_NAME=$(basename $DIR)
+export DOCKERTAG=deltachat/desktop-$BUILDER_NAME 
 
-docker build -t deltachat-desktop-$(basename $DIR) $DIR
+docker build -e BUILDER_NAME -t $DOCKERTAG $DIR
