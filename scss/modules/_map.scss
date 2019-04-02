@@ -1,13 +1,14 @@
 @import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
 #map {
-  width: 90vw;
-  height: 90vh;
+	width: 90vw;
+	height: 90vh;
 }
 
 .bp3-dialog.map-dialog {
-  width: 90vw;
-    height: 90vh;
+	width: 90vw;
+	height: 90vh;
+	position: relative;
 }
 
 .mapboxgl-popup-content {
@@ -15,5 +16,20 @@
 }
 
 .mapboxgl-marker {
-  cursor: pointer;
+	cursor: pointer;
+}
+
+.map-overlay {
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	position: absolute;
+	width: 150px;
+	top: 90px;
+	left: 0;
+	padding: 10px;
+	background-color: #fff;
+	z-index: 500;
+}
+
+.bp3-slider-handle:focus {
+	outline: none;
 }

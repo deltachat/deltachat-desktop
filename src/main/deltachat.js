@@ -344,16 +344,12 @@ class DeltaChatController extends EventEmitter {
   }
 
   setLocation (latitude, longitude, accuracy) {
-    log.debug(`setLocation ${latitude}`)
     let res = this._dc.setLocation(latitude, longitude, accuracy)
-    log.debug(`setLocation result: ${res}`)
     return res
   }
 
   getLocations (chatId, contactId, timestampFrom, timestampTo) {
-    log.debug(`getLocations ${chatId}`)
     let res = this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
-    log.debug(`getLocations result: ${res}`)
     return res
   }
 

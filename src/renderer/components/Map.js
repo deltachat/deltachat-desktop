@@ -6,18 +6,23 @@ const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment')
 const formatRelativeTime = require('./conversations/formatRelativeTime')
 const MapLayerFactory = require('./helpers/MapLayerFactory')
+const { Slider } = require('@blueprintjs/core')
 
 const PopupMessage = props => <div> {props.username} <br /> {props.formattedDate} </div>
 
 class Map extends React.Component {
   constructor (props) {
     super(props)
+    this.timeOffset = 48 // hours
     this.state = {
-      points: []
+      points: [],
+      timeOffset: 48,
+      mapStyle: 'streets-v11'
     }
-    this.initialTimeOffset = 48 // hours
     this.renderLayer = this.renderLayer.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
+    this.toggleLayer = this.toggleLayer.bind(this)
+    this.onRangeChange = this.onRangeChange.bind(this)
   }
 
   componentDidMount () {
@@ -26,13 +31,15 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map(
       {
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v8',
+        style: 'mapbox://styles/mapbox/satellite-v9',
         zoom: 4,
         center: [8, 48],
         attributionControl: false
       })
     this.map.on('load', this.renderLayer)
     this.map.on('click', this.onMapClick)
+    this.map.addControl(new mapboxgl.NavigationControl())
+    this.pathLayerIds = []
   }
 
   renderLayer () {
@@ -47,7 +54,6 @@ class Map extends React.Component {
         let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
         this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(pointsForLayer, contact))
         this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact))
-
         let lastPoint = locationsForContact[locationsForContact.length - 1]
         let lastDate = formatRelativeTime(lastPoint.tstamp * 1000, { extended: true })
         let markup = ReactDOMServer.renderToStaticMarkup(<PopupMessage username={contact.firstName} formattedDate={lastDate} />)
@@ -77,10 +83,50 @@ class Map extends React.Component {
     }
   }
 
+  toggleLayer (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const visibility = this.map.getLayoutProperty(this.pathLayerIds[0], 'visibility')
+    const newVisibility = visibility === 'visible' ? 'none' : 'visible'
+    this.pathLayerIds.map(layerId => this.map.setLayoutProperty(layerId, 'visibility', newVisibility))
+    console.log('toggleLayer: ' + newVisibility)
+  }
+
+  onRangeChange (key) {
+    return (value) => this.setState({ [key]: value })
+  }
+
+  onMapStyleChange (key) {
+    return (value) => this.setState({ [key]: value })
+  }
+
   render () {
     return (
-      <div id='map' />
-    )
+      <div>
+        <nav id='controls' className='map-overlay top'>
+          <a onClick={this.toggleLayer}>Toggle Path layer</a><br /><br />
+          <div id='menu'>
+            <input id='streets-v11' type='radio' name='rtoggle' value='streets' checked='checked' />
+            <label htmlFor='streets'>streets</label>
+            <input id='dark-v10' type='radio' name='rtoggle' value='dark' onChange={this.onMapStyleChange('timeOffset')} />
+            <label htmlFor='dark'>dark</label>
+            <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors' />
+            <label htmlFor='outdoors'>outdoors</label>
+            <input id='satellite-v9' type='radio' name='rtoggle' value='satellite' />
+            <label htmlFor='satellite'>satellite</label>
+          </div>
+          <label id='month'>{this.state.timeOffset} hours</label>
+          <Slider min={0}
+            max={72}
+            stepSize={2}
+            labelStepSize={10}
+            onChange={this.onRangeChange('timeOffset')}
+            value={this.state.timeOffset}
+            vertical='true' />
+        </nav>
+        <div id='map' />
+      </div>)
   }
 }
 

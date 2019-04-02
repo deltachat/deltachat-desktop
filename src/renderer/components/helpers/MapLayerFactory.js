@@ -3,9 +3,9 @@ const formatRelativeTime = require('../conversations/formatRelativeTime')
 const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
 class MapLayerFactory {
-  static getGeoJSONLineLayer (points, contact) {
+  static getGeoJSONLineLayer (points, contact, id) {
     return {
-      'id': 'contact-route-' + contact.id,
+      'id': id,
       'type': 'line',
       'source': {
         'type': 'geojson',
@@ -30,9 +30,9 @@ class MapLayerFactory {
     }
   }
 
-  static getGeoJSONPointsLayer (locations, contact) {
+  static getGeoJSONPointsLayer (locations, contact, layerId) {
     let layer = {
-      'id': 'points-' + contact.id,
+      'id': layerId,
       'type': 'circle',
       'source': {
         'type': 'geojson',
