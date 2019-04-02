@@ -1,28 +1,38 @@
 
 version: 2
 jobs:
-  ubu1604:
+  ubu1604-rpgp:
     machine: True
     steps:
       - checkout
       - run: 
-          command: ci_scripts/build-image.sh ci_scripts/ubuntu-16_04
+          command: ci_scripts/build-image.sh ci_scripts/ubuntu-16_04-rpgp
       - run: 
-          command: ci_scripts/build-package.sh ci_scripts/ubuntu-16_04
+          command: ci_scripts/build-package.sh ci_scripts/ubuntu-16_04-rpgp
 
-  ubu1804:
+  ubu1804-rpgp:
     machine: True
     steps:
       - checkout
       - run: 
-          command: ci_scripts/build-image.sh ci_scripts/ubuntu-18_04
+          command: ci_scripts/build-image.sh ci_scripts/ubuntu-18_04-rpgp
       - run: 
-          command: ci_scripts/build-package.sh ci_scripts/ubuntu-18_04
+          command: ci_scripts/build-package.sh ci_scripts/ubuntu-18_04-rpgp
+
+  ubu1810-rpgp:
+    machine: True
+    steps:
+      - checkout
+      - run: 
+          command: ci_scripts/build-image.sh ci_scripts/ubuntu-18_10-rpgp
+      - run: 
+          command: ci_scripts/build-package.sh ci_scripts/ubuntu-18_10-rpgp
 
 
 workflows:
   version: 2
   build_all:
     jobs:
-      - ubu1604
-      - ubu1804
+      - ubu1604-rpgp
+      - ubu1804-rpgp
+      - ubu1810-rpgp
