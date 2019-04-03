@@ -8,6 +8,7 @@ const ReactDOM = require('react-dom')
 
 const { remote, ipcRenderer } = require('electron')
 const localize = require('../localize')
+const moment = require('moment')
 const App = require('./App')
 const logger = require('../logger')
 
@@ -41,6 +42,7 @@ function onChooseLanguage (e, locale) {
 }
 
 function setupLocaleData (locale) {
+  moment.locale(locale)
   window.localeData = ipcRenderer.sendSync('locale-data', locale)
   window.translate = localize.translate(window.localeData.messages)
 }
