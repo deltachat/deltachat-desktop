@@ -67,6 +67,7 @@ const MessageWrapper = styled.div`
   .module-message__img-attachment {
     object-fit: unset;
     width: auto;
+    max-width: 100%;
     height: auto;
     min-height: unset;
   }

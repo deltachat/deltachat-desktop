@@ -23,8 +23,6 @@ const MediaGallery = styled.div`
   padding-top: 20px;
 `
 
-const THUMBNAIL_SIZE = '80px'
-
 const MediaGalleryItem = styled.div`
   float: left;
 
@@ -39,10 +37,7 @@ const MediaGalleryItem = styled.div`
   }
 
   .module-message__img-attachment {
-    max-height: ${THUMBNAIL_SIZE};
-    min-height: ${THUMBNAIL_SIZE};
-    max-width: ${THUMBNAIL_SIZE};
-    min-width: ${THUMBNAIL_SIZE};
+    max-width: 100% !important;
   }
 
   .module-message__generic-attachment__text {
