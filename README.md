@@ -27,22 +27,14 @@ The application can be downloaded from the [`Releases`](https://github.com/delta
 
 ### Linux
 
-#### AppImage
+#### Flatpak
 
-AppImages are a generic way to install software accross most linux distributions
-and systems.
-
-To install a `.AppImage` based release:
-
-- Download the binary
-- Make it executable, e.g. `chmod u+x ~/Downloads/deltachat-desktop-x.y.z-x86_64.AppImage`
-- Executing the `.AppImage` will install it on the system in `/opt/DeltaChat`
-
-#### Debian/Ubuntu
-
-- Click on the link for the `.deb` file
-- Some systems enable installing it directly by clicking
-- If your system doesn't handle `.deb` files you can install manually by doing e.g. `sudo dpkg -i ~/Downloads/deltachat-desktop_x.y.z_amd64.deb`
+The primary distribution-independed way to install is to use the
+flatpak build.  This is maintained in [it's own
+repository](https://github.com/flathub/chat.delta.desktop), however a
+pre-built binary can be downloaded and installed from
+[flathub](https://flathub.org/apps/details/chat.delta.desktop) which
+also has a setup guide for many Linux platforms.
 
 #### Arch Linux
 
@@ -65,7 +57,7 @@ makepkg -si
 sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ```
 
-#### Mac OS
+### Mac OS
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
@@ -292,14 +284,16 @@ tx push --source
 
 ### CI
 
-For Continuous Integration we currently use both Travis and Jenkins. Travis is used for Mac and Jenkins for Linux. Once we support Windows we will most likely use Travis for Windows.
+For Continuous Integration we currently use Travis.
 
-### Deploy Workflow
+### Release Workflow
 
-1. Create a draft release on github, e.g. `vX.Y.Z`
-2. Change `version` field in `package.json` to `X.Y.Z`
-3. Commit and push modified `package.json` (repeat until release is ready)
-4. Once done, publish the release on github, which will create the tag
+1. Create a draft release on github, e.g. `vX.Y.Z`.
+2. Change `version` field in `package.json` to `X.Y.Z`.
+3. Update, commit and push `static/chat.delta.desktopp.appdata.xml`
+   with the new release information.
+4. Commit and push modified `package.json` (repeat until release is ready).
+5. Once done, publish the release on github, which will create the tag.
 
 Also see <https://www.electron.build/configuration/publish>
 

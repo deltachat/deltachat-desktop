@@ -57,8 +57,17 @@ ul {
   list-style: none;
   padding-left: 0px;
 }
-ul li button {
+ul li {
   min-width: 200px;
+}
+
+.emoji-mart-category-list > li {
+  min-width: initial;
+}
+
+button {
+  /*  This broke emoji mart after update */
+  /* min-width: 200px; */
 }
 
 .SelectGroupImage {

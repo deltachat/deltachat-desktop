@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Delta Chat
+Comment=Delta Chat email-based messenger
+Exec=/app/bin/run.sh
+Icon=chat.delta.desktop
+Terminal=false
+Type=Application
+Categories=Network;Chat;
+StartupWMClass=deltachat

@@ -1,5 +1,6 @@
 const React = require('react')
 const C = require('deltachat-node/constants')
+const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
 const StyleVariables = require('./style-variables')
@@ -80,76 +81,96 @@ const ArchivedChats = styled.div`
 `
 
 class ChatList extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.contextMenu = React.createRef()
+  }
+
+  openMenu (chatId, e) {
+    e.persist()
+    this.contextMenu.current.show(chatId, e)
+  }
+
   render () {
     const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
 
     return (
-      <ChatListWrapper>
-        { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-        <div className='ConversationList'>
-          {chatList.map((chat, i) => {
-            if (!chat) return
-            const i18n = window.translate
-            const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
+      <div>
+        <ChatListWrapper>
+          { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
+          <div className='ConversationList'>
+            {chatList.map((chatListItem, i) => {
+              if (!chatListItem) return
+              const i18n = window.translate
+              const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
 
-            // Don't show freshMessageCounter on selected chat
-            if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-              const name = `${tx('new_message_from_desktop')} ${chat.name}`
-              return (
-                <ContactRequestItemWrapper key={i}>
+              // Don't show freshMessageCounter on selected chat
+              if (chatListItem.id === C.DC_CHAT_ID_DEADDROP) {
+                const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
+                return (
+                  <ContactRequestItemWrapper key={i}>
+                    <ChatListItem
+                      className='contactrequest'
+                      name={name}
+                      i18n={i18n}
+                      phoneNumber={chatListItem.summary.text1}
+                      lastUpdated={lastUpdated}
+                      lastMessage={{
+                        text2: chatListItem.summary.text2,
+                        status: 'delivered'
+                      }}
+                      onClick={() => onDeadDropClick(chatListItem.deaddrop)}
+                      isSelected={chatListItem.id === selectedChatId}
+                      unreadCount={chatListItem.freshMessageCounter}
+
+                    />
+                  </ContactRequestItemWrapper>)
+              } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+                return (
+                  <ArchivedChats key={i}>
+                    <ChatListItem
+                      onClick={this.props.onShowArchivedChats}
+                      name={chatListItem.name}
+                      i18n={i18n} />
+                  </ArchivedChats>
+                )
+              } else {
+                return (
                   <ChatListItem
-                    className='contactrequest'
-                    name={name}
-                    i18n={i18n}
-                    phoneNumber={chat.summary.text1}
+                    key={i}
+                    onClick={this.props.onChatClick.bind(null, chatListItem.id)}
+                    phoneNumber={chatListItem.summary.text1}
+                    name={chatListItem.name}
+                    avatarPath={chatListItem.profileImage}
+                    color={chatListItem.color}
                     lastUpdated={lastUpdated}
                     lastMessage={{
-                      text2: chat.summary.text2,
-                      status: 'delivered'
+                      text1: chatListItem.summary.text1,
+                      text1Meaning: chatListItem.summary.text1Meaning,
+                      text2: chatListItem.summary.text2,
+                      status: 'sent' // TODO: interpret data from summary to get correct state
                     }}
-                    onClick={() => onDeadDropClick(chat.deaddrop)}
-                    isSelected={chat.id === selectedChatId}
-                    unreadCount={chat.freshMessageCounter}
+                    i18n={i18n}
+                    isSelected={chatListItem.id === selectedChatId}
+                    isVerified={chatListItem.isVerified}
+                    isGroup={chatListItem.isGroup}
+                    unreadCount={chatListItem.freshMessageCounter}
+                    onContextMenu={this.openMenu.bind(this, chatListItem.id)}
                   />
-                </ContactRequestItemWrapper>)
-            } else if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
-              return (
-                <ArchivedChats key={i}>
-                  <ChatListItem
-                    onClick={this.props.onShowArchivedChats}
-                    name={chat.name}
-                    i18n={i18n} />
-                </ArchivedChats>
-              )
-            } else {
-              return (
-                <ChatListItem
-                  key={i}
-                  onClick={this.props.onChatClick.bind(null, chat.id)}
-                  phoneNumber={chat.summary.text1}
-                  name={chat.name}
-                  avatarPath={chat.profileImage}
-                  color={chat.color}
-                  lastUpdated={lastUpdated}
-                  lastMessage={{
-                    text1: chat.summary.text1,
-                    text1Meaning: chat.summary.text1Meaning,
-                    text2: chat.summary.text2,
-                    status: 'sent' // TODO: interpret data from summary to get correct state
-                  }}
-                  i18n={i18n}d
-                  isSelected={chat.id === selectedChatId}
-                  isVerified={chat.isVerified}
-                  isGroup={chat.isGroup}
-                  unreadCount={chat.freshMessageCounter}
-                />
-              )
-            }
-          })}
-        </div>
-      </ChatListWrapper>
+                )
+              }
+            })}
+          </div>
+        </ChatListWrapper>
+        <ChatListContextMenu
+          ref={this.contextMenu}
+          showArchivedChats={showArchivedChats}
+          openDialog={this.props.openDialog}
+          changeScreen={this.props.changeScreen} />
+      </div>
     )
   }
 }

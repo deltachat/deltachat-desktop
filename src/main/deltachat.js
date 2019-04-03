@@ -92,10 +92,6 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
-
-      // Don't rerender if a draft changes
-      if (msgId === 0) return
-
       render()
     })
 
@@ -380,21 +376,27 @@ class DeltaChatController extends EventEmitter {
     const chatList = []
     for (let i = 0; i < listCount; i++) {
       const chatId = list.getChatId(i)
-      const chat = this._dc.getChat(chatId).toJson()
-      chat.color = this._integerToHexColor(chat.color)
+      const chat = this._getChatById(chatId)
 
       if (!chat) continue
-
-      chat.summary = list.getSummary(i).toJson()
-      chat.freshMessageCounter = this._dc.getFreshMessageCount(chatId)
-      chat.isGroup = isGroupChat(chat)
 
       if (chat.id === C.DC_CHAT_ID_DEADDROP) {
         const messageId = list.getMessageId(i)
         chat.deaddrop = this._deadDropMessage(messageId)
       }
 
-      chatList.push(chat)
+      // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+      chatList.push({
+        id: chat.id,
+        summary: list.getSummary(i).toJson(),
+        name: chat.name,
+        deaddrop: chat.deaddrop,
+        freshMessageCounter: chat.freshMessageCounter,
+        profileImage: chat.profileImage,
+        color: chat.color,
+        isVerified: chat.isVerified,
+        isGroup: chat.isGroup
+      })
     }
     return chatList
   }
@@ -431,41 +433,58 @@ class DeltaChatController extends EventEmitter {
   }
 
   _selectedChat (showArchivedChats, chatList, selectedChatId) {
-    let selectedChat = chatList && chatList.find(({ id }) => id === selectedChatId)
-    if (selectedChatId === C.DC_CHAT_ID_DEADDROP) {
-      selectedChat = this._dc.getChat(selectedChatId)
-      if (selectedChat) selectedChat = selectedChat.toJson()
-    }
-    if (!selectedChat) {
-      this._selectedChatId = null
-      return null
-    }
+    let selectedChat = this._getChatById(selectedChatId)
+    if (!selectedChat) return null
+    if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
+      if (selectedChat.freshMessageCounter > 0) {
+        this._dc.markNoticedChat(selectedChat.id)
+        selectedChat.freshMessageCounter = 0
+      }
 
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
+      if (this._saved.markRead) {
+        this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+      }
     }
-    const messageIds = this._dc.getChatMessages(selectedChatId, C.DC_GCM_ADDDAYMARKER, 0)
-    selectedChat.totalMessages = messageIds.length
-    selectedChat.messages = this._messagesToRender(messageIds)
-
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
-    }
-
-    selectedChat.contacts = this._dc.getChatContacts(selectedChatId).map(id => {
-      return this._dc.getContact(id).toJson()
-    })
-
-    let draft = this._dc.getDraft(selectedChatId)
-    if (draft) {
-      selectedChat.draft = draft.getText()
-    } else {
-      selectedChat.draft = ''
-    }
-    log.debug('getDraft:', selectedChat.draft)
 
     return selectedChat
+  }
+
+  _getChatById (chatId) {
+    if (!chatId) return null
+    const rawChat = this._dc.getChat(chatId)
+    if (!rawChat) return null
+    const chat = rawChat.toJson()
+    let draft = this._dc.getDraft(chatId)
+    if (draft) {
+      chat.draft = draft.getText()
+    } else {
+      chat.draft = ''
+    }
+    log.debug('getDraft:', chat.draft)
+    var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+    // This object is NOT created with object assign to promote consistency and to be easier to understand
+    return {
+      id: chat.id,
+      name: chat.name,
+      isVerified: chat.isVerified,
+      profileImage: chat.profileImage,
+
+      archived: chat.archived,
+      subtitle: chat.subtitle,
+      type: chat.type,
+      isUnpromoted: chat.isUnpromoted,
+      isSelfTalk: chat.isSelfTalk,
+
+      contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
+      totalMessages: messageIds.length,
+      messages: this._messagesToRender(messageIds),
+      color: this._integerToHexColor(chat.color),
+      summary: undefined,
+      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      isGroup: isGroupChat(chat),
+      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      draft: chat.draft
+    }
   }
 
   _messagesToRender (messageIds) {
