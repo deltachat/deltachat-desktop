@@ -142,13 +142,13 @@ class Settings extends React.Component {
         confirmationDialog(this.translate('pref_managekeys_export_explain').replace('%1$s', filenames[0]), response => {
           if (!response) return
           if (filenames && filenames.length) {
+            ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+              this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_exported_to_x', filename) })
+            })
             ipcRenderer.send('keysExport', filenames[0])
           }
         })
       }
-    })
-    ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-      this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_exported_to_x', filename) })
     })
   }
 
