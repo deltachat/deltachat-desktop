@@ -1,4 +1,4 @@
-const moment = require('moment')
+const formatRelativeTime = require('../conversations/formatRelativeTime')
 // todo: get this from some settings/config file
 const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
@@ -51,7 +51,7 @@ class MapLayerFactory {
         'type': 'Feature',
         'properties': {
           contact: contact.firstName,
-          reported: moment(location.tstamp * 1000).format('Y-m-d LT')
+          reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
         },
         'geometry': {
           'type': 'Point',
