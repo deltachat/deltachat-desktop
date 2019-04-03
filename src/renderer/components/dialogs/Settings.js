@@ -176,11 +176,13 @@ class Settings extends React.Component {
         properties: ['openDirectory']
       }
       remote.dialog.showOpenDialog(opts, filenames => {
-        if (!filenames || !filenames.length) return
+        if (!filenames || !filenames.length) {
+          return
+        }
+        ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+          this.props.userFeedback({ type: 'success', text: this.translate('pref_backup_written_to_x', filename) })
+        })
         ipcRenderer.send('backupExport', filenames[0])
-      })
-      ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-        this.props.userFeedback({ type: 'success', text: this.translate('pref_backup_written_to_x', filename) })
       })
     })
   }
