@@ -1,6 +1,7 @@
 const React = require('react')
 const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
+const path = require('path')
 const styled = require('styled-components').default
 
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
@@ -45,11 +46,14 @@ class Settings extends React.Component {
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onBackupImport = this.onBackupImport.bind(this)
+    this.onKeysExport = this.onKeysExport.bind(this)
+    this.onKeysImport = this.onKeysImport.bind(this)
     this.handleRCSettingsChange = this.handleRCSettingsChange.bind(this)
     this.handleDeltaSettingsChange = this.handleDeltaSettingsChange.bind(this)
     this.renderRCSwitch = this.renderRCSwitch.bind(this)
     this.renderDeltaSwitch = this.renderDeltaSwitch.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
+    this.translate = window.translate
   }
 
   componentDidUpdate (prevProps) {
@@ -97,10 +101,60 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  onBackupImport () {
-    const tx = window.translate
+  onKeysImport () {
     const opts = {
-      title: tx('import_backup_title'),
+      title: window.translate('pref_managekeys_import_explain'),
+      defaultPath: remote.app.getPath('downloads'),
+      properties: ['openDirectory']
+    }
+    remote.dialog.showOpenDialog(
+      opts,
+      filenames => {
+        if (filenames && filenames.length) {
+          confirmationDialog(window.translate('pref_managekeys_import_explain', filenames[0]), response => {
+            if (!response) {
+              return
+            }
+            ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
+              if (progress === 1000) {
+                this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_imported_from_x', filenames[0]) })
+              }
+            })
+            return ipcRenderer.send('keysImport', filenames[0])
+          })
+        }
+      }
+    )
+  }
+
+  onKeysExport () {
+    // TODO: ask for the user's password and check it using
+    // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
+
+    const opts = {
+      title: window.translate('pref_managekeys_export_secret_keys'),
+      defaultPath: remote.app.getPath('downloads'),
+      properties: ['openDirectory']
+    }
+
+    remote.dialog.showOpenDialog(opts, filenames => {
+      if (filenames && filenames.length) {
+        confirmationDialog(this.translate('pref_managekeys_export_explain').replace('%1$s', filenames[0]), response => {
+          if (!response) return
+          if (filenames && filenames.length) {
+            ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+              this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_exported_to_x', filename) })
+            })
+            ipcRenderer.send('keysExport', filenames[0])
+          }
+        })
+      }
+    })
+  }
+
+  onBackupImport () {
+    const opts = {
+      title: this.translate('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
     }
@@ -111,19 +165,23 @@ class Settings extends React.Component {
   }
 
   onBackupExport () {
-    const tx = window.translate
     let confirmOpts = {
-      buttons: [tx('cancel'), tx('export_backup_desktop')]
+      buttons: [this.translate('cancel'), this.translate('export_backup_desktop')]
     }
-    confirmationDialog(tx('pref_backup_export_explain'), confirmOpts, response => {
+    confirmationDialog(this.translate('pref_backup_export_explain'), confirmOpts, response => {
       if (!response) return
       let opts = {
-        title: tx('export_backup_desktop'),
+        title: this.translate('export_backup_desktop'),
         defaultPath: remote.app.getPath('downloads'),
         properties: ['openDirectory']
       }
       remote.dialog.showOpenDialog(opts, filenames => {
-        if (!filenames || !filenames.length) return
+        if (!filenames || !filenames.length) {
+          return
+        }
+        ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+          this.props.userFeedback({ type: 'success', text: this.translate('pref_backup_written_to_x', filename) })
+        })
         ipcRenderer.send('backupExport', filenames[0])
       })
     })
@@ -177,18 +235,21 @@ class Settings extends React.Component {
     )
   }
 
+  componentWillUnmount () {
+    ipcRenderer.removeAllListener('DC_EVENT_IMEX_FILE_WRITTEN')
+  }
+
   render () {
     const { deltachat, isOpen, onClose } = this.props
     const { userDetails, settings, advancedSettings, keyTransfer } = this.state
-    const tx = window.translate
-    const title = tx('menu_settings')
+    const title = this.translate('menu_settings')
 
     return (
       <div>
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={userDetails !== false}
-          title={tx('pref_password_and_account_settings')}
+          title={this.translate('pref_password_and_account_settings')}
           icon='settings'
           onClose={() => this.setState({ userDetails: false })}>
           <SettingsDialog className={Classes.DIALOG_BODY}>
@@ -201,8 +262,8 @@ class Settings extends React.Component {
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
-                <Button type='submit' text={userDetails ? tx('update') : tx('login_title')} />
-                <Button type='cancel' text={tx('cancel')} />
+                <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
+                <Button type='cancel' text={this.translate('cancel')} />
               </Login>
             </Card>
           </SettingsDialog>
@@ -216,41 +277,48 @@ class Settings extends React.Component {
             <Card elevation={Elevation.ONE}>
               <H5>{deltachat.credentials.addr}</H5>
               <Button onClick={() => this.setState({ userDetails: true })}>
-                {tx('pref_password_and_account_settings')}
+                {this.translate('pref_password_and_account_settings')}
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_chats_and_media')}</H5>
-              <Callout>{tx('pref_enter_sends_explain')}</Callout>
+              <H5>{this.translate('pref_chats_and_media')}</H5>
+              <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
               <br />
-              { this.renderRCSwitch('enterKeySends', tx('pref_enter_sends')) }
+              { this.renderRCSwitch('enterKeySends', this.translate('pref_enter_sends')) }
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('autocrypt')}</H5>
-              <Callout>{tx('autocrypt_explain')}</Callout>
+              <H5>{this.translate('autocrypt')}</H5>
+              <Callout>{this.translate('autocrypt_explain')}</Callout>
               <br />
-              { this.renderDeltaSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
+              { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
               <Button onClick={this.initiateKeyTransfer}>
-                {tx('autocrypt_send_asm_button')}
+                {this.translate('autocrypt_send_asm_button')}
               </Button>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_backup')}</H5>
+              <H5>{this.translate('pref_backup')}</H5>
               <ButtonGroup>
-                <Button onClick={this.onBackupExport}>{tx('pref_backup_export_start_button')}</Button>
-                <Button onClick={this.onBackupImport}>{tx('import_backup_title')}</Button>
+                <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
+                <Button onClick={this.onBackupImport}>{this.translate('import_backup_title')}</Button>
               </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_privacy')}</H5>
-              { this.renderRCSwitch('markRead', tx('pref_read_receipts')) }
+              <H5>{this.translate('pref_managekeys_menu_title')}</H5>
+              <ButtonGroup>
+                <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
+                <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
+              </ButtonGroup>
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_imap_folder_handling')}</H5>
-              { this.renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder')) }
-              { this.renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder')) }
-              { this.renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder')) }
-              { this.renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves')) }
+              <H5>{this.translate('pref_privacy')}</H5>
+              { this.renderRCSwitch('markRead', this.translate('pref_read_receipts')) }
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{this.translate('pref_imap_folder_handling')}</H5>
+              { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
+              { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
+              { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
+              { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
             </Card>
           </SettingsDialog>
         </Dialog>
