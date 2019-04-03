@@ -226,6 +226,8 @@ class Composer extends React.Component {
               enterKeySends={enterKeySends}
               sendMessage={this.sendMessage}
               setComposerSize={this.props.setComposerSize}
+              chatId={this.props.chatId}
+              draft={this.props.draft}
             />
           )}
         </SettingsContext.Consumer>

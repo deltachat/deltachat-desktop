@@ -119,7 +119,7 @@ class ChatList extends React.Component {
                       phoneNumber={chatListItem.summary.text1}
                       lastUpdated={lastUpdated}
                       lastMessage={{
-                        text: chatListItem.summary.text2,
+                        text2: chatListItem.summary.text2,
                         status: 'delivered'
                       }}
                       onClick={() => onDeadDropClick(chatListItem.deaddrop)}
@@ -148,7 +148,9 @@ class ChatList extends React.Component {
                     color={chatListItem.color}
                     lastUpdated={lastUpdated}
                     lastMessage={{
-                      text: chatListItem.summary.text2,
+                      text1: chatListItem.summary.text1,
+                      text1Meaning: chatListItem.summary.text1Meaning,
+                      text2: chatListItem.summary.text2,
                       status: 'sent' // TODO: interpret data from summary to get correct state
                     }}
                     i18n={i18n}

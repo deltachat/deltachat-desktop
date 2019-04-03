@@ -91,6 +91,8 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+      // Don't rerender if a draft changes
+      if (msgId === 0) return
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       render()
     })
@@ -308,8 +310,16 @@ class DeltaChatController extends EventEmitter {
     return this._dc.getSecurejoinQrCode(chatId)
   }
 
-  backupImport (filename) {
-    this._dc.importExport(C.DC_IMEX_IMPORT_BACKUP, filename)
+  checkPassword (password) {
+    return password === this.getConfig('mail_pw')
+  }
+
+  keysImport (directory) {
+    this._dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory)
+  }
+
+  keysExport (directory) {
+    this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
   }
 
   backupExport (dir) {
@@ -345,6 +355,14 @@ class DeltaChatController extends EventEmitter {
     let res = this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
     log.debug(`getLocations result: ${res}`)
     return res
+  }
+
+  setDraft (chatId, msgText) {
+    log.debug(`setDraft: ${msgText}, ${chatId}`)
+    let msg = this._dc.messageNew()
+    msg.setText(msgText)
+
+    this._dc.setDraft(chatId, msg)
   }
 
   /**
@@ -460,7 +478,13 @@ class DeltaChatController extends EventEmitter {
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
     const chat = rawChat.toJson()
-
+    let draft = this._dc.getDraft(chatId)
+    if (draft) {
+      chat.draft = draft.getText()
+    } else {
+      chat.draft = ''
+    }
+    log.debug('getDraft:', chat.draft)
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -482,7 +506,8 @@ class DeltaChatController extends EventEmitter {
       summary: undefined,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroupChat(chat),
-      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP
+      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      draft: chat.draft
     }
   }
 

@@ -42,6 +42,7 @@ function init (cwd, state, logHandler) {
   })
 
   dc.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
+    log.debug('DC_EVENT_IMEX_FILE_WRITTEN: ' + filename)
     main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
 
@@ -158,6 +159,9 @@ function init (cwd, state, logHandler) {
   ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
   ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
 
+  ipcMain.on('keysImport', (e, dir) => dc.keysImport(dir))
+  ipcMain.on('keysExport', (e, dir) => dc.keysExport(dir))
+
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dc.setConfig(key, value)
   })
@@ -235,6 +239,10 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
+  })
+
+  ipcMain.on('setDraft', (event, chatId, msg) => {
+    dc.setDraft(chatId, msg)
   })
 
   function render () {

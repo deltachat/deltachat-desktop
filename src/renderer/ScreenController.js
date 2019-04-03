@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const path = require('path')
 
 const {
   H5,
@@ -51,7 +52,7 @@ class ScreenController extends React.Component {
   }
 
   userFeedback (message) {
-    if (message !== false && this.state.message) return // one at a time, cowgirl
+    if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
   }
 
@@ -60,14 +61,9 @@ class ScreenController extends React.Component {
   }
 
   componentDidMount () {
-    var self = this
-    const tx = window.translate
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
-    ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-      self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
-    })
   }
 
   handleLogin (credentials) {
