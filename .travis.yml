@@ -41,6 +41,7 @@ script:
         desktop-file-validate static/chat.delta.desktop.desktop;
     fi
   - if [ $(uname) = Linux ]; then
+        echo $(which appstream-util:)
         appstream-util validate-relax static/chat.delta.desktop.appdata.xml;
     fi
   - npm run build
