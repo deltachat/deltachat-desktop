@@ -61,18 +61,9 @@ class ScreenController extends React.Component {
   }
 
   componentDidMount () {
-    var self = this
-    const tx = window.translate
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
-    ipcRenderer.on('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-      if (filename.indexOf('bak') > -1) {
-        self.userFeedback({ type: 'success', text: tx('pref_backup_written_to_x', filename) })
-      } else {
-        self.userFeedback({ type: 'success', text: tx('pref_managekeys_secret_keys_exported_to_x', path.dirname(filename)) })
-      }
-    })
   }
 
   handleLogin (credentials) {
