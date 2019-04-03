@@ -221,6 +221,8 @@ class ChatView extends React.Component {
         </div>
         <Composer
           ref={this.refComposer}
+          chatId={chat.id}
+          draft={chat.draft}
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
         />
