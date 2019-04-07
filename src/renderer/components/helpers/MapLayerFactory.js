@@ -3,21 +3,25 @@ const formatRelativeTime = require('../conversations/formatRelativeTime')
 const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
 class MapLayerFactory {
-  static getGeoJSONLineLayer (points, contact, id) {
+  static getGeoJSONLineSourceData (coordinates) {
+    return {
+      'type': 'FeatureCollection',
+      'features': [{
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': coordinates
+        }
+      }]
+    }
+  }
+
+  static getGeoJSONLineLayer (contact, id) {
     return {
       'id': id,
       'type': 'line',
-      'source': {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': points
-          }
-        }
-      },
+      'source': id,
       'layout': {
         'line-join': 'round',
         'line-cap': 'round'
@@ -60,6 +64,22 @@ class MapLayerFactory {
       })
     })
     return layer
+  }
+
+  static getGeoJSONPointsLayerSource (locations, contact) {
+    return locations.map(location => {
+      return {
+        'type': 'Feature',
+        'properties': {
+          contact: contact.firstName,
+          reported: moment(location.tstamp * 1000).format('Y-m-d LT')
+        },
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [location.lon, location.lat]
+        }
+      }
+    })
   }
 
   static getAccessToken () {

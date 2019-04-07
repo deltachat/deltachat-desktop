@@ -33,3 +33,15 @@
 .bp3-slider-handle:focus {
 	outline: none;
 }
+
+.map-overlay #menu {
+	clear: both;
+	div {
+		width: 50%;
+		float: left;
+
+		input {
+			margin-right: 4px;
+		}
+	}
+}
