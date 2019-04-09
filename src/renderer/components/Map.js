@@ -1,6 +1,7 @@
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { ipcRenderer } = require('electron')
+const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
 const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment')
@@ -13,16 +14,18 @@ const PopupMessage = props => <div> {props.username} <br /> {props.formattedDate
 class Map extends React.Component {
   constructor (props) {
     super(props)
-    this.timeOffset = 10
     this.state = {
       points: [],
       timeOffset: 10,
+      lastTimeOffset: 10,
       mapStyle: 'default',
       showTerrain: false,
       showControls: false,
       showPaths: true
     }
+    this.debounce = debounce(this.updateLocation, 1000)
     this.customLayer = {}
+    this.marker = []
     this.renderLayer = this.renderLayer.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
     this.toggleLayer = this.toggleLayer.bind(this)
@@ -41,7 +44,8 @@ class Map extends React.Component {
         zoom: 4,
         center: [8, 48],
         attributionControl: false
-      })
+      }
+    )
     this.map.on('load', this.renderLayer)
     this.map.on('click', this.onMapClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
@@ -52,16 +56,13 @@ class Map extends React.Component {
     const contacts = selectedChat.contacts
     let allPoints = []
 
-    let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, moment().unix() - (this.initialTimeOffset * 3600), 0)
+    let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
     contacts.map(contact => {
       let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
       if (locationsForContact && locationsForContact.length) {
         let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
-        let pathLayerId = 'contact-route-' + contact.id
-        let pointsLayerId = 'points-' + contact.id
-        this.addPathLayer(pointsForLayer, contact, pathLayerId)
-        // this.map.addLayer(MapLayerFactory.getGeoJSONLineLayer(contact, pathLayerId))
-        this.map.addLayer(MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact, pointsLayerId))
+        this.addPathLayer(pointsForLayer, contact)
+        this.addPathJointsLayer(locationsForContact, contact)
         let lastPoint = locationsForContact[locationsForContact.length - 1]
         let lastDate = formatRelativeTime(lastPoint.tstamp * 1000, { extended: true })
         let markup = ReactDOMServer.renderToStaticMarkup(<PopupMessage username={contact.firstName} formattedDate={lastDate} />)
@@ -78,7 +79,66 @@ class Map extends React.Component {
     }
   }
 
-  addPathLayer (coordinates, contact, layerId) {
+  updateLocation () {
+    const { selectedChat } = this.props
+    const contacts = selectedChat.contacts
+    let allPoints = []
+    if (this.state.timeOffset < this.state.lastTimeOffset) {
+      // remove all layer since source update does not remove existing points
+      Object.keys(this.customLayer).map(
+        key => {
+          if (this.map.getLayer(key)) {
+            this.map.removeLayer(key)
+            this.map.removeSource(key)
+          }
+        }
+      )
+      this.marker.map(
+        marker => marker.remove()
+      )
+      this.renderLayer()
+    } else {
+      let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
+      contacts.map(contact => {
+        let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
+        if (locationsForContact && locationsForContact.length) {
+          let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
+          let pathLayerId = 'contact-route-' + contact.id
+          let pointsLayerId = 'points-' + contact.id
+          if (!this.map.getSource(pathLayerId)) {
+            this.addPathLayer(pointsForLayer, contact)
+          } else {
+            this.map.getSource(pathLayerId).setData(MapLayerFactory.getGeoJSONLineSourceData(pointsForLayer))
+          }
+          if (!this.map.getSource(pointsLayerId)) {
+            this.addPathJointsLayer(locationsForContact, contact)
+          } else {
+            this.map.getSource(pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData(locationsForContact, contact))
+          }
+          let lastPoint = locationsForContact[locationsForContact.length - 1]
+          let lastDate = formatRelativeTime(lastPoint.tstamp * 1000, { extended: true })
+          let markup = ReactDOMServer.renderToStaticMarkup(
+            <PopupMessage username={contact.firstName} formattedDate={lastDate} />
+          )
+          let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(markup)
+          this.marker.push(
+            new mapboxgl.Marker({ color: '#' + contact.color.toString(16) })
+              .setLngLat([lastPoint.lon, lastPoint.lat])
+              .setPopup(popup)
+              .addTo(this.map)
+          )
+          allPoints = allPoints.concat(pointsForLayer)
+        }
+      })
+      if (allPoints.length > 0) {
+        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+      }
+    }
+    this.state.lastTimeOffset = this.state.timeOffset
+  }
+
+  addPathLayer (coordinates, contact) {
+    const layerId = 'contact-route-' + contact.id
     let source = { type: 'geojson',
       data: MapLayerFactory.getGeoJSONLineSourceData(coordinates)
     }
@@ -87,6 +147,20 @@ class Map extends React.Component {
       source
     )
     let layer = MapLayerFactory.getGeoJSONLineLayer(contact, layerId)
+    this.customLayer[layerId] = layer
+    this.map.addLayer(layer)
+  }
+
+  addPathJointsLayer (locationsForContact, contact) {
+    const layerId = 'points-' + contact.id
+    let source = { type: 'geojson',
+      data: MapLayerFactory.getGeoJSONPointsLayerSourceData(locationsForContact, contact)
+    }
+    this.map.addSource(
+      layerId,
+      source
+    )
+    let layer = MapLayerFactory.getGeoJSONPointsLayer(locationsForContact, contact, layerId)
     this.customLayer[layerId] = layer
     this.map.addLayer(layer)
   }
@@ -113,8 +187,9 @@ class Map extends React.Component {
     )
   }
 
-  onRangeChange (key) { // TODO
-    return (value) => this.setState({ [key]: value })
+  onRangeChange (value) {
+    this.setState({ 'timeOffset': value })
+    this.debounce(value)
   }
 
   changeMapStyle (evt) {
@@ -157,13 +232,18 @@ class Map extends React.Component {
     return rangeMap[value].label
   }
 
+  getTimestampForRange () {
+    const rangeMap = MapLayerFactory.getRangeMap()
+    return moment().unix() - rangeMap[this.state.timeOffset].minutes * 60
+  }
+
   render () {
     return (
       <div>
         <nav id='controls' className='map-overlay top'>
-          <Button minimal icon={this.state.showControls ? 'chevron-up' : 'chevron-down'} onClick={() => this.setState({ showControls: !this.state.showControls })}>Map controls</Button>
+          <Button minimal className='collapse-control' icon={this.state.showControls ? 'chevron-up' : 'chevron-down'} onClick={() => this.setState({ showControls: !this.state.showControls })}>Map controls</Button>
           <Collapse isOpen={this.state.showControls}>
-            <Button minimal icon='layout' onClick={this.toggleLayer} > {this.state.showPaths ? 'Hide' : 'Show'} paths </Button>
+            <Button minimal className='toggle-path' icon='layout' onClick={this.toggleLayer} > {this.state.showPaths ? 'Hide' : 'Show'} paths </Button>
             <br />
             <div id='menu' >
               <div>
@@ -200,7 +280,7 @@ class Map extends React.Component {
               stepSize={10}
               labelStepSize={10}
               labelRenderer={this.rangeSliderLabelRenderer}
-              onChange={this.onRangeChange('timeOffset')}
+              onChange={this.onRangeChange}
               value={this.state.timeOffset}
               vertical='true' />
           </Collapse>

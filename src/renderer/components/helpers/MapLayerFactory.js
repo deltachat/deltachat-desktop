@@ -35,51 +35,34 @@ class MapLayerFactory {
   }
 
   static getGeoJSONPointsLayer (locations, contact, layerId) {
-    let layer = {
+    return {
       'id': layerId,
       'type': 'circle',
-      'source': {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': []
-        }
-      },
-      paint: {
+      'source': layerId,
+      'paint': {
         'circle-radius': 6,
         'circle-color': '#' + contact.color.toString(16)
       }
     }
-    locations.map(location => {
-      layer.source.data.features.push({
-        'type': 'Feature',
-        'properties': {
-          contact: contact.firstName,
-          reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
-        },
-        'geometry': {
-          'type': 'Point',
-          'coordinates': [location.lon, location.lat]
-        }
-      })
-    })
-    return layer
   }
 
-  static getGeoJSONPointsLayerSource (locations, contact) {
-    return locations.map(location => {
-      return {
-        'type': 'Feature',
-        'properties': {
-          contact: contact.firstName,
-          reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
-        },
-        'geometry': {
-          'type': 'Point',
-          'coordinates': [location.lon, location.lat]
+  static getGeoJSONPointsLayerSourceData (locations, contact) {
+    return {
+      'type': 'FeatureCollection',
+      'features': locations.map(location => {
+        return {
+          'type': 'Feature',
+          'properties': {
+            contact: contact.firstName,
+            reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [location.lon, location.lat]
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   static getSatelliteMapLayer (styleKey) {
