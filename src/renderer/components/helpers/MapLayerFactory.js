@@ -72,7 +72,7 @@ class MapLayerFactory {
         'type': 'Feature',
         'properties': {
           contact: contact.firstName,
-          reported: moment(location.tstamp * 1000).format('Y-m-d LT')
+          reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
         },
         'geometry': {
           'type': 'Point',
@@ -80,6 +80,33 @@ class MapLayerFactory {
         }
       }
     })
+  }
+
+  static getSatelliteMapLayer (styleKey) {
+    return {
+      id: styleKey,
+      source: {
+        'type': 'raster',
+        'tiles': ['https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=' + accessToken],
+        'tileSize': 512
+      },
+      type: 'raster',
+      layout: { 'visibility': 'visible' }
+    }
+  }
+
+  static getRangeMap () {
+    return {
+      10: { minutes: 30, label: '30 min' },
+      20: { minutes: 60, label: '1 h' },
+      30: { minutes: 120, label: '2 h' },
+      40: { minutes: 480, label: '8 h' },
+      50: { minutes: (24 * 60), label: '1 day' },
+      60: { minutes: (2 * 24 * 60), label: '2 day' },
+      70: { minutes: (8 * 24 * 60), label: '1 week' },
+      80: { minutes: (32 * 24 * 60), label: '4 weeks' },
+      90: { minutes: 0, label: 'unlimited' }
+    }
   }
 
   static getAccessToken () {

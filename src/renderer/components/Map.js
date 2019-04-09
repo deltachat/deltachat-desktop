@@ -6,18 +6,21 @@ const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment')
 const formatRelativeTime = require('./conversations/formatRelativeTime')
 const MapLayerFactory = require('./helpers/MapLayerFactory')
-const { Slider } = require('@blueprintjs/core')
+const { Slider, Button, Collapse } = require('@blueprintjs/core')
 
 const PopupMessage = props => <div> {props.username} <br /> {props.formattedDate} </div>
 
 class Map extends React.Component {
   constructor (props) {
     super(props)
-    this.timeOffset = 48 // hours
+    this.timeOffset = 10
     this.state = {
       points: [],
-      timeOffset: 48,
-      mapStyle: 'default'
+      timeOffset: 10,
+      mapStyle: 'default',
+      showTerrain: false,
+      showControls: false,
+      showPaths: true
     }
     this.customLayer = {}
     this.renderLayer = this.renderLayer.bind(this)
@@ -25,6 +28,7 @@ class Map extends React.Component {
     this.toggleLayer = this.toggleLayer.bind(this)
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
+    this.toggleTerrainLayer = this.toggleTerrainLayer.bind(this)
   }
 
   componentDidMount () {
@@ -40,7 +44,7 @@ class Map extends React.Component {
       })
     this.map.on('load', this.renderLayer)
     this.map.on('click', this.onMapClick)
-    this.map.addControl(new mapboxgl.NavigationControl())
+    this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
   }
 
   renderLayer () {
@@ -75,7 +79,6 @@ class Map extends React.Component {
   }
 
   addPathLayer (coordinates, contact, layerId) {
-    console.log(MapLayerFactory.getGeoJSONLineSourceData(coordinates))
     let source = { type: 'geojson',
       data: MapLayerFactory.getGeoJSONLineSourceData(coordinates)
     }
@@ -101,76 +104,68 @@ class Map extends React.Component {
     }
   }
 
-  toggleLayer (e) {
+  toggleLayer () {
+    this.setState({ showPaths: !this.state.showPaths })
     const layerIds = Object.keys(this.customLayer)
-    const visibility = this.map.getLayoutProperty(layerIds[0], 'visibility')
-    const newVisibility = visibility === 'visible' ? 'none' : 'visible'
+    const newVisibility = this.state.showPaths ? 'none' : 'visible'
     layerIds.map(
       layerId => this.map.setLayoutProperty(layerId, 'visibility', newVisibility)
     )
-    console.log('toggleLayer: ' + newVisibility)
   }
 
-  onRangeChange (key) {
+  onRangeChange (key) { // TODO
     return (value) => this.setState({ [key]: value })
   }
 
   changeMapStyle (evt) {
-    // evt.preventDefault()
-    // evt.stopPropagation()
-    const styleKey = evt.target.value
-    this.setState({ mapStyle: styleKey })
-    console.log(this.map.getStyle())
-    // this.map.setStyle('mapbox://styles/mapbox/' + value)
+    const style = evt.target.value
+    this.setState({ mapStyle: style })
+    const visibility = (style === 'satellite') ? 'visible' : 'none'
 
-    if (this.map.getLayer(styleKey)) {
-      this.map.setLayoutProperty(styleKey, 'visibility', 'visible')
-    } else {
-      if (styleKey === 'satellite') {
-        this.map.addLayer({
-          id: styleKey,
-          source: {
-            'type': 'raster',
-            'tiles': ['https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=' + MapLayerFactory.getAccessToken()],
-            'tileSize': 512
-          },
-          type: 'raster',
-          layout: { 'visibility': 'visible' }
-        })
-      } else if (styleKey === 'terrain') {
-        this.map.addSource('dem', {
-          type: 'raster-dem',
-          url: 'mapbox://mapbox.terrain-rgb'
-        })
-        this.map.addLayer({
-          id: styleKey,
-          source: 'dem',
-          type: 'hillshade',
-          layout: { 'visibility': 'visible' }
-        })
-      }
+    if (!this.map.getLayer('satellite')) {
+      this.map.addLayer(MapLayerFactory.getSatelliteMapLayer('satellite'))
+      // move other layers to top
+      Object.keys(this.customLayer).map(
+        key => this.map.moveLayer(key)
+      )
     }
-    ['satellite', 'terrain'].map(
-      style => {
-        if (this.map.getLayer(style) && style !== styleKey) {
-          this.map.setLayoutProperty(style, 'visibility', 'none')
-        }
-      }
-    )
-    Object.keys(this.customLayer).map(
-      (key) => {
-        this.map.moveLayer(key)
-      }
-    )
+    this.map.setLayoutProperty('satellite', 'visibility', visibility)
+  }
+
+  toggleTerrainLayer () {
+    let { showTerrain } = this.state
+    this.setState({ showTerrain: !showTerrain })
+    const visibility = showTerrain ? 'none' : 'visible'
+    if (this.map.getLayer('terrain')) {
+      this.map.setLayoutProperty('terrain', 'visibility', visibility)
+    } else {
+      this.map.addSource('dem', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.terrain-rgb'
+      })
+      this.map.addLayer({
+        id: 'terrain',
+        source: 'dem',
+        type: 'hillshade',
+        layout: { 'visibility': 'visible' }
+      })
+    }
+  }
+
+  rangeSliderLabelRenderer (value) {
+    const rangeMap = MapLayerFactory.getRangeMap()
+    return rangeMap[value].label
   }
 
   render () {
     return (
       <div>
         <nav id='controls' className='map-overlay top'>
-          <a onClick={this.toggleLayer}>Toggle Path layer</a><br /><br />
-          <div id='menu' >
-            <form >
+          <Button minimal icon={this.state.showControls ? 'chevron-up' : 'chevron-down'} onClick={() => this.setState({ showControls: !this.state.showControls })}>Map controls</Button>
+          <Collapse isOpen={this.state.showControls}>
+            <Button minimal icon='layout' onClick={this.toggleLayer} > {this.state.showPaths ? 'Hide' : 'Show'} paths </Button>
+            <br />
+            <div id='menu' >
               <div>
                 <input id='default'
                   type='radio'
@@ -181,15 +176,6 @@ class Map extends React.Component {
                 <label htmlFor='streets'>Streets</label>
               </div>
               <div>
-                <input id='terrain'
-                  type='radio'
-                  name='rtoggle'
-                  value='terrain'
-                  checked={this.state.mapStyle === 'terrain'}
-                  onChange={this.changeMapStyle} />
-                <label htmlFor='terrain'>Terrain</label>
-              </div>
-              <div>
                 <input id='satellite'
                   type='radio'
                   name='rtoggle'
@@ -198,17 +184,26 @@ class Map extends React.Component {
                   onChange={this.changeMapStyle} />
                 <label htmlFor='satellite'>Satellite</label>
               </div>
-            </form>
-          </div>
-          <br />
-          <label id='month'>{this.state.timeOffset} hours</label>
-          <Slider min={0}
-            max={72}
-            stepSize={2}
-            labelStepSize={10}
-            onChange={this.onRangeChange('timeOffset')}
-            value={this.state.timeOffset}
-            vertical='true' />
+              <div>
+                <input id='terrain'
+                  type='checkbox'
+                  name='rtoggle'
+                  value='terrain'
+                  checked={this.state.showTerrain}
+                  onChange={this.toggleTerrainLayer} />
+                <label htmlFor='terrain'>Terrain</label>
+              </div>
+            </div>
+            <label className='divider'>Time range</label>
+            <Slider min={10}
+              max={90}
+              stepSize={10}
+              labelStepSize={10}
+              labelRenderer={this.rangeSliderLabelRenderer}
+              onChange={this.onRangeChange('timeOffset')}
+              value={this.state.timeOffset}
+              vertical='true' />
+          </Collapse>
         </nav>
         <div id='map' />
       </div>

@@ -23,25 +23,41 @@
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 	position: absolute;
 	width: 150px;
-	top: 90px;
-	left: 0;
+	top: 50px;
+	left: 10px;
 	padding: 10px;
 	background-color: #fff;
 	z-index: 500;
+	border-radius: 5px;
 }
 
-.bp3-slider-handle:focus {
-	outline: none;
-}
+#controls {
+	padding-bottom: 15px;
 
-.map-overlay #menu {
-	clear: both;
-	div {
-		width: 50%;
-		float: left;
+	label.divider {
+		display: block;
+		margin: 10px 0;
+		clear: both;
+	}
 
-		input {
-			margin-right: 4px;
+	.bp3-slider-handle:focus {
+		outline: none;
+	}
+
+	.bp3-slider-label {
+	    width: 80px;
+	}
+
+	#menu {
+		clear: both;
+		div {
+			width: 50%;
+			float: left;
+
+			input {
+				margin-right: 4px;
+			}
 		}
 	}
 }
+
