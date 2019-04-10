@@ -13,7 +13,6 @@ class MessageDetail extends React.Component {
   render () {
     var { chat, message, onClose } = this.props
     var isOpen = !!message
-
     const tx = window.translate
 
     let body = <div />

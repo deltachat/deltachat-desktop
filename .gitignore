@@ -1,5 +1,6 @@
 dist/
 static/bundle.js
+static/main.css
 package-lock.json
 _locales/*.json
 !_locales/_experimental_en.json

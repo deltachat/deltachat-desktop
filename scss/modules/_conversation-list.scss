@@ -1,0 +1,221 @@
+// Module: Conversation List Item
+
+.module-conversation-list-item {
+  display: flex;
+  flex-direction: row;
+  padding-right: 16px;
+  padding-left: 16px;
+  align-items: center;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-black-016-no-tranparency;
+  }
+}
+
+.module-conversation-list-item--has-unread {
+  padding-left: 12px;
+  border-left: 4px solid $color-signal-blue;
+}
+
+.module-conversation-list-item--is-selected {
+  background-color: $color-black-016-no-tranparency;
+}
+
+.module-conversation-list-item__avatar {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height: 48px;
+  width: 48px;
+  border-radius: 24px;
+  min-width: 48px;
+
+  object-fit: cover;
+}
+.module-conversation-list-item__default-avatar {
+  color: white;
+  font-size: 26px;
+  line-height: 48px;
+  text-align: center;
+
+  background-color: $color-conversation-grey;
+}
+
+.module-conversation-list-item__default-avatar--blue {
+  background-color: $color-conversation-blue;
+}
+.module-conversation-list-item__default-avatar--cyan {
+  background-color: $color-conversation-cyan;
+}
+.module-conversation-list-item__default-avatar--deep_orange {
+  background-color: $color-conversation-deep_orange;
+}
+.module-conversation-list-item__default-avatar--green {
+  background-color: $color-conversation-green;
+}
+.module-conversation-list-item__default-avatar--indigo {
+  background-color: $color-conversation-indigo;
+}
+.module-conversation-list-item__default-avatar--pink {
+  background-color: $color-conversation-pink;
+}
+.module-conversation-list-item__default-avatar--purple {
+  background-color: $color-conversation-purple;
+}
+.module-conversation-list-item__default-avatar--red {
+  background-color: $color-conversation-red;
+}
+.module-conversation-list-item__default-avatar--teal {
+  background-color: $color-conversation-teal;
+}
+
+.module-conversation-list-item__content {
+  flex-grow: 1;
+  margin-left: 12px;
+  // parent - 48px (for avatar) - 16px (our right margin)
+  max-width: calc(100% - 64px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.module-conversation-list-item__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.module-conversation-list-item__header__name {
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: 14px;
+  line-height: 18px;
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  .emoji-container {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.module-conversation-list-item__header__name--with-unread {
+  font-weight: 300;
+}
+
+.module-conversation-list-item__header__timestamp {
+  flex-shrink: 0;
+  margin-left: 6px;
+
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  text-transform: uppercase;
+}
+
+.module-conversation-list-item__header__date--has-unread {
+  font-weight: 300;
+}
+
+.module-conversation-list-item__message {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 3px;
+}
+
+.module-conversation-list-item__message__text {
+  flex-grow: 1;
+  flex-shrink: 1;
+
+  font-size: 13px;
+  line-height: 18px;
+
+  height: 1.3em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.module-conversation-list-item__message__text--has-unread {
+  font-weight: 300;
+}
+
+.module-conversation-list-item__unread-count {
+  color: $color-white;
+  background-color: $color-signal-blue;
+  text-align: center;
+
+  // For alignment with the message text
+  margin-top: 1px;
+
+  font-size: 10px;
+  margin-left: 5px;
+  min-width: 20px;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  border-radius: 10px;
+}
+
+.module-conversation-list-item__message__status-icon {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.module-conversation-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}
+
+.module-conversation-list-item__is-group {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+  filter: invert(100%);
+}
+
+.module-conversation-list-item__message__status-icon--sending {
+  @include color-svg('../images/sending.svg', $color-light-60);
+  animation: module-conversation-list-item__message__status-icon--spinning 4s
+    linear infinite;
+}
+
+@keyframes module-conversation-list-item__message__status-icon--spinning {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.module-conversation-list-item__message__status-icon--sent {
+  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+}
+.module-conversation-list-item__message__status-icon--delivered {
+  @include color-svg('../images/sent.svg', $color-light-35);
+  width: 18px;
+}
+.module-conversation-list-item__message__status-icon--read {
+  @include color-svg('../images/read.svg', $color-light-35);
+  width: 18px;
+}
+.module-conversation-list-item__message__status-icon--error {
+  @include color-svg('../images/error.svg', $color-core-red);
+}

@@ -47,10 +47,9 @@
 
     .network-status-message {
       h3 {
-        padding: 0px;
-        margin: 0px;
+        padding: 0;
+        margin: 0;
         margin-bottom: 2px;
-        font-size: 14px;
       }
       span {
         display: inline-block;
@@ -84,7 +83,7 @@
   color: $color-light-90;
 
   padding: 8px;
-  padding-top: 0px;
+  padding-top: 0;
   margin-top: -1px;
 
   position: relative;

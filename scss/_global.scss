@@ -14,6 +14,30 @@ body {
   font-family: $roboto!important;
   font-size: 14px;
   color: $color-light-90;
+  background-color: white;
+}
+
+.window {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+  padding: 10px 10px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  min-width: 200px;
+}
+
+h1, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
+  user-select: none;
 }
 
 .dark-overlay {
@@ -61,6 +85,12 @@ button {
   cursor: pointer;
   font-size: inherit;
 }
+
+button {
+  /*  This broke emoji mart after update */
+  /* min-width: 200px; */
+}
+
 button.grey {
   border-radius: $border-radius;
   border: solid 1px #ccc;
@@ -88,6 +118,11 @@ button.grey {
 
 a {
   color: $blue;
+}
+
+.thumbnail {
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .file-input {
@@ -203,6 +238,21 @@ $avatar-size: 48px;
       display: none;
     }
   }
+}
+
+.SelectGroupImage {
+  width: 100px;
+}
+
+.GroupImage {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.RemoveGroupImage {
+  width: 100px;
+  margin-bottom: 4px;
 }
 
 $unread-badge-size: 21px;
@@ -412,6 +462,10 @@ textarea {
   &:focus {
     outline: 1px solid $blue;
   }
+}
+
+input:focus {
+  outline: 0 !important;
 }
 
 .expiredAlert {
@@ -814,4 +868,25 @@ button:focus {
   .number {
     -webkit-text-security: square;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666666;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #606060;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

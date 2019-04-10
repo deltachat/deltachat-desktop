@@ -1,6 +1,7 @@
 .conversation {
   background-color: $color-white;
   position: relative;
+  padding-bottom: 40px;
 
   .panel,
   .panel-wrapper {
@@ -9,7 +10,6 @@
 
   .panel {
     .container {
-      padding-top: 20px;
       max-width: 750px;
       margin: 0 auto;
       padding: 20px;

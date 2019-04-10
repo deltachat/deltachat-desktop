@@ -194,6 +194,14 @@ function init (cwd, state, logHandler) {
     })
   })
 
+  ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
+    e.returnValue = dc.setLocation(latitude, longitude, accuracy)
+  })
+
+  ipcMain.on('getLocations', (e, chatId, contactId, timestampFrom, timestampTo) => {
+    e.returnValue = dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
+  })
+
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: '' })
   })

@@ -1,0 +1,170 @@
+// Module: Message Detail
+
+.module-message-detail {
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+.module-message-detail__message-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  &:after {
+    content: '.';
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
+.module-message-detail__label {
+  font-weight: 300;
+  padding-right: 5px;
+}
+
+.module-message-detail__unix-timestamp {
+  color: $color-light-10;
+}
+
+.module-message-detail__delete-button-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.module-message-detail__delete-button {
+  @include button-reset;
+
+  background-color: $color-core-red;
+  color: $color-white;
+  box-shadow: 0 0 10px -3px rgba(97, 97, 97, 0.7);
+  border-radius: 5px;
+  border: solid 1px $color-light-35;
+  cursor: pointer;
+  margin: 1em auto;
+  padding: 1em;
+}
+
+.module-message-detail__contact-container {
+  margin: 20px;
+}
+
+.module-message-detail__contact {
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.module-message-detail__contact__avatar {
+  height: 44px;
+  width: 44px;
+  min-width: 44px;
+  border-radius: 22px;
+}
+
+.module-message-detail__contact__default-avatar {
+  background-color: $color-conversation-grey;
+
+  line-height: 44px;
+  font-size: 20px;
+  color: $color-white;
+  text-align: center;
+}
+
+.module-message-detail__contact__default-avatar--blue {
+  background-color: $color-conversation-blue;
+}
+.module-message-detail__contact__default-avatar--cyan {
+  background-color: $color-conversation-cyan;
+}
+.module-message-detail__contact__default-avatar--deep_orange {
+  background-color: $color-conversation-deep_orange;
+}
+.module-message-detail__contact__default-avatar--green {
+  background-color: $color-conversation-green;
+}
+.module-message-detail__contact__default-avatar--indigo {
+  background-color: $color-conversation-indigo;
+}
+.module-message-detail__contact__default-avatar--pink {
+  background-color: $color-conversation-pink;
+}
+.module-message-detail__contact__default-avatar--purple {
+  background-color: $color-conversation-purple;
+}
+.module-message-detail__contact__default-avatar--red {
+  background-color: $color-conversation-red;
+}
+.module-message-detail__contact__default-avatar--teal {
+  background-color: $color-conversation-teal;
+}
+
+.module-message-detail__contact__text {
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.module-message-detail__contact__error {
+  color: $color-core-red;
+  font-weight: 300;
+}
+
+.module-message-detail__contact__status-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 2px;
+}
+
+.module-message-detail__contact__status-icon--sending {
+  @include color-svg('../images/sending.svg', $color-light-60);
+  animation: module-message-detail__contact__status-icon--spinning 4s linear
+    infinite;
+}
+
+@keyframes module-message-detail__contact__status-icon--spinning {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.module-message-detail__contact__status-icon--sent {
+  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+}
+.module-message-detail__contact__status-icon--delivered {
+  @include color-svg('../images/sent.svg', $color-light-35);
+  width: 18px;
+}
+.module-message-detail__contact__status-icon--read {
+  @include color-svg('../images/read.svg', $color-light-35);
+  width: 18px;
+}
+.module-message-detail__contact__status-icon--error {
+  @include color-svg('../images/error.svg', $color-core-red);
+}
+
+.module-message-detail__contact__error-buttons {
+  text-align: right;
+}
+
+.module-message-detail__contact__show-safety-number {
+  @include button-reset;
+  padding: 4px;
+  color: $color-white;
+  background-color: $color-light-35;
+  border-radius: 4px;
+}
+.module-message-detail__contact__send-anyway {
+  @include button-reset;
+  color: $color-white;
+  background-color: $color-core-red;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 4px;
+  border-radius: 4px;
+}
