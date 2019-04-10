@@ -21,7 +21,8 @@ class Map extends React.Component {
       mapStyle: 'default',
       showTerrain: false,
       showControls: false,
-      showPaths: true
+      showPaths: true,
+      currentContacts: []
     }
     this.debounce = debounce(this.updateLocation, 1000)
     this.customLayer = {}
@@ -32,6 +33,7 @@ class Map extends React.Component {
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.toggleTerrainLayer = this.toggleTerrainLayer.bind(this)
+    this.toggleContactLayer = this.toggleContactLayer.bind(this)
   }
 
   componentDidMount () {
@@ -55,11 +57,13 @@ class Map extends React.Component {
     const { selectedChat } = this.props
     const contacts = selectedChat.contacts
     let allPoints = []
-
+    let currentContacts = []
     let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
     contacts.map(contact => {
       let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
       if (locationsForContact && locationsForContact.length) {
+        currentContacts.push(contact)
+        console.log(contact, locationsForContact)
         let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
         this.addPathLayer(pointsForLayer, contact)
         this.addPathJointsLayer(locationsForContact, contact)
@@ -74,6 +78,7 @@ class Map extends React.Component {
         allPoints = allPoints.concat(pointsForLayer)
       }
     })
+    this.setState({ currentContacts: currentContacts })
     if (allPoints.length > 0) {
       this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
     }
@@ -83,6 +88,7 @@ class Map extends React.Component {
     const { selectedChat } = this.props
     const contacts = selectedChat.contacts
     let allPoints = []
+    let currentContacts = []
     if (this.state.timeOffset < this.state.lastTimeOffset) {
       // remove all layer since source update does not remove existing points
       Object.keys(this.customLayer).map(
@@ -105,6 +111,7 @@ class Map extends React.Component {
           let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
           let pathLayerId = 'contact-route-' + contact.id
           let pointsLayerId = 'points-' + contact.id
+          currentContacts.push(contact)
           if (!this.map.getSource(pathLayerId)) {
             this.addPathLayer(pointsForLayer, contact)
           } else {
@@ -130,6 +137,7 @@ class Map extends React.Component {
           allPoints = allPoints.concat(pointsForLayer)
         }
       })
+      this.setState({ currentContacts: currentContacts })
       if (allPoints.length > 0) {
         this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
       }
@@ -237,6 +245,13 @@ class Map extends React.Component {
     return moment().unix() - rangeMap[this.state.timeOffset].minutes * 60
   }
 
+  toggleContactLayer (evt) {
+    const visibility = evt.target.checked ? 'none' : 'visible'
+    const contactId = evt.target.name
+    this.map.setLayoutProperty('contact-route-' + contactId, 'visibility', visibility)
+    this.map.setLayoutProperty('points-' + contactId, 'visibility', visibility)
+  }
+
   render () {
     return (
       <div>
@@ -274,7 +289,7 @@ class Map extends React.Component {
                 <label htmlFor='terrain'>Terrain</label>
               </div>
             </div>
-            <label className='divider'>Time range</label>
+            <h3>Time range</h3>
             <Slider min={10}
               max={90}
               stepSize={10}
@@ -283,6 +298,12 @@ class Map extends React.Component {
               onChange={this.onRangeChange}
               value={this.state.timeOffset}
               vertical='true' />
+            <div className='contactFilter'>
+              <h3>Hide contacts</h3>
+              {this.state.currentContacts.map(
+                contact => <div key={contact.id} ><input type='checkbox' name={contact.id} onClick={this.toggleContactLayer} /><label>{contact.firstName} </label></div>
+              )}
+            </div>
           </Collapse>
         </nav>
         <div id='map' />
