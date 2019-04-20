@@ -19,6 +19,10 @@ class DeltaChatController extends EventEmitter {
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this._saved = saved
+    this.state = {
+      selectedChat: null,
+      chatList: []
+    }
   }
 
   // Save settings for RC
@@ -53,20 +57,21 @@ class DeltaChatController extends EventEmitter {
         this.configuring = false
         this.emit('ready', this.credentials)
         log.info('dc_get_info', dc.getInfo())
+        this.updateStateChatList()
+        this.updateState
         render()
       }
       if (!dc.isConfigured()) {
         dc.once('ready', onReady)
         this.configuring = true
         dc.configure(addServerFlags(credentials))
-        render()
       } else {
         onReady()
       }
     })
 
     dc.on('ALL', (event, data1, data2) => {
-      log.debug('ALL event', { event, data1, data2 })
+      //log.debug('ALL event', { event, data1, data2 })
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
@@ -286,9 +291,26 @@ class DeltaChatController extends EventEmitter {
 
   selectChat (chatId) {
     log.debug(`action - selecting chat ${chatId}`)
+    console.time('selectChat')
     this._pages = 1
     this._selectedChatId = chatId
+    console.log(this.state.chatList)
+    this.updateStateSelectedChat()
     this._render()
+    console.timeEnd('selectChat')
+  }
+
+  updateStateChatList() {
+    console.log('updateStateChatList')
+    this.state.chatList = this._chatList(this._showArchivedChats)
+  }
+
+  updateStateSelectedChat() {
+    if(!this._selectedChatId) {
+      log.debug('dc._selectedChatId is not defined, can\'t update state of selectedChat') 
+      return
+    }
+    this.state.selectedChat = this._selectedChat(this._showArchivedChats, this.chatList, this._selectedChatId)
   }
 
   /**
@@ -369,21 +391,24 @@ class DeltaChatController extends EventEmitter {
    * Returns the state in json format
    */
   render () {
+    console.time('backend render')
     let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
 
-    let chatList = this._chatList(showArchivedChats)
-    let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
+    const state = this.state
 
-    return {
+    const stateReturn = {
       configuring: this.configuring,
       credentials: this.credentials,
       ready: this.ready,
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
-      chatList,
-      selectedChat
+      ...state
     }
+
+    console.timeEnd('backend render')
+
+    return stateReturn
   }
 
   _integerToHexColor (integerColor) {
@@ -484,7 +509,6 @@ class DeltaChatController extends EventEmitter {
     } else {
       chat.draft = ''
     }
-    log.debug('getDraft:', chat.draft)
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -567,6 +591,7 @@ class DeltaChatController extends EventEmitter {
 
   fetchMessages () {
     this._pages++
+    this.updateStateSelectedChat()
     this._render()
   }
 

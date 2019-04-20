@@ -15,6 +15,7 @@ class App extends React.Component {
 
   render () {
     const { state } = this
+    console.log(state)
     return (
       <SettingsContext.Provider value={state.saved}>
         <IntlProvider locale={window.localeData.locale}>
