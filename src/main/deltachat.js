@@ -71,7 +71,7 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('ALL', (event, data1, data2) => {
-      //log.debug('ALL event', { event, data1, data2 })
+      log.debug('ALL event', { event, data1, data2 })
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
@@ -92,12 +92,15 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
       this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
+      this.updateStateChatList()
       render()
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       // Don't rerender if a draft changes
       if (msgId === 0) return
+      if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+      this.updateStateChatList()
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       render()
     })
@@ -105,21 +108,26 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
       this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
+      if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+      this.updateStateChatList()
       render()
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
       this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
+      this.updateStateSelectedChat()
       render()
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
       this.logCoreEvent('EVENT msg failed to deliver', { chatId, msgId })
+      this.updateStateSelectedChat()
       render()
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
       this.logCoreEvent('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
+      this.updateStateSelectedChat()
       render()
     })
 
@@ -240,6 +248,7 @@ class DeltaChatController extends EventEmitter {
       this._dc.archiveChat(chatId, 0)
     }
     this.selectChat(chatId)
+    this.updateStateChatList()
     return chatId
   }
 
@@ -262,15 +271,22 @@ class DeltaChatController extends EventEmitter {
   deleteChat (chatId) {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
+    if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+    this.updateStateChatList()
+    this._render()
   }
 
   archiveChat (chatId, archive) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
+    if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+    this.updateStateChatList()
+    this._render()
   }
 
   showArchivedChats (show) {
     this._showArchivedChats = show
+    this.updateStateChatList()
     this._render()
   }
 
@@ -294,7 +310,6 @@ class DeltaChatController extends EventEmitter {
     console.time('selectChat')
     this._pages = 1
     this._selectedChatId = chatId
-    console.log(this.state.chatList)
     this.updateStateSelectedChat()
     this._render()
     console.timeEnd('selectChat')
@@ -485,13 +500,23 @@ class DeltaChatController extends EventEmitter {
     let selectedChat = this._getChatById(selectedChatId)
     if (!selectedChat) return null
     if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
-      if (selectedChat.freshMessageCounter > 0) {
-        this._dc.markNoticedChat(selectedChat.id)
-        selectedChat.freshMessageCounter = 0
-      }
-
+      let updateFreshMessageCounter = true
       if (this._saved.markRead) {
         this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+      } else if (selectedChat.freshMessageCounter > 0) {
+        this._dc.markNoticedChat(selectedChat.id)
+        selectedChat.freshMessageCounter = 0
+      } else {
+        updateFreshMessageCounter = false
+      }
+
+      if(updateFreshMessageCounter === true) {
+        for(let chatListItem of this.state.chatList) {
+          if(chatListItem.id !== selectedChatId) continue
+
+          chatListItem.freshMessageCounter = this._dc.getFreshMessageCount(chatListItem.id)
+          break
+        }
       }
     }
 
