@@ -17,51 +17,54 @@ class MapLayerFactory {
     }
   }
 
-  static getGeoJSONLineLayer (contact, id) {
+  static getGeoJSONLineLayer (pathLayerId, color) {
     return {
-      'id': id,
+      'id': pathLayerId,
       'type': 'line',
-      'source': id,
+      'source': pathLayerId,
       'layout': {
         'line-join': 'round',
         'line-cap': 'round'
       },
       'paint': {
-        'line-color': '#' + contact.color.toString(16),
+        'line-color': '#' + color.toString(16),
         'line-opacity': 0.7,
         'line-width': 4
       }
     }
   }
 
-  static getGeoJSONPointsLayer (locations, contact, layerId) {
+  static getGeoJSONPointsLayer (pointsLayerId, color) {
     return {
-      'id': layerId,
+      'id': pointsLayerId,
       'type': 'circle',
-      'source': layerId,
+      'source': pointsLayerId,
       'paint': {
         'circle-radius': 6,
-        'circle-color': '#' + contact.color.toString(16)
+        'circle-color': '#' + color.toString(16)
       }
     }
   }
 
-  static getGeoJSONPointsLayerSourceData (locations, contact) {
+  static getGeoJSONPointsLayerSourceData (locations, contact, withMessageOnly) {
     return {
       'type': 'FeatureCollection',
-      'features': locations.map(location => {
-        return {
-          'type': 'Feature',
-          'properties': {
-            contact: contact.firstName,
-            reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
-          },
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [location.lon, location.lat]
-          }
+      'features': locations.reduce((features, location) => {
+        if (!withMessageOnly || location.msgid) {
+          features.push({
+            'type': 'Feature',
+            'properties': {
+              contact: contact.firstName,
+              reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
+            },
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [location.lon, location.lat]
+            }
+          })
         }
-      })
+        return features
+      }, [])
     }
   }
 

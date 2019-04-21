@@ -1,5 +1,5 @@
 const React = require('react')
-const Map = require('../Map')
+const MapComponent = require('../MapComponent')
 const { Dialog } = require('@blueprintjs/core')
 
 class MapDialog extends React.Component {
@@ -24,7 +24,7 @@ class MapDialog extends React.Component {
         icon='info-sign'
         onClose={this.close}
         canOutsideClickClose={false}>
-        <Map selectedChat={selectedChat} />
+        <MapComponent selectedChat={selectedChat} />
       </Dialog>
     )
   }
