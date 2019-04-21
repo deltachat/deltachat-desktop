@@ -189,6 +189,7 @@ class DeltaChatController extends EventEmitter {
    */
   searchChats (query) {
     this._query = query
+    this.updateStateChatList()
     this._render()
   }
 
