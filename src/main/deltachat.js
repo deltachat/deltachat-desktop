@@ -58,7 +58,6 @@ class DeltaChatController extends EventEmitter {
         this.emit('ready', this.credentials)
         log.info('dc_get_info', dc.getInfo())
         this.updateStateChatList()
-        this.updateState
         render()
       }
       if (!dc.isConfigured()) {
@@ -99,7 +98,7 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       // Don't rerender if a draft changes
       if (msgId === 0) return
-      if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+      if (chatId === this._selectedChatId) this.updateStateSelectedChat()
       this.updateStateChatList()
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       render()
@@ -108,7 +107,7 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
       this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
-      if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+      if (chatId === this._selectedChatId) this.updateStateSelectedChat()
       this.updateStateChatList()
       render()
     })
@@ -272,7 +271,7 @@ class DeltaChatController extends EventEmitter {
   deleteChat (chatId) {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
-    if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+    if (chatId === this._selectedChatId) this.updateStateSelectedChat()
     this.updateStateChatList()
     this._render()
   }
@@ -280,7 +279,7 @@ class DeltaChatController extends EventEmitter {
   archiveChat (chatId, archive) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
-    if(chatId === this._selectedChatId) this.updateStateSelectedChat()
+    if (chatId === this._selectedChatId) this.updateStateSelectedChat()
     this.updateStateChatList()
     this._render()
   }
@@ -316,14 +315,14 @@ class DeltaChatController extends EventEmitter {
     console.timeEnd('selectChat')
   }
 
-  updateStateChatList() {
+  updateStateChatList () {
     console.log('updateStateChatList')
     this.state.chatList = this._chatList(this._showArchivedChats)
   }
 
-  updateStateSelectedChat() {
-    if(!this._selectedChatId) {
-      log.debug('dc._selectedChatId is not defined, can\'t update state of selectedChat') 
+  updateStateSelectedChat () {
+    if (!this._selectedChatId) {
+      log.debug('dc._selectedChatId is not defined, can\'t update state of selectedChat')
       return
     }
     this.state.selectedChat = this._selectedChat(this._showArchivedChats, this.chatList, this._selectedChatId)
@@ -408,7 +407,6 @@ class DeltaChatController extends EventEmitter {
    */
   render () {
     console.time('backend render')
-    let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
 
     const state = this.state
@@ -511,9 +509,9 @@ class DeltaChatController extends EventEmitter {
         updateFreshMessageCounter = false
       }
 
-      if(updateFreshMessageCounter === true) {
-        for(let chatListItem of this.state.chatList) {
-          if(chatListItem.id !== selectedChatId) continue
+      if (updateFreshMessageCounter === true) {
+        for (let chatListItem of this.state.chatList) {
+          if (chatListItem.id !== selectedChatId) continue
 
           chatListItem.freshMessageCounter = this._dc.getFreshMessageCount(chatListItem.id)
           break
