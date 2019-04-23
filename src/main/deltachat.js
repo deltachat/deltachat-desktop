@@ -257,11 +257,13 @@ class DeltaChatController extends EventEmitter {
   deleteChat (chatId) {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
+    this._render()
   }
 
   archiveChat (chatId, archive) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
+    this._render()
   }
 
   showArchivedChats (show) {
