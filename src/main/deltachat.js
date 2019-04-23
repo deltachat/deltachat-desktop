@@ -344,13 +344,11 @@ class DeltaChatController extends EventEmitter {
   }
 
   setLocation (latitude, longitude, accuracy) {
-    let res = this._dc.setLocation(latitude, longitude, accuracy)
-    return res
+    return this._dc.setLocation(latitude, longitude, accuracy)
   }
 
   getLocations (chatId, contactId, timestampFrom, timestampTo) {
-    let res = this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
-    return res
+    return this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
   }
 
   setDraft (chatId, msgText) {
@@ -359,20 +357,6 @@ class DeltaChatController extends EventEmitter {
     msg.setText(msgText)
 
     this._dc.setDraft(chatId, msg)
-  }
-
-  setLocation (latitude, longitude, accuracy) {
-    log.debug(`setLocation ${latitude}`)
-    let res = this._dc.setLocation(latitude, longitude, accuracy)
-    log.debug(`setLocation result: ${res}`)
-    return res
-  }
-
-  getLocations (chatId, contactId) {
-    log.debug(`getLocations ${chatId}`)
-    let res = this._dc.getLocations(chatId, contactId)
-    log.debug(`getLocations result: ${res}`)
-    return res
   }
 
   /**

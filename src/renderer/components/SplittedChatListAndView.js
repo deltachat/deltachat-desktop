@@ -69,8 +69,6 @@ class SplittedChatListAndView extends React.Component {
 
   onChatClick (chatId) {
     ipcRenderer.send('selectChat', chatId)
-    console.log('chatId:', chatId)
-    ipcRenderer.send('getLocations', 10, 10)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
