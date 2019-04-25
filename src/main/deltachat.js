@@ -479,14 +479,16 @@ class DeltaChatController extends EventEmitter {
     if (!chatId) return null
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
+
     const chat = rawChat.toJson()
     let draft = this._dc.getDraft(chatId)
+
     if (draft) {
       chat.draft = draft.getText()
     } else {
       chat.draft = ''
     }
-    log.debug('getDraft:', chat.draft)
+
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
