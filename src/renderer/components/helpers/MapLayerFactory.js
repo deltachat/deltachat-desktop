@@ -3,7 +3,8 @@ const formatRelativeTime = require('../conversations/formatRelativeTime')
 const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
 class MapLayerFactory {
-  static getGeoJSONLineSourceData (coordinates) {
+  static getGeoJSONLineSourceData (locations) {
+    const coordinates = locations.map(point => [point.lon, point.lat])
     return {
       'type': 'FeatureCollection',
       'features': [{
@@ -55,7 +56,8 @@ class MapLayerFactory {
             'type': 'Feature',
             'properties': {
               contact: contact.firstName,
-              reported: formatRelativeTime(location.tstamp * 1000, { extended: true })
+              reported: location.tstamp,
+              msgid: location.msgid
             },
             'geometry': {
               'type': 'Point',

@@ -1,5 +1,5 @@
 const React = require('react')
-const MapComponent = require('../MapComponent')
+const MapComponent = require('../map/MapComponent')
 const { Dialog } = require('@blueprintjs/core')
 
 class MapDialog extends React.Component {

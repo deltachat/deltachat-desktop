@@ -4,23 +4,22 @@ const { ipcRenderer } = require('electron')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
 const geojsonExtent = require('@mapbox/geojson-extent')
-const moment = require('moment')
-const formatRelativeTime = require('./conversations/formatRelativeTime')
-const MapLayerFactory = require('./helpers/MapLayerFactory')
-const { Slider, Button, Collapse } = require('@blueprintjs/core')
-
-const PopupMessage = props => <div> {props.username} <br /> {props.formattedDate} </div>
+const moment = require('moment/moment')
+const formatRelativeTime = require('../conversations/formatRelativeTime')
+const MapLayerFactory = require('../helpers/MapLayerFactory')
+const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
+const PopupMessage = require('./PopupMessage')
 
 class MapComponent extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      timeOffset: 10,
-      lastTimeOffset: 10,
+      timeOffset: 50,
+      lastTimeOffset: 50,
       mapStyle: 'default',
       showTerrain: false,
       showControls: false,
-      showPathLayer: true,
+      showPathLayer: false,
       currentContacts: []
     }
     this.mapDataStore = new Map()
@@ -62,7 +61,6 @@ class MapComponent extends React.Component {
       this.mapDataStore.clear()
     }
     let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
-    console.log(locationsForChat, new Date(this.getTimestampForRange() * 1000))
     contacts.map(contact => {
       let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
       if (locationsForContact && locationsForContact.length) {
@@ -74,24 +72,16 @@ class MapComponent extends React.Component {
           pointsLayerId: 'points-' + contact.id,
           hidden: false
         }
-        if (this.state.currentContacts.find(existingContact => contact.id === existingContact.id)) {
-          mapData.hidden = this.state.currentContacts.find(existingContact => contact.id === existingContact.id).hidden
+        const existingContact = this.state.currentContacts.find(item => item.id === contact.id)
+        if (existingContact) {
+          mapData.hidden = existingContact.hidden
         }
         this.mapDataStore.set(contact.id, mapData)
-        if (!this.map.getSource(mapData.pathLayerId)) {
-          this.addPathLayer(pointsForLayer, mapData)
-        } else {
-          // update source
-          this.map.getSource(mapData.pathLayerId).setData(MapLayerFactory.getGeoJSONLineSourceData(pointsForLayer))
-        }
-        if (!this.map.getSource(mapData.pointsLayerId)) {
-          this.addPathJointsLayer(locationsForContact, mapData)
-        } else {
-          this.map.getSource(mapData.pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData(locationsForContact, contact, true))
-        }
+        this.addLayerForContact(mapData, locationsForContact)
+
         let lastPoint = locationsForContact[0]
         let lastDate = formatRelativeTime(lastPoint.tstamp * 1000, { extended: true })
-        let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate))
+        let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate, null))
         if (mapData.marker) {
           // remove old marker
           mapData.marker.remove()
@@ -141,9 +131,23 @@ class MapComponent extends React.Component {
     )
   }
 
-  addPathLayer (coordinates, mapData) {
+  addLayerForContact (mapData, locationsForContact) {
+    if (!this.map.getSource(mapData.pathLayerId)) {
+      this.addPathLayer(locationsForContact, mapData)
+    } else {
+      // update source
+      this.map.getSource(mapData.pathLayerId).setData(MapLayerFactory.getGeoJSONLineSourceData(locationsForContact))
+    }
+    if (!this.map.getSource(mapData.pointsLayerId)) {
+      this.addPathJointsLayer(locationsForContact, mapData)
+    } else {
+      this.map.getSource(mapData.pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData(locationsForContact, mapData.contact, true))
+    }
+  }
+
+  addPathLayer (locationsForContact, mapData) {
     let source = { type: 'geojson',
-      data: MapLayerFactory.getGeoJSONLineSourceData(coordinates)
+      data: MapLayerFactory.getGeoJSONLineSourceData(locationsForContact)
     }
     this.map.addSource(
       mapData.pathLayerId,
@@ -169,10 +173,20 @@ class MapComponent extends React.Component {
   }
 
   onMapClick (event) {
+    const { selectedChat } = this.props
+    let message
     let features = this.map.queryRenderedFeatures(event.point)
-    const contactFeature = features.find(f => f.properties.contact !== undefined)
+    const contactFeature = features.find(f => {
+      return (f.properties.contact !== undefined)
+    })
     if (contactFeature) {
-      let markup = this.renderPopupMessage(contactFeature.properties.contact, contactFeature.properties.reported)
+      if (contactFeature.properties.msgid) {
+        const messageObj = selectedChat.messages.find(msg => msg.id === contactFeature.properties.msgid)
+        if (messageObj) {
+          message = messageObj.msg
+        }
+      }
+      let markup = this.renderPopupMessage(contactFeature.properties.contact, contactFeature.properties.reported, message)
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(contactFeature.geometry.coordinates)
         .setHTML(markup)
@@ -281,9 +295,10 @@ class MapComponent extends React.Component {
     }
   }
 
-  renderPopupMessage (contactName, formattedDate) {
+  renderPopupMessage (contactName, timestamp, message) {
+    const i18n = window.translate
     return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage username={contactName} formattedDate={formattedDate} />
+      <PopupMessage username={contactName} timestamp={timestamp} message={message} i18n={i18n} />
     )
   }
 
