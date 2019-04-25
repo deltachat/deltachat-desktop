@@ -1,7 +1,6 @@
 const React = require('react')
 const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
-const path = require('path')
 const styled = require('styled-components').default
 
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
