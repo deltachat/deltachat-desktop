@@ -352,7 +352,6 @@ class DeltaChatController extends EventEmitter {
   }
 
   setDraft (chatId, msgText) {
-    log.debug(`setDraft: ${msgText}, ${chatId}`)
     let msg = this._dc.messageNew()
     msg.setText(msgText)
 
@@ -478,7 +477,6 @@ class DeltaChatController extends EventEmitter {
     } else {
       chat.draft = ''
     }
-    log.debug('getDraft:', chat.draft)
     var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {

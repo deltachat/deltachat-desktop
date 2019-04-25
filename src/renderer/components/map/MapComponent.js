@@ -6,7 +6,7 @@ const mapboxgl = require('mapbox-gl')
 const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment/moment')
 const formatRelativeTime = require('../conversations/formatRelativeTime')
-const MapLayerFactory = require('../helpers/MapLayerFactory')
+const MapLayerFactory = require('./MapLayerFactory')
 const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
 
@@ -186,7 +186,10 @@ class MapComponent extends React.Component {
           message = messageObj.msg
         }
       }
-      let markup = this.renderPopupMessage(contactFeature.properties.contact, contactFeature.properties.reported, message)
+      let markup = this.renderPopupMessage(
+        contactFeature.properties.contact,
+        formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
+        message)
       new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(contactFeature.geometry.coordinates)
         .setHTML(markup)
@@ -259,7 +262,11 @@ class MapComponent extends React.Component {
 
   getTimestampForRange () {
     const rangeMap = MapLayerFactory.getRangeMap()
-    return moment().unix() - rangeMap[this.state.timeOffset].minutes * 60
+    if (rangeMap[this.state.timeOffset].minutes === 0) {
+      return 0
+    } else {
+      return moment().unix() - rangeMap[this.state.timeOffset].minutes * 60
+    }
   }
 
   toggleContactLayer (contactId, isHidden) {
@@ -295,10 +302,10 @@ class MapComponent extends React.Component {
     }
   }
 
-  renderPopupMessage (contactName, timestamp, message) {
+  renderPopupMessage (contactName, formattedDate, message) {
     const i18n = window.translate
     return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage username={contactName} timestamp={timestamp} message={message} i18n={i18n} />
+      <PopupMessage username={contactName} formattedDate={formattedDate} message={message} i18n={i18n} />
     )
   }
 

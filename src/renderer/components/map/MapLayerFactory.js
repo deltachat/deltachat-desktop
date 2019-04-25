@@ -4,7 +4,7 @@ const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0
 
 class MapLayerFactory {
   static getGeoJSONLineSourceData (locations) {
-    const coordinates = locations.map(point => [point.lon, point.lat])
+    const coordinates = locations.map(point => [point.longitude, point.latitude])
     return {
       'type': 'FeatureCollection',
       'features': [{
@@ -52,7 +52,6 @@ class MapLayerFactory {
       'type': 'FeatureCollection',
       'features': locations.reduce((features, location) => {
         if (!withMessageOnly || location.msgId) {
-          console.log(location)
           features.push({
             'type': 'Feature',
             'properties': {
