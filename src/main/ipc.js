@@ -213,10 +213,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = app.localeData
   })
 
-  ipcMain.on('getMessage', (e, msgId) => {
-    e.returnValue = dc.getMessage(msgId)
-  })
-
   ipcMain.on('updateSettings', (e, saved) => {
     dc.updateSettings(saved)
     app.saveState()
