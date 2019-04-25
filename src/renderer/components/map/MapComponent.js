@@ -64,7 +64,7 @@ class MapComponent extends React.Component {
     contacts.map(contact => {
       let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
       if (locationsForContact && locationsForContact.length) {
-        let pointsForLayer = locationsForContact.map(point => [point.lon, point.lat])
+        let pointsForLayer = locationsForContact.map(point => [point.longitude, point.latitude])
         // map data to handle map state
         let mapData = {
           contact: contact,
@@ -80,14 +80,14 @@ class MapComponent extends React.Component {
         this.addLayerForContact(mapData, locationsForContact)
 
         let lastPoint = locationsForContact[0]
-        let lastDate = formatRelativeTime(lastPoint.tstamp * 1000, { extended: true })
+        let lastDate = formatRelativeTime(lastPoint.timestamp * 1000, { extended: true })
         let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate, null))
         if (mapData.marker) {
           // remove old marker
           mapData.marker.remove()
         }
         mapData.marker = new mapboxgl.Marker({ color: '#' + contact.color.toString(16) })
-          .setLngLat([lastPoint.lon, lastPoint.lat])
+          .setLngLat([lastPoint.longitude, lastPoint.latitude])
           .setPopup(popup)
         if (mapData.hidden) {
           // the contact is hidden so don't show the contact's layers
@@ -180,8 +180,8 @@ class MapComponent extends React.Component {
       return (f.properties.contact !== undefined)
     })
     if (contactFeature) {
-      if (contactFeature.properties.msgid) {
-        const messageObj = selectedChat.messages.find(msg => msg.id === contactFeature.properties.msgid)
+      if (contactFeature.properties.msgId) {
+        const messageObj = selectedChat.messages.find(msg => msg.id === contactFeature.properties.msgId)
         if (messageObj) {
           message = messageObj.msg
         }

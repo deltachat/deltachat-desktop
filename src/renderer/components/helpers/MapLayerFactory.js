@@ -51,17 +51,18 @@ class MapLayerFactory {
     return {
       'type': 'FeatureCollection',
       'features': locations.reduce((features, location) => {
-        if (!withMessageOnly || location.msgid) {
+        if (!withMessageOnly || location.msgId) {
+          console.log(location)
           features.push({
             'type': 'Feature',
             'properties': {
               contact: contact.firstName,
-              reported: location.tstamp,
-              msgid: location.msgid
+              reported: location.timestamp,
+              msgId: location.msgId
             },
             'geometry': {
               'type': 'Point',
-              'coordinates': [location.lon, location.lat]
+              'coordinates': [location.longitude, location.latitude]
             }
           })
         }
