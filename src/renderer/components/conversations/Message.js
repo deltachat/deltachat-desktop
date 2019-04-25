@@ -2,6 +2,7 @@ const React = require('react')
 const classNames = require('classnames')
 
 const MessageBody = require('./MessageBody')
+const MessageMetaData = require('./MessageMetaData')
 const Quote = require('./Quote')
 const EmbeddedContact = require('./EmbeddedContact')
 const Timestamp = require('./Timestamp')
@@ -286,94 +287,6 @@ class Message extends React.Component {
     )
   }
 
-  renderMetadata () {
-    const {
-      padlock,
-      attachment,
-      collapseMetadata,
-      direction,
-      expirationLength,
-      expirationTimestamp,
-      i18n,
-      status,
-      text,
-      timestamp
-    } = this.props
-
-    if (collapseMetadata) {
-      return null
-    }
-
-    const withImageNoCaption = Boolean(
-      !text &&
-        ((Attachment.isImage(attachment) && Attachment.hasImage(attachment)) ||
-          (Attachment.isVideo(attachment) && Attachment.hasVideoScreenshot(attachment)))
-    )
-    const showError = status === 'error' && direction === 'outgoing'
-
-    return (
-      <div
-        className={classNames(
-          'module-message__metadata',
-          withImageNoCaption
-            ? 'module-message__metadata--with-image-no-caption'
-            : null
-        )}
-      >
-        {padlock === true && status !== 'error' ? (
-          <div
-            className={classNames(
-              'module-message__metadata__padlock-icon',
-              `module-message__metadata__padlock-icon--${direction}`
-            )}
-          />
-        ) : null}
-        {showError ? (
-          <span
-            className={classNames(
-              'module-message__metadata__date',
-              `module-message__metadata__date--${direction}`,
-              withImageNoCaption
-                ? 'module-message__metadata__date--with-image-no-caption'
-                : null
-            )}
-          >
-            {i18n('sendFailed')}
-          </span>
-        ) : (
-          <Timestamp
-            i18n={i18n}
-            timestamp={timestamp}
-            extended
-            direction={direction}
-            withImageNoCaption={withImageNoCaption}
-            module='module-message__metadata__date'
-          />
-        )}
-        {expirationLength && expirationTimestamp ? (
-          <ExpireTimer
-            direction={direction}
-            expirationLength={expirationLength}
-            expirationTimestamp={expirationTimestamp}
-            withImageNoCaption={withImageNoCaption}
-          />
-        ) : null}
-        <span className='module-message__metadata__spacer' />
-        {direction === 'outgoing' && status !== 'error' ? (
-          <div
-            className={classNames(
-              'module-message__metadata__status-icon',
-              `module-message__metadata__status-icon--${status}`,
-              withImageNoCaption
-                ? 'module-message__metadata__status-icon--with-image-no-caption'
-                : null
-            )}
-          />
-        ) : null}
-      </div>
-    )
-  }
-
   captureMenuTrigger (triggerRef) {
     this.menuTriggerRef = triggerRef
   }
@@ -568,7 +481,7 @@ class Message extends React.Component {
           {this.renderAttachment()}
 
           {this.renderText()}
-          {this.renderMetadata()}
+          <MessageMetaData {...this.props} />
           {this.renderSendMessageButton()}
         </div>
         {this.renderError(direction === 'outgoing')}

@@ -1,13 +1,14 @@
 @import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
 #map {
-  width: 90vw;
-  height: 90vh;
+	width: 90vw;
+	height: 90vh;
 }
 
 .bp3-dialog.map-dialog {
-  width: 90vw;
-    height: 90vh;
+	width: 90vw;
+	height: 90vh;
+	position: relative;
 }
 
 .mapboxgl-popup-content {
@@ -15,5 +16,67 @@
 }
 
 .mapboxgl-marker {
-  cursor: pointer;
+	cursor: pointer;
 }
+
+.map-overlay {
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	position: absolute;
+	width: 160px;
+	top: 50px;
+	left: 10px;
+	padding: 10px;
+	background-color: #fff;
+	z-index: 500;
+	border-radius: 5px;
+}
+
+#controls {
+	h3 {
+		margin-bottom: 0;
+		clear: both;
+	}
+
+	button.collapse-control {
+		padding-left: 0;
+	}
+	button.toggle-path {
+		padding-left: 0;
+	}
+
+	.bp3-slider {
+		margin-top: 10px;
+	}
+
+	.bp3-slider-handle:focus {
+		outline: none;
+	}
+
+	.bp3-slider-label {
+	    width: 80px;
+	}
+
+	#menu {
+		clear: both;
+		div {
+			width: 50%;
+			float: left;
+
+			input {
+				margin-right: 4px;
+			}
+		}
+	}
+
+	.bp3-button.bp3-minimal:hover {
+		background: none;
+	}
+
+	.contactFilter {
+		padding-top: 10px;
+		label {
+			padding-left: 5px;
+		}
+	}
+}
+
