@@ -62,7 +62,6 @@
     "mime-types": "^2.1.21",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
-    "ol": "^4.6.5",
     "rc": "^1.2.8",
     "react": "^16.4.2",
     "react-contextmenu": "^2.9.4",
