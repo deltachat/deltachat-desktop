@@ -13,7 +13,7 @@ class MapDialog extends React.Component {
   }
 
   render () {
-    const { selectedChat } = this.props
+    const { selectedChat, userid } = this.props
     let isOpen = !!selectedChat
     const title = selectedChat ? selectedChat.name + ' ( ' + selectedChat.subtitle + ')' : 'Map'
     return (
@@ -24,7 +24,7 @@ class MapDialog extends React.Component {
         icon='info-sign'
         onClose={this.close}
         canOutsideClickClose={false}>
-        <MapComponent selectedChat={selectedChat} />
+        <MapComponent selectedChat={selectedChat} userid={userid} />
       </Dialog>
     )
   }

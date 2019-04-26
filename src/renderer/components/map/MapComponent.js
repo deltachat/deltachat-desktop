@@ -35,6 +35,11 @@ class MapComponent extends React.Component {
 
   componentDidMount () {
     this.componentDidMount = Date.now()
+    const { selectedChat, userid } = this.props
+    const savedState = window.localStorage.getItem(`${userid}_${selectedChat.id}_map`)
+    if (typeof savedState === 'string') {
+      this.setState(JSON.parse(savedState))
+    }
     mapboxgl.accessToken = MapLayerFactory.getAccessToken()
     this.map = new mapboxgl.Map(
       {
@@ -48,6 +53,14 @@ class MapComponent extends React.Component {
     this.map.on('load', this.renderOrUpdateLayer)
     this.map.on('click', this.onMapClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
+  }
+
+  componentWillUnmount () {
+    // save parts of the state we wanna keep
+    const { selectedChat, userid } = this.props
+    let saveState = JSON.parse(JSON.stringify(this.state))
+    delete saveState.lastTimeOffset
+    window.localStorage.setItem(`${userid}_${selectedChat.id}_map`, JSON.stringify(saveState))
   }
 
   renderOrUpdateLayer () {
