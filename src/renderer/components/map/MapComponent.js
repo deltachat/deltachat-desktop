@@ -1,5 +1,6 @@
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
+const ReactDOM = require('react-dom')
 const { ipcRenderer } = require('electron')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
@@ -11,6 +12,8 @@ const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
 const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
+
+const ContextMenu = require('./ContextMenu')
 
 class MapComponent extends React.Component {
   constructor (props) {
@@ -28,11 +31,15 @@ class MapComponent extends React.Component {
     this.debounce = debounce(this.renderOrUpdateLayer, 1000)
     this.renderOrUpdateLayer = this.renderOrUpdateLayer.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
+    this.onMapRightClick = this.onMapRightClick.bind(this)
+    this.sendPoiMessage = this.sendPoiMessage.bind(this)
     this.togglePathLayer = this.togglePathLayer.bind(this)
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.toggleTerrainLayer = this.toggleTerrainLayer.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
+    this.contextMenu = React.createRef()
+    this.contextMenuPopup = null
   }
 
   componentDidMount () {
@@ -59,6 +66,7 @@ class MapComponent extends React.Component {
     )
     this.map.on('load', this.renderOrUpdateLayer)
     this.map.on('click', this.onMapClick)
+    this.map.on('contextmenu', this.onMapRightClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
   }
 
@@ -77,14 +85,18 @@ class MapComponent extends React.Component {
   renderOrUpdateLayer () {
     const { selectedChat } = this.props
     const contacts = selectedChat.contacts
-    let allPoints = []
-    let currentContacts = []
     if (this.state.timeOffset < this.state.lastTimeOffset) {
       // remove all layer since source update does not remove existing points
       this.removeAllLayer()
       this.mapDataStore.clear()
     }
-    let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
+    this.renderLayers(selectedChat, contacts)
+  }
+
+  async renderLayers (selectedChat, contacts) {
+    let allPoints = []
+    let currentContacts = []
+    let locationsForChat = await ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
     contacts.map(contact => {
       let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
       if (locationsForContact && locationsForContact.length) {
@@ -203,6 +215,7 @@ class MapComponent extends React.Component {
   }
 
   onMapClick (event) {
+    console.log('onMapClick', event)
     const { selectedChat } = this.props
     let message
     let features = this.map.queryRenderedFeatures(event.point)
@@ -221,11 +234,26 @@ class MapComponent extends React.Component {
         formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
         message)
       new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(contactFeature.geometry.coordinates)
         .setHTML(markup)
         .setLngLat(contactFeature.geometry.coordinates)
         .addTo(this.map)
     }
+  }
+
+  sendPoiMessage (evt) {
+    console.log('sendPoiMessage', evt)
+    if (this.contextMenuPopup) {
+      this.contextMenuPopup.remove()
+    }
+  }
+
+  onMapRightClick (event) {
+    console.log(event)
+    console.log(this.contextMenu.current)
+    this.contextMenuPopup = new mapboxgl.Popup({ offset: [0, -15] })
+      .setLngLat(event.lngLat)
+      .setDOMContent(ReactDOM.findDOMNode(this.contextMenu.current))
+      .addTo(this.map)
   }
 
   togglePathLayer () {
@@ -407,6 +435,7 @@ class MapComponent extends React.Component {
           </Collapse>
         </nav>
         <div id='map' />
+        <ContextMenu ref={this.contextMenu} onSetPoi={this.sendPoiMessage} />
       </div>
     )
   }
