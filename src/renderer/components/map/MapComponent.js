@@ -47,7 +47,6 @@ class MapComponent extends React.Component {
 
   componentDidMount () {
     this.currentUserAddress = this.context.credentials.addr
-    this.componentDidMount = Date.now()
     const { selectedChat } = this.props
     const saveData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
     let mapSettings = { zoom: 4, center: [8, 48] } // <- default
@@ -110,8 +109,14 @@ class MapComponent extends React.Component {
       allPoints = allPoints.concat(pointsForLayer)
     })
     this.setState({ currentContacts: currentContacts })
-    if (allPoints.length > 0) {
-      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+    if (this.stateFromSession) {
+      this.stateFromSession = false
+      this.setTerrainLayer(this.state.showTerrain)
+      this.changeMapStyle(this.state.mapStyle)
+    } else {
+      if (allPoints.length > 0) {
+        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+      }
     }
     this.state.lastTimeOffset = this.state.timeOffset
     this.mapDataStore.initialized = true
@@ -157,16 +162,6 @@ class MapComponent extends React.Component {
         } else {
           mapData.marker.addTo(this.map)
         }
-      }
-    }
-    this.setState({ currentContacts: currentContacts })
-    if (this.stateFromSession) {
-      this.stateFromSession = false
-      this.setTerrainLayer(this.state.showTerrain)
-      this.changeMapStyle(this.state.mapStyle)
-    } else {
-      if (allPoints.length > 0) {
-       this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
       }
     }
     return pointsForLayer
