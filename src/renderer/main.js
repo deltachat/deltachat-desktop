@@ -48,7 +48,7 @@ function setupLocaleData (locale) {
 }
 
 window.addEventListener('keydown', function (ev) {
-  if (ev.code === 'KeyA' && ev.ctrlKey) {
+  if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
     let stop = true
     if (ev.target.localName === 'textarea' || ev.target.localName === 'input') {
       stop = false
