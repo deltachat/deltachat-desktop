@@ -1,4 +1,3 @@
-const formatRelativeTime = require('../conversations/formatRelativeTime')
 // todo: get this from some settings/config file
 const accessToken = 'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
@@ -38,12 +37,16 @@ class MapLayerFactory {
   static getGeoJSONPointsLayer (pointsLayerId, color) {
     return {
       'id': pointsLayerId,
-      'type': 'circle',
-      'source': pointsLayerId,
-      'paint': {
-        'circle-radius': 6,
-        'circle-color': '#' + color.toString(16)
-      }
+      'type': 'symbol',
+      'layout': {
+        'icon-image': '{icon}-15',
+        'icon-size': 2
+        // 'fill-color': '#220066'
+      },
+      'source': pointsLayerId
+      // 'paint': {
+      //   'circle-color': '#' + color.toString(16)
+      // }
     }
   }
 
@@ -52,12 +55,15 @@ class MapLayerFactory {
       'type': 'FeatureCollection',
       'features': locations.reduce((features, location) => {
         if (!withMessageOnly || location.msgId) {
+          let icon = location.isIndependent ? 'viewpoint' : 'marker'
           features.push({
             'type': 'Feature',
             'properties': {
               contact: contact.firstName,
               reported: location.timestamp,
-              msgId: location.msgId
+              isPoi: location.isIndependent,
+              msgId: location.msgId,
+              icon: icon
             },
             'geometry': {
               'type': 'Point',

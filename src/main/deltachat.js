@@ -118,6 +118,11 @@ class DeltaChatController extends EventEmitter {
       render()
     })
 
+    dc.on('DC_EVENT_LOCATION_CHANGED', (chatId, msgId) => {
+      this.emit('DC_EVENT_LOCATION_CHANGED', chatId, msgId)
+      render()
+    })
+
     dc.on('DC_EVENT_WARNING', (warning) => {
       log.warn(warning)
     })
@@ -163,11 +168,12 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  sendMessage (chatId, text, filename, opts) {
+  sendMessage (chatId, text, filename, location) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename)
     if (text) msg.setText(text)
+    if (location) msg.setLocation(location.lat, location.lng)
     this._dc.sendMessage(chatId, msg)
   }
 
