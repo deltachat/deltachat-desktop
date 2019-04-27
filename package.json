@@ -74,6 +74,7 @@
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^0.51.4",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
