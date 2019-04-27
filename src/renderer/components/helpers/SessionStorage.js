@@ -7,7 +7,7 @@ module.exports = {
      * @param {{[key:string]:any}} value
      */
   storeItem: function (scopeName, key, value) {
-    window.localStorage.setItem(`${scopeName}-${key}`, JSON.stringify(value))
+    window.sessionStorage.setItem(`${scopeName}-${key}`, JSON.stringify(value))
   },
   /**
      *
@@ -16,7 +16,7 @@ module.exports = {
      * @returns {{[key:string]:any}}
      */
   getItem: function (scopeName, key) {
-    const value = window.localStorage.getItem(`${scopeName}-${key}`)
+    const value = window.sessionStorage.getItem(`${scopeName}-${key}`)
     return value ? JSON.parse(value) : undefined
   },
   /**
@@ -25,7 +25,7 @@ module.exports = {
      * @param {string} key
      */
   remove: function (scopeName, key) {
-    window.localStorage.removeItem(`${scopeName}-${key}`)
+    window.sessionStorage.removeItem(`${scopeName}-${key}`)
   }
 
 }

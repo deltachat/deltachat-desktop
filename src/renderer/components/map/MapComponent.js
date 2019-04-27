@@ -9,7 +9,7 @@ const formatRelativeTime = require('../conversations/formatRelativeTime')
 const MapLayerFactory = require('./MapLayerFactory')
 const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
-const LocalStorage = require('../helpers/LocalStorage')
+const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
 
 class MapComponent extends React.Component {
@@ -39,11 +39,11 @@ class MapComponent extends React.Component {
     this.currentUserAddress = this.context.credentials.addr
     this.componentDidMount = Date.now()
     const { selectedChat } = this.props
-    const savedState = LocalStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
+    const saveData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
     let mapSettings = { zoom: 4, center: [8, 48] } // <- default
-    if (typeof savedState !== 'undefined') {
-      ({ zoom: mapSettings.zoom, center: mapSettings.center } = savedState)
-      delete savedState.zoom; delete savedState.center
+    if (saveData !== undefined) {
+      const { savedMapSettings, savedState } = saveData
+      mapSettings = savedMapSettings
       this.setState(savedState)
       this.retrieveSaveState = true
     }
@@ -65,11 +65,13 @@ class MapComponent extends React.Component {
   componentWillUnmount () {
     // save parts of the state we wanna keep
     const { selectedChat } = this.props
-    let saveState = JSON.parse(JSON.stringify(this.state))
-    delete saveState.lastTimeOffset
-    saveState.zoom = this.map.getZoom()
-    saveState.center = this.map.getCenter()
-    LocalStorage.storeItem(this.currentUserAddress, `${selectedChat.id}_map`, saveState)
+    SessionStorage.storeItem(this.currentUserAddress, `${selectedChat.id}_map`, {
+      savedMapSettings: {
+        zoom: this.map.getZoom(),
+        center: this.map.getCenter()
+      },
+      saveState: this.state
+    })
   }
 
   renderOrUpdateLayer () {
