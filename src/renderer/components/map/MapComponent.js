@@ -70,7 +70,7 @@ class MapComponent extends React.Component {
         zoom: this.map.getZoom(),
         center: this.map.getCenter()
       },
-      saveState: this.state
+      savedState: this.state
     })
   }
 
