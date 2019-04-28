@@ -1,5 +1,6 @@
 const React = require('react')
 const { ContactListItem } = require('./conversations')
+const DCConstants = require('deltachat-node/constants')
 
 function convertContactProps (contact) {
   return {
@@ -7,7 +8,7 @@ function convertContactProps (contact) {
     phoneNumber: contact.address,
     avatarPath: contact.profileImage,
     profileName: contact.displayName,
-    isMe: contact.displayName === 'Me',
+    isMe: contact.id === DCConstants.DC_CONTACT_ID_SELF,
     i18n: window.translate,
     verified: contact.isVerified
   }
