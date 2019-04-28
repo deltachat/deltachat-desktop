@@ -45,7 +45,7 @@ class MapComponent extends React.Component {
       const { savedMapSettings, savedState } = saveData
       mapSettings = savedMapSettings
       this.setState(savedState)
-      this.retrieveSaveState = true
+      this.stateFromSession = true
     }
     mapboxgl.accessToken = MapLayerFactory.getAccessToken()
     this.map = new mapboxgl.Map(
@@ -131,8 +131,8 @@ class MapComponent extends React.Component {
       }
     })
     this.setState({ currentContacts: currentContacts })
-    if (this.retrieveSaveState) {
-      this.retrieveSaveState = false
+    if (this.stateFromSession) {
+      this.stateFromSession = false
       this.setTerrainLayer(this.state.showTerrain)
       this.changeMapStyle(this.state.mapStyle)
     } else {
@@ -319,7 +319,9 @@ class MapComponent extends React.Component {
     this.setState({ currentContacts: currentContacts })
     this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', visibility)
     this.map.setLayoutProperty(mapDataItem.pointsLayerId, 'visibility', visibility)
-    this.setBoundToMarker()
+    if (!this.stateFromSession) {
+      this.setBoundToMarker()
+    }
   }
 
   setBoundToMarker () {
