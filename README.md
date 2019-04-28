@@ -76,13 +76,26 @@ $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
 ```
 
-Install dependencies:
+Install dependencies, there are two options:
+
+1. Use system-wide installed `libdeltachat.so`:
+
+```
+$ npm install --dc-system-lib=true
+```
+
+2. Use the deltachat-core code included as a git submodule in the
+   deltachat-node bindings:
 
 ```
 $ npm install
 ```
 
-Build the app (only needed if the code has changed or if the app has never been built before):
+For both these see the instructions in the deltchat-node and
+deltachat-core README files to set things up.
+
+Build the app (only needed if the code has changed or if the app has
+never been built before):
 
 ```
 $ npm run build
@@ -292,8 +305,14 @@ For Continuous Integration we currently use Travis.
 2. Change `version` field in `package.json` to `X.Y.Z`.
 3. Update, commit and push `static/chat.delta.desktopp.appdata.xml`
    with the new release information.
-4. Commit and push modified `package.json` (repeat until release is ready).
-5. Once done, publish the release on github, which will create the tag.
+4. Regenerate `package-lock.json` using `npm install`, commit and push
+   modified `package.json` and `package-lock.json` (repeat until
+   release is ready).
+5. Once done, publish the release on github, which will create the
+   tag.
+6. File an issue at
+   https://github.com/flathub/chat.delta.desktop/issues to make a new
+   release.
 
 Also see <https://www.electron.build/configuration/publish>
 
