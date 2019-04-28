@@ -9,6 +9,8 @@ const formatRelativeTime = require('../conversations/formatRelativeTime')
 const MapLayerFactory = require('./MapLayerFactory')
 const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
+const SessionStorage = require('../helpers/SessionStorage')
+const SettingsContext = require('../../contexts/SettingsContext')
 
 class MapComponent extends React.Component {
   constructor (props) {
@@ -34,20 +36,42 @@ class MapComponent extends React.Component {
   }
 
   componentDidMount () {
+    this.currentUserAddress = this.context.credentials.addr
     this.componentDidMount = Date.now()
+    const { selectedChat } = this.props
+    const saveData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
+    let mapSettings = { zoom: 4, center: [8, 48] } // <- default
+    if (saveData !== undefined) {
+      const { savedMapSettings, savedState } = saveData
+      mapSettings = savedMapSettings
+      this.setState(savedState)
+      this.stateFromSession = true
+    }
     mapboxgl.accessToken = MapLayerFactory.getAccessToken()
     this.map = new mapboxgl.Map(
       {
         container: 'map',
         style: 'mapbox://styles/mapbox/outdoors-v11',
-        zoom: 4,
-        center: [8, 48],
+        zoom: mapSettings.zoom,
+        center: mapSettings.center,
         attributionControl: false
       }
     )
     this.map.on('load', this.renderOrUpdateLayer)
     this.map.on('click', this.onMapClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
+  }
+
+  componentWillUnmount () {
+    // save parts of the state we wanna keep
+    const { selectedChat } = this.props
+    SessionStorage.storeItem(this.currentUserAddress, `${selectedChat.id}_map`, {
+      savedMapSettings: {
+        zoom: this.map.getZoom(),
+        center: this.map.getCenter()
+      },
+      savedState: this.state
+    })
   }
 
   renderOrUpdateLayer () {
@@ -107,8 +131,14 @@ class MapComponent extends React.Component {
       }
     })
     this.setState({ currentContacts: currentContacts })
-    if (allPoints.length > 0) {
-      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+    if (this.stateFromSession) {
+      this.stateFromSession = false
+      this.setTerrainLayer(this.state.showTerrain)
+      this.changeMapStyle(this.state.mapStyle)
+    } else {
+      if (allPoints.length > 0) {
+        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+      }
     }
     this.state.lastTimeOffset = this.state.timeOffset
   }
@@ -236,9 +266,14 @@ class MapComponent extends React.Component {
   }
 
   toggleTerrainLayer () {
-    let { showTerrain } = this.state
-    this.setState({ showTerrain: !showTerrain })
-    const visibility = showTerrain ? 'none' : 'visible'
+    const showTerrain = !this.state.showTerrain
+    this.setState({ showTerrain })
+    this.setTerrainLayer(showTerrain)
+  }
+
+  setTerrainLayer (showTerrain) {
+    const visibility = showTerrain ? 'visible' : 'none'
+    console.log(visibility)
     if (this.map.getLayer('terrain')) {
       this.map.setLayoutProperty('terrain', 'visibility', visibility)
     } else {
@@ -250,7 +285,7 @@ class MapComponent extends React.Component {
         id: 'terrain',
         source: 'dem',
         type: 'hillshade',
-        layout: { 'visibility': 'visible' }
+        layout: { 'visibility': visibility }
       })
     }
   }
@@ -284,7 +319,9 @@ class MapComponent extends React.Component {
     this.setState({ currentContacts: currentContacts })
     this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', visibility)
     this.map.setLayoutProperty(mapDataItem.pointsLayerId, 'visibility', visibility)
-    this.setBoundToMarker()
+    if (!this.stateFromSession) {
+      this.setBoundToMarker()
+    }
   }
 
   setBoundToMarker () {
@@ -325,7 +362,6 @@ class MapComponent extends React.Component {
           <Button minimal className='collapse-control' icon={this.state.showControls ? 'chevron-up' : 'chevron-down'} onClick={() => this.setState({ showControls: !this.state.showControls })}>Map controls</Button>
           <Collapse isOpen={this.state.showControls}>
             <Button minimal className='toggle-path' icon='layout' onClick={this.togglePathLayer} > {this.state.showPathLayer ? 'Hide' : 'Show'} paths </Button>
-            <br />
             <div id='menu' >
               <div>
                 <input id='default'
@@ -375,5 +411,6 @@ class MapComponent extends React.Component {
     )
   }
 }
+MapComponent.contextType = SettingsContext
 
 module.exports = MapComponent
