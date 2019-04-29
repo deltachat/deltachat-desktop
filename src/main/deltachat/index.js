@@ -2,7 +2,7 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const EventEmitter = require('events').EventEmitter
 const path = require('path')
-const log = require('../logger').getLogger('main/deltachat')
+const log = require('../../logger').getLogger('main/deltachat')
 
 const PAGE_SIZE = 20
 
@@ -19,6 +19,16 @@ class DeltaChatController extends EventEmitter {
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this._saved = saved
+    this.loadSplitOuts()
+  }
+
+  loadSplitOuts() {
+    require('./login').bind(this)()
+  }
+
+  emit(event, ...args) {
+    super.emit('ALL', event, ...args)
+    super.emit(event, ...args)
   }
 
   // Save settings for RC
@@ -32,112 +42,6 @@ class DeltaChatController extends EventEmitter {
 
   logCoreEvent (event, payload) {
     log.debug('Core Event', event, payload)
-  }
-
-  login (credentials, render, coreStrings) {
-    // Creates a separate DB file for each login
-    const cwd = this.getPath(credentials.addr)
-    log.info(`Using deltachat instance ${cwd}`)
-    this._dc = new DeltaChat()
-    const dc = this._dc
-    this.credentials = credentials
-    this._render = render
-
-    this.setCoreStrings(coreStrings)
-
-    dc.open(cwd, err => {
-      if (err) throw err
-      const onReady = () => {
-        log.info('Ready')
-        this.ready = true
-        this.configuring = false
-        this.emit('ready', this.credentials)
-        log.info('dc_get_info', dc.getInfo())
-        render()
-      }
-      if (!dc.isConfigured()) {
-        dc.once('ready', onReady)
-        this.configuring = true
-        dc.configure(addServerFlags(credentials))
-        render()
-      } else {
-        onReady()
-      }
-    })
-
-    dc.on('ALL', (event, data1, data2) => {
-      log.debug('ALL event', { event, data1, data2 })
-    })
-
-    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
-      this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', progress)
-      if (Number(progress) === 0) { // login failed
-        this.emit('DC_EVENT_LOGIN_FAILED')
-        this.logout()
-      }
-    })
-
-    dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
-      this.emit('DC_EVENT_IMEX_FILE_WRITTEN', filename)
-    })
-
-    dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
-      this.emit('DC_EVENT_IMEX_PROGRESS', progress)
-    })
-
-    dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
-      this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
-      render()
-    })
-
-    dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      // Don't rerender if a draft changes
-      if (msgId === 0) return
-      this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
-      render()
-    })
-
-    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
-      this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
-      render()
-    })
-
-    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
-      render()
-    })
-
-    dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
-      this.logCoreEvent('EVENT msg failed to deliver', { chatId, msgId })
-      render()
-    })
-
-    dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      this.logCoreEvent('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
-      render()
-    })
-
-    dc.on('DC_EVENT_WARNING', (warning) => {
-      log.warn(warning)
-    })
-
-    const onError = error => {
-      this.emit('error', error)
-      log.error(error)
-    }
-
-    dc.on('DC_EVENT_ERROR', (error) => {
-      onError(error)
-    })
-
-    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
-      onError(error)
-    })
-
-    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
-      onError(error)
-    })
   }
 
   logout () {

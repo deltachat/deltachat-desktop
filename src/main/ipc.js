@@ -10,16 +10,19 @@ const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc')
+
 const DeltaChat = (() => {
   try {
-    return require('./deltachat')
+    return require('./deltachat/index')
   } catch (error) {
     log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
     const { dialog } = require('electron')
     const { getLogsPath } = require('../application-constants')
     dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
+    throw error
   }
 })()
+
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 const setupUnreadBadgeCounter = require('./unread-badge')
