@@ -1,4 +1,5 @@
 const DeltaChat = require('deltachat-node')
+const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/login')
 const path = require('path')
 
@@ -31,7 +32,7 @@ function login (credentials, render, coreStrings) {
     } else {
       onReady()
     }
-    
+
     dc.on('ALL', (event, data1, data2) => {
       log.debug('ALL event', { event, data1, data2 })
     })
@@ -159,8 +160,22 @@ function close () {
   this._dc = null
 }
 
-module.exports = function() {
+module.exports = function () {
   this.login = login.bind(this)
   this.logout = logout.bind(this)
   this.close = close.bind(this)
+}
+
+if (!module.parent) {
+  // TODO move this to unit tests
+  console.log(serverFlags({
+    mailSecurity: 'ssl',
+    sendSecurity: 'ssl'
+  }))
+  console.log(C.DC_LP_IMAP_SOCKET_SSL | C.DC_LP_SMTP_SOCKET_SSL)
+  console.log(serverFlags({
+    mailSecurity: 'starttls',
+    sendSecurity: 'starttls'
+  }))
+  console.log(C.DC_LP_IMAP_SOCKET_STARTTLS | C.DC_LP_SMTP_SOCKET_STARTTLS)
 }
