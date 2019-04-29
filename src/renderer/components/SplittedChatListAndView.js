@@ -142,6 +142,7 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
+            totalChats={deltachat.totalChats}
             chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
