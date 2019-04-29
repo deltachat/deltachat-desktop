@@ -2,44 +2,27 @@ const C = require('deltachat-node/constants')
 
 const PAGE_SIZE = 20
 
-function _getChatById (chatId) {
-  if (!chatId) return null
-  const rawChat = this._dc.getChat(chatId)
-  if (!rawChat) return null
+function _selectedChat (showArchivedChats, chatList, selectedChatId) {
+  let selectedChat = this._getChatById(selectedChatId)
+  if (!selectedChat) return null
 
-  const chat = rawChat.toJson()
-  let draft = this._dc.getDraft(chatId)
-
-  if (draft) {
-    chat.draft = draft.getText()
-  } else {
-    chat.draft = ''
-  }
-
-  var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+  var messageIds = this._dc.getChatMessages(selectedChat.id, C.DC_GCM_ADDDAYMARKER, 0)
   // This object is NOT created with object assign to promote consistency and to be easier to understand
-  return {
-    id: chat.id,
-    name: chat.name,
-    isVerified: chat.isVerified,
-    profileImage: chat.profileImage,
+  selectedChat.totalMessages = messageIds.length
+  selectedChat.messages = this._messagesToRender(messageIds)
 
-    archived: chat.archived,
-    subtitle: chat.subtitle,
-    type: chat.type,
-    isUnpromoted: chat.isUnpromoted,
-    isSelfTalk: chat.isSelfTalk,
+  if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
+    if (selectedChat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(selectedChat.id)
+      selectedChat.freshMessageCounter = 0
+    }
 
-    contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
-    totalMessages: messageIds.length,
-    messages: this._messagesToRender(messageIds),
-    color: this._integerToHexColor(chat.color),
-    summary: undefined,
-    freshMessageCounter: this._dc.getFreshMessageCount(chatId),
-    isGroup: this.isGroupChat(chat),
-    isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
-    draft: chat.draft
+    if (this._saved.markRead) {
+      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
+    }
   }
+
+  return selectedChat
 }
 
 function _messagesToRender (messageIds) {
@@ -127,7 +110,7 @@ function deleteMessage (id) {
 }
 
 module.exports = function() {
-  this._getChatById = _getChatById.bind(this)
+  this._selectedChat = _selectedChat.bind(this)
   this._messagesToRender = _messagesToRender.bind(this)
   this.messageIdToJson = messageIdToJson.bind(this)
   this.fetchMessages = fetchMessages.bind(this)

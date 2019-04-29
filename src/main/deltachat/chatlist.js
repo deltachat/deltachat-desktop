@@ -61,7 +61,7 @@ function _chatList (showArchivedChats) {
   const chatList = []
   for (let i = 0; i < listCount; i++) {
     const chatId = list.getChatId(i)
-    const chat = this._getChatListItemById(chatId)
+    const chat = this._getChatById(chatId)
 
     if (!chat) continue
 
@@ -86,7 +86,8 @@ function _chatList (showArchivedChats) {
   return chatList
 }
 
-function _getChatListItemById (chatId) {
+function _getChatById (chatId) {
+  console.time('_getChatById', chatId)
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
@@ -101,7 +102,7 @@ function _getChatListItemById (chatId) {
   }
 
   // This object is NOT created with object assign to promote consistency and to be easier to understand
-  return {
+  const chatObject = {
     id: chat.id,
     name: chat.name,
     isVerified: chat.isVerified,
@@ -120,6 +121,9 @@ function _getChatListItemById (chatId) {
     isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
     draft: chat.draft
   }
+
+  console.timeEnd('_getChatById', chatId)
+  return chatObject
 }
 
 function _getGeneralFreshMessageCounter () {
@@ -153,25 +157,9 @@ function _deadDropMessage (id) {
   return { id, contact }
 }
 
-function _selectedChat (showArchivedChats, chatList, selectedChatId) {
-  let selectedChat = this._getChatById(selectedChatId)
-  if (!selectedChat) return null
-  if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
-    }
-
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
-    }
-  }
-
-  return selectedChat
-}
 
 module.exports = function () {
-  this._getChatListItemById = _getChatListItemById.bind(this)
+  this._getChatById = _getChatById.bind(this)
   this.searchChats = searchChats.bind(this)
   this.unblockContact = unblockContact.bind(this)
   this.blockContact = blockContact.bind(this)
@@ -183,5 +171,4 @@ module.exports = function () {
   this._chatList = _chatList.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
-  this._selectedChat = _selectedChat.bind(this)
 }
