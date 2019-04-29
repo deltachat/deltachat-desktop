@@ -8,10 +8,6 @@ const StyleVariables = require('./style-variables')
 
 const log = require('../../logger').getLogger('renderer/chatView')
 
-const MutationObserver = window.MutationObserver
-
-const SCROLL_BUFFER = 70
-
 const ChatListWrapper = styled.div`
   width: 30%;
   height: calc(100vh - 50px);
