@@ -6,7 +6,7 @@ const log = require('../logger').getLogger('main/deltachat')
 
 const CHATVIEW_PAGE_SIZE = 20
 const CHATLIST_PAGE_SIZE = 5
-const CHATLIST_START_SIZE = 15
+const CHATLIST_START_SIZE = 10
 
 /**
  * The Controller is the container for a deltachat instance

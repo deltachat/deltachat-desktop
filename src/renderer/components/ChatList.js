@@ -87,7 +87,6 @@ class ChatList extends React.Component {
   constructor (props) {
     super(props)
     this.contextMenu = React.createRef()
-    this.chatListDiv = React.createRef()
   }
 
   componentDidMount () {
@@ -116,6 +115,11 @@ class ChatList extends React.Component {
     const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
+
+    if (this.doc) {
+      var allowedScroll = this.doc.scrollHeight > this.doc.clientHeight
+      if (!allowedScroll) this.fetchNextChats()
+    }
 
     return (
       <div>
