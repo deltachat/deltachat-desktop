@@ -17,6 +17,10 @@ class DeltaChatController extends EventEmitter {
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this._saved = saved
     this.loadSplitOuts()
+    this.state = {
+      selectedChat: null,
+      chatList: []
+    }
   }
 
   loadSplitOuts () {
@@ -152,8 +156,8 @@ class DeltaChatController extends EventEmitter {
     let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
 
-    let chatList = this._chatList(showArchivedChats)
-    let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
+    //let chatList = this._chatList(showArchivedChats)
+    let selectedChat = this._selectedChat(showArchivedChats, selectedChatId)
 
     return {
       configuring: this.configuring,
@@ -161,7 +165,7 @@ class DeltaChatController extends EventEmitter {
       ready: this.ready,
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
-      chatList,
+      //chatList,
       selectedChat
     }
   }

@@ -4,7 +4,7 @@ const styled = require('styled-components').default
 
 const Media = require('./Media')
 const Menu = require('./Menu')
-const ChatList = require('./ChatList')
+const ChatList = require('./ChatList').default
 const ChatView = require('./ChatView')
 const SearchInput = require('./SearchInput.js')
 
@@ -142,7 +142,6 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
@@ -178,5 +177,7 @@ class SplittedChatListAndView extends React.Component {
     )
   }
 }
+
+
 
 module.exports = SplittedChatListAndView

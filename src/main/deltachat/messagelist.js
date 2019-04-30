@@ -2,7 +2,7 @@ const C = require('deltachat-node/constants')
 
 const PAGE_SIZE = 20
 
-function _selectedChat (showArchivedChats, chatList, selectedChatId) {
+function _selectedChat (showArchivedChats, selectedChatId) {
   let selectedChat = this._getChatById(selectedChatId)
   if (!selectedChat) return null
 

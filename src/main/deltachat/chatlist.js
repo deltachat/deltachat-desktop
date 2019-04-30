@@ -1,6 +1,11 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
 
+function updateStateChatList () {
+  console.log('updateStateChatList')
+  this.state.chatList = this._chatList(this._showArchivedChats)
+}
+
 /**
  * Update query for rendering chats with search input
  */
@@ -159,6 +164,7 @@ function _deadDropMessage (id) {
 
 
 module.exports = function () {
+  this.updateStateChatList = updateStateChatList.bind(this)
   this._getChatById = _getChatById.bind(this)
   this.searchChats = searchChats.bind(this)
   this.unblockContact = unblockContact.bind(this)

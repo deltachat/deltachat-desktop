@@ -1,9 +1,7 @@
-const React = require('react')
-const C = require('deltachat-node/constants')
-const ChatListContextMenu = require('./ChatListContextMenu')
-const ChatListItem = require('./ChatListItem')
+import React, { useState, useEffect, useRef } from 'react';
 const styled = require('styled-components').default
 const StyleVariables = require('./style-variables')
+import { FixedSizeList as List } from 'react-window';
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -52,127 +50,46 @@ const ChatListWrapper = styled.div`
 
 }
 `
+const Row = ({ index, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    Row {index}
+  </div>
+);
 
-const ChatListNoChats = styled.div`
-  height: 52px;
-  text-align: center;
-  padding-top: calc((52px - 14px) / 2);
-  padding: 5px;
+export default function ChatList () {
+  const [chatIds, setChatIds] = useState(null)
+  const [scrollOffset, setScrollOffset] = useState(0)
+  const listRef = useRef(null)
 
-  p {
-    margin: 0 auto;
-  }
-`
-
-const ContactRequestItemWrapper = styled.div`
-  .module-conversation-list-item {
-    background-color:#ccc;
-  }
-
-  .module-conversation-list-item:hover {
-    background-color:#bbb;
-  }
-`
-
-const ArchivedChats = styled.div`
-  .module-conversation-list-item__avatar {
-    visibility: hidden;
-  }
-`
-
-class ChatList extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.contextMenu = React.createRef()
-  }
-
-  openMenu (chatId, e) {
-    e.persist()
-    this.contextMenu.current.show(chatId, e)
-  }
-
-  render () {
-    const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
-    const tx = window.translate
-    const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
-
-    return (
-      <div>
-        <ChatListWrapper>
-          { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-          <div className='ConversationList'>
-            {chatList.map((chatListItem, i) => {
-              if (!chatListItem) return
-              const i18n = window.translate
-              const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
-
-              // Don't show freshMessageCounter on selected chat
-              if (chatListItem.id === C.DC_CHAT_ID_DEADDROP) {
-                const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
-                return (
-                  <ContactRequestItemWrapper key={i}>
-                    <ChatListItem
-                      className='contactrequest'
-                      name={name}
-                      i18n={i18n}
-                      phoneNumber={chatListItem.summary.text1}
-                      lastUpdated={lastUpdated}
-                      lastMessage={{
-                        text2: chatListItem.summary.text2,
-                        status: 'delivered'
-                      }}
-                      onClick={() => onDeadDropClick(chatListItem.deaddrop)}
-                      isSelected={chatListItem.id === selectedChatId}
-                      unreadCount={chatListItem.freshMessageCounter}
-
-                    />
-                  </ContactRequestItemWrapper>)
-              } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
-                return (
-                  <ArchivedChats key={i}>
-                    <ChatListItem
-                      onClick={this.props.onShowArchivedChats}
-                      name={chatListItem.name}
-                      i18n={i18n} />
-                  </ArchivedChats>
-                )
-              } else {
-                return (
-                  <ChatListItem
-                    key={i}
-                    onClick={this.props.onChatClick.bind(null, chatListItem.id)}
-                    phoneNumber={chatListItem.summary.text1}
-                    name={chatListItem.name}
-                    avatarPath={chatListItem.profileImage}
-                    color={chatListItem.color}
-                    lastUpdated={lastUpdated}
-                    lastMessage={{
-                      text1: chatListItem.summary.text1,
-                      text1Meaning: chatListItem.summary.text1Meaning,
-                      text2: chatListItem.summary.text2,
-                      status: 'sent' // TODO: interpret data from summary to get correct state
-                    }}
-                    i18n={i18n}
-                    isSelected={chatListItem.id === selectedChatId}
-                    isVerified={chatListItem.isVerified}
-                    isGroup={chatListItem.isGroup}
-                    unreadCount={chatListItem.freshMessageCounter}
-                    onContextMenu={this.openMenu.bind(this, chatListItem.id)}
-                  />
-                )
-              }
-            })}
-          </div>
-        </ChatListWrapper>
-        <ChatListContextMenu
-          ref={this.contextMenu}
-          showArchivedChats={showArchivedChats}
-          openDialog={this.props.openDialog}
-          changeScreen={this.props.changeScreen} />
-      </div>
-    )
-  }
+  useEffect(() => {
+    setInterval(() => {
+      console.log(listRef)
+      if(listRef.current !== null) {
+        let currentScrollOffset = listRef.current._outerRef.scrollHeight  
+        console.log(currentScrollOffset)
+        //setScrollOffset(scrollOffset + 4 * 150)
+      }
+      setChatIds([...chatIds === null ? [] : chatIds, 1,2,3,4])
+    }, 1000)
+  }, [])
+  
+  return (
+    <ChatListWrapper>
+      {chatIds === null ?
+        <p>Loading chats...</p>
+      :
+        <List
+          ref={listRef}
+          className="List"
+          height={150}
+          itemCount={chatIds.length}
+          itemSize={35}
+          width={300}
+        >
+          {Row}
+        </List>
+      }
+    </ChatListWrapper>
+  )
 }
 
-module.exports = ChatList
