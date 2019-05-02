@@ -59,7 +59,6 @@ class SplittedChatListAndView extends React.Component {
 
     this.chatView = React.createRef()
     this.search = debounce(() => {
-      console.log('sending ipc renderer', this.state.queryStr)
       ipcRenderer.send('searchChats', this.state.queryStr)
     }, 250)
   }
