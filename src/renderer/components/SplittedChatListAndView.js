@@ -1,6 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const debounce = require('debounce')
 
 const Media = require('./Media')
 const Menu = require('./Menu')
@@ -57,6 +58,9 @@ class SplittedChatListAndView extends React.Component {
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
+    this.search = debounce(() => {
+      ipcRenderer.send('searchChats', this.state.queryStr)
+    }, 250)
   }
 
   componentDidMount () {
@@ -78,13 +82,13 @@ class SplittedChatListAndView extends React.Component {
     }
   }
 
-  searchChats (queryStr) {
-    this.setState({ queryStr })
-    ipcRenderer.send('searchChats', queryStr)
-  }
-
   onDeadDropClick (deadDrop) {
     this.props.openDialog('DeadDrop', { deadDrop })
+  }
+
+  searchChats (queryStr) {
+    this.setState({ queryStr })
+    this.search()
   }
 
   handleSearchChange (event) {
@@ -142,6 +146,7 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
+            totalChats={deltachat.totalChats}
             chatList={deltachat.chatList}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}

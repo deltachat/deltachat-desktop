@@ -1,9 +1,12 @@
 const React = require('react')
+const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
 const StyleVariables = require('./style-variables')
+
+const log = require('../../logger').getLogger('renderer/chatView')
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -28,13 +31,13 @@ const ChatListWrapper = styled.div`
   .module-conversation-list-item--is-selected {
     background-color: ${StyleVariables.colors.deltaSelected};
     color: ${StyleVariables.colors.deltaPrimaryFg};
-    
+
     span.module-contact-name {
       color: ${StyleVariables.colors.deltaPrimaryFg};
     }
 
     .module-conversation-list-item__is-group {
-      filter: unset; 
+      filter: unset;
     }
 
     &:hover {
@@ -83,8 +86,24 @@ const ArchivedChats = styled.div`
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
-
     this.contextMenu = React.createRef()
+  }
+
+  componentDidMount () {
+    this.doc = document.querySelector(`.${ChatListWrapper.styledComponentId}`)
+    if (!this.doc) return log.warn(`Didn't find .ChatListWrapper .ConversationList`)
+    this.doc.onscroll = this.onScroll.bind(this)
+  }
+
+  onScroll () {
+    var element = this.doc
+    var fetch = (element.scrollHeight - element.scrollTop) === element.clientHeight
+    if (fetch) this.fetchNextChats()
+  }
+
+  fetchNextChats () {
+    if (this.props.totalChats === this.props.chatList.length) return
+    ipcRenderer.send('fetchChats')
   }
 
   openMenu (chatId, e) {
@@ -97,11 +116,16 @@ class ChatList extends React.Component {
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
 
+    if (this.doc) {
+      var allowedScroll = this.doc.scrollHeight > this.doc.clientHeight
+      if (!allowedScroll) this.fetchNextChats()
+    }
+
     return (
       <div>
         <ChatListWrapper>
           { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-          <div className='ConversationList'>
+          <div className='ConversationList' ref={this.chatListDiv}>
             {chatList.map((chatListItem, i) => {
               if (!chatListItem) return
               const i18n = window.translate

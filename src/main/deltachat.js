@@ -4,7 +4,9 @@ const EventEmitter = require('events').EventEmitter
 const path = require('path')
 const log = require('../logger').getLogger('main/deltachat')
 
-const PAGE_SIZE = 20
+const CHATVIEW_PAGE_SIZE = 20
+const CHATLIST_PAGE_SIZE = 5
+const CHATLIST_START_SIZE = 10
 
 /**
  * The Controller is the container for a deltachat instance
@@ -367,7 +369,7 @@ class DeltaChatController extends EventEmitter {
     let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
 
-    let chatList = this._chatList(showArchivedChats)
+    let { listCount, chatList } = this._chatList(showArchivedChats)
     let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
 
     return {
@@ -376,6 +378,7 @@ class DeltaChatController extends EventEmitter {
       ready: this.ready,
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
+      totalChats: listCount,
       chatList,
       selectedChat
     }
@@ -393,7 +396,9 @@ class DeltaChatController extends EventEmitter {
     const listCount = list.getCount()
 
     const chatList = []
-    for (let i = 0; i < listCount; i++) {
+    const maxChats = (this._chatListPages * CHATLIST_PAGE_SIZE) + CHATLIST_START_SIZE
+
+    for (let i = 0; i < maxChats; i++) {
       const chatId = list.getChatId(i)
       const chat = this._getChatById(chatId)
 
@@ -417,7 +422,7 @@ class DeltaChatController extends EventEmitter {
         isGroup: chat.isGroup
       })
     }
-    return chatList
+    return { chatList, listCount }
   }
 
   _getGeneralFreshMessageCounter () {
@@ -511,7 +516,7 @@ class DeltaChatController extends EventEmitter {
   _messagesToRender (messageIds) {
     const countMessages = messageIds.length
     const messageIdsToRender = messageIds.splice(
-      Math.max(countMessages - (this._pages * PAGE_SIZE), 0),
+      Math.max(countMessages - (this._pages * CHATVIEW_PAGE_SIZE), 0),
       countMessages
     )
 
@@ -560,6 +565,11 @@ class DeltaChatController extends EventEmitter {
       isInfo: msg.isInfo(),
       setupCodeBegin
     }
+  }
+
+  fetchChats () {
+    this._chatListPages++
+    this._render()
   }
 
   fetchMessages () {
@@ -612,6 +622,7 @@ class DeltaChatController extends EventEmitter {
     this._selectedChatId = null
     this._showArchivedChats = false
     this._pages = 1
+    this._chatListPages = 0
     this._query = ''
   }
 }
