@@ -2,8 +2,10 @@ const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const ReactDOM = require('react-dom')
 const { ipcRenderer } = require('electron')
+const C = require('deltachat-node/constants')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
+const locationStore = require('../../stores/locations')
 const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment/moment')
 const formatRelativeTime = require('../conversations/formatRelativeTime')
@@ -14,13 +16,13 @@ const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
 
 const ContextMenu = require('./ContextMenu')
+const i18n = window.translate
 
 class MapComponent extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       timeOffset: 50,
-      lastTimeOffset: 50,
       mapStyle: 'default',
       showTerrain: false,
       showControls: false,
@@ -29,8 +31,8 @@ class MapComponent extends React.Component {
       totalMessages: 0
     }
     this.mapDataStore = new Map()
-    this.debounce = debounce(this.renderOrUpdateLayer, 1000)
-    this.renderOrUpdateLayer = this.renderOrUpdateLayer.bind(this)
+    this.refreshLocations = debounce(this.getLocations, 1000)
+    this.getLocations = this.getLocations.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
     this.onMapRightClick = this.onMapRightClick.bind(this)
     this.sendPoiMessage = this.sendPoiMessage.bind(this)
@@ -42,20 +44,27 @@ class MapComponent extends React.Component {
     this.contextMenu = React.createRef()
     this.contextMenuPopup = null
     this.poiLocation = null
-    this.currentUserAddress = null
   }
 
   componentDidMount () {
-    this.currentUserAddress = this.context.credentials.addr
     const { selectedChat } = this.props
-    const saveData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
+    this.currentUserAddress = this.context.credentials.addr
     let mapSettings = { zoom: 4, center: [8, 48] } // <- default
-    if (saveData !== undefined) {
-      const { savedMapSettings, savedState } = saveData
+    const savedData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
+    if (savedData !== undefined) {
+      const { savedMapSettings, savedState } = savedData
       mapSettings = savedMapSettings
       this.setState(savedState)
       this.stateFromSession = true
     }
+    locationStore.setState({
+      selectedChat: selectedChat,
+      locations: [],
+      mapSettings: {
+        timestampFrom: this.getTimestampForRange(),
+        timestampTo: 0
+      }
+    })
     mapboxgl.accessToken = MapLayerFactory.getAccessToken()
     this.map = new mapboxgl.Map(
       {
@@ -66,11 +75,15 @@ class MapComponent extends React.Component {
         attributionControl: false
       }
     )
-    this.map.on('load', this.renderOrUpdateLayer)
+    this.map.on('load', this.getLocations)
     this.map.on('click', this.onMapClick)
     this.map.on('contextmenu', this.onMapRightClick)
-    this.map.on('close', () => console.log('map closed'))
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
+    const onLocationsUpdated = (locationState) => {
+      const { locations } = locationState
+      this.renderLayers(locations)
+    }
+    locationStore.subscribe(onLocationsUpdated)
   }
 
   componentWillUnmount () {
@@ -85,41 +98,49 @@ class MapComponent extends React.Component {
     })
   }
 
-  renderOrUpdateLayer () {
-    if (this.state.timeOffset < this.state.lastTimeOffset) {
-      // remove all layer since source update does not remove existing points
-      this.removeAllLayer()
-      this.mapDataStore.clear()
+  getLocations () {
+    const { selectedChat } = this.props
+    const action = {
+      type: 'DC_GET_LOCATIONS',
+      payload: {
+        chatId: selectedChat.id,
+        contactId: 0,
+        timestampFrom: this.getTimestampForRange(),
+        timestampTo: 0
+      }
     }
-    this.renderLayers()
+    locationStore.dispatch(action)
   }
 
-  async renderLayers () {
+  renderLayers (locations) {
+    // remove all layer since source update does not remove existing points
+    this.removeAllLayer()
+    this.mapDataStore.clear()
     const { selectedChat } = this.props
     let allPoints = []
     let currentContacts = []
-    let locationsForChat = await ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
-    this.mapDataStore.locationCount = locationsForChat.length
-    selectedChat.contacts.map(contact => {
-      let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
-      if (locationsForContact.length > 0) {
-        currentContacts.push(contact)
-      }
-      const pointsForLayer = this.renderContactLayer(contact, locationsForContact)
-      allPoints = allPoints.concat(pointsForLayer)
-    })
-    this.setState({ currentContacts: currentContacts })
-    if (this.stateFromSession) {
-      this.stateFromSession = false
-      this.setTerrainLayer(this.state.showTerrain)
-      this.changeMapStyle(this.state.mapStyle)
-    } else {
-      if (allPoints.length > 0) {
-        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+
+    this.mapDataStore.locationCount = locations.length
+    if (locations.length > 0) {
+      selectedChat.contacts.map(contact => {
+        let locationsForContact = locations.filter(location => location.contactId === contact.id)
+        if (locationsForContact.length > 0) {
+          currentContacts.push(contact)
+        }
+        const pointsForLayer = this.renderContactLayer(contact, locationsForContact)
+        allPoints = allPoints.concat(pointsForLayer)
+      })
+      this.setState({ currentContacts: currentContacts })
+      if (this.stateFromSession) {
+        this.stateFromSession = false
+        this.setTerrainLayer(this.state.showTerrain)
+        this.changeMapStyle(this.state.mapStyle)
+      } else {
+        if (allPoints.length > 0) {
+          this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+        }
       }
     }
-    this.state.lastTimeOffset = this.state.timeOffset
-    this.mapDataStore.initialized = true
   }
 
   renderContactLayer (contact, locationsForContact) {
@@ -167,12 +188,6 @@ class MapComponent extends React.Component {
     return pointsForLayer
   }
 
-  async updateLayerForContact (contact) {
-    const { selectedChat } = this.props
-    let locationsForContact = await ipcRenderer.sendSync('getLocations', selectedChat.id, contact.id, this.getTimestampForRange(), 0)
-    this.renderContactLayer(contact, locationsForContact)
-  }
-
   removeAllLayer () {
     this.mapDataStore.forEach(
       (mapDataItem) => {
@@ -196,7 +211,7 @@ class MapComponent extends React.Component {
       this.addPathLayer(locationsForContact, mapData)
     } else {
       // update source
-      this.map.getSource(mapData.pathLayerId).setData(MapLayerFactory.getGeoJSONLineSourceData(locationsForContact))
+      this.map.getSource(mapData.pathLayerId).setData(MapLayerFactory.getGeoJSONLineSourceData(locationsForContact.filter(location => !location.isIndependent)))
     }
     if (!this.map.getSource(mapData.pointsLayerId)) {
       this.addPathJointsLayer(locationsForContact, mapData)
@@ -207,7 +222,7 @@ class MapComponent extends React.Component {
 
   addPathLayer (locationsForContact, mapData) {
     let source = { type: 'geojson',
-      data: MapLayerFactory.getGeoJSONLineSourceData(locationsForContact)
+      data: MapLayerFactory.getGeoJSONLineSourceData(locationsForContact.filter(location => !location.isIndependent))
     }
     this.map.addSource(
       mapData.pathLayerId,
@@ -232,9 +247,7 @@ class MapComponent extends React.Component {
     this.map.addLayer(layer)
   }
 
-  onMapClick (event) {
-    console.log('onMapClick', event)
-    const { selectedChat } = this.props
+  async onMapClick (event) {
     let message
     let features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
@@ -242,7 +255,10 @@ class MapComponent extends React.Component {
     })
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
-        const messageObj = selectedChat.messages.find(msg => msg.id === contactFeature.properties.msgId)
+        const messageObj = await ipcRenderer.sendSync(
+          'getMessage',
+          contactFeature.properties.msgId
+        )
         if (messageObj) {
           message = messageObj.msg
         }
@@ -259,8 +275,6 @@ class MapComponent extends React.Component {
   }
 
   onMapRightClick (event) {
-    console.log(event)
-    console.log(this.contextMenu.current)
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
     }
@@ -277,15 +291,32 @@ class MapComponent extends React.Component {
 
   sendPoiMessage (message) {
     const { selectedChat } = this.props
-    console.log('sendPoiMessage', message)
-    ipcRenderer.send('sendMessage', selectedChat.id, message, null, this.poiLocation)
+    if (!this.poiLocation) {
+      return
+    }
+    let latLng = Object.assign({}, this.poiLocation)
+    ipcRenderer.send('sendMessage', selectedChat.id, message, null, latLng)
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
       this.contextMenuPopup = null
-      this.poiLocation = null
     }
     let contact = selectedChat.contacts.find(contact => contact.address === this.currentUserAddress)
-    this.updateLayerForContact(contact)
+    if (!contact) {
+      contact = { id: C.DC_CONTACT_ID_SELF, firstName: i18n('self') } // fallback since current user is not in contact list in non group chats
+    }
+    const location = {
+      longitude: latLng.lng,
+      latitude: latLng.lat,
+      contact: contact,
+      timestamp: new Date().getUTCMilliseconds(),
+      isIndependent: true,
+      message: message
+    }
+    const mapData = this.mapDataStore.get(contact.id)
+    if (mapData) {
+      this.map.getSource(mapData.pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData([location], contact, true))
+    }
+    this.poiLocation = null
   }
 
   togglePathLayer () {
@@ -301,7 +332,7 @@ class MapComponent extends React.Component {
 
   onRangeChange (value) {
     this.setState({ 'timeOffset': value })
-    this.debounce(value)
+    this.refreshLocations()
   }
 
   changeMapStyle (style) {
@@ -332,8 +363,8 @@ class MapComponent extends React.Component {
   }
 
   setTerrainLayer (showTerrain) {
-    const visibility = showTerrain ? 'visible' : 'none'
-    console.log(visibility)
+    this.setState({ showTerrain: !showTerrain })
+    const visibility = showTerrain ? 'none' : 'visible'
     if (this.map.getLayer('terrain')) {
       this.map.setLayoutProperty('terrain', 'visibility', visibility)
     } else {
@@ -368,10 +399,14 @@ class MapComponent extends React.Component {
     let mapDataItem = this.mapDataStore.get(contactId)
     const visibility = isHidden ? 'visible' : 'none'
     if (!isHidden) {
-      mapDataItem.marker.remove()
+      if (mapDataItem.marker) {
+        mapDataItem.marker.remove()
+      }
       mapDataItem.hidden = true
     } else {
-      mapDataItem.marker.addTo(this.map)
+      if (mapDataItem.marker) {
+        mapDataItem.marker.addTo(this.map)
+      }
       mapDataItem.hidden = false
     }
     let currentContacts = this.state.currentContacts.map(
@@ -402,7 +437,6 @@ class MapComponent extends React.Component {
   }
 
   renderPopupMessage (contactName, formattedDate, message) {
-    const i18n = window.translate
     return ReactDOMServer.renderToStaticMarkup(
       <PopupMessage username={contactName} formattedDate={formattedDate} message={message} i18n={i18n} />
     )

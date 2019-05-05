@@ -41,12 +41,8 @@ class MapLayerFactory {
       'layout': {
         'icon-image': '{icon}-15',
         'icon-size': 2
-        // 'fill-color': '#220066'
       },
       'source': pointsLayerId
-      // 'paint': {
-      //   'circle-color': '#' + color.toString(16)
-      // }
     }
   }
 
