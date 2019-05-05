@@ -25,10 +25,7 @@ class Store {
 
   subscribe (listener) {
     this.listeners.push(listener)
-    return () => {
-      const index = this.listeners.indexOf(listener)
-      this.listeners.splice(index, 1)
-    }
+    return this.unsubscribe.bind(this, listener)
   }
 
   unsubscribe (listener) {
