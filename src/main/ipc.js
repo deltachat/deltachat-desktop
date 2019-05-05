@@ -85,8 +85,8 @@ function init (cwd, state, logHandler) {
     render()
   })
 
-  ipcMain.on('sendMessage', (e, chatId, text, fileName) => {
-    dc.sendMessage(chatId, text, fileName)
+  ipcMain.on('sendMessage', (e, chatId, text, fileName, location) => {
+    dc.sendMessage(chatId, text, fileName, location)
   })
 
   ipcMain.on('fetchMessages', () => dc.fetchMessages())

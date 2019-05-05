@@ -1,5 +1,6 @@
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
+const ReactDOM = require('react-dom')
 const { ipcRenderer } = require('electron')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
@@ -12,6 +13,8 @@ const PopupMessage = require('./PopupMessage')
 const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
 
+const ContextMenu = require('./ContextMenu')
+
 class MapComponent extends React.Component {
   constructor (props) {
     super(props)
@@ -22,22 +25,28 @@ class MapComponent extends React.Component {
       showTerrain: false,
       showControls: false,
       showPathLayer: false,
-      currentContacts: []
+      currentContacts: [],
+      totalMessages: 0
     }
     this.mapDataStore = new Map()
     this.debounce = debounce(this.renderOrUpdateLayer, 1000)
     this.renderOrUpdateLayer = this.renderOrUpdateLayer.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
+    this.onMapRightClick = this.onMapRightClick.bind(this)
+    this.sendPoiMessage = this.sendPoiMessage.bind(this)
     this.togglePathLayer = this.togglePathLayer.bind(this)
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.toggleTerrainLayer = this.toggleTerrainLayer.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
+    this.contextMenu = React.createRef()
+    this.contextMenuPopup = null
+    this.poiLocation = null
+    this.currentUserAddress = null
   }
 
   componentDidMount () {
     this.currentUserAddress = this.context.credentials.addr
-    this.componentDidMount = Date.now()
     const { selectedChat } = this.props
     const saveData = SessionStorage.getItem(this.currentUserAddress, `${selectedChat.id}_map`)
     let mapSettings = { zoom: 4, center: [8, 48] } // <- default
@@ -59,6 +68,8 @@ class MapComponent extends React.Component {
     )
     this.map.on('load', this.renderOrUpdateLayer)
     this.map.on('click', this.onMapClick)
+    this.map.on('contextmenu', this.onMapRightClick)
+    this.map.on('close', () => console.log('map closed'))
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
   }
 
@@ -75,35 +86,67 @@ class MapComponent extends React.Component {
   }
 
   renderOrUpdateLayer () {
-    const { selectedChat } = this.props
-    const contacts = selectedChat.contacts
-    let allPoints = []
-    let currentContacts = []
     if (this.state.timeOffset < this.state.lastTimeOffset) {
       // remove all layer since source update does not remove existing points
       this.removeAllLayer()
       this.mapDataStore.clear()
     }
-    let locationsForChat = ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
-    contacts.map(contact => {
-      let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
-      if (locationsForContact && locationsForContact.length) {
-        let pointsForLayer = locationsForContact.map(point => [point.longitude, point.latitude])
-        // map data to handle map state
-        let mapData = {
-          contact: contact,
-          pathLayerId: 'contact-route-' + contact.id,
-          pointsLayerId: 'points-' + contact.id,
-          hidden: false
-        }
-        const existingContact = this.state.currentContacts.find(item => item.id === contact.id)
-        if (existingContact) {
-          mapData.hidden = existingContact.hidden
-        }
-        this.mapDataStore.set(contact.id, mapData)
-        this.addLayerForContact(mapData, locationsForContact)
+    this.renderLayers()
+  }
 
-        let lastPoint = locationsForContact[0]
+  async renderLayers () {
+    const { selectedChat } = this.props
+    let allPoints = []
+    let currentContacts = []
+    let locationsForChat = await ipcRenderer.sendSync('getLocations', selectedChat.id, 0, this.getTimestampForRange(), 0)
+    this.mapDataStore.locationCount = locationsForChat.length
+    selectedChat.contacts.map(contact => {
+      let locationsForContact = locationsForChat.filter(location => location.contactId === contact.id)
+      if (locationsForContact.length > 0) {
+        currentContacts.push(contact)
+      }
+      const pointsForLayer = this.renderContactLayer(contact, locationsForContact)
+      allPoints = allPoints.concat(pointsForLayer)
+    })
+    this.setState({ currentContacts: currentContacts })
+    if (this.stateFromSession) {
+      this.stateFromSession = false
+      this.setTerrainLayer(this.state.showTerrain)
+      this.changeMapStyle(this.state.mapStyle)
+    } else {
+      if (allPoints.length > 0) {
+        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+      }
+    }
+    this.state.lastTimeOffset = this.state.timeOffset
+    this.mapDataStore.initialized = true
+  }
+
+  renderContactLayer (contact, locationsForContact) {
+    let pointsForLayer = []
+    let lastPoint = null
+    if (locationsForContact && locationsForContact.length) {
+      pointsForLayer = locationsForContact.map(location => {
+        if (!lastPoint && !location.isIndependent) {
+          lastPoint = location
+        }
+        return [location.longitude, location.latitude]
+      })
+      // map data to handle map state
+      let mapData = {
+        contact: contact,
+        pathLayerId: 'contact-route-' + contact.id,
+        pointsLayerId: 'points-' + contact.id,
+        hidden: false
+      }
+      const existingContact = this.state.currentContacts.find(item => item.id === contact.id)
+      if (existingContact) {
+        mapData.hidden = existingContact.hidden
+      }
+      this.mapDataStore.set(contact.id, mapData)
+      this.addOrUpdateLayerForContact(mapData, locationsForContact)
+
+      if (lastPoint) {
         let lastDate = formatRelativeTime(lastPoint.timestamp * 1000, { extended: true })
         let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate, null))
         if (mapData.marker) {
@@ -119,28 +162,15 @@ class MapComponent extends React.Component {
         } else {
           mapData.marker.addTo(this.map)
         }
-        // light weight contact object for component state in contact filter control
-        currentContacts.push(
-          {
-            id: contact.id,
-            name: contact.firstName,
-            hidden: mapData.hidden,
-            color: contact.color
-          })
-        allPoints = allPoints.concat(pointsForLayer)
-      }
-    })
-    this.setState({ currentContacts: currentContacts })
-    if (this.stateFromSession) {
-      this.stateFromSession = false
-      this.setTerrainLayer(this.state.showTerrain)
-      this.changeMapStyle(this.state.mapStyle)
-    } else {
-      if (allPoints.length > 0) {
-        this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
       }
     }
-    this.state.lastTimeOffset = this.state.timeOffset
+    return pointsForLayer
+  }
+
+  async updateLayerForContact (contact) {
+    const { selectedChat } = this.props
+    let locationsForContact = await ipcRenderer.sendSync('getLocations', selectedChat.id, contact.id, this.getTimestampForRange(), 0)
+    this.renderContactLayer(contact, locationsForContact)
   }
 
   removeAllLayer () {
@@ -161,7 +191,7 @@ class MapComponent extends React.Component {
     )
   }
 
-  addLayerForContact (mapData, locationsForContact) {
+  addOrUpdateLayerForContact (mapData, locationsForContact) {
     if (!this.map.getSource(mapData.pathLayerId)) {
       this.addPathLayer(locationsForContact, mapData)
     } else {
@@ -203,6 +233,7 @@ class MapComponent extends React.Component {
   }
 
   onMapClick (event) {
+    console.log('onMapClick', event)
     const { selectedChat } = this.props
     let message
     let features = this.map.queryRenderedFeatures(event.point)
@@ -221,11 +252,40 @@ class MapComponent extends React.Component {
         formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
         message)
       new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(contactFeature.geometry.coordinates)
         .setHTML(markup)
         .setLngLat(contactFeature.geometry.coordinates)
         .addTo(this.map)
     }
+  }
+
+  onMapRightClick (event) {
+    console.log(event)
+    console.log(this.contextMenu.current)
+    if (this.contextMenuPopup) {
+      this.contextMenuPopup.remove()
+    }
+    this.poiLocation = event.lngLat
+    this.contextMenuPopup = new mapboxgl.Popup({ offset: [0, -15] })
+      .setLngLat(event.lngLat)
+      .setDOMContent(ReactDOM.findDOMNode(this.contextMenu.current))
+      .addTo(this.map)
+      .on('close', () => {
+        this.contextMenuPopup = null
+        this.poiLocation = null
+      })
+  }
+
+  sendPoiMessage (message) {
+    const { selectedChat } = this.props
+    console.log('sendPoiMessage', message)
+    ipcRenderer.send('sendMessage', selectedChat.id, message, null, this.poiLocation)
+    if (this.contextMenuPopup) {
+      this.contextMenuPopup.remove()
+      this.contextMenuPopup = null
+      this.poiLocation = null
+    }
+    let contact = selectedChat.contacts.find(contact => contact.address === this.currentUserAddress)
+    this.updateLayerForContact(contact)
   }
 
   togglePathLayer () {
@@ -317,7 +377,9 @@ class MapComponent extends React.Component {
     let currentContacts = this.state.currentContacts.map(
       contactItem => contactItem.id === contactId ? { ...contactItem, ...{ hidden: mapDataItem.hidden } } : contactItem)
     this.setState({ currentContacts: currentContacts })
-    this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', visibility)
+    if (this.state.showPathLayer) {
+      this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', visibility)
+    }
     this.map.setLayoutProperty(mapDataItem.pointsLayerId, 'visibility', visibility)
     if (!this.stateFromSession) {
       this.setBoundToMarker()
@@ -350,7 +412,7 @@ class MapComponent extends React.Component {
     return (
       <div key={contact.id} >
         <input type='checkbox' name={contact.id} onChange={() => this.toggleContactLayer(contact.id, contact.hidden)} checked={!contact.hidden} />
-        <label style={{ color: '#' + contact.color.toString(16) }}>{contact.name} </label>
+        <label style={{ color: '#' + contact.color.toString(16) }}>{contact.firstName} </label>
       </div>
     )
   }
@@ -407,10 +469,10 @@ class MapComponent extends React.Component {
           </Collapse>
         </nav>
         <div id='map' />
+        <ContextMenu ref={this.contextMenu} onSetPoi={this.sendPoiMessage} />
       </div>
     )
   }
 }
 MapComponent.contextType = SettingsContext
-
 module.exports = MapComponent

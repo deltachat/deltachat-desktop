@@ -15,6 +15,49 @@
 
 }
 
+div.context-menu {
+	width: 200px;
+	label {
+		display: block;
+		font-size: 13px;
+		padding: 2px;
+	}
+	input {
+		height: 24px;
+		font-size: 16px;
+		padding: 3px;
+		width: 160px;
+		border-width: 0 0 1px 0;
+		border-color: #666;
+		border-style: solid;
+	}
+	div.send-button-wrapper {
+		width: 32px;
+		height: 32px;
+		float: right;
+		margin-top: 14px;
+		margin-bottom: 4px;
+		margin-right: 5px;
+		background-color: #415e6b;
+		border-radius: 180px;
+		cursor: pointer;
+		button {
+			height: 24px;
+			width: 24px;
+			margin: 4px;
+			padding-left: 16px;
+			border: none;
+			background-image: url(../images/send-button.png);
+			background-color: transparent;
+			background-repeat: no-repeat;
+			background-position: 3px 1px;
+			background-size: contain;
+			vertical-align: middle;
+		}
+	}
+}
+
+
 .mapboxgl-marker {
 	cursor: pointer;
 }
