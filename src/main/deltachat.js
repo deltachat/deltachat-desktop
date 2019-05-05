@@ -3,6 +3,8 @@ const C = require('deltachat-node/constants')
 const EventEmitter = require('events').EventEmitter
 const path = require('path')
 const log = require('../logger').getLogger('main/deltachat')
+const eventStrings = require('deltachat-node/events')
+const windows = require('./windows')
 
 const CHATVIEW_PAGE_SIZE = 20
 const CHATLIST_PAGE_SIZE = 5
@@ -36,6 +38,17 @@ class DeltaChatController extends EventEmitter {
     log.debug('Core Event', event, payload)
   }
 
+  handleRendererEvent (evt, methodName, args) {
+    if (typeof this[methodName] === 'function') {
+      this[methodName](...args)
+    }
+  }
+
+  sendToRenderer (evt, payload) {
+    log.debug('sendToRenderer: ' + evt, payload)
+    windows.main.send(evt, payload)
+  }
+
   login (credentials, render, coreStrings) {
     // Creates a separate DB file for each login
     const cwd = this.getPath(credentials.addr)
@@ -67,8 +80,8 @@ class DeltaChatController extends EventEmitter {
       }
     })
 
-    dc.on('ALL', (event, data1, data2) => {
-      log.debug('ALL event', { event, data1, data2 })
+    dc.on('ALL', (event, ...args) => {
+      log.debug('ALL event', event, args)
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
@@ -95,17 +108,19 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       // Don't rerender if a draft changes
       if (msgId === 0) return
+      this.sendToRenderer('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
+      this.sendToRenderer('DC_EVENT_INCOMING_MSG', { chatId, msgId })
       this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
       render()
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+      this.sendToRenderer('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
       this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
       render()
     })
@@ -116,13 +131,13 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      this.logCoreEvent('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
+      this.logCoreEvent('DC_EVENT_MSG_READ', { chatId, msgId })
       render()
     })
 
-    dc.on('DC_EVENT_LOCATION_CHANGED', (chatId, msgId) => {
-      this.emit('DC_EVENT_LOCATION_CHANGED', chatId, msgId)
-      render()
+    dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
+      this.logCoreEvent('DC_EVENT_LOCATION_CHANGED', { contactId })
+      this.sendToRenderer('DC_EVENT_LOCATION_CHANGED', { contactId })
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
@@ -358,7 +373,8 @@ class DeltaChatController extends EventEmitter {
   }
 
   getLocations (chatId, contactId, timestampFrom, timestampTo) {
-    return this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
+    const locations = this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
+    this.sendToRenderer('DD_EVENT_LOCATIONS_UPDATED', { locations, chatId, contactId, timestampFrom, timestampTo })
   }
 
   setDraft (chatId, msgText) {
@@ -546,8 +562,13 @@ class DeltaChatController extends EventEmitter {
     return messages
   }
 
+
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
+    if (!msg) {
+      log.warn('No message found for ID ' + id)
+      return { msg: null }
+    }
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
