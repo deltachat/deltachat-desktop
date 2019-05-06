@@ -46,3 +46,21 @@ function setupLocaleData (locale) {
   window.localeData = ipcRenderer.sendSync('locale-data', locale)
   window.translate = localize.translate(window.localeData.messages)
 }
+
+window.addEventListener('keydown', function (ev) {
+  if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
+    let stop = true
+    if (ev.target.localName === 'textarea' || ev.target.localName === 'input') {
+      stop = false
+    } else {
+      for (let index = 0; index < ev.path.length; index++) {
+        const element = ev.path[index]
+        if (element.localName === 'textarea' || element.localName === 'input') stop = false
+      }
+    }
+    if (stop) {
+      ev.stopPropagation()
+      ev.preventDefault()
+    }
+  }
+})
