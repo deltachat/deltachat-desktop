@@ -70,6 +70,10 @@ function init (cwd, state, logHandler) {
     menu.init(logHandler)
   })
 
+  ipcMain.on('EVENT_DC_FUNCTION_CALL', (evt, fnName, ...args) => {
+    dc.handleRendererEvent(evt, fnName, args)
+  })
+
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
@@ -87,6 +91,10 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('sendMessage', (e, chatId, text, fileName, location) => {
     dc.sendMessage(chatId, text, fileName, location)
+  })
+
+  ipcMain.on('getMessage', (e, msgId) => {
+    e.returnValue = dc.messageIdToJson(msgId)
   })
 
   ipcMain.on('fetchMessages', () => dc.fetchMessages())
@@ -197,10 +205,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
     e.returnValue = dc.setLocation(latitude, longitude, accuracy)
-  })
-
-  ipcMain.on('getLocations', (e, chatId, contactId, timestampFrom, timestampTo) => {
-    e.returnValue = dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
