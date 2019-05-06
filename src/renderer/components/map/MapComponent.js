@@ -27,8 +27,7 @@ class MapComponent extends React.Component {
       showTerrain: false,
       showControls: false,
       showPathLayer: false,
-      currentContacts: [],
-      totalMessages: 0
+      currentContacts: []
     }
     this.mapDataStore = new Map()
     this.refreshLocations = debounce(this.getLocations, 1000)
