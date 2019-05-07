@@ -12,7 +12,7 @@ const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc')
 const DeltaChat = (() => {
   try {
-    return require('./deltachat')
+    return require('./deltachat/index.js')
   } catch (error) {
     log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
     const { dialog } = require('electron')
