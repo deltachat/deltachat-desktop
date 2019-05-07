@@ -3,7 +3,6 @@ const C = require('deltachat-node/constants')
 const EventEmitter = require('events').EventEmitter
 const path = require('path')
 const log = require('../logger').getLogger('main/deltachat')
-const eventStrings = require('deltachat-node/events')
 const windows = require('./windows')
 
 const CHATVIEW_PAGE_SIZE = 20
@@ -561,7 +560,6 @@ class DeltaChatController extends EventEmitter {
 
     return messages
   }
-
 
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
