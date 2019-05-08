@@ -35,6 +35,12 @@ before_install:
   - echo $(uname);
   - if [ $(uname) = Darwin ]; then
         brew install meson ninja openssl libetpan;
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -y;
+        . ~/.cargo/env;
+        git clone https://github.com/rpgp/rpgp.git;
+        pushd rpgp/pgp-ffi;
+        make install;
+        popd;
     fi
 
 install:
