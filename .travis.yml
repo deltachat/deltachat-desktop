@@ -33,7 +33,7 @@ before_install:
         sudo pip3 install meson;
     fi
   - if [ $(uname) = Darwin]; then
-        brew install meson ninja
+        brew install meson ninja;
     fi
 
 install:
