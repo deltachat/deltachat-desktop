@@ -34,7 +34,7 @@ before_install:
     fi
   - echo $(uname);
   - if [ $(uname) = Darwin ]; then
-        brew install meson ninja;
+        brew install meson ninja openssl libetpan;
     fi
 
 install:
