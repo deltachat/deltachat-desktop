@@ -32,6 +32,9 @@ before_install:
   - if [ $(uname) = Linux ]; then
         sudo pip3 install meson;
     fi
+  - if [ $(uname) = Darwin]; then
+        brew install meson ninja
+    fi
 
 install:
   - npm install
