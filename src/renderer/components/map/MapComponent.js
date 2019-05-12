@@ -16,7 +16,6 @@ const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
 
 const ContextMenu = require('./ContextMenu')
-const i18n = window.translate
 
 class MapComponent extends React.Component {
   constructor (props) {
@@ -301,7 +300,7 @@ class MapComponent extends React.Component {
     }
     let contact = selectedChat.contacts.find(contact => contact.address === this.currentUserAddress)
     if (!contact) {
-      contact = { id: C.DC_CONTACT_ID_SELF, firstName: i18n('self') } // fallback since current user is not in contact list in non group chats
+      contact = { id: C.DC_CONTACT_ID_SELF, firstName: window.translate('self') } // fallback since current user is not in contact list in non group chats
     }
     const location = {
       longitude: latLng.lng,
@@ -437,7 +436,7 @@ class MapComponent extends React.Component {
 
   renderPopupMessage (contactName, formattedDate, message) {
     return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage username={contactName} formattedDate={formattedDate} message={message} i18n={i18n} />
+      <PopupMessage username={contactName} formattedDate={formattedDate} message={message} i18n={window.translate} />
     )
   }
 
