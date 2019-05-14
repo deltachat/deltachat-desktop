@@ -175,13 +175,6 @@ function close () {
   this._dc = null
 }
 
-
-function addServerFlags (credentials) {
-  return Object.assign({}, credentials, {
-    serverFlags: serverFlags(credentials)
-  })
-}
-
 module.exports = function () {
   this.setCoreStrings = setCoreStrings.bind(this)
   this.login = login.bind(this)

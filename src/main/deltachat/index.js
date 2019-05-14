@@ -1,9 +1,6 @@
-const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const EventEmitter = require('events').EventEmitter
-const path = require('path')
 const log = require('../../logger').getLogger('main/deltachat')
-const eventStrings = require('deltachat-node/events')
 const windows = require('../windows')
 
 /**
@@ -23,7 +20,7 @@ class DeltaChatController extends EventEmitter {
     this.loadSplitOuts()
   }
 
-  loadSplitOuts() {
+  loadSplitOuts () {
     require('./login').bind(this)()
     require('./chatlist').bind(this)()
     require('./chatmethods').bind(this)()
@@ -32,7 +29,6 @@ class DeltaChatController extends EventEmitter {
     require('./locations').bind(this)()
     require('./autocrypt').bind(this)()
   }
-
 
   logCoreEvent (event, payload) {
     log.debug('Core Event', event, payload)
@@ -49,12 +45,9 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(evt, payload)
   }
 
-
   checkPassword (password) {
     return password === this.getConfig('mail_pw')
   }
-
-
 
   /**
    * Returns the state in json format
@@ -81,8 +74,6 @@ class DeltaChatController extends EventEmitter {
   _integerToHexColor (integerColor) {
     return '#' + integerColor.toString(16)
   }
-
-
 
   _blockedContacts () {
     if (!this._dc) return []
@@ -127,6 +118,5 @@ class DeltaChatController extends EventEmitter {
     this._query = ''
   }
 }
-
 
 module.exports = DeltaChatController

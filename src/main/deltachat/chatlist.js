@@ -96,7 +96,6 @@ function _getChatById (chatId) {
   }
 }
 
-
 function isGroupChat (chat) {
   return [
     C.DC_CHAT_TYPE_GROUP,

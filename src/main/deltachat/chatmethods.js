@@ -1,3 +1,4 @@
+const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatmethods')
 
@@ -116,7 +117,7 @@ function _integerToHexColor (integerColor) {
   return '#' + integerColor.toString(16)
 }
 
-module.exports = function() {
+module.exports = function () {
   this.getInfo = getInfo.bind(this)
   this.createContact = createContact.bind(this)
   this.chatWithContact = chatWithContact.bind(this)

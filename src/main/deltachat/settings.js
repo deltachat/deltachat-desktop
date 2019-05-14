@@ -1,3 +1,5 @@
+const C = require('deltachat-node/constants')
+const log = require('../../logger').getLogger('main/deltachat/settings')
 
 // Save settings for RC
 function updateSettings (saved) {
@@ -29,8 +31,7 @@ function keysExport (directory) {
   this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
 }
 
-
-module.exports = function() {
+module.exports = function () {
   this.updateSettings = updateSettings.bind(this)
   this.setConfig = setConfig.bind(this)
   this.getConfig = getConfig.bind(this)

@@ -12,7 +12,6 @@ function sendMessage (chatId, text, filename, location) {
   this._dc.sendMessage(chatId, msg)
 }
 
-
 function deleteMessage (id) {
   log.info(`deleting message ${id}`)
   this._dc.deleteMessages(id)
@@ -52,7 +51,6 @@ function _messagesToRender (messageIds) {
   return messages
 }
 
-
 function messageIdToJson (id) {
   const msg = this._dc.getMessage(id)
   if (!msg) {
@@ -84,7 +82,6 @@ function messageIdToJson (id) {
   }
 }
 
-
 function fetchMessages () {
   this._pages++
   this._render()
@@ -95,7 +92,7 @@ function forwardMessage (msgId, contactId) {
   this._dc.forwardMessages(msgId, chatId)
   this.selectChat(chatId)
 }
-module.exports = function() {
+module.exports = function () {
   this.sendMessage = sendMessage.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)
