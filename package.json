@@ -85,6 +85,7 @@
     "depcheck": "^0.6.11",
     "electron": "^4.0.1",
     "electron-builder": "^20.28.3",
+    "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^0.1.0",
     "node-sass": "^4.12.0",
