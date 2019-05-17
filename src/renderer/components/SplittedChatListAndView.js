@@ -164,13 +164,10 @@ class SplittedChatListAndView extends React.Component {
               />
                 : (<ChatView
                   ref={this.chatView}
-                  screenProps={this.props.screenProps}
                   onDeadDropClick={this.onDeadDropClick}
-                  userFeedback={this.props.userFeedback}
-                  changeScreen={this.props.changeScreen}
                   openDialog={this.props.openDialog}
                   chat={selectedChat}
-                  deltachat={this.props.deltachat} />)
+                />)
               : (
                 <Welcome>
                   <h1>{tx('welcome_desktop')}</h1>
