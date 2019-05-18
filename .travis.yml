@@ -1,64 +1,49 @@
-sudo: required
 language: node_js
+services:
+  - docker
+sudo: required
 dist: xenial
 
 addons:
-  apt:
+  homebrew:
     packages:
-      - appstream-util
-      - desktop-file-utils
-      - python3-pip
-      - python3-setuptools
-      - libssl-dev
-      - libsqlite3-dev
-      - libbz2-dev
-      - zlib1g-dev
-      - libsasl2-dev
-
-node_js:
-  - 10
-
+      - meson
+      - libetpan
+      - openssl
+      - coreutils
+    update: true
 os:
   - osx
   - linux
 
+node_js:
+  - 10
+
+env:
+  global:
+    - DOCKER_IMAGE=deltachat/travis-dc-node-base:latest
+
+  matrix:
+    - DC_CORE_VERSION="master" SYS_DC_CORE="false"
+    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
+
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
+    - $HOME/.cargo
+    - $TRAVIS_BUILD_DIR/target
+
+before_cache:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cleanup;
+
 before_install:
-  - if [ $(uname) = Linux ]; then
-        wget https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip;
-        unzip ninja-linux.zip;
-        chmod +x ninja;
-        sudo cp ninja /usr/bin;
-    fi
-  - if [ $(uname) = Linux ]; then
-        sudo pip3 install meson;
-    fi
+  - ./ci_scripts/ci-prelude.sh
 
 install:
-  - npm install
+  - ./ci_scripts/ci-build.sh
 
 script:
-  - if [ $(uname) = Linux ]; then
-        desktop-file-validate static/chat.delta.desktop.desktop;
-    fi
-  - if [ $(uname) = Linux ]; then
-        appstream-util validate-relax static/chat.delta.desktop.appdata.xml;
-    fi
-  - npm run build
-  - npm test
-  - if [ $(uname) != Linux ]; then
-        npm run test-integration;
-    fi
-
-# Only deploy for OSX, for linux we only release source.
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: npm run dist-ci
-  on:
-    repo: deltachat/deltachat-desktop
-    os: osx
-    all_branches: true
-
+  - ./ci_scripts/ci-test.sh
 
 notifications:
   email: false
