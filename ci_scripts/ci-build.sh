@@ -38,9 +38,9 @@ else
 fi
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-$EXEC npm install --dc-system-lib=$SYS_DC_CORE;
-$EXEC npm run build
-$EXEC npm run test
+$EXEC npm install --verbose --dc-system-lib=$SYS_DC_CORE;
+$EXEC npm run build;
+$EXEC npm run test;
 
 if [ $TRAVIS_OS_NAME = linux ]; then
     readelf -d build/Release/deltachat.node
