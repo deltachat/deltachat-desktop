@@ -38,5 +38,6 @@ else
 fi
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-$EXEC npm install --dc-system-lib=$SYS_DC_CORE;
+$EXEC npm install --dc-system-lib=$SYS_DC_CORE --verbose;
 $EXEC npm run build;
+$EXEC tail -f /dev/null
