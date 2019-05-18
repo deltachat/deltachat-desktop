@@ -37,9 +37,9 @@ fi
 
 
 $EXEC npm test;
-if [ $TRAVIS_PULL_REQUEST = false ]; then
-    $EXEC npm run test-integration;
-fi
+#if [ $TRAVIS_PULL_REQUEST = false ]; then
+#    $EXEC npm run test-integration;
+#fi
 
 
 # Finally cleanup the running container
