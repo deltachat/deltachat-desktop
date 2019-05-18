@@ -232,19 +232,20 @@ class Composer extends React.Component {
           )}
         </SettingsContext.Consumer>
         <EmojiButtonWrapper ref={this.pickerButtonRef}>
-          <IconButton onMouseOver={this.showEmojiPicker.bind(this, true)}>
+          <IconButton onClick={this.showEmojiPicker.bind(this, true)}>
             <IconButtonSpan />
           </IconButton>
         </EmojiButtonWrapper>
         { this.state.showEmojiPicker &&
           <EmojiPickerWrapper ref={this.pickerRef}>
             <Picker
-              title='Pick your emoji…'
-              emoji='point_up'
               style={{ width: '100%', height: '100%' }}
               native
               color={StyleVariables.colors.deltaPrimaryBg}
               onSelect={this.onEmojiSelect}
+              showPreview={false}
+              showSkinTones={false}
+              emojiTooltip
             />
           </EmojiPickerWrapper>
         }
