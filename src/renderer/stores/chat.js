@@ -25,34 +25,6 @@ const defaultState = {
 }
 const chatStore = new Store(defaultState)
 
-function getMessage (evt, msgId) {
-  const state = chatStore.getState()
-  const messageObj = ipcRenderer.sendSync(
-    'EVENT_DC_FUNCTION_CALL',
-    'getMessage',
-    msgId
-  )
-  if (evt === 'DC_EVENT_INCOMING_MSG') {
-    this.setState({ ...state, messages: [...state.chat.messages, messageObj] })
-  } else if (evt === 'DC_EVENT_MSGS_CHANGED') {
-    const index = state.messages.findIndex(msg => msg.id === msgId)
-    let messages = [
-      ...state.messages.slice(0, index),
-      messageObj,
-      ...state.messages.slice(index + 1)
-    ]
-    this.setState({ ...state, messages: messages })
-  }
-}
-
-function onMessageChanged (evt, payload) {
-  const { id } = chatStore.getState()
-  const { chatId, msgId } = payload
-  if (id && chatId === id) {
-    getMessage(evt, msgId)
-  }
-}
-
 chatStore.reducers.push((action, state) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
@@ -76,6 +48,17 @@ chatStore.effects.push((action, state) => {
   }
 })
 
+chatStore.effects.push((action, state) => {
+  if (action.type === 'UI_SEND_MESSAGE') {
+    const { msgId } = action.payload
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'deleteMessage',
+      msgId
+    )
+  }
+})
+
 ipcRenderer.on('DD_EVENT_CHAT_SELECTED', (evt, payload) => {
   chatStore.setState(payload.chat)
 })
@@ -88,7 +71,20 @@ ipcRenderer.on('DD_MESSAGES_LOADED', (evt, payload) => {
   }
 })
 
-ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onMessageChanged)
-ipcRenderer.on('DC_EVENT_INCOMING_MSG', onMessageChanged)
+ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
+  const { chatId, messageObj } = payload
+  const state = chatStore.getState()
+  if (state.id !== chatId) {
+    return
+  }
+  if (!state.messages.find(msg => msg.id === messageObj.id)) {
+    chatStore.setState({ ...state, messages: [...state.messages, messageObj] })
+  } else {
+    let messages = state.messages.map(msg => {
+      return msg.id === messageObj.id ? messageObj : msg
+    })
+    chatStore.setState({ ...state, messages })
+  }
+})
 
 module.exports = chatStore

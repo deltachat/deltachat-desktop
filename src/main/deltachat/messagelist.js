@@ -17,6 +17,11 @@ function deleteMessage (id) {
   this._dc.deleteMessages(id)
 }
 
+function getMessage (msgId) {
+  const messageObj = this.messageIdToJson(msgId)
+  this.sendToRenderer('DD_EVENT_MSG_UPDATE', { messageObj })
+}
+
 function setDraft (chatId, msgText) {
   let msg = this._dc.messageNew()
   msg.setText(msgText)
@@ -31,7 +36,6 @@ function _messagesToRender (messageIds) {
     isLastPage ? 0 : -currentIndex,
     isLastPage ? messageIds.length - currentIndex : CHATVIEW_PAGE_SIZE
   )
-
   if (messageIdsToRender.length === 0) return []
 
   let messages = []
@@ -39,7 +43,10 @@ function _messagesToRender (messageIds) {
   for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
     let id = messageIdsToRender[i]
     let json = this.messageIdToJson(id)
-    if (messages[i + 1] && id === C.DC_MSG_ID_DAYMARKER) {
+    if (id === C.DC_MSG_ID_DAYMARKER) {
+      if (json.msg.chatId === 0) {
+        continue
+      }
       json.daymarker = {
         timestamp: messages[i + 1].msg.timestamp,
         id: 'd' + i
@@ -66,7 +73,6 @@ function messageIdToJson (id) {
   if (contact.color) {
     contact.color = this._integerToHexColor(contact.color)
   }
-
   return {
     id,
     msg: msg.toJson(),
@@ -101,6 +107,7 @@ function forwardMessage (msgId, contactId) {
   this.selectChat(chatId)
 }
 module.exports = function () {
+  this.getMessage = getMessage.bind(this)
   this.sendMessage = sendMessage.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)

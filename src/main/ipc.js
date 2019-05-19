@@ -71,6 +71,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('EVENT_DC_FUNCTION_CALL', (evt, fnName, ...args) => {
+    console.log('EVENT_DC_FUNCTION_CALL: ', fnName, args)
     dc.handleRendererEvent(evt, fnName, args)
   })
 
@@ -87,10 +88,6 @@ function init (cwd, state, logHandler) {
     rimraf.sync(dc.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
-  })
-
-  ipcMain.on('sendMessage', (e, chatId, text, fileName, location) => {
-    dc.sendMessage(chatId, text, fileName, location)
   })
 
   ipcMain.on('getMessage', (e, msgId) => {
@@ -136,7 +133,7 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
 
-  ipcMain.on('getChatById', (e, chatId) => main.send('getChatById', dc._getChatById(chatId)))
+  // ipcMain.on('getChatById', (e, chatId) => main.send('getChatById', dc._getChatById(chatId)))
 
   ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
 

@@ -100,12 +100,18 @@ class ChatView extends React.Component {
   }
 
   writeMessage (opts) {
-    const { chat } = this.state
-    ipcRenderer.send('sendMessage', chat.id, opts.text, opts.filename)
+    const { chat } = this.props
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'sendMessage',
+      chat.id,
+      opts.text,
+      opts.filename
+    )
   }
 
   fetchNextMessages () {
-    const chat = this.props.chat
+    const { chat } = this.props
     if (chat.totalMessages === chat.messages.length) return
     this.scrollPrepare()
     ipcRenderer.send(
@@ -163,7 +169,7 @@ class ChatView extends React.Component {
   }
 
   onShowDetail (message) {
-    const { chat } = this.state
+    const { chat } = this.props
     this.props.openDialog('MessageDetail', {
       message,
       chat
@@ -188,7 +194,13 @@ class ChatView extends React.Component {
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        ipcRenderer.send('sendMessage', chat.id, null, path)
+        ipcRenderer.send(
+          'EVENT_DC_FUNCTION_CALL',
+          'sendMessage',
+          chat.id,
+          null,
+          path
+        )
       } else {
         log.warn('Prevented a file from being send again while dragging it out')
       }
