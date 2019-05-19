@@ -164,7 +164,7 @@ class ChatList extends React.Component {
               } else {
                 return (
                   <ChatListItem
-                    key={i}
+                    key={chatListItem.id}
                     onClick={this.props.onChatClick.bind(null, chatListItem.id)}
                     phoneNumber={chatListItem.summary.text1}
                     name={chatListItem.name}
