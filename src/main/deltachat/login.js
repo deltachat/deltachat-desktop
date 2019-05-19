@@ -20,7 +20,7 @@ function setCoreStrings (strings) {
 
 function login (credentials, render, coreStrings) {
   // Creates a separate DB file for each login
-  const cwd = getPath(this.cwd, credentials.addr)
+  const cwd = this.getPath(this.cwd, credentials.addr)
   log.info(`Using deltachat instance ${cwd}`)
   this._dc = new DeltaChat()
   const dc = this._dc
@@ -180,6 +180,7 @@ module.exports = function () {
   this.login = login.bind(this)
   this.logout = logout.bind(this)
   this.close = close.bind(this)
+  this.getPath = getPath.bind(this)
 }
 
 if (!module.parent) {
