@@ -9,6 +9,7 @@ const moment = require('moment')
 const mime = require('mime-types')
 const filesizeConverter = require('filesize')
 const log = require('../../logger').getLogger('renderer/messageWrapper')
+const chatStore = require('../stores/chat')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -109,7 +110,7 @@ function render (props) {
   let body
 
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
-    key = message.daymarker.id
+    key = message.daymarker.id + message.daymarker.timestamp
     body = (
       <InfoMessage>
         <p>
@@ -215,7 +216,7 @@ function convert (message) {
     })
   }
 
-  message.onDelete = () => ipcRenderer.send('deleteMessage', message.id)
+  message.onDelete = () => chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
 
   const msg = message.msg
 

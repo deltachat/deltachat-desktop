@@ -25,21 +25,21 @@ function setDraft (chatId, msgText) {
 }
 
 function _messagesToRender (messageIds) {
-  const countMessages = messageIds.length
+  const currentIndex = this._pages * CHATVIEW_PAGE_SIZE
+  const isLastPage = messageIds.length < currentIndex
   const messageIdsToRender = messageIds.splice(
-    Math.max(countMessages - (this._pages * CHATVIEW_PAGE_SIZE), 0),
-    countMessages
+    isLastPage ? 0 : -currentIndex,
+    isLastPage ? messageIds.length - currentIndex : CHATVIEW_PAGE_SIZE
   )
 
   if (messageIdsToRender.length === 0) return []
 
-  let messages = Array(messageIdsToRender.length)
+  let messages = []
 
   for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
     let id = messageIdsToRender[i]
     let json = this.messageIdToJson(id)
-
-    if (id === C.DC_MSG_ID_DAYMARKER) {
+    if (messages[i + 1] && id === C.DC_MSG_ID_DAYMARKER) {
       json.daymarker = {
         timestamp: messages[i + 1].msg.timestamp,
         id: 'd' + i
@@ -83,15 +83,17 @@ function messageIdToJson (id) {
 }
 
 function fetchMessages (chatId) {
-  this._pages++
   var messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
+  if (messageIds.length <= this._pages * CHATVIEW_PAGE_SIZE) {
+    return
+  }
+  this._pages++
   var payload = {
     chatId: chatId,
     totalMessages: messageIds.length,
     messages: this._messagesToRender(messageIds)
   }
   this.sendToRenderer('DD_MESSAGES_LOADED', payload)
-  // this._render()
 }
 
 function forwardMessage (msgId, contactId) {

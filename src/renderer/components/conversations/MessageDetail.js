@@ -135,7 +135,7 @@ class MessageDetail extends React.Component {
         <table className='module-message-detail__info'>
           <tbody>
             {(errors || []).map((error, index) => (
-              <tr key={index}>
+              <tr key={message.id}>
                 <td className='module-message-detail__label'>
                   {i18n('error')}
                 </td>
