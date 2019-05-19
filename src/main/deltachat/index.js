@@ -1,4 +1,5 @@
 const C = require('deltachat-node/constants')
+const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat')
 const windows = require('../windows')
@@ -31,6 +32,9 @@ class DeltaChatController extends EventEmitter {
   }
 
   logCoreEvent (event, payload) {
+    if (!isNaN(event)) {
+      event = eventStrings[event]
+    }
     log.debug('Core Event', event, payload)
   }
 
@@ -45,17 +49,20 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(evt, payload)
   }
 
+  onMessageUpdate (chatId, msgId) {
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId) })
+  }
+
   checkPassword (password) {
     return password === this.getConfig('mail_pw')
   }
 
   registerEventHandler (dc, render) {
     dc.on('ALL', (event, ...args) => {
-      log.debug('ALL event', event, args)
+      this.logCoreEvent(event, args)
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
-      this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', progress)
       if (Number(progress) === 0) { // login failed
         this.emit('DC_EVENT_LOGIN_FAILED')
         this.logout()
@@ -80,33 +87,25 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      // Don't rerender if a draft changes
+      // Don't update if a draft changes
       if (msgId === 0) return
-      this.sendToRenderer('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
-      this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
-      render()
+      this.onMessageUpdate(chatId, msgId)
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.sendToRenderer('DC_EVENT_INCOMING_MSG', { chatId, msgId })
-      this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
-      render()
+      this.onMessageUpdate(chatId, msgId)
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      this.sendToRenderer('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
-      this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
-      render()
+      this.onMessageUpdate(chatId, msgId)
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
-      this.logCoreEvent('EVENT msg failed to deliver', { chatId, msgId })
-      render()
+      this.sendToRenderer('DC_EVENT_MSG_FAILED', { chatId, msgId })
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      this.logCoreEvent('DC_EVENT_MSG_READ', { chatId, msgId })
-      render()
+      this.onMessageUpdate(chatId, msgId)
     })
 
     dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
@@ -140,6 +139,7 @@ class DeltaChatController extends EventEmitter {
    * Returns the state in json format
    */
   render () {
+    log.debug('Cntroller->render called')
     let showArchivedChats = this._showArchivedChats
 
     let { listCount, chatList } = this._chatList(showArchivedChats)

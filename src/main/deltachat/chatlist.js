@@ -13,10 +13,22 @@ function searchChats (query) {
 }
 
 function selectChat (chatId) {
-  log.debug(`action - selecting chat ${chatId}`)
-  this._pages = 1
   this._selectedChatId = chatId
-  const chat = this._getChatById(chatId)
+  let chat = this._getChatById(chatId)
+  if (!chat) {
+    log.debug(`Error: selected chat not found: ${chatId}`)
+    return null
+  }
+  if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
+    if (chat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(chat.id)
+      chat.freshMessageCounter = 0
+      if (this._saved.markRead) {
+        log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
+        this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
+      }
+    }
+  }
   this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })
 }
 
@@ -61,7 +73,7 @@ function _getChatById (chatId, skipMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
-
+  this._pages = 1
   const chat = rawChat.toJson()
   let draft = this._dc.getDraft(chatId)
 
@@ -137,23 +149,6 @@ function _deadDropMessage (id) {
   return { id, contact }
 }
 
-function _selectedChat (showArchivedChats, chatList, selectedChatId) {
-  let selectedChat = this._getChatById(selectedChatId)
-  if (!selectedChat) return null
-  if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
-    }
-
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
-    }
-  }
-
-  return selectedChat
-}
-
 function fetchChats () {
   this._chatListPages++
   this._render()
@@ -171,7 +166,6 @@ module.exports = function () {
   this._getChatById = _getChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
-  this._selectedChat = _selectedChat.bind(this)
   this.fetchChats = fetchChats.bind(this)
   this.showArchivedChats = showArchivedChats.bind(this)
 }

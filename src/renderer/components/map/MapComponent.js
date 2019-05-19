@@ -296,7 +296,14 @@ class MapComponent extends React.Component {
       return
     }
     let latLng = Object.assign({}, this.poiLocation)
-    ipcRenderer.send('sendMessage', selectedChat.id, message, null, latLng)
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'sendMessage',
+      selectedChat.id,
+      message,
+      null,
+      latLng
+    )
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
       this.contextMenuPopup = null
