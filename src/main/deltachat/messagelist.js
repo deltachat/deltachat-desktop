@@ -47,7 +47,6 @@ function _messagesToRender (messageIds) {
     }
     messages[i] = json
   }
-
   return messages
 }
 

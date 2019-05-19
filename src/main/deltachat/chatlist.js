@@ -32,7 +32,7 @@ function _chatList (showArchivedChats) {
 
   for (let i = 0; i < maxChats; i++) {
     const chatId = list.getChatId(i)
-    const chat = this._getChatById(chatId)
+    const chat = this._getChatById(chatId, true)
 
     if (!chat) continue
 
@@ -57,7 +57,7 @@ function _chatList (showArchivedChats) {
   return { chatList, listCount }
 }
 
-function _getChatById (chatId) {
+function _getChatById (chatId, skipMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
@@ -71,7 +71,9 @@ function _getChatById (chatId) {
     chat.draft = ''
   }
 
-  var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+  const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+  const messages = skipMessages ? [] : this._messagesToRender(messageIds)
+
   // This object is NOT created with object assign to promote consistency and to be easier to understand
   return {
     id: chat.id,
@@ -87,7 +89,7 @@ function _getChatById (chatId) {
 
     contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
     totalMessages: messageIds.length,
-    messages: this._messagesToRender(messageIds),
+    messages: messages,
     color: this._integerToHexColor(chat.color),
     summary: undefined,
     freshMessageCounter: this._dc.getFreshMessageCount(chatId),
