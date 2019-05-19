@@ -53,15 +53,38 @@ function onMessageChanged (evt, payload) {
   }
 }
 
+chatStore.reducers.push((action, state) => {
+  if (action.type === 'UI_DELETE_MESSAGE') {
+    const { msgId } = action.payload
+    const index = state.messages.findIndex(msg => msg.id === msgId)
+    let messages = [
+      ...state.messages.slice(0, index),
+      ...state.messages.slice(index + 1)
+    ]
+    return { ...state, messages }
+  }
+})
+
+chatStore.effects.push((action, state) => {
+  if (action.type === 'UI_DELETE_MESSAGE') {
+    const { msgId } = action.payload
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'deleteMessage',
+      msgId
+    )
+  }
+})
+
 ipcRenderer.on('DD_EVENT_CHAT_SELECTED', (evt, payload) => {
   chatStore.setState(payload.chat)
 })
 
-ipcRenderer.on('DD_MESSAGES_LOADED', payload => {
+ipcRenderer.on('DD_MESSAGES_LOADED', (evt, payload) => {
   const state = chatStore.getState()
   const { chatId, messages, totalMessages } = payload
   if (chatId === chatStore.getState().id) {
-    chatStore.setState({ ...state, totalMessages, messages: [messages, ...state.messages] })
+    chatStore.setState({ ...state, totalMessages, messages: [...messages, ...state.messages] })
   }
 })
 

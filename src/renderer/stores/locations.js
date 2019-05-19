@@ -58,7 +58,7 @@ ipcRenderer.on('DD_EVENT_LOCATIONS_UPDATED', (evt, payload) => {
 locationStore.reducers.push((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
     const { timestampFrom, timestampTo } = action.payload
-    state = Object.assign({}, state, { mapSettings: { timestampFrom, timestampTo } })
+    state = { ...state, mapSettings: { timestampFrom, timestampTo } }
     return state
   }
 })
