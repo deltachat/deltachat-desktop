@@ -140,11 +140,9 @@ class DeltaChatController extends EventEmitter {
    * Returns the state in json format
    */
   render () {
-    let selectedChatId = this._selectedChatId
     let showArchivedChats = this._showArchivedChats
 
     let { listCount, chatList } = this._chatList(showArchivedChats)
-    let selectedChat = this._selectedChat(showArchivedChats, chatList, selectedChatId)
 
     return {
       configuring: this.configuring,
@@ -153,8 +151,7 @@ class DeltaChatController extends EventEmitter {
       blockedContacts: this._blockedContacts(),
       showArchivedChats,
       totalChats: listCount,
-      chatList,
-      selectedChat
+      chatList
     }
   }
 

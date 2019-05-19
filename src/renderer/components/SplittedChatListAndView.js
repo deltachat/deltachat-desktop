@@ -11,6 +11,7 @@ const SearchInput = require('./SearchInput.js')
 
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
+const chatStore = require('../stores/chat')
 
 const {
   Alignment,
@@ -47,7 +48,8 @@ class SplittedChatListAndView extends React.Component {
 
     this.state = {
       queryStr: '',
-      media: false
+      media: false,
+      selectedChat: null
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
@@ -65,6 +67,9 @@ class SplittedChatListAndView extends React.Component {
 
   componentDidMount () {
     this.searchChats('')
+    chatStore.subscribe(chat => {
+      this.setState({ selectedChat: chat })
+    })
   }
 
   showArchivedChats (show) {
@@ -72,7 +77,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onChatClick (chatId) {
-    ipcRenderer.send('selectChat', chatId)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', chatId)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
@@ -96,14 +101,14 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onMapIconClick () {
-    const { deltachat } = this.props
-    const { selectedChat } = deltachat
+    const { selectedChat } = this.state
     this.props.openDialog('MapDialog', { selectedChat })
   }
 
   render () {
     const { deltachat } = this.props
-    const { selectedChat, showArchivedChats } = deltachat
+    const { showArchivedChats } = deltachat
+    const { selectedChat } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage
@@ -164,9 +169,9 @@ class SplittedChatListAndView extends React.Component {
               />
                 : (<ChatView
                   ref={this.chatView}
+                  chat={selectedChat}
                   onDeadDropClick={this.onDeadDropClick}
                   openDialog={this.props.openDialog}
-                  chat={selectedChat}
                 />)
               : (
                 <Welcome>

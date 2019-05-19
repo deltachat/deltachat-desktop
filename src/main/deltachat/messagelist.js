@@ -82,9 +82,16 @@ function messageIdToJson (id) {
   }
 }
 
-function fetchMessages () {
+function fetchMessages (chatId) {
   this._pages++
-  this._render()
+  var messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
+  var payload = {
+    chatId: chatId,
+    totalMessages: messageIds.length,
+    messages: this._messagesToRender(messageIds)
+  }
+  this.sendToRenderer('DD_MESSAGES_LOADED', payload)
+  // this._render()
 }
 
 function forwardMessage (msgId, contactId) {
