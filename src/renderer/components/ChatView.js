@@ -88,7 +88,7 @@ class ChatView extends React.Component {
     this.writeMessage = this.writeMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
-    this.lastId = this.props.chat.id
+    this.lastId = 0
     this.previousScrollHeightMinusTop = null
 
     this.conversationRef = React.createRef()
@@ -100,7 +100,7 @@ class ChatView extends React.Component {
   }
 
   writeMessage (opts) {
-    const { chat } = this.props
+    const { chat } = this.state
     ipcRenderer.send('sendMessage', chat.id, opts.text, opts.filename)
   }
 
@@ -159,7 +159,7 @@ class ChatView extends React.Component {
   }
 
   onShowDetail (message) {
-    const { chat } = this.props
+    const { chat } = this.state
     this.props.openDialog('MessageDetail', {
       message,
       chat
@@ -176,7 +176,7 @@ class ChatView extends React.Component {
 
   onDrop (e) {
     const files = e.target.files || e.dataTransfer.files
-    const { chat } = this.props
+    const { chat } = this.props.chat
     e.preventDefault()
     e.stopPropagation()
     // TODO maybe add a clause here for windows because that uses backslash instead of slash

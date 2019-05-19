@@ -16,7 +16,9 @@ function selectChat (chatId) {
   log.debug(`action - selecting chat ${chatId}`)
   this._pages = 1
   this._selectedChatId = chatId
-  this._render()
+  const chat = this._getChatById(chatId)
+  this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })
+  // this._render()
 }
 
 function _chatList (showArchivedChats) {
