@@ -49,6 +49,89 @@ class DeltaChatController extends EventEmitter {
     return password === this.getConfig('mail_pw')
   }
 
+  registerEventHandler (dc, render) {
+    dc.on('ALL', (event, ...args) => {
+      log.debug('ALL event', event, args)
+    })
+
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+      this.logCoreEvent('DC_EVENT_CONFIGURE_PROGRESS', progress)
+      if (Number(progress) === 0) { // login failed
+        this.emit('DC_EVENT_LOGIN_FAILED')
+        this.logout()
+      }
+    })
+
+    dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
+      this.emit('DC_EVENT_IMEX_FILE_WRITTEN', filename)
+    })
+
+    dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
+      this.emit('DC_EVENT_IMEX_PROGRESS', progress)
+    })
+
+    dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
+      this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
+      render()
+    })
+
+    dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+      // Don't rerender if a draft changes
+      if (msgId === 0) return
+      this.sendToRenderer('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
+      this.logCoreEvent('DC_EVENT_MSGS_CHANGED', { chatId, msgId })
+      render()
+    })
+
+    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+      this.sendToRenderer('DC_EVENT_INCOMING_MSG', { chatId, msgId })
+      this.logCoreEvent('DC_EVENT_INCOMING_MSG', { chatId, msgId })
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+      this.sendToRenderer('DC_EVENT_MSG_DELIVERED', { chatId, msgId })
+      this.logCoreEvent('EVENT msg delivered', { chatId, msgId })
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
+      this.logCoreEvent('EVENT msg failed to deliver', { chatId, msgId })
+      render()
+    })
+
+    dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+      this.logCoreEvent('DC_EVENT_MSG_READ', { chatId, msgId })
+      render()
+    })
+
+    dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
+      this.logCoreEvent('DC_EVENT_LOCATION_CHANGED', { contactId })
+      this.sendToRenderer('DC_EVENT_LOCATION_CHANGED', { contactId })
+    })
+
+    dc.on('DC_EVENT_WARNING', (warning) => {
+      log.warn(warning)
+    })
+
+    const onError = error => {
+      this.emit('error', error)
+      log.error(error)
+    }
+
+    dc.on('DC_EVENT_ERROR', (error) => {
+      onError(error)
+    })
+
+    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+      onError(error)
+    })
+
+    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
+      onError(error)
+    })
+  }
+
   /**
    * Returns the state in json format
    */
