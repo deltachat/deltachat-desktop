@@ -25,6 +25,7 @@ const defaultState = {
 }
 const chatStore = new Store(defaultState)
 
+// remove the message from state immediately
 chatStore.reducers.push((action, state) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
@@ -39,17 +40,6 @@ chatStore.reducers.push((action, state) => {
 
 chatStore.effects.push((action, state) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
-    const { msgId } = action.payload
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
-      'deleteMessage',
-      msgId
-    )
-  }
-})
-
-chatStore.effects.push((action, state) => {
-  if (action.type === 'UI_SEND_MESSAGE') {
     const { msgId } = action.payload
     ipcRenderer.send(
       'EVENT_DC_FUNCTION_CALL',
