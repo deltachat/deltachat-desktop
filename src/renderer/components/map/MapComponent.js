@@ -364,8 +364,7 @@ class MapComponent extends React.Component {
   }
 
   setTerrainLayer (showTerrain) {
-    this.setState({ showTerrain: !showTerrain })
-    const visibility = showTerrain ? 'none' : 'visible'
+    const visibility = showTerrain ? 'visible' : 'none'
     if (this.map.getLayer('terrain')) {
       this.map.setLayoutProperty('terrain', 'visibility', visibility)
     } else {
