@@ -73,7 +73,7 @@ function _getChatById (chatId, skipMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
-  this._pages = 1
+  this._pages = 0
   const chat = rawChat.toJson()
   let draft = this._dc.getDraft(chatId)
 

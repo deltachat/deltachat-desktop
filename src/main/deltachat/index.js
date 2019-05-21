@@ -35,7 +35,7 @@ class DeltaChatController extends EventEmitter {
     if (!isNaN(event)) {
       event = eventStrings[event]
     }
-    log.debug('Core Event', event, payload)
+    log.debug('Core Event', event)
   }
 
   handleRendererEvent (evt, methodName, args) {
@@ -193,7 +193,7 @@ class DeltaChatController extends EventEmitter {
     this.credentials = { addr: '' }
     this._selectedChatId = null
     this._showArchivedChats = false
-    this._pages = 1
+    this._pages = 0
     this._chatListPages = 0
     this._query = ''
   }
