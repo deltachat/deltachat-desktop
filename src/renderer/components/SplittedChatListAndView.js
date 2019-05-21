@@ -63,6 +63,7 @@ class SplittedChatListAndView extends React.Component {
     this.search = debounce(() => {
       ipcRenderer.send('searchChats', this.state.queryStr)
     }, 250)
+    this.chatClicked = 0
   }
 
   componentDidMount () {
@@ -72,12 +73,24 @@ class SplittedChatListAndView extends React.Component {
     })
   }
 
+  componentWillUnmount () {
+    chatStore.unsubscribe(chat => {
+      this.setState({ selectedChat: chat })
+    })
+  }
+
   showArchivedChats (show) {
     ipcRenderer.send('showArchivedChats', show)
   }
 
   onChatClick (chatId) {
+    if (chatId === this.chatClicked) {
+      // avoid double clicks
+      return
+    }
+    this.chatClicked = chatId
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', chatId)
+    setTimeout(() => { this.chatClicked = 0 }, 500)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()

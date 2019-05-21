@@ -133,8 +133,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
 
-  // ipcMain.on('getChatById', (e, chatId) => main.send('getChatById', dc._getChatById(chatId)))
-
   ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
 
   ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))

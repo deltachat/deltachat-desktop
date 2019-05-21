@@ -139,7 +139,6 @@ class DeltaChatController extends EventEmitter {
    * Returns the state in json format
    */
   render () {
-    log.debug('Cntroller->render called')
     let showArchivedChats = this._showArchivedChats
 
     let { listCount, chatList } = this._chatList(showArchivedChats)
