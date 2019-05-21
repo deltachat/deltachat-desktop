@@ -30,30 +30,32 @@ function setDraft (chatId, msgText) {
 }
 
 function _messagesToRender (messageIds) {
-  const currentIndex = this._pages * CHATVIEW_PAGE_SIZE
-  const isLastPage = messageIds.length < currentIndex
+  // we need one more message than we render, to get the timestamp
+  // from preceeding message for DAYMARKER
+  const currentIndex = (this._pages * CHATVIEW_PAGE_SIZE) + 1
+  messageIds.reverse() // newest IDs first
   const messageIdsToRender = messageIds.splice(
-    isLastPage ? 0 : -currentIndex,
-    isLastPage ? messageIds.length - currentIndex : CHATVIEW_PAGE_SIZE
+    currentIndex,
+    CHATVIEW_PAGE_SIZE + 1
   )
   if (messageIdsToRender.length === 0) return []
-
+  messageIdsToRender.reverse()
   let messages = []
-
-  for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
+  for (let i = 0; i < messageIdsToRender.length; i++) {
     let id = messageIdsToRender[i]
     let json = this.messageIdToJson(id)
     if (id === C.DC_MSG_ID_DAYMARKER) {
-      if (json.msg.chatId === 0) {
-        continue
-      }
-      json.daymarker = {
-        timestamp: messages[i + 1].msg.timestamp,
-        id: 'd' + i
+      if (messages[i - 1]) {
+        json.daymarker = {
+          timestamp: messages[i - 1].msg.timestamp,
+          id: 'd' + i
+        }
       }
     }
     messages[i] = json
   }
+  // remove the additional message again
+  messages.shift()
   return messages
 }
 
