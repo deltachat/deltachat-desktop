@@ -31,6 +31,7 @@ class MapComponent extends React.Component {
     this.mapDataStore = new Map()
     this.refreshLocations = debounce(this.getLocations, 1000)
     this.getLocations = this.getLocations.bind(this)
+    this.onLocationsUpdate = this.onLocationsUpdate.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
     this.onMapRightClick = this.onMapRightClick.bind(this)
     this.sendPoiMessage = this.sendPoiMessage.bind(this)
@@ -77,11 +78,7 @@ class MapComponent extends React.Component {
     this.map.on('click', this.onMapClick)
     this.map.on('contextmenu', this.onMapRightClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
-    const onLocationsUpdated = (locationState) => {
-      const { locations } = locationState
-      this.renderLayers(locations)
-    }
-    locationStore.subscribe(onLocationsUpdated)
+    locationStore.subscribe(this.onLocationsUpdate)
   }
 
   componentWillUnmount () {
@@ -94,6 +91,12 @@ class MapComponent extends React.Component {
       },
       savedState: this.state
     })
+    locationStore.unsubscribe(this.onLocationsUpdate)
+  }
+
+  onLocationsUpdate (locationState) {
+    const { locations } = locationState
+    this.renderLayers(locations)
   }
 
   getLocations () {
