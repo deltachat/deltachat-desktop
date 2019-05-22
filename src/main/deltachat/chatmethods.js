@@ -75,13 +75,13 @@ function modifyGroup (chatId, name, image, remove, add) {
 function deleteChat (chatId) {
   log.debug(`action - deleting chat ${chatId}`)
   this._dc.deleteChat(chatId)
-  this._render()
+  this.updateChatList()
 }
 
 function archiveChat (chatId, archive) {
   log.debug(`action - archiving chat ${chatId}`)
   this._dc.archiveChat(chatId, archive)
-  this._render()
+  this.updateChatList()
 }
 
 function createGroupChat (verified, name, image, contactIds) {

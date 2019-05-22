@@ -17,7 +17,6 @@ class DeltaChatController extends EventEmitter {
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this._saved = saved
-
     this.loadSplitOuts()
   }
 
@@ -49,8 +48,8 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(evt, payload)
   }
 
-  onMessageUpdate (chatId, msgId) {
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId) })
+  onMessageUpdate (chatId, msgId, eventType) {
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
   }
 
   checkPassword (password) {
@@ -82,22 +81,24 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
-      this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
-      render()
+      this.updateChatList()
+      this.updateBlockedContacts()
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       // Don't update if a draft changes
       if (msgId === 0) return
-      this.onMessageUpdate(chatId, msgId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
+      this.updateChatList()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.onMessageUpdate(chatId, msgId)
+      this.updateChatList()
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      this.onMessageUpdate(chatId, msgId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_DELIVERED')
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
@@ -105,6 +106,7 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+      this.updateChatList()
       this.onMessageUpdate(chatId, msgId)
     })
 
@@ -135,22 +137,19 @@ class DeltaChatController extends EventEmitter {
     })
   }
 
+  updateBlockedContacts () {
+    const blockedContacts = this._blockedContacts()
+    this.sendToRenderer('DD_EVENT_BLOCKED_CONTACTS_UPDATED', { blockedContacts })
+  }
+
   /**
    * Returns the state in json format
    */
   render () {
-    let showArchivedChats = this._showArchivedChats
-
-    let { listCount, chatList } = this._chatList(showArchivedChats)
-
     return {
       configuring: this.configuring,
       credentials: this.credentials,
-      ready: this.ready,
-      blockedContacts: this._blockedContacts(),
-      showArchivedChats,
-      totalChats: listCount,
-      chatList
+      ready: this.ready
     }
   }
 
@@ -197,7 +196,6 @@ class DeltaChatController extends EventEmitter {
     this._selectedChatId = null
     this._showArchivedChats = false
     this._pages = 0
-    this._chatListPages = 0
     this._query = ''
   }
 }

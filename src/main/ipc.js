@@ -57,6 +57,7 @@ function init (cwd, state, logHandler) {
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
+    dc.updateChatList()
   })
 
   ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
@@ -94,8 +95,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.messageIdToJson(msgId)
   })
 
-  ipcMain.on('fetchChats', () => dc.fetchChats())
-
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
   })
@@ -127,13 +126,9 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.getContacts(listFlags, queryStr)
   })
 
-  ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
-
   ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
-
-  ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
 
   ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
 

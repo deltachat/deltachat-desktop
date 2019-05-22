@@ -55,7 +55,7 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_delete_chat_desktop'), yes => {
       if (yes) {
-        ipcRenderer.send('deleteChat', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', selectedChat.id)
       }
     })
   }

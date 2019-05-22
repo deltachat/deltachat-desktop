@@ -4,6 +4,7 @@ const styled = require('styled-components').default
 
 const confirmation = require('./dialogs/confirmationDialog')
 const { RenderContact } = require('./Contact')
+const blockedContactsStore = require('../stores/blockedContacts')
 
 const {
   Alignment,
@@ -22,6 +23,24 @@ class UnblockContacts extends React.Component {
   constructor (props) {
     super(props)
     this.onContactClick = this.onContactClick.bind(this)
+    this.onContactsUpdate = this.onContactsUpdate.bind(this)
+    this.state = {
+      blockedContacts: []
+    }
+    blockedContactsStore.subscribe()
+  }
+
+  onContactsUpdate (blockedContacts) {
+    this.setState({ blockedContacts: blockedContacts })
+  }
+
+  componentDidMount () {
+    this.setState({ selectedChat: blockedContactsStore.getState() })
+    blockedContactsStore.subscribe(this.onContactsUpdate)
+  }
+
+  componentWillUnmount () {
+    blockedContactsStore.unsubscribe(this.onContactsUpdate)
   }
 
   onContactClick (contact) {
@@ -34,10 +53,9 @@ class UnblockContacts extends React.Component {
   }
 
   render () {
-    const { deltachat } = this.props
     const tx = window.translate
 
-    const blockedContacts = deltachat.blockedContacts
+    const blockedContacts = this.state.blockedContacts
     return (
       <div>
         <Navbar fixedToTop>

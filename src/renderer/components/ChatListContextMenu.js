@@ -17,19 +17,17 @@ class ChatListContextMenu extends React.Component {
   show (chatId, e) {
     e.preventDefault()
     e.stopPropagation()
+    console.log('ChatListContextMenu.show', chatId, this.props)
     /*
      This is a workaround because react-contextmenu
      has no official programatic way of opening the menu yet
      https://github.com/vkbansal/react-contextmenu/issues/259
     */
     const ev = { detail: { id: 'chat-options', position: { x: e.clientX, y: e.clientY } } }
-
-    ipcRenderer.send('getChatById', chatId)
-    ipcRenderer.once('getChatById', (e, chat) => {
-      this.setState({ chat }, () => {
-        if (!this.contextMenu.current) return
-        this.contextMenu.current.handleShow(ev)
-      })
+    const chat = this.props.chatList.find(chat => chat.id === chatId)
+    this.setState({ chat }, () => {
+      if (!this.contextMenu.current) return
+      this.contextMenu.current.handleShow(ev)
     })
   }
 
@@ -82,7 +80,7 @@ class ChatListContextMenu extends React.Component {
     const chatId = this.state.chat.id
     confirmation(tx('ask_delete_chat_desktop'), yes => {
       if (yes) {
-        ipcRenderer.send('deleteChat', chatId)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
       }
     })
   }

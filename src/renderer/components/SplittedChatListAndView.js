@@ -12,6 +12,7 @@ const SearchInput = require('./SearchInput.js')
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
 const chatStore = require('../stores/chat')
+const chatListStore = require('../stores/chatList')
 
 const {
   Alignment,
@@ -49,20 +50,23 @@ class SplittedChatListAndView extends React.Component {
     this.state = {
       queryStr: '',
       media: false,
-      selectedChat: null
+      selectedChat: null,
+      chatList: [],
+      showArchivedChats: false
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
     this.onChatUpdate = this.onChatUpdate.bind(this)
+    this.onChatListUpdate = this.onChatListUpdate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
     this.search = debounce(() => {
-      ipcRenderer.send('searchChats', this.state.queryStr)
+      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'searchChats', this.state.queryStr)
     }, 250)
     this.chatClicked = 0
   }
@@ -71,10 +75,17 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ selectedChat: chat })
   }
 
+  onChatListUpdate (state) {
+    const { chatList, showArchivedChats } = state
+    this.setState({ chatList, showArchivedChats })
+    console.log('onChatListUpdate', this.state)
+  }
+
   componentDidMount () {
     this.searchChats('')
-    this.setState({ selectedChat: chatStore.getState() })
+    console.log('componentDidMount', this.state)
     chatStore.subscribe(this.onChatUpdate)
+    chatListStore.subscribe(this.onChatListUpdate)
   }
 
   componentWillUnmount () {
@@ -82,7 +93,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   showArchivedChats (show) {
-    ipcRenderer.send('showArchivedChats', show)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'showArchivedChats', show)
   }
 
   onChatClick (chatId) {
@@ -121,9 +132,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   render () {
-    const { deltachat } = this.props
-    const { showArchivedChats } = deltachat
-    const { selectedChat } = this.state
+    let { selectedChat, chatList, showArchivedChats } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage
@@ -166,12 +175,11 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            totalChats={deltachat.totalChats}
-            chatList={deltachat.chatList}
+            chatList={chatList}
+            showArchivedChats={showArchivedChats}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
-            showArchivedChats={deltachat.showArchivedChats}
             selectedChatId={selectedChat ? selectedChat.id : null}
             openDialog={this.props.openDialog}
             changeScreen={this.props.changeScreen}

@@ -1,6 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const { ipcRenderer } = require('electron')
+const chatListStore = require('../stores/chatList')
 
 const MessageInputTextarea = styled.textarea`
   float: left;
@@ -37,6 +38,7 @@ class ComposerMessageInput extends React.Component {
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.updateDraft = this.updateDraft.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
 
     this.textareaRef = React.createRef()
@@ -90,7 +92,8 @@ class ComposerMessageInput extends React.Component {
   }
 
   updateDraft () {
-    ipcRenderer.send('setDraft', this.state.chatId, this.state.text)
+    const { text, chatId } = this.state
+    chatListStore.dispatch({ type: 'UI_SET_DRAFT', payload: { text, chatId } })
   }
 
   keyEventToAction (e) {

@@ -62,8 +62,9 @@ ipcRenderer.on('DD_MESSAGES_LOADED', (evt, payload) => {
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
-  const { chatId, messageObj } = payload
+  const { chatId, messageObj, eventType } = payload
   const state = chatStore.getState()
+  console.log('DD_EVENT_MSG_UPDATE: ', eventType)
   if (state.id !== chatId) {
     return
   }
