@@ -2,41 +2,40 @@
 
 ## [Unreleased][unreleased]
 
-## [0.102.0] - 2019-05-22
+## [0.103.0] - 2019-05-22
 
 ### Added
 
-- add context menu to ChatList @Simon-Laux #698
-- Add location streaming support @nicodh #747
-- Add map controls @nicodh #765
-- Add react-debugger @Simon-Laux
-- Update and integrate appstream file (flatpaks) @flub #730
-- Implement drafts @jikstra #721
+- add context menu to ChatList [**@Simon-Laux**](https://github.com/Simon-Laux) [#698](https://github.com/deltachat/deltachat-desktop/issues/698)
+- Add location streaming support [**@nicodh**](https://github.com/nicodh) [#747](https://github.com/deltachat/deltachat-desktop/issues/747)
+- Add map controls [**@nicodh**](https://github.com/nicodh) [#765](https://github.com/deltachat/deltachat-desktop/issues/765)
+- Add react-debugger [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Update and integrate appstream file (flatpaks) [**@flub**](https://github.com/flub) [#730](https://github.com/deltachat/deltachat-desktop/issues/730)
+- Implement drafts [**@jikstra**](https://github.com/jikstra) [#721](https://github.com/deltachat/deltachat-desktop/issues/721)
 
 ### Changed
 
-- simplify chat object creation, optimisations & remove unpkg from whitelist @Simon-Laux
-- Refactor sass @nicodh
-- Update deltachat-node to 0.43.0 @ralphtheninja
-- New state handling @nicodh #785
-- Change backend into multiple files @jikstra #787
-- Update deltachat-node to 0.44.1 @jikstra #796
+- simplify chat object creation, optimisations & remove unpkg from whitelist [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Refactor sass [**@nicodh**](https://github.com/nicodh)
+- Update deltachat-node to 0.43.0 [**@ralphtheninja**](https://github.com/ralphtheninja)
+- New state handling [**@nicodh**](https://github.com/nicodh) [#785](https://github.com/deltachat/deltachat-desktop/issues/785)
+- Change backend into multiple files [**@jikstra**](https://github.com/jikstra) [#787](https://github.com/deltachat/deltachat-desktop/issues/787)
+- Update deltachat-node to 0.44.1 [**@jikstra**](https://github.com/jikstra) [#796](https://github.com/deltachat/deltachat-desktop/issues/796)
 
 ### Fixed
 
-- Import/Export keys @nicodh @karissa #251 #707
-- Updated emoji-mart @Simon-Laux
-- Make sure images don't overflow in ChatView @Jikstra #734
-- Fix crash on contact requests @Simon-Laux #755 #776
-- Fix broken render when archiving/deleting chats @ralphtheninja #762
-- Prevent select all @Simon-Laux #774
-- Remember map settings @nicodh #777
-- Update readme for new dc-node @flub #779
-- Improve chatlist performance @karissa #782
-- Change emoji picker behaviour @Simon-Laux #795
-- Fix delete account @jikstra #799
-- Reapply lost changes @nicodh #800
-
+- Import/Export keys [**@nicodh**](https://github.com/nicodh) [**@karissa**](https://github.com/karissa) [#251](https://github.com/deltachat/deltachat-desktop/issues/251) [#707](https://github.com/deltachat/deltachat-desktop/issues/707)
+- Updated emoji-mart [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Make sure images don't overflow in ChatView [**@Jikstra**](https://github.com/Jikstra) [#734](https://github.com/deltachat/deltachat-desktop/issues/734)
+- Fix crash on contact requests [**@Simon-Laux**](https://github.com/Simon-Laux) [#755](https://github.com/deltachat/deltachat-desktop/issues/755) [#776](https://github.com/deltachat/deltachat-desktop/issues/776)
+- Fix broken render when archiving/deleting chats [**@ralphtheninja**](https://github.com/ralphtheninja) [#762](https://github.com/deltachat/deltachat-desktop/issues/762)
+- Prevent select all [**@Simon-Laux**](https://github.com/Simon-Laux) [#774](https://github.com/deltachat/deltachat-desktop/issues/774)
+- Remember map settings [**@nicodh**](https://github.com/nicodh) [#777](https://github.com/deltachat/deltachat-desktop/issues/777)
+- Update readme for new dc-node [**@flub**](https://github.com/flub) [#779](https://github.com/deltachat/deltachat-desktop/issues/779)
+- Improve chatlist performance [**@karissa**](https://github.com/karissa) [#782](https://github.com/deltachat/deltachat-desktop/issues/782)
+- Change emoji picker behaviour [**@Simon-Laux**](https://github.com/Simon-Laux) [#795](https://github.com/deltachat/deltachat-desktop/issues/795)
+- Fix delete account [**@jikstra**](https://github.com/jikstra) [#799](https://github.com/deltachat/deltachat-desktop/issues/799)
+- Reapply lost changes [**@nicodh**](https://github.com/nicodh) [#800](https://github.com/deltachat/deltachat-desktop/issues/800)
 
 ## [0.102.0] - 2019-03-12
 
