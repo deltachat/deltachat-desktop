@@ -2,6 +2,42 @@
 
 ## [Unreleased][unreleased]
 
+## [0.102.0] - 2019-05-22
+
+### Added
+
+- add context menu to ChatList @Simon-Laux #698
+- Add location streaming support @nicodh #747
+- Add map controls @nicodh #765
+- Add react-debugger @Simon-Laux
+- Update and integrate appstream file (flatpaks) @flub #730
+- Implement drafts @jikstra #721
+
+### Changed
+
+- simplify chat object creation, optimisations & remove unpkg from whitelist @Simon-Laux
+- Refactor sass @nicodh
+- Update deltachat-node to 0.43.0 @ralphtheninja
+- New state handling @nicodh #785
+- Change backend into multiple files @jikstra #787
+- Update deltachat-node to 0.44.1 @jikstra #796
+
+### Fixed
+
+- Import/Export keys @nicodh @karissa #251 #707
+- Updated emoji-mart @Simon-Laux
+- Make sure images don't overflow in ChatView @Jikstra #734
+- Fix crash on contact requests @Simon-Laux #755 #776
+- Fix broken render when archiving/deleting chats @ralphtheninja #762
+- Prevent select all @Simon-Laux #774
+- Remember map settings @nicodh #777
+- Update readme for new dc-node @flub #779
+- Improve chatlist performance @karissa #782
+- Change emoji picker behaviour @Simon-Laux #795
+- Fix delete account @jikstra #799
+- Reapply lost changes @nicodh #800
+
+
 ## [0.102.0] - 2019-03-12
 
 ### Added
@@ -511,7 +547,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...HEAD
+
+[0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
 
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
 
