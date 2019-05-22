@@ -55,6 +55,7 @@ class SplittedChatListAndView extends React.Component {
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
+    this.onChatUpdate = this.onChatUpdate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
@@ -66,17 +67,18 @@ class SplittedChatListAndView extends React.Component {
     this.chatClicked = 0
   }
 
+  onChatUpdate (chat) {
+    this.setState({ selectedChat: chat })
+  }
+
   componentDidMount () {
     this.searchChats('')
-    chatStore.subscribe(chat => {
-      this.setState({ selectedChat: chat })
-    })
+    this.setState({ selectedChat: chatStore.getState() })
+    chatStore.subscribe(this.onChatUpdate)
   }
 
   componentWillUnmount () {
-    chatStore.unsubscribe(chat => {
-      this.setState({ selectedChat: chat })
-    })
+    chatStore.unsubscribe(this.onChatUpdate)
   }
 
   showArchivedChats (show) {

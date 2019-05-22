@@ -88,7 +88,7 @@ class ChatView extends React.Component {
     this.writeMessage = this.writeMessage.bind(this)
     this.scrollToBottom = this.scrollToBottom.bind(this)
     this.conversationDiv = React.createRef()
-    this.lastId = 0
+    this.lastId = this.props.chat.id
     this.previousScrollHeightMinusTop = null
 
     this.conversationRef = React.createRef()
@@ -186,7 +186,7 @@ class ChatView extends React.Component {
 
   onDrop (e) {
     const files = e.target.files || e.dataTransfer.files
-    const { chat } = this.props.chat
+    const { chat } = this.props
     e.preventDefault()
     e.stopPropagation()
     // TODO maybe add a clause here for windows because that uses backslash instead of slash
