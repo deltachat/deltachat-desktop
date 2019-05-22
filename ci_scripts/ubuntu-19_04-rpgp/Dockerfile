@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 
-ENV BUILDER_NAME="ubuntu-18_04-rpgp"
+ENV BUILDER_NAME="ubuntu-19_04-rpgp"
 
 # Update system
 RUN true \
@@ -31,7 +31,7 @@ RUN true \
     && cp ninja /usr/bin
 
 # Install dependencies for deltachat-node
-RUN apt -y install python
+RUN apt -y install python2
 
 
 # Install rust for rpgp
@@ -50,5 +50,6 @@ RUN true \
 RUN true \
     && cd /rpgp/pgp-ffi \
     && PREFIX=/opt/DeltaChat/rpgp make install
+
 
 

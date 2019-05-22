@@ -50,13 +50,3 @@ RUN true \
 RUN true \
     && cd /rpgp/pgp-ffi \
     && PREFIX=/opt/DeltaChat/rpgp make install
-
-
-# Set the working directory to /app
-WORKDIR /build-context
-
-COPY . /build-context
-
-RUN chmod +x /build-context/*.sh
-
-
