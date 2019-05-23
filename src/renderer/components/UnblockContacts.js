@@ -27,7 +27,6 @@ class UnblockContacts extends React.Component {
     this.state = {
       blockedContacts: []
     }
-    blockedContactsStore.subscribe()
   }
 
   onContactsUpdate (blockedContacts) {
@@ -37,6 +36,7 @@ class UnblockContacts extends React.Component {
   componentDidMount () {
     this.setState({ selectedChat: blockedContactsStore.getState() })
     blockedContactsStore.subscribe(this.onContactsUpdate)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateBlockedContacts')
   }
 
   componentWillUnmount () {
@@ -47,7 +47,7 @@ class UnblockContacts extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
-        ipcRenderer.send('unblockContact', contact.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'unblockContact', contact.id)
       }
     })
   }
@@ -68,6 +68,7 @@ class UnblockContacts extends React.Component {
           {!blockedContacts.length && <NoneBlocked>{tx('none_blocked_desktop')}</NoneBlocked>}
           {blockedContacts.map((contact) => {
             return (<RenderContact
+              key={contact.id}
               contact={contact}
               onClick={this.onContactClick.bind(this, contact)}
             />

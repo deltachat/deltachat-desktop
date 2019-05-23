@@ -2,6 +2,7 @@ const React = require('react')
 const styled = require('styled-components').default
 const { ipcRenderer } = require('electron')
 const chatListStore = require('../stores/chatList')
+const debounce = require('debounce')
 
 const MessageInputTextarea = styled.textarea`
   float: left;
@@ -38,8 +39,12 @@ class ComposerMessageInput extends React.Component {
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.updateDraft = this.updateDraft.bind(this)
     this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
+
+    this.saveDraft = debounce(() => {
+      const { text, chatId } = this.state
+      chatListStore.dispatch({ type: 'UI_SET_DRAFT', payload: { text, chatId } })
+    }, 500)
 
     this.textareaRef = React.createRef()
   }
@@ -82,18 +87,13 @@ class ComposerMessageInput extends React.Component {
 
     if (prevState.text !== this.state.text) {
       this.resizeTextareaAndComposer()
-      this.updateDraft()
+      this.saveDraft()
     }
   }
 
   onChange (e) {
     this.setState({ text: e.target.value, error: false })
-    this.updateDraft()
-  }
-
-  updateDraft () {
-    const { text, chatId } = this.state
-    chatListStore.dispatch({ type: 'UI_SET_DRAFT', payload: { text, chatId } })
+    this.saveDraft()
   }
 
   keyEventToAction (e) {

@@ -56,7 +56,7 @@ class DeltaChatController extends EventEmitter {
     return password === this.getConfig('mail_pw')
   }
 
-  registerEventHandler (dc, render) {
+  registerEventHandler (dc) {
     dc.on('ALL', (event, ...args) => {
       this.logCoreEvent(event, args)
     })

@@ -52,6 +52,7 @@ function createChatByContactId (contactId) {
     log.debug('chat was archived, unarchiving it')
     this._dc.archiveChat(chatId, 0)
   }
+  this.updateChatList()
   this.selectChat(chatId)
   return chatId
 }

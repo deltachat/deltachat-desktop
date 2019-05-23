@@ -34,7 +34,7 @@ class Controller {
 
   onArchiveChat (archive) {
     const selectedChat = this.props.selectedChat
-    ipcRenderer.send('archiveChat', selectedChat.id, archive)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', selectedChat.id, archive)
   }
 
   onBlockContact () {

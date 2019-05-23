@@ -11,6 +11,7 @@ const SearchInput = require('./SearchInput.js')
 
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
+
 const chatStore = require('../stores/chat')
 const chatListStore = require('../stores/chatList')
 
@@ -78,7 +79,6 @@ class SplittedChatListAndView extends React.Component {
   onChatListUpdate (state) {
     const { chatList, showArchivedChats } = state
     this.setState({ chatList, showArchivedChats })
-    console.log('onChatListUpdate', this.state)
   }
 
   componentDidMount () {
@@ -90,6 +90,7 @@ class SplittedChatListAndView extends React.Component {
 
   componentWillUnmount () {
     chatStore.unsubscribe(this.onChatUpdate)
+    chatListStore.unsubscribe(this.onChatListUpdate)
   }
 
   showArchivedChats (show) {

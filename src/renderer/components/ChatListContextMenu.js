@@ -73,7 +73,7 @@ class ChatListContextMenu extends React.Component {
     )
   }
   onArchiveChat (archive) {
-    ipcRenderer.send('archiveChat', this.state.chat.id, archive)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', this.state.chat.id, archive)
   }
   onDeleteChat () {
     const tx = window.translate

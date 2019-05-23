@@ -105,10 +105,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
 
-  ipcMain.on('archiveChat', (e, chatId, archive) => {
-    dc.archiveChat(chatId, archive)
-  })
-
   ipcMain.on('createChatByContactId', (e, contactId) => {
     e.returnValue = dc.createChatByContactId(contactId)
   })
