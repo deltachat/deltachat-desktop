@@ -1,8 +1,0 @@
-#/bin/bash
-
-# Currently we rely on a wrapper script to preload bundled
-# libdeltachat because of rpgp.
-# ToDo: Open issue for this on -core
-
-
-LD_PRELOAD="/opt/DeltaChat/libdeltachat/lib/x86_64-linux-gnu/libdeltachat.so" /opt/DeltaChat/deltachat-desktop-electron

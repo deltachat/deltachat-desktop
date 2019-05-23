@@ -8,7 +8,7 @@
     "category": "Utility",
     "depends": [
       "libsasl2-2",
-      "libssl1.0.0",
+      "libssl1.1",
       "libsqlite3-0"
     ]
   },

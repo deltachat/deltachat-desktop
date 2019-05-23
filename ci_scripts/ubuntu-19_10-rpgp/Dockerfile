@@ -1,5 +1,6 @@
-FROM ubuntu:18.10
+FROM ubuntu:19.10
 
+ENV BUILDER_NAME="ubuntu-19_10-rpgp"
 
 # Update system
 RUN true \
@@ -32,9 +33,23 @@ RUN true \
 # Install dependencies for deltachat-node
 RUN apt -y install python2
 
-# Set the working directory to /app
-WORKDIR /build-context
 
-COPY . /build-context
+# Install rust for rpgp
+RUN true \
+    && apt -y install curl \
+    && curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-2019-03-23 -y
 
-RUN chmod +x /build-context/*.sh
+ENV PATH=/root/.cargo/bin:$PATH
+
+# Install rpgp
+RUN true \
+    && cd / \
+    && git clone https://github.com/rpgp/rpgp.git
+
+# As rpgp is currently a huge github repo, split built into two layers
+RUN true \
+    && cd /rpgp/pgp-ffi \
+    && PREFIX=/opt/DeltaChat/rpgp make install
+
+
+
