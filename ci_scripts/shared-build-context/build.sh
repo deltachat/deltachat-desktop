@@ -31,7 +31,6 @@ npm run rebuild-bindings
 
 # actually build desktop files
 cd /build
-ls /shared-build-context
 #npm run build
 
 
