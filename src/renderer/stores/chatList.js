@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
+const chatStore = require('./chat')
 
 const defaultState = {
   chatList: [],
@@ -16,7 +17,7 @@ ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
 })
 
 // update the draft in chat list immediately
-chatListStore.reducers.push((action, state) => {
+function updateDraft (action, state) {
   if (action.type === 'UI_SET_DRAFT') {
     const { chatId, text } = action.payload
     const chat = state.chatList.find(chat => chat.id === chatId)
@@ -45,7 +46,9 @@ chatListStore.reducers.push((action, state) => {
     })
     return { ...state, chatList }
   }
-})
+}
+
+chatListStore.reducers.push(updateDraft)
 
 chatListStore.effects.push((action, state) => {
   if (action.type === 'UI_SET_DRAFT') {
@@ -57,6 +60,24 @@ chatListStore.effects.push((action, state) => {
       text
     )
   }
+})
+
+chatStore.subscribe((selectedChat) => {
+  const { id, messages } = selectedChat
+  if (!messages || messages.length < 0) {
+    return
+  }
+  const state = chatListStore.getState()
+  // mark loaded messages as read
+  let chatList = state.chatList.map(chat => {
+    if (chat.id === id) {
+      const newFreshMessageCounter = chat.freshMessageCounter < messages.length ? 0 : chat.freshMessageCounter - messages.length
+      return { ...chat, freshMessageCounter: newFreshMessageCounter }
+    } else {
+      return chat
+    }
+  })
+  chatListStore.setState({ ...state, chatList })
 })
 
 module.exports = chatListStore
