@@ -193,7 +193,7 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: true })
   }
 
-  // Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json)
+  /** Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json) */
   handleRCSettingsChange (key, value) {
     const { saved } = this.state
     saved[key] = value
@@ -201,7 +201,7 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', saved)
   }
 
-  // Saves settings to deltachat core
+  /** Saves settings to deltachat core */
   handleDeltaSettingsChange (key, value) {
     ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
