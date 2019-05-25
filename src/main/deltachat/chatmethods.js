@@ -22,7 +22,10 @@ function chatWithContact (deadDrop) {
   this._dc.createContact(name, address)
   log.info(`Added contact ${name} (${address})`)
   const chatId = this._dc.createChatByMessageId(deadDrop.id)
-  if (chatId) this.selectChat(chatId)
+  if (chatId) {
+    this.updateChatList()
+    this.selectChat(chatId)
+  }
 }
 
 function unblockContact (contactId) {
@@ -91,6 +94,7 @@ function createGroupChat (verified, name, image, contactIds) {
   else chatId = this._dc.createUnverifiedGroupChat(name)
   this._dc.setChatProfileImage(chatId, image)
   contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
+  this.updateChatList()
   this.selectChat(chatId)
   return { chatId }
 }

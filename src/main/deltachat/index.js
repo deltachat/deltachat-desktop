@@ -43,11 +43,21 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  sendToRenderer (evt, payload) {
-    log.debug('sendToRenderer: ' + evt)
-    windows.main.send(evt, payload)
+  /**
+   * @param eventType string
+   * @param payload
+   */
+  sendToRenderer (eventType, payload) {
+    log.debug('sendToRenderer: ' + eventType)
+    windows.main.send(eventType, payload)
   }
 
+  /**
+   *
+   * @param chatId
+   * @param msgId
+   * @param eventType string
+   */
   onMessageUpdate (chatId, msgId, eventType) {
     this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
   }
@@ -89,11 +99,9 @@ class DeltaChatController extends EventEmitter {
       // Don't update if a draft changes
       if (msgId === 0) return
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
-      this.updateChatList()
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.updateChatList()
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
     })
 
@@ -102,11 +110,11 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
+      // TODO: what should we do here?
       this.sendToRenderer('DC_EVENT_MSG_FAILED', { chatId, msgId })
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      this.updateChatList()
       this.onMessageUpdate(chatId, msgId)
     })
 

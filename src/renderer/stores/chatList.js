@@ -11,9 +11,29 @@ const chatListStore = new Store(defaultState)
 // value for text1Meaning
 const DC_TEXT1_DRAFT = 1
 
+// complete update of chat list
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
   console.log('DD_EVENT_CHATLIST_UPDATED', payload)
   chatListStore.setState(payload)
+})
+
+ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
+  const { chatId, eventType } = payload
+  if (eventType === 'DC_EVENT_INCOMING_MSG') {
+    const listState = chatListStore.getState()
+    const selectedChat = chatStore.getState()
+    if (chatId === selectedChat.id) {
+      console.log('Incoming message for current chat')
+      // new message in selected chat should not increase unread messages
+      return
+    }
+    const chat = listState.chatList.find(chat => chat.id === chatId)
+    const updatetChat = { ...chat, freshMessageCounter: chat.freshMessageCounter + 1 }
+    let chatList = listState.chatList.map(chat => {
+      return chat.id === chatId ? updatetChat : chat
+    })
+    chatListStore.setState({ ...listState, chatList })
+  }
 })
 
 // update the draft in chat list immediately
@@ -28,6 +48,7 @@ function updateDraft (action, state) {
     let { text1, text2, text1Meaning, _initialText } = chat.summary
 
     if (text1Meaning !== DC_TEXT1_DRAFT && !_initialText) {
+      // keep initial text to be able to restore it if a draft is deleted again
       _initialText = [ text1, text2 ]
     }
     let newSummary = {
