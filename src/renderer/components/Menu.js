@@ -27,7 +27,7 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_leave_group'), yes => {
       if (yes) {
-        ipcRenderer.send('leaveGroup', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
       }
     })
   }
@@ -65,7 +65,7 @@ class Controller {
   }
 
   onContactRequests () {
-    ipcRenderer.send('contactRequests')
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'contactRequests')
   }
 
   logout () {

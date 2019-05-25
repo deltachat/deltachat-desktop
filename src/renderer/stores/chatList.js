@@ -74,12 +74,7 @@ chatListStore.reducers.push(updateDraft)
 chatListStore.effects.push((action, state) => {
   if (action.type === 'UI_SET_DRAFT') {
     const { chatId, text } = action.payload
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
-      'setDraft',
-      chatId,
-      text
-    )
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'setDraft', chatId, text)
   }
 })
 
@@ -92,8 +87,8 @@ chatStore.subscribe((selectedChat) => {
   // mark loaded messages as read
   let chatList = state.chatList.map(chat => {
     if (chat.id === id) {
-      const newFreshMessageCounter = chat.freshMessageCounter < messages.length ? 0 : chat.freshMessageCounter - messages.length
-      return { ...chat, freshMessageCounter: newFreshMessageCounter }
+      const newCounter = chat.freshMessageCounter < messages.length ? 0 : chat.freshMessageCounter - messages.length
+      return { ...chat, freshMessageCounter: newCounter }
     } else {
       return chat
     }

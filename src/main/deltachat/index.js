@@ -44,8 +44,8 @@ class DeltaChatController extends EventEmitter {
   }
 
   /**
-   * @param eventType string
-   * @param payload
+   * @param {string} eventType
+   * @param {object} payload
    */
   sendToRenderer (eventType, payload) {
     log.debug('sendToRenderer: ' + eventType)
@@ -54,9 +54,9 @@ class DeltaChatController extends EventEmitter {
 
   /**
    *
-   * @param chatId
-   * @param msgId
-   * @param eventType string
+   * @param {int} chatId
+   * @param {int} msgId
+   * @param {string} eventType
    */
   onMessageUpdate (chatId, msgId, eventType) {
     this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
@@ -119,7 +119,6 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
-      this.logCoreEvent('DC_EVENT_LOCATION_CHANGED', { contactId })
       this.sendToRenderer('DC_EVENT_LOCATION_CHANGED', { contactId })
     })
 

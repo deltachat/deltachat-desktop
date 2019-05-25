@@ -95,8 +95,8 @@ class ChatListContextMenu extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_leave_group'), yes => {
       if (yes) {
-        ipcRenderer.send('leaveGroup', selectedChat.id)
-        ipcRenderer.send('selectChat', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', selectedChat.id)
       }
     })
   }
@@ -108,7 +108,7 @@ class ChatListContextMenu extends React.Component {
     if (!contactId) return
     confirmation(tx('ask_block_contact'), yes => {
       if (yes) {
-        ipcRenderer.send('blockContact', contactId)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', contactId)
       }
     })
   }

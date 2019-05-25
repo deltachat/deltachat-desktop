@@ -10,6 +10,7 @@ const ContactList = require('../ContactList')
 class ForwardMessage extends React.Component {
   onContactClick (contact) {
     ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
       'forwardMessage',
       this.props.forwardMessage.msg.id,
       contact.id

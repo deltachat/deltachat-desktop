@@ -41,11 +41,7 @@ chatStore.reducers.push((action, state) => {
 chatStore.effects.push((action) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
-      'deleteMessage',
-      msgId
-    )
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteMessage', msgId)
   }
 })
 

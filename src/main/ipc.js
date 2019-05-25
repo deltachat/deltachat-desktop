@@ -103,8 +103,6 @@ function init (cwd, state, logHandler) {
     dc.modifyGroup(chatId, name, image, remove, add)
   })
 
-  ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
-
   ipcMain.on('createChatByContactId', (e, contactId) => {
     e.returnValue = dc.createChatByContactId(contactId)
   })
@@ -115,9 +113,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
 
-  ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
-  ipcMain.on('unblockContact', (e, id) => dc.unblockContact(id))
-
   ipcMain.on('getContacts', (e, listFlags, queryStr) => {
     e.returnValue = dc.getContacts(listFlags, queryStr)
   })
@@ -126,22 +121,12 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
 
-  ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
-
-  ipcMain.on('contactRequests', () => dc.contactRequests())
-
   ipcMain.on('getEncrInfo', (e, contactId) => {
     e.returnValue = dc.getEncrInfo(contactId)
   })
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
-  })
-
-  ipcMain.on('deleteMessage', (e, id) => dc.deleteMessage(id))
-
-  ipcMain.on('forwardMessage', (e, msgId, contactId) => {
-    dc.forwardMessage(msgId, contactId)
   })
 
   ipcMain.on('getQrCode', (e, chatId) => {
@@ -227,10 +212,6 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
-  })
-
-  ipcMain.on('setDraft', (event, chatId, msg) => {
-    dc.setDraft(chatId, msg)
   })
 
   function render () {
