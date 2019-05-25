@@ -2,6 +2,7 @@ const React = require('react')
 const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
 const styled = require('styled-components').default
+const C = require('deltachat-node/constants')
 
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 const {
@@ -14,6 +15,8 @@ const {
   Dialog,
   Switch,
   Label,
+  RadioGroup,
+  Radio,
   Callout
 } = require('@blueprintjs/core')
 
@@ -79,6 +82,8 @@ class Settings extends React.Component {
           'configured_e2ee_enabled',
           'displayname',
           'selfstatus',
+          // 'mdns_enabled', // TODO - investigate markRead var doesn't affect this?
+          'show_emails'
         ]
       )
 
@@ -340,6 +345,18 @@ class Settings extends React.Component {
               <H5>this.translate('setting_profile')</H5>
               { this.renderDeltaInput('displayname', "this.translate('settings_displayname')")}
               { this.renderDeltaInput('selfstatus', "this.translate('setting_profile_status')")}
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>contact request handling</H5>
+              <RadioGroup
+                label='Show classic emails'
+                onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
+                selectedValue={Number(settings['show_emails'])}
+              >
+                <Radio label='No, chats only' value={C.DC_SHOW_EMAILS_OFF} />
+                <Radio label='For accepted contacts' value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
+                <Radio label='All' value={C.DC_SHOW_EMAILS_ALL} />
+              </RadioGroup>
             </Card>
           </SettingsDialog>
         </Dialog>
