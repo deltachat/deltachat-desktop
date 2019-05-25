@@ -13,6 +13,7 @@ const {
   Button,
   Dialog,
   Switch,
+  Label,
   Callout
 } = require('@blueprintjs/core')
 
@@ -75,7 +76,9 @@ class Settings extends React.Component {
           'configured_send_server',
           'configured_send_port',
           'configured_send_security',
-          'configured_e2ee_enabled'
+          'configured_e2ee_enabled',
+          'displayname',
+          'selfstatus',
         ]
       )
 
@@ -234,6 +237,20 @@ class Settings extends React.Component {
     )
   }
 
+  renderDeltaInput (configKey, label) {
+    let configValue = this.state.settings[configKey]
+    return (
+      <Label>
+        {label}
+        <input
+          value={configValue}
+          className={Classes.INPUT}
+          onChange={(ev) => this.handleDeltaSettingsChange(configKey, ev.target.value)}
+        />
+      </Label>
+    )
+  }
+
   componentWillUnmount () {
     ipcRenderer.removeAllListener('DC_EVENT_IMEX_FILE_WRITTEN')
   }
@@ -318,6 +335,11 @@ class Settings extends React.Component {
               { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
               { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
               { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>this.translate('setting_profile')</H5>
+              { this.renderDeltaInput('displayname', "this.translate('settings_displayname')")}
+              { this.renderDeltaInput('selfstatus', "this.translate('setting_profile_status')")}
             </Card>
           </SettingsDialog>
         </Dialog>
