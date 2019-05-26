@@ -310,7 +310,7 @@ class MapComponent extends React.Component {
     }
     let contact = selectedChat.contacts.find(contact => contact.address === this.currentUserAddress)
     if (!contact) {
-      contact = { id: C.DC_CONTACT_ID_SELF, firstName: window.translate('self') } // fallback since current user is not in contact list in non group chats
+      contact = { id: C.DC_CONTACT_ID_SELF, firstName: window.translate('self'), color: 1212112 } // fallback since current user is not in contact list in non group chats
     }
     const location = {
       longitude: latLng.lng,
@@ -323,6 +323,8 @@ class MapComponent extends React.Component {
     const mapData = this.mapDataStore.get(contact.id)
     if (mapData) {
       this.map.getSource(mapData.pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData([location], contact, true))
+    } else {
+      this.renderContactLayer(contact, [location])
     }
     this.poiLocation = null
   }
