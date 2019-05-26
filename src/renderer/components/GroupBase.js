@@ -156,7 +156,7 @@ class GroupBase extends React.Component {
                 <tr>
                   <td>
                     <ContactList
-                      filter={(contact) => this.contactInGroup(contact.id)}
+                      filterFunction={(contact) => this.contactInGroup(contact.id)}
                       childProps={(contact) => {
                         return { color: !this.contactInGroupStateChanged(contact.id) ? 'green' : 'yellow' }
                       }}
@@ -166,7 +166,7 @@ class GroupBase extends React.Component {
                   </td>
                   <td>
                     <ContactList
-                      filter={(contact) => !this.contactInGroup(contact.id)}
+                      filterFunction={(contact) => !this.contactInGroup(contact.id)}
                       childProps={(contact) => {
                         return { color: this.contactInGroupStateChanged(contact.id) ? 'red' : '' }
                       }}
