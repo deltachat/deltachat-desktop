@@ -342,20 +342,20 @@ class Settings extends React.Component {
               { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>this.translate('setting_profile')</H5>
-              { this.renderDeltaInput('displayname', "this.translate('settings_displayname')")}
-              { this.renderDeltaInput('selfstatus', "this.translate('setting_profile_status')")}
+              <H5>{this.translate('setting_profile')}</H5>
+              { this.renderDeltaInput('displayname', this.translate('setting_profile_displayname'))}
+              { this.renderDeltaInput('selfstatus', this.translate('setting_profile_status'))}
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>contact request handling</H5>
+              <H5>{this.translate('setting_show_mail')}</H5>
               <RadioGroup
-                label='Show classic emails'
+                label={this.translate('setting_show_mail_label')}
                 onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
                 selectedValue={Number(settings['show_emails'])}
               >
-                <Radio label='No, chats only' value={C.DC_SHOW_EMAILS_OFF} />
-                <Radio label='For accepted contacts' value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
-                <Radio label='All' value={C.DC_SHOW_EMAILS_ALL} />
+                <Radio label={this.translate('setting_show_mail_off')} value={C.DC_SHOW_EMAILS_OFF} />
+                <Radio label={this.translate('setting_show_mail_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
+                <Radio label={this.translate('setting_show_mail_all')} value={C.DC_SHOW_EMAILS_ALL} />
               </RadioGroup>
             </Card>
           </SettingsDialog>
