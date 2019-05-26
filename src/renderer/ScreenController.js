@@ -22,7 +22,6 @@ const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
-const ContactList = require('./components/ContactList')
 const confirmation = require('./components/dialogs/confirmationDialog')
 
 class ScreenController extends React.Component {
@@ -115,9 +114,6 @@ class ScreenController extends React.Component {
         break
       case 'EditGroup':
         Screen = EditGroup
-        break
-      case 'ContactList':
-        Screen = ContactList
         break
       case 'UnblockContacts':
         Screen = UnblockContacts
