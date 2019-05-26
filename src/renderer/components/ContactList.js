@@ -25,7 +25,9 @@ class ContactList extends SearchableList {
 
   _getData () {
     if (this.props.contacts) {
-      return this.props.contacts
+      return this.props.contacts.filter(contact =>
+        `${contact.name}${contact.address}${contact.displayName}`.indexOf(this.state.queryStr) !== -1
+      )
     }
     const listFlags = this.props.showVerifiedContacts ? C.DC_GCL_VERIFIED_ONLY : 0
     return ipcRenderer.sendSync(
