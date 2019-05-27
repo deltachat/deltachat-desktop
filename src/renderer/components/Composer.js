@@ -215,7 +215,7 @@ class Composer extends React.Component {
 
   render () {
     return (
-      <ComposerWrapper ref='ComposerWrapper'>
+      <ComposerWrapper ref='ComposerWrapper' hidden={this.props.hidden}>
         <AttachmentButtonWrapper>
           <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
         </AttachmentButtonWrapper>

@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 
 const Composer = require('./Composer')
@@ -75,6 +76,13 @@ const ChatViewWrapper = styled.div`
     color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
   }
 }
+`
+
+const NotInGroupMessage = styled.div`
+line-height: 40px;
+font-size: 20pt;
+color: darkred;
+text-align: center;
 `
 
 class ChatView extends React.Component {
@@ -196,8 +204,14 @@ class ChatView extends React.Component {
     e.stopPropagation()
   }
 
+  isSelfInGroup () {
+    const { chat } = this.props
+    return chat.contacts.findIndex(contact => contact.id === C.DC_CONTACT_ID_SELF) !== -1
+  }
+
   render () {
     const { onDeadDropClick, chat } = this.props
+    const hideComposer = chat.isGroup && !this.isSelfInGroup()
     return (
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
@@ -225,7 +239,9 @@ class ChatView extends React.Component {
           draft={chat.draft}
           onSubmit={this.writeMessage}
           setComposerSize={this.setComposerSize.bind(this)}
+          hidden={hideComposer}
         />
+        {hideComposer && <NotInGroupMessage>Not In Group</NotInGroupMessage>}
       </ChatViewWrapper>
     )
   }
