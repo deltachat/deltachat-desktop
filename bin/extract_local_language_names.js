@@ -15,11 +15,12 @@ function getAvailableLanguages () {
       const locale = l.split('.json')[0]
       const content = require(join(localeDir, l))
       const localLangName = content[`language_${locale}`] || englishLang[`language_${locale}`]
+      if (!localLangName) console.error(`'language_${locale}' key is missing in both the native lang and the fallback lang (en)`)
       return {
         locale,
-        name: localLangName.message
+        name: localLangName && localLangName.message
       }
-    })
+    }).filter(item => item.name !== undefined)
 }
 
 writeFileSync(join(localeDir, '_languages.json'), JSON.stringify(getAvailableLanguages(), null, 2))

@@ -57,7 +57,6 @@ function xmlToJson (filename) {
   js.resources.plurals.forEach((plural) => {
     const name = plural._attributes.name
     if (!name) return error(plural)
-    console.log(plural)
 
     if (!Array.isArray(plural.item)) plural.item = [plural.item]
 
