@@ -347,15 +347,15 @@ class Settings extends React.Component {
               { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('setting_show_mail')}</H5>
+              <H5>{this.translate('pref_email_interaction_title')}</H5>
               <RadioGroup
-                label={this.translate('setting_show_mail_label')}
+                label={this.translate('pref_show_emails')}
                 onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
                 selectedValue={Number(settings['show_emails'])}
               >
-                <Radio label={this.translate('setting_show_mail_off')} value={C.DC_SHOW_EMAILS_OFF} />
-                <Radio label={this.translate('setting_show_mail_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
-                <Radio label={this.translate('setting_show_mail_all')} value={C.DC_SHOW_EMAILS_ALL} />
+                <Radio label={this.translate('pref_show_emails_no')} value={C.DC_SHOW_EMAILS_OFF} />
+                <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
+                <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
               </RadioGroup>
             </Card>
           </SettingsDialog>

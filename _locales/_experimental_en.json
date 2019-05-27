@@ -10,20 +10,5 @@
   },
   "hide_password": {
     "message": "Hide password"
-  },
-  "setting_show_mail": {
-    "message": "contact request handling"
-  },
-  "setting_show_mail_label": {
-    "message": "Show classic emails"
-  },
-  "setting_show_mail_off": {
-    "message": "No, chats only"
-  },
-  "setting_show_mail_contacts": {
-    "message": "For accepted contacts"
-  },
-  "setting_show_mail_all": {
-    "message": "All"
   }
 }
