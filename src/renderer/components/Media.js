@@ -99,7 +99,11 @@ class Media extends React.Component {
   }
 
   onClickMedia (message) {
-    this.props.openDialog('RenderMedia', { message })
+    if (message.filemime === 'application/octet-stream' && !(Attachment.isVideo(message.msg.attachment) || Attachment.isImage(message.msg.attachment))) {
+      message.onDownload()
+    } else {
+      this.props.openDialog('RenderMedia', { message })
+    }
   }
 
   render () {
