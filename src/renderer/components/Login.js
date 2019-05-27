@@ -1,4 +1,5 @@
 const React = require('react')
+const { useState } = React
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 
@@ -11,6 +12,125 @@ const {
   ProgressBar,
   Intent
 } = require('@blueprintjs/core')
+const { Select } = require('@blueprintjs/select')
+
+const AdvancedButton = styled.button`
+  -webkit-appearance: button-bevel;
+  background-color: transparent;`
+
+const AdvancedButtonIconClosed = styled.div`
+  &::after {
+    content: '+';
+  }
+`
+
+const AdvancedButtonIconOpen = styled.div`
+  &::after {
+    content: 'x';
+  }
+`
+
+const DeltaFormGroup = styled.div`
+  .bp3-form-content { 
+    padding: 0px 10px 0px 10px;
+  }
+`
+
+const DeltaSelectWrapper = styled(DeltaFormGroup)`
+  .bp3-select::after {
+    content:'>';
+    font:11px "Consolas", monospace;
+    transform:rotate(90deg);
+  }
+  .bp3-select {
+    width: 100%;
+    select {
+     -webkit-box-shadow: none;
+      box-shadow: none;
+      background-image: none;
+      background-color: transparent;
+      width: 100%;
+      &:hover {
+        outline: none;
+        outline-offset: none;
+      }
+    }
+  }
+`
+
+const DeltaSelect = function(props) {
+  return (
+    <DeltaSelectWrapper>
+      <div className='bp3-select .modifier'>
+        <select id={props.id} value={props.value} onChange={props.onChange}>
+          {props.children}
+        </select>
+      </div>
+    </DeltaSelectWrapper>
+  )
+}
+
+const DeltaInputWrapper = styled(DeltaFormGroup)`
+  .bp3-input {
+    padding: unset;
+    border-radius: unset;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 1px solid;
+  }
+`
+
+const DeltaInput = function(props) {
+  return (
+    <DeltaInputWrapper>
+      <FormGroup>
+        <InputGroup
+          id={props.id}
+          type={props.type}
+          value={props.value}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
+          min={props.min}
+          max={props.max}
+        />
+      </FormGroup>
+    </DeltaInputWrapper>
+  )
+}
+
+const DeltaPasswordInput = function(props) {
+    const tx = window.translate
+
+    const { showPassword, setShowPassword } = useState(false)
+
+    const password = props.password || ''
+    console.log('props:', props)
+
+    const lockButton = (
+      <Button
+        icon={showPassword ? 'eye-open' : 'eye-off'}
+        title={showPassword ? tx('hide_password') : tx('show_password')}
+        intent={Intent.WARNING}
+        minimal
+        onClick={() => setShowPassword(!showPassword)}
+      />
+    )
+
+    return (
+      <DeltaInputWrapper>
+        <FormGroup>
+          <InputGroup
+            id={props.id}
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={props.onChange}
+            placeholder={props.placeholder}
+            rightElement={password.length > 0 ? lockButton : null}
+          />
+        </FormGroup>
+      </DeltaInputWrapper>
+      )
+}
 
 const ProgressBarWrapper = styled.div`
 margin-top: 20px
@@ -100,15 +220,19 @@ class Login extends React.Component {
     )
 
     return (
-      <InputGroup
-        id={keyValue}
-        type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
-        value={this.state.credentials[keyValue]}
-        onChange={this.handleCredentialsChange}
-        placeholder={tx('password')}
-        rightElement={this.state.credentials[keyValue].length > 0 ? lockButton : null}
-      />
-    )
+      <DeltaInputWrapper>
+        <FormGroup>
+          <InputGroup
+            id={keyValue}
+            type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
+            value={this.state.credentials[keyValue]}
+            onChange={this.handleCredentialsChange}
+            placeholder={tx('password')}
+            rightElement={this.state.credentials[keyValue].length > 0 ? lockButton : null}
+          />
+        </FormGroup>
+      </DeltaInputWrapper>
+      )
   }
 
   renderLoginHeader (mode) {
@@ -140,68 +264,67 @@ class Login extends React.Component {
       <React.Fragment>
         {this.renderLoginHeader(mode)}
         <form onSubmit={this.handleSubmit}>
-          <FormGroup label={tx('email_address')} placeholder={tx('email_address')} labelFor='email'>
-            <InputGroup
-              id='addr'
-              disabled={addrDisabled}
-              type='text'
-              value={addr}
-              onChange={this.handleCredentialsChange}
-            />
-          </FormGroup>
-          <FormGroup label={tx('password')} placeholder={tx('password')} labelFor='mailPw'>
-            {this.renderPasswordInput('showPasswordMail', 'mailPw')}
-          </FormGroup>
-          <Button onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? '-' : '+') + ' ' + tx('menu_advanced') }
-          </Button>
+    
+          <DeltaInput
+            placeholder={tx('email_address')}
+            labelFor='email'
+            id='addr'
+            disabled={addrDisabled}
+            type='text'
+            value={addr}
+            onChange={this.handleCredentialsChange}
+          />
+          
+          <DeltaPasswordInput
+            label={tx('password')}
+            placeholder={tx('password')}
+            password={this.state.credentials['mailPw']}
+            onChange={this.handleCredentialsChange}
+          />
+          
+          <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
+            {(showAdvanced ? <AdvancedButtonIconOpen/> : <AdvancedButtonIconClosed/>) }
+            {tx('menu_advanced') }
+          </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
             <h2>{tx('login_inbox')}</h2>
             <p>{tx('login_subheader')}</p>
-            <FormGroup
+            <DeltaInput
               label={tx('login_imap_login')}
               placeholder={tx('login_imap_login')}
               labelFor='mailUser'>
-              <InputGroup
-                id='mailUser'
-                type='text'
-                value={mailUser}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
-            <FormGroup
-              label={tx('login_imap_server')}
+              id='mailUser'
+              type='text'
+              value={mailUser}
+              onChange={this.handleCredentialsChange}
+            </DeltaInput>
+            <DeltaInput
               placeholder={tx('login_imap_server')}
               labelFor='mailServer'>
-              <InputGroup
-                id='mailServer'
-                type='text'
-                value={mailServer}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
-            <FormGroup
-              label={tx('login_imap_port')}
+              id='mailServer'
+              type='text'
+              value={mailServer}
+              onChange={this.handleCredentialsChange}
+            </DeltaInput>
+            <DeltaInput
               placeholder={tx('login_imap_port')}
               labelFor='mailPort'>
-              <InputGroup
-                id='mailPort'
-                type='number'
-                min='0'
-                max='65535'
-                value={mailPort}
-                placeholder={tx('def')}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
+              id='mailPort'
+              type='number'
+              min='0'
+              max='65535'
+              value={mailPort}
+              placeholder={tx('def')}
+              onChange={this.handleCredentialsChange}
+            </DeltaInput>
             <FormGroup label={tx('login_imap_security')} placeholder={tx('login_imap_security')}
               labelFor='mailSecurity'>
-              <div className='bp3-select .modifier'>
-                <select id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
-                  <option value='ssl'>SSL/TLS</option>
-                  <option value='starttls'>STARTTLS</option>
-                </select>
-              </div>
+              <DeltaSelect id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
+                <option value='automatic'>Automatic</option>
+                <option value='ssl'>SSL/TLS</option>
+                <option value='starttls'>SartTLS</option>
+                <option value='plain'>{tx('off')}</option>
+              </DeltaSelect>
             </FormGroup>
             <h2>{tx('login_outbox')}</h2>
             <FormGroup
@@ -250,12 +373,12 @@ class Login extends React.Component {
               label={tx('login_smtp_security')}
               placeholder={tx('login_smtp_security')}
               labelFor='sendSecurity'>
-              <div className='bp3-select .modifier'>
-                <select id='sendSecurity' value={sendSecurity} onChange={this.handleCredentialsChange}>
-                  <option value='ssl'>SSL/TLS</option>
-                  <option value='starttls'>STARTTLS</option>
-                </select>
-              </div>
+              <DeltaSelect id='sendSecurity' value={sendSecurity} onChange={this.handleCredentialsChange}>
+                <option value='automatic'>Automatic</option>
+                <option value='ssl'>SSL/TLS</option>
+                <option value='starttls'>STARTTLS</option>
+                <option value='plain'>{tx('off')}</option>
+              </DeltaSelect>
             </FormGroup>
           </Collapse>
           {
