@@ -24,11 +24,13 @@ class Login extends React.Component {
       progress: 0
     }
     this._updateProgress = this._updateProgress.bind(this)
-    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
-
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.renderPasswordInput = this.renderPasswordInput.bind(this)
+  }
+
+  componentDidMount () {
+    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
   }
 
   componentWillUnmount () {
@@ -255,6 +257,7 @@ class Login extends React.Component {
             loading &&
             <ProgressBar
               value={this.state.progress / 10}
+              intent={Intent.PRIMARY}
             />
           }
           <br />
