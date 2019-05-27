@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
 const {
   Button,
@@ -7,8 +8,13 @@ const {
   InputGroup,
   FormGroup,
   Collapse,
+  ProgressBar,
   Intent
 } = require('@blueprintjs/core')
+
+const ProgressBarWrapper = styled.div`
+margin-top: 20px
+`
 
 class Login extends React.Component {
   constructor (props) {
@@ -19,12 +25,25 @@ class Login extends React.Component {
         showAdvanced: false,
         showPasswordMail: false,
         showPasswordSend: false
-      }
+      },
+      progress: 0
     }
-
+    this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.renderPasswordInput = this.renderPasswordInput.bind(this)
+  }
+
+  componentDidMount () {
+    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
+  }
+
+  _updateProgress (ev, progress) {
+    this.setState({ progress })
   }
 
   _defaultCredentials () {
@@ -239,6 +258,15 @@ class Login extends React.Component {
               </div>
             </FormGroup>
           </Collapse>
+          {
+            loading &&
+            <ProgressBarWrapper>
+              <ProgressBar
+                value={this.state.progress / 1000}
+                intent={Intent.SUCCESS}
+              />
+            </ProgressBarWrapper>
+          }
           <br />
           {React.Children.map(this.props.children, (child) => {
             var props = {}

@@ -70,6 +70,10 @@ class DeltaChatController extends EventEmitter {
       this.emit('DC_EVENT_IMEX_PROGRESS', progress)
     })
 
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+      this.sendToRenderer('DC_EVENT_CONFIGURE_PROGRESS', progress)
+    })
+
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
       this.logCoreEvent('DC_EVENT_CONTACTS_CHANGED', contactId)
       render()
