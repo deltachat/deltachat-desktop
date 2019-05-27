@@ -7,6 +7,7 @@ const {
   InputGroup,
   FormGroup,
   Collapse,
+  ProgressBar,
   Intent
 } = require('@blueprintjs/core')
 
@@ -19,12 +20,23 @@ class Login extends React.Component {
         showAdvanced: false,
         showPasswordMail: false,
         showPasswordSend: false
-      }
+      },
+      progress: 0
     }
+    this._updateProgress = this._updateProgress.bind(this)
+    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
 
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.renderPasswordInput = this.renderPasswordInput.bind(this)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
+  }
+
+  _updateProgress (ev, progress) {
+    this.setState({ progress })
   }
 
   _defaultCredentials () {
@@ -239,6 +251,12 @@ class Login extends React.Component {
               </div>
             </FormGroup>
           </Collapse>
+          {
+            loading &&
+            <ProgressBar
+              value={this.state.progress / 10}
+            />
+          }
           <br />
           {React.Children.map(this.props.children, (child) => {
             var props = {}
