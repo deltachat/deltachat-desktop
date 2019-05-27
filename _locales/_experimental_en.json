@@ -11,15 +11,6 @@
   "hide_password": {
     "message": "Hide password"
   },
-  "setting_profile": {
-    "message": "Profil"
-  },
-  "setting_profile_displayname": {
-    "message": "Displayname"
-  },
-  "setting_profile_status": {
-    "message": "Signature / Status"
-  },
   "setting_show_mail": {
     "message": "contact request handling"
   },

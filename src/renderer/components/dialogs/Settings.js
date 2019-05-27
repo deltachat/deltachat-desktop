@@ -342,9 +342,9 @@ class Settings extends React.Component {
               { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
             </Card>
             <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('setting_profile')}</H5>
-              { this.renderDeltaInput('displayname', this.translate('setting_profile_displayname'))}
-              { this.renderDeltaInput('selfstatus', this.translate('setting_profile_status'))}
+              <H5>{this.translate('pref_profile_info_headline')}</H5>
+              { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
+              { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('setting_show_mail')}</H5>
