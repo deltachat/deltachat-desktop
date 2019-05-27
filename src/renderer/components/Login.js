@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const styled = require('styled-components').default
 
 const {
   Button,
@@ -10,6 +11,10 @@ const {
   ProgressBar,
   Intent
 } = require('@blueprintjs/core')
+
+const ProgressBarWrapper = styled.div`
+margin-top: 20px
+`
 
 class Login extends React.Component {
   constructor (props) {
@@ -255,10 +260,12 @@ class Login extends React.Component {
           </Collapse>
           {
             loading &&
-            <ProgressBar
-              value={this.state.progress / 10}
-              intent={Intent.PRIMARY}
-            />
+            <ProgressBarWrapper>
+              <ProgressBar
+                value={this.state.progress / 1000}
+                intent={Intent.SUCCESS}
+              />
+            </ProgressBarWrapper>
           }
           <br />
           {React.Children.map(this.props.children, (child) => {
