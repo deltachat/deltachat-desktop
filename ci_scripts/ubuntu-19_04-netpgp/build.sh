@@ -19,19 +19,10 @@ npm install
 # get deltachat-node from github
 cd /build/node_modules
 git clone --branch v0.44.1 https://github.com/deltachat/deltachat-node.git
-cd deltachat-node
-npm run submodule
-
-# manually compile deltachat-core with netpgp
-cd deltachat-core
-meson -Drpgp=false builddir
-cd builddir
-ninja
-
-# recompile node-bindings
-cd /build/node_modules/deltachat-node
+cd deltachat-node/scripts
+cp /build-context/rebuild-core.js .
+cd ..
 npm install
-npm run rebuild-bindings
 
 # reset package.json
 cd /build
