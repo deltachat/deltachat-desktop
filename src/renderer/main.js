@@ -11,6 +11,7 @@ const localize = require('../localize')
 const moment = require('moment')
 const App = require('./App')
 const logger = require('../logger')
+logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
 
 const STATE_WRAPPER = {}
 const state = STATE_WRAPPER.state = remote.app.state
@@ -30,8 +31,6 @@ ipcRenderer.on('render', (e, state) => {
   STATE_WRAPPER.state = state
   app.setState(state)
 })
-
-logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
 
 ipcRenderer.send('ipcReady')
 

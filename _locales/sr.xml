@@ -1,3 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">У реду</string>
+    <string name="cancel">Откажи</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
+    <string name="on">Укључено</string>
+    <string name="off">Искључено</string>
+    <string name="def">Подразумевано</string>
+    <string name="custom">Посебно</string>
+    <string name="none">Ништа</string>
+    <string name="open">Отвори</string>
+    <string name="delete">Обриши</string>
+    <string name="not_now">Не сада</string>
+    <string name="never">Никад</string>
+    <string name="one_moment">Тренутак...</string>
+    <string name="done">Завршено</string>
+    <string name="undo">Опозови</string>
+    <string name="error">Грешка</string>
+    <string name="error_x">Грешка: %1$s</string>
+    <string name="error_no_network">Мрежа није доступна.</string>
+    <string name="no_app_to_handle_data">Нема апликације која обрађује ову врсту података.</string>
+    <string name="no_browser_installed">Прегледач није инсталиран.</string>
+    <string name="file_not_found">Не могу да нађем %1$s.</string>
+    <string name="copied_to_clipboard">Копирано у клипборд.</string>
+    <string name="contacts_headline">Контакти</string>
+    <string name="email_address">Е-адреса</string>
+    <string name="bad_email_address">Лоша е-адреса.</string>
+    <string name="password">Лозинка</string>
+    <string name="now">Сада</string>
+    <!-- n_min_ago is deprecated, use n_minutes instead -->
+    <string name="n_min_ago">%dмин</string>
+    <string name="today">Данас</string>
+    <string name="yesterday">Јуче</string>
+    <string name="this_week">Ове недеље</string>
+    <string name="this_month">Овог месеца</string>
+    <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
+    <plurals name="n_minutes">
+        <item quantity="one">%d мин</item>
+        <item quantity="few">%d мин</item>
+        <item quantity="other">%d мин</item>
+    </plurals>
+    <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
+    <plurals name="n_hours">
+        <item quantity="one">%d сат</item>
+        <item quantity="few">%d сата</item>
+        <item quantity="other">%d сати</item>
+    </plurals>
+    <string name="self">Ја</string>
+    <string name="draft">Нацрт</string>
+    <string name="image">Слика</string>
+    <string name="gif">ГИФ</string>
+    <string name="images">Слике</string>
+    <string name="audio">Звук</string>
+    <string name="voice_message">Гласовна порука</string>
+    <string name="forwarded_message">Прослеђена порука</string>
+    <string name="video">Видео</string>
+    <string name="documents">Документи</string>
+    <string name="contact">Особа</string>
+    <string name="camera">Камера</string>
     </resources>

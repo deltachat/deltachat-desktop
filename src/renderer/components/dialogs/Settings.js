@@ -2,6 +2,7 @@ const React = require('react')
 const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
 const styled = require('styled-components').default
+const C = require('deltachat-node/constants')
 
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 const {
@@ -13,6 +14,9 @@ const {
   Button,
   Dialog,
   Switch,
+  Label,
+  RadioGroup,
+  Radio,
   Callout
 } = require('@blueprintjs/core')
 
@@ -75,7 +79,11 @@ class Settings extends React.Component {
           'configured_send_server',
           'configured_send_port',
           'configured_send_security',
-          'configured_e2ee_enabled'
+          'configured_e2ee_enabled',
+          'displayname',
+          'selfstatus',
+          // 'mdns_enabled', // TODO - investigate markRead var doesn't affect this?
+          'show_emails'
         ]
       )
 
@@ -190,7 +198,7 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: true })
   }
 
-  // Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json)
+  /** Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json) */
   handleRCSettingsChange (key, value) {
     const { saved } = this.state
     saved[key] = value
@@ -198,7 +206,7 @@ class Settings extends React.Component {
     ipcRenderer.send('updateSettings', saved)
   }
 
-  // Saves settings to deltachat core
+  /** Saves settings to deltachat core */
   handleDeltaSettingsChange (key, value) {
     ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
@@ -231,6 +239,20 @@ class Settings extends React.Component {
         label={label}
         onChange={() => this.handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))}
       />
+    )
+  }
+
+  renderDeltaInput (configKey, label) {
+    let configValue = this.state.settings[configKey]
+    return (
+      <Label>
+        {label}
+        <input
+          value={configValue}
+          className={Classes.INPUT}
+          onChange={(ev) => this.handleDeltaSettingsChange(configKey, ev.target.value)}
+        />
+      </Label>
     )
   }
 
@@ -318,6 +340,23 @@ class Settings extends React.Component {
               { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
               { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
               { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{this.translate('pref_profile_info_headline')}</H5>
+              { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
+              { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{this.translate('pref_email_interaction_title')}</H5>
+              <RadioGroup
+                label={this.translate('pref_show_emails')}
+                onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
+                selectedValue={Number(settings['show_emails'])}
+              >
+                <Radio label={this.translate('pref_show_emails_no')} value={C.DC_SHOW_EMAILS_OFF} />
+                <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
+                <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
+              </RadioGroup>
             </Card>
           </SettingsDialog>
         </Dialog>
