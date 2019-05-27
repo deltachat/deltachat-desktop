@@ -86,7 +86,6 @@
     <string name="menu_edit_name">Редактировать имя</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_view_profile">Просмотреть профиль</string>
-
     <!-- get confirmations -->
     <string name="ask_leave_group">Вы уверены что хотите выйти из группы?</string>
     <string name="ask_forward">Переслать сообщения %1$s?</string>
@@ -112,12 +111,7 @@
     <string name="group_create_button">Создать группу</string>
     <string name="group_please_enter_group_name">Введите имя для группы</string>
     <string name="group_hello_draft">Привет, я создал группу \"%1$s\" для нас.</string>
-    <!-- chat media view -->
     <string name="media_preview">Предпросмотр медиа</string>
-    <string name="media_tab_media">Медиа</string>
-    <string name="media_tab_documents">Документы</string>
-    <string name="media_no_media_hint">Нет медиа.</string>
-    <string name="media_no_documents_hint">Нет документов</string>
 
 
     <!-- welcome and login -->
@@ -127,4 +121,7 @@
     <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
     <string name="welcome_intro5_headline">Свобода</string>
     <string name="welcome_intro6_headline">Зашифрован</string>
+    <string name="media_tab_media">Медиа</string>
+    <string name="media_tab_documents">Документы</string>
+    <string name="media_no_media_hint">Нет медиа.</string>
     </resources>
