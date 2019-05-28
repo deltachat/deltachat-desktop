@@ -45,6 +45,7 @@
   "homepage": "https://delta.chat",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
+    "@blueprintjs/select": "^3.4.0",
     "@mapbox/geojson-extent": "^0.3.2",
     "application-config": "^1.0.1",
     "array-differ": "^2.0.3",
@@ -56,6 +57,7 @@
     "error-stack-parser": "^2.0.2",
     "filesize": "^3.6.1",
     "google-libphonenumber": "^3.1.15",
+    "immutability-helper": "^3.0.0",
     "intl-tel-input": "^14.0.1",
     "linkify-it": "^2.1.0",
     "lodash": "^4.17.11",
@@ -63,6 +65,7 @@
     "mapbox-gl": "^0.54.0",
     "mime-types": "^2.1.21",
     "mkdirp": "^0.5.1",
+    "moize": "^5.4.4",
     "moment": "^2.22.2",
     "rc": "^1.2.8",
     "react": "^16.8.6",

@@ -2,6 +2,7 @@ const React = require('react')
 const { useState } = React
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const update = require('immutability-helper').default
 
 const {
   Button,
@@ -12,7 +13,6 @@ const {
   ProgressBar,
   Intent
 } = require('@blueprintjs/core')
-const { Select } = require('@blueprintjs/select')
 
 const AdvancedButton = styled.button`
   -webkit-appearance: button-bevel;
@@ -58,7 +58,7 @@ const DeltaSelectWrapper = styled(DeltaFormGroup)`
   }
 `
 
-const DeltaSelect = function(props) {
+const DeltaSelect = React.memo((props) => {
   return (
     <DeltaSelectWrapper>
       <div className='bp3-select .modifier'>
@@ -68,7 +68,7 @@ const DeltaSelect = function(props) {
       </div>
     </DeltaSelectWrapper>
   )
-}
+})
 
 const DeltaInputWrapper = styled(DeltaFormGroup)`
   .bp3-input {
@@ -80,7 +80,8 @@ const DeltaInputWrapper = styled(DeltaFormGroup)`
   }
 `
 
-const DeltaInput = function(props) {
+const DeltaInput = React.memo((props) => {
+  console.log('di', props)
   return (
     <DeltaInputWrapper>
       <FormGroup>
@@ -92,45 +93,46 @@ const DeltaInput = function(props) {
           placeholder={props.placeholder}
           min={props.min}
           max={props.max}
+          disabled={props.disabled}
         />
       </FormGroup>
     </DeltaInputWrapper>
   )
-}
+})
 
-const DeltaPasswordInput = function(props) {
-    const tx = window.translate
+const DeltaPasswordInput = React.memo((props) => {
+  const tx = window.translate
 
-    const { showPassword, setShowPassword } = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-    const password = props.password || ''
-    console.log('props:', props)
+  const password = props.password || ''
+  console.log('props:', props)
 
-    const lockButton = (
-      <Button
-        icon={showPassword ? 'eye-open' : 'eye-off'}
-        title={showPassword ? tx('hide_password') : tx('show_password')}
-        intent={Intent.WARNING}
-        minimal
-        onClick={() => setShowPassword(!showPassword)}
-      />
-    )
+  const lockButton = (
+    <Button
+      icon={showPassword ? 'eye-open' : 'eye-off'}
+      title={showPassword ? tx('hide_password') : tx('show_password')}
+      intent={Intent.WARNING}
+      minimal
+      onClick={() => setShowPassword(!showPassword)}
+    />
+  )
 
-    return (
-      <DeltaInputWrapper>
-        <FormGroup>
-          <InputGroup
-            id={props.id}
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            rightElement={password.length > 0 ? lockButton : null}
-          />
-        </FormGroup>
-      </DeltaInputWrapper>
-      )
-}
+  return (
+    <DeltaInputWrapper>
+      <FormGroup>
+        <InputGroup
+          id={props.id}
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
+          rightElement={password.length > 0 ? lockButton : null}
+        />
+      </FormGroup>
+    </DeltaInputWrapper>
+  )
+})
 
 const ProgressBarWrapper = styled.div`
 margin-top: 20px
@@ -151,7 +153,6 @@ class Login extends React.Component {
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.renderPasswordInput = this.renderPasswordInput.bind(this)
   }
 
   componentDidMount () {
@@ -184,8 +185,13 @@ class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
-    let stateCredentials = Object.assign(this.state.credentials, { [event.target.id]: event.target.value })
-    this.setState(stateCredentials)
+    let updatedState = update(this.state, {
+      credentials: {
+        [event.target.id]: {$set: event.target.value}
+      }
+    })
+    console.log('handleCredentialsChange', updatedState)
+    this.setState(updatedState)
   }
 
   handleSubmit (event) {
@@ -204,35 +210,6 @@ class Login extends React.Component {
     this.setState({ credentials: this._defaultCredentials() })
     event.preventDefault()
     event.stopPropagation()
-  }
-
-  renderPasswordInput (keyShowPassword, keyValue) {
-    const tx = window.translate
-
-    const lockButton = (
-      <Button
-        icon={this.state[keyShowPassword] ? 'eye-open' : 'eye-off'}
-        title={this.state[keyShowPassword] ? tx('hide_password') : tx('show_password')}
-        intent={Intent.WARNING}
-        minimal
-        onClick={this.handleUISwitchStateProperty.bind(this, keyShowPassword)}
-      />
-    )
-
-    return (
-      <DeltaInputWrapper>
-        <FormGroup>
-          <InputGroup
-            id={keyValue}
-            type={this.state.ui[keyShowPassword] ? 'text' : 'password'}
-            value={this.state.credentials[keyValue]}
-            onChange={this.handleCredentialsChange}
-            placeholder={tx('password')}
-            rightElement={this.state.credentials[keyValue].length > 0 ? lockButton : null}
-          />
-        </FormGroup>
-      </DeltaInputWrapper>
-      )
   }
 
   renderLoginHeader (mode) {
@@ -266,19 +243,20 @@ class Login extends React.Component {
         <form onSubmit={this.handleSubmit}>
     
           <DeltaInput
-            placeholder={tx('email_address')}
-            labelFor='email'
+            key='addr'
             id='addr'
+            placeholder={tx('email_address')}
             disabled={addrDisabled}
-            type='text'
             value={addr}
             onChange={this.handleCredentialsChange}
           />
           
           <DeltaPasswordInput
+            key='mailPw'
+            id='mailPw'
             label={tx('password')}
             placeholder={tx('password')}
-            password={this.state.credentials['mailPw']}
+            password={mailPw}
             onChange={this.handleCredentialsChange}
           />
           
@@ -289,36 +267,36 @@ class Login extends React.Component {
           <Collapse isOpen={showAdvanced}>
             <h2>{tx('login_inbox')}</h2>
             <p>{tx('login_subheader')}</p>
+
             <DeltaInput
-              label={tx('login_imap_login')}
-              placeholder={tx('login_imap_login')}
-              labelFor='mailUser'>
+              key='mailUser'
               id='mailUser'
+              placeholder={tx('login_imap_login')}
               type='text'
               value={mailUser}
               onChange={this.handleCredentialsChange}
-            </DeltaInput>
+            />
+
             <DeltaInput
-              placeholder={tx('login_imap_server')}
-              labelFor='mailServer'>
+              key='mailServer'
               id='mailServer'
+              placeholder={tx('login_imap_server')}
               type='text'
               value={mailServer}
               onChange={this.handleCredentialsChange}
-            </DeltaInput>
+            />
             <DeltaInput
-              placeholder={tx('login_imap_port')}
-              labelFor='mailPort'>
+              key='mailPort'
               id='mailPort'
+              placeholder={tx('login_imap_port')}
               type='number'
               min='0'
               max='65535'
               value={mailPort}
-              placeholder={tx('def')}
               onChange={this.handleCredentialsChange}
-            </DeltaInput>
-            <FormGroup label={tx('login_imap_security')} placeholder={tx('login_imap_security')}
-              labelFor='mailSecurity'>
+            />
+
+            <FormGroup label={tx('login_imap_security')} placeholder={tx('login_imap_security')} labelFor='mailSecurity'>
               <DeltaSelect id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
                 <option value='automatic'>Automatic</option>
                 <option value='ssl'>SSL/TLS</option>
@@ -327,48 +305,38 @@ class Login extends React.Component {
               </DeltaSelect>
             </FormGroup>
             <h2>{tx('login_outbox')}</h2>
-            <FormGroup
-              label={tx('login_smtp_login')}
+            <DeltaInput
+              key='sendUser'
+              id='sendUser'
               placeholder={tx('login_smtp_login')}
-              labelFor='sendUser'>
-              <InputGroup
-                id='sendUser'
-                type='text'
-                value={sendUser}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
-            <FormGroup
-              label={tx('login_smtp_password')}
+              value={sendUser}
+              onChange={this.handleCredentialsChange}
+            />
+            <DeltaPasswordInput
+              key='sendPw'
+              id='sendPw'
               placeholder={tx('login_smtp_password')}
-              labelFor='sendPw'>
-              {this.renderPasswordInput('showPasswordSend', 'sendPw')}
-            </FormGroup>
-            <FormGroup
-              label={tx('login_smtp_server')}
+              password={sendPw}
+              onChange={this.handleCredentialsChange}
+            />
+            <DeltaInput
+              key='sendServer'
+              id='sendServer'
               placeholder={tx('login_smtp_server')}
-              labelFor='sendServer'>
-              <InputGroup
-                id='sendServer'
-                type='text'
-                value={sendServer}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
-            <FormGroup
-              label={tx('login_smtp_port')}
+              type='text'
+              value={sendServer}
+              onChange={this.handleCredentialsChange}
+            />
+            <DeltaInput
+              key='sendPort'
+              id='sendPort'
               placeholder={tx('login_smtp_port')}
-              labelFor='sendPort'>
-              <InputGroup
-                id='sendPort'
-                type='number'
-                min='0'
-                max='65535'
-                value={sendPort}
-                placeholder={tx('def')}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
+              type='number'
+              min='0'
+              max='65535'
+              value={sendPort}
+              onChange={this.handleCredentialsChange}
+            />
             <FormGroup
               label={tx('login_smtp_security')}
               placeholder={tx('login_smtp_security')}
