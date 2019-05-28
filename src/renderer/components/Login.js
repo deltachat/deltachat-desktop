@@ -3,6 +3,9 @@ const { useState } = React
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 const update = require('immutability-helper').default
+const StyleVariables = require('./style-variables')
+
+console.log(StyleVariables)
 
 const {
   Button,
@@ -76,7 +79,26 @@ const DeltaInputWrapper = styled(DeltaFormGroup)`
     border-radius: unset;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-bottom: 1px solid;
+    border-bottom: 2px solid;
+    border-bottom-color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    font-size: 16px; 
+
+    &:focus {
+      border-bottom-color: ${StyleVariables.colors.deltaFocusBlue};
+      color: ${StyleVariables.colors.deltaFocusBlue};
+    }
+
+    &:focus::placeholder {
+      color: transparent;
+    }
+    &::placeholder {
+      color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    }
+  }
+
+  .bp3-button.bp3-minimal.bp3-intent-warning, .bp3-button.bp3-minimal.bp3-intent-warning:hover {
+    color: #62656a !important;
+    background-color: #d0d0d0 !important;
   }
 `
 
@@ -127,7 +149,7 @@ const DeltaPasswordInput = React.memo((props) => {
           value={password}
           onChange={props.onChange}
           placeholder={props.placeholder}
-          rightElement={password.length > 0 ? lockButton : null}
+          rightElement={lockButton}
         />
       </FormGroup>
     </DeltaInputWrapper>
