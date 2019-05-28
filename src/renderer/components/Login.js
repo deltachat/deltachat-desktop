@@ -17,20 +17,28 @@ const {
   Intent
 } = require('@blueprintjs/core')
 
-const AdvancedButton = styled.button`
+const AdvancedButton = styled.div`
   -webkit-appearance: button-bevel;
-  background-color: transparent;`
-
-const AdvancedButtonIconClosed = styled.div`
-  -webkit-mask: url(../images/ic_close_white_24dp.png) no-repeat center;
-  -webkit-mask-size: 125%;
-  background-color: #a4a6a9;
+  background-color: transparent;
+  color: blue;
+  font-size: 17px;
+  &:hover {
+    cursor: pointer;
+  }
 `
 
-const AdvancedButtonIconOpen = styled.div`
-  -webkit-mask: url(../images/ic_close_white_24dp.png) no-repeat center;
-  -webkit-mask-size: 125%;
-  background-color: #a4a6a9;
+const AdvancedButtonIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  -webkit-mask: url(../images/dc-close.svg) no-repeat center;
+  -webkit-mask-size: 100%;
+  background-color: ${StyleVariables.colors.deltaFocusBlue};
+`
+
+const AdvancedButtonIconClosed = styled(AdvancedButtonIcon)`
+`
+
+const AdvancedButtonIconOpen = styled(AdvancedButtonIcon)`
 `
 
 const DeltaFormGroup = styled.div`
@@ -239,6 +247,7 @@ class Login extends React.Component {
   }
 
   handleSubmit (event) {
+    console.log(event)
     let config = this.state.credentials
     this.props.onSubmit(config)
     event.preventDefault()
@@ -257,7 +266,7 @@ class Login extends React.Component {
   }
 
   renderLoginHeader (mode) {
-    return mode === 'update' ? null : <Callout>{window.translate('login_instruction_desktop')}</Callout>
+    return mode === 'update' ? null : <DeltaText>{window.translate('login_instruction_desktop')}</DeltaText>
   }
 
   render () {
@@ -305,7 +314,7 @@ class Login extends React.Component {
           />
           
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? <AdvancedButtonIconOpen/> : <AdvancedButtonIconClosed/>) }
+            {(showAdvanced ? '- ' : '+ ') }
             {tx('menu_advanced') }
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
@@ -395,8 +404,9 @@ class Login extends React.Component {
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
-            <DeltaText>{tx('login_subheader')}</DeltaText>
           </Collapse>
+          <br />
+          <DeltaText>{tx('login_subheader')}</DeltaText>
           {
             loading &&
             <ProgressBarWrapper>
@@ -406,7 +416,6 @@ class Login extends React.Component {
               />
             </ProgressBarWrapper>
           }
-          <br />
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
