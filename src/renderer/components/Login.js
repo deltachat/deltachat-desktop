@@ -22,15 +22,15 @@ const AdvancedButton = styled.button`
   background-color: transparent;`
 
 const AdvancedButtonIconClosed = styled.div`
-  &::after {
-    content: '+';
-  }
+  -webkit-mask: url(../images/ic_close_white_24dp.png) no-repeat center;
+  -webkit-mask-size: 125%;
+  background-color: #a4a6a9;
 `
 
 const AdvancedButtonIconOpen = styled.div`
-  &::after {
-    content: 'x';
-  }
+  -webkit-mask: url(../images/ic_close_white_24dp.png) no-repeat center;
+  -webkit-mask-size: 125%;
+  background-color: #a4a6a9;
 `
 
 const DeltaFormGroup = styled.div`
@@ -53,22 +53,32 @@ const DeltaSelectWrapper = styled(DeltaFormGroup)`
       background-image: none;
       background-color: transparent;
       width: 100%;
-      &:hover {
-        outline: none;
-        outline-offset: none;
+      color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+      font-size: 17px;
+      &:hover, &:focus {
+        outline: unset;
+        outline-offset: unset;
       }
     }
+  }
+  .bp3-form-group label.bp3-label {
+    padding-left: 10px;
+    color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    font-size: 16px; 
   }
 `
 
 const DeltaSelect = React.memo((props) => {
   return (
     <DeltaSelectWrapper>
-      <div className='bp3-select .modifier'>
-        <select id={props.id} value={props.value} onChange={props.onChange}>
-          {props.children}
-        </select>
-      </div>
+      <FormGroup label={props.label}>
+
+        <div className='bp3-select .modifier'>
+          <select id={props.id} value={props.value} onChange={props.onChange}>
+            {props.children}
+          </select>
+        </div>
+      </FormGroup>
     </DeltaSelectWrapper>
   )
 })
@@ -98,6 +108,9 @@ const DeltaInputWrapper = styled(DeltaFormGroup)`
 
   .bp3-button.bp3-minimal.bp3-intent-warning, .bp3-button.bp3-minimal.bp3-intent-warning:hover {
     color: #62656a !important;
+  }
+
+  .bp3-button.bp3-minimal.bp3-intent-warning:hover {
     background-color: #d0d0d0 !important;
   }
 `
@@ -159,6 +172,15 @@ const DeltaPasswordInput = React.memo((props) => {
 const ProgressBarWrapper = styled.div`
 margin-top: 20px
 `
+
+const DeltaText = styled.p`
+  color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+`
+
+const DeltaHeadline = styled.p`
+  color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+  font-size: 18px;
+  padding: 15px 0 3px;`
 
 class Login extends React.Component {
   constructor (props) {
@@ -287,8 +309,7 @@ class Login extends React.Component {
             {tx('menu_advanced') }
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
-            <h2>{tx('login_inbox')}</h2>
-            <p>{tx('login_subheader')}</p>
+            <DeltaHeadline>{tx('login_inbox')}</DeltaHeadline>
 
             <DeltaInput
               key='mailUser'
@@ -318,15 +339,19 @@ class Login extends React.Component {
               onChange={this.handleCredentialsChange}
             />
 
-            <FormGroup label={tx('login_imap_security')} placeholder={tx('login_imap_security')} labelFor='mailSecurity'>
-              <DeltaSelect id='mailSecurity' value={mailSecurity} onChange={this.handleCredentialsChange}>
-                <option value='automatic'>Automatic</option>
-                <option value='ssl'>SSL/TLS</option>
-                <option value='starttls'>SartTLS</option>
-                <option value='plain'>{tx('off')}</option>
-              </DeltaSelect>
-            </FormGroup>
-            <h2>{tx('login_outbox')}</h2>
+            <DeltaSelect
+              id='mailSecurity'
+              label={tx('login_imap_security')}
+              value={mailSecurity}
+              onChange={this.handleCredentialsChange}
+            >
+              <option value='automatic'>Automatic</option>
+              <option value='ssl'>SSL/TLS</option>
+              <option value='starttls'>SartTLS</option>
+              <option value='plain'>{tx('off')}</option>
+            </DeltaSelect>
+
+            <DeltaHeadline>{tx('login_outbox')}</DeltaHeadline>
             <DeltaInput
               key='sendUser'
               id='sendUser'
@@ -359,17 +384,18 @@ class Login extends React.Component {
               value={sendPort}
               onChange={this.handleCredentialsChange}
             />
-            <FormGroup
+            <DeltaSelect
+              id='sendSecurity'
               label={tx('login_smtp_security')}
-              placeholder={tx('login_smtp_security')}
-              labelFor='sendSecurity'>
-              <DeltaSelect id='sendSecurity' value={sendSecurity} onChange={this.handleCredentialsChange}>
-                <option value='automatic'>Automatic</option>
-                <option value='ssl'>SSL/TLS</option>
-                <option value='starttls'>STARTTLS</option>
-                <option value='plain'>{tx('off')}</option>
-              </DeltaSelect>
-            </FormGroup>
+              value={sendSecurity}
+              onChange={this.handleCredentialsChange}
+            >
+              <option value='automatic'>Automatic</option>
+              <option value='ssl'>SSL/TLS</option>
+              <option value='starttls'>STARTTLS</option>
+              <option value='plain'>{tx('off')}</option>
+            </DeltaSelect>
+            <DeltaText>{tx('login_subheader')}</DeltaText>
           </Collapse>
           {
             loading &&

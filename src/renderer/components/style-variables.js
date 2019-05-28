@@ -12,7 +12,7 @@ module.exports = {
     deltaInfoMessageBubbleBg: '#000000',
     deltaInfoMessageBubbleColor: 'white',
     deltaChatMessageBubbleSelfStatusColor: '#4caf50',
-    deltaFocusBlue: 'blue'
+    deltaFocusBlue: '#42A5F5'
   }
 }
 
