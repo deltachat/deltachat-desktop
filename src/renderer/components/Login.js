@@ -20,26 +20,37 @@ const {
 const AdvancedButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
-  color: blue;
-  font-size: 17px;
+  color: ${StyleVariables.colors.deltaFocusBlue};;
+  font-size: 16px;
+  float: left;
+  display: block;
+  width: 100%;
   &:hover {
     cursor: pointer;
   }
+  p {
+    margin-left: 8px;
+    display: -webkit-inline-box;
+    position: relative;
+    font-size: 18px;
+    margin-bottom: 0px;
+    bottom: 3px;
+  }
 `
 
-const AdvancedButtonIcon = styled.div`
+const AdvancedButtonIconOpen = styled.div`
   width: 20px;
   height: 20px;
-  -webkit-mask: url(../images/dc-close.svg) no-repeat center;
+  -webkit-mask: url(../images/dc-cross.svg) no-repeat center;
   -webkit-mask-size: 100%;
   background-color: ${StyleVariables.colors.deltaFocusBlue};
+  display: -webkit-inline-box;
 `
 
-const AdvancedButtonIconClosed = styled(AdvancedButtonIcon)`
+const AdvancedButtonIconClosed = styled(AdvancedButtonIconOpen)`
+  transform: rotate(45deg);
 `
 
-const AdvancedButtonIconOpen = styled(AdvancedButtonIcon)`
-`
 
 const DeltaFormGroup = styled.div`
   .bp3-form-content { 
@@ -314,8 +325,8 @@ class Login extends React.Component {
           />
           
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? '- ' : '+ ') }
-            {tx('menu_advanced') }
+            {(showAdvanced ? <AdvancedButtonIconClosed/> : <AdvancedButtonIconOpen/>) }
+            <p>{tx('menu_advanced') }</p>
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
             <DeltaHeadline>{tx('login_inbox')}</DeltaHeadline>
