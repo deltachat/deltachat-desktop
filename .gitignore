@@ -2,6 +2,7 @@ dist/
 static/bundle.js
 static/main.css
 _locales/*.json
+!_locales/_languages.json
 !_locales/_experimental_en.json
 :
 # Logs
