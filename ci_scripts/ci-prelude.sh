@@ -10,6 +10,7 @@ set -ex
 # runtime.
 DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
+RPGP_VERSION="v0.2.0-alpha"
 
 
 # To facilitate running locally, derive some Travis environment
@@ -47,7 +48,7 @@ case $TRAVIS_OS_NAME in
         ;;
     osx)
         # Install cyrus sasl
-        ./ci_scripts/build_sasl.sh --with-openssl=/usr/local/opt/openssl
+        ./ci_scripts/shared-image-context/build-install-sasl.sh --with-openssl=/usr/local/opt/openssl
 
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
         
@@ -57,7 +58,7 @@ case $TRAVIS_OS_NAME in
         . ~/.cargo/env
 
         # Install rpgp
-        git clone https://github.com/rpgp/rpgp.git
+        git clone -b $RPGP_VERSION https://github.com/rpgp/rpgp.git
         pushd rpgp/pgp-ffi
         make install
         popd

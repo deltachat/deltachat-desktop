@@ -8,12 +8,8 @@ RUN true \
     && apt -y upgrade
 
 # Install nvm & node
-RUN true \
-    && apt -y install wget git \
-    && wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash \
-    && export NVM_DIR="$HOME/.nvm" \
-    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
-    && nvm install v10
+COPY ./install-nvm-node.sh /tmp
+RUN chmod +x ./tmp/install-nvm-node.sh && /tmp/install-nvm-node.sh
 
 # Install @sqdependencies to build deltachat-core
 RUN apt -y install g++- libssl-dev libsqlite3-dev libbz2-dev zlib1g-dev python3-dev unzip  cmake pkg-config libsasl2-dev
