@@ -8,12 +8,8 @@ RUN true \
     && apt -y upgrade
 
 # Install nvm & node
-RUN true \
-    && apt -y install wget git \
-    && wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash \
-    && export NVM_DIR="$HOME/.nvm" \
-    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
-    && nvm install v10
+COPY ./install-nvm-node.sh /tmp
+RUN chmod +x ./tmp/install-nvm-node.sh && /tmp/install-nvm-node.sh
 
 # Install @sqdependencies to build deltachat-core
 RUN apt -y install g++- libssl-dev libsqlite3-dev libbz2-dev zlib1g-dev python3-dev unzip  cmake pkg-config libsasl2-dev
@@ -34,21 +30,13 @@ RUN true \
 RUN apt -y install python
 
 
-# Install rust for rpgp
-RUN true \
-    && apt -y install curl \
-    && curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-2019-03-23 -y
-
+# Install rust
+COPY ./install-rust.sh /tmp
+RUN chmod +x ./tmp/install-rust.sh && /tmp/install-rust.sh
 ENV PATH=/root/.cargo/bin:$PATH
 
-# Install rpgp
-RUN true \
-    && cd / \
-    && git clone https://github.com/rpgp/rpgp.git
-
-# As rpgp is currently a huge github repo, split built into two layers
-RUN true \
-    && cd /rpgp/pgp-ffi \
-    && PREFIX=/opt/DeltaChat/rpgp make install
+# Build and install rpgp
+COPY ./build-install-rpgp.sh /tmp
+RUN chmod +x ./tmp/build-install-rpgp.sh && /tmp/build-install-rpgp.sh
 
 
