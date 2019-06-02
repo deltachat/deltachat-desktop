@@ -9,7 +9,6 @@ console.log(StyleVariables)
 
 const {
   Button,
-  Callout,
   InputGroup,
   FormGroup,
   Collapse,
@@ -50,7 +49,6 @@ const AdvancedButtonIconOpen = styled.div`
 const AdvancedButtonIconClosed = styled(AdvancedButtonIconOpen)`
   transform: rotate(45deg);
 `
-
 
 const DeltaFormGroup = styled.div`
   .bp3-form-content { 
@@ -250,7 +248,7 @@ class Login extends React.Component {
   handleCredentialsChange (event) {
     let updatedState = update(this.state, {
       credentials: {
-        [event.target.id]: {$set: event.target.value}
+        [event.target.id]: { $set: event.target.value }
       }
     })
     console.log('handleCredentialsChange', updatedState)
@@ -305,7 +303,7 @@ class Login extends React.Component {
       <React.Fragment>
         {this.renderLoginHeader(mode)}
         <form onSubmit={this.handleSubmit}>
-    
+
           <DeltaInput
             key='addr'
             id='addr'
@@ -314,7 +312,7 @@ class Login extends React.Component {
             value={addr}
             onChange={this.handleCredentialsChange}
           />
-          
+
           <DeltaPasswordInput
             key='mailPw'
             id='mailPw'
@@ -323,9 +321,9 @@ class Login extends React.Component {
             password={mailPw}
             onChange={this.handleCredentialsChange}
           />
-          
+
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? <AdvancedButtonIconClosed/> : <AdvancedButtonIconOpen/>) }
+            {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />) }
             <p>{tx('menu_advanced') }</p>
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
