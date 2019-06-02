@@ -4,7 +4,9 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "watch": "node bin/watch",
+    "watch": "npm run watch-other && npm run watch-js",
+    "watch-other": "node bin/watch &",
+    "watch-js": "webpack --mode=development --progress --profile --colors --watch",
     "test": "standard && node test/unit",
     "test-integration": "node test/integration",
     "dev": "npm run build && npm run start",
