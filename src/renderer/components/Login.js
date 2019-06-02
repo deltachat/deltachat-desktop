@@ -21,9 +21,9 @@ const AdvancedButton = styled.div`
   background-color: transparent;
   color: ${StyleVariables.colors.deltaFocusBlue};;
   font-size: 16px;
-  float: left;
   display: block;
-  width: 100%;
+  width: 100%; 
+  margin-top: 30px;
   &:hover {
     cursor: pointer;
   }
@@ -323,7 +323,7 @@ class Login extends React.Component {
           />
 
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />) }
+            {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
             <p>{tx('menu_advanced') }</p>
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
