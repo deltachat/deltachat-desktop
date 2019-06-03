@@ -192,7 +192,7 @@ class RenderMessage extends React.Component {
       authorAvatarPath: message.contact.profileImage,
       authorColor: message.contact.color,
       authorName: message.contact.name,
-      authorPhoneNumber: message.contact.address,
+      authorAddress: message.contact.address,
       status: msg.status,
       text: msg.text,
       direction: msg.direction,

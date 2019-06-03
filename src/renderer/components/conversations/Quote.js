@@ -209,7 +209,7 @@ class Quote extends React.Component {
   renderAuthor () {
     const {
       authorProfileName,
-      authorPhoneNumber,
+      authorAddress,
       authorName,
       authorColor,
       i18n,
@@ -229,7 +229,7 @@ class Quote extends React.Component {
           i18n('you')
         ) : (
           <ContactName
-            phoneNumber={authorPhoneNumber}
+            phoneNumber={authorAddress}
             name={authorName}
             profileName={authorProfileName}
             i18n={i18n}
