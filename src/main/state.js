@@ -38,7 +38,8 @@ function getDefaultState () {
       notifications: true,
       showNotificationContent: true,
       locale: 'en',
-      credentials: null
+      credentials: null,
+      enableOnDemandLocationStreaming: false
     }
   }
 }

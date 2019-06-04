@@ -8,6 +8,7 @@ const Menu = require('./Menu')
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const SearchInput = require('./SearchInput.js')
+const SettingsContext = require('../contexts/SettingsContext')
 
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
@@ -137,7 +138,15 @@ class SplittedChatListAndView extends React.Component {
                 onClick={() => this.setState({ media: !this.state.media })}
                 minimal
                 icon={this.state.media ? 'chat' : 'media'} />}
-              {selectedChat && <Button minimal icon='map' onClick={this.onMapIconClick} />}
+              {selectedChat &&
+
+              <SettingsContext.Consumer>
+                {({ enableOnDemandLocationStreaming }) => (
+                  enableOnDemandLocationStreaming &&
+                  <Button minimal icon='map' onClick={this.onMapIconClick} />
+                )}
+              </SettingsContext.Consumer>
+              }
               <Popover content={menu} position={Position.RIGHT_TOP}>
                 <Button className='icon-rotated' minimal icon='more' />
               </Popover>

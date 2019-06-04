@@ -358,6 +358,10 @@ class Settings extends React.Component {
                 <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
               </RadioGroup>
             </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{this.translate('pref_experimental_features')}</H5>
+              { this.renderRCSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
+            </Card>
           </SettingsDialog>
         </Dialog>
       </div>
