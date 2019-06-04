@@ -85,12 +85,23 @@ const DeltaSelectWrapper = styled(DeltaFormGroup)`
 `
 
 const DeltaSelect = React.memo((props) => {
+  const [ isFocused, setIsFocused ] = useState(false)
+
+  const onFocus = () => setIsFocused(true)
+  const onBlur = () => setIsFocused(false)
+
   return (
     <DeltaSelectWrapper>
       <FormGroup>
-        <DeltaLabel>{props.label}</DeltaLabel>
+        <DeltaLabel focus={isFocused}>{props.label}</DeltaLabel>
         <div className='bp3-select .modifier'>
-          <select id={props.id} value={props.value} onChange={props.onChange}>
+          <select
+            id={props.id}
+            value={props.value}
+            onChange={props.onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          >
             {props.children}
           </select>
         </div>
@@ -133,26 +144,27 @@ const DeltaInputWrapper = styled(DeltaFormGroup)`
 
 const DeltaLabel = styled.div`
     visibility: ${props => props.visible === false ? 'hidden' : 'visible'};
-    height: 20px;
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
     width: 100%;
-    color: ${StyleVariables.colors.deltaFocusBlue};
+    color: ${props => props.focus === true ? 
+      StyleVariables.colors.deltaFocusBlue : 
+      StyleVariables.colors.deltaChatPrimaryFgLight};
 `
 
 const DeltaInput = React.memo((props) => {
   const [ isFocused, setIsFocused ] = useState(false)
-  const onFocus = () => {
-    setIsFocused(true)
-  }
 
-  const onBlur = () => {
-    setIsFocused(false)
-  }
+  const onFocus = () => setIsFocused(true)
+  const onBlur = () => setIsFocused(false)
 
   return (
     <DeltaInputWrapper>
       <FormGroup>
         <DeltaLabel
           visible={isFocused || props.value.length > 0}
+          focus={isFocused}
         >{props.placeholder}
         </DeltaLabel>
         <InputGroup
