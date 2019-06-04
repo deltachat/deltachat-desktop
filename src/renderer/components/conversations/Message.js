@@ -1,7 +1,7 @@
 const React = require('react')
 const classNames = require('classnames')
 
-const MessageBody = require('./MessageBody')
+const MessageBody = require('../MessageBody')
 const MessageMetaData = require('./MessageMetaData')
 // const Quote = require('./Quote')
 

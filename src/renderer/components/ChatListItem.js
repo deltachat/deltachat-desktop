@@ -2,8 +2,10 @@ const React = require('react')
 const classNames = require('classnames')
 const styled = require('styled-components').default
 const {
-  MessageBody, Timestamp, ContactName
+  Timestamp, ContactName
 } = require('./conversations')
+
+const MessageBody = require('./MessageBody')
 
 const MessageText1 = styled.div`
   float: left;
@@ -154,7 +156,7 @@ class ChatListItem extends React.Component {
           <MessageBody
             text={lastMessage.text2 || ''}
             disableJumbomoji
-            disableLinks
+            preview
             i18n={i18n}
           />
         </div>

@@ -1,6 +1,5 @@
 const React = require('react')
 const classNames = require('classnames')
-const Emojify = require('./Emojify')
 
 // TODO this function can be found in many places, refactor!
 function getInitial (name) {
@@ -52,7 +51,7 @@ class ContactListItem extends React.Component {
     const profileElement =
       !isMe && profileName && !name ? (
         <span className='module-contact-list-item__text__profile-name'>
-          ~<Emojify text={profileName} i18n={i18n} />
+          ~{profileName}
         </span>
       ) : null
 
@@ -71,7 +70,7 @@ class ContactListItem extends React.Component {
         {this.renderAvatar({ displayName })}
         <div className='module-contact-list-item__text'>
           <div className='module-contact-list-item__text__name'>
-            <Emojify text={displayName} i18n={i18n} /> {profileElement}
+            {displayName} {profileElement}
           </div>
           <div className='module-contact-list-item__text__additional-data'>
             {showVerified ? (

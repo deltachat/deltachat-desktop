@@ -57,7 +57,6 @@
     "error-stack-parser": "^2.0.2",
     "filesize": "^3.6.1",
     "immutability-helper": "^3.0.0",
-    "linkify-it": "^2.1.0",
     "lodash": "^4.17.11",
     "lodash.merge": "^4.6.1",
     "mapbox-gl": "^0.54.0",
@@ -74,6 +73,7 @@
     "rimraf": "^2.6.2",
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8",
+    "simple-markdown": "^0.4.4",
     "styled-components": "^4.2.1"
   },
   "devDependencies": {
