@@ -45,7 +45,7 @@
   "homepage": "https://delta.chat",
   "dependencies": {
     "@blueprintjs/core": "^3.4.0",
-    "@blueprintjs/select": "^3.4.0",
+    "@blueprintjs/select": "^3.8.1",
     "@mapbox/geojson-extent": "^0.3.2",
     "application-config": "^1.0.1",
     "array-differ": "^2.0.3",
@@ -89,7 +89,7 @@
     "cp-file": "^6.0.0",
     "depcheck": "^0.6.11",
     "electron": "^4.2.3",
-    "electron-builder": "^20.41.0",
+    "electron-builder": "^20.43.0",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^0.1.0",
@@ -101,7 +101,7 @@
     "tape": "^4.10.2",
     "tempy": "^0.2.1",
     "version-changed": "^1.1.0",
-    "webpack": "^4.32.2",
+    "webpack": "^4.33.0",
     "webpack-cli": "^3.3.2",
     "webpack-node-externals": "^1.7.2",
     "xml-js": "^1.6.8"

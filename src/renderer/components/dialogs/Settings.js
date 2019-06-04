@@ -20,7 +20,7 @@ const {
   Callout
 } = require('@blueprintjs/core')
 
-const Login = require('../Login')
+const Login = require('../Login').default
 const KeyTransfer = require('./KeyTransfer')
 const confirmationDialog = require('./confirmationDialog')
 

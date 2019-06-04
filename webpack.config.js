@@ -21,11 +21,12 @@ module.exports = (_, argv) => ({
         test: /\.js$/,
         include: path.normalize(`${__dirname}/src/renderer`),
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: ['react'],
           plugins: [
             'transform-object-rest-spread'
-          ]
+          ],
+          sourceType: 'module'
         }
       }
     ]
