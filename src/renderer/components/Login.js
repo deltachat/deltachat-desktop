@@ -1,11 +1,10 @@
 const React = require('react')
-const { useState } = React
+const { useState, useRef } = React
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 const update = require('immutability-helper').default
 const StyleVariables = require('./style-variables')
-
-console.log(StyleVariables)
+const classnames = require('classnames')
 
 const {
   Button,
@@ -88,8 +87,8 @@ const DeltaSelectWrapper = styled(DeltaFormGroup)`
 const DeltaSelect = React.memo((props) => {
   return (
     <DeltaSelectWrapper>
-      <FormGroup label={props.label}>
-
+      <FormGroup>
+        <DeltaLabel>{props.label}</DeltaLabel>
         <div className='bp3-select .modifier'>
           <select id={props.id} value={props.value} onChange={props.onChange}>
             {props.children}
@@ -132,11 +131,30 @@ const DeltaInputWrapper = styled(DeltaFormGroup)`
   }
 `
 
+const DeltaLabel = styled.div`
+    visibility: ${props => props.visible === false ? 'hidden' : 'visible'};
+    height: 20px;
+    width: 100%;
+    color: ${StyleVariables.colors.deltaFocusBlue};
+`
+
 const DeltaInput = React.memo((props) => {
-  console.log('di', props)
+  const [ isFocused, setIsFocused ] = useState(false)
+  const onFocus = () => {
+    setIsFocused(true)
+  }
+
+  const onBlur = () => {
+    setIsFocused(false)
+  }
+
   return (
     <DeltaInputWrapper>
       <FormGroup>
+        <DeltaLabel
+          visible={isFocused || props.value.length > 0}
+        >{props.placeholder}
+        </DeltaLabel>
         <InputGroup
           id={props.id}
           type={props.type}
@@ -146,6 +164,9 @@ const DeltaInput = React.memo((props) => {
           min={props.min}
           max={props.max}
           disabled={props.disabled}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          rightElement={props.rightElement}
         />
       </FormGroup>
     </DeltaInputWrapper>
@@ -158,7 +179,6 @@ const DeltaPasswordInput = React.memo((props) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const password = props.password || ''
-  console.log('props:', props)
 
   const lockButton = (
     <Button
@@ -171,18 +191,14 @@ const DeltaPasswordInput = React.memo((props) => {
   )
 
   return (
-    <DeltaInputWrapper>
-      <FormGroup>
-        <InputGroup
-          id={props.id}
-          type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={props.onChange}
-          placeholder={props.placeholder}
-          rightElement={lockButton}
-        />
-      </FormGroup>
-    </DeltaInputWrapper>
+    <DeltaInput
+      id={props.id}
+      type={showPassword ? 'text' : 'password'}
+      value={password}
+      onChange={props.onChange}
+      placeholder={props.placeholder}
+      rightElement={lockButton}
+    />
   )
 })
 
