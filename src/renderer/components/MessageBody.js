@@ -9,7 +9,7 @@ const emojiRegex = getRegex()
 const SimpleMarkdown = require('simple-markdown')
 
 const previewParser = SimpleMarkdown.parserFor(previewRules, { inline: true })
-const parser = SimpleMarkdown.parserFor(rules, { inline: true })
+const parser = SimpleMarkdown.parserFor(rules)
 const ast2react = SimpleMarkdown.outputFor(rules, 'react')
 
 class MessageBody extends React.Component {
@@ -29,7 +29,7 @@ class MessageBody extends React.Component {
         </span>
       )
     }
-    const ast = (preview ? previewParser : parser)(emojifiedText)
+    const ast = (preview ? previewParser : parser)(emojifiedText.trim())
     const res = ast2react(ast)
     return res
   }
