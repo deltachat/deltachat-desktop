@@ -70,12 +70,10 @@ export default class Login extends React.Component {
         [event.target.id]: { $set: event.target.value }
       }
     })
-    console.log('handleCredentialsChange', updatedState)
     this.setState(updatedState)
   }
 
   handleSubmit (event) {
-    console.log(event)
     let config = this.state.credentials
     this.props.onSubmit(config)
     event.preventDefault()
