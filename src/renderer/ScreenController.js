@@ -15,7 +15,7 @@ const {
 
 const NavbarWrapper = require('./components/NavbarWrapper')
 const UnblockContacts = require('./components/UnblockContacts')
-const Login = require('./components/Login')
+const Login = require('./components/Login').default
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
