@@ -19,8 +19,8 @@ class MessageBody extends React.Component {
     const emojifiedText = text.replace(/:[\w\d_\-+]*:/g, replaceColons)
     if (
       emojifiedText.length < 50 &&
-            !disableJumbomoji &&
-            emojifiedText.replace(emojiRegex, '').trim() === ''
+      !disableJumbomoji &&
+      emojifiedText.replace(emojiRegex, '').trim() === ''
     ) {
       const sizeClass = disableJumbomoji ? '' : getSizeClass(text)
       return (
