@@ -3,7 +3,6 @@ const classNames = require('classnames')
 
 const MessageBody = require('../MessageBody')
 const MessageMetaData = require('./MessageMetaData')
-// const Quote = require('./Quote')
 
 const { getIncrement } = require('./ExpireTimer')
 const ContactName = require('./ContactName')
@@ -205,34 +204,6 @@ class Message extends React.Component {
     )
   }
 
-  // renderQuote () {
-  //   const { conversationType, direction, i18n, quote } = this.props
-
-  //   if (!quote) {
-  //     return null
-  //   }
-
-  //   const withContentAbove =
-  //     conversationType === 'group' && direction === 'incoming'
-
-  //   return (
-  //     <Quote
-  //       i18n={i18n}
-  //       onClick={quote.onClick}
-  //       text={quote.text}
-  //       attachment={quote.attachment}
-  //       isIncoming={direction === 'incoming'}
-  //       authorAddress={quote.authorAddress}
-  //       authorProfileName={quote.authorProfileName}
-  //       authorName={quote.authorName}
-  //       authorColor={quote.authorColor}
-  //       referencedMessageNotFound={quote.referencedMessageNotFound}
-  //       isFromMe={quote.isFromMe}
-  //       withContentAbove={withContentAbove}
-  //     />
-  //   )
-  // }
-
   renderAttachment () {
     return Attachment.render(this.props)
   }
@@ -427,7 +398,6 @@ class Message extends React.Component {
           )}
         >
           {this.renderAuthor()}
-          {/* this.renderQuote() */}
           {this.renderAttachment()}
 
           {this.renderText()}
