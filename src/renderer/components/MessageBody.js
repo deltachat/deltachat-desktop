@@ -22,7 +22,7 @@ class MessageBody extends React.Component {
       !disableJumbomoji &&
       emojifiedText.replace(emojiRegex, '').trim() === ''
     ) {
-      const sizeClass = disableJumbomoji ? '' : getSizeClass(text)
+      const sizeClass = disableJumbomoji ? '' : getSizeClass(emojifiedText)
       return (
         <span className={classNames('emoji-container', sizeClass)}>
           {emojifiedText}
