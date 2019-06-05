@@ -7,16 +7,24 @@ function assign (rule, order, object = {}) {
   return Object.assign({}, rule, { order }, object)
 }
 
+function ignoreScope (rule) {
+  return Object.assign(rule, {
+    match: anyScopeRegex(rule.match.regex)
+  })
+}
+
+function ignoreScopeAssign (rule, order, object = {}) {
+  return ignoreScope(assign(rule, order, object))
+}
+
 const previewRules = {
   Array: defaultRules.Array,
-  strong: assign(defaultRules.strong, 1),
-  em: assign(defaultRules.em, 1),
-  u: assign(defaultRules.u, 2),
-  del: assign(defaultRules.del, 3),
-  br: assign(defaultRules.br, 4),
-  inlineCode: assign(defaultRules.inlineCode, 12, {
-    match: anyScopeRegex(/^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/)
-  }),
+  strong: ignoreScopeAssign(defaultRules.strong, 1),
+  em: ignoreScopeAssign(defaultRules.em, 1),
+  u: ignoreScopeAssign(defaultRules.u, 2),
+  del: ignoreScopeAssign(defaultRules.del, 3),
+  br: ignoreScopeAssign(defaultRules.br, 4),
+  inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
   text: assign(defaultRules.text, 100)
 }
 const rules = Object.assign({
@@ -39,7 +47,7 @@ const rules = Object.assign({
   }), // uses style of codeBlock
   link: {
     order: 18,
-    match: defaultRules.url.match,
+    match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/),
     parse: function (capture, recurseParse, state) {
       return { content: capture[1] }
     },
