@@ -11,6 +11,10 @@ const chatListStore = new Store(defaultState)
 // value for text1Meaning
 const DC_TEXT1_DRAFT = 1
 
+function sortChatList (first, second) {
+  return first.summary.timestamp > second.summary.timestamp ? -1 : 1
+}
+
 // complete update of chat list
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
   console.log('DD_EVENT_CHATLIST_UPDATED', payload)
@@ -18,8 +22,8 @@ ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
-  const { chatId, eventType } = payload
-  if (eventType === 'DC_EVENT_INCOMING_MSG') {
+  const { chatId, messageObj, eventType } = payload
+  if (eventType === 'DC_EVENT_INCOMING_MSG' || eventType === 'DC_EVENT_MSGS_CHANGED') {
     const listState = chatListStore.getState()
     const selectedChat = chatStore.getState()
     if (chatId === selectedChat.id) {
@@ -28,10 +32,18 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
       return
     }
     const chat = listState.chatList.find(chat => chat.id === chatId)
-    const updatetChat = { ...chat, freshMessageCounter: chat.freshMessageCounter + 1 }
+    if (!chat) {
+      return
+    }
+    const updatedChat = {
+      ...chat,
+      freshMessageCounter: chat.freshMessageCounter + 1,
+      summary: messageObj.msg.summary
+    }
     let chatList = listState.chatList.map(chat => {
-      return chat.id === chatId ? updatetChat : chat
+      return chat.id === chatId ? updatedChat : chat
     })
+    chatList.sort(sortChatList)
     chatListStore.setState({ ...listState, chatList })
   }
 })

@@ -37,6 +37,13 @@ class DeltaChatController extends EventEmitter {
     log.debug('Core Event', event)
   }
 
+  /**
+  * TODO: filter by a list of public/allowed methods
+  *
+  * @param evt
+  * @param methodName
+  * @param args
+  */
   handleRendererEvent (evt, methodName, args) {
     if (typeof this[methodName] === 'function') {
       this[methodName](...args)
@@ -93,6 +100,11 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
       this.updateChatList()
       this.updateBlockedContacts()
+    })
+
+    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId) => {
+      log.debug('DC_EVENT_CHAT_MODIFIED: ' + chatId)
+      this.updateChatList()
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
