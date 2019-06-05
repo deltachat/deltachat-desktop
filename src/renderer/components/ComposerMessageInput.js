@@ -1,6 +1,5 @@
 const React = require('react')
 const styled = require('styled-components').default
-const { ipcRenderer } = require('electron')
 const chatListStore = require('../stores/chatList')
 const debounce = require('debounce')
 
