@@ -1,5 +1,4 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
@@ -92,18 +91,6 @@ class ChatList extends React.Component {
   componentDidMount () {
     this.doc = document.querySelector(`.${ChatListWrapper.styledComponentId}`)
     if (!this.doc) return log.warn(`Didn't find .ChatListWrapper .ConversationList`)
-    this.doc.onscroll = this.onScroll.bind(this)
-  }
-
-  onScroll () {
-    var element = this.doc
-    var fetch = (element.scrollHeight - element.scrollTop) === element.clientHeight
-    if (fetch) this.fetchNextChats()
-  }
-
-  fetchNextChats () {
-    if (this.props.totalChats === this.props.chatList.length) return
-    ipcRenderer.send('fetchChats')
   }
 
   openMenu (chatId, e) {
@@ -115,11 +102,6 @@ class ChatList extends React.Component {
     const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
-
-    if (this.doc) {
-      var allowedScroll = this.doc.scrollHeight > this.doc.clientHeight
-      if (!allowedScroll) this.fetchNextChats()
-    }
 
     return (
       <div>
@@ -154,7 +136,7 @@ class ChatList extends React.Component {
                   </ContactRequestItemWrapper>)
               } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
                 return (
-                  <ArchivedChats key={i}>
+                  <ArchivedChats key={chatListItem.id}>
                     <ChatListItem
                       onClick={this.props.onShowArchivedChats}
                       name={chatListItem.name}
@@ -173,7 +155,6 @@ class ChatList extends React.Component {
                     lastUpdated={lastUpdated}
                     lastMessage={{
                       text1: chatListItem.summary.text1,
-                      text1Meaning: chatListItem.summary.text1Meaning,
                       text2: chatListItem.summary.text2,
                       status: 'sent' // TODO: interpret data from summary to get correct state
                     }}
@@ -191,6 +172,7 @@ class ChatList extends React.Component {
         </ChatListWrapper>
         <ChatListContextMenu
           ref={this.contextMenu}
+          chatList={chatList}
           showArchivedChats={showArchivedChats}
           openDialog={this.props.openDialog}
           changeScreen={this.props.changeScreen} />

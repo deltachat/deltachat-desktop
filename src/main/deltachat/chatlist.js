@@ -1,22 +1,38 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
 
-const CHATLIST_PAGE_SIZE = 5
-const CHATLIST_START_SIZE = 10
-
 /**
  * Update query for rendering chats with search input
  */
 function searchChats (query) {
   this._query = query
-  this._render()
+  this.updateChatList()
 }
 
 function selectChat (chatId) {
-  log.debug(`action - selecting chat ${chatId}`)
-  this._pages = 1
   this._selectedChatId = chatId
-  this._render()
+  let chat = this._getChatById(chatId, true)
+  if (!chat) {
+    log.debug(`Error: selected chat not found: ${chatId}`)
+    return null
+  }
+  if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
+    if (chat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(chat.id)
+      chat.freshMessageCounter = 0
+      if (this._saved.markRead) {
+        log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
+        this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
+      }
+    }
+  }
+  this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })
+}
+
+function updateChatList () {
+  console.log('updateChatList')
+  const chatList = this._chatList(this._showArchivedChats)
+  this.sendToRenderer('DD_EVENT_CHATLIST_UPDATED', { chatList, showArchivedChats: this._showArchivedChats })
 }
 
 function _chatList (showArchivedChats) {
@@ -24,12 +40,10 @@ function _chatList (showArchivedChats) {
 
   const listFlags = showArchivedChats ? C.DC_GCL_ARCHIVED_ONLY : 0
   const list = this._dc.getChatList(listFlags, this._query)
-  const listCount = list.getCount()
 
   const chatList = []
-  const maxChats = (this._chatListPages * CHATLIST_PAGE_SIZE) + CHATLIST_START_SIZE
 
-  for (let i = 0; i < maxChats; i++) {
+  for (let i = 0; i < list.getCount(); i++) {
     const chatId = list.getChatId(i)
     const chat = this._getChatById(chatId)
 
@@ -50,17 +64,18 @@ function _chatList (showArchivedChats) {
       profileImage: chat.profileImage,
       color: chat.color,
       isVerified: chat.isVerified,
-      isGroup: chat.isGroup
+      isGroup: chat.isGroup,
+      contacts: chat.contacts
     })
   }
-  return { chatList, listCount }
+  return chatList
 }
 
-function _getChatById (chatId) {
+function _getChatById (chatId, loadMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
-
+  this._pages = 0
   const chat = rawChat.toJson()
   let draft = this._dc.getDraft(chatId)
 
@@ -70,7 +85,9 @@ function _getChatById (chatId) {
     chat.draft = ''
   }
 
-  var messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+  const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
+  const messages = loadMessages ? this._messagesToRender(messageIds) : []
+
   // This object is NOT created with object assign to promote consistency and to be easier to understand
   return {
     id: chat.id,
@@ -86,7 +103,7 @@ function _getChatById (chatId) {
 
     contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
     totalMessages: messageIds.length,
-    messages: this._messagesToRender(messageIds),
+    messages: messages,
     color: this._integerToHexColor(chat.color),
     summary: undefined,
     freshMessageCounter: this._dc.getFreshMessageCount(chatId),
@@ -105,10 +122,9 @@ function isGroupChat (chat) {
 
 function _getGeneralFreshMessageCounter () {
   const list = this._dc.getChatList(0, this._query)
-  const listCount = list.getCount()
 
   var freshMessageCounter = 0
-  for (let i = 0; i < listCount; i++) {
+  for (let i = 0; i < list.getCount(); i++) {
     const chatId = list.getChatId(i)
     const chat = this._dc.getChat(chatId).toJson()
 
@@ -134,31 +150,9 @@ function _deadDropMessage (id) {
   return { id, contact }
 }
 
-function _selectedChat (showArchivedChats, chatList, selectedChatId) {
-  let selectedChat = this._getChatById(selectedChatId)
-  if (!selectedChat) return null
-  if (selectedChat.id !== C.DC_CHAT_ID_DEADDROP) {
-    if (selectedChat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(selectedChat.id)
-      selectedChat.freshMessageCounter = 0
-    }
-
-    if (this._saved.markRead) {
-      this._dc.markSeenMessages(selectedChat.messages.map((msg) => msg.id))
-    }
-  }
-
-  return selectedChat
-}
-
-function fetchChats () {
-  this._chatListPages++
-  this._render()
-}
-
 function showArchivedChats (show) {
   this._showArchivedChats = show
-  this._render()
+  this.updateChatList()
 }
 
 module.exports = function () {
@@ -168,7 +162,6 @@ module.exports = function () {
   this._getChatById = _getChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
-  this._selectedChat = _selectedChat.bind(this)
-  this.fetchChats = fetchChats.bind(this)
   this.showArchivedChats = showArchivedChats.bind(this)
+  this.updateChatList = updateChatList.bind(this)
 }

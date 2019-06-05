@@ -27,14 +27,14 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_leave_group'), yes => {
       if (yes) {
-        ipcRenderer.send('leaveGroup', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
       }
     })
   }
 
   onArchiveChat (archive) {
     const selectedChat = this.props.selectedChat
-    ipcRenderer.send('archiveChat', selectedChat.id, archive)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', selectedChat.id, archive)
   }
 
   onBlockContact () {
@@ -55,7 +55,7 @@ class Controller {
     const tx = window.translate
     confirmation(tx('ask_delete_chat_desktop'), yes => {
       if (yes) {
-        ipcRenderer.send('deleteChat', selectedChat.id)
+        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', selectedChat.id)
       }
     })
   }
@@ -65,7 +65,7 @@ class Controller {
   }
 
   onContactRequests () {
-    ipcRenderer.send('contactRequests')
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'contactRequests')
   }
 
   logout () {

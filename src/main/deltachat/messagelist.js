@@ -17,6 +17,11 @@ function deleteMessage (id) {
   this._dc.deleteMessages(id)
 }
 
+function getMessage (msgId) {
+  const messageObj = this.messageIdToJson(msgId)
+  this.sendToRenderer('DD_EVENT_MSG_UPDATE', { messageObj })
+}
+
 function setDraft (chatId, msgText) {
   let msg = this._dc.messageNew()
   msg.setText(msgText)
@@ -25,29 +30,32 @@ function setDraft (chatId, msgText) {
 }
 
 function _messagesToRender (messageIds) {
-  const countMessages = messageIds.length
+  // we need one more message than we render, to get the timestamp
+  // from preceeding message for DAYMARKER
+  const currentIndex = (this._pages * CHATVIEW_PAGE_SIZE)
+  messageIds.reverse() // newest IDs first
   const messageIdsToRender = messageIds.splice(
-    Math.max(countMessages - (this._pages * CHATVIEW_PAGE_SIZE), 0),
-    countMessages
+    currentIndex,
+    CHATVIEW_PAGE_SIZE + 1
   )
-
   if (messageIdsToRender.length === 0) return []
-
-  let messages = Array(messageIdsToRender.length)
-
-  for (let i = messageIdsToRender.length - 1; i >= 0; i--) {
+  messageIdsToRender.reverse() // newest IDs last
+  let messages = []
+  for (let i = 0; i < messageIdsToRender.length; i++) {
     let id = messageIdsToRender[i]
     let json = this.messageIdToJson(id)
-
-    if (id === C.DC_MSG_ID_DAYMARKER) {
-      json.daymarker = {
-        timestamp: messages[i + 1].msg.timestamp,
-        id: 'd' + i
+    if (id === C.DC_MSG_ID_DAYMARKER && i > 0) {
+      if (messages[i - 1]) {
+        json.daymarker = {
+          timestamp: messages[i - 1].msg.timestamp,
+          id: 'd' + i
+        }
       }
     }
     messages[i] = json
   }
-
+  // remove the additional message again
+  messages.shift()
   return messages
 }
 
@@ -67,7 +75,6 @@ function messageIdToJson (id) {
   if (contact.color) {
     contact.color = this._integerToHexColor(contact.color)
   }
-
   return {
     id,
     msg: msg.toJson(),
@@ -82,9 +89,18 @@ function messageIdToJson (id) {
   }
 }
 
-function fetchMessages () {
+function fetchMessages (chatId) {
+  var messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
+  if (messageIds.length <= this._pages * CHATVIEW_PAGE_SIZE) {
+    return
+  }
   this._pages++
-  this._render()
+  var payload = {
+    chatId: chatId,
+    totalMessages: messageIds.length,
+    messages: this._messagesToRender(messageIds)
+  }
+  this.sendToRenderer('DD_MESSAGES_LOADED', payload)
 }
 
 function forwardMessage (msgId, contactId) {
@@ -93,6 +109,7 @@ function forwardMessage (msgId, contactId) {
   this.selectChat(chatId)
 }
 module.exports = function () {
+  this.getMessage = getMessage.bind(this)
   this.sendMessage = sendMessage.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)

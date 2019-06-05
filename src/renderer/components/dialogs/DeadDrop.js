@@ -17,7 +17,7 @@ class DeadDrop extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('chatWithContact', this.props.deadDrop)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'chatWithContact', this.props.deadDrop)
     this.close()
   }
 
@@ -26,7 +26,7 @@ class DeadDrop extends React.Component {
   }
 
   never () {
-    ipcRenderer.send('blockContact', this.props.deadDrop.contact.id)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', this.props.deadDrop.contact.id)
     this.close()
   }
 

@@ -48,7 +48,7 @@ function login (credentials, render, coreStrings) {
       onReady()
     }
   })
-  this.registerEventHandler(dc, render)
+  this.registerEventHandler(dc)
 }
 
 function logout () {

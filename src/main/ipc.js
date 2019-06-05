@@ -57,6 +57,7 @@ function init (cwd, state, logHandler) {
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
+    dc.updateChatList()
   })
 
   ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
@@ -71,6 +72,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('EVENT_DC_FUNCTION_CALL', (evt, fnName, ...args) => {
+    console.log('EVENT_DC_FUNCTION_CALL: ', fnName, args)
     dc.handleRendererEvent(evt, fnName, args)
   })
 
@@ -89,16 +91,9 @@ function init (cwd, state, logHandler) {
     render()
   })
 
-  ipcMain.on('sendMessage', (e, chatId, text, fileName, location) => {
-    dc.sendMessage(chatId, text, fileName, location)
-  })
-
   ipcMain.on('getMessage', (e, msgId) => {
     e.returnValue = dc.messageIdToJson(msgId)
   })
-
-  ipcMain.on('fetchMessages', () => dc.fetchMessages())
-  ipcMain.on('fetchChats', () => dc.fetchChats())
 
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
@@ -106,12 +101,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('modifyGroup', (e, chatId, name, image, remove, add) => {
     dc.modifyGroup(chatId, name, image, remove, add)
-  })
-
-  ipcMain.on('leaveGroup', (e, chatId) => dc.leaveGroup(chatId))
-
-  ipcMain.on('archiveChat', (e, chatId, archive) => {
-    dc.archiveChat(chatId, archive)
   })
 
   ipcMain.on('createChatByContactId', (e, contactId) => {
@@ -124,28 +113,13 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
 
-  ipcMain.on('blockContact', (e, id) => dc.blockContact(id))
-  ipcMain.on('unblockContact', (e, id) => dc.unblockContact(id))
-
   ipcMain.on('getContacts', (e, listFlags, queryStr) => {
     e.returnValue = dc.getContacts(listFlags, queryStr)
   })
 
-  ipcMain.on('showArchivedChats', (e, show) => dc.showArchivedChats(show))
-
   ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
   })
-
-  ipcMain.on('selectChat', (e, chatId) => dc.selectChat(chatId))
-
-  ipcMain.on('getChatById', (e, chatId) => main.send('getChatById', dc._getChatById(chatId)))
-
-  ipcMain.on('searchChats', (e, queryStr) => dc.searchChats(queryStr))
-
-  ipcMain.on('deleteChat', (e, chatId) => dc.deleteChat(chatId))
-
-  ipcMain.on('contactRequests', () => dc.contactRequests())
 
   ipcMain.on('getEncrInfo', (e, contactId) => {
     e.returnValue = dc.getEncrInfo(contactId)
@@ -153,12 +127,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
-  })
-
-  ipcMain.on('deleteMessage', (e, id) => dc.deleteMessage(id))
-
-  ipcMain.on('forwardMessage', (e, msgId, contactId) => {
-    dc.forwardMessage(msgId, contactId)
   })
 
   ipcMain.on('getQrCode', (e, chatId) => {
@@ -244,10 +212,6 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
-  })
-
-  ipcMain.on('setDraft', (event, chatId, msg) => {
-    dc.setDraft(chatId, msg)
   })
 
   function render () {

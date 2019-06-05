@@ -12,6 +12,9 @@ const SearchInput = require('./SearchInput.js')
 const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
 
+const chatStore = require('../stores/chat')
+const chatListStore = require('../stores/chatList')
+
 const {
   Alignment,
   Classes,
@@ -47,32 +50,61 @@ class SplittedChatListAndView extends React.Component {
 
     this.state = {
       queryStr: '',
-      media: false
+      media: false,
+      selectedChat: null,
+      chatList: [],
+      showArchivedChats: false
     }
 
     this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
+    this.onChatUpdate = this.onChatUpdate.bind(this)
+    this.onChatListUpdate = this.onChatListUpdate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
     this.search = debounce(() => {
-      ipcRenderer.send('searchChats', this.state.queryStr)
+      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'searchChats', this.state.queryStr)
     }, 250)
+    this.chatClicked = 0
+  }
+
+  onChatUpdate (chat) {
+    this.setState({ selectedChat: chat })
+  }
+
+  onChatListUpdate (state) {
+    const { chatList, showArchivedChats } = state
+    this.setState({ chatList, showArchivedChats })
   }
 
   componentDidMount () {
     this.searchChats('')
+    console.log('componentDidMount', this.state)
+    chatStore.subscribe(this.onChatUpdate)
+    chatListStore.subscribe(this.onChatListUpdate)
+  }
+
+  componentWillUnmount () {
+    chatStore.unsubscribe(this.onChatUpdate)
+    chatListStore.unsubscribe(this.onChatListUpdate)
   }
 
   showArchivedChats (show) {
-    ipcRenderer.send('showArchivedChats', show)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'showArchivedChats', show)
   }
 
   onChatClick (chatId) {
-    ipcRenderer.send('selectChat', chatId)
+    if (chatId === this.chatClicked) {
+      // avoid double clicks
+      return
+    }
+    this.chatClicked = chatId
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', chatId)
+    setTimeout(() => { this.chatClicked = 0 }, 500)
     try {
       if (this.chatView.current) {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
@@ -96,14 +128,12 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onMapIconClick () {
-    const { deltachat } = this.props
-    const { selectedChat } = deltachat
+    const { selectedChat } = this.state
     this.props.openDialog('MapDialog', { selectedChat })
   }
 
   render () {
-    const { deltachat } = this.props
-    const { selectedChat, showArchivedChats } = deltachat
+    let { selectedChat, chatList, showArchivedChats } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage
@@ -146,12 +176,11 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            totalChats={deltachat.totalChats}
-            chatList={deltachat.chatList}
+            chatList={chatList}
+            showArchivedChats={showArchivedChats}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
-            showArchivedChats={deltachat.showArchivedChats}
             selectedChatId={selectedChat ? selectedChat.id : null}
             openDialog={this.props.openDialog}
             changeScreen={this.props.changeScreen}
@@ -164,13 +193,10 @@ class SplittedChatListAndView extends React.Component {
               />
                 : (<ChatView
                   ref={this.chatView}
-                  screenProps={this.props.screenProps}
-                  onDeadDropClick={this.onDeadDropClick}
-                  userFeedback={this.props.userFeedback}
-                  changeScreen={this.props.changeScreen}
-                  openDialog={this.props.openDialog}
                   chat={selectedChat}
-                  deltachat={this.props.deltachat} />)
+                  onDeadDropClick={this.onDeadDropClick}
+                  openDialog={this.props.openDialog}
+                />)
               : (
                 <Welcome>
                   <h1>{tx('welcome_desktop')}</h1>
