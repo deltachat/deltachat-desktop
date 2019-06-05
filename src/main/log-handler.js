@@ -2,9 +2,26 @@ const { createWriteStream } = require('fs')
 const path = require('path')
 const { getLogsPath } = require('../application-constants')
 
-module.exports = () => {
+function logName () {
   const dir = getLogsPath()
-  const fileName = path.join(dir, `${(new Date()).toISOString()}.log`)
+  const d = new Date()
+  function pad (number) {
+    return number < 10 ? '0' + number : number
+  }
+  const fileName = [
+    `${d.getFullYear()}-`,
+    `${pad(d.getMonth())}-`,
+    `${pad(d.getDay())}-`,
+    `${pad(d.getHours())}-`,
+    `${pad(d.getMinutes())}-`,
+    `${pad(d.getSeconds())}`,
+    '.log'
+  ].join('')
+  return path.join(dir, fileName)
+}
+
+module.exports = () => {
+  const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
   console.log(`Logfile: ${fileName}`)
   return {
