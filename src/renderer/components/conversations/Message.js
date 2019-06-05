@@ -1,10 +1,8 @@
 const React = require('react')
 const classNames = require('classnames')
 
-const MessageBody = require('./MessageBody')
+const MessageBody = require('../MessageBody')
 const MessageMetaData = require('./MessageMetaData')
-const Quote = require('./Quote')
-const EmbeddedContact = require('./EmbeddedContact')
 
 const { getIncrement } = require('./ExpireTimer')
 const ContactName = require('./ContactName')
@@ -81,7 +79,7 @@ class Message extends React.Component {
   renderAvatar () {
     const {
       authorName,
-      authorPhoneNumber,
+      authorAddress,
       authorProfileName,
       authorAvatarPath,
       authorColor,
@@ -91,7 +89,7 @@ class Message extends React.Component {
       i18n
     } = this.props
 
-    const title = `${authorName || authorPhoneNumber}${
+    const title = `${authorName || authorAddress}${
       !authorName && authorProfileName ? ` ~${authorProfileName}` : ''
     }`
 
@@ -150,7 +148,7 @@ class Message extends React.Component {
   renderAuthor () {
     const {
       authorName,
-      authorPhoneNumber,
+      authorAddress,
       authorProfileName,
       conversationType,
       direction,
@@ -158,7 +156,7 @@ class Message extends React.Component {
       authorColor
     } = this.props
 
-    const title = authorName || authorPhoneNumber
+    const title = authorName || authorAddress
 
     if (direction !== 'incoming' || conversationType !== 'group' || !title) {
       return null
@@ -167,7 +165,7 @@ class Message extends React.Component {
     return (
       <div className='module-message__author'>
         <ContactName
-          phoneNumber={authorPhoneNumber}
+          phoneNumber={authorAddress}
           name={authorName}
           profileName={authorProfileName}
           module='module-message__author'
@@ -206,84 +204,8 @@ class Message extends React.Component {
     )
   }
 
-  renderQuote () {
-    const { conversationType, direction, i18n, quote } = this.props
-
-    if (!quote) {
-      return null
-    }
-
-    const withContentAbove =
-      conversationType === 'group' && direction === 'incoming'
-
-    return (
-      <Quote
-        i18n={i18n}
-        onClick={quote.onClick}
-        text={quote.text}
-        attachment={quote.attachment}
-        isIncoming={direction === 'incoming'}
-        authorPhoneNumber={quote.authorPhoneNumber}
-        authorProfileName={quote.authorProfileName}
-        authorName={quote.authorName}
-        authorColor={quote.authorColor}
-        referencedMessageNotFound={quote.referencedMessageNotFound}
-        isFromMe={quote.isFromMe}
-        withContentAbove={withContentAbove}
-      />
-    )
-  }
-
   renderAttachment () {
     return Attachment.render(this.props)
-  }
-
-  renderEmbeddedContact () {
-    const {
-      collapseMetadata,
-      contact,
-      conversationType,
-      direction,
-      i18n,
-      text
-    } = this.props
-    if (!contact) {
-      return null
-    }
-
-    const withCaption = Boolean(text)
-    const withContentAbove =
-      conversationType === 'group' && direction === 'incoming'
-    const withContentBelow = withCaption || !collapseMetadata
-
-    return (
-      <EmbeddedContact
-        contact={contact}
-        hasSignalAccount={contact.hasSignalAccount}
-        isIncoming={direction === 'incoming'}
-        i18n={i18n}
-        onClick={contact.onClick}
-        withContentAbove={withContentAbove}
-        withContentBelow={withContentBelow}
-      />
-    )
-  }
-
-  renderSendMessageButton () {
-    const { contact, i18n } = this.props
-    if (!contact || !contact.hasSignalAccount) {
-      return null
-    }
-
-    return (
-      <div
-        role='button'
-        onClick={contact.onSendMessage}
-        className='module-message__send-message-button'
-      >
-        {i18n('sendMessageToContact')}
-      </div>
-    )
   }
 
   captureMenuTrigger (triggerRef) {
@@ -437,7 +359,7 @@ class Message extends React.Component {
 
   render () {
     const {
-      authorPhoneNumber,
+      authorAddress,
       authorColor,
       direction,
       id,
@@ -447,7 +369,7 @@ class Message extends React.Component {
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
     //   It needs to be unique.
-    const triggerId = String(id || `${authorPhoneNumber}-${timestamp}`)
+    const triggerId = String(id || `${authorAddress}-${timestamp}`)
 
     if (expired) {
       return null
@@ -476,12 +398,10 @@ class Message extends React.Component {
           )}
         >
           {this.renderAuthor()}
-          {this.renderQuote()}
           {this.renderAttachment()}
 
           {this.renderText()}
           <MessageMetaData {...this.props} />
-          {this.renderSendMessageButton()}
         </div>
         {this.renderError(direction === 'outgoing')}
         {this.renderMenu(direction === 'incoming', triggerId)}

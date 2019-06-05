@@ -74,7 +74,6 @@ function render (props) {
     collapseMetadata,
     conversationType,
     direction,
-    quote,
     onClickAttachment
   } = props
 
@@ -85,8 +84,7 @@ function render (props) {
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption || !collapseMetadata
-  const withContentAbove =
-    quote || (conversationType === 'group' && direction === 'incoming')
+  const withContentAbove = conversationType === 'group' && direction === 'incoming'
 
   if (isImage(attachment)) {
     if (!attachment.url) {
