@@ -103,8 +103,7 @@ function fetchMessages (chatId) {
   this.sendToRenderer('DD_MESSAGES_LOADED', payload)
 }
 
-function forwardMessage (msgId, contactId) {
-  const chatId = this._dc.getChatIdByContactId(contactId)
+function forwardMessage (msgId, chatId) {
   this._dc.forwardMessages(msgId, chatId)
   this.selectChat(chatId)
 }

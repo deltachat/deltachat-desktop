@@ -71,6 +71,32 @@ function _chatList (showArchivedChats) {
   return chatList
 }
 
+function _forwardChatList (listFlags, query) {
+  if (!this._dc) return []
+  const list = this._dc.getChatList(listFlags, query)
+
+  const chatList = []
+
+  for (let i = 0; i < list.getCount(); i++) {
+    const chatId = list.getChatId(i)
+    const chat = this._getChatById(chatId)
+
+    if (!chat || chat.id === C.DC_CHAT_ID_DEADDROP) continue
+
+    // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+    chatList.push({
+      id: chat.id,
+      summary: list.getSummary(i).toJson(),
+      name: chat.name,
+      profileImage: chat.profileImage,
+      color: chat.color,
+      isVerified: chat.isVerified,
+      isGroup: chat.isGroup
+    })
+  }
+  return chatList
+}
+
 function _getChatById (chatId, loadMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
@@ -159,6 +185,7 @@ module.exports = function () {
   this.searchChats = searchChats.bind(this)
   this.selectChat = selectChat.bind(this)
   this._chatList = _chatList.bind(this)
+  this._forwardChatList = _forwardChatList.bind(this)
   this._getChatById = _getChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)

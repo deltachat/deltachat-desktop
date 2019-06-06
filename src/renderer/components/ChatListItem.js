@@ -111,7 +111,6 @@ class ChatListItem extends React.Component {
             phoneNumber={phoneNumber}
             name={name}
             profileName={profileName}
-            i18n={i18n}
           />
         </div>
         <div
@@ -134,7 +133,7 @@ class ChatListItem extends React.Component {
   }
 
   renderMessage () {
-    const { lastMessage, unreadCount, i18n } = this.props
+    const { lastMessage, unreadCount } = this.props
 
     if (!lastMessage) {
       return null
@@ -157,7 +156,6 @@ class ChatListItem extends React.Component {
             text={lastMessage.text2 || ''}
             disableJumbomoji
             preview
-            i18n={i18n}
           />
         </div>
         {lastMessage.status ? (
