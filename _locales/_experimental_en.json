@@ -10,5 +10,11 @@
   },
   "hide_password": {
     "message": "Hide password"
+  },
+  "pref_experimental_features": {
+    "message": "Experimental features"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "On-demand location streaming"
   }
 }
