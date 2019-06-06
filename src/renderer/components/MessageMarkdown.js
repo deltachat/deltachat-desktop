@@ -19,9 +19,9 @@ function ignoreScopeAssign (rule, order, object = {}) {
 
 const previewRules = {
   Array: defaultRules.Array,
-  strong: ignoreScopeAssign(defaultRules.strong, 1),
-  em: ignoreScopeAssign(defaultRules.em, 1),
-  u: ignoreScopeAssign(defaultRules.u, 2),
+  strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
+  em: ignoreScopeAssign(defaultRules.em, 1), // italics
+  // u: ignoreScopeAssign(defaultRules.u, 2),
   del: ignoreScopeAssign(defaultRules.del, 3),
   br: ignoreScopeAssign(defaultRules.br, 4),
   inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
