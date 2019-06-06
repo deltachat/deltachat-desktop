@@ -97,6 +97,10 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.messageIdToJson(msgId)
   })
 
+  ipcMain.on('getForwardChatList', (e, listFlags, query) => {
+    e.returnValue = dc._forwardChatList(listFlags, query)
+  })
+
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
   })

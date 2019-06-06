@@ -5,21 +5,21 @@ const {
   Dialog
 } = require('@blueprintjs/core')
 
-const ContactList = require('../ContactList')
+const ForwardToList = require('../ForwardToList')
 
 class ForwardMessage extends React.Component {
-  onContactClick (contact) {
+  onChatClick (chatid) {
     ipcRenderer.send(
       'EVENT_DC_FUNCTION_CALL',
       'forwardMessage',
       this.props.forwardMessage.msg.id,
-      contact.id
+      chatid
     )
     this.props.onClose()
   }
 
   render () {
-    const { contacts, forwardMessage, onClose } = this.props
+    const { forwardMessage, onClose } = this.props
     const tx = window.translate
     var isOpen = !!forwardMessage
 
@@ -30,9 +30,8 @@ class ForwardMessage extends React.Component {
         icon='info-sign'
         onClose={onClose}>
         <div className={Classes.DIALOG_BODY}>
-          <ContactList
-            contacts={contacts}
-            onContactClick={this.onContactClick.bind(this)}
+          <ForwardToList
+            onChatClick={this.onChatClick.bind(this)}
           />
         </div>
       </Dialog>
