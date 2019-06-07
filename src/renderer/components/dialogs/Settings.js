@@ -42,7 +42,7 @@ class Settings extends React.Component {
       saved: props.saved,
       advancedSettings: {},
       userDetails: false,
-      mailPw: MAGIC_PW,
+      mail_pw: MAGIC_PW,
       settings: {}
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
@@ -216,7 +216,7 @@ class Settings extends React.Component {
 
   onLoginSubmit (config) {
     this.props.userFeedback(false)
-    if (config.mailPw === MAGIC_PW) delete config.mailPw
+    if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
   }
 
@@ -279,7 +279,7 @@ class Settings extends React.Component {
                 {...advancedSettings}
                 mode={'update'}
                 addr={settings.addr}
-                mailPw={settings.mail_pw}
+                mail_pw={settings.mail_pw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
                 addrDisabled>
