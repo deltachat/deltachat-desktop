@@ -1,7 +1,7 @@
 #/bin/bash
 set -xe
 
-_gittag="v0.2.0-alpha"
+_gittag="0.2.1"
 
 cd /tmp
 git clone --branch $_gittag https://github.com/rpgp/rpgp.git
