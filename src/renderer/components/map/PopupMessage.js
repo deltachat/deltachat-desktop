@@ -9,7 +9,6 @@ class PopupMessage extends React.Component {
       props.padlock = props.showPadlock
       props.timestamp = props.timestamp * 1000
       props.username = username
-      props.i18n = window.translate
       return (
         <div>
           <div>{message.text}</div>

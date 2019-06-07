@@ -9,7 +9,6 @@ function convertContactProps (contact) {
     avatarPath: contact.profileImage,
     profileName: contact.displayName,
     isMe: contact.id === DCConstants.DC_CONTACT_ID_SELF,
-    i18n: window.translate,
     verified: contact.isVerified
   }
 }

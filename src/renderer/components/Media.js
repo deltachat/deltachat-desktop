@@ -132,7 +132,6 @@ class Media extends React.Component {
             onClick={this.onClickMedia.bind(this, message)}
             key={message.id}>
             {Attachment.render({
-              i18n: window.translate,
               direction: msg.direction,
               attachment: msg.attachment,
               collapseMetadata: true,

@@ -68,7 +68,6 @@ function dragAttachmentOut (attachment, dragEvent) {
 
 function render (props) {
   const {
-    i18n,
     attachment,
     text,
     collapseMetadata,
@@ -76,6 +75,7 @@ function render (props) {
     direction,
     onClickAttachment
   } = props
+  const tx = window.translate
 
   if (!attachment) {
     return null
@@ -95,7 +95,7 @@ function render (props) {
             `module-message__broken-image--${direction}`
           )}
         >
-          {i18n('imageFailedToLoad')}
+          {tx('imageFailedToLoad')}
         </div>
       )
     }
@@ -149,7 +149,7 @@ function render (props) {
             `module-message__broken-video-screenshot--${direction}`
           )}
         >
-          {i18n('videoScreenshotFailedToLoad')}
+          {tx('videoScreenshotFailedToLoad')}
         </div>
       )
     }

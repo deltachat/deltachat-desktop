@@ -110,7 +110,6 @@ class ChatList extends React.Component {
           <div className='ConversationList' ref={this.chatListDiv}>
             {chatList.map((chatListItem, i) => {
               if (!chatListItem) return
-              const i18n = window.translate
               const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
 
               // Don't show freshMessageCounter on selected chat
@@ -121,7 +120,6 @@ class ChatList extends React.Component {
                     <ChatListItem
                       className='contactrequest'
                       name={name}
-                      i18n={i18n}
                       phoneNumber={chatListItem.summary.text1}
                       lastUpdated={lastUpdated}
                       lastMessage={{
@@ -131,7 +129,6 @@ class ChatList extends React.Component {
                       onClick={() => onDeadDropClick(chatListItem.deaddrop)}
                       isSelected={chatListItem.id === selectedChatId}
                       unreadCount={chatListItem.freshMessageCounter}
-
                     />
                   </ContactRequestItemWrapper>)
               } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
@@ -140,7 +137,7 @@ class ChatList extends React.Component {
                     <ChatListItem
                       onClick={this.props.onShowArchivedChats}
                       name={chatListItem.name}
-                      i18n={i18n} />
+                    />
                   </ArchivedChats>
                 )
               } else {
@@ -158,7 +155,6 @@ class ChatList extends React.Component {
                       text2: chatListItem.summary.text2,
                       status: 'sent' // TODO: interpret data from summary to get correct state
                     }}
-                    i18n={i18n}
                     isSelected={chatListItem.id === selectedChatId}
                     isVerified={chatListItem.isVerified}
                     isGroup={chatListItem.isGroup}

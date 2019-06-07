@@ -32,7 +32,6 @@ class MessageDetail extends React.Component {
         message={msg}
         sentAt={msg.sentAt}
         receivedAt={msg.receivedAt}
-        i18n={window.translate}
       />
     }
 
