@@ -33,6 +33,8 @@ function init (cwd, state, logHandler) {
       state.logins.push(credentials.addr)
     }
     state.saved.credentials = credentials
+    delete state.saved.credentials.mail_pw
+    delete state.saved.credentials.send_pw
     app.saveState()
   })
 
