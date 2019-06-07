@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import * as update from 'immutability-helper'
@@ -48,19 +50,18 @@ export default class Login extends React.Component {
   }
 
   _defaultCredentials () {
-    /* *CONFIG* */
     return {
       addr: process.env.DC_ADDR || this.props.addr || '',
-      mailUser: this.props.mailUser || '',
-      mailPw: process.env.DC_MAIL_PW || this.props.mailPw || '',
-      mailServer: this.props.mailServer || '',
-      mailPort: this.props.mailPort || '',
-      mailSecurity: this.props.mailSecurity || '',
-      sendUser: this.props.sendUser || '',
-      sendPw: this.props.sendPw || '',
-      sendServer: this.props.sendServer || '',
-      sendPort: this.props.sendPort || '',
-      sendSecurity: this.props.sendSecurity || ''
+      mail_user: this.props.mail_user || '',
+      mail_pw: process.env.DC_MAIL_PW || this.props.mail_pw || '',
+      mail_server: this.props.mail_server || '',
+      mail_port: this.props.mail_port || '',
+      mail_security: this.props.mail_security || '',
+      send_user: this.props.send_user || '',
+      send_pw: this.props.send_pw || '',
+      send_server: this.props.send_server || '',
+      send_port: this.props.send_port || '',
+      send_security: this.props.send_security || ''
     }
   }
 
@@ -100,16 +101,16 @@ export default class Login extends React.Component {
 
     const {
       addr,
-      mailUser,
-      mailPw,
-      mailServer,
-      mailPort,
-      mailSecurity,
-      sendUser,
-      sendServer,
-      sendPort,
-      sendSecurity,
-      sendPw
+      mail_user,
+      mail_pw,
+      mail_server,
+      mail_port,
+      mail_security,
+      send_user,
+      send_server,
+      send_port,
+      send_security,
+      send_pw
     } = this.state.credentials
 
     const { showAdvanced } = this.state.ui
@@ -131,11 +132,11 @@ export default class Login extends React.Component {
           />
 
           <DeltaPasswordInput
-            key='mailPw'
-            id='mailPw'
+            key='mail_pw'
+            id='mail_pw'
             label={tx('password')}
             placeholder={tx('password')}
-            password={mailPw}
+            password={mail_pw}
             onChange={this.handleCredentialsChange}
           />
 
@@ -147,37 +148,37 @@ export default class Login extends React.Component {
             <DeltaHeadline>{tx('login_inbox')}</DeltaHeadline>
 
             <DeltaInput
-              key='mailUser'
-              id='mailUser'
+              key='mail_user'
+              id='mail_user'
               placeholder={tx('login_imap_login')}
               type='text'
-              value={mailUser}
+              value={mail_user}
               onChange={this.handleCredentialsChange}
             />
 
             <DeltaInput
-              key='mailServer'
-              id='mailServer'
+              key='mail_server'
+              id='mail_server'
               placeholder={tx('login_imap_server')}
               type='text'
-              value={mailServer}
+              value={mail_server}
               onChange={this.handleCredentialsChange}
             />
             <DeltaInput
-              key='mailPort'
-              id='mailPort'
+              key='mail_port'
+              id='mail_port'
               placeholder={tx('login_imap_port')}
               type='number'
               min='0'
               max='65535'
-              value={mailPort}
+              value={mail_port}
               onChange={this.handleCredentialsChange}
             />
 
             <DeltaSelect
-              id='mailSecurity'
+              id='mail_security'
               label={tx('login_imap_security')}
-              value={mailSecurity}
+              value={mail_security}
               onChange={this.handleCredentialsChange}
             >
               <option value='automatic'>Automatic</option>
@@ -188,41 +189,41 @@ export default class Login extends React.Component {
 
             <DeltaHeadline>{tx('login_outbox')}</DeltaHeadline>
             <DeltaInput
-              key='sendUser'
-              id='sendUser'
+              key='send_user'
+              id='send_user'
               placeholder={tx('login_smtp_login')}
-              value={sendUser}
+              value={send_user}
               onChange={this.handleCredentialsChange}
             />
             <DeltaPasswordInput
-              key='sendPw'
-              id='sendPw'
+              key='send_pw'
+              id='send_pw'
               placeholder={tx('login_smtp_password')}
-              password={sendPw}
+              password={send_pw}
               onChange={this.handleCredentialsChange}
             />
             <DeltaInput
-              key='sendServer'
-              id='sendServer'
+              key='send_server'
+              id='send_server'
               placeholder={tx('login_smtp_server')}
               type='text'
-              value={sendServer}
+              value={send_server}
               onChange={this.handleCredentialsChange}
             />
             <DeltaInput
-              key='sendPort'
-              id='sendPort'
+              key='send_port'
+              id='send_port'
               placeholder={tx('login_smtp_port')}
               type='number'
               min='0'
               max='65535'
-              value={sendPort}
+              value={send_port}
               onChange={this.handleCredentialsChange}
             />
             <DeltaSelect
-              id='sendSecurity'
+              id='send_security'
               label={tx('login_smtp_security')}
-              value={sendSecurity}
+              value={send_security}
               onChange={this.handleCredentialsChange}
             >
               <option value='automatic'>Automatic</option>
@@ -245,7 +246,7 @@ export default class Login extends React.Component {
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
-              props.disabled = loading || (!addr || !mailPw) || (showAdvanced && !sendPw)
+              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw)
             }
             if (child.props.type === 'cancel') {
               props.onClick = this.cancelClick.bind(this)
