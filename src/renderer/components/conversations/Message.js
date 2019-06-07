@@ -85,9 +85,9 @@ class Message extends React.Component {
       authorColor,
       collapseMetadata,
       conversationType,
-      direction,
-      i18n
+      direction
     } = this.props
+    const tx = window.translate
 
     const title = `${authorName || authorAddress}${
       !authorName && authorProfileName ? ` ~${authorProfileName}` : ''
@@ -121,7 +121,7 @@ class Message extends React.Component {
 
     return (
       <div className='module-message__author-avatar'>
-        <img alt={i18n('contactAvatarAlt', [title])} src={authorAvatarPath} />
+        <img alt={tx('contactAvatarAlt', [title])} src={authorAvatarPath} />
       </div>
     )
   }
@@ -152,7 +152,6 @@ class Message extends React.Component {
       authorProfileName,
       conversationType,
       direction,
-      i18n,
       authorColor
     } = this.props
 
@@ -169,7 +168,6 @@ class Message extends React.Component {
           name={authorName}
           profileName={authorProfileName}
           module='module-message__author'
-          i18n={i18n}
           color={authorColor}
         />
       </div>
@@ -177,11 +175,12 @@ class Message extends React.Component {
   }
 
   renderText () {
-    const { text, i18n, direction, status } = this.props
+    const { text, direction, status } = this.props
+    const tx = window.translate
 
     const contents =
       direction === 'incoming' && status === 'error'
-        ? i18n('incomingError')
+        ? tx('incomingError')
         : text
 
     if (!contents) {
@@ -199,7 +198,7 @@ class Message extends React.Component {
             : null
         )}
       >
-        <MessageBody text={contents || ''} i18n={i18n} />
+        <MessageBody text={contents || ''} />
       </div>
     )
   }
@@ -293,9 +292,9 @@ class Message extends React.Component {
       onReply,
       onForward,
       onRetrySend,
-      onShowDetail,
-      i18n
+      onShowDetail
     } = this.props
+    const tx = window.translate
 
     const showRetry = status === 'error' && direction === 'outgoing'
 
@@ -308,7 +307,7 @@ class Message extends React.Component {
             }}
             onClick={onDownload}
           >
-            {i18n('download_attachment_desktop')}
+            {tx('download_attachment_desktop')}
           </MenuItem>
         ) : null}
         <MenuItem
@@ -317,7 +316,7 @@ class Message extends React.Component {
           }}
           onClick={onReply}
         >
-          {i18n('reply_to_message_desktop')}
+          {tx('reply_to_message_desktop')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -325,7 +324,7 @@ class Message extends React.Component {
           }}
           onClick={onForward}
         >
-          {i18n('menu_forward')}
+          {tx('menu_forward')}
         </MenuItem>
         <MenuItem
           attributes={{
@@ -333,7 +332,7 @@ class Message extends React.Component {
           }}
           onClick={onShowDetail}
         >
-          {i18n('more_info_desktop')}
+          {tx('more_info_desktop')}
         </MenuItem>
         {showRetry ? (
           <MenuItem
@@ -342,7 +341,7 @@ class Message extends React.Component {
             }}
             onClick={onRetrySend}
           >
-            {i18n('retrySend')}
+            {tx('retrySend')}
           </MenuItem>
         ) : null}
         <MenuItem
@@ -351,7 +350,7 @@ class Message extends React.Component {
           }}
           onClick={onDelete}
         >
-          {i18n('delete_message_desktop')}
+          {tx('delete_message_desktop')}
         </MenuItem>
       </ContextMenu>
     )

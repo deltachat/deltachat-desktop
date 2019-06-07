@@ -14,11 +14,11 @@ class MessageMetaData extends React.Component {
       direction,
       expirationLength,
       expirationTimestamp,
-      i18n,
       status,
       text,
       timestamp
     } = this.props
+    const tx = window.translate
 
     if (collapseMetadata) {
       return null
@@ -61,11 +61,10 @@ class MessageMetaData extends React.Component {
                 : null
             )}
           >
-            {i18n('sendFailed')}
+            {tx('sendFailed')}
           </span>
         ) : (
           <Timestamp
-            i18n={i18n}
             timestamp={timestamp}
             extended
             direction={direction}

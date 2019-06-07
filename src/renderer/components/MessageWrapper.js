@@ -180,7 +180,6 @@ class RenderMessage extends React.Component {
     const props = {
       padlock: msg.showPadlock,
       id,
-      i18n: window.translate,
       conversationType,
       onDownload: message.onDownload,
       onReply: message.onReply,

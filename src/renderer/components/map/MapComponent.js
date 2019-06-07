@@ -447,7 +447,7 @@ class MapComponent extends React.Component {
 
   renderPopupMessage (contactName, formattedDate, message) {
     return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage username={contactName} formattedDate={formattedDate} message={message} i18n={window.translate} />
+      <PopupMessage username={contactName} formattedDate={formattedDate} message={message} />
     )
   }
 

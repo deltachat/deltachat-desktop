@@ -8,12 +8,13 @@ function getInitial (name) {
 
 class ContactListItem extends React.Component {
   renderAvatar ({ displayName }) {
-    const { avatarPath, i18n, color, name } = this.props
+    const { avatarPath, color, name } = this.props
+    const tx = window.translate
 
     if (avatarPath) {
       return (
         <div className='module-contact-list-item__avatar'>
-          <img alt={i18n('contactAvatarAlt', [displayName])} src={avatarPath} />
+          <img alt={tx('contactAvatarAlt', [displayName])} src={avatarPath} />
         </div>
       )
     }
@@ -36,7 +37,6 @@ class ContactListItem extends React.Component {
 
   render () {
     const {
-      i18n,
       name,
       onClick,
       isMe,
@@ -44,9 +44,10 @@ class ContactListItem extends React.Component {
       profileName,
       verified
     } = this.props
+    const tx = window.translate
 
     const title = name || phoneNumber
-    const displayName = isMe ? i18n('me_desktop') : title
+    const displayName = isMe ? tx('me_desktop') : title
 
     const profileElement =
       !isMe && profileName && !name ? (
@@ -76,7 +77,7 @@ class ContactListItem extends React.Component {
             {showVerified ? (
               <img className='module-contact-list-item__text__verified-icon' src='../images/verified.png' />
             ) : null}
-            {showVerified ? ` ${i18n('verified_desktop')}` : null}
+            {showVerified ? ` ${tx('verified_desktop')}` : null}
             {showVerified && showNumber ? ' ∙ ' : null}
             {showNumber ? phoneNumber : null}
           </div>

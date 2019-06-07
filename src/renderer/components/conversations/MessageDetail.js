@@ -10,7 +10,7 @@ function getInitial (name) {
 
 class MessageDetail extends React.Component {
   renderAvatar (contact) {
-    const { i18n } = this.props
+    const tx = window.translate
     const { avatarPath, color, phoneNumber, name, profileName } = contact
 
     if (!avatarPath) {
@@ -36,14 +36,15 @@ class MessageDetail extends React.Component {
     return (
       <img
         className='module-message-detail__contact__avatar'
-        alt={i18n('contactAvatarAlt', [title])}
+        alt={tx('contactAvatarAlt', [title])}
         src={avatarPath}
       />
     )
   }
 
   renderDeleteButton () {
-    const { i18n, message } = this.props
+    const { message } = this.props
+    const tx = window.translate
 
     return (
       <div className='module-message-detail__delete-button-container'>
@@ -51,14 +52,14 @@ class MessageDetail extends React.Component {
           onClick={message.onDelete}
           className='module-message-detail__delete-button'
         >
-          {i18n('delete_message_desktop')}
+          {tx('delete_message_desktop')}
         </button>
       </div>
     )
   }
 
   renderContact (contact) {
-    const { i18n } = this.props
+    const tx = window.translate
     const errors = contact.errors || []
 
     const errorComponent = contact.isOutgoingKeyError ? (
@@ -67,13 +68,13 @@ class MessageDetail extends React.Component {
           className='module-message-detail__contact__show-safety-number'
           onClick={contact.onShowSafetyNumber}
         >
-          {i18n('showSafetyNumber')}
+          {tx('showSafetyNumber')}
         </button>
         <button
           className='module-message-detail__contact__send-anyway'
           onClick={contact.onSendAnyway}
         >
-          {i18n('sendAnyway')}
+          {tx('sendAnyway')}
         </button>
       </div>
     ) : null
@@ -95,7 +96,6 @@ class MessageDetail extends React.Component {
               phoneNumber={contact.phoneNumber}
               name={contact.name}
               profileName={contact.profileName}
-              i18n={i18n}
             />
           </div>
           {errors.map((error, index) => (
@@ -125,19 +125,20 @@ class MessageDetail extends React.Component {
   }
 
   render () {
-    const { errors, message, receivedAt, sentAt, i18n } = this.props
+    const { errors, message, receivedAt, sentAt } = this.props
+    const tx = window.translate
 
     return (
       <div className='module-message-detail'>
         <div className='module-message-detail__message-container'>
-          <Message i18n={i18n} {...message} />
+          <Message {...message} />
         </div>
         <table className='module-message-detail__info'>
           <tbody>
             {(errors || []).map((error, index) => (
               <tr key={message.id}>
                 <td className='module-message-detail__label'>
-                  {i18n('error')}
+                  {tx('error')}
                 </td>
                 <td>
                   {' '}
@@ -146,7 +147,7 @@ class MessageDetail extends React.Component {
               </tr>
             ))}
             <tr>
-              <td className='module-message-detail__label'>{i18n('message_detail_sent_desktop')}</td>
+              <td className='module-message-detail__label'>{tx('message_detail_sent_desktop')}</td>
               <td>
                 {moment(sentAt).format('LLLL')}{' '}
                 <span className='module-message-detail__unix-timestamp'>
@@ -157,7 +158,7 @@ class MessageDetail extends React.Component {
             {receivedAt ? (
               <tr>
                 <td className='module-message-detail__label'>
-                  {i18n('message_detail_received_desktop')}
+                  {tx('message_detail_received_desktop')}
                 </td>
                 <td>
                   {moment(receivedAt).format('LLLL')}{' '}
@@ -169,7 +170,7 @@ class MessageDetail extends React.Component {
             ) : null}
             <tr>
               <td className='module-message-detail__label'>
-                {message.direction === 'incoming' ? i18n('message_detail_from_desktop') : i18n('message_detail_to_desktop')}
+                {message.direction === 'incoming' ? tx('message_detail_from_desktop') : tx('message_detail_to_desktop')}
               </td>
             </tr>
           </tbody>

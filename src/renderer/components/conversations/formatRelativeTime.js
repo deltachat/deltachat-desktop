@@ -24,9 +24,9 @@ function isYear (timestamp) {
 }
 
 function formatRelativeTime (rawTimestamp, options) {
-  let { extended, i18n } = options
-  i18n = i18n || window.translate
-  const formats = extended ? getExtendedFormats(i18n) : getShortFormats(i18n)
+  let { extended } = options
+  const tx = window.translate
+  const formats = extended ? getExtendedFormats(tx) : getShortFormats(tx)
   const timestamp = moment(rawTimestamp)
   const now = moment()
   const diff = moment.duration(now.diff(timestamp))
@@ -40,14 +40,14 @@ function formatRelativeTime (rawTimestamp, options) {
   } else if (diff.hours() >= 1) {
     const key = 'n_hours'
 
-    return i18n(key, diff.hours(), { quantity: diff.hours() === 1 ? 'one' : 'other' })
+    return tx(key, diff.hours(), { quantity: diff.hours() === 1 ? 'one' : 'other' })
   } else if (diff.minutes() >= 1) {
     const key = 'n_minutes'
 
-    return i18n(key, diff.minutes(), { quantity: diff.minutes() === 1 ? 'one' : 'other' })
+    return tx(key, diff.minutes(), { quantity: diff.minutes() === 1 ? 'one' : 'other' })
   }
 
-  return i18n('now')
+  return tx('now')
 }
 
 module.exports = formatRelativeTime

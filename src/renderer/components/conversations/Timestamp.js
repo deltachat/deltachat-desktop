@@ -29,7 +29,6 @@ class Timestamp extends React.Component {
   render () {
     const {
       direction,
-      i18n,
       module,
       timestamp,
       withImageNoCaption,
@@ -50,7 +49,7 @@ class Timestamp extends React.Component {
         )}
         title={moment(timestamp).format('llll')}
       >
-        {formatRelativeTime(timestamp, { i18n, extended })}
+        {formatRelativeTime(timestamp, { extended })}
       </span>
     )
   }
