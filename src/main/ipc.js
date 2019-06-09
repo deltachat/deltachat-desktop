@@ -95,10 +95,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.messageIdToJson(msgId)
   })
 
-  ipcMain.on('getForwardChatList', (e, listFlags, query) => {
-    e.returnValue = dc._forwardChatList(listFlags, query)
-  })
-
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
   })
@@ -116,10 +112,6 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
-
-  ipcMain.on('getContacts', (e, listFlags, queryStr) => {
-    e.returnValue = dc.getContacts(listFlags, queryStr)
-  })
 
   ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)

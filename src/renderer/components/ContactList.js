@@ -3,6 +3,7 @@ const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const SearchableList = require('./SearchableList')
+const contactsStore = require('../stores/contacts')
 
 const { RenderContact } = require('./Contact')
 
@@ -21,16 +22,32 @@ class ContactList extends SearchableList {
     this.state.showVerifiedContacts = false
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
+    this.filterContactList = this.filterContactList.bind(this)
   }
 
-  _getData () {
-    if (this.props.contacts) {
-      return this.props.contacts.filter(contact =>
-        `${contact.name}${contact.address}${contact.displayName}`.indexOf(this.state.queryStr) !== -1
-      )
+  filterContactList (contactsState) {
+    const { contacts } = contactsState
+    const { filterFunction } = this.props
+    let data = contacts
+    if (filterFunction) {
+      data = contacts.filter(filterFunction)
     }
+    this.setState({ data })
+  }
+
+  componentDidMount () {
+    contactsStore.subscribe(this.filterContactList)
+    this.search()
+  }
+
+  componentWillUnmount () {
+    contactsStore.unsubscribe(this.filterContactList)
+  }
+
+  search () {
     const listFlags = this.props.showVerifiedContacts ? C.DC_GCL_VERIFIED_ONLY : 0
-    return ipcRenderer.sendSync(
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
       'getContacts',
       listFlags,
       this.state.queryStr
