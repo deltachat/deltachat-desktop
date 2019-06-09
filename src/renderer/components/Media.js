@@ -37,7 +37,7 @@ const MediaGalleryItem = styled.div`
   }
 
   .module-message__img-attachment {
-    max-width: 100% !important;
+    max-width: 120pt;
   }
 
   .module-message__generic-attachment__text {
