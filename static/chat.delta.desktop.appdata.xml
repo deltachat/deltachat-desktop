@@ -34,6 +34,37 @@
   <url type="donation">https://delta.chat/en/contribute</url>
   <url type="translate">https://www.transifex.com/delta-chat/public/</url>
   <releases>
+    <release version="v0.104.0" date="2019-06-09">
+      <description>
+        <p>Added</p>
+        <ul>
+          <li>Add ci deb building scripts @hpk42 @jikstra #752</li>
+          <li>Add ci deb build instructions for ubuntu 19.04 @jikstra</li> 
+          <li>Add ci deb build instructions for 19.04 with netpgp @jikstra #814</li>
+          <li>Add settings for displayname and signature @Simon-Laux #810</li>
+          <li>Add progress indicator on login @Simon-Laux #811</li>
+          <li>Add incremental builds on watching @Jikstra #827</li>
+          <li>Refactor message body and implement simple markdown @Simon-Laux #833</li>
+          <li>Add advanced settings section and switch to turn on/off location streaming @jikstra #832</li>
+        </ul>
+        <p>Changed</p>
+        <ul>
+          <li>Open files in media view directly @Simon-Laux #817</li>
+          <li>Refactor chatlist and messagelist, use async approach, improves performance a lot @nicodh #835 #840</li>
+          <li>Remove unused dependencies @Simon-Laux #835</li>
+          <li>remove i18n property and replace each occurence with the transifex one @Simon-Laux #843</li>
+        </ul>
+        <p>Fixed</p>
+        <ul>
+          <li>Fix ci deb building, add building .debs for 18.10 (backported to 0.103.0) @Jikstra #805</li>
+          <li>Fix ci testing @Jikstra #826</li>
+          <li>Update fstream dependency @jikstra #825</li>
+          <li>Use a friendlier file name for logs on windows @ralphtheninja #828</li>
+          <li>Fix images in media gallery showing as squares again @Simon-Laux #847</li>
+          <li>Update rpgp to 0.2.1 @jikstra #844</li>
+        </ul>
+      </description>
+    </release>
     <release version="v0.103.0" date="2019-05-22">
       <description>
         <p>Added</p>
