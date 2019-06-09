@@ -108,7 +108,9 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
 ENV PATH=/root/.cargo/bin:$PATH
 
 # Install rpgp
-RUN git clone https://github.com/rpgp/rpgp.git
+RUN RPGP_VERSION 0.2.1
+RUN git clone --branch $RPGP_VERSION --depth 1 https://github.com/rpgp/rpgp.git
+RUN echo "rpgp ${RPGP_VERSION}"
 RUN cd rpgp/pgp-ffi && make install
 RUN ldconfig -v
 
