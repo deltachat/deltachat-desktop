@@ -1,6 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const SearchInput = require('./SearchInput')
+const debounce = require('debounce')
 
 const ListDiv = styled.div`
   max-height: 400px;
@@ -13,16 +14,20 @@ class SearchableList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      queryStr: ''
+      queryStr: '',
+      data: []
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
+    this.updateQuery = debounce(this.search, 200)
   }
 
   handleSearch (event) {
-    this.search(event.target.value)
+    this.updateQuery(event.target.value)
+    this.setState({ queryStr: event.target.value })
   }
 
+  // could be overwritten by child class
   search (queryStr) {
     this.setState({ queryStr })
   }
@@ -30,14 +35,7 @@ class SearchableList extends React.Component {
   componentDidMount () {
     this.search('')
   }
-  // can be overwritten by child class
-  _getData () {
-    return this.props.data
-  }
-  // can be overwritten by child class
-  _filter (value, index, array) {
-    return this.props.filterFunction ? this.props.filterFunction(value, index, array) : true
-  }
+
   // should be overwritten by child class
   renderItem (item, index, array) {
     return <div>
@@ -46,7 +44,7 @@ class SearchableList extends React.Component {
   }
 
   render (renderFunction) {
-    const data = this._getData().filter(this._filter.bind(this))
+    const { data } = this.state
     return <div>
       <SearchInput
         onChange={this.handleSearch}

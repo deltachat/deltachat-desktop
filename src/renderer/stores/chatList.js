@@ -4,6 +4,7 @@ const chatStore = require('./chat')
 
 const defaultState = {
   chatList: [],
+  filteredChatIdList: [],
   showArchivedChats: false
 }
 const chatListStore = new Store(defaultState)
@@ -19,6 +20,14 @@ function sortChatList (first, second) {
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
   console.log('DD_EVENT_CHATLIST_UPDATED', payload)
   chatListStore.setState(payload)
+})
+
+// update of filtered chat list
+ipcRenderer.on('DD_EVENT_FILTERED_CHATLIST_UPDATED', (evt, payload) => {
+  console.log('DD_EVENT_FILTERED_CHATLIST_UPDATED', payload)
+  const { chatIdList } = payload
+  const listState = chatListStore.getState()
+  chatListStore.setState({ ...listState, filteredChatIdList: chatIdList })
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
@@ -48,9 +57,9 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   }
 })
 
-// update the draft in chat list immediately
-function updateDraft (action, state) {
+function reducer (action, state) {
   if (action.type === 'UI_SET_DRAFT') {
+    // update the draft in chat list immediately
     const { chatId, text } = action.payload
     const chat = state.chatList.find(chat => chat.id === chatId)
     if (!chat) {
@@ -78,10 +87,15 @@ function updateDraft (action, state) {
       return chat.id === chatId ? updatedChat : chat
     })
     return { ...state, chatList }
+  } else if (action.type === 'UI_UPDATE_QUERY') {
+    const { query } = action.payload
+    return { ...state, query }
+  } else {
+    return state
   }
 }
 
-chatListStore.reducers.push(updateDraft)
+chatListStore.reducers.push(reducer)
 
 chatListStore.effects.push((action, state) => {
   if (action.type === 'UI_SET_DRAFT') {
