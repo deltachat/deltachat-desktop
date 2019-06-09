@@ -33,6 +33,8 @@ function init (cwd, state, logHandler) {
       state.logins.push(credentials.addr)
     }
     state.saved.credentials = credentials
+    delete state.saved.credentials.mail_pw
+    delete state.saved.credentials.send_pw
     app.saveState()
   })
 
@@ -194,7 +196,7 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
-    if (!credentials.mailPw) credentials.mailPw = dc.getConfig('mail_pw')
+    if (!credentials.mail_pw) credentials.mail_pw = dc.getConfig('mail_pw')
     const tmp = new DeltaChat(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))

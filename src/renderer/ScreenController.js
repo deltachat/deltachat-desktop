@@ -218,7 +218,7 @@ function LoginScreen (props) {
   const children = props.children
 
   function onClickLogin (login) {
-    ipcRenderer.send('login', { addr: login, mailPw: true })
+    ipcRenderer.send('login', { addr: login, mail_pw: true })
   }
 
   function forgetLogin (login) {

@@ -25,7 +25,7 @@ env:
 
   matrix:
     - DC_CORE_VERSION="master" SYS_DC_CORE="false"
-    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
+#    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
 
 cache:
   directories:
