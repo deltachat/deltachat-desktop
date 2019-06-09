@@ -2,6 +2,35 @@
 
 ## [Unreleased][unreleased]
 
+## [0.104.0] - 2019-06-09
+
+### Added
+
+- Add ci deb building scripts [**@hpk42**](https://github.com/hpk42) [**@jikstra**](https://github.com/jikstra) [#752](https://github.com/deltachat/deltachat-desktop/issues/752)
+- Add ci deb build instructions for ubuntu 19.04 [**@jikstra**](https://github.com/jikstra) 
+- Add ci deb build instructions for 19.04 with netpgp [**@jikstra**](https://github.com/jikstra) [#814](https://github.com/deltachat/deltachat-desktop/issues/814)
+- Add settings for displayname and signature [**@Simon-Laux**](https://github.com/Simon-Laux) [#810](https://github.com/deltachat/deltachat-desktop/issues/810)
+- Add progress indicator on login [**@Simon-Laux**](https://github.com/Simon-Laux) [#811](https://github.com/deltachat/deltachat-desktop/issues/811)
+- Add incremental builds on watching [**@Jikstra**](https://github.com/Jikstra) [#827](https://github.com/deltachat/deltachat-desktop/issues/827)
+- Refactor message body and implement simple markdown [**@Simon-Laux**](https://github.com/Simon-Laux) [#833](https://github.com/deltachat/deltachat-desktop/issues/833)
+- Add advanced settings section and switch to turn on/off location streaming [**@jikstra**](https://github.com/jikstra) [#832](https://github.com/deltachat/deltachat-desktop/issues/832)
+
+### Changed
+
+- Open files in media view directly [**@Simon-Laux**](https://github.com/Simon-Laux) [#817](https://github.com/deltachat/deltachat-desktop/issues/817)
+- Refactor chatlist & messagelist, use async approach, improves performance a lot [**@nicodh**](https://github.com/nicodh) [#835](https://github.com/deltachat/deltachat-desktop/issues/835) [#840](https://github.com/deltachat/deltachat-desktop/issues/840)
+- Remove unused dependencies [**@Simon-Laux**](https://github.com/Simon-Laux) [#835](https://github.com/deltachat/deltachat-desktop/issues/835)
+- remove i18n property and replace each occurence with the transifex one [**@Simon-Laux**](https://github.com/Simon-Laux) [#843](https://github.com/deltachat/deltachat-desktop/issues/843)
+
+### Fixed
+
+- Fix ci deb building, add building .debs for 18.10 (backported to 0.103.0) [**@Jikstra**](https://github.com/Jikstra) [#805](https://github.com/deltachat/deltachat-desktop/issues/805)
+- Fix ci testing [**@Jikstra**](https://github.com/Jikstra) [#826](https://github.com/deltachat/deltachat-desktop/issues/826)
+- Update fstream dependency [**@jikstra**](https://github.com/jikstra) [#825](https://github.com/deltachat/deltachat-desktop/issues/825)
+- Use a friendlier file name for logs on windows [**@ralphtheninja**](https://github.com/ralphtheninja) [#828](https://github.com/deltachat/deltachat-desktop/issues/828)
+- Fix images in media gallery showing as squares again [**@Simon-Laux**](https://github.com/Simon-Laux) [#847](https://github.com/deltachat/deltachat-desktop/issues/847)
+- Update rpgp to 0.2.1 [**@jikstra**](https://github.com/jikstra) [#844](https://github.com/deltachat/deltachat-desktop/issues/844)
+
 ## [0.103.0] - 2019-05-22
 
 ### Added
@@ -546,7 +575,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...HEAD
+
+[0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
 
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
 

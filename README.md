@@ -311,7 +311,7 @@ For Continuous Integration we currently use Travis.
 5. Once done, publish the release on github, which will create the
    tag.
 6. File an issue at
-   https://github.com/flathub/chat.delta.desktop/issues to make a new
+   <https://github.com/flathub/chat.delta.desktop/issues> to make a new
    release.
 
 Also see <https://www.electron.build/configuration/publish>
