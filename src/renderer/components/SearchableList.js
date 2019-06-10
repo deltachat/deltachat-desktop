@@ -19,6 +19,7 @@ class SearchableList extends React.Component {
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
+    this._getData = this._getData.bind(this)
     this.updateQuery = debounce(this.search, 200)
   }
 
@@ -30,6 +31,10 @@ class SearchableList extends React.Component {
   // could be overwritten by child class
   search (queryStr) {
     this.setState({ queryStr })
+  }
+
+  _getData () {
+    return this.state.data
   }
 
   componentDidMount () {
@@ -44,7 +49,7 @@ class SearchableList extends React.Component {
   }
 
   render (renderFunction) {
-    const { data } = this.state
+    const data = this._getData()
     return <div>
       <SearchInput
         onChange={this.handleSearch}

@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const contactsStore = require('../stores/contacts')
 
 const {
   Alignment,
@@ -40,11 +41,34 @@ class CreateChat extends React.Component {
     this.onCreateVerifiedGroup = this.onCreateVerifiedGroup.bind(this)
     this.onCreateContact = this.onCreateContact.bind(this)
     this.chooseContact = this.chooseContact.bind(this)
+    this.assignContacts = this.assignContacts.bind(this)
+    this.state = {
+      contacts: []
+    }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
     // we don't care about the props for now, really.
     return (this.state !== nextState)
+  }
+
+  assignContacts (contactsState) {
+    const { contacts } = contactsState
+    this.setState({ contacts })
+  }
+
+  componentDidMount () {
+    contactsStore.subscribe(this.assignContacts)
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'getContacts',
+      0,
+      ''
+    )
+  }
+
+  componentWillUnmount () {
+    contactsStore.unsubscribe(this.assignContacts)
   }
 
   onCreateGroup () {
@@ -75,7 +99,7 @@ class CreateChat extends React.Component {
   }
 
   render () {
-    const { contacts } = this.props
+    const { contacts } = this.state
     const tx = window.translate
 
     return (

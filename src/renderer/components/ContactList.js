@@ -1,9 +1,7 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const SearchableList = require('./SearchableList')
-const contactsStore = require('../stores/contacts')
 
 const { RenderContact } = require('./Contact')
 
@@ -22,36 +20,24 @@ class ContactList extends SearchableList {
     this.state.showVerifiedContacts = false
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
-    this.filterContactList = this.filterContactList.bind(this)
   }
 
-  filterContactList (contactsState) {
-    const { contacts } = contactsState
-    const { filterFunction } = this.props
+  _getData () {
+    const { filterFunction, contacts } = this.props
+    if (!contacts || contacts.length === 0) {
+      return []
+    }
     let data = contacts
     if (filterFunction) {
       data = contacts.filter(filterFunction)
     }
-    this.setState({ data })
-  }
-
-  componentDidMount () {
-    contactsStore.subscribe(this.filterContactList)
-    this.search()
-  }
-
-  componentWillUnmount () {
-    contactsStore.unsubscribe(this.filterContactList)
-  }
-
-  search () {
-    const listFlags = this.props.showVerifiedContacts ? C.DC_GCL_VERIFIED_ONLY : 0
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
-      'getContacts',
-      listFlags,
-      this.state.queryStr
+    data = data.filter(contact =>
+      `${contact.name}${contact.address}${contact.displayName}`.indexOf(this.state.queryStr) !== -1
     )
+    if (this.props.showVerifiedContacts) {
+      data = data.filter(contact => contact.isVerified)
+    }
+    return data
   }
 
   render () {
