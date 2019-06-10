@@ -9,12 +9,14 @@ const contactsStore = new Store(defaultState)
 
 ipcRenderer.on('DD_EVENT_BLOCKED_CONTACTS_UPDATED', (evt, payload) => {
   const { blockedContacts } = payload
-  contactsStore.setState({ blockedContacts })
+  const state = contactsStore.getState()
+  contactsStore.setState({ ...state, blockedContacts })
 })
 
 ipcRenderer.on('DD_EVENT_CONTACTS_UPDATED', (evt, payload) => {
   const { contacts } = payload
-  contactsStore.setState({ contacts })
+  const state = contactsStore.getState()
+  contactsStore.setState({ ...state, contacts })
 })
 
 module.exports = contactsStore
