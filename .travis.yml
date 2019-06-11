@@ -3,15 +3,6 @@ services:
   - docker
 sudo: required
 dist: xenial
-
-addons:
-  homebrew:
-    packages:
-      - meson
-      - libetpan
-      - openssl
-      - coreutils
-    update: true
 os:
   - osx
   - linux
