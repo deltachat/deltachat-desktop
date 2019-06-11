@@ -26,23 +26,5 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
     esac
 fi
 
-if [ $TRAVIS_OS_NAME = linux ]; then
-    CONTAINER_ID=${CONTAINER_ID:-$(docker ps --latest --format='{{.ID}}')}
-    EXEC="docker exec -eDC_ADDR=$DC_ADDR -eDC_MAIL_PW=$DC_MAIL_PW $CONTAINER_ID";
-    EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
-else
-    EXEC=
-    EXEC_ROOT=sudo
-fi
 
-
-$EXEC npm test;
-#if [ $TRAVIS_PULL_REQUEST = false ]; then
-#    $EXEC npm run test-integration;
-#fi
-
-
-# Finally cleanup the running container
-if [ $TRAVIS_OS_NAME = linux ]; then
-    docker kill $CONTAINER_ID;
-fi
+npm test;
