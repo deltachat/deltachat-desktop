@@ -51,6 +51,7 @@ case $TRAVIS_OS_NAME in
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
         
         # Install rust
+        chmod +x ./ci_scripts/shared-image-context/install-rust.sh
         ./ci_scripts/shared-image-context/install-rust.sh
         . ~/.cargo/env
         #if [ "$SYS_DC_CORE" = "true" ]; then
