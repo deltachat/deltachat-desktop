@@ -10,8 +10,6 @@ set -ex
 # runtime.
 DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
-RPGP_VERSION="v0.2.1"
-
 
 # To facilitate running locally, derive some Travis environment
 # variables.
@@ -53,8 +51,7 @@ case $TRAVIS_OS_NAME in
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
         
         # Install rust
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
-            | sh -s -- --default-toolchain nightly -y
+        ./ci_scripts/shared-image-context/install-rust.sh
         . ~/.cargo/env
         #if [ "$SYS_DC_CORE" = "true" ]; then
         #    git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
