@@ -1,6 +1,4 @@
 language: node_js
-services:
-  - docker
 sudo: required
 dist: xenial
 os:
@@ -11,9 +9,6 @@ node_js:
   - 10
 
 env:
-  global:
-    - DOCKER_IMAGE=deltachat/travis-dc-node-base:latest
-
   matrix:
     - DC_CORE_VERSION="master" SYS_DC_CORE="false"
 #    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
@@ -24,8 +19,6 @@ cache:
     - $HOME/.cargo
     - $TRAVIS_BUILD_DIR/target
 
-before_cache:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cleanup;
 
 before_install:
   - ./ci_scripts/ci-prelude.sh

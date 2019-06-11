@@ -8,7 +8,7 @@ RUN true \
     && apt -y upgrade
 
 # Install generic dependencies
-RUN apt -y install curl
+RUN apt -y install curl wget git
 
 # Install nvm & node
 COPY ./install-nvm-node.sh /tmp

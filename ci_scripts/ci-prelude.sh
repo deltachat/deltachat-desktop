@@ -25,9 +25,14 @@ SYS_DC_CORE=${SYS_DC_CORE:-true}
 
 case $TRAVIS_OS_NAME in
     linux)
+        # Install generic dependencies
+        sudo apt -y install curl wget git
+
+        # Install nvm + node
         chmod +x ./ci_scripts/shared-image-context/install-nvm-node.sh
         ./ci_scripts/shared-image-context/install-nvm-node.sh
         
+        # Install rust
         chmod +x ./ci_scripts/shared-image-context/install-rust.sh
         ./ci_scripts/shared-image-context/install-rust.sh
         PATH=/root/.cargo/bin:$PATH
@@ -39,8 +44,6 @@ case $TRAVIS_OS_NAME in
         chmod +x ./ci_scripts/shared-image-context/install-rust.sh
         ./ci_scripts/shared-image-context/install-rust.sh
         . ~/.cargo/env
-
-
         ;;
     *)
         echo "Unknown OS: $TRAVIS_OS_NAME" >&2
