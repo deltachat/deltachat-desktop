@@ -59,7 +59,6 @@ function init (cwd, state, logHandler) {
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
-    dc.updateChatList()
   })
 
   ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))

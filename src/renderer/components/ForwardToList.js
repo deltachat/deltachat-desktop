@@ -1,7 +1,5 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
 const SearchableList = require('./SearchableList')
-const chatListStore = require('../stores/chatList')
 
 const ChatListItem = require('./ChatListItem')
 
@@ -9,39 +7,22 @@ class ForwardToList extends SearchableList {
   constructor (props) {
     super(props)
     this.state.showVerifiedContacts = false
-    this.handleSearch = this.handleSearch.bind(this)
-    this.search = this.search.bind(this)
-    this.filterChatList = this.filterChatList.bind(this)
   }
 
-  filterChatList (chatListState) {
-    const { chatList, filteredChatIdList } = chatListState
-    let data = []
-    chatList.map(chat => {
-      if (filteredChatIdList.indexOf(chat.id) > -1) {
-        data.push(chat)
-      }
-    })
-    this.setState({ data })
-  }
-
-  componentDidMount () {
-    chatListStore.subscribe(this.filterChatList)
-    this.search('')
-  }
-
-  componentWillUnmount () {
-    chatListStore.unsubscribe(this.filterChatList)
-  }
-
-  search (queryStr) {
-    this.setState({ queryStr })
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
-      'getForwardChatList',
-      0,
-      queryStr
+  _getData () {
+    const { filterFunction, chatList } = this.props
+    if (!chatList || chatList.length === 0) {
+      return []
+    }
+    let data = chatList
+    if (filterFunction) {
+      data = chatList.filter(filterFunction)
+    }
+    data = data.filter(chat =>
+      `${chat.name}`.indexOf(this.state.queryStr) !== -1
     )
+    data = data.filter(chat => (!chat.deaddrop && !chat.isArchiveLink))
+    return data
   }
 
   renderItem (chatListItem) {

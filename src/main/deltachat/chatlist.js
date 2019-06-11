@@ -54,12 +54,17 @@ function _chatList (showArchivedChats) {
       chat.deaddrop = this._deadDropMessage(messageId)
     }
 
+    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+      chat.isArchiveLink = true
+    }
+
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     chatList.push({
       id: chat.id,
       summary: list.getSummary(i).toJson(),
       name: chat.name,
       deaddrop: chat.deaddrop,
+      isArchiveLink: chat.isArchiveLink,
       freshMessageCounter: chat.freshMessageCounter,
       profileImage: chat.profileImage,
       color: chat.color,
@@ -69,19 +74,6 @@ function _chatList (showArchivedChats) {
     })
   }
   return chatList
-}
-
-function getForwardChatList (listFlags, query) {
-  if (!this._dc) return []
-  const list = this._dc.getChatList(listFlags, query)
-  let chatIdList = []
-  for (let i = 0; i < list.getCount(); i++) {
-    const chatId = list.getChatId(i)
-    if (chatId !== C.DC_CHAT_ID_DEADDROP) {
-      chatIdList.push(chatId)
-    }
-  }
-  this.sendToRenderer('DD_EVENT_FILTERED_CHATLIST_UPDATED', { chatIdList })
 }
 
 function _getChatById (chatId, loadMessages) {
@@ -172,7 +164,6 @@ module.exports = function () {
   this.searchChats = searchChats.bind(this)
   this.selectChat = selectChat.bind(this)
   this._chatList = _chatList.bind(this)
-  this.getForwardChatList = getForwardChatList.bind(this)
   this._getChatById = _getChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)

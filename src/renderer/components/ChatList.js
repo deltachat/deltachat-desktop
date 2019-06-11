@@ -1,5 +1,4 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
@@ -113,7 +112,7 @@ class ChatList extends React.Component {
               const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
 
               // Don't show freshMessageCounter on selected chat
-              if (chatListItem.id === C.DC_CHAT_ID_DEADDROP) {
+              if (chatListItem.deaddrop) {
                 const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
                 return (
                   <ContactRequestItemWrapper key={i}>
@@ -131,7 +130,7 @@ class ChatList extends React.Component {
                       unreadCount={chatListItem.freshMessageCounter}
                     />
                   </ContactRequestItemWrapper>)
-              } else if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+              } else if (chatListItem.isArchiveLink) {
                 return (
                   <ArchivedChats key={chatListItem.id}>
                     <ChatListItem

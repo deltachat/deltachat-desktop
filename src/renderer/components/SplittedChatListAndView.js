@@ -54,6 +54,7 @@ class SplittedChatListAndView extends React.Component {
       media: false,
       selectedChat: null,
       chatList: [],
+      filteredChatList: [],
       showArchivedChats: false
     }
 
@@ -67,9 +68,6 @@ class SplittedChatListAndView extends React.Component {
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
-    this.search = debounce(() => {
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'searchChats', this.state.queryStr)
-    }, 250)
     this.chatClicked = 0
   }
 
@@ -80,13 +78,14 @@ class SplittedChatListAndView extends React.Component {
   onChatListUpdate (state) {
     const { chatList, showArchivedChats } = state
     this.setState({ chatList, showArchivedChats })
+    this.searchChats(this.state.queryStr)
   }
 
   componentDidMount () {
-    this.searchChats('')
     console.log('componentDidMount', this.state)
     chatStore.subscribe(this.onChatUpdate)
     chatListStore.subscribe(this.onChatListUpdate)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
   }
 
   componentWillUnmount () {
@@ -120,8 +119,15 @@ class SplittedChatListAndView extends React.Component {
   }
 
   searchChats (queryStr) {
+    const { chatList } = this.state
+    let filteredChatList = chatList
     this.setState({ queryStr })
-    this.search()
+    if (queryStr.length > 0) {
+      filteredChatList = filteredChatList.filter(chat =>
+        `${chat.name}`.indexOf(queryStr) !== -1
+      )
+    }
+    this.setState({ filteredChatList })
   }
 
   handleSearchChange (event) {
@@ -134,7 +140,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   render () {
-    let { selectedChat, chatList, showArchivedChats } = this.state
+    let { selectedChat, filteredChatList, showArchivedChats } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage
@@ -185,7 +191,7 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            chatList={chatList}
+            chatList={filteredChatList}
             showArchivedChats={showArchivedChats}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}

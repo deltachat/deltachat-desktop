@@ -4,7 +4,6 @@ const chatStore = require('./chat')
 
 const defaultState = {
   chatList: [],
-  filteredChatIdList: [],
   showArchivedChats: false
 }
 const chatListStore = new Store(defaultState)
@@ -13,21 +12,18 @@ const chatListStore = new Store(defaultState)
 const DC_TEXT1_DRAFT = 1
 
 function sortChatList (first, second) {
+  if (first.deaddrop) {
+    return -1
+  }
+  if (first.isArchiveLink) {
+    return 1
+  }
   return first.summary.timestamp > second.summary.timestamp ? -1 : 1
 }
 
 // complete update of chat list
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
-  console.log('DD_EVENT_CHATLIST_UPDATED', payload)
   chatListStore.setState(payload)
-})
-
-// update of filtered chat list
-ipcRenderer.on('DD_EVENT_FILTERED_CHATLIST_UPDATED', (evt, payload) => {
-  console.log('DD_EVENT_FILTERED_CHATLIST_UPDATED', payload)
-  const { chatIdList } = payload
-  const listState = chatListStore.getState()
-  chatListStore.setState({ ...listState, filteredChatIdList: chatIdList })
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
@@ -35,18 +31,17 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   if (eventType === 'DC_EVENT_INCOMING_MSG' || eventType === 'DC_EVENT_MSGS_CHANGED') {
     const listState = chatListStore.getState()
     const selectedChat = chatStore.getState()
-    if (chatId === selectedChat.id) {
-      console.log('Incoming message for current chat')
-      // new message in selected chat should not increase unread messages
-      return
-    }
     const chat = listState.chatList.find(chat => chat.id === chatId)
     if (!chat) {
       return
     }
+    let freshMessageCounter = chat.freshMessageCounter
+    if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
+      freshMessageCounter++
+    }
     const updatedChat = {
       ...chat,
-      freshMessageCounter: chat.freshMessageCounter + 1,
+      freshMessageCounter: freshMessageCounter,
       summary: messageObj.msg.summary
     }
     let chatList = listState.chatList.map(chat => {
