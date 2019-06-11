@@ -10,7 +10,7 @@ set -ex
 # runtime.
 DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
-RPGP_VERSION="0.2.1"
+RPGP_VERSION="v0.2.0-alpha"
 
 
 # To facilitate running locally, derive some Travis environment
