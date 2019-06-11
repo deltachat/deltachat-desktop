@@ -24,10 +24,6 @@ SYS_DC_CORE=${SYS_DC_CORE:-true}
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
 
-# Use correct node version
-chmod +x ./ci_scripts/shared-image-context/nvm-use.sh
-./ci_scripts/shared-image-context/nvm-use.sh
-
 # Install rust
 chmod +x ./ci_scripts/shared-image-context/install-rust.sh
 ./ci_scripts/shared-image-context/install-rust.sh
