@@ -4,12 +4,9 @@
 @import 'global';
 
 // Components
-@import 'progress';
-@import 'modal';
 @import 'lightbox';
 @import 'recorder';
 @import 'emoji';
-@import 'settings';
 
 // Build the main view
 @import 'index';
@@ -17,7 +14,3 @@
 
 // New CSS
 @import 'modules/index';
-
-// Installer
-@import 'options';
-
