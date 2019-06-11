@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# Build deltachat-node itself.
-
-# On linux this uses the latest created docker container, which works
-# fine on the CI build but may be the wrong continer if you are doing
-# things somewhere else.  Set CONTAINER_ID to the correct container to
-# avoid using the latest created container.
+# This ci step actually installs all node/npm dependencies for deltachat-desktop
+# and builds desktop.
 
 set -ex
 
