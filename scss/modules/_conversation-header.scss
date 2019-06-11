@@ -120,26 +120,6 @@
   vertical-align: text-bottom;
 }
 
-.module-conversation-header__expiration {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
-.module-conversation-header__expiration__clock-icon {
-  @include color-svg('../images/timer.svg', $color-light-60);
-  height: 20px;
-  width: 20px;
-  display: inline-block;
-}
-
-.module-conversation-header__expiration__setting {
-  margin-left: 5px;
-  text-align: center;
-}
-
 .module-conversation-header__gear-icon {
   @include color-svg('../images/gear.svg', $color-light-60);
   height: 20px;

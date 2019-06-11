@@ -1,6 +1,5 @@
 const React = require('react')
 const classNames = require('classnames')
-const { ExpireTimer } = require('./ExpireTimer')
 const Timestamp = require('./Timestamp')
 const Attachment = require('../Attachment')
 
@@ -12,8 +11,6 @@ class MessageMetaData extends React.Component {
       attachment,
       collapseMetadata,
       direction,
-      expirationLength,
-      expirationTimestamp,
       status,
       text,
       timestamp
@@ -72,14 +69,6 @@ class MessageMetaData extends React.Component {
             module='module-message__metadata__date'
           />
         )}
-        {expirationLength && expirationTimestamp ? (
-          <ExpireTimer
-            direction={direction}
-            expirationLength={expirationLength}
-            expirationTimestamp={expirationTimestamp}
-            withImageNoCaption={withImageNoCaption}
-          />
-        ) : null}
         <span className='module-message__metadata__spacer' />
         {direction === 'outgoing' && status !== 'error' ? (
           <div
