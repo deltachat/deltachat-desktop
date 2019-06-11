@@ -1,19 +1,21 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.10
 
-ENV BUILDER_NAME="ubuntu-16_04-rpgp"
+ENV BUILDER_NAME="ubuntu-18_10"
 
 # Update system
 RUN true \
     && apt update \
     && apt -y upgrade
 
+# Install generic dependencies
+RUN apt -y install curl
 
 # Install nvm & node
 COPY ./install-nvm-node.sh /tmp
 RUN chmod +x ./tmp/install-nvm-node.sh && /tmp/install-nvm-node.sh
 
 # Install dependencies for deltachat-node
-RUN apt -y install python
+RUN apt -y install python2
 
 # Install rust
 COPY ./install-rust.sh /tmp

@@ -10,7 +10,7 @@ set -ex
 # runtime.
 DOCKER_IMAGE=${DOCKER_IMAGE:-deltachat/travis-dc-node-base:latest}
 DC_CORE_VERSION=${DC_CORE_VERSION:-master}
-RPGP_VERSION="v0.2.0-alpha"
+RPGP_VERSION="v0.2.1"
 
 
 # To facilitate running locally, derive some Travis environment
@@ -37,40 +37,32 @@ case $TRAVIS_OS_NAME in
         CONTAINER_ID=$(docker run -d -v/etc/passwd:/etc/passwd:ro -u$(id -u):$(id -g) -v$(pwd):/work -w/work -eHOME=/work $DOCKER_IMAGE)
         EXEC="docker exec $CONTAINER_ID";
         EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
-        if [ "$SYS_DC_CORE" = "true" ]; then
-            $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-            $EXEC meson -Drpgp=true deltachat-core-build deltachat-core-src
-            $EXEC ninja -v -C deltachat-core-build
-            $EXEC_ROOT ninja -v -C deltachat-core-build install
-            $EXEC_ROOT ldconfig -v
-            $EXEC rm -rf deltachat-core-build deltachat-core-src
-        fi
+
+        # $SYS_DC_CORE is currently disabled because rust core doesn't allow
+        # a system wide installation
+        #if [ "$SYS_DC_CORE" = "true" ]; then
+        #    $EXEC git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
+        #    $EXEC meson -Drpgp=true deltachat-core-build deltachat-core-src
+        #    $EXEC ninja -v -C deltachat-core-build
+        #    $EXEC_ROOT ninja -v -C deltachat-core-build install
+        #    $EXEC_ROOT ldconfig -v
+        #    $EXEC rm -rf deltachat-core-build deltachat-core-src
+        #fi
         ;;
     osx)
-        # Install cyrus sasl
-        ./ci_scripts/shared-image-context/build-install-sasl.sh --with-openssl=/usr/local/opt/openssl
-
         export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
         
         # Install rust
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
             | sh -s -- --default-toolchain nightly -y
         . ~/.cargo/env
-
-        # Install rpgp
-        git clone -b $RPGP_VERSION https://github.com/rpgp/rpgp.git
-        pushd rpgp/pgp-ffi
-        make install
-        popd
-
-
-        if [ "$SYS_DC_CORE" = "true" ]; then
-            git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
-            meson -Drpgp=true deltachat-core-build deltachat-core-src
-            ninja -v -C deltachat-core-build
-            sudo ninja -v -C deltachat-core-build install
-        fi
-        rm -rf deltachat-core-build deltachat-core-src cyrus-sasl-*
+        #if [ "$SYS_DC_CORE" = "true" ]; then
+        #    git clone --branch=$DC_CORE_VERSION https://github.com/deltachat/deltachat-core deltachat-core-src
+        #    meson -Drpgp=true deltachat-core-build deltachat-core-src
+        #    ninja -v -C deltachat-core-build
+        #    sudo ninja -v -C deltachat-core-build install
+        #fi
+        #rm -rf deltachat-core-build deltachat-core-src cyrus-sasl-*
         ;;
     *)
         echo "Unknown OS: $TRAVIS_OS_NAME" >&2

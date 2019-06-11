@@ -1,11 +1,14 @@
 FROM ubuntu:19.10
 
-ENV BUILDER_NAME="ubuntu-19_10-rpgp"
+ENV BUILDER_NAME="ubuntu-19_10"
 
 # Update system
 RUN true \
     && apt update \
     && apt -y upgrade
+
+# Install generic dependencies
+RUN apt -y install curl
 
 # Install nvm & node
 COPY ./install-nvm-node.sh /tmp
@@ -18,3 +21,6 @@ RUN apt -y install python2
 COPY ./install-rust.sh /tmp
 RUN chmod +x ./tmp/install-rust.sh && /tmp/install-rust.sh
 ENV PATH=/root/.cargo/bin:$PATH
+
+# Install dependencies for electron builder
+RUN apt -y install binutils
