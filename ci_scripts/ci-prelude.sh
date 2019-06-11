@@ -22,30 +22,19 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
 fi
 SYS_DC_CORE=${SYS_DC_CORE:-true}
 
+export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
 
-case $TRAVIS_OS_NAME in
-    linux)
-        # Install generic dependencies
-        sudo apt -y install curl wget git
+# Use correct node version
+chmod +x ./ci_scripts/shared-image-context/nvm-use.sh
+./ci_scripts/shared-image-context/nvm-use.sh
 
-        # Install nvm + node
-        chmod +x ./ci_scripts/shared-image-context/install-nvm-node.sh
-        ./ci_scripts/shared-image-context/install-nvm-node.sh
-        
-        # Install rust
-        chmod +x ./ci_scripts/shared-image-context/install-rust.sh
-        ./ci_scripts/shared-image-context/install-rust.sh
-        PATH=/root/.cargo/bin:$PATH
-        ;;
-    osx)
-        export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-        
-        # Install rust
-        chmod +x ./ci_scripts/shared-image-context/install-rust.sh
-        ./ci_scripts/shared-image-context/install-rust.sh
-        . ~/.cargo/env
-        ;;
-    *)
-        echo "Unknown OS: $TRAVIS_OS_NAME" >&2
-        exit 1
-esac
+# Install rust
+chmod +x ./ci_scripts/shared-image-context/install-rust.sh
+./ci_scripts/shared-image-context/install-rust.sh
+
+# Include rust tools in PATH
+if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+  PATH=/root/.cargo/bin:$PATH
+else
+  . ~/.cargo/env
+fi

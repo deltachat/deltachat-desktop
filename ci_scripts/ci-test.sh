@@ -26,5 +26,4 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
     esac
 fi
 
-
 npm test;
