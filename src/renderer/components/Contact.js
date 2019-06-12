@@ -5,7 +5,7 @@ const DCConstants = require('deltachat-node/constants')
 function convertContactProps (contact) {
   return {
     name: contact.name,
-    phoneNumber: contact.address,
+    email: contact.address,
     avatarPath: contact.profileImage,
     profileName: contact.displayName,
     isMe: contact.id === DCConstants.DC_CONTACT_ID_SELF,

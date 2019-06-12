@@ -40,13 +40,13 @@ class ContactListItem extends React.Component {
       name,
       onClick,
       isMe,
-      phoneNumber,
+      email,
       profileName,
       verified
     } = this.props
     const tx = window.translate
 
-    const title = name || phoneNumber
+    const title = name || email
     const displayName = isMe ? tx('me_desktop') : title
 
     const profileElement =
@@ -79,7 +79,7 @@ class ContactListItem extends React.Component {
             ) : null}
             {showVerified ? ` ${tx('verified_desktop')}` : null}
             {showVerified && showNumber ? ' ∙ ' : null}
-            {showNumber ? phoneNumber : null}
+            {showNumber ? email : null}
           </div>
         </div>
       </div>

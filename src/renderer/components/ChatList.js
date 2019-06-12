@@ -120,9 +120,9 @@ class ChatList extends React.Component {
                     <ChatListItem
                       className='contactrequest'
                       name={name}
-                      phoneNumber={chatListItem.summary.text1}
                       lastUpdated={lastUpdated}
                       lastMessage={{
+                        text1: chatListItem.summary.text1,
                         text2: chatListItem.summary.text2,
                         status: 'delivered'
                       }}
@@ -145,7 +145,7 @@ class ChatList extends React.Component {
                   <ChatListItem
                     key={chatListItem.id}
                     onClick={this.props.onChatClick.bind(null, chatListItem.id)}
-                    phoneNumber={chatListItem.summary.text1}
+                    email={chatListItem.summary.text1}
                     name={chatListItem.name}
                     avatarPath={chatListItem.profileImage}
                     color={chatListItem.color}
