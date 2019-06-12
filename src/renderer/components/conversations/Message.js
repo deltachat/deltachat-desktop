@@ -164,7 +164,7 @@ class Message extends React.Component {
     return (
       <div className='module-message__author'>
         <ContactName
-          phoneNumber={authorAddress}
+          email={authorAddress}
           name={authorName}
           profileName={authorProfileName}
           module='module-message__author'

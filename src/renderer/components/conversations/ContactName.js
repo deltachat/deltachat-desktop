@@ -2,10 +2,10 @@ const React = require('react')
 
 class ContactName extends React.Component {
   render () {
-    const { phoneNumber, name, profileName, module, color } = this.props
+    const { email, name, profileName, module, color } = this.props
     const prefix = module || 'module-contact-name'
 
-    const title = name || phoneNumber
+    const title = name || email
     const shouldShowProfile = Boolean(profileName && !name)
     const profileElement = shouldShowProfile ? (
       <span className={`${prefix}__profile-name`} style={{ color: color }}>

@@ -90,7 +90,7 @@ class ChatListItem extends React.Component {
       unreadCount,
       lastUpdated,
       name,
-      phoneNumber,
+      email,
       profileName
     } = this.props
 
@@ -107,7 +107,7 @@ class ChatListItem extends React.Component {
           {this.renderVerified()}
           {this.renderGroupIcon()}
           <ContactName
-            phoneNumber={phoneNumber}
+            email={email}
             name={name}
             profileName={profileName}
           />

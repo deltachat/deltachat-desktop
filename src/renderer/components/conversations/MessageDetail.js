@@ -11,7 +11,7 @@ function getInitial (name) {
 class MessageDetail extends React.Component {
   renderAvatar (contact) {
     const tx = window.translate
-    const { avatarPath, color, phoneNumber, name, profileName } = contact
+    const { avatarPath, color, email, name, profileName } = contact
 
     if (!avatarPath) {
       const initial = getInitial(name || '')
@@ -29,7 +29,7 @@ class MessageDetail extends React.Component {
       )
     }
 
-    const title = `${name || phoneNumber}${
+    const title = `${name || email}${
       !name && profileName ? ` ~${profileName}` : ''
     }`
 
@@ -88,12 +88,12 @@ class MessageDetail extends React.Component {
     ) : null
 
     return (
-      <div key={contact.phoneNumber} className='module-message-detail__contact'>
+      <div key={contact.email} className='module-message-detail__contact'>
         {this.renderAvatar(contact)}
         <div className='module-message-detail__contact__text'>
           <div className='module-message-detail__contact__name'>
             <ContactName
-              phoneNumber={contact.phoneNumber}
+              email={contact.email}
               name={contact.name}
               profileName={contact.profileName}
             />
