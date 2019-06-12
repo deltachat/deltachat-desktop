@@ -1,4 +1,6 @@
 #/bin/bash
 set -xe
 
-nvm install v10
+NODE_VERSION='v10'
+
+nvm install $NODE_VERSION

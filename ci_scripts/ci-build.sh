@@ -21,8 +21,6 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
             exit 1
     esac
 fi
-SYS_DC_CORE=${SYS_DC_CORE:-true}
-
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
 npm install;

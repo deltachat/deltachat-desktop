@@ -1,5 +1,6 @@
 #/bin/bash
 set -xe
+RUST_VERSION='nightly-2019-03-23'
 
-curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-2019-03-23 -y
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain $RUST_VERSION -y
 
