@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# Build deltachat-node itself.
-
-# On linux this uses the latest created docker container, which works
-# fine on the CI build but may be the wrong continer if you are doing
-# things somewhere else.  Set CONTAINER_ID to the correct container to
-# avoid using the latest created container.
+# This ci step actually installs all node/npm dependencies for deltachat-desktop
+# and builds desktop.
 
 set -ex
 
@@ -25,18 +21,7 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
             exit 1
     esac
 fi
-SYS_DC_CORE=${SYS_DC_CORE:-true}
-
-
-if [ $TRAVIS_OS_NAME = linux ]; then
-    CONTAINER_ID=${CONTAINER_ID:-$(docker ps --latest --format='{{.ID}}')}
-    EXEC="docker exec $CONTAINER_ID";
-    EXEC_ROOT="docker exec -u0:0 -eHOME=/ $CONTAINER_ID";
-else
-    EXEC=
-    EXEC_ROOT=sudo
-fi
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
-$EXEC npm install --dc-system-lib=$SYS_DC_CORE;
-$EXEC npm run build;
+npm install;
+npm run build;

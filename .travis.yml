@@ -1,17 +1,6 @@
 language: node_js
-services:
-  - docker
 sudo: required
 dist: xenial
-
-addons:
-  homebrew:
-    packages:
-      - meson
-      - libetpan
-      - openssl
-      - coreutils
-    update: true
 os:
   - osx
   - linux
@@ -19,22 +8,12 @@ os:
 node_js:
   - 10
 
-env:
-  global:
-    - DOCKER_IMAGE=deltachat/travis-dc-node-base:latest
-
-  matrix:
-    - DC_CORE_VERSION="master" SYS_DC_CORE="false"
-#    - DC_CORE_VERSION="master" SYS_DC_CORE="true"
-
 cache:
   directories:
     - $HOME/Library/Caches/Homebrew
     - $HOME/.cargo
     - $TRAVIS_BUILD_DIR/target
 
-before_cache:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cleanup;
 
 before_install:
   - ./ci_scripts/ci-prelude.sh
