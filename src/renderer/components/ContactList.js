@@ -1,5 +1,4 @@
 const React = require('react')
-const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const SearchableList = require('./SearchableList')
 
