@@ -12,6 +12,7 @@ echo "Missing translations:"
 
 main 2>/dev/null | uniq -u
 
+echo
 echo "You need to check these by hand:"
 
-grep -r "tx(" src | grep "tx([^']" 
+grep -nr "tx(" src | grep "tx([^']" 
