@@ -2,7 +2,6 @@ const React = require('react')
 const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
 const styled = require('styled-components').default
-const StyleVariables = require('./style-variables')
 
 const log = require('../../logger').getLogger('renderer/chatView')
 
@@ -23,15 +22,15 @@ const ChatListWrapper = styled.div`
   }
 
   .module-conversation-list-item:hover {
-    background-color: ${StyleVariables.colors.deltaHover}
+    background-color: ${props => props.theme.deltaHover}
   }
 
   .module-conversation-list-item--is-selected {
-    background-color: ${StyleVariables.colors.deltaSelected};
-    color: ${StyleVariables.colors.deltaPrimaryFg};
+    background-color: ${props => props.theme.deltaSelected};
+    color: ${props => props.theme.deltaPrimaryFg};
 
     span.module-contact-name {
-      color: ${StyleVariables.colors.deltaPrimaryFg};
+      color: ${props => props.theme.deltaPrimaryFg};
     }
 
     .module-conversation-list-item__is-group {
@@ -39,7 +38,7 @@ const ChatListWrapper = styled.div`
     }
 
     &:hover {
-      background-color: ${StyleVariables.colors.deltaSelected};
+      background-color: ${props => props.theme.deltaSelected};
     }
   }
 

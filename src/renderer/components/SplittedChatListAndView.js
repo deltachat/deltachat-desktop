@@ -10,7 +10,6 @@ const ChatView = require('./ChatView')
 const SearchInput = require('./SearchInput.js')
 const SettingsContext = require('../contexts/SettingsContext')
 
-const StyleVariables = require('./style-variables')
 const NavbarWrapper = require('./NavbarWrapper')
 
 const chatStore = require('../stores/chat')
@@ -34,7 +33,7 @@ const NavbarGroupName = styled.div`
 const NavbarGroupSubtitle = styled.div`
   font-size: small;
   font-weight: 100;
-  color: ${StyleVariables.colors.deltaPrimaryFgLight};
+  color: ${props => props.theme.deltaPrimaryFgLight};
 `
 
 const Welcome = styled.div`

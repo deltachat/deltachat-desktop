@@ -4,7 +4,6 @@ const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const Message = require('./conversations/Message')
 const { remote, ipcRenderer } = require('electron')
-const StyleVariables = require('./style-variables')
 const moment = require('moment')
 const mime = require('mime-types')
 const filesizeConverter = require('filesize')
@@ -33,10 +32,10 @@ const InfoMessage = styled.div`
     font-style: italic;
     font-weight: bold;
     padding: 7px 14px;
-    background-color: ${StyleVariables.colors.deltaInfoMessageBubbleBg};
+    background-color: ${props => props.theme.deltaInfoMessageBubbleBg};
     border-radius: 10px;
     opacity: 0.44;
-    color: ${StyleVariables.colors.deltaInfoMessageBubbleColor};
+    color: ${props => props.theme.deltaInfoMessageBubbleColor};
   }
 `
 
@@ -78,11 +77,11 @@ const MessageWrapper = styled.div`
   }
 
   .module-message__metadata__date {
-    color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
+    color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
   }
 
   .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
-    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelfStatusColor};
+    background-color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
   }
 
   .module-message__buttons__reply {
