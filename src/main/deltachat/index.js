@@ -21,13 +21,14 @@ class DeltaChatController extends EventEmitter {
   }
 
   loadSplitOuts () {
-    require('./login').bind(this)()
+    require('./autocrypt').bind(this)()
+    require('./backup').bind(this)()
     require('./chatlist').bind(this)()
     require('./chatmethods').bind(this)()
+    require('./locations').bind(this)()
+    require('./login').bind(this)()
     require('./messagelist').bind(this)()
     require('./settings').bind(this)()
-    require('./locations').bind(this)()
-    require('./autocrypt').bind(this)()
   }
 
   logCoreEvent (event, payload) {
