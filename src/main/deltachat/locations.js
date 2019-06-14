@@ -8,6 +8,7 @@ function getLocations (chatId, contactId, timestampFrom, timestampTo) {
 }
 
 module.exports = function () {
+  console.log('xxx2', this)
   this.setLocation = setLocation.bind(this)
   this.getLocations = getLocations.bind(this)
 }

@@ -5,9 +5,30 @@ import {
   Button,
   InputGroup,
   FormGroup,
-  Intent
+  Intent,
+  ProgressBar
 } from '@blueprintjs/core'
 
+export const DeltaBlueButton = styled.div`
+  -webkit-appearance: button-bevel;
+  background-color: transparent;
+  color: ${StyleVariables.colors.deltaFocusBlue};;
+  font-size: 16px;
+  display: block;
+  width: 100%; 
+  margin-top: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+  p {
+    margin-left: 8px;
+    display: -webkit-inline-box;
+    position: relative;
+    font-size: 18px;
+    margin-bottom: 0px;
+    bottom: 3px;
+  }
+`
 export const AdvancedButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
@@ -219,3 +240,14 @@ export const DeltaHeadline = styled.p`
   color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
   font-size: 18px;
   padding: 15px 0 3px;`
+
+export const DeltaProgressBar = function(props) {
+  return (
+    <ProgressBarWrapper>
+      <ProgressBar
+        value={props.progress / 1000}
+        intent={props.intent}
+      />
+    </ProgressBarWrapper>
+  )
+}
