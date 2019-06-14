@@ -4,13 +4,9 @@ const classNames = require('classnames')
 const MessageBody = require('../MessageBody')
 const MessageMetaData = require('./MessageMetaData')
 
-const { getIncrement } = require('./ExpireTimer')
 const ContactName = require('./ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('../Attachment')
-
-const EXPIRATION_CHECK_MINIMUM = 2000
-const EXPIRED_DELAY = 600
 
 class Message extends React.Component {
   constructor (props) {
@@ -20,60 +16,6 @@ class Message extends React.Component {
     this.showMenu = this.showMenu.bind(this)
 
     this.menuTriggerRef = null
-    this.expirationCheckInterval = null
-    this.expiredTimeout = null
-
-    this.state = {
-      expiring: false,
-      expired: false
-    }
-  }
-
-  componentDidMount () {
-    const { expirationLength } = this.props
-    if (!expirationLength) {
-      return
-    }
-
-    const increment = getIncrement(expirationLength)
-    const checkFrequency = Math.max(EXPIRATION_CHECK_MINIMUM, increment)
-
-    this.checkExpired()
-
-    this.expirationCheckInterval = setInterval(() => {
-      this.checkExpired()
-    }, checkFrequency)
-  }
-
-  componentWillUnmount () {
-    if (this.expirationCheckInterval) {
-      clearInterval(this.expirationCheckInterval)
-    }
-    if (this.expiredTimeout) {
-      clearTimeout(this.expiredTimeout)
-    }
-  }
-
-  checkExpired () {
-    const now = Date.now()
-    const { expirationTimestamp, expirationLength } = this.props
-
-    if (!expirationTimestamp || !expirationLength) {
-      return
-    }
-
-    if (now >= expirationTimestamp) {
-      this.setState({
-        expiring: true
-      })
-
-      const setExpired = () => {
-        this.setState({
-          expired: true
-        })
-      }
-      this.expiredTimeout = setTimeout(setExpired, EXPIRED_DELAY)
-    }
   }
 
   renderAvatar () {
@@ -364,23 +306,17 @@ class Message extends React.Component {
       id,
       timestamp
     } = this.props
-    const { expired, expiring } = this.state
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
     //   It needs to be unique.
     const triggerId = String(id || `${authorAddress}-${timestamp}`)
-
-    if (expired) {
-      return null
-    }
 
     return (
       <div
         onContextMenu={this.showMenu}
         className={classNames(
           'module-message',
-          `module-message--${direction}`,
-          expiring ? 'module-message--expired' : null
+          `module-message--${direction}`
         )}
       >
         {this.renderAvatar()}

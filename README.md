@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-<center><img src="screenshot.png"/></center>
+<center><img src="README_ASSETS/screenshot.png"/></center>
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
@@ -171,7 +171,7 @@ Mac: ~/Library/Application Support/DeltaChat/logs
 
 You can also access the log folder and the current log file under the `View->Developer` menu:
 
-<center><img src="devMenu.png"/></center>
+<center><img src="README_ASSETS/devMenu.png"/></center>
 
 ##### Format
 
