@@ -4,7 +4,7 @@ const chatStore = require('./chat')
 
 const defaultState = {
   chatList: [],
-  showArchivedChats: false
+  archivedChatList: []
 }
 const chatListStore = new Store(defaultState)
 
@@ -23,7 +23,13 @@ function sortChatList (first, second) {
 
 // complete update of chat list
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
-  chatListStore.setState(payload)
+  const { chatList, showArchivedChats } = payload
+  const state = chatListStore.getState()
+  if (showArchivedChats) {
+    chatListStore.setState({ ...state, archivedChatList: chatList })
+  } else {
+    chatListStore.setState({ ...state, chatList })
+  }
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
