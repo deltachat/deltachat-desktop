@@ -72,6 +72,7 @@ class KeyTransfer extends React.Component {
       loading: false,
       key: false
     }
+    this.onClose = this.onClose.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.initiateKeyTransferResp = this.initiateKeyTransferResp.bind(this)
   }
@@ -88,26 +89,32 @@ class KeyTransfer extends React.Component {
     ipcRenderer.removeListener('initiateKeyTransferResp', this.initiateKeyTransferResp)
   }
 
+  onClose () {
+    const { onClose } = this.props
+    this.setState({ key: null })
+    onClose()
+  }
+
   initiateKeyTransfer () {
     ipcRenderer.send('initiateKeyTransfer')
     this.setState({ loading: true })
   }
 
   render () {
-    const { isOpen, onClose } = this.props
+    const { isOpen } = this.props
     const { loading, key } = this.state
     const tx = window.translate
 
     let body
     if (loading) body = <KeyLoadingPanel />
-    else if (key) body = <KeyViewPanel autocryptKey={key} onClose={onClose} />
+    else if (key) body = <KeyViewPanel autocryptKey={key} onClose={this.onClose} />
     else body = <InitiatePanel onClick={this.initiateKeyTransfer} />
     return (
       <Dialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
         icon='exchange'
-        onClose={onClose}
+        onClose={this.onClose}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
           {body}
