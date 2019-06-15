@@ -54,12 +54,17 @@ function _chatList (showArchivedChats) {
       chat.deaddrop = this._deadDropMessage(messageId)
     }
 
+    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+      chat.isArchiveLink = true
+    }
+
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     chatList.push({
       id: chat.id,
       summary: list.getSummary(i).toJson(),
       name: chat.name,
       deaddrop: chat.deaddrop,
+      isArchiveLink: chat.isArchiveLink,
       freshMessageCounter: chat.freshMessageCounter,
       profileImage: chat.profileImage,
       color: chat.color,

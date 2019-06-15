@@ -4,7 +4,7 @@ const styled = require('styled-components').default
 
 const confirmation = require('./dialogs/confirmationDialog')
 const { RenderContact } = require('./Contact')
-const blockedContactsStore = require('../stores/blockedContacts')
+const contactsStore = require('../stores/contacts')
 
 const {
   Alignment,
@@ -29,18 +29,20 @@ class UnblockContacts extends React.Component {
     }
   }
 
-  onContactsUpdate (blockedContacts) {
-    this.setState({ blockedContacts: blockedContacts })
+  onContactsUpdate (contactState) {
+    const { blockedContacts } = contactState
+    this.setState({ blockedContacts })
   }
 
   componentDidMount () {
-    this.setState({ selectedChat: blockedContactsStore.getState() })
-    blockedContactsStore.subscribe(this.onContactsUpdate)
+    const { blockedContacts } = contactsStore.getState()
+    this.setState({ blockedContacts })
+    contactsStore.subscribe(this.onContactsUpdate)
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateBlockedContacts')
   }
 
   componentWillUnmount () {
-    blockedContactsStore.unsubscribe(this.onContactsUpdate)
+    contactsStore.unsubscribe(this.onContactsUpdate)
   }
 
   onContactClick (contact) {

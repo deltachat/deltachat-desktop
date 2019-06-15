@@ -1,7 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
-const debounce = require('debounce')
 
 const Media = require('./Media')
 const Menu = require('./Menu')
@@ -54,6 +53,8 @@ class SplittedChatListAndView extends React.Component {
       media: false,
       selectedChat: null,
       chatList: [],
+      archivedChatList: [],
+      filteredChatList: [],
       showArchivedChats: false
     }
 
@@ -67,9 +68,6 @@ class SplittedChatListAndView extends React.Component {
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
-    this.search = debounce(() => {
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'searchChats', this.state.queryStr)
-    }, 250)
     this.chatClicked = 0
   }
 
@@ -78,15 +76,16 @@ class SplittedChatListAndView extends React.Component {
   }
 
   onChatListUpdate (state) {
-    const { chatList, showArchivedChats } = state
-    this.setState({ chatList, showArchivedChats })
+    const { chatList, archivedChatList } = state
+    this.setState({ chatList, archivedChatList })
+    this.searchChats(this.state.queryStr)
   }
 
   componentDidMount () {
-    this.searchChats('')
     console.log('componentDidMount', this.state)
     chatStore.subscribe(this.onChatUpdate)
     chatListStore.subscribe(this.onChatListUpdate)
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
   }
 
   componentWillUnmount () {
@@ -94,8 +93,9 @@ class SplittedChatListAndView extends React.Component {
     chatListStore.unsubscribe(this.onChatListUpdate)
   }
 
-  showArchivedChats (show) {
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'showArchivedChats', show)
+  showArchivedChats (showArchivedChats) {
+    this.setState({ showArchivedChats })
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'showArchivedChats', showArchivedChats)
   }
 
   onChatClick (chatId) {
@@ -120,8 +120,18 @@ class SplittedChatListAndView extends React.Component {
   }
 
   searchChats (queryStr) {
+    const { chatList, archivedChatList, showArchivedChats } = this.state
+    let filteredChatList = chatList
+    if (showArchivedChats) {
+      filteredChatList = archivedChatList
+    }
     this.setState({ queryStr })
-    this.search()
+    if (queryStr.length > 0) {
+      filteredChatList = filteredChatList.filter(chat =>
+        `${chat.name}`.indexOf(queryStr) !== -1
+      )
+    }
+    this.setState({ filteredChatList })
   }
 
   handleSearchChange (event) {
@@ -134,7 +144,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   render () {
-    let { selectedChat, chatList, showArchivedChats } = this.state
+    let { selectedChat, filteredChatList, showArchivedChats } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage
@@ -185,7 +195,7 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            chatList={chatList}
+            chatList={filteredChatList}
             showArchivedChats={showArchivedChats}
             onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
