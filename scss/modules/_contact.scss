@@ -4,96 +4,6 @@
   font-style: italic;
 }
 
-// Module: Embedded Contact
-
-.module-embedded-contact {
-  // Cursor is always a pointer because this component is always wired up to the contact detail screen
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-}
-
-.module-embedded-contact--with-content-above {
-  padding-top: 4px;
-}
-
-.module-embedded-contact--with-content-below {
-  padding-bottom: 4px;
-}
-
-.module-embedded-contact__image-container {
-  flex: initial;
-  min-width: 50px;
-  width: 50px;
-  height: 50px;
-
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  object-fit: cover;
-
-  img {
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.module-embedded-contact__image-container__default-avatar {
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  background-color: $color-conversation-grey;
-  color: $color-white;
-  font-size: 25px;
-  line-height: 52px;
-}
-
-.module-embedded-contact__text-container {
-  flex-grow: 1;
-  margin-left: 8px;
-
-  max-width: calc(100% - 58px);
-}
-
-.module-embedded-contact__contact-name {
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 300;
-  margin-top: 6px;
-  color: $color-light-90;
-
-  max-width: 100%;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-}
-
-.module-embedded-contact__contact-name--incoming {
-  color: $color-white;
-}
-
-.module-embedded-contact__contact-method {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
-  margin-top: 3px;
-  color: $color-light-60;
-
-  max-width: 100%;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-}
-
-.module-embedded-contact__contact-method--incoming {
-  color: $color-white-07;
-}
-
 // Module: Contact Detail
 
 .module-contact-detail {
@@ -125,7 +35,7 @@
   width: 100%;
   height: 100%;
   background-color: $color-conversation-grey;
-  color: $color-white;
+  color: var(--color-white);
   font-size: 50px;
   line-height: 82px;
 }
@@ -149,7 +59,7 @@
   padding: 6px;
   margin-top: 20px;
 
-  color: $color-white;
+  color: var(--color-white);
 
   flex-direction: column;
   align-items: center;

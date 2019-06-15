@@ -1,6 +1,8 @@
+const styled = require('styled-components').default
 const React = require('react')
 const StyledThemeProvider = require('styled-components').ThemeProvider
 const { EventEmitter } = require('events')
+var Color = require('color')
 
 const defaultTheme = Object.freeze({
   deltaPrimaryBg: '#415e6b',
@@ -16,7 +18,11 @@ const defaultTheme = Object.freeze({
   deltaInfoMessageBubbleColor: 'white',
   deltaChatMessageBubbleSelfStatusColor: '#4caf50',
   deltaFocusBlue: '#42A5F5',
-  deltaSelected: '#4c6e7d' // same as deltaPrimaryBgLight
+  deltaSelected: '#4c6e7d', // same as deltaPrimaryBgLight
+  signalBlue: '#2090ea',
+  outgoingMessagePadlock: '#4caf50',
+  coreRed: '#f44336',
+  colorWhite: '#ffffff'
 })
 
 class ThemeManager extends EventEmitter {
@@ -40,6 +46,14 @@ class ThemeManager extends EventEmitter {
 }
 
 const manager = new ThemeManager()
+
+const ScssVarOverwrite = styled.div`
+  --color-signal-blue: ${props => props.theme.signalBlue};
+  --color-outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
+  --color-core-red: ${props => props.theme.coreRed};
+  --color-white: ${props => props.theme.colorWhite};
+  --color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7)};
+`
 
 class ThemeProvider extends React.Component {
   constructor () {
@@ -65,7 +79,9 @@ class ThemeProvider extends React.Component {
 
   render () {
     return <StyledThemeProvider theme={this.state.theme}>
-      {this.props.children}
+      <ScssVarOverwrite>
+        {this.props.children}
+      </ScssVarOverwrite>
     </StyledThemeProvider>
   }
 }

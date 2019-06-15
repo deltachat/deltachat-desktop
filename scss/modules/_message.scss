@@ -133,7 +133,7 @@
   display: inline-block;
   position: absolute;
   bottom: 4px;
-  @include color-svg('../images/error.svg', $color-core-red);
+  @include color-svg('../images/error.svg', var(--color-core-red));
 }
 
 .module-message__error--outgoing {
@@ -208,7 +208,7 @@
   border-radius: 16px;
   overflow: hidden;
 
-  background-color: $color-white;
+  background-color: var(--color-white);
 }
 
 .module-message__attachment-container--with-content-below {
@@ -303,7 +303,7 @@
 }
 
 .module-message__broken-image--incoming {
-  color: $color-white;
+  color: var(--color-white);
 }
 
 .module-message__video-overlay__circle {
@@ -314,7 +314,7 @@
 
   width: 48px;
   height: 48px;
-  background-color: $color-white;
+  background-color: var(--color-white);
   border-radius: 24px;
 }
 
@@ -326,7 +326,7 @@
 
   height: 36px;
   width: 36px;
-  @include color-svg('../images/play.svg', $color-signal-blue);
+  @include color-svg('../images/play.svg', var(--color-signal-blue));
 }
 
 .module-message__broken-video-screenshot {
@@ -343,7 +343,7 @@
 }
 
 .module-message__broken-video-screenshot--incoming {
-  color: $color-white;
+  color: var(--color-white);
 }
 
 .module-message__audio-attachment {
@@ -428,7 +428,7 @@
 }
 
 .module-message__generic-attachment__file-name--incoming {
-  color: $color-white;
+  color: var(--color-white);
 }
 
 .module-message__generic-attachment__file-size {
@@ -440,11 +440,11 @@
 }
 
 .module-message__generic-attachment__file-size--incoming {
-  color: $color-white;
+  color: var(--color-white);
 }
 
 .module-message__author {
-  color: $color-white;
+  color: var(--color-white);
   font-size: 13px;
   font-weight: 300;
   line-height: 18px;
@@ -477,10 +477,10 @@
 }
 
 .module-message__text--incoming {
-  color: $color-white;
+  color: var(--color-white);
   a {
     text-decoration: underline;
-    color: $color-white;
+    color: var(--color-white);
   }
 }
 
@@ -524,10 +524,10 @@
   text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
-  color: $color-white-07;
+  color: var(--color-white-07);
 }
 .module-message__metadata__date--with-image-no-caption {
-  color: $color-white;
+  color: var(--color-white);
 }
 
 .module-message__metadata__spacer {
@@ -547,7 +547,7 @@
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', $color-core-green, 125%);
+  @include color-svg('../images/padlock.svg', var(--color-outgoing-message-padlock), 125%);
 }
 
 .module-message__metadata__status-icon {
@@ -584,7 +584,7 @@
 
 // When status indicators are overlaid on top of an image, they use different colors
 .module-message__metadata__status-icon--with-image-no-caption {
-  background-color: $color-white;
+  background-color: var(--color-white);
 }
 
 .module-message__send-message-button {
@@ -592,7 +592,6 @@
   font-weight: 300;
   font-size: 13px;
   line-height: 18px;
-  color: $color-signal-blue;
   background-color: $color-light-02;
   border: 1px solid $color-black-012;
 
@@ -673,7 +672,7 @@
 .module-message__author-default-avatar__label {
   width: 100%;
   font-size: 18px;
-  color: $color-white;
+  color: var(--color-white);
 }
 
 // All media query widths have 300px added to account for the left pane

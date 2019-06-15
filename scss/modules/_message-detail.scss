@@ -37,8 +37,8 @@
 .module-message-detail__delete-button {
   @include button-reset;
 
-  background-color: $color-core-red;
-  color: $color-white;
+  background-color: var(--color-core-red);
+  color: var(--color-white);
   box-shadow: 0 0 10px -3px rgba(97, 97, 97, 0.7);
   border-radius: 5px;
   border: solid 1px $color-light-35;
@@ -70,7 +70,7 @@
 
   line-height: 44px;
   font-size: 20px;
-  color: $color-white;
+  color: var(--color-white);
   text-align: center;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .module-message-detail__contact__error {
-  color: $color-core-red;
+  color: var(--color-core-red);
   font-weight: 300;
 }
 
@@ -145,7 +145,7 @@
   width: 18px;
 }
 .module-message-detail__contact__status-icon--error {
-  @include color-svg('../images/error.svg', $color-core-red);
+  @include color-svg('../images/error.svg', var(--color-core-red));
 }
 
 .module-message-detail__contact__error-buttons {
@@ -155,14 +155,14 @@
 .module-message-detail__contact__show-safety-number {
   @include button-reset;
   padding: 4px;
-  color: $color-white;
+  color: var(--color-white);
   background-color: $color-light-35;
   border-radius: 4px;
 }
 .module-message-detail__contact__send-anyway {
   @include button-reset;
-  color: $color-white;
-  background-color: $color-core-red;
+  color: var(--color-white);
+  background-color: var(--color-core-red);
   margin-left: 5px;
   margin-top: 5px;
   padding: 4px;

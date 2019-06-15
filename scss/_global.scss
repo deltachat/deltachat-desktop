@@ -86,11 +86,6 @@ button {
   font-size: inherit;
 }
 
-button {
-  /*  This broke emoji mart after update */
-  /* min-width: 200px; */
-}
-
 button.grey {
   border-radius: $border-radius;
   border: solid 1px #ccc;
@@ -184,13 +179,13 @@ $avatar-size: 48px;
   line-height: $avatar-size;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  color: $color-white;
+  color: var(--color-white);
   font-size: 18px;
   background-color: $grey;
 }
 
 .group-info-input {
-  background: $color-white;
+  background: var(--color-white);
 
   .group-avatar {
     display: inline-block;

@@ -16,7 +16,7 @@
 
 .module-conversation-list-item--has-unread {
   padding-left: 12px;
-  border-left: 4px solid $color-signal-blue;
+  border-left: 4px solid var(--color-signal-blue);
 }
 
 .module-conversation-list-item--is-selected {
@@ -153,8 +153,8 @@
 }
 
 .module-conversation-list-item__unread-count {
-  color: $color-white;
-  background-color: $color-signal-blue;
+  color: var(--color-white);
+  background-color: var(--color-signal-blue);
   text-align: center;
 
   // For alignment with the message text
@@ -217,5 +217,5 @@
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--error {
-  @include color-svg('../images/error.svg', $color-core-red);
+  @include color-svg('../images/error.svg', var(--color-core-red));
 }

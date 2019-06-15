@@ -24,7 +24,7 @@
 }
 
 .module-media-gallery__tab--active {
-  border-bottom: 2px solid $color-signal-blue;
+  border-bottom: 2px solid var(--color-signal-blue);
 }
 
 .module-media-gallery__content {
@@ -158,7 +158,7 @@
 
   width: 42px;
   height: 42px;
-  background-color: $color-white;
+  background-color: var(--color-white);
   border-radius: 21px;
 }
 
@@ -170,7 +170,7 @@
 
   height: 36px;
   width: 36px;
-  @include color-svg('../images/play.svg', $color-signal-blue);
+  @include color-svg('../images/play.svg', var(--color-signal-blue));
 }
 
 .module-media-grid-item__icon-video {
