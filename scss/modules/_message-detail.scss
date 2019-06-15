@@ -66,40 +66,12 @@
 }
 
 .module-message-detail__contact__default-avatar {
-  background-color: $color-conversation-grey;
+  background-color: var(--color-conversation-grey);
 
   line-height: 44px;
   font-size: 20px;
   color: var(--color-white);
   text-align: center;
-}
-
-.module-message-detail__contact__default-avatar--blue {
-  background-color: $color-conversation-blue;
-}
-.module-message-detail__contact__default-avatar--cyan {
-  background-color: $color-conversation-cyan;
-}
-.module-message-detail__contact__default-avatar--deep_orange {
-  background-color: $color-conversation-deep_orange;
-}
-.module-message-detail__contact__default-avatar--green {
-  background-color: $color-conversation-green;
-}
-.module-message-detail__contact__default-avatar--indigo {
-  background-color: $color-conversation-indigo;
-}
-.module-message-detail__contact__default-avatar--pink {
-  background-color: $color-conversation-pink;
-}
-.module-message-detail__contact__default-avatar--purple {
-  background-color: $color-conversation-purple;
-}
-.module-message-detail__contact__default-avatar--red {
-  background-color: $color-conversation-red;
-}
-.module-message-detail__contact__default-avatar--teal {
-  background-color: $color-conversation-teal;
 }
 
 .module-message-detail__contact__text {

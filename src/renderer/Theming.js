@@ -22,7 +22,8 @@ const defaultTheme = Object.freeze({
   signalBlue: '#2090ea',
   outgoingMessagePadlock: '#4caf50',
   coreRed: '#f44336',
-  colorWhite: '#ffffff'
+  colorWhite: '#ffffff',
+  converstationGrey: '#505050'
 })
 
 class ThemeManager extends EventEmitter {
@@ -52,7 +53,8 @@ const ScssVarOverwrite = styled.div`
   --color-outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
   --color-core-red: ${props => props.theme.coreRed};
   --color-white: ${props => props.theme.colorWhite};
-  --color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7)};
+  --color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7).toString()};
+  --color-conversation-grey: ${props => props.theme.converstationGrey};
 `
 
 class ThemeProvider extends React.Component {

@@ -35,48 +35,8 @@
 
   text-align: center;
 
-  border: 6px solid lighten($color-conversation-grey, 23);
-  background-color: lighten($color-conversation-grey, 32);
-}
-
-.module-contact-list-item__avatar-default--grey {
-  background-color: lighten($color-conversation-grey, 32);
-}
-.module-contact-list-item__avatar-default--blue {
-  background-color: $color-conversation-blue;
-  border:none;
-}
-.module-contact-list-item__avatar-default--cyan {
-  background-color: $color-conversation-cyan;
-  border:none;
-}
-.module-contact-list-item__avatar-default--deep_orange {
-  background-color: $color-conversation-deep_orange;
-  border:none;
-}
-.module-contact-list-item__avatar-default--green {
-  background-color: $color-conversation-green;
-  border:none;
-}
-.module-contact-list-item__avatar-default--indigo {
-  background-color: $color-conversation-indigo;
-  border:none;
-}
-.module-contact-list-item__avatar-default--pink {
-  background-color: $color-conversation-pink;
-  border:none;
-}
-.module-contact-list-item__avatar-default--purple {
-  background-color: $color-conversation-purple;
-  border:none;
-}
-.module-contact-list-item__avatar-default--red {
-  background-color: $color-conversation-red;
-  border:none;
-}
-.module-contact-list-item__avatar-default--teal {
-  background-color: $color-conversation-teal;
-  border:none;
+  border: 6px solid lighten(#505050, 23);
+  background-color: lighten(#505050, 32);
 }
 
 .module-contact-list-item__avatar-default__label {

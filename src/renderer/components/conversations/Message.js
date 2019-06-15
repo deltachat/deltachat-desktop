@@ -305,7 +305,6 @@ class Message extends React.Component {
   render () {
     const {
       authorAddress,
-      authorColor,
       direction,
       id,
       timestamp
@@ -330,10 +329,7 @@ class Message extends React.Component {
           onContextMenu={this.showMenu}
           className={classNames(
             'module-message__container',
-            `module-message__container--${direction}`,
-            direction === 'incoming'
-              ? `module-message__container--incoming-${authorColor}`
-              : null
+            `module-message__container--${direction}`
           )}
         >
           {this.renderAuthor()}

@@ -154,46 +154,6 @@
   padding-bottom: 10px;
 }
 
-.module-message__container--outgoing {
-  background-color: $color-light-10;
-}
-
-// In case the color gets messed up
-.module-message__container--incoming {
-  background-color: $color-conversation-grey;
-}
-
-.module-message__container--incoming-grey {
-  background-color: $color-conversation-grey;
-}
-.module-message__container--incoming-blue {
-  background-color: $color-conversation-blue;
-}
-.module-message__container--incoming-cyan {
-  background-color: $color-conversation-cyan;
-}
-.module-message__container--incoming-deep_orange {
-  background-color: $color-conversation-deep_orange;
-}
-.module-message__container--incoming-green {
-  background-color: $color-conversation-green;
-}
-.module-message__container--incoming-indigo {
-  background-color: $color-conversation-indigo;
-}
-.module-message__container--incoming-pink {
-  background-color: $color-conversation-pink;
-}
-.module-message__container--incoming-purple {
-  background-color: $color-conversation-purple;
-}
-.module-message__container--incoming-red {
-  background-color: $color-conversation-red;
-}
-.module-message__container--incoming-teal {
-  background-color: $color-conversation-teal;
-}
-
 .module-message__attachment-container {
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
@@ -636,37 +596,6 @@
   text-align: center;
 
   user-select: none;
-}
-
-.module-message__author-default-avatar--grey {
-  background-color: $color-conversation-grey;
-}
-.module-message__author-default-avatar--blue {
-  background-color: $color-conversation-blue;
-}
-.module-message__author-default-avatar--cyan {
-  background-color: $color-conversation-cyan;
-}
-.module-message__author-default-avatar--deep_orange {
-  background-color: $color-conversation-deep_orange;
-}
-.module-message__author-default-avatar--green {
-  background-color: $color-conversation-green;
-}
-.module-message__author-default-avatar--indigo {
-  background-color: $color-conversation-indigo;
-}
-.module-message__author-default-avatar--pink {
-  background-color: $color-conversation-pink;
-}
-.module-message__author-default-avatar--purple {
-  background-color: $color-conversation-purple;
-}
-.module-message__author-default-avatar--red {
-  background-color: $color-conversation-red;
-}
-.module-message__author-default-avatar--teal {
-  background-color: $color-conversation-teal;
 }
 
 .module-message__author-default-avatar__label {

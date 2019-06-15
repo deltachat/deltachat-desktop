@@ -39,35 +39,7 @@
   line-height: 48px;
   text-align: center;
 
-  background-color: $color-conversation-grey;
-}
-
-.module-conversation-list-item__default-avatar--blue {
-  background-color: $color-conversation-blue;
-}
-.module-conversation-list-item__default-avatar--cyan {
-  background-color: $color-conversation-cyan;
-}
-.module-conversation-list-item__default-avatar--deep_orange {
-  background-color: $color-conversation-deep_orange;
-}
-.module-conversation-list-item__default-avatar--green {
-  background-color: $color-conversation-green;
-}
-.module-conversation-list-item__default-avatar--indigo {
-  background-color: $color-conversation-indigo;
-}
-.module-conversation-list-item__default-avatar--pink {
-  background-color: $color-conversation-pink;
-}
-.module-conversation-list-item__default-avatar--purple {
-  background-color: $color-conversation-purple;
-}
-.module-conversation-list-item__default-avatar--red {
-  background-color: $color-conversation-red;
-}
-.module-conversation-list-item__default-avatar--teal {
-  background-color: $color-conversation-teal;
+  background-color: var(--color-conversation-grey);
 }
 
 .module-conversation-list-item__content {
