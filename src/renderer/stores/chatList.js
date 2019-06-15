@@ -12,11 +12,11 @@ const chatListStore = new Store(defaultState)
 const DC_TEXT1_DRAFT = 1
 
 function sortChatList (first, second) {
-  if (first.deaddrop) {
-    return -1
+  if (first.deaddrop || second.deaddrop) {
+    return first.deaddrop ? -1 : 1
   }
-  if (first.isArchiveLink) {
-    return 1
+  if (first.isArchiveLink || second.isArchiveLink) {
+    return first.isArchiveLink ? 1 : -1
   }
   return first.summary.timestamp > second.summary.timestamp ? -1 : 1
 }
