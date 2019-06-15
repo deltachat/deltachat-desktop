@@ -90,9 +90,8 @@ class KeyTransfer extends React.Component {
   }
 
   onClose () {
-    const { onClose } = this.props
     this.setState({ key: null })
-    onClose()
+    this.props.onClose()
   }
 
   initiateKeyTransfer () {
