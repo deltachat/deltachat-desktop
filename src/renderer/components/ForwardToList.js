@@ -19,9 +19,8 @@ class ForwardToList extends SearchableList {
       data = chatList.filter(filterFunction)
     }
     data = data.filter(chat =>
-      `${chat.name}`.indexOf(this.state.queryStr) !== -1
+      `${chat.name}`.indexOf(this.state.queryStr) !== -1 && !chat.deaddrop && !chat.isArchiveLink
     )
-    data = data.filter(chat => (!chat.deaddrop && !chat.isArchiveLink))
     return data
   }
 
