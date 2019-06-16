@@ -30,7 +30,6 @@ class ForwardToList extends SearchableList {
     return <ChatListItem
       key={chatListItem.id}
       onClick={onChatClick.bind(null, chatListItem.id)}
-      phoneNumber={chatListItem.summary.text1}
       name={chatListItem.name}
       avatarPath={chatListItem.profileImage}
       color={chatListItem.color}
