@@ -1,67 +1,11 @@
-.conversation-stack,
-.new-conversation,
-.inbox {
-  height: 100%;
-  overflow: hidden;
-}
-
-.expired {
-  .conversation-stack {
-    height: calc(100% - 48px);
-  }
-}
-
 .scrollable {
   height: 100%;
   overflow: auto;
 }
 
-.network-status-container {
-  .network-status {
-    background: url('../images/error_red.svg') no-repeat left 10px center;
-    background-size: 25px 25px;
-    background-color: #fcd156;
-    padding: 10px;
-    padding-left: 2 * $button-height;
-    display: none;
-
-    .network-status-message {
-      h3 {
-        padding: 0;
-        margin: 0;
-        margin-bottom: 2px;
-      }
-      span {
-        display: inline-block;
-        font-size: 12px;
-        padding: 0.5em 0;
-      }
-    }
-    .action {
-      button {
-        border-radius: $border-radius;
-        border: solid 1px #ccc;
-        cursor: pointer;
-        font-family: inherit;
-        color: white;
-        background: $blue;
-      }
-    }
-  }
-}
-
-.conversation-stack {
-  .conversation {
-    display: none;
-  }
-  .conversation:first-child {
-    display: block;
-  }
-}
-
-$search-x-size: 16px;
-$search-padding-right: 12px;
-$search-padding-left: 30px;
+// $search-x-size: 16px;
+// $search-padding-right: 12px;
+// $search-padding-left: 30px;
 
 // input.search {
 //   border: 1px solid $color-black-02;
@@ -120,11 +64,6 @@ $search-padding-left: 30px;
   display: none;
   cursor: pointer;
   opacity: 0.7;
-  .contact-details .number {
-    display: block;
-    font-style: italic;
-    padding-right: 8px;
-  }
 
   &.valid {
     opacity: 1;
@@ -135,98 +74,5 @@ $search-padding-left: 30px;
   .last-message {
     margin: 6px 0 0;
     font-size: $font-size-small;
-  }
-}
-
-.conversations .unread .contact-details {
-  .name,
-  .last-message,
-  .last-timestamp {
-    font-weight: bold;
-  }
-}
-
-.hint {
-  margin: 10px;
-  padding: 1em;
-  border-radius: $border-radius;
-  color: white;
-  border: 2px dashed white;
-
-  h3 {
-    margin-top: 5px;
-  }
-
-  &.firstRun {
-    position: absolute;
-    top: 0;
-    left: 302px;
-    width: 225px;
-
-    &:before,
-    &:after {
-      content: ' ';
-      display: block;
-      position: absolute;
-      top: 8px;
-      left: -35px;
-      width: 0;
-      height: 0;
-      border: solid 10px white;
-      border-color: transparent white transparent transparent;
-      transform: scaleX(2.5) scaleY(0.75);
-    }
-    &:after {
-      border-color: transparent #2eace0 transparent transparent;
-      left: -30px;
-    }
-  }
-}
-
-.conversation.placeholder {
-  text-align: center;
-  .container {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .content {
-    display: inline-block;
-  }
-
-  h3 {
-    font-size: large;
-  }
-}
-.contact.placeholder {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  background: transparent;
-  color: white;
-  border: 2px dashed white;
-  overflow: visible;
-  p {
-    color: white;
-  }
-  &:before,
-  &:after {
-    content: ' ';
-    display: block;
-    position: absolute;
-    top: -35px;
-    left: 15px;
-    width: 0;
-    height: 0;
-    border: solid 10px white;
-    border-color: transparent transparent white transparent;
-    transform: scaleY(2.5) scaleX(0.75);
-  }
-  &:after {
-    border-color: transparent transparent #2eace0 transparent;
-    top: -30px;
   }
 }

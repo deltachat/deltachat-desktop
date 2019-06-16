@@ -104,10 +104,7 @@ a {
   color: $blue;
 }
 
-.thumbnail {
-  max-width: 50px;
-  max-height: 50px;
-}
+
 
 .file-input {
   position: relative;
@@ -173,57 +170,6 @@ $avatar-size: 48px;
   background-color: $grey;
 }
 
-.group-info-input {
-  background: var(--color-white);
-
-  .group-avatar {
-    display: inline-block;
-    padding: 2px 0px 0px 2px;
-  }
-
-  .file-input .thumbnail,
-  .thumbnail .avatar,
-  img {
-    height: 54px;
-    width: 54px;
-    border-radius: (54px / 2);
-  }
-
-  .thumbnail:after {
-    content: '';
-    position: absolute;
-    height: 0;
-    width: 0;
-    bottom: 0;
-    right: 0;
-    border-bottom: 10px solid $grey;
-    border-left: 10px solid transparent;
-  }
-
-  input.name {
-    padding: 0.5em;
-    border: solid 1px #ccc;
-    border-width: 0 0 1px 0;
-    width: calc(100% - 84px);
-  }
-}
-
-.group-member-list,
-.new-group-update {
-  .summary {
-    margin: 10px;
-  }
-
-  .members .contact {
-    box-shadow: none;
-    border-bottom: 1px solid #eee;
-    .last-message,
-    .last-timestamp {
-      display: none;
-    }
-  }
-}
-
 .SelectGroupImage {
   width: 100px;
 }
@@ -246,116 +192,12 @@ $new-contact-left-margin: 16px;
   margin-left: $new-contact-left-margin;
 }
 
-// Still used for the contact search view
-.contact-details {
-  $left-margin: 12px;
-
-  vertical-align: middle;
-  display: inline-block;
-  margin: 0 0 0 $left-margin;
-  width: calc(
-    100% - #{$avatar-size} - #{$new-contact-left-margin} - #{$left-margin} - #{(
-        4/14
-      ) + em}
-  );
-  text-align: left;
-
-  p {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    height: 1.2em;
-    text-overflow: ellipsis;
-  }
-
-  .name {
-    display: block;
-    margin: 0;
-    font-size: 1em;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    text-align: left;
-  }
-
-  .number {
-    color: var(--color-light-60);
-    font-size: $font-size-small;
-  }
-
-  &.clickable {
-    cursor: pointer;
-  }
-
-  .verified-icon {
-    @include color-svg('../images/verified-check.svg', $grey);
-    display: inline-block;
-    width: 1.25em;
-    height: 1.25em;
-    vertical-align: text-bottom;
-  }
-
-  .body-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.recipients-input {
-  position: relative;
-
-  .recipients-container {
-    background-color: white;
-    padding: 2px;
-    border-bottom: 1px solid #f2f2f2;
-    line-height: 24px;
-  }
-
-  .recipient {
-    display: inline-block;
-    margin: 0 2px 2px 0;
-    padding: 0 5px;
-    border-radius: 10px;
-    background-color: $blue;
-    color: white;
-
-    &.error {
-      background-color: #f00;
-    }
-
-    .remove {
-      margin-left: 5px;
-      padding: 0 2px;
-    }
-  }
-
-  .results {
-    position: absolute;
-    z-index: 10;
-    margin: 0 0 0 20px;
-    width: calc(100% - 30px);
-    max-width: 300px;
-    max-height: 55px * 3;
-    overflow-y: auto;
-    box-shadow: 0px 0px 1px rgba(#aaa, 0.8);
-
-    .contact {
-      cursor: pointer;
-    }
-  }
-}
-
 .attachment-preview {
   display: inline-block;
   position: relative;
   img {
     max-width: 100%;
   }
-}
-.new-conversation .recipients-input .recipients::before {
-  content: 'To: ';
-}
-.new-group-update .recipients-input .recipients::before {
-  content: 'Add: ';
 }
 
 .x {
@@ -390,31 +232,6 @@ input:focus {
   outline: 0 !important;
 }
 
-.expiredAlert {
-  background: #f3f3a7;
-  padding: 10px;
-
-  button {
-    float: right;
-    border: none;
-    border-radius: $border-radius;
-    color: white;
-    font-weight: bold;
-    line-height: 36px;
-    padding: 0 20px;
-    background: $blue;
-    margin-left: 20px;
-  }
-
-  .message {
-    padding: 10px 0;
-  }
-}
-
-.inbox {
-  position: relative;
-}
-
 @keyframes loading {
   50% {
     transform: scale(1);
@@ -425,70 +242,12 @@ input:focus {
   }
 }
 
-.app-loading-screen {
-  z-index: 99;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: white;
-  display: flex;
-  align-items: center;
-
-  .content {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-  .container {
-    margin-left: auto;
-    margin-right: auto;
-    width: 78px;
-    height: 22px;
-  }
-  .message {
-    -webkit-user-select: text;
-    max-width: 35em;
-  }
-
-  .dot {
-    width: 14px;
-    height: 14px;
-    border: 3px solid $blue;
-    border-radius: 50%;
-    float: left;
-    margin: 0 6px;
-    transform: scale(0);
-
-    animation: loading 1500ms ease infinite 0ms;
-    &:nth-child(2) {
-      animation: loading 1500ms ease infinite 333ms;
-    }
-    &:nth-child(3) {
-      animation: loading 1500ms ease infinite 666ms;
-    }
-  }
-}
-
 //yellow/blue border fix
-.inbox:focus,
 button:focus  {
   outline: none;
 }
 button:focus {
   outline: none;
-}
-
-.text-security .inbox {
-  .name,
-  .body,
-  .last-message,
-  .sender,
-  .conversation-title,
-  .number {
-    -webkit-text-security: square;
-  }
 }
 
 ::-webkit-scrollbar {
