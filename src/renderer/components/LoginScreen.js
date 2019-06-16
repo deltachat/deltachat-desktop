@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, Fragment} from 'react'
 import { ipcRenderer, remote } from 'electron'
 import NavbarWrapper from './NavbarWrapper'
 import confirmation from './dialogs/confirmationDialog'
@@ -12,7 +12,8 @@ import {
   Alignment,
   Navbar,
   NavbarGroup,
-  NavbarHeading
+  NavbarHeading,
+  Dialog
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
 
@@ -62,28 +63,21 @@ const LoginItem = styled.li`
   }
 `
 
-export default function LoginScreen (props) {
+function ImportButton(props) {
   const tx = window.translate
+  const [showDialog, setShowDialog] = useState(false)
+  const [importProgress, setImportProgress] = useState(0)
+  const [importState, setImportState] = useState(['IMPORTING'])
   
-  const [importProgress, setImportProgress] = useState(false)
-  function onClickLogin (login) {
-    ipcRenderer.send('login', { addr: login, mail_pw: true })
-  }
-
-  function forgetLogin (login) {
-    const message = tx('forget_login_confirmation_desktop')
-    confirmation(message, (yes) => {
-      if (yes) ipcRenderer.send('forgetLogin', login)
-    })
-  }
-
   function onClickImportBackup() {
     const opts = {
       title: tx('import_backup_title'),
       properties: ['openFile'],
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
     }
+
     ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (progress, err) => {
+      console.log('DC_EVENT_IMEX_PROGRESS', progress)
       setImportProgress(progress)
     })
 
@@ -95,8 +89,46 @@ export default function LoginScreen (props) {
     remote.dialog.showOpenDialog(opts, filenames => {
       if (!filenames || !filenames.length) return
       ipcRenderer.send('backupImport', filenames[0])
+      setShowDialog(true)
     })
   }
+
+  const onHandleClose = () => setShowDialog(false)
+
+  return(
+    <Fragment>
+      <DeltaBlueButton onClick={onClickImportBackup} >
+        <p>{tx('import_backup_title') }</p>
+      </DeltaBlueButton>
+      <Dialog
+        icon="info-sign"
+        onClose={onHandleClose}
+        title={tx('import_backup_title')} 
+
+        isOpen={showDialog}
+      >
+        <DeltaProgressBar
+          value={importProgress / 1000}
+          intent={Intent.SUCCESS}
+        />
+      </Dialog>
+    </Fragment>
+  )
+}
+
+export default function LoginScreen (props) {
+  const tx = window.translate
+  function onClickLogin (login) {
+    ipcRenderer.send('login', { addr: login, mail_pw: true })
+  }
+
+  function forgetLogin (login) {
+    const message = tx('forget_login_confirmation_desktop')
+    confirmation(message, (yes) => {
+      if (yes) ipcRenderer.send('forgetLogin', login)
+    })
+  }
+
 
   return (
     <LoginWrapper>
@@ -119,16 +151,7 @@ export default function LoginScreen (props) {
             </LoginItem>
             )}
           </ul>
-          <DeltaBlueButton onClick={onClickImportBackup} >
-            <p>{tx('import_backup_title') }</p>
-          </DeltaBlueButton>
-          {
-            importProgress &&
-              <DeltaProgressBar
-                value={importProgress / 1000}
-                intent={Intent.SUCCESS}
-              />
-          }
+          <ImportButton/>
         </Card>
         }
         <Card>
