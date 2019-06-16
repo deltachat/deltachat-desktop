@@ -5,28 +5,6 @@
   align-items: stretch;
 }
 
-.module-message--expired {
-  animation: module-message__shake 0.2s linear infinite;
-}
-
-@keyframes module-message__shake {
-  0% {
-    transform: translateX(0px);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(0px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-  100% {
-    transform: translateX(0px);
-  }
-}
-
 // Spec: container < 438px
 .module-message--incoming {
   margin-left: 0;

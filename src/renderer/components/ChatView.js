@@ -14,7 +14,7 @@ const SCROLL_BUFFER = 70
 
 const ChatViewWrapper = styled.div`
   width: 70%;
-  background-color: #eeefef;
+  background-color:  ${props => props.theme.deltaPrimaryBg};
   float: right;
   display: grid;
   grid-template-columns: auto;

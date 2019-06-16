@@ -130,7 +130,7 @@ export const DeltaInputWrapper = styled(DeltaFormGroup)`
   }
 
   .bp3-button.bp3-minimal.bp3-intent-warning:hover {
-    background-color: #d0d0d0 !important;
+    background-color: ${props => props.theme.deltaChatPrimaryFgLight} !important;
   }
 `
 

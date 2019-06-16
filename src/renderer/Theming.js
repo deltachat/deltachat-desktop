@@ -33,7 +33,8 @@ const defaultTheme = Object.freeze({
   contextMenuBorder: '#efefef',
   contextMenuBG: '#f9fafa',
   messageButtons: '#8b8e91',
-  messageButtonsHover: '#070c14'
+  messageButtonsHover: '#070c14',
+  bgColor: '#fff'
 })
 
 class ThemeManager extends EventEmitter {
@@ -78,6 +79,7 @@ const ScssVarOverwrite = styled.div`
 --context-menu-bg: ${props => props.theme.contextMenuBG};
 --message-buttons: ${props => props.theme.messageButtons};
 --message-buttons-hover: ${props => props.theme.messageButtonsHover};
+--bg-color: ${props => props.theme.bgColor};
 `
 
 class ThemeProvider extends React.Component {

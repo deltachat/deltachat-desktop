@@ -27,7 +27,7 @@
   object-fit: cover;
 }
 .module-conversation-list-item__default-avatar {
-  color: white;
+  color: var(--color-white);
   font-size: 26px;
   line-height: 48px;
   text-align: center;

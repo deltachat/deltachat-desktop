@@ -44,21 +44,24 @@ html {
 
   --color-white: #ffffff;
   --color-white-07: rgba(#ffffff, 0.7);
-  --color-light-90: #070c14; // - // some kind of font color?
-  --color-light-35: #a4a6a9; // -
-  --color-light-60: #62656a; // -
-  --color-blue: #2090ea; // -
-  --color-grey: #616161; // -
+  --color-light-90: #070c14; // some kind of font color?
+  --color-light-35: #a4a6a9;
+  --color-light-60: #62656a;
+  --color-blue: #2090ea;
+  --color-grey: #616161;
 
   --color-conversation-grey: #505050;
 
   
   // Already renamed
   --outgoing-message-padlock: #4caf50; // TODO: remove this somehow, because it's too specific -> only affects outgoing
-  --context-menu-border: #efefef; // -
-  --context-menu-bg: #f9fafa; // -
-  --message-buttons: #8b8e91; // -
-  --message-buttons-hover: #070c14; // -
+  --context-menu-border: #efefef;
+  --context-menu-bg: #f9fafa;
+  --message-buttons: #8b8e91;
+  --message-buttons-hover: #070c14;
+  --bg-color: #fff;
+  --scrollbar-thumb: #666666; // -
+  --scrollbar-thumb-hover: #606060; // -
 }
 
 $color-light-10: #eeefef; // only used by attachment downloadbutton :hover
