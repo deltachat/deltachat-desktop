@@ -19,11 +19,21 @@ const defaultTheme = Object.freeze({
   deltaChatMessageBubbleSelfStatusColor: '#4caf50',
   deltaFocusBlue: '#42A5F5',
   deltaSelected: '#4c6e7d', // same as deltaPrimaryBgLight
+  // Scss ones
   signalBlue: '#2090ea',
-  outgoingMessagePadlock: '#4caf50',
   coreRed: '#f44336',
   colorWhite: '#ffffff',
-  converstationGrey: '#505050'
+  colorLight90: '#070c14',
+  colorLight35: '#a4a6a9',
+  colorLight60: '#62656a',
+  colorBlue: '#2090ea',
+  colorGrey: '#616161',
+  converstationGrey: '#505050',
+  outgoingMessagePadlock: '#4caf50',
+  contextMenuBorder: '#efefef',
+  contextMenuBG: '#f9fafa',
+  messageButtons: '#8b8e91',
+  messageButtonsHover: '#070c14'
 })
 
 class ThemeManager extends EventEmitter {
@@ -49,12 +59,25 @@ class ThemeManager extends EventEmitter {
 const manager = new ThemeManager()
 
 const ScssVarOverwrite = styled.div`
-  --color-signal-blue: ${props => props.theme.signalBlue};
-  --outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
-  --color-core-red: ${props => props.theme.coreRed};
-  --color-white: ${props => props.theme.colorWhite};
-  --color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7).toString()};
-  --color-conversation-grey: ${props => props.theme.converstationGrey};
+--color-signal-blue: ${props => props.theme.signalBlue};
+--color-core-red: ${props => props.theme.coreRed};
+
+--color-white: ${props => props.theme.colorWhite};
+--color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7).toString()};
+--color-light-90: ${props => props.theme.colorLight90};
+--color-light-35: ${props => props.theme.colorLight35};
+--color-light-60: ${props => props.theme.colorLight60};
+--color-blue: ${props => props.theme.colorBlue};
+--color-grey: ${props => props.theme.colorGrey};
+
+--color-conversation-grey: ${props => props.theme.converstationGrey};
+
+// Already renamed
+--outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
+--context-menu-border: ${props => props.theme.contextMenuBorder};
+--context-menu-bg: ${props => props.theme.contextMenuBG};
+--message-buttons: ${props => props.theme.messageButtons};
+--message-buttons-hover: ${props => props.theme.messageButtonsHover};
 `
 
 class ThemeProvider extends React.Component {

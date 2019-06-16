@@ -75,33 +75,8 @@ button {
   font-size: inherit;
 }
 
-button.grey {
-  border-radius: $border-radius;
-  border: solid 1px #ccc;
-  cursor: pointer;
-  margin: 1em auto;
-  padding: 1em;
-  font-family: inherit;
-  color: $grey;
-  background: $grey_l;
-  box-shadow: 0 0 10px -5px rgba($grey, 0.5);
-
-  &:hover {
-    box-shadow: 0 0 10px -3px rgba($grey, 0.7);
-  }
-
-  &[disabled='disabled'] {
-    &,
-    &:hover {
-      opacity: 0.5;
-      box-shadow: none;
-      cursor: default;
-    }
-  }
-}
-
 a {
-  color: $blue;
+  color: var(--color-blue);
 }
 
 
@@ -125,7 +100,7 @@ a {
       display: inline-block;
       width: $button-height;
       height: $button-height;
-      @include color-svg('../images/paperclip.svg', $grey);
+      @include color-svg('../images/paperclip.svg', var(--color-grey));
       transform: rotateZ(-45deg);
     }
 
@@ -148,10 +123,6 @@ a {
   }
 }
 
-.dropoff {
-  outline: solid 1px $blue;
-}
-
 $avatar-size: 48px;
 
 .avatar {
@@ -167,7 +138,7 @@ $avatar-size: 48px;
   text-overflow: ellipsis;
   color: var(--color-white);
   font-size: 18px;
-  background-color: $grey;
+  background-color: var(--color-grey);
 }
 
 .SelectGroupImage {
@@ -208,7 +179,7 @@ $new-contact-left-margin: 16px;
   width: 22px;
   height: 22px;
   padding: 3px;
-  background: $grey;
+  background: var(--color-grey);
 
   &:before {
     content: '';
@@ -224,7 +195,7 @@ input[type='search'],
 textarea {
   &:active,
   &:focus {
-    outline: 1px solid $blue;
+    outline: 1px solid var(--color-blue);
   }
 }
 

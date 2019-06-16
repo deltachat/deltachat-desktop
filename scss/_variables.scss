@@ -47,6 +47,8 @@ html {
   --color-light-90: #070c14; // - // some kind of font color?
   --color-light-35: #a4a6a9; // -
   --color-light-60: #62656a; // -
+  --color-blue: #2090ea; // -
+  --color-grey: #616161; // -
 
   --color-conversation-grey: #505050;
 
@@ -60,12 +62,6 @@ html {
 }
 
 $color-light-10: #eeefef; // only used by attachment downloadbutton :hover
-
-// Old colors
-
-$blue: #2090ea;
-$grey_l: #f3f3f3; // only used in grey button as bg
-$grey: #616161;
 
 // A few layout variables used cross-file
 
