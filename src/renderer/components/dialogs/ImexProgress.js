@@ -19,9 +19,9 @@ class ImexProgress extends React.Component {
 
   componentDidMount () {
     var self = this
-    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
+    /*ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
       self.setState({ progress })
-    })
+    })*/
   }
 
   render () {

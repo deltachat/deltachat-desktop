@@ -1,4 +1,4 @@
-import React, {useState, Fragment} from 'react'
+import React, {useState, useEffect, Fragment} from 'react'
 import { ipcRenderer, remote } from 'electron'
 import NavbarWrapper from './NavbarWrapper'
 import confirmation from './dialogs/confirmationDialog'
@@ -62,13 +62,48 @@ const LoginItem = styled.li`
     width: 90%;
   }
 `
+const ImportDialogContent = React.memo(function ImportDialogContent(props) {
+  const tx = window.translate
+  const [importProgress, setImportProgress] = useState(0)
+  const [error, setError] = useState(null)
+  const [importState, setImportState] = useState(['INIT', {}])
 
-function ImportButton(props) {
+  useEffect(() => {
+    console.log('useEffect', ipcRenderer)
+    ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
+    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (evt, progress) => {
+      console.log('DC_EVENT_IMEX_PROGRESS', progress)
+      setImportProgress(progress)
+    })
+
+    ipcRenderer.on('DD_EVENT_BACKUP_IMPORTED', (evt, addr) => {
+      alert(addr)
+      setImportProgress(false)
+    })
+
+    ipcRenderer.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
+      console.log('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
+      setImportState(['IMPORT_EXISTS', {}])
+    })
+  }, [])
+  return (
+    <Fragment>
+      <DeltaProgressBar
+        progress={importProgress}
+        intent={error === false ? Intent.SUCCESS : Intent.ERROR}
+      />
+      { error && <p>Error: {error}</p>}
+      { importState[0] == 'INIT' && <p></p> }
+      { <div style={{'height': '500px','backgroundColor':'red'}}>Do you want to overwrite the backup?</div> }
+      { importState[0] == 'INIT' && <p></p> }
+    </Fragment>
+  )
+})
+
+const ImportButton = React.memo(function ImportButton(props) {
   const tx = window.translate
   const [showDialog, setShowDialog] = useState(false)
-  const [importProgress, setImportProgress] = useState(0)
-  const [importState, setImportState] = useState(['IMPORTING'])
-  
+
   function onClickImportBackup() {
     const opts = {
       title: tx('import_backup_title'),
@@ -76,45 +111,33 @@ function ImportButton(props) {
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
     }
 
-    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (progress, err) => {
-      console.log('DC_EVENT_IMEX_PROGRESS', progress)
-      setImportProgress(progress)
-    })
-
-    ipcRenderer.once('DD_EVENT_BACKUP_IMPORTED', (addr) => {
-      alert(addr)
-      setImportProgress(false)
-    })
-
     remote.dialog.showOpenDialog(opts, filenames => {
       if (!filenames || !filenames.length) return
       ipcRenderer.send('backupImport', filenames[0])
       setShowDialog(true)
     })
   }
-
   const onHandleClose = () => setShowDialog(false)
 
+  console.log('render importbutton')
   return(
     <Fragment>
       <DeltaBlueButton onClick={onClickImportBackup} >
         <p>{tx('import_backup_title') }</p>
       </DeltaBlueButton>
-      <Dialog
-        icon="info-sign"
-        onClose={onHandleClose}
-        title={tx('import_backup_title')} 
-
-        isOpen={showDialog}
-      >
-        <DeltaProgressBar
-          value={importProgress / 1000}
-          intent={Intent.SUCCESS}
-        />
-      </Dialog>
+      {showDialog &&
+        <Dialog
+          icon="info-sign"
+          onClose={props.onHandleClose}
+          title={tx('import_backup_title')} 
+          canOutsideClickClose={true}
+          isOpen={showDialog}
+        >
+          <ImportDialogContent />  
+        </Dialog> }
     </Fragment>
   )
-}
+})
 
 export default function LoginScreen (props) {
   const tx = window.translate

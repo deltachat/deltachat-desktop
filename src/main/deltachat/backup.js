@@ -18,13 +18,13 @@ function backupImport (file) {
     let newPath = self.getPath(addr)
     if(await fs.pathExists(newPath)) {
       console.log(`backupImport: ${newPath} already exists`)
-      this.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', true)
+      self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', true)
     } else {
       console.log(`backupImport: ${newPath} does not exist, moving...`)
-      this.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
+      self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
       await fs.move(tmpConfigPath, newPath)
       console.log(`backupImport: ${tmpConfigPath} successfully moved to ${newPath}`)
-      this.sendToRenderer('DD_EVENT_BACKUP_IMPORTED', addr)
+      self.sendToRenderer('DD_EVENT_BACKUP_IMPORTED', addr)
     }
   }
 
@@ -53,7 +53,7 @@ function backupImport (file) {
     console.log('backupImport:', event, ...args)
   })
   dc.on('DC_EVENT_IMEX_PROGRESS', progress => {
-    this.sendToRenderer('DC_EVENT_IMEX_PRORGRESS', progress / 2)
+    this.sendToRenderer('DC_EVENT_IMEX_PROGRESS', progress / 2)
     if(progress == 0) {
       onErrorImport('UNKNOWN_ERROR')
     }

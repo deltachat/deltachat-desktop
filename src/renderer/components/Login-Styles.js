@@ -245,7 +245,7 @@ export const DeltaProgressBar = function(props) {
   return (
     <ProgressBarWrapper>
       <ProgressBar
-        value={props.progress / 1000}
+        value={props.progress ? props.progress / 1000 : 0}
         intent={props.intent}
       />
     </ProgressBarWrapper>

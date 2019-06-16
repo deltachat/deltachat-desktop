@@ -12,6 +12,7 @@ const moment = require('moment')
 const App = require('./App')
 const logger = require('../logger')
 logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
+const log = logger.getLogger('render/main')
 
 const STATE_WRAPPER = {}
 const state = STATE_WRAPPER.state = remote.app.state
@@ -22,7 +23,7 @@ const app = ReactDOM.render(
   <App STATE_WRAPPER={STATE_WRAPPER} />,
   document.querySelector('#root')
 )
-
+ipcRenderer.on('ALL', (e, eName, ...args) => log.debug('ipcRenderer', eName, ...args)) 
 ipcRenderer.on('error', (e, ...args) => console.error(...args))
 
 ipcRenderer.on('chooseLanguage', onChooseLanguage)
