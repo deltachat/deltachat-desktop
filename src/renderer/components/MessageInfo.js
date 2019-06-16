@@ -2,7 +2,7 @@ const React = require('react')
 const moment = require('moment')
 const { ipcRenderer } = require('electron')
 
-const InfoStyle = { backgroundColor: 'lightgrey', width: '100%' }
+const InfoStyle = { backgroundColor: 'lightgrey', width: '100%', resize: 'none' }
 
 class MessageInfo extends React.Component {
   constructor () {
