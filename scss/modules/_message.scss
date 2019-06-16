@@ -69,9 +69,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/download.svg', $color-light-45);
+  @include color-svg('../images/download.svg', var(--message-buttons));
   &:hover {
-    @include color-svg('../images/download.svg', $color-light-90);
+    @include color-svg('../images/download.svg', var(--message-buttons-hover));
   }
   &.icon-medium {
     height: 36px;
@@ -80,7 +80,7 @@
 }
 
 .attachment-overlay .module-message__buttons__download:hover {
-  @include color-svg('../images/download.svg', $color-light-10);
+  @include color-svg('../images/download.svg', var(--message-buttons-hover));
 }
 
 
@@ -90,9 +90,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/reply.svg', $color-light-45);
+  @include color-svg('../images/reply.svg', var(--message-buttons));
   &:hover {
-    @include color-svg('../images/reply.svg', $color-light-90);
+    @include color-svg('../images/reply.svg', var(--message-buttons-hover));
   }
 }
 
@@ -108,9 +108,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg-rotated('../images/ellipsis.svg', $color-light-45);
+  @include color-svg-rotated('../images/ellipsis.svg', var(--message-buttons));
   &:hover {
-    @include color-svg-rotated('../images/ellipsis.svg', $color-light-90);
+    @include color-svg-rotated('../images/ellipsis.svg', var(--message-buttons-hover));
   }
 }
 
@@ -191,7 +191,6 @@
   left: 0;
   right: 0;
   border-radius: 16px;
-  box-shadow: inset 0px 0px 0px 1px $color-black-02;
 }
 
 .module-message__img-border-overlay--with-content-below {
@@ -259,7 +258,7 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: $color-light-90;
+  color: var(--color-light-90);
 }
 
 .module-message__broken-image--incoming {
@@ -297,7 +296,7 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: $color-light-90;
+  color: var(--color-light-90);
 
   cursor: pointer;
 }
@@ -364,7 +363,7 @@
   white-space: nowrap;
   text-overflow: clip;
 
-  color: $color-light-90;
+  color: var(--color-light-90);
 }
 
 .module-message__generic-attachment__text {
@@ -375,7 +374,7 @@
 }
 
 .module-message__generic-attachment__file-name {
-  color: $color-light-90;
+  color: var(--color-light-90);
   font-size: 14px;
   line-height: 18px;
   font-weight: 300;
@@ -392,7 +391,7 @@
 }
 
 .module-message__generic-attachment__file-size {
-  color: $color-light-90;
+  color: var(--color-light-90);
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
@@ -420,7 +419,7 @@
 }
 
 .module-message__text {
-  color: $color-light-90;
+  color: var(--color-light-90);
   font-size: 14px;
   line-height: 18px;
   text-align: start;
@@ -432,7 +431,7 @@
 
   a {
     text-decoration: underline;
-    color: $color-light-90;
+    color: var(--color-light-90);
   }
 }
 
@@ -480,7 +479,7 @@
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
-  color: $color-light-60;
+  color: var(--color-light-60);
   text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
@@ -503,11 +502,11 @@
 }
 
 .module-message__metadata__padlock-icon--incoming {
-  @include color-svg('../images/padlock.svg', $color-light-35, 125%);
+  @include color-svg('../images/padlock.svg', var(--color-light-35), 125%);
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', var(--color-outgoing-message-padlock), 125%);
+  @include color-svg('../images/padlock.svg', var(--outgoing-message-padlock), 125%);
 }
 
 .module-message__metadata__status-icon {
@@ -519,7 +518,7 @@
 }
 
 .module-message__metadata__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-light-60);
+  @include color-svg('../images/sending.svg', var(--color-light-60));
   animation: module-message__metdata__status-icon--spinning 4s linear infinite;
 }
 
@@ -531,40 +530,20 @@
 }
 
 .module-message__metadata__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
 }
 .module-message__metadata__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', var(--color-light-35));
   width: 18px;
 }
 .module-message__metadata__status-icon--read {
-  @include color-svg('../images/read.svg', $color-light-35);
+  @include color-svg('../images/read.svg', var(--color-light-35));
   width: 18px;
 }
 
 // When status indicators are overlaid on top of an image, they use different colors
 .module-message__metadata__status-icon--with-image-no-caption {
   background-color: var(--color-white);
-}
-
-.module-message__send-message-button {
-  cursor: pointer;
-  font-weight: 300;
-  font-size: 13px;
-  line-height: 18px;
-  background-color: $color-light-02;
-  border: 1px solid $color-black-012;
-
-  margin-top: 8px;
-  margin-bottom: -10px;
-  margin-left: -12px;
-  margin-right: -12px;
-
-  text-align: center;
-  padding: 10px;
-
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
 }
 
 .module-message__author-avatar {

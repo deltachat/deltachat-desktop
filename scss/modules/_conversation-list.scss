@@ -9,18 +9,11 @@
 
   cursor: pointer;
 
-  &:hover {
-    background-color: $color-black-016-no-tranparency;
-  }
 }
 
 .module-conversation-list-item--has-unread {
   padding-left: 12px;
   border-left: 4px solid var(--color-signal-blue);
-}
-
-.module-conversation-list-item--is-selected {
-  background-color: $color-black-016-no-tranparency;
 }
 
 .module-conversation-list-item__avatar {
@@ -165,7 +158,7 @@
 }
 
 .module-conversation-list-item__message__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-light-60);
+  @include color-svg('../images/sending.svg', var(--color-light-60));
   animation: module-conversation-list-item__message__status-icon--spinning 4s
     linear infinite;
 }
@@ -178,14 +171,14 @@
 }
 
 .module-conversation-list-item__message__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
 }
 .module-conversation-list-item__message__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', var(--color-light-35));
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--read {
-  @include color-svg('../images/read.svg', $color-light-35);
+  @include color-svg('../images/read.svg', var(--color-light-35));
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--error {

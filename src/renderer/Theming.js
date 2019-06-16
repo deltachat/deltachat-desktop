@@ -50,7 +50,7 @@ const manager = new ThemeManager()
 
 const ScssVarOverwrite = styled.div`
   --color-signal-blue: ${props => props.theme.signalBlue};
-  --color-outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
+  --outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
   --color-core-red: ${props => props.theme.coreRed};
   --color-white: ${props => props.theme.colorWhite};
   --color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7).toString()};

@@ -26,7 +26,7 @@
 }
 
 .module-message-detail__unix-timestamp {
-  color: $color-light-10;
+  color: #eeefef;
 }
 
 .module-message-detail__delete-button-container {
@@ -41,7 +41,7 @@
   color: var(--color-white);
   box-shadow: 0 0 10px -3px rgba(97, 97, 97, 0.7);
   border-radius: 5px;
-  border: solid 1px $color-light-35;
+  border: solid 1px var(--color-light-35);
   cursor: pointer;
   margin: 1em auto;
   padding: 1em;
@@ -93,7 +93,7 @@
 }
 
 .module-message-detail__contact__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-light-60);
+  @include color-svg('../images/sending.svg', var(--color-light-60));
   animation: module-message-detail__contact__status-icon--spinning 4s linear
     infinite;
 }
@@ -106,14 +106,14 @@
 }
 
 .module-message-detail__contact__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
 }
 .module-message-detail__contact__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', var(--color-light-35));
   width: 18px;
 }
 .module-message-detail__contact__status-icon--read {
-  @include color-svg('../images/read.svg', $color-light-35);
+  @include color-svg('../images/read.svg', var(--color-light-35));
   width: 18px;
 }
 .module-message-detail__contact__status-icon--error {
@@ -128,7 +128,7 @@
   @include button-reset;
   padding: 4px;
   color: var(--color-white);
-  background-color: $color-light-35;
+  background-color: var(--color-light-35);
   border-radius: 4px;
 }
 .module-message-detail__contact__send-anyway {

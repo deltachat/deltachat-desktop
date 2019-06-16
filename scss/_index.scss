@@ -1,14 +1,12 @@
 .conversation-stack,
 .new-conversation,
-.inbox,
-.gutter {
+.inbox {
   height: 100%;
   overflow: hidden;
 }
 
 .expired {
-  .conversation-stack,
-  .gutter {
+  .conversation-stack {
     height: calc(100% - 48px);
   }
 }
@@ -18,24 +16,6 @@
   overflow: auto;
 }
 
-.gutter {
-  background-color: $color-black-008-no-tranparency;
-
-  ::-webkit-scrollbar-track {
-    background: $color-black-008-no-tranparency;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border: 2px solid $color-black-008-no-tranparency;
-  }
-
-  float: left;
-  width: 300px;
-  .content {
-    overflow-y: scroll;
-    max-height: calc(100% - 88px);
-  }
-}
 .network-status-container {
   .network-status {
     background: url('../images/error_red.svg') no-repeat left 10px center;
@@ -79,78 +59,55 @@
   }
 }
 
-.tool-bar {
-  color: $color-light-90;
-
-  padding: 8px;
-  padding-top: 0;
-  margin-top: -1px;
-
-  position: relative;
-  .search-icon {
-    content: '';
-    display: inline-block;
-    float: left;
-    width: 24px;
-    height: 33px;
-    -webkit-mask: url('../images/search.svg') no-repeat left center;
-    -webkit-mask-size: 100%;
-    background-color: $color-light-35;
-    position: absolute;
-    left: 20px;
-    top: 0;
-  }
-}
-
 $search-x-size: 16px;
 $search-padding-right: 12px;
 $search-padding-left: 30px;
 
-input.search {
-  border: 1px solid $color-black-02;
-  padding: 0 $search-padding-right 0 $search-padding-left;
-  margin-left: 8px;
-  margin-right: 8px;
-  outline: 0;
-  height: 32px;
-  width: calc(100% - 16px);
-  outline-offset: -2px;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: normal;
+// input.search {
+//   border: 1px solid $color-black-02;
+//   padding: 0 $search-padding-right 0 $search-padding-left;
+//   margin-left: 8px;
+//   margin-right: 8px;
+//   outline: 0;
+//   height: 32px;
+//   width: calc(100% - 16px);
+//   outline-offset: -2px;
+//   font-size: 14px;
+//   line-height: 18px;
+//   font-weight: normal;
 
-  position: relative;
-  border-radius: 4px;
+//   position: relative;
+//   border-radius: 4px;
 
-  &:focus {
-    outline: solid 1px $blue;
-  }
+//   &:focus {
+//     outline: solid 1px $blue;
+//   }
 
-  &.active {
-    background-image: url('../images/x.svg');
-    background-repeat: no-repeat;
-    background-size: $search-x-size;
+//   &.active {
+//     background-image: url('../images/x.svg');
+//     background-repeat: no-repeat;
+//     background-size: $search-x-size;
 
-    &.ltr {
-      background-position: right $search-padding-right center;
-    }
+//     &.ltr {
+//       background-position: right $search-padding-right center;
+//     }
 
-    &.rtl {
-      background-position: left $search-padding-left center;
-    }
-  }
+//     &.rtl {
+//       background-position: left $search-padding-left center;
+//     }
+//   }
 
-  &::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    display: block;
-    width: $search-x-size;
-    height: $search-x-size;
-  }
+//   &::-webkit-search-cancel-button {
+//     -webkit-appearance: none;
+//     display: block;
+//     width: $search-x-size;
+//     height: $search-x-size;
+//   }
 
-  &::-webkit-search-cancel-button:hover {
-    cursor: pointer;
-  }
-}
+//   &::-webkit-search-cancel-button:hover {
+//     cursor: pointer;
+//   }
+// }
 
 .last-timestamp {
   font-size: smaller;
@@ -175,21 +132,9 @@ input.search {
 }
 
 .index {
-  .gutter .new-group-update-form {
-    display: none;
-    padding: 0.5em;
-  }
-
   .last-message {
     margin: 6px 0 0;
     font-size: $font-size-small;
-  }
-
-  .gutter .timestamp {
-    position: absolute;
-    top: 14px;
-    right: 12px;
-    color: $grey;
   }
 }
 
