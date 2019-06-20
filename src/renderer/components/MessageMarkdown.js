@@ -47,7 +47,7 @@ const rules = Object.assign({
   }), // uses style of codeBlock
   link: {
     order: 18,
-    match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/),
+    match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
     parse: function (capture, recurseParse, state) {
       return { content: capture[1] }
     },
