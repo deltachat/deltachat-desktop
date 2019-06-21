@@ -62,6 +62,10 @@ function init (cwd, state, logHandler) {
     dc.updateChatList()
   })
 
+  ipcMain.on('all', (e, ...args) => {
+    log.debug('Renderer event:', e, ...args)
+  })
+
   ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
   ipcMain.on('setBounds', (e, ...args) => main.setBounds(...args))
   ipcMain.on('setProgress', (e, ...args) => main.setProgress(...args))

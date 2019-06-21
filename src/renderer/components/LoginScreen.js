@@ -71,7 +71,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   useEffect(() => {
     console.log('useEffect', ipcRenderer)
     ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
-    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (evt, progress) => {
+    ipcRenderer.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
       console.log('DC_EVENT_IMEX_PROGRESS', progress)
       setImportProgress(progress)
     })
@@ -86,6 +86,11 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
       setImportState(['IMPORT_EXISTS', {}])
     })
   }, [])
+
+  function overwriteBackup() {
+    ipcRenderer.send('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
+  }
+
   return (
     <Fragment>
       <DeltaProgressBar
@@ -94,7 +99,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
       />
       { error && <p>Error: {error}</p>}
       { importState[0] == 'INIT' && <p></p> }
-      { <div style={{'height': '500px','backgroundColor':'red'}}>Do you want to overwrite the backup?</div> }
+      { importState[0] == 'IMPORT_EXISTS' && <div style={{'height': '500px','backgroundColor':'red'}}>Do you want to overwrite the backup? <button onClick={overwriteBackup}>Yes!</button></div> }
       { importState[0] == 'INIT' && <p></p> }
     </Fragment>
   )
