@@ -4,7 +4,7 @@ const tempy = require('tempy')
 const fs = require('fs-extra')
 const {promisify} = require('util');
 const windows = require('../windows')
-const { ipcRenderer } = require('electron')
+const { ipcMain } = require('electron')
 
 function backupExport (dir) {
   this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)
@@ -16,16 +16,19 @@ function backupImport (file) {
 
   let self = this
 
-  async function moveImportedConfigFolder(addr, newPath) {
-    await fs.move(tmpConfigPath, newPath)
-    console.log(`backupImport: ${tmpConfigPath} successfully moved to ${newPath}`)
+  async function copyImportedConfigFolder(addr, newPath, overwrite=false) {
+    if(overwrite === true) {
+      await fs.remove(newPath)
+    }
+    await fs.copy(tmpConfigPath, newPath)
+    console.log(`backupImport: ${tmpConfigPath} successfully copied to ${newPath}`)
     self.sendToRenderer('DD_EVENT_BACKUP_IMPORTED', addr)
   }
 
-  async function onDCClosed(err, addr) {
-    if(err) throw err
-    self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
-    console.log('Successfully closed')
+
+
+  async function checkConfigFolderExists(addr) {
+    self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600) 
 
     let newPath = self.getPath(addr)
     if(await fs.pathExists(newPath)) {
@@ -33,17 +36,21 @@ function backupImport (file) {
       self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', true)
       self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
   
-      ipcRenderer.once('DU_EVENT_OVERWRITE_IMPORT', () => {
-        console.log('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
-        moveImportedConfigFolder(addr, newPath)
+      ipcMain.once('DU_EVENT_BACKUP_IMPORT_OVERWRITE', () => {
+        console.log('DU_EVENT_OVERWRITE_IMPORT')
+        copyImportedConfigFolder(addr, newPath, true)
       })        
     } else {
       console.log(`backupImport: ${newPath} does not exist, moving...`)
       self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
       self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
-      moveImportedConfigFolder(addr, newPath)
+      copyImportedConfigFolder(addr, newPath, false)
     }
-    moveImportedConfigFolder(addr)
+  }
+
+  async function onDCClosed(err, addr) {
+    if(err) throw err
+    console.log('DC Closed')
   }
 
   function onSuccessfulImport() {
@@ -51,6 +58,7 @@ function backupImport (file) {
 
     console.log(`backupImport: Closing dc instance...`)
     dc.close((err) => onDCClosed(err, addr))
+    checkConfigFolderExists(addr)
   }
 
   function onErrorImport(err) {
@@ -59,6 +67,7 @@ function backupImport (file) {
 
   console.log(`Creating dummy dc config for importing at ${tmpConfigPath}`)
   dc.open(tmpConfigPath, () => {
+    console.log(`Starting backup import of ${file}`)
     dc.importExport(C.DC_IMEX_IMPORT_BACKUP, file)
   })
   dc.on('ALL', (event, ...args) => {

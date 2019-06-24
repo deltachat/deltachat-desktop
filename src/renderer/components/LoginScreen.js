@@ -1,5 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react'
-import { ipcRenderer, remote } from 'electron'
+import { remote } from 'electron'
+import { sendToBackend, ipcBackend}  from '../ipc'
 import NavbarWrapper from './NavbarWrapper'
 import confirmation from './dialogs/confirmationDialog'
 import styled from 'styled-components'
@@ -69,26 +70,26 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   const [importState, setImportState] = useState(['INIT', {}])
 
   useEffect(() => {
-    console.log('useEffect', ipcRenderer)
-    ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
-    ipcRenderer.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
+    console.log('useEffect', ipcBackend)
+    ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
+    ipcBackend.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
       console.log('DC_EVENT_IMEX_PROGRESS', progress)
       setImportProgress(progress)
     })
 
-    ipcRenderer.on('DD_EVENT_BACKUP_IMPORTED', (evt, addr) => {
-      alert(addr)
-      setImportProgress(false)
+    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', (evt, addr) => {
+      setImportProgress(1000)
+      setImportState(['IMPORT_COMPLETE', {}])
     })
 
-    ipcRenderer.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
+    ipcBackend.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
       console.log('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
       setImportState(['IMPORT_EXISTS', {}])
     })
   }, [])
 
   function overwriteBackup() {
-    ipcRenderer.send('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
+    sendToBackend('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
   }
 
   return (
@@ -101,6 +102,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
       { importState[0] == 'INIT' && <p></p> }
       { importState[0] == 'IMPORT_EXISTS' && <div style={{'height': '500px','backgroundColor':'red'}}>Do you want to overwrite the backup? <button onClick={overwriteBackup}>Yes!</button></div> }
       { importState[0] == 'INIT' && <p></p> }
+      { importState[0] == 'IMPORT_COMPLETE' && <p>Successfully imported backup</p> }
     </Fragment>
   )
 })
@@ -118,7 +120,7 @@ const ImportButton = React.memo(function ImportButton(props) {
 
     remote.dialog.showOpenDialog(opts, filenames => {
       if (!filenames || !filenames.length) return
-      ipcRenderer.send('backupImport', filenames[0])
+      sendToBackend('backupImport', filenames[0])
       setShowDialog(true)
     })
   }
@@ -147,13 +149,13 @@ const ImportButton = React.memo(function ImportButton(props) {
 export default function LoginScreen (props) {
   const tx = window.translate
   function onClickLogin (login) {
-    ipcRenderer.send('login', { addr: login, mail_pw: true })
+    sendToBackend('login', { addr: login, mail_pw: true })
   }
 
   function forgetLogin (login) {
     const message = tx('forget_login_confirmation_desktop')
     confirmation(message, (yes) => {
-      if (yes) ipcRenderer.send('forgetLogin', login)
+      if (yes) sendToBackend('forgetLogin', login)
     })
   }
 
