@@ -21,7 +21,7 @@ const previewRules = {
   Array: defaultRules.Array,
   strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
   em: ignoreScopeAssign(defaultRules.em, 1), // italics
-  // u: ignoreScopeAssign(defaultRules.u, 2),
+  ubold: assign(ignoreScope(defaultRules.u), 2, { react: defaultRules.strong.react }),
   del: ignoreScopeAssign(defaultRules.del, 3),
   br: ignoreScopeAssign(defaultRules.br, 4),
   inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
@@ -47,7 +47,7 @@ const rules = Object.assign({
   }), // uses style of codeBlock
   link: {
     order: 18,
-    match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/),
+    match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
     parse: function (capture, recurseParse, state) {
       return { content: capture[1] }
     },
