@@ -117,7 +117,7 @@ class Message extends React.Component {
   }
 
   renderText () {
-    const { text, direction, status } = this.props
+    const { text, direction, status, onShowDetail } = this.props
     const tx = window.translate
 
     const contents =
@@ -128,6 +128,9 @@ class Message extends React.Component {
     if (!contents) {
       return null
     }
+
+    // TODO another check - don't check it only over string
+    const longMessage = /\[.{3}\]$/.test(text)
 
     return (
       <div
@@ -141,6 +144,7 @@ class Message extends React.Component {
         )}
       >
         <MessageBody text={contents || ''} />
+        {longMessage && <button onClick={onShowDetail}>...</button>}
       </div>
     )
   }

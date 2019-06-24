@@ -22,6 +22,10 @@ function getMessage (msgId) {
   this.sendToRenderer('DD_EVENT_MSG_UPDATE', { messageObj })
 }
 
+function getMessageInfo (msgId) {
+  return this._dc.getMessageInfo(msgId)
+}
+
 function setDraft (chatId, msgText) {
   let msg = this._dc.messageNew()
   msg.setText(msgText)
@@ -109,6 +113,7 @@ function forwardMessage (msgId, chatId) {
 }
 module.exports = function () {
   this.getMessage = getMessage.bind(this)
+  this.getMessageInfo = getMessageInfo.bind(this)
   this.sendMessage = sendMessage.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)

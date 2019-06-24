@@ -96,6 +96,10 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.messageIdToJson(msgId)
   })
 
+  ipcMain.on('getMessageInfo', (e, msgId) => {
+    main.send('MessageInfo', dc.getMessageInfo(msgId))
+  })
+
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
   })
