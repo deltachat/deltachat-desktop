@@ -130,6 +130,9 @@
       ],
       "category": "Utility"
     },
+    "win": {
+      "icon":"images/deltachat.ico"
+    },
     "files": [
       "!node_modules/deltachat-node/deltachat-core${/*}"
     ]
