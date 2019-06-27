@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 set -xe
 RUST_VERSION='nightly-2019-03-23'
 
