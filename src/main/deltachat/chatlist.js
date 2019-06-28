@@ -1,5 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
+const { app } = require('electron')
 
 /**
  * Update query for rendering chats with search input
@@ -23,6 +24,7 @@ function selectChat (chatId) {
       if (this._saved.markRead) {
         log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
         this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
+        app.setBadgeCount(this._getGeneralFreshMessageCounter())
       }
     }
   }
@@ -126,20 +128,7 @@ function isGroupChat (chat) {
 }
 
 function _getGeneralFreshMessageCounter () {
-  const list = this._dc.getChatList(0, this._query)
-
-  var freshMessageCounter = 0
-  for (let i = 0; i < list.getCount(); i++) {
-    const chatId = list.getChatId(i)
-    const chat = this._dc.getChat(chatId).toJson()
-
-    if (!chat) continue
-
-    if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
-      freshMessageCounter += this._dc.getFreshMessageCount(chatId)
-    }
-  }
-  return freshMessageCounter
+  return this._dc.getFreshMessages().length
 }
 
 function _deadDropMessage (id) {
