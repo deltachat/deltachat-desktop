@@ -8,8 +8,15 @@ os:
 node_js:
   - 10
 
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
+    - $HOME/.cargo
+    - $TRAVIS_BUILD_DIR/target
+
+
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start && sleep 3; fi
+  - ./ci_scripts/ci-prelude.sh
 
 install:
   - ./ci_scripts/ci-build.sh

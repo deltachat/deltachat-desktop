@@ -155,28 +155,10 @@ export default class Login extends React.Component {
               value={mail_user}
               onChange={this.handleCredentialsChange}
             />
-          <FormGroup label={tx('password')} placeholder={tx('password')} labelFor='mailPw'>
-            {this.renderPasswordInput('showPasswordMail', 'mailPw')}
-          </FormGroup>
-          <Button id='showAdvancedButton' onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
-            {(showAdvanced ? '-' : '+') + ' ' + tx('menu_advanced') }
-          </Button>
-          <Collapse isOpen={showAdvanced}>
-            <h2>{tx('login_inbox')}</h2>
-            <p>{tx('login_subheader')}</p>
-            <FormGroup
-              label={tx('login_imap_login')}
-              placeholder={tx('login_imap_login')}
-              labelFor='mailUser'>
-              <InputGroup
-                id='mailUser'
-                type='text'
-                value={mailUser}
-                onChange={this.handleCredentialsChange}
-              />
-            </FormGroup>
-            <FormGroup
-              label={tx('login_imap_server')}
+
+            <DeltaInput
+              key='mail_server'
+              id='mail_server'
               placeholder={tx('login_imap_server')}
               type='text'
               value={mail_server}
