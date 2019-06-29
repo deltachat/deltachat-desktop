@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
@@ -66,7 +67,7 @@ class ScreenController extends React.Component {
 
   handleLogin (credentials) {
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,15})+$/.test(credentials.addr)) {
-      this.onError(null,  window.translate('bad_email_address'))
+      this.onError(null, window.translate('bad_email_address'))
       return false
     }
     this.userFeedback(false)
