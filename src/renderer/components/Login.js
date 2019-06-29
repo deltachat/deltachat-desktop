@@ -140,7 +140,7 @@ export default class Login extends React.Component {
             onChange={this.handleCredentialsChange}
           />
 
-          <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')}>
+          <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
             {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
             <p>{tx('menu_advanced') }</p>
           </AdvancedButton>

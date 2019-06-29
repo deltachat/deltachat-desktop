@@ -6,7 +6,7 @@ const path = require('path')
 const tempy = require('tempy')
 const PNG = require('pngjs').PNG
 
-const testConfig = require(path.join(__dirname, 'fixtures/config.json'))
+const getConfig = require(path.join(__dirname, 'fixtures/config'))
 
 module.exports = {
   createApp,
@@ -17,7 +17,7 @@ module.exports = {
   waitForLoad,
   wait,
   copy,
-  testConfig
+  getConfig
 }
 
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
@@ -33,15 +33,14 @@ function createApp () {
 }
 
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
-// @param Object config to override default testConfig
+// @param Object config to override default test config
 function createAppWithConfig (overrideConfig) {
   const TEST_DIR = tempy.directory()
+  const defaultConfig = getConfig()
   console.log(`createApp TEST_DIR: ${TEST_DIR}`)
-  console.log('Override config:', JSON.stringify(overrideConfig))
   if (overrideConfig) {
-    let extendedConfig = Object.assign({}, testConfig, overrideConfig)
+    let extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
     fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
-    console.log('config user:', extendedConfig.credentials.addr)
   }
   return new Application({
     path: electronPath,
