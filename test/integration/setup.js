@@ -23,7 +23,6 @@ module.exports = {
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
 function createApp () {
   const TEST_DIR = tempy.directory()
-  console.log(`createApp TEST_DIR: ${TEST_DIR}`)
   return new Application({
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
@@ -37,7 +36,6 @@ function createApp () {
 function createAppWithConfig (overrideConfig) {
   const TEST_DIR = tempy.directory()
   const defaultConfig = getConfig()
-  console.log(`createApp TEST_DIR: ${TEST_DIR}`)
   if (overrideConfig) {
     let extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
     fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
@@ -53,9 +51,7 @@ function createAppWithConfig (overrideConfig) {
 // Starts the app, waits for it to load, returns a promise
 function waitForLoad (app, t, opts) {
   if (!opts) opts = {}
-  console.log(`waitForLoad`)
   return app.start().then(function () {
-    console.log(`app started waitUntilWindowLoaded`)
     return app.client.waitUntilWindowLoaded()
   })
 }
