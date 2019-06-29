@@ -53,7 +53,9 @@ function createAppWithConfig (overrideConfig) {
 // Starts the app, waits for it to load, returns a promise
 function waitForLoad (app, t, opts) {
   if (!opts) opts = {}
+  console.log(`waitForLoad`)
   return app.start().then(function () {
+    console.log(`app started waitUntilWindowLoaded`)
     return app.client.waitUntilWindowLoaded()
   })
 }
