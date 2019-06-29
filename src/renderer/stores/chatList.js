@@ -18,6 +18,9 @@ function sortChatList (first, second) {
   if (first.isArchiveLink || second.isArchiveLink) {
     return first.isArchiveLink ? 1 : -1
   }
+  if (first.freshMessageCounter !== second.freshMessageCounter) {
+    return first.freshMessageCounter > second.freshMessageCounter ? -1 : 1
+  }
   return first.summary.timestamp > second.summary.timestamp ? -1 : 1
 }
 
