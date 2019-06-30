@@ -3,6 +3,7 @@ const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat')
 const windows = require('../windows')
+const { app } = require('electron')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -58,6 +59,10 @@ class DeltaChatController extends EventEmitter {
   sendToRenderer (eventType, payload) {
     log.debug('sendToRenderer: ' + eventType)
     windows.main.send(eventType, payload)
+  }
+
+  translate (txt) {
+    return app.translate(txt)
   }
 
   /**

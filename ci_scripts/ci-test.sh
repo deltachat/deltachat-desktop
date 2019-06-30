@@ -22,3 +22,5 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
 fi
 
 npm test;
+
+npm run test-integration;

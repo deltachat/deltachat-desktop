@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
