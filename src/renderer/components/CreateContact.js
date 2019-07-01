@@ -52,7 +52,7 @@ class CreateContact extends React.Component {
     function createContact () {
       const id = ipcRenderer.sendSync('createContact', name, email)
       if (id) {
-       self.props.screenProps.onSubmit(id)
+        self.props.screenProps.onSubmit(id)
       }
     }
 
