@@ -11,6 +11,10 @@ function getInfo () {
 }
 
 function createContact (name, email) {
+  if (!DeltaChat.maybeValidAddr(email)) {
+    this.emit('error', this.translate('bad_email_address'))
+    return null
+  }
   return this._dc.createContact(name, email)
 }
 
