@@ -5,5 +5,6 @@ Exec=/app/bin/run.sh
 Icon=chat.delta.desktop
 Terminal=false
 Type=Application
-Categories=Network;Chat;
+Categories=Network;Chat;InstantMessaging;
 StartupWMClass=deltachat
+Keywords=dc;chat;delta;messaging;messenger;email
