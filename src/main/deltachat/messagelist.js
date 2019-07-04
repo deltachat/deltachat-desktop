@@ -22,6 +22,10 @@ function getMessage (msgId) {
   this.sendToRenderer('DD_EVENT_MSG_UPDATE', { messageObj })
 }
 
+function getMessageInfo (msgId) {
+  return this._dc.getMessageInfo(msgId)
+}
+
 function setDraft (chatId, msgText) {
   let msg = this._dc.messageNew()
   msg.setText(msgText)
@@ -103,13 +107,13 @@ function fetchMessages (chatId) {
   this.sendToRenderer('DD_MESSAGES_LOADED', payload)
 }
 
-function forwardMessage (msgId, contactId) {
-  const chatId = this._dc.getChatIdByContactId(contactId)
+function forwardMessage (msgId, chatId) {
   this._dc.forwardMessages(msgId, chatId)
   this.selectChat(chatId)
 }
 module.exports = function () {
   this.getMessage = getMessage.bind(this)
+  this.getMessageInfo = getMessageInfo.bind(this)
   this.sendMessage = sendMessage.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)

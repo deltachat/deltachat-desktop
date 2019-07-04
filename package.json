@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "0.104.0",
+  "version": "0.105.0-pre1",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
@@ -129,6 +129,9 @@
         "deb"
       ],
       "category": "Utility"
+    },
+    "win": {
+      "icon": "images/deltachat.ico"
     },
     "files": [
       "!node_modules/deltachat-node/deltachat-core${/*}"

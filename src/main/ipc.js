@@ -62,7 +62,6 @@ function init (cwd, state, logHandler) {
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
-    dc.updateChatList()
   })
 
   ipcMain.on('all', (e, ...args) => {
@@ -104,6 +103,10 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.messageIdToJson(msgId)
   })
 
+  ipcMain.on('getMessageInfo', (e, msgId) => {
+    main.send('MessageInfo', dc.getMessageInfo(msgId))
+  })
+
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
   })
@@ -121,10 +124,6 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
-
-  ipcMain.on('getContacts', (e, listFlags, queryStr) => {
-    e.returnValue = dc.getContacts(listFlags, queryStr)
-  })
 
   ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
     e.returnValue = dc.createGroupChat(verified, name, image, contactIds)

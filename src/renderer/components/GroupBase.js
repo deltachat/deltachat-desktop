@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron')
 const React = require('react')
 const { dialog } = require('electron').remote
+const contactsStore = require('../stores/contacts')
 
 const {
   Alignment,
@@ -32,8 +33,29 @@ class GroupBase extends React.Component {
     this.state = state
     this.state.group = this.state.group || {}
     this.state.name = this.state.name || ''
+    this.state.contacts = this.state.contacts || []
     this.back = this.back.bind(this)
     this.state.changedContacts = this.state.changedContacts || {}
+    this.assignContacts = this.assignContacts.bind(this)
+  }
+
+  assignContacts (contactsState) {
+    const { contacts } = contactsState
+    this.setState({ contacts })
+  }
+
+  componentDidMount () {
+    contactsStore.subscribe(this.assignContacts)
+    ipcRenderer.send(
+      'EVENT_DC_FUNCTION_CALL',
+      'getContacts',
+      0,
+      ''
+    )
+  }
+
+  componentWillUnmount () {
+    contactsStore.unsubscribe(this.assignContacts)
   }
 
   addToGroup (contactId) {
@@ -119,6 +141,7 @@ class GroupBase extends React.Component {
     } = this.state
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
+    const { contacts } = this.state
 
     return (
       <div>
@@ -156,7 +179,8 @@ class GroupBase extends React.Component {
                 <tr>
                   <td>
                     <ContactList
-                      filter={(contact) => this.contactInGroup(contact.id)}
+                      contacts={contacts}
+                      filterFunction={(contact) => this.contactInGroup(contact.id)}
                       childProps={(contact) => {
                         return { color: !this.contactInGroupStateChanged(contact.id) ? 'green' : 'yellow' }
                       }}
@@ -166,7 +190,8 @@ class GroupBase extends React.Component {
                   </td>
                   <td>
                     <ContactList
-                      filter={(contact) => !this.contactInGroup(contact.id)}
+                      contacts={contacts}
+                      filterFunction={(contact) => !this.contactInGroup(contact.id)}
                       childProps={(contact) => {
                         return { color: this.contactInGroupStateChanged(contact.id) ? 'red' : '' }
                       }}

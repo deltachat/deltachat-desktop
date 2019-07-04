@@ -1,5 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
+const { app } = require('electron')
 
 /**
  * Update query for rendering chats with search input
@@ -23,6 +24,7 @@ function selectChat (chatId) {
       if (this._saved.markRead) {
         log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
         this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
+        app.setBadgeCount(this._getGeneralFreshMessageCounter())
       }
     }
   }
@@ -54,12 +56,17 @@ function _chatList (showArchivedChats) {
       chat.deaddrop = this._deadDropMessage(messageId)
     }
 
+    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+      chat.isArchiveLink = true
+    }
+
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     chatList.push({
       id: chat.id,
       summary: list.getSummary(i).toJson(),
       name: chat.name,
       deaddrop: chat.deaddrop,
+      isArchiveLink: chat.isArchiveLink,
       freshMessageCounter: chat.freshMessageCounter,
       profileImage: chat.profileImage,
       color: chat.color,
@@ -121,20 +128,7 @@ function isGroupChat (chat) {
 }
 
 function _getGeneralFreshMessageCounter () {
-  const list = this._dc.getChatList(0, this._query)
-
-  var freshMessageCounter = 0
-  for (let i = 0; i < list.getCount(); i++) {
-    const chatId = list.getChatId(i)
-    const chat = this._dc.getChat(chatId).toJson()
-
-    if (!chat) continue
-
-    if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
-      freshMessageCounter += this._dc.getFreshMessageCount(chatId)
-    }
-  }
-  return freshMessageCounter
+  return this._dc.getFreshMessages().length
 }
 
 function _deadDropMessage (id) {

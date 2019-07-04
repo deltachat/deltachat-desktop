@@ -29,6 +29,11 @@ function login (credentials, render, coreStrings) {
 
   this.setCoreStrings(coreStrings)
 
+  if (!DeltaChat.maybeValidAddr(credentials.addr)) {
+    this.emit('error', this.translate('bad_email_address'))
+    return
+  }
+
   dc.open(cwd, err => {
     if (err) throw err
     const onReady = () => {

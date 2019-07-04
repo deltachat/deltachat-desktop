@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # Currently we rely on a wrapper script to preload bundled
 # libdeltachat because of rpgp.

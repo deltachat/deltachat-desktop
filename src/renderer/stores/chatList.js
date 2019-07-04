@@ -4,7 +4,7 @@ const chatStore = require('./chat')
 
 const defaultState = {
   chatList: [],
-  showArchivedChats: false
+  archivedChatList: []
 }
 const chatListStore = new Store(defaultState)
 
@@ -12,13 +12,27 @@ const chatListStore = new Store(defaultState)
 const DC_TEXT1_DRAFT = 1
 
 function sortChatList (first, second) {
+  if (first.deaddrop || second.deaddrop) {
+    return first.deaddrop ? -1 : 1
+  }
+  if (first.isArchiveLink || second.isArchiveLink) {
+    return first.isArchiveLink ? 1 : -1
+  }
+  if (first.freshMessageCounter !== second.freshMessageCounter) {
+    return first.freshMessageCounter > second.freshMessageCounter ? -1 : 1
+  }
   return first.summary.timestamp > second.summary.timestamp ? -1 : 1
 }
 
 // complete update of chat list
 ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
-  console.log('DD_EVENT_CHATLIST_UPDATED', payload)
-  chatListStore.setState(payload)
+  const { chatList, showArchivedChats } = payload
+  const state = chatListStore.getState()
+  if (showArchivedChats) {
+    chatListStore.setState({ ...state, archivedChatList: chatList })
+  } else {
+    chatListStore.setState({ ...state, chatList })
+  }
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
@@ -26,18 +40,17 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   if (eventType === 'DC_EVENT_INCOMING_MSG' || eventType === 'DC_EVENT_MSGS_CHANGED') {
     const listState = chatListStore.getState()
     const selectedChat = chatStore.getState()
-    if (chatId === selectedChat.id) {
-      console.log('Incoming message for current chat')
-      // new message in selected chat should not increase unread messages
-      return
-    }
     const chat = listState.chatList.find(chat => chat.id === chatId)
     if (!chat) {
       return
     }
+    let freshMessageCounter = chat.freshMessageCounter
+    if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
+      freshMessageCounter++
+    }
     const updatedChat = {
       ...chat,
-      freshMessageCounter: chat.freshMessageCounter + 1,
+      freshMessageCounter: freshMessageCounter,
       summary: messageObj.msg.summary
     }
     let chatList = listState.chatList.map(chat => {
@@ -48,9 +61,9 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   }
 })
 
-// update the draft in chat list immediately
-function updateDraft (action, state) {
+function reducer (action, state) {
   if (action.type === 'UI_SET_DRAFT') {
+    // update the draft in chat list immediately
     const { chatId, text } = action.payload
     const chat = state.chatList.find(chat => chat.id === chatId)
     if (!chat) {
@@ -78,10 +91,15 @@ function updateDraft (action, state) {
       return chat.id === chatId ? updatedChat : chat
     })
     return { ...state, chatList }
+  } else if (action.type === 'UI_UPDATE_QUERY') {
+    const { query } = action.payload
+    return { ...state, query }
+  } else {
+    return state
   }
 }
 
-chatListStore.reducers.push(updateDraft)
+chatListStore.reducers.push(reducer)
 
 chatListStore.effects.push((action, state) => {
   if (action.type === 'UI_SET_DRAFT') {
