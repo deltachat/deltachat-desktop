@@ -95,8 +95,7 @@ function backupImport (file) {
         onSuccessfulMove(addr)
       }
 
-    })
-    
+    })    
   }
   binding.dcn_open(dcn_context, db, '', err => {
     if (err) return done(err)

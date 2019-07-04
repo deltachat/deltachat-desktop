@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import Login from './Login'
 import {
   Button,
+  Classes,
+  Elevation,
   Intent,
   H5,
   Card,
@@ -69,6 +71,8 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   const [error, setError] = useState(null)
   const [importState, setImportState] = useState(['INIT', {}])
 
+  let addr = ''
+
   useEffect(() => {
     console.log('useEffect', ipcBackend)
     ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
@@ -77,7 +81,8 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
       setImportProgress(progress)
     })
 
-    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', (evt, addr) => {
+    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', (evt, a) => {
+      addr = a
       setImportProgress(1000)
       setImportState(['IMPORT_COMPLETE', {}])
     })
@@ -93,17 +98,32 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   }
 
   return (
-    <Fragment>
+    <div className={Classes.DIALOG_BODY}>
+      { error && <p>Error: {error}</p>}
+      { importState[0] == 'INIT' && <p></p> }
+      { importState[0] == 'IMPORT_EXISTS' && 
+        <Card elevation={Elevation.ONE}>
+          <Fragment>
+            {`Seems like there's already an existing Account with the ${addr} address.
+          To import this backup you need to overwrite the existing account. Do you want to?`}
+          </Fragment>
+          <br/>
+          <Button onClick={overwriteBackup} type='submit' text='Yes!' />
+          <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
+        </Card>
+      }
+      { importState[0] == 'INIT' && <p></p> }
+      { importState[0] == 'IMPORT_COMPLETE' && 
+        <Card elevation={Elevation.ONE}>
+          Successfully imported backup
+        </Card>
+      }
+
       <DeltaProgressBar
         progress={importProgress}
         intent={error === false ? Intent.SUCCESS : Intent.ERROR}
       />
-      { error && <p>Error: {error}</p>}
-      { importState[0] == 'INIT' && <p></p> }
-      { importState[0] == 'IMPORT_EXISTS' && <div style={{'height': '500px','backgroundColor':'red'}}>Do you want to overwrite the backup? <button onClick={overwriteBackup}>Yes!</button></div> }
-      { importState[0] == 'INIT' && <p></p> }
-      { importState[0] == 'IMPORT_COMPLETE' && <p>Successfully imported backup</p> }
-    </Fragment>
+    </div>
   )
 })
 
@@ -124,7 +144,10 @@ const ImportButton = React.memo(function ImportButton(props) {
       setShowDialog(true)
     })
   }
-  const onHandleClose = () => setShowDialog(false)
+  const onHandleClose = () => {
+    setShowDialog(false)
+    sendToBackend('updateLogins')
+  }
 
   console.log('render importbutton')
   return(
@@ -135,12 +158,12 @@ const ImportButton = React.memo(function ImportButton(props) {
       {showDialog &&
         <Dialog
           icon="info-sign"
-          onClose={props.onHandleClose}
+          onClose={onHandleClose}
           title={tx('import_backup_title')} 
           canOutsideClickClose={true}
           isOpen={showDialog}
         >
-          <ImportDialogContent />  
+          <ImportDialogContent onClose={onHandleClose} />  
         </Dialog> }
     </Fragment>
   )
@@ -181,7 +204,6 @@ export default function LoginScreen (props) {
             </LoginItem>
             )}
           </ul>
-          <ImportButton/>
         </Card>
         }
         <Card>
@@ -191,6 +213,7 @@ export default function LoginScreen (props) {
             <Button type='submit' text={tx('login_title')} />
             <Button type='cancel' text={tx('cancel')} />
           </Login>
+          <ImportButton/>
         </Card>
       </div>
     </LoginWrapper>

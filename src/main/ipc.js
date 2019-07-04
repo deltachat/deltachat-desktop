@@ -5,6 +5,8 @@ const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const getLogins = require('./logins')
+const { getConfigPath } = require('../application-constants')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -23,6 +25,7 @@ const DeltaChat = (() => {
 const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 const setupUnreadBadgeCounter = require('./unread-badge')
+
 
 function init (cwd, state, logHandler) {
   const main = windows.main
@@ -218,6 +221,14 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
+  })
+
+  ipcMain.on('updateLogins', (e) => {
+    getLogins(getConfigPath(), (err, logins) => {
+      if (err) throw err
+      state.logins = logins
+      render()
+    })
   })
 
   function render () {
