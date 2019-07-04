@@ -20,6 +20,10 @@ import {
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
 
+import logger from '../../logger'
+
+const log = logger.getLogger('renderer/components/LoginScreen')
+
 
 const LoginWrapper = styled.div`
   align-items: center;
@@ -74,10 +78,10 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   let addr = ''
 
   useEffect(() => {
-    console.log('useEffect', ipcBackend)
-    ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => console.log('test'))
+    log.debug('useEffect', ipcBackend)
+    ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => log.debug('test'))
     ipcBackend.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
-      console.log('DC_EVENT_IMEX_PROGRESS', progress)
+      log.debug('DC_EVENT_IMEX_PROGRESS', progress)
       setImportProgress(progress)
     })
 
@@ -88,7 +92,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
     })
 
     ipcBackend.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
-      console.log('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
+      log.debug('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
       setImportState(['IMPORT_EXISTS', {}])
     })
   }, [])
@@ -149,7 +153,6 @@ const ImportButton = React.memo(function ImportButton(props) {
     sendToBackend('updateLogins')
   }
 
-  console.log('render importbutton')
   return(
     <Fragment>
       <DeltaBlueButton onClick={onClickImportBackup} >
