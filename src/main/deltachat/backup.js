@@ -9,6 +9,7 @@ const windows = require('../windows')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
+const log = require('../../logger').getLogger('main/deltachat/backup')
 
 function backupExport (dir) {
   this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)
@@ -34,11 +35,11 @@ function backupImport (file) {
   const dcn_context = binding.dcn_context_new()
 
   let tmpConfigPath = tempy.directory()
-  console.log(`Creating dummy dc config for importing at ${tmpConfigPath}`)
+  log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
   const db = path.join(tmpConfigPath, 'db.sqlite')
   const done = (err, result) => {
     binding.dcn_close(dcn_context, () => {
-      console.log(`closed context for getConfig ${dir}`)
+      log.debug(`closed context for getConfig ${dir}`)
     })
     cb(err, result)
     
@@ -47,7 +48,7 @@ function backupImport (file) {
   const dcn_event = new EventEmitter();
   binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
     eventStr = events[event]
-    console.log('backup event:', eventStr, data1, data2)
+    log.debug('backup event:', eventStr, data1, data2)
     dcn_event.emit(eventStr, data1, data2)
   })
   
@@ -66,10 +67,9 @@ function backupImport (file) {
   }
 
   function onSuccessfulImport() {
-    console.log('yessa')
     const addr = binding.dcn_get_config(dcn_context, 'addr')
 
-    console.log(`backupImport: Closing dc instance...`)
+    log.debug(`backupImport: Closing dc instance...`)
     binding.dcn_close(dcn_context, async (err) => {
 
       self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600) 
@@ -78,17 +78,17 @@ function backupImport (file) {
       let configFolderExists = await fs.pathExists(newPath)
 
       if(configFolderExists) {
-        console.log(`backupImport: ${newPath} already exists`)
+        log.debug(`backupImport: ${newPath} already exists`)
         self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', true)
         self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
     
         ipcMain.once('DU_EVENT_BACKUP_IMPORT_OVERWRITE', async () => {
-          console.log('DU_EVENT_OVERWRITE_IMPORT')
+          log.debug('DU_EVENT_OVERWRITE_IMPORT')
           await moveImportedConfigFolder(addr, newPath, true)
           onSuccessfulMove(addr)
         })        
       } else {
-        console.log(`backupImport: ${newPath} does not exist, moving...`)
+        log.debug(`backupImport: ${newPath} does not exist, moving...`)
         self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
         self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
         await moveImportedConfigFolder(addr, newPath, false)
@@ -99,8 +99,8 @@ function backupImport (file) {
   }
   binding.dcn_open(dcn_context, db, '', err => {
     if (err) return done(err)
-    console.log(`openend context`)
-    console.log(`Starting backup import of ${file}`)
+    log.debug(`openend context`)
+    log.debug(`Starting backup import of ${file}`)
     
     binding.dcn_start_threads(dcn_context)
     binding.dcn_imex(dcn_context, C.DC_IMEX_IMPORT_BACKUP, file, '')
@@ -109,7 +109,6 @@ function backupImport (file) {
 }
 
 module.exports = function () {
-  console.log('xxx', this)
   this.backupExport = backupExport.bind(this)
   this.backupImport = backupImport.bind(this)
 }
