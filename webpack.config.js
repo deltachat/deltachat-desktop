@@ -20,13 +20,15 @@ module.exports = (_, argv) => ({
       {
         test: /\.js$/,
         include: path.normalize(`${__dirname}/src/renderer`),
-        loader: 'babel-loader',
-        options: {
-          presets: ['react'],
-          plugins: [
-            'transform-object-rest-spread'
-          ],
-          sourceType: 'module'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            sourceType: 'module'
+          }
         }
       }
     ]
