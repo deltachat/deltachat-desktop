@@ -128,7 +128,7 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ queryStr })
     if (queryStr.length > 0) {
       filteredChatList = filteredChatList.filter(chat =>
-        `${chat.name}`.indexOf(queryStr) !== -1
+        `${chat.name}`.toLowerCase().indexOf(queryStr.toLowerCase()) !== -1
       )
     }
     this.setState({ filteredChatList })
