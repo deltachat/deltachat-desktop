@@ -141,7 +141,7 @@ class SplittedChatListAndView extends React.Component {
 
   onMapIconClick () {
     const { selectedChat } = this.state
-    this.props.openDialog('MapDialog', { selectedChat })
+    this.context.openDialog('MapDialog', { selectedChat })
   }
 
   render () {
