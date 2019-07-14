@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const GroupBase = require('./GroupBase')
 const differ = require('array-differ')
+const ScreenContext = require('../contexts/ScreenContext')
 
 class EditGroup extends GroupBase {
   constructor (props) {
@@ -30,7 +31,7 @@ class EditGroup extends GroupBase {
   }
 
   back () {
-    this.props.changeScreen('ChatList')
+    this.context.changeScreen('ChatList')
   }
 
   onSubmit () {
@@ -48,8 +49,10 @@ class EditGroup extends GroupBase {
       add
     )
 
-    this.props.changeScreen('ChatList')
+    this.context.changeScreen('ChatList')
   }
 }
+
+EditGroup.contextType = ScreenContext
 
 module.exports = EditGroup
