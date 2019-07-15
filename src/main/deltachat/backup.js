@@ -1,11 +1,8 @@
 const C = require('deltachat-node/constants')
-const DeltaChat = require('deltachat-node')
 const binding = require('deltachat-node/binding')
 const events = require('deltachat-node/events')
 const tempy = require('tempy')
 const fs = require('fs-extra')
-const { promisify } = require('util')
-const windows = require('../windows')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
@@ -16,7 +13,6 @@ function backupExport (dir) {
 }
 
 function backupImport (file) {
-
   let self = this
 
   async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
@@ -27,25 +23,20 @@ function backupImport (file) {
     console.log(`backupImport: ${tmpConfigPath} successfully copied to ${newPath}`)
   }
 
-  function onErrorImport (err) {
-    self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_ERROR', err)
-  }
-
-  const dcn_context = binding.dcn_context_new()
+  const dcnContext = binding.dcn_context_new()
 
   let tmpConfigPath = tempy.directory()
   log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
   const db = path.join(tmpConfigPath, 'db.sqlite')
-  const done = (err, result) => {
-    binding.dcn_close(dcn_context, () => {
-      log.debug(`closed context for getConfig ${dir}`)
+  const onError = (err) => {
+    self.sendToRenderer('DD_EVENT_BACKUP_IMPORT_ERROR', err)
+    binding.dcn_close(dcnContext, () => {
+      log.debug(`closed context for backupImport ${file}`)
     })
-    cb(err, result)
-    
   }
 
   const dcnEvent = new EventEmitter()
-  binding.dcn_set_event_handler(dcn_context, (event, data1, data2) => {
+  binding.dcn_set_event_handler(dcnContext, (event, data1, data2) => {
     const eventStr = events[event]
     log.debug('backup event:', eventStr, data1, data2)
     dcnEvent.emit(eventStr, data1, data2)
@@ -54,7 +45,7 @@ function backupImport (file) {
   dcnEvent.on('DC_EVENT_IMEX_PROGRESS', progress => {
     this.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', progress / 2)
     if (progress === 0) {
-      onErrorImport('UNKNOWN_ERROR')
+      onError('UNKNOWN_ERROR')
     }
     if (progress === 1000) {
       onSuccessfulImport()
@@ -66,10 +57,10 @@ function backupImport (file) {
   }
 
   function onSuccessfulImport () {
-    const addr = binding.dcn_get_config(dcn_context, 'addr')
+    const addr = binding.dcn_get_config(dcnContext, 'addr')
 
     log.debug(`backupImport: Closing dc instance...`)
-    binding.dcn_close(dcn_context, async (err) => {
+    binding.dcn_close(dcnContext, async (err) => {
       if (err) throw err
 
       self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
@@ -96,15 +87,14 @@ function backupImport (file) {
       }
     })
   }
-  binding.dcn_open(dcn_context, db, '', err => {
-    if (err) return done(err)
+  binding.dcn_open(dcnContext, db, '', err => {
+    if (err) return onError(err)
     log.debug(`openend context`)
     log.debug(`Starting backup import of ${file}`)
 
-    binding.dcn_start_threads(dcn_context)
-    binding.dcn_imex(dcn_context, C.DC_IMEX_IMPORT_BACKUP, file, '')
+    binding.dcn_start_threads(dcnContext)
+    binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
   })
-
 }
 
 module.exports = function () {

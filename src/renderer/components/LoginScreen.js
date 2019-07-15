@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { remote } from 'electron'
-import { sendToBackend, ipcBackend}  from '../ipc'
+import { sendToBackend, ipcBackend } from '../ipc'
 import NavbarWrapper from './NavbarWrapper'
 import confirmation from './dialogs/confirmationDialog'
 import styled from 'styled-components'
@@ -10,7 +10,6 @@ import {
   Classes,
   Elevation,
   Intent,
-  H5,
   Card,
   Alignment,
   Navbar,
@@ -23,7 +22,6 @@ import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles
 import logger from '../../logger'
 
 const log = logger.getLogger('renderer/components/LoginScreen')
-
 
 const LoginWrapper = styled.div`
   align-items: center;
@@ -119,19 +117,19 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
   return (
     <div className={Classes.DIALOG_BODY}>
       { error && <p>Error: {error}</p>}
-      { importState[0] === 'INIT' && <p></p> }
-      { importState[0] === 'IMPORT_EXISTS' && 
+      { importState[0] === 'INIT' && <p /> }
+      { importState[0] === 'IMPORT_EXISTS' &&
         <Card elevation={Elevation.ONE}>
           <Fragment>
             {`Seems like there's already an existing Account with the ${addr} address.
           To import this backup you need to overwrite the existing account. Do you want to?`}
           </Fragment>
-          <br/>
+          <br />
           <Button onClick={overwriteBackup} type='submit' text='Yes!' className='override-backup' />
           <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
         </Card>
       }
-      { importState[0] === 'IMPORT_COMPLETE' && 
+      { importState[0] === 'IMPORT_COMPLETE' &&
         <Card elevation={Elevation.ONE}>
           Successfully imported backup
         </Card>
@@ -177,7 +175,7 @@ const ImportButton = React.memo(function ImportButton (props) {
           icon='info-sign'
           onClose={onHandleClose}
           title={tx('import_backup_title')}
-          canOutsideClickClose={true}
+          canOutsideClickClose
           isOpen={showDialog}
         >
           <ImportDialogContent onClose={onHandleClose} />
