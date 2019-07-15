@@ -21,8 +21,9 @@ function selectChat (chatId) {
     if (chat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(chat.id)
       chat.freshMessageCounter = 0
-      log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
-      this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
+      const messagIds = chat.messages.map((msg) => msg.id)
+      log.debug('markSeenMessages', messagIds)
+      this._dc.markSeenMessages(messagIds)
       app.setBadgeCount(this._getGeneralFreshMessageCounter())
     }
   }
