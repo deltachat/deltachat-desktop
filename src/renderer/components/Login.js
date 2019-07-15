@@ -12,7 +12,7 @@ import {
   DeltaProgressBar,
   AdvancedButton,
   AdvancedButtonIconClosed,
-  AdvancedButtonIconOpen,
+  AdvancedButtonIconOpen
 } from './Login-Styles'
 import {
   Collapse,

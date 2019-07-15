@@ -241,7 +241,7 @@ export const DeltaHeadline = styled.p`
   font-size: 18px;
   padding: 15px 0 3px;`
 
-export const DeltaProgressBar = function(props) {
+export const DeltaProgressBar = function (props) {
   return (
     <ProgressBarWrapper>
       <ProgressBar

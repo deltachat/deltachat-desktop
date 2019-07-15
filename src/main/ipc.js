@@ -26,7 +26,6 @@ const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 const setupUnreadBadgeCounter = require('./unread-badge')
 
-
 function init (cwd, state, logHandler) {
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
