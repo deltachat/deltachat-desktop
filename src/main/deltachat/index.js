@@ -36,7 +36,8 @@ class DeltaChatController extends EventEmitter {
     if (!isNaN(event)) {
       event = eventStrings[event]
     }
-    log.debug('Core Event', event)
+
+    log.debug('Core Event', event, payload[0] === 0 ? payload[1] : payload.join(' '))
   }
 
   /**
