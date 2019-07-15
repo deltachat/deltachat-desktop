@@ -16,6 +16,7 @@ function backupExport (dir) {
 }
 
 function backupImport (file) {
+
   let self = this
 
   async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
@@ -40,6 +41,7 @@ function backupImport (file) {
       log.debug(`closed context for getConfig ${dir}`)
     })
     cb(err, result)
+    
   }
 
   const dcnEvent = new EventEmitter()
@@ -102,6 +104,7 @@ function backupImport (file) {
     binding.dcn_start_threads(dcn_context)
     binding.dcn_imex(dcn_context, C.DC_IMEX_IMPORT_BACKUP, file, '')
   })
+
 }
 
 module.exports = function () {
