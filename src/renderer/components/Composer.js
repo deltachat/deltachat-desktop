@@ -1,8 +1,8 @@
 const React = require('react')
+const { withTheme } = require('styled-components')
 
 const { Button } = require('@blueprintjs/core')
 const { remote } = require('electron')
-const StyleVariables = require('./style-variables')
 const styled = require('styled-components').default
 const { Picker } = require('emoji-mart')
 
@@ -11,7 +11,7 @@ const SettingsContext = require('../contexts/SettingsContext')
 const ComposerMessageInput = require('./ComposerMessageInput')
 
 const ComposerWrapper = styled.div`
-  background-color: ${StyleVariables.colors.deltaPrimaryFg};
+  background-color: ${props => props.theme.deltaPrimaryFg};
   border-left: 1px solid rgba(16,22,26,0.1);
 `
 
@@ -105,7 +105,7 @@ const SendButtonCircleWrapper = styled.div`
   margin-top: 4px;
   margin-bottom: 4px;
   margin-right: 5px;
-  background-color: ${StyleVariables.colors.deltaPrimaryBg};
+  background-color: ${props => props.theme.deltaPrimaryBg};
   border-radius: 180px;
   cursor: pointer;
   
@@ -241,7 +241,7 @@ class Composer extends React.Component {
             <Picker
               style={{ width: '100%', height: '100%' }}
               native
-              color={StyleVariables.colors.deltaPrimaryBg}
+              color={this.props.theme.deltaPrimaryBg}
               onSelect={this.onEmojiSelect}
               showPreview={false}
               showSkinTones={false}
@@ -256,4 +256,4 @@ class Composer extends React.Component {
     )
   }
 }
-module.exports = Composer
+module.exports = withTheme(Composer)

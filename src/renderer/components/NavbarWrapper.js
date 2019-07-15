@@ -1,5 +1,4 @@
 const styled = require('styled-components').default
-const StyleVariables = require('./style-variables')
 
 module.exports = styled.div`
   img {
@@ -9,8 +8,8 @@ module.exports = styled.div`
 
   .bp3-navbar {
     padding: 0px;
-    background-color: ${StyleVariables.colors.deltaPrimaryBg};
-    color: ${StyleVariables.colors.deltaPrimaryFg};
+    background-color: ${props => props.theme.deltaPrimaryBg};
+    color: ${props => props.theme.deltaPrimaryFg};
   }
 
   .bp3-navbar-heading {
@@ -38,7 +37,7 @@ module.exports = styled.div`
   }
 
   .bp3-icon > svg:not([fill]) {
-    fill: ${StyleVariables.colors.deltaPrimaryFg};
+    fill: ${props => props.theme.deltaPrimaryFg};
   }
 
   .icon-rotated > .bp3-icon > svg:not([fill]){
@@ -50,18 +49,18 @@ module.exports = styled.div`
   }
 
   .bp3-input[type="search"] {
-    background-color: ${StyleVariables.colors.deltaPrimaryBg};
+    background-color: ${props => props.theme.deltaPrimaryBg};
     -webkit-box-shadow: none;
     box-shadow: none;
     border: unset;
-    color: ${StyleVariables.colors.deltaPrimaryFg};
+    color: ${props => props.theme.deltaPrimaryFg};
     padding-left: unset !important;
     margin-left: 40px;
     width: calc(100% - 40px);
   }
 
   .bp3-input[type="search"]::placeholder {
-    color: ${StyleVariables.colors.deltaPrimaryFgLight}
+    color: ${props => props.theme.deltaPrimaryFgLight}
   }
 
   .bp3-button.bp3-minimal {

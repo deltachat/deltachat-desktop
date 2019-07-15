@@ -13,25 +13,24 @@ const {
 } = require('@blueprintjs/core')
 
 const styled = require('styled-components').default
-const StyleVariables = require('./style-variables')
 
 const ContactList = require('./ContactList')
 const NavbarWrapper = require('./NavbarWrapper')
 
 const OvalDeltaButton = styled.button`
-  background-color: ${StyleVariables.colors.deltaPrimaryBg} 
+  background-color: ${props => props.theme.deltaPrimaryBg} 
   padding: 10px
   border-style: none
   border-radius: 180px
   margin: 10px
   font-weight: bold
-  color: ${StyleVariables.colors.deltaPrimaryFg} 
+  color: ${props => props.theme.deltaPrimaryFg} 
   &:focus {
     outline: none
   }
   &:hover {
-    background-color: ${StyleVariables.colors.deltaHover} 
-    color: ${StyleVariables.colors.deltaPrimaryBg} 
+    background-color: ${props => props.theme.deltaHover} 
+    color: ${props => props.theme.deltaPrimaryBg} 
   }
 `
 

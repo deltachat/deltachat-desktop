@@ -20,18 +20,3 @@
   background-color: $color;
   transform: rotate(90deg);
 }
-
-@mixin header-icon-white($svg) {
-  @include color-svg($svg, rgba(255, 255, 255, 0.8));
-  &:focus,
-  &:hover {
-    @include color-svg($svg, white);
-  }
-}
-@mixin header-icon-black($svg) {
-  @include color-svg($svg, rgba(0, 0, 0, 0.5));
-  &:focus,
-  &:hover {
-    @include color-svg($svg, black);
-  }
-}

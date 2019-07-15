@@ -13,8 +13,8 @@ body {
   margin: 0;
   font-family: $roboto!important;
   font-size: 14px;
-  color: $color-light-90;
-  background-color: white;
+  color: var(--color-light-90);
+  background-color: var(--bg-color);
 }
 
 .window {
@@ -40,17 +40,6 @@ h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   user-select: none;
 }
 
-.dark-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: $color-black;
-  opacity: 0.25;
-  z-index: 200;
-}
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -65,7 +54,7 @@ h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
 }
 
 .title-bar {
-  color: $color-light-90;
+  color: var(--color-light-90);
 
   height: $header-height;
   display: flex;
@@ -78,7 +67,7 @@ h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   font-size: 16px;
   line-height: 24px;
   font-weight: 300;
-  color: $color-light-90;
+  color: var(--color-light-90);
 }
 
 button {
@@ -86,44 +75,11 @@ button {
   font-size: inherit;
 }
 
-button {
-  /*  This broke emoji mart after update */
-  /* min-width: 200px; */
-}
-
-button.grey {
-  border-radius: $border-radius;
-  border: solid 1px #ccc;
-  cursor: pointer;
-  margin: 1em auto;
-  padding: 1em;
-  font-family: inherit;
-  color: $grey;
-  background: $grey_l;
-  box-shadow: 0 0 10px -5px rgba($grey, 0.5);
-
-  &:hover {
-    box-shadow: 0 0 10px -3px rgba($grey, 0.7);
-  }
-
-  &[disabled='disabled'] {
-    &,
-    &:hover {
-      opacity: 0.5;
-      box-shadow: none;
-      cursor: default;
-    }
-  }
-}
-
 a {
-  color: $blue;
+  color: var(--color-blue);
 }
 
-.thumbnail {
-  max-width: 50px;
-  max-height: 50px;
-}
+
 
 .file-input {
   position: relative;
@@ -144,7 +100,7 @@ a {
       display: inline-block;
       width: $button-height;
       height: $button-height;
-      @include color-svg('../images/paperclip.svg', $grey);
+      @include color-svg('../images/paperclip.svg', var(--color-grey));
       transform: rotateZ(-45deg);
     }
 
@@ -167,10 +123,6 @@ a {
   }
 }
 
-.dropoff {
-  outline: solid 1px $blue;
-}
-
 $avatar-size: 48px;
 
 .avatar {
@@ -184,60 +136,9 @@ $avatar-size: 48px;
   line-height: $avatar-size;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  color: $color-white;
+  color: var(--color-white);
   font-size: 18px;
-  background-color: $grey;
-}
-
-.group-info-input {
-  background: $color-white;
-
-  .group-avatar {
-    display: inline-block;
-    padding: 2px 0px 0px 2px;
-  }
-
-  .file-input .thumbnail,
-  .thumbnail .avatar,
-  img {
-    height: 54px;
-    width: 54px;
-    border-radius: (54px / 2);
-  }
-
-  .thumbnail:after {
-    content: '';
-    position: absolute;
-    height: 0;
-    width: 0;
-    bottom: 0;
-    right: 0;
-    border-bottom: 10px solid $grey;
-    border-left: 10px solid transparent;
-  }
-
-  input.name {
-    padding: 0.5em;
-    border: solid 1px #ccc;
-    border-width: 0 0 1px 0;
-    width: calc(100% - 84px);
-  }
-}
-
-.group-member-list,
-.new-group-update {
-  .summary {
-    margin: 10px;
-  }
-
-  .members .contact {
-    box-shadow: none;
-    border-bottom: 1px solid #eee;
-    .last-message,
-    .last-timestamp {
-      display: none;
-    }
-  }
+  background-color: var(--color-grey);
 }
 
 .SelectGroupImage {
@@ -257,146 +158,9 @@ $avatar-size: 48px;
 
 $unread-badge-size: 21px;
 
-.banner {
-  z-index: 100;
-
-  // what's the right color?
-  background-color: $blue_l;
-  color: black;
-  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
-
-  position: absolute;
-  top: 25px;
-  right: 30px;
-  left: 30px;
-
-  padding: 5px 25px 5px 10px;
-
-  text-align: center;
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  .warning {
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    vertical-align: text-bottom;
-    @include color-svg('../images/warning.svg', black);
-  }
-
-  .dismiss {
-    position: absolute;
-    right: 3px;
-    top: 3px;
-
-    height: 23px;
-    width: 23px;
-    @include color-svg('../images/x.svg', black);
-  }
-}
-
 $new-contact-left-margin: 16px;
 .new-contact .avatar {
   margin-left: $new-contact-left-margin;
-}
-
-// Still used for the contact search view
-.contact-details {
-  $left-margin: 12px;
-
-  vertical-align: middle;
-  display: inline-block;
-  margin: 0 0 0 $left-margin;
-  width: calc(
-    100% - #{$avatar-size} - #{$new-contact-left-margin} - #{$left-margin} - #{(
-        4/14
-      ) + em}
-  );
-  text-align: left;
-
-  p {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    height: 1.2em;
-    text-overflow: ellipsis;
-  }
-
-  .name {
-    display: block;
-    margin: 0;
-    font-size: 1em;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    text-align: left;
-  }
-
-  .number {
-    color: $color-light-60;
-    font-size: $font-size-small;
-  }
-
-  &.clickable {
-    cursor: pointer;
-  }
-
-  .verified-icon {
-    @include color-svg('../images/verified-check.svg', $grey);
-    display: inline-block;
-    width: 1.25em;
-    height: 1.25em;
-    vertical-align: text-bottom;
-  }
-
-  .body-wrapper {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.recipients-input {
-  position: relative;
-
-  .recipients-container {
-    background-color: white;
-    padding: 2px;
-    border-bottom: 1px solid #f2f2f2;
-    line-height: 24px;
-  }
-
-  .recipient {
-    display: inline-block;
-    margin: 0 2px 2px 0;
-    padding: 0 5px;
-    border-radius: 10px;
-    background-color: $blue;
-    color: white;
-
-    &.error {
-      background-color: #f00;
-    }
-
-    .remove {
-      margin-left: 5px;
-      padding: 0 2px;
-    }
-  }
-
-  .results {
-    position: absolute;
-    z-index: 10;
-    margin: 0 0 0 20px;
-    width: calc(100% - 30px);
-    max-width: 300px;
-    max-height: 55px * 3;
-    overflow-y: auto;
-    box-shadow: 0px 0px 1px rgba(#aaa, 0.8);
-
-    .contact {
-      cursor: pointer;
-    }
-  }
 }
 
 .attachment-preview {
@@ -404,35 +168,6 @@ $new-contact-left-margin: 16px;
   position: relative;
   img {
     max-width: 100%;
-  }
-}
-.new-conversation .recipients-input .recipients::before {
-  content: 'To: ';
-}
-.new-group-update .recipients-input .recipients::before {
-  content: 'Add: ';
-}
-
-$loading-height: 16px;
-
-.loading {
-  position: relative;
-  &::before {
-    display: block;
-    margin: 0px auto;
-    content: ' ';
-    height: $loading-height;
-    width: $loading-height;
-    border-radius: 2 * $loading-height;
-    border: solid 3px;
-    border-color: $blue_l $blue_l $grey_l $grey_l !important;
-    animation: rotate 1s linear infinite;
-  }
-
-  @keyframes rotate {
-    to {
-      transform: rotate(360deg);
-    }
   }
 }
 
@@ -444,14 +179,14 @@ $loading-height: 16px;
   width: 22px;
   height: 22px;
   padding: 3px;
-  background: $grey;
+  background: var(--color-grey);
 
   &:before {
     content: '';
     display: block;
     width: 100%;
     height: 100%;
-    @include color-svg('../images/x.svg', white);
+    @include color-svg('../images/x.svg', var(--color-white));
   }
 }
 
@@ -460,37 +195,12 @@ input[type='search'],
 textarea {
   &:active,
   &:focus {
-    outline: 1px solid $blue;
+    outline: 1px solid var(--color-blue);
   }
 }
 
 input:focus {
   outline: 0 !important;
-}
-
-.expiredAlert {
-  background: #f3f3a7;
-  padding: 10px;
-
-  button {
-    float: right;
-    border: none;
-    border-radius: $border-radius;
-    color: white;
-    font-weight: bold;
-    line-height: 36px;
-    padding: 0 20px;
-    background: $blue;
-    margin-left: 20px;
-  }
-
-  .message {
-    padding: 10px 0;
-  }
-}
-
-.inbox {
-  position: relative;
 }
 
 @keyframes loading {
@@ -503,70 +213,12 @@ input:focus {
   }
 }
 
-.app-loading-screen {
-  z-index: 99;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: white;
-  display: flex;
-  align-items: center;
-
-  .content {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-  .container {
-    margin-left: auto;
-    margin-right: auto;
-    width: 78px;
-    height: 22px;
-  }
-  .message {
-    -webkit-user-select: text;
-    max-width: 35em;
-  }
-
-  .dot {
-    width: 14px;
-    height: 14px;
-    border: 3px solid $blue;
-    border-radius: 50%;
-    float: left;
-    margin: 0 6px;
-    transform: scale(0);
-
-    animation: loading 1500ms ease infinite 0ms;
-    &:nth-child(2) {
-      animation: loading 1500ms ease infinite 333ms;
-    }
-    &:nth-child(3) {
-      animation: loading 1500ms ease infinite 666ms;
-    }
-  }
-}
-
 //yellow/blue border fix
-.inbox:focus,
 button:focus  {
   outline: none;
 }
 button:focus {
   outline: none;
-}
-
-.text-security .inbox {
-  .name,
-  .body,
-  .last-message,
-  .sender,
-  .conversation-title,
-  .number {
-    -webkit-text-security: square;
-  }
 }
 
 ::-webkit-scrollbar {
@@ -579,11 +231,11 @@ button:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #666666;
+  background: var(--scrollbar-thumb);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #606060;
+  background: var(--scrollbar-thumb-hover);
 }
 
 ::-webkit-scrollbar-corner {
