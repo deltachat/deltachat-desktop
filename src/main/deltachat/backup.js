@@ -92,8 +92,8 @@ function backupImport (file) {
     log.debug(`openend context`)
     log.debug(`Starting backup import of ${file}`)
 
-    binding.dcn_start_threads(dcnContext)
     binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
+    binding.dcn_perform_imap_jobs(dcnContext)
   })
 }
 
