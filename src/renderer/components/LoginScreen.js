@@ -79,22 +79,32 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
 
   useEffect(() => {
     log.debug('useEffect', ipcBackend)
+    let wasCanceled = false
     ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => log.debug('test'))
     ipcBackend.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
       log.debug('DC_EVENT_IMEX_PROGRESS', progress)
-      setImportProgress(progress)
+      if (!wasCanceled) {
+        setImportProgress(progress)
+      }
     })
 
     ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', (evt, a) => {
       addr = a
-      setImportProgress(1000)
-      setImportState(['IMPORT_COMPLETE', {}])
+      if (!wasCanceled) {
+        setImportProgress(1000)
+        setImportState(['IMPORT_COMPLETE', {}])
+      }
     })
 
     ipcBackend.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
       log.debug('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
-      setImportState(['IMPORT_EXISTS', {}])
+      if (!wasCanceled) {
+        setImportState(['IMPORT_EXISTS', {}])
+      }
     })
+    return () => {
+      wasCanceled = true
+    }
   }, [])
 
   function overwriteBackup() {
@@ -104,29 +114,28 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   return (
     <div className={Classes.DIALOG_BODY}>
       { error && <p>Error: {error}</p>}
-      { importState[0] == 'INIT' && <p></p> }
-      { importState[0] == 'IMPORT_EXISTS' && 
+      { importState[0] === 'INIT' && <p></p> }
+      { importState[0] === 'IMPORT_EXISTS' && 
         <Card elevation={Elevation.ONE}>
           <Fragment>
             {`Seems like there's already an existing Account with the ${addr} address.
           To import this backup you need to overwrite the existing account. Do you want to?`}
           </Fragment>
           <br/>
-          <Button onClick={overwriteBackup} type='submit' text='Yes!' />
+          <Button onClick={overwriteBackup} type='submit' text='Yes!' className='override-backup' />
           <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
         </Card>
       }
-      { importState[0] == 'INIT' && <p></p> }
-      { importState[0] == 'IMPORT_COMPLETE' && 
+      { importState[0] === 'IMPORT_COMPLETE' && 
         <Card elevation={Elevation.ONE}>
           Successfully imported backup
         </Card>
       }
-
+      { importState[0] !== 'IMPORT_COMPLETE' && 
       <DeltaProgressBar
         progress={importProgress}
         intent={error === false ? Intent.SUCCESS : Intent.ERROR}
-      />
+      /> }
     </div>
   )
 })

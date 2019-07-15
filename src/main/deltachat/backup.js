@@ -1,11 +1,8 @@
 const C = require('deltachat-node/constants')
-const DeltaChat = require('deltachat-node')
 const binding = require('deltachat-node/binding')
 const events = require('deltachat-node/events')
 const tempy = require('tempy')
 const fs = require('fs-extra')
-const {promisify} = require('util');
-const windows = require('../windows')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
