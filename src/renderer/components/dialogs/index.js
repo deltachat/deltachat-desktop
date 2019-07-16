@@ -66,14 +66,19 @@ class Controller extends React.Component {
     return (
       <div>
         {Object.values(dialogs).map((dialog) => {
+          let isOpen = dialog.props !== false
+          if (!isOpen) return null
+
           var name = dialog.Component.name
           var defaultProps = {
-            isOpen: dialog.props !== false,
+            isOpen,
             onClose: () => this.close(name),
             userFeedback,
             saved,
             deltachat,
-            key: name
+            key: name,
+            openDialog: open,
+            closeDialog: close
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})

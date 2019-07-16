@@ -46,8 +46,7 @@ function backupImport (file) {
     this.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', progress / 2)
     if (progress === 0) {
       onError('UNKNOWN_ERROR')
-    }
-    if (progress === 1000) {
+    } else if (progress === 1000) {
       onSuccessfulImport()
     }
   })
@@ -93,9 +92,7 @@ function backupImport (file) {
     log.debug(`Starting backup import of ${file}`)
 
     binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
-    log.debug(`before dcn_perform_imap_jobs`)
     binding.dcn_perform_imap_jobs(dcnContext)
-    log.debug(`after dcn_perform_imap_jobs`)
   })
 }
 
