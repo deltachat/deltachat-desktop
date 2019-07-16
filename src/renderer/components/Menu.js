@@ -92,7 +92,7 @@ class DeltaMenu extends React.Component {
 
     let chatMenu = <div />
 
-    if (selectedChat) {
+    if (selectedChat && !selectedChat.isDeaddrop) {
       chatMenu = <div>
         <Menu.Divider />
         {showArchivedChats
