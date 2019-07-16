@@ -21,11 +21,10 @@ function selectChat (chatId) {
     if (chat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(chat.id)
       chat.freshMessageCounter = 0
-      if (this._saved.markRead) {
-        log.debug('markSeenMessages', chat.messages.map((msg) => msg.id))
-        this._dc.markSeenMessages(chat.messages.map((msg) => msg.id))
-        app.setBadgeCount(this._getGeneralFreshMessageCounter())
-      }
+      const messagIds = chat.messages.map((msg) => msg.id)
+      log.debug('markSeenMessages', messagIds)
+      this._dc.markSeenMessages(messagIds)
+      app.setBadgeCount(this._getGeneralFreshMessageCounter())
     }
   }
   this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })

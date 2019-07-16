@@ -82,7 +82,7 @@ class Settings extends React.Component {
           'configured_e2ee_enabled',
           'displayname',
           'selfstatus',
-          // 'mdns_enabled', // TODO - investigate markRead var doesn't affect this?
+          'mdns_enabled',
           'show_emails'
         ]
       )
@@ -332,7 +332,7 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('pref_privacy')}</H5>
-              { this.renderRCSwitch('markRead', this.translate('pref_read_receipts')) }
+              { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('pref_imap_folder_handling')}</H5>
