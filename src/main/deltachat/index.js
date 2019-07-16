@@ -32,12 +32,14 @@ class DeltaChatController extends EventEmitter {
     require('./settings').bind(this)()
   }
 
-  logCoreEvent (event, payload) {
+  logCoreEvent (event, data1, data2) {
     if (!isNaN(event)) {
       event = eventStrings[event]
     }
 
-    log.debug('Core Event', event, payload[0] === 0 ? payload[1] : payload.join(' '))
+    if (data1 === 0) data1 = ''
+
+    log.debug('Core Event', event, data1, data2)
   }
 
   /**
@@ -81,8 +83,8 @@ class DeltaChatController extends EventEmitter {
   }
 
   registerEventHandler (dc) {
-    dc.on('ALL', (event, ...args) => {
-      this.logCoreEvent(event, args)
+    dc.on('ALL', (event, data1, data2) => {
+      this.logCoreEvent(event, data1, data2)
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
