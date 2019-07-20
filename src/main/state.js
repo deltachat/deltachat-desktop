@@ -33,7 +33,6 @@ function getDefaultState () {
      * Persisted state. Must be JSON.
      */
     saved: {
-      markRead: true,
       enterKeySends: false,
       notifications: true,
       showNotificationContent: true,

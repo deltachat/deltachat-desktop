@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import * as StyleVariables from './style-variables'
 import {
   Button,
   InputGroup,
@@ -32,7 +31,7 @@ export const DeltaBlueButton = styled.div`
 export const AdvancedButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
-  color: ${StyleVariables.colors.deltaFocusBlue};;
+  color: ${props => props.theme.deltaFocusBlue};;
   font-size: 16px;
   display: block;
   width: 100%; 
@@ -55,7 +54,7 @@ export const AdvancedButtonIconOpen = styled.div`
   height: 20px;
   -webkit-mask: url(../images/dc-cross.svg) no-repeat center;
   -webkit-mask-size: 100%;
-  background-color: ${StyleVariables.colors.deltaFocusBlue};
+  background-color: ${props => props.theme.deltaFocusBlue};
   display: -webkit-inline-box;
 `
 
@@ -83,7 +82,7 @@ export const DeltaSelectWrapper = styled(DeltaFormGroup)`
       background-image: none;
       background-color: transparent;
       width: 100%;
-      color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+      color: ${props => props.theme.deltaChatPrimaryFgLight};
       font-size: 17px;
       &:hover, &:focus {
         outline: unset;
@@ -93,7 +92,7 @@ export const DeltaSelectWrapper = styled(DeltaFormGroup)`
   }
   .bp3-form-group label.bp3-label {
     padding-left: 10px;
-    color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    color: ${props => props.theme.deltaChatPrimaryFgLight};
     font-size: 16px; 
   }
 `
@@ -131,19 +130,19 @@ export const DeltaInputWrapper = styled(DeltaFormGroup)`
     -webkit-box-shadow: none;
     box-shadow: none;
     border-bottom: 2px solid;
-    border-bottom-color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    border-bottom-color: ${props => props.theme.deltaChatPrimaryFgLight};
     font-size: 16px; 
 
     &:focus {
-      border-bottom-color: ${StyleVariables.colors.deltaFocusBlue};
-      color: ${StyleVariables.colors.deltaFocusBlue};
+      border-bottom-color: ${props => props.theme.deltaFocusBlue};
+      color: ${props => props.theme.deltaFocusBlue};
     }
 
     &:focus::placeholder {
       color: transparent;
     }
     &::placeholder {
-      color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+      color: ${props => props.theme.deltaChatPrimaryFgLight};
     }
   }
 
@@ -152,7 +151,7 @@ export const DeltaInputWrapper = styled(DeltaFormGroup)`
   }
 
   .bp3-button.bp3-minimal.bp3-intent-warning:hover {
-    background-color: #d0d0d0 !important;
+    background-color: ${props => props.theme.deltaChatPrimaryFgLight} !important;
   }
 `
 
@@ -163,8 +162,8 @@ export const DeltaLabel = styled.div`
     line-height: 13px;
     width: 100%;
     color: ${props => props.focus === true
-    ? StyleVariables.colors.deltaFocusBlue
-    : StyleVariables.colors.deltaChatPrimaryFgLight};
+    ? props.theme.deltaFocusBlue
+    : props.theme.deltaChatPrimaryFgLight};
 `
 
 export const DeltaInput = React.memo((props) => {
@@ -233,11 +232,11 @@ margin-top: 20px
 `
 
 export const DeltaText = styled.p`
-  color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+  color: ${props => props.theme.deltaChatPrimaryFgLight};
 `
 
 export const DeltaHeadline = styled.p`
-  color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+  color: ${props => props.theme.deltaChatPrimaryFgLight};
   font-size: 18px;
   padding: 15px 0 3px;`
 

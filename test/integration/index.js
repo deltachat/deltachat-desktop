@@ -21,7 +21,7 @@ test('Bad mail address results in error message', async (t) => {
       .setValue('#mail_pw', 'bar')
       .click('button[type=\'submit\']')
 
-    await setup.wait(5000)
+    await setup.wait(500)
     let text = await app.client.getText('.user-feedback')
     t.equal(text, 'Bad email address.')
     setup.endTest(app, t)

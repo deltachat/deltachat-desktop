@@ -2,6 +2,8 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 
+const ScreenContext = require('./contexts/ScreenContext')
+const NavbarWrapper = require('./components/NavbarWrapper')
 const UnblockContacts = require('./components/UnblockContacts')
 const LoginScreen = require('./components/LoginScreen').default
 const CreateChat = require('./components/CreateChat')
@@ -117,15 +119,18 @@ class ScreenController extends React.Component {
         )}
         {!deltachat.ready
           ? <LoginScreen logins={logins} deltachat={deltachat} />
-          : <Screen
-            saved={saved}
-            screenProps={screenProps}
-            openDialog={this.openDialog}
-            closeDialog={this.closeDialog}
-            userFeedback={this.userFeedback}
-            changeScreen={this.changeScreen}
-            deltachat={deltachat}
-          />
+          : <ScreenContext.Provider value={{
+            openDialog: this.openDialog,
+            closeDialog: this.closeDialog,
+            userFeedback: this.userFeedback,
+            changeScreen: this.changeScreen
+          }}>
+            <Screen
+              saved={saved}
+              deltachat={deltachat}
+              screenProps={screenProps}
+            />
+          </ScreenContext.Provider>
         }
         <dialogs.Controller
           ref={this.dialogs}

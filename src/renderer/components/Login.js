@@ -50,9 +50,9 @@ export default class Login extends React.Component {
 
   _defaultCredentials () {
     return {
-      addr: process.env.DC_ADDR || this.props.addr || '',
+      addr: this.props.addr || '',
       mail_user: this.props.mail_user || '',
-      mail_pw: process.env.DC_MAIL_PW || this.props.mail_pw || '',
+      mail_pw: this.props.mail_pw || '',
       mail_server: this.props.mail_server || '',
       mail_port: this.props.mail_port || '',
       mail_security: this.props.mail_security || '',

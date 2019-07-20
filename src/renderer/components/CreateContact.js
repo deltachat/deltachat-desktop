@@ -1,5 +1,6 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
+const ScreenContext = require('../contexts/ScreenContext')
 
 const {
   Alignment,
@@ -28,7 +29,7 @@ class CreateContact extends React.Component {
   }
 
   back () {
-    this.props.changeScreen('CreateChat')
+    this.context.changeScreen('CreateChat')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -63,7 +64,7 @@ class CreateContact extends React.Component {
     } else if (email.length) {
       createContact(email.split('@')[0], email)
     } else {
-      return this.props.userFeedback({ type: 'error', text: tx('email_validation_failed_desktop') })
+      return this.context.userFeedback({ type: 'error', text: tx('email_validation_failed_desktop') })
     }
   }
 
@@ -106,5 +107,6 @@ class CreateContact extends React.Component {
     )
   }
 }
+CreateContact.contextType = ScreenContext
 
 module.exports = CreateContact

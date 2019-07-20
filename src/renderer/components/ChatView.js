@@ -1,11 +1,11 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
+const ScreenContext = require('../contexts/ScreenContext')
 
 const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
 const { ConversationContext } = require('./conversations')
-const StyleVariables = require('./style-variables')
 const log = require('../../logger').getLogger('renderer/chatView')
 
 const MutationObserver = window.MutationObserver
@@ -14,7 +14,7 @@ const SCROLL_BUFFER = 70
 
 const ChatViewWrapper = styled.div`
   width: 70%;
-  background-color: #eeefef;
+  background-color:  ${props => props.theme.deltaPrimaryBg};
   float: right;
   display: grid;
   grid-template-columns: auto;
@@ -42,11 +42,11 @@ const ChatViewWrapper = styled.div`
   }
 
   .module-message__container--incoming {
-    background-color: ${StyleVariables.colors.deltaChatMessageBubbleOther};
+    background-color: ${props => props.theme.deltaChatMessageBubbleOther};
   }
 
   .module-message__container--outgoing {
-    background-color: ${StyleVariables.colors.deltaChatMessageBubbleSelf};
+    background-color: ${props => props.theme.deltaChatMessageBubbleSelf};
 
     &, & .module-message__attachment-container {
       border-radius: 16px 16px 1px 16px;
@@ -68,11 +68,11 @@ const ChatViewWrapper = styled.div`
   }
 
   .module-message__author, .module-message__text {
-    color: ${StyleVariables.colors.deltaChatPrimaryFg};
+    color: ${props => props.theme.deltaChatPrimaryFg};
   }
 
   .module-message__metadata__date--incoming {
-    color: ${StyleVariables.colors.deltaChatPrimaryFgLight};
+    color: ${props => props.theme.deltaChatPrimaryFgLight};
   }
 }
 `
@@ -161,23 +161,23 @@ class ChatView extends React.Component {
   }
 
   onClickAttachment (message) {
-    this.props.openDialog('RenderMedia', { message })
+    this.context.openDialog('RenderMedia', { message })
   }
 
   onClickSetupMessage (setupMessage) {
-    this.props.openDialog('SetupMessage', { setupMessage })
+    this.context.openDialog('SetupMessage', { setupMessage })
   }
 
   onShowDetail (message) {
     const { chat } = this.props
-    this.props.openDialog('MessageDetail', {
+    this.context.openDialog('MessageDetail', {
       message,
       chat
     })
   }
 
   onForward (forwardMessage) {
-    this.props.openDialog('ForwardMessage', { forwardMessage })
+    this.context.openDialog('ForwardMessage', { forwardMessage })
   }
 
   setComposerSize (size) {
@@ -246,5 +246,6 @@ class ChatView extends React.Component {
     )
   }
 }
+ChatView.contextType = ScreenContext
 
 module.exports = ChatView

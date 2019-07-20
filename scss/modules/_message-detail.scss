@@ -26,7 +26,7 @@
 }
 
 .module-message-detail__unix-timestamp {
-  color: $color-light-10;
+  color: #eeefef;
 }
 
 .module-message-detail__delete-button-container {
@@ -37,11 +37,11 @@
 .module-message-detail__delete-button {
   @include button-reset;
 
-  background-color: $color-core-red;
-  color: $color-white;
+  background-color: var(--color-core-red);
+  color: var(--color-white);
   box-shadow: 0 0 10px -3px rgba(97, 97, 97, 0.7);
   border-radius: 5px;
-  border: solid 1px $color-light-35;
+  border: solid 1px var(--color-light-35);
   cursor: pointer;
   margin: 1em auto;
   padding: 1em;
@@ -66,40 +66,12 @@
 }
 
 .module-message-detail__contact__default-avatar {
-  background-color: $color-conversation-grey;
+  background-color: var(--color-conversation-grey);
 
   line-height: 44px;
   font-size: 20px;
-  color: $color-white;
+  color: var(--color-white);
   text-align: center;
-}
-
-.module-message-detail__contact__default-avatar--blue {
-  background-color: $color-conversation-blue;
-}
-.module-message-detail__contact__default-avatar--cyan {
-  background-color: $color-conversation-cyan;
-}
-.module-message-detail__contact__default-avatar--deep_orange {
-  background-color: $color-conversation-deep_orange;
-}
-.module-message-detail__contact__default-avatar--green {
-  background-color: $color-conversation-green;
-}
-.module-message-detail__contact__default-avatar--indigo {
-  background-color: $color-conversation-indigo;
-}
-.module-message-detail__contact__default-avatar--pink {
-  background-color: $color-conversation-pink;
-}
-.module-message-detail__contact__default-avatar--purple {
-  background-color: $color-conversation-purple;
-}
-.module-message-detail__contact__default-avatar--red {
-  background-color: $color-conversation-red;
-}
-.module-message-detail__contact__default-avatar--teal {
-  background-color: $color-conversation-teal;
 }
 
 .module-message-detail__contact__text {
@@ -108,7 +80,7 @@
 }
 
 .module-message-detail__contact__error {
-  color: $color-core-red;
+  color: var(--color-core-red);
   font-weight: 300;
 }
 
@@ -121,7 +93,7 @@
 }
 
 .module-message-detail__contact__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-light-60);
+  @include color-svg('../images/sending.svg', var(--color-light-60));
   animation: module-message-detail__contact__status-icon--spinning 4s linear
     infinite;
 }
@@ -134,18 +106,18 @@
 }
 
 .module-message-detail__contact__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-light-35);
+  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
 }
 .module-message-detail__contact__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-light-35);
+  @include color-svg('../images/sent.svg', var(--color-light-35));
   width: 18px;
 }
 .module-message-detail__contact__status-icon--read {
-  @include color-svg('../images/read.svg', $color-light-35);
+  @include color-svg('../images/read.svg', var(--color-light-35));
   width: 18px;
 }
 .module-message-detail__contact__status-icon--error {
-  @include color-svg('../images/error.svg', $color-core-red);
+  @include color-svg('../images/error.svg', var(--color-core-red));
 }
 
 .module-message-detail__contact__error-buttons {
@@ -155,14 +127,14 @@
 .module-message-detail__contact__show-safety-number {
   @include button-reset;
   padding: 4px;
-  color: $color-white;
-  background-color: $color-light-35;
+  color: var(--color-white);
+  background-color: var(--color-light-35);
   border-radius: 4px;
 }
 .module-message-detail__contact__send-anyway {
   @include button-reset;
-  color: $color-white;
-  background-color: $color-core-red;
+  color: var(--color-white);
+  background-color: var(--color-core-red);
   margin-left: 5px;
   margin-top: 5px;
   padding: 4px;

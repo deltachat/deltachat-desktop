@@ -24,9 +24,9 @@ class ContactListItem extends React.Component {
     return (
       <div
         className={classNames(
-          'module-contact-list-item__avatar-default',
-          `module-contact-list-item__avatar-default--${color}`
+          'module-contact-list-item__avatar-default'
         )}
+        style={{ backgroundColor: color }}
       >
         <div className='module-contact-list-item__avatar-default__label'>
           {title}

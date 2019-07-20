@@ -14,7 +14,6 @@ let getConfig = () => {
     mailServerDomain = process.env.DC_ADDR.split('@').pop()
   }
   return {
-    'markRead': true,
     'notifications': true,
     'showNotificationContent': true,
     'locale': 'en',

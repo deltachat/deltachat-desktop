@@ -1,3 +1,4 @@
+const { ThemeProvider } = require('./Theming')
 const React = require('react')
 const SettingsContext = require('./contexts/SettingsContext')
 const ScreenController = require('./ScreenController')
@@ -18,10 +19,12 @@ class App extends React.Component {
     return (
       <SettingsContext.Provider value={state.saved}>
         <IntlProvider locale={window.localeData.locale}>
-          <ScreenController
-            logins={state.logins}
-            saved={state.saved}
-            deltachat={state.deltachat} />
+          <ThemeProvider>
+            <ScreenController
+              logins={state.logins}
+              saved={state.saved}
+              deltachat={state.deltachat} />
+          </ThemeProvider>
         </IntlProvider>
       </SettingsContext.Provider>
     )
