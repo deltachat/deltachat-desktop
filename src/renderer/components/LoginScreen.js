@@ -134,11 +134,11 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
           Successfully imported backup
         </Card>
       }
-
+      { importState[0] !== 'IMPORT_COMPLETE' &&
       <DeltaProgressBar
         progress={importProgress}
         intent={error === false ? Intent.SUCCESS : Intent.ERROR}
-      />
+    /> }
     </div>
   )
 })
