@@ -46,6 +46,7 @@ class Controller extends React.Component {
   }
 
   open (name, props) {
+    console.log('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
     if (!Component) throw new Error(`Component with name ${name} does not exist`)
     if (!props) props = {}
@@ -77,8 +78,8 @@ class Controller extends React.Component {
             saved,
             deltachat,
             key: name,
-            openDialog: open,
-            closeDialog: close
+            openDialog: this.open.bind(this),
+            closeDialog: this.close.bind(this)
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
