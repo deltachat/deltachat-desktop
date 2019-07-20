@@ -3,7 +3,6 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const ScreenContext = require('./contexts/ScreenContext')
-const NavbarWrapper = require('./components/NavbarWrapper')
 const UnblockContacts = require('./components/UnblockContacts')
 const LoginScreen = require('./components/LoginScreen').default
 const CreateChat = require('./components/CreateChat')

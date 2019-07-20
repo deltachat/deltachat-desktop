@@ -22,10 +22,9 @@ class ImexProgress extends React.Component {
   }
 
   componentDidMount () {
-    var self = this
     ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
   }
-  
+
   componentWillUnmount () {
     ipcRenderer.removeListener('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
   }
