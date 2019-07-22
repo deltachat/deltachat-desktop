@@ -261,29 +261,3 @@ code {
   border-radius: 0;
   padding: none;
 }
-
-.bp3-dialog {
-  background: #ececec;
-  border-radius: 2px;
-}
-
-.bp3-dialog-body {
-  margin: 0px;
-  
-}
-
-.bp3-card {
-  border-radius: 0px;
-  &:last-child {
-    margin-bottom: -20px;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
-}
-
-.bp3-elevation-1 {
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
-  &:first-child {
-    box-shadow: 0 0 0 0px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
-  }
-}
