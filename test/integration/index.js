@@ -7,7 +7,7 @@ const testCredentials = setup.getConfig().credentials
 test('app runs', async (t) => {
   const app = setup.createApp()
   await setup.waitForLoad(app, t)
-  let text = await app.client.getText('.bp3-navbar-heading')
+  const text = await app.client.getText('.bp3-navbar-heading')
   t.equal(text, 'Welcome to DeltaChat')
   setup.endTest(app, t)
 })
@@ -22,7 +22,7 @@ test('Bad mail address results in error message', async (t) => {
       .click('button[type=\'submit\']')
 
     await setup.wait(500)
-    let text = await app.client.getText('.user-feedback')
+    const text = await app.client.getText('.user-feedback')
     t.equal(text, 'Bad email address.')
     setup.endTest(app, t)
   } catch (err) {
@@ -48,7 +48,7 @@ test('Valid mail credentials results in success message', async (t) => {
       .click('button[type=\'submit\']')
 
     await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
-    let text = await app.client.getText('h1')
+    const text = await app.client.getText('h1')
     t.equal(text, 'Welcome to DeltaChat')
     setup.endTest(app, t)
   } catch (err) {
@@ -64,7 +64,7 @@ test('App uses credentials from existing config file', async (t) => {
   try {
     await setup.waitForLoad(app, t)
     await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
-    let text = await app.client.getText('h1')
+    const text = await app.client.getText('h1')
     await t.equal(text, 'Welcome to DeltaChat')
     setup.endTest(app, t)
   } catch (err) {
@@ -76,11 +76,11 @@ test('App uses credentials from existing config file', async (t) => {
 })
 
 test('App loads language from config file', async (t) => {
-  const app = setup.createAppWithConfig({ 'locale': 'de' })
+  const app = setup.createAppWithConfig({ locale: 'de' })
   try {
     await setup.waitForLoad(app, t)
     await app.client.waitUntilTextExists('h1', 'Willkommen zu Delta Chat', 20e3)
-    let text = await app.client.getText('h1')
+    const text = await app.client.getText('h1')
     await t.equal(text, 'Willkommen zu Delta Chat')
     setup.endTest(app, t)
   } catch (err) {

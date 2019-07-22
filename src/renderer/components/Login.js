@@ -66,7 +66,7 @@ export default class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
-    let updatedState = update(this.state, {
+    const updatedState = update(this.state, {
       credentials: {
         [event.target.id]: { $set: event.target.value }
       }
@@ -75,13 +75,13 @@ export default class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    let config = this.state.credentials
+    const config = this.state.credentials
     this.props.onSubmit(config)
     event.preventDefault()
   }
 
   handleUISwitchStateProperty (key) {
-    let stateUi = Object.assign(this.state.ui, { [key]: !this.state.ui[key] })
+    const stateUi = Object.assign(this.state.ui, { [key]: !this.state.ui[key] })
     this.setState(stateUi)
   }
 

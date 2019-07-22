@@ -53,7 +53,7 @@ class Message extends React.Component {
         )}
         >
           <div
-            style={{ 'backgroundColor': color }}
+            style={{ backgroundColor: color }}
             className='module-message__author-default-avatar__label'>
             {label}
           </div>

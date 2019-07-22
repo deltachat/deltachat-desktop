@@ -106,8 +106,8 @@ class GroupBase extends React.Component {
     const tx = window.translate
     dialog.showOpenDialog({
       title: tx('select_group_image_desktop'),
-      filters: [ { name: 'Images', extensions: [ 'jpg', 'png', 'gif' ] } ],
-      properties: [ 'openFile' ]
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile']
     }, files => {
       if (Array.isArray(files) && files.length > 0) {
         this.setState({ image: files[0] })

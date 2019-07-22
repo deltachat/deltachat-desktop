@@ -12,7 +12,7 @@ function searchChats (query) {
 
 function selectChat (chatId) {
   this._selectedChatId = chatId
-  let chat = this._getChatById(chatId, true)
+  const chat = this._getChatById(chatId, true)
   if (!chat) {
     log.debug(`Error: selected chat not found: ${chatId}`)
     return null
@@ -83,7 +83,7 @@ function _getChatById (chatId, loadMessages) {
   if (!rawChat) return null
   this._pages = 0
   const chat = rawChat.toJson()
-  let draft = this._dc.getDraft(chatId)
+  const draft = this._dc.getDraft(chatId)
 
   if (draft) {
     chat.draft = draft.getText()

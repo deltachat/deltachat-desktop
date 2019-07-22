@@ -22,11 +22,11 @@ class ChatListItem extends React.Component {
 
     if (!avatarPath) {
       const codepoint = name.codePointAt(0)
-      let initial = codepoint ? String.fromCodePoint(codepoint) : '#'
+      const initial = codepoint ? String.fromCodePoint(codepoint) : '#'
 
       return (
         <div
-          style={{ 'backgroundColor': color }}
+          style={{ backgroundColor: color }}
           className={classNames(
             'module-conversation-list-item__avatar',
             'module-conversation-list-item__default-avatar'

@@ -5,13 +5,13 @@ class MapLayerFactory {
   static getGeoJSONLineSourceData (locations) {
     const coordinates = locations.map(point => [point.longitude, point.latitude])
     return {
-      'type': 'FeatureCollection',
-      'features': [{
-        'type': 'Feature',
-        'properties': {},
-        'geometry': {
-          'type': 'LineString',
-          'coordinates': coordinates
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: coordinates
         }
       }]
     }
@@ -19,14 +19,14 @@ class MapLayerFactory {
 
   static getGeoJSONLineLayer (pathLayerId, color) {
     return {
-      'id': pathLayerId,
-      'type': 'line',
-      'source': pathLayerId,
-      'layout': {
+      id: pathLayerId,
+      type: 'line',
+      source: pathLayerId,
+      layout: {
         'line-join': 'round',
         'line-cap': 'round'
       },
-      'paint': {
+      paint: {
         'line-color': '#' + color.toString(16),
         'line-opacity': 0.7,
         'line-width': 4
@@ -36,34 +36,34 @@ class MapLayerFactory {
 
   static getGeoJSONPointsLayer (pointsLayerId, color) {
     return {
-      'id': pointsLayerId,
-      'type': 'symbol',
-      'layout': {
+      id: pointsLayerId,
+      type: 'symbol',
+      layout: {
         'icon-image': '{icon}-15',
         'icon-size': 2
       },
-      'source': pointsLayerId
+      source: pointsLayerId
     }
   }
 
   static getGeoJSONPointsLayerSourceData (locations, contact, withMessageOnly) {
     return {
-      'type': 'FeatureCollection',
-      'features': locations.reduce((features, location) => {
+      type: 'FeatureCollection',
+      features: locations.reduce((features, location) => {
         if (!withMessageOnly || location.msgId) {
-          let icon = location.isIndependent ? 'viewpoint' : 'marker'
+          const icon = location.isIndependent ? 'viewpoint' : 'marker'
           features.push({
-            'type': 'Feature',
-            'properties': {
+            type: 'Feature',
+            properties: {
               contact: contact.firstName,
               reported: location.timestamp,
               isPoi: location.isIndependent,
               msgId: location.msgId,
               icon: icon
             },
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [location.longitude, location.latitude]
+            geometry: {
+              type: 'Point',
+              coordinates: [location.longitude, location.latitude]
             }
           })
         }
@@ -76,12 +76,12 @@ class MapLayerFactory {
     return {
       id: styleKey,
       source: {
-        'type': 'raster',
-        'tiles': ['https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=' + accessToken],
-        'tileSize': 512
+        type: 'raster',
+        tiles: ['https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=' + accessToken],
+        tileSize: 512
       },
       type: 'raster',
-      layout: { 'visibility': 'visible' }
+      layout: { visibility: 'visible' }
     }
   }
 

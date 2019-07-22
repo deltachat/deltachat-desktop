@@ -74,9 +74,11 @@ class ChatListContextMenu extends React.Component {
       </ContextMenu>
     )
   }
+
   onArchiveChat (archive) {
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', this.state.chat.id, archive)
   }
+
   onDeleteChat () {
     const tx = window.translate
     const chatId = this.state.chat.id
@@ -86,12 +88,15 @@ class ChatListContextMenu extends React.Component {
       }
     })
   }
+
   onEncrInfo () {
     this.context.openDialog('EncrInfo', { chat: this.state.chat })
   }
+
   onEditGroup () {
     this.context.changeScreen('EditGroup', { chat: this.state.chat })
   }
+
   onLeaveGroup () {
     const selectedChat = this.state.chat
     const tx = window.translate

@@ -16,8 +16,8 @@ function getConfig (key) {
 }
 
 function getConfigFor (keys) {
-  let config = {}
-  for (let key of keys) {
+  const config = {}
+  for (const key of keys) {
     config[key] = this.getConfig(key)
   }
   return config

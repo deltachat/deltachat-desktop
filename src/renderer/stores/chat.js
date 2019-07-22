@@ -30,7 +30,7 @@ chatStore.reducers.push((action, state) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
     const index = state.messages.findIndex(msg => msg.id === msgId)
-    let messages = [
+    const messages = [
       ...state.messages.slice(0, index),
       ...state.messages.slice(index + 1)
     ]
@@ -67,7 +67,7 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   if (!state.messages.find(msg => msg.id === messageObj.id)) {
     chatStore.setState({ ...state, messages: [...state.messages, messageObj] })
   } else {
-    let messages = state.messages.map(msg => {
+    const messages = state.messages.map(msg => {
       return msg.id === messageObj.id ? messageObj : msg
     })
     chatStore.setState({ ...state, messages })
