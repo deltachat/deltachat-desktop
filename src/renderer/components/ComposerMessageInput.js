@@ -127,12 +127,12 @@ class ComposerMessageInput extends React.Component {
   resizeTextareaAndComposer () {
     const maxScrollHeight = 9 * 24
 
-    let el = this.textareaRef.current
+    const el = this.textareaRef.current
 
     // We need to set the textarea height first to `auto` to get the real needed
     // scrollHeight. Ugly hack.
     el.style.height = 'auto'
-    let scrollHeight = el.scrollHeight
+    const scrollHeight = el.scrollHeight
 
     if (scrollHeight + 16 === this.composerSize) {
       el.style.height = scrollHeight + 'px'
@@ -156,14 +156,14 @@ class ComposerMessageInput extends React.Component {
   }
 
   insertStringAtCursorPosition (str) {
-    let textareaElem = this.textareaRef.current
-    let { selectionStart, selectionEnd } = textareaElem
-    let textValue = this.state.text
+    const textareaElem = this.textareaRef.current
+    const { selectionStart, selectionEnd } = textareaElem
+    const textValue = this.state.text
 
-    let textBeforeCursor = textValue.slice(0, selectionStart)
-    let textAfterCursor = textValue.slice(selectionEnd)
+    const textBeforeCursor = textValue.slice(0, selectionStart)
+    const textAfterCursor = textValue.slice(selectionEnd)
 
-    let updatedText = textBeforeCursor + str + textAfterCursor
+    const updatedText = textBeforeCursor + str + textAfterCursor
 
     this.setCursorPosition = textareaElem.selectionStart + str.length
 

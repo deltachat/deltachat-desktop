@@ -172,12 +172,12 @@ class Settings extends React.Component {
   }
 
   onBackupExport () {
-    let confirmOpts = {
+    const confirmOpts = {
       buttons: [this.translate('cancel'), this.translate('export_backup_desktop')]
     }
     confirmationDialog(this.translate('pref_backup_export_explain'), confirmOpts, response => {
       if (!response) return
-      let opts = {
+      const opts = {
         title: this.translate('export_backup_desktop'),
         defaultPath: remote.app.getPath('downloads'),
         properties: ['openDirectory']
@@ -232,7 +232,7 @@ class Settings extends React.Component {
   }
 
   renderDeltaSwitch (configKey, label) {
-    let configValue = this.state.settings[configKey]
+    const configValue = this.state.settings[configKey]
     return (
       <Switch
         checked={configValue === '1'}
@@ -243,7 +243,7 @@ class Settings extends React.Component {
   }
 
   renderDeltaInput (configKey, label) {
-    let configValue = this.state.settings[configKey]
+    const configValue = this.state.settings[configKey]
     return (
       <Label>
         {label}

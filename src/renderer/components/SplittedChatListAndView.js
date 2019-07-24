@@ -144,7 +144,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   render () {
-    let { selectedChat, filteredChatList, showArchivedChats } = this.state
+    const { selectedChat, filteredChatList, showArchivedChats } = this.state
 
     const tx = window.translate
     const profileImage = selectedChat && selectedChat.profileImage

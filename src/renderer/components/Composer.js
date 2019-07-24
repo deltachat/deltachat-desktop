@@ -155,7 +155,7 @@ class Composer extends React.Component {
   }
 
   sendMessage () {
-    let message = this.messageInputRef.current.getText()
+    const message = this.messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
       log.debug(`Empty message: don't send it...`)
       return
@@ -192,12 +192,12 @@ class Composer extends React.Component {
   }
 
   onMouseMove (event) {
-    let x = event.clientX
-    let y = event.clientY
+    const x = event.clientX
+    const y = event.clientY
     if (this.state.showEmojiPicker === false) return
 
-    let bounding = this.pickerRef.current.getBoundingClientRect()
-    let boundingButton = this.pickerButtonRef.current.getBoundingClientRect()
+    const bounding = this.pickerRef.current.getBoundingClientRect()
+    const boundingButton = this.pickerButtonRef.current.getBoundingClientRect()
 
     if (!this.insideBoundingRect(x, y, bounding, 10) &&
         !this.insideBoundingRect(x, y, boundingButton, 10)) {

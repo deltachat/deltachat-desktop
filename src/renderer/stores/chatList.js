@@ -53,7 +53,7 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
       freshMessageCounter: freshMessageCounter,
       summary: messageObj.msg.summary
     }
-    let chatList = listState.chatList.map(chat => {
+    const chatList = listState.chatList.map(chat => {
       return chat.id === chatId ? updatedChat : chat
     })
     chatList.sort(sortChatList)
@@ -74,9 +74,9 @@ function reducer (action, state) {
 
     if (text1Meaning !== DC_TEXT1_DRAFT && !_initialText) {
       // keep initial text to be able to restore it if a draft is deleted again
-      _initialText = [ text1, text2 ]
+      _initialText = [text1, text2]
     }
-    let newSummary = {
+    const newSummary = {
       ...chat.summary,
       text1: window.translate('draft'),
       text2: text,
@@ -87,7 +87,7 @@ function reducer (action, state) {
       newSummary.text2 = _initialText[1]
     }
     const updatedChat = { ...chat, summary: newSummary }
-    let chatList = state.chatList.map(chat => {
+    const chatList = state.chatList.map(chat => {
       return chat.id === chatId ? updatedChat : chat
     })
     return { ...state, chatList }
@@ -115,7 +115,7 @@ chatStore.subscribe((selectedChat) => {
   }
   const state = chatListStore.getState()
   // mark loaded messages as read
-  let chatList = state.chatList.map(chat => {
+  const chatList = state.chatList.map(chat => {
     if (chat.id === id) {
       const newCounter = chat.freshMessageCounter < messages.length ? 0 : chat.freshMessageCounter - messages.length
       return { ...chat, freshMessageCounter: newCounter }
