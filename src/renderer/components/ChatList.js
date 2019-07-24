@@ -5,6 +5,8 @@ const styled = require('styled-components').default
 
 const log = require('../../logger').getLogger('renderer/chatView')
 
+const C = require('deltachat-node/constants')
+
 const ChatListWrapper = styled.div`
   width: 30%;
   height: calc(100vh - 50px);
@@ -80,6 +82,31 @@ const ArchivedChats = styled.div`
   }
 `
 
+function coreMsgStatus2TextStatus (state) {
+  switch (state) {
+    case C.DC_STATE_OUT_FAILED:
+      return 'error'
+    case C.DC_STATE_OUT_PENDING:
+      return 'sending'
+    case C.DC_STATE_OUT_PREPARING:
+      return 'sending'
+    // case C.DC_STATE_OUT_DRAFT: has no icon?
+    //   return 'draft'
+    case C.DC_STATE_OUT_DELIVERED:
+      return 'delivered'
+    case C.DC_STATE_OUT_MDN_RCVD:
+      return 'read'
+    case C.DC_STATE_IN_FRESH:
+      return 'delivered'
+    case C.DC_STATE_IN_SEEN:
+      return 'delivered'
+    case C.DC_STATE_IN_NOTICED:
+      return 'read'
+    default:
+      return '' // to display no icon on unknown state
+  }
+}
+
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
@@ -151,7 +178,7 @@ class ChatList extends React.Component {
                     lastMessage={{
                       text1: chatListItem.summary.text1,
                       text2: chatListItem.summary.text2,
-                      status: 'sent' // TODO: interpret data from summary to get correct state
+                      status: coreMsgStatus2TextStatus(chatListItem.summary.state)
                     }}
                     isSelected={chatListItem.id === selectedChatId}
                     isVerified={chatListItem.isVerified}
