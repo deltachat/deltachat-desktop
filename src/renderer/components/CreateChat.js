@@ -18,19 +18,19 @@ const ContactList = require('./ContactList')
 const NavbarWrapper = require('./NavbarWrapper')
 
 const OvalDeltaButton = styled.button`
-  background-color: ${props => props.theme.deltaPrimaryBg} 
+  background-color: ${props => props.theme.ovalButtonBg} 
   padding: 10px
   border-style: none
   border-radius: 180px
   margin: 10px
   font-weight: bold
-  color: ${props => props.theme.deltaPrimaryFg} 
+  color: ${props => props.theme.ovalButtonText} 
   &:focus {
     outline: none
   }
   &:hover {
-    background-color: ${props => props.theme.deltaHover} 
-    color: ${props => props.theme.deltaPrimaryBg} 
+    background-color: ${props => props.theme.ovalButtonBgHover} 
+    color: ${props => props.theme.ovalButtonTextHover} 
   }
 `
 

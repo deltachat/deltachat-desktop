@@ -5,11 +5,6 @@ const { EventEmitter } = require('events')
 var Color = require('color')
 
 const defaultTheme = Object.freeze({
-  deltaPrimaryBg: '#415e6b',
-  deltaPrimaryBgLight: '#4c6e7d',
-  deltaPrimaryFg: '#ffffff',
-  deltaPrimaryFgLight: '#d0d0d0',
-  deltaHover: '#ececec',
   deltaChatPrimaryFg: '#070c14',
   deltaChatPrimaryFgLight: '#62656a',
   deltaChatMessageBubbleSelf: '#efffde',
@@ -18,7 +13,7 @@ const defaultTheme = Object.freeze({
   deltaInfoMessageBubbleColor: 'white',
   deltaChatMessageBubbleSelfStatusColor: '#4caf50',
   deltaFocusBlue: '#42A5F5',
-  deltaSelected: '#4c6e7d', // same as deltaPrimaryBgLight
+  deltaSelected: '#4c6e7d',
   deltaChatViewBg: '#e6dcd3',
   // Scss ones
   signalBlue: '#2090ea',
@@ -37,7 +32,26 @@ const defaultTheme = Object.freeze({
   messageButtonsHover: '#070c14',
   bgColor: '#fff',
   // Misc
-  bgImagePath: '../images/background_hd2.svg'
+  bgImagePath: '../images/background_hd2.svg',
+  ovalButtonBg: '#415e6b',
+  ovalButtonBgHover: '#ececec',
+  ovalButtonText: 'white',
+  ovalButtonTextHover: '#415e6b',
+  // Dings
+  navBarBackground: '#415e6b',
+  navBarText: '#ffffff',
+  navBarSearchPlaceholder: '#d0d0d0',
+  navBarGroupSubtitle: '#d0d0d0',
+  chatViewWrapperBg: 'white', // Is this used??
+  composerText: '#415e6b',
+  composerBg: 'white',
+  chatListItemSelectedBg: '#4c6e7d',
+  chatListItemSelectedBgHover: '#4c6e7d', // deltaSelected, but should be something else
+  chatListItemSelectedText: 'white', 
+  chatListItemBgHover: '#ececec',
+  messageText: '#070c14',
+  messageIncommingDate: '#070c14',
+
 })
 
 class ThemeManager extends EventEmitter {

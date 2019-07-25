@@ -14,7 +14,7 @@ const SCROLL_BUFFER = 70
 
 const ChatViewWrapper = styled.div`
   width: 70%;
-  background-color:  ${props => props.theme.deltaPrimaryBg};
+  background-color:  ${props => props.theme.chatViewWrapperBg}; /* is this used? */
   float: right;
   display: grid;
   grid-template-columns: auto;
@@ -69,11 +69,11 @@ const ChatViewWrapper = styled.div`
   }
 
   .module-message__author, .module-message__text {
-    color: ${props => props.theme.deltaChatPrimaryFg};
+    color: ${props => props.theme.messageText};
   }
 
   .module-message__metadata__date--incoming {
-    color: ${props => props.theme.deltaChatPrimaryFgLight};
+    color: ${props => props.theme.messageIncommingDate};
   }
 }
 `

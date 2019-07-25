@@ -33,7 +33,7 @@ const NavbarGroupName = styled.div`
 const NavbarGroupSubtitle = styled.div`
   font-size: small;
   font-weight: 100;
-  color: ${props => props.theme.deltaPrimaryFgLight};
+  color: ${props => props.theme.navBarGroupSubtitle};
 `
 
 const Welcome = styled.div`

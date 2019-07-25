@@ -23,15 +23,15 @@ const ChatListWrapper = styled.div`
   }
 
   .module-conversation-list-item:hover {
-    background-color: ${props => props.theme.deltaHover}
+    background-color: ${props => props.theme.chatListItemBgHover}
   }
 
   .module-conversation-list-item--is-selected {
-    background-color: ${props => props.theme.deltaSelected};
-    color: ${props => props.theme.deltaPrimaryFg};
+    background-color: ${props => props.theme.chatListItemSelectedBg};
+    color: ${props => props.theme.chatListItemSelectedText};
 
     span.module-contact-name {
-      color: ${props => props.theme.deltaPrimaryFg};
+      color: ${props => props.theme.chatListItemSelectedText};
     }
 
     .module-conversation-list-item__is-group {
@@ -39,7 +39,7 @@ const ChatListWrapper = styled.div`
     }
 
     &:hover {
-      background-color: ${props => props.theme.deltaSelected};
+      background-color: ${props => props.theme.chatListItemSelectedBgHover};
     }
   }
 

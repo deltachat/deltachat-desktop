@@ -8,8 +8,8 @@ module.exports = styled.div`
 
   .bp3-navbar {
     padding: 0px;
-    background-color: ${props => props.theme.deltaPrimaryBg};
-    color: ${props => props.theme.deltaPrimaryFg};
+    background-color: ${props => props.theme.navBarBackground};
+    color: ${props => props.theme.navBarText};
   }
 
   .bp3-navbar-heading {
@@ -37,7 +37,7 @@ module.exports = styled.div`
   }
 
   .bp3-icon > svg:not([fill]) {
-    fill: ${props => props.theme.deltaPrimaryFg};
+    fill: ${props => props.theme.navBarText};
   }
 
   .icon-rotated > .bp3-icon > svg:not([fill]){
@@ -49,18 +49,18 @@ module.exports = styled.div`
   }
 
   .bp3-input[type="search"] {
-    background-color: ${props => props.theme.deltaPrimaryBg};
+    background-color: ${props => props.theme.navBarBackground};
     -webkit-box-shadow: none;
     box-shadow: none;
     border: unset;
-    color: ${props => props.theme.deltaPrimaryFg};
+    color: ${props => props.theme.navBarText};
     padding-left: unset !important;
     margin-left: 40px;
     width: calc(100% - 40px);
   }
 
   .bp3-input[type="search"]::placeholder {
-    color: ${props => props.theme.deltaPrimaryFgLight}
+    color: ${props => props.theme.navBarSearchPlaceholder}
   }
 
   .bp3-button.bp3-minimal {
