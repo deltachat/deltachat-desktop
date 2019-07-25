@@ -2,7 +2,7 @@ var watch = require('glob-watcher')
 var child = require('child_process')
 
 watch([
-  './conversations/stylesheets'
+  './scss'
 ], function (done) {
   var p = child.spawn('npm', ['run', 'build-css'])
   p.stdout.pipe(process.stdout)
