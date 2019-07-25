@@ -5,16 +5,8 @@ const { EventEmitter } = require('events')
 var Color = require('color')
 
 const defaultTheme = Object.freeze({
-  deltaChatPrimaryFg: '#070c14',
-  deltaChatPrimaryFgLight: '#62656a',
-  deltaChatMessageBubbleSelf: '#efffde',
-  deltaChatMessageBubbleOther: '#ffffff',
-  deltaInfoMessageBubbleBg: '#000000',
-  deltaInfoMessageBubbleColor: 'white',
-  deltaChatMessageBubbleSelfStatusColor: '#4caf50',
-  deltaFocusBlue: '#42A5F5',
-  deltaSelected: '#4c6e7d',
-  deltaChatViewBg: '#e6dcd3',
+  deltaChatPrimaryFg: '#070c14', // only used on login screen
+  deltaChatPrimaryFgLight: '#62656a', // only used on login screen
   // Scss ones
   signalBlue: '#2090ea',
   coreRed: '#f44336',
@@ -43,15 +35,21 @@ const defaultTheme = Object.freeze({
   navBarSearchPlaceholder: '#d0d0d0',
   navBarGroupSubtitle: '#d0d0d0',
   chatViewWrapperBg: 'white', // Is this used??
+  chatViewBg: '#e6dcd3',
   composerText: '#415e6b',
   composerBg: 'white',
   chatListItemSelectedBg: '#4c6e7d',
   chatListItemSelectedBgHover: '#4c6e7d', // deltaSelected, but should be something else
-  chatListItemSelectedText: 'white', 
+  chatListItemSelectedText: 'white',
   chatListItemBgHover: '#ececec',
   messageText: '#070c14',
+  infoMessageBubbleBg: '#000000',
+  infoMessageBubbleText: 'white',
+  messageIncommingBg: '#ffffff',
   messageIncommingDate: '#070c14',
-
+  messageOutgoingBg: '#efffde',
+  messageOutgoingStatusColor: '#4caf50',
+  loginInputFocusColor: '#42A5F5'
 })
 
 class ThemeManager extends EventEmitter {
@@ -59,7 +57,7 @@ class ThemeManager extends EventEmitter {
     super()
     const themeJSON = window.localStorage.getItem('theme')
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
-
+    
     window.ThemeManager = this // only for using fron the dev console
   }
 

@@ -32,10 +32,10 @@ const InfoMessage = styled.div`
     font-style: italic;
     font-weight: bold;
     padding: 7px 14px;
-    background-color: ${props => props.theme.deltaInfoMessageBubbleBg};
+    background-color: ${props => props.theme.infoMessageBubbleBg};
     border-radius: 10px;
     opacity: 0.44;
-    color: ${props => props.theme.deltaInfoMessageBubbleColor};
+    color: ${props => props.theme.infoMessageBubbleText};
   }
 `
 
@@ -77,11 +77,11 @@ const MessageWrapper = styled.div`
   }
 
   .module-message__metadata__date {
-    color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
+    color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
   .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
-    background-color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
+    background-color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
   .module-message__buttons__reply {

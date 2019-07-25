@@ -25,7 +25,7 @@ const ChatViewWrapper = styled.div`
     overflow: scroll;
     background-image: url(${props => props.theme.bgImagePath});
     background-size: cover;
-    background-color: ${props => props.theme.deltaChatViewBg};
+    background-color: ${props => props.theme.chatViewBg};
   }
 
   .conversation, .discussion-container {
@@ -43,11 +43,11 @@ const ChatViewWrapper = styled.div`
   }
 
   .module-message__container--incoming {
-    background-color: ${props => props.theme.deltaChatMessageBubbleOther};
+    background-color: ${props => props.theme.messageIncommingBg};
   }
 
   .module-message__container--outgoing {
-    background-color: ${props => props.theme.deltaChatMessageBubbleSelf};
+    background-color: ${props => props.theme.messageOutgoingBg};
 
     &, & .module-message__attachment-container {
       border-radius: 16px 16px 1px 16px;
