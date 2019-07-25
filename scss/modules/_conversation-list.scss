@@ -184,3 +184,8 @@
 .module-conversation-list-item__message__status-icon--error {
   @include color-svg('../images/error.svg', var(--color-core-red));
 }
+
+// (empty for now)
+// .module-conversation-list-item__message__status-icon--draft {
+//   @include color-svg('../images/lead-pencil.svg', var(--color-light-35));
+// }

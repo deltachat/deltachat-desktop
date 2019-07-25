@@ -90,8 +90,8 @@ function coreMsgStatus2TextStatus (state) {
       return 'sending'
     case C.DC_STATE_OUT_PREPARING:
       return 'sending'
-    // case C.DC_STATE_OUT_DRAFT: has no icon?
-    //   return 'draft'
+    case C.DC_STATE_OUT_DRAFT:
+      return 'draft'
     case C.DC_STATE_OUT_DELIVERED:
       return 'delivered'
     case C.DC_STATE_OUT_MDN_RCVD:
