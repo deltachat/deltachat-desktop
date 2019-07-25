@@ -19,6 +19,7 @@ const defaultTheme = Object.freeze({
   deltaChatMessageBubbleSelfStatusColor: '#4caf50',
   deltaFocusBlue: '#42A5F5',
   deltaSelected: '#4c6e7d', // same as deltaPrimaryBgLight
+  deltaChatViewBg: '#e6dcd3',
   // Scss ones
   signalBlue: '#2090ea',
   coreRed: '#f44336',
@@ -34,7 +35,9 @@ const defaultTheme = Object.freeze({
   contextMenuBG: '#f9fafa',
   messageButtons: '#8b8e91',
   messageButtonsHover: '#070c14',
-  bgColor: '#fff'
+  bgColor: '#fff',
+  // Misc
+  bgImagePath: '../images/background_hd2.svg'
 })
 
 class ThemeManager extends EventEmitter {
