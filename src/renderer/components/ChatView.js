@@ -23,7 +23,7 @@ const ChatViewWrapper = styled.div`
 
   #the-conversation {
     overflow: scroll;
-    background-image: url(${props => props.theme.bgImagePath});
+    background-image: url(${props => props.theme.chatViewBgImgPath});
     background-size: cover;
     background-color: ${props => props.theme.chatViewBg};
   }
