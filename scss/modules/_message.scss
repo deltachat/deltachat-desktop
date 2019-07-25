@@ -111,7 +111,7 @@
   display: inline-block;
   position: absolute;
   bottom: 4px;
-  @include color-svg('../images/error.svg', var(--color-core-red));
+  @include color-svg('../images/error.svg', var(--color-conversation-message-detail-error));
 }
 
 .module-message__error--outgoing {
@@ -146,7 +146,7 @@
   border-radius: 16px;
   overflow: hidden;
 
-  background-color: var(--color-white);
+  background-color: var(--color-message-attachment-container-bg);
 }
 
 .module-message__attachment-container--with-content-below {
@@ -240,7 +240,7 @@
 }
 
 .module-message__broken-image--incoming {
-  color: var(--color-white);
+  color: var(--color-message-broken-image-incomming);
 }
 
 .module-message__video-overlay__circle {
@@ -251,7 +251,7 @@
 
   width: 48px;
   height: 48px;
-  background-color: var(--color-white);
+  background-color: var(--color-message-video-overlay-circle);
   border-radius: 24px;
 }
 
@@ -263,7 +263,7 @@
 
   height: 36px;
   width: 36px;
-  @include color-svg('../images/play.svg', var(--color-signal-blue));
+  @include color-svg('../images/play.svg', var(--color-message-video-play));
 }
 
 .module-message__broken-video-screenshot {
@@ -280,7 +280,7 @@
 }
 
 .module-message__broken-video-screenshot--incoming {
-  color: var(--color-white);
+  color: var(--color-message-broken-video-screenshot-incomming);
 }
 
 .module-message__audio-attachment {
@@ -365,7 +365,7 @@
 }
 
 .module-message__generic-attachment__file-name--incoming {
-  color: var(--color-white);
+  color: var(--color-message-attachment-filename-incomming);
 }
 
 .module-message__generic-attachment__file-size {
@@ -377,11 +377,11 @@
 }
 
 .module-message__generic-attachment__file-size--incoming {
-  color: var(--color-white);
+  color: var(--color-message-attachment-filesize-incomming);
 }
 
 .module-message__author {
-  color: var(--color-white);
+  color: var(--color-message-author);
   font-size: 13px;
   font-weight: 300;
   line-height: 18px;
@@ -414,10 +414,10 @@
 }
 
 .module-message__text--incoming {
-  color: var(--color-white);
+  color: var(--color-message-message-text-incomming);
   a {
     text-decoration: underline;
-    color: var(--color-white);
+    color: var(--color-message-message-text-incomming);
   }
 }
 
@@ -461,10 +461,10 @@
   text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
-  color: var(--color-white-07);
+  color: var(--color-message-metadata-date-incomming);
 }
 .module-message__metadata__date--with-image-no-caption {
-  color: var(--color-white);
+  color: var(--color-message-metadata-image-no-caption);
 }
 
 .module-message__metadata__spacer {
@@ -521,7 +521,7 @@
 
 // When status indicators are overlaid on top of an image, they use different colors
 .module-message__metadata__status-icon--with-image-no-caption {
-  background-color: var(--color-white);
+  background-color: var(--color-message-metadata-image-no-caption);
 }
 
 .module-message__author-avatar {
@@ -558,7 +558,7 @@
 .module-message__author-default-avatar__label {
   width: 100%;
   font-size: 18px;
-  color: var(--color-white);
+  color: var(--color-message-author-default-avatar-label);
 }
 
 // All media query widths have 300px added to account for the left pane

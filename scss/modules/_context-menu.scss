@@ -58,18 +58,18 @@
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
-  color: var(--color-white);
+  color: var(--color-context-item-selected);
   background-color: var(--color-light-35);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active.react-contextmenu-item--checked:before,
 .react-contextmenu-item.react-contextmenu-item--selected.react-contextmenu-item--checked:before {
-  color: var(--color-white);
+  color: var(--color-context-item-selected-before);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--active:after,
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--selected:after {
-  color: var(--color-white);
+  color: var(--color-context-item-selected-after);
 }

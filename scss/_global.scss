@@ -136,7 +136,7 @@ $avatar-size: 48px;
   line-height: $avatar-size;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  color: var(--color-white);
+  color: var(--color-global-avatar);
   font-size: 18px;
   background-color: var(--color-grey);
 }
@@ -186,7 +186,7 @@ $new-contact-left-margin: 16px;
     display: block;
     width: 100%;
     height: 100%;
-    @include color-svg('../images/x.svg', var(--color-white));
+    @include color-svg('../images/x.svg', var(--color-global-x));
   }
 }
 
