@@ -47,9 +47,9 @@ html {
   --clr-broken-media-bg: #070c14;
   --clr-broken-media-bg-text: #fff;
   --clr-message-status-icon-sending: #62656a;
-  --clr-avatar-default-bg: #505050; //This is probably never used because the core allways sets the color
   --clr-message-buttons: #8b8e91;
   --clr-message-buttons: #070c14;
+  --clr-avatar-label: #fff;
 
 }
 
@@ -57,9 +57,8 @@ html {
 
   /* Global */
   $color-global-a: #2090ea;
-  $color-global-avatar: #ffffff;
-  $color-global-avatar-bg: #616161;
   $color-global-bg: #fff;
+  $color-global-text: #070c14;
   $color-global-textarea-outline: #2090ea;
   $color-global-x: #ffffff;
   $color-global-x-bg: #616161;
@@ -79,7 +78,7 @@ html {
   $color-composer-emoji-btn: #616161;
   $color-composer-file-btn: #616161;
 
-  /* ChatView (converstation) */
+  /* ChatView (conversation) */
   $color-conversation-bg: #fff;
   $color-conversation-discussion-container-bg: #fff;
   
@@ -88,8 +87,7 @@ html {
   $color-conversation-list-unread-count-bg: #2090ea;
   $color-conversation-list-message-error: var(--clr-error);
   $color-conversation-list-unread-count: #ffffff;
-  $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
-  
+  $color-conversation-list-avatar-text: var(--clr-avatar-label);
   
   /* Message Bubble */
   $color-message-attachment-container-bg: #ffffff;
@@ -97,7 +95,7 @@ html {
   $color-message-attachment-filesize-incomming: #ffffff;
   $color-message-author: #ffffff;
   
-  $color-message-author-default-avatar-label: #ffffff;
+  $color-message-author-default-avatar-label: var(--clr-avatar-label);
   
   $color-message-broken-image-incomming: var(--clr-broken-media-bg-text);
   $color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
@@ -114,11 +112,11 @@ html {
   $color-message-generic-attachment-filesize: #070c14;
   $color-message-text: #070c14;
   $color-message-text-underline: #070c14;
-
+  
   $color-message-metadata-image-no-caption: #ffffff;
   $color-message-padlock-incomming: #a4a6a9;
   $color-message-padlock-outgoing: #4caf50;
-
+  
   $color-message-button-download: var(--clr-message-buttons);
   $color-message-button-reply: var(--clr-message-buttons);
   $color-message-button-menu: var(--clr-message-buttons);
@@ -129,38 +127,19 @@ html {
   $color-message-icon-error: #ffffff;
   
   /* Context menu */
-  $color-context-menu-item: var(--clr-context-menu-text);
-  $color-context-menu-item-before: var(--clr-context-menu-text);
-  $color-context-menu-item-sub-after: var(--clr-context-menu-text);
-  $color-context-menu-item-sub: var(--clr-context-menu-text);
   $color-context-menu-border: #efefef;
   $color-context-menu-bg: #f9fafa;
-  maybe-duplicates {
-    $color-context-menu-item-selected: #a4a6a9;
-    $color-context-item-selected: var(--clr-context-item-selected);
-    $color-context-item-selected-before: var(--clr-context-item-selected);  
-    $color-context-item-selected-after: var(--clr-context-item-selected);
-  }
-
+  $color-context-menu-text: var(--clr-context-menu-text);
+  $color-context-menu-selected-bg: #a4a6a9;
+  $color-context-menu-selected-text: var(--clr-context-item-selected);
+  
   /* Message Status */
-
   $color-msg-status-icon-sent: #a4a6a9;
   $color-msg-status-icon-delivered: #a4a6a9;
   $color-msg-status-icon-read: #a4a6a9;
   $color-msg-status-icon-error:$color-conversation-list-message-error;
-  
   $color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
-
-
   
-// Css that might not be in use anymore:
-  $color-global-body: #070c14;
-  $color-global-titlebar: #070c14;
-  $color-global-logo: #070c14;
-  $color-conversation-list-default-avatar: #ffffff; // is this used?
-  
-
-
 
 // Belongs to stuff we plan to remove / change anyway 
 // so we don't put this into theming yet
@@ -169,15 +148,19 @@ $color-message-detail-delete-button-border: #a4a6a9;
 $color-message-detail-delete-bg: #f44336;
 $color-message-detail-delete: #ffffff;
 
+$color-conversation-list-item-default-avatar-bg: #505050; //This is never used because the core allways sets the color
+
 /* 
 
 Todo:
-0. sort them by group/module 
-1. check for usused style/colors
-2. check for colors/ styles that get allways overwritten by styled components
-3. check for typos and repeat 1 & 2 for those that had typos
+0. sort them by group/module ✔️
+1. cleanup
+- check for usused style/colors
+- check for colors/ styles that get allways overwritten by styled components
+- check for typos
 4. make css vars
-5. bring them in js
+5. fix indent
+6. bring them in js
 
 */
 

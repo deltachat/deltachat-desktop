@@ -54,7 +54,6 @@ const MessageWrapper = styled.div`
     width: 36px;
     height: 36px;
     background-color: #757575;
-    color: #ffffff;
     font-size: 25px;
     line-height: 36px;
   }

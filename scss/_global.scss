@@ -13,7 +13,7 @@ body {
   margin: 0;
   font-family: $roboto!important;
   font-size: 14px;
-  color: $color-global-body;
+  color: $color-global-text;
   background-color: $color-global-bg;
 }
 
@@ -51,23 +51,6 @@ h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
 
 .hide {
   display: none;
-}
-
-.title-bar {
-  color: $color-global-titlebar;
-
-  height: $header-height;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.logo {
-  margin-left: 16px;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 300;
-  color: $color-global-logo;
 }
 
 button {
@@ -121,24 +104,6 @@ a {
     cursor: pointer;
     z-index: 1;
   }
-}
-
-$avatar-size: 48px;
-
-.avatar {
-  display: inline-block;
-  height: $avatar-size;
-  width: $avatar-size;
-  border-radius: 50%;
-  background-size: cover;
-  vertical-align: middle;
-  text-align: center;
-  line-height: $avatar-size;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  color: $color-global-avatar;
-  font-size: 18px;
-  background-color: $color-global-avatar-bg;
 }
 
 .SelectGroupImage {
