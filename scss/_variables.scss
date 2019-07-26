@@ -42,15 +42,17 @@ html {
 
   --clr-error: #f44336;
   --clr-error-variant: #f44336;
-  --clr-context-item-selected: #fff;
+  --clr-context-menu-bg: #f9fafa;
   --clr-context-menu-text: #070c14;
+  --clr-context-menu-selected: #fff;
+  --clr-context-menu-selected-bg: #a4a6a9;
   --clr-broken-media-bg: #070c14;
   --clr-broken-media-bg-text: #fff;
+  --clr-message-status-icon: #a4a6a9;
   --clr-message-status-icon-sending: #62656a;
   --clr-message-buttons: #8b8e91;
   --clr-message-buttons: #070c14;
   --clr-avatar-label: #fff;
-
 }
 
 // Theming Colors
@@ -124,20 +126,20 @@ html {
   $color-message-button-reply-hover: var(--clr-message-buttons);
   $color-message-button-menu-hover: var(--clr-message-buttons);
   
-  $color-message-icon-error: #ffffff;
+  $color-message-icon-error: var(--clr-error);
   
   /* Context menu */
   $color-context-menu-border: #efefef;
-  $color-context-menu-bg: #f9fafa;
+  $color-context-menu-bg: var(--clr-context-menu-bg);
   $color-context-menu-text: var(--clr-context-menu-text);
-  $color-context-menu-selected-bg: #a4a6a9;
-  $color-context-menu-selected-text: var(--clr-context-item-selected);
+  $color-context-menu-selected-bg: var(--clr-context-menu-selected-bg);
+  $color-context-menu-selected-text: var(--clr-context-menu-selected);
   
   /* Message Status */
-  $color-msg-status-icon-sent: #a4a6a9;
-  $color-msg-status-icon-delivered: #a4a6a9;
-  $color-msg-status-icon-read: #a4a6a9;
-  $color-msg-status-icon-error:$color-conversation-list-message-error;
+  $color-msg-status-icon-sent: var(--clr-message-status-icon);
+  $color-msg-status-icon-delivered: var(--clr-message-status-icon);
+  $color-msg-status-icon-read: var(--clr-message-status-icon);
+  $color-msg-status-icon-error: var(--clr-error);
   $color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
   
 
@@ -163,8 +165,6 @@ Todo:
 6. bring them in js
 
 */
-
-
 
 // A few layout variables used cross-file
 
