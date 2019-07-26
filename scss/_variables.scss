@@ -45,6 +45,7 @@ html {
   --clr-context-item-selected: #fff;
   --clr-context-menu-text: #070c14;
   --clr-broken-media-bg: #070c14;
+  --clr-broken-media-bg-text: #fff;
   --clr-message-status-icon-sending: #62656a;
   --clr-avatar-default-bg: #505050; //This is probably never used because the core allways sets the color
   --clr-message-buttons: #8b8e91;
@@ -56,68 +57,58 @@ html {
 
   $color-conversation-list-has-unread: #2090ea;
   $color-conversation-list-unread-count-bg: #2090ea;
-  //$color-core-red: #f44336;
-  $color-message-detail-delete-bg: #f44336;
 
+  
   $color-conversation-list-message-error: var(--clr-error);
-  $color-message-detail-error-bg: var(--clr-error);
-
-  $color-message-detail-error: var(--clr-error-variant);
-
-  //$color-white: #ffffff;
+  
   $color-global-avatar: #ffffff;
   $color-global-x: #ffffff;
   $color-contact-default-label: #ffffff;
-
+  
   $color-context-item-selected: var(--clr-context-item-selected);
   $color-context-item-selected-before: var(--clr-context-item-selected);  
   $color-context-item-selected-after: var(--clr-context-item-selected);
   
   $color-conversaton-list-default-avatar: #ffffff;
   $color-conversation-list-unread-count: #ffffff;
-  $color-conversation-message-detail-delete-bg: #ffffff;
   // message
-  $color-message-detail-contact-default-avatar: #ffffff;
-  $color-message-detail-contact-show-safety-number: #ffffff; // is this component used?
-  $color-conversation-message-detail-error-alt: #ffffff;
   $color-message-attachment-container-bg: #ffffff;
   $color-message-attachment-filename-incomming: #ffffff;
   $color-message-attachment-filesize-incomming: #ffffff;
   $color-message-author: #ffffff;
   $color-message-metadata-image-no-caption: #ffffff;
   $color-message-author-default-avatar-label: #ffffff;
-  $color-message-broken-image-incomming: #ffffff;
-  $color-message-broken-video-screenshot-incomming: #ffffff;
+  
+  $color-message-broken-image-incomming: var(--clr-broken-media-bg-text);
+  $color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
   
   $color-message-video-overlay-circle: #ffffff;
   $color-message-video-play: #2090ea;
 
-
+  
   $color-message-metadata-date-incomming: rgba(#ffffff, 0.7);
-
+  
   //$color-light-90: #070c14; // some kind of font color?
   $color-global-body: #070c14;
   $color-global-titlebar: #070c14;
   $color-global-logo: #070c14;
-
+  
   $color-context-menu-item: var(--clr-context-menu-text);
   $color-context-menu-item-before: var(--clr-context-menu-text);
   $color-context-menu-item-sub-after: var(--clr-context-menu-text);
   $color-context-menu-item-sub: var(--clr-context-menu-text);
-
+  
   $color-message-generic-attachment-icon-extension: #070c14;
   $color-message-generic-attachment-filename: #070c14;
   $color-message-generic-attachment-filesize: #070c14;
   $color-message-text: #070c14;
   $color-message-text-underline: #070c14;
-   
+  
   $color-message-broken-image: var(--clr-broken-media-bg);
   $color-message-broken-video-screenshot: var(--clr-broken-media-bg);
-
+  
   //$color-light-35: #a4a6a9;
   $color-context-menu-item-selected: #a4a6a9;
-  $color-message-detail-delete-button-border: #a4a6a9;
-  $color-message-detail-contact-show-safety-number-bg: #a4a6a9;
   $color-message-metadata-padlock-icon-incomming: #a4a6a9;
   
   //TODO investigate duplication between scss files??
@@ -130,36 +121,33 @@ html {
   $color-message-metadata-status-icon-read: #a4a6a9;
   $color-message-detail-contact-status-icon-read: #a4a6a9;
   $color-conversation-list-status-icon-read: #a4a6a9;
-
+  
   //$color-light-60: #62656a;
   $color-contact-list-item: #62656a;
   $color-message-metadata-date: #62656a;
-
+  
   $color-conversation-list-message-status-icon-sending: var(--clr-message-status-icon-sending);
-  $color-message-detail-contact-status-icon-sending: var(--clr-message-status-icon-sending);
   $color-message-metadata-status-icon-sending: var(--clr-message-status-icon-sending);
-
+  
   //$color-blue: #2090ea;
   $color-global-a: #2090ea;
   $color-global-textarea-outline: #2090ea;
-
+  
   //$color-grey: #616161;
   $color-emoji-smile-svg: #616161;
   $color-global-paperclip-svg: #616161;
   $color-global-avatar-bg: #616161;
   $color-global-x-bg: #616161;
   $color-index-last-timestamp: #616161;
-
+  
   $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
-  $color-message-detail-contact-detault-avatar-bg: var(--clr-avatar-default-bg);
-
+  
   $color-bp3-dialogs-bg: #ececec;
-
+  
   $color-outgoing-message-padlock: #4caf50;
   $color-context-menu-border: #efefef;
   $color-context-menu-bg: #f9fafa;
-
-
+  
   $color-message-button-download: var(--clr-message-buttons);
   $color-message-button-reply: var(--clr-message-buttons);
   $color-message-button-menu: var(--clr-message-buttons);
@@ -171,10 +159,29 @@ html {
   $color-conversation-discussion-container-bg: #fff;
   $color-global-bg: #fff;
   $color-map-overlay-bg: #fff;
-
+  
   $color-scrollbar-thumb: #666666; // -
   $color-scrollbar-thumb-hover: #606060; // -
+  
+// Css might not be in use anymore:
+$color-message-detail-contact-detault-avatar-bg: var(--clr-avatar-default-bg);
+$color-message-detail-error-bg: var(--clr-error);
+$color-message-detail-error: var(--clr-error-variant);
+$color-message-detail-contact-default-avatar: #ffffff;
+$color-message-detail-contact-show-safety-number: #ffffff; // is this component used?
+$color-conversation-message-detail-error-alt: #ffffff;
+$color-message-detail-contact-show-safety-number-bg: #a4a6a9;
+$color-message-detail-contact-status-icon-sending: var(--clr-message-status-icon-sending);
 
+
+
+
+// Belongs to stuff we plan to remove / change anyway 
+// so we don't put this into theming yet
+// because it will change
+$color-message-detail-delete-button-border: #a4a6a9;
+$color-message-detail-delete-bg: #f44336;
+$color-message-detail-delete: #ffffff;
 
 
 // A few layout variables used cross-file
