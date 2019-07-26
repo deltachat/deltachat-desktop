@@ -1,5 +1,5 @@
 .conversation {
-  background-color: var(--color-conversation-bg);
+  background-color: $color-conversation-bg;
   position: relative;
   padding-bottom: 40px;
 
@@ -55,7 +55,7 @@
 }
 
 .discussion-container {
-  background-color: var(--color-conversation-discussion-container-bg);
+  background-color: $color-conversation-discussion-container-bg;
 }
 
 .message-container,

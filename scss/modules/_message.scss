@@ -47,9 +47,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/download.svg', var(--message-button-download));
+  @include color-svg('../images/download.svg', $message-button-download);
   &:hover {
-    @include color-svg('../images/download.svg', var(--message-button-download-hover));
+    @include color-svg('../images/download.svg', $message-button-download-hover);
   }
   &.icon-medium {
     height: 36px;
@@ -58,7 +58,7 @@
 }
 
 .attachment-overlay .module-message__buttons__download:hover {
-  @include color-svg('../images/download.svg', var(--message-button-download-hover));
+  @include color-svg('../images/download.svg', $message-button-download-hover);
 }
 
 
@@ -68,9 +68,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/reply.svg', var(--message-button-reply));
+  @include color-svg('../images/reply.svg', $message-button-reply);
   &:hover {
-    @include color-svg('../images/reply.svg', var(--message-button-reply-hover));
+    @include color-svg('../images/reply.svg', $message-button-reply-hover);
   }
 }
 
@@ -86,9 +86,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg-rotated('../images/ellipsis.svg', var(--message-button-menu));
+  @include color-svg-rotated('../images/ellipsis.svg', $message-button-menu);
   &:hover {
-    @include color-svg-rotated('../images/ellipsis.svg', var(--message-button-menu-hover));
+    @include color-svg-rotated('../images/ellipsis.svg', $message-button-menu-hover);
   }
 }
 
@@ -111,7 +111,7 @@
   display: inline-block;
   position: absolute;
   bottom: 4px;
-  @include color-svg('../images/error.svg', var(--color-conversation-message-detail-error));
+  @include color-svg('../images/error.svg', $color-conversation-message-detail-error);
 }
 
 .module-message__error--outgoing {
@@ -146,7 +146,7 @@
   border-radius: 16px;
   overflow: hidden;
 
-  background-color: var(--color-message-attachment-container-bg);
+  background-color: $color-message-attachment-container-bg;
 }
 
 .module-message__attachment-container--with-content-below {
@@ -236,11 +236,11 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: var(--color-message-broken-image);
+  color: $color-message-broken-image;
 }
 
 .module-message__broken-image--incoming {
-  color: var(--color-message-broken-image-incomming);
+  color: $color-message-broken-image-incomming;
 }
 
 .module-message__video-overlay__circle {
@@ -251,7 +251,7 @@
 
   width: 48px;
   height: 48px;
-  background-color: var(--color-message-video-overlay-circle);
+  background-color: $color-message-video-overlay-circle;
   border-radius: 24px;
 }
 
@@ -263,7 +263,7 @@
 
   height: 36px;
   width: 36px;
-  @include color-svg('../images/play.svg', var(--color-message-video-play));
+  @include color-svg('../images/play.svg', $color-message-video-play);
 }
 
 .module-message__broken-video-screenshot {
@@ -274,13 +274,13 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: var(--color-message-broken-video-screenshot);
+  color: $color-message-broken-video-screenshot;
 
   cursor: pointer;
 }
 
 .module-message__broken-video-screenshot--incoming {
-  color: var(--color-message-broken-video-screenshot-incomming);
+  color: $color-message-broken-video-screenshot-incomming;
 }
 
 .module-message__audio-attachment {
@@ -341,7 +341,7 @@
   white-space: nowrap;
   text-overflow: clip;
 
-  color: var(--color-message-generic-attachment-icon-extension);
+  color: $color-message-generic-attachment-icon-extension;
 }
 
 .module-message__generic-attachment__text {
@@ -352,7 +352,7 @@
 }
 
 .module-message__generic-attachment__file-name {
-  color: var(--color-message-generic-attachment-filename;
+  color: $color-message-generic-attachment-filename;
   font-size: 14px;
   line-height: 18px;
   font-weight: 300;
@@ -365,11 +365,11 @@
 }
 
 .module-message__generic-attachment__file-name--incoming {
-  color: var(--color-message-attachment-filename-incomming);
+  color: $color-message-attachment-filename-incomming;
 }
 
 .module-message__generic-attachment__file-size {
-  color: var(--color-message-generic-attachment-filesize);
+  color: $color-message-generic-attachment-filesize;
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
@@ -377,11 +377,11 @@
 }
 
 .module-message__generic-attachment__file-size--incoming {
-  color: var(--color-message-attachment-filesize-incomming);
+  color: $color-message-attachment-filesize-incomming;
 }
 
 .module-message__author {
-  color: var(--color-message-author);
+  color: $color-message-author;
   font-size: 13px;
   font-weight: 300;
   line-height: 18px;
@@ -397,7 +397,7 @@
 }
 
 .module-message__text {
-  color: var(--color-message-text);
+  color: $color-message-text;
   font-size: 14px;
   line-height: 18px;
   text-align: start;
@@ -409,15 +409,15 @@
 
   a {
     text-decoration: underline;
-    color: var(--color-message-text-underline);
+    color: $color-message-text-underline;
   }
 }
 
 .module-message__text--incoming {
-  color: var(--color-message-message-text-incomming);
+  color: $color-message-message-text-incomming;
   a {
     text-decoration: underline;
-    color: var(--color-message-message-text-incomming);
+    color: $color-message-message-text-incomming;
   }
 }
 
@@ -457,14 +457,14 @@
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
-  color: var(--color-message-metadata-date);
+  color: $color-message-metadata-date;
   text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
-  color: var(--color-message-metadata-date-incomming);
+  color: $color-message-metadata-date-incomming;
 }
 .module-message__metadata__date--with-image-no-caption {
-  color: var(--color-message-metadata-image-no-caption);
+  color: $color-message-metadata-image-no-caption;
 }
 
 .module-message__metadata__spacer {
@@ -480,11 +480,11 @@
 }
 
 .module-message__metadata__padlock-icon--incoming {
-  @include color-svg('../images/padlock.svg', var(--color-message-metadata-padlock-icon-incomming), 125%);
+  @include color-svg('../images/padlock.svg', $color-message-metadata-padlock-icon-incomming, 125%);
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', var(--color-outgoing-message-padlock), 125%);
+  @include color-svg('../images/padlock.svg', $color-outgoing-message-padlock, 125%);
 }
 
 .module-message__metadata__status-icon {
@@ -496,7 +496,7 @@
 }
 
 .module-message__metadata__status-icon--sending {
-  @include color-svg('../images/sending.svg', var(--color-message-metadata-status-icon-sending));
+  @include color-svg('../images/sending.svg', $color-message-metadata-status-icon-sending);
   animation: module-message__metdata__status-icon--spinning 4s linear infinite;
 }
 
@@ -508,20 +508,20 @@
 }
 
 .module-message__metadata__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', var(--color-message-metadata-status-icon-sent));
+  @include color-svg('../images/check-circle-outline.svg', $color-message-metadata-status-icon-sent);
 }
 .module-message__metadata__status-icon--delivered {
-  @include color-svg('../images/sent.svg', var(--color-message-metadata-status-icon-delivered));
+  @include color-svg('../images/sent.svg', $color-message-metadata-status-icon-delivered);
   width: 18px;
 }
 .module-message__metadata__status-icon--read {
-  @include color-svg('../images/read.svg', var(--color-message-metadata-status-icon-read));
+  @include color-svg('../images/read.svg', $color-message-metadata-status-icon-read);
   width: 18px;
 }
 
 // When status indicators are overlaid on top of an image, they use different colors
 .module-message__metadata__status-icon--with-image-no-caption {
-  background-color: var(--color-message-metadata-image-no-caption);
+  background-color: $color-message-metadata-image-no-caption;
 }
 
 .module-message__author-avatar {
@@ -558,7 +558,7 @@
 .module-message__author-default-avatar__label {
   width: 100%;
   font-size: 18px;
-  color: var(--color-message-author-default-avatar-label);
+  color: $color-message-author-default-avatar-label;
 }
 
 // All media query widths have 300px added to account for the left pane
