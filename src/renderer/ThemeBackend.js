@@ -7,8 +7,6 @@ export function ThemeDataBuilder (theme) {
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
   let themeData = {
-    deltaChatPrimaryFg: '#070c14', // only used on login screen
-    deltaChatPrimaryFgLight: '#62656a', // only used on login screen
     // Scss ones
     signalBlue: '#2090ea',
     coreRed: '#f44336',
@@ -22,8 +20,6 @@ export function ThemeDataBuilder (theme) {
     outgoingMessagePadlock: '#4caf50',
     contextMenuBorder: '#efefef',
     contextMenuBG: '#f9fafa',
-    messageButtons: '#8b8e91',
-    messageButtonsHover: '#070c14',
     bgColor: '#fff',
     // Misc
     ovalButtonBg: '#415e6b',
@@ -44,6 +40,7 @@ export function ThemeDataBuilder (theme) {
     chatListItemSelectedBgHover: Color('#4c6e7d').lighten(0.24).hex(), // deltaSelected, but should be something else
     chatListItemSelectedText: 'white',
     chatListItemBgHover: '#ececec',
+    // Message Bubble
     messageText: '#070c14',
     infoMessageBubbleBg: '#000000',
     infoMessageBubbleText: 'white',
@@ -51,7 +48,13 @@ export function ThemeDataBuilder (theme) {
     messageIncommingDate: '#070c14',
     messageOutgoingBg: '#efffde',
     messageOutgoingStatusColor: '#4caf50',
-    loginInputFocusColor: '#42A5F5'
+    // Message Bubble - Buttons
+    messageButtons: '#8b8e91',
+    messageButtonsHover: '#070c14',
+    // Login Screen
+    loginInputFocusColor: '#42A5F5',
+    deltaChatPrimaryFg: '#070c14', // only used on login screen
+    deltaChatPrimaryFgLight: '#62656a' // only used on login screen
   }
   Object.keys(themeData).forEach(key => themeData[key] === undefined ? delete themeData[key] : '')
   if (theme.raw) {
