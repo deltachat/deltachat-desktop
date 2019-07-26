@@ -111,7 +111,7 @@
   display: inline-block;
   position: absolute;
   bottom: 4px;
-  @include color-svg('../images/error.svg', $color-conversation-message-detail-error);
+  @include color-svg('../images/error.svg', $color-message-icon-error);
 }
 
 .module-message__error--outgoing {

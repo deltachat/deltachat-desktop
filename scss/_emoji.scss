@@ -37,7 +37,7 @@ button.emoji {
     display: inline-block;
     width: $button-height;
     height: $button-height;
-    @include color-svg('../images/smile.svg', $color-emoji-smile-svg);
+    @include color-svg('../images/smile.svg', $color-composer-emoji-btn);
   }
 
   &:focus,

@@ -100,7 +100,7 @@ a {
       display: inline-block;
       width: $button-height;
       height: $button-height;
-      @include color-svg('../images/paperclip.svg', $color-global-paperclip-svg);
+      @include color-svg('../images/paperclip.svg', $color-composer-file-btn);
       transform: rotateZ(-45deg);
     }
 

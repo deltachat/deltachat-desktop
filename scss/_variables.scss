@@ -58,7 +58,6 @@ html {
   $color-conversation-list-has-unread: #2090ea;
   $color-conversation-list-unread-count-bg: #2090ea;
 
-  
   $color-conversation-list-message-error: var(--clr-error);
   
   $color-global-avatar: #ffffff;
@@ -134,11 +133,10 @@ html {
   $color-global-textarea-outline: #2090ea;
   
   //$color-grey: #616161;
-  $color-emoji-smile-svg: #616161;
-  $color-global-paperclip-svg: #616161;
+  $color-composer-emoji-btn: #616161;
+  $color-composer-file-btn: #616161;
   $color-global-avatar-bg: #616161;
   $color-global-x-bg: #616161;
-  $color-index-last-timestamp: #616161;
   
   $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
   
@@ -154,6 +152,8 @@ html {
   $color-message-button-download-hover: var(--clr-message-buttons);
   $color-message-button-reply-hover: var(--clr-message-buttons);
   $color-message-button-menu-hover: var(--clr-message-buttons);
+
+  $color-message-icon-error: #ffffff;
   
   $color-conversation-bg: #fff;
   $color-conversation-discussion-container-bg: #fff;
@@ -164,14 +164,6 @@ html {
   $color-scrollbar-thumb-hover: #606060; // -
   
 // Css might not be in use anymore:
-$color-message-detail-contact-detault-avatar-bg: var(--clr-avatar-default-bg);
-$color-message-detail-error-bg: var(--clr-error);
-$color-message-detail-error: var(--clr-error-variant);
-$color-message-detail-contact-default-avatar: #ffffff;
-$color-message-detail-contact-show-safety-number: #ffffff; // is this component used?
-$color-conversation-message-detail-error-alt: #ffffff;
-$color-message-detail-contact-show-safety-number-bg: #a4a6a9;
-$color-message-detail-contact-status-icon-sending: var(--clr-message-status-icon-sending);
 
 
 
