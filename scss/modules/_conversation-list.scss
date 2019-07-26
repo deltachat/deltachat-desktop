@@ -171,14 +171,14 @@
 }
 
 .module-conversation-list-item__message__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
+  @include color-svg('../images/check-circle-outline.svg', var(--color-conversation-list-status-icon-sent));
 }
 .module-conversation-list-item__message__status-icon--delivered {
-  @include color-svg('../images/sent.svg', var(--color-light-35));
+  @include color-svg('../images/sent.svg', var(--color-conversation-list-status-icon-delivered));
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--read {
-  @include color-svg('../images/read.svg', var(--color-light-35));
+  @include color-svg('../images/read.svg', var(--color-conversation-list-status-icon-read));
   width: 18px;
 }
 .module-conversation-list-item__message__status-icon--error {

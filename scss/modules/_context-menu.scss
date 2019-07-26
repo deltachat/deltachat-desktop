@@ -17,7 +17,7 @@
 }
 
 .react-contextmenu-item {
-  color: var(--color-light-90);
+  color: var(--color-context-menu-item);
 
   cursor: pointer;
   font-size: 13px;
@@ -36,11 +36,11 @@
   display: inline-block;
   position: absolute;
   right: 7px;
-  color: var(--color-light-90);
+  color: var(--color-context-menu-item-before);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {
-  padding: 0;
+  padding: 0;--color-context-menu-item-sub
 }
 
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
@@ -53,13 +53,13 @@
   display: inline-block;
   position: absolute;
   right: 7px;
-  color: var(--color-light-90);
+  color: var(--color-context-menu-item-before);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
   color: var(--color-context-item-selected);
-  background-color: var(--color-light-35);
+  background-color: var(--color-context-menu-item-selected);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active.react-contextmenu-item--checked:before,

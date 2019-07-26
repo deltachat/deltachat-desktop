@@ -236,7 +236,7 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: var(--color-light-90);
+  color: var(--color-message-broken-image);
 }
 
 .module-message__broken-image--incoming {
@@ -274,7 +274,7 @@
   padding: 10px;
   text-align: center;
   text-transform: uppercase;
-  color: var(--color-light-90);
+  color: var(--color-message-broken-video-screenshot);
 
   cursor: pointer;
 }
@@ -341,7 +341,7 @@
   white-space: nowrap;
   text-overflow: clip;
 
-  color: var(--color-light-90);
+  color: var(--color-message-generic-attachment-icon-extension);
 }
 
 .module-message__generic-attachment__text {
@@ -352,7 +352,7 @@
 }
 
 .module-message__generic-attachment__file-name {
-  color: var(--color-light-90);
+  color: var(--color-message-generic-attachment-filename;
   font-size: 14px;
   line-height: 18px;
   font-weight: 300;
@@ -369,7 +369,7 @@
 }
 
 .module-message__generic-attachment__file-size {
-  color: var(--color-light-90);
+  color: var(--color-message-generic-attachment-filesize);
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
@@ -397,7 +397,7 @@
 }
 
 .module-message__text {
-  color: var(--color-light-90);
+  color: var(--color-message-text);
   font-size: 14px;
   line-height: 18px;
   text-align: start;
@@ -409,7 +409,7 @@
 
   a {
     text-decoration: underline;
-    color: var(--color-light-90);
+    color: var(--color-message-text-underline);
   }
 }
 
@@ -480,7 +480,7 @@
 }
 
 .module-message__metadata__padlock-icon--incoming {
-  @include color-svg('../images/padlock.svg', var(--color-light-35), 125%);
+  @include color-svg('../images/padlock.svg', var(--color-message-metadata-padlock-icon-incomming), 125%);
 }
 
 .module-message__metadata__padlock-icon--outgoing {
@@ -508,14 +508,14 @@
 }
 
 .module-message__metadata__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
+  @include color-svg('../images/check-circle-outline.svg', var(--color-message-metadata-status-icon-sent));
 }
 .module-message__metadata__status-icon--delivered {
-  @include color-svg('../images/sent.svg', var(--color-light-35));
+  @include color-svg('../images/sent.svg', var(--color-message-metadata-status-icon-delivered));
   width: 18px;
 }
 .module-message__metadata__status-icon--read {
-  @include color-svg('../images/read.svg', var(--color-light-35));
+  @include color-svg('../images/read.svg', var(--color-message-metadata-status-icon-read));
   width: 18px;
 }
 
