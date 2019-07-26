@@ -64,10 +64,6 @@ const ChatViewWrapper = styled.div`
     border-bottom-right-radius: 0px !important;
   }
 
-  .module-message__text--incoming {
-    color: unset;
-  }
-
   .module-message__author, .module-message__text {
     color: ${props => props.theme.messageText};
   }
