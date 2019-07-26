@@ -66,7 +66,7 @@
 }
 
 .module-message-detail__contact__default-avatar {
-  background-color: var(--color-conversation-grey);
+  background-color: var(--color-message-detail-contact-default-avatar-bg);
 
   line-height: 44px;
   font-size: 20px;
@@ -93,7 +93,7 @@
 }
 
 .module-message-detail__contact__status-icon--sending {
-  @include color-svg('../images/sending.svg', var(--color-light-60));
+  @include color-svg('../images/sending.svg', var(--color-message-detail-contact-status-icon-sending));
   animation: module-message-detail__contact__status-icon--spinning 4s linear
     infinite;
 }

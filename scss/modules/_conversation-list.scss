@@ -32,7 +32,7 @@
   line-height: 48px;
   text-align: center;
 
-  background-color: var(--color-conversation-grey);
+  background-color: var(--color-conversation-list-item-default-avatar-bg);
 }
 
 .module-conversation-list-item__content {
@@ -158,7 +158,7 @@
 }
 
 .module-conversation-list-item__message__status-icon--sending {
-  @include color-svg('../images/sending.svg', var(--color-light-60));
+  @include color-svg('../images/sending.svg', var(--color-conversation-list-message-status-icon-sending));
   animation: module-conversation-list-item__message__status-icon--spinning 4s
     linear infinite;
 }

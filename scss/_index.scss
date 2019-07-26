@@ -24,7 +24,7 @@
 //   border-radius: 4px;
 
 //   &:focus {
-//     outline: solid 1px var(--color-blue);
+//     outline: solid 1px var(--color-index-focus-outline);
 //   }
 
 //   &.active {
@@ -57,7 +57,7 @@
   font-size: smaller;
   float: right;
   margin: 0 10px;
-  color: var(--color-grey);
+  color: var(--color-index-last-timestamp);
 }
 
 .new-contact {

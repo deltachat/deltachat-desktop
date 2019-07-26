@@ -108,27 +108,54 @@ html {
   --color-message-metadata-status-icon-delivered: #a4a6a9;
   --color-message-metadata-status-icon-read: #a4a6a9;
 
-  --color-light-60: #62656a;
-  --color-blue: #2090ea;
-  --color-grey: #616161;
+  //--color-light-60: #62656a;
+  --color-contact-list-item: #62656a;
+  --color-conversation-list-message-status-icon-sending: #62656a;
+  --color-message-detail-contact-status-icon-sending: #62656a;
+  --color-message-metadata-date: #62656a;
+  --color-message-metadata-status-icon-sending: #62656a;
 
-  --color-conversation-grey: #505050;
+  //--color-blue: #2090ea;
+  --color-global-a: #2090ea;
+  --color-global-textarea-outline: #2090ea;
+  //--color-index-focus-outline: #2090ea;
 
+  //--color-grey: #616161;
+  --color-emoji-smile-svg: #616161;
+  --color-global-paperclip-svg: #616161;
+  --color-global-avatar-bg: #616161;
+  --color-global-x-bg: #616161;
+  --color-index-last-timestamp: #616161;
+
+  //--color-conversation-grey: #505050;
+  --color-conversation-list-item-default-avatar-bg: #505050;
+  --color-message-detail-contact-detault-avatar-bg: #505050;
+
+  --color-bp3-dialogs-bg: #ececec;
+
+  --color-outgoing-message-padlock: #4caf50;
+  --color-context-menu-border: #efefef;
+  --color-context-menu-bg: #f9fafa;
+  //--message-buttons: #8b8e91;
+  --color-message-button-download: #8b8e91;
+  --color-message-button-reply: #8b8e91;
+  --color-message-button-menu: #8b8e91;
+
+  //--message-buttons-hover: #070c14;
+  --color-message-button-download-hover: #070c14;
+  --color-message-button-reply-hover: #070c14;
+  --color-message-button-menu-hover: #070c14;
   
-  --dialog-bg: #ececec;
+  --color-conversation-bg: #fff;
+  --color-conversation-discussion-container-bg: #fff;
+  --color-global-bg: #fff;
+  --color-map-overlay-bg: #fff;
 
-  // Already renamed
-  --outgoing-message-padlock: #4caf50; // TODO: remove this somehow, because it's too specific -> only affects outgoing
-  --context-menu-border: #efefef;
-  --context-menu-bg: #f9fafa;
-  --message-buttons: #8b8e91;
-  --message-buttons-hover: #070c14;
-  --bg-color: #fff;
-  --scrollbar-thumb: #666666; // -
-  --scrollbar-thumb-hover: #606060; // -
+  --color-scrollbar-thumb: #666666; // -
+  --color-scrollbar-thumb-hover: #606060; // -
 }
 
-$color-light-10: #eeefef; // only used by attachment downloadbutton :hover
+//$color-light-10: #eeefef; // depricated?
 
 // A few layout variables used cross-file
 

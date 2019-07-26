@@ -47,9 +47,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/download.svg', var(--message-buttons));
+  @include color-svg('../images/download.svg', var(--message-button-download));
   &:hover {
-    @include color-svg('../images/download.svg', var(--message-buttons-hover));
+    @include color-svg('../images/download.svg', var(--message-button-download-hover));
   }
   &.icon-medium {
     height: 36px;
@@ -58,7 +58,7 @@
 }
 
 .attachment-overlay .module-message__buttons__download:hover {
-  @include color-svg('../images/download.svg', var(--message-buttons-hover));
+  @include color-svg('../images/download.svg', var(--message-button-download-hover));
 }
 
 
@@ -68,9 +68,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/reply.svg', var(--message-buttons));
+  @include color-svg('../images/reply.svg', var(--message-button-reply));
   &:hover {
-    @include color-svg('../images/reply.svg', var(--message-buttons-hover));
+    @include color-svg('../images/reply.svg', var(--message-button-reply-hover));
   }
 }
 
@@ -86,9 +86,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg-rotated('../images/ellipsis.svg', var(--message-buttons));
+  @include color-svg-rotated('../images/ellipsis.svg', var(--message-button-menu));
   &:hover {
-    @include color-svg-rotated('../images/ellipsis.svg', var(--message-buttons-hover));
+    @include color-svg-rotated('../images/ellipsis.svg', var(--message-button-menu-hover));
   }
 }
 
@@ -457,7 +457,7 @@
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
-  color: var(--color-light-60);
+  color: var(--color-message-metadata-date);
   text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
@@ -484,7 +484,7 @@
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', var(--outgoing-message-padlock), 125%);
+  @include color-svg('../images/padlock.svg', var(--color-outgoing-message-padlock), 125%);
 }
 
 .module-message__metadata__status-icon {
@@ -496,7 +496,7 @@
 }
 
 .module-message__metadata__status-icon--sending {
-  @include color-svg('../images/sending.svg', var(--color-light-60));
+  @include color-svg('../images/sending.svg', var(--color-message-metadata-status-icon-sending));
   animation: module-message__metdata__status-icon--spinning 4s linear infinite;
 }
 
