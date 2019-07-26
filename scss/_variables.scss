@@ -38,15 +38,20 @@ $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, No
 // New colors
 
 html {
-  // '// -' means that it isn't added to theming.js yet and it still needs to be added there
-  //$color-signal-blue: #2090ea;
+
+
+
+}
+
+// Theming Colors
+
   $color-conversation-list-has-unread: #2090ea;
   $color-conversation-list-unread-count-bg: #2090ea;
   //$color-core-red: #f44336;
   $color-message-detail-delete-bg: #f44336;
   error-color {
-  $color-conversation-list-message-error: #f44336;
-  $color-message-detail-error-bg: #f44336;
+    $color-conversation-list-message-error: #f44336;
+    $color-message-detail-error-bg: #f44336;
   }
   $color-message-detail-error: #f44336;
 
@@ -55,9 +60,9 @@ html {
   $color-global-x: #ffffff;
   $color-contact-default-label: #ffffff;
   context-item-selected{
-  $color-context-item-selected: #ffffff;
-  $color-context-item-selected-before: #ffffff;  
-  $color-context-item-selected-after: #ffffff;
+    $color-context-item-selected: #ffffff;
+    $color-context-item-selected-before: #ffffff;  
+    $color-context-item-selected-after: #ffffff;
   }
   $color-conversaton-list-default-avatar: #ffffff;
   $color-conversation-list-unread-count: #ffffff;
@@ -86,44 +91,53 @@ html {
   $color-global-body: #070c14;
   $color-global-titlebar: #070c14;
   $color-global-logo: #070c14;
-  $color-context-menu-item: #070c14;
-  $color-context-menu-item-before: #070c14;
-  $color-context-menu-item-sub-after: #070c14;
-  $color-context-menu-item-sub: #070c14;
-  $color-message-broken-image: #070c14;
-  $color-message-broken-video-screenshot: #070c14;
+  context-menu-text{
+    $color-context-menu-item: #070c14;
+    $color-context-menu-item-before: #070c14;
+    $color-context-menu-item-sub-after: #070c14;
+    $color-context-menu-item-sub: #070c14;
+  }
   $color-message-generic-attachment-icon-extension: #070c14;
   $color-message-generic-attachment-filename: #070c14;
   $color-message-generic-attachment-filesize: #070c14;
   $color-message-text: #070c14;
   $color-message-text-underline: #070c14;
+  
+  broken-media-bg{
+    $color-message-broken-image: #070c14;
+    $color-message-broken-video-screenshot: #070c14;
+  }
 
   //$color-light-35: #a4a6a9;
   $color-context-menu-item-selected: #a4a6a9;
-  $color-conversation-list-status-icon-sent: #a4a6a9;
-  $color-conversation-list-status-icon-delivered: #a4a6a9;
-  $color-conversation-list-status-icon-read: #a4a6a9;
   $color-message-detail-delete-button-border: #a4a6a9;
-  $color-message-detail-contact-status-icon-send: #a4a6a9;
-  $color-message-detail-contact-status-icon-delivered: #a4a6a9;
-  $color-message-detail-contact-status-icon-read: #a4a6a9;
   $color-message-detail-contact-show-safety-number-bg: #a4a6a9;
   $color-message-metadata-padlock-icon-incomming: #a4a6a9;
+  
+  //TODO investigate duplication between scss files??
+  $color-message-detail-contact-status-icon-send: #a4a6a9;
   $color-message-metadata-status-icon-sent: #a4a6a9;
+  $color-conversation-list-status-icon-sent: #a4a6a9;
   $color-message-metadata-status-icon-delivered: #a4a6a9;
+  $color-conversation-list-status-icon-delivered: #a4a6a9;
+  $color-message-detail-contact-status-icon-delivered: #a4a6a9;
   $color-message-metadata-status-icon-read: #a4a6a9;
+  $color-message-detail-contact-status-icon-read: #a4a6a9;
+  $color-conversation-list-status-icon-read: #a4a6a9;
 
   //$color-light-60: #62656a;
   $color-contact-list-item: #62656a;
-  $color-conversation-list-message-status-icon-sending: #62656a;
-  $color-message-detail-contact-status-icon-sending: #62656a;
   $color-message-metadata-date: #62656a;
-  $color-message-metadata-status-icon-sending: #62656a;
+
+  message-status-icon-sending{
+    $color-conversation-list-message-status-icon-sending: #62656a;
+    $color-message-detail-contact-status-icon-sending: #62656a;
+    $color-message-metadata-status-icon-sending: #62656a;
+  }
 
   //$color-blue: #2090ea;
   $color-global-a: #2090ea;
   $color-global-textarea-outline: #2090ea;
-  //$color-index-focus-outline: #2090ea;
 
   //$color-grey: #616161;
   $color-emoji-smile-svg: #616161;
@@ -133,8 +147,10 @@ html {
   $color-index-last-timestamp: #616161;
 
   //$color-conversation-grey: #505050;
-  $color-conversation-list-item-default-avatar-bg: #505050;
-  $color-message-detail-contact-detault-avatar-bg: #505050;
+  default-avatar-bg {
+    $color-conversation-list-item-default-avatar-bg: #505050;
+    $color-message-detail-contact-detault-avatar-bg: #505050;
+  }
 
   $color-bp3-dialogs-bg: #ececec;
 
@@ -142,14 +158,17 @@ html {
   $color-context-menu-border: #efefef;
   $color-context-menu-bg: #f9fafa;
   //$message-buttons: #8b8e91;
-  $color-message-button-download: #8b8e91;
-  $color-message-button-reply: #8b8e91;
-  $color-message-button-menu: #8b8e91;
+  message-buttons {
+    $color-message-button-download: #8b8e91;
+    $color-message-button-reply: #8b8e91;
+    $color-message-button-menu: #8b8e91;
+  }
 
-  //$message-buttons-hover: #070c14;
+  message-buttons-hover {
   $color-message-button-download-hover: #070c14;
   $color-message-button-reply-hover: #070c14;
   $color-message-button-menu-hover: #070c14;
+  }
   
   $color-conversation-bg: #fff;
   $color-conversation-discussion-container-bg: #fff;
@@ -158,9 +177,8 @@ html {
 
   $color-scrollbar-thumb: #666666; // -
   $color-scrollbar-thumb-hover: #606060; // -
-}
 
-//$color-light-10: #eeefef; // depricated?
+
 
 // A few layout variables used cross-file
 
