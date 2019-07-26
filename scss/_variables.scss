@@ -38,32 +38,41 @@ $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, No
 // New colors
 
 html {
+  // clr stands for color to save space
 
-
+  --clr-error: #f44336;
+  --clr-error-variant: #f44336;
+  --clr-context-item-selected: #fff;
+  --clr-context-menu-text: #070c14;
+  --clr-broken-media-bg: #070c14;
+  --clr-message-status-icon-sending: #62656a;
+  --clr-avatar-default-bg: #505050; //This is probably never used because the core allways sets the color
+  --clr-message-buttons: #8b8e91;
+  --clr-message-buttons: #070c14;
 
 }
 
-// Theming Colors
+// Theming Colors - TODO sort them by name
 
   $color-conversation-list-has-unread: #2090ea;
   $color-conversation-list-unread-count-bg: #2090ea;
   //$color-core-red: #f44336;
   $color-message-detail-delete-bg: #f44336;
-  error-color {
-    $color-conversation-list-message-error: #f44336;
-    $color-message-detail-error-bg: #f44336;
-  }
-  $color-message-detail-error: #f44336;
+
+  $color-conversation-list-message-error: var(--clr-error);
+  $color-message-detail-error-bg: var(--clr-error);
+
+  $color-message-detail-error: var(--clr-error-variant);
 
   //$color-white: #ffffff;
   $color-global-avatar: #ffffff;
   $color-global-x: #ffffff;
   $color-contact-default-label: #ffffff;
-  context-item-selected{
-    $color-context-item-selected: #ffffff;
-    $color-context-item-selected-before: #ffffff;  
-    $color-context-item-selected-after: #ffffff;
-  }
+
+  $color-context-item-selected: var(--clr-context-item-selected);
+  $color-context-item-selected-before: var(--clr-context-item-selected);  
+  $color-context-item-selected-after: var(--clr-context-item-selected);
+  
   $color-conversaton-list-default-avatar: #ffffff;
   $color-conversation-list-unread-count: #ffffff;
   $color-conversation-message-detail-delete-bg: #ffffff;
@@ -91,22 +100,20 @@ html {
   $color-global-body: #070c14;
   $color-global-titlebar: #070c14;
   $color-global-logo: #070c14;
-  context-menu-text{
-    $color-context-menu-item: #070c14;
-    $color-context-menu-item-before: #070c14;
-    $color-context-menu-item-sub-after: #070c14;
-    $color-context-menu-item-sub: #070c14;
-  }
+
+  $color-context-menu-item: var(--clr-context-menu-text);
+  $color-context-menu-item-before: var(--clr-context-menu-text);
+  $color-context-menu-item-sub-after: var(--clr-context-menu-text);
+  $color-context-menu-item-sub: var(--clr-context-menu-text);
+
   $color-message-generic-attachment-icon-extension: #070c14;
   $color-message-generic-attachment-filename: #070c14;
   $color-message-generic-attachment-filesize: #070c14;
   $color-message-text: #070c14;
   $color-message-text-underline: #070c14;
-  
-  broken-media-bg{
-    $color-message-broken-image: #070c14;
-    $color-message-broken-video-screenshot: #070c14;
-  }
+   
+  $color-message-broken-image: var(--clr-broken-media-bg);
+  $color-message-broken-video-screenshot: var(--clr-broken-media-bg);
 
   //$color-light-35: #a4a6a9;
   $color-context-menu-item-selected: #a4a6a9;
@@ -129,11 +136,9 @@ html {
   $color-contact-list-item: #62656a;
   $color-message-metadata-date: #62656a;
 
-  message-status-icon-sending{
-    $color-conversation-list-message-status-icon-sending: #62656a;
-    $color-message-detail-contact-status-icon-sending: #62656a;
-    $color-message-metadata-status-icon-sending: #62656a;
-  }
+  $color-conversation-list-message-status-icon-sending: var(--clr-message-status-icon-sending);
+  $color-message-detail-contact-status-icon-sending: var(--clr-message-status-icon-sending);
+  $color-message-metadata-status-icon-sending: var(--clr-message-status-icon-sending);
 
   //$color-blue: #2090ea;
   $color-global-a: #2090ea;
@@ -146,29 +151,22 @@ html {
   $color-global-x-bg: #616161;
   $color-index-last-timestamp: #616161;
 
-  //$color-conversation-grey: #505050;
-  default-avatar-bg {
-    $color-conversation-list-item-default-avatar-bg: #505050;
-    $color-message-detail-contact-detault-avatar-bg: #505050;
-  }
+  $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
+  $color-message-detail-contact-detault-avatar-bg: var(--clr-avatar-default-bg);
 
   $color-bp3-dialogs-bg: #ececec;
 
   $color-outgoing-message-padlock: #4caf50;
   $color-context-menu-border: #efefef;
   $color-context-menu-bg: #f9fafa;
-  //$message-buttons: #8b8e91;
-  message-buttons {
-    $color-message-button-download: #8b8e91;
-    $color-message-button-reply: #8b8e91;
-    $color-message-button-menu: #8b8e91;
-  }
 
-  message-buttons-hover {
-  $color-message-button-download-hover: #070c14;
-  $color-message-button-reply-hover: #070c14;
-  $color-message-button-menu-hover: #070c14;
-  }
+
+  $color-message-button-download: var(--clr-message-buttons);
+  $color-message-button-reply: var(--clr-message-buttons);
+  $color-message-button-menu: var(--clr-message-buttons);
+  $color-message-button-download-hover: var(--clr-message-buttons);
+  $color-message-button-reply-hover: var(--clr-message-buttons);
+  $color-message-button-menu-hover: var(--clr-message-buttons);
   
   $color-conversation-bg: #fff;
   $color-conversation-discussion-container-bg: #fff;
