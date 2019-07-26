@@ -33,3 +33,51 @@
     background-color: #4caf50;
 }
   
+
+// Message Status
+
+.status-icon--sending {
+    @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
+    animation: __status-icon--spinning 4s
+        linear infinite;
+}
+
+@keyframes __status-icon--spinning {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.status-icon--sent {
+    @include color-svg('../images/check-circle-outline.svg', $color-msg-status-icon-sent);
+}
+
+.status-icon--delivered {
+    @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
+    width: 18px;
+}
+
+.status-icon--read {
+    @include color-svg('../images/read.svg', $color-msg-status-icon-read);
+    width: 18px;
+}
+
+.status-icon--error {
+    @include color-svg('../images/error.svg', $color-msg-status-icon-error);
+}
+
+// .status-icon--draft {
+//   @include color-svg('../images/lead-pencil.svg', lightgrey);
+// }
+
+.status-icon {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-left: 6px;
+}
+
+.module-message__metadata > .status-icon {
+    margin-bottom: 2px;
+}

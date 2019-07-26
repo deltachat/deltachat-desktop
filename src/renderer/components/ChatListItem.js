@@ -166,8 +166,8 @@ class ChatListItem extends React.Component {
         {lastMessage.status ? (
           <div
             className={classNames(
-              'module-conversation-list-item__message__status-icon',
-              `module-conversation-list-item__message__status-icon--${
+              'status-icon',
+              `status-icon--${
                 lastMessage.status
               }`
             )}

@@ -6,6 +6,8 @@ export function ThemeDataBuilder (theme) {
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
+
+  // #070c14; // some kind of font color?
   let themeData = {
     // Scss ones
     signalBlue: '#2090ea',

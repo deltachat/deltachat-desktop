@@ -80,7 +80,7 @@ const MessageWrapper = styled.div`
     color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
-  .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
+  .status-icon--read, .status-icon--delivered {
     background-color: ${props => props.theme.messageOutgoingStatusColor};
   }
 

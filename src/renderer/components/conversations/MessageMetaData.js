@@ -73,11 +73,8 @@ class MessageMetaData extends React.Component {
         {direction === 'outgoing' && status !== 'error' ? (
           <div
             className={classNames(
-              'module-message__metadata__status-icon',
-              `module-message__metadata__status-icon--${status}`,
-              withImageNoCaption
-                ? 'module-message__metadata__status-icon--with-image-no-caption'
-                : null
+              'status-icon',
+              `status-icon--${status}`
             )}
           />
         ) : null}

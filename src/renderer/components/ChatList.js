@@ -47,7 +47,9 @@ const ChatListWrapper = styled.div`
     width: 90%;
   }
 
-  .module-conversation-list-item__message__status-icon {
+  .status-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
     margin-left: calc(100% - 90% - 12px);
   }
 

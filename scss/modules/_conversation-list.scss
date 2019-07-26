@@ -27,7 +27,7 @@
   object-fit: cover;
 }
 .module-conversation-list-item__default-avatar {
-  color: $color-conversaton-list-default-avatar;
+  color: $color-conversation-list-default-avatar;
   font-size: 26px;
   line-height: 48px;
   text-align: center;
@@ -134,16 +134,6 @@
   border-radius: 10px;
 }
 
-.module-conversation-list-item__message__status-icon {
-  flex-shrink: 0;
-
-  margin-top: 2px;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-left: 6px;
-}
-
 .module-conversation-list-item__is-verified {
   width: 0.75em;
   height: 0.75em;
@@ -156,36 +146,3 @@
   margin-right: 2px;
   filter: invert(100%);
 }
-
-.module-conversation-list-item__message__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-conversation-list-message-status-icon-sending);
-  animation: module-conversation-list-item__message__status-icon--spinning 4s
-    linear infinite;
-}
-
-@keyframes module-conversation-list-item__message__status-icon--spinning {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-.module-conversation-list-item__message__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-conversation-list-status-icon-sent);
-}
-.module-conversation-list-item__message__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-conversation-list-status-icon-delivered);
-  width: 18px;
-}
-.module-conversation-list-item__message__status-icon--read {
-  @include color-svg('../images/read.svg', $color-conversation-list-status-icon-read);
-  width: 18px;
-}
-.module-conversation-list-item__message__status-icon--error {
-  @include color-svg('../images/error.svg', $color-conversation-list-message-error);
-}
-
-// (empty for now)
-// .module-conversation-list-item__message__status-icon--draft {
-//   @include color-svg('../images/lead-pencil.svg', var(--color-light-35));
-// }

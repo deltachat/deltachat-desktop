@@ -478,48 +478,11 @@
 }
 
 .module-message__metadata__padlock-icon--incoming {
-  @include color-svg('../images/padlock.svg', $color-message-metadata-padlock-icon-incomming, 125%);
+  @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', $color-outgoing-message-padlock, 125%);
-}
-
-.module-message__metadata__status-icon {
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-left: 6px;
-  margin-bottom: 2px;
-}
-
-.module-message__metadata__status-icon--sending {
-  @include color-svg('../images/sending.svg', $color-message-metadata-status-icon-sending);
-  animation: module-message__metdata__status-icon--spinning 4s linear infinite;
-}
-
-@keyframes module-message__metdata__status-icon--spinning {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-.module-message__metadata__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', $color-message-metadata-status-icon-sent);
-}
-.module-message__metadata__status-icon--delivered {
-  @include color-svg('../images/sent.svg', $color-message-metadata-status-icon-delivered);
-  width: 18px;
-}
-.module-message__metadata__status-icon--read {
-  @include color-svg('../images/read.svg', $color-message-metadata-status-icon-read);
-  width: 18px;
-}
-
-// When status indicators are overlaid on top of an image, they use different colors
-.module-message__metadata__status-icon--with-image-no-caption {
-  background-color: $color-message-metadata-image-no-caption;
+  @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
 }
 
 .module-message__author-avatar {

@@ -53,118 +53,112 @@ html {
 
 }
 
-// Theming Colors - TODO sort them by name
+// Theming Colors
 
+  /* Global */
+  $color-global-a: #2090ea;
+  $color-global-avatar: #ffffff;
+  $color-global-avatar-bg: #616161;
+  $color-global-bg: #fff;
+  $color-global-textarea-outline: #2090ea;
+  $color-global-x: #ffffff;
+  $color-global-x-bg: #616161;
+
+  $color-scrollbar-thumb: #666666;
+  $color-scrollbar-thumb-hover: #606060;
+  
+  /* Misc */
+  $color-contact-default-label: #ffffff;
+  $color-contact-list-item: #62656a;
+  
+  $color-bp3-dialogs-bg: #ececec;
+  
+  $color-map-overlay-bg: #fff;
+  
+  /* Message Composer */
+  $color-composer-emoji-btn: #616161;
+  $color-composer-file-btn: #616161;
+
+  /* ChatView (converstation) */
+  $color-conversation-bg: #fff;
+  $color-conversation-discussion-container-bg: #fff;
+  
+  /* Chat List (conversation list) */
   $color-conversation-list-has-unread: #2090ea;
   $color-conversation-list-unread-count-bg: #2090ea;
-
   $color-conversation-list-message-error: var(--clr-error);
-  
-  $color-global-avatar: #ffffff;
-  $color-global-x: #ffffff;
-  $color-contact-default-label: #ffffff;
-  
-  $color-context-item-selected: var(--clr-context-item-selected);
-  $color-context-item-selected-before: var(--clr-context-item-selected);  
-  $color-context-item-selected-after: var(--clr-context-item-selected);
-  
-  $color-conversaton-list-default-avatar: #ffffff;
   $color-conversation-list-unread-count: #ffffff;
-  // message
+  $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
+  
+  
+  /* Message Bubble */
   $color-message-attachment-container-bg: #ffffff;
   $color-message-attachment-filename-incomming: #ffffff;
   $color-message-attachment-filesize-incomming: #ffffff;
   $color-message-author: #ffffff;
-  $color-message-metadata-image-no-caption: #ffffff;
+  
   $color-message-author-default-avatar-label: #ffffff;
   
   $color-message-broken-image-incomming: var(--clr-broken-media-bg-text);
   $color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
-  
+  $color-message-broken-image: var(--clr-broken-media-bg);
+  $color-message-broken-video-screenshot: var(--clr-broken-media-bg);
   $color-message-video-overlay-circle: #ffffff;
   $color-message-video-play: #2090ea;
 
-  
   $color-message-metadata-date-incomming: rgba(#ffffff, 0.7);
-  
-  //$color-light-90: #070c14; // some kind of font color?
-  $color-global-body: #070c14;
-  $color-global-titlebar: #070c14;
-  $color-global-logo: #070c14;
-  
-  $color-context-menu-item: var(--clr-context-menu-text);
-  $color-context-menu-item-before: var(--clr-context-menu-text);
-  $color-context-menu-item-sub-after: var(--clr-context-menu-text);
-  $color-context-menu-item-sub: var(--clr-context-menu-text);
+  $color-message-metadata-date: #62656a;
   
   $color-message-generic-attachment-icon-extension: #070c14;
   $color-message-generic-attachment-filename: #070c14;
   $color-message-generic-attachment-filesize: #070c14;
   $color-message-text: #070c14;
   $color-message-text-underline: #070c14;
-  
-  $color-message-broken-image: var(--clr-broken-media-bg);
-  $color-message-broken-video-screenshot: var(--clr-broken-media-bg);
-  
-  //$color-light-35: #a4a6a9;
-  $color-context-menu-item-selected: #a4a6a9;
-  $color-message-metadata-padlock-icon-incomming: #a4a6a9;
-  
-  //TODO investigate duplication between scss files??
-  $color-message-detail-contact-status-icon-send: #a4a6a9;
-  $color-message-metadata-status-icon-sent: #a4a6a9;
-  $color-conversation-list-status-icon-sent: #a4a6a9;
-  $color-message-metadata-status-icon-delivered: #a4a6a9;
-  $color-conversation-list-status-icon-delivered: #a4a6a9;
-  $color-message-detail-contact-status-icon-delivered: #a4a6a9;
-  $color-message-metadata-status-icon-read: #a4a6a9;
-  $color-message-detail-contact-status-icon-read: #a4a6a9;
-  $color-conversation-list-status-icon-read: #a4a6a9;
-  
-  //$color-light-60: #62656a;
-  $color-contact-list-item: #62656a;
-  $color-message-metadata-date: #62656a;
-  
-  $color-conversation-list-message-status-icon-sending: var(--clr-message-status-icon-sending);
-  $color-message-metadata-status-icon-sending: var(--clr-message-status-icon-sending);
-  
-  //$color-blue: #2090ea;
-  $color-global-a: #2090ea;
-  $color-global-textarea-outline: #2090ea;
-  
-  //$color-grey: #616161;
-  $color-composer-emoji-btn: #616161;
-  $color-composer-file-btn: #616161;
-  $color-global-avatar-bg: #616161;
-  $color-global-x-bg: #616161;
-  
-  $color-conversation-list-item-default-avatar-bg: var(--clr-avatar-default-bg);
-  
-  $color-bp3-dialogs-bg: #ececec;
-  
-  $color-outgoing-message-padlock: #4caf50;
-  $color-context-menu-border: #efefef;
-  $color-context-menu-bg: #f9fafa;
-  
+
+  $color-message-metadata-image-no-caption: #ffffff;
+  $color-message-padlock-incomming: #a4a6a9;
+  $color-message-padlock-outgoing: #4caf50;
+
   $color-message-button-download: var(--clr-message-buttons);
   $color-message-button-reply: var(--clr-message-buttons);
   $color-message-button-menu: var(--clr-message-buttons);
   $color-message-button-download-hover: var(--clr-message-buttons);
   $color-message-button-reply-hover: var(--clr-message-buttons);
   $color-message-button-menu-hover: var(--clr-message-buttons);
-
+  
   $color-message-icon-error: #ffffff;
   
-  $color-conversation-bg: #fff;
-  $color-conversation-discussion-container-bg: #fff;
-  $color-global-bg: #fff;
-  $color-map-overlay-bg: #fff;
-  
-  $color-scrollbar-thumb: #666666; // -
-  $color-scrollbar-thumb-hover: #606060; // -
-  
-// Css might not be in use anymore:
+  /* Context menu */
+  $color-context-menu-item: var(--clr-context-menu-text);
+  $color-context-menu-item-before: var(--clr-context-menu-text);
+  $color-context-menu-item-sub-after: var(--clr-context-menu-text);
+  $color-context-menu-item-sub: var(--clr-context-menu-text);
+  $color-context-menu-border: #efefef;
+  $color-context-menu-bg: #f9fafa;
+  maybe-duplicates {
+    $color-context-menu-item-selected: #a4a6a9;
+    $color-context-item-selected: var(--clr-context-item-selected);
+    $color-context-item-selected-before: var(--clr-context-item-selected);  
+    $color-context-item-selected-after: var(--clr-context-item-selected);
+  }
 
+  /* Message Status */
+
+  $color-msg-status-icon-sent: #a4a6a9;
+  $color-msg-status-icon-delivered: #a4a6a9;
+  $color-msg-status-icon-read: #a4a6a9;
+  $color-msg-status-icon-error:$color-conversation-list-message-error;
+  
+  $color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
+
+
+  
+// Css that might not be in use anymore:
+  $color-global-body: #070c14;
+  $color-global-titlebar: #070c14;
+  $color-global-logo: #070c14;
+  $color-conversation-list-default-avatar: #ffffff; // is this used?
+  
 
 
 
@@ -178,12 +172,12 @@ $color-message-detail-delete: #ffffff;
 /* 
 
 Todo:
+0. sort them by group/module 
 1. check for usused style/colors
 2. check for colors/ styles that get allways overwritten by styled components
 3. check for typos and repeat 1 & 2 for those that had typos
 4. make css vars
-5. sort them by group/module
-6. bring them in js
+5. bring them in js
 
 */
 
