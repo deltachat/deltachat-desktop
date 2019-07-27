@@ -38,17 +38,25 @@ $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, No
 // New colors
 
 html {
-  // clr stands for color to save space
-
-  --clr-error: #f44336;
-  --clr-error-variant: #f44336;
+  // clr stands for color to save space 
+  --clr-avatar-label: #fff;
+  --clr-bp3-dialog-bg: #ececec;
+  --clr-broken-media-bg: #070c14;
+  --clr-broken-media-bg-text: #fff;
   --clr-context-menu-bg: #f9fafa;
   --clr-context-menu-border: #efefef;
   --clr-context-menu-text: #070c14;
   --clr-context-menu-selected: #fff;
   --clr-context-menu-selected-bg: #a4a6a9;
-  --clr-broken-media-bg: #070c14;
-  --clr-broken-media-bg-text: #fff;
+  --clr-conversation-list-unread-count-bg: #2090ea;
+  --clr-conversation-list-unread-count-label: #ffffff;
+  --clr-contact-list-item: #62656a;
+  --clr-composer-btn: #616161;
+  --clr-error: #f44336;
+  --clr-global-a: #2090ea;
+  --clr-global-bg: #fff;
+  --clr-global-text: #070c14;
+  --clr-map-overlay-bg: #fff;
   --clr-message-status-icon: #a4a6a9;
   --clr-message-status-icon-sending: #62656a;
   --clr-message-buttons: #8b8e91;
@@ -61,37 +69,23 @@ html {
   --clr-message-generic-attachment-icon-extension: #070c14;
   --clr-message-generic-attachment-filename: #070c14;
   --clr-message-generic-attachment-filesize: #070c14;
-  --clr-avatar-label: #fff;
-  --clr-composer-btn: #616161;
+  --clr-message-attachment-container-bg: #ffffff;
+  --clr-message-attachment-filename-incomming: #ffffff;
+  --clr-message-attachment-filesize-incomming: #ffffff;
   --clr-message-metadata-date: #62656a;
   --clr-message-metadata-date-incomming: rgba(#ffffff, 0.7);
   --clr-message-video-play: #2090ea;
   --clr-message-video-overlay-circle: #ffffff;
   --clr-message-author: #ffffff;
-  --clr-message-attachment-container-bg: #ffffff;
-  --clr-message-attachment-filename-incomming: #ffffff;
-  --clr-message-attachment-filesize-incomming: #ffffff;
-  --clr-conversation-list-unread-count-bg: #2090ea;
-  --clr-conversation-list-unread-count-label: #ffffff;
-  --clr-contact-list-item: #62656a;
-  --clr-bp3-dialog-bg: #ececec;
-  --clr-map-overlay-bg: #fff;
-  --clr-global-a: #2090ea;
-  --clr-global-bg: #fff;
-  --clr-global-text: #070c14;
-  --clr-global-textarea-outline: #2090ea;
   --clr-scrollbar-thumb: #666666;
   --clr-scrollbar-thumb-hover: #606060;
-
 }
 
 // Theming Colors
-
 /* Global */
 $color-global-a: var(--clr-global-a);
 $color-global-bg: var(--clr-global-bg);
 $color-global-text: var(--clr-global-text);
-$color-global-textarea-outline: var(--clr-global-textarea-outline);
 
 $color-scrollbar-thumb: var(--clr-scrollbar-thumb);
 $color-scrollbar-thumb-hover: var(--clr-scrollbar-thumb-hover);
@@ -165,7 +159,7 @@ $color-msg-status-icon-delivered: var(--clr-message-status-icon);
 $color-msg-status-icon-read: var(--clr-message-status-icon);
 $color-msg-status-icon-error: var(--clr-error);
 $color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
-  
+
 
 // Belongs to stuff we plan to remove / change anyway 
 // so we don't put this into theming yet
@@ -175,23 +169,9 @@ $color-message-detail-delete-bg: #f44336;
 $color-message-detail-delete: #ffffff;
 
 $color-conversation-list-item-default-avatar-bg: #505050; //This is never used because the core allways sets the color
-
-/* 
-
-Todo:
-0. sort them by group/module ✔️
-1. cleanup✔️
-- check for usused style/colors
-- check for colors/ styles that get allways overwritten by styled components
-- check for typos
-4. make css vars✔️
-5. fix indent✔️
-6. bring them in js
-
-*/
+$color-global-textarea-outline: #2090ea;
 
 // A few layout variables used cross-file
-
 $header-height: 48px;
 $button-height: 24px;
 

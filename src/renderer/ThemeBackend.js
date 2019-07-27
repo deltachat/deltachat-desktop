@@ -9,20 +9,6 @@ export function ThemeDataBuilder (theme) {
 
   // #070c14; // some kind of font color?
   let themeData = {
-    // Scss ones
-    signalBlue: '#2090ea',
-    coreRed: '#f44336',
-    colorWhite: '#ffffff',
-    colorLight90: '#070c14',
-    colorLight35: '#a4a6a9',
-    colorLight60: '#62656a',
-    colorBlue: '#2090ea',
-    colorGrey: '#616161',
-    converstationGrey: '#505050',
-    outgoingMessagePadlock: '#4caf50',
-    contextMenuBorder: '#efefef',
-    contextMenuBG: '#f9fafa',
-    bgColor: '#fff',
     // Misc
     ovalButtonBg: '#415e6b',
     ovalButtonBgHover: '#ececec',
@@ -56,7 +42,46 @@ export function ThemeDataBuilder (theme) {
     // Login Screen
     loginInputFocusColor: '#42A5F5',
     deltaChatPrimaryFg: '#070c14', // only used on login screen
-    deltaChatPrimaryFgLight: '#62656a' // only used on login screen
+    deltaChatPrimaryFgLight: '#62656a', // only used on login screen
+    // From scss - need sorting and deduplication from the ones above
+    avatarLabelColor: '#ffffff',
+    bp3DialogBg: '#ececec',
+    brokenMediaText: '#070c14',
+    brokenMediaBg: '#ffffff',
+    contextMenuBg: '#f9fafa',
+    contextMenuBorder: '#efefef',
+    contextMenuText: '#070c14',
+    contextMenuSelected: '#fff',
+    contextMenuSelectedBg: '#a4a6a9',
+    unreadCountBg: '#2090ea',
+    unreadCountLabel: '#ffffff',
+    contactListItemBg: '#62656a',
+    composerBtnColor: '#616161',
+    errorColor: '#f44336',
+    globalLinkColor: '#2090ea',
+    globalBackground: '#fff',
+    globalText: '#070c14',
+    mapOverlayBg: '#ffffff',
+    messageStatusIcon: '#a4a6a9',
+    messageStatusIconSending: '#62656a',
+    messagePadlockOutgoing: '#4caf50',
+    messagePadlockIncomming: '#a4a6a9',
+    messageMetadataImageNoCaption: '#ffffff',
+    messageTextLink: '#070c14',
+    messageAttachmentIconExtentionColor: '#070c14',
+    messageAttachmentIconBg: '#ffffff',
+    messageAttachmentFileName: '#070c14',
+    messageAttachmentFileSize: '#070c14',
+    messageAttachmentFileNameIncomming: '#ffffff',
+    messageAttachmentFileSizeIncomming: '#ffffff',
+    messageMetadataDate: '#62656a',
+    messageMetadataIncomming: 'rgba(#ffffff, 0.7)',
+    videoPlayBtnIcon: '#2090ea',
+    videoPlayBtnBg: '#ffffff',
+    messageAuthor: '#ffffff',
+    scrollBarThumb: '#666666',
+    scrollBarThumbHover: '#606060',
+
   }
   Object.keys(themeData).forEach(key => themeData[key] === undefined ? delete themeData[key] : '')
   if (theme.raw) {
@@ -72,25 +97,45 @@ export const defaultTheme = Object.freeze({
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ScssVarOverwrite = styled.div`
---color-signal-blue: ${props => props.theme.signalBlue};
---color-core-red: ${props => props.theme.coreRed};
-
---color-white: ${props => props.theme.colorWhite};
---color-white-07: ${props => Color(props.theme.colorWhite).alpha(0.7).toString()};
---color-light-90: ${props => props.theme.colorLight90};
---color-light-35: ${props => props.theme.colorLight35};
---color-light-60: ${props => props.theme.colorLight60};
---color-blue: ${props => props.theme.colorBlue};
---color-grey: ${props => props.theme.colorGrey};
-
---color-conversation-grey: ${props => props.theme.converstationGrey};
-
-// Already renamed
---outgoing-message-padlock: ${props => props.theme.outgoingMessagePadlock};
---context-menu-border: ${props => props.theme.contextMenuBorder};
---context-menu-bg: ${props => props.theme.contextMenuBG};
---message-buttons: ${props => props.theme.messageButtons};
---message-buttons-hover: ${props => props.theme.messageButtonsHover};
---bg-color: ${props => props.theme.bgColor};
+export const ScssVarOverwrite = styled.div`${props => props.theme.}
+--clr-avatar-label: ${props => props.theme.avatarLabelColor};
+--clr-bp3-dialog-bg: ${props => props.theme.bp3DialogBg};
+--clr-broken-media-bg: ${props => props.theme.brokenMediaText};
+--clr-broken-media-bg-text: ${props => props.theme.brokenMediaBg};
+--clr-context-menu-bg: ${props => props.theme.contextMenuBg};
+--clr-context-menu-border: ${props => props.theme.contextMenuBorder} ;
+--clr-context-menu-text: ${props => props.theme.contextMenuText} ;
+--clr-context-menu-selected: ${props => props.theme.contextMenuSelected};
+--clr-context-menu-selected-bg: ${props => props.theme.contextMenuSelectedBg};
+--clr-conversation-list-unread-count-bg: ${props => props.theme.unreadCountBg} ;
+--clr-conversation-list-unread-count-label: ${props => props.theme.unreadCountBg};
+--clr-contact-list-item: ${props => props.theme.contactListItemBg};
+--clr-composer-btn: ${props => props.theme.composerBtnColor};
+--clr-error: ${props => props.theme.errorColor};
+--clr-global-a: ${props => props.theme.globalLinkColor};
+--clr-global-bg: ${props => props.theme.globalBackground};
+--clr-global-text: ${props => props.theme.globalText};
+--clr-map-overlay-bg: ${props => props.theme.mapOverlayBg};
+--clr-message-status-icon: ${props => props.theme.messageStatusIcon};
+--clr-message-status-icon-sending: ${props => props.theme.messageStatusIconSending};
+--clr-message-buttons: ${props => props.theme.messageButtons};
+--clr-message-buttons-hover: ${props => props.theme.messageButtonsHover};
+--clr-message-padlock-outgoing: ${props => props.theme.messagePadlockOutgoing};
+--clr-message-padlock-incomming: ${props => props.theme.messagePadlockIncomming};
+--clr-message-metadata-image-no-caption: ${props => props.theme.messageMetadataImageNoCaption};
+--clr-message-text: ${props => props.theme.messageText};
+--clr-message-text-underline: ${props => props.theme.messageTextLink};
+--clr-message-generic-attachment-icon-extension: ${props => props.theme.messageAttachmentIconExtentionColor};
+--clr-message-generic-attachment-filename: ${props => props.theme.messageAttachmentFileName};
+--clr-message-generic-attachment-filesize: ${props => props.theme.messageAttachmentFileSize};
+--clr-message-attachment-container-bg: ${props => props.theme.messageAttachmentIconBg};
+--clr-message-attachment-filename-incomming: ${props => props.theme.messageAttachmentFileNameIncomming};
+--clr-message-attachment-filesize-incomming: ${props => props.theme.messageAttachmentFileSizeIncomming};
+--clr-message-metadata-date: ${props => props.theme.messageMetadataDate};
+--clr-message-metadata-date-incomming: ${props => props.theme.messageMetadataIncomming};
+--clr-message-video-play: ${props => props.theme.videoPlayBtnIcon};
+--clr-message-video-overlay-circle: ${props => props.theme.videoPlayBtnBg};
+--clr-message-author: ${props => props.theme.messageAuthor};
+--clr-scrollbar-thumb: ${props => props.theme.scrollBarThumb};
+--clr-scrollbar-thumb-hover: ${props => props.theme.scrollBarThumbHover};
 `
