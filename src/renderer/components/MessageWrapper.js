@@ -124,14 +124,14 @@ function render (props) {
   } else if (message.msg.isSetupmessage) {
     body = (
       <SetupMessage key={message.id}
-        onClick={onClickSetupMessage}>
+        onClick={onClickSetupMessage} className={'pointer'}>
         <RenderMessage {...props} />
       </SetupMessage>
     )
   } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
     body = (
       <div key={message.id}
-        onClick={onClickContactRequest}>
+        onClick={onClickContactRequest} className={'pointer'}>
         <RenderMessage {...props} />
       </div>
     )
