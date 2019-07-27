@@ -1,6 +1,7 @@
 const React = require('react')
 const ChatListContextMenu = require('./ChatListContextMenu')
 const ChatListItem = require('./ChatListItem')
+const mapCoreMsgStatus2String = require('./helpers/MapMsgStatus')
 const styled = require('styled-components').default
 
 const log = require('../../logger').getLogger('renderer/chatView')
@@ -82,30 +83,7 @@ const ArchivedChats = styled.div`
   }
 `
 
-function coreMsgStatus2TextStatus (state) {
-  switch (state) {
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_OUT_PREPARING:
-      return 'sending'
-    case C.DC_STATE_OUT_DRAFT:
-      return 'draft'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    case C.DC_STATE_IN_FRESH:
-      return 'delivered'
-    case C.DC_STATE_IN_SEEN:
-      return 'delivered'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
-    default:
-      return '' // to display no icon on unknown state
-  }
-}
+
 
 class ChatList extends React.Component {
   constructor (props) {
@@ -178,7 +156,7 @@ class ChatList extends React.Component {
                     lastMessage={{
                       text1: chatListItem.summary.text1,
                       text2: chatListItem.summary.text2,
-                      status: coreMsgStatus2TextStatus(chatListItem.summary.state)
+                      status: mapCoreMsgStatus2String(chatListItem.summary.state)
                     }}
                     isSelected={chatListItem.id === selectedChatId}
                     isVerified={chatListItem.isVerified}
