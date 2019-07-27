@@ -6,8 +6,6 @@ const styled = require('styled-components').default
 
 const log = require('../../logger').getLogger('renderer/chatView')
 
-const C = require('deltachat-node/constants')
-
 const ChatListWrapper = styled.div`
   width: 30%;
   height: calc(100vh - 50px);
@@ -82,8 +80,6 @@ const ArchivedChats = styled.div`
     visibility: hidden;
   }
 `
-
-
 
 class ChatList extends React.Component {
   constructor (props) {
