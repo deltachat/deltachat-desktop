@@ -139,7 +139,7 @@ class GroupBase extends React.Component {
     const { showQrInviteCodeButton, heading } = this.state
     const showQrVerifyCodeButton = verified
     const showVerifiedContacts = verified
-    const label = heading ? heading :  verified ? 'menu_new_verified_group' : 'menu_new_group'
+    const label = heading || (verified ? 'menu_new_verified_group' : 'menu_new_group')
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
     const { contacts } = this.state
