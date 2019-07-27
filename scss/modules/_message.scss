@@ -364,20 +364,12 @@
   text-overflow: ellipsis;
 }
 
-.module-message__generic-attachment__file-name--incoming {
-  color: $color-message-attachment-filename-incomming;
-}
-
 .module-message__generic-attachment__file-size {
   color: $color-message-generic-attachment-filesize;
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
   margin-top: 3px;
-}
-
-.module-message__generic-attachment__file-size--incoming {
-  color: $color-message-attachment-filesize-incomming;
 }
 
 .module-message__author {

@@ -30,6 +30,7 @@ export function ThemeDataBuilder (theme) {
     chatListItemBgHover: '#ececec',
     // Message Bubble
     messageText: '#070c14',
+    setupMessageText: '#ed824e',
     infoMessageBubbleBg: '#000000',
     infoMessageBubbleText: 'white',
     messageIncommingBg: '#ffffff',
@@ -72,8 +73,6 @@ export function ThemeDataBuilder (theme) {
     messageAttachmentIconBg: '#ffffff',
     messageAttachmentFileName: '#070c14',
     messageAttachmentFileSize: '#070c14',
-    messageAttachmentFileNameIncomming: '#ffffff',
-    messageAttachmentFileSizeIncomming: '#ffffff',
     messageMetadataDate: '#62656a',
     messageMetadataIncomming: 'rgba(#ffffff, 0.7)',
     videoPlayBtnIcon: '#2090ea',
@@ -97,7 +96,7 @@ export const defaultTheme = Object.freeze({
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ScssVarOverwrite = styled.div`${props => props.theme.}
+export const ScssVarOverwrite = styled.div`
 --clr-avatar-label: ${props => props.theme.avatarLabelColor};
 --clr-bp3-dialog-bg: ${props => props.theme.bp3DialogBg};
 --clr-broken-media-bg: ${props => props.theme.brokenMediaText};
@@ -129,8 +128,6 @@ export const ScssVarOverwrite = styled.div`${props => props.theme.}
 --clr-message-generic-attachment-filename: ${props => props.theme.messageAttachmentFileName};
 --clr-message-generic-attachment-filesize: ${props => props.theme.messageAttachmentFileSize};
 --clr-message-attachment-container-bg: ${props => props.theme.messageAttachmentIconBg};
---clr-message-attachment-filename-incomming: ${props => props.theme.messageAttachmentFileNameIncomming};
---clr-message-attachment-filesize-incomming: ${props => props.theme.messageAttachmentFileSizeIncomming};
 --clr-message-metadata-date: ${props => props.theme.messageMetadataDate};
 --clr-message-metadata-date-incomming: ${props => props.theme.messageMetadataIncomming};
 --clr-message-video-play: ${props => props.theme.videoPlayBtnIcon};
