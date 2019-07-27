@@ -43,6 +43,7 @@ html {
   --clr-error: #f44336;
   --clr-error-variant: #f44336;
   --clr-context-menu-bg: #f9fafa;
+  --clr-context-menu-border: #efefef;
   --clr-context-menu-text: #070c14;
   --clr-context-menu-selected: #fff;
   --clr-context-menu-selected-bg: #a4a6a9;
@@ -51,51 +52,74 @@ html {
   --clr-message-status-icon: #a4a6a9;
   --clr-message-status-icon-sending: #62656a;
   --clr-message-buttons: #8b8e91;
-  --clr-message-buttons: #070c14;
+  --clr-message-buttons-hover: #070c14;
+  --clr-message-padlock-outgoing: #4caf50;
+  --clr-message-padlock-incomming: #a4a6a9;
+  --clr-message-metadata-image-no-caption: #fff;
+  --clr-message-text: #070c14;
+  --clr-message-text-underline: #070c14;
+  --clr-message-generic-attachment-icon-extension: #070c14;
+  --clr-message-generic-attachment-filename: #070c14;
+  --clr-message-generic-attachment-filesize: #070c14;
   --clr-avatar-label: #fff;
+  --clr-composer-btn: #616161;
+  --clr-message-metadata-date: #62656a;
+  --clr-message-metadata-date-incomming: rgba(#ffffff, 0.7);
+  --clr-message-video-play: #2090ea;
+  --clr-message-video-overlay-circle: #ffffff;
+  --clr-message-author: #ffffff;
+  --clr-message-attachment-container-bg: #ffffff;
+  --clr-message-attachment-filename-incomming: #ffffff;
+  --clr-message-attachment-filesize-incomming: #ffffff;
+  --clr-conversation-list-unread-count-bg: #2090ea;
+  --clr-conversation-list-unread-count-label: #ffffff;
+  --clr-contact-list-item: #62656a;
+  --clr-bp3-dialog-bg: #ececec;
+  --clr-map-overlay-bg: #fff;//
+  --clr-global-a: #2090ea;
+  --clr-global-bg: #fff;
+  --clr-global-text: #070c14;
+  --clr-global-textarea-outline: #2090ea;
+  --clr-scrollbar-thumb: #666666;
+  --clr-scrollbar-thumb-hover: #606060;
+
 }
 
 // Theming Colors
 
   /* Global */
-  $color-global-a: #2090ea;
-  $color-global-bg: #fff;
-  $color-global-text: #070c14;
-  $color-global-textarea-outline: #2090ea;
-  $color-global-x: #ffffff;
-  $color-global-x-bg: #616161;
+  $color-global-a: var(--clr-global-a);
+  $color-global-bg: var(--clr-global-bg);
+  $color-global-text: var(--clr-global-text);
+  $color-global-textarea-outline: var(--clr-global-textarea-outline);
 
-  $color-scrollbar-thumb: #666666;
-  $color-scrollbar-thumb-hover: #606060;
+  $color-scrollbar-thumb: var(--clr-scrollbar-thumb);
+  $color-scrollbar-thumb-hover: var(--clr-scrollbar-thumb-hover);
   
   /* Misc */
-  $color-contact-default-label: #ffffff;
-  $color-contact-list-item: #62656a;
+  $color-contact-default-label: var(--clr-avatar-label);
+  $color-contact-list-item: var(--clr-contact-list-item);
   
-  $color-bp3-dialogs-bg: #ececec;
+  $color-bp3-dialog-bg: var(--clr-bp3-dialog-bg);
   
-  $color-map-overlay-bg: #fff;
+  $color-map-overlay-bg: var(--clr-map-overlay-bg);
   
   /* Message Composer */
-  $color-composer-emoji-btn: #616161;
-  $color-composer-file-btn: #616161;
-
-  /* ChatView (conversation) */
-  $color-conversation-bg: #fff;
-  $color-conversation-discussion-container-bg: #fff;
+  $color-composer-emoji-btn: var(--clr-composer-btn);
+  $color-composer-file-btn: var(--clr-composer-btn);
   
   /* Chat List (conversation list) */
-  $color-conversation-list-has-unread: #2090ea;
-  $color-conversation-list-unread-count-bg: #2090ea;
+  $color-conversation-list-has-unread: var(--clr-conversation-list-unread-count-bg);
+  $color-conversation-list-unread-count-bg: var(--clr-conversation-list-unread-count-bg);
+  $color-conversation-list-unread-count-label: var(--clr-conversation-list-unread-count-label);
   $color-conversation-list-message-error: var(--clr-error);
-  $color-conversation-list-unread-count: #ffffff;
   $color-conversation-list-avatar-text: var(--clr-avatar-label);
   
   /* Message Bubble */
-  $color-message-attachment-container-bg: #ffffff;
-  $color-message-attachment-filename-incomming: #ffffff;
-  $color-message-attachment-filesize-incomming: #ffffff;
-  $color-message-author: #ffffff;
+  $color-message-author: var(--clr-message-author);
+  $color-message-attachment-container-bg: var(clr-message-attachment-container-bg);
+  $color-message-attachment-filename-incomming: var(--clr-message-attachment-filename-incomming);
+  $color-message-attachment-filesize-incomming: var(--clr-message-attachment-filesize-incomming);
   
   $color-message-author-default-avatar-label: var(--clr-avatar-label);
   
@@ -103,21 +127,21 @@ html {
   $color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
   $color-message-broken-image: var(--clr-broken-media-bg);
   $color-message-broken-video-screenshot: var(--clr-broken-media-bg);
-  $color-message-video-overlay-circle: #ffffff;
-  $color-message-video-play: #2090ea;
+  $color-message-video-play: var(--clr-message-video-play);
+  $color-message-video-overlay-circle: var(--clr-message-video-overlay-circle);
 
-  $color-message-metadata-date-incomming: rgba(#ffffff, 0.7);
-  $color-message-metadata-date: #62656a;
+  $color-message-metadata-date: var(--clr-message-metadata-date);
+  $color-message-metadata-date-incomming: var(--clr-message-metadata-date-incomming);
   
-  $color-message-generic-attachment-icon-extension: #070c14;
-  $color-message-generic-attachment-filename: #070c14;
-  $color-message-generic-attachment-filesize: #070c14;
-  $color-message-text: #070c14;
-  $color-message-text-underline: #070c14;
+  $color-message-generic-attachment-icon-extension: var(--clr-message-generic-attachment-icon-extension);
+  $color-message-generic-attachment-filename: var(--clr-message-generic-attachment-filename);
+  $color-message-generic-attachment-filesize: var(--clr-message-generic-attachment-filesize);
+  $color-message-text: var(--clr-message-text);
+  $color-message-text-underline: var(--clr-message-text-underline);
   
-  $color-message-metadata-image-no-caption: #ffffff;
-  $color-message-padlock-incomming: #a4a6a9;
-  $color-message-padlock-outgoing: #4caf50;
+  $color-message-metadata-image-no-caption: var(--clr-message-metadata-image-no-caption);
+  $color-message-padlock-incomming: var(--clr-message-padlock-incomming);
+  $color-message-padlock-outgoing: var(--clr-message-padlock-outgoing);
   
   $color-message-button-download: var(--clr-message-buttons);
   $color-message-button-reply: var(--clr-message-buttons);
@@ -129,7 +153,7 @@ html {
   $color-message-icon-error: var(--clr-error);
   
   /* Context menu */
-  $color-context-menu-border: #efefef;
+  $color-context-menu-border: var(--clr-context-menu-border);
   $color-context-menu-bg: var(--clr-context-menu-bg);
   $color-context-menu-text: var(--clr-context-menu-text);
   $color-context-menu-selected-bg: var(--clr-context-menu-selected-bg);

@@ -47,9 +47,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/download.svg', $message-button-download);
+  @include color-svg('../images/download.svg', $color-message-button-download);
   &:hover {
-    @include color-svg('../images/download.svg', $message-button-download-hover);
+    @include color-svg('../images/download.svg', $color-message-button-download-hover);
   }
   &.icon-medium {
     height: 36px;
@@ -58,7 +58,7 @@
 }
 
 .attachment-overlay .module-message__buttons__download:hover {
-  @include color-svg('../images/download.svg', $message-button-download-hover);
+  @include color-svg('../images/download.svg', $color-message-button-download-hover);
 }
 
 
@@ -68,9 +68,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg('../images/reply.svg', $message-button-reply);
+  @include color-svg('../images/reply.svg', $color-message-button-reply);
   &:hover {
-    @include color-svg('../images/reply.svg', $message-button-reply-hover);
+    @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
   }
 }
 
@@ -86,9 +86,9 @@
   width: 24px;
   display: inline-block;
   cursor: pointer;
-  @include color-svg-rotated('../images/ellipsis.svg', $message-button-menu);
+  @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu);
   &:hover {
-    @include color-svg-rotated('../images/ellipsis.svg', $message-button-menu-hover);
+    @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu-hover);
   }
 }
 
