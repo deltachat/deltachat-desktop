@@ -13,7 +13,7 @@ function backupExport (dir) {
 }
 
 function backupImport (file) {
-  let self = this
+  const self = this
 
   async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
     if (overwrite === true) {
@@ -25,7 +25,7 @@ function backupImport (file) {
 
   const dcnContext = binding.dcn_context_new()
 
-  let tmpConfigPath = tempy.directory()
+  const tmpConfigPath = tempy.directory()
   log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
   const db = path.join(tmpConfigPath, 'db.sqlite')
   const onError = (err) => {
@@ -64,8 +64,8 @@ function backupImport (file) {
 
       self.sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
 
-      let newPath = self.getPath(addr)
-      let configFolderExists = await fs.pathExists(newPath)
+      const newPath = self.getPath(addr)
+      const configFolderExists = await fs.pathExists(newPath)
 
       if (configFolderExists) {
         log.debug(`backupImport: ${newPath} already exists`)

@@ -159,8 +159,8 @@ class Settings extends React.Component {
   }
 
   onBackupExport () {
-    let { openDialog, closeDialog } = this.props
-    let confirmOpts = {
+    const { openDialog, closeDialog } = this.props
+    const confirmOpts = {
       buttons: [this.translate('cancel'), this.translate('export_backup_desktop')]
     }
     confirmationDialog(this.translate('pref_backup_export_explain'), confirmOpts, response => {
