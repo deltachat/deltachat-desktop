@@ -186,8 +186,9 @@ const ImportButton = React.memo(function ImportButton (props) {
 
 export default function LoginScreen (props) {
   const tx = window.translate
-  function onClickLogin (login) {
-    sendToBackend('login', { addr: login, mail_pw: true })
+
+  function onClickLogin (credentials) {
+    sendToBackend('login', credentials)
   }
 
   function forgetLogin (login) {

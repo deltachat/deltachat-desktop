@@ -19,6 +19,8 @@ import {
   Intent
 } from '@blueprintjs/core'
 
+const log = require('../../logger').getLogger('renderer/Login')
+
 export default class Login extends React.Component {
   constructor (props) {
     super(props)
@@ -74,8 +76,8 @@ export default class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    const config = this.state.credentials
-    this.props.onSubmit(config)
+    const credentials = this.state.credentials
+    this.props.onSubmit(credentials)
     event.preventDefault()
   }
 
