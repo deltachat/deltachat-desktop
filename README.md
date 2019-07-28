@@ -224,6 +224,9 @@ The syntax is the exact same as for all other `_locales/*.json` files.
 Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
 
+> Tipp: run with `--translation-watch` (included in `npm start`) to start in translation
+ watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save 
+
 ### Tests
 
 Running `npm test` does the following:
