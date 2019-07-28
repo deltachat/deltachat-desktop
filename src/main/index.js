@@ -1,5 +1,6 @@
 console.time('init')
 
+const fs = require('fs')
 const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 
@@ -64,6 +65,16 @@ function onReady (err, results) {
   menu.init(logHandler)
 
   if (rc.debug) windows.main.toggleDevTools()
+
+  if (app.rc['translation-watch']) {
+    fs.watchFile('_locales/_experimental_en.json', (curr, prev) => {
+      if (curr.mtime !== prev.mtime) {
+        console.log('File changed reloading translation data')
+        windows.main.chooseLanguage(app.localeData.locale)
+        console.log('reloading translation data - done')
+      }
+    })
+  }
 }
 
 app.once('ipcReady', () => {

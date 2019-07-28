@@ -24,7 +24,7 @@ function isYear (timestamp) {
 }
 
 function formatRelativeTime (rawTimestamp, options) {
-  let { extended } = options
+  const { extended } = options
   const tx = window.translate
   const formats = extended ? getExtendedFormats(tx) : getShortFormats(tx)
   const timestamp = moment(rawTimestamp)

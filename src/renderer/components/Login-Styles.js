@@ -98,7 +98,7 @@ export const DeltaSelectWrapper = styled(DeltaFormGroup)`
 `
 
 export const DeltaSelect = React.memo((props) => {
-  const [ isFocused, setIsFocused ] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   const onFocus = () => setIsFocused(true)
   const onBlur = () => setIsFocused(false)
@@ -167,7 +167,7 @@ export const DeltaLabel = styled.div`
 `
 
 export const DeltaInput = React.memo((props) => {
-  const [ isFocused, setIsFocused ] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   const onFocus = () => setIsFocused(true)
   const onBlur = () => setIsFocused(false)

@@ -37,7 +37,7 @@ function createAppWithConfig (overrideConfig) {
   const TEST_DIR = tempy.directory()
   const defaultConfig = getConfig()
   if (overrideConfig) {
-    let extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
+    const extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
     fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
   }
   return new Application({

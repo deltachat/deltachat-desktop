@@ -27,7 +27,7 @@ function getMessageInfo (msgId) {
 }
 
 function setDraft (chatId, msgText) {
-  let msg = this._dc.messageNew()
+  const msg = this._dc.messageNew()
   msg.setText(msgText)
 
   this._dc.setDraft(chatId, msg)
@@ -44,10 +44,10 @@ function _messagesToRender (messageIds) {
   )
   if (messageIdsToRender.length === 0) return []
   messageIdsToRender.reverse() // newest IDs last
-  let messages = []
+  const messages = []
   for (let i = 0; i < messageIdsToRender.length; i++) {
-    let id = messageIdsToRender[i]
-    let json = this.messageIdToJson(id)
+    const id = messageIdsToRender[i]
+    const json = this.messageIdToJson(id)
     if (id === C.DC_MSG_ID_DAYMARKER && i > 0) {
       if (messages[i - 1]) {
         json.daymarker = {

@@ -14,7 +14,7 @@ class MapDialog extends React.Component {
 
   render () {
     const { selectedChat } = this.props
-    let isOpen = !!selectedChat
+    const isOpen = !!selectedChat
     const title = selectedChat ? selectedChat.name + ' ( ' + selectedChat.subtitle + ')' : 'Map'
     return (
       <Dialog

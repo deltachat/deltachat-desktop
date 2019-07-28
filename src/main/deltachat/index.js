@@ -138,7 +138,7 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
-      this.onMessageUpdate(chatId, msgId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_READ')
     })
 
     dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
@@ -196,7 +196,7 @@ class DeltaChatController extends EventEmitter {
 
   getContacts (listFlags, queryStr) {
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
-    let contacts = distinctIds.map(id => {
+    const contacts = distinctIds.map(id => {
       return this._dc.getContact(id).toJson()
     })
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })

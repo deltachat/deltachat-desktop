@@ -50,7 +50,7 @@ function xmlToJson (filename) {
       text = text.replace(new RegExp('\\\\', 'g'), '')
     }
     res[name] = {
-      'message': text
+      message: text
     }
   })
 

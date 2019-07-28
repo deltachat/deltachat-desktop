@@ -84,7 +84,7 @@ Install dependencies, there are two options:
 $ npm install --dc-system-lib=true
 ```
 
-2. Use the deltachat-core code included as a git submodule in the
+2. Use the deltachat-core-rust code included as a git submodule in the
    deltachat-node bindings:
 
 ```
@@ -92,7 +92,7 @@ $ npm install
 ```
 
 For both these see the instructions in the deltchat-node and
-deltachat-core README files to set things up.
+deltachat-rust-core README files to set things up.
 
 Build the app (only needed if the code has changed or if the app has
 never been built before):
@@ -115,39 +115,14 @@ Each database is a sqlite file that represents the account for a given email add
 
 ## Troubleshooting
 
-This module builds on top of `deltachat-core`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
+This module builds on top of `deltachat-core-rust`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
-If you get errors when running `npm install`, they might be related to the _build_ dependencies `meson` and `ninja`.
+If you get errors when running `npm install`, they might be related to the _build_ dependency `rust`.
 
-If `meson` is missing:
-
-```
-sudo apt-get install python3-pip
-sudo pip3 install meson
-```
-
-If `ninja` is missing:
-
-```
-sudo apt-get install ninja-build
-```
-
-You might also need the following system dependencies:
-
-- `libssl-dev`
-- `libsasl2-dev`
-- `libsqlite3-dev`
-- `zlib1g-dev`
-
-To fix these issues do:
-
-```
-sudo apt-get install libssl-dev libsasl2-dev libsqlite3-dev zlib1g-dev
-```
+If `rust` or `cargo` is missing:
+Follow the instruction on https://rustup.rs/ to install rust and cargo.
 
 Then try running `npm install` again.
-
-Please see [build instructions](https://github.com/deltachat/deltachat-core#building-your-own-libdeltachatso) for additional information.
 
 ### Logging
 
@@ -176,7 +151,7 @@ You can also access the log folder and the current log file under the `View->Dev
 ##### Format
 
 The log files have the extension `.log`, the file name represents the point in time the log started.
-Basically the log files are **tab separated** `csv`-files:
+Basically the log files are **tab separated** `csv`-files(also known as `tsv`):
 
 ```
 "2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
@@ -193,25 +168,27 @@ Basically the log files are **tab separated** `csv`-files:
 Some important folders and files:
 
 ```
+├── _locales                  # translation files in xml and json
+│   ├── _experimental-en.json # can contain experimental language strings
+│   └── languages.json        # central file which keeps the human readable language 
 ├── bin                       # various helper scripts
 ├── build                     # files needed only at build time
-├── css                       # styelsheets which need preprocessing
-│   └── conversations         # stylesheets pulled out from signal
+├── ci_scripts                # scripts and dockerfiles used by the CI
 ├── images                    # image files used in conversations
 ├── index.js                  # entry point for the main process
 ├── jenkins                   # pipelines for building on Jenkins
-├── _locales                  # translation files in xml and json
-│   ├── _experimental-en.json # can contain experimental language strings
-│   └── languages.json        # central file which keeps the human readable language names
+names
+├── scss                      # styelsheets which need preprocessing
 ├── src
 │   ├── main                  # javascript for the main process
 │   └── renderer              # javascript for the renderer process
 ├── static
 │   ├── bundle.js             # javascript bundle built by webpack
-│   └── conversations.css     # css bundle built from conversations scss files
+│   ├── conversations.css     # css bundle built from conversations scss files
 │   ├── fonts                 # fonts
 │   ├── main.css              # main css file
 │   └── main.html             # main html file in renderer process
+├── README_ASSETS             # Images used in this readme file
 ├── test
 │   ├── integration           # integration tests
 │   └── unit                  # unit tests
@@ -246,6 +223,9 @@ The syntax is the exact same as for all other `_locales/*.json` files.
 
 Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
+
+> Tipp: run with `--translation-watch` (included in `npm start`) to start in translation
+ watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save 
 
 ### Tests
 

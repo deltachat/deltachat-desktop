@@ -23,7 +23,7 @@ class EncrInfo extends React.Component {
   componentDidUpdate () {
     const { chat } = this.props
     if (!chat) return
-    let contacts = chat.contacts
+    const contacts = chat.contacts
     if (!this.state.encrInfo && contacts && contacts.length === 1) {
       this._getEncrInfoForContactId(contacts[0].id)
     }

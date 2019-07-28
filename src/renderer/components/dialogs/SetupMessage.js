@@ -51,12 +51,12 @@ class SetupMessagePanel extends React.Component {
     const valueNumber = Number(value)
     if (value.length > 4 || isNaN(valueNumber) || valueNumber < 0 || valueNumber > 9999) return false
 
-    let updatedkey = this.state.key
+    const updatedkey = this.state.key
     let index = Number(event.target.getAttribute('data-index'))
     updatedkey[index] = value
     this.setState({ key: updatedkey })
     if (value.length === 4) {
-      let next = index += 1
+      const next = index += 1
       if (next <= 8) document.getElementById('autocrypt-input-' + next).focus()
     }
   }
@@ -66,7 +66,7 @@ class SetupMessagePanel extends React.Component {
   }
 
   renderInputKey () {
-    let inputs = []
+    const inputs = []
     for (let i = 0; i < 9; i++) {
       inputs.push(
         <SetupMessagePartialInputWrapper key={i}>

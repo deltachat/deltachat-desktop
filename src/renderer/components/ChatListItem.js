@@ -11,6 +11,11 @@ const MessageText1 = styled.div`
   float: left;
   margin-right: 2px;
 `
+const MessageText1Draft = styled.div`
+  float: left;
+  margin-right: 2px;
+  color: ${props => props.theme.draftTextColor}
+`
 
 class ChatListItem extends React.Component {
   renderAvatar () {
@@ -22,11 +27,11 @@ class ChatListItem extends React.Component {
 
     if (!avatarPath) {
       const codepoint = name.codePointAt(0)
-      let initial = codepoint ? String.fromCodePoint(codepoint) : '#'
+      const initial = codepoint ? String.fromCodePoint(codepoint) : '#'
 
       return (
         <div
-          style={{ 'backgroundColor': color }}
+          style={{ backgroundColor: color }}
           className={classNames(
             'module-conversation-list-item__avatar',
             'module-conversation-list-item__default-avatar'
@@ -137,6 +142,8 @@ class ChatListItem extends React.Component {
       return null
     }
 
+    const Text1 = lastMessage.status === 'draft' ? MessageText1Draft : MessageText1
+
     return (
       <div className='module-conversation-list-item__message'>
         <div
@@ -148,7 +155,7 @@ class ChatListItem extends React.Component {
           )}
         >
           { lastMessage.text1 !== null
-            ? <MessageText1>{lastMessage.text1 + ': ' }</MessageText1> : null
+            ? <Text1>{lastMessage.text1 + ': ' }</Text1> : null
           }
           <MessageBody
             text={lastMessage.text2 || ''}

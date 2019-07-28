@@ -119,12 +119,12 @@ class MapComponent extends React.Component {
     this.mapDataStore.clear()
     const { selectedChat } = this.props
     let allPoints = []
-    let currentContacts = []
+    const currentContacts = []
 
     this.mapDataStore.locationCount = locations.length
     if (locations.length > 0) {
       selectedChat.contacts.map(contact => {
-        let locationsForContact = locations.filter(location => location.contactId === contact.id)
+        const locationsForContact = locations.filter(location => location.contactId === contact.id)
         if (locationsForContact.length > 0) {
           currentContacts.push(contact)
         }
@@ -155,7 +155,7 @@ class MapComponent extends React.Component {
         return [location.longitude, location.latitude]
       })
       // map data to handle map state
-      let mapData = {
+      const mapData = {
         contact: contact,
         pathLayerId: 'contact-route-' + contact.id,
         pointsLayerId: 'points-' + contact.id,
@@ -169,8 +169,8 @@ class MapComponent extends React.Component {
       this.addOrUpdateLayerForContact(mapData, locationsForContact)
 
       if (lastPoint) {
-        let lastDate = formatRelativeTime(lastPoint.timestamp * 1000, { extended: true })
-        let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate, null))
+        const lastDate = formatRelativeTime(lastPoint.timestamp * 1000, { extended: true })
+        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(this.renderPopupMessage(contact.firstName, lastDate, null))
         if (mapData.marker) {
           // remove old marker
           mapData.marker.remove()
@@ -222,14 +222,14 @@ class MapComponent extends React.Component {
   }
 
   addPathLayer (locationsForContact, mapData) {
-    let source = { type: 'geojson',
+    const source = { type: 'geojson',
       data: MapLayerFactory.getGeoJSONLineSourceData(locationsForContact.filter(location => !location.isIndependent))
     }
     this.map.addSource(
       mapData.pathLayerId,
       source
     )
-    let layer = MapLayerFactory.getGeoJSONLineLayer(mapData.pathLayerId, mapData.contact.color)
+    const layer = MapLayerFactory.getGeoJSONLineLayer(mapData.pathLayerId, mapData.contact.color)
     this.map.addLayer(layer)
     if (!this.state.showPathLayer) {
       this.map.setLayoutProperty(mapData.pathLayerId, 'visibility', 'none')
@@ -237,20 +237,20 @@ class MapComponent extends React.Component {
   }
 
   addPathJointsLayer (locationsForContact, data) {
-    let source = { type: 'geojson',
+    const source = { type: 'geojson',
       data: MapLayerFactory.getGeoJSONPointsLayerSourceData(locationsForContact, data.contact, true)
     }
     this.map.addSource(
       data.pointsLayerId,
       source
     )
-    let layer = MapLayerFactory.getGeoJSONPointsLayer(data.pointsLayerId, data.contact.color)
+    const layer = MapLayerFactory.getGeoJSONPointsLayer(data.pointsLayerId, data.contact.color)
     this.map.addLayer(layer)
   }
 
   async onMapClick (event) {
     let message
-    let features = this.map.queryRenderedFeatures(event.point)
+    const features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return (f.properties.contact !== undefined)
     })
@@ -264,7 +264,7 @@ class MapComponent extends React.Component {
           message = messageObj.msg
         }
       }
-      let markup = this.renderPopupMessage(
+      const markup = this.renderPopupMessage(
         contactFeature.properties.contact,
         formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
         message)
@@ -295,7 +295,7 @@ class MapComponent extends React.Component {
     if (!this.poiLocation) {
       return
     }
-    let latLng = Object.assign({}, this.poiLocation)
+    const latLng = Object.assign({}, this.poiLocation)
     ipcRenderer.send(
       'EVENT_DC_FUNCTION_CALL',
       'sendMessage',
@@ -341,7 +341,7 @@ class MapComponent extends React.Component {
   }
 
   onRangeChange (value) {
-    this.setState({ 'timeOffset': value })
+    this.setState({ timeOffset: value })
     this.refreshLocations()
   }
 
@@ -385,7 +385,7 @@ class MapComponent extends React.Component {
         id: 'terrain',
         source: 'dem',
         type: 'hillshade',
-        layout: { 'visibility': visibility }
+        layout: { visibility: visibility }
       })
     }
   }
@@ -405,7 +405,7 @@ class MapComponent extends React.Component {
   }
 
   toggleContactLayer (contactId, isHidden) {
-    let mapDataItem = this.mapDataStore.get(contactId)
+    const mapDataItem = this.mapDataStore.get(contactId)
     const visibility = isHidden ? 'visible' : 'none'
     if (!isHidden) {
       if (mapDataItem.marker) {
@@ -418,7 +418,7 @@ class MapComponent extends React.Component {
       }
       mapDataItem.hidden = false
     }
-    let currentContacts = this.state.currentContacts.map(
+    const currentContacts = this.state.currentContacts.map(
       contactItem => contactItem.id === contactId ? { ...contactItem, ...{ hidden: mapDataItem.hidden } } : contactItem)
     this.setState({ currentContacts: currentContacts })
     if (this.state.showPathLayer) {
@@ -431,7 +431,7 @@ class MapComponent extends React.Component {
   }
 
   setBoundToMarker () {
-    let markerCoordinates = []
+    const markerCoordinates = []
     this.mapDataStore.forEach(
       mapDataitem => {
         if (mapDataitem.marker && !mapDataitem.hidden) {

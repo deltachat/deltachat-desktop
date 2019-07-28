@@ -69,8 +69,8 @@ function setup (app, locale) {
     messages = merge(messagesEnglish, localeMessages)
   }
 
-  let experimentalFile = retrieveLocaleFile('_experimental_en')
-  let experimentalMessages = getLocaleMessages(experimentalFile)
+  const experimentalFile = retrieveLocaleFile('_experimental_en')
+  const experimentalMessages = getLocaleMessages(experimentalFile)
   if (experimentalMessages) {
     messages = merge(messages, experimentalMessages)
   } else {
