@@ -5,7 +5,6 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
-const { ConversationContext } = require('./conversations')
 const log = require('../../logger').getLogger('renderer/chatView')
 
 const MutationObserver = window.MutationObserver
@@ -14,22 +13,49 @@ const SCROLL_BUFFER = 70
 
 const ChatViewWrapper = styled.div`
   width: 70%;
-  background-color:  ${props => props.theme.chatViewWrapperBg}; /* is this used? */
   float: right;
   display: grid;
   grid-template-columns: auto;
   height: calc(100vh - 50px);
   margin-top: 50px;
+  background-image: url(${props => props.theme.chatViewBgImgPath});
+  background-size: cover;
+  background-color: ${props => props.theme.chatViewBg};
+
+}
+`
+const ConversationWrapper = styled.div`
+  position: relative;
 
   #the-conversation {
+    position: absolute;
+    bottom: 0;
     overflow: scroll;
-    background-image: url(${props => props.theme.chatViewBgImgPath});
-    background-size: cover;
-    background-color: ${props => props.theme.chatViewBg};
+    max-height: 100%;
+    width:100%;
+    padding: 0 0.5em;
   }
 
-  .conversation, .discussion-container {
-    background-color: inherit;
+  ul {
+    list-style: none;
+    
+    li {
+      margin-bottom: 10px;
+
+      .message-wrapper {
+        margin-left: 16px;
+        margin-right: 16px;
+      }
+
+      &::after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: ' ';
+        clear: both;
+        height: 0;
+      }
+    }
   }
 
   .module-message__author-default-avatar {
@@ -71,7 +97,6 @@ const ChatViewWrapper = styled.div`
   .module-message__metadata__date--incoming {
     color: ${props => props.theme.messageIncommingDate};
   }
-}
 `
 
 class ChatView extends React.Component {
@@ -215,23 +240,25 @@ class ChatView extends React.Component {
       <ChatViewWrapper
         style={{ gridTemplateRows: `auto ${this.state.composerSize}px` }}
         ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
-        <div id='the-conversation' ref={this.conversationDiv}>
-          <ConversationContext>
-            {chat.messages.map(rawMessage => {
-              const message = MessageWrapper.convert(rawMessage)
-              message.onReply = () => log.debug('reply to', message)
-              message.onForward = this.onForward.bind(this, message)
-              return MessageWrapper.render({
-                message,
-                chat,
-                onClickContactRequest: () => onDeadDropClick(message),
-                onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
-                onShowDetail: this.onShowDetail.bind(this, message),
-                onClickAttachment: this.onClickAttachment.bind(this, message)
-              })
-            })}
-          </ConversationContext>
-        </div>
+        <ConversationWrapper>
+          <div id='the-conversation' ref={this.conversationDiv}>
+            <ul>
+              {chat.messages.map(rawMessage => {
+                const message = MessageWrapper.convert(rawMessage)
+                message.onReply = () => log.debug('reply to', message)
+                message.onForward = this.onForward.bind(this, message)
+                return MessageWrapper.render({
+                  message,
+                  chat,
+                  onClickContactRequest: () => onDeadDropClick(message),
+                  onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
+                  onShowDetail: this.onShowDetail.bind(this, message),
+                  onClickAttachment: this.onClickAttachment.bind(this, message)
+                })
+              })}
+            </ul>
+          </div>
+        </ConversationWrapper>
         <Composer
           ref={this.refComposer}
           chatId={chat.id}

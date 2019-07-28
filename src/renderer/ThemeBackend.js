@@ -19,7 +19,6 @@ export function ThemeDataBuilder (theme) {
     navBarText: '#ffffff',
     navBarSearchPlaceholder: '#d0d0d0',
     navBarGroupSubtitle: '#d0d0d0',
-    chatViewWrapperBg: 'white', // Is this used??
     chatViewBg: '#e6dcd3',
     chatViewBgImgPath: theme.bgImagePath,
     composerText: '#415e6b',
