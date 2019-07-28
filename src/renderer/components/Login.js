@@ -19,8 +19,6 @@ import {
   Intent
 } from '@blueprintjs/core'
 
-const log = require('../../logger').getLogger('renderer/Login')
-
 export default class Login extends React.Component {
   constructor (props) {
     super(props)
