@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
 const chatStore = require('./chat')
+const mapCoreMsgStatus2String = require('../components/helpers/MapMsgStatus')
 
 const defaultState = {
   chatList: [],
@@ -37,67 +38,68 @@ ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   const { chatId, messageObj, eventType } = payload
-  if (eventType === 'DC_EVENT_INCOMING_MSG' || eventType === 'DC_EVENT_MSGS_CHANGED') {
-    const listState = chatListStore.getState()
-    const selectedChat = chatStore.getState()
-    const chat = listState.chatList.find(chat => chat.id === chatId)
-    if (!chat) {
-      // the chat is not in the list, let's reload the list
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
-      return
-    }
-    let freshMessageCounter = chat.freshMessageCounter
-    if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
-      freshMessageCounter++
-    }
-    const updatedChat = {
-      ...chat,
-      freshMessageCounter: freshMessageCounter,
-      summary: messageObj.msg.summary
-    }
-    const chatList = listState.chatList.map(chat => {
-      return chat.id === chatId ? updatedChat : chat
-    })
-    chatList.sort(sortChatList)
-    chatListStore.setState({ ...listState, chatList })
+
+  const listState = chatListStore.getState()
+  const selectedChat = chatStore.getState()
+  const chat = listState.chatList.find(chat => chat.id === chatId)
+  if (!chat) {
+    // the chat is not in the list, let's reload the list
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    return
   }
+  let freshMessageCounter = chat.freshMessageCounter
+  if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
+    freshMessageCounter++
+  }
+  const updatedChat = {
+    ...chat,
+    freshMessageCounter: freshMessageCounter,
+    summary: { status: mapCoreMsgStatus2String(messageObj.msg.state), ...messageObj.msg.summary }
+  }
+  const chatList = listState.chatList.map(chat => {
+    return chat.id === chatId ? updatedChat : chat
+  })
+  chatList.sort(sortChatList)
+  chatListStore.setState({ ...listState, chatList })
 })
 
-function reducer (action, state) {
+function reducer (action, componentState) {
   if (action.type === 'UI_SET_DRAFT') {
     // update the draft in chat list immediately
     const { chatId, text } = action.payload
-    const chat = state.chatList.find(chat => chat.id === chatId)
+    const chat = componentState.chatList.find(chat => chat.id === chatId)
     if (!chat) {
       console.log('Chat not found')
       return
     }
-    let { text1, text2, text1Meaning, _initialText } = chat.summary
+    let { text1, text2, text1Meaning, _initialText, state } = chat.summary
 
     if (text1Meaning !== DC_TEXT1_DRAFT && !_initialText) {
       // keep initial text to be able to restore it if a draft is deleted again
-      _initialText = [text1, text2]
+      _initialText = [text1, text2, state]
     }
     const newSummary = {
       ...chat.summary,
       text1: window.translate('draft'),
       text2: text,
+      state: 'draft',
       _initialText: _initialText
     }
     if (text.length === 0 && _initialText) {
       newSummary.text1 = _initialText[0]
       newSummary.text2 = _initialText[1]
+      newSummary.state = _initialText[2]
     }
     const updatedChat = { ...chat, summary: newSummary }
-    const chatList = state.chatList.map(chat => {
+    const chatList = componentState.chatList.map(chat => {
       return chat.id === chatId ? updatedChat : chat
     })
-    return { ...state, chatList }
+    return { ...componentState, chatList }
   } else if (action.type === 'UI_UPDATE_QUERY') {
     const { query } = action.payload
-    return { ...state, query }
+    return { ...componentState, query }
   } else {
-    return state
+    return componentState
   }
 }
 
