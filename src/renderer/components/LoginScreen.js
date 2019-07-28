@@ -138,7 +138,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
       <DeltaProgressBar
         progress={importProgress}
         intent={error === false ? Intent.SUCCESS : Intent.ERROR}
-    /> }
+      /> }
     </div>
   )
 })
