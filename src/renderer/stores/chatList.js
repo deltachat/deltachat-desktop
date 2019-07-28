@@ -42,6 +42,8 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
     const selectedChat = chatStore.getState()
     const chat = listState.chatList.find(chat => chat.id === chatId)
     if (!chat) {
+      // the chat is not in the list, let's reload the list
+      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
       return
     }
     let freshMessageCounter = chat.freshMessageCounter

@@ -2,8 +2,6 @@ const React = require('react')
 const moment = require('moment')
 const { ipcRenderer } = require('electron')
 
-const InfoStyle = { backgroundColor: 'lightgrey', width: '100%', resize: 'none' }
-
 class MessageInfo extends React.Component {
   constructor () {
     super()
@@ -48,10 +46,9 @@ class MessageInfo extends React.Component {
 
     return (
       <div className='module-message-detail'>
-        <div style={InfoStyle}>
+        <div className='message-content'>
           <textarea
             readOnly
-            style={InfoStyle}
             rows='20'
             value={this.state.content}
           />
