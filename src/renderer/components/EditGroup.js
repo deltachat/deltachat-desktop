@@ -10,7 +10,6 @@ class EditGroup extends GroupBase {
     const group = {}
 
     super(props, {
-      buttonLabel: 'save_desktop',
       heading: 'menu_edit_group',
       group: group,
       name: chat.name,

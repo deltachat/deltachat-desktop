@@ -136,10 +136,10 @@ class GroupBase extends React.Component {
 
   render () {
     const { verified } = this.props.screenProps
-    const { showQrInviteCodeButton } = this.state
+    const { showQrInviteCodeButton, heading } = this.state
     const showQrVerifyCodeButton = verified
     const showVerifiedContacts = verified
-    const label = verified ? 'menu_new_verified_group' : 'menu_new_group'
+    const label = heading || (verified ? 'menu_new_verified_group' : 'menu_new_group')
     const tx = window.translate
     const image = this.state.image || '../images/group_default.png'
     const { contacts } = this.state
@@ -166,7 +166,7 @@ class GroupBase extends React.Component {
               <Button
                 disabled={this.isButtonDisabled()}
                 onClick={this.onSubmit.bind(this)}
-                text={tx(label)} />
+                text={tx('save_desktop')} />
             </ControlGroup>
             <div className='SelectGroupImage'>
               <img className='GroupImage' src={image} onClick={this.onSelectGroupImage.bind(this)} />
