@@ -48,13 +48,13 @@ class DeadDrop extends React.Component {
         onClose={this.close}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
-          <h2>{body}</h2>
+          <h3>{body}</h3>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <ButtonGroup>
-                <Button onClick={this.yes}> Yes </Button>
-                <Button onClick={this.close}> No </Button>
-                <Button onClick={this.never}> Never </Button>
+                <Button onClick={this.yes}> {tx('yes')} </Button>
+                <Button onClick={this.close}> {tx('no')} </Button>
+                <Button onClick={this.never}> {tx('never')} </Button>
               </ButtonGroup>
             </div>
           </div>
