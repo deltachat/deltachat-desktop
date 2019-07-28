@@ -39,29 +39,13 @@ ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   const { chatId, messageObj, eventType } = payload
 
-  if (eventType === 'DC_EVENT_INCOMING_MSG' || eventType === 'DC_EVENT_MSGS_CHANGED') {
-    const listState = chatListStore.getState()
-    const selectedChat = chatStore.getState()
-    const chat = listState.chatList.find(chat => chat.id === chatId)
-    if (!chat) {
-      // the chat is not in the list, let's reload the list
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
-      return
-    }
-    let freshMessageCounter = chat.freshMessageCounter
-    if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
-      freshMessageCounter++
-    }
-    const updatedChat = {
-      ...chat,
-      freshMessageCounter: freshMessageCounter,
-      summary: messageObj.msg.summary
-    }
-    const chatList = listState.chatList.map(chat => {
-      return chat.id === chatId ? updatedChat : chat
-    })
-    chatList.sort(sortChatList)
-    chatListStore.setState({ ...listState, chatList })
+  const listState = chatListStore.getState()
+  const selectedChat = chatStore.getState()
+  const chat = listState.chatList.find(chat => chat.id === chatId)
+  if (!chat) {
+    // the chat is not in the list, let's reload the list
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    return
   }
   let freshMessageCounter = chat.freshMessageCounter
   if (eventType === 'DC_EVENT_INCOMING_MSG' && chatId !== selectedChat.id) {
