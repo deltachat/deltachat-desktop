@@ -5,6 +5,27 @@ const log = require('../../logger').getLogger('main/deltachat')
 const windows = require('../windows')
 const { app } = require('electron')
 
+const publicAccessibleMethods = [
+  'archiveChat',
+  'blockContact',
+  'chatWithContact',
+  'contactRequests',
+  'deleteChat',
+  'deleteMessage',
+  'fetchMessages',
+  'forwardMessage',
+  'getContacts',
+  'getLocations',
+  'leaveGroup',
+  'selectChat',
+  'sendMessage',
+  'setDraft',
+  'showArchivedChats',
+  'unblockContact',
+  'updateBlockedContacts',
+  'updateChatList'
+]
+
 /**
  * The Controller is the container for a deltachat instance
  */
@@ -43,13 +64,17 @@ class DeltaChatController extends EventEmitter {
   }
 
   /**
-  * TODO: filter by a list of public/allowed methods
   *
   * @param evt
   * @param methodName
   * @param args
   */
   handleRendererEvent (evt, methodName, args) {
+    if (publicAccessibleMethods.indexOf(methodName) < 0) {
+      const message = 'Method not accessible: ' + methodName
+      log.error(message)
+      throw (message)
+    }
     if (typeof this[methodName] === 'function') {
       this[methodName](...args)
     }
