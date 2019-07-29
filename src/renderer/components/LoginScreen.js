@@ -188,11 +188,9 @@ export default function LoginScreen (props) {
   const tx = window.translate
 
   function onClickLogin (credentials) {
-
     if (typeof credentials === 'string') {
-      credentials = {addr: credentials, mail_pw: true}
+      credentials = { addr: credentials, mail_pw: true }
     }
-    console.log(credentials)
     sendToBackend('login', credentials)
   }
 

@@ -29,6 +29,8 @@ const allDialogs = [
   MapDialog
 ]
 
+const log = require('../../../logger').getLogger('renderer/dialogs')
+
 class Controller extends React.Component {
   constructor (props) {
     super(props)
@@ -46,7 +48,7 @@ class Controller extends React.Component {
   }
 
   open (name, props) {
-    console.log('openDialog: ', name, props)
+    log.debug('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
     if (!Component) throw new Error(`Component with name ${name} does not exist`)
     if (!props) props = {}

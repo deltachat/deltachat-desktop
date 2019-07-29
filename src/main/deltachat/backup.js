@@ -20,7 +20,7 @@ function backupImport (file) {
       await fs.remove(newPath)
     }
     await fs.move(tmpConfigPath, newPath)
-    console.log(`backupImport: ${tmpConfigPath} successfully copied to ${newPath}`)
+    log.debug(`backupImport: ${tmpConfigPath} successfully copied to ${newPath}`)
   }
 
   const dcnContext = binding.dcn_context_new()
