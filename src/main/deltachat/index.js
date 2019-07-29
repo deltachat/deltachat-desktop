@@ -73,7 +73,7 @@ class DeltaChatController extends EventEmitter {
     if (publicAccessibleMethods.indexOf(methodName) < 0) {
       const message = 'Method not accessible: ' + methodName
       log.error(message)
-      throw (message)
+      throw new Error(message)
     }
     if (typeof this[methodName] === 'function') {
       this[methodName](...args)
