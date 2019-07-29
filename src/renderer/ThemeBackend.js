@@ -152,7 +152,7 @@ export function ThemeDataBuilder (theme) {
 export const defaultTheme = Object.freeze({
   bgImagePath: '../images/background_hd2.svg',
   bgPrimary: '#fff',
-  bgSecondary: '#e6dcd3',
+  bgSecondary: '#f5f5f5',
   textPrimary: '#111111',
   textSecondary: '#222222',
   ovalButtonBg: '#415e6b',
