@@ -188,6 +188,11 @@ export default function LoginScreen (props) {
   const tx = window.translate
 
   function onClickLogin (credentials) {
+
+    if (typeof credentials === 'string') {
+      credentials = {addr: credentials, mail_pw: true}
+    }
+    console.log(credentials)
     sendToBackend('login', credentials)
   }
 
@@ -211,11 +216,11 @@ export default function LoginScreen (props) {
         { props.logins.length > 0 && <Card>
           <DeltaHeadline>{tx('login_known_accounts_title_desktop')}</DeltaHeadline>
           <ul>
-            {props.logins.map((login) => <LoginItem key={login}>
-              <Button large minimal onClick={() => onClickLogin(login)}>
-                {login}
+            {props.logins.map((addr) => <LoginItem key={addr}>
+              <Button large minimal onClick={() => onClickLogin(addr)}>
+                {addr}
               </Button>
-              <Button intent={Intent.DANGER} minimal icon='cross' onClick={() => forgetLogin(login)} />
+              <Button intent={Intent.DANGER} minimal icon='cross' onClick={() => forgetLogin(addr)} />
             </LoginItem>
             )}
           </ul>
