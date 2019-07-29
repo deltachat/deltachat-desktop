@@ -47,7 +47,7 @@ class DeadDrop extends React.Component {
         icon='info-sign'
         onClose={this.close}
         canOutsideClickClose={false}>
-        <div className={Classes.DIALOG_BODY}>
+        <div className='bp3-dialog-body-with-padding'>
           <h3>{body}</h3>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
