@@ -101,7 +101,10 @@ function hide () {
 }
 
 function send (...args) {
-  if (!main.win) return
+  if (!main.win) {
+    log.warn('main.win not defined, can\'t send ipc to renderer')
+    return
+  }
   main.win.send(...args)
 }
 

@@ -86,6 +86,7 @@ class DeltaChatController extends EventEmitter {
    */
   sendToRenderer (eventType, payload) {
     log.debug('sendToRenderer: ' + eventType)
+    windows.main.send('ALL', eventType, payload)
     windows.main.send(eventType, payload)
   }
 
