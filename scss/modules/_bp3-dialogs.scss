@@ -12,6 +12,7 @@
 }
 
 .bp3-card {
+  background-color: $color-bp3-dialog-card-bg;
   border-radius: 0px;
   &:last-child {
     margin-bottom: -20px;
@@ -31,4 +32,8 @@
   width: calc(100% + 40px);
   left: -20px;
   padding: 10px 20px 9px;
+}
+
+.bp3-heading {
+  color: $color-bp3-heading;
 }

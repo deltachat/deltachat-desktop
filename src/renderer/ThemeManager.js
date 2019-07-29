@@ -1,7 +1,7 @@
 const React = require('react')
 const StyledThemeProvider = require('styled-components').ThemeProvider
 const { EventEmitter } = require('events')
-const { defaultTheme, ThemeDataBuilder: ThemeBuilder, defaultThemeData, ScssVarOverwrite } = require('./ThemeBackend.js')
+const { defaultTheme, ThemeDataBuilder: ThemeBuilder, defaultThemeData, ThemeVarOverwrite } = require('./ThemeBackend.js')
 
 class ThemeManager extends EventEmitter {
   constructor () {
@@ -54,6 +54,7 @@ class ThemeProvider extends React.Component {
 
   componentDidMount () {
     manager.addListener('update', this.update)
+    this.update()
   }
 
   componentWillUnmount () {
@@ -62,14 +63,14 @@ class ThemeProvider extends React.Component {
 
   update (ev) {
     console.log(ev)
-    this.setState({ theme: manager.getCurrentlyAppliedThemeData() })
+    const theme = manager.getCurrentlyAppliedThemeData()
+    this.setState({ theme })
+    window.document.getElementById('dom-root').style = ThemeVarOverwrite(theme)
   }
 
   render () {
     return <StyledThemeProvider theme={this.state.theme}>
-      <ScssVarOverwrite>
-        {this.props.children}
-      </ScssVarOverwrite>
+      {this.props.children}
     </StyledThemeProvider>
   }
 }

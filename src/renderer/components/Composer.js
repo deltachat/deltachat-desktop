@@ -48,7 +48,7 @@ const IconButton = styled.button`
   border: 0;
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: white;
+  background-color: ${props => props.theme.composerBg};
   &:focus {
     outline: none;
   }

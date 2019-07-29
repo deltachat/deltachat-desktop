@@ -41,6 +41,8 @@ html {
   // clr stands for color to save space 
   --clr-avatar-label: #fff;
   --clr-bp3-dialog-bg: #ececec;
+  --clr-bp3-dialog-card-bg: #9e9e9e;
+  --clr-bp3-heading: black;
   --clr-broken-media-bg: #070c14;
   --clr-broken-media-bg-text: #fff;
   --clr-context-menu-bg: #f9fafa;
@@ -95,6 +97,8 @@ $color-contact-default-label: var(--clr-avatar-label);
 $color-contact-list-item: var(--clr-contact-list-item);
 
 $color-bp3-dialog-bg: var(--clr-bp3-dialog-bg);
+$color-bp3-dialog-card-bg:var(--clr-bp3-dialog-card-bg);
+$color-bp3-heading:var(--clr-bp3-heading);
 
 $color-map-overlay-bg: var(--clr-map-overlay-bg);
 
