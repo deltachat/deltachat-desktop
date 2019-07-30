@@ -3,10 +3,46 @@ const { ipcRenderer } = require('electron')
 
 const {
   Classes,
-  Button,
-  ButtonGroup,
   Dialog
 } = require('@blueprintjs/core')
+
+const styled = require('styled-components').default
+const { createGlobalStyle } = require('styled-components')
+
+const SmallDialogWrapper = createGlobalStyle`
+  .bp3-small-dialog {
+    background: #ffffff;
+    width: 350px;
+    padding-bottom: 0px;
+  }
+`
+
+const DeltaGreenNoBorderButton = styled.p`
+  color: #53948c;
+  padding: 0px 7px;
+  margin-bottom: 0px;
+  &:hover {
+    cursor: pointer;
+  }
+
+`
+
+function SmallDialog (props) {
+  return (
+    <React.Fragment>
+      <SmallDialogWrapper />
+      <Dialog
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        canOutsideClickClose
+        isCloseButtonShown={false}
+        className='bp3-small-dialog'
+      >
+        {props.children}
+      </Dialog>
+    </React.Fragment>
+  )
+}
 
 class DeadDrop extends React.Component {
   constructor (props) {
@@ -37,29 +73,37 @@ class DeadDrop extends React.Component {
     const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
 
     const tx = window.translate
-    const title = tx('contact_request_title_desktop')
     const body = tx('ask_start_chat_with', nameAndAddr)
 
     return (
-      <Dialog
+      <SmallDialog
         isOpen={isOpen}
-        title={title}
-        icon='info-sign'
         onClose={this.close}
-        canOutsideClickClose={false}>
+      >
         <div className='bp3-dialog-body-with-padding'>
-          <h3>{body}</h3>
+          <p>{body}</p>
           <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <ButtonGroup>
-                <Button onClick={this.yes}> {tx('yes')} </Button>
-                <Button onClick={this.close}> {tx('no')} </Button>
-                <Button onClick={this.never}> {tx('never')} </Button>
-              </ButtonGroup>
+            <div
+              className={Classes.DIALOG_FOOTER_ACTIONS}
+              style={{ justifyContent: 'space-between', marginTop: '7px' }}
+
+            >
+              <DeltaGreenNoBorderButton
+                onClick={this.never}
+              >
+                {tx('never').toUpperCase()}
+              </DeltaGreenNoBorderButton>
+              <DeltaGreenNoBorderButton
+                onClick={this.close}
+                style={{ marginLeft: '90px' }}
+              >
+                {tx('not_now').toUpperCase()}
+              </DeltaGreenNoBorderButton>
+              <DeltaGreenNoBorderButton onClick={this.yes}> {tx('ok').toUpperCase()} </DeltaGreenNoBorderButton>
             </div>
           </div>
         </div>
-      </Dialog>
+      </SmallDialog>
     )
   }
 }
