@@ -11,7 +11,7 @@ import {
 export const DeltaBlueButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
-  color: ${props => props.theme.deltaFocusBlue};;
+  color: ${props => props.theme.loginButtonText};
   font-size: 16px;
   display: block;
   width: 100%; 

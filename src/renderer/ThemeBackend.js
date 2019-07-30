@@ -106,6 +106,7 @@ export function ThemeDataBuilder (theme) {
     messageAttachmentFileSize: '#070c14',
     // Login Screen
     loginInputFocusColor: '#42A5F5',
+    loginButtonText: '#42A5F5',
     deltaChatPrimaryFg: '#070c14', // only used on login screen
     deltaChatPrimaryFgLight: '#62656a', // only used on login screen
     // Context Menu
