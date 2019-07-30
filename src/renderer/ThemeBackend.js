@@ -119,6 +119,7 @@ export function ThemeDataBuilder (theme) {
     contextMenuSelectedBg: '#a4a6a9',
     // Misc
     avatarLabelColor: '#ffffff',
+    bp3DialogHeaderBg: theme.bgSecondary,
     bp3DialogBg: theme.bgPrimary,
     bp3DialogCardBg: theme.bgSecondary,
     bp3Heading: theme.textPrimary,
