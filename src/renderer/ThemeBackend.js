@@ -122,6 +122,8 @@ export function ThemeDataBuilder (theme) {
     bp3DialogBg: theme.bgPrimary,
     bp3DialogCardBg: theme.bgSecondary,
     bp3Heading: theme.textPrimary,
+    bp3ButtonText: theme.textPrimary,
+    bp3ButtonBg: theme.bgPrimary,
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
     unreadCountBg: '#2090ea',
@@ -172,6 +174,9 @@ export const ThemeVarOverwrite = (theme) => `
 --clr-bp3-dialog-bg: ${theme.bp3DialogBg};
 --clr-bp3-dialog-card-bg: ${theme.bp3DialogCardBg};
 --clr-bp3-heading: ${theme.bp3Heading}
+--clr-bp3-button-text: ${theme.bp3ButtonText};
+--clr-bp3-button-bg: ${theme.bp3ButtonBg}
+--clr-bp3-dialog-header-bg: ${theme.bp3DialogHeaderBg}
 --clr-broken-media-bg: ${theme.brokenMediaText};
 --clr-broken-media-bg-text: ${theme.brokenMediaBg};
 --clr-context-menu-bg: ${theme.contextMenuBg};
