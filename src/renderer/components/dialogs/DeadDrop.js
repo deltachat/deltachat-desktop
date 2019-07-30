@@ -17,7 +17,7 @@ const SmallDialogWrapper = createGlobalStyle`
   }
 `
 
-const DeltaGreenNoBorderButton = styled.p`
+const DeltaGreenButton = styled.p`
   color: #53948c;
   padding: 0px 7px;
   margin-bottom: 0px;
@@ -86,20 +86,17 @@ class DeadDrop extends React.Component {
             <div
               className={Classes.DIALOG_FOOTER_ACTIONS}
               style={{ justifyContent: 'space-between', marginTop: '7px' }}
-
             >
-              <DeltaGreenNoBorderButton
-                onClick={this.never}
-              >
+              <DeltaGreenButton onClick={this.never}>
                 {tx('never').toUpperCase()}
-              </DeltaGreenNoBorderButton>
-              <DeltaGreenNoBorderButton
+              </DeltaGreenButton>
+              <DeltaGreenButton
                 onClick={this.close}
                 style={{ marginLeft: '90px' }}
               >
                 {tx('not_now').toUpperCase()}
-              </DeltaGreenNoBorderButton>
-              <DeltaGreenNoBorderButton onClick={this.yes}> {tx('ok').toUpperCase()} </DeltaGreenNoBorderButton>
+              </DeltaGreenButton>
+              <DeltaGreenButton onClick={this.yes}>{tx('ok').toUpperCase()}</DeltaGreenButton>
             </div>
           </div>
         </div>
