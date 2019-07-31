@@ -48,7 +48,6 @@ class Settings extends React.Component {
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
-    this.onBackupImport = this.onBackupImport.bind(this)
     this.onKeysExport = this.onKeysExport.bind(this)
     this.onKeysImport = this.onKeysImport.bind(this)
     this.handleRCSettingsChange = this.handleRCSettingsChange.bind(this)
@@ -159,19 +158,8 @@ class Settings extends React.Component {
     })
   }
 
-  onBackupImport () {
-    const opts = {
-      title: this.translate('import_backup_title'),
-      properties: ['openFile'],
-      filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
-    }
-    remote.dialog.showOpenDialog(opts, filenames => {
-      if (!filenames || !filenames.length) return
-      ipcRenderer.send('backupImport', filenames[0])
-    })
-  }
-
   onBackupExport () {
+    const { openDialog, closeDialog } = this.props
     const confirmOpts = {
       buttons: [this.translate('cancel'), this.translate('export_backup_desktop')]
     }
@@ -188,8 +176,11 @@ class Settings extends React.Component {
         }
         ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
           this.props.userFeedback({ type: 'success', text: this.translate('pref_backup_written_to_x', filename) })
+
+          closeDialog('ImexProgress')
         })
         ipcRenderer.send('backupExport', filenames[0])
+        openDialog('ImexProgress', {})
       })
     })
   }
@@ -257,7 +248,7 @@ class Settings extends React.Component {
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeAllListener('DC_EVENT_IMEX_FILE_WRITTEN')
+    ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
   render () {
@@ -318,10 +309,7 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('pref_backup')}</H5>
-              <ButtonGroup>
-                <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
-                <Button onClick={this.onBackupImport}>{this.translate('import_backup_title')}</Button>
-              </ButtonGroup>
+              <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('pref_managekeys_menu_title')}</H5>

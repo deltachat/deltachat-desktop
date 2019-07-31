@@ -1,7 +1,5 @@
 const React = require('react')
-
 const { ipcRenderer } = require('electron')
-
 const {
   Intent,
   ProgressBar,
@@ -15,13 +13,20 @@ class ImexProgress extends React.Component {
     this.state = {
       progress: 0
     }
+
+    this.onDcEventImexProgress = this.onDcEventImexProgress.bind(this)
+  }
+
+  onDcEventImexProgress (_event, progress) {
+    this.setState({ progress })
   }
 
   componentDidMount () {
-    var self = this
-    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
-      self.setState({ progress })
-    })
+    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
+  }
+
+  componentWillUnmount () {
+    ipcRenderer.removeListener('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
   }
 
   render () {

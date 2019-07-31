@@ -31,6 +31,8 @@ const allDialogs = [
   ConfirmationDialog
 ]
 
+const log = require('../../../logger').getLogger('renderer/dialogs')
+
 class Controller extends React.Component {
   constructor (props) {
     super(props)
@@ -48,6 +50,7 @@ class Controller extends React.Component {
   }
 
   open (name, props) {
+    log.debug('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
     if (!Component) throw new Error(`Component with name ${name} does not exist`)
     if (!props) props = {}
@@ -63,18 +66,24 @@ class Controller extends React.Component {
   render () {
     const { saved, userFeedback, deltachat } = this.props
     const { dialogs } = this.state
+    // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
     return (
       <div>
         {Object.values(dialogs).map((dialog) => {
+          const isOpen = dialog.props !== false
+          if (!isOpen) return null
+
           var name = dialog.Component.name
           var defaultProps = {
-            isOpen: dialog.props !== false,
+            isOpen,
             onClose: () => this.close(name),
             userFeedback,
             saved,
             deltachat,
-            key: name
+            key: name,
+            openDialog: this.open.bind(this),
+            closeDialog: this.close.bind(this)
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
