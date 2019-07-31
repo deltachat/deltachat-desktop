@@ -28,7 +28,6 @@ export default function SmallDialog (props) {
         isOpen={props.isOpen}
         onClose={props.onClose}
         canOutsideClickClose
-        isCloseButtonShown={false}
         className='bp3-small-dialog'
       >
         {props.children}

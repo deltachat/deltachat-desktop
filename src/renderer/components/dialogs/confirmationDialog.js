@@ -31,9 +31,10 @@ export default function ConfirmationDialog (props) {
   return (
     <SmallDialog
       isOpen={isOpen}
-      onClose={(err) => {
-        if (err) throw err
-        cb(null)
+      onClose={(event) => {
+        onClose()
+        // eslint-disable-next-line standard/no-callback-literal
+        cb(false)
       }}
     >
       <div className='bp3-dialog-body-with-padding'>

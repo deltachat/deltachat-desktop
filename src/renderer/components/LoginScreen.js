@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { remote } from 'electron'
 import { sendToBackend, ipcBackend } from '../ipc'
 import NavbarWrapper from './NavbarWrapper'
-import confirmation from './dialogs/confirmationDialog'
 import styled from 'styled-components'
 import Login from './Login'
 import {
@@ -18,9 +17,8 @@ import {
   Dialog
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
-
 import logger from '../../logger'
-
+import ScreenContext from '../contexts/ScreenContext'
 const log = logger.getLogger('renderer/components/LoginScreen')
 
 const LoginWrapper = styled.div`
@@ -186,6 +184,7 @@ const ImportButton = React.memo(function ImportButton (props) {
 
 export default function LoginScreen (props) {
   const tx = window.translate
+  const { openDialog } = useContext(ScreenContext)
 
   function onClickLogin (credentials) {
     if (typeof credentials === 'string') {
@@ -196,8 +195,9 @@ export default function LoginScreen (props) {
 
   function forgetLogin (login) {
     const message = tx('forget_login_confirmation_desktop')
-    confirmation(message, (yes) => {
-      if (yes) sendToBackend('forgetLogin', login)
+    openDialog('ConfirmationDialog', {
+      message,
+      cb: yes => { if (yes) sendToBackend('forgetLogin', login) }
     })
   }
 
