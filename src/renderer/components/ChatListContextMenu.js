@@ -4,7 +4,6 @@ const { ipcRenderer } = require('electron')
 const ScreenContext = require('../contexts/ScreenContext')
 
 const { ContextMenu, MenuItem } = require('react-contextmenu')
-const spawnConfirmationDialog = require('./dialogs/confirmationDialog').spawnConfirmationDialog
 const { Icon } = require('@blueprintjs/core')
 
 class ChatListContextMenu extends React.Component {
@@ -88,7 +87,7 @@ class ChatListContextMenu extends React.Component {
         if (yes) {
           ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
         }
-      }})
+      } })
   }
 
   onEncrInfo () {
@@ -109,7 +108,7 @@ class ChatListContextMenu extends React.Component {
           ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
           ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', selectedChat.id)
         }
-      }})
+      } })
   }
 
   onBlockContact () {
@@ -123,7 +122,7 @@ class ChatListContextMenu extends React.Component {
         if (yes) {
           ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', contactId)
         }
-      }})
+      } })
   }
 }
 ChatListContextMenu.contextType = ScreenContext

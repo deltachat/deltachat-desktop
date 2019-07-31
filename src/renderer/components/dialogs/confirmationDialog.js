@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { remote } from 'electron'
-import * as ScreenContext from '../../contexts/ScreenContext'  
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaGreenButton } from '../helpers/SmallDialog'
 
@@ -18,7 +17,7 @@ export function confirmationDialogLegacy (message, opts, cb) {
   })
 }
 
-export default function ConfirmationDialog(props) {
+export default function ConfirmationDialog (props) {
   const { message, cb, onClose } = props
 
   const isOpen = !!message
@@ -32,7 +31,10 @@ export default function ConfirmationDialog(props) {
   return (
     <SmallDialog
       isOpen={isOpen}
-      onClose={() => cb(false)}
+      onClose={(err) => {
+        if (err) throw err
+        cb(null)
+      }}
     >
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
@@ -55,11 +57,4 @@ export default function ConfirmationDialog(props) {
       </div>
     </SmallDialog>
   )
-}
-
-
-export function spawnConfirmationDialog(message, cb) {
-  const screenContext = useContext(ScreenContext)
-
-  screenContext.openDialog('ConfirmationDialog', {message, cb})
 }
