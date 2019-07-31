@@ -28,10 +28,10 @@ export function openDeleteChatDialog (screenContext, chatId) {
   })
 }
 
-export function openBlockContactDialog(screenContext, selectedChat) {
+export function openBlockContactDialog (screenContext, selectedChat) {
   const tx = window.translate
   if (selectedChat && selectedChat.contacts.length) {
-    let contact = selectedChat.contacts[0]
+    const contact = selectedChat.contacts[0]
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_block_contact'),
       cb: yes => {
@@ -43,6 +43,6 @@ export function openBlockContactDialog(screenContext, selectedChat) {
   }
 }
 
-export function openEncryptionInfoDialog(screenContext, chat) {
+export function openEncryptionInfoDialog (screenContext, chat) {
   screenContext.openDialog('EncrInfo', { chat })
 }

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useContext, useEffect } from 'react'
-import { ipcRenderer } from 'electron'
 import ScreenContext from '../contexts/ScreenContext'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { Icon } from '@blueprintjs/core'
@@ -13,10 +12,10 @@ import {
 
 const ChatListContextMenu = React.memo((props) => {
   const screenContext = useContext(ScreenContext)
-  const { chatList, showArchivedChats } = props
-  const [chat, setChat] = useState({isGroup: false})
+  const { showArchivedChats } = props
+  const [chat, setChat] = useState({ isGroup: false })
   const [showEvent, setShowEvent] = useState(null)
-  let contextMenu = useRef(null)
+  const contextMenu = useRef(null)
 
   const show = (event, chat) => {
     console.log('ChatListContextMenu.show', chat, event)
@@ -27,14 +26,14 @@ const ChatListContextMenu = React.memo((props) => {
     */
     event.preventDefault()
     event.stopPropagation()
-    let position = {x: event.clientX, y: event.clientY}
+    const position = { x: event.clientX, y: event.clientY }
     const ev = { detail: { id: 'chat-options', position } }
     setChat(chat)
     setShowEvent(ev)
   }
 
-  useEffect(() => {props.getShow(show)}, [])
-  useEffect(() => { if(showEvent) contextMenu.current.handleShow(showEvent)})
+  useEffect(() => { props.getShow(show) }, [])
+  useEffect(() => { if (showEvent) contextMenu.current.handleShow(showEvent) })
 
   const reset = () => {
     setShowEvent(null)
@@ -47,7 +46,7 @@ const ChatListContextMenu = React.memo((props) => {
   const onEditGroup = () => screenContext.changeScreen('EditGroup', { chat })
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
-  
+
   const tx = window.translate
   console.log(chat)
   return (
