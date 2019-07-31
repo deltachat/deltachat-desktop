@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron')
 const ScreenContext = require('../contexts/ScreenContext')
 
 const { ContextMenu, MenuItem } = require('react-contextmenu')
-const confirmation = require('./dialogs/confirmationDialog')
+const spawnConfirmationDialog = require('./dialogs/confirmationDialog').spawnConfirmationDialog
 const { Icon } = require('@blueprintjs/core')
 
 class ChatListContextMenu extends React.Component {
@@ -82,11 +82,13 @@ class ChatListContextMenu extends React.Component {
   onDeleteChat () {
     const tx = window.translate
     const chatId = this.state.chat.id
-    confirmation(tx('ask_delete_chat_desktop'), yes => {
-      if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
-      }
-    })
+    this.context.openDialog('ConfirmationDialog', {
+      message: tx('ask_delete_chat_desktop'),
+      cb: yes => {
+        if (yes) {
+          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
+        }
+      }})
   }
 
   onEncrInfo () {
@@ -100,12 +102,14 @@ class ChatListContextMenu extends React.Component {
   onLeaveGroup () {
     const selectedChat = this.state.chat
     const tx = window.translate
-    confirmation(tx('ask_leave_group'), yes => {
-      if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', selectedChat.id)
-      }
-    })
+    this.context.openDialog('ConfirmationDialog', {
+      message: tx('ask_leave_group'),
+      cb: yes => {
+        if (yes) {
+          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
+          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', selectedChat.id)
+        }
+      }})
   }
 
   onBlockContact () {
@@ -113,11 +117,13 @@ class ChatListContextMenu extends React.Component {
     const chat = this.state.chat
     const contactId = (chat && chat.contacts.length) ? chat.contacts[0].id : undefined
     if (!contactId) return
-    confirmation(tx('ask_block_contact'), yes => {
-      if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', contactId)
-      }
-    })
+    this.context.openDialog('ConfirmationDialog', {
+      message: tx('ask_block_contact'),
+      cb: yes => {
+        if (yes) {
+          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', contactId)
+        }
+      }})
   }
 }
 ChatListContextMenu.contextType = ScreenContext

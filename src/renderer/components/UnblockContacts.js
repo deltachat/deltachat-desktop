@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
-const confirmation = require('./dialogs/confirmationDialog')
+const confirmation = require('./dialogs/confirmationDialog').confirmationDialogLegacy
 const { RenderContact } = require('./Contact')
 const contactsStore = require('../stores/contacts')
 

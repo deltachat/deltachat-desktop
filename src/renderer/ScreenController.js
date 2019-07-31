@@ -24,7 +24,7 @@ const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
-const confirmation = require('./components/dialogs/confirmationDialog')
+const confirmation = require('./components/dialogs/confirmationDialog').confirmationDialogLegacy
 
 class ScreenController extends React.Component {
   constructor (props) {

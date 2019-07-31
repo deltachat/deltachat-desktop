@@ -12,6 +12,7 @@ const Settings = require('./Settings')
 const ForwardMessage = require('./ForwardMessage')
 const EncrInfo = require('./EncrInfo')
 const MapDialog = require('./MapDialog')
+const ConfirmationDialog = require('./confirmationDialog').default
 
 const allDialogs = [
   SetupMessage,
@@ -26,7 +27,8 @@ const allDialogs = [
   Settings,
   ForwardMessage,
   EncrInfo,
-  MapDialog
+  MapDialog,
+  ConfirmationDialog
 ]
 
 class Controller extends React.Component {

@@ -1,7 +1,7 @@
 const React = require('react')
 const { ipcRenderer } = require('electron')
 const autobind = require('class-autobind').default
-const confirmation = require('./dialogs/confirmationDialog')
+const confirmation = require('./dialogs/confirmationDialog').default
 
 const {
   Menu,

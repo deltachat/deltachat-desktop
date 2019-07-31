@@ -22,7 +22,7 @@ const {
 
 const Login = require('../Login').default
 const KeyTransfer = require('./KeyTransfer')
-const confirmationDialog = require('./confirmationDialog')
+const confirmationDialog = require('./confirmationDialog').confirmationDialogLegacy
 
 const SettingsDialog = styled.div`
   .bp3-card:not(:last-child){
