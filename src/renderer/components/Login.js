@@ -9,14 +9,13 @@ import {
   DeltaHeadline,
   DeltaText,
   DeltaSelect,
+  DeltaProgressBar,
   AdvancedButton,
   AdvancedButtonIconClosed,
-  AdvancedButtonIconOpen,
-  ProgressBarWrapper
+  AdvancedButtonIconOpen
 } from './Login-Styles'
 import {
   Collapse,
-  ProgressBar,
   Intent
 } from '@blueprintjs/core'
 
@@ -75,8 +74,8 @@ export default class Login extends React.Component {
   }
 
   handleSubmit (event) {
-    const config = this.state.credentials
-    this.props.onSubmit(config)
+    const credentials = this.state.credentials
+    this.props.onSubmit(credentials)
     event.preventDefault()
   }
 
@@ -236,12 +235,10 @@ export default class Login extends React.Component {
           <DeltaText>{tx('login_subheader')}</DeltaText>
           {
             loading &&
-            <ProgressBarWrapper>
-              <ProgressBar
+              <DeltaProgressBar
                 value={this.state.progress / 1000}
                 intent={Intent.SUCCESS}
               />
-            </ProgressBarWrapper>
           }
           {React.Children.map(this.props.children, (child) => {
             var props = {}

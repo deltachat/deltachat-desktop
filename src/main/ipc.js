@@ -5,6 +5,8 @@ const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const getLogins = require('./logins')
+const { getConfigPath } = require('../application-constants')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -59,6 +61,10 @@ function init (cwd, state, logHandler) {
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
+  })
+
+  ipcMain.on('all', (e, ...args) => {
+    log.debug('Renderer event:', e, ...args)
   })
 
   ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
@@ -213,6 +219,14 @@ function init (cwd, state, logHandler) {
     }
 
     tmp.login(credentials, fakeRender, txCoreStrings())
+  })
+
+  ipcMain.on('updateLogins', (e) => {
+    getLogins(getConfigPath(), (err, logins) => {
+      if (err) throw err
+      state.logins = logins
+      render()
+    })
   })
 
   function render () {

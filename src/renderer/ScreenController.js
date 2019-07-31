@@ -1,30 +1,16 @@
 /* eslint-disable no-useless-escape */
 const React = require('react')
 const { ipcRenderer } = require('electron')
-const styled = require('styled-components').default
-
-const {
-  H5,
-  Card,
-  Intent,
-  Alignment,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  Button
-} = require('@blueprintjs/core')
 
 const ScreenContext = require('./contexts/ScreenContext')
-const NavbarWrapper = require('./components/NavbarWrapper')
 const UnblockContacts = require('./components/UnblockContacts')
-const Login = require('./components/Login').default
+const LoginScreen = require('./components/LoginScreen').default
 const CreateChat = require('./components/CreateChat')
 const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
 const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
-const confirmation = require('./components/dialogs/confirmationDialog').confirmationDialogLegacy
 
 class ScreenController extends React.Component {
   constructor (props) {
@@ -43,7 +29,6 @@ class ScreenController extends React.Component {
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
-    this.handleLogin = this.handleLogin.bind(this)
     this.dialogs = React.createRef()
   }
 
@@ -64,11 +49,6 @@ class ScreenController extends React.Component {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
-  }
-
-  handleLogin (credentials) {
-    this.userFeedback(false)
-    ipcRenderer.send('login', credentials)
   }
 
   componentWillUnmount () {
@@ -127,7 +107,6 @@ class ScreenController extends React.Component {
 
     var type = this.state.message.type
     var classNames = `user-feedback ${type}`
-    const tx = window.translate
 
     return (
       <div>
@@ -138,14 +117,7 @@ class ScreenController extends React.Component {
           </div>
         )}
         {!deltachat.ready
-          ? <LoginScreen logins={logins}>
-            <H5>{tx('login_title')}</H5>
-            <Login onSubmit={this.handleLogin} loading={deltachat.configuring}>
-              <br />
-              <Button type='submit' text={tx('login_title')} />
-              <Button type='cancel' text={tx('cancel')} />
-            </Login>
-          </LoginScreen>
+          ? <LoginScreen logins={logins} deltachat={deltachat} />
           : <ScreenContext.Provider value={{
             openDialog: this.openDialog,
             closeDialog: this.closeDialog,
@@ -167,97 +139,6 @@ class ScreenController extends React.Component {
       </div>
     )
   }
-}
-
-const LoginWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: calc(100vh);
-
-  .bp3-card {
-    width: 400px;
-    margin-top: 20px;
-  }
-
-  .window { 
-    padding-left: calc((100vw - 400px) / 2)
-  }
-
-`
-
-const LoginItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  border-right: 1px solid grey;
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
-  min-width: 300px;
-  border-radius: 0;
-
-  :hover {
-    button.bp3-intent-danger {
-      display: inline-flex;
-    }
-  }
-
-  button.bp3-intent-danger {
-    display: none;
-  }
-
-  &:first-child {
-    border-top: 1px solid grey;
-  }
-
-  button.bp3-large {
-    width: 90%;
-  }
-`
-
-function LoginScreen (props) {
-  const tx = window.translate
-  const children = props.children
-
-  function onClickLogin (login) {
-    ipcRenderer.send('login', { addr: login, mail_pw: true })
-  }
-
-  function forgetLogin (login) {
-    const message = tx('forget_login_confirmation_desktop')
-    confirmation(message, (yes) => {
-      if (yes) ipcRenderer.send('forgetLogin', login)
-    })
-  }
-
-  return (
-    <LoginWrapper>
-      <NavbarWrapper>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT}>
-            <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
-      </NavbarWrapper>
-      <div className='window'>
-        { props.logins.length > 0 && <Card>
-          <H5>{tx('login_known_accounts_title_desktop')}</H5>
-          <ul>
-            {props.logins.map((login) => <LoginItem key={login}>
-              <Button large minimal onClick={() => onClickLogin(login)}>
-                {login}
-              </Button>
-              <Button intent={Intent.DANGER} minimal icon='cross' onClick={() => forgetLogin(login)} />
-            </LoginItem>
-            )}
-          </ul>
-        </Card>
-        }
-        <Card>
-          {children}
-        </Card>
-      </div>
-    </LoginWrapper>
-  )
 }
 
 module.exports = ScreenController
