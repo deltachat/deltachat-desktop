@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 
 export function archiveChat (chatId, archive) {
   ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', chatId, archive)
