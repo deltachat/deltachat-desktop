@@ -1,5 +1,5 @@
 const React = require('react')
-const ChatListContextMenu = require('./ChatListContextMenu')
+const ChatListContextMenu = require('./ChatListContextMenu').default
 const ChatListItem = require('./ChatListItem')
 const mapCoreMsgStatus2String = require('./helpers/MapMsgStatus')
 const styled = require('styled-components').default

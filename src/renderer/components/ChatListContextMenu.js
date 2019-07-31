@@ -1,12 +1,17 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
+import React from 'react'
+import { ipcRenderer } from 'electron'
+import ScreenContext from '../contexts/ScreenContext'
+import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { Icon } from '@blueprintjs/core'
+import {
+  archiveChat,
+  openLeaveChatDialog,
+  openDeleteChatDialog,
+  openBlockContactDialog,
+  openEncryptionInfoDialog
+} from './helpers/ChatMethods'
 
-const ScreenContext = require('../contexts/ScreenContext')
-
-const { ContextMenu, MenuItem } = require('react-contextmenu')
-const { Icon } = require('@blueprintjs/core')
-
-class ChatListContextMenu extends React.Component {
+export default class ChatListContextMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -75,23 +80,15 @@ class ChatListContextMenu extends React.Component {
   }
 
   onArchiveChat (archive) {
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', this.state.chat.id, archive)
+    archiveChat(this.state.chat.id, archive)
   }
 
   onDeleteChat () {
-    const tx = window.translate
-    const chatId = this.state.chat.id
-    this.context.openDialog('ConfirmationDialog', {
-      message: tx('ask_delete_chat_desktop'),
-      cb: yes => {
-        if (yes) {
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
-        }
-      } })
+    openDeleteChatDialog(this.context, this.state.chat.id)
   }
 
   onEncrInfo () {
-    this.context.openDialog('EncrInfo', { chat: this.state.chat })
+    openEncryptionInfoDialog(this.context, this.state.chat)
   }
 
   onEditGroup () {
@@ -99,32 +96,12 @@ class ChatListContextMenu extends React.Component {
   }
 
   onLeaveGroup () {
-    const selectedChat = this.state.chat
-    const tx = window.translate
-    this.context.openDialog('ConfirmationDialog', {
-      message: tx('ask_leave_group'),
-      cb: yes => {
-        if (yes) {
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', selectedChat.id)
-        }
-      } })
+    openLeaveChatDialog(this.context, this.state.chat.id)
   }
 
   onBlockContact () {
-    const tx = window.translate
-    const chat = this.state.chat
-    const contactId = (chat && chat.contacts.length) ? chat.contacts[0].id : undefined
-    if (!contactId) return
-    this.context.openDialog('ConfirmationDialog', {
-      message: tx('ask_block_contact'),
-      cb: yes => {
-        if (yes) {
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'blockContact', contactId)
-        }
-      } })
+    openBlockContactDialog(this.context, this.state.chat)
   }
 }
 ChatListContextMenu.contextType = ScreenContext
 
-module.exports = ChatListContextMenu

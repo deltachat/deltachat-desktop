@@ -6,6 +6,13 @@ import {
   Menu,
   MenuItem
 } from '@blueprintjs/core'
+import {
+  archiveChat,
+  openLeaveChatDialog,
+  openDeleteChatDialog,
+  openBlockContactDialog,
+  openEncryptionInfoDialog
+} from './helpers/ChatMethods'
 
 export default function DeltaMenu (props) {
   const {
@@ -21,54 +28,15 @@ export default function DeltaMenu (props) {
   let chatMenu = <div />
 
   const onCreateChat = () => screenContext.changeScreen('CreateChat')
-
   const onEditGroup = () => screenContext.changeScreen('EditGroup', { chat: selectedChat })
-
-  const onLeaveGroup = () => {
-    const tx = window.translate
-    screenContext.openDialog('ConfirmationDialog', {
-      message: tx('ask_leave_group'),
-      cb: yes => {
-        if (yes) {
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', selectedChat.id)
-        }
-      } })
-  }
-
-  const onArchiveChat = archive => ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', selectedChat.id, archive)
-
-  const onBlockContact = () => {
-    const tx = window.translate
-    if (selectedChat && selectedChat.contacts.length) {
-      var contact = selectedChat.contacts[0]
-      screenContext.openDialog('ConfirmationDialog', {
-        message: tx('ask_block_contact'),
-        cb: yes => {
-          if (yes) {
-            ipcRenderer.send('blockContact', contact.id)
-          }
-        } })
-    }
-  }
-
-  const onDeleteChat = () => {
-    const tx = window.translate
-    screenContext.openDialog('ConfirmationDialog', {
-      message: tx('ask_delete_chat_desktop'),
-      cb: yes => {
-        if (yes) {
-          ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', selectedChat.id)
-        }
-      } })
-  }
-
+  const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
+  const onArchiveChat = archive => archiveChat(selectedChat.id, archive)
+  const onBlockContact = () => openBlockContactDialog(screenContext, selectedChat)
+  const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat.id)
   const onUnblockContacts = () => screenContext.changeScreen('UnblockContacts')
-
   const onContactRequests = () => ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'contactRequests')
-
   const logout = () => ipcRenderer.send('logout')
-
-  const onEncrInfo = () => screenContext.openDialog('EncrInfo', { chat: selectedChat })
+  const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
 
   if (selectedChat && !selectedChat.isDeaddrop) {
     chatMenu = <div>
