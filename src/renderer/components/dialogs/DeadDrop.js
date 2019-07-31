@@ -1,50 +1,10 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
+import React from 'react'  
+import { ipcRenderer } from 'electron'
+import { Classes } from '@blueprintjs/core'
+import SmallDialog, { DeltaGreenButton } from '../helpers/SmallDialog'
 
-const {
-  Classes,
-  Dialog
-} = require('@blueprintjs/core')
 
-const styled = require('styled-components').default
-const { createGlobalStyle } = require('styled-components')
-
-const SmallDialogWrapper = createGlobalStyle`
-  .bp3-small-dialog {
-    background: #ffffff;
-    width: 350px;
-    padding-bottom: 0px;
-  }
-`
-
-const DeltaGreenButton = styled.p`
-  color: #53948c;
-  padding: 0px 7px;
-  margin-bottom: 0px;
-  &:hover {
-    cursor: pointer;
-  }
-
-`
-
-function SmallDialog (props) {
-  return (
-    <React.Fragment>
-      <SmallDialogWrapper />
-      <Dialog
-        isOpen={props.isOpen}
-        onClose={props.onClose}
-        canOutsideClickClose
-        isCloseButtonShown={false}
-        className='bp3-small-dialog'
-      >
-        {props.children}
-      </Dialog>
-    </React.Fragment>
-  )
-}
-
-class DeadDrop extends React.Component {
+export default class DeadDrop extends React.Component {
   constructor (props) {
     super(props)
     this.yes = this.yes.bind(this)
@@ -104,5 +64,3 @@ class DeadDrop extends React.Component {
     )
   }
 }
-
-module.exports = DeadDrop
