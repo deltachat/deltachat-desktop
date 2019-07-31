@@ -118,7 +118,7 @@ export function ThemeDataBuilder (theme) {
     contextMenuSelected: theme.bgSecondary,
     contextMenuSelectedBg: '#a4a6a9',
     // Misc
-    avatarLabelColor: '#ffffff',
+    avatarLabelColor: '#ffffff', // Only changable with theme.raw
     bp3DialogHeaderBg: theme.bgSecondary,
     bp3DialogBg: theme.bgPrimary,
     bp3DialogCardBg: theme.bgSecondary,
@@ -127,7 +127,7 @@ export function ThemeDataBuilder (theme) {
     bp3ButtonBg: theme.bgPrimary,
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
-    unreadCountBg: '#2090ea',
+    unreadCountBg: theme.accentColor,
     unreadCountLabel: '#ffffff', // Only changable with theme.raw
     contactListItemBg: '#62656a',
     errorColor: '#f44336',
@@ -135,8 +135,8 @@ export function ThemeDataBuilder (theme) {
     globalBackground: theme.bgPrimary,
     globalText: theme.textPrimary,
     mapOverlayBg: theme.bgPrimary,
-    videoPlayBtnIcon: '#2090ea',
-    videoPlayBtnBg: '#ffffff',
+    videoPlayBtnIcon: theme.accentColor,
+    videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
     scrollBarThumb: undefinedGuard(
       theme.scrollbarTransparency, c => Color('black').alpha(c).rgb().string()
     ),
@@ -157,6 +157,7 @@ export const defaultTheme = Object.freeze({
   bgImagePath: '../images/background_hd2.svg',
   bgPrimary: '#fff',
   bgSecondary: '#f5f5f5',
+  accentColor: '#2090ea',
   textPrimary: '#111111',
   textSecondary: '#222222',
   ovalButtonBg: '#415e6b',
