@@ -4,7 +4,7 @@ const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
-const Menu = require('./Menu')
+const Menu = require('./Menu').default
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
 const SearchInput = require('./SearchInput.js')
@@ -151,8 +151,6 @@ class SplittedChatListAndView extends React.Component {
 
     const menu = <ScreenContext.Consumer>{(screenContext) =>
       <Menu
-        openDialog={screenContext.openDialog}
-        changeScreen={screenContext.changeScreen}
         selectedChat={selectedChat}
         showArchivedChats={showArchivedChats}
       />}

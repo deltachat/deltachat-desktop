@@ -1,5 +1,5 @@
 const React = require('react')
-const ChatListContextMenu = require('./ChatListContextMenu')
+const ChatListContextMenu = require('./ChatListContextMenu').default
 const ChatListItem = require('./ChatListItem')
 const mapCoreMsgStatus2String = require('./helpers/MapMsgStatus')
 const styled = require('styled-components').default
@@ -84,7 +84,7 @@ const ArchivedChats = styled.div`
 class ChatList extends React.Component {
   constructor (props) {
     super(props)
-    this.contextMenu = React.createRef()
+    this.realOpenContextMenu = null
   }
 
   componentDidMount () {
@@ -92,16 +92,17 @@ class ChatList extends React.Component {
     if (!this.doc) return log.warn(`Didn't find .ChatListWrapper .ConversationList`)
   }
 
-  openMenu (chatId, e) {
-    e.persist()
-    this.contextMenu.current.show(chatId, e)
+  openContextMenu (event, chatId) {
+    if (this.realOpenContextMenu === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
+    const chat = this.props.chatList.find(chat => chat.id === chatId)
+    this.realOpenContextMenu(event, chat)
   }
 
   render () {
     const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
     const tx = window.translate
     const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
-
+    const self = this
     return (
       <div>
         <ChatListWrapper>
@@ -158,7 +159,7 @@ class ChatList extends React.Component {
                     isVerified={chatListItem.isVerified}
                     isGroup={chatListItem.isGroup}
                     unreadCount={chatListItem.freshMessageCounter}
-                    onContextMenu={this.openMenu.bind(this, chatListItem.id)}
+                    onContextMenu={(event) => { this.openContextMenu(event, chatListItem.id) }}
                   />
                 )
               }
@@ -166,9 +167,8 @@ class ChatList extends React.Component {
           </div>
         </ChatListWrapper>
         <ChatListContextMenu
-          ref={this.contextMenu}
-          chatList={chatList}
           showArchivedChats={showArchivedChats}
+          getShow={show => { self.realOpenContextMenu = show }}
         />
       </div>
     )

@@ -1,14 +1,9 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
+import React from 'react'
+import { ipcRenderer } from 'electron'
+import { Classes } from '@blueprintjs/core'
+import SmallDialog, { DeltaGreenButton } from '../helpers/SmallDialog'
 
-const {
-  Classes,
-  Button,
-  ButtonGroup,
-  Dialog
-} = require('@blueprintjs/core')
-
-class DeadDrop extends React.Component {
+export default class DeadDrop extends React.Component {
   constructor (props) {
     super(props)
     this.yes = this.yes.bind(this)
@@ -37,31 +32,34 @@ class DeadDrop extends React.Component {
     const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
 
     const tx = window.translate
-    const title = tx('contact_request_title_desktop')
     const body = tx('ask_start_chat_with', nameAndAddr)
 
     return (
-      <Dialog
+      <SmallDialog
         isOpen={isOpen}
-        title={title}
-        icon='info-sign'
         onClose={this.close}
-        canOutsideClickClose={false}>
-        <div className={Classes.DIALOG_BODY}>
-          <h3>{body}</h3>
+      >
+        <div className='bp3-dialog-body-with-padding'>
+          <p>{body}</p>
           <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <ButtonGroup>
-                <Button onClick={this.yes}> {tx('yes')} </Button>
-                <Button onClick={this.close}> {tx('no')} </Button>
-                <Button onClick={this.never}> {tx('never')} </Button>
-              </ButtonGroup>
+            <div
+              className={Classes.DIALOG_FOOTER_ACTIONS}
+              style={{ justifyContent: 'space-between', marginTop: '7px' }}
+            >
+              <DeltaGreenButton onClick={this.never}>
+                {tx('never').toUpperCase()}
+              </DeltaGreenButton>
+              <DeltaGreenButton
+                onClick={this.close}
+                style={{ marginLeft: '90px' }}
+              >
+                {tx('not_now').toUpperCase()}
+              </DeltaGreenButton>
+              <DeltaGreenButton onClick={this.yes}>{tx('ok').toUpperCase()}</DeltaGreenButton>
             </div>
           </div>
         </div>
-      </Dialog>
+      </SmallDialog>
     )
   }
 }
-
-module.exports = DeadDrop

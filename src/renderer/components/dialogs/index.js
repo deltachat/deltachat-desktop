@@ -3,7 +3,7 @@ const SetupMessage = require('./SetupMessage')
 const MessageDetail = require('./MessageDetail')
 const RenderMedia = require('./RenderMedia')
 const ContactDetail = require('./ContactDetail')
-const DeadDrop = require('./DeadDrop')
+const DeadDrop = require('./DeadDrop').default
 const KeyTransfer = require('./KeyTransfer')
 const QrCode = require('./QrCode')
 const ImexProgress = require('./ImexProgress')
@@ -12,6 +12,7 @@ const Settings = require('./Settings')
 const ForwardMessage = require('./ForwardMessage')
 const EncrInfo = require('./EncrInfo')
 const MapDialog = require('./MapDialog')
+const ConfirmationDialog = require('./confirmationDialog').default
 
 const allDialogs = [
   SetupMessage,
@@ -26,7 +27,8 @@ const allDialogs = [
   Settings,
   ForwardMessage,
   EncrInfo,
-  MapDialog
+  MapDialog,
+  ConfirmationDialog
 ]
 
 const log = require('../../../logger').getLogger('renderer/dialogs')

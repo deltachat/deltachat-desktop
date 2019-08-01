@@ -116,21 +116,21 @@ class ScreenController extends React.Component {
             {this.state.message.text}
           </div>
         )}
-        {!deltachat.ready
-          ? <LoginScreen logins={logins} deltachat={deltachat} />
-          : <ScreenContext.Provider value={{
-            openDialog: this.openDialog,
-            closeDialog: this.closeDialog,
-            userFeedback: this.userFeedback,
-            changeScreen: this.changeScreen
-          }}>
-            <Screen
+        <ScreenContext.Provider value={{
+          openDialog: this.openDialog,
+          closeDialog: this.closeDialog,
+          userFeedback: this.userFeedback,
+          changeScreen: this.changeScreen
+        }}>
+          {!deltachat.ready
+            ? <LoginScreen logins={logins} deltachat={deltachat} />
+            : <Screen
               saved={saved}
               deltachat={deltachat}
               screenProps={screenProps}
             />
-          </ScreenContext.Provider>
-        }
+          }
+        </ScreenContext.Provider>
         <dialogs.Controller
           ref={this.dialogs}
           deltachat={deltachat}
