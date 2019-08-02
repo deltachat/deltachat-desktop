@@ -132,6 +132,7 @@ export const DeltaInputWrapper = styled(DeltaFormGroup)`
     border-bottom: 2px solid;
     border-bottom-color: ${props => props.theme.deltaChatPrimaryFgLight};
     font-size: 16px; 
+    background-color: transparent;
 
     &:focus {
       border-bottom-color: ${props => props.theme.loginInputFocusColor};
