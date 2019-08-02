@@ -28,8 +28,21 @@ function changeSaturation (colorString, factor) {
   }
 }
 
-function undefinedGuard (value, func) {
-  return typeof value === 'undefined' ? undefined : func(value)
+function blendColor (colorString0, colorString1, factor) {
+  console.log(...arguments)
+  const color0 = Color(colorString0)
+  const color1 = Color(colorString1)
+  return color0.mix(color1, factor).rgb().string()  
+}
+
+function undefinedGuard (raw_value, func) {
+  const values = Array.isArray(raw_value) ? raw_value : [raw_value]
+  console.log(raw_value, values, notUndefined(values))
+  return notUndefined(...values) ? func(...values) : undefined
+}
+
+function notUndefined(...variables){
+  return !variables.map(v => typeof v === 'undefined').reduce((acc, cur) => acc || cur)
 }
 
 export function ThemeDataBuilder (theme) {
@@ -121,14 +134,32 @@ export function ThemeDataBuilder (theme) {
     contextMenuText: theme.textSecondary,
     contextMenuSelected: theme.bgSecondary,
     contextMenuSelectedBg: '#a4a6a9',
-    // Misc
-    avatarLabelColor: '#ffffff', // Only changable with theme.raw
+    // Bp3 overwrites
     bp3DialogHeaderBg: theme.bgSecondary,
     bp3DialogBg: theme.bgPrimary,
     bp3DialogCardBg: theme.bgSecondary,
     bp3Heading: theme.textPrimary,
     bp3ButtonText: theme.textPrimary,
     bp3ButtonBg: theme.bgPrimary,
+    // EmojiMart overwrites
+    emojiMartText: theme.textPrimary,
+    emojiMartBorder: undefinedGuard(
+      theme.bgSecondary, c => changeContrast(c, 0.1)
+    ),
+    emojiMartBg: theme.bgSecondary,
+    emojiMartCategoryIcons: undefinedGuard(
+      [theme.textPrimary, theme.bgSecondary], (c1,c2) => blendColor(c1, c2, 0.4)
+    ),
+    emojiMartInputBg: theme.bgSecondary,
+    emojiMartInputText: theme.textPrimary,
+    emojiMartInputPlaceholder: undefinedGuard(
+      [theme.textPrimary, theme.bgSecondary], (c1,c2) => blendColor(c1, c2, 0.3)
+    ),
+    emojiMartSelect: undefinedGuard(
+      theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2) 
+    ),
+    // Misc
+    avatarLabelColor: '#ffffff', // Only changable with theme.raw
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
     unreadCountBg: theme.accentColor,
@@ -217,4 +248,12 @@ export const ThemeVarOverwrite = (theme) => `
 --clr-message-video-overlay-circle: ${theme.videoPlayBtnBg};
 --clr-scrollbar-thumb: ${theme.scrollBarThumb};
 --clr-scrollbar-thumb-hover: ${theme.scrollBarThumbHover};
+--clr-emoji-mart-text: ${theme.emojiMartText};
+--clr-emoji-mart-border: ${theme.emojiMartBorder};
+--clr-emoji-mart-bg: ${theme.emojiMartBg};
+--clr-emoji-mart-category-icons: ${theme.emojiMartCategoryIcons};
+--clr-emoji-mart-input-text: ${theme.emojiMartInputText};
+--clr-emoji-mart-input-bg: ${theme.emojiMartInputBg};
+--clr-emoji-mart-input-placeholder: ${theme.emojiMartInputPlaceholder};//lightgrey;
+--clr-emoji-mart-select: ${theme.emojiMartSelect};//#f4f4f4;
 `

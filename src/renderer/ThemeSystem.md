@@ -41,7 +41,7 @@ delete this section after done before merge!
 
 - hamburger menu content
 - bp3 overwrites (see todo/-comments in scss file)
-- emojimart window (see `_emoji-mart-overwrites.scss`)
+- emojimart window (see `_emoji-mart-overwrites.scss`) [100%]
 - login screen known acconts text
 
 - gradients? namely:
