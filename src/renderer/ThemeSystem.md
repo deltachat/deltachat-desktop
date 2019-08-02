@@ -47,3 +47,7 @@ delete this section after done before merge!
 - gradients? namely:
     - bp3 input focus
     - gradient between chatlist and chatview
+
+- sample dark theme
+
+- fix standard stuff (`npm test`)

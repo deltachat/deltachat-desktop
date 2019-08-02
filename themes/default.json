@@ -1,0 +1,15 @@
+{
+    "bgPrimary":"#111",
+    "bgSecondary":"#222",
+    "comment":{"bgImagePath": "../images/background_hd2.svg"},
+    "accentColor": "lightblue",
+    "textPrimary": "#fff",
+    "textSecondary": "#ddd",
+    "ovalButtonBg": "#999",
+    "ovalButtonText": "#fff",
+    "bgChatView": "darkslategray",
+    "bgNavBar": "#bbbbff",
+    "textNavBar": "#000",
+    "scrollbarTransparency": 0.4
+}
+
