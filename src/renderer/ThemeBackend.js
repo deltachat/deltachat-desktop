@@ -65,13 +65,20 @@ export function ThemeDataBuilder (theme) {
     chatViewBg: theme.bgChatView,
     chatViewBgImgPath: theme.bgImagePath,
     // ChatView - Composer
-    composerText: '#415e6b',
     composerBg: theme.bgPrimary,
-    composerBtnColor: '#616161',
+    composerText: theme.textPrimary,
+    composerPlaceholderText: undefinedGuard(
+      theme.textPrimary, c => Color(c).alpha(0.5).rgb().string()
+    ),
+    composerBtnColor: undefinedGuard(
+      theme.textPrimary, c => Color(c).alpha(0.9).rgb().string()
+    ),
+    composerSendButton: '#415e6b',
+    emojiSelectorSelectionColor: theme.accentColor,
     // Chat List
     chatListItemSelectedBg: '#4c6e7d',
     chatListItemSelectedBgHover: undefinedGuard(
-      true, _ => Color('#4c6e7d').lighten(0.24).hex() // deltaSelected, but should be something else
+      true, _ => Color('#4c6e7d').lighten(0.24).hex()
     ),
     chatListItemSelectedText: theme.bgPrimary,
     chatListItemBgHover: undefinedGuard(

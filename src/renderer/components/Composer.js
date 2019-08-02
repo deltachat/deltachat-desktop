@@ -105,7 +105,7 @@ const SendButtonCircleWrapper = styled.div`
   margin-top: 4px;
   margin-bottom: 4px;
   margin-right: 5px;
-  background-color: ${props => props.theme.composerText};
+  background-color: ${props => props.theme.composerSendButton};
   border-radius: 180px;
   cursor: pointer;
   
@@ -241,7 +241,7 @@ class Composer extends React.Component {
             <Picker
               style={{ width: '100%', height: '100%' }}
               native
-              color={this.props.theme.composerText}
+              color={this.props.theme.emojiSelectorSelectionColor}
               onSelect={this.onEmojiSelect}
               showPreview={false}
               showSkinTones={false}

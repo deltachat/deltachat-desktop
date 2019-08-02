@@ -17,6 +17,11 @@ const MessageInputTextarea = styled.textarea`
   margin-left: 40px;
   overflow-y: hidden;
   background-color: ${props => props.theme.composerBg};
+  color: ${props => props.theme.composerText};
+
+  &::placeholder {
+    color: ${props => props.theme.composerPlaceholderText};
+  }
 
   &:focus {
     outline: none;
