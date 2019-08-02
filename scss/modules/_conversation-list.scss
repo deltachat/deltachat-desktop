@@ -141,8 +141,9 @@
 }
 
 .module-conversation-list-item__is-group {
+  display: inline-block;
   width: 0.75em;
   height: 0.75em;
   margin-right: 2px;
-  filter: invert(100%);
+  @include color-svg("../images/group-icon.svg", $chatlist-isgroup-icon);
 }

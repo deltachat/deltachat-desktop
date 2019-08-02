@@ -80,9 +80,8 @@ class ChatListItem extends React.Component {
   renderGroupIcon () {
     if (this.props.isGroup) {
       return (
-        <img
+        <span
           className='module-conversation-list-item__is-group'
-          src='../images/group-icon.png'
         />
       )
     }
