@@ -1,0 +1,39 @@
+.emoji-mart-category-list > li {
+    min-width: initial;
+}
+
+.emoji-mart {
+    color: #222427;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+}
+
+.emoji-mart-anchors svg, .emoji-mart-anchors img {
+    fill: #858585;
+}
+
+.emoji-mart-bar {
+    border: 0 solid #d9d9d9;
+}
+
+.emoji-mart-category-label span {
+    /* disable? -> no its important when scrolling */
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, .95);
+}
+
+// searchbar
+.emoji-mart-search input {
+    border: 1px solid #d9d9d9;
+    background-color: white;
+}
+
+.emoji-mart-search input::placeholder {
+    color: lightgrey;
+}
+
+
+// select background circle
+.emoji-mart-category .emoji-mart-emoji:hover:before {
+    background-color: #f4f4f4;
+}
