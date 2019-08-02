@@ -38,7 +38,6 @@ class ThemeManager extends EventEmitter {
   getDefaultTheme () {
     return defaultTheme
   }
-
 }
 
 const manager = new ThemeManager()
