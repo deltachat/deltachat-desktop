@@ -34,3 +34,14 @@ getCurrentTheme ()
 getDefaultThemeData ()
 getDefaultTheme ()
 ```
+
+
+### TODO
+delete this section after done before merge!
+
+- hamburger menu content
+- bp3 overwrites (see todo/-comments in scss file)
+- emojimart window (see `_emoji-mart-overwrites.scss`)
+
+- gradients? namely:
+    - bp3 input focus

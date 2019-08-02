@@ -46,3 +46,22 @@
 .bp3-dialog-header {
   background-color: $color-bp3-dialog-header;
 }
+
+.bp3-input {
+  background-color: white;
+  color: black;
+}
+
+.bp3-input::placeholder {
+  color: lightgrey
+}
+
+//TODO Button  (text and bg + hover )
+
+//TODO .bp3 toggle-switch-button
+
+
+.bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
+  // the sliders/dials icon in the dialog header in the settings dialog
+  color: #5c7080;
+}
