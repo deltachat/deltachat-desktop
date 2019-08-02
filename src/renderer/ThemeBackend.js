@@ -107,8 +107,7 @@ export function ThemeDataBuilder (theme) {
     // Message Bubble - Attachments
     messageAttachmentIconExtentionColor: '#070c14', // Only changable with theme.raw
     messageAttachmentIconBg: '#ffffff', // Only changable with theme.raw
-    messageAttachmentFileName: '#070c14',
-    messageAttachmentFileSize: '#070c14',
+    messageAttachmentFileInfo: '#070c14',
     // Login Screen
     loginInputFocusColor: '#42A5F5',
     loginButtonText: '#42A5F5',
@@ -210,8 +209,7 @@ export const ThemeVarOverwrite = (theme) => `
 --clr-message-text: ${theme.messageText};
 --clr-message-text-underline: ${theme.messageTextLink};
 --clr-message-generic-attachment-icon-extension: ${theme.messageAttachmentIconExtentionColor};
---clr-message-generic-attachment-filename: ${theme.messageAttachmentFileName};
---clr-message-generic-attachment-filesize: ${theme.messageAttachmentFileSize};
+--clr-message-generic-attachment-fileinfo: ${theme.messageAttachmentFileInfo};
 --clr-message-attachment-container-bg: ${theme.messageAttachmentIconBg};
 --clr-message-metadata-date: ${theme.messageMetadataDate};
 --clr-message-metadata-date-incomming: ${theme.messageMetadataIncomming};

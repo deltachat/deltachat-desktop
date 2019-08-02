@@ -72,11 +72,8 @@ html {
   --clr-message-text: #070c14;
   --clr-message-text-underline: #070c14;
   --clr-message-generic-attachment-icon-extension: #070c14;
-  --clr-message-generic-attachment-filename: #070c14;
-  --clr-message-generic-attachment-filesize: #070c14;
+  --clr-message-generic-attachment-fileinfo: #070c14;
   --clr-message-attachment-container-bg: #ffffff;
-  --clr-message-attachment-filename-incomming: #ffffff;
-  --clr-message-attachment-filesize-incomming: #ffffff;
   --clr-message-metadata-date: #62656a;
   --clr-message-metadata-date-incomming: rgba(#ffffff, 0.7);
   --clr-message-video-play: #2090ea;
@@ -123,8 +120,6 @@ $chatlist-isgroup-icon: var(--clr-global-text);
 /* Message Bubble */
 $color-message-author: var(--clr-message-author);
 $color-message-attachment-container-bg: var(clr-message-attachment-container-bg);
-$color-message-attachment-filename-incomming: var(--clr-message-attachment-filename-incomming);
-$color-message-attachment-filesize-incomming: var(--clr-message-attachment-filesize-incomming);
 
 $color-message-author-default-avatar-label: var(--clr-avatar-label);
 
@@ -139,8 +134,7 @@ $color-message-metadata-date: var(--clr-message-metadata-date);
 $color-message-metadata-date-incomming: var(--clr-message-metadata-date-incomming);
 
 $color-message-generic-attachment-icon-extension: var(--clr-message-generic-attachment-icon-extension);
-$color-message-generic-attachment-filename: var(--clr-message-generic-attachment-filename);
-$color-message-generic-attachment-filesize: var(--clr-message-generic-attachment-filesize);
+$color-message-generic-attachment-fileinfo: var(--clr-message-generic-attachment-fileinfo);
 $color-message-text: var(--clr-message-text);
 $color-message-text-underline: var(--clr-message-text-underline);
 

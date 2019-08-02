@@ -352,7 +352,7 @@
 }
 
 .module-message__generic-attachment__file-name {
-  color: $color-message-generic-attachment-filename;
+  color: $color-message-generic-attachment-fileinfo;
   font-size: 14px;
   line-height: 18px;
   font-weight: 300;
@@ -365,7 +365,7 @@
 }
 
 .module-message__generic-attachment__file-size {
-  color: $color-message-generic-attachment-filesize;
+  color: $color-message-generic-attachment-fileinfo;
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
