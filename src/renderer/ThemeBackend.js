@@ -114,8 +114,8 @@ export function ThemeDataBuilder (theme) {
     // Login Screen
     loginInputFocusColor: '#42A5F5',
     loginButtonText: '#42A5F5',
-    deltaChatPrimaryFg: '#070c14', // only used on login screen
-    deltaChatPrimaryFgLight: '#62656a', // only used on login screen
+    deltaChatPrimaryFg: theme.textPrimary, // todo rename this var
+    deltaChatPrimaryFgLight: theme.textSecondary, // todo rename this var
     // Context Menu
     contextMenuBg: theme.bgSecondary,
     contextMenuBorder: undefinedGuard(
@@ -165,8 +165,8 @@ export const defaultTheme = Object.freeze({
   bgPrimary: '#fff',
   bgSecondary: '#f5f5f5',
   accentColor: '#2090ea',
-  textPrimary: '#111111',
-  textSecondary: '#222222',
+  textPrimary: '#010101',
+  textSecondary: '#62656a',
   ovalButtonBg: '#415e6b',
   ovalButtonText: '#fff',
   bgChatView: 'lime',
