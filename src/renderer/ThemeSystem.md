@@ -53,6 +53,11 @@ delete this section after done before merge!
 - main menu rightside triangle/arrow
 - main menu shadow thingie looks wreid in dark modes
 - emoji picker border can be a bit more pronounced (especially for dark themes)
+- dialog background
+- map controlls
+- gallery
+    - background
+    - tabs
 
 - gradients? namely:
     - bp3 input focus
