@@ -31,7 +31,7 @@ function changeSaturation (colorString, factor) {
 function blendColor (colorString0, colorString1, factor) {
   const color0 = Color(colorString0)
   const color1 = Color(colorString1)
-  return color0.mix(color1, factor).rgb().string()  
+  return color0.mix(color1, factor).rgb().string()
 }
 
 function undefinedGuard (rawValue, func) {
@@ -168,7 +168,7 @@ export function ThemeDataBuilder (theme) {
       [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.3)
     ),
     emojiMartSelect: undefinedGuard(
-      theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2) 
+      theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2)
     ),
     // Misc
     avatarLabelColor: '#ffffff', // Only changable with theme.raw

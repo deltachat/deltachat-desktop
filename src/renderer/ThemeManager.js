@@ -11,7 +11,7 @@ class ThemeManager extends EventEmitter {
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     window.ThemeManager = this // only for using from the dev console
-    ipcRenderer.on('theme-update', (e, data)=> this.setTheme(data))
+    ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
   }
 
   setTheme (theme) {
