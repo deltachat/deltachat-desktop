@@ -1,4 +1,5 @@
-var Color = require('color')
+const Color = require('color')
+const log = require('../logger').getLogger('render/theme-backend')
 
 function changeContrast (colorString, factor) {
   // TODO make the black check code work
@@ -13,8 +14,7 @@ function changeContrast (colorString, factor) {
 }
 
 function invertColor (colorString) {
-  const color = Color(colorString)
-  return color.negate().rgb().string()
+  return Color(colorString).negate().rgb().string()
 }
 
 function changeSaturation (colorString, factor) {
@@ -29,8 +29,7 @@ function changeSaturation (colorString, factor) {
 }
 
 function undefinedGuard (value, func) {
-  if (typeof value === 'undefined') return undefined
-  else return func(value)
+  return typeof value === 'undefined' ? undefined : func(value)
 }
 
 export function ThemeDataBuilder (theme) {
@@ -39,7 +38,6 @@ export function ThemeDataBuilder (theme) {
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
   /// Don't use color directly here
-  console.log(theme.textNavBar, changeContrast(theme.textNavBar, 0.3))
 
   // #070c14; // some kind of font color?
   let themeData = {
@@ -155,7 +153,7 @@ export function ThemeDataBuilder (theme) {
   Object.keys(themeData).forEach(key => themeData[key] === undefined ? delete themeData[key] : '')
   if (theme.raw) {
     themeData = Object.assign(themeData, theme.raw)
-    console.log('theme.raw', theme.raw, themeData)
+    log.debug('theme.raw', theme.raw, themeData)
   }
   return themeData
 }
