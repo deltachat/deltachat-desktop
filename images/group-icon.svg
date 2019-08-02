@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg2" width="96" height="96" viewBox="0 0 96 96">
+   <defs id="defs6" />
+   <ellipse style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;" id="path836" cx="32.431034" cy="32.072754" rx="12.727922" ry="12.87174" />
+   <ellipse style="opacity:1;fill:#000003;fill-opacity:1;stroke:none;" id="path838" cx="64.430611" cy="32.072754" rx="12.512195" ry="13.015559" />
+   <path style="fill:#000000;stroke:none;fill-opacity:1" d="M 4.4583682,75.577797 V 63.209421 C 7.7662824,58.607252 12.760708,54.321303 28.188392,51.991591 l 11.325693,10e-7 c 7.56191,2.077585 15.686879,3.113005 20.31434,11.793102 l -0.143819,11.793103 z" id="path840" />
+   <path style="fill:#000000;stroke:none;fill-opacity:1" d="m 61.266608,52.279228 c 3.36857,2.108101 6.10298,5.499073 7.5294,10.516186 l -0.05085,13.068993 H 92.237288 V 64.016949 C 87.098049,56.741054 79.465801,52.153697 67.423729,52.322033 Z" id="path842" />
+</svg>

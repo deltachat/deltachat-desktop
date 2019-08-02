@@ -1,4 +1,4 @@
-const { ThemeProvider } = require('./Theming')
+const { ThemeProvider } = require('./ThemeManager')
 const React = require('react')
 const SettingsContext = require('./contexts/SettingsContext')
 const ScreenController = require('./ScreenController')

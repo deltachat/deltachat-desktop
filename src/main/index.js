@@ -75,6 +75,23 @@ function onReady (err, results) {
       }
     })
   }
+
+  if (app.rc['theme-watch']) {
+    console.log('theme-watch activated: ', app.rc['theme-watch'])
+    if (fs.existsSync(app.rc['theme-watch'])) {
+      fs.watchFile(app.rc['theme-watch'], (curr, prev) => {
+        if (curr.mtime !== prev.mtime) {
+          console.log('File changed reloading theme data')
+          // TODO make this more safe or disable when merging
+          const content = fs.readFileSync(app.rc['theme-watch'])
+          windows.main.send('theme-update', JSON.parse(content))
+          console.log('reloading theme data - done')
+        }
+      })
+    } else {
+      console.log("couldn't find file")
+    }
+  }
 }
 
 app.once('ipcReady', () => {

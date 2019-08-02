@@ -1,0 +1,43 @@
+.emoji-mart-category-list > li {
+    min-width: initial;
+}
+
+.emoji-mart {
+    color: var(--clr-emoji-mart);
+    border: 1px solid var(--clr-emoji-mart-border);
+    background: var(--clr-emoji-mart-bg);
+}
+
+.emoji-mart-anchors svg, .emoji-mart-anchors img {
+    fill: var(--clr-emoji-mart-category-icons);
+}
+
+.emoji-mart-bar {
+    border: 0 solid var(--clr-emoji-mart-border);
+}
+
+.emoji-mart-category-label span {
+    /* disable? -> no its important when scrolling */
+    background-color: var(--clr-emoji-mart-bg);
+}
+
+// searchbar
+.emoji-mart-search input {
+    color: var(--clr-emoji-mart-input-text);
+    border: 1px solid var(--clr-emoji-mart-border);
+    background-color: var(--clr-emoji-mart-input-bg);
+}
+
+.emoji-mart-search input::placeholder {
+    color: var(--clr-emoji-mart-input-placeholder);
+}
+
+.emoji-mart-search-icon {
+    fill: var(--clr-emoji-mart-input-placeholder);
+}
+
+
+// select background circle
+.emoji-mart-category .emoji-mart-emoji:hover:before {
+    background-color: var(--clr-emoji-mart-select);
+}

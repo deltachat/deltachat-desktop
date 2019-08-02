@@ -11,7 +11,7 @@ const SettingsContext = require('../contexts/SettingsContext')
 const ComposerMessageInput = require('./ComposerMessageInput')
 
 const ComposerWrapper = styled.div`
-  background-color: ${props => props.theme.deltaPrimaryFg};
+  background-color: ${props => props.theme.composerBg};
   border-left: 1px solid rgba(16,22,26,0.1);
 `
 
@@ -48,7 +48,7 @@ const IconButton = styled.button`
   border: 0;
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: white;
+  background-color: ${props => props.theme.composerBg};
   &:focus {
     outline: none;
   }
@@ -105,7 +105,7 @@ const SendButtonCircleWrapper = styled.div`
   margin-top: 4px;
   margin-bottom: 4px;
   margin-right: 5px;
-  background-color: ${props => props.theme.deltaPrimaryBg};
+  background-color: ${props => props.theme.composerSendButton};
   border-radius: 180px;
   cursor: pointer;
   
@@ -241,7 +241,7 @@ class Composer extends React.Component {
             <Picker
               style={{ width: '100%', height: '100%' }}
               native
-              color={this.props.theme.deltaPrimaryBg}
+              color={this.props.theme.emojiSelectorSelectionColor}
               onSelect={this.onEmojiSelect}
               showPreview={false}
               showSkinTones={false}

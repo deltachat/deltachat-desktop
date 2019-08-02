@@ -13,8 +13,8 @@ body {
   margin: 0;
   font-family: $roboto!important;
   font-size: 14px;
-  color: var(--color-light-90);
-  background-color: var(--bg-color);
+  color: $color-global-text;
+  background-color: $color-global-bg;
 }
 
 .window {
@@ -53,30 +53,13 @@ h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
   display: none;
 }
 
-.title-bar {
-  color: var(--color-light-90);
-
-  height: $header-height;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.logo {
-  margin-left: 16px;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 300;
-  color: var(--color-light-90);
-}
-
 button {
   cursor: pointer;
   font-size: inherit;
 }
 
 a {
-  color: var(--color-blue);
+  color: $color-global-a;
 }
 
 
@@ -100,7 +83,7 @@ a {
       display: inline-block;
       width: $button-height;
       height: $button-height;
-      @include color-svg('../images/paperclip.svg', var(--color-grey));
+      @include color-svg('../images/paperclip.svg', $color-composer-file-btn);
       transform: rotateZ(-45deg);
     }
 
@@ -121,24 +104,6 @@ a {
     cursor: pointer;
     z-index: 1;
   }
-}
-
-$avatar-size: 48px;
-
-.avatar {
-  display: inline-block;
-  height: $avatar-size;
-  width: $avatar-size;
-  border-radius: 50%;
-  background-size: cover;
-  vertical-align: middle;
-  text-align: center;
-  line-height: $avatar-size;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  color: var(--color-white);
-  font-size: 18px;
-  background-color: var(--color-grey);
 }
 
 .SelectGroupImage {
@@ -171,31 +136,12 @@ $new-contact-left-margin: 16px;
   }
 }
 
-.x {
-  display: inline-block;
-  float: right;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  padding: 3px;
-  background: var(--color-grey);
-
-  &:before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    @include color-svg('../images/x.svg', var(--color-white));
-  }
-}
-
 input[type='text'],
 input[type='search'],
 textarea {
   &:active,
   &:focus {
-    outline: 1px solid var(--color-blue);
+    outline: 1px solid $color-global-textarea-outline;
   }
 }
 
@@ -231,11 +177,11 @@ button:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
+  background: $color-scrollbar-thumb;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
+  background: $color-scrollbar-thumb-hover;
 }
 
 ::-webkit-scrollbar-corner {

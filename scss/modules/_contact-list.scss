@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
 
-  color: var(--color-light-60);
+  color: $color-contact-list-item;
 }
 
 .module-contact-list-item--with-click-handler {
@@ -41,7 +41,7 @@
 
 .module-contact-list-item__avatar-default__label {
   width: 100%;
-  color: var(--color-white);
+  color: $color-contact-default-label;
   font-size: 18px;
 }
 

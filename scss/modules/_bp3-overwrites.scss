@@ -1,0 +1,91 @@
+.bp3-dialog {
+  background: var(--clr-bp3-dialog-bg);
+  border-radius: 2px;
+}
+
+.bp3-dialog-body {
+  margin: 0px;
+}
+
+.bp3-dialog-body-with-padding {
+  padding: 20px;
+}
+
+.bp3-card {
+  background-color: var(--clr-bp3-dialog-card-bg);
+  border-radius: 0px;
+  &:last-child {
+    margin-bottom: -20px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+}
+
+.bp3-elevation-1 {
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+  &:first-child {
+    box-shadow: 0 0 0 0px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+  }
+}
+
+.bp3-callout {
+  width: calc(100% + 40px);
+  left: -20px;
+  padding: 10px 20px 9px;
+}
+
+.bp3-heading {
+  color: var(--clr-bp3-heading);
+}
+
+.bp3-button:not([class*="bp3-intent-"], :icon) {
+  color: var(--clr-bp3-button-text);
+  background-color: var(--clr-bp3-button-bg);
+  background-image: linear-gradient(to bottom, var(--clr-bp3-button-gradient-top), var(--clr-bp3-button-gradient-bottom));
+}
+.bp3-button:not([class*="bp3-intent-"], :icon):hover {
+  background-color: var(--clr-bp3-button-hover)
+}
+
+// .bp3-button[class*="bp3-intent-"]:active {
+//   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
+// }
+
+.bp3-dialog-header {
+  background-color: var(--clr-bp3-dialog-header-bg);
+}
+
+.bp3-input {
+  background-color: var(--clr-bp3-input-bg);
+  color: var(--clr-bp3-input);
+}
+
+.bp3-input::placeholder {
+  color: var(--clr-bp3-input-placeholder);
+}
+
+.bp3-control.bp3-switch {
+  input ~ .bp3-control-indicator {
+    background: var(--clr-bp3-switch-bg);
+  }
+  .bp3-control-indicator::before {
+    box-shadow: 0 0 0 1px var(--clr-bp3-switch-before-shadow);
+    background: var(--clr-bp3-switch-before-bg);
+  }
+  input:checked ~ .bp3-control-indicator {
+      background: var(--clr-bp3-switch-checked);
+  }
+  input:checked ~ .bp3-control-indicator::before {
+    box-shadow: inset 0 0 0 1px var(--clr-bp3-switch-checked-before-shadow);
+  }
+}
+
+.bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
+  // the sliders/dials icon in the dialog header in the settings dialog
+  color: var(--clr-bp3-dialog-header-icon) 
+}
+
+.bp3-menu {
+  background-color: var(--clr-bp3-menu-bg);
+  color: var(--clr-bp3-menu);
+}

@@ -1,0 +1,18 @@
+{
+    "bgPrimary":"#000",
+    "bgSecondary":"#222",
+    "accentColor": "purple",
+    "textPrimary": "#fff",
+    "textSecondary": "#ddd",
+    "ovalButtonBg": "#999",
+    "ovalButtonText": "#fff",
+    "bgImagePath": "none",
+    "bgChatView": "#000",
+    "bgNavBar": "#000",
+    "textNavBar": "#ddd",
+    "scrollbarTransparency": 0.45,
+    "bgMessageBubbleIncoming": "#222",
+    "bgMessageBubbleOutgoing": "#343",
+    "raw": {}
+}
+

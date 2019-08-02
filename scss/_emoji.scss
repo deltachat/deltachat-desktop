@@ -37,15 +37,11 @@ button.emoji {
     display: inline-block;
     width: $button-height;
     height: $button-height;
-    @include color-svg('../images/smile.svg', var(--color-grey));
+    @include color-svg('../images/smile.svg', $color-composer-emoji-btn);
   }
 
   &:focus,
   &:hover {
     opacity: 1;
   }
-}
-
-.emoji-mart-category-list > li {
-  min-width: initial;
 }

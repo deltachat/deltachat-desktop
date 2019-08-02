@@ -17,7 +17,7 @@ const GROUP_TYPES = [
 
 const SetupMessage = styled.div`
   .module-message__text {
-    color: #ed824e;
+    color: ${props => props.theme.setupMessageText};
   }
 `
 
@@ -32,10 +32,10 @@ const InfoMessage = styled.div`
     font-style: italic;
     font-weight: bold;
     padding: 7px 14px;
-    background-color: ${props => props.theme.deltaInfoMessageBubbleBg};
+    background-color: ${props => props.theme.infoMessageBubbleBg};
     border-radius: 10px;
     opacity: 0.44;
-    color: ${props => props.theme.deltaInfoMessageBubbleColor};
+    color: ${props => props.theme.infoMessageBubbleText};
   }
 `
 
@@ -47,14 +47,11 @@ const MessageWrapper = styled.div`
   }
 
   .module-message__author-default-avatar__label {
-    background-color: black;
     top: -121px;
     left: -10px;
     border-radius: 50%;
     width: 36px;
     height: 36px;
-    background-color: #757575;
-    color: #ffffff;
     font-size: 25px;
     line-height: 36px;
   }
@@ -77,24 +74,15 @@ const MessageWrapper = styled.div`
   }
 
   .module-message__metadata__date {
-    color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
+    color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
-  .module-message__metadata__status-icon--read, .module-message__metadata__status-icon--delivered {
-    background-color: ${props => props.theme.deltaChatMessageBubbleSelfStatusColor};
+  .status-icon--read, .status-icon--delivered {
+    background-color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
   .module-message__buttons__reply {
     display: none;
-  }
-
-  .module-message__text--incoming a {
-    color: #070c14;
-  }
-
-  .module-message__generic-attachment__file-size--incoming,
-  .module-message__generic-attachment__file-name--incoming {
-    color: black;
   }
 
   .module-message__generic-attachment__icon__extension{

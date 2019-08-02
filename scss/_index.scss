@@ -3,63 +3,6 @@
   overflow: auto;
 }
 
-// $search-x-size: 16px;
-// $search-padding-right: 12px;
-// $search-padding-left: 30px;
-
-// input.search {
-//   border: 1px solid $color-black-02;
-//   padding: 0 $search-padding-right 0 $search-padding-left;
-//   margin-left: 8px;
-//   margin-right: 8px;
-//   outline: 0;
-//   height: 32px;
-//   width: calc(100% - 16px);
-//   outline-offset: -2px;
-//   font-size: 14px;
-//   line-height: 18px;
-//   font-weight: normal;
-
-//   position: relative;
-//   border-radius: 4px;
-
-//   &:focus {
-//     outline: solid 1px var(--color-blue);
-//   }
-
-//   &.active {
-//     background-image: url('../images/x.svg');
-//     background-repeat: no-repeat;
-//     background-size: $search-x-size;
-
-//     &.ltr {
-//       background-position: right $search-padding-right center;
-//     }
-
-//     &.rtl {
-//       background-position: left $search-padding-left center;
-//     }
-//   }
-
-//   &::-webkit-search-cancel-button {
-//     -webkit-appearance: none;
-//     display: block;
-//     width: $search-x-size;
-//     height: $search-x-size;
-//   }
-
-//   &::-webkit-search-cancel-button:hover {
-//     cursor: pointer;
-//   }
-// }
-
-.last-timestamp {
-  font-size: smaller;
-  float: right;
-  margin: 0 10px;
-  color: var(--color-grey);
-}
-
 .new-contact {
   display: none;
   cursor: pointer;

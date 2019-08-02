@@ -251,8 +251,7 @@ function render (props) {
           </div>
           <div
             className={classNames(
-              'module-message__generic-attachment__file-size',
-              `module-message__generic-attachment__file-size--${direction}`
+              'module-message__generic-attachment__file-size'
             )}
           >
             {fileSize}

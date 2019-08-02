@@ -11,7 +11,7 @@ import {
 export const DeltaBlueButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
-  color: ${props => props.theme.deltaFocusBlue};;
+  color: ${props => props.theme.loginButtonText};
   font-size: 16px;
   display: block;
   width: 100%; 
@@ -31,7 +31,7 @@ export const DeltaBlueButton = styled.div`
 export const AdvancedButton = styled.div`
   -webkit-appearance: button-bevel;
   background-color: transparent;
-  color: ${props => props.theme.deltaFocusBlue};;
+  color: ${props => props.theme.loginInputFocusColor};;
   font-size: 16px;
   display: block;
   width: 100%; 
@@ -54,7 +54,7 @@ export const AdvancedButtonIconOpen = styled.div`
   height: 20px;
   -webkit-mask: url(../images/dc-cross.svg) no-repeat center;
   -webkit-mask-size: 100%;
-  background-color: ${props => props.theme.deltaFocusBlue};
+  background-color: ${props => props.theme.loginInputFocusColor};
   display: -webkit-inline-box;
 `
 
@@ -132,10 +132,11 @@ export const DeltaInputWrapper = styled(DeltaFormGroup)`
     border-bottom: 2px solid;
     border-bottom-color: ${props => props.theme.deltaChatPrimaryFgLight};
     font-size: 16px; 
+    background-color: transparent;
 
     &:focus {
-      border-bottom-color: ${props => props.theme.deltaFocusBlue};
-      color: ${props => props.theme.deltaFocusBlue};
+      border-bottom-color: ${props => props.theme.loginInputFocusColor};
+      color: ${props => props.theme.loginInputFocusColor};
     }
 
     &:focus::placeholder {
@@ -162,7 +163,7 @@ export const DeltaLabel = styled.div`
     line-height: 13px;
     width: 100%;
     color: ${props => props.focus === true
-    ? props.theme.deltaFocusBlue
+    ? props.theme.loginInputFocusColor
     : props.theme.deltaChatPrimaryFgLight};
 `
 

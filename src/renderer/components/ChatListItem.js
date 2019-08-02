@@ -80,9 +80,8 @@ class ChatListItem extends React.Component {
   renderGroupIcon () {
     if (this.props.isGroup) {
       return (
-        <img
+        <span
           className='module-conversation-list-item__is-group'
-          src='../images/group-icon.png'
         />
       )
     }
@@ -166,8 +165,8 @@ class ChatListItem extends React.Component {
         {lastMessage.status ? (
           <div
             className={classNames(
-              'module-conversation-list-item__message__status-icon',
-              `module-conversation-list-item__message__status-icon--${
+              'status-icon',
+              `status-icon--${
                 lastMessage.status
               }`
             )}

@@ -13,7 +13,7 @@
 
 .module-conversation-list-item--has-unread {
   padding-left: 12px;
-  border-left: 4px solid var(--color-signal-blue);
+  border-left: 4px solid $color-conversation-list-has-unread;
 }
 
 .module-conversation-list-item__avatar {
@@ -27,12 +27,12 @@
   object-fit: cover;
 }
 .module-conversation-list-item__default-avatar {
-  color: var(--color-white);
+  color: $color-conversation-list-avatar-text;
   font-size: 26px;
   line-height: 48px;
   text-align: center;
 
-  background-color: var(--color-conversation-grey);
+  background-color: $color-conversation-list-item-default-avatar-bg;
 }
 
 .module-conversation-list-item__content {
@@ -118,8 +118,8 @@
 }
 
 .module-conversation-list-item__unread-count {
-  color: var(--color-white);
-  background-color: var(--color-signal-blue);
+  color: $color-conversation-list-unread-count-label;
+  background-color: $color-conversation-list-unread-count-bg;
   text-align: center;
 
   // For alignment with the message text
@@ -134,16 +134,6 @@
   border-radius: 10px;
 }
 
-.module-conversation-list-item__message__status-icon {
-  flex-shrink: 0;
-
-  margin-top: 2px;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-left: 6px;
-}
-
 .module-conversation-list-item__is-verified {
   width: 0.75em;
   height: 0.75em;
@@ -151,41 +141,9 @@
 }
 
 .module-conversation-list-item__is-group {
+  display: inline-block;
   width: 0.75em;
   height: 0.75em;
   margin-right: 2px;
-  filter: invert(100%);
+  @include color-svg("../images/group-icon.svg", $chatlist-isgroup-icon);
 }
-
-.module-conversation-list-item__message__status-icon--sending {
-  @include color-svg('../images/sending.svg', var(--color-light-60));
-  animation: module-conversation-list-item__message__status-icon--spinning 4s
-    linear infinite;
-}
-
-@keyframes module-conversation-list-item__message__status-icon--spinning {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-.module-conversation-list-item__message__status-icon--sent {
-  @include color-svg('../images/check-circle-outline.svg', var(--color-light-35));
-}
-.module-conversation-list-item__message__status-icon--delivered {
-  @include color-svg('../images/sent.svg', var(--color-light-35));
-  width: 18px;
-}
-.module-conversation-list-item__message__status-icon--read {
-  @include color-svg('../images/read.svg', var(--color-light-35));
-  width: 18px;
-}
-.module-conversation-list-item__message__status-icon--error {
-  @include color-svg('../images/error.svg', var(--color-core-red));
-}
-
-// (empty for now)
-// .module-conversation-list-item__message__status-icon--draft {
-//   @include color-svg('../images/lead-pencil.svg', var(--color-light-35));
-// }
