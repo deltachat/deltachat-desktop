@@ -1,5 +1,5 @@
 .bp3-dialog {
-  background: $color-bp3-dialog-bg;
+  background: var(--clr-bp3-dialog-bg);
   border-radius: 2px;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .bp3-card {
-  background-color: $color-bp3-dialog-card-bg;
+  background-color: var(--clr-bp3-dialog-card-bg);
   border-radius: 0px;
   &:last-child {
     margin-bottom: -20px;
@@ -35,33 +35,57 @@
 }
 
 .bp3-heading {
-  color: $color-bp3-heading;
+  color: var(--clr-bp3-heading);
 }
 
-.bp3-button {
-  color: $color-bp3-button-text;
-  background-color: $color-bp3-button-bg;
+.bp3-button:not([class*="bp3-intent-"]) {
+  color: var(--clr-bp3-button-text);
+  background-color: var(--clr-bp3-button-bg);
+  background-image: linear-gradient(to bottom, var(--clr-bp3-button-gradient-top), var(--clr-bp3-button-gradient-bottom));
 }
+.bp3-button:not([class*="bp3-intent-"]):hover {
+  background-color: var(--clr-bp3-button-hover)
+}
+
+// .bp3-button[class*="bp3-intent-"]:active {
+//   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
+// }
 
 .bp3-dialog-header {
-  background-color: $color-bp3-dialog-header;
+  background-color: var(--clr-bp3-dialog-header-bg);
 }
 
 .bp3-input {
-  background-color: white;
-  color: black;
+  background-color: var(--clr-bp3-input-bg);
+  color: var(--clr-bp3-input);
 }
 
 .bp3-input::placeholder {
-  color: lightgrey
+  color: var(--clr-bp3-input-placeholder);
 }
 
-//TODO Button  (text and bg + hover )
-
-//TODO .bp3 toggle-switch-button
-
+.bp3-control.bp3-switch {
+  input ~ .bp3-control-indicator {
+    background: var(--clr-bp3-switch-bg);
+  }
+  .bp3-control-indicator::before {
+    box-shadow: 0 0 0 1px var(--clr-bp3-switch-before-shadow);
+    background: var(--clr-bp3-switch-before-bg);
+  }
+  input:checked ~ .bp3-control-indicator {
+      background: var(--clr-bp3-switch-checked);
+  }
+  input:checked ~ .bp3-control-indicator::before {
+    box-shadow: inset 0 0 0 1px var(--clr-bp3-switch-checked-before-shadow);
+  }
+}
 
 .bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
   // the sliders/dials icon in the dialog header in the settings dialog
-  color: #5c7080;
+  color: var(--clr-bp3-dialog-header-icon) 
+}
+
+.bp3-menu {
+  background-color: var(--clr-bp3-menu-bg);
+  color: var(--clr-bp3-menu);
 }

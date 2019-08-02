@@ -44,6 +44,11 @@ const Welcome = styled.div`
   text-align: center;
 `
 
+const MenuButtonWrapper = styled.div`
+  .bp3-button { background: none; }
+  .bp3-button:hover { background: none; }
+`
+
 class SplittedChatListAndView extends React.Component {
   constructor (props) {
     super(props)
@@ -188,7 +193,9 @@ class SplittedChatListAndView extends React.Component {
               </SettingsContext.Consumer>
               }
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' />
+                <MenuButtonWrapper>
+                  <Button className='icon-rotated' minimal icon='more' />
+                </MenuButtonWrapper>
               </Popover>
             </NavbarGroup>
           </Navbar>

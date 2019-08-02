@@ -39,8 +39,8 @@ getDefaultTheme ()
 ### TODO
 delete this section after done before merge!
 
-- hamburger menu content
-- bp3 overwrites (see todo/-comments in scss file)
+- main menu content [100%]
+- bp3 overwrites (see todo/-comments in scss file) [~100%]
 - emojimart window (see `_emoji-mart-overwrites.scss`) [100%]
 - login screen known acconts text
 

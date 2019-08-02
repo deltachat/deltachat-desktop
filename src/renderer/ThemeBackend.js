@@ -51,7 +51,7 @@ export function ThemeDataBuilder (theme) {
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
   /// Don't use color directly here
-
+  const bp3SwitchShadowColor = 'rgba(16,22,26,.4)'
   // #070c14; // some kind of font color?
   let themeData = {
     // Misc
@@ -136,11 +136,25 @@ export function ThemeDataBuilder (theme) {
     contextMenuSelectedBg: '#a4a6a9',
     // Bp3 overwrites
     bp3DialogHeaderBg: theme.bgSecondary,
+    bp3DialogHeaderIcon: '#5c7080',
     bp3DialogBg: theme.bgPrimary,
     bp3DialogCardBg: theme.bgSecondary,
     bp3Heading: theme.textPrimary,
     bp3ButtonText: theme.textPrimary,
     bp3ButtonBg: theme.bgPrimary,
+    bp3ButtonGradientTop: 'rgba(255,255,255,0.8)',
+    bp3ButtonGradientBottom: 'rgba(255,255,255,0)',
+    bp3ButtonHoverBg: '#ebf1f5',
+    bp3InputText: theme.textPrimary,
+    bp3InputBg: theme.bgPrimary,
+    bp3InputPlaceholder: 'lightgray',
+    bp3MenuText: theme.textPrimary,
+    bp3MenuBg: theme.bgSecondary,
+    bp3SwitchBg: 'rgba(130, 165, 188, 0.5)',
+    bp3SwitchBeforeShadow: bp3SwitchShadowColor,
+    bp3SwitchBeforeBg: 'RGBA(57, 75, 89, 1)',
+    bp3SwitchChecked: theme.accentColor,
+    bp3SwitchCheckedBeforeShadow: bp3SwitchShadowColor,
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(
@@ -208,12 +222,6 @@ export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
 export const ThemeVarOverwrite = (theme) => `
 --clr-avatar-label: ${theme.avatarLabelColor};
---clr-bp3-dialog-bg: ${theme.bp3DialogBg};
---clr-bp3-dialog-card-bg: ${theme.bp3DialogCardBg};
---clr-bp3-heading: ${theme.bp3Heading}
---clr-bp3-button-text: ${theme.bp3ButtonText};
---clr-bp3-button-bg: ${theme.bp3ButtonBg}
---clr-bp3-dialog-header-bg: ${theme.bp3DialogHeaderBg}
 --clr-broken-media-bg: ${theme.brokenMediaText};
 --clr-broken-media-bg-text: ${theme.brokenMediaBg};
 --clr-context-menu-bg: ${theme.contextMenuBg};
@@ -254,6 +262,26 @@ export const ThemeVarOverwrite = (theme) => `
 --clr-emoji-mart-category-icons: ${theme.emojiMartCategoryIcons};
 --clr-emoji-mart-input-text: ${theme.emojiMartInputText};
 --clr-emoji-mart-input-bg: ${theme.emojiMartInputBg};
---clr-emoji-mart-input-placeholder: ${theme.emojiMartInputPlaceholder};//lightgrey;
---clr-emoji-mart-select: ${theme.emojiMartSelect};//#f4f4f4;
+--clr-emoji-mart-input-placeholder: ${theme.emojiMartInputPlaceholder};
+--clr-emoji-mart-select: ${theme.emojiMartSelect};
+--clr-bp3-dialog-bg: ${theme.bp3DialogBg};
+--clr-bp3-dialog-card-bg: ${theme.bp3DialogCardBg};
+--clr-bp3-heading: ${theme.bp3Heading}
+--clr-bp3-button-text: ${theme.bp3ButtonText};
+--clr-bp3-button-bg: ${theme.bp3ButtonBg};
+--clr-bp3-button-gradient-top: ${theme.bp3ButtonGradientTop};
+--clr-bp3-button-gradient-bottom: ${theme.bp3ButtonGradientBottom};
+--clr-bp3-button-hover: ${theme.bp3ButtonHoverBg};
+--clr-bp3-dialog-header-bg: ${theme.bp3DialogHeaderBg};
+--clr-bp3-menu-bg: ${theme.bp3MenuBg};
+--clr-bp3-menu: ${theme.bp3MenuText};
+--clr-bp3-input-bg: ${theme.bp3InputBg};        
+--clr-bp3-input: ${theme.bp3InputText};                 
+--clr-bp3-input-placeholder: ${theme.bp3InputPlaceholder};     
+--clr-bp3-dialog-header-icon: ${theme.bp3DialogHeaderIcon};
+--clr-bp3-switch-bg: ${theme.bp3SwitchBg};
+--clr-bp3-switch-before-shadow: ${theme.bp3SwitchBeforeShadow};
+--clr-bp3-switch-before-bg: ${theme.bp3SwitchBeforeBg};
+--clr-bp3-switch-checked: ${theme.bp3SwitchChecked};
+--clr-bp3-switch-checked-before-shadow: ${theme.bp3SwitchCheckedBeforeShadow};
 `
