@@ -40,6 +40,9 @@ getDefaultTheme ()
 ```
 npx electron . --theme-watch "./themes/dark.json"
 ```
+Quirks:
+- You're theme gets only updated and loaded on change of the specified theme file
+- Doesn't work with `npm run dev` because this argument gets lost
 
 ### TODO
 delete this section after done before merge!
@@ -47,15 +50,15 @@ delete this section after done before merge!
 - login screen known acconts text
 - toggle hover
 - main menu seperation bars
-- emoji picker search icon should have color of placeholder
-- emoji picker border can be a bit more pronounced
+- main menu rightside triangle/arrow
+- main menu shadow thingie looks wreid in dark modes
+- emoji picker border can be a bit more pronounced (especially for dark themes)
 
 - gradients? namely:
     - bp3 input focus
     - gradient between chatlist and chatview
 
-- highlevel:
- - make availible chat bubble color
+
 
 - sample dark theme
 

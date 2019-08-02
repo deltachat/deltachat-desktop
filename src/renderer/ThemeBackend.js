@@ -99,9 +99,9 @@ export function ThemeDataBuilder (theme) {
     setupMessageText: '#ed824e',
     infoMessageBubbleBg: '#000000',
     infoMessageBubbleText: 'white',
-    messageIncommingBg: '#ffffff',
+    messageIncommingBg: theme.bgMessageBubbleIncoming,
     messageIncommingDate: theme.textPrimary,
-    messageOutgoingBg: '#efffde',
+    messageOutgoingBg: theme.bgMessageBubbleOutgoing,
     messageOutgoingStatusColor: '#4caf50',
     // Message Bubble - Buttons
     messageButtons: '#8b8e91',
@@ -214,8 +214,9 @@ export const defaultTheme = Object.freeze({
   bgChatView: 'lime',
   bgNavBar: '#415e6b',
   textNavBar: '#fff',
-  scrollbarTransparency: 0.4
-
+  scrollbarTransparency: 0.4,
+  bgMessageBubbleIncoming: '#fff',
+  bgMessageBubbleOutgoing: '#efffde'
 })
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))

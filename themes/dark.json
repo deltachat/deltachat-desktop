@@ -11,9 +11,7 @@
     "bgNavBar": "#4e1479",
     "textNavBar": "#ddddf0",
     "scrollbarTransparency": 0.34,
-    "raw": {
-        "messageIncommingBg": "#303030",
-        "messageOutgoingBg": "#354535"
-
-    }
+    "bgMessageBubbleIncoming": "#303030",
+    "bgMessageBubbleOutgoing": "#354535",
+    "raw": {}
 }
