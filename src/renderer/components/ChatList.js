@@ -19,7 +19,6 @@ const ChatListWrapper = styled.div`
   span.module-contact-name {
     font-weight: 200;
     font-size: medium;
-    color: #232323;
   }
 
   .module-conversation-list-item:hover {
