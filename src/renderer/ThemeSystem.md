@@ -35,18 +35,27 @@ getDefaultThemeData ()
 getDefaultTheme ()
 ```
 
+## Hot reload:
+> Warning: This will also (probably) change in the future.
+```
+npx electron . --theme-watch "./themes/dark.json"
+```
 
 ### TODO
 delete this section after done before merge!
 
-- main menu content [100%]
-- bp3 overwrites (see todo/-comments in scss file) [~100%]
-- emojimart window (see `_emoji-mart-overwrites.scss`) [100%]
 - login screen known acconts text
+- toggle hover
+- main menu seperation bars
+- emoji picker search icon should have color of placeholder
+- emoji picker border can be a bit more pronounced
 
 - gradients? namely:
     - bp3 input focus
     - gradient between chatlist and chatview
+
+- highlevel:
+ - make availible chat bubble color
 
 - sample dark theme
 

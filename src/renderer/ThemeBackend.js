@@ -5,10 +5,10 @@ function changeContrast (colorString, factor) {
   // TODO make the black check code work
   const color = Color(colorString).hex() === '#000000' ? Color('#010101') : Color(colorString)
   if (color.isDark()) {
-    console.log('dark')
+    // console.log('dark')
     return color.lighten(factor).rgb().string()
   } else if (color.isLight()) {
-    console.log('light')
+    // console.log('light')
     return color.darken(factor).rgb().string()
   }
 }
@@ -29,19 +29,17 @@ function changeSaturation (colorString, factor) {
 }
 
 function blendColor (colorString0, colorString1, factor) {
-  console.log(...arguments)
   const color0 = Color(colorString0)
   const color1 = Color(colorString1)
   return color0.mix(color1, factor).rgb().string()  
 }
 
-function undefinedGuard (raw_value, func) {
-  const values = Array.isArray(raw_value) ? raw_value : [raw_value]
-  console.log(raw_value, values, notUndefined(values))
+function undefinedGuard (rawValue, func) {
+  const values = Array.isArray(rawValue) ? rawValue : [rawValue]
   return notUndefined(...values) ? func(...values) : undefined
 }
 
-function notUndefined(...variables){
+function notUndefined (...variables) {
   return !variables.map(v => typeof v === 'undefined').reduce((acc, cur) => acc || cur)
 }
 
@@ -162,12 +160,12 @@ export function ThemeDataBuilder (theme) {
     ),
     emojiMartBg: theme.bgSecondary,
     emojiMartCategoryIcons: undefinedGuard(
-      [theme.textPrimary, theme.bgSecondary], (c1,c2) => blendColor(c1, c2, 0.4)
+      [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.4)
     ),
     emojiMartInputBg: theme.bgSecondary,
     emojiMartInputText: theme.textPrimary,
     emojiMartInputPlaceholder: undefinedGuard(
-      [theme.textPrimary, theme.bgSecondary], (c1,c2) => blendColor(c1, c2, 0.3)
+      [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.3)
     ),
     emojiMartSelect: undefinedGuard(
       theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2) 
@@ -187,10 +185,12 @@ export function ThemeDataBuilder (theme) {
     videoPlayBtnIcon: theme.accentColor,
     videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
     scrollBarThumb: undefinedGuard(
-      theme.scrollbarTransparency, c => Color('black').alpha(c).rgb().string()
+      [theme.scrollbarTransparency, theme.bgPrimary],
+      (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t).rgb().string()
     ),
     scrollBarThumbHover: undefinedGuard(
-      theme.scrollbarTransparency, c => Color('black').alpha(c + 0.14).rgb().string()
+      [theme.scrollbarTransparency, theme.bgPrimary],
+      (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t + 0.14).rgb().string()
     )
 
   }
@@ -203,7 +203,7 @@ export function ThemeDataBuilder (theme) {
 }
 
 export const defaultTheme = Object.freeze({
-  bgImagePath: '../images/background_hd2.svg',
+  bgImagePath: '../images/background_light.svg',
   bgPrimary: '#fff',
   bgSecondary: '#f5f5f5',
   accentColor: '#2090ea',

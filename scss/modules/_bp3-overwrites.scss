@@ -38,12 +38,12 @@
   color: var(--clr-bp3-heading);
 }
 
-.bp3-button:not([class*="bp3-intent-"]) {
+.bp3-button:not([class*="bp3-intent-"], :icon) {
   color: var(--clr-bp3-button-text);
   background-color: var(--clr-bp3-button-bg);
   background-image: linear-gradient(to bottom, var(--clr-bp3-button-gradient-top), var(--clr-bp3-button-gradient-bottom));
 }
-.bp3-button:not([class*="bp3-intent-"]):hover {
+.bp3-button:not([class*="bp3-intent-"], :icon):hover {
   background-color: var(--clr-bp3-button-hover)
 }
 

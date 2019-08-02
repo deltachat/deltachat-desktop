@@ -1,0 +1,19 @@
+{
+    "bgPrimary":"#222",
+    "bgSecondary":"#333",
+    "accentColor": "lightblue",
+    "textPrimary": "#fff",
+    "textSecondary": "#ddd",
+    "ovalButtonBg": "#999",
+    "ovalButtonText": "#fff",
+    "bgImagePath": "../images/background_dark.svg",
+    "bgChatView": "#19232B",
+    "bgNavBar": "#4e1479",
+    "textNavBar": "#ddddf0",
+    "scrollbarTransparency": 0.34,
+    "raw": {
+        "messageIncommingBg": "#303030",
+        "messageOutgoingBg": "#354535"
+
+    }
+}
