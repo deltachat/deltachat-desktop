@@ -215,7 +215,6 @@ export const ThemeVarOverwrite = (theme) => `
 --clr-message-metadata-date-incomming: ${theme.messageMetadataIncomming};
 --clr-message-video-play: ${theme.videoPlayBtnIcon};
 --clr-message-video-overlay-circle: ${theme.videoPlayBtnBg};
---clr-message-author: ${theme.messageAuthor};
 --clr-scrollbar-thumb: ${theme.scrollBarThumb};
 --clr-scrollbar-thumb-hover: ${theme.scrollBarThumbHover};
 `
