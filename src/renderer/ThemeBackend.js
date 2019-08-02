@@ -107,7 +107,7 @@ export function ThemeDataBuilder (theme) {
     // Message Bubble - Attachments
     messageAttachmentIconExtentionColor: '#070c14', // Only changable with theme.raw
     messageAttachmentIconBg: '#ffffff', // Only changable with theme.raw
-    messageAttachmentFileInfo: '#070c14',
+    messageAttachmentFileInfo: theme.textPrimary,
     // Login Screen
     loginInputFocusColor: '#42A5F5',
     loginButtonText: '#42A5F5',
