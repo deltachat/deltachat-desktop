@@ -169,7 +169,6 @@ class SplittedChatListAndView extends React.Component {
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              {profileImage && <img src={profileImage} />}
               <NavbarHeading>
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
