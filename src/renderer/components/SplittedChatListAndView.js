@@ -147,7 +147,6 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChat, filteredChatList, showArchivedChats } = this.state
 
     const tx = window.translate
-    const profileImage = selectedChat && selectedChat.profileImage
 
     const menu = <ScreenContext.Consumer>{(screenContext) =>
       <Menu
