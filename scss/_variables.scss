@@ -37,77 +37,77 @@ $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, No
 
 // Theming Colors
 /* Global */
-$color-global-a: var(--clr-global-a);
-$color-global-bg: var(--clr-global-bg);
-$color-global-text: var(--clr-global-text);
+$color-global-a: var(--globalLinkColor);
+$color-global-bg: var(--globalBackground);
+$color-global-text: var(--globalText);
 
-$color-scrollbar-thumb: var(--clr-scrollbar-thumb);
-$color-scrollbar-thumb-hover: var(--clr-scrollbar-thumb-hover);
+$color-scrollbar-thumb: var(--scrollBarThumb);
+$color-scrollbar-thumb-hover: var(--scrollBarThumbHover);
 
 /* Misc */
-$color-contact-default-label: var(--clr-avatar-label);
-$color-contact-list-item: var(--clr-contact-list-item);
+$color-contact-default-label: var(--avatarLabelColor);
+$color-contact-list-item: var(--contactListItemBg);
 
-$color-map-overlay-bg: var(--clr-map-overlay-bg);
+$color-map-overlay-bg: var(--mapOverlayBg);
 
 /* Message Composer */
-$color-composer-emoji-btn: var(--clr-composer-btn);
-$color-composer-file-btn: var(--clr-composer-btn);
+$color-composer-emoji-btn: var(--composerBtnColor);
+$color-composer-file-btn: var(--composerBtnColor);
 
 /* Chat List (conversation list) */
-$color-conversation-list-has-unread: var(--clr-conversation-list-unread-count-bg);
-$color-conversation-list-unread-count-bg: var(--clr-conversation-list-unread-count-bg);
-$color-conversation-list-unread-count-label: var(--clr-conversation-list-unread-count-label);
-$color-conversation-list-message-error: var(--clr-error);
-$color-conversation-list-avatar-text: var(--clr-avatar-label);
-$chatlist-isgroup-icon: var(--clr-global-text);
+$color-conversation-list-has-unread: var(--unreadCountBg);
+$color-conversation-list-unread-count-bg: var(--unreadCountBg);
+$color-conversation-list-unread-count-label: var(--unreadCountLabel);
+$color-conversation-list-message-error: var(--errorColor);
+$color-conversation-list-avatar-text: var(--avatarLabelColor);
+$chatlist-isgroup-icon: var(--globalText);
 
 /* Message Bubble */
-$color-message-attachment-container-bg: var(clr-message-attachment-container-bg);
+$color-message-attachment-container-bg: var(--messageAttachmentIconBg);
 
-$color-message-author-default-avatar-label: var(--clr-avatar-label);
+$color-message-author-default-avatar-label: var(--avatarLabelColor);
 
-$color-message-broken-image-incomming: var(--clr-broken-media-bg-text);
-$color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
-$color-message-broken-image: var(--clr-broken-media-bg);
-$color-message-broken-video-screenshot: var(--clr-broken-media-bg);
-$color-message-video-play: var(--clr-message-video-play);
-$color-message-video-overlay-circle: var(--clr-message-video-overlay-circle);
+$color-message-broken-image-incomming: var(--brokenMediaText);
+$color-message-broken-video-screenshot-incomming: var(--brokenMediaText);
+$color-message-broken-image: var(--brokenMediaBg);
+$color-message-broken-video-screenshot: var(--brokenMediaBg);
+$color-message-video-play: var(--videoPlayBtnIcon);
+$color-message-video-overlay-circle: var(--videoPlayBtnBg);
 
-$color-message-metadata-date: var(--clr-message-metadata-date);
-$color-message-metadata-date-incomming: var(--clr-message-metadata-date-incomming);
+$color-message-metadata-date: var(--messageMetadataDate);
+$color-message-metadata-date-incomming: var(--messageMetadataIncomming);
 
-$color-message-generic-attachment-icon-extension: var(--clr-message-generic-attachment-icon-extension);
-$color-message-generic-attachment-fileinfo: var(--clr-message-generic-attachment-fileinfo);
-$color-message-text: var(--clr-message-text);
-$color-message-text-underline: var(--clr-message-text-underline);
+$color-message-generic-attachment-icon-extension: var(--messageAttachmentIconExtentionColor);
+$color-message-generic-attachment-fileinfo: var(--messageAttachmentFileInfo);
+$color-message-text: var(--messageText);
+$color-message-text-underline: var(--messageTextLink);
 
-$color-message-metadata-image-no-caption: var(--clr-message-metadata-image-no-caption);
-$color-message-padlock-incomming: var(--clr-message-padlock-incomming);
-$color-message-padlock-outgoing: var(--clr-message-padlock-outgoing);
+$color-message-metadata-image-no-caption: var(--messageMetadataImageNoCaption);
+$color-message-padlock-incomming: var(--messagePadlockIncomming);
+$color-message-padlock-outgoing: var(--messagePadlockOutgoing);
 
-$color-message-button-download: var(--clr-message-buttons);
-$color-message-button-reply: var(--clr-message-buttons);
-$color-message-button-menu: var(--clr-message-buttons);
-$color-message-button-download-hover: var(--clr-message-buttons);
-$color-message-button-reply-hover: var(--clr-message-buttons);
-$color-message-button-menu-hover: var(--clr-message-buttons);
+$color-message-button-download: var(--messageButtons);
+$color-message-button-reply: var(--messageButtons);
+$color-message-button-menu: var(--messageButtons);
+$color-message-button-download-hover: var(--messageButtons);
+$color-message-button-reply-hover: var(--messageButtons);
+$color-message-button-menu-hover: var(--messageButtons);
 
-$color-message-icon-error: var(--clr-error);
+$color-message-icon-error: var(--errorColor);
 
 /* Context menu */
-$color-context-menu-border: var(--clr-context-menu-border);
-$color-context-menu-bg: var(--clr-context-menu-bg);
-$color-context-menu-text: var(--clr-context-menu-text);
-$color-context-menu-selected-bg: var(--clr-context-menu-selected-bg);
-$color-context-menu-selected-text: var(--clr-context-menu-selected);
+$color-context-menu-border: var(--contextMenuBorder);
+$color-context-menu-bg: var(--contextMenuBg);
+$color-context-menu-text: var(--contextMenuText);
+$color-context-menu-selected-bg: var(--contextMenuSelectedBg);
+$color-context-menu-selected-text: var(--contextMenuSelected);
 
 /* Message Status */
-$color-msg-status-icon-sent: var(--clr-message-status-icon);
-$color-msg-status-icon-delivered: var(--clr-message-status-icon);
-$color-msg-status-icon-read: var(--clr-message-status-icon);
-$color-msg-status-icon-error: var(--clr-error);
-$color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
+$color-msg-status-icon-sent: var(--messageStatusIcon);
+$color-msg-status-icon-delivered: var(--messageStatusIcon);
+$color-msg-status-icon-read: var(--messageStatusIcon);
+$color-msg-status-icon-error: var(--errorColor);
+$color-msg-status-icon-sending: var(--messageStatusIconSending);
 
 
 // Belongs to stuff we plan to remove / change anyway 

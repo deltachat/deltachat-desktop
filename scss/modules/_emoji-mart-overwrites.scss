@@ -3,41 +3,41 @@
 }
 
 .emoji-mart {
-    color: var(--clr-emoji-mart);
-    border: 1px solid var(--clr-emoji-mart-border);
-    background: var(--clr-emoji-mart-bg);
+    color: var(--emojiMartText);
+    border: 1px solid var(--emojiMartBorder);
+    background: var(--emojiMartBg);
 }
 
 .emoji-mart-anchors svg, .emoji-mart-anchors img {
-    fill: var(--clr-emoji-mart-category-icons);
+    fill: var(--emojiMartCategoryIcons);
 }
 
 .emoji-mart-bar {
-    border: 0 solid var(--clr-emoji-mart-border);
+    border: 0 solid var(--emojiMartBorder);
 }
 
 .emoji-mart-category-label span {
     /* disable? -> no its important when scrolling */
-    background-color: var(--clr-emoji-mart-bg);
+    background-color: var(--emojiMartBg);
 }
 
 // searchbar
 .emoji-mart-search input {
-    color: var(--clr-emoji-mart-input-text);
-    border: 1px solid var(--clr-emoji-mart-border);
-    background-color: var(--clr-emoji-mart-input-bg);
+    color: var(--emojiMartInputText);
+    border: 1px solid var(--emojiMartBorder);
+    background-color: var(--emojiMartInputBg);
 }
 
 .emoji-mart-search input::placeholder {
-    color: var(--clr-emoji-mart-input-placeholder);
+    color: var(--emojiMartInputPlaceholder);
 }
 
 .emoji-mart-search-icon {
-    fill: var(--clr-emoji-mart-input-placeholder);
+    fill: var(--emojiMartInputPlaceholder);
 }
 
 
 // select background circle
 .emoji-mart-category .emoji-mart-emoji:hover:before {
-    background-color: var(--clr-emoji-mart-select);
+    background-color: var(--emojiMartSelect);
 }
