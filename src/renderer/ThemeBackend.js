@@ -221,68 +221,12 @@ export const defaultTheme = Object.freeze({
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ThemeVarOverwrite = (theme) => `
---avatarLabelColor: ${theme.avatarLabelColor};
---brokenMediaBg: ${theme.brokenMediaBg};
---brokenMediaText: ${theme.brokenMediaText};
---contextMenuBg: ${theme.contextMenuBg};
---contextMenuBorder: ${theme.contextMenuBorder} ;
---contextMenuText: ${theme.contextMenuText} ;
---contextMenuSelected: ${theme.contextMenuSelected};
---contextMenuSelectedBg: ${theme.contextMenuSelectedBg};
---unreadCountBg: ${theme.unreadCountBg} ;
---unreadCountLabel: ${theme.unreadCountLabel};
---contactListItemBg: ${theme.contactListItemBg};
---composerBtnColor: ${theme.composerBtnColor};
---errorColor: ${theme.errorColor};
---globalLinkColor: ${theme.globalLinkColor};
---globalBackground: ${theme.globalBackground};
---globalText: ${theme.globalText};
---mapOverlayBg: ${theme.mapOverlayBg};
---messageStatusIcon: ${theme.messageStatusIcon};
---messageStatusIconSending: ${theme.messageStatusIconSending};
---messageButtons: ${theme.messageButtons};
---messageButtons-hover: ${theme.messageButtonsHover};
---messagePadlockOutgoing: ${theme.messagePadlockOutgoing};
---messagePadlockIncomming: ${theme.messagePadlockIncomming};
---messageMetadataImageNoCaption: ${theme.messageMetadataImageNoCaption};
---messageText: ${theme.messageText};
---messageTextLink: ${theme.messageTextLink};
---messageAttachmentIconExtentionColor: ${theme.messageAttachmentIconExtentionColor};
---messageAttachmentFileInfo: ${theme.messageAttachmentFileInfo};
---messageAttachmentIconBg: ${theme.messageAttachmentIconBg};
---messageMetadataDate: ${theme.messageMetadataDate};
---messageMetadataIncomming: ${theme.messageMetadataIncomming};
---videoPlayBtnIcon: ${theme.videoPlayBtnIcon};
---videoPlayBtnBg: ${theme.videoPlayBtnBg};
---scrollBarThumb: ${theme.scrollBarThumb};
---scrollBarThumbHover: ${theme.scrollBarThumbHover};
---emojiMartText: ${theme.emojiMartText};
---emojiMartBorder: ${theme.emojiMartBorder};
---emojiMartBg: ${theme.emojiMartBg};
---emojiMartCategoryIcons: ${theme.emojiMartCategoryIcons};
---emojiMartInputText: ${theme.emojiMartInputText};
---emojiMartInputBg: ${theme.emojiMartInputBg};
---emojiMartInputPlaceholder: ${theme.emojiMartInputPlaceholder};
---emojiMartSelect: ${theme.emojiMartSelect};
---bp3DialogBg: ${theme.bp3DialogBg};
---bp3DialogCardBg: ${theme.bp3DialogCardBg};
---bp3Heading: ${theme.bp3Heading}
---bp3ButtonText: ${theme.bp3ButtonText};
---bp3ButtonBg: ${theme.bp3ButtonBg};
---bp3ButtonGradientTop: ${theme.bp3ButtonGradientTop};
---bp3ButtonGradientBottom: ${theme.bp3ButtonGradientBottom};
---bp3ButtonHoverBg: ${theme.bp3ButtonHoverBg};
---bp3DialogHeaderBg: ${theme.bp3DialogHeaderBg};
---bp3MenuBg: ${theme.bp3MenuBg};
---bp3MenuText: ${theme.bp3MenuText};
---bp3InputBg: ${theme.bp3InputBg};        
---bp3InputText: ${theme.bp3InputText};                 
---bp3InputPlaceholder: ${theme.bp3InputPlaceholder};     
---bp3DialogHeaderIcon: ${theme.bp3DialogHeaderIcon};
---bp3SwitchBg: ${theme.bp3SwitchBg};
---bp3SwitchBeforeShadow: ${theme.bp3SwitchBeforeShadow};
---bp3SwitchBeforeBg: ${theme.bp3SwitchBeforeBg};
---bp3SwitchChecked: ${theme.bp3SwitchChecked};
---bp3SwitchCheckedBeforeShadow: ${theme.bp3SwitchCheckedBeforeShadow};
-`
+export const ThemeVarOverwrite = (theme) => {
+  var css = ''
+  for (var key in theme) {
+    if (Object.hasOwnProperty.bind(theme, key)) {
+      css += `--${key}: ${theme[key]};`
+    }
+  }
+  return `:root {${css}}`
+}
