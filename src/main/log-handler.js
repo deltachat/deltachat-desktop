@@ -23,6 +23,7 @@ function logName () {
 module.exports = () => {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
+  /* ignore-console-log */
   console.log(`Logfile: ${fileName}`)
   return {
     /**

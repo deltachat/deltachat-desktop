@@ -7,12 +7,12 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 
 const { remote, ipcRenderer } = require('electron')
-const localize = require('../localize')
-const moment = require('moment')
-const App = require('./App')
 const logger = require('../logger')
 logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
 const log = logger.getLogger('render/main')
+const localize = require('../localize')
+const moment = require('moment')
+const App = require('./App')
 
 const STATE_WRAPPER = {}
 const state = STATE_WRAPPER.state = remote.app.state

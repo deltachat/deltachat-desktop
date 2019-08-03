@@ -20,7 +20,9 @@ function setLogHandler (LogHandler) {
 function log (channel, level, ...args) {
   const variant = LoggerVariants[level]
   if (!handler) {
+    /* ignore-console-log */
     console.log('Failed to log message - Handler not initilized yet')
+    /* ignore-console-log */
     console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
     throw Error('Failed to log message - Handler not initilized yet')
   }

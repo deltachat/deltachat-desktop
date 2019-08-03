@@ -79,7 +79,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('EVENT_DC_FUNCTION_CALL', (evt, fnName, ...args) => {
-    console.log('EVENT_DC_FUNCTION_CALL: ', fnName, args)
+    log.debug('EVENT_DC_FUNCTION_CALL: ', fnName, args)
     dc.handleRendererEvent(evt, fnName, args)
   })
 
