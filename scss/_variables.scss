@@ -35,63 +35,7 @@ $emojifonts: 'Apple Color Emoji', NotoEmoji;
 $roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 
-// Theming Colors
-/* Misc */
-$color-contact-default-label: var(--avatarLabelColor);
-$color-contact-list-item: var(--contactListItemBg);
-
-$color-map-overlay-bg: var(--mapOverlayBg);
-
-/* Message Composer */
-$color-composer-emoji-btn: var(--composerBtnColor);
-
-/* Chat List (conversation list) */
-$color-conversation-list-has-unread: var(--unreadCountBg);
-$color-conversation-list-unread-count-bg: var(--unreadCountBg);
-$color-conversation-list-unread-count-label: var(--unreadCountLabel);
-$color-conversation-list-message-error: var(--errorColor);
-$color-conversation-list-avatar-text: var(--avatarLabelColor);
-$chatlist-isgroup-icon: var(--globalText);
-
-/* Message Bubble */
-$color-message-attachment-container-bg: var(--messageAttachmentIconBg);
-
-$color-message-author-default-avatar-label: var(--avatarLabelColor);
-
-$color-message-broken-image-incomming: var(--brokenMediaText);
-$color-message-broken-video-screenshot-incomming: var(--brokenMediaText);
-$color-message-broken-image: var(--brokenMediaBg);
-$color-message-broken-video-screenshot: var(--brokenMediaBg);
-$color-message-video-play: var(--videoPlayBtnIcon);
-$color-message-video-overlay-circle: var(--videoPlayBtnBg);
-
-$color-message-metadata-date: var(--messageMetadataDate);
-$color-message-metadata-date-incomming: var(--messageMetadataIncomming);
-
-$color-message-generic-attachment-icon-extension: var(--messageAttachmentIconExtentionColor);
-$color-message-generic-attachment-fileinfo: var(--messageAttachmentFileInfo);
-$color-message-text: var(--messageText);
-$color-message-text-underline: var(--messageTextLink);
-
-$color-message-metadata-image-no-caption: var(--messageMetadataImageNoCaption);
-$color-message-padlock-incomming: var(--messagePadlockIncomming);
-$color-message-padlock-outgoing: var(--messagePadlockOutgoing);
-
-$color-message-button-download: var(--messageButtons);
-$color-message-button-reply: var(--messageButtons);
-$color-message-button-menu: var(--messageButtons);
-$color-message-button-download-hover: var(--messageButtons);
-$color-message-button-reply-hover: var(--messageButtons);
-$color-message-button-menu-hover: var(--messageButtons);
-
-$color-message-icon-error: var(--errorColor);
-
-/* Message Status */
-$color-msg-status-icon-sent: var(--messageStatusIcon);
-$color-msg-status-icon-delivered: var(--messageStatusIcon);
-$color-msg-status-icon-read: var(--messageStatusIcon);
-$color-msg-status-icon-error: var(--errorColor);
-$color-msg-status-icon-sending: var(--messageStatusIconSending);
+/* Theming Colors */
 
 
 // Belongs to stuff we plan to remove / change anyway 

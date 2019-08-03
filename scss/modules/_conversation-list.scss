@@ -1,4 +1,10 @@
-// Module: Conversation List Item
+/* Chat List (conversation list) */
+$color-conversation-list-has-unread: var(--unreadCountBg);
+$color-conversation-list-unread-count-bg: var(--unreadCountBg);
+$color-conversation-list-unread-count-label: var(--unreadCountLabel);
+$color-conversation-list-message-error: var(--errorColor);
+$color-conversation-list-avatar-text: var(--avatarLabelColor);
+$chatlist-isgroup-icon: var(--globalText);
 
 .module-conversation-list-item {
   display: flex;

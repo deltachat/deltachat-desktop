@@ -1,5 +1,7 @@
 @import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
+$color-map-overlay-bg: var(--mapOverlayBg);
+
 #map {
 	width: 90vw;
 	height: 90vh;
