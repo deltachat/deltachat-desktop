@@ -4,7 +4,7 @@
     "accentColor": "lightblue",
     "textPrimary": "#fff",
     "textSecondary": "#ddd",
-    "ovalButtonBg": "#999",
+    "ovalButtonBg": "darkgreen",
     "ovalButtonText": "#fff",
     "bgImagePath": "../images/background_dark.svg",
     "bgChatView": "#19232B",

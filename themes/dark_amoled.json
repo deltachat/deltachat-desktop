@@ -4,7 +4,7 @@
     "accentColor": "purple",
     "textPrimary": "#fff",
     "textSecondary": "#ddd",
-    "ovalButtonBg": "#999",
+    "ovalButtonBg": "darkgreen",
     "ovalButtonText": "#fff",
     "bgImagePath": "none",
     "bgChatView": "#000",
