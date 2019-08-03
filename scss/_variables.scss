@@ -36,14 +36,6 @@ $roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans
 $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 
 // Theming Colors
-/* Global */
-$color-global-a: var(--globalLinkColor);
-$color-global-bg: var(--globalBackground);
-$color-global-text: var(--globalText);
-
-$color-scrollbar-thumb: var(--scrollBarThumb);
-$color-scrollbar-thumb-hover: var(--scrollBarThumbHover);
-
 /* Misc */
 $color-contact-default-label: var(--avatarLabelColor);
 $color-contact-list-item: var(--contactListItemBg);
@@ -93,13 +85,6 @@ $color-message-button-reply-hover: var(--messageButtons);
 $color-message-button-menu-hover: var(--messageButtons);
 
 $color-message-icon-error: var(--errorColor);
-
-/* Context menu */
-$color-context-menu-border: var(--contextMenuBorder);
-$color-context-menu-bg: var(--contextMenuBg);
-$color-context-menu-text: var(--contextMenuText);
-$color-context-menu-selected-bg: var(--contextMenuSelectedBg);
-$color-context-menu-selected-text: var(--contextMenuSelected);
 
 /* Message Status */
 $color-msg-status-icon-sent: var(--messageStatusIcon);

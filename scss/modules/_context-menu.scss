@@ -1,13 +1,13 @@
 // Third-party module: react-contextmenu
 
 .react-contextmenu {
-  background-color: $color-context-menu-bg;
+  background-color: var(--contextMenuBg);
   border-radius: 4px;
   min-width: 160px;
   padding: 0;
   padding-top: 8px;
   padding-bottom: 8px;
-  border: 1px solid $color-context-menu-border;
+  border: 1px solid var(--contextMenuBorder);
   opacity: 0;
 }
 
@@ -17,7 +17,7 @@
 }
 
 .react-contextmenu-item {
-  color: $color-context-menu-text;
+  color: var(--contextMenuText);
 
   cursor: pointer;
   font-size: 13px;
@@ -36,12 +36,12 @@
   display: inline-block;
   position: absolute;
   right: 7px;
-  color: $color-context-menu-selected-text;
+  color: var(--contextMenuSelected);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {
   padding: 0;
-  color: $color-context-menu-text;
+  color: var(--contextMenuText);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
@@ -54,23 +54,23 @@
   display: inline-block;
   position: absolute;
   right: 7px;
-  color: $color-context-menu-text;
+  color: var(--contextMenuText);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
-  color: $color-context-menu-selected-text;
-  background-color: $color-context-menu-selected-bg;
+  color: var(--contextMenuSelected);
+  background-color: var(--contextMenuSelectedBg);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active.react-contextmenu-item--checked:before,
 .react-contextmenu-item.react-contextmenu-item--selected.react-contextmenu-item--checked:before {
-  color: $color-context-menu-selected-text;
+  color: var(--contextMenuSelected);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--active:after,
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--selected:after {
-  color: $color-context-menu-selected-text;
+  color: var(--contextMenuSelected);
 }
