@@ -223,8 +223,8 @@ export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
 export const ThemeVarOverwrite = (theme) => {
   var css = ''
-  for (var key in theme) {
-    if (Object.hasOwnProperty.bind(theme, key)) {
+  for (var key in defaultThemeData) {
+    if (Object.hasOwnProperty.bind(defaultThemeData, key)) {
       css += `--${key}: ${theme[key]};`
     }
   }
