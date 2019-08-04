@@ -202,22 +202,7 @@ export function ThemeDataBuilder (theme) {
   return themeData
 }
 
-export const defaultTheme = Object.freeze({
-  bgImagePath: '../images/background_light.svg',
-  bgPrimary: '#fff',
-  bgSecondary: '#f5f5f5',
-  accentColor: '#2090ea',
-  textPrimary: '#010101',
-  textSecondary: '#62656a',
-  ovalButtonBg: '#415e6b',
-  ovalButtonText: '#fff',
-  bgChatView: 'lime',
-  bgNavBar: '#415e6b',
-  textNavBar: '#fff',
-  scrollbarTransparency: 0.4,
-  bgMessageBubbleIncoming: '#fff',
-  bgMessageBubbleOutgoing: '#efffde'
-})
+export const defaultTheme = Object.freeze(require('../../themes/light.json'))
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 

@@ -91,8 +91,6 @@ function onReady (err, results) {
     })
   }
 
-  log.info('hallo')
-
   if (app.rc['theme']) {
     log.info(`theme: trying to load theme from '${app.rc['theme']}'`)
     if (fs.existsSync(app.rc['theme'])) {
