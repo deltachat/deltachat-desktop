@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
 const chatStore = require('./chat')
 const mapCoreMsgStatus2String = require('../components/helpers/MapMsgStatus')
+const log = require('../../logger').getLogger('renderer/stores/chatList')
 
 const defaultState = {
   chatList: [],
@@ -69,7 +70,7 @@ function reducer (action, componentState) {
     const { chatId, text } = action.payload
     const chat = componentState.chatList.find(chat => chat.id === chatId)
     if (!chat) {
-      console.log('Chat not found')
+      log.debug('Chat not found')
       return
     }
     let { text1, text2, text1Meaning, _initialText, state } = chat.summary

@@ -24,7 +24,7 @@ const app = ReactDOM.render(
   document.querySelector('#root')
 )
 ipcRenderer.on('ALL', (e, eName, ...args) => log.debug('ipcRenderer', eName, ...args))
-ipcRenderer.on('error', (e, ...args) => console.error(...args))
+ipcRenderer.on('error', (e, ...args) => log.error(...args))
 
 ipcRenderer.on('chooseLanguage', onChooseLanguage)
 

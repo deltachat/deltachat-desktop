@@ -10,6 +10,8 @@ import {
   openEncryptionInfoDialog
 } from './helpers/ChatMethods'
 
+const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
+
 const ChatListContextMenu = React.memo((props) => {
   const screenContext = useContext(ScreenContext)
   const { showArchivedChats } = props
@@ -18,7 +20,7 @@ const ChatListContextMenu = React.memo((props) => {
   const contextMenu = useRef(null)
 
   const show = (event, chat) => {
-    console.log('ChatListContextMenu.show', chat, event)
+    log.debug('ChatListContextMenu.show', chat, event)
     /*
      This is a workaround because react-contextmenu
      has no official programatic way of opening the menu yet
@@ -48,7 +50,6 @@ const ChatListContextMenu = React.memo((props) => {
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
 
   const tx = window.translate
-  console.log(chat)
   return (
     <ContextMenu id='chat-options' ref={contextMenu} onHide={reset}>
       {showArchivedChats

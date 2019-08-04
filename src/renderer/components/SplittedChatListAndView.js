@@ -26,6 +26,8 @@ const {
   Button
 } = require('@blueprintjs/core')
 
+const log = require('../../logger').getLogger('renderer/SplittedChatListAndView')
+
 const NavbarGroupName = styled.div`
   font-size: medium;
   font-weight: bold;
@@ -82,7 +84,6 @@ class SplittedChatListAndView extends React.Component {
   }
 
   componentDidMount () {
-    console.log('componentDidMount', this.state)
     chatStore.subscribe(this.onChatUpdate)
     chatListStore.subscribe(this.onChatListUpdate)
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
@@ -111,7 +112,7 @@ class SplittedChatListAndView extends React.Component {
         this.chatView.current.refComposer.current.messageInputRef.current.focus()
       }
     } catch (error) {
-      console.debug(error)
+      log.debug(error)
     }
   }
 

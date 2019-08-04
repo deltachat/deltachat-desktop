@@ -114,17 +114,3 @@ module.exports = function () {
   this.close = close.bind(this)
   this.getPath = getPath.bind(this)
 }
-
-if (!module.parent) {
-  // TODO move this to unit tests
-  console.log(serverFlags({
-    mailSecurity: 'ssl',
-    sendSecurity: 'ssl'
-  }))
-  console.log(C.DC_LP_IMAP_SOCKET_SSL | C.DC_LP_SMTP_SOCKET_SSL)
-  console.log(serverFlags({
-    mailSecurity: 'starttls',
-    sendSecurity: 'starttls'
-  }))
-  console.log(C.DC_LP_IMAP_SOCKET_STARTTLS | C.DC_LP_SMTP_SOCKET_STARTTLS)
-}

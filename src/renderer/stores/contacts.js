@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
+const log = require('../../logger').getLogger('renderer/stores/contacts')
 
 const defaultState = {
   contacts: [],
@@ -18,7 +19,7 @@ ipcRenderer.on('DD_EVENT_BLOCKED_CONTACTS_UPDATED', (evt, payload) => {
 ipcRenderer.on('DD_EVENT_CONTACTS_UPDATED', (evt, payload) => {
   const { contacts } = payload
   const state = contactsStore.getState()
-  console.log('DD_EVENT_CONTACTS_UPDATED', contacts)
+  log.debug('DD_EVENT_CONTACTS_UPDATED', contacts)
   contactsStore.setState({ ...state, contacts })
 })
 
