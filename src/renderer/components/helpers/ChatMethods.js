@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron'
 const chatListStore = require('../../stores/chatList')
 
 export function archiveChat (chatId, archive) {
-  chatListStore.dispatch({ type: 'UI_ARCHIVE_CHAT', payload: { chatId } })
+  chatListStore.dispatch({ type: 'UI_ARCHIVE_CHAT', payload: { chatId, archive } })
 }
 
 export function openLeaveChatDialog (screenContext, chatId) {

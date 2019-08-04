@@ -215,7 +215,7 @@ class SplittedChatListAndView extends React.Component {
                   />)
                 : (
                   <Welcome>
-                    <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+                    <h3>{tx('no_chat_selected_suggestion_desktop')}</h3>
                   </Welcome>
                 )
               : (
