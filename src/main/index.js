@@ -5,6 +5,7 @@ const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 
 if (!app.requestSingleInstanceLock()) {
+  /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()
 }
@@ -69,27 +70,27 @@ function onReady (err, results) {
   if (app.rc['translation-watch']) {
     fs.watchFile('_locales/_experimental_en.json', (curr, prev) => {
       if (curr.mtime !== prev.mtime) {
-        console.log('File changed reloading translation data')
+        log.info('translation-watch: File changed reloading translation data')
         windows.main.chooseLanguage(app.localeData.locale)
-        console.log('reloading translation data - done')
+        log.info('translation-watch: reloading translation data - done')
       }
     })
   }
 
   if (app.rc['theme-watch']) {
-    console.log('theme-watch activated: ', app.rc['theme-watch'])
+    log.info('theme-watch activated: ', app.rc['theme-watch'])
     if (fs.existsSync(app.rc['theme-watch'])) {
       fs.watchFile(app.rc['theme-watch'], (curr, prev) => {
         if (curr.mtime !== prev.mtime) {
-          console.log('File changed reloading theme data')
+          log.info('theme-watch: File changed reloading theme data')
           // TODO make this more safe or disable when merging
           const content = fs.readFileSync(app.rc['theme-watch'])
           windows.main.send('theme-update', JSON.parse(content))
-          console.log('reloading theme data - done')
+          log.info('theme-watch: reloading theme data - done')
         }
       })
     } else {
-      console.log("couldn't find file")
+      log.error("theme-watch: couldn't find file")
     }
   }
 }
@@ -113,14 +114,14 @@ function quit (e) {
   e.preventDefault()
 
   function doQuit () {
-    console.log('Quitting now. Bye.')
+    log.info('Quitting now. Bye.')
     app.quit()
   }
 
   State.saveImmediate(app.state, doQuit)
 
   setTimeout(() => {
-    console.error('Saving state took too long. Quitting.')
+    log.error('Saving state took too long. Quitting.')
     doQuit()
   }, 4000)
 }

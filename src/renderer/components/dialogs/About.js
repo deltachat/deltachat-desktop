@@ -8,6 +8,7 @@ const {
 } = require('../../../application-constants')
 
 const { ipcRenderer, clipboard } = require('electron')
+const log = require('../../../logger').getLogger('renderer/dialogs/About')
 
 class ClickableLink extends React.Component {
   onClick () {
@@ -42,7 +43,7 @@ class DCInfo extends React.Component {
     ipcRenderer.send('getDCinfo')
     ipcRenderer.once('dcInfo', (e, info) => {
       this.setState({ loading: false, content: info })
-      console.log('dcInfo', info)
+      log.debug('dcInfo', info)
       this.forceUpdate()
     })
   }

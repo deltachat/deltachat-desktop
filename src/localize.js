@@ -77,7 +77,7 @@ function setup (app, locale) {
     log.debug(`No experimental language file (${experimentalFile}) found`)
   }
 
-  console.log(messages['no_chat_selected_suggestion_desktop'])
+  log.debug(messages['no_chat_selected_suggestion_desktop'])
   const localeData = { messages, locale }
   app.localeData = localeData
   app.translate = translate(app.localeData.messages)

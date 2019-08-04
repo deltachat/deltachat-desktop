@@ -31,7 +31,7 @@ function selectChat (chatId) {
 }
 
 function updateChatList () {
-  console.log('updateChatList')
+  log.debug('updateChatList')
   const chatList = this._chatList(this._showArchivedChats)
   this.sendToRenderer('DD_EVENT_CHATLIST_UPDATED', { chatList, showArchivedChats: this._showArchivedChats })
 }

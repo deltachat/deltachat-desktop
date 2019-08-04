@@ -25,6 +25,8 @@ const defaultState = {
 }
 const chatStore = new Store(defaultState)
 
+const log = require('../../logger').getLogger('renderer/stores/chat')
+
 // remove the message from state immediately
 chatStore.reducers.push((action, state) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
@@ -60,7 +62,7 @@ ipcRenderer.on('DD_MESSAGES_LOADED', (evt, payload) => {
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   const { chatId, messageObj, eventType } = payload
   const state = chatStore.getState()
-  console.log('DD_EVENT_MSG_UPDATE: ', eventType)
+  log.debug('DD_EVENT_MSG_UPDATE: ', eventType)
   if (state.id !== chatId) {
     return
   }
