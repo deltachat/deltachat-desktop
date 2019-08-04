@@ -25,21 +25,26 @@ walker.on('file', function (root, fileStats, next) {
     const lines = data.split('\n')
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
-      if (line.indexOf('console.') !== -1) {
-        if (/console.(debug|log|info|error)\(/.test(line)) {
-          const previousLine = i === 0 ? '' : lines[i - 1]
-          if (!previousLine.includes('/* ignore-console-log */') && !/^\s*\/\//.test(line)) {
-            formattedOutput(
-              `${filename}:${i + 1}`,
-              lines.slice(i - 1, i + 2).join('\n').replace(
-                line,
-                string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${s1.cyan}${s2.red}${s3.cyan}`)
-              )
-            )
-            found++
-          }
-        }
-      }
+      const previousLine = i === 0 ? '' : lines[i - 1]
+
+      const lineContainsConsoleLog = line.indexOf('console.') !== -1 &&
+          /console.(debug|log|info|error)\(/.test(line) === true
+
+      if (!lineContainsConsoleLog) continue
+
+      const ignoreConsoleLog = previousLine.includes('/* ignore-console-log */') ||
+        /^\s*\/\//.test(line)
+
+      if (ignoreConsoleLog) continue
+
+      formattedOutput(
+        `${filename}:${i + 1}`,
+        lines.slice(i - 1, i + 2).join('\n').replace(
+          line,
+          string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${s1.cyan}${s2.red}${s3.cyan}`)
+        )
+      )
+      found++
     }
     next()
   })
