@@ -1,11 +1,6 @@
 const styled = require('styled-components').default
 
 module.exports = styled.div`
-  img {
-    height: 40px;
-    margin-left: 5px;
-  }
-
   .bp3-navbar {
     padding: 0px;
     background-color: ${props => props.theme.navBarBackground};
