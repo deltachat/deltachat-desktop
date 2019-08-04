@@ -35,7 +35,12 @@
 }
   
 
-// Message Status
+/* Message Status */
+$color-msg-status-icon-sent: var(--messageStatusIcon);
+$color-msg-status-icon-delivered: var(--messageStatusIcon);
+$color-msg-status-icon-read: var(--messageStatusIcon);
+$color-msg-status-icon-error: var(--errorColor);
+$color-msg-status-icon-sending: var(--messageStatusIconSending);
 
 .status-icon--sending {
     @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);

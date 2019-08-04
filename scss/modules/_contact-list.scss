@@ -1,4 +1,6 @@
 // Module: Contact List Item
+$color-contact-default-label: var(--avatarLabelColor);
+$color-contact-list-item: var(--contactListItemBg);
 
 .module-contact-list-item {
   padding-top: 5px;

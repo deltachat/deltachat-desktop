@@ -1,3 +1,36 @@
+/* Message Bubble */
+$color-message-attachment-container-bg: var(--messageAttachmentIconBg);
+
+$color-message-author-default-avatar-label: var(--avatarLabelColor);
+
+$color-message-broken-image-incomming: var(--brokenMediaText);
+$color-message-broken-video-screenshot-incomming: var(--brokenMediaText);
+$color-message-broken-image: var(--brokenMediaBg);
+$color-message-broken-video-screenshot: var(--brokenMediaBg);
+$color-message-video-play: var(--videoPlayBtnIcon);
+$color-message-video-overlay-circle: var(--videoPlayBtnBg);
+
+$color-message-metadata-date: var(--messageMetadataDate);
+$color-message-metadata-date-incomming: var(--messageMetadataIncomming);
+
+$color-message-generic-attachment-icon-extension: var(--messageAttachmentIconExtentionColor);
+$color-message-generic-attachment-fileinfo: var(--messageAttachmentFileInfo);
+$color-message-text: var(--messageText);
+$color-message-text-underline: var(--messageTextLink);
+
+$color-message-metadata-image-no-caption: var(--messageMetadataImageNoCaption);
+$color-message-padlock-incomming: var(--messagePadlockIncomming);
+$color-message-padlock-outgoing: var(--messagePadlockOutgoing);
+
+$color-message-button-download: var(--messageButtons);
+$color-message-button-reply: var(--messageButtons);
+$color-message-button-menu: var(--messageButtons);
+$color-message-button-download-hover: var(--messageButtons);
+$color-message-button-reply-hover: var(--messageButtons);
+$color-message-button-menu-hover: var(--messageButtons);
+
+$color-message-icon-error: var(--errorColor);
+
 .module-message {
   position: relative;
   display: inline-flex;

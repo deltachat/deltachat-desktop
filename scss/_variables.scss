@@ -35,79 +35,7 @@ $emojifonts: 'Apple Color Emoji', NotoEmoji;
 $roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
 
-// Theming Colors
-/* Global */
-$color-global-a: var(--clr-global-a);
-$color-global-bg: var(--clr-global-bg);
-$color-global-text: var(--clr-global-text);
-
-$color-scrollbar-thumb: var(--clr-scrollbar-thumb);
-$color-scrollbar-thumb-hover: var(--clr-scrollbar-thumb-hover);
-
-/* Misc */
-$color-contact-default-label: var(--clr-avatar-label);
-$color-contact-list-item: var(--clr-contact-list-item);
-
-$color-map-overlay-bg: var(--clr-map-overlay-bg);
-
-/* Message Composer */
-$color-composer-emoji-btn: var(--clr-composer-btn);
-$color-composer-file-btn: var(--clr-composer-btn);
-
-/* Chat List (conversation list) */
-$color-conversation-list-has-unread: var(--clr-conversation-list-unread-count-bg);
-$color-conversation-list-unread-count-bg: var(--clr-conversation-list-unread-count-bg);
-$color-conversation-list-unread-count-label: var(--clr-conversation-list-unread-count-label);
-$color-conversation-list-message-error: var(--clr-error);
-$color-conversation-list-avatar-text: var(--clr-avatar-label);
-$chatlist-isgroup-icon: var(--clr-global-text);
-
-/* Message Bubble */
-$color-message-attachment-container-bg: var(clr-message-attachment-container-bg);
-
-$color-message-author-default-avatar-label: var(--clr-avatar-label);
-
-$color-message-broken-image-incomming: var(--clr-broken-media-bg-text);
-$color-message-broken-video-screenshot-incomming: var(--clr-broken-media-bg-text);
-$color-message-broken-image: var(--clr-broken-media-bg);
-$color-message-broken-video-screenshot: var(--clr-broken-media-bg);
-$color-message-video-play: var(--clr-message-video-play);
-$color-message-video-overlay-circle: var(--clr-message-video-overlay-circle);
-
-$color-message-metadata-date: var(--clr-message-metadata-date);
-$color-message-metadata-date-incomming: var(--clr-message-metadata-date-incomming);
-
-$color-message-generic-attachment-icon-extension: var(--clr-message-generic-attachment-icon-extension);
-$color-message-generic-attachment-fileinfo: var(--clr-message-generic-attachment-fileinfo);
-$color-message-text: var(--clr-message-text);
-$color-message-text-underline: var(--clr-message-text-underline);
-
-$color-message-metadata-image-no-caption: var(--clr-message-metadata-image-no-caption);
-$color-message-padlock-incomming: var(--clr-message-padlock-incomming);
-$color-message-padlock-outgoing: var(--clr-message-padlock-outgoing);
-
-$color-message-button-download: var(--clr-message-buttons);
-$color-message-button-reply: var(--clr-message-buttons);
-$color-message-button-menu: var(--clr-message-buttons);
-$color-message-button-download-hover: var(--clr-message-buttons);
-$color-message-button-reply-hover: var(--clr-message-buttons);
-$color-message-button-menu-hover: var(--clr-message-buttons);
-
-$color-message-icon-error: var(--clr-error);
-
-/* Context menu */
-$color-context-menu-border: var(--clr-context-menu-border);
-$color-context-menu-bg: var(--clr-context-menu-bg);
-$color-context-menu-text: var(--clr-context-menu-text);
-$color-context-menu-selected-bg: var(--clr-context-menu-selected-bg);
-$color-context-menu-selected-text: var(--clr-context-menu-selected);
-
-/* Message Status */
-$color-msg-status-icon-sent: var(--clr-message-status-icon);
-$color-msg-status-icon-delivered: var(--clr-message-status-icon);
-$color-msg-status-icon-read: var(--clr-message-status-icon);
-$color-msg-status-icon-error: var(--clr-error);
-$color-msg-status-icon-sending: var(--clr-message-status-icon-sending);
+/* Theming Colors */
 
 
 // Belongs to stuff we plan to remove / change anyway 
@@ -127,4 +55,3 @@ $button-height: 24px;
 $border-radius: 5px;
 
 $font-size: 14px;
-$font-size-small: (13/14) + em;

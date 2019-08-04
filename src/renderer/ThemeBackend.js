@@ -221,68 +221,12 @@ export const defaultTheme = Object.freeze({
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ThemeVarOverwrite = (theme) => `
---clr-avatar-label: ${theme.avatarLabelColor};
---clr-broken-media-bg: ${theme.brokenMediaText};
---clr-broken-media-bg-text: ${theme.brokenMediaBg};
---clr-context-menu-bg: ${theme.contextMenuBg};
---clr-context-menu-border: ${theme.contextMenuBorder} ;
---clr-context-menu-text: ${theme.contextMenuText} ;
---clr-context-menu-selected: ${theme.contextMenuSelected};
---clr-context-menu-selected-bg: ${theme.contextMenuSelectedBg};
---clr-conversation-list-unread-count-bg: ${theme.unreadCountBg} ;
---clr-conversation-list-unread-count-label: ${theme.unreadCountLabel};
---clr-contact-list-item: ${theme.contactListItemBg};
---clr-composer-btn: ${theme.composerBtnColor};
---clr-error: ${theme.errorColor};
---clr-global-a: ${theme.globalLinkColor};
---clr-global-bg: ${theme.globalBackground};
---clr-global-text: ${theme.globalText};
---clr-map-overlay-bg: ${theme.mapOverlayBg};
---clr-message-status-icon: ${theme.messageStatusIcon};
---clr-message-status-icon-sending: ${theme.messageStatusIconSending};
---clr-message-buttons: ${theme.messageButtons};
---clr-message-buttons-hover: ${theme.messageButtonsHover};
---clr-message-padlock-outgoing: ${theme.messagePadlockOutgoing};
---clr-message-padlock-incomming: ${theme.messagePadlockIncomming};
---clr-message-metadata-image-no-caption: ${theme.messageMetadataImageNoCaption};
---clr-message-text: ${theme.messageText};
---clr-message-text-underline: ${theme.messageTextLink};
---clr-message-generic-attachment-icon-extension: ${theme.messageAttachmentIconExtentionColor};
---clr-message-generic-attachment-fileinfo: ${theme.messageAttachmentFileInfo};
---clr-message-attachment-container-bg: ${theme.messageAttachmentIconBg};
---clr-message-metadata-date: ${theme.messageMetadataDate};
---clr-message-metadata-date-incomming: ${theme.messageMetadataIncomming};
---clr-message-video-play: ${theme.videoPlayBtnIcon};
---clr-message-video-overlay-circle: ${theme.videoPlayBtnBg};
---clr-scrollbar-thumb: ${theme.scrollBarThumb};
---clr-scrollbar-thumb-hover: ${theme.scrollBarThumbHover};
---clr-emoji-mart-text: ${theme.emojiMartText};
---clr-emoji-mart-border: ${theme.emojiMartBorder};
---clr-emoji-mart-bg: ${theme.emojiMartBg};
---clr-emoji-mart-category-icons: ${theme.emojiMartCategoryIcons};
---clr-emoji-mart-input-text: ${theme.emojiMartInputText};
---clr-emoji-mart-input-bg: ${theme.emojiMartInputBg};
---clr-emoji-mart-input-placeholder: ${theme.emojiMartInputPlaceholder};
---clr-emoji-mart-select: ${theme.emojiMartSelect};
---clr-bp3-dialog-bg: ${theme.bp3DialogBg};
---clr-bp3-dialog-card-bg: ${theme.bp3DialogCardBg};
---clr-bp3-heading: ${theme.bp3Heading}
---clr-bp3-button-text: ${theme.bp3ButtonText};
---clr-bp3-button-bg: ${theme.bp3ButtonBg};
---clr-bp3-button-gradient-top: ${theme.bp3ButtonGradientTop};
---clr-bp3-button-gradient-bottom: ${theme.bp3ButtonGradientBottom};
---clr-bp3-button-hover: ${theme.bp3ButtonHoverBg};
---clr-bp3-dialog-header-bg: ${theme.bp3DialogHeaderBg};
---clr-bp3-menu-bg: ${theme.bp3MenuBg};
---clr-bp3-menu: ${theme.bp3MenuText};
---clr-bp3-input-bg: ${theme.bp3InputBg};        
---clr-bp3-input: ${theme.bp3InputText};                 
---clr-bp3-input-placeholder: ${theme.bp3InputPlaceholder};     
---clr-bp3-dialog-header-icon: ${theme.bp3DialogHeaderIcon};
---clr-bp3-switch-bg: ${theme.bp3SwitchBg};
---clr-bp3-switch-before-shadow: ${theme.bp3SwitchBeforeShadow};
---clr-bp3-switch-before-bg: ${theme.bp3SwitchBeforeBg};
---clr-bp3-switch-checked: ${theme.bp3SwitchChecked};
---clr-bp3-switch-checked-before-shadow: ${theme.bp3SwitchCheckedBeforeShadow};
-`
+export const ThemeVarOverwrite = (theme) => {
+  var css = ''
+  for (var key in defaultThemeData) {
+    if (Object.hasOwnProperty.bind(defaultThemeData, key)) {
+      css += `--${key}: ${theme[key]};`
+    }
+  }
+  return `:root {${css}}`
+}

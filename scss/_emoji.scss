@@ -24,6 +24,7 @@
   }
 }
 
+// This is the emoji button in the composer
 button.emoji {
   width: 36px;
   height: 36px;
@@ -37,7 +38,7 @@ button.emoji {
     display: inline-block;
     width: $button-height;
     height: $button-height;
-    @include color-svg('../images/smile.svg', $color-composer-emoji-btn);
+    @include color-svg('../images/smile.svg', var(--composerBtnColor));
   }
 
   &:focus,

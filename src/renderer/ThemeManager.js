@@ -65,7 +65,7 @@ class ThemeProvider extends React.Component {
   update (ev) {
     const theme = manager.getCurrentlyAppliedThemeData()
     this.setState({ theme })
-    window.document.getElementById('dom-root').style = ThemeVarOverwrite(theme)
+    window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(theme)
   }
 
   render () {
