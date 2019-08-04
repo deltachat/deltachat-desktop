@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron')
 const GroupBase = require('./GroupBase')
+const ScreenContext = require('../contexts/ScreenContext')
 
 class CreateGroup extends GroupBase {
   constructor (props) {
@@ -29,8 +30,10 @@ class CreateGroup extends GroupBase {
       this.state.image,
       contactIds
     )
-    this.props.changeScreen('ChatList')
+    this.context.changeScreen('ChatList')
   }
 }
+
+CreateGroup.contextType = ScreenContext
 
 module.exports = CreateGroup
