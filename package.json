@@ -7,7 +7,7 @@
     "watch": "npm run watch-other && npm run watch-js",
     "watch-other": "node bin/watch &",
     "watch-js": "webpack --mode=development --progress --profile --colors --watch",
-    "test": "npm run test-standard && npm run test-log-conventions && node run test-unit",
+    "test": "npm run test-standard && npm run test-log-conventions && npm run test-unit",
     "test-standard": "standard",
     "test-standard-fix": "standard --fix",
     "test-log-conventions": "node ./bin/log-conventions",
