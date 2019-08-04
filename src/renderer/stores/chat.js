@@ -37,7 +37,10 @@ chatStore.reducers.push((action, state) => {
       ...state.messages.slice(index + 1)
     ]
     return { ...state, messages }
+  } else if (action.type === 'UI_UNSELECT_CHAT') {
+    return defaultState
   }
+
 })
 
 chatStore.effects.push((action) => {

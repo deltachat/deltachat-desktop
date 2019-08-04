@@ -203,15 +203,21 @@ class SplittedChatListAndView extends React.Component {
           />
           {
             selectedChat
-              ? this.state.media ? <Media
-                chat={selectedChat}
-              />
-                : (<ChatView
-                  ref={this.chatView}
+              ? selectedChat.id
+                ? this.state.media ? <Media
                   chat={selectedChat}
-                  onDeadDropClick={this.onDeadDropClick}
-                  openDialog={this.context.openDialog}
-                />)
+                />
+                  : (<ChatView
+                    ref={this.chatView}
+                    chat={selectedChat}
+                    onDeadDropClick={this.onDeadDropClick}
+                    openDialog={this.context.openDialog}
+                  />)
+                : (
+                  <Welcome>
+                    <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+                  </Welcome>
+                )
               : (
                 <Welcome>
                   <h1>{tx('welcome_desktop')}</h1>

@@ -1,7 +1,8 @@
 import { ipcRenderer } from 'electron'
+const chatListStore = require('../../stores/chatList')
 
 export function archiveChat (chatId, archive) {
-  ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', chatId, archive)
+  chatListStore.dispatch({ type: 'UI_ARCHIVE_CHAT', payload: { chatId } })
 }
 
 export function openLeaveChatDialog (screenContext, chatId) {
@@ -10,7 +11,7 @@ export function openLeaveChatDialog (screenContext, chatId) {
     message: tx('ask_leave_group'),
     cb: yes => {
       if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'leaveGroup', chatId)
+        chatListStore.dispatch({ type: 'UI_LEAVE_CHAT', payload: { chatId } })
       }
     }
   })
@@ -22,7 +23,7 @@ export function openDeleteChatDialog (screenContext, chatId) {
     message: tx('ask_delete_chat_desktop'),
     cb: yes => {
       if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteChat', chatId)
+        chatListStore.dispatch({ type: 'UI_DELETE_CHAT', payload: { chatId } })
       }
     }
   })

@@ -20,7 +20,7 @@ const ChatListContextMenu = React.memo((props) => {
   const contextMenu = useRef(null)
 
   const show = (event, chat) => {
-    log.debug('ChatListContextMenu.show', chat, event)
+    //log.debug('ChatListContextMenu.show', chat, event)
     /*
      This is a workaround because react-contextmenu
      has no official programatic way of opening the menu yet
