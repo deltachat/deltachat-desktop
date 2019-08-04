@@ -148,7 +148,6 @@ class SplittedChatListAndView extends React.Component {
     const { selectedChat, filteredChatList, showArchivedChats } = this.state
 
     const tx = window.translate
-    const profileImage = selectedChat && selectedChat.profileImage
 
     const menu = <ScreenContext.Consumer>{(screenContext) =>
       <Menu
@@ -170,7 +169,6 @@ class SplittedChatListAndView extends React.Component {
               />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
-              {profileImage && <img src={profileImage} />}
               <NavbarHeading>
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
