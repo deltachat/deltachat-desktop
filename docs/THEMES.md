@@ -35,13 +35,22 @@ getDefaultThemeData ()
 getDefaultTheme ()
 ```
 
-## Hot reload:
+
+## Setting a theme from CLI
+
 > Warning: This will also (probably) change in the future.
+
 ```
-npx electron . --theme-watch "./themes/dark.json"
+npx electron . --theme "./themes/dark.json"
 ```
+
+You can also enable hot reload for loaded theme with:
+
+```
+npx electron . --theme "./themes/dark.json" --theme-watch
+```
+
 Quirks:
-- You're theme gets only updated and loaded on change of the specified theme file
 - Doesn't work with `npm run dev` because this argument gets lost
 
 ### TODO
