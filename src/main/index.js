@@ -48,13 +48,12 @@ parallel({
   state: (cb) => State.load(cb)
 }, onReady)
 
-
-function updateTheme() {
+function updateTheme () {
   const sendTheme = () => {
     const content = fs.readFileSync(app.rc['theme'])
     windows.main.send('theme-update', JSON.parse(content))
   }
-  if(!app.ipcReady) {
+  if (!app.ipcReady) {
     log.info('theme: Waiting for ipc to be ready before setting theme.')
     app.once('ipcReady', sendTheme)
     return
@@ -96,22 +95,18 @@ function onReady (err, results) {
     if (fs.existsSync(app.rc['theme'])) {
       updateTheme()
       log.info(`theme: set theme`)
+      if (app.rc['theme-watch']) {
+        log.info('theme-watch: activated', app.rc['theme-watch'])
+        fs.watchFile(app.rc['theme'], (curr, prev) => {
+          if (curr.mtime !== prev.mtime) {
+            log.info('theme-watch: File changed reloading theme data')
+            updateTheme()
+            log.info('theme-watch: reloading theme data - done')
+          }
+        })
+      }
     } else {
       log.error("theme: couldn't find file")
-    }
-  }
-
-  if (app.rc['theme-watch']) {
-    log.info('theme-watch: activated', app.rc['theme-watch'])
-    if(app.rc['theme']) {
-      fs.watchFile(app.rc['theme'], (curr, prev) => {
-        if (curr.mtime !== prev.mtime) {
-          log.info('theme-watch: File changed reloading theme data')
-          updateTheme()
-          // TODO make this more safe or disable when merging
-          log.info('theme-watch: reloading theme data - done')
-        }
-      })
     }
   }
 }
