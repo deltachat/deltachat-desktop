@@ -16,6 +16,9 @@ class Message extends React.Component {
     this.showMenu = this.showMenu.bind(this)
 
     this.menuTriggerRef = null
+    this.state = {
+      textSelected: false
+    }
   }
 
   renderAvatar () {
@@ -159,6 +162,7 @@ class Message extends React.Component {
 
   showMenu (event) {
     if (this.menuTriggerRef) {
+      this.setState({ textSelected: window.getSelection().toString() !== '' })
       this.menuTriggerRef.handleContextClick(event)
     }
   }
@@ -246,6 +250,16 @@ class Message extends React.Component {
 
     return (
       <ContextMenu id={triggerId}>
+        <MenuItem
+          attributes={{
+            hidden: !this.state.textSelected
+          }}
+          onClick={_ => {
+            navigator.clipboard.writeText(window.getSelection().toString())
+          }}
+        >
+          {tx('copy_selected_text')}
+        </MenuItem>
         {attachment ? (
           <MenuItem
             attributes={{
