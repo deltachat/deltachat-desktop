@@ -131,13 +131,13 @@ $chatlist-isgroup-icon: var(--globalText);
   // For alignment with the message text
   margin-top: 1px;
 
-  font-size: 10px;
+  font-size: 9pt;
   margin-left: 5px;
-  min-width: 20px;
   height: 20px;
-  width: 20px;
+  padding: 0 5pt;
   line-height: 20px;
   border-radius: 10px;
+  font-weight: bold;
 }
 
 .module-conversation-list-item__is-verified {

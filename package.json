@@ -13,7 +13,7 @@
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
     "test-integration": "node test/integration",
-    "dev": "npm run build && npm run start",
+    "dev": "npm run build && npm run start --",
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
     "dist-ci": "version-unchanged || npm run dist",
