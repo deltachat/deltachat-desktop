@@ -111,9 +111,27 @@ chatListStore.effects.push((action, state) => {
     const { chatId, text } = action.payload
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'setDraft', chatId, text)
   }
+  if (action.type === 'UI_DELETE_CHAT' || action.type === 'UI_ARCHIVE_CHAT' || action.type === 'UI_LEAVE_CHAT') {
+    const { chatId } = action.payload
+    const selectedChat = chatStore.getState()
+    if (selectedChat && selectedChat.id === chatId) {
+      // current chat is deleted
+      chatStore.dispatch({ type: 'UI_UNSELECT_CHAT' })
+    }
+    if (action.type === 'UI_ARCHIVE_CHAT') {
+      const { archive } = action.payload
+      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', chatId, archive)
+    } else {
+      const functionName = action.type === 'UI_DELETE_CHAT' ? 'deleteChat' : 'leaveGroup'
+      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', functionName, chatId)
+    }
+  }
 })
 
 chatStore.subscribe((selectedChat) => {
+  if (selectedChat === null || selectedChat.id === null) {
+    return
+  }
   const { id, messages } = selectedChat
   if (!messages || messages.length < 0) {
     return

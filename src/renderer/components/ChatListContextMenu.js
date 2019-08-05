@@ -22,6 +22,7 @@ const ChatListContextMenu = React.memo((props) => {
   const show = (event, chat) => {
     // no log.debug, because passing the event object to through ipc freezes the application
     // console.debug('ChatListContextMenu.show', chat, event) // also commented out because it's not needed
+
     /*
      This is a workaround because react-contextmenu
      has no official programatic way of opening the menu yet
