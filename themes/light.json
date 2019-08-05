@@ -7,7 +7,7 @@
   "textSecondary": "#62656a",
   "ovalButtonBg": "#415e6b",
   "ovalButtonText": "#fff",
-  "bgChatView": "lime",
+  "bgChatView": "#e6dcd4",
   "bgNavBar": "#415e6b",
   "textNavBar": "#fff",
   "scrollbarTransparency": 0.4,
