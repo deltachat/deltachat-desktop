@@ -41,13 +41,17 @@ getDefaultTheme ()
 > Warning: This will also (probably) change in the future.
 
 ```
-npx electron . --theme "./themes/dark.json"
+npx elctron . --theme "./themes/dark.json"
+or
+npm run dev -- --theme "./themes/dark.json"
+or
+npm run start -- --theme "./themes/dark.json"
 ```
 
 You can also enable hot reload for loaded theme with:
 
 ```
-npx electron . --theme "./themes/dark.json" --theme-watch
+npm run start -- --theme "./themes/dark.json" --theme-watch
 ```
 
 Quirks:
