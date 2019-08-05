@@ -16,5 +16,8 @@
   },
   "pref_on_demand_location_streaming": {
     "message": "On-demand location streaming"
+  },
+  "copy_selected_text": {
+    "message": "Copy selected Text"
   }
 }
