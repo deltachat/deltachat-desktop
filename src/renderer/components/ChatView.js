@@ -18,7 +18,7 @@ const ChatViewWrapper = styled.div`
   grid-template-columns: auto;
   height: calc(100vh - 50px);
   margin-top: 50px;
-  background-image: url(${props => props.theme.chatViewBgImgPath});
+  background-image: ${props => props.theme.chatViewBgImgPath};
   background-size: cover;
   background-color: ${props => props.theme.chatViewBg};
 
