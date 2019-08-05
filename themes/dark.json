@@ -1,7 +1,7 @@
 {
     "bgPrimary":"#222",
     "bgSecondary":"#333",
-    "accentColor": "lightblue",
+    "accentColor": "#2090ea",
     "textPrimary": "#fff",
     "textSecondary": "#ddd",
     "ovalButtonBg": "darkgreen",

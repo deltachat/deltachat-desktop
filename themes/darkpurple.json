@@ -2,7 +2,7 @@
     "meta_description":"A clean theme that highlights our purple nature",
     "bgPrimary":"#222333",
     "bgSecondary":"#333444",
-    "accentColor": "lightblue",
+    "accentColor": "#cc12ac",
     "textPrimary": "#fff",
     "textSecondary": "#ddd",
     "ovalButtonBg": "darkgreen",
