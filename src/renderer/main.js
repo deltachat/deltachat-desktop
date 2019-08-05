@@ -23,7 +23,8 @@ const app = ReactDOM.render(
   <App STATE_WRAPPER={STATE_WRAPPER} />,
   document.querySelector('#root')
 )
-ipcRenderer.on('ALL', (e, eName, ...args) => log.debug('ipcRenderer', eName, ...args))
+/* ignore-console-log */
+ipcRenderer.on('ALL', (e, eName, ...args) => console.debug('ipcRenderer', eName, ...args))
 ipcRenderer.on('error', (e, ...args) => log.error(...args))
 
 ipcRenderer.on('chooseLanguage', onChooseLanguage)

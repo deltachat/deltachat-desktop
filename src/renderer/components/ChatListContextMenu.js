@@ -10,7 +10,7 @@ import {
   openEncryptionInfoDialog
 } from './helpers/ChatMethods'
 
-const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
+// const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
 
 const ChatListContextMenu = React.memo((props) => {
   const screenContext = useContext(ScreenContext)
@@ -20,7 +20,9 @@ const ChatListContextMenu = React.memo((props) => {
   const contextMenu = useRef(null)
 
   const show = (event, chat) => {
-    //log.debug('ChatListContextMenu.show', chat, event)
+    // no log.debug, because passing the event object to through ipc freezes the application
+    // console.debug('ChatListContextMenu.show', chat, event) // also commented out because it's not needed
+    
     /*
      This is a workaround because react-contextmenu
      has no official programatic way of opening the menu yet
