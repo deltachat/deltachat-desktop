@@ -33,8 +33,9 @@ function log (channel, level, ...args) {
 }
 
 function getStackTrace () {
-  const stack = esp.parse(new Error('Get Stacktrace'))
-  return stack.slice(2, stack.length)
+  const rawStack = esp.parse(new Error('Get Stacktrace'))
+  const stack = rawStack.slice(2, rawStack.length)
+  return rc['machine-readable-stacktrace'] ? stack : stack.map(s => `\n${s.toString()}`).join()
 }
 
 class Logger {

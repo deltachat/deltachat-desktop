@@ -134,6 +134,7 @@ Debug messages are disabled by default, enable them with the `--log-debug` flag.
 | ------------------ | -------------------------------------------- |
 | `--log-debug`      | Log debug messages                           |
 | `--log-to-console` | Output the log to stout / chrome dev console |
+| `--machine-readable-stacktrace` | Enable JSON stacktrace          |
 
 #### Log locations
 
