@@ -58,49 +58,47 @@ class Settings extends React.Component {
     this.translate = window.translate
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.props.isOpen && !prevProps.isOpen) {
-      const settings = ipcRenderer.sendSync(
-        'getConfigFor', [
-          'addr',
-          'mail_pw',
-          'inbox_watch',
-          'sentbox_watch',
-          'mvbox_watch',
-          'mvbox_move',
-          'e2ee_enabled',
-          'configured_mail_server',
-          'configured_mail_user',
-          'configured_mail_port',
-          'configured_mail_security',
-          'configured_send_user',
-          'configured_send_pw',
-          'configured_send_server',
-          'configured_send_port',
-          'configured_send_security',
-          'configured_e2ee_enabled',
-          'displayname',
-          'selfstatus',
-          'mdns_enabled',
-          'show_emails'
-        ]
-      )
+  componentDidMount () {
+    const settings = ipcRenderer.sendSync(
+      'getConfigFor', [
+        'addr',
+        'mail_pw',
+        'inbox_watch',
+        'sentbox_watch',
+        'mvbox_watch',
+        'mvbox_move',
+        'e2ee_enabled',
+        'configured_mail_server',
+        'configured_mail_user',
+        'configured_mail_port',
+        'configured_mail_security',
+        'configured_send_user',
+        'configured_send_pw',
+        'configured_send_server',
+        'configured_send_port',
+        'configured_send_security',
+        'configured_e2ee_enabled',
+        'displayname',
+        'selfstatus',
+        'mdns_enabled',
+        'show_emails'
+      ]
+    )
 
-      const advancedSettings = {
-        mailUser: settings['configured_mail_user'],
-        mailServer: settings['configured_mail_server'],
-        mailPort: settings['configured_mail_port'],
-        mailSecurity: settings['configured_mail_security'],
-        sendUser: settings['configured_send_user'],
-        sendPw: settings['configured_send_pw'],
-        sendServer: settings['configured_send_server'],
-        sendPort: settings['configured_send_port'],
-        sendSecurity: settings['configured_send_security'],
-        e2ee_enabled: settings['configured_e2ee_enabled']
-      }
-
-      this.setState({ settings, advancedSettings })
+    const advancedSettings = {
+      mail_user: settings['configured_mail_user'],
+      mail_server: settings['configured_mail_server'],
+      mail_port: settings['configured_mail_port'],
+      mail_security: settings['configured_mail_security'],
+      send_user: settings['configured_send_user'],
+      send_pw: settings['configured_send_pw'],
+      send_server: settings['configured_send_server'],
+      send_port: settings['configured_send_port'],
+      send_security: settings['configured_send_security'],
+      e2ee_enabled: settings['configured_e2ee_enabled']
     }
+
+    this.setState({ settings, advancedSettings })
   }
 
   onKeyTransferComplete () {
