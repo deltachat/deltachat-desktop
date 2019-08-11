@@ -271,6 +271,7 @@ class Settings extends React.Component {
                 mail_pw={settings.mail_pw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
+                onClose={() => this.setState({ userDetails: false })}
                 addrDisabled>
                 <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
                 <Button type='cancel' text={this.translate('cancel')} />

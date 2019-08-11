@@ -29,7 +29,8 @@ export default class Login extends React.Component {
         showPasswordMail: false,
         showPasswordSend: false
       },
-      progress: 0
+      progress: 0,
+      dirty: false
     }
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
@@ -65,11 +66,16 @@ export default class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
+    const { id, value } = event.target
     const updatedState = update(this.state, {
       credentials: {
-        [event.target.id]: { $set: event.target.value }
+        [id]: { $set: value }
       }
     })
+    const dirty = Object.keys(updatedState.credentials).find(
+      key => this.props[key] != updatedState.credentials[key]
+    ) !== undefined
+    updatedState.dirty = dirty
     this.setState(updatedState)
   }
 
@@ -89,6 +95,7 @@ export default class Login extends React.Component {
     this.setState({ credentials: this._defaultCredentials() })
     event.preventDefault()
     event.stopPropagation()
+    this.props.onClose()
   }
 
   renderLoginHeader (mode) {
@@ -113,6 +120,8 @@ export default class Login extends React.Component {
     } = this.state.credentials
 
     const { showAdvanced } = this.state.ui
+
+    const { dirty } = this.state
 
     const tx = window.translate
 
@@ -243,11 +252,14 @@ export default class Login extends React.Component {
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
+              if (!dirty) {
+                return
+              }
               props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw)
             }
             if (child.props.type === 'cancel') {
               props.onClick = this.cancelClick.bind(this)
-              if (!loading) return
+              if (!dirty) return
             }
             return React.cloneElement(child, props)
           })}
