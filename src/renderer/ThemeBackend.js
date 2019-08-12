@@ -158,7 +158,7 @@ export function ThemeDataBuilder (theme) {
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(
-      theme.bgSecondary, c => changeContrast(c, 0.1)
+      theme.bgSecondary, c => changeContrast(c, 0.2)
     ),
     emojiMartBg: theme.bgSecondary,
     emojiMartCategoryIcons: undefinedGuard(

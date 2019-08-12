@@ -61,7 +61,6 @@ Quirks:
 delete this section after done before merge!
 
 - toggle hover
-- emoji picker border can be a bit more pronounced (especially for dark themes)
 - gallery
     - tabs // do we relly need that? we will transform it into a dialog and make new styles there anyway.
 
