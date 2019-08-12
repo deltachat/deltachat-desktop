@@ -173,6 +173,7 @@ export function ThemeDataBuilder (theme) {
       theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2)
     ),
     // Misc
+    galleryBg: theme.bgSecondary,
     avatarLabelColor: '#ffffff', // Only changable with theme.raw
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
