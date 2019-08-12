@@ -51,6 +51,13 @@
 //   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
 // }
 
+.bp3-button.bp3-minimal {
+  color: var(--bp3ButtonText);
+}
+.bp3-button.bp3-minimal:hover {
+  color: inherit; // todo adjust this to be an extra var 
+}
+
 .bp3-dialog-header {
   background-color: var(--bp3DialogHeaderBg);
 }
@@ -88,4 +95,21 @@
 .bp3-menu {
   background-color: var(--bp3MenuBg);
   color: var(--bp3MenuText);
+}
+
+.bp3-popover .bp3-popover-content {
+  background: unset;
+}
+
+.bp3-popover {
+  -webkit-box-shadow: none;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2), 0 8px 24px rgba(16, 22, 26, 0.2); // TODO include color into theming
+}
+
+.bp3-popover .bp3-popover-arrow-fill {
+  fill: var(--bp3MenuBg);
+}
+
+.bp3-menu-divider {
+  border-top: 1px solid rgba(16, 22, 26, 0.15); // TODO include color into theming
 }
