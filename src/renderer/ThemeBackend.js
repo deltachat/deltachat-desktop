@@ -72,7 +72,9 @@ export function ThemeDataBuilder (theme) {
     ),
     // ChatView
     chatViewBg: theme.bgChatView,
-    chatViewBgImgPath: theme.bgImagePath !== 'none' ? `url(${theme.bgImagePath})` : 'none',
+    chatViewBgImgPath: undefinedGuard(
+      theme.bgImagePath, path => path !== 'none' ? `url(${path})` : 'none'
+    ),
     // ChatView - Composer
     composerBg: theme.bgPrimary,
     composerText: theme.textPrimary,
