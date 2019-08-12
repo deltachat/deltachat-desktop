@@ -73,7 +73,7 @@ export default class Login extends React.Component {
       }
     })
     const dirty = Object.keys(updatedState.credentials).find(
-      key => this.props[key] != updatedState.credentials[key]
+      key => this.props[key] !== updatedState.credentials[key]
     ) !== undefined
     updatedState.dirty = dirty
     this.setState(updatedState)
