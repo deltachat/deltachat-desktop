@@ -13,7 +13,7 @@ const Attachment = require('./Attachment')
 
 const Wrapper = styled.div`
   width: 70%;
-  background-color: #eeefef;
+  background-color: ${props => props.theme.galleryBg};
   float: right;
   padding: 10px;
   margin-top: 50px;

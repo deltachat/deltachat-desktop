@@ -72,7 +72,9 @@ export function ThemeDataBuilder (theme) {
     ),
     // ChatView
     chatViewBg: theme.bgChatView,
-    chatViewBgImgPath: theme.bgImagePath !== 'none' ? `url(${theme.bgImagePath})` : 'none',
+    chatViewBgImgPath: undefinedGuard(
+      theme.bgImagePath, path => path !== 'none' ? `url(${path})` : 'none'
+    ),
     // ChatView - Composer
     composerBg: theme.bgPrimary,
     composerText: theme.textPrimary,
@@ -148,15 +150,18 @@ export function ThemeDataBuilder (theme) {
     bp3InputPlaceholder: 'lightgray',
     bp3MenuText: theme.textPrimary,
     bp3MenuBg: theme.bgSecondary,
-    bp3SwitchBg: 'rgba(130, 165, 188, 0.5)',
-    bp3SwitchBeforeShadow: bp3SwitchShadowColor,
-    bp3SwitchBeforeBg: 'RGBA(57, 75, 89, 1)',
-    bp3SwitchChecked: theme.accentColor,
-    bp3SwitchCheckedBeforeShadow: bp3SwitchShadowColor,
+    bp3Switch: theme.bp3Switch,
+    bp3SwitchShadow: theme.bp3SwitchShadow,
+    bp3SwitchChecked: theme.bp3SwitchChecked, 
+    bp3SwitchShadowChecked: theme.bp3SwitchShadowChecked, 
+    bp3SwitchBefore: theme.bp3SwitchBefore,
+    bp3SwitchBeforeShadow: theme.bp3SwitchBeforeShadow,
+    bp3SwitchBeforeChecked: theme.bp3SwitchBeforeChecked,
+    bp3SwitchBeforeShadowChecked: theme.bp3SwitchBeforeShadowChecked,
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(
-      theme.bgSecondary, c => changeContrast(c, 0.1)
+      theme.bgSecondary, c => changeContrast(c, 0.2)
     ),
     emojiMartBg: theme.bgSecondary,
     emojiMartCategoryIcons: undefinedGuard(
@@ -171,6 +176,7 @@ export function ThemeDataBuilder (theme) {
       theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2)
     ),
     // Misc
+    galleryBg: theme.bgSecondary,
     avatarLabelColor: '#ffffff', // Only changable with theme.raw
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
@@ -184,11 +190,11 @@ export function ThemeDataBuilder (theme) {
     mapOverlayBg: theme.bgPrimary,
     videoPlayBtnIcon: theme.accentColor,
     videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
-    scrollBarThumb: undefinedGuard(
+    scrollbarThumb: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t).rgb().string()
     ),
-    scrollBarThumbHover: undefinedGuard(
+    scrollbarThumbHover: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t + 0.14).rgb().string()
     )

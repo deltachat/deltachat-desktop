@@ -97,11 +97,11 @@ button:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollBarThumb);
+  background: var(--scrollbarThumb);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollBarThumbHover);
+  background: var(--scrollbarThumbHover);
 }
 
 ::-webkit-scrollbar-corner {

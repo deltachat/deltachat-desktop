@@ -2,7 +2,6 @@
 
 .react-contextmenu {
   background-color: var(--contextMenuBg);
-  border-radius: 4px;
   min-width: 160px;
   padding: 0;
   padding-top: 8px;
@@ -24,10 +23,7 @@
   line-height: 18px;
   white-space: nowrap;
 
-  padding-left: 16px;
-  padding-top: 3px;
-  padding-bottom: 2px;
-  padding-right: 16px;
+  padding: 5px 10px 5px 10px;
   user-select: none;
 }
 
