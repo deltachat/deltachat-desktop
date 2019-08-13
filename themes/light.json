@@ -10,7 +10,12 @@
   "bgChatView": "#e6dcd4",
   "bgNavBar": "#415e6b",
   "textNavBar": "#fff",
-  "scrollbarTransparency": 0.4,
+  "scrollbarThumb": "red",
+  "scrollbarThumbHover": "red",
   "bgMessageBubbleIncoming": "#fff",
-  "bgMessageBubbleOutgoing": "#efffde"
+  "bgMessageBubbleOutgoing": "#efffde",
+  "raw": {
+      "scrollbarThumb": "#666666",
+      "scrollbarThumbHover": "#606060"
+  }
 }
