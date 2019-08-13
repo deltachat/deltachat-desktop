@@ -17,6 +17,7 @@
       "scrollbarThumbHover": "#606060",
       "contextMenuBg": "#fff",
       "bp3MenuBg": "#fff",
+      "bp3DialogBg": "#ececec",
       "bp3DialogCardBg": "#fff",
       "bp3DialogHeaderBg": "#fff"
   }
