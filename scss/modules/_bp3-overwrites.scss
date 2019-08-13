@@ -60,6 +60,8 @@
 
 .bp3-dialog-header {
   background-color: var(--bp3DialogHeaderBg);
+  // We should have one variable for dialog/context menu border radius
+  border-radius: 2px 2px 0 0;
 }
 
 .bp3-input {
