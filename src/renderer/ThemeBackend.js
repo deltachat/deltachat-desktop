@@ -187,11 +187,11 @@ export function ThemeDataBuilder (theme) {
     mapOverlayBg: theme.bgPrimary,
     videoPlayBtnIcon: theme.accentColor,
     videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
-    scrollBarThumb: undefinedGuard(
+    scrollbarThumb: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t).rgb().string()
     ),
-    scrollBarThumbHover: undefinedGuard(
+    scrollbarThumbHover: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t + 0.14).rgb().string()
     )

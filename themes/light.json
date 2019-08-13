@@ -10,12 +10,14 @@
   "bgChatView": "#e6dcd4",
   "bgNavBar": "#415e6b",
   "textNavBar": "#fff",
-  "scrollbarThumb": "red",
-  "scrollbarThumbHover": "red",
   "bgMessageBubbleIncoming": "#fff",
   "bgMessageBubbleOutgoing": "#efffde",
   "raw": {
       "scrollbarThumb": "#666666",
-      "scrollbarThumbHover": "#606060"
+      "scrollbarThumbHover": "#606060",
+      "contextMenuBg": "#fff",
+      "bp3MenuBg": "#fff",
+      "bp3DialogCardBg": "#fff",
+      "bp3DialogHeaderBg": "#fff"
   }
 }
