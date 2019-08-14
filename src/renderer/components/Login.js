@@ -236,7 +236,7 @@ export default class Login extends React.Component {
           {
             loading &&
               <DeltaProgressBar
-                value={this.state.progress / 1000}
+                progress={this.state.progress}
                 intent={Intent.SUCCESS}
               />
           }
