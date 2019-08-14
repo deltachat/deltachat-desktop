@@ -64,7 +64,7 @@ class Controller extends React.Component {
   }
 
   render () {
-    const { saved, userFeedback, deltachat } = this.props
+    const { userFeedback, deltachat } = this.props
     const { dialogs } = this.state
     // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
@@ -79,7 +79,6 @@ class Controller extends React.Component {
             isOpen,
             onClose: () => this.close(name),
             userFeedback,
-            saved,
             deltachat,
             key: name,
             openDialog: this.open.bind(this),

@@ -80,7 +80,7 @@ class ScreenController extends React.Component {
   }
 
   render () {
-    const { saved, logins, deltachat } = this.props
+    const { logins, deltachat } = this.props
     const { screen, screenProps } = this.state
 
     var Screen
@@ -125,7 +125,6 @@ class ScreenController extends React.Component {
           {!deltachat.ready
             ? <LoginScreen logins={logins} deltachat={deltachat} />
             : <Screen
-              saved={saved}
               deltachat={deltachat}
               screenProps={screenProps}
             />
@@ -134,7 +133,6 @@ class ScreenController extends React.Component {
         <dialogs.Controller
           ref={this.dialogs}
           deltachat={deltachat}
-          saved={saved}
           userFeedback={this.userFeedback} />
       </div>
     )

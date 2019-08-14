@@ -38,7 +38,6 @@ class DeltaChatController extends EventEmitter {
     this.cwd = cwd
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
-    this._saved = saved
     this.loadSplitOuts()
   }
 
