@@ -38,7 +38,7 @@ const ChatListWrapper = styled.div`
     }
 
     &:hover {
-      background-color: ${props => props.theme.chatListItemSelectedBgHover};
+        background-color: var(--chatListItemSelectedBg);
     }
   }
 

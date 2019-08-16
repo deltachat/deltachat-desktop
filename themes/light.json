@@ -19,6 +19,7 @@
       "bp3MenuBg": "#fff",
       "bp3DialogBg": "#ececec",
       "bp3DialogCardBg": "#fff",
-      "bp3DialogHeaderBg": "#fff"
+      "bp3DialogHeaderBg": "#fff",
+      "chatListItemBgHover": "rgb(228, 228, 228)"
   }
 }
