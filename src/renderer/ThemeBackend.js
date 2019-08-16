@@ -72,7 +72,9 @@ export function ThemeDataBuilder (theme) {
     ),
     // ChatView
     chatViewBg: theme.bgChatView,
-    chatViewBgImgPath: theme.bgImagePath !== 'none' ? `url(${theme.bgImagePath})` : 'none',
+    chatViewBgImgPath: undefinedGuard(
+      theme.bgImagePath, path => path !== 'none' ? `url(${path})` : 'none'
+    ),
     // ChatView - Composer
     composerBg: theme.bgPrimary,
     composerText: theme.textPrimary,
@@ -156,7 +158,7 @@ export function ThemeDataBuilder (theme) {
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(
-      theme.bgSecondary, c => changeContrast(c, 0.1)
+      theme.bgSecondary, c => changeContrast(c, 0.2)
     ),
     emojiMartBg: theme.bgSecondary,
     emojiMartCategoryIcons: undefinedGuard(
@@ -171,6 +173,7 @@ export function ThemeDataBuilder (theme) {
       theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2)
     ),
     // Misc
+    galleryBg: theme.bgSecondary,
     avatarLabelColor: '#ffffff', // Only changable with theme.raw
     brokenMediaText: '#070c14',
     brokenMediaBg: '#ffffff',
@@ -184,11 +187,11 @@ export function ThemeDataBuilder (theme) {
     mapOverlayBg: theme.bgPrimary,
     videoPlayBtnIcon: theme.accentColor,
     videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
-    scrollBarThumb: undefinedGuard(
+    scrollbarThumb: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t).rgb().string()
     ),
-    scrollBarThumbHover: undefinedGuard(
+    scrollbarThumbHover: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t + 0.14).rgb().string()
     )

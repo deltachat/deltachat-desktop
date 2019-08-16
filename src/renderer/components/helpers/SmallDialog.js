@@ -4,7 +4,6 @@ import { Dialog } from '@blueprintjs/core'
 
 export const SmallDialogWrapper = createGlobalStyle`
   .bp3-small-dialog {
-    background: #ffffff;
     width: 350px;
     padding-bottom: 0px;
   }

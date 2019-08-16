@@ -60,24 +60,18 @@ Quirks:
 ### TODO
 delete this section after done before merge!
 
-- login screen known acconts text
 - toggle hover
-- main menu seperation bars
-- main menu rightside triangle/arrow
-- main menu shadow thingie looks wreid in dark modes
-- emoji picker border can be a bit more pronounced (especially for dark themes)
-- dialog background
-- map controlls
 - gallery
-    - background
-    - tabs
+    - tabs // do we relly need that? we will transform it into a dialog and make new styles there anyway.
+
+- see todo comments in _bp3_overwrites.scss
+    - dialog shadows in darkmode look weird
+    - main menu shadow thingie looks weird in dark modes
+    - map controlls hover
+    - main menu seperation bars
 
 - gradients? namely:
     - bp3 input focus
     - gradient between chatlist and chatview
 
-
-
-- sample dark theme
-
-- fix standard stuff (`npm test`)
+- don't forget to fix standard stuff (`npm test`)
