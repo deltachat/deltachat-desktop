@@ -66,15 +66,23 @@ export default class Login extends React.Component {
   }
 
   handleCredentialsChange (event) {
+    const { mode } = this.props
     const { id, value } = event.target
     const updatedState = update(this.state, {
       credentials: {
         [id]: { $set: value }
       }
     })
-    const dirty = Object.keys(updatedState.credentials).find(
-      key => this.props[key] !== updatedState.credentials[key]
-    ) !== undefined
+    let dirty = false
+    if (mode === 'update') {
+      dirty = Object.keys(updatedState.credentials).find(
+        key => this.props[key] !== updatedState.credentials[key]
+      ) !== undefined
+    } else {
+      dirty = Object.keys(updatedState.credentials).find(
+        key => updatedState.credentials[key] !== ''
+      ) !== undefined
+    }
     updatedState.dirty = dirty
     this.setState(updatedState)
   }
@@ -91,11 +99,14 @@ export default class Login extends React.Component {
   }
 
   cancelClick (event) {
-    ipcRenderer.send('logout')
-    this.setState({ credentials: this._defaultCredentials() })
+    const { mode, loading } = this.props
     event.preventDefault()
     event.stopPropagation()
-    this.props.onClose()
+    if (mode === 'update' && !loading) {
+      this.props.onClose()
+    } else {
+      ipcRenderer.send('logout')
+    }
   }
 
   renderLoginHeader (mode) {
@@ -258,8 +269,8 @@ export default class Login extends React.Component {
               props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw)
             }
             if (child.props.type === 'cancel') {
+              if (!loading) return
               props.onClick = this.cancelClick.bind(this)
-              if (!dirty) return
             }
             return React.cloneElement(child, props)
           })}

@@ -127,6 +127,7 @@ class ScreenController extends React.Component {
             : <Screen
               deltachat={deltachat}
               screenProps={screenProps}
+              mode={'login'}
             />
           }
         </ScreenContext.Provider>
