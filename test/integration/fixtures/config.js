@@ -15,6 +15,7 @@ const getConfig = () => {
   }
   return {
     notifications: true,
+    enterKeySends: true,
     showNotificationContent: true,
     locale: 'en',
     credentials: {
