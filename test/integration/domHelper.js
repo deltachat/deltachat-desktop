@@ -11,11 +11,11 @@ const domHelper = {
   },
   async openSettings () {
     await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(3) a')
+    await this.browser.click('.bp3-menu li:nth-child(3) a .bp3-fill')
   },
   async logout () {
     await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(6) a')
+    await this.browser.click('.bp3-menu li:nth-child(6) a .bp3-fill')
   },
   async closeDialog () {
     await this.browser.click('.bp3-dialog-close-button')
