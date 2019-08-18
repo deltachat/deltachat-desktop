@@ -22,14 +22,14 @@ const domHelper = {
   },
   async isActiveSwitch (label) {
     try {
-      return await this.browser.$('label=' + label).$('.active').isExisting()
+      return await this.browser.$('label=' + label).getAttribute('class') === 'bp3-control bp3-switch active'
     } catch (error) {
       return false
     }
   },
   async isInactiveSwitch (label) {
     try {
-      return await this.browser.$('label=' + label).$('.inactive').isExisting()
+      return await this.browser.$('label=' + label).getAttribute('class') === 'bp3-control bp3-switch inactive'
     } catch (error) {
       return false
     }

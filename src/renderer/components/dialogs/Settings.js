@@ -218,7 +218,7 @@ class Settings extends React.Component {
         {(settings) => (
           <Switch
             checked={settings[configKey]}
-            class={settings[configKey] ? 'active' : 'inactive'}
+            className={settings[configKey] ? 'active' : 'inactive'}
             label={label}
             onChange={() => this.handleDesktopSettingsChange(configKey, !settings[configKey])}
           />
@@ -231,7 +231,7 @@ class Settings extends React.Component {
     return (
       <Switch
         checked={configValue === '1'}
-        class={configValue === '1' ? 'active' : 'inactive'}
+        className={configValue === '1' ? 'active' : 'inactive'}
         label={label}
         onChange={() => this.handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))}
       />
