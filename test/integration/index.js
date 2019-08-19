@@ -111,6 +111,7 @@ test('Update and persist Desktop settings', async (t) => {
     await domHelper.closeDialog()
     await domHelper.logout()
     await app.client.click('.bp3-button:nth-child(1)')
+    await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
     await domHelper.openSettings()
     await t.ok(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is still not active after new login')
     setup.endTest(app, t)
