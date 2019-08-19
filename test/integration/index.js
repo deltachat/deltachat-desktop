@@ -109,7 +109,6 @@ test('Update and persist Desktop settings', async (t) => {
     currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
     await t.equals(currentConfig['enterKeySends'], false, 'enterKeySends is false in config.json')
     await domHelper.closeDialog()
-    await domHelper.logout()
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
