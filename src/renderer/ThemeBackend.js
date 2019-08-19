@@ -48,9 +48,6 @@ export function ThemeDataBuilder (theme) {
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
-  /// Don't use color directly here
-  const bp3SwitchShadowColor = 'rgba(16,22,26,.4)'
-  // #070c14; // some kind of font color?
   let themeData = {
     // Misc
     ovalButtonBg: theme.ovalButtonBg,
@@ -152,8 +149,8 @@ export function ThemeDataBuilder (theme) {
     bp3MenuBg: theme.bgSecondary,
     bp3Switch: theme.bp3Switch,
     bp3SwitchShadow: theme.bp3SwitchShadow,
-    bp3SwitchChecked: theme.bp3SwitchChecked, 
-    bp3SwitchShadowChecked: theme.bp3SwitchShadowChecked, 
+    bp3SwitchChecked: theme.bp3SwitchChecked,
+    bp3SwitchShadowChecked: theme.bp3SwitchShadowChecked,
     bp3SwitchBefore: theme.bp3SwitchBefore,
     bp3SwitchBeforeShadow: theme.bp3SwitchBeforeShadow,
     bp3SwitchBeforeChecked: theme.bp3SwitchBeforeChecked,
