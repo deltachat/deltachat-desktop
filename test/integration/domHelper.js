@@ -22,7 +22,7 @@ const domHelper = {
   },
   async isActiveSwitch (label) {
     try {
-      this.browser.$('label=' + label).waitForExists(1000)
+      this.browser.$('label=' + label).waitForExist(1000)
       return await this.browser.$('label=' + label).getAttribute('class') === 'bp3-control bp3-switch active'
     } catch (error) {
       return false
@@ -30,7 +30,7 @@ const domHelper = {
   },
   async isInactiveSwitch (label) {
     try {
-      this.browser.$('label=' + label).waitForExists(1000)
+      this.browser.$('label=' + label).waitForExist(1000)
       return await this.browser.$('label=' + label).getAttribute('class') === 'bp3-control bp3-switch inactive'
     } catch (error) {
       return false
