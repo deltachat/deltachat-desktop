@@ -1,11 +1,10 @@
-const React = require('react')
-const crypto = require('crypto')
-const { ipcRenderer, remote } = require('electron')
-const styled = require('styled-components').default
-const C = require('deltachat-node/constants')
+import React from 'react'
+import crypto from 'crypto'
+import { ipcRenderer, remote } from 'electron'
+import C from 'deltachat-node/constants'
+import styled, { createGlobalStyle } from 'styled-components'
 
-const MAGIC_PW = crypto.randomBytes(8).toString('hex')
-const {
+import {
   Elevation,
   H5,
   Card,
@@ -18,23 +17,43 @@ const {
   RadioGroup,
   Radio,
   Callout
-} = require('@blueprintjs/core')
+} from '@blueprintjs/core'
 
-const Login = require('../Login').default
-const KeyTransfer = require('./KeyTransfer')
-const confirmationDialog = require('./confirmationDialog').confirmationDialogLegacy
-
-const SettingsDialog = styled.div`
-  .bp3-card:not(:last-child){
-    margin-bottom: 20px;
-  }
-`
+import Login from '../Login'
+import KeyTransfer from './KeyTransfer'
+import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
+const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 
 function flipDeltaBoolean (value) {
   return value === '1' ? '0' : '1'
 }
 
-class Settings extends React.Component {
+const SettingsDialogGlobal = createGlobalStyle`
+    .SettingsDialog {
+        position: absolute;
+        top: 0;
+        min-height: 60%;
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+        
+
+        .bp3-dialog-body {
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            overflow: overlay;
+
+        }
+
+        .bp3-elevation-1:last-child {
+            flex: 1 1 auto;
+            margin-bottom: 0px;
+        }
+      }
+    }
+`
+
+export default class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -43,7 +62,8 @@ class Settings extends React.Component {
       advancedSettings: {},
       userDetails: false,
       mail_pw: MAGIC_PW,
-      settings: {}
+      settings: {},
+      show: 'main'
     }
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -251,110 +271,130 @@ class Settings extends React.Component {
     ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
-  render () {
+  renderDialogContent () {
     const { deltachat, isOpen, onClose } = this.props
     const { userDetails, settings, advancedSettings, keyTransfer } = this.state
     const title = this.translate('menu_settings')
+    if (this.state.show === 'main') {
+      return (
+        <div>
+          <Card elevation={Elevation.ONE}>
+            <H5>{deltachat.credentials.addr}</H5>
+            <Button onClick={() => this.setState({ show: 'login' })}>
+              {this.translate('pref_password_and_account_settings')}
+            </Button>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_chats_and_media')}</H5>
+            <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
+            <br />
+            { this.renderRCSwitch('enterKeySends', this.translate('pref_enter_sends')) }
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('autocrypt')}</H5>
+            <Callout>{this.translate('autocrypt_explain')}</Callout>
+            <br />
+            { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
+            <Button onClick={this.initiateKeyTransfer}>
+              {this.translate('autocrypt_send_asm_button')}
+            </Button>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_backup')}</H5>
+            <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_managekeys_menu_title')}</H5>
+            <ButtonGroup>
+              <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
+              <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
+            </ButtonGroup>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_privacy')}</H5>
+            { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
+            </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_imap_folder_handling')}</H5>
+            { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
+            { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
+            { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
+            { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_profile_info_headline')}</H5>
+            { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
+            { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_email_interaction_title')}</H5>
+            <RadioGroup
+              label={this.translate('pref_show_emails')}
+              onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
+              selectedValue={Number(settings['show_emails'])}
+            >
+              <Radio label={this.translate('pref_show_emails_no')} value={C.DC_SHOW_EMAILS_OFF} />
+              <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
+              <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
+            </RadioGroup>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_experimental_features')}</H5>
+            { this.renderRCSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
+          </Card>
+        </div>
+      )
+    } else if (this.state.show === 'login') {
+      return (
+        <Card elevation={Elevation.ONE}>
+          <Login
+            {...advancedSettings}
+            mode={'update'}
+            addr={settings.addr}
+            mail_pw={settings.mail_pw}
+            onSubmit={this.onLoginSubmit}
+            loading={deltachat.configuring}
+            addrDisabled>
+            <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
+            <Button type='cancel' text={this.translate('cancel')} />
+          </Login>
+        </Card>
+      )
+    } else {
+      throw new Error('Invalid state name: ' + this.state.name)
+    }
+  }
+
+  render () {
+    const { deltachat, isOpen, onClose } = this.props
+    const { settings, advancedSettings, keyTransfer } = this.state
+    let title;
+    if (this.state.show === 'main') {
+        title = this.translate('menu_settings')
+    } else if (this.state.show === 'login') {
+        title = this.translate('pref_password_and_account_settings')
+    }
 
     return (
       <div>
+        <SettingsDialogGlobal />
         <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
-          isOpen={userDetails !== false}
-          title={this.translate('pref_password_and_account_settings')}
-          icon='settings'
-          onClose={() => this.setState({ userDetails: false })}>
-          <SettingsDialog className={Classes.DIALOG_BODY}>
-            <Card elevation={Elevation.ONE}>
-              <Login
-                {...advancedSettings}
-                mode={'update'}
-                addr={settings.addr}
-                mail_pw={settings.mail_pw}
-                onSubmit={this.onLoginSubmit}
-                loading={deltachat.configuring}
-                addrDisabled>
-                <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
-                <Button type='cancel' text={this.translate('cancel')} />
-              </Login>
-            </Card>
-          </SettingsDialog>
-        </Dialog>
-        <Dialog
-          isOpen={isOpen && !keyTransfer && !userDetails}
-          title={title}
-          icon='settings'
-          onClose={onClose}>
-          <SettingsDialog className={Classes.DIALOG_BODY}>
-            <Card elevation={Elevation.ONE}>
-              <H5>{deltachat.credentials.addr}</H5>
-              <Button onClick={() => this.setState({ userDetails: true })}>
-                {this.translate('pref_password_and_account_settings')}
-              </Button>
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_chats_and_media')}</H5>
-              <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
-              <br />
-              { this.renderRCSwitch('enterKeySends', this.translate('pref_enter_sends')) }
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('autocrypt')}</H5>
-              <Callout>{this.translate('autocrypt_explain')}</Callout>
-              <br />
-              { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
-              <Button onClick={this.initiateKeyTransfer}>
-                {this.translate('autocrypt_send_asm_button')}
-              </Button>
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_backup')}</H5>
-              <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_managekeys_menu_title')}</H5>
-              <ButtonGroup>
-                <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
-                <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
-              </ButtonGroup>
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_privacy')}</H5>
-              { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_imap_folder_handling')}</H5>
-              { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
-              { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
-              { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
-              { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_profile_info_headline')}</H5>
-              { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
-              { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_email_interaction_title')}</H5>
-              <RadioGroup
-                label={this.translate('pref_show_emails')}
-                onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
-                selectedValue={Number(settings['show_emails'])}
-              >
-                <Radio label={this.translate('pref_show_emails_no')} value={C.DC_SHOW_EMAILS_OFF} />
-                <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
-                <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
-              </RadioGroup>
-            </Card>
-            <Card elevation={Elevation.ONE}>
-              <H5>{this.translate('pref_experimental_features')}</H5>
-              { this.renderRCSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
-            </Card>
-          </SettingsDialog>
+          isOpen={isOpen}
+          onClose={onClose}
+          className='SettingsDialog'
+        >
+          <div class="bp3-dialog-header">
+           { this.state.show !== 'main' && <button onClick={() => this.setState({show: 'main'})} class="bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left"></button> }
+            <h4 class="bp3-heading">{title}</h4>
+            <button onClick={onClose} aria-label="Close" class="bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross"></button>
+          </div>
+          <div className={Classes.DIALOG_BODY}>
+            { this.renderDialogContent() }
+          </div>
+         <div className={Classes.DIALOG_FOOTER}/>
         </Dialog>
       </div>
     )
   }
 }
-
-module.exports = Settings
