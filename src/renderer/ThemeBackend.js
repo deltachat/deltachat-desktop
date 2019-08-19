@@ -151,10 +151,10 @@ export function ThemeDataBuilder (theme) {
     bp3SwitchShadow: theme.bp3SwitchShadow,
     bp3SwitchChecked: theme.bp3SwitchChecked,
     bp3SwitchShadowChecked: theme.bp3SwitchShadowChecked,
-    bp3SwitchBefore: theme.bp3SwitchBefore,
-    bp3SwitchBeforeShadow: theme.bp3SwitchBeforeShadow,
-    bp3SwitchBeforeChecked: theme.bp3SwitchBeforeChecked,
-    bp3SwitchBeforeShadowChecked: theme.bp3SwitchBeforeShadowChecked,
+    bp3SwitchKnob: theme.bp3SwitchKnob,
+    bp3SwitchKnobShadow: theme.bp3SwitchKnobShadow,
+    bp3SwitchKnobChecked: theme.bp3SwitchKnobChecked,
+    bp3SwitchKnobShadowChecked: theme.bp3SwitchKnobShadowChecked,
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(

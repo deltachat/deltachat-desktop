@@ -88,12 +88,12 @@
     margin-top: -2px;
     width: calc(1em + 4px);
     height: calc(1em + 4px);
-    box-shadow: var(--bp3SwitchBeforeShadow);
-    background: var(--bp3SwitchBefore);
+    box-shadow: var(--bp3SwitchKnobShadow);
+    background: var(--bp3SwitchKnob);
 }
 .bp3-control.bp3-switch input:checked ~ .bp3-control-indicator::before {
-    box-shadow: var(--bp3SwitchBeforeShadowChecked);
-    background: var(--bp3SwitchBeforeChecked);
+    box-shadow: var(--bp3SwitchKnobShadowChecked);
+    background: var(--bp3SwitchKnobChecked);
 }
 
 .bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {

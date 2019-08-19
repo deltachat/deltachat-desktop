@@ -25,8 +25,8 @@
       "bp3SwitchShadow": "unset",
       "bp3SwitchChecked": "#acd4e8", 
       "bp3SwitchShadowChecked": "unset", 
-      "bp3SwitchBefore": "#f3f3f3",
-      "bp3SwitchBeforeShadow": "0px 2px 0 0px #d2cfcfad",
-      "bp3SwitchBeforeChecked": "#42A5F5",
-      "bp3SwitchBeforeShadowChecked": "0px 1px 0 0px #c9d4d2d1"  }
+      "bp3SwitchKnob": "#f3f3f3",
+      "bp3SwitchKnobShadow": "0px 2px 0 0px #d2cfcfad",
+      "bp3SwitchKnobChecked": "#42A5F5",
+      "bp3SwitchKnobShadowChecked": "0px 1px 0 0px #c9d4d2d1"  }
 }
