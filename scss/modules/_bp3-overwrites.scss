@@ -73,20 +73,27 @@
   color: var(--bp3InputPlaceholder);
 }
 
-.bp3-control.bp3-switch {
-  input ~ .bp3-control-indicator {
-    background: var(--bp3SwitchBg);
-  }
-  .bp3-control-indicator::before {
-    box-shadow: 0 0 0 1px var(--bp3SwitchBeforeShadow);
-    background: var(--bp3SwitchBeforeBg);
-  }
-  input:checked ~ .bp3-control-indicator {
-      background: var(--bp3SwitchChecked);
-  }
-  input:checked ~ .bp3-control-indicator::before {
-    box-shadow: inset 0 0 0 1px var(--bp3SwitchCheckedBeforeShadow);
-  }
+.bp3-control.bp3-switch input ~ .bp3-control-indicator, .bp3-control.bp3-switch:hover input ~ .bp3-control-indicator {
+    background: var(--bp3Switch);
+    box-shadow: var(--bp3SwitchShadow);
+}
+
+.bp3-control.bp3-switch input:checked ~ .bp3-control-indicator, .bp3-control.bp3-switch:hover input:checked ~ .bp3-control-indicator {
+    box-shadow: var(--bp3SwitchShadowChecked);
+    background: var(--bp3SwitchChecked);
+}
+
+.bp3-control.bp3-switch .bp3-control-indicator::before {
+    margin-left: -2px;
+    margin-top: -2px;
+    width: calc(1em + 4px);
+    height: calc(1em + 4px);
+    box-shadow: var(--bp3SwitchBeforeShadow);
+    background: var(--bp3SwitchBefore);
+}
+.bp3-control.bp3-switch input:checked ~ .bp3-control-indicator::before {
+    box-shadow: var(--bp3SwitchBeforeShadowChecked);
+    background: var(--bp3SwitchBeforeChecked);
 }
 
 .bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
@@ -114,4 +121,8 @@
 
 .bp3-menu-divider {
   border-top: 1px solid rgba(16, 22, 26, 0.15); // TODO include color into theming
+}
+
+:focus, .bp3-control input:focus ~ .bp3-control-indicator {
+    outline: unset;
 }

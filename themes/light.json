@@ -20,6 +20,13 @@
       "bp3DialogBg": "#ececec",
       "bp3DialogCardBg": "#fff",
       "bp3DialogHeaderBg": "#fff",
-      "chatListItemBgHover": "rgb(228, 228, 228)"
-  }
+      "chatListItemBgHover": "rgb(228, 228, 228)",
+      "bp3Switch": "#7a8084",
+      "bp3SwitchShadow": "unset",
+      "bp3SwitchChecked": "#acd4e8", 
+      "bp3SwitchShadowChecked": "unset", 
+      "bp3SwitchBefore": "#f3f3f3",
+      "bp3SwitchBeforeShadow": "0px 2px 0 0px #d2cfcfad",
+      "bp3SwitchBeforeChecked": "#42A5F5",
+      "bp3SwitchBeforeShadowChecked": "0px 1px 0 0px #c9d4d2d1"  }
 }
