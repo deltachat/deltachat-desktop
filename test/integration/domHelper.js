@@ -15,7 +15,7 @@ const domHelper = {
   },
   async logout () {
     await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(6) a')
+    await this.browser.click('=Logout')
   },
   async closeDialog () {
     await this.browser.click('.bp3-dialog-close-button')
