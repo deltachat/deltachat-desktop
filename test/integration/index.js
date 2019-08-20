@@ -92,7 +92,7 @@ test('App loads language from config file', async (t) => {
   }
 })
 
-test('Update and persist Desktop settings', async (t) => {
+test.only('Update and persist Desktop settings', async (t) => {
   const app = setup.createAppWithConfig({})
   try {
     await setup.waitForLoad(app, t)
@@ -109,6 +109,11 @@ test('Update and persist Desktop settings', async (t) => {
     currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
     await t.equals(currentConfig['enterKeySends'], false, 'enterKeySends is false in config.json')
     await domHelper.closeDialog()
+    await domHelper.logout()
+    await app.client.click('.bp3-button:nth-child(1)')
+    await domHelper.openSettings()
+    await t.ok(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is still not active after new login')
+
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
