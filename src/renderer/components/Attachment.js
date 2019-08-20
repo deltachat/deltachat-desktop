@@ -16,7 +16,8 @@ module.exports = {
   isImage,
   hasImage,
   isVideo,
-  hasVideoScreenshot
+  hasVideoScreenshot,
+  isDisplayableByRenderMedia
 }
 
 function isImage (attachment) {
@@ -47,6 +48,10 @@ function isAudio (attachment) {
   return (
     attachment && attachment.contentType && MIME.isAudio(attachment.contentType)
   )
+}
+
+function isDisplayableByRenderMedia (attachment) {
+  return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
 }
 
 function getExtension ({ fileName, contentType }) {
@@ -231,6 +236,7 @@ function render (props) {
         <div
           className='module-message__generic-attachment__icon'
           draggable='true'
+          onClick={onClickAttachment}
           onDragStart={dragAttachmentOut.bind(null, attachment)}
           title={contentType}
         >

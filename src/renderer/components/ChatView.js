@@ -1,11 +1,13 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, shell } = require('electron')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
 const Composer = require('./Composer')
 const MessageWrapper = require('./MessageWrapper')
 const log = require('../../logger').getLogger('renderer/chatView')
+
+const { isDisplayableByRenderMedia } = require('./Attachment')
 
 const MutationObserver = window.MutationObserver
 
@@ -183,7 +185,13 @@ class ChatView extends React.Component {
   }
 
   onClickAttachment (message) {
-    this.context.openDialog('RenderMedia', { message })
+    if (isDisplayableByRenderMedia(message.msg.attachment)) {
+      this.context.openDialog('RenderMedia', { message })
+    } else {
+      if (!shell.openItem(message.msg.attachment.url)) {
+        log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
+      }
+    }
   }
 
   onClickSetupMessage (setupMessage) {
