@@ -15,9 +15,11 @@ const domHelper = {
   },
   async logout () {
     await this.openMainMenu()
+    await this.browser.$('=Logout').waitForExist(1000)
     await this.browser.click('=Logout')
   },
   async closeDialog () {
+    await this.browser.$('.bp3-dialog-close-button').waitForExist(1000)
     await this.browser.click('.bp3-dialog-close-button')
   },
   async isActiveSwitch (label) {
