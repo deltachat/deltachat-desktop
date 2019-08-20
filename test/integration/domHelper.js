@@ -6,7 +6,6 @@ const domHelper = {
   },
 
   async openMainMenu () {
-    this.browser.$('#main-menu-button').waitForExist(5000)
     await this.browser.click('#main-menu-button')
   },
   async openSettings () {
@@ -14,12 +13,10 @@ const domHelper = {
     await this.browser.click('=Settings')
   },
   async logout () {
-    await this.openMainMenu()
-    await this.browser.$('=Logout').waitForExist(1000)
+    await this.browser.click('#main-menu-button')
     await this.browser.click('=Logout')
   },
   async closeDialog () {
-    await this.browser.$('.bp3-dialog-close-button').waitForExist(1000)
     await this.browser.click('.bp3-dialog-close-button')
   },
   async isActiveSwitch (label) {
