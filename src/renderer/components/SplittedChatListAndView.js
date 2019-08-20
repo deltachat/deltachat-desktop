@@ -185,7 +185,7 @@ class SplittedChatListAndView extends React.Component {
                   <Button minimal icon='map' onClick={this.onMapIconClick} />
                 )}
               </SettingsContext.Consumer>
-              }""
+              }
               <Popover content={menu} position={Position.RIGHT_TOP}>
                 <Button className='icon-rotated' minimal icon='more' id='main-menu-button' />
               </Popover>
