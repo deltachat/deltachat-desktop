@@ -1,7 +1,7 @@
 import React from 'react'
 import { remote } from 'electron'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaGreenButton } from '../helpers/SmallDialog'
+import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
 
 export function confirmationDialogLegacy (message, opts, cb) {
   if (!cb) cb = opts
@@ -44,15 +44,20 @@ export default function ConfirmationDialog (props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaGreenButton onClick={() => onClick(false)}>
-              {tx('no').toUpperCase()}
-            </DeltaGreenButton>
-            <DeltaGreenButton
+            <DeltaButtonPrimary
+              noPadding
               onClick={() => onClick(true)}
-              style={{ marginLeft: '90px' }}
             >
               {tx('yes').toUpperCase()}
-            </DeltaGreenButton>
+            </DeltaButtonPrimary>
+            <DeltaButtonDanger
+              noPadding
+              onClick={() => onClick(false)}
+              style={{ marginLeft: '90px' }}
+            >
+
+              {tx('no').toUpperCase()}
+            </DeltaButtonDanger>
           </div>
         </div>
       </div>

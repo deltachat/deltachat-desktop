@@ -1,7 +1,7 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import styled from 'styled-components'
-import { DeltaGreenButton } from '../helpers/SmallDialog'
+import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import {
   Card,
   Callout,
@@ -37,6 +37,10 @@ const SetupMessagePartialInputSeperator = styled.div`
   align-items: center;
   justify-content: center;
   height: 30px;
+
+  .bp3-icon > svg:not([fill]) {
+    fill: var(--bp3InputPlaceholder);
+  }
 `
 
 class SetupMessagePanel extends React.Component {
@@ -100,7 +104,7 @@ class SetupMessagePanel extends React.Component {
       </Card>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <DeltaGreenButton onClick={this.onClick.bind(this)}>{tx('ok')}</DeltaGreenButton>
+          <DeltaButtonPrimary onClick={this.onClick.bind(this)}>{tx('ok')}</DeltaButtonPrimary>
         </div>
       </div>
     </div>)

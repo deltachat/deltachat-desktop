@@ -15,18 +15,24 @@ export const SmallDialogWrapper = createGlobalStyle`
   }
 `
 
-export const DeltaGreenButton = styled.p`
-  color: #53948c;
-  padding: 0px 7px;
+export const DeltaButton = styled.p`
+  color: ${({color}) => color ? color : '#bec5c4'};
+  padding: ${({noPadding}) => !noPadding ? '0 2px' : '0px'};
   margin-bottom: 0px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: ${({bold}) => bold === false ? '0px' : '2px'};
   font-size: initial;
-  font-weight: bold;
-}  &:hover {
+  letter-spacing: ${({bold}) => bold === false ? 'initial' : 'bold'};
+  &:hover {
     cursor: pointer;
   }
+`
 
+export const DeltaButtonPrimary = styled(DeltaButton)`
+  color: #53948c;
+`
+export const DeltaButtonDanger = styled(DeltaButton)`
+  color: #fd5d1b;
 `
 
 export default function SmallDialog (props) {

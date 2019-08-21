@@ -29,6 +29,10 @@ $bp3-dialog-radius: 2px;
 .bp3-card {
   background-color: var(--bp3DialogCardBg);
   border-radius: 0px;
+  margin-top: 20px;
+  &:first-child {
+      margin-top: 0px;
+  }
   &:last-child {
     margin-bottom: -20px;
     border-bottom-left-radius: 2px;
