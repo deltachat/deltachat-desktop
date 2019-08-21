@@ -1,11 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/settings')
 
-// Save settings for RC
-function updateSettings (saved) {
-  this._saved = saved
-}
-
 function setConfig (key, value) {
   log.info(`Setting config ${key}:${value}`)
   return this._dc.setConfig(key, String(value))
@@ -32,7 +27,6 @@ function keysExport (directory) {
 }
 
 module.exports = function () {
-  this.updateSettings = updateSettings.bind(this)
   this.setConfig = setConfig.bind(this)
   this.getConfig = getConfig.bind(this)
   this.getConfigFor = getConfigFor.bind(this)

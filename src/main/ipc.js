@@ -193,9 +193,10 @@ function init (cwd, state, logHandler) {
     e.returnValue = app.localeData
   })
 
-  ipcMain.on('updateSettings', (e, saved) => {
-    dc.updateSettings(saved)
-    app.saveState()
+  ipcMain.on('updateDesktopSetting', (e, key, value) => {
+    const { saved } = app.state
+    saved[key] = value
+    app.saveState({ saved })
     render()
   })
 
