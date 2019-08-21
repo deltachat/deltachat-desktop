@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const { ipcRenderer, remote } = require('electron')
 const styled = require('styled-components').default
 const C = require('deltachat-node/constants')
+const SettingsContext = require('../../contexts/SettingsContext')
 
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 const {
@@ -39,7 +40,6 @@ class Settings extends React.Component {
     super(props)
     this.state = {
       keyTransfer: false,
-      saved: props.saved,
       advancedSettings: {},
       userDetails: false,
       mail_pw: MAGIC_PW,
@@ -50,57 +50,55 @@ class Settings extends React.Component {
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onKeysExport = this.onKeysExport.bind(this)
     this.onKeysImport = this.onKeysImport.bind(this)
-    this.handleRCSettingsChange = this.handleRCSettingsChange.bind(this)
+    this.handleDesktopSettingsChange = this.handleDesktopSettingsChange.bind(this)
     this.handleDeltaSettingsChange = this.handleDeltaSettingsChange.bind(this)
-    this.renderRCSwitch = this.renderRCSwitch.bind(this)
+    this.renderDTSettingSwitch = this.renderDTSettingSwitch.bind(this)
     this.renderDeltaSwitch = this.renderDeltaSwitch.bind(this)
     this.onLoginSubmit = this.onLoginSubmit.bind(this)
     this.translate = window.translate
   }
 
-  componentDidUpdate (prevProps) {
-    if (this.props.isOpen && !prevProps.isOpen) {
-      const settings = ipcRenderer.sendSync(
-        'getConfigFor', [
-          'addr',
-          'mail_pw',
-          'inbox_watch',
-          'sentbox_watch',
-          'mvbox_watch',
-          'mvbox_move',
-          'e2ee_enabled',
-          'configured_mail_server',
-          'configured_mail_user',
-          'configured_mail_port',
-          'configured_mail_security',
-          'configured_send_user',
-          'configured_send_pw',
-          'configured_send_server',
-          'configured_send_port',
-          'configured_send_security',
-          'configured_e2ee_enabled',
-          'displayname',
-          'selfstatus',
-          'mdns_enabled',
-          'show_emails'
-        ]
-      )
+  componentDidMount () {
+    const settings = ipcRenderer.sendSync(
+      'getConfigFor', [
+        'addr',
+        'mail_pw',
+        'inbox_watch',
+        'sentbox_watch',
+        'mvbox_watch',
+        'mvbox_move',
+        'e2ee_enabled',
+        'configured_mail_server',
+        'configured_mail_user',
+        'configured_mail_port',
+        'configured_mail_security',
+        'configured_send_user',
+        'configured_send_pw',
+        'configured_send_server',
+        'configured_send_port',
+        'configured_send_security',
+        'configured_e2ee_enabled',
+        'displayname',
+        'selfstatus',
+        'mdns_enabled',
+        'show_emails'
+      ]
+    )
 
-      const advancedSettings = {
-        mailUser: settings['configured_mail_user'],
-        mailServer: settings['configured_mail_server'],
-        mailPort: settings['configured_mail_port'],
-        mailSecurity: settings['configured_mail_security'],
-        sendUser: settings['configured_send_user'],
-        sendPw: settings['configured_send_pw'],
-        sendServer: settings['configured_send_server'],
-        sendPort: settings['configured_send_port'],
-        sendSecurity: settings['configured_send_security'],
-        e2ee_enabled: settings['configured_e2ee_enabled']
-      }
-
-      this.setState({ settings, advancedSettings })
+    const advancedSettings = {
+      mail_user: settings['configured_mail_user'],
+      mail_server: settings['configured_mail_server'],
+      mail_port: settings['configured_mail_port'],
+      mail_security: settings['configured_mail_security'],
+      send_user: settings['configured_send_user'],
+      send_pw: settings['configured_send_pw'],
+      send_server: settings['configured_send_server'],
+      send_port: settings['configured_send_port'],
+      send_security: settings['configured_send_security'],
+      e2ee_enabled: settings['configured_e2ee_enabled']
     }
+
+    this.setState({ settings, advancedSettings })
   }
 
   onKeyTransferComplete () {
@@ -189,12 +187,12 @@ class Settings extends React.Component {
     this.setState({ keyTransfer: true })
   }
 
-  /** Saves settings for the application (saved in ~/.config/DeltaChat/deltachat.json) */
-  handleRCSettingsChange (key, value) {
-    const { saved } = this.state
-    saved[key] = value
-    this.setState({ saved })
-    ipcRenderer.send('updateSettings', saved)
+  /*
+   * Saves settings for the Deltchat Desktop
+   * persisted in ~/.config/DeltaChat/deltachat.json
+   */
+  handleDesktopSettingsChange (key, value) {
+    ipcRenderer.send('updateDesktopSetting', key, value)
   }
 
   /** Saves settings to deltachat core */
@@ -211,15 +209,21 @@ class Settings extends React.Component {
     ipcRenderer.send('updateCredentials', config)
   }
 
-  renderRCSwitch (configKey, label) {
-    const { saved } = this.state
+  /*
+   * render switch for Desktop Setings
+   */
+  renderDTSettingSwitch (configKey, label) {
     return (
-      <Switch
-        checked={saved && saved[configKey]}
-        label={label}
-        onChange={() => this.handleRCSettingsChange(configKey, !saved[configKey])}
-      />
-    )
+      <SettingsContext.Consumer>
+        {(settings) => (
+          <Switch
+            checked={settings[configKey]}
+            className={settings[configKey] ? 'active' : 'inactive'}
+            label={label}
+            onChange={() => this.handleDesktopSettingsChange(configKey, !settings[configKey])}
+          />
+        )}
+      </SettingsContext.Consumer>)
   }
 
   renderDeltaSwitch (configKey, label) {
@@ -227,6 +231,7 @@ class Settings extends React.Component {
     return (
       <Switch
         checked={configValue === '1'}
+        className={configValue === '1' ? 'active' : 'inactive'}
         label={label}
         onChange={() => this.handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))}
       />
@@ -273,6 +278,7 @@ class Settings extends React.Component {
                 mail_pw={settings.mail_pw}
                 onSubmit={this.onLoginSubmit}
                 loading={deltachat.configuring}
+                onClose={() => this.setState({ userDetails: false })}
                 addrDisabled>
                 <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
                 <Button type='cancel' text={this.translate('cancel')} />
@@ -296,7 +302,7 @@ class Settings extends React.Component {
               <H5>{this.translate('pref_chats_and_media')}</H5>
               <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
               <br />
-              { this.renderRCSwitch('enterKeySends', this.translate('pref_enter_sends')) }
+              { this.renderDTSettingSwitch('enterKeySends', this.translate('pref_enter_sends')) }
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('autocrypt')}</H5>
@@ -348,7 +354,7 @@ class Settings extends React.Component {
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{this.translate('pref_experimental_features')}</H5>
-              { this.renderRCSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
+              { this.renderDTSettingSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
             </Card>
           </SettingsDialog>
         </Dialog>

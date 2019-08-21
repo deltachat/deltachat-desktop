@@ -17,7 +17,8 @@ module.exports = {
   waitForLoad,
   wait,
   copy,
-  getConfig
+  getConfig,
+  readConfigFile
 }
 
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
@@ -159,4 +160,8 @@ function copy (pathFrom, pathTo) {
     if (process.platform !== 'win32' || err.code !== 'EPERM') throw err
     console.log('ignoring windows copy EPERM error', err)
   }
+}
+
+function readConfigFile (path) {
+  return JSON.parse(fs.readFileSync(path))
 }

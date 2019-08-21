@@ -22,7 +22,6 @@ class App extends React.Component {
           <ThemeProvider>
             <ScreenController
               logins={state.logins}
-              saved={state.saved}
               deltachat={state.deltachat} />
           </ThemeProvider>
         </IntlProvider>
