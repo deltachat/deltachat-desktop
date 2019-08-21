@@ -48,9 +48,6 @@ export function ThemeDataBuilder (theme) {
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
   // because it gets merged with the default theme later anyway
-  /// Don't use color directly here
-  const bp3SwitchShadowColor = 'rgba(16,22,26,.4)'
-  // #070c14; // some kind of font color?
   let themeData = {
     // Misc
     ovalButtonBg: theme.ovalButtonBg,
@@ -150,11 +147,14 @@ export function ThemeDataBuilder (theme) {
     bp3InputPlaceholder: 'lightgray',
     bp3MenuText: theme.textPrimary,
     bp3MenuBg: theme.bgSecondary,
-    bp3SwitchBg: 'rgba(130, 165, 188, 0.5)',
-    bp3SwitchBeforeShadow: bp3SwitchShadowColor,
-    bp3SwitchBeforeBg: 'RGBA(57, 75, 89, 1)',
-    bp3SwitchChecked: theme.accentColor,
-    bp3SwitchCheckedBeforeShadow: bp3SwitchShadowColor,
+    bp3Switch: '#7a8084',
+    bp3SwitchShadow: 'unset',
+    bp3SwitchChecked: '#acd4e8',
+    bp3SwitchShadowChecked: 'unset',
+    bp3SwitchKnob: '#f5f5f5',
+    bp3SwitchKnobShadow: '0px 2px 0 0px #d2cfcfad',
+    bp3SwitchKnobChecked: '#42A5F5',
+    bp3SwitchKnobShadowChecked: '0px 1px 0 0px #c9d4d2d1',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(
