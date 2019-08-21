@@ -1,7 +1,7 @@
 $bp3-dialog-radius: 2px;
 
 .bp3-dialog {
-  background: var(--bp3DialogBg);
+  background: var(--bp3DialogBgSecondary);
   border-radius: $bp3-dialog-radius;
   margin-bottom: 0px;
   padding-bottom: 0px;
@@ -20,14 +20,14 @@ $bp3-dialog-radius: 2px;
 }
 
 .bp3-dialog-footer {
-  background-color: var(--bp3DialogCardBg);
+  background-color: var(--bp3DialogBgPrimary);
   margin: 0;
   padding: 0 20px 20px;
   border-radius: $bp3-dialog-radius;
 }
 
 .bp3-card {
-  background-color: var(--bp3DialogCardBg);
+  background-color: var(--bp3DialogBgPrimary);
   border-radius: 0px;
   margin-top: 20px;
   &:first-child {

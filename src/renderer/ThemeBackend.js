@@ -124,7 +124,7 @@ export function ThemeDataBuilder (theme) {
     deltaChatPrimaryFg: theme.textPrimary, // todo rename this var
     deltaChatPrimaryFgLight: theme.textSecondary, // todo rename this var
     // Context Menu
-    contextMenuBg: theme.bgSecondary,
+    contextMenuBg: theme.bgPrimary,
     contextMenuBorder: undefinedGuard(
       theme.bgSecondary, c => changeContrast(c, 0.1)
     ),
@@ -132,10 +132,10 @@ export function ThemeDataBuilder (theme) {
     contextMenuSelected: theme.bgSecondary,
     contextMenuSelectedBg: '#a4a6a9',
     // Bp3 overwrites
-    bp3DialogHeaderBg: theme.bgSecondary,
+    bp3DialogHeaderBg: theme.bgPrimary,
     bp3DialogHeaderIcon: '#5c7080',
-    bp3DialogBg: theme.bgPrimary,
-    bp3DialogCardBg: theme.bgSecondary,
+    bp3DialogBgSecondary: theme.bgSecondary,
+    bp3DialogBgPrimary: theme.bgPrimary,
     bp3Heading: theme.textPrimary,
     bp3ButtonText: theme.textPrimary,
     bp3ButtonBg: theme.bgPrimary,
@@ -146,7 +146,7 @@ export function ThemeDataBuilder (theme) {
     bp3InputBg: theme.bgPrimary,
     bp3InputPlaceholder: 'lightgray',
     bp3MenuText: theme.textPrimary,
-    bp3MenuBg: theme.bgSecondary,
+    bp3MenuBg: theme.bgPrimary,
     bp3Switch: '#7a8084',
     bp3SwitchShadow: 'unset',
     bp3SwitchChecked: '#acd4e8',
@@ -160,7 +160,7 @@ export function ThemeDataBuilder (theme) {
     emojiMartBorder: undefinedGuard(
       theme.bgSecondary, c => changeContrast(c, 0.2)
     ),
-    emojiMartBg: theme.bgSecondary,
+    emojiMartBg: theme.bgPrimary,
     emojiMartCategoryIcons: undefinedGuard(
       [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.4)
     ),

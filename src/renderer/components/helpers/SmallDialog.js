@@ -6,7 +6,7 @@ export const SmallDialogWrapper = createGlobalStyle`
   .bp3-small-dialog {
     width: 350px;
     padding-bottom: 0px;
-    background-color: var(--bp3DialogCardBg);
+    background-color: var(--bp3DialogBgPrimary);
   }
 
   .bp3-dialog-footer {
