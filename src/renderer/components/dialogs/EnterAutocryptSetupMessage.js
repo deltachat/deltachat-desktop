@@ -1,9 +1,10 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
-const styled = require('styled-components').default
-
-const {
+import React from 'react'
+import { ipcRenderer } from 'electron'
+import styled from 'styled-components'
+import { DeltaGreenButton } from '../helpers/SmallDialog'
+import {
   Card,
+  Callout,
   Icon,
   Spinner,
   Classes,
@@ -11,7 +12,7 @@ const {
   ButtonGroup,
   Dialog,
   InputGroup
-} = require('@blueprintjs/core')
+} from '@blueprintjs/core'
 
 const InputTransferKey = styled.div`
   display: grid;
@@ -30,7 +31,7 @@ const SetupMessagePartialInputWrapper = styled.div`
 `
 
 const SetupMessagePartialInputSeperator = styled.div`
-  width: 20%;
+  width: 25%;
   float: right;
   display: flex;
   align-items: center;
@@ -92,23 +93,21 @@ class SetupMessagePanel extends React.Component {
 
     return (<div>
       <Card>
-        {tx('autocrypt_continue_transfer_please_enter_code')}
+        <Callout>{tx('autocrypt_continue_transfer_please_enter_code')}</Callout> 
+        <InputTransferKey>
+          {this.renderInputKey()}
+        </InputTransferKey>
       </Card>
-      <InputTransferKey>
-        {this.renderInputKey()}
-      </InputTransferKey>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <ButtonGroup>
-            <Button onClick={this.onClick.bind(this)}>{tx('transfer_key_desktop')}</Button>
-          </ButtonGroup>
+          <DeltaGreenButton onClick={this.onClick.bind(this)}>{tx('ok')}</DeltaGreenButton>
         </div>
       </div>
     </div>)
   }
 }
 
-class SetupMessage extends React.Component {
+export default class EnterAutocryptSetupMessage extends React.Component {
   constructor (props) {
     super(props)
     this.state = { loading: false }
@@ -164,7 +163,6 @@ class SetupMessage extends React.Component {
       <Dialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
-        icon='exchange'
         onClose={onClose}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
@@ -175,4 +173,3 @@ class SetupMessage extends React.Component {
   }
 }
 
-module.exports = SetupMessage

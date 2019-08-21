@@ -1,10 +1,10 @@
 const React = require('react')
-const SetupMessage = require('./SetupMessage')
 const MessageDetail = require('./MessageDetail')
 const RenderMedia = require('./RenderMedia')
 const ContactDetail = require('./ContactDetail')
 const DeadDrop = require('./DeadDrop').default
-const KeyTransfer = require('./KeyTransfer')
+const EnterAutocryptSetupMessage = require('./EnterAutocryptSetupMessage').default
+const SendAutocryptSetupMessage = require('./SendAutocryptSetupMessage')
 const QrCode = require('./QrCode')
 const ImexProgress = require('./ImexProgress')
 const About = require('./About')
@@ -15,12 +15,12 @@ const MapDialog = require('./MapDialog')
 const ConfirmationDialog = require('./confirmationDialog').default
 
 const allDialogs = [
-  SetupMessage,
   ContactDetail,
   DeadDrop,
   RenderMedia,
   MessageDetail,
-  KeyTransfer,
+  EnterAutocryptSetupMessage,
+  SendAutocryptSetupMessage,
   QrCode,
   ImexProgress,
   About,

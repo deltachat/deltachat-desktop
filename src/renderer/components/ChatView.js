@@ -187,7 +187,7 @@ class ChatView extends React.Component {
   }
 
   onClickSetupMessage (setupMessage) {
-    this.context.openDialog('SetupMessage', { setupMessage })
+    this.context.openDialog('EnterAutocryptSetupMessage', { setupMessage })
   }
 
   onShowDetail (message) {

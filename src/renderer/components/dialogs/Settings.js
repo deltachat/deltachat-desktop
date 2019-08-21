@@ -20,7 +20,7 @@ import {
 } from '@blueprintjs/core'
 
 import Login from '../Login'
-import KeyTransfer from './KeyTransfer'
+import SendAutocryptSetupMessage from './SendAutocryptSetupMessage'
 import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 
@@ -32,24 +32,6 @@ const SettingsDialogGlobal = createGlobalStyle`
     .SettingsDialog {
         position: absolute;
         top: 0;
-        min-height: 60%;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-        
-
-        .bp3-dialog-body {
-            display: flex;
-            flex-direction: column;
-            max-height: 90vh;
-            overflow: overlay;
-
-        }
-
-        .bp3-elevation-1:last-child {
-            flex: 1 1 auto;
-            margin-bottom: 0px;
-        }
-      }
     }
 `
 
@@ -378,7 +360,7 @@ export default class Settings extends React.Component {
     return (
       <div>
         <SettingsDialogGlobal />
-        <KeyTransfer isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
+        <SendAutocryptSetupMessage isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={isOpen}
           onClose={onClose}

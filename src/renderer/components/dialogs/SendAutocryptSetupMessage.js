@@ -65,7 +65,7 @@ class InitiatePanel extends React.Component {
   }
 }
 
-class KeyTransfer extends React.Component {
+class SendAutocryptSetupMessage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -123,4 +123,4 @@ class KeyTransfer extends React.Component {
   }
 }
 
-module.exports = KeyTransfer
+module.exports = SendAutocryptSetupMessage
