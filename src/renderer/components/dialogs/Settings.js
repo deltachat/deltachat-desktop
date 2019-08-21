@@ -355,7 +355,7 @@ export default class Settings extends React.Component {
 
   render () {
     const { onClose } = this.props
-    const { userDetails, keyTransfer } = this.state
+    const { keyTransfer } = this.state
     let title
     if (this.state.show === 'main') {
       title = this.translate('menu_settings')

@@ -50,6 +50,9 @@ export function ThemeDataBuilder (theme) {
   // because it gets merged with the default theme later anyway
   let themeData = {
     // Misc
+    colorPrimary: '#53948c',
+    colorDanger: '#f44336',
+    colorNone: '#8ca5a1',
     ovalButtonBg: theme.ovalButtonBg,
     ovalButtonBgHover: undefinedGuard(
       theme.ovalButtonBg, c => changeContrast(c, 0.7)

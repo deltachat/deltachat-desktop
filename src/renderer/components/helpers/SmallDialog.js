@@ -16,7 +16,7 @@ export const SmallDialogWrapper = createGlobalStyle`
 `
 
 export const DeltaButton = styled.p`
-  color: ${({ color }) => color || '#8ca5a1'};
+  color: ${({ color }) => color || 'var(--colorNone)'};
   padding: ${({ noPadding }) => !noPadding ? '0 2px' : '0px'};
   margin-bottom: 0px;
   text-transform: uppercase;
@@ -29,10 +29,10 @@ export const DeltaButton = styled.p`
 `
 
 export const DeltaButtonPrimary = styled(DeltaButton)`
-  color: #53948c;
+  color: var(--colorPrimary);
 `
 export const DeltaButtonDanger = styled(DeltaButton)`
-  color: #f44336;
+  color: var(--colorDanger);
 `
 
 export default function SmallDialog (props) {
