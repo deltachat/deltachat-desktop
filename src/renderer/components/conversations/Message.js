@@ -262,9 +262,6 @@ class Message extends React.Component {
         </MenuItem>
         {attachment ? (
           <MenuItem
-            attributes={{
-              className: 'module-message__context__download'
-            }}
             onClick={onDownload}
           >
             {tx('download_attachment_desktop')}
