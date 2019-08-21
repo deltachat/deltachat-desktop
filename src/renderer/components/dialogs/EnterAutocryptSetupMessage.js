@@ -1,47 +1,14 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
-import styled from 'styled-components'
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import {
   Card,
   Callout,
-  Icon,
   Spinner,
   Classes,
-  Button,
-  ButtonGroup,
-  Dialog,
-  InputGroup
+  Dialog
 } from '@blueprintjs/core'
-
-const InputTransferKey = styled.div`
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-gap: 10px;
-  padding: 20px 10px 20px 30px;
-`
-
-const SetupMessagePartialInputWrapper = styled.div`
-  width: 100%;
-
-  .bp3-input {
-    width: 66%;
-    float: left;
-  }
-`
-
-const SetupMessagePartialInputSeperator = styled.div`
-  width: 25%;
-  float: right;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 30px;
-
-  .bp3-icon > svg:not([fill]) {
-    fill: var(--bp3InputPlaceholder);
-  }
-`
+import InputTransferKey from '../helpers/AutocryptSetupMessage'
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
@@ -70,44 +37,24 @@ class SetupMessagePanel extends React.Component {
     this.props.continueKeyTransfer(this.state.key.join(''))
   }
 
-  renderInputKey () {
-    const inputs = []
-    for (let i = 0; i < 9; i++) {
-      inputs.push(
-        <SetupMessagePartialInputWrapper key={i}>
-          <InputGroup
-            key={i}
-            data-index={i}
-            id={'autocrypt-input-' + i}
-            value={this.state.key[i]}
-            onChange={this.handleChangeKey}
-          />
-          {i !== 8 &&
-          i !== 2 &&
-          i !== 5 &&
-            <SetupMessagePartialInputSeperator><Icon icon='small-minus' /></SetupMessagePartialInputSeperator>}
-        </SetupMessagePartialInputWrapper>
-      )
-    }
-    return inputs
-  }
-
   render () {
     const tx = window.translate
 
-    return (<div>
-      <Card>
-        <Callout>{tx('autocrypt_continue_transfer_please_enter_code')}</Callout> 
-        <InputTransferKey>
-          {this.renderInputKey()}
-        </InputTransferKey>
-      </Card>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <DeltaButtonPrimary onClick={this.onClick.bind(this)}>{tx('ok')}</DeltaButtonPrimary>
+    return (
+      <React.Fragment>
+        <div className={Classes.DIALOG_BODY}>
+          <Card>
+            <Callout>{tx('autocrypt_continue_transfer_please_enter_code')}</Callout>
+            <InputTransferKey autocryptkey={this.state.key} onChange={this.handleChangeKey} />
+          </Card>
         </div>
-      </div>
-    </div>)
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <DeltaButtonPrimary onClick={this.onClick.bind(this)}>{tx('ok')}</DeltaButtonPrimary>
+          </div>
+        </div>
+      </React.Fragment>
+    )
   }
 }
 
@@ -154,9 +101,7 @@ export default class EnterAutocryptSetupMessage extends React.Component {
 
     let body
     if (loading) {
-      body = <div>
-        <Spinner size={50} intent='success' />
-      </div>
+      body = <div className={Classes.DIALOG_BODY}><Spinner size={50} intent='success' /></div>
     } else {
       body = <SetupMessagePanel
         setupCodeBegin={setupCodeBegin}
@@ -169,11 +114,8 @@ export default class EnterAutocryptSetupMessage extends React.Component {
         title={tx('autocrypt_key_transfer_desktop')}
         onClose={onClose}
         canOutsideClickClose={false}>
-        <div className={Classes.DIALOG_BODY}>
-          {body}
-        </div>
+        {body}
       </Dialog>
     )
   }
 }
-

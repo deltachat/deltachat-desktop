@@ -1,53 +1,48 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
+import React from 'react'
+import { ipcRenderer } from 'electron'
 
-const {
+import {
+  Card,
+  Callout,
   Spinner,
   Classes,
-  Button,
-  ButtonGroup,
   Dialog
-} = require('@blueprintjs/core')
+} from '@blueprintjs/core'
+import { DeltaButton } from '../helpers/SmallDialog'
+import InputTransferKey from '../helpers/AutocryptSetupMessage'
 
 class KeyViewPanel extends React.Component {
-  formatAutocryptKey (autocryptKey) {
-    const splittedAutocryptKey = autocryptKey.split('-')
-    return splittedAutocryptKey.map((e, i) => {
-      const isLast = (i + 1) === splittedAutocryptKey.length
-      const isNThird = (i + 1) % 3 === 0
-
-      const addLineBreak = !isLast && isNThird
-      const addDash = !isLast
-
-      return e + (addDash ? ' - ' : '') + (addLineBreak ? '\n' : '')
-    }).join('')
-  }
-
   render () {
-    const formattedAutocryptKey = this.formatAutocryptKey(this.props.autocryptKey)
-
     const tx = window.translate
     return (
-      <div>
-        <p>{tx('show_key_transfer_message_desktop')}</p>
-        <pre>{formattedAutocryptKey}</pre>
+      <React.Fragment>
+        <div className={Classes.DIALOG_BODY}>
+          <Card>
+            <Callout>{tx('show_key_transfer_message_desktop')}</Callout>
+            <div className={Classes.DIALOG_BODY}>
+              <InputTransferKey autocryptkey={this.props.autocryptKey.split('-')} disabled />
+            </div>
+          </Card>
+        </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <ButtonGroup>
-              <Button onClick={this.props.onClose}>{tx('done')}</Button>
-            </ButtonGroup>
+            <DeltaButton onClick={this.props.onClose}>{tx('done')}</DeltaButton>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }
 
 class KeyLoadingPanel extends React.Component {
   render () {
-    return <div>
-      <Spinner hasValue={false} size={Spinner.SIZE_STANDARD} intent='success' />
-    </div>
+    return (
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <Spinner hasValue={false} size={Spinner.SIZE_STANDARD} intent='success' />
+        </Card>
+      </div>
+    )
   }
 }
 
@@ -55,17 +50,17 @@ class InitiatePanel extends React.Component {
   render () {
     const tx = window.translate
     return (
-      <div>
-        <p>{tx('initiate_key_transfer_desktop')}</p>
-        <ButtonGroup>
-          <Button onClick={this.props.onClick} text={tx('initiate_key_transfer_title_desktop')} />
-        </ButtonGroup>
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
+          <DeltaButton style={{ float: 'right', marginTop: '10px' }} onClick={this.props.onClick}>{tx('ok')}</DeltaButton>
+        </Card>
       </div>
     )
   }
 }
 
-class SendAutocryptSetupMessage extends React.Component {
+export default class SendAutocryptSetupMessage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -112,15 +107,10 @@ class SendAutocryptSetupMessage extends React.Component {
       <Dialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
-        icon='exchange'
         onClose={this.onClose}
         canOutsideClickClose={false}>
-        <div className={Classes.DIALOG_BODY}>
-          {body}
-        </div>
+        {body}
       </Dialog>
     )
   }
 }
-
-module.exports = SendAutocryptSetupMessage

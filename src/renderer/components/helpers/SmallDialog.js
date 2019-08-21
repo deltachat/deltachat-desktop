@@ -16,13 +16,13 @@ export const SmallDialogWrapper = createGlobalStyle`
 `
 
 export const DeltaButton = styled.p`
-  color: ${({color}) => color ? color : '#bec5c4'};
-  padding: ${({noPadding}) => !noPadding ? '0 2px' : '0px'};
+  color: ${({ color }) => color || '#8ca5a1'};
+  padding: ${({ noPadding }) => !noPadding ? '0 2px' : '0px'};
   margin-bottom: 0px;
   text-transform: uppercase;
-  letter-spacing: ${({bold}) => bold === false ? '0px' : '2px'};
+  letter-spacing: ${({ bold }) => bold === false ? '0px' : '2px'};
   font-size: initial;
-  letter-spacing: ${({bold}) => bold === false ? 'initial' : 'bold'};
+  letter-spacing: ${({ bold }) => bold === false ? 'initial' : 'bold'};
   &:hover {
     cursor: pointer;
   }
@@ -32,7 +32,7 @@ export const DeltaButtonPrimary = styled(DeltaButton)`
   color: #53948c;
 `
 export const DeltaButtonDanger = styled(DeltaButton)`
-  color: #fd5d1b;
+  color: #f44336;
 `
 
 export default function SmallDialog (props) {

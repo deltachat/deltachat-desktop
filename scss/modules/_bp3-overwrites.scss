@@ -144,6 +144,7 @@ $bp3-dialog-radius: 2px;
   border-top: 1px solid rgba(16, 22, 26, 0.15); // TODO include color into theming
 }
 
-:focus, .bp3-control input:focus ~ .bp3-control-indicator {
+:focus, .bp3-control input:focus ~ .bp3-control-indicator, input[type='text']:active, input[type='text']:focus {
     outline: unset;
 }
+

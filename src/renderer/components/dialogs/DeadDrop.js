@@ -43,7 +43,7 @@ export default class DeadDrop extends React.Component {
           <p>{body}</p>
           <div className={Classes.DIALOG_FOOTER}>
             <div
-              className={Classes.DIALOG_FOOTER_ACTIONS} 
+              className={Classes.DIALOG_FOOTER_ACTIONS}
               style={{ justifyContent: 'space-between', marginTop: '7px' }}
             >
               <DeltaButtonPrimary bold={false} onClick={this.yes}>{tx('yes').toUpperCase()}</DeltaButtonPrimary>

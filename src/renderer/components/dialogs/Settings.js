@@ -2,8 +2,7 @@ import React from 'react'
 import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import C from 'deltachat-node/constants'
-import styled, { createGlobalStyle } from 'styled-components'
-
+import { createGlobalStyle } from 'styled-components'
 import {
   Elevation,
   H5,
@@ -254,9 +253,8 @@ export default class Settings extends React.Component {
   }
 
   renderDialogContent () {
-    const { deltachat, isOpen, onClose } = this.props
-    const { userDetails, settings, advancedSettings, keyTransfer } = this.state
-    const title = this.translate('menu_settings')
+    const { deltachat } = this.props
+    const { userDetails, settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -295,7 +293,7 @@ export default class Settings extends React.Component {
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_privacy')}</H5>
             { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
-            </Card>
+          </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
@@ -348,13 +346,13 @@ export default class Settings extends React.Component {
   }
 
   render () {
-    const { deltachat, isOpen, onClose } = this.props
-    const { settings, advancedSettings, keyTransfer } = this.state
-    let title;
+    const { isOpen, onClose } = this.props
+    const { keyTransfer } = this.state
+    let title
     if (this.state.show === 'main') {
-        title = this.translate('menu_settings')
+      title = this.translate('menu_settings')
     } else if (this.state.show === 'login') {
-        title = this.translate('pref_password_and_account_settings')
+      title = this.translate('pref_password_and_account_settings')
     }
 
     return (
@@ -366,15 +364,15 @@ export default class Settings extends React.Component {
           onClose={onClose}
           className='SettingsDialog'
         >
-          <div class="bp3-dialog-header">
-           { this.state.show !== 'main' && <button onClick={() => this.setState({show: 'main'})} class="bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left"></button> }
-            <h4 class="bp3-heading">{title}</h4>
-            <button onClick={onClose} aria-label="Close" class="bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross"></button>
+          <div class='bp3-dialog-header'>
+            { this.state.show !== 'main' && <button onClick={() => this.setState({ show: 'main' })} class='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
+            <h4 class='bp3-heading'>{title}</h4>
+            <button onClick={onClose} aria-label='Close' class='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
           </div>
           <div className={Classes.DIALOG_BODY}>
             { this.renderDialogContent() }
           </div>
-         <div className={Classes.DIALOG_FOOTER}/>
+          <div className={Classes.DIALOG_FOOTER} />
         </Dialog>
       </div>
     )
