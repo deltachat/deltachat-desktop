@@ -10,7 +10,7 @@ const ImexProgress = require('./ImexProgress')
 const About = require('./About')
 const Settings = require('./Settings').default
 const ForwardMessage = require('./ForwardMessage')
-const EncrInfo = require('./EncrInfo')
+const EncryptionInfo = require('./EncryptionInfo').default
 const MapDialog = require('./MapDialog')
 const ConfirmationDialog = require('./confirmationDialog').default
 
@@ -26,7 +26,7 @@ const allDialogs = [
   About,
   Settings,
   ForwardMessage,
-  EncrInfo,
+  EncryptionInfo,
   MapDialog,
   ConfirmationDialog
 ]

@@ -51,10 +51,12 @@ export default function DeltaMenu (props) {
         icon='delete'
         text={tx('menu_delete_chat')}
         onClick={onDeleteChat} />
-      <MenuItem
-        icon='lock'
-        text={tx('encryption_info_desktop')}
-        onClick={onEncrInfo} />
+      {!isGroup &&
+        <MenuItem
+            icon='lock'
+            text={tx('encryption_info_desktop')}
+            onClick={onEncrInfo} />
+      }
       {isGroup
         ? (
           <div>

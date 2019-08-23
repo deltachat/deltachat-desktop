@@ -15,6 +15,7 @@ const publicAccessibleMethods = [
   'fetchMessages',
   'forwardMessage',
   'getContacts',
+  'getEncryptionInfo',
   'getLocations',
   'leaveGroup',
   'selectChat',
@@ -76,6 +77,18 @@ class DeltaChatController extends EventEmitter {
     }
     if (typeof this[methodName] === 'function') {
       this[methodName](...args)
+    }
+  }
+  
+  callMethod ( evt, methodName, args) {
+    if (publicAccessibleMethods.indexOf(methodName) < 0) {
+      const message = 'Method not accessible: ' + methodName
+      log.error(message)
+      throw new Error(message)
+    }
+    if (typeof this[methodName] === 'function') {
+      const returnValue = this[methodName](...args)
+      this.sendToRenderer('CALL_DC_METHOD_RETURN_' + methodName, returnValue)
     }
   }
 

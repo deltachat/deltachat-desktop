@@ -83,6 +83,10 @@ function init (cwd, state, logHandler) {
     dc.handleRendererEvent(evt, fnName, args)
   })
 
+  ipcMain.on('callDCMethod', (e, fnName, ...args) => {
+    dc.callMethod(e, fnName, args)
+  })
+
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   setupNotifications(dc, state.saved)
@@ -91,6 +95,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
   })
+
 
   ipcMain.on('forgetLogin', (e, addr) => {
     rimraf.sync(dc.getPath(addr))

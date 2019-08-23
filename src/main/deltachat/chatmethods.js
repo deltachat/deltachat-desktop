@@ -112,7 +112,7 @@ function getQrCode (chatId = 0) {
   return this._dc.getSecurejoinQrCode(chatId)
 }
 
-function getEncrInfo (contactId) {
+function getEncryptionInfo (contactId) {
   return this._dc.getContactEncryptionInfo(contactId)
 }
 
@@ -140,7 +140,7 @@ module.exports = function () {
   this.createGroupChat = createGroupChat.bind(this)
   this.leaveGroup = leaveGroup.bind(this)
   this.getQrCode = getQrCode.bind(this)
-  this.getEncrInfo = getEncrInfo.bind(this)
+  this.getEncryptionInfo = getEncryptionInfo.bind(this)
   this.getChatMedia = getChatMedia.bind(this)
   this._integerToHexColor = _integerToHexColor.bind(this)
 }
