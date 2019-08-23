@@ -117,6 +117,14 @@ $bp3-dialog-radius: 2px;
     background: var(--bp3SwitchKnobChecked);
 }
 
+.bp3-control .bp3-control-indicator, .bp3-control:hover .bp3-control-indicator {
+    background-color: transparent;
+}
+
+.bp3-control input:checked ~ .bp3-control-indicator, .bp3-control:hover input:checked ~ .bp3-control-indicator {
+    box-shadow: var(--bp3SwitchKnobShadowChecked);
+    background: var(--bp3SwitchKnobChecked);
+}
 .bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
   // the sliders/dials icon in the dialog header in the settings dialog
   color: var(--bp3DialogHeaderIcon) 
