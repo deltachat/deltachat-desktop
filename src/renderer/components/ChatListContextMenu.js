@@ -65,9 +65,11 @@ const ChatListContextMenu = React.memo((props) => {
       <MenuItem onClick={onDeleteChat}>
         <Icon icon='delete' /> {tx('menu_delete_chat')}
       </MenuItem>
-      <MenuItem onClick={onEncrInfo}>
-        <Icon icon='lock' /> {tx('encryption_info_desktop')}
-      </MenuItem>
+      { !chat.isGroup &&
+        <MenuItem onClick={onEncrInfo}>
+          <Icon icon='lock' /> {tx('encryption_info_desktop')}
+        </MenuItem>
+      }
       {chat.isGroup
         ? (
           <div>
