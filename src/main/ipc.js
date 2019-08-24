@@ -96,7 +96,6 @@ function init (cwd, state, logHandler) {
     dc.login(credentials, render, txCoreStrings())
   })
 
-
   ipcMain.on('forgetLogin', (e, addr) => {
     rimraf.sync(dc.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
