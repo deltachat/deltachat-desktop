@@ -6,7 +6,8 @@ export const InputTransferKeyWrapper = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: 10px;
-  padding: 20px 10px 20px 30px;
+  padding: 20px 0px 20px 0px;
+  margin-right: -55px;
 `
 
 export const SetupMessagePartialInputWrapper = styled.div`
