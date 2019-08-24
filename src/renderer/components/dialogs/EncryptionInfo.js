@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import  { callDcMethod } from '../../ipc'
-import { Classes, Card, Dialog } from '@blueprintjs/core'
+import { callDcMethod } from '../../ipc'
+import { Classes } from '@blueprintjs/core'
+import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
 
-import  { getLogger } from '../../../logger'
-const log = getLogger('renderer/encrInfo')
-
-import ContactList from '../ContactList'
-
-import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
-
-export default function EncryptionInfo(props) {
+export default function EncryptionInfo (props) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     const { chat } = props
@@ -25,7 +19,7 @@ export default function EncryptionInfo(props) {
       onClose={onClose}
     >
       <div className='bp3-dialog-body-with-padding'>
-        <p style={{whiteSpace: 'pre-wrap'}}>
+        <p style={{ whiteSpace: 'pre-wrap' }}>
           { !encryptionInfo && 'Fetching...' }
           { encryptionInfo && encryptionInfo}
         </p>
@@ -34,7 +28,7 @@ export default function EncryptionInfo(props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ marginTop: '7px' }}
           >
-            <DeltaButton style={{float: 'right'}} onClick={onClose}>
+            <DeltaButton style={{ float: 'right' }} onClick={onClose}>
               {tx('ok')}
             </DeltaButton>
           </div>
