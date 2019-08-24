@@ -1,19 +1,38 @@
+$bp3-dialog-radius: 2px;
+
 .bp3-dialog {
-  background: var(--bp3DialogBg);
-  border-radius: 2px;
+  background: var(--bp3DialogBgSecondary);
+  border-radius: $bp3-dialog-radius;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
 }
 
 .bp3-dialog-body {
   margin: 0px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: overlay;
 }
 
 .bp3-dialog-body-with-padding {
   padding: 20px;
 }
 
+.bp3-dialog-footer {
+  background-color: var(--bp3DialogBgPrimary);
+  margin: 0;
+  padding: 0 20px 20px;
+  border-radius: $bp3-dialog-radius;
+}
+
 .bp3-card {
-  background-color: var(--bp3DialogCardBg);
+  background-color: var(--bp3DialogBgPrimary);
   border-radius: 0px;
+  margin-top: 20px;
+  &:first-child {
+      margin-top: 0px;
+  }
   &:last-child {
     margin-bottom: -20px;
     border-bottom-left-radius: 2px;
@@ -21,10 +40,12 @@
   }
 }
 
-.bp3-elevation-1 {
+.bp3-elevation-1, .bp3-elevation-0 {
   box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
   &:first-child {
     box-shadow: 0 0 0 0px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+    flex: 1 1 auto;
+    margin-bottom: 0px;
   }
 }
 
@@ -96,6 +117,14 @@
     background: var(--bp3SwitchKnobChecked);
 }
 
+.bp3-control .bp3-control-indicator, .bp3-control:hover .bp3-control-indicator {
+    background-color: transparent;
+}
+
+.bp3-control input:checked ~ .bp3-control-indicator, .bp3-control:hover input:checked ~ .bp3-control-indicator {
+    box-shadow: var(--bp3SwitchKnobShadowChecked);
+    background: var(--bp3SwitchKnobChecked);
+}
 .bp3-dialog-header .bp3-icon-large, .bp3-dialog-header .bp3-icon {
   // the sliders/dials icon in the dialog header in the settings dialog
   color: var(--bp3DialogHeaderIcon) 
@@ -123,6 +152,7 @@
   border-top: 1px solid rgba(16, 22, 26, 0.15); // TODO include color into theming
 }
 
-:focus, .bp3-control input:focus ~ .bp3-control-indicator {
+:focus, .bp3-control input:focus ~ .bp3-control-indicator, input[type='text']:active, input[type='text']:focus {
     outline: unset;
 }
+

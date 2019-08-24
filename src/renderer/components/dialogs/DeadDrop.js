@@ -1,7 +1,7 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaGreenButton } from '../helpers/SmallDialog'
+import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
 
 export default class DeadDrop extends React.Component {
   constructor (props) {
@@ -46,16 +46,17 @@ export default class DeadDrop extends React.Component {
               className={Classes.DIALOG_FOOTER_ACTIONS}
               style={{ justifyContent: 'space-between', marginTop: '7px' }}
             >
-              <DeltaGreenButton onClick={this.never}>
-                {tx('never').toUpperCase()}
-              </DeltaGreenButton>
-              <DeltaGreenButton
+              <DeltaButtonPrimary bold={false} onClick={this.yes}>{tx('yes').toUpperCase()}</DeltaButtonPrimary>
+              <DeltaButton
+                bold={false}
                 onClick={this.close}
-                style={{ marginLeft: '90px' }}
+                style={{ marginLeft: '115px' }}
               >
                 {tx('not_now').toUpperCase()}
-              </DeltaGreenButton>
-              <DeltaGreenButton onClick={this.yes}>{tx('ok').toUpperCase()}</DeltaGreenButton>
+              </DeltaButton>
+              <DeltaButtonDanger bold={false} onClick={this.never}>
+                {tx('never').toUpperCase()}
+              </DeltaButtonDanger>
             </div>
           </div>
         </div>
