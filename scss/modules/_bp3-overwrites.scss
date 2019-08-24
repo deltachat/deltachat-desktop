@@ -156,3 +156,17 @@ $bp3-dialog-radius: 2px;
     outline: unset;
 }
 
+.bp3-spinner-animation {
+  animation: pt-spinner-animation 500ms linear infinite reverse;
+}
+
+.bp3-spinner {
+  .bp3-spinner-track {
+    stroke: var(--bp3SpinnerTrack);
+  }
+  .bp3-spinner-head {
+    transition: stroke-dashoffset 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    stroke: var(--bp3SpinnerHead);
+    stroke-dashoffset: 100;
+  }
+}

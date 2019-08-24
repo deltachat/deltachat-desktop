@@ -39,7 +39,7 @@ class KeyLoadingPanel extends React.Component {
     return (
       <div className={Classes.DIALOG_BODY}>
         <Card>
-          <Spinner hasValue={false} size={Spinner.SIZE_STANDARD} intent='success' />
+          <Spinner/>
         </Card>
       </div>
     )
