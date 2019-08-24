@@ -39,7 +39,7 @@ class KeyLoadingPanel extends React.Component {
     return (
       <div className={Classes.DIALOG_BODY}>
         <Card>
-          <Spinner/>
+          <Spinner />
         </Card>
       </div>
     )
