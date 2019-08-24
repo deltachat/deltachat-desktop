@@ -22,7 +22,7 @@ export const DeltaButton = styled.p`
   text-transform: uppercase;
   letter-spacing: ${({ bold }) => bold === false ? '0px' : '2px'};
   font-size: initial;
-  letter-spacing: ${({ bold }) => bold === false ? 'initial' : 'bold'};
+  font-weight: ${({ bold }) => bold === false ? 'initial' : 'bold'};
   &:hover {
     cursor: pointer;
   }
