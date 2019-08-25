@@ -53,7 +53,7 @@ class InitiatePanel extends React.Component {
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
-          <DeltaButton style={{ float: 'right', marginTop: '10px' }} onClick={this.props.onClick}>{tx('ok')}</DeltaButton>
+          <DeltaButton style={{ float: 'right', marginTop: '20px' }} onClick={this.props.onClick}>{tx('ok')}</DeltaButton>
         </Card>
       </div>
     )
