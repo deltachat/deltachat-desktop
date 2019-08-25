@@ -158,6 +158,8 @@ export function ThemeDataBuilder (theme) {
     bp3SwitchKnobShadow: '0px 2px 0 0px #d2cfcfad',
     bp3SwitchKnobChecked: '#42A5F5',
     bp3SwitchKnobShadowChecked: '0px 1px 0 0px #c9d4d2d1',
+    bp3SpinnerTrack: '#acd4e8',
+    bp3SpinnerHead: '#42a5f5',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: undefinedGuard(

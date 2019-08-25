@@ -101,7 +101,7 @@ export default class EnterAutocryptSetupMessage extends React.Component {
 
     let body
     if (loading) {
-      body = <div className={Classes.DIALOG_BODY}><Spinner size={50} intent='success' /></div>
+      body = <div className={Classes.DIALOG_BODY}><Spinner /></div>
     } else {
       body = <SetupMessagePanel
         setupCodeBegin={setupCodeBegin}
