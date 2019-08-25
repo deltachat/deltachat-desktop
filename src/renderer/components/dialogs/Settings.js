@@ -20,7 +20,6 @@ import {
 } from '@blueprintjs/core'
 
 import Login from '../Login'
-import SendAutocryptSetupMessage from './SendAutocryptSetupMessage'
 import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
 const SettingsContext = require('../../contexts/SettingsContext')
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
@@ -40,14 +39,12 @@ export default class Settings extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      keyTransfer: false,
       advancedSettings: {},
       userDetails: false,
       mail_pw: MAGIC_PW,
       settings: {},
       show: 'main'
     }
-    this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
     this.onKeysExport = this.onKeysExport.bind(this)
@@ -185,10 +182,6 @@ export default class Settings extends React.Component {
     })
   }
 
-  initiateKeyTransfer () {
-    this.setState({ keyTransfer: true })
-  }
-
   /*
    * Saves settings for the Deltchat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
@@ -259,7 +252,7 @@ export default class Settings extends React.Component {
   }
 
   renderDialogContent () {
-    const { deltachat } = this.props
+    const { deltachat, openDialog } = this.props
     const { userDetails, settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
@@ -281,7 +274,7 @@ export default class Settings extends React.Component {
             <Callout>{this.translate('autocrypt_explain')}</Callout>
             <br />
             { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
-            <Button onClick={this.initiateKeyTransfer}>
+            <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
               {this.translate('autocrypt_send_asm_button')}
             </Button>
           </Card>
@@ -355,7 +348,6 @@ export default class Settings extends React.Component {
 
   render () {
     const { onClose } = this.props
-    const { keyTransfer } = this.state
     let title
     if (this.state.show === 'main') {
       title = this.translate('menu_settings')
@@ -366,7 +358,6 @@ export default class Settings extends React.Component {
     return (
       <div>
         <SettingsDialogGlobal />
-        <SendAutocryptSetupMessage isOpen={keyTransfer} onClose={this.onKeyTransferComplete} />
         <Dialog
           isOpen={this.props.isOpen}
           onClose={() => this.setState({ userDetails: false })}
