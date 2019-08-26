@@ -83,8 +83,15 @@ function init (cwd, state, logHandler) {
     dc.handleRendererEvent(evt, fnName, args)
   })
 
-  ipcMain.on('callDCMethod', (e, fnName, ...args) => {
-    dc.callMethod(e, fnName, args)
+  ipcMain.on('EVENT_DC_CALL_METHOD_IGNORE_RETURN', (e, methodName, ...args) => {
+    log.debug('EVENT_DC_CALL_METHOD_IGNORE_RETURN: ', methodName, args)
+    dc.callMethod(e, methodName, args)
+  })
+
+  ipcMain.on('EVENT_DC_CALL_METHOD', (e, methodName, ...args) => {
+    log.debug('EVENT_DC_CALL_METHOD: ', methodName, args)
+    const returnValue = dc.callMethod(e, methodName, args)
+    main.send('DD_DC_CALL_METHOD_RETURN_' + methodName, returnValue)
   })
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
@@ -152,10 +159,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dc.setConfig(key, value)
-  })
-
-  ipcMain.on('getConfigFor', (e, keys) => {
-    e.returnValue = dc.getConfigFor(keys)
   })
 
   ipcMain.on('getDCinfo', () => {

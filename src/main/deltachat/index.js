@@ -24,7 +24,8 @@ const publicAccessibleMethods = [
   'showArchivedChats',
   'unblockContact',
   'updateBlockedContacts',
-  'updateChatList'
+  'updateChatList',
+  'getConfigFor'
 ]
 
 /**
@@ -86,10 +87,14 @@ class DeltaChatController extends EventEmitter {
       log.error(message)
       throw new Error(message)
     }
-    if (typeof this[methodName] === 'function') {
-      const returnValue = this[methodName](...args)
-      this.sendToRenderer('CALL_DC_METHOD_RETURN_' + methodName, returnValue)
+
+    if (typeof this[methodName] !== 'function') {
+      const message = 'Method is not of type function: ' + methodName
+      log.error(message)
+      throw new Error(message)
     }
+
+    return this[methodName](...args)
   }
 
   /**

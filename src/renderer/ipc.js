@@ -11,9 +11,21 @@ export function sendToBackend (event, ...args) {
 // of the dc method is the first argument to cb
 export function callDcMethod (fnName, args, cb) {
   if (!Array.isArray(args)) args = [args]
-  sendToBackend('callDCMethod', fnName, args)
-  ipcRenderer.once('CALL_DC_METHOD_RETURN_' + fnName, (_ev, returnValue) => {
+  const ignoreReturn = typeof cb !== 'function'
+  const eventName = ignoreReturn ? 'EVENT_DC_CALL_METHOD_IGNORE_RETURN' : 'EVENT_DC_CALL_METHOD'
+
+  sendToBackend(eventName, fnName, args)
+
+  if (ignoreReturn) return
+
+  ipcRenderer.once('DD_DC_CALL_METHOD_RETURN_' + fnName, (_ev, returnValue) => {
     cb(returnValue)
+  })
+}
+
+export function callDcMethodAsync(fnName, args) {
+  return new Promise((resolve, reject) => {
+    callDcMethod(fnName, args, resolve)
   })
 }
 

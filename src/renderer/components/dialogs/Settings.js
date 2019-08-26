@@ -1,6 +1,7 @@
 import React from 'react'
 import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
+import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
 import { createGlobalStyle } from 'styled-components'
 
@@ -60,32 +61,30 @@ export default class Settings extends React.Component {
     this.translate = window.translate
   }
 
-  componentDidMount () {
-    const settings = ipcRenderer.sendSync(
-      'getConfigFor', [
-        'addr',
-        'mail_pw',
-        'inbox_watch',
-        'sentbox_watch',
-        'mvbox_watch',
-        'mvbox_move',
-        'e2ee_enabled',
-        'configured_mail_server',
-        'configured_mail_user',
-        'configured_mail_port',
-        'configured_mail_security',
-        'configured_send_user',
-        'configured_send_pw',
-        'configured_send_server',
-        'configured_send_port',
-        'configured_send_security',
-        'configured_e2ee_enabled',
-        'displayname',
-        'selfstatus',
-        'mdns_enabled',
-        'show_emails'
-      ]
-    )
+  async componentDidMount () {
+    const settings = await callDcMethodAsync('getConfigFor', [
+      'addr',
+      'mail_pw',
+      'inbox_watch',
+      'sentbox_watch',
+      'mvbox_watch',
+      'mvbox_move',
+      'e2ee_enabled',
+      'configured_mail_server',
+      'configured_mail_user',
+      'configured_mail_port',
+      'configured_mail_security',
+      'configured_send_user',
+      'configured_send_pw',
+      'configured_send_server',
+      'configured_send_port',
+      'configured_send_security',
+      'configured_e2ee_enabled',
+      'displayname',
+      'selfstatus',
+      'mdns_enabled',
+      'show_emails'
+    ])
 
     const advancedSettings = {
       mail_user: settings['configured_mail_user'],
