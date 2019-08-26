@@ -24,7 +24,7 @@ export function callDcMethod (fnName, args, cb) {
   })
 }
 
-export function callDcMethodAsync(fnName, args) {
+export function callDcMethodAsync (fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
