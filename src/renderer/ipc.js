@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-const log = require('../logger').getLogger('renderer/chatView')
+const log = require('../logger').getLogger('renderer/ipc')
 
 export function sendToBackend (event, ...args) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
@@ -19,14 +19,13 @@ export function callDcMethod (fnName, args, cb) {
   if (ignoreReturn) return
 
   ipcRenderer.once('DD_DC_CALL_METHOD_RETURN_' + fnName, (_ev, returnValue) => {
+    log.debug('DD_DC_CALL_METHOD_RETURN_' + fnName, 'Got back return: ', returnValue)
     cb(returnValue)
   })
 }
 
 export function callDcMethodAsync(fnName, args) {
-  return new Promise((resolve, reject) => {
-    callDcMethod(fnName, args, resolve)
-  })
+  return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
 export const ipcBackend = ipcRenderer
