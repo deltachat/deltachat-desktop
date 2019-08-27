@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { ContactName as ContactNameConversations } from '../conversations'
 import styled from 'styled-components'
 
-export function renderAvatar(avatarPath, color, name) {
+export function renderAvatar(avatarPath, color, displayName) {
   if (avatarPath) {
     return (
       <img
@@ -13,8 +13,8 @@ export function renderAvatar(avatarPath, color, name) {
     )
   }
 
-  const codepoint = name.codePointAt(0)
-  const initial = codepoint ? String.fromCodePoint(codepoint) : '#'
+  const codepoint = displayName.codePointAt(0)
+  const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
     <div
@@ -75,8 +75,23 @@ export default function Contact(props) {
   const { id, avatarPath, color, displayName, address, isVerified } = props.contact
   return (
     <ContactWrapper>
-      {renderAvatar(avatarPath, color, name)}
+      {renderAvatar(avatarPath, color, displayName)}
       {ContactName(displayName, address, isVerified)}
+    </ContactWrapper>
+  )
+}
+
+const PseudoContactText = styled.p`
+  font-weight: bold;
+`
+export function PseudoContact(props) {
+  const { cutoff, text } = props
+  return (
+    <ContactWrapper>
+      {renderAvatar(false, false, cutoff)}
+      <ContactNameWrapper>
+        <PseudoContactText>{text}</PseudoContactText>
+      </ContactNameWrapper>
     </ContactWrapper>
   )
 }
