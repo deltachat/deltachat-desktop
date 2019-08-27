@@ -1,8 +1,9 @@
-const React = require('react')
-const styled = require('styled-components').default
-const SearchableList = require('./SearchableList')
-
-const { RenderContact } = require('./Contact')
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
+import SearchableList from '../SearchableList'
+import { RenderContact } from '../Contact'
+import contactsStore from '../../stores/contacts'
+import { callDcMethod } from '../../ipc'
 
 const ContactListDiv = styled.div`
   .module-contact-list-item--with-click-handler {
@@ -13,7 +14,24 @@ const ContactListDiv = styled.div`
   }
 `
 
-class ContactList extends SearchableList {
+export function useContacts(listFlags, queryStr) {
+  const [contacts, setContacts] = useState([])
+
+  const updateContacts = (listFlags, queryStr) => {
+      callDcMethod('getContacts', [listFlags, queryStr])
+  }
+    
+  const assignContacts = ({contacts}) => setContacts(contacts)
+  useEffect(() => {
+    contactsStore.subscribe(assignContacts)
+    updateContacts(listFlags, queryStr)
+    return () => contactsStore.unsubscribe(assignContacts)
+  }, [])
+  
+  return [contacts, updateContacts]
+}
+
+export default class ContactList extends SearchableList {
   constructor (props) {
     super(props)
     this.state.showVerifiedContacts = false
@@ -54,4 +72,3 @@ class ContactList extends SearchableList {
     />
   }
 }
-module.exports = ContactList

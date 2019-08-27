@@ -10,7 +10,6 @@ export function sendToBackend (event, ...args) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 export function callDcMethod (fnName, args, cb) {
-  if (!Array.isArray(args)) args = [args]
   const ignoreReturn = typeof cb !== 'function'
   const eventName = ignoreReturn ? 'EVENT_DC_CALL_METHOD_IGNORE_RETURN' : 'EVENT_DC_CALL_METHOD'
 
