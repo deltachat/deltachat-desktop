@@ -185,6 +185,8 @@ export function ThemeDataBuilder (theme) {
     unreadCountBg: theme.accentColor,
     unreadCountLabel: '#ffffff', // Only changable with theme.raw
     contactListItemBg: '#62656a',
+    contactListInitalColor: theme.textSecondary,
+    contactEmailColor: theme.textSecondary,
     errorColor: '#f44336',
     globalLinkColor: '#2090ea', // Only changable with theme.raw
     globalBackground: theme.bgPrimary,

@@ -56,6 +56,7 @@ class SearchableList extends React.Component {
         value={this.state.queryStr}
       />
       <ListDiv>
+        { this.state.queryStr === '' && typeof this.props.renderOnEmptySearch === 'function' && this.props.renderOnEmptySearch() }
         {data.map(this.renderItem.bind(this))}
       </ListDiv>
     </div>

@@ -4,6 +4,7 @@ import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
 import contactsStore from '../../stores/contacts'
 import { callDcMethod } from '../../ipc'
+import Contact from './Contact'
 
 const ContactListDiv = styled.div`
   .module-contact-list-item--with-click-handler {
@@ -14,20 +15,20 @@ const ContactListDiv = styled.div`
   }
 `
 
-export function useContacts(listFlags, queryStr) {
+export function useContacts (listFlags, queryStr) {
   const [contacts, setContacts] = useState([])
 
   const updateContacts = (listFlags, queryStr) => {
-      callDcMethod('getContacts', [listFlags, queryStr])
+    callDcMethod('getContacts', [listFlags, queryStr])
   }
-    
-  const assignContacts = ({contacts}) => setContacts(contacts)
+
+  const assignContacts = ({ contacts }) => setContacts(contacts)
   useEffect(() => {
     contactsStore.subscribe(assignContacts)
     updateContacts(listFlags, queryStr)
     return () => contactsStore.unsubscribe(assignContacts)
   }, [])
-  
+
   return [contacts, updateContacts]
 }
 
@@ -58,7 +59,9 @@ export default class ContactList extends SearchableList {
   }
 
   render () {
-    return <ContactListDiv>{super.render()}</ContactListDiv>
+    return <ContactListDiv>
+      {super.render()}
+    </ContactListDiv>
   }
 
   renderItem (contact) {
@@ -71,4 +74,47 @@ export default class ContactList extends SearchableList {
       {...props}
     />
   }
+}
+
+const ContactListItemWrapper = styled.div`
+  padding-left: ${({showInitial}) => showInitial ? '0px' : '40px'};
+  &:hover {
+    background-color: var(--chatListItemBgHover)
+  }
+`
+
+const ContactListItemInitial = styled.div`
+  width: 40px;
+  height: 64px;
+  float: left;
+  text-align: center;
+  font-size: 26px;
+  padding-top: 23px;
+  text-transform: capitalize;
+  color: var(--contactListInitalColor);
+`
+export function ContactListItem(props) {
+  console.log(props)
+  let { contact, showInitial, onClick } = props
+  return (
+    <ContactListItemWrapper key={contact.id} showInitial={showInitial} onClick={() => onClick(contact)}>
+      { showInitial && <ContactListItemInitial>{contact.displayName[0]}</ContactListItemInitial> } 
+      <Contact contact={contact}/>
+    </ContactListItemWrapper>
+  )  
+}
+
+export function ContactList2(props) {
+  const { contacts, onClick } = props
+  let currInitial = ''
+  return contacts.map(contact => {
+      let initial = contact.displayName[0].toLowerCase()
+      let showInitial = false
+      if (initial !== currInitial) {
+          currInitial = initial
+          showInitial = true
+      }
+
+      return ContactListItem({contact, onClick, showInitial})
+  })
 }

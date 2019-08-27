@@ -1,7 +1,7 @@
 const React = require('react')
 const SearchableList = require('./SearchableList')
 
-const ChatListItem = require('./ChatListItem')
+const ChatListItem = require('./ChatListItem').default
 
 class ForwardToList extends SearchableList {
   constructor (props) {

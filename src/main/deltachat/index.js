@@ -26,7 +26,7 @@ const publicAccessibleMethods = [
   'updateBlockedContacts',
   'updateChatList',
   'getConfigFor',
-  'createChatByContactId',
+  'createChatByContactId'
 ]
 
 /**
@@ -229,20 +229,23 @@ class DeltaChatController extends EventEmitter {
   _integerToHexColor (integerColor) {
     return '#' + integerColor.toString(16)
   }
+  
+  getContact(id) {
+    let contact = this._dc.getContact(id).toJson()
+    contact.color = this._integerToHexColor(contact.color)
+    return contact
+  }
+
 
   _blockedContacts () {
     if (!this._dc) return []
-    return this._dc.getBlockedContacts().map(id => {
-      return this._dc.getContact(id).toJson()
-    })
+    return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }
 
   getContacts (listFlags, queryStr) {
     console.log(arguments)
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
-    const contacts = distinctIds.map(id => {
-      return this._dc.getContact(id).toJson()
-    })
+    const contacts = distinctIds.map(this.getContact.bind(this))
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
   }
 
