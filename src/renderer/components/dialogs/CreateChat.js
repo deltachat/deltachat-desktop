@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react'
 import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
 import styled, { createGlobalStyle } from 'styled-components'
-import { useContacts, ContactList2 } from '../helpers/ContactList'
+import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
 import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes, Dialog } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
@@ -51,27 +51,6 @@ export function DeltaDialog(props) {
   )
 }
 
-const renderContactItem = (cutoff, contactName, description) => {
-  return (
-    <div role="button" class="module-contact-list-item module-contact-list-item--with-click-handler">
-      <div class="module-contact-list-item__avatar-default">
-        <div class="module-contact-list-item__avatar-default__label">
-          {cutoff}
-        </div>
-      </div>
-      <div class="module-contact-list-item__text">
-        <div class="module-contact-list-item__text__name">
-          {contactName}
-          <span class="module-contact-list-item__text__profile-name">
-            {description}
-          </span>
-        </div>
-        <div class="module-contact-list-item__text__additional-data"></div>
-      </div>
-    </div>
-  )
-}
-
 const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
 `
@@ -97,8 +76,16 @@ export default function CreateChat (props) {
   const renderOnEmptySearch = () => {
     return (
       <Fragment>
-        {renderContactItem('+', 'New verified group', '')}
-        {renderContactItem('+', 'New group', '')}
+        <PseudoContactListItem
+          id='newgroup'
+          cutoff='+'
+          text={tx('menu_new_group')}
+        />
+        <PseudoContactListItem
+          id='newverifiedgroup'
+          cutoff='+'
+          text={tx('menu_new_verified_group')}
+        />
       </Fragment>
     )
   }
@@ -114,6 +101,7 @@ export default function CreateChat (props) {
       <div className={Classes.DIALOG_BODY}>
         <CreateChatContactListWrapper>
           {renderOnEmptySearch()}
+          
           <ContactList2 contacts={contacts} onClick={chooseContact} /> 
         </CreateChatContactListWrapper>
       </div>

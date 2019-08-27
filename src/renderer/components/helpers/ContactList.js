@@ -4,7 +4,7 @@ import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
 import contactsStore from '../../stores/contacts'
 import { callDcMethod } from '../../ipc'
-import Contact from './Contact'
+import Contact, { PseudoContact } from './Contact'
 
 const ContactListDiv = styled.div`
   .module-contact-list-item--with-click-handler {
@@ -77,7 +77,7 @@ export default class ContactList extends SearchableList {
 }
 
 const ContactListItemWrapper = styled.div`
-  padding-left: ${({showInitial}) => showInitial ? '0px' : '40px'};
+  padding-left: ${({showInitial}) => showInitial === true ? '0px' : '40px'};
   &:hover {
     background-color: var(--chatListItemBgHover)
   }
@@ -94,15 +94,35 @@ const ContactListItemInitial = styled.div`
   color: var(--contactListInitalColor);
 `
 export function ContactListItem(props) {
-  console.log(props)
-  let { contact, showInitial, onClick } = props
+  const { contact, showInitial, onClick } = props
   return (
-    <ContactListItemWrapper key={contact.id} showInitial={showInitial} onClick={() => onClick(contact)}>
-      { showInitial && <ContactListItemInitial>{contact.displayName[0]}</ContactListItemInitial> } 
+    <ContactListItemWrapper
+      key={contact.id}
+      showInitial={showInitial}
+      onClick={() => onClick(contact)}
+    >
+      {showInitial && 
+          <ContactListItemInitial>
+            {contact.displayName[0]}
+          </ContactListItemInitial> } 
       <Contact contact={contact}/>
     </ContactListItemWrapper>
   )  
 }
+
+export function PseudoContactListItem(props) {
+  const { id, cutoff, text, onClick } = props
+  return (
+    <ContactListItemWrapper
+      key={id}
+      showInitial={false}
+      onClick={onClick}
+    >
+      <PseudoContact cutoff={cutoff} text={text} />
+    </ContactListItemWrapper>
+  )  
+}
+
 
 export function ContactList2(props) {
   const { contacts, onClick } = props
