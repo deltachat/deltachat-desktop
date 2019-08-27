@@ -1,11 +1,9 @@
-const React = require('react')
-const classNames = require('classnames')
-const styled = require('styled-components').default
-const {
-  Timestamp, ContactName
-} = require('./conversations')
-
-const MessageBody = require('./MessageBody')
+import React from 'react'
+import classNames from 'classnames'
+import styled from 'styled-components'
+import { Timestamp, ContactName } from './conversations'
+import MessageBody from './MessageBody'
+import { renderAvatar } from './helpers/Contact'
 
 const MessageText1 = styled.div`
   float: left;
@@ -17,39 +15,8 @@ const MessageText1Draft = styled.div`
   color: ${props => props.theme.draftTextColor}
 `
 
-class ChatListItem extends React.Component {
-  renderAvatar () {
-    const {
-      avatarPath,
-      color,
-      name
-    } = this.props
 
-    if (!avatarPath) {
-      const codepoint = name.codePointAt(0)
-      const initial = codepoint ? String.fromCodePoint(codepoint) : '#'
-
-      return (
-        <div
-          style={{ backgroundColor: color }}
-          className={classNames(
-            'module-conversation-list-item__avatar',
-            'module-conversation-list-item__default-avatar'
-          )}
-        >
-          {initial}
-        </div>
-      )
-    }
-
-    return (
-      <img
-        className='module-conversation-list-item__avatar'
-        src={avatarPath}
-      />
-    )
-  }
-
+export default class ChatListItem extends React.Component {
   renderUnread () {
     const { unreadCount } = this.props
 
@@ -182,7 +149,7 @@ class ChatListItem extends React.Component {
 
   render () {
     const { unreadCount, onClick, isSelected, onContextMenu } = this.props
-
+    const { avatarPath, color, name } = this.props
     return (
       <div
         role='button'
@@ -194,7 +161,7 @@ class ChatListItem extends React.Component {
           isSelected ? 'module-conversation-list-item--is-selected' : null
         )}
       >
-        {this.renderAvatar()}
+        {renderAvatar(avatarPath, color, name)}
         <div className='module-conversation-list-item__content'>
           {this.renderHeader()}
           {this.renderMessage()}
@@ -204,4 +171,3 @@ class ChatListItem extends React.Component {
   }
 }
 
-module.exports = ChatListItem

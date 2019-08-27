@@ -65,8 +65,8 @@ class CreateChat extends React.Component {
       0,
       ''
     )
-    return () => 
-    contactsStore.unsubscribe(this.assignContacts)
+    return () =>
+      contactsStore.unsubscribe(this.assignContacts)
   }
 
   componentWillUnmount () {
