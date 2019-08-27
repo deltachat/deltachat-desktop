@@ -83,12 +83,14 @@ function init (cwd, state, logHandler) {
     dc.handleRendererEvent(evt, fnName, args)
   })
 
-  ipcMain.on('EVENT_DC_CALL_METHOD_IGNORE_RETURN', (e, methodName, ...args) => {
+  ipcMain.on('EVENT_DC_CALL_METHOD_IGNORE_RETURN', (e, methodName, args) => {
+    if (!Array.isArray(args)) args = [args]
     log.debug('EVENT_DC_CALL_METHOD_IGNORE_RETURN: ', methodName, args)
     dc.callMethod(e, methodName, args)
   })
 
-  ipcMain.on('EVENT_DC_CALL_METHOD', (e, methodName, ...args) => {
+  ipcMain.on('EVENT_DC_CALL_METHOD', (e, methodName, args) => {
+    if (!Array.isArray(args)) args = [args]
     log.debug('EVENT_DC_CALL_METHOD: ', methodName, args)
     const returnValue = dc.callMethod(e, methodName, args)
     main.send('DD_DC_CALL_METHOD_RETURN_' + methodName, returnValue)

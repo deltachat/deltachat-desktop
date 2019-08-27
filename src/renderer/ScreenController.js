@@ -130,11 +130,11 @@ class ScreenController extends React.Component {
               mode={'login'}
             />
           }
+          <dialogs.Controller
+            ref={this.dialogs}
+            deltachat={deltachat}
+            userFeedback={this.userFeedback} />
         </ScreenContext.Provider>
-        <dialogs.Controller
-          ref={this.dialogs}
-          deltachat={deltachat}
-          userFeedback={this.userFeedback} />
       </div>
     )
   }

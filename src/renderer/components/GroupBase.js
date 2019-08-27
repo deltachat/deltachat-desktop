@@ -16,7 +16,7 @@ const {
 } = require('@blueprintjs/core')
 
 const NavbarWrapper = require('./NavbarWrapper')
-const ContactList = require('./ContactList')
+const ContactList = require('./helpers/ContactList')
 
 const styled = require('styled-components').default
 

@@ -25,7 +25,8 @@ const publicAccessibleMethods = [
   'unblockContact',
   'updateBlockedContacts',
   'updateChatList',
-  'getConfigFor'
+  'getConfigFor',
+  'createChatByContactId',
 ]
 
 /**
@@ -82,14 +83,14 @@ class DeltaChatController extends EventEmitter {
   }
 
   callMethod (evt, methodName, args) {
-    if (publicAccessibleMethods.indexOf(methodName) < 0) {
-      const message = 'Method not accessible: ' + methodName
+    if (typeof this[methodName] !== 'function') {
+      const message = 'Method is not of type function: ' + methodName
       log.error(message)
       throw new Error(message)
     }
 
-    if (typeof this[methodName] !== 'function') {
-      const message = 'Method is not of type function: ' + methodName
+    if (publicAccessibleMethods.indexOf(methodName) < 0) {
+      const message = 'Method not accessible: ' + methodName
       log.error(message)
       throw new Error(message)
     }
@@ -237,6 +238,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   getContacts (listFlags, queryStr) {
+    console.log(arguments)
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
     const contacts = distinctIds.map(id => {
       return this._dc.getContact(id).toJson()

@@ -27,7 +27,7 @@ export default function DeltaMenu (props) {
 
   let chatMenu = <div />
 
-  const onCreateChat = () => screenContext.changeScreen('CreateChat')
+  const onCreateChat = () => screenContext.openDialog('CreateChat', {})
   const onEditGroup = () => screenContext.changeScreen('EditGroup', { chat: selectedChat })
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
   const onArchiveChat = archive => archiveChat(selectedChat.id, archive)

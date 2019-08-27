@@ -14,7 +14,7 @@ const {
 
 const styled = require('styled-components').default
 
-const ContactList = require('./ContactList')
+const ContactList = require('./helpers/ContactList')
 const NavbarWrapper = require('./NavbarWrapper')
 
 const OvalDeltaButton = styled.button`
@@ -65,6 +65,8 @@ class CreateChat extends React.Component {
       0,
       ''
     )
+    return () => 
+    contactsStore.unsubscribe(this.assignContacts)
   }
 
   componentWillUnmount () {
