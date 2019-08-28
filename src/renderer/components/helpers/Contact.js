@@ -85,13 +85,12 @@ const PseudoContactText = styled.p`
   font-weight: bold;
 `
 export function PseudoContact (props) {
-  const { cutoff, text } = props
+  const { cutoff, text, subText } = props
   return (
     <ContactWrapper>
       {renderAvatar(false, false, cutoff)}
-      <ContactNameWrapper>
-        <PseudoContactText>{text}</PseudoContactText>
-      </ContactNameWrapper>
+      { !subText && <ContactNameWrapper><PseudoContactText>{text}</PseudoContactText></ContactNameWrapper> }
+      { subText && ContactName(text, subText, false) }
     </ContactWrapper>
   )
 }

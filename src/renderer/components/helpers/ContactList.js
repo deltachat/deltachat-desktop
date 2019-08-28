@@ -111,14 +111,14 @@ export function ContactListItem (props) {
 }
 
 export function PseudoContactListItem (props) {
-  const { id, cutoff, text, onClick } = props
+  const { id, cutoff, text, subText, onClick } = props
   return (
     <ContactListItemWrapper
       key={id}
       showInitial={false}
       onClick={onClick}
     >
-      <PseudoContact cutoff={cutoff} text={text} />
+      <PseudoContact cutoff={cutoff} text={text} subText={subText} />
     </ContactListItemWrapper>
   )
 }
