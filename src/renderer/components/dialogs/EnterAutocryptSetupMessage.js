@@ -6,9 +6,9 @@ import {
   Callout,
   Spinner,
   Classes,
-  Dialog
 } from '@blueprintjs/core'
 import InputTransferKey from '../helpers/AutocryptSetupMessage'
+import DeltaDialog from '../helpers/DeltaDialog'
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
@@ -109,13 +109,13 @@ export default class EnterAutocryptSetupMessage extends React.Component {
     }
 
     return (
-      <Dialog
+      <DeltaDialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
         onClose={onClose}
         canOutsideClickClose={false}>
         {body}
-      </Dialog>
+      </DeltaDialog>
     )
   }
 }

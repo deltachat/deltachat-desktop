@@ -6,10 +6,10 @@ import {
   Callout,
   Spinner,
   Classes,
-  Dialog
 } from '@blueprintjs/core'
 import { DeltaButton } from '../helpers/SmallDialog'
 import InputTransferKey from '../helpers/AutocryptSetupMessage'
+import DeltaDialog from '../helpers/DeltaDialog'
 
 class KeyViewPanel extends React.Component {
   render () {
@@ -104,13 +104,13 @@ export default class SendAutocryptSetupMessage extends React.Component {
     else if (key) body = <KeyViewPanel autocryptKey={key} onClose={this.onClose} />
     else body = <InitiatePanel onClick={this.initiateKeyTransfer} />
     return (
-      <Dialog
+      <DeltaDialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
         onClose={this.onClose}
         canOutsideClickClose={false}>
         {body}
-      </Dialog>
+      </DeltaDialog>
     )
   }
 }

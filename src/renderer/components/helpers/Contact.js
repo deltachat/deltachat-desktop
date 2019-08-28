@@ -17,17 +17,26 @@ export function renderAvatar (avatarPath, color, displayName) {
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
+    <AvatarBubble color={color}>
+      {initial}
+    </AvatarBubble>
+  )
+}
+
+export function AvatarBubble(props) {
+  return (
     <div
-      style={{ backgroundColor: color }}
+      style={{ backgroundColor: props.color, ...props.style }}
       className={classNames(
         'module-conversation-list-item__avatar',
         'module-conversation-list-item__default-avatar'
       )}
     >
-      {initial}
+      {props.children}
     </div>
   )
 }
+
 export function VerifiedIcon (props) {
   return (
     <img

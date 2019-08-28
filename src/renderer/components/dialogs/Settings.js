@@ -352,6 +352,7 @@ export default class Settings extends React.Component {
         isOpen={this.props.isOpen}
         onClose={() => this.setState({ userDetails: false })}
         className='SettingsDialog'
+        fixed
       >
         <div className='bp3-dialog-header'>
           { this.state.show !== 'main' && <button onClick={() => this.setState({ show: 'main' })} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }

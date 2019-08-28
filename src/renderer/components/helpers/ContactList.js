@@ -79,7 +79,8 @@ export default class ContactList extends SearchableList {
 const ContactListItemWrapper = styled.div`
   padding-left: ${({ showInitial }) => showInitial === true ? '0px' : '40px'};
   &:hover {
-    background-color: var(--chatListItemBgHover)
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
   }
 `
 
@@ -137,3 +138,18 @@ export function ContactList2 (props) {
     return ContactListItem({ contact, onClick, showInitial })
   })
 }
+
+export const ContactListSearchInput = styled.input`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  margin: 0;
+  line-height: inherit;
+  border: 0px;
+  margin-left: 20px;
+  font-size: 18px;
+`
