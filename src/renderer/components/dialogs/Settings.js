@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
-import { createGlobalStyle } from 'styled-components'
 
 import {
   Elevation,
@@ -20,6 +19,7 @@ import {
   Callout
 } from '@blueprintjs/core'
 
+import { DeltaDialogBase } from '../helpers/DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
 const SettingsContext = require('../../contexts/SettingsContext')
@@ -28,13 +28,6 @@ const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 function flipDeltaBoolean (value) {
   return value === '1' ? '0' : '1'
 }
-
-const SettingsDialogGlobal = createGlobalStyle`
-    .SettingsDialog {
-        position: absolute;
-        top: 0;
-    }
-`
 
 export default class Settings extends React.Component {
   constructor (props) {
@@ -59,7 +52,7 @@ export default class Settings extends React.Component {
   }
 
   async componentDidMount () {
-    const settings = await callDcMethodAsync('getConfigFor', [
+    const settings = await callDcMethodAsync('getConfigFor', [[
       'addr',
       'mail_pw',
       'inbox_watch',
@@ -81,7 +74,7 @@ export default class Settings extends React.Component {
       'selfstatus',
       'mdns_enabled',
       'show_emails'
-    ])
+    ]])
 
     const advancedSettings = {
       mail_user: settings['configured_mail_user'],
@@ -355,24 +348,21 @@ export default class Settings extends React.Component {
     }
 
     return (
-      <div>
-        <SettingsDialogGlobal />
-        <Dialog
-          isOpen={this.props.isOpen}
-          onClose={() => this.setState({ userDetails: false })}
-          className='SettingsDialog'
-        >
-          <div className='bp3-dialog-header'>
-            { this.state.show !== 'main' && <button onClick={() => this.setState({ show: 'main' })} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
-            <h4 className='bp3-heading'>{title}</h4>
-            <button onClick={onClose} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
-          </div>
-          <div className={Classes.DIALOG_BODY}>
-            { this.renderDialogContent() }
-          </div>
-          <div className={Classes.DIALOG_FOOTER} />
-        </Dialog>
-      </div>
+      <DeltaDialogBase
+        isOpen={this.props.isOpen}
+        onClose={() => this.setState({ userDetails: false })}
+        className='SettingsDialog'
+      >
+        <div className='bp3-dialog-header'>
+          { this.state.show !== 'main' && <button onClick={() => this.setState({ show: 'main' })} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
+          <h4 className='bp3-heading'>{title}</h4>
+          <button onClick={onClose} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
+        </div>
+        <div className={Classes.DIALOG_BODY}>
+          { this.renderDialogContent() }
+        </div>
+        <div className={Classes.DIALOG_FOOTER} />
+      </DeltaDialogBase>
     )
   }
 }

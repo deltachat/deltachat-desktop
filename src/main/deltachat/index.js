@@ -229,13 +229,12 @@ class DeltaChatController extends EventEmitter {
   _integerToHexColor (integerColor) {
     return '#' + integerColor.toString(16)
   }
-  
-  getContact(id) {
-    let contact = this._dc.getContact(id).toJson()
+
+  getContact (id) {
+    const contact = this._dc.getContact(id).toJson()
     contact.color = this._integerToHexColor(contact.color)
     return contact
   }
-
 
   _blockedContacts () {
     if (!this._dc) return []
