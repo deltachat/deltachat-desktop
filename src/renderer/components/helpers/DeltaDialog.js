@@ -4,7 +4,7 @@ import { Dialog } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 export const CreateDeltaDialogGlobal = createGlobalStyle`
-  .DeltaDialog {
+  .FixedDeltaDialog {
     position: absolute;
     top: 0;
   }
@@ -20,7 +20,7 @@ export function DeltaDialogBase(props) {
       <Dialog
         isOpen={props.isOpen}
         onClose={props.onClose}
-        className={classNames('DeltaDialog', props.className)}
+        className={classNames(props.fixed ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
         style={props.style}
       >
       {props.children}
