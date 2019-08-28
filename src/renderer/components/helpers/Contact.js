@@ -39,6 +39,7 @@ export function VerifiedIcon (props) {
 }
 
 const ContactNameWrapper = styled.div`
+  height: 54px;
   margin-left: 20px;
 `
 
@@ -82,6 +83,7 @@ export default function Contact (props) {
 }
 
 const PseudoContactText = styled.p`
+  padding-top: calc((54px - 18px) / 2);
   font-weight: bold;
 `
 export function PseudoContact (props) {

@@ -29,6 +29,7 @@ const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
 `
 
+
 export default function CreateChat (props) {
   const { isOpen, onClose } = props
   const tx = window.translate
@@ -36,6 +37,11 @@ export default function CreateChat (props) {
 
   const [queryStr, setQueryStr] = useState('')
   const [contacts, updateContacts] = useContacts(0, queryStr)
+  
+  const closeDialogAndSelectChat = chatId => { 
+    onClose()
+    changeScreen('ChatView', { chatId })
+  }
 
   const chooseContact = async ({ id }) => {
     const chatId = await callDcMethodAsync('createChatByContactId', id)
@@ -43,9 +49,9 @@ export default function CreateChat (props) {
     if (!chatId) {
       return userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
     }
-    onClose()
-    changeScreen('ChatView', { chatId })
+    closeDialogAndSelectChat(chatId)
   }
+
 
   const onSearchChange = event => {
     let queryStr = event.target.value
@@ -70,13 +76,27 @@ export default function CreateChat (props) {
     )
   }
   
-  const renderOnSearch = () => {
+  const addContactOnClick = async () => {
+    let queryStrIsEmail = isValidEmail(queryStr)
+    if (!queryStrIsEmail) return
+    
+    const contactId = await callDcMethodAsync('createContact', [queryStr, queryStr])
+    const chatId = await callDcMethodAsync('createChatByContactId', contactId)
+    closeDialogAndSelectChat(chatId)
+  }
+  const renderAddContactIfNeeded = () => {
+    if (queryStr === '' ||
+        (contacts.length === 1 && contacts[0].address.toLowerCase() == queryStr.toLowerCase())) {
+      return null
+    }
+    let queryStrIsEmail = isValidEmail(queryStr)
     return (
       <PseudoContactListItem
         id='newcontact'
         cutoff='+'
         text={tx('menu_new_contact')}
-        subText={tx('contacts_type_email_above')}
+        subText={queryStrIsEmail ? queryStr + ' ...' : tx('contacts_type_email_above')}
+        onClick={addContactOnClick}
       />
     )
   }
@@ -96,12 +116,17 @@ export default function CreateChat (props) {
           <CreateChatContactListWrapper>
             {queryStr === '' && renderOnEmptySearch()}
             <ContactList2 contacts={contacts} onClick={chooseContact} />
-            {queryStr !== '' && renderOnSearch()}
+            {renderAddContactIfNeeded()}
           </CreateChatContactListWrapper>
         </div>
         <div className={Classes.DIALOG_FOOTER} />
      </DeltaDialogBase>
   )
+}
+
+function isValidEmail(email) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) return true
+  return false
 }
 
 

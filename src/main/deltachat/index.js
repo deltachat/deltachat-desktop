@@ -26,7 +26,8 @@ const publicAccessibleMethods = [
   'updateBlockedContacts',
   'updateChatList',
   'getConfigFor',
-  'createChatByContactId'
+  'createChatByContactId',
+  'createContact'
 ]
 
 /**
