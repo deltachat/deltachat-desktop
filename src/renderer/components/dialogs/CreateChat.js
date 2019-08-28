@@ -6,7 +6,7 @@ import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes, Dialog } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
 import classNames from 'classnames'
-import DeltaDialog from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
 
 const OvalDeltaButton = styled.button`
   background-color: ${props => props.theme.ovalButtonBg};
@@ -34,7 +34,8 @@ export default function CreateChat (props) {
   const tx = window.translate
   const { changeScreen, userFeedback } = useContext(ScreenContext)
 
-  const [contacts, updateContacts] = useContacts(0, '')
+  const [queryStr, setQueryStr] = useState('')
+  const [contacts, updateContacts] = useContacts(0, queryStr)
 
   const chooseContact = async ({ id }) => {
     const chatId = await callDcMethodAsync('createChatByContactId', id)
@@ -44,6 +45,12 @@ export default function CreateChat (props) {
     }
     onClose()
     changeScreen('ChatView', { chatId })
+  }
+
+  const onSearchChange = event => {
+    let queryStr = event.target.value
+    setQueryStr(queryStr)
+    updateContacts(0, queryStr)
   }
 
   const renderOnEmptySearch = () => {
@@ -62,23 +69,53 @@ export default function CreateChat (props) {
       </Fragment>
     )
   }
+  
+  const renderOnSearch = () => {
+    return (
+      <PseudoContactListItem
+        id='newcontact'
+        cutoff='+'
+        text={tx('menu_new_contact')}
+        subText={tx('contacts_type_email_above')}
+      />
+    )
+  }
 
   const title = 'test'
   return (
-    <DeltaDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      title='Test'
-      style={{ width: '400px' }}
-    >
-      <div className={Classes.DIALOG_BODY}>
-        <CreateChatContactListWrapper>
-          {renderOnEmptySearch()}
-
-          <ContactList2 contacts={contacts} onClick={chooseContact} />
-        </CreateChatContactListWrapper>
-      </div>
-      <div className={Classes.DIALOG_FOOTER} />
-    </DeltaDialog>
+     <DeltaDialogBase 
+       isOpen={isOpen}
+       onClose={onClose}
+       style={{ width: '400px' }}
+     >
+        <div className='bp3-dialog-header'>
+          <ContactSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
+          <DeltaDialogCloseButton onClick={onClose} />
+        </div>
+        <div className={Classes.DIALOG_BODY}>
+          <CreateChatContactListWrapper>
+            {queryStr === '' && renderOnEmptySearch()}
+            <ContactList2 contacts={contacts} onClick={chooseContact} />
+            {queryStr !== '' && renderOnSearch()}
+          </CreateChatContactListWrapper>
+        </div>
+        <div className={Classes.DIALOG_FOOTER} />
+     </DeltaDialogBase>
   )
 }
+
+
+const ContactSearchInput = styled.input`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  margin: 0;
+  line-height: inherit;
+  border: 0px;
+  margin-left: 20px;
+  font-size: 18px;
+`
