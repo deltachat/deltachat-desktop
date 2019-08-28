@@ -7,10 +7,12 @@ function setConfig (key, value) {
 }
 
 function getConfig (key) {
+  console.log('getConfig', key)
   return this._dc.getConfig(key)
 }
 
 function getConfigFor (keys) {
+  console.log('getConfigFor', keys)
   const config = {}
   for (const key of keys) {
     config[key] = this.getConfig(key)

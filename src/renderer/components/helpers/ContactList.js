@@ -77,7 +77,7 @@ export default class ContactList extends SearchableList {
 }
 
 const ContactListItemWrapper = styled.div`
-  padding-left: ${({showInitial}) => showInitial === true ? '0px' : '40px'};
+  padding-left: ${({ showInitial }) => showInitial === true ? '0px' : '40px'};
   &:hover {
     background-color: var(--chatListItemBgHover)
   }
@@ -93,7 +93,7 @@ const ContactListItemInitial = styled.div`
   text-transform: capitalize;
   color: var(--contactListInitalColor);
 `
-export function ContactListItem(props) {
+export function ContactListItem (props) {
   const { contact, showInitial, onClick } = props
   return (
     <ContactListItemWrapper
@@ -101,16 +101,16 @@ export function ContactListItem(props) {
       showInitial={showInitial}
       onClick={() => onClick(contact)}
     >
-      {showInitial && 
-          <ContactListItemInitial>
-            {contact.displayName[0]}
-          </ContactListItemInitial> } 
-      <Contact contact={contact}/>
+      {showInitial &&
+      <ContactListItemInitial>
+        {contact.displayName[0]}
+      </ContactListItemInitial> }
+      <Contact contact={contact} />
     </ContactListItemWrapper>
-  )  
+  )
 }
 
-export function PseudoContactListItem(props) {
+export function PseudoContactListItem (props) {
   const { id, cutoff, text, onClick } = props
   return (
     <ContactListItemWrapper
@@ -120,21 +120,20 @@ export function PseudoContactListItem(props) {
     >
       <PseudoContact cutoff={cutoff} text={text} />
     </ContactListItemWrapper>
-  )  
+  )
 }
 
-
-export function ContactList2(props) {
+export function ContactList2 (props) {
   const { contacts, onClick } = props
   let currInitial = ''
   return contacts.map(contact => {
-      let initial = contact.displayName[0].toLowerCase()
-      let showInitial = false
-      if (initial !== currInitial) {
-          currInitial = initial
-          showInitial = true
-      }
+    const initial = contact.displayName[0].toLowerCase()
+    let showInitial = false
+    if (initial !== currInitial) {
+      currInitial = initial
+      showInitial = true
+    }
 
-      return ContactListItem({contact, onClick, showInitial})
+    return ContactListItem({ contact, onClick, showInitial })
   })
 }

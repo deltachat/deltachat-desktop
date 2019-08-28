@@ -15,7 +15,6 @@ const MessageText1Draft = styled.div`
   color: ${props => props.theme.draftTextColor}
 `
 
-
 export default class ChatListItem extends React.Component {
   renderUnread () {
     const { unreadCount } = this.props
@@ -170,4 +169,3 @@ export default class ChatListItem extends React.Component {
     )
   }
 }
-

@@ -1,17 +1,39 @@
 import React, { Fragment } from 'react'
+import { createGlobalStyle } from 'styled-components'
+import { Dialog } from '@blueprintjs/core'
+import classNames from 'classnames'
 
-export default function DeltaDialog () {
-  const { children } = props
+export const CreateDeltaDialogGlobal = createGlobalStyle`
+    .DeltaDialog {
+        position: absolute;
+        top: 0;
+    }
+`
+
+export function DeltaDialogBase(props) {
   return (
     <Fragment>
-      <SettingsDialogGlobal />
+      <CreateDeltaDialogGlobal />
       <Dialog
-        isOpen={this.props.isOpen}
-        onClose={() => this.setState({ userDetails: false })}
-        className='SettingsDialog'
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        className={classNames('DeltaDialog', props.className)}
+        style={props.style}
       >
-        {props.children}
+      {props.children}
       </Dialog>
     </Fragment>
+  )
+}
+
+export default function DeltaDialog (props) {
+  return (
+     <DeltaDialogBase {...props}>
+        <div className='bp3-dialog-header'>
+          <h4 className='bp3-heading'>{props.title}</h4>
+          <button onClick={props.onClose} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
+        </div>
+        {props.children}
+     </DeltaDialogBase>
   )
 }

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { ContactName as ContactNameConversations } from '../conversations'
 import styled from 'styled-components'
 
-export function renderAvatar(avatarPath, color, displayName) {
+export function renderAvatar (avatarPath, color, displayName) {
   if (avatarPath) {
     return (
       <img
@@ -59,10 +59,10 @@ export function ContactName (displayName, address, isVerified) {
     <ContactNameWrapper>
       <ContactNameDisplayName>
         {displayName}
-        {isVerified && <VerifiedIcon style={{marginLeft:'4px'}}/>}
+        {isVerified && <VerifiedIcon style={{ marginLeft: '4px' }} />}
       </ContactNameDisplayName>
       <ContactNameEmail>{address}</ContactNameEmail>
-   </ContactNameWrapper>
+    </ContactNameWrapper>
   )
 }
 
@@ -71,7 +71,7 @@ const ContactWrapper = styled.div`
   flex-direction: row;
   align-items: center;
 `
-export default function Contact(props) {
+export default function Contact (props) {
   const { id, avatarPath, color, displayName, address, isVerified } = props.contact
   return (
     <ContactWrapper>
@@ -84,7 +84,7 @@ export default function Contact(props) {
 const PseudoContactText = styled.p`
   font-weight: bold;
 `
-export function PseudoContact(props) {
+export function PseudoContact (props) {
   const { cutoff, text } = props
   return (
     <ContactWrapper>

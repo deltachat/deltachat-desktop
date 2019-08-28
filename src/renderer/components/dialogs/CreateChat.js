@@ -6,6 +6,7 @@ import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes, Dialog } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
 import classNames from 'classnames'
+import DeltaDialog from '../helpers/DeltaDialog'
 
 const OvalDeltaButton = styled.button`
   background-color: ${props => props.theme.ovalButtonBg};
@@ -24,33 +25,6 @@ const OvalDeltaButton = styled.button`
   }
 `
 
-const CreateDeltaDialogGlobal = createGlobalStyle`
-    .DeltaDialog {
-        position: absolute;
-        top: 0;
-    }
-`
-
-export function DeltaDialog(props) {
-  return (
-    <Fragment>
-      <CreateDeltaDialogGlobal/>
-      <Dialog
-        isOpen={props.isOpen}
-        onClose={props.onClose}
-        className={classNames('DeltaDialog', props.className)}
-        style={props.style}
-      >
-        <div className='bp3-dialog-header'>
-          <h4 className='bp3-heading'>{props.title}</h4>
-          <button onClick={props.onClose} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
-        </div>
-        {props.children}
-      </Dialog>
-    </Fragment>
-  )
-}
-
 const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
 `
@@ -59,19 +33,18 @@ export default function CreateChat (props) {
   const { isOpen, onClose } = props
   const tx = window.translate
   const { changeScreen, userFeedback } = useContext(ScreenContext)
-  
+
   const [contacts, updateContacts] = useContacts(0, '')
 
-  const chooseContact = async ({id}) => {
+  const chooseContact = async ({ id }) => {
     const chatId = await callDcMethodAsync('createChatByContactId', id)
 
     if (!chatId) {
-      return userFeedback({ type: 'error', text: tx('create_chat_error_desktop')})
+      return userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
     }
     onClose()
     changeScreen('ChatView', { chatId })
   }
-  
 
   const renderOnEmptySearch = () => {
     return (
@@ -90,19 +63,19 @@ export default function CreateChat (props) {
     )
   }
 
-  const title = "test"
+  const title = 'test'
   return (
     <DeltaDialog
       isOpen={isOpen}
       onClose={onClose}
       title='Test'
-      style={{width: '400px'}}
+      style={{ width: '400px' }}
     >
       <div className={Classes.DIALOG_BODY}>
         <CreateChatContactListWrapper>
           {renderOnEmptySearch()}
-          
-          <ContactList2 contacts={contacts} onClick={chooseContact} /> 
+
+          <ContactList2 contacts={contacts} onClick={chooseContact} />
         </CreateChatContactListWrapper>
       </div>
       <div className={Classes.DIALOG_FOOTER} />
