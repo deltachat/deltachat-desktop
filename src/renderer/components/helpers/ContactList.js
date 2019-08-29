@@ -77,7 +77,7 @@ export default class ContactList extends SearchableList {
 }
 
 const ContactListItemWrapper = styled.div`
-  padding-left: ${({ showInitial }) => showInitial === true ? '0px' : '40px'};
+  display: flex;
   &:hover {
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
@@ -85,47 +85,99 @@ const ContactListItemWrapper = styled.div`
 `
 
 const ContactListItemInitial = styled.div`
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   height: 64px;
-  float: left;
   text-align: center;
   font-size: 26px;
   padding-top: 23px;
   text-transform: capitalize;
   color: var(--contactListInitalColor);
 `
+const ContactListItemInitialSpacer = styled.div`
+  min-width: 40px;
+  max-width: 40px;
+  height: 64px;
+`
+const ContactListItemContactWrapper = styled.div`
+  width: 100%;
+`
+
+const ContactListItemCheckboxWrapper = styled.div`
+  width: 40px;
+  margin-right: 20px;
+  input {
+    width: 20px;
+    height: 20px;
+    margin-top: calc((64px - 20px) / 2);
+    -webkit-appearance: none;
+    border: solid;
+    border-radius: 3px;
+    border-width: 2px;
+    border-color: grey;
+    &:checked {
+      border-color: blue;
+      background-color: blue;
+    }
+    &:checked:after {
+      content: '\\2714';
+      font-family: monospace;
+      font-size: 31px;
+      top: -11px;
+      left: -1px;
+      position: relative;
+      color: white;
+    }
+  }
+`
+
 export function ContactListItem (props) {
-  const { contact, showInitial, onClick } = props
+  const { contact, showInitial, onClick, showCheckbox, checked, onCheckboxClick } = props
   return (
     <ContactListItemWrapper
       key={contact.id}
-      showInitial={showInitial}
       onClick={() => onClick(contact)}
     >
-      {showInitial &&
-      <ContactListItemInitial>
-        {contact.displayName[0]}
-      </ContactListItemInitial> }
-      <Contact contact={contact} />
+      {showInitial && <ContactListItemInitial>{contact.displayName[0]}</ContactListItemInitial> }
+      {!showInitial && <ContactListItemInitialSpacer/> }
+      <ContactListItemContactWrapper>
+        <Contact contact={contact} />
+      </ContactListItemContactWrapper>
+      {showCheckbox &&
+        <ContactListItemCheckboxWrapper>
+          <input
+            type="checkbox" 
+            disabled={contact.id === 1}
+            onClick={event => {
+              event.stopPropagation()
+              typeof onCheckboxClick === 'function' && onCheckboxClick(contact)
+            }}
+            defaultChecked={checked === true}
+          />
+        </ContactListItemCheckboxWrapper>
+      }
     </ContactListItemWrapper>
   )
 }
 
 export function PseudoContactListItem (props) {
-  const { id, cutoff, text, subText, onClick } = props
+  const { id, cutoff, text, subText, onClick, avatar } = props
   return (
     <ContactListItemWrapper
       key={id}
       showInitial={false}
       onClick={onClick}
     >
-      <PseudoContact cutoff={cutoff} text={text} subText={subText} />
+      <ContactListItemInitialSpacer/>
+      <PseudoContact cutoff={cutoff} text={text} subText={subText} avatar={avatar}>
+        {props.children}
+      </PseudoContact>
     </ContactListItemWrapper>
   )
 }
 
 export function ContactList2 (props) {
-  const { contacts, onClick } = props
+  const { contacts, onClick, showCheckbox, isChecked, onCheckboxClick } = props
   let currInitial = ''
   return contacts.map(contact => {
     const initial = contact.displayName[0].toLowerCase()
@@ -135,7 +187,11 @@ export function ContactList2 (props) {
       showInitial = true
     }
 
-    return ContactListItem({ contact, onClick, showInitial })
+    let checked = null
+    if(showCheckbox && typeof isChecked === 'function') {
+      checked = isChecked(contact)
+    }
+    return ContactListItem({ contact, onClick, showInitial, showCheckbox, checked, onCheckboxClick })
   })
 }
 
