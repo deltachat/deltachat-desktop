@@ -99,7 +99,7 @@ export function PseudoContact (props) {
   const { cutoff, text, subText } = props
   return (
     <ContactWrapper>
-      {renderAvatar(false, false, cutoff)}
+      {props.children ? props.children : renderAvatar(false, false, cutoff)}
       { !subText && <ContactNameWrapper><PseudoContactText>{text}</PseudoContactText></ContactNameWrapper> }
       { subText && ContactName(text, subText, false) }
     </ContactWrapper>

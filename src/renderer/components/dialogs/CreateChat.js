@@ -187,13 +187,32 @@ const CreateGroupMemberSearchInput = styled(CreateChatSearchInput)`
   width: 100%;
 `
 
+const NoSearchResultsAvatarBubbleWrapper = styled.div`
+  .module-conversation-list-item__avatar.module-conversation-list-item__default-avatar {
+    transform: rotate(45deg); 
+    line-height: 46px;
+  }
+`
+
+const NoSearchResultsAvatarBubble = (props) => {
+  return (
+    <NoSearchResultsAvatarBubbleWrapper>
+      <AvatarBubble color={props.color}>
+        :-(
+      </AvatarBubble>
+    </NoSearchResultsAvatarBubbleWrapper>
+  )
+}
+
 export function CreateGroupInner({show, setShow, onClose}) {
   const tx = window.translate
 
   const [queryStr, setQueryStr] = useState('')
-  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
   const [groupMembers, setGroupMembers] = useState([1])
-
+  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const searchContactsToAdd = queryStr !== '' ?  
+    searchContacts.filter(({id}) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5) :
+    []
   const onSearchChange = e => {
     let queryStr = e.target.value
     setQueryStr(queryStr)
@@ -215,9 +234,12 @@ export function CreateGroupInner({show, setShow, onClose}) {
           cutoff='+'
           text={tx('qrshow_title')}
         />
-      </>
-    )
+      </>   
+    )   
   }
+
+  const removeGroupMember = ({id}) => id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
+  const addGroupMember = ({id}) => setGroupMembers([...groupMembers, id])
 
   return (
     <>
@@ -239,11 +261,34 @@ export function CreateGroupInner({show, setShow, onClose}) {
           <CreateGroupMemberContactListWrapper>
             <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} />
             {renderAddMemberIfNeeded()}  
-            <ContactList2 contacts={searchContacts.filter(({id}) => groupMembers.indexOf(id) !== -1)} onClick={()=>{}} />
-            {queryStr !== '' && searchContacts.length !== 0 && (
+            <ContactList2
+              contacts={searchContacts.filter(({id}) => groupMembers.indexOf(id) !== -1)}
+              onClick={()=>{}}
+              showCheckbox
+              isChecked={() => true}
+              onCheckboxClick={removeGroupMember}
+            />
+            {queryStr !== '' && searchContactsToAdd.length !== 0 && (
               <>
                 <CreateGroupSeperator noMargin>{tx('group_add_members')}</CreateGroupSeperator>
-                <ContactList2 contacts={searchContacts.filter(({id}) => groupMembers.indexOf(id) === -1).filter((_, index) => index < 5)} onClick={()=>{}} />
+                <ContactList2
+                  contacts={searchContactsToAdd}
+                  onClick={()=>{}}
+                  showCheckbox
+                  isChecked={() => false}
+                  onCheckboxClick={addGroupMember}
+                />
+              </>
+            )}
+            {queryStr !== '' && searchContacts.length === 0 && (
+              <>
+              <PseudoContactListItem
+                id='addmember'
+                text={tx('search_no_result_for_x', queryStr)}
+                onClick={() => {}}
+              >
+                <NoSearchResultsAvatarBubble/>
+              </PseudoContactListItem>
               </>
             )}
           </CreateGroupMemberContactListWrapper>
