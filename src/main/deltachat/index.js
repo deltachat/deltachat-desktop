@@ -15,6 +15,7 @@ const publicAccessibleMethods = [
   'fetchMessages',
   'forwardMessage',
   'getContacts',
+  'getContacts2',
   'getEncryptionInfo',
   'getLocations',
   'leaveGroup',
@@ -241,11 +242,16 @@ class DeltaChatController extends EventEmitter {
     if (!this._dc) return []
     return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }
-
-  getContacts (listFlags, queryStr) {
+  
+  getContacts2 (listFlags, queryStr) {
     console.log(arguments)
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
     const contacts = distinctIds.map(this.getContact.bind(this))
+    return contacts
+  }
+
+  getContacts (listFlags, queryStr) {
+    const contacts = this.getContacts2(listFlags, queryStr)
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
   }
 
