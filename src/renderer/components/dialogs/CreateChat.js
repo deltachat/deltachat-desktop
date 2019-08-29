@@ -45,7 +45,6 @@ export const CreateChatSearchInput = styled.input`
   margin: 0;
   line-height: inherit;
   border: 0px;
-  margin-left: 20px;
   font-size: 18px;
 `
 
@@ -191,6 +190,7 @@ const NoSearchResultsAvatarBubbleWrapper = styled.div`
   .module-conversation-list-item__avatar.module-conversation-list-item__default-avatar {
     transform: rotate(45deg); 
     line-height: 46px;
+    letter-spacing: 1px;
   }
 `
 

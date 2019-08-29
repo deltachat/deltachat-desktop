@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
 import contactsStore from '../../stores/contacts'
-import { callDcMethod } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 import Contact, { PseudoContact } from './Contact'
 
 const ContactListDiv = styled.div`
@@ -18,15 +18,14 @@ const ContactListDiv = styled.div`
 export function useContacts (listFlags, queryStr) {
   const [contacts, setContacts] = useState([])
 
-  const updateContacts = (listFlags, queryStr) => {
-    callDcMethod('getContacts', [listFlags, queryStr])
+  const updateContacts = async (listFlags, queryStr) => {
+    const contacts = await callDcMethodAsync('getContacts2', [listFlags, queryStr])
+    setContacts(contacts)
   }
 
   const assignContacts = ({ contacts }) => setContacts(contacts)
   useEffect(() => {
-    contactsStore.subscribe(assignContacts)
     updateContacts(listFlags, queryStr)
-    return () => contactsStore.unsubscribe(assignContacts)
   }, [])
 
   return [contacts, updateContacts]
