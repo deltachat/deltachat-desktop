@@ -182,8 +182,7 @@ const CreateGroupMemberContactListWrapper = styled.div`
 const CreateGroupMemberSearchInput = styled(CreateChatSearchInput)`
   margin-left: 40px;
   padding: 10px 0px;
-  padding-right: 40px;
-  width: 100%;
+  width: calc(100% - 80px);
 `
 
 const NoSearchResultsAvatarBubbleWrapper = styled.div`
