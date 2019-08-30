@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react'
 import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
 import { AvatarBubble, AvatarImage } from '../helpers/Contact'
 import ScreenContext from '../../contexts/ScreenContext'
@@ -195,15 +195,47 @@ const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
   }
 `
 
-const GroupImage = (props) => {
-  const { groupImage, onClick } = props
-  if (groupImage) return <AvatarImage src={groupImage} onClick={onClick}/>
 
-  return (
-    <AvatarBubble style={{float:'left'}} onClick={onClick}>
-      G
-    </AvatarBubble>
-  )
+const Circle = styled.div`
+  position: relative;
+  width: 26px;
+  height: 25px;
+  left: -8px;
+  background-color: #e56555;
+  border-radius: 50%;
+`
+
+const CrossWrapperSpanMixin = css`
+    display: block;
+    position: relative;
+    width: 22px;
+    height: 3px;
+    top: 11px;
+    left: 2px;
+    background-color: white;
+`
+const CrossWrapper = styled.div`
+   span:nth-child(1) {
+    ${CrossWrapperSpanMixin}
+    transform: rotate(135deg);
+  }
+  span:nth-child(2) {
+    ${CrossWrapperSpanMixin}
+    transform: rotate(-135deg);
+    top: 8px;
+  }
+`
+
+const Cross = (props) => <CrossWrapper><span/><span/></CrossWrapper>
+const GroupImageUnsetButton = (props) => {
+  const { onClick } = props
+  return <Circle onClick={onClick}><Cross/></Circle>
+}
+
+const GroupImage = (props) => {
+  const { groupImage, onSetGroupImage, onUnsetGroupImage } = props
+  if (groupImage) return <><AvatarImage src={groupImage} onClick={onSetGroupImage} {...props}/><GroupImageUnsetButton onClick={onUnsetGroupImage}/></>
+  return <AvatarBubble onClick={onSetGroupImage} {...props}>G</AvatarBubble>
 }
 
 export function CreateGroupInner({show, setShow, onClose}) {
@@ -234,6 +266,8 @@ export function CreateGroupInner({show, setShow, onClose}) {
       }
     })
   }
+
+  const onUnsetGroupImage = () => setGroupImage('')
 
   const renderAddMemberIfNeeded = () => {
     if (queryStr !== '') return null
@@ -268,7 +302,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <CreateGroupSettingsContainer>
-            <GroupImage groupImage={groupImage} onClick={onSetGroupImage} />
+            <GroupImage style={{float: 'left'}} groupImage={groupImage} onSetGroupImage={onSetGroupImage} onUnsetGroupImage={onUnsetGroupImage}/>
             <GroupNameInput placeholder={tx('group_name')} autoFocus />
           </CreateGroupSettingsContainer>
           <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other' )}</CreateGroupSeperator>
