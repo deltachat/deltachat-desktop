@@ -121,12 +121,18 @@ const ContactListItemCheckboxWrapper = styled.div`
     &:disabled {
       border-color: grey;
       background-color: grey;
+      cursor: default;
     }
   }
 
   .DeltaCheckmarkIcon {
     position: relative;
     top: -20px;
+    display: ${({checked}) => checked ? 'block' : 'none'};
+  }
+
+  input:hover, .DeltaCheckmarkIcon:hover {
+    cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
   }
 `
 
@@ -166,14 +172,14 @@ const DeltaCheckbox = (props) => {
   const _onClick = props.onClick
   const onClick = e => typeof _onClick === 'function' && _onClick(e)
   return (
-    <ContactListItemCheckboxWrapper>
+    <ContactListItemCheckboxWrapper checked={checked} disabled={disabled}>
       <input
         type="checkbox" 
         disabled={disabled}
         onClick={onClick}
         defaultChecked={checked}
       />
-      <DeltaCheckmarkIcon style={{display: checked ? 'block' : 'none'}} onClick={onClick}/>
+      <DeltaCheckmarkIcon onClick={onClick}/>
     </ContactListItemCheckboxWrapper>
   )
 }
