@@ -115,21 +115,68 @@ const ContactListItemCheckboxWrapper = styled.div`
     border-width: 2px;
     border-color: grey;
     &:checked {
-      border-color: blue;
-      background-color: blue;
+      border-color: var(--loginInputFocusColor);
+      background-color: var(--loginInputFocusColor);
     }
-    &:checked:after {
-      content: '\\2714';
-      font-family: monospace;
-      font-size: 31px;
-      top: -11px;
-      left: -1px;
-      position: relative;
-      color: white;
+    &:disabled {
+      border-color: grey;
+      background-color: grey;
     }
+  }
+
+  .DeltaCheckmarkIcon {
+    position: relative;
+    top: -20px;
   }
 `
 
+const DeltaCheckmarkIconWrapper = styled.div`
+  width: 20px;
+  height: 20px;
+  span:nth-child(1) {
+    display: block;
+    position: relative;
+    width: 9px;
+    height: 3px;
+    right: -1px;
+    bottom: -7px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    background-color: white;
+  }
+  span:nth-child(2) {
+    display: block;
+    position: relative;
+    height: 3px;
+    width: 14px;
+    top: 1px;
+    right: -6px;
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    background-color: white;
+  }
+`
+
+const DeltaCheckmarkIcon = (props) => <DeltaCheckmarkIconWrapper {...props} className="DeltaCheckmarkIcon"><span/><span/></DeltaCheckmarkIconWrapper>
+
+const DeltaCheckbox = (props) => {
+  const { checked, disabled } = props
+  const _onClick = props.onClick
+  const onClick = e => typeof _onClick === 'function' && _onClick(e)
+  return (
+    <ContactListItemCheckboxWrapper>
+      <input
+        type="checkbox" 
+        disabled={disabled}
+        onClick={onClick}
+        defaultChecked={checked}
+      />
+      <DeltaCheckmarkIcon style={{display: checked ? 'block' : 'none'}} onClick={onClick}/>
+    </ContactListItemCheckboxWrapper>
+  )
+}
 export function ContactListItem (props) {
   const { contact, showInitial, onClick, showCheckbox, checked, onCheckboxClick } = props
   return (
@@ -143,17 +190,10 @@ export function ContactListItem (props) {
         <Contact contact={contact} />
       </ContactListItemContactWrapper>
       {showCheckbox &&
-        <ContactListItemCheckboxWrapper>
-          <input
-            type="checkbox" 
-            disabled={contact.id === 1}
-            onClick={event => {
-              event.stopPropagation()
-              typeof onCheckboxClick === 'function' && onCheckboxClick(contact)
-            }}
-            defaultChecked={checked === true}
-          />
-        </ContactListItemCheckboxWrapper>
+        <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={e => {
+          e.stopPropagation()
+          typeof onCheckboxClick === 'function' && onCheckboxClick(contact)
+        }} />
       }
     </ContactListItemWrapper>
   )

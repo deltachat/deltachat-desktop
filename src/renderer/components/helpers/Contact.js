@@ -48,6 +48,8 @@ export function VerifiedIcon (props) {
 }
 
 const ContactNameWrapper = styled.div`
+  display: inline-block;
+  width: calc(100% - 64px);
   height: 54px;
   margin-left: 20px;
 `
@@ -56,12 +58,18 @@ const ContactNameDisplayName = styled.p`
   font-weight: bold;
   margin-bottom: 0px;
   margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const ContactNameEmail = styled.p`
   color: var(--contactEmailColor);
   margin-bottom: 3px;
   margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export function ContactName (displayName, address, isVerified) {
@@ -80,6 +88,7 @@ const ContactWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 320px;
 `
 export default function Contact (props) {
   const { id, avatarPath, color, displayName, address, isVerified } = props.contact
@@ -94,6 +103,9 @@ export default function Contact (props) {
 const PseudoContactText = styled.p`
   padding-top: calc((54px - 18px) / 2);
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 export function PseudoContact (props) {
   const { cutoff, text, subText } = props
