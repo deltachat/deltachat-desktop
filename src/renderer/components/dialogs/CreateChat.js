@@ -195,47 +195,61 @@ const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
   }
 `
 
-
-const Circle = styled.div`
-  position: relative;
-  width: 26px;
-  height: 25px;
-  left: -8px;
-  background-color: #e56555;
-  border-radius: 50%;
-`
-
 const CrossWrapperSpanMixin = css`
     display: block;
     position: relative;
-    width: 22px;
+    width: 16px;
     height: 3px;
-    top: 11px;
-    left: 2px;
+    left: 5px;
     background-color: white;
 `
-const CrossWrapper = styled.div`
-   span:nth-child(1) {
+
+const GroupImageUnsetButtonWrapper = styled.div`
+  position: relative;
+  width: 26px;
+  height: 26px;
+  left: -11px;
+  top: -2px;
+  background-color: #e56555;
+  border-radius: 50%;
+  &:hover, span:hover {
+    cursor: pointer;
+  }
+  span:nth-child(1) {
     ${CrossWrapperSpanMixin}
-    transform: rotate(135deg);
+    transform: rotate(130deg);
+    top: 11px;
   }
   span:nth-child(2) {
     ${CrossWrapperSpanMixin}
-    transform: rotate(-135deg);
+    transform: rotate(-130deg);
     top: 8px;
   }
 `
 
+const CrossWrapper = styled.div`
+`
+
 const Cross = (props) => <CrossWrapper><span/><span/></CrossWrapper>
 const GroupImageUnsetButton = (props) => {
-  const { onClick } = props
-  return <Circle onClick={onClick}><Cross/></Circle>
+  return <GroupImageUnsetButtonWrapper {...props} ><span/><span/></GroupImageUnsetButtonWrapper>
 }
+
+const GroupImageWrapper = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`
 
 const GroupImage = (props) => {
   const { groupImage, onSetGroupImage, onUnsetGroupImage } = props
-  if (groupImage) return <><AvatarImage src={groupImage} onClick={onSetGroupImage} {...props}/><GroupImageUnsetButton onClick={onUnsetGroupImage}/></>
-  return <AvatarBubble onClick={onSetGroupImage} {...props}>G</AvatarBubble>
+  return (
+    <GroupImageWrapper>
+      { groupImage && <AvatarImage src={groupImage} onClick={onSetGroupImage} {...props}/> }
+      { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...props}>G</AvatarBubble> }
+      <GroupImageUnsetButton style={{visibility: groupImage ? 'visible' : 'hidden'}} onClick={onUnsetGroupImage}/>
+    </GroupImageWrapper>
+  )
 }
 
 export function CreateGroupInner({show, setShow, onClose}) {
