@@ -4,12 +4,16 @@ import { ContactName as ContactNameConversations } from '../conversations'
 import styled from 'styled-components'
 
 export function renderAvatar (avatarPath, color, displayName) {
+  return (
+    <Avatar avatarPath={avatarPath} color={color} displayName={displayName} />
+  )
+}
+
+export function Avatar(props) {
+  const { avatarPath, color, displayName } = props
   if (avatarPath) {
     return (
-      <img
-        className='module-conversation-list-item__avatar'
-        src={avatarPath}
-      />
+      <AvatarImage src={avatarPath} />
     )
   }
 
@@ -23,19 +27,30 @@ export function renderAvatar (avatarPath, color, displayName) {
   )
 }
 
-export function AvatarBubble(props) {
-  return (
-    <div
-      style={{ backgroundColor: props.color, ...props.style }}
-      className={classNames(
-        'module-conversation-list-item__avatar',
-        'module-conversation-list-item__default-avatar'
-      )}
-    >
-      {props.children}
-    </div>
-  )
-}
+export const AvatarImage = styled.img`
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height: 48px;
+  width: 48px;
+  border-radius: 24px;
+  min-width: 48px;
+  object-fit: cover;
+`
+
+export const AvatarBubble = styled.div`
+  object-fit: cover;
+  height: 48px;
+  width: 48px;
+  min-width: 48px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-radius: 24px;
+  background-color: ${({color}) => color ? color : '#505050'};
+  color: var(--avatarLabelColor);
+  font-size: 26px;
+  line-height: 48px;
+  text-align: center;
+`
 
 export function VerifiedIcon (props) {
   return (
