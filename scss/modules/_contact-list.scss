@@ -16,37 +16,6 @@ $color-contact-list-item: var(--contactListItemBg);
   cursor: pointer;
 }
 
-.module-contact-list-item__avatar {
-  display: inline-block;
-
-  img {
-    height: 44px;
-    width: 44px;
-    border-radius: 22px;
-  }
-}
-
-.module-contact-list-item__avatar-default {
-  height: 44px;
-  width: 44px;
-  border-radius: 22px;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  text-align: center;
-
-  border: 6px solid lighten(#505050, 23);
-  background-color: lighten(#505050, 32);
-}
-
-.module-contact-list-item__avatar-default__label {
-  width: 100%;
-  color: $color-contact-default-label;
-  font-size: 18px;
-}
-
 .module-contact-list-item__text {
   margin-left: 8px;
 }

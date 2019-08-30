@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { ContactName as ContactNameConversations } from '../conversations'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export function renderAvatar (avatarPath, color, displayName) {
   return (
@@ -27,24 +27,24 @@ export function Avatar(props) {
   )
 }
 
-export const AvatarImage = styled.img`
-  margin-top: 8px;
-  margin-bottom: 8px;
+export const AvatarMixin = css`
+  position: relative;
+  z-index: 2;
+  object-fit: cover;
   height: 48px;
   width: 48px;
-  border-radius: 24px;
   min-width: 48px;
-  object-fit: cover;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-radius: 24px;
+`
+
+export const AvatarImage = styled.img`
+  ${AvatarMixin}
 `
 
 export const AvatarBubble = styled.div`
-  object-fit: cover;
-  height: 48px;
-  width: 48px;
-  min-width: 48px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-radius: 24px;
+  ${AvatarMixin}
   background-color: ${({color}) => color ? color : '#505050'};
   color: var(--avatarLabelColor);
   font-size: 26px;
