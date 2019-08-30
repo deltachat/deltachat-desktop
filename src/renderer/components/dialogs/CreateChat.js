@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, useContext } from 'react'
 import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
 import styled, { createGlobalStyle } from 'styled-components'
 import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
-import { AvatarBubble } from '../helpers/Contact'
+import { AvatarBubble, AvatarImage } from '../helpers/Contact'
 import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes, Dialog } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
@@ -11,6 +11,7 @@ import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
 import debounce from 'debounce'
 import C from 'deltachat-node/constants'
 import { DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
+import { remote } from 'electron'
 
 const OvalDeltaButton = styled.button`
   background-color: ${props => props.theme.ovalButtonBg};
@@ -185,29 +186,33 @@ const CreateGroupMemberSearchInput = styled(CreateChatSearchInput)`
   width: calc(100% - 80px);
 `
 
-const NoSearchResultsAvatarBubbleWrapper = styled.div`
-  .module-conversation-list-item__avatar.module-conversation-list-item__default-avatar {
-    transform: rotate(45deg); 
-    line-height: 46px;
-    letter-spacing: 1px;
+const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
+  transform: rotate(45deg); 
+  line-height: 46px;
+  letter-spacing: 1px;
+  &::after {
+    content: ':-(';
   }
 `
 
-const NoSearchResultsAvatarBubble = (props) => {
+const GroupImage = (props) => {
+  const { groupImage, onClick } = props
+  if (groupImage) return <AvatarImage src={groupImage} onClick={onClick}/>
+
   return (
-    <NoSearchResultsAvatarBubbleWrapper>
-      <AvatarBubble color={props.color}>
-        :-(
-      </AvatarBubble>
-    </NoSearchResultsAvatarBubbleWrapper>
+    <AvatarBubble style={{float:'left'}} onClick={onClick}>
+      G
+    </AvatarBubble>
   )
 }
 
 export function CreateGroupInner({show, setShow, onClose}) {
   const tx = window.translate
+  const { openD } = useContext(ScreenContext)
 
   const [queryStr, setQueryStr] = useState('')
   const [groupMembers, setGroupMembers] = useState([1])
+  const [groupImage, setGroupImage] = useState('')
   const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
   const searchContactsToAdd = queryStr !== '' ?  
     searchContacts.filter(({id}) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5) :
@@ -216,6 +221,18 @@ export function CreateGroupInner({show, setShow, onClose}) {
     let queryStr = e.target.value
     setQueryStr(queryStr)
     updateSearchContacts(C.DC_GCL_ADD_SELF, queryStr)
+  }
+
+  const onSetGroupImage = () => { 
+    remote.dialog.showOpenDialog({
+      title: tx('select_group_image_desktop'),
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile']
+    }, files => {
+      if (Array.isArray(files) && files.length > 0) {
+        setGroupImage(files[0])
+      }
+    })
   }
 
   const renderAddMemberIfNeeded = () => {
@@ -251,9 +268,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <CreateGroupSettingsContainer>
-            <AvatarBubble style={{float:'left'}}>
-              G
-            </AvatarBubble>
+            <GroupImage groupImage={groupImage} onClick={onSetGroupImage} />
             <GroupNameInput placeholder={tx('group_name')} autoFocus />
           </CreateGroupSettingsContainer>
           <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other' )}</CreateGroupSeperator>
@@ -286,7 +301,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
                 text={tx('search_no_result_for_x', queryStr)}
                 onClick={() => {}}
               >
-                <NoSearchResultsAvatarBubble/>
+                <NoSearchResultsAvatarBubble />
               </PseudoContactListItem>
               </>
             )}
