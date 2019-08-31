@@ -79,7 +79,8 @@
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8",
     "simple-markdown": "^0.4.4",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "tempy": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -102,7 +103,6 @@
     "spectron": "^6.0.0",
     "standard": "^13.1.0",
     "tape": "^4.11.0",
-    "tempy": "^0.3.0",
     "version-changed": "^1.1.0",
     "walk": "^2.3.14",
     "webpack": "^4.39.2",
