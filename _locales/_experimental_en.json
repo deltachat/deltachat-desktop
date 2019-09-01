@@ -19,5 +19,11 @@
   },
   "copy_selected_text": {
     "message": "Copy selected text"
+  },
+  "retry_send": {
+    "message": "Retry to send message"
+  },
+  "send_failed": {
+    "message": "Sending message failed"
   }
 }
