@@ -160,7 +160,6 @@ export const GroupNameInput = styled.input`
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);
   height: 32px;
-  margin-top: calc((54px - 27px) / 2);
 `
 
 const CreateGroupSettingsContainer = styled.div`
