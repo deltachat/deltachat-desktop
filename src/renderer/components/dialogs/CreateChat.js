@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, useContext } from 'react'
 import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
 import styled, { createGlobalStyle, css } from 'styled-components'
 import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
-import { AvatarBubble, AvatarImage } from '../helpers/Contact'
+import { AvatarBubble, AvatarImage, QRAvatar } from '../helpers/Contact'
 import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes, Dialog } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
@@ -317,6 +317,8 @@ export function CreateGroupInner({show, setShow, onClose}) {
             setShow('createGroup-showQrCode')
           }}
         />
+          <QRAvatar />
+        </PseudoContactListItem>
       </>   
     )   
   }

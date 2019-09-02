@@ -9,7 +9,7 @@ export function renderAvatar (avatarPath, color, displayName) {
   )
 }
 
-export function Avatar(props) {
+export function Avatar (props) {
   const { avatarPath, color, displayName } = props
   if (avatarPath) {
     return (
@@ -27,6 +27,20 @@ export function Avatar(props) {
   )
 }
 
+export function QRAvatar () {
+  return (
+    <AvatarBubble>
+      <QRAvatarQRCodeImg src='../images/qr_icon.png'
+        className='sharp-pixel-image'
+      />
+    </AvatarBubble>
+  )
+}
+
+const QRAvatarQRCodeImg = styled.img`
+  width: 22px;
+  margin-top: 14px;
+`
 export const AvatarMixin = css`
   position: relative;
   z-index: 2;
