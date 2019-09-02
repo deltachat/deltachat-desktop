@@ -27,13 +27,13 @@
     "message": "Sending message failed"
   },
   "a11y_send_btn_label": {
-    "message": "Send Button"
+    "message": "Send"
   },
   "a11y_emoji_btn_label": {
-    "message": "Emoji Button"
+    "message": "Emoji"
   },
   "a11y_attachment_btn_label": {
-    "message": "Emoji Button"
+    "message": "Attachment"
   },
   "a11y_encryption_padlock": {
     "message": "encryption padock"
