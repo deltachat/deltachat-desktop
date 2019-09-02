@@ -13,6 +13,7 @@ const MapLayerFactory = require('./MapLayerFactory')
 const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
 const SessionStorage = require('../helpers/SessionStorage')
+const SettingsContext = require('../../contexts/SettingsContext')
 
 const ContextMenu = require('./ContextMenu')
 
@@ -516,4 +517,6 @@ class MapComponent extends React.Component {
     )
   }
 }
+
+MapComponent.contextType = SettingsContext
 module.exports = MapComponent
