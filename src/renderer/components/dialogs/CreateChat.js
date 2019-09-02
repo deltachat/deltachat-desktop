@@ -316,7 +316,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
             setQrCode(qrCode)
             setShow('createGroup-showQrCode')
           }}
-        />
+        >
           <QRAvatar />
         </PseudoContactListItem>
       </>   
