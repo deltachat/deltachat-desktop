@@ -20,6 +20,7 @@ const publicAccessibleMethods = [
   'getEncryptionInfo',
   'getLocations',
   'getQrCode',
+  'setChatName',
   'leaveGroup',
   'selectChat',
   'sendMessage',

@@ -99,6 +99,10 @@ function createGroupChat (verified, name) {
   return chatId
 }
 
+function setChatName(chatId, name) {
+  return this._dc.setChatName(chatId, name) 
+}
+
 function leaveGroup (chatId) {
   log.debug(`action - leaving chat ${chatId}`)
   this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
@@ -136,6 +140,7 @@ module.exports = function () {
   this.createGroupChat = createGroupChat.bind(this)
   this.leaveGroup = leaveGroup.bind(this)
   this.getQrCode = getQrCode.bind(this)
+  this.setChatName = setChatName.bind(this)
   this.getEncryptionInfo = getEncryptionInfo.bind(this)
   this.getChatMedia = getChatMedia.bind(this)
   this._integerToHexColor = _integerToHexColor.bind(this)
