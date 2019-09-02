@@ -298,7 +298,7 @@ class Message extends React.Component {
             }}
             onClick={onRetrySend}
           >
-            {tx('retrySend')}
+            {tx('retry_send')}
           </MenuItem>
         ) : null}
         <MenuItem

@@ -58,7 +58,7 @@ class MessageMetaData extends React.Component {
                 : null
             )}
           >
-            {tx('sendFailed')}
+            {tx('send_failed')}
           </span>
         ) : (
           <Timestamp
