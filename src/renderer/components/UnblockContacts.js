@@ -63,7 +63,9 @@ class UnblockContacts extends React.Component {
       <div>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <Button className={Classes.MINIMAL} icon='undo' onClick={this.context.changeScreen} />
+            <Button className={Classes.MINIMAL} icon='undo'
+              onClick={this.context.changeScreen}
+              aria-label={tx('a11y_back_btn_label')} />
             <NavbarHeading>{tx('unblock_contacts_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>

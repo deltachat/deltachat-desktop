@@ -161,7 +161,12 @@ class SplittedChatListAndView extends React.Component {
         <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              { showArchivedChats && (<Button className={[Classes.MINIMAL, 'icon-rotated']} icon='undo' onClick={this.onHideArchivedChats} />) }
+              { showArchivedChats && (
+                <Button
+                  className={[Classes.MINIMAL, 'icon-rotated']}
+                  icon='undo' onClick={this.onHideArchivedChats}
+                  aria-label={tx('a11y_back_btn_label')} />
+              ) }
               <SearchInput
                 onChange={this.handleSearchChange}
                 value={this.state.queryStr}
@@ -176,18 +181,19 @@ class SplittedChatListAndView extends React.Component {
               {selectedChat && <Button
                 onClick={() => this.setState({ media: !this.state.media })}
                 minimal
-                icon={this.state.media ? 'chat' : 'media'} />}
+                icon={this.state.media ? 'chat' : 'media'}
+                aria-label={tx(`a11y_goto_${this.state.media ? 'chat' : 'media'}_label`)} />}
               {selectedChat &&
 
               <SettingsContext.Consumer>
                 {({ enableOnDemandLocationStreaming }) => (
                   enableOnDemandLocationStreaming &&
-                  <Button minimal icon='map' onClick={this.onMapIconClick} />
+                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('a11y_map_btn_label')} />
                 )}
               </SettingsContext.Consumer>
               }
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' />
+                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('a11y_main_menu_label')} />
               </Popover>
             </NavbarGroup>
           </Navbar>

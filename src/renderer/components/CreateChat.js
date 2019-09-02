@@ -107,7 +107,11 @@ class CreateChat extends React.Component {
         <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              <Button className={Classes.MINIMAL} icon='undo' onClick={this.context.changeScreen} />
+              <Button
+                className={Classes.MINIMAL}
+                icon='undo'
+                onClick={this.context.changeScreen}
+                aria-label={tx('a11y_back_btn_label')} />
               <NavbarHeading>{tx('menu_new_chat')}</NavbarHeading>
             </NavbarGroup>
           </Navbar>
