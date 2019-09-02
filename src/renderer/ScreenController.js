@@ -28,6 +28,8 @@ class ScreenController extends React.Component {
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
+    this.attachDialog = this.attachDialog.bind(this)
+    this.detachDialog = this.detachDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogs = React.createRef()
   }
@@ -79,6 +81,14 @@ class ScreenController extends React.Component {
     this.dialogs.current.close(name)
   }
 
+  attachDialog (...args) {
+    this.dialogs.current.attachDialog(...args)
+  }
+
+  detachDialog (...args) {
+    this.dialogs.current.detachDialog(...args)
+  }
+
   render () {
     const { logins, deltachat } = this.props
     const { screen, screenProps } = this.state
@@ -120,7 +130,9 @@ class ScreenController extends React.Component {
           openDialog: this.openDialog,
           closeDialog: this.closeDialog,
           userFeedback: this.userFeedback,
-          changeScreen: this.changeScreen
+          changeScreen: this.changeScreen,
+          attachDialog: this.attachDialog,
+          detachDialog: this.detachDialog
         }}>
           {!deltachat.ready
             ? <LoginScreen logins={logins} deltachat={deltachat} />

@@ -92,15 +92,11 @@ function archiveChat (chatId, archive) {
   this.updateChatList()
 }
 
-function createGroupChat (verified, name, image, contactIds) {
-  let chatId
-  if (verified) chatId = this._dc.createVerifiedGroupChat(name)
-  else chatId = this._dc.createUnverifiedGroupChat(name)
-  this._dc.setChatProfileImage(chatId, image)
-  contactIds.forEach(id => this._dc.addContactToChat(chatId, id))
-  this.updateChatList()
-  this.selectChat(chatId)
-  return { chatId }
+function createGroupChat (verified, name) {
+  const chatId = verified ? 
+    this._dc.createVerifiedGroupChat(name) :
+    this._dc.createUnverifiedGroupChat(name)
+  return chatId
 }
 
 function leaveGroup (chatId) {

@@ -123,34 +123,9 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.getChatContacts(chatId)
   })
 
-  ipcMain.on('modifyGroup', (e, chatId, name, image, remove, add) => {
-    dc.modifyGroup(chatId, name, image, remove, add)
-  })
-
-  ipcMain.on('createChatByContactId', (e, contactId) => {
-    e.returnValue = dc.createChatByContactId(contactId)
-  })
-
-  ipcMain.on('createContact', (e, name, email) => {
-    e.returnValue = dc.createContact(name, email)
-  })
-
-  ipcMain.on('chatWithContact', (e, deadDrop) => dc.chatWithContact(deadDrop))
-
-  ipcMain.on('createGroupChat', (e, verified, name, image, contactIds) => {
-    e.returnValue = dc.createGroupChat(verified, name, image, contactIds)
-  })
-
-  ipcMain.on('getEncrInfo', (e, contactId) => {
-    e.returnValue = dc.getEncrInfo(contactId)
-  })
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
-  })
-
-  ipcMain.on('getQrCode', (e, chatId) => {
-    e.returnValue = dc.getQrCode(chatId)
   })
 
   ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
