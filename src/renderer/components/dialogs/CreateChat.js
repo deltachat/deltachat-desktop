@@ -4,7 +4,7 @@ import styled, { createGlobalStyle, css } from 'styled-components'
 import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
 import { AvatarBubble, AvatarImage, QRAvatar } from '../helpers/Contact'
 import ScreenContext from '../../contexts/ScreenContext'
-import { Card, Classes, Dialog } from '@blueprintjs/core'
+import { Card, Classes, Dialog, Spinner } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
 import classNames from 'classnames'
 import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
@@ -12,6 +12,7 @@ import debounce from 'debounce'
 import C from 'deltachat-node/constants'
 import { DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
 import { remote } from 'electron'
+import qr from 'react-qr-svg'
 
 const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
@@ -265,13 +266,12 @@ export function CreateGroupInner({show, setShow, onClose}) {
 
   
   useEffect(() => {
-    if(groupId !== -1 || groupName === '') return
     async function createInitialGroup() {
-      const groupId = await callDcMethodAsync('createGroupChat', [0, groupName])
-      setGroupId(groupId)
+        const groupId = await callDcMethodAsync('createGroupChat', [false, ''])
+        setGroupId(groupId)
     }
     createInitialGroup()
-  }, [groupName])
+  }, [])
 
   const onSetGroupImage = () => { 
     remote.dialog.showOpenDialog({
@@ -283,6 +283,11 @@ export function CreateGroupInner({show, setShow, onClose}) {
         setGroupImage(files[0])
       }
     })
+  }
+
+  const updateGroupName = async groupName => {
+    callDcMethodAsync('setChatName', [groupId, groupName])
+    setGroupName(groupName)
   }
 
   const onUnsetGroupImage = () => setGroupImage('')
@@ -309,10 +314,9 @@ export function CreateGroupInner({show, setShow, onClose}) {
           id='showqrcode'
           cutoff='+'
           text={tx('qrshow_title')}
-          subText={groupName === '' ? tx('group_please_enter_group_name') : ''}
           onClick={async () => {
-            if(groupName === '' || groupId === -1) return
-            const crCode = callDcMethodAsync('getQrCode', groupId)
+            if(groupId === -1) return
+            const qrCode = await callDcMethodAsync('getQrCode', groupId)
             setQrCode(qrCode)
             setShow('createGroup-showQrCode')
           }}
@@ -322,6 +326,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
       </>   
     )   
   }
+  if(groupId === -1) return <Spinner />
   return (
     <>
       { show.startsWith('createGroup-addMember') &&
@@ -357,7 +362,12 @@ export function CreateGroupInner({show, setShow, onClose}) {
           </div>
           <div className={Classes.DIALOG_BODY}>
            <Card style={{paddingTop: '0px'}}>
-              {qrCode}  
+            <qr.QRCode
+              bgColor='#FFFFFF'
+              fgColor='#000000'
+              level='Q'
+              value={qrCode}
+            />
            </Card>
           </div>
           <div className={Classes.DIALOG_FOOTER} />
@@ -375,7 +385,7 @@ export function CreateGroupInner({show, setShow, onClose}) {
           <Card>
             <CreateGroupSettingsContainer>
               <GroupImage style={{float: 'left'}} groupImage={groupImage} onSetGroupImage={onSetGroupImage} onUnsetGroupImage={onUnsetGroupImage}/>
-              <GroupNameInput placeholder={tx('group_name')} autoFocus value={groupName} onChange={({target}) => setGroupName(target.value)} />
+              <GroupNameInput placeholder={tx('group_name')} autoFocus value={groupName} onChange={({target}) => updateGroupName(target.value)} />
             </CreateGroupSettingsContainer>
             <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other' )}</CreateGroupSeperator>
             <CreateGroupMemberContactListWrapper>
