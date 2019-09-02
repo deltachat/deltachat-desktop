@@ -13,7 +13,7 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
   }
 `
 
-export function DeltaDialogBase(props) {
+export const DeltaDialogBase = React.memo((props) => {
   return (
     <Fragment>
       <CreateDeltaDialogGlobal />
@@ -27,7 +27,7 @@ export function DeltaDialogBase(props) {
       </Dialog>
     </Fragment>
   )
-}
+})
 
 export const DeltaDialogCloseButtonWrapper = styled.div`
   .bp3-icon-cross::before {
@@ -49,7 +49,8 @@ export function DeltaDialogCloseButton(props) {
       </DeltaDialogCloseButtonWrapper>
     )
 }
-export default function DeltaDialog (props) {
+
+const DeltaDialog = React.memo((props) => {
   return (
      <DeltaDialogBase {...props}>
         <div className='bp3-dialog-header'>
@@ -59,4 +60,24 @@ export default function DeltaDialog (props) {
         {props.children}
      </DeltaDialogBase>
   )
+})
+export default DeltaDialog
+
+export const useDialog = (DialogComponent) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [props, setProps] = useState({})
+  const showDialog = (props) => {
+    setProps(props ? props : {})
+    setIsOpen(true)
+  }
+  const dismissDialog = () => {
+    setIsOpen(false)
+  }
+  const onClose = dismissDialog
+
+  const renderDialog = () => {
+    if(!isOpen) return null
+    return <DialogComponent {...{...props, isOpen, onClose}} />
+  }
+  return [renderDialog, showDialog]
 }

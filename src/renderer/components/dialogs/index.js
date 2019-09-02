@@ -47,7 +47,7 @@ class Controller extends React.Component {
       }
     })
 
-    this.state = { dialogs }
+    this.state = { dialogs, attachedDialogs: [] }
     this.close = this.close.bind(this)
   }
 
@@ -67,7 +67,7 @@ class Controller extends React.Component {
 
   render () {
     const { userFeedback, deltachat } = this.props
-    const { dialogs } = this.state
+    const { dialogs, attachedDialogs } = this.state
     // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
     return (
@@ -89,6 +89,9 @@ class Controller extends React.Component {
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
           return <dialog.Component {...props} />
+        })}
+        {attachedDialogs.map(([Component, props], id) => {
+          return <Component {...props} onClose={() => this.detachDialog(id)} />
         })}
       </div>
     )
