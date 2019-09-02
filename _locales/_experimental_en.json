@@ -25,5 +25,62 @@
   },
   "send_failed": {
     "message": "Sending message failed"
+  },
+  "a11y_send_btn_label": {
+    "message": "Send Button"
+  },
+  "a11y_emoji_btn_label": {
+    "message": "Emoji Button"
+  },
+  "a11y_attachment_btn_label": {
+    "message": "Emoji Button"
+  },
+  "a11y_encryption_padlock": {
+    "message": "encryption padock"
+  },
+  "a11y_delivery_status_error":{
+    "message": "delivery status: error"
+  },
+  "a11y_delivery_status_sending":{
+    "message": "delivery status: sending"
+  },
+  "a11y_delivery_status_draft":{
+    "message": "delivery status: draft"
+  },
+  "a11y_delivery_status_delivered":{
+    "message": "delivery status: delivered"
+  },
+  "a11y_delivery_status_read":{
+    "message": "delivery status: read"
+  },
+  "a11y_delivery_status_":{
+    "message": "invalid delivery status"
+  },
+  "a11y_back_btn_label": {
+    "message": "Back"
+  },
+  "a11y_close_btn_label": {
+    "message": "Close"
+  },
+  "a11y_save_btn_label": {
+    "message": "Save"
+  },
+  "a11y_remove_account_btn_label": {
+    "message": "Remove account"
+  },
+  "a11y_goto_media_label": {
+    "message": "go to Gallery"
+  },
+  "a11y_goto_chat_label": {
+    "message": "go to Chat"
+  },
+  "a11y_map_btn_label": {
+    "message": "map"
+  },
+  "a11y_main_menu_label": {
+    "message": "main menu"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "message actions"
   }
 }

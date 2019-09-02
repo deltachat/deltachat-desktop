@@ -42,6 +42,7 @@ class MessageMetaData extends React.Component {
         ) : null}
         {padlock === true && status !== 'error' ? (
           <div
+            aria-label={tx('a11y_encryption_padlock')}
             className={classNames(
               'module-message__metadata__padlock-icon',
               `module-message__metadata__padlock-icon--${direction}`
@@ -76,6 +77,7 @@ class MessageMetaData extends React.Component {
               'status-icon',
               `status-icon--${status}`
             )}
+            aria-label={tx(`a11y_delivery_status_${status}`)}
           />
         ) : null}
       </div>

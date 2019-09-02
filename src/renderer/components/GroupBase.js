@@ -149,7 +149,7 @@ class GroupBase extends React.Component {
         <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
-              <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} />
+              <Button className={Classes.MINIMAL} icon='undo' onClick={this.back} aria-label={tx('a11y_back_btn_label')} />
               <NavbarHeading>{tx(label)}</NavbarHeading>
             </NavbarGroup>
           </Navbar>

@@ -214,10 +214,15 @@ class Composer extends React.Component {
   }
 
   render () {
+    const tx = window.translate
+
     return (
       <ComposerWrapper ref='ComposerWrapper'>
         <AttachmentButtonWrapper>
-          <Button minimal icon='paperclip' onClick={this.addFilename.bind(this)} />
+          <Button minimal
+            icon='paperclip'
+            onClick={this.addFilename.bind(this)}
+            aria-label={tx('a11y_attachment_btn_label')} />
         </AttachmentButtonWrapper>
         <SettingsContext.Consumer>
           {({ enterKeySends }) => (
@@ -232,7 +237,7 @@ class Composer extends React.Component {
           )}
         </SettingsContext.Consumer>
         <EmojiButtonWrapper ref={this.pickerButtonRef}>
-          <IconButton onClick={this.showEmojiPicker.bind(this, true)}>
+          <IconButton onClick={this.showEmojiPicker.bind(this, true)} aria-label={tx('a11y_emoji_btn_label')}>
             <IconButtonSpan />
           </IconButton>
         </EmojiButtonWrapper>
@@ -249,7 +254,7 @@ class Composer extends React.Component {
             />
           </EmojiPickerWrapper>
         }
-        <SendButtonCircleWrapper onClick={this.sendMessage}>
+        <SendButtonCircleWrapper onClick={this.sendMessage} aria-label={tx('a11y_send_btn_label')}>
           <SendButton />
         </SendButtonCircleWrapper>
       </ComposerWrapper>

@@ -175,6 +175,7 @@ class Message extends React.Component {
       onDownload,
       onReply
     } = this.props
+    const tx = window.translate
 
     if (!isCorrectSide || disableMenu) {
       return null
@@ -185,9 +186,9 @@ class Message extends React.Component {
         onClick={onDownload}
         role='button'
         className={classNames(
-          'module-message__buttons__download',
-          `module-message__buttons__download--${direction}`
+          'module-message__buttons__download'
         )}
+        aria-label={tx('a11y_save_btn_label')}
       />
     ) : null
 
@@ -196,8 +197,7 @@ class Message extends React.Component {
         onClick={onReply}
         role='button'
         className={classNames(
-          'module-message__buttons__reply',
-          `module-message__buttons__download--${direction}`
+          'module-message__buttons__reply'
         )}
       />
     )
@@ -208,9 +208,9 @@ class Message extends React.Component {
           role='button'
           onClick={this.showMenu}
           className={classNames(
-            'module-message__buttons__menu',
-            `module-message__buttons__download--${direction}`
+            'module-message__buttons__menu'
           )}
+          aria-label={tx('a11y_message_context_menu_btn_label')}
         />
       </ContextMenuTrigger>
     )

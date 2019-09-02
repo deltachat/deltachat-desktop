@@ -135,6 +135,8 @@ class ChatListItem extends React.Component {
   }
 
   renderMessage () {
+    const tx = window.translate
+
     const { lastMessage, unreadCount } = this.props
 
     if (!lastMessage) {
@@ -170,6 +172,7 @@ class ChatListItem extends React.Component {
                 lastMessage.status
               }`
             )}
+            aria-label={tx(`a11y_delivery_status_${lastMessage.status}`)}
           />
         ) : null}
         {this.renderUnread()}

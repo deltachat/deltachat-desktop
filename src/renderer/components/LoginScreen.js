@@ -218,7 +218,10 @@ export default function LoginScreen (props) {
               <Button large minimal onClick={() => onClickLogin(addr)}>
                 {addr}
               </Button>
-              <Button intent={Intent.DANGER} minimal icon='cross' onClick={() => forgetLogin(addr)} />
+              <Button
+                intent={Intent.DANGER} minimal icon='cross'
+                onClick={() => forgetLogin(addr)}
+                aria-label={tx('a11y_remove_account_btn_label')} />
             </LoginItem>
             )}
           </ul>
