@@ -40,10 +40,9 @@ function chatModified (chatId) {
   const listFlags = 0
   const list = this._dc.getChatList(listFlags, '')
   console.log(list.dc_chatlist)
-  let chatList = []
+  const chatList = []
   let i
   for (let counter = 0; counter < list.getCount(); counter++) {
-    
     const id = list.getChatId(counter)
     chatList.push(id)
     if (id == chatId) i = counter
@@ -84,7 +83,7 @@ function getChatById (chatId, list, i) {
   if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
     chat.isArchiveLink = true
   }
-  
+
   const summary = list.getSummary(i).toJson()
   const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
@@ -103,7 +102,7 @@ function getChatById (chatId, list, i) {
     },
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,
-    unreadCount: chat.freshMessageCounter,
+    unreadCount: chat.freshMessageCounter
   }
 }
 

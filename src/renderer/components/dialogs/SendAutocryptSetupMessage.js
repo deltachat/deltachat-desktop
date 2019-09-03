@@ -5,7 +5,7 @@ import {
   Card,
   Callout,
   Spinner,
-  Classes,
+  Classes
 } from '@blueprintjs/core'
 import { DeltaButton } from '../helpers/SmallDialog'
 import InputTransferKey from '../helpers/AutocryptSetupMessage'

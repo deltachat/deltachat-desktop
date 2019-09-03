@@ -23,7 +23,7 @@ export const DeltaDialogBase = React.memo((props) => {
         className={classNames(props.fixed ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
         style={props.style}
       >
-      {props.children}
+        {props.children}
       </Dialog>
     </Fragment>
   )
@@ -42,23 +42,23 @@ export const DeltaDialogCloseButtonWrapper = styled.div`
   }
 `
 
-export function DeltaDialogCloseButton(props) {
-    return (
-      <DeltaDialogCloseButtonWrapper>
-        <button {...props} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
-      </DeltaDialogCloseButtonWrapper>
-    )
+export function DeltaDialogCloseButton (props) {
+  return (
+    <DeltaDialogCloseButtonWrapper>
+      <button {...props} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
+    </DeltaDialogCloseButtonWrapper>
+  )
 }
 
 const DeltaDialog = React.memo((props) => {
   return (
-     <DeltaDialogBase {...props}>
-        <div className='bp3-dialog-header'>
-          <h4 className='bp3-heading'>{props.title}</h4>
-          <DeltaDialogCloseButton onClick={props.onClose} />
-        </div>
-        {props.children}
-     </DeltaDialogBase>
+    <DeltaDialogBase {...props}>
+      <div className='bp3-dialog-header'>
+        <h4 className='bp3-heading'>{props.title}</h4>
+        <DeltaDialogCloseButton onClick={props.onClose} />
+      </div>
+      {props.children}
+    </DeltaDialogBase>
   )
 })
 export default DeltaDialog
@@ -67,7 +67,7 @@ export const useDialog = (DialogComponent) => {
   const [isOpen, setIsOpen] = useState(false)
   const [props, setProps] = useState({})
   const showDialog = (props) => {
-    setProps(props ? props : {})
+    setProps(props || {})
     setIsOpen(true)
   }
   const dismissDialog = () => {
@@ -76,8 +76,8 @@ export const useDialog = (DialogComponent) => {
   const onClose = dismissDialog
 
   const renderDialog = () => {
-    if(!isOpen) return null
-    return <DialogComponent {...{...props, isOpen, onClose}} />
+    if (!isOpen) return null
+    return <DialogComponent {...{ ...props, isOpen, onClose }} />
   }
   return [renderDialog, showDialog]
 }

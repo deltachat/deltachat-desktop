@@ -249,7 +249,7 @@ class DeltaChatController extends EventEmitter {
     if (!this._dc) return []
     return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }
-  
+
   getContacts2 (listFlags, queryStr) {
     console.log(arguments)
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))

@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import { ContactName as ContactNameConversations } from '../conversations'
 import styled, { css } from 'styled-components'
 
 export function renderAvatar (avatarPath, color, displayName) {
@@ -59,22 +58,19 @@ export const AvatarImage = styled.img`
 
 export const AvatarBubble = styled.div`
   ${AvatarMixin}
-  background-color: ${({color}) => color ? color : '#505050'};
+  background-color: ${({ color }) => color || '#505050'};
   color: var(--avatarLabelColor);
   font-size: 26px;
   line-height: 48px;
   text-align: center;
 `
 
-export function VerifiedIcon (props) {
-  return (
-    <img
-      className='module-conversation-list-item__is-verified'
-      src='../images/verified.png'
-      style={props.style}
-    />
-  )
-}
+export const VerifiedIconImg = styled.img`
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+`
+export const VerifiedIcon = props => <VerifiedIconImg src='../images/verified.png' style={props.style} />
 
 const ContactNameWrapper = styled.div`
   display: inline-block;
@@ -123,7 +119,7 @@ export default function Contact (props) {
   const { id, avatarPath, color, displayName, address, isVerified } = props.contact
   return (
     <ContactWrapper>
-      {renderAvatar(avatarPath, color, displayName)}
+      <Avatar {...{avatarPath, color, displayName}} />
       {ContactName(displayName, address, isVerified)}
     </ContactWrapper>
   )
