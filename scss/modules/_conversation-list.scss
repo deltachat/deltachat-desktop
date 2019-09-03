@@ -122,20 +122,3 @@ $chatlist-isgroup-icon: var(--globalText);
 .module-conversation-list-item__message__text--has-unread {
   font-weight: 300;
 }
-
-.module-conversation-list-item__unread-count {
-  color: $color-conversation-list-unread-count-label;
-  background-color: $color-conversation-list-unread-count-bg;
-  text-align: center;
-
-  // For alignment with the message text
-  margin-top: 1px;
-
-  font-size: 9pt;
-  margin-left: 5px;
-  height: 20px;
-  padding: 0 5pt;
-  line-height: 20px;
-  border-radius: 10px;
-  font-weight: bold;
-}
