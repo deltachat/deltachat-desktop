@@ -86,20 +86,20 @@ function getChatById (chatId, list, i) {
   }
   
   const summary = list.getSummary(i).toJson()
-  const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
+  const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
   // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
   return {
     id: chat.id,
-    email: chat.summary.text1,
+    email: summary.text1,
     name: chat.name,
     avatarPath: chat.profileImage,
     color: chat.color,
     lastUpdated: lastUpdated,
-    lastMessage: {
-      text1: chat.summary.text1,
-      text2: chat.summary.text2,
-      status: mapCoreMsgStatus2String(chat.summary.state)
+    summary: {
+      text1: summary.text1,
+      text2: summary.text2,
+      status: mapCoreMsgStatus2String(summary.state)
     },
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,

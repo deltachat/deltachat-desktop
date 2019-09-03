@@ -166,6 +166,10 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+      if (chatId === 0) {
+        this.updateChatList()
+        return
+      }
       // Don't update if a draft changes
       if (msgId === 0) return
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')

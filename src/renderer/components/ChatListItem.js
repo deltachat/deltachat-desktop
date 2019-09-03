@@ -69,11 +69,11 @@ const Header = React.memo(props => {
 })
 
 export const Message = React.memo(props => {
-  const { lastMessage, unreadCount } = props
+  const { summary, unreadCount } = props
 
-  if (!lastMessage) return null
+  if (!summary) return null
 
-  const Text1 = lastMessage.status === 'draft' ? MessageText1Draft : MessageText1
+  const Text1 = summary.status === 'draft' ? MessageText1Draft : MessageText1
 
   return (
     <div className='module-conversation-list-item__message'>
@@ -81,11 +81,11 @@ export const Message = React.memo(props => {
         'module-conversation-list-item__message__text',
         unreadCount > 0 ? 'module-conversation-list-item__message__text--has-unread' : null
       )}>
-        { lastMessage.text1 !== null ? (<Text1>{lastMessage.text1 + ': ' }</Text1>) : null }
-        <MessageBody text={lastMessage.text2 || ''} disableJumbomoji preview/>
+        { summary.text1 !== null ? (<Text1>{summary.text1 + ': ' }</Text1>) : null }
+        <MessageBody text={summary.text2 || ''} disableJumbomoji preview/>
       </div>
-      { lastMessage.status ?
-        (<div className={classNames('status-icon', `status-icon--${lastMessage.status}`)}/>) :
+      { summary.status ?
+        (<div className={classNames('status-icon', `status-icon--${summary.status}`)}/>) :
         null
       }
       <UnreadCounter unreadCount={unreadCount} />
@@ -94,9 +94,9 @@ export const Message = React.memo(props => {
 })
 
 const ChatListItem = React.memo(props => {
-  const { unreadCount, lastUpdated, email,profileName, isVerified, isGroup, avatarPath, color, name, lastMessage } = props.chatListItem
+  const { unreadCount, lastUpdated, email,profileName, isVerified, isGroup, avatarPath, color, name, summary } = props.chatListItem
   const { onClick, isSelected, onContextMenu } = props
-  console.log('rendering', name)
+  console.log('rendering', props.chatListItem)
   return (
     <div
       role='button'
@@ -111,7 +111,7 @@ const ChatListItem = React.memo(props => {
       {<Avatar {...{avatarPath, color, displayName: name}} />}
       <div className='module-conversation-list-item__content'>
         <Header {...{unreadCount, lastUpdated, name,  email,profileName, isVerified, isGroup}}/>
-        <Message {...{lastMessage, unreadCount}}/>
+        <Message {...{summary, unreadCount}}/>
       </div>
     </div>
   )
