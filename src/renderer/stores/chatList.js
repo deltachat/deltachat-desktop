@@ -37,6 +37,22 @@ ipcRenderer.on('DD_EVENT_CHATLIST_UPDATED', (evt, payload) => {
   }
 })
 
+ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
+  const { chatId, chat } = payload
+  const state = chatListStore.getState()
+  const { chatList } = state
+  const chatListIndex = chatList.findIndex(chat => chat.id === chatId)
+  if (chatListIndex === -1) {
+    // the chat is not in the list, let's reload the list
+    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    return
+  }
+  
+  chatListStore.setState({ ...state, chatList: chatList.map((oldChat, i) => {
+    return i === chatListIndex ? chat : oldChat
+  })})
+})
+
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   const { chatId, messageObj, eventType } = payload
 

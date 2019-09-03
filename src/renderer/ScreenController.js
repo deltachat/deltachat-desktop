@@ -5,10 +5,7 @@ const { ipcRenderer } = require('electron')
 const ScreenContext = require('./contexts/ScreenContext')
 const UnblockContacts = require('./components/UnblockContacts')
 const LoginScreen = require('./components/LoginScreen').default
-const CreateChat = require('./components/CreateChat')
-const CreateGroup = require('./components/CreateGroup')
 const EditGroup = require('./components/EditGroup')
-const CreateContact = require('./components/CreateContact')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
 
@@ -95,15 +92,6 @@ class ScreenController extends React.Component {
 
     var Screen
     switch (screen) {
-      case 'CreateChat':
-        Screen = CreateChat
-        break
-      case 'CreateContact':
-        Screen = CreateContact
-        break
-      case 'CreateGroup':
-        Screen = CreateGroup
-        break
       case 'EditGroup':
         Screen = EditGroup
         break

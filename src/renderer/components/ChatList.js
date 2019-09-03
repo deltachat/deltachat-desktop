@@ -110,26 +110,20 @@ class ChatList extends React.Component {
           { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
           <div className='ConversationList' ref={this.chatListDiv}>
             {chatList.map((chatListItem, i) => {
+              
               if (!chatListItem) return
-              const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
+              
 
               // Don't show freshMessageCounter on selected chat
               if (chatListItem.deaddrop) {
                 const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
                 return (
-                  <ContactRequestItemWrapper key={i}>
+                  <ContactRequestItemWrapper key={chatListItem.id}>
                     <ChatListItem
                       className='contactrequest'
-                      name={name}
-                      lastUpdated={lastUpdated}
-                      lastMessage={{
-                        text1: chatListItem.summary.text1,
-                        text2: chatListItem.summary.text2,
-                        status: 'delivered'
-                      }}
+                      chatListItem={chatListItem}
                       onClick={() => onDeadDropClick(chatListItem.deaddrop)}
                       isSelected={chatListItem.id === selectedChatId}
-                      unreadCount={chatListItem.freshMessageCounter}
                     />
                   </ContactRequestItemWrapper>)
               } else if (chatListItem.isArchiveLink) {
@@ -137,29 +131,16 @@ class ChatList extends React.Component {
                   <ArchivedChats key={chatListItem.id}>
                     <ChatListItem
                       onClick={this.props.onShowArchivedChats}
-                      name={chatListItem.name}
+                      chatListItem={chatListItem}
                     />
                   </ArchivedChats>
                 )
               } else {
                 return (
                   <ChatListItem
-                    key={chatListItem.id}
+                    chatListItem={chatListItem}
                     onClick={this.props.onChatClick.bind(null, chatListItem.id)}
-                    email={chatListItem.summary.text1}
-                    name={chatListItem.name}
-                    avatarPath={chatListItem.profileImage}
-                    color={chatListItem.color}
-                    lastUpdated={lastUpdated}
-                    lastMessage={{
-                      text1: chatListItem.summary.text1,
-                      text2: chatListItem.summary.text2,
-                      status: mapCoreMsgStatus2String(chatListItem.summary.state)
-                    }}
                     isSelected={chatListItem.id === selectedChatId}
-                    isVerified={chatListItem.isVerified}
-                    isGroup={chatListItem.isGroup}
-                    unreadCount={chatListItem.freshMessageCounter}
                     onContextMenu={(event) => { this.openContextMenu(event, chatListItem.id) }}
                   />
                 )
