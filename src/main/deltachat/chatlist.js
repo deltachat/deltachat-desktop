@@ -36,6 +36,23 @@ function updateChatList () {
   this.sendToRenderer('DD_EVENT_CHATLIST_UPDATED', { chatList, showArchivedChats: this._showArchivedChats })
 }
 
+function chatModified (chatId) {
+  const listFlags = 0
+  const list = this._dc.getChatList(listFlags, '')
+  console.log(list.dc_chatlist)
+  let chatList = []
+  let i
+  for (let counter = 0; counter < list.getCount(); counter++) {
+    
+    const id = list.getChatId(counter)
+    chatList.push(id)
+    if (id == chatId) i = counter
+  }
+  console.log(JSON.stringify(chatList))
+  const chat = this.getChatById(chatId, list, i)
+  this.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
+}
+
 function _chatList (showArchivedChats) {
   if (!this._dc) return []
 
@@ -46,35 +63,73 @@ function _chatList (showArchivedChats) {
 
   for (let i = 0; i < list.getCount(); i++) {
     const chatId = list.getChatId(i)
-    const chat = this._getChatById(chatId)
+    const chat = this.getChatById(chatId, list, i)
 
     if (!chat) continue
-
-    if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-      const messageId = list.getMessageId(i)
-      chat.deaddrop = this._deadDropMessage(messageId)
-    }
-
-    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      chat.isArchiveLink = true
-    }
-
-    // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
-    chatList.push({
-      id: chat.id,
-      summary: list.getSummary(i).toJson(),
-      name: chat.name,
-      deaddrop: chat.deaddrop,
-      isArchiveLink: chat.isArchiveLink,
-      freshMessageCounter: chat.freshMessageCounter,
-      profileImage: chat.profileImage,
-      color: chat.color,
-      isVerified: chat.isVerified,
-      isGroup: chat.isGroup,
-      contacts: chat.contacts
-    })
+    chatList.push(chat)
   }
   return chatList
+}
+
+function getChatById (chatId, list, i) {
+  const chat = this._getChatById(chatId)
+
+  if (!chat) return null
+
+  if (chat.id === C.DC_CHAT_ID_DEADDROP) {
+    const messageId = list.getMessageId(i)
+    chat.deaddrop = this._deadDropMessage(messageId)
+  }
+
+  if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
+    chat.isArchiveLink = true
+  }
+  
+  const summary = list.getSummary(i).toJson()
+  const lastUpdated = chat.summary.timestamp ? chat.summary.timestamp * 1000 : null
+
+  // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+  return {
+    id: chat.id,
+    email: chat.summary.text1,
+    name: chat.name,
+    avatarPath: chat.profileImage,
+    color: chat.color,
+    lastUpdated: lastUpdated,
+    lastMessage: {
+      text1: chat.summary.text1,
+      text2: chat.summary.text2,
+      status: mapCoreMsgStatus2String(chat.summary.state)
+    },
+    isVerified: chat.isVerified,
+    isGroup: chat.isGroup,
+    unreadCount: chat.freshMessageCounter,
+  }
+}
+
+function mapCoreMsgStatus2String (state) {
+  switch (state) {
+    case C.DC_STATE_OUT_FAILED:
+      return 'error'
+    case C.DC_STATE_OUT_PENDING:
+      return 'sending'
+    case C.DC_STATE_OUT_PREPARING:
+      return 'sending'
+    case C.DC_STATE_OUT_DRAFT:
+      return 'draft'
+    case C.DC_STATE_OUT_DELIVERED:
+      return 'delivered'
+    case C.DC_STATE_OUT_MDN_RCVD:
+      return 'read'
+    case C.DC_STATE_IN_FRESH:
+      return 'delivered'
+    case C.DC_STATE_IN_SEEN:
+      return 'delivered'
+    case C.DC_STATE_IN_NOTICED:
+      return 'read'
+    default:
+      return '' // to display no icon on unknown state
+  }
 }
 
 function _getChatById (chatId, loadMessages) {
@@ -152,9 +207,11 @@ module.exports = function () {
   this.searchChats = searchChats.bind(this)
   this.selectChat = selectChat.bind(this)
   this._chatList = _chatList.bind(this)
+  this.getChatById = getChatById.bind(this)
   this._getChatById = _getChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
   this.showArchivedChats = showArchivedChats.bind(this)
   this.updateChatList = updateChatList.bind(this)
+  this.chatModified = chatModified.bind(this)
 }

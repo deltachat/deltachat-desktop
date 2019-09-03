@@ -162,7 +162,7 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_CHAT_MODIFIED', (chatId) => {
       log.debug('DC_EVENT_CHAT_MODIFIED: ' + chatId)
-      this.updateChatList()
+      this.chatModified(chatId)
     })
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {

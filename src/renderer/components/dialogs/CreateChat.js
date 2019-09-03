@@ -8,11 +8,11 @@ import { Card, Classes, Dialog, Spinner } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
 import classNames from 'classnames'
 import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
-import debounce from 'debounce'
 import C from 'deltachat-node/constants'
 import { DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
 import { remote } from 'electron'
 import qr from 'react-qr-svg'
+import debounce from 'debounce'
 
 const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
@@ -251,6 +251,10 @@ export function useContactSearch(updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
+const setChatName = debounce((groupId, groupName) => {
+  callDcMethodAsync('setChatName', [groupId, groupName])
+}, 200)
+
 export function CreateGroupInner({show, setShow, onClose}) {
   const tx = window.translate
   const [groupName, setGroupName] = useState('')
@@ -285,8 +289,9 @@ export function CreateGroupInner({show, setShow, onClose}) {
     })
   }
 
+
   const updateGroupName = async groupName => {
-    callDcMethodAsync('setChatName', [groupId, groupName])
+    setChatName(groupId, groupName)
     setGroupName(groupName)
   }
 
