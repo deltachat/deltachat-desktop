@@ -136,6 +136,7 @@ class ChatList extends React.Component {
               } else {
                 return (
                   <ChatListItem
+                    key={chatListItem.id}
                     chatListItem={chatListItem}
                     onClick={this.props.onChatClick.bind(null, chatListItem.id)}
                     isSelected={chatListItem.id === selectedChatId}
