@@ -129,11 +129,11 @@ const ContactListItemCheckboxWrapper = styled.div`
     display: block;
     position: relative;
     top: -20px;
-    visibility: ${({checked}) => checked ? 'visible' : 'hidden'};
+    visibility: ${({ checked }) => checked ? 'visible' : 'hidden'};
   }
 
   input:hover, .DeltaCheckmarkIcon:hover {
-    cursor: ${({disabled}) => disabled ? 'default' : 'pointer'};
+    cursor: ${({ disabled }) => disabled ? 'default' : 'pointer'};
   }
 `
 
@@ -166,7 +166,7 @@ const DeltaCheckmarkIconWrapper = styled.div`
   }
 `
 
-const DeltaCheckmarkIcon = (props) => <DeltaCheckmarkIconWrapper {...props} className="DeltaCheckmarkIcon"><span/><span/></DeltaCheckmarkIconWrapper>
+const DeltaCheckmarkIcon = (props) => <DeltaCheckmarkIconWrapper {...props} className='DeltaCheckmarkIcon'><span /><span /></DeltaCheckmarkIconWrapper>
 
 const DeltaCheckbox = (props) => {
   const { checked, disabled } = props
@@ -175,12 +175,12 @@ const DeltaCheckbox = (props) => {
   return (
     <ContactListItemCheckboxWrapper checked={checked} disabled={disabled}>
       <input
-        type="checkbox" 
+        type='checkbox'
         disabled={disabled}
         onChange={onClick}
         checked={checked}
       />
-      <DeltaCheckmarkIcon onClick={onClick}/>
+      <DeltaCheckmarkIcon onClick={onClick} />
     </ContactListItemCheckboxWrapper>
   )
 }
@@ -192,7 +192,7 @@ export function ContactListItem (props) {
       onClick={() => onClick(contact)}
     >
       {showInitial && <ContactListItemInitial>{contact.displayName[0]}</ContactListItemInitial> }
-      {!showInitial && <ContactListItemInitialSpacer/> }
+      {!showInitial && <ContactListItemInitialSpacer /> }
       <ContactListItemContactWrapper>
         <Contact contact={contact} />
       </ContactListItemContactWrapper>
@@ -214,7 +214,7 @@ export function PseudoContactListItem (props) {
       showInitial={false}
       onClick={onClick}
     >
-      <ContactListItemInitialSpacer/>
+      <ContactListItemInitialSpacer />
       <PseudoContact cutoff={cutoff} text={text} subText={subText} avatar={avatar}>
         {props.children}
       </PseudoContact>
@@ -234,7 +234,7 @@ export function ContactList2 (props) {
     }
 
     let checked = null
-    if(showCheckbox && typeof isChecked === 'function') {
+    if (showCheckbox && typeof isChecked === 'function') {
       checked = isChecked(contact)
     }
     return ContactListItem({ contact, onClick, showInitial, showCheckbox, checked, onCheckboxClick })

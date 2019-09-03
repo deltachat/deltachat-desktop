@@ -7,5 +7,4 @@ exports.MIME = require('./MIME')
 
 // Components
 exports.Timestamp = require('./Timestamp')
-exports.ContactName = require('./ContactName')
 exports.ContactListItem = require('./ContactListItem')

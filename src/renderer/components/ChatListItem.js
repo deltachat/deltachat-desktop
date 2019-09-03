@@ -1,9 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
 import styled from 'styled-components'
-import { Timestamp, ContactName } from './conversations'
+import { Timestamp } from './conversations'
 import MessageBody from './MessageBody'
-import { Avatar } from './helpers/Contact'
+import { Avatar, VerifiedIcon } from './helpers/Contact'
 
 const MessageText1 = styled.div`
   float: left;
@@ -15,44 +15,67 @@ const MessageText1Draft = styled.div`
   color: ${props => props.theme.draftTextColor}
 `
 
+
+const UnreadCounterDiv = styled.div`
+  color: var(--unreadCountLabel);
+  background-color: var(--unreadCountBg);
+  text-align: center;
+
+  // For alignment with the message text
+  margin-top: 1px;
+
+  font-size: 9pt;
+  margin-left: 5px;
+  height: 20px;
+  padding: 0 5pt;
+  line-height: 20px;
+  border-radius: 10px;
+  font-weight: bold;
+`
 const UnreadCounter = React.memo(props => {
   const { unreadCount } = props
   if (unreadCount === 0) return null
   return (
-    <div className='module-conversation-list-item__unread-count'>
-      {unreadCount}
-    </div>
+    <UnreadCounterDiv>{unreadCount}</UnreadCounterDiv>
   )
 })
 
-const VerifiedIcon = React.memo(props => {
-  return <img className='module-conversation-list-item__is-verified' src='../images/verified.png' />
-})
+const GroupIcon = styled.span`
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+  -webkit-mask: url(../images/group-icon.svg) no-repeat center;
+  -webkit-mask-size: 100%;
+  background-color: var(--globalText);
+`
 
-const GroupIcon = React.memo(props => {
-  return <span className='module-conversation-list-item__is-group' />
-})
+const ContactNameSpan = styled.span`
+  font-weight: 200;
+  font-size: medium;
+  color: ${({isSelected}) => isSelected ? props.theme.chatListItemSelectedText : 'unset'};
+  
+`
 
 const Header = React.memo(props => {
   const {
     unreadCount,
     lastUpdated,
-    name,
-    email,
-    profileName,
-    isVerified,
-    isGroup
-  } = props
+  } = props.chatListItem
+  const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
 
   return (
     <div className='module-conversation-list-item__header'>
       <div className={classNames(
         'module-conversation-list-item__header__name',
         unreadCount > 0 ? 'module-conversation-list-item__header__name--with-unread' : null
-     )}>
-        {isVerified && <VerifiedIcon />}
+      )}>
         {isGroup && <GroupIcon />}
-        <ContactName email={email} name={name} profileName={profileName} />
+        {isVerified && <VerifiedIcon />}
+        <ContactNameSpan isSelected={isSelected}>
+          {name || email}
+          {' '}
+        </ContactNameSpan>
       </div>
       <div className={classNames(
         'module-conversation-list-item__header__date',
@@ -69,7 +92,7 @@ const Header = React.memo(props => {
 })
 
 export const Message = React.memo(props => {
-  const { summary, unreadCount } = props
+  const { summary, unreadCount } = props.chatListItem
 
   if (!summary) return null
 
@@ -82,11 +105,11 @@ export const Message = React.memo(props => {
         unreadCount > 0 ? 'module-conversation-list-item__message__text--has-unread' : null
       )}>
         { summary.text1 !== null ? (<Text1>{summary.text1 + ': ' }</Text1>) : null }
-        <MessageBody text={summary.text2 || ''} disableJumbomoji preview/>
+        <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      { summary.status ?
-        (<div className={classNames('status-icon', `status-icon--${summary.status}`)}/>) :
-        null
+      { summary.status
+        ? (<div className={classNames('status-icon', `status-icon--${summary.status}`)} />)
+        : null
       }
       <UnreadCounter unreadCount={unreadCount} />
     </div>
@@ -94,7 +117,7 @@ export const Message = React.memo(props => {
 })
 
 const ChatListItem = React.memo(props => {
-  const { unreadCount, lastUpdated, email,profileName, isVerified, isGroup, avatarPath, color, name, summary } = props.chatListItem
+  const { chatListItem } = props
   const { onClick, isSelected, onContextMenu } = props
   console.log('rendering', props.chatListItem)
   return (
@@ -104,14 +127,14 @@ const ChatListItem = React.memo(props => {
       onContextMenu={onContextMenu}
       className={classNames(
         'module-conversation-list-item',
-        unreadCount > 0 ? 'module-conversation-list-item--has-unread' : null,
+        chatListItem.unreadCount > 0 ? 'module-conversation-list-item--has-unread' : null,
         isSelected ? 'module-conversation-list-item--is-selected' : null
       )}
     >
-      {<Avatar {...{avatarPath, color, displayName: name}} />}
+      {<Avatar {...chatListItem} displayName={chatListItem.name}  />}
       <div className='module-conversation-list-item__content'>
-        <Header {...{unreadCount, lastUpdated, name,  email,profileName, isVerified, isGroup}}/>
-        <Message {...{summary, unreadCount}}/>
+        <Header chatListItem={chatListItem} />
+        <Message chatListItem={chatListItem} />
       </div>
     </div>
   )

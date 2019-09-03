@@ -110,9 +110,7 @@ class ChatList extends React.Component {
           { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
           <div className='ConversationList' ref={this.chatListDiv}>
             {chatList.map((chatListItem, i) => {
-              
               if (!chatListItem) return
-              
 
               // Don't show freshMessageCounter on selected chat
               if (chatListItem.deaddrop) {

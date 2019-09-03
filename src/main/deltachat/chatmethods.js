@@ -93,14 +93,14 @@ function archiveChat (chatId, archive) {
 }
 
 function createGroupChat (verified, name) {
-  const chatId = verified ? 
-    this._dc.createVerifiedGroupChat(name) :
-    this._dc.createUnverifiedGroupChat(name)
+  const chatId = verified
+    ? this._dc.createVerifiedGroupChat(name)
+    : this._dc.createUnverifiedGroupChat(name)
   return chatId
 }
 
-function setChatName(chatId, name) {
-  return this._dc.setChatName(chatId, name) 
+function setChatName (chatId, name) {
+  return this._dc.setChatName(chatId, name)
 }
 
 function leaveGroup (chatId) {

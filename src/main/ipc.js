@@ -123,7 +123,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.getChatContacts(chatId)
   })
 
-
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
   })

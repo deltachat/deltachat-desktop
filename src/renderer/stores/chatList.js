@@ -47,10 +47,11 @@ ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
     ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
     return
   }
-  
-  chatListStore.setState({ ...state, chatList: chatList.map((oldChat, i) => {
-    return i === chatListIndex ? chat : oldChat
-  })})
+
+  chatListStore.setState({ ...state,
+    chatList: chatList.map((oldChat, i) => {
+      return i === chatListIndex ? chat : oldChat
+    }) })
 })
 
 ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
