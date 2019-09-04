@@ -246,7 +246,8 @@ export function useContactSearch (updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
-export function CreateGroupInner ({ show, setShow, onClose }) {
+export function CreateGroupInner (props) {
+  const { show, setShow, onClose } = props
   const tx = window.translate
   const [groupName, setGroupName] = useState('')
   const [groupMembers, setGroupMembers] = useState([1])
@@ -258,6 +259,13 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
   const searchContactsToAdd = queryStr !== ''
     ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
     : []
+
+  const closeAndDelete = async () => {
+    if (groupId !== -1) {
+       await callDcMethodAsync('deleteChat', groupId)
+    } 
+    onClose()
+  }
 
   const lazilyCreateOrUpdateGroup = async (finishing) => {
     let gId = groupId
@@ -338,7 +346,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
           <div className='bp3-dialog-header'>
             <button onClick={() => { updateSearch(''); setShow('createGroup-main') }} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
             <h4 className='bp3-heading'>{tx('group_add_members')}</h4>
-            <DeltaDialogCloseButton onClick={onClose} />
+            <DeltaDialogCloseButton onClick={closeAndDelete} />
           </div>
           <div className={Classes.DIALOG_BODY}>
             <Card style={{ paddingTop: '0px' }}>
@@ -362,7 +370,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
           <div className='bp3-dialog-header'>
             <button onClick={() => { updateSearch(''); setShow('createGroup-main') }} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
             <h4 className='bp3-heading'>{tx('qrshow_title')}</h4>
-            <DeltaDialogCloseButton onClick={onClose} />
+            <DeltaDialogCloseButton onClick={closeAndDelete} />
           </div>
           <div className={Classes.DIALOG_BODY}>
             <Card style={{ paddingTop: '0px' }}>
