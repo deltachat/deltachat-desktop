@@ -246,10 +246,6 @@ export function useContactSearch (updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
-const setChatName = debounce((groupId, groupName) => {
-  callDcMethodAsync('setChatName', [groupId, groupName])
-}, 200)
-
 export function CreateGroupInner ({ show, setShow, onClose }) {
   const tx = window.translate
   const [groupName, setGroupName] = useState('')
@@ -263,13 +259,29 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
     ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
     : []
 
-  useEffect(() => {
-    async function createInitialGroup () {
-      const groupId = await callDcMethodAsync('createGroupChat', [false, ''])
-      setGroupId(groupId)
+  const lazilyCreateOrUpdateGroup = async (finishing) => {
+    let gId = groupId
+    if (gId === -1) {
+      gId = await callDcMethodAsync('createGroupChat', [false, groupName])
+      setGroupId(gId)
+    } else {
+      await callDcMethodAsync('setChatName', [gId, groupName])
     }
-    createInitialGroup()
-  }, [])
+    if(finishing === true) {
+      if (groupImage != '') {
+        await callDcMethodAsync('setChatProfileImage', [gId, groupImage])
+      }
+      for (let contactId of groupMembers) {
+        await callDcMethodAsync('addContactToChat', [gId, contactId])
+      }
+    }
+    return gId
+  }
+  const finishCreateGroup = async () => {
+    const groupId = await lazilyCreateOrUpdateGroup(true)
+    onClose()
+    changeScreen('ChatView', { chatId })
+  }
 
   const onSetGroupImage = () => {
     remote.dialog.showOpenDialog({
@@ -281,11 +293,6 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
         setGroupImage(files[0])
       }
     })
-  }
-
-  const updateGroupName = async groupName => {
-    setChatName(groupId, groupName)
-    setGroupName(groupName)
   }
 
   const onUnsetGroupImage = () => setGroupImage('')
@@ -312,7 +319,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
           cutoff='+'
           text={tx('qrshow_title')}
           onClick={async () => {
-            if (groupId === -1) return
+            const groupId = await lazilyCreateOrUpdateGroup(false)
             const qrCode = await callDcMethodAsync('getQrCode', groupId)
             setQrCode(qrCode)
             setShow('createGroup-showQrCode')
@@ -323,7 +330,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
       </>
     )
   }
-  if (groupId === -1) return <Spinner />
+
   return (
     <>
       { show.startsWith('createGroup-addMember') &&
@@ -382,7 +389,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
             <Card>
               <CreateGroupSettingsContainer>
                 <GroupImage style={{ float: 'left' }} groupImage={groupImage} onSetGroupImage={onSetGroupImage} onUnsetGroupImage={onUnsetGroupImage} />
-                <GroupNameInput placeholder={tx('group_name')} autoFocus value={groupName} onChange={({ target }) => updateGroupName(target.value)} />
+                <GroupNameInput placeholder={tx('group_name')} autoFocus value={groupName} onChange={({ target }) => setGroupName(target.value)} />
               </CreateGroupSettingsContainer>
               <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</CreateGroupSeperator>
               <CreateGroupMemberContactListWrapper>
@@ -428,6 +435,7 @@ export function CreateGroupInner ({ show, setShow, onClose }) {
               <DeltaButtonPrimary
                 noPadding
                 onClick={() => onClick(true)}
+                onClick={finishCreateGroup}
               >
                 {tx('group_create_button')}
               </DeltaButtonPrimary>

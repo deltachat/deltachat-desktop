@@ -99,6 +99,14 @@ function createGroupChat (verified, name) {
   return chatId
 }
 
+function setChatProfileImage (chatId, newImage) {
+  return this._dc.setChatProfileImage(chatId, newImage)
+}
+
+function addContactToChat(chatId, contactId) {
+  return this._dc.addContactToChat(chatId, contactId)
+}
+
 function setChatName (chatId, name) {
   return this._dc.setChatName(chatId, name)
 }
@@ -141,6 +149,8 @@ module.exports = function () {
   this.leaveGroup = leaveGroup.bind(this)
   this.getQrCode = getQrCode.bind(this)
   this.setChatName = setChatName.bind(this)
+  this.setChatProfileImage = setChatProfileImage.bind(this)
+  this.addContactToChat = addContactToChat.bind(this)
   this.getEncryptionInfo = getEncryptionInfo.bind(this)
   this.getChatMedia = getChatMedia.bind(this)
   this._integerToHexColor = _integerToHexColor.bind(this)
