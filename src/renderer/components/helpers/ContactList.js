@@ -17,13 +17,13 @@ const ContactListDiv = styled.div`
 export function useContacts (listFlags, queryStr) {
   const [contacts, setContacts] = useState([])
 
-  const updateContacts = async (listFlags, queryStr) => {
+  const updateContacts = async (queryStr) => {
     const contacts = await callDcMethodAsync('getContacts2', [listFlags, queryStr])
     setContacts(contacts)
   }
 
   useEffect(() => {
-    updateContacts(listFlags, queryStr)
+    updateContacts(queryStr)
   }, [])
 
   return [contacts, updateContacts]

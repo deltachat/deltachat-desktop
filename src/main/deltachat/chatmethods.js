@@ -93,7 +93,8 @@ function archiveChat (chatId, archive) {
 }
 
 function createGroupChat (verified, name) {
-  const chatId = verified
+  console.log('creat group verified: ', verified)
+  const chatId = verified === true
     ? this._dc.createVerifiedGroupChat(name)
     : this._dc.createUnverifiedGroupChat(name)
   return chatId
