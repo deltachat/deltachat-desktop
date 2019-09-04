@@ -103,7 +103,7 @@ function setChatProfileImage (chatId, newImage) {
   return this._dc.setChatProfileImage(chatId, newImage)
 }
 
-function addContactToChat(chatId, contactId) {
+function addContactToChat (chatId, contactId) {
   return this._dc.addContactToChat(chatId, contactId)
 }
 

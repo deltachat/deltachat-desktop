@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import styled, { css } from 'styled-components'
 
 export function renderAvatar (avatarPath, color, displayName) {
@@ -116,10 +115,10 @@ const ContactWrapper = styled.div`
   width: 320px;
 `
 export default function Contact (props) {
-  const { id, avatarPath, color, displayName, address, isVerified } = props.contact
+  const { avatarPath, color, displayName, address, isVerified } = props.contact
   return (
     <ContactWrapper>
-      <Avatar {...{avatarPath, color, displayName}} />
+      <Avatar {...{ avatarPath, color, displayName }} />
       {ContactName(displayName, address, isVerified)}
     </ContactWrapper>
   )

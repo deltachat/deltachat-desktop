@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Dialog } from '@blueprintjs/core'
 import classNames from 'classnames'
@@ -80,4 +80,14 @@ export const useDialog = (DialogComponent) => {
     return <DialogComponent {...{ ...props, isOpen, onClose }} />
   }
   return [renderDialog, showDialog]
+}
+
+export function GoBackDialogHeader ({ onClickBack, title, onClose }) {
+  return (
+    <div className='bp3-dialog-header'>
+      <button onClick={onClickBack} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
+      <h4 className='bp3-heading'>{title}</h4>
+      <DeltaDialogCloseButton onClick={onClose} />
+    </div>
+  )
 }

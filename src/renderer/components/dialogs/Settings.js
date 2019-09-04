@@ -11,7 +11,6 @@ import {
   ButtonGroup,
   Classes,
   Button,
-  Dialog,
   Switch,
   Label,
   RadioGroup,

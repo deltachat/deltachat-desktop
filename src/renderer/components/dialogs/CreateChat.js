@@ -1,18 +1,16 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react'
-import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
-import styled, { createGlobalStyle, css } from 'styled-components'
-import { useContacts, ContactList2, ContactListItem, PseudoContactListItem } from '../helpers/ContactList'
+import React, { Fragment, useState, useContext } from 'react'
+import { DeltaButtonPrimary } from '../helpers/SmallDialog'
+import styled from 'styled-components'
+import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
 import { AvatarBubble, AvatarImage, QRAvatar } from '../helpers/Contact'
 import ScreenContext from '../../contexts/ScreenContext'
-import { Card, Classes, Dialog, Spinner } from '@blueprintjs/core'
+import { Card, Classes } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../../ipc'
-import classNames from 'classnames'
-import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogCloseButton, GoBackDialogHeader } from '../helpers/DeltaDialog'
 import C from 'deltachat-node/constants'
 
 import { remote } from 'electron'
 import qr from 'react-qr-svg'
-import debounce from 'debounce'
 
 const CreateChatContactListWrapper = styled.div`
   background-color: var(--bp3DialogBgPrimary);
@@ -91,7 +89,7 @@ export default function CreateChat (props) {
 
   const renderAddContactIfNeeded = () => {
     if (queryStr === '' ||
-        (contacts.length === 1 && contacts[0].address.toLowerCase() == queryStr.toLowerCase())) {
+        (contacts.length === 1 && contacts[0].address.toLowerCase() === queryStr.toLowerCase())) {
       return null
     }
     return (
@@ -176,15 +174,6 @@ const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
   }
 `
 
-const CrossWrapperSpanMixin = css`
-    display: block;
-    position: relative;
-    width: 16px;
-    height: 3px;
-    left: 5px;
-    background-color: white;
-`
-
 const GroupImageUnsetButtonWrapper = styled.div`
   position: relative;
   width: 26px;
@@ -196,22 +185,24 @@ const GroupImageUnsetButtonWrapper = styled.div`
   &:hover, span:hover {
     cursor: pointer;
   }
-  span:nth-child(1) {
-    ${CrossWrapperSpanMixin}
-    transform: rotate(130deg);
-    top: 11px;
-  }
-  span:nth-child(2) {
-    ${CrossWrapperSpanMixin}
-    transform: rotate(-130deg);
-    top: 8px;
+  span {
+    display: block;
+    position: relative;
+    width: 16px;
+    height: 3px;
+    left: 5px;
+    background-color: white;
+    &:nth-child(1) {
+      transform: rotate(130deg);
+      top: 11px;
+    }
+    &:nth-child(2) {
+      transform: rotate(-130deg);
+      top: 8px;
+    }
   }
 `
 
-const CrossWrapper = styled.div`
-`
-
-const Cross = (props) => <CrossWrapper><span /><span /></CrossWrapper>
 const GroupImageUnsetButton = (props) => {
   return <GroupImageUnsetButtonWrapper {...props} ><span /><span /></GroupImageUnsetButtonWrapper>
 }
@@ -259,11 +250,10 @@ export function CreateGroupInner (props) {
   const searchContactsToAdd = queryStr !== ''
     ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
     : []
+  const { changeScreen } = useContext(ScreenContext)
 
   const closeAndDelete = async () => {
-    if (groupId !== -1) {
-       await callDcMethodAsync('deleteChat', groupId)
-    } 
+    if (groupId !== -1) await callDcMethodAsync('deleteChat', groupId)
     onClose()
   }
 
@@ -275,20 +265,20 @@ export function CreateGroupInner (props) {
     } else {
       await callDcMethodAsync('setChatName', [gId, groupName])
     }
-    if(finishing === true) {
-      if (groupImage != '') {
+    if (finishing === true) {
+      if (groupImage !== '') {
         await callDcMethodAsync('setChatProfileImage', [gId, groupImage])
       }
-      for (let contactId of groupMembers) {
+      for (const contactId of groupMembers) {
         await callDcMethodAsync('addContactToChat', [gId, contactId])
       }
     }
     return gId
   }
   const finishCreateGroup = async () => {
-    const groupId = await lazilyCreateOrUpdateGroup(true)
+    const gId = await lazilyCreateOrUpdateGroup(true)
     onClose()
-    changeScreen('ChatView', { chatId })
+    changeScreen('ChatView', { gId })
   }
 
   const onSetGroupImage = () => {
@@ -327,8 +317,9 @@ export function CreateGroupInner (props) {
           cutoff='+'
           text={tx('qrshow_title')}
           onClick={async () => {
-            const groupId = await lazilyCreateOrUpdateGroup(false)
-            const qrCode = await callDcMethodAsync('getQrCode', groupId)
+            if (groupId === -1 && groupName === '') return
+            const gId = await lazilyCreateOrUpdateGroup(false)
+            const qrCode = await callDcMethodAsync('getQrCode', gId)
             setQrCode(qrCode)
             setShow('createGroup-showQrCode')
           }}
@@ -343,11 +334,11 @@ export function CreateGroupInner (props) {
     <>
       { show.startsWith('createGroup-addMember') &&
         <>
-          <div className='bp3-dialog-header'>
-            <button onClick={() => { updateSearch(''); setShow('createGroup-main') }} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
-            <h4 className='bp3-heading'>{tx('group_add_members')}</h4>
-            <DeltaDialogCloseButton onClick={closeAndDelete} />
-          </div>
+          <GoBackDialogHeader
+            title={tx('group_add_members')}
+            onClickBack={() => { updateSearch(''); setShow('createGroup-main') }}
+            onClose={closeAndDelete}
+          />
           <div className={Classes.DIALOG_BODY}>
             <Card style={{ paddingTop: '0px' }}>
               <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
@@ -367,11 +358,11 @@ export function CreateGroupInner (props) {
       }
       { show.startsWith('createGroup-showQrCode') &&
         <>
-          <div className='bp3-dialog-header'>
-            <button onClick={() => { updateSearch(''); setShow('createGroup-main') }} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
-            <h4 className='bp3-heading'>{tx('qrshow_title')}</h4>
-            <DeltaDialogCloseButton onClick={closeAndDelete} />
-          </div>
+          <GoBackDialogHeader
+            title={tx('qrshow_title')}
+            onClickBack={() => { updateSearch(''); setShow('createGroup-main') }}
+            onClose={closeAndDelete}
+          />
           <div className={Classes.DIALOG_BODY}>
             <Card style={{ paddingTop: '0px' }}>
               <qr.QRCode
@@ -387,13 +378,12 @@ export function CreateGroupInner (props) {
       }
       { show.startsWith('createGroup-main') &&
         <>
-          <div className='bp3-dialog-header'>
-            <button onClick={() => setShow('main')} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
-            <h4 className='bp3-heading'>{tx('menu_new_group')}</h4>
-            <DeltaDialogCloseButton onClick={onClose} />
-          </div>
+          <GoBackDialogHeader
+            title={tx('menu_new_group')}
+            onClickBack={() => setShow('main')}
+            onClose={closeAndDelete}
+          />
           <div className={Classes.DIALOG_BODY}>
-
             <Card>
               <CreateGroupSettingsContainer>
                 <GroupImage style={{ float: 'left' }} groupImage={groupImage} onSetGroupImage={onSetGroupImage} onUnsetGroupImage={onUnsetGroupImage} />
@@ -437,12 +427,9 @@ export function CreateGroupInner (props) {
             </Card>
           </div>
           <div className={Classes.DIALOG_FOOTER}>
-            <div
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-            >
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <DeltaButtonPrimary
                 noPadding
-                onClick={() => onClick(true)}
                 onClick={finishCreateGroup}
               >
                 {tx('group_create_button')}
@@ -457,13 +444,13 @@ export function CreateGroupInner (props) {
 
 function isValidEmail (email) {
   // empty string is not allowed
-  if (email == '') return false
+  if (email === '') return false
   const parts = email.split('@')
   // missing @ character or more than one @ character
   if (parts.length !== 2) return false
   const [local, domain] = parts
   // empty string is not valid for local part
-  if (local == '') return false
+  if (local === '') return false
   // domain is too short
   if (domain.length <= 3) return false
   const dot = domain.indexOf('.')

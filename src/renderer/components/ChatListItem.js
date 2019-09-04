@@ -15,7 +15,6 @@ const MessageText1Draft = styled.div`
   color: ${props => props.theme.draftTextColor}
 `
 
-
 const UnreadCounterDiv = styled.div`
   color: var(--unreadCountLabel);
   background-color: var(--unreadCountBg);
@@ -53,14 +52,14 @@ const GroupIcon = styled.span`
 const ContactNameSpan = styled.span`
   font-weight: 200;
   font-size: medium;
-  color: ${({isSelected}) => isSelected ? props.theme.chatListItemSelectedText : 'unset'};
+  color: ${({ isSelected, theme }) => isSelected ? theme.chatListItemSelectedText : 'unset'};
   
 `
 
 const Header = React.memo(props => {
   const {
     unreadCount,
-    lastUpdated,
+    lastUpdated
   } = props.chatListItem
   const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
 
@@ -131,7 +130,7 @@ const ChatListItem = React.memo(props => {
         isSelected ? 'module-conversation-list-item--is-selected' : null
       )}
     >
-      {<Avatar {...chatListItem} displayName={chatListItem.name}  />}
+      {<Avatar {...chatListItem} displayName={chatListItem.name} />}
       <div className='module-conversation-list-item__content'>
         <Header chatListItem={chatListItem} />
         <Message chatListItem={chatListItem} />
@@ -139,7 +138,7 @@ const ChatListItem = React.memo(props => {
     </div>
   )
 }, (prevProps, nextProps) => {
-  const shouldRerender = prevProps.chatListItem != nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected
+  const shouldRerender = prevProps.chatListItem !== nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected
   return !shouldRerender
 })
 
