@@ -45,7 +45,7 @@ function chatModified (chatId) {
   for (let counter = 0; counter < list.getCount(); counter++) {
     const id = list.getChatId(counter)
     chatList.push(id)
-    if (id == chatId) i = counter
+    if (id === chatId) i = counter
   }
   console.log(JSON.stringify(chatList))
   const chat = this.getChatById(chatId, list, i)

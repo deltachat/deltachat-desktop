@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
-import contactsStore from '../../stores/contacts'
 import { callDcMethodAsync } from '../../ipc'
 import Contact, { PseudoContact } from './Contact'
 
@@ -23,7 +22,6 @@ export function useContacts (listFlags, queryStr) {
     setContacts(contacts)
   }
 
-  const assignContacts = ({ contacts }) => setContacts(contacts)
   useEffect(() => {
     updateContacts(listFlags, queryStr)
   }, [])

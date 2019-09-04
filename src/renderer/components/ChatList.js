@@ -1,7 +1,6 @@
 const React = require('react')
 const ChatListContextMenu = require('./ChatListContextMenu').default
 const ChatListItem = require('./ChatListItem').default
-const mapCoreMsgStatus2String = require('./helpers/MapMsgStatus')
 const styled = require('styled-components').default
 
 const log = require('../../logger').getLogger('renderer/chatView')
@@ -114,7 +113,6 @@ class ChatList extends React.Component {
 
               // Don't show freshMessageCounter on selected chat
               if (chatListItem.deaddrop) {
-                const name = `${tx('new_message_from_desktop')} ${chatListItem.name}`
                 return (
                   <ContactRequestItemWrapper key={chatListItem.id}>
                     <ChatListItem
