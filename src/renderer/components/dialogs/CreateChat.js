@@ -1,34 +1,27 @@
 import React, { Fragment, useState, useContext } from 'react'
-import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import styled from 'styled-components'
-import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
-import { AvatarBubble, AvatarImage, QRAvatar } from '../helpers/Contact'
-import ScreenContext from '../../contexts/ScreenContext'
 import { Card, Classes } from '@blueprintjs/core'
-import { callDcMethodAsync } from '../../ipc'
-import { DeltaDialogBase, DeltaDialogCloseButton, GoBackDialogHeader } from '../helpers/DeltaDialog'
-import C from 'deltachat-node/constants'
-
 import { remote } from 'electron'
 import qr from 'react-qr-svg'
+import C from 'deltachat-node/constants'
 
-const CreateChatContactListWrapper = styled.div`
-  background-color: var(--bp3DialogBgPrimary);
-`
-
-export const CreateChatSearchInput = styled.input`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  margin: 0;
-  line-height: inherit;
-  border: 0px;
-  font-size: 18px;
-`
+import { callDcMethodAsync } from '../../ipc'
+import ScreenContext from '../../contexts/ScreenContext'
+import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
+import { DeltaButtonPrimary } from '../helpers/SmallDialog'
+import { DeltaDialogBase, DeltaDialogCloseButton, GoBackDialogHeader } from '../helpers/DeltaDialog'
+import {
+  CreateGroupSettingsContainer,
+  CreateGroupSeperator,
+  CreateGroupMemberContactListWrapper,
+  CreateChatSearchInput,
+  CreateChatContactListWrapper,
+  GroupImage,
+  GroupNameInput,
+  CreateGroupMemberSearchInput,
+  PseudoContactListItemNoSearchResults,
+  PseudoContactListItemShowQrCode,
+  PseudoContactListItemAddMember
+} from './CreateChat-Styles'
 
 export default function CreateChat (props) {
   const { isOpen, onClose } = props
@@ -74,6 +67,7 @@ export default function CreateChat (props) {
           id='newverifiedgroup'
           cutoff='+'
           text={tx('menu_new_verified_group')}
+          onClick={() => setShow('createVerifiedGroup-main')}
         />
       </Fragment>
     )
@@ -127,100 +121,8 @@ export default function CreateChat (props) {
           </>)
       }
       { show.startsWith('createGroup') && <CreateGroupInner {...{ show, setShow, onClose }} />}
+      { show.startsWith('createVerifiedGroup') && <CreateVerifiedGroupInner {...{ show, setShow, onClose }} />}
     </DeltaDialogBase>
-  )
-}
-
-export const GroupNameInput = styled.input`
-  margin-left: 20px;
-  font-size: x-large;
-  width: 78%;
-  border: 0;
-  border-bottom: solid;
-  border-color: var(--loginInputFocusColor);
-  height: 32px;
-`
-
-const CreateGroupSettingsContainer = styled.div`
-  margin-top: -8px;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding: 0px 40px 0px 40px;
-`
-const CreateGroupSeperator = styled.div`
-  margin: ${({ noMargin }) => noMargin ? '0px' : '20px -20px 0px -20px'};
-  padding: 10px 20px;
-  background-color: lightgrey;
-  color: grey;
-`
-
-const CreateGroupMemberContactListWrapper = styled.div`
-  margin-left: -20px;
-  margin-right: -20px;
-`
-
-const CreateGroupMemberSearchInput = styled(CreateChatSearchInput)`
-  margin-left: 40px;
-  padding: 10px 0px;
-  width: calc(100% - 80px);
-`
-
-const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
-  transform: rotate(45deg); 
-  line-height: 46px;
-  letter-spacing: 1px;
-  &::after {
-    content: ':-(';
-  }
-`
-
-const GroupImageUnsetButtonWrapper = styled.div`
-  position: relative;
-  width: 26px;
-  height: 26px;
-  left: -11px;
-  top: -2px;
-  background-color: #e56555;
-  border-radius: 50%;
-  &:hover, span:hover {
-    cursor: pointer;
-  }
-  span {
-    display: block;
-    position: relative;
-    width: 16px;
-    height: 3px;
-    left: 5px;
-    background-color: white;
-    &:nth-child(1) {
-      transform: rotate(130deg);
-      top: 11px;
-    }
-    &:nth-child(2) {
-      transform: rotate(-130deg);
-      top: 8px;
-    }
-  }
-`
-
-const GroupImageUnsetButton = (props) => {
-  return <GroupImageUnsetButtonWrapper {...props} ><span /><span /></GroupImageUnsetButtonWrapper>
-}
-
-const GroupImageWrapper = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
-`
-
-const GroupImage = (props) => {
-  const { groupImage, onSetGroupImage, onUnsetGroupImage } = props
-  return (
-    <GroupImageWrapper>
-      { groupImage && <AvatarImage src={groupImage} onClick={onSetGroupImage} {...props} /> }
-      { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...props}>G</AvatarBubble> }
-      <GroupImageUnsetButton style={{ visibility: groupImage ? 'visible' : 'hidden' }} onClick={onUnsetGroupImage} />
-    </GroupImageWrapper>
   )
 }
 
@@ -229,7 +131,7 @@ export function useContactSearch (updateContacts) {
 
   const updateSearch = searchString => {
     setSearchString(searchString)
-    updateContacts(C.DC_GCL_ADD_SELF, searchString)
+    updateContacts(searchString)
   }
 
   const onSearchChange = e => updateSearch(e.target.value)
@@ -237,21 +139,115 @@ export function useContactSearch (updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
-export function CreateGroupInner (props) {
-  const { show, setShow, onClose } = props
-  const tx = window.translate
-  const [groupName, setGroupName] = useState('')
-  const [groupMembers, setGroupMembers] = useState([1])
+export function useGroupImage (props) {
   const [groupImage, setGroupImage] = useState('')
-  const [groupId, setGroupId] = useState(-1)
-  const [qrCode, setQrCode] = useState('')
-  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
-  const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
-  const searchContactsToAdd = queryStr !== ''
-    ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
-    : []
-  const { changeScreen } = useContext(ScreenContext)
+  const tx = window.translate
 
+  const onSetGroupImage = () => {
+    remote.dialog.showOpenDialog({
+      title: tx('select_group_image_desktop'),
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile']
+    }, files => {
+      if (Array.isArray(files) && files.length > 0) {
+        setGroupImage(files[0])
+      }
+    })
+  }
+  const onUnsetGroupImage = () => setGroupImage('')
+
+  return [groupImage, onSetGroupImage, onUnsetGroupImage]
+}
+
+export function useGroupMembers () {
+  const [groupMembers, setGroupMembers] = useState([1])
+
+  const removeGroupMember = ({ id }) => id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
+  const addGroupMember = ({ id }) => setGroupMembers([...groupMembers, id])
+  const addRemoveGroupMember = ({ id }) => {
+    console.log('addRemoveGroupMember', id, groupMembers)
+    groupMembers.indexOf(id) !== -1 ? removeGroupMember({ id }) : addGroupMember({ id })
+  }
+  return [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember]
+}
+
+export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName }) => {
+  const tx = window.translate
+  return (
+    <CreateGroupSettingsContainer>
+      <GroupImage
+        style={{ float: 'left' }}
+        groupImage={groupImage}
+        onSetGroupImage={onSetGroupImage}
+        onUnsetGroupImage={onUnsetGroupImage}
+      />
+      <GroupNameInput
+        placeholder={tx('group_name')}
+        value={groupName}
+        onChange={({ target }) => setGroupName(target.value)}
+        autoFocus
+      />
+    </CreateGroupSettingsContainer>
+  )
+}
+
+export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, queryStr, searchContacts, groupMembers, addRemoveGroupMember }) => {
+  const tx = window.translate
+
+  return (
+    <>
+      <GoBackDialogHeader
+        title={tx('group_add_members')}
+        onClickBack={onClickBack}
+        onClose={onClose}
+      />
+      <div className={Classes.DIALOG_BODY}>
+        <Card style={{ paddingTop: '0px' }}>
+          <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
+          <CreateGroupMemberContactListWrapper>
+            <ContactList2
+              contacts={searchContacts}
+              onClick={() => {}}
+              showCheckbox
+              isChecked={({ id }) => groupMembers.indexOf(id) !== -1}
+              onCheckboxClick={addRemoveGroupMember}
+            />
+          </CreateGroupMemberContactListWrapper>
+        </Card>
+      </div>
+      <div className={Classes.DIALOG_FOOTER} />
+    </>
+  )
+}
+
+export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
+  const tx = window.translate
+
+  return (
+    <>
+      <GoBackDialogHeader
+        title={tx('qrshow_title')}
+        onClickBack={onClickBack}
+        onClose={onClose}
+      />
+      <div className={Classes.DIALOG_BODY}>
+        <Card style={{ paddingTop: '0px' }}>
+          <qr.QRCode
+            bgColor='#FFFFFF'
+            fgColor='#000000'
+            level='Q'
+            value={qrCode}
+          />
+        </Card>
+      </div>
+      <div className={Classes.DIALOG_FOOTER} />
+    </>
+  )
+}
+
+export const useCreateGroup = (verified, groupName, groupImage, groupMembers, onClose) => {
+  const { changeScreen } = useContext(ScreenContext)
+  const [groupId, setGroupId] = useState(-1)
   const closeAndDelete = async () => {
     if (groupId !== -1) await callDcMethodAsync('deleteChat', groupId)
     onClose()
@@ -260,7 +256,7 @@ export function CreateGroupInner (props) {
   const lazilyCreateOrUpdateGroup = async (finishing) => {
     let gId = groupId
     if (gId === -1) {
-      gId = await callDcMethodAsync('createGroupChat', [false, groupName])
+      gId = await callDcMethodAsync('createGroupChat', [verified, groupName])
       setGroupId(gId)
     } else {
       await callDcMethodAsync('setChatName', [gId, groupName])
@@ -280,102 +276,58 @@ export function CreateGroupInner (props) {
     onClose()
     changeScreen('ChatView', { gId })
   }
+  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete]
+}
 
-  const onSetGroupImage = () => {
-    remote.dialog.showOpenDialog({
-      title: tx('select_group_image_desktop'),
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
-      properties: ['openFile']
-    }, files => {
-      if (Array.isArray(files) && files.length > 0) {
-        setGroupImage(files[0])
-      }
-    })
-  }
+export function CreateGroupInner (props) {
+  const { show, setShow, onClose } = props
+  const tx = window.translate
 
-  const onUnsetGroupImage = () => setGroupImage('')
+  const [groupName, setGroupName] = useState('')
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
+  const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
 
-  const removeGroupMember = ({ id }) => id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }) => setGroupMembers([...groupMembers, id])
-  const addRemoveGroupMember = ({ id }) => {
-    console.log('addRemoveGroupMember', id, groupMembers)
-    groupMembers.indexOf(id) !== -1 ? removeGroupMember({ id }) : addGroupMember({ id })
-  }
+  const [qrCode, setQrCode] = useState('')
+
+  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
+  const searchContactsToAdd = queryStr !== ''
+    ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
+    : []
 
   const renderAddMemberIfNeeded = () => {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItem
-          id='addmember'
-          cutoff='+'
-          text={tx('group_add_members')}
-          onClick={() => setShow('createGroup-addMember')}
-        />
-        <PseudoContactListItem
-          id='showqrcode'
-          cutoff='+'
-          text={tx('qrshow_title')}
-          onClick={async () => {
-            if (groupId === -1 && groupName === '') return
-            const gId = await lazilyCreateOrUpdateGroup(false)
-            const qrCode = await callDcMethodAsync('getQrCode', gId)
-            setQrCode(qrCode)
-            setShow('createGroup-showQrCode')
-          }}
-        >
-          <QRAvatar />
-        </PseudoContactListItem>
+        <PseudoContactListItemAddMember onClick={() => setShow('createGroup-addMember')} />
+        <PseudoContactListItemShowQrCode onClick={async () => {
+          if (groupId === -1 && groupName === '') return
+          const gId = await lazilyCreateOrUpdateGroup(false)
+          const qrCode = await callDcMethodAsync('getQrCode', gId)
+          setQrCode(qrCode)
+          setShow('createGroup-showQrCode')
+        }} />
       </>
     )
   }
 
   return (
     <>
-      { show.startsWith('createGroup-addMember') &&
-        <>
-          <GoBackDialogHeader
-            title={tx('group_add_members')}
-            onClickBack={() => { updateSearch(''); setShow('createGroup-main') }}
-            onClose={closeAndDelete}
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card style={{ paddingTop: '0px' }}>
-              <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
-              <CreateGroupMemberContactListWrapper>
-                <ContactList2
-                  contacts={searchContacts}
-                  onClick={() => {}}
-                  showCheckbox
-                  isChecked={({ id }) => groupMembers.indexOf(id) !== -1}
-                  onCheckboxClick={addRemoveGroupMember}
-                />
-              </CreateGroupMemberContactListWrapper>
-            </Card>
-          </div>
-          <div className={Classes.DIALOG_FOOTER} />
-        </>
-      }
-      { show.startsWith('createGroup-showQrCode') &&
-        <>
-          <GoBackDialogHeader
-            title={tx('qrshow_title')}
-            onClickBack={() => { updateSearch(''); setShow('createGroup-main') }}
-            onClose={closeAndDelete}
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card style={{ paddingTop: '0px' }}>
-              <qr.QRCode
-                bgColor='#FFFFFF'
-                fgColor='#000000'
-                level='Q'
-                value={qrCode}
-              />
-            </Card>
-          </div>
-          <div className={Classes.DIALOG_FOOTER} />
-        </>
-      }
+      { show.startsWith('createGroup-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setShow('createGroup-main') },
+        onClose: closeAndDelete,
+        onSearchChange,
+        queryStr,
+        searchContacts,
+        groupMembers,
+        addRemoveGroupMember
+      })}
+      { show.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setShow('createGroup-main') },
+        onClose: closeAndDelete,
+        qrCode: qrCode
+      })}
       { show.startsWith('createGroup-main') &&
         <>
           <GoBackDialogHeader
@@ -385,10 +337,7 @@ export function CreateGroupInner (props) {
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
-              <CreateGroupSettingsContainer>
-                <GroupImage style={{ float: 'left' }} groupImage={groupImage} onSetGroupImage={onSetGroupImage} onUnsetGroupImage={onUnsetGroupImage} />
-                <GroupNameInput placeholder={tx('group_name')} autoFocus value={groupName} onChange={({ target }) => setGroupName(target.value)} />
-              </CreateGroupSettingsContainer>
+              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
               <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</CreateGroupSeperator>
               <CreateGroupMemberContactListWrapper>
                 <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
@@ -412,17 +361,109 @@ export function CreateGroupInner (props) {
                   />
                 </>
                 )}
-                {queryStr !== '' && searchContacts.length === 0 && (
+                {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+              </CreateGroupMemberContactListWrapper>
+            </Card>
+          </div>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+              <DeltaButtonPrimary
+                noPadding
+                onClick={finishCreateGroup}
+              >
+                {tx('group_create_button')}
+              </DeltaButtonPrimary>
+            </div>
+          </div>
+        </>
+      }
+    </>
+  )
+}
+
+export function CreateVerifiedGroupInner (props) {
+  const { show, setShow, onClose } = props
+  const tx = window.translate
+
+  const [groupName, setGroupName] = useState('')
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
+  const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
+
+  const [qrCode, setQrCode] = useState('')
+
+  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF, '')
+  const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
+  const searchContactsToAdd = queryStr !== ''
+    ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
+    : []
+
+  const renderAddMemberIfNeeded = () => {
+    if (queryStr !== '') return null
+    return (
+      <>
+        <PseudoContactListItemAddMember onClick={() => setShow('createVerifiedGroup-addMember')} />
+        <PseudoContactListItemShowQrCode onClick={async () => {
+          if (groupId === -1 && groupName === '') return
+          const gId = await lazilyCreateOrUpdateGroup(false)
+          const qrCode = await callDcMethodAsync('getQrCode', gId)
+          setQrCode(qrCode)
+          setShow('createVerifiedGroup-showQrCode')
+        }} />
+      </>
+    )
+  }
+
+  return (
+    <>
+      { show.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setShow('createVerifiedGroup-main') },
+        onClose: closeAndDelete,
+        onSearchChange,
+        queryStr,
+        searchContacts,
+        groupMembers,
+        addRemoveGroupMember
+      })}
+      { show.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setShow('createVerifiedGroup-main') },
+        onClose: closeAndDelete,
+        qrCode: qrCode
+      })}
+      { show.startsWith('createVerifiedGroup-main') &&
+        <>
+          <GoBackDialogHeader
+            title={tx('menu_new_verified_group')}
+            onClickBack={() => setShow('main')}
+            onClose={closeAndDelete}
+          />
+          <div className={Classes.DIALOG_BODY}>
+            <Card>
+              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+              <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</CreateGroupSeperator>
+              <CreateGroupMemberContactListWrapper>
+                <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
+                {renderAddMemberIfNeeded()}
+                <ContactList2
+                  contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
+                  onClick={() => {}}
+                  showCheckbox
+                  isChecked={() => true}
+                  onCheckboxClick={removeGroupMember}
+                />
+                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                 <>
-                  <PseudoContactListItem
-                    id='addmember'
-                    text={tx('search_no_result_for_x', queryStr)}
+                  <CreateGroupSeperator noMargin>{tx('group_add_members')}</CreateGroupSeperator>
+                  <ContactList2
+                    contacts={searchContactsToAdd}
                     onClick={() => {}}
-                  >
-                    <NoSearchResultsAvatarBubble />
-                  </PseudoContactListItem>
+                    showCheckbox
+                    isChecked={() => false}
+                    onCheckboxClick={addGroupMember}
+                  />
                 </>
                 )}
+                {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
               </CreateGroupMemberContactListWrapper>
             </Card>
           </div>
