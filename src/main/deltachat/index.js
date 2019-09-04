@@ -21,6 +21,8 @@ const publicAccessibleMethods = [
   'getLocations',
   'getQrCode',
   'setChatName',
+  'setChatProfileImage',
+  'addContactToChat',
   'leaveGroup',
   'selectChat',
   'sendMessage',
