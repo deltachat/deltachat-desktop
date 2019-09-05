@@ -253,7 +253,6 @@ class DeltaChatController extends EventEmitter {
   }
 
   getContacts2 (listFlags, queryStr) {
-    console.log(arguments)
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
     const contacts = distinctIds.map(this.getContact.bind(this))
     return contacts

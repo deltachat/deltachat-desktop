@@ -118,7 +118,6 @@ export const Message = React.memo(props => {
 const ChatListItem = React.memo(props => {
   const { chatListItem } = props
   const { onClick, isSelected, onContextMenu } = props
-  console.log('rendering', props.chatListItem)
   return (
     <div
       role='button'

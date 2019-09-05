@@ -165,7 +165,6 @@ export function useGroupMembers () {
   const removeGroupMember = ({ id }) => id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
   const addGroupMember = ({ id }) => setGroupMembers([...groupMembers, id])
   const addRemoveGroupMember = ({ id }) => {
-    console.log('addRemoveGroupMember', id, groupMembers)
     groupMembers.indexOf(id) !== -1 ? removeGroupMember({ id }) : addGroupMember({ id })
   }
   return [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember]
