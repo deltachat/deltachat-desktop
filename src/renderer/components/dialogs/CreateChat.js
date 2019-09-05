@@ -268,6 +268,7 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
     return gId
   }
   const finishCreateGroup = async () => {
+    if (groupName === '') return
     const gId = await lazilyCreateOrUpdateGroup(true)
     onClose()
     changeScreen('ChatView', { gId })
