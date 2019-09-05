@@ -37,7 +37,8 @@ export function QRAvatar () {
 
 const QRAvatarQRCodeImg = styled.img`
   width: 22px;
-  margin-top: 14px;
+  height: 22px;
+  margin-top: calc((48px - 22px) / 2);
 `
 export const AvatarMixin = css`
   position: relative;
