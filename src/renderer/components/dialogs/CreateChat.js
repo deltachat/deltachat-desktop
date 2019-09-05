@@ -29,9 +29,9 @@ export default function CreateChat (props) {
   const { changeScreen, userFeedback } = useContext(ScreenContext)
   const [show, setShow] = useState('main')
 
-  const [queryStr, setQueryStr] = useState('')
+  const [contacts, updateContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const [queryStr, onSearchChange] = useContactSearch(updateContacts)
   const queryStrIsEmail = isValidEmail(queryStr)
-  const [contacts, updateContacts] = useContacts(C.DC_GCL_ADD_SELF, queryStr)
 
   const closeDialogAndSelectChat = chatId => {
     onClose()
@@ -45,12 +45,6 @@ export default function CreateChat (props) {
       return userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
     }
     closeDialogAndSelectChat(chatId)
-  }
-
-  const onSearchChange = e => {
-    const queryStr = e.target.value
-    setQueryStr(queryStr)
-    updateContacts(C.DC_GCL_ADD_SELF, queryStr)
   }
 
   const renderAddGroupIfNeeded = () => {
@@ -111,11 +105,13 @@ export default function CreateChat (props) {
               <DeltaDialogCloseButton onClick={onClose} />
             </div>
             <div className={Classes.DIALOG_BODY}>
-              <CreateChatContactListWrapper>
-                { renderAddGroupIfNeeded()}
-                <ContactList2 contacts={contacts} onClick={chooseContact} />
-                {renderAddContactIfNeeded()}
-              </CreateChatContactListWrapper>
+              <Card>
+                <CreateChatContactListWrapper>
+                  { renderAddGroupIfNeeded()}
+                  <ContactList2 contacts={contacts} onClick={chooseContact} />
+                  {renderAddContactIfNeeded()}
+                </CreateChatContactListWrapper>
+              </Card>
             </div>
             <div className={Classes.DIALOG_FOOTER} />
           </>)
@@ -211,6 +207,7 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
               isChecked={({ id }) => groupMembers.indexOf(id) !== -1}
               onCheckboxClick={addRemoveGroupMember}
             />
+            { queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
           </CreateGroupMemberContactListWrapper>
         </Card>
       </div>

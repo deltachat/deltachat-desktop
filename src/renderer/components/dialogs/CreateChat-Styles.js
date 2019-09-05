@@ -4,6 +4,7 @@ import { AvatarBubble, AvatarImage, QRAvatar } from '../helpers/Contact'
 import { PseudoContactListItem } from '../helpers/ContactList'
 
 export const CreateChatContactListWrapper = styled.div`
+  margin: -20px;
   background-color: var(--bp3DialogBgPrimary);
 `
 
