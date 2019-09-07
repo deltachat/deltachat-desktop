@@ -14,7 +14,6 @@ export function Avatar (props) {
       <AvatarImage src={avatarPath} />
     )
   }
-
   const codepoint = displayName.codePointAt(0)
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
@@ -136,7 +135,7 @@ export function PseudoContact (props) {
   const { cutoff, text, subText } = props
   return (
     <ContactWrapper>
-      {props.children ? props.children : renderAvatar(false, false, cutoff)}
+      {props.children ? props.children : renderAvatar(false, '#505050', cutoff)}
       { !subText && <ContactNameWrapper><PseudoContactText>{text}</PseudoContactText></ContactNameWrapper> }
       { subText && ContactName(text, subText, false) }
     </ContactWrapper>
