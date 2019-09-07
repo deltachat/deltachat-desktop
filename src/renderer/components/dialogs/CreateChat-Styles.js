@@ -105,11 +105,11 @@ export const GroupImageWrapper = styled.div`
 `
 
 export const GroupImage = (props) => {
-  const { groupImage, onSetGroupImage, onUnsetGroupImage } = props
+  const { groupImage, onSetGroupImage, onUnsetGroupImage, ...otherProps } = props
   return (
     <GroupImageWrapper>
       { groupImage && <AvatarImage src={groupImage} onClick={onSetGroupImage} {...props} /> }
-      { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...props}>G</AvatarBubble> }
+      { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...otherProps}>G</AvatarBubble> }
       <GroupImageUnsetButton style={{ visibility: groupImage ? 'visible' : 'hidden' }} onClick={onUnsetGroupImage} />
     </GroupImageWrapper>
   )
