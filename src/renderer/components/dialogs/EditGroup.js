@@ -1,27 +1,22 @@
-import React, { useState, useContext } from 'react'
-import { ipcRenderer } from 'electron'
+import React, { useState } from 'react'
 import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
 import differ from 'array-differ'
-import styled from 'styled-components'
 import { Card, Classes } from '@blueprintjs/core'
-import ScreenContext from '../../contexts/ScreenContext'
 import { DeltaDialogBase, GoBackDialogHeader } from '../helpers/DeltaDialog'
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import { isValidEmail } from '../helpers/Contact'
 import { useGroupImage, useContactSearch, GroupSettingsSetNameAndProfileImage, AddMemberInnerDialog, ShowQrCodeInnerDialog } from './CreateChat'
 import { useContacts, ContactList2 } from '../helpers/ContactList'
-
 import {
-  GroupSeperator,
-  GroupMemberContactListWrapper,
-  // CreateChatSearchInput,
-  // CreateChatContactListWrapper,
-  GroupMemberSearchInput,
   PseudoContactListItemNoSearchResults,
   PseudoContactListItemShowQrCode,
   PseudoContactListItemAddMember
 } from './CreateChat-Styles'
+import {
+  GroupSeperator,
+  GroupMemberContactListWrapper,
+  GroupMemberSearchInput
+} from './Group-Styles'
 
 export default function EditGroup (props) {
   const { chat } = props
