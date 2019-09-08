@@ -314,7 +314,7 @@ export function CreateGroupInner (props) {
 
   return (
     <>
-      { viewMode.startsWith('addMember') && AddMemberInnerDialog({
+      { viewMode.startsWith('createGroup-addMember') && AddMemberInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
         onClose: closeAndDelete,
         onSearchChange,
@@ -323,12 +323,12 @@ export function CreateGroupInner (props) {
         groupMembers,
         addRemoveGroupMember
       })}
-      { viewMode.startsWith('showQrCode') && ShowQrCodeInnerDialog({
+      { viewMode.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
         onClose: closeAndDelete,
         qrCode: qrCode
       })}
-      { viewMode.startsWith('main') &&
+      { viewMode.startsWith('createGroup-main') &&
         <>
           <GoBackDialogHeader
             title={tx('menu_new_group')}
