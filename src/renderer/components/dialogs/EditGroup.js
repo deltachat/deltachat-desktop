@@ -76,8 +76,9 @@ export function EditGroupInner (props) {
   const [groupId, finishEditGroup] = useEditGroup(false, groupName, groupImage, groupMembers, chat.id, onClose)
 
   const [qrCode, setQrCode] = useState('')
+  const listFlags = chat.isVerified ? (C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF) : C.DC_GCL_ADD_SELF
 
-  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const [searchContacts, updateSearchContacts] = useContacts(listFlags, '')
   const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
   const searchContactsToAdd = queryStr !== ''
     ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
