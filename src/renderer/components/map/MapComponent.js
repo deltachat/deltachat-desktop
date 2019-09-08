@@ -1,3 +1,4 @@
+const { callDcMethod } = require('../../ipc')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const ReactDOM = require('react-dom')
@@ -296,13 +297,9 @@ class MapComponent extends React.Component {
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+    callDcMethod(
       'sendMessage',
-      selectedChat.id,
-      message,
-      null,
-      latLng
+      [selectedChat.id, message, null, latLng]
     )
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()

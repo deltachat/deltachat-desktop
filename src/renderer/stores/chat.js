@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron')
+const { callDcMethod } = require('../ipc')
 const { Store } = require('./store')
 
 const defaultState = {
@@ -45,7 +46,7 @@ chatStore.reducers.push((action, state) => {
 chatStore.effects.push((action) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'deleteMessage', msgId)
+    callDcMethod('deleteMessage', [msgId])
   }
 })
 

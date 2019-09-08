@@ -1,3 +1,4 @@
+const { callDcMethod } = require('../ipc')
 const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
 
@@ -13,13 +14,10 @@ const locationStore = new Store(defaultState)
 
 const getLocations = (chatId, mapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
-  ipcRenderer.send(
-    'EVENT_DC_FUNCTION_CALL',
+  callDcMethod(
     'getLocations',
-    chatId,
-    0,
-    timestampFrom,
-    timestampTo
+    [chatId, 0, timestampFrom, timestampTo],
+    (locations) => locationStore.setState({ ...locationStore.getState(), locations })
   )
 }
 
@@ -49,11 +47,6 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, payload) => {
 // sometimes a MSGS_CHANGED is sent instead of locations changed
 ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
 ipcRenderer.on('DC_EVENT_INCOMING_MSG', onLocationChange)
-
-ipcRenderer.on('DD_EVENT_LOCATIONS_UPDATED', (evt, payload) => {
-  const { locations } = payload
-  locationStore.setState({ ...locationStore.getState(), locations })
-})
 
 locationStore.reducers.push((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {

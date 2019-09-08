@@ -78,22 +78,19 @@ function init (cwd, state, logHandler) {
     menu.init(logHandler)
   })
 
-  ipcMain.on('EVENT_DC_FUNCTION_CALL', (evt, fnName, ...args) => {
-    log.debug('EVENT_DC_FUNCTION_CALL: ', fnName, args)
-    dc.handleRendererEvent(evt, fnName, args)
-  })
-
-  ipcMain.on('EVENT_DC_CALL_METHOD_IGNORE_RETURN', (e, methodName, args) => {
+  /* dispatch a method on DC core */
+  ipcMain.on('EVENT_DC_DISPATCH', (e, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
-    log.debug('EVENT_DC_CALL_METHOD_IGNORE_RETURN: ', methodName, args)
+    log.debug('EVENT_DC_DISPATCH: ', methodName, args)
     dc.callMethod(e, methodName, args)
   })
 
-  ipcMain.on('EVENT_DC_CALL_METHOD', (e, methodName, args) => {
+  /* dispatch a method on DC core with result passed to callback */
+  ipcMain.on('EVENT_DC_DISPATCH_CB', (e, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
-    log.debug('EVENT_DC_CALL_METHOD: ', methodName, args)
+    log.debug('EVENT_DC_DISPATCH_CB: ', methodName, args)
     const returnValue = dc.callMethod(e, methodName, args)
-    main.send('DD_DC_CALL_METHOD_RETURN_' + methodName, returnValue)
+    main.send('EVENT_DD_DISPATCH_RETURN_' + methodName, returnValue)
   })
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))

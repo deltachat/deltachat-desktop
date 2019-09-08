@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron')
+const { callDcMethod } = require('../ipc')
 const { Store } = require('./store')
 const chatStore = require('./chat')
 const mapCoreMsgStatus2String = require('../components/helpers/MapMsgStatus')
@@ -44,7 +45,7 @@ ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
   const chatListIndex = chatList.findIndex(chat => chat.id === chatId)
   if (chatListIndex === -1) {
     // the chat is not in the list, let's reload the list
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    callDcMethod('updateChatList')
     return
   }
 
@@ -62,7 +63,7 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   const chat = listState.chatList.find(chat => chat.id === chatId)
   if (!chat) {
     // the chat is not in the list, let's reload the list
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    callDcMethod('updateChatList')
     return
   }
   let freshMessageCounter = chat.freshMessageCounter
@@ -126,7 +127,7 @@ chatListStore.reducers.push(reducer)
 chatListStore.effects.push((action, state) => {
   if (action.type === 'UI_SET_DRAFT') {
     const { chatId, text } = action.payload
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'setDraft', chatId, text)
+    callDcMethod('setDraft', [chatId, text])
   }
   if (action.type === 'UI_DELETE_CHAT' || action.type === 'UI_ARCHIVE_CHAT' || action.type === 'UI_LEAVE_CHAT') {
     const { chatId } = action.payload
@@ -137,10 +138,10 @@ chatListStore.effects.push((action, state) => {
     }
     if (action.type === 'UI_ARCHIVE_CHAT') {
       const { archive } = action.payload
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'archiveChat', chatId, archive)
+      callDcMethod('archiveChat', [chatId, archive])
     } else {
       const functionName = action.type === 'UI_DELETE_CHAT' ? 'deleteChat' : 'leaveGroup'
-      ipcRenderer.send('EVENT_DC_FUNCTION_CALL', functionName, chatId)
+      callDcMethod(functionName, [chatId])
     }
   }
 })

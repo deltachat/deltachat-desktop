@@ -72,23 +72,6 @@ class DeltaChatController extends EventEmitter {
     log.debug('Core Event', event, data1, data2)
   }
 
-  /**
-  *
-  * @param evt
-  * @param methodName
-  * @param args
-  */
-  handleRendererEvent (evt, methodName, args) {
-    if (publicAccessibleMethods.indexOf(methodName) < 0) {
-      const message = 'Method not accessible: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-    if (typeof this[methodName] === 'function') {
-      this[methodName](...args)
-    }
-  }
-
   callMethod (evt, methodName, args) {
     if (typeof this[methodName] !== 'function') {
       const message = 'Method is not of type function: ' + methodName
