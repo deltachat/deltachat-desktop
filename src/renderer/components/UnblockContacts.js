@@ -1,5 +1,5 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
+const { callDcMethod } = require('../ipc')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
@@ -39,7 +39,7 @@ class UnblockContacts extends React.Component {
     const { blockedContacts } = contactsStore.getState()
     this.setState({ blockedContacts })
     contactsStore.subscribe(this.onContactsUpdate)
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'updateBlockedContacts')
+    callDcMethod('updateBlockedContacts')
   }
 
   componentWillUnmount () {
@@ -50,7 +50,7 @@ class UnblockContacts extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
-        ipcRenderer.send('EVENT_DC_DISPATCH', 'unblockContact', contact.id)
+        callDcMethod('unblockContact', [contact.id])
       }
     })
   }

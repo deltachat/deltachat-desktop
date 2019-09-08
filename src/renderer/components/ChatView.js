@@ -1,5 +1,6 @@
 const React = require('react')
-const { ipcRenderer, shell } = require('electron')
+const { shell } = require('electron')
+const { callDcMethod } = require('../ipc')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
@@ -125,12 +126,9 @@ class ChatView extends React.Component {
 
   writeMessage (opts) {
     const { chat } = this.props
-    ipcRenderer.send(
-      'EVENT_DC_DISPATCH',
+    callDcMethod(
       'sendMessage',
-      chat.id,
-      opts.text,
-      opts.filename
+      [chat.id, opts.text, opts.filename]
     )
   }
 
@@ -138,10 +136,9 @@ class ChatView extends React.Component {
     const { chat } = this.props
     if (chat.totalMessages === chat.messages.length) return
     this.scrollPrepare()
-    ipcRenderer.send(
-      'EVENT_DC_DISPATCH',
+    callDcMethod(
       'fetchMessages',
-      chat.id
+      [chat.id]
     )
   }
 
@@ -224,12 +221,9 @@ class ChatView extends React.Component {
     for (let i = 0; i < files.length; i++) {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        ipcRenderer.send(
-          'EVENT_DC_DISPATCH',
+        callDcMethod(
           'sendMessage',
-          chat.id,
-          null,
-          path
+          [chat.id, null, path]
         )
       } else {
         log.warn('Prevented a file from being send again while dragging it out')

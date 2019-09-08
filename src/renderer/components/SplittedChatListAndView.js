@@ -1,5 +1,5 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
+const { callDcMethod } = require('../ipc')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
@@ -86,7 +86,7 @@ class SplittedChatListAndView extends React.Component {
   componentDidMount () {
     chatStore.subscribe(this.onChatUpdate)
     chatListStore.subscribe(this.onChatListUpdate)
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'updateChatList')
+    callDcMethod('updateChatList')
   }
 
   componentWillUnmount () {
@@ -96,7 +96,7 @@ class SplittedChatListAndView extends React.Component {
 
   showArchivedChats (showArchivedChats) {
     this.setState({ showArchivedChats })
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'showArchivedChats', showArchivedChats)
+    callDcMethod('showArchivedChats', [showArchivedChats])
   }
 
   onChatClick (chatId) {
@@ -105,7 +105,7 @@ class SplittedChatListAndView extends React.Component {
       return
     }
     this.chatClicked = chatId
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'selectChat', chatId)
+    callDcMethod('selectChat', [chatId])
     setTimeout(() => { this.chatClicked = 0 }, 500)
     try {
       if (this.chatView.current) {
