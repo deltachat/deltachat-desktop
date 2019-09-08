@@ -16,10 +16,7 @@ const getLocations = (chatId, mapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
   callDcMethod(
     'getLocations',
-    chatId,
-    0,
-    timestampFrom,
-    timestampTo
+    [chatId, 0, timestampFrom, timestampTo]
   )
 }
 

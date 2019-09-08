@@ -1,3 +1,4 @@
+const { callDcMethod } = require('../ipc')
 const { ipcRenderer } = require('electron')
 const React = require('react')
 const { dialog } = require('electron').remote
@@ -47,11 +48,9 @@ class GroupBase extends React.Component {
 
   componentDidMount () {
     contactsStore.subscribe(this.assignContacts)
-    ipcRenderer.send(
-      'EVENT_DC_DISPATCH',
+    callDcMethod(
       'getContacts',
-      0,
-      ''
+      [0, '']
     )
   }
 

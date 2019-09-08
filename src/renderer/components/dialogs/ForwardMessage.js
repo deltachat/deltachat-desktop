@@ -1,5 +1,5 @@
 const React = require('react')
-const { ipcRenderer } = require('electron')
+const { callDcMethod } = require('../../ipc')
 const {
   Classes,
   Dialog
@@ -18,11 +18,9 @@ class ForwardMessage extends React.Component {
   }
 
   onChatClick (chatid) {
-    ipcRenderer.send(
-      'EVENT_DC_DISPATCH',
+    callDcMethod(
       'forwardMessage',
-      this.props.forwardMessage.msg.id,
-      chatid
+      [this.props.forwardMessage.msg.id, chatid]
     )
     this.props.onClose()
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { callDcMethod } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
 
@@ -12,7 +12,7 @@ export default class DeadDrop extends React.Component {
   }
 
   yes () {
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'chatWithContact', this.props.deadDrop)
+    callDcMethod('chatWithContact', [this.props.deadDrop])
     this.close()
   }
 
@@ -21,7 +21,7 @@ export default class DeadDrop extends React.Component {
   }
 
   never () {
-    ipcRenderer.send('EVENT_DC_DISPATCH', 'blockContact', this.props.deadDrop.contact.id)
+    callDcMethod('blockContact', [this.props.deadDrop.contact.id])
     this.close()
   }
 
