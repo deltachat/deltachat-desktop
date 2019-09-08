@@ -59,7 +59,7 @@ export const GroupImageUnsetButtonWrapper = styled.div`
   &:hover, span:hover {
     cursor: pointer;
   }
-  span {GroupSettingsContainer
+  span {
     display: block;
     position: relative;
     width: 16px;
