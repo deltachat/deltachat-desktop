@@ -27,9 +27,6 @@ export default function EditGroup (props) {
   const { chat } = props
   const { isOpen, onClose } = props
   const [viewMode, setViewMode] = useState('main')
-  const [updateContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
-  const [queryStr] = useContactSearch(updateContacts)
-  const queryStrIsEmail = isValidEmail(queryStr)
 
   return (
     <DeltaDialogBase
@@ -44,16 +41,15 @@ export default function EditGroup (props) {
 }
 
 export const useEditGroup = (verified, groupName, groupImage, groupMembers, groupId, onClose) => {
-  const [initialGroupMembers, updateGroupMembers] = useState(groupMembers)
-  const updateGroup = async (finishing) => {
-    const after = Object.keys(groupMembers).map(id => Number(id))
-    const remove = differ(initialGroupMembers, after)
-    const add = differ(after, initialGroupMembers)
+  const [initialGroupMembers] = useState(groupMembers)
+  const updateGroup = async () => {
+    const remove = differ(initialGroupMembers, groupMembers)
+    const add = differ(groupMembers, initialGroupMembers)
     await callDcMethodAsync('modifyGroup', [groupId, groupName, groupImage, remove, add])
   }
   const finishEditGroup = async () => {
     if (groupName === '') return
-    updateGroup(true)
+    updateGroup()
     onClose()
   }
   return [groupId, updateGroup, finishEditGroup, onClose]
@@ -75,9 +71,9 @@ export function EditGroupInner (props) {
   const tx = window.translate
 
   const [groupName, setGroupName] = useState(chat.name)
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(chat.profileImage)
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers(chat.contacts)
-  const [groupId, updateGroup] = useEditGroup(false, chat.name, chat.profileImage, groupMembers, chat.id)
+  const [groupId, finishEditGroup] = useEditGroup(false, groupName, groupImage, groupMembers, chat.id, onClose)
 
   const [qrCode, setQrCode] = useState('')
 
@@ -159,7 +155,7 @@ export function EditGroupInner (props) {
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <DeltaButtonPrimary
               noPadding
-              onClick={updateGroup}
+              onClick={finishEditGroup}
             >
               {tx('save_desktop')}
             </DeltaButtonPrimary>
