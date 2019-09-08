@@ -48,7 +48,7 @@ class GroupBase extends React.Component {
   componentDidMount () {
     contactsStore.subscribe(this.assignContacts)
     ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+      'EVENT_DC_DISPATCH',
       'getContacts',
       0,
       ''

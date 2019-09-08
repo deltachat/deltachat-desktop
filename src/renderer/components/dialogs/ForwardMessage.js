@@ -19,7 +19,7 @@ class ForwardMessage extends React.Component {
 
   onChatClick (chatid) {
     ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+      'EVENT_DC_DISPATCH',
       'forwardMessage',
       this.props.forwardMessage.msg.id,
       chatid

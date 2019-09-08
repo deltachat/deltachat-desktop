@@ -1,3 +1,4 @@
+const { callDcMethod } = require('../ipc')
 const { ipcRenderer } = require('electron')
 const { Store } = require('./store')
 
@@ -13,8 +14,7 @@ const locationStore = new Store(defaultState)
 
 const getLocations = (chatId, mapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
-  ipcRenderer.send(
-    'EVENT_DC_FUNCTION_CALL',
+  callDcMethod(
     'getLocations',
     chatId,
     0,

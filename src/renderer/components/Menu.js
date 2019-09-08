@@ -34,7 +34,7 @@ export default function DeltaMenu (props) {
   const onBlockContact = () => openBlockContactDialog(screenContext, selectedChat)
   const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat.id)
   const onUnblockContacts = () => screenContext.changeScreen('UnblockContacts')
-  const onContactRequests = () => ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'contactRequests')
+  const onContactRequests = () => ipcRenderer.send('EVENT_DC_DISPATCH', 'contactRequests')
   const logout = () => ipcRenderer.send('logout')
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
 
