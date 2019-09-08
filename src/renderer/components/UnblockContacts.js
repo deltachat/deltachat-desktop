@@ -39,7 +39,7 @@ class UnblockContacts extends React.Component {
     const { blockedContacts } = contactsStore.getState()
     this.setState({ blockedContacts })
     contactsStore.subscribe(this.onContactsUpdate)
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateBlockedContacts')
+    ipcRenderer.send('EVENT_DC_DISPATCH', 'updateBlockedContacts')
   }
 
   componentWillUnmount () {
@@ -50,7 +50,7 @@ class UnblockContacts extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
-        ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'unblockContact', contact.id)
+        ipcRenderer.send('EVENT_DC_DISPATCH', 'unblockContact', contact.id)
       }
     })
   }

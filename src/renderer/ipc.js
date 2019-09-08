@@ -11,14 +11,14 @@ export function sendToBackend (event, ...args) {
 // of the dc method is the first argument to cb
 export function callDcMethod (fnName, args, cb) {
   const ignoreReturn = typeof cb !== 'function'
-  const eventName = ignoreReturn ? 'EVENT_DC_CALL_METHOD_IGNORE_RETURN' : 'EVENT_DC_CALL_METHOD'
+  const eventName = ignoreReturn ? 'EVENT_DC_DISPATCH' : 'EVENT_DC_DISPATCH_CB'
 
   sendToBackend(eventName, fnName, args)
 
   if (ignoreReturn) return
 
-  ipcRenderer.once('DD_DC_CALL_METHOD_RETURN_' + fnName, (_ev, returnValue) => {
-    log.debug('DD_DC_CALL_METHOD_RETURN_' + fnName, 'Got back return: ', returnValue)
+  ipcRenderer.once('EVENT_DD_DISPATCH_RETURN_' + fnName, (_ev, returnValue) => {
+    log.debug('EVENT_DD_DISPATCH_RETURN_' + fnName, 'Got back return: ', returnValue)
     cb(returnValue)
   })
 }

@@ -297,7 +297,7 @@ class MapComponent extends React.Component {
     }
     const latLng = Object.assign({}, this.poiLocation)
     ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+      'EVENT_DC_DISPATCH',
       'sendMessage',
       selectedChat.id,
       message,

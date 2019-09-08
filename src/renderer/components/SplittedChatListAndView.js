@@ -86,7 +86,7 @@ class SplittedChatListAndView extends React.Component {
   componentDidMount () {
     chatStore.subscribe(this.onChatUpdate)
     chatListStore.subscribe(this.onChatListUpdate)
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'updateChatList')
+    ipcRenderer.send('EVENT_DC_DISPATCH', 'updateChatList')
   }
 
   componentWillUnmount () {
@@ -96,7 +96,7 @@ class SplittedChatListAndView extends React.Component {
 
   showArchivedChats (showArchivedChats) {
     this.setState({ showArchivedChats })
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'showArchivedChats', showArchivedChats)
+    ipcRenderer.send('EVENT_DC_DISPATCH', 'showArchivedChats', showArchivedChats)
   }
 
   onChatClick (chatId) {
@@ -105,7 +105,7 @@ class SplittedChatListAndView extends React.Component {
       return
     }
     this.chatClicked = chatId
-    ipcRenderer.send('EVENT_DC_FUNCTION_CALL', 'selectChat', chatId)
+    ipcRenderer.send('EVENT_DC_DISPATCH', 'selectChat', chatId)
     setTimeout(() => { this.chatClicked = 0 }, 500)
     try {
       if (this.chatView.current) {

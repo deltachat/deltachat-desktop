@@ -126,7 +126,7 @@ class ChatView extends React.Component {
   writeMessage (opts) {
     const { chat } = this.props
     ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+      'EVENT_DC_DISPATCH',
       'sendMessage',
       chat.id,
       opts.text,
@@ -139,7 +139,7 @@ class ChatView extends React.Component {
     if (chat.totalMessages === chat.messages.length) return
     this.scrollPrepare()
     ipcRenderer.send(
-      'EVENT_DC_FUNCTION_CALL',
+      'EVENT_DC_DISPATCH',
       'fetchMessages',
       chat.id
     )
@@ -225,7 +225,7 @@ class ChatView extends React.Component {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         ipcRenderer.send(
-          'EVENT_DC_FUNCTION_CALL',
+          'EVENT_DC_DISPATCH',
           'sendMessage',
           chat.id,
           null,
