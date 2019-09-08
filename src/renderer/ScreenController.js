@@ -5,7 +5,6 @@ const { ipcRenderer } = require('electron')
 const ScreenContext = require('./contexts/ScreenContext')
 const UnblockContacts = require('./components/UnblockContacts')
 const LoginScreen = require('./components/LoginScreen').default
-const EditGroup = require('./components/EditGroup')
 const SplittedChatListAndView = require('./components/SplittedChatListAndView')
 const dialogs = require('./components/dialogs')
 
@@ -92,9 +91,6 @@ class ScreenController extends React.Component {
 
     var Screen
     switch (screen) {
-      case 'EditGroup':
-        Screen = EditGroup
-        break
       case 'UnblockContacts':
         Screen = UnblockContacts
         break
