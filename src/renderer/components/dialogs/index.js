@@ -12,7 +12,7 @@ const Settings = require('./Settings').default
 const ForwardMessage = require('./ForwardMessage')
 const EncryptionInfo = require('./EncryptionInfo').default
 const CreateChat = require('./CreateChat').default
-const EditGroup2 = require('./EditGroup2').default
+const EditGroup = require('./EditGroup').default
 const MapDialog = require('./MapDialog')
 const ConfirmationDialog = require('./confirmationDialog').default
 
@@ -30,7 +30,7 @@ const allDialogs = [
   ForwardMessage,
   EncryptionInfo,
   CreateChat,
-  EditGroup2,
+  EditGroup,
   MapDialog,
   ConfirmationDialog
 ]

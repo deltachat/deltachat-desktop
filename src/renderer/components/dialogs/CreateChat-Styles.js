@@ -32,25 +32,25 @@ export const GroupNameInput = styled.input`
   height: 32px;
 `
 
-export const CreateGroupSettingsContainer = styled.div`
+export const GroupSettingsContainer = styled.div`
   margin-top: -8px;
   margin-left: -20px;
   margin-right: -20px;
   padding: 0px 40px 0px 40px;
 `
-export const CreateGroupSeperator = styled.div`
+export const GroupSeperator = styled.div`
   margin: ${({ noMargin }) => noMargin ? '0px' : '20px -20px 0px -20px'};
   padding: 10px 20px;
   background-color: lightgrey;
   color: grey;
 `
 
-export const CreateGroupMemberContactListWrapper = styled.div`
+export const GroupMemberContactListWrapper = styled.div`
   margin-left: -20px;
   margin-right: -20px;
 `
 
-export const CreateGroupMemberSearchInput = styled(CreateChatSearchInput)`
+export const GroupMemberSearchInput = styled(CreateChatSearchInput)`
   margin-left: 40px;
   padding: 10px 0px;
   width: calc(100% - 80px);
@@ -76,7 +76,7 @@ export const GroupImageUnsetButtonWrapper = styled.div`
   &:hover, span:hover {
     cursor: pointer;
   }
-  span {
+  span {GroupSettingsContainer
     display: block;
     position: relative;
     width: 16px;
