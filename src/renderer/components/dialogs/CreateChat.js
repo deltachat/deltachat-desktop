@@ -27,7 +27,7 @@ export default function CreateChat (props) {
   const { isOpen, onClose } = props
   const tx = window.translate
   const { changeScreen, userFeedback } = useContext(ScreenContext)
-  const [show, setShow] = useState('main')
+  const [viewMode, setViewMode] = useState('main')
 
   const [contacts, updateContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
@@ -55,13 +55,13 @@ export default function CreateChat (props) {
           id='newgroup'
           cutoff='+'
           text={tx('menu_new_group')}
-          onClick={() => setShow('createGroup-main')}
+          onClick={() => setViewMode('createGroup-main')}
         />
         <PseudoContactListItem
           id='newverifiedgroup'
           cutoff='+'
           text={tx('menu_new_verified_group')}
-          onClick={() => setShow('createVerifiedGroup-main')}
+          onClick={() => setViewMode('createVerifiedGroup-main')}
         />
       </Fragment>
     )
@@ -98,7 +98,7 @@ export default function CreateChat (props) {
       style={{ width: '400px', height: '76vh', top: '12vh' }}
       fixed
     >
-      { show.startsWith('main') &&
+      { viewMode.startsWith('main') &&
           (<>
             <div className='bp3-dialog-header'>
               <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
@@ -116,8 +116,8 @@ export default function CreateChat (props) {
             <div className={Classes.DIALOG_FOOTER} />
           </>)
       }
-      { show.startsWith('createGroup') && <CreateGroupInner {...{ show, setShow, onClose }} />}
-      { show.startsWith('createVerifiedGroup') && <CreateVerifiedGroupInner {...{ show, setShow, onClose }} />}
+      { viewMode.startsWith('createGroup') && <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />}
+      { viewMode.startsWith('createVerifiedGroup') && <CreateVerifiedGroupInner {...{ viewMode, setViewMode, onClose }} />}
     </DeltaDialogBase>
   )
 }
@@ -277,7 +277,7 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
 }
 
 export function CreateGroupInner (props) {
-  const { show, setShow, onClose } = props
+  const { viewMode, setViewMode, onClose } = props
   const tx = window.translate
 
   const [groupName, setGroupName] = useState('')
@@ -297,13 +297,13 @@ export function CreateGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setShow('createGroup-addMember')} />
+        <PseudoContactListItemAddMember onClick={() => setViewMode('createGroup-addMember')} />
         <PseudoContactListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('getQrCode', gId)
           setQrCode(qrCode)
-          setShow('createGroup-showQrCode')
+          setViewMode('createGroup-showQrCode')
         }} />
       </>
     )
@@ -311,8 +311,8 @@ export function CreateGroupInner (props) {
 
   return (
     <>
-      { show.startsWith('createGroup-addMember') && AddMemberInnerDialog({
-        onClickBack: () => { updateSearch(''); setShow('createGroup-main') },
+      { viewMode.startsWith('createGroup-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
         onClose: closeAndDelete,
         onSearchChange,
         queryStr,
@@ -320,16 +320,16 @@ export function CreateGroupInner (props) {
         groupMembers,
         addRemoveGroupMember
       })}
-      { show.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
-        onClickBack: () => { updateSearch(''); setShow('createGroup-main') },
+      { viewMode.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
         onClose: closeAndDelete,
         qrCode: qrCode
       })}
-      { show.startsWith('createGroup-main') &&
+      { viewMode.startsWith('createGroup-main') &&
         <>
           <GoBackDialogHeader
             title={tx('menu_new_group')}
-            onClickBack={() => setShow('main')}
+            onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}
           />
           <div className={Classes.DIALOG_BODY}>
@@ -379,7 +379,7 @@ export function CreateGroupInner (props) {
 }
 
 export function CreateVerifiedGroupInner (props) {
-  const { show, setShow, onClose } = props
+  const { viewMode, setViewMode, onClose } = props
   const tx = window.translate
 
   const [groupName, setGroupName] = useState('')
@@ -399,13 +399,13 @@ export function CreateVerifiedGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setShow('createVerifiedGroup-addMember')} />
+        <PseudoContactListItemAddMember onClick={() => setViewMode('createVerifiedGroup-addMember')} />
         <PseudoContactListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('getQrCode', gId)
           setQrCode(qrCode)
-          setShow('createVerifiedGroup-showQrCode')
+          setViewMode('createVerifiedGroup-showQrCode')
         }} />
       </>
     )
@@ -413,8 +413,8 @@ export function CreateVerifiedGroupInner (props) {
 
   return (
     <>
-      { show.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
-        onClickBack: () => { updateSearch(''); setShow('createVerifiedGroup-main') },
+      { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
         onClose: closeAndDelete,
         onSearchChange,
         queryStr,
@@ -422,16 +422,16 @@ export function CreateVerifiedGroupInner (props) {
         groupMembers,
         addRemoveGroupMember
       })}
-      { show.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
-        onClickBack: () => { updateSearch(''); setShow('createVerifiedGroup-main') },
+      { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
         onClose: closeAndDelete,
         qrCode: qrCode
       })}
-      { show.startsWith('createVerifiedGroup-main') &&
+      { viewMode.startsWith('createVerifiedGroup-main') &&
         <>
           <GoBackDialogHeader
             title={tx('menu_new_verified_group')}
-            onClickBack={() => setShow('main')}
+            onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}
           />
           <div className={Classes.DIALOG_BODY}>
