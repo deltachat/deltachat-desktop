@@ -136,8 +136,8 @@ export function useContactSearch (updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
-export function useGroupImage (props) {
-  const [groupImage, setGroupImage] = useState('')
+export function useGroupImage (image) {
+  const [groupImage, setGroupImage] = useState(image)
   const tx = window.translate
 
   const onSetGroupImage = () => {
