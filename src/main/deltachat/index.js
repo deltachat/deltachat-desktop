@@ -6,34 +6,35 @@ const windows = require('../windows')
 const { app } = require('electron')
 
 const publicAccessibleMethods = [
+  'addContactToChat',
   'archiveChat',
   'blockContact',
   'chatWithContact',
   'createGroupChat',
   'contactRequests',
+  'createChatByContactId',
+  'createContact',
   'deleteChat',
   'deleteMessage',
   'fetchMessages',
   'forwardMessage',
+  'getConfigFor',
   'getContacts',
   'getContacts2',
   'getEncryptionInfo',
   'getLocations',
   'getQrCode',
+  'leaveGroup',
+  'modifyGroup',
   'setChatName',
   'setChatProfileImage',
-  'addContactToChat',
-  'leaveGroup',
   'selectChat',
   'sendMessage',
   'setDraft',
   'showArchivedChats',
   'unblockContact',
   'updateBlockedContacts',
-  'updateChatList',
-  'getConfigFor',
-  'createChatByContactId',
-  'createContact'
+  'updateChatList'
 ]
 
 /**

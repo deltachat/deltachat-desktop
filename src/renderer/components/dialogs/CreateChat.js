@@ -10,18 +10,21 @@ import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/Con
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import { DeltaDialogBase, DeltaDialogCloseButton, GoBackDialogHeader } from '../helpers/DeltaDialog'
 import {
-  CreateGroupSettingsContainer,
-  CreateGroupSeperator,
-  CreateGroupMemberContactListWrapper,
   CreateChatSearchInput,
   CreateChatContactListWrapper,
-  GroupImage,
-  GroupNameInput,
-  CreateGroupMemberSearchInput,
   PseudoContactListItemNoSearchResults,
   PseudoContactListItemShowQrCode,
   PseudoContactListItemAddMember
 } from './CreateChat-Styles'
+
+import {
+  GroupSettingsContainer,
+  GroupSeperator,
+  GroupMemberContactListWrapper,
+  GroupImage,
+  GroupNameInput,
+  GroupMemberSearchInput
+} from './Group-Styles'
 
 export default function CreateChat (props) {
   const { isOpen, onClose } = props
@@ -135,8 +138,8 @@ export function useContactSearch (updateContacts) {
   return [searchString, onSearchChange, updateSearch]
 }
 
-export function useGroupImage (props) {
-  const [groupImage, setGroupImage] = useState('')
+export function useGroupImage (image) {
+  const [groupImage, setGroupImage] = useState(image)
   const tx = window.translate
 
   const onSetGroupImage = () => {
@@ -169,7 +172,7 @@ export function useGroupMembers () {
 export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName }) => {
   const tx = window.translate
   return (
-    <CreateGroupSettingsContainer>
+    <GroupSettingsContainer>
       <GroupImage
         style={{ float: 'left' }}
         groupImage={groupImage}
@@ -182,7 +185,7 @@ export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImag
         onChange={({ target }) => setGroupName(target.value)}
         autoFocus
       />
-    </CreateGroupSettingsContainer>
+    </GroupSettingsContainer>
   )
 }
 
@@ -198,8 +201,8 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
       />
       <div className={Classes.DIALOG_BODY}>
         <Card style={{ paddingTop: '0px' }}>
-          <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
-          <CreateGroupMemberContactListWrapper>
+          <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
+          <GroupMemberContactListWrapper>
             <ContactList2
               contacts={searchContacts}
               onClick={() => {}}
@@ -208,7 +211,7 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
               onCheckboxClick={addRemoveGroupMember}
             />
             { queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
-          </CreateGroupMemberContactListWrapper>
+          </GroupMemberContactListWrapper>
         </Card>
       </div>
       <div className={Classes.DIALOG_FOOTER} />
@@ -335,9 +338,9 @@ export function CreateGroupInner (props) {
           <div className={Classes.DIALOG_BODY}>
             <Card>
               {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
-              <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</CreateGroupSeperator>
-              <CreateGroupMemberContactListWrapper>
-                <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
+              <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
+              <GroupMemberContactListWrapper>
+                <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
                 {renderAddMemberIfNeeded()}
                 <ContactList2
                   contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
@@ -348,7 +351,7 @@ export function CreateGroupInner (props) {
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                 <>
-                  <CreateGroupSeperator noMargin>{tx('group_add_members')}</CreateGroupSeperator>
+                  <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
                   <ContactList2
                     contacts={searchContactsToAdd}
                     onClick={() => {}}
@@ -359,7 +362,7 @@ export function CreateGroupInner (props) {
                 </>
                 )}
                 {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
-              </CreateGroupMemberContactListWrapper>
+              </GroupMemberContactListWrapper>
             </Card>
           </div>
           <div className={Classes.DIALOG_FOOTER}>
@@ -437,9 +440,9 @@ export function CreateVerifiedGroupInner (props) {
           <div className={Classes.DIALOG_BODY}>
             <Card>
               {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
-              <CreateGroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</CreateGroupSeperator>
-              <CreateGroupMemberContactListWrapper>
-                <CreateGroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
+              <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
+              <GroupMemberContactListWrapper>
+                <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
                 {renderAddMemberIfNeeded()}
                 <ContactList2
                   contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
@@ -450,7 +453,7 @@ export function CreateVerifiedGroupInner (props) {
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                 <>
-                  <CreateGroupSeperator noMargin>{tx('group_add_members')}</CreateGroupSeperator>
+                  <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
                   <ContactList2
                     contacts={searchContactsToAdd}
                     onClick={() => {}}
@@ -461,7 +464,7 @@ export function CreateVerifiedGroupInner (props) {
                 </>
                 )}
                 {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
-              </CreateGroupMemberContactListWrapper>
+              </GroupMemberContactListWrapper>
             </Card>
           </div>
           <div className={Classes.DIALOG_FOOTER}>
