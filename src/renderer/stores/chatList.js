@@ -21,10 +21,10 @@ function sortChatList (first, second) {
   if (first.isArchiveLink || second.isArchiveLink) {
     return first.isArchiveLink ? 1 : -1
   }
-  if (first.freshMessageCounter !== second.freshMessageCounter) {
-    return first.freshMessageCounter > second.freshMessageCounter ? -1 : 1
+  if (first.unreadCount !== second.unreadCount) {
+    return first.unreadCount > second.unreadCount ? -1 : 1
   }
-  return first.summary.timestamp > second.summary.timestamp ? -1 : 1
+  return first.lastUpdated > second.lastUpdated ? -1 : 1
 }
 
 // complete update of chat list
