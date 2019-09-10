@@ -115,13 +115,11 @@ export function EditGroupInner (props) {
           title={tx('menu_edit_group')}
           onClose={onClose}
         />
-        <Card>
-          {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
-          <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-          <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
-        </Card>
         <div className={Classes.DIALOG_BODY}>
           <Card>
+            {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+            <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
+            <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
             <GroupMemberContactListWrapper>
               {renderAddMemberIfNeeded()}
               <ContactList2
