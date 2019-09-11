@@ -100,7 +100,7 @@ function getChatById (chatId, list, i) {
     },
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,
-    unreadCount: chat.freshMessageCounter,
+    freshMessageCounter: chat.freshMessageCounter,
     isArchiveLink: chat.isArchiveLink
   }
 }

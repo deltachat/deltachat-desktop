@@ -21,9 +21,6 @@ function sortChatList (first, second) {
   if (first.isArchiveLink || second.isArchiveLink) {
     return first.isArchiveLink ? 1 : -1
   }
-  if (first.unreadCount !== second.unreadCount) {
-    return first.unreadCount > second.unreadCount ? -1 : 1
-  }
   return first.lastUpdated > second.lastUpdated ? -1 : 1
 }
 
