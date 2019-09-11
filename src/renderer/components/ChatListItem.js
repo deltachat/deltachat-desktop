@@ -32,10 +32,10 @@ const UnreadCounterDiv = styled.div`
   font-weight: bold;
 `
 const UnreadCounter = React.memo(props => {
-  const { unreadCount } = props
-  if (unreadCount === 0) return null
+  const { freshMessageCounter } = props
+  if (freshMessageCounter === 0) return null
   return (
-    <UnreadCounterDiv>{unreadCount}</UnreadCounterDiv>
+    <UnreadCounterDiv>{freshMessageCounter}</UnreadCounterDiv>
   )
 })
 
@@ -58,7 +58,7 @@ const ContactNameSpan = styled.span`
 
 const Header = React.memo(props => {
   const {
-    unreadCount,
+    freshMessageCounter,
     lastUpdated
   } = props.chatListItem
   const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
@@ -67,7 +67,7 @@ const Header = React.memo(props => {
     <div className='module-conversation-list-item__header'>
       <div className={classNames(
         'module-conversation-list-item__header__name',
-        unreadCount > 0 ? 'module-conversation-list-item__header__name--with-unread' : null
+        freshMessageCounter > 0 ? 'module-conversation-list-item__header__name--with-unread' : null
       )}>
         {isGroup && <GroupIcon />}
         {isVerified && <VerifiedIcon />}
@@ -78,7 +78,7 @@ const Header = React.memo(props => {
       </div>
       <div className={classNames(
         'module-conversation-list-item__header__date',
-        unreadCount > 0 ? 'module-conversation-list-item__header__date--has-unread' : null
+        freshMessageCounter > 0 ? 'module-conversation-list-item__header__date--has-unread' : null
       )}>
         <Timestamp
           timestamp={lastUpdated}
@@ -91,7 +91,7 @@ const Header = React.memo(props => {
 })
 
 export const Message = React.memo(props => {
-  const { summary, unreadCount } = props.chatListItem
+  const { summary, freshMessageCounter } = props.chatListItem
 
   if (!summary) return null
 
@@ -101,7 +101,7 @@ export const Message = React.memo(props => {
     <div className='module-conversation-list-item__message'>
       <div className={classNames(
         'module-conversation-list-item__message__text',
-        unreadCount > 0 ? 'module-conversation-list-item__message__text--has-unread' : null
+        freshMessageCounter > 0 ? 'module-conversation-list-item__message__text--has-unread' : null
       )}>
         { summary.text1 !== null ? (<Text1>{summary.text1 + ': ' }</Text1>) : null }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
@@ -110,7 +110,7 @@ export const Message = React.memo(props => {
         ? (<div className={classNames('status-icon', `status-icon--${summary.status}`)} />)
         : null
       }
-      <UnreadCounter unreadCount={unreadCount} />
+      <UnreadCounter freshMessageCounter={freshMessageCounter} />
     </div>
   )
 })
@@ -125,7 +125,7 @@ const ChatListItem = React.memo(props => {
       onContextMenu={onContextMenu}
       className={classNames(
         'module-conversation-list-item',
-        chatListItem.unreadCount > 0 ? 'module-conversation-list-item--has-unread' : null,
+        chatListItem.freshMessageCounter > 0 ? 'module-conversation-list-item--has-unread' : null,
         isSelected ? 'module-conversation-list-item--is-selected' : null
       )}
     >
