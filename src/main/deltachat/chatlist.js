@@ -46,7 +46,7 @@ function chatModified (chatId) {
     chatList.push(id)
     if (id === chatId) i = counter
   }
-  if (i == -1) return this.updateChatList()
+  if (i === -1) return
   const chat = this.getChatById(chatId, list, i)
   this.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
 }
