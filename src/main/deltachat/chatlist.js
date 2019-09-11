@@ -40,12 +40,13 @@ function chatModified (chatId) {
   const listFlags = 0
   const list = this._dc.getChatList(listFlags, '')
   const chatList = []
-  let i
+  let i = -1
   for (let counter = 0; counter < list.getCount(); counter++) {
     const id = list.getChatId(counter)
     chatList.push(id)
     if (id === chatId) i = counter
   }
+  if (i == -1) return this.updateChatList()
   const chat = this.getChatById(chatId, list, i)
   this.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
 }
