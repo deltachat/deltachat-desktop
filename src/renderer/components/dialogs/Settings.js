@@ -309,6 +309,10 @@ export default class Settings extends React.Component {
             <H5>{this.translate('pref_experimental_features')}</H5>
             { this.renderDTSettingSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
           </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_background')}</H5>
+            
+          </Card>
         </div>
       )
     } else if (this.state.show === 'login') {

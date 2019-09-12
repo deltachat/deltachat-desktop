@@ -38,7 +38,8 @@ function getDefaultState () {
       showNotificationContent: true,
       locale: 'en',
       credentials: null,
-      enableOnDemandLocationStreaming: false
+      enableOnDemandLocationStreaming: false,
+      chatViewBgImgPath: undefined
     }
   }
 }

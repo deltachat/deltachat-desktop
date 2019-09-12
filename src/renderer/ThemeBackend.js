@@ -1,6 +1,9 @@
 const Color = require('color')
 const log = require('../logger').getLogger('render/theme-backend')
 
+const { remote } = require('electron')
+const state = remote.app.state
+
 function changeContrast (colorString, factor) {
   // TODO make the black check code work
   const color = Color(colorString).hex() === '#000000' ? Color('#010101') : Color(colorString)
@@ -209,6 +212,12 @@ export function ThemeDataBuilder (theme) {
     themeData = Object.assign(themeData, theme.raw)
     log.debug('theme.raw', theme.raw, themeData)
   }
+
+  if (remote.app.state.saved['chatViewBgImgPath']) {
+    themeData.chatViewBgImgPath = `url("${remote.app.state.saved['chatViewBgImgPath']}")`
+    log.debug('theme background overwritten by user settings', remote.app.state.saved['chatViewBgImgPath'])
+  }
+
   return themeData
 }
 
