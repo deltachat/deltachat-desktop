@@ -79,4 +79,14 @@ ipcRenderer.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
   }
 })
 
+ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
+  const { chatId, chat } = payload
+  const state = chatStore.getState()
+  if (state.id !== chatId) {
+    return
+  }
+  // update info for selected chat
+  chatStore.setState({ ...state, profileImage: chat.profileImage, name: chat.name, subtitle: chat.subtitle })
+})
+
 module.exports = chatStore
