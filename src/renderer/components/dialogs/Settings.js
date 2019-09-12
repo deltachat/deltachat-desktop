@@ -179,14 +179,14 @@ export default class Settings extends React.Component {
    */
   handleDesktopSettingsChange (key, value) {
     ipcRenderer.send('updateDesktopSetting', key, value)
+    this.setState({ ...settings, [key]: value})
   }
 
   /** Saves settings to deltachat core */
   handleDeltaSettingsChange (key, value) {
+    const { settings } = this.state
     ipcRenderer.sendSync('setConfig', key, value)
-    const settings = this.state.settings
-    settings[key] = String(value)
-    this.setState({ settings })
+    this.setState({ ...settings, [key]: String(value)})
   }
 
   onLoginSubmit (config) {
@@ -258,7 +258,13 @@ export default class Settings extends React.Component {
             <H5>{this.translate('pref_chats_and_media')}</H5>
             <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
             <br />
-            { this.renderDTSettingSwitch('enterKeySends', this.translate('pref_enter_sends')) }
+            <RadioGroup
+              onChange={(ev) => {console.log('onChange'); this.handleDesktopSettingsChange('enterKeySends', ev.target.value)}}
+              selectedValue={Boolean(settings['enterKeySends'])}
+            >
+              <Radio label={this.translate('pref_enter_sends')} value={true} />
+              <Radio label={this.translate('pref_ctrl_enter_sends')} value={false} />
+            </RadioGroup>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('autocrypt')}</H5>

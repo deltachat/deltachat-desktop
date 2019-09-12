@@ -82,5 +82,8 @@
   },
   "a11y_message_context_menu_btn_label": {
     "message": "message actions"
+  },
+  "pref_ctrl_enter_sends": {
+    "message": "Ctrl+enter sends"
   }
 }
