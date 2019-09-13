@@ -1,13 +1,13 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
-const {
+import React from 'react'
+import { ipcRenderer } from 'electron'
+import {
   Intent,
   ProgressBar,
-  Classes,
-  Dialog
-} = require('@blueprintjs/core')
+  Classes
+} from '@blueprintjs/core'
+import DeltaDialog from '../helpers/DeltaDialog'
 
-class ImexProgress extends React.Component {
+export default class ImexProgress extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -35,18 +35,16 @@ class ImexProgress extends React.Component {
     var isOpen = progress > 0 && progress < 1000
 
     return (
-      <Dialog
+      <DeltaDialog
         isOpen={isOpen}
         title={tx('imex_progress_title_desktop')}
-        icon='exchange'
         canEscapeKeyClose={false}
         isCloseButtonShown={false}
         canOutsideClickClose={false}>
         <div className={Classes.DIALOG_BODY}>
           <ProgressBar intent={Intent.PRIMARY} value={isOpen ? (progress / 1000) : null} />
         </div>
-      </Dialog>
+      </DeltaDialog>
     )
   }
 }
-module.exports = ImexProgress

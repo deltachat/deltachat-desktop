@@ -13,12 +13,13 @@ import {
   Alignment,
   Navbar,
   NavbarGroup,
-  NavbarHeading,
-  Dialog
+  NavbarHeading
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
 import logger from '../../logger'
 import ScreenContext from '../contexts/ScreenContext'
+import DeltaDialog from './helpers/DeltaDialog'
+
 const log = logger.getLogger('renderer/components/LoginScreen')
 
 const LoginWrapper = styled.div`
@@ -114,29 +115,22 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
 
   return (
     <div className={Classes.DIALOG_BODY}>
-      { error && <p>Error: {error}</p>}
-      { importState[0] === 'INIT' && <p /> }
-      { importState[0] === 'IMPORT_EXISTS' &&
-        <Card elevation={Elevation.ONE}>
-          <Fragment>
+      <Card elevation={Elevation.ONE}>
+        { error && <p>Error: {error}</p> }
+        { importState[0] === 'INIT' && <p /> }
+        { importState[0] === 'IMPORT_EXISTS' &&
+          <>
             {`Seems like there's already an existing Account with the ${addr} address.
-          To import this backup you need to overwrite the existing account. Do you want to?`}
-          </Fragment>
-          <br />
-          <Button onClick={overwriteBackup} type='submit' text='Yes!' className='override-backup' />
-          <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
-        </Card>
-      }
-      { importState[0] === 'IMPORT_COMPLETE' &&
-        <Card elevation={Elevation.ONE}>
-          Successfully imported backup
-        </Card>
-      }
-      { importState[0] !== 'IMPORT_COMPLETE' &&
-      <DeltaProgressBar
-        progress={importProgress}
-        intent={error === false ? Intent.SUCCESS : Intent.ERROR}
-      /> }
+            To import this backup you need to overwrite the existing account. Do you want to?`}
+            <br />
+            <Button onClick={overwriteBackup} type='submit' text='Yes!' className='override-backup' />
+            <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
+          </>
+        }
+        { importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup' }
+        { importState[0] !== 'IMPORT_COMPLETE' &&
+          <DeltaProgressBar progress={importProgress} intent={error === false ? Intent.SUCCESS : Intent.ERROR} /> }
+      </Card>
     </div>
   )
 })
@@ -169,15 +163,16 @@ const ImportButton = React.memo(function ImportButton (props) {
         <p>{tx('import_backup_title') }</p>
       </DeltaBlueButton>
       {showDialog &&
-        <Dialog
-          icon='info-sign'
+        <DeltaDialog
           onClose={onHandleClose}
           title={tx('import_backup_title')}
           canOutsideClickClose
           isOpen={showDialog}
+          fixed
+          style={{ top: '40%' }}
         >
           <ImportDialogContent onClose={onHandleClose} />
-        </Dialog> }
+        </DeltaDialog> }
     </Fragment>
   )
 })
