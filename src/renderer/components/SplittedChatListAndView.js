@@ -7,7 +7,7 @@ const Media = require('./Media')
 const Menu = require('./Menu').default
 const ChatList = require('./ChatList')
 const ChatView = require('./ChatView')
-const SearchInput = require('./SearchInput.js')
+const SearchInput = require('./SearchInput.js').default
 const SettingsContext = require('../contexts/SettingsContext')
 
 const NavbarWrapper = require('./NavbarWrapper')

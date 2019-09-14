@@ -1,5 +1,5 @@
 const React = require('react')
-const SearchableList = require('./SearchableList')
+const SearchableList = require('./SearchableList').default
 
 const ChatListItem = require('./ChatListItem').default
 
@@ -25,25 +25,11 @@ class ForwardToList extends SearchableList {
   }
 
   renderItem (chatListItem) {
-    const { onChatClick, i18n } = this.props
-    const lastUpdated = chatListItem.summary.timestamp ? chatListItem.summary.timestamp * 1000 : null
+    const { onChatClick } = this.props
     return <ChatListItem
       key={chatListItem.id}
       onClick={onChatClick.bind(null, chatListItem.id)}
-      name={chatListItem.name}
-      avatarPath={chatListItem.profileImage}
-      color={chatListItem.color}
-      lastUpdated={lastUpdated}
-      lastMessage={{
-        text1: chatListItem.summary.text1,
-        text2: chatListItem.summary.text2,
-        status: 'sent' // TODO: interpret data from summary to get correct state
-      }}
-      i18n={i18n}
-      isSelected={false}
-      isVerified={chatListItem.isVerified}
-      isGroup={chatListItem.isGroup}
-      unreadCount={null}
+      chatListItem={chatListItem}
     />
   }
 }
