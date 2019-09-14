@@ -142,7 +142,7 @@ The logs can be found in:
 
 ```
 Linux: ~/.config/DeltaChat/logs/
-Mac: ~/Library/Application Support/DeltaChat/logs
+Mac: ~/Library/Application\ Support/DeltaChat/logs
 ```
 
 You can also access the log folder and the current log file under the `View->Developer` menu:
