@@ -1,29 +1,24 @@
-const React = require('react')
-const { InputGroup } = require('@blueprintjs/core')
-const styled = require('styled-components').default
+import React from 'react'
+import styled from 'styled-components'
+import {
+  CreateChatSearchInput
+} from './dialogs/CreateChat-Styles'
 
-const SearchInputWrapper = styled.div`
-  width: 100%
-  .bp3-input-group {
-    width: 100%
-  }
+const SearchInputWrap = styled(CreateChatSearchInput)`
+margin-left: 40px;
+padding: 10px 0px;
+width: calc(100% - 80px);
 `
 
-class SearchInput extends React.Component {
+export default class SearchInput extends React.Component {
   render () {
     const tx = window.translate
     return (
-      <SearchInputWrapper>
-        <InputGroup
-          type='search'
-          large
-          placeholder={tx('search')}
-          leftIcon='search'
-          {...this.props}
-        />
-      </SearchInputWrapper>
+      <SearchInputWrap
+        placeholder={tx('search')}
+        autoFocus
+        {...this.props}
+      />
     )
   }
 }
-
-module.exports = SearchInput

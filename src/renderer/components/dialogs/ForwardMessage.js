@@ -1,6 +1,7 @@
 const React = require('react')
 const { callDcMethod } = require('../../ipc')
 const {
+  Card,
   Classes,
   Dialog
 } = require('@blueprintjs/core')
@@ -12,9 +13,7 @@ class ForwardMessage extends React.Component {
   constructor (props) {
     super(props)
     this.assignChatList = this.assignChatList.bind(this)
-    this.state = {
-      chatList: []
-    }
+    this.state = chatListStore.getState()
   }
 
   onChatClick (chatid) {
@@ -51,10 +50,12 @@ class ForwardMessage extends React.Component {
         icon='info-sign'
         onClose={onClose}>
         <div className={Classes.DIALOG_BODY}>
-          <ForwardToList
-            chatList={chatList}
-            onChatClick={this.onChatClick.bind(this)}
-          />
+          <Card>
+            <ForwardToList
+              chatList={chatList}
+              onChatClick={this.onChatClick.bind(this)}
+            />
+          </Card>
         </div>
       </Dialog>
     )

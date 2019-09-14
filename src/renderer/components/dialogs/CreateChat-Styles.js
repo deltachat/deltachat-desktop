@@ -20,6 +20,7 @@ export const CreateChatSearchInput = styled.input`
   line-height: inherit;
   border: 0px;
   font-size: 18px;
+  background-color: transparent;
 `
 
 export const NoSearchResultsAvatarBubble = styled(AvatarBubble)`

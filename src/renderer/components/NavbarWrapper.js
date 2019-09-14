@@ -43,7 +43,7 @@ module.exports = styled.div`
     margin-left: 0px !important;
   }
 
-  .bp3-input[type="search"] {
+  input {
     background-color: ${props => props.theme.navBarBackground};
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -54,7 +54,7 @@ module.exports = styled.div`
     width: calc(100% - 40px);
   }
 
-  .bp3-input[type="search"]::placeholder {
+  input::placeholder {
     color: ${props => props.theme.navBarSearchPlaceholder}
   }
 

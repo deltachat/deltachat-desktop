@@ -1,16 +1,15 @@
-const React = require('react')
-const styled = require('styled-components').default
-const SearchInput = require('./SearchInput')
+import React from 'react'
+import styled from 'styled-components'
+import SearchInput from './SearchInput'
 const debounce = require('debounce')
 
 const ListDiv = styled.div`
   max-height: 400px;
   overflow: scroll;
   margin-top: 10px;
-  border: 1px solid darkgrey;
 `
 
-class SearchableList extends React.Component {
+export default class SearchableList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -62,4 +61,3 @@ class SearchableList extends React.Component {
     </div>
   }
 }
-module.exports = SearchableList
