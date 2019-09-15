@@ -221,9 +221,9 @@ $color-message-icon-error: var(--errorColor);
   min-height: 150px;
   max-height: 300px;
 
-  // The padding on the bottom of the bubble produces three extra pixels of space at the
+  // The padding on the bottom of the bubble produces 4 extra pixels of space at the
   //   bottom, so this doesn't match up with the padding numbers above.
-  margin-bottom: -3px;
+  margin-bottom: -4px;
 
   // redundant with attachment-container, but we get cursor flashing on move otherwise
   cursor: pointer;
