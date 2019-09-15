@@ -8,7 +8,7 @@
     "ovalButtonText": "#fff",
     "bgImagePath": "../images/background_dark.svg",
     "bgChatView": "#19232B",
-    "bgNavBar": "#4e1479",
+    "bgNavBar": "#272727",
     "textNavBar": "#ddddf0",
     "scrollbarTransparency": 0.34,
     "bgMessageBubbleIncoming": "#303030",
