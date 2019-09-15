@@ -136,7 +136,7 @@ export function ThemeDataBuilder (theme) {
     contextMenuSelectedBg: '#a4a6a9',
     // Bp3 overwrites
     bp3DialogHeaderBg: theme.bgPrimary,
-    bp3DialogHeaderIcon: '#5c7080',
+    bp3DialogHeaderIcon: '#666666',
     bp3DialogBgSecondary: theme.bgSecondary,
     bp3DialogBgPrimary: theme.bgPrimary,
     bp3Heading: theme.textPrimary,
