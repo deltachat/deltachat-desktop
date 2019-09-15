@@ -94,6 +94,7 @@ function getChatById (chatId, list, i) {
     avatarPath: chat.profileImage,
     color: chat.color,
     lastUpdated: lastUpdated,
+    subtitle: chat.subtitle,
     summary: {
       text1: summary.text1,
       text2: summary.text2,
