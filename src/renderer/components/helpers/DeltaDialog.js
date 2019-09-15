@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Dialog } from '@blueprintjs/core'
 import classNames from 'classnames'
+import { Classes } from '@blueprintjs/core'
 
 export const CreateDeltaDialogGlobal = createGlobalStyle`
   .FixedDeltaDialog {
@@ -61,6 +62,7 @@ const DeltaDialog = React.memo((props) => {
     </DeltaDialogBase>
   )
 })
+
 export default DeltaDialog
 
 export const useDialog = (DialogComponent) => {
@@ -82,12 +84,36 @@ export const useDialog = (DialogComponent) => {
   return [renderDialog, showDialog]
 }
 
-export function GoBackDialogHeader ({ onClickBack, title, onClose }) {
+export function DeltaDialogHeader (props) {
+  let { onClickBack, title, onClose, borderBottom, children, showBackButton } = props
+  if ( typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
   return (
-    <div className='bp3-dialog-header'>
-      <button onClick={onClickBack} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
-      <h4 className='bp3-heading'>{title}</h4>
+    <div className={classNames(Classes.DIALOG_HEADER, {'bp3-dialog-header-border-bottom': borderBottom})}>
+      { showBackButton && <button onClick={onClickBack} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
+      { title && <h4 className='bp3-heading'>{title}</h4> }
+      { children }
       <DeltaDialogCloseButton onClick={onClose} />
     </div>
   )
 }
+
+export function DeltaDialogFooter(props) {
+  let { hide, children } = props
+  if (typeof hide === 'undefined') hide = typeof children === 'undefined'
+  return (
+    <div style={{display: hide ? 'none' : 'unset'}} className={Classes.DIALOG_FOOTER}>
+      {children}
+    </div>
+  )
+}
+
+export function DeltaDialogBody(props) {
+  let { noFooter, children } = props
+  noFooter = noFooter !== false
+  return (
+    <div className={classNames(Classes.DIALOG_BODY, {'.bp3-dialog-body-no-footer' : noFooter})} >
+      {children}
+    </div>
+  )
+}
+

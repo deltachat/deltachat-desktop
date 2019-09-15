@@ -8,7 +8,7 @@ import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
 import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import { DeltaDialogBase, DeltaDialogCloseButton, GoBackDialogHeader } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogCloseButton, DeltaDialogHeader, DeltaDialogBody } from '../helpers/DeltaDialog'
 import {
   CreateChatSearchInput,
   CreateChatContactListWrapper,
@@ -103,11 +103,10 @@ export default function CreateChat (props) {
     >
       { viewMode.startsWith('main') &&
           (<>
-            <div className='bp3-dialog-header'>
+            <DeltaDialogHeader onClose={onClose} borderBottom>
               <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
-              <DeltaDialogCloseButton onClick={onClose} />
-            </div>
-            <div className={Classes.DIALOG_BODY}>
+            </DeltaDialogHeader>
+            <DeltaDialogBody noFooter>
               <Card>
                 <CreateChatContactListWrapper>
                   { renderAddGroupIfNeeded()}
@@ -115,8 +114,7 @@ export default function CreateChat (props) {
                   {renderAddContactIfNeeded()}
                 </CreateChatContactListWrapper>
               </Card>
-            </div>
-            <div className={Classes.DIALOG_FOOTER} />
+            </DeltaDialogBody>
           </>)
       }
       { viewMode.startsWith('createGroup') && <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />}
@@ -194,10 +192,11 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
 
   return (
     <>
-      <GoBackDialogHeader
+      <DeltaDialogHeader
         title={tx('group_add_members')}
         onClickBack={onClickBack}
         onClose={onClose}
+        borderBottom
       />
       <div className={Classes.DIALOG_BODY}>
         <Card style={{ paddingTop: '0px' }}>
@@ -224,7 +223,7 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
 
   return (
     <>
-      <GoBackDialogHeader
+      <DeltaDialogHeader
         title={tx('qrshow_title')}
         onClickBack={onClickBack}
         onClose={onClose}
@@ -330,7 +329,7 @@ export function CreateGroupInner (props) {
       })}
       { viewMode.startsWith('createGroup-main') &&
         <>
-          <GoBackDialogHeader
+          <DeltaDialogHeader
             title={tx('menu_new_group')}
             onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}
@@ -432,7 +431,7 @@ export function CreateVerifiedGroupInner (props) {
       })}
       { viewMode.startsWith('createVerifiedGroup-main') &&
         <>
-          <GoBackDialogHeader
+          <DeltaDialogHeader
             title={tx('menu_new_verified_group')}
             onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}

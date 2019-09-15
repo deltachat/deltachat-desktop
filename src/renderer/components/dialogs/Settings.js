@@ -18,7 +18,7 @@ import {
   Callout
 } from '@blueprintjs/core'
 
-import { DeltaDialogBase, DeltaDialogCloseButton } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogCloseButton, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
 const SettingsContext = require('../../contexts/SettingsContext')
@@ -353,15 +353,16 @@ export default class Settings extends React.Component {
         className='SettingsDialog'
         fixed
       >
-        <div className='bp3-dialog-header'>
-          { this.state.show !== 'main' && <button onClick={() => this.setState({ show: 'main' })} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
-          <h4 className='bp3-heading'>{title}</h4>
-          <DeltaDialogCloseButton onClick={onClose} />
-        </div>
-        <div className={Classes.DIALOG_BODY}>
+        <DeltaDialogHeader
+          showBackButton={this.state.show !== 'main'}
+          onClickBack={() => this.setState({ show: 'main' })}
+          title={title}
+          onClose={onClose}
+          borderBottom={this.state.show === 'main'}
+        />
+        <DeltaDialogBody noFooter>
           { this.renderDialogContent() }
-        </div>
-        <div className={Classes.DIALOG_FOOTER} />
+        </DeltaDialogBody>
       </DeltaDialogBase>
     )
   }
