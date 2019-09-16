@@ -23,5 +23,10 @@ if [ -z "$TRAVIS_OS_NAME" ]; then
 fi
 
 export PKG_CONFIG_PATH=/usr/local/opt/openssl/lib/pkgconfig
+
+node --version
+npm --version
+cargo --version
+
 npm install;
 npm run build;
