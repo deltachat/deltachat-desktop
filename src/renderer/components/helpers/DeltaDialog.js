@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 import { Dialog } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { Classes } from '@blueprintjs/core'
@@ -30,11 +30,7 @@ export const DeltaDialogBase = React.memo((props) => {
   )
 })
 
-export const DeltaDialogCloseButtonWrapper = styled.div`
-  .bp3-icon-cross::before {
-    font-size: x-large !important;
-  }
-
+export const DeltaDialogButtonMixin = css`
   .bp3-icon-large {
     margin-right: 0px;
   }
@@ -43,11 +39,29 @@ export const DeltaDialogCloseButtonWrapper = styled.div`
   }
 `
 
+export const DeltaDialogCloseButtonWrapper = styled.div`
+  ${DeltaDialogButtonMixin}
+  .bp3-icon-cross::before {
+    font-size: x-large !important;
+  }
+`
+
 export function DeltaDialogCloseButton (props) {
   return (
     <DeltaDialogCloseButtonWrapper>
       <button {...props} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
     </DeltaDialogCloseButtonWrapper>
+  )
+}
+export const DeltaDialogBackButtonWrapper = styled.div`
+  ${DeltaDialogButtonMixin}
+`
+
+export function DeltaDialogBackButton (props) {
+  return (
+    <DeltaDialogBackButtonWrapper>
+      <button {...props} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
+    </DeltaDialogBackButtonWrapper>
   )
 }
 
@@ -89,7 +103,7 @@ export function DeltaDialogHeader (props) {
   if ( typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
   return (
     <div className={classNames(Classes.DIALOG_HEADER, {'bp3-dialog-header-border-bottom': borderBottom})}>
-      { showBackButton && <button onClick={onClickBack} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' /> }
+      { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
       { title && <h4 className='bp3-heading'>{title}</h4> }
       { children }
       <DeltaDialogCloseButton onClick={onClose} />
