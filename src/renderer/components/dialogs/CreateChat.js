@@ -198,9 +198,9 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
         onClose={onClose}
         borderBottom
       />
-      <div className={Classes.DIALOG_BODY}>
-        <Card style={{ paddingTop: '0px' }}>
-          <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
+      <DeltaDialogBody noFooter>
+        <Card style={{ padding: '0px 20px' }}>
+          <GroupMemberSearchInput style={{ marginLeft: '20px' }} onChange={onSearchChange} value={queryStr} placeholder={tx('search')} autoFocus />
           <GroupMemberContactListWrapper>
             <ContactList2
               contacts={searchContacts}
@@ -212,8 +212,7 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
             { queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
           </GroupMemberContactListWrapper>
         </Card>
-      </div>
-      <div className={Classes.DIALOG_FOOTER} />
+      </DeltaDialogBody>
     </>
   )
 }
@@ -415,34 +414,34 @@ export function CreateVerifiedGroupInner (props) {
 
   return (
     <>
-      { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose: closeAndDelete,
-        onSearchChange,
-        queryStr,
-        searchContacts,
-        groupMembers,
-        addRemoveGroupMember
-      })}
-      { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose: closeAndDelete,
-        qrCode: qrCode
-      })}
-      { viewMode.startsWith('createVerifiedGroup-main') &&
-        <>
-          <DeltaDialogHeader
-            title={tx('menu_new_verified_group')}
-            onClickBack={() => setViewMode('main')}
-            onClose={closeAndDelete}
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
-              <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-              <GroupMemberContactListWrapper>
-                <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
-                {renderAddMemberIfNeeded()}
+          { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
+            onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
+            onClose: closeAndDelete,
+            onSearchChange,
+            queryStr,
+            searchContacts,
+            groupMembers,
+            addRemoveGroupMember
+          })}
+          { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
+            onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
+            onClose: closeAndDelete,
+            qrCode: qrCode
+          })}
+          { viewMode.startsWith('createVerifiedGroup-main') &&
+            <>
+              <DeltaDialogHeader
+                title={tx('menu_new_verified_group')}
+                onClickBack={() => setViewMode('main')}
+                onClose={closeAndDelete}
+              />
+              <div className={Classes.DIALOG_BODY}>
+                <Card>
+                  {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+                  <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
+                  <GroupMemberContactListWrapper>
+                    <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
+                    {renderAddMemberIfNeeded()}
                 <ContactList2
                   contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
                   onClick={() => {}}
