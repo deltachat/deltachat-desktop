@@ -12,7 +12,7 @@ function searchChats (query) {
 
 function selectChat (chatId) {
   this._selectedChatId = chatId
-  const chat = this._getChatById(chatId, true)
+  const chat = this.getFullChatById(chatId, true)
   if (!chat) {
     log.debug(`Error: selected chat not found: ${chatId}`)
     return null
@@ -47,7 +47,7 @@ function chatModified (chatId) {
     if (id === chatId) i = counter
   }
   if (i === -1) return
-  const chat = this.getChatById(chatId, list, i)
+  const chat = this.getSmallChatById(chatId, list, i)
   this.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
 }
 
@@ -61,7 +61,7 @@ function _chatList (showArchivedChats) {
 
   for (let i = 0; i < list.getCount(); i++) {
     const chatId = list.getChatId(i)
-    const chat = this.getChatById(chatId, list, i)
+    const chat = this.getSmallChatById(chatId, list, i)
 
     if (!chat) continue
     chatList.push(chat)
@@ -69,8 +69,8 @@ function _chatList (showArchivedChats) {
   return chatList
 }
 
-function getChatById (chatId, list, i) {
-  const chat = this._getChatById(chatId)
+function getSmallChatById (chatId, list, i) {
+  const chat = this.getFullChatById(chatId)
 
   if (!chat) return null
 
@@ -100,6 +100,7 @@ function getChatById (chatId, list, i) {
       text2: summary.text2,
       status: mapCoreMsgStatus2String(summary.state)
     },
+    contacts: chat.contacts,
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,
     freshMessageCounter: chat.freshMessageCounter,
@@ -132,7 +133,7 @@ function mapCoreMsgStatus2String (state) {
   }
 }
 
-function _getChatById (chatId, loadMessages) {
+function getFullChatById (chatId, loadMessages) {
   if (!chatId) return null
   const rawChat = this._dc.getChat(chatId)
   if (!rawChat) return null
@@ -207,8 +208,8 @@ module.exports = function () {
   this.searchChats = searchChats.bind(this)
   this.selectChat = selectChat.bind(this)
   this._chatList = _chatList.bind(this)
-  this.getChatById = getChatById.bind(this)
-  this._getChatById = _getChatById.bind(this)
+  this.getSmallChatById = getSmallChatById.bind(this)
+  this.getFullChatById = getFullChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
   this.showArchivedChats = showArchivedChats.bind(this)
