@@ -185,7 +185,6 @@ const DeltaCheckbox = (props) => {
 export function ContactListItem (props) {
   const { contact, showInitial, onClick, showCheckbox, checked } = props
   const onCheckboxClick = e => {
-    console.log(showCheckbox)
     if (!showCheckbox) return
     e && e.stopPropagation()
     typeof props.onCheckboxClick === 'function' && props.onCheckboxClick(contact)
