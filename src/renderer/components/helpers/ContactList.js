@@ -183,11 +183,21 @@ const DeltaCheckbox = (props) => {
   )
 }
 export function ContactListItem (props) {
-  const { contact, showInitial, onClick, showCheckbox, checked, onCheckboxClick } = props
+  const { contact, showInitial, onClick, showCheckbox, checked } = props
+  const onCheckboxClick = e => {
+    console.log(showCheckbox)
+    if (!showCheckbox) return
+    e && e.stopPropagation()
+    typeof props.onCheckboxClick === 'function' && props.onCheckboxClick(contact)
+  }
   return (
     <ContactListItemWrapper
       key={contact.id}
-      onClick={() => onClick(contact)}
+      onClick={() => {
+        console.log('hallo')
+        onClick(contact)
+        onCheckboxClick()
+      }}
     >
       {showInitial && <ContactListItemInitial>{contact.displayName[0]}</ContactListItemInitial> }
       {!showInitial && <ContactListItemInitialSpacer /> }
@@ -195,10 +205,7 @@ export function ContactListItem (props) {
         <Contact contact={contact} />
       </ContactListItemContactWrapper>
       {showCheckbox &&
-        <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={e => {
-          e.stopPropagation()
-          typeof onCheckboxClick === 'function' && onCheckboxClick(contact)
-        }} />
+        <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={onCheckboxClick} />
       }
     </ContactListItemWrapper>
   )
