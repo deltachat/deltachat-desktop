@@ -19,7 +19,8 @@ export function confirmationDialogLegacy (message, opts, cb) {
 
 export default function ConfirmationDialog (props) {
   const { message, cb, onClose } = props
-
+  const yesIsDanger = props.yesIsDanger !== false
+        
   const isOpen = !!message
   const tx = window.translate
 
@@ -44,20 +45,19 @@ export default function ConfirmationDialog (props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaButtonPrimary
-              noPadding
-              onClick={() => onClick(true)}
-            >
-              {tx('yes').toUpperCase()}
-            </DeltaButtonPrimary>
             <DeltaButtonDanger
               noPadding
-              onClick={() => onClick(false)}
+              onClick={() => yesIsDanger ? onClick(true) : onClick(false)}
+            >
+              { yesIsDanger ? tx('yes') : tx('no') }
+            </DeltaButtonDanger>
+            <DeltaButtonPrimary
+              noPadding
+              onClick={() => yesIsDanger ? onClick(false) : onClick(true)}
               style={{ marginLeft: '90px' }}
             >
-
-              {tx('no').toUpperCase()}
-            </DeltaButtonDanger>
+              { yesIsDanger ? tx('no') : tx('yes') }
+            </DeltaButtonPrimary>
           </div>
         </div>
       </div>

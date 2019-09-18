@@ -51,7 +51,7 @@ export function ThemeDataBuilder (theme) {
   let themeData = {
     // Misc
     colorPrimary: '#53948c',
-    colorDanger: '#f44336',
+    colorDanger: '#f96856',
     colorNone: '#8ca5a1',
     ovalButtonBg: theme.ovalButtonBg,
     ovalButtonBgHover: undefinedGuard(
