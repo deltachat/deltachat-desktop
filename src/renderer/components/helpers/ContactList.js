@@ -193,7 +193,6 @@ export function ContactListItem (props) {
     <ContactListItemWrapper
       key={contact.id}
       onClick={() => {
-        console.log('hallo')
         onClick(contact)
         onCheckboxClick()
       }}

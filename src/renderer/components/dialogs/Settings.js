@@ -18,7 +18,7 @@ import {
   Callout
 } from '@blueprintjs/core'
 
-import { DeltaDialogBase, DeltaDialogCloseButton, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
 const SettingsContext = require('../../contexts/SettingsContext')

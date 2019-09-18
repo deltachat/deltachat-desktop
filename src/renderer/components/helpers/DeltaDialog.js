@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import styled, { createGlobalStyle, css } from 'styled-components'
-import { Dialog } from '@blueprintjs/core'
+import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { Classes } from '@blueprintjs/core'
 
 export const CreateDeltaDialogGlobal = createGlobalStyle`
   .FixedDeltaDialog {
@@ -100,9 +99,9 @@ export const useDialog = (DialogComponent) => {
 
 export function DeltaDialogHeader (props) {
   let { onClickBack, title, onClose, borderBottom, children, showBackButton } = props
-  if ( typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
+  if (typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
   return (
-    <div className={classNames(Classes.DIALOG_HEADER, {'bp3-dialog-header-border-bottom': borderBottom})}>
+    <div className={classNames(Classes.DIALOG_HEADER, { 'bp3-dialog-header-border-bottom': borderBottom })}>
       { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
       { title && <h4 className='bp3-heading'>{title}</h4> }
       { children }
@@ -111,23 +110,22 @@ export function DeltaDialogHeader (props) {
   )
 }
 
-export function DeltaDialogFooter(props) {
+export function DeltaDialogFooter (props) {
   let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{display: hide ? 'none' : 'unset'}} className={Classes.DIALOG_FOOTER}>
+    <div style={{ display: hide ? 'none' : 'unset' }} className={Classes.DIALOG_FOOTER}>
       {children}
     </div>
   )
 }
 
-export function DeltaDialogBody(props) {
+export function DeltaDialogBody (props) {
   let { noFooter, children } = props
   noFooter = noFooter !== false
   return (
-    <div className={classNames(Classes.DIALOG_BODY, {'.bp3-dialog-body-no-footer' : noFooter})} >
+    <div className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })} >
       {children}
     </div>
   )
 }
-

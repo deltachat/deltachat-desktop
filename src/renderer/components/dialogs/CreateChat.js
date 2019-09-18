@@ -8,7 +8,7 @@ import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
 import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import { DeltaDialogBase, DeltaDialogCloseButton, DeltaDialogHeader, DeltaDialogBody } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody } from '../helpers/DeltaDialog'
 import {
   CreateChatSearchInput,
   CreateChatContactListWrapper,
@@ -414,68 +414,68 @@ export function CreateVerifiedGroupInner (props) {
 
   return (
     <>
-          { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
-            onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-            onClose: closeAndDelete,
-            onSearchChange,
-            queryStr,
-            searchContacts,
-            groupMembers,
-            addRemoveGroupMember
-          })}
-          { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
-            onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-            onClose: closeAndDelete,
-            qrCode: qrCode
-          })}
-          { viewMode.startsWith('createVerifiedGroup-main') &&
-            <>
-              <DeltaDialogHeader
-                title={tx('menu_new_verified_group')}
-                onClickBack={() => setViewMode('main')}
-                onClose={closeAndDelete}
+      { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
+        onClose: closeAndDelete,
+        onSearchChange,
+        queryStr,
+        searchContacts,
+        groupMembers,
+        addRemoveGroupMember
+      })}
+      { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
+        onClose: closeAndDelete,
+        qrCode: qrCode
+      })}
+      { viewMode.startsWith('createVerifiedGroup-main') &&
+      <>
+        <DeltaDialogHeader
+          title={tx('menu_new_verified_group')}
+          onClickBack={() => setViewMode('main')}
+          onClose={closeAndDelete}
+        />
+        <div className={Classes.DIALOG_BODY}>
+          <Card>
+            {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+            <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
+            <GroupMemberContactListWrapper>
+              <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
+              {renderAddMemberIfNeeded()}
+              <ContactList2
+                contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
+                onClick={() => {}}
+                showCheckbox
+                isChecked={() => true}
+                onCheckboxClick={removeGroupMember}
               />
-              <div className={Classes.DIALOG_BODY}>
-                <Card>
-                  {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
-                  <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-                  <GroupMemberContactListWrapper>
-                    <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
-                    {renderAddMemberIfNeeded()}
+              {queryStr !== '' && searchContactsToAdd.length !== 0 && (
+              <>
+                <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
                 <ContactList2
-                  contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
+                  contacts={searchContactsToAdd}
                   onClick={() => {}}
                   showCheckbox
-                  isChecked={() => true}
-                  onCheckboxClick={removeGroupMember}
+                  isChecked={() => false}
+                  onCheckboxClick={addGroupMember}
                 />
-                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
-                <>
-                  <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
-                  <ContactList2
-                    contacts={searchContactsToAdd}
-                    onClick={() => {}}
-                    showCheckbox
-                    isChecked={() => false}
-                    onCheckboxClick={addGroupMember}
-                  />
-                </>
-                )}
-                {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
-              </GroupMemberContactListWrapper>
-            </Card>
+              </>
+              )}
+              {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+            </GroupMemberContactListWrapper>
+          </Card>
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <DeltaButtonPrimary
+              noPadding
+              onClick={finishCreateGroup}
+            >
+              {tx('group_create_button')}
+            </DeltaButtonPrimary>
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <DeltaButtonPrimary
-                noPadding
-                onClick={finishCreateGroup}
-              >
-                {tx('group_create_button')}
-              </DeltaButtonPrimary>
-            </div>
-          </div>
-        </>
+        </div>
+      </>
       }
     </>
   )
