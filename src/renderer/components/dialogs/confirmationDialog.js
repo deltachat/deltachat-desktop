@@ -20,7 +20,7 @@ export function confirmationDialogLegacy (message, opts, cb) {
 export default function ConfirmationDialog (props) {
   const { message, cb, onClose } = props
   const yesIsDanger = props.yesIsDanger !== false
-        
+
   const isOpen = !!message
   const tx = window.translate
 
