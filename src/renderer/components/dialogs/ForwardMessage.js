@@ -59,7 +59,7 @@ export const LazyChatListItem = (props) => {
   //console.log('render', chatId, inView)
   return (
     <>
-    { chatListItem === false && <PlaceholderChatListItem chatId={chatId} onClick={onClick} /> }
+    { chatListItem === false && <PlaceholderChatListItem chatId={chatId} /> }
     { chatListItem !== false && <ChatListItem
       key={chatId}
       onClick={onClick.bind(null, chatListItem.id)}
@@ -70,48 +70,15 @@ export const LazyChatListItem = (props) => {
 }
 
 export const PlaceholderChatListItem = (props) => {
-  const { chatId } = props
-  const placeholderChatListItem = {
-    id: chatId,
-    email: '...',
-    name: '...',
-    avatarPath: '',
-    color: 'grey',
-    lastUpdated: 0,
-    subtitle: '...',
-    summary: {
-      text1: '...',
-      text2: '...',
-      status: 'error'
-    },
-    contacts: [],
-    isVerified: false,
-    isGroup: false,
-    freshMessageCounter: 0,
-    isArchiveLink: false
-  }
   return (
-    <ChatListItem
-      key={chatId}
-      onClick={props.onClick}
-      chatListItem={placeholderChatListItem}
-    />
+    <div style={{height: '64px'}} />
   )
 }
 
-export default function ForwardMessage(props) {
-  const tx = window.translate
-  const { forwardMessage, onClose } = props
-  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
+export const LazyChatList = (props) => {
+  const { chatListIds, onChatClick } = props
   const [ chatListIndexInView, setChatListIndexInView ] = useState(false)         
-
-  const onChatClick = chatid => {
-    callDcMethod('forwardMessage', [props.forwardMessage.msg.id, chatid])
-    props.onClose()
-  }
-  const onSearchChange = e => setQueryStr(e.target.value)
   const scrollRef = useRef(null)
-
 
   const calculateIndexesInView = (_scrollRef) => {
     if (!scrollRef.current) {
@@ -124,11 +91,10 @@ export default function ForwardMessage(props) {
     const indexStart = Math.floor(scrollTop / itemHeight)
     const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
     console.log(indexStart, indexEnd)
-    setChatListIndexInView([indexStart, indexEnd])
+    setChatListIndexInView([indexStart, indexEnd + 20])
   }
 
   const onScroll = () => calculateIndexesInView()
-  const onLoad = () => console.log('onLoad', scrollRef.current) 
 
   const isInView = (chatListIndex) => {
     if(chatListIndexInView === false) return false
@@ -143,6 +109,30 @@ export default function ForwardMessage(props) {
     console.log(scrollHeight, scrollTop, clientHeight)
     calculateIndexesInView(scrollRef)
   }, [chatListIds])
+
+  return (  
+    <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onScroll}>
+      <Card>
+        {chatListIds.map((chatListId, chatListIndex) => {
+          return <LazyChatListItem key={chatListId} chatId={chatListId} inView={isInView(chatListIndex)} onClick={onChatClick}/>
+        })}
+      </Card>
+    </div>
+  )
+}
+
+export default function ForwardMessage(props) {
+  const tx = window.translate
+  const { forwardMessage, onClose } = props
+  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
+
+  const onChatClick = chatid => {
+    callDcMethod('forwardMessage', [props.forwardMessage.msg.id, chatid])
+    props.onClose()
+  }
+  const onSearchChange = e => setQueryStr(e.target.value)
+
+
   var isOpen = !!forwardMessage
   console.log('xxx', chatListIds)
   return (
@@ -152,17 +142,10 @@ export default function ForwardMessage(props) {
       onClose={onClose}
       style={{ width: '400px', height: 'calc(100% - 60px)', margin: '0' }}
     >
-
       <DeltaDialogHeader onClose={onClose}>
         <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
       </DeltaDialogHeader>
-      <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onScroll}>
-        <Card>
-          {chatListIds.map((chatListId, chatListIndex) => {
-            return <LazyChatListItem key={chatListId} chatId={chatListId} inView={isInView(chatListIndex)}/>
-          })}
-        </Card>
-      </div>
+      <LazyChatList chatListIds={chatListIds} onChatClick={onChatClick} />
     </DeltaDialogBase>
   )
 }
