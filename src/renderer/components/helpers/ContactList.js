@@ -25,7 +25,7 @@ export function useContacts (listFlags, queryStr) {
   const updateContacts = queryStr => debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {
-    updateContacts(queryStr)
+    callDcMethod('getContacts2', [listFlags, queryStr], setContacts)
   }, [])
 
   return [contacts, updateContacts]
