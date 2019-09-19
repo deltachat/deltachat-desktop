@@ -1,9 +1,10 @@
-const React = require('react')
-const ChatListContextMenu = require('./ChatListContextMenu').default
-const ChatListItem = require('./ChatListItem').default
-const styled = require('styled-components').default
+import React, { useRef } from 'react'
+import ChatListContextMenu from './ChatListContextMenu'
+import ChatListItem from './ChatListItem'
+import styled from 'styled-components'
 
-const log = require('../../logger').getLogger('renderer/chatView')
+import  logger from '../../logger'
+const log = logger.getLogger('renderer/chatView')
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -81,77 +82,64 @@ const ArchivedChats = styled.div`
   }
 `
 
-class ChatList extends React.Component {
-  constructor (props) {
-    super(props)
-    this.realOpenContextMenu = null
+export default function ChatList (props) {
+  const { onDeadDropClick, chatList, selectedChatId, showArchivedChats, onShowArchivedChats, onChatClick } = props
+  const tx = window.translate
+  const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
+  const realOpenContextMenu = useRef(null) 
+
+  const openContextMenu = (event, chatId) => {
+    if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
+    const chat = chatList.find(chat => chat.id === chatId)
+    realOpenContextMenu.current(event, chat)
   }
 
-  componentDidMount () {
-    this.doc = document.querySelector(`.${ChatListWrapper.styledComponentId}`)
-    if (!this.doc) return log.warn(`Didn't find .ChatListWrapper .ConversationList`)
-  }
+  return (
+    <div>
+      <ChatListWrapper>
+        { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
+        <div className='ConversationList'>
+          {chatList.map((chatListItem, i) => {
+            if (!chatListItem) return
 
-  openContextMenu (event, chatId) {
-    if (this.realOpenContextMenu === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
-    const chat = this.props.chatList.find(chat => chat.id === chatId)
-    this.realOpenContextMenu(event, chat)
-  }
-
-  render () {
-    const { onDeadDropClick, chatList, selectedChatId, showArchivedChats } = this.props
-    const tx = window.translate
-    const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
-    const self = this
-    return (
-      <div>
-        <ChatListWrapper>
-          { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-          <div className='ConversationList' ref={this.chatListDiv}>
-            {chatList.map((chatListItem, i) => {
-              if (!chatListItem) return
-
-              // Don't show freshMessageCounter on selected chat
-              if (chatListItem.deaddrop) {
-                return (
-                  <ContactRequestItemWrapper key={chatListItem.id}>
-                    <ChatListItem
-                      className='contactrequest'
-                      chatListItem={chatListItem}
-                      onClick={() => onDeadDropClick(chatListItem.deaddrop)}
-                      isSelected={chatListItem.id === selectedChatId}
-                    />
-                  </ContactRequestItemWrapper>)
-              } else if (chatListItem.isArchiveLink) {
-                return (
-                  <ArchivedChats key={chatListItem.id}>
-                    <ChatListItem
-                      onClick={this.props.onShowArchivedChats}
-                      chatListItem={chatListItem}
-                    />
-                  </ArchivedChats>
-                )
-              } else {
-                return (
+            // Don't show freshMessageCounter on selected chat
+            if (chatListItem.deaddrop) {
+              return (
+                <ContactRequestItemWrapper key={chatListItem.id}>
                   <ChatListItem
-                    key={chatListItem.id}
+                    className='contactrequest'
                     chatListItem={chatListItem}
-                    onClick={this.props.onChatClick.bind(null, chatListItem.id)}
+                    onClick={() => onDeadDropClick(chatListItem.deaddrop)}
                     isSelected={chatListItem.id === selectedChatId}
-                    onContextMenu={(event) => { this.openContextMenu(event, chatListItem.id) }}
                   />
-                )
-              }
-            })}
-          </div>
-        </ChatListWrapper>
-        <ChatListContextMenu
-          showArchivedChats={showArchivedChats}
-          getShow={show => { self.realOpenContextMenu = show }}
-        />
-      </div>
-    )
-  }
+                </ContactRequestItemWrapper>)
+            } else if (chatListItem.isArchiveLink) {
+              return (
+                <ArchivedChats key={chatListItem.id}>
+                  <ChatListItem
+                    onClick={onShowArchivedChats}
+                    chatListItem={chatListItem}
+                  />
+                </ArchivedChats>
+              )
+            } else {
+              return (
+                <ChatListItem
+                  key={chatListItem.id}
+                  chatListItem={chatListItem}
+                  onClick={onChatClick.bind(null, chatListItem.id)}
+                  isSelected={chatListItem.id === selectedChatId}
+                  onContextMenu={(event) => { openContextMenu(event, chatListItem.id) }}
+                />
+              )
+            }
+          })}
+        </div>
+      </ChatListWrapper>
+      <ChatListContextMenu
+        showArchivedChats={showArchivedChats}
+        getShow={show => { realOpenContextMenu.current = show }}
+      />
+    </div>
+  )
 }
-
-module.exports = ChatList

@@ -5,7 +5,7 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
 const Menu = require('./Menu').default
-const ChatList = require('./ChatList')
+const ChatList = require('./ChatList').default
 const ChatView = require('./ChatView')
 const SearchInput = require('./SearchInput.js').default
 const SettingsContext = require('../contexts/SettingsContext')
