@@ -43,16 +43,18 @@ export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
   return {chatListIds, listFlags, setListFlags, queryStr, setQueryStr, queryContactId, setQueryContactId}
 }
 
-export const PlaceholderChatListItem = (props) => {
+export const PlaceholderChatListItem = React.memo((props) => {
   return (
     <div style={{height: '64px'}} />
   )
-}
+})
 
-export const LazyChatList = (props) => {
+const in_fetch = []
+export const LazyChatList = React.memo((props) => {
   const { chatListIds, onChatClick } = props
   const [ chatItems, setChatItems ] = useState({})
   const scrollRef = useRef(null)
+  const fetching = useRef([])
 
 
   const fetchChatsInView = (_scrollRef) => {
@@ -60,15 +62,21 @@ export const LazyChatList = (props) => {
       console.log('scrollRef is undefined')
       return
     }
+    if (chatListIds.length === 0) return
     const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
     const itemHeight = scrollHeight / chatListIds.length
     const indexStart = Math.floor(scrollTop / itemHeight)
-    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight) + 20
+    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
     for(let i = indexStart; i <= indexEnd; i++) {
       let chatId = chatListIds[i]
-      if (typeof chatItems[chatId] !== 'undefined') continue
+      if (!chatId) break
+      if (typeof chatItems[chatId] !== 'undefined' || fetching.current.indexOf(chatId) !== -1) continue
+      fetching.current.push(chatId)
       callDcMethod('getSmallChatById', chatId, chat => {
         setChatItems(chatItems => {return {...chatItems, [chatId]: chat}})
+        console.log(fetching)
+        let index = fetching.current.indexOf(chatId)
+        fetching.current.splice(index, index)
       })
     }
   }
@@ -83,24 +91,19 @@ export const LazyChatList = (props) => {
       <Card>
         {chatListIds.map((chatId, chatListIndex) => {
           let chatListItem = chatItems[chatId]
-          return (
-            <>
-              { typeof chatListItem === 'undefined'  && <PlaceholderChatListItem
-                  key={chatId}
-                  chatId={chatId}
-              /> }
-              { typeof chatListItem !== 'undefined' && <ChatListItem
-                key={chatId}
-                onClick={onChatClick.bind(null, chatId)}
-                chatListItem={chatListItem}
-              /> }
-            </>
-          )
+           if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem key={chatId} />
+           return (
+             <ChatListItem 
+               key={chatId}
+               onClick={onChatClick.bind(null, chatId)}
+               chatListItem={chatListItem}
+             /> 
+           )
         })}
       </Card>
     </div>
   )
-}
+})
 
 export default function ForwardMessage(props) {
   const tx = window.translate
