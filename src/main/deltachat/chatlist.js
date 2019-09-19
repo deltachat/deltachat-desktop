@@ -69,10 +69,32 @@ function _chatList (showArchivedChats) {
   return chatList
 }
 
+function getChatListIds(listFlags, queryStr, queryContactId) {
+  const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)  
+  let chatListIds = []
+  for (let counter = 0; counter < chatList.getCount(); counter++) {
+    const chatId = chatList.getChatId(counter)
+    chatListIds.push(chatId)
+  }
+  return chatListIds
+}
+
 function getSmallChatById (chatId, list, i) {
   const chat = this.getFullChatById(chatId)
 
-  if (!chat) return null
+  if(!list) {
+    list = this._dc.getChatList(0, '', 0)
+    i = -1
+    for (let counter = 0; counter < list.getCount(); counter++) {
+      const currentChatId = list.getChatId(counter)
+      if (currentChatId === chatId) {
+          i = counter
+          break
+      }
+    }
+  }
+
+  if (!chat || i === -1) return null
 
   if (chat.id === C.DC_CHAT_ID_DEADDROP) {
     const messageId = list.getMessageId(i)
@@ -215,4 +237,5 @@ module.exports = function () {
   this.showArchivedChats = showArchivedChats.bind(this)
   this.updateChatList = updateChatList.bind(this)
   this.chatModified = chatModified.bind(this)
+  this.getChatListIds = getChatListIds.bind(this)
 }

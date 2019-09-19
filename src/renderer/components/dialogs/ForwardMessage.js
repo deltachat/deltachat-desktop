@@ -1,63 +1,168 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
 import { callDcMethod } from '../../ipc'
-import {
-  Card,
-  Classes,
-  Dialog
-} from '@blueprintjs/core'
+import { Card, Classes } from '@blueprintjs/core'
 import chatListStore from '../../stores/chatList'
+import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
+import ChatListItem from '../ChatListItem'
+import { CreateChatSearchInput } from './CreateChat-Styles'
+import { ipcBackend } from '../../ipc'
+import debounce from 'debounce'
+import classNames from 'classnames'
 
-import ForwardToList from '../ForwardToList'
+const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
+  callDcMethod('getChatListIds', [listFlags, queryStr, queryContactId], cb)
+}, 200)
 
-export default class ForwardMessage extends React.Component {
-  constructor (props) {
-    super(props)
-    this.assignChatList = this.assignChatList.bind(this)
-    this.state = chatListStore.getState()
+export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
+  if(!_queryStr) _queryStr = ''
+
+  const [listFlags, setListFlags] = useState(_listFlags)
+  const [queryStr, setQueryStr] = useState(_queryStr)
+  const [queryContactId, setQueryContactId] = useState(_queryContactId)
+  const [chatListIds, setChatListIds] = useState([])
+
+  const getAndSetChatListIds = immediatly => {
+    if (immediatly === true) {
+      callDcMethod('getChatListIds', [listFlags, queryStr, queryContactId], setChatListIds)
+      return
+    }
+    debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
   }
 
-  onChatClick (chatid) {
-    callDcMethod(
-      'forwardMessage',
-      [this.props.forwardMessage.msg.id, chatid]
-    )
-    this.props.onClose()
+  const onChatListUpdated = () => getAndSetChatListIds()
+
+  useEffect(() => {
+    getAndSetChatListIds(true)
+    ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', onChatListUpdated)
+    return () => ipcBackend.removeListener('DD_EVENT_CHATLIST_UPDATED', onChatListUpdated)
+  }, [])
+
+  useEffect(() => {
+    getAndSetChatListIds()
+  }, [listFlags, queryStr, queryContactId])
+
+  return {chatListIds, listFlags, setListFlags, queryStr, setQueryStr, queryContactId, setQueryContactId}
+}
+
+export const LazyChatListItem = (props) => {
+  const { chatId, inView } = props
+  const onClick = () => {
+    const { onClick } = props
+    if (typeof onClick !== 'function') return
+    onClick(chatId)
   }
 
-  assignChatList (chatListState) {
-    let { chatList } = chatListState
-    chatList = chatList.filter(chat => (!chat.deaddrop && !chat.archive))
-    this.setState({ chatList })
+  const [chatListItem, setChatListItem] = useState(false)
+  useEffect(() => {
+    chatListItem === false && inView === true && callDcMethod('getSmallChatById', chatId, setChatListItem)
+  }, [inView])
+  //console.log('render', chatId, inView)
+  return (
+    <>
+    { chatListItem === false && <PlaceholderChatListItem chatId={chatId} onClick={onClick} /> }
+    { chatListItem !== false && <ChatListItem
+      key={chatId}
+      onClick={onClick.bind(null, chatListItem.id)}
+      chatListItem={chatListItem}
+    /> }
+    </>
+  )
+}
+
+export const PlaceholderChatListItem = (props) => {
+  const { chatId } = props
+  const placeholderChatListItem = {
+    id: chatId,
+    email: '...',
+    name: '...',
+    avatarPath: '',
+    color: 'grey',
+    lastUpdated: 0,
+    subtitle: '...',
+    summary: {
+      text1: '...',
+      text2: '...',
+      status: 'error'
+    },
+    contacts: [],
+    isVerified: false,
+    isGroup: false,
+    freshMessageCounter: 0,
+    isArchiveLink: false
+  }
+  return (
+    <ChatListItem
+      key={chatId}
+      onClick={props.onClick}
+      chatListItem={placeholderChatListItem}
+    />
+  )
+}
+
+export default function ForwardMessage(props) {
+  const tx = window.translate
+  const { forwardMessage, onClose } = props
+  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
+  const [ chatListIndexInView, setChatListIndexInView ] = useState(false)         
+
+  const onChatClick = chatid => {
+    callDcMethod('forwardMessage', [props.forwardMessage.msg.id, chatid])
+    props.onClose()
+  }
+  const onSearchChange = e => setQueryStr(e.target.value)
+  const scrollRef = useRef(null)
+
+
+  const calculateIndexesInView = (_scrollRef) => {
+    if (!scrollRef.current) {
+      console.log('scrollRef is undefined')
+      return
+    }
+    const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
+    console.log(scrollHeight, scrollTop, clientHeight)
+    const itemHeight = scrollHeight / chatListIds.length
+    const indexStart = Math.floor(scrollTop / itemHeight)
+    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
+    console.log(indexStart, indexEnd)
+    setChatListIndexInView([indexStart, indexEnd])
   }
 
-  componentDidMount () {
-    chatListStore.subscribe(this.assignChatList)
+  const onScroll = () => calculateIndexesInView()
+  const onLoad = () => console.log('onLoad', scrollRef.current) 
 
-  }
-  componentWillUnmount () {
-    chatListStore.unsubscribe(this.assignChatList)
+  const isInView = (chatListIndex) => {
+    if(chatListIndexInView === false) return false
+    
+    const [ indexStart, indexEnd ] = chatListIndexInView
+    return chatListIndex >= indexStart && chatListIndex <= indexEnd 
   }
 
-  render () {
-    const { forwardMessage, onClose } = this.props
-    const tx = window.translate
-    const { chatList } = this.state
-    var isOpen = !!forwardMessage
-    return (
-      <Dialog
-        isOpen={isOpen}
-        title={tx('menu_forward')}
-        icon='info-sign'
-        onClose={onClose}>
-        <div className={Classes.DIALOG_BODY}>
-          <Card>
-            <ForwardToList
-              chatList={chatList}
-              onChatClick={this.onChatClick.bind(this)}
-            />
-          </Card>
-        </div>
-      </Dialog>
-    )
-  }
+  useLayoutEffect(() => {
+    if(!scrollRef.current) return
+    const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
+    console.log(scrollHeight, scrollTop, clientHeight)
+    calculateIndexesInView(scrollRef)
+  }, [chatListIds])
+  var isOpen = !!forwardMessage
+  console.log('xxx', chatListIds)
+  return (
+    <DeltaDialogBase
+      isOpen={isOpen}
+      title={tx('menu_forward')}
+      onClose={onClose}
+      style={{ width: '400px', height: 'calc(100% - 60px)', margin: '0' }}
+    >
+
+      <DeltaDialogHeader onClose={onClose}>
+        <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
+      </DeltaDialogHeader>
+      <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onScroll}>
+        <Card>
+          {chatListIds.map((chatListId, chatListIndex) => {
+            return <LazyChatListItem key={chatListId} chatId={chatListId} inView={isInView(chatListIndex)}/>
+          })}
+        </Card>
+      </div>
+    </DeltaDialogBase>
+  )
 }
