@@ -7,8 +7,11 @@ import {
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
-  openEncryptionInfoDialog
+  openEncryptionInfoDialog,
+  openEditGroupDialog
 } from './helpers/ChatMethods'
+
+import { callDcMethodAsync } from '../ipc'
 
 // const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
 
@@ -47,7 +50,11 @@ const ChatListContextMenu = React.memo((props) => {
   const onArchiveChat = archive => archiveChat(chat.id, archive)
   const onDeleteChat = () => openDeleteChatDialog(screenContext, chat.id)
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
-  const onEditGroup = () => screenContext.changeScreen('EditGroup', { chat })
+  const onEditGroup =   async () => {
+    console.log('hallo')
+    let fullChat = await callDcMethodAsync('getFullChatById', chat.id)
+    openEditGroupDialog(screenContext, fullChat)
+  }
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
 
