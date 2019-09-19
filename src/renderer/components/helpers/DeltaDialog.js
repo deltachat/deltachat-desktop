@@ -100,10 +100,10 @@ export const useDialog = (DialogComponent) => {
 }
 
 export function DeltaDialogHeader (props) {
-  let { onClickBack, title, onClose, borderBottom, children, showBackButton } = props
+  let { onClickBack, title, onClose, children, showBackButton } = props
   if (typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
   return (
-    <div className={classNames(Classes.DIALOG_HEADER, { 'bp3-dialog-header-border-bottom': borderBottom })}>
+    <div className={classNames(Classes.DIALOG_HEADER, 'bp3-dialog-header-border-bottom')}>
       { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
       { title && <h4 className='bp3-heading'>{title}</h4> }
       { children }
@@ -114,10 +114,10 @@ export function DeltaDialogHeader (props) {
 
 
 export function DeltaDialogFooter (props) {
-  let { hide, children, borderTop } = props
+  let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{ display: hide ? 'none' : 'unset' }} className={classNames(Classes.DIALOG_FOOTER, { 'bp3-dialog-footer-border-top': borderTop })}>
+    <div style={{ display: hide ? 'none' : 'unset' }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
       {children}
     </div>
   )

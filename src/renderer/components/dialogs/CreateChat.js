@@ -103,7 +103,7 @@ export default function CreateChat (props) {
     >
       { viewMode.startsWith('main') &&
           (<>
-            <DeltaDialogHeader onClose={onClose} borderBottom>
+            <DeltaDialogHeader onClose={onClose}>
               <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
             </DeltaDialogHeader>
             <DeltaDialogBody noFooter>
@@ -196,7 +196,6 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
         title={tx('group_add_members')}
         onClickBack={onClickBack}
         onClose={onClose}
-        borderBottom
       />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
@@ -332,7 +331,6 @@ export function CreateGroupInner (props) {
             title={tx('menu_new_group')}
             onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}
-            borderBottom
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
@@ -364,7 +362,7 @@ export function CreateGroupInner (props) {
               </GroupMemberContactListWrapper>
             </Card>
           </div>
-          <DeltaDialogFooter borderTop>
+          <DeltaDialogFooter>
               <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <DeltaButtonPrimary
                 noPadding

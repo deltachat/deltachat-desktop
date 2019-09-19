@@ -358,7 +358,6 @@ export default class Settings extends React.Component {
           onClickBack={() => this.setState({ show: 'main' })}
           title={title}
           onClose={onClose}
-          borderBottom={this.state.show === 'main'}
         />
         <DeltaDialogBody noFooter>
           { this.renderDialogContent() }
