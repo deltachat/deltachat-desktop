@@ -27,7 +27,7 @@ $bp3-dialog-radius: 2px;
 .bp3-dialog-footer {
   background-color: var(--bp3DialogBgPrimary);
   margin: 0;
-  padding: 20px;
+  padding: 15px;
   border-radius: $bp3-dialog-radius;
 }
 
@@ -90,6 +90,7 @@ $bp3-dialog-radius: 2px;
   background-color: var(--bp3DialogHeaderBg);
   // We should have one variable for dialog/context menu border radius
   border-radius: 2px 2px 0 0;
+  padding: 20px;
 }
 
 .bp3-dialog-header-border-bottom {

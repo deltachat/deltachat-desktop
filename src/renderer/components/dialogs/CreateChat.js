@@ -170,7 +170,7 @@ export function useGroupMembers () {
 export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName }) => {
   const tx = window.translate
   return (
-    <GroupSettingsContainer>
+    <GroupSettingsContainer style={{ paddingBottom: '20px' }}>
       <GroupImage
         style={{ float: 'left' }}
         groupImage={groupImage}
@@ -332,6 +332,7 @@ export function CreateGroupInner (props) {
             title={tx('menu_new_group')}
             onClickBack={() => setViewMode('main')}
             onClose={closeAndDelete}
+            borderBottom
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
