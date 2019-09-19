@@ -8,9 +8,6 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
     position: absolute;
     top: 0;
   }
-  .bp3-dialog-header {
-    padding-right: 4px;
-  }
 `
 
 export const DeltaDialogBase = React.memo((props) => {
@@ -41,7 +38,8 @@ export const DeltaDialogButtonMixin = css`
 export const DeltaDialogCloseButtonWrapper = styled.div`
   ${DeltaDialogButtonMixin}
   .bp3-icon-cross::before {
-    font-size: x-large !important;
+    margin-right: -14px;
+    font-size: 24px;
   }
 `
 
@@ -54,6 +52,10 @@ export function DeltaDialogCloseButton (props) {
 }
 export const DeltaDialogBackButtonWrapper = styled.div`
   ${DeltaDialogButtonMixin}
+  button::before {
+    margin-left: -13px !important;
+    font-size: 20px !important;
+  }
 `
 
 export function DeltaDialogBackButton (props) {
