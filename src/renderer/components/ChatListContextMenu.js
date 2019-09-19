@@ -51,7 +51,6 @@ const ChatListContextMenu = React.memo((props) => {
   const onDeleteChat = () => openDeleteChatDialog(screenContext, chat.id)
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
   const onEditGroup = async () => {
-    console.log('hallo')
     const fullChat = await callDcMethodAsync('getFullChatById', chat.id)
     openEditGroupDialog(screenContext, fullChat)
   }
