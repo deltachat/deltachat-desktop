@@ -13,7 +13,7 @@ export function openLeaveChatDialog (screenContext, chatId) {
       if (yes) {
         chatListStore.dispatch({ type: 'UI_LEAVE_CHAT', payload: { chatId } })
       }
-    }
+    }   
   })
 }
 
@@ -46,4 +46,8 @@ export function openBlockContactDialog (screenContext, selectedChat) {
 
 export function openEncryptionInfoDialog (screenContext, chat) {
   screenContext.openDialog('EncryptionInfo', { chat })
+}
+
+export function openEditGroupDialog (screenContext, selectedChat) {
+  screenContext.openDialog('EditGroup', { chat: selectedChat })
 }
