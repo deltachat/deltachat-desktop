@@ -1,15 +1,15 @@
-const React = require('react')
-const { callDcMethod } = require('../../ipc')
-const {
+import React from 'react'
+import { callDcMethod } from '../../ipc'
+import {
   Card,
   Classes,
   Dialog
-} = require('@blueprintjs/core')
-const chatListStore = require('../../stores/chatList')
+} from '@blueprintjs/core'
+import chatListStore from '../../stores/chatList'
 
-const ForwardToList = require('../ForwardToList')
+import ForwardToList from '../ForwardToList'
 
-class ForwardMessage extends React.Component {
+export default class ForwardMessage extends React.Component {
   constructor (props) {
     super(props)
     this.assignChatList = this.assignChatList.bind(this)
@@ -32,8 +32,8 @@ class ForwardMessage extends React.Component {
 
   componentDidMount () {
     chatListStore.subscribe(this.assignChatList)
-  }
 
+  }
   componentWillUnmount () {
     chatListStore.unsubscribe(this.assignChatList)
   }
@@ -61,5 +61,3 @@ class ForwardMessage extends React.Component {
     )
   }
 }
-
-module.exports = ForwardMessage
