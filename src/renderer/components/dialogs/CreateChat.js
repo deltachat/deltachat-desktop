@@ -363,7 +363,7 @@ export function CreateGroupInner (props) {
             </Card>
           </div>
           <DeltaDialogFooter>
-              <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <DeltaButtonPrimary
                 noPadding
                 onClick={finishCreateGroup}

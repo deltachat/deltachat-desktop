@@ -112,7 +112,6 @@ export function DeltaDialogHeader (props) {
   )
 }
 
-
 export function DeltaDialogFooter (props) {
   let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
