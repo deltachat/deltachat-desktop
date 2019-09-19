@@ -8,7 +8,7 @@ import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
 import { useContacts, ContactList2, PseudoContactListItem } from '../helpers/ContactList'
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from '../helpers/DeltaDialog'
 import {
   CreateChatSearchInput,
   CreateChatContactListWrapper,
@@ -98,7 +98,7 @@ export default function CreateChat (props) {
     <DeltaDialogBase
       isOpen={isOpen}
       onClose={onClose}
-      style={{ width: '400px', height: '76vh', top: '12vh' }}
+      style={{ width: '400px', height: 'calc(100% - 60px)' }}
       fixed
     >
       { viewMode.startsWith('main') &&
@@ -364,8 +364,8 @@ export function CreateGroupInner (props) {
               </GroupMemberContactListWrapper>
             </Card>
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <DeltaDialogFooter borderTop>
+              <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <DeltaButtonPrimary
                 noPadding
                 onClick={finishCreateGroup}
@@ -373,7 +373,7 @@ export function CreateGroupInner (props) {
                 {tx('group_create_button')}
               </DeltaButtonPrimary>
             </div>
-          </div>
+          </DeltaDialogFooter>
         </>
       }
     </>

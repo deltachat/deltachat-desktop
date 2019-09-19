@@ -92,7 +92,7 @@ const ContactListItemContactWrapper = styled.div`
 
 const ContactListItemCheckboxWrapper = styled.div`
   width: 40px;
-  margin-right: 20px;
+  margin-right: 40px;
   input {
     -webkit-appearance: none;
     width: 20px;

@@ -132,7 +132,7 @@ const ContactWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 320px;
+  width: 300px;
 `
 export default function Contact (props) {
   const { avatarPath, color, displayName, address, isVerified } = props.contact
