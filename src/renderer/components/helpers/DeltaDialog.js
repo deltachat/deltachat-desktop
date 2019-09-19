@@ -112,11 +112,12 @@ export function DeltaDialogHeader (props) {
   )
 }
 
+
 export function DeltaDialogFooter (props) {
-  let { hide, children } = props
+  let { hide, children, borderTop } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{ display: hide ? 'none' : 'unset' }} className={Classes.DIALOG_FOOTER}>
+    <div style={{ display: hide ? 'none' : 'unset' }} className={classNames(Classes.DIALOG_FOOTER, { 'bp3-dialog-footer-border-top': borderTop })}>
       {children}
     </div>
   )
