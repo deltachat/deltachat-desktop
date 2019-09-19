@@ -13,7 +13,7 @@ export function openLeaveChatDialog (screenContext, chatId) {
       if (yes) {
         chatListStore.dispatch({ type: 'UI_LEAVE_CHAT', payload: { chatId } })
       }
-    }   
+    }
   })
 }
 
