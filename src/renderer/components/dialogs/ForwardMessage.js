@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
-import { callDcMethod } from '../../ipc'
+import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import { Card, Classes } from '@blueprintjs/core'
 import chatListStore from '../../stores/chatList'
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
 import ChatListItem from '../ChatListItem'
 import { CreateChatSearchInput } from './CreateChat-Styles'
-import { ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import classNames from 'classnames'
 
@@ -44,31 +43,6 @@ export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
   return {chatListIds, listFlags, setListFlags, queryStr, setQueryStr, queryContactId, setQueryContactId}
 }
 
-export const LazyChatListItem = (props) => {
-  const { chatId, inView } = props
-  const onClick = () => {
-    const { onClick } = props
-    if (typeof onClick !== 'function') return
-    onClick(chatId)
-  }
-
-  const [chatListItem, setChatListItem] = useState(false)
-  useEffect(() => {
-    chatListItem === false && inView === true && callDcMethod('getSmallChatById', chatId, setChatListItem)
-  }, [inView])
-  //console.log('render', chatId, inView)
-  return (
-    <>
-    { chatListItem === false && <PlaceholderChatListItem chatId={chatId} /> }
-    { chatListItem !== false && <ChatListItem
-      key={chatId}
-      onClick={onClick.bind(null, chatListItem.id)}
-      chatListItem={chatListItem}
-    /> }
-    </>
-  )
-}
-
 export const PlaceholderChatListItem = (props) => {
   return (
     <div style={{height: '64px'}} />
@@ -77,44 +51,51 @@ export const PlaceholderChatListItem = (props) => {
 
 export const LazyChatList = (props) => {
   const { chatListIds, onChatClick } = props
-  const [ chatListIndexInView, setChatListIndexInView ] = useState(false)         
+  const [ chatItems, setChatItems ] = useState({})
   const scrollRef = useRef(null)
 
-  const calculateIndexesInView = (_scrollRef) => {
+
+  const fetchChatsInView = (_scrollRef) => {
     if (!scrollRef.current) {
       console.log('scrollRef is undefined')
       return
     }
     const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
-    console.log(scrollHeight, scrollTop, clientHeight)
     const itemHeight = scrollHeight / chatListIds.length
     const indexStart = Math.floor(scrollTop / itemHeight)
-    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
-    console.log(indexStart, indexEnd)
-    setChatListIndexInView([indexStart, indexEnd + 20])
-  }
-
-  const onScroll = () => calculateIndexesInView()
-
-  const isInView = (chatListIndex) => {
-    if(chatListIndexInView === false) return false
-    
-    const [ indexStart, indexEnd ] = chatListIndexInView
-    return chatListIndex >= indexStart && chatListIndex <= indexEnd 
+    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight) + 20
+    for(let i = indexStart; i <= indexEnd; i++) {
+      let chatId = chatListIds[i]
+      if (typeof chatItems[chatId] !== 'undefined') continue
+      callDcMethod('getSmallChatById', chatId, chat => {
+        setChatItems(chatItems => {return {...chatItems, [chatId]: chat}})
+      })
+    }
   }
 
   useLayoutEffect(() => {
     if(!scrollRef.current) return
-    const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
-    console.log(scrollHeight, scrollTop, clientHeight)
-    calculateIndexesInView(scrollRef)
+    fetchChatsInView(scrollRef)
   }, [chatListIds])
 
   return (  
-    <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onScroll}>
+    <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={fetchChatsInView}>
       <Card>
-        {chatListIds.map((chatListId, chatListIndex) => {
-          return <LazyChatListItem key={chatListId} chatId={chatListId} inView={isInView(chatListIndex)} onClick={onChatClick}/>
+        {chatListIds.map((chatId, chatListIndex) => {
+          let chatListItem = chatItems[chatId]
+          return (
+            <>
+              { typeof chatListItem === 'undefined'  && <PlaceholderChatListItem
+                  key={chatId}
+                  chatId={chatId}
+              /> }
+              { typeof chatListItem !== 'undefined' && <ChatListItem
+                key={chatId}
+                onClick={onChatClick.bind(null, chatId)}
+                chatListItem={chatListItem}
+              /> }
+            </>
+          )
         })}
       </Card>
     </div>
@@ -134,7 +115,6 @@ export default function ForwardMessage(props) {
 
 
   var isOpen = !!forwardMessage
-  console.log('xxx', chatListIds)
   return (
     <DeltaDialogBase
       isOpen={isOpen}
