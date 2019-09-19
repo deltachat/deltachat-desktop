@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
-import { callDcMethodAsync } from '../../ipc'
+import { callDcMethod } from '../../ipc'
 import Contact, { PseudoContact } from './Contact'
+import debounce from 'debounce'
 
 const ContactListDiv = styled.div`
   .module-contact-list-item--with-click-handler {
@@ -14,13 +15,14 @@ const ContactListDiv = styled.div`
   }
 `
 
+const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
+  callDcMethod('getContacts2', [listFlags, queryStr], cb)
+}, 200)
+
 export function useContacts (listFlags, queryStr) {
   const [contacts, setContacts] = useState([])
 
-  const updateContacts = async (queryStr) => {
-    const contacts = await callDcMethodAsync('getContacts2', [listFlags, queryStr])
-    setContacts(contacts)
-  }
+  const updateContacts = queryStr => debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {
     updateContacts(queryStr)
