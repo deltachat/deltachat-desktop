@@ -80,7 +80,8 @@
     "run-series": "^1.1.8",
     "simple-markdown": "^0.4.4",
     "styled-components": "^4.3.2",
-    "tempy": "^0.3.0"
+    "tempy": "^0.3.0",
+    "use-debounce": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
