@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import ChatListItem from './ChatListItem'
 import styled from 'styled-components'
+import { useChatListIds, useLazyChatListItems, LazyChatListItem } from './helpers/ChatList'
 
 import  logger from '../../logger'
 const log = logger.getLogger('renderer/chatView')
@@ -83,7 +84,7 @@ const ArchivedChats = styled.div`
 `
 
 export default function ChatList (props) {
-  const { onDeadDropClick, chatList, selectedChatId, showArchivedChats, onShowArchivedChats, onChatClick } = props
+  const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, onChatClick } = props
   const tx = window.translate
   const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
   const realOpenContextMenu = useRef(null) 
@@ -94,52 +95,26 @@ export default function ChatList (props) {
     realOpenContextMenu.current(event, chat)
   }
 
-  return (
-    <div>
-      <ChatListWrapper>
-        { !chatList.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-        <div className='ConversationList'>
-          {chatList.map((chatListItem, i) => {
-            if (!chatListItem) return
+  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
+  const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
 
-            // Don't show freshMessageCounter on selected chat
-            if (chatListItem.deaddrop) {
-              return (
-                <ContactRequestItemWrapper key={chatListItem.id}>
-                  <ChatListItem
-                    className='contactrequest'
-                    chatListItem={chatListItem}
-                    onClick={() => onDeadDropClick(chatListItem.deaddrop)}
-                    isSelected={chatListItem.id === selectedChatId}
-                  />
-                </ContactRequestItemWrapper>)
-            } else if (chatListItem.isArchiveLink) {
-              return (
-                <ArchivedChats key={chatListItem.id}>
-                  <ChatListItem
-                    onClick={onShowArchivedChats}
-                    chatListItem={chatListItem}
-                  />
-                </ArchivedChats>
-              )
-            } else {
-              return (
-                <ChatListItem
-                  key={chatListItem.id}
-                  chatListItem={chatListItem}
-                  onClick={onChatClick.bind(null, chatListItem.id)}
-                  isSelected={chatListItem.id === selectedChatId}
-                  onContextMenu={(event) => { openContextMenu(event, chatListItem.id) }}
-                />
-              )
-            }
-          })}
+  return (
+    <>
+      <ChatListWrapper ref={scrollRef} onScroll={fetchChatsInView}>
+        { !chatListIds.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
+        <div className='ConversationList'>
+          {chatListIds.map(chatId => <LazyChatListItem
+            key={chatId}
+            chatListItem={chatItems[chatId]}
+            onClick={onChatClick.bind(null, chatId)}
+          />)}
+          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({queryStr})}
         </div>
       </ChatListWrapper>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}
         getShow={show => { realOpenContextMenu.current = show }}
       />
-    </div>
+    </>
   )
 }

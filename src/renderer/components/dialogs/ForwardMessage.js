@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
-import ChatListItem from '../ChatListItem'
 import { useChatListIds, useLazyChatListItems, LazyChatListItem } from '../helpers/ChatList'
 import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
 import classNames from 'classnames'
+import { callDcMethod } from '../../ipc'
 
 
 export default function ForwardMessage(props) {
