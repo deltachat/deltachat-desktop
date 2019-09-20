@@ -9,10 +9,10 @@ export function sendToBackend (event, ...args) {
 
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
-var callDcMethodIdentifier = -1
+var callDcMethodIdentifier = 0
 export function callDcMethod (methodName, args, cb) {
   const identifier = callDcMethodIdentifier++
-  if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = -1
+  if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = 0
   const ignoreReturn = typeof cb !== 'function'
   const eventName = ignoreReturn ? 'EVENT_DC_DISPATCH' : 'EVENT_DC_DISPATCH_CB'
 

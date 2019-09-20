@@ -89,7 +89,6 @@ function deleteChat (chatId) {
 function archiveChat (chatId, archive) {
   log.debug(`action - archiving chat ${chatId}`)
   this._dc.archiveChat(chatId, archive)
-  this.updateChatList()
 }
 
 function createGroupChat (verified, name) {

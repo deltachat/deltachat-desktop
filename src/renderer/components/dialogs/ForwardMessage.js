@@ -32,7 +32,7 @@ export default function ForwardMessage (props) {
         <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
       </DeltaDialogHeader>
       <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={fetchChatsInView}>
-        <Card>
+        <Card style={{ padding: '0px' }}>
           {chatListIds.map(chatId => <ChatListItem
             key={chatId}
             chatListItem={chatItems[chatId]}

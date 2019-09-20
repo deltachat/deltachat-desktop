@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
-import { callDcMethod, ipcBackend } from '../../ipc'
+import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import ChatListItem from './ChatListItem'
+import logger from '../../../logger'
+import { useDebouncedCallback } from 'use-debounce'
+
+const log = logger.getLogger('renderer/helpers/ChatList')
 
 const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
   callDcMethod('getChatListIds', [listFlags, queryStr, queryContactId], cb)
@@ -23,15 +27,36 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
   }
 
-  const onChatListUpdated = () => getAndSetChatListIds()
+  const onChatListUpdated = () => {
+    log.debug('useChatListIds: chatlist updated, refetching chatlistids')
+    getAndSetChatListIds()
+  }
+
+  const onMsgsChanged = (ev, chatId, msgId) => {
+    if (chatId === 0) {
+      log.debug('useChatListIds: onMsgsChanged, chatId is zero, refetching chatlistids')
+      getAndSetChatListIds()
+    }
+  }
+
+  const refetchChatlist = () => {
+    log.debug('useChatListIds: refetchingChatlist')
+    getAndSetChatListIds()
+  }
 
   useEffect(() => {
-    getAndSetChatListIds(true)
+    log.debug('useChatListIds: onComponentDidMount')
     ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', onChatListUpdated)
-    return () => ipcBackend.removeListener('DD_EVENT_CHATLIST_UPDATED', onChatListUpdated)
+    ipcBackend.on('DC_EVENT_INCOMING_MSG', refetchChatlist)
+    ipcBackend.on('DC_EVENT_MSGS_CHANGED', onMsgsChanged)
+    return () => {
+      ipcBackend.removeListener('DD_EVENT_CHATLIST_UPDATED', onChatListUpdated)
+      ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onMsgsChanged)
+    }
   }, [])
 
   useEffect(() => {
+    log.debug('useChatListIds: listFlags, queryStr or queryContactId changed, refetching chatlistids')
     getAndSetChatListIds()
   }, [listFlags, queryStr, queryContactId])
 
@@ -43,35 +68,71 @@ export const useLazyChatListItems = (chatListIds) => {
   const fetching = useRef([])
   const [chatItems, setChatItems] = useState({})
 
-  const fetchChatsInView = (_scrollRef) => {
+  const isNotReady = () => {
+    if (chatListIds.length === 0) return true
     if (!scrollRef.current) {
-      console.log('scrollRef is undefined')
-      return
+      log.warn('scrollRef is undefined')
+      return true
     }
-    if (chatListIds.length === 0) return
+    return false
+  }
+
+  const getIndexStartEndInView = () => {
     const { scrollHeight, scrollTop, clientHeight } = scrollRef.current
     const itemHeight = scrollHeight / chatListIds.length
     const indexStart = Math.floor(scrollTop / itemHeight)
-    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight) + 10
+    const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
+    return [indexStart, indexEnd]
+  }
+
+  const chatIdsInView = () => {
+    const [indexStart, indexEnd] = getIndexStartEndInView()
+    const chatIds = []
     for (let i = indexStart; i <= indexEnd; i++) {
       const chatId = chatListIds[i]
       if (!chatId) break
-      fetchChat(chatId)
+      chatIds.push(chatId)
     }
+    return chatIds
   }
 
-  const fetchChat = chatId => {
-    if (typeof chatItems[chatId] !== 'undefined' || fetching.current.indexOf(chatId) !== -1) return
-    fetching.current.push(chatId)
-    callDcMethod('getSmallChatById', chatId, chat => {
-      setChatItems(chatItems => { return { ...chatItems, [chatId]: chat } })
-      console.log(fetching)
-      const indexToDelete = fetching.current.indexOf(chatId)
-      fetching.current.splice(indexToDelete, indexToDelete)
-    })
+  const [fetchChatsInView] = useDebouncedCallback(async () => {
+    if (isNotReady()) return
+    const chatIds = chatIdsInView()
+    const chats = await fetchChats(chatIds)
+
+    if (!chats) return
+    log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
+    setChatItems(chatItems => { return { ...chatItems, ...chats } })
+  }, 200, { leading: true })
+
+  const updateChatsInViewUnsetOthers = async () => {
+    if (isNotReady()) return
+    const chatIds = chatIdsInView()
+    const chats = await fetchChats(chatIds, true)
+
+    if (!chats) return
+    log.debug('useLazyChatListItems: Force updating chats in view, unsetting others', Object.keys(chats))
+    setChatItems(chats)
   }
+
+  const fetchChats = async (chatIds, force) => {
+    const chatIdsToFetch = chatIds.filter(i => fetching.current.indexOf(i) === -1 && (typeof chatItems[i] === 'undefined' || force === true))
+
+    if (chatIdsToFetch.length === 0) return
+    fetching.current.push(...chatIdsToFetch)
+    const chats = await callDcMethodAsync('getSmallChatByIds', [chatIds])
+    fetching.current = fetching.current.filter(i => chatIdsToFetch.indexOf(i) === -1)
+    return chats
+  }
+
+  useEffect(() => {
+    log.debug('useLazyChatListItems: chatListIds changed, force updating chats in view')
+    updateChatsInViewUnsetOthers()
+  }, [chatListIds])
 
   useLayoutEffect(() => {
+    if (Object.keys(chatItems).length > 0) return
     if (!scrollRef.current) return
     fetchChatsInView(scrollRef)
   }, [chatListIds])

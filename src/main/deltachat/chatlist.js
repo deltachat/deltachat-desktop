@@ -47,7 +47,7 @@ function getChatListIds (listFlags, queryStr, queryContactId) {
   return chatListIds
 }
 
-function findIndexOfChatIdInChatList(list, chatId) {
+function findIndexOfChatIdInChatList (list, chatId) {
   let i = -1
   for (let counter = 0; counter < list.getCount(); counter++) {
     const currentChatId = list.getChatId(counter)
@@ -58,8 +58,8 @@ function findIndexOfChatIdInChatList(list, chatId) {
   }
   return i
 }
-    
-function getListAndIndexForChatId(chatId) {
+
+function getListAndIndexForChatId (chatId) {
   let list = this._dc.getChatList(0, '', 0)
   let i = findIndexOfChatIdInChatList(list, chatId)
 
@@ -70,10 +70,17 @@ function getListAndIndexForChatId(chatId) {
   return [list, i]
 }
 
+function getSmallChatByIds (chatIds) {
+  const chats = {}
+  for (const chatId of chatIds) {
+    chats[chatId] = this.getSmallChatById(chatId)
+  }
+  return chats
+}
 function getSmallChatById (chatId, list, i) {
   const chat = this.getFullChatById(chatId)
 
-  if(!list) [list, i] = this.getListAndIndexForChatId(chatId)
+  if (!list) [list, i] = this.getListAndIndexForChatId(chatId)
   if (!chat || i === -1) return null
 
   if (chat.id === C.DC_CHAT_ID_DEADDROP) {
@@ -201,9 +208,9 @@ function _deadDropMessage (id) {
   return { id, contact }
 }
 
-function showArchivedChats (show) {
-  this._showArchivedChats = show
-  this.updateChatList()
+function updateChatList () {
+  log.debug('updateChatList')
+  this.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
 }
 
 module.exports = function () {
@@ -215,4 +222,6 @@ module.exports = function () {
   this.chatModified = chatModified.bind(this)
   this.getChatListIds = getChatListIds.bind(this)
   this.getListAndIndexForChatId = getListAndIndexForChatId.bind(this)
+  this.updateChatList = updateChatList.bind(this)
+  this.getSmallChatByIds = getSmallChatByIds.bind(this)
 }

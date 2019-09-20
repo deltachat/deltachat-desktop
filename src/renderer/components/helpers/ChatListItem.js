@@ -127,6 +127,11 @@ const ChatListItemWrapper = styled.div`
     font-size: medium;
   }
 
+  .module-conversation-list-item { 
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
   .module-conversation-list-item:hover {
     background-color: ${props => props.theme.chatListItemBgHover}
   }

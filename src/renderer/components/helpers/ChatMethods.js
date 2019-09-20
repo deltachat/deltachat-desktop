@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron'
-const chatListStore = require('../../stores/chatList')
+import { callDcMethod } from '../../ipc'
 
 export function archiveChat (chatId, archive) {
-  chatListStore.dispatch({ type: 'UI_ARCHIVE_CHAT', payload: { chatId, archive } })
+  callDcMethod('archiveChat', [chatId, archive])
 }
 
 export function openLeaveChatDialog (screenContext, chatId) {

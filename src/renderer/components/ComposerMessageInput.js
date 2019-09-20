@@ -1,8 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
-const chatListStore = require('../stores/chatList')
 const debounce = require('debounce')
-
+const { callDcMethod } = require('../ipc')
 const MessageInputTextarea = styled.textarea`
   float: left;
   width: calc(100% - 120px);
@@ -48,7 +47,7 @@ class ComposerMessageInput extends React.Component {
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
-      chatListStore.dispatch({ type: 'UI_SET_DRAFT', payload: { text, chatId } })
+      callDcMethod('setDraft', [chatId, text])
     }, 500)
 
     this.textareaRef = React.createRef()

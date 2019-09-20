@@ -15,41 +15,6 @@ const ChatListWrapper = styled.div`
   user-select: none;
   margin-top: 50px;
 
-  span.module-contact-name {
-    font-weight: 200;
-    font-size: medium;
-  }
-
-  .module-conversation-list-item:hover {
-    background-color: ${props => props.theme.chatListItemBgHover}
-  }
-
-  .module-conversation-list-item--is-selected {
-    background-color: ${props => props.theme.chatListItemSelectedBg};
-    color: ${props => props.theme.chatListItemSelectedText};
-
-    span.module-contact-name {
-      color: ${props => props.theme.chatListItemSelectedText};
-    }
-
-    .module-conversation-list-item__is-group {
-      filter: unset;
-    }
-
-    &:hover {
-        background-color: var(--chatListItemSelectedBg);
-    }
-  }
-
-  .module-conversation-list-item__header__name {
-    width: 90%;
-  }
-
-  .status-icon {
-    flex-shrink: 0;
-    margin-top: 2px;
-    margin-left: calc(100% - 90% - 12px);
-  }
 
 }
 `
@@ -88,11 +53,11 @@ export default function ChatList (props) {
   const realOpenContextMenu = useRef(null)
   const onChatClick = chatId => {
     if (chatId === 6) return onShowArchivedChats()
-    props.onChatClick(chatId)    
+    props.onChatClick(chatId)
   }
 
-  useEffect(() => setQueryStr(queryStr), [queryStr])
-  useEffect(() => showArchivedChats ? setListFlags(C.DC_GCL_ARCHIVED_ONLY) : setListFlags(0), [showArchivedChats])  
+  // useEffect(() => setQueryStr(queryStr), [queryStr])
+  useEffect(() => showArchivedChats ? setListFlags(C.DC_GCL_ARCHIVED_ONLY) : setListFlags(0), [showArchivedChats])
 
   const openContextMenu = (event, chatId) => {
     if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
@@ -117,7 +82,7 @@ export default function ChatList (props) {
                 onClick={onChatClick.bind(null, chatId)}
                 onContextMenu={(event) => { openContextMenu(event, chatId) }}
               />
-             )
+            )
           })}
         </div>
       </ChatListWrapper>
