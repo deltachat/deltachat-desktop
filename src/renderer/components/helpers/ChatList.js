@@ -104,7 +104,7 @@ export const useLazyChatListItems = (chatListIds) => {
     if (!chats) return
     log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
     setChatItems(chatItems => { return { ...chatItems, ...chats } })
-  }, 200, { leading: true })
+  }, 50)
 
   const updateChatsInViewUnsetOthers = async () => {
     if (isNotReady()) return
