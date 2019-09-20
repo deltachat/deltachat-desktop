@@ -5,11 +5,12 @@ import { useChatListIds, useLazyChatListItems, LazyChatListItem } from '../helpe
 import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
+const C = require('deltachat-node/constants')
 
 export default function ForwardMessage (props) {
   const tx = window.translate
   const { forwardMessage, onClose } = props
-  const { chatListIds, queryStr, setQueryStr } = useChatListIds()
+  const { chatListIds, queryStr, setQueryStr } = useChatListIds(C.DC_GCL_NO_SPECIALS)
   const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
 
   const onChatClick = chatid => {
