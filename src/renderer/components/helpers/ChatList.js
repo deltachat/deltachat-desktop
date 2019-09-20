@@ -95,4 +95,7 @@ export const LazyChatListItem = React.memo(props => {
       chatListItem={chatListItem}
     />
   )
+}, (prevProps, nextProps) => {
+  const shouldRerender = prevProps.chatListItem !== nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected
+  return !shouldRerender
 })

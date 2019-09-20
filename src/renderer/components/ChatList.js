@@ -107,14 +107,17 @@ export default function ChatList (props) {
       <ChatListWrapper ref={scrollRef} onScroll={fetchChatsInView}>
         { !chatListIds.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
         <div className='ConversationList'>
-          {chatListIds.map(chatId => <LazyChatListItem
-            isSelected={selectedChatId === chatId}
-            key={chatId}
-            chatListItem={chatItems[chatId]}
-            onClick={onChatClick.bind(null, chatId)}
-            onContextMenu={(event) => { openContextMenu(event, chatId) }}
-          />)}
-          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
+          {chatListIds.map(chatId => {
+            return (
+              <LazyChatListItem
+                isSelected={selectedChatId === chatId}
+                key={chatId}
+                chatListItem={chatItems[chatId]}
+                onClick={onChatClick.bind(null, chatId)}
+                onContextMenu={(event) => { openContextMenu(event, chatId) }}
+              />
+             )
+          })}
         </div>
       </ChatListWrapper>
       <ChatListContextMenu
