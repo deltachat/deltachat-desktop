@@ -95,7 +95,7 @@ export default function ChatList (props) {
 
   const openContextMenu = (event, chatId) => {
     if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
-    const chat = chatList.find(chat => chat.id === chatId)
+    const chat = chatItems[chatId]
     realOpenContextMenu.current(event, chat)
   }
 
@@ -112,6 +112,7 @@ export default function ChatList (props) {
             key={chatId}
             chatListItem={chatItems[chatId]}
             onClick={onChatClick.bind(null, chatId)}
+            onContextMenu={(event) => { openContextMenu(event, chatId) }}
           />)}
           {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
         </div>

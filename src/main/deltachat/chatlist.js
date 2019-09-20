@@ -2,14 +2,6 @@ const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
 
-/**
- * Update query for rendering chats with search input
- */
-function searchChats (query) {
-  this._query = query
-  this.updateChatList()
-}
-
 function selectChat (chatId) {
   this._selectedChatId = chatId
   const chat = this.getFullChatById(chatId, true)
@@ -30,12 +22,6 @@ function selectChat (chatId) {
   this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })
 }
 
-function updateChatList () {
-  log.debug('updateChatList')
-  const chatList = this._chatList(this._showArchivedChats)
-  this.sendToRenderer('DD_EVENT_CHATLIST_UPDATED', { chatList, showArchivedChats: this._showArchivedChats })
-}
-
 function chatModified (chatId) {
   const listFlags = 0
   const list = this._dc.getChatList(listFlags, '')
@@ -49,24 +35,6 @@ function chatModified (chatId) {
   if (i === -1) return
   const chat = this.getSmallChatById(chatId, list, i)
   this.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
-}
-
-function _chatList (showArchivedChats) {
-  if (!this._dc) return []
-
-  const listFlags = showArchivedChats ? C.DC_GCL_ARCHIVED_ONLY : 0
-  const list = this._dc.getChatList(listFlags, this._query)
-
-  const chatList = []
-
-  for (let i = 0; i < list.getCount(); i++) {
-    const chatId = list.getChatId(i)
-    const chat = this.getSmallChatById(chatId, list, i)
-
-    if (!chat) continue
-    chatList.push(chat)
-  }
-  return chatList
 }
 
 function getChatListIds (listFlags, queryStr, queryContactId) {
@@ -239,15 +207,11 @@ function showArchivedChats (show) {
 }
 
 module.exports = function () {
-  this.searchChats = searchChats.bind(this)
   this.selectChat = selectChat.bind(this)
-  this._chatList = _chatList.bind(this)
   this.getSmallChatById = getSmallChatById.bind(this)
   this.getFullChatById = getFullChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
-  this.showArchivedChats = showArchivedChats.bind(this)
-  this.updateChatList = updateChatList.bind(this)
   this.chatModified = chatModified.bind(this)
   this.getChatListIds = getChatListIds.bind(this)
   this.getListAndIndexForChatId = getListAndIndexForChatId.bind(this)
