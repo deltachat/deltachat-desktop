@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import styled from 'styled-components'
 import { useChatListIds, useLazyChatListItems, LazyChatListItem } from './helpers/ChatList'
+const C = require('deltachat-node/constants')
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -81,7 +82,7 @@ const ArchivedChats = styled.div`
 
 export default function ChatList (props) {
   const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
-  const { chatListIds, setQueryStr } = useChatListIds()
+  const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
   const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
   const realOpenContextMenu = useRef(null)
   const onChatClick = chatId => {
@@ -90,6 +91,7 @@ export default function ChatList (props) {
   }
 
   useEffect(() => setQueryStr(queryStr), [queryStr])
+  useEffect(() => showArchivedChats ? setListFlags(C.DC_GCL_ARCHIVED_ONLY) : setListFlags(0), [showArchivedChats])  
 
   const openContextMenu = (event, chatId) => {
     if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')

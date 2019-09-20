@@ -86,6 +86,7 @@ export const useLazyChatListItems = (chatListIds) => {
 
 export const LazyChatListItem = React.memo(props => {
   const { chatListItem, onClick } = props
+  console.log(chatListItem)
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   return (
     <ChatListItem

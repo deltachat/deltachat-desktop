@@ -79,21 +79,33 @@ function getChatListIds (listFlags, queryStr, queryContactId) {
   return chatListIds
 }
 
+function findIndexOfChatIdInChatList(list, chatId) {
+  let i = -1
+  for (let counter = 0; counter < list.getCount(); counter++) {
+    const currentChatId = list.getChatId(counter)
+    if (currentChatId === chatId) {
+      i = counter
+      break
+    }
+  }
+  return i
+}
+    
+function getListAndIndexForChatId(chatId) {
+  let list = this._dc.getChatList(0, '', 0)
+  let i = findIndexOfChatIdInChatList(list, chatId)
+
+  if (i == -1) {
+    list = this._dc.getChatList(1, '', 0)
+    i = findIndexOfChatIdInChatList(list, chatId)
+  }
+  return [list, i]
+}
+
 function getSmallChatById (chatId, list, i) {
   const chat = this.getFullChatById(chatId)
 
-  if (!list) {
-    list = this._dc.getChatList(0, '', 0)
-    i = -1
-    for (let counter = 0; counter < list.getCount(); counter++) {
-      const currentChatId = list.getChatId(counter)
-      if (currentChatId === chatId) {
-        i = counter
-        break
-      }
-    }
-  }
-
+  if(!list) [list, i] = this.getListAndIndexForChatId(chatId)
   if (!chat || i === -1) return null
 
   if (chat.id === C.DC_CHAT_ID_DEADDROP) {
@@ -238,4 +250,5 @@ module.exports = function () {
   this.updateChatList = updateChatList.bind(this)
   this.chatModified = chatModified.bind(this)
   this.getChatListIds = getChatListIds.bind(this)
+  this.getListAndIndexForChatId = getListAndIndexForChatId.bind(this)
 }
