@@ -1,9 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
 import styled from 'styled-components'
-import { Timestamp } from './conversations'
-import MessageBody from './MessageBody'
-import { Avatar, VerifiedIcon } from './helpers/Contact'
+import { Timestamp } from '../conversations'
+import MessageBody from '../MessageBody'
+import { Avatar, VerifiedIcon } from '../helpers/Contact'
 
 const MessageText1 = styled.div`
   float: left;
@@ -115,26 +115,71 @@ export const Message = React.memo(props => {
   )
 })
 
-const ChatListItem = React.memo(props => {
-  const { chatListItem } = props
-  const { onClick, isSelected, onContextMenu } = props
+export const PlaceholderChatListItem = React.memo((props) => {
   return (
-    <div
-      role='button'
-      onClick={onClick}
-      onContextMenu={onContextMenu}
-      className={classNames(
-        'module-conversation-list-item',
-        chatListItem.freshMessageCounter > 0 ? 'module-conversation-list-item--has-unread' : null,
-        isSelected ? 'module-conversation-list-item--is-selected' : null
-      )}
-    >
-      {<Avatar {...chatListItem} displayName={chatListItem.name} />}
-      <div className='module-conversation-list-item__content'>
-        <Header chatListItem={chatListItem} />
-        <Message chatListItem={chatListItem} />
+    <div style={{ height: '64px' }} />
+  )
+})
+
+const ChatListItemWrapper = styled.div`
+  span.module-contact-name {
+    font-weight: 200;
+    font-size: medium;
+  }
+
+  .module-conversation-list-item:hover {
+    background-color: ${props => props.theme.chatListItemBgHover}
+  }
+
+  .module-conversation-list-item--is-selected {
+    background-color: ${props => props.theme.chatListItemSelectedBg};
+    color: ${props => props.theme.chatListItemSelectedText};
+
+    span.module-contact-name {
+      color: ${props => props.theme.chatListItemSelectedText};
+    }
+
+    .module-conversation-list-item__is-group {
+      filter: unset;
+    }
+
+    &:hover {
+        background-color: var(--chatListItemSelectedBg);
+    }
+  }
+
+  .module-conversation-list-item__header__name {
+    width: 90%;
+  }
+
+  .status-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-left: calc(100% - 90% - 12px);
+  }
+`
+const ChatListItem = React.memo(props => {
+  const { chatListItem, onClick, isSelected, onContextMenu } = props
+  if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
+  return (
+    <ChatListItemWrapper>
+      <div
+        role='button'
+        onClick={onClick}
+        onContextMenu={onContextMenu}
+        className={classNames(
+          'module-conversation-list-item',
+          chatListItem.freshMessageCounter > 0 ? 'module-conversation-list-item--has-unread' : null,
+          isSelected ? 'module-conversation-list-item--is-selected' : null
+        )}
+      >
+        {<Avatar {...chatListItem} displayName={chatListItem.name} />}
+        <div className='module-conversation-list-item__content'>
+          <Header chatListItem={chatListItem} />
+          <Message chatListItem={chatListItem} />
+        </div>
       </div>
-    </div>
+    </ChatListItemWrapper>
   )
 }, (prevProps, nextProps) => {
   const shouldRerender = prevProps.chatListItem !== nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader } from '../helpers/DeltaDialog'
-import { useChatListIds, useLazyChatListItems, LazyChatListItem } from '../helpers/ChatList'
+import { useChatListIds, useLazyChatListItems } from '../helpers/ChatList'
+import ChatListItem from '../helpers/ChatListItem'
 import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
@@ -32,7 +33,7 @@ export default function ForwardMessage (props) {
       </DeltaDialogHeader>
       <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={fetchChatsInView}>
         <Card>
-          {chatListIds.map(chatId => <LazyChatListItem
+          {chatListIds.map(chatId => <ChatListItem
             key={chatId}
             chatListItem={chatItems[chatId]}
             onClick={onChatClick.bind(null, chatId)}

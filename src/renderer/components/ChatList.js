@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import styled from 'styled-components'
-import { useChatListIds, useLazyChatListItems, LazyChatListItem } from './helpers/ChatList'
+import { useChatListIds, useLazyChatListItems } from './helpers/ChatList'
+import ChatListItem from './helpers/ChatListItem'
 const C = require('deltachat-node/constants')
 
 const ChatListWrapper = styled.div`
@@ -109,7 +110,7 @@ export default function ChatList (props) {
         <div className='ConversationList'>
           {chatListIds.map(chatId => {
             return (
-              <LazyChatListItem
+              <ChatListItem
                 isSelected={selectedChatId === chatId}
                 key={chatId}
                 chatListItem={chatItems[chatId]}
