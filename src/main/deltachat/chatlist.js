@@ -69,9 +69,9 @@ function _chatList (showArchivedChats) {
   return chatList
 }
 
-function getChatListIds(listFlags, queryStr, queryContactId) {
-  const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)  
-  let chatListIds = []
+function getChatListIds (listFlags, queryStr, queryContactId) {
+  const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)
+  const chatListIds = []
   for (let counter = 0; counter < chatList.getCount(); counter++) {
     const chatId = chatList.getChatId(counter)
     chatListIds.push(chatId)
@@ -82,14 +82,14 @@ function getChatListIds(listFlags, queryStr, queryContactId) {
 function getSmallChatById (chatId, list, i) {
   const chat = this.getFullChatById(chatId)
 
-  if(!list) {
+  if (!list) {
     list = this._dc.getChatList(0, '', 0)
     i = -1
     for (let counter = 0; counter < list.getCount(); counter++) {
       const currentChatId = list.getChatId(counter)
       if (currentChatId === chatId) {
-          i = counter
-          break
+        i = counter
+        break
       }
     }
   }

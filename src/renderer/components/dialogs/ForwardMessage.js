@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react'
+import React from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader } from '../helpers/DeltaDialog'
 import { useChatListIds, useLazyChatListItems, LazyChatListItem } from '../helpers/ChatList'
 import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
 
-
-export default function ForwardMessage(props) {
+export default function ForwardMessage (props) {
   const tx = window.translate
   const { forwardMessage, onClose } = props
-  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
+  const { chatListIds, queryStr, setQueryStr } = useChatListIds()
   const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
 
   const onChatClick = chatid => {
@@ -18,7 +17,6 @@ export default function ForwardMessage(props) {
     props.onClose()
   }
   const onSearchChange = e => setQueryStr(e.target.value)
-
 
   var isOpen = !!forwardMessage
   return (
@@ -38,7 +36,7 @@ export default function ForwardMessage(props) {
             chatListItem={chatItems[chatId]}
             onClick={onChatClick.bind(null, chatId)}
           />)}
-          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({queryStr})}
+          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
         </Card>
       </div>
     </DeltaDialogBase>

@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  CreateChatSearchInput
-} from './dialogs/CreateChat-Styles'
+import { CreateChatSearchInput } from './dialogs/CreateChat-Styles'
 
 const SearchInputWrap = styled(CreateChatSearchInput)`
 margin-left: 40px;

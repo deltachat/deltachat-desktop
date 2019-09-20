@@ -1,11 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import ChatListItem from './ChatListItem'
 import styled from 'styled-components'
 import { useChatListIds, useLazyChatListItems, LazyChatListItem } from './helpers/ChatList'
-
-import  logger from '../../logger'
-const log = logger.getLogger('renderer/chatView')
 
 const ChatListWrapper = styled.div`
   width: 30%;
@@ -84,10 +80,16 @@ const ArchivedChats = styled.div`
 `
 
 export default function ChatList (props) {
-  const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, onChatClick } = props
-  const tx = window.translate
-  const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
-  const realOpenContextMenu = useRef(null) 
+  const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
+  const { chatListIds, setQueryStr } = useChatListIds()
+  const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
+  const realOpenContextMenu = useRef(null)
+  const onChatClick = chatId => {
+    if (chatId === 6) return onShowArchivedChats()
+    props.onChatClick(chatId)    
+  }
+
+  useEffect(() => setQueryStr(queryStr), [queryStr])
 
   const openContextMenu = (event, chatId) => {
     if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
@@ -95,8 +97,8 @@ export default function ChatList (props) {
     realOpenContextMenu.current(event, chat)
   }
 
-  const { chatListIds, queryStr, setQueryStr} = useChatListIds()
-  const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
+  const tx = window.translate
+  const missingChatsMsg = tx(showArchivedChats ? 'no_archived_chats_desktop' : 'no_chats_desktop')
 
   return (
     <>
@@ -104,11 +106,12 @@ export default function ChatList (props) {
         { !chatListIds.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
         <div className='ConversationList'>
           {chatListIds.map(chatId => <LazyChatListItem
+            isSelected={selectedChatId === chatId}
             key={chatId}
             chatListItem={chatItems[chatId]}
             onClick={onChatClick.bind(null, chatId)}
           />)}
-          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({queryStr})}
+          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
         </div>
       </ChatListWrapper>
       <ChatListContextMenu
