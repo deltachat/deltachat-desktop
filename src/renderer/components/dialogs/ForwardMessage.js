@@ -6,7 +6,16 @@ import ChatListItem from '../helpers/ChatListItem'
 import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
+import styled from 'styled-components'
+
 const C = require('deltachat-node/constants')
+
+const ForwardMessageChatList = styled.div`
+  .module-conversation-list-item {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+`
 
 export default function ForwardMessage (props) {
   const tx = window.translate
@@ -33,12 +42,14 @@ export default function ForwardMessage (props) {
       </DeltaDialogHeader>
       <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={fetchChatsInView}>
         <Card style={{ padding: '0px' }}>
-          {chatListIds.map(chatId => <ChatListItem
-            key={chatId}
-            chatListItem={chatItems[chatId]}
-            onClick={onChatClick.bind(null, chatId)}
-          />)}
-          {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
+          <ForwardMessageChatList>
+            {chatListIds.map(chatId => <ChatListItem
+              key={chatId}
+              chatListItem={chatItems[chatId]}
+              onClick={onChatClick.bind(null, chatId)}
+            />)}
+            {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
+          </ForwardMessageChatList>
         </Card>
       </div>
     </DeltaDialogBase>
