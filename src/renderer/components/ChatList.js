@@ -49,7 +49,7 @@ const ArchivedChats = styled.div`
 export default function ChatList (props) {
   const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
   const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
-  const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
+  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
   const realOpenContextMenu = useRef(null)
   const onChatClick = chatId => {
     if (chatId === 6) return onShowArchivedChats()
@@ -70,7 +70,7 @@ export default function ChatList (props) {
 
   return (
     <>
-      <ChatListWrapper ref={scrollRef} onScroll={fetchChatsInView}>
+      <ChatListWrapper ref={scrollRef} onScroll={onChatListScroll}>
         { !chatListIds.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
         <div className='ConversationList'>
           {chatListIds.map(chatId => {

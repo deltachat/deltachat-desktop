@@ -21,7 +21,7 @@ export default function ForwardMessage (props) {
   const tx = window.translate
   const { forwardMessage, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatListIds(C.DC_GCL_NO_SPECIALS)
-  const [chatItems, fetchChatsInView, scrollRef] = useLazyChatListItems(chatListIds)
+  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
 
   const onChatClick = chatid => {
     callDcMethod('forwardMessage', [props.forwardMessage.msg.id, chatid])
@@ -40,7 +40,7 @@ export default function ForwardMessage (props) {
       <DeltaDialogHeader onClose={onClose}>
         <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
       </DeltaDialogHeader>
-      <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={fetchChatsInView}>
+      <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onChatListScroll}>
         <Card style={{ padding: '0px' }}>
           <ForwardMessageChatList>
             {chatListIds.map(chatId => <ChatListItem
