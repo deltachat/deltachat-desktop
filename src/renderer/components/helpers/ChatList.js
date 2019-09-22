@@ -3,7 +3,6 @@ import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import ChatListItem from './ChatListItem'
 import logger from '../../../logger'
-import { useDebouncedCallback } from 'use-debounce'
 
 const log = logger.getLogger('renderer/helpers/ChatList')
 
@@ -102,8 +101,6 @@ export const useLazyChatListItems = chatListIds => {
         setChatItems(chatItems => { return { ...chatItems, ...chats } })
     }
 
-    const [debouncedFetchChatsInView] = useDebouncedCallback(fetchChatsInView, 20)
-
     const updateChatsInViewUnsetOthers = async () => {
         if (isNotReady()) return
         const chatIds = chatIdsInView()
@@ -116,10 +113,9 @@ export const useLazyChatListItems = chatListIds => {
 
     const fetchChats = async (chatIds, force) => {
         const chatIdsToFetch = chatIds.filter(i => fetching.current.indexOf(i) === -1 && (typeof chatItems[i] === 'undefined' || force === true))
-
         if (chatIdsToFetch.length === 0) return
         fetching.current.push(...chatIdsToFetch)
-        const chats = await callDcMethodAsync('getSmallChatByIds', [chatIds])
+        const chats = await callDcMethodAsync('getSmallChatByIds', [chatIdsToFetch])
         fetching.current = fetching.current.filter(i => chatIdsToFetch.indexOf(i) === -1)
         return chats
     }
@@ -138,12 +134,8 @@ export const useLazyChatListItems = chatListIds => {
         }
     }
 
-    //let onScrollI = 0
     const onChatListScroll = () => {
-        //let i = onScrollI++
-        //console.log(`onScrollI ${i} START`)
         fetchChatsInView()
-        //console.log(`onScrollI ${i} END`)
     }
 
     const onChatListItemChanged = (event, {chatId}) => {
