@@ -140,7 +140,7 @@ export const useLazyChatListItems = chatListIds => {
 
     //let onScrollI = 0
     const onChatListScroll = () => {
-        let i = onScrollI++
+        //let i = onScrollI++
         //console.log(`onScrollI ${i} START`)
         fetchChatsInView()
         //console.log(`onScrollI ${i} END`)
@@ -167,10 +167,10 @@ export const useLazyChatListItems = chatListIds => {
         fetchChatsInView()
     }, [chatListIds])
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (Object.keys(chatItems).length > 0) return
         if (!scrollRef.current) return
         fetchChatsInView(scrollRef)
-    }, [chatListIds])
+    }, [chatListIds, scrollRef])
     return {chatItems, onChatListScroll, scrollRef}
 }
