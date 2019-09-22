@@ -38,7 +38,7 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
         return () => {
             ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
         }
-    }, [])
+    }, [listFlags, queryStr, queryContactId])
 
     useEffect(() => {
         log.debug('useChatListIds: listFlags, queryStr or queryContactId changed, refetching chatlistids')
@@ -124,7 +124,7 @@ export const useLazyChatListItems = chatListIds => {
         return chats
     }
 
-    const refetchChatIfInViewUnsetOtherwise = async (event, chatId) => {
+    const refetchChatIfInViewUnsetOtherwise = async (chatId) => {
         if (chatId === 0) return
         if (isChatIdInView(chatId)) {
             log.debug(`useLazyChatListItems: chat with id ${chatId} changed, it's in view therefore refetching`)
@@ -138,19 +138,27 @@ export const useLazyChatListItems = chatListIds => {
         }
     }
 
-    let onScrollI = 0
+    //let onScrollI = 0
     const onChatListScroll = () => {
         let i = onScrollI++
-        console.log(`onScrollI ${i} START`)
+        //console.log(`onScrollI ${i} START`)
         fetchChatsInView()
-        console.log(`onScrollI ${i} END`)
+        //console.log(`onScrollI ${i} END`)
+    }
+
+    const onChatListItemChanged = (event, {chatId}) => {
+        if (chatId === 0) {
+            updateChatsInViewUnsetOthers()
+        } else {
+            refetchChatIfInViewUnsetOtherwise(chatId)
+        }
     }
 
     useEffect(() => {
         log.debug('useLazyChatListItems: onComponentDidMount')
-        ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', refetchChatIfInViewUnsetOtherwise)
+        ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
         return () => {
-            ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', refetchChatIfInViewUnsetOtherwise)
+            ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
         }
     }, [chatListIds])
 

@@ -56,7 +56,7 @@ export default function ChatList (props) {
     props.onChatClick(chatId)
   }
 
-  // useEffect(() => setQueryStr(queryStr), [queryStr])
+  useEffect(() => setQueryStr(queryStr), [queryStr])
   useEffect(() => showArchivedChats ? setListFlags(C.DC_GCL_ARCHIVED_ONLY) : setListFlags(0), [showArchivedChats])
 
   const openContextMenu = (event, chatId) => {
