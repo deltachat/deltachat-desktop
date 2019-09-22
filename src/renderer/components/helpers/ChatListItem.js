@@ -165,6 +165,8 @@ const ChatListItemWrapper = styled.div`
 `
 const ChatListItem = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
+  console.log('yyy', chatListItem)
+  if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   return (
     <ChatListItemWrapper>

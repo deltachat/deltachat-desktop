@@ -14,8 +14,6 @@ const ChatListWrapper = styled.div`
   box-shadow: 0 0 4px 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
   user-select: none;
   margin-top: 50px;
-
-
 }
 `
 
