@@ -311,7 +311,7 @@ export default class Settings extends React.Component {
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>
-            
+            <BackgroundSelector onChange={(val) => this.handleDesktopSettingsChange('chatViewBgImg', val)} />
           </Card>
         </div>
       )
@@ -365,5 +365,65 @@ export default class Settings extends React.Component {
         </DeltaDialogBody>
       </DeltaDialogBase>
     )
+  }
+}
+
+class BackgroundSelector extends React.Component {
+  constructor () {
+    super()
+    this.fileInput = React.createRef()
+    this.colorInput = React.createRef()
+  }
+
+  // TODO: configure refs to open the inputs (file & color)
+  // TODO: actualy use the result
+  // TODO: style the thing
+  render () {
+    return (<div>
+      <SettingsContext.Consumer>
+        {(settings) => (
+          <div style={{ background: settings['chatViewBgImg'] }} aria-label='background Preview' >[preview]{settings['chatViewBgImg']}</div>
+        )}
+      </SettingsContext.Consumer>
+      <button onClick={this.onButton.bind(this, 'def')}>Default Background</button>
+      <button onClick={this.onButton.bind(this, 'def_color')}>Default Color</button>
+      <button onClick={this.onButton.bind(this, 'image')}>Custom Image</button>
+      <button onClick={this.onButton.bind(this, 'color')}>Custom Color</button>
+      <div hidden>
+        <input
+          type={'color'}
+          onChange={this.onColor.bind(this)}
+          ref={this.colorInput} /> // todo put this somewhere where it isn't closed by react rerender imidiately
+      </div>
+    </div>
+    )
+  }
+
+  setValue (val) {
+    this.props.onChange(val)
+  }
+
+  onButton (type, ev) {
+    switch (type) {
+      case 'def':
+        this.setValue(undefined)
+        break
+      case 'def_color':
+        this.setValue('var(--chatViewBg)')
+        break
+      case 'image':
+        ipcRenderer.send('selectBackgroundImage')
+        break
+      case 'color':
+        this.colorInput.current && this.colorInput.current.click()
+        break
+      default:
+        console.error("this shouldn't happen")
+    }
+  }
+
+  onColor (ev) {
+    // TODO debounce
+    this.setValue(ev.target.value)
   }
 }

@@ -1,6 +1,6 @@
 module.exports = { init }
 
-const { app, ipcMain } = require('electron')
+const { app, ipcMain, dialog } = require('electron')
 const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs')
@@ -173,11 +173,34 @@ function init (cwd, state, logHandler) {
     e.returnValue = app.localeData
   })
 
-  ipcMain.on('updateDesktopSetting', (e, key, value) => {
+  const updateDesktopSetting = (e, key, value) => {
     const { saved } = app.state
     saved[key] = value
     app.saveState({ saved })
     render()
+  }
+  ipcMain.on('updateDesktopSetting', updateDesktopSetting)
+
+  ipcMain.on('selectBackgroundImage', (e) => {
+    dialog.showOpenDialog(undefined, {
+      title: 'Select Background Image',
+      filters: [
+        { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile']
+    }, (filenames) => {
+      if (!filenames) { return }
+      log.info('BG-IMG Selected File:', filenames[0])
+      const newPath = path.join(getConfigPath(), 'backgrounds', path.basename(filenames[0]))
+      fs.copyFile(filenames[0], newPath, (err) => {
+        if (err) {
+          log.error('BG-IMG Copy Failed', err)
+          return
+        }
+        updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath}")`)
+      })
+    })
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {
