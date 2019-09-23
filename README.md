@@ -299,6 +299,6 @@ Also see <https://www.electron.build/configuration/publish>
 
 ## License
 
-Licensed under the GPLv3, see [LICENSE](./LICENSE) file for details.
+Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
 
 Copyright © 2019 `DeltaChat` contributors.
