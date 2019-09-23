@@ -17,6 +17,18 @@
   "pref_on_demand_location_streaming": {
     "message": "On-demand location streaming"
   },
+  "pref_background_default": {
+    "message": "Default background"
+  },
+  "pref_background_default_color": {
+    "message": "Default color"
+  },
+  "pref_background_custom": {
+    "message": "Custom image"
+  },
+  "pref_background_custom_color": {
+    "message": "Custom color"
+  },
   "copy_selected_text": {
     "message": "Copy selected text"
   },
@@ -36,25 +48,25 @@
     "message": "Attachment"
   },
   "a11y_encryption_padlock": {
-    "message": "encryption padock"
+    "message": "Encryption padlock"
   },
   "a11y_delivery_status_error":{
-    "message": "delivery status: error"
+    "message": "Delivery status: Error"
   },
   "a11y_delivery_status_sending":{
-    "message": "delivery status: sending"
+    "message": "Delivery status: Sending"
   },
   "a11y_delivery_status_draft":{
-    "message": "delivery status: draft"
+    "message": "Delivery status: Draft"
   },
   "a11y_delivery_status_delivered":{
-    "message": "delivery status: delivered"
+    "message": "Delivery status: Delivered"
   },
   "a11y_delivery_status_read":{
-    "message": "delivery status: read"
+    "message": "Delivery status: Read"
   },
   "a11y_delivery_status_":{
-    "message": "invalid delivery status"
+    "message": "Invalid delivery status"
   },
   "a11y_back_btn_label": {
     "message": "Back"
@@ -69,18 +81,33 @@
     "message": "Remove account"
   },
   "a11y_goto_media_label": {
-    "message": "go to Gallery"
+    "message": "Go to gallery"
   },
   "a11y_goto_chat_label": {
-    "message": "go to Chat"
+    "message": "Go to chat"
   },
   "a11y_map_btn_label": {
-    "message": "map"
+    "message": "Map"
   },
   "a11y_main_menu_label": {
-    "message": "main menu"
+    "message": "Main menu"
   },
   "a11y_message_context_menu_btn_label": {
-    "message": "message actions"
+    "message": "Message actions"
+  },
+  "a11y_background_preview_label": {
+    "message": "Background preview"
+  },
+"welcome_desktop": {
+"message": "Welcome to Delta Chat"
+  },
+"global_menu_help_learn_desktop": {
+"message": "Learn More About Delta Chat"
+  },
+"global_menu_help_about_desktop": {
+"message": "About Delta Chat"
+  },
+"about_deltachat_heading_desktop": {
+"message": "About Delta Chat"
   }
 }
