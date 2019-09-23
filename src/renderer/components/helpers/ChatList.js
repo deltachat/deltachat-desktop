@@ -3,6 +3,7 @@ import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import ChatListItem from './ChatListItem'
 import logger from '../../../logger'
+import { useDebouncedCallback } from 'use-debounce'
 
 const log = logger.getLogger('renderer/helpers/ChatList')
 
@@ -91,9 +92,9 @@ export const useLazyChatListItems = chatListIds => {
 
   const isChatIdInView = chatId => chatIdsInView().indexOf(chatId) !== -1
 
-  const fetchChatsInView = async () => {
+  const fetchChatsInView = async (offset) => {
     if (isNotReady()) return
-    const chatIds = chatIdsInView()
+    const chatIds = chatIdsInView(offset)
     const chats = await fetchChats(chatIds)
 
     if (!chats) return
@@ -135,9 +136,9 @@ export const useLazyChatListItems = chatListIds => {
     }
   }
 
-  const onChatListScroll = () => {
-    fetchChatsInView()
-  }
+  const [onChatListScroll] = useDebouncedCallback(() => {
+    fetchChatsInView(20)
+  }, 50)
 
   const onChatListItemChanged = (event, { chatId }) => {
     if (chatId === 0) {
@@ -148,16 +149,12 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   useEffect(() => {
-    log.debug('useLazyChatListItems: onComponentDidMount')
+    log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
+    fetchChatsInView()
     ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     }
-  }, [chatListIds])
-
-  useEffect(() => {
-    log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
-    fetchChatsInView()
   }, [chatListIds])
 
   useEffect(() => {

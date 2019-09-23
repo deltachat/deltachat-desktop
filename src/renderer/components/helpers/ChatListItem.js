@@ -5,56 +5,13 @@ import { Timestamp } from '../conversations'
 import MessageBody from '../MessageBody'
 import { Avatar, VerifiedIcon } from '../helpers/Contact'
 
-const MessageText1 = styled.div`
-  float: left;
-  margin-right: 2px;
-`
-const MessageText1Draft = styled.div`
-  float: left;
-  margin-right: 2px;
-  color: ${props => props.theme.draftTextColor}
-`
-
-const UnreadCounterDiv = styled.div`
-  color: var(--unreadCountLabel);
-  background-color: var(--unreadCountBg);
-  text-align: center;
-
-  // For alignment with the message text
-  margin-top: 1px;
-
-  font-size: 9pt;
-  margin-left: 5px;
-  height: 20px;
-  padding: 0 5pt;
-  line-height: 20px;
-  border-radius: 10px;
-  font-weight: bold;
-`
-const UnreadCounter = React.memo(props => {
-  const { freshMessageCounter } = props
-  if (freshMessageCounter === 0) return null
+const FreshMessageCounter = React.memo(props => {
+  const { counter } = props
+  if (counter === 0) return null
   return (
-    <UnreadCounterDiv>{freshMessageCounter}</UnreadCounterDiv>
+    <div className='chat-list-item__fresh-message-counter' >{counter}</div>
   )
 })
-
-const GroupIcon = styled.span`
-  display: inline-block;
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 2px;
-  -webkit-mask: url(../images/group-icon.svg) no-repeat center;
-  -webkit-mask-size: 100%;
-  background-color: var(--globalText);
-`
-
-const ContactNameSpan = styled.span`
-  font-weight: 200;
-  font-size: medium;
-  color: ${({ isSelected, theme }) => isSelected ? theme.chatListItemSelectedText : 'unset'};
-  
-`
 
 const Header = React.memo(props => {
   const {
@@ -69,12 +26,12 @@ const Header = React.memo(props => {
         'chat-list-item__header__name',
         freshMessageCounter > 0 ? 'chat-list-item__header__name--with-unread' : null
       )}>
-        {isGroup && <GroupIcon />}
+        {isGroup && <div className='chat-list-item__group-icon' />}
         {isVerified && <VerifiedIcon />}
-        <ContactNameSpan isSelected={isSelected}>
+        <span classNames='chat-list-item__name'>
           {name || email}
           {' '}
-        </ContactNameSpan>
+        </span>
       </div>
       <div className={classNames(
         'chat-list-item__header__date',
@@ -95,22 +52,25 @@ export const Message = React.memo(props => {
 
   if (!summary) return null
 
-  const Text1 = summary.status === 'draft' ? MessageText1Draft : MessageText1
-
   return (
     <div className='chat-list-item__message'>
       <div className={classNames(
         'chat-list-item__message__text',
         freshMessageCounter > 0 ? 'chat-list-item__message__text--has-unread' : null
       )}>
-        { summary.text1 !== null ? (<Text1>{summary.text1 + ': ' }</Text1>) : null }
+        { summary.text1 !== null && 
+          <div className={classNames(
+              'chat-list-item__message__text__summary',
+              { 'chat-list-item__message__text__summary--draft' : summary.status === 'draft' }
+          )}>{summary.text1 + ': ' }</div>
+        }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
       { summary.status
-        ? (<div className={classNames('status-icon', `status-icon--${summary.status}`)} />)
+        ? (<div className='chat-list-item__status-icon' />)
         : null
       }
-      <UnreadCounter freshMessageCounter={freshMessageCounter} />
+      <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )
 })
@@ -121,51 +81,8 @@ export const PlaceholderChatListItem = React.memo((props) => {
   )
 })
 
-const ChatListItemWrapper = styled.div`
-  span.module-contact-name {
-    font-weight: 200;
-    font-size: medium;
-  }
-
-  .chat-list-item { 
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
-  .chat-list-item:hover {
-    background-color: ${props => props.theme.chatListItemBgHover}
-  }
-
-  .chat-list-item--is-selected {
-    background-color: ${props => props.theme.chatListItemSelectedBg};
-    color: ${props => props.theme.chatListItemSelectedText};
-
-    span.module-contact-name {
-      color: ${props => props.theme.chatListItemSelectedText};
-    }
-
-    .chat-list-item__is-group {
-      filter: unset;
-    }
-
-    &:hover {
-        background-color: var(--chatListItemSelectedBg);
-    }
-  }
-
-  .chat-list-item__header__name {
-    width: 90%;
-  }
-
-  .status-icon {
-    flex-shrink: 0;
-    margin-top: 2px;
-    margin-left: calc(100% - 90% - 12px);
-  }
-`
 const ChatListItem = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
-  console.log('yyy', chatListItem)
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   return (
