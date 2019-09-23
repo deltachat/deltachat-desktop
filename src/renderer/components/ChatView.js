@@ -249,7 +249,7 @@ class ChatView extends React.Component {
             style={{ 
               gridTemplateRows: `auto ${this.state.composerSize}px`,
               background: settings['chatViewBgImg'],
-              'background-size': 'cover'
+              backgroundSize: 'cover'
             }}
             ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
             <ConversationWrapper>

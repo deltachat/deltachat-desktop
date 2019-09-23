@@ -192,7 +192,7 @@ function init (cwd, state, logHandler) {
     }, (filenames) => {
       if (!filenames) { return }
       log.info('BG-IMG Selected File:', filenames[0])
-      const newPath = path.join(getConfigPath(), 'backgrounds', path.basename(filenames[0]))
+      const newPath = path.join(getConfigPath(), 'background' + path.extname(filenames[0]))
       fs.copyFile(filenames[0], newPath, (err) => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)

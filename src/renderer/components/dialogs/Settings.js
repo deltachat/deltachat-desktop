@@ -373,22 +373,27 @@ class BackgroundSelector extends React.Component {
     super()
     this.fileInput = React.createRef()
     this.colorInput = React.createRef()
+    this.translate = window.translate
   }
 
-  // TODO: configure refs to open the inputs (file & color)
-  // TODO: actualy use the result
   // TODO: style the thing
   render () {
-    return (<div>
+    return (<div style={{ display: 'flex' }}>
       <SettingsContext.Consumer>
         {(settings) => (
-          <div style={{ background: settings['chatViewBgImg'] }} aria-label='background Preview' >[preview]{settings['chatViewBgImg']}</div>
+          <div
+            style={{ background: settings['chatViewBgImg'], backgroundSize: 'cover' }}
+            aria-label='background Preview'
+            className={'background-preview'}
+          />
         )}
       </SettingsContext.Consumer>
-      <button onClick={this.onButton.bind(this, 'def')}>Default Background</button>
-      <button onClick={this.onButton.bind(this, 'def_color')}>Default Color</button>
-      <button onClick={this.onButton.bind(this, 'image')}>Custom Image</button>
-      <button onClick={this.onButton.bind(this, 'color')}>Custom Color</button>
+      <div className={'background-options'}>
+        <button onClick={this.onButton.bind(this, 'def')}>Default Background</button>
+        <button onClick={this.onButton.bind(this, 'def_color')}>Default Color</button>
+        <button onClick={this.onButton.bind(this, 'image')}>Custom Image</button>
+        <button onClick={this.onButton.bind(this, 'color')}>Custom Color</button>
+      </div>
       <div hidden>
         <input
           type={'color'}
