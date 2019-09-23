@@ -64,10 +64,10 @@ const Header = React.memo(props => {
   const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
 
   return (
-    <div className='module-conversation-list-item__header'>
+    <div className='chat-list-item__header'>
       <div className={classNames(
-        'module-conversation-list-item__header__name',
-        freshMessageCounter > 0 ? 'module-conversation-list-item__header__name--with-unread' : null
+        'chat-list-item__header__name',
+        freshMessageCounter > 0 ? 'chat-list-item__header__name--with-unread' : null
       )}>
         {isGroup && <GroupIcon />}
         {isVerified && <VerifiedIcon />}
@@ -77,13 +77,13 @@ const Header = React.memo(props => {
         </ContactNameSpan>
       </div>
       <div className={classNames(
-        'module-conversation-list-item__header__date',
-        freshMessageCounter > 0 ? 'module-conversation-list-item__header__date--has-unread' : null
+        'chat-list-item__header__date',
+        freshMessageCounter > 0 ? 'chat-list-item__header__date--has-unread' : null
       )}>
         <Timestamp
           timestamp={lastUpdated}
           extended={false}
-          module='module-conversation-list-item__header__timestamp'
+          module='chat-list-item__header__timestamp'
         />
       </div>
     </div>
@@ -98,10 +98,10 @@ export const Message = React.memo(props => {
   const Text1 = summary.status === 'draft' ? MessageText1Draft : MessageText1
 
   return (
-    <div className='module-conversation-list-item__message'>
+    <div className='chat-list-item__message'>
       <div className={classNames(
-        'module-conversation-list-item__message__text',
-        freshMessageCounter > 0 ? 'module-conversation-list-item__message__text--has-unread' : null
+        'chat-list-item__message__text',
+        freshMessageCounter > 0 ? 'chat-list-item__message__text--has-unread' : null
       )}>
         { summary.text1 !== null ? (<Text1>{summary.text1 + ': ' }</Text1>) : null }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
@@ -127,16 +127,16 @@ const ChatListItemWrapper = styled.div`
     font-size: medium;
   }
 
-  .module-conversation-list-item { 
+  .chat-list-item { 
     padding-right: 10px;
     padding-left: 10px;
   }
 
-  .module-conversation-list-item:hover {
+  .chat-list-item:hover {
     background-color: ${props => props.theme.chatListItemBgHover}
   }
 
-  .module-conversation-list-item--is-selected {
+  .chat-list-item--is-selected {
     background-color: ${props => props.theme.chatListItemSelectedBg};
     color: ${props => props.theme.chatListItemSelectedText};
 
@@ -144,7 +144,7 @@ const ChatListItemWrapper = styled.div`
       color: ${props => props.theme.chatListItemSelectedText};
     }
 
-    .module-conversation-list-item__is-group {
+    .chat-list-item__is-group {
       filter: unset;
     }
 
@@ -153,7 +153,7 @@ const ChatListItemWrapper = styled.div`
     }
   }
 
-  .module-conversation-list-item__header__name {
+  .chat-list-item__header__name {
     width: 90%;
   }
 
@@ -169,24 +169,22 @@ const ChatListItem = React.memo(props => {
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   return (
-    <ChatListItemWrapper>
-      <div
-        role='button'
-        onClick={onClick}
-        onContextMenu={onContextMenu}
-        className={classNames(
-          'module-conversation-list-item',
-          chatListItem.freshMessageCounter > 0 ? 'module-conversation-list-item--has-unread' : null,
-          isSelected ? 'module-conversation-list-item--is-selected' : null
-        )}
-      >
-        {<Avatar {...chatListItem} displayName={chatListItem.name} />}
-        <div className='module-conversation-list-item__content'>
-          <Header chatListItem={chatListItem} />
-          <Message chatListItem={chatListItem} />
-        </div>
+    <div
+      role='button'
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      className={classNames(
+        'chat-list-item',
+        chatListItem.freshMessageCounter > 0 ? 'chat-list-item--has-unread' : null,
+        isSelected ? 'chat-list-item--is-selected' : null
+      )}
+    >
+      {<Avatar {...chatListItem} displayName={chatListItem.name} />}
+      <div className='chat-list-item__content'>
+        <Header chatListItem={chatListItem} />
+        <Message chatListItem={chatListItem} />
       </div>
-    </ChatListItemWrapper>
+    </div>
   )
 }, (prevProps, nextProps) => {
   const shouldRerender = prevProps.chatListItem !== nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected

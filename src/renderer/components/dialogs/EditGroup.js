@@ -11,7 +11,7 @@ import {
   PseudoContactListItemNoSearchResults,
   PseudoContactListItemShowQrCode,
   PseudoContactListItemAddMember
-} from './CreateChat-Styles'
+} from '../helpers/ContactListItem'
 import {
   GroupSeperator,
   GroupMemberContactListWrapper,

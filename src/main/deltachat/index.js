@@ -88,15 +88,15 @@ class DeltaChatController extends EventEmitter {
       if (event === 'DC_EVENT_INFO') return
       this.sendToRenderer(event, ...args)
     })
-    
+
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
     dc.on('DC_EVENT_INCOMING_MSG', this.onChatListChanged.bind(this))
     dc.on('DC_EVENT_MSGS_CHANGED', this.onChatListChanged.bind(this))
     dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatListChanged.bind(this))
     dc.on('DC_EVENT_MSG_DELIVERED', this.onChatListChanged.bind(this))
 
-    dc.on('DC_EVENT_INCOMING_MSG',  this.onChatListItemChanged.bind(this))
-    dc.on('DC_EVENT_MSGS_CHANGED',  this.onChatListItemChanged.bind(this))
+    dc.on('DC_EVENT_INCOMING_MSG', this.onChatListItemChanged.bind(this))
+    dc.on('DC_EVENT_MSGS_CHANGED', this.onChatListItemChanged.bind(this))
     dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatListItemChanged.bind(this))
     dc.on('DC_EVENT_MSG_DELIVERED', this.onChatListItemChanged.bind(this))
 
@@ -126,14 +126,14 @@ class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  onChatListItemChanged(chatId) {
-    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', {chatId})
+  onChatListItemChanged (chatId) {
+    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
+  }
 
+  onMessageListChanged () {
   }
-  onMessageListChanged() {
-  }
-  
-  onChatChanged() {
+
+  onChatChanged () {
 
   }
 

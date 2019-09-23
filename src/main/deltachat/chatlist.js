@@ -63,7 +63,7 @@ function getListAndIndexForChatId (chatId) {
   let list = this._dc.getChatList(0, '', 0)
   let i = findIndexOfChatIdInChatList(list, chatId)
 
-  if (i == -1) {
+  if (i === -1) {
     list = this._dc.getChatList(1, '', 0)
     i = findIndexOfChatIdInChatList(list, chatId)
   }

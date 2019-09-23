@@ -1,48 +1,9 @@
 import React, { useRef, useEffect } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import styled from 'styled-components'
 import { useChatListIds, useLazyChatListItems } from './helpers/ChatList'
 import ChatListItem from './helpers/ChatListItem'
+import { PseudoContactListItemNoSearchResults } from './helpers/ContactListItem'
 const C = require('deltachat-node/constants')
-
-const ChatListWrapper = styled.div`
-  width: 30%;
-  height: calc(100vh - 50px);
-  float: left;
-  overflow-y: auto;
-  border-right: 1px solid #b9b9b9;
-  box-shadow: 0 0 4px 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
-  user-select: none;
-  margin-top: 50px;
-}
-`
-
-const ChatListNoChats = styled.div`
-  height: 52px;
-  text-align: center;
-  padding-top: calc((52px - 14px) / 2);
-  padding: 5px;
-
-  p {
-    margin: 0 auto;
-  }
-`
-
-const ContactRequestItemWrapper = styled.div`
-  .module-conversation-list-item {
-    background-color:#ccc;
-  }
-
-  .module-conversation-list-item:hover {
-    background-color:#bbb;
-  }
-`
-
-const ArchivedChats = styled.div`
-  .module-conversation-list-item__avatar {
-    visibility: hidden;
-  }
-`
 
 export default function ChatList (props) {
   const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
@@ -68,22 +29,25 @@ export default function ChatList (props) {
 
   return (
     <>
-      <ChatListWrapper ref={scrollRef} onScroll={onChatListScroll}>
-        { !chatListIds.length && (<ChatListNoChats><p>{missingChatsMsg}</p></ChatListNoChats>) }
-        <div className='ConversationList'>
-          {chatListIds.map(chatId => {
-            return (
-              <ChatListItem
-                isSelected={selectedChatId === chatId}
-                key={chatId}
-                chatListItem={chatItems[chatId]}
-                onClick={onChatClick.bind(null, chatId)}
-                onContextMenu={(event) => { openContextMenu(event, chatId) }}
-              />
-            )
-          })}
-        </div>
-      </ChatListWrapper>
+      <div className='chat-list' ref={scrollRef} onScroll={onChatListScroll}>
+        {chatListIds.map(chatId => {
+          return (
+            <ChatListItem
+              isSelected={selectedChatId === chatId}
+              key={chatId}
+              chatListItem={chatItems[chatId]}
+              onClick={onChatClick.bind(null, chatId)}
+              onContextMenu={(event) => { openContextMenu(event, chatId) }}
+            />
+          )
+        })}
+        {chatListIds.length === 0 && queryStr === '' &&
+         null
+        }
+        { chatListIds.length === 0 && queryStr !== '' &&
+          PseudoContactListItemNoSearchResults({ queryStr })
+        }
+      </div>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}
         getShow={show => { realOpenContextMenu.current = show }}

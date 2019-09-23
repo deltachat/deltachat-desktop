@@ -3,7 +3,8 @@ import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader } from '../helpers/DeltaDialog'
 import { useChatListIds, useLazyChatListItems } from '../helpers/ChatList'
 import ChatListItem from '../helpers/ChatListItem'
-import { CreateChatSearchInput, PseudoContactListItemNoSearchResults } from './CreateChat-Styles'
+import { CreateChatSearchInput } from './CreateChat-Styles'
+import { PseudoContactListItemNoSearchResults } from '../helpers/ContactListItem'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
 import styled from 'styled-components'
@@ -11,10 +12,6 @@ import styled from 'styled-components'
 const C = require('deltachat-node/constants')
 
 const ForwardMessageChatList = styled.div`
-  .module-conversation-list-item {
-    padding-right: 20px;
-    padding-left: 20px;
-  }
 `
 
 export default function ForwardMessage (props) {
@@ -42,14 +39,14 @@ export default function ForwardMessage (props) {
       </DeltaDialogHeader>
       <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onChatListScroll}>
         <Card style={{ padding: '0px' }}>
-          <ForwardMessageChatList>
+          <div className='forward-message-list-chat-list'>
             {chatListIds.map(chatId => <ChatListItem
               key={chatId}
               chatListItem={chatItems[chatId]}
               onClick={onChatClick.bind(null, chatId)}
             />)}
             {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
-          </ForwardMessageChatList>
+          </div>
         </Card>
       </div>
     </DeltaDialogBase>
