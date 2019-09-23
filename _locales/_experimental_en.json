@@ -98,16 +98,16 @@
   "a11y_background_preview_label": {
     "message": "Background preview"
   },
-"welcome_desktop": {
-"message": "Welcome to Delta Chat"
+  "welcome_desktop": {
+    "message": "Welcome to Delta Chat"
   },
-"global_menu_help_learn_desktop": {
-"message": "Learn More About Delta Chat"
+  "global_menu_help_learn_desktop": {
+    "message": "Learn More About Delta Chat"
   },
-"global_menu_help_about_desktop": {
-"message": "About Delta Chat"
+  "global_menu_help_about_desktop": {
+    "message": "About Delta Chat"
   },
-"about_deltachat_heading_desktop": {
-"message": "About Delta Chat"
+  "about_deltachat_heading_desktop": {
+    "message": "About Delta Chat"
   }
 }
