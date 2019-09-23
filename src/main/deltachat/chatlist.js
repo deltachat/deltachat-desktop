@@ -148,7 +148,7 @@ function getFullChatById (chatId, loadMessages) {
   if (!rawChat) return null
   this._pages = 0
   const chat = rawChat.toJson()
-  const draft = chatId === 6 ? '' : this._dc.getDraft(chatId)
+  const draft = this._dc.getDraft(chatId)
 
   if (draft) {
     chat.draft = draft.getText()
