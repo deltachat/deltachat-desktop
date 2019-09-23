@@ -373,26 +373,25 @@ class BackgroundSelector extends React.Component {
     super()
     this.fileInput = React.createRef()
     this.colorInput = React.createRef()
-    this.translate = window.translate
   }
 
-  // TODO: style the thing
   render () {
+    const tx = window.translate
     return (<div style={{ display: 'flex' }}>
       <SettingsContext.Consumer>
         {(settings) => (
           <div
             style={{ background: settings['chatViewBgImg'], backgroundSize: 'cover' }}
-            aria-label='background Preview'
+            aria-label={tx('a11y_background_preview_label')}
             className={'background-preview'}
           />
         )}
       </SettingsContext.Consumer>
       <div className={'background-options'}>
-        <button onClick={this.onButton.bind(this, 'def')}>Default Background</button>
-        <button onClick={this.onButton.bind(this, 'def_color')}>Default Color</button>
-        <button onClick={this.onButton.bind(this, 'image')}>Custom Image</button>
-        <button onClick={this.onButton.bind(this, 'color')}>Custom Color</button>
+        <button onClick={this.onButton.bind(this, 'def')}>{tx('pref_background_default')}</button>
+        <button onClick={this.onButton.bind(this, 'def_color')}>{tx('pref_background_default_color')}</button>
+        <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom')}</button>
+        <button onClick={this.onButton.bind(this, 'color')}>{tx('pref_background_custom_color')}</button>
       </div>
       <div hidden>
         <input
