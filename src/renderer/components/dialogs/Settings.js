@@ -422,6 +422,7 @@ class BackgroundSelector extends React.Component {
         this.colorInput.current && this.colorInput.current.click()
         break
       default:
+        /* ignore-console-log */
         console.error("this shouldn't happen")
     }
   }
