@@ -8,16 +8,11 @@ import { Avatar, VerifiedIcon } from '../helpers/Contact'
 const FreshMessageCounter = React.memo(props => {
   const { counter } = props
   if (counter === 0) return null
-  return (
-    <div className='chat-list-item__fresh-message-counter' >{counter}</div>
-  )
+  return <div className='chat-list-item__fresh-message-counter' >{counter}</div>
 })
 
 const Header = React.memo(props => {
-  const {
-    freshMessageCounter,
-    lastUpdated
-  } = props.chatListItem
+  const { freshMessageCounter, lastUpdated } = props.chatListItem
   const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
 
   return (
@@ -28,14 +23,13 @@ const Header = React.memo(props => {
       )}>
         {isGroup && <div className='chat-list-item__group-icon' />}
         {isVerified && <VerifiedIcon />}
-        <span classNames='chat-list-item__name'>
-          {name || email}
-          {' '}
+        <span className='chat-list-item__name'>
+          {(name || email) + ' '}
         </span>
       </div>
       <div className={classNames(
         'chat-list-item__header__date',
-        freshMessageCounter > 0 ? 'chat-list-item__header__date--has-unread' : null
+        { 'chat-list-item__header__date--has-unread' : freshMessageCounter > 0 }
       )}>
         <Timestamp
           timestamp={lastUpdated}
@@ -49,37 +43,29 @@ const Header = React.memo(props => {
 
 export const Message = React.memo(props => {
   const { summary, freshMessageCounter } = props.chatListItem
-
   if (!summary) return null
 
   return (
     <div className='chat-list-item__message'>
       <div className={classNames(
         'chat-list-item__message__text',
-        freshMessageCounter > 0 ? 'chat-list-item__message__text--has-unread' : null
+        { 'chat-list-item__message__text--has-unread': freshMessageCounter > 0 } 
       )}>
         { summary.text1 !== null && 
           <div className={classNames(
-              'chat-list-item__message__text__summary',
-              { 'chat-list-item__message__text__summary--draft' : summary.status === 'draft' }
+            'chat-list-item__message__text__summary',
+            { 'chat-list-item__message__text__summary--draft' : summary.status === 'draft' }
           )}>{summary.text1 + ': ' }</div>
         }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      { summary.status
-        ? (<div className='chat-list-item__status-icon' />)
-        : null
-      }
+      { summary.status && <div className='chat-list-item__status-icon' /> }
       <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )
 })
 
-export const PlaceholderChatListItem = React.memo((props) => {
-  return (
-    <div style={{ height: '64px' }} />
-  )
-})
+export const PlaceholderChatListItem = React.memo((props) => { return <div style={{ height: '64px' }} /> })
 
 const ChatListItem = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
@@ -92,11 +78,13 @@ const ChatListItem = React.memo(props => {
       onContextMenu={onContextMenu}
       className={classNames(
         'chat-list-item',
-        chatListItem.freshMessageCounter > 0 ? 'chat-list-item--has-unread' : null,
-        isSelected ? 'chat-list-item--is-selected' : null
+        {
+          'chat-list-item--has-unread': chatListItem.freshMessageCounter > 0,
+          'chat-list-item--is-selected': isSelected
+        }
       )}
     >
-      {<Avatar {...chatListItem} displayName={chatListItem.name} />}
+      <Avatar {...chatListItem} displayName={chatListItem.name} />
       <div className='chat-list-item__content'>
         <Header chatListItem={chatListItem} />
         <Message chatListItem={chatListItem} />

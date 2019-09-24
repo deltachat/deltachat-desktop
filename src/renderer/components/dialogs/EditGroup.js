@@ -8,10 +8,10 @@ import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import { useGroupImage, useContactSearch, GroupSettingsSetNameAndProfileImage, AddMemberInnerDialog, ShowQrCodeInnerDialog } from './CreateChat'
 import { useContacts, ContactList2 } from '../helpers/ContactList'
 import {
-  PseudoContactListItemNoSearchResults,
-  PseudoContactListItemShowQrCode,
-  PseudoContactListItemAddMember
-} from '../helpers/ContactListItem'
+  PseudoListItemNoSearchResults,
+  PseudoListItemShowQrCode,
+  PseudoListItemAddMember
+} from '../helpers/PseudoListItem'
 import {
   GroupSeperator,
   GroupMemberContactListWrapper,
@@ -83,8 +83,8 @@ export function EditGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setViewMode('addMember')} />
-        <PseudoContactListItemShowQrCode onClick={async () => {
+        <PseudoListItemAddMember onClick={() => setViewMode('addMember')} />
+        <PseudoListItemShowQrCode onClick={async () => {
           const qrCode = await callDcMethodAsync('getQrCode', groupId)
           setQrCode(qrCode)
           setViewMode('showQrCode')
@@ -142,7 +142,7 @@ export function EditGroupInner (props) {
                 />
               </>
               )}
-              {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+              {queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
             </GroupMemberContactListWrapper>
           </Card>
         </div>

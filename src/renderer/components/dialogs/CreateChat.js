@@ -8,11 +8,12 @@ import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
 import { useContacts, ContactList2 } from '../helpers/ContactList'
 import {
-  PseudoContactListItem,
-  PseudoContactListItemNoSearchResults,
-  PseudoContactListItemShowQrCode,
-  PseudoContactListItemAddMember
-} from '../helpers/ContactListItem'
+  PseudoListItem,
+  PseudoListItemNoSearchResults,
+  PseudoListItemShowQrCode,
+  PseudoListItemAddMember,
+  PseudoListItemAddContact
+} from '../helpers/PseudoListItem'
 
 import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from '../helpers/DeltaDialog'
@@ -58,13 +59,13 @@ export default function CreateChat (props) {
     if (queryStr !== '') return null
     return (
       <Fragment>
-        <PseudoContactListItem
+        <PseudoListItem
           id='newgroup'
           cutoff='+'
           text={tx('menu_new_group')}
           onClick={() => setViewMode('createGroup-main')}
         />
-        <PseudoContactListItem
+        <PseudoListItem
           id='newverifiedgroup'
           cutoff='+'
           text={tx('menu_new_verified_group')}
@@ -87,15 +88,7 @@ export default function CreateChat (props) {
         (contacts.length === 1 && contacts[0].address.toLowerCase() === queryStr.toLowerCase())) {
       return null
     }
-    return (
-      <PseudoContactListItem
-        id='newcontact'
-        cutoff='+'
-        text={tx('menu_new_contact')}
-        subText={queryStrIsEmail ? queryStr + ' ...' : tx('contacts_type_email_above')}
-        onClick={addContactOnClick}
-      />
-    )
+    return PseudoListItemAddContact({queryStr, queryStrIsEmail, onClick: addContactOnClick})
   }
 
   return (
@@ -212,7 +205,7 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
               isChecked={({ id }) => groupMembers.indexOf(id) !== -1}
               onCheckboxClick={addRemoveGroupMember}
             />
-            { queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+            { queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
           </GroupMemberContactListWrapper>
         </Card>
       </DeltaDialogBody>
@@ -301,8 +294,8 @@ export function CreateGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setViewMode('createGroup-addMember')} />
-        <PseudoContactListItemShowQrCode onClick={async () => {
+        <PseudoListItemAddMember onClick={() => setViewMode('createGroup-addMember')} />
+        <PseudoListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('getQrCode', gId)
@@ -362,7 +355,7 @@ export function CreateGroupInner (props) {
                   />
                 </>
                 )}
-                {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+                {queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
               </GroupMemberContactListWrapper>
             </Card>
           </div>
@@ -403,8 +396,8 @@ export function CreateVerifiedGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setViewMode('createVerifiedGroup-addMember')} />
-        <PseudoContactListItemShowQrCode onClick={async () => {
+        <PseudoListItemAddMember onClick={() => setViewMode('createVerifiedGroup-addMember')} />
+        <PseudoListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('getQrCode', gId)
@@ -464,7 +457,7 @@ export function CreateVerifiedGroupInner (props) {
                 />
               </>
               )}
-              {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+              {queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
             </GroupMemberContactListWrapper>
           </Card>
         </div>
@@ -484,7 +477,7 @@ export function CreateVerifiedGroupInner (props) {
   )
 }
 
-function isValidEmail (email) {
+export function isValidEmail (email) {
   // empty string is not allowed
   if (email === '') return false
   const parts = email.split('@')

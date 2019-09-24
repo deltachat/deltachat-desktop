@@ -1,14 +1,19 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import { useChatListIds, useLazyChatListItems } from './helpers/ChatList'
 import ChatListItem from './helpers/ChatListItem'
-import { PseudoContactListItemNoSearchResults } from './helpers/ContactListItem'
-const C = require('deltachat-node/constants')
+import { PseudoListItemNoSearchResults, PseudoListItemAddContact } from './helpers/PseudoListItem'
+import C from 'deltachat-node/constants'
+import { isValidEmail } from './dialogs/CreateChat'
+import ScreenContext from '../contexts/ScreenContext'
+import { callDcMethodAsync } from '../ipc'
 
 export default function ChatList (props) {
   const { onDeadDropClick, selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
+  const queryStrIsEmail = isValidEmail(queryStr)
   const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
+  const { changeScreen } = useContext(ScreenContext)
   const realOpenContextMenu = useRef(null)
   const onChatClick = chatId => {
     if (chatId === 6) return onShowArchivedChats()
@@ -22,6 +27,20 @@ export default function ChatList (props) {
     if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
     const chat = chatItems[chatId]
     realOpenContextMenu.current(event, chat)
+  }
+  const addContactOnClick = async () => {
+    if (!queryStrIsEmail) return
+
+    const contactId = await callDcMethodAsync('createContact', [queryStr, queryStr])
+    const chatId = await callDcMethodAsync('createChatByContactId', contactId)
+    changeScreen('ChatView', { chatId })
+  }
+
+  const renderAddContactIfNeeded = () => {
+    if (queryStr === '') return null
+    console.log(chatItems[chatListIds[0]], chatListIds[0])
+    if (chatListIds.length > 0 && chatItems[chatListIds[0]].contacts[0].address === queryStr) return null
+    return PseudoListItemAddContact({queryStr, queryStrIsEmail, onClick: addContactOnClick})
   }
 
   const tx = window.translate
@@ -44,9 +63,7 @@ export default function ChatList (props) {
         {chatListIds.length === 0 && queryStr === '' &&
          null
         }
-        { chatListIds.length === 0 && queryStr !== '' &&
-          PseudoContactListItemNoSearchResults({ queryStr })
-        }
+        {renderAddContactIfNeeded()}
       </div>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}

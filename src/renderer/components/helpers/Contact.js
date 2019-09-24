@@ -95,7 +95,10 @@ const ContactNameWrapper = styled.div`
   display: inline-block;
   width: calc(100% - 64px);
   height: 54px;
-  margin-left: 20px;
+  margin-left: 10px;
+  .chat-list & {
+    width: calc(100% - 84px);
+  }
 `
 
 const ContactNameDisplayName = styled.p`
@@ -133,6 +136,10 @@ const ContactWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   width: 300px;
+  .chat-list & {
+    width: 30vw;
+    padding: 0px 10px;
+  }
 `
 export default function Contact (props) {
   const { avatarPath, color, displayName, address, isVerified } = props.contact

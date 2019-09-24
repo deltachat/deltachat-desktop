@@ -12,12 +12,15 @@ const ContactListDiv = styled.div`
   }
 `
 
-const ContactListItemWrapper = styled.div`
+export const ContactListItemWrapper = styled.div`
   display: flex;
   padding-left: 40px;
   &:hover {
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
+  }
+  .chat-list & {
+    padding-left: 0px;
   }
 `
 
@@ -137,20 +140,6 @@ export function ContactListItem (props) {
   )
 }
 
-export function PseudoContactListItem (props) {
-  const { id, cutoff, text, subText, onClick, avatar } = props
-  return (
-    <ContactListItemWrapper
-      key={id}
-      onClick={onClick}
-    >
-      <PseudoContact cutoff={cutoff} text={text} subText={subText} avatar={avatar}>
-        {props.children}
-      </PseudoContact>
-    </ContactListItemWrapper>
-  )
-}
-
 export const ContactListSearchInput = styled.input`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -166,48 +155,3 @@ export const ContactListSearchInput = styled.input`
   font-size: 18px;
 `
 
-export const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
-  transform: rotate(45deg); 
-  line-height: 46px;
-  letter-spacing: 1px;
-  &::after {
-    content: ':-(';
-  }
-`
-
-export const PseudoContactListItemNoSearchResults = ({ queryStr }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='addmember'
-      text={tx('search_no_result_for_x', queryStr)}
-    >
-      <NoSearchResultsAvatarBubble />
-    </PseudoContactListItem>
-  )
-}
-
-export const PseudoContactListItemShowQrCode = ({ onClick }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='showqrcode'
-      text={tx('qrshow_title')}
-      onClick={onClick}
-    >
-      <QRAvatar />
-    </PseudoContactListItem>
-  )
-}
-
-export const PseudoContactListItemAddMember = ({ onClick }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='addmember'
-      cutoff='+'
-      text={tx('group_add_members')}
-      onClick={onClick}
-    />
-  )
-}
