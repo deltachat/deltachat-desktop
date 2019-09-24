@@ -96,7 +96,7 @@ export default class Settings extends React.Component {
 
   onKeysImport () {
     const opts = {
-      title: window.translate('pref_managekeys_import_explain'),
+      title: window.translate('pref_managekeys_import_secret_keys'),
       defaultPath: remote.app.getPath('downloads'),
       properties: ['openDirectory']
     }
