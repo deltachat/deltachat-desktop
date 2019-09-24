@@ -148,6 +148,13 @@ export const useLazyChatListItems = chatListIds => {
     }
   }
 
+  const onResize = () => fetchChatsInView()
+  
+  useLayoutEffect(() => {
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [chatListIds, chatItems, scrollRef])
+
   useEffect(() => {
     log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
     fetchChatsInView()
@@ -155,12 +162,12 @@ export const useLazyChatListItems = chatListIds => {
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     }
-  }, [chatListIds])
+  }, [chatListIds, chatItems, scrollRef])
 
   useEffect(() => {
     if (Object.keys(chatItems).length > 0) return
     if (!scrollRef.current) return
     fetchChatsInView(scrollRef)
-  }, [chatListIds, scrollRef])
+  }, [chatListIds, chatItems, scrollRef])
   return { chatItems, onChatListScroll, scrollRef }
 }

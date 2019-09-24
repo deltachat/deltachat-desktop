@@ -61,6 +61,9 @@ module.exports = styled.div`
   .bp3-button.bp3-minimal {
     min-width: 0px;
     min-height: 0px;
+  }
+
+  .bp3-popover-target {
     margin-right: 1vw;
   }
 `
