@@ -138,17 +138,17 @@ class SplittedChatListAndView extends React.Component {
         <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
+              <SearchInput
+                onChange={this.handleSearchChange}
+                value={this.state.queryStr}
+                className='icon-rotated'
+              />
               { showArchivedChats && (
                 <Button
                   className={[Classes.MINIMAL, 'icon-rotated']}
                   icon='undo' onClick={this.onHideArchivedChats}
                   aria-label={tx('a11y_back_btn_label')} />
               ) }
-              <SearchInput
-                onChange={this.handleSearchChange}
-                value={this.state.queryStr}
-                className='icon-rotated'
-              />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
               <NavbarHeading>
