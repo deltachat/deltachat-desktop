@@ -27,7 +27,6 @@ export default function EditGroup (props) {
     <DeltaDialogBase
       isOpen={isOpen}
       onClose={onClose}
-      style={{ width: '400px', height: '76vh', top: '12vh' }}
       fixed
     >
       <EditGroupInner {...{ viewMode, setViewMode, onClose, chat }} />
