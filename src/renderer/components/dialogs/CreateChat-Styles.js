@@ -1,6 +1,4 @@
-import React from 'react'
 import styled from 'styled-components'
-import { PseudoContactListItem } from '../helpers/ContactList-Styles'
 
 export const CreateChatContactListWrapper = styled.div`
   margin: -20px;

@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
-import ChatListItem from './ChatListItem'
 import logger from '../../../logger'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -130,7 +129,7 @@ export const useLazyChatListItems = chatListIds => {
     } else {
       log.debug(`useLazyChatListItems: chat with id ${chatId} changed, it's NOT in view, unsetting if needed`)
       setChatItems(chatItems => {
-        if (typeof chatItems[chatId] !== undefined) return { ...chatItems, [chatId]: undefined }
+        if (typeof chatItems[chatId] !== 'undefined') return { ...chatItems, [chatId]: undefined }
       }
       )
     }

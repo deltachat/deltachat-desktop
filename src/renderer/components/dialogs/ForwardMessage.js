@@ -7,12 +7,8 @@ import { CreateChatSearchInput } from './CreateChat-Styles'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
-import styled from 'styled-components'
 
 const C = require('deltachat-node/constants')
-
-const ForwardMessageChatList = styled.div`
-`
 
 export default function ForwardMessage (props) {
   const tx = window.translate
@@ -45,7 +41,7 @@ export default function ForwardMessage (props) {
               chatListItem={chatItems[chatId]}
               onClick={onChatClick.bind(null, chatId)}
             />)}
-            {chatListIds.length === 0 && queryStr !== '' && PseudoContactListItemNoSearchResults({ queryStr })}
+            {chatListIds.length === 0 && queryStr !== '' && PseudoListItemNoSearchResults({ queryStr })}
           </div>
         </Card>
       </div>

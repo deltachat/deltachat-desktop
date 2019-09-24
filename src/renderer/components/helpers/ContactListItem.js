@@ -1,16 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { RenderContact } from '../Contact'
-import Contact, { PseudoContact, AvatarBubble, QRAvatar } from './Contact'
-
-const ContactListDiv = styled.div`
-  .module-contact-list-item--with-click-handler {
-    padding: 10px;
-  }
-  .module-contact-list-item--with-click-handler:hover {
-    background-color: darkgrey;
-  }
-`
+import Contact from './Contact'
 
 export const ContactListItemWrapper = styled.div`
   display: flex;
@@ -24,11 +14,6 @@ export const ContactListItemWrapper = styled.div`
   }
 `
 
-const ContactListItemInitialSpacer = styled.div`
-  min-width: 40px;
-  max-width: 40px;
-  height: 64px;
-`
 const ContactListItemContactWrapper = styled.div`
   width: 100%;
 `

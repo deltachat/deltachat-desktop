@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import SearchableList from '../SearchableList'
 import { RenderContact } from '../Contact'
 import { callDcMethod } from '../../ipc'
-import Contact, { PseudoContact } from './Contact'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
 

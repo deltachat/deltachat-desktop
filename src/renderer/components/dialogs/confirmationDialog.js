@@ -31,7 +31,6 @@ export default function ConfirmationDialog (props) {
 
   const onClick = yes => {
     props.onClose()
-    console.log('yes', yes)
     cb(yes)
   }
 

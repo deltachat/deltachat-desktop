@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { RenderContact } from '../Contact'
 import Contact, { PseudoContact } from './Contact'
 
 const ContactListItemWrapper = styled.div`

@@ -64,7 +64,6 @@ class SplittedChatListAndView extends React.Component {
     this.onChatClick = this.onChatClick.bind(this)
     this.onChatUpdate = this.onChatUpdate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
-    this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
@@ -102,10 +101,6 @@ class SplittedChatListAndView extends React.Component {
     } catch (error) {
       log.debug(error)
     }
-  }
-
-  onDeadDropClick (deadDrop) {
-    this.context.openDialog('DeadDrop', { deadDrop })
   }
 
   searchChats (queryStr) {
@@ -179,7 +174,6 @@ class SplittedChatListAndView extends React.Component {
           <ChatList
             queryStr={queryStr}
             showArchivedChats={showArchivedChats}
-            onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChat ? selectedChat.id : null}
@@ -193,7 +187,6 @@ class SplittedChatListAndView extends React.Component {
                   : (<ChatView
                     ref={this.chatView}
                     chat={selectedChat}
-                    onDeadDropClick={this.onDeadDropClick}
                     openDialog={this.context.openDialog}
                   />)
                 : (

@@ -29,7 +29,6 @@ export default class DeadDrop extends React.Component {
     const { deaddrop } = this.props
 
     const isOpen = !!deaddrop
-    console.log('hallo', isOpen)
     const nameAndAddr = deaddrop && deaddrop.contact && deaddrop.contact.nameAndAddr
 
     const tx = window.translate

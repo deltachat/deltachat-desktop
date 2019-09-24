@@ -65,16 +65,6 @@ class DeltaChatController extends EventEmitter {
     return app.translate(txt)
   }
 
-  /**
-   *
-   * @param {int} chatId
-   * @param {int} msgId
-   * @param {string} eventType
-   */
-  onMessageUpdate (chatId, msgId, eventType) {
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
-  }
-
   checkPassword (password) {
     return password === this.getConfig('mail_pw')
   }
@@ -90,7 +80,6 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
-
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       this.onChatListChanged()

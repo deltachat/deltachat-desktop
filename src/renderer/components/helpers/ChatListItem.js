@@ -1,6 +1,5 @@
-import React, { useContext }  from 'react'
+import React, { useContext } from 'react'
 import classNames from 'classnames'
-import styled from 'styled-components'
 import { Timestamp } from '../conversations'
 import MessageBody from '../MessageBody'
 import { Avatar, VerifiedIcon } from '../helpers/Contact'
@@ -15,7 +14,7 @@ const FreshMessageCounter = React.memo(props => {
 
 const Header = React.memo(props => {
   const { freshMessageCounter, lastUpdated } = props.chatListItem
-  const { name, email, isVerified, isGroup, isSelected } = props.chatListItem
+  const { name, email, isVerified, isGroup } = props.chatListItem
 
   return (
     <div className='chat-list-item__header'>
@@ -82,7 +81,6 @@ const ChatListItemArchiveLink = React.memo(props => {
   )
 })
 
-
 const ChatListItemNormal = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
   return (
@@ -111,18 +109,16 @@ const ChatListItemNormal = React.memo(props => {
 const ChatListItemDeaddrop = React.memo(props => {
   const { chatListItem } = props
   const { openDialog } = useContext(ScreenContext)
-  const onClick = () => openDialog('DeadDrop', {deaddrop: chatListItem.deaddrop})
-  return <ChatListItemNormal {...{chatListItem, onClick, className:'chat-list-item--is-deaddrop'}} />
+  const onClick = () => openDialog('DeadDrop', { deaddrop: chatListItem.deaddrop })
+  return <ChatListItemNormal {...{ chatListItem, onClick, className: 'chat-list-item--is-deaddrop' }} />
 })
 
 const ChatListItem = React.memo(props => {
-  const { chatListItem, onClick, isSelected, onContextMenu } = props
-  console.log(chatListItem)
+  const { chatListItem, onClick } = props
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   if (chatListItem.id === C.DC_CHAT_ID_DEADDROP) return <ChatListItemDeaddrop chatListItem={chatListItem} />
   if (chatListItem.id === C.DC_CHAT_ID_ARCHIVED_LINK) return <ChatListItemArchiveLink onClick={onClick} chatListItem={chatListItem} />
-  console.log(chatListItem)
   return <ChatListItemNormal {...props} />
 }, (prevProps, nextProps) => {
   const shouldRerender = prevProps.chatListItem !== nextProps.chatListItem || prevProps.isSelected !== nextProps.isSelected
