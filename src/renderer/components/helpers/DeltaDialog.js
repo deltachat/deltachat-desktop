@@ -71,10 +71,7 @@ export function DeltaDialogBackButton (props) {
 const DeltaDialog = React.memo((props) => {
   return (
     <DeltaDialogBase {...props}>
-      <div className='bp3-dialog-header'>
-        <h4 className='bp3-heading'>{props.title}</h4>
-        <DeltaDialogCloseButton onClick={props.onClose} />
-      </div>
+      <DeltaDialogHeader {...{ ...props, children: undefined }} />
       {props.children}
     </DeltaDialogBase>
   )

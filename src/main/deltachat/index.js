@@ -103,7 +103,6 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
       this.onChatListItemChanged(chatId)
-      this.sendToRenderer('DC_EVENT_MSG_FAILED', { chatId, msgId })
     })
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {

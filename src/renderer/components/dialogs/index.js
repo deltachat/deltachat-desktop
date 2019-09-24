@@ -1,5 +1,5 @@
 const React = require('react')
-const MessageDetail = require('./MessageDetail')
+const MessageDetail = require('./MessageDetail').default
 const RenderMedia = require('./RenderMedia')
 const DeadDrop = require('./DeadDrop').default
 const EnterAutocryptSetupMessage = require('./EnterAutocryptSetupMessage').default
