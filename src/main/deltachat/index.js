@@ -162,7 +162,7 @@ class DeltaChatController extends EventEmitter {
    * @param {string} eventType
    */
   onMessageUpdate (chatId, msgId, eventType) {
-    if (chatId === 0) return
+    if (chatId === 0 || msgId === 0) return
     this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
   }
 
