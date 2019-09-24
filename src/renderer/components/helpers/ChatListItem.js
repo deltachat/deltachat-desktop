@@ -59,7 +59,7 @@ export const Message = React.memo(props => {
         }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      { summary.status && <div className='chat-list-item__status-icon' /> }
+      { summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status}/> }
       <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )
@@ -82,6 +82,7 @@ const ChatListItemArchiveLink = React.memo(props => {
 
 const ChatListItem = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
+  console.log(chatListItem)
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
   if (chatListItem.isArchiveLink) return <ChatListItemArchiveLink onClick={onClick} chatListItem={chatListItem} />

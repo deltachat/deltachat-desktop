@@ -13,8 +13,8 @@ $chatlist-isgroup-icon: var(--globalText);
   padding-right: 10px;
   padding-left: 10px;
   align-items: center;
-
   cursor: pointer;
+
   &:hover {
     background-color:#bbb;
   }
@@ -85,15 +85,12 @@ $chatlist-isgroup-icon: var(--globalText);
 .chat-list-item__header__timestamp {
   flex-shrink: 0;
   margin-left: 6px;
-
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
-
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
   text-transform: uppercase;
 }
 
@@ -110,11 +107,12 @@ $chatlist-isgroup-icon: var(--globalText);
 }
 
 .chat-list-item__message__text {
+  max-width: calc(100% - 18px);
+  height: 1.3em;
   flex-grow: 1;
   flex-shrink: 1;
   font-size: 13px;
   line-height: 18px;
-  height: 1.3em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -219,4 +217,56 @@ $chatlist-isgroup-icon: var(--globalText);
   font-weight: 200;
   text-align: center;
   color: #565656;
+}
+/* Message Status */
+$color-chat-list-item__message__status-icon--sent: var(--messageStatusIcon);
+$color-chat-list-item__message__status-icon--delivered: var(--messageStatusIcon);
+$color-chat-list-item__message__status-icon--read: var(--messageStatusIcon);
+$color-chat-list-item__message__status-icon--error: var(--errorColor);
+$color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSending);
+
+.chat-list-item__message__status-icon--sending {
+    @include color-svg('../../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
+    animation: _chat-list-item__message__status-icon--spinning 4s
+        linear infinite;
+}
+
+@keyframes _chat-list-item__message__status-icon--spinning {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.chat-list-item__message__status-icon--sent {
+    @include color-svg('../images/check-circle-outline.svg', $color-chat-list-item__message__status-icon--sent);
+}
+
+.chat-list-item__message__status-icon--delivered {
+    @include color-svg('../images/sent.svg', $color-chat-list-item__message__status-icon--delivered);
+    width: 18px;
+}
+
+.chat-list-item__message__status-icon--read {
+    @include color-svg('../images/read.svg', $color-chat-list-item__message__status-icon--read);
+    width: 18px;
+}
+
+.chat-list-item__message__status-icon--error {
+    @include color-svg('../images/error.svg', $color-chat-list-item__message__status-icon--error);
+}
+
+// .chat-list-item__message__status-icon--draft {
+//   @include color-svg('../images/lead-pencil.svg', lightgrey);
+// }
+
+.chat-list-item__message__status-icon {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-left: 6px;
+}
+
+.module-message__metadata > .chat-list-item__message__status-icon {
+    margin-bottom: 2px;
 }
