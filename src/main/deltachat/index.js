@@ -85,10 +85,12 @@ class DeltaChatController extends EventEmitter {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
+      this.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
       this.onChatListChanged()
+      this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
       this.onChatModified(chatId)
     })
