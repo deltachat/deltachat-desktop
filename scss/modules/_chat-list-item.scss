@@ -218,6 +218,13 @@ $chatlist-isgroup-icon: var(--globalText);
   text-align: center;
   color: #565656;
 }
+
+.chat-list-item--is-deaddrop {
+  background-color:#ccc;
+  &:hover {
+    background-color:#bbb;
+  } 
+}
 /* Message Status */
 $color-chat-list-item__message__status-icon--sent: var(--messageStatusIcon);
 $color-chat-list-item__message__status-icon--delivered: var(--messageStatusIcon);

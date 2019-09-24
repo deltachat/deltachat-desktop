@@ -109,6 +109,7 @@ function getSmallChatById (chatId, list, i) {
       text2: summary.text2,
       status: mapCoreMsgStatus2String(summary.state)
     },
+    deaddrop: chat.deaddrop,
     contacts: chat.contacts,
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,
