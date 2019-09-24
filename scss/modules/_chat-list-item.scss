@@ -7,6 +7,7 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 $chatlist-isgroup-icon: var(--globalText);
 
 .chat-list-item {
+  height: 64px;
   display: flex;
   flex-direction: row;
   padding-right: 10px;
@@ -111,14 +112,13 @@ $chatlist-isgroup-icon: var(--globalText);
 .chat-list-item__message__text {
   flex-grow: 1;
   flex-shrink: 1;
-
   font-size: 13px;
   line-height: 18px;
-
   height: 1.3em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #565656;
 }
 
 .chat-list-item__message__text--has-unread {
@@ -150,7 +150,7 @@ $chatlist-isgroup-icon: var(--globalText);
   background-color: var(--chatListItemSelectedBg);
   color: var(--chatListItemSelectedText);
 
-  span.module-contact-name {
+  span.module-contact-name, .chat-list-item__message__text {
     color: var(--chatListItemSelectedText);
   }
 
@@ -211,4 +211,12 @@ $chatlist-isgroup-icon: var(--globalText);
 .chat-list-item__name {
   font-weight: 200;
   font-size: medium;
+}
+
+.chat-list-item__archive-link { 
+  top: calc((64px - 18px) / 2);
+  width: 100%;
+  font-weight: 200;
+  text-align: center;
+  color: #565656;
 }

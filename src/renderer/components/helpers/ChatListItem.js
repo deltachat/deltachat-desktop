@@ -67,10 +67,25 @@ export const Message = React.memo(props => {
 
 export const PlaceholderChatListItem = React.memo((props) => { return <div style={{ height: '64px' }} /> })
 
+const ChatListItemArchiveLink = React.memo(props => {
+  const { chatListItem, onClick } = props
+  return (
+    <div
+      role='button'
+      onClick={onClick}
+      className={'chat-list-item'}
+    >
+      <div className='chat-list-item__archive-link'>{chatListItem.name}</div>
+    </div>
+  )
+})
+
 const ChatListItem = React.memo(props => {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
+  if (chatListItem.isArchiveLink) return <ChatListItemArchiveLink onClick={onClick} chatListItem={chatListItem} />
+  console.log(chatListItem)
   return (
     <div
       role='button'
