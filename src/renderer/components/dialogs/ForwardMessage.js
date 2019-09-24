@@ -32,7 +32,7 @@ export default function ForwardMessage (props) {
       isOpen={isOpen}
       title={tx('menu_forward')}
       onClose={onClose}
-      style={{ width: '400px', height: 'calc(100% - 60px)', margin: '0' }}
+      fixed
     >
       <DeltaDialogHeader onClose={onClose}>
         <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />

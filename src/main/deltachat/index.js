@@ -90,15 +90,40 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
-    dc.on('DC_EVENT_INCOMING_MSG', this.onChatListChanged.bind(this))
-    dc.on('DC_EVENT_MSGS_CHANGED', this.onChatListChanged.bind(this))
-    dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatListChanged.bind(this))
-    dc.on('DC_EVENT_MSG_DELIVERED', this.onChatListChanged.bind(this))
 
-    dc.on('DC_EVENT_INCOMING_MSG', this.onChatListItemChanged.bind(this))
-    dc.on('DC_EVENT_MSGS_CHANGED', this.onChatListItemChanged.bind(this))
-    dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatListItemChanged.bind(this))
-    dc.on('DC_EVENT_MSG_DELIVERED', this.onChatListItemChanged.bind(this))
+
+    dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+      this.onChatListChanged()
+      this.onChatListItemChanged(chatId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
+    })
+
+    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+      this.onChatListChanged()
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
+      this.onChatModified(chatId)
+    })
+
+    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId, msgId) => {
+      this.onChatListChanged(chatId)
+      this.onChatListItemChanged(chatId)
+      this.onChatModified(chatId)
+    })
+
+    dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
+      this.onChatListItemChanged(chatId)
+      this.sendToRenderer('DC_EVENT_MSG_FAILED', { chatId, msgId })
+    })
+
+    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+      this.onChatListItemChanged(chatId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_DELIVERED')
+    })
+
+    dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+      this.onChatListItemChanged(chatId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_READ')
+    })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
       log.warn(warning)
@@ -130,11 +155,15 @@ class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
   }
 
-  onMessageListChanged () {
-  }
-
-  onChatChanged () {
-
+  /**
+   *
+   * @param {int} chatId
+   * @param {int} msgId
+   * @param {string} eventType
+   */
+  onMessageUpdate (chatId, msgId, eventType) {
+    if (chatId === 0) return
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
   }
 
   updateBlockedContacts () {

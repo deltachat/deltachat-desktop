@@ -149,10 +149,10 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   const onResize = () => fetchChatsInView()
-  
+
   useLayoutEffect(() => {
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [chatListIds, chatItems, scrollRef])
 
   useEffect(() => {

@@ -88,14 +88,13 @@ export default function CreateChat (props) {
         (contacts.length === 1 && contacts[0].address.toLowerCase() === queryStr.toLowerCase())) {
       return null
     }
-    return PseudoListItemAddContact({queryStr, queryStrIsEmail, onClick: addContactOnClick})
+    return PseudoListItemAddContact({ queryStr, queryStrIsEmail, onClick: addContactOnClick })
   }
 
   return (
     <DeltaDialogBase
       isOpen={isOpen}
       onClose={onClose}
-      style={{ width: '400px', height: 'calc(100% - 60px)' }}
       fixed
     >
       { viewMode.startsWith('main') &&

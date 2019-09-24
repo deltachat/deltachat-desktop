@@ -7,6 +7,8 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
   .FixedDeltaDialog {
     position: absolute;
     top: 0;
+    width: 400px;
+    height: calc(100% - 60px);
   }
 `
 

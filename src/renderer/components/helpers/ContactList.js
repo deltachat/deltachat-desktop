@@ -5,7 +5,7 @@ import { RenderContact } from '../Contact'
 import { callDcMethod } from '../../ipc'
 import Contact, { PseudoContact } from './Contact'
 import debounce from 'debounce'
-import {  ContactListItem } from './ContactListItem'
+import { ContactListItem } from './ContactListItem'
 
 const ContactListDiv = styled.div`
   .module-contact-list-item--with-click-handler {

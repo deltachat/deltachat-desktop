@@ -154,4 +154,3 @@ export const ContactListSearchInput = styled.input`
   margin-left: 20px;
   font-size: 18px;
 `
-

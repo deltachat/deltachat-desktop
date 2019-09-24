@@ -29,7 +29,7 @@ const Header = React.memo(props => {
       </div>
       <div className={classNames(
         'chat-list-item__header__date',
-        { 'chat-list-item__header__date--has-unread' : freshMessageCounter > 0 }
+        { 'chat-list-item__header__date--has-unread': freshMessageCounter > 0 }
       )}>
         <Timestamp
           timestamp={lastUpdated}
@@ -49,17 +49,17 @@ export const Message = React.memo(props => {
     <div className='chat-list-item__message'>
       <div className={classNames(
         'chat-list-item__message__text',
-        { 'chat-list-item__message__text--has-unread': freshMessageCounter > 0 } 
+        { 'chat-list-item__message__text--has-unread': freshMessageCounter > 0 }
       )}>
-        { summary.text1 !== null && 
+        { summary.text1 !== null &&
           <div className={classNames(
             'chat-list-item__message__text__summary',
-            { 'chat-list-item__message__text__summary--draft' : summary.status === 'draft' }
+            { 'chat-list-item__message__text__summary--draft': summary.status === 'draft' }
           )}>{summary.text1 + ': ' }</div>
         }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      { summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status}/> }
+      { summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status} /> }
       <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )

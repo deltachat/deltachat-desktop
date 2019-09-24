@@ -51,7 +51,6 @@ export const PseudoListItemShowQrCode = ({ onClick }) => {
   )
 }
 
-
 export const PseudoListItemAddMember = ({ onClick }) => {
   const tx = window.translate
   return (
@@ -64,7 +63,7 @@ export const PseudoListItemAddMember = ({ onClick }) => {
   )
 }
 
-export const PseudoListItemAddContact = ({queryStr, queryStrIsEmail, onClick}) => {
+export const PseudoListItemAddContact = ({ queryStr, queryStrIsEmail, onClick }) => {
   const tx = window.translate
   return (
     <PseudoListItem

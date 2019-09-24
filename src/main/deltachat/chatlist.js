@@ -22,7 +22,7 @@ function selectChat (chatId) {
   this.sendToRenderer('DD_EVENT_CHAT_SELECTED', { chat })
 }
 
-function chatModified (chatId) {
+function onChatModified (chatId) {
   const listFlags = 0
   const list = this._dc.getChatList(listFlags, '')
   const chatList = []
@@ -219,7 +219,7 @@ module.exports = function () {
   this.getFullChatById = getFullChatById.bind(this)
   this._getGeneralFreshMessageCounter = _getGeneralFreshMessageCounter.bind(this)
   this._deadDropMessage = _deadDropMessage.bind(this)
-  this.chatModified = chatModified.bind(this)
+  this.onChatModified = onChatModified.bind(this)
   this.getChatListIds = getChatListIds.bind(this)
   this.getListAndIndexForChatId = getListAndIndexForChatId.bind(this)
   this.updateChatList = updateChatList.bind(this)

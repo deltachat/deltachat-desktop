@@ -349,7 +349,6 @@ export default class Settings extends React.Component {
         isOpen={this.props.isOpen}
         onClose={() => this.setState({ userDetails: false })}
         className='SettingsDialog'
-        style={{ width: '400px', height: 'calc(100% - 60px)' }}
         fixed
       >
         <DeltaDialogHeader
