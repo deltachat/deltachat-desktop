@@ -130,6 +130,7 @@ export const useLazyChatListItems = chatListIds => {
       log.debug(`useLazyChatListItems: chat with id ${chatId} changed, it's NOT in view, unsetting if needed`)
       setChatItems(chatItems => {
         if (typeof chatItems[chatId] !== 'undefined') return { ...chatItems, [chatId]: undefined }
+        return chatItems
       }
       )
     }
