@@ -232,17 +232,17 @@ $color-chat-list-item__message__status-icon--read: var(--messageStatusIcon);
 $color-chat-list-item__message__status-icon--error: var(--errorColor);
 $color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSending);
 
-.chat-list-item__message__status-icon--sending {
-    @include color-svg('../../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
-    animation: _chat-list-item__message__status-icon--spinning 4s
-        linear infinite;
-}
-
 @keyframes _chat-list-item__message__status-icon--spinning {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
+}
+
+.chat-list-item__message__status-icon--sending {
+    @include color-svg('../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
+    animation: _chat-list-item__message__status-icon--spinning 4s
+        linear infinite;
 }
 
 .chat-list-item__message__status-icon--sent {
