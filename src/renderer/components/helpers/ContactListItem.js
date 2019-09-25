@@ -9,7 +9,7 @@ export const ContactListItemWrapper = styled.div`
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
   }
-  .chat-list & {
+  .chat-list &, .forward-message-chat-list & {
     padding-left: 0px;
   }
 `

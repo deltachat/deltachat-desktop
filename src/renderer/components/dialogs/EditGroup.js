@@ -119,8 +119,8 @@ export function EditGroupInner (props) {
           <Card>
             {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
             <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-            <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
             <GroupMemberContactListWrapper>
+              <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
               {renderAddMemberIfNeeded()}
               <ContactList2
                 contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
