@@ -137,20 +137,3 @@ code {
   image-rendering: pixelated;
 }
 
-
-// ChatView Background selector
-
-.background-preview {
-  width: 100pt;
-  height: 100pt;
-  border-radius: 5pt;
-  background-image: url(../images/background_light.svg);
-  background-color: var(--chatViewBg);
-}
-
-.background-options {
-  display: flex;
-  flex-direction: column;
-  padding-left: 8pt;
-  justify-content: space-evenly;
-}
