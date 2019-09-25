@@ -168,7 +168,6 @@ const ImportButton = React.memo(function ImportButton (props) {
           title={tx('import_backup_title')}
           canOutsideClickClose
           isOpen={showDialog}
-          fixed
           style={{ top: '40%' }}
         >
           <ImportDialogContent onClose={onHandleClose} />
