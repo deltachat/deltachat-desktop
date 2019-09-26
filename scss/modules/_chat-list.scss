@@ -8,3 +8,39 @@
   user-select: none;
   margin-top: 50px;
 }
+
+.chatlist-item-skeleton {
+  opacity: 0.1;
+
+  & .bone {
+    background: grey;
+    border-radius: 3pt;
+    color: grey;
+  }
+
+  .skeleton-avatar {
+    position: relative;
+    height: 48px;
+    width: 48px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-radius: 24px;
+    background-color: grey;
+  }
+
+  animation: breath 2s infinite;
+}
+
+@keyframes breath {
+  0% {
+    opacity: 0.1;
+  }
+
+  50% {
+    opacity: 0.12;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
+}

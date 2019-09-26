@@ -52,21 +52,49 @@ export const Message = React.memo(props => {
         'chat-list-item__message__text',
         { 'chat-list-item__message__text--has-unread': freshMessageCounter > 0 }
       )}>
-        { summary.text1 !== null &&
+        {summary.text1 !== null &&
           <div className={classNames(
             'chat-list-item__message__text__summary',
             { 'chat-list-item__message__text__summary--draft': summary.status === 'draft' }
-          )}>{summary.text1 + ': ' }</div>
+          )}>{summary.text1 + ': '}</div>
         }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      { summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status} /> }
+      {summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status} />}
       <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )
 })
 
-export const PlaceholderChatListItem = React.memo((props) => { return <div style={{ height: '64px' }} /> })
+export const PlaceholderChatListItem = React.memo((props) => {
+  return <div
+    className={classNames(
+      'chat-list-item',
+      props.className,
+      'chatlist-item-skeleton'
+    )}
+  >
+    <div className='skeleton-avatar' />
+    <div className='chat-list-item__content'>
+      <div className='chat-list-item__header'>
+        <div className={'chat-list-item__header__name'}>
+          <span className={classNames('chat-list-item__name', 'bone')}>
+            Chat name
+          </span>
+        </div>
+        <div className={'chat-list-item__header__date'}>
+          <div className={classNames('chat-list-item__header__timestamp', 'bone')}>Jan 1, 1970</div>
+        </div>
+      </div>
+      <div className='chat-list-item__message'>
+        <div className={classNames('chat-list-item__message__text', 'bone')}>
+          test: message
+        </div>
+        <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--delivered'} />
+      </div>
+    </div>
+  </div>
+})
 
 const ChatListItemArchiveLink = React.memo(props => {
   const { chatListItem, onClick } = props
