@@ -185,7 +185,7 @@ function init (cwd, state, logHandler) {
     dialog.showOpenDialog(undefined, {
       title: 'Select Background Image',
       filters: [
-        { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+        { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
         { name: 'All Files', extensions: ['*'] }
       ],
       properties: ['openFile']
