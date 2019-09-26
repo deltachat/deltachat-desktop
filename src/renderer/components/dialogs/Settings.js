@@ -392,6 +392,18 @@ class BackgroundSelector extends React.Component {
         <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom')}</button>
         <button onClick={this.onButton.bind(this, 'color')}>{tx('pref_background_custom_color')}</button>
       </div>
+      <div className={'background-default-images'}>
+        { [
+          'AmRandeDesWaldes.hd.jpg',
+          'bee.webp',
+          'TodnauFalls.hd.jpg',
+          'AmRheinInMainz.webp',
+          'ForestSun.webp',
+          'ArkOfFriendship.webp',
+          'riesenrad.webp',
+          'background_old.jpg'
+        ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
+      </div>
       <div hidden>
         <input
           type={'color'}
@@ -416,6 +428,9 @@ class BackgroundSelector extends React.Component {
         break
       case 'image':
         ipcRenderer.send('selectBackgroundImage')
+        break
+      case 'pimage':
+        ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
         break
       case 'color':
         this.colorInput.current && this.colorInput.current.click()

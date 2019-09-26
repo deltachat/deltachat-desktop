@@ -181,26 +181,35 @@ function init (cwd, state, logHandler) {
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
-  ipcMain.on('selectBackgroundImage', (e) => {
-    dialog.showOpenDialog(undefined, {
-      title: 'Select Background Image',
-      filters: [
-        { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-        { name: 'All Files', extensions: ['*'] }
-      ],
-      properties: ['openFile']
-    }, (filenames) => {
-      if (!filenames) { return }
-      log.info('BG-IMG Selected File:', filenames[0])
-      const newPath = path.join(getConfigPath(), `background_${Date.now()}` + path.extname(filenames[0]))
-      fs.copyFile(filenames[0], newPath, (err) => {
+  ipcMain.on('selectBackgroundImage', (e, file) => {
+    const copyAndSetBg = (originalfile) => {
+      const newPath = path.join(getConfigPath(), `background_${Date.now()}` + path.extname(originalfile))
+      fs.copyFile(originalfile, newPath, (err) => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)
           return
         }
         updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath}")`)
       })
-    })
+    }
+    if (!file) {
+      dialog.showOpenDialog(undefined, {
+        title: 'Select Background Image',
+        filters: [
+          { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+          { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile']
+      }, (filenames) => {
+        if (!filenames) { return }
+        log.info('BG-IMG Selected File:', filenames[0])
+        copyAndSetBg(filenames[0])
+      })
+    } else {
+      const filepath = path.join(__dirname, '../../images/backgrounds/', file)
+      console.log(filepath)
+      copyAndSetBg(filepath)
+    }
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {
