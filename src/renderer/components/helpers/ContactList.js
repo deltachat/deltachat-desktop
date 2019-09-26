@@ -100,4 +100,3 @@ export default class ContactList extends SearchableList {
     />
   }
 }
-
