@@ -9,6 +9,7 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
     top: 0;
     width: 400px;
     height: calc(100% - 60px);
+
   }
 `
 

@@ -351,7 +351,9 @@ class Message extends React.Component {
         </div>
         {this.renderError(direction === 'outgoing')}
         {this.renderMenu(direction === 'incoming', triggerId)}
-        {this.renderContextMenu(triggerId)}
+        <div onClick={ev => { ev.stopPropagation() }}>
+          {this.renderContextMenu(triggerId)}
+        </div>
       </div>
     )
   }

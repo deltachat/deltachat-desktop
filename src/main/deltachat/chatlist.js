@@ -77,6 +77,7 @@ function getSmallChatByIds (chatIds) {
   }
   return chats
 }
+
 function getSmallChatById (chatId, list, i) {
   const chat = this.getFullChatById(chatId)
 
