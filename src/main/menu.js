@@ -43,20 +43,22 @@ function setLabels (menu) {
 }
 
 function getAvailableLanguages () {
-  return languages.sort(
-    ({ name: name1 }, { name: name2 }) => name1 > name2 ? 1 : -1
-  ).map(({ locale, name }) => {
-    return {
-      label: name,
-      type: 'radio',
-      checked: locale === app.localeData.locale,
-      click: () => {
-        app.state.saved.locale = locale
-        app.saveState()
-        windows.main.chooseLanguage(locale)
+  return languages
+    .filter(({ name }) => name.indexOf('*') === -1)
+    .sort(
+      ({ name: name1 }, { name: name2 }) => name1 > name2 ? 1 : -1
+    ).map(({ locale, name }) => {
+      return {
+        label: name,
+        type: 'radio',
+        checked: locale === app.localeData.locale,
+        click: () => {
+          app.state.saved.locale = locale
+          app.saveState()
+          windows.main.chooseLanguage(locale)
+        }
       }
-    }
-  })
+    })
 }
 
 function getMenuTemplate (logHandler) {
