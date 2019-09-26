@@ -209,6 +209,7 @@ export function ThemeDataBuilder (theme) {
     themeData = Object.assign(themeData, theme.raw)
     log.debug('theme.raw', theme.raw, themeData)
   }
+
   return themeData
 }
 

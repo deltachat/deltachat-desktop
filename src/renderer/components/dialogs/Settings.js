@@ -309,6 +309,10 @@ export default class Settings extends React.Component {
             <H5>{this.translate('pref_experimental_features')}</H5>
             { this.renderDTSettingSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
           </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_background')}</H5>
+            <BackgroundSelector onChange={(val) => this.handleDesktopSettingsChange('chatViewBgImg', val)} />
+          </Card>
         </div>
       )
     } else if (this.state.show === 'login') {
@@ -361,5 +365,70 @@ export default class Settings extends React.Component {
         </DeltaDialogBody>
       </DeltaDialogBase>
     )
+  }
+}
+
+class BackgroundSelector extends React.Component {
+  constructor () {
+    super()
+    this.fileInput = React.createRef()
+    this.colorInput = React.createRef()
+  }
+
+  render () {
+    const tx = window.translate
+    return (<div style={{ display: 'flex' }}>
+      <SettingsContext.Consumer>
+        {(settings) => (
+          <div
+            style={{ background: settings['chatViewBgImg'], backgroundSize: 'cover' }}
+            aria-label={tx('a11y_background_preview_label')}
+            className={'background-preview'}
+          />
+        )}
+      </SettingsContext.Consumer>
+      <div className={'background-options'}>
+        <button onClick={this.onButton.bind(this, 'def')}>{tx('pref_background_default')}</button>
+        <button onClick={this.onButton.bind(this, 'def_color')}>{tx('pref_background_default_color')}</button>
+        <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom')}</button>
+        <button onClick={this.onButton.bind(this, 'color')}>{tx('pref_background_custom_color')}</button>
+      </div>
+      <div hidden>
+        <input
+          type={'color'}
+          onChange={this.onColor.bind(this)}
+          ref={this.colorInput} /> // todo put this somewhere where it isn't closed by react rerender imidiately
+      </div>
+    </div>
+    )
+  }
+
+  setValue (val) {
+    this.props.onChange(val)
+  }
+
+  onButton (type, ev) {
+    switch (type) {
+      case 'def':
+        this.setValue(undefined)
+        break
+      case 'def_color':
+        this.setValue('var(--chatViewBg)')
+        break
+      case 'image':
+        ipcRenderer.send('selectBackgroundImage')
+        break
+      case 'color':
+        this.colorInput.current && this.colorInput.current.click()
+        break
+      default:
+        /* ignore-console-log */
+        console.error("this shouldn't happen")
+    }
+  }
+
+  onColor (ev) {
+    // TODO debounce
+    this.setValue(ev.target.value)
   }
 }
