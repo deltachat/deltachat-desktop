@@ -245,15 +245,18 @@ class ChatView extends React.Component {
     return (
       <SettingsContext.Consumer>
         {(settings) => {
-          const isImg = settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1
+          var style = { backgroundSize: 'cover', gridTemplateRows: `auto ${this.state.composerSize}px` }
+          if (settings['chatViewBgImg']) {
+            if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
+              style.backgroundImage = settings['chatViewBgImg']
+            } else {
+              style.backgroundColor = settings['chatViewBgImg']
+              style.backgroundImage = 'none'
+            }
+          }
           return (
             <ChatViewWrapper
-              style={{
-                gridTemplateRows: `auto ${this.state.composerSize}px`,
-                background: isImg ? 'unset' : settings['chatViewBgImg'],
-                backgroundImage: isImg ? settings['chatViewBgImg'] : 'unset',
-                backgroundSize: 'cover'
-              }}
+              style={style}
               ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
               <ConversationWrapper>
                 <div id='the-conversation' ref={this.conversationDiv}>
