@@ -79,18 +79,18 @@ function init (cwd, state, logHandler) {
   })
 
   /* dispatch a method on DC core */
-  ipcMain.on('EVENT_DC_DISPATCH', (e, methodName, args) => {
+  ipcMain.on('EVENT_DC_DISPATCH', (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
     log.debug('EVENT_DC_DISPATCH: ', methodName, args)
     dc.callMethod(e, methodName, args)
   })
 
   /* dispatch a method on DC core with result passed to callback */
-  ipcMain.on('EVENT_DC_DISPATCH_CB', (e, methodName, args) => {
+  ipcMain.on('EVENT_DC_DISPATCH_CB', (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
-    log.debug('EVENT_DC_DISPATCH_CB: ', methodName, args)
+    log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
     const returnValue = dc.callMethod(e, methodName, args)
-    main.send('EVENT_DD_DISPATCH_RETURN_' + methodName, returnValue)
+    main.send(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, returnValue)
   })
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))

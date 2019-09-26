@@ -1,5 +1,5 @@
 const React = require('react')
-const MessageDetail = require('./MessageDetail')
+const MessageDetail = require('./MessageDetail').default
 const RenderMedia = require('./RenderMedia')
 const DeadDrop = require('./DeadDrop').default
 const EnterAutocryptSetupMessage = require('./EnterAutocryptSetupMessage').default
@@ -7,7 +7,7 @@ const SendAutocryptSetupMessage = require('./SendAutocryptSetupMessage').default
 const ImexProgress = require('./ImexProgress').default
 const About = require('./About')
 const Settings = require('./Settings').default
-const ForwardMessage = require('./ForwardMessage')
+const ForwardMessage = require('./ForwardMessage').default
 const EncryptionInfo = require('./EncryptionInfo').default
 const CreateChat = require('./CreateChat').default
 const EditGroup = require('./EditGroup').default

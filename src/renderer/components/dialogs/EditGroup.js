@@ -8,10 +8,10 @@ import { DeltaButtonPrimary } from '../helpers/SmallDialog'
 import { useGroupImage, useContactSearch, GroupSettingsSetNameAndProfileImage, AddMemberInnerDialog, ShowQrCodeInnerDialog } from './CreateChat'
 import { useContacts, ContactList2 } from '../helpers/ContactList'
 import {
-  PseudoContactListItemNoSearchResults,
-  PseudoContactListItemShowQrCode,
-  PseudoContactListItemAddMember
-} from './CreateChat-Styles'
+  PseudoListItemNoSearchResults,
+  PseudoListItemShowQrCode,
+  PseudoListItemAddMember
+} from '../helpers/PseudoListItem'
 import {
   GroupSeperator,
   GroupMemberContactListWrapper,
@@ -27,7 +27,6 @@ export default function EditGroup (props) {
     <DeltaDialogBase
       isOpen={isOpen}
       onClose={onClose}
-      style={{ width: '400px', height: '76vh', top: '12vh' }}
       fixed
     >
       <EditGroupInner {...{ viewMode, setViewMode, onClose, chat }} />
@@ -83,8 +82,8 @@ export function EditGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoContactListItemAddMember onClick={() => setViewMode('addMember')} />
-        <PseudoContactListItemShowQrCode onClick={async () => {
+        <PseudoListItemAddMember onClick={() => setViewMode('addMember')} />
+        <PseudoListItemShowQrCode onClick={async () => {
           const qrCode = await callDcMethodAsync('getQrCode', groupId)
           setQrCode(qrCode)
           setViewMode('showQrCode')
@@ -120,8 +119,8 @@ export function EditGroupInner (props) {
           <Card>
             {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
             <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-            <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
             <GroupMemberContactListWrapper>
+              <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
               {renderAddMemberIfNeeded()}
               <ContactList2
                 contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
@@ -142,7 +141,7 @@ export function EditGroupInner (props) {
                 />
               </>
               )}
-              {queryStr !== '' && searchContacts.length === 0 && PseudoContactListItemNoSearchResults({ queryStr })}
+              {queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
             </GroupMemberContactListWrapper>
           </Card>
         </div>

@@ -8,7 +8,6 @@ import {
   Elevation,
   H5,
   Card,
-  ButtonGroup,
   Classes,
   Button,
   Switch,
@@ -97,7 +96,7 @@ export default class Settings extends React.Component {
 
   onKeysImport () {
     const opts = {
-      title: window.translate('pref_managekeys_import_explain'),
+      title: window.translate('pref_managekeys_import_secret_keys'),
       defaultPath: remote.app.getPath('downloads'),
       properties: ['openDirectory']
     }
@@ -275,10 +274,8 @@ export default class Settings extends React.Component {
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_managekeys_menu_title')}</H5>
-            <ButtonGroup>
-              <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
-              <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
-            </ButtonGroup>
+            <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
+            <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_privacy')}</H5>

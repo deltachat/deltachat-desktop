@@ -7,6 +7,9 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
   .FixedDeltaDialog {
     position: absolute;
     top: 0;
+    width: 400px;
+    height: calc(100% - 60px);
+
   }
 `
 
@@ -69,10 +72,7 @@ export function DeltaDialogBackButton (props) {
 const DeltaDialog = React.memo((props) => {
   return (
     <DeltaDialogBase {...props}>
-      <div className='bp3-dialog-header'>
-        <h4 className='bp3-heading'>{props.title}</h4>
-        <DeltaDialogCloseButton onClick={props.onClose} />
-      </div>
+      <DeltaDialogHeader {...{ ...props, children: undefined }} />
       {props.children}
     </DeltaDialogBase>
   )
@@ -126,7 +126,7 @@ export function DeltaDialogBody (props) {
   let { noFooter, children } = props
   noFooter = noFooter !== false
   return (
-    <div className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })} >
+    <div {...props} ref={props.ref} className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })}>
       {children}
     </div>
   )

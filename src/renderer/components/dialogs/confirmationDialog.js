@@ -18,26 +18,24 @@ export function confirmationDialogLegacy (message, opts, cb) {
 }
 
 export default function ConfirmationDialog (props) {
-  const { message, cb, onClose } = props
+  const { message, cb } = props
   const yesIsDanger = props.yesIsDanger !== false
 
   const isOpen = !!message
   const tx = window.translate
+  const onClose = () => {
+    props.onClose()
+    // eslint-disable-next-line standard/no-callback-literal
+    cb(false)
+  }
 
   const onClick = yes => {
-    onClose()
+    props.onClose()
     cb(yes)
   }
 
   return (
-    <SmallDialog
-      isOpen={isOpen}
-      onClose={(event) => {
-        onClose()
-        // eslint-disable-next-line standard/no-callback-literal
-        cb(false)
-      }}
-    >
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
         <div className={Classes.DIALOG_FOOTER}>

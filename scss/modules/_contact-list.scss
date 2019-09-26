@@ -41,8 +41,7 @@ $color-contact-list-item: var(--contactListItemBg);
   margin-bottom: -1px;
 }
 
-.module-conversation-list-item__is-verified {
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 2px;
+span.module-contact-name {
+  font-weight: 200;
+  font-size: medium;
 }

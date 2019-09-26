@@ -5,15 +5,14 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
 const Menu = require('./Menu').default
-const ChatList = require('./ChatList')
+const ChatList = require('./ChatList').default
 const ChatView = require('./ChatView')
-const SearchInput = require('./SearchInput.js').default
+const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
 const NavbarWrapper = require('./NavbarWrapper')
 
 const chatStore = require('../stores/chat')
-const chatListStore = require('../stores/chatList')
 
 const {
   Alignment,
@@ -64,9 +63,7 @@ class SplittedChatListAndView extends React.Component {
     this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
     this.onChatClick = this.onChatClick.bind(this)
     this.onChatUpdate = this.onChatUpdate.bind(this)
-    this.onChatListUpdate = this.onChatListUpdate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
-    this.onDeadDropClick = this.onDeadDropClick.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
     this.chatView = React.createRef()
@@ -77,26 +74,16 @@ class SplittedChatListAndView extends React.Component {
     this.setState({ selectedChat: chat })
   }
 
-  onChatListUpdate (state) {
-    const { chatList, archivedChatList } = state
-    this.setState({ chatList, archivedChatList })
-    this.searchChats(this.state.queryStr)
-  }
-
   componentDidMount () {
     chatStore.subscribe(this.onChatUpdate)
-    chatListStore.subscribe(this.onChatListUpdate)
-    callDcMethod('updateChatList')
   }
 
   componentWillUnmount () {
     chatStore.unsubscribe(this.onChatUpdate)
-    chatListStore.unsubscribe(this.onChatListUpdate)
   }
 
   showArchivedChats (showArchivedChats) {
     this.setState({ showArchivedChats })
-    callDcMethod('showArchivedChats', [showArchivedChats])
   }
 
   onChatClick (chatId) {
@@ -116,23 +103,8 @@ class SplittedChatListAndView extends React.Component {
     }
   }
 
-  onDeadDropClick (deadDrop) {
-    this.context.openDialog('DeadDrop', { deadDrop })
-  }
-
   searchChats (queryStr) {
-    const { chatList, archivedChatList, showArchivedChats } = this.state
-    let filteredChatList = chatList
-    if (showArchivedChats) {
-      filteredChatList = archivedChatList
-    }
     this.setState({ queryStr })
-    if (queryStr.length > 0) {
-      filteredChatList = filteredChatList.filter(chat =>
-        `${chat.name}`.toLowerCase().indexOf(queryStr.toLowerCase()) !== -1
-      )
-    }
-    this.setState({ filteredChatList })
   }
 
   handleSearchChange (event) {
@@ -145,7 +117,7 @@ class SplittedChatListAndView extends React.Component {
   }
 
   render () {
-    const { selectedChat, filteredChatList, showArchivedChats } = this.state
+    const { selectedChat, showArchivedChats, queryStr } = this.state
 
     const tx = window.translate
 
@@ -161,17 +133,17 @@ class SplittedChatListAndView extends React.Component {
         <NavbarWrapper>
           <Navbar fixedToTop>
             <NavbarGroup align={Alignment.LEFT}>
+              <SearchInput
+                onChange={this.handleSearchChange}
+                value={this.state.queryStr}
+                className='icon-rotated'
+              />
               { showArchivedChats && (
                 <Button
                   className={[Classes.MINIMAL, 'icon-rotated']}
                   icon='undo' onClick={this.onHideArchivedChats}
                   aria-label={tx('a11y_back_btn_label')} />
               ) }
-              <SearchInput
-                onChange={this.handleSearchChange}
-                value={this.state.queryStr}
-                className='icon-rotated'
-              />
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
               <NavbarHeading>
@@ -200,9 +172,8 @@ class SplittedChatListAndView extends React.Component {
         </NavbarWrapper>
         <div>
           <ChatList
-            chatList={filteredChatList}
+            queryStr={queryStr}
             showArchivedChats={showArchivedChats}
-            onDeadDropClick={this.onDeadDropClick}
             onShowArchivedChats={this.onShowArchivedChats}
             onChatClick={this.onChatClick}
             selectedChatId={selectedChat ? selectedChat.id : null}
@@ -216,7 +187,6 @@ class SplittedChatListAndView extends React.Component {
                   : (<ChatView
                     ref={this.chatView}
                     chat={selectedChat}
-                    onDeadDropClick={this.onDeadDropClick}
                     openDialog={this.context.openDialog}
                   />)
                 : (

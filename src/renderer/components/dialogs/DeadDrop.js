@@ -12,7 +12,7 @@ export default class DeadDrop extends React.Component {
   }
 
   yes () {
-    callDcMethod('chatWithContact', [this.props.deadDrop])
+    callDcMethod('chatWithContact', [this.props.deaddrop])
     this.close()
   }
 
@@ -21,15 +21,15 @@ export default class DeadDrop extends React.Component {
   }
 
   never () {
-    callDcMethod('blockContact', [this.props.deadDrop.contact.id])
+    callDcMethod('blockContact', [this.props.deaddrop.contact.id])
     this.close()
   }
 
   render () {
-    const { deadDrop } = this.props
+    const { deaddrop } = this.props
 
-    const isOpen = !!deadDrop
-    const nameAndAddr = deadDrop && deadDrop.contact && deadDrop.contact.nameAndAddr
+    const isOpen = !!deaddrop
+    const nameAndAddr = deaddrop && deaddrop.contact && deaddrop.contact.nameAndAddr
 
     const tx = window.translate
     const body = tx('ask_start_chat_with', nameAndAddr)

@@ -31,6 +31,8 @@ const LoginWrapper = styled.div`
   .bp3-card {
     width: 400px;
     margin-top: 20px;
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+    flex: unset;
   }
 
   .window { 
@@ -168,7 +170,6 @@ const ImportButton = React.memo(function ImportButton (props) {
           title={tx('import_backup_title')}
           canOutsideClickClose
           isOpen={showDialog}
-          fixed
           style={{ top: '40%' }}
         >
           <ImportDialogContent onClose={onHandleClose} />

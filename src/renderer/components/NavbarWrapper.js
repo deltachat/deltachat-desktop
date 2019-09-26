@@ -19,7 +19,7 @@ module.exports = styled.div`
 
   .bp3-align-left {
     width: 30%;
-    padding-left: 2vw;
+    padding: 0px 10px;
   }
 
   .bp3-align-right {
@@ -61,6 +61,9 @@ module.exports = styled.div`
   .bp3-button.bp3-minimal {
     min-width: 0px;
     min-height: 0px;
+  }
+
+  .bp3-popover-target {
     margin-right: 1vw;
   }
 `

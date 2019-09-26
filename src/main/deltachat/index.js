@@ -5,39 +5,6 @@ const log = require('../../logger').getLogger('main/deltachat')
 const windows = require('../windows')
 const { app } = require('electron')
 
-const publicAccessibleMethods = [
-  'addContactToChat',
-  'archiveChat',
-  'blockContact',
-  'chatWithContact',
-  'createGroupChat',
-  'contactRequests',
-  'createChatByContactId',
-  'createContact',
-  'deleteChat',
-  'deleteMessage',
-  'fetchMessages',
-  'forwardMessage',
-  'getConfigFor',
-  'getContacts',
-  'getContacts2',
-  'getEncryptionInfo',
-  'getLocations',
-  'getQrCode',
-  'getFullChatById',
-  'leaveGroup',
-  'modifyGroup',
-  'setChatName',
-  'setChatProfileImage',
-  'selectChat',
-  'sendMessage',
-  'setDraft',
-  'showArchivedChats',
-  'unblockContact',
-  'updateBlockedContacts',
-  'updateChatList'
-]
-
 /**
  * The Controller is the container for a deltachat instance
  */
@@ -81,12 +48,6 @@ class DeltaChatController extends EventEmitter {
       throw new Error(message)
     }
 
-    if (publicAccessibleMethods.indexOf(methodName) < 0) {
-      const message = 'Method not accessible: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
-
     return this[methodName](...args)
   }
 
@@ -104,84 +65,54 @@ class DeltaChatController extends EventEmitter {
     return app.translate(txt)
   }
 
-  /**
-   *
-   * @param {int} chatId
-   * @param {int} msgId
-   * @param {string} eventType
-   */
-  onMessageUpdate (chatId, msgId, eventType) {
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
-  }
-
   checkPassword (password) {
     return password === this.getConfig('mail_pw')
   }
 
   registerEventHandler (dc) {
-    dc.on('ALL', (event, data1, data2) => {
-      this.logCoreEvent(event, data1, data2)
-    })
-
-    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
-      if (Number(progress) === 0) { // login failed
-        this.emit('DC_EVENT_LOGIN_FAILED')
-        this.logout()
+    dc.on('ALL', (event, ...args) => {
+      if (!isNaN(event)) {
+        event = eventStrings[event]
       }
+      this.logCoreEvent(event, ...args)
+      if (event === 'DC_EVENT_INFO') return
+      this.sendToRenderer(event, ...args)
     })
 
-    dc.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename) => {
-      this.emit('DC_EVENT_IMEX_FILE_WRITTEN', filename)
-    })
-
-    dc.on('DC_EVENT_IMEX_PROGRESS', (progress) => {
-      this.emit('DC_EVENT_IMEX_PROGRESS', progress)
-    })
-
-    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
-      this.sendToRenderer('DC_EVENT_CONFIGURE_PROGRESS', progress)
-    })
-
-    dc.on('DC_EVENT_CONTACTS_CHANGED', (contactId) => {
-      this.updateChatList()
-      this.updateBlockedContacts()
-    })
-
-    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId) => {
-      log.debug('DC_EVENT_CHAT_MODIFIED: ' + chatId)
-      this.chatModified(chatId)
-    })
+    dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
 
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
-      if (chatId === 0) {
-        this.updateChatList()
-        return
-      }
-      // Don't update if a draft changes
-      if (msgId === 0) return
+      this.onChatListChanged()
+      this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
+      this.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
-      this.emit('DC_EVENT_INCOMING_MSG', chatId, msgId)
+      this.onChatListChanged()
+      this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
+      this.onChatModified(chatId)
     })
 
-    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
-      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_DELIVERED')
+    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId, msgId) => {
+      this.onChatListChanged(chatId)
+      this.onChatListItemChanged(chatId)
+      this.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
-      // TODO: what should we do here?
-      this.sendToRenderer('DC_EVENT_MSG_FAILED', { chatId, msgId })
+      this.onChatListItemChanged(chatId)
+    })
+
+    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+      this.onChatListItemChanged(chatId)
+      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_DELIVERED')
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+      this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_READ')
-    })
-
-    dc.on('DC_EVENT_LOCATION_CHANGED', (contactId) => {
-      this.sendToRenderer('DC_EVENT_LOCATION_CHANGED', { contactId })
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
@@ -204,6 +135,25 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
       onError(error)
     })
+  }
+
+  onChatListChanged () {
+    this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
+  }
+
+  onChatListItemChanged (chatId) {
+    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
+  }
+
+  /**
+   *
+   * @param {int} chatId
+   * @param {int} msgId
+   * @param {string} eventType
+   */
+  onMessageUpdate (chatId, msgId, eventType) {
+    if (chatId === 0 || msgId === 0) return
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
   }
 
   updateBlockedContacts () {

@@ -1,7 +1,4 @@
-import React from 'react'
 import styled from 'styled-components'
-import { AvatarBubble, QRAvatar } from '../helpers/Contact'
-import { PseudoContactListItem } from '../helpers/ContactList'
 
 export const CreateChatContactListWrapper = styled.div`
   margin: -20px;
@@ -22,49 +19,3 @@ export const CreateChatSearchInput = styled.input`
   font-size: 18px;
   background-color: transparent;
 `
-
-export const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
-  transform: rotate(45deg); 
-  line-height: 46px;
-  letter-spacing: 1px;
-  &::after {
-    content: ':-(';
-  }
-`
-
-export const PseudoContactListItemNoSearchResults = ({ queryStr }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='addmember'
-      text={tx('search_no_result_for_x', queryStr)}
-    >
-      <NoSearchResultsAvatarBubble />
-    </PseudoContactListItem>
-  )
-}
-
-export const PseudoContactListItemShowQrCode = ({ onClick }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='showqrcode'
-      text={tx('qrshow_title')}
-      onClick={onClick}
-    >
-      <QRAvatar />
-    </PseudoContactListItem>
-  )
-}
-
-export const PseudoContactListItemAddMember = ({ onClick }) => {
-  const tx = window.translate
-  return (
-    <PseudoContactListItem
-      id='addmember'
-      cutoff='+'
-      text={tx('group_add_members')}
-      onClick={onClick}
-    />
-  )
-}
