@@ -1,11 +1,23 @@
 [
   {
+    "locale": "ar",
+    "name": "*Arabic"
+  },
+  {
+    "locale": "az",
+    "name": "Azerbaijani"
+  },
+  {
     "locale": "be",
-    "name": "Belarusian"
+    "name": "*Belarusian"
   },
   {
     "locale": "ca",
     "name": "Català"
+  },
+  {
+    "locale": "ca",
+    "name": "*Czech"
   },
   {
     "locale": "da",
@@ -21,7 +33,7 @@
   },
   {
     "locale": "eo",
-    "name": "Esperanto"
+    "name": "*Esperanto"
   },
   {
     "locale": "es",
@@ -37,7 +49,7 @@
   },
   {
     "locale": "hr",
-    "name": "Croatian"
+    "name": "*Croatian"
   },
   {
     "locale": "hu",
@@ -45,7 +57,7 @@
   },
   {
     "locale": "id",
-    "name": "Indonesian"
+    "name": "*Indonesian"
   },
   {
     "locale": "it",
@@ -58,6 +70,10 @@
   {
     "locale": "ko",
     "name": "Korean"
+  },
+  {
+    "locale": "it",
+    "name": "Italian"
   },
   {
     "locale": "nl",
@@ -97,11 +113,11 @@
   },
   {
     "locale": "ta",
-    "name": "Tamil"
+    "name": "*Tamil"
   },
   {
     "locale": "te",
-    "name": "Telugu"
+    "name": "*Telugu"
   },
   {
     "locale": "tr",
@@ -114,5 +130,9 @@
   {
     "locale": "zh_CN",
     "name": "汉语"
+  },
+  {
+    "locale": "zh_TW",
+    "name": "Chinese (Taiwan)"
   }
 ]
