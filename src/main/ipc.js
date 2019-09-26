@@ -3,7 +3,7 @@ module.exports = { init }
 const { app, ipcMain, dialog } = require('electron')
 const rimraf = require('rimraf')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const os = require('os')
 const getLogins = require('./logins')
 const { getConfigPath } = require('../application-constants')
@@ -182,8 +182,10 @@ function init (cwd, state, logHandler) {
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
   ipcMain.on('selectBackgroundImage', (e, file) => {
-    const copyAndSetBg = (originalfile) => {
-      const newPath = path.join(getConfigPath(), `background_${Date.now()}` + path.extname(originalfile))
+    const copyAndSetBg = async (originalfile) => {
+      await fs.ensureDir(path.join(getConfigPath(), 'background/'))
+      await fs.emptyDir(path.join(getConfigPath(), 'background/'))
+      const newPath = path.join(getConfigPath(), 'background/', `background_${Date.now()}` + path.extname(originalfile))
       fs.copyFile(originalfile, newPath, (err) => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)
