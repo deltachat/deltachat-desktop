@@ -120,7 +120,7 @@ This module builds on top of `deltachat-core-rust`, which in turn has external d
 If you get errors when running `npm install`, they might be related to the _build_ dependency `rust`.
 
 If `rust` or `cargo` is missing:
-Follow the instruction on https://rustup.rs/ to install rust and cargo.
+Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
 
@@ -130,11 +130,11 @@ Then try running `npm install` again.
 
 Debug messages are disabled by default, enable them with the `--log-debug` flag.
 
-| Flag               | Effect                                       |
-| ------------------ | -------------------------------------------- |
-| `--log-debug`      | Log debug messages                           |
-| `--log-to-console` | Output the log to stout / chrome dev console |
-| `--machine-readable-stacktrace` | Enable JSON stacktrace          |
+| Flag                            | Effect                                       |
+| ------------------------------- | -------------------------------------------- |
+| `--log-debug`                   | Log debug messages                           |
+| `--log-to-console`              | Output the log to stout / chrome dev console |
+| `--machine-readable-stacktrace` | Enable JSON stacktrace                       |
 
 #### Log locations
 
@@ -226,7 +226,7 @@ Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
 
 > Tipp: run with `--translation-watch` (included in `npm start`) to start in translation
- watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save 
+>  watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save 
 
 ### Tests
 

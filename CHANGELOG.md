@@ -2,6 +2,31 @@
 
 ## [Unreleased][unreleased]
 
+## [0.200.0] - 2019-09-26
+
+### Added
+
+- Add user customizable message list backgrounds [**@Simon-Laux**](https://github.com/Simon-Laux) [#1001](https://github.com/deltachat/deltachat-desktop/issues/1001)
+- Add placeholder chatlist items [**@Simon-Laux**](https://github.com/Simon-Laux) [#1007](https://github.com/deltachat/deltachat-desktop/issues/1007)
+- Implement lazy loading chatlist [**@Jikstra**](https://github.com/Jikstra) [#997](https://github.com/deltachat/deltachat-desktop/issues/997)
+- Add labels for icon buttons to improve Accessability [**@Simon-Laux**](https://github.com/Simon-Laux) [#966](https://github.com/deltachat/deltachat-desktop/issues/966)
+- Add basic theming support and some themes, major css refactoring included (not yet exposed in Settings, needs cli parameter) [**@Simon-Laux**](https://github.com/Simon-Laux) [**@MIntrovrt**](https://github.com/MIntrovrt) [#911](https://github.com/deltachat/deltachat-desktop/issues/911)
+
+### Changed
+
+- Upgrade deltachat-node to v1.0.0-alpha.7 [**@Jikstra**](https://github.com/Jikstra)
+- Use hooks for loading contacts/chats [**@Jikstra**](https://github.com/Jikstra)
+- UI Rework: Create Chat/Group [**@Jikstra**](https://github.com/Jikstra) [#957](https://github.com/deltachat/deltachat-desktop/issues/957)
+- UI Rework: Edit Group [**@nicodh**](https://github.com/nicodh) [#970](https://github.com/deltachat/deltachat-desktop/issues/970)
+- UI Rework: Put most screen changes into dialogs
+- UI Rework: Settings
+- Upgrade standard [**@ralphtheninja**](https://github.com/ralphtheninja) [#900](https://github.com/deltachat/deltachat-desktop/issues/900)
+
+### Fixed
+
+- Fix typos in \_experimental_en.json [**@OzancanKaratas**](https://github.com/OzancanKaratas) [#1003](https://github.com/deltachat/deltachat-desktop/issues/1003)
+- Fix copy/paste log path on Mac [**@clemens-tolboom**](https://github.com/clemens-tolboom) [#988](https://github.com/deltachat/deltachat-desktop/issues/988)
+
 ## [0.104.0] - 2019-06-09
 
 ### Added
@@ -575,7 +600,9 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.200.0...HEAD
+
+[0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
 
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
 
