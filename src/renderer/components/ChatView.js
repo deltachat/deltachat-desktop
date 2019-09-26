@@ -244,42 +244,46 @@ class ChatView extends React.Component {
     const { onDeadDropClick, chat } = this.props
     return (
       <SettingsContext.Consumer>
-        {(settings) => (
-          <ChatViewWrapper
-            style={{
-              gridTemplateRows: `auto ${this.state.composerSize}px`,
-              background: settings['chatViewBgImg'],
-              backgroundSize: 'cover'
-            }}
-            ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
-            <ConversationWrapper>
-              <div id='the-conversation' ref={this.conversationDiv}>
-                <ul>
-                  {chat.messages.map(rawMessage => {
-                    const message = MessageWrapper.convert(rawMessage)
-                    message.onReply = () => log.debug('reply to', message)
-                    message.onForward = this.onForward.bind(this, message)
-                    return MessageWrapper.render({
-                      message,
-                      chat,
-                      onClickContactRequest: () => onDeadDropClick(message),
-                      onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
-                      onShowDetail: this.onShowDetail.bind(this, message),
-                      onClickAttachment: this.onClickAttachment.bind(this, message)
-                    })
-                  })}
-                </ul>
-              </div>
-            </ConversationWrapper>
-            <Composer
-              ref={this.refComposer}
-              chatId={chat.id}
-              draft={chat.draft}
-              onSubmit={this.writeMessage}
-              setComposerSize={this.setComposerSize.bind(this)}
-            />
-          </ChatViewWrapper>
-        )}
+        {(settings) => {
+          const isImg = settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1
+          return (
+            <ChatViewWrapper
+              style={{
+                gridTemplateRows: `auto ${this.state.composerSize}px`,
+                background: isImg ? 'unset' : settings['chatViewBgImg'],
+                backgroundImage: isImg ? settings['chatViewBgImg'] : 'unset',
+                backgroundSize: 'cover'
+              }}
+              ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
+              <ConversationWrapper>
+                <div id='the-conversation' ref={this.conversationDiv}>
+                  <ul>
+                    {chat.messages.map(rawMessage => {
+                      const message = MessageWrapper.convert(rawMessage)
+                      message.onReply = () => log.debug('reply to', message)
+                      message.onForward = this.onForward.bind(this, message)
+                      return MessageWrapper.render({
+                        message,
+                        chat,
+                        onClickContactRequest: () => onDeadDropClick(message),
+                        onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
+                        onShowDetail: this.onShowDetail.bind(this, message),
+                        onClickAttachment: this.onClickAttachment.bind(this, message)
+                      })
+                    })}
+                  </ul>
+                </div>
+              </ConversationWrapper>
+              <Composer
+                ref={this.refComposer}
+                chatId={chat.id}
+                draft={chat.draft}
+                onSubmit={this.writeMessage}
+                setComposerSize={this.setComposerSize.bind(this)}
+              />
+            </ChatViewWrapper>
+          )
+        }}
       </SettingsContext.Consumer>
     )
   }
