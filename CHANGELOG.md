@@ -14,7 +14,7 @@
 
 ### Changed
 
-- Upgrade deltachat-node to v1.0.0-alpha.7 [**@Jikstra**](https://github.com/Jikstra)
+- Upgrade deltachat-node to v1.0.0-alpha.8 [**@Jikstra**](https://github.com/Jikstra)
 - Use hooks for loading contacts/chats [**@Jikstra**](https://github.com/Jikstra)
 - UI Rework: Create Chat/Group [**@Jikstra**](https://github.com/Jikstra) [#957](https://github.com/deltachat/deltachat-desktop/issues/957)
 - UI Rework: Edit Group [**@nicodh**](https://github.com/nicodh) [#970](https://github.com/deltachat/deltachat-desktop/issues/970)
