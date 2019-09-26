@@ -282,13 +282,6 @@ export default class Settings extends React.Component {
             { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
           </Card>
           <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_imap_folder_handling')}</H5>
-            { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
-            { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
-            { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
-            { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
-          </Card>
-          <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_profile_info_headline')}</H5>
             { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
             { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
@@ -306,12 +299,18 @@ export default class Settings extends React.Component {
             </RadioGroup>
           </Card>
           <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_experimental_features')}</H5>
-            { this.renderDTSettingSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
-          </Card>
-          <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>
             <BackgroundSelector onChange={(val) => this.handleDesktopSettingsChange('chatViewBgImg', val)} />
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_experimental_features')}</H5>
+            { this.renderDTSettingSwitch('enableOnDemandLocationStreaming', this.translate('pref_on_demand_location_streaming')) }
+            <br />
+            <H5>{this.translate('pref_imap_folder_handling')}</H5>
+            { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
+            { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
+            { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
+            { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
           </Card>
         </div>
       )
