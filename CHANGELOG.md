@@ -2,6 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+## [0.201.0] - 2019-09-27
+
+### Added
+
+- A few default chat background images to choose from [**@Simon-Laux**](https://github.com/Simon-Laux)
+
+### Fixed
+
+- fixed new Language Strings and fixed a11y strings
+
 ## [0.200.0] - 2019-09-26
 
 ### Added

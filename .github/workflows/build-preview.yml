@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: install wine
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install --yes wine-stable wine32
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
@@ -17,22 +22,33 @@ jobs:
       run: |
         npm install
         npm run build
-        npm test
     - name: electron builder
-      run: npx electron-builder --linux --win --mac
+      run: npx electron-builder --linux --win portable --mac mas || true
+    - name: renaming
+      run: |
+        cd dist
+        mv *.AppImage DeltaChatPreview.AppImage
+        mv *.deb DeltaChat.deb
+        mv *.exe DeltaChat.exe
+        ls
+        cd ..
     - uses: actions/upload-artifact@master
       with:
         name: Linux Appimage
-        path: dist/*.Appimage
+        path: dist/DeltaChatPreview.AppImage
     - uses: actions/upload-artifact@master
       with:
         name: Linux deb
-        path: dist/*.deb
+        path: dist/DeltaChat.deb
     - uses: actions/upload-artifact@master
       with:
         name: Windows Zip
         path: dist/win-unpacked
     - uses: actions/upload-artifact@master
       with:
-        name: Mac dmg
-        path: dist/*dmg
+        name: Windows Portable
+        path: dist/DeltaChat.exe
+    - uses: actions/upload-artifact@master
+      with:
+        name: Mac mas
+        path: dist/mas/DeltaChat.app
