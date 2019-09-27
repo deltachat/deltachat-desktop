@@ -17,6 +17,18 @@
   "pref_on_demand_location_streaming": {
     "message": "On-demand location streaming"
   },
+  "pref_background_default": {
+    "message": "Default background"
+  },
+  "pref_background_default_color": {
+    "message": "Default color"
+  },
+  "pref_background_custom": {
+    "message": "Custom image"
+  },
+  "pref_background_custom_color": {
+    "message": "Custom color"
+  },
   "copy_selected_text": {
     "message": "Copy selected text"
   },
@@ -82,5 +94,9 @@
   },
   "a11y_message_context_menu_btn_label": {
     "message": "Message actions"
+  },
+  "a11y_background_preview_label": {
+    "message": "Background preview"
   }
+
 }
