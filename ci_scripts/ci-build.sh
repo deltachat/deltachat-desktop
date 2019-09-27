@@ -28,7 +28,7 @@ echo $PATH
 
 node --version
 npm --version
-cargo --version
+cargo --version || true
 
 npm install;
 npm run build;
