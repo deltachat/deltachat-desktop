@@ -9,10 +9,6 @@ if (typeof process.env.DC_MAIL_PW !== 'string') {
 }
 
 const getConfig = () => {
-  let mailServerDomain = process.env.DC_MAIL_SERVER
-  if (typeof mailServer !== 'string') {
-    mailServerDomain = process.env.DC_ADDR.split('@').pop()
-  }
   return {
     notifications: true,
     enterKeySends: true,
@@ -20,7 +16,7 @@ const getConfig = () => {
     locale: 'en',
     credentials: {
       addr: process.env.DC_ADDR,
-      mail_pw: process.env.DC_MAIL_PW,
+      mail_pw: process.env.DC_MAIL_PW
     },
     bounds: {
       x: 0,
