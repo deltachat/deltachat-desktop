@@ -209,7 +209,6 @@ function init (cwd, state, logHandler) {
       })
     } else {
       const filepath = path.join(__dirname, '../../images/backgrounds/', file)
-      console.log(filepath)
       copyAndSetBg(filepath)
     }
   })
