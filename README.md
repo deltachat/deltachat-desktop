@@ -13,7 +13,6 @@
 
 <details><summary>Click to expand</summary>
 
-
 - [Install](#install)
 - [Configuration and Databases](#configuration-and-databases)
 - [Troubleshooting](#troubleshooting)
