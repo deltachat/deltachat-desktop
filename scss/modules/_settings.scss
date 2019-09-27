@@ -2,8 +2,8 @@
 // ChatView Background selector
 
 .background-preview {
-    width: 100pt;
-    height: 100pt;
+    width: 142px;
+    height: 142px;
     border-radius: 5pt;
     background-image: url(../images/background_light.svg);
     background-color: var(--chatViewBg);
@@ -12,6 +12,21 @@
 .background-options {
     display: flex;
     flex-direction: column;
-    padding-left: 8pt;
+    padding: 0 8px;
     justify-content: space-evenly;
+}
+
+.background-default-images {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 150px;
+}
+
+.background-default-images > div {
+    margin: 2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 3pt;
+    background-color: darkcyan;
 }

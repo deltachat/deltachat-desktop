@@ -3,7 +3,7 @@ module.exports = { init }
 const { app, ipcMain, dialog } = require('electron')
 const rimraf = require('rimraf')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 const os = require('os')
 const getLogins = require('./logins')
 const { getConfigPath } = require('../application-constants')
@@ -181,26 +181,36 @@ function init (cwd, state, logHandler) {
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
-  ipcMain.on('selectBackgroundImage', (e) => {
-    dialog.showOpenDialog(undefined, {
-      title: 'Select Background Image',
-      filters: [
-        { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
-        { name: 'All Files', extensions: ['*'] }
-      ],
-      properties: ['openFile']
-    }, (filenames) => {
-      if (!filenames) { return }
-      log.info('BG-IMG Selected File:', filenames[0])
-      const newPath = path.join(getConfigPath(), `background_${Date.now()}` + path.extname(filenames[0]))
-      fs.copyFile(filenames[0], newPath, (err) => {
+  ipcMain.on('selectBackgroundImage', (e, file) => {
+    const copyAndSetBg = async (originalfile) => {
+      await fs.ensureDir(path.join(getConfigPath(), 'background/'))
+      await fs.emptyDir(path.join(getConfigPath(), 'background/'))
+      const newPath = path.join(getConfigPath(), 'background/', `background_${Date.now()}` + path.extname(originalfile))
+      fs.copyFile(originalfile, newPath, (err) => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)
           return
         }
         updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath}")`)
       })
-    })
+    }
+    if (!file) {
+      dialog.showOpenDialog(undefined, {
+        title: 'Select Background Image',
+        filters: [
+          { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+          { name: 'All Files', extensions: ['*'] }
+        ],
+        properties: ['openFile']
+      }, (filenames) => {
+        if (!filenames) { return }
+        log.info('BG-IMG Selected File:', filenames[0])
+        copyAndSetBg(filenames[0])
+      })
+    } else {
+      const filepath = path.join(__dirname, '../../images/backgrounds/', file)
+      copyAndSetBg(filepath)
+    }
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {
