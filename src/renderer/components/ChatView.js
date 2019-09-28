@@ -180,7 +180,7 @@ export default function ChatView (props) {
   useEffect(() => {
     // on new chat selected
     previousScrollHeightMinusTop.current = null
-    if (refComposer.current) {
+    if (refComposer.current && refComposer.current.messageInputRef.current) {
       refComposer.current.messageInputRef.current.focus()
     }
     scrollToBottom()
@@ -246,6 +246,7 @@ export default function ChatView (props) {
   }
 
   const { onDeadDropClick, chat } = props
+  const isDisabled = chat.contacts.find(contact => contact.id === 1) === undefined
 
   return (
     <SettingsContext.Consumer>
@@ -288,6 +289,7 @@ export default function ChatView (props) {
               draft={chat.draft}
               onSubmit={writeMessage}
               setComposerSize={setComposerSize.bind(this)}
+              isDisabled={isDisabled}
             />
           </ChatViewWrapper>
         )
