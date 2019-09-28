@@ -191,7 +191,7 @@ function init (cwd, state, logHandler) {
           log.error('BG-IMG Copy Failed', err)
           return
         }
-        updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath.replace(/\//g, '/')}")`)
+        updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath.replace(/\\/g, '/')}")`)
       })
     }
     if (!file) {
