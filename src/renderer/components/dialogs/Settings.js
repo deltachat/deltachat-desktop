@@ -378,14 +378,13 @@ class BackgroundSelector extends React.Component {
     const tx = window.translate
     return (<div style={{ display: 'flex' }}>
       <SettingsContext.Consumer>
-        {(settings) => {
-          console.log(settings['chatViewBgImg'])
-          return (<div
+        {(settings) => (
+          <div
             style={{ background: settings['chatViewBgImg'], backgroundSize: 'cover' }}
             aria-label={tx('a11y_background_preview_label')}
             className={'background-preview'}
-          />)
-        }}
+          />
+        )}
       </SettingsContext.Consumer>
       <div className={'background-options'}>
         <button onClick={this.onButton.bind(this, 'def')}>{tx('pref_background_default')}</button>
