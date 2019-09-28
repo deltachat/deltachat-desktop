@@ -25,8 +25,6 @@ const {
   Button
 } = require('@blueprintjs/core')
 
-const log = require('../../logger').getLogger('renderer/SplittedChatListAndView')
-
 const NavbarGroupName = styled.div`
   font-size: medium;
   font-weight: bold;

@@ -128,10 +128,8 @@ export default function ChatView (props) {
   }
 
   const fetchNextMessages = () => {
-    console.log('fetchNextMessages')
     const { chat } = props
     if (chat.totalMessages === chat.messages.length) return
-    console.log('fetchNextMessages call dc')
     scrollPrepare()
     callDcMethod(
       'fetchMessages',
