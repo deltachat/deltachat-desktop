@@ -119,7 +119,8 @@ function getSmallChatById (chatId, list, i) {
     isVerified: chat.isVerified,
     isGroup: chat.isGroup,
     freshMessageCounter: chat.freshMessageCounter,
-    isArchiveLink: chat.isArchiveLink
+    isArchiveLink: chat.isArchiveLink,
+    selfInGroup: chat.selfInGroup
   }
 }
 
