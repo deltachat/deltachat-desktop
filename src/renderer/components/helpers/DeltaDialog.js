@@ -19,6 +19,8 @@ export const DeltaDialogBase = React.memo((props) => {
       <Dialog
         isOpen={props.isOpen}
         onClose={props.onClose}
+        canOutsideClickClose={false}
+        canEscapeKeyClose={true}
         className={classNames(props.fixed ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
         style={props.style}
       >
