@@ -246,7 +246,6 @@ export default function ChatView (props) {
   }
 
   const { onDeadDropClick, chat } = props
-  console.log('slefInGroup', chat.selfInGroup)
 
   return (
     <SettingsContext.Consumer>
