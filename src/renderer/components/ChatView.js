@@ -111,6 +111,7 @@ export default function ChatView (props) {
     error: false,
     composerSize: 40
   })
+  const { chat } = props
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
   let doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
@@ -120,7 +121,6 @@ export default function ChatView (props) {
   const { openDialog } = useContext(ScreenContext)
 
   const writeMessage = (opts) => {
-    const { chat } = props
     callDcMethod(
       'sendMessage',
       [chat.id, opts.text, opts.filename]
@@ -128,7 +128,6 @@ export default function ChatView (props) {
   }
 
   const fetchNextMessages = () => {
-    const { chat } = props
     if (chat.totalMessages === chat.messages.length) return
     scrollPrepare()
     callDcMethod(
@@ -175,7 +174,7 @@ export default function ChatView (props) {
     return () => {
       if (observer) observer.disconnect()
     }
-  }, [props.chat.id])
+  }, [chat.id])
 
   useEffect(() => {
     // on new chat selected
@@ -184,7 +183,7 @@ export default function ChatView (props) {
       refComposer.current.messageInputRef.current.focus()
     }
     scrollToBottom()
-  }, [props.chat.id])
+  }, [chat.id])
 
   const scrollToBottom = (force) => {
     doc.scrollTop = doc.scrollHeight
@@ -205,7 +204,6 @@ export default function ChatView (props) {
   }
 
   const onShowDetail = (message) => {
-    const { chat } = props
     openDialog('MessageDetail', {
       message,
       chat
@@ -222,7 +220,6 @@ export default function ChatView (props) {
 
   const onDrop = (e) => {
     const files = e.target.files || e.dataTransfer.files
-    const { chat } = props
     e.preventDefault()
     e.stopPropagation()
     // TODO maybe add a clause here for windows because that uses backslash instead of slash
@@ -245,7 +242,8 @@ export default function ChatView (props) {
     e.stopPropagation()
   }
 
-  const { onDeadDropClick, chat } = props
+  const { onDeadDropClick } = props
+  const disabled = chat.isGroup && !chat.selfInGroup
 
   return (
     <SettingsContext.Consumer>
@@ -288,7 +286,7 @@ export default function ChatView (props) {
               draft={chat.draft}
               onSubmit={writeMessage}
               setComposerSize={setComposerSize.bind(this)}
-              isDisabled={!chat.selfInGroup}
+              isDisabled={disabled}
             />
           </ChatViewWrapper>
         )
