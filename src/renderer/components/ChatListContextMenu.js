@@ -76,7 +76,7 @@ const ChatListContextMenu = React.memo((props) => {
           <Icon icon='lock' /> {tx('encryption_info_desktop')}
         </MenuItem>
       }
-      {chat.isGroup && chat.contacts.find(contact => contact.id === 1)
+      {chat.isGroup && chat.selfInGroup
         ? (
           <div>
             <MenuItem onClick={onEditGroup} >

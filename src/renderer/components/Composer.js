@@ -220,11 +220,8 @@ class Composer extends React.Component {
     if (isDisabled) {
       return <ComposerWrapper
         className={'disabled-message-input'}
-        style={
-          { textAlign: 'center',
-            padding: '0.5rem',
-            color: '#999' }}>
-        {'Messaging disabled (you are not in this group)'}
+        style={{ textAlign: 'center', padding: '0.5rem', color: '#999' }}>
+        {tx('messaging_disabled_not_in_group')}
       </ComposerWrapper>
     } else {
       return (

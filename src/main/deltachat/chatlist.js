@@ -160,7 +160,12 @@ function getFullChatById (chatId, loadMessages) {
 
   const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
   const messages = loadMessages ? this._messagesToRender(messageIds) : []
-
+  const contacts = this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson())
+  const isGroup = isGroupChat(chat)
+  let selfInGroup = isGroup
+  if (isGroup && contacts.find(contact => contact.id === C.DC_CONTACT_ID_SELF) === undefined) {
+    selfInGroup = false
+  }
   // This object is NOT created with object assign to promote consistency and to be easier to understand
   return {
     id: chat.id,
@@ -174,15 +179,16 @@ function getFullChatById (chatId, loadMessages) {
     isUnpromoted: chat.isUnpromoted,
     isSelfTalk: chat.isSelfTalk,
 
-    contacts: this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson()),
+    contacts: contacts,
     totalMessages: messageIds.length,
     messages: messages,
     color: this._integerToHexColor(chat.color),
     summary: undefined,
     freshMessageCounter: this._dc.getFreshMessageCount(chatId),
-    isGroup: isGroupChat(chat),
+    isGroup: isGroup,
     isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
-    draft: chat.draft
+    draft: chat.draft,
+    selfInGroup: selfInGroup
   }
 }
 

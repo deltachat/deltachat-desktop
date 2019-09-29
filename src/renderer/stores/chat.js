@@ -86,7 +86,14 @@ ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
     return
   }
   // update info for selected chat
-  chatStore.setState({ ...state, profileImage: chat.profileImage, name: chat.name, subtitle: chat.subtitle, contacts: chat.contacts })
+  chatStore.setState(
+    { ...state,
+      profileImage: chat.profileImage,
+      name: chat.name,
+      subtitle: chat.subtitle,
+      contacts: chat.contacts,
+      selfInGroup: chat.selfInGroup
+    })
 })
 
 module.exports = chatStore

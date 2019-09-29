@@ -246,7 +246,7 @@ export default function ChatView (props) {
   }
 
   const { onDeadDropClick, chat } = props
-  const isDisabled = chat.contacts.find(contact => contact.id === 1) === undefined
+  console.log('slefInGroup', chat.selfInGroup)
 
   return (
     <SettingsContext.Consumer>
@@ -289,7 +289,7 @@ export default function ChatView (props) {
               draft={chat.draft}
               onSubmit={writeMessage}
               setComposerSize={setComposerSize.bind(this)}
-              isDisabled={isDisabled}
+              isDisabled={!chat.selfInGroup}
             />
           </ChatViewWrapper>
         )
