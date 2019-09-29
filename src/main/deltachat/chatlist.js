@@ -96,6 +96,10 @@ function getSmallChatById (chatId, list, i) {
   const summary = list.getSummary(i).toJson()
   const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
+  if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
+    summary.text2 = this.translate('message_not_verified')
+  }
+
   // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
   return {
     id: chat.id,
