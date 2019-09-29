@@ -29,6 +29,7 @@ class DeltaChatController extends EventEmitter {
     require('./login').bind(this)()
     require('./messagelist').bind(this)()
     require('./settings').bind(this)()
+    require('./stickers').bind(this)()
   }
 
   logCoreEvent (event, data1, data2) {

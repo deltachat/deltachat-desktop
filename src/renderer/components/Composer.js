@@ -1,14 +1,16 @@
-const React = require('react')
-const { withTheme } = require('styled-components')
+import React, { useState, useRef } from 'react'
+import { withTheme } from 'styled-components'
 
-const { Button } = require('@blueprintjs/core')
-const { remote } = require('electron')
-const styled = require('styled-components').default
-const { Picker } = require('emoji-mart')
+import { Button } from '@blueprintjs/core'
+import { remote } from 'electron'
+import styled from 'styled-components'
+import { Picker } from 'emoji-mart'
 
-const log = require('../../logger').getLogger('renderer/composer')
-const SettingsContext = require('../contexts/SettingsContext')
-const ComposerMessageInput = require('./ComposerMessageInput')
+import logger from '../../logger'
+const log  = logger.getLogger('renderer/composer')
+import SettingsContext from '../contexts/SettingsContext'
+import ComposerMessageInput from './ComposerMessageInput'
+import { callDcMethodAsync } from '../ipc'
 
 const ComposerWrapper = styled.div`
   background-color: ${props => props.theme.composerBg};
@@ -132,133 +134,127 @@ const SendButton = styled.button`
   }
 `
 
-class Composer extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      filename: null,
-      error: false,
-      showEmojiPicker: false
+const Composer = withTheme(props => {
+  const { onSubmit, setComposerSize, chatId, draft, theme } = props
+  const [filename, setFilename] = useState(null)
+  const [error, setError] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-    }
-    this.sendMessage = this.sendMessage.bind(this)
-    this.onEmojiSelect = this.onEmojiSelect.bind(this)
-    this.onMouseMove = this.onMouseMove.bind(this)
+  const composerWrapperRef = useRef()
+  const messageInputRef = useRef()
+  const pickerRef = useRef()
+  const pickerButtonRef = useRef()
 
-    this.messageInputRef = React.createRef()
-    this.pickerRef = React.createRef()
-    this.pickerButtonRef = React.createRef()
-  }
-
-  handleError () {
-    this.setState({ error: true })
-  }
-
-  sendMessage () {
-    const message = this.messageInputRef.current.getText()
+  const handleError = () => setError(true)
+    
+  const sendMessage = () => {
+    const message = messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
       log.debug(`Empty message: don't send it...`)
       return
     }
-    this.props.onSubmit({
+    onSubmit({
       text: message
     })
-    this.messageInputRef.current.clearText()
-    this.messageInputRef.current.focus()
+    messageInputRef.current.clearText()
+    messageInputRef.current.focus()
   }
 
-  addFilename () {
-    remote.dialog.showOpenDialog({
-      properties: ['openFile']
-    }, (filenames) => {
-      if (filenames && filenames[0]) {
-        this.props.onSubmit({ filename: filenames[0] })
-      }
-    })
+  const addFilename = () => {
+    remote.dialog.showOpenDialog(
+      {properties: ['openFile']},
+      filenames => { filenames && filenames[0] && onSubmit({ filename: filenames[0] }) }
+    )
   }
 
-  showEmojiPicker (show) {
-    if (show) {
-      document.addEventListener('mousemove', this.onMouseMove)
-    } else {
-      document.removeEventListener('mousemove', this.onMouseMove)
-    }
-    this.setState({ showEmojiPicker: show })
-  }
-
-  onEmojiSelect (emoji) {
-    log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    this.messageInputRef.current.insertStringAtCursorPosition(emoji.native)
-  }
-
-  onMouseMove (event) {
-    const x = event.clientX
-    const y = event.clientY
-    if (this.state.showEmojiPicker === false) return
-
-    const bounding = this.pickerRef.current.getBoundingClientRect()
-    const boundingButton = this.pickerButtonRef.current.getBoundingClientRect()
-
-    if (!this.insideBoundingRect(x, y, bounding, 10) &&
-        !this.insideBoundingRect(x, y, boundingButton, 10)) {
-      log.debug(`Closing EmojiPicker x: ${x} y: ${y}`)
-      this.setState({ showEmojiPicker: false })
-    }
-  }
-
-  insideBoundingRect (mouseX, mouseY, boundingRect, margin = 0) {
+  const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
     return mouseX >= boundingRect.x - margin &&
            mouseX <= boundingRect.x + boundingRect.width + margin &&
            mouseY >= boundingRect.y - margin &&
            mouseY <= boundingRect.y + boundingRect.height + margin
   }
 
-  render () {
-    const tx = window.translate
+  const onMouseMove = event => {
+    const x = event.clientX
+    const y = event.clientY
+    if (showEmojiPicker === false) return
 
-    return (
-      <ComposerWrapper ref='ComposerWrapper'>
-        <AttachmentButtonWrapper>
-          <Button minimal
-            icon='paperclip'
-            onClick={this.addFilename.bind(this)}
-            aria-label={tx('a11y_attachment_btn_label')} />
-        </AttachmentButtonWrapper>
-        <SettingsContext.Consumer>
-          {({ enterKeySends }) => (
-            <ComposerMessageInput
-              ref={this.messageInputRef}
-              enterKeySends={enterKeySends}
-              sendMessage={this.sendMessage}
-              setComposerSize={this.props.setComposerSize}
-              chatId={this.props.chatId}
-              draft={this.props.draft}
-            />
-          )}
-        </SettingsContext.Consumer>
-        <EmojiButtonWrapper ref={this.pickerButtonRef}>
-          <IconButton onClick={this.showEmojiPicker.bind(this, true)} aria-label={tx('a11y_emoji_btn_label')}>
-            <IconButtonSpan />
-          </IconButton>
-        </EmojiButtonWrapper>
-        { this.state.showEmojiPicker &&
-          <EmojiPickerWrapper ref={this.pickerRef}>
-            <Picker
-              style={{ width: '100%', height: '100%' }}
-              native
-              color={this.props.theme.emojiSelectorSelectionColor}
-              onSelect={this.onEmojiSelect}
-              showPreview={false}
-              showSkinTones={false}
-              emojiTooltip
-            />
-          </EmojiPickerWrapper>
-        }
-        <SendButtonCircleWrapper onClick={this.sendMessage}>
-          <SendButton aria-label={tx('a11y_send_btn_label')} />
-        </SendButtonCircleWrapper>
-      </ComposerWrapper>
-    )
+    const bounding = pickerRef.current.getBoundingClientRect()
+    const boundingButton = pickerButtonRef.current.getBoundingClientRect()
+
+    if (!insideBoundingRect(x, y, bounding, 10) &&
+        !insideBoundingRect(x, y, boundingButton, 10)) {
+      log.debug(`Closing EmojiPicker x: ${x} y: ${y}`)
+      setShowEmojiPicker(false)
+    }
   }
-}
-module.exports = withTheme(Composer)
+
+  const onClickEmojiPicker = show => {
+    if (show) {
+      document.addEventListener('mousemove', onMouseMove)
+    } else {
+      document.removeEventListener('mousemove', onMouseMove)
+    }
+    setShowEmojiPicker(show)
+  }
+
+  const onEmojiSelect = emoji => {
+    log.debug(`EmojiPicker: Selected ${emoji.id}`)
+    messageInputRef.current.insertStringAtCursorPosition(emoji.native)
+  }
+
+
+  const onClickStickers = async () => {
+    const stickers = await callDcMethodAsync('getStickers')
+    console.log('stickers', stickers)
+  }
+
+  const tx = window.translate
+
+  return (
+    <ComposerWrapper ref={composerWrapperRef}>
+      <AttachmentButtonWrapper>
+        <Button minimal
+          icon='paperclip'
+          onClick={addFilename.bind(this)}
+          aria-label={tx('a11y_attachment_btn_label')} />
+      </AttachmentButtonWrapper>
+      <SettingsContext.Consumer>
+        {({ enterKeySends }) => (
+          <ComposerMessageInput
+            ref={messageInputRef}
+            enterKeySends={enterKeySends}
+            sendMessage={sendMessage}
+            setComposerSize={setComposerSize}
+            chatId={chatId}
+            draft={draft}
+          />
+        )}
+      </SettingsContext.Consumer>
+      <EmojiButtonWrapper ref={pickerButtonRef}>
+        <IconButton onClick={onClickEmojiPicker.bind(this, true)} aria-label={tx('a11y_emoji_btn_label')}>
+          <IconButtonSpan />
+        </IconButton>
+      </EmojiButtonWrapper>
+      { showEmojiPicker &&
+        <EmojiPickerWrapper ref={pickerRef}>
+          <Picker
+            style={{ width: '100%', height: '100%' }}
+            native
+            color={theme.emojiSelectorSelectionColor}
+            onSelect={onEmojiSelect}
+            showPreview={false}
+            showSkinTones={false}
+            emojiTooltip
+          />
+        </EmojiPickerWrapper>
+      }
+      <button onClick={onClickStickers}>Stickers</button>
+      <SendButtonCircleWrapper onClick={sendMessage}>
+        <SendButton aria-label={tx('a11y_send_btn_label')} />
+      </SendButtonCircleWrapper>
+    </ComposerWrapper>
+  )
+})
+
+export default Composer

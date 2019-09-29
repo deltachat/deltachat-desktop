@@ -4,7 +4,7 @@ const { callDcMethod } = require('../ipc')
 const styled = require('styled-components').default
 const ScreenContext = require('../contexts/ScreenContext')
 
-const Composer = require('./Composer')
+const Composer = require('./Composer').default
 const MessageWrapper = require('./MessageWrapper')
 const log = require('../../logger').getLogger('renderer/chatView')
 
