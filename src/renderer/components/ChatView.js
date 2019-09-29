@@ -28,10 +28,10 @@ const ChatViewWrapper = styled.div`
 
 }
 `
-const ConversationWrapper = styled.div`
+const MessageListWrapper = styled.div`
   position: relative;
 
-  #the-conversation {
+  #message-list {
     position: absolute;
     bottom: 0;
     overflow: scroll;
@@ -112,8 +112,8 @@ export default function ChatView (props) {
     composerSize: 40
   })
   const previousScrollHeightMinusTop = useRef(null)
-  const conversationDiv = useRef(null)
-  let doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #the-conversation`)
+  const messageListWrap = useRef(null)
+  let doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
 
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
@@ -162,14 +162,14 @@ export default function ChatView (props) {
 
   useEffect(() => {
     if (!doc) {
-      doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #the-conversation`)
+      doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
     }
     if (!doc) {
-      logger.warn(`Didn't find .ChatViewWrapper #the-conversation element`)
+      logger.warn(`Didn't find .ChatViewWrapper #message-list element`)
     }
     const observer = new MutationObserver(handleScroll)
-    if (conversationDiv.current) {
-      observer.observe(conversationDiv.current, { attributes: false, childList: true, subtree: true })
+    if (messageListWrap.current) {
+      observer.observe(messageListWrap.current, { attributes: false, childList: true, subtree: true })
     }
     doc.onscroll = onScroll
     return () => {
@@ -263,8 +263,8 @@ export default function ChatView (props) {
           <ChatViewWrapper
             style={style}
             ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
-            <ConversationWrapper>
-              <div id='the-conversation' ref={conversationDiv}>
+            <MessageListWrapper>
+              <div id='message-list' ref={messageListWrap}>
                 <ul>
                   {chat.messages.map(rawMessage => {
                     const message = MessageWrapper.convert(rawMessage)
@@ -281,7 +281,7 @@ export default function ChatView (props) {
                   })}
                 </ul>
               </div>
-            </ConversationWrapper>
+            </MessageListWrapper>
             <Composer
               ref={refComposer}
               chatId={chat.id}
