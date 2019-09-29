@@ -237,7 +237,7 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
   )
 }
 
-export const useCreateGroup = (verified, groupName, groupImage, groupMembers) => {
+export const useCreateGroup = (verified, groupName, groupImage, groupMembers, onClose) => {
   const { changeScreen } = useContext(ScreenContext)
   const [groupId, setGroupId] = useState(-1)
 
@@ -275,7 +275,7 @@ export function CreateGroupInner (props) {
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(false, groupName, groupImage, groupMembers)
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
 
   const [qrCode, setQrCode] = useState('')
 
@@ -360,7 +360,7 @@ export function CreateGroupInner (props) {
                 noPadding
                 onClick={finishCreateGroup}
               >
-               {tx('ok')}
+                {tx('ok')}
               </DeltaButtonPrimary>
             </div>
           </DeltaDialogFooter>
@@ -377,7 +377,7 @@ export function CreateVerifiedGroupInner (props) {
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(true, groupName, groupImage, groupMembers)
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
 
   const [qrCode, setQrCode] = useState('')
 
