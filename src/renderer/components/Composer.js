@@ -215,50 +215,59 @@ class Composer extends React.Component {
 
   render () {
     const tx = window.translate
+    const { isDisabled } = this.props
 
-    return (
-      <ComposerWrapper ref='ComposerWrapper'>
-        <AttachmentButtonWrapper>
-          <Button minimal
-            icon='paperclip'
-            onClick={this.addFilename.bind(this)}
-            aria-label={tx('a11y_attachment_btn_label')} />
-        </AttachmentButtonWrapper>
-        <SettingsContext.Consumer>
-          {({ enterKeySends }) => (
-            <ComposerMessageInput
-              ref={this.messageInputRef}
-              enterKeySends={enterKeySends}
-              sendMessage={this.sendMessage}
-              setComposerSize={this.props.setComposerSize}
-              chatId={this.props.chatId}
-              draft={this.props.draft}
-            />
-          )}
-        </SettingsContext.Consumer>
-        <EmojiButtonWrapper ref={this.pickerButtonRef}>
-          <IconButton onClick={this.showEmojiPicker.bind(this, true)} aria-label={tx('a11y_emoji_btn_label')}>
-            <IconButtonSpan />
-          </IconButton>
-        </EmojiButtonWrapper>
-        { this.state.showEmojiPicker &&
-          <EmojiPickerWrapper ref={this.pickerRef}>
-            <Picker
-              style={{ width: '100%', height: '100%' }}
-              native
-              color={this.props.theme.emojiSelectorSelectionColor}
-              onSelect={this.onEmojiSelect}
-              showPreview={false}
-              showSkinTones={false}
-              emojiTooltip
-            />
-          </EmojiPickerWrapper>
-        }
-        <SendButtonCircleWrapper onClick={this.sendMessage}>
-          <SendButton aria-label={tx('a11y_send_btn_label')} />
-        </SendButtonCircleWrapper>
+    if (isDisabled) {
+      return <ComposerWrapper
+        className={'disabled-message-input'}
+        style={{ textAlign: 'center', padding: '0.5rem', color: '#999' }}>
+        {tx('messaging_disabled_not_in_group')}
       </ComposerWrapper>
-    )
+    } else {
+      return (
+        <ComposerWrapper ref='ComposerWrapper'>
+          {!isDisabled && <AttachmentButtonWrapper>
+            <Button minimal
+              icon='paperclip'
+              onClick={this.addFilename.bind(this)}
+              aria-label={tx('a11y_attachment_btn_label')} />
+          </AttachmentButtonWrapper>}
+          <SettingsContext.Consumer>
+            {({ enterKeySends }) => (
+              <ComposerMessageInput
+                ref={this.messageInputRef}
+                enterKeySends={enterKeySends}
+                sendMessage={this.sendMessage}
+                setComposerSize={this.props.setComposerSize}
+                chatId={this.props.chatId}
+                draft={this.props.draft}
+              />
+            )}
+          </SettingsContext.Consumer>
+          <EmojiButtonWrapper ref={this.pickerButtonRef}>
+            <IconButton onClick={this.showEmojiPicker.bind(this, true)} aria-label={tx('a11y_emoji_btn_label')}>
+              <IconButtonSpan />
+            </IconButton>
+          </EmojiButtonWrapper>
+          { this.state.showEmojiPicker &&
+            <EmojiPickerWrapper ref={this.pickerRef}>
+              <Picker
+                style={{ width: '100%', height: '100%' }}
+                native
+                color={this.props.theme.emojiSelectorSelectionColor}
+                onSelect={this.onEmojiSelect}
+                showPreview={false}
+                showSkinTones={false}
+                emojiTooltip
+              />
+            </EmojiPickerWrapper>
+          }
+          <SendButtonCircleWrapper onClick={this.sendMessage}>
+            <SendButton aria-label={tx('a11y_send_btn_label')} />
+          </SendButtonCircleWrapper>
+        </ComposerWrapper>
+      )
+    }
   }
 }
 module.exports = withTheme(Composer)

@@ -254,7 +254,9 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
         await callDcMethodAsync('setChatProfileImage', [gId, groupImage])
       }
       for (const contactId of groupMembers) {
-        await callDcMethodAsync('addContactToChat', [gId, contactId])
+        if (contactId !== C.DC_CONTACT_ID_SELF) {
+          await callDcMethodAsync('addContactToChat', [gId, contactId])
+        }
       }
     }
     return gId

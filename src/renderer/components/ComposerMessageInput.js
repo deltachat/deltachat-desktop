@@ -89,7 +89,7 @@ class ComposerMessageInput extends React.Component {
       this.setCursorPosition = false
     }
 
-    if (prevState.text !== this.state.text) {
+    if (prevState.text !== this.state.text && prevState.chatId === this.state.chatId) {
       this.resizeTextareaAndComposer()
       this.saveDraft()
     }

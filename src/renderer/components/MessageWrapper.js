@@ -164,6 +164,10 @@ class RenderMessage extends React.Component {
       onClick: () => { log.debug('click contact') }
     }
 
+    if (msg.text === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
+      msg.text = window.translate('message_not_verified')
+    }
+
     const props = {
       padlock: msg.showPadlock,
       id,

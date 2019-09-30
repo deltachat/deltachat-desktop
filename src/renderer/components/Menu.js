@@ -59,7 +59,7 @@ export default function DeltaMenu (props) {
           text={tx('encryption_info_desktop')}
           onClick={onEncrInfo} />
       }
-      {isGroup
+      {isGroup && selectedChat.selfInGroup
         ? (
           <div>
             <MenuItem

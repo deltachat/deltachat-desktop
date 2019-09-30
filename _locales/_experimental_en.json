@@ -97,6 +97,12 @@
   },
   "a11y_background_preview_label": {
     "message": "Background preview"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "'Messaging disabled (you are not in this group)'"
+  },
+  "message_not_verified": {
+    "message": "The message was sent with non-verified encryption.. See \"Info\" for details."
   }
 
 }

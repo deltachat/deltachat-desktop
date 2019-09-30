@@ -1,15 +1,15 @@
-const React = require('react')
-const { shell } = require('electron')
-const { callDcMethod } = require('../ipc')
-const styled = require('styled-components').default
-const ScreenContext = require('../contexts/ScreenContext')
+import React, { useRef, useState, useEffect, useContext } from 'react'
+import styled from 'styled-components'
+import { shell } from 'electron'
+import { callDcMethod } from '../ipc'
+import ScreenContext from '../contexts/ScreenContext'
 
-const Composer = require('./Composer')
-const MessageWrapper = require('./MessageWrapper')
-const log = require('../../logger').getLogger('renderer/chatView')
+import Composer from './Composer'
+import MessageWrapper from './MessageWrapper'
+import logger from '../../logger'
 
-const { isDisplayableByRenderMedia } = require('./Attachment')
-const SettingsContext = require('../contexts/SettingsContext')
+import { isDisplayableByRenderMedia } from './Attachment'
+import SettingsContext from '../contexts/SettingsContext'
 
 const MutationObserver = window.MutationObserver
 
@@ -28,10 +28,10 @@ const ChatViewWrapper = styled.div`
 
 }
 `
-const ConversationWrapper = styled.div`
+const MessageListWrapper = styled.div`
   position: relative;
 
-  #the-conversation {
+  #message-list {
     position: absolute;
     bottom: 0;
     overflow: scroll;
@@ -106,118 +106,120 @@ const ConversationWrapper = styled.div`
   }
 `
 
-class ChatView extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      error: false,
-      composerSize: 40
-    }
+export default function ChatView (props) {
+  const [state, setState] = useState({
+    error: false,
+    composerSize: 40
+  })
+  const { chat } = props
+  const previousScrollHeightMinusTop = useRef(null)
+  const messageListWrap = useRef(null)
+  let doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
 
-    this.writeMessage = this.writeMessage.bind(this)
-    this.scrollToBottom = this.scrollToBottom.bind(this)
-    this.conversationDiv = React.createRef()
-    this.lastId = this.props.chat.id
-    this.previousScrollHeightMinusTop = null
+  const conversationRef = useRef(null)
+  const refComposer = useRef(null)
+  const { openDialog } = useContext(ScreenContext)
 
-    this.conversationRef = React.createRef()
-    this.refComposer = React.createRef()
-  }
-
-  componentWillUnmount () {
-    if (this.observer) this.observer.disconnect()
-  }
-
-  writeMessage (opts) {
-    const { chat } = this.props
+  const writeMessage = (opts) => {
     callDcMethod(
       'sendMessage',
       [chat.id, opts.text, opts.filename]
     )
   }
 
-  fetchNextMessages () {
-    const { chat } = this.props
+  const fetchNextMessages = () => {
     if (chat.totalMessages === chat.messages.length) return
-    this.scrollPrepare()
+    scrollPrepare()
     callDcMethod(
       'fetchMessages',
       [chat.id]
     )
   }
 
-  handleScroll () {
-    if (this.previousScrollHeightMinusTop !== null &&
-       (!this.lastId || this.lastId === this.props.chat.id)) {
-      this.restoreScroll()
+  const handleScroll = () => {
+    if (previousScrollHeightMinusTop.current !== null) {
+      restoreScroll()
     } else {
-      this.scrollToBottom()
+      scrollToBottom()
     }
-
-    this.lastId = this.props.chat && this.props.chat.id
   }
 
-  restoreScroll () {
-    this.doc.scrollTop = this.doc.scrollHeight - this.previousScrollHeightMinusTop
-    this.previousScrollHeightMinusTop = null
+  const restoreScroll = () => {
+    doc.scrollTop = doc.scrollHeight - previousScrollHeightMinusTop.current
+    previousScrollHeightMinusTop.current = null
   }
 
-  scrollPrepare () {
-    this.previousScrollHeightMinusTop = this.doc.scrollHeight - this.doc.scrollTop
+  const scrollPrepare = () => {
+    previousScrollHeightMinusTop.current = doc.scrollHeight - doc.scrollTop
   }
 
-  onScroll () {
-    if (this.doc.scrollTop <= SCROLL_BUFFER) this.fetchNextMessages()
-  }
-
-  componentDidMount () {
-    this.doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #the-conversation`)
-    if (!this.doc) return log.warn(`Didn't find .ChatViewWrapper #the-conversation element`)
-    if (!this.observer && this.conversationDiv.current) {
-      this.observer = new MutationObserver(this.handleScroll.bind(this))
-      this.observer.observe(this.conversationDiv.current, { attributes: false, childList: true, subtree: true })
+  const onScroll = () => {
+    if (doc.scrollTop <= SCROLL_BUFFER) {
+      fetchNextMessages()
     }
-    this.doc.onscroll = this.onScroll.bind(this)
-    this.scrollToBottom()
   }
 
-  scrollToBottom (force) {
-    this.doc.scrollTop = this.doc.scrollHeight
+  useEffect(() => {
+    if (!doc) {
+      doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
+    }
+    if (!doc) {
+      logger.warn(`Didn't find .ChatViewWrapper #message-list element`)
+    }
+    const observer = new MutationObserver(handleScroll)
+    if (messageListWrap.current) {
+      observer.observe(messageListWrap.current, { attributes: false, childList: true, subtree: true })
+    }
+    doc.onscroll = onScroll
+    return () => {
+      if (observer) observer.disconnect()
+    }
+  }, [chat.id])
+
+  useEffect(() => {
+    // on new chat selected
+    previousScrollHeightMinusTop.current = null
+    if (refComposer.current && refComposer.current.messageInputRef.current) {
+      refComposer.current.messageInputRef.current.focus()
+    }
+    scrollToBottom()
+  }, [chat.id])
+
+  const scrollToBottom = (force) => {
+    doc.scrollTop = doc.scrollHeight
   }
 
-  onClickAttachment (message) {
+  const onClickAttachment = (message) => {
     if (isDisplayableByRenderMedia(message.msg.attachment)) {
-      this.context.openDialog('RenderMedia', { message })
+      openDialog('RenderMedia', { message })
     } else {
       if (!shell.openItem(message.msg.attachment.url)) {
-        log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
+        logger.info("file couldn't be opened, try saving it in a different place and try to open it from there")
       }
     }
   }
 
-  onClickSetupMessage (setupMessage) {
-    this.context.openDialog('EnterAutocryptSetupMessage', { setupMessage })
+  const onClickSetupMessage = (setupMessage) => {
+    openDialog('EnterAutocryptSetupMessage', { setupMessage })
   }
 
-  onShowDetail (message) {
-    const { chat } = this.props
-    this.context.openDialog('MessageDetail', {
+  const onShowDetail = (message) => {
+    openDialog('MessageDetail', {
       message,
       chat
     })
   }
 
-  onForward (forwardMessage) {
-    this.context.openDialog('ForwardMessage', { forwardMessage })
+  const onForward = (forwardMessage) => {
+    openDialog('ForwardMessage', { forwardMessage })
   }
 
-  setComposerSize (size) {
-    this.setState({ composerSize: size })
+  const setComposerSize = (size) => {
+    setState({ composerSize: size })
   }
 
-  onDrop (e) {
+  const onDrop = (e) => {
     const files = e.target.files || e.dataTransfer.files
-    const { chat } = this.props
     e.preventDefault()
     e.stopPropagation()
     // TODO maybe add a clause here for windows because that uses backslash instead of slash
@@ -230,67 +232,65 @@ class ChatView extends React.Component {
           [chat.id, null, path]
         )
       } else {
-        log.warn('Prevented a file from being send again while dragging it out')
+        logger.warn('Prevented a file from being send again while dragging it out')
       }
     }
   }
 
-  onDragOver (e) {
+  const onDragOver = (e) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
-  render () {
-    const { onDeadDropClick, chat } = this.props
-    return (
-      <SettingsContext.Consumer>
-        {(settings) => {
-          var style = { backgroundSize: 'cover', gridTemplateRows: `auto ${this.state.composerSize}px` }
-          if (settings['chatViewBgImg']) {
-            if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
-              style.backgroundImage = settings['chatViewBgImg']
-            } else {
-              style.backgroundColor = settings['chatViewBgImg']
-              style.backgroundImage = 'none'
-            }
-          }
-          return (
-            <ChatViewWrapper
-              style={style}
-              ref={this.ChatViewWrapperRef} onDrop={this.onDrop.bind({ props: { chat } })} onDragOver={this.onDragOver} >
-              <ConversationWrapper>
-                <div id='the-conversation' ref={this.conversationDiv}>
-                  <ul>
-                    {chat.messages.map(rawMessage => {
-                      const message = MessageWrapper.convert(rawMessage)
-                      message.onReply = () => log.debug('reply to', message)
-                      message.onForward = this.onForward.bind(this, message)
-                      return MessageWrapper.render({
-                        message,
-                        chat,
-                        onClickContactRequest: () => onDeadDropClick(message),
-                        onClickSetupMessage: this.onClickSetupMessage.bind(this, message),
-                        onShowDetail: this.onShowDetail.bind(this, message),
-                        onClickAttachment: this.onClickAttachment.bind(this, message)
-                      })
-                    })}
-                  </ul>
-                </div>
-              </ConversationWrapper>
-              <Composer
-                ref={this.refComposer}
-                chatId={chat.id}
-                draft={chat.draft}
-                onSubmit={this.writeMessage}
-                setComposerSize={this.setComposerSize.bind(this)}
-              />
-            </ChatViewWrapper>
-          )
-        }}
-      </SettingsContext.Consumer>
-    )
-  }
-}
-ChatView.contextType = ScreenContext
+  const { onDeadDropClick } = props
+  const disabled = chat.isGroup && !chat.selfInGroup
 
-module.exports = ChatView
+  return (
+    <SettingsContext.Consumer>
+      {(settings) => {
+        var style = { backgroundSize: 'cover', gridTemplateRows: `auto ${state.composerSize}px` }
+        if (settings['chatViewBgImg']) {
+          if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
+            style.backgroundImage = settings['chatViewBgImg']
+          } else {
+            style.backgroundColor = settings['chatViewBgImg']
+            style.backgroundImage = 'none'
+          }
+        }
+        return (
+          <ChatViewWrapper
+            style={style}
+            ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
+            <MessageListWrapper>
+              <div id='message-list' ref={messageListWrap}>
+                <ul>
+                  {chat.messages.map(rawMessage => {
+                    const message = MessageWrapper.convert(rawMessage)
+                    message.onReply = () => logger.debug('reply to', message)
+                    message.onForward = onForward.bind(this, message)
+                    return MessageWrapper.render({
+                      message,
+                      chat,
+                      onClickContactRequest: () => onDeadDropClick(message),
+                      onClickSetupMessage: onClickSetupMessage.bind(this, message),
+                      onShowDetail: onShowDetail.bind(this, message),
+                      onClickAttachment: onClickAttachment.bind(this, message)
+                    })
+                  })}
+                </ul>
+              </div>
+            </MessageListWrapper>
+            <Composer
+              ref={refComposer}
+              chatId={chat.id}
+              draft={chat.draft}
+              onSubmit={writeMessage}
+              setComposerSize={setComposerSize.bind(this)}
+              isDisabled={disabled}
+            />
+          </ChatViewWrapper>
+        )
+      }}
+    </SettingsContext.Consumer>
+  )
+}

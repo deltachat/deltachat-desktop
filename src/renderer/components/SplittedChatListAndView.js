@@ -6,7 +6,7 @@ const ScreenContext = require('../contexts/ScreenContext')
 const Media = require('./Media')
 const Menu = require('./Menu').default
 const ChatList = require('./ChatList').default
-const ChatView = require('./ChatView')
+const ChatView = require('./ChatView').default
 const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
@@ -24,8 +24,6 @@ const {
   Popover,
   Button
 } = require('@blueprintjs/core')
-
-const log = require('../../logger').getLogger('renderer/SplittedChatListAndView')
 
 const NavbarGroupName = styled.div`
   font-size: medium;
@@ -66,7 +64,6 @@ class SplittedChatListAndView extends React.Component {
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.onMapIconClick = this.onMapIconClick.bind(this)
 
-    this.chatView = React.createRef()
     this.chatClicked = 0
   }
 
@@ -94,13 +91,6 @@ class SplittedChatListAndView extends React.Component {
     this.chatClicked = chatId
     callDcMethod('selectChat', [chatId])
     setTimeout(() => { this.chatClicked = 0 }, 500)
-    try {
-      if (this.chatView.current) {
-        this.chatView.current.refComposer.current.messageInputRef.current.focus()
-      }
-    } catch (error) {
-      log.debug(error)
-    }
   }
 
   searchChats (queryStr) {
@@ -185,7 +175,6 @@ class SplittedChatListAndView extends React.Component {
                   chat={selectedChat}
                 />
                   : (<ChatView
-                    ref={this.chatView}
                     chat={selectedChat}
                     openDialog={this.context.openDialog}
                   />)
