@@ -79,7 +79,7 @@ function init (cwd, state, logHandler) {
   })
 
   /* dispatch a method on DC core */
-  ipcMain.on('EVENT_DC_DISPATCH_CB', (e, identifier, methodName, args) => {
+  ipcMain.on('EVENT_DC_DISPATCH', (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
     log.debug('EVENT_DC_DISPATCH: ', methodName, args)
     dc.callMethod(e, methodName, args)
