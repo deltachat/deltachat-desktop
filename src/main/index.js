@@ -19,7 +19,7 @@ mkdirp.sync(getLogsPath())
 // Setup Logger
 const logHandler = require('./log-handler')()
 const logger = require('../logger')
-const log = logger.getLogger('main/index')
+const log = logger.getLogger('main/index', true)
 logger.setLogHandler(logHandler.log)
 process.on('exit', logHandler.end)
 

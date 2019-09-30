@@ -22,7 +22,7 @@ const {
   windowDefaults
 } = require('../../application-constants')
 
-const log = require('../../logger').getLogger('main/mainWindow')
+const log = require('../../logger').getLogger('main/mainWindow', true)
 
 function init (app, options) {
   if (main.win) {

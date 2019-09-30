@@ -1,6 +1,6 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/chatmethods')
+const log = require('../../logger').getLogger('main/deltachat/chatmethods', true)
 
 function getInfo () {
   if (this.ready === true) {

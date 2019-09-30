@@ -1,5 +1,7 @@
 const esp = require('error-stack-parser')
 const { app, remote } = require('electron')
+const colors = require('colors/safe')
+const startTime = Date.now()
 
 const rc = remote ? remote.app.rc : app ? app.rc : {}
 
@@ -17,7 +19,7 @@ function setLogHandler (LogHandler) {
   handler = LogHandler
 }
 
-function log (channel, level, stacktrace, ...args) {
+function log ({ channel, isMainProcess }, level, stacktrace, args) {
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
@@ -28,10 +30,25 @@ function log (channel, level, stacktrace, ...args) {
   }
   handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
-    if (stacktrace) {
-      variant.log(channel, variant.level, stacktrace, ...args)
+    if (isMainProcess) {
+      const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${[
+        '[D]',
+        colors.blue('[i]'),
+        colors.yellow('[w]'),
+        colors.red('[E]'),
+        colors.red('[C]')
+      ][level]}${colors.grey(channel)}:`
+      if (!stacktrace) {
+        console.log(begining, ...args)
+      } else {
+        console.log(begining, ...args, colors.red(stacktrace))
+      }
     } else {
-      variant.log(channel, variant.level, ...args)
+      if (stacktrace) {
+        variant.log(channel, variant.level, stacktrace, ...args)
+      } else {
+        variant.log(channel, variant.level, ...args)
+      }
     }
   }
 }
@@ -43,34 +60,35 @@ function getStackTrace () {
 }
 
 class Logger {
-  constructor (channel) {
+  constructor (channel, isMainProcess) {
     this.channel = channel
+    this.isMainProcess = isMainProcess
   }
 
   debug (...args) {
     if (!rc['log-debug']) return
-    log(this.channel, 0, undefined, ...args)
+    log(this, 0, undefined, args)
   }
 
   info (...args) {
-    log(this.channel, 1, undefined, ...args)
+    log(this, 1, undefined, args)
   }
 
   warn (...args) {
-    log(this.channel, 2, getStackTrace(), ...args)
+    log(this, 2, getStackTrace(), args)
   }
 
   error (...args) {
-    log(this.channel, 3, getStackTrace(), ...args)
+    log(this, 3, getStackTrace(), args)
   }
 
   critical (...args) {
-    log(this.channel, 4, getStackTrace(), ...args)
+    log(this, 4, getStackTrace(), args)
   }
 }
 
-function getLogger (channel) {
-  return new Logger(channel)
+function getLogger (channel, isMainProcess = false) {
+  return new Logger(channel, isMainProcess)
 }
 
 module.exports = { setLogHandler, Logger, getLogger }

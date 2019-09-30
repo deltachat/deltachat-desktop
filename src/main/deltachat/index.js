@@ -1,8 +1,8 @@
 const C = require('deltachat-node/constants')
 const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
-const log = require('../../logger').getLogger('main/deltachat')
-const logCoreEv = require('../../logger').getLogger('core/event')
+const log = require('../../logger').getLogger('main/deltachat', true)
+const logCoreEv = require('../../logger').getLogger('core/event', true)
 const windows = require('../windows')
 const { app } = require('electron')
 

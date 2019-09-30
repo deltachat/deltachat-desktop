@@ -1,6 +1,6 @@
 const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/login')
+const log = require('../../logger').getLogger('main/deltachat/login', true)
 const path = require('path')
 
 /**
