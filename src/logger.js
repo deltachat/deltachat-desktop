@@ -17,7 +17,7 @@ function setLogHandler (LogHandler) {
   handler = LogHandler
 }
 
-function log (channel, level, ...args) {
+function log (channel, level, stacktrace, ...args) {
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
@@ -26,9 +26,13 @@ function log (channel, level, ...args) {
     console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
     throw Error('Failed to log message - Handler not initilized yet')
   }
-  handler(channel, variant.level, ...args)
+  handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
-    variant.log(channel, variant.level, ...args)
+    if (stacktrace) {
+      variant.log(channel, variant.level, stacktrace, ...args)
+    } else {
+      variant.log(channel, variant.level, ...args)
+    }
   }
 }
 
@@ -45,11 +49,11 @@ class Logger {
 
   debug (...args) {
     if (!rc['log-debug']) return
-    log(this.channel, 0, [], ...args)
+    log(this.channel, 0, undefined, ...args)
   }
 
   info (...args) {
-    log(this.channel, 1, [], ...args)
+    log(this.channel, 1, undefined, ...args)
   }
 
   warn (...args) {
