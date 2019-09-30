@@ -4,11 +4,13 @@ import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
 import styled from 'styled-components'
 import { Picker } from 'emoji-mart'
+import classNames from 'classnames'
 
 import SettingsContext from '../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
 import { callDcMethodAsync, callDcMethod } from '../ipc'
 import logger from '../../logger'
+
 const log = logger.getLogger('renderer/composer')
 
 const ComposerWrapper = styled.div`
@@ -190,44 +192,54 @@ export default Composer
 const EmojiAndStickerPickerWrapper = styled.div`
   position: fixed;
   z-index: 10;
-  width: 314px;
-  height: 400px
+  width: 438px;
+  height: 70vh;
   right: 10px;
   bottom: 50px;
   background-color: white;
+  border-radius: 2px;
+  box-shadow: 0px 0px 2px 2px #b1b1b126;
+
   .emoji-sticker-picker__sticker-picker {
-    height: 300px;
-    width: 314px;
+    width: 100%;
     overflow: scroll;
     img {
       max-width: 300px;
       height: auto;
     }
   }
-`
 
-const EmojiPickerWrapper = styled.div`
-  .emoji-mart-emoji-native, .emoji-mart {
-    font-family: inherit
+  .emoji-sticker-picker__emoji-or-sticker-selector {
+    width: 100%
+    height: 41px;
+    display: flex;
+    border-bottom: 1px solid var(--emojiMartBorder);
   }
 
-  .emoji-mart-category .emoji-mart-emoji span {
-    height: auto !important;
-    width: auto !important;
-  }
-
-  @media only screen and (max-height: 530px) {
-    .emoji-mart-scroll {
-      height: 100px;
+  .emoji-sticker-picker__emoji-or-sticker-selector__button {
+    width: 50%;
+    padding-top: 7px;
+    font-size: large;
+    text-align: center;
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+    border-bottom-color: transparent;
+    &:last-child {
+      float: right;
     }
   }
+  
+  .emoji-sticker-picker__emoji-or-sticker-selector__button--is-selected {
+    color: var(--emojiSelectorSelectionColor) !important;
+    border-bottom-color: var(--emojiSelectorSelectionColor) !important;
+  }
 
-  @media only screen and (max-width: 600px) {
-    width: 272px;
+  .emoji-sticker-picker__emoji-or-sticker-picker {
+    border-bottom: 1px solid var(--emojiMartBorder);
+  }
 
-    .emoji-mart-title-label {
-      font-size: 20px;
-    }
+  .emoji-sticker-picker__emoji-picker {
+    height: calc(70vh - 40px - 30px);
   }
 `
 
@@ -241,7 +253,7 @@ export const StickerDiv = props => {
   }
 
   return (
-    <div className='emoji-sticker-picker__sticker-picker'>
+    <div>
       <h1>{stickerPackName}</h1>
       { stickerPackImages.map((filePath, index) => {
           return (
@@ -259,7 +271,7 @@ export const StickerDiv = props => {
 export const StickerPicker = props => {
   const { stickers, chatId } = props
   return (
-    <div>
+    <div className='emoji-sticker-picker__sticker-picker'>
       { console.log(stickers, Object.keys(stickers)) }
       { Object.keys(stickers).map(stickerPackName => {
           return <StickerDiv
@@ -269,6 +281,19 @@ export const StickerPicker = props => {
             stickerPackImages={stickers[stickerPackName]}
           />
       })}
+    </div>
+  )
+}
+
+export const EmojiOrStickerSelectorButton = props => {
+  return (
+    <div
+      className={classNames(
+        'emoji-sticker-picker__emoji-or-sticker-selector__button',
+        { 'emoji-sticker-picker__emoji-or-sticker-selector__button--is-selected' : props.isSelected })}
+      onClick={props.onClick}
+    >
+      {props.children}
     </div>
   )
 }
@@ -286,24 +311,26 @@ export const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
 
   return (
     <EmojiAndStickerPickerWrapper>
-      <div className='emoji-sticker-picker__titlebar'>
-        <div onClick={() => setShowSticker(false)}>Emoji</div>
-        <div onClick={() => setShowSticker(true)} style={{float:'right'}}>Sticker</div>
+      <div className='emoji-sticker-picker__emoji-or-sticker-selector'>
+        <EmojiOrStickerSelectorButton onClick={() => setShowSticker(false)} isSelected={!showSticker}>Emoji</EmojiOrStickerSelectorButton>
+        <EmojiOrStickerSelectorButton onClick={() => setShowSticker(true)} isSelected={showSticker}>Sticker</EmojiOrStickerSelectorButton>
       </div>
-      { !showSticker &&
-        <EmojiPickerWrapper ref={ref}>
-          <Picker
-            style={{ width: '100%', height: '100%' }}
-            native
-            color={color}
-            onSelect={onEmojiSelect}
-            showPreview={false}
-            showSkinTones={false}
-            emojiTooltip
-          />
-        </EmojiPickerWrapper>
-      }
-      { showSticker && stickers !== null && typeof stickers === 'object' && <StickerPicker chatId={chatId} stickers={stickers} /> }
+      <div className='emoji-sticker-picker__emoji-or-sticker-picker'>
+       { !showSticker &&
+         <div className='emoji-sticker-picker__emoji-picker' ref={ref}>
+           <Picker
+             style={{ width: '100%', height: '100%' }}
+             native
+             color={color}
+             onSelect={onEmojiSelect}
+             showPreview={false}
+             showSkinTones={false}
+             emojiTooltip
+           />
+         </div>
+       }
+       { showSticker && stickers !== null && typeof stickers === 'object' && <StickerPicker chatId={chatId} stickers={stickers} /> }
+      </div>
     </EmojiAndStickerPickerWrapper>
   )
 })
