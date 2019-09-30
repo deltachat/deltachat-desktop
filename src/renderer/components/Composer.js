@@ -202,7 +202,8 @@ const EmojiAndStickerPickerWrapper = styled.div`
 
   .emoji-sticker-picker__sticker-picker {
     width: 100%;
-    overflow: scroll;
+    height: calc(70vh - 40px - 30px);
+    overflow: overlay;
     img {
       max-width: 300px;
       height: auto;
@@ -227,6 +228,9 @@ const EmojiAndStickerPickerWrapper = styled.div`
     &:last-child {
       float: right;
     }
+    &:hover {
+      cursor: pointer;
+    }
   }
   
   .emoji-sticker-picker__emoji-or-sticker-selector__button--is-selected {
@@ -240,6 +244,10 @@ const EmojiAndStickerPickerWrapper = styled.div`
 
   .emoji-sticker-picker__emoji-picker {
     height: calc(70vh - 40px - 30px);
+  }
+
+  .emoji-sticker-picker__sticker-picker__inner {
+    padding: 0px 6px;
   }
 `
 
@@ -272,15 +280,16 @@ export const StickerPicker = props => {
   const { stickers, chatId } = props
   return (
     <div className='emoji-sticker-picker__sticker-picker'>
-      { console.log(stickers, Object.keys(stickers)) }
-      { Object.keys(stickers).map(stickerPackName => {
-          return <StickerDiv
-            chatId={chatId}
-            key={stickerPackName}
-            stickerPackName={stickerPackName}
-            stickerPackImages={stickers[stickerPackName]}
-          />
-      })}
+      <div className='emoji-sticker-picker__sticker-picker__inner'>
+       { Object.keys(stickers).map(stickerPackName => {
+           return <StickerDiv
+             chatId={chatId}
+             key={stickerPackName}
+             stickerPackName={stickerPackName}
+             stickerPackImages={stickers[stickerPackName]}
+           />
+       })}
+      </div>
     </div>
   )
 }
