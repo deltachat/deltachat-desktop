@@ -2,6 +2,7 @@ const C = require('deltachat-node/constants')
 const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat')
+const logCoreEv = require('../../logger').getLogger('core/event')
 const windows = require('../windows')
 const { app } = require('electron')
 
@@ -38,7 +39,7 @@ class DeltaChatController extends EventEmitter {
 
     if (data1 === 0) data1 = ''
 
-    log.debug('Core Event', event, data1, data2)
+    logCoreEv.debug(event, data1, data2)
   }
 
   callMethod (evt, methodName, args) {
