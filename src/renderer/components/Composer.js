@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { withTheme } from 'styled-components'
 import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
@@ -7,7 +7,7 @@ import { Picker } from 'emoji-mart'
 
 import SettingsContext from '../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
-import { callDcMethodAsync } from '../ipc'
+import { callDcMethodAsync, callDcMethod } from '../ipc'
 import logger from '../../logger'
 const log = logger.getLogger('renderer/composer')
 
@@ -175,7 +175,7 @@ const Composer = withTheme(React.forwardRef((props, ref) => {
           </IconButton>
         </EmojiButtonWrapper>
         { showEmojiPicker &&
-            <EmojiAndStickerPicker ref={pickerRef} onEmojiSelect={onEmojiSelect} color={theme.emojiSelectorSelectionColor} />
+            <EmojiAndStickerPicker chatId={chatId} ref={pickerRef} onEmojiSelect={onEmojiSelect} color={theme.emojiSelectorSelectionColor} />
         }
         <SendButtonCircleWrapper onClick={sendMessage}>
           <SendButton aria-label={tx('a11y_send_btn_label')} />
@@ -195,6 +195,15 @@ const EmojiAndStickerPickerWrapper = styled.div`
   right: 10px;
   bottom: 50px;
   background-color: white;
+  .emoji-sticker-picker__sticker-picker {
+    height: 300px;
+    width: 314px;
+    overflow: scroll;
+    img {
+      max-width: 300px;
+      height: auto;
+    }
+  }
 `
 
 const EmojiPickerWrapper = styled.div`
@@ -222,14 +231,57 @@ const EmojiPickerWrapper = styled.div`
   }
 `
 
+export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncEffect() }, ...args)
+
+
+export const StickerDiv = props => {
+  const { stickerPackName, stickerPackImages, chatId } = props
+  const onClickSticker = (fileName) => {
+    callDcMethod('sendMessage', [chatId, 'We are testing stickers', fileName])
+  }
+
+  return (
+    <div className='emoji-sticker-picker__sticker-picker'>
+      <h1>{stickerPackName}</h1>
+      { stickerPackImages.map((filePath, index) => {
+          return (
+            <img
+              key={index}
+              src={filePath}
+              onClick={onClickSticker.bind(this, filePath)}
+            />
+          )
+      })}
+    </div>
+  )
+}
+
+export const StickerPicker = props => {
+  const { stickers, chatId } = props
+  return (
+    <div>
+      { console.log(stickers, Object.keys(stickers)) }
+      { Object.keys(stickers).map(stickerPackName => {
+          return <StickerDiv
+            chatId={chatId}
+            key={stickerPackName}
+            stickerPackName={stickerPackName}
+            stickerPackImages={stickers[stickerPackName]}
+          />
+      })}
+    </div>
+  )
+}
+
 export const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
-  const { color, onEmojiSelect, emojiTooltip } = props
+  const { color, onEmojiSelect, emojiTooltip, chatId } = props
 
   const [showSticker, setShowSticker] = useState(false)
-  const [sticker, setSticker] = useState(null)
+  const [stickers, setStickers] = useState(null)
   
-  useEffect(async () => {
-
+  useAsyncEffect(async () => {
+    const stickers = await callDcMethodAsync('getStickers')
+    setStickers(stickers)
   }, [])
 
   return (
@@ -251,6 +303,7 @@ export const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
           />
         </EmojiPickerWrapper>
       }
+      { showSticker && stickers !== null && typeof stickers === 'object' && <StickerPicker chatId={chatId} stickers={stickers} /> }
     </EmojiAndStickerPickerWrapper>
   )
 })
