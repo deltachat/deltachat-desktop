@@ -179,7 +179,7 @@ export default function ChatView (props) {
   useEffect(() => {
     // on new chat selected
     previousScrollHeightMinusTop.current = null
-    if (refComposer.current && refComposer.current.messageInputRef.current) {
+    if (refComposer.current && refComposer.current.messageInputRef && refComposer.current.messageInputRef.current) {
       refComposer.current.messageInputRef.current.focus()
     }
     scrollToBottom()

@@ -444,13 +444,8 @@ $color-message-icon-error: var(--errorColor);
 // With an image and no caption, this section needs to be on top of the image overlay
 .module-message__metadata--with-image-no-caption {
   position: absolute;
+  right: 16px;
   bottom: 9px;
-  z-index: 2;
-
-  width: 100%;
-  // Because this is absolutely positioned, we 100% is too big, take it down by parent
-  //   padding sizes.
-  padding-right: 24px;
 }
 
 .module-message__metadata--username {
