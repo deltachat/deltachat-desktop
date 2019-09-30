@@ -20,8 +20,8 @@ function setCoreStrings (strings) {
 
 function login (credentials, render, coreStrings) {
   // Creates a separate DB file for each login
-  const cwd = this.getPath(credentials.addr)
-  log.info(`Using deltachat instance ${cwd}`)
+  this.fullCwd = this.getPath(credentials.addr)
+  log.info(`Using deltachat instance ${this.fullCwd}`)
   this._dc = new DeltaChat()
   const dc = this._dc
   this.credentials = credentials
@@ -34,7 +34,7 @@ function login (credentials, render, coreStrings) {
     return
   }
 
-  dc.open(cwd, err => {
+  dc.open(this.fullCwd, err => {
     if (err) throw err
     const onReady = () => {
       log.info('Ready')
