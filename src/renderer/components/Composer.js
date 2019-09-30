@@ -1,14 +1,14 @@
-const React = require('react')
-const { withTheme } = require('styled-components')
+import React from 'react'
+import { withTheme } from 'styled-components'
+import { Button } from '@blueprintjs/core'
+import { remote } from 'electron'
+import styled from 'styled-components'
+import { Picker } from 'emoji-mart'
 
-const { Button } = require('@blueprintjs/core')
-const { remote } = require('electron')
-const styled = require('styled-components').default
-const { Picker } = require('emoji-mart')
-
-const log = require('../../logger').getLogger('renderer/composer')
-const SettingsContext = require('../contexts/SettingsContext')
-const ComposerMessageInput = require('./ComposerMessageInput')
+import SettingsContext from '../contexts/SettingsContext'
+import ComposerMessageInput from './ComposerMessageInput'
+import logger from '../../logger'
+const log = logger.getLogger('renderer/composer')
 
 const ComposerWrapper = styled.div`
   background-color: ${props => props.theme.composerBg};
@@ -270,4 +270,5 @@ class Composer extends React.Component {
     }
   }
 }
-module.exports = withTheme(Composer)
+const Composer2 = withTheme(Composer)
+export default Composer2
