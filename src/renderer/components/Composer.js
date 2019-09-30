@@ -262,8 +262,8 @@ class Composer extends React.Component {
               />
             </EmojiPickerWrapper>
           }
-          <SendButtonCircleWrapper onClick={this.sendMessage} aria-label={tx('a11y_send_btn_label')}>
-            <SendButton />
+          <SendButtonCircleWrapper onClick={this.sendMessage}>
+            <SendButton aria-label={tx('a11y_send_btn_label')}/>
           </SendButtonCircleWrapper>
         </ComposerWrapper>
       )

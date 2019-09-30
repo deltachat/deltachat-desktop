@@ -187,6 +187,7 @@ class SplittedChatListAndView extends React.Component {
                 <Welcome>
                   <h1>{tx('welcome_desktop')}</h1>
                   <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+                  <img src={'../images/image-80.svg'} className='welcome-image' />
                 </Welcome>
               )
           }

@@ -240,10 +240,6 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
 export const useCreateGroup = (verified, groupName, groupImage, groupMembers, onClose) => {
   const { changeScreen } = useContext(ScreenContext)
   const [groupId, setGroupId] = useState(-1)
-  const closeAndDelete = async () => {
-    if (groupId !== -1) await callDcMethodAsync('deleteChat', groupId)
-    onClose()
-  }
 
   const lazilyCreateOrUpdateGroup = async (finishing) => {
     let gId = groupId
@@ -271,7 +267,7 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
     onClose()
     changeScreen('ChatView', { gId })
   }
-  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete]
+  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup]
 }
 
 export function CreateGroupInner (props) {
@@ -281,7 +277,7 @@ export function CreateGroupInner (props) {
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
 
   const [qrCode, setQrCode] = useState('')
 
@@ -311,7 +307,7 @@ export function CreateGroupInner (props) {
     <>
       { viewMode.startsWith('createGroup-addMember') && AddMemberInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
-        onClose: closeAndDelete,
+        onClose,
         onSearchChange,
         queryStr,
         searchContacts,
@@ -320,7 +316,7 @@ export function CreateGroupInner (props) {
       })}
       { viewMode.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
-        onClose: closeAndDelete,
+        onClose,
         qrCode: qrCode
       })}
       { viewMode.startsWith('createGroup-main') &&
@@ -328,7 +324,7 @@ export function CreateGroupInner (props) {
           <DeltaDialogHeader
             title={tx('menu_new_group')}
             onClickBack={() => setViewMode('main')}
-            onClose={closeAndDelete}
+            onClose={onClose}
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
@@ -366,7 +362,7 @@ export function CreateGroupInner (props) {
                 noPadding
                 onClick={finishCreateGroup}
               >
-                {tx('group_create_button')}
+                {tx('ok')}
               </DeltaButtonPrimary>
             </div>
           </DeltaDialogFooter>
@@ -383,7 +379,7 @@ export function CreateVerifiedGroupInner (props) {
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup, closeAndDelete] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
 
   const [qrCode, setQrCode] = useState('')
 
@@ -413,7 +409,7 @@ export function CreateVerifiedGroupInner (props) {
     <>
       { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose: closeAndDelete,
+        onClose,
         onSearchChange,
         queryStr,
         searchContacts,
@@ -422,7 +418,7 @@ export function CreateVerifiedGroupInner (props) {
       })}
       { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose: closeAndDelete,
+        onClose,
         qrCode: qrCode
       })}
       { viewMode.startsWith('createVerifiedGroup-main') &&
@@ -430,7 +426,7 @@ export function CreateVerifiedGroupInner (props) {
         <DeltaDialogHeader
           title={tx('menu_new_verified_group')}
           onClickBack={() => setViewMode('main')}
-          onClose={closeAndDelete}
+          onClose={onClose}
         />
         <div className={Classes.DIALOG_BODY}>
           <Card>
