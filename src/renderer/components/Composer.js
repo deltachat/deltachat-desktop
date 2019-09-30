@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react'
-import { withTheme } from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 
 import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
-import styled from 'styled-components'
+
 import { Picker } from 'emoji-mart'
 
 import logger from '../../logger'
-const log  = logger.getLogger('renderer/composer')
 import SettingsContext from '../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
 import { callDcMethodAsync } from '../ipc'
+const log = logger.getLogger('renderer/composer')
 
 const ComposerWrapper = styled.div`
   background-color: ${props => props.theme.composerBg};
@@ -134,19 +134,18 @@ const SendButton = styled.button`
   }
 `
 
-const Composer = withTheme(props => {
+const Composer = withTheme(React.forwardRef((props, composerRef) => {
   const { onSubmit, setComposerSize, chatId, draft, theme } = props
   const [filename, setFilename] = useState(null)
   const [error, setError] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  const composerWrapperRef = useRef()
   const messageInputRef = useRef()
   const pickerRef = useRef()
   const pickerButtonRef = useRef()
 
   const handleError = () => setError(true)
-    
+
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
@@ -162,7 +161,7 @@ const Composer = withTheme(props => {
 
   const addFilename = () => {
     remote.dialog.showOpenDialog(
-      {properties: ['openFile']},
+      { properties: ['openFile'] },
       filenames => { filenames && filenames[0] && onSubmit({ filename: filenames[0] }) }
     )
   }
@@ -203,7 +202,6 @@ const Composer = withTheme(props => {
     messageInputRef.current.insertStringAtCursorPosition(emoji.native)
   }
 
-
   const onClickStickers = async () => {
     const stickers = await callDcMethodAsync('getStickers')
     console.log('stickers', stickers)
@@ -212,7 +210,7 @@ const Composer = withTheme(props => {
   const tx = window.translate
 
   return (
-    <ComposerWrapper ref={composerWrapperRef}>
+    <ComposerWrapper ref={composerRef}>
       <AttachmentButtonWrapper>
         <Button minimal
           icon='paperclip'
@@ -255,6 +253,6 @@ const Composer = withTheme(props => {
       </SendButtonCircleWrapper>
     </ComposerWrapper>
   )
-})
+}))
 
 export default Composer

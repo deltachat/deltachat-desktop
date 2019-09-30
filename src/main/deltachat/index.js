@@ -15,6 +15,7 @@ class DeltaChatController extends EventEmitter {
   constructor (cwd, saved) {
     super()
     this.cwd = cwd
+    this.fullCwd = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this.loadSplitOuts()
@@ -42,14 +43,19 @@ class DeltaChatController extends EventEmitter {
     log.debug('Core Event', event, data1, data2)
   }
 
-  callMethod (evt, methodName, args) {
+  async callMethod (evt, methodName, args) {
     if (typeof this[methodName] !== 'function') {
       const message = 'Method is not of type function: ' + methodName
       log.error(message)
       throw new Error(message)
     }
-
-    return this[methodName](...args)
+    let returnValue
+    try {
+      returnValue = await this[methodName](...args)
+    } catch (err) {
+      log.error(`Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`)
+    }
+    return returnValue
   }
 
   /**

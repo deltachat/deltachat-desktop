@@ -86,10 +86,10 @@ function init (cwd, state, logHandler) {
   })
 
   /* dispatch a method on DC core with result passed to callback */
-  ipcMain.on('EVENT_DC_DISPATCH_CB', (e, identifier, methodName, args) => {
+  ipcMain.on('EVENT_DC_DISPATCH_CB', async (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
     log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-    const returnValue = dc.callMethod(e, methodName, args)
+    const returnValue = await dc.callMethod(e, methodName, args)
     main.send(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, returnValue)
   })
 
