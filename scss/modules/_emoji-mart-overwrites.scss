@@ -26,6 +26,7 @@
 .emoji-mart-category-label span {
     /* disable? -> no its important when scrolling */
     background-color: var(--emojiMartBg);
+    color: grey;
 }
 
 .emoji-mart-search {
@@ -43,6 +44,7 @@
 // select background circle
 .emoji-mart-category .emoji-mart-emoji:hover:before {
     background-color: var(--emojiMartSelect);
+    border-radius: 4px;
 }
 
 .emoji-mart-category-label {

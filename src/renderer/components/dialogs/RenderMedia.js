@@ -21,6 +21,7 @@ const Container = styled.div`
     img, video {
       max-width: 90vw;
       max-height: 100vh;
+      background-color: white;
     }
 `
 

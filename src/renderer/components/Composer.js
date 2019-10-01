@@ -198,11 +198,12 @@ const EmojiAndStickerPickerWrapper = styled.div`
   bottom: 50px;
   background-color: white;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 2px #b1b1b126;
+  box-shadow: 0px 0px 0px 1px #00000017;
 
   .emoji-sticker-picker__sticker-picker {
     width: 100%;
-    height: calc(70vh - 40px - 30px);
+    height: calc(70vh - 40px - 30px + 1px);
+    margin-top: -1px;
     overflow: overlay;
     img {
       max-width: 300px;
@@ -225,6 +226,7 @@ const EmojiAndStickerPickerWrapper = styled.div`
     border-bottom-style: solid;
     border-bottom-width: 4px;
     border-bottom-color: transparent;
+    color: grey;
     &:last-child {
       float: right;
     }
@@ -249,6 +251,45 @@ const EmojiAndStickerPickerWrapper = styled.div`
   .emoji-sticker-picker__sticker-picker__inner {
     padding: 0px 6px;
   }
+
+  .emoji-sticker-picker__sticker-picker__inner__sticker-pack-title {
+    padding: 5px 6px;
+    color: grey;
+    font-size: large;
+    font-weight: 500;
+    text-transform: capitalize;
+    font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 28px;
+    line-height: 18.4px;
+  }
+
+  .emoji-sticker-picker__sticker-picker__inner__sticker-pack-container {
+    display: flex;
+    /* max-width: 400px; */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 5px 0px;
+  }
+  .emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker { 
+    display: flex;
+    justify-content: center;
+    width: 133px;
+    height: 133px;
+    margin: 5px 0px;
+    padding: 3px;
+    border-radius: 4px;
+    &:hover {
+      background-color: lightgrey;
+      cursor: pointer;
+    }
+    img {
+      max-height: calc(133px - 6px);
+      max-width: calc(133px - 6px);
+      object-fit: contain;
+    }
+  }
 `
 
 export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncEffect() }, ...args)
@@ -262,16 +303,20 @@ export const StickerDiv = props => {
 
   return (
     <div>
-      <h1>{stickerPackName}</h1>
-      { stickerPackImages.map((filePath, index) => {
-          return (
-            <img
-              key={index}
-              src={filePath}
-              onClick={onClickSticker.bind(this, filePath)}
-            />
-          )
-      })}
+      <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-title'>{stickerPackName}</div>
+      <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container'>
+        { stickerPackImages.map((filePath, index) => {
+            return (
+              <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker'>
+                <img
+                  key={index}
+                  src={filePath}
+                  onClick={onClickSticker.bind(this, filePath)}
+                />
+              </div>
+            )
+        })}
+      </div>
     </div>
   )
 }
