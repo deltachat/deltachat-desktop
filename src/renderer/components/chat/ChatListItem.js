@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { Timestamp } from '../conversations'
-import MessageBody from '../messagelist/MessageBody'
-import { Avatar, VerifiedIcon } from '../helpers/Contact'
+import MessageBody from '../message/MessageBody'
+import { Avatar, VerifiedIcon } from '../contact/Contact'
 import C from 'deltachat-node/constants'
 import ScreenContext from '../../contexts/ScreenContext'
 

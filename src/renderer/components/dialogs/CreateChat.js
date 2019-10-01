@@ -6,7 +6,7 @@ import C from 'deltachat-node/constants'
 
 import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
-import { useContacts, ContactList2 } from '../helpers/ContactList'
+import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItem,
   PseudoListItemNoSearchResults,
@@ -15,8 +15,8 @@ import {
   PseudoListItemAddContact
 } from '../helpers/PseudoListItem'
 
-import { DeltaButtonPrimary } from '../helpers/SmallDialog'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from '../helpers/DeltaDialog'
+import { DeltaButtonPrimary } from './SmallDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   CreateChatSearchInput,
   CreateChatContactListWrapper

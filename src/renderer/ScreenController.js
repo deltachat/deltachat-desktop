@@ -3,16 +3,16 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const ScreenContext = require('./contexts/ScreenContext')
-const UnblockContacts = require('./components/UnblockContacts')
+const UnblockContacts = require('./components/UnblockContactsScreen')
 const LoginScreen = require('./components/LoginScreen').default
-const SplittedChatListAndView = require('./components/SplittedChatListAndView')
+const MainScreen = require('./components/MainScreen')
 const dialogs = require('./components/dialogs')
 
 class ScreenController extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      screen: 'SplittedChatListAndView',
+      screen: 'MainScreen',
       screenProps: {},
       message: false
     }
@@ -30,7 +30,7 @@ class ScreenController extends React.Component {
     this.dialogs = React.createRef()
   }
 
-  changeScreen (screen = 'SplittedChatListAndView', screenProps = {}) {
+  changeScreen (screen = 'MainScreen', screenProps = {}) {
     this.setState({ screen, screenProps })
   }
 
@@ -95,7 +95,7 @@ class ScreenController extends React.Component {
         Screen = UnblockContacts
         break
       default:
-        Screen = SplittedChatListAndView
+        Screen = MainScreen
         break
     }
 

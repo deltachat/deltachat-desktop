@@ -17,9 +17,9 @@ import {
   Callout
 } from '@blueprintjs/core'
 
-import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from '../helpers/DeltaDialog'
+import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from './DeltaDialog'
 import Login from '../Login'
-import { confirmationDialogLegacy as confirmationDialog } from './confirmationDialog'
+import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
 const SettingsContext = require('../../contexts/SettingsContext')
 const MAGIC_PW = crypto.randomBytes(8).toString('hex')
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { AvatarBubble, AvatarImage } from '../helpers/Contact'
+import { AvatarBubble, AvatarImage } from '../contact/Contact'
 import {
   CreateChatSearchInput
 } from './CreateChat-Styles'

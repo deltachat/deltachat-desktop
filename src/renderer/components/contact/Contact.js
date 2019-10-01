@@ -1,5 +1,34 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { ContactListItem } from '../conversations'
+import C from 'deltachat-node/constants'
+
+export function convertContactProps (contact) {
+  return {
+    name: contact.name,
+    email: contact.address,
+    avatarPath: contact.profileImage,
+    profileName: contact.displayName,
+    isMe: contact.id === DCConstants.DC_CONTACT_ID_SELF,
+    verified: contact.isVerified
+  }
+}
+
+export function RenderContact (props) {
+  const contact = props.contact
+
+  var outgoingProps = convertContactProps(contact)
+
+  const oldOnClick = props.onClick
+  outgoingProps.onClick = function (event) {
+    if (oldOnClick) oldOnClick(contact)
+  }
+
+  outgoingProps.color = props.color
+
+  return (<ContactListItem {...outgoingProps} />)
+}
+
 
 export function renderAvatar (avatarPath, color, displayName) {
   return (

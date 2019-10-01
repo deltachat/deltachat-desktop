@@ -1,14 +1,14 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
-import { DeltaButtonPrimary } from '../helpers/SmallDialog'
+import { DeltaButtonPrimary } from './SmallDialog'
 import {
   Card,
   Callout,
   Spinner,
   Classes
 } from '@blueprintjs/core'
-import InputTransferKey from '../helpers/AutocryptSetupMessage'
-import DeltaDialog from '../helpers/DeltaDialog'
+import InputTransferKey from './AutocryptSetupMessage'
+import DeltaDialog from './DeltaDialog'
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
