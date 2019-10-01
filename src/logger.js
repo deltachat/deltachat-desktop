@@ -39,8 +39,10 @@ function log ({ channel, isMainProcess }, level, stacktrace, args) {
         colors.red('[C]')
       ][level]}${colors.grey(channel)}:`
       if (!stacktrace) {
+        /* ignore-console-log */
         console.log(begining, ...args)
       } else {
+        /* ignore-console-log */
         console.log(begining, ...args, colors.red(stacktrace))
       }
     } else {
