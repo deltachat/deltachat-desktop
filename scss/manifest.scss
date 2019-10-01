@@ -1,3 +1,5 @@
+// Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
+
 // Global Settings, Variables, and Mixins
 @import 'variables';
 @import 'mixins';
@@ -6,5 +8,31 @@
 // Components
 @import 'emoji';
 
-// New CSS
-@import 'modules/index';
+// Chat
+@import 'chat/_chat-list-item';
+@import 'chat/_chat-list';
+
+// Composer
+@import 'composer/_composer';
+@import 'composer/_emoji-sticker-picker';
+
+// Contact
+@import 'contact/_contact-list';
+@import 'contact/_contact';
+
+// Dialogs
+@import 'dialogs/_forward-message';
+@import 'dialogs/_settings';
+
+// Map
+@import 'map/_map';
+
+// Message
+@import 'message/_message-detail';
+@import 'message/_message-list';
+@import 'message/_message';
+
+// Overwrites for third party node modules
+@import 'overwrites/_bp3-overwrites';
+@import 'overwrites/_react-context-menu-overwrites';
+@import 'overwrites/_emoji-mart-overwrites';

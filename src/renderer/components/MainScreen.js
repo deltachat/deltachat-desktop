@@ -5,8 +5,8 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
 const Menu = require('./Menu').default
-const ChatList = require('./ChatList').default
-const ChatView = require('./ChatView').default
+const ChatList = require('./chat/ChatList').default
+const MessageList = require('./message/MessageList').default
 const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
@@ -43,7 +43,7 @@ const Welcome = styled.div`
   text-align: center;
 `
 
-class SplittedChatListAndView extends React.Component {
+class MainScreen extends React.Component {
   constructor (props) {
     super(props)
 
@@ -174,7 +174,7 @@ class SplittedChatListAndView extends React.Component {
                 ? this.state.media ? <Media
                   chat={selectedChat}
                 />
-                  : (<ChatView
+                  : (<MessageList
                     chat={selectedChat}
                     openDialog={this.context.openDialog}
                   />)
@@ -197,6 +197,6 @@ class SplittedChatListAndView extends React.Component {
   }
 }
 
-SplittedChatListAndView.contextType = ScreenContext
+MainScreen.contextType = ScreenContext
 
-module.exports = SplittedChatListAndView
+module.exports = MainScreen

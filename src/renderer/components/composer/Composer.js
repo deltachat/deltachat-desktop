@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react'
 import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
 
-import SettingsContext from '../contexts/SettingsContext'
+import SettingsContext from '../../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
-import logger from '../../logger'
+import logger from '../../../logger'
 import EmojiAndStickerPicker from './EmojiAndStickerPicker'
 
 const log = logger.getLogger('renderer/composer')

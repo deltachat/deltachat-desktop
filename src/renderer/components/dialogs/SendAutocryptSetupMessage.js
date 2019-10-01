@@ -7,9 +7,9 @@ import {
   Spinner,
   Classes
 } from '@blueprintjs/core'
-import { DeltaButton } from '../helpers/SmallDialog'
-import InputTransferKey from '../helpers/AutocryptSetupMessage'
-import DeltaDialog from '../helpers/DeltaDialog'
+import { DeltaButton } from './SmallDialog'
+import InputTransferKey from './AutocryptSetupMessage'
+import DeltaDialog from './DeltaDialog'
 
 class KeyViewPanel extends React.Component {
   render () {
