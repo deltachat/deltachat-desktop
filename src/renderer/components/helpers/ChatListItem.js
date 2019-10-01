@@ -22,7 +22,6 @@ const Header = React.memo(props => {
         'chat-list-item__header__name',
         freshMessageCounter > 0 ? 'chat-list-item__header__name--with-unread' : null
       )}>
-        {isGroup && <div className='chat-list-item__group-icon' />}
         {isVerified && <VerifiedIcon />}
         <span className='chat-list-item__name'>
           {(name || email) + ' '}
@@ -136,9 +135,26 @@ const ChatListItemNormal = React.memo(props => {
 
 const ChatListItemDeaddrop = React.memo(props => {
   const { chatListItem } = props
+  console.log('xxx', chatListItem)
   const { openDialog } = useContext(ScreenContext)
   const onClick = () => openDialog('DeadDrop', { deaddrop: chatListItem.deaddrop })
-  return <ChatListItemNormal {...{ chatListItem, onClick, className: 'chat-list-item--is-deaddrop' }} />
+  const tx = window.translate
+  return (
+    <div
+      role='button'
+      onClick={onClick}
+      className={classNames(
+        'chat-list-item',
+        'chat-list-item--is-deaddrop'
+      )}
+    >
+      <Avatar displayName={chatListItem.deaddrop.contact.address} />
+      <div className='chat-list-item__content'>
+        <Header chatListItem={{...chatListItem, name: tx('chat_contact_request')}} />
+        <Message chatListItem={chatListItem} />
+      </div>
+    </div>
+  )
 })
 
 const ChatListItem = React.memo(props => {
