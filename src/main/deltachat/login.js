@@ -83,7 +83,7 @@ function serverFlags ({ mailSecurity, sendSecurity }) {
   } else if (mailSecurity === 'starttls') {
     flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
   } else if (mailSecurity === 'plain') {
-    flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
+    flags.push(C.DC_LP_IMAP_SOCKET_PLAIN)
   }
 
   if (sendSecurity === 'ssl') {
@@ -91,7 +91,7 @@ function serverFlags ({ mailSecurity, sendSecurity }) {
   } else if (sendSecurity === 'starttls') {
     flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
   } else if (sendSecurity === 'plain') {
-    flags.push(C.DC_MAX_GET_INFO_LEN)
+    flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
   }
 
   if (!flags.length) return null
