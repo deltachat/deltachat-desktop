@@ -46,17 +46,16 @@ export default class DeadDrop extends React.Component {
               className={Classes.DIALOG_FOOTER_ACTIONS}
               style={{ justifyContent: 'space-between', marginTop: '7px' }}
             >
-              <DeltaButtonPrimary bold={false} onClick={this.yes}>{tx('yes').toUpperCase()}</DeltaButtonPrimary>
-              <DeltaButton
-                bold={false}
-                onClick={this.close}
-                style={{ marginLeft: '115px' }}
-              >
-                {tx('not_now').toUpperCase()}
-              </DeltaButton>
               <DeltaButtonDanger bold={false} onClick={this.never}>
                 {tx('never').toUpperCase()}
               </DeltaButtonDanger>
+              <DeltaButton
+                bold={false}
+                onClick={this.close}
+              >
+                {tx('not_now').toUpperCase()}
+              </DeltaButton>
+              <DeltaButtonPrimary bold={false} onClick={this.yes}>{tx('yes').toUpperCase()}</DeltaButtonPrimary>
             </div>
           </div>
         </div>
