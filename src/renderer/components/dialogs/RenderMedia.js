@@ -4,9 +4,6 @@ const createGlobalStyle = require('styled-components').createGlobalStyle
 const { Icon, Overlay } = require('@blueprintjs/core')
 
 const OverlayGlobal = createGlobalStyle`
-  .bp3-overlay-backdrop {
-    background-color: rgba(16, 22, 26, 1);
-  }
 `
 
 const Container = styled.div`
@@ -16,12 +13,12 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background-color: white;
     
     img, video {
-      max-width: 90vw;
+      width: 100vw;
       max-height: 100vh;
-      background-color: white;
+      object-fit: contain;
     }
 `
 
@@ -58,13 +55,13 @@ class RenderMedia extends React.Component {
     // html element to render
     switch (contentType.split('/')[0]) {
       case 'image':
-        elm = <img src={url} />
+        elm = <div className='image-container'><img src={url} /></div>
         break
       case 'audio':
         elm = <audio src={url} controls={1} />
         break
       case 'video':
-        elm = <video src={url} controls={1} />
+        elm = <video src={url} controls={1} autoplay />
         break
       default:
         elm = null

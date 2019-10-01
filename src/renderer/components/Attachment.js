@@ -180,6 +180,7 @@ function render (props) {
           className='module-message__img-attachment'
           height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
           src={attachment.url}
+          controls={1}
         />
         <div
           className={classNames(
