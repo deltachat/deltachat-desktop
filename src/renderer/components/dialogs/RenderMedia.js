@@ -20,6 +20,9 @@ const Container = styled.div`
       max-height: 100vh;
       object-fit: contain;
     }
+    video {
+      width: 95vw;
+    }
 `
 
 const RenderMediaWrapper = styled.div`
@@ -32,6 +35,7 @@ const CloseButtonWrapper = styled.div`
   position: absolute;
   right: 5px;
   cursor: pointer;
+  z-index: 10;
 `
 
 const DownloadButtonWrapper = styled.div`
@@ -39,6 +43,7 @@ const DownloadButtonWrapper = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
+  z-index: 10;
 `
 
 class RenderMedia extends React.Component {

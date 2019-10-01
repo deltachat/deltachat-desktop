@@ -3,13 +3,13 @@ const fsExtra = require('fs-extra')
 const path = require('path')
 const log = require('../../logger').getLogger('main/deltachat/stickers')
 
-async function isDirectory(path) {
-  let lstat = await fs.lstat(path)
+async function isDirectory (path) {
+  const lstat = await fs.lstat(path)
   return lstat.isDirectory()
 }
 
-async function isFile(path) {
-  let lstat = await fs.lstat(path)
+async function isFile (path) {
+  const lstat = await fs.lstat(path)
   return lstat.isFile()
 }
 
@@ -21,22 +21,21 @@ async function getStickers () {
     return {}
   }
 
-  let stickers = {}
+  const stickers = {}
 
   const list = await fs.readdir(stickerFolder)
-  for(let stickerPack of list) {
+  for (const stickerPack of list) {
     const stickerPackPath = path.join(stickerFolder, stickerPack)
-    if(!await isDirectory(stickerPackPath)) continue
-    let stickerImages = []
-    for (let sticker of await fs.readdir(stickerPackPath)) {
+    if (!await isDirectory(stickerPackPath)) continue
+    const stickerImages = []
+    for (const sticker of await fs.readdir(stickerPackPath)) {
       const stickerPackImagePath = path.join(stickerPackPath, sticker)
-      if(!sticker.endsWith('.png') || !await isFile(stickerPackImagePath)) continue
+      if (!sticker.endsWith('.png') || !await isFile(stickerPackImagePath)) continue
       stickerImages.push(stickerPackImagePath)
     }
     if (stickerImages.length === 0) continue
     stickers[stickerPack] = stickerImages
   }
-
 
   return stickers
 }
