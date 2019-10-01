@@ -1,5 +1,5 @@
 const React = require('react')
-const MessageMetaData = require('../conversations/MessageMetaData')
+const MessageMetaData = require('../messagelist/MessageMetaData')
 
 class PopupMessage extends React.Component {
   render () {

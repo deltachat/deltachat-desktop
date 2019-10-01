@@ -5,8 +5,8 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
 const Menu = require('./Menu').default
-const ChatList = require('./ChatList').default
-const ChatView = require('./ChatView').default
+const ChatList = require('./chatlist/ChatList').default
+const MessageList = require('./messagelist/MessageList').default
 const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
@@ -174,7 +174,7 @@ class SplittedChatListAndView extends React.Component {
                 ? this.state.media ? <Media
                   chat={selectedChat}
                 />
-                  : (<ChatView
+                  : (<MessageList
                     chat={selectedChat}
                     openDialog={this.context.openDialog}
                   />)

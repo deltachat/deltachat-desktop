@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Picker } from 'emoji-mart'
 import classNames from 'classnames'
-import { callDcMethod, callDcMethodAsync } from '../ipc'
+import { callDcMethod, callDcMethodAsync } from '../../ipc'
 
 export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncEffect() }, ...args)
 

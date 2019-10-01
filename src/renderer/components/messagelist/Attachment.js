@@ -5,7 +5,7 @@ const mimeTypes = require('mime-types')
 
 const {
   isImageTypeSupported, isVideoTypeSupported, MIME
-} = require('./conversations')
+} = require('../conversations')
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300

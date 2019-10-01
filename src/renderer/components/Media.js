@@ -8,8 +8,8 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const styled = require('styled-components').default
 
-const MessageWrapper = require('./MessageWrapper')
-const Attachment = require('./Attachment')
+const MessageWrapper = require('./messagelist/MessageWrapper')
+const Attachment = require('./messagelist/Attachment')
 
 const Wrapper = styled.div`
   width: 70%;

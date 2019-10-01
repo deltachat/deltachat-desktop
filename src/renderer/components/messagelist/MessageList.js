@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { shell } from 'electron'
-import { callDcMethod } from '../ipc'
-import ScreenContext from '../contexts/ScreenContext'
+import { callDcMethod } from '../../ipc'
+import ScreenContext from '../../contexts/ScreenContext'
 
-import Composer from './Composer'
+import Composer from '../composer/Composer'
 import MessageWrapper from './MessageWrapper'
-import logger from '../../logger'
+import logger from '../../../logger'
 
 import { isDisplayableByRenderMedia } from './Attachment'
-import SettingsContext from '../contexts/SettingsContext'
+import SettingsContext from '../../contexts/SettingsContext'
 
 const MutationObserver = window.MutationObserver
 
