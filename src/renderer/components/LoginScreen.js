@@ -18,7 +18,7 @@ import {
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
 import logger from '../../logger'
 import ScreenContext from '../contexts/ScreenContext'
-import DeltaDialog from './helpers/DeltaDialog'
+import DeltaDialog from './dialogs/DeltaDialog'
 
 const log = logger.getLogger('renderer/components/LoginScreen')
 

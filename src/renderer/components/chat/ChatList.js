@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useContext } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import { useChatListIds, useLazyChatListItems } from './helpers/ChatList'
-import ChatListItem from './helpers/ChatListItem'
-import { PseudoListItemAddContact } from './helpers/PseudoListItem'
+import { useChatListIds, useLazyChatListItems } from './ChatListHelpers'
+import ChatListItem from './ChatListItem'
+import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import C from 'deltachat-node/constants'
-import { isValidEmail } from './dialogs/CreateChat'
-import ScreenContext from '../contexts/ScreenContext'
-import { callDcMethodAsync } from '../ipc'
+import { isValidEmail } from '../dialogs/CreateChat'
+import ScreenContext from '../../contexts/ScreenContext'
+import { callDcMethodAsync } from '../../ipc'
 
 export default function ChatList (props) {
   const { selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { callDcMethod } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaButton } from '../helpers/SmallDialog'
+import SmallDialog, { DeltaButton } from './SmallDialog'
 
 export default function EncryptionInfo (props) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')

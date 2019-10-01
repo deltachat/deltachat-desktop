@@ -1,7 +1,7 @@
 import React from 'react'
 import { callDcMethod } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
+import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 
 export default class DeadDrop extends React.Component {
   constructor (props) {

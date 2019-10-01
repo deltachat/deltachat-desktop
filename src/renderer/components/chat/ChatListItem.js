@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { Timestamp } from '../conversations'
-import MessageBody from '../MessageBody'
-import { Avatar, VerifiedIcon } from '../helpers/Contact'
+import MessageBody from '../message/MessageBody'
+import { Avatar, VerifiedIcon } from '../contact/Contact'
 import C from 'deltachat-node/constants'
 import ScreenContext from '../../contexts/ScreenContext'
 
@@ -150,7 +150,7 @@ const ChatListItemDeaddrop = React.memo(props => {
     >
       <Avatar displayName={chatListItem.deaddrop.contact.address} />
       <div className='chat-list-item__content'>
-        <Header chatListItem={{...chatListItem, name: tx('chat_contact_request')}} />
+        <Header chatListItem={{ ...chatListItem, name: tx('chat_contact_request') }} />
         <Message chatListItem={chatListItem} />
       </div>
     </div>

@@ -1,12 +1,12 @@
 const React = require('react')
 const classNames = require('classnames')
 
-const MessageBody = require('../MessageBody')
+const MessageBody = require('./MessageBody')
 const MessageMetaData = require('./MessageMetaData')
 
-const ContactName = require('./ContactName')
+const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const Attachment = require('../Attachment')
+const Attachment = require('./Attachment')
 
 class Message extends React.Component {
   constructor (props) {

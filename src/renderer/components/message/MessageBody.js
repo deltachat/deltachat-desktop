@@ -1,7 +1,7 @@
 const React = require('react')
 const classNames = require('classnames')
 
-const { getSizeClass, getRegex, replaceColons } = require('./conversations/emoji')
+const { getSizeClass, getRegex, replaceColons } = require('../conversations/emoji')
 
 const { previewRules, rules } = require('./MessageMarkdown')
 
