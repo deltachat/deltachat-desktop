@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
-import styled from 'styled-components'
 import { shell } from 'electron'
 import { callDcMethod } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
@@ -30,8 +29,6 @@ export default function MessageList (props) {
 
   const { openDialog } = useContext(ScreenContext)
 
-  const writeMessage = ({text, filename}) => callDcMethod('sendMessage', [chat.id, text, filename])
-
   const fetchNextMessages = () => {
     if (chat.totalMessages === chat.messages.length) return
     scrollPrepare()
@@ -54,7 +51,7 @@ export default function MessageList (props) {
     previousScrollHeightMinusTop.current = null
   }
 
-  const scrollPrepare = () => previousScrollHeightMinusTop.current = doc.scrollHeight - doc.scrollTop
+  const scrollPrepare = () => { previousScrollHeightMinusTop.current = doc.scrollHeight - doc.scrollTop }
 
   const onScroll = () => {
     if (doc.scrollTop <= SCROLL_BUFFER) {
@@ -62,7 +59,7 @@ export default function MessageList (props) {
     }
   }
 
-  const scrollToBottom = force => doc.scrollTop = doc.scrollHeight
+  const scrollToBottom = force => { doc.scrollTop = doc.scrollHeight }
 
   const onClickAttachment = (message) => {
     if (isDisplayableByRenderMedia(message.msg.attachment)) {
@@ -74,8 +71,8 @@ export default function MessageList (props) {
     }
   }
 
-  const onClickSetupMessage = setupMessage =>openDialog('EnterAutocryptSetupMessage', { setupMessage })
-  const onShowDetail = message => openDialog('MessageDetail', {message, chat})
+  const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
+  const onShowDetail = message => openDialog('MessageDetail', { message, chat })
   const onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
   const setComposerSize = size => setState({ composerSize: size })
 
@@ -170,7 +167,6 @@ export default function MessageList (props) {
               ref={refComposer}
               chatId={chat.id}
               draft={chat.draft}
-              onSubmit={writeMessage}
               setComposerSize={setComposerSize.bind(this)}
               isDisabled={disabled}
             />

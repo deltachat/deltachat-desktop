@@ -6,11 +6,12 @@ import SettingsContext from '../../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
 import logger from '../../../logger'
 import EmojiAndStickerPicker from './EmojiAndStickerPicker'
+import { callDcMethod } from '../../ipc'
 
 const log = logger.getLogger('renderer/composer')
 
 const Composer = React.forwardRef((props, ref) => {
-  const { onSubmit, isDisabled, chatId, draft } = props
+  const { isDisabled, chatId, draft } = props
 
   const [filename, setFilename] = useState(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -25,7 +26,7 @@ const Composer = React.forwardRef((props, ref) => {
       log.debug(`Empty message: don't send it...`)
       return
     }
-    onSubmit({ text: message, filename })
+    callDcMethod('sendMessage', [chatId, message, filename])
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()

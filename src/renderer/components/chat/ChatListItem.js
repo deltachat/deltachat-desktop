@@ -14,7 +14,7 @@ const FreshMessageCounter = React.memo(props => {
 
 const Header = React.memo(props => {
   const { freshMessageCounter, lastUpdated } = props.chatListItem
-  const { name, email, isVerified, isGroup } = props.chatListItem
+  const { name, email, isVerified } = props.chatListItem
 
   return (
     <div className='chat-list-item__header'>
