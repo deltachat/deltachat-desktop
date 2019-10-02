@@ -15,26 +15,22 @@ const MutationObserver = window.MutationObserver
 
 const SCROLL_BUFFER = 70
 
-export default function ChatView (props) {
+export default function MessageList (props) {
   const [state, setState] = useState({
     error: false,
     composerSize: 40
   })
-  const { chat } = props
+  const { chat, onDeadDropClick } = props
+
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
   let doc = document.querySelector(`.message-list-and-composer #message-list`)
-
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
+
   const { openDialog } = useContext(ScreenContext)
 
-  const writeMessage = (opts) => {
-    callDcMethod(
-      'sendMessage',
-      [chat.id, opts.text, opts.filename]
-    )
-  }
+  const writeMessage = ({text, filename}) => callDcMethod('sendMessage', [chat.id, text, filename])
 
   const fetchNextMessages = () => {
     if (chat.totalMessages === chat.messages.length) return
@@ -58,14 +54,53 @@ export default function ChatView (props) {
     previousScrollHeightMinusTop.current = null
   }
 
-  const scrollPrepare = () => {
-    previousScrollHeightMinusTop.current = doc.scrollHeight - doc.scrollTop
-  }
+  const scrollPrepare = () => previousScrollHeightMinusTop.current = doc.scrollHeight - doc.scrollTop
 
   const onScroll = () => {
     if (doc.scrollTop <= SCROLL_BUFFER) {
       fetchNextMessages()
     }
+  }
+
+  const scrollToBottom = force => doc.scrollTop = doc.scrollHeight
+
+  const onClickAttachment = (message) => {
+    if (isDisplayableByRenderMedia(message.msg.attachment)) {
+      openDialog('RenderMedia', { message })
+    } else {
+      if (!shell.openItem(message.msg.attachment.url)) {
+        logger.info("file couldn't be opened, try saving it in a different place and try to open it from there")
+      }
+    }
+  }
+
+  const onClickSetupMessage = setupMessage =>openDialog('EnterAutocryptSetupMessage', { setupMessage })
+  const onShowDetail = message => openDialog('MessageDetail', {message, chat})
+  const onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
+  const setComposerSize = size => setState({ composerSize: size })
+
+  const onDrop = (e) => {
+    const files = e.target.files || e.dataTransfer.files
+    e.preventDefault()
+    e.stopPropagation()
+    // TODO maybe add a clause here for windows because that uses backslash instead of slash
+    const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
+    for (let i = 0; i < files.length; i++) {
+      const { path } = files[i]
+      if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
+        callDcMethod(
+          'sendMessage',
+          [chat.id, null, path]
+        )
+      } else {
+        logger.warn('Prevented a file from being send again while dragging it out')
+      }
+    }
+  }
+
+  const onDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
   }
 
   useEffect(() => {
@@ -94,64 +129,6 @@ export default function ChatView (props) {
     scrollToBottom()
   }, [chat.id])
 
-  const scrollToBottom = (force) => {
-    doc.scrollTop = doc.scrollHeight
-  }
-
-  const onClickAttachment = (message) => {
-    if (isDisplayableByRenderMedia(message.msg.attachment)) {
-      openDialog('RenderMedia', { message })
-    } else {
-      if (!shell.openItem(message.msg.attachment.url)) {
-        logger.info("file couldn't be opened, try saving it in a different place and try to open it from there")
-      }
-    }
-  }
-
-  const onClickSetupMessage = (setupMessage) => {
-    openDialog('EnterAutocryptSetupMessage', { setupMessage })
-  }
-
-  const onShowDetail = (message) => {
-    openDialog('MessageDetail', {
-      message,
-      chat
-    })
-  }
-
-  const onForward = (forwardMessage) => {
-    openDialog('ForwardMessage', { forwardMessage })
-  }
-
-  const setComposerSize = (size) => {
-    setState({ composerSize: size })
-  }
-
-  const onDrop = (e) => {
-    const files = e.target.files || e.dataTransfer.files
-    e.preventDefault()
-    e.stopPropagation()
-    // TODO maybe add a clause here for windows because that uses backslash instead of slash
-    const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
-    for (let i = 0; i < files.length; i++) {
-      const { path } = files[i]
-      if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        callDcMethod(
-          'sendMessage',
-          [chat.id, null, path]
-        )
-      } else {
-        logger.warn('Prevented a file from being send again while dragging it out')
-      }
-    }
-  }
-
-  const onDragOver = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
-  const { onDeadDropClick } = props
   const disabled = chat.isGroup && !chat.selfInGroup
 
   return (
