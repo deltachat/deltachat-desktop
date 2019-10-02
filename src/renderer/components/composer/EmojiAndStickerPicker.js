@@ -76,14 +76,14 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
   }, [])
 
   return (
-    <div className='emoji-sticker-picker'>
+    <div className='emoji-sticker-picker' ref={ref}>
       <div className='emoji-sticker-picker__emoji-or-sticker-selector'>
         <EmojiOrStickerSelectorButton onClick={() => setShowSticker(false)} isSelected={!showSticker}>Emoji</EmojiOrStickerSelectorButton>
         <EmojiOrStickerSelectorButton onClick={() => setShowSticker(true)} isSelected={showSticker}>Sticker</EmojiOrStickerSelectorButton>
       </div>
       <div className='emoji-sticker-picker__emoji-or-sticker-picker'>
         { !showSticker &&
-        <div className='emoji-sticker-picker__emoji-picker' ref={ref}>
+        <div className='emoji-sticker-picker__emoji-picker'>
           <Picker
             style={{ width: '100%', height: '100%' }}
             native
