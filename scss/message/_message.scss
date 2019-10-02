@@ -32,493 +32,493 @@ $color-message-button-menu-hover: var(--messageButtons);
 $color-message-icon-error: var(--errorColor);
 
 .module-message {
-  position: relative;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: stretch;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;
 }
 
 // Spec: container < 438px
 .module-message--incoming {
-  margin-left: 0;
-  margin-right: 32px;
+    margin-left: 0;
+    margin-right: 32px;
 }
 .module-message--outgoing {
-  float: right;
-  margin-right: 0;
-  margin-left: 32px;
+    float: right;
+    margin-right: 0;
+    margin-left: 32px;
 }
 
 .module-message__buttons {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  opacity: 0;
-  z-index: 10;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    opacity: 0;
+    z-index: 10;
 }
 
 .module-message:hover .module-message__buttons {
-  opacity: 1;
+    opacity: 1;
 }
 
 .module-message__buttons--incoming {
-  right: 0;
-  top: 5px;
+    right: 0;
+    top: 5px;
 }
 
 .module-message__buttons--outgoing {
-  right: 0;
-  top: 5px;
+    right: 0;
+    top: 5px;
 }
 
 
 .module-message__buttons__download {
-  height: 24px;
-  width: 24px;
-  display: inline-block;
-  cursor: pointer;
-  @include color-svg('../images/download.svg', $color-message-button-download);
-  &:hover {
-    @include color-svg('../images/download.svg', $color-message-button-download-hover);
-  }
-  &.icon-medium {
-    height: 36px;
-    width: 36px;
-  }
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    cursor: pointer;
+    @include color-svg('../images/download.svg', $color-message-button-download);
+    &:hover {
+        @include color-svg('../images/download.svg', $color-message-button-download-hover);
+    }
+    &.icon-medium {
+        height: 36px;
+        width: 36px;
+    }
 }
 
 .attachment-overlay .module-message__buttons__download:hover {
-  @include color-svg('../images/download.svg', $color-message-button-download-hover);
+    @include color-svg('../images/download.svg', $color-message-button-download-hover);
 }
 
 
 
 .module-message__buttons__reply {
-  height: 24px;
-  width: 24px;
-  display: inline-block;
-  cursor: pointer;
-  @include color-svg('../images/reply.svg', $color-message-button-reply);
-  &:hover {
-    @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
-  }
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    cursor: pointer;
+    @include color-svg('../images/reply.svg', $color-message-button-reply);
+    &:hover {
+        @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
+    }
 }
 
 .module-message__buttons__reply--incoming {
-  margin-left: 12px;
+    margin-left: 12px;
 }
 .module-message__buttons__reply--outgoing {
-  margin-right: 12px;
+    margin-right: 12px;
 }
 
 .module-message__buttons__menu {
-  height: 24px;
-  width: 24px;
-  display: inline-block;
-  cursor: pointer;
-  @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu);
-  &:hover {
-    @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu-hover);
-  }
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    cursor: pointer;
+    @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu);
+    &:hover {
+        @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu-hover);
+    }
 }
 
 .module-message__buttons__menu--incoming {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 .module_message__buttons__menu--outgoing {
-  margin-right: 0;
+    margin-right: 0;
 }
 
 .module-message__error-container {
-  width: 28px;
-  position: relative;
+    width: 28px;
+    position: relative;
 }
 
 .module-message__error {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  position: absolute;
-  bottom: 4px;
-  @include color-svg('../images/error.svg', $color-message-icon-error);
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: absolute;
+    bottom: 4px;
+    @include color-svg('../images/error.svg', $color-message-icon-error);
 }
 
 .module-message__error--outgoing {
-  left: 8px;
+    left: 8px;
 }
 
 .module-message__error--incoming {
-  right: 8px;
+    right: 8px;
 }
 
 .module-message__container {
-  position: relative;
-  display: inline-block;
-  border-radius: 16px;
-  padding-right: 12px;
-  padding-left: 12px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+    position: relative;
+    display: inline-block;
+    border-radius: 16px;
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .module-message__attachment-container {
-  // Entirely to ensure that images are centered if they aren't full width of bubble
-  text-align: center;
-  position: relative;
-  cursor: pointer;
+    // Entirely to ensure that images are centered if they aren't full width of bubble
+    text-align: center;
+    position: relative;
+    cursor: pointer;
 
-  margin-left: -12px;
-  margin-right: -12px;
-  margin-top: -10px;
-  margin-bottom: -10px;
+    margin-left: -12px;
+    margin-right: -12px;
+    margin-top: -10px;
+    margin-bottom: -10px;
 
-  border-radius: 16px;
-  overflow: hidden;
+    border-radius: 16px;
+    overflow: hidden;
 
-  background-color: $color-message-attachment-container-bg;
+    background-color: $color-message-attachment-container-bg;
 }
 
 .module-message__attachment-container--with-content-below {
-  margin-bottom: 7px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+    margin-bottom: 7px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .module-message__attachment-container--with-content-above {
-  margin-top: 4px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+    margin-top: 4px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .module-message__img-border-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  border-radius: 16px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    border-radius: 16px;
 }
 
 .module-message__img-border-overlay--with-content-below {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .module-message__img-border-overlay--with-content-above {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .module-message__img-attachment {
-  object-fit: cover;
-  width: 100%;
-  min-width: 200px;
-  min-height: 150px;
-  max-height: 300px;
+    object-fit: cover;
+    width: 100%;
+    min-width: 200px;
+    min-height: 150px;
+    max-height: 300px;
 
-  // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-  //   bottom, so this doesn't match up with the padding numbers above.
-  margin-bottom: -4px;
+    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
+    //   bottom, so this doesn't match up with the padding numbers above.
+    margin-bottom: -4px;
 
-  // redundant with attachment-container, but we get cursor flashing on move otherwise
-  cursor: pointer;
+    // redundant with attachment-container, but we get cursor flashing on move otherwise
+    cursor: pointer;
 }
 
 .module-message__img-overlay {
-  position: absolute;
-  height: 48px;
-  bottom: 0;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  margin-left: -12px;
-  margin-right: -12px;
-  margin-bottom: -10px;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+    position: absolute;
+    height: 48px;
+    bottom: 0;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    margin-left: -12px;
+    margin-right: -12px;
+    margin-bottom: -10px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
 }
 
 .module-message__broken-image {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
 
-  padding: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  color: $color-message-broken-image;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    color: $color-message-broken-image;
 }
 
 .module-message__broken-image--incoming {
-  color: $color-message-broken-image-incomming;
+    color: $color-message-broken-image-incomming;
 }
 
 .module-message__video-overlay__circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-  width: 48px;
-  height: 48px;
-  background-color: $color-message-video-overlay-circle;
-  border-radius: 24px;
+    width: 48px;
+    height: 48px;
+    background-color: $color-message-video-overlay-circle;
+    border-radius: 24px;
 }
 
 .module-message__video-overlay__play-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-  height: 36px;
-  width: 36px;
-  @include color-svg('../images/play.svg', $color-message-video-play);
+    height: 36px;
+    width: 36px;
+    @include color-svg('../images/play.svg', $color-message-video-play);
 }
 
 .module-message__broken-video-screenshot {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
 
-  padding: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  color: $color-message-broken-video-screenshot;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    color: $color-message-broken-video-screenshot;
 
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .module-message__broken-video-screenshot--incoming {
-  color: $color-message-broken-video-screenshot-incomming;
+    color: $color-message-broken-video-screenshot-incomming;
 }
 
 .module-message__audio-attachment {
-  margin-top: 2px;
-  display: block;
-  margin-right: 30px;
+    margin-top: 2px;
+    display: block;
+    margin-right: 30px;
 }
 
 .module-message__audio-attachment--with-content-below {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .module-message__audio-attachment--with-content-above {
-  margin-top: 6px;
+    margin-top: 6px;
 }
 
 .module-message__generic-attachment {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .module-message__generic-attachment--with-content-below {
-  padding-bottom: 6px;
+    padding-bottom: 6px;
 }
 
 .module-message__generic-attachment--with-content-above {
-  padding-top: 4px;
+    padding-top: 4px;
 }
 
 .module-message__generic-attachment__icon {
-  background: url('../images/file-gradient.svg') no-repeat center;
-  height: 44px;
-  width: 56px;
-  margin-left: -13px;
-  margin-right: -14px;
-  margin-bottom: -4px;
+    background: url('../images/file-gradient.svg') no-repeat center;
+    height: 44px;
+    width: 56px;
+    margin-left: -13px;
+    margin-right: -14px;
+    margin-bottom: -4px;
 
-  // So we can center the extension text inside this icon
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    // So we can center the extension text inside this icon
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .module-message__generic-attachment__icon__extension {
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 0.1px;
+    text-transform: uppercase;
 
-  // Along with flow layout in parent item, centers text
-  text-align: center;
-  width: 25px;
-  margin-left: auto;
-  margin-right: auto;
+    // Along with flow layout in parent item, centers text
+    text-align: center;
+    width: 25px;
+    margin-left: auto;
+    margin-right: auto;
 
-  // We don't have much room for text here, cut it off without ellipse
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
+    // We don't have much room for text here, cut it off without ellipse
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
 
-  color: $color-message-generic-attachment-icon-extension;
+    color: $color-message-generic-attachment-icon-extension;
 }
 
 .module-message__generic-attachment__text {
-  flex-grow: 1;
-  margin-left: 8px;
-  // The width of the icon plus our 8px margin
-  max-width: calc(100% - 37px);
+    flex-grow: 1;
+    margin-left: 8px;
+    // The width of the icon plus our 8px margin
+    max-width: calc(100% - 37px);
 }
 
 .module-message__generic-attachment__file-name {
-  color: $color-message-generic-attachment-fileinfo;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 300;
-  margin-top: 2px;
+    color: $color-message-generic-attachment-fileinfo;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 300;
+    margin-top: 2px;
 
-  // Handling really long filenames - cut them off
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    // Handling really long filenames - cut them off
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .module-message__generic-attachment__file-size {
-  color: $color-message-generic-attachment-fileinfo;
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
-  margin-top: 3px;
+    color: $color-message-generic-attachment-fileinfo;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
 }
 
 .module-message__author {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 18px;
-  height: 18px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 18px;
+    height: 18px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .module-message__author__profile-name {
-  font-style: italic;
+    font-style: italic;
 }
 
 .module-message__text {
-  color: $color-message-text;
-  font-size: 14px;
-  line-height: 18px;
-  text-align: start;
+    color: $color-message-text;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: start;
 
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
 
-  a {
-    text-decoration: underline;
-    color: $color-message-text-underline;
-  }
+    a {
+        text-decoration: underline;
+        color: $color-message-text-underline;
+    }
 }
 
 .module-message__text--incoming {
-  a {
-    text-decoration: underline;
-  }
+    a {
+        text-decoration: underline;
+    }
 }
 
 .module-message__text {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .module-message__text--error {
-  font-style: italic;
+    font-style: italic;
 }
 
 .module-message__metadata {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 3px;
-  margin-bottom: -3px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: -3px;
 }
 
 // With an image and no caption, this section needs to be on top of the image overlay
 .module-message__metadata--with-image-no-caption {
-  position: absolute;
-  right: 16px;
-  bottom: 9px;
+    position: absolute;
+    right: 16px;
+    bottom: 9px;
 }
 
 .module-message__metadata--username {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .module-message__metadata__date {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
-  color: $color-message-metadata-date;
-  text-transform: uppercase;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.3px;
+    color: $color-message-metadata-date;
+    text-transform: uppercase;
 }
 .module-message__metadata__date--incoming {
-  color: $color-message-metadata-date-incomming;
+    color: $color-message-metadata-date-incomming;
 }
 .module-message__metadata__date--with-image-no-caption {
-  color: $color-message-metadata-image-no-caption;
+    color: $color-message-metadata-image-no-caption;
 }
 
 .module-message__metadata__spacer {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .module-message__metadata__padlock-icon {
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-right: 2px;
-  margin-bottom: 3px;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-right: 2px;
+    margin-bottom: 3px;
 }
 
 .module-message__metadata__padlock-icon--incoming {
-  @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
+    @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
 }
 
 .module-message__metadata__padlock-icon--outgoing {
-  @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
+    @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
 }
 
 .module-message__author-avatar {
-  position: absolute;
-  // This accounts for the weird extra 3px we get at the bottom of messages
-  bottom: -3px;
-  right: calc(100% + 4px);
+    position: absolute;
+    // This accounts for the weird extra 3px we get at the bottom of messages
+    bottom: -3px;
+    right: calc(100% + 4px);
 
-  img {
-    height: 36px;
-    width: 36px;
-    border-radius: 18px;
-    object-fit: cover;
-  }
+    img {
+        height: 36px;
+        width: 36px;
+        border-radius: 18px;
+        object-fit: cover;
+    }
 }
 
 .module-message__author-default-avatar {
-  position: absolute;
-  bottom: 0px;
-  right: calc(100% + 4px);
+    position: absolute;
+    bottom: 0px;
+    right: calc(100% + 4px);
 
-  height: 36px;
-  width: 36px;
-  border-radius: 18px;
+    height: 36px;
+    width: 36px;
+    border-radius: 18px;
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
 
-  user-select: none;
+    user-select: none;
 }
 
 .module-message__author-default-avatar__label {
-  color: $color-message-author-default-avatar-label;
+    color: $color-message-author-default-avatar-label;
 }
 
 // All media query widths have 300px added to account for the left pane
@@ -526,14 +526,14 @@ $color-message-icon-error: var(--errorColor);
 
 // To hide in small breakpoints
 .module-message__buttons__download {
-  display: none;
+    display: none;
 }
 .module-message__buttons__reply {
-  display: none;
+    display: none;
 }
 
 .pointer .module-message__container--incoming {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .module-message-detail .message-content * {
@@ -545,61 +545,61 @@ $color-message-icon-error: var(--errorColor);
 
 /* Spec: container > 438px and container < 593px*/
 @media (min-width: 800px) and (max-width: 925px) {
-  .module-message {
-    max-width: 374px;
-  }
+    .module-message {
+        max-width: 374px;
+    }
 
-  // Spec: container < 438px
-  .module-message--incoming {
-    margin-left: 0;
-    margin-right: auto;
-  }
-  .module-message--outgoing {
-    margin-right: 0;
-    margin-left: auto;
-  }
+    // Spec: container < 438px
+    .module-message--incoming {
+        margin-left: 0;
+        margin-right: auto;
+    }
+    .module-message--outgoing {
+        margin-right: 0;
+        margin-left: auto;
+    }
 
-  // To hide in small breakpoints
-  .module-message__buttons__download {
-    display: inline-block;
-  }
-  .module-message__buttons__reply {
-    display: inline-block;
-  }
+    // To hide in small breakpoints
+    .module-message__buttons__download {
+        display: inline-block;
+    }
+    .module-message__buttons__reply {
+        display: inline-block;
+    }
 
-  // To hide in larger breakpoints
-  .module-message__context__reply {
-    display: none;
-  }
+    // To hide in larger breakpoints
+    .module-message__context__reply {
+        display: none;
+    }
 }
 
 // Spec: container > 593px
 @media (min-width: 926px) {
-  .module-message {
-    max-width: 66%;
-  }
+    .module-message {
+        max-width: 66%;
+    }
 
-  .module-message--incoming {
-    margin-left: 0;
-    margin-right: auto;
-  }
-  .module-message--outgoing {
-    margin-right: 0;
-    margin-left: auto;
-  }
+    .module-message--incoming {
+        margin-left: 0;
+        margin-right: auto;
+    }
+    .module-message--outgoing {
+        margin-right: 0;
+        margin-left: auto;
+    }
 
-  // To hide in small breakpoints
-  .module-message__buttons__download {
-    display: inline-block;
-  }
-  .module-message__buttons__reply {
-    display: inline-block;
-  }
+    // To hide in small breakpoints
+    .module-message__buttons__download {
+        display: inline-block;
+    }
+    .module-message__buttons__reply {
+        display: inline-block;
+    }
 
-  // To hide in larger breakpoints
-  .module-message__context__reply {
-    display: none;
-  }
+    // To hide in larger breakpoints
+    .module-message__context__reply {
+        display: none;
+    }
 }
 
 /* Message Status */
@@ -612,7 +612,7 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
 .status-icon--sending {
     @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
     animation: __status-icon--spinning 4s
-        linear infinite;
+    linear infinite;
 }
 
 @keyframes __status-icon--spinning {
@@ -656,14 +656,29 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
 }
 
 .module-message--sticker {
-  .module-message__attachment-container {
-    background-color: transparent;
-  }
-  .module-message__img-attachment {
-    margin-bottom: 20px;
-  }
+    .module-message__attachment-container {
+        background-color: transparent;
+    }
+    .module-message__img-attachment {
+        margin-bottom: 20px;
+    }
+    .module-message__metadata {
+        margin-top: 10px;
+        margin-bottom: -7px;
+        float: right;
+        padding: 3px 10px 0px 10px;
+        background-color: #d3d3d38c;
+        border-radius: 4px;
+        color: black;
+    }
+    .module-message__metadata__date {
+        color: white !important;
+    }
+    .status-icon--read, .status-icon--delivered {
+        background-color: white !important;
+    } 
 }
 
-.module-message--sticker .module-message__container.module-message__container--outgoing {
+.module-message--sticker .module-message__container.module-message__container--outgoing, .module-message--sticker .module-message__container.module-message__container--incoming {
     background-color: transparent;
 }

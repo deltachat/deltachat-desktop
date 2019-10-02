@@ -173,7 +173,8 @@ class Message extends React.Component {
       direction,
       disableMenu,
       onDownload,
-      onReply
+      onReply,
+      viewType
     } = this.props
     const tx = window.translate
 
@@ -181,7 +182,7 @@ class Message extends React.Component {
       return null
     }
 
-    const downloadButton = attachment ? (
+    const downloadButton = attachment && viewType !== 23 ? (
       <div
         onClick={onDownload}
         role='button'
