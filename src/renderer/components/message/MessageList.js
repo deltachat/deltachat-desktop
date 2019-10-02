@@ -62,6 +62,7 @@ export default function MessageList (props) {
   const scrollToBottom = force => { doc.scrollTop = doc.scrollHeight }
 
   const onClickAttachment = (message) => {
+    if (message.viewType.viewType === 23) return
     if (isDisplayableByRenderMedia(message.msg.attachment)) {
       openDialog('RenderMedia', { message })
     } else {
