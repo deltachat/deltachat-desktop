@@ -164,7 +164,7 @@ export default class Login extends React.Component {
             <p>{tx('menu_advanced') }</p>
           </AdvancedButton>
           <Collapse isOpen={showAdvanced}>
-            <br/>
+            <br />
             <DeltaHeadline>{tx('login_inbox')}</DeltaHeadline>
 
             <DeltaInput

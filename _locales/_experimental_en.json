@@ -80,9 +80,6 @@
   "a11y_remove_account_btn_label": {
     "message": "Remove account"
   },
-  "a11y_goto_chat_label": {
-    "message": "Go to chat"
-  },
   "main_menu": {
     "message": "Main menu"
   },
