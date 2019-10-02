@@ -50,7 +50,7 @@ class MessageInfo extends React.Component {
     return (
       <div className='module-message-detail'>
         <Callout>
-          <p>{this.state.content}</p>
+          <p style={{ userSelect: 'text' }}>{this.state.content}</p>
         </Callout>
         <table className='module-message-detail__info'>
           <tbody>
