@@ -8,7 +8,7 @@ export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncE
 export const StickerDiv = props => {
   const { stickerPackName, stickerPackImages, chatId, setShowEmojiPicker } = props
   const onClickSticker = (fileName) => {
-    callDcMethod('sendMessage', [chatId, 'We are testing stickers', fileName])
+    callDcMethod('sendSticker', [chatId, fileName])
     setShowEmojiPicker(false)
   }
 
@@ -18,12 +18,8 @@ export const StickerDiv = props => {
       <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container'>
         { stickerPackImages.map((filePath, index) => {
           return (
-            <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker'>
-              <img
-                key={index}
-                src={filePath}
-                onClick={onClickSticker.bind(this, filePath)}
-              />
+            <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker' key={index}>
+              <img src={filePath} onClick={onClickSticker.bind(this, filePath)}/>
             </div>
           )
         })}

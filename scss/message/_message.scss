@@ -654,3 +654,16 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
 .module-message__metadata > .status-icon {
     margin-bottom: 2px;
 }
+
+.module-message--sticker {
+  .module-message__attachment-container {
+    background-color: transparent;
+  }
+  .module-message__img-attachment {
+    margin-bottom: 20px;
+  }
+}
+
+.module-message--sticker .module-message__container.module-message__container--outgoing {
+    background-color: transparent;
+}

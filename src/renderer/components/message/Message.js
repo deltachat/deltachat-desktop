@@ -318,19 +318,23 @@ class Message extends React.Component {
       authorAddress,
       direction,
       id,
-      timestamp
+      timestamp,
+      viewType
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
     //   It needs to be unique.
     const triggerId = String(id || `${authorAddress}-${timestamp}`)
 
+    console.log(viewType, this.props, viewType === 23)
+
     return (
       <div
         onContextMenu={this.showMenu}
         className={classNames(
           'module-message',
-          `module-message--${direction}`
+          `module-message--${direction}`,
+          {'module-message--sticker': viewType === 23}
         )}
       >
         {this.renderAvatar()}
