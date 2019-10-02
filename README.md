@@ -170,7 +170,7 @@ Some important folders and files:
 
 ```
 ├── _locales                  # translation files in xml and json
-│   ├── _experimental-en.json # can contain experimental language strings
+│   ├── _untranslated_en.json # can contain experimental language strings
 │   └── languages.json        # central file which keeps the human readable language 
 ├── bin                       # various helper scripts
 ├── build                     # files needed only at build time
@@ -218,7 +218,7 @@ Sometimes you need to add new language strings, but don't want to push them to
 transifex immediately because it's unsure if the string will be adjusted in the
 short future or it's unclear if the pr will even get merged or you simply don't
 have push rights to the transifex language repo. To still be able to implement
-new language strings, you can add them to the `_locales/_experimental-en.json`
+new language strings, you can add them to the `_locales/_untranslated_en.json`
 file. You can also overload every other language string if you need to.
 The syntax is the exact same as for all other `_locales/*.json` files. 
 

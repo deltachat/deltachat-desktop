@@ -110,7 +110,7 @@ export default class Login extends React.Component {
   }
 
   renderLoginHeader (mode) {
-    return mode === 'update' ? null : <DeltaText>{window.translate('login_explain')}</DeltaText>
+    return mode === 'update' ? null : <DeltaText>{window.translate('login_instruction_desktop')}</DeltaText>
   }
 
   render () {
@@ -158,7 +158,7 @@ export default class Login extends React.Component {
             password={mail_pw}
             onChange={this.handleCredentialsChange}
           />
-          <DeltaText>{tx('login_no_servers_hint')}</DeltaText>
+
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
             {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
             <p>{tx('menu_advanced') }</p>

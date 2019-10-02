@@ -9,7 +9,7 @@ test('that translation files are valid json', t => {
     const xmlFiles = files.filter(f => path.extname(f) === '.xml')
     const jsonFiles = files.filter(f => path.extname(f) === '.json' &&
                                         path.basename(f) !== '_languages.json' &&
-                                        path.basename(f) !== '_experimental_en.json')
+                                        path.basename(f) !== '_untranslated_en.json')
     const name = f => f.split('.')[0]
     t.deepEqual(
       xmlFiles.map(name),

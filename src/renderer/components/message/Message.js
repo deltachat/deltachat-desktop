@@ -189,7 +189,7 @@ class Message extends React.Component {
         className={classNames(
           'module-message__buttons__download'
         )}
-        aria-label={tx('a11y_save_btn_label')}
+        aria-label={tx('save')}
       />
     ) : null
 
@@ -259,7 +259,7 @@ class Message extends React.Component {
             navigator.clipboard.writeText(window.getSelection().toString())
           }}
         >
-          {tx('copy_selected_text')}
+          {tx('menu_copy_to_clipboard')}
         </MenuItem>
         {attachment ? (
           <MenuItem
