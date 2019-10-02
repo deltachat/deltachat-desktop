@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
 
@@ -10,6 +10,13 @@ import { callDcMethod } from '../../ipc'
 
 const log = logger.getLogger('renderer/composer')
 
+const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
+  return mouseX >= boundingRect.x - margin &&
+         mouseX <= boundingRect.x + boundingRect.width + margin &&
+         mouseY >= boundingRect.y - margin &&
+         mouseY <= boundingRect.y + boundingRect.height + margin
+}
+
 const Composer = React.forwardRef((props, ref) => {
   const { isDisabled, chatId, draft } = props
 
@@ -17,7 +24,7 @@ const Composer = React.forwardRef((props, ref) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const messageInputRef = useRef()
-  const pickerRef = useRef()
+  const emojiAndStickerRef = useRef()
   const pickerButtonRef = useRef()
 
   const sendMessage = () => {
@@ -44,6 +51,21 @@ const Composer = React.forwardRef((props, ref) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
     messageInputRef.current.insertStringAtCursorPosition(emoji.native)
   }
+
+  useEffect(() => {
+    console.log('showEmojiPicker', showEmojiPicker)
+    if(!showEmojiPicker) return
+    const onClick = e => {
+      if(!emojiAndStickerRef.current) return
+      const {clientX, clientY} = event
+      const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
+      const clickIsOutSideEmojiPicker = !insideBoundingRect(clientX, clientY, boundingRect, 2)
+      if(clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
+    }
+
+    document.addEventListener('click', onClick)
+    return () => { console.log('unmount'); document.removeEventListener('click', onClick) }
+  }, [showEmojiPicker, emojiAndStickerRef])
 
   const tx = window.translate
 
@@ -79,7 +101,7 @@ const Composer = React.forwardRef((props, ref) => {
           <span />
         </div>
         { showEmojiPicker &&
-        <EmojiAndStickerPicker chatId={chatId} ref={pickerRef} onEmojiSelect={onEmojiSelect} />
+          <EmojiAndStickerPicker chatId={chatId} ref={emojiAndStickerRef} onEmojiSelect={onEmojiSelect} setShowEmojiPicker={setShowEmojiPicker} />
         }
         <div className='composer__send-button-wrapper' onClick={sendMessage}>
           <button aria-label={tx('a11y_send_btn_label')} />
