@@ -15,97 +15,6 @@ const MutationObserver = window.MutationObserver
 
 const SCROLL_BUFFER = 70
 
-const ChatViewWrapper = styled.div`
-  width: 70%;
-  float: right;
-  display: grid;
-  grid-template-columns: auto;
-  height: calc(100vh - 50px);
-  margin-top: 50px;
-  background-image: ${props => props.theme.chatViewBgImgPath};
-  background-size: cover;
-  background-color: var(--chatViewBg);
-
-}
-`
-const MessageListWrapper = styled.div`
-  position: relative;
-
-  #message-list {
-    position: absolute;
-    bottom: 0;
-    overflow: scroll;
-    max-height: 100%;
-    width:100%;
-    padding: 0 0.5em;
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  }
-
-  ul {
-    list-style: none;
-    
-    li {
-      margin-bottom: 10px;
-
-      .message-wrapper {
-        margin-left: 16px;
-        margin-right: 16px;
-      }
-
-      &::after {
-        visibility: hidden;
-        display: block;
-        font-size: 0;
-        content: ' ';
-        clear: both;
-        height: 0;
-      }
-    }
-  }
-
-  .module-message__author-default-avatar {
-    align-self: flex-end;
-  }
-
-  .module-message__container {
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 16px 1px;
-    }
-  }
-
-  .module-message__container--incoming {
-    background-color: ${props => props.theme.messageIncommingBg};
-  }
-
-  .module-message__container--outgoing {
-    background-color: ${props => props.theme.messageOutgoingBg};
-
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 1px 16px;
-    }
-  }
-
-  .module-message__attachment-container--with-content-above {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-  }
-
-  .module-message__attachment-container--with-content-below {
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-  }
-
-  .module-message__author, .module-message__text {
-    color: ${props => props.theme.messageText};
-  }
-
-  .module-message__metadata__date--incoming {
-    color: ${props => props.theme.messageIncommingDate};
-  }
-`
-
 export default function ChatView (props) {
   const [state, setState] = useState({
     error: false,
@@ -114,7 +23,7 @@ export default function ChatView (props) {
   const { chat } = props
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
-  let doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
+  let doc = document.querySelector(`.message-list-and-composer #message-list`)
 
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
@@ -161,10 +70,10 @@ export default function ChatView (props) {
 
   useEffect(() => {
     if (!doc) {
-      doc = document.querySelector(`.${ChatViewWrapper.styledComponentId} #message-list`)
+      doc = document.querySelector(`.message-list-and-composer #message-list`)
     }
     if (!doc) {
-      logger.warn(`Didn't find .ChatViewWrapper #message-list element`)
+      logger.warn(`Didn't find '.message-list-and-composer #message-list' element`)
     }
     const observer = new MutationObserver(handleScroll)
     if (messageListWrap.current) {
@@ -258,10 +167,10 @@ export default function ChatView (props) {
           }
         }
         return (
-          <ChatViewWrapper
+          <div className='message-list-and-composer'
             style={style}
             ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
-            <MessageListWrapper>
+            <div className='message-list-and-composer__message-list'>
               <div id='message-list' ref={messageListWrap}>
                 <ul>
                   {chat.messages.map(rawMessage => {
@@ -279,7 +188,7 @@ export default function ChatView (props) {
                   })}
                 </ul>
               </div>
-            </MessageListWrapper>
+            </div>
             <Composer
               ref={refComposer}
               chatId={chat.id}
@@ -288,7 +197,7 @@ export default function ChatView (props) {
               setComposerSize={setComposerSize.bind(this)}
               isDisabled={disabled}
             />
-          </ChatViewWrapper>
+          </div>
         )
       }}
     </SettingsContext.Consumer>
