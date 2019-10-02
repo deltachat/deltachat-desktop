@@ -389,7 +389,7 @@ class BackgroundSelector extends React.Component {
       <div className={'background-options'}>
         <button onClick={this.onButton.bind(this, 'def')}>{tx('pref_background_default')}</button>
         <button onClick={this.onButton.bind(this, 'def_color')}>{tx('pref_background_default_color')}</button>
-        <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom')}</button>
+        <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom_image')}</button>
         <button onClick={this.onButton.bind(this, 'color')}>{tx('pref_background_custom_color')}</button>
       </div>
       <div className={'background-default-images'}>

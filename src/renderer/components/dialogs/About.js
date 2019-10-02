@@ -71,7 +71,7 @@ class About extends React.Component {
     return (
       <Dialog
         isOpen={isOpen}
-        title={tx('about_deltachat_heading_desktop')}
+        title={tx('global_menu_help_about_desktop')}
         icon='info-sign'
         onClose={onClose}
         canOutsideClickClose={false}>

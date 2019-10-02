@@ -99,11 +99,11 @@ function getMenuTemplate (logHandler) {
           role: 'paste'
         },
         {
-          translate: 'global_menu_edit_delete_desktop',
+          translate: 'delete',
           role: 'delete'
         },
         {
-          translate: 'global_menu_edit_selectall_desktop',
+          translate: 'menu_select_all',
           role: 'selectall'
         }
       ]
@@ -115,6 +115,10 @@ function getMenuTemplate (logHandler) {
           translate: 'global_menu_view_floatontop_desktop',
           type: 'checkbox',
           click: () => windows.main.toggleAlwaysOnTop()
+        },
+        {
+          translate: 'global_menu_preferences_language_desktop',
+          submenu: getAvailableLanguages()
         },
         {
           type: 'separator'
@@ -138,15 +142,6 @@ function getMenuTemplate (logHandler) {
               click: () => shell.openItem(logHandler.logFilePath())
             }
           ]
-        }
-      ]
-    },
-    {
-      translate: 'global_menu_preferences_desktop',
-      submenu: [
-        {
-          translate: 'global_menu_preferences_language_desktop',
-          submenu: getAvailableLanguages()
         }
       ]
     },

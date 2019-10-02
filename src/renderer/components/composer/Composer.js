@@ -83,7 +83,7 @@ const Composer = React.forwardRef((props, ref) => {
           <Button minimal
             icon='paperclip'
             onClick={addFilename.bind(this)}
-            aria-label={tx('a11y_attachment_btn_label')} />
+            aria-label={tx('attachment')} />
         </div>}
         <SettingsContext.Consumer>
           {({ enterKeySends }) => (
@@ -97,14 +97,14 @@ const Composer = React.forwardRef((props, ref) => {
             />
           )}
         </SettingsContext.Consumer>
-        <div className='composer__emoji-button' ref={pickerButtonRef} onClick={onEmojiIconClick} aria-label={tx('a11y_emoji_btn_label')}>
+        <div className='composer__emoji-button' ref={pickerButtonRef} onClick={onEmojiIconClick} aria-label={tx('emoji')}>
           <span />
         </div>
         { showEmojiPicker &&
           <EmojiAndStickerPicker chatId={chatId} ref={emojiAndStickerRef} onEmojiSelect={onEmojiSelect} setShowEmojiPicker={setShowEmojiPicker} />
         }
         <div className='composer__send-button-wrapper' onClick={sendMessage}>
-          <button aria-label={tx('a11y_send_btn_label')} />
+          <button aria-label={tx('menu_send')} />
         </div>
       </div>
     )
