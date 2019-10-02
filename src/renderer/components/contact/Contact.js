@@ -9,7 +9,7 @@ export function convertContactProps (contact) {
     email: contact.address,
     avatarPath: contact.profileImage,
     profileName: contact.displayName,
-    isMe: contact.id === DCConstants.DC_CONTACT_ID_SELF,
+    isMe: contact.id === C.DC_CONTACT_ID_SELF,
     verified: contact.isVerified
   }
 }
@@ -28,7 +28,6 @@ export function RenderContact (props) {
 
   return (<ContactListItem {...outgoingProps} />)
 }
-
 
 export function renderAvatar (avatarPath, color, displayName) {
   return (
