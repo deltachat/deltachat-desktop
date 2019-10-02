@@ -81,7 +81,7 @@ function onReady (err, results) {
   if (rc.debug) windows.main.toggleDevTools()
 
   if (app.rc['translation-watch']) {
-    fs.watchFile('_locales/_experimental_en.json', (curr, prev) => {
+    fs.watchFile('_locales/_untranslated_en.json', (curr, prev) => {
       if (curr.mtime !== prev.mtime) {
         log.info('translation-watch: File changed reloading translation data')
         windows.main.chooseLanguage(app.localeData.locale)
