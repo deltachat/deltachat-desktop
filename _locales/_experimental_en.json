@@ -1,6 +1,6 @@
 {
-  "login_instruction_desktop": {
-    "message": "Login with an existing e-mail account (use your e-mail credentials here)"
+  "login_explain": {
+    "message": "Login with an existing e-mail account."
   },
   "update": {
     "message": "Update"
@@ -23,14 +23,11 @@
   "pref_background_default_color": {
     "message": "Default color"
   },
-  "pref_background_custom": {
+  "pref_background_custom_image": {
     "message": "Custom image"
   },
   "pref_background_custom_color": {
     "message": "Custom color"
-  },
-  "copy_selected_text": {
-    "message": "Copy selected text"
   },
   "retry_send": {
     "message": "Retry to send message"
@@ -38,13 +35,10 @@
   "send_failed": {
     "message": "Sending message failed"
   },
-  "a11y_send_btn_label": {
-    "message": "Send"
-  },
-  "a11y_emoji_btn_label": {
+  "emoji": {
     "message": "Emoji"
   },
-  "a11y_attachment_btn_label": {
+  "attachment": {
     "message": "Attachment"
   },
   "a11y_encryption_padlock": {
@@ -65,31 +59,31 @@
   "a11y_delivery_status_read":{
     "message": "Delivery status: Read"
   },
-  "a11y_delivery_status_":{
+  "a11y_delivery_status_invalid":{
     "message": "Invalid delivery status"
   },
-  "a11y_back_btn_label": {
+  "back": {
     "message": "Back"
   },
-  "a11y_close_btn_label": {
+  "close": {
     "message": "Close"
   },
-  "a11y_save_btn_label": {
+  "save": {
     "message": "Save"
+  },
+  "chat": {
+    "message": "Chat"
+  },
+  "media": {
+    "message": "Media"
   },
   "a11y_remove_account_btn_label": {
     "message": "Remove account"
   },
-  "a11y_goto_media_label": {
-    "message": "Go to gallery"
-  },
   "a11y_goto_chat_label": {
     "message": "Go to chat"
   },
-  "a11y_map_btn_label": {
-    "message": "Map"
-  },
-  "a11y_main_menu_label": {
+  "main_menu": {
     "message": "Main menu"
   },
   "a11y_message_context_menu_btn_label": {

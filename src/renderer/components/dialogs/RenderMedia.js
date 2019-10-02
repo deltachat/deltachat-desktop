@@ -79,7 +79,7 @@ class RenderMedia extends React.Component {
         <RenderMediaWrapper>
           {elm &&
             <CloseButtonWrapper>
-              <Icon onClick={onClose} icon='cross' iconSize={32} color={'grey'} aria-label={tx('a11y_close_btn_label')} />
+              <Icon onClick={onClose} icon='cross' iconSize={32} color={'grey'} aria-label={tx('close')} />
             </CloseButtonWrapper>
           }
           <Container>
@@ -89,7 +89,7 @@ class RenderMedia extends React.Component {
             <div role='button'
               onClick={message.onDownload}
               className='module-message__buttons__download module-message__buttons__download--outgoing icon-medium'
-              aria-label={tx('a11y_save_btn_label')} />
+              aria-label={tx('save')} />
           </DownloadButtonWrapper>
         </RenderMediaWrapper>
       </Overlay>

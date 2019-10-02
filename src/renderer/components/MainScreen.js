@@ -132,7 +132,7 @@ class MainScreen extends React.Component {
                 <Button
                   className={[Classes.MINIMAL, 'icon-rotated']}
                   icon='undo' onClick={this.onHideArchivedChats}
-                  aria-label={tx('a11y_back_btn_label')} />
+                  aria-label={tx('back')} />
               ) }
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -144,18 +144,18 @@ class MainScreen extends React.Component {
                 onClick={() => this.setState({ media: !this.state.media })}
                 minimal
                 icon={this.state.media ? 'chat' : 'media'}
-                aria-label={tx(`a11y_goto_${this.state.media ? 'chat' : 'media'}_label`)} />}
+                aria-label={tx(this.state.media ? 'chat' : 'media')} />}
               {selectedChat &&
 
               <SettingsContext.Consumer>
                 {({ enableOnDemandLocationStreaming }) => (
                   enableOnDemandLocationStreaming &&
-                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('a11y_map_btn_label')} />
+                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
                 )}
               </SettingsContext.Consumer>
               }
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('a11y_main_menu_label')} />
+                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
               </Popover>
             </NavbarGroup>
           </Navbar>
