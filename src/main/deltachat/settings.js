@@ -1,5 +1,5 @@
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/settings')
+const log = require('../../logger').getLogger('main/deltachat/settings', true)
 
 function setConfig (key, value) {
   log.info(`Setting config ${key}:${value}`)

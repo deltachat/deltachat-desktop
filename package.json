@@ -82,7 +82,8 @@
     "simple-markdown": "^0.4.4",
     "styled-components": "^4.3.2",
     "tempy": "^0.3.0",
-    "use-debounce": "^3.0.1"
+    "use-debounce": "^3.0.1",
+    "colors": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -91,7 +92,6 @@
     "@types/mapbox-gl": "^0.54.2",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "colors": "^1.3.3",
     "cp-file": "^7.0.0",
     "depcheck": "^0.8.3",
     "electron": "^4.2.9",

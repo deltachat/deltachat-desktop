@@ -1,5 +1,5 @@
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/chatlist')
+const log = require('../../logger').getLogger('main/deltachat/chatlist', true)
 const { app } = require('electron')
 
 function selectChat (chatId) {

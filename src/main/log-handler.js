@@ -15,7 +15,7 @@ function logName () {
     `${pad(d.getHours())}-`,
     `${pad(d.getMinutes())}-`,
     `${pad(d.getSeconds())}`,
-    '.log'
+    '.log.tsv'
   ].join('')
   return path.join(dir, fileName)
 }

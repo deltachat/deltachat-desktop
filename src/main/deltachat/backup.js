@@ -6,7 +6,7 @@ const fs = require('fs-extra')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
-const log = require('../../logger').getLogger('main/deltachat/backup')
+const log = require('../../logger').getLogger('main/deltachat/backup', true)
 
 function backupExport (dir) {
   this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)

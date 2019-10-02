@@ -11,7 +11,7 @@ const { getConfigPath } = require('../application-constants')
 const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
-const log = require('../logger').getLogger('main/ipc')
+const log = require('../logger').getLogger('main/ipc', true)
 const DeltaChat = (() => {
   try {
     return require('./deltachat/index.js')
