@@ -59,6 +59,11 @@ class DeltaChatController extends EventEmitter {
   sendToRenderer (eventType, payload) {
     log.debug('sendToRenderer: ' + eventType)
     windows.main.send('ALL', eventType, payload)
+    if (!eventType) {
+      log.error('Tried to send an undefined event to the renderer.\n' +
+      'This is not allowed and will normaly produce a crash of electron')
+      return
+    }
     windows.main.send(eventType, payload)
   }
 
