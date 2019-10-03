@@ -19,7 +19,7 @@ export const StickerDiv = props => {
         { stickerPackImages.map((filePath, index) => {
           return (
             <div className='emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker' key={index}>
-              <img src={filePath} onClick={onClickSticker.bind(this, filePath)}/>
+              <img src={filePath} onClick={onClickSticker.bind(this, filePath)} />
             </div>
           )
         })}
