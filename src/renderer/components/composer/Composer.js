@@ -54,13 +54,12 @@ const Composer = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     console.log('showEmojiPicker', showEmojiPicker)
-    if(!showEmojiPicker) return
-    const onClick = e => {
-      if(!emojiAndStickerRef.current) return
-      const {clientX, clientY} = event
+    if (!showEmojiPicker) return
+    const onClick = ({ clientX, clientY }) => {
+      if (!emojiAndStickerRef.current) return
       const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
       const clickIsOutSideEmojiPicker = !insideBoundingRect(clientX, clientY, boundingRect, 2)
-      if(clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
+      if (clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
     }
 
     document.addEventListener('click', onClick)

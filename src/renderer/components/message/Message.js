@@ -335,7 +335,7 @@ class Message extends React.Component {
         className={classNames(
           'module-message',
           `module-message--${direction}`,
-          {'module-message--sticker': viewType === 23}
+          { 'module-message--sticker': viewType === 23 }
         )}
       >
         {this.renderAvatar()}

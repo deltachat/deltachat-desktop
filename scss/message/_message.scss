@@ -663,10 +663,11 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
         margin-bottom: 20px;
     }
     .module-message__metadata {
-        margin-top: 10px;
-        margin-bottom: -7px;
         float: right;
         padding: 3px 10px 0px 10px;
+        margin-top: 10px;
+        margin-bottom: -7px;
+        margin-right: -15px;
         background-color: #d3d3d38c;
         border-radius: 4px;
         color: black;
