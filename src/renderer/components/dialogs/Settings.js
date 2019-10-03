@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
-import { DeltaText } from '../Login-Styles'
 import {
   Elevation,
   H5,
@@ -13,8 +12,7 @@ import {
   Switch,
   Label,
   RadioGroup,
-  Radio,
-  Callout
+  Radio
 } from '@blueprintjs/core'
 
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from './DeltaDialog'
@@ -267,7 +265,7 @@ export default class Settings extends React.Component {
               <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
               <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
             </RadioGroup>
-            <br/>
+            <br />
             <H5>{this.translate('pref_privacy')}</H5>
             { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
           </Card>
@@ -282,8 +280,8 @@ export default class Settings extends React.Component {
             <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
               {this.translate('autocrypt_send_asm_button')}
             </Button>
-            <br/>
-            <p style={{marginTop:'10px'}}>{this.translate('autocrypt_explain')}</p>
+            <br />
+            <p style={{ marginTop: '10px' }}>{this.translate('autocrypt_explain')}</p>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
