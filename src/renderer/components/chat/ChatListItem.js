@@ -135,7 +135,6 @@ const ChatListItemNormal = React.memo(props => {
 
 const ChatListItemDeaddrop = React.memo(props => {
   const { chatListItem } = props
-  console.log('xxx', chatListItem)
   const { openDialog } = useContext(ScreenContext)
   const onClick = () => openDialog('DeadDrop', { deaddrop: chatListItem.deaddrop })
   const tx = window.translate

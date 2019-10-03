@@ -3,7 +3,6 @@ import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
-
 import {
   Elevation,
   H5,
@@ -13,8 +12,7 @@ import {
   Switch,
   Label,
   RadioGroup,
-  Radio,
-  Callout
+  Radio
 } from '@blueprintjs/core'
 
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from './DeltaDialog'
@@ -248,46 +246,16 @@ export default class Settings extends React.Component {
       return (
         <div>
           <Card elevation={Elevation.ONE}>
-            <H5>{deltachat.credentials.addr}</H5>
+            <H5>{this.translate('pref_profile_info_headline')}</H5>
+            <p>{deltachat.credentials.addr}</p>
+            { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
+            { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
             <Button onClick={() => this.setState({ show: 'login' })}>
               {this.translate('pref_password_and_account_settings')}
             </Button>
           </Card>
           <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_chats_and_media')}</H5>
-            <Callout>{this.translate('pref_enter_sends_explain')}</Callout>
-            <br />
-            { this.renderDTSettingSwitch('enterKeySends', this.translate('pref_enter_sends')) }
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('autocrypt')}</H5>
-            <Callout>{this.translate('autocrypt_explain')}</Callout>
-            <br />
-            { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
-            <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
-              {this.translate('autocrypt_send_asm_button')}
-            </Button>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_backup')}</H5>
-            <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_managekeys_menu_title')}</H5>
-            <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
-            <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_privacy')}</H5>
-            { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_profile_info_headline')}</H5>
-            { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
-            { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_email_interaction_title')}</H5>
+            <H5>{this.translate('pref_communication')}</H5>
             <RadioGroup
               label={this.translate('pref_show_emails')}
               onChange={(ev) => this.handleDeltaSettingsChange('show_emails', ev.target.value)}
@@ -297,10 +265,29 @@ export default class Settings extends React.Component {
               <Radio label={this.translate('pref_show_emails_accepted_contacts')} value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS} />
               <Radio label={this.translate('pref_show_emails_all')} value={C.DC_SHOW_EMAILS_ALL} />
             </RadioGroup>
+            <br />
+            <H5>{this.translate('pref_privacy')}</H5>
+            { this.renderDeltaSwitch('mdns_enabled', this.translate('pref_read_receipts')) }
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>
             <BackgroundSelector onChange={(val) => this.handleDesktopSettingsChange('chatViewBgImg', val)} />
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('autocrypt')}</H5>
+            <br />
+            { this.renderDeltaSwitch('e2ee_enabled', this.translate('autocrypt_prefer_e2ee'))}
+            <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
+              {this.translate('autocrypt_send_asm_button')}
+            </Button>
+            <br />
+            <p style={{ marginTop: '10px' }}>{this.translate('autocrypt_explain')}</p>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_chats_and_media')}</H5>
+            <br />
+            { this.renderDTSettingSwitch('enterKeySends', this.translate('pref_enter_sends')) }
+            <p>{this.translate('pref_enter_sends_explain')}</p>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_experimental_features')}</H5>
@@ -311,6 +298,15 @@ export default class Settings extends React.Component {
             { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
             { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
             { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_managekeys_menu_title')}</H5>
+            <Button onClick={this.onKeysExport}>{this.translate('pref_managekeys_export_secret_keys')}...</Button>
+            <Button onClick={this.onKeysImport}>{this.translate('pref_managekeys_import_secret_keys')}...</Button>
+          </Card>
+          <Card elevation={Elevation.ONE}>
+            <H5>{this.translate('pref_backup')}</H5>
+            <Button onClick={this.onBackupExport}>{this.translate('pref_backup_export_start_button')}</Button>
           </Card>
         </div>
       )
