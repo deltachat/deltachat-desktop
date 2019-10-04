@@ -206,15 +206,3 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
     background-color: #bbb;
   } 
 }
-/* Message Status */
-$color-chat-list-item__message__status-icon--delivered: var(--messageStatusIcon);
-$color-chat-list-item__message__status-icon--read: var(--messageStatusIcon);
-$color-chat-list-item__message__status-icon--error: var(--errorColor);
-$color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSending);
-
-@keyframes _chat-list-item__message__status-icon--spinning {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
