@@ -5,8 +5,8 @@ const ScreenContext = require('../contexts/ScreenContext')
 
 const Media = require('./Media')
 const Menu = require('./Menu').default
-const ChatList = require('./ChatList').default
-const ChatView = require('./ChatView').default
+const ChatList = require('./chat/ChatList').default
+const MessageList = require('./message/MessageList').default
 const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
@@ -43,7 +43,7 @@ const Welcome = styled.div`
   text-align: center;
 `
 
-class SplittedChatListAndView extends React.Component {
+class MainScreen extends React.Component {
   constructor (props) {
     super(props)
 
@@ -132,7 +132,7 @@ class SplittedChatListAndView extends React.Component {
                 <Button
                   className={[Classes.MINIMAL, 'icon-rotated']}
                   icon='undo' onClick={this.onHideArchivedChats}
-                  aria-label={tx('a11y_back_btn_label')} />
+                  aria-label={tx('back')} />
               ) }
             </NavbarGroup>
             <NavbarGroup align={Alignment.RIGHT}>
@@ -144,18 +144,18 @@ class SplittedChatListAndView extends React.Component {
                 onClick={() => this.setState({ media: !this.state.media })}
                 minimal
                 icon={this.state.media ? 'chat' : 'media'}
-                aria-label={tx(`a11y_goto_${this.state.media ? 'chat' : 'media'}_label`)} />}
+                aria-label={tx(this.state.media ? 'chat' : 'media')} />}
               {selectedChat &&
 
               <SettingsContext.Consumer>
                 {({ enableOnDemandLocationStreaming }) => (
                   enableOnDemandLocationStreaming &&
-                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('a11y_map_btn_label')} />
+                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
                 )}
               </SettingsContext.Consumer>
               }
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('a11y_main_menu_label')} />
+                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
               </Popover>
             </NavbarGroup>
           </Navbar>
@@ -174,7 +174,7 @@ class SplittedChatListAndView extends React.Component {
                 ? this.state.media ? <Media
                   chat={selectedChat}
                 />
-                  : (<ChatView
+                  : (<MessageList
                     chat={selectedChat}
                     openDialog={this.context.openDialog}
                   />)
@@ -197,6 +197,6 @@ class SplittedChatListAndView extends React.Component {
   }
 }
 
-SplittedChatListAndView.contextType = ScreenContext
+MainScreen.contextType = ScreenContext
 
-module.exports = SplittedChatListAndView
+module.exports = MainScreen

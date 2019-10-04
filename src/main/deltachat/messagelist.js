@@ -12,6 +12,13 @@ function sendMessage (chatId, text, filename, location) {
   this._dc.sendMessage(chatId, msg)
 }
 
+function sendSticker (chatId, stickerPath) {
+  const viewType = 23
+  const msg = this._dc.messageNew(viewType)
+  msg.setFile(stickerPath)
+  this._dc.sendMessage(chatId, msg)
+}
+
 function deleteMessage (id) {
   log.info(`deleting message ${id}`)
   this._dc.deleteMessages(id)
@@ -72,6 +79,7 @@ function messageIdToJson (id) {
   const filemime = msg.getFilemime()
   const filename = msg.getFilename()
   const filesize = msg.getFilebytes()
+  const viewType = msg.getViewType()
   const fromId = msg.getFromId()
   const isMe = fromId === C.DC_CONTACT_ID_SELF
   const setupCodeBegin = msg.getSetupcodebegin()
@@ -85,6 +93,7 @@ function messageIdToJson (id) {
     filemime,
     filename,
     filesize,
+    viewType,
     fromId,
     isMe,
     contact,
@@ -115,6 +124,7 @@ module.exports = function () {
   this.getMessage = getMessage.bind(this)
   this.getMessageInfo = getMessageInfo.bind(this)
   this.sendMessage = sendMessage.bind(this)
+  this.sendSticker = sendSticker.bind(this)
   this.deleteMessage = deleteMessage.bind(this)
   this.setDraft = setDraft.bind(this)
   this._messagesToRender = _messagesToRender.bind(this)

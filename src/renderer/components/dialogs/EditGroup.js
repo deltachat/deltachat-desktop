@@ -3,10 +3,10 @@ import { callDcMethodAsync } from '../../ipc'
 import C from 'deltachat-node/constants'
 import differ from 'array-differ'
 import { Card, Classes } from '@blueprintjs/core'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogFooter } from '../helpers/DeltaDialog'
-import { DeltaButtonPrimary } from '../helpers/SmallDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogFooter } from './DeltaDialog'
+import { DeltaButtonPrimary } from './SmallDialog'
 import { useGroupImage, useContactSearch, GroupSettingsSetNameAndProfileImage, AddMemberInnerDialog, ShowQrCodeInnerDialog } from './CreateChat'
-import { useContacts, ContactList2 } from '../helpers/ContactList'
+import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItemNoSearchResults,
   PseudoListItemShowQrCode,

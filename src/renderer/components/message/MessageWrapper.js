@@ -2,13 +2,13 @@ const React = require('react')
 const path = require('path')
 const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
-const Message = require('./conversations/Message')
+const Message = require('./Message')
 const { remote, ipcRenderer } = require('electron')
 const moment = require('moment')
 const mime = require('mime-types')
 const filesizeConverter = require('filesize')
-const log = require('../../logger').getLogger('renderer/messageWrapper')
-const chatStore = require('../stores/chat')
+const log = require('../../../logger').getLogger('renderer/messageWrapper')
+const chatStore = require('../../stores/chat')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -186,7 +186,8 @@ class RenderMessage extends React.Component {
       status: msg.status,
       text: msg.text,
       direction: msg.direction,
-      timestamp: msg.sentAt
+      timestamp: msg.sentAt,
+      viewType: msg.viewType
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment

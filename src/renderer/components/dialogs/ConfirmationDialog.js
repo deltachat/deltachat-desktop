@@ -1,7 +1,7 @@
 import React from 'react'
 import { remote } from 'electron'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from '../helpers/SmallDialog'
+import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 
 export function confirmationDialogLegacy (message, opts, cb) {
   if (!cb) cb = opts

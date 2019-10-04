@@ -5,7 +5,7 @@ import {
   ProgressBar,
   Classes
 } from '@blueprintjs/core'
-import DeltaDialog from '../helpers/DeltaDialog'
+import DeltaDialog from './DeltaDialog'
 
 export default class ImexProgress extends React.Component {
   constructor (props) {

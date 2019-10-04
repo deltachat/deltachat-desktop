@@ -5,7 +5,7 @@ const mimeTypes = require('mime-types')
 
 const {
   isImageTypeSupported, isVideoTypeSupported, MIME
-} = require('./conversations')
+} = require('../conversations')
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
@@ -180,6 +180,7 @@ function render (props) {
           className='module-message__img-attachment'
           height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
           src={attachment.url}
+          controls={1}
         />
         <div
           className={classNames(

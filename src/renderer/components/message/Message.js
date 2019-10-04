@@ -1,12 +1,12 @@
 const React = require('react')
 const classNames = require('classnames')
 
-const MessageBody = require('../MessageBody')
+const MessageBody = require('./MessageBody')
 const MessageMetaData = require('./MessageMetaData')
 
-const ContactName = require('./ContactName')
+const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const Attachment = require('../Attachment')
+const Attachment = require('./Attachment')
 
 class Message extends React.Component {
   constructor (props) {
@@ -173,7 +173,8 @@ class Message extends React.Component {
       direction,
       disableMenu,
       onDownload,
-      onReply
+      onReply,
+      viewType
     } = this.props
     const tx = window.translate
 
@@ -181,14 +182,14 @@ class Message extends React.Component {
       return null
     }
 
-    const downloadButton = attachment ? (
+    const downloadButton = attachment && viewType !== 23 ? (
       <div
         onClick={onDownload}
         role='button'
         className={classNames(
           'module-message__buttons__download'
         )}
-        aria-label={tx('a11y_save_btn_label')}
+        aria-label={tx('save')}
       />
     ) : null
 
@@ -258,7 +259,7 @@ class Message extends React.Component {
             navigator.clipboard.writeText(window.getSelection().toString())
           }}
         >
-          {tx('copy_selected_text')}
+          {tx('menu_copy_to_clipboard')}
         </MenuItem>
         {attachment ? (
           <MenuItem
@@ -318,7 +319,8 @@ class Message extends React.Component {
       authorAddress,
       direction,
       id,
-      timestamp
+      timestamp,
+      viewType
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -330,7 +332,8 @@ class Message extends React.Component {
         onContextMenu={this.showMenu}
         className={classNames(
           'module-message',
-          `module-message--${direction}`
+          `module-message--${direction}`,
+          { 'module-message--sticker': viewType === 23 }
         )}
       >
         {this.renderAvatar()}

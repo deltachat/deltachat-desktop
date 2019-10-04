@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from 'react'
-import ScreenContext from '../contexts/ScreenContext'
+import ScreenContext from '../../contexts/ScreenContext'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { Icon } from '@blueprintjs/core'
 import {
@@ -9,9 +9,9 @@ import {
   openBlockContactDialog,
   openEncryptionInfoDialog,
   openEditGroupDialog
-} from './helpers/ChatMethods'
+} from '../helpers/ChatMethods'
 
-import { callDcMethodAsync } from '../ipc'
+import { callDcMethodAsync } from '../../ipc'
 
 // const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
 

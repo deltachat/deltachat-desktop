@@ -119,7 +119,7 @@ export function ThemeDataBuilder (theme) {
     messageAuthor: '#ffffff',
     // Message Bubble - Attachments
     messageAttachmentIconExtentionColor: '#070c14', // Only changable with theme.raw
-    messageAttachmentIconBg: '#ffffff', // Only changable with theme.raw
+    messageAttachmentIconBg: 'transparent', // Only changable with theme.raw
     messageAttachmentFileInfo: theme.textPrimary,
     // Login Screen
     loginInputFocusColor: '#42A5F5',
@@ -162,9 +162,7 @@ export function ThemeDataBuilder (theme) {
     bp3SpinnerHead: '#42a5f5',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
-    emojiMartBorder: undefinedGuard(
-      theme.bgSecondary, c => changeContrast(c, 0.2)
-    ),
+    emojiMartBorder: '#ececec',
     emojiMartBg: theme.bgPrimary,
     emojiMartCategoryIcons: undefinedGuard(
       [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.4)

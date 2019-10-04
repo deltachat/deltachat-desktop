@@ -1,7 +1,7 @@
 const React = require('react')
 const styled = require('styled-components').default
 const debounce = require('debounce')
-const { callDcMethod } = require('../ipc')
+const { callDcMethod } = require('../../ipc')
 const MessageInputTextarea = styled.textarea`
   float: left;
   width: calc(100% - 120px);

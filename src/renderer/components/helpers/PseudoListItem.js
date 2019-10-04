@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { PseudoContact, AvatarBubble, QRAvatar } from './Contact'
-import { ContactListItemWrapper } from './ContactListItem'
+import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
+import { ContactListItemWrapper } from '../contact/ContactListItem'
 
 export function PseudoListItem (props) {
   const { id, cutoff, text, subText, onClick, avatar } = props
