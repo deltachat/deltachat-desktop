@@ -129,10 +129,16 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 .chat-list-item { 
   padding-right: 10px;
   padding-left: 10px;
-}
 
-.chat-list-item:hover {
-  background-color: var(--chatListItemBgHover);
+  .status-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
 }
 
 .chat-list-item--is-selected {
@@ -154,12 +160,6 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 
 .chat-list-item__header__name {
   width: 90%;
-}
-
-.chat-list-item__status-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-  margin-left: calc(100% - 90% - 12px);
 }
 
 .chat-list-item__message__text__summary {
@@ -217,44 +217,4 @@ $color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSen
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
-}
-
-.chat-list-item__message__status-icon {
-    width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
-    min-width: 18px; // this max-with is a workaround, to prevent shrinking
-    height: 12px;
-    display: inline-block;
-    margin-left: 2px;
-
-    &.sending {
-        @include color-svg('../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
-        animation: _chat-list-item__message__status-icon--spinning 4s
-            linear infinite;
-        width: 12px;
-        min-width: 12px;
-        margin-left: 8px; // ensure the element takes always the same width
-    }
-    
-    &.delivered {
-        @include color-svg('../images/sent.svg', $color-chat-list-item__message__status-icon--delivered);
-    }
-    
-    &.read {
-        @include color-svg('../images/read.svg', $color-chat-list-item__message__status-icon--read);
-    }
-    
-    &.error {
-        @include color-svg('../images/error.svg', $color-chat-list-item__message__status-icon--error);
-        width: 12px;
-        min-width: 12px;
-        margin-left: 8px; // ensure the element takes always the same width
-    }
-    
-    // &.draft {
-    //   @include color-svg('../images/lead-pencil.svg', lightgrey);
-    // }
-}
-
-.module-message__metadata > .chat-list-item__message__status-icon {
-    margin-bottom: 2px;
 }
