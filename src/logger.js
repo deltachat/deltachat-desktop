@@ -3,15 +3,22 @@ const { app, remote } = require('electron')
 const colors = require('colors/safe')
 const startTime = Date.now()
 
+const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
+
 const rc = remote ? remote.app.rc : app ? app.rc : {}
 
 const LoggerVariants = [
-  { log: console.debug, level: 'DEBUG' },
-  { log: console.info, level: 'INFO' },
-  { log: console.warn, level: 'WARNING' },
-  { log: console.error, level: 'ERROR' },
-  { log: console.error, level: 'CRITICAL' }
+  { log: console.debug, level: 'DEBUG', emoji: '🕸️' },
+  { log: console.info, level: 'INFO', emoji: 'ℹ️' },
+  { log: console.warn, level: 'WARNING', emoji: '⚠️' },
+  { log: console.error, level: 'ERROR', emoji: '🚨' },
+  { log: console.error, level: 'CRITICAL', emoji: '🚨🚨' }
 ]
+
+function printProcessLogLevelInfo () {
+  /* ignore-console-log */
+  console.info(`%cLogging Levels:\n${LoggerVariants.map((v) => `${v.emoji} ${v.level}`).join('\n')}`, emojiFontCss)
+}
 
 let handler
 
@@ -46,10 +53,13 @@ function log ({ channel, isMainProcess }, level, stacktrace, args) {
         console.log(begining, ...args, colors.red(stacktrace))
       }
     } else {
+      const prefix = `%c${variant.emoji}%c${channel}`
+      const prefixStyle = [emojiFontCss, 'color:blueviolet;']
+
       if (stacktrace) {
-        variant.log(channel, variant.level, stacktrace, ...args)
+        variant.log(prefix, ...prefixStyle, stacktrace, ...args)
       } else {
-        variant.log(channel, variant.level, ...args)
+        variant.log(prefix, ...prefixStyle, ...args)
       }
     }
   }
@@ -93,4 +103,4 @@ function getLogger (channel, isMainProcess = false) {
   return new Logger(channel, isMainProcess)
 }
 
-module.exports = { setLogHandler, Logger, getLogger }
+module.exports = { setLogHandler, Logger, getLogger, printProcessLogLevelInfo }
