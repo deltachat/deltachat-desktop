@@ -73,18 +73,6 @@ const MessageWrapper = styled.div`
     box-shadow: unset;
   }
 
-  .module-message__metadata__date {
-    color: ${props => props.theme.messageOutgoingStatusColor};
-  }
-
-  .status-icon.read, .status-icon.delivered {
-    background-color: ${props => props.theme.messageOutgoingStatusColor};
-  }
-
-  .module-message__buttons__reply {
-    display: none;
-  }
-
   .module-message__generic-attachment__icon__extension{
     font-family: monospace;
   }

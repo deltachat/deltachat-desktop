@@ -42,12 +42,33 @@ $color-message-icon-error: var(--errorColor);
 .module-message--incoming {
     margin-left: 0;
     margin-right: 32px;
+    
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
+    }
+
+    .module-message__metadata__date {
+        color: $color-message-metadata-date-incomming;
+    }
 }
 .module-message--outgoing {
     float: right;
     margin-right: 0;
     margin-left: 32px;
+
+    .module-message__metadata__date {
+        color: var(--messageOutgoingStatusColor);
+    }
+
+    .status-icon.read, .status-icon.delivered {
+        background-color: var(--messageOutgoingStatusColor);
+    }
+
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
+    }
 }
+
 
 .module-message__buttons {
     position: absolute;
@@ -105,24 +126,27 @@ $color-message-icon-error: var(--errorColor);
 }
 
 
-
 .module-message__buttons__reply {
-    height: 24px;
-    width: 24px;
-    display: inline-block;
-    cursor: pointer;
-    @include color-svg('../images/reply.svg', $color-message-button-reply);
-    &:hover {
-        @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
-    }
+    display: none;
 }
 
-.module-message__buttons__reply--incoming {
-    margin-left: 12px;
-}
-.module-message__buttons__reply--outgoing {
-    margin-right: 12px;
-}
+// .module-message__buttons__reply {
+//     height: 24px;
+//     width: 24px;
+//     display: inline-block;
+//     cursor: pointer;
+//     @include color-svg('../images/reply.svg', $color-message-button-reply);
+//     &:hover {
+//         @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
+//     }
+// }
+
+// .module-message__buttons__reply--incoming {
+//     margin-left: 12px;
+// }
+// .module-message__buttons__reply--outgoing {
+//     margin-right: 12px;
+// }
 
 .module-message__buttons__menu {
     height: 24px;
@@ -463,15 +487,13 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__metadata__date {
-    font-size: 11px;
+    font-size: 11.5px;
     line-height: 16px;
     letter-spacing: 0.3px;
     color: $color-message-metadata-date;
     text-transform: uppercase;
 }
-.module-message__metadata__date--incoming {
-    color: $color-message-metadata-date-incomming;
-}
+
 .module-message__metadata__date--with-image-no-caption {
     color: $color-message-metadata-image-no-caption;
 }
@@ -486,14 +508,6 @@ $color-message-icon-error: var(--errorColor);
     display: inline-block;
     margin-right: 2px;
     margin-bottom: 3px;
-}
-
-.module-message__metadata__padlock-icon--incoming {
-    @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
-}
-
-.module-message__metadata__padlock-icon--outgoing {
-    @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
 }
 
 .module-message__author-avatar {
@@ -635,11 +649,17 @@ $color-message-icon-error: var(--errorColor);
         font-weight: bold;
     }
     .module-message__metadata__date {
-        color: white !important;
+        font-size: 11px;
+        color: white;
     }
-    .status-icon--read, .status-icon--delivered {
-        background-color: white !important;
+        
+    .status-icon.read, .status-icon.delivered {
+        background-color: white;
     } 
+
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', white, 125%);
+    }
 }
 
 .module-message--sticker .module-message__container.module-message__container--outgoing, .module-message--sticker .module-message__container.module-message__container--incoming {

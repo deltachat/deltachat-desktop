@@ -43,17 +43,13 @@ class MessageMetaData extends React.Component {
         {padlock === true && status !== 'error' ? (
           <div
             aria-label={tx('a11y_encryption_padlock')}
-            className={classNames(
-              'module-message__metadata__padlock-icon',
-              `module-message__metadata__padlock-icon--${direction}`
-            )}
+            className={'module-message__metadata__padlock-icon'}
           />
         ) : null}
         {showError ? (
           <span
             className={classNames(
               'module-message__metadata__date',
-              `module-message__metadata__date--${direction}`,
               withImageNoCaption
                 ? 'module-message__metadata__date--with-image-no-caption'
                 : null
