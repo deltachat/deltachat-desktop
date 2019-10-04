@@ -1,6 +1,7 @@
 $esp-height: 70vh;
 $esp-header-height: 40px;
 $esp-footer-height: 30px;
+$emojimart-search-height: 31px + 6px;
 
 .emoji-sticker-picker {
   position: fixed;
@@ -146,10 +147,6 @@ $esp-footer-height: 30px;
   color: grey;
 }
 
-.emoji-mart-search {
-  display: none;
-}
-
 .emoji-mart-search input::placeholder {
   color: var(--emojiMartInputPlaceholder);
 }
@@ -192,20 +189,6 @@ $esp-footer-height: 30px;
 }
 
 .emoji-mart-scroll {
-  height: 100%;
+  height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} - #{$emojimart-search-height});
   padding: 0 6px;
-}
-
-@media only screen and (max-height: 530px) {
-  .emoji-mart-scroll {
-    height: 100%;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  // width: 272px;
-
-  .emoji-mart-title-label {
-    font-size: 20px;
-  }
 }
