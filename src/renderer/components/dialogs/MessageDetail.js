@@ -34,6 +34,7 @@ class MessageInfo extends React.Component {
     return (
       <div className='module-message-detail__delete-button-container'>
         <button
+          style={{ userSelect: 'none' }}
           onClick={message.onDelete}
           className='module-message-detail__delete-button'
         >
@@ -50,7 +51,7 @@ class MessageInfo extends React.Component {
     return (
       <div className='module-message-detail'>
         <Callout>
-          <p style={{ userSelect: 'text' }}>{this.state.content}</p>
+          <p>{this.state.content}</p>
         </Callout>
         <table className='module-message-detail__info'>
           <tbody>
