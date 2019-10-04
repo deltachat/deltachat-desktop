@@ -15,6 +15,7 @@
   height: calc(70vh - 40px - 30px + 1px);
   margin-top: -1px;
   overflow: overlay;
+
   img {
     max-width: 300px;
     height: auto;
@@ -37,9 +38,11 @@
   border-bottom-width: 4px;
   border-bottom-color: transparent;
   color: grey;
+
   &:last-child {
     float: right;
   }
+
   &:hover {
     cursor: pointer;
   }
@@ -82,7 +85,8 @@
   justify-content: space-between;
   margin: 5px 0px;
 }
-.emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker { 
+
+.emoji-sticker-picker__sticker-picker__inner__sticker-pack-container__sticker {
   display: flex;
   justify-content: center;
   width: 133px;
@@ -90,13 +94,114 @@
   margin: 5px 0px;
   padding: 3px;
   border-radius: 4px;
+
   &:hover {
     background-color: lightgrey;
     cursor: pointer;
   }
+
   img {
     max-height: calc(133px - 6px);
     max-width: calc(133px - 6px);
     object-fit: contain;
+  }
+}
+
+
+// Emojimart overwrites
+.emoji-mart-category-list>li {
+  min-width: initial;
+}
+
+.emoji-mart {
+  color: var(--emojiMartText);
+  border: none;
+  background: var(--emojiMartBg);
+}
+
+.emoji-mart-anchors svg,
+.emoji-mart-anchors img {
+  fill: var(--emojiMartCategoryIcons);
+}
+
+.emoji-mart-bar {
+  position: absolute;
+  height: 30px;
+  width: 438px;
+  top: calc(70vh - 40px + 13px);
+  border-top: 0 solid var(--emojiMartBorder);
+}
+
+.emoji-mart-bar:first-child {
+  border-bottom-width: 0px;
+}
+
+.emoji-mart-category-label span {
+  /* disable? -> no its important when scrolling */
+  background-color: var(--emojiMartBg);
+  color: grey;
+}
+
+.emoji-mart-search {
+  display: none;
+}
+
+.emoji-mart-search input::placeholder {
+  color: var(--emojiMartInputPlaceholder);
+}
+
+.emoji-mart-search-icon {
+  display: none;
+}
+
+// select background circle
+.emoji-mart-category .emoji-mart-emoji:hover:before {
+  background-color: var(--emojiMartSelect);
+  border-radius: 4px;
+}
+
+.emoji-mart-category-label {
+  position: relative !important;
+}
+
+.emoji-mart-emoji-native,
+.emoji-mart {
+  font-family: inherit
+}
+
+.emoji-mart-category .emoji-mart-emoji span {
+  height: auto !important;
+  width: auto !important;
+}
+
+.emoji-mart-anchor {
+  padding: 0px 4px;
+  padding-top: 4px;
+}
+
+.emoji-mart-anchor-selected .emoji-mart-anchor-bar {
+  display: none;
+}
+
+.emoji-mart-anchor-selected svg {
+  fill: var(--emojiSelectorSelectionColor);
+}
+
+.emoji-mart-scroll {
+  height: 100%;
+  padding: 0 6px;
+}
+
+@media only screen and (max-height: 530px) {
+  .emoji-mart-scroll {
+    height: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  // width: 272px;
+
+  .emoji-mart-title-label {
+    font-size: 20px;
   }
 }
