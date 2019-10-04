@@ -96,6 +96,7 @@
     "depcheck": "^0.8.3",
     "electron": "^4.2.9",
     "electron-builder": "^20.44.4",
+    "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^1.2.0",
