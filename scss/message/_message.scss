@@ -618,14 +618,6 @@ $color-msg-status-icon-read: var(--messageStatusIcon);
 $color-msg-status-icon-error: var(--errorColor);
 $color-msg-status-icon-sending: var(--messageStatusIconSending);
 
-.status-icon--sending {
-    @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
-    animation: __status-icon--spinning 4s
-    linear infinite;
-    width: 12px !important;
-    margin-left: 8px !important;
-}
-
 @keyframes __status-icon--spinning {
     100% {
         -webkit-transform: rotate(360deg);
@@ -633,29 +625,32 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
     }
 }
 
-.status-icon--delivered {
-    @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
-}
-
-.status-icon--read {
-    @include color-svg('../images/read.svg', $color-msg-status-icon-read);
-}
-
-.status-icon--error {
-    @include color-svg('../images/error.svg', $color-msg-status-icon-error);
-    width: 12px !important;
-    margin-left: 8px !important;
-}
-
-// .status-icon--draft {
-//   @include color-svg('../images/lead-pencil.svg', lightgrey);
-// }
-
 .status-icon {
     width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
     height: 12px;
     display: inline-block;
     margin-left: 2px;
+    
+    &.sending {
+        @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
+        animation: __status-icon--spinning 4s
+        linear infinite;
+        width: 12px;
+        margin-left: 8px;
+    }
+    &.delivered {
+        @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
+    }
+
+    &.read {
+        @include color-svg('../images/read.svg', $color-msg-status-icon-read);
+    }
+
+    &.error {
+        @include color-svg('../images/error.svg', $color-msg-status-icon-error);
+        width: 12px;
+        margin-left: 8px;
+    }
 }
 
 .module-message__metadata > .status-icon {

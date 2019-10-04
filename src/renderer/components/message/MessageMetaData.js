@@ -75,7 +75,7 @@ class MessageMetaData extends React.Component {
           <div
             className={classNames(
               'status-icon',
-              `status-icon--${status}`
+              status
             )}
             aria-label={tx(`a11y_delivery_status_${status}`)}
           />

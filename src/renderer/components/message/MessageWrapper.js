@@ -77,7 +77,7 @@ const MessageWrapper = styled.div`
     color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
-  .status-icon--read, .status-icon--delivered {
+  .status-icon.read, .status-icon.delivered {
     background-color: ${props => props.theme.messageOutgoingStatusColor};
   }
 
