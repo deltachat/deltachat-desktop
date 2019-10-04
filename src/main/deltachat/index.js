@@ -85,11 +85,13 @@ class DeltaChatController extends EventEmitter {
 
   registerEventHandler (dc) {
     dc.on('ALL', (event, ...args) => {
+      console.log('ALL', event, ...args)
       if (!isNaN(event)) {
         event = eventStrings[event]
       }
       this.logCoreEvent(event, ...args)
-      if (event === 'DC_EVENT_INFO') return
+      console.log(event)
+      if (!event || event === 'DC_EVENT_INFO') return
       this.sendToRenderer(event, ...args)
     })
 
