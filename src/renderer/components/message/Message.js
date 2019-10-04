@@ -327,8 +327,6 @@ class Message extends React.Component {
     //   It needs to be unique.
     const triggerId = String(id || `${authorAddress}-${timestamp}`)
 
-    console.log(viewType, this.props, viewType === 23)
-
     return (
       <div
         onContextMenu={this.showMenu}
