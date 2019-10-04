@@ -223,20 +223,24 @@ $color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSen
     @include color-svg('../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
     animation: _chat-list-item__message__status-icon--spinning 4s
         linear infinite;
+    width: 12px !important;
+    min-width: 12px !important;
+    margin-left: 8px !important; // ensure the element takes always the same width
 }
 
 .chat-list-item__message__status-icon--delivered {
     @include color-svg('../images/sent.svg', $color-chat-list-item__message__status-icon--delivered);
-    width: 18px;
 }
 
 .chat-list-item__message__status-icon--read {
     @include color-svg('../images/read.svg', $color-chat-list-item__message__status-icon--read);
-    width: 18px;
 }
 
 .chat-list-item__message__status-icon--error {
     @include color-svg('../images/error.svg', $color-chat-list-item__message__status-icon--error);
+    width: 12px !important;
+    min-width: 12px !important;
+    margin-left: 8px !important; // ensure the element takes always the same width
 }
 
 // .chat-list-item__message__status-icon--draft {
@@ -244,10 +248,11 @@ $color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSen
 // }
 
 .chat-list-item__message__status-icon {
-    width: 12px;
+    width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
+    min-width: 18px;
     height: 12px;
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 2px;
 }
 
 .module-message__metadata > .chat-list-item__message__status-icon {

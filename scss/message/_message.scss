@@ -622,6 +622,8 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
     @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
     animation: __status-icon--spinning 4s
     linear infinite;
+    width: 12px !important;
+    margin-left: 8px !important;
 }
 
 @keyframes __status-icon--spinning {
@@ -633,16 +635,16 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
 
 .status-icon--delivered {
     @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
-    width: 18px;
 }
 
 .status-icon--read {
     @include color-svg('../images/read.svg', $color-msg-status-icon-read);
-    width: 18px;
 }
 
 .status-icon--error {
     @include color-svg('../images/error.svg', $color-msg-status-icon-error);
+    width: 12px !important;
+    margin-left: 8px !important;
 }
 
 // .status-icon--draft {
@@ -650,10 +652,10 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
 // }
 
 .status-icon {
-    width: 12px;
+    width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
     height: 12px;
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 2px;
 }
 
 .module-message__metadata > .status-icon {
