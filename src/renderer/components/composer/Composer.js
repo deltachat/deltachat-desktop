@@ -53,7 +53,6 @@ const Composer = React.forwardRef((props, ref) => {
   }
 
   useEffect(() => {
-    console.log('showEmojiPicker', showEmojiPicker)
     if (!showEmojiPicker) return
     const onClick = ({ clientX, clientY }) => {
       if (!emojiAndStickerRef.current) return
@@ -63,7 +62,7 @@ const Composer = React.forwardRef((props, ref) => {
     }
 
     document.addEventListener('click', onClick)
-    return () => { console.log('unmount'); document.removeEventListener('click', onClick) }
+    return () => { document.removeEventListener('click', onClick) }
   }, [showEmojiPicker, emojiAndStickerRef])
 
   const tx = window.translate
