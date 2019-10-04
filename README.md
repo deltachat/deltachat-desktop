@@ -236,7 +236,8 @@ Running `npm test` does the following:
 - runs `standard` as code linter
 - runs the unit tests
 
-Running `npm run test-integaration` executes the integration tests.
+Running `npm run test-integration` executes the integration tests.
+Make sure you specify the enviroment variables `DC_ADDR` and `DC_MAIL_PW` before running the integration tests.
 
 The integration tests use `spectron` and `tape`. They click through the app, taking screenshots and comparing each one to a reference. Why screenshots?
 
