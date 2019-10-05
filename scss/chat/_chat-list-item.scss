@@ -129,10 +129,16 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 .chat-list-item { 
   padding-right: 10px;
   padding-left: 10px;
-}
 
-.chat-list-item:hover {
-  background-color: var(--chatListItemBgHover);
+  .status-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
 }
 
 .chat-list-item--is-selected {
@@ -154,12 +160,6 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 
 .chat-list-item__header__name {
   width: 90%;
-}
-
-.chat-list-item__status-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-  margin-left: calc(100% - 90% - 12px);
 }
 
 .chat-list-item__message__text__summary {
@@ -205,56 +205,4 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   &:hover {
     background-color: #bbb;
   } 
-}
-/* Message Status */
-$color-chat-list-item__message__status-icon--sent: var(--messageStatusIcon);
-$color-chat-list-item__message__status-icon--delivered: var(--messageStatusIcon);
-$color-chat-list-item__message__status-icon--read: var(--messageStatusIcon);
-$color-chat-list-item__message__status-icon--error: var(--errorColor);
-$color-chat-list-item__message__status-icon--sending: var(--messageStatusIconSending);
-
-@keyframes _chat-list-item__message__status-icon--spinning {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
-.chat-list-item__message__status-icon--sending {
-    @include color-svg('../images/sending.svg', $color-chat-list-item__message__status-icon--sending);
-    animation: _chat-list-item__message__status-icon--spinning 4s
-        linear infinite;
-}
-
-.chat-list-item__message__status-icon--sent {
-    @include color-svg('../images/check-circle-outline.svg', $color-chat-list-item__message__status-icon--sent);
-}
-
-.chat-list-item__message__status-icon--delivered {
-    @include color-svg('../images/sent.svg', $color-chat-list-item__message__status-icon--delivered);
-    width: 18px;
-}
-
-.chat-list-item__message__status-icon--read {
-    @include color-svg('../images/read.svg', $color-chat-list-item__message__status-icon--read);
-    width: 18px;
-}
-
-.chat-list-item__message__status-icon--error {
-    @include color-svg('../images/error.svg', $color-chat-list-item__message__status-icon--error);
-}
-
-// .chat-list-item__message__status-icon--draft {
-//   @include color-svg('../images/lead-pencil.svg', lightgrey);
-// }
-
-.chat-list-item__message__status-icon {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin-left: 6px;
-}
-
-.module-message__metadata > .chat-list-item__message__status-icon {
-    margin-bottom: 2px;
 }

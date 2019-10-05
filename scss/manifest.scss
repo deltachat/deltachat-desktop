@@ -31,8 +31,8 @@
 @import 'message/_message-detail';
 @import 'message/_message-list';
 @import 'message/_message';
+@import 'message/_status-icon';
 
 // Overwrites for third party node modules
 @import 'overwrites/_bp3-overwrites';
 @import 'overwrites/_react-context-menu-overwrites';
-@import 'overwrites/_emoji-mart-overwrites';

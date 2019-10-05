@@ -42,12 +42,33 @@ $color-message-icon-error: var(--errorColor);
 .module-message--incoming {
     margin-left: 0;
     margin-right: 32px;
+    
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
+    }
+
+    .module-message__metadata__date {
+        color: $color-message-metadata-date-incomming;
+    }
 }
 .module-message--outgoing {
     float: right;
     margin-right: 0;
     margin-left: 32px;
+
+    .module-message__metadata__date {
+        color: var(--messageOutgoingStatusColor);
+    }
+
+    .status-icon.read, .status-icon.delivered {
+        background-color: var(--messageOutgoingStatusColor);
+    }
+
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
+    }
 }
+
 
 .module-message__buttons {
     position: absolute;
@@ -62,6 +83,16 @@ $color-message-icon-error: var(--errorColor);
 
 .module-message:hover .module-message__buttons {
     opacity: 1;
+}
+
+.module-message.module-message--sticker:hover {
+    .module-message__buttons__menu {
+        background-color: white;
+    }
+    .react-contextmenu-wrapper {
+        background-color: #2525258f;
+        border-radius: 4px;
+    }
 }
 
 .module-message__buttons--incoming {
@@ -95,24 +126,27 @@ $color-message-icon-error: var(--errorColor);
 }
 
 
-
 .module-message__buttons__reply {
-    height: 24px;
-    width: 24px;
-    display: inline-block;
-    cursor: pointer;
-    @include color-svg('../images/reply.svg', $color-message-button-reply);
-    &:hover {
-        @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
-    }
+    display: none;
 }
 
-.module-message__buttons__reply--incoming {
-    margin-left: 12px;
-}
-.module-message__buttons__reply--outgoing {
-    margin-right: 12px;
-}
+// .module-message__buttons__reply {
+//     height: 24px;
+//     width: 24px;
+//     display: inline-block;
+//     cursor: pointer;
+//     @include color-svg('../images/reply.svg', $color-message-button-reply);
+//     &:hover {
+//         @include color-svg('../images/reply.svg', $color-message-button-reply-hover);
+//     }
+// }
+
+// .module-message__buttons__reply--incoming {
+//     margin-left: 12px;
+// }
+// .module-message__buttons__reply--outgoing {
+//     margin-right: 12px;
+// }
 
 .module-message__buttons__menu {
     height: 24px;
@@ -453,15 +487,13 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__metadata__date {
-    font-size: 11px;
+    font-size: 11.5px;
     line-height: 16px;
     letter-spacing: 0.3px;
     color: $color-message-metadata-date;
     text-transform: uppercase;
 }
-.module-message__metadata__date--incoming {
-    color: $color-message-metadata-date-incomming;
-}
+
 .module-message__metadata__date--with-image-no-caption {
     color: $color-message-metadata-image-no-caption;
 }
@@ -476,14 +508,6 @@ $color-message-icon-error: var(--errorColor);
     display: inline-block;
     margin-right: 2px;
     margin-bottom: 3px;
-}
-
-.module-message__metadata__padlock-icon--incoming {
-    @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
-}
-
-.module-message__metadata__padlock-icon--outgoing {
-    @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
 }
 
 .module-message__author-avatar {
@@ -602,55 +626,6 @@ $color-message-icon-error: var(--errorColor);
     }
 }
 
-/* Message Status */
-$color-msg-status-icon-sent: var(--messageStatusIcon);
-$color-msg-status-icon-delivered: var(--messageStatusIcon);
-$color-msg-status-icon-read: var(--messageStatusIcon);
-$color-msg-status-icon-error: var(--errorColor);
-$color-msg-status-icon-sending: var(--messageStatusIconSending);
-
-.status-icon--sending {
-    @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
-    animation: __status-icon--spinning 4s
-    linear infinite;
-}
-
-@keyframes __status-icon--spinning {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
-.status-icon--sent {
-    @include color-svg('../images/check-circle-outline.svg', $color-msg-status-icon-sent);
-}
-
-.status-icon--delivered {
-    @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
-    width: 18px;
-}
-
-.status-icon--read {
-    @include color-svg('../images/read.svg', $color-msg-status-icon-read);
-    width: 18px;
-}
-
-.status-icon--error {
-    @include color-svg('../images/error.svg', $color-msg-status-icon-error);
-}
-
-// .status-icon--draft {
-//   @include color-svg('../images/lead-pencil.svg', lightgrey);
-// }
-
-.status-icon {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin-left: 6px;
-}
-
 .module-message__metadata > .status-icon {
     margin-bottom: 2px;
 }
@@ -664,20 +639,27 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
     }
     .module-message__metadata {
         float: right;
-        padding: 3px 10px 0px 10px;
+        padding: 4px 10px 1px 10px;
         margin-top: 10px;
         margin-bottom: -7px;
         margin-right: -15px;
-        background-color: #d3d3d38c;
+        background-color: #01010159;
         border-radius: 4px;
         color: black;
+        font-weight: bold;
     }
     .module-message__metadata__date {
-        color: white !important;
+        font-size: 11px;
+        color: white;
     }
-    .status-icon--read, .status-icon--delivered {
-        background-color: white !important;
+        
+    .status-icon.read, .status-icon.delivered {
+        background-color: white;
     } 
+
+    .module-message__metadata__padlock-icon {
+        @include color-svg('../images/padlock.svg', white, 125%);
+    }
 }
 
 .module-message--sticker .module-message__container.module-message__container--outgoing, .module-message--sticker .module-message__container.module-message__container--incoming {

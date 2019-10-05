@@ -59,7 +59,7 @@ export const Message = React.memo(props => {
         }
         <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
       </div>
-      {summary.status && <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--' + summary.status} />}
+      {summary.status && <div className={classNames('status-icon', summary.status)} />}
       <FreshMessageCounter counter={freshMessageCounter} />
     </div>
   )
@@ -89,7 +89,7 @@ export const PlaceholderChatListItem = React.memo((props) => {
         <div className={classNames('chat-list-item__message__text', 'bone')}>
           test: message
         </div>
-        <div className={'chat-list-item__message__status-icon chat-list-item__message__status-icon--delivered'} />
+        <div className={classNames('status-icon', 'delivered')} />
       </div>
     </div>
   </div>
