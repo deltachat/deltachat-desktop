@@ -72,9 +72,9 @@ test('App loads language from config file', async (t) => {
   const app = setup.createAppWithConfig({ locale: 'de' })
   try {
     await setup.waitForLoad(app, t)
-    await app.client.waitUntilTextExists('h1', 'Willkommen zu Delta Chat', 20e3)
+    await app.client.waitUntilTextExists('h1', 'Willkommen bei Delta Chat', 20e3)
     const text = await app.client.getText('h1')
-    await t.equal(text, 'Willkommen zu Delta Chat', 'Localized welcome message is shown')
+    await t.equal(text, 'Willkommen bei Delta Chat', 'Localized welcome message is shown')
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
