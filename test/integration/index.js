@@ -9,7 +9,7 @@ test('app runs', async (t) => {
   const app = setup.createApp()
   await setup.waitForLoad(app, t)
   const text = await app.client.getText('.bp3-navbar-heading')
-  t.equal(text, 'Welcome to DeltaChat', 'App is loaded and welcome message is shown')
+  t.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
   setup.endTest(app, t)
 })
 
@@ -40,9 +40,9 @@ test('Valid mail credentials results in success message', async (t) => {
       .setValue('#mail_pw', testCredentials.mail_pw)
       .click('button[type=\'submit\']')
 
-    await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
+    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
     const text = await app.client.getText('h1')
-    t.equal(text, 'Welcome to DeltaChat', 'Login successful')
+    t.equal(text, 'Welcome to Delta Chat', 'Login successful')
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
@@ -56,9 +56,9 @@ test('App uses credentials from existing config file', async (t) => {
   const app = setup.createAppWithConfig({})
   try {
     await setup.waitForLoad(app, t)
-    await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
+    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
     const text = await app.client.getText('h1')
-    await t.equal(text, 'Welcome to DeltaChat', 'Welcome message is shown')
+    await t.equal(text, 'Welcome to Delta Chat', 'Welcome message is shown')
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
@@ -72,9 +72,9 @@ test('App loads language from config file', async (t) => {
   const app = setup.createAppWithConfig({ locale: 'de' })
   try {
     await setup.waitForLoad(app, t)
-    await app.client.waitUntilTextExists('h1', 'Willkommen zu Delta Chat', 20e3)
+    await app.client.waitUntilTextExists('h1', 'Willkommen bei Delta Chat', 20e3)
     const text = await app.client.getText('h1')
-    await t.equal(text, 'Willkommen zu Delta Chat', 'Localized welcome message is shown')
+    await t.equal(text, 'Willkommen bei Delta Chat', 'Localized welcome message is shown')
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
@@ -89,7 +89,7 @@ test('Update and persist Desktop settings', async (t) => {
   try {
     await setup.waitForLoad(app, t)
     domHelper.init(app)
-    await app.client.waitUntilTextExists('h1', 'Welcome to DeltaChat', 20e3)
+    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
     await domHelper.openSettings()
     let currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
     await t.equals(currentConfig['enterKeySends'], true, 'enterKeySends is true in config.json')
