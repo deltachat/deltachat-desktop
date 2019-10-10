@@ -138,7 +138,11 @@
         "AppImage",
         "deb"
       ],
-      "category": "Utility"
+      "category": "Network;Chat;InstantMessaging;",
+      "desktop": {
+        "comment": "Delta Chat email-based messenger",
+        "keywords": "dc;chat;delta;messaging;messenger;email"
+      }
     },
     "win": {
       "icon": "images/deltachat.ico"
