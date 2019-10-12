@@ -145,3 +145,23 @@ code {
   max-height: 60vh;
   height: auto;
 }
+
+
+
+.user-feedback {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  padding: 10px;
+  z-index: 30;
+  box-shadow: 0 2px 2px rgba(0,0,0, .5);
+}
+.user-feedback.error {
+  background-color: red;
+}
+.user-feedback.success {
+  background-color: #4caf50;
+}
