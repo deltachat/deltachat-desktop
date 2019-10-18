@@ -61,10 +61,9 @@ module.exports = styled.div`
 
   span.views {
     margin-left: auto;
-    margin-right: 3pt;
 
     .bp3-button {
-      margin: 0 1pt;
+      margin: 0 2px;
     }
   }
 

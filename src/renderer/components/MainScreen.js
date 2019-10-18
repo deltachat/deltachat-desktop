@@ -144,6 +144,7 @@ class MainScreen extends React.Component {
                 <Button
                   onClick={() => this.setState({ media: false })}
                   minimal
+                  large
                   active={!this.state.media}
                   // aria-selected={!this.state.media}
                   icon={'chat'}
@@ -151,6 +152,7 @@ class MainScreen extends React.Component {
                 <Button
                   onClick={() => this.setState({ media: true })}
                   minimal
+                  large
                   active={this.state.media}
                   // aria-selected={this.state.media}
                   icon={'media'}
@@ -158,7 +160,12 @@ class MainScreen extends React.Component {
                 <SettingsContext.Consumer>
                   {({ enableOnDemandLocationStreaming }) => (
                     enableOnDemandLocationStreaming &&
-                    <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
+                    <Button
+                      minimal
+                      large
+                      icon='map'
+                      style={{'margin-left': 0 }}
+                      onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
                   )}
                 </SettingsContext.Consumer>
               </span>}
