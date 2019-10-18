@@ -27,10 +27,6 @@ module.exports = styled.div`
     float: none;
   }
 
-  .bp3-popover-wrapper {
-    margin-left: auto;
-  }
-
   .bp3-icon > svg:not([fill]) {
     fill: ${props => props.theme.navBarText};
   }
@@ -61,6 +57,14 @@ module.exports = styled.div`
   .bp3-button.bp3-minimal {
     min-width: 0px;
     min-height: 0px;
+  }
+
+  span.views {
+    margin-left: auto;
+
+    .bp3-button {
+      margin: 0 2px;
+    }
   }
 
   .bp3-popover-target {

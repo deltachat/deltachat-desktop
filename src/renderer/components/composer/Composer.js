@@ -18,7 +18,7 @@ const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
 }
 
 const Composer = React.forwardRef((props, ref) => {
-  const { isDisabled, chatId, draft } = props
+  const { isDisabled, disabledReason, chatId, draft } = props
 
   const [filename, setFilename] = useState(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
@@ -68,21 +68,25 @@ const Composer = React.forwardRef((props, ref) => {
   const tx = window.translate
 
   if (isDisabled) {
-    return <div
-      ref={ref}
-      className={'composer composer--disabled-message-input'}
-      style={{ textAlign: 'center', padding: '0.5rem', color: '#999' }}>
-      {tx('messaging_disabled_not_in_group')}
-    </div>
+    if (disabledReason) {
+      return <div
+        ref={ref}
+        className={'composer composer--disabled-message-input'}
+        style={{ textAlign: 'center', padding: '0.5rem', color: '#999' }}>
+        {tx(disabledReason)}
+      </div>
+    } else {
+      return <span />
+    }
   } else {
     return (
       <div className='composer' ref={ref}>
-        {!isDisabled && <div className='composer__attachment-button'>
+        <div className='composer__attachment-button'>
           <Button minimal
             icon='paperclip'
             onClick={addFilename.bind(this)}
             aria-label={tx('attachment')} />
-        </div>}
+        </div>
         <SettingsContext.Consumer>
           {({ enterKeySends }) => (
             <ComposerMessageInput

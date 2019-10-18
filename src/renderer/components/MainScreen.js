@@ -140,23 +140,40 @@ class MainScreen extends React.Component {
                 <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
                 <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
               </NavbarHeading>
-              {selectedChat && <Button
-                onClick={() => this.setState({ media: !this.state.media })}
-                minimal
-                icon={this.state.media ? 'chat' : 'media'}
-                aria-label={tx(this.state.media ? 'chat' : 'media')} />}
-              {selectedChat &&
-
-              <SettingsContext.Consumer>
-                {({ enableOnDemandLocationStreaming }) => (
-                  enableOnDemandLocationStreaming &&
-                  <Button minimal icon='map' onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
-                )}
-              </SettingsContext.Consumer>
-              }
-              <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
-              </Popover>
+              {selectedChat && selectedChat.id && <span className='views'>
+                <Button
+                  onClick={() => this.setState({ media: false })}
+                  minimal
+                  large
+                  active={!this.state.media}
+                  // aria-selected={!this.state.media}
+                  icon={'chat'}
+                  aria-label={tx('chat')} />
+                <Button
+                  onClick={() => this.setState({ media: true })}
+                  minimal
+                  large
+                  active={this.state.media}
+                  // aria-selected={this.state.media}
+                  icon={'media'}
+                  aria-label={tx('media')} />
+                <SettingsContext.Consumer>
+                  {({ enableOnDemandLocationStreaming }) => (
+                    enableOnDemandLocationStreaming &&
+                    <Button
+                      minimal
+                      large
+                      icon='map'
+                      style={{ marginLeft: 0 }}
+                      onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
+                  )}
+                </SettingsContext.Consumer>
+              </span>}
+              <span style={{ 'margin-left': selectedChat && selectedChat.id ? 0 : 'auto' }}>
+                <Popover content={menu} position={Position.RIGHT_TOP}>
+                  <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
+                </Popover>
+              </span>
             </NavbarGroup>
           </Navbar>
         </NavbarWrapper>
