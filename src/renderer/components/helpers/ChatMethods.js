@@ -12,11 +12,11 @@ export function openLeaveChatDialog (screenContext, chatId) {
   })
 }
 
-export function openDeleteChatDialog (screenContext, chatId) {
+export function openDeleteChatDialog (screenContext, chat) {
   const tx = window.translate
   screenContext.openDialog('ConfirmationDialog', {
-    message: tx('ask_delete_chat_desktop'),
-    cb: yes => yes && callDcMethod('deleteChat', chatId)
+    message: tx('ask_delete_chat_desktop', chat.name),
+    cb: yes => yes && callDcMethod('deleteChat', chat.id)
   })
 }
 
