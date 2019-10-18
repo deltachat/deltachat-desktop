@@ -27,23 +27,6 @@ class MessageInfo extends React.Component {
     })
   }
 
-  renderDeleteButton () {
-    const { message } = this.props
-    const tx = window.translate
-
-    return (
-      <div className='module-message-detail__delete-button-container'>
-        <button
-          style={{ userSelect: 'none' }}
-          onClick={message.onDelete}
-          className='module-message-detail__delete-button'
-        >
-          {tx('delete_message_desktop')}
-        </button>
-      </div>
-    )
-  }
-
   render () {
     const { errors, message, receivedAt, sentAt } = this.props
     const tx = window.translate
@@ -90,7 +73,6 @@ class MessageInfo extends React.Component {
             ) : null}
           </tbody>
         </table>
-        {this.renderDeleteButton()}
       </div>
     )
   }
