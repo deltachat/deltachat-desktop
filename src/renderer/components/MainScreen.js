@@ -164,7 +164,7 @@ class MainScreen extends React.Component {
                       minimal
                       large
                       icon='map'
-                      style={{'margin-left': 0 }}
+                      style={{ marginLeft: 0 }}
                       onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
                   )}
                 </SettingsContext.Consumer>
