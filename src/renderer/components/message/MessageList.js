@@ -10,6 +10,8 @@ import logger from '../../../logger'
 import { isDisplayableByRenderMedia } from './Attachment'
 import SettingsContext from '../../contexts/SettingsContext'
 
+import { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } from 'deltachat-node/constants'
+
 const MutationObserver = window.MutationObserver
 
 const SCROLL_BUFFER = 70
@@ -127,7 +129,17 @@ export default function MessageList (props) {
     scrollToBottom()
   }, [chat.id])
 
-  const disabled = chat.isGroup && !chat.selfInGroup
+  const [disabled, disabledReason] = (({ id, isGroup, selfInGroup }) => {
+    if (id === DC_CHAT_ID_DEADDROP) {
+      return [true, 'messaging_disabled_deaddrop']
+    } else if (id === DC_CHAT_ID_STARRED) {
+      return [true]
+    } else if (isGroup && !selfInGroup) {
+      return [true, 'messaging_disabled_not_in_group']
+    } else {
+      return [false]
+    }
+  })(chat)
 
   return (
     <SettingsContext.Consumer>
@@ -170,6 +182,7 @@ export default function MessageList (props) {
               draft={chat.draft}
               setComposerSize={setComposerSize.bind(this)}
               isDisabled={disabled}
+              disabledReason={disabledReason}
             />
           </div>
         )
