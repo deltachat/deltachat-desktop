@@ -169,7 +169,7 @@ class MainScreen extends React.Component {
                   )}
                 </SettingsContext.Consumer>
               </span>}
-              <span style={{ 'margin-left': selectedChat && selectedChat.id ? 0 : 'auto' }}>
+              <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
                 <Popover content={menu} position={Position.RIGHT_TOP}>
                   <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
                 </Popover>
