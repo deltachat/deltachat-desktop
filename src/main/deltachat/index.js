@@ -6,6 +6,8 @@ const logCoreEv = require('../../logger').getLogger('core/event', true)
 const windows = require('../windows')
 const { app } = require('electron')
 
+const { maybeMarkSeen } = require('../markseenFix')
+
 /**
  * The Controller is the container for a deltachat instance
  */
@@ -103,6 +105,7 @@ class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+      maybeMarkSeen(chatId, msgId)
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')

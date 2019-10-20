@@ -26,6 +26,8 @@ const C = require('deltachat-node/constants')
 const setupNotifications = require('./notifications')
 const setupUnreadBadgeCounter = require('./unread-badge')
 
+const { setupMarkseenFix } = require('./markseenFix')
+
 function init (cwd, state, logHandler) {
   const main = windows.main
   const dc = new DeltaChat(cwd, state.saved)
@@ -97,6 +99,7 @@ function init (cwd, state, logHandler) {
 
   setupNotifications(dc, state.saved)
   setupUnreadBadgeCounter(dc)
+  setupMarkseenFix(dc)
 
   ipcMain.on('login', (e, credentials) => {
     dc.login(credentials, render, txCoreStrings())
@@ -115,6 +118,11 @@ function init (cwd, state, logHandler) {
   ipcMain.on('getMessageInfo', (e, msgId) => {
     main.send('MessageInfo', dc.getMessageInfo(msgId))
   })
+
+  // for the future:
+  // ipcMain.on('markSeenMessages', (e, ids) => {
+  //   this._dc.markSeenMessages(ids)
+  // })
 
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.getChatContacts(chatId)
