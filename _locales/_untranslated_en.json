@@ -3,6 +3,12 @@
     "message": "Messaging disabled (you are not in this group)"
   },
   "message_not_verified": {
-    "message": "The message was sent with non-verified encryption.. See \"Info\" for details."
+    "message": "The message was sent with non-verified encryption. See \"Info\" for details."
+  },
+  "messaging_disabled_deaddrop":{
+    "message": "Click on a message to start accept or deny the contact request"
+  },
+  "ask_delete_chat_desktop": {
+    "message": "Are you sure you want to delete \"%1$s\"?"
   }
 }
