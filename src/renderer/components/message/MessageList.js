@@ -35,7 +35,7 @@ export default function MessageList (props) {
     if (chat.totalMessages === chat.messages.length) return
     scrollPrepare()
     callDcMethod(
-      'fetchMessages',
+      'messageList.fetchMessages',
       [chat.id]
     )
   }
@@ -89,7 +89,7 @@ export default function MessageList (props) {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         callDcMethod(
-          'sendMessage',
+          'messageList.sendMessage',
           [chat.id, null, path]
         )
       } else {

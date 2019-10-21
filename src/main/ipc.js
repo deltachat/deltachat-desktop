@@ -112,11 +112,11 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('getMessage', (e, msgId) => {
-    e.returnValue = dc.messageIdToJson(msgId)
+    e.returnValue = dc.messageList.messageIdToJson(msgId)
   })
 
   ipcMain.on('getMessageInfo', (e, msgId) => {
-    main.send('MessageInfo', dc.getMessageInfo(msgId))
+    main.send('MessageInfo', dc.messageList.getMessageInfo(msgId))
   })
 
   // for the future:

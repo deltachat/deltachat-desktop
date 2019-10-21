@@ -47,7 +47,7 @@ class ComposerMessageInput extends React.Component {
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
-      callDcMethod('setDraft', [chatId, text])
+      callDcMethod('messageList.setDraft', [chatId, text])
     }, 500)
 
     this.textareaRef = React.createRef()

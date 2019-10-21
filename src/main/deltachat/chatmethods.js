@@ -126,7 +126,7 @@ function getEncryptionInfo (contactId) {
 function getChatMedia (msgType1, msgType2) {
   if (!this._selectedChatId) return
   const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
-  return mediaMessages.map(this.messageIdToJson.bind(this))
+  return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
 }
 
 function _integerToHexColor (integerColor) {

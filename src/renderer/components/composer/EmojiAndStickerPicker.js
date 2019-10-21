@@ -8,7 +8,7 @@ export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncE
 export const StickerDiv = props => {
   const { stickerPackName, stickerPackImages, chatId, setShowEmojiPicker } = props
   const onClickSticker = (fileName) => {
-    callDcMethod('sendSticker', [chatId, fileName])
+    callDcMethod('messageList.sendSticker', [chatId, fileName])
     setShowEmojiPicker(false)
   }
 

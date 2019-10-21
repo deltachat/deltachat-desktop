@@ -129,7 +129,7 @@ module.exports = class DCChatList extends SplitOut {
     }
 
     const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
-    const messages = loadMessages ? this._controller._messagesToRender(messageIds) : []
+    const messages = loadMessages ? this._controller.messageList._messagesToRender(messageIds) : []
     const contacts = this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson())
     const isGroup = isGroupChat(chat)
     let selfInGroup = isGroup

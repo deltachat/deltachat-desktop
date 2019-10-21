@@ -14,6 +14,7 @@ const { maybeMarkSeen } = require('../markseenFix')
 const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
 const DCChatList = require('./chatlist')
+const DCMessageList = require('./messagelist')
 const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 
@@ -53,7 +54,10 @@ class DeltaChatController extends EventEmitter {
     require('./chatmethods').bind(this)()
     require('./locations').bind(this)()
     require('./login').bind(this)()
-    require('./messagelist').bind(this)()
+  }
+
+  get messageList () {
+    return new DCMessageList(this)
   }
 
   get settings () {
@@ -227,7 +231,7 @@ class DeltaChatController extends EventEmitter {
    */
   onMessageUpdate (chatId, msgId, eventType) {
     if (chatId === 0 || msgId === 0) return
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageList.messageIdToJson(msgId), eventType })
   }
 
   updateBlockedContacts () {
@@ -283,7 +287,7 @@ class DeltaChatController extends EventEmitter {
   getChatMedia (msgType1, msgType2) {
     if (!this._selectedChatId) return
     const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
-    return mediaMessages.map(this.messageIdToJson.bind(this))
+    return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
   }
 
   /**
