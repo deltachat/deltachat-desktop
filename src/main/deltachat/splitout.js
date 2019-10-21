@@ -1,11 +1,14 @@
 /**
  * @typedef {import('deltachat-node')} DeltaChat
+ * @typedef {import('./index')} DeltaChatController
  */
 module.exports = class SplitOut {
   /**
-   * @param {DeltaChat} dcNode
+   * @param {DeltaChatController} controller
    */
-  constructor (dcNode) {
-    this._dc = dcNode
+  constructor (controller) {
+    this._controller = controller
+    /** @type {DeltaChat} */
+    this._dc = controller._dc
   }
 }

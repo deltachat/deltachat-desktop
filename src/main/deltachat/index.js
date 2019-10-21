@@ -12,6 +12,7 @@ const { maybeMarkSeen } = require('../markseenFix')
  * @typedef {import('deltachat-node')} DeltaChat
  */
 const DCAutocrypt = require('./autocrypt')
+const DCBackup = require('./backup')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -34,11 +35,14 @@ class DeltaChatController extends EventEmitter {
   }
 
   get autocrypt () {
-    return new DCAutocrypt(this._dc)
+    return new DCAutocrypt(this)
+  }
+
+  get backup () {
+    return new DCBackup(this)
   }
 
   loadSplitOuts () {
-    require('./backup').bind(this)()
     require('./chatlist').bind(this)()
     require('./chatmethods').bind(this)()
     require('./locations').bind(this)()

@@ -132,8 +132,8 @@ function init (cwd, state, logHandler) {
     e.returnValue = dc.getChatMedia(msgType1, msgType2)
   })
 
-  ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
-  ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
+  ipcMain.on('backupImport', (e, fileName) => dc.backup.import(fileName))
+  ipcMain.on('backupExport', (e, dir) => dc.backup.export(dir))
 
   ipcMain.on('keysImport', (e, dir) => dc.keysImport(dir))
   ipcMain.on('keysExport', (e, dir) => dc.keysExport(dir))
