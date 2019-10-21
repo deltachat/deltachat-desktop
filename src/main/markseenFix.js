@@ -2,6 +2,7 @@ const windows = require('./windows')
 const C = require('deltachat-node/constants')
 const log = require('../logger').getLogger('main/markseenfix', true)
 
+/** @type {import('./deltachat/index')} */
 let dc
 
 function maybeMarkSeen (chatId, msgId) {
@@ -15,7 +16,7 @@ function setupMarkseenFix (dcClass) {
   dc = dcClass
   dc.on('ready', _ => {
     windows.main.win.on('focus', () => {
-      const chat = dc.getFullChatById(dc._selectedChatId, true)
+      const chat = dc.chatList.getFullChatById(dc._selectedChatId, true)
       if (!chat) return
       if (chat && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
         if (chat.freshMessageCounter > 0) {

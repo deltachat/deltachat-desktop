@@ -6,6 +6,10 @@ const {
   Notification
 } = require('electron')
 
+/**
+ * @param {import('./deltachat/index')} dc
+ * @param {*} settings
+ */
 module.exports = function (dc, settings) {
   if (!Notification.isSupported()) return
 
@@ -28,7 +32,7 @@ module.exports = function (dc, settings) {
       })
       notify.show()
       notify.on('click', () => {
-        dc.selectChat(chatId)
+        dc.chatList.selectChat(chatId)
         app.focus()
         notify = null
       })

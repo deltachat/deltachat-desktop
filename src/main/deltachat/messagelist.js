@@ -118,7 +118,7 @@ function fetchMessages (chatId) {
 
 function forwardMessage (msgId, chatId) {
   this._dc.forwardMessages(msgId, chatId)
-  this.selectChat(chatId)
+  this.chatList.selectChat(chatId)
 }
 module.exports = function () {
   this.getMessage = getMessage.bind(this)

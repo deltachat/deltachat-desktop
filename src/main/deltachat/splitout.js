@@ -8,7 +8,10 @@ module.exports = class SplitOut {
    */
   constructor (controller) {
     this._controller = controller
-    /** @type {DeltaChat} */
-    this._dc = controller._dc
+  }
+
+  /** @return {DeltaChat} */
+  get _dc () {
+    return this._controller._dc
   }
 }

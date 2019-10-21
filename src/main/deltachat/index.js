@@ -13,6 +13,7 @@ const { maybeMarkSeen } = require('../markseenFix')
  */
 const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
+const DCChatList = require('./chatlist')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -42,8 +43,11 @@ class DeltaChatController extends EventEmitter {
     return new DCBackup(this)
   }
 
+  get chatList () {
+    return new DCChatList(this)
+  }
+
   loadSplitOuts () {
-    require('./chatlist').bind(this)()
     require('./chatmethods').bind(this)()
     require('./locations').bind(this)()
     require('./login').bind(this)()
@@ -62,8 +66,37 @@ class DeltaChatController extends EventEmitter {
     logCoreEv.debug(event, data1, data2)
   }
 
+  __resolveNestedMethod (self, methodName) {
+    let previous = self
+    let scope
+    for (const key of methodName.split('.')) {
+      scope = previous
+      previous = previous[key]
+      if (typeof previous === 'undefined') {
+        const message = 'Resolving of nested method name failed: ' + methodName
+        log.error(message)
+        throw new Error(message)
+      }
+    }
+    if (typeof previous !== 'function') {
+      const message = '(nested) Method is not of type function: ' + methodName
+      log.error(message)
+      throw new Error(message)
+    }
+    return previous.bind(scope)
+  }
+
+  /**
+   *
+   * @param {*} evt
+   * @param {string} methodName
+   * @param {*} args
+   */
   async callMethod (evt, methodName, args) {
-    if (typeof this[methodName] !== 'function') {
+    const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
+      : this[methodName]
+
+    if (typeof method !== 'function') {
       const message = 'Method is not of type function: ' + methodName
       log.error(message)
       throw new Error(message)
@@ -71,7 +104,7 @@ class DeltaChatController extends EventEmitter {
 
     let returnValue
     try {
-      returnValue = await this[methodName](...args)
+      returnValue = await method(...args)
     } catch (err) {
       log.error(`Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`)
     }
@@ -117,7 +150,7 @@ class DeltaChatController extends EventEmitter {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
@@ -125,13 +158,13 @@ class DeltaChatController extends EventEmitter {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_CHAT_MODIFIED', (chatId, msgId) => {
       this.onChatListChanged(chatId)
       this.onChatListItemChanged(chatId)
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
@@ -232,7 +265,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   contactRequests () {
-    this.selectChat(C.DC_CHAT_ID_DEADDROP)
+    this.chatList.selectChat(C.DC_CHAT_ID_DEADDROP)
   }
 
   getEncrInfo (contactId) {

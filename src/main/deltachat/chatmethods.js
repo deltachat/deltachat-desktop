@@ -27,8 +27,8 @@ function chatWithContact (deadDrop) {
   log.info(`Added contact ${name} (${address})`)
   const chatId = this._dc.createChatByMessageId(deadDrop.id)
   if (chatId) {
-    this.updateChatList()
-    this.selectChat(chatId)
+    this.chatList.updateChatList()
+    this.chatList.selectChat(chatId)
   }
 }
 
@@ -59,8 +59,8 @@ function createChatByContactId (contactId) {
     log.debug('chat was archived, unarchiving it')
     this._dc.archiveChat(chatId, 0)
   }
-  this.updateChatList()
-  this.selectChat(chatId)
+  this.chatList.updateChatList()
+  this.chatList.selectChat(chatId)
   return chatId
 }
 
@@ -83,7 +83,7 @@ function modifyGroup (chatId, name, image, remove, add) {
 function deleteChat (chatId) {
   log.debug(`action - deleting chat ${chatId}`)
   this._dc.deleteChat(chatId)
-  this.updateChatList()
+  this.chatList.updateChatList()
 }
 
 function archiveChat (chatId, archive) {
