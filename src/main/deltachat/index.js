@@ -14,6 +14,7 @@ const { maybeMarkSeen } = require('../markseenFix')
 const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
 const DCChatList = require('./chatlist')
+const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 
 /**
@@ -53,7 +54,10 @@ class DeltaChatController extends EventEmitter {
     require('./locations').bind(this)()
     require('./login').bind(this)()
     require('./messagelist').bind(this)()
-    require('./settings').bind(this)()
+  }
+
+  get settings () {
+    return new DCSettings(this)
   }
 
   get stickers () {
@@ -135,7 +139,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   checkPassword (password) {
-    return password === this.getConfig('mail_pw')
+    return password === this.settings.getConfig('mail_pw')
   }
 
   registerEventHandler (dc) {

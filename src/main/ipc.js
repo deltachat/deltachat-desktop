@@ -135,11 +135,11 @@ function init (cwd, state, logHandler) {
   ipcMain.on('backupImport', (e, fileName) => dc.backup.import(fileName))
   ipcMain.on('backupExport', (e, dir) => dc.backup.export(dir))
 
-  ipcMain.on('keysImport', (e, dir) => dc.keysImport(dir))
-  ipcMain.on('keysExport', (e, dir) => dc.keysExport(dir))
+  ipcMain.on('keysImport', (e, dir) => dc.settings.keysImport(dir))
+  ipcMain.on('keysExport', (e, dir) => dc.settings.keysExport(dir))
 
   ipcMain.on('setConfig', (e, key, value) => {
-    e.returnValue = dc.setConfig(key, value)
+    e.returnValue = dc.settings.setConfig(key, value)
   })
 
   ipcMain.on('getDCinfo', () => {
@@ -223,7 +223,7 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
-    if (!credentials.mail_pw) credentials.mail_pw = dc.getConfig('mail_pw')
+    if (!credentials.mail_pw) credentials.mail_pw = dc.settings.getConfig('mail_pw')
     const tmp = new DeltaChat(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))

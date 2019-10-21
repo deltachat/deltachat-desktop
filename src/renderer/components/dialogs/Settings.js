@@ -48,7 +48,7 @@ export default class Settings extends React.Component {
   }
 
   async componentDidMount () {
-    const settings = await callDcMethodAsync('getConfigFor', [[
+    const settings = await callDcMethodAsync('settings.getConfigFor', [[
       'addr',
       'mail_pw',
       'inbox_watch',
