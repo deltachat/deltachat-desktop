@@ -149,13 +149,13 @@ function init (cwd, state, logHandler) {
   ipcMain.on('logout', () => dc.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
-    dc.initiateKeyTransfer((err, resp) => {
+    dc.autocrypt.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
   })
 
   ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
-    dc.continueKeyTransfer(messageId, setupCode, err => {
+    dc.autocrypt.continueKeyTransfer(messageId, setupCode, err => {
       main.send('continueKeyTransferResp', err)
     })
   })

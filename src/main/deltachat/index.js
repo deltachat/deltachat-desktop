@@ -9,6 +9,11 @@ const { app } = require('electron')
 const { maybeMarkSeen } = require('../markseenFix')
 
 /**
+ * @typedef {import('deltachat-node')} DeltaChat
+ */
+const DCAutocrypt = require('./autocrypt')
+
+/**
  * The Controller is the container for a deltachat instance
  */
 class DeltaChatController extends EventEmitter {
@@ -22,10 +27,17 @@ class DeltaChatController extends EventEmitter {
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     this.loadSplitOuts()
+    /**
+     * @type {DeltaChat}
+     */
+    this._dc = undefined
+  }
+
+  get autocrypt () {
+    return new DCAutocrypt(this._dc)
   }
 
   loadSplitOuts () {
-    require('./autocrypt').bind(this)()
     require('./backup').bind(this)()
     require('./chatlist').bind(this)()
     require('./chatmethods').bind(this)()

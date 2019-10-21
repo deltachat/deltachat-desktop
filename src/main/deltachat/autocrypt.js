@@ -1,12 +1,19 @@
-function initiateKeyTransfer (cb) {
-  return this._dc.initiateKeyTransfer(cb)
-}
+/**
+ * @typedef {import('deltachat-node')} DeltaChat
+ */
+module.exports = class DCAutocrypt {
+  /**
+   * @param {DeltaChat} dcNode
+   */
+  constructor (dcNode) {
+    this._dc = dcNode
+  }
 
-function continueKeyTransfer (messageId, setupCode, cb) {
-  return this._dc.continueKeyTransfer(messageId, setupCode, cb)
-}
+  initiateKeyTransfer (cb) {
+    return this._dc.initiateKeyTransfer(cb)
+  }
 
-module.exports = function () {
-  this.initiateKeyTransfer = initiateKeyTransfer.bind(this)
-  this.continueKeyTransfer = continueKeyTransfer.bind(this)
+  continueKeyTransfer (messageId, setupCode, cb) {
+    return this._dc.continueKeyTransfer(messageId, setupCode, cb)
+  }
 }
