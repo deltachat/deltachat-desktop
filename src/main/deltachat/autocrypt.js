@@ -1,14 +1,5 @@
-/**
- * @typedef {import('deltachat-node')} DeltaChat
- */
-module.exports = class DCAutocrypt {
-  /**
-   * @param {DeltaChat} dcNode
-   */
-  constructor (dcNode) {
-    this._dc = dcNode
-  }
-
+const SplitOut = require('./splitout')
+module.exports = class DCAutocrypt extends SplitOut {
   initiateKeyTransfer (cb) {
     return this._dc.initiateKeyTransfer(cb)
   }
