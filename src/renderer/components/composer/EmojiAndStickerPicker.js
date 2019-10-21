@@ -67,7 +67,7 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
   const [stickers, setStickers] = useState(null)
 
   useAsyncEffect(async () => {
-    const stickers = await callDcMethodAsync('getStickers')
+    const stickers = await callDcMethodAsync('stickers.getStickers')
     setStickers(stickers)
   }, [])
 

@@ -14,6 +14,7 @@ const { maybeMarkSeen } = require('../markseenFix')
 const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
 const DCChatList = require('./chatlist')
+const DCStickers = require('./stickers')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -53,7 +54,10 @@ class DeltaChatController extends EventEmitter {
     require('./login').bind(this)()
     require('./messagelist').bind(this)()
     require('./settings').bind(this)()
-    require('./stickers').bind(this)()
+  }
+
+  get stickers () {
+    return new DCStickers(this)
   }
 
   logCoreEvent (event, data1, data2) {
