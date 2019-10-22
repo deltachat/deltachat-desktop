@@ -76,7 +76,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
-    dc.setCoreStrings(txCoreStrings())
+    dc.loginController.setCoreStrings(txCoreStrings())
     menu.init(logHandler)
   })
 
@@ -102,11 +102,11 @@ function init (cwd, state, logHandler) {
   setupMarkseenFix(dc)
 
   ipcMain.on('login', (e, credentials) => {
-    dc.login(credentials, render, txCoreStrings())
+    dc.loginController.login(credentials, render, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
-    rimraf.sync(dc.getPath(addr))
+    rimraf.sync(dc.loginController.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
   })
@@ -146,7 +146,7 @@ function init (cwd, state, logHandler) {
     main.send('dcInfo', dc.getInfo())
   })
 
-  ipcMain.on('logout', () => dc.logout())
+  ipcMain.on('logout', () => dc.loginController.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
     dc.autocrypt.initiateKeyTransfer((err, resp) => {
@@ -234,13 +234,13 @@ function init (cwd, state, logHandler) {
       deltachat.configuring = tmpDeltachat.configuring
       sendState(deltachat)
       if (tmpDeltachat.ready) {
-        dc.login(credentials, render, txCoreStrings())
+        dc.loginController.login(credentials, render, txCoreStrings())
         main.send('success', 'Configuration success!')
-        tmp.close()
+        tmp.loginController.close()
       }
     }
 
-    tmp.login(credentials, fakeRender, txCoreStrings())
+    tmp.loginController.login(credentials, fakeRender, txCoreStrings())
   })
 
   ipcMain.on('updateLogins', (e) => {
@@ -267,7 +267,7 @@ function init (cwd, state, logHandler) {
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    dc.login(savedCredentials, render, txCoreStrings())
+    dc.loginController.login(savedCredentials, render, txCoreStrings())
   }
 }
 

@@ -15,7 +15,8 @@ module.exports = class DCBackup extends SplitOut {
   }
 
   import (file) {
-    const { sendToRenderer, getPath } = this._controller
+    const { sendToRenderer, loginController } = this._controller
+    const { getPath } = loginController
 
     async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
       if (overwrite === true) {

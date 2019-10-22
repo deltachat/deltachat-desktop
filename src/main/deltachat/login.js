@@ -3,70 +3,79 @@ const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/login', true)
 const path = require('path')
 
-/**
- * Called when this controller is created and when current
- * locale changes
- */
-function setCoreStrings (strings) {
-  if (!this._dc) return
+const SplitOut = require('./splitout')
+module.exports = class DCLoginController extends SplitOut {
+  /**
+   * Called when this controller is created and when current
+   * locale changes
+   */
+  setCoreStrings (strings) {
+    if (!this._dc) return
 
-  this._dc.clearStringTable()
-  Object.keys(strings).forEach(key => {
-    this._dc.setStringTable(Number(key), strings[key])
-  })
+    this._dc.clearStringTable()
+    Object.keys(strings).forEach(key => {
+      this._dc.setStringTable(Number(key), strings[key])
+    })
 
-  this._render()
-}
-
-function login (credentials, render, coreStrings) {
-  // Creates a separate DB file for each login
-  this.fullCwd = this.getPath(credentials.addr)
-  log.info(`Using deltachat instance ${this.fullCwd}`)
-  this._dc = new DeltaChat()
-  const dc = this._dc
-  this.credentials = credentials
-  this._render = render
-
-  this.setCoreStrings(coreStrings)
-
-  if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-    this.emit('error', this.translate('bad_email_address'))
-    return
+    this._controller._render()
   }
 
-  dc.open(this.fullCwd, err => {
-    if (err) throw err
-    const onReady = () => {
-      log.info('Ready')
-      this.ready = true
-      this.configuring = false
-      this.emit('ready', this.credentials)
-      log.info('dc_get_info', dc.getInfo())
-      render()
+  login (credentials, render, coreStrings) {
+    // Creates a separate DB file for each login
+    this._controller.fullCwd = this.getPath(credentials.addr)
+    log.info(`Using deltachat instance ${this._controller.fullCwd}`)
+    this._controller._dc = new DeltaChat()
+    const dc = this._dc
+    this._controller.credentials = credentials
+    this._controller._render = render
+
+    this.setCoreStrings(coreStrings)
+
+    if (!DeltaChat.maybeValidAddr(credentials.addr)) {
+      this.emit('error', this._controller.translate('bad_email_address'))
+      return
     }
-    if (!dc.isConfigured()) {
-      dc.once('ready', onReady)
-      this.configuring = true
-      dc.configure(addServerFlags(credentials))
-      render()
-    } else {
-      onReady()
-    }
-  })
-  this.registerEventHandler(dc)
-}
 
-function logout () {
-  this.close()
-  this._resetState()
+    dc.open(this._controller.fullCwd, err => {
+      if (err) throw err
+      const onReady = () => {
+        log.info('Ready')
+        this._controller.ready = true
+        this._controller.configuring = false
+        this._controller.emit('ready', this._controller.credentials)
+        log.info('dc_get_info', dc.getInfo())
+        render()
+      }
+      if (!dc.isConfigured()) {
+        dc.once('ready', onReady)
+        this._controller.configuring = true
+        dc.configure(addServerFlags(credentials))
+        render()
+      } else {
+        onReady()
+      }
+    })
+    this._controller.registerEventHandler(dc)
+  }
 
-  log.info('Logged out')
-  this.emit('logout')
-  if (typeof this._render === 'function') this._render()
-}
+  logout () {
+    this.close()
+    this._controller._resetState()
 
-function getPath (addr) {
-  return path.join(this.cwd, Buffer.from(addr).toString('hex'))
+    log.info('Logged out')
+    this._controller.emit('logout')
+    if (typeof this._controller._render === 'function') this._controller._render()
+  }
+
+  getPath (addr) {
+    return path.join(this._controller.cwd, Buffer.from(addr).toString('hex'))
+  }
+
+  close () {
+    if (!this._dc) return
+    this._dc.close()
+    this._controller._dc = null
+  }
 }
 
 function addServerFlags (credentials) {
@@ -99,18 +108,4 @@ function serverFlags ({ mailSecurity, sendSecurity }) {
   return flags.reduce((flag, acc) => {
     return acc | flag
   }, 0)
-}
-
-function close () {
-  if (!this._dc) return
-  this._dc.close()
-  this._dc = null
-}
-
-module.exports = function () {
-  this.setCoreStrings = setCoreStrings.bind(this)
-  this.login = login.bind(this)
-  this.logout = logout.bind(this)
-  this.close = close.bind(this)
-  this.getPath = getPath.bind(this)
 }
