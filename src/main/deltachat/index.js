@@ -22,6 +22,7 @@ const DCLocations = require('./locations')
 const DCLoginController = require('./login')
 const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
+const DCChat = require('./chat')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -57,6 +58,11 @@ class DeltaChatController extends EventEmitter {
 
   loadSplitOuts () {
     require('./chatmethods').bind(this)()
+    // contacts
+  }
+
+  get chat () {
+    return new DCChat(this)
   }
 
   get locations () {
@@ -285,16 +291,6 @@ class DeltaChatController extends EventEmitter {
 
   contactRequests () {
     this.chatList.selectChat(C.DC_CHAT_ID_DEADDROP)
-  }
-
-  getEncrInfo (contactId) {
-    return this._dc.getContactEncryptionInfo(contactId)
-  }
-
-  getChatMedia (msgType1, msgType2) {
-    if (!this._selectedChatId) return
-    const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
-    return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
   }
 
   getInfo () {

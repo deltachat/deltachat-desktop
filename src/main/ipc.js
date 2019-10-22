@@ -124,12 +124,14 @@ function init (cwd, state, logHandler) {
   //   this._dc.markSeenMessages(ids)
   // })
 
+  /* unused
   ipcMain.on('getChatContacts', (e, chatId) => {
-    e.returnValue = dc.getChatContacts(chatId)
+    e.returnValue = dc.chat.getChatContacts(chatId)
   })
+  */
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
-    e.returnValue = dc.getChatMedia(msgType1, msgType2)
+    e.returnValue = dc.chat.getChatMedia(msgType1, msgType2)
   })
 
   ipcMain.on('backupImport', (e, fileName) => dc.backup.import(fileName))

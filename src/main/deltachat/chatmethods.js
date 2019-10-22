@@ -1,5 +1,4 @@
 const DeltaChat = require('deltachat-node')
-const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatmethods', true)
 
 function createContact (name, email) {
@@ -8,20 +7,6 @@ function createContact (name, email) {
     return null
   }
   return this._dc.createContact(name, email)
-}
-
-function chatWithContact (deadDrop) {
-  log.info(`chat with dead drop ${deadDrop}`)
-  const contact = this._dc.getContact(deadDrop.contact.id)
-  const address = contact.getAddress()
-  const name = contact.getName() || address.split('@')[0]
-  this._dc.createContact(name, address)
-  log.info(`Added contact ${name} (${address})`)
-  const chatId = this._dc.createChatByMessageId(deadDrop.id)
-  if (chatId) {
-    this.chatList.updateChatList()
-    this.chatList.selectChat(chatId)
-  }
 }
 
 function unblockContact (contactId) {
@@ -56,87 +41,10 @@ function createChatByContactId (contactId) {
   return chatId
 }
 
-function getChatContacts (chatId) {
-  return this._dc.getChatContacts(chatId)
-}
-
-function modifyGroup (chatId, name, image, remove, add) {
-  log.debug('action - modify group', { chatId, name, image, remove, add })
-  this._dc.setChatName(chatId, name)
-  const chat = this._dc.getChat(chatId)
-  if (chat.getProfileImage() !== image) {
-    this._dc.setChatProfileImage(chatId, image || '')
-  }
-  remove.forEach(id => this._dc.removeContactFromChat(chatId, id))
-  add.forEach(id => this._dc.addContactToChat(chatId, id))
-  return true
-}
-
-function deleteChat (chatId) {
-  log.debug(`action - deleting chat ${chatId}`)
-  this._dc.deleteChat(chatId)
-  this.chatList.updateChatList()
-}
-
-function archiveChat (chatId, archive) {
-  log.debug(`action - archiving chat ${chatId}`)
-  this._dc.archiveChat(chatId, archive)
-}
-
-function createGroupChat (verified, name) {
-  const chatId = verified === true
-    ? this._dc.createVerifiedGroupChat(name)
-    : this._dc.createUnverifiedGroupChat(name)
-  return chatId
-}
-
-function setChatProfileImage (chatId, newImage) {
-  return this._dc.setChatProfileImage(chatId, newImage)
-}
-
-function addContactToChat (chatId, contactId) {
-  return this._dc.addContactToChat(chatId, contactId)
-}
-
-function setChatName (chatId, name) {
-  return this._dc.setChatName(chatId, name)
-}
-
-function leaveGroup (chatId) {
-  log.debug(`action - leaving chat ${chatId}`)
-  this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
-}
-
-function getQrCode (chatId = 0) {
-  return this._dc.getSecurejoinQrCode(chatId)
-}
-
-function getEncryptionInfo (contactId) {
-  return this._dc.getContactEncryptionInfo(contactId)
-}
-
-function getChatMedia (msgType1, msgType2) {
-  if (!this._selectedChatId) return
-  const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
-  return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
-}
-
 module.exports = function () {
   this.createContact = createContact.bind(this)
-  this.chatWithContact = chatWithContact.bind(this)
   this.unblockContact = unblockContact.bind(this)
   this.blockContact = blockContact.bind(this)
   this.createChatByContactId = createChatByContactId.bind(this)
-  this.getChatContacts = getChatContacts.bind(this)
-  this.modifyGroup = modifyGroup.bind(this)
-  this.deleteChat = deleteChat.bind(this)
-  this.archiveChat = archiveChat.bind(this)
-  this.createGroupChat = createGroupChat.bind(this)
-  this.leaveGroup = leaveGroup.bind(this)
-  this.getQrCode = getQrCode.bind(this)
-  this.setChatName = setChatName.bind(this)
-  this.setChatProfileImage = setChatProfileImage.bind(this)
-  this.addContactToChat = addContactToChat.bind(this)
-  this.getEncryptionInfo = getEncryptionInfo.bind(this)
-  this.getChatMedia = getChatMedia.bind(this)
+
 }
