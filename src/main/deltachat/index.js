@@ -1,4 +1,5 @@
 const C = require('deltachat-node/constants')
+const DeltaChatNode = require('deltachat-node')
 const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat', true)
@@ -294,6 +295,14 @@ class DeltaChatController extends EventEmitter {
     if (!this._selectedChatId) return
     const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
     return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
+  }
+
+  getInfo () {
+    if (this.ready === true) {
+      return this._dc.getInfo()
+    } else {
+      return DeltaChatNode.getSystemInfo()
+    }
   }
 
   /**

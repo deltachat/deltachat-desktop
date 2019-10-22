@@ -2,14 +2,6 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatmethods', true)
 
-function getInfo () {
-  if (this.ready === true) {
-    return this._dc.getInfo()
-  } else {
-    return DeltaChat.getSystemInfo()
-  }
-}
-
 function createContact (name, email) {
   if (!DeltaChat.maybeValidAddr(email)) {
     this.emit('error', this.translate('bad_email_address'))
@@ -130,7 +122,6 @@ function getChatMedia (msgType1, msgType2) {
 }
 
 module.exports = function () {
-  this.getInfo = getInfo.bind(this)
   this.createContact = createContact.bind(this)
   this.chatWithContact = chatWithContact.bind(this)
   this.unblockContact = unblockContact.bind(this)
