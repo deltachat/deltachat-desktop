@@ -174,8 +174,8 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(eventType, payload)
   }
 
-  translate (txt) {
-    return app.translate(txt)
+  translate (key, substitutions, opts) {
+    return app.translate(key, substitutions, opts)
   }
 
   checkPassword (password) {

@@ -100,7 +100,6 @@ module.exports = class DCChatList extends SplitOut {
       avatarPath: chat.profileImage,
       color: chat.color,
       lastUpdated: lastUpdated,
-      subtitle: chat.subtitle,
       summary: {
         text1: summary.text1,
         text2: summary.text2,
@@ -146,7 +145,7 @@ module.exports = class DCChatList extends SplitOut {
       profileImage: chat.profileImage,
 
       archived: chat.archived,
-      subtitle: chat.subtitle,
+      subtitle: this.__chatSubtitle(chat, contacts),
       type: chat.type,
       isUnpromoted: chat.isUnpromoted,
       isSelfTalk: chat.isSelfTalk,
@@ -162,6 +161,28 @@ module.exports = class DCChatList extends SplitOut {
       draft: chat.draft,
       selfInGroup: selfInGroup
     }
+  }
+
+  __chatSubtitle (chat, contacts) {
+    const tx = this._controller.translate
+    if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
+      if (isGroupChat(chat)) {
+        return tx('n_members', [contacts.length], { quantity: contacts.length })
+      } else if (contacts.length >= 1) {
+        if (chat.type === C.DC_CHAT_TYPE_SINGLE && contacts[0].id === C.DC_CONTACT_ID_SELF) {
+          return tx('chat_self_talk_subtitle')
+        }
+        return contacts[0].address
+      }
+    } else {
+      switch (chat.id) {
+        case C.DC_CHAT_ID_DEADDROP:
+          return tx('menu_deaddrop_subtitle')
+        // case C.DC_CHAT_ID_STARRED:
+        //   return 'stared'
+      }
+    }
+    return 'ErrTitle'
   }
 
   _getGeneralFreshMessageCounter () {
