@@ -8,6 +8,8 @@ const { app } = require('electron')
 
 const { maybeMarkSeen } = require('../markseenFix')
 
+const { integerToHexColor } = require('./util')
+
 /**
  * @typedef {import('deltachat-node')} DeltaChat
  */
@@ -258,13 +260,9 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  _integerToHexColor (integerColor) {
-    return '#' + integerColor.toString(16)
-  }
-
   getContact (id) {
     const contact = this._dc.getContact(id).toJson()
-    contact.color = this._integerToHexColor(contact.color)
+    contact.color = integerToHexColor(contact.color)
     return contact
   }
 

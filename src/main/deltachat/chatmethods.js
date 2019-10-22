@@ -129,10 +129,6 @@ function getChatMedia (msgType1, msgType2) {
   return mediaMessages.map(this.messageList.messageIdToJson.bind(this.messageList))
 }
 
-function _integerToHexColor (integerColor) {
-  return '#' + integerColor.toString(16)
-}
-
 module.exports = function () {
   this.getInfo = getInfo.bind(this)
   this.createContact = createContact.bind(this)
@@ -152,5 +148,4 @@ module.exports = function () {
   this.addContactToChat = addContactToChat.bind(this)
   this.getEncryptionInfo = getEncryptionInfo.bind(this)
   this.getChatMedia = getChatMedia.bind(this)
-  this._integerToHexColor = _integerToHexColor.bind(this)
 }

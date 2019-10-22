@@ -2,6 +2,8 @@ const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist', true)
 const { app } = require('electron')
 
+const { integerToHexColor } = require('./util')
+
 const SplitOut = require('./splitout')
 module.exports = class DCChatList extends SplitOut {
   selectChat (chatId) {
@@ -152,7 +154,7 @@ module.exports = class DCChatList extends SplitOut {
       contacts: contacts,
       totalMessages: messageIds.length,
       messages: messages,
-      color: this._controller._integerToHexColor(chat.color),
+      color: integerToHexColor(chat.color),
       summary: undefined,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroup,

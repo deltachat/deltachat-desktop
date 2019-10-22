@@ -1,6 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/messagelist')
-
+const { integerToHexColor } = require('./util')
 const CHATVIEW_PAGE_SIZE = 20
 
 const SplitOut = require('./splitout')
@@ -87,7 +87,7 @@ module.exports = class DCMessageList extends SplitOut {
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
     if (contact.color) {
-      contact.color = this._controller._integerToHexColor(contact.color)
+      contact.color = integerToHexColor(contact.color)
     }
     return {
       id,
