@@ -15,6 +15,7 @@ const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
 const DCChatList = require('./chatlist')
 const DCMessageList = require('./messagelist')
+const DCLocations = require('./locations')
 const DCLoginController = require('./login')
 const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
@@ -53,7 +54,10 @@ class DeltaChatController extends EventEmitter {
 
   loadSplitOuts () {
     require('./chatmethods').bind(this)()
-    require('./locations').bind(this)()
+  }
+
+  get locations () {
+    return new DCLocations(this)
   }
 
   get loginController () {

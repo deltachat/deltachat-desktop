@@ -167,7 +167,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
-    e.returnValue = dc.setLocation(latitude, longitude, accuracy)
+    e.returnValue = dc.locations.setLocation(latitude, longitude, accuracy)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
