@@ -167,3 +167,16 @@ code {
 .user-feedback.success {
   background-color: #4caf50;
 }
+
+.clear-button {
+  &.clear-button--hidden {
+    display: none;
+  }
+
+  &.bp3-button[class*="bp3-icon-"]::before {
+    color: white;
+  }
+  &.bp3-button.bp3-minimal:hover {
+    background-color: unset;
+  }
+}

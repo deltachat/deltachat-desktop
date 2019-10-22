@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { CreateChatSearchInput } from './dialogs/CreateChat-Styles'
+import classNames from 'classnames'
 
 const SearchInputWrap = styled(CreateChatSearchInput)`
   margin-left: 40px;
@@ -11,15 +12,35 @@ const SearchInputWrap = styled(CreateChatSearchInput)`
   }
 `
 
-export default class SearchInput extends React.Component {
-  render () {
-    const tx = window.translate
-    return (
+export function ClearButton(props) {
+  const { onChange, value } = props
+  const onClear = () => onChange({target:{value:''}})
+  
+  return (
+    <button
+      aria-label="Clear"
+      className={classNames(
+        "bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button",
+        {'clear-button--hidden': value === ''}
+      )}
+      onClick={onClear}>
+    </button>
+  )
+}
+
+export default function SearchInput(props) {
+  const { onChange, value, className } = props
+  const tx = window.translate
+  return (
+    <>
       <SearchInputWrap
         placeholder={tx('search')}
         autoFocus
-        {...this.props}
+        onChange={onChange}
+        value={value}
+        className={className}
       />
-    )
-  }
+      <ClearButton value={value} onChange={onChange} />
+    </>
+  )
 }
