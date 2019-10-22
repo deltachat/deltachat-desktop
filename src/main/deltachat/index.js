@@ -107,24 +107,29 @@ class DeltaChatController extends EventEmitter {
     logCoreEv.debug(event, data1, data2)
   }
 
+  /**
+   * @param {string} methodName
+   */
   __resolveNestedMethod (self, methodName) {
-    let previous = self
-    let scope
-    for (const key of methodName.split('.')) {
-      scope = previous
-      previous = previous[key]
-      if (typeof previous === 'undefined') {
-        const message = 'Resolving of nested method name failed: ' + methodName
-        log.error(message)
-        throw new Error(message)
-      }
+    const parts = methodName.split('.')
+    if (parts.length > 2) {
+      const message = 'Resolving of nested method name failed: Too many parts, only two allowed: ' + methodName
+      log.error(message)
+      throw new Error(message)
     }
-    if (typeof previous !== 'function') {
+    const scope = self[parts[0]]
+    if (typeof scope === 'undefined') {
+      const message = 'Resolving of nested method name failed: ' + methodName
+      log.error(message)
+      throw new Error(message)
+    }
+    const method = scope[parts[1]]
+    if (typeof method !== 'function') {
       const message = '(nested) Method is not of type function: ' + methodName
       log.error(message)
       throw new Error(message)
     }
-    return previous.bind(scope)
+    return method.bind(scope)
   }
 
   /**
