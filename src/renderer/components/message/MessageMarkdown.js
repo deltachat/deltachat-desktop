@@ -59,7 +59,7 @@ const rules = Object.assign({
     order: 19,
     match: blockRegex(/^(?:\n *)*\n/),
     parse: ignoreCapture,
-    react: function (node, output, state) { return <br key={state.key} /> }
+    react: function (node, output, state) { return <div className='line-break' /> }
   }
 }, previewRules)
 
