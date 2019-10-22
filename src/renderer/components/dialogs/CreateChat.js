@@ -47,7 +47,7 @@ export default function CreateChat (props) {
   }
 
   const chooseContact = async ({ id }) => {
-    const chatId = await callDcMethodAsync('createChatByContactId', id)
+    const chatId = await callDcMethodAsync('contacts.createChatByContactId', id)
 
     if (!chatId) {
       return userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
@@ -78,8 +78,8 @@ export default function CreateChat (props) {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('createContact', [queryStr, queryStr])
-    const chatId = await callDcMethodAsync('createChatByContactId', contactId)
+    const contactId = await callDcMethodAsync('contacts.createContact', [queryStr, queryStr])
+    const chatId = await callDcMethodAsync('contacts.createChatByContactId', contactId)
     closeDialogAndSelectChat(chatId)
   }
 

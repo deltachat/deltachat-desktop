@@ -23,6 +23,7 @@ const DCLoginController = require('./login')
 const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 const DCChat = require('./chat')
+const DCContacts = require('./contacts')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -37,7 +38,6 @@ class DeltaChatController extends EventEmitter {
     this.fullCwd = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
-    this.loadSplitOuts()
     /**
      * @type {DeltaChat}
      */
@@ -56,9 +56,8 @@ class DeltaChatController extends EventEmitter {
     return new DCChatList(this)
   }
 
-  loadSplitOuts () {
-    require('./chatmethods').bind(this)()
-    // contacts
+  get contacts () {
+    return new DCContacts(this)
   }
 
   get chat () {
@@ -123,13 +122,15 @@ class DeltaChatController extends EventEmitter {
    */
   async callMethod (evt, methodName, args) {
     const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
-      : this[methodName].bind(this)
-
-    if (typeof method !== 'function') {
-      const message = 'Method is not of type function: ' + methodName
-      log.error(message)
-      throw new Error(message)
-    }
+      : ((methodName) => {
+        const method = this[methodName]
+        if (typeof method !== 'function') {
+          const message = 'Method is not of type function: ' + methodName
+          log.error(message)
+          throw new Error(message)
+        }
+        return method.bind(this)
+      })(methodName)
 
     let returnValue
     try {

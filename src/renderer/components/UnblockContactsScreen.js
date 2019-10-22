@@ -50,7 +50,7 @@ class UnblockContacts extends React.Component {
     const tx = window.translate
     confirmation(tx('ask_unblock_contact'), yes => {
       if (yes) {
-        callDcMethod('unblockContact', [contact.id])
+        callDcMethod('contacts.unblockContact', [contact.id])
       }
     })
   }

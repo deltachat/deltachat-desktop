@@ -68,18 +68,4 @@ module.exports = class DCChat extends SplitOut {
   getChatContacts (chatId) {
     return this._dc.getChatContacts(chatId)
   }
-
-  acceptContactRequest (deadDrop) {
-    log.info(`chat with dead drop ${deadDrop}`)
-    const contact = this._dc.getContact(deadDrop.contact.id)
-    const address = contact.getAddress()
-    const name = contact.getName() || address.split('@')[0]
-    this._dc.createContact(name, address)
-    log.info(`Added contact ${name} (${address})`)
-    const chatId = this._dc.createChatByMessageId(deadDrop.id)
-    if (chatId) {
-      this._controller.chatList.updateChatList()
-      this._controller.chatList.selectChat(chatId)
-    }
-  }
 }
