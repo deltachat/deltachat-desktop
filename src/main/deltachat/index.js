@@ -42,46 +42,59 @@ class DeltaChatController extends EventEmitter {
      * @type {DeltaChat}
      */
     this._dc = undefined
+
+    this.__private = {
+      autocrypt: new DCAutocrypt(this),
+      backup: new DCBackup(this),
+      chatList: new DCChatList(this),
+      contacts: new DCContacts(this),
+      chat: new DCChat(this),
+      locations: new DCLocations(this),
+      loginController: new DCLoginController(this),
+      messageList: new DCMessageList(this),
+      settings: new DCSettings(this),
+      stickers: new DCStickers(this)
+    }
   }
 
   get autocrypt () {
-    return new DCAutocrypt(this)
+    return this.__private.autocrypt
   }
 
   get backup () {
-    return new DCBackup(this)
+    return this.__private.backup
   }
 
   get chatList () {
-    return new DCChatList(this)
+    return this.__private.chatList
   }
 
   get contacts () {
-    return new DCContacts(this)
+    return this.__private.contacts
   }
 
   get chat () {
-    return new DCChat(this)
+    return this.__private.chat
   }
 
   get locations () {
-    return new DCLocations(this)
+    return this.__private.locations
   }
 
   get loginController () {
-    return new DCLoginController(this)
+    return this.__private.loginController
   }
 
   get messageList () {
-    return new DCMessageList(this)
+    return this.__private.messageList
   }
 
   get settings () {
-    return new DCSettings(this)
+    return this.__private.settings
   }
 
   get stickers () {
-    return new DCStickers(this)
+    return this.__private.stickers
   }
 
   logCoreEvent (event, data1, data2) {
