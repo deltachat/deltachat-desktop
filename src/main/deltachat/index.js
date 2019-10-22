@@ -117,7 +117,7 @@ class DeltaChatController extends EventEmitter {
    */
   async callMethod (evt, methodName, args) {
     const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
-      : this[methodName]
+      : this[methodName].bind(this)
 
     if (typeof method !== 'function') {
       const message = 'Method is not of type function: ' + methodName
