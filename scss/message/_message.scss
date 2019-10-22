@@ -665,3 +665,10 @@ $color-message-icon-error: var(--errorColor);
 .module-message--sticker .module-message__container.module-message__container--outgoing, .module-message--sticker .module-message__container.module-message__container--incoming {
     background-color: transparent;
 }
+
+.module-message .line-break {
+  height: 14px;
+  &:last-child {
+    height: 0px;
+  }
+}
