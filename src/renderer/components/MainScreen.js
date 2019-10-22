@@ -193,7 +193,6 @@ class MainScreen extends React.Component {
                 />
                   : (<MessageList
                     chat={selectedChat}
-                    openDialog={this.context.openDialog}
                   />)
                 : (
                   <Welcome>

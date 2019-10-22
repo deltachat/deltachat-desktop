@@ -167,7 +167,7 @@ export default function MessageList (props) {
                     return MessageWrapper.render({
                       message,
                       chat,
-                      onClickContactRequest: () => onDeadDropClick(message),
+                      onClickContactRequest: () => openDialog('DeadDrop', { deaddrop: message }),
                       onClickSetupMessage: onClickSetupMessage.bind(this, message),
                       onShowDetail: onShowDetail.bind(this, message),
                       onClickAttachment: onClickAttachment.bind(this, message)
