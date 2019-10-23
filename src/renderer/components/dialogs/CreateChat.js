@@ -229,7 +229,7 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode, groupName 
             fgColor='#000000'
             level='Q'
             value={qrCode}
-            style={{ paddingTop: 'calc(100% / 2)' }}
+            style={{ marginTop: 'calc(100% / 2)', padding: '20pt', width: '100%', backgroundColor: 'white' }}
           />
         </Card>
       </DeltaDialogBody>
