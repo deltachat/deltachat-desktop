@@ -14,7 +14,7 @@ export const GroupNameInput = styled.input`
   border-color: var(--loginInputFocusColor);
   height: 32px;
   background-color: transparent;
-  color: var(--deltaChatPrimaryFg);
+  color: var(--bp3MenuText);
 `
 
 export const GroupSettingsContainer = styled.div`
@@ -26,8 +26,8 @@ export const GroupSettingsContainer = styled.div`
 export const GroupSeperator = styled.div`
   margin: ${({ noMargin }) => noMargin ? '0px' : '20px -20px 0px -20px'};
   padding: 10px 20px;
-  background-color: lightgrey;
-  color: grey;
+  background-color: var(--bp3DialogBgSecondary);
+  color: var(--bp3MenuText);
 `
 
 export const GroupMemberContactListWrapper = styled.div`
