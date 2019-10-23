@@ -13,6 +13,8 @@ export const GroupNameInput = styled.input`
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);
   height: 32px;
+  background-color: transparent;
+  color: var(--deltaChatPrimaryFg);
 `
 
 export const GroupSettingsContainer = styled.div`
