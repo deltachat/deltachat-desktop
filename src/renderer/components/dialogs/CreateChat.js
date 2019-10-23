@@ -212,7 +212,7 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
   )
 }
 
-export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
+export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode, groupName }) => {
   const tx = window.translate
 
   return (
@@ -222,17 +222,20 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode }) => {
         onClickBack={onClickBack}
         onClose={onClose}
       />
-      <div className={Classes.DIALOG_BODY}>
+      <DeltaDialogBody>
         <Card style={{ paddingTop: '0px' }}>
           <qr.QRCode
             bgColor='#FFFFFF'
             fgColor='#000000'
             level='Q'
             value={qrCode}
+            style={{ paddingTop: 'calc(100% / 2)' }}
           />
         </Card>
-      </div>
-      <div className={Classes.DIALOG_FOOTER} />
+      </DeltaDialogBody>
+      <DeltaDialogFooter>
+        <p style={{ textAlign: 'center' }}>{tx('qrshow_join_group_hint', [groupName])}</p>
+      </DeltaDialogFooter>
     </>
   )
 }

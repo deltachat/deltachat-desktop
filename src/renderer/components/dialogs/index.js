@@ -12,6 +12,7 @@ const EncryptionInfo = require('./EncryptionInfo').default
 const CreateChat = require('./CreateChat').default
 const EditGroup = require('./EditGroup').default
 const MapDialog = require('./MapDialog')
+const QrInviteCode = require('./QrInviteCode').default
 const ConfirmationDialog = require('./ConfirmationDialog').default
 
 const allDialogs = [
@@ -28,6 +29,7 @@ const allDialogs = [
   CreateChat,
   EditGroup,
   MapDialog,
+  QrInviteCode,
   ConfirmationDialog
 ]
 

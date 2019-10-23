@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { callDcMethod } from '../ipc'
+import { callDcMethod, callDcMethodAsync } from '../ipc'
 import { ipcRenderer } from 'electron'
 import ScreenContext from '../contexts/ScreenContext'
 
@@ -88,9 +88,12 @@ export default function DeltaMenu (props) {
     <MenuItem icon='plus' text={tx('menu_new_chat')} onClick={() => onCreateChat(screenContext)} />
     {chatMenu}
     <MenuItem
-      icon='settings'
-      text={tx('menu_settings')}
-      onClick={() => screenContext.openDialog('Settings')}
+      icon='camera'
+      text={tx('qrshow_join_contact_title')}
+      onClick={async () => {
+        const qrCode = await callDcMethodAsync('chat.getQrCode', 0)
+        screenContext.openDialog('QrInviteCode', { qrCode })
+      }}
     />
     <MenuItem
       icon='person'
@@ -101,6 +104,11 @@ export default function DeltaMenu (props) {
       icon='blocked-person'
       text={tx('unblock_contacts_desktop')}
       onClick={onUnblockContacts}
+    />
+    <MenuItem
+      icon='settings'
+      text={tx('menu_settings')}
+      onClick={() => screenContext.openDialog('Settings')}
     />
     <MenuItem icon='log-out' text={tx('logout_desktop')} onClick={logout} />
   </Menu>)
