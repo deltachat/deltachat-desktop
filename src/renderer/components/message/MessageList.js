@@ -21,7 +21,7 @@ export default function MessageList (props) {
     error: false,
     composerSize: 40
   })
-  const { chat, onDeadDropClick } = props
+  const { chat } = props
 
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
