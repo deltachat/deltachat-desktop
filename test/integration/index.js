@@ -100,7 +100,6 @@ test('Update and persist Desktop settings', async (t) => {
     await t.ok(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is not active after click')
     currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
     await t.equals(currentConfig['enterKeySends'], false, 'enterKeySends is false in config.json')
-    await domHelper.closeDialog()
     setup.endTest(app, t)
   } catch (err) {
     app.client.getMainProcessLogs().then(
