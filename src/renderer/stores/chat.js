@@ -46,7 +46,7 @@ chatStore.reducers.push((action, state) => {
 chatStore.effects.push((action) => {
   if (action.type === 'UI_DELETE_MESSAGE') {
     const { msgId } = action.payload
-    callDcMethod('deleteMessage', [msgId])
+    callDcMethod('messageList.deleteMessage', [msgId])
   }
 })
 

@@ -8,7 +8,7 @@ export const useAsyncEffect = (asyncEffect, ...args) => useEffect(() => { asyncE
 export const StickerDiv = props => {
   const { stickerPackName, stickerPackImages, chatId, setShowEmojiPicker } = props
   const onClickSticker = (fileName) => {
-    callDcMethod('sendSticker', [chatId, fileName])
+    callDcMethod('messageList.sendSticker', [chatId, fileName])
     setShowEmojiPicker(false)
   }
 
@@ -67,7 +67,7 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
   const [stickers, setStickers] = useState(null)
 
   useAsyncEffect(async () => {
-    const stickers = await callDcMethodAsync('getStickers')
+    const stickers = await callDcMethodAsync('stickers.getStickers')
     setStickers(stickers)
   }, [])
 

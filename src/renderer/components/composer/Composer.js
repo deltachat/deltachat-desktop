@@ -33,7 +33,7 @@ const Composer = React.forwardRef((props, ref) => {
       log.debug(`Empty message: don't send it...`)
       return
     }
-    callDcMethod('sendMessage', [chatId, message, filename])
+    callDcMethod('messageList.sendMessage', [chatId, message, filename])
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()

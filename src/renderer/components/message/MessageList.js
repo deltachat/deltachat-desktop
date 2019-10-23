@@ -21,7 +21,7 @@ export default function MessageList (props) {
     error: false,
     composerSize: 40
   })
-  const { chat, onDeadDropClick } = props
+  const { chat } = props
 
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
@@ -35,7 +35,7 @@ export default function MessageList (props) {
     if (chat.totalMessages === chat.messages.length) return
     scrollPrepare()
     callDcMethod(
-      'fetchMessages',
+      'messageList.fetchMessages',
       [chat.id]
     )
   }
@@ -89,7 +89,7 @@ export default function MessageList (props) {
       const { path } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         callDcMethod(
-          'sendMessage',
+          'messageList.sendMessage',
           [chat.id, null, path]
         )
       } else {
@@ -167,7 +167,7 @@ export default function MessageList (props) {
                     return MessageWrapper.render({
                       message,
                       chat,
-                      onClickContactRequest: () => onDeadDropClick(message),
+                      onClickContactRequest: () => openDialog('DeadDrop', { deaddrop: message }),
                       onClickSetupMessage: onClickSetupMessage.bind(this, message),
                       onShowDetail: onShowDetail.bind(this, message),
                       onClickAttachment: onClickAttachment.bind(this, message)

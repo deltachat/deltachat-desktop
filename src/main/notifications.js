@@ -6,6 +6,10 @@ const {
   Notification
 } = require('electron')
 
+/**
+ * @param {import('./deltachat/controller')} dc
+ * @param {*} settings
+ */
 module.exports = function (dc, settings) {
   if (!Notification.isSupported()) return
 
@@ -14,7 +18,7 @@ module.exports = function (dc, settings) {
   function getMsgBody (msgId) {
     const tx = app.translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
-    var json = dc.messageIdToJson(msgId)
+    var json = dc.messageList.messageIdToJson(msgId)
     var summary = json.msg.summary
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
@@ -28,7 +32,7 @@ module.exports = function (dc, settings) {
       })
       notify.show()
       notify.on('click', () => {
-        dc.selectChat(chatId)
+        dc.chatList.selectChat(chatId)
         app.focus()
         notify = null
       })

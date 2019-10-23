@@ -15,7 +15,7 @@ const locationStore = new Store(defaultState)
 const getLocations = (chatId, mapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
   callDcMethod(
-    'getLocations',
+    'locations.getLocations',
     [chatId, 0, timestampFrom, timestampTo],
     (locations) => locationStore.setState({ ...locationStore.getState(), locations })
   )

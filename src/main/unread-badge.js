@@ -9,7 +9,7 @@ module.exports = function (dc) {
   let reUpdateTimeOut
 
   function update () {
-    const count = dc._getGeneralFreshMessageCounter()
+    const count = dc.chatList._getGeneralFreshMessageCounter()
     app.setBadgeCount(count)
   }
 

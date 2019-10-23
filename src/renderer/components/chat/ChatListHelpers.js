@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce'
 const log = logger.getLogger('renderer/helpers/ChatList')
 
 const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
-  callDcMethod('getChatListIds', [listFlags, queryStr, queryContactId], cb)
+  callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], cb)
 }, 200)
 
 export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
@@ -20,7 +20,7 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
 
   const getAndSetChatListIds = immediatly => {
     if (immediatly === true) {
-      callDcMethod('getChatListIds', [listFlags, queryStr, queryContactId], setChatListIds)
+      callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], setChatListIds)
       return
     }
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
@@ -115,7 +115,7 @@ export const useLazyChatListItems = chatListIds => {
     const chatIdsToFetch = chatIds.filter(i => fetching.current.indexOf(i) === -1 && (typeof chatItems[i] === 'undefined' || force === true))
     if (chatIdsToFetch.length === 0) return
     fetching.current.push(...chatIdsToFetch)
-    const chats = await callDcMethodAsync('getSmallChatByIds', [chatIdsToFetch])
+    const chats = await callDcMethodAsync('chatList.getSmallChatByIds', [chatIdsToFetch])
     fetching.current = fetching.current.filter(i => chatIdsToFetch.indexOf(i) === -1)
     return chats
   }

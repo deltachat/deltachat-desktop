@@ -12,7 +12,7 @@ export default class DeadDrop extends React.Component {
   }
 
   yes () {
-    callDcMethod('chatWithContact', [this.props.deaddrop])
+    callDcMethod('contacts.acceptContactRequest', [this.props.deaddrop])
     this.close()
   }
 
@@ -21,7 +21,7 @@ export default class DeadDrop extends React.Component {
   }
 
   never () {
-    callDcMethod('blockContact', [this.props.deaddrop.contact.id])
+    callDcMethod('contacts.blockContact', [this.props.deaddrop.contact.id])
     this.close()
   }
 

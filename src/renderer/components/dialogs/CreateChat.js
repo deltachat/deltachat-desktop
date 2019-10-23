@@ -47,7 +47,7 @@ export default function CreateChat (props) {
   }
 
   const chooseContact = async ({ id }) => {
-    const chatId = await callDcMethodAsync('createChatByContactId', id)
+    const chatId = await callDcMethodAsync('contacts.createChatByContactId', id)
 
     if (!chatId) {
       return userFeedback({ type: 'error', text: tx('create_chat_error_desktop') })
@@ -78,8 +78,8 @@ export default function CreateChat (props) {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('createContact', [queryStr, queryStr])
-    const chatId = await callDcMethodAsync('createChatByContactId', contactId)
+    const contactId = await callDcMethodAsync('contacts.createContact', [queryStr, queryStr])
+    const chatId = await callDcMethodAsync('contacts.createChatByContactId', contactId)
     closeDialogAndSelectChat(chatId)
   }
 
@@ -244,18 +244,18 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
   const lazilyCreateOrUpdateGroup = async (finishing) => {
     let gId = groupId
     if (gId === -1) {
-      gId = await callDcMethodAsync('createGroupChat', [verified, groupName])
+      gId = await callDcMethodAsync('chat.createGroupChat', [verified, groupName])
       setGroupId(gId)
     } else {
-      await callDcMethodAsync('setChatName', [gId, groupName])
+      await callDcMethodAsync('chat.setName', [gId, groupName])
     }
     if (finishing === true) {
       if (groupImage !== '') {
-        await callDcMethodAsync('setChatProfileImage', [gId, groupImage])
+        await callDcMethodAsync('chat.setProfileImage', [gId, groupImage])
       }
       for (const contactId of groupMembers) {
         if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await callDcMethodAsync('addContactToChat', [gId, contactId])
+          await callDcMethodAsync('chat.addContactToChat', [gId, contactId])
         }
       }
     }
@@ -295,7 +295,7 @@ export function CreateGroupInner (props) {
         <PseudoListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
-          const qrCode = await callDcMethodAsync('getQrCode', gId)
+          const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
           setQrCode(qrCode)
           setViewMode('createGroup-showQrCode')
         }} />
@@ -397,7 +397,7 @@ export function CreateVerifiedGroupInner (props) {
         <PseudoListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') return
           const gId = await lazilyCreateOrUpdateGroup(false)
-          const qrCode = await callDcMethodAsync('getQrCode', gId)
+          const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
           setQrCode(qrCode)
           setViewMode('createVerifiedGroup-showQrCode')
         }} />

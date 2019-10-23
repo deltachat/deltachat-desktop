@@ -14,7 +14,7 @@ const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc', true)
 const DeltaChat = (() => {
   try {
-    return require('./deltachat/index.js')
+    return require('./deltachat/controller')
   } catch (error) {
     log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
     const { dialog } = require('electron')
@@ -76,7 +76,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
-    dc.setCoreStrings(txCoreStrings())
+    dc.loginController.setCoreStrings(txCoreStrings())
     menu.init(logHandler)
   })
 
@@ -102,21 +102,21 @@ function init (cwd, state, logHandler) {
   setupMarkseenFix(dc)
 
   ipcMain.on('login', (e, credentials) => {
-    dc.login(credentials, render, txCoreStrings())
+    dc.loginController.login(credentials, render, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
-    rimraf.sync(dc.getPath(addr))
+    rimraf.sync(dc.loginController.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
     render()
   })
 
   ipcMain.on('getMessage', (e, msgId) => {
-    e.returnValue = dc.messageIdToJson(msgId)
+    e.returnValue = dc.messageList.messageIdToJson(msgId)
   })
 
   ipcMain.on('getMessageInfo', (e, msgId) => {
-    main.send('MessageInfo', dc.getMessageInfo(msgId))
+    main.send('MessageInfo', dc.messageList.getMessageInfo(msgId))
   })
 
   // for the future:
@@ -124,38 +124,40 @@ function init (cwd, state, logHandler) {
   //   this._dc.markSeenMessages(ids)
   // })
 
+  /* unused
   ipcMain.on('getChatContacts', (e, chatId) => {
-    e.returnValue = dc.getChatContacts(chatId)
+    e.returnValue = dc.chat.getChatContacts(chatId)
   })
+  */
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
-    e.returnValue = dc.getChatMedia(msgType1, msgType2)
+    e.returnValue = dc.chat.getChatMedia(msgType1, msgType2)
   })
 
-  ipcMain.on('backupImport', (e, fileName) => dc.backupImport(fileName))
-  ipcMain.on('backupExport', (e, dir) => dc.backupExport(dir))
+  ipcMain.on('backupImport', (e, fileName) => dc.backup.import(fileName))
+  ipcMain.on('backupExport', (e, dir) => dc.backup.export(dir))
 
-  ipcMain.on('keysImport', (e, dir) => dc.keysImport(dir))
-  ipcMain.on('keysExport', (e, dir) => dc.keysExport(dir))
+  ipcMain.on('keysImport', (e, dir) => dc.settings.keysImport(dir))
+  ipcMain.on('keysExport', (e, dir) => dc.settings.keysExport(dir))
 
   ipcMain.on('setConfig', (e, key, value) => {
-    e.returnValue = dc.setConfig(key, value)
+    e.returnValue = dc.settings.setConfig(key, value)
   })
 
   ipcMain.on('getDCinfo', () => {
     main.send('dcInfo', dc.getInfo())
   })
 
-  ipcMain.on('logout', () => dc.logout())
+  ipcMain.on('logout', () => dc.loginController.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
-    dc.initiateKeyTransfer((err, resp) => {
+    dc.autocrypt.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
   })
 
   ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
-    dc.continueKeyTransfer(messageId, setupCode, err => {
+    dc.autocrypt.continueKeyTransfer(messageId, setupCode, err => {
       main.send('continueKeyTransferResp', err)
     })
   })
@@ -167,7 +169,7 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
-    e.returnValue = dc.setLocation(latitude, longitude, accuracy)
+    e.returnValue = dc.locations.setLocation(latitude, longitude, accuracy)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
@@ -223,7 +225,7 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
-    if (!credentials.mail_pw) credentials.mail_pw = dc.getConfig('mail_pw')
+    if (!credentials.mail_pw) credentials.mail_pw = dc.settings.getConfig('mail_pw')
     const tmp = new DeltaChat(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))
@@ -234,13 +236,13 @@ function init (cwd, state, logHandler) {
       deltachat.configuring = tmpDeltachat.configuring
       sendState(deltachat)
       if (tmpDeltachat.ready) {
-        dc.login(credentials, render, txCoreStrings())
+        dc.loginController.login(credentials, render, txCoreStrings())
         main.send('success', 'Configuration success!')
-        tmp.close()
+        tmp.loginController.close()
       }
     }
 
-    tmp.login(credentials, fakeRender, txCoreStrings())
+    tmp.loginController.login(credentials, fakeRender, txCoreStrings())
   })
 
   ipcMain.on('updateLogins', (e) => {
@@ -267,7 +269,7 @@ function init (cwd, state, logHandler) {
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    dc.login(savedCredentials, render, txCoreStrings())
+    dc.loginController.login(savedCredentials, render, txCoreStrings())
   }
 }
 

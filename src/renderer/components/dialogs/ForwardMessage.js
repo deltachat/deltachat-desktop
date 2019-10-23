@@ -17,7 +17,7 @@ export default function ForwardMessage (props) {
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
 
   const onChatClick = chatid => {
-    callDcMethod('forwardMessage', [props.forwardMessage.msg.id, chatid])
+    callDcMethod('messageList.forwardMessage', [props.forwardMessage.msg.id, chatid])
     props.onClose()
   }
   const onSearchChange = e => setQueryStr(e.target.value)

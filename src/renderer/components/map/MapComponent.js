@@ -258,7 +258,7 @@ class MapComponent extends React.Component {
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
         const messageObj = await ipcRenderer.sendSync(
-          'getMessage',
+          'messageList.getMessage',
           contactFeature.properties.msgId
         )
         if (messageObj) {
@@ -298,7 +298,7 @@ class MapComponent extends React.Component {
     }
     const latLng = Object.assign({}, this.poiLocation)
     callDcMethod(
-      'sendMessage',
+      'messageList.sendMessage',
       [selectedChat.id, message, null, latLng]
     )
     if (this.contextMenuPopup) {

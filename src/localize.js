@@ -17,11 +17,17 @@ function translate (messages) {
     }
 
     let message = entry.message
-    if (opts.quantity) {
-      if (typeof entry[opts.quantity] !== 'undefined') {
+    if (typeof opts.quantity !== 'undefined') {
+      if (typeof opts.quantity === 'string') {
         message = entry[opts.quantity]
+      } else if (typeof opts.quantity === 'number') {
+        message = entry[opts.quantity] || opts.quantity === 1 ? entry['one'] : entry['other']
       } else {
+        message = undefined
+      }
+      if (typeof message === 'undefined') {
         log.error(`Missing quantity '${opts.quantity}' for key '${key}'`)
+        return `${key}:${opts.quantity}`
       }
     }
 

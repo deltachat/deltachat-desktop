@@ -1,4 +1,5 @@
 const C = require('deltachat-node/constants')
+const DeltaChatNode = require('deltachat-node')
 const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat', true)
@@ -7,6 +8,22 @@ const windows = require('../windows')
 const { app } = require('electron')
 
 const { maybeMarkSeen } = require('../markseenFix')
+
+const { integerToHexColor } = require('./util')
+
+/**
+ * @typedef {import('deltachat-node')} DeltaChat
+ */
+const DCAutocrypt = require('./autocrypt')
+const DCBackup = require('./backup')
+const DCChatList = require('./chatlist')
+const DCMessageList = require('./messagelist')
+const DCLocations = require('./locations')
+const DCLoginController = require('./login')
+const DCSettings = require('./settings')
+const DCStickers = require('./stickers')
+const DCChat = require('./chat')
+const DCContacts = require('./contacts')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -21,19 +38,63 @@ class DeltaChatController extends EventEmitter {
     this.fullCwd = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
-    this.loadSplitOuts()
+    /**
+     * @type {DeltaChat}
+     */
+    this._dc = undefined
+
+    this.__private = {
+      autocrypt: new DCAutocrypt(this),
+      backup: new DCBackup(this),
+      chatList: new DCChatList(this),
+      contacts: new DCContacts(this),
+      chat: new DCChat(this),
+      locations: new DCLocations(this),
+      loginController: new DCLoginController(this),
+      messageList: new DCMessageList(this),
+      settings: new DCSettings(this),
+      stickers: new DCStickers(this)
+    }
   }
 
-  loadSplitOuts () {
-    require('./autocrypt').bind(this)()
-    require('./backup').bind(this)()
-    require('./chatlist').bind(this)()
-    require('./chatmethods').bind(this)()
-    require('./locations').bind(this)()
-    require('./login').bind(this)()
-    require('./messagelist').bind(this)()
-    require('./settings').bind(this)()
-    require('./stickers').bind(this)()
+  get autocrypt () {
+    return this.__private.autocrypt
+  }
+
+  get backup () {
+    return this.__private.backup
+  }
+
+  get chatList () {
+    return this.__private.chatList
+  }
+
+  get contacts () {
+    return this.__private.contacts
+  }
+
+  get chat () {
+    return this.__private.chat
+  }
+
+  get locations () {
+    return this.__private.locations
+  }
+
+  get loginController () {
+    return this.__private.loginController
+  }
+
+  get messageList () {
+    return this.__private.messageList
+  }
+
+  get settings () {
+    return this.__private.settings
+  }
+
+  get stickers () {
+    return this.__private.stickers
   }
 
   logCoreEvent (event, data1, data2) {
@@ -46,16 +107,52 @@ class DeltaChatController extends EventEmitter {
     logCoreEv.debug(event, data1, data2)
   }
 
-  async callMethod (evt, methodName, args) {
-    if (typeof this[methodName] !== 'function') {
-      const message = 'Method is not of type function: ' + methodName
+  /**
+   * @param {string} methodName
+   */
+  __resolveNestedMethod (self, methodName) {
+    const parts = methodName.split('.')
+    if (parts.length > 2) {
+      const message = 'Resolving of nested method name failed: Too many parts, only two allowed: ' + methodName
       log.error(message)
       throw new Error(message)
     }
+    const scope = self[parts[0]]
+    if (typeof scope === 'undefined') {
+      const message = 'Resolving of nested method name failed: ' + methodName
+      log.error(message)
+      throw new Error(message)
+    }
+    const method = scope[parts[1]]
+    if (typeof method !== 'function') {
+      const message = '(nested) Method is not of type function: ' + methodName
+      log.error(message)
+      throw new Error(message)
+    }
+    return method.bind(scope)
+  }
+
+  /**
+   *
+   * @param {*} evt
+   * @param {string} methodName
+   * @param {*} args
+   */
+  async callMethod (evt, methodName, args) {
+    const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
+      : ((methodName) => {
+        const method = this[methodName]
+        if (typeof method !== 'function') {
+          const message = 'Method is not of type function: ' + methodName
+          log.error(message)
+          throw new Error(message)
+        }
+        return method.bind(this)
+      })(methodName)
 
     let returnValue
     try {
-      returnValue = await this[methodName](...args)
+      returnValue = await method(...args)
     } catch (err) {
       log.error(`Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`)
     }
@@ -77,12 +174,12 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(eventType, payload)
   }
 
-  translate (txt) {
-    return app.translate(txt)
+  translate (key, substitutions, opts) {
+    return app.translate(key, substitutions, opts)
   }
 
   checkPassword (password) {
-    return password === this.getConfig('mail_pw')
+    return password === this.settings.getConfig('mail_pw')
   }
 
   registerEventHandler (dc) {
@@ -101,7 +198,7 @@ class DeltaChatController extends EventEmitter {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
@@ -109,13 +206,13 @@ class DeltaChatController extends EventEmitter {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_CHAT_MODIFIED', (chatId, msgId) => {
       this.onChatListChanged(chatId)
       this.onChatListItemChanged(chatId)
-      this.onChatModified(chatId)
+      this.chatList.onChatModified(chatId)
     })
 
     dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
@@ -170,7 +267,7 @@ class DeltaChatController extends EventEmitter {
    */
   onMessageUpdate (chatId, msgId, eventType) {
     if (chatId === 0 || msgId === 0) return
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageIdToJson(msgId), eventType })
+    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageList.messageIdToJson(msgId), eventType })
   }
 
   updateBlockedContacts () {
@@ -189,13 +286,9 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  _integerToHexColor (integerColor) {
-    return '#' + integerColor.toString(16)
-  }
-
   getContact (id) {
     const contact = this._dc.getContact(id).toJson()
-    contact.color = this._integerToHexColor(contact.color)
+    contact.color = integerToHexColor(contact.color)
     return contact
   }
 
@@ -216,17 +309,15 @@ class DeltaChatController extends EventEmitter {
   }
 
   contactRequests () {
-    this.selectChat(C.DC_CHAT_ID_DEADDROP)
+    this.chatList.selectChat(C.DC_CHAT_ID_DEADDROP)
   }
 
-  getEncrInfo (contactId) {
-    return this._dc.getContactEncryptionInfo(contactId)
-  }
-
-  getChatMedia (msgType1, msgType2) {
-    if (!this._selectedChatId) return
-    const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
-    return mediaMessages.map(this.messageIdToJson.bind(this))
+  getInfo () {
+    if (this.ready === true) {
+      return this._dc.getInfo()
+    } else {
+      return DeltaChatNode.getSystemInfo()
+    }
   }
 
   /**

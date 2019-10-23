@@ -39,7 +39,7 @@ export const useEditGroup = (verified, groupName, groupImage, groupMembers, grou
   const updateGroup = async () => {
     const remove = differ(initialGroupMembers, groupMembers)
     const add = differ(groupMembers, initialGroupMembers)
-    await callDcMethodAsync('modifyGroup', [groupId, groupName, groupImage, remove, add])
+    await callDcMethodAsync('chat.modifyGroup', [groupId, groupName, groupImage, remove, add])
   }
   const finishEditGroup = async () => {
     if (groupName === '') return
@@ -84,7 +84,7 @@ export function EditGroupInner (props) {
       <>
         <PseudoListItemAddMember onClick={() => setViewMode('addMember')} />
         <PseudoListItemShowQrCode onClick={async () => {
-          const qrCode = await callDcMethodAsync('getQrCode', groupId)
+          const qrCode = await callDcMethodAsync('chat.getQrCode', groupId)
           setQrCode(qrCode)
           setViewMode('showQrCode')
         }} />

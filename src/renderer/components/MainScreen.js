@@ -89,7 +89,7 @@ class MainScreen extends React.Component {
       return
     }
     this.chatClicked = chatId
-    callDcMethod('selectChat', [chatId])
+    callDcMethod('chatList.selectChat', [chatId])
     setTimeout(() => { this.chatClicked = 0 }, 500)
   }
 
@@ -193,7 +193,6 @@ class MainScreen extends React.Component {
                 />
                   : (<MessageList
                     chat={selectedChat}
-                    openDialog={this.context.openDialog}
                   />)
                 : (
                   <Welcome>
