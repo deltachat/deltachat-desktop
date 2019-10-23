@@ -106,7 +106,8 @@ export function EditGroupInner (props) {
       { viewMode === 'showQrCode' && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('main') },
         onClose,
-        qrCode
+        qrCode,
+        groupName
       })}
       { viewMode === 'main' &&
       <>
