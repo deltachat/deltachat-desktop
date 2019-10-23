@@ -12,23 +12,22 @@ const SearchInputWrap = styled(CreateChatSearchInput)`
   }
 `
 
-export function ClearButton(props) {
+export function ClearButton (props) {
   const { onChange, value } = props
-  const onClear = () => onChange({target:{value:''}})
-  
+  const onClear = () => onChange({ target: { value: '' } })
+
   return (
     <button
-      aria-label="Clear"
+      aria-label='Clear'
       className={classNames(
-        "bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button",
-        {'clear-button--hidden': value === ''}
+        'bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button',
+        { 'clear-button--hidden': value === '' }
       )}
-      onClick={onClear}>
-    </button>
+      onClick={onClear} />
   )
 }
 
-export default function SearchInput(props) {
+export default function SearchInput (props) {
   const { onChange, value, className } = props
   const tx = window.translate
   return (
