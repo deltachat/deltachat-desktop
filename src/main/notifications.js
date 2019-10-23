@@ -7,7 +7,7 @@ const {
 } = require('electron')
 
 /**
- * @param {import('./deltachat/index')} dc
+ * @param {import('./deltachat/controller')} dc
  * @param {*} settings
  */
 module.exports = function (dc, settings) {

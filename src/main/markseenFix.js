@@ -2,7 +2,7 @@ const windows = require('./windows')
 const C = require('deltachat-node/constants')
 const log = require('../logger').getLogger('main/markseenfix', true)
 
-/** @type {import('./deltachat/index')} */
+/** @type {import('./deltachat/controller')} */
 let dc
 
 function maybeMarkSeen (chatId, msgId) {

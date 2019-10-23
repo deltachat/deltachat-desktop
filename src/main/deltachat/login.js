@@ -32,7 +32,7 @@ module.exports = class DCLoginController extends SplitOut {
     this.setCoreStrings(coreStrings)
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-      this.emit('error', this._controller.translate('bad_email_address'))
+      this._controller.emit('error', this._controller.translate('bad_email_address'))
       return
     }
 
