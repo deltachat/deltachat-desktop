@@ -11,7 +11,7 @@ const domHelper = {
   },
   async openSettings () {
     await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(3) a')
+    await this.browser.click('.bp3-menu li:nth-child(7) a.bp3-menu-item')
   },
   async logout () {
     await this.openMainMenu()
