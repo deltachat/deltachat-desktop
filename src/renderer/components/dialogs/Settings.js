@@ -60,11 +60,13 @@ export default class Settings extends React.Component {
       'configured_mail_user',
       'configured_mail_port',
       'configured_mail_security',
+      'configured_imap_certificate_checks',
       'configured_send_user',
       'configured_send_pw',
       'configured_send_server',
       'configured_send_port',
       'configured_send_security',
+      'configured_smtp_certificate_checks',
       'configured_e2ee_enabled',
       'displayname',
       'selfstatus',
@@ -77,11 +79,13 @@ export default class Settings extends React.Component {
       mail_server: settings['configured_mail_server'],
       mail_port: settings['configured_mail_port'],
       mail_security: settings['configured_mail_security'],
+      imap_certificate_checks: settings['configured_imap_certificate_checks'],
       send_user: settings['configured_send_user'],
       send_pw: settings['configured_send_pw'],
       send_server: settings['configured_send_server'],
       send_port: settings['configured_send_port'],
       send_security: settings['configured_send_security'],
+      smtp_certificate_checks: settings['configured_smtp_certificate_checks'],
       e2ee_enabled: settings['configured_e2ee_enabled']
     }
 

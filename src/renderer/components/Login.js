@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 
+import C from 'deltachat-node/constants'
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import * as update from 'immutability-helper'
@@ -57,11 +58,13 @@ export default class Login extends React.Component {
       mail_server: this.props.mail_server || '',
       mail_port: this.props.mail_port || '',
       mail_security: this.props.mail_security || '',
+      imap_certificate_checks: this.props.imap_certificate_checks || '',
       send_user: this.props.send_user || '',
       send_pw: this.props.send_pw || '',
       send_server: this.props.send_server || '',
       send_port: this.props.send_port || '',
-      send_security: this.props.send_security || ''
+      send_security: this.props.send_security || '',
+      smtp_certificate_checks: this.props.smtp_certificate_checks || ''
     }
   }
 
@@ -123,11 +126,13 @@ export default class Login extends React.Component {
       mail_server,
       mail_port,
       mail_security,
+      imap_certificate_checks,
       send_user,
+      send_pw,
       send_server,
       send_port,
       send_security,
-      send_pw
+      smtp_certificate_checks
     } = this.state.credentials
 
     const { showAdvanced } = this.state.ui
@@ -206,6 +211,17 @@ export default class Login extends React.Component {
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
+            <DeltaSelect
+              id='imap_certificate_checks'
+              label={tx('login_imap_certificate_checks')}
+              value={imap_certificate_checks}
+              onChange={this.handleCredentialsChange}
+            >
+              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_HOSTNAMES}>{tx('accept_invalid_hostnames')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>{tx('accept_invalid_certificates')}</option>
+            </DeltaSelect>
 
             <DeltaHeadline>{tx('login_outbox')}</DeltaHeadline>
             <DeltaInput
@@ -250,6 +266,17 @@ export default class Login extends React.Component {
               <option value='ssl'>SSL/TLS</option>
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
+            </DeltaSelect>
+            <DeltaSelect
+              id='smtp_certificate_checks'
+              label={tx('login_smtp_certificate_checks')}
+              value={smtp_certificate_checks}
+              onChange={this.handleCredentialsChange}
+            >
+              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_HOSTNAMES}>{tx('accept_invalid_hostnames')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>{tx('accept_invalid_certificates')}</option>
             </DeltaSelect>
           </Collapse>
           <br />
