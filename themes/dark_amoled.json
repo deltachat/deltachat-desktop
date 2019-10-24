@@ -13,6 +13,8 @@
     "scrollbarTransparency": 0.45,
     "bgMessageBubbleIncoming": "#222",
     "bgMessageBubbleOutgoing": "#343",
-    "raw": {}
+    "raw": {
+        "outlineProperties": "1px solid #202020"
+    }
 }
 
