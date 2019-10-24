@@ -20,6 +20,9 @@ $emojimart-search-height: 31px + 6px;
   height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} + 1px);
   margin-top: -1px;
   overflow: overlay;
+  .disable-sticker & {
+    height: calc(#{$esp-height} - #{$esp-footer-height} + 1px);
+  }
 
   img {
     max-width: 300px;
@@ -32,6 +35,9 @@ $emojimart-search-height: 31px + 6px;
   height: calc(#{$esp-header-height} + 1px);
   display: flex;
   border-bottom: 1px solid var(--emojiMartBorder);
+  .disable-sticker & {
+    display: none;
+  }
 }
 
 .emoji-sticker-picker__emoji-or-sticker-selector__button {
@@ -64,6 +70,9 @@ $emojimart-search-height: 31px + 6px;
 
 .emoji-sticker-picker__emoji-picker {
   height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height});
+  .disable-sticker & {
+    height: calc(#{$esp-height} - #{$esp-footer-height});
+  }
 }
 
 .emoji-sticker-picker__sticker-picker__inner {
@@ -191,4 +200,11 @@ $emojimart-search-height: 31px + 6px;
 .emoji-mart-scroll {
   height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} - #{$emojimart-search-height});
   padding: 0 6px;
+  .disable-sticker & {
+    height: calc(#{$esp-height} - #{$esp-footer-height} - #{$emojimart-search-height});
+  }
+}
+
+.emoji-mart-category .emoji-mart-emoji span {
+  cursor: pointer;
 }

@@ -65,6 +65,7 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
 
   const [showSticker, setShowSticker] = useState(false)
   const [stickers, setStickers] = useState(null)
+  const disableStickers = stickers === null || Object.keys(stickers).length === 0
 
   useAsyncEffect(async () => {
     const stickers = await callDcMethodAsync('stickers.getStickers')
@@ -72,7 +73,10 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
   }, [])
 
   return (
-    <div className='emoji-sticker-picker' ref={ref}>
+    <div
+      className={classNames('emoji-sticker-picker', { 'disable-sticker': disableStickers })}
+      ref={ref}
+    >
       <div className='emoji-sticker-picker__emoji-or-sticker-selector'>
         <EmojiOrStickerSelectorButton onClick={() => setShowSticker(false)} isSelected={!showSticker}>Emoji</EmojiOrStickerSelectorButton>
         <EmojiOrStickerSelectorButton onClick={() => setShowSticker(true)} isSelected={showSticker}>Sticker</EmojiOrStickerSelectorButton>
