@@ -14,7 +14,9 @@
     "bgMessageBubbleIncoming": "#222",
     "bgMessageBubbleOutgoing": "#343",
     "raw": {
-        "outlineProperties": "1px solid #202020"
+        "outlineProperties": "1px solid #202020",
+        "outlineColor": "#505050"
+
     }
 }
 
