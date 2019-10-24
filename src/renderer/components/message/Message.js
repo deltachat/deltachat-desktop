@@ -8,6 +8,29 @@ const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('./Attachment')
 
+const MessageText = (props) => {
+  const { text, direction, status, onShowDetail } = props
+
+  // TODO another check - don't check it only over string
+  const longMessage = /\[.{3}\]$/.test(text)
+
+  return (
+    <div
+      dir='auto'
+      className={classNames(
+        'module-message__text',
+        `module-message__text--${direction}`,
+        status === 'error' && direction === 'incoming'
+          ? 'module-message__text--error'
+          : null
+      )}
+    >
+      <MessageBody text={text || ''} />
+      {longMessage && <button onClick={onShowDetail}>...</button>}
+    </div>
+  )
+}
+
 const Avatar = ({ contact }) => {
   const {
     profileImage,
@@ -69,39 +92,6 @@ class Message extends React.Component {
     this.state = {
       textSelected: false
     }
-  }
-
-  renderText () {
-    const { text, direction, status, onShowDetail } = this.props
-    const tx = window.translate
-
-    const contents =
-      direction === 'incoming' && status === 'error'
-        ? tx('incomingError')
-        : text
-
-    if (!contents) {
-      return null
-    }
-
-    // TODO another check - don't check it only over string
-    const longMessage = /\[.{3}\]$/.test(text)
-
-    return (
-      <div
-        dir='auto'
-        className={classNames(
-          'module-message__text',
-          `module-message__text--${direction}`,
-          status === 'error' && direction === 'incoming'
-            ? 'module-message__text--error'
-            : null
-        )}
-      >
-        <MessageBody text={contents || ''} />
-        {longMessage && <button onClick={onShowDetail}>...</button>}
-      </div>
-    )
   }
 
   captureMenuTrigger (triggerRef) {
@@ -271,7 +261,8 @@ class Message extends React.Component {
       viewType,
       collapseMetadata,
       conversationType,
-      message
+      message,
+      text
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -299,7 +290,7 @@ class Message extends React.Component {
           {direction === 'incoming' && conversationType === 'group' && Author(message)}
           {Attachment.render(this.props)}
 
-          {this.renderText()}
+          {text && MessageText(this.props)}
           <MessageMetaData {...this.props} />
         </div>
         {this.renderMenu(direction === 'incoming', triggerId)}
