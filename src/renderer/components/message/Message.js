@@ -58,6 +58,16 @@ const Author = ({ contact }) => {
   )
 }
 
+// todo solve this only with css - and make it look better
+const ErrorIcon = () => (<div className='module-message__error-container'>
+  <div
+    className={classNames(
+      'module-message__error',
+      `module-message__error--outgoing`
+    )}
+  />
+</div>)
+
 class Message extends React.Component {
   constructor (props) {
     super(props)
@@ -69,25 +79,6 @@ class Message extends React.Component {
     this.state = {
       textSelected: false
     }
-  }
-
-  renderError (isCorrectSide) {
-    const { status, direction } = this.props
-
-    if (!isCorrectSide || status !== 'error') {
-      return null
-    }
-
-    return (
-      <div className='module-message__error-container'>
-        <div
-          className={classNames(
-            'module-message__error',
-            `module-message__error--${direction}`
-          )}
-        />
-      </div>
-    )
   }
 
   renderText () {
@@ -290,7 +281,8 @@ class Message extends React.Component {
       viewType,
       collapseMetadata,
       conversationType,
-      message
+      message,
+      status
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -307,7 +299,6 @@ class Message extends React.Component {
         )}
       >
         {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
-        {this.renderError(direction === 'incoming')}
         {this.renderMenu(direction === 'outgoing', triggerId)}
         <div
           onContextMenu={this.showMenu}
@@ -322,7 +313,7 @@ class Message extends React.Component {
           {this.renderText()}
           <MessageMetaData {...this.props} />
         </div>
-        {this.renderError(direction === 'outgoing')}
+        {direction === 'outgoing' && status === 'error' && ErrorIcon()}
         {this.renderMenu(direction === 'incoming', triggerId)}
         <div onClick={ev => { ev.stopPropagation() }}>
           {this.renderContextMenu(triggerId)}
