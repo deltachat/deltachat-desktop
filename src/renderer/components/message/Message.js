@@ -85,60 +85,41 @@ const Author = ({ contact }) => {
 const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   const {
     attachment,
-    direction,
     onDownload,
     onReply,
     viewType
   } = props
   const tx = window.translate
 
-  const downloadButton = attachment && viewType !== 23 ? (
-    <div
-      onClick={onDownload}
-      role='button'
-      className={classNames(
-        'module-message__buttons__download'
-      )}
-      aria-label={tx('save')}
-    />
-  ) : null
-
-  const replyButton = (
-    <div
-      onClick={onReply}
-      role='button'
-      className={classNames(
-        'module-message__buttons__reply'
-      )}
-    />
-  )
-
-  const menuButton = (
-    <ContextMenuTrigger id={triggerId} ref={MenuRef}>
-      <div
-        role='button'
-        onClick={showMenu}
-        className={classNames(
-          'module-message__buttons__menu'
-        )}
-        aria-label={tx('a11y_message_context_menu_btn_label')}
-      />
-    </ContextMenuTrigger>
-  )
-
-  const first = direction === 'incoming' ? downloadButton : menuButton
-  const last = direction === 'incoming' ? menuButton : downloadButton
-
   return [(
-    <div
-      className={classNames(
-        'module-message__buttons',
-        `module-message__buttons--${direction}`
-      )}
-    >
-      {first}
-      {replyButton}
-      {last}
+    <div className='module-message__buttons'>
+      {
+        attachment && viewType !== 23 && <div
+          onClick={onDownload}
+          role='button'
+          className={classNames(
+            'module-message__buttons__download'
+          )}
+          aria-label={tx('save')}
+        />
+      }
+      <div
+        onClick={onReply}
+        role='button'
+        className={classNames(
+          'module-message__buttons__reply'
+        )}
+      />
+      <ContextMenuTrigger id={triggerId} ref={MenuRef}>
+        <div
+          role='button'
+          onClick={showMenu}
+          className={classNames(
+            'module-message__buttons__menu'
+          )}
+          aria-label={tx('a11y_message_context_menu_btn_label')}
+        />
+      </ContextMenuTrigger>
     </div>
   )]
 }
@@ -266,7 +247,7 @@ const Message = (props) => {
       )}
     >
       {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
-      {direction === 'outgoing' && menu}
+      {menu}
       <div
         onContextMenu={showMenu}
         className={classNames(
@@ -280,7 +261,6 @@ const Message = (props) => {
         {text && MessageText(props, onShowDetail)}
         <MessageMetaData {...props} />
       </div>
-      {direction === 'incoming' && menu}
       <div onClick={ev => { ev.stopPropagation() }}>
         {contextMenu(props, textSelected, triggerId)}
       </div>

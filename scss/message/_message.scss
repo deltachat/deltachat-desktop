@@ -72,7 +72,7 @@ $color-message-icon-error: var(--errorColor);
 
 .module-message__buttons {
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 0;
     display: inline-flex;
     flex-direction: row;
@@ -94,17 +94,6 @@ $color-message-icon-error: var(--errorColor);
         border-radius: 4px;
     }
 }
-
-.module-message__buttons--incoming {
-    right: 0;
-    top: 5px;
-}
-
-.module-message__buttons--outgoing {
-    right: 0;
-    top: 5px;
-}
-
 
 .module-message__buttons__download {
     height: 24px;
