@@ -23,7 +23,7 @@ module.exports = function (dc, settings) {
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+  dc._dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
     if (!notify && settings.notifications && windows.main.win.hidden) {
       notify = new Notification({
         title: appName(),
