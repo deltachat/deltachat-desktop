@@ -1,4 +1,5 @@
 const React = require('react')
+const { useRef, useState } = require('react')
 const classNames = require('classnames')
 
 const MessageBody = require('./MessageBody')
@@ -8,8 +9,8 @@ const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('./Attachment')
 
-const MessageText = (props) => {
-  const { text, direction, status, onShowDetail } = props
+const MessageText = (props, onShowDetail) => {
+  const { text, direction, status } = props
 
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
@@ -81,225 +82,210 @@ const Author = ({ contact }) => {
   )
 }
 
-class Message extends React.Component {
-  constructor (props) {
-    super(props)
+const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
+  const {
+    attachment,
+    direction,
+    onDownload,
+    onReply,
+    viewType
+  } = props
+  const tx = window.translate
 
-    this.captureMenuTrigger = this.captureMenuTrigger.bind(this)
-    this.showMenu = this.showMenu.bind(this)
+  const downloadButton = attachment && viewType !== 23 ? (
+    <div
+      onClick={onDownload}
+      role='button'
+      className={classNames(
+        'module-message__buttons__download'
+      )}
+      aria-label={tx('save')}
+    />
+  ) : null
 
-    this.menuTriggerRef = null
-    this.state = {
-      textSelected: false
-    }
-  }
+  const replyButton = (
+    <div
+      onClick={onReply}
+      role='button'
+      className={classNames(
+        'module-message__buttons__reply'
+      )}
+    />
+  )
 
-  captureMenuTrigger (triggerRef) {
-    this.menuTriggerRef = triggerRef
-  }
-
-  showMenu (event) {
-    if (this.menuTriggerRef) {
-      this.setState({ textSelected: window.getSelection().toString() !== '' })
-      this.menuTriggerRef.handleContextClick(event)
-    }
-  }
-
-  renderMenu (isCorrectSide, triggerId) {
-    const {
-      attachment,
-      direction,
-      disableMenu,
-      onDownload,
-      onReply,
-      viewType
-    } = this.props
-    const tx = window.translate
-
-    if (!isCorrectSide || disableMenu) {
-      return null
-    }
-
-    const downloadButton = attachment && viewType !== 23 ? (
+  const menuButton = (
+    <ContextMenuTrigger id={triggerId} ref={MenuRef}>
       <div
-        onClick={onDownload}
         role='button'
+        onClick={showMenu}
         className={classNames(
-          'module-message__buttons__download'
+          'module-message__buttons__menu'
         )}
-        aria-label={tx('save')}
+        aria-label={tx('a11y_message_context_menu_btn_label')}
       />
-    ) : null
+    </ContextMenuTrigger>
+  )
 
-    const replyButton = (
-      <div
+  const first = direction === 'incoming' ? downloadButton : menuButton
+  const last = direction === 'incoming' ? menuButton : downloadButton
+
+  return [(
+    <div
+      className={classNames(
+        'module-message__buttons',
+        `module-message__buttons--${direction}`
+      )}
+    >
+      {first}
+      {replyButton}
+      {last}
+    </div>
+  )]
+}
+
+const renderContextMenu = (props, textSelected, triggerId) => {
+  const {
+    attachment,
+    direction,
+    status,
+    onDelete,
+    onDownload,
+    onReply,
+    onForward,
+    onRetrySend,
+    onShowDetail
+  } = props
+  const tx = window.translate
+
+  const showRetry = status === 'error' && direction === 'outgoing'
+
+  return (
+    <ContextMenu id={triggerId}>
+      <MenuItem
+        attributes={{
+          hidden: !textSelected
+        }}
+        onClick={_ => {
+          navigator.clipboard.writeText(window.getSelection().toString())
+        }}
+      >
+        {tx('menu_copy_to_clipboard')}
+      </MenuItem>
+      {attachment ? (
+        <MenuItem
+          onClick={onDownload}
+        >
+          {tx('download_attachment_desktop')}
+        </MenuItem>
+      ) : null}
+      <MenuItem
+        attributes={{
+          className: 'module-message__context__reply'
+        }}
         onClick={onReply}
-        role='button'
-        className={classNames(
-          'module-message__buttons__reply'
-        )}
-      />
-    )
+      >
+        {tx('reply_to_message_desktop')}
+      </MenuItem>
+      <MenuItem
+        attributes={{
+          className: 'module-message__context__forward'
+        }}
+        onClick={onForward}
+      >
+        {tx('menu_forward')}
+      </MenuItem>
+      <MenuItem
+        attributes={{
+          className: 'module-message__context__more-info'
+        }}
+        onClick={onShowDetail}
+      >
+        {tx('more_info_desktop')}
+      </MenuItem>
+      {showRetry ? (
+        <MenuItem
+          attributes={{
+            className: 'module-message__context__retry-send'
+          }}
+          onClick={onRetrySend}
+        >
+          {tx('retry_send')}
+        </MenuItem>
+      ) : null}
+      <MenuItem
+        attributes={{
+          className: 'module-message__context__delete-message'
+        }}
+        onClick={onDelete}
+      >
+        {tx('delete_message_desktop')}
+      </MenuItem>
+    </ContextMenu>
+  )
+}
 
-    const menuButton = (
-      <ContextMenuTrigger id={triggerId} ref={this.captureMenuTrigger}>
-        <div
-          role='button'
-          onClick={this.showMenu}
-          className={classNames(
-            'module-message__buttons__menu'
-          )}
-          aria-label={tx('a11y_message_context_menu_btn_label')}
-        />
-      </ContextMenuTrigger>
-    )
+const Message = (props) => {
+  const {
+    authorAddress,
+    direction,
+    id,
+    timestamp,
+    viewType,
+    collapseMetadata,
+    conversationType,
+    message,
+    text,
+    disableMenu
+  } = props
 
-    const first = direction === 'incoming' ? downloadButton : menuButton
-    const last = direction === 'incoming' ? menuButton : downloadButton
+  // This id is what connects our triple-dot click with our associated pop-up menu.
+  //   It needs to be unique.
+  const triggerId = String(id || `${authorAddress}-${timestamp}`)
 
-    return (
+  const onShowDetail = props.onShowDetail
+
+  const MenuRef = useRef(null)
+  const [textSelected, setTextSelected] = useState(false)
+
+  const showMenu = (event) => {
+    if (MenuRef.current) {
+      setTextSelected(window.getSelection().toString() !== '')
+      MenuRef.current.handleContextClick(event)
+    }
+  }
+
+  const menu = !disableMenu && InlineMenu(MenuRef, showMenu, triggerId, props)
+
+  return (
+    <div
+      onContextMenu={showMenu}
+      className={classNames(
+        'module-message',
+        `module-message--${direction}`,
+        { 'module-message--sticker': viewType === 23 }
+      )}
+    >
+      {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
+      {direction === 'outgoing' && menu}
       <div
+        onContextMenu={showMenu}
         className={classNames(
-          'module-message__buttons',
-          `module-message__buttons--${direction}`
+          'module-message__container',
+          `module-message__container--${direction}`
         )}
       >
-        {first}
-        {replyButton}
-        {last}
+        {direction === 'incoming' && conversationType === 'group' && Author(message)}
+        {Attachment.render(props)}
+
+        {text && MessageText(props, onShowDetail)}
+        <MessageMetaData {...props} />
       </div>
-    )
-  }
-
-  renderContextMenu (triggerId) {
-    const {
-      attachment,
-      direction,
-      status,
-      onDelete,
-      onDownload,
-      onReply,
-      onForward,
-      onRetrySend,
-      onShowDetail
-    } = this.props
-    const tx = window.translate
-
-    const showRetry = status === 'error' && direction === 'outgoing'
-
-    return (
-      <ContextMenu id={triggerId}>
-        <MenuItem
-          attributes={{
-            hidden: !this.state.textSelected
-          }}
-          onClick={_ => {
-            navigator.clipboard.writeText(window.getSelection().toString())
-          }}
-        >
-          {tx('menu_copy_to_clipboard')}
-        </MenuItem>
-        {attachment ? (
-          <MenuItem
-            onClick={onDownload}
-          >
-            {tx('download_attachment_desktop')}
-          </MenuItem>
-        ) : null}
-        <MenuItem
-          attributes={{
-            className: 'module-message__context__reply'
-          }}
-          onClick={onReply}
-        >
-          {tx('reply_to_message_desktop')}
-        </MenuItem>
-        <MenuItem
-          attributes={{
-            className: 'module-message__context__forward'
-          }}
-          onClick={onForward}
-        >
-          {tx('menu_forward')}
-        </MenuItem>
-        <MenuItem
-          attributes={{
-            className: 'module-message__context__more-info'
-          }}
-          onClick={onShowDetail}
-        >
-          {tx('more_info_desktop')}
-        </MenuItem>
-        {showRetry ? (
-          <MenuItem
-            attributes={{
-              className: 'module-message__context__retry-send'
-            }}
-            onClick={onRetrySend}
-          >
-            {tx('retry_send')}
-          </MenuItem>
-        ) : null}
-        <MenuItem
-          attributes={{
-            className: 'module-message__context__delete-message'
-          }}
-          onClick={onDelete}
-        >
-          {tx('delete_message_desktop')}
-        </MenuItem>
-      </ContextMenu>
-    )
-  }
-
-  render () {
-    const {
-      authorAddress,
-      direction,
-      id,
-      timestamp,
-      viewType,
-      collapseMetadata,
-      conversationType,
-      message,
-      text
-    } = this.props
-
-    // This id is what connects our triple-dot click with our associated pop-up menu.
-    //   It needs to be unique.
-    const triggerId = String(id || `${authorAddress}-${timestamp}`)
-
-    return (
-      <div
-        onContextMenu={this.showMenu}
-        className={classNames(
-          'module-message',
-          `module-message--${direction}`,
-          { 'module-message--sticker': viewType === 23 }
-        )}
-      >
-        {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
-        {this.renderMenu(direction === 'outgoing', triggerId)}
-        <div
-          onContextMenu={this.showMenu}
-          className={classNames(
-            'module-message__container',
-            `module-message__container--${direction}`
-          )}
-        >
-          {direction === 'incoming' && conversationType === 'group' && Author(message)}
-          {Attachment.render(this.props)}
-
-          {text && MessageText(this.props)}
-          <MessageMetaData {...this.props} />
-        </div>
-        {this.renderMenu(direction === 'incoming', triggerId)}
-        <div onClick={ev => { ev.stopPropagation() }}>
-          {this.renderContextMenu(triggerId)}
-        </div>
+      {direction === 'incoming' && menu}
+      <div onClick={ev => { ev.stopPropagation() }}>
+        {renderContextMenu(props, textSelected, triggerId)}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 module.exports = Message
