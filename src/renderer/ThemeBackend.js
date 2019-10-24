@@ -160,7 +160,7 @@ export function ThemeDataBuilder (theme) {
     bp3SwitchKnobShadowChecked: '0px 1px 0 0px #c9d4d2d1',
     bp3SpinnerTrack: '#acd4e8',
     bp3SpinnerHead: '#42a5f5',
-    outlineProperties: '1px solid #b9b9b9',
+    outlineProperties: '1px solid transparent',
     outlineColor:'b9b9b9',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
