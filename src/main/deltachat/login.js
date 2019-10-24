@@ -2,6 +2,10 @@ const DeltaChat = require('deltachat-node')
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/login', true)
 const path = require('path')
+const setupNotifications = require('../notifications')
+const setupUnreadBadgeCounter = require('../unread-badge')
+const { setupMarkseenFix } = require('../markseenFix')
+const { app } = require('electron')
 
 const SplitOut = require('./splitout')
 module.exports = class DCLoginController extends SplitOut {
@@ -24,8 +28,8 @@ module.exports = class DCLoginController extends SplitOut {
     // Creates a separate DB file for each login
     this._controller.fullCwd = this.getPath(credentials.addr)
     log.info(`Using deltachat instance ${this._controller.fullCwd}`)
-    this._controller._dc = new DeltaChat()
-    const dc = this._dc
+    const dc = new DeltaChat()
+    this._controller._dc = dc
     this._controller.credentials = credentials
     this._controller._render = render
 
@@ -36,7 +40,7 @@ module.exports = class DCLoginController extends SplitOut {
       return
     }
 
-    dc.open(this._controller.fullCwd, err => {
+    this._dc.open(this._controller.fullCwd, err => {
       if (err) throw err
       const onReady = () => {
         log.info('Ready')
@@ -46,16 +50,19 @@ module.exports = class DCLoginController extends SplitOut {
         log.info('dc_get_info', dc.getInfo())
         render()
       }
-      if (!dc.isConfigured()) {
-        dc.once('ready', onReady)
+      if (!this._dc.isConfigured()) {
+        this._dc.once('ready', onReady)
         this._controller.configuring = true
-        dc.configure(addServerFlags(credentials))
+        this._dc.configure(addServerFlags(credentials))
         render()
       } else {
         onReady()
       }
     })
     this._controller.registerEventHandler(dc)
+    setupNotifications(this._controller, app.state.saved)
+    setupUnreadBadgeCounter(this._controller)
+    setupMarkseenFix(this._controller)
   }
 
   logout () {

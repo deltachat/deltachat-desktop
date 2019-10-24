@@ -13,7 +13,7 @@ module.exports = function (dc) {
     app.setBadgeCount(count)
   }
 
-  dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+  dc._dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
     // don't update imidiately if the app is in focused
     if (windows.main.win.hidden) update()
 
@@ -24,7 +24,7 @@ module.exports = function (dc) {
     }, 4000)
   })
 
-  dc.on('ready', () => {
+  dc._dc.on('ready', () => {
     // for start and after account switch
     update()
   })
