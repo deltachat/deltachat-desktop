@@ -167,28 +167,6 @@ $color-message-icon-error: var(--errorColor);
     margin-right: 0;
 }
 
-.module-message__error-container {
-    width: 28px;
-    position: relative;
-}
-
-.module-message__error {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    position: absolute;
-    bottom: 4px;
-    @include color-svg('../images/error.svg', $color-message-icon-error);
-}
-
-.module-message__error--outgoing {
-    left: 8px;
-}
-
-.module-message__error--incoming {
-    right: 8px;
-}
-
 .module-message__container {
     position: relative;
     display: inline-block;
