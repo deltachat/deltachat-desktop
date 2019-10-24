@@ -58,16 +58,6 @@ const Author = ({ contact }) => {
   )
 }
 
-// todo solve this only with css - and make it look better
-const ErrorIcon = () => (<div className='module-message__error-container'>
-  <div
-    className={classNames(
-      'module-message__error',
-      `module-message__error--outgoing`
-    )}
-  />
-</div>)
-
 class Message extends React.Component {
   constructor (props) {
     super(props)
@@ -281,8 +271,7 @@ class Message extends React.Component {
       viewType,
       collapseMetadata,
       conversationType,
-      message,
-      status
+      message
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -313,7 +302,6 @@ class Message extends React.Component {
           {this.renderText()}
           <MessageMetaData {...this.props} />
         </div>
-        {direction === 'outgoing' && status === 'error' && ErrorIcon()}
         {this.renderMenu(direction === 'incoming', triggerId)}
         <div onClick={ev => { ev.stopPropagation() }}>
           {this.renderContextMenu(triggerId)}

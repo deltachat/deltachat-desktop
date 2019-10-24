@@ -54,6 +54,7 @@ class MessageMetaData extends React.Component {
                 ? 'module-message__metadata__date--with-image-no-caption'
                 : null
             )}
+            style={{ color: 'red' }}
           >
             {tx('send_failed')}
           </span>
@@ -67,7 +68,7 @@ class MessageMetaData extends React.Component {
           />
         )}
         <span className='module-message__metadata__spacer' />
-        {direction === 'outgoing' && status !== 'error' ? (
+        {direction === 'outgoing' ? (
           <div
             className={classNames(
               'status-icon',
