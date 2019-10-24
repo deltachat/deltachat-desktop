@@ -4,7 +4,7 @@ const SplitOut = require('./splitout')
 module.exports = class DCChat extends SplitOut {
   getChatMedia (msgType1, msgType2) {
     if (!this._controller._selectedChatId) return
-    const mediaMessages = this._dc.getChatMedia(this._selectedChatId, msgType1, msgType2)
+    const mediaMessages = this._dc.getChatMedia(this._controller._selectedChatId, msgType1, msgType2)
     return mediaMessages.map(
       this._controller.messageList.messageIdToJson.bind(this._controller.messageList)
     )
