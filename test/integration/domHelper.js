@@ -1,21 +1,25 @@
 const domHelper = {
   browser: null,
 
+  getMainMenuItemSelector (index) {
+    return `.bp3-menu li:nth-child(${index}) a.bp3-menu-item`
+  },
+
   init (app) {
     this.browser = app.client
   },
 
-  async openMainMenu () {
+  async openMainMenuItem (itemClass) {
     this.browser.$('#main-menu-button').waitForExist(5000)
     await this.browser.click('#main-menu-button')
+    this.browser.$('.' + itemClass).waitForExist(5000)
+    await this.browser.click('.' + itemClass)
   },
   async openSettings () {
-    await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(7) a.bp3-menu-item')
+    await this.openMainMenuItem('bp3-icon-settings')
   },
   async logout () {
-    await this.openMainMenu()
-    await this.browser.click('.bp3-menu li:nth-child(6) a.bp3-menu-item')
+    await this.openMainMenuItem('bp3-icon-log-out')
   },
   async closeDialog () {
     await this.browser.click('.bp3-dialog-close-button')
