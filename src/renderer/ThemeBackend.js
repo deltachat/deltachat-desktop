@@ -161,10 +161,13 @@ export function ThemeDataBuilder (theme) {
     bp3SpinnerTrack: '#acd4e8',
     bp3SpinnerHead: '#42a5f5',
     outlineProperties: '1px solid #b9b9b9',
+    outlineColor:'b9b9b9',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
-    emojiMartBorder: '#ececec',
+    emojiMartBorder: theme.outlineColor,
+    emojiMartSearchBorder: theme.emojiMartBorder,
     emojiMartBg: theme.bgPrimary,
+    emojiMartOutsideRadius: '5px',
     emojiMartCategoryIcons: undefinedGuard(
       [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.4)
     ),
