@@ -143,7 +143,7 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   )]
 }
 
-const renderContextMenu = (props, textSelected, triggerId) => {
+const contextMenu = (props, textSelected, triggerId) => {
   const {
     attachment,
     direction,
@@ -282,7 +282,7 @@ const Message = (props) => {
       </div>
       {direction === 'incoming' && menu}
       <div onClick={ev => { ev.stopPropagation() }}>
-        {renderContextMenu(props, textSelected, triggerId)}
+        {contextMenu(props, textSelected, triggerId)}
       </div>
     </div>
   )
