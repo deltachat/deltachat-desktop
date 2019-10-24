@@ -8,6 +8,56 @@ const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('./Attachment')
 
+const Avatar = ({ contact }) => {
+  const {
+    profileImage,
+    color,
+    name,
+    address
+  } = contact
+
+  const alt = `${name || address}`
+
+  if (profileImage) {
+    return (
+      <div className='module-message__author-avatar'>
+        <img alt={alt} src={profileImage} />
+      </div>
+    )
+  } else {
+    return (
+      <div className='module-message__author-default-avatar'
+        alt={alt}
+      >
+        <div
+          style={{ backgroundColor: color }}
+          className='module-message__author-default-avatar__label'>
+          {(name && name.trim()[0]) || '#'}
+        </div>
+      </div>
+    )
+  }
+}
+
+const Author = ({ contact }) => {
+  const {
+    color,
+    name,
+    address
+  } = contact
+
+  return (
+    <div className='module-message__author'>
+      <ContactName
+        email={address}
+        name={name}
+        module='module-message__author'
+        color={color}
+      />
+    </div>
+  )
+}
+
 class Message extends React.Component {
   constructor (props) {
     super(props)
@@ -19,56 +69,6 @@ class Message extends React.Component {
     this.state = {
       textSelected: false
     }
-  }
-
-  renderAvatar () {
-    const {
-      authorName,
-      authorAddress,
-      authorProfileName,
-      authorAvatarPath,
-      authorColor,
-      collapseMetadata,
-      conversationType,
-      direction
-    } = this.props
-    const tx = window.translate
-
-    const title = `${authorName || authorAddress}${
-      !authorName && authorProfileName ? ` ~${authorProfileName}` : ''
-    }`
-
-    if (
-      collapseMetadata ||
-      conversationType !== 'group' ||
-      direction === 'outgoing'
-    ) {
-      return
-    }
-
-    if (!authorAvatarPath) {
-      const label = authorName ? (authorName.trim()[0] || '#') : '#'
-      const color = authorColor || 'green'
-
-      return (
-        <div className={classNames(
-          'module-message__author-default-avatar'
-        )}
-        >
-          <div
-            style={{ backgroundColor: color }}
-            className='module-message__author-default-avatar__label'>
-            {label}
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className='module-message__author-avatar'>
-        <img alt={tx('contactAvatarAlt', [title])} src={authorAvatarPath} />
-      </div>
-    )
   }
 
   renderError (isCorrectSide) {
@@ -85,35 +85,6 @@ class Message extends React.Component {
             'module-message__error',
             `module-message__error--${direction}`
           )}
-        />
-      </div>
-    )
-  }
-
-  renderAuthor () {
-    const {
-      authorName,
-      authorAddress,
-      authorProfileName,
-      conversationType,
-      direction,
-      authorColor
-    } = this.props
-
-    const title = authorName || authorAddress
-
-    if (direction !== 'incoming' || conversationType !== 'group' || !title) {
-      return null
-    }
-
-    return (
-      <div className='module-message__author'>
-        <ContactName
-          email={authorAddress}
-          name={authorName}
-          profileName={authorProfileName}
-          module='module-message__author'
-          color={authorColor}
         />
       </div>
     )
@@ -150,10 +121,6 @@ class Message extends React.Component {
         {longMessage && <button onClick={onShowDetail}>...</button>}
       </div>
     )
-  }
-
-  renderAttachment () {
-    return Attachment.render(this.props)
   }
 
   captureMenuTrigger (triggerRef) {
@@ -320,7 +287,10 @@ class Message extends React.Component {
       direction,
       id,
       timestamp,
-      viewType
+      viewType,
+      collapseMetadata,
+      conversationType,
+      message
     } = this.props
 
     // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -336,7 +306,7 @@ class Message extends React.Component {
           { 'module-message--sticker': viewType === 23 }
         )}
       >
-        {this.renderAvatar()}
+        {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
         {this.renderError(direction === 'incoming')}
         {this.renderMenu(direction === 'outgoing', triggerId)}
         <div
@@ -346,8 +316,8 @@ class Message extends React.Component {
             `module-message__container--${direction}`
           )}
         >
-          {this.renderAuthor()}
-          {this.renderAttachment()}
+          {direction === 'incoming' && conversationType === 'group' && Author(message)}
+          {Attachment.render(this.props)}
 
           {this.renderText()}
           <MessageMetaData {...this.props} />
