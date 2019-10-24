@@ -28,9 +28,7 @@ $bp3-dialog-radius: 2px;
 }
 
 .bp3-dialog-footer-border-top {
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #ececec;
+  border-top: var(--outlineProperties);
 }
 
 .bp3-dialog-footer {
@@ -103,9 +101,7 @@ $bp3-dialog-radius: 2px;
 }
 
 .bp3-dialog-header-border-bottom {
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: #ececec;
+  border-bottom: var(--outlineProperties);
 }
 
 .bp3-input {
