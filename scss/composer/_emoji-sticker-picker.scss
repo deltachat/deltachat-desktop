@@ -174,7 +174,8 @@ $emojimart-search-height: 31px + 6px;
 }
 .emoji-mart-search input{
   background: var(--emojiMartBg);
-  border-color: var(--emojiMartSearchBorder)
+  border-color: var(--emojiMartSearchBorder);
+  color: var(--emojiMartInputText);
 }
 
 // select background circle
