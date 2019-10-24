@@ -41,12 +41,12 @@ export const useEditGroup = (verified, groupName, groupImage, groupMembers, grou
     const add = differ(groupMembers, initialGroupMembers)
     await callDcMethodAsync('chat.modifyGroup', [groupId, groupName, groupImage, remove, add])
   }
-  const finishEditGroup = async () => {
+  const onUpdateGroup = async () => {
     if (groupName === '') return
-    updateGroup()
+    await updateGroup()
     onClose()
   }
-  return [groupId, updateGroup, finishEditGroup, onClose]
+  return [groupId, onUpdateGroup, updateGroup, onClose]
 }
 
 export function useGroupMembers (initialMembers) {
@@ -67,7 +67,7 @@ export function EditGroupInner (props) {
   const [groupName, setGroupName] = useState(chat.name)
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(chat.profileImage)
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers(chat.contacts)
-  const [groupId, finishEditGroup] = useEditGroup(false, groupName, groupImage, groupMembers, chat.id, onClose)
+  const [groupId, onUpdateGroup] = useEditGroup(false, groupName, groupImage, groupMembers, chat.id, onClose)
 
   const [qrCode, setQrCode] = useState('')
   const listFlags = chat.isVerified ? (C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF) : C.DC_GCL_ADD_SELF
@@ -106,8 +106,7 @@ export function EditGroupInner (props) {
       { viewMode === 'showQrCode' && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('main') },
         onClose,
-        qrCode,
-        groupName
+        qrCode
       })}
       { viewMode === 'main' &&
       <>
@@ -150,7 +149,7 @@ export function EditGroupInner (props) {
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <DeltaButtonPrimary
               noPadding
-              onClick={finishEditGroup}
+              onClick={onUpdateGroup}
             >
               {tx('save_desktop')}
             </DeltaButtonPrimary>
