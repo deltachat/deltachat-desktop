@@ -176,6 +176,9 @@ export default class Settings extends React.Component {
    */
   handleDesktopSettingsChange (key, value) {
     ipcRenderer.send('updateDesktopSetting', key, value)
+    if (key === 'notifications' && value === false) {
+      ipcRenderer.send('updateDesktopSetting', 'showNotificationContent', false)
+    }
   }
 
   /** Saves settings to deltachat core */
@@ -203,6 +206,7 @@ export default class Settings extends React.Component {
             checked={settings[configKey]}
             className={settings[configKey] ? 'active' : 'inactive'}
             label={label}
+            disabled={configKey === 'showNotificationContent' && !settings['notifications']}
             onChange={() => this.handleDesktopSettingsChange(configKey, !settings[configKey])}
           />
         )}
@@ -288,6 +292,12 @@ export default class Settings extends React.Component {
             <br />
             { this.renderDTSettingSwitch('enterKeySends', this.translate('pref_enter_sends')) }
             <p>{this.translate('pref_enter_sends_explain')}</p>
+            <br />
+            { this.renderDTSettingSwitch('notifications', this.translate('pref_notifications')) }
+            <p>{this.translate('pref_notifications_explain')}</p>
+            <br />
+            { this.renderDTSettingSwitch('showNotificationContent', this.translate('pref_show_notification_content')) }
+            <p>{this.translate('pref_show_notification_content_explain')}</p>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_experimental_features')}</H5>

@@ -10,5 +10,17 @@
   },
   "ask_delete_chat_desktop": {
     "message": "Are you sure you want to delete \"%1$s\"?"
+  },
+  "pref_notifications": {
+    "message": "Enable notifications"
+  },
+  "pref_notifications_explain": {
+    "message": "Enable system notifications on new messages"
+  },
+  "pref_show_notification_content": {
+    "message": "Show message content in notification"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Shows sender and first words of message content in notification"
   }
 }
