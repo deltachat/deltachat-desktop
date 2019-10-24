@@ -5,6 +5,7 @@ module.exports = styled.div`
     padding: 0px;
     background-color: ${props => props.theme.navBarBackground};
     color: ${props => props.theme.navBarText};
+    border-bottom: ${props => props.theme.outlineProperties};
   }
 
   .bp3-navbar-heading {
