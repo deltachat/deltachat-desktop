@@ -138,6 +138,7 @@ $bp3-dialog-radius: 2px;
 
 .bp3-control .bp3-control-indicator, .bp3-control:hover .bp3-control-indicator {
     background-color: transparent;
+    background-image: linear-gradient(to bottom, var(--bp3SelectorTop), var(--bp3SelectorBottom));
 }
 
 .bp3-control input:checked ~ .bp3-control-indicator, .bp3-control:hover input:checked ~ .bp3-control-indicator {
