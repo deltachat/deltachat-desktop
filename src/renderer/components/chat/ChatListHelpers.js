@@ -73,6 +73,8 @@ export const useLazyChatListItems = chatListIds => {
 
   const chatIdsInView = (offset) => {
     let [indexStart, indexEnd] = getIndexStartEndInView()
+    // load 10 more than in view to have a buffer when scrolling
+    indexEnd += 10
     if (offset) {
       indexStart = indexStart - offset
       if (indexStart < 0) indexStart = 0
@@ -85,7 +87,7 @@ export const useLazyChatListItems = chatListIds => {
       if (!chatId) break
       chatIds.push(chatId)
     }
-    // log.debug('useLazyChatListItems: chatIdsInView', chatIds)
+    // console.log('useLazyChatListItems: chatIdsInView', chatIds)
     return chatIds
   }
 
