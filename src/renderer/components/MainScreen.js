@@ -197,6 +197,7 @@ class MainScreen extends React.Component {
                 : (
                   <Welcome>
                     <h3>{tx('no_chat_selected_suggestion_desktop')}</h3>
+                    <img src={'../images/image-80.svg'} className='welcome-image' />
                   </Welcome>
                 )
               : (
