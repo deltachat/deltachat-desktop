@@ -26,7 +26,11 @@ const DCChat = require('./chat')
 const DCContacts = require('./contacts')
 
 /**
- * The Controller is the container for a deltachat instance
+ * DeltaChatController
+ *
+ * - proxy for a deltachat instance
+ * - sends events to renderer
+ * - handles events from renderer
  */
 class DeltaChatController extends EventEmitter {
   /**
@@ -278,7 +282,7 @@ class DeltaChatController extends EventEmitter {
   /**
    * Returns the state in json format
    */
-  render () {
+  getState () {
     return {
       configuring: this.configuring,
       credentials: this.credentials,

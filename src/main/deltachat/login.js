@@ -20,17 +20,17 @@ module.exports = class DCLoginController extends SplitOut {
       this._dc.setStockTranslation(Number(key), strings[key])
     })
 
-    this._controller._render()
+    this._controller._sendStateToRenderer()
   }
 
-  login (credentials, render, coreStrings) {
+  login (credentials, sendStateToRenderer, coreStrings) {
     // Creates a separate DB file for each login
     this._controller.fullCwd = this.getPath(credentials.addr)
     log.info(`Using deltachat instance ${this._controller.fullCwd}`)
     const dc = new DeltaChat()
     this._controller._dc = dc
     this._controller.credentials = credentials
-    this._controller._render = render
+    this._controller._sendStateToRenderer = sendStateToRenderer
 
     this.setCoreStrings(coreStrings)
 
@@ -47,13 +47,13 @@ module.exports = class DCLoginController extends SplitOut {
         this._controller.configuring = false
         this._controller.emit('ready', this._controller.credentials)
         log.info('dc_get_info', dc.getInfo())
-        render()
+        sendStateToRenderer()
       }
       if (!this._dc.isConfigured()) {
         this._dc.once('ready', onReady)
         this._controller.configuring = true
         this._dc.configure(addServerFlags(credentials))
-        render()
+        sendStateToRenderer()
       } else {
         onReady()
       }
@@ -70,7 +70,7 @@ module.exports = class DCLoginController extends SplitOut {
 
     log.info('Logged out')
     this._controller.emit('logout')
-    if (typeof this._controller._render === 'function') this._controller._render()
+    if (typeof this._controller._sendStateToRenderer === 'function') this._controller._sendStateToRenderer()
   }
 
   getPath (addr) {

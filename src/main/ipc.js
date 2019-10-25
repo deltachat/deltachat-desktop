@@ -12,7 +12,7 @@ const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc', true)
-const DeltaChat = (() => {
+const DeltaChatController = (() => {
   try {
     return require('./deltachat/controller')
   } catch (error) {
@@ -26,7 +26,7 @@ const C = require('deltachat-node/constants')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
-  const dc = new DeltaChat(cwd, state.saved)
+  const dc = new DeltaChatController(cwd, state.saved)
 
   dc.on('ready', credentials => {
     if (!state.logins.includes(credentials.addr)) {
@@ -94,13 +94,13 @@ function init (cwd, state, logHandler) {
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   ipcMain.on('login', (e, credentials) => {
-    dc.loginController.login(credentials, render, txCoreStrings())
+    dc.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
     rimraf.sync(dc.loginController.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
-    render()
+    sendStateToRenderer()
   })
 
   ipcMain.on('getMessage', (e, msgId) => {
@@ -168,7 +168,7 @@ function init (cwd, state, logHandler) {
     event.sender.startDrag({ file: filePath, icon: '' })
   })
 
-  ipcMain.on('render', render)
+  ipcMain.on('render', sendStateToRenderer)
 
   ipcMain.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
@@ -179,7 +179,7 @@ function init (cwd, state, logHandler) {
     const { saved } = app.state
     saved[key] = value
     app.saveState({ saved })
-    render()
+    sendStateToRenderer()
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
@@ -218,17 +218,18 @@ function init (cwd, state, logHandler) {
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
     if (!credentials.mail_pw) credentials.mail_pw = dc.settings.getConfig('mail_pw')
-    const tmp = new DeltaChat(dir, state.saved)
+    const tmp = new DeltaChatController(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))
 
     function fakeRender () {
-      const deltachat = dc.render()
-      const tmpDeltachat = tmp.render()
+      const deltachat = dc.getState()
+      // test login with a new instance
+      const tmpDeltachat = tmp.getState()
       deltachat.configuring = tmpDeltachat.configuring
       sendState(deltachat)
       if (tmpDeltachat.ready) {
-        dc.loginController.login(credentials, render, txCoreStrings())
+        dc.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
         main.send('success', 'Configuration success!')
         tmp.loginController.close()
       }
@@ -241,13 +242,13 @@ function init (cwd, state, logHandler) {
     getLogins(getConfigPath(), (err, logins) => {
       if (err) throw err
       state.logins = logins
-      render()
+      sendStateToRenderer()
     })
   })
 
-  function render () {
+  function sendStateToRenderer () {
     log.debug('RENDER')
-    const deltachat = dc.render()
+    const deltachat = dc.getState()
     main.setTitle(deltachat.credentials.addr)
     sendState(deltachat)
   }
@@ -261,7 +262,7 @@ function init (cwd, state, logHandler) {
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    dc.loginController.login(savedCredentials, render, txCoreStrings())
+    dc.loginController.login(savedCredentials, sendStateToRenderer, txCoreStrings())
   }
 }
 
