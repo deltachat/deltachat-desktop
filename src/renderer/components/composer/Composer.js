@@ -29,7 +29,7 @@ const Composer = React.forwardRef((props, ref) => {
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
-    if (message.match(/^\s*$/)) {
+    if (message.match(/^\s*$/) && !filename) {
       log.debug(`Empty message: don't send it...`)
       return
     }

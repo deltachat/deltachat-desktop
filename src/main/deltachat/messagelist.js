@@ -2,13 +2,17 @@ const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/messagelist')
 const { integerToHexColor } = require('./util')
 const CHATVIEW_PAGE_SIZE = 20
+const mime = require('mime-types')
 
 const SplitOut = require('./splitout')
 module.exports = class DCMessageList extends SplitOut {
   sendMessage (chatId, text, filename, location) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
-    if (filename) msg.setFile(filename)
+    if (filename) {
+      const mimeType = mime.lookup(filename)
+      msg.setFile(filename, mimeType)
+    }
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
     this._dc.sendMessage(chatId, msg)
