@@ -203,7 +203,7 @@ export default class Login extends React.Component {
             >
               <option value='automatic'>Automatic</option>
               <option value='ssl'>SSL/TLS</option>
-              <option value='starttls'>StartTLS</option>
+              <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
 
