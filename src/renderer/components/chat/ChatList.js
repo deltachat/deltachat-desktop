@@ -17,7 +17,7 @@ export default function ChatList (props) {
   const realOpenContextMenu = useRef(null)
 
   const onChatClick = chatId => {
-    if (chatId === 6) return onShowArchivedChats()
+    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
     props.onChatClick(chatId)
   }
 
