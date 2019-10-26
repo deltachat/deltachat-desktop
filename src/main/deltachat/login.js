@@ -91,22 +91,23 @@ function addServerFlags (credentials) {
   })
 }
 
-function serverFlags ({ mailSecurity, sendSecurity }) {
+/* eslint-disable camelcase */
+function serverFlags ({ mail_security, send_security }) {
   const flags = []
 
-  if (mailSecurity === 'ssl') {
+  if (mail_security === 'ssl') {
     flags.push(C.DC_LP_IMAP_SOCKET_SSL)
-  } else if (mailSecurity === 'starttls') {
+  } else if (mail_security === 'starttls') {
     flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
-  } else if (mailSecurity === 'plain') {
+  } else if (mail_security === 'plain') {
     flags.push(C.DC_LP_IMAP_SOCKET_PLAIN)
   }
 
-  if (sendSecurity === 'ssl') {
+  if (send_security === 'ssl') {
     flags.push(C.DC_LP_SMTP_SOCKET_SSL)
-  } else if (sendSecurity === 'starttls') {
+  } else if (send_security === 'starttls') {
     flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
-  } else if (sendSecurity === 'plain') {
+  } else if (send_security === 'plain') {
     flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
   }
 
@@ -114,3 +115,4 @@ function serverFlags ({ mailSecurity, sendSecurity }) {
     return acc | flag
   }, 0)
 }
+/* eslint-enable camelcase */
