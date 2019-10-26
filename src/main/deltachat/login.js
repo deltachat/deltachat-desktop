@@ -87,7 +87,7 @@ module.exports = class DCLoginController extends SplitOut {
 
 function addServerFlags (credentials) {
   return Object.assign({}, credentials, {
-    serverFlags: serverFlags(credentials)
+    server_flags: serverFlags(credentials)
   })
 }
 
