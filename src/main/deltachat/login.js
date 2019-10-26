@@ -110,8 +110,6 @@ function serverFlags ({ mailSecurity, sendSecurity }) {
     flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
   }
 
-  if (!flags.length) return null
-
   return flags.reduce((flag, acc) => {
     return acc | flag
   }, 0)
