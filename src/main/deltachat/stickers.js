@@ -1,15 +1,14 @@
-const fs = require('fs').promises
 const fsExtra = require('fs-extra')
 const path = require('path')
 const log = require('../../logger').getLogger('main/deltachat/stickers')
 
 async function isDirectory (path) {
-  const lstat = await fs.lstat(path)
+  const lstat = await fsExtra.lstat(path)
   return lstat.isDirectory()
 }
 
 async function isFile (path) {
-  const lstat = await fs.lstat(path)
+  const lstat = await fsExtra.lstat(path)
   return lstat.isFile()
 }
 
@@ -25,12 +24,12 @@ module.exports = class DCStickers extends SplitOut {
 
     const stickers = {}
 
-    const list = await fs.readdir(stickerFolder)
+    const list = await fsExtra.readdir(stickerFolder)
     for (const stickerPack of list) {
       const stickerPackPath = path.join(stickerFolder, stickerPack)
       if (!await isDirectory(stickerPackPath)) continue
       const stickerImages = []
-      for (const sticker of await fs.readdir(stickerPackPath)) {
+      for (const sticker of await fsExtra.readdir(stickerPackPath)) {
         const stickerPackImagePath = path.join(stickerPackPath, sticker)
         if (!sticker.endsWith('.png') || !await isFile(stickerPackImagePath)) continue
         stickerImages.push(stickerPackImagePath)
