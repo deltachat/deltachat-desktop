@@ -171,7 +171,7 @@ export default class Settings extends React.Component {
   }
 
   /*
-   * Saves settings for the Deltchat Desktop
+   * Saves settings for the Deltachat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
   handleDesktopSettingsChange (key, value) {
