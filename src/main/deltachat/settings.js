@@ -27,4 +27,16 @@ module.exports = class DCSettings extends SplitOut {
   keysExport (directory) {
     this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
   }
+
+  updateConfigs (newValues) {
+    Object.keys(newValues).map(
+      (key) => {
+        if (key === 'send_security' || key === 'mail_security') {
+
+        } else {
+          this.setConfig(key, newValues[key])
+        }
+      }
+    )
+  }
 }

@@ -30,7 +30,7 @@ export default class Settings extends React.Component {
     super(props)
     this.state = {
       advancedSettings: {},
-      userDetails: false,
+      showSettingsDialog: false,
       mail_pw: MAGIC_PW,
       settings: {},
       show: 'main'
@@ -195,6 +195,10 @@ export default class Settings extends React.Component {
     ipcRenderer.send('updateCredentials', config)
   }
 
+  onCancelLogin () {
+    ipcRenderer.send('cancelCredentialsUpdate')
+  }
+
   /*
    * render switch for Desktop Setings
    */
@@ -245,7 +249,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent () {
     const { deltachat, openDialog } = this.props
-    const { userDetails, settings, advancedSettings } = this.state
+    const { showSettingsDialog, settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -330,10 +334,11 @@ export default class Settings extends React.Component {
             mail_pw={settings.mail_pw}
             onSubmit={this.onLoginSubmit}
             loading={deltachat.configuring}
-            onClose={() => this.setState({ userDetails: false })}
+            onClose={() => this.setState({ showSettingsDialog: false })}
+            onCancel={this.onCancelLogin}
             addrDisabled
           >
-            <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
+            <Button type='submit' text={this.translate('update')} />
             <Button type='cancel' text={this.translate('cancel')} />
           </Login>
         </Card>
@@ -355,7 +360,7 @@ export default class Settings extends React.Component {
     return (
       <DeltaDialogBase
         isOpen={this.props.isOpen}
-        onClose={() => this.setState({ userDetails: false })}
+        onClose={() => this.setState({ showSettingsDialog: false })}
         className='SettingsDialog'
         fixed
       >
