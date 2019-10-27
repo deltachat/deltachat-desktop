@@ -16,7 +16,6 @@ module.exports = class DCBackup extends SplitOut {
 
   import (file) {
     const { sendToRenderer, loginController } = this._controller
-    const { getPath } = loginController
 
     async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
       if (overwrite === true) {
@@ -67,7 +66,7 @@ module.exports = class DCBackup extends SplitOut {
 
         sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
 
-        const newPath = getPath(addr)
+        const newPath = loginController.getPath(addr)
         const configFolderExists = await fs.pathExists(newPath)
 
         if (configFolderExists) {
