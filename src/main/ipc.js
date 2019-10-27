@@ -26,6 +26,7 @@ const C = require('deltachat-node/constants')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
+  // first we initialize a "generic" instance which is not bound to a certain account
   const dc = new DeltaChatController(cwd, state.saved)
 
   dc.on('ready', credentials => {
@@ -218,24 +219,31 @@ function init (cwd, state, logHandler) {
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
     if (!credentials.mail_pw) credentials.mail_pw = dc.settings.getConfig('mail_pw')
+    // create a new instance to test the new login credentials
     const tmp = new DeltaChatController(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))
 
-    function fakeRender () {
+    function onReadyCallback () {
       const deltachat = dc.getState()
       // test login with a new instance
       const tmpDeltachat = tmp.getState()
       deltachat.configuring = tmpDeltachat.configuring
       sendState(deltachat)
       if (tmpDeltachat.ready) {
-        dc.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
+        dc.loginController.login(credentials, sendStateToRenderer, txCoreStrings(), true)
         main.send('success', 'Configuration success!')
         tmp.loginController.close()
       }
     }
 
-    tmp.loginController.login(credentials, fakeRender, txCoreStrings())
+    tmp.loginController.login(credentials, onReadyCallback, txCoreStrings())
+  })
+
+  ipcMain.on('cancelCredentialsUpdate', () => {
+    const deltachat = dc.getState()
+    deltachat.configuring = false
+    sendState(deltachat)
   })
 
   ipcMain.on('updateLogins', (e) => {
@@ -258,6 +266,9 @@ function init (cwd, state, logHandler) {
     main.send('render', state)
   }
 
+  // if we find saved credentials we login in with these
+  // which will instantiate a new DeltachatController which
+  // is bound to a certain account
   const savedCredentials = state.saved.credentials
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&

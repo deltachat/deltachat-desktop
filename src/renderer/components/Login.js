@@ -30,7 +30,8 @@ export default class Login extends React.Component {
         showPasswordSend: false
       },
       progress: 0,
-      dirty: false
+      dirty: false,
+      disableSubmit: false
     }
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
@@ -88,9 +89,13 @@ export default class Login extends React.Component {
   }
 
   handleSubmit (event) {
+    const { mode } = this.props
     const credentials = this.state.credentials
     this.props.onSubmit(credentials)
     event.preventDefault()
+    if (mode !== 'update') {
+      this.setState({ disableSubmit: true })
+    }
   }
 
   handleUISwitchStateProperty (key) {
@@ -99,11 +104,11 @@ export default class Login extends React.Component {
   }
 
   cancelClick (event) {
-    const { mode, loading } = this.props
+    const { mode } = this.props
     event.preventDefault()
     event.stopPropagation()
-    if (mode === 'update' && !loading) {
-      this.props.onClose()
+    if (mode === 'update') {
+      this.props.onCancel()
     } else {
       ipcRenderer.send('logout')
     }
@@ -115,6 +120,7 @@ export default class Login extends React.Component {
 
   render () {
     const { addrDisabled, loading, mode } = this.props
+    const { disableSubmit } = this.state
 
     const {
       addr,
@@ -139,7 +145,7 @@ export default class Login extends React.Component {
     return (
       <React.Fragment>
         {this.renderLoginHeader(mode)}
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className={'login-form'}>
 
           <DeltaInput
             key='addr'
@@ -264,10 +270,7 @@ export default class Login extends React.Component {
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
-              if (!dirty) {
-                return
-              }
-              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw)
+              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw) || !dirty || disableSubmit
             }
             if (child.props.type === 'cancel') {
               if (!loading) return
