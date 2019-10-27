@@ -249,7 +249,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent () {
     const { deltachat, openDialog } = this.props
-    const { showSettingsDialog, settings, advancedSettings } = this.state
+    const { settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
