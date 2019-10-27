@@ -1,5 +1,4 @@
 const DeltaChat = require('deltachat-node')
-const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/login', true)
 const path = require('path')
 const setupNotifications = require('../notifications')
@@ -51,7 +50,7 @@ module.exports = class DCLoginController extends SplitOut {
       if (!this._dc.isConfigured() || updateConfiguration) {
         this._dc.once('ready', onReady)
         this._controller.configuring = true
-        this._dc.configure(addServerFlags(credentials))
+        this._dc.configure(this.addServerFlags(credentials))
         sendStateToRenderer()
       } else {
         onReady()
@@ -81,36 +80,10 @@ module.exports = class DCLoginController extends SplitOut {
     this._dc.close()
     this._controller._dc = null
   }
-}
 
-function addServerFlags (credentials) {
-  return Object.assign({}, credentials, {
-    server_flags: serverFlags(credentials)
-  })
-}
-
-/* eslint-disable camelcase */
-function serverFlags ({ mail_security, send_security }) {
-  const flags = []
-
-  if (mail_security === 'ssl') {
-    flags.push(C.DC_LP_IMAP_SOCKET_SSL)
-  } else if (mail_security === 'starttls') {
-    flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
-  } else if (mail_security === 'plain') {
-    flags.push(C.DC_LP_IMAP_SOCKET_PLAIN)
+  addServerFlags (credentials) {
+    return Object.assign({}, credentials, {
+      server_flags: this._controller.settings.serverFlags(credentials)
+    })
   }
-
-  if (send_security === 'ssl') {
-    flags.push(C.DC_LP_SMTP_SOCKET_SSL)
-  } else if (send_security === 'starttls') {
-    flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
-  } else if (send_security === 'plain') {
-    flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
-  }
-
-  return flags.reduce((flag, acc) => {
-    return acc | flag
-  }, 0)
 }
-/* eslint-enable camelcase */
