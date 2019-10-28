@@ -42,18 +42,13 @@ module.exports = class DCSettings extends SplitOut {
     this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
   }
 
-  updateConfigs (newValues) {
-    Object.keys(newValues).map(
-      (key) => {
-        if (key === 'send_security' || key === 'mail_security') {
-
-        } else {
-          this.setConfig(key, newValues[key])
-        }
-      }
-    )
-  }
-
+  /**
+   *
+   * get a string value from bitmask (automatic, ssl, starttls or plain)
+   *
+   * @param {*} flags bitmask
+   * @param {*} configKey string
+   */
   convertServerFlag (flags, configKey) {
     configKey = configKey.replace('configured_', '')
     let result = 'automatic'
