@@ -33,10 +33,12 @@ jobs:
       run: npx electron-builder --linux --win portable --mac mas || true
     - name: compressing mas
       uses: montudor/action-zip@v0.1.0
-      args: "zip -r dist/deltachat-desktop-mas-${{ github.ref }}.zip dist/mas/DeltaChat.app"
+      with:
+        args: "zip -r dist/deltachat-desktop-mas-${{ github.ref }}.zip dist/mas/DeltaChat.app"
     - name: compressing win portable
       uses: montudor/action-zip@v0.1.0
-      args: "zip -r dist/deltachat-desktop-win-${{ github.ref }}.zip dist/win-unpacked"
+      with:
+        args: "zip -r dist/deltachat-desktop-win-${{ github.ref }}.zip dist/win-unpacked"
     - name: renaming
       run: |
         cd dist
