@@ -16,9 +16,8 @@ module.exports = class DCLoginController extends SplitOut {
   setCoreStrings (strings) {
     if (!this._dc) return
 
-    this._dc.clearStringTable()
     Object.keys(strings).forEach(key => {
-      this._dc.setStringTable(Number(key), strings[key])
+      this._dc.setStockTranslation(Number(key), strings[key])
     })
 
     this._controller._render()
