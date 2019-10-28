@@ -24,8 +24,8 @@ module.exports = class DCLoginController extends SplitOut {
 
   login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
-    this._controller.fullCwd = this.getPath(credentials.addr)
-    log.info(`Using deltachat instance ${this._controller.fullCwd}`)
+    this._controller.accountDir = this.getPath(credentials.addr)
+    log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
     this._controller._dc = dc
     this._controller.credentials = credentials
@@ -36,7 +36,7 @@ module.exports = class DCLoginController extends SplitOut {
       return
     }
 
-    this._dc.open(this._controller.fullCwd, err => {
+    this._dc.open(this._controller.accountDir, err => {
       if (err) throw err
       this.setCoreStrings(coreStrings)
       const onReady = () => {

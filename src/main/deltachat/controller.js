@@ -39,7 +39,7 @@ class DeltaChatController extends EventEmitter {
   constructor (cwd, saved) {
     super()
     this.cwd = cwd
-    this.fullCwd = false
+    this.accountDir = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     /**
