@@ -1,6 +1,9 @@
 name: Preview
 
-on: [pull_request]
+on: 
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changes
 
 jobs:
   build:
@@ -27,23 +30,23 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --linux --win portable --mac mas || true
+      run: npx electron-builder --linux --win portable || true # --mac mas || true
     - name: renaming
       run: |
         cd dist
-        mv *.AppImage DeltaChatPreview.AppImage
-        mv *.deb DeltaChat.deb
-        mv *.exe DeltaChat.exe
+        mv *.AppImage DeltaChat-${{ github.ref }}.AppImage
+        mv *.deb DeltaChat-${{ github.ref }}.deb
+        mv *.exe DeltaChat-${{ github.ref }}.exe
         ls
         cd ..
     - uses: actions/upload-artifact@master
       with:
         name: Linux Appimage
-        path: dist/DeltaChatPreview.AppImage
+        path: dist/DeltaChat-${{ github.ref }}.AppImage
     - uses: actions/upload-artifact@master
       with:
         name: Linux deb
-        path: dist/DeltaChat.deb
+        path: dist/DeltaChat-${{ github.ref }}.deb
     - uses: actions/upload-artifact@master
       with:
         name: Windows Zip
@@ -51,8 +54,8 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: Windows Portable
-        path: dist/DeltaChat.exe
-    - uses: actions/upload-artifact@master
-      with:
-        name: Mac mas
-        path: dist/mas/DeltaChat.app
+        path: dist/DeltaChat-${{ github.ref }}.exe
+#    - uses: actions/upload-artifact@master
+#      with:
+#        name: Mac mas
+#        path: dist/mas/DeltaChat.app
