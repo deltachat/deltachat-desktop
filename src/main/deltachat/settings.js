@@ -54,7 +54,6 @@ module.exports = class DCSettings extends SplitOut {
     )
   }
 
-  /* eslint-disable camelcase */
   convertServerFlag (flags, configKey) {
     configKey = configKey.replace('configured_', '')
     let result = 'automatic'
