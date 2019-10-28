@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: change build name
+      run: |
+        sed -e "s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g" package.json
+        sed -e "s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g" package.json
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
