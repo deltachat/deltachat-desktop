@@ -30,13 +30,19 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --linux --win portable || true # --mac mas || true
+      run: npx electron-builder --linux --win portable --mac mas || true
+    - name: compressing mas
+      uses: montudor/action-zip@v0.1.0
+      args: "zip -r dist/deltachat-desktop-mas-${{ github.ref }}.zip dist/mas/DeltaChat.app"
+    - name: compressing win portable
+      uses: montudor/action-zip@v0.1.0
+      args: "zip -r dist/deltachat-desktop-win-${{ github.ref }}.zip dist/win-unpacked"
     - name: renaming
       run: |
         cd dist
         mv *.AppImage DeltaChat-${{ github.ref }}.AppImage
-        mv *.deb DeltaChat-${{ github.ref }}.deb
-        mv *.exe DeltaChat-${{ github.ref }}.exe
+        #mv *.deb DeltaChat-${{ github.ref }}.deb
+        #mv *.exe DeltaChat-${{ github.ref }}.exe
         ls
         cd ..
     - uses: appleboy/scp-action@master
@@ -45,7 +51,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/DeltaChat-${{ github.ref }}.AppImage
+        SOURCE: dist/deltachat-desktop-${{ github.ref }}.AppImage
         TARGET: "/var/www/html/download/desktop/preview/"
         rm:
     - uses: appleboy/scp-action@master
@@ -54,7 +60,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/DeltaChat-${{ github.ref }}.deb
+        SOURCE: dist/deltachat-desktop-win-${{ github.ref }}.zip
         TARGET: "/var/www/html/download/desktop/preview/"
         rm:
     - uses: appleboy/scp-action@master
@@ -63,19 +69,33 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/win-unpacked
+        SOURCE: dist/deltachat-desktop-mas-${{ github.ref }}.zip
         TARGET: "/var/www/html/download/desktop/preview/"
-        rm:
-    - uses: appleboy/scp-action@master
-      env:
-        USERNAME: ${{ secrets.USERNAME }}
-        KEY: ${{ secrets.KEY }}
-        HOST: "download.delta.chat"
-        PORT: 22
-        SOURCE: dist/DeltaChat-${{ github.ref }}.exe
-        TARGET: "/var/www/html/download/desktop/preview/"
-        rm:
 #    - uses: appleboy/scp-action@master
-#      with:
-#        name: Mac mas
-#        path: dist/mas/DeltaChat.app
+#      env:
+#        USERNAME: ${{ secrets.USERNAME }}
+#        KEY: ${{ secrets.KEY }}
+#        HOST: "download.delta.chat"
+#        PORT: 22
+#        SOURCE: dist/DeltaChat-${{ github.ref }}.exe
+#        TARGET: "/var/www/html/download/desktop/preview/"
+#        rm:
+#    - uses: appleboy/scp-action@master
+#      env:
+#        USERNAME: ${{ secrets.USERNAME }}
+#        KEY: ${{ secrets.KEY }}
+#        HOST: "download.delta.chat"
+#        PORT: 22
+#        SOURCE: dist/DeltaChat-${{ github.ref }}.deb
+#        TARGET: "/var/www/html/download/desktop/preview/"
+#        rm:
+    - name: "Post Links"
+      uses: rytswd/respost@v0.1.0
+      with:
+        title: "Download Preview Builds"
+        body: "Thanks for your contribution! You can download the preview builds here: \
+               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ github.ref }}.AppImage \
+               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ github.ref }}.zip \
+               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-win-${{ github.ref }}.zip"
+#               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ github.ref }}.deb \
+#               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ github.ref }}.exe \
