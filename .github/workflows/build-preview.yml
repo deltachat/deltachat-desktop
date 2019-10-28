@@ -39,23 +39,43 @@ jobs:
         mv *.exe DeltaChat-${{ github.ref }}.exe
         ls
         cd ..
-    - uses: actions/upload-artifact@master
-      with:
-        name: Linux Appimage
-        path: dist/DeltaChat-${{ github.ref }}.AppImage
-    - uses: actions/upload-artifact@master
-      with:
-        name: Linux deb
-        path: dist/DeltaChat-${{ github.ref }}.deb
-    - uses: actions/upload-artifact@master
-      with:
-        name: Windows Zip
-        path: dist/win-unpacked
-    - uses: actions/upload-artifact@master
-      with:
-        name: Windows Portable
-        path: dist/DeltaChat-${{ github.ref }}.exe
-#    - uses: actions/upload-artifact@master
+    - uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/DeltaChat-${{ github.ref }}.AppImage
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+    - uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/DeltaChat-${{ github.ref }}.deb
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+    - uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/win-unpacked
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+    - uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/DeltaChat-${{ github.ref }}.exe
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+#    - uses: appleboy/scp-action@master
 #      with:
 #        name: Mac mas
 #        path: dist/mas/DeltaChat.app
