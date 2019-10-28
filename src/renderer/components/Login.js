@@ -85,6 +85,7 @@ export default class Login extends React.Component {
       ) !== undefined
     }
     updatedState.dirty = dirty
+    updatedState.disableSubmit = false
     this.setState(updatedState)
   }
 
@@ -107,6 +108,7 @@ export default class Login extends React.Component {
     const { mode } = this.props
     event.preventDefault()
     event.stopPropagation()
+    this.setState({ disableSubmit: false })
     if (mode === 'update') {
       this.props.onCancel()
     } else {
