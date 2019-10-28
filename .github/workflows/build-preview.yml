@@ -12,11 +12,10 @@ jobs:
 
     steps:
     - name: change build name
-      run: |
-        sudo apt update
-        sudo apt install sed
-        sed -ie "s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g" package.json
-        sed -ie "s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g" package.json
+      uses: lefherz/action-sed@master
+      with:
+        args: sed -ie "s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g" package.json
+        args: sed -ie "s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g" package.json
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
