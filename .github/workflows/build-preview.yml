@@ -12,9 +12,11 @@ jobs:
 
     steps:
     - name: Get Pullrequest ID
+      id: prepare
       run: |
-        export GITHUB_PULLREQUEST_ID=$(echo "refs/pull/1088/merge" | cut -d '/' -f3)
-        echo $GITHUB_PULLREQUEST_ID
+        export PULLREQUEST_ID=$(echo "refs/pull/1088/merge" | cut -d '/' -f3)
+        echo $PULLREQUEST_ID
+        echo ::set-output name=prid::$PULLREQUEST_ID
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
@@ -34,17 +36,16 @@ jobs:
         npm run build
     - name: electron builder
       run: npx electron-builder --linux --win portable --mac mas || true
-    - name: compressing mas
-      run: zip -r dist/deltachat-desktop-mas-$GITHUB_PULLREQUEST_ID.zip dist/mas
     - name: renaming
       run: |
         cd dist
-        mkdir preview-$GITHUB_PULLREQUEST_ID
-        mv *.AppImage preview-$GITHUB_PULLREQUEST_ID/
-        mv *.exe preview-$GITHUB_PULLREQUEST_ID/
-        mv *.zip preview-$GITHUB_PULLREQUEST_ID/
+        mkdir preview
+        mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
+        mv *.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe
         ls
         cd ..
+    - name: compressing mas
+      run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
       uses: appleboy/scp-action@master
       env:
@@ -52,53 +53,17 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: "-pr dist/preview-*"
-        TARGET: "/var/www/html/download/desktop/preview/"
-        rm:
-#   - name: upload Windows exe
-#     uses: appleboy/scp-action@master
-#     env:
-#       USERNAME: ${{ secrets.USERNAME }}
-#       KEY: ${{ secrets.KEY }}
-#       HOST: "download.delta.chat"
-#       PORT: 22
-#       SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.exe
-#       TARGET: "/var/www/html/download/desktop/preview/"
-#       rm:
-#   - name: upload MacOS MAS
-#     uses: appleboy/scp-action@master
-#     env:
-#       USERNAME: ${{ secrets.USERNAME }}
-#       KEY: ${{ secrets.KEY }}
-#       HOST: "download.delta.chat"
-#       PORT: 22
-#       SOURCE: dist/deltachat-desktop-mas-${{GITHUB_PULLREQUEST_ID}}.zip
-#       TARGET: "/var/www/html/download/desktop/preview/"
-#    - uses: appleboy/scp-action@master
-#      env:
-#        USERNAME: ${{ secrets.USERNAME }}
-#        KEY: ${{ secrets.KEY }}
-#        HOST: "download.delta.chat"
-#        PORT: 22
-#        SOURCE: dist/DeltaChat-$GITHUB_PULLREQUEST_ID.exe
-#        TARGET: "/var/www/html/download/desktop/preview/"
-#        rm:
-#    - uses: appleboy/scp-action@master
-#      env:
-#        USERNAME: ${{ secrets.USERNAME }}
-#        KEY: ${{ secrets.KEY }}
-#        HOST: "download.delta.chat"
-#        PORT: 22
-#        SOURCE: dist/DeltaChat-$GITHUB_PULLREQUEST_ID.deb
-#        TARGET: "/var/www/html/download/desktop/preview/"
-#        rm:
+      with:
+        source: "dist/preview/*"
+        target: "/var/www/html/download/desktop/preview/"
+        strip_components: 1
     - name: "Post Links"
       uses: rytswd/respost@v0.1.0
       with:
         title: "Download Preview Builds"
         body: "Thanks for your contribution! You can download the preview builds here: \
-               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-$GITHUB_PULLREQUEST_ID.AppImage \
-               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-$GITHUB_PULLREQUEST_ID.zip \
-               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe"
-#               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-$GITHUB_PULLREQUEST_ID.deb \
-#               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe \
+               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage \
+               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip \
+               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe"
+#               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
+#               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
