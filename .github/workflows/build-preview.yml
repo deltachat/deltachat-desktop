@@ -11,14 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-#   - name: change build name
-#     uses: lefherz/action-sed@master
-#     with:
-#       args: 'sed -ie "s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g" package.json'
-#   - name: change build productName
-#     uses: lefherz/action-sed@master
-#     with:
-#       args: 'sed -ie "s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g" package.json'
+    - name: change build name
+      uses: lefherz/action-sed@master
+      with:
+        args:
+          sed-script: s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g
+          file: package.json
+    - name: change build productName
+      uses: lefherz/action-sed@master
+      with:
+        args: 
+          sed-script: s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g
+          file: package.json
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
