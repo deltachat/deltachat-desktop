@@ -39,40 +39,41 @@ jobs:
     - name: renaming
       run: |
         cd dist
-        mv *.AppImage deltachat-desktop-$GITHUB_PULLREQUEST_ID.AppImage
-        #mv *.deb DeltaChat-$GITHUB_PULLREQUEST_ID.deb
-        mv *.exe deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe # make sure this stays the portable one and doesn't rename the setup if we plan to build that too
+        mkdir preview-$GITHUB_PULLREQUEST_ID
+        mv *.AppImage preview-$GITHUB_PULLREQUEST_ID/
+        mv *.exe preview-$GITHUB_PULLREQUEST_ID/
+        mv *.zip preview-$GITHUB_PULLREQUEST_ID/
         ls
         cd ..
-    - name: upload AppImage
+    - name: upload folder
       uses: appleboy/scp-action@master
       env:
         USERNAME: ${{ secrets.USERNAME }}
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.AppImage
+        SOURCE: "-pr dist/preview-*"
         TARGET: "/var/www/html/download/desktop/preview/"
         rm:
-    - name: upload Windows exe
-      uses: appleboy/scp-action@master
-      env:
-        USERNAME: ${{ secrets.USERNAME }}
-        KEY: ${{ secrets.KEY }}
-        HOST: "download.delta.chat"
-        PORT: 22
-        SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.exe
-        TARGET: "/var/www/html/download/desktop/preview/"
-        rm:
-    - name: upload MacOS MAS
-      uses: appleboy/scp-action@master
-      env:
-        USERNAME: ${{ secrets.USERNAME }}
-        KEY: ${{ secrets.KEY }}
-        HOST: "download.delta.chat"
-        PORT: 22
-        SOURCE: dist/deltachat-desktop-mas-${{GITHUB_PULLREQUEST_ID}}.zip
-        TARGET: "/var/www/html/download/desktop/preview/"
+#   - name: upload Windows exe
+#     uses: appleboy/scp-action@master
+#     env:
+#       USERNAME: ${{ secrets.USERNAME }}
+#       KEY: ${{ secrets.KEY }}
+#       HOST: "download.delta.chat"
+#       PORT: 22
+#       SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.exe
+#       TARGET: "/var/www/html/download/desktop/preview/"
+#       rm:
+#   - name: upload MacOS MAS
+#     uses: appleboy/scp-action@master
+#     env:
+#       USERNAME: ${{ secrets.USERNAME }}
+#       KEY: ${{ secrets.KEY }}
+#       HOST: "download.delta.chat"
+#       PORT: 22
+#       SOURCE: dist/deltachat-desktop-mas-${{GITHUB_PULLREQUEST_ID}}.zip
+#       TARGET: "/var/www/html/download/desktop/preview/"
 #    - uses: appleboy/scp-action@master
 #      env:
 #        USERNAME: ${{ secrets.USERNAME }}
