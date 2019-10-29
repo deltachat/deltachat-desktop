@@ -11,12 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: test a thing
+      run: git branch | grep \* | cut -d ' ' -f2 | echo
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install --yes wine-stable wine32
     - uses: actions/checkout@v1
+    - name: test a thing
+      run: git branch | grep \* | cut -d ' ' -f2 | echo
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
       with:
