@@ -58,7 +58,7 @@ jobs:
       with:
         source: "dist/preview/*"
         target: "/var/www/html/download/desktop/preview/"
-        strip_components: 1
+        strip_components: 2
     - name: "Post Links"
       if: steps.prepare.outputs.uploadtoserver
       uses: rytswd/respost@v0.1.0
@@ -66,10 +66,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         title: "Download Preview Builds"
-        body: "Thanks for your contribution! You can download the preview builds here: \
-               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage \
-               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip \
-               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe"
+        body: "Thanks for your contribution! You can download the preview builds here: \n \
+               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage\n \
+               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip\n \
+               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
 #               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
 #               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
     - name: "zip result"
