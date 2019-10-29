@@ -51,7 +51,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/deltachat-desktop-$GITHUB_PULLREQUEST_ID.AppImage
+        SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.AppImage
         TARGET: "/var/www/html/download/desktop/preview/"
         rm:
     - name: upload Windows exe
@@ -61,7 +61,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe
+        SOURCE: dist/deltachat-desktop-${{GITHUB_PULLREQUEST_ID}}.exe
         TARGET: "/var/www/html/download/desktop/preview/"
         rm:
     - name: upload MacOS MAS
@@ -71,7 +71,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: dist/deltachat-desktop-mas-$GITHUB_PULLREQUEST_ID.zip
+        SOURCE: dist/deltachat-desktop-mas-${{GITHUB_PULLREQUEST_ID}}.zip
         TARGET: "/var/www/html/download/desktop/preview/"
 #    - uses: appleboy/scp-action@master
 #      env:
