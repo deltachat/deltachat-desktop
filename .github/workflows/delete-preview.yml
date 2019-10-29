@@ -1,0 +1,76 @@
+name: Delete Preview Deliverables
+
+on: 
+  pull_request:
+    types: [closed]
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changes
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get Pullrequest ID
+      run: |
+        export GITHUB_PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo $GITHUB_PULLREQUEST_ID
+    - name: renaming
+      run: |
+        cd dist
+        # create empty file to copy it over the outdated deliverable on download.delta.chat
+        echo "delete-me" > empty
+        cp empty deltachat-desktop-$GITHUB_PULLREQUEST_ID.AppImage
+        #mv empty DeltaChat-$GITHUB_PULLREQUEST_ID.deb
+        cp empty deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe
+        cp empty dist/deltachat-desktop-mas-$GITHUB_PULLREQUEST_ID.zip
+        ls
+        cd ..
+    - name: upload AppImage
+      uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/deltachat-desktop-$GITHUB_PULLREQUEST_ID.AppImage
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+    - name: upload Windows exe
+      uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/deltachat-desktop-$GITHUB_PULLREQUEST_ID.exe
+        TARGET: "/var/www/html/download/desktop/preview/"
+        rm:
+    - name: upload MacOS MAS
+      uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+        SOURCE: dist/deltachat-desktop-mas-$GITHUB_PULLREQUEST_ID.zip
+        TARGET: "/var/www/html/download/desktop/preview/"
+#    - uses: appleboy/scp-action@master
+#      env:
+#        USERNAME: ${{ secrets.USERNAME }}
+#        KEY: ${{ secrets.KEY }}
+#        HOST: "download.delta.chat"
+#        PORT: 22
+#        SOURCE: dist/DeltaChat-$GITHUB_PULLREQUEST_ID.exe
+#        TARGET: "/var/www/html/download/desktop/preview/"
+#        rm:
+#    - uses: appleboy/scp-action@master
+#      env:
+#        USERNAME: ${{ secrets.USERNAME }}
+#        KEY: ${{ secrets.KEY }}
+#        HOST: "download.delta.chat"
+#        PORT: 22
+#        SOURCE: dist/DeltaChat-$GITHUB_PULLREQUEST_ID.deb
+#        TARGET: "/var/www/html/download/desktop/preview/"
+#        rm:
