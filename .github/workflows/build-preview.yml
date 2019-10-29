@@ -70,10 +70,10 @@ jobs:
 #               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
 #               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
     - name: "zip result"
-      if: ${{ secrets.USERNAME == 0 }}
+      if: secrets.USERNAME == 0
       run: zip -r dist/preview.zip dist/preview/
     - name: Upload result to artifacts\
-      if: ${{ secrets.USERNAME == 0 }}
+      if: secrets.USERNAME == 0
       uses: actions/upload-artifact@master
       with:
         name: Files
