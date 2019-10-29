@@ -47,7 +47,7 @@ jobs:
     - name: compressing mas
       run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
-      if: secrets.USERNAME != 0
+      if: (secrets.USERNAME != 0)
       uses: appleboy/scp-action@master
       env:
         USERNAME: ${{ secrets.USERNAME }}
@@ -59,7 +59,7 @@ jobs:
         target: "/var/www/html/download/desktop/preview/"
         strip_components: 1
     - name: "Post Links"
-      if: secrets.USERNAME != 0
+      if: (secrets.USERNAME != 0)
       uses: rytswd/respost@v0.1.0
       with:
         title: "Download Preview Builds"
@@ -70,10 +70,10 @@ jobs:
 #               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
 #               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
     - name: "zip result"
-      if: secrets.USERNAME == 0
+      if: (secrets.USERNAME == 0)
       run: zip -r dist/preview.zip dist/preview/
     - name: Upload result to artifacts\
-      if: secrets.USERNAME == 0
+      if: (secrets.USERNAME == 0)
       uses: actions/upload-artifact@master
       with:
         name: Files
