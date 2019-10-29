@@ -132,7 +132,7 @@
         }
       ]
     },
-    "appId": "com.deltachat.desktop",
+    "appId": "chat.delta.desktop.electron",
     "linux": {
       "target": [
         "AppImage",
