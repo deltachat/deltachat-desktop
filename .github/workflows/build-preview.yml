@@ -62,6 +62,8 @@ jobs:
     - name: "Post Links"
       if: steps.prepare.outputs.uploadtoserver
       uses: rytswd/respost@v0.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         title: "Download Preview Builds"
         body: "Thanks for your contribution! You can download the preview builds here: \
@@ -73,7 +75,7 @@ jobs:
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
       run: zip -r dist/preview.zip dist/preview/
-    - name: Upload result to artifacts\
+    - name: Upload result to artifacts
       if: steps.prepare.outputs.uploadtoserver == false
       uses: actions/upload-artifact@master
       with:
