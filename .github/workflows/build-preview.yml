@@ -11,16 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: change build name
-      uses: lefherz/action-sed@master
-      with:
-        sed-script: "s/\"name\": \"deltachat-desktop\"/\"name\": \"deltachat-desktop-${{ github.ref }}\"/g"
-        file: "package.json"
-    - name: change build productName
-      uses: lefherz/action-sed@master
-      with:
-        sed-script: "s/\"productName\": \"DeltaChat\"/\"productName\": \"DeltaChat-${{ github.ref }}\"/g"
-        file: "package.json"
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
@@ -31,6 +21,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
+    - name: change build name and Product Name to development id
+      run: |
+        node ./bin/github-actions/devbuild.js
     - name: npm install, build, test
       run: |
         npm install
