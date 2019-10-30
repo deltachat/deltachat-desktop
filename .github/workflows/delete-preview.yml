@@ -17,7 +17,6 @@ jobs:
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo $PULLREQUEST_ID
-        #echo ::set-output name=prid::$PULLREQUEST_ID
     - name: renaming
       run: |
         mkdir preview
@@ -35,7 +34,6 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: "preview"
-        TARGET: "/var/www/html/download/desktop/"
-        rm: 1
+        SOURCE: "preview/*"
+        TARGET: "/var/www/html/download/desktop/preview/"
 
