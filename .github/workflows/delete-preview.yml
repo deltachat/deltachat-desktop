@@ -3,7 +3,7 @@ name: Delete Preview Deliverables
 
 on: 
   pull_request:
-    types: [closed]
+#    types: [closed]
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changes
 
