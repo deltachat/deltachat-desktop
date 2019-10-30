@@ -37,5 +37,5 @@ jobs:
         HOST: "download.delta.chat"
         PORT: 22
         SOURCE: "preview/*"
-        TARGET: "/var/www/html/download/desktop/preview/"
+        TARGET: "/var/www/html/download/desktop/"
 
