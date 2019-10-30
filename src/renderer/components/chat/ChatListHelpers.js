@@ -73,8 +73,6 @@ export const useLazyChatListItems = chatListIds => {
 
   const chatIdsInView = (offset) => {
     let [indexStart, indexEnd] = getIndexStartEndInView()
-    // load 10 more than in view to have a buffer when scrolling
-    indexEnd += 10
     if (offset) {
       indexStart = indexStart - offset
       if (indexStart < 0) indexStart = 0
@@ -150,7 +148,7 @@ export const useLazyChatListItems = chatListIds => {
     }
   }
 
-  const onResize = () => fetchChatsInView()
+  const onResize = () => fetchChatsInView(10)
 
   useLayoutEffect(() => {
     window.addEventListener('resize', onResize)
@@ -159,7 +157,7 @@ export const useLazyChatListItems = chatListIds => {
 
   useEffect(() => {
     log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
-    fetchChatsInView()
+    fetchChatsInView(10)
     ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
