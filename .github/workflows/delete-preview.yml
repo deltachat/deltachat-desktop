@@ -36,6 +36,8 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
+      with:
         SOURCE: "preview/*"
-        TARGET: "/var/www/html/download/desktop/"
+        TARGET: "/var/www/html/download/desktop/preview/"
+        strip_components: 1
 
