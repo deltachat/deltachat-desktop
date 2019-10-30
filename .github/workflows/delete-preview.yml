@@ -23,9 +23,11 @@ jobs:
         mkdir preview
         # create empty file to copy it over the outdated deliverable on download.delta.chat
         echo "This preview build is outdated and has been removed." > empty
-        cp empty preview/deltachat-desktop-${{ steps.outputs.prid }}.AppImage
-        cp empty preview/deltachat-desktop-${{ steps.outputs.prid }}.exe
-        cp empty preview/deltachat-desktop-mas-${{ steps.outputs.prid }}.zip
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe
+        cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
+        ls
+        ls preview
         cd ..
     - name: upload AppImage
       uses: appleboy/scp-action@master
