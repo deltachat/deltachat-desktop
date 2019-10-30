@@ -77,8 +77,9 @@ export default function MessageList (props) {
 
   const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
   const onShowDetail = message => openDialog('MessageDetail', { message, chat })
+  const tx = window.translate
   const onDelete = message => openDialog('ConfirmationDialog', {
-    message: 'Are you sure you want to delete message',
+    message: tx('ask_delete_message_desktop'),
     cb: yes => yes && chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
   })
   const onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
