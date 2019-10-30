@@ -1,3 +1,4 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
 name: Preview
 
 on: 
@@ -43,7 +44,7 @@ jobs:
         mkdir preview
         mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
         mv *.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe
-        ls
+        ls preview
         cd ..
     - name: compressing mas
       run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
