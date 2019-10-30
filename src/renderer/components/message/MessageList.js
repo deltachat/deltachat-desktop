@@ -11,6 +11,7 @@ import { isDisplayableByRenderMedia } from './Attachment'
 import SettingsContext from '../../contexts/SettingsContext'
 
 import { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } from 'deltachat-node/constants'
+import chatStore from '../../stores/chat'
 
 const MutationObserver = window.MutationObserver
 
@@ -76,6 +77,10 @@ export default function MessageList (props) {
 
   const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
   const onShowDetail = message => openDialog('MessageDetail', { message, chat })
+  const onDelete = message => openDialog('ConfirmationDialog', {
+    message: 'Are you sure you want to delete message',
+    cb: yes => yes && chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
+  })
   const onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
   const setComposerSize = size => setState({ composerSize: size })
 
@@ -170,6 +175,7 @@ export default function MessageList (props) {
                       onClickContactRequest: () => openDialog('DeadDrop', { deaddrop: message }),
                       onClickSetupMessage: onClickSetupMessage.bind(this, message),
                       onShowDetail: onShowDetail.bind(this, message),
+                      onDelete: onDelete.bind(this, message),
                       onClickAttachment: onClickAttachment.bind(this, message)
                     })
                   })}
