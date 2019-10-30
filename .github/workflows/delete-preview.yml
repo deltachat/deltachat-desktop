@@ -20,12 +20,12 @@ jobs:
         #echo ::set-output name=prid::$PULLREQUEST_ID
     - name: renaming
       run: |
-        mkdir deliv
+        mkdir preview
         # create empty file to copy it over the outdated deliverable on download.delta.chat
         echo "This preview build is outdated and has been removed." > empty
-        cp empty deliv/deltachat-desktop-$PULLREQUEST_ID.AppImage
-        cp empty deliv/deltachat-desktop-$PULLREQUEST_ID.exe
-        cp empty deliv/deltachat-desktop-mas-$PULLREQUEST_ID.zip
+        cp empty preview/deltachat-desktop-$PULLREQUEST_ID.AppImage
+        cp empty preview/deltachat-desktop-$PULLREQUEST_ID.exe
+        cp empty preview/deltachat-desktop-mas-$PULLREQUEST_ID.zip
         ls
         cd ..
     - name: upload AppImage
@@ -35,7 +35,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         HOST: "download.delta.chat"
         PORT: 22
-        SOURCE: "deliv"
-        TARGET: "/var/www/html/download/desktop/preview/"
+        SOURCE: "preview"
+        TARGET: "/var/www/html/download/desktop/"
         rm: 1
 
