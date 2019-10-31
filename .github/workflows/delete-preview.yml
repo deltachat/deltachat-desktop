@@ -18,13 +18,21 @@ jobs:
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=prid::$PULLREQUEST_ID
-    - name: Replace builds with dummy files
+    - name: Renaming
       run: |
-        echo ${{ secrets.KEY }} > .ssh/id_ed25519
-        # create em file to copy it over the outdated deliverable on download.delta.chat
-        echo "This preview build is outdated and has been removed." > em
-        export SCPPATH="/var/www/html/download/desktop/preview/deltachat-desktop"
-        scp em ${{ secrets.USERNAME }}@download.delta.chat:$SCPPATH-${{ steps.getid.outputs.prid }}.AppImage -i .ssh/id_ed25519
-        scp em ${{ secrets.USERNAME }}@download.delta.chat:$SCPPATH-${{ steps.getid.outputs.prid }}.exe -i .ssh/id_ed25519
-        scp em ${{ secrets.USERNAME }}@download.delta.chat:$SCPPATH-mas-${{ steps.getid.outputs.prid }}.zip -i .ssh/id_ed25519
-
+        mkdir preview
+        # create empty file to copy it over the outdated deliverable on download.delta.chat
+        echo "This preview build is outdated and has been removed." > empty
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe
+        cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
+        cd ..
+    - name: Replace builds with dummy files
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "preview/*"
+        remote: "/var/www/html/download/desktop/preview/"
