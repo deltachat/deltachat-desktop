@@ -37,6 +37,17 @@ jobs:
         HOST: "download.delta.chat"
         PORT: 22
       with:
+        SOURCE: "preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe"
+        TARGET: "/var/www/html/download/desktop/preview/"
+        strip_components: 1
+    - name: Replace builds with dummy files
+      uses: appleboy/scp-action@master
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        KEY: ${{ secrets.KEY }}
+        HOST: "download.delta.chat"
+        PORT: 22
+      with:
         SOURCE: "preview/*"
         TARGET: "/var/www/html/download/desktop/preview/"
         strip_components: 1
