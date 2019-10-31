@@ -18,7 +18,7 @@ jobs:
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=prid::$PULLREQUEST_ID
-    - name: renaming
+    - name: Renaming
       run: |
         mkdir preview
         # create empty file to copy it over the outdated deliverable on download.delta.chat
@@ -29,7 +29,7 @@ jobs:
         ls
         ls preview
         cd ..
-    - name: upload AppImage
+    - name: Replace builds with dummy files
       uses: appleboy/scp-action@master
       env:
         USERNAME: ${{ secrets.USERNAME }}
