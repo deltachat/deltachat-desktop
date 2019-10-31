@@ -51,12 +51,11 @@ jobs:
     - name: upload folder
       if: steps.prepare.outputs.uploadtoserver
       uses: horochx/deploy-via-scp@v1.0.1
-      env:
+      with:
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         host: "download.delta.chat"
         port: 22
-      with:
         local: "dist/preview/*"
         remote: "/var/www/html/download/desktop/preview/"
     - name: "Post Links"
