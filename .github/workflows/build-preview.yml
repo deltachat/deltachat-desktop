@@ -15,7 +15,7 @@ jobs:
     - name: Get Pullrequest ID
       id: prepare
       run: |
-        export PULLREQUEST_ID=$(echo "refs/pull/1088/merge" | cut -d '/' -f3)
+        export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo $PULLREQUEST_ID
         if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
         echo ::set-output name=prid::$PULLREQUEST_ID
