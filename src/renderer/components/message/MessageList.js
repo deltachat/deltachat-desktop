@@ -147,6 +147,8 @@ export default function MessageList (props) {
     }
   })(chat)
 
+  let specialMessageIdCounter = 0
+
   return (
     <SettingsContext.Consumer>
       {(settings) => {
@@ -168,17 +170,26 @@ export default function MessageList (props) {
                 <ul>
                   {chat.messages.map(rawMessage => {
                     const message = MessageWrapper.convert(rawMessage)
+
+                    // As messages with a message id below 9 are special messages without a unique id, we need to generate a unique key for them
+                    const key = message.id <= 9
+                      ? 'magic' + message.id + '_' + specialMessageIdCounter++
+                      : message.id
+
                     message.onReply = () => logger.debug('reply to', message)
                     message.onForward = onForward.bind(this, message)
-                    return MessageWrapper.render({
-                      message,
-                      chat,
-                      onClickContactRequest: () => openDialog('DeadDrop', { deaddrop: message }),
-                      onClickSetupMessage: onClickSetupMessage.bind(this, message),
-                      onShowDetail: onShowDetail.bind(this, message),
-                      onDelete: onDelete.bind(this, message),
-                      onClickAttachment: onClickAttachment.bind(this, message)
-                    })
+                    return (
+                      <MessageWrapper.render
+                        key={key}
+                        message={message}
+                        chat={chat}
+                        onClickContactRequest={() => openDialog('DeadDrop', { deaddrop: message })}
+                        onClickSetupMessage={onClickSetupMessage.bind(this, message)}
+                        onShowDetail={onShowDetail.bind(this, message)}
+                        onDelete={onDelete.bind(this, message)}
+                        onClickAttachment={onClickAttachment.bind(this, message)}
+                      />
+                    )
                   })}
                 </ul>
               </div>
