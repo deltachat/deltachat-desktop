@@ -1,6 +1,10 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
 name: Preview
 
-on: [pull_request]
+on: 
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
 jobs:
   build:
@@ -8,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Get Pullrequest ID
+      id: prepare
+      run: |
+        export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo $PULLREQUEST_ID
+        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        echo ::set-output name=prid::$PULLREQUEST_ID
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
@@ -18,6 +29,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
+    - name: change build name and Product Name to development id
+      run: |
+        node ./bin/github-actions/devbuild.js
     - name: npm install, build, test
       run: |
         npm install
@@ -27,28 +41,42 @@ jobs:
     - name: renaming
       run: |
         cd dist
-        mv *.AppImage DeltaChatPreview.AppImage
-        mv *.deb DeltaChat.deb
-        mv *.exe DeltaChat.exe
-        ls
+        mkdir preview
+        mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
+        mv *.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe
+        ls preview
         cd ..
-    - uses: actions/upload-artifact@master
+    - name: compressing mas
+      run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+    - name: upload folder
+      if: steps.prepare.outputs.uploadtoserver
+      uses: horochx/deploy-via-scp@v1.0.1
       with:
-        name: Linux Appimage
-        path: dist/DeltaChatPreview.AppImage
-    - uses: actions/upload-artifact@master
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "dist/preview/*"
+        remote: "/var/www/html/download/desktop/preview/"
+    - name: "Post Links"
+      if: steps.prepare.outputs.uploadtoserver
+      uses: rytswd/respost@v0.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: Linux deb
-        path: dist/DeltaChat.deb
-    - uses: actions/upload-artifact@master
+        title: "Download Preview Builds"
+        body: "Thanks for your contribution! You can download the preview builds here: \n \
+               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage\n \
+               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip\n \
+               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
+#               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
+#               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
+    - name: "zip result"
+      if: steps.prepare.outputs.uploadtoserver == false
+      run: zip -r dist/preview.zip dist/preview/
+    - name: Upload result to artifacts
+      if: steps.prepare.outputs.uploadtoserver == false
+      uses: actions/upload-artifact@master
       with:
-        name: Windows Zip
-        path: dist/win-unpacked
-    - uses: actions/upload-artifact@master
-      with:
-        name: Windows Portable
-        path: dist/DeltaChat.exe
-    - uses: actions/upload-artifact@master
-      with:
-        name: Mac mas
-        path: dist/mas/DeltaChat.app
+        name: Files
+        path: dist/preview.zip
