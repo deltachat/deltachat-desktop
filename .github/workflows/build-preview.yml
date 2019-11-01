@@ -4,7 +4,7 @@ name: Preview
 on: 
   pull_request:
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changes
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
 jobs:
   build:

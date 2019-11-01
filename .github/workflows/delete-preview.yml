@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [closed]
     paths-ignore:
-      - 'docs/**'  # only trigger build if a file outside of /docs was changes
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
 jobs:
   delete:
