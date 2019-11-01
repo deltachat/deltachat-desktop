@@ -16,9 +16,8 @@ module.exports = class DCLoginController extends SplitOut {
   setCoreStrings (strings) {
     if (!this._dc) return
 
-    this._dc.clearStringTable()
     Object.keys(strings).forEach(key => {
-      this._dc.setStringTable(Number(key), strings[key])
+      this._dc.setStockTranslation(Number(key), strings[key])
     })
 
     this._controller._render()
@@ -33,8 +32,6 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller.credentials = credentials
     this._controller._render = render
 
-    this.setCoreStrings(coreStrings)
-
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
       this._controller.emit('error', this._controller.translate('bad_email_address'))
       return
@@ -42,6 +39,7 @@ module.exports = class DCLoginController extends SplitOut {
 
     this._dc.open(this._controller.fullCwd, err => {
       if (err) throw err
+      this.setCoreStrings(coreStrings)
       const onReady = () => {
         log.info('Ready')
         this._controller.ready = true

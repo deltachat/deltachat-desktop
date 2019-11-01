@@ -8,7 +8,6 @@ const moment = require('moment')
 const mime = require('mime-types')
 const filesizeConverter = require('filesize')
 const log = require('../../../logger').getLogger('renderer/messageWrapper')
-const chatStore = require('../../stores/chat')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -142,7 +141,7 @@ class RenderMessage extends React.Component {
   }
 
   render () {
-    const { onShowDetail, onClickAttachment, chat, message } = this.props
+    const { onDelete, onShowDetail, onClickAttachment, chat, message } = this.props
     const { fromId, id } = message
     const msg = message.msg
     const conversationType = convertChatType(chat.type)
@@ -163,7 +162,7 @@ class RenderMessage extends React.Component {
       onDownload: message.onDownload,
       onReply: message.onReply,
       onForward: message.onForward,
-      onDelete: message.onDelete,
+      onDelete,
       onShowDetail,
       contact,
       onClickAttachment,
@@ -192,8 +191,6 @@ function convert (message) {
       if (filename) ipcRenderer.send('saveFile', message.msg.file, filename)
     })
   }
-
-  message.onDelete = () => chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
 
   const msg = message.msg
 
