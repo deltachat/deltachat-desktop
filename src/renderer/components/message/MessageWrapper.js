@@ -80,13 +80,12 @@ const MessageWrapper = styled.div`
 function render (props) {
   const { message, onClickSetupMessage, onClickContactRequest } = props
 
-  let key = message.id
   let body
 
   if (message.id === C.DC_MSG_ID_DAYMARKER) {
-    key = message.daymarker.id + message.daymarker.timestamp
+    const key = message.daymarker.id + message.daymarker.timestamp
     body = (
-      <InfoMessage>
+      <InfoMessage key={key}>
         <p>
           {moment.unix(message.daymarker.timestamp).calendar(null, {
             lastDay: '',
@@ -114,7 +113,7 @@ function render (props) {
     body = <RenderMessage {...props} />
   }
 
-  return <li key={key}>{body}</li>
+  return <li>{body}</li>
 }
 
 /**
