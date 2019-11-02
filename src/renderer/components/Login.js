@@ -64,17 +64,29 @@ export default class Login extends React.Component {
       send_server: this.props.send_server || '',
       send_port: this.props.send_port || '',
       send_security: this.props.send_security || '',
-      smtp_certificate_checks: this.props.smtp_certificate_checks || ''
+      smtp_certificate_checks: this.props.smtp_certificate_checks || '',
     }
   }
 
   handleCredentialsChange (event) {
     const { mode } = this.props
     const { id, value } = event.target
-    const updatedState = update(this.state, {
-      credentials: {
+    let updatedCredentials;
+    if (id == 'certificate_checks') {
+      // Change to certificate_checks updates certificate checks configuration
+      // for all protocols.
+      updatedCredentials = {
+        ['imap_certificate_checks']: { $set: value },
+        ['smtp_certificate_checks']: { $set: value }
+      };
+    } else {
+      updatedCredentials = {
         [id]: { $set: value }
       }
+    }
+
+    const updatedState = update(this.state, {
+      credentials: updatedCredentials
     })
     let dirty = false
     if (mode === 'update') {
@@ -131,9 +143,11 @@ export default class Login extends React.Component {
       send_pw,
       send_server,
       send_port,
-      send_security,
-      smtp_certificate_checks
+      send_security
     } = this.state.credentials
+
+    // We assume that smtp_certificate_checks has the same value.
+    let certificate_checks = imap_certificate_checks;
 
     const { showAdvanced } = this.state.ui
 
@@ -211,17 +225,6 @@ export default class Login extends React.Component {
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
-            <DeltaSelect
-              id='imap_certificate_checks'
-              label={tx('login_imap_certificate_checks')}
-              value={imap_certificate_checks}
-              onChange={this.handleCredentialsChange}
-            >
-              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
-              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
-              <option value={C.DC_CERTCK_ACCEPT_INVALID_HOSTNAMES}>{tx('accept_invalid_hostnames')}</option>
-              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>{tx('accept_invalid_certificates')}</option>
-            </DeltaSelect>
 
             <DeltaHeadline>{tx('login_outbox')}</DeltaHeadline>
             <DeltaInput
@@ -267,10 +270,11 @@ export default class Login extends React.Component {
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
+
             <DeltaSelect
-              id='smtp_certificate_checks'
-              label={tx('login_smtp_certificate_checks')}
-              value={smtp_certificate_checks}
+              id='certificate_checks'
+              label={tx('login_certificate_checks')}
+              value={certificate_checks}
               onChange={this.handleCredentialsChange}
             >
               <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
