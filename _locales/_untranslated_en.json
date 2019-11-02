@@ -25,5 +25,20 @@
   },
   "ask_delete_message_desktop": {
     "message": "Are you sure you want to delete this message?"
+  },
+  "login_certificate_checks": {
+    "message": "Certificate checks"
+  },
+  "automatic": {
+    "message": "Automatic"
+  },
+  "strict": {
+    "message": "Strict"
+  },
+  "accept_invalid_hostnames": {
+    "message": "Accept invalid hostnames"
+  },
+  "accept_invalid_certificates": {
+    "message": "Accept invalid certificates"
   }
 }
