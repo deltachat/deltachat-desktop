@@ -248,11 +248,26 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
       onError(error)
+      if (this.configuring) {
+        // error when updating login credentials when being logged in
+        this.onLoginFailure()
+      }
     })
 
     dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
       onError(error)
     })
+
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+      if (Number(progress) === 0) { // login failed
+        this.onLoginFailure()
+      }
+    })
+  }
+
+  onLoginFailure () {
+    this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
+    this.loginController.logout()
   }
 
   onChatListChanged () {
