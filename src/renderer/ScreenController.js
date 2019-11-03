@@ -107,7 +107,7 @@ class ScreenController extends React.Component {
         {this.state.message && (
           <div onClick={this.userFeedbackClick}
             className={classNames}>
-            {this.state.message.text}
+            <p>{this.state.message.text}</p>
           </div>
         )}
         <ScreenContext.Provider value={{
