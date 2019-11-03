@@ -147,7 +147,7 @@ export default class Login extends React.Component {
     return (
       <React.Fragment>
         {this.renderLoginHeader(mode)}
-        <form onSubmit={this.handleSubmit} className={'login-form'}>
+        <form onSubmit={this.handleSubmit} className='login-form'>
 
           <DeltaInput
             key='addr'
