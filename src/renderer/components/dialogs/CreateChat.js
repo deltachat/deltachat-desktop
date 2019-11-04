@@ -320,7 +320,8 @@ export function CreateGroupInner (props) {
       { viewMode.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
         onClose,
-        qrCode: qrCode
+        qrCode: qrCode,
+        groupName
       })}
       { viewMode.startsWith('createGroup-main') &&
         <>
@@ -422,7 +423,8 @@ export function CreateVerifiedGroupInner (props) {
       { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
         onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
         onClose,
-        qrCode: qrCode
+        qrCode: qrCode,
+        groupName
       })}
       { viewMode.startsWith('createVerifiedGroup-main') &&
       <>

@@ -40,6 +40,7 @@ function translate (messages) {
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
         if (typeof substitutions[c] === 'undefined') {
           log.error(`Missing ${c} argument for key %c'${key}'`)
+          return ''
         }
         return substitutions[c++].toString()
       })
