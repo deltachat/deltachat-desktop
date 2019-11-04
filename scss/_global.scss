@@ -149,23 +149,30 @@ code {
 
 
 .user-feedback {
-  font-size: 20px;
-    position: fixed;
-    bottom: 0;
-    max-width: 80%;
-    margin: 12px 10px;
-    border-radius: 4px;
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  z-index: 10;
+
+  p {
+    display: inline-block;
     text-align: center;
-    color: black;
-    padding: 10px;
-    z-index: 30;
-    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.5);
-}
-.user-feedback.error {
-  background-color: #ffffba;
-}
-.user-feedback.success {
-  background-color: #4caf50;
+    font-style: italic;
+    font-weight: bold;
+    padding: 7px 14px;
+    background-color: #696868;
+    border-radius: 10px;
+    color: white;
+    font-size: medium;
+    max-width: 90%;
+  }
+  &.error p {
+    background-color: #b73a3a;
+  }
+  &.success p {
+    background-color: #3ca26a;
+  }
 }
 
 .clear-button {
