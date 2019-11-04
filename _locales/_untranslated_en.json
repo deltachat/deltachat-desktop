@@ -25,6 +25,8 @@
   },
   "ask_delete_message_desktop": {
     "message": "Are you sure you want to delete this message?"
+  },
+  "about_offical_app_desktop": {
+    "message": "This is the official Delta Chat Desktop app."
   }
 }
-

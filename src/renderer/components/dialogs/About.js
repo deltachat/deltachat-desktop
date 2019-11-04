@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { remote, ipcRenderer, clipboard } from 'electron'
 import { Card } from '@blueprintjs/core'
-
+import reactStringReplace from 'react-string-replace'
 import logger from '../../../logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
@@ -62,7 +62,7 @@ export default function About (props) {
         <Card>
           <p style={{ color: 'grey', userSelect: 'all' }}>{`Version ${appVersion()}`}</p>
           <p>
-            This is the official <ClickableLink href='https://delta.chat' text='Delta Chat' /> Desktop app.<br /><br />
+            {reactStringReplace(tx('about_offical_app_desktop'), 'Delta Chat', () => <ClickableLink href='https://delta.chat' text='Delta Chat' />)}<br /><br />
             This software is licensed under <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' /> and the source code is available on <ClickableLink href={gitHubUrl()} text='GitHub' />.
           </p>
           <DCInfo />
