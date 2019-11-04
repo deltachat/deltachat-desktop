@@ -161,9 +161,11 @@ code {
     font-style: italic;
     font-weight: bold;
     padding: 7px 14px;
-    background-color: rgba(105, 104, 104, 0.75);
+    background-color: #696868;
     border-radius: 10px;
     color: white;
+    font-size: medium;
+    max-width: 90%;
   }
   &.error p {
     background-color: #b73a3a;
