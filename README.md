@@ -263,13 +263,7 @@ Install the [transifex-client](https://docs.transifex.com/client) and get added 
 And periodically we can run the following command to get the new translation strings from translators:
 
 ```
-tx pull --all
-```
-
-Note that this command updated `_locales/*.xml`. Run the following command to convert from xml to json:
-
-```
-npm run build-translations
+npm run update-translations
 ```
 
 When you need to modify language strings, this should be done in `_locales/en.xml`. Run the following command to sync with Transifex:
