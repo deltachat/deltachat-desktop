@@ -65,21 +65,21 @@ export default class Login extends React.Component {
       send_server: this.props.send_server || '',
       send_port: this.props.send_port || '',
       send_security: this.props.send_security || '',
-      smtp_certificate_checks: this.props.smtp_certificate_checks || '',
+      smtp_certificate_checks: this.props.smtp_certificate_checks || ''
     }
   }
 
   handleCredentialsChange (event) {
     const { mode } = this.props
     const { id, value } = event.target
-    let updatedCredentials;
-    if (id == 'certificate_checks') {
+    let updatedCredentials
+    if (id === 'certificate_checks') {
       // Change to certificate_checks updates certificate checks configuration
       // for all protocols.
       updatedCredentials = {
-        ['imap_certificate_checks']: { $set: value },
-        ['smtp_certificate_checks']: { $set: value }
-      };
+        imap_certificate_checks: { $set: value },
+        smtp_certificate_checks: { $set: value }
+      }
     } else {
       updatedCredentials = {
         [id]: { $set: value }
@@ -155,7 +155,7 @@ export default class Login extends React.Component {
     } = this.state.credentials
 
     // We assume that smtp_certificate_checks has the same value.
-    let certificate_checks = imap_certificate_checks;
+    const certificate_checks = imap_certificate_checks
 
     const { showAdvanced } = this.state.ui
 
