@@ -11,8 +11,21 @@
     <string name="def">По умолчанию</string>
     <string name="custom">Персональная настройка</string>
     <string name="none">Не задано</string>
+    <string name="automatic">Автоматически</string>
+    <string name="strict">Строго</string>
     <string name="open">Открыть</string>
     <string name="delete">Удалить</string>
+    <string name="update">Обновить</string>
+    <string name="emoji">Эмодзи</string>
+    <string name="attachment">Вложение</string>
+    <string name="back">Назад</string>
+    <string name="close">Закрыть</string>
+    <string name="save">Сохранить</string>
+    <string name="chat">Чат</string>
+    <string name="media">Медиафайлы</string>
+    <string name="main_menu">Главное меню</string>
+    <string name="show_password">Показать пароль</string>
+    <string name="hide_password">Скрыть пароль</string>
     <string name="not_now">Не сейчас</string>
     <string name="never">Никогда</string>
     <string name="one_moment">Один момент…</string>
@@ -161,7 +174,7 @@
     <string name="menu_edit_group_image">Редактировать изображение группы</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_advanced">Дополнительные параметры</string>
-    <string name="menu_deaddrop">Запросы на общение</string>
+    <string name="menu_deaddrop">Запросы контактов</string>
     <string name="menu_deaddrop_subtitle">Нажмите на сообщение, чтобы начать чат</string>
     <string name="menu_view_profile">Просмотреть профиль</string>
     <string name="menu_zoom_in">Увеличить масштаб</string>
@@ -257,6 +270,9 @@
     <string name="chat_self_talk_subtitle">Сообщения отправленные себе</string>
     <string name="chat_contact_request">Запрос контакта</string>
     <string name="chat_no_contact_requests">Нет запросов контактов.\n\nЕсли Вы хотите, чтобы обычная почта появлялась здесь как запросы контактов, вы можете изменить соответствующий параметр в настройках приложения.</string>
+    <string name="retry_send">Попробовать послать сообщение заново</string>
+    <string name="send_failed">Отправка сообщения завершилась неуспешно</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Показать местоположения с интервалом времени</string>
     <string name="show_location_traces">Показывать маршруты</string>
@@ -316,6 +332,7 @@
     <string name="welcome_start_messaging">Начать общение</string>
     <string name="login_title">Логин</string>
     <string name="login_header">Войдите на ваш сервер</string>
+    <string name="login_explain">Войти с существующим email-аккаунтом</string>
     <string name="login_subheader">Для известных почтовых систем, дополнительные настройки устанавливаются автоматически. Иногда для IMAP требуется разрешение в веб-интерфейсе. Проконсультируйтесь с технической поддержкой вашей почтовой службы или друзьями, для получения помощи.</string>
     <string name="login_no_servers_hint">У Delta Chat нет собственных серверов, ваши данные остаются только на вашем устройстве!</string>
     <string name="login_inbox">Входящие</string>
@@ -328,11 +345,12 @@
     <string name="login_smtp_password">SMTP пароль</string>
     <string name="login_smtp_server">SMTP сервер</string>
     <string name="login_smtp_port">SMTP порт</string>
-    <string name="login_smtp_security">Настройки безопасности SMTP</string>
+    <string name="login_smtp_security">Параметры безопасности SMTP</string>
     <string name="login_auth_method">Метод авторизации</string>
     <string name="login_info_oauth2_title">Продолжить упрощенную настройку?</string>
     <string name="login_info_oauth2_text">Введённый адрес электронной почты поддерживает упрощённую настройку (OAuth2).\n\nНа следующем шаге разрешите, пожалуйста, Delta Chat выступать в качестве Вашего приложения для чата с помощью электронной почты.\n\nУ Delta Chat нет серверов, Ваши данные остаются на Вашем устройстве!</string>
     <string name="login_info_gmail_text">Для аккаунтов GMail необходимо задать пароль для приложений - App-Password , если включена 2FA двухфакторная аутентификация. Если эти настройки недоступны, вам нужно активировать параметр Less Secure Apps.</string>
+    <string name="login_certificate_checks">Проверки сертификатов</string>
     <string name="login_error_mail">Укажите действительный адрес эл. почты</string>
     <string name="login_error_server">Укажите действительный сервер / IP адрес</string>
     <string name="login_error_port">Укажите действительный порт (1-65535)</string>
@@ -344,6 +362,10 @@
     <string name="login_error_cannot_login">Не удалось выполнить вход с логином \"%1$s\". Убедитесь, что адрес эл. почты и пароль указаны верно.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Ответ сервера %1$s: %2$s\n\nНекоторые серверы электронной почты сохраняют дополнительную информацию в папке «Входящие». Вы можете проверить эту папку, например, используя доступ через веб-интерфейс. Если Вы столкнулись с проблемами, проконсультируйте с провайдером электронной почты или знакомым специалистом.</string>
+
+    <!-- TLS certificate checks -->
+    <string name="accept_invalid_hostnames">Принимать сертификаты с неверным именем хоста</string>
+    <string name="accept_invalid_certificates">Принимать недействительные сертификаты</string>
 
 
     <!-- share and forward messages -->
@@ -372,7 +394,7 @@
     <string name="pref_blocked_contacts">Заблокированные контакты</string>
     <string name="pref_profile_photo_remove_ask">Удалить фото профиля?</string>
     <string name="pref_help_url">https://delta.chat/ru/help</string>
-    <string name="pref_password_and_account_settings">Настройки пароля и аккаунта</string>
+    <string name="pref_password_and_account_settings">Пароль и аккаунт</string>
     <string name="pref_who_can_see_this_information">Кто может видеть эту информацию?</string>
     <string name="pref_who_can_see_profile_explain">Изображение профиля и имя будут отображаться при общении с другими пользователями. Уже отправленная информация не может быть удалена или отозвана.</string>
     <string name="pref_your_name">Ваше имя</string>
@@ -448,6 +470,7 @@
     <string name="pref_watch_inbox_folder">Следить за папкой Входящие</string>
     <string name="pref_watch_sent_folder">Следить за папкой Исходящие</string>
     <string name="pref_watch_mvbox_folder">Следить за папкой DeltaChat</string>
+    <string name="pref_send_copy_to_self">Отправить копию себе</string>
     <string name="pref_auto_folder_moves">Автоматически Перемещать в папку DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Чаты были перемещены, чтобы избежать путаницы в папке Входящие</string>
     <string name="pref_email_interaction_title">Взаимодействие с электронной почтой</string>
@@ -455,11 +478,18 @@
     <string name="pref_show_emails_no">Нет, только чаты</string>
     <string name="pref_show_emails_accepted_contacts">Для принятых контактов</string>
     <string name="pref_show_emails_all">Все</string>
-    <string name="pref_empty_server_title">ОПАСНАЯ ЗОНА: Удалить электронную почту с сервера</string>
+    <string name="pref_empty_server_title">Удалить электронную почту с сервера</string>
     <string name="pref_empty_server_msg">Эта функция помогает освободить место на сервере IMAP, удаляя ВСЕ сообщения электронной почты, включая чат-сообщения, в указанных папках. Сообщения на этом устройстве не удалятся. Удаление не может быть отменено!</string>
     <string name="pref_empty_server_inbox">Удалить ВСЕ сообщения электронной почты в папке «Входящие»</string>
     <string name="pref_empty_server_mvbox">Удалить ВСЕ сообщения электронной почты в папке DeltaChat</string>
     <string name="pref_empty_server_do_button">Удаление электронной почты</string>
+    <string name="pref_experimental_features">Экспериментальные функции</string>
+    <string name="pref_on_demand_location_streaming">Трансляция местоположения</string>
+    <string name="pref_background_default">Фон по умолчанию</string>
+    <string name="pref_background_default_color">Цвет по умолчанию</string>
+    <string name="pref_background_custom_image">Пользовательское изображение</string>
+    <string name="pref_background_custom_color">Пользовательский цвет</string>
+
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
     <string name="autocrypt_explain">Autocrypt — новый и открытый протокол установления сквозного шифрования для электронной почты.\n\n Необходимые параметры шифрования назначаются автоматически и их возможно передавать между своими устройствами используя  сообщения с параметрами Autocrypt.</string>
@@ -484,7 +514,7 @@
     <string name="systemmsg_group_image_deleted">Изображение группы удалено.</string>
     <string name="systemmsg_member_added">Добавлен участник %1$s.</string>
     <string name="systemmsg_member_removed">Участник %1$s удалён.</string>
-    <string name="systemmsg_group_left">Вы покинули группу.</string>
+    <string name="systemmsg_group_left">Группа покинута.</string>
     <string name="systemmsg_read_receipt_subject">Уведомление о прочтении</string>
     <string name="systemmsg_read_receipt_body">Это подтверждение того, что сообщение \"%1$s\" было открыто на устройстве получателя. Данное подтверждение не означает, что сообщение было прочитано.</string>
     <string name="systemmsg_cannot_decrypt">Это сообщение не может быть расшифровано.\n\n• Возможно, это уже поможет просто ответить на это сообщение и попросить отправителя отправить сообщение еще раз.\n\n • В случае, если вы переустановили Delta Chat или другую почтовую программу на этом или другом устройство, с которого вы, возможно, захотите отправить оттуда Сообщение с параметрами Autocrypt.</string>
@@ -551,7 +581,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Требуется разрешение</string>
     <string name="perm_continue">Продолжить</string>
-    <string name="perm_not_now">Не сейчас</string>
     <string name="perm_explain_need_for_camera_access">Для захвата фото и видео разрешите Delta Chat доступ к камере.</string>
     <string name="perm_explain_need_for_mic_access">Для отправки звуковых сообщений разрешите Delta Chat доступ к микрофону</string>
     <string name="perm_explain_need_for_storage_access">Приложению Delta Chat необходим доступ к файлам для экспорта или резервного копирования.</string>
@@ -566,6 +595,8 @@
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Зашифрованное сообщение</string>
 
+    <!-- desktop specific strings -->
+    <string name="welcome_desktop">Добро пожаловать в DeltaChat</string>
     <string name="login_known_accounts_title_desktop">Известные аккаунты</string>
     <string name="global_menu_preferences_language_desktop">Выбор языка</string>
     <string name="global_menu_file_desktop">Файл</string>
@@ -581,13 +612,15 @@
     <string name="global_menu_view_developer_desktop">Разработчик</string>
     <string name="global_menu_view_developer_tools_desktop">Инструменты разработчика</string>
     <string name="global_menu_help_desktop">Помощь</string>
+    <string name="global_menu_help_learn_desktop">Узнать больше о Delta Chat</string>
     <string name="global_menu_help_contribute_desktop">Присоединиться к разработке на GitHub</string>
     <string name="global_menu_help_report_desktop">Сообщить о проблеме…</string>
+    <string name="global_menu_help_about_desktop">О Delta Chat</string>
     <string name="no_chat_selected_suggestion_desktop">Выберите чат или создайте новый</string>
     <string name="write_message_desktop">Напишите сообщение</string>
     <string name="encryption_info_title_desktop">Информация о шифровании</string>
     <string name="contact_detail_title_desktop">Детали контакта</string>
-    <string name="contact_request_title_desktop">Запрос на общение</string>
+    <string name="contact_request_title_desktop">Запрос контакта</string>
     <string name="delete_message_desktop">Удалить сообщение</string>
     <string name="more_info_desktop">Больше информации</string>
     <string name="logout_desktop">Выйти</string>
@@ -634,4 +667,15 @@
     <string name="user_location_permission_explanation">Для отображения и публикации вашего местоположения Delta Chat необходимо разрешение на местоположение.</string>
 
 
-    </resources>
+    <!-- accessibility -->
+    <string name="a11y_delivery_status_error">Статус доставки: ошибка</string>
+    <string name="a11y_encryption_padlock">Значок шифрования</string>
+    <string name="a11y_delivery_status_sending">Статус доставки: отправляется</string>
+    <string name="a11y_delivery_status_draft">Статус доставки: черновик</string>
+    <string name="a11y_delivery_status_delivered">Статус доставки: доставлено</string>
+    <string name="a11y_delivery_status_read">Статус доставки: прочитано</string>
+    <string name="a11y_delivery_status_invalid">Недопустимый статус доставки</string>
+    <string name="a11y_remove_account_btn_label">Удалить аккаунт</string>
+    <string name="a11y_message_context_menu_btn_label">Действия с сообщением</string>
+    <string name="a11y_background_preview_label">Предпросмотр фона</string>
+</resources>

@@ -322,7 +322,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Réponse de %1$s: %2$s\n\nCertains fournisseurs ajoutent des informations dans votre boite de réception; vous pouvez les vérifier par exemple dans le gestionnaire Web. Consultez votre fournisseur ou vos amis si vous rencontrez des problèmes.</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Transférer à ...</string>
@@ -349,7 +348,6 @@
     <string name="pref_blocked_contacts">Contacts bloqués</string>
     <string name="pref_profile_photo_remove_ask">Supprimer la photo de profil ?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <string name="pref_password_and_account_settings">Configuration des comptes et mots de passe</string>
     <string name="pref_who_can_see_this_information">Qui peut voir cette information ?</string>
     <string name="pref_who_can_see_profile_explain">L\'image et le nom de votre profil seront affichés à côté de vos messages lorsque vous communiquez avec d\'autres utilisateurs. Les informations déjà envoyées ne peuvent pas être effacées ou supprimées.</string>
     <string name="pref_your_name">Votre nom</string>
@@ -433,7 +431,7 @@
     <string name="pref_show_emails_no">Non, seulement les tchats</string>
     <string name="pref_show_emails_accepted_contacts">Pour les contacts acceptés</string>
     <string name="pref_show_emails_all">Tout</string>
-    <string name="pref_empty_server_title">ZONE DANGEREUSE: Effacer les courriels du serveur</string>
+    <string name="pref_empty_server_title">Effacer les courriels du serveur</string>
     <string name="pref_empty_server_msg">Cette fonction aide à faire de la place sur votre serveur IMAP en effaçant TOUS les courriels, y compris les messages de discussion, dans les dossiers indiqués. Les messages sur cet appareil ne seront pas effacés. L\'effacement ne peut pas être annulée !</string>
     <string name="pref_empty_server_inbox">Effacer TOUS les courriels du dossier boîte de réception</string>
     <string name="pref_empty_server_mvbox">Effacer TOUS les courriels du dossier DeltaChat</string>
@@ -529,7 +527,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Autorisation requise</string>
     <string name="perm_continue">Continuez</string>
-    <string name="perm_not_now">Pas maintenant</string>
     <string name="perm_explain_need_for_camera_access">Pour prendre des photos et des vidéos, autorisez DeltaChat à accéder à la caméra.</string>
     <string name="perm_explain_need_for_mic_access">Pour envoyer des messages audios, autorisez DeltaChat à accéder à votre micro.</string>
     <string name="perm_explain_need_for_storage_access">DeltaChat a besoin d\'accéder à vos fichiers afin d\'exporter des fichiers ou de créer des sauvegardes.</string>

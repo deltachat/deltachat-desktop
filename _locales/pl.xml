@@ -345,7 +345,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Odpowiedź od %1$s: %2$s\n\nNiektórzy dostawcy umieszczają w skrzynce odbiorczej dodatkowe informacje, które można sprawdzić np. na stronie internetowej. W przypadku wystąpienia problemów należy skonsultować się z dostawcą lub znajomymi.</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Przekaż do…</string>
@@ -372,7 +371,6 @@
     <string name="pref_blocked_contacts">Zablokowane kontakty</string>
     <string name="pref_profile_photo_remove_ask">Usunąć zdjęcie profilowe?</string>
     <string name="pref_help_url">https://delta.chat/pl/help</string>
-    <string name="pref_password_and_account_settings">Hasło i ustawienia konta</string>
     <string name="pref_who_can_see_this_information">Kto może zobaczyć tę informację?</string>
     <string name="pref_who_can_see_profile_explain">Twoje zdjęcie profilowe i nazwa będą wyświetlane wraz z wiadomościami podczas komunikacji z innymi użytkownikami. Już wysłanych informacji nie można skasować ani usunąć.</string>
     <string name="pref_your_name">Twoja nazwa</string>
@@ -455,7 +453,7 @@
     <string name="pref_show_emails_no">Nie, tylko czaty</string>
     <string name="pref_show_emails_accepted_contacts">Dla zaakceptowanych kontaktów</string>
     <string name="pref_show_emails_all">Wszystkie</string>
-    <string name="pref_empty_server_title">STREFA NIEBEZPIECZNA: Usuwanie e-maili z serwera</string>
+    <string name="pref_empty_server_title">Usuwanie e-maili z serwera</string>
     <string name="pref_empty_server_msg">Ta funkcja pomaga zwolnić miejsce na serwerze IMAP, usuwając WSZYSTKIE wiadomości e-mail, w tym wiadomości czat, w podanych folderach. Wiadomości na tym urządzeniu nie zostaną usunięte. Usunięcia nie można cofnąć!</string>
     <string name="pref_empty_server_inbox">Usuń WSZYSTKIE wiadomości e-mail w folderze Skrzynka odbiorcza</string>
     <string name="pref_empty_server_mvbox"> Usuń WSZYSTKIE wiadomości e-mail w folderze DeltaChat</string>
@@ -551,7 +549,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Wymagane zezwolenie</string>
     <string name="perm_continue">Kontynuuj</string>
-    <string name="perm_not_now">Nie teraz</string>
     <string name="perm_explain_need_for_camera_access">Aby robić zdjęcia i nagrywać wideo, zezwól Delta Chat na dostęp do aparatu.</string>
     <string name="perm_explain_need_for_mic_access">Aby wysyłać wiadomości audio, zezwól Delta Chat na dostęp do mikrofonu.</string>
     <string name="perm_explain_need_for_storage_access">Aby eksportować pliki lub tworzyć kopie zapasowe Delta Chat potrzebuje dostępu do twoich plików.</string>

@@ -268,7 +268,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Resposta de %1$s: %2$s \n\nAlguns provedores colocam informações adicionais na sua caixa de entrada; pode verificá-los, por exemplo, na interface web. Consulte o seu provedor ou amigos se você tiver problemas.</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Reencaminhar ...</string>
@@ -291,7 +290,6 @@
     <string name="pref_blocked_contacts">Bloquear contactos</string>
     <string name="pref_profile_photo_remove_ask">Remover a foto do perfil</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <string name="pref_password_and_account_settings">Palavra-chave e definiçõs da conta</string>
     <string name="pref_who_can_see_this_information">Quem pode ver esta informação?</string>
     <string name="pref_who_can_see_profile_explain">A sua foto e nome de perfil serão mostrados ao lado das suas mensagens ao comunicar com outros utilizadores. As informações já enviadas não podem ser excluídas ou removidas</string>
     <string name="pref_your_name">O seu nome</string>
@@ -453,7 +451,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Permissão necessária</string>
     <string name="perm_continue">Continuar</string>
-    <string name="perm_not_now">Agora não</string>
     <string name="perm_explain_need_for_camera_access">Para capturar fotos e vídeos, permita que o Delta Chat aceda a câmera.</string>
     <string name="perm_explain_need_for_mic_access">Para enviar mensagens de áudio, permita o acesso do Delta Chat ao seu microfone.</string>
     <string name="perm_explain_need_for_storage_access">O Delta Chat precisa de acesso aos seus arquivos para exportar arquivos ou criar backups.</string>
