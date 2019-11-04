@@ -344,7 +344,6 @@
     <string name="pref_blocked_contacts">Bloklanmış kontaktlar</string>
     <string name="pref_profile_photo_remove_ask">Profil şəkilini silmək?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <string name="pref_password_and_account_settings">Parol və hesab tənzimləməsi</string>
     <string name="pref_who_can_see_this_information">Bu məlumatları kim görə bilər?</string>
     <string name="pref_who_can_see_profile_explain">Digər istifadəçilərlə ünsiyyət qurarkən profil şəkliniz və adınız mesajlarınızla birlikdə göstərilir. Zatən göndərilən məlumat silinməyəcək. </string>
     <string name="pref_your_name">Adın</string>
@@ -426,7 +425,7 @@
     <string name="pref_show_emails_no">Xeyir, ancaq çatlar</string>
     <string name="pref_show_emails_accepted_contacts">Qəbul edilən kontaktlar üçün</string>
     <string name="pref_show_emails_all">Hamısı</string>
-    <string name="pref_empty_server_title">Təhlükə zonası: serverdən e-poçtları silin</string>
+    <string name="pref_empty_server_title">Serverdən e-poçtları silin</string>
     <string name="pref_empty_server_msg">Bu funksiya, verilmiş qovluqlarda, söhbət mesajları da daxil olmaqla, bütün elektron poçtları silməklə IMAP serverinizdə olan yaddaşı boşaltmağa  kömək edir. Bu cihazdakı mesajlar silinməyəcək. Silinmə geri qaytarıla bilməz!</string>
     <string name="pref_empty_server_inbox">Daxil olan qutusunda bütün elektron poçtları sil</string>
     <string name="pref_empty_server_mvbox">DeltaChat qutusunda bütün elektron poçtları sil</string>
@@ -520,7 +519,6 @@
     <!-- permissions -->
     <string name="perm_required_title">İzin tələb olunur</string>
     <string name="perm_continue">Davam edin</string>
-    <string name="perm_not_now">İndi yox</string>
     <string name="perm_explain_need_for_camera_access">Foto və video çəkmək üçün Delta Chat-ə kameraya giriş imkanı verin.</string>
     <string name="perm_explain_need_for_mic_access">Səsli mesajları göndərmək üçün mikrofona izn verin. </string>
     <string name="perm_explain_need_for_storage_access">Delta Chat, faylları idxal / ixrac etmək üçün iznə ehtiyacı var.</string>

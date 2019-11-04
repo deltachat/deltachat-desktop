@@ -11,6 +11,8 @@
     <string name="def">Default</string>
     <string name="custom">Custom</string>
     <string name="none">None</string>
+    <string name="automatic">Automatic</string>
+    <string name="strict">Strict</string>
     <string name="open">Open</string>
     <string name="delete">Delete</string>
     <string name="update">Update</string>
@@ -305,7 +307,7 @@
     <string name="welcome_intro6_message">Encrypted with all common algorithms. Messages stay on your servers.</string>
     <string name="welcome_intro7_headline">Trustworthy</string>
     <string name="welcome_intro7_message">Delta Chat is safe for business use, compatible and standards-based.</string>
-    <string name="welcome_start_messaging">Start Messaging</string>
+    <string name="welcome_start_messaging">Start messaging</string>
     <string name="login_title">Login</string>
     <string name="login_header">Login to your server</string>
     <string name="login_explain">Login with an existing e-mail account.</string>
@@ -326,6 +328,7 @@
     <string name="login_info_oauth2_title">Continue with simplified setup?</string>
     <string name="login_info_oauth2_text">The entered e-mail-address supports a simplified setup (OAuth2).\n\nIn the next step, please allow Delta Chat to act as your Chat with E-Mail app.\n\nThere are no Delta Chat servers, your data stays on your device!</string>
     <string name="login_info_gmail_text">For GMail Accounts you need to create an App-Password if you have 2FA enabled. If this setting is not available, you need to enable Less Secure Apps.</string>
+    <string name="login_certificate_checks">Certificate checks</string>
     <string name="login_error_mail">Please enter a valid email address</string>
     <string name="login_error_server">Please enter a valid server / IP address</string>
     <string name="login_error_port">Please enter a valid port (1–65535)</string>
@@ -337,6 +340,10 @@
     <string name="login_error_cannot_login">Cannot login as \"%1$s\". Please check if the email-address and the password are correct.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Response from %1$s: %2$s\n\nSome providers place additional information in your inbox; you can check them it eg. in the web frontend. Consult your provider or friends if you run into problems.</string>
+
+    <!-- TLS certificate checks -->
+    <string name="accept_invalid_hostnames">Accept invalid hostnames</string>
+    <string name="accept_invalid_certificates">Accept invalid certificates</string>
 
 
     <!-- share and forward messages -->
@@ -365,7 +372,7 @@
     <string name="pref_blocked_contacts">Blocked contacts</string>
     <string name="pref_profile_photo_remove_ask">Remove profile photo?</string>
     <string name="pref_help_url">https://delta.chat/en/help</string>
-    <string name="pref_password_and_account_settings">Password and account settings</string>
+    <string name="pref_password_and_account_settings">Password and account</string>
     <string name="pref_who_can_see_this_information">Who can see this information?</string>
     <string name="pref_who_can_see_profile_explain">Your profile picture and name will be shown alongside your messages when communicating with other users. Already sent information can not be deleted or removed.</string>
     <string name="pref_your_name">Your name</string>
@@ -441,17 +448,18 @@
     <string name="pref_watch_inbox_folder">Watch Inbox folder</string>
     <string name="pref_watch_sent_folder">Watch Sent folder</string>
     <string name="pref_watch_mvbox_folder">Watch DeltaChat folder</string>
-    <string name="pref_auto_folder_moves">Automatic Moves to DeltaChat folder</string>
+    <string name="pref_send_copy_to_self">Send copy to self</string>
+    <string name="pref_auto_folder_moves">Automatic moves to DeltaChat folder</string>
     <string name="pref_auto_folder_moves_explain">Chat conversations are moved to avoid cluttering the Inbox folder</string>
     <string name="pref_email_interaction_title">Email interaction</string>
     <string name="pref_show_emails">Show classic emails</string>
     <string name="pref_show_emails_no">No, chats only</string>
     <string name="pref_show_emails_accepted_contacts">For accepted contacts</string>
     <string name="pref_show_emails_all">All</string>
-    <string name="pref_empty_server_title">DANGER ZONE: Delete e-mails from server</string>
+    <string name="pref_empty_server_title">Delete e-mails from server</string>
     <string name="pref_empty_server_msg">This function helps to free space on your IMAP server by deleting ALL e-mails, including chat-messages, in the given folders. Messages on this device will not be deleted.  The deletion cannot be undone!</string>
-    <string name="pref_empty_server_inbox">Delete ALL e-mails in Inbox folder</string>
-    <string name="pref_empty_server_mvbox">Delete ALL e-mails in DeltaChat folder</string>
+    <string name="pref_empty_server_inbox">Delete all e-mails in Inbox folder</string>
+    <string name="pref_empty_server_mvbox">Delete all e-mails in DeltaChat folder</string>
     <string name="pref_empty_server_do_button">Delete e-mails</string>
     <string name="pref_experimental_features">Experimental features</string>
     <string name="pref_on_demand_location_streaming">On-demand location streaming</string>
@@ -551,7 +559,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Permission required</string>
     <string name="perm_continue">Continue</string>
-    <string name="perm_not_now">Not now</string>
     <string name="perm_explain_need_for_camera_access">To capture photos and video, allow Delta Chat access to the camera.</string>
     <string name="perm_explain_need_for_mic_access">To send audio messages, allow Delta Chat access to your microphone.</string>
     <string name="perm_explain_need_for_storage_access">Delta Chat needs access to your files in order to export files or to create backups.</string>
