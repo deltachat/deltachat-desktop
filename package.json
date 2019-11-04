@@ -79,6 +79,7 @@
     "react-dom": "^16.11.0",
     "react-intl": "^2.9.0",
     "react-qr-svg": "^2.1.0",
+    "react-string-replace": "^0.4.4",
     "rimraf": "^2.7.1",
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8",
