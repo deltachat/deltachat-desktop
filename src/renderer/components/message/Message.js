@@ -138,7 +138,8 @@ const contextMenu = (props, textSelected, triggerId) => {
   } = props
   const tx = window.translate
 
-  const showRetry = status === 'error' && direction === 'outgoing'
+  let showRetry = status === 'error' && direction === 'outgoing'
+  showRetry = false // TODO: retry send is not yet implemented
 
   return (
     <ContextMenu id={triggerId}>
