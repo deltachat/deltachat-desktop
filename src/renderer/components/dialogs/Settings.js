@@ -415,7 +415,7 @@ class BackgroundSelector extends React.Component {
           'AmRheinInMainz.webp',
           'ForestSun.webp',
           'ArkOfFriendship.webp',
-          'riesenrad.webp',
+          'nico_bg.jpg',
           'background_old.jpg'
         ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
       </div>
