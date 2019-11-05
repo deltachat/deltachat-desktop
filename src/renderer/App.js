@@ -4,8 +4,8 @@ import SettingsContext from './contexts/SettingsContext'
 import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-import { remote, ipcRenderer } from 'electron'
-import { callDcMethod } from './ipc'
+import { remote } from 'electron'
+import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend } from './ipc'
 import logger from '../logger'
 
 const log = logger.getLogger('render/App')
@@ -19,7 +19,7 @@ export default function App (props) {
   const [localeData, setLocaleData] = useState(null)
 
   useEffect(() => {
-    ipcRenderer.send('ipcReady')
+    sendToBackend('ipcReady')
     window.addEventListener('keydown', function (ev) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
@@ -45,7 +45,7 @@ export default function App (props) {
 
   function setupLocaleData (locale) {
     moment.locale(locale)
-    const localeData = ipcRenderer.sendSync('locale-data', locale)
+    const localeData = sendToBackendSync('locale-data', locale)
     window.localeData = localeData
     window.translate = localize.translate(localeData.messages)
     setLocaleData(localeData)
@@ -56,30 +56,30 @@ export default function App (props) {
   const onRender = (e, state) => setState(state)
   const onChooseLanguage = (e, locale) => {
     setupLocaleData(locale)
-    ipcRenderer.send('chooseLanguage', locale)
+    sendToBackend('chooseLanguage', locale)
   }
 
   useEffect(() => {
     setupLocaleData(state.saved.locale)
-    ipcRenderer.on('ALL', logALL)
-    ipcRenderer.on('error', logError)
+    ipcBackend.on('ALL', logALL)
+    ipcBackend.on('error', logError)
     return () => {
-      ipcRenderer.removeListener('ALL', logALL)
-      ipcRenderer.removeListener('ALL', logError)
+      ipcBackend.removeListener('ALL', logALL)
+      ipcBackend.removeListener('ALL', logError)
     }
   }, [])
 
   useEffect(() => {
-    ipcRenderer.on('render', onRender)
+    ipcBackend.on('render', onRender)
     return () => {
-      ipcRenderer.removeListener('render', onRender)
+      ipcBackend.removeListener('render', onRender)
     }
   }, [state])
 
   useEffect(() => {
-    ipcRenderer.on('chooseLanguage', onChooseLanguage)
+    ipcBackend.on('chooseLanguage', onChooseLanguage)
     return () => {
-      ipcRenderer.removeListener('chooseLanguage', onChooseLanguage)
+      ipcBackend.removeListener('chooseLanguage', onChooseLanguage)
     }
   }, [localeData])
 
