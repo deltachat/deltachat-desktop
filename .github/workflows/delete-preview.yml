@@ -17,17 +17,18 @@ jobs:
       id: getid
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        touch echo-output
         echo ::set-output name=prid::$PULLREQUEST_ID
-        echo "HOME: ${{ github.home }}"
-        echo "WORKFLOW: ${{ github.workflow }}"
-        echo "ACTION: ${{ github.action }}"
-        echo "EVENT_NAME: ${{ github.event.name }}"
-        echo "EVENT_PATH: ${{ github.event.path }}"
-        echo "WORKSPACE: ${{ github.workspace }}"
-        echo "SHA: ${{ github.sha }}"
-        echo "REF: ${{ github.ref }}"
-        echo "HEAD_REF: ${{ github.head.ref }}"
-        echo "BASE_REF: ${{ github.base.ref }}"
+        echo "HOME: ${{ github.home }}" >> echo-output
+        echo "WORKFLOW: ${{ github.workflow }}" >> echo-output
+        echo "ACTION: ${{ github.action }}" >> echo-output
+        echo "EVENT_NAME: ${{ github.event.name }}" >> echo-output
+        echo "EVENT_PATH: ${{ github.event.path }}" >> echo-output
+        echo "WORKSPACE: ${{ github.workspace }}" >> echo-output
+        echo "SHA: ${{ github.sha }}" >> echo-output
+        echo "REF: ${{ github.ref }}" >> echo-output
+        echo "HEAD_REF: ${{ github.head.ref }}" >> echo-output
+        echo "BASE_REF: ${{ github.base.ref }}" >> echo-output
     - name: Renaming
       run: |
         mkdir preview
@@ -36,6 +37,7 @@ jobs:
         cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
         cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe
         cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
+        cp echo-output preview/echo-output
         cd ..
     - name: Replace builds with dummy files
       uses: horochx/deploy-via-scp@v1.0.1
