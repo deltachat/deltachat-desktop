@@ -22,13 +22,13 @@ jobs:
         echo "HOME: ${{ github.home }}" >> echo-output
         echo "WORKFLOW: ${{ github.workflow }}" >> echo-output
         echo "ACTION: ${{ github.action }}" >> echo-output
-        echo "EVENT_NAME: ${{ github.event.name }}" >> echo-output
-        echo "EVENT_PATH: ${{ github.event.path }}" >> echo-output
+        echo "EVENT_NAME: $GITHUB_EVENT_NAME" >> echo-output
+        echo "EVENT_PATH: $GITHUB_EVENT_PATH" >> echo-output
         echo "WORKSPACE: ${{ github.workspace }}" >> echo-output
         echo "SHA: ${{ github.sha }}" >> echo-output
         echo "REF: ${{ github.ref }}" >> echo-output
-        echo "HEAD_REF: ${{ github.head.ref }}" >> echo-output
-        echo "BASE_REF: ${{ github.base.ref }}" >> echo-output
+        echo "HEAD_REF: $GITHUB_HEAD_REF" >> echo-output
+        echo "BASE_REF: $GITHUB_BASE_REF" >> echo-output
     - name: Renaming
       run: |
         mkdir preview
