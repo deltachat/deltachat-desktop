@@ -51,8 +51,8 @@ export function DCInfo (props) {
 export default function About (props) {
   const { isOpen, onClose } = props
   const tx = window.translate
- 
-  let desktopString = reactStringReplace(tx('about_offical_app_desktop'), 'Delta Chat', () => <ClickableLink href='https://delta.chat' text='Delta Chat' />)
+
+  const desktopString = reactStringReplace(tx('about_offical_app_desktop'), 'Delta Chat', () => <ClickableLink href='https://delta.chat' text='Delta Chat' />)
   let versionString = reactStringReplace(tx('about_licensed_under_desktop'), 'GNU GPL version 3', () => <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' />)
   versionString = reactStringReplace(versionString, 'GitHub', () => <ClickableLink href={gitHubUrl()} text='GitHub' />)
 

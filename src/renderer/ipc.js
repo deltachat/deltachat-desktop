@@ -4,7 +4,7 @@ const log = require('../logger').getLogger('renderer/ipc')
 export const ipcBackend = ipcRenderer
 
 var backendLoggingStarted = false
-export function startBackendLogging() {
+export function startBackendLogging () {
   if (backendLoggingStarted === true) return log.error('Backend logging is already started!')
   backendLoggingStarted = true
 
@@ -46,4 +46,3 @@ export function callDcMethod (methodName, args, cb) {
 export function callDcMethodAsync (fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
-

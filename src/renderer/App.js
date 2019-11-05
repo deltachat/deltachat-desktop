@@ -6,9 +6,7 @@ import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
-import logger from '../logger'
 
-const log = logger.getLogger('render/App')
 const localize = require('../localize')
 const moment = require('moment')
 
@@ -43,9 +41,8 @@ export default function App (props) {
     })
   }, [])
 
-
-  useEffect(() => { 
-    startBackendLogging() 
+  useEffect(() => {
+    startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
 
