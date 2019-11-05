@@ -3,7 +3,7 @@ name: Delete Preview Deliverables
 
 on: 
   pull_request:
-    types: [closed]
+#   types: [closed]
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
@@ -18,6 +18,16 @@ jobs:
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=prid::$PULLREQUEST_ID
+        echo "HOME: ${{ github.home }}"
+        echo "WORKFLOW: ${{ github.workflow }}"
+        echo "ACTION: ${{ github.action }}"
+        echo "EVENT_NAME: ${{ GITHUB_EVENT_NAME }}"
+        echo "EVENT_PATH: ${{ github.event.path }}"
+        echo "WORKSPACE: ${{ github.workspace }}"
+        echo "SHA: ${{ github.sha }}"
+        echo "REF: ${{ github.ref }}"
+        echo "HEAD_REF: ${{ GITHUB_HEAD_REF }}"
+        echo "BASE_REF: ${{ GITHUB_BASE_REF }}"
     - name: Renaming
       run: |
         mkdir preview
