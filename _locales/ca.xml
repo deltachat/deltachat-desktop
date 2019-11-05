@@ -286,7 +286,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">La resposta de%1$s ha sigut: %2$s\n\nHi ha proveïdors que posen informació addicional a la vostra safata d\'entrada; podeu trobar-la allà p. ex. usant la interfície de correu web. Consulteu el vostre proveïdor o els vostres amics si teniu problemes.</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Reenvia a ...</string>
@@ -313,7 +312,6 @@
     <string name="pref_blocked_contacts">Contactes bloquejats</string>
     <string name="pref_profile_photo_remove_ask">Esborrar la foto de perfil?</string>
     <string name="pref_help_url">https://delta.chat/ca/help</string>
-    <string name="pref_password_and_account_settings">Contrasenya i preferències del compte</string>
     <string name="pref_who_can_see_this_information">Qui pot veure aquesta informació?</string>
     <string name="pref_who_can_see_profile_explain">La vostra imatge de perfil i el vostre nom es mostraran en els missatges que envieu als altres usuaris. La informació que ja s\'hagi enviat no es pot eliminar ni esborrar.</string>
     <string name="pref_your_name">El vostre nom</string>
@@ -479,7 +477,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Es requereix permís</string>
     <string name="perm_continue">Continua</string>
-    <string name="perm_not_now">Ara no</string>
     <string name="perm_explain_need_for_camera_access">Permet que Delta Chat accedeixi a la càmera per fer fotos i vídeo</string>
     <string name="perm_explain_need_for_mic_access">Permet que Delta Chat accedeixi al micròfon per enviar missatges d\'àudio</string>
     <string name="perm_explain_need_for_storage_access">Delta Chat necessita accedir als vostres arxius per exportar documents o per fer-ne còpies de seguretat.</string>

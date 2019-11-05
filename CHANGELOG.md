@@ -2,6 +2,49 @@
 
 ## [Unreleased][unreleased]
 
+## [0.840.0] - 2019-11-05
+
+### Changed
+
+- ChatView refactoring [#1017](https://github.com/deltachat/deltachat-desktop/issues/1017) [**@nicodh**](https://github.com/nicodh)
+- Add janka's welcome image [**@jankass**](https://github.com/jankass) [**@Simon-Laux**](https://github.com/Simon-Laux) [**@jikstra**](https://github.com/jikstra) 
+- Rename the `Create group` button to a more generic `ok` button [**@Jikstra**](https://github.com/Jikstra)
+- Improve backend & frontend logging [#1026](https://github.com/deltachat/deltachat-desktop/issues/1026) [#1030](https://github.com/deltachat/deltachat-desktop/issues/1030) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Various styling tweaks [**@Simon-Laux**](https://github.com/Simon-Laux) [#1039](https://github.com/deltachat/deltachat-desktop/issues/1039)
+- Improve backend deltachat controller [**@Simon-Laux**](https://github.com/Simon-Laux) [#1056](https://github.com/deltachat/deltachat-desktop/issues/1056)
+- Reorder settings [**@jikstra**](https://github.com/jikstra) ([#1035](https://github.com/deltachat/deltachat-desktop/issues/1035))
+- Upload preview builts to download.delta.chat (CI) [**@lefherz**](https://github.com/lefherz) [#1088](https://github.com/deltachat/deltachat-desktop/issues/1088)
+- Implement ssl certificate settings [**@link2xt**](https://github.com/link2xt) [#1076](https://github.com/deltachat/deltachat-desktop/issues/1076)
+- Restyle user-feedback [**@jikstra**](https://github.com/jikstra) [#1100](https://github.com/deltachat/deltachat-desktop/issues/1100) 
+- Add new zealand background image of [**@nicodh**](https://github.com/nicodh) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Update deltachat-node to v1.0.0-alpha.11
+- Restyle about dialog [**@jikstra**](https://github.com/jikstra)
+- Implement maybeNetwork [**@jikstra**](https://github.com/jikstra)
+- Hide retry send from message context menu [**@nicodh**](https://github.com/nicodh)
+- Call setCoreStrings after opening the context [**@link2xt**](https://github.com/link2xt)
+- Add confirm delete message dialog [**@hansal7014**](https://github.com/hansal7014) [#1083](https://github.com/deltachat/deltachat-desktop/issues/1083)
+
+### Fixed
+
+- Fix windows background [**@Simon-Laux**](https://github.com/Simon-Laux) ([#1016](https://github.com/deltachat/deltachat-desktop/issues/1016))
+- Fix constants in serverFlags conversion [#1028](https://github.com/deltachat/deltachat-desktop/issues/1028) [**@link2xt**](https://github.com/link2xt)
+- Fix showing user feedback/errors again [**@Simon-Laux**](https://github.com/Simon-Laux) [#1047](https://github.com/deltachat/deltachat-desktop/issues/1047)
+- Fix mark message as seen [**@Simon-Laux**](https://github.com/Simon-Laux) [#1054](https://github.com/deltachat/deltachat-desktop/issues/1054)
+- Fix showing line breaks in Messages [**@Jikstra**](https://github.com/Jikstra) [#1062](https://github.com/deltachat/deltachat-desktop/issues/1062)
+- Close edit group dialog when clicking on save button [**@jikstra**](https://github.com/jikstra) ([#1067](https://github.com/deltachat/deltachat-desktop/issues/1067)) 
+- Fix broken notificatins [**@nicodh**](https://github.com/nicodh) [#1071](https://github.com/deltachat/deltachat-desktop/issues/1071)
+- Fix media view [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix showing qr code on group creation [**@Jikstra**](https://github.com/Jikstra) [#1101](https://github.com/deltachat/deltachat-desktop/issues/1101)
+- Fix various key warnings [**@Jikstra**](https://github.com/Jikstra) [#1103](https://github.com/deltachat/deltachat-desktop/issues/1103)
+- Do not call messageToJson for daymarker messages [**@link2xt**](https://github.com/link2xt) 
+- Fix updating account settings [**@nicodh**](https://github.com/nicodh)
+- Fix serverFlags [**@link2xt**](https://github.com/link2xt)
+
+### Added
+
+- Implement experimental sticker support [**@jikstra**](https://github.com/jikstra) [#1032](https://github.com/deltachat/deltachat-desktop/issues/1032)
+- Add react dev tools [#1029](https://github.com/deltachat/deltachat-desktop/issues/1029) [**@simon-laux**](https://github.com/simon-laux)
+
 ## [0.201.0] - 2019-09-27
 
 ### Added

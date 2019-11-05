@@ -1,5 +1,4 @@
 const DeltaChat = require('deltachat-node')
-const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/login', true)
 const path = require('path')
 const setupNotifications = require('../notifications')
@@ -20,24 +19,24 @@ module.exports = class DCLoginController extends SplitOut {
       this._dc.setStockTranslation(Number(key), strings[key])
     })
 
-    this._controller._render()
+    this._controller._sendStateToRenderer()
   }
 
-  login (credentials, render, coreStrings) {
+  login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
-    this._controller.fullCwd = this.getPath(credentials.addr)
-    log.info(`Using deltachat instance ${this._controller.fullCwd}`)
+    this._controller.accountDir = this.getPath(credentials.addr)
+    log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
     this._controller._dc = dc
     this._controller.credentials = credentials
-    this._controller._render = render
+    this._controller._sendStateToRenderer = sendStateToRenderer
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
       this._controller.emit('error', this._controller.translate('bad_email_address'))
       return
     }
 
-    this._dc.open(this._controller.fullCwd, err => {
+    this._dc.open(this._controller.accountDir, err => {
       if (err) throw err
       this.setCoreStrings(coreStrings)
       const onReady = () => {
@@ -46,13 +45,13 @@ module.exports = class DCLoginController extends SplitOut {
         this._controller.configuring = false
         this._controller.emit('ready', this._controller.credentials)
         log.info('dc_get_info', dc.getInfo())
-        render()
+        sendStateToRenderer()
       }
-      if (!this._dc.isConfigured()) {
+      if (!this._dc.isConfigured() || updateConfiguration) {
         this._dc.once('ready', onReady)
         this._controller.configuring = true
-        this._dc.configure(addServerFlags(credentials))
-        render()
+        this._dc.configure(this.addServerFlags(credentials))
+        sendStateToRenderer()
       } else {
         onReady()
       }
@@ -69,7 +68,7 @@ module.exports = class DCLoginController extends SplitOut {
 
     log.info('Logged out')
     this._controller.emit('logout')
-    if (typeof this._controller._render === 'function') this._controller._render()
+    if (typeof this._controller._sendStateToRenderer === 'function') this._controller._sendStateToRenderer()
   }
 
   getPath (addr) {
@@ -81,36 +80,10 @@ module.exports = class DCLoginController extends SplitOut {
     this._dc.close()
     this._controller._dc = null
   }
-}
 
-function addServerFlags (credentials) {
-  return Object.assign({}, credentials, {
-    server_flags: serverFlags(credentials)
-  })
-}
-
-/* eslint-disable camelcase */
-function serverFlags ({ mail_security, send_security }) {
-  const flags = []
-
-  if (mail_security === 'ssl') {
-    flags.push(C.DC_LP_IMAP_SOCKET_SSL)
-  } else if (mail_security === 'starttls') {
-    flags.push(C.DC_LP_IMAP_SOCKET_STARTTLS)
-  } else if (mail_security === 'plain') {
-    flags.push(C.DC_LP_IMAP_SOCKET_PLAIN)
+  addServerFlags (credentials) {
+    return Object.assign({}, credentials, {
+      server_flags: this._controller.settings.serverFlags(credentials)
+    })
   }
-
-  if (send_security === 'ssl') {
-    flags.push(C.DC_LP_SMTP_SOCKET_SSL)
-  } else if (send_security === 'starttls') {
-    flags.push(C.DC_LP_SMTP_SOCKET_STARTTLS)
-  } else if (send_security === 'plain') {
-    flags.push(C.DC_LP_SMTP_SOCKET_PLAIN)
-  }
-
-  return flags.reduce((flag, acc) => {
-    return acc | flag
-  }, 0)
 }
-/* eslint-enable camelcase */

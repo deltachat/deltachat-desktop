@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 
+import C from 'deltachat-node/constants'
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import * as update from 'immutability-helper'
@@ -30,7 +31,8 @@ export default class Login extends React.Component {
         showPasswordSend: false
       },
       progress: 0,
-      dirty: false
+      dirty: false,
+      disableSubmit: false
     }
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
@@ -57,21 +59,35 @@ export default class Login extends React.Component {
       mail_server: this.props.mail_server || '',
       mail_port: this.props.mail_port || '',
       mail_security: this.props.mail_security || '',
+      imap_certificate_checks: this.props.imap_certificate_checks || '',
       send_user: this.props.send_user || '',
       send_pw: this.props.send_pw || '',
       send_server: this.props.send_server || '',
       send_port: this.props.send_port || '',
-      send_security: this.props.send_security || ''
+      send_security: this.props.send_security || '',
+      smtp_certificate_checks: this.props.smtp_certificate_checks || ''
     }
   }
 
   handleCredentialsChange (event) {
     const { mode } = this.props
     const { id, value } = event.target
-    const updatedState = update(this.state, {
-      credentials: {
+    let updatedCredentials
+    if (id === 'certificate_checks') {
+      // Change to certificate_checks updates certificate checks configuration
+      // for all protocols.
+      updatedCredentials = {
+        imap_certificate_checks: { $set: value },
+        smtp_certificate_checks: { $set: value }
+      }
+    } else {
+      updatedCredentials = {
         [id]: { $set: value }
       }
+    }
+
+    const updatedState = update(this.state, {
+      credentials: updatedCredentials
     })
     let dirty = false
     if (mode === 'update') {
@@ -84,13 +100,18 @@ export default class Login extends React.Component {
       ) !== undefined
     }
     updatedState.dirty = dirty
+    updatedState.disableSubmit = false
     this.setState(updatedState)
   }
 
   handleSubmit (event) {
+    const { mode } = this.props
     const credentials = this.state.credentials
     this.props.onSubmit(credentials)
     event.preventDefault()
+    if (mode !== 'update') {
+      this.setState({ disableSubmit: true })
+    }
   }
 
   handleUISwitchStateProperty (key) {
@@ -99,11 +120,12 @@ export default class Login extends React.Component {
   }
 
   cancelClick (event) {
-    const { mode, loading } = this.props
+    const { mode } = this.props
     event.preventDefault()
     event.stopPropagation()
-    if (mode === 'update' && !loading) {
-      this.props.onClose()
+    this.setState({ disableSubmit: false })
+    if (mode === 'update') {
+      this.props.onCancel()
     } else {
       ipcRenderer.send('logout')
     }
@@ -115,6 +137,7 @@ export default class Login extends React.Component {
 
   render () {
     const { addrDisabled, loading, mode } = this.props
+    const { disableSubmit } = this.state
 
     const {
       addr,
@@ -123,12 +146,16 @@ export default class Login extends React.Component {
       mail_server,
       mail_port,
       mail_security,
+      imap_certificate_checks,
       send_user,
+      send_pw,
       send_server,
       send_port,
-      send_security,
-      send_pw
+      send_security
     } = this.state.credentials
+
+    // We assume that smtp_certificate_checks has the same value.
+    const certificate_checks = imap_certificate_checks
 
     const { showAdvanced } = this.state.ui
 
@@ -139,7 +166,7 @@ export default class Login extends React.Component {
     return (
       <React.Fragment>
         {this.renderLoginHeader(mode)}
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className='login-form'>
 
           <DeltaInput
             key='addr'
@@ -251,6 +278,18 @@ export default class Login extends React.Component {
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
+
+            <DeltaSelect
+              id='certificate_checks'
+              label={tx('login_certificate_checks')}
+              value={certificate_checks}
+              onChange={this.handleCredentialsChange}
+            >
+              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_HOSTNAMES}>{tx('accept_invalid_hostnames')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>{tx('accept_invalid_certificates')}</option>
+            </DeltaSelect>
           </Collapse>
           <br />
           <DeltaText>{tx('login_subheader')}</DeltaText>
@@ -264,10 +303,7 @@ export default class Login extends React.Component {
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
-              if (!dirty) {
-                return
-              }
-              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw)
+              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw) || !dirty || disableSubmit
             }
             if (child.props.type === 'cancel') {
               if (!loading) return

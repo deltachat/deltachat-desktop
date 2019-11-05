@@ -2,7 +2,7 @@ const React = require('react')
 const { useRef, useState } = require('react')
 const classNames = require('classnames')
 
-const MessageBody = require('./MessageBody')
+const MessageBody = require('./MessageBody').default
 const MessageMetaData = require('./MessageMetaData')
 
 const ContactName = require('../conversations/ContactName')
@@ -91,7 +91,7 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   } = props
   const tx = window.translate
 
-  return [(
+  return (
     <div className='module-message__buttons'>
       {
         attachment && viewType !== 23 && <div
@@ -121,7 +121,7 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
         />
       </ContextMenuTrigger>
     </div>
-  )]
+  )
 }
 
 const contextMenu = (props, textSelected, triggerId) => {
@@ -138,7 +138,8 @@ const contextMenu = (props, textSelected, triggerId) => {
   } = props
   const tx = window.translate
 
-  const showRetry = status === 'error' && direction === 'outgoing'
+  let showRetry = status === 'error' && direction === 'outgoing'
+  showRetry = false // TODO: retry send is not yet implemented
 
   return (
     <ContextMenu id={triggerId}>

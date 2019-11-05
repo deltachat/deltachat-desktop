@@ -323,7 +323,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Resposta de %1$s: %2$s\n\nAlguns provedores colocam informações adicionais na sua caixa de entrada; verifique-as, por exemplo, na interface web. Consulte o seu provedor ou amigos se você tiver problemas.</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Encaminhar para...</string>
@@ -350,7 +349,6 @@
     <string name="pref_blocked_contacts">Contatos bloqueados</string>
     <string name="pref_profile_photo_remove_ask">Remover foto de perfil?</string>
     <string name="pref_help_url">https://delta.chat/pt/help</string>
-    <string name="pref_password_and_account_settings">Senha e configurações da conta</string>
     <string name="pref_who_can_see_this_information">Quem pode ver essa informação?</string>
     <string name="pref_who_can_see_profile_explain">Sua foto de perfil e nome serão exibidos com suas mensagens a outros usuários. Informações já enviadas não podem ser apagas ou removidas.</string>
     <string name="pref_your_name">Seu nome</string>
@@ -433,7 +431,7 @@
     <string name="pref_show_emails_no">Não, somente conversas</string>
     <string name="pref_show_emails_accepted_contacts">Para contatos aceitos</string>
     <string name="pref_show_emails_all">Todos</string>
-    <string name="pref_empty_server_title">ZONA DE PERIGO: Apagar e-mails do servidor</string>
+    <string name="pref_empty_server_title">Apagar e-mails do servidor</string>
     <string name="pref_empty_server_msg">Esta função ajuda a liberar espaço em seu servidor IMAP ao apagar TODOS os e-mails, incluindo conversas, em suas respectivas pastas. Mensagens neste dispositivo não serão apagadas. A remoção não pode ser desfeita!</string>
     <string name="pref_empty_server_inbox">Deletar TODOS os e-mais na Caixa de Entrada.</string>
     <string name="pref_empty_server_mvbox">Deletar TODOS os e-mails na pasta DeltaChat.</string>
@@ -529,7 +527,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Permissão necessária</string>
     <string name="perm_continue">Continuar</string>
-    <string name="perm_not_now">Agora não</string>
     <string name="perm_explain_need_for_camera_access">Para capturar fotos e vídeos, autorize o Delta Chat a acessar sua câmera.</string>
     <string name="perm_explain_need_for_mic_access">Para enviar mensagens de áudio, permita o Delta Chat acessar seu microfone.</string>
     <string name="perm_explain_need_for_storage_access">O Delta Chat precisa acessar seu armazenamento para que você possa exportar arquivos e criar becapes.</string>

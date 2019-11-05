@@ -309,7 +309,6 @@
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">伺服器 %1$s 的回應: %2$s\n\n有些郵件服務商會在你的收件匣提供進一步的資訊，請檢查一下，並看看 web 介面上有沒有相關設定。還是不行的話，請洽詢郵件服務商，或是請朋友幫忙。</string>
 
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">轉發給...</string>
@@ -336,7 +335,6 @@
     <string name="pref_blocked_contacts">已封鎖的聯絡人</string>
     <string name="pref_profile_photo_remove_ask">移除大頭照?</string>
     <string name="pref_help_url">https://delta.chat/tw/help</string>
-    <string name="pref_password_and_account_settings">帳號密碼設定</string>
     <string name="pref_who_can_see_this_information">隱私權設定</string>
     <string name="pref_who_can_see_profile_explain">你的名字和大頭照在通訊的過程中，會提供給對方看到。已傳送的資訊無法被刪除或移除。</string>
     <string name="pref_your_name">你的名字</string>

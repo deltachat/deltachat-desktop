@@ -23,6 +23,10 @@
 // Dialogs
 @import 'dialogs/_forward-message';
 @import 'dialogs/_settings';
+@import 'dialogs/_about';
+
+// Login
+@import 'login/_login.scss';
 
 // Map
 @import 'map/_map';

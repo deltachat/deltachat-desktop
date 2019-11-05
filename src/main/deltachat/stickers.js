@@ -15,7 +15,7 @@ async function isFile (path) {
 const SplitOut = require('./splitout')
 module.exports = class DCStickers extends SplitOut {
   async getStickers () {
-    const stickerFolder = path.join(this._controller.fullCwd, 'stickers')
+    const stickerFolder = path.join(this._controller.accountDir, 'stickers')
 
     if (!await fsExtra.pathExists(stickerFolder)) {
       log.info(`Sticker folder ${stickerFolder} does not exist`)

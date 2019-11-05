@@ -1,10 +1,27 @@
 import { ipcRenderer } from 'electron'
 const log = require('../logger').getLogger('renderer/ipc')
 
+export const ipcBackend = ipcRenderer
+
+var backendLoggingStarted = false
+export function startBackendLogging () {
+  if (backendLoggingStarted === true) return log.error('Backend logging is already started!')
+  backendLoggingStarted = true
+
+  ipcBackend.on('ALL', (e, eName, ...args) => log.debug('backend', eName, ...args))
+  ipcBackend.on('error', (e, ...args) => log.error(...args))
+}
+
 export function sendToBackend (event, ...args) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   ipcRenderer.send(event, ...args)
+}
+
+export function sendToBackendSync (event, ...args) {
+  log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
+  ipcRenderer.send('ALL', event, ...args)
+  return ipcRenderer.sendSync(event, ...args)
 }
 
 // Call a dc method without blocking the renderer process. Return value
@@ -29,5 +46,3 @@ export function callDcMethod (methodName, args, cb) {
 export function callDcMethodAsync (fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
-
-export const ipcBackend = ipcRenderer

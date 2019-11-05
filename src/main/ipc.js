@@ -12,7 +12,7 @@ const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc', true)
-const DeltaChat = (() => {
+const DeltaChatController = (() => {
   try {
     return require('./deltachat/controller')
   } catch (error) {
@@ -26,9 +26,9 @@ const C = require('deltachat-node/constants')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
-  const dc = new DeltaChat(cwd, state.saved)
+  const dcController = new DeltaChatController(cwd, state.saved)
 
-  dc.on('ready', credentials => {
+  dcController.on('ready', credentials => {
     if (!state.logins.includes(credentials.addr)) {
       state.logins.push(credentials.addr)
     }
@@ -38,23 +38,23 @@ function init (cwd, state, logHandler) {
     app.saveState()
   })
 
-  dc.on('logout', () => {
+  dcController.on('logout', () => {
     state.saved.credentials = null
     app.saveState()
   })
 
-  dc.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
+  dcController.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
     log.debug('DC_EVENT_IMEX_FILE_WRITTEN: ' + filename)
     main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
 
-  dc.on('DC_EVENT_IMEX_PROGRESS', progress => {
+  dcController.on('DC_EVENT_IMEX_PROGRESS', progress => {
     main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
-  dc.on('error', error => main.send('error', error))
+  dcController.on('error', error => main.send('error', error))
 
-  dc.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
+  dcController.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
 
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
@@ -72,7 +72,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale) => {
     localize.setup(app, locale)
-    dc.loginController.setCoreStrings(txCoreStrings())
+    dcController.loginController.setCoreStrings(txCoreStrings())
     menu.init(logHandler)
   })
 
@@ -80,35 +80,35 @@ function init (cwd, state, logHandler) {
   ipcMain.on('EVENT_DC_DISPATCH', (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
     log.debug('EVENT_DC_DISPATCH: ', methodName, args)
-    dc.callMethod(e, methodName, args)
+    dcController.callMethod(e, methodName, args)
   })
 
   /* dispatch a method on DC core with result passed to callback */
   ipcMain.on('EVENT_DC_DISPATCH_CB', async (e, identifier, methodName, args) => {
     if (!Array.isArray(args)) args = [args]
     log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-    const returnValue = await dc.callMethod(e, methodName, args)
+    const returnValue = await dcController.callMethod(e, methodName, args)
     main.send(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, returnValue)
   })
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   ipcMain.on('login', (e, credentials) => {
-    dc.loginController.login(credentials, render, txCoreStrings())
+    dcController.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
   })
 
   ipcMain.on('forgetLogin', (e, addr) => {
-    rimraf.sync(dc.loginController.getPath(addr))
+    rimraf.sync(dcController.loginController.getPath(addr))
     state.logins.splice(state.logins.indexOf(addr), 1)
-    render()
+    sendStateToRenderer()
   })
 
   ipcMain.on('getMessage', (e, msgId) => {
-    e.returnValue = dc.messageList.messageIdToJson(msgId)
+    e.returnValue = dcController.messageList.messageIdToJson(msgId)
   })
 
   ipcMain.on('getMessageInfo', (e, msgId) => {
-    main.send('MessageInfo', dc.messageList.getMessageInfo(msgId))
+    main.send('MessageInfo', dcController.messageList.getMessageInfo(msgId))
   })
 
   // for the future:
@@ -123,33 +123,33 @@ function init (cwd, state, logHandler) {
   */
 
   ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
-    e.returnValue = dc.chat.getChatMedia(msgType1, msgType2)
+    e.returnValue = dcController.chat.getChatMedia(msgType1, msgType2)
   })
 
-  ipcMain.on('backupImport', (e, fileName) => dc.backup.import(fileName))
-  ipcMain.on('backupExport', (e, dir) => dc.backup.export(dir))
+  ipcMain.on('backupImport', (e, fileName) => dcController.backup.import(fileName))
+  ipcMain.on('backupExport', (e, dir) => dcController.backup.export(dir))
 
-  ipcMain.on('keysImport', (e, dir) => dc.settings.keysImport(dir))
-  ipcMain.on('keysExport', (e, dir) => dc.settings.keysExport(dir))
+  ipcMain.on('keysImport', (e, dir) => dcController.settings.keysImport(dir))
+  ipcMain.on('keysExport', (e, dir) => dcController.settings.keysExport(dir))
 
   ipcMain.on('setConfig', (e, key, value) => {
-    e.returnValue = dc.settings.setConfig(key, value)
+    e.returnValue = dcController.settings.setConfig(key, value)
   })
 
   ipcMain.on('getDCinfo', () => {
-    main.send('dcInfo', dc.getInfo())
+    main.send('dcInfo', dcController.getInfo())
   })
 
-  ipcMain.on('logout', () => dc.loginController.logout())
+  ipcMain.on('logout', () => dcController.loginController.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
-    dc.autocrypt.initiateKeyTransfer((err, resp) => {
+    dcController.autocrypt.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
   })
 
   ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
-    dc.autocrypt.continueKeyTransfer(messageId, setupCode, err => {
+    dcController.autocrypt.continueKeyTransfer(messageId, setupCode, err => {
       main.send('continueKeyTransferResp', err)
     })
   })
@@ -161,14 +161,14 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
-    e.returnValue = dc.locations.setLocation(latitude, longitude, accuracy)
+    e.returnValue = dcController.locations.setLocation(latitude, longitude, accuracy)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: '' })
   })
 
-  ipcMain.on('render', render)
+  ipcMain.on('render', sendStateToRenderer)
 
   ipcMain.on('locale-data', (e, locale) => {
     if (locale) app.localeData = localize.setup(app, locale)
@@ -179,7 +179,7 @@ function init (cwd, state, logHandler) {
     const { saved } = app.state
     saved[key] = value
     app.saveState({ saved })
-    render()
+    sendStateToRenderer()
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
@@ -217,37 +217,45 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('updateCredentials', (e, credentials) => {
     const dir = path.join(os.tmpdir(), Date.now().toString())
-    if (!credentials.mail_pw) credentials.mail_pw = dc.settings.getConfig('mail_pw')
-    const tmp = new DeltaChat(dir, state.saved)
+    if (!credentials.mail_pw) credentials.mail_pw = dcController.settings.getConfig('mail_pw')
+    // create a new instance to test the new login credentials
+    const tmp = new DeltaChatController(dir, state.saved)
 
     tmp.on('error', error => main.send('error', error))
 
-    function fakeRender () {
-      const deltachat = dc.render()
-      const tmpDeltachat = tmp.render()
+    function onReadyCallback () {
+      const deltachat = dcController.getState()
+      const tmpDeltachat = tmp.getState()
       deltachat.configuring = tmpDeltachat.configuring
       sendState(deltachat)
       if (tmpDeltachat.ready) {
-        dc.loginController.login(credentials, render, txCoreStrings())
+        // test login was successfull so we log in with the current account to update the DB config
+        dcController.loginController.login(credentials, sendStateToRenderer, txCoreStrings(), true)
         main.send('success', 'Configuration success!')
         tmp.loginController.close()
       }
     }
+    // test login with a temporary instance
+    tmp.loginController.login(credentials, onReadyCallback, txCoreStrings())
+  })
 
-    tmp.loginController.login(credentials, fakeRender, txCoreStrings())
+  ipcMain.on('cancelCredentialsUpdate', () => {
+    const deltachat = dcController.getState()
+    deltachat.configuring = false
+    sendState(deltachat)
   })
 
   ipcMain.on('updateLogins', (e) => {
     getLogins(getConfigPath(), (err, logins) => {
       if (err) throw err
       state.logins = logins
-      render()
+      sendStateToRenderer()
     })
   })
 
-  function render () {
+  function sendStateToRenderer () {
     log.debug('RENDER')
-    const deltachat = dc.render()
+    const deltachat = dcController.getState()
     main.setTitle(deltachat.credentials.addr)
     sendState(deltachat)
   }
@@ -257,11 +265,14 @@ function init (cwd, state, logHandler) {
     main.send('render', state)
   }
 
+  // if we find saved credentials we login in with these
+  // which will create a new Deltachat instance which
+  // is bound to a certain account
   const savedCredentials = state.saved.credentials
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    dc.loginController.login(savedCredentials, render, txCoreStrings())
+    dcController.loginController.login(savedCredentials, sendStateToRenderer, txCoreStrings())
   }
 }
 

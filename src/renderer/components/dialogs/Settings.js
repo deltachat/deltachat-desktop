@@ -30,7 +30,7 @@ export default class Settings extends React.Component {
     super(props)
     this.state = {
       advancedSettings: {},
-      userDetails: false,
+      showSettingsDialog: false,
       mail_pw: MAGIC_PW,
       settings: {},
       show: 'main'
@@ -60,11 +60,13 @@ export default class Settings extends React.Component {
       'configured_mail_user',
       'configured_mail_port',
       'configured_mail_security',
+      'configured_imap_certificate_checks',
       'configured_send_user',
       'configured_send_pw',
       'configured_send_server',
       'configured_send_port',
       'configured_send_security',
+      'configured_smtp_certificate_checks',
       'configured_e2ee_enabled',
       'displayname',
       'selfstatus',
@@ -77,11 +79,13 @@ export default class Settings extends React.Component {
       mail_server: settings['configured_mail_server'],
       mail_port: settings['configured_mail_port'],
       mail_security: settings['configured_mail_security'],
+      imap_certificate_checks: settings['configured_imap_certificate_checks'],
       send_user: settings['configured_send_user'],
       send_pw: settings['configured_send_pw'],
       send_server: settings['configured_send_server'],
       send_port: settings['configured_send_port'],
       send_security: settings['configured_send_security'],
+      smtp_certificate_checks: settings['configured_smtp_certificate_checks'],
       e2ee_enabled: settings['configured_e2ee_enabled']
     }
 
@@ -195,6 +199,10 @@ export default class Settings extends React.Component {
     ipcRenderer.send('updateCredentials', config)
   }
 
+  onCancelLogin () {
+    ipcRenderer.send('cancelCredentialsUpdate')
+  }
+
   /*
    * render switch for Desktop Setings
    */
@@ -245,7 +253,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent () {
     const { deltachat, openDialog } = this.props
-    const { userDetails, settings, advancedSettings } = this.state
+    const { settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -330,10 +338,11 @@ export default class Settings extends React.Component {
             mail_pw={settings.mail_pw}
             onSubmit={this.onLoginSubmit}
             loading={deltachat.configuring}
-            onClose={() => this.setState({ userDetails: false })}
+            onClose={() => this.setState({ showSettingsDialog: false })}
+            onCancel={this.onCancelLogin}
             addrDisabled
           >
-            <Button type='submit' text={userDetails ? this.translate('update') : this.translate('login_title')} />
+            <Button type='submit' text={this.translate('update')} />
             <Button type='cancel' text={this.translate('cancel')} />
           </Login>
         </Card>
@@ -355,7 +364,7 @@ export default class Settings extends React.Component {
     return (
       <DeltaDialogBase
         isOpen={this.props.isOpen}
-        onClose={() => this.setState({ userDetails: false })}
+        onClose={() => this.setState({ showSettingsDialog: false })}
         className='SettingsDialog'
         fixed
       >
@@ -406,7 +415,7 @@ class BackgroundSelector extends React.Component {
           'AmRheinInMainz.webp',
           'ForestSun.webp',
           'ArkOfFriendship.webp',
-          'riesenrad.webp',
+          'nico_bg.jpg',
           'background_old.jpg'
         ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
       </div>

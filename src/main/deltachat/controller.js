@@ -24,9 +24,14 @@ const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 const DCChat = require('./chat')
 const DCContacts = require('./contacts')
+const DCContext = require('./context')
 
 /**
- * The Controller is the container for a deltachat instance
+ * DeltaChatController
+ *
+ * - proxy for a deltachat instance
+ * - sends events to renderer
+ * - handles events from renderer
  */
 class DeltaChatController extends EventEmitter {
   /**
@@ -35,7 +40,7 @@ class DeltaChatController extends EventEmitter {
   constructor (cwd, saved) {
     super()
     this.cwd = cwd
-    this.fullCwd = false
+    this.accountDir = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     /**
@@ -53,7 +58,8 @@ class DeltaChatController extends EventEmitter {
       loginController: new DCLoginController(this),
       messageList: new DCMessageList(this),
       settings: new DCSettings(this),
-      stickers: new DCStickers(this)
+      stickers: new DCStickers(this),
+      context: new DCContext(this)
     }
   }
 
@@ -95,6 +101,10 @@ class DeltaChatController extends EventEmitter {
 
   get stickers () {
     return this.__private.stickers
+  }
+
+  get context () {
+    return this.__private.context
   }
 
   logCoreEvent (event, data1, data2) {
@@ -244,11 +254,26 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
       onError(error)
+      if (this.configuring) {
+        // error when updating login credentials when being logged in
+        this.onLoginFailure()
+      }
     })
 
     dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
       onError(error)
     })
+
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+      if (Number(progress) === 0) { // login failed
+        this.onLoginFailure()
+      }
+    })
+  }
+
+  onLoginFailure () {
+    this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
+    this.loginController.logout()
   }
 
   onChatListChanged () {
@@ -278,7 +303,7 @@ class DeltaChatController extends EventEmitter {
   /**
    * Returns the state in json format
    */
-  render () {
+  getState () {
     return {
       configuring: this.configuring,
       credentials: this.credentials,
