@@ -26,7 +26,6 @@ jobs:
         cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
         cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe
         cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
-        cp echo-output preview/echo-output
         cd ..
     - name: Replace builds with dummy files
       uses: horochx/deploy-via-scp@v1.0.1
