@@ -1,6 +1,17 @@
 import { ipcRenderer } from 'electron'
 const log = require('../logger').getLogger('renderer/ipc')
 
+export const ipcBackend = ipcRenderer
+
+var backendLoggingStarted = false
+export function startBackendLogging() {
+  if (backendLoggingStarted === true) return log.error('Backend logging is already started!')
+  backendLoggingStarted = true
+
+  ipcBackend.on('ALL', (e, eName, ...args) => log.debug('backend', eName, ...args))
+  ipcBackend.on('error', (e, ...args) => log.error(...args))
+}
+
 export function sendToBackend (event, ...args) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
@@ -36,4 +47,3 @@ export function callDcMethodAsync (fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
-export const ipcBackend = ipcRenderer

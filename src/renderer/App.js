@@ -5,7 +5,7 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
-import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend } from './ipc'
+import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import logger from '../logger'
 
 const log = logger.getLogger('render/App')
@@ -43,6 +43,20 @@ export default function App (props) {
     })
   }, [])
 
+
+  useEffect(() => { 
+    startBackendLogging() 
+    setupLocaleData(state.saved.locale)
+  }, [])
+
+  const onRender = (e, state) => setState(state)
+  useEffect(() => {
+    ipcBackend.on('render', onRender)
+    return () => {
+      ipcBackend.removeListener('render', onRender)
+    }
+  }, [state])
+
   function setupLocaleData (locale) {
     moment.locale(locale)
     const localeData = sendToBackendSync('locale-data', locale)
@@ -51,31 +65,10 @@ export default function App (props) {
     setLocaleData(localeData)
   }
 
-  const logALL = (e, eName, ...args) => console.debug('ipcRenderer', eName, ...args)
-  const logError = (e, ...args) => log.error(...args)
-  const onRender = (e, state) => setState(state)
   const onChooseLanguage = (e, locale) => {
     setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
-
-  useEffect(() => {
-    setupLocaleData(state.saved.locale)
-    ipcBackend.on('ALL', logALL)
-    ipcBackend.on('error', logError)
-    return () => {
-      ipcBackend.removeListener('ALL', logALL)
-      ipcBackend.removeListener('ALL', logError)
-    }
-  }, [])
-
-  useEffect(() => {
-    ipcBackend.on('render', onRender)
-    return () => {
-      ipcBackend.removeListener('render', onRender)
-    }
-  }, [state])
-
   useEffect(() => {
     ipcBackend.on('chooseLanguage', onChooseLanguage)
     return () => {
