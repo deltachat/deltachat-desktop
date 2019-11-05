@@ -56,16 +56,19 @@ module.exports = class DCMessageList extends SplitOut {
     const messages = []
     for (let i = 0; i < messageIdsToRender.length; i++) {
       const id = messageIdsToRender[i]
-      const json = this.messageIdToJson(id)
-      if (id === C.DC_MSG_ID_DAYMARKER && i > 0) {
-        if (messages[i - 1]) {
-          json.daymarker = {
-            timestamp: messages[i - 1].msg.timestamp,
-            id: 'd' + i
-          }
+      if (id !== C.DC_MSG_ID_DAYMARKER) {
+        messages.push(this.messageIdToJson(id))
+      } else if (i > 0 && messages[i - 1]) {
+        const json = {
+          id,
+          msg: { text: '' }
         }
+        json.daymarker = {
+          timestamp: messages[i - 1].msg.timestamp,
+          id: 'd' + i
+        }
+        messages.push(json)
       }
-      messages[i] = json
     }
     // remove the additional message again
     messages.shift()
