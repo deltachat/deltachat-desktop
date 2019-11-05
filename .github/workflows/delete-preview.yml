@@ -29,6 +29,8 @@ jobs:
         echo "REF: ${{ github.ref }}" >> echo-output
         echo "HEAD_REF: $GITHUB_HEAD_REF" >> echo-output
         echo "BASE_REF: $GITHUB_BASE_REF" >> echo-output
+        export PR_NUMBER=$(jq .number < $GITHUB_EVENT_PATH)
+        echo "PR NUMBER: $PR_NUMBER" >> echo-output
     - name: Renaming
       run: |
         mkdir preview
