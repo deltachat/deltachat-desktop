@@ -5,9 +5,10 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import { remote, ipcRenderer } from 'electron'
+import { callDcMethod } from './ipc'
 import logger from '../logger'
 
-const log = logger.getLogger('render/main')
+const log = logger.getLogger('render/App')
 const localize = require('../localize')
 const moment = require('moment')
 
@@ -35,6 +36,10 @@ export default function App (props) {
           ev.preventDefault()
         }
       }
+    })
+
+    window.addEventListener('online', () => {
+      callDcMethod('context.maybeNetwork')
     })
   }, [])
 

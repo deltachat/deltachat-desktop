@@ -24,6 +24,7 @@ const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 const DCChat = require('./chat')
 const DCContacts = require('./contacts')
+const DCContext = require('./context')
 
 /**
  * The Controller is the container for a deltachat instance
@@ -53,7 +54,8 @@ class DeltaChatController extends EventEmitter {
       loginController: new DCLoginController(this),
       messageList: new DCMessageList(this),
       settings: new DCSettings(this),
-      stickers: new DCStickers(this)
+      stickers: new DCStickers(this),
+      context: new DCContext(this)
     }
   }
 
@@ -95,6 +97,10 @@ class DeltaChatController extends EventEmitter {
 
   get stickers () {
     return this.__private.stickers
+  }
+
+  get context () {
+    return this.__private.context
   }
 
   logCoreEvent (event, data1, data2) {
