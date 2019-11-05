@@ -16,7 +16,7 @@ jobs:
     - name: Get Pullrequest ID
       id: getid
       run: |
-        export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        export PULLREQUEST_ID=$(jq .number < $GITHUB_EVENT_PATH)
         echo ::set-output name=prid::$PULLREQUEST_ID
     - name: Renaming
       run: |
