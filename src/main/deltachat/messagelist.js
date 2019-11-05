@@ -56,16 +56,20 @@ module.exports = class DCMessageList extends SplitOut {
     const messages = []
     for (let i = 0; i < messageIdsToRender.length; i++) {
       const id = messageIdsToRender[i]
-      if (id !== C.DC_MSG_ID_DAYMARKER) {
+      if (id > C.DC_MSG_ID_LAST_SPECIAL) {
         messages.push(this.messageIdToJson(id))
-      } else if (i > 0 && messages[i - 1]) {
+      } else if (id === C.DC_MSG_ID_DAYMARKER && messages.length > 0) {
+        const timestamp = messages[messages.length - 1].msg.timestamp
         const json = {
           id,
-          msg: { text: '' }
-        }
-        json.daymarker = {
-          timestamp: messages[i - 1].msg.timestamp,
-          id: 'd' + i
+          msg: {
+            text: '',
+            timestamp
+          },
+          daymarker: {
+            timestamp,
+            id: 'd' + i
+          }
         }
         messages.push(json)
       }
