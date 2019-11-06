@@ -23,7 +23,6 @@ const previewRules = {
   em: ignoreScopeAssign(defaultRules.em, 1), // italics
   ubold: assign(ignoreScope(defaultRules.u), 2, { react: defaultRules.strong.react }),
   del: ignoreScopeAssign(defaultRules.del, 3),
-  br: ignoreScopeAssign(defaultRules.br, 4),
   inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
   text: assign(defaultRules.text, 100)
 }
@@ -55,11 +54,17 @@ const rules = Object.assign({
       return <a href={node.content} key={state.key}>{node.content}</a>
     }
   },
-  newline: {
+  newlinePlus: {
     order: 19,
-    match: blockRegex(/^(?:\n *)*\n/),
+    match: blockRegex(/^(?:\n *){2,}\n/),
     parse: ignoreCapture,
-    react: function (node, output, state) { return <div className='line-break' /> }
+    react: function (node, output, state) { return <div key={state.key} className='double-line-break' /> }
+  },
+  newline: {
+    order: 20,
+    match: blockRegex(/^(?:\n *)\n/),
+    parse: ignoreCapture,
+    react: function (node, output, state) { return <div key={state.key} className='line-break' /> }
   }
 }, previewRules)
 
