@@ -71,6 +71,14 @@ jobs:
                Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
 #               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
 #               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
+    - name: "Add links to details"
+      if: steps.prepare.outputs.uploadtoserver
+      run: |
+        export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.sha }}"
+        export STATE="success"
+        export ARTIFACT_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage"
+        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"The build was a success. Download it here:\", \"context\": \"Build Upload\", \"target_url\": \"${ARTIFACT_URL}\"}"
+        curl --fail --silent -X POST --user ":${{ GITHUB_TOKEN }}" "$GITHUB_API_URL" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
       run: zip -r dist/preview.zip dist/preview/
