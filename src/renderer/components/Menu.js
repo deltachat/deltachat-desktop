@@ -110,6 +110,6 @@ export default function DeltaMenu (props) {
       text={tx('menu_settings')}
       onClick={() => screenContext.openDialog('Settings')}
     />
-    <MenuItem icon='log-out' text={tx('logout_desktop')} onClick={logout} />
+    <MenuItem icon='log-out' text={tx('switch_account_desktop')} onClick={logout} />
   </Menu>)
 }
