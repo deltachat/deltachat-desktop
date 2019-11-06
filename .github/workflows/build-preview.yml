@@ -22,23 +22,6 @@ jobs:
         echo ::set-output name=sha::$SHA
         echo ::set-output name=base-url::$BASE_URL
         echo ::set-output name=prid::$PULLREQUEST_ID
-    - name: "Post links to details"
-      if: steps.prepare.outputs.uploadtoserver
-      run: |
-        export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
-        export STATE="success"
-        export APPIMAGE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.AppImage"
-        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
-        export EXE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.exe"
-        echo $APPIMAGE_URL
-        echo $MAS_URL
-        echo $EXE_URL
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
@@ -95,20 +78,15 @@ jobs:
       if: steps.prepare.outputs.uploadtoserver
       run: |
         export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
-        export STATE="success"
-        export BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
-        export APPIMAGE_URL="$BASE_URL${{ steps.prepare.outputs.prid }}.AppImage"
-        export MAS_URL="$BASE_URLmas-${{ steps.prepare.outputs.prid }}.zip"
-        export EXE_URL="$BASE_URL${{ steps.prepare.outputs.prid }}.exe"
-        echo $APPIMAGE_URL
-        echo $MAS_URL
-        echo $EXE_URL
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
-        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        export APPIMAGE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.AppImage"
+        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
+        export EXE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.exe"
+        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
+        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
+        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
+        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
       run: zip -r dist/preview.zip dist/preview/
