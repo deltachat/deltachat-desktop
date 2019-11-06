@@ -18,6 +18,7 @@ jobs:
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo $PULLREQUEST_ID
         if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        echo ::set-output name=sha::${{ github.sha }}
         echo ::set-output name=prid::$PULLREQUEST_ID
     - name: install wine
       run: |
