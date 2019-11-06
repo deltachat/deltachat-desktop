@@ -60,26 +60,33 @@ jobs:
         port: 22
         local: "dist/preview/*"
         remote: "/var/www/html/download/desktop/preview/"
-    - name: "Post Links"
-      if: steps.prepare.outputs.uploadtoserver
-      uses: rytswd/respost@v0.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        title: "Download Preview Builds"
-        body: "Thanks for your contribution! You can download the preview builds here: \n \
-               Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage\n \
-               MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip\n \
-               Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
-#               Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
-#               Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
-    - name: "Add links to details"
+#   - name: "Post Links"
+#     if: steps.prepare.outputs.uploadtoserver
+#     uses: rytswd/respost@v0.1.0
+#     env:
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     with:
+#       title: "Download Preview Builds"
+#       body: "Thanks for your contribution! You can download the preview builds here: \n \
+#              Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage\n \
+#              MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip\n \
+#              Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
+#              Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
+#              Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
+    - name: "Post links to details"
       if: steps.prepare.outputs.uploadtoserver
       run: |
         export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
         export STATE="success"
-        export ARTIFACT_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage"
-        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"The build was a success. Download it here:\", \"context\": \"Build Upload\", \"target_url\": \"${ARTIFACT_URL}\"}"
+        export BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
+        export APPIMAGE_URL="$BASE_URL${{ steps.prepare.outputs.prid }}.AppImage"
+        export MAS_URL="$BASE_URLmas-${{ steps.prepare.outputs.prid }}.zip"
+        export EXE_URL="$BASE_URL${{ steps.prepare.outputs.prid }}.exe"
+        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
+        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
+        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
         curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
