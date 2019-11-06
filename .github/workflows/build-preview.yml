@@ -78,7 +78,7 @@ jobs:
         export STATE="success"
         export ARTIFACT_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage"
         export STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"The build was a success. Download it here:\", \"context\": \"Build Upload\", \"target_url\": \"${ARTIFACT_URL}\"}"
-        curl --fail --silent -X POST --user ":${{ secrets.GITHUB_TOKEN }}" "$GITHUB_API_URL" --data "$STATUS_DATA"
+        curl --silent -X POST --user "github-actions:${{ secrets.GITHUB_TOKEN }}" "$GITHUB_API_URL" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
       run: zip -r dist/preview.zip dist/preview/
