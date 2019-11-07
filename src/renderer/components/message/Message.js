@@ -92,31 +92,25 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   const tx = window.translate
 
   return (
-    <div className='module-message__buttons'>
+    <div className='message-buttons'>
       {
         attachment && viewType !== 23 && <div
           onClick={onDownload}
           role='button'
-          className={classNames(
-            'module-message__buttons__download'
-          )}
+          className='msg-button download hide-on-small'
           aria-label={tx('save')}
         />
       }
       <div
         onClick={onReply}
         role='button'
-        className={classNames(
-          'module-message__buttons__reply'
-        )}
+        className='msg-button reply hide-on-small'
       />
       <ContextMenuTrigger id={triggerId} ref={MenuRef}>
         <div
           role='button'
           onClick={showMenu}
-          className={classNames(
-            'module-message__buttons__menu'
-          )}
+          className='msg-button menu'
           aria-label={tx('a11y_message_context_menu_btn_label')}
         />
       </ContextMenuTrigger>
@@ -242,9 +236,9 @@ const Message = (props) => {
     <div
       onContextMenu={showMenu}
       className={classNames(
-        'module-message',
-        `module-message--${direction}`,
-        { 'module-message--sticker': viewType === 23 }
+        'message',
+        direction,
+        { 'type-sticker': viewType === 23 }
       )}
     >
       {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
