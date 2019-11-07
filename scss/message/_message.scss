@@ -633,9 +633,16 @@ $color-message-icon-error: var(--errorColor);
     background-color: transparent;
 }
 
-.module-message .line-break {
-  height: 14px;
-  &:last-child {
+.module-message {
+  .double-line-break {
+    height: 28px;
+  }
+  .line-break {
+    height: 14px;
+  }
+
+  .line-break:last-child {
     height: 0px;
   }
 }
+
