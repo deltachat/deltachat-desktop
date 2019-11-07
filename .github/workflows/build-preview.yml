@@ -16,6 +16,8 @@ jobs:
       id: prepare
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo ${{ github.event.after }}
+        echo ${{ github.event.head_commit.id }}
         echo ::set-output name=prid::$PULLREQUEST_ID
         if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
     - name: install wine
