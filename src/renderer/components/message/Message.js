@@ -245,10 +245,7 @@ const Message = (props) => {
       {menu}
       <div
         onContextMenu={showMenu}
-        className={classNames(
-          'module-message__container',
-          `module-message__container--${direction}`
-        )}
+        className='msg-container'
       >
         {direction === 'incoming' && conversationType === 'group' && Author(message)}
         {Attachment.render(props)}

@@ -31,11 +31,6 @@
     li {
       margin-bottom: 10px;
 
-      .message-wrapper {
-        margin-left: 16px;
-        margin-right: 16px;
-      }
-
       &::after {
         visibility: hidden;
         display: block;
@@ -49,24 +44,6 @@
 
   .module-message__author-default-avatar {
     align-self: flex-end;
-  }
-
-  .module-message__container {
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 16px 1px;
-    }
-  }
-
-  .module-message__container--incoming {
-    background-color: var(--messageIncommingBg);
-  }
-
-  .module-message__container--outgoing {
-    background-color: var(--messageOutgoingBg);
-
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 1px 16px;
-    }
   }
 
   .module-message__attachment-container--with-content-above {
