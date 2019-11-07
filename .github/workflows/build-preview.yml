@@ -16,6 +16,8 @@ jobs:
       id: prepare
       run: |
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
+        echo $GITHUB_API_URL
         echo ::set-output name=prid::$PULLREQUEST_ID
         if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
     - name: install wine
@@ -74,7 +76,7 @@ jobs:
       if: steps.prepare.outputs.uploadtoserver
       run: |
         export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
-        echo GITHUB_API_URL
+        echo $GITHUB_API_URL
         export APPIMAGE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage"
         export MAS_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip"
         export EXE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe"
