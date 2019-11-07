@@ -88,7 +88,7 @@ class RenderMedia extends React.Component {
           <DownloadButtonWrapper>
             <div role='button'
               onClick={message.onDownload}
-              className='module-message__buttons__download module-message__buttons__download--outgoing icon-medium'
+              className='msg-button download icon-medium'
               aria-label={tx('save')} />
           </DownloadButtonWrapper>
         </RenderMediaWrapper>
