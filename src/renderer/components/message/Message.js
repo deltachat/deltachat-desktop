@@ -148,52 +148,25 @@ const contextMenu = (props, textSelected, triggerId) => {
         {tx('menu_copy_to_clipboard')}
       </MenuItem>
       {attachment ? (
-        <MenuItem
-          onClick={onDownload}
-        >
+        <MenuItem onClick={onDownload}>
           {tx('download_attachment_desktop')}
         </MenuItem>
       ) : null}
-      <MenuItem
-        attributes={{
-          className: 'module-message__context__reply'
-        }}
-        onClick={onReply}
-      >
+      <MenuItem onClick={onReply}>
         {tx('reply_to_message_desktop')}
       </MenuItem>
-      <MenuItem
-        attributes={{
-          className: 'module-message__context__forward'
-        }}
-        onClick={onForward}
-      >
+      <MenuItem onClick={onForward}>
         {tx('menu_forward')}
       </MenuItem>
-      <MenuItem
-        attributes={{
-          className: 'module-message__context__more-info'
-        }}
-        onClick={onShowDetail}
-      >
+      <MenuItem onClick={onShowDetail}>
         {tx('more_info_desktop')}
       </MenuItem>
       {showRetry ? (
-        <MenuItem
-          attributes={{
-            className: 'module-message__context__retry-send'
-          }}
-          onClick={onRetrySend}
-        >
+        <MenuItem onClick={onRetrySend}>
           {tx('retry_send')}
         </MenuItem>
       ) : null}
-      <MenuItem
-        attributes={{
-          className: 'module-message__context__delete-message'
-        }}
-        onClick={onDelete}
-      >
+      <MenuItem onClick={onDelete} >
         {tx('delete_message_desktop')}
       </MenuItem>
     </ContextMenu>
