@@ -82,10 +82,6 @@ $color-message-button-menu-hover: var(--messageButtons);
 
 .msg-button.download {
     @include color-svg('../images/download.svg', $color-message-button-download);
-    &.icon-medium {
-        height: 36px;
-        width: 36px;
-    }
 }
 .msg-button.reply {
     display: none; /* not used currently */

@@ -1,0 +1,44 @@
+.attachment-overlay {
+    .attachment-view {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+
+        img,
+        video {
+            width: 100vw;
+            max-height: 100vh;
+            object-fit: contain;
+        }
+
+        video {
+            width: 95vw;
+        }
+    }
+
+    .render-media-wrapper {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .btn-wrapper {
+        float: right;
+        position: absolute;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .download-btn {
+        height: 36px;
+        width: 36px;
+        display: inline-block;
+        @include color-svg('../images/download.svg', var(--messageButtons));
+        &:hover {
+            background-color: var(--messageButtons);
+        }
+    }
+}
