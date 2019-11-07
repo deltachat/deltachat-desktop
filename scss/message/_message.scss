@@ -1,35 +1,10 @@
 /* Message Bubble */
-$color-message-attachment-container-bg: var(--messageAttachmentIconBg);
-
-$color-message-author-default-avatar-label: var(--avatarLabelColor);
-
-$color-message-broken-image-incomming: var(--brokenMediaText);
-$color-message-broken-video-screenshot-incomming: var(--brokenMediaText);
-$color-message-broken-image: var(--brokenMediaBg);
-$color-message-broken-video-screenshot: var(--brokenMediaBg);
-$color-message-video-play: var(--videoPlayBtnIcon);
-$color-message-video-overlay-circle: var(--videoPlayBtnBg);
-
-$color-message-metadata-date: var(--messageMetadataDate);
-$color-message-metadata-date-incomming: var(--messageMetadataIncomming);
-
-$color-message-generic-attachment-icon-extension: var(--messageAttachmentIconExtentionColor);
-$color-message-generic-attachment-fileinfo: var(--messageAttachmentFileInfo);
-$color-message-text: var(--messageText);
-$color-message-text-underline: var(--messageTextLink);
-
-$color-message-metadata-image-no-caption: var(--messageMetadataImageNoCaption);
-$color-message-padlock-incomming: var(--messagePadlockIncomming);
-$color-message-padlock-outgoing: var(--messagePadlockOutgoing);
-
 $color-message-button-download: var(--messageButtons);
 $color-message-button-reply: var(--messageButtons);
 $color-message-button-menu: var(--messageButtons);
 $color-message-button-download-hover: var(--messageButtons);
 $color-message-button-reply-hover: var(--messageButtons);
 $color-message-button-menu-hover: var(--messageButtons);
-
-$color-message-icon-error: var(--errorColor);
 
 .module-message {
     position: relative;
@@ -44,11 +19,11 @@ $color-message-icon-error: var(--errorColor);
     margin-right: 32px;
     
     .module-message__metadata__padlock-icon {
-        @include color-svg('../images/padlock.svg', $color-message-padlock-incomming, 125%);
+        @include color-svg('../images/padlock.svg', var(--messagePadlockIncomming), 125%);
     }
 
     .module-message__metadata__date {
-        color: $color-message-metadata-date-incomming;
+        color: var(--messageMetadataIncomming);
     }
 }
 .module-message--outgoing {
@@ -65,7 +40,7 @@ $color-message-icon-error: var(--errorColor);
     }
 
     .module-message__metadata__padlock-icon {
-        @include color-svg('../images/padlock.svg', $color-message-padlock-outgoing, 125%);
+        @include color-svg('../images/padlock.svg', var(--messagePadlockOutgoing), 125%);
     }
 }
 
@@ -180,7 +155,7 @@ $color-message-icon-error: var(--errorColor);
     border-radius: 16px;
     overflow: hidden;
 
-    background-color: $color-message-attachment-container-bg;
+    background-color: var(--messageAttachmentIconBg);
 }
 
 .module-message__attachment-container--with-content-below {
@@ -252,11 +227,11 @@ $color-message-icon-error: var(--errorColor);
     padding: 10px;
     text-align: center;
     text-transform: uppercase;
-    color: $color-message-broken-image;
+    color: var(--brokenMediaBg);
 }
 
 .module-message__broken-image--incoming {
-    color: $color-message-broken-image-incomming;
+    color: var(--brokenMediaText);
 }
 
 .module-message__video-overlay__circle {
@@ -267,7 +242,7 @@ $color-message-icon-error: var(--errorColor);
 
     width: 48px;
     height: 48px;
-    background-color: $color-message-video-overlay-circle;
+    background-color: var(--videoPlayBtnBg);
     border-radius: 24px;
 }
 
@@ -279,7 +254,7 @@ $color-message-icon-error: var(--errorColor);
 
     height: 36px;
     width: 36px;
-    @include color-svg('../images/play.svg', $color-message-video-play);
+    @include color-svg('../images/play.svg', var(--videoPlayBtnIcon));
 }
 
 .module-message__broken-video-screenshot {
@@ -290,13 +265,13 @@ $color-message-icon-error: var(--errorColor);
     padding: 10px;
     text-align: center;
     text-transform: uppercase;
-    color: $color-message-broken-video-screenshot;
+    color: var(--brokenMediaBg);
 
     cursor: pointer;
 }
 
 .module-message__broken-video-screenshot--incoming {
-    color: $color-message-broken-video-screenshot-incomming;
+    color: var(--brokenMediaText);;
 }
 
 .module-message__audio-attachment {
@@ -357,7 +332,7 @@ $color-message-icon-error: var(--errorColor);
     white-space: nowrap;
     text-overflow: clip;
 
-    color: $color-message-generic-attachment-icon-extension;
+    color: var(--messageAttachmentIconExtentionColor);
 }
 
 .module-message__generic-attachment__text {
@@ -368,7 +343,7 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__generic-attachment__file-name {
-    color: $color-message-generic-attachment-fileinfo;
+    color: var(--messageAttachmentFileInfo);
     font-size: 14px;
     line-height: 18px;
     font-weight: 300;
@@ -381,7 +356,7 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__generic-attachment__file-size {
-    color: $color-message-generic-attachment-fileinfo;
+    color: var(--messageAttachmentFileInfo);
     font-size: 11px;
     line-height: 16px;
     letter-spacing: 0.3px;
@@ -404,7 +379,7 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__text {
-    color: $color-message-text;
+    color: var(--messageText);
     font-size: 14px;
     line-height: 18px;
     text-align: start;
@@ -416,7 +391,7 @@ $color-message-icon-error: var(--errorColor);
 
     a {
         text-decoration: underline;
-        color: $color-message-text-underline;
+        color: var(--messageTextLink);
     }
 }
 
@@ -457,12 +432,12 @@ $color-message-icon-error: var(--errorColor);
     font-size: 11.5px;
     line-height: 16px;
     letter-spacing: 0.3px;
-    color: $color-message-metadata-date;
+    color: var(--messageMetadataDate);
     text-transform: uppercase;
 }
 
 .module-message__metadata__date--with-image-no-caption {
-    color: $color-message-metadata-image-no-caption;
+    color: var(--messageMetadataImageNoCaption);
 }
 
 .module-message__metadata__spacer {
@@ -509,7 +484,7 @@ $color-message-icon-error: var(--errorColor);
 }
 
 .module-message__author-default-avatar__label {
-    color: $color-message-author-default-avatar-label;
+    color: var(--avatarLabelColor);
 }
 
 // All media query widths have 300px added to account for the left pane
