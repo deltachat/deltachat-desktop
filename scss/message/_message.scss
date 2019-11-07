@@ -1,11 +1,4 @@
 /* Message Bubble */
-$color-message-button-download: var(--messageButtons);
-$color-message-button-reply: var(--messageButtons);
-$color-message-button-menu: var(--messageButtons);
-$color-message-button-download-hover: var(--messageButtons);
-$color-message-button-reply-hover: var(--messageButtons);
-$color-message-button-menu-hover: var(--messageButtons);
-
 .message {
     position: relative;
     display: inline-flex;
@@ -76,19 +69,19 @@ $color-message-button-menu-hover: var(--messageButtons);
     display: inline-block;
     cursor: pointer;
     &:hover {
-        background-color: $color-message-button-download-hover;
+        background-color: var(--messageButtons);
     }
 }
 
 .msg-button.download {
-    @include color-svg('../images/download.svg', $color-message-button-download);
+    @include color-svg('../images/download.svg', var(--messageButtons));
 }
 .msg-button.reply {
     display: none; /* not used currently */
-    @include color-svg('../images/reply.svg', $color-message-button-reply);
+    @include color-svg('../images/reply.svg', var(--messageButtons));
 }
 .msg-button.menu {
-    @include color-svg-rotated('../images/ellipsis.svg', $color-message-button-menu);
+    @include color-svg-rotated('../images/ellipsis.svg', var(--messageButtons));
 }
 
 .module-message__container {
