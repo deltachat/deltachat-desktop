@@ -34,7 +34,8 @@
   <url type="donation">https://delta.chat/en/contribute</url>
   <url type="translate">https://www.transifex.com/delta-chat/public/</url>
   <releases>
-    <release version="0.105.0-pre2" date="2019-07-10">
+    <release version="v0.804.0" date="2019-11-04" />
+    <release version="v0.105.0-pre2" date="2019-07-10">
       <description>
         <p>Added</p>
         <ul>
