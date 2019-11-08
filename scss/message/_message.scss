@@ -83,21 +83,6 @@
         float: right;
     }
 
-    .module-message__author-default-avatar__label {
-        top: -121px;
-        left: -10px;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        font-size: 25px;
-        line-height: 36px;
-    }
-
-    .module-message__author-default-avatar {
-        position: static;
-        margin-right: 8px;
-    }
-
     .module-message__img-attachment {
         object-fit: unset;
         width: auto;
@@ -383,7 +368,7 @@
     }
 }
 
-.module-message__author-avatar { // TODO: move avatar to own file
+.message > .author-avatar {
     position: absolute;
     // This accounts for the weird extra 3px we get at the bottom of messages
     bottom: -3px;
@@ -395,33 +380,27 @@
         border-radius: 18px;
         object-fit: cover;
     }
-}
-.module-message__author-default-avatar {
-    align-self: flex-end;
-}
-.module-message__author {
-    color: var(--messageText);
-}
 
-.module-message__author-default-avatar {
-    position: absolute;
-    bottom: 0px;
-    right: calc(100% + 4px);
+    &.default { // text letter version
+        align-self: flex-end;
+        bottom: 0px;
+        text-align: center;
+        position: static;
+        margin-right: 8px;
 
-    height: 36px;
-    width: 36px;
-    border-radius: 18px;
+        & > .label {
+            user-select: none;
+            color: var(--avatarLabelColor);
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-
-    user-select: none;
-}
-
-.module-message__author-default-avatar__label {
-    color: var(--avatarLabelColor);
+            top: -121px;
+            left: -10px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 25px;
+            line-height: 36px;
+        }
+    }
 }
 
 // All media query widths have 300px added to account for the left pane

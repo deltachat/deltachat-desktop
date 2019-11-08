@@ -21,18 +21,18 @@ const Avatar = ({ contact }) => {
 
   if (profileImage) {
     return (
-      <div className='module-message__author-avatar'>
+      <div className='author-avatar'>
         <img alt={alt} src={profileImage} />
       </div>
     )
   } else {
     return (
-      <div className='module-message__author-default-avatar'
+      <div className='author-avatar default'
         alt={alt}
       >
         <div
           style={{ backgroundColor: color }}
-          className='module-message__author-default-avatar__label'>
+          className='label'>
           {(name && name.trim()[0]) || '#'}
         </div>
       </div>
