@@ -315,7 +315,7 @@
     font-style: italic;
 }
 
-.module-message__text {
+.message .text {
     color: var(--messageText);
     font-size: 14px;
     line-height: 18px;
@@ -330,21 +330,23 @@
         text-decoration: underline;
         color: var(--messageTextLink);
     }
-}
-
-.module-message__text--incoming {
-    a {
-        text-decoration: underline;
-    }
-}
-
-.module-message__text {
     margin-right: 10px;
 }
 
-.module-message__text--error {
-    font-style: italic;
+.message.error.incoming {
+ .text {
+     font-style: italic;
+ }
 }
+
+.setupMessage {
+    .message {
+        .text {
+            color: var(--setupMessageText);
+        }
+    }
+}
+
 
 .module-message__metadata {
     display: flex;
@@ -405,7 +407,7 @@
 .module-message__author-default-avatar {
     align-self: flex-end;
 }
-.module-message__author, .module-message__text {
+.module-message__author {
     color: var(--messageText);
 }
 
