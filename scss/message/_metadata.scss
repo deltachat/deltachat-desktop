@@ -8,10 +8,14 @@
 
     &.with-image-no-caption {
         position: absolute;
-        right: 16px;
-        bottom: 9px;
-
-        // TODO apply metadata background too like they get applied to stickers
+        right: 5px;
+        bottom: 5px;
+        float: right;
+        padding: 4px 10px 1px 10px;
+        margin: 0;
+        background-color: #0000008f;
+        border-radius: 4px;
+        font-weight: bold;
         &>.date {
             color: var(--messageMetadataImageNoCaption);
         }
