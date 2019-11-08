@@ -75,6 +75,17 @@
         padding-left: 12px;
         padding-top: 10px;
         padding-bottom: 10px;
+
+        & > .author {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 18px;
+            height: 18px;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     }
 
     .metadata {
@@ -312,17 +323,6 @@
     line-height: 16px;
     letter-spacing: 0.3px;
     margin-top: 3px;
-}
-
-.module-message__author {
-    font-size: 13px;
-    font-weight: 300;
-    line-height: 18px;
-    height: 18px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 .message .text {
