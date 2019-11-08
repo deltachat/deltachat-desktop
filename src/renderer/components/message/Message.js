@@ -180,7 +180,6 @@ const Message = (props) => {
     id,
     timestamp,
     viewType,
-    collapseMetadata,
     conversationType,
     message,
     text,
@@ -214,7 +213,7 @@ const Message = (props) => {
         { 'type-sticker': viewType === 23 }
       )}
     >
-      {!collapseMetadata && conversationType === 'group' && direction === 'incoming' && Avatar(message)}
+      {conversationType === 'group' && direction === 'incoming' && Avatar(message)}
       {menu}
       <div
         onContextMenu={showMenu}

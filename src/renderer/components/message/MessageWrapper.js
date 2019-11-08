@@ -68,10 +68,6 @@ const MessageWrapper = styled.div`
     min-height: unset;
   }
 
-  .module-message__img-border-overlay {
-    box-shadow: unset;
-  }
-
   .module-message__generic-attachment__icon__extension{
     font-family: monospace;
   }

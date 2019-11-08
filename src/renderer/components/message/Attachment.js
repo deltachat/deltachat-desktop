@@ -75,7 +75,6 @@ function render (props) {
   const {
     attachment,
     text,
-    collapseMetadata,
     conversationType,
     direction,
     onClickAttachment
@@ -88,7 +87,7 @@ function render (props) {
 
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
-  const withContentBelow = withCaption || !collapseMetadata
+  const withContentBelow = withCaption
   const withContentAbove = conversationType === 'group' && direction === 'incoming'
 
   if (isImage(attachment)) {
@@ -127,20 +126,6 @@ function render (props) {
           height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
           src={attachment.url}
         />
-        <div
-          className={classNames(
-            'module-message__img-border-overlay',
-            withCaption
-              ? 'module-message__img-border-overlay--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__img-border-overlay--with-content-above'
-              : null
-          )}
-        />
-        {!withCaption && !collapseMetadata ? (
-          <div className='module-message__img-overlay' />
-        ) : null}
       </div>
     )
   } else if (isVideo(attachment)) {
@@ -182,20 +167,6 @@ function render (props) {
           src={attachment.url}
           controls={1}
         />
-        <div
-          className={classNames(
-            'module-message__img-border-overlay',
-            withCaption
-              ? 'module-message__img-border-overlay--with-content-below'
-              : null,
-            withContentAbove
-              ? 'module-message__img-border-overlay--with-content-above'
-              : null
-          )}
-        />
-        {!withCaption && !collapseMetadata ? (
-          <div className='module-message__img-overlay' />
-        ) : null}
         <div className='module-message__video-overlay__circle'>
           <div className='module-message__video-overlay__play-icon' />
         </div>
