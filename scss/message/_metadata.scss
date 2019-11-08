@@ -1,0 +1,47 @@
+// used by message and the popup message on map
+.metadata {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: -3px;
+
+    &.with-image-no-caption {
+        position: absolute;
+        right: 16px;
+        bottom: 9px;
+
+        // TODO apply metadata background too like they get applied to stickers
+        &>.date {
+            color: var(--messageMetadataImageNoCaption);
+        }
+    }
+
+    &>.status-icon {
+        margin-bottom: 2px;
+    }
+
+    &>.username {
+        margin-right: 10px;
+    }
+
+    &>.date {
+        font-size: 11.5px;
+        line-height: 16px;
+        letter-spacing: 0.3px;
+        color: var(--messageMetadataDate);
+        text-transform: uppercase;
+    }
+
+    &>.spacer {
+        flex-grow: 1;
+    }
+
+    &>.padlock-icon {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        margin-right: 2px;
+        margin-bottom: 3px;
+    }
+}

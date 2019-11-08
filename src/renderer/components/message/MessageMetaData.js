@@ -26,29 +26,22 @@ class MessageMetaData extends React.Component {
     return (
       <div
         className={classNames(
-          'module-message__metadata',
-          withImageNoCaption
-            ? 'module-message__metadata--with-image-no-caption'
-            : null
+          'metadata',
+          { 'with-image-no-caption': withImageNoCaption }
         )}
       >
         {username !== undefined ? (
-          <div className={'module-message__metadata--username'} >{username}</div>
+          <div className='username' >{username}</div>
         ) : null}
         {padlock === true && status !== 'error' ? (
           <div
             aria-label={tx('a11y_encryption_padlock')}
-            className={'module-message__metadata__padlock-icon'}
+            className={'padlock-icon'}
           />
         ) : null}
         {showError ? (
           <span
-            className={classNames(
-              'module-message__metadata__date',
-              withImageNoCaption
-                ? 'module-message__metadata__date--with-image-no-caption'
-                : null
-            )}
+            className='date'
             style={{ color: 'red' }}
           >
             {tx('send_failed')}
@@ -58,11 +51,10 @@ class MessageMetaData extends React.Component {
             timestamp={timestamp}
             extended
             direction={direction}
-            withImageNoCaption={withImageNoCaption}
-            module='module-message__metadata__date'
+            module='date'
           />
         )}
-        <span className='module-message__metadata__spacer' />
+        <span className='spacer' />
         {direction === 'outgoing' ? (
           <div
             className={classNames(
