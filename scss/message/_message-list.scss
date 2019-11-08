@@ -18,8 +18,9 @@
     bottom: 0;
     overflow: scroll;
     max-height: 100%;
-    width:100%;
+    width: 100%;
     padding: 0 0.5em;
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
@@ -27,7 +28,7 @@
 
   ul {
     list-style: none;
-    
+
     li {
       margin-bottom: 10px;
 

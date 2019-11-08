@@ -2,10 +2,12 @@
 
 .module-message-detail {
   margin-top: -20px;
+
   .bp3-callout {
     max-height: 50vh;
     overflow: auto;
   }
+
   p {
     white-space: pre-line;
     user-select: text;
