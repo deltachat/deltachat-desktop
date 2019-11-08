@@ -48,14 +48,12 @@ const Author = ({ contact }) => {
   } = contact
 
   return (
-    <div className='module-message__author'>
-      <ContactName
-        email={address}
-        name={name}
-        module='module-message__author'
-        color={color}
-      />
-    </div>
+    <ContactName
+      email={address}
+      name={name}
+      module='author'
+      color={color}
+    />
   )
 }
 
