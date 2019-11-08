@@ -8,12 +8,13 @@
         margin-left: 0;
         margin-right: 32px;
         
-        .module-message__metadata__padlock-icon {
-            @include color-svg('../images/padlock.svg', var(--messagePadlockIncomming), 125%);
-        }
-
-        .module-message__metadata__date {
-            color: var(--messageMetadataIncomming);
+        .metadata {
+            & > .padlock-icon {
+                @include color-svg('../images/padlock.svg', var(--messagePadlockIncomming), 125%);
+            }
+            & > .date {
+                color: var(--messageMetadataIncomming);
+            }
         }
 
         .msg-container {
@@ -29,16 +30,16 @@
         margin-right: 0;
         margin-left: 32px;
     
-        .module-message__metadata__date {
-            color: var(--messageOutgoingStatusColor);
-        }
-    
-        .status-icon.read, .status-icon.delivered {
-            background-color: var(--messageOutgoingStatusColor);
-        }
-    
-        .module-message__metadata__padlock-icon {
-            @include color-svg('../images/padlock.svg', var(--messagePadlockOutgoing), 125%);
+        .metadata {
+            & > .date {
+                color: var(--messageOutgoingStatusColor);
+            }
+            & > .padlock-icon {
+                @include color-svg('../images/padlock.svg', var(--messagePadlockOutgoing), 125%);
+            }
+            & > .status-icon.read, & > .status-icon.delivered {
+                background-color: var(--messageOutgoingStatusColor);
+            }
         }
 
         .msg-container {
@@ -76,7 +77,7 @@
         padding-bottom: 10px;
     }
 
-    .module-message__metadata {
+    .metadata {
         margin-top: 10px;
         margin-bottom: -7px;
         float: right;
@@ -182,9 +183,6 @@
     // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
 }
-
-// TODO apply metadata background to images too like they get applied to stickers
-
 
 .module-message__broken-image {
     font-size: 11px;
@@ -378,50 +376,6 @@
     }
 }
 
-
-.module-message__metadata {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 3px;
-    margin-bottom: -3px;
-}
-
-// With an image and no caption, this section needs to be on top of the image overlay
-.module-message__metadata--with-image-no-caption {
-    position: absolute;
-    right: 16px;
-    bottom: 9px;
-}
-
-.module-message__metadata--username {
-    margin-right: 10px;
-}
-
-.module-message__metadata__date {
-    font-size: 11.5px;
-    line-height: 16px;
-    letter-spacing: 0.3px;
-    color: var(--messageMetadataDate);
-    text-transform: uppercase;
-}
-
-.module-message__metadata__date--with-image-no-caption {
-    color: var(--messageMetadataImageNoCaption);
-}
-
-.module-message__metadata__spacer {
-    flex-grow: 1;
-}
-
-.module-message__metadata__padlock-icon {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    margin-right: 2px;
-    margin-bottom: 3px;
-}
-
 .module-message__author-avatar {
     position: absolute;
     // This accounts for the weird extra 3px we get at the bottom of messages
@@ -514,10 +468,6 @@
     }
 }
 
-.module-message__metadata > .status-icon {
-    margin-bottom: 2px;
-}
-
 .message.type-sticker {
     .msg-container {
         background-color: transparent !important;
@@ -529,7 +479,7 @@
     .module-message__img-attachment {
         margin-bottom: 20px;
     }
-    .module-message__metadata {
+    .metadata {
         float: right;
         padding: 4px 10px 1px 10px;
         margin-top: 10px;
@@ -540,18 +490,22 @@
         color: black;
         font-weight: bold;
     }
-    .module-message__metadata__date {
-        font-size: 11px;
-        color: white;
+
+    .metadata {
+        & > .date {
+            font-size: 11px;
+            color: white;
+        }
+
+        & > .padlock-icon {
+            @include color-svg('../images/padlock.svg', white, 125%);
+        }
     }
-        
+  
     .status-icon.read, .status-icon.delivered {
         background-color: white;
     } 
-
-    .module-message__metadata__padlock-icon {
-        @include color-svg('../images/padlock.svg', white, 125%);
-    }
+  
 }
 
 

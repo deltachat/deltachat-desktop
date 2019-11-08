@@ -31,10 +31,10 @@ class Timestamp extends React.Component {
       direction,
       module,
       timestamp,
-      withImageNoCaption,
+
       extended
     } = this.props
-    const moduleName = module || 'module-timestamp'
+    const moduleName = module || ''
 
     if (timestamp === null || timestamp === undefined) {
       return null
@@ -44,8 +44,7 @@ class Timestamp extends React.Component {
       <span
         className={classNames(
           moduleName,
-          direction ? `${moduleName}--${direction}` : null,
-          withImageNoCaption ? `${moduleName}--with-image-no-caption` : null
+          direction ? `${moduleName}--${direction}` : null
         )}
         title={moment(timestamp).format('llll')}
       >
