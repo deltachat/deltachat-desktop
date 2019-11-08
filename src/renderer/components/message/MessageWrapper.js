@@ -32,41 +32,6 @@ const InfoMessage = styled.div`
   }
 `
 
-const MessageWrapper = styled.div`
-  .module-message__metadata {
-    margin-top: 10px;
-    margin-bottom: -7px;
-    float: right;
-  }
-
-  .module-message__author-default-avatar__label {
-    top: -121px;
-    left: -10px;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-size: 25px;
-    line-height: 36px;
-  }
-
-  .module-message__author-default-avatar {
-    position: static;
-    margin-right: 8px;
-  }
-
-  .module-message__img-attachment {
-    object-fit: unset;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    min-height: unset;
-  }
-
-  .module-message__generic-attachment__icon__extension{
-    font-family: monospace;
-  }
-`
-
 function render (props) {
   const { message, onClickSetupMessage, onClickContactRequest } = props
 
@@ -167,7 +132,7 @@ class RenderMessage extends React.Component {
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
     if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
 
-    return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
+    return (<div ref={this.el}><Message {...props} /></div>)
   }
 }
 
