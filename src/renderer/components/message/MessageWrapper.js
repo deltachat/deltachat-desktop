@@ -14,12 +14,6 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
 
-const SetupMessage = styled.div`
-  .module-message__text {
-    color: ${props => props.theme.setupMessageText};
-  }
-`
-
 const InfoMessage = styled.div`
   width: 100%;
   text-align: center;
@@ -93,10 +87,10 @@ function render (props) {
     )
   } else if (message.msg.isSetupmessage) {
     body = (
-      <SetupMessage key={message.id}
-        onClick={onClickSetupMessage} className={'pointer'}>
+      <div className='setupMessage pointer' key={message.id}
+        onClick={onClickSetupMessage}>
         <RenderMessage {...props} />
-      </SetupMessage>
+      </div>
     )
   } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
     body = (

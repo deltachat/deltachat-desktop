@@ -9,29 +9,6 @@ const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
 const Attachment = require('./Attachment')
 
-const MessageText = (props, onShowDetail) => {
-  const { text, direction, status } = props
-
-  // TODO another check - don't check it only over string
-  const longMessage = /\[.{3}\]$/.test(text)
-
-  return (
-    <div
-      dir='auto'
-      className={classNames(
-        'module-message__text',
-        `module-message__text--${direction}`,
-        status === 'error' && direction === 'incoming'
-          ? 'module-message__text--error'
-          : null
-      )}
-    >
-      <MessageBody text={text || ''} />
-      {longMessage && <button onClick={onShowDetail}>...</button>}
-    </div>
-  )
-}
-
 const Avatar = ({ contact }) => {
   const {
     profileImage,
@@ -183,7 +160,8 @@ const Message = (props) => {
     conversationType,
     message,
     text,
-    disableMenu
+    disableMenu,
+    status
   } = props
 
   // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -204,13 +182,17 @@ const Message = (props) => {
 
   const menu = !disableMenu && InlineMenu(MenuRef, showMenu, triggerId, props)
 
+  // TODO another check - don't check it only over string
+  const longMessage = /\[.{3}\]$/.test(text)
+
   return (
     <div
       onContextMenu={showMenu}
       className={classNames(
         'message',
         direction,
-        { 'type-sticker': viewType === 23 }
+        { 'type-sticker': viewType === 23 },
+        { error: status === 'error' }
       )}
     >
       {conversationType === 'group' && direction === 'incoming' && Avatar(message)}
@@ -222,7 +204,10 @@ const Message = (props) => {
         {direction === 'incoming' && conversationType === 'group' && Author(message)}
         {Attachment.render(props)}
 
-        {text && MessageText(props, onShowDetail)}
+        <div dir='auto' className='text' >
+          <MessageBody text={text || ''} />
+        </div>
+        {longMessage && <button onClick={onShowDetail}>...</button>}
         <MessageMetaData {...props} />
       </div>
       <div onClick={ev => { ev.stopPropagation() }}>
