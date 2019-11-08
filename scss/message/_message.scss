@@ -75,6 +75,36 @@
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
+    .module-message__metadata {
+        margin-top: 10px;
+        margin-bottom: -7px;
+        float: right;
+    }
+
+    .module-message__author-default-avatar__label {
+        top: -121px;
+        left: -10px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 25px;
+        line-height: 36px;
+    }
+
+    .module-message__author-default-avatar {
+        position: static;
+        margin-right: 8px;
+    }
+
+    .module-message__img-attachment {
+        object-fit: unset;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        min-height: unset;
+    }
+
 }
 
 .message.type-sticker:hover {
@@ -270,6 +300,7 @@
     text-overflow: clip;
 
     color: var(--messageAttachmentIconExtentionColor);
+    font-family: monospace;
 }
 
 .module-message__generic-attachment__text {
