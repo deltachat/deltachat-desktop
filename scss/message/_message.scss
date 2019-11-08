@@ -340,10 +340,6 @@
     text-overflow: ellipsis;
 }
 
-.module-message__author__profile-name {
-    font-style: italic;
-}
-
 .message .text {
     color: var(--messageText);
     font-size: 14px;
@@ -360,6 +356,17 @@
         color: var(--messageTextLink);
     }
     margin-right: 10px;
+
+    .double-line-break {
+        height: 28px;
+    }
+    .line-break {
+        height: 14px;
+    }
+
+    .line-break:last-child {
+        height: 0px;
+    }
 }
 
 .message.error.incoming {
@@ -376,7 +383,7 @@
     }
 }
 
-.module-message__author-avatar {
+.module-message__author-avatar { // TODO: move avatar to own file
     position: absolute;
     // This accounts for the weird extra 3px we get at the bottom of messages
     bottom: -3px;
@@ -507,18 +514,3 @@
     } 
   
 }
-
-
-.message {
-  .double-line-break {
-    height: 28px;
-  }
-  .line-break {
-    height: 14px;
-  }
-
-  .line-break:last-child {
-    height: 0px;
-  }
-}
-
