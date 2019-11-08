@@ -137,25 +137,6 @@
     border-top-right-radius: 0px;
 }
 
-.module-message__img-border-overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-    left: 0;
-    right: 0;
-    border-radius: 16px;
-}
-
-.module-message__img-border-overlay--with-content-below {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-.module-message__img-border-overlay--with-content-above {
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-}
 
 .module-message__img-attachment {
     object-fit: cover;
@@ -172,19 +153,8 @@
     cursor: pointer;
 }
 
-.module-message__img-overlay {
-    position: absolute;
-    height: 48px;
-    bottom: 0;
-    z-index: 2;
-    left: 0;
-    right: 0;
-    margin-left: -12px;
-    margin-right: -12px;
-    margin-bottom: -10px;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-}
+// TODO apply metadata background to images too like they get applied to stickers
+
 
 .module-message__broken-image {
     font-size: 11px;
@@ -431,6 +401,12 @@
         border-radius: 18px;
         object-fit: cover;
     }
+}
+.module-message__author-default-avatar {
+    align-self: flex-end;
+}
+.module-message__author, .module-message__text {
+    color: var(--messageText);
 }
 
 .module-message__author-default-avatar {

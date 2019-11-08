@@ -9,17 +9,12 @@ class MessageMetaData extends React.Component {
       padlock,
       username,
       attachment,
-      collapseMetadata,
       direction,
       status,
       text,
       timestamp
     } = this.props
     const tx = window.translate
-
-    if (collapseMetadata) {
-      return null
-    }
 
     const withImageNoCaption = Boolean(
       !text &&

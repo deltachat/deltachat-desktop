@@ -42,21 +42,4 @@
     }
   }
 
-  .module-message__author-default-avatar {
-    align-self: flex-end;
-  }
-
-  .module-message__attachment-container--with-content-above {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-  }
-
-  .module-message__attachment-container--with-content-below {
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-  }
-
-  .module-message__author, .module-message__text {
-    color: var(--messageText);
-  }
 }
