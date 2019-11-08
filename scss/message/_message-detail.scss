@@ -51,3 +51,10 @@
   margin: 1em auto;
   padding: 1em;
 }
+
+.module-message-detail .message-content * {
+  background-color: lightgrey;
+  width: 100%;
+  resize: none;
+  padding: 1rem;
+}
