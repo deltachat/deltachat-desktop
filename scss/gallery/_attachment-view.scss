@@ -37,6 +37,7 @@
         width: 36px;
         display: inline-block;
         @include color-svg('../images/download.svg', var(--messageButtons));
+
         &:hover {
             background-color: var(--messageButtons);
         }
