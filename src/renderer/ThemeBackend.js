@@ -75,6 +75,9 @@ export function ThemeDataBuilder (theme) {
     chatViewBgImgPath: undefinedGuard(
       theme.bgImagePath, path => path !== 'none' ? `url(${path})` : 'none'
     ),
+    invertValWelcomeImage: undefinedGuard(
+      theme.bgPrimary, bg => Color(bg).isDark() ? '1' : '0'
+    ),
     // ChatView - Composer
     composerBg: theme.bgPrimary,
     composerText: theme.textPrimary,
