@@ -6,7 +6,7 @@ const ScreenContext = require('../contexts/ScreenContext')
 const Media = require('./Media')
 const Menu = require('./Menu').default
 const ChatList = require('./chat/ChatList').default
-const MessageList = require('./message/MessageList').default
+const MessageListAndComposer = require('./message/MessageListAndComposer').default
 const SearchInput = require('./SearchInput').default
 const SettingsContext = require('../contexts/SettingsContext')
 
@@ -191,7 +191,7 @@ class MainScreen extends React.Component {
                 ? this.state.media ? <Media
                   chat={selectedChat}
                 />
-                  : (<MessageList
+                  : (<MessageListAndComposer
                     chat={selectedChat}
                   />)
                 : (
