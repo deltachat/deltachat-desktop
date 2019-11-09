@@ -1,20 +1,20 @@
-const React = require('react')
-const { callDcMethod } = require('../ipc')
-const styled = require('styled-components').default
-const ScreenContext = require('../contexts/ScreenContext')
+import React, { useState, useRef, useEffect, useContext } from 'react'
+import { callDcMethod } from '../ipc'
+import styled from 'styled-components'
+import ScreenContext from '../contexts/ScreenContext'
 
-const Media = require('./Media')
-const Menu = require('./Menu').default
-const ChatList = require('./chat/ChatList').default
-const MessageListAndComposer = require('./message/MessageListAndComposer').default
-const SearchInput = require('./SearchInput').default
-const SettingsContext = require('../contexts/SettingsContext')
+import Media from './Media'
+import Menu from './Menu'
+import ChatList from './chat/ChatList'
+import MessageListAndComposer from './message/MessageListAndComposer'
+import SearchInput from './SearchInput'
+import SettingsContext from '../contexts/SettingsContext'
 
-const NavbarWrapper = require('./NavbarWrapper')
+import NavbarWrapper from './NavbarWrapper'
 
-const chatStore = require('../stores/chat')
+import chatStore from '../stores/chat'
 
-const {
+import {
   Alignment,
   Classes,
   Navbar,
@@ -23,7 +23,7 @@ const {
   Position,
   Popover,
   Button
-} = require('@blueprintjs/core')
+} from '@blueprintjs/core'
 
 const NavbarGroupName = styled.div`
   font-size: medium;
@@ -43,177 +43,134 @@ const Welcome = styled.div`
   text-align: center;
 `
 
-class MainScreen extends React.Component {
-  constructor (props) {
-    super(props)
+export default function MainScreen() {
+  const [queryStr, setQueryStr] = useState('')
+  const [media, setMedia] = useState(false)
+  const [selectedChat, setSelectedChat] = useState(null)
+  const [showArchivedChats, setShowArchivedChats] = useState(null)
+  const { openDialog } = useContext(ScreenContext)
 
-    this.state = {
-      queryStr: '',
-      media: false,
-      selectedChat: null,
-      chatList: [],
-      archivedChatList: [],
-      filteredChatList: [],
-      showArchivedChats: false
-    }
+  const chatClicked = useRef(0)
 
-    this.onShowArchivedChats = this.showArchivedChats.bind(this, true)
-    this.onHideArchivedChats = this.showArchivedChats.bind(this, false)
-    this.onChatClick = this.onChatClick.bind(this)
-    this.onChatUpdate = this.onChatUpdate.bind(this)
-    this.handleSearchChange = this.handleSearchChange.bind(this)
-    this.onMapIconClick = this.onMapIconClick.bind(this)
-
-    this.chatClicked = 0
-  }
-
-  onChatUpdate (chat) {
-    this.setState({ selectedChat: chat })
-  }
-
-  componentDidMount () {
-    chatStore.subscribe(this.onChatUpdate)
-  }
-
-  componentWillUnmount () {
-    chatStore.unsubscribe(this.onChatUpdate)
-  }
-
-  showArchivedChats (showArchivedChats) {
-    this.setState({ showArchivedChats })
-  }
-
-  onChatClick (chatId) {
-    if (chatId === this.chatClicked) {
+  const onChatUpdate = chat => setSelectedChat(chat)
+  const onChatClick = chatId => {
+    if (chatId === chatClicked.current) {
       // avoid double clicks
       return
     }
-    this.chatClicked = chatId
+    chatClicked.current = chatId
     callDcMethod('chatList.selectChat', [chatId])
-    setTimeout(() => { this.chatClicked = 0 }, 500)
+    setTimeout(() => { chatClicked.current = 0 }, 500)
   }
+  const searchChats = queryStr => setQueryStr(queryStr)
+  const handleSearchChange = event => searchChats(event.target.value)
+  const onMapIconClick = () => openDialog('MapDialog', { selectedChat })
 
-  searchChats (queryStr) {
-    this.setState({ queryStr })
-  }
+  useEffect(() => {
+    chatStore.subscribe(onChatUpdate)
+    return () => { chatStore.unsubscribe(onChatUpdate) }
+  }, [selectedChat])
 
-  handleSearchChange (event) {
-    this.searchChats(event.target.value)
-  }
+ const tx = window.translate
 
-  onMapIconClick () {
-    const { selectedChat } = this.state
-    this.context.openDialog('MapDialog', { selectedChat })
-  }
+ const menu = <ScreenContext.Consumer>{(screenContext) =>
+   <Menu
+     selectedChat={selectedChat}
+     showArchivedChats={setShowArchivedChats}
+   />}
+ </ScreenContext.Consumer>
 
-  render () {
-    const { selectedChat, showArchivedChats, queryStr } = this.state
-
-    const tx = window.translate
-
-    const menu = <ScreenContext.Consumer>{(screenContext) =>
-      <Menu
-        selectedChat={selectedChat}
-        showArchivedChats={showArchivedChats}
-      />}
-    </ScreenContext.Consumer>
-
-    return (
-      <div>
-        <NavbarWrapper>
-          <Navbar fixedToTop>
-            <NavbarGroup align={Alignment.LEFT}>
-              <SearchInput
-                onChange={this.handleSearchChange}
-                value={this.state.queryStr}
-                className='icon-rotated'
-              />
-              { showArchivedChats && (
-                <Button
-                  className={[Classes.MINIMAL, 'icon-rotated']}
-                  icon='undo' onClick={this.onHideArchivedChats}
-                  aria-label={tx('back')} />
-              ) }
-            </NavbarGroup>
-            <NavbarGroup align={Alignment.RIGHT}>
-              <NavbarHeading>
-                <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
-                <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
-              </NavbarHeading>
-              {selectedChat && selectedChat.id && <span className='views'>
-                <Button
-                  onClick={() => this.setState({ media: false })}
-                  minimal
-                  large
-                  active={!this.state.media}
-                  // aria-selected={!this.state.media}
-                  icon={'chat'}
-                  aria-label={tx('chat')} />
-                <Button
-                  onClick={() => this.setState({ media: true })}
-                  minimal
-                  large
-                  active={this.state.media}
-                  // aria-selected={this.state.media}
-                  icon={'media'}
-                  aria-label={tx('media')} />
-                <SettingsContext.Consumer>
-                  {({ enableOnDemandLocationStreaming }) => (
-                    enableOnDemandLocationStreaming &&
-                    <Button
-                      minimal
-                      large
-                      icon='map'
-                      style={{ marginLeft: 0 }}
-                      onClick={this.onMapIconClick} aria-label={tx('tab_map')} />
-                  )}
-                </SettingsContext.Consumer>
-              </span>}
-              <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
-                <Popover content={menu} position={Position.RIGHT_TOP}>
-                  <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
-                </Popover>
-              </span>
-            </NavbarGroup>
-          </Navbar>
-        </NavbarWrapper>
-        <div>
-          <ChatList
-            queryStr={queryStr}
-            showArchivedChats={showArchivedChats}
-            onShowArchivedChats={this.onShowArchivedChats}
-            onChatClick={this.onChatClick}
-            selectedChatId={selectedChat ? selectedChat.id : null}
-          />
-          {
-            selectedChat
-              ? selectedChat.id
-                ? this.state.media ? <Media
-                  chat={selectedChat}
-                />
-                  : (<MessageListAndComposer
-                    chat={selectedChat}
-                  />)
-                : (
-                  <Welcome>
-                    <h3>{tx('no_chat_selected_suggestion_desktop')}</h3>
-                    <img src={'../images/image-80.svg'} className='welcome-image' />
-                  </Welcome>
-                )
-              : (
-                <Welcome>
-                  <h1>{tx('welcome_desktop')}</h1>
-                  <p>{tx('no_chat_selected_suggestion_desktop')}</p>
-                  <img src={'../images/image-80.svg'} className='welcome-image' />
-                </Welcome>
-              )
-          }
-        </div>
-      </div>
+  const MessageListView = selectedChat
+    ? selectedChat.id
+      ? media ? <Media
+        chat={selectedChat}
+      />
+        : (<MessageListAndComposer
+          chat={selectedChat}
+        />)
+      : (
+        <Welcome>
+          <h3>{tx('no_chat_selected_suggestion_desktop')}</h3>
+          <img src={'../images/image-80.svg'} className='welcome-image' />
+        </Welcome>
+      )
+    : (
+      <Welcome>
+        <h1>{tx('welcome_desktop')}</h1>
+        <p>{tx('no_chat_selected_suggestion_desktop')}</p>
+        <img src={'../images/image-80.svg'} className='welcome-image' />
+      </Welcome>
     )
-  }
+
+ return (
+   <div>
+     <NavbarWrapper>
+       <Navbar fixedToTop>
+         <NavbarGroup align={Alignment.LEFT}>
+           <SearchInput
+             onChange={handleSearchChange}
+             value={queryStr}
+             className='icon-rotated'
+           />
+           { showArchivedChats && (
+             <Button
+               className={[Classes.MINIMAL, 'icon-rotated']}
+               icon='undo' onClick={() => setShowArchivedChats(false)}
+               aria-label={tx('back')} />
+           ) }
+         </NavbarGroup>
+         <NavbarGroup align={Alignment.RIGHT}>
+           <NavbarHeading>
+             <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
+             <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
+           </NavbarHeading>
+           {selectedChat && selectedChat.id && <span className='views'>
+             <Button
+               onClick={() => setMedia(false)}
+               minimal
+               large
+               active={!media}
+               // aria-selected={!media}
+               icon={'chat'}
+               aria-label={tx('chat')} />
+             <Button
+               onClick={() => setMedia(true)}
+               minimal
+               large
+               active={media}
+               // aria-selected={media}
+               icon={'media'}
+               aria-label={tx('media')} />
+             <SettingsContext.Consumer>
+               {({ enableOnDemandLocationStreaming }) => (
+                 enableOnDemandLocationStreaming &&
+                 <Button
+                   minimal
+                   large
+                   icon='map'
+                   style={{ marginLeft: 0 }}
+                   onClick={onMapIconClick} aria-label={tx('tab_map')} />
+               )}
+             </SettingsContext.Consumer>
+           </span>}
+           <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
+             <Popover content={menu} position={Position.RIGHT_TOP}>
+               <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
+             </Popover>
+           </span>
+         </NavbarGroup>
+       </Navbar>
+     </NavbarWrapper>
+     <div>
+       <ChatList
+         queryStr={queryStr}
+         showArchivedChats={showArchivedChats}
+         onShowArchivedChats={() => setShowArchivedChats(true)}
+         onChatClick={onChatClick}
+         selectedChatId={selectedChat ? selectedChat.id : null}
+       />
+       {MessageListView}
+     </div>
+   </div>
+ )
 }
-
-MainScreen.contextType = ScreenContext
-
-module.exports = MainScreen
