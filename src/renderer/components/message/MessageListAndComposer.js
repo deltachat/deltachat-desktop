@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
 
 import Composer from '../composer/Composer'
@@ -56,36 +56,32 @@ export default function MessageListAndComposer (props) {
     }
   })(chat)
 
+  const settings = useContext(SettingsContext)
+  const style = { backgroundSize: 'cover', gridTemplateRows: `auto ${state.composerSize}px` }
+  if (settings['chatViewBgImg']) {
+    if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
+      style.backgroundImage = settings['chatViewBgImg']
+    } else {
+      style.backgroundColor = settings['chatViewBgImg']
+      style.backgroundImage = 'none'
+    }
+  }
+
   return (
-    <SettingsContext.Consumer>
-      {(settings) => {
-        var style = { backgroundSize: 'cover', gridTemplateRows: `auto ${state.composerSize}px` }
-        if (settings['chatViewBgImg']) {
-          if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
-            style.backgroundImage = settings['chatViewBgImg']
-          } else {
-            style.backgroundColor = settings['chatViewBgImg']
-            style.backgroundImage = 'none'
-          }
-        }
-        return (
-          <div className='message-list-and-composer'
-            style={style}
-            ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
-            <div className='message-list-and-composer__message-list'>
-              <MessageList chat={chat} refComposer={refComposer} />
-            </div>
-            <Composer
-              ref={refComposer}
-              chatId={chat.id}
-              draft={chat.draft}
-              setComposerSize={setComposerSize.bind(this)}
-              isDisabled={disabled}
-              disabledReason={disabledReason}
-            />
-          </div>
-        )
-      }}
-    </SettingsContext.Consumer>
+    <div className='message-list-and-composer'
+      style={style}
+      ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
+      <div className='message-list-and-composer__message-list'>
+        <MessageList chat={chat} refComposer={refComposer} />
+      </div>
+      <Composer
+        ref={refComposer}
+        chatId={chat.id}
+        draft={chat.draft}
+        setComposerSize={setComposerSize.bind(this)}
+        isDisabled={disabled}
+        disabledReason={disabledReason}
+      />
+    </div>
   )
 }
