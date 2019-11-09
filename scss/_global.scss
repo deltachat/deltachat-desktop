@@ -140,6 +140,8 @@ code {
   padding-top: 10pt;
   max-height: 60vh;
   height: auto;
+  filter: unquote("invert(var(--invertValWelcomeImage))");
+  pointer-events: none;
 }
 
 
