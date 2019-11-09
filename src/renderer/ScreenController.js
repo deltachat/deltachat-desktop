@@ -5,7 +5,7 @@ const { ipcRenderer } = require('electron')
 const ScreenContext = require('./contexts/ScreenContext')
 const UnblockContacts = require('./components/UnblockContactsScreen')
 const LoginScreen = require('./components/LoginScreen').default
-const MainScreen = require('./components/MainScreen')
+const MainScreen = require('./components/MainScreen').default
 const dialogs = require('./components/dialogs')
 
 class ScreenController extends React.Component {
