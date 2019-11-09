@@ -1,0 +1,33 @@
+.media-view {
+    width: 70%;
+    background-color: var(--galleryBg);
+    float: right;
+    padding: 10px;
+    margin-top: 50px;
+
+    &>.gallery {
+        height: calc(100vh - 50px - 40px - 10px);
+        overflow: scroll;
+        padding-top: 20px;
+
+        &>.item {
+            float: left;
+
+            .module-message__attachment-container {
+                background-color: transparent;
+                border-radius: 0px;
+                margin: 0px !important;
+            }
+
+            .module-message__img-attachment {
+                max-width: 120pt;
+            }
+
+            .module-message__generic-attachment__text {
+                div {
+                    color: black !important;
+                }
+            }
+        }
+    }
+}

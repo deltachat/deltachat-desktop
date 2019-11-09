@@ -2,44 +2,9 @@ import { onDownload } from './message/messageFunctions'
 import React from 'react'
 import C from 'deltachat-node/constants'
 import { callDcMethodAsync } from '../ipc'
-import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
 import Attachment, { isVideo, isImage } from './message/Attachment'
-
-const Wrapper = styled.div`
-  width: 70%;
-  background-color: ${props => props.theme.galleryBg};
-  float: right;
-  padding: 10px;
-  margin-top: 50px;
-`
-const MediaGallery = styled.div`
-  height: calc(100vh - 50px - 40px - 10px);
-  overflow: scroll;
-  padding-top: 20px;
-`
-
-const MediaGalleryItem = styled.div`
-  float: left;
-
-  .module-message__attachment-container {
-    background-color: transparent;
-    border-radius: 0px;
-    margin: 0px !important;
-  }
-
-  .module-message__img-attachment {
-    width: 120pt !important;
-    height: 120pt !important;
-  }
-
-  .module-message__generic-attachment__text {
-    div { color: black !important; }
-  }
-
-
-`
 
 const GROUPS = {
   images: {
@@ -108,7 +73,7 @@ export default class Media extends React.Component {
   render () {
     const { medias } = this.state
     const tx = window.translate
-    return <Wrapper>
+    return <div className='media-view'>
       <div class='bp3-tabs' style={{ minWidth: 200 }}>
         <ul class='bp3-tab-list .modifier' role='tablist'>
           {Object.keys(GROUPS).map((id) => {
@@ -121,10 +86,10 @@ export default class Media extends React.Component {
           })}
         </ul>
         <div class='bp3-tab-panel' role='tabpanel'>
-          <MediaGallery>
+          <div className='gallery'>
             {medias.map((message) => {
               var msg = message.msg
-              return <MediaGalleryItem
+              return <div className='item'
                 onClick={this.onClickMedia.bind(this, message)}
                 key={msg.id}>
                 <Attachment {...{
@@ -133,12 +98,12 @@ export default class Media extends React.Component {
                   conversationType: 'direct',
                   message
                 }} />
-              </MediaGalleryItem>
+              </div>
             })}
-          </MediaGallery>
+            </div>
         </div>
       </div>
-    </Wrapper>
+    </div>
   }
 }
 
