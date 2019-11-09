@@ -10,12 +10,13 @@ $emojimart-search-height: 31px + 6px;
   height: $esp-height;
   right: 13px;
   bottom: 50px;
-  background-color: white;
-  border-radius: 2px;
+  background-color:var(--emojiMartBg);
+  border-radius: var(--emojiMartOutsideRadius);
   box-shadow: 0px 0px 0px 1px #00000017;
 }
 
 .emoji-sticker-picker__sticker-picker {
+  background: var(--emojiMartBg);
   width: 100%;
   height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} + 1px);
   margin-top: -1px;
@@ -38,6 +39,10 @@ $emojimart-search-height: 31px + 6px;
   .disable-sticker & {
     display: none;
   }
+  background: var(--emojiMartBg);
+  border-top-left-radius: var(--emojiMartOutsideRadius);
+  border-top-right-radius: var(--emojiMartOutsideRadius);
+
 }
 
 .emoji-sticker-picker__emoji-or-sticker-selector__button {
@@ -131,6 +136,7 @@ $emojimart-search-height: 31px + 6px;
   color: var(--emojiMartText);
   border: none;
   background: var(--emojiMartBg);
+  border-radius: 0px;
 }
 
 .emoji-mart-anchors svg,
@@ -144,10 +150,13 @@ $emojimart-search-height: 31px + 6px;
   width: 438px;
   top: calc(#{$esp-height} - #{$esp-header-height} + 13px);
   border-top: 0 solid var(--emojiMartBorder);
+  background: var(--emojiMartBg);
 }
 
 .emoji-mart-bar:first-child {
   border-bottom-width: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
 .emoji-mart-category-label span {
@@ -162,6 +171,11 @@ $emojimart-search-height: 31px + 6px;
 
 .emoji-mart-search-icon {
   display: none;
+}
+.emoji-mart-search input{
+  background: var(--emojiMartBg);
+  border-color: var(--emojiMartSearchBorder);
+  color: var(--emojiMartInputText);
 }
 
 // select background circle

@@ -14,12 +14,6 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
 
-const SetupMessage = styled.div`
-  .module-message__text {
-    color: ${props => props.theme.setupMessageText};
-  }
-`
-
 const InfoMessage = styled.div`
   width: 100%;
   text-align: center;
@@ -35,45 +29,6 @@ const InfoMessage = styled.div`
     border-radius: 10px;
     opacity: 0.44;
     color: ${props => props.theme.infoMessageBubbleText};
-  }
-`
-
-const MessageWrapper = styled.div`
-  .module-message__metadata {
-    margin-top: 10px;
-    margin-bottom: -7px;
-    float: right;
-  }
-
-  .module-message__author-default-avatar__label {
-    top: -121px;
-    left: -10px;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    font-size: 25px;
-    line-height: 36px;
-  }
-
-  .module-message__author-default-avatar {
-    position: static;
-    margin-right: 8px;
-  }
-
-  .module-message__img-attachment {
-    object-fit: unset;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    min-height: unset;
-  }
-
-  .module-message__img-border-overlay {
-    box-shadow: unset;
-  }
-
-  .module-message__generic-attachment__icon__extension{
-    font-family: monospace;
   }
 `
 
@@ -97,10 +52,10 @@ function render (props) {
     )
   } else if (message.msg.isSetupmessage) {
     body = (
-      <SetupMessage key={message.id}
-        onClick={onClickSetupMessage} className={'pointer'}>
+      <div className='setupMessage pointer' key={message.id}
+        onClick={onClickSetupMessage}>
         <RenderMessage {...props} />
-      </SetupMessage>
+      </div>
     )
   } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
     body = (
@@ -177,7 +132,7 @@ class RenderMessage extends React.Component {
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
     if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
 
-    return (<MessageWrapper ref={this.el}><Message {...props} /></MessageWrapper>)
+    return (<div ref={this.el}><Message {...props} /></div>)
   }
 }
 

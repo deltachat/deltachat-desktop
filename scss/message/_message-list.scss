@@ -18,8 +18,9 @@
     bottom: 0;
     overflow: scroll;
     max-height: 100%;
-    width:100%;
+    width: 100%;
     padding: 0 0.5em;
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
@@ -27,14 +28,9 @@
 
   ul {
     list-style: none;
-    
+
     li {
       margin-bottom: 10px;
-
-      .message-wrapper {
-        margin-left: 16px;
-        margin-right: 16px;
-      }
 
       &::after {
         visibility: hidden;
@@ -47,39 +43,4 @@
     }
   }
 
-  .module-message__author-default-avatar {
-    align-self: flex-end;
-  }
-
-  .module-message__container {
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 16px 1px;
-    }
-  }
-
-  .module-message__container--incoming {
-    background-color: var(--messageIncommingBg);
-  }
-
-  .module-message__container--outgoing {
-    background-color: var(--messageOutgoingBg);
-
-    &, & .module-message__attachment-container {
-      border-radius: 16px 16px 1px 16px;
-    }
-  }
-
-  .module-message__attachment-container--with-content-above {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-  }
-
-  .module-message__attachment-container--with-content-below {
-    border-bottom-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-  }
-
-  .module-message__author, .module-message__text {
-    color: var(--messageText);
-  }
 }

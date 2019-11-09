@@ -1,0 +1,52 @@
+// used by message and the popup message on map
+.metadata {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: -3px;
+
+    &.with-image-no-caption {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        float: right;
+        padding: 4px 10px 1px 10px;
+        margin: 0;
+        background-color: #0000008f;
+        border-radius: 4px;
+        font-weight: bold;
+
+        &>.date {
+            color: var(--messageMetadataImageNoCaption);
+        }
+    }
+
+    &>.status-icon {
+        margin-bottom: 2px;
+    }
+
+    &>.username {
+        margin-right: 10px;
+    }
+
+    &>.date {
+        font-size: 11.5px;
+        line-height: 16px;
+        letter-spacing: 0.3px;
+        color: var(--messageMetadataDate);
+        text-transform: uppercase;
+    }
+
+    &>.spacer {
+        flex-grow: 1;
+    }
+
+    &>.padlock-icon {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        margin-right: 2px;
+        margin-bottom: 3px;
+    }
+}

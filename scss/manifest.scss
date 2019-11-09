@@ -20,6 +20,9 @@
 @import 'contact/_contact-list';
 @import 'contact/_contact';
 
+// Gallery (media view)
+@import 'gallery/attachment-view';
+
 // Dialogs
 @import 'dialogs/_forward-message';
 @import 'dialogs/_settings';
@@ -35,6 +38,7 @@
 @import 'message/_message-detail';
 @import 'message/_message-list';
 @import 'message/_message';
+@import 'message/_metadata';
 @import 'message/_status-icon';
 
 // Overwrites for third party node modules

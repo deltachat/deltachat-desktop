@@ -2,10 +2,12 @@
 
 .module-message-detail {
   margin-top: -20px;
+
   .bp3-callout {
     max-height: 50vh;
     overflow: auto;
   }
+
   p {
     white-space: pre-line;
     user-select: text;
@@ -50,4 +52,11 @@
   cursor: pointer;
   margin: 1em auto;
   padding: 1em;
+}
+
+.module-message-detail .message-content * {
+  background-color: lightgrey;
+  width: 100%;
+  resize: none;
+  padding: 1rem;
 }

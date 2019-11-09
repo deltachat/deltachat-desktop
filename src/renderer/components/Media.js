@@ -33,10 +33,6 @@ const MediaGalleryItem = styled.div`
     margin: 0px !important;
   }
 
-  .module-message__img-border-overlay {
-    display: none;
-  }
-
   .module-message__img-attachment {
     max-width: 120pt;
   }
@@ -135,7 +131,6 @@ class Media extends React.Component {
             {Attachment.render({
               direction: msg.direction,
               attachment: msg.attachment,
-              collapseMetadata: true,
               conversationType: 'direct'
             })}
           </MediaGalleryItem>
