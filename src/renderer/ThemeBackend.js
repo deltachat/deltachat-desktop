@@ -98,6 +98,10 @@ export function ThemeDataBuilder (theme) {
     chatListItemBgHover: undefinedGuard(
       theme.bgPrimary, c => changeContrast(c, 0.3)
     ),
+    chatListBorderColor: undefinedGuard(
+      theme.bgPrimary, bg => Color(bg).isDark() ? '#111' : '#b9b9b9'
+    ),
+    chatListBorder: '1px solid ' + undefinedGuard(theme.chatListBorderColor),
     // Message Bubble
     messageText: theme.textPrimary,
     messageTextLink: theme.textPrimary, // same as message text
