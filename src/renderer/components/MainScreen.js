@@ -43,7 +43,7 @@ const Welcome = styled.div`
   text-align: center;
 `
 
-export default function MainScreen() {
+export default function MainScreen () {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
   const [selectedChat, setSelectedChat] = useState(null)
@@ -71,14 +71,14 @@ export default function MainScreen() {
     return () => { chatStore.unsubscribe(onChatUpdate) }
   }, [selectedChat])
 
- const tx = window.translate
+  const tx = window.translate
 
- const menu = <ScreenContext.Consumer>{(screenContext) =>
-   <Menu
-     selectedChat={selectedChat}
-     showArchivedChats={setShowArchivedChats}
-   />}
- </ScreenContext.Consumer>
+  const menu = <ScreenContext.Consumer>{(screenContext) =>
+    <Menu
+      selectedChat={selectedChat}
+      showArchivedChats={setShowArchivedChats}
+    />}
+  </ScreenContext.Consumer>
 
   const MessageListView = selectedChat
     ? selectedChat.id
@@ -102,75 +102,75 @@ export default function MainScreen() {
       </Welcome>
     )
 
- return (
-   <div>
-     <NavbarWrapper>
-       <Navbar fixedToTop>
-         <NavbarGroup align={Alignment.LEFT}>
-           <SearchInput
-             onChange={handleSearchChange}
-             value={queryStr}
-             className='icon-rotated'
-           />
-           { showArchivedChats && (
-             <Button
-               className={[Classes.MINIMAL, 'icon-rotated']}
-               icon='undo' onClick={() => setShowArchivedChats(false)}
-               aria-label={tx('back')} />
-           ) }
-         </NavbarGroup>
-         <NavbarGroup align={Alignment.RIGHT}>
-           <NavbarHeading>
-             <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
-             <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
-           </NavbarHeading>
-           {selectedChat && selectedChat.id && <span className='views'>
-             <Button
-               onClick={() => setMedia(false)}
-               minimal
-               large
-               active={!media}
-               // aria-selected={!media}
-               icon={'chat'}
-               aria-label={tx('chat')} />
-             <Button
-               onClick={() => setMedia(true)}
-               minimal
-               large
-               active={media}
-               // aria-selected={media}
-               icon={'media'}
-               aria-label={tx('media')} />
-             <SettingsContext.Consumer>
-               {({ enableOnDemandLocationStreaming }) => (
-                 enableOnDemandLocationStreaming &&
-                 <Button
-                   minimal
-                   large
-                   icon='map'
-                   style={{ marginLeft: 0 }}
-                   onClick={onMapIconClick} aria-label={tx('tab_map')} />
-               )}
-             </SettingsContext.Consumer>
-           </span>}
-           <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
-             <Popover content={menu} position={Position.RIGHT_TOP}>
-               <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
-             </Popover>
-           </span>
-         </NavbarGroup>
-       </Navbar>
-     </NavbarWrapper>
-     <div>
-       <ChatList
-         queryStr={queryStr}
-         showArchivedChats={showArchivedChats}
-         onShowArchivedChats={() => setShowArchivedChats(true)}
-         onChatClick={onChatClick}
-         selectedChatId={selectedChat ? selectedChat.id : null}
-       />
-       {MessageListView}
-     </div>
-   </div>
- )
+  return (
+    <div>
+      <NavbarWrapper>
+        <Navbar fixedToTop>
+          <NavbarGroup align={Alignment.LEFT}>
+            <SearchInput
+              onChange={handleSearchChange}
+              value={queryStr}
+              className='icon-rotated'
+            />
+            { showArchivedChats && (
+              <Button
+                className={[Classes.MINIMAL, 'icon-rotated']}
+                icon='undo' onClick={() => setShowArchivedChats(false)}
+                aria-label={tx('back')} />
+            ) }
+          </NavbarGroup>
+          <NavbarGroup align={Alignment.RIGHT}>
+            <NavbarHeading>
+              <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
+              <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
+            </NavbarHeading>
+            {selectedChat && selectedChat.id && <span className='views'>
+              <Button
+                onClick={() => setMedia(false)}
+                minimal
+                large
+                active={!media}
+                // aria-selected={!media}
+                icon={'chat'}
+                aria-label={tx('chat')} />
+              <Button
+                onClick={() => setMedia(true)}
+                minimal
+                large
+                active={media}
+                // aria-selected={media}
+                icon={'media'}
+                aria-label={tx('media')} />
+              <SettingsContext.Consumer>
+                {({ enableOnDemandLocationStreaming }) => (
+                  enableOnDemandLocationStreaming &&
+                  <Button
+                    minimal
+                    large
+                    icon='map'
+                    style={{ marginLeft: 0 }}
+                    onClick={onMapIconClick} aria-label={tx('tab_map')} />
+                )}
+              </SettingsContext.Consumer>
+            </span>}
+            <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
+              <Popover content={menu} position={Position.RIGHT_TOP}>
+                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
+              </Popover>
+            </span>
+          </NavbarGroup>
+        </Navbar>
+      </NavbarWrapper>
+      <div>
+        <ChatList
+          queryStr={queryStr}
+          showArchivedChats={showArchivedChats}
+          onShowArchivedChats={() => setShowArchivedChats(true)}
+          onChatClick={onChatClick}
+          selectedChatId={selectedChat ? selectedChat.id : null}
+        />
+        {MessageListView}
+      </div>
+    </div>
+  )
 }

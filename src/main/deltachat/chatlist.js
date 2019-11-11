@@ -36,7 +36,7 @@ module.exports = class DCChatList extends SplitOut {
       chatList.push(id)
       if (id === chatId) i = counter
     }
-    if (i === -1) return
+    if (i === -1) return undefined
     // const chat = this.getChatListItemById(chatId, list, i) <- this should never be called
     // this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
     // did we mean to send the full chat?
@@ -95,7 +95,6 @@ module.exports = class DCChatList extends SplitOut {
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     return {
       id: chat.id,
-      // email: summary.text1,
       name: chat.name || summary.text1,
       avatarPath: chat.profileImage,
       color: integerToHexColor(chat.color),
@@ -106,7 +105,6 @@ module.exports = class DCChatList extends SplitOut {
         status: mapCoreMsgStatus2String(summary.state)
       },
       deaddrop: chat.deaddrop,
-      // contacts: chat.contacts,
       isVerified: chat.isVerified,
       isGroup: isGroup,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
