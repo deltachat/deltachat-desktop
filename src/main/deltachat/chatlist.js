@@ -39,7 +39,7 @@ module.exports = class DCChatList extends SplitOut {
     if (i === -1) return
     // const chat = this.getChatListItemById(chatId, list, i) <- this should never be called
     // this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
-    // did we mean to send the full chat? 
+    // did we mean to send the full chat?
   }
 
   getChatListIds (listFlags, queryStr, queryContactId) {
@@ -72,7 +72,8 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   getChatListItemById (chatId, list, i) {
-    const chat = this.getFullChatById(chatId)
+    const chat = this.__getChatById(chatId)
+    if (chat === null) return null
 
     if (!list) [list, i] = this.getListAndIndexForChatId(chatId)
     if (!chat || i === -1) return null
@@ -82,24 +83,22 @@ module.exports = class DCChatList extends SplitOut {
       chat.deaddrop = this._deadDropMessage(messageId)
     }
 
-    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      chat.isArchiveLink = true
-    }
-
+    console.log('getChatListItemsByIds', chatId)
     const summary = list.getSummary(i).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
       summary.text2 = this._controller.translate('message_not_verified')
     }
-
+    const isGroup = isGroupChat(chat)
+    const contactIds = this._dc.getChatContacts(chatId)
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     return {
       id: chat.id,
-      email: summary.text1,
-      name: chat.name,
+      // email: summary.text1,
+      name: chat.name || summary.text1,
       avatarPath: chat.profileImage,
-      color: chat.color,
+      color: integerToHexColor(chat.color),
       lastUpdated: lastUpdated,
       summary: {
         text1: summary.text1,
@@ -107,37 +106,41 @@ module.exports = class DCChatList extends SplitOut {
         status: mapCoreMsgStatus2String(summary.state)
       },
       deaddrop: chat.deaddrop,
-      contacts: chat.contacts,
+      // contacts: chat.contacts,
       isVerified: chat.isVerified,
-      isGroup: chat.isGroup,
-      freshMessageCounter: chat.freshMessageCounter,
-      isArchiveLink: chat.isArchiveLink,
-      selfInGroup: chat.selfInGroup
+      isGroup: isGroup,
+      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
+      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
   }
 
-  getFullChatById (chatId, loadMessages) {
+  __getChatById (chatId) {
     if (!chatId) return null
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
-    this._controller._pages = 0
-    const chat = rawChat.toJson()
+    return rawChat.toJson()
+  }
+
+  __getDraft (chatId) {
     const draft = this._dc.getDraft(chatId)
+    return draft ? draft.getText() : ''
+  }
 
-    if (draft) {
-      chat.draft = draft.getText()
-    } else {
-      chat.draft = ''
-    }
+  getFullChatById (chatId, loadMessages) {
+    const chat = this.__getChatById(chatId)
+    if (chat === null) return null
+    this._controller._pages = 0
 
+    console.log('getFullChatById', chatId)
     const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     const messages = loadMessages ? this._controller.messageList._messagesToRender(messageIds) : []
-    const contacts = this._dc.getChatContacts(chatId).map(id => this._dc.getContact(id).toJson())
+
     const isGroup = isGroupChat(chat)
-    let selfInGroup = isGroup
-    if (isGroup && contacts.find(contact => contact.id === C.DC_CONTACT_ID_SELF) === undefined) {
-      selfInGroup = false
-    }
+    const contactIds = this._dc.getChatContacts(chatId)
+
+    const contacts = contactIds.map(id => this._dc.getContact(id).toJson())
+
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
       id: chat.id,
@@ -159,8 +162,8 @@ module.exports = class DCChatList extends SplitOut {
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
-      draft: chat.draft,
-      selfInGroup: selfInGroup
+      draft: this.__getDraft(chatId),
+      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
   }
 

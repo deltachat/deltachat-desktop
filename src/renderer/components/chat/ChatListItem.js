@@ -13,8 +13,12 @@ const FreshMessageCounter = React.memo(props => {
 })
 
 const Header = React.memo(props => {
-  const { freshMessageCounter, lastUpdated } = props.chatListItem
-  const { name, email, isVerified } = props.chatListItem
+  const {
+    freshMessageCounter,
+    lastUpdated,
+    name,
+    isVerified
+  } = props.chatListItem
 
   return (
     <div className='chat-list-item__header'>
@@ -24,7 +28,7 @@ const Header = React.memo(props => {
       )}>
         {isVerified && <VerifiedIcon />}
         <span className='chat-list-item__name'>
-          {(name || email) + ' '}
+          {name + ' '}
         </span>
       </div>
       <div className={classNames(
