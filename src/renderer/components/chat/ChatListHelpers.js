@@ -8,7 +8,7 @@ const log = logger.getLogger('renderer/helpers/ChatList')
 
 const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
   callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], cb)
-}, 200)
+}, 10)
 
 export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
   if (!_queryStr) _queryStr = ''
