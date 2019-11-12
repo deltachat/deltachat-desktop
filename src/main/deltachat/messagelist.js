@@ -74,8 +74,6 @@ module.exports = class DCMessageList extends SplitOut {
         messages.push(json)
       }
     }
-    // remove the additional message again
-    messages.shift()
     return messages
   }
 
