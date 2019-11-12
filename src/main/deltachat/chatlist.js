@@ -37,7 +37,7 @@ module.exports = class DCChatList extends SplitOut {
       if (id === chatId) i = counter
     }
     if (i === -1) return
-    const chat = this.getSmallChatById(chatId, list, i)
+    const chat = this.getChatListItem(chatId, list, i)
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
@@ -62,19 +62,38 @@ module.exports = class DCChatList extends SplitOut {
     return [list, i]
   }
 
-  getSmallChatByIds (chatIds) {
+  getChatListItems (chatIds) {
     const chats = {}
-    for (const chatId of chatIds) {
-      chats[chatId] = this.getSmallChatById(chatId)
+    console.time('getChatListItems')
+    let list = this._dc.getChatList(0, '', 0)
+    if(!findIndexOfChatIdInChatList(list, chatIds[0])) {
+      list = this._dc.getChatList(1, '', 0)
     }
+
+    let last_i = 0
+    for (const chatId of chatIds) {
+      last_i = findIndexOfChatIdInChatList(list, last_i, chatId)
+      chats[chatId] = this.getChatListItem(chatId, list, last_i)
+    }
+    console.timeEnd('getChatListItems')
     return chats
   }
 
-  getSmallChatById (chatId, list, i) {
-    const chat = this.getFullChatById(chatId)
+  getChatListItem (chatId, list, i) {
+    console.time('getChatListItem', i)
+    if (!chatId) return null
+    const rawChat = this._dc.getChat(chatId)
+    if (!rawChat) return null
+    let chat = rawChat.toJson()
+    const draft = this._dc.getDraft(chatId)
 
-    if (!list) [list, i] = this.getListAndIndexForChatId(chatId)
-    if (!chat || i === -1) return null
+    if (draft) {
+      chat.draft = draft.getText()
+    } else {
+      chat.draft = ''
+    }
+
+    const isGroup = isGroupChat(chat)
 
     if (chat.id === C.DC_CHAT_ID_DEADDROP) {
       const messageId = list.getMessageId(i)
@@ -86,33 +105,30 @@ module.exports = class DCChatList extends SplitOut {
     }
 
     const summary = list.getSummary(i).toJson()
-    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
+    summary.status = mapCoreMsgStatus2String(summary.state)
 
     if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
       summary.text2 = this._controller.translate('message_not_verified')
     }
+    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
-    // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
-    return {
+    const chatListItem = {
       id: chat.id,
-      email: summary.text1,
       name: chat.name,
-      avatarPath: chat.profileImage,
-      color: chat.color,
-      lastUpdated: lastUpdated,
-      summary: {
-        text1: summary.text1,
-        text2: summary.text2,
-        status: mapCoreMsgStatus2String(summary.state)
-      },
-      deaddrop: chat.deaddrop,
-      contacts: chat.contacts,
       isVerified: chat.isVerified,
-      isGroup: chat.isGroup,
-      freshMessageCounter: chat.freshMessageCounter,
+      color: integerToHexColor(chat.color),
+      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      draft: chat.draft,
+      email: summary.text1,
+      avatarPath: chat.profileImage,
+      lastUpdated: lastUpdated,
+      summary,
+      deaddrop: chat.deaddrop,
       isArchiveLink: chat.isArchiveLink,
-      selfInGroup: chat.selfInGroup
     }
+    console.timeEnd('getChatListItem', i)
+    return chatListItem
   }
 
   getFullChatById (chatId, loadMessages) {
@@ -138,6 +154,8 @@ module.exports = class DCChatList extends SplitOut {
       selfInGroup = false
     }
     // This object is NOT created with object assign to promote consistency and to be easier to understand
+
+
     return {
       id: chat.id,
       name: chat.name,
@@ -206,9 +224,9 @@ module.exports = class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-function findIndexOfChatIdInChatList (list, chatId) {
+function findIndexOfChatIdInChatList (list, last_i, chatId) {
   let i = -1
-  for (let counter = 0; counter < list.getCount(); counter++) {
+  for (let counter = last_i; counter < list.getCount(); counter++) {
     const currentChatId = list.getChatId(counter)
     if (currentChatId === chatId) {
       i = counter

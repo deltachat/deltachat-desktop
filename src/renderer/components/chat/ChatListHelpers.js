@@ -115,7 +115,7 @@ export const useLazyChatListItems = chatListIds => {
     const chatIdsToFetch = chatIds.filter(i => fetching.current.indexOf(i) === -1 && (typeof chatItems[i] === 'undefined' || force === true))
     if (chatIdsToFetch.length === 0) return
     fetching.current.push(...chatIdsToFetch)
-    const chats = await callDcMethodAsync('chatList.getSmallChatByIds', [chatIdsToFetch])
+    const chats = await callDcMethodAsync('chatList.getChatListItems', [chatIdsToFetch])
     fetching.current = fetching.current.filter(i => chatIdsToFetch.indexOf(i) === -1)
     return chats
   }
