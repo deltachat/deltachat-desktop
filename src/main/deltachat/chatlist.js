@@ -27,19 +27,8 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   onChatModified (chatId) {
-    const listFlags = 0
-    const list = this._dc.getChatList(listFlags, '')
-    const chatList = []
-    let i = -1
-    for (let counter = 0; counter < list.getCount(); counter++) {
-      const id = list.getChatId(counter)
-      chatList.push(id)
-      if (id === chatId) i = counter
-    }
-    if (i === -1) return undefined
-    // const chat = this.getChatListItemById(chatId, list, i) <- this should never be called
-    // this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
-    // did we mean to send the full chat?
+    const chat = this.getFullChatById(chatId)
+    this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   getChatListIds (listFlags, queryStr, queryContactId) {
