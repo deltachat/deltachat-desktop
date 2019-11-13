@@ -27,8 +27,8 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   onChatModified (chatId) {
-    // const chat = this.getFullChatById(chatId)
-    // this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
+    const chat = this.getFullChatById(chatId)
+    this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   getChatListIds (listFlags, queryStr, queryContactId) {
