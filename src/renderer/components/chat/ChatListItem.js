@@ -134,6 +134,7 @@ const ChatListItemNormal = React.memo(props => {
 })
 
 const ChatListItemDeaddrop = React.memo(props => {
+  if (!chatListItem.deaddrop) return null
   const { chatListItem } = props
   const { openDialog } = useContext(ScreenContext)
   const onClick = () => openDialog('DeadDrop', { deaddrop: chatListItem.deaddrop })
@@ -147,7 +148,7 @@ const ChatListItemDeaddrop = React.memo(props => {
         'chat-list-item--is-deaddrop'
       )}
     >
-      <Avatar displayName={chatListItem.deaddrop.contact.address} />
+      <Avatar displayName={chatListItem.deaddrop.address} />
       <div className='chat-list-item__content'>
         <Header chatListItem={{ ...chatListItem, name: tx('chat_contact_request') }} />
         <Message chatListItem={chatListItem} />

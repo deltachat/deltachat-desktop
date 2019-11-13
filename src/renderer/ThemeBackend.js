@@ -163,7 +163,7 @@ export function ThemeDataBuilder (theme) {
     bp3SelectorTop: 'rgba(255, 255, 255, 0.8)',
     bp3SelectorBottom: 'rgba(255, 255, 255, 0.0)',
     outlineProperties: '1px solid transparent',
-    outlineColor:'b9b9b9',
+    outlineColor: 'b9b9b9',
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: theme.outlineColor,

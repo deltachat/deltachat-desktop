@@ -66,7 +66,7 @@ module.exports = class DCChatList extends SplitOut {
     const chats = {}
     console.time('getChatListItems')
     let list = this._dc.getChatList(0, '', 0)
-    if(!findIndexOfChatIdInChatList(list, chatIds[0])) {
+    if (!findIndexOfChatIdInChatList(list, chatIds[0])) {
       list = this._dc.getChatList(1, '', 0)
     }
 
@@ -79,53 +79,87 @@ module.exports = class DCChatList extends SplitOut {
     return chats
   }
 
+  __getChatAsJson (chatId) {
+    if (!chatId) return null
+    const chat = this._dc.getChat(chatId)
+    if (!chat) return null
+    return chat.toJson()
+  }
+
+  _deadDropMessage (id) {
+    const msg = this._dc.getMessage(id)
+    const fromId = msg && msg.getFromId()
+    if (!fromId) {
+      log.warn('Ignoring DEADDROP due to missing fromId')
+      return
+    }
+    const contact = this._dc.getContact(fromId).toJson()
+    return { id, contact }
+  }
+
+
+  __getChatListItemDeaddrop(chatId, list, i) {
+    if (!chatId === C.DC_CHAT_ID_DEADDROP) return false 
+
+    const messageId = list.getMessageId(i)    
+    const msg = this._dc.getMessage(messageId)
+    const fromId = msg && msg.getFromId()
+    if (!fromId) {
+      log.warn('Ignoring DEADDROP due to missing fromId')
+      return
+    }
+    const contact = this._dc.getContact(fromId).toJson()
+    return { 
+      contactId: fromId,
+      nameAndAddr: contact.nameAndAddr,
+      address: contact.address 
+    }    
+  }
+
   getChatListItem (chatId, list, i) {
     console.time('getChatListItem', i)
-    if (!chatId) return null
-    const rawChat = this._dc.getChat(chatId)
-    if (!rawChat) return null
-    let chat = rawChat.toJson()
-    const draft = this._dc.getDraft(chatId)
+    const chat = this.__getChatAsJson(chatId)
+    if (!chat) return null
 
+    // draft
+    let draft = this._dc.getDraft(chatId)
     if (draft) {
-      chat.draft = draft.getText()
+      draft = draft.getText()
     } else {
-      chat.draft = ''
+      draft = ''
     }
 
-    const isGroup = isGroupChat(chat)
+    // deaddrop
+    let deaddrop = this.__getChatListItemDeaddrop(chatId, list, i)
 
-    if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-      const messageId = list.getMessageId(i)
-      chat.deaddrop = this._deadDropMessage(messageId)
-    }
 
-    if (chat.id === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      chat.isArchiveLink = true
-    }
-
+    // summary
     const summary = list.getSummary(i).toJson()
     summary.status = mapCoreMsgStatus2String(summary.state)
-
     if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
       summary.text2 = this._controller.translate('message_not_verified')
     }
+
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
+    const color = integerToHexColor(chat.color)
+    const freshMessageCounter = this._dc.getFreshMessageCount(chat.id)
+
+    // ToDo: refactor to profileImage
+    const avatarPath = chat.profileImage
+
+    // ToDo: get actual email and not just the name/email of the last active group/chat contact
+    const email = summary.text1
 
     const chatListItem = {
-      id: chat.id,
-      name: chat.name,
-      isVerified: chat.isVerified,
-      color: integerToHexColor(chat.color),
-      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
-      isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
-      draft: chat.draft,
-      email: summary.text1,
-      avatarPath: chat.profileImage,
-      lastUpdated: lastUpdated,
+      ...chat,
+      draft,
+      deaddrop,
       summary,
-      deaddrop: chat.deaddrop,
-      isArchiveLink: chat.isArchiveLink,
+      lastUpdated,
+      color,
+      freshMessageCounter,
+      avatarPath,
+      email
     }
     console.timeEnd('getChatListItem', i)
     return chatListItem
@@ -154,7 +188,6 @@ module.exports = class DCChatList extends SplitOut {
       selfInGroup = false
     }
     // This object is NOT created with object assign to promote consistency and to be easier to understand
-
 
     return {
       id: chat.id,
@@ -207,16 +240,6 @@ module.exports = class DCChatList extends SplitOut {
     return this._dc.getFreshMessages().length
   }
 
-  _deadDropMessage (id) {
-    const msg = this._dc.getMessage(id)
-    const fromId = msg && msg.getFromId()
-    if (!fromId) {
-      log.warn('Ignoring DEADDROP due to missing fromId')
-      return
-    }
-    const contact = this._dc.getContact(fromId).toJson()
-    return { id, contact }
-  }
 
   updateChatList () {
     log.debug('updateChatList')

@@ -17,14 +17,14 @@ module.exports = class DCContacts extends SplitOut {
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  acceptContactRequest (deadDrop) {
-    log.info(`chat with dead drop ${deadDrop}`)
-    const contact = this._dc.getContact(deadDrop.contact.id)
+  acceptContactRequest (contactId) {
+    log.info(`chat with dead drop ${contactId}`)
+    const contact = this._dc.getContact(contactId)
     const address = contact.getAddress()
     const name = contact.getName() || address.split('@')[0]
     this._dc.createContact(name, address)
     log.info(`Added contact ${name} (${address})`)
-    const chatId = this._dc.createChatByMessageId(deadDrop.id)
+    const chatId = this._dc.createChatByContactId(contactId)
     if (chatId) {
       this._controller.chatList.updateChatList()
       this._controller.chatList.selectChat(chatId)
