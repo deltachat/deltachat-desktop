@@ -18,6 +18,7 @@
     "pack": "npm run build && electron-builder --dir",
     "dist-ci": "version-unchanged || npm run dist",
     "dist": "electron-builder --publish=onTagOrDraft",
+    "dist-portable": "node bin/prepare-build-portable && electron-builder --win portable --linux AppImage && node bin/prepare-build-portable undo",
     "build": "npm run build-css && npm run build-js && npm run build-translations",
     "build-css": "node-sass scss/manifest.scss static/main.css",
     "build-js": "webpack --mode=development --progress --profile --colors",
