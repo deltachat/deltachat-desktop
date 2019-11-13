@@ -27,8 +27,8 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   onChatModified (chatId) {
-    const chat = this.getFullChatById(chatId)
-    this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
+    // const chat = this.getFullChatById(chatId)
+    // this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   getChatListIds (listFlags, queryStr, queryContactId) {
@@ -72,7 +72,7 @@ module.exports = class DCChatList extends SplitOut {
       chat.deaddrop = this._deadDropMessage(messageId)
     }
 
-    console.log('getChatListItemsByIds', chatId)
+    // console.log('getChatListItemsByIds', chatId)
     const summary = list.getSummary(i).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
@@ -119,7 +119,7 @@ module.exports = class DCChatList extends SplitOut {
     if (chat === null) return null
     this._controller._pages = 0
 
-    console.log('getFullChatById', chatId)
+    // console.log('getFullChatById', chatId)
     const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
     const messages = loadMessages ? this._controller.messageList._messagesToRender(messageIds) : []
 
