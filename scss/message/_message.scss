@@ -157,7 +157,7 @@
     margin-left: 0;
     margin-right: 32px;
 
-    .metadata {
+    .metadata:not(.with-image-no-caption) {
         &>.padlock-icon {
             @include color-svg('../images/padlock.svg', var(--messagePadlockIncomming), 125%);
         }

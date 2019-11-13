@@ -113,7 +113,6 @@ export function ThemeDataBuilder (theme) {
     messageStatusIconSending: '#62656a',
     messagePadlockOutgoing: '#4caf50',
     messagePadlockIncomming: '#a4a6a9',
-    messageMetadataImageNoCaption: '#ffffff',
     messageMetadataDate: '#62656a',
     messageMetadataIncomming: 'rgba(#ffffff, 0.7)',
     messageAuthor: '#ffffff',
