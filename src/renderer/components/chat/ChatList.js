@@ -39,7 +39,6 @@ export default function ChatList (props) {
   }
 
   const renderAddContactIfNeeded = () => {
-    console.log(chatItems, chatListIds)
     if (queryStr === '' || chatListIds.length > 0) return null
     return PseudoListItemAddContact({ queryStr, queryStrIsEmail, onClick: addContactOnClick })
   }
