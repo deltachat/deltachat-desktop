@@ -2,7 +2,6 @@ const { callDcMethod } = require('../../ipc')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const ReactDOM = require('react-dom')
-const { ipcRenderer } = require('electron')
 const C = require('deltachat-node/constants')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
@@ -257,22 +256,24 @@ class MapComponent extends React.Component {
     })
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
-        const messageObj = await ipcRenderer.sendSync(
+        callDcMethod(
           'messageList.getMessage',
-          contactFeature.properties.msgId
+          contactFeature.properties.msgId,
+          (messageObj) => {
+            if (messageObj) {
+              message = messageObj.msg
+            }
+            const markup = this.renderPopupMessage(
+              contactFeature.properties.contact,
+              formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
+              message)
+            new mapboxgl.Popup({ offset: [0, -15] })
+              .setHTML(markup)
+              .setLngLat(contactFeature.geometry.coordinates)
+              .addTo(this.map)
+          }
         )
-        if (messageObj) {
-          message = messageObj.msg
-        }
       }
-      const markup = this.renderPopupMessage(
-        contactFeature.properties.contact,
-        formatRelativeTime(contactFeature.properties.reported * 1000, { extended: true }),
-        message)
-      new mapboxgl.Popup({ offset: [0, -15] })
-        .setHTML(markup)
-        .setLngLat(contactFeature.geometry.coordinates)
-        .addTo(this.map)
     }
   }
 
