@@ -27,8 +27,7 @@ module.exports = class DCMessageList extends SplitOut {
   }
 
   getMessage (msgId) {
-    const messageObj = this.messageIdToJson(msgId)
-    this._controller.sendToRenderer('DD_EVENT_MSG_UPDATE', { messageObj })
+    return this.messageIdToJson(msgId)
   }
 
   getMessageInfo (msgId) {

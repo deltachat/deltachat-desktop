@@ -29,17 +29,16 @@ const onLocationChange = (evt, payload) => {
   }
 }
 
-ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, payload) => {
+ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
   const { selectedChat, mapSettings } = locationStore.getState()
-  const { contactId } = payload
   if (contactId === 0) {
     // this means all locations were deleted
-    getLocations(selectedChat, mapSettings)
+    getLocations(selectedChat.id, mapSettings)
   }
   if (selectedChat && selectedChat.contacts) {
     const isMemberOfSelectedChat = selectedChat.contacts.find(contact => contact.id === contactId)
     if (isMemberOfSelectedChat) {
-      getLocations(selectedChat, mapSettings)
+      getLocations(selectedChat.id, mapSettings)
     }
   }
 })
