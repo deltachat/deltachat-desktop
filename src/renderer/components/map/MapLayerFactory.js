@@ -72,6 +72,43 @@ class MapLayerFactory {
     }
   }
 
+  static getPOILayer (locations) {
+    const layer = {
+      id: 'markers',
+      type: 'symbol',
+      /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+      source: {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: []
+        }
+      },
+      layout: {
+        'icon-image': 'poi-marker'
+      }
+    }
+    locations.map(
+      (location) => {
+        layer.source.data.features.push(
+          {
+            type: 'Feature',
+            properties: {
+              reported: location.timestamp,
+              isPoi: true,
+              msgId: location.msgId
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [location.longitude, location.latitude]
+            }
+          }
+        )
+      }
+    )
+    return layer
+  }
+
   static getSatelliteMapLayer (styleKey) {
     return {
       id: styleKey,
