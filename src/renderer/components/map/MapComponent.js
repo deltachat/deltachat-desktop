@@ -20,6 +20,7 @@ const ContextMenu = require('./ContextMenu')
 class MapComponent extends React.Component {
   constructor (props) {
     super(props)
+    this.maxZoomAfterFitBounds = 20
     this.state = {
       timeOffset: 50,
       mapStyle: 'default',
@@ -138,7 +139,7 @@ class MapComponent extends React.Component {
         this.changeMapStyle(this.state.mapStyle)
       } else {
         if (allPoints.length > 0) {
-          this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100 })
+          this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100, maxZoom: this.maxZoomAfterFitBounds })
         }
       }
     }
@@ -332,8 +333,9 @@ class MapComponent extends React.Component {
     const newVisibility = this.state.showPathLayer ? 'none' : 'visible'
     this.mapDataStore.forEach(
       (mapDataItem) => {
-        this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', newVisibility)
-        // this.map.setLayoutProperty(mapDataItem.pointsLayerId, 'visibility', newVisibility)
+        if (!mapDataItem.hidden) {
+          this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', newVisibility)
+        }
       }
     )
   }
@@ -404,8 +406,9 @@ class MapComponent extends React.Component {
 
   toggleContactLayer (contactId, isHidden) {
     const mapDataItem = this.mapDataStore.get(contactId)
-    const visibility = isHidden ? 'visible' : 'none'
+    const visibility = isHidden ? 'visible' : 'none' // set visibility to...
     if (!isHidden) {
+      // layer was not hidden, so hide it now
       if (mapDataItem.marker) {
         mapDataItem.marker.remove()
       }
@@ -439,7 +442,7 @@ class MapComponent extends React.Component {
       }
     )
     if (markerCoordinates.length) {
-      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: markerCoordinates }), { padding: 100 })
+      this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: markerCoordinates }), { padding: 100, maxZoom: this.maxZoomAfterFitBounds })
     }
   }
 
@@ -452,7 +455,7 @@ class MapComponent extends React.Component {
   renderContactCheckbox (contact) {
     return (
       <div key={contact.id} >
-        <input type='checkbox' name={contact.id} onChange={() => this.toggleContactLayer(contact.id, contact.hidden)} checked={!contact.hidden} />
+        <input type='checkbox' name={contact.id} onChange={() => this.toggleContactLayer(contact.id, contact.hidden)} checked={contact.hidden} />
         <label style={{ color: '#' + contact.color.toString(16) }}>{contact.firstName} </label>
       </div>
     )
