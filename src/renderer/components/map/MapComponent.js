@@ -115,6 +115,7 @@ class MapComponent extends React.Component {
   }
 
   renderLayers (locations) {
+    console.log('locations', locations)
     // remove all layer since source update does not remove existing points
     this.removeAllLayer()
     this.mapDataStore.clear()
@@ -125,13 +126,24 @@ class MapComponent extends React.Component {
     this.mapDataStore.locationCount = locations.length
     if (locations.length > 0) {
       selectedChat.contacts.map(contact => {
-        const locationsForContact = locations.filter(location => location.contactId === contact.id)
+        const locationsForContact = locations.filter(location => location.contactId === contact.id && !location.isIndependent)
         if (locationsForContact.length > 0) {
           currentContacts.push(contact)
         }
         const pointsForLayer = this.renderContactLayer(contact, locationsForContact)
         allPoints = allPoints.concat(pointsForLayer)
       })
+      const poiLocations = locations.filter(location => location.isIndependent)
+      if (poiLocations.length > 0) {
+        this.map.loadImage('./icons/poi-marker.png', (error, image) => {
+          if (error) {
+            console.log('error')
+          }
+          this.map.addImage('poi-marker', image)
+        })
+        this.map.addLayer(MapLayerFactory.getPOILayer(poiLocations))
+        // allPoints = allPoints.concat(poiPoints)
+      }
       this.setState({ currentContacts: currentContacts })
       if (this.stateFromSession) {
         this.stateFromSession = false
@@ -253,7 +265,7 @@ class MapComponent extends React.Component {
     let message
     const features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
-      return (f.properties.contact !== undefined)
+      return (f.properties.contact !== undefined || f.properties.isPoi)
     })
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
