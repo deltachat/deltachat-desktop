@@ -46,11 +46,16 @@
         flex-grow: 1;
     }
 
-    &>.padlock-icon {
+    &>.padlock-icon,
+    &>.location-icon {
         width: 12px;
         height: 12px;
         display: inline-block;
         margin-right: 2px;
         margin-bottom: 3px;
     }
+
+    &>.location-icon {
+      margin-bottom: 0;
+  }
 }

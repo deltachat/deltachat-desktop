@@ -12,7 +12,8 @@ class MessageMetaData extends React.Component {
       direction,
       status,
       text,
-      timestamp
+      timestamp,
+      hasLocation
     } = this.props
     const tx = window.translate
 
@@ -38,6 +39,9 @@ class MessageMetaData extends React.Component {
             aria-label={tx('a11y_encryption_padlock')}
             className={'padlock-icon'}
           />
+        ) : null}
+        {hasLocation ? (
+          <span className={'location-icon'} />
         ) : null}
         {showError ? (
           <span

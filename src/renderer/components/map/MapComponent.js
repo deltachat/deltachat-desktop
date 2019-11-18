@@ -24,7 +24,6 @@ class MapComponent extends React.Component {
     this.state = {
       timeOffset: 50,
       mapStyle: 'default',
-      showTerrain: false,
       showControls: false,
       showPathLayer: false,
       currentContacts: []
@@ -39,7 +38,6 @@ class MapComponent extends React.Component {
     this.togglePathLayer = this.togglePathLayer.bind(this)
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
-    this.toggleTerrainLayer = this.toggleTerrainLayer.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
     this.contextMenu = React.createRef()
     this.contextMenuPopup = null
@@ -115,7 +113,6 @@ class MapComponent extends React.Component {
   }
 
   renderLayers (locations) {
-    console.log('locations', locations)
     // remove all layer since source update does not remove existing points
     this.removeAllLayer()
     this.mapDataStore.clear()
@@ -136,10 +133,9 @@ class MapComponent extends React.Component {
       const poiLocations = locations.filter(location => (location.isIndependent && !location.marker))
       if (poiLocations.length > 0) {
         this.map.loadImage('./icons/poi-marker.png', (error, image) => {
-          if (error) {
-            console.log('error')
+          if (!error) {
+            this.map.addImage('poi-marker', image)
           }
-          this.map.addImage('poi-marker', image)
         })
         const poiLayer = MapLayerFactory.getPOILayer(poiLocations)
         this.mapDataStore.set('poi-layer', poiLayer)
@@ -161,7 +157,6 @@ class MapComponent extends React.Component {
       this.setState({ currentContacts: currentContacts })
       if (this.stateFromSession) {
         this.stateFromSession = false
-        this.setTerrainLayer(this.state.showTerrain)
         this.changeMapStyle(this.state.mapStyle)
       } else {
         if (allPoints.length > 0) {
@@ -393,12 +388,6 @@ class MapComponent extends React.Component {
       )
     }
     this.map.setLayoutProperty('satellite', 'visibility', visibility)
-  }
-
-  toggleTerrainLayer () {
-    const showTerrain = !this.state.showTerrain
-    this.setState({ showTerrain })
-    this.setTerrainLayer(showTerrain)
   }
 
   rangeSliderLabelRenderer (value) {
