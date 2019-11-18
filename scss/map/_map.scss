@@ -7,6 +7,13 @@ $color-map-overlay-bg: var(--mapOverlayBg);
 	height: 90vh;
 }
 
+.marker-icon {
+  font-size: 36px;
+  font-weight: bold;
+  color: red;
+  text-shadow: 4px 4px 5px #999;
+}
+
 .bp3-dialog.map-dialog {
 	width: 90vw;
 	height: 90vh;

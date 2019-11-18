@@ -133,7 +133,7 @@ class MapComponent extends React.Component {
         const pointsForLayer = this.renderContactLayer(contact, locationsForContact)
         allPoints = allPoints.concat(pointsForLayer)
       })
-      const poiLocations = locations.filter(location => location.isIndependent)
+      const poiLocations = locations.filter(location => (location.isIndependent && !location.marker))
       if (poiLocations.length > 0) {
         this.map.loadImage('./icons/poi-marker.png', (error, image) => {
           if (error) {
@@ -141,8 +141,22 @@ class MapComponent extends React.Component {
           }
           this.map.addImage('poi-marker', image)
         })
-        this.map.addLayer(MapLayerFactory.getPOILayer(poiLocations))
-        // allPoints = allPoints.concat(poiPoints)
+        const poiLayer = MapLayerFactory.getPOILayer(poiLocations)
+        this.mapDataStore.set('poi-layer', poiLayer)
+        this.map.addLayer(poiLayer)
+      }
+      const poiMarker = locations.filter(location => (location.isIndependent && location.marker))
+      if (poiMarker.length) {
+        poiMarker.map((location) => {
+          var el = document.createElement('div')
+          el.className = 'marker-icon'
+          el.innerHTML = location.marker
+          // make a marker for each feature and add to the map
+          const m = new mapboxgl.Marker(el)
+            .setLngLat([location.longitude, location.latitude])
+            .addTo(this.map)
+          m.location = location
+        })
       }
       this.setState({ currentContacts: currentContacts })
       if (this.stateFromSession) {
@@ -372,6 +386,9 @@ class MapComponent extends React.Component {
           if (this.map.getLayer(mapDataItem.pointsLayerId)) {
             this.map.moveLayer(mapDataItem.pointsLayerId)
           }
+          if (this.map.getLayer('poi-marker')) {
+            this.map.moveLayer('poi-marker')
+          }
         }
       )
     }
@@ -382,24 +399,6 @@ class MapComponent extends React.Component {
     const showTerrain = !this.state.showTerrain
     this.setState({ showTerrain })
     this.setTerrainLayer(showTerrain)
-  }
-
-  setTerrainLayer (showTerrain) {
-    const visibility = showTerrain ? 'visible' : 'none'
-    if (this.map.getLayer('terrain')) {
-      this.map.setLayoutProperty('terrain', 'visibility', visibility)
-    } else {
-      this.map.addSource('dem', {
-        type: 'raster-dem',
-        url: 'mapbox://mapbox.terrain-rgb'
-      })
-      this.map.addLayer({
-        id: 'terrain',
-        source: 'dem',
-        type: 'hillshade',
-        layout: { visibility: visibility }
-      })
-    }
   }
 
   rangeSliderLabelRenderer (value) {
@@ -498,15 +497,6 @@ class MapComponent extends React.Component {
                   checked={this.state.mapStyle === 'satellite'}
                   onChange={() => this.changeMapStyle('satellite')} />
                 <label htmlFor='satellite'>Satellite</label>
-              </div>
-              <div>
-                <input id='terrain'
-                  type='checkbox'
-                  name='rtoggle'
-                  value='terrain'
-                  checked={this.state.showTerrain}
-                  onChange={this.toggleTerrainLayer} />
-                <label htmlFor='terrain'>Terrain</label>
               </div>
             </div>
             <h3>Time range</h3>
