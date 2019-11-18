@@ -162,6 +162,10 @@
             @include color-svg('../images/padlock.svg', var(--messagePadlockIncomming), 125%);
         }
 
+        &>.location-icon {
+          @include color-svg('../images/map-marker.svg', var(--messagePadlockIncomming), 100%);
+      }
+
         &>.date {
             color: var(--messageMetadataIncomming);
         }
@@ -189,6 +193,10 @@
 
         &>.padlock-icon {
             @include color-svg('../images/padlock.svg', var(--messagePadlockOutgoing), 125%);
+        }
+
+        &>.location-icon {
+          @include color-svg('../images/map-marker.svg', var(--messagePadlockOutgoing), 100%);
         }
 
         &>.status-icon.read,
@@ -241,6 +249,10 @@
         &>.padlock-icon {
             @include color-svg('../images/padlock.svg', white, 125%);
         }
+
+        &>.location-icon {
+          @include color-svg('../images/map-marker.svg', white, 100%);
+      }
     }
 
     .status-icon.read,

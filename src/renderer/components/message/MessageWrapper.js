@@ -126,7 +126,8 @@ class RenderMessage extends React.Component {
       direction: msg.direction,
       timestamp: msg.sentAt,
       viewType: msg.viewType,
-      message
+      message,
+      hasLocation: msg.hasLocation
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
