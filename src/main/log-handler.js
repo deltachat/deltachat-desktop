@@ -10,8 +10,8 @@ function logName () {
   }
   const fileName = [
     `${d.getFullYear()}-`,
-    `${pad(d.getMonth())}-`,
-    `${pad(d.getDay())}-`,
+    `${pad(d.getMonth() + 1)}-`,
+    `${pad(d.getDate())}-`,
     `${pad(d.getHours())}-`,
     `${pad(d.getMinutes())}-`,
     `${pad(d.getSeconds())}`,
