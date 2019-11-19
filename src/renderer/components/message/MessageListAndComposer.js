@@ -72,7 +72,7 @@ export default function MessageListAndComposer (props) {
       style={style}
       ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
       <div className='message-list-and-composer__message-list'>
-        <MessageList chat={chat} refComposer={refComposer} />
+        <MessageList chat={chat} refComposer={refComposer} locationStreamingEnabled={settings.enableOnDemandLocationStreaming} />
       </div>
       <Composer
         ref={refComposer}

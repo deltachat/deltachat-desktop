@@ -10,7 +10,7 @@ import logger from '../../../logger'
 const SCROLL_BUFFER = 70
 const MutationObserver = window.MutationObserver
 
-export default function MessageList ({ chat, refComposer }) {
+export default function MessageList ({ chat, refComposer, locationStreamingEnabled }) {
   const previousScrollHeightMinusTop = useRef(null)
   const messageListWrap = useRef(null)
   let doc = document.querySelector(`.message-list-and-composer #message-list`)
@@ -118,6 +118,7 @@ export default function MessageList ({ chat, refComposer }) {
               onShowDetail={onShowDetail.bind(this, message)}
               onDelete={onDelete.bind(this, message)}
               onClickAttachment={onClickAttachment.bind(this, message)}
+              locationStreamingEnabled={locationStreamingEnabled}
             />
           )
         })}

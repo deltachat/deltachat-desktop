@@ -95,7 +95,7 @@ class RenderMessage extends React.Component {
   }
 
   render () {
-    const { onDelete, onShowDetail, onClickAttachment, chat, message } = this.props
+    const { onDelete, onShowDetail, onClickAttachment, chat, message, locationStreamingEnabled } = this.props
     const { fromId, id } = message
     const msg = message.msg
     const conversationType = convertChatType(chat.type)
@@ -127,7 +127,7 @@ class RenderMessage extends React.Component {
       timestamp: msg.sentAt,
       viewType: msg.viewType,
       message,
-      hasLocation: msg.hasLocation
+      hasLocation: (msg.hasLocation && locationStreamingEnabled)
     }
 
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
