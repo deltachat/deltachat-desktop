@@ -157,7 +157,6 @@ const contextMenu = (props, textSelected, link, triggerId) => {
 
 const Message = (props) => {
   const {
-    authorAddress,
     direction,
     id,
     timestamp,
@@ -169,6 +168,8 @@ const Message = (props) => {
     status,
     attachment
   } = props
+
+  const authorAddress = message.contact.address
 
   // This id is what connects our triple-dot click with our associated pop-up menu.
   //   It needs to be unique.

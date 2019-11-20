@@ -100,7 +100,6 @@ class RenderMessage extends React.Component {
       onDelete,
       onShowDetail,
       contact,
-      authorAddress: message.contact.address,
       status: msg.status,
       text: msg.text,
       direction: msg.direction,
