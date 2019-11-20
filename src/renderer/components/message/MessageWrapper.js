@@ -77,7 +77,7 @@ function render (props) {
  */
 class RenderMessage extends React.Component {
   render () {
-    const { onDelete, onShowDetail, onClickAttachment, chat, message, locationStreamingEnabled } = this.props
+    const { onDelete, onShowDetail, chat, message, locationStreamingEnabled } = this.props
     const { fromId, id } = message
     const msg = message.msg
     const conversationType = GROUP_TYPES.includes(chat.type) ? 'group' : 'direct'
@@ -100,7 +100,6 @@ class RenderMessage extends React.Component {
       onDelete,
       onShowDetail,
       contact,
-      onClickAttachment,
       authorAddress: message.contact.address,
       status: msg.status,
       text: msg.text,

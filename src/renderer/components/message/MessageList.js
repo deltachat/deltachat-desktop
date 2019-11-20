@@ -3,9 +3,9 @@ import MessageWrapper from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
 import chatStore from '../../stores/chat'
-import { isDisplayableByRenderMedia } from './Attachment'
-import { shell } from 'electron'
-import logger from '../../../logger'
+
+import { getLogger } from '../../../logger'
+const log = getLogger('render/msgList')
 
 const SCROLL_BUFFER = 70
 const MutationObserver = window.MutationObserver
@@ -54,7 +54,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
       doc = document.querySelector(`.message-list-and-composer #message-list`)
     }
     if (!doc) {
-      logger.warn(`Didn't find '.message-list-and-composer #message-list' element`)
+      log.warn(`Didn't find '.message-list-and-composer #message-list' element`)
     }
     const observer = new MutationObserver(handleScroll)
     if (messageListWrap.current) {
@@ -74,17 +74,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }
     scrollToBottom()
   }, [chat.id])
-
-  const onClickAttachment = (message) => {
-    if (message.viewType.viewType === 23) return
-    if (isDisplayableByRenderMedia(message.msg.attachment)) {
-      openDialog('RenderMedia', { message })
-    } else {
-      if (!shell.openItem(message.msg.attachment.url)) {
-        logger.info("file couldn't be opened, try saving it in a different place and try to open it from there")
-      }
-    }
-  }
 
   const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
   const onShowDetail = message => openDialog('MessageDetail', { message, chat })
@@ -106,7 +95,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
             ? 'magic' + message.id + '_' + specialMessageIdCounter++
             : message.id
 
-          message.onReply = () => logger.debug('reply to', message)
+          message.onReply = () => log.debug('reply to', message)
           message.onForward = onForward.bind(this, message)
           return (
             <MessageWrapper.render
@@ -117,7 +106,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
               onClickSetupMessage={onClickSetupMessage.bind(this, message)}
               onShowDetail={onShowDetail.bind(this, message)}
               onDelete={onDelete.bind(this, message)}
-              onClickAttachment={onClickAttachment.bind(this, message)}
               locationStreamingEnabled={locationStreamingEnabled}
             />
           )

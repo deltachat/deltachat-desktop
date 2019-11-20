@@ -1,6 +1,9 @@
-const path = require('path')
-const { remote, ipcRenderer } = require('electron')
+import path from 'path'
+import { remote, ipcRenderer, shell } from 'electron'
+// import C from 'deltachat-node/constants'
 
+import { getLogger } from '../../../logger'
+const log = getLogger('render/msgFunctions')
 /**
  * @typedef {{chatId: number,
       duration: number,
@@ -33,4 +36,13 @@ export function onDownload (msg) {
   }, (filename) => {
     if (filename) ipcRenderer.send('saveFile', msg.file, filename)
   })
+}
+
+/**
+ * @param {MsgObject} msg
+ */
+export function openAttachmentInShell (msg) {
+  if (!shell.openItem(msg.file)) {
+    log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
+  }
 }
