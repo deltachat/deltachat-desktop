@@ -1,5 +1,6 @@
 const React = require('react')
 const { defaultRules, blockRegex, anyScopeRegex } = require('simple-markdown')
+const { remote } = require('electron')
 
 var ignoreCapture = function () { return {} }
 
@@ -51,7 +52,11 @@ const rules = Object.assign({
       return { content: capture[1] }
     },
     react: function (node, output, state) {
-      return <a href={node.content} key={state.key}>{node.content}</a>
+      const onClick = (ev) => {
+        ev.preventDefault()
+        remote.shell.openExternal(node.content)
+      }
+      return <a href={node.content} key={state.key} onClick={onClick}>{node.content}</a>
     }
   },
   newlinePlus: {
