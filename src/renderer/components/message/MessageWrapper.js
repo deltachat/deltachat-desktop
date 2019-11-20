@@ -98,7 +98,7 @@ class RenderMessage extends React.Component {
     const { onDelete, onShowDetail, onClickAttachment, chat, message, locationStreamingEnabled } = this.props
     const { fromId, id } = message
     const msg = message.msg
-    const conversationType = convertChatType(chat.type)
+    const conversationType = GROUP_TYPES.includes(chat.type) ? 'group' : 'direct'
 
     const contact = {
       onSendMessage: () => log.debug(`send a message to ${fromId}`),
@@ -211,10 +211,6 @@ function convertContentType (message) {
     default:
       return 'application/octet-stream'
   }
-}
-
-function convertChatType (type) {
-  return GROUP_TYPES.includes(type) ? 'group' : 'direct'
 }
 
 module.exports = {
