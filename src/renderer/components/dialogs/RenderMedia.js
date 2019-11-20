@@ -1,10 +1,6 @@
 const { onDownload } = require('../message/messageFunctions')
 const React = require('react')
-const createGlobalStyle = require('styled-components').createGlobalStyle
 const { Icon, Overlay } = require('@blueprintjs/core')
-
-const OverlayGlobal = createGlobalStyle`
-`
 
 class RenderMedia extends React.Component {
   render () {
@@ -35,7 +31,6 @@ class RenderMedia extends React.Component {
       <Overlay isOpen={Boolean(url)}
         className='attachment-overlay'
         onClose={onClose}>
-        <OverlayGlobal />
         <div className='render-media-wrapper'>
           {elm &&
             <div className='btn-wrapper' style={{ right: '5px' }}>
