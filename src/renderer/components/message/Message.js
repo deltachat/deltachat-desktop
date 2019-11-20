@@ -101,7 +101,7 @@ const contextMenu = (props, textSelected, triggerId) => {
     status,
     onDelete,
     message,
-    onReply,
+    // onReply,
     onForward,
     onRetrySend,
     onShowDetail
@@ -128,9 +128,11 @@ const contextMenu = (props, textSelected, triggerId) => {
           {tx('download_attachment_desktop')}
         </MenuItem>
       ) : null}
+      {/*
       <MenuItem onClick={onReply}>
         {tx('reply_to_message_desktop')}
       </MenuItem>
+       */}
       <MenuItem onClick={onForward}>
         {tx('menu_forward')}
       </MenuItem>
@@ -203,7 +205,7 @@ const Message = (props) => {
         className='msg-container'
       >
         {direction === 'incoming' && conversationType === 'group' && Author(message)}
-        <Attachment {...{ 
+        <Attachment {...{
           attachment,
           text,
           conversationType,
