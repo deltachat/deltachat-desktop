@@ -1,15 +1,13 @@
-const React = require('react')
-const C = require('deltachat-node/constants')
-const { ipcRenderer } = require('electron')
-const {
-  Button, ButtonGroup
-} = require('@blueprintjs/core')
-const ScreenContext = require('../contexts/ScreenContext')
+import { onDownload } from './message/messageFunctions'
+import React from 'react'
+import C from 'deltachat-node/constants'
+import { ipcRenderer } from 'electron'
+import { Button, ButtonGroup } from '@blueprintjs/core'
+import styled from 'styled-components'
 
-const styled = require('styled-components').default
-
-const MessageWrapper = require('./message/MessageWrapper')
-const Attachment = require('./message/Attachment')
+import ScreenContext from '../contexts/ScreenContext'
+import MessageWrapper from './message/MessageWrapper'
+import Attachment from './message/Attachment'
 
 const Wrapper = styled.div`
   width: 70%;
@@ -65,7 +63,7 @@ const DEFAULT_STATE = {
   medias: []
 }
 
-class Media extends React.Component {
+export default class Media extends React.Component {
   constructor (props) {
     super(props)
     this.state = DEFAULT_STATE
@@ -101,7 +99,7 @@ class Media extends React.Component {
       message.filemime === 'application/octet-stream' &&
       !(Attachment.isVideo(attachment) || Attachment.isImage(attachment))
     ) {
-      message.onDownload()
+      onDownload(message.msg)
     } else {
       this.context.openDialog('RenderMedia', { message })
     }
@@ -141,5 +139,3 @@ class Media extends React.Component {
 }
 
 Media.contextType = ScreenContext
-
-module.exports = Media

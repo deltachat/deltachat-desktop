@@ -1,3 +1,4 @@
+const { onDownload } = require('../message/messageFunctions')
 const React = require('react')
 const createGlobalStyle = require('styled-components').createGlobalStyle
 const { Icon, Overlay } = require('@blueprintjs/core')
@@ -46,7 +47,7 @@ class RenderMedia extends React.Component {
           </div>
           <div className='btn-wrapper' style={{ right: 0, bottom: 0 }}>
             <div role='button'
-              onClick={message.onDownload}
+              onClick={onDownload.bind(null, message.msg)}
               className='download-btn'
               aria-label={tx('save')} />
           </div>

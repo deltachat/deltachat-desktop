@@ -1,3 +1,4 @@
+const { onDownload } = require('./messageFunctions')
 const React = require('react')
 const { useRef, useState } = require('react')
 const classNames = require('classnames')
@@ -60,7 +61,7 @@ const Author = ({ contact }) => {
 const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   const {
     attachment,
-    onDownload,
+    message,
     onReply,
     viewType
   } = props
@@ -70,7 +71,7 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
     <div className='message-buttons'>
       {
         attachment && viewType !== 23 && <div
-          onClick={onDownload}
+          onClick={onDownload.bind(null, message.msg)}
           role='button'
           className='msg-button download hide-on-small'
           aria-label={tx('save')}
@@ -99,7 +100,7 @@ const contextMenu = (props, textSelected, link, triggerId) => {
     direction,
     status,
     onDelete,
-    onDownload,
+    message,
     onReply,
     onForward,
     onRetrySend,
@@ -129,7 +130,7 @@ const contextMenu = (props, textSelected, link, triggerId) => {
         {tx('menu_copy_to_clipboard')}
       </MenuItem>
       {attachment ? (
-        <MenuItem onClick={onDownload}>
+        <MenuItem onClick={onDownload.bind(null, message.msg)}>
           {tx('download_attachment_desktop')}
         </MenuItem>
       ) : null}
