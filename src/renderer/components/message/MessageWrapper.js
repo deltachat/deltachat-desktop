@@ -1,9 +1,7 @@
 const React = require('react')
-const path = require('path')
 const C = require('deltachat-node/constants')
 const styled = require('styled-components').default
 const Message = require('./Message')
-const { remote, ipcRenderer } = require('electron')
 const moment = require('moment')
 const mime = require('mime-types')
 const filesizeConverter = require('filesize')
@@ -97,7 +95,6 @@ class RenderMessage extends React.Component {
       padlock: msg.showPadlock,
       id,
       conversationType,
-      onDownload: message.onDownload,
       onReply: message.onReply,
       onForward: message.onForward,
       onDelete,
@@ -122,15 +119,6 @@ class RenderMessage extends React.Component {
 }
 
 function convert (message) {
-  message.onDownload = () => {
-    const defaultPath = path.join(remote.app.getPath('downloads'), path.basename(message.msg.file))
-    remote.dialog.showSaveDialog({
-      defaultPath
-    }, (filename) => {
-      if (filename) ipcRenderer.send('saveFile', message.msg.file, filename)
-    })
-  }
-
   const msg = message.msg
 
   if (msg.isSetupmessage) {
