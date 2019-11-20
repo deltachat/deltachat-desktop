@@ -119,10 +119,6 @@ class RenderMessage extends React.Component {
 function convert (message) {
   const msg = message.msg
 
-  if (msg.isSetupmessage) {
-    msg.text = window.translate('autocrypt_asm_click_body')
-  }
-
   Object.assign(msg, {
     sentAt: msg.timestamp * 1000,
     receivedAt: msg.receivedTimestamp * 1000,
