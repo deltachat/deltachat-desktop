@@ -8,7 +8,7 @@ const MessageMetaData = require('./MessageMetaData')
 
 const ContactName = require('../conversations/ContactName')
 const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const Attachment = require('./Attachment')
+const Attachment = require('./Attachment').default
 
 const Avatar = ({ contact }) => {
   const {
@@ -160,7 +160,8 @@ const Message = (props) => {
     message,
     text,
     disableMenu,
-    status
+    status,
+    attachment
   } = props
 
   // This id is what connects our triple-dot click with our associated pop-up menu.
@@ -201,7 +202,12 @@ const Message = (props) => {
         className='msg-container'
       >
         {direction === 'incoming' && conversationType === 'group' && Author(message)}
-        {Attachment.render(props)}
+        <Attachment {...{ 
+          attachment,
+          text,
+          conversationType,
+          direction,
+          message }} />
 
         <div dir='auto' className='text' >
           <MessageBody text={text || ''} />

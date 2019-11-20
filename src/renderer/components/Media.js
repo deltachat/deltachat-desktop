@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
 import MessageWrapper from './message/MessageWrapper'
-import Attachment from './message/Attachment'
+import Attachment, { isVideo, isImage } from './message/Attachment'
 
 const Wrapper = styled.div`
   width: 70%;
@@ -97,7 +97,7 @@ export default class Media extends React.Component {
     const attachment = message.msg.attachment
     if (
       message.filemime === 'application/octet-stream' &&
-      !(Attachment.isVideo(attachment) || Attachment.isImage(attachment))
+      !(isVideo(attachment) || isImage(attachment))
     ) {
       onDownload(message.msg)
     } else {
@@ -126,11 +126,12 @@ export default class Media extends React.Component {
           return <MediaGalleryItem
             onClick={this.onClickMedia.bind(this, message)}
             key={message.id}>
-            {Attachment.render({
+            <Attachment {...{
               direction: msg.direction,
               attachment: msg.attachment,
-              conversationType: 'direct'
-            })}
+              conversationType: 'direct',
+              message
+            }} />
           </MediaGalleryItem>
         })}
       </MediaGallery>

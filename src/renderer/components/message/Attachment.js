@@ -1,26 +1,19 @@
-const React = require('react')
-const { ipcRenderer } = require('electron')
-const classNames = require('classnames')
-const mimeTypes = require('mime-types')
+import React, { useContext } from 'react'
+import { ipcRenderer } from 'electron'
+import classNames from 'classnames'
+import mimeTypes from 'mime-types'
+import { openAttachmentInShell } from './messageFunctions'
+import C from 'deltachat-node/constants'
+import ScreenContext from '../../contexts/ScreenContext'
 
-const {
+import {
   isImageTypeSupported, isVideoTypeSupported, MIME
-} = require('../conversations')
+} from '../conversations'
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
 
-module.exports = {
-  render,
-  isAudio,
-  isImage,
-  hasImage,
-  isVideo,
-  hasVideoScreenshot,
-  isDisplayableByRenderMedia
-}
-
-function isImage (attachment) {
+export function isImage (attachment) {
   return (
     attachment &&
     attachment.contentType &&
@@ -28,11 +21,11 @@ function isImage (attachment) {
   )
 }
 
-function hasImage (attachment) {
+export function hasImage (attachment) {
   return attachment && attachment.url
 }
 
-function isVideo (attachment) {
+export function isVideo (attachment) {
   return (
     attachment &&
     attachment.contentType &&
@@ -40,17 +33,17 @@ function isVideo (attachment) {
   )
 }
 
-function hasVideoScreenshot (attachment) {
+export function hasVideoScreenshot (attachment) {
   return attachment && attachment.screenshot && attachment.screenshot.url
 }
 
-function isAudio (attachment) {
+export function isAudio (attachment) {
   return (
     attachment && attachment.contentType && MIME.isAudio(attachment.contentType)
   )
 }
 
-function isDisplayableByRenderMedia (attachment) {
+export function isDisplayableByRenderMedia (attachment) {
   return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
 }
 
@@ -71,18 +64,30 @@ function dragAttachmentOut (attachment, dragEvent) {
   ipcRenderer.send('ondragstart', attachment.url)
 }
 
-function render (props) {
+export default function Attachment (props) {
   const {
     attachment,
     text,
     conversationType,
     direction,
-    onClickAttachment
+    message
   } = props
   const tx = window.translate
 
   if (!attachment) {
     return null
+  }
+
+  const { openDialog } = useContext(ScreenContext)
+  const msg = message.msg
+  const onClickAttachment = ev => {
+    if (msg.viewType === C.DC_MSG_STICKER) return
+    ev.stopPropagation()
+    if (isDisplayableByRenderMedia(message.msg.attachment)) {
+      openDialog('RenderMedia', { message })
+    } else {
+      openAttachmentInShell(msg)
+    }
   }
 
   const withCaption = Boolean(text)
