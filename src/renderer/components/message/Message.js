@@ -164,6 +164,7 @@ const Message = (props) => {
     status,
     attachment
   } = props
+  const tx = window.translate
 
   const authorAddress = message.contact.address
 
@@ -213,7 +214,7 @@ const Message = (props) => {
           message }} />
 
         <div dir='auto' className='text' >
-          <MessageBody text={text || ''} />
+          {message.msg.isSetupmessage ? tx('autocrypt_asm_click_body') : <MessageBody text={text || ''} />}
         </div>
         {longMessage && <button onClick={onShowDetail}>...</button>}
         <MessageMetaData {...props} />
