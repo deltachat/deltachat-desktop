@@ -337,6 +337,10 @@ class DeltaChatController extends EventEmitter {
     this.chatList.selectChat(C.DC_CHAT_ID_DEADDROP)
   }
 
+  setProfilePicture (newImage) {
+    this._dc.setConfig('selfavatar', newImage)
+  }
+
   getInfo () {
     if (this.ready === true) {
       return this._dc.getInfo()
