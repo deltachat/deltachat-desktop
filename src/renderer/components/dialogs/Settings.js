@@ -460,4 +460,29 @@ class BackgroundSelector extends React.Component {
     // TODO debounce
     this.setValue(ev.target.value)
   }
+
+  /**
+   * @param {boolean} remove wether to remove the profile image
+   */
+  setProfileImage (remove) {
+    const changeProfilePicture = async (picture) =>{
+      await callDcMethodAsync('setProfilePicture', [picture])
+      // todo refresh the visuals
+    }
+
+    const tx = window.translate
+    if (remove) {
+      changeProfilePicture('')
+    } else {
+      remote.dialog.showOpenDialog({
+        title: tx('select_profile_image_desktop'),
+        filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+        properties: ['openFile']
+      }, async files => {
+        if (Array.isArray(files) && files.length > 0) {
+          changeProfilePicture(files[0])
+        }
+      })
+    }
+  }
 }

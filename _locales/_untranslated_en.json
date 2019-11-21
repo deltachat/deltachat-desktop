@@ -34,5 +34,8 @@
   },
   "switch_account_desktop":{
     "message": "Switch account"
+  },
+  "select_profile_image_desktop": {
+    "message": "Select your new Profile image"
   }
 }
