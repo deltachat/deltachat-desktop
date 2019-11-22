@@ -258,11 +258,11 @@ export default class Settings extends React.Component {
       return (
         <div>
           <Card elevation={Elevation.ONE}>
+            <ProfileImageSelector />
             <H5>{this.translate('pref_profile_info_headline')}</H5>
             <p>{deltachat.credentials.addr}</p>
             { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
             { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
-            <ProfileImageSelector />
             <Button onClick={() => this.setState({ show: 'login' })}>
               {this.translate('pref_password_and_account_settings')}
             </Button>
@@ -489,11 +489,13 @@ function ProfileImageSelector (props) {
     })
   }
 
-  return <div className='profile-image-selector' style={{ float: 'right' }}>
-    <img src={profileImagePreview} alt={profileImagePreview} />
+  return <div className='profile-image-selector'>
+    {/* TODO: show anything else when there is no profile image, like the letter avatar */}
+    <img src={profileImagePreview} alt={tx('a11y_profile_image_label')} />
     <div>
-      <button onClick={openSelectionDialog}>Select Image</button>
-      <button onClick={changeProfilePicture.bind(null, '')}>Remove Image</button>
+      {/* TODO: replace the text by icons that get described by aria-label */}
+      <button aria-label={tx('a11y_profile_image_select')} onClick={openSelectionDialog}>Select</button>
+      <button aria-label={tx('a11y_profile_image_remove')} onClick={changeProfilePicture.bind(null, '')}>Remove</button>
     </div>
   </div>
 }

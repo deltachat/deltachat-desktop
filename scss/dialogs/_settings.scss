@@ -30,3 +30,37 @@
     border-radius: 3pt;
     background-color: darkcyan;
 }
+
+.profile-image-selector {
+    float: right;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &>img {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        border: 2px solid #656565;
+        margin: 5px;
+    }
+    &>div {
+        // the button container
+        &>button {
+            border: 1px #7d7d7d solid;
+            background: #ddffff;
+            border-radius: 4px;
+            display: inline;
+
+            &:first-child{
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-right: none;
+            }
+            &:last-child{
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        }
+    }
+}
