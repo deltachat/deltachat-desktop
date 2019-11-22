@@ -387,7 +387,12 @@ class BackgroundSelector extends React.Component {
   constructor () {
     super()
     this.fileInput = React.createRef()
-    this.colorInput = React.createRef()
+    this.colorInput = document.getElementById('color-input') // located in index.html outside of react
+    this.colorInput.onchange = ev => this.onColor.bind(this)(ev)
+  }
+
+  componentWillUnmount () {
+    this.colorInput.onchange = null
   }
 
   render () {
@@ -420,12 +425,6 @@ class BackgroundSelector extends React.Component {
           'background_old.jpg'
         ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
       </div>
-      <div hidden>
-        <input
-          type={'color'}
-          onChange={this.onColor.bind(this)}
-          ref={this.colorInput} /> // todo put this somewhere where it isn't closed by react rerender imidiately
-      </div>
     </div>
     )
   }
@@ -449,7 +448,7 @@ class BackgroundSelector extends React.Component {
         ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
         break
       case 'color':
-        this.colorInput.current && this.colorInput.current.click()
+        this.colorInput && this.colorInput.click()
         break
       default:
         /* ignore-console-log */
