@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
@@ -262,6 +262,7 @@ export default class Settings extends React.Component {
             <p>{deltachat.credentials.addr}</p>
             { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
             { this.renderDeltaInput('selfstatus', this.translate('pref_default_status_label'))}
+            <ProfileImageSelector />
             <Button onClick={() => this.setState({ show: 'login' })}>
               {this.translate('pref_password_and_account_settings')}
             </Button>
@@ -460,29 +461,39 @@ class BackgroundSelector extends React.Component {
     // TODO debounce
     this.setValue(ev.target.value)
   }
+}
 
-  /**
-   * @param {boolean} remove wether to remove the profile image
-   */
-  setProfileImage (remove) {
-    const changeProfilePicture = async (picture) =>{
-      await callDcMethodAsync('setProfilePicture', [picture])
-      // todo refresh the visuals
-    }
+function ProfileImageSelector (props) {
+  const tx = window.translate
+  const [profileImagePreview, setProfileImagePreview] = useState('')
+  useLayoutEffect(_ => {
+    callDcMethodAsync('getProfilePicture').then(setProfileImagePreview)
+    // return nothing because reacts wants it like that
+  })
 
-    const tx = window.translate
-    if (remove) {
-      changeProfilePicture('')
-    } else {
-      remote.dialog.showOpenDialog({
-        title: tx('select_profile_image_desktop'),
-        filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
-        properties: ['openFile']
-      }, async files => {
-        if (Array.isArray(files) && files.length > 0) {
-          changeProfilePicture(files[0])
-        }
-      })
-    }
+  const changeProfilePicture = async (picture) => {
+    console.log('setProfilePicture',[picture])
+    await callDcMethodAsync('setProfilePicture', [picture])
+    setProfileImagePreview(await callDcMethodAsync('getProfilePicture'))
   }
+
+  const openSelectionDialog = () => {
+    remote.dialog.showOpenDialog({
+      title: tx('select_profile_image_desktop'),
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile']
+    }, async files => {
+      if (Array.isArray(files) && files.length > 0) {
+        changeProfilePicture(files[0])
+      }
+    })
+  }
+
+  return <div className='profile-image-selector' style={{ float: 'right' }}>
+    <img src={profileImagePreview} alt={profileImagePreview} />
+    <div>
+      <button onClick={openSelectionDialog}>Select Image</button>
+      <button onClick={changeProfilePicture.bind(null, '')}>Remove Image</button>
+    </div>
+  </div>
 }

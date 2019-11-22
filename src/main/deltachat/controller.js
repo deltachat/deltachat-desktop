@@ -341,6 +341,10 @@ class DeltaChatController extends EventEmitter {
     this._dc.setConfig('selfavatar', newImage)
   }
 
+  getProfilePicture () {
+    return this._dc.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
+  }
+
   getInfo () {
     if (this.ready === true) {
       return this._dc.getInfo()
