@@ -40,5 +40,14 @@
   },
   "select_profile_image_desktop": {
     "message": "Select your new Profile image"
+  },
+  "a11y_profile_image_label":{
+    "message": "Your profile image"
+  },
+  "a11y_profile_image_select":{
+    "message": "set a new profile image"
+  },
+  "a11y_profile_image_remove":{
+    "message": "remove your profile image"
   }
 }
