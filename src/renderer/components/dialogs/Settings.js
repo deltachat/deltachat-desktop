@@ -472,7 +472,6 @@ function ProfileImageSelector (props) {
   })
 
   const changeProfilePicture = async (picture) => {
-    console.log('setProfilePicture',[picture])
     await callDcMethodAsync('setProfilePicture', [picture])
     setProfileImagePreview(await callDcMethodAsync('getProfilePicture'))
   }
