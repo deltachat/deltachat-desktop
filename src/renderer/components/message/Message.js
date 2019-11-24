@@ -93,7 +93,7 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   )
 }
 
-const contextMenu = (props, textSelected, triggerId) => {
+const contextMenu = (props, textSelected, link, triggerId) => {
   const {
     attachment,
     direction,
@@ -112,6 +112,12 @@ const contextMenu = (props, textSelected, triggerId) => {
 
   return (
     <ContextMenu id={triggerId}>
+      <MenuItem
+        attributes={{ hidden: link === '' }}
+        onClick={_ => navigator.clipboard.writeText(link)}
+      >
+        {tx('menu_copy_link_to_clipboard')}
+      </MenuItem>
       <MenuItem
         attributes={{
           hidden: !textSelected
@@ -170,10 +176,12 @@ const Message = (props) => {
 
   const MenuRef = useRef(null)
   const [textSelected, setTextSelected] = useState(false)
+  const [link, setLink] = useState('')
 
   const showMenu = (event) => {
     if (MenuRef.current) {
       setTextSelected(window.getSelection().toString() !== '')
+      setLink(event.target.href || '')
       MenuRef.current.handleContextClick(event)
     }
   }
@@ -209,7 +217,7 @@ const Message = (props) => {
         <MessageMetaData {...props} />
       </div>
       <div onClick={ev => { ev.stopPropagation() }}>
-        {contextMenu(props, textSelected, triggerId)}
+        {contextMenu(props, textSelected, link, triggerId)}
       </div>
     </div>
   )
