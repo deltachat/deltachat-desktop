@@ -1,4 +1,7 @@
 {
+  "menu_copy_link_to_clipboard": {
+    "message": "Copy link"
+  },
   "messaging_disabled_not_in_group": {
     "message": "Messaging disabled (you are not in this group)"
   },
