@@ -223,12 +223,6 @@ function mapCoreMsgStatus2String (state) {
       return 'delivered'
     case C.DC_STATE_OUT_MDN_RCVD:
       return 'read'
-    case C.DC_STATE_IN_FRESH:
-      return 'delivered'
-    case C.DC_STATE_IN_SEEN:
-      return 'delivered'
-    case C.DC_STATE_IN_NOTICED:
-      return 'read'
     default:
       return '' // to display no icon on unknown state
   }
