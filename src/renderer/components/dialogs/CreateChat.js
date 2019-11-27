@@ -34,16 +34,16 @@ import {
 export default function CreateChat (props) {
   const { isOpen, onClose } = props
   const tx = window.translate
-  const { changeScreen, userFeedback } = useContext(ScreenContext)
+  const { userFeedback } = useContext(ScreenContext)
   const [viewMode, setViewMode] = useState('main')
 
   const [contacts, updateContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
   const queryStrIsEmail = isValidEmail(queryStr)
 
-  const closeDialogAndSelectChat = chatId => {
+  const closeDialogAndSelectChat = async chatId => {
     onClose()
-    changeScreen('ChatView', { chatId })
+    await callDcMethodAsync('chatList.selectChat', [chatId])
   }
 
   const chooseContact = async ({ id }) => {
@@ -241,7 +241,6 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode, groupName 
 }
 
 export const useCreateGroup = (verified, groupName, groupImage, groupMembers, onClose) => {
-  const { changeScreen } = useContext(ScreenContext)
   const [groupId, setGroupId] = useState(-1)
 
   const lazilyCreateOrUpdateGroup = async (finishing) => {
@@ -268,7 +267,7 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
     if (groupName === '') return
     const gId = await lazilyCreateOrUpdateGroup(true)
     onClose()
-    changeScreen('ChatView', { gId })
+    await callDcMethodAsync('chatList.selectChat', [gId])
   }
   return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup]
 }
