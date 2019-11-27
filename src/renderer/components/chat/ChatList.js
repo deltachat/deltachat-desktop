@@ -13,7 +13,6 @@ export default function ChatList (props) {
   const queryStrIsEmail = isValidEmail(queryStr)
   const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
-  const { changeScreen } = useContext(ScreenContext)
   const realOpenContextMenu = useRef(null)
 
   const onChatClick = chatId => {
@@ -35,7 +34,7 @@ export default function ChatList (props) {
 
     const contactId = await callDcMethodAsync('contacts.createContact', [queryStr, queryStr])
     const chatId = await callDcMethodAsync('contacts.createChatByContactId', contactId)
-    changeScreen('ChatView', { chatId })
+    await callDcMethodAsync('chatList.selectChat', [chatId])
   }
 
   const renderAddContactIfNeeded = () => {
