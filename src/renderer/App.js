@@ -12,6 +12,27 @@ const moment = require('moment')
 
 addLocaleData(enLocaleData)
 
+function selectFirstChatListItem() {
+  const allChatItems = document.getElementsByClassName('chat-list-item')
+  if (allChatItems.length > 0) allChatItems[0].click()
+}
+
+document.addEventListener ("keydown", function (Event) {
+  if (Event.altKey  &&  Event.key === "ArrowDown") {
+    const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
+    if (selectedChatItems.length == 0) return selectFirstChatListItem()
+    const nextSibling = selectedChatItems[0].nextSibling
+    nextSibling.click()
+    nextSibling.scrollIntoView({block: 'nearest'})
+  } else if(Event.altKey && Event.key === 'ArrowUp') {
+    const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
+    if (selectedChatItems.length == 0) return selectFirstChatListItem()
+    const previousSibling = selectedChatItems[0].previousSibling
+    previousSibling.click()
+    previousSibling.scrollIntoView({block: 'nearest'})
+  }
+});
+
 export default function App (props) {
   const [state, setState] = useState(remote.app.state)
   const [localeData, setLocaleData] = useState(null)
@@ -45,7 +66,6 @@ export default function App (props) {
     startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
-
   const onRender = (e, state) => setState(state)
   useEffect(() => {
     ipcBackend.on('render', onRender)
