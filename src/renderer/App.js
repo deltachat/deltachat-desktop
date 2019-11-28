@@ -13,23 +13,30 @@ const moment = require('moment')
 addLocaleData(enLocaleData)
 
 function selectFirstChatListItem() {
-  const allChatItems = document.getElementsByClassName('chat-list-item')
-  if (allChatItems.length > 0) allChatItems[0].click()
+  let chatItemToSelect = document.querySelector('.chat-list-item')
+  if (chatItemToSelect.classList.contains('chat-list-item--is-deaddrop')) {
+    chatItemToSelect = chatItemToSelect.nextSibling
+  }
+  chatItemToSelect.click()
+}
+
+function selectChatItem(domChatItem) {
+  if (domChatItem.classList.contains('chat-list-item--is-deaddrop')) return
+  domChatItem.click()
+  domChatItem.scrollIntoView({block: 'nearest'})
 }
 
 document.addEventListener ("keydown", function (Event) {
   if (Event.altKey  &&  Event.key === "ArrowDown") {
     const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
     if (selectedChatItems.length == 0) return selectFirstChatListItem()
-    const nextSibling = selectedChatItems[0].nextSibling
-    nextSibling.click()
-    nextSibling.scrollIntoView({block: 'nearest'})
+    const nextChatItem = selectedChatItems[0].nextSibling
+    selectChatItem(nextChatItem)
   } else if(Event.altKey && Event.key === 'ArrowUp') {
     const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
     if (selectedChatItems.length == 0) return selectFirstChatListItem()
-    const previousSibling = selectedChatItems[0].previousSibling
-    previousSibling.click()
-    previousSibling.scrollIntoView({block: 'nearest'})
+    const previousChatItem = selectedChatItems[0].previousSibling
+    selectChatItem(previousChatItem)
   }
 });
 
