@@ -14,6 +14,7 @@ const EditGroup = require('./EditGroup').default
 const MapDialog = require('./MapDialog')
 const QrInviteCode = require('./QrInviteCode').default
 const ConfirmationDialog = require('./ConfirmationDialog').default
+const UnblockContacts = require('./UnblockContacts').default
 
 const allDialogs = [
   DeadDrop,
@@ -30,7 +31,8 @@ const allDialogs = [
   EditGroup,
   MapDialog,
   QrInviteCode,
-  ConfirmationDialog
+  ConfirmationDialog,
+  UnblockContacts
 ]
 
 const log = require('../../../logger').getLogger('renderer/dialogs')
