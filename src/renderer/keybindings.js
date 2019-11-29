@@ -3,15 +3,28 @@ function selectFirstChatListItem() {
   if (chatItemToSelect.classList.contains('chat-list-item--is-deaddrop')) {
     chatItemToSelect = chatItemToSelect.nextSibling
   }
-  chatItemToSelect.click()
+  selectChatItem(chatItemToSelect)
 }
 
 function selectChatItem(domChatItem) {
   if (domChatItem.classList.contains('chat-list-item--is-deaddrop')) return
   domChatItem.click()
   domChatItem.scrollIntoView({block: 'nearest'})
-  document.querySelector('#composer-textarea').focus()
+  setTimeout(() => document.querySelector('#composer-textarea').focus(), 300)
 }
+
+function scrollSelectedChatItemIntoView() {
+  let selectedChatItem = document.querySelector('.chat-list-item--is-selected')
+  if (selectedChatItem) selectedChatItem.scrollIntoView({block: 'nearest'})
+}
+
+function setSearchInputValue(value) {
+    const chatListSearch = document.querySelector('#chat-list-search')
+    var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    nativeInputValueSetter.call(chatListSearch, value);
+    var ev2 = new Event('input', { bubbles: true});
+    chatListSearch.dispatchEvent(ev2);
+}   
 
 export default function attachKeybindingsListener () {
   document.addEventListener ("keydown", function (Event) {
@@ -27,8 +40,17 @@ export default function attachKeybindingsListener () {
       selectChatItem(previousChatItem)
     } else if(Event.ctrlKey && Event.key === 'k') {
       const chatListSearch = document.querySelector('#chat-list-search')
-      chatListSearch.value = ''
+      setSearchInputValue('')
       chatListSearch.focus()
+    } else if(Event.key === 'Escape' && Event.target.id === 'chat-list-search') {
+      setSearchInputValue('')
+      document.querySelector('#composer-textarea').focus()
+      setTimeout(() => scrollSelectedChatItemIntoView(), 300)
+    } else if(Event.key === 'Enter' && Event.target.id === 'chat-list-search') {
+      Event.preventDefault()
+      selectFirstChatListItem()
+      setSearchInputValue('')
+      setTimeout(() => scrollSelectedChatItemIntoView(), 300)
     }
   });
 }
