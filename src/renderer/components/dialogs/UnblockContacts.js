@@ -8,16 +8,20 @@ import DeltaDialog, {
   DeltaDialogCardInnerWithoutPadding
 } from './DeltaDialog'
 import contactsStore from '../../stores/contacts'
-import { Card, Spinner } from '@blueprintjs/core'
+import { Card } from '@blueprintjs/core'
 import { ContactList2 } from '../contact/ContactList'
 import ScreenContext from '../../contexts/ScreenContext'
 
 export default function UnblockContacts (props) {
   const { isOpen, onClose } = props
   const [blockedContacts, setBlockedContacts] = useState(null)
+  const [hadBlockedContacts, setHadBlockedContacts] = useState(null)
   const screenContext = useContext(ScreenContext)
 
-  const onContactsUpdate = ({blockedContacts}) => setBlockedContacts(blockedContacts)
+  const onContactsUpdate = ({blockedContacts}) => {
+    if (hadBlockedContacts === null) setHadBlockedContacts(blockedContacts.length !== 0)
+    setBlockedContacts(blockedContacts)
+  }
   useEffect(() => {
     contactsStore.subscribe(onContactsUpdate)
     callDcMethod('updateBlockedContacts')
@@ -33,33 +37,30 @@ export default function UnblockContacts (props) {
       cb: yes => yes && blockContact(id)
     })
   }
-  console.log(blockedContacts)
-
 
   const tx = window.translate
+  console.log(hadBlockedContacts)
+  if (blockedContacts === null) return null
   return (
     <DeltaDialog
       isOpen={isOpen}
       onClose={onClose}
-      title={tx('unblock_contacts_desktop')}
-      fixed
+      title={tx('pref_blocked_contacts')}
+      fixed={hadBlockedContacts===true}
     >
       <DeltaDialogBody>
         <DeltaDialogCard>
-          { blockedContacts === null && <Spinner/> }
-          { blockedContacts !== null && blockedContacts.length === 0 &&
+          { blockedContacts.length === 0 &&
             <p>{tx('none_blocked_desktop')}</p>
           }
-          { blockedContacts !== null && blockedContacts.length > 0 &&
+          { blockedContacts.length > 0 &&
             <DeltaDialogCardInnerWithoutPadding>
-              <div style={{overflow: 'scroll', height: '100%', backgroundColor:'var(--bp3DialogBgPrimary)'}}>
-                <ContactList2
-                  contacts={blockedContacts}
-                  showRemove
-                  onClick={onUnblockContact}
-                  onRemoveClick={onUnblockContact}
-                />
-              </div>
+                <div style={{overflow: 'scroll', height: '100%', backgroundColor:'var(--bp3DialogBgPrimary)'}}>
+                  <ContactList2
+                    contacts={blockedContacts}
+                    onClick={onUnblockContact}
+                  />
+                </div>
             </DeltaDialogCardInnerWithoutPadding>
           }
         </DeltaDialogCard>

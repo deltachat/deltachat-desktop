@@ -102,7 +102,7 @@ export default function DeltaMenu (props) {
     />
     <MenuItem
       icon='blocked-person'
-      text={tx('unblock_contacts_desktop')}
+      text={tx('pref_blocked_contacts')}
       onClick={onUnblockContacts}
     />
     <MenuItem
