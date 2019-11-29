@@ -8,7 +8,7 @@ export default function EncryptionInfo (props) {
   useEffect(() => {
     const { chat } = props
     if (!chat) return
-    callDcMethod('chat.getEncryptionInfo', chat.contacts[0].id, setEncryptionInfo)
+    callDcMethod('chat.getEncryptionInfo', chat.contactIds[0], setEncryptionInfo)
   })
 
   const { isOpen, onClose } = props
