@@ -9,6 +9,7 @@
 .delta-dialog-card {
   background-color: var(--bp3DialogHeaderBg); 
   padding: 20px;
+  height: -webkit-fill-available;
 }
 
 .bp3-small-dialog {

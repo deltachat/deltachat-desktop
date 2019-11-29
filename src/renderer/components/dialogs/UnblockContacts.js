@@ -42,6 +42,7 @@ export default function UnblockContacts (props) {
       isOpen={isOpen}
       onClose={onClose}
       title={tx('unblock_contacts_desktop')}
+      fixed
     >
       <DeltaDialogBody>
         <DeltaDialogCard>
@@ -51,7 +52,7 @@ export default function UnblockContacts (props) {
           }
           { blockedContacts !== null && blockedContacts.length > 0 &&
             <DeltaDialogCardInnerWithoutPadding>
-              <div style={{overflow: 'scroll', maxHeight: '80vh'}}>
+              <div style={{overflow: 'scroll', height: '100%', backgroundColor:'var(--bp3DialogBgPrimary)'}}>
                 <ContactList2
                   contacts={blockedContacts}
                   showRemove
@@ -63,7 +64,6 @@ export default function UnblockContacts (props) {
           }
         </DeltaDialogCard>
       </DeltaDialogBody>
-      <DeltaDialogFooter>{blockedContacts !== null && blockedContacts.length <= 1 && <br/>}</DeltaDialogFooter>
     </DeltaDialog>
   )
 }
