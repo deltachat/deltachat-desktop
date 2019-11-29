@@ -180,6 +180,7 @@ class ComposerMessageInput extends React.Component {
 
     return (
       <MessageInputTextarea
+        id='composer-textarea'
         ref={this.textareaRef}
         rows='1'
         intent={this.state.error ? 'danger' : 'none'}

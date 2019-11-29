@@ -108,6 +108,7 @@ export default function MainScreen () {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <SearchInput
+              id='chat-list-search'
               onChange={handleSearchChange}
               value={queryStr}
               className='icon-rotated'
