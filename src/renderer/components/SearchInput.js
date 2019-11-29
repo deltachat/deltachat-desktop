@@ -28,11 +28,12 @@ export function ClearButton (props) {
 }
 
 export default function SearchInput (props) {
-  const { onChange, value, className } = props
+  const { onChange, value, className, id } = props
   const tx = window.translate
   return (
     <>
       <SearchInputWrap
+        id={id}
         placeholder={tx('search')}
         autoFocus
         onChange={onChange}
