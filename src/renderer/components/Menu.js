@@ -35,7 +35,7 @@ export default function DeltaMenu (props) {
   const onArchiveChat = archive => archiveChat(selectedChat.id, archive)
   const onBlockContact = () => openBlockContactDialog(screenContext, selectedChat)
   const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat)
-  const onUnblockContacts = () => screenContext.changeScreen('UnblockContacts')
+  const onUnblockContacts = () => screenContext.openDialog('UnblockContacts', {})
   const onContactRequests = () => callDcMethod('contactRequests')
   const logout = () => ipcRenderer.send('logout')
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)

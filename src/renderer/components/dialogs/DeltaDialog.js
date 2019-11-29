@@ -131,4 +131,20 @@ export function DeltaDialogBody (props) {
       {children}
     </div>
   )
+} 
+
+export function DeltaDialogCard (props) {
+  const { noPadding } = props
+  return (
+    <div className={classNames('delta-dialog-card', {'delta-dialog-card--no-padding': noPadding})}>
+      {props.children}
+    </div>
+  )
+}  
+
+export function DeltaDialogCardInnerWithoutPadding (props) {
+  return (
+    <div className='delta-dialog-card__inner-without-padding'>{props.children}</div>
+  )
 }
+  

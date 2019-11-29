@@ -3,7 +3,6 @@ const React = require('react')
 const { ipcRenderer } = require('electron')
 
 const ScreenContext = require('./contexts/ScreenContext')
-const UnblockContacts = require('./components/UnblockContactsScreen')
 const LoginScreen = require('./components/LoginScreen').default
 const MainScreen = require('./components/MainScreen').default
 const dialogs = require('./components/dialogs')
@@ -12,12 +11,9 @@ class ScreenController extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      screen: 'MainScreen',
-      screenProps: {},
       message: false
     }
 
-    this.changeScreen = this.changeScreen.bind(this)
     this.onError = this.onError.bind(this)
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
@@ -28,10 +24,6 @@ class ScreenController extends React.Component {
     this.detachDialog = this.detachDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogs = React.createRef()
-  }
-
-  changeScreen (screen = 'MainScreen', screenProps = {}) {
-    this.setState({ screen, screenProps })
   }
 
   userFeedback (message) {
@@ -87,18 +79,6 @@ class ScreenController extends React.Component {
 
   render () {
     const { logins, deltachat } = this.props
-    const { screen, screenProps } = this.state
-
-    var Screen
-    switch (screen) {
-      case 'UnblockContacts':
-        Screen = UnblockContacts
-        break
-      default:
-        Screen = MainScreen
-        break
-    }
-
     var type = this.state.message.type
     var classNames = `user-feedback ${type}`
 
@@ -120,9 +100,8 @@ class ScreenController extends React.Component {
         }}>
           {!deltachat.ready
             ? <LoginScreen logins={logins} deltachat={deltachat} />
-            : <Screen
+            : <MainScreen
               deltachat={deltachat}
-              screenProps={screenProps}
               mode={'login'}
             />
           }
