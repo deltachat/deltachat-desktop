@@ -13,6 +13,8 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
 `
 
 export const DeltaDialogBase = React.memo((props) => {
+  const isFixed = props.fixed && props.fixed !== false
+  console.log('isFixed', isFixed)
   return (
     <Fragment>
       <CreateDeltaDialogGlobal />
@@ -21,7 +23,7 @@ export const DeltaDialogBase = React.memo((props) => {
         onClose={props.onClose}
         canOutsideClickClose={false}
         canEscapeKeyClose
-        className={classNames(props.fixed ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
+        className={classNames(isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
         style={props.style}
       >
         {props.children}
