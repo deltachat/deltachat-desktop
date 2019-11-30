@@ -34,7 +34,7 @@ export default function SmallDialog (props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       canOutsideClickClose
-      className='bp3-small-dialog'
+      className='delta-dialog-small-dialog'
     >
       {props.children}
     </Dialog>
