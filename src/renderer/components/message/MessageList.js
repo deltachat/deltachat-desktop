@@ -1,8 +1,9 @@
-import React, { useContext, useRef, useEffect, useState, useLayoutEffect } from 'react'
+import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCallback } from 'react'
 import MessageWrapper from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
 import MessageListStore from '../../stores/MessageList'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { getLogger } from '../../../logger'
 const log = getLogger('render/msgList')
@@ -31,8 +32,10 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
 
   const scrollDownOnChatSelected = () => {
     console.log('newChatSelected!', messageListRef)
-    let elem = document.querySelector(`#message-list li:last-child`)
-    elem.scrollIntoView()
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    setTimeout(() => {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    }, 30)
   }
 
   const scrollToLastMessageOnLastPage = (countFetchedMessages) => {
@@ -50,10 +53,14 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }
   }, [messageIds, page])
 
-  const onScroll = () => {
-    if (messageListRef.current.scrollTop === 0) {
+  const [fetchMore] = useDebouncedCallback(() => {
+    messageListDispatch({type: 'FETCH_MORE_MESSAGES'})
+  }, 10, { leading: true })
+
+  const onScroll = Event => {
+    if (messageListRef.current.scrollTop <= 0) {
       log.debug('Scrolled to top, fetching more messsages!')
-      messageListDispatch({type: 'FETCH_MORE_MESSAGES'})
+      fetchMore()
     }
   }
 
@@ -64,7 +71,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
       <ul>
         {messageIdsToShow.map(messageId => {
-          console.log('render', messageId)
           return MessageListItem({
             messageId,
             rawMessage: messages[messageId],
