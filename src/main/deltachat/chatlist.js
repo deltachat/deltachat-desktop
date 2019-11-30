@@ -120,9 +120,6 @@ module.exports = class DCChatList extends SplitOut {
     if (chat === null) return null
     this._controller._pages = 0
 
-    // console.log('getFullChatById', chatId)
-    const messageIds = this._dc.getChatMessages(chat.id, C.DC_GCM_ADDDAYMARKER, 0)
-    const messages = loadMessages ? this._controller.messageList._messagesToRender(messageIds) : []
 
     const isGroup = isGroupChat(chat)
     const contactIds = this._dc.getChatContacts(chatId)
@@ -143,8 +140,6 @@ module.exports = class DCChatList extends SplitOut {
       isSelfTalk: chat.isSelfTalk,
 
       contacts: contacts,
-      totalMessages: messageIds.length,
-      messages: messages,
       color: integerToHexColor(chat.color),
       summary: undefined,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),

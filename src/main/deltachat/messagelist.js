@@ -1,7 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/messagelist')
 const { integerToHexColor } = require('./util')
-const CHATVIEW_PAGE_SIZE = 20
 
 const SplitOut = require('./splitout')
 module.exports = class DCMessageList extends SplitOut {
@@ -41,41 +40,6 @@ module.exports = class DCMessageList extends SplitOut {
     this._dc.setDraft(chatId, msg)
   }
 
-  _messagesToRender (messageIds) {
-    // we need one more message than we render, to get the timestamp
-    // from preceeding message for DAYMARKER
-    const currentIndex = (this._controller._pages * CHATVIEW_PAGE_SIZE)
-    messageIds.reverse() // newest IDs first
-    const messageIdsToRender = messageIds.splice(
-      currentIndex,
-      CHATVIEW_PAGE_SIZE + 1
-    )
-    if (messageIdsToRender.length === 0) return []
-    messageIdsToRender.reverse() // newest IDs last
-    const messages = []
-    for (let i = 0; i < messageIdsToRender.length; i++) {
-      const id = messageIdsToRender[i]
-      if (id > C.DC_MSG_ID_LAST_SPECIAL) {
-        messages.push(this.messageIdToJson(id))
-      } else if (id === C.DC_MSG_ID_DAYMARKER && messages.length > 0) {
-        const timestamp = messages[messages.length - 1].msg.timestamp
-        const json = {
-          id,
-          msg: {
-            text: '',
-            timestamp
-          },
-          daymarker: {
-            timestamp,
-            id: 'd' + i
-          }
-        }
-        messages.push(json)
-      }
-    }
-    return messages
-  }
-
   messageIdToJson (id) {
     const msg = this._dc.getMessage(id)
     if (!msg) {
@@ -106,20 +70,6 @@ module.exports = class DCMessageList extends SplitOut {
       isInfo: msg.isInfo(),
       setupCodeBegin
     }
-  }
-
-  fetchMessages (chatId) {
-    var messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
-    if (messageIds.length <= this._controller._pages * CHATVIEW_PAGE_SIZE) {
-      return
-    }
-    this._controller._pages++
-    var payload = {
-      chatId: chatId,
-      totalMessages: messageIds.length,
-      messages: this._messagesToRender(messageIds)
-    }
-    this._controller.sendToRenderer('DD_MESSAGES_LOADED', payload)
   }
 
   forwardMessage (msgId, chatId) {
