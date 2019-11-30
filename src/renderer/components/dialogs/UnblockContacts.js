@@ -55,12 +55,10 @@ export default function UnblockContacts (props) {
           }
           { blockedContacts.length > 0 &&
             <DeltaDialogCardInnerWithoutPadding>
-                <div style={{overflow: 'scroll', height: '100%', backgroundColor:'var(--bp3DialogBgPrimary)'}}>
-                  <ContactList2
-                    contacts={blockedContacts}
-                    onClick={onUnblockContact}
-                  />
-                </div>
+              <ContactList2
+                contacts={blockedContacts}
+                onClick={onUnblockContact}
+              />
             </DeltaDialogCardInnerWithoutPadding>
           }
         </DeltaDialogCard>
