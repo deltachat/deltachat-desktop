@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCallback } from 'react'
+import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCallback, useMemo } from 'react'
 import MessageWrapper from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
@@ -30,65 +30,70 @@ const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {
   return messageIdsToShow
 }
 
-function scrollToLastMessageOnLastPageAfterFetchedMoreMessages(oldestFetchedMessageIndex, messageListRef) {
-  const scrollToLastMessageOnLastPage = (countFetchedMessages) => {
-    console.log('scrollToLastMessageOnLastPage', countFetchedMessages)
-    let elem = document.querySelector(`#message-list li:nth-child(${countFetchedMessages})`)
-    elem.scrollIntoView()
-  }
-  useEffect(() => {
-    MessageListStore.addListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
-    return () => {
-      MessageListStore.removeListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
-    }
-  }, [oldestFetchedMessageIndex])
-}
-
 export default function MessageList ({ chat, refComposer, locationStreamingEnabled }) {
-  const [{oldestFetchedMessageIndex, messages, messageIds}, messageListDispatch] = useStore(MessageListStore)
+  const [{
+    oldestFetchedMessageIndex,
+    messages,
+    messageIds,
+    scrollToBottom,
+    scrollToLastPage,
+    scrollHeight,
+    countFetchedMessages
+  }, messageListDispatch] = useStore(MessageListStore)
   const messageListRef = useRef(null)
+  const lastKnownScrollPosition = useRef([null,null])
 
-
-  const scrollDownOnChatSelected = () => {
-    console.log('newChatSelected!', messageListRef)
+  useLayoutEffect(() => {
+    if (scrollToBottom === false) return
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-  }
+    messageListDispatch({type: 'SCROLLED_TO_BOTTOM'})
+  }, [scrollToBottom])
+
+  useLayoutEffect(() => {
+    if (scrollToLastPage === false) return
+    console.log('scrollToLastMessageOnLastPage', lastKnownScrollPosition.current)
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current[0] + lastKnownScrollPosition.current[1]
+    messageListDispatch({type: 'SCROLLED_TO_LAST_PAGE'})
+  }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
     messageListDispatch({type: 'SELECT_CHAT', payload: chat.id })
-    MessageListStore.addListener('afterNewChatSelected', scrollDownOnChatSelected)
-    return () => {
-      MessageListStore.removeListener('afterNewChatSelected', scrollDownOnChatSelected)
-    }
   }, [chat.id])
 
-  scrollToLastMessageOnLastPageAfterFetchedMoreMessages(oldestFetchedMessageIndex)
-
   const [fetchMore] = useDebouncedCallback(() => {
-    messageListDispatch({type: 'FETCH_MORE_MESSAGES'})
+    messageListDispatch({type: 'FETCH_MORE_MESSAGES', payload: {scrollHeight: messageListRef.current.scrollHeight }})
   }, 10, { leading: true })
 
   const onScroll = Event => {
-    if (messageListRef.current.scrollTop <= 0) {
+    if (messageListRef.current.scrollTop == 0) {
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
     }
+    lastKnownScrollPosition.current[0] = messageListRef.current.scrollHeight
+    lastKnownScrollPosition.current[1] = messageListRef.current.scrollTop
   }
 
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
   console.log('Rerender!')
 
   const tx = window.translate
+  let specialMessageIdCounter = 0
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
       <ul>
         {_messageIdsToShow.map(messageId => {
+          const key = messageId <= 9 ?
+            'magic' + messageId + '_' + specialMessageIdCounter++ :
+            messageId
+          const message = messages[messageId]
+          if (!message) return
           return <MessageListItem
+            key={key}
             messageId={messageId}
-            rawMessage={messages[messageId]}
+            message={message}
             chat={chat}
             locationStreamingEnabled={locationStreamingEnabled}
           />
@@ -101,35 +106,15 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
 
 
 export function MessageListItem(props) {
-  const {openDialog} = useContext(ScreenContext)
-  const tx = window.translate
-  const {messageId, rawMessage, chat, locationStreamingEnabled} = props
-  if(!rawMessage) return null
-  const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
-  const onShowDetail = message => openDialog('MessageDetail', { message, chat })
-  const onDelete = message => openDialog('ConfirmationDialog', {
-    message: tx('ask_delete_message_desktop'),
-    cb: yes => yes && chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
-  })
-  const onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
-  const message = MessageWrapper.convert(rawMessage)
+  const { key, chat, message, locationStreamingEnabled } = props
 
   // As messages with a message id below 9 are special messages without a unique id, we need to generate a unique key for them
-  const key = message.id <= 9
-    ? 'magic' + message.id + '_' + specialMessageIdCounter++
-    : message.id
 
-  message.onReply = () => log.debug('reply to', message)
-  message.onForward = onForward.bind(this, message)
   return (
     <MessageWrapper.render
       key={key}
       message={message}
       chat={chat}
-      onClickContactRequest={() => openDialog('DeadDrop', { deaddrop: message })}
-      onClickSetupMessage={onClickSetupMessage.bind(this, message)}
-      onShowDetail={onShowDetail.bind(this, message)}
-      onDelete={onDelete.bind(this, message)}
       locationStreamingEnabled={locationStreamingEnabled}
     />
   )

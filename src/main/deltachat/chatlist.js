@@ -140,6 +140,7 @@ module.exports = class DCChatList extends SplitOut {
       isSelfTalk: chat.isSelfTalk,
 
       contacts: contacts,
+      contactIds,
       color: integerToHexColor(chat.color),
       summary: undefined,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),

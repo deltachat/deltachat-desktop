@@ -1,11 +1,14 @@
-const React = require('react')
-const C = require('deltachat-node/constants')
-const styled = require('styled-components').default
-const Message = require('./Message')
-const moment = require('moment')
-const mime = require('mime-types')
-const filesizeConverter = require('filesize')
-const log = require('../../../logger').getLogger('renderer/messageWrapper')
+import React, { useContext } from 'react'
+import C from 'deltachat-node/constants'
+import styled from 'styled-components'
+import Message from './Message'
+import moment from 'moment'
+import mime from 'mime-types'
+import ScreenContext from '../../contexts/ScreenContext'
+import filesizeConverter from 'filesize'
+import logger from '../../../logger'
+
+const log = logger.getLogger('renderer/messageWrapper')
 
 const GROUP_TYPES = [
   C.DC_CHAT_TYPE_GROUP,
@@ -30,8 +33,20 @@ const InfoMessage = styled.div`
   }
 `
 
-function render (props) {
-  const { message, onClickSetupMessage, onClickContactRequest } = props
+export function render (props) {
+  const {message, messageId, chat, locationStreamingEnabled} = props
+  const {openDialog} = useContext(ScreenContext)
+  const tx = window.translate
+
+  const onClickContactRequest = () => openDialog('DeadDrop', { deaddrop: message })
+  const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
+  const onShowDetail = message => openDialog('MessageDetail', { message, chat })
+  const onDelete = message => openDialog('ConfirmationDialog', {
+    message: tx('ask_delete_message_desktop'),
+    cb: yes => yes && chatStore.dispatch({ type: 'UI_DELETE_MESSAGE', payload: { msgId: message.id } })
+  })
+  message.onReply = () => log.debug('reply to', message)
+  message.onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
 
   let body
 
@@ -116,7 +131,7 @@ class RenderMessage extends React.Component {
   }
 }
 
-function convert (message) {
+export function convert (message) {
   const msg = message.msg
 
   Object.assign(msg, {
@@ -179,7 +194,5 @@ function convertContentType (message) {
   }
 }
 
-module.exports = {
-  convert,
-  render
-}
+const MessageWrapper = { render, convert }
+export default MessageWrapper
