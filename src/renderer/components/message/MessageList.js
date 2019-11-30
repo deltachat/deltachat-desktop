@@ -42,6 +42,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   }, messageListDispatch] = useStore(MessageListStore)
   const messageListRef = useRef(null)
   const lastKnownScrollPosition = useRef([null,null])
+  const isFetching = useRef(false)
 
   useLayoutEffect(() => {
     if (scrollToBottom === false) return
@@ -55,25 +56,27 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   useLayoutEffect(() => {
     if (scrollToLastPage === false) return
     console.log('scrollToLastMessageOnLastPage', lastKnownScrollPosition.current)
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current[0] + lastKnownScrollPosition.current[1]
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
     messageListDispatch({type: 'SCROLLED_TO_LAST_PAGE'})
+    isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
     messageListDispatch({type: 'SELECT_CHAT', payload: chat.id })
+    isFetching.current = false
   }, [chat.id])
 
   const [fetchMore] = useDebouncedCallback(() => {
     messageListDispatch({type: 'FETCH_MORE_MESSAGES', payload: {scrollHeight: messageListRef.current.scrollHeight }})
-  }, 10, { leading: true })
+  }, 30, { leading: true })
 
   const onScroll = Event => {
-    if (messageListRef.current.scrollTop == 0) {
+    if (messageListRef.current.scrollTop == 0 && isFetching.current === false) {
+      lastKnownScrollPosition.current = messageListRef.current.scrollHeight
+      isFetching.current = true
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
     }
-    lastKnownScrollPosition.current[0] = messageListRef.current.scrollHeight
-    lastKnownScrollPosition.current[1] = messageListRef.current.scrollTop
   }
 
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
@@ -90,13 +93,14 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
             messageId
           const message = messages[messageId]
           if (!message) return
-          return <MessageListItem
-            key={key}
-            messageId={messageId}
-            message={message}
-            chat={chat}
-            locationStreamingEnabled={locationStreamingEnabled}
-          />
+          return (
+            <MessageWrapper.render
+              key={key}
+              message={message}
+              chat={chat}
+              locationStreamingEnabled={locationStreamingEnabled}
+            />
+          )
         })} 
         })>
       </ul>
@@ -104,18 +108,3 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   )
 }
 
-
-export function MessageListItem(props) {
-  const { key, chat, message, locationStreamingEnabled } = props
-
-  // As messages with a message id below 9 are special messages without a unique id, we need to generate a unique key for them
-
-  return (
-    <MessageWrapper.render
-      key={key}
-      message={message}
-      chat={chat}
-      locationStreamingEnabled={locationStreamingEnabled}
-    />
-  )
-}

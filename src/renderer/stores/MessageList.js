@@ -5,7 +5,7 @@ import MessageWrapper from '../components/message/MessageWrapper'
 
 const log = logger.getLogger('renderer/stores/MessageList')
 
-export const PAGE_SIZE = 50
+export const PAGE_SIZE = 30
 
 const defaultState = {
   chatId: -1,
