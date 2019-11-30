@@ -4,7 +4,7 @@ import EventEmitterStore from './EventEmitterStore'
 import logger from '../../logger'
 const log = logger.getLogger('renderer/stores/MessageList')
 
-export const PAGE_SIZE = 10
+export const PAGE_SIZE = 30
 
 const defaultState = {
   messageIds: [],
