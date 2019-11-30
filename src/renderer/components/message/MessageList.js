@@ -87,7 +87,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   return (
     <div id='message-list' ref={messageListWrap}>
       <ul>
-        {console.log(chat.messages, chat.id)}
         {chat.messages.map(rawMessage => {
           const message = MessageWrapper.convert(rawMessage)
 

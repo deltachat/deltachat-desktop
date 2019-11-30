@@ -26,10 +26,8 @@ export function openDeleteChatDialog (screenContext, chat) {
 }
 
 export function openBlockContactDialog (screenContext, selectedChat) {
-  console.log(selectedChat)
   const tx = window.translate
   if (selectedChat && selectedChat.contactIds.length) {
-    const contact = selectedChat.contactIds[0]
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_block_contact'),
       cb: yes => yes && callDcMethod('contacts.blockContact', selectedChat.contactIds[0], unselectChat)
