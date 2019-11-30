@@ -22,13 +22,32 @@ export function useStore(StoreInstance) {
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }
 
+const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {
+  let messageIdsToShow = []
+  for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
+    messageIdsToShow.push(messageIds[i])
+  }
+  return messageIdsToShow
+}
+
+function scrollToLastMessageOnLastPageAfterFetchedMoreMessages(oldestFetchedMessageIndex, messageListRef) {
+  const scrollToLastMessageOnLastPage = (countFetchedMessages) => {
+    console.log('scrollToLastMessageOnLastPage', countFetchedMessages)
+    let elem = document.querySelector(`#message-list li:nth-child(${countFetchedMessages})`)
+    elem.scrollIntoView()
+  }
+  useEffect(() => {
+    MessageListStore.addListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
+    return () => {
+      MessageListStore.removeListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
+    }
+  }, [oldestFetchedMessageIndex])
+}
+
 export default function MessageList ({ chat, refComposer, locationStreamingEnabled }) {
-  const [{messageIdsToShow, messages, messageIds, page}, messageListDispatch] = useStore(MessageListStore)
+  const [{oldestFetchedMessageIndex, messages, messageIds}, messageListDispatch] = useStore(MessageListStore)
   const messageListRef = useRef(null)
 
-  useEffect(() => {
-    messageListDispatch({type: 'SELECT_CHAT', payload: chat.id })
-  }, [chat.id])
 
   const scrollDownOnChatSelected = () => {
     console.log('newChatSelected!', messageListRef)
@@ -38,20 +57,15 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }, 30)
   }
 
-  const scrollToLastMessageOnLastPage = (countFetchedMessages) => {
-    console.log('scrollToLastMessageOnLastPage', countFetchedMessages)
-    let elem = document.querySelector(`#message-list li:nth-child(${countFetchedMessages})`)
-    elem.scrollIntoView()
-  }
-
   useEffect(() => {
+    messageListDispatch({type: 'SELECT_CHAT', payload: chat.id })
     MessageListStore.addListener('afterNewChatSelected', scrollDownOnChatSelected)
-    MessageListStore.addListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
     return () => {
       MessageListStore.removeListener('afterNewChatSelected', scrollDownOnChatSelected)
-      MessageListStore.removeListener('afterFetchedMoreMessages', scrollToLastMessageOnLastPage)
     }
-  }, [messageIds, page])
+  }, [chat.id])
+
+  scrollToLastMessageOnLastPageAfterFetchedMoreMessages(oldestFetchedMessageIndex)
 
   const [fetchMore] = useDebouncedCallback(() => {
     messageListDispatch({type: 'FETCH_MORE_MESSAGES'})
@@ -64,13 +78,14 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }
   }
 
+  const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
+  console.log(_messageIdsToShow, messageIds, oldestFetchedMessageIndex)
 
   const tx = window.translate
-  console.log('messageIdsToShow', messageIdsToShow, messageIds)
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
       <ul>
-        {messageIdsToShow.map(messageId => {
+        {_messageIdsToShow.map(messageId => {
           return MessageListItem({
             messageId,
             rawMessage: messages[messageId],
