@@ -126,4 +126,19 @@ module.exports = class DCMessageList extends SplitOut {
     this._dc.forwardMessages(msgId, chatId)
     this._controller.chatList.selectChat(chatId)
   }
+
+  getMessageIds(chatId) {
+    const messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
+    console.log(messageIds)
+    return messageIds
+  }
+
+  getMessages(messageIds) {
+    let messages = {}
+    messageIds.forEach(messageId => {
+      if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
+      messages[messageId] = this.messageIdToJson(messageId)
+    })
+    return messages
+  }
 }
