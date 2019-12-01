@@ -137,19 +137,6 @@ MessageListStore.effects.push(async ({ type, payload }, state) => {
   }
 })
 
-ipcBackend.on('DD_EVENT_MSG_UPDATE', (evt, payload) => {
-  const { chatId, messageObj, eventType } = payload
-
-  if (MessageListStore.state.chatId !== chatId) return
-
-  MessageListStore.dispatch({
-    type: 'MESSAGE_UPDATED',
-    payload: {
-      messageObj
-    }
-  })
-})
-
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [chatId, msgId]) => {
   MessageListStore.dispatch({
     type: 'MESSAGE_DELIVERED',
