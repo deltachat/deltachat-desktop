@@ -26,9 +26,7 @@ MessageListStore.reducers.push(({ type, payload, chatId }, state) => {
   if (typeof chatId !== 'undefined' && chatId !== state.chatId) {
     log('chatId changed, skipping action')
   }
-  if (type === 'SELECT_CHAT') {
-    return { ...defaultState, chatId: payload }
-  } else if (type === 'NEW_CHAT_SELECTED') {
+  if (type === 'NEW_CHAT_SELECTED') {
     return { ...state, ...payload }
   } else if (type === 'FETCHED_MORE_MESSAGES') {
     return {
@@ -95,9 +93,6 @@ MessageListStore.effects.push(async ({ type, payload }, state) => {
     const newestFetchedMessageIndex = messageIds.length
     const messageIdsToFetch = messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex)
     const messages = await callDcMethodAsync('messageList.getMessages', [messageIdsToFetch])
-    for (const messageId of Object.keys(messages)) {
-      messages[messageId] = messages[messageId]
-    }
     MessageListStore.dispatch({
       type: 'NEW_CHAT_SELECTED',
       payload: {
@@ -120,9 +115,6 @@ MessageListStore.effects.push(async ({ type, payload }, state) => {
     if (fetchedMessageIds.length === 0) return
 
     const fetchedMessages = await callDcMethodAsync('messageList.getMessages', [fetchedMessageIds])
-    for (const messageId of Object.keys(fetchedMessages)) {
-      fetchedMessages[messageId] = fetchedMessages[messageId]
-    }
     console.log('fetchedMessages', fetchedMessages)
 
     MessageListStore.dispatch({
