@@ -142,10 +142,10 @@
     }
 
     .module-message__img-attachment {
-        object-fit: unset;
+        object-fit: cover;
         width: auto;
         max-width: 100%;
-        height: auto;
+        height: 400px;
         min-height: unset;
     }
 
