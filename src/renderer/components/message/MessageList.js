@@ -24,6 +24,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     messages,
     messageIds,
     scrollToBottom,
+    scrollToBottomIfClose,
     scrollToLastPage,
     scrollHeight,
     countFetchedMessages
@@ -40,6 +41,19 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }, 30)
     messageListDispatch({ type: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
+
+  useLayoutEffect(() => {
+    if (scrollToBottomIfClose === false) return
+    if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop > 400) {
+      messageListDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+      return
+    }
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    setTimeout(() => {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    }, 30)
+    messageListDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+  }, [scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
