@@ -10,7 +10,8 @@ module.exports = class DCMessageList extends SplitOut {
     if (filename) msg.setFile(filename)
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
-    this._dc.sendMessage(chatId, msg)
+    const messageId = this._dc.sendMessage(chatId, msg)
+    return [messageId, this.getMessage(messageId)]
   }
 
   sendSticker (chatId, stickerPath) {
@@ -46,6 +47,10 @@ module.exports = class DCMessageList extends SplitOut {
       log.warn('No message found for ID ' + id)
       return { msg: null }
     }
+    return this.messageToJson(msg)
+  }
+
+  messageToJson (msg) {
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
@@ -57,8 +62,8 @@ module.exports = class DCMessageList extends SplitOut {
     if (contact.color) {
       contact.color = integerToHexColor(contact.color)
     }
-    return {
-      id,
+    return convert({
+      id: msg.id,
       msg: msg.toJson(),
       filemime,
       filename,
@@ -69,7 +74,7 @@ module.exports = class DCMessageList extends SplitOut {
       contact,
       isInfo: msg.isInfo(),
       setupCodeBegin
-    }
+    })
   }
 
   forwardMessage (msgId, chatId) {
@@ -77,18 +82,81 @@ module.exports = class DCMessageList extends SplitOut {
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId) {
+  getMessageIds (chatId) {
     const messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
     console.log(messageIds)
     return messageIds
   }
 
-  getMessages(messageIds) {
-    let messages = {}
+  getMessages (messageIds) {
+    const messages = {}
     messageIds.forEach(messageId => {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       messages[messageId] = this.messageIdToJson(messageId)
     })
     return messages
+  }
+}
+
+function convert (message) {
+  const msg = message.msg
+
+  Object.assign(msg, {
+    sentAt: msg.timestamp * 1000,
+    receivedAt: msg.receivedTimestamp * 1000,
+    direction: message.isMe ? 'outgoing' : 'incoming',
+    status: convertMessageStatus(msg.state)
+  })
+
+  if (msg.file) {
+    msg.attachment = {
+      url: msg.file,
+      contentType: convertContentType(message),
+      fileName: message.filename || msg.text,
+      fileSize: filesizeConverter(message.filesize)
+    }
+  }
+
+  return message
+}
+
+function convertMessageStatus (s) {
+  switch (s) {
+    case C.DC_STATE_IN_FRESH:
+      return 'sent'
+    case C.DC_STATE_OUT_FAILED:
+      return 'error'
+    case C.DC_STATE_IN_SEEN:
+      return 'read'
+    case C.DC_STATE_IN_NOTICED:
+      return 'read'
+    case C.DC_STATE_OUT_DELIVERED:
+      return 'delivered'
+    case C.DC_STATE_OUT_MDN_RCVD:
+      return 'read'
+    case C.DC_STATE_OUT_PENDING:
+      return 'sending'
+    case C.DC_STATE_UNDEFINED:
+      return 'error'
+  }
+}
+
+function convertContentType (message) {
+  const filemime = message.filemime
+
+  if (!filemime) return 'application/octet-stream'
+  if (filemime !== 'application/octet-stream') return filemime
+
+  switch (message.msg.viewType) {
+    case C.DC_MSG_IMAGE:
+      return 'image/jpg'
+    case C.DC_MSG_VOICE:
+      return 'audio/ogg'
+    case C.DC_MSG_FILE:
+      const type = mime.lookup(message.msg.file)
+      if (type) return type
+      else return 'application/octet-stream'
+    default:
+      return 'application/octet-stream'
   }
 }
