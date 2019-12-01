@@ -66,7 +66,7 @@ MessageListStore.reducers.push(({ type, payload, chatId }, state) => {
     const [messageId, message] = payload
     const messageIds = [...state.messageIds, messageId]
     const messages = { ...state.messages, [messageId]: message }
-    return { ...state, messageIds, messages }
+    return { ...state, messageIds, messages, scrollToBottom: true }
   } else if (type === 'MESSAGE_DELIVERED') {
     const messages = {
       ...state.messages,
