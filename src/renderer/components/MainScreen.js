@@ -76,7 +76,7 @@ export default function MainScreen () {
   const menu = <ScreenContext.Consumer>{(screenContext) =>
     <Menu
       selectedChat={selectedChat}
-      showArchivedChats={setShowArchivedChats}
+      showArchivedChats={showArchivedChats}
     />}
   </ScreenContext.Consumer>
 
