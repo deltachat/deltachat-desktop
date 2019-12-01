@@ -1,6 +1,7 @@
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/messagelist')
 const { integerToHexColor } = require('./util')
+const filesizeConverter = require('filesize')
 
 const SplitOut = require('./splitout')
 module.exports = class DCMessageList extends SplitOut {
