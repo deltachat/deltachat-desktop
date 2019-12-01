@@ -174,7 +174,7 @@ class DeltaChatController extends EventEmitter {
    * @param {object} payload
    */
   sendToRenderer (eventType, payload) {
-    log.debug('sendToRenderer: ' + eventType)
+    log.debug('sendToRenderer: ' + eventType, payload)
     windows.main.send('ALL', eventType, payload)
     if (!eventType) {
       log.error('Tried to send an undefined event to the renderer.\n' +
@@ -198,8 +198,9 @@ class DeltaChatController extends EventEmitter {
         event = eventStrings[event]
       }
       this.logCoreEvent(event, ...args)
+      console.log(event, ...args)
       if (!event || event === 'DC_EVENT_INFO') return
-      this.sendToRenderer(event, ...args)
+      this.sendToRenderer(event, args)
     })
 
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
