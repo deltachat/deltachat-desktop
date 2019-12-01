@@ -3,9 +3,7 @@ import C from 'deltachat-node/constants'
 import styled from 'styled-components'
 import Message from './Message'
 import moment from 'moment'
-import mime from 'mime-types'
 import ScreenContext from '../../contexts/ScreenContext'
-import filesizeConverter from 'filesize'
 import logger from '../../../logger'
 import { useMessageListStore } from '../../stores/MessageList'
 
@@ -41,11 +39,10 @@ export const render = React.memo((props) => {
   const tx = window.translate
 
   const onClickContactRequest = () => openDialog('DeadDrop', { deaddrop: message })
-  const onClickSetupMessage = setupMessage => openDialog('EnterAutocryptSetupMessage', { setupMessage })
+  const onClickSetupMessage = () => openDialog('EnterAutocryptSetupMessage', { message })
 
   props = { ...props, onClickSetupMessage, onClickContactRequest }
-  message.onReply = () => log.debug('reply to', message)
-  message.onForward = forwardMessage => openDialog('ForwardMessage', { forwardMessage })
+  message.onForward = () => openDialog('ForwardMessage', { message })
 
   let body
 
@@ -98,8 +95,8 @@ export function RenderMessage (props) {
   const { openDialog } = useContext(ScreenContext)
 
   const conversationType = GROUP_TYPES.includes(chat.type) ? 'group' : 'direct'
-  const onShowDetail = message => openDialog('MessageDetail', { message, chat })
-  const onDelete = message => openDialog('ConfirmationDialog', {
+  const onShowDetail = () => openDialog('MessageDetail', { message, chat })
+  const onDelete = () => openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message_desktop'),
     cb: yes => yes && messageListDispatch({ type: 'UI_DELETE_MESSAGE', payload: id })
   })
