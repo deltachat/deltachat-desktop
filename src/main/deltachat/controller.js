@@ -207,7 +207,6 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
-      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSGS_CHANGED')
       this.chatList.onChatModified(chatId)
     })
 
@@ -215,7 +214,6 @@ class DeltaChatController extends EventEmitter {
       maybeMarkSeen(chatId, msgId)
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
-      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_INCOMING_MSG')
       this.chatList.onChatModified(chatId)
     })
 
@@ -231,12 +229,10 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
       this.onChatListItemChanged(chatId)
-      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_DELIVERED')
     })
 
     dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
       this.onChatListItemChanged(chatId)
-      this.onMessageUpdate(chatId, msgId, 'DC_EVENT_MSG_READ')
     })
 
     dc.on('DC_EVENT_WARNING', (warning) => {
@@ -282,17 +278,6 @@ class DeltaChatController extends EventEmitter {
 
   onChatListItemChanged (chatId) {
     this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
-  }
-
-  /**
-   *
-   * @param {int} chatId
-   * @param {int} msgId
-   * @param {string} eventType
-   */
-  onMessageUpdate (chatId, msgId, eventType) {
-    if (chatId === 0 || msgId === 0) return
-    this.sendToRenderer('DD_EVENT_MSG_UPDATE', { chatId, messageObj: this.messageList.messageIdToJson(msgId), eventType })
   }
 
   updateBlockedContacts () {

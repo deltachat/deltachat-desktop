@@ -7,6 +7,7 @@ import ComposerMessageInput from './ComposerMessageInput'
 import logger from '../../../logger'
 import EmojiAndStickerPicker from './EmojiAndStickerPicker'
 import { callDcMethod } from '../../ipc'
+import { useMessageListStore } from '../../stores/MessageList'
 
 const log = logger.getLogger('renderer/composer')
 
@@ -19,7 +20,7 @@ const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
 
 const Composer = React.forwardRef((props, ref) => {
   const { isDisabled, disabledReason, chatId, draft } = props
-
+  const [messageListStore, messageListStoreDispatch] = useMessageListStore()
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const messageInputRef = useRef()
@@ -32,7 +33,7 @@ const Composer = React.forwardRef((props, ref) => {
       log.debug(`Empty message: don't send it...`)
       return
     }
-    callDcMethod('messageList.sendMessage', [chatId, message, null])
+    messageListStoreDispatch({ type: 'SEND_MESSAGE', payload: [chatId, message, null] })
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()
@@ -40,7 +41,9 @@ const Composer = React.forwardRef((props, ref) => {
 
   const addFilename = () => {
     remote.dialog.showOpenDialog({ properties: ['openFile'] }, filenames => {
-      if (filenames && filenames[0]) callDcMethod('messageList.sendMessage', [chatId, '', filenames[0]])
+      if (filenames && filenames[0]) {
+        messageListStoreDispatch({ type: 'SEND_MESSAGE', payload: [chatId, '', filenames[0]] })
+      }
     })
   }
 

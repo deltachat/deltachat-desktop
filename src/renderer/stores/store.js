@@ -1,4 +1,16 @@
+import { useState, useEffect } from 'react'
 import logger from '../../logger'
+
+export function useStore (StoreInstance) {
+  const [state, setState] = useState(StoreInstance.getState())
+
+  useEffect(() => {
+    StoreInstance.subscribe(setState)
+    return () => StoreInstance.unsubscribe(setState)
+  }, [])
+
+  return [state, StoreInstance.dispatch.bind(StoreInstance)]
+}
 
 class Store {
   constructor (state, name) {
@@ -6,11 +18,11 @@ class Store {
     this.listeners = []
     this.reducers = []
     this.effects = []
-    if(!name) name = 'Store'
+    if (!name) name = 'Store'
     this.log = logger.getLogger('renderer/stores/' + name)
   }
 
-  getName() {
+  getName () {
     return 'Store'
   }
 
@@ -33,7 +45,6 @@ class Store {
       this.listeners.forEach(listener => listener(this.state))
     }
   }
-
 
   subscribe (listener) {
     this.listeners.push(listener)

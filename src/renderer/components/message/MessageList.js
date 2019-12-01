@@ -2,7 +2,7 @@ import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCal
 import MessageWrapper from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
-import MessageListStore from '../../stores/MessageList'
+import { useMessageListStore } from '../../stores/MessageList'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { getLogger } from '../../../logger'
@@ -10,20 +10,8 @@ const log = getLogger('render/msgList')
 
 const PAGE_SIZE = 30
 
-export function useStore(StoreInstance) {
-  const [state, setState] = useState(StoreInstance.getState())
-  const [page, setPage] = useState(1)
-
-  useEffect(() => {
-    StoreInstance.subscribe(setState)
-    return () => StoreInstance.unsubscribe(setState)
-  }, [])
-
-  return [state, StoreInstance.dispatch.bind(StoreInstance)]
-}
-
 const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {
-  let messageIdsToShow = []
+  const messageIdsToShow = []
   for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
     messageIdsToShow.push(messageIds[i])
   }
@@ -39,9 +27,9 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     scrollToLastPage,
     scrollHeight,
     countFetchedMessages
-  }, messageListDispatch] = useStore(MessageListStore)
+  }, messageListDispatch] = useMessageListStore()
   const messageListRef = useRef(null)
-  const lastKnownScrollPosition = useRef([null,null])
+  const lastKnownScrollPosition = useRef([null, null])
   const isFetching = useRef(false)
 
   useLayoutEffect(() => {
@@ -50,24 +38,24 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-    messageListDispatch({type: 'SCROLLED_TO_BOTTOM'})
+    messageListDispatch({ type: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
 
   useLayoutEffect(() => {
     if (scrollToLastPage === false) return
     console.log('scrollToLastMessageOnLastPage', lastKnownScrollPosition.current)
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
-    messageListDispatch({type: 'SCROLLED_TO_LAST_PAGE'})
+    messageListDispatch({ type: 'SCROLLED_TO_LAST_PAGE' })
     isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
-    messageListDispatch({type: 'SELECT_CHAT', payload: chat.id })
+    messageListDispatch({ type: 'SELECT_CHAT', payload: chat.id })
     isFetching.current = false
   }, [chat.id])
 
   const [fetchMore] = useDebouncedCallback(() => {
-    messageListDispatch({type: 'FETCH_MORE_MESSAGES', payload: {scrollHeight: messageListRef.current.scrollHeight }})
+    messageListDispatch({ type: 'FETCH_MORE_MESSAGES', payload: { scrollHeight: messageListRef.current.scrollHeight } })
   }, 30, { leading: true })
 
   const onScroll = Event => {
@@ -88,9 +76,9 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
       <ul>
         {_messageIdsToShow.map(messageId => {
-          const key = messageId <= 9 ?
-            'magic' + messageId + '_' + specialMessageIdCounter++ :
-            messageId
+          const key = messageId <= 9
+            ? 'magic' + messageId + '_' + specialMessageIdCounter++
+            : messageId
           const message = messages[messageId]
           if (!message) return
           return (
@@ -101,10 +89,9 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
               locationStreamingEnabled={locationStreamingEnabled}
             />
           )
-        })} 
+        })}
         })>
       </ul>
     </div>
   )
 }
-
