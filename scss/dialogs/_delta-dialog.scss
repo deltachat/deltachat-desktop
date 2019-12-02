@@ -1,0 +1,26 @@
+.delta-dialog-card__inner-without-padding {
+  margin: -20px;
+}
+
+.delta-dialog-card--no-padding {
+  padding: 0px;
+}
+
+.delta-dialog-card {
+  background-color: var(--bp3DialogHeaderBg); 
+  padding: 20px;
+  height: 100%;
+  &:last-child {
+    height: -webkit-fill-available;
+  }
+}
+
+.delta-dialog-small-dialog {
+  width: 350px !important;
+  padding-bottom: 0px !important;
+  background-color: var(--bp3DialogBgPrimary) !important;
+  .bp3-dialog-footer {
+    margin-top: 16px;
+    padding: 0 0px 0px;
+  }
+}

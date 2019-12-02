@@ -13,6 +13,7 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
 `
 
 export const DeltaDialogBase = React.memo((props) => {
+  const isFixed = props.fixed && props.fixed !== false
   return (
     <Fragment>
       <CreateDeltaDialogGlobal />
@@ -21,7 +22,7 @@ export const DeltaDialogBase = React.memo((props) => {
         onClose={props.onClose}
         canOutsideClickClose={false}
         canEscapeKeyClose
-        className={classNames(props.fixed ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
+        className={classNames(isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
         style={props.style}
       >
         {props.children}
@@ -130,5 +131,20 @@ export function DeltaDialogBody (props) {
     <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })}>
       {children}
     </div>
+  )
+}
+
+export function DeltaDialogCard (props) {
+  const { noPadding } = props
+  return (
+    <div className={classNames('delta-dialog-card', { 'delta-dialog-card--no-padding': noPadding })}>
+      {props.children}
+    </div>
+  )
+}
+
+export function DeltaDialogCardInnerWithoutPadding (props) {
+  return (
+    <div className='delta-dialog-card__inner-without-padding'>{props.children}</div>
   )
 }

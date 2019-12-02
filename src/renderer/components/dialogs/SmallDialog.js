@@ -1,19 +1,6 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
 import { Dialog } from '@blueprintjs/core'
-
-export const SmallDialogWrapper = createGlobalStyle`
-  .bp3-small-dialog {
-    width: 350px;
-    padding-bottom: 0px;
-    background-color: var(--bp3DialogBgPrimary);
-  }
-
-  .bp3-dialog-footer {
-    margin-top: 16px;
-    padding: 0 0px 0px;
-  }
-`
 
 export const DeltaButton = styled.p`
   color: ${({ color }) => color || 'var(--colorNone)'};
@@ -43,16 +30,13 @@ export const DeltaButtonDanger = styled(DeltaButton)`
 
 export default function SmallDialog (props) {
   return (
-    <React.Fragment>
-      <SmallDialogWrapper />
-      <Dialog
-        isOpen={props.isOpen}
-        onClose={props.onClose}
-        canOutsideClickClose
-        className='bp3-small-dialog'
-      >
-        {props.children}
-      </Dialog>
-    </React.Fragment>
+    <Dialog
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      canOutsideClickClose
+      className='delta-dialog-small-dialog'
+    >
+      {props.children}
+    </Dialog>
   )
 }

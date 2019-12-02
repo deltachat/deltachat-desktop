@@ -76,7 +76,7 @@ export default function MainScreen () {
   const menu = <ScreenContext.Consumer>{(screenContext) =>
     <Menu
       selectedChat={selectedChat}
-      showArchivedChats={setShowArchivedChats}
+      showArchivedChats={showArchivedChats}
     />}
   </ScreenContext.Consumer>
 
@@ -108,6 +108,7 @@ export default function MainScreen () {
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <SearchInput
+              id='chat-list-search'
               onChange={handleSearchChange}
               value={queryStr}
               className='icon-rotated'

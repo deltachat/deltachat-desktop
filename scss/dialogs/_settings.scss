@@ -1,34 +1,45 @@
 
 // ChatView Background selector
 
+.bg-option-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
 .background-preview {
-    width: 142px;
+    width: 45%;
     height: 142px;
     border-radius: 5pt;
     background-image: url(../images/background_light.svg);
     background-color: var(--chatViewBg);
+    background-size: cover;
 }
 
 .background-options {
     display: flex;
     flex-direction: column;
-    padding: 0 8px;
     justify-content: space-evenly;
+    width: 50%;
 }
 
 .background-default-images {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    height: 150px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 170px;
+  justify-content: space-between;
+  align-content: space-between;
+  margin-top: 13px;
 }
 
 .background-default-images > div {
+    flex-wrap: wrap;
     margin: 2px;
-    width: 32px;
-    height: 32px;
+    width: 75px;
+    height: 75px;
     border-radius: 3pt;
     background-color: darkcyan;
+    background-size: cover;
 }
 
 .profile-image-selector {

@@ -6,11 +6,14 @@ import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
+import attachKeybindingsListener from './keybindings'
 
 const localize = require('../localize')
 const moment = require('moment')
 
 addLocaleData(enLocaleData)
+
+attachKeybindingsListener()
 
 export default function App (props) {
   const [state, setState] = useState(remote.app.state)
@@ -45,7 +48,6 @@ export default function App (props) {
     startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
-
   const onRender = (e, state) => setState(state)
   useEffect(() => {
     ipcBackend.on('render', onRender)

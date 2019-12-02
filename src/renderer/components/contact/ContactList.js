@@ -16,13 +16,13 @@ const ContactListDiv = styled.div`
 `
 
 export function ContactList2 (props) {
-  const { contacts, onClick, showCheckbox, isChecked, onCheckboxClick } = props
+  const { contacts, onClick, showCheckbox, isChecked, onCheckboxClick, showRemove, onRemoveClick } = props
   return contacts.map(contact => {
     let checked = null
     if (showCheckbox && typeof isChecked === 'function') {
       checked = isChecked(contact)
     }
-    return ContactListItem({ contact, onClick, showCheckbox, checked, onCheckboxClick })
+    return ContactListItem({ contact, onClick, showCheckbox, checked, onCheckboxClick, showRemove, onRemoveClick })
   })
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Contact from './Contact'
+import { Icon } from '@blueprintjs/core'
 
 export const ContactListItemWrapper = styled.div`
   display: flex;
@@ -107,7 +108,7 @@ const DeltaCheckbox = (props) => {
   )
 }
 export function ContactListItem (props) {
-  const { contact, onClick, showCheckbox, checked } = props
+  const { contact, onClick, showCheckbox, checked, showRemove, onRemoveClick } = props
   const onCheckboxClick = e => {
     if (!showCheckbox) return
     e && e.stopPropagation()
@@ -126,6 +127,9 @@ export function ContactListItem (props) {
       </ContactListItemContactWrapper>
       {showCheckbox &&
         <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={onCheckboxClick} />
+      }
+      {showRemove &&
+        <div className='module-contact-list-item__trash-icon' onClick={onRemoveClick.bind(contact)}><Icon icon='trash' /></div>
       }
     </ContactListItemWrapper>
   )

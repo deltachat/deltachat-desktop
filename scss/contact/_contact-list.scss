@@ -41,6 +41,16 @@ $color-contact-list-item: var(--contactListItemBg);
   margin-bottom: -1px;
 }
 
+.module-contact-list-item__trash-icon {
+  margin-top: calc((64px - 20px) / 2);
+  margin-right: 40px;    
+  .bp3-icon > svg {
+    width: 20px;
+    height: 20px;
+    fill: grey;
+  }
+}
+
 span.module-contact-name {
   font-weight: 200;
   font-size: medium;

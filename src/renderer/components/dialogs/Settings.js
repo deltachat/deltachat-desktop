@@ -397,35 +397,38 @@ class BackgroundSelector extends React.Component {
 
   render () {
     const tx = window.translate
-    return (<div style={{ display: 'flex' }}>
-      <SettingsContext.Consumer>
-        {(settings) => (
-          <div
-            style={{ background: settings['chatViewBgImg'], backgroundSize: 'cover' }}
-            aria-label={tx('a11y_background_preview_label')}
-            className={'background-preview'}
-          />
-        )}
-      </SettingsContext.Consumer>
-      <div className={'background-options'}>
-        <button onClick={this.onButton.bind(this, 'def')}>{tx('pref_background_default')}</button>
-        <button onClick={this.onButton.bind(this, 'def_color')}>{tx('pref_background_default_color')}</button>
-        <button onClick={this.onButton.bind(this, 'image')}>{tx('pref_background_custom_image')}</button>
-        <button onClick={this.onButton.bind(this, 'color')}>{tx('pref_background_custom_color')}</button>
+    return (
+      <div>
+        <div className={'bg-option-wrap'}>
+          <SettingsContext.Consumer>
+            {(settings) => (
+              <div
+                style={{ backgroundImage: settings['chatViewBgImg'], backgroundSize: 'cover' }}
+                aria-label={tx('a11y_background_preview_label')}
+                className={'background-preview'}
+              />
+            )}
+          </SettingsContext.Consumer>
+          <div className={'background-options'}>
+            <button onClick={this.onButton.bind(this, 'def')} className={'bp3-button'}>{tx('pref_background_default')}</button>
+            <button onClick={this.onButton.bind(this, 'def_color')} className={'bp3-button'}>{tx('pref_background_default_color')}</button>
+            <button onClick={this.onButton.bind(this, 'image')} className={'bp3-button'}>{tx('pref_background_custom_image')}</button>
+            <button onClick={this.onButton.bind(this, 'color')} className={'bp3-button'}>{tx('pref_background_custom_color')}</button>
+          </div>
+        </div>
+        <div className={'background-default-images'}>
+          { [
+            'flower.webp',
+            'bee.webp',
+            'wheat.webp',
+            'mm-1.webp',
+            'mm-2.webp',
+            'lake-tekapo.jpg',
+            'nz-beach.webp',
+            'petito-moreno.webp'
+          ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
+        </div>
       </div>
-      <div className={'background-default-images'}>
-        { [
-          'AmRandeDesWaldes.hd.jpg',
-          'bee.webp',
-          'TodnauFalls.hd.jpg',
-          'AmRheinInMainz.webp',
-          'ForestSun.webp',
-          'ArkOfFriendship.webp',
-          'nico_bg.jpg',
-          'background_old.jpg'
-        ].map((elem) => <div onClick={this.onButton.bind(this, 'pimage')} style={{ backgroundImage: `url(../images/backgrounds/${elem})` }} key={elem} data-url={elem} />) }
-      </div>
-    </div>
     )
   }
 
