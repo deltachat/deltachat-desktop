@@ -109,7 +109,7 @@ export function ThemeDataBuilder (theme) {
     messageButtons: '#8b8e91',
     messageButtonsHover: '#070c14',
     // Message Bubble - Metadata
-    messageStatusIcon: '#a4a6a9',
+    messageStatusIcon: '#4caf50',
     messageStatusIconSending: '#62656a',
     messagePadlockOutgoing: '#4caf50',
     messagePadlockIncomming: '#a4a6a9',
