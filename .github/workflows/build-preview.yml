@@ -24,7 +24,6 @@ jobs:
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d "/" -f3)
         echo ::set-output name=prid::$PULLREQUEST_ID
         if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
-        md5sum package-lock.json > pkgsum
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
       with:
@@ -84,13 +83,6 @@ jobs:
                              \"context\": \"Windows Preview Build\", \
                              \"target_url\": \"${EXE_URL}\"}"
         curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        if md5sum -c pkgsum --status; then 
-            export STATUS_DATA="{\"state\": \"failed\", \  # this value is probably not valid
-                                 \"description\": \"Remember to update package-lock.json!\", \
-                                 \"context\": \"Package Lock Status\"}"
-            curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        fi
-        
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
       run: zip -r dist/preview.zip dist/preview/
