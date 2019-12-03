@@ -1,5 +1,5 @@
 # documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
-name: Preview
+name: Check package-lock
 
 on: 
   pull_request:
@@ -13,10 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Get Pullrequest ID
-      id: prepare
-      run: |
-        md5sum package-lock.json > pkgsum
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
       with:
@@ -24,12 +20,15 @@ jobs:
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
+    - name: Checksum before build
+      id: prepare
+      run: |
+        md5sum package-lock.json > pkgsum
     - name: npm install, build, test
       run: |
         npm install
         npm run build
     - name: "Post links to details"
-      if: steps.prepare.outputs.uploadtoserver
       run: |
         # URLs for API connection and uploads
         export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
