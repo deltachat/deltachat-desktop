@@ -22,7 +22,7 @@ class Store {
     this._log = logger.getLogger('renderer/stores/' + name)
   }
 
-  get log() {
+  get log () {
     return this._log
   }
 
@@ -43,7 +43,7 @@ class Store {
     this.effects.forEach(effect => {
       effect(action, state)
     })
-    if (state != this.state) {
+    if (state !== this.state) {
       this.log.debug(`DISPATCHING of "${action.type}" changed the state. Before:`, this.state, 'After:', state)
       this.state = state
       this.listeners.forEach(listener => listener(this.state))

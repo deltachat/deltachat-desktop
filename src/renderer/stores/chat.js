@@ -36,8 +36,7 @@ const defaultState = {
 const chatStore = new Store(defaultState, 'ChatStore')
 const log = chatStore.log
 
-
-chatStore.reducers.push(({type, payload, id}, state) => {
+chatStore.reducers.push(({ type, payload, id }, state) => {
   if (typeof id !== 'undefined' && id !== state.id) {
     log.debug('REDUCER', 'id changed, skipping action')
   }
@@ -63,9 +62,9 @@ chatStore.reducers.push(({type, payload, id}, state) => {
     return {
       ...state,
       messageIds: payload.messageIds,
-      messages: { 
+      messages: {
         ...state.messages,
-        ...payload.messagesIncoming,
+        ...payload.messagesIncoming
       },
       scrollToBottomIfClose: true
     }
@@ -88,8 +87,8 @@ chatStore.reducers.push(({type, payload, id}, state) => {
     ]
     const messages = { ...state.messages, [msgId]: null }
     return { ...state, messageIds, messages, oldestFetchedMessageIndex }
-    return { ...state, messages: { ...state.messages, ...payload.messagesChanged }} 
   } else if (type === 'MESSAGE_CHANGED') {
+    return { ...state, messages: { ...state.messages, ...payload.messagesChanged } }
   } else if (type === 'SENT_MESSAGE') {
     const [messageId, message] = payload
     const messageIds = [...state.messageIds, messageId]
@@ -111,7 +110,7 @@ chatStore.reducers.push(({type, payload, id}, state) => {
   return state
 })
 
-chatStore.effects.push(async ({type, payload}, state) => {
+chatStore.effects.push(async ({ type, payload }, state) => {
   if (type === 'SELECT_CHAT') {
     callDcMethod('chatList.selectChat', [payload])
   } else if (type === 'UI_DELETE_MESSAGE') {
@@ -153,14 +152,14 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
   if (state.id !== chatId) {
     return
   }
-  chatStore.dispatch({type: 'MODIFIED_CHAT', payload: {
-    profileImage: chat.profileImage,
-    name: chat.name,
-    subtitle: chat.subtitle,
-    contacts: chat.contacts,
-    selfInGroup: chat.selfInGroup
-  }})
-
+  chatStore.dispatch({ type: 'MODIFIED_CHAT',
+    payload: {
+      profileImage: chat.profileImage,
+      name: chat.name,
+      subtitle: chat.subtitle,
+      contacts: chat.contacts,
+      selfInGroup: chat.selfInGroup
+    } })
 })
 
 ipcBackend.on('DD_EVENT_CHAT_SELECTED', async (evt, payload) => {
@@ -178,7 +177,7 @@ ipcBackend.on('DD_EVENT_CHAT_SELECTED', async (evt, payload) => {
       messageIds,
       messages,
       oldestFetchedMessageIndex,
-      scrollToBottom: true,
+      scrollToBottom: true
     }
   })
 })
@@ -218,7 +217,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
         messageId,
         messagesChanged
       }
-    }) 
+    })
   } else {
     log.debug('DC_EVENT_MSGS_CHANGED', 'changed message seems to be a new message')
     const messageIds = await callDcMethodAsync('messageList.getMessageIds', [id])

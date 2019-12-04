@@ -2,11 +2,9 @@ import React, { useContext } from 'react'
 import C from 'deltachat-node/constants'
 import styled from 'styled-components'
 import Message from './Message'
-import moment from 'moment'
 import ScreenContext from '../../contexts/ScreenContext'
 import logger from '../../../logger'
 import { useChatStore } from '../../stores/chat'
-
 
 const log = logger.getLogger('renderer/messageWrapper')
 
@@ -34,9 +32,8 @@ export const InfoMessage = styled.div`
 `
 
 export const render = React.memo((props) => {
-  const { message, messageId, chat, locationStreamingEnabled } = props
+  const { message } = props
   const { openDialog } = useContext(ScreenContext)
-  const tx = window.translate
 
   const onClickContactRequest = () => openDialog('DeadDrop', { deaddrop: message })
   const onClickSetupMessage = () => openDialog('EnterAutocryptSetupMessage', { message })
@@ -74,7 +71,7 @@ export const render = React.memo((props) => {
  * is expected by Conversations.Message
  */
 export function RenderMessage (props) {
-  const [chatStore, chatStoreDispatch] = useChatStore()
+  const chatStoreDispatch = useChatStore()[1]
   const { chat, message, locationStreamingEnabled } = props
   const { fromId, id } = message
   const msg = message.msg
