@@ -1,7 +1,5 @@
-import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCallback, useMemo } from 'react'
+import React, { useRef, useEffect } from 'react'
 import MessageWrapper, { InfoMessage } from './MessageWrapper'
-import ScreenContext from '../../contexts/ScreenContext'
-import { callDcMethod } from '../../ipc'
 import { useChatStore } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import C from 'deltachat-node/constants'
@@ -9,8 +7,6 @@ import moment from 'moment'
 
 import { getLogger } from '../../../logger'
 const log = getLogger('render/msgList')
-
-const PAGE_SIZE = 30
 
 const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {
   const messageIdsToShow = []
@@ -28,8 +24,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     scrollToBottom,
     scrollToBottomIfClose,
     scrollToLastPage,
-    scrollHeight,
-    countFetchedMessages
+    scrollHeight
   }, chatStoreDispatch] = useChatStore()
   const messageListRef = useRef(null)
   const lastKnownScrollPosition = useRef([null, null])
@@ -75,7 +70,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   }, 30, { leading: true })
 
   const onScroll = Event => {
-    if (messageListRef.current.scrollTop == 0 && isFetching.current === false) {
+    if (messageListRef.current.scrollTop === 0 && isFetching.current === false) {
       lastKnownScrollPosition.current = messageListRef.current.scrollHeight
       isFetching.current = true
       log.debug('Scrolled to top, fetching more messsages!')
@@ -86,7 +81,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
   console.log('Rerender!', scrollToBottom)
 
-  const tx = window.translate
   let specialMessageIdCounter = 0
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -114,12 +108,12 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   )
 }
 
-export function DayMarker(props) {
+export function DayMarker (props) {
   const { timestamp } = props
   const tx = window.translate
   return (
     <InfoMessage>
-      <p style={{textTransform: 'capitalize'}}>
+      <p style={{ textTransform: 'capitalize' }}>
         {moment.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
           lastDay: `[${tx('yesterday')}]`,
@@ -129,5 +123,4 @@ export function DayMarker(props) {
       </p>
     </InfoMessage>
   )
-
 }
