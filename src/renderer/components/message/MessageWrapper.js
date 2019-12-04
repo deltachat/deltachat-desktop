@@ -15,7 +15,7 @@ const GROUP_TYPES = [
   C.DC_CHAT_TYPE_VERIFIED_GROUP
 ]
 
-const InfoMessage = styled.div`
+export const InfoMessage = styled.div`
   width: 100%;
   text-align: center;
   margin: 26px 0px;
@@ -46,20 +46,7 @@ export const render = React.memo((props) => {
 
   let body
 
-  if (message.id === C.DC_MSG_ID_DAYMARKER) {
-    const key = message.daymarker.id + message.daymarker.timestamp
-    body = (
-      <InfoMessage key={key}>
-        <p>
-          {moment.unix(message.daymarker.timestamp).calendar(null, {
-            lastDay: '',
-            lastWeek: 'LL',
-            sameElse: 'LL'
-          })}
-        </p>
-      </InfoMessage>
-    )
-  } else if (message.msg.isSetupmessage) {
+  if (message.msg.isSetupmessage) {
     body = (
       <div className='setupMessage pointer' key={message.id}
         onClick={onClickSetupMessage}>
