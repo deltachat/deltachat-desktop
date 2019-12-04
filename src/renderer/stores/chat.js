@@ -37,15 +37,15 @@ const chatStore = new Store(defaultState, 'ChatStore')
 const log = chatStore.log
 
 chatStore.reducers.push(({ type, payload, id }, state) => {
+  if (type === 'SELECTED_CHAT') {
+    return { ...defaultState, ...payload }
+  }
+
   if (typeof id !== 'undefined' && id !== state.id) {
     log.debug('REDUCER', 'id changed, skipping action')
   }
 
-  if (type === 'SELECT_CHAT') {
-    return { ...defaultState, id: payload }
-  } else if (type === 'SELECTED_CHAT') {
-    return { ...defaultState, ...payload }
-  } else if (type === 'UI_UNSELECT_CHAT') {
+  if (type === 'UI_UNSELECT_CHAT') {
     return { ...defaultState }
   } else if (type === 'MODIFIED_CHAT') {
     return { ...state, payload }
@@ -112,7 +112,24 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
 
 chatStore.effects.push(async ({ type, payload }, state) => {
   if (type === 'SELECT_CHAT') {
-    callDcMethod('chatList.selectChat', [payload])
+    const chatId = payload
+    const chat = await callDcMethodAsync('chatList.selectChat', [chatId])
+    const messageIds = await callDcMethodAsync('messageList.getMessageIds', [chatId])
+    const oldestFetchedMessageIndex = messageIds.length - PAGE_SIZE
+    const newestFetchedMessageIndex = messageIds.length
+    const messageIdsToFetch = messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex)
+    const messages = await callDcMethodAsync('messageList.getMessages', [messageIdsToFetch])
+    chatStore.dispatch({
+      type: 'SELECTED_CHAT',
+      payload: {
+        ...chat,
+        id: chatId,
+        messageIds,
+        messages,
+        oldestFetchedMessageIndex,
+        scrollToBottom: true
+      }
+    })
   } else if (type === 'UI_DELETE_MESSAGE') {
     const { msgId } = payload
     callDcMethod('messageList.deleteMessage', [msgId])
@@ -158,26 +175,6 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup
     } })
-})
-
-ipcBackend.on('DD_EVENT_CHAT_SELECTED', async (evt, payload) => {
-  const { chat } = payload
-  const { id } = chat
-  const messageIds = await callDcMethodAsync('messageList.getMessageIds', [id])
-  const oldestFetchedMessageIndex = messageIds.length - PAGE_SIZE
-  const newestFetchedMessageIndex = messageIds.length
-  const messageIdsToFetch = messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex)
-  const messages = await callDcMethodAsync('messageList.getMessages', [messageIdsToFetch])
-  chatStore.dispatch({
-    type: 'SELECTED_CHAT',
-    payload: {
-      ...chat,
-      messageIds,
-      messages,
-      oldestFetchedMessageIndex,
-      scrollToBottom: true
-    }
-  })
 })
 
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
