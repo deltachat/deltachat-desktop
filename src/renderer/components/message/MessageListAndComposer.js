@@ -7,6 +7,8 @@ import MessageList from './MessageList'
 
 import SettingsContext from '../../contexts/SettingsContext'
 
+import ScreenContext from '../../contexts/ScreenContext'
+
 import { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } from 'deltachat-node/constants'
 
 export default function MessageListAndComposer (props) {
@@ -17,6 +19,7 @@ export default function MessageListAndComposer (props) {
   const { chat } = props
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
+  const { openDialog } = useContext(ScreenContext)
 
   const setComposerSize = size => setState({ composerSize: size })
 
@@ -24,15 +27,23 @@ export default function MessageListAndComposer (props) {
     const files = e.target.files || e.dataTransfer.files
     e.preventDefault()
     e.stopPropagation()
+    const tx = window.translate
+
     // TODO maybe add a clause here for windows because that uses backslash instead of slash
     const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
     for (let i = 0; i < files.length; i++) {
-      const { path } = files[i]
+      const { path, name } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        callDcMethod(
-          'messageList.sendMessage',
-          [chat.id, null, path]
-        )
+        openDialog('ConfirmationDialog', {
+          message: tx('ask_send_file_desktop', [name, chat.name]),
+          cb: yes => {
+            if (!yes) { return }
+            callDcMethod(
+              'messageList.sendMessage',
+              [chat.id, null, path]
+            )
+          }
+        })
       } else {
         logger.warn('Prevented a file from being send again while dragging it out')
       }
