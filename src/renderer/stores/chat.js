@@ -33,7 +33,7 @@ const defaultState = {
   countFetchedMessages: 0
 }
 
-const chatStore = new Store(defaultState)
+const chatStore = new Store(defaultState, 'ChatStore')
 const log = chatStore.log
 
 
@@ -44,6 +44,8 @@ chatStore.reducers.push(({type, payload, id}, state) => {
 
   if (type === 'SELECTED_CHAT') {
     return { ...defaultState, ...payload }
+  } else if (type === 'UI_UNSELECT_CHAT') {
+    return { ...defaultState }
   } else if (type === 'MODIFIED_CHAT') {
     return { ...state, payload }
   } else if (type === 'FETCHED_MORE_MESSAGES') {
