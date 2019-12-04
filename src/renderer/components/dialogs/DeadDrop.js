@@ -8,7 +8,10 @@ export default function DeadDrop (props) {
   const { deaddrop, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
   const yes = async () => {
-    const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [deaddrop])
+    const messageId = deaddrop.msg.id
+    const contactId = deaddrop.contact.id 
+    console.log(deaddrop)
+    const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [{messageId, contactId}])
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     onClose()
   }
