@@ -1,9 +1,11 @@
 import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCallback, useMemo } from 'react'
-import MessageWrapper from './MessageWrapper'
+import MessageWrapper, { InfoMessage } from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
 import { useChatStore } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
+import C from 'deltachat-node/constants'
+import moment from 'moment'
 
 import { getLogger } from '../../../logger'
 const log = getLogger('render/msgList')
@@ -89,15 +91,18 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
       <ul >
-        {_messageIdsToShow.map(messageId => {
-          const key = messageId <= 9
-            ? 'magic' + messageId + '_' + specialMessageIdCounter++
-            : messageId
+        {_messageIdsToShow.map((messageId, i) => {
+          if (messageId === C.DC_MSG_ID_DAYMARKER) {
+            const key = 'magic' + messageId + '_' + specialMessageIdCounter++
+            const nextMessage = messages[_messageIdsToShow[i + 1]]
+            if (!nextMessage) return null
+            return <DayMarker key={key} timestamp={nextMessage.msg.timestamp} />
+          }
           const message = messages[messageId]
           if (!message) return
           return (
             <MessageWrapper.render
-              key={key}
+              key={messageId}
               message={message}
               chat={chat}
               locationStreamingEnabled={locationStreamingEnabled}
@@ -105,6 +110,24 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
           )
         })}
       </ul>
-    </div>
+    t</div>
   )
+}
+
+export function DayMarker(props) {
+  const { timestamp } = props
+  const tx = window.translate
+  return (
+    <InfoMessage>
+      <p style={{textTransform: 'capitalize'}}>
+        {moment.unix(timestamp).calendar(null, {
+          sameDay: `[${tx('today')}]`,
+          lastDay: `[${tx('yesterday')}]`,
+          lastWeek: 'LL',
+          sameElse: 'LL'
+        })}
+      </p>
+    </InfoMessage>
+  )
+
 }
