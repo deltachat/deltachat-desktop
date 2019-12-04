@@ -25,10 +25,9 @@ module.exports = class DCContacts extends SplitOut {
     this._dc.createContact(name, address)
     log.info(`Added contact ${name} (${address})`)
     const chatId = this._dc.createChatByMessageId(deadDrop.id)
-    if (chatId) {
-      this._controller.chatList.updateChatList()
-      this._controller.chatList.selectChat(chatId)
-    }
+
+    if (chatId) this._controller.chatList.updateChatList()
+    return chatId
   }
 
   createContact (name, email) {
