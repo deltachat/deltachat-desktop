@@ -104,7 +104,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
             />
           )
         })}
-        })>
       </ul>
     </div>
   )
