@@ -9,7 +9,7 @@ import ChatList from './chat/ChatList'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import SearchInput from './SearchInput'
 import SettingsContext from '../contexts/SettingsContext'
-
+import { useChatStore } from '../stores/chat'
 import NavbarWrapper from './NavbarWrapper'
 
 import chatStore from '../stores/chat'
@@ -46,9 +46,9 @@ const Welcome = styled.div`
 export default function MainScreen () {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
-  const [selectedChat, setSelectedChat] = useState(null)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
   const { openDialog } = useContext(ScreenContext)
+  const [selectedChat, chatStoreDispatch] = useChatStore()
 
   const chatClicked = useRef(0)
 
@@ -59,17 +59,12 @@ export default function MainScreen () {
       return
     }
     chatClicked.current = chatId
-    callDcMethod('chatList.selectChat', [chatId])
+    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     setTimeout(() => { chatClicked.current = 0 }, 500)
   }
   const searchChats = queryStr => setQueryStr(queryStr)
   const handleSearchChange = event => searchChats(event.target.value)
   const onMapIconClick = () => openDialog('MapDialog', { selectedChat })
-
-  useEffect(() => {
-    chatStore.subscribe(onChatUpdate)
-    return () => { chatStore.unsubscribe(onChatUpdate) }
-  }, [selectedChat])
 
   const tx = window.translate
 

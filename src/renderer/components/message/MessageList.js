@@ -2,7 +2,7 @@ import React, { useContext, useRef, useEffect, useState, useLayoutEffect, useCal
 import MessageWrapper from './MessageWrapper'
 import ScreenContext from '../../contexts/ScreenContext'
 import { callDcMethod } from '../../ipc'
-import { useMessageListStore } from '../../stores/MessageList'
+import { useChatStore } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { getLogger } from '../../../logger'
@@ -28,7 +28,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     scrollToLastPage,
     scrollHeight,
     countFetchedMessages
-  }, messageListDispatch] = useMessageListStore()
+  }, chatStoreDispatch] = useChatStore()
   const messageListRef = useRef(null)
   const lastKnownScrollPosition = useRef([null, null])
   const isFetching = useRef(false)
@@ -39,37 +39,37 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-    messageListDispatch({ type: 'SCROLLED_TO_BOTTOM' })
+    chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
 
   useLayoutEffect(() => {
     if (scrollToBottomIfClose === false) return
     if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop > 400) {
-      messageListDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+      chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
       return
     }
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-    messageListDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+    chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
   }, [scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
     console.log('scrollToLastMessageOnLastPage', lastKnownScrollPosition.current)
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
-    messageListDispatch({ type: 'SCROLLED_TO_LAST_PAGE' })
+    chatStoreDispatch({ type: 'SCROLLED_TO_LAST_PAGE' })
     isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
-    messageListDispatch({ type: 'SELECT_CHAT', payload: chat.id })
+    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chat.id })
     isFetching.current = false
   }, [chat.id])
 
   const [fetchMore] = useDebouncedCallback(() => {
-    messageListDispatch({ type: 'FETCH_MORE_MESSAGES', payload: { scrollHeight: messageListRef.current.scrollHeight } })
+    chatStoreDispatch({ type: 'FETCH_MORE_MESSAGES', payload: { scrollHeight: messageListRef.current.scrollHeight } })
   }, 30, { leading: true })
 
   const onScroll = Event => {

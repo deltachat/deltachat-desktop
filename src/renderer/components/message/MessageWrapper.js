@@ -5,7 +5,7 @@ import Message from './Message'
 import moment from 'moment'
 import ScreenContext from '../../contexts/ScreenContext'
 import logger from '../../../logger'
-import { useMessageListStore } from '../../stores/MessageList'
+import { useChatStore } from '../../stores/chat'
 
 
 const log = logger.getLogger('renderer/messageWrapper')
@@ -87,7 +87,7 @@ export const render = React.memo((props) => {
  * is expected by Conversations.Message
  */
 export function RenderMessage (props) {
-  const [messageListStore, messageListDispatch] = useMessageListStore()
+  const [chatStore, chatStoreDispatch] = useChatStore()
   const { chat, message, locationStreamingEnabled } = props
   const { fromId, id } = message
   const msg = message.msg
@@ -98,7 +98,7 @@ export function RenderMessage (props) {
   const onShowDetail = () => openDialog('MessageDetail', { message, chat })
   const onDelete = () => openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message_desktop'),
-    cb: yes => yes && messageListDispatch({ type: 'UI_DELETE_MESSAGE', payload: id })
+    cb: yes => yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: id })
   })
 
   const contact = {
