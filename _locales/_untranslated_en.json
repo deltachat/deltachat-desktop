@@ -49,5 +49,8 @@
   },
   "a11y_profile_image_remove":{
     "message": "remove your profile image"
+  },
+  "ask_send_file_desktop":{
+    "message": "Send %s to %s?"
   }
 }
