@@ -86,7 +86,6 @@ module.exports = class DCMessageList extends SplitOut {
 
   getMessageIds (chatId) {
     const messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
-    console.log(messageIds)
     return messageIds
   }
 

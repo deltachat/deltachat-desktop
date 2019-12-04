@@ -198,7 +198,6 @@ class DeltaChatController extends EventEmitter {
         event = eventStrings[event]
       }
       this.logCoreEvent(event, ...args)
-      console.log(event, ...args)
       if (!event || event === 'DC_EVENT_INFO') return
       this.sendToRenderer(event, args)
     })

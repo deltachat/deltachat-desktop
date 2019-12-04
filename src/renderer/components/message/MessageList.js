@@ -54,7 +54,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
 
   useEffect(() => {
     if (scrollToLastPage === false) return
-    console.log('scrollToLastMessageOnLastPage', lastKnownScrollPosition.current)
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
     chatStoreDispatch({ type: 'SCROLLED_TO_LAST_PAGE' })
     isFetching.current = false
@@ -79,7 +78,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   }
 
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
-  console.log('Rerender!', scrollToBottom)
 
   let specialMessageIdCounter = 0
   return (
