@@ -25,10 +25,12 @@ import {
 const NavbarGroupName = styled.div`
   font-size: medium;
   font-weight: bold;
+  cursor: pointer;
 `
 const NavbarGroupSubtitle = styled.div`
   font-size: small;
   font-weight: 100;
+  cursor: pointer;
   color: ${props => props.theme.navBarGroupSubtitle};
 `
 
@@ -56,6 +58,11 @@ export default function MainScreen () {
   const searchChats = queryStr => setQueryStr(queryStr)
   const handleSearchChange = event => searchChats(event.target.value)
   const onMapIconClick = () => openDialog('MapDialog', { selectedChat })
+  const onTitleClick = () => {
+    if (selectedChat && selectedChat.isGroup) {
+      openDialog('EditGroup', { chat: selectedChat })
+    }
+  }
 
   const tx = window.translate
 
@@ -98,8 +105,8 @@ export default function MainScreen () {
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>
-              <NavbarGroupName>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
-              <NavbarGroupSubtitle>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
+              <NavbarGroupName onClick={onTitleClick}>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
+              <NavbarGroupSubtitle onClick={onTitleClick}>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
             </NavbarHeading>
             {selectedChat && selectedChat.id && <span className='views'>
               <Button
