@@ -33,7 +33,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   const lastKnownScrollPosition = useRef([null, null])
   const isFetching = useRef(false)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (scrollToBottom === false) return
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
@@ -42,7 +42,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (scrollToBottomIfClose === false) return
     if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop > 400) {
       chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
