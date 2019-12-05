@@ -213,6 +213,7 @@ const Message = (props) => {
         onContextMenu={showMenu}
         className='msg-container'
       >
+        {message.msg.isForwarded && <div className='forwarded-indicator'>{tx('forwarded_message')}</div>}
         {direction === 'incoming' && conversationType === 'group' && Author(message)}
         <Attachment {...{
           attachment,
