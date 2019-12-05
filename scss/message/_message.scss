@@ -149,6 +149,13 @@
         min-height: unset;
     }
 
+    .forwarded-indicator {
+        font-weight: bold;
+        font-size: 0.9em;
+        margin-bottom: 3px;
+        opacity: 0.86;
+    }
+
 }
 
 // States that modify the message buble appearance
