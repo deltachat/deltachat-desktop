@@ -1,0 +1,72 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
+name: Build & Upload Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get Pullrequest ID
+      id: prepare
+      run: |
+        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        export TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo ::set-output name=tag::$TAG
+        #export SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
+        #echo ::set-output name=sha::$SHA
+    - name: install wine
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install --yes wine-stable wine32
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: change build name and Product Name to development id
+      run: |
+        node ./bin/github-actions/devbuild.js
+    - name: npm install, build, test
+      run: |
+        npm install
+        npm run build
+    - name: electron builder
+      run: npx electron-builder --linux --win portable --mac mas || true
+    - name: renaming
+      run: |
+        cd dist
+        mkdir preview
+        mv *.AppImage preview/DeltaChat-${{ steps.prepare.outputs.tag }}.AppImage
+        mv *.exe preview/DeltaChat-${{ steps.prepare.outputs.tag }}.exe
+        ls preview
+        cd ..
+    - name: compressing mas
+      run: zip -r dist/preview/DeltaChat-mas-${{ steps.prepare.outputs.tag }}.zip dist/mas
+    - name: upload folder
+      if: steps.prepare.outputs.uploadtoserver
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "dist/preview/*"
+        remote: "/var/www/html/download/desktop/"
+    - name: "zip result"
+      if: steps.prepare.outputs.uploadtoserver == false
+      run: zip -r dist/preview.zip dist/preview/
+    - name: Upload result to artifacts
+      if: steps.prepare.outputs.uploadtoserver == false
+      uses: actions/upload-artifact@master
+      with:
+        name: Files
+        path: dist/preview.zip
