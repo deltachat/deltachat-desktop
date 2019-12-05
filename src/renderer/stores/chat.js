@@ -77,14 +77,11 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
 
-    const messageIndex = state.messageIds.findIndex(mId => mId === msgId)
+    const messageIndex = state.messageIds.findIndex(mId => mId !== msgId)
     const oldestFetchedMessageIndex = messageIndex === state.oldestFetchedMessageIndex
       ? messageIndex + 1
       : state.oldestFetchedMessageIndex
-    const messageIds = [
-      ...state.messageIds.slice(0, messageIndex),
-      ...state.messageIds.slice(messageIndex + 1)
-    ]
+    const messageIds = state.messageIds.filter(mId => mId !== msgId)
     const messages = { ...state.messages, [msgId]: null }
     return { ...state, messageIds, messages, oldestFetchedMessageIndex }
   } else if (type === 'MESSAGE_CHANGED') {
@@ -131,7 +128,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
       }
     })
   } else if (type === 'UI_DELETE_MESSAGE') {
-    const { msgId } = payload
+    const msgId = payload
     callDcMethod('messageList.deleteMessage', [msgId])
   } else if (type === 'FETCH_MORE_MESSAGES') {
     const oldestFetchedMessageIndex = Math.max(state.oldestFetchedMessageIndex - 30, 0)

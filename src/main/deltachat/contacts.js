@@ -17,7 +17,7 @@ module.exports = class DCContacts extends SplitOut {
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
-  acceptContactRequest ({messageId, contactId}) {
+  acceptContactRequest ({ messageId, contactId }) {
     log.info(`chat with dead drop ${contactId}:${messageId}`)
     const contact = this._dc.getContact(contactId)
     const address = contact.getAddress()
