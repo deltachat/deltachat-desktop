@@ -2,7 +2,7 @@
 name: Build & Upload Release
 
 on:
-  pull-request:  # testing
+  pull_request:  # testing
   push:
     branches:
       - master
