@@ -18,7 +18,6 @@ jobs:
     - name: Get Pullrequest ID
       id: prepare
       run: |
-        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
         export TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=tag::$TAG
         #export SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
@@ -33,9 +32,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
-    - name: change build name and Product Name to development id
-      run: |
-        node ./bin/github-actions/devbuild.js
     - name: npm install, build, test
       run: |
         npm install
@@ -53,7 +49,6 @@ jobs:
     - name: compressing mas
       run: zip -r dist/preview/DeltaChat-mas-${{ steps.prepare.outputs.tag }}.zip dist/mas
     - name: upload folder
-      if: steps.prepare.outputs.uploadtoserver
       uses: horochx/deploy-via-scp@v1.0.1
       with:
         user: ${{ secrets.USERNAME }}
@@ -62,12 +57,3 @@ jobs:
         port: 22
         local: "dist/preview/*"
         remote: "/var/www/html/download/desktop/"
-    - name: "zip result"
-      if: steps.prepare.outputs.uploadtoserver == false
-      run: zip -r dist/preview.zip dist/preview/
-    - name: Upload result to artifacts
-      if: steps.prepare.outputs.uploadtoserver == false
-      uses: actions/upload-artifact@master
-      with:
-        name: Files
-        path: dist/preview.zip
