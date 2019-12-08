@@ -41,13 +41,15 @@ jobs:
     - name: renaming
       run: |
         cd dist
-        mkdir preview
-        mv *.AppImage preview/DeltaChat-${{ steps.prepare.outputs.tag }}.AppImage
-        mv *.exe preview/DeltaChat-${{ steps.prepare.outputs.tag }}.exe
-        ls preview
+        mkdir release
+        mv *.AppImage release/DeltaChat-${{ steps.prepare.outputs.tag }}.AppImage
+        mv *.deb release/DeltaChat-${{ steps.prepare.outputs.tag }}.deb
+        mv *.exe release/DeltaChat-${{ steps.prepare.outputs.tag }}.exe
+        mv win-unpacked release/
+        ls release
         cd ..
     - name: compressing mas
-      run: zip -r dist/preview/DeltaChat-mas-${{ steps.prepare.outputs.tag }}.zip dist/mas
+      run: zip -r dist/release/DeltaChat-mas-${{ steps.prepare.outputs.tag }}.zip dist/mas
     - name: upload folder
       uses: horochx/deploy-via-scp@v1.0.1
       with:
@@ -55,5 +57,5 @@ jobs:
         key: ${{ secrets.KEY }}
         host: "download.delta.chat"
         port: 22
-        local: "dist/preview/*"
+        local: "dist/release/*"
         remote: "/var/www/html/download/desktop/"
