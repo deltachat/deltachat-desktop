@@ -50,7 +50,9 @@ jobs:
     - name: compressing mas
       run: zip -r dist/release/DeltaChat-mas-${{ steps.prepare.outputs.tag }}.zip dist/mas
     - name: compressing win-portable
-      run: zip -r dist/release/DeltaChat-windows-portable-${{ steps.prepare.outputs.tag }}.zip dist/win-unpacked
+      run: |
+        cd dist/win-unpacked
+        zip -r ../release/DeltaChat-windows-portable-${{ steps.prepare.outputs.tag }}.zip *
     - name: upload folder
       uses: horochx/deploy-via-scp@v1.0.1
       with:
