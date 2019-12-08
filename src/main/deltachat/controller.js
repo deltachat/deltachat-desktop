@@ -204,6 +204,7 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
 
+    // TODO: move event handling to frontend store
     dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)

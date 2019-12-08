@@ -26,9 +26,9 @@ const defaultState = {
   messageIds: [],
   messages: {},
   oldestFetchedMessageIndex: -1,
-  scrollToBottom: false,
-  scrollToBottomIfClose: false,
-  scrollToLastPage: false,
+  scrollToBottom: false, // if true the UI will scroll to bottom
+  scrollToBottomIfClose: false, // used to display new incoming message (only if current view is close to bottom)
+  scrollToLastPage: false, // after fetching more messages reset scroll bar to old position
   scrollHeight: 0,
   countFetchedMessages: 0
 }
@@ -42,7 +42,8 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
   }
 
   if (typeof id !== 'undefined' && id !== state.id) {
-    log.debug('REDUCER', 'id changed, skipping action')
+    log.debug('REDUCER', 'seems like an old action because the chatId changed in between')
+    return state
   }
 
   if (type === 'UI_UNSELECT_CHAT') {
@@ -68,25 +69,29 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
       },
       scrollToBottomIfClose: true
     }
-  } else if (type === 'SCROLLED_TO_LAST_PAGE') {
-    return { ...state, scrollToLastPage: false, scrollHeight: 0 }
-  } else if (type === 'SCROLLED_TO_BOTTOM') {
-    return { ...state, scrollToBottom: false }
-  } else if (type === 'SCROLLED_TO_BOTTOM_IF_CLOSE') {
-    return { ...state, scrollToBottomIfClose: false }
+    // type SCROLL_COMPLETE ?
+  } else if (type === 'FINISHED_SCROLL') {
+    if (payload === 'SCROLLED_TO_LAST_PAGE') {
+      return { ...state, scrollToLastPage: false, scrollHeight: 0 }
+    } else if (payload === 'SCROLLED_TO_BOTTOM') {
+      return { ...state, scrollToBottom: false }
+    } else if (payload === 'SCROLLED_TO_BOTTOM_IF_CLOSE') {
+      return { ...state, scrollToBottomIfClose: false }
+    }
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
 
-    const messageIndex = state.messageIds.findIndex(mId => mId !== msgId)
-    const oldestFetchedMessageIndex = messageIndex === state.oldestFetchedMessageIndex
-      ? messageIndex + 1
-      : state.oldestFetchedMessageIndex
+    const messageIndex = state.messageIds.indexOf(msgId)
+    let { oldestFetchedMessageIndex } = state
+    if (messageIndex === oldestFetchedMessageIndex) {
+      oldestFetchedMessageIndex += 1
+    }
     const messageIds = state.messageIds.filter(mId => mId !== msgId)
     const messages = { ...state.messages, [msgId]: null }
     return { ...state, messageIds, messages, oldestFetchedMessageIndex }
   } else if (type === 'MESSAGE_CHANGED') {
     return { ...state, messages: { ...state.messages, ...payload.messagesChanged } }
-  } else if (type === 'SENT_MESSAGE') {
+  } else if (type === 'MESSAGE_SENT') {
     const [messageId, message] = payload
     const messageIds = [...state.messageIds, messageId]
     const messages = { ...state.messages, [messageId]: message }
@@ -110,6 +115,8 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
 chatStore.effects.push(async ({ type, payload }, state) => {
   if (type === 'SELECT_CHAT') {
     const chatId = payload
+    // these methods were called in backend before
+    // might be an issue if callDcMethodAsync has a significant delay
     const chat = await callDcMethodAsync('chatList.selectChat', [chatId])
     const messageIds = await callDcMethodAsync('messageList.getMessageIds', [chatId])
     const oldestFetchedMessageIndex = messageIds.length - PAGE_SIZE
@@ -131,7 +138,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
     const msgId = payload
     callDcMethod('messageList.deleteMessage', [msgId])
   } else if (type === 'FETCH_MORE_MESSAGES') {
-    const oldestFetchedMessageIndex = Math.max(state.oldestFetchedMessageIndex - 30, 0)
+    const oldestFetchedMessageIndex = Math.max(state.oldestFetchedMessageIndex - PAGE_SIZE, 0)
     const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
     if (lastMessageIndexOnLastPage === 0) return
     const fetchedMessageIds = state.messageIds.slice(
@@ -154,7 +161,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
   } else if (type === 'SEND_MESSAGE') {
     if (payload[0] !== chatStore.state.id) return
     const messageObj = await callDcMethodAsync('messageList.sendMessage', payload)
-    chatStore.dispatch({ type: 'SENT_MESSAGE', payload: messageObj, id: payload[0] })
+    chatStore.dispatch({ type: 'MESSAGE_SENT', payload: messageObj, id: payload[0] })
   }
 })
 
@@ -182,7 +189,7 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, id, messageIdIncoming) => {
+ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, id) => {
   if (id !== chatStore.state.id) return
   const messageIds = await callDcMethodAsync('messageList.getMessageIds', [id])
   const messageIdsIncoming = messageIds.filter(x => !chatStore.state.messageIds.includes(x))

@@ -47,6 +47,12 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
   return { chatListIds, listFlags, setListFlags, queryStr, setQueryStr, queryContactId, setQueryContactId }
 }
 
+/**
+ * fetch chats by IDs
+ * only if chats are
+ * - in view
+ * - not already loaded
+ */
 export const useLazyChatListItems = chatListIds => {
   const scrollRef = useRef(null)
   const fetching = useRef([])
@@ -101,6 +107,9 @@ export const useLazyChatListItems = chatListIds => {
     setChatItems(chatItems => { return { ...chatItems, ...chats } })
   }
 
+  /**
+   * called after chatlist update
+   */
   const updateChatsInViewUnsetOthers = async () => {
     if (isNotReady()) return
     const chatIds = chatIdsInView()

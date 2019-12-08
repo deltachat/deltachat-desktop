@@ -4,13 +4,15 @@ import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButton, DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 import { useChatStore } from '../../stores/chat'
 
+/**
+ * handle contact requests
+ */
 export default function DeadDrop (props) {
   const { deaddrop, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
   const yes = async () => {
-    const messageId = deaddrop.msg.id
+    const messageId = deaddrop.id
     const contactId = deaddrop.contact.id
-    console.log(deaddrop)
     const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [{ messageId, contactId }])
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     onClose()
