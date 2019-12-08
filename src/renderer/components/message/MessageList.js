@@ -36,26 +36,28 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-    chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM' })
+    chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
 
   useEffect(() => {
     if (scrollToBottomIfClose === false) return
     if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop > 400) {
-      chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+      // we are close to bottom so scroll down to show the new message
+      chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
       return
     }
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     setTimeout(() => {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     }, 30)
-    chatStoreDispatch({ type: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
+    chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
   }, [scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
+    // restore old scroll position after new messages are rendered
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
-    chatStoreDispatch({ type: 'SCROLLED_TO_LAST_PAGE' })
+    chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_LAST_PAGE' })
     isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
 

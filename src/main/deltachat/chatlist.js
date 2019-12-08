@@ -13,20 +13,20 @@ module.exports = class DCChatList extends SplitOut {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
     }
-    if (chat.id !== C.DC_CHAT_ID_DEADDROP) {
-      if (chat.freshMessageCounter > 0) {
-        this._dc.markNoticedChat(chat.id)
-        chat.freshMessageCounter = 0
-        const messagIds = this.getMessageIds(chatId)
-        log.debug('markSeenMessages', messagIds)
-        this._dc.markSeenMessages(messagIds)
-        app.setBadgeCount(this._getGeneralFreshMessageCounter())
-      }
+    if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
+      this._dc.markNoticedChat(chat.id)
+      chat.freshMessageCounter = 0
+      const messagIds = this.getMessageIds(chatId)
+      log.debug('markSeenMessages', messagIds)
+      // TODO: move mark seen logic to frontend
+      this._dc.markSeenMessages(messagIds)
+      app.setBadgeCount(this._getGeneralFreshMessageCounter())
     }
     return chat
   }
 
   onChatModified (chatId) {
+    // TODO: move event handling to store
     const chat = this.getFullChatById(chatId)
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
@@ -115,7 +115,7 @@ module.exports = class DCChatList extends SplitOut {
     return draft ? draft.getText() : ''
   }
 
-  getFullChatById (chatId, loadMessages) {
+  getFullChatById (chatId) {
     const chat = this.__getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0
@@ -135,7 +135,7 @@ module.exports = class DCChatList extends SplitOut {
       archived: chat.archived,
       subtitle: this.__chatSubtitle(chat, contacts),
       type: chat.type,
-      isUnpromoted: chat.isUnpromoted,
+      isUnpromoted: chat.isUnpromoted, // new chat but no initial message sent
       isSelfTalk: chat.isSelfTalk,
 
       contacts: contacts,

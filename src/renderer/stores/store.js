@@ -8,7 +8,7 @@ export function useStore (StoreInstance) {
     StoreInstance.subscribe(setState)
     return () => StoreInstance.unsubscribe(setState)
   }, [])
-
+  // TODO: better return an object to allow destructuring
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }
 
@@ -24,10 +24,6 @@ class Store {
 
   get log () {
     return this._log
-  }
-
-  getName () {
-    return 'Store'
   }
 
   getState () {
