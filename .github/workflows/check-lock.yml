@@ -32,7 +32,7 @@ jobs:
         # URLs for API connection and uploads
         export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
         if ! md5sum -c pkgsum --status; then 
-            export STATUS_DATA="{\"state\": \"failed\", \  # this value is probably not valid
+            export STATUS_DATA="{\"state\": \"failure\", \
                                  \"description\": \"Remember to commit & push package-lock.json!\", \
                                  \"context\": \"package-lock changed\"}"
             curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
