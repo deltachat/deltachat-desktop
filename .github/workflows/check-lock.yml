@@ -25,7 +25,7 @@ jobs:
       run: |
         md5sum package-lock.json > pkgsum
         SUM=`cat pkgsum`
-        echo ::set-output checksum=checksum::$SUM
+        echo ::set-output name=checksum::$SUM
     - name: npm install, build, test
       run: |
         npm i
