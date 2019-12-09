@@ -22,6 +22,8 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer()
   }
 
+
+
   login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
     this._controller.accountDir = this.getPath(credentials.addr)
@@ -45,6 +47,7 @@ module.exports = class DCLoginController extends SplitOut {
         this._controller.configuring = false
         this._controller.emit('ready', this._controller.credentials)
         log.info('dc_get_info', dc.getInfo())
+        this.initDeviceChat()
         sendStateToRenderer()
       }
       if (!this._dc.isConfigured() || updateConfiguration) {
@@ -86,4 +89,13 @@ module.exports = class DCLoginController extends SplitOut {
       server_flags: this._controller.settings.serverFlags(credentials)
     })
   }
+
+  initDeviceChat() {
+    console.log(this._dc.addDeviceMessage)
+    const isFirstLogin = this._dc.addDeviceMessage('welcome', 'Welcome!') !== 0
+
+    // Create Saved Message chat on first login
+    if (isFirstLogin) this._controller.contacts.createChatByContactId(1)
+  }
+    
 }
