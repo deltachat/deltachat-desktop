@@ -148,13 +148,6 @@
         height: 400px;
         min-height: unset;
     }
-
-    .forwarded-indicator {
-        font-weight: bold;
-        font-size: 0.9em;
-        margin-bottom: 3px;
-        opacity: 0.86;
-    }
 }
 
 // States that modify the message buble appearance
@@ -282,6 +275,20 @@
 .message.error.incoming {
     .text {
         font-style: italic;
+    }
+}
+
+.message.forwarded {
+    .forwarded-indicator {
+        font-weight: bold;
+        font-size: 0.9em;
+        margin-bottom: 3px;
+        opacity: 0.86;
+    }
+    .module-message__attachment-container {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-top: 0;
     }
 }
 

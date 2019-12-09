@@ -204,7 +204,8 @@ const Message = (props) => {
         'message',
         direction,
         { 'type-sticker': viewType === 23 },
-        { error: status === 'error' }
+        { error: status === 'error' },
+        { forwarded: message.msg.isForwarded }
       )}
     >
       {conversationType === 'group' && direction === 'incoming' && Avatar(message)}
