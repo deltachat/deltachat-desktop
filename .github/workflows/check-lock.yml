@@ -38,7 +38,7 @@ jobs:
             echo "Checksum before npm i:"
             echo ${{ steps.calculate.outputs.checksum }}
             echo "Checksum after npm i:"
-            cat pkgsum
+            md5sum package-lock.json
         fi
     - name: "Post warning"
       if: steps.checksum.outputs.warn
