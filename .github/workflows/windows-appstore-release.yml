@@ -1,0 +1,53 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
+name: Build & Upload Release
+
+on:
+  pull_request:  # testing
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Get Pullrequest ID
+      id: prepare
+      run: |
+        export TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo ::set-output name=tag::$TAG
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: apply diff
+      run: |
+        wget https://github.com/deltachat/deltachat-desktop/files/3940533/diff-get-on-msstore.txt
+        git apply diff-get-on-msstore.txt
+    - name: npm install, build, test
+      run: |
+        npm install
+        npm run build
+    - name: electron builder
+      run: npx electron-builder --win || true
+    - name: renaming
+      run: |
+        cd dist
+        ls
+        mkdir release
+        mv *.appx release/DeltaChat-${{ steps.prepare.outputs.tag }}.appx
+        ls release
+#   - name: upload folder
+#     uses: horochx/deploy-via-scp@v1.0.1
+#     with:
+#       user: ${{ secrets.USERNAME }}
+#       key: ${{ secrets.KEY }}
+#       host: "download.delta.chat"
+#       port: 22
+#       local: "dist/release/*"
+#       remote: "/var/www/html/download/desktop/"
