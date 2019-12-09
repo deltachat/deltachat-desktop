@@ -36,7 +36,7 @@ jobs:
             echo "Warning: checksum changed"
             echo ::set-output name=warn::true
             echo "Checksum before npm i:"
-            echo {{ steps.calculate.outputs.checksum }}
+            echo ${{ steps.calculate.outputs.checksum }}
             echo "Checksum after npm i:"
             cat pkgsum
         fi
