@@ -52,5 +52,4 @@ jobs:
                              --url "$GITHUB_API_URL" \
                              --header "content-type: application/json" \
                              --data "$STATUS_DATA"
-        fi
 
