@@ -27,8 +27,8 @@ jobs:
         node-version: 10.x
     - name: apply diff
       run: |
-        curl https://github.com/deltachat/deltachat-desktop/files/3940533/diff-get-on-msstore.txt -O ms.diff
-        git apply c:\ms.diff
+        curl https://github.com/deltachat/deltachat-desktop/files/3940533/diff-get-on-msstore.txt > ms.diff
+        git apply ms.diff
     - name: npm install, build, test
       run: |
         npm install
