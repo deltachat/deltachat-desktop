@@ -64,12 +64,6 @@ export const render = React.memo((props) => {
   return <li>{body}</li>
 })
 
-/**
- * RenderMessage takes a message already created with Message.convert
- * and returns a React component of that message from the Conversations
- * library. This class mostly just converts the necessary properties to what
- * is expected by Conversations.Message
- */
 export function RenderMessage (props) {
   const chatStoreDispatch = useChatStore()[1]
   const { chat, message, locationStreamingEnabled } = props
