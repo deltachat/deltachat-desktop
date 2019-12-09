@@ -35,6 +35,7 @@ jobs:
         if ! md5sum -c pkgsum --status; then 
             echo "Warning: checksum changed"
             echo ::set-output name=warn::true
+            node --version
             echo "Checksum before npm i:"
             echo ${{ steps.calculate.outputs.checksum }}
             echo "Checksum after npm i:"
