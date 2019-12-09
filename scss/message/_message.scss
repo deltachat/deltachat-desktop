@@ -93,6 +93,8 @@
         padding-bottom: 10px;
 
         &>.author {
+            display: block;
+            max-width: 40vw;
             font-size: 13px;
             font-weight: 300;
             line-height: 18px;
