@@ -27,7 +27,6 @@ jobs:
     - name: npm install, build, test
       run: |
         npm install
-        npm run build
     - name: "Post links to details"
       run: |
         # URLs for API connection and uploads
