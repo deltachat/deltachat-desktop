@@ -6,7 +6,6 @@ import { Button, ButtonGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
-import MessageWrapper from './message/MessageWrapper'
 import Attachment, { isVideo, isImage } from './message/Attachment'
 
 const Wrapper = styled.div`
@@ -120,12 +119,11 @@ export default class Media extends React.Component {
         })}
       </ButtonGroup>
       <MediaGallery>
-        {medias.map((raw) => {
-          var message = MessageWrapper.convert(raw)
+        {medias.map((message) => {
           var msg = message.msg
           return <MediaGalleryItem
             onClick={this.onClickMedia.bind(this, message)}
-            key={message.id}>
+            key={msg.id}>
             <Attachment {...{
               direction: msg.direction,
               attachment: msg.attachment,
