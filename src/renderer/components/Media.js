@@ -92,7 +92,9 @@ export default class Media extends React.Component {
     this.setState({ id, msgTypes, medias })
   }
 
-  onClickMedia (message) {
+  onClickMedia (message, ev) {
+    ev.preventDefault()
+    ev.stopPropagation()
     const attachment = message.msg.attachment
     if (
       message.filemime === 'application/octet-stream' &&
