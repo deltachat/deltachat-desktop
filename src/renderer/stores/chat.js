@@ -233,11 +233,8 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   }
 })
 
-ipcBackend.on('ClickOnNotification', (ev, { chatId, msgId }) => {
-  chatStore.dispatch({
-    type: 'SELECT_CHAT',
-    payload: chatId
-  })
+ipcBackend.on('ClickOnNotification', (ev, { chatId }) => {
+  selectChat(chatId)
 })
 
 export const useChatStore = () => useStore(chatStore)
