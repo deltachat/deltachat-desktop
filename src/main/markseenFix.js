@@ -21,7 +21,7 @@ function setupMarkseenFix (dcClass) {
       if (chat && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
         if (chat.freshMessageCounter > 0) {
           dc._dc.markNoticedChat(chat.id)
-          const messagIds = chat.messages.map((msg) => msg.id)
+          const messagIds = (chat.messages || []).map((msg) => msg.id)
           log.debug('markSeenMessages', messagIds)
           dc._dc.markSeenMessages(messagIds)
         }
