@@ -241,4 +241,6 @@ ipcBackend.on('ClickOnNotification', (ev, { chatId, msgId }) => {
 })
 
 export const useChatStore = () => useStore(chatStore)
+export const selectChat = chatId => chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+
 export default chatStore
