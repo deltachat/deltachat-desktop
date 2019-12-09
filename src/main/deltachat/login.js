@@ -47,7 +47,7 @@ module.exports = class DCLoginController extends SplitOut {
         this._controller.configuring = false
         this._controller.emit('ready', this._controller.credentials)
         log.info('dc_get_info', dc.getInfo())
-        this.initDeviceChat()
+        this.updateDeviceChats()
         sendStateToRenderer()
       }
       if (!this._dc.isConfigured() || updateConfiguration) {
@@ -90,12 +90,8 @@ module.exports = class DCLoginController extends SplitOut {
     })
   }
 
-  initDeviceChat() {
-    console.log(this._dc.addDeviceMessage)
-    const isFirstLogin = this._dc.addDeviceMessage('welcome', 'Welcome!') !== 0
-
-    // Create Saved Message chat on first login
-    if (isFirstLogin) this._controller.contacts.createChatByContactId(1)
+  updateDeviceChats() {
+    this._dc.updateDeviceChats()
   }
     
 }
