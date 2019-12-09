@@ -32,7 +32,7 @@ module.exports = function (dc, settings) {
       })
       notify.show()
       notify.on('click', () => {
-        dc.chatList.selectChat(chatId)
+        dc.sendToRenderer('ClickOnNotification', { chatId, msgId })
         app.focus()
         notify = null
       })
