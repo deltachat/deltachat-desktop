@@ -1,5 +1,5 @@
 # documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
-name: Build & Upload Release
+name: Build appx
 
 on:
   pull_request:  # testing
@@ -18,7 +18,7 @@ jobs:
     - name: Get Pullrequest ID
       id: prepare
       run: |
-        export TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        $TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=tag::$TAG
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
