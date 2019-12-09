@@ -27,7 +27,7 @@ jobs:
     - name: npm install, build, test
       run: |
         npm install
-    - name: "Post warning"
+    - name: "Post links to details"
       run: |
         # URLs for API connection and uploads
         export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
