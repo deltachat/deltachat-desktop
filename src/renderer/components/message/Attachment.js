@@ -39,7 +39,7 @@ export function hasVideoScreenshot (attachment) {
 
 export function isAudio (attachment) {
   return (
-    attachment && attachment.contentType && MIME.isAudio(attachment.contentType)
+    attachment && attachment.contentType && attachment.contentType.startsWith('audio/')
   )
 }
 
