@@ -145,6 +145,7 @@ module.exports = class DCChatList extends SplitOut {
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      isDeviceChat: chat.isDeviceTalk,
       draft: this.__getDraft(chatId),
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }

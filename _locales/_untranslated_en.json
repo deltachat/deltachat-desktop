@@ -5,6 +5,9 @@
   "messaging_disabled_not_in_group": {
     "message": "Messaging disabled (you are not in this group)"
   },
+  "messaging_disabled_device_chat": {
+    "message": "Messaging disabled (this is the device chat)"
+  },
   "message_not_verified": {
     "message": "The message was sent with non-verified encryption. See \"Info\" for details."
   },

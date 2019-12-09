@@ -58,6 +58,8 @@ export default function MessageListAndComposer (props) {
   const [disabled, disabledReason] = (({ id, isGroup, selfInGroup }) => {
     if (id === DC_CHAT_ID_DEADDROP) {
       return [true, 'messaging_disabled_deaddrop']
+    } else if (chat.isDeviceChat === true) {
+      return [true, 'messaging_disabled_device_chat']
     } else if (id === DC_CHAT_ID_STARRED) {
       return [true]
     } else if (isGroup && !selfInGroup) {
