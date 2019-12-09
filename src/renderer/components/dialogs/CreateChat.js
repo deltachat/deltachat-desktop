@@ -6,6 +6,7 @@ import C from 'deltachat-node/constants'
 
 import { callDcMethodAsync } from '../../ipc'
 import ScreenContext from '../../contexts/ScreenContext'
+import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItem,
@@ -41,9 +42,9 @@ export default function CreateChat (props) {
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
   const queryStrIsEmail = isValidEmail(queryStr)
 
-  const closeDialogAndSelectChat = async chatId => {
+  const closeDialogAndSelectChat = chatId => {
+    selectChat(chatId)
     onClose()
-    await callDcMethodAsync('chatList.selectChat', [chatId])
   }
 
   const chooseContact = async ({ id }) => {
@@ -267,7 +268,7 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
     if (groupName === '') return
     const gId = await lazilyCreateOrUpdateGroup(true)
     onClose()
-    await callDcMethodAsync('chatList.selectChat', [gId])
+    selectChat(gId)
   }
   return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup]
 }

@@ -6,7 +6,7 @@ import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import C from 'deltachat-node/constants'
 import { isValidEmail } from '../dialogs/CreateChat'
 import { callDcMethodAsync } from '../../ipc'
-import { useChatStore } from '../../stores/chat'
+import { selectChat } from '../../stores/chat'
 
 export default function ChatList (props) {
   const { selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
@@ -14,7 +14,6 @@ export default function ChatList (props) {
   const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
   const realOpenContextMenu = useRef(null)
-  const chatStoreDispatch = useChatStore()[1]
 
   const onChatClick = chatId => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
@@ -35,7 +34,7 @@ export default function ChatList (props) {
 
     const contactId = await callDcMethodAsync('contacts.createContact', [queryStr, queryStr])
     const chatId = await callDcMethodAsync('contacts.createChatByContactId', contactId)
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+    selectChat(chatId)
   }
 
   const renderAddContactIfNeeded = () => {
