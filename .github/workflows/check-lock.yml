@@ -35,7 +35,7 @@ jobs:
             export STATUS_DATA="{\"state\": \"failed\", \  # this value is probably not valid
                                  \"description\": \"Remember to commit & push package-lock.json!\", \
                                  \"context\": \"package-lock changed\"}"
-            curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                                --url "$GITHUB_API_URL" \
                                --header "content-type: application/json" \
                                --data "$STATUS_DATA"
