@@ -28,6 +28,7 @@ jobs:
     - name: apply diff
       run: |
         curl -O https://github.com/deltachat/deltachat-desktop/files/3940533/diff-get-on-msstore.txt
+        type diff-get-on-msstore.txt
         git.exe apply diff-get-on-msstore.txt
     - name: npm install, build, test
       run: |
