@@ -21,23 +21,36 @@ jobs:
       run: |
         node ./bin/github-actions/devbuild.js
     - name: Checksum before build
-      id: prepare
+      id: calculate
       run: |
         md5sum package-lock.json > pkgsum
+        SUM=`cat pkgsum`
+        echo ::set-output checksum=checksum::$SUM
     - name: npm install, build, test
       run: |
-        npm install
-    - name: "Post links to details"
+        npm i
+    - name: "Check md5 sum"
+      id: checksum
+      run: |
+        if ! md5sum -c pkgsum --status; then 
+            echo "Warning: checksum changed"
+            echo ::set-output name=warn::true
+            echo "Checksum before npm i:"
+            echo "{{ steps.calculate.outputs.checksum }}"
+            echo "Checksum after npm i:"
+            cat pkgsum
+        fi
+    - name: "Post warning"
+      if: steps.checksum.outputs.warn
       run: |
         # URLs for API connection and uploads
         export GITHUB_API_URL="https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ github.event.after }}"
-        if ! md5sum -c pkgsum --status; then 
-            export STATUS_DATA="{\"state\": \"failure\", \
-                                 \"description\": \"Remember to commit & push package-lock.json!\", \
-                                 \"context\": \"package-lock changed\"}"
-            curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                               --url "$GITHUB_API_URL" \
-                               --header "content-type: application/json" \
-                               --data "$STATUS_DATA"
+        export STATUS_DATA="{\"state\": \"failure\", \
+                             \"description\": \"Remember to commit & push package-lock.json!\", \
+                             \"context\": \"package-lock changed\"}"
+        curl -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                             --url "$GITHUB_API_URL" \
+                             --header "content-type: application/json" \
+                             --data "$STATUS_DATA"
         fi
 
