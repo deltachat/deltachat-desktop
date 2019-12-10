@@ -1,4 +1,4 @@
-const { join } = require('path')
+const { join, basename } = require('path')
 const fs = require('fs-extra')
 const DeltaChat = require('deltachat-node')
 const logger = require('../logger')
@@ -11,7 +11,7 @@ async function getLogins (dir) {
   const paths = fileNames.map(filename => join(dir, filename))
 
   const accountFolders = paths.filter(
-    (path) => fs.existsSync(join(path, 'db.sqlite'))
+    (path) => fs.existsSync(join(path, 'db.sqlite')) && !fs.lstatSync(path).isSymbolicLink()
   )
 
   const accounts = await Promise.all(accountFolders.map(async path => {
@@ -31,9 +31,24 @@ async function getLogins (dir) {
   ))
   const validAccounts = accounts.filter(accounts => accounts !== null)
 
-  // todo convert folders
+  // convert folders
+  const oldFormatAccounts = validAccounts.filter(account => basename(account.path) !== account.addr)
 
-  return validAccounts.map(account => account.addr)
+  if (oldFormatAccounts.length > 0) {
+    log.info(
+      'Old format accounts folders detected, trying to convert them',
+      oldFormatAccounts.map(({ path }) => basename(path))
+    )
+    for (let i = 0; i < oldFormatAccounts.length; i++) {
+      const account = oldFormatAccounts[i]
+      await fs.move(join(dir, basename(account.path)), join(dir, account.addr))
+      console.log('symlink, for backwards compatibility', join('./', account.addr), join(dir, basename(account.path)))
+      await fs.symlink(join('./', account.addr), join(dir, basename(account.path)))
+    }
+    return getLogins(dir)
+  } else {
+    return validAccounts.map(account => account.addr)
+  }
 }
 
 function getConfig (cwd) {
