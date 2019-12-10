@@ -5,7 +5,7 @@ const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
-const getLogins = require('./logins')
+const { getLogins } = require('./logins')
 const { getConfigPath } = require('../application-constants')
 
 const localize = require('../localize')
@@ -242,13 +242,10 @@ function init (cwd, state, logHandler) {
     sendState(deltachat)
   })
 
-  ipcMain.on('updateLogins', (e) => {
-    getLogins(getConfigPath(), (err, logins) => {
-      if (err) throw err
-      state.logins = logins
+  ipcMain.on('updateLogins', async (e) => {
+    state.logins = await getLogins(getConfigPath())
       sendStateToRenderer()
     })
-  })
 
   function sendStateToRenderer () {
     log.debug('RENDER')

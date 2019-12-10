@@ -33,7 +33,7 @@ process.on('uncaughtException', (err) => {
 const parallel = require('run-parallel')
 
 const localize = require('../localize')
-const logins = require('./logins')
+const { getLogins } = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
@@ -44,7 +44,7 @@ app.ipcReady = false
 app.isQuitting = false
 
 parallel({
-  logins: (cb) => logins(getConfigPath(), cb),
+  logins: (cb) => getLogins(getConfigPath()).then(res => cb(null, res)).catch(err => cb(err)),
   appReady: (cb) => app.on('ready', () => cb(null)),
   state: (cb) => State.load(cb)
 }, onReady)
