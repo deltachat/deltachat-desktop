@@ -95,7 +95,12 @@ export default function Attachment (props) {
   const withContentBelow = withCaption
   const withContentAbove = conversationType === 'group' && direction === 'incoming'
 
+  const dimensions = message.msg.dimensions || {}
+  // Calculating height to prevent reflow when image loads
+  const height = Math.max(MINIMUM_IMG_HEIGHT, dimensions.height || 0)
+
   if (isImage(attachment)) {
+    const isSticker = message.msg.viewType === C.DC_MSG_STICKER
     if (!attachment.url) {
       return (
         <div
@@ -108,10 +113,6 @@ export default function Attachment (props) {
         </div>
       )
     }
-
-    // Calculating height to prevent reflow when image loads
-    const height = Math.max(MINIMUM_IMG_HEIGHT, attachment.height || 0)
-
     return (
       <div
         onClick={onClickAttachment}
@@ -128,7 +129,7 @@ export default function Attachment (props) {
       >
         <img
           className='module-message__img-attachment'
-          height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
+          style={{ height: !isSticker && `${Math.min(MAXIMUM_IMG_HEIGHT, height)}px` }}
           src={attachment.url}
         />
       </div>
@@ -148,10 +149,6 @@ export default function Attachment (props) {
         </div>
       )
     }
-
-    // Calculating height to prevent reflow when image loads
-    const height = Math.max(MINIMUM_IMG_HEIGHT, 0)
-
     return (
       <div
         onClick={onClickAttachment}
@@ -168,7 +165,7 @@ export default function Attachment (props) {
       >
         <video
           className='module-message__img-attachment'
-          height={Math.min(MAXIMUM_IMG_HEIGHT, height)}
+          style={{ height: `${Math.min(MAXIMUM_IMG_HEIGHT, height)}px` }}
           src={attachment.url}
           controls={1}
         />
