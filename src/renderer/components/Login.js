@@ -47,7 +47,7 @@ export default class Login extends React.Component {
     ipcRenderer.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
   }
 
-  _updateProgress (ev, progress) {
+  _updateProgress (ev, [progress, _]) {
     this.setState({ progress })
   }
 
