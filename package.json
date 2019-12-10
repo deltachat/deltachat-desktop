@@ -60,7 +60,7 @@
     "color": "^3.1.2",
     "colors": "^1.4.0",
     "debounce": "^1.2.0",
-    "deltachat-node": "deltachat/deltachat-node#feat_more_device",
+    "deltachat-node": "deltachat/deltachat-node#e051aa48b123dc655f0da8e99c47a5dc555f9470",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.11.1",
     "error-stack-parser": "^2.0.4",
