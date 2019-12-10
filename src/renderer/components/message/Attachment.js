@@ -129,7 +129,7 @@ export default function Attachment (props) {
       >
         <img
           className='module-message__img-attachment'
-          style={{ height: !isSticker && `${Math.min(MAXIMUM_IMG_HEIGHT, height)}px` }}
+          style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }}
           src={attachment.url}
         />
       </div>
@@ -165,7 +165,7 @@ export default function Attachment (props) {
       >
         <video
           className='module-message__img-attachment'
-          style={{ height: `${Math.min(MAXIMUM_IMG_HEIGHT, height)}px` }}
+          style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }}
           src={attachment.url}
           controls={1}
         />
