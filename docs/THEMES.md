@@ -41,7 +41,7 @@ getDefaultTheme ()
 > Warning: This will also (probably) change in the future.
 
 ```
-npx elctron . --theme "./themes/dark.json"
+npx electron . --theme "./themes/dark.json"
 or
 npm run dev -- --theme "./themes/dark.json"
 or
