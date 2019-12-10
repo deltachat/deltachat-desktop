@@ -1,32 +1,51 @@
-const path = require('path')
-const series = require('run-series')
-const fs = require('fs')
+const { join } = require('path')
+const fs = require('fs-extra')
 const DeltaChat = require('deltachat-node')
+const logger = require('../logger')
+const log = logger.getLogger('main/find_logins', true)
 
 module.exports = getLogins
 
 function getLogins (dir, cb) {
-  const tasks = []
-  fs.readdir(dir, (err, files) => {
-    if (err) return cb(err)
-    files.forEach(filename => {
-      if (!fs.existsSync(path.join(dir, filename, 'db.sqlite'))) return
-      const fullPath = path.join(dir, filename)
-      if (fs.statSync(fullPath).isDirectory()) {
-        tasks.push(getConfig(fullPath))
+  getLogins2(dir)
+    .then(result => cb(null, result))
+    .catch(err => cb(err))
+}
+
+async function getLogins2 (dir) {
+  const fileNames = await fs.readdir(dir)
+  const paths = fileNames.map(filename => join(dir, filename))
+
+  const accountFolders = paths.filter(
+    (path) => fs.existsSync(join(path, 'db.sqlite'))
+  )
+
+  const accounts = await Promise.all(accountFolders.map(async path => {
+    try {
+      const config = await getConfig(path)
+      if (typeof config.addr !== 'string') { throw new Error('Account has no address defined') }
+
+      return {
+        path,
+        addr: config.addr
       }
-    })
-    series(tasks, (err, logins) => {
-      if (err) return cb(err)
-      cb(null, logins.filter(i => {
-        return i && typeof i.addr === 'string'
-      }).map(i => i.addr))
-    })
-  })
+    } catch (error) {
+      log.error(`Account ${path} is inaccessible`, error)
+      return null
+    }
+  }
+  ))
+  const validAccounts = accounts.filter(accounts => accounts !== null)
+
+  // todo convert folders
+
+  return validAccounts.map(account => account.addr)
 }
 
 function getConfig (cwd) {
-  return next => {
-    DeltaChat.getConfig(cwd, next)
-  }
+  return new Promise((resolve, reject) => {
+    DeltaChat.getConfig(cwd, (err, result) => {
+      if (err) { reject(err) } else { resolve(result) }
+    })
+  })
 }
