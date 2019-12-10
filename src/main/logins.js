@@ -4,15 +4,9 @@ const DeltaChat = require('deltachat-node')
 const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
 
-module.exports = getLogins
+module.exports = { getLogins }
 
-function getLogins (dir, cb) {
-  getLogins2(dir)
-    .then(result => cb(null, result))
-    .catch(err => cb(err))
-}
-
-async function getLogins2 (dir) {
+async function getLogins (dir) {
   const fileNames = await fs.readdir(dir)
   const paths = fileNames.map(filename => join(dir, filename))
 
