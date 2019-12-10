@@ -22,8 +22,6 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer()
   }
 
-
-
   login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
     this._controller.accountDir = this.getPath(credentials.addr)
@@ -90,8 +88,7 @@ module.exports = class DCLoginController extends SplitOut {
     })
   }
 
-  updateDeviceChats() {
+  updateDeviceChats () {
     this._dc.updateDeviceChats()
   }
-    
 }
