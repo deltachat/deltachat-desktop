@@ -6,9 +6,7 @@ import { openAttachmentInShell } from './messageFunctions'
 import C from 'deltachat-node/constants'
 import ScreenContext from '../../contexts/ScreenContext'
 
-import {
-  isImageTypeSupported, isVideoTypeSupported, MIME
-} from '../conversations'
+import { isImageTypeSupported, isVideoTypeSupported } from '../conversations'
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300

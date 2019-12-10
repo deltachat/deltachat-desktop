@@ -67,7 +67,7 @@ export const render = React.memo((props) => {
 export function RenderMessage (props) {
   const chatStoreDispatch = useChatStore()[1]
   const { chat, message, locationStreamingEnabled } = props
-  const { fromId, id } = message
+  const { fromId, id } = message.msg
   const msg = message.msg
   const tx = window.translate
   const { openDialog } = useContext(ScreenContext)
