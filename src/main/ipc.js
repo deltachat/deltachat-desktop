@@ -244,8 +244,8 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('updateLogins', async (e) => {
     state.logins = await getLogins(getConfigPath())
-      sendStateToRenderer()
-    })
+    sendStateToRenderer()
+  })
 
   function sendStateToRenderer () {
     log.debug('RENDER')

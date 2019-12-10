@@ -42,7 +42,7 @@ async function getLogins (dir) {
     for (let i = 0; i < oldFormatAccounts.length; i++) {
       const account = oldFormatAccounts[i]
       await fs.move(join(dir, basename(account.path)), join(dir, account.addr))
-      console.log('symlink, for backwards compatibility', join('./', account.addr), join(dir, basename(account.path)))
+      log.info('symlink, for backwards compatibility', join('./', account.addr), join(dir, basename(account.path)))
       await fs.symlink(join('./', account.addr), join(dir, basename(account.path)))
     }
     return getLogins(dir)
