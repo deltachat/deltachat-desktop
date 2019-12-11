@@ -20,6 +20,16 @@ jobs:
       run: |
         $TAG=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         echo ::set-output name=tag::$TAG
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.prepare.outputs.tag }}
+        release_name: ${{ steps.prepare.outputs.tag }}
+        draft: true
+        prerelease: false
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
@@ -32,18 +42,24 @@ jobs:
     - name: electron builder
       run: npx electron-builder --win
     - name: renaming
+      id: renaming
       run: |
         cd dist
         ls
         mkdir release
-        mv *.appx release/DeltaChat-${{ steps.prepare.outputs.tag }}.appx
+        $release_name = "DeltaChat-${{ steps.prepare.outputs.tag }}.appx"
+        $release_path = "/dist/release/$release_name"
+        mv *.appx $release_path
+        echo ::set-output name=rname::$release_name
+        echo ::set-output name=rpath::$release_path
         ls release
-    - name: upload folder
-      uses: horochx/deploy-via-scp@v1.0.1
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        user: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        host: "download.delta.chat"
-        port: 22
-        local: "dist/release/*"
-        remote: "/var/www/html/download/desktop/"
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.renaming.outputs.rpath }}
+        asset_name: ${{ steps.renaming.outputs.rname }}
+        asset_content_type: application/vns.ms-appx
+
