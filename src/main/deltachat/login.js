@@ -1,5 +1,5 @@
 const DeltaChat = require('deltachat-node')
-const log = require('../../logger').getLogger('main/deltachat/login', true)
+const log = require('../../logger').getLogger('main/deltachat/login')
 const path = require('path')
 const setupNotifications = require('../notifications')
 const setupUnreadBadgeCounter = require('../unread-badge')
