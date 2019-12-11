@@ -25,11 +25,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.x
-    - name: apply diff
-      run: |
-        curl -L -O https://github.com/deltachat/deltachat-desktop/files/3940533/diff-get-on-msstore.txt
-        type diff-get-on-msstore.txt
-        git apply diff-get-on-msstore.txt
     - name: npm install, build, test
       run: |
         npm install
@@ -43,12 +38,12 @@ jobs:
         mkdir release
         mv *.appx release/DeltaChat-${{ steps.prepare.outputs.tag }}.appx
         ls release
-#   - name: upload folder
-#     uses: horochx/deploy-via-scp@v1.0.1
-#     with:
-#       user: ${{ secrets.USERNAME }}
-#       key: ${{ secrets.KEY }}
-#       host: "download.delta.chat"
-#       port: 22
-#       local: "dist/release/*"
-#       remote: "/var/www/html/download/desktop/"
+    - name: upload folder
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "dist/release/*"
+        remote: "/var/www/html/download/desktop/"

@@ -149,8 +149,15 @@
       }
     },
     "win": {
-      "icon": "images/deltachat.ico"
+      "icon": "images/deltachat.ico",
+         "publisherName": "merlinux"
     },
+       "appx": {
+         "publisherDisplayName": "merlinux",
+         "identityName": "merlinux.DeltaChat",
+         "publisher": "CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E",
+         "languages": [ "en-US", "de-DE" ]
+         },
     "files": [
       "!node_modules/deltachat-node/deltachat-core${/*}"
     ]
