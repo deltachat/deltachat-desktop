@@ -90,5 +90,15 @@ module.exports = class DCLoginController extends SplitOut {
 
   updateDeviceChats () {
     this._dc.updateDeviceChats()
+    this._dc.addDeviceMessage('changelog-version-0.900.0-test9', `**Changes in v0.900.0**
+
+- Many new background images🖼️
+- You can copy a link by right clicking on the message and selecting "Copy link"
+- Finally keybindings. Press ALT+ArrowUp/Down to select next/previous chat. Jump to search with CTRL+k.
+- Fixed many message list annoyances
+- Performance & stability improvements
+
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#09000---2019-12-11 
+    `)
   }
 }
