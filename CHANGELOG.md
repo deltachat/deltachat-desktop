@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 
-## [0.900.0] - 2019-12-11
+## [0.900.0] - 2019-12-12
 
 ### Changed
 
@@ -33,8 +33,7 @@
 
 ### Fixed
 
-Fix #1119 [**@Simon-Laux**](https://github.com/Simon-Laux)
-
+- Fix empty lines are not preserved [#1119](https://github.com/deltachat/deltachat-desktop/issues/1119) [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Fix appdata.xml for flatpak builds #1125 [**@muelli**](https://github.com/muelli)
 - Fix Theming issues (theming is still WIP) [#1072](https://github.com/deltachat/deltachat-desktop/pull/1072) [**@MIntrovrt**](https://github.com/MIntrovrt)
 - Fix devbuilds to really use an own data directory [ffcfb52]{https://github.com/deltachat/deltachat-desktop/commit/ffcfb528d926c7e0fe4e46e028e57bffdb3ee55d} [**@Simon-Laux**](https://github.com/Simon-Laux)
@@ -65,6 +64,7 @@ Fix #1119 [**@Simon-Laux**](https://github.com/Simon-Laux)
 - MainScreen and split MessageList component into two components [#1128](https://github.com/deltachat/deltachat-desktop/pull/1128)[**@Jikstra**](https://github.com/Jikstra)
 - Background Selection layout [#1162](https://github.com/deltachat/deltachat-desktop/pull/1162) [**@nicodh**](https://github.com/nicodh)
 - Rewrite MessageList store logic and refactor chat store [#1161](https://github.com/deltachat/deltachat-desktop/pull/1161)[**@Jikstra**](https://github.com/Jikstra)
+- Refactor _messagesToRender [#1114](https://github.com/deltachat/deltachat-desktop/pull/1114)[**@link2xt**](https://github.com/link2xt)
 
 ### Mentions
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types

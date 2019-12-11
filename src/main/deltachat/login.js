@@ -98,7 +98,7 @@ module.exports = class DCLoginController extends SplitOut {
 - Fixed many message list annoyances
 - Performance & stability improvements
 
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#09000---2019-12-11 
+Full changelog: http://delta.chat/a5f/ 
     `)
   }
 }
