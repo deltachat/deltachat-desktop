@@ -30,7 +30,7 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --win || true
+      run: npx electron-builder --win
     - name: renaming
       run: |
         cd dist
