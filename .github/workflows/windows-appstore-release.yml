@@ -2,10 +2,10 @@
 name: Build appx
 
 on:
-  pull_request:  # testing
+# pull_request:  # testing
   push:
-    branches:
-      - master
+#   branches:
+#     - master
     tags:
       - v*
 
