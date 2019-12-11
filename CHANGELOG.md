@@ -2,6 +2,78 @@
 
 ## [Unreleased][unreleased]
 
+
+## [0.900.0] - 2019-12-11
+
+### Changed
+
+- rename `logout` to `switch account` [fdb62d7](https://github.com/deltachat/deltachat-desktop/commit/fdb62d7c50b645518b2d57f1d7434b45e327ae14) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Save log to file containing correct day and month (starting at 1 rather than at 0 for january) [#1145](https://github.com/deltachat/deltachat-desktop/pull/1145)[**@pabzm**](https://github.com/pabzm)
+- Improve Background Selection layout (refactor) [#1162](https://github.com/deltachat/deltachat-desktop/pull/1162) [**@nicodh**](https://github.com/nicodh)
+- New Background Images [**@r10s**](https://github.com/r10s)[**@nicodh**](https://github.com/nicodh)
+- make messageStatusIcon in chatlistitem green [#1173](https://github.com/deltachat/deltachat-desktop/pull/1173)[**@Simon-Laux**](https://github.com/Simon-Laux)
+
+### Added
+
+- DOCUMENTATION: guidelines for css [#1072](https://github.com/deltachat/deltachat-desktop/pull/1123) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- possibility to make truly portable windows builds [forum topic](https://support.delta.chat/t/please-make-deltachat-for-windows-a-truly-portable-standalone-program/675) [#1138](https://github.com/deltachat/deltachat-desktop/pull/1138/files) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- (Map) add an icon for Point of Interest [#1127](https://github.com/deltachat/deltachat-desktop/issues/1127)[**@nicodh**](https://github.com/nicodh)
+- Add map marker icon to messages with location [#1127](https://github.com/deltachat/deltachat-desktop/issues/1127)[**@nicodh**](https://github.com/nicodh)
+- Add "Copy link" into context menu [#1153](https://github.com/deltachat/deltachat-desktop/pull/1153)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Add setting to set & change profile image [#1151](https://github.com/deltachat/deltachat-desktop/pull/1151)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Implement keybindings [#1157](https://github.com/deltachat/deltachat-desktop/pull/1157)[**@Jikstra**](https://github.com/Jikstra)[**@missytake**](https://github.com/missytake)
+- Add file drag-in confirmation dialog [#1174](https://github.com/deltachat/deltachat-desktop/pull/1174)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Add forwarded message indicator [#1183](https://github.com/deltachat/deltachat-desktop/pull/1183)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Make chat title and group name clickable [#1192](https://github.com/deltachat/deltachat-desktop/pull/1192)[**@nicodh**](https://github.com/nicodh)
+- Create device chat and saved message chat on first login [#1199](https://github.com/deltachat/deltachat-desktop/pull/1199)[**@Jikstra**](https://github.com/Jikstra)
+
+### Removed
+
+- remove Terrain view (mapbox) [#1127](https://github.com/deltachat/deltachat-desktop/issues/1127)[**@nicodh**](https://github.com/nicodh)
+
+### Fixed
+
+Fix #1119 [**@Simon-Laux**](https://github.com/Simon-Laux)
+
+- Fix appdata.xml for flatpak builds #1125 [**@muelli**](https://github.com/muelli)
+- Fix Theming issues (theming is still WIP) [#1072](https://github.com/deltachat/deltachat-desktop/pull/1072) [**@MIntrovrt**](https://github.com/MIntrovrt)
+- Fix devbuilds to really use an own data directory [ffcfb52]{https://github.com/deltachat/deltachat-desktop/commit/ffcfb528d926c7e0fe4e46e028e57bffdb3ee55d} [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix first message missing in messagelist [2d2ad4a](https://github.com/deltachat/deltachat-desktop/commit/2d2ad4ac9c1103547752d67f63c335fa54b5e1db)[**@Jikstra**](https://github.com/Jikstra)
+- Fix subtitle disappears in chatview [#1130](https://github.com/deltachat/deltachat-desktop/issues/1130)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix selecting a file to import a secret key. [#1144](https://github.com/deltachat/deltachat-desktop/pull/1144) [**@pabzm**](https://github.com/pabzm)
+- Fix incomming image metadata unreadable [#1135](https://github.com/deltachat/deltachat-desktop/pull/1135)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix freeze when clicking on POI and a few other map bugs [#1127](https://github.com/deltachat/deltachat-desktop/issues/1127)[**@nicodh**](https://github.com/nicodh)
+- Fix background color selector disappearing [a6f837f](https://github.com/deltachat/deltachat-desktop/commit/a6f837ffb895790112409ee64349c67fb687c794)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix groupname in show group qr code [#1154](https://github.com/deltachat/deltachat-desktop/pull/1154)[**@link2xt**](https://github.com/link2xt)
+- Fix New group chat isn't selected [#1155](https://github.com/deltachat/deltachat-desktop/issues/1155)[**@nicodh**](https://github.com/nicodh)
+- Fix Show encryption info crashes [#1166](https://github.com/deltachat/deltachat-desktop/issues/1166)[**@Jikstra**](https://github.com/Jikstra)
+- Messages appear in wrong chat (on scrolling up) [#1158](https://github.com/deltachat/deltachat-desktop/issues/1158)[**@Jikstra**](https://github.com/Jikstra)
+- Chat scrolls not to completely to bottom if pictures are present [#477](https://github.com/deltachat/deltachat-desktop/issues/477)[**@Jikstra**](https://github.com/Jikstra)
+- Chat updates (such as delete or new incomming message) result in jumping to the end [#712](https://github.com/deltachat/deltachat-desktop/issues/712)[**@Jikstra**](https://github.com/Jikstra)
+- Fix dispatching select chat action [#1205](https://github.com/deltachat/deltachat-desktop/pull/1205)[**@Jikstra**](https://github.com/Jikstra)
+- Message does't resize to chat area if display_name is long [#1188](https://github.com/deltachat/deltachat-desktop/issues/1188)[**@Jikstra**](https://github.com/Jikstra)
+- Playing audio from "audio" tab opens fullscreen preview window and play in background [#1168](https://github.com/deltachat/deltachat-desktop/issues/1168)[**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix login progress bar [#1211](https://github.com/deltachat/deltachat-desktop/pull/1211)[**@Jikstra**](https://github.com/Jikstra)
+- Fix take message height from core into account [#1210](https://github.com/deltachat/deltachat-desktop/pull/1210)[**@Simon-Laux**](https://github.com/Simon-Laux)
+
+
+
+### Refactorings
+
+- Message component (scss classes edition) [#1072](https://github.com/deltachat/deltachat-desktop/pull/1123) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Message component Part 2 [#1147](https://github.com/deltachat/deltachat-desktop/pull/1147) [**@Simon-Laux**](https://github.com/Simon-Laux)
+- MainScreen and split MessageList component into two components [#1128](https://github.com/deltachat/deltachat-desktop/pull/1128)[**@Jikstra**](https://github.com/Jikstra)
+- Background Selection layout [#1162](https://github.com/deltachat/deltachat-desktop/pull/1162) [**@nicodh**](https://github.com/nicodh)
+- Rewrite MessageList store logic and refactor chat store [#1161](https://github.com/deltachat/deltachat-desktop/pull/1161)[**@Jikstra**](https://github.com/Jikstra)
+
+### Mentions
+- [**@adbenitez**](https://github.com/adbenitez) fixed some types
+- Thanks to our translators
+
+
+- Update deltachat-node to 1.0.0-beta.15
+    - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
+
 ## [0.840.0] - 2019-11-05
 
 ### Changed
