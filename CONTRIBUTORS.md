@@ -8,23 +8,25 @@
 | **Karissa McKelvey**    |                                            |
 | **Nico de Haen**        |                                            |
 | **Jikstra**             | [**@Jikstra**](https://github.com/Jikstra) |
+| **lefherz**             |                                            |
 | **holger krekel**       |                                            |
 | **Alexander Krotov**    |                                            |
 | **Maris Alicke**        |                                            |
+| **maris**               |                                            |
+| **Tobias Mueller**      |                                            |
 | **Floris Bruynooghe**   |                                            |
 | **Hansal Bachkaniwala** |                                            |
 | **jankass**             |                                            |
-| **muelli**              |                                            |
-| **B. Petersen**         |                                            |
+| **Asiel Díaz Benítez**  |                                            |
+| **pabzm**               |                                            |
 | **Ozancan Karataş**     |                                            |
-| **Emil Lefherz**        |                                            |
+| **B. Petersen**         |                                            |
+| **bb**                  |                                            |
 | **Clemens Tolboom**     |                                            |
+| **Alberto Luaces**      |                                            |
 | **zafai**               | [**@zafai**](https://github.com/zafai)     |
 | **Noah**                |                                            |
 | **Harald H**            |                                            |
-| **Alberto Luaces**      |                                            |
 | **Oliver Bestwalter**   |                                            |
-| **bb**                  |                                            |
 | **alfaslash**           |                                            |
 | **substack**            |                                            |
-| **maris**               |                                            |

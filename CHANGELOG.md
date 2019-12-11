@@ -2,7 +2,6 @@
 
 ## [Unreleased][unreleased]
 
-
 ## [0.900.0] - 2019-12-12
 
 ### Changed
@@ -34,9 +33,9 @@
 ### Fixed
 
 - Fix empty lines are not preserved [#1119](https://github.com/deltachat/deltachat-desktop/issues/1119) [**@Simon-Laux**](https://github.com/Simon-Laux)
-- Fix appdata.xml for flatpak builds #1125 [**@muelli**](https://github.com/muelli)
+- Fix appdata.xml for flatpak builds [#1125](https://github.com/deltachat/deltachat-desktop/issues/1125) [**@muelli**](https://github.com/muelli)
 - Fix Theming issues (theming is still WIP) [#1072](https://github.com/deltachat/deltachat-desktop/pull/1072) [**@MIntrovrt**](https://github.com/MIntrovrt)
-- Fix devbuilds to really use an own data directory [ffcfb52]{https://github.com/deltachat/deltachat-desktop/commit/ffcfb528d926c7e0fe4e46e028e57bffdb3ee55d} [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Fix devbuilds to really use an own data directory [ffcfb52](https://github.com/deltachat/deltachat-desktop/commit/ffcfb528d926c7e0fe4e46e028e57bffdb3ee55d)[**@Simon-Laux**](https://github.com/Simon-Laux)
 - Fix first message missing in messagelist [2d2ad4a](https://github.com/deltachat/deltachat-desktop/commit/2d2ad4ac9c1103547752d67f63c335fa54b5e1db)[**@Jikstra**](https://github.com/Jikstra)
 - Fix subtitle disappears in chatview [#1130](https://github.com/deltachat/deltachat-desktop/issues/1130)[**@Simon-Laux**](https://github.com/Simon-Laux)
 - Fix selecting a file to import a secret key. [#1144](https://github.com/deltachat/deltachat-desktop/pull/1144) [**@pabzm**](https://github.com/pabzm)
@@ -55,8 +54,6 @@
 - Fix login progress bar [#1211](https://github.com/deltachat/deltachat-desktop/pull/1211)[**@Jikstra**](https://github.com/Jikstra)
 - Fix take message height from core into account [#1210](https://github.com/deltachat/deltachat-desktop/pull/1210)[**@Simon-Laux**](https://github.com/Simon-Laux)
 
-
-
 ### Refactorings
 
 - Message component (scss classes edition) [#1072](https://github.com/deltachat/deltachat-desktop/pull/1123) [**@Simon-Laux**](https://github.com/Simon-Laux)
@@ -64,15 +61,16 @@
 - MainScreen and split MessageList component into two components [#1128](https://github.com/deltachat/deltachat-desktop/pull/1128)[**@Jikstra**](https://github.com/Jikstra)
 - Background Selection layout [#1162](https://github.com/deltachat/deltachat-desktop/pull/1162) [**@nicodh**](https://github.com/nicodh)
 - Rewrite MessageList store logic and refactor chat store [#1161](https://github.com/deltachat/deltachat-desktop/pull/1161)[**@Jikstra**](https://github.com/Jikstra)
-- Refactor _messagesToRender [#1114](https://github.com/deltachat/deltachat-desktop/pull/1114)[**@link2xt**](https://github.com/link2xt)
+- Refactor \_messagesToRender [#1114](https://github.com/deltachat/deltachat-desktop/pull/1114)[**@link2xt**](https://github.com/link2xt)
 
 ### Mentions
+
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
 
 - Update deltachat-node to 1.0.0-beta.15
-    - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
+  - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
 ## [0.840.0] - 2019-11-05
 
