@@ -6,7 +6,7 @@ const fs = require('fs-extra')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
-const log = require('../../logger').getLogger('main/deltachat/backup', true)
+const log = require('../../logger').getLogger('main/deltachat/backup')
 
 const SplitOut = require('./splitout')
 module.exports = class DCBackup extends SplitOut {

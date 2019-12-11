@@ -72,9 +72,9 @@ function getStackTrace () {
 }
 
 class Logger {
-  constructor (channel, isMainProcess) {
+  constructor (channel) {
     this.channel = channel
-    this.isMainProcess = isMainProcess
+    this.isMainProcess = typeof window === 'undefined'
   }
 
   debug (...args) {
@@ -99,8 +99,8 @@ class Logger {
   }
 }
 
-function getLogger (channel, isMainProcess = false) {
-  return new Logger(channel, isMainProcess)
+function getLogger (channel) {
+  return new Logger(channel)
 }
 
 module.exports = { setLogHandler, Logger, getLogger, printProcessLogLevelInfo }

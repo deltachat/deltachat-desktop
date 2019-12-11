@@ -1,4 +1,4 @@
-const log = require('../logger').getLogger('main/dev', true)
+const log = require('../logger').getLogger('main/dev')
 
 /**
  * Only works when it's installed (aka when its a dev enviroment)

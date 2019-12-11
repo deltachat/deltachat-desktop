@@ -1,5 +1,5 @@
 const DeltaChat = require('deltachat-node')
-const log = require('../../logger').getLogger('main/deltachat/contacts', true)
+const log = require('../../logger').getLogger('main/deltachat/contacts')
 
 const SplitOut = require('./splitout')
 module.exports = class DCContacts extends SplitOut {
