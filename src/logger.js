@@ -8,11 +8,11 @@ const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helv
 const rc = remote ? remote.app.rc : app ? app.rc : {}
 
 const LoggerVariants = [
-  { log: console.debug, level: 'DEBUG', emoji: '🕸️' },
-  { log: console.info, level: 'INFO', emoji: 'ℹ️' },
-  { log: console.warn, level: 'WARNING', emoji: '⚠️' },
-  { log: console.error, level: 'ERROR', emoji: '🚨' },
-  { log: console.error, level: 'CRITICAL', emoji: '🚨🚨' }
+  { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
+  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: colors.blue('[i]') },
+  { log: console.warn, level: 'WARNING', emoji: '⚠️', symbol: colors.yellow('[w]') },
+  { log: console.error, level: 'ERROR', emoji: '🚨', symbol: colors.red('[E]') },
+  { log: console.error, level: 'CRITICAL', emoji: '🚨🚨', symbol: colors.red('[C]') }
 ]
 
 function printProcessLogLevelInfo () {
@@ -38,13 +38,7 @@ function log ({ channel, isMainProcess }, level, stacktrace, args) {
   handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
     if (isMainProcess) {
-      const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${[
-        '[D]',
-        colors.blue('[i]'),
-        colors.yellow('[w]'),
-        colors.red('[E]'),
-        colors.red('[C]')
-      ][level]}${colors.grey(channel)}:`
+      const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${LoggerVariants[level].symbol}${colors.grey(channel)}:`
       if (!stacktrace) {
         /* ignore-console-log */
         console.log(begining, ...args)
