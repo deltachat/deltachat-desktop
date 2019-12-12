@@ -5,6 +5,7 @@ const setupNotifications = require('../notifications')
 const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
+const { escapeEmailForAccountFolder } = require('./util')
 
 const SplitOut = require('./splitout')
 module.exports = class DCLoginController extends SplitOut {
@@ -73,7 +74,7 @@ module.exports = class DCLoginController extends SplitOut {
   }
 
   getPath (addr) {
-    return path.join(this._controller.cwd, addr)
+    return path.join(this._controller.cwd, escapeEmailForAccountFolder(addr))
   }
 
   close () {
