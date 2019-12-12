@@ -41,8 +41,10 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
 
   useEffect(() => {
     if (scrollToBottomIfClose === false) return
-    if (messageListRef.current.scrollHeight - messageListRef.current.scrollTop > 400) {
-      // we are close to bottom so scroll down to show the new message
+    // For whatever reason the scrollTop is ~1000 off...
+    const distanceToBottom = messageListRef.current.scrollHeight - (messageListRef.current.scrollTop + 1000)
+    if (distanceToBottom > (window.screen.height / 2)) {
+      // we are too far away from the  ottom so  don't scroll down to show the new message
       chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
       return
     }
