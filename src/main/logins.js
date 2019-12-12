@@ -44,8 +44,14 @@ async function getLogins (dir) {
       const account = oldFormatAccounts[i]
       const newFolder = escapeEmailForAccountFolder(account.addr)
       await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
-      log.info('symlink, for backwards compatibility', join('./', newFolder), join(dir, basename(account.path)))
-      await fs.symlink(join('./', newFolder), join(dir, basename(account.path)))
+      // Backwards compatibility
+      try {
+        const compatPath = Buffer.from(account.addr).toString('hex')
+        log.info('symlink, for backwards compatibility', join('./', newFolder), join(dir, compatPath))
+        await fs.symlink(join('./', newFolder), join(dir, compatPath))
+      } catch (error) {
+        log.error('symlinking failed', error)
+      }
     }
     return getLogins(dir)
   } else {
