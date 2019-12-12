@@ -66,8 +66,7 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
       messages: {
         ...state.messages,
         ...payload.messagesIncoming
-      },
-      scrollToBottom: true
+      }
     }
     // type SCROLL_COMPLETE ?
   } else if (type === 'FINISHED_SCROLL') {
@@ -191,7 +190,8 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
 
 ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
   if (chatId !== chatStore.state.id) {
-    log.debug(`DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn\'t match id of selected chat (${chatStore.state.id}). Skipping.`)
+    log.debug(`DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${chatStore.state.id}). Skipping.`)
+    return
   }
   const messageIds = await callDcMethodAsync('messageList.getMessageIds', [chatId])
   const messageIdsIncoming = messageIds.filter(x => !chatStore.state.messageIds.includes(x))
