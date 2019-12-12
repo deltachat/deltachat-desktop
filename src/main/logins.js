@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const DeltaChat = require('deltachat-node')
 const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
+const { escapeEmailForAccountFolder } = require('./deltachat/util')
 
 module.exports = { getLogins }
 
@@ -32,7 +33,7 @@ async function getLogins (dir) {
   const validAccounts = accounts.filter(accounts => accounts !== null)
 
   // convert folders
-  const oldFormatAccounts = validAccounts.filter(account => basename(account.path) !== account.addr)
+  const oldFormatAccounts = validAccounts.filter(account => basename(account.path) !== escapeEmailForAccountFolder(account.addr))
 
   if (oldFormatAccounts.length > 0) {
     log.info(
@@ -41,9 +42,10 @@ async function getLogins (dir) {
     )
     for (let i = 0; i < oldFormatAccounts.length; i++) {
       const account = oldFormatAccounts[i]
-      await fs.move(join(dir, basename(account.path)), join(dir, account.addr))
-      log.info('symlink, for backwards compatibility', join('./', account.addr), join(dir, basename(account.path)))
-      await fs.symlink(join('./', account.addr), join(dir, basename(account.path)))
+      const newFolder = escapeEmailForAccountFolder(account.addr)
+      await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
+      log.info('symlink, for backwards compatibility', join('./', newFolder), join(dir, basename(account.path)))
+      await fs.symlink(join('./', newFolder), join(dir, basename(account.path)))
     }
     return getLogins(dir)
   } else {
