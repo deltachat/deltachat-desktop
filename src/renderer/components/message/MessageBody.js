@@ -4,8 +4,12 @@ import { getSizeClass, getRegex, replaceColons } from '../conversations/emoji'
 import { previewRules, rules } from './MessageMarkdown'
 import SimpleMarkdown from 'simple-markdown'
 
+import logger from '../../../logger'
+const log = logger.getLogger('renderer/messageMarkdown')
+
 const emojiRegex = getRegex()
 const previewParser = SimpleMarkdown.parserFor(previewRules, { inline: true })
+const previewAst2react = SimpleMarkdown.outputFor(previewRules, 'react')
 const parser = SimpleMarkdown.parserFor(rules)
 const ast2react = SimpleMarkdown.outputFor(rules, 'react')
 
@@ -25,9 +29,14 @@ export default function MessageBody (props) {
       </span>
     )
   }
-  const ast = (preview ? previewParser : parser)(emojifiedText)
-  const res = ast2react(ast)
-  return res
+  try {
+    const ast = (preview ? previewParser : parser)(emojifiedText)
+    const res = (preview ? previewAst2react : ast2react)(ast)
+    return res
+  } catch (error) {
+    log.error('An Error Appeared, falling back to dumping the raw text', error)
+    return <span>{emojifiedText}</span>
+  }
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
 

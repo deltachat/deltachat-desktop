@@ -1,5 +1,5 @@
 const React = require('react')
-const { defaultRules, blockRegex, anyScopeRegex } = require('simple-markdown')
+const { defaultRules, blockRegex, anyScopeRegex, reactElement } = require('simple-markdown')
 const { remote } = require('electron')
 
 var ignoreCapture = function () { return {} }
@@ -18,16 +18,36 @@ function ignoreScopeAssign (rule, order, object = {}) {
   return ignoreScope(assign(rule, order, object))
 }
 
+const TextRule = function (node, output, state) {
+  return reactElement(
+    'span',
+    state.key,
+    {
+      children: output(node.content, state)
+    }
+  )
+}
+
+function mkPreviewRule (rule, order) {
+  return assign(ignoreScope(rule), order, { react: TextRule })
+}
+
 const previewRules = {
+  Array: defaultRules.Array,
+  strong: mkPreviewRule(defaultRules.strong, 1), // bold
+  em: mkPreviewRule(defaultRules.em, 1), // italics
+  ubold: mkPreviewRule(defaultRules.u, 2),
+  text: ignoreScope(defaultRules.text, 20)
+}
+
+const rules = Object.assign({
   Array: defaultRules.Array,
   strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
   em: ignoreScopeAssign(defaultRules.em, 1), // italics
   ubold: assign(ignoreScope(defaultRules.u), 2, { react: defaultRules.strong.react }),
   del: ignoreScopeAssign(defaultRules.del, 3),
   inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
-  text: assign(defaultRules.text, 100)
-}
-const rules = Object.assign({
+  text: assign(defaultRules.text, 100),
   // new mailto (open chat in dc?)
   // blockQuote ? (requires css; could be used for replies)
   // mentions? (this component requires somekind of access to the chat memberlist)
@@ -71,7 +91,7 @@ const rules = Object.assign({
     parse: ignoreCapture,
     react: function (node, output, state) { return <div key={state.key} className='line-break' /> }
   }
-}, previewRules)
+})
 
 module.exports = {
   previewRules,
