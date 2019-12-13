@@ -4,7 +4,7 @@ const setupNotifications = require('../notifications')
 const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
-const { getNewAccountPath } = require('./logins')
+const { getNewAccountPath } = require('../logins')
 
 const SplitOut = require('./splitout')
 module.exports = class DCLoginController extends SplitOut {

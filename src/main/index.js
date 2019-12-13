@@ -44,7 +44,7 @@ app.ipcReady = false
 app.isQuitting = false
 
 parallel({
-  logins: (cb) => getLogins(getConfigPath()).then(res => cb(null, res)).catch(err => cb(err)),
+  logins: (cb) => getLogins().then(res => cb(null, res)).catch(err => cb(err)),
   appReady: (cb) => app.on('ready', () => cb(null)),
   state: (cb) => State.load(cb)
 }, onReady)
