@@ -1,11 +1,10 @@
 module.exports = { init }
 
 const { app, ipcMain, dialog } = require('electron')
-const rimraf = require('rimraf')
 const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
-const { getLogins } = require('./logins')
+const { getLogins, removeAccount } = require('./logins')
 const { getConfigPath } = require('../application-constants')
 
 const localize = require('../localize')
@@ -97,11 +96,22 @@ function init (cwd, state, logHandler) {
     dcController.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
   })
 
-  ipcMain.on('forgetLogin', (e, addr) => {
-    rimraf.sync(dcController.loginController.getPath(addr))
-    state.logins.splice(state.logins.indexOf(addr), 1)
+  const updateLogins = async () => {
+    state.logins = await getLogins(getConfigPath())
     sendStateToRenderer()
+  }
+
+  ipcMain.on('forgetLogin', async (e, addr) => {
+    try {
+      await removeAccount(addr)
+      main.send('success', 'successfully forgot account')
+    } catch (error) {
+      main.send('error', error.message)
+    }
+    updateLogins()
   })
+
+  ipcMain.on('updateLogins', updateLogins)
 
   ipcMain.on('getMessage', (e, msgId) => {
     e.returnValue = dcController.messageList.messageIdToJson(msgId)
@@ -240,11 +250,6 @@ function init (cwd, state, logHandler) {
     const deltachat = dcController.getState()
     deltachat.configuring = false
     sendState(deltachat)
-  })
-
-  ipcMain.on('updateLogins', async (e) => {
-    state.logins = await getLogins(getConfigPath())
-    sendStateToRenderer()
   })
 
   function sendStateToRenderer () {
