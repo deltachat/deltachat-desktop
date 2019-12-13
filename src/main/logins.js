@@ -5,7 +5,7 @@ const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
 const { escapeEmailForAccountFolder } = require('./deltachat/util')
 
-module.exports = { getLogins }
+const { getConfigPath } = require('../application-constants')
 
 async function getLogins (dir) {
   // search for old accounts and convert them
@@ -69,3 +69,21 @@ function getConfig (cwd) {
     })
   })
 }
+
+async function removeAccount (accountAddress) {
+  const accountFolder = join(getConfigPath(), 'accounts')
+  const account = (await readDeltaAccounts(accountFolder)).find(({ addr }) => accountAddress === addr)
+  if (!account) {
+    throw new Error('Removing account failed: Account not found')
+  } else if (!await fs.pathExists(account.path)) {
+    log.error('Removing account failed: path does not exist', account)
+    throw new Error('Removing account failed: path does not exist:', account.path)
+  }
+  await fs.remove(account.path)
+}
+
+function getNewAccountPath (addr) {
+  return join(getConfigPath(), 'accounts', escapeEmailForAccountFolder(addr))
+}
+
+module.exports = { getLogins, removeAccount, getNewAccountPath }

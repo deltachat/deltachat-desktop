@@ -1,11 +1,10 @@
 const DeltaChat = require('deltachat-node')
 const log = require('../../logger').getLogger('main/deltachat/login')
-const path = require('path')
 const setupNotifications = require('../notifications')
 const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
-const { escapeEmailForAccountFolder } = require('./util')
+const { getNewAccountPath } = require('./logins')
 
 const SplitOut = require('./splitout')
 module.exports = class DCLoginController extends SplitOut {
@@ -25,7 +24,7 @@ module.exports = class DCLoginController extends SplitOut {
 
   login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
-    this._controller.accountDir = this.getPath(credentials.addr)
+    this._controller.accountDir = getNewAccountPath(credentials.addr)
     log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
     this._controller._dc = dc
@@ -71,10 +70,6 @@ module.exports = class DCLoginController extends SplitOut {
     log.info('Logged out')
     this._controller.emit('logout')
     if (typeof this._controller._sendStateToRenderer === 'function') this._controller._sendStateToRenderer()
-  }
-
-  getPath (addr) {
-    return path.join(this._controller.cwd, 'accounts', escapeEmailForAccountFolder(addr))
   }
 
   close () {
