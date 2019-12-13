@@ -5,15 +5,14 @@ const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
 const { escapeEmailForAccountFolder } = require('./deltachat/util')
 
-const { getAccountsPath } = require('../application-constants')
+const { getAccountsPath, getConfigPath } = require('../application-constants')
 
 async function getLogins () {
-  const accountsDir = getAccountsPath()
   // search for old accounts and convert them
-  await migrate(accountsDir)
+  await migrate(getConfigPath())
 
   // list new accounts
-  const accounts = await readDeltaAccounts(join(accountsDir, 'accounts'))
+  const accounts = await readDeltaAccounts(getAccountsPath())
   return accounts.map(account => account.addr)
 }
 
