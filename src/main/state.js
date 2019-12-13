@@ -1,6 +1,7 @@
 const appConfig = require('../application-config')
 const { EventEmitter } = require('events')
 const log = require('../logger').getLogger('main/state')
+const { promisify } = require('util')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
@@ -44,15 +45,17 @@ function getDefaultState () {
   }
 }
 
-function load (cb) {
-  appConfig.read(function (err, saved) {
-    if (err) {
-      log.info('Missing configuration file. Using default values.')
-    }
-    const state = getDefaultState()
-    state.saved = Object.assign(state.saved, err ? {} : saved)
-    cb(null, state)
-  })
+async function load () {
+  var state = getDefaultState()
+  var saved = {}
+  try {
+    saved = await promisify(cb => appConfig.read(cb))()
+  } catch (error) {
+    log.debug(error)
+    log.info('Missing configuration file. Using default values.')
+  }
+  state.saved = Object.assign(state.saved, saved)
+  return state
 }
 
 function saveImmediate (state, cb) {
