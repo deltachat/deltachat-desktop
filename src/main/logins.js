@@ -8,41 +8,21 @@ const { escapeEmailForAccountFolder } = require('./deltachat/util')
 module.exports = { getLogins }
 
 async function getLogins (dir) {
-  const fileNames = await fs.readdir(dir)
-  const paths = fileNames.map(filename => join(dir, filename))
+  // search for old accounts and convert them
+  await migrate(dir)
 
-  const accountFolders = paths.filter(
-    (path) => fs.existsSync(join(path, 'db.sqlite')) && !fs.lstatSync(path).isSymbolicLink()
-  )
+  // list new accounts
+  const accounts = await readDeltaAccounts(join(dir, 'accounts'))
+  return accounts.map(account => account.addr)
+}
 
-  const accounts = await Promise.all(accountFolders.map(async path => {
-    try {
-      const config = await getConfig(path)
-      if (typeof config.addr !== 'string') { throw new Error('Account has no address defined') }
+async function migrate (dir) {
+  const oldAccounts = await readDeltaAccounts(dir)
 
-      return {
-        path,
-        addr: config.addr
-      }
-    } catch (error) {
-      log.error(`Account ${path} is inaccessible`, error)
-      return null
-    }
-  }
-  ))
-  const validAccounts = accounts.filter(accounts => accounts !== null)
-
-  // convert folders
-  const oldFormatAccounts = validAccounts.filter(account => basename(account.path) !== escapeEmailForAccountFolder(account.addr))
-
-  if (oldFormatAccounts.length > 0) {
-    log.info(
-      'Old format accounts folders detected, trying to convert them',
-      oldFormatAccounts.map(({ path }) => basename(path))
-    )
-    for (let i = 0; i < oldFormatAccounts.length; i++) {
-      const account = oldFormatAccounts[i]
-      const newFolder = escapeEmailForAccountFolder(account.addr)
+  if (oldAccounts.length > 0) {
+    log.info('Old format accounts detected, trying to convert them', oldAccounts)
+    for (const account of oldAccounts) {
+      const newFolder = join('accounts', escapeEmailForAccountFolder(account.addr))
       await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
       // Backwards compatibility
       try {
@@ -53,10 +33,33 @@ async function getLogins (dir) {
         log.error('symlinking failed', error)
       }
     }
-    return getLogins(dir)
-  } else {
-    return validAccounts.map(account => account.addr)
+    log.info(`converted ${oldAccounts} accounts to new version`)
   }
+}
+
+async function getAccountInfo (path) {
+  try {
+    const config = await getConfig(path)
+    if (typeof config.addr !== 'string') { throw new Error('Account has no address defined') }
+
+    return {
+      path,
+      addr: config.addr
+    }
+  } catch (error) {
+    log.error(`Account ${path} is inaccessible`, error)
+    return null
+  }
+}
+
+async function readDeltaAccounts (accountFolderPath) {
+  const paths = (await fs.readdir(accountFolderPath)).map(filename => join(accountFolderPath, filename))
+  const accountFolders = paths.filter(path => {
+    // isDeltaAccountFolder
+    return fs.existsSync(join(path, 'db.sqlite')) && !fs.lstatSync(path).isSymbolicLink()
+  })
+
+  return (await Promise.all(accountFolders.map(getAccountInfo))).filter(accounts => accounts !== null)
 }
 
 function getConfig (cwd) {
