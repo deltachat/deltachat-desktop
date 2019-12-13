@@ -489,14 +489,15 @@ function ProfileImageSelector (props) {
       }
     })
   }
+  const profileImage = profileImagePreview || '../images/camera.png'
 
   return <div className='profile-image-selector'>
     {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-    <img src={profileImagePreview} alt={tx('a11y_profile_image_label')} />
+    <img src={profileImage} alt={tx('a11y_profile_image_label')} />
     <div>
       {/* TODO: replace the text by icons that get described by aria-label */}
-      <button aria-label={tx('a11y_profile_image_select')} onClick={openSelectionDialog}>Select</button>
-      <button aria-label={tx('a11y_profile_image_remove')} onClick={changeProfilePicture.bind(null, '')}>Remove</button>
+      <button aria-label={tx('a11y_profile_image_select')} onClick={openSelectionDialog} className={'bp3-button'}>Select</button>
+      <button aria-label={tx('a11y_profile_image_remove')} onClick={changeProfilePicture.bind(null, '')} className={'bp3-button'}>Remove</button>
     </div>
   </div>
 }
