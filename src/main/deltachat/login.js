@@ -90,7 +90,7 @@ module.exports = class DCLoginController extends SplitOut {
 
   updateDeviceChats () {
     this._dc.updateDeviceChats()
-    this._dc.addDeviceMessage('changelog-version-0.900.0-test9', `**Changes in v0.900.0**
+    this._dc.addDeviceMessage('changelog-version-0.900.0-test9', `Changes in v0.900.0
 
 - Many new background images🖼️
 - You can copy a link by right clicking on the message and selecting "Copy link"
