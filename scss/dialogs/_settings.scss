@@ -58,10 +58,6 @@
     &>div {
         // the button container
         &>button {
-            border: 1px #7d7d7d solid;
-            background: #ddffff;
-            border-radius: 4px;
-            display: inline;
 
             &:first-child{
                 border-top-right-radius: 0;
