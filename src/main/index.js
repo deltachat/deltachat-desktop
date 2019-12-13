@@ -31,8 +31,6 @@ process.on('uncaughtException', (err) => {
   throw err
 })
 
-const parallel = require('run-parallel')
-
 const localize = require('../localize')
 const { getLogins } = require('./logins')
 const ipc = require('./ipc')
@@ -44,11 +42,16 @@ const devTools = require('./devtools')
 app.ipcReady = false
 app.isQuitting = false
 
-parallel({
-  logins: (cb) => getLogins().then(res => cb(null, res)).catch(err => cb(err)),
-  appReady: (cb) => app.on('ready', () => cb(null)),
-  state: (cb) => State.load(cb)
-}, onReady)
+Promise.all([
+  getLogins(),
+  new Promise((resolve, reject) => app.on('ready', resolve)),
+  State.load()
+])
+  .then(onReady)
+  .catch(error => {
+    log.critical('Fatal Error during init', error)
+    process.exit(1)
+  })
 
 function updateTheme () {
   const sendTheme = () => {
@@ -63,11 +66,9 @@ function updateTheme () {
   sendTheme()
 }
 
-function onReady (err, results) {
-  if (err) throw err
-
-  const state = app.state = results.state
-  state.logins = results.logins
+function onReady ([logins, _appReady, loadedState]) {
+  const state = app.state = loadedState
+  state.logins = logins
 
   app.saveState = () => State.save({ saved: state.saved })
 
