@@ -7,6 +7,7 @@ const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat/backup')
+const { getNewAccountPath } = require('../logins')
 
 const SplitOut = require('./splitout')
 module.exports = class DCBackup extends SplitOut {
@@ -15,7 +16,7 @@ module.exports = class DCBackup extends SplitOut {
   }
 
   import (file) {
-    const { sendToRenderer, loginController } = this._controller
+    const { sendToRenderer } = this._controller
 
     async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
       if (overwrite === true) {
@@ -66,7 +67,7 @@ module.exports = class DCBackup extends SplitOut {
 
         sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
 
-        const newPath = loginController.getPath(addr)
+        const newPath = getNewAccountPath(addr)
         const configFolderExists = await fs.pathExists(newPath)
 
         if (configFolderExists) {
