@@ -58,6 +58,10 @@ function getLogsPath () {
   return path.join(getConfigPath(), 'logs')
 }
 
+function getAccountsPath () {
+  return path.join(getConfigPath(), 'accounts')
+}
+
 module.exports = {
   appName,
   appVersion,
@@ -69,5 +73,6 @@ module.exports = {
   gitHubLicenseUrl,
   windowDefaults,
   getConfigPath,
-  getLogsPath
+  getLogsPath,
+  getAccountsPath
 }

@@ -97,7 +97,7 @@ function init (cwd, state, logHandler) {
   })
 
   const updateLogins = async () => {
-    state.logins = await getLogins(getConfigPath())
+    state.logins = await getLogins()
     sendStateToRenderer()
   }
 
