@@ -58,39 +58,37 @@ const ChatListContextMenu = React.memo((props) => {
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
 
   const tx = window.translate
+
+  const menu = [
+    showArchivedChats
+      ? <MenuItem onClick={() => onArchiveChat(false)} >
+        <Icon icon='export' /> {tx('menu_unarchive_chat')}
+      </MenuItem>
+      : <MenuItem icon='import' onClick={() => onArchiveChat(true)}>
+        <Icon icon='import' /> {tx('menu_archive_chat')}
+      </MenuItem>,
+    <MenuItem onClick={onDeleteChat}>
+      <Icon icon='delete' /> {tx('menu_delete_chat')}
+    </MenuItem>,
+    !chat.isGroup && !chat.isDeviceTalk && <MenuItem onClick={onEncrInfo}>
+      <Icon icon='lock' /> {tx('encryption_info_desktop')}
+    </MenuItem>,
+    chat.isGroup && chat.selfInGroup && <>
+      <MenuItem onClick={onEditGroup} >
+        <Icon icon='edit' /> {tx('menu_edit_group')}
+      </MenuItem>
+      <MenuItem onClick={onLeaveGroup}>
+        <Icon icon='log-out' /> {tx('menu_leave_group')}
+      </MenuItem>
+    </>,
+    !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && <MenuItem onClick={onBlockContact}>
+      <Icon icon='blocked-person' /> {tx('menu_block_contact')}
+    </MenuItem>
+  ]
+
   return (
     <ContextMenu id='chat-options' ref={contextMenu} onHide={reset}>
-      {showArchivedChats
-        ? <MenuItem onClick={() => onArchiveChat(false)} >
-          <Icon icon='export' /> {tx('menu_unarchive_chat')}
-        </MenuItem>
-        : <MenuItem icon='import' onClick={() => onArchiveChat(true)}>
-          <Icon icon='import' /> {tx('menu_archive_chat')}
-        </MenuItem>
-      }
-      <MenuItem onClick={onDeleteChat}>
-        <Icon icon='delete' /> {tx('menu_delete_chat')}
-      </MenuItem>
-      { !chat.isGroup &&
-        <MenuItem onClick={onEncrInfo}>
-          <Icon icon='lock' /> {tx('encryption_info_desktop')}
-        </MenuItem>
-      }
-      {chat.isGroup && chat.selfInGroup
-        ? (
-          <div>
-            <MenuItem onClick={onEditGroup} >
-              <Icon icon='edit' /> {tx('menu_edit_group')}
-            </MenuItem>
-            <MenuItem onClick={onLeaveGroup}>
-              <Icon icon='log-out' /> {tx('menu_leave_group')}
-            </MenuItem>
-          </div>
-        )
-        : <MenuItem onClick={onBlockContact}>
-          <Icon icon='blocked-person' /> {tx('menu_block_contact')}
-        </MenuItem>
-      }
+      {menu}
     </ContextMenu>
   )
 })
