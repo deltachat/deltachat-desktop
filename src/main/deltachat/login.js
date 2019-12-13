@@ -74,7 +74,7 @@ module.exports = class DCLoginController extends SplitOut {
   }
 
   getPath (addr) {
-    return path.join(this._controller.cwd, escapeEmailForAccountFolder(addr))
+    return path.join(this._controller.cwd, 'accounts', escapeEmailForAccountFolder(addr))
   }
 
   close () {
