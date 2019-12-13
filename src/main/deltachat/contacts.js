@@ -21,9 +21,8 @@ module.exports = class DCContacts extends SplitOut {
     log.info(`chat with dead drop ${contactId}:${messageId}`)
     const contact = this._dc.getContact(contactId)
     const address = contact.getAddress()
-    const name = contact.getName() || address.split('@')[0]
-    this._dc.createContact(name, address)
-    log.info(`Added contact ${name} (${address})`)
+    this._dc.createContact('', address)
+    log.info(`Added contact ${contact.getNameAndAddress()}`)
     const chatId = this._dc.createChatByMessageId(messageId)
 
     if (chatId) this._controller.chatList.updateChatList()
@@ -35,7 +34,7 @@ module.exports = class DCContacts extends SplitOut {
       this._controller.emit('error', this._controller.translate('bad_email_address'))
       return null
     }
-    return this._dc.createContact(name, email)
+    return this._dc.createContact(name || '', email)
   }
 
   createChatByContactId (contactId) {
