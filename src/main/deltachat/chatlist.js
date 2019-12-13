@@ -157,8 +157,10 @@ module.exports = class DCChatList extends SplitOut {
       if (isGroupChat(chat)) {
         return tx('n_members', [contacts.length], { quantity: contacts.length })
       } else if (contacts.length >= 1) {
-        if (chat.type === C.DC_CHAT_TYPE_SINGLE && contacts[0].id === C.DC_CONTACT_ID_SELF) {
+        if (chat.isSelfTalk) {
           return tx('chat_self_talk_subtitle')
+        } else if (chat.isDeviceTalk) {
+          return tx('device_talk_subtitle')
         }
         return contacts[0].address
       }
