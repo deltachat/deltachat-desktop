@@ -1,6 +1,7 @@
 console.time('init')
 
 const fs = require('fs')
+const { ensureDirSync } = require('fs-extra')
 const { app, session } = require('electron')
 const rc = app.rc = require('../rc')
 
@@ -11,10 +12,10 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 // Setup folders
-const mkdirp = require('mkdirp')
-const { getConfigPath, getLogsPath } = require('../application-constants')
-mkdirp.sync(getConfigPath())
-mkdirp.sync(getLogsPath())
+const { getConfigPath, getLogsPath, getAccountsPath } = require('../application-constants')
+ensureDirSync(getConfigPath())
+ensureDirSync(getLogsPath())
+ensureDirSync(getAccountsPath())
 
 // Setup Logger
 const logHandler = require('./log-handler')()
