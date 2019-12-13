@@ -27,7 +27,6 @@ const defaultState = {
   messages: {},
   oldestFetchedMessageIndex: -1,
   scrollToBottom: false, // if true the UI will scroll to bottom
-  scrollToBottomIfClose: false, // used to display new incoming message (only if current view is close to bottom)
   scrollToLastPage: false, // after fetching more messages reset scroll bar to old position
   scrollHeight: 0,
   countFetchedMessages: 0
@@ -75,8 +74,6 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
       return { ...state, scrollToLastPage: false, scrollHeight: 0 }
     } else if (payload === 'SCROLLED_TO_BOTTOM') {
       return { ...state, scrollToBottom: false }
-    } else if (payload === 'SCROLLED_TO_BOTTOM_IF_CLOSE') {
-      return { ...state, scrollToBottomIfClose: false }
     }
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload

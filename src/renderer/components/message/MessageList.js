@@ -22,7 +22,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     messages,
     messageIds,
     scrollToBottom,
-    scrollToBottomIfClose,
     scrollToLastPage,
     scrollHeight
   }, chatStoreDispatch] = useChatStore()
@@ -38,22 +37,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }, 30)
     chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
-
-  useEffect(() => {
-    if (scrollToBottomIfClose === false) return
-    // For whatever reason the scrollTop is ~1000 off...
-    const distanceToBottom = messageListRef.current.scrollHeight - (messageListRef.current.scrollTop + 1000)
-    if (distanceToBottom > (window.screen.height / 2)) {
-      // we are too far away from the  ottom so  don't scroll down to show the new message
-      chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
-      return
-    }
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    }, 30)
-    chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM_IF_CLOSE' })
-  }, [scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
