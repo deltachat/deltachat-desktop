@@ -48,7 +48,7 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
   if (type === 'UI_UNSELECT_CHAT') {
     return { ...defaultState }
   } else if (type === 'MODIFIED_CHAT') {
-    return { ...state, payload }
+    return { ...state, ...payload }
   } else if (type === 'FETCHED_MORE_MESSAGES') {
     return {
       ...state,
