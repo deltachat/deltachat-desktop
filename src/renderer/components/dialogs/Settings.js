@@ -33,7 +33,8 @@ export default class Settings extends React.Component {
       showSettingsDialog: false,
       mail_pw: MAGIC_PW,
       settings: {},
-      show: 'main'
+      show: 'main',
+      selfContact: {}
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
@@ -89,7 +90,9 @@ export default class Settings extends React.Component {
       e2ee_enabled: settings['configured_e2ee_enabled']
     }
 
-    this.setState({ settings, advancedSettings })
+    const selfContact = await callDcMethodAsync('getContact', [C.DC_CONTACT_ID_SELF])
+
+    this.setState({ settings, advancedSettings, selfContact })
   }
 
   onKeyTransferComplete () {
@@ -258,7 +261,10 @@ export default class Settings extends React.Component {
       return (
         <div>
           <Card elevation={Elevation.ONE}>
-            <ProfileImageSelector />
+            <ProfileImageSelector
+              displayName={this.state.settings['displayname']}
+              color={this.state.selfContact.color}
+            />
             <H5>{this.translate('pref_profile_info_headline')}</H5>
             <p>{deltachat.credentials.addr}</p>
             { this.renderDeltaInput('displayname', this.translate('pref_your_name'))}
@@ -466,6 +472,7 @@ class BackgroundSelector extends React.Component {
 }
 
 function ProfileImageSelector (props) {
+  const { displayName, color } = props
   const tx = window.translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
   useLayoutEffect(_ => {
@@ -489,11 +496,17 @@ function ProfileImageSelector (props) {
       }
     })
   }
-  const profileImage = profileImagePreview || '../images/camera.png'
+
+  const codepoint = displayName && displayName.codePointAt(0)
+  const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return <div className='profile-image-selector'>
     {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-    <img src={profileImage} alt={tx('a11y_profile_image_label')} />
+    {
+      profileImagePreview
+        ? <img src={profileImagePreview} alt={tx('a11y_profile_image_label')} />
+        : <span style={{ backgroundColor: color }}>{initial}</span>
+    }
     <div>
       {/* TODO: replace the text by icons that get described by aria-label */}
       <button aria-label={tx('a11y_profile_image_select')} onClick={openSelectionDialog} className={'bp3-button'}>Select</button>
