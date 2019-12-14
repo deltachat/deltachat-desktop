@@ -497,7 +497,8 @@ function ProfileImageSelector (props) {
     <div>
       {/* TODO: replace the text by icons that get described by aria-label */}
       <button aria-label={tx('a11y_profile_image_select')} onClick={openSelectionDialog} className={'bp3-button'}>Select</button>
-      <button aria-label={tx('a11y_profile_image_remove')} onClick={changeProfilePicture.bind(null, '')} className={'bp3-button'}>Remove</button>
+      {profileImagePreview &&
+      <button aria-label={tx('a11y_profile_image_remove')} onClick={changeProfilePicture.bind(null, '')} className={'bp3-button'}>Remove</button>}
     </div>
   </div>
 }
