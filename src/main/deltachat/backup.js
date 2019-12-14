@@ -84,6 +84,12 @@ module.exports = class DCBackup extends SplitOut {
           log.debug(`backupImport: ${newPath} does not exist, moving...`)
           sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
           sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
+          try {
+            // future compatibiliy: remove a symlink if it exists
+            if ((await fs.lstat(newPath)).isSymbolicLink()) {
+              await fs.remove(newPath).catch(log.error.bind(null, 'symlink removing failed'))
+            }
+          } catch (error) { /* but we don't care about the error of a not found symlink */ }
           await moveImportedConfigFolder(addr, newPath, false)
           onSuccessfulMove(addr)
         }

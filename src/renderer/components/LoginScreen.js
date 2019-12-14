@@ -183,10 +183,11 @@ export default function LoginScreen (props) {
   const { openDialog } = useContext(ScreenContext)
 
   function onClickLogin (credentials) {
-    if (typeof credentials === 'string') {
-      credentials = { addr: credentials, mail_pw: true }
-    }
     sendToBackend('login', credentials)
+  }
+
+  function onClickLoadAccount (login) {
+    sendToBackend('loadAccount', login)
   }
 
   function forgetLogin (login) {
@@ -211,13 +212,13 @@ export default function LoginScreen (props) {
         { props.logins.length > 0 && <Card>
           <DeltaHeadline>{tx('login_known_accounts_title_desktop')}</DeltaHeadline>
           <ul>
-            {props.logins.map((addr) => <LoginItem key={addr}>
-              <Button large minimal onClick={() => onClickLogin(addr)}>
-                {addr}
+            {props.logins.map((login) => <LoginItem key={login.path}>
+              <Button large minimal onClick={() => onClickLoadAccount(login)} title={login.path}>
+                {login.addr}
               </Button>
               <Button
                 intent={Intent.DANGER} minimal icon='cross'
-                onClick={() => forgetLogin(addr)}
+                onClick={() => forgetLogin(login)}
                 aria-label={tx('a11y_remove_account_btn_label')} />
             </LoginItem>
             )}
