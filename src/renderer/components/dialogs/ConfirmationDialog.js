@@ -34,6 +34,8 @@ export default function ConfirmationDialog (props) {
     cb(yes)
   }
 
+  const Btn = yesIsDanger ? DeltaButtonDanger : DeltaButtonPrimary
+
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
@@ -43,19 +45,19 @@ export default function ConfirmationDialog (props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaButtonDanger
-              noPadding
-              onClick={() => yesIsDanger ? onClick(true) : onClick(false)}
-            >
-              { yesIsDanger ? tx('yes') : tx('no') }
-            </DeltaButtonDanger>
             <DeltaButtonPrimary
               noPadding
-              onClick={() => yesIsDanger ? onClick(false) : onClick(true)}
+              onClick={() => onClick(false)}
+            >
+              {tx('no')}
+            </DeltaButtonPrimary>
+            <Btn
+              noPadding
+              onClick={() => onClick(true)}
               style={{ marginLeft: '90px' }}
             >
-              { yesIsDanger ? tx('no') : tx('yes') }
-            </DeltaButtonPrimary>
+              {tx('yes')}
+            </Btn>
           </div>
         </div>
       </div>
