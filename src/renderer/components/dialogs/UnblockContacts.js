@@ -32,6 +32,7 @@ export default function UnblockContacts (props) {
   const onUnblockContact = ({ id }) => {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_unblock_contact'),
+      confirmLabel: tx('confirm_unblock_contact'),
       cb: yes => yes && blockContact(id)
     })
   }
