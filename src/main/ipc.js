@@ -4,7 +4,7 @@ const { app, ipcMain, dialog } = require('electron')
 const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
-const { getLogins, removeAccount } = require('./logins')
+const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
 const { getConfigPath } = require('../application-constants')
 
 const localize = require('../localize')
@@ -27,9 +27,9 @@ function init (cwd, state, logHandler) {
   const main = windows.main
   const dcController = new DeltaChatController(cwd, state.saved)
 
-  dcController.on('ready', credentials => {
-    if (!state.logins.includes(credentials.addr)) {
-      state.logins.push(credentials.addr)
+  dcController.on('ready', async credentials => {
+    if (!state.logins.find(({ addr }) => addr === credentials.addr)) {
+      state.logins = await getLogins()
     }
     state.saved.credentials = credentials
     delete state.saved.credentials.mail_pw
@@ -93,7 +93,21 @@ function init (cwd, state, logHandler) {
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
   ipcMain.on('login', (e, credentials) => {
-    dcController.loginController.login(credentials, sendStateToRenderer, txCoreStrings())
+    dcController.loginController.login(
+      getNewAccountPath(),
+      credentials,
+      sendStateToRenderer,
+      txCoreStrings()
+    )
+  })
+
+  ipcMain.on('loadAccount', (e, login) => {
+    dcController.loginController.login(
+      login.path,
+      { addr: login.addr, mail_pw: true },
+      sendStateToRenderer,
+      txCoreStrings()
+    )
   })
 
   const updateLogins = async () => {
@@ -101,9 +115,9 @@ function init (cwd, state, logHandler) {
     sendStateToRenderer()
   }
 
-  ipcMain.on('forgetLogin', async (e, addr) => {
+  ipcMain.on('forgetLogin', async (e, login) => {
     try {
-      await removeAccount(addr)
+      await removeAccount(login.path)
       main.send('success', 'successfully forgot account')
     } catch (error) {
       main.send('error', error.message)
@@ -237,13 +251,24 @@ function init (cwd, state, logHandler) {
       sendState(deltachat)
       if (tmpDeltachat.ready) {
         // test login was successfull so we log in with the current account to update the DB config
-        dcController.loginController.login(credentials, sendStateToRenderer, txCoreStrings(), true)
+        dcController.loginController.login(
+          dcController.accountDir,
+          credentials,
+          sendStateToRenderer,
+          txCoreStrings(),
+          true
+        )
         main.send('success', 'Configuration success!')
         tmp.loginController.close()
       }
     }
     // test login with a temporary instance
-    tmp.loginController.login(credentials, onReadyCallback, txCoreStrings())
+    tmp.loginController.login(
+      dcController.accountDir,
+      credentials,
+      onReadyCallback,
+      txCoreStrings()
+    )
   })
 
   ipcMain.on('cancelCredentialsUpdate', () => {
@@ -271,7 +296,21 @@ function init (cwd, state, logHandler) {
   if (savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0) {
-    dcController.loginController.login(savedCredentials, sendStateToRenderer, txCoreStrings())
+    const selectedAccount = state.logins.find(account => account.addr === savedCredentials.addr)
+
+    if (!selectedAccount) {
+      log.error('Previous account not found!')
+      throw new Error('Previous account not found!')
+    }
+
+    console.log(selectedAccount)
+
+    dcController.loginController.login(
+      selectedAccount.path,
+      savedCredentials,
+      sendStateToRenderer,
+      txCoreStrings()
+    )
   }
 }
 

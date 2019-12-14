@@ -4,7 +4,6 @@ const setupNotifications = require('../notifications')
 const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
-const { getNewAccountPath } = require('../logins')
 
 const SplitOut = require('./splitout')
 module.exports = class DCLoginController extends SplitOut {
@@ -22,9 +21,9 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer()
   }
 
-  login (credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
+  login (accountDir, credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
     // Creates a separate DB file for each login
-    this._controller.accountDir = getNewAccountPath(credentials.addr)
+    this._controller.accountDir = accountDir
     log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
     this._controller._dc = dc

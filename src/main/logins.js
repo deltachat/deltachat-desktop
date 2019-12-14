@@ -7,13 +7,22 @@ const { escapeEmailForAccountFolder } = require('./deltachat/util')
 
 const { getAccountsPath, getConfigPath } = require('../application-constants')
 
+// change this in the future to enable new account format and break compatibility to really old dcversions on windows
+const NEW_ACCOUNT_FORMAT = false
+
 async function getLogins () {
-  // search for old accounts and convert them
-  await migrate(getConfigPath())
+  if (NEW_ACCOUNT_FORMAT) {
+    // search for old accounts and convert them
+    await migrate(getConfigPath())
+  }
 
   // list new accounts
-  const accounts = await readDeltaAccounts(getAccountsPath())
-  return accounts.map(account => account.addr)
+  var accounts = await readDeltaAccounts(getAccountsPath())
+  if (!NEW_ACCOUNT_FORMAT) {
+    // search for old accounts and use them
+    accounts.push(...await readDeltaAccounts(getConfigPath()))
+  }
+  return accounts
 }
 
 async function migrate (dir) {
@@ -70,8 +79,8 @@ function getConfig (cwd) {
   })
 }
 
-async function removeAccount (accountAddress) {
-  const account = (await readDeltaAccounts(getAccountsPath())).find(({ addr }) => accountAddress === addr)
+async function removeAccount (accountPath) {
+  const account = (await getLogins()).find(({ path }) => accountPath === path)
   if (!account) {
     throw new Error('Removing account failed: Account not found')
   } else if (!await fs.pathExists(account.path)) {
@@ -82,7 +91,11 @@ async function removeAccount (accountAddress) {
 }
 
 function getNewAccountPath (addr) {
-  return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
+  if (NEW_ACCOUNT_FORMAT) {
+    return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
+  } else {
+    return join(getConfigPath(), Buffer.from(addr).toString('hex'))
+  }
 }
 
 module.exports = { getLogins, removeAccount, getNewAccountPath }
