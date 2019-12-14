@@ -18,8 +18,7 @@ export function confirmationDialogLegacy (message, opts, cb) {
 }
 
 export default function ConfirmationDialog (props) {
-  const { message, cb } = props
-  const yesIsDanger = props.yesIsDanger !== false
+  const { message, cancelLabel, confirmLabel, cb } = props
 
   const isOpen = !!message
   const tx = window.translate
@@ -34,8 +33,6 @@ export default function ConfirmationDialog (props) {
     cb(yes)
   }
 
-  const Btn = yesIsDanger ? DeltaButtonDanger : DeltaButtonPrimary
-
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
@@ -49,15 +46,15 @@ export default function ConfirmationDialog (props) {
               noPadding
               onClick={() => onClick(false)}
             >
-              {tx('no')}
+              {cancelLabel || tx('cancel')}
             </DeltaButtonPrimary>
-            <Btn
+            <DeltaButtonDanger
               noPadding
               onClick={() => onClick(true)}
               style={{ marginLeft: '90px' }}
             >
-              {tx('yes')}
-            </Btn>
+              {confirmLabel || tx('yes')}
+            </DeltaButtonDanger>
           </div>
         </div>
       </div>
