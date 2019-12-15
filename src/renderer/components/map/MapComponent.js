@@ -2,7 +2,6 @@ const { callDcMethod } = require('../../ipc')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const ReactDOM = require('react-dom')
-const C = require('deltachat-node/constants')
 const debounce = require('debounce')
 const mapboxgl = require('mapbox-gl')
 const locationStore = require('../../stores/locations')
@@ -14,6 +13,7 @@ const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
 const SessionStorage = require('../helpers/SessionStorage')
 const SettingsContext = require('../../contexts/SettingsContext')
+const chatStore = require('../../stores/chat').default
 
 const ContextMenu = require('./ContextMenu')
 
@@ -132,18 +132,21 @@ class MapComponent extends React.Component {
       })
       const poiLocations = locations.filter(location => (location.isIndependent && !location.marker))
       if (poiLocations.length > 0) {
-        this.map.loadImage('./icons/poi-marker.png', (error, image) => {
-          if (!error) {
-            this.map.addImage('poi-marker', image)
-          }
-        })
+        if (!this.map.hasImage('poi-marker')) {
+          this.map.loadImage('./icons/poi-marker.png', (error, image) => {
+            if (!error) {
+              this.map.addImage('poi-marker', image)
+            }
+          })
+        }
         const poiLayer = MapLayerFactory.getPOILayer(poiLocations)
         this.mapDataStore.set('poi-layer', poiLayer)
         this.map.addLayer(poiLayer)
       }
-      const poiMarker = locations.filter(location => (location.isIndependent && location.marker))
-      if (poiMarker.length) {
-        poiMarker.map((location) => {
+      const poiWithMarker = locations.filter(location => (location.isIndependent && location.marker))
+      if (poiWithMarker.length) {
+        const poiMarker = []
+        poiWithMarker.map((location) => {
           var el = document.createElement('div')
           el.className = 'marker-icon'
           el.innerHTML = location.marker
@@ -152,7 +155,9 @@ class MapComponent extends React.Component {
             .setLngLat([location.longitude, location.latitude])
             .addTo(this.map)
           m.location = location
+          poiMarker.push(m)
         })
+        this.mapDataStore.set('poi-marker', poiMarker)
       }
       this.setState({ currentContacts: currentContacts })
       if (this.stateFromSession) {
@@ -212,6 +217,10 @@ class MapComponent extends React.Component {
   }
 
   removeAllLayer () {
+    if (this.mapDataStore.has('poi-marker')) {
+      this.mapDataStore.get('poi-marker').map(m => m.remove())
+      this.mapDataStore.delete('poi-marker')
+    }
     this.mapDataStore.forEach(
       (mapDataItem) => {
         if (this.map.getLayer(mapDataItem.pathLayerId)) {
@@ -320,32 +329,13 @@ class MapComponent extends React.Component {
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    callDcMethod(
-      'messageList.sendMessage',
-      [selectedChat.id, message, null, latLng]
-    )
+    chatStore.dispatch({ type: 'SEND_MESSAGE', payload: [selectedChat.id, message, null, latLng] })
+
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
       this.contextMenuPopup = null
     }
-    let contact = selectedChat.contacts.find(contact => contact.address === this.currentUserAddress)
-    if (!contact) {
-      contact = { id: C.DC_CONTACT_ID_SELF, firstName: window.translate('self'), color: 1212112 } // fallback since current user is not in contact list in non group chats
-    }
-    const location = {
-      longitude: latLng.lng,
-      latitude: latLng.lat,
-      contact: contact,
-      timestamp: new Date().getUTCMilliseconds(),
-      isIndependent: true,
-      message: message
-    }
-    const mapData = this.mapDataStore.get(contact.id)
-    if (mapData) {
-      this.map.getSource(mapData.pointsLayerId).setData(MapLayerFactory.getGeoJSONPointsLayerSourceData([location], contact, true))
-    } else {
-      this.renderContactLayer(contact, [location])
-    }
+
     this.poiLocation = null
   }
 
@@ -381,8 +371,8 @@ class MapComponent extends React.Component {
           if (this.map.getLayer(mapDataItem.pointsLayerId)) {
             this.map.moveLayer(mapDataItem.pointsLayerId)
           }
-          if (this.map.getLayer('poi-marker')) {
-            this.map.moveLayer('poi-marker')
+          if (this.map.getLayer('poi-layer')) {
+            this.map.moveLayer('poi-layer')
           }
         }
       )

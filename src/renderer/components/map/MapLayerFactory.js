@@ -74,7 +74,7 @@ class MapLayerFactory {
 
   static getPOILayer (locations) {
     const layer = {
-      id: 'poi-marker',
+      id: 'poi-layer',
       type: 'symbol',
       /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
       source: {
