@@ -23,7 +23,7 @@ const getLocations = (chatId, mapSettings) => {
 
 const onLocationChange = (evt, payload) => {
   const { selectedChat, mapSettings } = locationStore.getState()
-  const { chatId } = payload
+  const [chatId] = payload
   if (selectedChat && chatId === selectedChat.id) {
     getLocations(chatId, mapSettings)
   }
