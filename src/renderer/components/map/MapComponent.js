@@ -123,7 +123,9 @@ class MapComponent extends React.Component {
     this.mapDataStore.locationCount = locations.length
     if (locations.length > 0) {
       selectedChat.contacts.map(contact => {
-        const locationsForContact = locations.filter(location => location.contactId === contact.id && !location.isIndependent)
+        const locationsForContact = locations.filter(
+          location => location.contactId === contact.id && !location.isIndependent
+        )
         if (locationsForContact.length > 0) {
           currentContacts.push(contact)
         }
@@ -165,7 +167,10 @@ class MapComponent extends React.Component {
         this.changeMapStyle(this.state.mapStyle)
       } else {
         if (allPoints.length > 0) {
-          this.map.fitBounds(geojsonExtent({ type: 'Point', coordinates: allPoints }), { padding: 100, maxZoom: this.maxZoomAfterFitBounds })
+          this.map.fitBounds(
+            geojsonExtent({ type: 'Point', coordinates: allPoints }),
+            { padding: 100, maxZoom: this.maxZoomAfterFitBounds }
+          )
         }
       }
     }
@@ -220,6 +225,11 @@ class MapComponent extends React.Component {
     if (this.mapDataStore.has('poi-marker')) {
       this.mapDataStore.get('poi-marker').map(m => m.remove())
       this.mapDataStore.delete('poi-marker')
+    }
+    if (this.map.getLayer('poi-layer')) {
+      this.map.removeLayer('poi-layer')
+      this.map.removeSource('poi-layer')
+      this.mapDataStore.delete('poi-layer')
     }
     this.mapDataStore.forEach(
       (mapDataItem) => {
@@ -344,7 +354,7 @@ class MapComponent extends React.Component {
     const newVisibility = this.state.showPathLayer ? 'none' : 'visible'
     this.mapDataStore.forEach(
       (mapDataItem) => {
-        if (!mapDataItem.hidden) {
+        if (!mapDataItem.hidden && mapDataItem.contact) {
           this.map.setLayoutProperty(mapDataItem.pathLayerId, 'visibility', newVisibility)
         }
       }
@@ -455,9 +465,17 @@ class MapComponent extends React.Component {
     return (
       <div>
         <nav id='controls' className='map-overlay top'>
-          <Button minimal className='collapse-control' icon={this.state.showControls ? 'chevron-up' : 'chevron-down'} onClick={() => this.setState({ showControls: !this.state.showControls })}>Map controls</Button>
+          <Button
+            minimal
+            className='collapse-control'
+            icon={this.state.showControls ? 'chevron-up' : 'chevron-down'}
+            onClick={() => this.setState({ showControls: !this.state.showControls })}>
+              Map controls
+          </Button>
           <Collapse isOpen={this.state.showControls}>
-            <Button minimal className='toggle-path' icon='layout' onClick={this.togglePathLayer} > {this.state.showPathLayer ? 'Hide' : 'Show'} paths </Button>
+            <Button minimal className='toggle-path' icon='layout' onClick={this.togglePathLayer} >
+              {this.state.showPathLayer ? 'Hide' : 'Show'} paths
+            </Button>
             <div id='menu' >
               <div>
                 <input id='default'
