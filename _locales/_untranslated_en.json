@@ -56,25 +56,7 @@
   "ask_send_file_desktop":{
     "message": "Send %s to %s?"
   },
-  "confirm_leave_group": {
-    "message": "Leave"
-  },
-  "confirm_delete_chat": {
-    "message": "Delete"
-  },
-  "confirm_block_contact": {
-    "message": "Block"
-  },
-  "confirm_unblock_contact": {
-    "message": "Unblock"
-  },
-  "confirm_forget_login": {
-    "message": "Forget"
-  },
-  "confirm_send_file": {
-    "message": "send"
-  },
-  "confirm_delete_message": {
-    "message": "Delete"
+  "remove_account": {
+    "message": "Remove account"
   }
 }
