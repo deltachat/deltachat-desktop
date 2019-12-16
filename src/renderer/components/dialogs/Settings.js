@@ -262,7 +262,7 @@ export default class Settings extends React.Component {
         <div>
           <Card elevation={Elevation.ONE}>
             <ProfileImageSelector
-              displayName={this.state.settings['displayname']}
+              displayName={this.state.settings['displayname'] || this.state.selfContact.address}
               color={this.state.selfContact.color}
             />
             <H5>{this.translate('pref_profile_info_headline')}</H5>
