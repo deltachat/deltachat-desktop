@@ -1,16 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 import { getSizeClass, getRegex, replaceColons } from '../conversations/emoji'
-import { previewRules, rules } from './MessageMarkdown'
-import SimpleMarkdown from 'simple-markdown'
 
 const emojiRegex = getRegex()
-const previewParser = SimpleMarkdown.parserFor(previewRules, { inline: true })
-const parser = SimpleMarkdown.parserFor(rules)
-const ast2react = SimpleMarkdown.outputFor(rules, 'react')
 
 export default function MessageBody (props) {
-  const { text, disableJumbomoji, preview } = props
+  const { text, disableJumbomoji } = props
   // if text is only emojis and Jumbomoji is enabled
   const emojifiedText = trim(text.replace(/:[\w\d_\-+]*:/g, replaceColons))
   if (
@@ -25,9 +20,7 @@ export default function MessageBody (props) {
       </span>
     )
   }
-  const ast = (preview ? previewParser : parser)(emojifiedText)
-  const res = ast2react(ast)
-  return res
+  return emojifiedText
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
 

@@ -84,7 +84,6 @@
     "rimraf": "^2.7.1",
     "run-parallel": "^1.1.9",
     "run-series": "^1.1.8",
-    "simple-markdown": "^0.7.0",
     "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
     "use-debounce": "^3.1.0"
