@@ -12,11 +12,11 @@
     }
 
     &>.author-avatar {
-        position: absolute;
-        // This accounts for the weird extra 3px we get at the bottom of messages
-        bottom: -3px;
-        right: calc(100% + 4px);
-
+        align-self: flex-end;
+        bottom: 0px;
+        position: static;
+        margin-right: 8px;
+        
         img {
             height: 36px;
             width: 36px;
@@ -26,11 +26,7 @@
 
         &.default {
             // text letter version
-            align-self: flex-end;
-            bottom: 0px;
             text-align: center;
-            position: static;
-            margin-right: 8px;
 
             &>.label {
                 user-select: none;
