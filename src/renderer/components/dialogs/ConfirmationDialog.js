@@ -51,7 +51,6 @@ export default function ConfirmationDialog (props) {
             <DeltaButtonDanger
               noPadding
               onClick={() => onClick(true)}
-              style={{ marginLeft: '90px' }}
             >
               {confirmLabel || tx('yes')}
             </DeltaButtonDanger>
