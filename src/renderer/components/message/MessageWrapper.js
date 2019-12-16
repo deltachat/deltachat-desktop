@@ -76,7 +76,7 @@ export function RenderMessage (props) {
   const onShowDetail = () => openDialog('MessageDetail', { message, chat })
   const onDelete = () => openDialog('ConfirmationDialog', {
     message: tx('ask_delete_message_desktop'),
-    confirmLabel: tx('confirm_delete_message'),
+    confirmLabel: tx('delete'),
     cb: yes => yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
   })
 

@@ -36,7 +36,7 @@ export default function MessageListAndComposer (props) {
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         openDialog('ConfirmationDialog', {
           message: tx('ask_send_file_desktop', [name, chat.name]),
-          confirmLabel: tx('confirm_send_file'),
+          confirmLabel: tx('menu_send'),
           cb: yes => {
             if (!yes) { return }
             callDcMethod(
