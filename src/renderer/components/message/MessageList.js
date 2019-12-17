@@ -47,7 +47,6 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   }, [scrollToLastPage, scrollHeight])
 
   useEffect(() => {
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chat.id })
     isFetching.current = false
   }, [chat.id])
 
