@@ -38,7 +38,12 @@ export default function DeltaMenu (props) {
   const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat)
   const onUnblockContacts = () => screenContext.openDialog('UnblockContacts', {})
   const onContactRequests = () => chatStoreDispatch({ type: 'SELECT_CHAT', payload: C.DC_CHAT_ID_DEADDROP })
-  const logout = () => ipcRenderer.send('logout')
+  const logout = () => {
+    if (selectedChat) {
+      chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
+    }
+    ipcRenderer.send('logout')
+  }
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
