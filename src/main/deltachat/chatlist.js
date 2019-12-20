@@ -61,18 +61,22 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   async getChatListItemsByIds (chatIds) {
+    const label = '[BENCH] getChatListItemByIds'
+    console.time(label)
     const chats = {}
-    let list, i
+    let list
+    let i = 0
     for (const chatId of chatIds) {
       if (!list) {
         [list, i] = await this.getListAndIndexForChatId(chatIds[0])
       } else {
-        i = await findIndexOfChatIdInChatList(list, chatId)
+        i = await findIndexOfChatIdInChatList(list, chatId, i)
       }
 
       const chat = await this.getChatListItemById(chatId, list, i)
       chats[chatId] = chat
     }
+    console.timeEnd(label)
     return chats
   }
 
@@ -241,9 +245,11 @@ module.exports = class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-async function findIndexOfChatIdInChatList (list, chatId) {
+async function findIndexOfChatIdInChatList (list, chatId, startI = 0) {
   let i = -1
-  for (let counter = 0; counter < list.getCount(); counter++) {
+  const listCount = list.getCount()
+  for (let counter = startI; counter < listCount; counter++) {
+    counter = counter % listCount
     const currentChatId = await chatListGetChatId(list, counter)
     if (currentChatId === chatId) {
       i = counter
