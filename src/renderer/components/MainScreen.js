@@ -10,7 +10,7 @@ import SearchInput from './SearchInput'
 import SettingsContext from '../contexts/SettingsContext'
 import { useChatStore } from '../stores/chat'
 import NavbarWrapper from './NavbarWrapper'
-import { openEditGroupDialog, openMapDialog } from './helpers/ChatMethods'
+import { openEditGroupDialog, openMapDialog, openOneOnOneChatInfoDialog } from './helpers/ChatMethods'
 
 import {
   Alignment,
@@ -60,8 +60,12 @@ export default function MainScreen () {
   const handleSearchChange = event => searchChats(event.target.value)
   const onMapIconClick = () => openMapDialog(screenContext, selectedChat)
   const onTitleClick = () => {
-    if (selectedChat && selectedChat.isGroup) {
+    if (!selectedChat) return
+
+    if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
+    } else {
+      openOneOnOneChatInfoDialog(screenContext)
     }
   }
 
