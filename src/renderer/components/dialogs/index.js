@@ -1,22 +1,23 @@
-const React = require('react')
-const MessageDetail = require('./MessageDetail').default
-const RenderMedia = require('./RenderMedia')
-const DeadDrop = require('./DeadDrop').default
-const EnterAutocryptSetupMessage = require('./EnterAutocryptSetupMessage').default
-const SendAutocryptSetupMessage = require('./SendAutocryptSetupMessage').default
-const ImexProgress = require('./ImexProgress').default
-const About = require('./About').default
-const Settings = require('./Settings').default
-const ForwardMessage = require('./ForwardMessage').default
-const EncryptionInfo = require('./EncryptionInfo').default
-const CreateChat = require('./CreateChat').default
-const EditGroup = require('./EditGroup').default
-const MapDialog = require('./MapDialog')
-const QrInviteCode = require('./QrInviteCode').default
-const ConfirmationDialog = require('./ConfirmationDialog').default
-const UnblockContacts = require('./UnblockContacts').default
+import React from 'react'
+import MessageDetail from './MessageDetail'
+import RenderMedia from './RenderMedia'
+import DeadDrop from './DeadDrop'
+import EnterAutocryptSetupMessage from './EnterAutocryptSetupMessage'
+import SendAutocryptSetupMessage from './SendAutocryptSetupMessage'
+import ImexProgress from './ImexProgress'
+import About from './About'
+import Settings from './Settings'
+import ForwardMessage from './ForwardMessage'
+import EncryptionInfo from './EncryptionInfo'
+import CreateChat from './CreateChat'
+import EditGroup from './EditGroup'
+import OneOnOneChatInfo from './OneOnOneChatInfo'
+import MapDialog from './MapDialog'
+import QrInviteCode from './QrInviteCode'
+import ConfirmationDialog from './ConfirmationDialog'
+import UnblockContacts from './UnblockContacts'
 
-const allDialogs = [
+export const allDialogs = [
   DeadDrop,
   RenderMedia,
   MessageDetail,
@@ -29,6 +30,7 @@ const allDialogs = [
   EncryptionInfo,
   CreateChat,
   EditGroup,
+  OneOnOneChatInfo,
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
@@ -37,7 +39,7 @@ const allDialogs = [
 
 const log = require('../../../logger').getLogger('renderer/dialogs')
 
-class Controller extends React.Component {
+export class Controller extends React.Component {
   constructor (props) {
     super(props)
 
@@ -100,5 +102,3 @@ class Controller extends React.Component {
   }
 }
 
-module.exports = allDialogs
-module.exports.Controller = Controller
