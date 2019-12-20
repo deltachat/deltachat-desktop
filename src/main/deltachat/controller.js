@@ -297,23 +297,27 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
+  // ToDo: Deprecated, use contacts.getContact
   getContact (id) {
     const contact = this._dc.getContact(id).toJson()
     contact.color = integerToHexColor(contact.color)
     return contact
   }
 
+  // ToDo: move to contacts.
   _blockedContacts () {
     if (!this._dc) return []
     return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }
 
+  // ToDo: move to contacts.
   getContacts2 (listFlags, queryStr) {
     const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
     const contacts = distinctIds.map(this.getContact.bind(this))
     return contacts
   }
 
+  // ToDo: move to contacts.
   getContacts (listFlags, queryStr) {
     const contacts = this.getContacts2(listFlags, queryStr)
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
