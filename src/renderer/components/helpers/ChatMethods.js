@@ -46,10 +46,10 @@ export function openEditGroupDialog (screenContext, selectedChat) {
   screenContext.openDialog('EditGroup', { chat: selectedChat })
 }
 
-export function openMapDialog(screenContext, selectedChat) {
+export function openMapDialog (screenContext, selectedChat) {
   screenContext.openDialog('MapDialog', { selectedChat })
 }
 
-export function openOneOnOneChatInfoDialog(screenContext) {
+export function openOneOnOneChatInfoDialog (screenContext) {
   screenContext.openDialog('OneOnOneChatInfo')
 }
