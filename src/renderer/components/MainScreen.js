@@ -10,7 +10,7 @@ import SearchInput from './SearchInput'
 import SettingsContext from '../contexts/SettingsContext'
 import { useChatStore } from '../stores/chat'
 import NavbarWrapper from './NavbarWrapper'
-import { openEditGroupDialog, openMapDialog, openOneOnOneChatInfoDialog } from './helpers/ChatMethods'
+import { openEditGroupDialog, openMapDialog, openViewProfileDialog } from './helpers/ChatMethods'
 
 import {
   Alignment,
@@ -65,7 +65,7 @@ export default function MainScreen () {
     if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
-      openOneOnOneChatInfoDialog(screenContext)
+      openViewProfileDialog(screenContext, selectedChat)
     }
   }
 

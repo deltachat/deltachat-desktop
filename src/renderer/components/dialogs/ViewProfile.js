@@ -2,13 +2,11 @@ import React, { useState } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogFooter, DeltaDialogBody } from './DeltaDialog'
 import { DeltaButtonPrimary } from './SmallDialog'
-import { useChatStore2 } from '../../stores/chat'
 
-export default function OneOnOneChatInfo (props) {
-  const { isOpen, onClose } = props
+export default function ViewProfile (props) { 
+  const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
-  const { selectedChat } = useChatStore2()
-  console.log(selectedChat)
+  console.log(chat)
 
   const tx = window.translate
 
@@ -25,8 +23,8 @@ export default function OneOnOneChatInfo (props) {
       />
       <DeltaDialogBody>
         <Card>
-        <p>{selectedChat.name}</p>
-        <p>{selectedChat.subtitle}</p>
+        <p>{chat.name}</p>
+        <p>{chat.subtitle}</p>
         </Card>
       </DeltaDialogBody>
       <DeltaDialogFooter>
