@@ -19,8 +19,7 @@ import {
 } from './Group-Styles'
 
 export default function EditGroup (props) {
-  const { chat } = props
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, chat} = props
   const [viewMode, setViewMode] = useState('main')
 
   return (

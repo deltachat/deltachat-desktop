@@ -50,6 +50,6 @@ export function openMapDialog (screenContext, selectedChat) {
   screenContext.openDialog('MapDialog', { selectedChat })
 }
 
-export function openOneOnOneChatInfoDialog (screenContext) {
-  screenContext.openDialog('OneOnOneChatInfo')
+export function openViewProfileDialog (screenContext, chat) {
+  screenContext.openDialog('ViewProfile', { chat })
 }

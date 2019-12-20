@@ -11,7 +11,7 @@ import ForwardMessage from './ForwardMessage'
 import EncryptionInfo from './EncryptionInfo'
 import CreateChat from './CreateChat'
 import EditGroup from './EditGroup'
-import OneOnOneChatInfo from './OneOnOneChatInfo'
+import ViewProfile from './ViewProfile'
 import MapDialog from './MapDialog'
 import QrInviteCode from './QrInviteCode'
 import ConfirmationDialog from './ConfirmationDialog'
@@ -30,7 +30,7 @@ export const allDialogs = [
   EncryptionInfo,
   CreateChat,
   EditGroup,
-  OneOnOneChatInfo,
+  ViewProfile,
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
