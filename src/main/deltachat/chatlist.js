@@ -31,22 +31,30 @@ module.exports = class DCChatList extends SplitOut {
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
-  getChatListIds (listFlags, queryStr, queryContactId) {
+  async __chatListGetChatId (list, index) {
+    return list.getChatId(index)
+  }
+
+  async getChatListIds (listFlags, queryStr, queryContactId) {
     const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)
     const chatListIds = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
-      const chatId = chatList.getChatId(counter)
+      const chatId = await this.__chatListGetChatId(chatList, counter)
       chatListIds.push(chatId)
     }
     return chatListIds
   }
 
+  async __getChatList (listflags, queryStr, queryContactId) {
+    return this._dc.getChatList(listflags, queryStr, queryContactId)
+  }
+
   async getListAndIndexForChatId (chatId) {
-    let list = this._dc.getChatList(0, '', 0)
+    let list = await this.__getChatList(0, '', 0)
     let i = await findIndexOfChatIdInChatList(list, chatId)
 
     if (i === -1) {
-      list = this._dc.getChatList(1, '', 0)
+      list = await this.__getChatList(1, '', 0)
       i = await findIndexOfChatIdInChatList(list, chatId)
     }
     return [list, i]
@@ -54,11 +62,22 @@ module.exports = class DCChatList extends SplitOut {
 
   async getChatListItemsByIds (chatIds) {
     const chats = {}
+    let list, i
     for (const chatId of chatIds) {
-      const chat = await this.getChatListItemById(chatId)
+      if (!list) {
+        [list, i] = await this.getListAndIndexForChatId(chatIds[0])
+      } else {
+        i = await findIndexOfChatIdInChatList(list, chatId)
+      }
+
+      const chat = await this.getChatListItemById(chatId, list, i)
       chats[chatId] = chat
     }
     return chats
+  }
+
+  async getChatListSummary (list, i) {
+    return list.getSummary(i).toJson()
   }
 
   async getChatListItemById (chatId, list, i) {
@@ -70,20 +89,20 @@ module.exports = class DCChatList extends SplitOut {
 
     if (chat.id === C.DC_CHAT_ID_DEADDROP) {
       const messageId = list.getMessageId(i)
-      chat.deaddrop = this._deadDropMessage(messageId)
+      chat.deaddrop = await this._deadDropMessage(messageId)
     }
 
     // console.log('getChatListItemsByIds', chatId)
-    const summary = list.getSummary(i).toJson()
+    const summary = await this.getChatListSummary(list, i)
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
       summary.text2 = this._controller.translate('message_not_verified')
     }
     const isGroup = isGroupChat(chat)
-    const contactIds = this._dc.getChatContacts(chatId)
+    const contactIds = await this.__getChatContactIds(chatId)
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
-    return {
+    const chatListItem = {
       id: chat.id,
       name: chat.name || summary.text1,
       avatarPath: chat.profileImage,
@@ -104,6 +123,8 @@ module.exports = class DCChatList extends SplitOut {
       isDeviceTalk: chat.isDeviceTalk,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
+
+    return chatListItem
   }
 
   async __getChatById (chatId) {
@@ -199,14 +220,18 @@ module.exports = class DCChatList extends SplitOut {
     return this._dc.getFreshMessages().length
   }
 
-  _deadDropMessage (id) {
-    const msg = this._dc.getMessage(id)
+  async __getMessage (id) {
+    return this._dc_getMessage(id)
+  }
+
+  async _deadDropMessage (id) {
+    const msg = await this.__getMessage(id)
     const fromId = msg && msg.getFromId()
     if (!fromId) {
       log.warn('Ignoring DEADDROP due to missing fromId')
       return
     }
-    const contact = this._dc.getContact(fromId).toJson()
+    const contact = await this.__getChatContact(fromId)
     return { id, contact }
   }
 
@@ -219,13 +244,17 @@ module.exports = class DCChatList extends SplitOut {
 async function findIndexOfChatIdInChatList (list, chatId) {
   let i = -1
   for (let counter = 0; counter < list.getCount(); counter++) {
-    const currentChatId = list.getChatId(counter)
+    const currentChatId = await chatListGetChatId(list, counter)
     if (currentChatId === chatId) {
       i = counter
       break
     }
   }
   return i
+}
+
+async function chatListGetChatId (list, index) {
+  return list.getChatId(index)
 }
 
 function mapCoreMsgStatus2String (state) {
