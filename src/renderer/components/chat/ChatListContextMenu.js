@@ -57,7 +57,8 @@ const ChatListContextMenu = React.memo((props) => {
   }
   const onViewProfile = async () => {
     const fullChat = await callDcMethodAsync('chatList.getFullChatById', chat.id)
-    openViewProfileDialog(screenContext, fullChat)
+    const contact = fullChat.contacts[0]
+    openViewProfileDialog(screenContext, contact)
   }
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
