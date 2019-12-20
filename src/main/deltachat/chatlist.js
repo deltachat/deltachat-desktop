@@ -6,9 +6,9 @@ const { integerToHexColor } = require('./util')
 
 const SplitOut = require('./splitout')
 module.exports = class DCChatList extends SplitOut {
-  selectChat (chatId) {
+  async selectChat (chatId) {
     this._controller._selectedChatId = chatId
-    const chat = this.getFullChatById(chatId, true)
+    const chat = await this.getFullChatById(chatId, true)
     if (!chat) {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
@@ -25,9 +25,9 @@ module.exports = class DCChatList extends SplitOut {
     return chat
   }
 
-  onChatModified (chatId) {
+  async onChatModified (chatId) {
     // TODO: move event handling to store
-    const chat = this.getFullChatById(chatId)
+    const chat = await this.getFullChatById(chatId)
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
@@ -41,30 +41,31 @@ module.exports = class DCChatList extends SplitOut {
     return chatListIds
   }
 
-  getListAndIndexForChatId (chatId) {
+  async getListAndIndexForChatId (chatId) {
     let list = this._dc.getChatList(0, '', 0)
-    let i = findIndexOfChatIdInChatList(list, chatId)
+    let i = await findIndexOfChatIdInChatList(list, chatId)
 
     if (i === -1) {
       list = this._dc.getChatList(1, '', 0)
-      i = findIndexOfChatIdInChatList(list, chatId)
+      i = await findIndexOfChatIdInChatList(list, chatId)
     }
     return [list, i]
   }
 
-  getChatListItemsByIds (chatIds) {
+  async getChatListItemsByIds (chatIds) {
     const chats = {}
     for (const chatId of chatIds) {
-      chats[chatId] = this.getChatListItemById(chatId)
+      const chat = await this.getChatListItemById(chatId)
+      chats[chatId] = chat
     }
     return chats
   }
 
-  getChatListItemById (chatId, list, i) {
-    const chat = this.__getChatById(chatId)
+  async getChatListItemById (chatId, list, i) {
+    const chat = await this.__getChatById(chatId)
     if (chat === null) return null
 
-    if (!list) [list, i] = this.getListAndIndexForChatId(chatId)
+    if (!list) [list, i] = await this.getListAndIndexForChatId(chatId)
     if (!chat || i === -1) return null
 
     if (chat.id === C.DC_CHAT_ID_DEADDROP) {
@@ -105,27 +106,44 @@ module.exports = class DCChatList extends SplitOut {
     }
   }
 
-  __getChatById (chatId) {
+  async __getChatById (chatId) {
     if (!chatId) return null
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
     return rawChat.toJson()
   }
 
-  __getDraft (chatId) {
+  async __getDraft (chatId) {
     const draft = this._dc.getDraft(chatId)
     return draft ? draft.getText() : ''
   }
 
-  getFullChatById (chatId) {
-    const chat = this.__getChatById(chatId)
+  async __getChatContactIds (chatId) {
+    return this._dc.getChatContacts(chatId)
+  }
+
+  async __getChatContact (contactId) {
+    return this._dc.getContact(contactId).toJson()
+  }
+
+  async __getChatContacts (contactIds) {
+    const contacts = []
+    for (let i = 0; i < contactIds.length; i++) {
+      const contact = await this.__getChatContact(contactIds[i])
+      contacts.push(contact)
+    }
+    return contacts
+  }
+
+  async getFullChatById (chatId) {
+    const chat = await this.__getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0
 
     const isGroup = isGroupChat(chat)
-    const contactIds = this._dc.getChatContacts(chatId)
+    const contactIds = await this.__getChatContactIds(chatId)
 
-    const contacts = contactIds.map(id => this._dc.getContact(id).toJson())
+    const contacts = await this.__getChatContacts(contactIds)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -135,7 +153,7 @@ module.exports = class DCChatList extends SplitOut {
       profileImage: chat.profileImage,
 
       archived: chat.archived,
-      subtitle: this.__chatSubtitle(chat, contacts),
+      subtitle: await this.__chatSubtitle(chat, contacts),
       type: chat.type,
       isUnpromoted: chat.isUnpromoted, // new chat but no initial message sent
       isSelfTalk: chat.isSelfTalk,
@@ -198,7 +216,7 @@ module.exports = class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-function findIndexOfChatIdInChatList (list, chatId) {
+async function findIndexOfChatIdInChatList (list, chatId) {
   let i = -1
   for (let counter = 0; counter < list.getCount(); counter++) {
     const currentChatId = list.getChatId(counter)
