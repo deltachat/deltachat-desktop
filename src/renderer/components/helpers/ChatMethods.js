@@ -45,3 +45,7 @@ export function openEncryptionInfoDialog (screenContext, chat) {
 export function openEditGroupDialog (screenContext, selectedChat) {
   screenContext.openDialog('EditGroup', { chat: selectedChat })
 }
+
+export function openMapDialog(screenContext, selectedChat) {
+  screenContext.openDialog('MapDialog', { selectedChat })
+}
