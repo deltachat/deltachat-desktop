@@ -1,15 +1,17 @@
 const windows = require('./windows')
 const { app, ipcMain } = require('electron')
 
-module.exports = function (dc) {
+/**
+ * @param {import('./deltachat/controller')} dc
+ */
+function setupUnreadBadge (dc) {
   if (process.platform !== 'linux' && process.platform !== 'darwin') return
-
-  if (process.platform === 'linux' && !app.isUnityRunning()) return
 
   let reUpdateTimeOut
 
-  function update () {
-    const count = dc.chatList._getGeneralFreshMessageCounter()
+  async function update () {
+    console.log('bb')
+    const count = await dc.callMethod(null, 'chatList.getGeneralFreshMessageCounter')
     app.setBadgeCount(count)
   }
 
@@ -24,14 +26,16 @@ module.exports = function (dc) {
     }, 4000)
   })
 
-  dc._dc.on('ready', () => {
+  dc.on('ready', () => {
     // for start and after account switch
     update()
   })
 
-  ipcMain.on('selectChat', () => {
+  ipcMain.on('update-badge', () => {
     // after selecting a chat to take mark read into account
     if (reUpdateTimeOut) clearTimeout(reUpdateTimeOut)
     reUpdateTimeOut = setTimeout(() => update(), 200)
   })
 }
+
+module.exports = setupUnreadBadge

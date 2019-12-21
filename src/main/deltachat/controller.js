@@ -148,7 +148,7 @@ class DeltaChatController extends EventEmitter {
    * @param {string} methodName
    * @param {*} args
    */
-  async callMethod (evt, methodName, args) {
+  async callMethod (evt, methodName, args = []) {
     const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
       : ((methodName) => {
         const method = this[methodName]
