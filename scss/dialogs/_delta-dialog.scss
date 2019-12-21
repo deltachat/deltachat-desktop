@@ -1,20 +1,3 @@
-.delta-dialog-card__inner-without-padding {
-  margin: -20px;
-}
-
-.delta-dialog-card--no-padding {
-  padding: 0px;
-}
-
-.delta-dialog-card {
-  background-color: var(--bp3DialogHeaderBg); 
-  padding: 20px;
-  height: 100%;
-  &:last-child {
-    height: -webkit-fill-available;
-  }
-}
-
 .delta-dialog-small-dialog {
   width: 350px !important;
   padding-bottom: 0px !important;
@@ -22,5 +5,21 @@
   .bp3-dialog-footer {
     margin-top: 16px;
     padding: 0 0px 0px;
+  }
+}
+
+.delta-dialog-content {
+  flex: 1 1 auto; 
+  padding: 0px;
+  background-color: var(--bp3DialogHeaderBg);
+
+  .delta-dialog-content-text-seperator {
+    height: 40px;
+    margin-top: 10px;
+    padding-left: 20px;
+    background-color: var(--chatListItemBgHover);
+    color: #565656;
+    line-height: 40px;
+    font-size: 17px;
   }
 }

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
 import DeltaDialog, {
   DeltaDialogBody,
-  DeltaDialogCard,
-  DeltaDialogCardInnerWithoutPadding
+  DeltaDialogContent,
 } from './DeltaDialog'
 import contactsStore from '../../stores/contacts'
 
@@ -47,21 +46,19 @@ export default function UnblockContacts (props) {
       fixed={hadBlockedContacts === true}
     >
       <DeltaDialogBody>
-        <DeltaDialogCard>
+        <DeltaDialogContent>
           { blockedContacts.length === 0 &&
-            <p>{tx('none_blocked_desktop')}</p>
+            <p style={{marginLeft:'20px'}}>{tx('none_blocked_desktop')}</p>
           }
           { blockedContacts.length > 0 &&
-            <DeltaDialogCardInnerWithoutPadding>
-              <div style={{ overflow: 'scroll', height: '100%', backgroundColor: 'var(--bp3DialogBgPrimary)' }}>
-                <ContactList2
-                  contacts={blockedContacts}
-                  onClick={onUnblockContact}
-                />
-              </div>
-            </DeltaDialogCardInnerWithoutPadding>
+            <div style={{ overflow: 'scroll', height: '100%', backgroundColor: 'var(--bp3DialogBgPrimary)' }}>
+              <ContactList2
+                contacts={blockedContacts}
+                onClick={onUnblockContact}
+              />
+            </div>
           }
-        </DeltaDialogCard>
+        </DeltaDialogContent>
       </DeltaDialogBody>
     </DeltaDialog>
   )
