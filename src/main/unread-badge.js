@@ -10,7 +10,6 @@ function setupUnreadBadge (dc) {
   let reUpdateTimeOut
 
   async function update () {
-    console.log('bb')
     const count = await dc.callMethod(null, 'chatList.getGeneralFreshMessageCounter')
     app.setBadgeCount(count)
   }
