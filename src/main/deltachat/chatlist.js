@@ -221,7 +221,7 @@ module.exports = class DCChatList extends SplitOut {
     return 'ErrTitle'
   }
 
-  _getGeneralFreshMessageCounter () {
+  getGeneralFreshMessageCounter () {
     return this._dc.getFreshMessages().length
   }
 
