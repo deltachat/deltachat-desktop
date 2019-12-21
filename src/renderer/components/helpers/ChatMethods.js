@@ -51,8 +51,5 @@ export function openMapDialog (screenContext, selectedChat) {
 }
 
 export async function openViewProfileDialog (screenContext, contact) {
-  if (Number.isInteger(contact)) {
-    contact = await callDcMethodAsync('contacts.getContact', [contact])
-  }
   screenContext.openDialog('ViewProfile', { contact })
 }
