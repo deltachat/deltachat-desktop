@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import styled, { createGlobalStyle, css } from 'styled-components'
-import { Dialog, Classes, Card } from '@blueprintjs/core'
+import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 export const CreateDeltaDialogGlobal = createGlobalStyle`
@@ -134,7 +134,7 @@ export function DeltaDialogBody (props) {
   )
 }
 
-export function DeltaDialogContent(props) {
+export function DeltaDialogContent (props) {
   const { noPadding } = props
   return (
     <div style={props.style} className={classNames('delta-dialog-content', { 'delta-dialog-content--no-padding': noPadding })}>
@@ -143,6 +143,6 @@ export function DeltaDialogContent(props) {
   )
 }
 
-export function DeltaDialogContentTextSeperator(props) {
+export function DeltaDialogContentTextSeperator (props) {
   return <div className='delta-dialog-content-text-seperator'>{props.text}</div>
 }

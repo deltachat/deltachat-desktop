@@ -1,6 +1,5 @@
 import { onDownload } from './messageFunctions'
-import React, { useContext } from 'react'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import classNames from 'classnames'
 import MessageBody from './MessageBody'
@@ -8,8 +7,6 @@ import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from './Attachment'
-import { openViewProfileDialog } from '../helpers/ChatMethods'
-import ScreenContext from '../../contexts/ScreenContext'
 
 const Avatar = (contact, onContactClick) => {
   const {
@@ -71,7 +68,7 @@ const Author = (contact, onContactClick) => {
     name,
     address
   } = contact
-  
+
   return (
     <ContactName
       email={address}
