@@ -1,4 +1,4 @@
-import { ipcBackend, callDcMethod, callDcMethodAsync } from '../ipc'
+import { ipcBackend, callDcMethod, callDcMethodAsync, mainProcessUpdateBadge } from '../ipc'
 import { Store, useStore } from './store'
 
 export const PAGE_SIZE = 30
@@ -131,6 +131,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
         scrollToBottom: true
       }
     })
+    mainProcessUpdateBadge()
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
     callDcMethod('messageList.deleteMessage', [msgId])

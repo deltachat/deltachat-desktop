@@ -51,3 +51,7 @@ export function callDcMethod (methodName, args, cb) {
 export function callDcMethodAsync (fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
+
+export function mainProcessUpdateBadge () {
+  ipcRenderer.send('update-badge')
+}
