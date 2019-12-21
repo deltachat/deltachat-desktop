@@ -225,7 +225,7 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   async __getMessage (id) {
-    return this._dc_getMessage(id)
+    return this._dc.getMessage(id)
   }
 
   async _deadDropMessage (id) {

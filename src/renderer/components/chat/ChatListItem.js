@@ -76,27 +76,7 @@ export const PlaceholderChatListItem = React.memo((props) => {
       props.className,
       'chatlist-item-skeleton'
     )}
-  >
-    <div className='skeleton-avatar' />
-    <div className='chat-list-item__content'>
-      <div className='chat-list-item__header'>
-        <div className={'chat-list-item__header__name'}>
-          <span className={classNames('chat-list-item__name', 'bone')}>
-            Chat name
-          </span>
-        </div>
-        <div className={'chat-list-item__header__date'}>
-          <div className={classNames('chat-list-item__header__timestamp', 'bone')}>Jan 1, 1970</div>
-        </div>
-      </div>
-      <div className='chat-list-item__message'>
-        <div className={classNames('chat-list-item__message__text', 'bone')}>
-          test: message
-        </div>
-        <div className={classNames('status-icon', 'delivered')} />
-      </div>
-    </div>
-  </div>
+  />
 })
 
 const ChatListItemArchiveLink = React.memo(props => {
