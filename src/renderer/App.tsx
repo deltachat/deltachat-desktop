@@ -7,6 +7,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
+import { AppState, LocaleData } from './types'
 
 const localize = require('../localize')
 const moment = require('moment')
@@ -16,19 +17,19 @@ addLocaleData(enLocaleData)
 attachKeybindingsListener()
 
 export default function App (props) {
-  const [state, setState] = useState(remote.app.state)
-  const [localeData, setLocaleData] = useState(null)
+  const [state, setState] = useState<AppState>(remote.app.state)
+  const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
     sendToBackend('ipcReady')
-    window.addEventListener('keydown', function (ev) {
+    window.addEventListener('keydown', function (ev: KeyboardEvent) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
-        if (ev.target.localName === 'textarea' || ev.target.localName === 'input') {
+        if ((ev.target as HTMLElement).localName === 'textarea' || (ev.target as HTMLElement).localName === 'input') {
           stop = false
         } else {
           for (let index = 0; index < ev.path.length; index++) {
-            const element = ev.path[index]
+            const element: HTMLElement = ev.path[index]
             if (element.localName === 'textarea' || element.localName === 'input') stop = false
           }
         }
@@ -58,9 +59,9 @@ export default function App (props) {
 
   function setupLocaleData (locale) {
     moment.locale(locale)
-    const localeData = sendToBackendSync('locale-data', locale)
-    window.localeData = localeData
-    window.translate = localize.translate(localeData.messages)
+    const localeData: LocaleData = sendToBackendSync('locale-data', locale);
+    (window as any).localeData = localeData;
+    (window as any).translate = localize.translate(localeData.messages)
     setLocaleData(localeData)
   }
 
