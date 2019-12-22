@@ -1,10 +1,10 @@
 const SplitOut = require('./splitout')
 module.exports = class DCLocations extends SplitOut {
-  setLocation (latitude, longitude, accuracy) {
+  setLocation (latitude: number, longitude: number, accuracy: number) {
     return this._dc.setLocation(latitude, longitude, accuracy)
   }
 
-  getLocations (chatId, contactId, timestampFrom, timestampTo) {
+  getLocations (chatId: number, contactId: number, timestampFrom: number, timestampTo: number) {
     return this._dc.getLocations(chatId, contactId, timestampFrom, timestampTo)
   }
 }
