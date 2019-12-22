@@ -7,7 +7,10 @@ const LoginScreen = require('./components/LoginScreen').default
 const MainScreen = require('./components/MainScreen').default
 const dialogs = require('./components/dialogs')
 
-class ScreenController extends React.Component {
+export default class ScreenController extends React.Component {
+   
+  props: any;
+
   constructor (props) {
     super(props)
     this.state = {
@@ -48,7 +51,7 @@ class ScreenController extends React.Component {
   }
 
   onError (event, error) {
-    const tx = window.translate
+    const tx = (window as any).translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
@@ -61,11 +64,11 @@ class ScreenController extends React.Component {
     this.openDialog('About')
   }
 
-  openDialog (name, props) {
+  openDialog (name: string, props?) {
     this.dialogs.current.open(name, props)
   }
 
-  closeDialog (name) {
+  closeDialog (name: string) {
     this.dialogs.current.close(name)
   }
 
@@ -114,5 +117,3 @@ class ScreenController extends React.Component {
     )
   }
 }
-
-module.exports = ScreenController
