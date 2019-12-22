@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = (_, argv) => ({
-  entry: path.normalize(`${__dirname}/src/renderer/main.js`),
+  entry: path.normalize(`${__dirname}/src/main/index.js`),
   target: 'electron-main',
   output: {
     path: path.normalize(`${__dirname}/static`),
@@ -15,21 +15,28 @@ module.exports = (_, argv) => ({
   node: {
     __dirname: true
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.json']
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.[jt]sx$/,
         include: path.normalize(`${__dirname}/src/renderer`),
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
-            ],
-            sourceType: 'module'
-          }
-        }
+        exclude: '/node_modules/',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react'
+              ],
+              sourceType: 'module'
+            }
+          },
+          'awesome-typescript-loader'
+        ]
       }
     ]
   }
