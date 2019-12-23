@@ -169,6 +169,7 @@ module.exports = class DCChatList extends SplitOut {
     const contactIds = await this.__getChatContactIds(chatId)
 
     const contacts = await this.__getChatContacts(contactIds)
+    const draft = await this.__getDraft(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -191,7 +192,7 @@ module.exports = class DCChatList extends SplitOut {
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
       isDeviceChat: chat.isDeviceTalk,
-      draft: this.__getDraft(chatId),
+      draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
   }
