@@ -129,9 +129,6 @@ function init (cwd, state, logHandler) {
   ipcMain.on('backupImport', (e, fileName) => dcController.backup.import(fileName))
   ipcMain.on('backupExport', (e, dir) => dcController.backup.export(dir))
 
-  ipcMain.on('keysImport', (e, dir) => dcController.settings.keysImport(dir))
-  ipcMain.on('keysExport', (e, dir) => dcController.settings.keysExport(dir))
-
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dcController.settings.setConfig(key, value)
   })

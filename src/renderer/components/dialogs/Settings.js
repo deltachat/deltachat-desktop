@@ -103,7 +103,7 @@ export default class Settings extends React.Component {
     const opts = {
       title: window.translate('pref_managekeys_import_secret_keys'),
       defaultPath: remote.app.getPath('downloads'),
-      properties: ['openFile']
+      properties: ['openDirectory']
     }
     remote.dialog.showOpenDialog(
       opts,
@@ -118,7 +118,7 @@ export default class Settings extends React.Component {
                 this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_imported_from_x', filenames[0]) })
               }
             })
-            return ipcRenderer.send('keysImport', filenames[0])
+            callDcMethodAsync('settings.keysImport', [filenames[0]])
           })
         }
       }
@@ -143,7 +143,7 @@ export default class Settings extends React.Component {
             ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
               this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_exported_to_x', filename) })
             })
-            ipcRenderer.send('keysExport', filenames[0])
+            callDcMethodAsync('settings.keysExport', [filenames[0]])
           }
         })
       }
