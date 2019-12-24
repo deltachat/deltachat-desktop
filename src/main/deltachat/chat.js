@@ -68,4 +68,11 @@ module.exports = class DCChat extends SplitOut {
   getChatContacts (chatId) {
     return this._dc.getChatContacts(chatId)
   }
+
+  /**
+   * @param {number} chatId
+   */
+  markNoticedChat (chatId) {
+    this._dc.markNoticedChat(chatId)
+  }
 }
