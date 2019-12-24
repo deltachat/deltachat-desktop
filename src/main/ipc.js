@@ -149,10 +149,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dcController.settings.setConfig(key, value)
   })
 
-  ipcMain.on('getDCinfo', () => {
-    main.send('dcInfo', dcController.getInfo())
-  })
-
   ipcMain.on('logout', () => dcController.loginController.logout())
 
   ipcMain.on('initiateKeyTransfer', (e) => {
