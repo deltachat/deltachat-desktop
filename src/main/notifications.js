@@ -15,19 +15,19 @@ module.exports = function (dc, settings) {
 
   let notify
 
-  function getMsgBody (msgId) {
+  async function getMsgBody (msgId) {
     const tx = app.translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
-    var json = dc.messageList.messageIdToJson(msgId)
+    var json = await dc.callMethod(null, 'messageList.messageIdToJson', [msgId])
     var summary = json.msg.summary
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
 
-  dc._dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId, msgId) => {
     if (!notify && settings.notifications && windows.main.win.hidden) {
       notify = new Notification({
         title: appName(),
-        body: getMsgBody(msgId),
+        body: await getMsgBody(msgId),
         icon: appIcon()
       })
       notify.show()
