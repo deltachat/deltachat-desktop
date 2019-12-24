@@ -74,7 +74,7 @@ export const PlaceholderChatListItem = React.memo((props) => {
     className={classNames(
       'chat-list-item',
       props.className,
-      'chatlist-item-skeleton'
+      'skeleton'
     )}
   />
 })
