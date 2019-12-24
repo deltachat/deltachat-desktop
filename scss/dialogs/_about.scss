@@ -1,7 +1,23 @@
-.dialog-about__dc-info {
-    width: 100%;
-    background-color: #ececec;
-    border-color: white;
-    border-color: #ececec;
+.dialog-about__dc-details {
+    width: 460px;
+    height: 460px;
+    border: 1px solid #ececec;
     border-radius: 2px;
+    overflow-y: scroll;
+    font-family: 'Courier New', Courier, monospace;
+
+    .key {
+        opacity: 0.8;
+        font-weight: bold;
+        width: 200px;
+    }
+
+    .value {
+        user-select: all;
+        word-break: break-word;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #ececec;
+    }
 }
