@@ -142,10 +142,6 @@ function init (cwd, state, logHandler) {
   })
   */
 
-  ipcMain.on('getChatMedia', (e, msgType1, msgType2) => {
-    e.returnValue = dcController.chat.getChatMedia(msgType1, msgType2)
-  })
-
   ipcMain.on('backupImport', (e, fileName) => dcController.backup.import(fileName))
   ipcMain.on('backupExport', (e, dir) => dcController.backup.export(dir))
 
