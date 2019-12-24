@@ -2,7 +2,7 @@ import React from 'react'
 import { convertContactProps } from '../contact/Contact'
 import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
-import { ipcRenderer } from 'electron'
+import { callDcMethodAsync } from '../../ipc'
 import { Card, Callout } from '@blueprintjs/core'
 
 class MessageInfo extends React.Component {
@@ -20,11 +20,11 @@ class MessageInfo extends React.Component {
 
   refresh () {
     this.setState({ loading: true })
-    ipcRenderer.send('getMessageInfo', this.props.message.id)
-    ipcRenderer.once('MessageInfo', (e, info) => {
-      this.setState({ loading: false, content: info })
-      this.forceUpdate()
-    })
+    callDcMethodAsync('messageList.getMessageInfo', this.props.message.id)
+      .then(info => {
+        this.setState({ loading: false, content: info })
+        this.forceUpdate()
+      })
   }
 
   render () {
