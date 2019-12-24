@@ -1,7 +1,8 @@
 import { onDownload } from './message/messageFunctions'
 import React from 'react'
 import C from 'deltachat-node/constants'
-import { ipcRenderer } from 'electron'
+import { callDcMethodAsync } from '../ipc'
+import { Button, ButtonGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
@@ -84,12 +85,11 @@ export default class Media extends React.Component {
 
   onSelect (id) {
     const msgTypes = GROUPS[id].values
-    const medias = ipcRenderer.sendSync(
-      'getChatMedia',
-      msgTypes[0],
-      msgTypes[1]
-    )
-    this.setState({ id, msgTypes, medias })
+    callDcMethodAsync('chat.getChatMedia', [msgTypes[0], msgTypes[1]])
+      .then(medias => {
+        this.setState({ id, msgTypes, medias })
+        this.forceUpdate()
+      })
   }
 
   onClickMedia (message, ev) {
