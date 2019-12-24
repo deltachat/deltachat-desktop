@@ -131,11 +131,6 @@ function init (cwd, state, logHandler) {
     e.returnValue = dcController.messageList.messageIdToJson(msgId)
   })
 
-  // for the future:
-  // ipcMain.on('markSeenMessages', (e, ids) => {
-  //   this._dc.markSeenMessages(ids)
-  // })
-
   /* unused
   ipcMain.on('getChatContacts', (e, chatId) => {
     e.returnValue = dc.chat.getChatContacts(chatId)
@@ -167,10 +162,6 @@ function init (cwd, state, logHandler) {
     fs.copyFile(source, target, err => {
       if (err) main.send('error', err.message)
     })
-  })
-
-  ipcMain.on('setLocation', (e, latitude, longitude, accuracy) => {
-    e.returnValue = dcController.locations.setLocation(latitude, longitude, accuracy)
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
