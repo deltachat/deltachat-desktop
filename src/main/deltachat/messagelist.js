@@ -97,6 +97,13 @@ module.exports = class DCMessageList extends SplitOut {
     })
     return messages
   }
+
+  /**
+   * @param {number[]} messageIds
+   */
+  markSeenMessages (messageIds) {
+    this._dc.markSeenMessages(messageIds)
+  }
 }
 
 function convert (message) {
