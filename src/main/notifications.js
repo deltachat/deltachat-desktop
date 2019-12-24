@@ -33,6 +33,7 @@ module.exports = function (dc, settings) {
       notify.show()
       notify.on('click', () => {
         dc.sendToRenderer('ClickOnNotification', { chatId, msgId })
+        windows.main.show()
         app.focus()
         notify = null
       })
