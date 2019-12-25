@@ -147,7 +147,7 @@ export const useLazyChatListItems = chatListIds => {
 
   const [onChatListScroll] = useDebouncedCallback(() => {
     fetchChatsInView(20)
-  }, 50)
+  }, 30)
 
   const onChatListItemChanged = (event, { chatId }) => {
     if (chatId === 0) {
@@ -176,7 +176,7 @@ export const useLazyChatListItems = chatListIds => {
   useEffect(() => {
     if (Object.keys(chatItems).length > 0) return
     if (!scrollRef.current) return
-    fetchChatsInView(scrollRef)
+    fetchChatsInView(10)
   }, [chatListIds, chatItems, scrollRef])
   return { chatItems, onChatListScroll, scrollRef }
 }
