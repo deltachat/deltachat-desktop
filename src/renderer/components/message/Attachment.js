@@ -41,7 +41,7 @@ export function isAudio (attachment) {
   )
 }
 
-export function isDisplayableByRenderMedia (attachment) {
+export function isDisplayableByFullscreenMedia (attachment) {
   return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
 }
 
@@ -81,8 +81,8 @@ export default function Attachment (props) {
   const onClickAttachment = ev => {
     if (msg.viewType === C.DC_MSG_STICKER) return
     ev.stopPropagation()
-    if (isDisplayableByRenderMedia(message.msg.attachment)) {
-      openDialog('RenderMedia', { message })
+    if (isDisplayableByFullscreenMedia(message.msg.attachment)) {
+      openDialog('FullscreenMedia', { message })
     } else {
       openAttachmentInShell(msg)
     }

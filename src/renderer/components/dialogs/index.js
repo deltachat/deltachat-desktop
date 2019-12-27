@@ -19,7 +19,7 @@ import UnblockContacts from './UnblockContacts'
 
 export const allDialogs = [
   DeadDrop,
-  RenderMedia,
+  FullscreenMedia,
   MessageDetail,
   EnterAutocryptSetupMessage,
   SendAutocryptSetupMessage,
@@ -30,7 +30,6 @@ export const allDialogs = [
   EncryptionInfo,
   CreateChat,
   EditGroup,
-  ViewProfile,
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
