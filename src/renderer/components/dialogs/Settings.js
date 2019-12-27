@@ -478,7 +478,7 @@ function ProfileImageSelector (props) {
   useEffect(_ => {
     callDcMethodAsync('getProfilePicture').then(setProfileImagePreview)
     // return nothing because reacts wants it like that
-  })
+  }, [profileImagePreview])
 
   const changeProfilePicture = async (picture) => {
     await callDcMethodAsync('setProfilePicture', [picture])
