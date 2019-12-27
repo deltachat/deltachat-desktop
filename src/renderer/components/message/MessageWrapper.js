@@ -108,7 +108,7 @@ export function RenderMessage (props) {
   }
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-  if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
+  if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
 }
