@@ -1,4 +1,4 @@
-import { callDcMethod } from '../../ipc'
+import { callDcMethod, callDcMethodAsync } from '../../ipc'
 import chatStore from '../../stores/chat'
 
 const unselectChat = () => {
@@ -50,6 +50,8 @@ export function openMapDialog (screenContext, selectedChat) {
   screenContext.openDialog('MapDialog', { selectedChat })
 }
 
-export async function openViewProfileDialog (screenContext, contact) {
+export async function openViewProfileDialog (chatid, screenContext) {
+  const fullChat = await callDcMethodAsync('chatList.getFullChatById', chatid)
+  const contact = fullChat.contacts[0]
   screenContext.openDialog('ViewProfile', { contact })
 }
