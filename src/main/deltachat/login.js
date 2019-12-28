@@ -71,6 +71,12 @@ module.exports = class DCLoginController extends SplitOut {
     if (typeof this._controller._sendStateToRenderer === 'function') this._controller._sendStateToRenderer()
   }
 
+  configure (credentials, cb) {
+    this._controller.configuring = true
+    this._controller.updating = true
+    this._dc.configure(this.addServerFlags(credentials), cb)
+  }
+
   close () {
     if (!this._dc) return
     this._dc.close()

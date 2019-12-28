@@ -201,6 +201,15 @@ export default class Settings extends React.Component {
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
+    ipcRenderer.once('DC_EVENT_IMAP_CONNECTED', () => {
+      console.log('IMAP setting update successful')
+    })
+    ipcRenderer.once('DC_EVENT_SMTP_CONNECTED', () => {
+      console.log('SMTP setting update successful')
+    })
+    ipcRenderer.once('DC_EVENT_ERROR_NETWORK', () => {
+      console.log('Setting update not successful')
+    })
   }
 
   onCancelLogin () {
