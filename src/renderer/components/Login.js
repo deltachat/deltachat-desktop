@@ -135,6 +135,37 @@ export default class Login extends React.Component {
     return mode === 'update' ? null : <DeltaText>{window.translate('login_explain')}</DeltaText>
   }
 
+  _getDefaultPort (protocol) {
+    const SendSecurityPortMap = {
+      imap: {
+        ssl: 993,
+        default: 143
+      },
+      smtp: {
+        ssl: 465,
+        starttls: 587,
+        plain: 25
+      }
+    }
+    const {
+      mail_security,
+      send_security
+    } = this.state.credentials
+    if (protocol === 'imap') {
+      if (mail_security === 'automatic' || mail_security === '' || mail_security === 'ssl') {
+        return SendSecurityPortMap.imap['ssl']
+      } else {
+        return SendSecurityPortMap.imap['default']
+      }
+    } else {
+      if (send_security === 'automatic' || send_security === '' || send_security === 'ssl') {
+        return SendSecurityPortMap.smtp['ssl']
+      } else {
+        return SendSecurityPortMap.smtp[send_security]
+      }
+    }
+  }
+
   render () {
     const { addrDisabled, loading, mode } = this.props
     const { disableSubmit } = this.state
@@ -216,7 +247,7 @@ export default class Login extends React.Component {
               key='mail_port'
               id='mail_port'
               label={tx('login_imap_port')}
-              placeholder={tx('default_value', '993')}
+              placeholder={tx('default_value', this._getDefaultPort('imap'))}
               type='number'
               min='0'
               max='65535'
@@ -265,7 +296,7 @@ export default class Login extends React.Component {
             <DeltaInput
               key='send_port'
               id='send_port'
-              placeholder={tx('default_value', '465')}
+              placeholder={tx('default_value', this._getDefaultPort('smtp'))}
               label={tx('login_smtp_port')}
               type='number'
               min='0'
