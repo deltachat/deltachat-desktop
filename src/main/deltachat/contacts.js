@@ -54,4 +54,8 @@ module.exports = class DCContacts extends SplitOut {
     this._controller.chatList.selectChat(chatId)
     return chatId
   }
+
+  getContact (contactId) {
+    return this._dc.getContact(contactId).toJson()
+  }
 }

@@ -10,6 +10,7 @@ import SearchInput from './SearchInput'
 import SettingsContext from '../contexts/SettingsContext'
 import { useChatStore } from '../stores/chat'
 import NavbarWrapper from './NavbarWrapper'
+import { openEditGroupDialog, openMapDialog, openViewProfileDialog } from './helpers/ChatMethods'
 
 import {
   Alignment,
@@ -46,7 +47,7 @@ export default function MainScreen () {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
-  const { openDialog } = useContext(ScreenContext)
+  const screenContext = useContext(ScreenContext)
   const [selectedChat, chatStoreDispatch] = useChatStore()
 
   const onChatClick = chatId => {
@@ -57,10 +58,15 @@ export default function MainScreen () {
   }
   const searchChats = queryStr => setQueryStr(queryStr)
   const handleSearchChange = event => searchChats(event.target.value)
-  const onMapIconClick = () => openDialog('MapDialog', { selectedChat })
+  const onMapIconClick = () => openMapDialog(screenContext, selectedChat)
   const onTitleClick = () => {
-    if (selectedChat && selectedChat.isGroup) {
-      openDialog('EditGroup', { chat: selectedChat })
+    if (!selectedChat) return
+
+    if (selectedChat.isGroup) {
+      openEditGroupDialog(screenContext, selectedChat)
+    } else {
+      const contact = selectedChat.contacts[0]
+      openViewProfileDialog(screenContext, contact)
     }
   }
 

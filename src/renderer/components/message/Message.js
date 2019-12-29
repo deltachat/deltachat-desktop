@@ -1,16 +1,14 @@
-const { onDownload } = require('./messageFunctions')
-const React = require('react')
-const { useRef, useState } = require('react')
-const classNames = require('classnames')
+import { onDownload } from './messageFunctions'
+import React, { useRef, useState } from 'react'
 
-const MessageBody = require('./MessageBody').default
-const MessageMetaData = require('./MessageMetaData')
+import classNames from 'classnames'
+import MessageBody from './MessageBody'
+import MessageMetaData from './MessageMetaData'
 
-const ContactName = require('../conversations/ContactName')
-const { ContextMenu, ContextMenuTrigger, MenuItem } = require('react-contextmenu')
-const Attachment = require('./Attachment').default
+import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
+import Attachment from './Attachment'
 
-const Avatar = ({ contact }) => {
+const Avatar = (contact, onContactClick) => {
   const {
     profileImage,
     color,
@@ -19,10 +17,11 @@ const Avatar = ({ contact }) => {
   } = contact
 
   const alt = `${name || address}`
+  const onClick = () => onContactClick(contact)
 
   if (profileImage) {
     return (
-      <div className='author-avatar'>
+      <div className='author-avatar' onClick={onClick}>
         <img alt={alt} src={profileImage} />
       </div>
     )
@@ -30,6 +29,7 @@ const Avatar = ({ contact }) => {
     return (
       <div className='author-avatar default'
         alt={alt}
+        onClick={onClick}
       >
         <div
           style={{ backgroundColor: color }}
@@ -41,7 +41,28 @@ const Avatar = ({ contact }) => {
   }
 }
 
-const Author = ({ contact }) => {
+const ContactName = (props) => {
+  const { email, name, profileName, module, color, onClick } = props
+  const prefix = module || 'module-contact-name'
+
+  const title = name || email
+  const shouldShowProfile = Boolean(profileName && !name)
+  const profileElement = shouldShowProfile ? (
+    <span className={`${prefix}__profile-name`} style={{ color: color }}>
+      ~{profileName || ''}
+    </span>
+  ) : null
+
+  return (
+    <span className={prefix} style={{ color: color }} onClick={onClick}>
+      {title}
+      {shouldShowProfile ? ' ' : null}
+      {profileElement}
+    </span>
+  )
+}
+
+const Author = (contact, onContactClick) => {
   const {
     color,
     name,
@@ -54,6 +75,7 @@ const Author = ({ contact }) => {
       name={name}
       module='author'
       color={color}
+      onClick={() => onContactClick(contact)}
     />
   )
 }
@@ -168,7 +190,8 @@ const Message = (props) => {
     text,
     disableMenu,
     status,
-    attachment
+    attachment,
+    onContactClick
   } = props
   const tx = window.translate
 
@@ -208,14 +231,14 @@ const Message = (props) => {
         { forwarded: message.msg.isForwarded }
       )}
     >
-      {conversationType === 'group' && direction === 'incoming' && Avatar(message)}
+      {conversationType === 'group' && direction === 'incoming' && Avatar(message.contact, onContactClick)}
       {menu}
       <div
         onContextMenu={showMenu}
         className='msg-container'
       >
         {message.msg.isForwarded && <div className='forwarded-indicator'>{tx('forwarded_message')}</div>}
-        {direction === 'incoming' && conversationType === 'group' && Author(message)}
+        {direction === 'incoming' && conversationType === 'group' && Author(message.contact, onContactClick)}
         <Attachment {...{
           attachment,
           text,
@@ -236,4 +259,4 @@ const Message = (props) => {
   )
 }
 
-module.exports = Message
+export default Message

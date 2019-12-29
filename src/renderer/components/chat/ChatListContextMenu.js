@@ -8,7 +8,8 @@ import {
   openDeleteChatDialog,
   openBlockContactDialog,
   openEncryptionInfoDialog,
-  openEditGroupDialog
+  openEditGroupDialog,
+  openViewProfileDialog
 } from '../helpers/ChatMethods'
 
 import { callDcMethodAsync } from '../../ipc'
@@ -54,6 +55,7 @@ const ChatListContextMenu = React.memo((props) => {
     const fullChat = await callDcMethodAsync('chatList.getFullChatById', chat.id)
     openEditGroupDialog(screenContext, fullChat)
   }
+  const onViewProfile = async () => openViewProfileDialog(chat.id, screenContext)
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
   const onBlockContact = () => openBlockContactDialog(screenContext, chat)
 
@@ -81,6 +83,9 @@ const ChatListContextMenu = React.memo((props) => {
         <Icon icon='log-out' /> {tx('menu_leave_group')}
       </MenuItem>
     </>,
+    !chat.isGroup && <MenuItem onClick={onViewProfile}>
+      <Icon icon='log-out' /> {tx('menu_view_profile')}
+    </MenuItem>,
     !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && <MenuItem onClick={onBlockContact}>
       <Icon icon='blocked-person' /> {tx('menu_block_contact')}
     </MenuItem>

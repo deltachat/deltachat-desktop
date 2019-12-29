@@ -5,6 +5,7 @@ import Message from './Message'
 import ScreenContext from '../../contexts/ScreenContext'
 import logger from '../../../logger'
 import { useChatStore } from '../../stores/chat'
+import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = logger.getLogger('renderer/messageWrapper')
 
@@ -65,12 +66,13 @@ export const render = React.memo((props) => {
 })
 
 export function RenderMessage (props) {
-  const chatStoreDispatch = useChatStore()[1]
-  const { chat, message, locationStreamingEnabled } = props
+  const [chat, chatStoreDispatch] = useChatStore()
+  const { message, locationStreamingEnabled } = props
   const { fromId, id } = message.msg
   const msg = message.msg
   const tx = window.translate
-  const { openDialog } = useContext(ScreenContext)
+  const screenContext = useContext(ScreenContext)
+  const { openDialog } = screenContext
 
   const conversationType = GROUP_TYPES.includes(chat.type) ? 'group' : 'direct'
   const onShowDetail = () => openDialog('MessageDetail', { message, chat })
@@ -79,6 +81,9 @@ export function RenderMessage (props) {
     confirmLabel: tx('delete'),
     cb: yes => yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
   })
+  const onContactClick = async (contact) => {
+    openViewProfileDialog(screenContext, contact)
+  }
 
   const contact = {
     onSendMessage: () => log.debug(`send a message to ${fromId}`),
@@ -97,6 +102,7 @@ export function RenderMessage (props) {
     onForward: message.onForward,
     onDelete,
     onShowDetail,
+    onContactClick,
     contact,
     status: msg.status,
     text: msg.text,
@@ -108,7 +114,7 @@ export function RenderMessage (props) {
   }
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-  if (message.isInfo) return <InfoMessage><p>{msg.text}</p></InfoMessage>
+  if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
 }

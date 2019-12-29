@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
@@ -475,10 +475,10 @@ function ProfileImageSelector (props) {
   const { displayName, color } = props
   const tx = window.translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
-  useLayoutEffect(_ => {
+  useEffect(_ => {
     callDcMethodAsync('getProfilePicture').then(setProfileImagePreview)
     // return nothing because reacts wants it like that
-  })
+  }, [profileImagePreview])
 
   const changeProfilePicture = async (picture) => {
     await callDcMethodAsync('setProfilePicture', [picture])

@@ -134,17 +134,15 @@ export function DeltaDialogBody (props) {
   )
 }
 
-export function DeltaDialogCard (props) {
+export function DeltaDialogContent (props) {
   const { noPadding } = props
   return (
-    <div className={classNames('delta-dialog-card', { 'delta-dialog-card--no-padding': noPadding })}>
+    <div style={props.style} className={classNames('delta-dialog-content', { 'delta-dialog-content--no-padding': noPadding })}>
       {props.children}
     </div>
   )
 }
 
-export function DeltaDialogCardInnerWithoutPadding (props) {
-  return (
-    <div className='delta-dialog-card__inner-without-padding'>{props.children}</div>
-  )
+export function DeltaDialogContentTextSeperator (props) {
+  return <div className='delta-dialog-content-text-seperator'>{props.text}</div>
 }
