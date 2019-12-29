@@ -46,7 +46,7 @@ export default function DeltaMenu (props) {
     ipcRenderer.send('logout')
   }
   const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
-  const onViewProfile = async () => openViewProfileDialog(selectedChat.id, screenContext)
+  const onViewProfile = async () => openViewProfileDialog(screenContext, selectedChat.contacts[0])
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
     const {
