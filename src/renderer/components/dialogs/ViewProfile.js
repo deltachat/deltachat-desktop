@@ -54,8 +54,6 @@ export default function ViewProfile (props) {
 
   const tx = window.translate
 
-  console.log(contact)
-
   const onChatClick = chatId => {
     selectChat(chatId)
     onClose()
