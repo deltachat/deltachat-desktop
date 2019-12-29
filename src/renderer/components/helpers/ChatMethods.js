@@ -50,8 +50,9 @@ export function openMapDialog (screenContext, selectedChat) {
   screenContext.openDialog('MapDialog', { selectedChat })
 }
 
-export async function openViewProfileDialog (chatid, screenContext) {
-  const fullChat = await callDcMethodAsync('chatList.getFullChatById', chatid)
-  const contact = fullChat.contacts[0]
+export async function openViewProfileDialog (screenContext, contact) {
+  if(Number.isInteger(contact)) {
+    contact = await callDcMethodAsync('chatList.getContact', contact)
+  }
   screenContext.openDialog('ViewProfile', { contact })
 }
