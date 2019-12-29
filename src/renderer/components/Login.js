@@ -303,7 +303,7 @@ export default class Login extends React.Component {
           {React.Children.map(this.props.children, (child) => {
             var props = {}
             if (child.props.type === 'submit') {
-              props.disabled = loading || (!addr || !mail_pw) || (showAdvanced && !send_pw) || !dirty || disableSubmit
+              props.disabled = loading || (!addr || !mail_pw) || !dirty || disableSubmit
             }
             if (child.props.type === 'cancel') {
               if (!loading) return
