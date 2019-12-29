@@ -172,14 +172,15 @@ export const DeltaInput = React.memo((props) => {
 
   const onFocus = () => setIsFocused(true)
   const onBlur = () => setIsFocused(false)
+  const showLabel = isFocused || props.value.length > 0 || (props.label !== undefined && props.label.length > 0)
 
   return (
     <DeltaInputWrapper>
       <FormGroup>
         <DeltaLabel
-          visible={isFocused || props.value.length > 0}
+          visible={showLabel}
           focus={isFocused}
-        >{props.placeholder}
+        >{(props.label && props.label.length > 0) ? props.label : props.placeholder}
         </DeltaLabel>
         <InputGroup
           id={props.id}
@@ -221,6 +222,7 @@ export const DeltaPasswordInput = React.memo((props) => {
     <DeltaInput
       id={props.id}
       type={showPassword ? 'text' : 'password'}
+      label={props.label ? props.label : ''}
       value={password}
       onChange={props.onChange}
       placeholder={props.placeholder}
