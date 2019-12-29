@@ -58,5 +58,14 @@
   },
   "remove_account": {
     "message": "Remove account"
+  },
+  "default_value": {
+    "message": "Default (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Default (same as above)"
+  },
+  "default_value_automatic": {
+    "message": "Automatic"
   }
 }

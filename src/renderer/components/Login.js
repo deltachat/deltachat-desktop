@@ -180,7 +180,6 @@ export default class Login extends React.Component {
           <DeltaPasswordInput
             key='mail_pw'
             id='mail_pw'
-            label={tx('password')}
             placeholder={tx('password')}
             password={mail_pw}
             onChange={this.handleCredentialsChange}
@@ -197,7 +196,8 @@ export default class Login extends React.Component {
             <DeltaInput
               key='mail_user'
               id='mail_user'
-              placeholder={tx('login_imap_login')}
+              placeholder={tx('default_value_as_above')}
+              label={tx('login_imap_login')}
               type='text'
               value={mail_user}
               onChange={this.handleCredentialsChange}
@@ -206,7 +206,8 @@ export default class Login extends React.Component {
             <DeltaInput
               key='mail_server'
               id='mail_server'
-              placeholder={tx('login_imap_server')}
+              placeholder={tx('default_value_automatic')}
+              label={tx('login_imap_server')}
               type='text'
               value={mail_server}
               onChange={this.handleCredentialsChange}
@@ -214,7 +215,8 @@ export default class Login extends React.Component {
             <DeltaInput
               key='mail_port'
               id='mail_port'
-              placeholder={tx('login_imap_port')}
+              label={tx('login_imap_port')}
+              placeholder={tx('default_value', '993')}
               type='number'
               min='0'
               max='65535'
@@ -238,21 +240,24 @@ export default class Login extends React.Component {
             <DeltaInput
               key='send_user'
               id='send_user'
-              placeholder={tx('login_smtp_login')}
+              placeholder={tx('default_value_as_above')}
+              label={tx('login_smtp_login')}
               value={send_user}
               onChange={this.handleCredentialsChange}
             />
             <DeltaPasswordInput
               key='send_pw'
               id='send_pw'
-              placeholder={tx('login_smtp_password')}
+              label={tx('login_smtp_password')}
+              placeholder={tx('default_value_as_above')}
               password={send_pw}
               onChange={this.handleCredentialsChange}
             />
             <DeltaInput
               key='send_server'
               id='send_server'
-              placeholder={tx('login_smtp_server')}
+              placeholder={tx('default_value_automatic')}
+              label={tx('login_smtp_server')}
               type='text'
               value={send_server}
               onChange={this.handleCredentialsChange}
@@ -260,7 +265,8 @@ export default class Login extends React.Component {
             <DeltaInput
               key='send_port'
               id='send_port'
-              placeholder={tx('login_smtp_port')}
+              placeholder={tx('default_value', '465')}
+              label={tx('login_smtp_port')}
               type='number'
               min='0'
               max='65535'
