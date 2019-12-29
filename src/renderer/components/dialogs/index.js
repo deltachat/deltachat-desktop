@@ -1,6 +1,6 @@
 import React from 'react'
 import MessageDetail from './MessageDetail'
-import RenderMedia from './RenderMedia'
+import FullscreenMedia from './FullscreenMedia'
 import DeadDrop from './DeadDrop'
 import EnterAutocryptSetupMessage from './EnterAutocryptSetupMessage'
 import SendAutocryptSetupMessage from './SendAutocryptSetupMessage'
