@@ -28,9 +28,11 @@
 
   ul {
     list-style: none;
+    min-width: 200px;
 
     li {
       margin-bottom: 10px;
+      min-width: 200px;
 
       &::after {
         visibility: hidden;
