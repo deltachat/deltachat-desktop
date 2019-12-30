@@ -110,31 +110,35 @@ export default class Media extends React.Component {
     const { medias } = this.state
     const tx = window.translate
     return <Wrapper>
-      <ButtonGroup style={{ minWidth: 200 }}>
-        {Object.keys(GROUPS).map((id) => {
-          return <Button
-            key={id}
-            disabled={this.state.id === id}
-            onClick={() => this.onSelect(id)}>
-            {tx(id)}
-          </Button>
-        })}
-      </ButtonGroup>
-      <MediaGallery>
-        {medias.map((message) => {
-          var msg = message.msg
-          return <MediaGalleryItem
-            onClick={this.onClickMedia.bind(this, message)}
-            key={msg.id}>
-            <Attachment {...{
-              direction: msg.direction,
-              attachment: msg.attachment,
-              conversationType: 'direct',
-              message
-            }} />
-          </MediaGalleryItem>
-        })}
-      </MediaGallery>
+      <div class='bp3-tabs' style={{ minWidth: 200 }}>
+        <ul class='bp3-tab-list .modifier' role='tablist'>
+          {Object.keys(GROUPS).map((id) => {
+            return <li
+              key={id}
+              class='bp3-tab' role='tab'
+              aria-selected={this.state.id === id} onClick={() => this.onSelect(id)}>
+              {tx(id)}
+            </li>
+          })}
+        </ul>
+        <div class='bp3-tab-panel' role='tabpanel'>
+          <MediaGallery>
+            {medias.map((message) => {
+              var msg = message.msg
+              return <MediaGalleryItem
+                onClick={this.onClickMedia.bind(this, message)}
+                key={msg.id}>
+                <Attachment {...{
+                  direction: msg.direction,
+                  attachment: msg.attachment,
+                  conversationType: 'direct',
+                  message
+                }} />
+              </MediaGalleryItem>
+            })}
+          </MediaGallery>
+        </div>
+      </div>
     </Wrapper>
   }
 }
