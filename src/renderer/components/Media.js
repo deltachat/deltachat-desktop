@@ -2,7 +2,6 @@ import { onDownload } from './message/messageFunctions'
 import React from 'react'
 import C from 'deltachat-node/constants'
 import { ipcRenderer } from 'electron'
-import { Button, ButtonGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
@@ -31,7 +30,8 @@ const MediaGalleryItem = styled.div`
   }
 
   .module-message__img-attachment {
-    max-width: 120pt;
+    width: 120pt !important;
+    height: 120pt !important;
   }
 
   .module-message__generic-attachment__text {
