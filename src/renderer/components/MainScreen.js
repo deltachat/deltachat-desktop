@@ -55,6 +55,7 @@ export default function MainScreen () {
     if (chatId === selectedChat.id) return
 
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+    setMedia(false)
   }
   const searchChats = queryStr => setQueryStr(queryStr)
   const handleSearchChange = event => searchChats(event.target.value)
