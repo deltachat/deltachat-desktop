@@ -8,6 +8,8 @@ export const appWindowTitle = appName
 
 export const enum Timespans {
   ZERO_SECONDS = 0,
+  ONE_SECOND = 1,
+  ONE_MINUTE_IN_SECONDS = 60,
   ONE_HOUR_IN_SECONDS = 60 * 60,
   TWO_HOURS_IN_SECONDS = 60 * 60 * 2,
   ONE_DAY_IN_SECONDS = 60 * 60 * 24,
