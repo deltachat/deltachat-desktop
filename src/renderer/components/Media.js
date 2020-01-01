@@ -2,7 +2,6 @@ import { onDownload } from './message/messageFunctions'
 import React from 'react'
 import C from 'deltachat-node/constants'
 import { callDcMethodAsync } from '../ipc'
-import { Button, ButtonGroup } from '@blueprintjs/core'
 import styled from 'styled-components'
 
 import ScreenContext from '../contexts/ScreenContext'
