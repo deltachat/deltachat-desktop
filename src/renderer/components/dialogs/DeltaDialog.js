@@ -22,7 +22,7 @@ export const DeltaDialogBase = React.memo((props) => {
         onClose={props.onClose}
         canOutsideClickClose={false}
         canEscapeKeyClose
-        className={classNames(isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog', props.className)}
+        className={classNames(isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog', [props.className])}
         style={props.style}
       >
         {props.children}

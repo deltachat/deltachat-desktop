@@ -73,7 +73,7 @@ class MapComponent extends React.Component {
         attributionControl: false
       }
     )
-    this.map.on('load', this.getLocations)
+    this.map.on('load', () => { this.map.resize(); this.getLocations})
     this.map.on('click', this.onMapClick)
     this.map.on('contextmenu', this.onMapRightClick)
     this.map.addControl(new mapboxgl.NavigationControl({ showCompass: false }))
@@ -514,7 +514,7 @@ class MapComponent extends React.Component {
         <div id='map' />
         <ContextMenu ref={this.contextMenu} onSetPoi={this.sendPoiMessage} />
       </div>
-    )
+   )
   }
 }
 

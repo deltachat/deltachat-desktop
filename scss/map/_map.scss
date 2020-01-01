@@ -3,15 +3,27 @@
 $color-map-overlay-bg: var(--mapOverlayBg);
 
 #map {
-	width: 90vw;
-	height: 90vh;
+    margin-top: 71px;
+    height: auto;
+}
+
+.mapboxgl-map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.mapboxgl-canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .marker-icon {
-  font-size: 36px;
-  font-weight: bold;
-  color: red;
-  text-shadow: 4px 4px 5px #999;
+    font-size: 36px;
+    font-weight: bold;
+    color: red;
+    text-shadow: 4px 4px 5px #999;
 }
 
 .bp3-dialog.map-dialog {
@@ -75,8 +87,8 @@ div.context-menu {
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 	position: absolute;
 	width: 160px;
-	top: 50px;
-	left: 10px;
+	top: 80px;
+	left: 20px;
 	padding: 10px;
 	background-color: $color-map-overlay-bg;
 	z-index: 500;
