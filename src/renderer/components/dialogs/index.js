@@ -34,7 +34,8 @@ export const allDialogs = [
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
-  UnblockContacts
+  UnblockContacts,
+  ViewProfile
 ]
 
 const log = require('../../../logger').getLogger('renderer/dialogs')
