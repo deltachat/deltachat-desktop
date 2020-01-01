@@ -253,8 +253,7 @@ class DeltaChatController extends EventEmitter {
 
     dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
       onError(error)
-      if (this.configuring && !this.updating) {
-        // error when updating login credentials when being logged in
+      if (this.configuring) {
         this.onLoginFailure()
       }
     })
@@ -272,6 +271,7 @@ class DeltaChatController extends EventEmitter {
 
   onLoginFailure () {
     if (this.updating) {
+      // error when updating login credentials when being logged in
       this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
       this.configuring = false
       this.updating = false

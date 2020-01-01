@@ -207,7 +207,7 @@ export default class Settings extends React.Component {
     ipcRenderer.once('DC_EVENT_SMTP_CONNECTED', () => {
       console.log('SMTP setting update successful')
     })
-    ipcRenderer.once('DC_EVENT_ERROR_NETWORK', () => {
+    ipcRenderer.once('DC_EVENT_LOGIN_FAILED', () => {
       console.log('Setting update not successful')
     })
   }
