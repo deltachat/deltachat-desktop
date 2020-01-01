@@ -30,6 +30,7 @@ export const allDialogs = [
   EncryptionInfo,
   CreateChat,
   EditGroup,
+  ViewProfile,
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
