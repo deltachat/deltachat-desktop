@@ -5,10 +5,9 @@ import classNames from 'classnames'
 
 export const CreateDeltaDialogGlobal = createGlobalStyle`
   .FixedDeltaDialog {
-    position: absolute;
-    top: 0;
+    top: 50px;
     width: 400px;
-    height: calc(100% - 60px);
+    height: calc(100% - 50px);
   }
 `
 
