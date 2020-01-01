@@ -94,7 +94,7 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('login', (e, credentials) => {
     dcController.loginController.login(
-      getNewAccountPath(),
+      getNewAccountPath(credentials.addr),
       credentials,
       sendStateToRenderer,
       txCoreStrings()
