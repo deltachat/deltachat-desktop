@@ -282,8 +282,6 @@ function init (cwd, state, logHandler) {
       throw new Error('Previous account not found!')
     }
 
-    console.log(selectedAccount)
-
     dcController.loginController.login(
       selectedAccount.path,
       savedCredentials,
