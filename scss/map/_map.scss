@@ -26,16 +26,6 @@ $color-map-overlay-bg: var(--mapOverlayBg);
     text-shadow: 4px 4px 5px #999;
 }
 
-.bp3-dialog.map-dialog {
-	width: 90vw;
-	height: 90vh;
-	position: relative;
-}
-
-.mapboxgl-popup-content {
-
-}
-
 div.context-menu {
 	width: 200px;
 	label {
