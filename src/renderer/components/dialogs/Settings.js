@@ -34,6 +34,9 @@ export default class Settings extends React.Component {
       mail_pw: MAGIC_PW,
       settings: {},
       show: 'main',
+      imapSuccess: false,
+      smtpSuccess: false,
+      loginFailed: false,
       selfContact: {}
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -49,6 +52,12 @@ export default class Settings extends React.Component {
   }
 
   async componentDidMount () {
+    await this.loadSettings()
+    const selfContact = await callDcMethodAsync('getContact', [C.DC_CONTACT_ID_SELF])
+    this.setState({ selfContact })
+  }
+
+  async loadSettings () {
     const settings = await callDcMethodAsync('settings.getConfigFor', [[
       'addr',
       'mail_pw',
@@ -91,9 +100,7 @@ export default class Settings extends React.Component {
       e2ee_enabled: settings['e2ee_enabled']
     }
 
-    const selfContact = await callDcMethodAsync('getContact', [C.DC_CONTACT_ID_SELF])
-
-    this.setState({ settings, advancedSettings, selfContact })
+    this.setState({ settings, advancedSettings })
   }
 
   onKeyTransferComplete () {
@@ -201,15 +208,29 @@ export default class Settings extends React.Component {
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
+    this.state.imapSuccess = false
+    this.state.smtpSuccess = false
     ipcRenderer.once('DC_EVENT_IMAP_CONNECTED', () => {
-      console.log('IMAP setting update successful')
+      this.state.imapSuccess = true
+      if (this.state.smtpSuccess) {
+        this.onLoginSuccess()
+      }
     })
     ipcRenderer.once('DC_EVENT_SMTP_CONNECTED', () => {
-      console.log('SMTP setting update successful')
+      this.state.smtpSuccess = true
+      if (this.state.imapSuccess) {
+        this.onLoginSuccess()
+      }
     })
     ipcRenderer.once('DC_EVENT_LOGIN_FAILED', () => {
-      console.log('Setting update not successful')
+      this.state.loginFailed = true
+      this.onCancelLogin()
     })
+  }
+
+  onLoginSuccess () {
+    this.state.loginFailed = false
+    this.loadSettings()
   }
 
   onCancelLogin () {
@@ -266,7 +287,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent () {
     const { deltachat, openDialog } = this.props
-    const { settings, advancedSettings } = this.state
+    const { settings, advancedSettings, imapSuccess, smtpSuccess, loginFailed } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -359,6 +380,9 @@ export default class Settings extends React.Component {
             onClose={() => this.setState({ showSettingsDialog: false })}
             onCancel={this.onCancelLogin}
             addrDisabled
+            imapSuccess={imapSuccess}
+            smtpSuccess={smtpSuccess}
+            loginFailed={loginFailed}
           >
             <Button type='submit' text={this.translate('update')} />
             <Button type='cancel' text={this.translate('cancel')} />
