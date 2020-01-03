@@ -7,7 +7,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { AppState, LocaleData } from './types'
+import { AppState, LocaleData, ExtendedApp } from '../types'
 
 const localize = require('../localize')
 const moment = require('moment')
@@ -17,7 +17,7 @@ addLocaleData(enLocaleData)
 attachKeybindingsListener()
 
 export default function App (props) {
-  const [state, setState] = useState<AppState>(remote.app.state)
+  const [state, setState] = useState<AppState>((remote.app as ExtendedApp).state)
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {

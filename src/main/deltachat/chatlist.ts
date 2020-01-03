@@ -1,14 +1,17 @@
+import SplitOut from './splitout'
+import { ChatList, Message, Contact, Summary } from 'deltachat-node'
+import { ChatListItem, Chat, RawChat } from '../../types'
+
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
 
 const { integerToHexColor } = require('./util')
 
-const SplitOut = require('./splitout')
-module.exports = class DCChatList extends SplitOut {
-  async selectChat (chatId) {
+export default class DCChatList extends SplitOut {
+  async selectChat (chatId: number) {
     this._controller._selectedChatId = chatId
-    const chat = await this.getFullChatById(chatId, true)
+    const chat = await this.getFullChatById(chatId)
     if (!chat) {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
@@ -24,25 +27,25 @@ module.exports = class DCChatList extends SplitOut {
     }
     return chat
   }
+  _getGeneralFreshMessageCounter(): number {
+    throw new Error("Method not implemented.")
+  }
 
-  /**
-   * @returns {number} chat id
-   */
-  getSelectedChatId () {
+  getSelectedChatId (): number {
     return this._controller._selectedChatId
   }
 
-  async onChatModified (chatId) {
+  async onChatModified (chatId: number) {
     // TODO: move event handling to store
     const chat = await this.getFullChatById(chatId)
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
-  async _chatListGetChatId (list, index) {
+  async _chatListGetChatId (list: ChatList, index: number): Promise<number> {
     return list.getChatId(index)
   }
 
-  async getChatListIds (listFlags, queryStr, queryContactId) {
+  async getChatListIds (listFlags: number, queryStr: string, queryContactId: number): Promise<number[]> {
     const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)
     const chatListIds = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
@@ -52,11 +55,11 @@ module.exports = class DCChatList extends SplitOut {
     return chatListIds
   }
 
-  async _getChatList (listflags, queryStr, queryContactId) {
+  async _getChatList (listflags: number, queryStr: string, queryContactId: number): Promise<ChatList> {
     return this._dc.getChatList(listflags, queryStr, queryContactId)
   }
 
-  async getListAndIndexForChatId (chatId) {
+  async getListAndIndexForChatId (chatId: number): Promise<[ChatList, number]> {
     let list = await this._getChatList(0, '', 0)
     let i = await findIndexOfChatIdInChatList(list, chatId)
 
@@ -67,10 +70,10 @@ module.exports = class DCChatList extends SplitOut {
     return [list, i]
   }
 
-  async getChatListItemsByIds (chatIds) {
+  async getChatListItemsByIds (chatIds: Array<number>): Promise<{[chatId: number]: ChatListItem}> {
     const label = '[BENCH] getChatListItemByIds'
     console.time(label)
-    const chats = {}
+    const chats: {[chatId: number]: ChatListItem} = {}
     let list
     let i = 0
     for (const chatId of chatIds) {
@@ -87,20 +90,22 @@ module.exports = class DCChatList extends SplitOut {
     return chats
   }
 
-  async getChatListSummary (list, i) {
+  async getChatListSummary (list: ChatList, i: number): Promise<Summary> {
     return list.getSummary(i).toJson()
   }
 
-  async getChatListItemById (chatId, list, i) {
+  async getChatListItemById (chatId: number, list: ChatList, i: number): Promise<ChatListItem> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
     if (!list) [list, i] = await this.getListAndIndexForChatId(chatId)
     if (!chat || i === -1) return null
 
+    let deaddrop = null
+
     if (chat.id === C.DC_CHAT_ID_DEADDROP) {
       const messageId = list.getMessageId(i)
-      chat.deaddrop = await this._deadDropMessage(messageId)
+      deaddrop = await this._deadDropMessage(messageId)
     }
 
     // console.log('getChatListItemsByIds', chatId)
@@ -113,7 +118,7 @@ module.exports = class DCChatList extends SplitOut {
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
-    const chatListItem = {
+    return{
       id: chat.id,
       name: chat.name || summary.text1,
       avatarPath: chat.profileImage,
@@ -124,7 +129,8 @@ module.exports = class DCChatList extends SplitOut {
         text2: summary.text2,
         status: mapCoreMsgStatus2String(summary.state)
       },
-      deaddrop: chat.deaddrop,
+      deaddrop: deaddrop,
+      isDeaddrop: chat.id === C.DC_CHAT_ID_DEADDROP,
       isVerified: chat.isVerified,
       isGroup: isGroup,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
@@ -134,31 +140,29 @@ module.exports = class DCChatList extends SplitOut {
       isDeviceTalk: chat.isDeviceTalk,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
-
-    return chatListItem
   }
 
-  async _getChatById (chatId) {
+  async _getChatById (chatId: number): Promise<RawChat> {
     if (!chatId) return null
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
     return rawChat.toJson()
   }
 
-  async _getDraft (chatId) {
+  async _getDraft (chatId: number) {
     const draft = this._dc.getDraft(chatId)
     return draft ? draft.getText() : ''
   }
 
-  async _getChatContactIds (chatId) {
+  async _getChatContactIds (chatId: number): Promise<number[]> {
     return this._dc.getChatContacts(chatId)
   }
 
-  async _getChatContact (contactId) {
+  async _getChatContact (contactId: number) {
     return this._dc.getContact(contactId).toJson()
   }
 
-  async _getChatContacts (contactIds) {
+  async _getChatContacts (contactIds: Array<number>) {
     const contacts = []
     for (let i = 0; i < contactIds.length; i++) {
       const contact = await this._getChatContact(contactIds[i])
@@ -167,7 +171,7 @@ module.exports = class DCChatList extends SplitOut {
     return contacts
   }
 
-  async getFullChatById (chatId) {
+  async getFullChatById (chatId: number): Promise<Chat> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0
@@ -184,13 +188,11 @@ module.exports = class DCChatList extends SplitOut {
       name: chat.name,
       isVerified: chat.isVerified,
       profileImage: chat.profileImage,
-
       archived: chat.archived,
       subtitle: await this._chatSubtitle(chat, contacts),
       type: chat.type,
       isUnpromoted: chat.isUnpromoted, // new chat but no initial message sent
       isSelfTalk: chat.isSelfTalk,
-
       contacts: contacts,
       contactIds,
       color: integerToHexColor(chat.color),
@@ -198,13 +200,14 @@ module.exports = class DCChatList extends SplitOut {
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
+      deaddrop: null,
       isDeviceChat: chat.isDeviceTalk,
       draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
   }
 
-  _chatSubtitle (chat, contacts) {
+  _chatSubtitle (chat: RawChat, contacts: Array<Contact>) {
     const tx = this._controller.translate
     if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
       if (isGroupChat(chat)) {
@@ -232,11 +235,11 @@ module.exports = class DCChatList extends SplitOut {
     return this._dc.getFreshMessages().length
   }
 
-  async _getMessage (id) {
+  async _getMessage (id: number): Promise<Message> {
     return this._dc.getMessage(id)
   }
 
-  async _deadDropMessage (id) {
+  async _deadDropMessage (id: number) {
     const msg = await this._getMessage(id)
     const fromId = msg && msg.getFromId()
     if (!fromId) {
@@ -253,7 +256,7 @@ module.exports = class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-async function findIndexOfChatIdInChatList (list, chatId, startI = 0) {
+async function findIndexOfChatIdInChatList (list: ChatList, chatId: number, startI = 0) {
   let i = -1
   const listCount = list.getCount()
   for (let counter = startI; counter < listCount; counter++) {
@@ -267,11 +270,11 @@ async function findIndexOfChatIdInChatList (list, chatId, startI = 0) {
   return i
 }
 
-async function chatListGetChatId (list, index) {
+async function chatListGetChatId (list: ChatList, index: number) {
   return list.getChatId(index)
 }
 
-function mapCoreMsgStatus2String (state) {
+function mapCoreMsgStatus2String (state: number) {
   switch (state) {
     case C.DC_STATE_OUT_FAILED:
       return 'error'
@@ -289,7 +292,7 @@ function mapCoreMsgStatus2String (state) {
       return '' // to display no icon on unknown state
   }
 }
-function isGroupChat (chat) {
+function isGroupChat (chat: RawChat) {
   return [
     C.DC_CHAT_TYPE_GROUP,
     C.DC_CHAT_TYPE_VERIFIED_GROUP

@@ -1,8 +1,9 @@
+import SplitOut from './splitout'
+
 const DeltaChat = require('deltachat-node')
 const log = require('../../logger').getLogger('main/deltachat/contacts')
 
-const SplitOut = require('./splitout')
-module.exports = class DCContacts extends SplitOut {
+export default class DCContacts extends SplitOut {
   unblockContact (contactId) {
     const contact = this._dc.getContact(contactId)
     this._dc.blockContact(contactId, false)

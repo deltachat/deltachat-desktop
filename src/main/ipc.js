@@ -1,4 +1,4 @@
-module.exports = { init }
+import DeltaChatController from './deltachat/controller'
 
 const { app, ipcMain, dialog } = require('electron')
 const path = require('path')
@@ -11,19 +11,10 @@ const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
 const log = require('../logger').getLogger('main/ipc')
-const DeltaChatController = (() => {
-  try {
-    return require('./deltachat/controller')
-  } catch (error) {
-    log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
-    const { dialog } = require('electron')
-    const { getLogsPath } = require('../application-constants')
-    dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
-  }
-})()
+
 const C = require('deltachat-node/constants')
 
-function init (cwd, state, logHandler) {
+export function init (cwd, state, logHandler) {
   const main = windows.main
   const dcController = new DeltaChatController(cwd, state.saved)
 

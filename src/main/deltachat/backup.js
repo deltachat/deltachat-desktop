@@ -1,3 +1,5 @@
+import SplitOut from './splitout'
+
 const C = require('deltachat-node/constants')
 const binding = require('deltachat-node/binding')
 const events = require('deltachat-node/events')
@@ -9,8 +11,7 @@ const EventEmitter = require('events').EventEmitter
 const log = require('../../logger').getLogger('main/deltachat/backup')
 const { getNewAccountPath } = require('../logins')
 
-const SplitOut = require('./splitout')
-module.exports = class DCBackup extends SplitOut {
+export default class DCBackup extends SplitOut {
   export (dir) {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)
   }

@@ -1,7 +1,7 @@
+import SplitOut from './splitout'
+
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/settings')
-
-const SplitOut = require('./splitout')
 
 const serverFlagMap = {
   mail_security_ssl: C.DC_LP_IMAP_SOCKET_SSL,
@@ -12,7 +12,7 @@ const serverFlagMap = {
   send_security_plain: C.DC_LP_SMTP_SOCKET_PLAIN
 }
 
-module.exports = class DCSettings extends SplitOut {
+export default class DCSettings extends SplitOut {
   setConfig (key, value) {
     log.info(`Setting config ${key}:${value}`)
     return this._dc.setConfig(key, String(value))

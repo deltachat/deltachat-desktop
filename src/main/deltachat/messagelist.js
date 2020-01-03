@@ -1,11 +1,12 @@
+import SplitOut from './splitout'
+
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/messagelist')
 const { integerToHexColor } = require('./util')
 const filesizeConverter = require('filesize')
 const mime = require('mime-types')
 
-const SplitOut = require('./splitout')
-module.exports = class DCMessageList extends SplitOut {
+export default class DCMessageList extends SplitOut {
   sendMessage (chatId, text, filename, location) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)

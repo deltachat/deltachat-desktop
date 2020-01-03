@@ -1,3 +1,5 @@
+import SplitOut from './splitout'
+
 const fsExtra = require('fs-extra')
 const path = require('path')
 const log = require('../../logger').getLogger('main/deltachat/stickers')
@@ -12,8 +14,7 @@ async function isFile (path) {
   return lstat.isFile()
 }
 
-const SplitOut = require('./splitout')
-module.exports = class DCStickers extends SplitOut {
+export default class DCStickers extends SplitOut {
   async getStickers () {
     const stickerFolder = path.join(this._controller.accountDir, 'stickers')
 

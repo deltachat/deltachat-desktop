@@ -1,6 +1,6 @@
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 
-module.exports = class DCContext extends SplitOut {
+export default class DCContext extends SplitOut {
   maybeNetwork () {
     this._dc.maybeNetwork()
   }

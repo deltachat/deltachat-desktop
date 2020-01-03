@@ -1,3 +1,5 @@
+import SplitOut from './splitout'
+
 const DeltaChat = require('deltachat-node')
 const log = require('../../logger').getLogger('main/deltachat/login')
 const setupNotifications = require('../notifications')
@@ -5,8 +7,7 @@ const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
 
-const SplitOut = require('./splitout')
-module.exports = class DCLoginController extends SplitOut {
+export default class DCLoginController extends SplitOut {
   /**
    * Called when this controller is created and when current
    * locale changes
