@@ -67,5 +67,11 @@
   },
   "default_value_automatic": {
     "message": "Automatic"
+  },
+  "help_page_title": {
+    "message": "Frequently Answered Questions"
+  },
+  "help_page_local_copy_hint": {
+    "message": "This content is a local copy of [LINK:the FAQ page] on our website."
   }
 }
