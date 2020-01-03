@@ -119,6 +119,12 @@ export default function DeltaMenu (props) {
       onClick={onUnblockContacts}
     />
     <MenuItem
+      icon='help'
+      text={tx('menu_help')}
+      id='help-page-link'
+      onClick={() => screenContext.openDialog('HelpPage')}
+    />
+    <MenuItem
       icon='settings'
       text={tx('menu_settings')}
       onClick={() => screenContext.openDialog('Settings')}
