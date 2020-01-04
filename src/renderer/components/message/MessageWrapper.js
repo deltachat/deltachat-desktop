@@ -33,36 +33,7 @@ export const InfoMessage = styled.div`
 `
 
 export const render = React.memo((props) => {
-  const { message } = props
-  const { openDialog } = useContext(ScreenContext)
-
-  const onClickContactRequest = () => openDialog('DeadDrop', { deaddrop: message })
-  const onClickSetupMessage = () => openDialog('EnterAutocryptSetupMessage', { message })
-
-  props = { ...props, onClickSetupMessage, onClickContactRequest }
-  message.onForward = () => openDialog('ForwardMessage', { message })
-
-  let body
-
-  if (message.msg.isSetupmessage) {
-    body = (
-      <div className='setupMessage pointer' key={message.id}
-        onClick={onClickSetupMessage}>
-        <RenderMessage {...props} />
-      </div>
-    )
-  } else if (message.msg.chatId === C.DC_CHAT_ID_DEADDROP) {
-    body = (
-      <div key={message.id}
-        onClick={onClickContactRequest} className={'pointer'}>
-        <RenderMessage {...props} />
-      </div>
-    )
-  } else {
-    body = <RenderMessage {...props} />
-  }
-
-  return <li>{body}</li>
+  return <li><RenderMessage {...props} /></li>
 })
 
 export function RenderMessage (props) {
@@ -73,6 +44,8 @@ export function RenderMessage (props) {
   const tx = window.translate
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext
+
+  message.onForward = () => openDialog('ForwardMessage', { message })
 
   const conversationType = GROUP_TYPES.includes(chat.type) ? 'group' : 'direct'
   const onShowDetail = () => openDialog('MessageDetail', { message, chat })
@@ -112,6 +85,15 @@ export function RenderMessage (props) {
     message,
     hasLocation: (msg.hasLocation && locationStreamingEnabled)
   }
+  
+  const isSetupmessage = message.msg.isSetupmessage
+  const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
+  if (isSetupmessage) {
+    props.onClickMessageBody = () => openDialog('EnterAutocryptSetupMessage', { message })
+  } else if (isDeadDrop) {
+    props.onClickMessageBody = () => openDialog('DeadDrop', { deaddrop: message })
+  }
+
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
   if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
