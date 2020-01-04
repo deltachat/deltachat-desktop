@@ -191,7 +191,8 @@ const Message = (props) => {
     disableMenu,
     status,
     attachment,
-    onContactClick
+    onContactClick,
+    onClickMessageBody
   } = props
   const tx = window.translate
 
@@ -239,17 +240,19 @@ const Message = (props) => {
       >
         {message.msg.isForwarded && <div className='forwarded-indicator'>{tx('forwarded_message')}</div>}
         {direction === 'incoming' && conversationType === 'group' && Author(message.contact, onContactClick)}
-        <Attachment {...{
-          attachment,
-          text,
-          conversationType,
-          direction,
-          message }} />
+        <div className={classNames('msg-body', {'msg-body--is-clickable': onClickMessageBody})}  onClick={props.onClickMessageBody}>
+          <Attachment {...{
+            attachment,
+            text,
+            conversationType,
+            direction,
+            message }} />
 
-        <div dir='auto' className='text' >
-          {message.msg.isSetupmessage ? tx('autocrypt_asm_click_body') : <MessageBody text={text || ''} />}
+          <div dir='auto' className='text' >
+            {message.msg.isSetupmessage ? tx('autocrypt_asm_click_body') : <MessageBody text={text || ''} />}
+          </div>
+          {longMessage && <button onClick={onShowDetail}>...</button>}
         </div>
-        {longMessage && <button onClick={onShowDetail}>...</button>}
         <MessageMetaData {...props} />
       </div>
       <div onClick={ev => { ev.stopPropagation() }}>
