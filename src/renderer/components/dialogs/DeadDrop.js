@@ -10,18 +10,26 @@ import { useChatStore } from '../../stores/chat'
 export default function DeadDrop (props) {
   const { deaddrop, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
+
+  const never = () => {
+    callDcMethod('contacts.blockContact', [deaddrop.contact.id])
+    onClose()
+  }
+
+  const notNow = async () => {
+    const contactId = deaddrop.contact.id
+    await callDcMethodAsync('contacts.markNoticedContact', [contactId])
+    onClose()
+  }
+
   const yes = async () => {
-    const messageId = deaddrop.id
+    const messageId = deaddrop.msg.id
     const contactId = deaddrop.contact.id
     const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [{ messageId, contactId }])
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     onClose()
   }
 
-  const never = () => {
-    callDcMethod('contacts.blockContact', [deaddrop.contact.id])
-    onClose()
-  }
 
   const isOpen = !!deaddrop
   const nameAndAddr = deaddrop && deaddrop.contact && deaddrop.contact.nameAndAddr
@@ -46,7 +54,7 @@ export default function DeadDrop (props) {
             </DeltaButtonDanger>
             <DeltaButton
               bold={false}
-              onClick={onClose}
+              onClick={notNow}
             >
               {tx('not_now').toUpperCase()}
             </DeltaButton>

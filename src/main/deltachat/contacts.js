@@ -58,4 +58,8 @@ module.exports = class DCContacts extends SplitOut {
   getContact (contactId) {
     return this._dc.getContact(contactId).toJson()
   }
+
+  markNoticedContact (contactId) {
+    return this._dc.markNoticedContact(contactId)
+  }
 }
