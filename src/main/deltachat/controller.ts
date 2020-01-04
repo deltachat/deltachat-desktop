@@ -16,7 +16,7 @@ import DCStickers from './stickers'
 import DCChat from './chat'
 import DCContacts from './contacts'
 import DCContext from './context'
-const { DeltaChat } = require('deltachat-node')
+import { DeltaChat } from 'deltachat-node'
 
 const C = require('deltachat-node/constants')
 const eventStrings = require('deltachat-node/events')
@@ -43,7 +43,7 @@ export default class DeltaChatController extends EventEmitter {
 
   ready: boolean
 
-  _dc: any
+  _dc: DeltaChat
 
   __private: any
 
