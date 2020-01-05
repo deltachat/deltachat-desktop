@@ -119,7 +119,7 @@
     <string name="menu_new_contact">Новий контакт</string>
     <string name="menu_new_chat">Новий чат</string>
     <string name="menu_new_group">Нова група</string>
-    <string name="menu_new_verified_group">Нова перевірена група (експериментальна функція)</string>
+    <string name="menu_new_verified_group">Нова перевірена група</string>
     <string name="menu_send">Відправити</string>
     <string name="menu_toggle_keyboard">Увімкнути емодзі-клавіатуру</string>
     <string name="menu_edit_group">Редагувати групу</string>
@@ -231,7 +231,7 @@
     <string name="group_self_not_in_group">Щоб виконати цю дію, Ви повинні бути учасником групи.</string>
     <string name="profile_encryption">Шифрування</string>
     <string name="media_preview">Попередній перегляд медіа</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Друзі не залишають друзів без спілкування.</string>
@@ -239,22 +239,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Мессенджер з найширшою аудиторією у світі. Безкоштовний і незалежний.</string>
-    <string name="welcome_intro2_headline">Незалежний</string>
-    <string name="welcome_intro2_message">Delta Chat не має централізованого сервера. Використовується ваш поштовий сервер.</string>
-    <string name="welcome_intro3_headline">Швидкий</string>
-    <string name="welcome_intro3_message">Доставляє повідомлення за лічені секунди.\nШвидкий інтерфейс.</string>
-    <string name="welcome_intro4_headline">Потужний</string>
-    <string name="welcome_intro4_message">Безлімітні чати, відправка фотографій, відео, голосових повідомлень і багато іншого. Підтримує безліч клієнтів.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Безкоштовний</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat безкоштовний і так буде завжди. Має відкритий початковий код. Ніякої реклами. Ніяких платних підписок. Немає прив\'язки до постачальника.</string>
-    <string name="welcome_intro6_headline">Зашифрований</string>
-    <string name="welcome_intro6_message">Зашифрований з використанням популярних алгоритмів. Повідомлення залишаються на ваших серверах.</string>
-    <string name="welcome_intro7_headline">Надійний</string>
-    <string name="welcome_intro7_message">Delta Chat безпечний для бізнесу, поєднується з іншими технологіями і грунтується на стандартах.</string>
     <string name="welcome_start_messaging">Почати спілкування</string>
     <string name="login_title">Увійти</string>
     <string name="login_header">Увійти на свій сервер</string>
@@ -428,7 +413,6 @@
     <string name="screenlock_inactivity_timeout_interval">Час бездіяльності</string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">Сканувати QR-код</string>
     <string name="qrscan_hint">Наведіть камеру на QR-код</string>
     <string name="qrscan_ask_join_group">Приєднатися до групи «%1$s»?</string>
@@ -450,8 +434,6 @@
     <string name="contact_not_verified">Неможливо підтвердити %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Змінені параметри для %1$s</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d нових повідомлень з %2$d чатів</string>
     <string name="notify_most_recent_from">Останнє від: %1$s</string>
@@ -481,7 +463,6 @@
     <string name="perm_explain_access_to_location_denied">Щоб передати місцезнаходження, додатку потрібен доступ до геоданих пристрою, але зараз його не надано. Для надання доступу перейдіть у системне меню налаштувань, у розділі «Додатки» знайдіть Delta Chat, виберіть пункт «Права доступу» і дозвольте доступ до місцезнаходження пристрою.</string>
     <string name="perm_enable_bg_reminder_title">Натисніть тут, щоб отримувати повідомлення, коли Delta Chat знаходиться у фоновому режимі.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat використовує мінімальні ресурси і дбає про те, щоб не розрядити батарею.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Зашифроване повідомлення</string>
 
@@ -501,7 +482,7 @@
     <string name="global_menu_view_developer_tools_desktop">Інструменти розробника</string>
     <string name="global_menu_help_desktop">Допомога</string>
     <string name="global_menu_help_contribute_desktop">Приєднатися до розробки на GitHub</string>
-    <string name="global_menu_help_report_desktop">Повідомити про проблему...</string>
+    <string name="global_menu_help_report_desktop">Повідомити про проблему</string>
     <string name="no_chat_selected_suggestion_desktop">Виберіть чат або створіть новий</string>
     <string name="write_message_desktop">Напишіть повідомлення</string>
     <string name="encryption_info_title_desktop">Інформація про шифрування</string>

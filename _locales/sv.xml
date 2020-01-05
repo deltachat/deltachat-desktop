@@ -87,7 +87,7 @@
     <string name="menu_new_contact">Ny kontakt</string>
     <string name="menu_new_chat">Ny chatt</string>
     <string name="menu_new_group">Ny grupp</string>
-    <string name="menu_new_verified_group">Ny verifierad grupp (experimentell)</string>
+    <string name="menu_new_verified_group">Ny verifierad grupp</string>
     <string name="menu_send">Skickat</string>
     <string name="menu_toggle_keyboard">Byt emoji-tangentbord</string>
     <string name="menu_edit_group">Redigera grupp</string>
@@ -172,7 +172,7 @@
     <string name="group_self_not_in_group">Du måste vara medlem i gruppen för att utföra denna åtgärd.</string>
     <string name="profile_encryption">Kryptering</string>
     <string name="media_preview">Media förhandsvisning</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Vänner låter inte andra vänner vara inlåsta i meddelandesilo.</string>
@@ -180,22 +180,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Chattappen med den bredaste publiken i världen. Fri och oberoende.</string>
-    <string name="welcome_intro2_headline">Oberoende</string>
-    <string name="welcome_intro2_message">Det finns ingen Delta Chat server. Appen använder bara din e-postserver.</string>
-    <string name="welcome_intro3_headline">Snabb</string>
-    <string name="welcome_intro3_message">Puss-meddelanden inom några sekunder. \nSnabbt gränssnitt.</string>
-    <string name="welcome_intro4_headline">Powerful</string>
-    <string name="welcome_intro4_message">Obegränsade chattar, bilder, videoklipp, ljudmeddelanden och mer. Multi-klient kapabel.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Kostnadsfri</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat är kostnadsfri för alltid. Öppen källkod. Inga annonser. Ingen prenumeration. Ingen leverantörslåsning.</string>
-    <string name="welcome_intro6_headline">Krypterad</string>
-    <string name="welcome_intro6_message">Krypterad med alla vanliga algoritmer. Meddelandena finns kvar på dina servrar.</string>
-    <string name="welcome_intro7_headline">Pålitlig</string>
-    <string name="welcome_intro7_message">Delta Chat är säker för företagsanvändning, kompatibel och standardbaserad.</string>
     <string name="welcome_start_messaging">Börja Chatta</string>
     <string name="login_title">Logga in</string>
     <string name="login_header">Logga in på din server</string>

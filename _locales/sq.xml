@@ -15,15 +15,21 @@
     <string name="strict">Strikt</string>
     <string name="open">Hap</string>
     <string name="delete">Fshije</string>
+    <string name="info">Të dhëna</string>
     <string name="update">Përditësoje</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Bashkëngjitje</string>
     <string name="back">Mbrapsht</string>
     <string name="close">Mbylle</string>
+    <string name="forward">Përpara</string>
+    <string name="archive">Arkivoje</string>
+    <string name="unarchive">Çarkivoje</string>
+    <string name="mute">Heshtoje</string>
     <string name="save">Ruaje</string>
     <string name="chat">Fjalosje</string>
     <string name="media">Media</string>
     <string name="main_menu">Menuja kryesore</string>
+    <string name="start_chat">Nisni fjalosje</string>
     <string name="show_password">Shfaqe fjalëkalimin</string>
     <string name="hide_password">Fshihe fjalëkalimin</string>
     <string name="not_now">Jo tani</string>
@@ -31,6 +37,8 @@
     <string name="one_moment">Një çast…</string>
     <string name="done">U bë</string>
     <string name="undo">Zhbëje</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <string name="next">Pasuesja</string>
     <string name="error">Gabim</string>
     <string name="error_x">Gabim: %1$s</string>
     <string name="error_no_network">Rrjet i pakapshëm.</string>
@@ -43,6 +51,8 @@
     <string name="bad_email_address">Adresë email e keqe.</string>
     <string name="password">Fjalëkalim</string>
     <string name="now">Tani</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Rrezik</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d min.</string>
     <string name="today">Sot</string>
@@ -121,7 +131,7 @@
     <string name="menu_new_contact">Kontakt i ri</string>
     <string name="menu_new_chat">Fjalosje e re</string>
     <string name="menu_new_group">Grup i ri</string>
-    <string name="menu_new_verified_group">Grup i ri i verifikuar (eksperimentale)</string>
+    <string name="menu_new_verified_group">Grup i ri i verifikuar</string>
     <string name="menu_send">Dërgoje</string>
     <string name="menu_toggle_keyboard">Shfaq/fshih tastierë emoji</string>
     <string name="menu_edit_group">Përpunoni grup</string>
@@ -169,6 +179,11 @@
     <string name="menu_zoom_out">Zvogëlim</string>
     <string name="menu_save_log">Ruaje regjistrin</string>
     <string name="title_share_location">Jepua vendndodhjen krejt anëtarëve të grupit</string>
+    <string name="device_talk">Mesazhe Pajisjeje</string>
+    <string name="device_talk_subtitle">Mesazhe të prodhuar lokalisht</string>
+    <string name="device_talk_explain">Mesazhet në këtë fjalosje prodhohen lokalisht nga aplikacioni juaj Delta Chat. Krijuesit e tij e përdorin për t’ju bërë të ditur përditësime dhe probleme gjatë përdorimit.</string>
+    <string name="device_talk_welcome_message">Mirë se vini te Delta Chat! – Delta Chat duket si aplikacione të tjerë popullorë për shkëmbim mesazhesh, por nuk përmban kontroll të centralizuar, s’ju gjurmon apo shet te ente të mëdha ju, shokët tuaj, kolegët apo familjen tuaj.\n\nTeknikisht, Delta Chat është një aplikacion email me një ndërfaqe moderne. Email me rroba të reja, nëse doni kështu 👻\n\nPërdoreni Delta Chat-in me cilindo prej miliarda vetash: thjesht përdorni adresat e tyre email. Marrësit s’ka nevojë të instalojnë Delta Chat-in, të vizitojnë sajte apo të regjistrohen diku - por sigurisht, nëse duan, mund t’i drejtoni te 👉 https://get.delta.chat</string>
+    <string name="edit_contact">Përpunoni kontaktin</string>
 
     <string name="mute_for_one_hour">Heshtoji për 1 orë</string>
     <string name="mute_for_two_hours">Heshtoji për 2 orë</string>
@@ -246,6 +261,8 @@
     <string name="chat_archived_label">Arkivuar</string>
     <string name="chat_no_messages">S\’ka mesazhe.</string>
     <string name="chat_self_talk_subtitle">Mesazhe që i kam dërguar vetes</string>
+    <string name="saved_messages">Mesazhe të ruajtur</string>
+    <string name="saved_messages_explain">• Përcillini mesazhet këtu për përdorim të lehtë\n\n• Mbani shënime ose kujtesa zanore\n\n• Bashkëngjitni media për t’i ruajtur</string>
     <string name="chat_contact_request">Kërkesë kontakti</string>
     <string name="chat_no_contact_requests">S\’ka kërkesa kontakti.\n\nNëse doni që email-e klasikë të shfaqen këtu si kërkesa kontakti, mund të ndryshoni rregullimin përkatës te rregullimet e aplikacionit.</string>
     <string name="retry_send">Riprovo të dërgosh mesazhin</string>
@@ -283,7 +300,7 @@
     <string name="tab_gallery_empty_hint">Figurat dhe videot e dhëna në këtë fjalosje do të shfaqen këtu.</string>
     <string name="tab_docs_empty_hint">Dokumentet, muzika dhe kartela të tjera të dhëna në këtë fjalosje do të shfaqen këtu.</string>
     <string name="media_preview">Paraparje media</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Kush të ka shok, s\’të lë kyçur në silos mesazhesh.</string>
@@ -291,22 +308,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Shkëmbyesi i mesazheve me publikun më të gjerë në botë. I lirë dhe i pavarur.</string>
-    <string name="welcome_intro2_headline">I pavarur</string>
-    <string name="welcome_intro2_message">S\’ka shërbyes Delta Chat. Aplikacioni përdor vetëm shërbyesin tuaj të email-eve.</string>
-    <string name="welcome_intro3_headline">I shpejtë</string>
-    <string name="welcome_intro3_message">Dërgoni mesazhe brenda sekondash.\nNdërfaqe e shpejtë.</string>
-    <string name="welcome_intro4_headline">I fuqishëm</string>
-    <string name="welcome_intro4_message">Fjalosje, figura, video, mesazhe audio të pakufizuara, dhe më tepër. I aftë për multi-klient.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">I lirë</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat është përgjithmonë i lirë.\nMe burim të hapur. Pa reklama. Pa pajtime. Pa kyçje nga tregtues.</string>
-    <string name="welcome_intro6_headline">I fshehtëzuar</string>
-    <string name="welcome_intro6_message">Fshehtëzuar me krejt algoritmet e zakonshëm. Mesazhet mbeten në shërbyesit tuaj.</string>
-    <string name="welcome_intro7_headline">I besueshëm</string>
-    <string name="welcome_intro7_message">Delta Chat-i është i parrezik për përdorim nga bizneset, i përputhshëm dhe i bazuar në standarde.</string>
     <string name="welcome_start_messaging">Filloni të Shkëmbeni Mesazhe</string>
     <string name="login_title">Hyrje</string>
     <string name="login_header">Hyrje te shërbyesi juaj</string>
@@ -345,6 +347,9 @@
     <string name="accept_invalid_hostnames">Prano strehëemra të pavlefshëm</string>
     <string name="accept_invalid_certificates">Prano dëshmi të pavlefshme</string>
 
+    <string name="used_settings">Rregullime të përdorura</string>
+    <string name="delete_account">Fshije llogarinë</string>
+    <string name="delete_account_ask">Jeni i sigurt se doni të fshihen të dhënat e llogarisë tuaj?</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -513,6 +518,7 @@
 
 
     <!-- qr code stuff -->
+    <string name="qr_code">Kod QR</string>
     <string name="qrscan_title">Skanoni kod QR</string>
     <string name="qrscan_hint">Vendoseni kamerën tuaj përmbi kodin QR</string>
     <string name="qrscan_ask_join_group">Doni të bëheni pjesë e grupit \"%1$s\"?</string>
@@ -536,6 +542,7 @@
     <string name="contact_not_verified">S\’verifikohet dot %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">U ndryshua rregullimi për %1$s</string>
+    <string name="verified_group_explain">Grupet e verifikuara (eksperimentale) furnizojnë siguri kundër sulmesh aktive. Anëtarët janë të verifikuar me një faktor të dytë nga anëtarë të tjerë dhe mesazhet janë përherë të fshehtëzuara skaj më skaj.</string>
 
 
     <!-- notifications  -->
@@ -568,11 +575,12 @@
     <string name="perm_explain_access_to_location_denied">Delta Chat lyp leje mbi Vendndodhjen që të mund të bashkëngjisë një vendndodhje, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Vendndodhjen\".</string>
     <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat-i përdor burime minimale dhe kujdeset të mos thajë baterinë.</string>
+    <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mesazh i fshehtëzuar</string>
 
-    <!-- desktop specific strings -->
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="welcome_desktop">Mirë se vini në Delta Chat</string>
     <string name="login_known_accounts_title_desktop">Llogari të njohura</string>
     <string name="global_menu_preferences_language_desktop">Zgjidhni Gjuhë…</string>
@@ -591,7 +599,7 @@
     <string name="global_menu_help_desktop">Ndihmë</string>
     <string name="global_menu_help_learn_desktop">Mësoni më tepër rreth Delta Chat-it</string>
     <string name="global_menu_help_contribute_desktop">Jepni ndihmesë në GitHub</string>
-    <string name="global_menu_help_report_desktop">Njoftoni një Problem…</string>
+    <string name="global_menu_help_report_desktop">Njoftoni një Problem</string>
     <string name="global_menu_help_about_desktop">Rreth Delta Chat-it</string>
     <string name="no_chat_selected_suggestion_desktop">Përzgjidhni një fjalosje ose krijoni një të tillë të re</string>
     <string name="write_message_desktop">Shkruani një mesazh</string>
@@ -655,4 +663,10 @@
     <string name="a11y_remove_account_btn_label">Hiqe llogarinë</string>
     <string name="a11y_message_context_menu_btn_label">Veprime mesazhesh</string>
     <string name="a11y_background_preview_label">Paraparje sfondi</string>
+
+    <!-- Translators: These strings are only used on iOS -->
+    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Lejimi i përdorimi të kamerës ju bën të mundur të bëni foto dhe video.</string>
+    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Lejimi i përdorimi të librit tuaj të adresave kamerës ju bën të mundur të bisedoni me kontakte prej pajisjes tuaj.</string>
+    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Lejimi i përdorimi të mikrofonit ju bën të mundur të bëni incizoni audio.</string>
+    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Lejimi i përdorimi të fototekës tuaj ju bën të mundur të ngarkoni figura prej saj.</string>
 </resources>
