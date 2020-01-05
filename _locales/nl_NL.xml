@@ -15,15 +15,21 @@
     <string name="strict">Strikt</string>
     <string name="open">Openen</string>
     <string name="delete">Verwijderen</string>
+    <string name="info">Informatie</string>
     <string name="update">Bijwerken</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Bijlage</string>
     <string name="back">Terug</string>
     <string name="close">Sluiten</string>
+    <string name="forward">Doorsturen</string>
+    <string name="archive">Archiveren</string>
+    <string name="unarchive">De-archiveren</string>
+    <string name="mute">Dempen</string>
     <string name="save">Opslaan</string>
     <string name="chat">Gesprek</string>
     <string name="media">Media</string>
     <string name="main_menu">Hoofdmenu</string>
+    <string name="start_chat">Gesprek beginnen</string>
     <string name="show_password">Wachtwoord tonen</string>
     <string name="hide_password">Wachtwoord verbergen</string>
     <string name="not_now">Niet nu</string>
@@ -31,6 +37,8 @@
     <string name="one_moment">Even geduld...</string>
     <string name="done">Klaar</string>
     <string name="undo">Ongedaan maken</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <string name="next">Volgende</string>
     <string name="error">Fout</string>
     <string name="error_x">Fout: %1$s</string>
     <string name="error_no_network">Geen internetverbinding.</string>
@@ -43,6 +51,8 @@
     <string name="bad_email_address">Ongeldig e-mailadres.</string>
     <string name="password">Wachtwoord</string>
     <string name="now">Nu</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Gevarenzone</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d min</string>
     <string name="today">Vandaag</string>
@@ -121,7 +131,7 @@
     <string name="menu_new_contact">Nieuw contactpersoon</string>
     <string name="menu_new_chat">Nieuw gesprek</string>
     <string name="menu_new_group">Nieuwe groep</string>
-    <string name="menu_new_verified_group">Nieuwe goedgekeurde groep (experimenteel)</string>
+    <string name="menu_new_verified_group">Nieuwe goedgekeurde groep</string>
     <string name="menu_send">Versturen</string>
     <string name="menu_toggle_keyboard">Emoji-toetsenbord tonen/verbergen</string>
     <string name="menu_edit_group">Groep aanpassen</string>
@@ -169,6 +179,11 @@
     <string name="menu_zoom_out">Uitzoomen</string>
     <string name="menu_save_log">Logboek opslaan</string>
     <string name="title_share_location">Locatie delen met alle groepsleden</string>
+    <string name="device_talk">Berichten op apparaat</string>
+    <string name="device_talk_subtitle">Lokaal gegenereerde berichten</string>
+    <string name="device_talk_explain">Berichten in dit gesprek worden geplaatst door de app zelf. Zo blijf je op de hoogte van app-updates en gebruiksproblemen.</string>
+    <string name="device_talk_welcome_message">Welkom bij Delta Chat! Delta Chat lijkt heel erg op andere chatapps, maar is toch écht anders! Zo is er geen centraal beheer, wordt je niet gevolgd en worden jouw gegevens of die van je vrienden/familie niet verkocht aan bedrijven.\n\nTechnisch gesproken is het een e-mailapp in een modern jasje (of moderne jurk 👻).\n\nGebruik Delta Chat om te communiceren met iedereen die een e-mailadres heeft. Ontvangers hoeven het niet te installeren, naar een website te gaan of ergens te registreren. Maar als ze dat willen, kun je ze natuurlijk altíjd doorverwijzen naar 👉 https://get.delta.chat</string>
+    <string name="edit_contact">Contactpersoon bewerken</string>
 
     <string name="mute_for_one_hour">1 uur lang uitschakelen</string>
     <string name="mute_for_two_hours">2 uur lang uitschakelen</string>
@@ -246,6 +261,8 @@
     <string name="chat_archived_label">Gearchiveerd</string>
     <string name="chat_no_messages">Geen berichten.</string>
     <string name="chat_self_talk_subtitle">Aan mijzelf gestuurde berichten</string>
+    <string name="saved_messages">Opgeslagen berichten</string>
+    <string name="saved_messages_explain">• Stuur berichten door naar hier om ze snel terug te kunnen lezen\n\n• Maak aantekeningen of spraakopnamen\n\n• Voeg media toe om deze op te slaan</string>
     <string name="chat_contact_request">Contactpersoonverzoek</string>
     <string name="chat_no_contact_requests">Geen contactpersoonverzoeken.\n\nAls je wilt dat klassieke e-mail hier verschijnt in de vorm van contactpersoonverzoeken, dan kun je dat aangeven in de app-instellingen.</string>
     <string name="retry_send">Bericht opnieuw versturen</string>
@@ -283,7 +300,7 @@
     <string name="tab_gallery_empty_hint">De in dit gesprek gedeelde afbeeldingen en video\'s verschijnen hier.</string>
     <string name="tab_docs_empty_hint">De in dit gesprek gedeelde documenten, muziek en overige bestanden verschijnen hier.</string>
     <string name="media_preview">Mediavoorbeeld</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Vrienden houden vrienden niet opgesloten in berichtkluizen.</string>
@@ -291,22 +308,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Dé berichtenapp met het breedste publiek ter wereld. Gratis en onafhankelijk.</string>
-    <string name="welcome_intro2_headline">Onafhankelijk</string>
-    <string name="welcome_intro2_message">Er is geen Delta Chat-server; de app gebruikt alleen je mailserver.</string>
-    <string name="welcome_intro3_headline">Snel</string>
-    <string name="welcome_intro3_message">Verstuur berichten binnen een paar seconden.\nSnelle gebruikersomgeving.</string>
-    <string name="welcome_intro4_headline">Krachtig</string>
-    <string name="welcome_intro4_message">Ongelimiteerd aantal gesprekken, afbeeldingen, video\'s, spraakberichten en meer. Kan omgaan met meerdere clients.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Gratis</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat zal altijd gratis blijven. Open source. Geen reclame. Geen abonnement. Onafhankelijk.</string>
-    <string name="welcome_intro6_headline">Versleuteld</string>
-    <string name="welcome_intro6_message">Versleuteld met alle bekende algoritmen. Berichten blijven op jouw server.</string>
-    <string name="welcome_intro7_headline">Betrouwbaar</string>
-    <string name="welcome_intro7_message">Delta Chat is veilig voor zakelijk gebruik, compatibel en gebaseerd op standaarden.</string>
     <string name="welcome_start_messaging">Aan de slag</string>
     <string name="login_title">Inloggen</string>
     <string name="login_header">Inloggen op je server</string>
@@ -345,6 +347,9 @@
     <string name="accept_invalid_hostnames">Ongeldige hostnamen accepteren</string>
     <string name="accept_invalid_certificates">Ongeldige certificaten accepteren</string>
 
+    <string name="used_settings">Gebruikte instellingen:</string>
+    <string name="delete_account">Account verwijderen</string>
+    <string name="delete_account_ask">Weet je zeker dat je je accountgegevens wilt verwijderen?</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -514,6 +519,7 @@
 
 
     <!-- qr code stuff -->
+    <string name="qr_code">QR-code</string>
     <string name="qrscan_title">QR-code scannen</string>
     <string name="qrscan_hint">Plaatst je camera boven de QR-code</string>
     <string name="qrscan_ask_join_group">Wil je deelnemen aan de groep \"%1$s\"?</string>
@@ -537,6 +543,7 @@
     <string name="contact_not_verified">Kan %1$s niet goedkeuren</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Gewijzigde instellingen voor %1$s</string>
+    <string name="verified_group_explain">Goedgekeurde groepen (experimenteel) zijn exta beveiligd tegen aanvallen van buitenaf. Leden worden goedgekeurd door andere leden en berichten zijn altijd end-to-end versleuteld.</string>
 
 
     <!-- notifications  -->
@@ -569,11 +576,12 @@
     <string name="perm_explain_access_to_location_denied">Delta Chat vereist de locatiemachtiging om je locatie te kunnen delen, maar je hebt dit permanent geweigerd. Ga naar de app-instellingen, kies \"Machtigingen\" en schakel \"Locatie\" in.</string>
     <string name="perm_enable_bg_reminder_title">Druk hier om berichten te ontvangen als Delta Chat niet geopend is.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat\'s accugebruik is laag omdat het slechts een minimaal aantal systeembronnen gebruikt.</string>
+    <string name="perm_enable_bg_already_done">Je hebt al toestemming gegeven voor het ophalen van berichten op de achtergrond.\n\nAls het nog steeds niet werkt, controleer dan de systeeminstellingen.</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Versleuteld bericht</string>
 
-    <!-- desktop specific strings -->
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="welcome_desktop">Welkom bij Delta Chat</string>
     <string name="login_known_accounts_title_desktop">Bekende accounts</string>
     <string name="global_menu_preferences_language_desktop">Kies een taal...</string>
@@ -592,7 +600,7 @@
     <string name="global_menu_help_desktop">Hulp</string>
     <string name="global_menu_help_learn_desktop">Meer informatie over Delta Chat</string>
     <string name="global_menu_help_contribute_desktop">Draag bij op GitHub</string>
-    <string name="global_menu_help_report_desktop">Meld een probleem...</string>
+    <string name="global_menu_help_report_desktop">Meld een probleem</string>
     <string name="global_menu_help_about_desktop">Over Delta Chat</string>
     <string name="no_chat_selected_suggestion_desktop">Kies een gesprek of creëer een nieuw gesprek</string>
     <string name="write_message_desktop">Schrijf een bericht</string>
@@ -656,4 +664,10 @@
     <string name="a11y_remove_account_btn_label">Account verwijderen</string>
     <string name="a11y_message_context_menu_btn_label">Berichtacties</string>
     <string name="a11y_background_preview_label">Achtergrondvoorbeeld</string>
+
+    <!-- Translators: These strings are only used on iOS -->
+    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Geef Delta Chat toegang tot je camera om foto\'s en video\'s te maken.</string>
+    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Geef Delta Chat toegang tot je adresboek om gesprekken te voeren met contactpersonen.</string>
+    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Geet Delta Chat toegang tot je microfoon om audio op te nemen.</string>
+    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Geef Delta Chat toegang tot je foto\'s om afbeeldingen te versturen.</string>
 </resources>

@@ -15,15 +15,21 @@
     <string name="strict">Strikt</string>
     <string name="open">Öffnen</string>
     <string name="delete">Löschen</string>
+    <string name="info">Info</string>
     <string name="update">Aktualisieren</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Anhang</string>
     <string name="back">Zurück</string>
     <string name="close">Schließen</string>
+    <string name="forward">Weiterleiten</string>
+    <string name="archive">Archivieren</string>
+    <string name="unarchive">Dearchivieren</string>
+    <string name="mute">Stumm</string>
     <string name="save">Speichern</string>
     <string name="chat">Chat</string>
     <string name="media">Medien</string>
     <string name="main_menu">Hauptmenü</string>
+    <string name="start_chat">Chat starten</string>
     <string name="show_password">Passwort anzeigen</string>
     <string name="hide_password">Passwort verstecken</string>
     <string name="not_now">Nicht jetzt</string>
@@ -31,6 +37,8 @@
     <string name="one_moment">Einen Moment…</string>
     <string name="done">Fertig</string>
     <string name="undo">Rückgängig</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <string name="next">Weiter</string>
     <string name="error">Fehler</string>
     <string name="error_x">Fehler: %1$s</string>
     <string name="error_no_network">Kein Netzwerk.</string>
@@ -43,6 +51,8 @@
     <string name="bad_email_address">Ungültige E-Mail-Adresse</string>
     <string name="password">Passwort</string>
     <string name="now">Jetzt</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Achtung</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d Min.</string>
     <string name="today">Heute</string>
@@ -121,7 +131,7 @@
     <string name="menu_new_contact">Neuer Kontakt</string>
     <string name="menu_new_chat">Neuer Chat</string>
     <string name="menu_new_group">Neue Gruppe</string>
-    <string name="menu_new_verified_group">Neue verifizierte Gruppe (experimentell)</string>
+    <string name="menu_new_verified_group">Neue verifizierte Gruppe</string>
     <string name="menu_send">Senden</string>
     <string name="menu_toggle_keyboard">Emojis einblenden</string>
     <string name="menu_edit_group">Gruppe bearbeiten</string>
@@ -169,6 +179,11 @@
     <string name="menu_zoom_out">Ansicht verkleinern</string>
     <string name="menu_save_log">Logdatei sichern</string>
     <string name="title_share_location">Standort mit allen Gruppenmitgliedern teilen</string>
+    <string name="device_talk">Systemnachrichten</string>
+    <string name="device_talk_subtitle">Lokal erzeugte Nachrichten</string>
+    <string name="device_talk_explain">Nachrichten in diesem Chat werden lokal von der Delta Chat App erzeugt. Der Chat wird von den Entwicklern verwendet, um auf Neuigkeiten und Probleme hinzuweisen.</string>
+    <string name="device_talk_welcome_message">Willkommen – Delta Chat sieht aus und funktioniert wie andere populäre Messenger - aber ohne zentrale Überwachung, ohne Tracking, ohne die Daten von Ihnen, Freunden, Kollegen oder Familienmitgliedern an irgendwelche Firmen zu verkaufen.\n\nTechnisch ist Delta Chat ein E-Mail-Programm mit einer modernen Chat-Oberfläche - E-Mail in neuen Kleidern 👻\n\nMit Delta Chat haben Sie Milliarden potentieller Chatpartner: Verwenden Sie einfach deren E-Mail-Adresse - die Empfänger selbst müssen Delta Chat dazu nicht installiert haben oder sich irgendwo anmelden. Aber natürlich, wenn Sie mögen, können Sie sie auf 👉 https://get.delta.chat hinweisen</string>
+    <string name="edit_contact">Kontakt bearbeiten</string>
 
     <string name="mute_for_one_hour">Stumm für 1 Stunde</string>
     <string name="mute_for_two_hours">Stumm für 2 Stunden</string>
@@ -246,6 +261,8 @@
     <string name="chat_archived_label">Archiviert</string>
     <string name="chat_no_messages">Keine Nachrichten.</string>
     <string name="chat_self_talk_subtitle">Nachrichten, die ich mir selber geschickt habe</string>
+    <string name="saved_messages">Gespeichertes</string>
+    <string name="saved_messages_explain">• Nachrichten zum Merken hierher weiterleiten\n\n• Notizen oder Sprachmemos machen\n\n• Medien zum Speichern einfügen</string>
     <string name="chat_contact_request">Kontaktanfrage</string>
     <string name="chat_no_contact_requests">Keine Kontaktanfragen.\n\nWenn normale E-Mails hier erscheinen sollen, müssen Sie die entsprechende erweiterte Einstellung ändern.</string>
     <string name="retry_send">Nachricht erneut senden</string>
@@ -283,7 +300,7 @@
     <string name="tab_gallery_empty_hint">In diesem Chat geteilte Bilder und Videos werden hier angezeigt.</string>
     <string name="tab_docs_empty_hint">In diesem Chat geteilte Dokumente, Musik und Dateien werden hier angezeigt.</string>
     <string name="media_preview">Media-Vorschau</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Freunde lassen Freunde nicht in Messenger-Silos zurück. </string>
@@ -291,22 +308,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Der Messenger mit der größten Reichweite der Welt. Frei und unabhängig.</string>
-    <string name="welcome_intro2_headline">Unabhängig</string>
-    <string name="welcome_intro2_message">Es gibt keinen Delta Chat Server. Die App verwendet nur Ihren E-Mail-Server.</string>
-    <string name="welcome_intro3_headline">Schnell</string>
-    <string name="welcome_intro3_message">Push-Nachrichten in Sekunden.\nSchnelles Interface.</string>
-    <string name="welcome_intro4_headline">Leistungsstark</string>
-    <string name="welcome_intro4_message">Unbegrenzte Chats, Bilder, Videos, Sprachnachrichten und mehr. Multi-Client-fähig.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Frei</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Open Source. Keine Werbung. Kein Abo. Keine Bindung an die Mobilfunknummer.</string>
-    <string name="welcome_intro6_headline">Verschlüsselt</string>
-    <string name="welcome_intro6_message">Verschlüsselung mit allen gängigen Verfahren. Die Nachrichten bleiben auf Ihren Servern.</string>
-    <string name="welcome_intro7_headline">Vertraulich</string>
-    <string name="welcome_intro7_message">Delta Chat ist für die geschäftliche Kommunikation geeignet, kompatibel und auf Standards basierend.</string>
     <string name="welcome_start_messaging">Jetzt beginnen</string>
     <string name="login_title">Login</string>
     <string name="login_header">Bei ihrem Server anmelden</string>
@@ -347,6 +349,9 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="accept_invalid_hostnames">Ungültige Hostnamen akzeptieren</string>
     <string name="accept_invalid_certificates">Ungültige Zertifikate akzeptieren</string>
 
+    <string name="used_settings">Verwendete Einstellungen:</string>
+    <string name="delete_account">E-Mail-Konto löschen</string>
+    <string name="delete_account_ask">Das E-Mail-Konto und alle Daten wirklich von diesem Gerät löschen?</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -458,7 +463,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_show_emails_no">Nein, nur Chats</string>
     <string name="pref_show_emails_accepted_contacts">Akzeptierte Kontakte</string>
     <string name="pref_show_emails_all">Alle</string>
-    <string name="pref_empty_server_title">E-Mails vom Server löschen!</string>
+    <string name="pref_empty_server_title">E-Mails vom Server löschen</string>
     <string name="pref_empty_server_msg">Mit dieser Funktion können Sie Speicherplatz auf Ihrem IMAP-Server freigeben, indem Sie ALLE E-Mails, einschließlich Chat-Nachrichten, in den angegebenen Ordnern löschen. Nachrichten auf diesem Gerät werden nicht gelöscht. Die Löschung kann nicht rückgängig gemacht werden!</string>
     <string name="pref_empty_server_inbox">Löschen ALLER e-mails im Nachrichteneingangsordner (INBOX)</string>
     <string name="pref_empty_server_mvbox">Löschen ALLER e-mails im DeltaChat Ordner.</string>
@@ -516,6 +521,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
 
 
     <!-- qr code stuff -->
+    <string name="qr_code">QR-Code</string>
     <string name="qrscan_title">QR-Code scannen</string>
     <string name="qrscan_hint">Kamera über den QR-Code halten</string>
     <string name="qrscan_ask_join_group">Der Gruppe \"%1$s\" beitreten?</string>
@@ -539,6 +545,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="contact_not_verified">Kann %1$s nicht verifizieren</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Geändertes Setup für %1$s</string>
+    <string name="verified_group_explain">Verifizierte Gruppen (experimentell) bieten Schutz gegen aktive Angriffe mittels Zwei-Faktor-Authentifizierung aller Mitglieder und immer aktiver Ende-zu-Ende-Verschlüsselung.</string>
 
 
     <!-- notifications  -->
@@ -571,11 +578,10 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="perm_explain_access_to_location_denied">Delta Chat benötigt eine Standortberechtigung, um einen Standort anzuhängen, aber er wurde dauerhaft abgelehnt. Bitte fahre mit dem Menü App-Einstellungen fort, wähle \"Berechtigungen\" und aktiviere \"Standort\".</string>
     <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat verbraucht nur minimale Ressourcen und achtet darauf, den Akku zu schonen.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
 
-    <!-- desktop specific strings -->
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="welcome_desktop">Willkommen bei Delta Chat</string>
     <string name="login_known_accounts_title_desktop">Bekannte Konten</string>
     <string name="global_menu_preferences_language_desktop">Wähle Sprache...</string>
@@ -594,7 +600,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="global_menu_help_desktop">Hilfe</string>
     <string name="global_menu_help_learn_desktop">Lerne mehr über Delta Chat</string>
     <string name="global_menu_help_contribute_desktop">Auf GitHub mitwirken</string>
-    <string name="global_menu_help_report_desktop">Melde ein Problem...</string>
+    <string name="global_menu_help_report_desktop">Melde ein Problem</string>
     <string name="global_menu_help_about_desktop">Über Delta Chat</string>
     <string name="no_chat_selected_suggestion_desktop">Wähle einen Chat aus oder erstelle einen neuen Chat.</string>
     <string name="write_message_desktop">Schreibe eine Nachricht</string>
@@ -658,4 +664,10 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="a11y_remove_account_btn_label">E-Mail-Konto löschen</string>
     <string name="a11y_message_context_menu_btn_label">Nachrichtaktionen</string>
     <string name="a11y_background_preview_label">Vorschau für Hintergrundbild</string>
+
+    <!-- Translators: These strings are only used on iOS -->
+    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Zugriff auf die Kamera ermöglicht das Aufnehmen von Fotos und Videos.</string>
+    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Wenn Du Zugriff auf das Adressbuch zulässt, kannst du von Deinem Gerät aus mit Kontakten chatten.</string>
+    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Wenn Du den Zugriff auf das Mikrofon zulässt, kannst Du Audio aufnehmen.</string>
+    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Wenn Du Zugriff auf die Fotobibliothek erlaubst, kannst Du Bilder aus der Bibliothek hochladen.</string>
 </resources>
