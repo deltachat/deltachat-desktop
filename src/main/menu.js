@@ -116,7 +116,7 @@ function getMenuTemplate (logHandler) {
           click: () => windows.main.toggleAlwaysOnTop()
         },
         {
-          translate: 'global_menu_preferences_language_desktop',
+          translate: 'pref_language',
           submenu: getAvailableLanguages()
         },
         {
