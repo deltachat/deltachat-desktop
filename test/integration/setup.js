@@ -37,6 +37,7 @@ function createApp () {
 function createAppWithConfig (overrideConfig) {
   const TEST_DIR = tempy.directory()
   const defaultConfig = getConfig()
+  // TODO create account folder and acoount database
   if (overrideConfig) {
     const extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
     fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
