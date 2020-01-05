@@ -102,7 +102,7 @@
     <string name="menu_new_contact">新增聯絡人</string>
     <string name="menu_new_chat">新增對話</string>
     <string name="menu_new_group">新增群組</string>
-    <string name="menu_new_verified_group">新增驗證專用群組(實驗性)</string>
+    <string name="menu_new_verified_group">新增驗證專用群組</string>
     <string name="menu_send">送出</string>
     <string name="menu_toggle_keyboard">切換表情符號鍵盤</string>
     <string name="menu_edit_group">編輯群組</string>
@@ -149,7 +149,6 @@
     <string name="menu_zoom_in">放大</string>
     <string name="menu_zoom_out">縮小</string>
     <string name="title_share_location">分享所在地給所有群組成員</string>
-
     <string name="mute_for_one_hour">靜音1小時</string>
     <string name="mute_for_two_hours">靜音2小時</string>
     <string name="mute_for_one_day">靜音1天</string>
@@ -253,7 +252,7 @@
     <string name="tab_gallery_empty_hint">本對話中共享的圖片和視訊會顯示在這裡。</string>
     <string name="tab_docs_empty_hint">本對話中共享的文件、音樂和其它檔案會顯示在這裡。</string>
     <string name="media_preview">媒體預覽</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">友情不應該被訊息的孤島分隔。</string>
@@ -261,22 +260,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">免費、獨立的通訊軟體，我們有全世界最廣的受眾。</string>
-    <string name="welcome_intro2_headline">獨立!</string>
-    <string name="welcome_intro2_message">Delta Chat 沒有中心化伺服器，我們只使用你的郵件伺服器。</string>
-    <string name="welcome_intro3_headline">快速!</string>
-    <string name="welcome_intro3_message">快速反應的介面\n傳送訊息只要幾秒鐘</string>
-    <string name="welcome_intro4_headline">強大!</string>
-    <string name="welcome_intro4_message">無限的對話、圖片、視訊、語音訊息。不受限於本通訊軟體。</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">免費!</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat 永遠都免費。開放原始碼，沒有廣告，無需訂閱，不綁電信商。</string>
-    <string name="welcome_intro6_headline">保密!</string>
-    <string name="welcome_intro6_message">使用常見的演算法加密訊息，而且密文存在你自己的伺服器上。</string>
-    <string name="welcome_intro7_headline">值得信賴!</string>
-    <string name="welcome_intro7_message">Delta Chat 可以安心在商業環境使用，基於業界標準，相容度高。</string>
     <string name="welcome_start_messaging">開始傳送訊息</string>
     <string name="login_title">登入</string>
     <string name="login_header">登入你的伺服器</string>
@@ -460,7 +444,6 @@
     <string name="screenlock_inactivity_timeout_interval">閒置逾時時間</string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">掃描QR Code</string>
     <string name="qrscan_hint">請將相機對準 QR Code</string>
     <string name="qrscan_ask_join_group">你要參加群組 %1$s 嗎?</string>

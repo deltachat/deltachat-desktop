@@ -15,15 +15,21 @@
     <string name="strict">Zorrotza</string>
     <string name="open">Ireki</string>
     <string name="delete">Ezabatu</string>
+    <string name="info">Informazioa</string>
     <string name="update">Eguneratu</string>
     <string name="emoji">Emojia</string>
     <string name="attachment">Eranskina</string>
     <string name="back">Atzera</string>
     <string name="close">Itxi</string>
+    <string name="forward">Birbidali</string>
+    <string name="archive">Artxibatu</string>
+    <string name="unarchive">Berreskuratu artxibotik</string>
+    <string name="mute">Isilarazi</string>
     <string name="save">Gorde</string>
     <string name="chat">Txata</string>
     <string name="media">Multimedia</string>
     <string name="main_menu">Menu nagusia</string>
+    <string name="start_chat">Hasi txata</string>
     <string name="show_password">Erakutsi pasahitza</string>
     <string name="hide_password">Ezkutatu pasahitza</string>
     <string name="not_now">Orain ez</string>
@@ -31,6 +37,8 @@
     <string name="one_moment">Unetxo bat...</string>
     <string name="done">Egina</string>
     <string name="undo">Desegin</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <string name="next">Hurrengoa</string>
     <string name="error">Errorea</string>
     <string name="error_x">Errorea: %1$s</string>
     <string name="error_no_network">Sarea ez dago eskuragarri.</string>
@@ -43,6 +51,8 @@
     <string name="bad_email_address">E-mail helbide okerra.</string>
     <string name="password">Pasahitza</string>
     <string name="now">Orain</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Arriskua</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d min</string>
     <string name="today">Gaur</string>
@@ -121,7 +131,7 @@
     <string name="menu_new_contact">Kontaktu berria</string>
     <string name="menu_new_chat">Txat berria</string>
     <string name="menu_new_group">Talde berria</string>
-    <string name="menu_new_verified_group">Egiaztatutako talde berria (esperimentala)</string>
+    <string name="menu_new_verified_group">Egiaztatutako talde berria</string>
     <string name="menu_send">Bidali</string>
     <string name="menu_toggle_keyboard">Txandakatu emoji teklatua</string>
     <string name="menu_edit_group">Editatu taldea</string>
@@ -169,6 +179,11 @@
     <string name="menu_zoom_out">Urrundu zooma</string>
     <string name="menu_save_log">Gorde egunkaria</string>
     <string name="title_share_location">Partekatu kokalekua taldeko kide guztiak</string>
+    <string name="device_talk">Gailuaren mezuak</string>
+    <string name="device_talk_subtitle">Lokalki sortutako mezuak</string>
+    <string name="device_talk_explain">Txat honetako mezuak zure Delta Chat aplikazioak sortu ditu lokalki. Egileek aplikazioaren eguneraketei buruz eta erabileran arazoei buruz informatzeko erabiltzen dute.</string>
+    <string name="device_talk_welcome_message">Ongi etorri Delta Chat-era! Delta Chat beste bat bateko mezularitza aplikazioen itxura du, baina ez du kontrol zentralizaturik, ez dizu jarraitzen edo saltzen, ez zu ez zure lagunak, lankideak edo familia elkarte handi bati.\n\nTeknikoki, Delta Chat e-mail aplikazio bat da interfaze berri batekin. E-maila jantzi berri batekin esan genezake 👻\n\nErabili Delta Chat milaka miloika pertsonekin,  erabili bere e-mail helbidea eta kitto. Hartzaileek ez dute zertan Delta Chat instalatu behar, ez webguneak bisitatu edo izena eman inon. Hala ere, jakina, instalatu nahi badute hona bideratu ditzakezu 👉 https://get.delta.chat</string>
+    <string name="edit_contact">Editatu kontaktua</string>
 
     <string name="mute_for_one_hour">Mututu ordubete</string>
     <string name="mute_for_two_hours">Mututu 2 ordu</string>
@@ -246,6 +261,8 @@
     <string name="chat_archived_label">Artxibatuta</string>
     <string name="chat_no_messages">Mezurik ez.</string>
     <string name="chat_self_talk_subtitle">Nire buruari bidalitako mezuak</string>
+    <string name="saved_messages">Gordetako mezuak</string>
+    <string name="saved_messages_explain">• Birbidali mezuak hona eskura izateko\n\n• Hartu oharrak edo ahots mezuak\n\n• Gehitu multimedia horietara</string>
     <string name="chat_contact_request">Kontaktua eskatuta</string>
     <string name="chat_no_contact_requests">Kontaktu eskaerarik ez.\n\nE-mail klasikoak hemen kontaktu eskari gisa agertzea nahi baduzu, aplikazioaren ezarpenetan aldatu dezakezu.</string>
     <string name="retry_send">Saiatu berriro mezua bidaltzen</string>
@@ -283,7 +300,7 @@
     <string name="tab_gallery_empty_hint">Txat honetan partekatutako irudi eta bideoak agertuko dira hemen</string>
     <string name="tab_docs_empty_hint">Txat honetan partekatutako dokumentuak, musika, eta bestelako fitxategiak agertuko dira hemen</string>
     <string name="media_preview">Multimediaren aurrebista</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Lagun onek ez diete bere lagunei itxitako mezularitza guneetan giltzaperatzea.</string>
@@ -291,22 +308,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Munduan erabiltzaile gehien dituen mezularitza aplikazioa. Librea eta independentea.</string>
-    <string name="welcome_intro2_headline">Independientea</string>
-    <string name="welcome_intro2_message">Ez dago Delta Chat zerbitzaririk. Aplikazioak zure e-mail zerbitzaria darabil.</string>
-    <string name="welcome_intro3_headline">Azkarra</string>
-    <string name="welcome_intro3_message">Bidali mezuak segundotan.\nInterfaze azkarra</string>
-    <string name="welcome_intro4_headline">Ahaltsua</string>
-    <string name="welcome_intro4_message">Txatak, irudiak, bideoak, audio-mezuak eta gehiago mugarik gabe. Hainbat bezeroekin bateragarria.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Librea</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Txat doan da betirako. Librea. Iragarkirik gabe. Harpidetzarik gabe. Hornitzaile bakarrera lotu gabe.</string>
-    <string name="welcome_intro6_headline">Zifratua</string>
-    <string name="welcome_intro6_message">Zifratuta ohiko algoritmoekin. Mezuak zure zerbitzarian gordetzen dira.</string>
-    <string name="welcome_intro7_headline">Fidagarria</string>
-    <string name="welcome_intro7_message">Delta Chat segurua da negozioetarako, bateragarria eta estandarretan oinarritua.</string>
     <string name="welcome_start_messaging">Hasi txateatzen</string>
     <string name="login_title">Hasi saioa</string>
     <string name="login_header">Hasi saioa zure zerbitzarian</string>
@@ -345,6 +347,9 @@
     <string name="accept_invalid_hostnames">Onartu ostalari izen baliogabeak</string>
     <string name="accept_invalid_certificates">Onartu ziurtagiri baliogabeak</string>
 
+    <string name="used_settings">Erabilitako ezarpenak:</string>
+    <string name="delete_account">Ezabatu kontua</string>
+    <string name="delete_account_ask">Ziur al zaude zure kontuaren datuak ezabatu nahi dituzula?</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -514,6 +519,7 @@
 
 
     <!-- qr code stuff -->
+    <string name="qr_code">QR kodea</string>
     <string name="qrscan_title">Eskaneatu QR kodea</string>
     <string name="qrscan_hint">Kokatu zure kamera QR kodearen gainean</string>
     <string name="qrscan_ask_join_group">\"%1$s\" taldera elkartu nahi duzu?</string>
@@ -537,8 +543,6 @@
     <string name="contact_not_verified">Ezin da %1$s egiaztatu</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Aldatu %1$s(r)en ezarpena</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d mezu berri %2$d txatetan</string>
     <string name="notify_most_recent_from">%1$s(r)en azkena</string>
@@ -569,11 +573,10 @@
     <string name="perm_explain_access_to_location_denied">Delta Chat-ek kokaleku aatzitzeko baimena behar du kokalekua eransteko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"baimenak\", eta gaitu \"Kokalekua\".</string>
     <string name="perm_enable_bg_reminder_title">Sakatu hemen mezuak jasotzeko Delta Chat bigarren planoan dagoenean.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat-ek baliabide gutxi erabiltzen ditu eta zure bateria ez agortzeaz arduratzen da.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Zifratutako mezua</string>
 
-    <!-- desktop specific strings -->
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="welcome_desktop">Ongi etorri Delta Chat-era</string>
     <string name="login_known_accounts_title_desktop">Kontu ezagunak</string>
     <string name="global_menu_preferences_language_desktop">Hautatu hizkuntza...</string>
@@ -592,7 +595,7 @@
     <string name="global_menu_help_desktop">Laguntza</string>
     <string name="global_menu_help_learn_desktop">Ikasi gehiago Delta Chat-i buruz</string>
     <string name="global_menu_help_contribute_desktop">Hartu parte GitHub-en</string>
-    <string name="global_menu_help_report_desktop">Eman arazo baten berri...</string>
+    <string name="global_menu_help_report_desktop">Eman arazo baten berri</string>
     <string name="global_menu_help_about_desktop">Delta Chat-i buruz</string>
     <string name="no_chat_selected_suggestion_desktop">Hautatu txat bat edo sortu txat berri bat</string>
     <string name="write_message_desktop">Idatzi mezu bat</string>
@@ -656,4 +659,10 @@
     <string name="a11y_remove_account_btn_label">Kendu kontua</string>
     <string name="a11y_message_context_menu_btn_label">Mezu-ekintzak</string>
     <string name="a11y_background_preview_label">Atzealdearen aurrebista</string>
+
+    <!-- Translators: These strings are only used on iOS -->
+    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Kamera atzitzeko baimena emateak argazkiak eta bideoak ateratzea ahalbidetzen dizu.</string>
+    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Kontaktuen liburua atzitzeko baimena emateak zure gailuko kontaktuekin txateatzea ahalbidetzen dizu.</string>
+    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Mikrofonoa  atzitzeko baimena emateak audioa grabatzea ahalbidetzen dizu.</string>
+    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Argazkien bilduma atzitzeko baimena emateak bertatik argazkiak igotzea ahalbidetzen dizu.</string>
 </resources>

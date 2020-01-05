@@ -107,7 +107,7 @@
     <string name="menu_new_contact">Contacte nou</string>
     <string name="menu_new_chat">Nova conversa</string>
     <string name="menu_new_group">Grup nou</string>
-    <string name="menu_new_verified_group">Nou grup verificat (experimental)</string>
+    <string name="menu_new_verified_group">Nou grup verificat</string>
     <string name="menu_send">Envia</string>
     <string name="menu_toggle_keyboard">Canvia al teclat d\'emoticones</string>
     <string name="menu_edit_group">Modifica el grup</string>
@@ -147,7 +147,6 @@
     <string name="menu_deaddrop_subtitle">Prem a missatge per començar a xatejar</string>
     <string name="menu_view_profile">Visualitza el perfil</string>
     <string name="title_share_location">Comparteix la ubicació amb tots els membres del grup</string>
-
     <string name="mute_for_one_hour">Silencia 1 hora</string>
     <string name="mute_for_two_hours">Silencia 2 hores</string>
     <string name="mute_for_one_day">Silencia 1 dia</string>
@@ -230,7 +229,7 @@
     <string name="group_self_not_in_group">Has de ser membre del grup per poder fer això.</string>
     <string name="profile_encryption">Encriptació</string>
     <string name="media_preview">Previsualització multimèdia</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Els amics no deixen els amics tancats en sitges de missatgeria.</string>
@@ -238,22 +237,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">El programa de missatgeria amb més ususaris del món. Gratuït i independent.</string>
-    <string name="welcome_intro2_headline">Independent</string>
-    <string name="welcome_intro2_message">No hi ha servidor de Delta Chat. L\'app només fa servir el teu servidor de correu electrònic.</string>
-    <string name="welcome_intro3_headline">Ràpid</string>
-    <string name="welcome_intro3_message">Envia missatges en segons.\nInterfície ràpida.</string>
-    <string name="welcome_intro4_headline">Potent</string>
-    <string name="welcome_intro4_message">Xats il·limitats, imatges, vídeos, missatges de so i més coses. Capacitat de multi-client.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Lliure</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat serà sempre lliure. Sense anuncis. Sense subscripció. Sense bloqueig de proveïdor.</string>
-    <string name="welcome_intro6_headline">Encriptat</string>
-    <string name="welcome_intro6_message">Encriptat amb els algoritmes habituals. Els missatges només es guarden al vostres servidors.</string>
-    <string name="welcome_intro7_headline">Fiable</string>
-    <string name="welcome_intro7_message">Delta Chat és segur per l\'ús empresarial, compatible i basat en estàndards.</string>
     <string name="welcome_start_messaging">Comenceu a comunicar-vos</string>
     <string name="login_title">Identifiqueu-vos</string>
     <string name="login_header">Identifiqueu-vos al vostre servidor</string>
@@ -433,7 +417,6 @@
     <string name="screenlock_inactivity_timeout_interval">Interval de temps d\'inactivitat </string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">Escaneja codi QR</string>
     <string name="qrscan_hint">Poseu la càmera davant del codi QR</string>
     <string name="qrscan_ask_join_group">Voleu unir-vos al grup \"%1$s\"?</string>
@@ -455,8 +438,6 @@
     <string name="contact_not_verified">No es pot verificar%1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Configuració canviada per %1$s</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d missatges nous en %2$d xats</string>
     <string name="notify_most_recent_from">El més nou des de : %1$s</string>
@@ -487,7 +468,6 @@
     <string name="perm_explain_access_to_location_denied">Delta Chat necessita accedir a la ubicació per poder-la adjuntar, però li ha estat denegada de forma permanent. Vés a les preferències del menú de l\'aplicació, tria \"Permisos i activa-hi la \"Ubicació\".</string>
     <string name="perm_enable_bg_reminder_title">Prem aquí per rebre missatges mentre Delta Chat és en segon pla.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat fa servir els recursos mínims i procura no gastar gaire bateria.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Missatge encriptat</string>
 
@@ -507,7 +487,7 @@
     <string name="global_menu_view_developer_tools_desktop">Eines de desenvolupador</string>
     <string name="global_menu_help_desktop">Ajuda</string>
     <string name="global_menu_help_contribute_desktop">Col·labora a GitHub</string>
-    <string name="global_menu_help_report_desktop">Informa d\'un problema...</string>
+    <string name="global_menu_help_report_desktop">Informa d\'un problema</string>
     <string name="no_chat_selected_suggestion_desktop">Tria un xat o crea\'n un de nou</string>
     <string name="write_message_desktop">Escriu un missatge</string>
     <string name="encryption_info_title_desktop">Informació de xifratge</string>
