@@ -15,8 +15,7 @@ const getConfig = () => {
     showNotificationContent: true,
     locale: 'en',
     credentials: {
-      addr: process.env.DC_ADDR,
-      mail_pw: process.env.DC_MAIL_PW
+      addr: process.env.DC_ADDR
     },
     bounds: {
       x: 0,
