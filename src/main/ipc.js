@@ -285,7 +285,7 @@ function init (cwd, state, logHandler) {
         txCoreStrings()
       )
     } else {
-      log.error('Previous account not found!', state.saved.credentials)
+      log.error('Previous account not found!', state.saved.credentials, 'is not in the list of found logins:', state.logins)
     }
   }
 }
