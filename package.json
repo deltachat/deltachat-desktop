@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "npm run watch-other && npm run watch-js",
-    "watch-other": "node bin/watch &",
+    "watch-other": "npm run build-css && node bin/watch &",
     "watch-js": "webpack --mode=development --progress --profile --colors --watch",
     "test": "npm run test-standard && npm run test-log-conventions && npm run test-unit",
     "test-standard": "standard",
