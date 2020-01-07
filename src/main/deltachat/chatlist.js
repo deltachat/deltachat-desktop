@@ -232,19 +232,8 @@ module.exports = class DCChatList extends SplitOut {
     return this._dc.getFreshMessages().length
   }
 
-  async _getMessage (id) {
-    return this._dc.getMessage(id)
-  }
-
   async _deadDropMessage (id) {
-    const msg = await this._getMessage(id)
-    const fromId = msg && msg.getFromId()
-    if (!fromId) {
-      log.warn('Ignoring DEADDROP due to missing fromId')
-      return
-    }
-    const contact = await this._getChatContact(fromId)
-    return { id, contact }
+    return await this._controller.messageList.getMessage(id)
   }
 
   updateChatList () {
