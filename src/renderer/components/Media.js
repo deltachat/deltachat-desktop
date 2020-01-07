@@ -74,18 +74,18 @@ export default class Media extends React.Component {
     const { medias } = this.state
     const tx = window.translate
     return <div className='media-view'>
-      <div class='bp3-tabs' style={{ minWidth: 200 }}>
-        <ul class='bp3-tab-list .modifier' role='tablist'>
+      <div className='bp3-tabs' style={{ minWidth: 200 }}>
+        <ul className='bp3-tab-list .modifier' role='tablist'>
           {Object.keys(GROUPS).map((id) => {
             return <li
               key={id}
-              class='bp3-tab' role='tab'
+              className='bp3-tab' role='tab'
               aria-selected={this.state.id === id} onClick={() => this.onSelect(id)}>
               {tx(id)}
             </li>
           })}
         </ul>
-        <div class='bp3-tab-panel' role='tabpanel'>
+        <div className='bp3-tab-panel' role='tabpanel'>
           <div className='gallery'>
             {medias.map((message) => {
               var msg = message.msg
@@ -100,7 +100,7 @@ export default class Media extends React.Component {
                 }} />
               </div>
             })}
-            </div>
+          </div>
         </div>
       </div>
     </div>
