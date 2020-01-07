@@ -5,7 +5,7 @@
     padding: 10px;
     margin-top: 50px;
 
-    &>.gallery {
+    & .gallery {
         height: calc(100vh - 50px - 40px - 10px);
         overflow: scroll;
         padding-top: 20px;
@@ -20,7 +20,11 @@
             }
 
             .module-message__img-attachment {
-                max-width: 120pt;
+                width: 120pt;
+                height: 120pt !important;
+                min-width: unset;
+                min-height: unset;
+                max-height: unset;
             }
         }
     }
