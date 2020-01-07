@@ -8,30 +8,30 @@ import { useChatStore } from '../../stores/chat'
  * handle contact requests
  */
 export default function DeadDrop (props) {
-  const { deaddrop, onClose } = props
+  const { contact, msg, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
 
   const never = () => {
-    callDcMethod('contacts.blockContact', [deaddrop.contact.id])
+    callDcMethod('contacts.blockContact', [contact.id])
     onClose()
   }
 
   const notNow = async () => {
-    const contactId = deaddrop.contact.id
+    const contactId = contact.id
     await callDcMethodAsync('contacts.markNoticedContact', [contactId])
     onClose()
   }
 
   const yes = async () => {
-    const messageId = deaddrop.msg.id
-    const contactId = deaddrop.contact.id
+    const messageId = msg.id
+    const contactId = contact.id
     const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [{ messageId, contactId }])
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     onClose()
   }
 
-  const isOpen = !!deaddrop
-  const nameAndAddr = deaddrop && deaddrop.contact && deaddrop.contact.nameAndAddr
+  const isOpen = !!contact
+  const nameAndAddr = contact && contact.nameAndAddr
 
   const tx = window.translate
   const body = tx('ask_start_chat_with', nameAndAddr)
