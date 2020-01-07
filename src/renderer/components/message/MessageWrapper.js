@@ -91,7 +91,9 @@ export function RenderMessage (props) {
   if (isSetupmessage) {
     props.onClickMessageBody = () => openDialog('EnterAutocryptSetupMessage', { message })
   } else if (isDeadDrop) {
-    props.onClickMessageBody = () => openDialog('DeadDrop', { deaddrop: message })
+    props.onClickMessageBody = () => {
+      openDialog('DeadDrop', message)
+    }
   }
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
