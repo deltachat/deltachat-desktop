@@ -35,7 +35,7 @@ const NavbarGroupSubtitle = styled.div`
   color: ${props => props.theme.navBarGroupSubtitle};
 `
 
-const Welcome = styled.div`
+const NoChatSelected = styled.div`
   width: 70%;
   float: right;
   height: calc(100vh - 50px);
@@ -84,11 +84,9 @@ export default function MainScreen () {
         chat={selectedChat}
       />)
     : (
-      <Welcome>
-        <h1>{tx('welcome_desktop')}</h1>
-        <h3>{tx('no_chat_selected_suggestion_desktop')}</h3>
-        <img src={'../images/image-80.svg'} className='welcome-image' />
-      </Welcome>
+      <NoChatSelected>
+        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+      </NoChatSelected>
     )
 
   return (

@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+- removed welcome screen and image
+
 ## [0.901.0] - 2019-12-20
 
 ### Changed
