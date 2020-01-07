@@ -133,6 +133,10 @@
             .line-break:last-child {
                 height: 0px;
             }
+
+            &.text--clickable {
+                cursor: pointer;
+            }
         }
     }
 
@@ -298,9 +302,6 @@
     }
 }
 
-.msg-body--is-clickable {
-    cursor: pointer;
-}
 
 
 // Media queries (responsiveness)
