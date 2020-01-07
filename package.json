@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "watch": "npm run watch-other && npm run watch-js",
-    "watch-other": "node bin/watch &",
-    "watch-ts": "tsc -b src/renderer -w &",
-    "watch-js": "npm run watch-ts && webpack --config build/renderer.wpc.js --mode=development --progress --hide-modules --colors --watch --build-delimiter webpack-completed",
+    "watch-other": "npm run build-css && node bin/watch &",
+    "watch-js": "webpack --mode=development --progress --profile --colors --watch",
     "test": "npm run test-standard && npm run test-log-conventions && npm run test-unit",
     "test-standard": "standard",
     "test-standard-fix": "standard --fix",
