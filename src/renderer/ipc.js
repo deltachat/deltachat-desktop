@@ -55,3 +55,14 @@ export function callDcMethodAsync (fnName, args) {
 export function mainProcessUpdateBadge () {
   ipcRenderer.send('update-badge')
 }
+
+export function saveLastChatId (chatId) {
+  ipcRenderer.send('saveLastChatId', chatId)
+}
+
+/**
+ * get the last selected chats id from previous session
+ */
+export function getLastSelectedChatId () {
+  return ipcRenderer.sendSync('getLastSelectedChatId')
+}

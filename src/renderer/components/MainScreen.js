@@ -19,6 +19,7 @@ import {
   Popover,
   Button
 } from '@blueprintjs/core'
+import { getLastSelectedChatId } from '../ipc'
 
 export default function MainScreen () {
   const [queryStr, setQueryStr] = useState('')
@@ -44,6 +45,15 @@ export default function MainScreen () {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
       openViewProfileDialog(screenContext, selectedChat.contacts[0])
+    }
+  }
+
+  const [isFirstLoad, setFirstLoad] = useState(true)
+  if (isFirstLoad) {
+    setFirstLoad(false)
+    const lastChatId = getLastSelectedChatId()
+    if (lastChatId) {
+      chatStoreDispatch({ type: 'SELECT_CHAT', payload: lastChatId })
     }
   }
 
