@@ -10,7 +10,7 @@
 
 .delta-dialog-content {
   flex: 1 1 auto; 
-  padding: 0px;
+  padding: 0px 20px;
   background-color: var(--bp3DialogHeaderBg);
 
   .delta-dialog-content-text-seperator {
@@ -21,5 +21,14 @@
     color: #565656;
     line-height: 40px;
     font-size: 17px;
+  }
+
+  &.delta-dialog-content--no-padding {
+    padding: 0px;
+  }
+
+  &.delta-dialog-content--no-overflow {
+    display: flex;
+    flex-direction: column;
   }
 }
