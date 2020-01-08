@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react'
-import styled from 'styled-components'
 import ScreenContext from '../contexts/ScreenContext'
-
 import Media from './Media'
 import Menu from './Menu'
 import ChatList from './chat/ChatList'
@@ -9,7 +7,6 @@ import MessageListAndComposer from './message/MessageListAndComposer'
 import SearchInput from './SearchInput'
 import SettingsContext from '../contexts/SettingsContext'
 import { useChatStore } from '../stores/chat'
-import NavbarWrapper from './NavbarWrapper'
 import { openEditGroupDialog, openMapDialog, openViewProfileDialog } from './helpers/ChatMethods'
 
 import {
@@ -22,26 +19,6 @@ import {
   Popover,
   Button
 } from '@blueprintjs/core'
-
-const NavbarGroupName = styled.div`
-  font-size: medium;
-  font-weight: bold;
-  cursor: pointer;
-`
-const NavbarGroupSubtitle = styled.div`
-  font-size: small;
-  font-weight: 100;
-  cursor: pointer;
-  color: ${props => props.theme.navBarGroupSubtitle};
-`
-
-const NoChatSelected = styled.div`
-  width: 70%;
-  float: right;
-  height: calc(100vh - 50px);
-  margin-top: 50px;
-  text-align: center;
-`
 
 export default function MainScreen () {
   const [queryStr, setQueryStr] = useState('')
@@ -84,14 +61,14 @@ export default function MainScreen () {
         chat={selectedChat}
       />)
     : (
-      <NoChatSelected>
+      <div className='no-chat-selected-screen'>
         <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-      </NoChatSelected>
+      </div>
     )
 
   return (
-    <div>
-      <NavbarWrapper>
+    <div className='main-screen'>
+      <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <SearchInput
@@ -109,8 +86,12 @@ export default function MainScreen () {
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>
-              <NavbarGroupName onClick={onTitleClick}>{selectedChat ? selectedChat.name : ''}</NavbarGroupName>
-              <NavbarGroupSubtitle onClick={onTitleClick}>{selectedChat ? selectedChat.subtitle : ''}</NavbarGroupSubtitle>
+              <div className='navbar-chat-name' onClick={onTitleClick}>
+                {selectedChat ? selectedChat.name : ''}
+              </div>
+              <div className='navbar-chat-subtile' onClick={onTitleClick}>
+                {selectedChat ? selectedChat.subtitle : ''}
+              </div>
             </NavbarHeading>
             {selectedChat && selectedChat.id && <span className='views'>
               <Button
@@ -148,7 +129,7 @@ export default function MainScreen () {
             </span>
           </NavbarGroup>
         </Navbar>
-      </NavbarWrapper>
+      </div>
       <div>
         <ChatList
           queryStr={queryStr}

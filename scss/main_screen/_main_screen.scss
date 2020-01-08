@@ -1,0 +1,24 @@
+.main-screen {
+
+    .navbar-chat-name {
+        font-size: medium;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .navbar-chat-subtile {
+        font-size: small;
+        font-weight: 100;
+        cursor: pointer;
+        color: var(--navBarGroupSubtitle);
+    }
+
+    .no-chat-selected-screen {
+        width: 70%;
+        float: right;
+        height: calc(100vh - 50px);
+        margin-top: 50px;
+        text-align: center;
+    }
+
+}
