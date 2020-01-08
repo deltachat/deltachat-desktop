@@ -69,6 +69,6 @@ module.exports = styled.div`
   }
 
   .bp3-popover-target {
-    margin-right: 1vw;
+    margin-right: 6px;
   }
 `
