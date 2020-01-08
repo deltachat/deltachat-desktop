@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { remote } from 'electron'
 import { sendToBackend, ipcBackend } from '../ipc'
-import NavbarWrapper from './NavbarWrapper'
 import styled from 'styled-components'
 import Login from './Login'
 import {
@@ -201,13 +200,13 @@ export default function LoginScreen (props) {
 
   return (
     <LoginWrapper>
-      <NavbarWrapper>
+      <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
             <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
-      </NavbarWrapper>
+      </div>
       <div className='window'>
         { props.logins.length > 0 && <Card>
           <DeltaHeadline>{tx('login_known_accounts_title_desktop')}</DeltaHeadline>
