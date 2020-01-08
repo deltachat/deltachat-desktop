@@ -40,7 +40,8 @@ function getDefaultState () {
       locale: 'en',
       credentials: null,
       enableOnDemandLocationStreaming: false,
-      chatViewBgImgPath: undefined
+      chatViewBgImg: undefined,
+      lastChats: {}
     }
   }
 }

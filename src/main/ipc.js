@@ -183,6 +183,20 @@ function init (cwd, state, logHandler) {
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
+  ipcMain.on('saveLastChatId', (e, chatId) => {
+    const { lastChats } = app.state.saved
+    lastChats[dcController.credentials.addr] = chatId
+    sendStateToRenderer()
+    // don't save to disk, because this is already done on close and it might block
+    // we can ignore the crash case, because a crash isn't supposed to happen
+    // and it's not important data
+  })
+
+  ipcMain.on('getLastSelectedChatId', (e) => {
+    const { lastChats } = app.state.saved
+    e.returnValue = lastChats[dcController.credentials.addr]
+  })
+
   ipcMain.on('selectBackgroundImage', (e, file) => {
     const copyAndSetBg = async (originalfile) => {
       await fs.ensureDir(path.join(getConfigPath(), 'background/'))
