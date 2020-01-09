@@ -8,7 +8,7 @@ const log = logger.getLogger('renderer/helpers/ChatList')
 
 const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
   callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], cb)
-}, 200)
+}, 10)
 
 export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
   if (!_queryStr) _queryStr = ''
@@ -146,7 +146,7 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   const onChatListScroll = () => {
-    fetchChatsInView(5)
+    fetchChatsInView(10)
   }
 
   const onChatListItemChanged = (event, { chatId }) => {
@@ -166,7 +166,7 @@ export const useLazyChatListItems = chatListIds => {
 
   useEffect(() => {
     log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
-    fetchChatsInView(0)
+    fetchChatsInView(10)
     ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
@@ -176,7 +176,7 @@ export const useLazyChatListItems = chatListIds => {
   useEffect(() => {
     if (Object.keys(chatItems).length > 0) return
     if (!scrollRef.current) return
-    fetchChatsInView(0)
+    fetchChatsInView(10)
   }, [chatListIds, chatItems, scrollRef])
   return { chatItems, onChatListScroll, scrollRef }
 }
