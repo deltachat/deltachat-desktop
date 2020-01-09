@@ -21,7 +21,7 @@ export function sendToBackend (event, ...args) {
   if (args.length === 0) return
   const before = performance.now();
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
-  //ipcRenderer.send('ALL', event, ...args)
+  ipcRenderer.send('ALL', event, ...args)
   ipcRenderer.send(event, ...args)
   const after = performance.now();
   const during = after - before
