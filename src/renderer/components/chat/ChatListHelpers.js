@@ -103,7 +103,7 @@ export const useLazyChatListItems = chatListIds => {
     const chats = await fetchChats(chatIds)
 
     if (!chats) return
-    log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
+    // log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
     setChatItems(chatItems => { return { ...chatItems, ...chats } })
   }
 
@@ -159,7 +159,7 @@ export const useLazyChatListItems = chatListIds => {
 
   const onResize = () => fetchChatsInView(10)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [chatListIds, chatItems, scrollRef])

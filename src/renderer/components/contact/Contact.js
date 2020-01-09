@@ -66,19 +66,19 @@ export function Avatar (props) {
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <AvatarBubble color={color}>
+    <div className='AvatarBubble' style={{backgroundColor: color}}>
       {initial}
-    </AvatarBubble>
+    </div>
   )
 }
 
 export function QRAvatar () {
   return (
-    <AvatarBubble>
+    <div className='AvatarBubble'>
       <QRAvatarQRCodeImg src='../images/qr_icon.png'
         className='sharp-pixel-image'
       />
-    </AvatarBubble>
+    </div>
   )
 }
 

@@ -92,7 +92,7 @@ const ChatListItemArchiveLink = React.memo(props => {
   )
 })
 
-const ChatListItemNormal = React.memo(props => {
+const ChatListItemNormal = React.memo(function ChatListItemNormal(props) {
   const { chatListItem, onClick, isSelected, onContextMenu } = props
   return (
     <div
@@ -117,7 +117,7 @@ const ChatListItemNormal = React.memo(props => {
   )
 })
 
-const ChatListItemDeaddrop = React.memo(props => {
+const ChatListItemDeaddrop = React.memo(function ChatListItemDeaddrop(props) {
   const { chatListItem } = props
   const { openDialog } = useContext(ScreenContext)
   const onClick = () => openDialog('DeadDrop', { deaddrop: chatListItem.deaddrop })
@@ -140,7 +140,7 @@ const ChatListItemDeaddrop = React.memo(props => {
   )
 })
 
-const ChatListItem = React.memo(props => {
+const ChatListItem = React.memo(function ChatListItem(props) {
   const { chatListItem, onClick } = props
   if (chatListItem === null) return null
   if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
