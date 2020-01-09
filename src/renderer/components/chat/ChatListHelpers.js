@@ -146,7 +146,7 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   const onChatListScroll = () => {
-    fetchChatsInView(20)
+    fetchChatsInView(5)
   }
 
   const onChatListItemChanged = (event, { chatId }) => {

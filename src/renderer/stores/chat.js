@@ -164,7 +164,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
   }
 })
 
-ipcBackend.on('DD_EVENT_CHAT_MODIFIED', debounce((evt, payload) => {
+ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
   const { chatId, chat } = payload
   const state = chatStore.getState()
   if (state.id !== chatId) {
@@ -178,7 +178,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', debounce((evt, payload) => {
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup
     } })
-}, 1000))
+})
 
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
   chatStore.dispatch({

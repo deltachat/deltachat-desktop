@@ -69,8 +69,8 @@ module.exports = class DCChatList extends SplitOut {
 
   async getChatListItemsByIds (chatIds) {
     if (chatIds.length === 0) return []
-    const label = '[BENCH] getChatListItemByIds ' + JSON.stringify(chatIds)
-    console.time(label)
+    //const label = '[BENCH] getChatListItemByIds ' + JSON.stringify(chatIds)
+    //console.time(label)
     const chats = {}
     let list
     let i = 0
@@ -84,7 +84,7 @@ module.exports = class DCChatList extends SplitOut {
       const chat = await this.getChatListItemById(chatId, list, i)
       chats[chatId] = chat
     }
-    console.timeEnd(label)
+    //console.timeEnd(label)
     return chats
   }
 
