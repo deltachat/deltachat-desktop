@@ -139,9 +139,9 @@ export function DeltaDialogContent (props) {
     <div style={props.style} className={classNames(
       'delta-dialog-content', {
         'delta-dialog-content--no-padding': noPadding,
-        'delta-dialog-content--no-overflow': noOverflow,
+        'delta-dialog-content--no-overflow': noOverflow
 
-    })}>
+      })}>
       {props.children}
     </div>
   )
