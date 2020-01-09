@@ -247,7 +247,7 @@ const Message = (props) => {
           direction,
           message }} />
 
-        <div dir='auto' className={classNames('text', {'text--clickable': onClickMessageBody})} onClick={props.onClickMessageBody}>
+        <div dir='auto' className={classNames('text', { 'text--clickable': onClickMessageBody })} onClick={props.onClickMessageBody}>
           {message.msg.isSetupmessage ? tx('autocrypt_asm_click_body') : <MessageBody text={text || ''} />}
         </div>
         {longMessage && <button onClick={onShowDetail}>...</button>}

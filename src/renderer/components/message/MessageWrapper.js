@@ -85,7 +85,7 @@ export function RenderMessage (props) {
     message,
     hasLocation: (msg.hasLocation && locationStreamingEnabled)
   }
-  
+
   const isSetupmessage = message.msg.isSetupmessage
   const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
   if (isSetupmessage) {
@@ -93,7 +93,6 @@ export function RenderMessage (props) {
   } else if (isDeadDrop) {
     props.onClickMessageBody = () => openDialog('DeadDrop', { deaddrop: message })
   }
-
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
   if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
