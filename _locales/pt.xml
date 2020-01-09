@@ -103,7 +103,7 @@
     <string name="menu_new_contact">Novo contacto</string>
     <string name="menu_new_chat">Nova chat</string>
     <string name="menu_new_group">Novo grupo</string>
-    <string name="menu_new_verified_group">Novo grupo verificado (experimental)</string>
+    <string name="menu_new_verified_group">Novo grupo verificado</string>
     <string name="menu_send">Enviar</string>
     <string name="menu_toggle_keyboard">Alternar teclado emoji</string>
     <string name="menu_edit_group">Editar grupo</string>
@@ -213,7 +213,7 @@
     <string name="group_self_not_in_group">Você deve ser um membro do grupo para executar essa ação.</string>
     <string name="profile_encryption">Encriptação</string>
     <string name="media_preview">Visualização de mídia</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Amigos não deixam amigos fechados em silos de mensagens.</string>
@@ -221,22 +221,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">O mensageiro com o público mais amplo do mundo. Livre e independente.</string>
-    <string name="welcome_intro2_headline">Independente</string>
-    <string name="welcome_intro2_message">Não há servidor do Delta Chat. O aplicativo usa apenas o seu servidor de email.</string>
-    <string name="welcome_intro3_headline">Rápido</string>
-    <string name="welcome_intro3_message">Envie mensagens em segundos. \n Interface rápida.</string>
-    <string name="welcome_intro4_headline">Potente</string>
-    <string name="welcome_intro4_message">chats, imagens, vídeos, mensagens de áudio e muito mais. Capacidade multi-cliente.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Grátis</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">O Delta Chat é gratuito para sempre. Código aberto. Sem anúncios. Nenhuma assinatura Nenhum bloqueio de fornecedor.</string>
-    <string name="welcome_intro6_headline">Encriptado</string>
-    <string name="welcome_intro6_message">Encriptado com todos os algoritmos comuns. Mensagens ficam no seu servidor.</string>
-    <string name="welcome_intro7_headline">Fidedigno</string>
-    <string name="welcome_intro7_message">O Delta Chat é seguro para uso comercial, compatível e baseado em standards.</string>
     <string name="welcome_start_messaging">Comece a chatr</string>
     <string name="login_title">Login</string>
     <string name="login_header">Login no seu servidor</string>
@@ -407,7 +392,6 @@
     <string name="screenlock_inactivity_timeout_interval">Intervalo de tempo limite de inactividade</string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">Fazer scan do código QR</string>
     <string name="qrscan_hint">Coloque sua câmera sobre o código QR</string>
     <string name="qrscan_ask_join_group">Quer se juntar-se ao grupo \"%1$s\"?</string>
@@ -429,8 +413,6 @@
     <string name="contact_not_verified">Não é possível verificar %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Configuração alterada para %1$s</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d novas mensagens em %2$d chats</string>
     <string name="notify_most_recent_from">Mais recentes de: %1$s</string>
@@ -460,7 +442,6 @@
     <string name="perm_explain_access_to_location_denied">O Delta Chat necessita permissão de acesso à localização para anexar um local, mas ele negado. Por favor, continue no menu de configurações do aplicativo, selecione \"Permissões \"e ative \"Localização\".</string>
     <string name="perm_enable_bg_reminder_title">Toque aqui para receber mensagens mesmo que o Delta Chat esteja em segundo plano.</string>
     <string name="perm_enable_bg_reminder_text">O Delta Chat usa pouquíssimos recursos e busca não consumir muito a bateria.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mensagem encriptada</string>
 
@@ -480,7 +461,7 @@
     <string name="global_menu_view_developer_tools_desktop">Ferramentas do programador</string>
     <string name="global_menu_help_desktop">Ajuda</string>
     <string name="global_menu_help_contribute_desktop">Contribuir no GitHub</string>
-    <string name="global_menu_help_report_desktop">Comunicar um problema ...</string>
+    <string name="global_menu_help_report_desktop">Comunicar um problema</string>
     <string name="no_chat_selected_suggestion_desktop">Selecione um CHAT ou crie um novo</string>
     <string name="write_message_desktop">Escreva uma mensagem</string>
     <string name="encryption_info_title_desktop">Informação sobre encriptação</string>

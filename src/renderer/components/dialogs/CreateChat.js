@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useContext } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { remote } from 'electron'
-import qr from 'react-qr-svg'
 import C from 'deltachat-node/constants'
 
 import { callDcMethodAsync } from '../../ipc'
@@ -31,6 +30,8 @@ import {
   GroupNameInput,
   GroupMemberSearchInput
 } from './Group-Styles'
+
+import { DeltaDialogQrInner } from './QrInviteCode'
 
 export default function CreateChat (props) {
   const { isOpen, onClose } = props
@@ -223,20 +224,7 @@ export const ShowQrCodeInnerDialog = ({ onClickBack, onClose, qrCode, groupName 
         onClickBack={onClickBack}
         onClose={onClose}
       />
-      <DeltaDialogBody>
-        <Card style={{ paddingTop: '0px' }}>
-          <qr.QRCode
-            bgColor='#FFFFFF'
-            fgColor='#000000'
-            level='Q'
-            value={qrCode}
-            style={{ marginTop: 'calc(100% / 2)', padding: '20pt', width: '100%', backgroundColor: 'white' }}
-          />
-        </Card>
-      </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <p style={{ textAlign: 'center' }}>{tx('qrshow_join_group_hint', [groupName])}</p>
-      </DeltaDialogFooter>
+      <DeltaDialogQrInner qrCode={qrCode} description={tx('qrshow_join_group_hint', [groupName])} />
     </>
   )
 }

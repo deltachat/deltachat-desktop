@@ -30,7 +30,6 @@ export default function DeadDrop (props) {
     onClose()
   }
 
-
   const isOpen = !!contact
   const nameAndAddr = contact && contact.nameAndAddr
 

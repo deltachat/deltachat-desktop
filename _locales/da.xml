@@ -108,7 +108,7 @@
     <string name="menu_new_contact">Ny kontakt</string>
     <string name="menu_new_chat">Ny samtale</string>
     <string name="menu_new_group">Ny gruppe</string>
-    <string name="menu_new_verified_group">Ny efterprøvet gruppe (eksperimentel)</string>
+    <string name="menu_new_verified_group">Ny efterprøvet gruppe</string>
     <string name="menu_send">Sende</string>
     <string name="menu_toggle_keyboard">Skifte emoji tastatur</string>
     <string name="menu_edit_group">Redigere gruppe</string>
@@ -155,7 +155,6 @@
     <string name="menu_zoom_in">Forstørre</string>
     <string name="menu_zoom_out">Formindske</string>
     <string name="title_share_location">Del placering med alle gruppe medlemmer</string>
-
     <string name="mute_for_one_hour">Dæmpe i 1 time</string>
     <string name="mute_for_two_hours">Dæmpe i 2 timer</string>
     <string name="mute_for_one_day">Dæmpe i 1 dag</string>
@@ -265,7 +264,7 @@
     <string name="tab_gallery_empty_hint">Billder og video delt i denne samtale vises her.</string>
     <string name="tab_docs_empty_hint">Dokumenter, musik og andre filer delt i denne samtale vises her.</string>
     <string name="media_preview">Medie forhåndvisning</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Venner lader ikke venner være låst i besked siloer.</string>
@@ -273,22 +272,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">Budbringeren med verdens bredeste publikum. Fri og uafhængig.</string>
-    <string name="welcome_intro2_headline">Uafhængig</string>
-    <string name="welcome_intro2_message">Der er ingen Delta Chat server. Programmet bruger kun din e-post server.</string>
-    <string name="welcome_intro3_headline">Hurtig</string>
-    <string name="welcome_intro3_message">Skubbe beskeder på sekunder.\nHurtig grænseflade.</string>
-    <string name="welcome_intro4_headline">Kraftfuld</string>
-    <string name="welcome_intro4_message">Ubegrænsede samtaler, billeder, video, tale beskeder med mere. Multi klient stand.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Fri</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">Delta Chat er fri for altid. Åben kildekode. Ingen reklamer. Intet abonnement. Ingen leverandør låsning.</string>
-    <string name="welcome_intro6_headline">Krypteret</string>
-    <string name="welcome_intro6_message">Krypteret med alle almindelige algoritmer. Beskeder bliver på  serveren.</string>
-    <string name="welcome_intro7_headline">Troværdig</string>
-    <string name="welcome_intro7_message">Delta Chat er sikker til erhvervsmæssig brug, kompatibel og standard baseret.</string>
     <string name="welcome_start_messaging">Start skrivning</string>
     <string name="login_title">Logind</string>
     <string name="login_header">Logind til server</string>
@@ -472,7 +456,6 @@
     <string name="screenlock_inactivity_timeout_interval">Inaktivitet tidsudløb interval</string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">Skanne QR kode</string>
     <string name="qrscan_hint">Placere kamera over QR kode</string>
     <string name="qrscan_ask_join_group">Deltage i gruppen \"%1$s\"?</string>
@@ -496,8 +479,6 @@
     <string name="contact_not_verified">Kan ikke efterprøve %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Ændret opsætning for %1$s</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d nye beskeder i %2$d samtaler</string>
     <string name="notify_most_recent_from">Nylig fra: %1$s</string>
@@ -528,7 +509,6 @@
     <string name="perm_explain_access_to_location_denied">Delta Chat kræver placering tilladelse for at kunne vedhæfte placering, men det er blevet afvist permanent. Fortsæt til program indstillings-menuen, vælg \"Tilladelser\" og aktiver \"Placering\".</string>
     <string name="perm_enable_bg_reminder_title">Tryk her for at modtage beskeder når Delta Chat er i baggrunden.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat bruger minimal resurse og passer på ikke at dræne batteriet.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Krypteret besked</string>
 
@@ -548,7 +528,7 @@
     <string name="global_menu_view_developer_tools_desktop">Udvikler værktøj</string>
     <string name="global_menu_help_desktop">Hjælp</string>
     <string name="global_menu_help_contribute_desktop">Bidrage på GitHub</string>
-    <string name="global_menu_help_report_desktop">Rapportere en sag...</string>
+    <string name="global_menu_help_report_desktop">Rapportere en sag</string>
     <string name="no_chat_selected_suggestion_desktop">Vælg samtale eller opret en ny samtale</string>
     <string name="write_message_desktop">Skrive en besked</string>
     <string name="encryption_info_title_desktop">Kryptering information</string>

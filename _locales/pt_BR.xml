@@ -108,7 +108,7 @@
     <string name="menu_new_contact">Novo contato</string>
     <string name="menu_new_chat">Nova conversa</string>
     <string name="menu_new_group">Novo grupo</string>
-    <string name="menu_new_verified_group">Novo grupo verificado (experimental)</string>
+    <string name="menu_new_verified_group">Novo grupo verificado</string>
     <string name="menu_send">Enviar</string>
     <string name="menu_toggle_keyboard">Ativar teclado emoji</string>
     <string name="menu_edit_group">Editar grupo</string>
@@ -156,7 +156,6 @@
     <string name="menu_zoom_out">Afastar</string>
     <string name="menu_save_log">Salvar registro</string>
     <string name="title_share_location">Compartilhar localização com o grupo</string>
-
     <string name="mute_for_one_hour">Silenciar por 1 hora</string>
     <string name="mute_for_two_hours">Silenciar por 2 horas</string>
     <string name="mute_for_one_day">Silenciar por 1 dia</string>
@@ -267,7 +266,7 @@
     <string name="tab_gallery_empty_hint">Imagens e vídeos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="tab_docs_empty_hint">Documentos, músicas e outros arquivos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="media_preview">Pré-visualização.</string>
-
+    
 
     <!-- invite -->
     <string name="invite_slogan">Ajude seus amigos a se libertarem de aplicativos que exploram seus dados.</string>
@@ -275,22 +274,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_headline">Delta Chat</string>
     <string name="welcome_intro1_message">O aplicativo com a maior base de usuários do mundo. Livre e independente.</string>
-    <string name="welcome_intro2_headline">Independente</string>
-    <string name="welcome_intro2_message">O Delta Chat não tem servidor. O aplicativo usa o seu e-mail.</string>
-    <string name="welcome_intro3_headline">Rápido</string>
-    <string name="welcome_intro3_message">Envie mensagens em segundos.\nInterface rápida.</string>
-    <string name="welcome_intro4_headline">Potente</string>
-    <string name="welcome_intro4_message">Sem limites de conversas, imagens, vídeos, áudios, mensagens, etc. Multicliente.</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_headline">Livre</string>
-    <!-- Translators: "free" as in freedom here, not "free" as in "free beer" -->
-    <string name="welcome_intro5_message">O Delta Chat será livre para sempre. Código aberto. Sem publicidade. Sem conta própria. Sem bloqueio do fornecedor.</string>
-    <string name="welcome_intro6_headline">Criptografado</string>
-    <string name="welcome_intro6_message">Criptografia com algoritmos padrão. As mensagens ficam no servidor de e-mail.</string>
-    <string name="welcome_intro7_headline">Confiável</string>
-    <string name="welcome_intro7_message">O Delta Chat é confiável para usar nos seus negócios e é baseado em padrões abertos.</string>
     <string name="welcome_start_messaging">Comece a conversar</string>
     <string name="login_title">Login</string>
     <string name="login_header">Acesse seu servidor</string>
@@ -481,7 +465,6 @@
     <string name="screenlock_inactivity_timeout_interval">Limite de inatividade</string>
 
 
-    <!-- qr code stuff -->
     <string name="qrscan_title">Escanear código QR</string>
     <string name="qrscan_hint">Aponte sua câmera para o código QR</string>
     <string name="qrscan_ask_join_group">Você quer ingressar no grupo \"%1$s\"?</string>
@@ -505,8 +488,6 @@
     <string name="contact_not_verified">Impossível verificar %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">A configuração Autocrypt mudou para %1$s</string>
-
-
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d novas mensagens em %2$d conversas</string>
     <string name="notify_most_recent_from">Mais recentes de: %1$s</string>
@@ -537,7 +518,6 @@
     <string name="perm_explain_access_to_location_denied">O Delta Chat precisa acessar sua localização para que você possa enviá-la, mas o acesso foi negado. Por favor, habilite o seu acesso nas configurações de permissões do aplicativo.</string>
     <string name="perm_enable_bg_reminder_title">Toque aqui para receber mensagens enquanto o Delta Chat estiver em segundo plano.</string>
     <string name="perm_enable_bg_reminder_text">O Delta Chat usa pouquíssimos recursos e cuida para que sua bateria não esvazie rápido.</string>
-
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mensagem criptografada</string>
 
@@ -557,7 +537,7 @@
     <string name="global_menu_view_developer_tools_desktop">Ferramentas de desenvolvedor</string>
     <string name="global_menu_help_desktop">Ajuda</string>
     <string name="global_menu_help_contribute_desktop">Contribua no GitHub</string>
-    <string name="global_menu_help_report_desktop">Relatar um erro...</string>
+    <string name="global_menu_help_report_desktop">Relatar um erro</string>
     <string name="no_chat_selected_suggestion_desktop">Selecione uma conversa ou crie uma nova</string>
     <string name="write_message_desktop">Escrever uma mensagem</string>
     <string name="encryption_info_title_desktop">Informações da criptografia</string>
