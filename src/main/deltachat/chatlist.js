@@ -17,10 +17,10 @@ module.exports = class DCChatList extends SplitOut {
       this._dc.markNoticedChat(chat.id)
       chat.freshMessageCounter = 0
       const messagIds = this._controller.messageList.getMessageIds(chatId)
-      log.debug('markSeenMessages', messagIds)
+      log.debug('markSeenMessages')
       // TODO: move mark seen logic to frontend
-      this._dc.markSeenMessages(messagIds)
-      app.setBadgeCount(this._getGeneralFreshMessageCounter())
+      setTimeout(() => this._dc.markSeenMessages(messagIds), 0)
+      //app.setBadgeCount(this._getGeneralFreshMessageCounter())
     }
     return chat
   }
@@ -68,7 +68,8 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   async getChatListItemsByIds (chatIds) {
-    const label = '[BENCH] getChatListItemByIds'
+    if (chatIds.length === 0) return []
+    const label = '[BENCH] getChatListItemByIds ' + JSON.stringify(chatIds)
     console.time(label)
     const chats = {}
     let list
@@ -168,6 +169,7 @@ module.exports = class DCChatList extends SplitOut {
   }
 
   async getFullChatById (chatId) {
+    console.time('getFullChatById ' + chatId)
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0
@@ -179,7 +181,7 @@ module.exports = class DCChatList extends SplitOut {
     const draft = await this._getDraft(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
-    return {
+    const fullChat = {
       id: chat.id,
       name: chat.name,
       isVerified: chat.isVerified,
@@ -202,6 +204,8 @@ module.exports = class DCChatList extends SplitOut {
       draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
     }
+    console.timeEnd('getFullChatById ' + chatId)
+    return fullChat
   }
 
   _chatSubtitle (chat, contacts) {
