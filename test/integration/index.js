@@ -1,110 +1,94 @@
+const setup = require('./setup')
+const chaiAsPromised = require('chai-as-promised')
+const chai = require('chai')
+const domHelper = require('./domHelper')
+const config = require('../integration/fixtures/config')
+
 process.env.NODE_ENV = 'test'
 
-const test = require('tape')
-const setup = require('./setup')
-const domHelper = require('./domHelper')
-const testCredentials = setup.getConfig().credentials
+// const setup = require('./setup')
+// const domHelper = require('./domHelper')
+// const testCredentials = setup.getConfig().credentials
 
-test('app runs', async (t) => {
-  const app = setup.createApp()
-  await setup.waitForLoad(app, t)
-  const text = await app.client.getText('.bp3-navbar-heading')
-  t.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
-  setup.endTest(app, t)
-})
+chai.should()
+chai.use(chaiAsPromised)
+const app = setup.createApp()
+const assert = chai.assert
+chai.config.includeStack = true
 
-test('Bad mail address results in error message', async (t) => {
-  const app = setup.createApp()
-  try {
-    await setup.waitForLoad(app, t)
+describe('Deltachat desktop', function () {
+  this.timeout(20000)
+  const account1Credentials = config.account1.credentials
+  const account2Credentials = config.account2.credentials
+  before(function () {
+    chaiAsPromised.transferPromiseness = app.transferPromiseness
+    return app.start()
+  })
+  after(function () {
+    if (app && app.isRunning()) {
+      return app.stop()
+    }
+  })
+  it('app runs', async () => {
+    // await waitForLoad(app, t)
+    const text = await app.client.getText('.bp3-navbar-heading')
+    return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
+  })
+  it('wrong credentials results in error message', async () => {
     app.client
       .setValue('#addr', 'foo')
       .setValue('#mail_pw', 'bar')
       .click('button[type=\'submit\']')
-
     await setup.wait(1000)
     const text = await app.client.getText('.user-feedback')
-    t.equal(text, 'Bad email address.', 'Mail validation error is shown')
-    setup.endTest(app, t)
-  } catch (err) {
-    setup.endTest(app, t, err || 'error')
-  }
-})
-
-test('Valid mail credentials results in success message', async (t) => {
-  const app = setup.createApp()
-  try {
-    await setup.waitForLoad(app, t)
+    app.client.$('.user-feedback').click()
+    return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
+  })
+  it('login with valid credentials works', async () => {
+    app.client.$('#show-advanced-button').click()
     app.client
-      .setValue('#addr', testCredentials.addr)
-      .setValue('#mail_pw', testCredentials.mail_pw)
+      .setValue('#addr', account1Credentials.addr)
+      .setValue('#mail_pw', account1Credentials.mail_pw)
+      .setValue('#mail_server', account1Credentials.mail_server)
       .click('button[type=\'submit\']')
 
     await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
-    const text = await app.client.getText('h1')
-    t.equal(text, 'Welcome to Delta Chat', 'Login successful')
-    setup.endTest(app, t)
-  } catch (err) {
-    app.client.getMainProcessLogs().then(
-      (logs) => console.log(logs)
-    )
-    setup.endTest(app, t, err || 'error')
-  }
-})
-
-test('App uses credentials from existing config file', async (t) => {
-  const app = setup.createAppWithConfig({})
-  try {
-    await setup.waitForLoad(app, t)
-    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
-    const text = await app.client.getText('h1')
-    await t.equal(text, 'Welcome to Delta Chat', 'Welcome message is shown')
-    setup.endTest(app, t)
-  } catch (err) {
-    app.client.getMainProcessLogs().then(
-      (logs) => console.log(logs)
-    )
-    setup.endTest(app, t, err || 'error')
-  }
-})
-
-test('App loads language from config file', async (t) => {
-  const app = setup.createAppWithConfig({ locale: 'de' })
-  try {
-    await setup.waitForLoad(app, t)
-    await app.client.waitUntilTextExists('h1', 'Willkommen bei Delta Chat', 20e3)
-    const text = await app.client.getText('h1')
-    await t.equal(text, 'Willkommen bei Delta Chat', 'Localized welcome message is shown')
-    setup.endTest(app, t)
-  } catch (err) {
-    app.client.getMainProcessLogs().then(
-      (logs) => console.log(logs)
-    )
-    setup.endTest(app, t, err || 'error')
-  }
-})
-
-test('Update and persist Desktop settings', async (t) => {
-  const app = setup.createAppWithConfig({})
-  try {
-    await setup.waitForLoad(app, t)
+    return app.client.getText('h1').should.eventually.equal('Welcome to Delta Chat')
+  })
+  it('changing settings is applied to config', async () => {
     domHelper.init(app)
-    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
     await domHelper.openSettings()
     let currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-    await t.equals(currentConfig['enterKeySends'], true, 'enterKeySends is true in config.json')
-    await t.ok(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active')
-    await app.client.pause(200) // give react time to update dom
+    assert.equal(currentConfig['enterKeySends'], false, 'enterKeySends is true in config.json')
+    assert.isTrue(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is inactive')
     await app.client.$('label=Enter key sends').click()
     await app.client.pause(1100) // has to be greater than state.SAVE_DEBOUNCE_INTERVAL
-    await t.ok(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is not active after click')
+    await assert.isTrue(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active after click')
     currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-    await t.equals(currentConfig['enterKeySends'], false, 'enterKeySends is false in config.json')
-    setup.endTest(app, t)
-  } catch (err) {
-    app.client.getMainProcessLogs().then(
-      (logs) => console.log(logs)
-    )
-    setup.endTest(app, t, err || 'error')
-  }
+    const newSetting = currentConfig['enterKeySends']
+    await domHelper.closeDialog()
+    return assert.isTrue(newSetting, 'enterKeySends is false in config.json')
+  })
+  it('account is created and a button shown in login screen', async () => {
+    await domHelper.logout()
+    await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
+    const accountButton = await app.client.$('=' + account1Credentials.addr)
+    return assert.isNotEmpty(accountButton)
+  })
+  it('account can login again', async () => {
+    app.client.$('ul li:first-child').click()
+    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
+    await domHelper.logout()
+  })
+  it('login with valid credentials works', async () => {
+    app.client.$('#show-advanced-button').click()
+    app.client
+      .setValue('#addr', account2Credentials.addr)
+      .setValue('#mail_pw', account2Credentials.mail_pw)
+      .setValue('#mail_server', account1Credentials.mail_server)
+      .click('button[type=\'submit\']')
+
+    await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
+    return app.client.getText('h1').should.eventually.equal('Welcome to Delta Chat')
+  })
 })

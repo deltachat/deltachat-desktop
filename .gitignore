@@ -70,3 +70,6 @@ typings/
 
 # conversations
 static/conversations.css
+
+# config credentials for integration testing
+.DCrc
