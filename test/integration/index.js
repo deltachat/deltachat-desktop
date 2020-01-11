@@ -80,7 +80,9 @@ describe('Deltachat desktop', function () {
   it('account can login again', async () => {
     app.client.$('ul li:first-child').click()
     await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
+    app.client.getText('h1').should.eventually.equal('Welcome to Delta Chat')
     await domHelper.logout()
+    return true
   })
   it('login with valid credentials works', async () => {
     app.client.$('#show-advanced-button').click()
