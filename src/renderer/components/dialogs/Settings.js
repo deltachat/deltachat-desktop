@@ -34,9 +34,6 @@ export default class Settings extends React.Component {
       mail_pw: MAGIC_PW,
       settings: {},
       show: 'main',
-      imapSuccess: false,
-      smtpSuccess: false,
-      loginFailed: false,
       selfContact: {}
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
@@ -208,28 +205,9 @@ export default class Settings extends React.Component {
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
-    this.state.imapSuccess = false
-    this.state.smtpSuccess = false
-    ipcRenderer.once('DC_EVENT_IMAP_CONNECTED', () => {
-      this.state.imapSuccess = true
-      if (this.state.smtpSuccess) {
-        this.onLoginSuccess()
-      }
-    })
-    ipcRenderer.once('DC_EVENT_SMTP_CONNECTED', () => {
-      this.state.smtpSuccess = true
-      if (this.state.imapSuccess) {
-        this.onLoginSuccess()
-      }
-    })
-    ipcRenderer.once('DC_EVENT_LOGIN_FAILED', () => {
-      this.state.loginFailed = true
-      this.onCancelLogin()
-    })
   }
 
   onLoginSuccess () {
-    this.state.loginFailed = false
     this.loadSettings()
   }
 
@@ -287,7 +265,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent () {
     const { deltachat, openDialog } = this.props
-    const { settings, advancedSettings, imapSuccess, smtpSuccess, loginFailed } = this.state
+    const { settings, advancedSettings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -380,9 +358,6 @@ export default class Settings extends React.Component {
             onClose={() => this.setState({ showSettingsDialog: false })}
             onCancel={this.onCancelLogin}
             addrDisabled
-            imapSuccess={imapSuccess}
-            smtpSuccess={smtpSuccess}
-            loginFailed={loginFailed}
           >
             <Button type='submit' text={this.translate('update')} />
             <Button type='cancel' text={this.translate('cancel')} />

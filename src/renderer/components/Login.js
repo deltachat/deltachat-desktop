@@ -167,7 +167,7 @@ export default class Login extends React.Component {
   }
 
   render () {
-    const { addrDisabled, loading, mode, imapSuccess, smtpSuccess, loginFailed } = this.props
+    const { addrDisabled, loading, mode } = this.props
     const { disableSubmit } = this.state
 
     const {
@@ -215,9 +215,6 @@ export default class Login extends React.Component {
             password={mail_pw}
             onChange={this.handleCredentialsChange}
           />
-          {(loginFailed) ? <h3>Login failed</h3> : null}
-          {(imapSuccess) ? <h3>{tx('login_inbox')} successfull configured</h3> : null}
-          {(smtpSuccess) ? <h3>{tx('login_outbox')}  successfull configured</h3> : null}
           <DeltaText>{tx('login_no_servers_hint')}</DeltaText>
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
             {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
