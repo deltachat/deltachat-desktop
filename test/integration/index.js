@@ -3,6 +3,7 @@ const chaiAsPromised = require('chai-as-promised')
 const chai = require('chai')
 const domHelper = require('./domHelper')
 const config = require('../integration/fixtures/config')
+const { describe, it, before, after } = require('mocha')
 
 process.env.NODE_ENV = 'test'
 
