@@ -56,20 +56,20 @@ describe('Deltachat desktop', function () {
     await app.client.waitUntilTextExists('h1', 'Welcome to Delta Chat', 20e3)
     return app.client.getText('h1').should.eventually.equal('Welcome to Delta Chat')
   })
-  it('changing settings is applied to config', async () => {
-    domHelper.init(app)
-    await domHelper.openSettings()
-    let currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-    assert.equal(currentConfig['enterKeySends'], false, 'enterKeySends is true in config.json')
-    assert.isTrue(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is inactive')
-    await app.client.$('label=Enter key sends').click()
-    await app.client.pause(1100) // has to be greater than state.SAVE_DEBOUNCE_INTERVAL
-    await assert.isTrue(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active after click')
-    currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-    const newSetting = currentConfig['enterKeySends']
-    await domHelper.closeDialog()
-    return assert.isTrue(newSetting, 'enterKeySends is false in config.json')
-  })
+  // it('changing settings is applied to config', async () => {
+  //   domHelper.init(app)
+  //   await domHelper.openSettings()
+  //   let currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
+  //   assert.equal(currentConfig['enterKeySends'], false, 'enterKeySends is true in config.json')
+  //   assert.isTrue(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is inactive')
+  //   await app.client.$('label=Enter key sends').click()
+  //   await app.client.pause(1100) // has to be greater than state.SAVE_DEBOUNCE_INTERVAL
+  //   await assert.isTrue(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active after click')
+  //   currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
+  //   const newSetting = currentConfig['enterKeySends']
+  //   await domHelper.closeDialog()
+  //   return assert.isTrue(newSetting, 'enterKeySends is false in config.json')
+  // })
   it('account is created and a button shown in login screen', async () => {
     await domHelper.logout()
     await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
