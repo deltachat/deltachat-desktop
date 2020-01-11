@@ -71,6 +71,7 @@ describe('Deltachat desktop', function () {
   //   return assert.isTrue(newSetting, 'enterKeySends is false in config.json')
   // })
   it('account is created and a button shown in login screen', async () => {
+    domHelper.init(app)
     await domHelper.logout()
     await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
     const accountButton = await app.client.$('=' + account1Credentials.addr)
