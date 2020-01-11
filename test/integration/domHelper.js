@@ -9,20 +9,22 @@ const domHelper = {
     this.browser = app.client
   },
 
-  async openMainMenuItem (itemClass) {
+  async openMainMenuItem (label) {
     this.browser.$('#main-menu-button').waitForExist(5000)
     await this.browser.click('#main-menu-button')
-    this.browser.$('=Settings').waitForExist(5000)
-    await this.browser.click('=Settings')
+    if (label) {
+      this.browser.$('=' + label).waitForExist(5000)
+      await this.browser.click('=' + label)
+    }
   },
   async openSettings () {
-    await this.openMainMenuItem('bp3-icon-settings')
+    await this.openMainMenuItem('Settings')
   },
   async logout () {
-    await this.openMainMenuItem('bp3-icon-log-out')
+    await this.openMainMenuItem('Switch account')
   },
   async closeDialog () {
-    await this.browser.click('.bp3-dialog-close-button')
+    this.browser.$('.bp3-dialog-header .bp3-dialog-close-button').click()
   },
   async isActiveSwitch (label) {
     try {

@@ -27,7 +27,11 @@ function createApp () {
   return new Application({
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
-    env: { TEST_DIR },
+    env: {
+      ELECTRON_ENABLE_LOGGING: true,
+      ELECTRON_ENABLE_STACK_DUMPING: true,
+      TEST_DIR
+    },
     waitTimeout: 10e3
   })
 }
