@@ -18,7 +18,7 @@ const assert = chai.assert
 chai.config.includeStack = true
 
 describe('Deltachat desktop', function () {
-  this.timeout(20000)
+  this.timeout(30000)
   const account1Credentials = config.account1.credentials
   const account2Credentials = config.account2.credentials
   before(function () {
