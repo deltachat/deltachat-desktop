@@ -1,6 +1,6 @@
 const conf = require('rc')('DC', {})
 
-if(conf.account1.credentials === undefined) {
+if (conf.account1.credentials === undefined) {
   if (typeof process.env.DC_ADDR !== 'string') {
     console.error('Missing DC_ADDR environment variable!')
     process.exit(1)

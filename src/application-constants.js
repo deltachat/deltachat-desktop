@@ -40,8 +40,8 @@ function windowDefaults () {
   const messageHeight = 100
   return {
     bounds: {
-      width: 500,
-      height: headerHeight + messageHeight * 6
+      width: 1100,
+      height: headerHeight + messageHeight * 8
     },
     headerHeight,
     minWidth: 450,
