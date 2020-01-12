@@ -1,3 +1,4 @@
+tsc-dist/
 dist/
 static/bundle.js
 static/main.css

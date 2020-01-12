@@ -1,1 +1,1 @@
-require('./dist/main')
+require('./tsc-dist/main')
