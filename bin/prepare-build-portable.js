@@ -1,6 +1,6 @@
 const { join } = require('path')
 const fs = require('fs')
-const appConfig = join(__dirname, '../src/application-config.js')
+const appConfig = join(__dirname, '../src/main/application-config.js')
 
 const action = process.argv[2] === 'undo' ? 'undo' : 'do'
 

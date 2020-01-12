@@ -5,7 +5,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const os = require('os')
 const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
-const { getConfigPath } = require('../application-constants')
+const { getConfigPath } = require('./application-constants')
 
 const localize = require('../localize')
 const menu = require('./menu')
@@ -17,7 +17,7 @@ const DeltaChatController = (() => {
   } catch (error) {
     log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
     const { dialog } = require('electron')
-    const { getLogsPath } = require('../application-constants')
+    const { getLogsPath } = require('./application-constants')
     dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
   }
 })()

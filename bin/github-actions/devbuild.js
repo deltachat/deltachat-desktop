@@ -13,7 +13,7 @@ p.build.appId = 'chat.delta.desktop.electron.dev'
 
 fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 
-const appConfig = join(__dirname, '../../src/application-config.js')
+const appConfig = join(__dirname, '../../src/main/application-config.js')
 
 const fileContent = fs.readFileSync(appConfig, 'utf-8')
   .replace(

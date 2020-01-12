@@ -20,7 +20,7 @@ const {
   appIcon,
   appWindowTitle,
   windowDefaults
-} = require('../../application-constants')
+} = require('../application-constants')
 
 const log = require('../../logger').getLogger('main/mainWindow')
 

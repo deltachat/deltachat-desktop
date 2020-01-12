@@ -1,6 +1,6 @@
 const appConfig = require('./application-config')
 const path = require('path')
-const version = require('../package.json').version
+const version = require('../../package.json').version
 
 function appName () {
   return 'DeltaChat'
@@ -46,7 +46,7 @@ function windowDefaults () {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${path.join(__dirname, '..', 'static', 'main.html')}`
+    main: `file://${path.join(__dirname, '..', '..', 'static', 'main.html')}`
   }
 }
 
