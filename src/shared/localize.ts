@@ -1,9 +1,24 @@
-const log = require('./shared/logger').getLogger('localize')
+const log = require('./logger').getLogger('localize')
 
-function translate (messages) {
-  function getMessage (key, substitutions, opts) {
-    if (typeof opts === 'string') opts = { quantity: opts }
-    if (!opts) opts = {}
+export interface LocaleData {
+  locale: string;
+  messages: {
+    [key: string]: {
+      message: string,
+      [key: string]: string
+    }
+  }
+}
+
+type getMessageOptions = { quantity?:string | number }
+
+export function translate (messages:LocaleData['messages']) {
+  function getMessage (key:string, substitutions:string[], raw_opts:string | getMessageOptions) {
+    let opts: getMessageOptions = {}
+    if (typeof raw_opts === 'string') 
+    opts = { quantity: raw_opts }
+    else
+    opts = Object.assign({},raw_opts)
 
     const entry = messages[key]
 
@@ -47,5 +62,3 @@ function translate (messages) {
 
   return getMessage
 }
-
-module.exports = { translate }

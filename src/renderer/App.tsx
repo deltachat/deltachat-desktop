@@ -7,9 +7,9 @@ import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { AppState, LocaleData } from './types'
+import { AppState } from '../shared/shared-types'
 
-const localize = require('../localize')
+import { translate, LocaleData } from '../shared/localize'
 const moment = require('moment')
 
 addLocaleData(enLocaleData)
@@ -61,7 +61,7 @@ export default function App (props) {
     moment.locale(locale)
     const localeData: LocaleData = sendToBackendSync('locale-data', locale);
     (window as any).localeData = localeData;
-    (window as any).translate = localize.translate(localeData.messages)
+    (window as any).translate = translate(localeData.messages)
     setLocaleData(localeData)
   }
 

@@ -4,7 +4,7 @@ const fs = require('fs')
 
 const log = require('../shared/logger').getLogger('load-transaltions')
 
-import { translate } from '../localize'
+import { translate } from '../shared/localize'
 
 export default function setup (app:any, locale:string) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
