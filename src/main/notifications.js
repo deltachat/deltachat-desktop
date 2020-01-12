@@ -1,5 +1,5 @@
 const windows = require('./windows')
-const { appName, appIcon } = require('../application-constants')
+const { appName, appIcon } = require('./application-constants')
 
 const {
   app,

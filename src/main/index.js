@@ -12,7 +12,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 // Setup folders
-const { getConfigPath, getLogsPath, getAccountsPath } = require('../application-constants')
+const { getConfigPath, getLogsPath, getAccountsPath } = require('./application-constants')
 ensureDirSync(getConfigPath())
 ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())

@@ -5,7 +5,7 @@ const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
 const { escapeEmailForAccountFolder } = require('./deltachat/util')
 
-const { getAccountsPath, getConfigPath } = require('../application-constants')
+const { getAccountsPath, getConfigPath } = require('./application-constants')
 
 // change this in the future to enable new account format and break compatibility to really old dcversions on windows
 const NEW_ACCOUNT_FORMAT = false

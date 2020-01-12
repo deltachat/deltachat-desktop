@@ -9,7 +9,7 @@ import {
   appVersion,
   gitHubUrl,
   gitHubLicenseUrl
-} from '../../../application-constants'
+} from '../../../main/application-constants'
 
 const log = logger.getLogger('renderer/dialogs/About')
 
