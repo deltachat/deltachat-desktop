@@ -7,7 +7,7 @@ const os = require('os')
 const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
 const { getConfigPath } = require('./application-constants')
 
-const localize = require('../localize')
+const loadTranslations = require('./load-translations').default
 const menu = require('./menu')
 const windows = require('./windows')
 const log = require('../shared/logger').getLogger('main/ipc')
@@ -70,7 +70,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('show', () => main.show())
   ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale) => {
-    localize.setup(app, locale)
+    loadTranslations(app, locale)
     dcController.loginController.setCoreStrings(txCoreStrings())
     menu.init(logHandler)
   })
@@ -171,7 +171,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('render', sendStateToRenderer)
 
   ipcMain.on('locale-data', (e, locale) => {
-    if (locale) app.localeData = localize.setup(app, locale)
+    if (locale) app.localeData = loadTranslations(app, locale)
     e.returnValue = app.localeData
   })
 
