@@ -4,7 +4,7 @@
  */
 
 import { ipcRenderer } from 'electron'
-const log = require('../logger').getLogger('renderer/ipc')
+const log = require('../shared/logger').getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
 

@@ -1,5 +1,5 @@
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/settings')
+const log = require('../../shared/logger').getLogger('main/deltachat/settings')
 
 const SplitOut = require('./splitout')
 

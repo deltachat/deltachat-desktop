@@ -3,7 +3,7 @@ import { remote, clipboard } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
-import logger from '../../../logger'
+import logger from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   appVersion,

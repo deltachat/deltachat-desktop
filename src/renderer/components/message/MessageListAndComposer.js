@@ -2,7 +2,7 @@ import React, { useRef, useState, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
 
 import Composer from '../composer/Composer'
-import logger from '../../../logger'
+import logger from '../../../shared/logger'
 import MessageList from './MessageList'
 
 import SettingsContext from '../../contexts/SettingsContext'
