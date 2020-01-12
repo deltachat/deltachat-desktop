@@ -1,6 +1,6 @@
 import { callDcMethod, ipcBackend } from '../ipc'
 import { Store } from './store'
-import logger from '../../logger'
+import logger from '../../shared/logger'
 import debounce from 'debounce'
 const log = logger.getLogger('renderer/stores/contacts')
 

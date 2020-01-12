@@ -1,5 +1,5 @@
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/chat')
+const log = require('../../shared/logger').getLogger('main/deltachat/chat')
 const SplitOut = require('./splitout')
 module.exports = class DCChat extends SplitOut {
   getChatMedia (msgType1, msgType2) {

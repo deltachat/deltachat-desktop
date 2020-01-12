@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
-import logger from '../../../logger'
+import logger from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
 
 const log = logger.getLogger('renderer/helpers/ChatList')

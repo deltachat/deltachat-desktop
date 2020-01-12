@@ -10,7 +10,7 @@ const { getConfigPath } = require('./application-constants')
 const localize = require('../localize')
 const menu = require('./menu')
 const windows = require('./windows')
-const log = require('../logger').getLogger('main/ipc')
+const log = require('../shared/logger').getLogger('main/ipc')
 const DeltaChatController = (() => {
   try {
     return require('./deltachat/controller')

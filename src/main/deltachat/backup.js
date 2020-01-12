@@ -6,7 +6,7 @@ const fs = require('fs-extra')
 const { ipcMain } = require('electron')
 const path = require('path')
 const EventEmitter = require('events').EventEmitter
-const log = require('../../logger').getLogger('main/deltachat/backup')
+const log = require('../../shared/logger').getLogger('main/deltachat/backup')
 const { getNewAccountPath } = require('../logins')
 
 const SplitOut = require('./splitout')
