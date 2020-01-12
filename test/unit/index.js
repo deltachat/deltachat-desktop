@@ -64,7 +64,7 @@ test('that translation files are valid json', t => {
 })
 
 test('test translation method', t => {
-  const l = require('../../src/localize')
+  const l = require('../../tsc-dist/shared/localize')
   const translate = l.translate({
     test_a: {
       message: 'foo %1$s %2$s blubb'
