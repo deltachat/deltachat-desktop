@@ -16,7 +16,7 @@ import {
   NavbarHeading
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
-import logger from '../../logger'
+import logger from '../../shared/logger'
 import ScreenContext from '../contexts/ScreenContext'
 import DeltaDialog from './dialogs/DeltaDialog'
 

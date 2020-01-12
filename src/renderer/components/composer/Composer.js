@@ -4,7 +4,7 @@ import { remote } from 'electron'
 
 import SettingsContext from '../../contexts/SettingsContext'
 import ComposerMessageInput from './ComposerMessageInput'
-import logger from '../../../logger'
+import logger from '../../../shared/logger'
 import EmojiAndStickerPicker from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 

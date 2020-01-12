@@ -1,5 +1,5 @@
 const Color = require('color')
-const log = require('../logger').getLogger('render/theme-backend')
+const log = require('../shared/logger').getLogger('render/theme-backend')
 
 function changeContrast (colorString, factor) {
   // TODO make the black check code work

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import logger from '../../logger'
+import logger from '../../shared/logger'
 
 export function useStore (StoreInstance) {
   const [state, setState] = useState(StoreInstance.getState())

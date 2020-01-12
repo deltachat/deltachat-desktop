@@ -14,7 +14,7 @@ import {
 
 import { callDcMethodAsync } from '../../ipc'
 
-// const log = require('../../logger').getLogger('renderer/ChatListContextMenu')
+// const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
 
 const ChatListContextMenu = React.memo((props) => {
   const screenContext = useContext(ScreenContext)

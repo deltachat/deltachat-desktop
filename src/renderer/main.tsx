@@ -9,7 +9,7 @@ window.eval = global.eval = function () {
 }
 
 function main () {
-  const logger = require('../logger')
+  const logger = require('../shared/logger')
   logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
   logger.printProcessLogLevelInfo()
 

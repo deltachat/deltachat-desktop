@@ -38,7 +38,7 @@ export const allDialogs = [
   ViewProfile
 ]
 
-const log = require('../../../logger').getLogger('renderer/dialogs')
+const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
 export class Controller extends React.Component {
   constructor (props) {

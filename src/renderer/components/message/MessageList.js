@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import C from 'deltachat-node/constants'
 import moment from 'moment'
 
-import { getLogger } from '../../../logger'
+import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {

@@ -1,5 +1,5 @@
 const C = require('deltachat-node/constants')
-const log = require('../../logger').getLogger('main/deltachat/chatlist')
+const log = require('../../shared/logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
 
 const { integerToHexColor } = require('./util')

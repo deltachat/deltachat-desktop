@@ -1,6 +1,6 @@
 const fsExtra = require('fs-extra')
 const path = require('path')
-const log = require('../../logger').getLogger('main/deltachat/stickers')
+const log = require('../../shared/logger').getLogger('main/deltachat/stickers')
 
 async function isDirectory (path) {
   const lstat = await fsExtra.lstat(path)

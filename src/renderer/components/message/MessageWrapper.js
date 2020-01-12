@@ -3,7 +3,7 @@ import C from 'deltachat-node/constants'
 import styled from 'styled-components'
 import Message from './Message'
 import ScreenContext from '../../contexts/ScreenContext'
-import logger from '../../../logger'
+import logger from '../../../shared/logger'
 import { useChatStore } from '../../stores/chat'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 
