@@ -1,14 +1,11 @@
-export interface Credentials {
+export interface Login {
   addr: string;
-  passwd?: string;
+  path: string;
 }
 
-export interface LocaleData {
-  locale: string;
-  messages: {
-    [key: string]: {message: string}
-  }
-} 
+export interface Credentials {
+  addr: string;
+}
 
 export interface LocalSettings {
   bounds: {
@@ -26,13 +23,13 @@ export interface LocalSettings {
   showNotificationContent: boolean;
 }
 
-
 export interface AppState {
   deltachat: {
     configuring: boolean;
     credentials: Credentials;
     ready: boolean;
-  }
+  };
+  logins: Array<Login>;
   saved: LocalSettings;
-  logins: Array<string>;
 }
+
