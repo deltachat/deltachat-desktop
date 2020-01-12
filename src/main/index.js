@@ -3,7 +3,7 @@ console.time('init')
 const fs = require('fs')
 const { ensureDirSync } = require('fs-extra')
 const { app, session } = require('electron')
-const rc = app.rc = require('../rc')
+const rc = app.rc = require('./rc').default
 
 if (!app.requestSingleInstanceLock()) {
   /* ignore-console-log */
