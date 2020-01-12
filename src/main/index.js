@@ -31,7 +31,7 @@ process.on('uncaughtException', (err) => {
   throw err
 })
 
-const localize = require('../localize')
+const loadTranslations = require('./load-translations').default
 const { getLogins } = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
@@ -72,7 +72,7 @@ function onReady ([logins, _appReady, loadedState]) {
 
   app.saveState = () => State.save({ saved: state.saved })
 
-  localize.setup(app, state.saved.locale || app.getLocale())
+  loadTranslations(app, state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
   log.info(`cwd ${cwd}`)
