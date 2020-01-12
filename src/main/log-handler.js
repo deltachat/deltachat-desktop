@@ -1,6 +1,6 @@
 const { createWriteStream } = require('fs')
 const path = require('path')
-const { getLogsPath } = require('../application-constants')
+const { getLogsPath } = require('./application-constants')
 
 function logName () {
   const dir = getLogsPath()

@@ -8,7 +8,7 @@ const {
   gitHubUrl,
   gitHubIssuesUrl,
   getLogsPath
-} = require('../application-constants')
+} = require('./application-constants')
 
 const languages = require('../../_locales/_languages.json')
 
