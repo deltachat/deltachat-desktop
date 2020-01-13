@@ -9,10 +9,9 @@ const geojsonExtent = require('@mapbox/geojson-extent')
 const moment = require('moment/moment')
 const formatRelativeTime = require('../conversations/formatRelativeTime')
 const MapLayerFactory = require('./MapLayerFactory')
-const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/esm/index')
 const PopupMessage = require('./PopupMessage')
 const SessionStorage = require('../helpers/SessionStorage')
-const SettingsContext = require('../../contexts/SettingsContext')
+const { SettingsContext } = require('../../contexts')
 const chatStore = require('../../stores/chat').default
 
 const ContextMenu = require('./ContextMenu')

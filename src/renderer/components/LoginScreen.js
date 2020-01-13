@@ -16,7 +16,7 @@ import {
 } from '@blueprintjs/core'
 import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
 import logger from '../../shared/logger'
-import ScreenContext from '../contexts/ScreenContext'
+import { ScreenContext } from '../contexts'
 import DeltaDialog from './dialogs/DeltaDialog'
 
 const log = logger.getLogger('renderer/components/LoginScreen')

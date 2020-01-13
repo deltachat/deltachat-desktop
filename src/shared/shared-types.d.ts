@@ -21,6 +21,7 @@ export interface LocalSettings {
   locale: string;
   notifications: boolean;
   showNotificationContent: boolean;
+  lastChats: {[account_addr:string]:number}
 }
 
 export interface AppState {

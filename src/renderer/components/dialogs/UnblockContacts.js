@@ -7,7 +7,7 @@ import DeltaDialog, {
 import contactsStore from '../../stores/contacts'
 
 import { ContactList2 } from '../contact/ContactList'
-import ScreenContext from '../../contexts/ScreenContext'
+import { ScreenContext } from '../../contexts'
 
 export default function UnblockContacts (props) {
   const { isOpen, onClose } = props

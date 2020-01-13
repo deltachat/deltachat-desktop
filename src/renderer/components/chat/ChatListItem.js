@@ -4,7 +4,7 @@ import { Timestamp } from '../conversations'
 import MessageBody from '../message/MessageBody'
 import { Avatar, VerifiedIcon } from '../contact/Contact'
 import C from 'deltachat-node/constants'
-import ScreenContext from '../../contexts/ScreenContext'
+import { ScreenContext } from '../../contexts'
 
 const FreshMessageCounter = React.memo(props => {
   const { counter } = props
