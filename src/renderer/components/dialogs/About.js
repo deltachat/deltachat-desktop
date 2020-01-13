@@ -9,7 +9,7 @@ import {
   appVersion,
   gitHubUrl,
   gitHubLicenseUrl
-} from '../../../main/application-constants'
+} from '../../../shared/constants'
 
 const log = logger.getLogger('renderer/dialogs/About')
 
@@ -62,8 +62,8 @@ export default function About (props) {
   const tx = window.translate
 
   const desktopString = reactStringReplace(tx('about_offical_app_desktop'), 'Delta Chat', () => <ClickableLink href='https://delta.chat' text='Delta Chat' />)
-  let versionString = reactStringReplace(tx('about_licensed_under_desktop'), 'GNU GPL version 3', () => <ClickableLink href={gitHubLicenseUrl()} text='GNU GPL version 3' />)
-  versionString = reactStringReplace(versionString, 'GitHub', () => <ClickableLink href={gitHubUrl()} text='GitHub' />)
+  let versionString = reactStringReplace(tx('about_licensed_under_desktop'), 'GNU GPL version 3', () => <ClickableLink href={gitHubLicenseUrl} text='GNU GPL version 3' />)
+  versionString = reactStringReplace(versionString, 'GitHub', () => <ClickableLink href={gitHubUrl} text='GitHub' />)
 
   return (
     <DeltaDialog
@@ -73,7 +73,7 @@ export default function About (props) {
     >
       <DeltaDialogBody>
         <Card>
-          <p style={{ color: 'grey', userSelect: 'all' }}>{`Version ${appVersion()}`}</p>
+          <p style={{ color: 'grey', userSelect: 'all' }}>{`Version ${appVersion}`}</p>
           <p>
             {desktopString}
             <br /><br />

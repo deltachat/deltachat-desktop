@@ -18,9 +18,9 @@ const electron = require('electron')
 const debounce = require('debounce')
 const {
   appIcon,
-  appWindowTitle,
   windowDefaults
 } = require('../application-constants')
+const { appWindowTitle } = require('../../shared/constants')
 
 const log = require('../../shared/logger').getLogger('main/mainWindow')
 
@@ -45,7 +45,7 @@ function init (app, options) {
     minHeight: defaults.minHeight,
     minWidth: defaults.minWidth,
     show: false,
-    title: appWindowTitle(),
+    title: appWindowTitle,
     titleBarStyle: 'hidden-inset', // Hide title bar (Mac)
     useContentSize: true, // Specify web page size without OS chrome
     width: initialBounds.width,
@@ -160,9 +160,9 @@ function setProgress (progress) {
 function setTitle (title) {
   if (!main.win) return
   if (title) {
-    main.win.setTitle(`${appWindowTitle()} - ${title}`)
+    main.win.setTitle(`${appWindowTitle} - ${title}`)
   } else {
-    main.win.setTitle(appWindowTitle())
+    main.win.setTitle(appWindowTitle)
   }
 }
 
