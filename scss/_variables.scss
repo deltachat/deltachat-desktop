@@ -1,35 +1,3 @@
-@font-face {
-  font-family: 'Roboto-Light';
-  src: url('fonts/Roboto-Light.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('fonts/Roboto-Regular.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('fonts/Roboto-Medium.ttf') format('truetype');
-  font-weight: 300;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('fonts/Roboto-Italic.ttf') format('truetype');
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('fonts/Roboto-Bold.ttf') format('truetype');
-  font-weight: bold;
-}
-@font-face {
-  font-family: 'NotoMono';
-  src: url('fonts/noto/mono/NotoMono-Regular.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'NotoEmoji';
-  src: url('fonts/noto/emoji/NotoColorEmoji.ttf') format('truetype');
-}
-
 $emojifonts: 'Apple Color Emoji', NotoEmoji;
 
 $roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;

@@ -1,3 +1,5 @@
+import { Slider, Button, Collapse } from '@blueprintjs/core/lib/cjs/index'
+
 const { callDcMethod } = require('../../ipc')
 const React = require('react')
 const ReactDOMServer = require('react-dom/server')
