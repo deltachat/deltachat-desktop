@@ -4,7 +4,7 @@ import React from "react"
 import { Component, createRef } from 'react'
 import { ipcRenderer } from 'electron'
 
-import ScreenContext from './contexts/ScreenContext'
+import { ScreenContext } from './contexts'
 import LoginScreen from'./components/LoginScreen'
 import MainScreen from './components/MainScreen'
 import {Controller as DialogController} from './components/dialogs/index'

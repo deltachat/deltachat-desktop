@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from 'react'
-import ScreenContext from '../../contexts/ScreenContext'
+import { ScreenContext } from '../../contexts'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { Icon } from '@blueprintjs/core'
 import {

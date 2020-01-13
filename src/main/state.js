@@ -19,32 +19,7 @@ const State = module.exports = Object.assign(new EventEmitter(), {
   saveImmediate
 })
 
-function getDefaultState () {
-  return {
-    /**
-     * Temporary state.
-     */
-    logins: [],
-    deltachat: {
-      chats: [],
-      credentials: {},
-      ready: false
-    },
-    /**
-     * Persisted state. Must be JSON.
-     */
-    saved: {
-      enterKeySends: false,
-      notifications: true,
-      showNotificationContent: true,
-      locale: 'en',
-      credentials: null,
-      enableOnDemandLocationStreaming: false,
-      chatViewBgImg: undefined,
-      lastChats: {}
-    }
-  }
-}
+const { getDefaultState } = require('../shared/state')
 
 async function load () {
   var state = getDefaultState()

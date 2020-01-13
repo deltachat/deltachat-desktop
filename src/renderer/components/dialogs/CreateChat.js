@@ -4,7 +4,7 @@ import { remote } from 'electron'
 import C from 'deltachat-node/constants'
 
 import { callDcMethodAsync } from '../../ipc'
-import ScreenContext from '../../contexts/ScreenContext'
+import { ScreenContext } from '../../contexts'
 import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {

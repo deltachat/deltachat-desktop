@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react'
-import ScreenContext from '../contexts/ScreenContext'
+import { ScreenContext, SettingsContext } from '../contexts'
+
 import Media from './Media'
 import Menu from './Menu'
 import ChatList from './chat/ChatList'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import SearchInput from './SearchInput'
-import SettingsContext from '../contexts/SettingsContext'
 import { useChatStore } from '../stores/chat'
 import { openEditGroupDialog, openMapDialog, openViewProfileDialog } from './helpers/ChatMethods'
 
