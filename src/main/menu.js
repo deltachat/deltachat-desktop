@@ -4,11 +4,10 @@ const { app, Menu, shell } = require('electron')
 const log = require('../shared/logger').getLogger('main/menu')
 const windows = require('./windows')
 const {
-  homePageUrl,
-  gitHubUrl,
-  gitHubIssuesUrl,
   getLogsPath
 } = require('./application-constants')
+
+const { homePageUrl, gitHubUrl, gitHubIssuesUrl } = require('../shared/constants')
 
 const languages = require('../../_locales/_languages.json')
 
@@ -152,13 +151,13 @@ function getMenuTemplate (logHandler) {
         {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
-            shell.openExternal(homePageUrl())
+            shell.openExternal(homePageUrl)
           }
         },
         {
           translate: 'global_menu_help_contribute_desktop',
           click: () => {
-            shell.openExternal(gitHubUrl())
+            shell.openExternal(gitHubUrl)
           }
         },
         {
@@ -167,7 +166,7 @@ function getMenuTemplate (logHandler) {
         {
           translate: 'global_menu_help_report_desktop',
           click: () => {
-            shell.openExternal(gitHubIssuesUrl())
+            shell.openExternal(gitHubIssuesUrl)
           }
         },
         {
