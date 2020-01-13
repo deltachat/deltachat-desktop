@@ -9,7 +9,7 @@ const { app } = require('electron')
 
 const { maybeMarkSeen } = require('../markseenFix')
 
-const { integerToHexColor } = require('./util')
+const { integerToHexColor } = require('../../shared/util')
 
 /**
  * @typedef {import('deltachat-node')} DeltaChat
