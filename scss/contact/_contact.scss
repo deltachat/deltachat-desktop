@@ -12,9 +12,17 @@
   margin-top: 8px;
   margin-bottom: 8px;
   border-radius: 24px;
-  background-color: '#505050';
+  background-color: #505050;
   color: var(--avatarLabelColor);
   font-size: 26px;
   line-height: 48px;
   text-align: center;
+}
+.AvatarBubble--NoSearchResults {
+  transform: rotate(45deg); 
+  line-height: 46px;
+  letter-spacing: 1px;
+  &::after {
+    content: ':-(';
+  }
 }

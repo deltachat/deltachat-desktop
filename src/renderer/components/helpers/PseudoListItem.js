@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
 import { ContactListItemWrapper } from '../contact/ContactListItem'
 
@@ -17,15 +16,6 @@ export function PseudoListItem (props) {
   )
 }
 
-export const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
-  transform: rotate(45deg); 
-  line-height: 46px;
-  letter-spacing: 1px;
-  &::after {
-    content: ':-(';
-  }
-`
-
 export const PseudoListItemNoSearchResults = ({ queryStr }) => {
   const tx = window.translate
   return (
@@ -33,7 +23,7 @@ export const PseudoListItemNoSearchResults = ({ queryStr }) => {
       id='addmember'
       text={tx('search_no_result_for_x', queryStr)}
     >
-      <NoSearchResultsAvatarBubble />
+      <AvatarBubble noSearchResults />
     </PseudoListItem>
   )
 }
