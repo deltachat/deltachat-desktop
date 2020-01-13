@@ -7,11 +7,17 @@ const LoginScreen = require('./components/LoginScreen').default
 const MainScreen = require('./components/MainScreen').default
 const dialogs = require('./components/dialogs')
 
+export interface userFeedback {
+  type: 'error'|'success'
+  text: string
+}
+
 export default class ScreenController extends React.Component {
    
   props: any;
+  state: { message: userFeedback|false }
 
-  constructor (props) {
+  constructor (props:any) {
     super(props)
     this.state = {
       message: false
@@ -30,7 +36,7 @@ export default class ScreenController extends React.Component {
     this.dialogs = React.createRef()
   }
 
-  userFeedback (message) {
+  userFeedback (message:userFeedback|false) {
     if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
   }
@@ -53,25 +59,25 @@ export default class ScreenController extends React.Component {
     ipcRenderer.removeListener('success', this.onSuccess)
   }
 
-  onError (event, error) {
+  onError (event:any, error:Error) {
     const tx = (window as any).translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
 
-  onSuccess (event, text) {
+  onSuccess (event:any, text: string) {
     this.userFeedback({ type: 'success', text })
   }
 
-  showAbout (showAbout) {
+  showAbout () {
     this.openDialog('About')
   }
 
   showHelp () {
     this.openDialog('HelpPage')
   }
-
-  openDialog (name: string, props?) {
+  
+  openDialog (name: string, props?:any) {
     this.dialogs.current.open(name, props)
   }
 
@@ -79,24 +85,22 @@ export default class ScreenController extends React.Component {
     this.dialogs.current.close(name)
   }
 
-  attachDialog (...args) {
+  attachDialog (...args:any[]) {
     this.dialogs.current.attachDialog(...args)
   }
 
-  detachDialog (...args) {
+  detachDialog (...args:any[]) {
     this.dialogs.current.detachDialog(...args)
   }
 
   render () {
     const { logins, deltachat } = this.props
-    var type = this.state.message.type
-    var classNames = `user-feedback ${type}`
 
     return (
       <div>
         {this.state.message && (
           <div onClick={this.userFeedbackClick}
-            className={classNames}>
+            className={`user-feedback ${this.state.message.type}`}>
             <p>{this.state.message.text}</p>
           </div>
         )}

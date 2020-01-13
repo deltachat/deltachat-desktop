@@ -16,7 +16,7 @@ addLocaleData(enLocaleData)
 
 attachKeybindingsListener()
 
-export default function App (props) {
+export default function App (props:any) {
   const [state, setState] = useState<AppState>(remote.app.state)
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
@@ -49,7 +49,7 @@ export default function App (props) {
     startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
-  const onRender = (e, state) => setState(state)
+  const onRender = (e:any, state) => setState(state)
   useEffect(() => {
     ipcBackend.on('render', onRender)
     return () => {
@@ -57,7 +57,7 @@ export default function App (props) {
     }
   }, [state])
 
-  function setupLocaleData (locale) {
+  function setupLocaleData (locale:string) {
     moment.locale(locale)
     const localeData: LocaleData = sendToBackendSync('locale-data', locale);
     (window as any).localeData = localeData;
@@ -65,7 +65,7 @@ export default function App (props) {
     setLocaleData(localeData)
   }
 
-  const onChooseLanguage = (e, locale) => {
+  const onChooseLanguage = (e:any, locale:string) => {
     setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
