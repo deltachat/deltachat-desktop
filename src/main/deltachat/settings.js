@@ -1,7 +1,11 @@
+
 const C = require('deltachat-node/constants')
 const log = require('../../logger').getLogger('main/deltachat/settings')
 
 const SplitOut = require('./splitout')
+
+const { app } = require('electron')
+const localize = require('../../localize')
 
 const serverFlagMap = {
   mail_security_ssl: C.DC_LP_IMAP_SOCKET_SSL,
@@ -79,5 +83,14 @@ module.exports = class DCSettings extends SplitOut {
     return flags.reduce((flag, acc) => {
       return acc | flag
     }, 0)
+  }
+
+
+  // TODO: this is not really deltachat-node/core related but we don't have
+  //       backend architecture to call non deltachat methods in a conveniant
+  //       way.
+  localeData (locale) {
+    if (locale) app.localeData = localize.setup(app, locale)
+    return app.localeData
   }
 }

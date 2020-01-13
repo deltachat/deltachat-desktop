@@ -170,11 +170,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('render', sendStateToRenderer)
 
-  ipcMain.on('locale-data', (e, locale) => {
-    if (locale) app.localeData = localize.setup(app, locale)
-    e.returnValue = app.localeData
-  })
-
   const updateDesktopSetting = (e, key, value) => {
     const { saved } = app.state
     saved[key] = value

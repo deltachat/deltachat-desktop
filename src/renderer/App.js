@@ -5,7 +5,7 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 import { remote } from 'electron'
-import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
+import { callDcMethod, callDcMethodAsync, sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 
 const localize = require('../localize')
@@ -56,16 +56,16 @@ export default function App (props) {
     }
   }, [state])
 
-  function setupLocaleData (locale) {
+  async function setupLocaleData (locale) {
     moment.locale(locale)
-    const localeData = sendToBackendSync('locale-data', locale)
+    const localeData = await callDcMethodAsync('settings.localeData', [locale])
     window.localeData = localeData
     window.translate = localize.translate(localeData.messages)
     setLocaleData(localeData)
   }
 
-  const onChooseLanguage = (e, locale) => {
-    setupLocaleData(locale)
+  const onChooseLanguage = async (e, locale) => {
+    await setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
   useEffect(() => {

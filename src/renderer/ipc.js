@@ -18,15 +18,16 @@ export function startBackendLogging () {
 }
 
 export function sendToBackend (event, ...args) {
+  if (args.length === 0) return
+  const before = performance.now()
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   ipcRenderer.send(event, ...args)
-}
-
-export function sendToBackendSync (event, ...args) {
-  log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
-  ipcRenderer.send('ALL', event, ...args)
-  return ipcRenderer.sendSync(event, ...args)
+  const after = performance.now()
+  const during = after - before
+  if (during > 10) {
+    log.warn('sendToBackend: ' + JSON.stringify(args) + ' took ' + during + 'ms. Blocking backend method?')
+  }
 }
 
 // Call a dc method without blocking the renderer process. Return value
