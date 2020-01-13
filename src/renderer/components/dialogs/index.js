@@ -18,7 +18,7 @@ import HelpPage from './HelpPage'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 
-export const allDialogs = [
+export const allDialogs = {
   DeadDrop,
   FullscreenMedia,
   MessageDetail,
@@ -36,9 +36,8 @@ export const allDialogs = [
   QrInviteCode,
   HelpPage,
   ConfirmationDialog,
-  UnblockContacts,
-  ViewProfile
-]
+  UnblockContacts
+}
 
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
@@ -47,9 +46,10 @@ export class Controller extends React.Component {
     super(props)
 
     var dialogs = {}
-    allDialogs.forEach((Component) => {
-      dialogs[Component.name] = {
-        Component,
+    Object.keys(allDialogs).forEach((key) => {
+      dialogs[key] = {
+        name: key,
+        Component: allDialogs[key],
         props: false
       }
     })
@@ -83,7 +83,7 @@ export class Controller extends React.Component {
           const isOpen = dialog.props !== false
           if (!isOpen) return null
 
-          var name = dialog.Component.name
+          var name = dialog.name
           var defaultProps = {
             isOpen,
             onClose: () => this.close(name),
