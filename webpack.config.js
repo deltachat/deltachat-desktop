@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = (_, argv) => ({
-  entry: path.normalize(`${__dirname}/src/renderer/main.tsx`),
+  entry: path.normalize(`${__dirname}/tsc-dist/renderer/main.js`),
   target: 'electron-main',
   output: {
     path: path.normalize(`${__dirname}/static`),
@@ -11,25 +11,24 @@ module.exports = (_, argv) => ({
   optimization: {
     nodeEnv: argv.mode
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map', // we now somehow need to tell this sourcemap to honor the source maps from ts
   node: {
     __dirname: true
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json']
+    extensions: ['.js', '.json']
   },
   module: {
     rules: [
       {
-        test: /\.[tj]s(x?)$/,
-        include: path.normalize(`${__dirname}/src/renderer`),
+        test: /\.js$/,
+        include: path.normalize(`${__dirname}/tsc-dist/renderer`),
         use: {
           loader: 'babel-loader',
           options: {
             presets: [
               '@babel/preset-env',
-              '@babel/preset-react',
-              '@babel/preset-typescript'
+              '@babel/preset-react'
             ],
             sourceType: 'module'
           }
