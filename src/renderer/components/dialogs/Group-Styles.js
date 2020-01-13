@@ -41,15 +41,6 @@ export const GroupMemberSearchInput = styled(CreateChatSearchInput)`
   width: calc(100% - 80px);
 `
 
-export const NoSearchResultsAvatarBubble = styled(AvatarBubble)`
-  transform: rotate(45deg); 
-  line-height: 46px;
-  letter-spacing: 1px;
-  &::after {
-    content: ':-(';
-  }
-`
-
 export const GroupImageUnsetButtonWrapper = styled.div`
   position: relative;
   width: 26px;

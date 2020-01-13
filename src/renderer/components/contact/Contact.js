@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { ContactListItem } from '../conversations'
 import C from 'deltachat-node/constants'
+import classNames from 'classnames'
 
 export function convertContactProps (contact) {
   return {
@@ -66,7 +67,7 @@ export function Avatar (props) {
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <div className='AvatarBubble' style={{backgroundColor: color}}>
+    <div className='AvatarBubble' style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
@@ -185,5 +186,20 @@ export function PseudoContact (props) {
       { !subText && <ContactNameWrapper><PseudoContactText>{text}</PseudoContactText></ContactNameWrapper> }
       { subText && ContactName(text, subText, false) }
     </ContactWrapper>
+  )
+}
+
+export function AvatarBubble (props) {
+  return (
+    <div
+      className={classNames(
+        'AvatarBubble',
+        { 'AvatarBubble--NoSearchResults': props.noSearchResults },
+        props.className
+      )}
+      {...props}
+    >
+      {props.children}
+    </div>
   )
 }
