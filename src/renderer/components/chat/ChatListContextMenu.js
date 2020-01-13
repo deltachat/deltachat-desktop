@@ -99,6 +99,9 @@ const ChatListContextMenu = React.memo((props) => {
       {menu}
     </ContextMenu>
   )
+}, (prevProps, nextProps) => {
+  const shouldRerender = prevProps.showArchivedChats !== nextProps.showArchivedChats
+  return !shouldRerender
 })
 
 export default ChatListContextMenu
