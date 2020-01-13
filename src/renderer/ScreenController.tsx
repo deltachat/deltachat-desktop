@@ -2,12 +2,12 @@ import { Login, AppState } from "../shared/shared-types"
 
 import React from "react"
 import { Component, createRef } from 'react'
-const { ipcRenderer } = require('electron')
+import { ipcRenderer } from 'electron'
 
 import ScreenContext from './contexts/ScreenContext'
-const LoginScreen = require('./components/LoginScreen').default
-const MainScreen = require('./components/MainScreen').default
-import {Controller as DialogController} from './components/dialogs'
+import LoginScreen from'./components/LoginScreen'
+import MainScreen from './components/MainScreen'
+import {Controller as DialogController} from './components/dialogs/index'
 
 
 export interface userFeedback {
@@ -63,13 +63,13 @@ export default class ScreenController extends Component {
     ipcRenderer.removeListener('success', this.onSuccess)
   }
 
-  onError (event:any, error:Error) {
+  onError (_event:any, error:Error) {
     const tx = (window as any).translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
 
-  onSuccess (event:any, text: string) {
+  onSuccess (_event:any, text: string) {
     this.userFeedback({ type: 'success', text })
   }
 
@@ -108,10 +108,7 @@ export default class ScreenController extends Component {
         }}>
           {!deltachat.ready
             ? <LoginScreen logins={logins} deltachat={deltachat} />
-            : <MainScreen
-              deltachat={deltachat}
-              mode={'login'}
-            />
+            : <MainScreen/>
           }
           <DialogController
             ref={this.dialogs}
