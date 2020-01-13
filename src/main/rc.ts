@@ -1,10 +1,5 @@
 import rc from 'rc';
-
-export interface RC_Config {
-  'log-debug': boolean
-  'log-to-console': boolean
-  'machine-readable-stacktrace': boolean
-}
+import { RC_Config } from '../shared/shared-types';
 
 const defaults:RC_Config = {
   'log-debug': false,
