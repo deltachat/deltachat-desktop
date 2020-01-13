@@ -166,6 +166,6 @@
   },
   "staticPath": {
     "source": "/static",
-    "target": "/tsc-dist/result"
+    "target": "/html-dist"
   }
 }
