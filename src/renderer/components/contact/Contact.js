@@ -66,7 +66,7 @@ export function Avatar (props) {
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <div className='AvatarBubble' style={{backgroundColor: color}}>
+    <div className='AvatarBubble' style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
