@@ -12,7 +12,7 @@ module.exports = (_, argv) => ({
   optimization: {
     nodeEnv: argv.mode
   },
-  devtool: 'source-map', // we now somehow need to tell this sourcemap to honor the source maps from ts
+  devtool: 'inline-source-map', // this must be inline for some unknown reason
   node: {
     __dirname: true
   },
@@ -23,8 +23,8 @@ module.exports = (_, argv) => ({
     rules: [
       {
         test: /\.js$/,
-        include: path.normalize(`${__dirname}/../tsc-dist/renderer`),
-        use: {
+        include: path.normalize(`${__dirname}/../tsc-dist`),
+        use: [{
           loader: 'babel-loader',
           options: {
             presets: [
@@ -33,7 +33,12 @@ module.exports = (_, argv) => ({
             ],
             sourceType: 'module'
           }
-        }
+        }, {
+          loader: 'source-map-loader',
+          options: {
+            enforce: 'pre'
+          }
+        }]
       }
     ]
   }
