@@ -1,11 +1,13 @@
 const domHelper = {
   browser: null,
+  app: null,
 
   getMainMenuItemSelector (index) {
     return `.bp3-menu li:nth-child(${index}) a.bp3-menu-item`
   },
 
   init (app) {
+    this.app = app
     this.browser = app.client
   },
 
@@ -41,6 +43,23 @@ const domHelper = {
     } catch (error) {
       return false
     }
+  },
+  clearAndSetValue (selector, value) {
+    // this.browser.click(selector).click(selector) // selects the text written in the input
+    // this.browser.keys('Delete') // removes old value
+    this.browser.$(selector).$(function () {
+      console.log(this.value)
+      return this.nextSibling
+    })
+    this.browser.setValue(selector, value) // sets new Value
+    return this
+  },
+  click (selector) {
+    this.browser.click(selector)
+    return this
+  },
+  async clickChatByName (name) {
+    this.browser.click('.chat-list-item__name=' + name)
   }
 }
 

@@ -49,7 +49,9 @@ function createAppWithConfig (overrideConfig) {
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
     env: { TEST_DIR },
-    waitTimeout: 10e3
+    waitTimeout: 10e3,
+    chromeDriverLogPath: '../chromedriver.log',
+    webdriverLogPath: '../webdriver.log'
   })
 }
 
