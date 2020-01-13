@@ -1,4 +1,20 @@
 .module-contact-name__profile-name {
     font-style: italic;
 }
- 
+
+.AvatarBubble {
+  position: relative;
+  z-index: 2;
+  object-fit: cover;
+  height: 48px;
+  width: 48px;
+  min-width: 48px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-radius: 24px;
+  background-color: '#505050';
+  color: var(--avatarLabelColor);
+  font-size: 26px;
+  line-height: 48px;
+  text-align: center;
+}

@@ -66,19 +66,19 @@ export function Avatar (props) {
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <AvatarBubble color={color}>
+    <div className='AvatarBubble' style={{backgroundColor: color}}>
       {initial}
-    </AvatarBubble>
+    </div>
   )
 }
 
 export function QRAvatar () {
   return (
-    <AvatarBubble>
+    <div className='AvatarBubble'>
       <QRAvatarQRCodeImg src='../images/qr_icon.png'
         className='sharp-pixel-image'
       />
-    </AvatarBubble>
+    </div>
   )
 }
 
@@ -101,15 +101,6 @@ export const AvatarMixin = css`
 
 export const AvatarImage = styled.img`
   ${AvatarMixin}
-`
-
-export const AvatarBubble = styled.div`
-  ${AvatarMixin}
-  background-color: ${({ color }) => color || '#505050'};
-  color: var(--avatarLabelColor);
-  font-size: 26px;
-  line-height: 48px;
-  text-align: center;
 `
 
 export const VerifiedIconImg = styled.img`
