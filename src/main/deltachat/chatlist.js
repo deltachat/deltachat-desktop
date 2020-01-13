@@ -2,7 +2,7 @@ const C = require('deltachat-node/constants')
 const log = require('../../shared/logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
 
-const { integerToHexColor } = require('./util')
+const { integerToHexColor } = require('../../shared/util')
 
 const SplitOut = require('./splitout')
 module.exports = class DCChatList extends SplitOut {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
-import { integerToHexColor } from '../../../main/deltachat/util'
+import { integerToHexColor } from '../../../shared/util'
 import styled from 'styled-components'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
