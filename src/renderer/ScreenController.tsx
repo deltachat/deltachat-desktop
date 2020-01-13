@@ -1,23 +1,28 @@
-/* eslint-disable no-useless-escape */
-const React = require('react')
+import { Login, AppState } from "../shared/shared-types"
+
+import React from "react"
+import { Component, createRef } from 'react'
 const { ipcRenderer } = require('electron')
 
-const ScreenContext = require('./contexts/ScreenContext')
+import ScreenContext from './contexts/ScreenContext'
 const LoginScreen = require('./components/LoginScreen').default
 const MainScreen = require('./components/MainScreen').default
-const dialogs = require('./components/dialogs')
+import {Controller as DialogController} from './components/dialogs'
+
 
 export interface userFeedback {
   type: 'error'|'success'
   text: string
 }
 
-export default class ScreenController extends React.Component {
-   
-  props: any;
-  state: { message: userFeedback|false }
+export default class ScreenController extends Component {
 
-  constructor (props:any) {
+  dialogs: React.RefObject<DialogController>;
+  state: { message: userFeedback|false };
+  changeScreen:any;
+  onShowAbout:any;
+
+  constructor (public props:{logins:Login[], deltachat: AppState['deltachat']}) {
     super(props)
     this.state = {
       message: false
@@ -29,10 +34,8 @@ export default class ScreenController extends React.Component {
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
-    this.attachDialog = this.attachDialog.bind(this)
-    this.detachDialog = this.detachDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
-    this.dialogs = React.createRef()
+    this.dialogs = createRef()
   }
 
   userFeedback (message:userFeedback|false) {
@@ -78,14 +81,6 @@ export default class ScreenController extends React.Component {
     this.dialogs.current.close(name)
   }
 
-  attachDialog (...args:any[]) {
-    this.dialogs.current.attachDialog(...args)
-  }
-
-  detachDialog (...args:any[]) {
-    this.dialogs.current.detachDialog(...args)
-  }
-
   render () {
     const { logins, deltachat } = this.props
 
@@ -102,8 +97,6 @@ export default class ScreenController extends React.Component {
           closeDialog: this.closeDialog,
           userFeedback: this.userFeedback,
           changeScreen: this.changeScreen,
-          attachDialog: this.attachDialog,
-          detachDialog: this.detachDialog
         }}>
           {!deltachat.ready
             ? <LoginScreen logins={logins} deltachat={deltachat} />
@@ -112,7 +105,7 @@ export default class ScreenController extends React.Component {
               mode={'login'}
             />
           }
-          <dialogs.Controller
+          <DialogController
             ref={this.dialogs}
             deltachat={deltachat}
             userFeedback={this.userFeedback} />
