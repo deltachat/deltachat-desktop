@@ -22,6 +22,7 @@ async function getLogins () {
     // search for old accounts and use them
     accounts.push(...await readDeltaAccounts(getConfigPath()))
   }
+  log.debug('Found following accounts:', accounts)
   return accounts
 }
 

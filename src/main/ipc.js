@@ -291,17 +291,16 @@ function init (cwd, state, logHandler) {
       Object.keys(savedCredentials).length !== 0) {
     const selectedAccount = state.logins.find(account => account.addr === savedCredentials.addr)
 
-    if (!selectedAccount) {
-      log.error('Previous account not found!')
-      throw new Error('Previous account not found!')
+    if (selectedAccount) {
+      dcController.loginController.login(
+        selectedAccount.path,
+        savedCredentials,
+        sendStateToRenderer,
+        txCoreStrings()
+      )
+    } else {
+      log.error('Previous account not found!', state.saved.credentials, 'is not in the list of found logins:', state.logins)
     }
-
-    dcController.loginController.login(
-      selectedAccount.path,
-      savedCredentials,
-      sendStateToRenderer,
-      txCoreStrings()
-    )
   }
 }
 
