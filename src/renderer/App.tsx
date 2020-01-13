@@ -28,8 +28,10 @@ export default function App (props:any) {
         if ((ev.target as HTMLElement).localName === 'textarea' || (ev.target as HTMLElement).localName === 'input') {
           stop = false
         } else {
-          for (let index = 0; index < ev.path.length; index++) {
-            const element: HTMLElement = ev.path[index]
+          // KeyboardEvent ev.path does ONLY exist in CHROMIUM
+          const invokePath:HTMLElement[] = (ev as any).path
+          for (let index = 0; index < invokePath.length; index++) {
+            const element: HTMLElement = invokePath[index]
             if (element.localName === 'textarea' || element.localName === 'input') stop = false
           }
         }
