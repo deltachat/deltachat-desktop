@@ -10,7 +10,7 @@ window.eval = global.eval = function () {
 
 function main () {
   const logger = require('../shared/logger')
-  logger.setLogHandler((...args) => ipcRenderer.send('handleLogMessage', ...args))
+  logger.setLogHandler((...args:any[]) => ipcRenderer.send('handleLogMessage', ...args))
   logger.printProcessLogLevelInfo()
 
   const App = require('./App').default
