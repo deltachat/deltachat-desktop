@@ -17,7 +17,7 @@ export function windowDefaults () {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${join(__dirname, '..', '..', 'static', 'main.html')}`
+    main: `file://${join(__dirname, '..', '..', 'html-dist', 'main.html')}`
   }
 }
 

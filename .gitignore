@@ -72,3 +72,8 @@ typings/
 
 # conversations
 static/conversations.css
+
+
+.cache/
+
+html-dist/
