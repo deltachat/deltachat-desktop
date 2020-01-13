@@ -17,26 +17,25 @@ import QrInviteCode from './QrInviteCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 
-export const allDialogs = [
-  DeadDrop,
-  FullscreenMedia,
-  MessageDetail,
-  EnterAutocryptSetupMessage,
-  SendAutocryptSetupMessage,
-  ImexProgress,
-  About,
-  Settings,
-  ForwardMessage,
-  EncryptionInfo,
-  CreateChat,
-  EditGroup,
-  ViewProfile,
-  MapDialog,
-  QrInviteCode,
-  ConfirmationDialog,
-  UnblockContacts,
-  ViewProfile
-]
+export const allDialogs = {
+  DeadDrop: DeadDrop,
+  FullscreenMedia: FullscreenMedia,
+  MessageDetail: MessageDetail,
+  EnterAutocryptSetupMessage: EnterAutocryptSetupMessage,
+  SendAutocryptSetupMessage: SendAutocryptSetupMessage,
+  ImexProgress: ImexProgress,
+  About: About,
+  Settings: Settings,
+  ForwardMessage: ForwardMessage,
+  EncryptionInfo: EncryptionInfo,
+  CreateChat: CreateChat,
+  EditGroup: EditGroup,
+  ViewProfile: ViewProfile,
+  MapDialog: MapDialog,
+  QrInviteCode: QrInviteCode,
+  ConfirmationDialog: ConfirmationDialog,
+  UnblockContacts: UnblockContacts
+}
 
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
@@ -45,9 +44,10 @@ export class Controller extends React.Component {
     super(props)
 
     var dialogs = {}
-    allDialogs.forEach((Component) => {
-      dialogs[Component.name] = {
-        Component,
+    Object.keys(allDialogs).forEach((key) => {
+      dialogs[key] = {
+        name: key,
+        Component: allDialogs[key],
         props: false
       }
     })
@@ -81,7 +81,7 @@ export class Controller extends React.Component {
           const isOpen = dialog.props !== false
           if (!isOpen) return null
 
-          var name = dialog.Component.name
+          var name = dialog.name
           var defaultProps = {
             isOpen,
             onClose: () => this.close(name),
