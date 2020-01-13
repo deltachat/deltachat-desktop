@@ -1,10 +1,11 @@
+// webpack.config.js for the renderer
 const path = require('path')
 
 module.exports = (_, argv) => ({
-  entry: path.normalize(`${__dirname}/tsc-dist/renderer/main.js`),
+  entry: path.normalize(`${__dirname}/../tsc-dist/renderer/main.js`),
   target: 'electron-main',
   output: {
-    path: path.normalize(`${__dirname}/static`),
+    path: path.normalize(`${__dirname}/../static`),
     filename: 'bundle.js',
     libraryTarget: 'commonjs2'
   },
@@ -22,7 +23,7 @@ module.exports = (_, argv) => ({
     rules: [
       {
         test: /\.js$/,
-        include: path.normalize(`${__dirname}/tsc-dist/renderer`),
+        include: path.normalize(`${__dirname}/../tsc-dist/renderer`),
         use: {
           loader: 'babel-loader',
           options: {
