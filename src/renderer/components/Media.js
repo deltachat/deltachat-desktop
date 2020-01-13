@@ -3,7 +3,7 @@ import React from 'react'
 import C from 'deltachat-node/constants'
 import { callDcMethodAsync } from '../ipc'
 
-import ScreenContext from '../contexts/ScreenContext'
+import { ScreenContext } from '../contexts'
 import Attachment, { isVideo, isImage } from './message/Attachment'
 
 const GROUPS = {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ThemeProvider } from './ThemeManager'
-import SettingsContext from './contexts/SettingsContext'
+import { SettingsContext } from './contexts'
 import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'

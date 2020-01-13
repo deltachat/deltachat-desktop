@@ -5,9 +5,7 @@ import Composer from '../composer/Composer'
 import logger from '../../../shared/logger'
 import MessageList from './MessageList'
 
-import SettingsContext from '../../contexts/SettingsContext'
-
-import ScreenContext from '../../contexts/ScreenContext'
+import { SettingsContext, ScreenContext } from '../../contexts'
 
 import { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } from 'deltachat-node/constants'
 

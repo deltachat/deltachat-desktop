@@ -2,7 +2,7 @@ import C from 'deltachat-node/constants'
 import React, { useContext } from 'react'
 import { callDcMethodAsync } from '../ipc'
 import { ipcRenderer } from 'electron'
-import ScreenContext from '../contexts/ScreenContext'
+import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import {
   Menu,

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import mimeTypes from 'mime-types'
 import { openAttachmentInShell } from './messageFunctions'
 import C from 'deltachat-node/constants'
-import ScreenContext from '../../contexts/ScreenContext'
+import { ScreenContext } from '../../contexts'
 
 import { isImageTypeSupported, isVideoTypeSupported } from '../conversations'
 
