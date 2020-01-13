@@ -65,6 +65,8 @@ function getStackTrace () {
   return rc['machine-readable-stacktrace'] ? stack : stack.map(s => `\n${s.toString()}`).join()
 }
 
+const LOG_DEBUG = rc['log-debug']
+
 class Logger {
   constructor (channel) {
     this.channel = channel
@@ -72,7 +74,7 @@ class Logger {
   }
 
   debug (...args) {
-    if (!rc['log-debug']) return
+    if (!LOG_DEBUG) return
     log(this, 0, undefined, args)
   }
 
