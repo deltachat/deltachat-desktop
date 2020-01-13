@@ -1,6 +1,6 @@
 const C = require('deltachat-node/constants')
 const log = require('../../shared/logger').getLogger('main/deltachat/messagelist')
-const { integerToHexColor } = require('./util')
+const { integerToHexColor } = require('../../shared/util')
 const filesizeConverter = require('filesize')
 const mime = require('mime-types')
 
