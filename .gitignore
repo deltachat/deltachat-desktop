@@ -1,6 +1,7 @@
 tsc-dist/
 dist/
 static/bundle.js
+static/bundle.js.map
 static/main.css
 _locales/*.json
 !_locales/_languages.json
