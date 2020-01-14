@@ -48,12 +48,13 @@
     .message-buttons {
         position: absolute;
         top: 5px;
-        right: 0;
+        right: -4px;
         display: inline-flex;
         flex-direction: row;
         align-items: center;
         opacity: 0;
         z-index: 10;
+        user-select: text;
 
         .msg-button {
             height: 24px;
@@ -73,10 +74,13 @@
                 display: none;
                 /* not used currently */
                 @include color-svg('../images/reply.svg', var(--messageButtons));
+                user-select: none;
             }
 
             &.menu {
                 @include color-svg-rotated('../images/ellipsis.svg', var(--messageButtons));
+                -webkit-mask-position-y: 4px;
+                user-select: none;
             }
         }
     }
