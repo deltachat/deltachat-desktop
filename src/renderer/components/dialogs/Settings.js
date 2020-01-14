@@ -72,7 +72,8 @@ export default class Settings extends React.Component {
       'displayname',
       'selfstatus',
       'mdns_enabled',
-      'show_emails'
+      'show_emails',
+      'bcc_self'
     ]])
 
     const advancedSettings = {
@@ -322,6 +323,7 @@ export default class Settings extends React.Component {
             { this.renderDeltaSwitch('inbox_watch', this.translate('pref_watch_inbox_folder')) }
             { this.renderDeltaSwitch('sentbox_watch', this.translate('pref_watch_sent_folder')) }
             { this.renderDeltaSwitch('mvbox_watch', this.translate('pref_watch_mvbox_folder')) }
+            { this.renderDeltaSwitch('bcc_self', this.translate('pref_send_copy_to_self')) }
             { this.renderDeltaSwitch('mvbox_move', this.translate('pref_auto_folder_moves')) }
           </Card>
           <Card elevation={Elevation.ONE}>
