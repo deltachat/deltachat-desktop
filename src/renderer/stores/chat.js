@@ -122,8 +122,9 @@ chatStore.effects.push(async ({ type, payload }, state) => {
     // might be an issue if callDcMethodAsync has a significant delay
     const chat = await callDcMethodAsync('chatList.selectChat', [chatId])
     const messageIds = await callDcMethodAsync('messageList.getMessageIds', [chatId])
-    const oldestFetchedMessageIndex = messageIds.length - PAGE_SIZE
+    const oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
     const newestFetchedMessageIndex = messageIds.length
+  
     const messageIdsToFetch = messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex)
     const messages = await callDcMethodAsync('messageList.getMessages', [messageIdsToFetch])
     chatStore.dispatch({
