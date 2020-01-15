@@ -124,7 +124,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
     const messageIds = await callDcMethodAsync('messageList.getMessageIds', [chatId])
     const oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
     const newestFetchedMessageIndex = messageIds.length
-  
+
     const messageIdsToFetch = messageIds.slice(oldestFetchedMessageIndex, newestFetchedMessageIndex)
     const messages = await callDcMethodAsync('messageList.getMessages', [messageIdsToFetch])
     chatStore.dispatch({
@@ -177,14 +177,16 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
   if (state.id !== chatId) {
     return
   }
-  chatStore.dispatch({ type: 'MODIFIED_CHAT',
+  chatStore.dispatch({
+    type: 'MODIFIED_CHAT',
     payload: {
       profileImage: chat.profileImage,
       name: chat.name,
       subtitle: chat.subtitle,
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup
-    } })
+    }
+  })
 })
 
 ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
