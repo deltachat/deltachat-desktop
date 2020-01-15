@@ -126,9 +126,7 @@ describe('Create chat and send message works', function () {
       .setValue('#addr', conf.account2.email)
       .setValue('#mail_pw', conf.account2.password)
       .click('button[type=\'submit\']')
-
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
-    app.client.getText('h2').should.eventually.equal(welcomeMessage, 'Login successful')
   })
   it('create chat', async () => {
     await domHelper.openMainMenuItem('New chat')
