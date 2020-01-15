@@ -23,7 +23,7 @@ const domHelper = {
     await this.openMainMenuItem('Settings')
   },
   async logout () {
-    await this.openMainMenuItem('Switch account')
+    return this.openMainMenuItem('Switch account')
   },
   async closeDialog () {
     this.browser.$('.bp3-dialog-header .bp3-dialog-close-button').click()

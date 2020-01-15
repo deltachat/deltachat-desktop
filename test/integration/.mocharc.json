@@ -1,0 +1,7 @@
+{
+  "diff": true,
+  "opts": false,
+  "slow": 75,
+  "timeout": 30000,
+  "ui": "bdd"
+}
