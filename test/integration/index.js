@@ -71,6 +71,7 @@ describe('Login with valid credentials works', function () {
   it('login with valid credentials', async () => {
     domHelper.init(app)
     conf.account1 = await createTmpUser()
+    conf.account2 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account1.email)
       .setValue('#mail_pw', conf.account1.password)
@@ -119,16 +120,18 @@ describe('Create chat and send message works', function () {
       return app.stop()
     }
   })
-  it('login with other valid credentials works', async () => {
+  it('login with other valid credentials works', async function () {
     domHelper.init(app)
-    conf.account2 = await createTmpUser()
+    this.retries(3)
     app.client
       .setValue('#addr', conf.account2.email)
       .setValue('#mail_pw', conf.account2.password)
       .click('button[type=\'submit\']')
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
+    app.client.getText('h2').should.eventually.equal(welcomeMessage)
   })
   it('create chat', async () => {
+    this.retries(3)
     await domHelper.openMainMenuItem('New chat')
     await app.client.waitUntilTextExists('p', 'New group', 20e3)
     assert.isOk(await app.client.$('.FixedDeltaDialog'), 'Dialog is shown')
