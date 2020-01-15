@@ -137,6 +137,8 @@ describe('Create chat and send message works', function () {
     assert.isOk(await app.client.$('p=New contact'), 'New contact button is visible')
     await app.client.$('p=New contact').click()
     domHelper.clickChatByName(conf.account1.email)
+  })
+  it('send message', async () => {
     await app.client.waitForExist('#composer-textarea', 3000)
     await app.client.setValue('#composer-textarea', testMessage1)
     await app.client.click('button[aria-label=\'Send\']')
