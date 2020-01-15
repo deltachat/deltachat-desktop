@@ -130,6 +130,8 @@ describe('Create chat and send message works', function () {
   })
   it('create chat', async () => {
     await domHelper.openMainMenuItem('New chat')
+    await app.client.waitUntilTextExists('p', 'New group', 20e3)
+    assert.isOk(await app.client.$('.FixedDeltaDialog'), 'Dialog is shown')
     app.client.$('.FixedDeltaDialog input').setValue(conf.account1.email)
     await app.client.waitUntilTextExists('p', 'New contact', 20e3)
     assert.isOk(await app.client.$('p=New contact'), 'New contact button is visible')
