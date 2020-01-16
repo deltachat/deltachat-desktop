@@ -110,7 +110,9 @@ describe('Login with other valid credentials works', function () {
     app.client
       .setValue('#addr', conf.account2.email)
       .setValue('#mail_pw', conf.account2.password)
-    assert.equal(await app.client.$('#addr').getValue(), conf.account2.email)
+    await setup.wait(1000)
+    const enteredValue = await app.client.$('#addr').getValue()
+    assert.equal(enteredValue, conf.account2.email)
     app.client.click('button[type=\'submit\']')
 
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
