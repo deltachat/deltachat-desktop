@@ -7,10 +7,6 @@ const { describe, it, before, after } = require('mocha')
 
 process.env.NODE_ENV = 'test'
 
-// const setup = require('./setup')
-// const domHelper = require('./domHelper')
-// const testCredentials = setup.getConfig().credentials
-
 chai.should()
 chai.use(chaiAsPromised)
 const app = setup.createApp()
@@ -19,35 +15,35 @@ chai.config.includeStack = true
 
 const testMessage1 = 'Test message 1'
 
-// describe('Login with false mail address gives an error', function () {
-//   this.timeout(30000)
-//   before(function () {
-//     chaiAsPromised.transferPromiseness = app.transferPromiseness
-//     return app.start()
-//   })
-//   after(function () {
-//     if (app && app.isRunning()) {
-//       return app.stop()
-//     }
-//   })
+describe('Login with false mail address gives an error', function () {
+  this.timeout(30000)
+  before(function () {
+    chaiAsPromised.transferPromiseness = app.transferPromiseness
+    return app.start()
+  })
+  after(function () {
+    if (app && app.isRunning()) {
+      return app.stop()
+    }
+  })
 
-//   it('app runs', async () => {
-//     const text = await app.client.getText('.bp3-navbar-heading')
-//     return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
-//   })
+  it('app runs', async () => {
+    const text = await app.client.getText('.bp3-navbar-heading')
+    return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
+  })
 
-//   it('wrong credentials results in error message', async () => {
-//     domHelper.init(app)
-//     app.client
-//       .setValue('#addr', 'foo')
-//       .setValue('#mail_pw', 'bar')
-//       .click('button[type=\'submit\']')
-//     await setup.wait(1000)
-//     const text = await app.client.getText('.user-feedback')
-//     app.client.$('.user-feedback').click()
-//     return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
-//   })
-// })
+  it('wrong credentials results in error message', async () => {
+    domHelper.init(app)
+    app.client
+      .setValue('#addr', 'foo')
+      .setValue('#mail_pw', 'bar')
+      .click('button[type=\'submit\']')
+    await setup.wait(1000)
+    const text = await app.client.getText('.user-feedback')
+    app.client.$('.user-feedback').click()
+    return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
+  })
+})
 
 const conf = {
   account1: null,
@@ -57,7 +53,6 @@ const conf = {
 const welcomeMessage = 'Select a chat or create a new chat'
 
 describe('Login with valid credentials works', function () {
-  this.timeout(30000)
   before(function async () {
     chaiAsPromised.transferPromiseness = app.transferPromiseness
     return app.start()
@@ -93,7 +88,6 @@ describe('Login with valid credentials works', function () {
 })
 
 describe('Login with other valid credentials works', function () {
-  this.timeout(30000)
   before(function async () {
     chaiAsPromised.transferPromiseness = app.transferPromiseness
     return app.start()
@@ -118,7 +112,6 @@ describe('Login with other valid credentials works', function () {
 })
 
 describe('Create chat and send message works', function () {
-  this.timeout(30000)
   before(function () {
     chaiAsPromised.transferPromiseness = app.transferPromiseness
     return app.start()
@@ -129,7 +122,6 @@ describe('Create chat and send message works', function () {
     }
   })
   it('create chat', async () => {
-    // await setup.wait(2000)
     domHelper.init(app)
     await domHelper.login(conf.account2.email)
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
@@ -151,7 +143,6 @@ describe('Create chat and send message works', function () {
 })
 
 describe('Contact request and receive message works', function () {
-  this.timeout(30000)
   before(function async () {
     chaiAsPromised.transferPromiseness = app.transferPromiseness
     return app.start()

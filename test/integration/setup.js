@@ -10,7 +10,6 @@ const getConfig = require(path.join(__dirname, 'fixtures/config'))
 
 module.exports = {
   createApp,
-  createAppWithConfig,
   endTest,
   screenshotCreateOrCompare,
   compareFiles,
@@ -33,25 +32,6 @@ function createApp () {
       TEST_DIR
     },
     waitTimeout: 10e3
-  })
-}
-
-// Returns a promise that resolves to a Spectron Application once the app has loaded.
-// @param Object config to override default test config
-function createAppWithConfig (overrideConfig) {
-  const TEST_DIR = tempy.directory()
-  const defaultConfig = getConfig()
-  if (overrideConfig) {
-    const extendedConfig = Object.assign({}, defaultConfig, overrideConfig)
-    fs.writeFileSync(path.join(TEST_DIR, 'config.json'), JSON.stringify(extendedConfig))
-  }
-  return new Application({
-    path: electronPath,
-    args: [path.join(__dirname, '..', '..')],
-    env: { TEST_DIR },
-    waitTimeout: 10e3,
-    chromeDriverLogPath: '../chromedriver.log',
-    webdriverLogPath: '../webdriver.log'
   })
 }
 
@@ -81,7 +61,7 @@ function endTest (app, t, err) {
 // Takes a screenshot of the app
 // If we already have a reference under test/screenshots, assert that they're the same
 // Otherwise, create the reference screenshot: test/screenshots/<platform>/<name>.png
-function screenshotCreateOrCompare (app, t, name) {
+function screenshotCreateOrCompare (app, assert, name, createOnly) {
   const ssDir = path.join(__dirname, 'screenshots', process.platform)
   const ssPath = path.join(ssDir, name + '.png')
   let ssBuf
@@ -95,15 +75,18 @@ function screenshotCreateOrCompare (app, t, name) {
     return app.browserWindow.capturePage()
   }).then(function (buffer) {
     if (ssBuf.length === 0) {
-      console.log('Saving screenshot ' + ssPath)
       fs.writeFileSync(ssPath, buffer)
     } else {
-      const match = compareIgnoringTransparency(buffer, ssBuf)
-      t.ok(match, 'screenshot comparison ' + name)
-      if (!match) {
-        const ssFailedPath = path.join(ssDir, name + '-failed.png')
-        console.log('Saving screenshot, failed comparison: ' + ssFailedPath)
-        fs.writeFileSync(ssFailedPath, buffer)
+      if (createOnly) {
+
+      } else {
+        const match = compareIgnoringTransparency(buffer, ssBuf)
+        assert.isTrue(match, 'screenshot comparison ' + name)
+        if (!match) {
+          const ssFailedPath = path.join(ssDir, name + '-failed.png')
+          console.log('Saving screenshot, failed comparison: ' + ssFailedPath)
+          fs.writeFileSync(ssFailedPath, buffer)
+        }
       }
     }
   })

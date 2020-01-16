@@ -12,7 +12,7 @@
     "test-standard-fix": "standard --fix",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
-    "test-integration": "mocha \"./test/integration/index.js\"",
+    "test-integration": "mocha \"./test/integration/\"",
     "dev": "npm run build && npm run start --",
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
