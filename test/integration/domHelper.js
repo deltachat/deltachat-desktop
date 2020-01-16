@@ -60,6 +60,10 @@ const domHelper = {
   },
   async clickChatByName (name) {
     this.browser.click('.chat-list-item__name=' + name)
+  },
+  async login (accountAddress) {
+    await this.browser.waitUntilTextExists('.bp3-button-text', accountAddress, 20e3)
+    return this.browser.$('.bp3-button-text=' + accountAddress).click()
   }
 }
 

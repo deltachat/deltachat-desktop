@@ -19,35 +19,35 @@ chai.config.includeStack = true
 
 const testMessage1 = 'Test message 1'
 
-describe('Login with false mail address gives an error', function () {
-  this.timeout(30000)
-  before(function () {
-    chaiAsPromised.transferPromiseness = app.transferPromiseness
-    return app.start()
-  })
-  after(function () {
-    if (app && app.isRunning()) {
-      return app.stop()
-    }
-  })
+// describe('Login with false mail address gives an error', function () {
+//   this.timeout(30000)
+//   before(function () {
+//     chaiAsPromised.transferPromiseness = app.transferPromiseness
+//     return app.start()
+//   })
+//   after(function () {
+//     if (app && app.isRunning()) {
+//       return app.stop()
+//     }
+//   })
 
-  it('app runs', async () => {
-    const text = await app.client.getText('.bp3-navbar-heading')
-    return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
-  })
+//   it('app runs', async () => {
+//     const text = await app.client.getText('.bp3-navbar-heading')
+//     return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
+//   })
 
-  it('wrong credentials results in error message', async () => {
-    domHelper.init(app)
-    app.client
-      .setValue('#addr', 'foo')
-      .setValue('#mail_pw', 'bar')
-      .click('button[type=\'submit\']')
-    await setup.wait(1000)
-    const text = await app.client.getText('.user-feedback')
-    app.client.$('.user-feedback').click()
-    return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
-  })
-})
+//   it('wrong credentials results in error message', async () => {
+//     domHelper.init(app)
+//     app.client
+//       .setValue('#addr', 'foo')
+//       .setValue('#mail_pw', 'bar')
+//       .click('button[type=\'submit\']')
+//     await setup.wait(1000)
+//     const text = await app.client.getText('.user-feedback')
+//     app.client.$('.user-feedback').click()
+//     return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
+//   })
+// })
 
 const conf = {
   account1: null,
@@ -80,29 +80,37 @@ describe('Login with valid credentials works', function () {
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     app.client.getText('h2').should.eventually.equal(welcomeMessage)
   })
-  // it('changing settings is applied to config', async () => {
-  //   domHelper.init(app)
-  //   await domHelper.openSettings()
-  //   let currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-  //   assert.equal(currentConfig['enterKeySends'], false, 'enterKeySends is true in config.json')
-  //   assert.isTrue(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is inactive')
-  //   await app.client.$('label=Enter key sends').click()
-  //   await app.client.pause(1100) // has to be greater than state.SAVE_DEBOUNCE_INTERVAL
-  //   await assert.isTrue(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active after click')
-  //   currentConfig = await setup.readConfigFile(app.env.TEST_DIR + '/config.json')
-  //   const newSetting = currentConfig['enterKeySends']
-  //   await domHelper.closeDialog()
-  //   return assert.isTrue(newSetting, 'enterKeySends is false in config.json')
-  // })
   it('account is created and a button shown in login screen', async () => {
     await domHelper.logout()
-    await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
-    assert.isNotEmpty(await app.client.$('p=Known accounts'), 'Account list exists')
-    const accountButton = await app.client.$('=' + conf.account1.email)
-    assert.isNotEmpty(accountButton, 'Account button exists')
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
   })
   it('account can login again', async () => {
-    app.client.$('ul li:first-child').click()
+    domHelper.login(conf.account1.email)
+    await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
+    app.client.getText('h2').should.eventually.equal(welcomeMessage)
+    await domHelper.logout()
+  })
+})
+
+describe('Login with other valid credentials works', function () {
+  this.timeout(30000)
+  before(function async () {
+    chaiAsPromised.transferPromiseness = app.transferPromiseness
+    return app.start()
+  })
+  after(function () {
+    if (app && app.isRunning()) {
+      return app.stop()
+    }
+  })
+
+  it('login with valid credentials', async () => {
+    domHelper.init(app)
+    app.client
+      .setValue('#addr', conf.account2.email)
+      .setValue('#mail_pw', conf.account2.password)
+      .click('button[type=\'submit\']')
+
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     app.client.getText('h2').should.eventually.equal(welcomeMessage)
     await domHelper.logout()
@@ -120,18 +128,11 @@ describe('Create chat and send message works', function () {
       return app.stop()
     }
   })
-  it('login with other valid credentials works', async function () {
-    domHelper.init(app)
-    this.retries(3)
-    app.client
-      .setValue('#addr', conf.account2.email)
-      .setValue('#mail_pw', conf.account2.password)
-      .click('button[type=\'submit\']')
-    await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
-    app.client.getText('h2').should.eventually.equal(welcomeMessage)
-  })
   it('create chat', async () => {
-    this.retries(3)
+    // await setup.wait(2000)
+    domHelper.init(app)
+    await domHelper.login(conf.account2.email)
+    await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     await domHelper.openMainMenuItem('New chat')
     await app.client.waitUntilTextExists('p', 'New group', 20e3)
     assert.isOk(await app.client.$('.FixedDeltaDialog'), 'Dialog is shown')
@@ -162,7 +163,8 @@ describe('Contact request and receive message works', function () {
   })
   it('contact request is displayed', async () => {
     domHelper.init(app)
-    app.client.$('ul li:first-child').click()
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
+    await domHelper.login(conf.account1.email)
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     await app.client.waitUntilTextExists('.chat-list-item__name', 'Contact request', 20e3)
     await domHelper.clickChatByName('Contact request')
