@@ -150,6 +150,12 @@ function getMenuTemplate (logHandler) {
       role: 'help',
       submenu: [
         {
+          translate: 'help_page_title',
+          click: () => {
+            windows.main.send('showHelpDialog')
+          }
+        },
+        {
           translate: 'global_menu_help_learn_desktop',
           click: () => {
             shell.openExternal(homePageUrl())
