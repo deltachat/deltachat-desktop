@@ -44,7 +44,7 @@ function HelpPageLocalCopyHint ({ props }) {
   ))
 
   return (
-    <p style={{ textAlign: 'center', fontSize: 'smaller', borderTop: 'solid thin lightgrey', paddingTop: '0.3em' }}>
+    <p className='help-page-local-copy-hint'>
       {linkedText}
     </p>
   )
@@ -59,7 +59,9 @@ export default function HelpPage (props) {
     >
       <DeltaDialogBody>
         <Card>
-          <HelpPageContent />
+          <span className='help-content'>
+            <HelpPageContent />
+          </span>
         </Card>
       </DeltaDialogBody>
       <DeltaDialogFooter>
