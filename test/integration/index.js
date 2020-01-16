@@ -116,9 +116,9 @@ describe('Login with other valid credentials works', function () {
     assert.equal(enteredValue, conf.account2.email)
     app.client.click('button[type=\'submit\']')
     await setup.wait(3000)
-    await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
-    // app.client.getText('h2').should.eventually.equal(welcomeMessage, 'Welcome message is shown')
-    // await domHelper.logout()
+    // await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
+    app.client.getText('h2').should.eventually.equal(welcomeMessage, 'Welcome message is shown')
+    await domHelper.logout()
   })
 })
 
