@@ -89,6 +89,7 @@ describe('Login with valid credentials works', function () {
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     app.client.getText('h2').should.eventually.equal(welcomeMessage)
     await domHelper.logout()
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
   })
 })
 
@@ -105,10 +106,11 @@ describe('Login with other valid credentials works', function () {
 
   it('login with valid credentials', async () => {
     domHelper.init(app)
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
     app.client
       .setValue('#addr', conf.account2.email)
       .setValue('#mail_pw', conf.account2.password)
-    assert.equal(await app.client.getValue('#addr'), conf.account2.email)
+    assert.equal(await app.client.$('#addr').getValue(), conf.account2.email)
     app.client.click('button[type=\'submit\']')
 
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
