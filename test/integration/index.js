@@ -28,8 +28,11 @@ describe('Login with false mail address gives an error', function () {
   })
 
   it('app runs', async () => {
-    const text = await app.client.getText('.bp3-navbar-heading')
-    return assert.equal(text, 'Welcome to Delta Chat', 'App is loaded and welcome message is shown')
+    app.client.getText('.bp3-navbar-heading')
+      .should.eventually.equal(
+        'Welcome to Delta Chat',
+        'App is loaded and welcome message is shown'
+      )
   })
 
   it('wrong credentials results in error message', async () => {
@@ -39,9 +42,11 @@ describe('Login with false mail address gives an error', function () {
       .setValue('#mail_pw', 'bar')
       .click('button[type=\'submit\']')
     await setup.wait(1000)
-    const text = await app.client.getText('.user-feedback')
+    app.client.getText('.user-feedback').should.eventually.equal(
+      'Bad email address.',
+      'Mail validation error is shown'
+    )
     app.client.$('.user-feedback').click()
-    return assert.equal(text, 'Bad email address.', 'Mail validation error is shown')
   })
 })
 
