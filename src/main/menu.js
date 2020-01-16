@@ -150,7 +150,7 @@ function getMenuTemplate (logHandler) {
       role: 'help',
       submenu: [
         {
-          translate: 'help_page_title',
+          translate: 'menu_help',
           click: () => {
             windows.main.send('showHelpDialog')
           }

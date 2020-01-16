@@ -53,7 +53,7 @@ function HelpPageLocalCopyHint ({ props }) {
 export default function HelpPage (props) {
   return (
     <DeltaDialog
-      title={window.translate('help_page_title')}
+      title={window.translate('menu_help')}
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
