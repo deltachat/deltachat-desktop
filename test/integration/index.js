@@ -13,7 +13,7 @@ const app = setup.createApp()
 const assert = chai.assert
 chai.config.includeStack = true
 
-const testMessage1 = 'Test message 1'
+// const testMessage1 = 'Test message 1'
 
 describe('Login with false mail address gives an error', function () {
   this.timeout(30000)
