@@ -10,10 +10,10 @@ process.env.NODE_ENV = 'test'
 chai.should()
 chai.use(chaiAsPromised)
 const app = setup.createApp()
-const assert = chai.assert
+// const assert = chai.assert
 chai.config.includeStack = true
 
-const testMessage1 = 'Test message 1'
+// const testMessage1 = 'Test message 1'
 const conf = {
   account1: null,
   account2: null
