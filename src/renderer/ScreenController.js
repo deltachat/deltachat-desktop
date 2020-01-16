@@ -23,6 +23,7 @@ class ScreenController extends React.Component {
     this.attachDialog = this.attachDialog.bind(this)
     this.detachDialog = this.detachDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
+    this.onShowHelp = this.showHelp.bind(this)
     this.dialogs = React.createRef()
   }
 
@@ -39,9 +40,11 @@ class ScreenController extends React.Component {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcRenderer.on('showHelpDialog', this.onShowHelp)
   }
 
   componentWillUnmount () {
+    ipcRenderer.removeListener('showHelpDialog', this.onShowHelp)
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
@@ -59,6 +62,10 @@ class ScreenController extends React.Component {
 
   showAbout (showAbout) {
     this.openDialog('About')
+  }
+
+  showHelp () {
+    this.openDialog('HelpPage')
   }
 
   openDialog (name, props) {
