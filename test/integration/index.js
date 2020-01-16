@@ -65,13 +65,14 @@ describe('Login with valid credentials works', function () {
   after(function () {
     if (app && app.isRunning()) {
       return app.stop()
+    } else {
+      console.debug('app not running!')
     }
   })
 
   it('login with valid credentials', async () => {
     domHelper.init(app)
     conf.account1 = await createTmpUser()
-    conf.account2 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account1.email)
       .setValue('#mail_pw', conf.account1.password)
@@ -96,7 +97,6 @@ describe('Login with valid credentials works', function () {
 
 describe('Login with other valid credentials works', function () {
   this.timeout(50000)
-  this.retries(3)
   before(function async () {
     chaiAsPromised.transferPromiseness = app.transferPromiseness
     return app.start()
@@ -107,18 +107,16 @@ describe('Login with other valid credentials works', function () {
     }
   })
 
-  it('login with valid credentials', async () => {
+  it('login with valid credentials', async function () {
     domHelper.init(app)
-    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3, 'Last account is shown')
+    conf.account2 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account2.email)
       .setValue('#mail_pw', conf.account2.password)
-    await setup.wait(3000)
-    const enteredValue = await app.client.$('#addr').getValue()
-    assert.equal(enteredValue, conf.account2.email)
-    app.client.click('button[type=\'submit\']')
-    await setup.wait(3000)
-    app.client.getText('h2').should.eventually.equal(welcomeMessage, 'Welcome message is shown')
+      .click('button[type=\'submit\']')
+
+    await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
+    app.client.getText('h2').should.eventually.equal(welcomeMessage)
     await domHelper.logout()
   })
 })
@@ -135,9 +133,9 @@ describe('Accounts are created', function () {
   })
   it('accounts are created', async () => {
     domHelper.init(app)
-    await app.client.waitUntilTextExists('p', 'Known accounts', 20e3, 'Account list is visible')
-    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3, 'Account 1 button is visible')
-    await app.client.waitUntilTextExists('.bp3-button-text', conf.account2.email, 20e3, 'Account 2 button is visible')
+    await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
+    await app.client.waitUntilTextExists('.bp3-button-text', conf.account2.email, 20e3)
   })
 })
 
