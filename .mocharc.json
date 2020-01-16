@@ -1,7 +1,7 @@
 {
   "diff": true,
   "opts": false,
-  "slow": 75,
-  "timeout": 30000,
+  "slow": 2000,
+  "timeout": 50000,
   "ui": "bdd"
 }
