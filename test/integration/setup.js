@@ -10,7 +10,6 @@ const getConfig = require(path.join(__dirname, 'fixtures/config'))
 
 module.exports = {
   createApp,
-  endTest,
   screenshotCreateOrCompare,
   compareFiles,
   waitForLoad,
@@ -20,9 +19,10 @@ module.exports = {
   readConfigFile
 }
 
+const TEST_DIR = tempy.directory()
+
 // Returns a promise that resolves to a Spectron Application once the app has loaded.
 function createApp () {
-  const TEST_DIR = tempy.directory()
   return new Application({
     path: electronPath,
     args: [path.join(__dirname, '..', '..')],
@@ -48,13 +48,6 @@ function wait (ms) {
   if (ms === undefined) ms = 1000 // Default: wait long enough for the UI to update
   return new Promise(function (resolve, reject) {
     setTimeout(resolve, ms)
-  })
-}
-
-// Quit the app, end the test, either in success (!err) or failure (err)
-function endTest (app, t, err) {
-  return app.stop().then(function () {
-    t.end(err)
   })
 }
 
@@ -151,6 +144,6 @@ function copy (pathFrom, pathTo) {
   }
 }
 
-function readConfigFile (path) {
-  return JSON.parse(fs.readFileSync(path))
+function readConfigFile () {
+  return JSON.parse(fs.readFileSync(path.join(TEST_DIR, 'config.json')))
 }

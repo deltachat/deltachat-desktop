@@ -24,7 +24,10 @@ const runAppSession = (name, tests) => {
   describe(name, function () {
     before(function async () {
       chaiAsPromised.transferPromiseness = app.transferPromiseness
-      return app.start()
+      return app.start().then(() => {
+        domHelper.init(app)
+        return app.client.waitUntilWindowLoaded()
+      })
     })
     tests()
     after(function () {
@@ -61,7 +64,6 @@ runAppSession('Login with false mail address gives an error', function () {
 
 runAppSession('Login with valid credentials works', function () {
   it('login with valid credentials', async () => {
-    domHelper.init(app)
     conf.account1 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account1.email)
@@ -76,7 +78,6 @@ runAppSession('Login with valid credentials works', function () {
 
 runAppSession('Login with other valid credentials works', function () {
   it('login with valid other credentials', async function () {
-    domHelper.init(app)
     conf.account2 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account2.email)
@@ -91,7 +92,7 @@ runAppSession('Login with other valid credentials works', function () {
 
 runAppSession('Accounts are created', function () {
   it('accounts are created', async () => {
-    domHelper.init(app)
+    await app.client.pause(500)
     await app.client.waitUntilTextExists('p', 'Known accounts', 20e3)
     await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
     await app.client.waitUntilTextExists('.bp3-button-text', conf.account2.email, 20e3)
@@ -100,7 +101,6 @@ runAppSession('Accounts are created', function () {
 
 runAppSession('Create chat and send message works', function () {
   it('create chat', async () => {
-    domHelper.init(app)
     await domHelper.login(conf.account2.email)
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
     await domHelper.openMainMenuItem('New chat')
@@ -122,7 +122,6 @@ runAppSession('Create chat and send message works', function () {
 
 runAppSession('Contact request and receive message works', function () {
   it('contact request is displayed', async () => {
-    domHelper.init(app)
     await app.client.waitUntilTextExists('.bp3-button-text', conf.account1.email, 20e3)
     await domHelper.login(conf.account1.email)
     await app.client.waitUntilTextExists('h2', welcomeMessage, 20e3)
@@ -139,5 +138,21 @@ runAppSession('Contact request and receive message works', function () {
     const messageText = await app.client.$('.text').getText()
     assert.equal(testMessage1, messageText)
     await domHelper.logout()
+  })
+})
+
+runAppSession('Update and persist Desktop settings', function () {
+  it('changing a settings is applied to config.json', async () => {
+    await domHelper.login(conf.account2.email)
+    await domHelper.openSettings()
+    let currentConfig = await setup.readConfigFile()
+    await assert.equal(currentConfig['enterKeySends'], false, 'enterKeySends is false in config.json')
+    await app.client.pause(200) // give react time to update dom
+    await assert.isOk(await domHelper.isInactiveSwitch('Enter key sends'), 'enterKeySends switch is not active after click')
+    await app.client.$('label=Enter key sends').click()
+    await app.client.pause(1100) // has to be greater than state.SAVE_DEBOUNCE_INTERVAL
+    await assert.isOk(await domHelper.isActiveSwitch('Enter key sends'), 'enterKeySends switch is active')
+    currentConfig = await setup.readConfigFile()
+    await assert.equal(currentConfig['enterKeySends'], true, 'enterKeySends is true in config.json')
   })
 })

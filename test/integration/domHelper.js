@@ -45,16 +45,6 @@ const domHelper = {
       return false
     }
   },
-  clearAndSetValue (selector, value) {
-    // this.browser.click(selector).click(selector) // selects the text written in the input
-    // this.browser.keys('Delete') // removes old value
-    this.browser.$(selector).$(function () {
-      console.log(this.value)
-      return this.nextSibling
-    })
-    this.browser.setValue(selector, value) // sets new Value
-    return this
-  },
   click (selector) {
     this.browser.click(selector)
     return this
@@ -63,6 +53,7 @@ const domHelper = {
     this.browser.click('.chat-list-item__name=' + name)
   },
   async login (accountAddress) {
+    await this.browser.pause(500)
     await this.browser.waitUntilTextExists('.bp3-button-text', accountAddress, 20e3)
     return this.browser.$('.bp3-button-text=' + accountAddress).click()
   }

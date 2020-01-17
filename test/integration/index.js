@@ -22,7 +22,10 @@ const runAppSession = (name, tests) => {
   describe(name, function () {
     before(function async () {
       chaiAsPromised.transferPromiseness = app.transferPromiseness
-      return app.start()
+      return app.start().then(() => {
+        domHelper.init(app)
+        return app.client.waitUntilWindowLoaded()
+      })
     })
     tests()
     after(function () {
@@ -43,7 +46,6 @@ runAppSession('Login with false mail address gives an error', function () {
   })
 
   it('wrong credentials results in error message', async () => {
-    domHelper.init(app)
     app.client
       .setValue('#addr', 'foo')
       .setValue('#mail_pw', 'bar')
@@ -59,7 +61,6 @@ runAppSession('Login with false mail address gives an error', function () {
 
 runAppSession('Login with valid credentials works', function () {
   it('login with valid credentials', async () => {
-    domHelper.init(app)
     conf.account1 = await createTmpUser()
     app.client
       .setValue('#addr', conf.account1.email)
