@@ -15,6 +15,7 @@ const domHelper = {
     this.browser.$('#main-menu-button').waitForExist(5000)
     await this.browser.click('#main-menu-button')
     if (label) {
+      await this.browser.pause(500)
       this.browser.$('=' + label).waitForExist(5000)
       await this.browser.click('=' + label)
     }
