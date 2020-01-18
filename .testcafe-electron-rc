@@ -1,0 +1,5 @@
+{
+    "mainWindowUrl": "./static/test.html",
+    "appPath": ".",
+    "openDevTools": true
+}

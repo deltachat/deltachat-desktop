@@ -38,6 +38,10 @@ function gitHubLicenseUrl () {
 function windowDefaults () {
   const headerHeight = 38
   const messageHeight = 100
+  let page = 'main.html'
+  if (process.env.NODE_ENV === 'test') {
+    page = 'test.html'
+  }
   return {
     bounds: {
       width: 1100,
@@ -46,7 +50,10 @@ function windowDefaults () {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${path.join(__dirname, '..', 'static', 'main.html')}`
+    webPreferences: {
+      allowRunningInsecureContent: false
+    },
+    main: `file://${path.join(__dirname, '..', 'static', page)}`
   }
 }
 

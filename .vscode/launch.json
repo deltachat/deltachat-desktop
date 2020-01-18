@@ -12,6 +12,21 @@
         },
         "args" : ["."],
         "outputCapture": "std"
-        }
+        },
+        {
+          "type": "node",
+          "protocol": "inspector",
+          "request": "launch",
+          "name": "Launch test files with TestCafe",
+          "program": "${workspaceRoot}/node_modules/testcafe/bin/testcafe.js",
+          "args": [
+              "--debug-mode",
+              "electron:.",
+              "${workspaceRoot}/test/testcafe/test.js"
+          ],
+          "env": [{"NODE_ENV": "test"}],
+          "console": "integratedTerminal",
+          "cwd": "${workspaceRoot}"
+      }
     ]
 }

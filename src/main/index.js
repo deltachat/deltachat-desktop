@@ -42,6 +42,10 @@ const devTools = require('./devtools')
 app.ipcReady = false
 app.isQuitting = false
 
+if (process.env.NODE_ENV === 'test') {
+  log.error('uncaughtError', 'NODE_ENV TEST!!')
+}
+
 Promise.all([
   getLogins(),
   new Promise((resolve, reject) => app.on('ready', resolve)),
@@ -157,13 +161,18 @@ app.on('web-contents-created', (e, contents) => {
   })
 })
 
+let contentSecurity = 'default-src \' \'none\''
+if (process.env.NODE_ENV === 'test') {
+  contentSecurity = 'default-src \'unsafe-inline\' \'self\' \'unsafe-eval\'; img-src \'self\' data:;'
+}
+
 app.once('ready', () => {
   devTools.tryInstallReactDevTools()
   session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
     fun({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ['default-src \'none\'']
+        'Content-Security-Policy': [contentSecurity]
       }
     })
   })
