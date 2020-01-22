@@ -1,11 +1,11 @@
-const { createWriteStream } = require('fs')
-const path = require('path')
-const { getLogsPath } = require('./application-constants')
+import { createWriteStream } from 'fs'
+import { join } from 'path'
+import { getLogsPath } from './application-constants'
 
 function logName () {
   const dir = getLogsPath()
   const d = new Date()
-  function pad (number) {
+  function pad (number:number) {
     return number < 10 ? '0' + number : number
   }
   const fileName = [
@@ -17,10 +17,10 @@ function logName () {
     `${pad(d.getSeconds())}`,
     '.log.tsv'
   ].join('')
-  return path.join(dir, fileName)
+  return join(dir, fileName)
 }
 
-module.exports = () => {
+export function createLogHandler () {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
   /* ignore-console-log */
@@ -28,17 +28,17 @@ module.exports = () => {
   return {
     /**
      * Internal log handler. Do not call directly!
-     * @param {string} channel The part/module where the message was logged from, e.g. 'main/deltachat'
-     * @param {string} level DEBUG, INFO, WARNING, ERROR or CRITICAL
-     * @param {array} stacktrace Stack trace if WARNING, ERROR or CRITICAL
-     * @param {string} ...args Variadic parameters. Stringified before logged to file
+     * @param channel The part/module where the message was logged from, e.g. 'main/deltachat'
+     * @param level DEBUG, INFO, WARNING, ERROR or CRITICAL
+     * @param stacktrace Stack trace if WARNING, ERROR or CRITICAL
+     * @param ...args Variadic parameters. Stringified before logged to file
      */
-    log: (channel, level, stacktrace, ...args) => {
+    log: (channel:string, level:string, stacktrace:any[], ...args:any[]) => {
       const timestamp = new Date().toISOString()
       let line = [timestamp, channel, level]
       line = line
         .concat([stacktrace, ...args])
-        .map(JSON.stringify)
+        .map(value => JSON.stringify(value))
       stream.write(`${line.join('\t')}\n`)
     },
     end: () => stream.end(),

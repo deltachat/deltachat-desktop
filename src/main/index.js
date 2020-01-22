@@ -18,7 +18,7 @@ ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())
 
 // Setup Logger
-const logHandler = require('./log-handler')()
+const logHandler = require('./log-handler').createLogHandler()
 const logger = require('../shared/logger')
 const log = logger.getLogger('main/index')
 logger.setLogHandler(logHandler.log)
