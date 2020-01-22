@@ -25,11 +25,14 @@ function helpPageReadContentFile () {
 
 export function HelpPageContent ({ props }) {
   // Make links open externaly (without this, nothing happens if one clicks on a link).
-  const parserOptions = { replace: ({ attribs, children }) => {
-    if (attribs && attribs.href && attribs.href.startsWith('http')) {
+  const parserOptions = { replace: (node) => {
+    if (node.attribs && node.attribs.href && node.attribs.href.startsWith('http')) {
       return (
-        <ClickableLink href={attribs.href}>{domToReact(children, parserOptions)}</ClickableLink>
+        <ClickableLink href={node.attribs.href}>{domToReact(node.children, parserOptions)}</ClickableLink>
       )
+    } else if (node.attribs && node.attribs.src) {
+      node.attribs.src = node.attribs.src.replace('../', './help/')
+      return node
     }
   } }
   return parse(helpPageReadContentFile(), parserOptions)
