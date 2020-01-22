@@ -18,6 +18,7 @@ ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())
 
 // Setup Logger
+const { cleanupLogFolder } = require('./log-handler')
 const logHandler = require('./log-handler').createLogHandler()
 const logger = require('../shared/logger')
 const log = logger.getLogger('main/index')
@@ -112,6 +113,8 @@ function onReady ([logins, _appReady, loadedState]) {
       log.error("theme: couldn't find file")
     }
   }
+
+  cleanupLogFolder().catch(err => log.error('Cleanup of old logfiles failed: ', err))
 }
 
 app.once('ipcReady', () => {
