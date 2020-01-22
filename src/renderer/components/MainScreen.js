@@ -97,6 +97,7 @@ export default function MainScreen () {
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>
               <div className='navbar-chat-name' onClick={onTitleClick}>
+                {selectedChat.isVerified && <img src='../images/verified.png' className='verified-icon' />}
                 {selectedChat ? selectedChat.name : ''}
               </div>
               <div className='navbar-chat-subtile' onClick={onTitleClick}>

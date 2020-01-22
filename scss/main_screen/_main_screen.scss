@@ -4,6 +4,12 @@
         font-size: medium;
         font-weight: bold;
         cursor: pointer;
+
+        img.verified-icon {
+            width: 0.8em;
+            height: 0.8em;
+            margin-right: 3px;
+        }
     }
 
     .navbar-chat-subtile {
