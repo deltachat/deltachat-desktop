@@ -123,7 +123,7 @@ export function EditGroupInner (props) {
               <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
               {renderAddMemberIfNeeded()}
               <ContactList2
-                contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
+                contacts={chat.contacts}
                 onClick={removeGroupMember}
                 showCheckbox
                 isChecked={() => true}
