@@ -1,7 +1,29 @@
 import { ipcRenderer } from 'electron'
 import mimeTypes from 'mime-types'
 
-import { isImageTypeSupported, isVideoTypeSupported } from '../conversations'
+/* Section - Data Copied in part from Signal */
+// Supported media types in google chrome
+// See: https://en.wikipedia.org/wiki/Comparison_of_web_browsers#Image_format_support
+const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  // No need to support SVG
+  //'image/svg+xml',
+  'image/webp',
+  'image/x-xbitmap',
+  // ICO
+  'image/vnd.microsoft.icon', 'image/ico', 'image/icon', 'image/x-icon',
+  // PNG
+  'image/apng', 'image/png'
+])
+// See: https://www.chromium.org/audio-video
+const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
+  'video/mp4',
+  'video/ogg',
+  'video/webm'
+])
+/* EndSection - Data Copied in part from Signal */
 
 // TODO define this correctly 
 // (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
@@ -11,7 +33,7 @@ export function isImage(attachment: attachment) {
   return (
     attachment &&
     attachment.contentType &&
-    isImageTypeSupported(attachment.contentType)
+    SUPPORTED_IMAGE_MIME_TYPES.includes(attachment.contentType)
   )
 }
 
@@ -23,7 +45,7 @@ export function isVideo(attachment: attachment) {
   return (
     attachment &&
     attachment.contentType &&
-    isVideoTypeSupported(attachment.contentType)
+    SUPPORTED_VIDEO_MIME_TYPES.includes(attachment.contentType)
   )
 }
 
