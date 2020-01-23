@@ -5,6 +5,8 @@ import formatRelativeTime from './formatRelativeTime'
 
 const UPDATE_FREQUENCY = 60 * 1000
 
+// This hook allows running a callback every delay milliseconds. It takes
+// care of clearing the interval on component unmount.
 export function useInterval (callback, delay) {
   useEffect(() => {
     if (delay === null || callback === null) return
