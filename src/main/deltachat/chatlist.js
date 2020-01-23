@@ -107,9 +107,6 @@ module.exports = class DCChatList extends SplitOut {
     const summary = await this.getChatListSummary(list, i)
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
-    if (summary.text2 === '[The message was sent with non-verified encryption.. See "Info" for details.]') {
-      summary.text2 = this._controller.translate('message_not_verified')
-    }
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
