@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
-import { openAttachmentInShell } from '../message/messageFunctions';
-import { C } from 'deltachat-node/constants.enum';
+import { openAttachmentInShell, onDownload } from '../message/messageFunctions';
 import { ScreenContext } from '../../contexts';
 import { isDisplayableByFullscreenMedia, isImage, isVideo, isAudio, getExtension, dragAttachmentOut, attachment } from './Attachment';
 
@@ -57,7 +56,7 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
   else {
     const { fileName, fileSize, contentType } = attachment;
     const extension = getExtension(attachment);
-    return (<div className='module-message__generic-attachment'>
+    return (<div className='module-message__generic-attachment' role='button' onClick={(ev) => {onDownload(message.msg)}}>
       <div className='module-message__generic-attachment__icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
         {extension ? (<div className='module-message__generic-attachment__icon__extension'>
           {contentType === 'application/octet-stream' ? '' : extension}
