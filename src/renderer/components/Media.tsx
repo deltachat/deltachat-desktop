@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { C } from 'deltachat-node/constants.enum'
-import { onDownload } from './message/messageFunctions'
-import { callDcMethodAsync } from '../ipc'
 
+import { callDcMethodAsync } from '../ipc'
 import { ScreenContext } from '../contexts'
-import { isDisplayableByFullscreenMedia } from './attachment/Attachment'
 import MediaAttachment from "./attachment/mediaAttachment"
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
@@ -60,18 +58,6 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
       })
   }
 
-  onClickMedia(message:message, ev: MouseEvent) {
-    ev.preventDefault()
-    ev.stopPropagation()
-    ev.stopImmediatePropagation()
-    const attachment = message.msg.attachment
-    if (isDisplayableByFullscreenMedia(attachment)) {
-      this.context.openDialog('FullscreenMedia', { message })
-    } else {
-      onDownload(message.msg)
-    }
-  }
-
   render() {
     const { medias } = this.state
     const tx = (window as any).translate
@@ -96,7 +82,6 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
               medias.map((message:message) => {
                 var msg = message.msg
                 return <div className='item'
-                  onClick={this.onClickMedia.bind(this, message)}
                   key={msg.id} >
                   <MediaAttachment {
                     ...{
