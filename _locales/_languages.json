@@ -76,12 +76,8 @@
     "name": "Italian"
   },
   {
-    "locale": "nl",
-    "name": "Dutch"
-  },
-  {
     "locale": "nl_NL",
-    "name": "Nederlands (Nederland)"
+    "name": "Nederlands"
   },
   {
     "locale": "pl",
