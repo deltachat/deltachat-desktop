@@ -1,6 +1,6 @@
 const React = require('react')
 const classNames = require('classnames')
-const Timestamp = require('../conversations/Timestamp')
+const Timestamp = require('../conversations/Timestamp').default
 const Attachment = require('./Attachment')
 
 class MessageMetaData extends React.Component {

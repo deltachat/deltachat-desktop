@@ -1,57 +1,42 @@
-const React = require('react')
-const classNames = require('classnames')
-const moment = require('moment')
-const formatRelativeTime = require('./formatRelativeTime')
+import React, { useState, useEffect } from 'react'
+import classNames from 'classnames'
+import moment from 'moment'
+import formatRelativeTime from './formatRelativeTime'
 
 const UPDATE_FREQUENCY = 60 * 1000
 
-class Timestamp extends React.Component {
-  constructor (props) {
-    super(props)
-    this.interval = null
-  }
+// This hook allows running a callback every delay milliseconds. It takes
+// care of clearing the interval on component unmount.
+export function useInterval (callback, delay) {
+  useEffect(() => {
+    if (delay === null || callback === null) return
 
-  componentDidMount () {
-    const update = () => {
-      this.setState({
-        lastUpdated: Date.now()
-      })
-    }
-    this.interval = setInterval(update, UPDATE_FREQUENCY)
-  }
-
-  componentWillUnmount () {
-    if (this.interval) {
-      clearInterval(this.interval)
-    }
-  }
-
-  render () {
-    const {
-      direction,
-      module,
-      timestamp,
-
-      extended
-    } = this.props
-    const moduleName = module || ''
-
-    if (timestamp === null || timestamp === undefined) {
-      return null
-    }
-
-    return (
-      <span
-        className={classNames(
-          moduleName,
-          direction ? `${moduleName}--${direction}` : null
-        )}
-        title={moment(timestamp).format('llll')}
-      >
-        {formatRelativeTime(timestamp, { extended })}
-      </span>
-    )
-  }
+    const interval = setInterval(() => { callback() }, delay)
+    return () => clearInterval(interval)
+  }, [callback, delay])
 }
 
-module.exports = Timestamp
+const Timestamp = React.memo(function Timestamp (props) {
+  const { direction, module, timestamp, extended } = props
+  const moduleName = module || ''
+
+  if (timestamp === null || timestamp === undefined) return null
+
+  const calculateRelativeTime = () => formatRelativeTime(timestamp, { extended })
+  const [relativeTime, setRelativeTime] = useState(() => calculateRelativeTime())
+
+  // Update relative time every UPDATE_FREQUENCY ms
+  const recalculateRelativeTime = () => setRelativeTime(calculateRelativeTime())
+  useInterval(recalculateRelativeTime, UPDATE_FREQUENCY)
+
+  return (
+    <span
+      className={classNames(moduleName, direction ? `${moduleName}--${direction}` : null)}
+      title={moment(timestamp).format('llll')}
+    >
+      {relativeTime}
+    </span>
+  )
+})
+
+export default Timestamp
