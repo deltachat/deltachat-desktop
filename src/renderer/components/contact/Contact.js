@@ -162,10 +162,10 @@ const ContactWrapper = styled.div`
   }
 `
 export default function Contact (props) {
-  const { avatarPath, color, displayName, address, isVerified } = props.contact
+  const { profileImage, color, displayName, address, isVerified } = props.contact
   return (
     <ContactWrapper>
-      <Avatar {...{ avatarPath, color, displayName }} />
+      <Avatar {...{ avatarPath: profileImage, color, displayName }} />
       {ContactName(displayName, address, isVerified)}
     </ContactWrapper>
   )
