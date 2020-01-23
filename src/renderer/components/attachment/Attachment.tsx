@@ -8,6 +8,7 @@ const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
   'image/bmp',
   'image/gif',
   'image/jpeg',
+  'image/jpg',
   // No need to support SVG
   //'image/svg+xml',
   'image/webp',
