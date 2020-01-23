@@ -5,7 +5,7 @@ import { callDcMethodAsync } from '../ipc'
 
 import { ScreenContext } from '../contexts'
 import { isDisplayableByFullscreenMedia } from './attachment/Attachment'
-import Attachment from "./attachment/mediaAttachment"
+import MediaAttachment from "./attachment/mediaAttachment"
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -98,7 +98,7 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
                 return <div className='item'
                   onClick={this.onClickMedia.bind(this, message)}
                   key={msg.id} >
-                  <Attachment {
+                  <MediaAttachment {
                     ...{
                       direction: msg.direction,
                       attachment: msg.attachment,
