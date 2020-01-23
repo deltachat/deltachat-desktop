@@ -8,9 +8,6 @@
   "messaging_disabled_device_chat": {
     "message": "This chat contains locally generated messages. Therefore you cannot write any messages."
   },
-  "message_not_verified": {
-    "message": "The message was sent with non-verified encryption. See \"Info\" for details."
-  },
   "messaging_disabled_deaddrop":{
     "message": "Click on a message to start accept or deny the contact request"
   },
