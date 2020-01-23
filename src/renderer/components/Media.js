@@ -59,6 +59,7 @@ export default class Media extends React.Component {
   onClickMedia (message, ev) {
     ev.preventDefault()
     ev.stopPropagation()
+    ev.stopImmediatePropagation()
     const attachment = message.msg.attachment
     if (isDisplayableByFullscreenMedia(attachment)) {
       this.context.openDialog('FullscreenMedia', { message })
@@ -93,7 +94,8 @@ export default class Media extends React.Component {
                   direction: msg.direction,
                   attachment: msg.attachment,
                   conversationType: 'direct',
-                  message
+                  message,
+                  isInMediaView: true
                 }} />
               </div>
             })}
