@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { ipcRenderer } from 'electron'
 import classNames from 'classnames'
 import mimeTypes from 'mime-types'
-import { openAttachmentInShell } from './messageFunctions'
+import { openAttachmentInShell } from '../message/messageFunctions'
 import C from 'deltachat-node/constants'
 import { ScreenContext } from '../../contexts'
 

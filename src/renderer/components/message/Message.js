@@ -6,7 +6,7 @@ import MessageBody from './MessageBody'
 import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
-import Attachment from './Attachment'
+import Attachment from '../attachment/Attachment'
 
 const Avatar = (contact, onContactClick) => {
   const {
