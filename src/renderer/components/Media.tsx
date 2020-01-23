@@ -4,7 +4,8 @@ import { onDownload } from './message/messageFunctions'
 import { callDcMethodAsync } from '../ipc'
 
 import { ScreenContext } from '../contexts'
-import Attachment, { isDisplayableByFullscreenMedia } from './attachment/Attachment'
+import { isDisplayableByFullscreenMedia } from './attachment/Attachment'
+import Attachment from "./attachment/mediaAttachment"
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
