@@ -85,7 +85,7 @@ export default function MainScreen () {
           <NavbarGroup align={Alignment.LEFT}>
             { showArchivedChats && (
               <>
-                <div class='archived-chats-title'>{tx('chat_archived_chats_title')}</div>
+                <div className='archived-chats-title'>{tx('chat_archived_chats_title')}</div>
                 <Button
                   className={[Classes.MINIMAL, 'icon-rotated', 'archived-chats-return-button']}
                   icon='undo' onClick={() => setShowArchivedChats(false)}
