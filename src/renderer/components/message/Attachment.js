@@ -68,7 +68,8 @@ export default function Attachment (props) {
     text,
     conversationType,
     direction,
-    message
+    message,
+    isInMediaView
   } = props
   const tx = window.translate
 
@@ -147,31 +148,46 @@ export default function Attachment (props) {
         </div>
       )
     }
-    return (
-      <div
-        onClick={onClickAttachment}
-        role='button'
-        className={classNames(
-          'module-message__attachment-container',
-          withCaption
-            ? 'module-message__attachment-container--with-content-below'
-            : null,
-          withContentAbove
-            ? 'module-message__attachment-container--with-content-above'
-            : null
-        )}
-      >
-        <video
-          className='module-message__img-attachment'
-          style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }}
-          src={attachment.url}
-          controls={1}
-        />
-        <div className='module-message__video-overlay__circle'>
-          <div className='module-message__video-overlay__play-icon' />
+    if (isInMediaView) {
+      return (
+        <div
+          onClick={onClickAttachment}
+          role='button'
+          className='module-message__attachment-container'
+        >
+          <video
+            className='module-message__img-attachment'
+            src={attachment.url}
+            controls={0}
+          />
+          <div className='module-message__video-overlay__circle'>
+            <div className='module-message__video-overlay__play-icon' />
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      // the native fullscreen option is better right now so we don't need to open our own one
+      return (
+        <div
+          className={classNames(
+            'module-message__attachment-container',
+            withCaption
+              ? 'module-message__attachment-container--with-content-below'
+              : null,
+            withContentAbove
+              ? 'module-message__attachment-container--with-content-above'
+              : null
+          )}
+        >
+          <video
+            className='module-message__img-attachment'
+            style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }}
+            src={attachment.url}
+            controls={1}
+          />
+        </div>
+      )
+    }
   } else if (isAudio(attachment)) {
     return (
       <audio
