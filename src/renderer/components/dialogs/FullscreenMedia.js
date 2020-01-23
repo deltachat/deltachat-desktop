@@ -29,7 +29,7 @@ export default function FullscreenMedia (props) {
       elm = <audio src={url} controls={1} />
       break
     case 'video':
-      elm = <video src={url} controls={1} autoplay />
+      elm = <video src={url} controls={1} autoPlay />
       break
     default:
       elm = null
