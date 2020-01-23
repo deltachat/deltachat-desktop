@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron'
 import classNames from 'classnames'
 import mimeTypes from 'mime-types'
 import { openAttachmentInShell } from '../message/messageFunctions'
-import C from 'deltachat-node/constants'
+import { C } from 'deltachat-node/constants.enum'
 import { ScreenContext } from '../../contexts'
 
 import { isImageTypeSupported, isVideoTypeSupported } from '../conversations'
@@ -11,7 +11,11 @@ import { isImageTypeSupported, isVideoTypeSupported } from '../conversations'
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
 
-export function isImage (attachment) {
+// TODO define this correctly 
+// (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
+type attachment = { [key: string]: any, contentType: string, fileName: string, url: any }
+
+export function isImage(attachment: attachment) {
   return (
     attachment &&
     attachment.contentType &&
@@ -19,11 +23,11 @@ export function isImage (attachment) {
   )
 }
 
-export function hasImage (attachment) {
+export function hasImage(attachment: attachment) {
   return attachment && attachment.url
 }
 
-export function isVideo (attachment) {
+export function isVideo(attachment: attachment) {
   return (
     attachment &&
     attachment.contentType &&
@@ -31,21 +35,21 @@ export function isVideo (attachment) {
   )
 }
 
-export function hasVideoScreenshot (attachment) {
+export function hasVideoScreenshot(attachment: attachment) {
   return attachment && attachment.screenshot && attachment.screenshot.url
 }
 
-export function isAudio (attachment) {
+export function isAudio(attachment: attachment) {
   return (
     attachment && attachment.contentType && attachment.contentType.startsWith('audio/')
   )
 }
 
-export function isDisplayableByFullscreenMedia (attachment) {
+export function isDisplayableByFullscreenMedia(attachment: attachment) {
   return isImage(attachment) || isAudio(attachment) || isVideo(attachment)
 }
 
-function getExtension ({ fileName, contentType }) {
+function getExtension({ fileName, contentType }: attachment) {
   if (fileName && fileName.indexOf('.') >= 0) {
     const lastPeriod = fileName.lastIndexOf('.')
     const extension = fileName.slice(lastPeriod + 1)
@@ -57,21 +61,30 @@ function getExtension ({ fileName, contentType }) {
   return mimeTypes.extension(contentType) || null
 }
 
-function dragAttachmentOut (attachment, dragEvent) {
+function dragAttachmentOut({ url }: attachment, dragEvent: DragEvent) {
   dragEvent.preventDefault()
-  ipcRenderer.send('ondragstart', attachment.url)
+  ipcRenderer.send('ondragstart', url)
 }
 
-export default function Attachment (props) {
-  const {
-    attachment,
-    text,
-    conversationType,
-    direction,
-    message,
-    isInMediaView
-  } = props
-  const tx = window.translate
+type AttachmentProps = { // TODO: replace "any" by the right type here
+  attachment: attachment,
+  text?: any,
+  conversationType: any,
+  direction: any,
+  message: any,
+  isInMediaView: boolean
+}
+
+export default function Attachment({
+  attachment,
+  text,
+  conversationType,
+  direction,
+  message,
+  isInMediaView
+}: AttachmentProps) {
+
+  const tx = (window as any).translate
 
   if (!attachment) {
     return null
@@ -79,7 +92,7 @@ export default function Attachment (props) {
 
   const { openDialog } = useContext(ScreenContext)
   const msg = message.msg
-  const onClickAttachment = ev => {
+  const onClickAttachment = (ev:any) => {
     if (msg.viewType === C.DC_MSG_STICKER) return
     ev.stopPropagation()
     if (isDisplayableByFullscreenMedia(message.msg.attachment)) {
@@ -158,7 +171,7 @@ export default function Attachment (props) {
           <video
             className='module-message__img-attachment'
             src={attachment.url}
-            controls={0}
+            controls={false}
           />
           <div className='module-message__video-overlay__circle'>
             <div className='module-message__video-overlay__play-icon' />
@@ -183,7 +196,7 @@ export default function Attachment (props) {
             className='module-message__img-attachment'
             style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }}
             src={attachment.url}
-            controls={1}
+            controls={true}
           />
         </div>
       )
@@ -207,7 +220,7 @@ export default function Attachment (props) {
     )
   } else {
     const { fileName, fileSize, contentType } = attachment
-    const extension = getExtension({ contentType, fileName })
+    const extension = getExtension(attachment)
 
     return (
       <div
@@ -230,7 +243,7 @@ export default function Attachment (props) {
         >
           {extension ? (
             <div className='module-message__generic-attachment__icon__extension'>
-              { contentType === 'application/octet-stream' ? '' : extension}
+              {contentType === 'application/octet-stream' ? '' : extension}
             </div>
           ) : null}
         </div>
