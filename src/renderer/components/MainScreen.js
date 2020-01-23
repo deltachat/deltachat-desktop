@@ -76,22 +76,29 @@ export default function MainScreen () {
       </div>
     )
 
+  // StandardJS won't let me use '&& { } || { }', so the following code
+  // compares with showArchivedChats twice.
   return (
     <div className='main-screen'>
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            <SearchInput
-              id='chat-list-search'
-              onChange={handleSearchChange}
-              value={queryStr}
-              className='icon-rotated'
-            />
             { showArchivedChats && (
-              <Button
-                className={[Classes.MINIMAL, 'icon-rotated']}
-                icon='undo' onClick={() => setShowArchivedChats(false)}
-                aria-label={tx('back')} />
+              <>
+                <div class='archived-chats-title'>{tx('chat_archived_chats_title')}</div>
+                <Button
+                  className={[Classes.MINIMAL, 'icon-rotated', 'archived-chats-return-button']}
+                  icon='undo' onClick={() => setShowArchivedChats(false)}
+                  aria-label={tx('back')} />
+              </>
+            ) }
+            { showArchivedChats || (
+              <SearchInput
+                id='chat-list-search'
+                onChange={handleSearchChange}
+                value={queryStr}
+                className='icon-rotated'
+              />
             ) }
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>

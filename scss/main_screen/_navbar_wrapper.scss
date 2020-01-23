@@ -70,4 +70,12 @@
     .bp3-popover-target {
         margin-right: 6px;
     }
+
+    .archived-chats-title {
+      flex: 1 1 auto;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 18px;
+    }
 }
