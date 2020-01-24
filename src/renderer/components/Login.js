@@ -3,7 +3,7 @@
 import C from 'deltachat-node/constants'
 import React from 'react'
 import { ipcRenderer } from 'electron'
-import * as update from 'immutability-helper'
+import update from 'immutability-helper'
 import {
   DeltaInput,
   DeltaPasswordInput,
