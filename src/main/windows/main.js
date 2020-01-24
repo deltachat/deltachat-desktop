@@ -68,6 +68,9 @@ function init (app, options) {
 
   win.once('ready-to-show', () => {
     if (!options.hidden) win.show()
+    if (process.env.NODE_ENV === 'test') {
+      win.maximize()
+    }
   })
 
   if (win.setSheetOffset) {
