@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
+import { callDcMethodAsync } from '../../ipc'
 
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
@@ -20,6 +21,21 @@ export const ProfileInfoContainer = styled.div`
     .address {
       color: #565656;
     }
+  }
+`
+
+export const OpenChatButton = styled.div`
+  width: 100%;
+  padding-left: 20px;
+  line-height: 40px;
+  font-size: 17px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: black;
+  &:hover {
+    color: var(--chatListItemSelectedText);
+    background-color: var(--chatListItemSelectedBg);
+    font-weight: bold;
   }
 `
 
@@ -76,6 +92,12 @@ export default function ViewProfile (props) {
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
           </ProfileInfoContainer>
+          <DeltaDialogContentTextSeperator text={tx('profile_actions')} />
+          <OpenChatButton role='button' onClick={() => {
+            callDcMethodAsync('contacts.getDMChatId', [contact.id]).then((chatId) => onChatClick(chatId))
+          }}>
+            {tx('profile_action_direct_message')}
+          </OpenChatButton>
           <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
             {chatListIds.map(chatId => {

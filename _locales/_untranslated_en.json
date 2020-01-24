@@ -70,5 +70,11 @@
   },
   "help_page_local_copy_hint": {
     "message": "This content is a local copy of [LINK:the FAQ page] on our website."
+  },
+  "profile_actions": {
+    "message": "Actions"
+  },
+  "profile_action_direct_message": {
+    "message": "Open Direct Message"
   }
 }
