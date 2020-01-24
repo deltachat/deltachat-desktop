@@ -1,5 +1,7 @@
 {
     "mainWindowUrl": "./static/test.html",
     "appPath": ".",
-    "openDevTools": true
+    "openDevTools": true,
+    "selectorTimeout": 30000,
+    "assertTimeout": 10000
 }
