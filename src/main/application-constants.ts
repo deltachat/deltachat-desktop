@@ -7,17 +7,23 @@ export function appIcon () {
 }
 
 export function windowDefaults () {
+  let targetFile = 'main.html'
+  let defaultWidth = 500
+  if (process.env.NODE_ENV === 'test') {
+    targetFile = 'test.html'
+    defaultWidth = 1100
+  }
   const headerHeight = 38
   const messageHeight = 100
   return {
     bounds: {
-      width: 500,
+      width: 1600,
       height: headerHeight + messageHeight * 6
     },
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${join(__dirname, '..', '..', 'static', 'main.html')}`
+    main: `file://${join(__dirname, '..', '..', 'static', targetFile)}`
   }
 }
 

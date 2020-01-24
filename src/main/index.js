@@ -120,6 +120,9 @@ function onReady ([logins, _appReady, loadedState]) {
 app.once('ipcReady', () => {
   console.timeEnd('init')
   const win = windows.main.win
+  if (process.env.NODE_ENV === 'test') {
+    win.maximize()
+  }
   win.on('close', e => {
     if (!app.isQuitting) {
       e.preventDefault()
@@ -160,13 +163,18 @@ app.on('web-contents-created', (e, contents) => {
   })
 })
 
+let contentSecurity = 'default-src \' \'none\''
+if (process.env.NODE_ENV === 'test') {
+  contentSecurity = 'default-src \'unsafe-inline\' \'self\' \'unsafe-eval\'; img-src \'self\' data:;'
+}
+
 app.once('ready', () => {
   devTools.tryInstallReactDevTools()
   session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
     fun({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': ['default-src \'none\'']
+        'Content-Security-Policy': [contentSecurity]
       }
     })
   })

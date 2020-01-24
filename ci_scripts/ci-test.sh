@@ -23,4 +23,4 @@ fi
 
 npm test;
 
-npm run test-integration;
+npm run test-cafe;
