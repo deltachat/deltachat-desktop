@@ -1,35 +1,56 @@
-import { ClientFunction, Selector } from 'testcafe'
-import { waitForReact, ReactSelector } from 'testcafe-react-selectors'
+import { Selector } from 'testcafe'
+import { waitForReact } from 'testcafe-react-selectors'
+const { createTmpUser } = require('../integration/fixtures/config')
 
-const getPageTitle = ClientFunction(() => document.title)
-const chatNameSelector = Selector('.bp3-navbar-heading')
-const getChatName = () => chatNameSelector().innerText
+const waitForLogin = 50000
+const conf = {}
+const welcomeMessage = 'Select a chat or create a new chat'
+let accountButton1 = null
+let accountButton2 = null
 
-const scriptContent = `
-window.addEventListener('DOMContentLoaded', function () {
-  // document.body.style.backgroundColor = 'green';
-  console.log('Client script loaded. Page title is: ' + document.title);  
-});
-`
-
-fixture('Electron test2').page('../../static/test.html').clientScripts({ content: scriptContent })
-
-test('shows correct page title', async t => {
-  await t.expect(getPageTitle()).eql('Deltachat e2e tests')
+fixture('Electron test2').page('../../static/test.html').beforeEach(async () => {
+  await waitForReact()
 })
 
 test('shows correct headline', async t => {
-  await t.expect(getChatName()).eql('Welcome to Delta Chat')
+  await t.expect(Selector('.bp3-navbar-heading').innerText).eql('Welcome to Delta Chat')
+    .typeText('#addr', 'foo')
+    .typeText('#mail_pw', 'bar')
+    .click('button[type=\'submit\']')
+    .expect(Selector('.user-feedback').innerText).eql('Bad email address.')
 })
 
-// fixture `Electron test`.page('../../static/test.html')
-//   .beforeEach(async () => {
-//     await waitForReact()
-//   }).clientScripts({ content: scriptContent })
+test('login works', async t => {
+  conf.account1 = await createTmpUser()
+  await t.expect(Selector('.bp3-navbar-heading').innerText).eql('Welcome to Delta Chat')
+    .typeText('#addr', conf.account1.email)
+    .typeText('#mail_pw', conf.account1.password)
+    .click('button[type=\'submit\']')
+    .expect(Selector('h2', { timeout: waitForLogin }).innerText).eql(welcomeMessage)
+    .click('#main-menu-button')
+    .wait(1000)
+    .click('.bp3-menu li:last-of-type a.bp3-menu-item')
+})
 
-// test('finds react element', async t => {
-//   // await t.typeText(nameField, 'test@foo.de')
-//   const reactComponent = ReactSelector('AdvancedButton')
-//   const reactComponentState = await reactComponent.getReact()
-//   await t.debug().click(reactComponentState)
-// })
+test('login button is shown', async t => {
+  accountButton1 = Selector('ul li button').withText(conf.account1.email)
+  await t.expect(accountButton1.exists).ok()
+})
+
+test('second login works', async t => {
+  conf.account2 = await createTmpUser()
+  await t.expect(Selector('.bp3-navbar-heading').innerText).eql('Welcome to Delta Chat')
+    .typeText('#addr', conf.account2.email)
+    .typeText('#mail_pw', conf.account2.password)
+    .click('button[type=\'submit\']')
+    .expect(Selector('h2', { timeout: waitForLogin }).innerText).eql(welcomeMessage)
+    .click('#main-menu-button')
+    .wait(1000)
+    .click('.bp3-menu li:last-of-type a.bp3-menu-item')
+})
+
+test('both login buttons are shown', async t => {
+  accountButton2 = Selector('ul li button').withText(conf.account2.email)
+  await t.expect(accountButton2.exists).ok()
+  await t.expect(Selector('ul li').count).eql(2)
+})
