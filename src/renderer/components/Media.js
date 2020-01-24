@@ -4,7 +4,7 @@ import C from 'deltachat-node/constants'
 import { callDcMethodAsync } from '../ipc'
 
 import { ScreenContext } from '../contexts'
-import Attachment, { isVideo, isImage } from './message/Attachment'
+import Attachment, { isDisplayableByFullscreenMedia } from './message/Attachment'
 
 const GROUPS = {
   images: {
@@ -60,13 +60,10 @@ export default class Media extends React.Component {
     ev.preventDefault()
     ev.stopPropagation()
     const attachment = message.msg.attachment
-    if (
-      message.filemime === 'application/octet-stream' &&
-      !(isVideo(attachment) || isImage(attachment))
-    ) {
-      onDownload(message.msg)
+    if (isDisplayableByFullscreenMedia(attachment)) {
+      this.context.openDialog('FullscreenMedia', { message })
     } else {
-      this.context.openDialog('RenderMedia', { message })
+      onDownload(message.msg)
     }
   }
 
