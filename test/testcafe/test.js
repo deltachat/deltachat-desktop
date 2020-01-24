@@ -2,6 +2,8 @@ import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
 const { createTmpUser } = require('../integration/fixtures/config')
 
+/* global fixture, test */
+
 const waitForLogin = 50000
 const conf = {}
 const welcomeMessage = 'Select a chat or create a new chat'
