@@ -3,5 +3,6 @@
     "appPath": ".",
     "openDevTools": true,
     "selectorTimeout": 50000,
-    "assertTimeout": 20000
+    "assertTimeout": 20000,
+    "testSpeed": 0.6
 }
