@@ -23,7 +23,7 @@
     "dist-portable": "electron-builder --win portable --linux AppImage",
     "build": "npm run build-css && npm run build-js && npm run build-translations",
     "build-css": "node-sass scss/manifest.scss static/main.css",
-    "build-js": "webpack --mode=development --progress --profile --colors",
+    "build-js": "webpack --progress --profile --colors",
     "build-translations": "node bin/convert-translations-from-xml-to-json.js",
     "pull-translations": "tx pull -l en && tx pull -f",
     "update-translations": "npm run pull-translations && npm run build-translations",

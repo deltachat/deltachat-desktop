@@ -11,7 +11,6 @@ module.exports = (_, argv) => ({
   optimization: {
     nodeEnv: argv.mode
   },
-  devtool: 'inline-source-map',
   node: {
     __dirname: true
   },
