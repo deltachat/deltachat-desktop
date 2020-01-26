@@ -23,4 +23,4 @@ fi
 
 npm test;
 
-npm run test-cafe;
+npm run test-e2e-ci;
