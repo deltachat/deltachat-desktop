@@ -66,30 +66,30 @@ const ChatListContextMenu = React.memo((props) => {
 
   const menu = [
     showArchivedChats
-      ? <MenuItem onClick={() => onArchiveChat(false)} >
+      ? <MenuItem onClick={() => onArchiveChat(false)} key='export'>
         <Icon icon='export' /> {tx('menu_unarchive_chat')}
       </MenuItem>
-      : <MenuItem icon='import' onClick={() => onArchiveChat(true)}>
+      : <MenuItem icon='import' onClick={() => onArchiveChat(true)} key='import'>
         <Icon icon='import' /> {tx('menu_archive_chat')}
       </MenuItem>,
-    <MenuItem onClick={onDeleteChat}>
+    <MenuItem onClick={onDeleteChat} key='delete'>
       <Icon icon='delete' /> {tx('menu_delete_chat')}
     </MenuItem>,
-    !chat.isGroup && !chat.isDeviceTalk && <MenuItem onClick={onEncrInfo}>
+    !chat.isGroup && !chat.isDeviceTalk && <MenuItem onClick={onEncrInfo} key='info'>
       <Icon icon='lock' /> {tx('encryption_info_desktop')}
     </MenuItem>,
     chat.isGroup && chat.selfInGroup && <>
-      <MenuItem onClick={onEditGroup} >
+      <MenuItem onClick={onEditGroup} key='edit'>
         <Icon icon='edit' /> {tx('menu_edit_group')}
       </MenuItem>
-      <MenuItem onClick={onLeaveGroup}>
+      <MenuItem onClick={onLeaveGroup} key='leave'>
         <Icon icon='log-out' /> {tx('menu_leave_group')}
       </MenuItem>
     </>,
-    !chat.isGroup && <MenuItem onClick={onViewProfile}>
+    !chat.isGroup && <MenuItem onClick={onViewProfile} key='view'>
       <Icon icon='log-out' /> {tx('menu_view_profile')}
     </MenuItem>,
-    !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && <MenuItem onClick={onBlockContact}>
+    !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && <MenuItem onClick={onBlockContact} key='block'>
       <Icon icon='blocked-person' /> {tx('menu_block_contact')}
     </MenuItem>
   ]
