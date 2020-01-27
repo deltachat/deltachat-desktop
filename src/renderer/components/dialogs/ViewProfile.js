@@ -10,10 +10,11 @@ import { callDcMethodAsync } from '../../ipc'
 
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
-  display: inline-grid;
-  grid-template-columns: auto auto;
+  display: flex;
+  width: calc(100% - 20px);
   .profile-info-name-container {
     margin: auto 10px;
+    flex-grow: 1;
     .name {
       font-size: medium;
       font-weight: bold;
@@ -22,20 +23,24 @@ export const ProfileInfoContainer = styled.div`
       color: #565656;
     }
   }
-`
+  .actions {
+    display: flex;
+    align-items: center;
 
-export const OpenChatButton = styled.div`
-  width: 100%;
-  padding-left: 20px;
-  line-height: 40px;
-  font-size: 17px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  color: black;
-  &:hover {
-    color: var(--chatListItemSelectedText);
-    background-color: var(--chatListItemSelectedBg);
-    font-weight: bold;
+    .open-dm-chat {
+      font-size: 16px;
+      color: #404092;
+      border: 1px solid #545eaf;
+      padding: 4px;
+      border-radius: 4px;
+      user-select: none;
+      cursor: pointer;
+      &:hover {
+        color: var(--chatListItemSelectedText);
+        background-color: var(--chatListItemSelectedBg);
+        font-weight: bold;
+      }
+    }
   }
 `
 
@@ -91,13 +96,14 @@ export default function ViewProfile (props) {
           <ProfileInfoContainer>
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
+            <div className='actions'>
+              <div className='open-dm-chat' role='button' onClick={() => {
+                callDcMethodAsync('contacts.getDMChatId', [contact.id]).then((chatId) => onChatClick(chatId))
+              }}>
+                {tx('profile_action_direct_message')}
+              </div>
+            </div>
           </ProfileInfoContainer>
-          <DeltaDialogContentTextSeperator text={tx('profile_actions')} />
-          <OpenChatButton role='button' onClick={() => {
-            callDcMethodAsync('contacts.getDMChatId', [contact.id]).then((chatId) => onChatClick(chatId))
-          }}>
-            {tx('profile_action_direct_message')}
-          </OpenChatButton>
           <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
             {chatListIds.map(chatId => {
