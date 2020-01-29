@@ -111,7 +111,7 @@
     "cp-file": "^7.0.0",
     "depcheck": "^0.8.4",
     "electron": "^4.2.12",
-    "electron-builder": "^21.2.0",
+    "electron-builder": "^22.3.2",
     "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
