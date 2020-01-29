@@ -118,7 +118,7 @@
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^1.2.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "pngjs": "^3.3.3",
     "sinon": "^7.5.0",
     "spectron": "^6.0.0",
