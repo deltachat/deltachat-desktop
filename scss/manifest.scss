@@ -22,6 +22,7 @@
 
 // Gallery (media view)
 @import 'gallery/attachment-view';
+@import 'gallery/_media-attachment';
 @import 'gallery/media';
 
 // Dialogs
@@ -44,6 +45,7 @@
 @import 'map/_map';
 
 // Message
+@import 'message/_message-attachment';
 @import 'message/_message-detail';
 @import 'message/_message-list';
 @import 'message/_message';

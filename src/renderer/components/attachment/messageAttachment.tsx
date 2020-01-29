@@ -44,38 +44,41 @@ export default function Attachment({ attachment, text, conversationType, directi
   if (isImage(attachment)) {
     const isSticker = message.msg.viewType === C.DC_MSG_STICKER;
     if (!attachment.url) {
-      return (<div className={classNames('module-message__broken-image', `module-message__broken-image--${direction}`)}>
+      return (<div className={classNames('message-attachment-broken-media', direction)}>
         {tx('imageFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className={classNames('module-message__attachment-container', withCaption
-      ? 'module-message__attachment-container--with-content-below'
+    return (<div onClick={onClickAttachment} role='button' className={classNames('message-attachment-media', withCaption
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__attachment-container--with-content-above'
+      ? 'content-above'
       : null)}>
-      <img className='module-message__img-attachment' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
+      <img className='attachment-content' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
     if (!attachment.url) {
-      return (<div role='button' onClick={onClickAttachment} className={classNames('module-message__broken-video-screenshot', `module-message__broken-video-screenshot--${direction}`)}>
+      return (<div role='button'
+        onClick={onClickAttachment}
+        style={{cursor:'pointer'}}
+        className={classNames('message-attachment-broken-media', direction)}>
         {tx('videoScreenshotFailedToLoad')}
       </div>);
     }
     // the native fullscreen option is better right now so we don't need to open our own one
-    return (<div className={classNames('module-message__attachment-container', withCaption
-      ? 'module-message__attachment-container--with-content-below'
+    return (<div className={classNames('message-attachment-media', withCaption
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__attachment-container--with-content-above'
+      ? 'content-above'
       : null)}>
-      <video className='module-message__img-attachment' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
+      <video className='attachment-content' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
     </div>);
   }
   else if (isAudio(attachment)) {
-    return (<audio controls className={classNames('module-message__audio-attachment', withContentBelow
-      ? 'module-message__audio-attachment--with-content-below'
+    return (<audio controls className={classNames('message-attachment-audio', withContentBelow
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__audio-attachment--with-content-above'
+      ? 'content-above'
       : null)}>
       <source src={attachment.url} />
     </audio>);
@@ -83,21 +86,21 @@ export default function Attachment({ attachment, text, conversationType, directi
   else {
     const { fileName, fileSize, contentType } = attachment;
     const extension = getExtension(attachment);
-    return (<div className={classNames('module-message__generic-attachment', withContentBelow
-      ? 'module-message__generic-attachment--with-content-below'
+    return (<div className={classNames('message-attachment-generic', withContentBelow
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__generic-attachment--with-content-above'
+      ? 'content-above'
       : null)}>
-      <div className='module-message__generic-attachment__icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
-        {extension ? (<div className='module-message__generic-attachment__icon__extension'>
+      <div className='file-icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
+        {extension ? (<div className='file-extension'>
           {contentType === 'application/octet-stream' ? '' : extension}
         </div>) : null}
       </div>
-      <div className='module-message__generic-attachment__text'>
-        <div className={classNames('module-message__generic-attachment__file-name', `module-message__generic-attachment__file-name--${direction}`)}>
+      <div className='text-part'>
+        <div className='name'>
           {fileName}
         </div>
-        <div className={classNames('module-message__generic-attachment__file-size')}>
+        <div className='size'>
           {fileSize}
         </div>
       </div>
