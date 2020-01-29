@@ -14,7 +14,6 @@ const FreshMessageCounter = React.memo(props => {
 
 const Header = React.memo(props => {
   const {
-    freshMessageCounter,
     lastUpdated,
     name,
     isVerified
@@ -22,19 +21,13 @@ const Header = React.memo(props => {
 
   return (
     <div className='chat-list-item__header'>
-      <div className={classNames(
-        'chat-list-item__header__name',
-        freshMessageCounter > 0 ? 'chat-list-item__header__name--with-unread' : null
-      )}>
+      <div className='chat-list-item__header__name'>
         {isVerified && <VerifiedIcon />}
         <span className='chat-list-item__name'>
           {name + ' '}
         </span>
       </div>
-      <div className={classNames(
-        'chat-list-item__header__date',
-        { 'chat-list-item__header__date--has-unread': freshMessageCounter > 0 }
-      )}>
+      <div className='chat-list-item__header__date'>
         <Timestamp
           timestamp={lastUpdated}
           extended={false}
@@ -51,10 +44,7 @@ export const Message = React.memo(props => {
 
   return (
     <div className='chat-list-item__message'>
-      <div className={classNames(
-        'chat-list-item__message__text',
-        { 'chat-list-item__message__text--has-unread': freshMessageCounter > 0 }
-      )}>
+      <div className='chat-list-item__message__text'>
         {summary.text1 !== null &&
           <div className={classNames(
             'chat-list-item__message__text__summary',
@@ -102,7 +92,7 @@ const ChatListItemNormal = React.memo(props => {
       className={classNames(
         'chat-list-item',
         {
-          'chat-list-item--has-unread': chatListItem.freshMessageCounter > 0,
+          'has-unread': chatListItem.freshMessageCounter > 0,
           'chat-list-item--is-selected': isSelected
         },
         props.className
