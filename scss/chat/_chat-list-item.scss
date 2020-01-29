@@ -139,6 +139,10 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
     margin-bottom: 2px;
   }
 
+  .status-icon.sending {
+    background-color: white;
+  }
+
   &:hover {
     background-color: var(--chatListItemBgHover);
   }
