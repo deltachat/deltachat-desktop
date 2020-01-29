@@ -79,18 +79,17 @@
     }
 }
 
-.module-message__audio-attachment {
+.message-attachment-audio {
     margin-top: 2px;
     display: block;
     margin-right: 30px;
-}
-
-.module-message__audio-attachment--with-content-below {
-    margin-bottom: 5px;
-}
-
-.module-message__audio-attachment--with-content-above {
-    margin-top: 6px;
+    &.content-below {
+        margin-bottom: 5px;
+    }
+    
+    &.content-above {
+        margin-top: 6px;
+    }
 }
 
 .module-message__generic-attachment {

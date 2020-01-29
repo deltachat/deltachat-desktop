@@ -75,10 +75,10 @@ export default function Attachment({ attachment, text, conversationType, directi
     </div>);
   }
   else if (isAudio(attachment)) {
-    return (<audio controls className={classNames('module-message__audio-attachment', withContentBelow
-      ? 'module-message__audio-attachment--with-content-below'
+    return (<audio controls className={classNames('message-attachment-audio', withContentBelow
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__audio-attachment--with-content-above'
+      ? 'content-above'
       : null)}>
       <source src={attachment.url} />
     </audio>);

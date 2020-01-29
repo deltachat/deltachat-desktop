@@ -49,7 +49,7 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
     </div>);
   }
   else if (isAudio(attachment)) {
-    return (<audio controls className='module-message__audio-attachment'>
+    return (<audio controls className='message-attachment-audio'>
       <source src={attachment.url} />
     </audio>);
   }
