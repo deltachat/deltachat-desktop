@@ -1,5 +1,4 @@
 /* Chat List (conversation list) */
-$color-chat-list-item-has-unread: var(--unreadCountBg);
 $color-chat-list-item-unread-count-bg: var(--unreadCountBg);
 $color-chat-list-item-unread-count-label: var(--unreadCountLabel);
 $color-chat-list-item-message-error: var(--errorColor);
@@ -24,11 +23,12 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
     background-position: 6px, 67px 12px, 67px 35px, 96% 12px;
     opacity: 0.1;
   }
-}
 
-.chat-list-item--has-unread {
-  padding-left: 12px;
-  border-left: 4px solid $color-chat-list-item-has-unread;
+  &.has-unread {
+    .chat-list-item__header__name, .chat-list-item__header__date, .chat-list-item__message__text{
+      font-weight: 300;
+    }
+  }
 }
 
 .chat-list-item__avatar {
@@ -82,10 +82,6 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
     font-size: inherit;
     line-height: inherit;
   }
-}
-
-.chat-list-item__header__name--with-unread, .chat-list-item__header__date--has-unread, .chat-list-item__message__text--has-unread{
-  font-weight: 300;
 }
 
 .chat-list-item__header__timestamp {
