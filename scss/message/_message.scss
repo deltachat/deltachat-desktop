@@ -185,7 +185,7 @@
         background-color: var(--messageIncommingBg);
 
         &,
-        .module-message__attachment-container {
+        .message-attachment-media {
             border-bottom-left-radius: 1px;
         }
     }
@@ -219,7 +219,7 @@
         background-color: var(--messageOutgoingBg);
 
         &,
-        .module-message__attachment-container {
+        .message-attachment-media {
             border-bottom-right-radius: 1px;
         }
     }
@@ -230,13 +230,13 @@
         background-color: transparent !important;
     }
 
-    .module-message__attachment-container {
+    .message-attachment-media {
         background-color: transparent;
+        &>.attachment-content{
+            margin-bottom: 20px;
+        }
     }
 
-    .module-message__img-attachment {
-        margin-bottom: 20px;
-    }
 
     .metadata {
         float: right;
@@ -294,7 +294,7 @@
         margin-bottom: 3px;
         opacity: 0.86;
     }
-    .module-message__attachment-container {
+    .message-attachment-media {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         margin-top: 0;

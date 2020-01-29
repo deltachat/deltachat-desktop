@@ -13,19 +13,20 @@
         &>.item {
             float: left;
 
-            .module-message__attachment-container {
+            .message-attachment-media {
                 background-color: transparent;
                 border-radius: 0px;
                 margin: 0px !important;
+                &>.attachment-content {
+                    width: 120pt;
+                    height: 120pt !important;
+                    min-width: unset;
+                    min-height: unset;
+                    max-height: unset;
+                }
             }
 
-            .module-message__img-attachment {
-                width: 120pt;
-                height: 120pt !important;
-                min-width: unset;
-                min-height: unset;
-                max-height: unset;
-            }
+            
         }
     }
 }

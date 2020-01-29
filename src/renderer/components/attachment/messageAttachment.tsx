@@ -44,31 +44,34 @@ export default function Attachment({ attachment, text, conversationType, directi
   if (isImage(attachment)) {
     const isSticker = message.msg.viewType === C.DC_MSG_STICKER;
     if (!attachment.url) {
-      return (<div className={classNames('module-message__broken-image', `module-message__broken-image--${direction}`)}>
+      return (<div className={classNames('message-attachment-broken-media', direction)}>
         {tx('imageFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className={classNames('module-message__attachment-container', withCaption
-      ? 'module-message__attachment-container--with-content-below'
+    return (<div onClick={onClickAttachment} role='button' className={classNames('message-attachment-media', withCaption
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__attachment-container--with-content-above'
+      ? 'content-above'
       : null)}>
-      <img className='module-message__img-attachment' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
+      <img className='attachment-content' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
     if (!attachment.url) {
-      return (<div role='button' onClick={onClickAttachment} className={classNames('module-message__broken-video-screenshot', `module-message__broken-video-screenshot--${direction}`)}>
+      return (<div role='button'
+        onClick={onClickAttachment}
+        style={{cursor:'pointer'}}
+        className={classNames('message-attachment-broken-media', direction)}>
         {tx('videoScreenshotFailedToLoad')}
       </div>);
     }
     // the native fullscreen option is better right now so we don't need to open our own one
-    return (<div className={classNames('module-message__attachment-container', withCaption
-      ? 'module-message__attachment-container--with-content-below'
+    return (<div className={classNames('message-attachment-media', withCaption
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__attachment-container--with-content-above'
+      ? 'content-above'
       : null)}>
-      <video className='module-message__img-attachment' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
+      <video className='attachment-content' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
     </div>);
   }
   else if (isAudio(attachment)) {

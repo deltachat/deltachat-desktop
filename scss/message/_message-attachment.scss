@@ -1,4 +1,4 @@
-.module-message__attachment-container {
+.message-attachment-media {
     // Entirely to ensure that images are centered if they aren't full width of bubble
     text-align: center;
     position: relative;
@@ -13,75 +13,58 @@
     overflow: hidden;
 
     background-color: var(--messageAttachmentIconBg);
+
+    &>.attachment-content {
+        object-fit: cover;
+        width: 100%;
+        min-width: 200px;
+        min-height: 150px;
+        max-height: 300px;
+
+        // The padding on the bottom of the bubble produces 4 extra pixels of space at the
+        //   bottom, so this doesn't match up with the padding numbers above.
+        margin-bottom: -4px;
+
+        // redundant with attachment-container, but we get cursor flashing on move otherwise
+        cursor: pointer;
+    }
+
+    &>.video-play-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        width: 48px;
+        height: 48px;
+        background-color: var(--videoPlayBtnBg);
+        border-radius: 24px;
+        &>.video-play-btn-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        
+            height: 36px;
+            width: 36px;
+            @include color-svg('../images/play.svg', var(--videoPlayBtnIcon));
+        }
+    }
+
+    &.content-below {
+        margin-bottom: 7px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    &.content-above {
+        margin-top: 4px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
 }
 
-.module-message__attachment-container--with-content-below {
-    margin-bottom: 7px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-.module-message__attachment-container--with-content-above {
-    margin-top: 4px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-}
-
-
-.module-message__img-attachment {
-    object-fit: cover;
-    width: 100%;
-    min-width: 200px;
-    min-height: 150px;
-    max-height: 300px;
-
-    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-    //   bottom, so this doesn't match up with the padding numbers above.
-    margin-bottom: -4px;
-
-    // redundant with attachment-container, but we get cursor flashing on move otherwise
-    cursor: pointer;
-}
-
-.module-message__broken-image {
-    font-size: 11px;
-    line-height: 16px;
-    letter-spacing: 0.3px;
-
-    padding: 10px;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--brokenMediaBg);
-}
-
-.module-message__broken-image--incoming {
-    color: var(--brokenMediaText);
-}
-
-.module-message__video-overlay__circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 48px;
-    height: 48px;
-    background-color: var(--videoPlayBtnBg);
-    border-radius: 24px;
-}
-
-.module-message__video-overlay__play-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    height: 36px;
-    width: 36px;
-    @include color-svg('../images/play.svg', var(--videoPlayBtnIcon));
-}
-
-.module-message__broken-video-screenshot {
+.message-attachment-broken-media {
     font-size: 11px;
     line-height: 16px;
     letter-spacing: 0.3px;
@@ -91,12 +74,9 @@
     text-transform: uppercase;
     color: var(--brokenMediaBg);
 
-    cursor: pointer;
-}
-
-.module-message__broken-video-screenshot--incoming {
-    color: var(--brokenMediaText);
-    ;
+    &.incoming {
+        color: var(--brokenMediaText);
+    }
 }
 
 .module-message__audio-attachment {

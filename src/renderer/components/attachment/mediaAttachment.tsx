@@ -27,24 +27,24 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
   };
   if (isImage(attachment)) {
     if (!attachment.url) {
-      return (<div className='module-message__broken-image'>
+      return (<div className='message-attachment-broken-media'>
         {tx('imageFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className='module-message__attachment-container'>
-      <img className='module-message__img-attachment' src={attachment.url} />
+    return (<div onClick={onClickAttachment} role='button' className='message-attachment-media'>
+      <img className='attachment-content' src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
     if (!attachment.url) {
-      return (<div role='button' className='module-message__broken-video-screenshot'>
+      return (<div role='button' className='message-attachment-broken-media'>
         {tx('videoScreenshotFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className='module-message__attachment-container'>
-    <video className='module-message__img-attachment' src={attachment.url} controls={false} />
-    <div className='module-message__video-overlay__circle'>
-        <div className='module-message__video-overlay__play-icon' />
+    return (<div onClick={onClickAttachment} role='button' className='message-attachment-media'>
+    <video className='attachment-content' src={attachment.url} controls={false} />
+    <div className='video-play-btn'>
+        <div className='video-play-btn-icon' />
     </div>
     </div>);
   }
