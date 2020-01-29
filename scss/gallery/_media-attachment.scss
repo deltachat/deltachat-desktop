@@ -57,14 +57,27 @@
 }
 
 .media-attachment-audio {
-    margin-top: 2px;
-    display: block;
-    margin-right: 30px;
+    margin: 2px;
+    padding: 4px;
+    background-color: rgba(130, 130, 130, 0.08);
+    &>.heading {
+        &>.name {
+            font-size: 17px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        &>span.date {
+            float: right;
+            color: grey;
+        }
+    }
 }
 
 .media-attachment-generic {
     display: flex;
     flex-direction: row;
+    width: 400px;
+    margin: 5px 3px;
 
 
     &>.file-icon {

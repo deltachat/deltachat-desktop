@@ -1,32 +1,35 @@
-const moment = require('moment')
+import moment from 'moment'
 
-const getExtendedFormats = (i18n) => ({
+const getExtendedFormats = () => ({
   y: 'lll',
-  M: `${i18n('timestamp_format_m_desktop') || 'MMM D'} LT`,
+  M: `${(window as any).translate('timestamp_format_m_desktop') || 'MMM D'} LT`,
   d: 'ddd LT'
 })
-const getShortFormats = (i18n) => ({
+const getShortFormats = () => ({
   y: 'll',
-  M: i18n('timestamp_format_m_desktop') || 'MMM D',
+  M: (window as any).translate('timestamp_format_m_desktop') || 'MMM D',
   d: 'ddd'
 })
 
-function isToday (timestamp) {
+function isToday(timestamp: moment.Moment) {
   const today = moment().format('ddd')
   const targetDay = moment(timestamp).format('ddd')
   return today === targetDay
 }
 
-function isYear (timestamp) {
+function isYear(timestamp: moment.Moment) {
   const year = moment().format('YYYY')
   const targetYear = moment(timestamp).format('YYYY')
   return year === targetYear
 }
 
-function formatRelativeTime (rawTimestamp, options) {
+export default function formatRelativeTime(
+  rawTimestamp: number,
+  options: { extended: boolean }
+) {
   const { extended } = options
-  const tx = window.translate
-  const formats = extended ? getExtendedFormats(tx) : getShortFormats(tx)
+  const tx = (window as any).translate
+  const formats = extended ? getExtendedFormats() : getShortFormats()
   const timestamp = moment(rawTimestamp)
   const now = moment()
   const diff = moment.duration(now.diff(timestamp))
@@ -50,4 +53,3 @@ function formatRelativeTime (rawTimestamp, options) {
   return tx('now')
 }
 
-module.exports = formatRelativeTime

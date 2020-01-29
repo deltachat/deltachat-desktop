@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { openAttachmentInShell, onDownload } from '../message/messageFunctions';
 import { ScreenContext } from '../../contexts';
 import { isDisplayableByFullscreenMedia, isImage, isVideo, isAudio, getExtension, dragAttachmentOut, attachment } from './Attachment';
+import Timestamp from '../conversations/Timestamp';
 
 type AttachmentProps = { // TODO: replace "any" by the right type here
   attachment: attachment,
@@ -49,9 +50,21 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
     </div>);
   }
   else if (isAudio(attachment)) {
-    return (<audio controls className='media-attachment-audio'>
-      <source src={attachment.url} />
-    </audio>);
+    return (<div className='media-attachment-audio'>
+      <div className='heading'>
+        <div className='name'>
+          {message?.contact.displayName}
+        </div>
+        <Timestamp
+          timestamp={message?.msg.timestamp * 1000}
+          extended
+          module='date'
+        />
+      </div>
+      <audio controls>
+        <source src={attachment.url} />
+      </audio>
+    </div>);
   }
   else {
     const { fileName, fileSize, contentType } = attachment;
