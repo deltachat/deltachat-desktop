@@ -56,17 +56,17 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
   else {
     const { fileName, fileSize, contentType } = attachment;
     const extension = getExtension(attachment);
-    return (<div className='module-message__generic-attachment' role='button' onClick={(ev) => {onDownload(message.msg)}}>
-      <div className='module-message__generic-attachment__icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
-        {extension ? (<div className='module-message__generic-attachment__icon__extension'>
+    return (<div className='message-attachment-generic' role='button' onClick={(ev) => {onDownload(message.msg)}}>
+      <div className='file-icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
+        {extension ? (<div className='file-extension'>
           {contentType === 'application/octet-stream' ? '' : extension}
         </div>) : null}
       </div>
-      <div className='module-message__generic-attachment__text'>
-        <div className={classNames('module-message__generic-attachment__file-name')}>
+      <div className='text-part'>
+        <div className='name'>
           {fileName}
         </div>
-        <div className={classNames('module-message__generic-attachment__file-size')}>
+        <div className='size'>
           {fileSize}
         </div>
       </div>

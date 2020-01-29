@@ -86,21 +86,21 @@ export default function Attachment({ attachment, text, conversationType, directi
   else {
     const { fileName, fileSize, contentType } = attachment;
     const extension = getExtension(attachment);
-    return (<div className={classNames('module-message__generic-attachment', withContentBelow
-      ? 'module-message__generic-attachment--with-content-below'
+    return (<div className={classNames('message-attachment-generic', withContentBelow
+      ? 'content-below'
       : null, withContentAbove
-      ? 'module-message__generic-attachment--with-content-above'
+      ? 'content-above'
       : null)}>
-      <div className='module-message__generic-attachment__icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
-        {extension ? (<div className='module-message__generic-attachment__icon__extension'>
+      <div className='file-icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
+        {extension ? (<div className='file-extension'>
           {contentType === 'application/octet-stream' ? '' : extension}
         </div>) : null}
       </div>
-      <div className='module-message__generic-attachment__text'>
-        <div className={classNames('module-message__generic-attachment__file-name', `module-message__generic-attachment__file-name--${direction}`)}>
+      <div className='text-part'>
+        <div className='name'>
           {fileName}
         </div>
-        <div className={classNames('module-message__generic-attachment__file-size')}>
+        <div className='size'>
           {fileSize}
         </div>
       </div>

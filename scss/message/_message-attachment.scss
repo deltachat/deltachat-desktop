@@ -92,20 +92,19 @@
     }
 }
 
-.module-message__generic-attachment {
+.message-attachment-generic {
     display: flex;
     flex-direction: row;
-}
 
-.module-message__generic-attachment--with-content-below {
-    padding-bottom: 6px;
-}
+    &.content-below {
+        padding-bottom: 6px;
+    }
 
-.module-message__generic-attachment--with-content-above {
-    padding-top: 4px;
-}
+    &.content-above {
+        padding-top: 4px;
+    }
 
-.module-message__generic-attachment__icon {
+    &>.file-icon {
     background: url('../images/file-gradient.svg') no-repeat center;
     height: 44px;
     width: 56px;
@@ -117,9 +116,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.module-message__generic-attachment__icon__extension {
+&>.file-extension {
     font-size: 10px;
     line-height: 13px;
     letter-spacing: 0.1px;
@@ -139,15 +136,15 @@
     color: var(--messageAttachmentIconExtentionColor);
     font-family: monospace;
 }
+    }
 
-.module-message__generic-attachment__text {
+    &>.text-part {
     flex-grow: 1;
     margin-left: 8px;
     // The width of the icon plus our 8px margin
     max-width: calc(100% - 37px);
-}
 
-.module-message__generic-attachment__file-name {
+&>.name {
     color: var(--messageAttachmentFileInfo);
     font-size: 14px;
     line-height: 18px;
@@ -160,10 +157,12 @@
     text-overflow: ellipsis;
 }
 
-.module-message__generic-attachment__file-size {
+&>.size {
     color: var(--messageAttachmentFileInfo);
     font-size: 11px;
     line-height: 16px;
     letter-spacing: 0.3px;
     margin-top: 3px;
+}
+    }
 }
