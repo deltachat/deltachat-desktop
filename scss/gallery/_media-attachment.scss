@@ -65,6 +65,8 @@
 .media-attachment-generic {
     display: flex;
     flex-direction: row;
+    width: 400px;
+    margin: 5px 3px;
 
 
     &>.file-icon {
