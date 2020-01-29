@@ -7,7 +7,7 @@ const UPDATE_FREQUENCY = 60 * 1000
 
 // This hook allows running a callback every delay milliseconds. It takes
 // care of clearing the interval on component unmount.
-export function useInterval (callback, delay) {
+export function useInterval(callback:()=>void, delay:number) {
   useEffect(() => {
     if (delay === null || callback === null) return
 
@@ -16,9 +16,16 @@ export function useInterval (callback, delay) {
   }, [callback, delay])
 }
 
-const Timestamp = React.memo(function Timestamp (props) {
-  const { direction, module, timestamp, extended } = props
-  const moduleName = module || ''
+type TimestampProps = {
+  direction?:"incoming" | "outgoing",
+  module: string,
+  timestamp: number,
+  extended: boolean
+}
+
+const Timestamp = React.memo(function Timestamp(props:TimestampProps) {
+  const { direction, timestamp, extended } = props
+  const moduleName = props.module || ''
 
   if (timestamp === null || timestamp === undefined) return null
 
