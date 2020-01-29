@@ -4,22 +4,12 @@
     position: relative;
     cursor: pointer;
 
-    margin-left: -12px;
-    margin-right: -12px;
-    margin-top: -10px;
-    margin-bottom: -10px;
-
-    border-radius: 16px;
     overflow: hidden;
-
-    background-color: var(--messageAttachmentIconBg);
 
     &>.attachment-content {
         object-fit: cover;
-        width: 100%;
-        min-width: 200px;
-        min-height: 150px;
-        max-height: 300px;
+        width: 120pt;
+        height: 120pt;
 
         // The padding on the bottom of the bubble produces 4 extra pixels of space at the
         //   bottom, so this doesn't match up with the padding numbers above.

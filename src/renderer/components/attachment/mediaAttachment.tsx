@@ -27,21 +27,21 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
   };
   if (isImage(attachment)) {
     if (!attachment.url) {
-      return (<div className='message-attachment-broken-media'>
+      return (<div className='media-attachment-broken-media'>
         {tx('imageFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className='message-attachment-media'>
+    return (<div onClick={onClickAttachment} role='button' className='media-attachment-media'>
       <img className='attachment-content' src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
     if (!attachment.url) {
-      return (<div role='button' className='message-attachment-broken-media'>
+      return (<div role='button' className='media-attachment-broken-media'>
         {tx('videoScreenshotFailedToLoad')}
       </div>);
     }
-    return (<div onClick={onClickAttachment} role='button' className='message-attachment-media'>
+    return (<div onClick={onClickAttachment} role='button' className='media-attachment-media'>
     <video className='attachment-content' src={attachment.url} controls={false} />
     <div className='video-play-btn'>
         <div className='video-play-btn-icon' />
@@ -49,14 +49,14 @@ export default function MediaAttachment({ attachment, message }: AttachmentProps
     </div>);
   }
   else if (isAudio(attachment)) {
-    return (<audio controls className='message-attachment-audio'>
+    return (<audio controls className='media-attachment-audio'>
       <source src={attachment.url} />
     </audio>);
   }
   else {
     const { fileName, fileSize, contentType } = attachment;
     const extension = getExtension(attachment);
-    return (<div className='message-attachment-generic' role='button' onClick={(ev) => {onDownload(message.msg)}}>
+    return (<div className='media-attachment-generic' role='button' onClick={(ev) => {onDownload(message.msg)}}>
       <div className='file-icon' draggable='true' onClick={onClickAttachment} onDragStart={dragAttachmentOut.bind(null, attachment)} title={contentType}>
         {extension ? (<div className='file-extension'>
           {contentType === 'application/octet-stream' ? '' : extension}
