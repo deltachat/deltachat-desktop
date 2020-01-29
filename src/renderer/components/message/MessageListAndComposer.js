@@ -2,13 +2,14 @@ import React, { useRef, useState, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
 
 import Composer from '../composer/Composer'
-import logger from '../../../shared/logger'
+import { getLogger } from '../../../shared/logger'
+
 import MessageList from './MessageList'
 
 import { SettingsContext, ScreenContext } from '../../contexts'
 
 import { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } from 'deltachat-node/constants'
-
+const log = getLogger('renderer/messageListAndComposer')
 export default function MessageListAndComposer (props) {
   const [state, setState] = useState({
     error: false,
@@ -28,7 +29,7 @@ export default function MessageListAndComposer (props) {
     const tx = window.translate
 
     // TODO maybe add a clause here for windows because that uses backslash instead of slash
-    const forbiddenPathRegEx = /DeltaChat\/[\d\w]*\/db\.sqlite-blobs\//gi
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     for (let i = 0; i < files.length; i++) {
       const { path, name } = files[i]
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
@@ -44,7 +45,7 @@ export default function MessageListAndComposer (props) {
           }
         })
       } else {
-        logger.warn('Prevented a file from being send again while dragging it out')
+        log.warn('Prevented a file from being send again while dragging it out')
       }
     }
   }
