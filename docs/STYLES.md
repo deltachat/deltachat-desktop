@@ -1,4 +1,8 @@
 # CSS Guidelines
+
+We use `prettier` for code formatting,
+use `npm run fix-formatting` before commiting to format the code.
+
 ## How we go about styles
 
 We decided to move away from styled components to pure scss, further we're going to remove the BOM syntax that remains from the signal codebase.
@@ -25,3 +29,4 @@ When using generic classnames like `date`, `avatar`, `username`, `error` make su
 ```
 
 This document is not final, feel free to ask questions and discuss this with us.
+

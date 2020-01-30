@@ -233,6 +233,7 @@ Example:
 
 Running `npm test` does the following:
 
+- runs `prettier` for code formatting
 - runs `standard` as code linter
 - runs the unit tests
 

@@ -1,6 +1,7 @@
 Notes for developers:
 
-
+- We use `prettier` for code formatting,
+use `npm run fix-formatting` before commiting to format the code.
 
 
 ### VS Code users
