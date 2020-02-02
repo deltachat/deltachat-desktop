@@ -2,27 +2,73 @@
 
 ## [Unreleased][unreleased]
 
-- removed welcome screen and image
+## [0.999.0] - 2020-02-02
+
+### Added
+
+- Fullscreen view for media files
+- Select last openend chat after starting app
+- Implement In-App Help
+- Implement BCC-Self setting
+- Add TypeScript support
+- Add/Move to TestCafe as testing framework
+- Add windows icons
+
+### Changed
+
+- Improve chatlist performance 
+- Removed welcome screen and image
+- Rewrite account folder logic
+- Improve styling of media gallery
+- Show Verified Icon in Navbar
+- Disable search when showing archived chats
+- Update deltachat-node to v1.0.0-beta23.1
+
+### Fixed
+
+- Fix importing keys
+- Various login & account setting fixes
+- Fix unread counter
+- Fix clicking on notifications and focusing app
+- Map dialog styling
+- Fix qr images overflowing on small screens
+- Fix missing avatars in groups
+- Fix sometimes not loading all messages
+- Fix destination of DeltaChatData folder if run as portable app
+- Delete old logs
+- Fix showing spinner more noticable
+- Fix video attachment play button
 
 ## [0.901.0] - 2019-12-20
 
 ### Changed
+
 - reword the hints when the user cannot write to a chat [#1231](https://github.com/deltachat/deltachat-desktop/pull/1231) [**@r10s**](https://github.com/r10s) [**@hpk42**](https://github.com/hpk42)
 - Internal: fix logger format when logging to console is enabled for translation errors [#1061](https://github.com/deltachat/deltachat-desktop/issues/1061)[**@Simon-Laux**](https://github.com/Simon-Laux)
 - Improve confirm dialogs [#1249](https://github.com/deltachat/deltachat-desktop/pull/1249) [**@Simon-Laux**](https://github.com/Simon-Laux)
 
 ### Removed
+
 - markdown removed (will come back in the future)
 
 ### Fixed
+
 - Fix the desktop side of the bug where when a user changed their name the new name wasn't displayed see [#1228](https://github.com/deltachat/deltachat-desktop/issues/1228) for more info on that bug.
+
 - Fix MessageList not updating/scrolling down on incoming message [#1229](https://github.com/deltachat/deltachat-desktop/pull/1229) [**@Jikstra**](https://github.com/Jikstra)
+
 - Fix subtitle missing in device-chat [#1225](https://github.com/deltachat/deltachat-desktop/issues/1225)[**@Simon-Laux**](https://github.com/Simon-Laux)
+
 - Fix CHAT_MODIFIED state update [#1247](https://github.com/deltachat/deltachat-desktop/pull/1247) [**@nicodh**](https://github.com/nicodh)
+
 - Fix POI only visible after reloading map [#1351](https://github.com/deltachat/deltachat-desktop/issues/1251) [**@nicodh**](https://github.com/nicodh)
+
 - Avoid update draft loop [#1248](https://github.com/deltachat/deltachat-desktop/pull/1248) [**@nicodh**](https://github.com/nicodh)
+
 - Make sure all layers are removed before updates [#1259](https://github.com/deltachat/deltachat-desktop/pull/1259) [**@nicodh**](https://github.com/nicodh)
+
 - Fix bug: chat was still selected active after switching accounts [#1260](https://github.com/deltachat/deltachat-desktop/issues/1260) [**@nicodh**](https://github.com/nicodh)
+
 - Don't fetch chat twice [#1262](https://github.com/deltachat/deltachat-desktop/pull/1262) [**@nicodh**](https://github.com/nicodh)
 
 - Update deltachat-node to 1.0.0-beta.21
@@ -749,7 +795,15 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...HEAD
+
+[0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
+
+[0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...v0.901.0
+
+[0.900.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.840.0...v0.900.0
+
+[0.840.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...v0.840.0
 
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.201.0
 
