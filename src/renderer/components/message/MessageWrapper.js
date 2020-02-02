@@ -32,13 +32,23 @@ export const InfoMessage = styled.div`
   }
 `
 
-export const render = React.memo((props) => {
-  return <li><RenderMessage {...props} /></li>
-})
+function diff(o1, o2) {
+  let diff = Object.keys(o2).reduce((diff, key) => {
+    if (o1[key] === o2[key]) return diff
+    return {
+      ...diff,
+      [key]: o2[key]
+    }
+  }, {})
+  return diff  
+}
 
-export function RenderMessage (props) {
-  const [chat, chatStoreDispatch] = useChatStore()
-  const { message, locationStreamingEnabled } = props
+export const render = (props) => {
+  return <li><RenderMessage {...props} /></li>
+}
+
+export const RenderMessage = React.memo((props) => {
+  const { message, locationStreamingEnabled, chat, chatStoreDispatch } = props
   const { fromId, id } = message.msg
   const msg = message.msg
   const tx = window.translate
@@ -100,6 +110,10 @@ export function RenderMessage (props) {
   if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
-}
+}, (prevProps, nextProps) => {
+  const areEqual = prevProps.message === nextProps.message
+  console.log('MessageWrapper.render componentDidUpdate', areEqual)
+  return areEqual
+})
 const MessageWrapper = { render }
 export default MessageWrapper
