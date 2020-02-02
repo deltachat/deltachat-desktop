@@ -186,7 +186,7 @@ function init (cwd, state, logHandler) {
   ipcMain.on('saveLastChatId', (e, chatId) => {
     const { lastChats } = app.state.saved
     lastChats[dcController.credentials.addr] = chatId
-    sendStateToRenderer()
+    //sendStateToRenderer()
     // don't save to disk, because this is already done on close and it might block
     // we can ignore the crash case, because a crash isn't supposed to happen
     // and it's not important data
