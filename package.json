@@ -13,7 +13,7 @@
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
     "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test_ci.js\"",
-    "test-e2e": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\"",
+    "test-e2e": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\" \"./test/testcafe/help-page.js\"",
     "dev": "npm run build && npm run start --",
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
