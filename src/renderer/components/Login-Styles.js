@@ -257,16 +257,12 @@ export const DeltaProgressBar = function (props) {
 }
 
 export const BeforeLoginHint = styled.div`
-
-padding: 4px;
-font-weight: bold;
-
-
-background-color: yellow;
-
+padding: 6px 8px;
+margin: 3px;
+font-style: italic;
+background-color: #ffff77;
 &.broken {
-  background-color: red;
+  background-color: #db3737;
+  color: white;
 }
-
-
 `
