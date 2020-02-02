@@ -72,3 +72,6 @@ typings/
 
 # conversations
 static/conversations.css
+
+# portable config folders
+DeltaChatData
