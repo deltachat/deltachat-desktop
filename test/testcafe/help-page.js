@@ -1,7 +1,9 @@
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
-import { loginWithTmpUser, logout, clickAppMenuItem, closeDialog } from './helpers'
-import { clickOnMainMenuItem } from 'testcafe-browser-provider-electron';
+import { logout, clickAppMenuItem, closeDialog } from './helpers'
+import { clickOnMainMenuItem } from 'testcafe-browser-provider-electron'
+
+/* global fixture, test */
 
 fixture('Help-page tests')
   .page('../../static/test.html')

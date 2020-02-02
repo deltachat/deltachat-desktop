@@ -202,7 +202,7 @@ export default function LoginScreen (props) {
     <LoginWrapper>
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT} style={{width:'unset'}}>
+          <NavbarGroup align={Alignment.LEFT} style={{ width: 'unset' }}>
             <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
           </NavbarGroup>
         </Navbar>
