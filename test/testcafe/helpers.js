@@ -1,4 +1,4 @@
-import { Selector, t } from 'testcafe';
+import { Selector, t } from 'testcafe'
 import { createTmpUser } from '../integration/fixtures/config'
 
 const waitForLogin = 50000
@@ -19,7 +19,7 @@ async function closeDialog () {
 }
 
 async function loginWithTmpUser () {
-  let account = await createTmpUser()
+  const account = await createTmpUser()
   await t.expect(Selector('.bp3-navbar-heading').innerText).eql('Welcome to Delta Chat')
     .typeText('#addr', account.email)
     .typeText('#mail_pw', account.password)

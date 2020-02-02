@@ -1,6 +1,5 @@
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
-const { createTmpUser } = require('../integration/fixtures/config')
 import { loginWithTmpUser, logout, clickAppMenuItem } from './helpers'
 
 /* global fixture, test */
@@ -11,7 +10,6 @@ const welcomeMessage = 'Select a chat or create a new chat'
 const testMessage = 'Test message'
 let accountButton1 = null
 let accountButton2 = null
-
 
 const clickChatByName = async (t, name) => {
   return t.click(Selector('.chat-list-item__name').withText(name))
