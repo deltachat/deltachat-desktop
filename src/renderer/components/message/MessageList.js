@@ -82,8 +82,9 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
             <MessageWrapper.render
               key={messageId}
               message={message}
-              chat={chat}
               locationStreamingEnabled={locationStreamingEnabled}
+              chat={chat}
+              chatStoreDispatch={chatStoreDispatch}
             />
           )
         })}

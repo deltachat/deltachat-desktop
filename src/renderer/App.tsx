@@ -10,6 +10,9 @@ import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
+import logger from '../shared/logger'
+
+const log = logger.getLogger('renderer/App')
 const moment = require('moment')
 
 addLocaleData(enLocaleData)
@@ -51,7 +54,10 @@ export default function App (props:any) {
     startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
-  const onRender = (e:any, state:AppState) => setState(state)
+  const onRender = (e:any, state:AppState) => {
+    log.debug('onRenderer')
+    setState(state)
+  }
   useEffect(() => {
     ipcBackend.on('render', onRender)
     return () => {
