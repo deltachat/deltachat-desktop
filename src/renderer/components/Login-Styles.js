@@ -255,3 +255,18 @@ export const DeltaProgressBar = function (props) {
     </ProgressBarWrapper>
   )
 }
+
+export const BeforeLoginHint = styled.div`
+
+padding: 4px;
+font-weight: bold;
+
+
+background-color: yellow;
+
+&.broken {
+  background-color: red;
+}
+
+
+`

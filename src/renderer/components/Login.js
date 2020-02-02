@@ -13,12 +13,14 @@ import {
   DeltaProgressBar,
   AdvancedButton,
   AdvancedButtonIconClosed,
-  AdvancedButtonIconOpen
+  AdvancedButtonIconOpen,
+  BeforeLoginHint
 } from './Login-Styles'
 import {
   Collapse,
   Intent
 } from '@blueprintjs/core'
+import { callDcMethodAsync } from '../ipc'
 
 export default class Login extends React.Component {
   constructor (props) {
@@ -32,7 +34,8 @@ export default class Login extends React.Component {
       },
       progress: 0,
       dirty: false,
-      disableSubmit: false
+      disableSubmit: false,
+      provider_info: {}
     }
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
@@ -102,6 +105,12 @@ export default class Login extends React.Component {
     updatedState.dirty = dirty
     updatedState.disableSubmit = false
     this.setState(updatedState)
+  }
+
+  async emailChange (event) {
+    this.handleCredentialsChange(event)
+    const result = await callDcMethodAsync('getProviderInfo', [event.target.value])
+    this.setState({ provider_info: result || {} })
   }
 
   handleSubmit (event) {
@@ -190,7 +199,7 @@ export default class Login extends React.Component {
 
     const { showAdvanced } = this.state.ui
 
-    const { dirty } = this.state
+    const { dirty, provider_info } = this.state
 
     const tx = window.translate
 
@@ -205,7 +214,7 @@ export default class Login extends React.Component {
             placeholder={tx('email_address')}
             disabled={addrDisabled}
             value={addr}
-            onChange={this.handleCredentialsChange}
+            onChange={this.emailChange.bind(this)}
           />
 
           <DeltaPasswordInput
@@ -215,6 +224,14 @@ export default class Login extends React.Component {
             password={mail_pw}
             onChange={this.handleCredentialsChange}
           />
+
+          { provider_info.before_login_hint &&
+          provider_info.status !== 0 &&
+          <BeforeLoginHint className={provider_info.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken'}>
+            {provider_info.before_login_hint}
+          </BeforeLoginHint>
+          }
+
           <DeltaText>{tx('login_no_servers_hint')}</DeltaText>
           <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
             {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
