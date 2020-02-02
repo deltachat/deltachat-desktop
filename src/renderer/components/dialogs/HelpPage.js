@@ -7,8 +7,9 @@ import { Card } from '@blueprintjs/core'
 import ClickableLink from '../helpers/ClickableLink'
 import { join } from 'path'
 import fs from 'fs'
+import electron from 'electron'
 
-const contentFilePath = join(__dirname, `../../../../static/help/__locale__/help.html`)
+const contentFilePath = join(electron.remote.app.getAppPath(), '/static/help/__locale__/help.html')
 
 function helpPageReadContentFile () {
   const locale = window.localeData.locale
