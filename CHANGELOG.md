@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [0.999.1] - 2020-02-02
+
+### Fixed
+
+- Fix crash on help in distributed packages
+
 ## [0.999.0] - 2020-02-02
 
 ### Added
@@ -795,7 +801,10 @@
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.1...HEAD
+
+[0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
+
 
 [0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
 
