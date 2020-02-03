@@ -39,13 +39,13 @@ export const DeltaSelect = React.memo((props: React.PropsWithChildren<{
 })
 
 export const DeltaInput = React.memo((props:React.PropsWithChildren<{
-  label:string,
+  label?:string,
   id?:string,
   value:any,
   placeholder?:string,
   type?: string,
-  min?: number,
-  max?: number,
+  min?: string,
+  max?: string,
   rightElement?:JSX.Element,
   disabled?:boolean
   onChange: ((event: FormEvent<HTMLElement>) => void) & ((event: ChangeEvent<HTMLInputElement>) => void)
