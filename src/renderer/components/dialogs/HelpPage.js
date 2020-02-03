@@ -44,8 +44,9 @@ export default function HelpPage (props) {
       title={window.translate('menu_help')}
       isOpen={props.isOpen}
       onClose={props.onClose}
+      fixed
     >
-      <DeltaDialogBody>
+      <DeltaDialogBody noFooter>
         <DeltaDialogContent>
             <span className='help-content'>
               <HelpPageContent />
