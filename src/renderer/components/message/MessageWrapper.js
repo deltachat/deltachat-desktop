@@ -110,7 +110,7 @@ export const RenderMessage = React.memo((props) => {
   if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
-}, (prevProps, nextProps) => {
+}, (prevProps, nextProps) => {  
   const areEqual = prevProps.message === nextProps.message
   console.log('MessageWrapper.render componentDidUpdate', areEqual)
   return areEqual
