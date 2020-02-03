@@ -39,21 +39,6 @@ export function HelpPageContent ({ props }) {
   return parse(helpPageReadContentFile(), parserOptions)
 }
 
-function HelpPageLocalCopyHint ({ props }) {
-  const locale = window.localeData.locale
-  const localizedHref = `https://delta.chat/${locale}/help`
-  const text = window.translate('help_page_local_copy_hint')
-  const linkedText = reactStringReplace(text, /\[LINK:([^\]]+)\]/, (match, index) => (
-    <ClickableLink href={localizedHref} key={index}>{match}</ClickableLink>
-  ))
-
-  return (
-    <p className='help-page-local-copy-hint'>
-      {linkedText}
-    </p>
-  )
-}
-
 export default function HelpPage (props) {
   return (
     <DeltaDialog
@@ -68,9 +53,6 @@ export default function HelpPage (props) {
           </span>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogFooter style={{ paddingTop: '0px', paddingBottom: '0px' }}>
-        <HelpPageLocalCopyHint />
-      </DeltaDialogFooter>
     </DeltaDialog>
   )
 }
