@@ -68,7 +68,7 @@ export default function HelpPage (props) {
           </span>
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogFooter>
+      <DeltaDialogFooter style={{paddingTop:'0px', paddingBottom:'0px'}}>
         <HelpPageLocalCopyHint />
       </DeltaDialogFooter>
     </DeltaDialog>
