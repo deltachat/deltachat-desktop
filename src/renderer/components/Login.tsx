@@ -16,6 +16,7 @@ import {
   Intent
 } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../ipc'
+import ClickableLink from './helpers/ClickableLink';
 
 type credentialState = {
   [key:string]:any,
@@ -257,9 +258,11 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
           />
 
           { provider_info?.before_login_hint &&
-          provider_info.status !== 0 &&
           <div className={`before-login-hint ${(provider_info.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken')}`}>
-            {provider_info.before_login_hint}
+            <p>
+              {provider_info.before_login_hint}
+            </p>
+            <ClickableLink href={provider_info.overview_page}>More Information at {provider_info.overview_page}</ClickableLink>
           </div>
           }
 
