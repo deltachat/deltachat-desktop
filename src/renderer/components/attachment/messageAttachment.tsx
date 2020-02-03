@@ -17,7 +17,7 @@ type AttachmentProps = { // TODO: replace "any" by the right type here
 }
 
 export default function Attachment({ attachment, text, conversationType, direction, message }: AttachmentProps) {
-  const tx = (window as any).translate;
+  const tx = window.translate;
   if (!attachment) {
     return null;
   }

@@ -64,7 +64,7 @@ export default class ScreenController extends Component {
   }
 
   onError (_event:any, error:Error) {
-    const tx = (window as any).translate
+    const tx = window.translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
