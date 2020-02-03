@@ -2,8 +2,7 @@ import React from 'react'
 import reactStringReplace from 'react-string-replace'
 import parse from 'html-react-parser'
 import domToReact from 'html-react-parser/lib/dom-to-react'
-import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
-import { Card } from '@blueprintjs/core'
+import DeltaDialog, { DeltaDialogContent, DeltaDialogBody } from './DeltaDialog'
 import ClickableLink from '../helpers/ClickableLink'
 import { join } from 'path'
 import fs from 'fs'
@@ -47,11 +46,11 @@ export default function HelpPage (props) {
       onClose={props.onClose}
     >
       <DeltaDialogBody>
-        <Card>
-          <span className='help-content'>
-            <HelpPageContent />
-          </span>
-        </Card>
+        <DeltaDialogContent>
+            <span className='help-content'>
+              <HelpPageContent />
+            </span>
+        </DeltaDialogContent>
       </DeltaDialogBody>
     </DeltaDialog>
   )
