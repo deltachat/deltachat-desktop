@@ -98,7 +98,7 @@ Full changelog: http://delta.chat/a5f/
 
     this._dc.addDeviceMessage('changelog-version-0.999.0', `Changes in v0.999.0
 
-- You want to know better how DeltaChat works? The whole FAQ is now accessable in the App, even if you're offline. You can open it by clicking on "Help" in the menu!
+- You want to know better how DeltaChat works? The whole FAQ is now accessible in the app, even if you're offline. You can open it by clicking on "Help" in the menu!
 - We also fixed many bugs, the chatlist loads faster and the whole app feels more responsive.
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#09990---2020-02-02
