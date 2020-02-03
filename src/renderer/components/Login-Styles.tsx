@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, FormEvent, ChangeEvent } from 'react'
 import {
   Button,
   InputGroup,
@@ -7,7 +7,12 @@ import {
   ProgressBar
 } from '@blueprintjs/core'
 
-export const DeltaSelect = React.memo((props) => {
+export const DeltaSelect = React.memo((props: React.PropsWithChildren<{
+  label:string,
+  id:any,
+  value:any,
+  onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void
+}>) => {
   const [isFocused, setIsFocused] = useState(false)
 
   const onFocus = () => setIsFocused(true)
@@ -33,7 +38,18 @@ export const DeltaSelect = React.memo((props) => {
   )
 })
 
-export const DeltaInput = React.memo((props) => {
+export const DeltaInput = React.memo((props:React.PropsWithChildren<{
+  label:string,
+  id?:string,
+  value:any,
+  placeholder?:string,
+  type?: string,
+  min?: number,
+  max?: number,
+  rightElement?:JSX.Element,
+  disabled?:boolean
+  onChange: ((event: FormEvent<HTMLElement>) => void) & ((event: ChangeEvent<HTMLInputElement>) => void)
+}>) => {
   const [isFocused, setIsFocused] = useState(false)
 
   const onFocus = () => setIsFocused(true)
@@ -65,7 +81,13 @@ export const DeltaInput = React.memo((props) => {
   )
 })
 
-export const DeltaPasswordInput = React.memo((props) => {
+export const DeltaPasswordInput = React.memo((props: React.PropsWithChildren<{
+  password:string,
+  id?:string,
+  label?:string,
+  placeholder?:string,
+  onChange: ((event: FormEvent<HTMLElement>) => void) & ((event: ChangeEvent<HTMLInputElement>) => void)
+}>) => {
   const tx = window.translate
 
   const [showPassword, setShowPassword] = useState(false)
@@ -96,9 +118,12 @@ export const DeltaPasswordInput = React.memo((props) => {
   )
 })
 
-export const DeltaProgressBar = function (props) {
+export const DeltaProgressBar = function (props:React.PropsWithChildren<{
+  progress: number,
+  intent?: Intent
+}>) {
   return (
-    <div style={{ 'margin-top': '20px', 'margin-bottom': '10px' }}>
+    <div style={{ marginTop: '20px', marginBottom: '10px' }}>
       <ProgressBar
         value={props.progress ? props.progress / 1000 : 0}
         intent={props.intent}
