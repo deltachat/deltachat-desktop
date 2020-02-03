@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { remote } from 'electron'
 import { sendToBackend, ipcBackend } from '../ipc'
-import styled from 'styled-components'
 import Login from './Login'
 import {
   Button,
@@ -14,59 +13,13 @@ import {
   NavbarGroup,
   NavbarHeading
 } from '@blueprintjs/core'
-import { DeltaHeadline, DeltaBlueButton, DeltaProgressBar } from './Login-Styles'
+import { DeltaProgressBar } from './Login-Styles'
 import logger from '../../shared/logger'
 import { ScreenContext } from '../contexts'
 import DeltaDialog from './dialogs/DeltaDialog'
 
 const log = logger.getLogger('renderer/components/LoginScreen')
 
-const LoginWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: calc(100vh);
-
-  .bp3-card {
-    width: 400px;
-    margin-top: 20px;
-    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
-    flex: unset;
-  }
-
-  .window { 
-    padding-left: calc((100vw - 400px) / 2)
-  }
-
-`
-
-const LoginItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  border-right: 1px solid grey;
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
-  min-width: 300px;
-  border-radius: 0;
-
-  :hover {
-    button.bp3-intent-danger {
-      display: inline-flex;
-    }
-  }
-
-  button.bp3-intent-danger {
-    display: none;
-  }
-
-  &:first-child {
-    border-top: 1px solid grey;
-  }
-
-  button.bp3-large {
-    width: 90%;
-  }
-`
 const ImportDialogContent = React.memo(function ImportDialogContent (props) {
   const tx = window.translate
   const [importProgress, setImportProgress] = useState(0)
@@ -160,9 +113,9 @@ const ImportButton = React.memo(function ImportButton (props) {
 
   return (
     <Fragment>
-      <DeltaBlueButton onClick={onClickImportBackup} >
+      <div className='delta-blue-button' onClick={onClickImportBackup} >
         <p>{tx('import_backup_title') }</p>
-      </DeltaBlueButton>
+      </div>
       {showDialog &&
         <DeltaDialog
           onClose={onHandleClose}
@@ -199,7 +152,7 @@ export default function LoginScreen (props) {
   }
 
   return (
-    <LoginWrapper>
+    <div className='login-screen'>
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT} style={{ width: 'unset' }}>
@@ -209,9 +162,9 @@ export default function LoginScreen (props) {
       </div>
       <div className='window'>
         { props.logins.length > 0 && <Card>
-          <DeltaHeadline>{tx('login_known_accounts_title_desktop')}</DeltaHeadline>
+          <p className='delta-headline'>{tx('login_known_accounts_title_desktop')}</p>
           <ul>
-            {props.logins.map((login) => <LoginItem key={login.path}>
+            {props.logins.map((login) => <li className='login-item' key={login.path}>
               <Button large minimal onClick={() => onClickLoadAccount(login)} title={login.path}>
                 {login.addr}
               </Button>
@@ -219,13 +172,13 @@ export default function LoginScreen (props) {
                 intent={Intent.DANGER} minimal icon='cross'
                 onClick={() => forgetLogin(login)}
                 aria-label={tx('a11y_remove_account_btn_label')} />
-            </LoginItem>
+            </li>
             )}
           </ul>
         </Card>
         }
         <Card>
-          <DeltaHeadline>{tx('login_title')}</DeltaHeadline>
+          <p className='delta-headline'>{tx('login_title')}</p>
           <Login onSubmit={onClickLogin} loading={props.deltachat.configuring}>
             <br />
             <Button type='submit' text={tx('login_title')} />
@@ -234,6 +187,6 @@ export default function LoginScreen (props) {
           <ImportButton />
         </Card>
       </div>
-    </LoginWrapper>
+    </div>
   )
 }
