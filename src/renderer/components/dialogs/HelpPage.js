@@ -1,5 +1,4 @@
 import React from 'react'
-import reactStringReplace from 'react-string-replace'
 import parse from 'html-react-parser'
 import domToReact from 'html-react-parser/lib/dom-to-react'
 import DeltaDialog, { DeltaDialogContent, DeltaDialogBody } from './DeltaDialog'
@@ -48,9 +47,9 @@ export default function HelpPage (props) {
     >
       <DeltaDialogBody noFooter>
         <DeltaDialogContent>
-            <span className='help-content'>
-              <HelpPageContent />
-            </span>
+          <span className='help-content'>
+            <HelpPageContent />
+          </span>
         </DeltaDialogContent>
       </DeltaDialogBody>
     </DeltaDialog>
