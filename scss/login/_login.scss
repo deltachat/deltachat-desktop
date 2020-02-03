@@ -1,3 +1,115 @@
-.login-form button[type='submit'] {
-  margin-right: 1rem;
+.login-form {
+  button[type="submit"] {
+    margin-right: 1rem;
+  }
+
+  p.text {
+    color: var(--deltaChatPrimaryFgLight);
+  }
+
+  div.advanced {
+    -webkit-appearance: button-bevel;
+    background-color: transparent;
+    color: var(--loginInputFocusColor);
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+    p {
+      margin-left: 8px;
+      display: -webkit-inline-box;
+      position: relative;
+      font-size: 18px;
+      margin-bottom: 0px;
+      bottom: 3px;
+    }
+  }
+}
+
+p.delta-headline {
+  color: var(--deltaChatPrimaryFgLight);
+  font-size: 18px;
+  padding: 15px 0 3px;
+}
+
+.login-screen {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: calc(100vh);
+
+  li.login-item {
+    display: flex;
+    justify-content: space-between;
+    border-right: 1px solid grey;
+    border-left: 1px solid grey;
+    border-bottom: 1px solid grey;
+    min-width: 300px;
+    border-radius: 0;
+
+    &:hover {
+      button.bp3-intent-danger {
+        display: inline-flex;
+      }
+    }
+
+    button.bp3-intent-danger {
+      display: none;
+    }
+
+    &:first-child {
+      border-top: 1px solid grey;
+    }
+
+    button.bp3-large {
+      width: 90%;
+    }
+  }
+
+  .bp3-card {
+    width: 400px;
+    margin-top: 20px;
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+      0 1px 1px rgba(16, 22, 26, 0.2);
+    flex: unset !important;
+  }
+
+  .window {
+    padding-left: calc((100vw - 400px) / 2);
+  }
+
+  div.delta-blue-button {
+    -webkit-appearance: button-bevel;
+    background-color: transparent;
+    color: var(--loginButtonText);
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+    p {
+      margin-left: 8px;
+      display: -webkit-inline-box;
+      position: relative;
+      font-size: 18px;
+      margin-bottom: 0px;
+      bottom: 3px;
+    }
+  }
+
+  .before-login-hint {
+    padding: 6px 8px;
+    margin: 3px;
+    font-style: italic;
+    background-color: #ffff77;
+    &.broken {
+      background-color: #db3737;
+      color: white;
+    }
+  }
 }

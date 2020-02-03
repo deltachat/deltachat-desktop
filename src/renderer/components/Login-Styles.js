@@ -8,47 +8,6 @@ import {
   ProgressBar
 } from '@blueprintjs/core'
 
-export const DeltaBlueButton = styled.div`
-  -webkit-appearance: button-bevel;
-  background-color: transparent;
-  color: ${props => props.theme.loginButtonText};
-  font-size: 16px;
-  display: block;
-  width: 100%; 
-  margin-top: 30px;
-  &:hover {
-    cursor: pointer;
-  }
-  p {
-    margin-left: 8px;
-    display: -webkit-inline-box;
-    position: relative;
-    font-size: 18px;
-    margin-bottom: 0px;
-    bottom: 3px;
-  }
-`
-export const AdvancedButton = styled.div`
-  -webkit-appearance: button-bevel;
-  background-color: transparent;
-  color: ${props => props.theme.loginInputFocusColor};;
-  font-size: 16px;
-  display: block;
-  width: 100%; 
-  margin-top: 30px;
-  &:hover {
-    cursor: pointer;
-  }
-  p {
-    margin-left: 8px;
-    display: -webkit-inline-box;
-    position: relative;
-    font-size: 18px;
-    margin-bottom: 0px;
-    bottom: 3px;
-  }
-`
-
 export const AdvancedButtonIconOpen = styled.div`
   width: 20px;
   height: 20px;
@@ -231,38 +190,13 @@ export const DeltaPasswordInput = React.memo((props) => {
   )
 })
 
-export const ProgressBarWrapper = styled.div`
-margin-top: 20px;
-margin-bottom: 10px;
-`
-
-export const DeltaText = styled.p`
-  color: ${props => props.theme.deltaChatPrimaryFgLight};
-`
-
-export const DeltaHeadline = styled.p`
-  color: ${props => props.theme.deltaChatPrimaryFgLight};
-  font-size: 18px;
-  padding: 15px 0 3px;`
-
 export const DeltaProgressBar = function (props) {
   return (
-    <ProgressBarWrapper>
+    <div style={{ 'margin-top': '20px', 'margin-bottom': '10px' }}>
       <ProgressBar
         value={props.progress ? props.progress / 1000 : 0}
         intent={props.intent}
       />
-    </ProgressBarWrapper>
+    </div>
   )
 }
-
-export const BeforeLoginHint = styled.div`
-padding: 6px 8px;
-margin: 3px;
-font-style: italic;
-background-color: #ffff77;
-&.broken {
-  background-color: #db3737;
-  color: white;
-}
-`

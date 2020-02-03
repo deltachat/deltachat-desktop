@@ -7,14 +7,10 @@ import update from 'immutability-helper'
 import {
   DeltaInput,
   DeltaPasswordInput,
-  DeltaHeadline,
-  DeltaText,
   DeltaSelect,
   DeltaProgressBar,
-  AdvancedButton,
   AdvancedButtonIconClosed,
-  AdvancedButtonIconOpen,
-  BeforeLoginHint
+  AdvancedButtonIconOpen
 } from './Login-Styles'
 import {
   Collapse,
@@ -141,7 +137,7 @@ export default class Login extends React.Component {
   }
 
   renderLoginHeader (mode) {
-    return mode === 'update' ? null : <DeltaText>{window.translate('login_explain')}</DeltaText>
+    return mode === 'update' ? null : <p className='text'>{window.translate('login_explain')}</p>
   }
 
   _getDefaultPort (protocol) {
@@ -227,19 +223,19 @@ export default class Login extends React.Component {
 
           { provider_info.before_login_hint &&
           provider_info.status !== 0 &&
-          <BeforeLoginHint className={provider_info.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken'}>
+          <div className={`before-login-hint ${(provider_info.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken')}`}>
             {provider_info.before_login_hint}
-          </BeforeLoginHint>
+          </div>
           }
 
-          <DeltaText>{tx('login_no_servers_hint')}</DeltaText>
-          <AdvancedButton onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
+          <p className='text'>{tx('login_no_servers_hint')}</p>
+          <div className='advanced' onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
             {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
             <p>{tx('menu_advanced') }</p>
-          </AdvancedButton>
+          </div>
           <Collapse isOpen={showAdvanced}>
             <br />
-            <DeltaHeadline>{tx('login_inbox')}</DeltaHeadline>
+            <p className='delta-headline'>{tx('login_inbox')}</p>
 
             <DeltaInput
               key='mail_user'
@@ -284,7 +280,7 @@ export default class Login extends React.Component {
               <option value='plain'>{tx('off')}</option>
             </DeltaSelect>
 
-            <DeltaHeadline>{tx('login_outbox')}</DeltaHeadline>
+            <p className='delta-headline'>{tx('login_outbox')}</p>
             <DeltaInput
               key='send_user'
               id='send_user'
@@ -346,7 +342,7 @@ export default class Login extends React.Component {
             </DeltaSelect>
           </Collapse>
           <br />
-          <DeltaText>{tx('login_subheader')}</DeltaText>
+          <p className='text'>{tx('login_subheader')}</p>
           {
             loading &&
               <DeltaProgressBar
