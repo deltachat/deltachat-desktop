@@ -1,4 +1,9 @@
 .help-content {
+    html {
+        position: relative;
+        top: -50px;
+    }
+
     a {
         text-decoration: none;
     }
@@ -26,8 +31,17 @@
         font-weight: normal;
         font-size: 1rem;
 
+      
+
         &>ul>li {
-            margin-left: 3px;
+            margin-left: 10px;
+            &::before {
+                content: "\2022";
+                color: #106ba3;
+                font-weight: bold;
+                display: inline-block;
+                width: 1em;
+              }
         }
     }
 }
