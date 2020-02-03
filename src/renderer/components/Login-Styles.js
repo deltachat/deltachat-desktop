@@ -8,54 +8,6 @@ import {
   ProgressBar
 } from '@blueprintjs/core'
 
-export const AdvancedButtonIconOpen = styled.div`
-  width: 20px;
-  height: 20px;
-  -webkit-mask: url(../images/dc-cross.svg) no-repeat center;
-  -webkit-mask-size: 100%;
-  background-color: ${props => props.theme.loginInputFocusColor};
-  display: -webkit-inline-box;
-`
-
-export const AdvancedButtonIconClosed = styled(AdvancedButtonIconOpen)`
-  transform: rotate(45deg);
-`
-
-export const DeltaFormGroup = styled.div`
-  .bp3-form-content { 
-    padding: 0px 10px 0px 10px;
-  }
-`
-
-export const DeltaSelectWrapper = styled(DeltaFormGroup)`
-  .bp3-select::after {
-    content:'>';
-    font:11px "Consolas", monospace;
-    transform:rotate(90deg);
-  }
-  .bp3-select {
-    width: 100%;
-    select {
-     -webkit-box-shadow: none;
-      box-shadow: none;
-      background-image: none;
-      background-color: transparent;
-      width: 100%;
-      color: ${props => props.theme.deltaChatPrimaryFgLight};
-      font-size: 17px;
-      &:hover, &:focus {
-        outline: unset;
-        outline-offset: unset;
-      }
-    }
-  }
-  .bp3-form-group label.bp3-label {
-    padding-left: 10px;
-    color: ${props => props.theme.deltaChatPrimaryFgLight};
-    font-size: 16px; 
-  }
-`
-
 export const DeltaSelect = React.memo((props) => {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -63,7 +15,7 @@ export const DeltaSelect = React.memo((props) => {
   const onBlur = () => setIsFocused(false)
 
   return (
-    <DeltaSelectWrapper>
+    <div className='delta-form-group delta-select'>
       <FormGroup>
         <DeltaLabel focus={isFocused}>{props.label}</DeltaLabel>
         <div className='bp3-select .modifier'>
@@ -78,42 +30,9 @@ export const DeltaSelect = React.memo((props) => {
           </select>
         </div>
       </FormGroup>
-    </DeltaSelectWrapper>
+    </div>
   )
 })
-
-export const DeltaInputWrapper = styled(DeltaFormGroup)`
-  .bp3-input {
-    padding: unset;
-    border-radius: unset;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    border-bottom: 2px solid;
-    border-bottom-color: ${props => props.theme.deltaChatPrimaryFgLight};
-    font-size: 16px; 
-    background-color: transparent;
-
-    &:focus {
-      border-bottom-color: ${props => props.theme.loginInputFocusColor};
-      color: ${props => props.theme.loginInputFocusColor};
-    }
-
-    &:focus::placeholder {
-      color: transparent;
-    }
-    &::placeholder {
-      color: ${props => props.theme.deltaChatPrimaryFgLight};
-    }
-  }
-
-  .bp3-button.bp3-minimal.bp3-intent-warning, .bp3-button.bp3-minimal.bp3-intent-warning:hover {
-    color: #62656a !important;
-  }
-
-  .bp3-button.bp3-minimal.bp3-intent-warning:hover {
-    background-color: ${props => props.theme.deltaChatPrimaryFgLight} !important;
-  }
-`
 
 export const DeltaLabel = styled.div`
     visibility: ${props => props.visible === false ? 'hidden' : 'visible'};
@@ -134,7 +53,7 @@ export const DeltaInput = React.memo((props) => {
   const showLabel = isFocused || props.value.length > 0 || (props.label !== undefined && props.label.length > 0)
 
   return (
-    <DeltaInputWrapper>
+    <div className='delta-form-group delta-input'>
       <FormGroup>
         <DeltaLabel
           visible={showLabel}
@@ -155,7 +74,7 @@ export const DeltaInput = React.memo((props) => {
           rightElement={props.rightElement}
         />
       </FormGroup>
-    </DeltaInputWrapper>
+    </div>
   )
 })
 
