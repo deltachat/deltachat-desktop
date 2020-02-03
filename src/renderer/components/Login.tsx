@@ -372,7 +372,6 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
             >
               <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
               <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
-              <option value={C.DC_CERTCK_ACCEPT_INVALID_HOSTNAMES}>{tx('accept_invalid_hostnames')}</option>
               <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>{tx('accept_invalid_certificates')}</option>
             </DeltaSelect>
           </Collapse>
