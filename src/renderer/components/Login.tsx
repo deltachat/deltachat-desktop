@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 
-import C from 'deltachat-node/constants'
+import { C } from 'deltachat-node/constants.enum';
+import { DeltaChat } from 'deltachat-node';
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import update from 'immutability-helper'
@@ -16,8 +17,44 @@ import {
 } from '@blueprintjs/core'
 import { callDcMethodAsync } from '../ipc'
 
-export default class Login extends React.Component {
-  constructor (props) {
+type credentialState = {
+  [key:string]:any,
+  addr?: string,
+  mail_user?: string,
+  mail_pw?: string,
+  mail_server?: string,
+  mail_port?: string,
+  mail_security?: 'automatic' | '' | 'ssl' | 'default',
+  imap_certificate_checks?: any,
+  send_user?: string,
+  send_pw?: string,
+  send_server?: string,
+  send_port?: string,
+  send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain',
+  smtp_certificate_checks?: any,
+}
+
+type LoginProps = React.PropsWithChildren<{
+  [key:string]:any,
+  mode: 'update' | undefined,
+} & credentialState>
+
+type LoginComponentState = {
+  credentials: credentialState,
+    ui: {
+      showAdvanced: boolean,
+      showPasswordMail: boolean,
+      showPasswordSend: boolean,
+      [key:string]:boolean
+    },
+    progress: number,
+    dirty: boolean,
+    disableSubmit: boolean,
+    provider_info: ReturnType<typeof DeltaChat.getProviderFromEmail>
+}
+
+export default class Login extends React.Component<LoginProps, LoginComponentState> {
+  constructor (props:LoginProps) {
     super(props)
     this.state = {
       credentials: this._defaultCredentials(),
@@ -29,7 +66,7 @@ export default class Login extends React.Component {
       progress: 0,
       dirty: false,
       disableSubmit: false,
-      provider_info: {}
+      provider_info: null
     }
     this._updateProgress = this._updateProgress.bind(this)
     this.handleCredentialsChange = this.handleCredentialsChange.bind(this)
@@ -44,11 +81,11 @@ export default class Login extends React.Component {
     ipcRenderer.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
   }
 
-  _updateProgress (ev, [progress, _]) {
+  _updateProgress (ev:any, [progress, _]:[number, any]) {
     this.setState({ progress })
   }
 
-  _defaultCredentials () {
+  _defaultCredentials ():credentialState {
     return {
       addr: this.props.addr || '',
       mail_user: this.props.mail_user || '',
@@ -66,7 +103,7 @@ export default class Login extends React.Component {
     }
   }
 
-  handleCredentialsChange (event) {
+  handleCredentialsChange (event: React.ChangeEvent<HTMLInputElement>) {
     const { mode } = this.props
     const { id, value } = event.target
     let updatedCredentials
@@ -83,7 +120,7 @@ export default class Login extends React.Component {
       }
     }
 
-    const updatedState = update(this.state, {
+    const updatedState: any = update(this.state, {
       credentials: updatedCredentials
     })
     let dirty = false
@@ -101,13 +138,13 @@ export default class Login extends React.Component {
     this.setState(updatedState)
   }
 
-  async emailChange (event) {
+  async emailChange (event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) {
     this.handleCredentialsChange(event)
     const result = await callDcMethodAsync('getProviderInfo', [event.target.value])
-    this.setState({ provider_info: result || {} })
+    this.setState({ provider_info: result || null })
   }
 
-  handleSubmit (event) {
+  handleSubmit (event: any) {
     const { mode } = this.props
     const credentials = this.state.credentials
     this.props.onSubmit(credentials)
@@ -117,12 +154,12 @@ export default class Login extends React.Component {
     }
   }
 
-  handleUISwitchStateProperty (key) {
+  handleUISwitchStateProperty (key:string) {
     const stateUi = Object.assign(this.state.ui, { [key]: !this.state.ui[key] })
-    this.setState(stateUi)
+    this.setState({ui: stateUi})
   }
 
-  cancelClick (event) {
+  cancelClick (event: any) {
     const { mode } = this.props
     event.preventDefault()
     event.stopPropagation()
@@ -134,11 +171,11 @@ export default class Login extends React.Component {
     }
   }
 
-  renderLoginHeader (mode) {
+  renderLoginHeader (mode: string) {
     return mode === 'update' ? null : <p className='text'>{window.translate('login_explain')}</p>
   }
 
-  _getDefaultPort (protocol) {
+  _getDefaultPort (protocol: string) {
     const SendSecurityPortMap = {
       imap: {
         ssl: 993,
@@ -219,7 +256,7 @@ export default class Login extends React.Component {
             onChange={this.handleCredentialsChange}
           />
 
-          { provider_info.before_login_hint &&
+          { provider_info?.before_login_hint &&
           provider_info.status !== 0 &&
           <div className={`before-login-hint ${(provider_info.status === C.DC_PROVIDER_STATUS_BROKEN && 'broken')}`}>
             {provider_info.before_login_hint}
@@ -258,7 +295,7 @@ export default class Login extends React.Component {
               key='mail_port'
               id='mail_port'
               label={tx('login_imap_port')}
-              placeholder={tx('default_value', this._getDefaultPort('imap'))}
+              placeholder={tx('default_value', String(this._getDefaultPort('imap')))}
               type='number'
               min='0'
               max='65535'
@@ -270,7 +307,7 @@ export default class Login extends React.Component {
               id='mail_security'
               label={tx('login_imap_security')}
               value={mail_security}
-              onChange={this.handleCredentialsChange}
+              onChange={this.handleCredentialsChange as any}
             >
               <option value='automatic'>Automatic</option>
               <option value='ssl'>SSL/TLS</option>
@@ -307,7 +344,7 @@ export default class Login extends React.Component {
             <DeltaInput
               key='send_port'
               id='send_port'
-              placeholder={tx('default_value', this._getDefaultPort('smtp'))}
+              placeholder={tx('default_value', String(this._getDefaultPort('smtp')))}
               label={tx('login_smtp_port')}
               type='number'
               min='0'
@@ -319,7 +356,7 @@ export default class Login extends React.Component {
               id='send_security'
               label={tx('login_smtp_security')}
               value={send_security}
-              onChange={this.handleCredentialsChange}
+              onChange={this.handleCredentialsChange as any}
             >
               <option value='automatic'>Automatic</option>
               <option value='ssl'>SSL/TLS</option>
@@ -331,7 +368,7 @@ export default class Login extends React.Component {
               id='certificate_checks'
               label={tx('login_certificate_checks')}
               value={certificate_checks}
-              onChange={this.handleCredentialsChange}
+              onChange={this.handleCredentialsChange as any}
             >
               <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
               <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
@@ -348,8 +385,8 @@ export default class Login extends React.Component {
                 intent={Intent.SUCCESS}
               />
           }
-          {React.Children.map(this.props.children, (child) => {
-            var props = {}
+          {React.Children.map(this.props.children, (child:any) => {
+            var props:{disabled?:boolean, onClick?: any} = {}
             if (child.props.type === 'submit') {
               props.disabled = loading || (!addr || !mail_pw) || !dirty || disableSubmit
             }
