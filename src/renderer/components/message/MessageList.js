@@ -26,22 +26,21 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     scrollHeight
   }, chatStoreDispatch] = useChatStore()
   const messageListRef = useRef(null)
-  const lastKnownScrollPosition = useRef([null, null])
+  const lastKnownScrollHeight = useRef([null, null])
   const isFetching = useRef(false)
 
   useEffect(() => {
     if (scrollToBottom === false) return
+    
+    log.debug('scrollToBottom', messageListRef.current.scrollTop, messageListRef.current.scrollHeight)
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    setTimeout(() => {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-    }, 30)
     chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM' })
   }, [scrollToBottom])
 
   useEffect(() => {
     if (scrollToLastPage === false) return
     // restore old scroll position after new messages are rendered
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollPosition.current
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight - lastKnownScrollHeight.current
     chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_LAST_PAGE' })
     isFetching.current = false
   }, [scrollToLastPage, scrollHeight])
@@ -55,12 +54,16 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
   }, 30, { leading: true })
 
   const onScroll = Event => {
-    if (messageListRef.current.scrollTop === 0 && isFetching.current === false) {
-      lastKnownScrollPosition.current = messageListRef.current.scrollHeight
+    if (messageListRef.current.scrollTop !== 0) return
+    if (isFetching.current === false) {
+      lastKnownScrollHeight.current = messageListRef.current.scrollHeight
       isFetching.current = true
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
     }
+    Event.preventDefault();
+    Event.stopPropagation();
+    return false;
   }
 
 
