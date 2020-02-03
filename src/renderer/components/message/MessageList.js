@@ -63,8 +63,33 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
     }
   }
 
-  const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
 
+  return <MessageListInner
+    onScroll={onScroll}
+    oldestFetchedMessageIndex={oldestFetchedMessageIndex}
+    messageIds={messageIds}
+    messages={messages}
+    messageListRef={messageListRef}
+    locationStreamingEnabled={locationStreamingEnabled}
+    chat={chat}
+    chatStoreDispatch={chatStoreDispatch}
+  />
+}
+
+export const MessageListInner = React.memo((props) => {
+  const {
+    onScroll,
+    oldestFetchedMessageIndex,
+    messageIds,
+    messages,
+    messageListRef,
+    locationStreamingEnabled,
+    chat, 
+    chatStoreDispatch
+  } = props
+  
+  const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
+  
   let specialMessageIdCounter = 0
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -91,7 +116,14 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
       </ul>
     </div>
   )
-}
+}, (prevProps, nextProps) => {
+  const areEqual = prevProps.messageIds === nextProps.messageIds &&
+    prevProps.oldestFetchedMessageIndex === nextProps.oldestFetchedMessageIndex &&
+    prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
+
+  console.log('MessageListInner componentDidUpdate', areEqual, prevProps.oldestFetchedMessageIndex, nextProps.oldestFetchedMessageIndex, prevProps.locationStreamingEnabled, nextProps.locationStreamingEnabled)
+  return areEqual
+})
 
 export function DayMarker (props) {
   const { timestamp } = props
