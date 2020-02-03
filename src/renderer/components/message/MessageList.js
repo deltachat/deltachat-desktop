@@ -31,7 +31,7 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
 
   useEffect(() => {
     if (scrollToBottom === false) return
-    
+
     log.debug('scrollToBottom', messageListRef.current.scrollTop, messageListRef.current.scrollHeight)
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
     chatStoreDispatch({ type: 'FINISHED_SCROLL', payload: 'SCROLLED_TO_BOTTOM' })
@@ -61,11 +61,10 @@ export default function MessageList ({ chat, refComposer, locationStreamingEnabl
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
     }
-    Event.preventDefault();
-    Event.stopPropagation();
-    return false;
+    Event.preventDefault()
+    Event.stopPropagation()
+    return false
   }
-
 
   return <MessageListInner
     onScroll={onScroll}
@@ -87,12 +86,12 @@ export const MessageListInner = React.memo((props) => {
     messages,
     messageListRef,
     locationStreamingEnabled,
-    chat, 
+    chat,
     chatStoreDispatch
   } = props
-  
+
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
-  
+
   let specialMessageIdCounter = 0
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -124,7 +123,6 @@ export const MessageListInner = React.memo((props) => {
     prevProps.oldestFetchedMessageIndex === nextProps.oldestFetchedMessageIndex &&
     prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
 
-  console.log('MessageListInner componentDidUpdate', areEqual, prevProps.oldestFetchedMessageIndex, nextProps.oldestFetchedMessageIndex, prevProps.locationStreamingEnabled, nextProps.locationStreamingEnabled)
   return areEqual
 })
 

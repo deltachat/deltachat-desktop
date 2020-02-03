@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'
 import logger from '../../../shared/logger'
-import { useChatStore } from '../../stores/chat'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = logger.getLogger('renderer/messageWrapper')
@@ -31,17 +30,6 @@ export const InfoMessage = styled.div`
     color: ${props => props.theme.infoMessageBubbleText};
   }
 `
-
-function diff(o1, o2) {
-  let diff = Object.keys(o2).reduce((diff, key) => {
-    if (o1[key] === o2[key]) return diff
-    return {
-      ...diff,
-      [key]: o2[key]
-    }
-  }, {})
-  return diff  
-}
 
 export const render = (props) => {
   return <li><RenderMessage {...props} /></li>
@@ -110,9 +98,8 @@ export const RenderMessage = React.memo((props) => {
   if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
-}, (prevProps, nextProps) => {  
+}, (prevProps, nextProps) => {
   const areEqual = prevProps.message === nextProps.message
-  console.log('MessageWrapper.render componentDidUpdate', areEqual)
   return areEqual
 })
 const MessageWrapper = { render }
