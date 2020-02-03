@@ -60,7 +60,7 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
 
   render() {
     const { medias } = this.state
-    const tx = (window as any).translate
+    const tx = window.translate
     return <div className='media-view' >
       <div className='bp3-tabs' style={{ minWidth: 200 }
       }>
