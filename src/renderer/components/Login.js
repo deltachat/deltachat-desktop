@@ -8,9 +8,7 @@ import {
   DeltaInput,
   DeltaPasswordInput,
   DeltaSelect,
-  DeltaProgressBar,
-  AdvancedButtonIconClosed,
-  AdvancedButtonIconOpen
+  DeltaProgressBar
 } from './Login-Styles'
 import {
   Collapse,
@@ -230,7 +228,7 @@ export default class Login extends React.Component {
 
           <p className='text'>{tx('login_no_servers_hint')}</p>
           <div className='advanced' onClick={this.handleUISwitchStateProperty.bind(this, 'showAdvanced')} id={'show-advanced-button'}>
-            {(showAdvanced ? <AdvancedButtonIconClosed /> : <AdvancedButtonIconOpen />)}
+            <div className={`advanced-icon ${showAdvanced && 'opened'}`} />
             <p>{tx('menu_advanced') }</p>
           </div>
           <Collapse isOpen={showAdvanced}>
