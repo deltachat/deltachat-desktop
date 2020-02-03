@@ -132,6 +132,17 @@ div.delta-form-group {
     padding: 0px 10px 0px 10px;
   }
 
+  div.label {
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
+    width: 100%;
+    color: var(--deltaChatPrimaryFgLight);
+    &.focus {
+      color: var(--loginInputFocusColor);
+    }
+  }
+
   &.delta-select {
     .bp3-select::after {
       content: ">";

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import {
   Button,
   InputGroup,
@@ -17,7 +16,7 @@ export const DeltaSelect = React.memo((props) => {
   return (
     <div className='delta-form-group delta-select'>
       <FormGroup>
-        <DeltaLabel focus={isFocused}>{props.label}</DeltaLabel>
+        <div className={`label ${isFocused && 'focus'}`}>{props.label}</div>
         <div className='bp3-select .modifier'>
           <select
             id={props.id}
@@ -34,17 +33,6 @@ export const DeltaSelect = React.memo((props) => {
   )
 })
 
-export const DeltaLabel = styled.div`
-    visibility: ${props => props.visible === false ? 'hidden' : 'visible'};
-    height: 13px;
-    font-size: 13px;
-    line-height: 13px;
-    width: 100%;
-    color: ${props => props.focus === true
-    ? props.theme.loginInputFocusColor
-    : props.theme.deltaChatPrimaryFgLight};
-`
-
 export const DeltaInput = React.memo((props) => {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -55,11 +43,10 @@ export const DeltaInput = React.memo((props) => {
   return (
     <div className='delta-form-group delta-input'>
       <FormGroup>
-        <DeltaLabel
-          visible={showLabel}
-          focus={isFocused}
+        <div className={`label ${isFocused && 'focus'}`}
+          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
         >{(props.label && props.label.length > 0) ? props.label : props.placeholder}
-        </DeltaLabel>
+        </div>
         <InputGroup
           id={props.id}
           type={props.type}
