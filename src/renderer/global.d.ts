@@ -1,8 +1,8 @@
-import { getMessageFuction, LocaleData } from "../shared/localize";
+import { getMessageFunction, LocaleData } from "../shared/localize";
 
 declare global {
     interface Window {
-        translate: getMessageFuction
+        translate: getMessageFunction
         localeData: LocaleData
     }
 }
