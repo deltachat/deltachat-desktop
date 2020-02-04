@@ -85,10 +85,8 @@
     "react-string-replace": "^0.4.4",
     "rimraf": "^2.7.1",
     "simple-markdown": "^0.7.1",
-    "source-map-loader": "^0.2.4",
     "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
-    "typescript": "^3.7.4",
     "use-debounce": "^3.3.0"
   },
   "devDependencies": {
@@ -130,6 +128,7 @@
     "testcafe": "^1.8.0",
     "testcafe-browser-provider-electron": "0.0.14",
     "testcafe-react-selectors": "^4.0.0",
+    "typescript": "^3.7.5",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"
   },
@@ -167,7 +166,22 @@
       "icon": "images/deltachat.ico"
     },
     "files": [
-      "!node_modules/deltachat-node/deltachat-core${/*}"
+      "!bin/",
+      "!jenkins/",
+      "!README_ASSETS/",
+      "!README.md",
+      "!.*",
+      "!src/",
+      "!scss/",
+      "!static/",
+      "!test/",
+      "!ci_scripts/",
+      "!tsc-dist/renderer/",
+      "!**/*.d.ts",
+      "!**/*.tsbuildinfo",
+      "!**/*.js.map",
+      "!**/*.css.map",
+      "!html-dist/report.html"
     ]
   },
   "staticPath": {
