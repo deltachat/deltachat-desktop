@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
 import { integerToHexColor } from '../../../shared/util'
@@ -7,7 +7,9 @@ import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
-
+import {
+  PseudoListItemAddMember
+} from '../helpers/PseudoListItem'
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
   display: flex;
@@ -67,11 +69,31 @@ export function ContactAvatar ({ contact }) {
   })
 }
 
+export function useEffectAsync(cb, dependencies) {
+  useEffect(() => {cb()}, dependencies)
+}
+
+export function useStateAsync (initial, cb, dependencies) {
+  const [value, setValue] = useState(initial)
+  useEffectAsync(async () => {
+    setValue(await cb())
+  }, dependencies)
+  return [value, setValue]
+}
+
 export default function ViewProfile (props) {
   const { isOpen, onClose, contact } = props
 
   const { chatListIds } = useChatListIds('', 0, contact.id)
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
+
+  const [dmChatId, _setDmChatId] = useStateAsync(
+    false,
+    callDcMethodAsync('contacts.getDMChatId', [contact.id]),
+    [contact.id]
+  )
+
+  console.log(dmChatId)
 
   const tx = window.translate
 
@@ -79,6 +101,7 @@ export default function ViewProfile (props) {
     selectChat(chatId)
     onClose()
   }
+  const onNewChat = () => onChatClick(dmChatId)
 
   return (
     <DeltaDialogBase
@@ -97,15 +120,14 @@ export default function ViewProfile (props) {
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
             <div className='actions'>
-              <div className='open-dm-chat' role='button' onClick={() => {
-                callDcMethodAsync('contacts.getDMChatId', [contact.id]).then((chatId) => onChatClick(chatId))
-              }}>
+              <div className='open-dm-chat' role='button' onClick={onNewChat}>
                 {tx('profile_action_direct_message')}
               </div>
             </div>
           </ProfileInfoContainer>
           <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
+            <PseudoListItemAddMember onClick={onNewChat} />
             {chatListIds.map(chatId => {
               return (
                 <ChatListItem
