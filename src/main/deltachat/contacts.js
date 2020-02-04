@@ -63,6 +63,10 @@ module.exports = class DCContacts extends SplitOut {
     return this._dc.markNoticedContact(contactId)
   }
 
+  getChatIdByContactId(contactId) {
+    return this._dc.getChatIdByContactId(contactId)
+  }
+
   /** Gets the direct message chat id with this contact and creates it if it doesn't exist yet */
   getDMChatId (contactId) {
     const existingChatId = this._dc.getChatIdByContactId(contactId)
