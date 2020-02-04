@@ -8,7 +8,7 @@ import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
 import { PseudoListItem } from '../helpers/PseudoListItem'
-import { C } from 'deltachat-node/constants.enum'
+
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
   display: flex;
@@ -49,8 +49,8 @@ export function ContactAvatar ({ contact }) {
   })
 }
 
-export function useEffectAsync(cb, dependencies) {
-  useEffect(() => {cb()}, dependencies)
+export function useEffectAsync (cb, dependencies) {
+  useEffect(() => { cb() }, dependencies)
 }
 
 export function useStateAsync (initial, cb) {
@@ -67,9 +67,8 @@ export default function ViewProfile (props) {
   const { chatListIds } = useChatListIds('', 0, contact.id)
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
 
-  const [dmChatId, _setDmChatId] = useStateAsync(false, callDcMethodAsync('contacts.getChatIdByContactId', [contact.id]))
+  const dmChatId = useStateAsync(false, callDcMethodAsync('contacts.getChatIdByContactId', [contact.id]))[0]
 
-  console.log(dmChatId, chatItems[dmChatId])
   const tx = window.translate
 
   const onChatClick = chatId => {
@@ -100,10 +99,10 @@ export default function ViewProfile (props) {
           </ProfileInfoContainer>
           <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            { dmChatId === 0 && <PseudoListItem id='addmember' cutoff='+' text={tx('menu_new_chat')} onClick={onNewChat} style={{paddingLeft: '10px'}}/>}
+            { dmChatId === 0 && <PseudoListItem id='addmember' cutoff='+' text={tx('menu_new_chat')} onClick={onNewChat} style={{ paddingLeft: '10px' }} />}
             { dmChatId > 0 && <ChatListItem key={dmChatId} chatListItem={chatItems[dmChatId]} onClick={onChatClick.bind(null, dmChatId)} />}
             {chatListIds.map(chatId => {
-              if (chatId === dmChatId ) return
+              if (chatId === dmChatId) return
               return (
                 <ChatListItem
                   key={chatId}

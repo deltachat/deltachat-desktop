@@ -63,7 +63,7 @@ module.exports = class DCContacts extends SplitOut {
     return this._dc.markNoticedContact(contactId)
   }
 
-  getChatIdByContactId(contactId) {
+  getChatIdByContactId (contactId) {
     return this._dc.getChatIdByContactId(contactId)
   }
 
