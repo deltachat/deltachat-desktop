@@ -1,5 +1,5 @@
 {
-    "mainWindowUrl": "./static/test.html",
+    "mainWindowUrl": "./html-dist/test.html",
     "appPath": ".",
     "openDevTools": true,
     "selectorTimeout": 50000,

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "watch": "npm run watch-other && npm run watch-ts",
-    "watch-other": "npm run build-css && node bin/watch &",
+    "watch-other": "node bin/watch &",
     "watch-ts": "tsc -b src/renderer -w &",
-    "watch-js": "npm run watch-ts && webpack --mode=development --progress --profile --colors --watch",
+    "watch-js": "npm run watch-ts && parcel src/renderer/*.html --out-dir html-dist --public-url ./ --target electron",
     "test": "npm run test-standard && npm run test-log-conventions && npm run test-unit",
     "test-standard": "standard",
     "test-standard-fix": "standard --fix",
@@ -19,10 +19,9 @@
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npx electron-builder --mac dmg --win nsis portable --linux AppImage deb",
-    "build": "npm run build-main && npm run build-css && npm run build-renderer && npm run build-translations",
+    "build": "npm run build-main && npm run build-renderer && npm run build-translations",
     "build-main": "tsc --build src/main",
-    "build-css": "node-sass scss/manifest.scss static/main.css",
-    "build-renderer": "tsc -b src/renderer && webpack --config build/renderer.wpc.js --mode=development --progress --profile --colors",
+    "build-renderer": "tsc -b src/renderer && parcel build src/renderer/*.html --out-dir html-dist --public-url ./ --target electron",
     "build-translations": "node bin/convert-translations-from-xml-to-json.js",
     "pull-translations": "tx pull -l en && tx pull -f",
     "update-translations": "npm run pull-translations && npm run build-translations",
@@ -118,6 +117,10 @@
     "glob-watcher": "^5.0.1",
     "hallmark": "^1.2.0",
     "node-sass": "^4.13.1",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
+    "parcel-plugin-clean-dist-fsextra": "git+https://github.com/Simon-Laux/parcel-plugin-clean-dist.git",
+    "parcel-plugin-copy": "^1.0.2",
     "pngjs": "^3.3.3",
     "sinon": "^7.5.0",
     "spectron": "^6.0.0",
@@ -128,9 +131,6 @@
     "testcafe-browser-provider-electron": "0.0.14",
     "testcafe-react-selectors": "^4.0.0",
     "walk": "^2.3.14",
-    "webpack": "^4.41.4",
-    "webpack-cli": "^3.3.10",
-    "webpack-node-externals": "^1.7.2",
     "xml-js": "^1.6.8"
   },
   "build": {
@@ -169,5 +169,9 @@
     "files": [
       "!node_modules/deltachat-node/deltachat-core${/*}"
     ]
+  },
+  "staticPath": {
+    "source": "/static",
+    "target": "/html-dist"
   }
 }

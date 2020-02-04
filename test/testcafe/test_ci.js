@@ -21,7 +21,7 @@ async function openMainMenuItem (t, label) {
 
 const logout = async (t) => openMainMenuItem(t, 'Switch account')
 
-fixture('Chat e2e tests').page('../../static/test.html').beforeEach(async () => {
+fixture('Chat e2e tests').page('../../html-dist/test.html').beforeEach(async () => {
   await waitForReact()
 })
 
