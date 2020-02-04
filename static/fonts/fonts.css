@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "Roboto-Light";
+  src: url("Roboto-Light.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Medium.ttf") format("truetype");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Italic.ttf") format("truetype");
+  font-style: italic;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "NotoMono";
+  src: url("noto/mono/NotoMono-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "NotoEmoji";
+  src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
+}

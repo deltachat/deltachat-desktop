@@ -15,7 +15,7 @@ const clickChatByName = async (t, name) => {
   return t.click(Selector('.chat-list-item__name').withText(name))
 }
 
-fixture('Chat e2e tests').page('../../static/test.html').beforeEach(async () => {
+fixture('Chat e2e tests').page('../../html-dist/test.html').beforeEach(async () => {
   await waitForReact()
 })
 

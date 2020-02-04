@@ -6,7 +6,7 @@ import { clickOnMainMenuItem } from 'testcafe-browser-provider-electron'
 /* global fixture, test */
 
 fixture('Help-page tests')
-  .page('../../static/test.html')
+  .page('../../html-dist/test.html')
   .beforeEach(async () => {
     await waitForReact()
   })
