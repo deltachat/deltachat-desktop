@@ -3,23 +3,9 @@ import styled from 'styled-components'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 
-export const ContactListItemWrapper = styled.div`
-  display: flex;
-  padding-left: 40px;
-  &:hover {
-    background-color: var(--chatListItemBgHover);
-    cursor: pointer;
-  }
-
-  .chat-list & {
-    padding-left: 0px;
-  }
-
-  .forward-message-list-chat-list & {
-    width: 100%;
-    padding: 0px 20px;
-  }
-`
+export const ContactListItemWrapper = props => {
+  return <div className='ContactListItemWrapper' {...props}>{props.children}</div>
+}
 
 const ContactListItemContactWrapper = styled.div`
   width: 100%;

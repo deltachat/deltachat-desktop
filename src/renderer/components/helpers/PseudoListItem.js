@@ -3,11 +3,12 @@ import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
 import { ContactListItemWrapper } from '../contact/ContactListItem'
 
 export function PseudoListItem (props) {
-  const { id, cutoff, text, subText, onClick, avatar } = props
+  const { id, cutoff, text, subText, onClick, avatar, style } = props
   return (
     <ContactListItemWrapper
       key={id}
       onClick={onClick}
+      style={style}
     >
       <PseudoContact cutoff={cutoff} text={text} subText={subText} avatar={avatar}>
         {props.children}
