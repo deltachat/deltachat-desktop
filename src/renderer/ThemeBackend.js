@@ -103,7 +103,7 @@ export function ThemeDataBuilder (theme) {
     messageText: theme.textPrimary,
     messageTextLink: theme.textPrimary, // same as message text
     setupMessageText: '#ed824e',
-    infoMessageBubbleBg: '#000000',
+    infoMessageBubbleBg: '#0000008c',
     infoMessageBubbleText: 'white',
     messageIncommingBg: theme.bgMessageBubbleIncoming,
     messageIncommingDate: theme.textPrimary,
