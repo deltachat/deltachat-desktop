@@ -26,8 +26,12 @@ export const InfoMessage = styled.div`
     padding: 7px 14px;
     background-color: ${props => props.theme.infoMessageBubbleBg};
     border-radius: 10px;
-    opacity: 0.44;
+    opacity: 0.9;
     color: ${props => props.theme.infoMessageBubbleText};
+    ${props => props["custom-selectable"] && `
+      user-select: auto;
+      user-select: all;
+    `}
   }
 `
 
@@ -95,7 +99,7 @@ export const RenderMessage = React.memo((props) => {
   }
 
   if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
-  if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail}><p>{msg.text}</p></InfoMessage>
+  if (message.isInfo) return <InfoMessage onContextMenu={onShowDetail} custom-selectable><p>{msg.text}</p></InfoMessage>
 
   return <Message {...props} />
 }, (prevProps, nextProps) => {
