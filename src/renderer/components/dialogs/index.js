@@ -14,7 +14,6 @@ import EditGroup from './EditGroup'
 import ViewProfile from './ViewProfile'
 import MapDialog from './MapDialog'
 import QrInviteCode from './QrInviteCode'
-import HelpPage from './HelpPage'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 
@@ -34,7 +33,6 @@ export const allDialogs = {
   ViewProfile,
   MapDialog,
   QrInviteCode,
-  HelpPage,
   ConfirmationDialog,
   UnblockContacts
 }

@@ -1,6 +1,6 @@
 import C from 'deltachat-node/constants'
 import React, { useContext } from 'react'
-import { callDcMethodAsync } from '../ipc'
+import { callDcMethodAsync, openHelp } from '../ipc'
 import { ipcRenderer } from 'electron'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
@@ -132,7 +132,7 @@ export default function DeltaMenu (props) {
       icon='help'
       text={tx('menu_help')}
       id='help-page-link'
-      onClick={() => screenContext.openDialog('HelpPage')}
+      onClick={() => openHelp()}
     />
     <MenuItem
       key='settings'
