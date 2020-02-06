@@ -262,7 +262,7 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
             <p>
               {provider_info.before_login_hint}
             </p>
-            <ClickableLink href={provider_info.overview_page}>More Information at {provider_info.overview_page}</ClickableLink>
+          <ClickableLink href={provider_info.overview_page}>{tx('more_info_desktop')}</ClickableLink>
           </div>
           }
 
