@@ -237,7 +237,6 @@ function init (cwd, state, logHandler) {
     sendStateToRenderer()
     dcController.loginController.configure(credentials, () => {
       dcController.configuring = false
-      dcController.updating = false
       main.send('success', 'Configuration success!')
       sendStateToRenderer()
     })
@@ -245,7 +244,6 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('cancelCredentialsUpdate', () => {
     dcController.configuring = false
-    dcController.updating = false
     const deltachat = dcController.getState()
     sendState(deltachat)
   })

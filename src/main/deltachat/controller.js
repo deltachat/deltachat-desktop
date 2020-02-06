@@ -265,6 +265,7 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
       if (Number(progress) === 0) { // login failed
         this.onLoginFailure()
+        this.sendToRenderer('DC_EVENT_CONFIGURE_FAILED')
       }
     })
   }

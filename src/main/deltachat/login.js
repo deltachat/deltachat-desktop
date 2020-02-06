@@ -73,7 +73,6 @@ module.exports = class DCLoginController extends SplitOut {
 
   configure (credentials, cb) {
     this._controller.configuring = true
-    this._controller.updating = true
     this._dc.configure(this.addServerFlags(credentials), cb)
   }
 

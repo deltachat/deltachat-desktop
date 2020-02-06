@@ -202,9 +202,13 @@ export default class Settings extends React.Component {
   }
 
   onLoginSubmit (config) {
+    const { closeDialog } = this.props
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
+    ipcRenderer.once('DC_EVENT_CONFIGURE_FAILED', () => {
+      closeDialog('Settings')
+    })
   }
 
   onLoginSuccess () {
@@ -212,6 +216,7 @@ export default class Settings extends React.Component {
   }
 
   onCancelLogin () {
+    // not yet implemented in core (issue #1159)
     ipcRenderer.send('cancelCredentialsUpdate')
   }
 
