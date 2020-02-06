@@ -152,7 +152,8 @@ function getMenuTemplate (logHandler) {
           translate: 'menu_help',
           click: () => {
             windows.main.send('showHelpDialog')
-          }
+          },
+          accelerator: "F1"
         },
         {
           translate: 'global_menu_help_learn_desktop',
