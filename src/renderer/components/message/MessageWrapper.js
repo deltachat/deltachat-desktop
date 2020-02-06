@@ -28,7 +28,7 @@ export const InfoMessage = styled.div`
     border-radius: 10px;
     opacity: 0.9;
     color: ${props => props.theme.infoMessageBubbleText};
-    ${props => props["custom-selectable"] && `
+    ${props => props['custom-selectable'] && `
       user-select: auto;
       user-select: all;
     `}

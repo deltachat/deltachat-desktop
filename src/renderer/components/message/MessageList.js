@@ -120,6 +120,7 @@ export const MessageListInner = React.memo((props) => {
   )
 }, (prevProps, nextProps) => {
   const areEqual = prevProps.messageIds === nextProps.messageIds &&
+    prevProps.messages === nextProps.messages &&
     prevProps.oldestFetchedMessageIndex === nextProps.oldestFetchedMessageIndex &&
     prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
 
