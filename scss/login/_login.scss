@@ -117,17 +117,22 @@ p.delta-headline {
 
   .before-login-hint {
     padding: 6px 8px;
-    margin: 3px;
-    font-style: italic;
-    background-color: #ffff77;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    background-color: #fdf7b2;
+    color: #101010;
+
     &.broken {
-      background-color: #db3737;
+      background-color: var(--errorColor);
       color: white;
+      a {
+        color: white;
+      }
     }
 
     a {
-      text-shadow: 1px 1px 2px black;
-      color: white;
+      font-weight: bold;
+      color: #101010;
     }
   }
 }
