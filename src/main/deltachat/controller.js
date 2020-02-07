@@ -339,9 +339,8 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  getProviderInfo (email) {
-    const ctx = new DeltaChatNode()
-    return ctx.getProviderFromEmail(email)
+  getProviderInfo(email) {
+    return DeltaChatNode.getProviderFromEmail(email);
   }
 
   /**
