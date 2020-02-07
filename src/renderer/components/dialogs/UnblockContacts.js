@@ -48,7 +48,7 @@ export default function UnblockContacts (props) {
       <DeltaDialogBody>
         <DeltaDialogContent>
           { blockedContacts.length === 0 &&
-            <p style={{ marginLeft: '20px' }}>{tx('none_blocked_desktop')}</p>
+            <p>{tx('none_blocked_desktop')}</p>
           }
           { blockedContacts.length > 0 &&
             <div style={{ overflow: 'scroll', height: '100%', backgroundColor: 'var(--bp3DialogBgPrimary)' }}>
