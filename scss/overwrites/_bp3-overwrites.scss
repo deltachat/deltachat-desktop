@@ -24,7 +24,8 @@ $bp3-dialog-radius: 2px;
 }
 
 .bp3-dialog-body-no-footer {
-  border-radius: $bp3-dialog-radius;
+  border-bottom-left-radius: $bp3-dialog-radius;
+  border-bottom-right-radius: $bp3-dialog-radius;
 }
 
 .bp3-dialog-footer-border-top {

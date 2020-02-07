@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
 import { integerToHexColor } from '../../../shared/util'
 import styled from 'styled-components'
@@ -91,7 +91,7 @@ export default function ViewProfile (props) {
         onClose={onClose}
         borderBottom
       />
-      <DeltaDialogBody>
+      <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
           <ProfileInfoContainer>
             <ProfileInfoAvatar contact={contact} />
@@ -114,7 +114,6 @@ export default function ViewProfile (props) {
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
-      <DeltaDialogFooter />
     </DeltaDialogBase>
   )
 }

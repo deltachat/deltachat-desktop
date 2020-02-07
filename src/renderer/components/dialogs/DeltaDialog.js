@@ -127,7 +127,7 @@ export function DeltaDialogBody (props) {
   let { noFooter, children } = props
   noFooter = noFooter !== false
   return (
-    <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })}>
+    <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { 'bp3-dialog-body-no-footer': noFooter })}>
       {children}
     </div>
   )
