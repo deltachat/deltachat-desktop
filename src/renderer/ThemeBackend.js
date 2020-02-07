@@ -170,7 +170,7 @@ export function ThemeDataBuilder (theme) {
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: theme.outlineColor,
-    emojiMartSearchBorder: theme.emojiMartBorder,
+    emojiMartSearchBorder: 'lightgrey',
     emojiMartBg: theme.bgPrimary,
     emojiMartOutsideRadius: '5px',
     emojiMartCategoryIcons: undefinedGuard(
