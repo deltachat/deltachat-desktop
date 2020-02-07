@@ -74,7 +74,7 @@ const Composer = React.forwardRef((props, ref) => {
         <div ref={ref} className='composer composer--disabled-message-input'>
           {tx(disabledReason)}
         </div>
-      ) 
+      )
     } else {
       return <span />
     }
