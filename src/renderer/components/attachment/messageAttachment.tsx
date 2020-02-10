@@ -53,7 +53,7 @@ export default function Attachment({ attachment, text, conversationType, directi
       : null, withContentAbove
       ? 'content-above'
       : null)}>
-      <img className='attachment-content' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
+      <img className='attachment-content' src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
