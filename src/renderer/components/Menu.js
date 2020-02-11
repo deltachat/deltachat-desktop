@@ -13,9 +13,7 @@ import {
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
-  openEncryptionInfoDialog,
-  openEditGroupDialog,
-  openViewProfileDialog
+  openEditGroupDialog
 } from './helpers/ChatMethods'
 
 export default function DeltaMenu (props) {
@@ -45,8 +43,6 @@ export default function DeltaMenu (props) {
     }
     ipcRenderer.send('logout')
   }
-  const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
-  const onViewProfile = async () => openViewProfileDialog(screenContext, selectedChat.contacts[0])
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
     const {

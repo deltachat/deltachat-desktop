@@ -103,7 +103,7 @@ export const useLazyChatListItems = chatListIds => {
     const chats = await fetchChats(chatIds)
 
     if (!chats) return
-    log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
+    // log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
     setChatItems(chatItems => { return { ...chatItems, ...chats } })
   }
 
@@ -116,7 +116,7 @@ export const useLazyChatListItems = chatListIds => {
     const chats = await fetchChats(chatIds, true)
 
     if (!chats) return
-    log.debug('useLazyChatListItems: Force updating chats in view, unsetting others', Object.keys(chats))
+    // log.debug('useLazyChatListItems: Force updating chats in view, unsetting others', Object.keys(chats))
     setChatItems(chats)
   }
 
@@ -153,7 +153,7 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   const [onChatListScroll] = useDebouncedCallback(() => {
-    fetchChatsInView(20)
+    fetchChatsInView(0)
   }, 30)
 
   const onChatListItemChanged = (event, { chatId }) => {
@@ -164,7 +164,7 @@ export const useLazyChatListItems = chatListIds => {
     }
   }
 
-  const onResize = () => fetchChatsInView(10)
+  const onResize = () => fetchChatsInView(0)
 
   useLayoutEffect(() => {
     window.addEventListener('resize', onResize)
@@ -173,7 +173,7 @@ export const useLazyChatListItems = chatListIds => {
 
   useEffect(() => {
     log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
-    fetchChatsInView(10)
+    fetchChatsInView(0)
     ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
@@ -183,7 +183,7 @@ export const useLazyChatListItems = chatListIds => {
   useEffect(() => {
     if (Object.keys(chatItems).length > 0) return
     if (!scrollRef.current) return
-    fetchChatsInView(10)
+    fetchChatsInView(0)
   }, [chatListIds, chatItems, scrollRef])
   return { chatItems, onChatListScroll, scrollRef }
 }
