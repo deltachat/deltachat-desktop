@@ -11,12 +11,18 @@
   min-width: 48px;
   margin-top: 8px;
   margin-bottom: 8px;
-  border-radius: 24px;
+  border-radius: 100%;
   background-color: #505050;
   color: var(--avatarLabelColor);
   font-size: 26px;
   line-height: 48px;
   text-align: center;
+  &.large {
+    height: 64px;
+    width: 64px;
+    line-height: 64px;
+    font-size: 39px;
+  }
 }
 .AvatarBubble--NoSearchResults {
   transform: rotate(45deg); 
@@ -24,6 +30,21 @@
   letter-spacing: 1px;
   &::after {
     content: ':-(';
+  }
+}
+.AvatarImage {
+  position: relative;
+  z-index: 2;
+  object-fit: cover;
+  height: 48px;
+  width: 48px;
+  min-width: 48px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-radius: 100%;
+  &.large {
+    height: 64px;
+    width: 64px;
   }
 }
 

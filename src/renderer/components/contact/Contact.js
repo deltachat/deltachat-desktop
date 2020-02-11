@@ -60,14 +60,17 @@ export function Avatar (props) {
   const { avatarPath, color, displayName } = props
   if (avatarPath) {
     return (
-      <AvatarImage src={avatarPath} />
+      <img className={classNames('AvatarImage', {'large': props.large})} src={avatarPath} />
     )
   }
   const codepoint = displayName.codePointAt(0)
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
+  
+  
+
   return (
-    <div className='AvatarBubble' style={{ backgroundColor: color }}>
+    <div className={classNames('AvatarBubble', {'large': props.large})} style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
@@ -87,21 +90,6 @@ const QRAvatarQRCodeImg = styled.img`
   width: 22px;
   height: 22px;
   margin-top: calc((48px - 22px) / 2);
-`
-export const AvatarMixin = css`
-  position: relative;
-  z-index: 2;
-  object-fit: cover;
-  height: 48px;
-  width: 48px;
-  min-width: 48px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-radius: 24px;
-`
-
-export const AvatarImage = styled.img`
-  ${AvatarMixin}
 `
 
 export const VerifiedIconImg = styled.img`

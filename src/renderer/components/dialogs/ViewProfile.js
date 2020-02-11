@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentSeperator, DeltaDialogContentTextSeperator, DeltaDialogButton } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
 import { integerToHexColor } from '../../../shared/util'
 import styled from 'styled-components'
@@ -8,13 +8,14 @@ import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
 import { PseudoListItem } from '../helpers/PseudoListItem'
+import { Button } from '@blueprintjs/core'
 
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
   display: flex;
   width: calc(100% - 20px);
   .profile-info-name-container {
-    margin: auto 10px;
+    margin: auto 17px;
     flex-grow: 1;
     .name {
       font-size: medium;
@@ -45,7 +46,8 @@ export function ContactAvatar ({ contact }) {
   return Avatar({
     avatarPath: profileImage,
     color,
-    displayName
+    displayName,
+    large: true
   })
 }
 
@@ -75,7 +77,7 @@ export default function ViewProfile (props) {
     selectChat(chatId)
     onClose()
   }
-  const onNewChat = async () => {
+  const onSendMessage = async () => {
     const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [contact.id])
     onChatClick(dmChatId)
   }
@@ -97,9 +99,9 @@ export default function ViewProfile (props) {
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
           </ProfileInfoContainer>
-          <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
+          <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>Send Message</Button>
+          <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text='Gemeinsame Chats'/>
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            { dmChatId === 0 && <PseudoListItem id='addmember' cutoff='+' text={tx('menu_new_chat')} onClick={onNewChat} style={{ paddingLeft: '10px' }} />}
             { dmChatId > 0 && <ChatListItem key={dmChatId} chatListItem={chatItems[dmChatId]} onClick={onChatClick.bind(null, dmChatId)} />}
             {chatListIds.map(chatId => {
               if (chatId === dmChatId) return
