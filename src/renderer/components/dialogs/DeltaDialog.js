@@ -108,7 +108,7 @@ export function DeltaDialogHeader (props) {
       { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
       { title && <h4 className='bp3-heading'>{title}</h4> }
       { children }
-      <DeltaDialogCloseButton onClick={onClose} />
+      { typeof onClose === 'function' && <DeltaDialogCloseButton onClick={onClose} /> }
     </div>
   )
 }
@@ -117,7 +117,7 @@ export function DeltaDialogFooter (props) {
   let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{ display: hide ? 'none' : 'unset' }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
+    <div style={{ display: hide ? 'none' : 'unset', ...props.style }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
       {children}
     </div>
   )

@@ -1,7 +1,7 @@
 {
   "colorPrimary": "#42A5F5",
   "colorDanger": "#f96856",
-  "colorNone": "#8ca5a1",
+  "colorNone": "#a0a0a0",
   "bgImagePath": "../images/background_light.svg",
   "bgPrimary": "#fff",
   "bgSecondary": "#f5f5f5",

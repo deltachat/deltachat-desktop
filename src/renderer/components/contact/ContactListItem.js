@@ -119,7 +119,7 @@ export function ContactListItem (props) {
       {showCheckbox &&
         <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={onCheckboxClick} />
       }
-      {showRemove &&
+      {showRemove && contact.id !== 1 &&
         <div className='module-contact-list-item__trash-icon' onClick={onRemoveClick}><Icon icon='cross' /></div>
       }
     </ContactListItemWrapper>
