@@ -198,12 +198,15 @@ $bp3-dialog-radius: 2px;
 }
 
 .bp3-tab:not([aria-disabled=true]):hover, .bp3-tab[aria-selected=true] {
-    color: var(--colorPrimary);
+  color: var(--colorPrimary);
 }
 
 
 .bp3-tab[aria-selected=true] {
-    -webkit-box-shadow: inset 0 -3px 0 var(--colorPrimary);
-    box-shadow: inset 0 -3px 0 var(--colorPrimary);
+  -webkit-box-shadow: inset 0 -3px 0 var(--colorPrimary);
+  box-shadow: inset 0 -3px 0 var(--colorPrimary);
 }
 
+.bp3-popover-arrow {
+  display: none;
+}

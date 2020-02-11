@@ -59,41 +59,27 @@ export default function DeltaMenu (props) {
     chatMenu = [
       <Menu.Divider key='divider1' />,
       showArchivedChats
-        ? <MenuItem key='archive' icon='export' text={tx('menu_unarchive_chat')}
+        ? <MenuItem key='archive' text={tx('menu_unarchive_chat')}
           onClick={() => onArchiveChat(false)} />
-        : <MenuItem key='unarchive' icon='import' text={tx('menu_archive_chat')}
+        : <MenuItem key='unarchive' text={tx('menu_archive_chat')}
           onClick={() => onArchiveChat(true)} />,
       <MenuItem
         key='delete'
-        icon='delete'
         text={tx('menu_delete_chat')}
         onClick={onDeleteChat} />,
-      !isGroup && <MenuItem
-        key='view'
-        icon='log-out'
-        text={tx('menu_view_profile')}
-        onClick={onViewProfile} />,
-      !isGroup && !isDeviceChat && <MenuItem
-        key='info'
-        icon='lock'
-        text={tx('encryption_info_desktop')}
-        onClick={onEncrInfo} />,
       isGroup && selfInGroup && <>
         <MenuItem
           key='edit'
-          icon='edit'
           text={tx('menu_edit_group')}
           onClick={onEditGroup}
         />
         <MenuItem
           key='leave'
-          icon='log-out' text={tx('menu_leave_group')}
           onClick={onLeaveGroup}
         />
       </>,
       !isGroup && !(isSelfTalk || isDeviceChat) && <MenuItem
         key='block'
-        icon='blocked-person'
         text={tx('menu_block_contact')}
         onClick={onBlockContact}
       />,
@@ -104,42 +90,37 @@ export default function DeltaMenu (props) {
   }
 
   return (<Menu>
-    <MenuItem key='chat' icon='plus' text={tx('menu_new_chat')} onClick={() => onCreateChat(screenContext)} />
-    {chatMenu}
+    <MenuItem key='chat' text={tx('menu_new_chat')} onClick={() => onCreateChat(screenContext)} />
+    <MenuItem
+      key='request'
+      text={tx('menu_deaddrop')}
+      onClick={onContactRequests}
+    />
     <MenuItem
       key='qr'
-      icon='camera'
       text={tx('qrshow_join_contact_title')}
       onClick={async () => {
         const qrCode = await callDcMethodAsync('chat.getQrCode', 0)
         screenContext.openDialog('QrInviteCode', { qrCode })
       }}
     />
+    {chatMenu}
     <MenuItem
-      key='request'
-      icon='person'
-      text={tx('menu_deaddrop')}
-      onClick={onContactRequests}
+      key='settings'
+      text={tx('menu_settings')}
+      onClick={() => screenContext.openDialog('Settings')}
     />
     <MenuItem
       key='unblock'
-      icon='blocked-person'
       text={tx('pref_blocked_contacts')}
       onClick={onUnblockContacts}
     />
     <MenuItem
       key='help'
-      icon='help'
       text={tx('menu_help')}
       id='help-page-link'
       onClick={() => screenContext.openDialog('HelpPage')}
     />
-    <MenuItem
-      key='settings'
-      icon='settings'
-      text={tx('menu_settings')}
-      onClick={() => screenContext.openDialog('Settings')}
-    />
-    <MenuItem key='logout' icon='log-out' text={tx('switch_account_desktop')} onClick={logout} />
+    <MenuItem key='logout' text={tx('switch_account_desktop')} onClick={logout} />
   </Menu>)
 }
