@@ -4,20 +4,12 @@ import { Icon, Overlay } from '@blueprintjs/core'
 
 export default function FullscreenMedia (props) {
   const tx = window.translate
-  const { message } = props
+  const { message, onClose } = props
   let elm = <div />
   if (!message || !message.msg || !message.msg.attachment) return elm
   const attachment = message.msg.attachment
   const url = attachment.url
   const contentType = attachment.contentType
-
-  const onClose = () => {
-    document.webkitExitFullscreen()
-    props.onClose()
-  }
-  useLayoutEffect(() => {
-    document.querySelector('html').webkitRequestFullscreen()
-  }, [])
 
   // TODO: there must be a stable external library for figuring out the right
   // html element to render
