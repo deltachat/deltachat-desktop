@@ -13,7 +13,7 @@ import { Button } from '@blueprintjs/core'
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
   display: flex;
-  width: calc(100% - 20px);
+  width: calc(100% - 27px);
   .profile-info-name-container {
     margin: auto 17px;
     flex-grow: 1;
@@ -67,9 +67,8 @@ export default function ViewProfile (props) {
   const { isOpen, onClose, contact } = props
 
   const { chatListIds } = useChatListIds('', 0, contact.id)
+  // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
-
-  const dmChatId = useStateAsync(false, callDcMethodAsync('contacts.getChatIdByContactId', [contact.id]))[0]
 
   const tx = window.translate
 
@@ -102,15 +101,10 @@ export default function ViewProfile (props) {
           <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>{tx('send_message')}</Button>
           <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            {chatListIds.map(chatId => {
-              return (
-                <ChatListItem
-                  key={chatId}
-                  chatListItem={chatItems[chatId]}
-                  onClick={onChatClick.bind(null, chatId)}
-                />
+            {
+              chatListIds.map(chatId => <ChatListItem key={chatId} chatListItem={chatItems[chatId]} onClick={onChatClick.bind(null, chatId)} />
               )
-            })}
+            }
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
