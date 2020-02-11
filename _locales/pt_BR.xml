@@ -11,13 +11,34 @@
     <string name="def">Padrão</string>
     <string name="custom">Personalizado</string>
     <string name="none">Nenhum</string>
+    <string name="automatic">Automático</string>
+    <string name="strict">Rigoroso</string>
     <string name="open">Abrir</string>
     <string name="delete">Apagar</string>
+    <string name="info">Informação</string>
+    <string name="update">Atualizar</string>
+    <string name="emoji">Emoji</string>
+    <string name="attachment">Anexo</string>
+    <string name="back">Voltar</string>
+    <string name="close">Fechar</string>
+    <string name="forward">Encaminhar</string>
+    <string name="archive">Arquivar</string>
+    <string name="unarchive">Desarquivar</string>
+    <string name="mute">Mudo</string>
+    <string name="save">Salvar</string>
+    <string name="chat">Conversa</string>
+    <string name="media">Mídia</string>
+    <string name="main_menu">Menu principal</string>
+    <string name="start_chat">Começar conversa</string>
+    <string name="show_password">Mostrar senha</string>
+    <string name="hide_password">Ocultar senha</string>
     <string name="not_now">Não agora</string>
     <string name="never">Nunca</string>
     <string name="one_moment">Um momento...</string>
     <string name="done">Feito</string>
     <string name="undo">Desfazer</string>
+    <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
+    <string name="next">Avançar</string>
     <string name="error">Erro</string>
     <string name="error_x">Erro: %1$s</string>
     <string name="error_no_network">Rede indisponível.</string>
@@ -26,10 +47,12 @@
     <string name="file_not_found">Impossível achar%1$s.</string>
     <string name="copied_to_clipboard">Copiado para a área de transferência.</string>
     <string name="contacts_headline">Contatos</string>
-    <string name="email_address">Endereço eletrônico</string>
-    <string name="bad_email_address">Endereço inválido.</string>
+    <string name="email_address">Endereço de email</string>
+    <string name="bad_email_address">Email inválido.</string>
     <string name="password">Senha</string>
     <string name="now">Agora</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Perigo</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%d min</string>
     <string name="today">Hoje</string>
@@ -140,7 +163,6 @@
     <string name="menu_pause">Pausar</string>
     <string name="menu_scroll_to_bottom">Rolar até o fim</string>
     <string name="menu_scroll_to_top">Rolar até o início</string>
-    <string name="menu_invite">Convidar amigos</string>
     <string name="menu_help">Ajuda</string>
     <string name="menu_select_all">Selecionar tudo</string>
     <string name="menu_expand">Expandir</string>
@@ -156,6 +178,8 @@
     <string name="menu_zoom_out">Afastar</string>
     <string name="menu_save_log">Salvar registro</string>
     <string name="title_share_location">Compartilhar localização com o grupo</string>
+    <string name="edit_contact">Editar contato</string>
+
     <string name="mute_for_one_hour">Silenciar por 1 hora</string>
     <string name="mute_for_two_hours">Silenciar por 2 horas</string>
     <string name="mute_for_one_day">Silenciar por 1 dia</string>
@@ -168,7 +192,6 @@
     <string name="share_location_for_one_hour">por 1 hora</string>
     <string name="share_location_for_two_hours">por 2 horas</string>
     <string name="share_location_for_six_hours">por 6 horas</string>
-
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Quer mesmo sair do grupo?</string>
@@ -232,6 +255,7 @@
     <string name="chat_archived_label">Arquivado</string>
     <string name="chat_no_messages">Sem mensagens.</string>
     <string name="chat_self_talk_subtitle">Mensagens para mim mesmo</string>
+    <string name="saved_messages">Mensagens salvas</string>
     <string name="chat_contact_request">Pedido de contato</string>
     <string name="chat_no_contact_requests">Sem pedidos de contato.\n\nSe você quiser, e-mails normais podem ser exibidos como pedidos de contato. Basta habilitar nas configurações.</string>
     <!-- map -->
@@ -266,13 +290,6 @@
     <string name="tab_gallery_empty_hint">Imagens e vídeos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="tab_docs_empty_hint">Documentos, músicas e outros arquivos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="media_preview">Pré-visualização.</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Ajude seus amigos a se libertarem de aplicativos que exploram seus dados.</string>
-    <string name="invite_default_text">Vamos mudar para o Delta Chat - %1$s - contate-me pelo e-mail %2$s</string>
-
-
     <!-- welcome and login -->
     <string name="welcome_intro1_message">O aplicativo com a maior base de usuários do mundo. Livre e independente.</string>
     <string name="welcome_start_messaging">Comece a conversar</string>
@@ -315,10 +332,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_summary_on">ligado</string>
-    <string name="pref_summary_off">desligado</string>
-    <string name="pref_summary_default">padrão</string>
-    <string name="pref_summary_custom">personalizado</string>
     <string name="pref_using_custom">Usando personalização: %s</string>
     <string name="pref_using_default">Usando padrão: %s</string>
     <string name="pref_profile_info_headline">Informações do seu perfil</string>
@@ -521,6 +534,8 @@
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mensagem criptografada</string>
 
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
+    <string name="welcome_desktop">Boas-vindas ao Delta Chat.</string>
     <string name="login_known_accounts_title_desktop">Contas conhecidas</string>
     <string name="global_menu_preferences_language_desktop">Escolher língua...</string>
     <string name="global_menu_file_desktop">Arquivo</string>
@@ -553,13 +568,10 @@
     <string name="verified_desktop">verificado</string>
     <string name="remove_desktop">Remover</string>
     <string name="save_desktop">Salvar</string>
-    <string name="show_qr_verify_code_desktop">Exibir código QR de convite</string>
-    <string name="show_qr_invite_code_desktop">Exibir código QR de convite</string>
     <string name="add_contact_desktop">Adicionar contato</string>
     <string name="login_required_desktop">requerido</string>
     <string name="name_desktop">Nome</string>
     <string name="autocrypt_key_transfer_desktop">Transferência de chaves do Autocrypt</string>
-    <string name="initiate_key_transfer_title_desktop">Começar a transferência de chaves</string>
     <string name="initiate_key_transfer_desktop">Uma \"mensagem de configuração do Autocrypt\" compartilha com segurança a sua configuração de ponta a ponta com outros aplicativos compatíveis. A configuração será criptografada por um código de configuração que será exibido aqui e deverá ser digitado no outro dispositivo.</string>
     <string name="reply_to_message_desktop">Responder à mensagem</string>
     <string name="select_group_image_desktop">Selecionar avatar de grupo</string>

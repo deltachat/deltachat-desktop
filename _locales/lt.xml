@@ -167,7 +167,6 @@
     <string name="menu_pause">Pristabdyti</string>
     <string name="menu_scroll_to_bottom">Slinkti į apačią</string>
     <string name="menu_scroll_to_top">Slinkti į viršų</string>
-    <string name="menu_invite">Pakviesti draugus</string>
     <string name="menu_help">Žinynas</string>
     <string name="menu_select_all">Žymėti viską</string>
     <string name="menu_expand">Išplėsti</string>
@@ -240,6 +239,12 @@
     <string name="chat_please_enter_message">Įveskite žinutę.</string>
     <string name="chat_camera_unavailable">Kamera neprieinama.</string>
     <string name="chat_unable_to_record_audio">Nepavyko įrašyti garso.</string>
+    <plurals name="chat_n_new_messages">
+        <item quantity="one">%d nauja žinutė</item>
+        <item quantity="few">%d naujos žinutės</item>
+        <item quantity="many">%d naujų žinučių</item>
+        <item quantity="other">%d nauja žinutė</item>
+    </plurals>
     <string name="chat_no_messages_hint">Siųskite žinutę %1$s:\n\n• Nieko tokio, jei %2$s nenaudoja Delta Chat.\n\n• Pirmosios žinutės pristatymas gali šiek tiek užtrukti ir gali būti nešifruotas.</string>
     <string name="chat_new_group_hint">Rašykite pirmąją žinutę, taip leisdami kitiems atsakyti šioje grupėje..\n\n• Nieko tokio, jei ne visi dalyviai naudoja Delta Chat.\n\n• Pirmosios žinutės pristatymas gali šiek tiek užtrukti.</string>
     <string name="chat_record_slide_to_cancel">Perbraukite, norėdami atsisakyti</string>
@@ -265,6 +270,10 @@
     <string name="group_hello_draft">Sveiki, aš ką tik sukūriau mums grupę \"%1$s\".</string>
     <string name="group_self_not_in_group">Norėdami atlikti šį veiksmą, privalote būti grupės dalyviu.</string>
     <string name="profile_encryption">Šifravimas</string>
+    <string name="profile_shared_chats">Bendrinami pokalbiai</string>
+    <string name="tab_contact">Adresatas</string>
+    <string name="tab_group">Grupė</string>
+    <string name="tab_members">Dalyviai</string>
     <string name="tab_gallery">Galerija</string>
     <string name="tab_docs">Dokumentai</string>
     <string name="tab_links">Nuorodos</string>
@@ -272,13 +281,6 @@
     <string name="tab_gallery_empty_hint">Čia bus rodomi šiame pokalbyje bendrinami paveikslai ir vaizdo įrašai.</string>
     <string name="tab_docs_empty_hint">Čia bus rodomi šiame pokalbyje bendrinami dokumentai, muzika ir kiti failai.</string>
     <string name="media_preview">Medijos peržiūra</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Draugai nepalieka savo draugų susirašinėjimo šachtose.</string>
-    <string name="invite_default_text">Pradėkime naudoti Delta Chat - %1$s - gali man parašyti į %2$s</string>
-
-
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Pokalbių programa su plačiausia auditorija pasaulyje. Nemokama ir nepriklausoma.</string>
     <string name="welcome_start_messaging">Pradėti susirašinėjimą</string>
@@ -319,9 +321,6 @@
     <string name="share_abort">Bendrinimas nutrauktas dėl trūkstamų leidimų.</string>
 
 
-    <!-- preferences -->
-    <string name="pref_summary_on">įjungta</string>
-    <string name="pref_summary_off">išjungta</string>
     <string name="pref_profile_info_headline">Jūsų profilio informacija</string>
     <string name="pref_profile_photo">Profilio nuotrauka</string>
     <string name="pref_trim_headline">Žinučių apkarpymas</string>
@@ -531,13 +530,10 @@
     <string name="encryption_info_desktop">Rodyti šifravimo informaciją</string>
     <string name="remove_desktop">Šalinti</string>
     <string name="save_desktop">Išsaugoti</string>
-    <string name="show_qr_verify_code_desktop">Rodyti QR pakvietimo kodą</string>
-    <string name="show_qr_invite_code_desktop">Rodyti QR pakvietimo kodą</string>
     <string name="add_contact_desktop">Pridėti adresatą</string>
     <string name="login_required_desktop">būtina</string>
     <string name="name_desktop">Vardas</string>
     <string name="autocrypt_key_transfer_desktop">Autocrypt rakto perdavimas</string>
-    <string name="initiate_key_transfer_title_desktop">Inicijuoti rakto perdavimą</string>
     <string name="initiate_key_transfer_desktop">Autocrypt sąrankos žinutė saugiai bendrina jūsų ištisinę sąranką su kitomis su Autocrypt suderinamomis programomis. Sąranka bus užšifruota sąrankos kodu, kuris yra rodomas čia ir privalės būti įvestas kitame įrenginyje.</string>
     <string name="reply_to_message_desktop">Atsakyti į žinutę</string>
     <string name="select_group_image_desktop">Pasirinkti grupės paveikslą</string>

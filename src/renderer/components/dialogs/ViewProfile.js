@@ -99,8 +99,8 @@ export default function ViewProfile (props) {
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
           </ProfileInfoContainer>
-          <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>Send Message</Button>
-          <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text='Gemeinsame Chats'/>
+          <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>{tx('send_message')}</Button>
+          <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
             {chatListIds.map(chatId => {
               return (
