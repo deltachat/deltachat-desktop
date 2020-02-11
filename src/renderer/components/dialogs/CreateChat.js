@@ -15,7 +15,7 @@ import {
   PseudoListItemAddContact
 } from '../helpers/PseudoListItem'
 
-import { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
+import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   CreateChatSearchInput,
@@ -165,8 +165,12 @@ export function useGroupMembers () {
   return [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember]
 }
 
-export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName }) => {
+export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName, errorMissingGroupName, setErrorMissingGroupName }) => {
   const tx = window.translate
+  const onChange = ({ target }) => {
+    if (target.value.length > 0) setErrorMissingGroupName(false)
+    setGroupName(target.value)
+  }
   return (
     <GroupSettingsContainer style={{ paddingBottom: '20px' }}>
       <GroupImage
@@ -178,9 +182,10 @@ export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImag
       <GroupNameInput
         placeholder={tx('group_name')}
         value={groupName}
-        onChange={({ target }) => setGroupName(target.value)}
+        onChange={onChange}
         autoFocus
       />
+      { errorMissingGroupName && <p style={{color: 'var(--colorDanger)', marginLeft: '68px'}}>{tx('group_please_enter_group_name')}</p> }
     </GroupSettingsContainer>
   )
 }
@@ -193,7 +198,6 @@ export const AddMemberInnerDialog = ({ onClickBack, onClose, onSearchChange, que
       <DeltaDialogHeader
         title={tx('group_add_members')}
         onClickBack={onClickBack}
-        onClose={onClose}
       />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
@@ -269,6 +273,7 @@ export function CreateGroupInner (props) {
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
   const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
   const [qrCode, setQrCode] = useState('')
 
@@ -284,7 +289,10 @@ export function CreateGroupInner (props) {
       <>
         <PseudoListItemAddMember onClick={() => setViewMode('createGroup-addMember')} />
         <PseudoListItemShowQrCode onClick={async () => {
-          if (groupId === -1 && groupName === '') return
+          if (groupId === -1 && groupName === '') {
+            setErrorMissingGroupName(true)
+            return
+          }
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
           setQrCode(qrCode)
@@ -316,11 +324,10 @@ export function CreateGroupInner (props) {
           <DeltaDialogHeader
             title={tx('menu_new_group')}
             onClickBack={() => setViewMode('main')}
-            onClose={onClose}
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
-              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName, errorMissingGroupName, setErrorMissingGroupName })}
               <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
               <GroupMemberContactListWrapper>
                 <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
@@ -345,18 +352,24 @@ export function CreateGroupInner (props) {
             </Card>
           </div>
           <DeltaDialogFooter>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <DeltaButtonDanger
+            <div className={Classes.DIALOG_FOOTER_ACTIONS} style={{justifyContent: 'space-between'}}>
+              <DeltaButton
                 noPadding
                 onClick={onClose}
               >
                 {tx('cancel')}
-              </DeltaButtonDanger>
+              </DeltaButton>
               <DeltaButtonPrimary
                 noPadding
-                onClick={finishCreateGroup}
+                onClick={() => {
+                  if(groupName == '') {
+                    setErrorMissingGroupName(true)
+                    return
+                  }
+                  finishCreateGroup()
+                }}
               >
-                {tx('ok')}
+                {tx('group_create_button')}
               </DeltaButtonPrimary>
             </div>
           </DeltaDialogFooter>
@@ -376,6 +389,7 @@ export function CreateVerifiedGroupInner (props) {
   const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
 
   const [qrCode, setQrCode] = useState('')
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
   const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF, '')
   const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
@@ -389,7 +403,10 @@ export function CreateVerifiedGroupInner (props) {
       <>
         <PseudoListItemAddMember onClick={() => setViewMode('createVerifiedGroup-addMember')} />
         <PseudoListItemShowQrCode onClick={async () => {
-          if (groupId === -1 && groupName === '') return
+          if (groupId === -1 && groupName === '') {
+            setErrorMissingGroupName(true)
+            return
+          }
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
           setQrCode(qrCode)
@@ -421,11 +438,10 @@ export function CreateVerifiedGroupInner (props) {
         <DeltaDialogHeader
           title={tx('menu_new_verified_group')}
           onClickBack={() => setViewMode('main')}
-          onClose={onClose}
         />
         <div className={Classes.DIALOG_BODY}>
           <Card>
-            {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName })}
+            {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName, errorMissingGroupName, setErrorMissingGroupName })}
             <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
             <GroupMemberContactListWrapper>
               <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
@@ -433,9 +449,8 @@ export function CreateVerifiedGroupInner (props) {
               <ContactList2
                 contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
                 onClick={() => {}}
-                showCheckbox
-                isChecked={() => true}
-                onCheckboxClick={removeGroupMember}
+                showRemove
+                onRemoveClick={removeGroupMember}
               />
               {queryStr !== '' && searchContactsToAdd.length !== 0 && (
               <>
@@ -454,10 +469,22 @@ export function CreateVerifiedGroupInner (props) {
           </Card>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <div style={{justifyContent: 'space-between'}} className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <DeltaButton
+              noPadding
+              onClick={onClose}
+            >
+              {tx('cancel')}
+            </DeltaButton>
             <DeltaButtonPrimary
               noPadding
-              onClick={finishCreateGroup}
+                onClick={() => {
+                  if(groupName == '') {
+                    setErrorMissingGroupName(true)
+                    return
+                  }
+                  finishCreateGroup()
+                }}
             >
               {tx('group_create_button')}
             </DeltaButtonPrimary>
