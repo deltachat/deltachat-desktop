@@ -84,7 +84,7 @@ export const GroupImage = (props) => {
   const { groupImage, onSetGroupImage, onUnsetGroupImage, ...otherProps } = props
   return (
     <GroupImageWrapper>
-      { groupImage && <AvatarImage src={groupImage} onClick={onSetGroupImage} {...otherProps} /> }
+      { groupImage && <AvatarImage avatarPath={groupImage} onClick={onSetGroupImage} {...otherProps} /> }
       { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...otherProps}>G</AvatarBubble> }
       <GroupImageUnsetButton style={{ visibility: groupImage ? 'visible' : 'hidden' }} onClick={onUnsetGroupImage} />
     </GroupImageWrapper>

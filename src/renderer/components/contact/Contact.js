@@ -57,20 +57,20 @@ export function isValidEmail (email) {
 }
 
 export function Avatar (props) {
-  const { avatarPath, color, displayName } = props
-  if (avatarPath) {
-    return (
-      <img className={classNames('AvatarImage', { large: props.large })} src={avatarPath} />
-    )
-  }
+  const { avatarPath, color, displayName, large } = props
+  if (avatarPath) return AvatarImage({ large, avatarPath })
   const codepoint = displayName.codePointAt(0)
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <div className={classNames('AvatarBubble', { large: props.large })} style={{ backgroundColor: color }}>
+    <div className={classNames('AvatarBubble', { large })} style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
+}
+
+export function AvatarImage ({ avatarPath, large, ...otherProps }) {
+  return <img className={classNames('AvatarImage', { large })} src={avatarPath} {...otherProps} />
 }
 
 export function QRAvatar () {
