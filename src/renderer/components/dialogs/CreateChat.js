@@ -185,7 +185,7 @@ export const GroupSettingsSetNameAndProfileImage = ({ groupImage, onSetGroupImag
         onChange={onChange}
         autoFocus
       />
-      { errorMissingGroupName && <p style={{color: 'var(--colorDanger)', marginLeft: '68px'}}>{tx('group_please_enter_group_name')}</p> }
+      { errorMissingGroupName && <p style={{ color: 'var(--colorDanger)', marginLeft: '68px' }}>{tx('group_please_enter_group_name')}</p> }
     </GroupSettingsContainer>
   )
 }
@@ -352,7 +352,7 @@ export function CreateGroupInner (props) {
             </Card>
           </div>
           <DeltaDialogFooter>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS} style={{justifyContent: 'space-between'}}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS} style={{ justifyContent: 'space-between' }}>
               <DeltaButton
                 noPadding
                 onClick={onClose}
@@ -362,7 +362,7 @@ export function CreateGroupInner (props) {
               <DeltaButtonPrimary
                 noPadding
                 onClick={() => {
-                  if(groupName == '') {
+                  if (groupName === '') {
                     setErrorMissingGroupName(true)
                     return
                   }
@@ -469,7 +469,7 @@ export function CreateVerifiedGroupInner (props) {
           </Card>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
-          <div style={{justifyContent: 'space-between'}} className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <div style={{ justifyContent: 'space-between' }} className={Classes.DIALOG_FOOTER_ACTIONS}>
             <DeltaButton
               noPadding
               onClick={onClose}
@@ -478,13 +478,13 @@ export function CreateVerifiedGroupInner (props) {
             </DeltaButton>
             <DeltaButtonPrimary
               noPadding
-                onClick={() => {
-                  if(groupName == '') {
-                    setErrorMissingGroupName(true)
-                    return
-                  }
-                  finishCreateGroup()
-                }}
+              onClick={() => {
+                if (groupName === '') {
+                  setErrorMissingGroupName(true)
+                  return
+                }
+                finishCreateGroup()
+              }}
             >
               {tx('group_create_button')}
             </DeltaButtonPrimary>
