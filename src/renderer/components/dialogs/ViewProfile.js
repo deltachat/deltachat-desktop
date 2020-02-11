@@ -102,9 +102,7 @@ export default function ViewProfile (props) {
           <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>Send Message</Button>
           <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text='Gemeinsame Chats'/>
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            { dmChatId > 0 && <ChatListItem key={dmChatId} chatListItem={chatItems[dmChatId]} onClick={onChatClick.bind(null, dmChatId)} />}
             {chatListIds.map(chatId => {
-              if (chatId === dmChatId) return
               return (
                 <ChatListItem
                   key={chatId}
