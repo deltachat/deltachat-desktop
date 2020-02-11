@@ -1,5 +1,5 @@
 import { onDownload } from '../message/messageFunctions'
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 
 export default function FullscreenMedia (props) {
