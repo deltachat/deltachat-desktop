@@ -16,7 +16,7 @@ import {
 } from '../helpers/PseudoListItem'
 
 import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody } from './DeltaDialog'
 import {
   CreateChatSearchInput,
   CreateChatContactListWrapper
@@ -116,7 +116,7 @@ export default function CreateChat (props) {
           </>)
       }
       { viewMode.startsWith('createGroup') && <CreateGroupInner isVerified={false} {...{ viewMode, setViewMode, onClose }} />}
-      { viewMode.startsWith('createVerifiedGroup') && <CreateGroupInner isVerified={true} {...{ viewMode, setViewMode, onClose }} />}
+      { viewMode.startsWith('createVerifiedGroup') && <CreateGroupInner isVerified {...{ viewMode, setViewMode, onClose }} />}
     </DeltaDialogBase>
   )
 }
@@ -324,7 +324,7 @@ export function CreateGroupInner (props) {
       { viewMode.startsWith(viewPrefix + '-main') &&
       <>
         <DeltaDialogHeader
-          title={ isVerified ? tx('menu_new_verified_group') : tx('menu_new_group')}
+          title={isVerified ? tx('menu_new_verified_group') : tx('menu_new_group')}
           onClickBack={() => setViewMode('main')}
         />
         <div className={Classes.DIALOG_BODY}>
