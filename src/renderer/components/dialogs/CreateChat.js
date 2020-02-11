@@ -328,19 +328,15 @@ export function CreateGroupInner (props) {
                 <ContactList2
                   contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
                   onClick={() => {}}
-                  showCheckbox
-                  isChecked={() => true}
-                  onCheckboxClick={removeGroupMember}
+                  showRemove
+                  onRemoveClick={removeGroupMember}
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                 <>
                   <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
                   <ContactList2
                     contacts={searchContactsToAdd}
-                    onClick={() => {}}
-                    showCheckbox
-                    isChecked={() => false}
-                    onCheckboxClick={addGroupMember}
+                    onClick={addGroupMember}
                   />
                 </>
                 )}
