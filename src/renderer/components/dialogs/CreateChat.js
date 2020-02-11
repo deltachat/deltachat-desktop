@@ -115,8 +115,8 @@ export default function CreateChat (props) {
             </DeltaDialogBody>
           </>)
       }
-      { viewMode.startsWith('createGroup') && <CreateGroupInner {...{ viewMode, setViewMode, onClose }} />}
-      { viewMode.startsWith('createVerifiedGroup') && <CreateVerifiedGroupInner {...{ viewMode, setViewMode, onClose }} />}
+      { viewMode.startsWith('createGroup') && <CreateGroupInner isVerified={false} {...{ viewMode, setViewMode, onClose }} />}
+      { viewMode.startsWith('createVerifiedGroup') && <CreateGroupInner isVerified={true} {...{ viewMode, setViewMode, onClose }} />}
     </DeltaDialogBase>
   )
 }
@@ -266,18 +266,20 @@ export const useCreateGroup = (verified, groupName, groupImage, groupMembers, on
 }
 
 export function CreateGroupInner (props) {
-  const { viewMode, setViewMode, onClose } = props
+  const { viewMode, setViewMode, onClose, isVerified } = props
   const tx = window.translate
 
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
   const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(false, groupName, groupImage, groupMembers, onClose)
-  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
+  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(isVerified, groupName, groupImage, groupMembers, onClose)
+
+  const viewPrefix = isVerified ? 'createVerifiedGroup' : 'createGroup'
 
   const [qrCode, setQrCode] = useState('')
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
-  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_ADD_SELF, '')
+  const [searchContacts, updateSearchContacts] = useContacts(isVerified ? (C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF) : C.DC_GCL_ADD_SELF, '')
   const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
   const searchContactsToAdd = queryStr !== ''
     ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
@@ -287,7 +289,7 @@ export function CreateGroupInner (props) {
     if (queryStr !== '') return null
     return (
       <>
-        <PseudoListItemAddMember onClick={() => setViewMode('createGroup-addMember')} />
+        <PseudoListItemAddMember onClick={() => setViewMode(viewPrefix + '-addMember')} />
         <PseudoListItemShowQrCode onClick={async () => {
           if (groupId === -1 && groupName === '') {
             setErrorMissingGroupName(true)
@@ -296,7 +298,7 @@ export function CreateGroupInner (props) {
           const gId = await lazilyCreateOrUpdateGroup(false)
           const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
           setQrCode(qrCode)
-          setViewMode('createGroup-showQrCode')
+          setViewMode(viewPrefix + '-showQrCode')
         }} />
       </>
     )
@@ -304,8 +306,8 @@ export function CreateGroupInner (props) {
 
   return (
     <>
-      { viewMode.startsWith('createGroup-addMember') && AddMemberInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
+      { viewMode.startsWith(viewPrefix + '-addMember') && AddMemberInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode(viewPrefix + '-main') },
         onClose,
         onSearchChange,
         queryStr,
@@ -313,130 +315,16 @@ export function CreateGroupInner (props) {
         groupMembers,
         addRemoveGroupMember
       })}
-      { viewMode.startsWith('createGroup-showQrCode') && ShowQrCodeInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createGroup-main') },
+      { viewMode.startsWith(viewPrefix + '-showQrCode') && ShowQrCodeInnerDialog({
+        onClickBack: () => { updateSearch(''); setViewMode(viewPrefix + '-main') },
         onClose,
         qrCode: qrCode,
         groupName
       })}
-      { viewMode.startsWith('createGroup-main') &&
-        <>
-          <DeltaDialogHeader
-            title={tx('menu_new_group')}
-            onClickBack={() => setViewMode('main')}
-          />
-          <div className={Classes.DIALOG_BODY}>
-            <Card>
-              {GroupSettingsSetNameAndProfileImage({ groupImage, onSetGroupImage, onUnsetGroupImage, groupName, setGroupName, errorMissingGroupName, setErrorMissingGroupName })}
-              <GroupSeperator>{tx('n_members', groupMembers.length, groupMembers.length <= 1 ? 'one' : 'other')}</GroupSeperator>
-              <GroupMemberContactListWrapper>
-                <GroupMemberSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('search')} />
-                {renderAddMemberIfNeeded()}
-                <ContactList2
-                  contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
-                  onClick={() => {}}
-                  showRemove
-                  onRemoveClick={removeGroupMember}
-                />
-                {queryStr !== '' && searchContactsToAdd.length !== 0 && (
-                <>
-                  <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
-                  <ContactList2
-                    contacts={searchContactsToAdd}
-                    onClick={addGroupMember}
-                  />
-                </>
-                )}
-                {queryStr !== '' && searchContacts.length === 0 && PseudoListItemNoSearchResults({ queryStr })}
-              </GroupMemberContactListWrapper>
-            </Card>
-          </div>
-          <DeltaDialogFooter>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS} style={{ justifyContent: 'space-between' }}>
-              <DeltaButton
-                noPadding
-                onClick={onClose}
-              >
-                {tx('cancel')}
-              </DeltaButton>
-              <DeltaButtonPrimary
-                noPadding
-                onClick={() => {
-                  if (groupName === '') {
-                    setErrorMissingGroupName(true)
-                    return
-                  }
-                  finishCreateGroup()
-                }}
-              >
-                {tx('group_create_button')}
-              </DeltaButtonPrimary>
-            </div>
-          </DeltaDialogFooter>
-        </>
-      }
-    </>
-  )
-}
-
-export function CreateVerifiedGroupInner (props) {
-  const { viewMode, setViewMode, onClose } = props
-  const tx = window.translate
-
-  const [groupName, setGroupName] = useState('')
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()
-  const [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember] = useGroupMembers()
-  const [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] = useCreateGroup(true, groupName, groupImage, groupMembers, onClose)
-
-  const [qrCode, setQrCode] = useState('')
-  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-
-  const [searchContacts, updateSearchContacts] = useContacts(C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF, '')
-  const [queryStr, onSearchChange, updateSearch] = useContactSearch(updateSearchContacts)
-  const searchContactsToAdd = queryStr !== ''
-    ? searchContacts.filter(({ id }) => groupMembers.indexOf(id) === -1).filter((_, i) => i < 5)
-    : []
-
-  const renderAddMemberIfNeeded = () => {
-    if (queryStr !== '') return null
-    return (
-      <>
-        <PseudoListItemAddMember onClick={() => setViewMode('createVerifiedGroup-addMember')} />
-        <PseudoListItemShowQrCode onClick={async () => {
-          if (groupId === -1 && groupName === '') {
-            setErrorMissingGroupName(true)
-            return
-          }
-          const gId = await lazilyCreateOrUpdateGroup(false)
-          const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
-          setQrCode(qrCode)
-          setViewMode('createVerifiedGroup-showQrCode')
-        }} />
-      </>
-    )
-  }
-
-  return (
-    <>
-      { viewMode.startsWith('createVerifiedGroup-addMember') && AddMemberInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose,
-        onSearchChange,
-        queryStr,
-        searchContacts,
-        groupMembers,
-        addRemoveGroupMember
-      })}
-      { viewMode.startsWith('createVerifiedGroup-showQrCode') && ShowQrCodeInnerDialog({
-        onClickBack: () => { updateSearch(''); setViewMode('createVerifiedGroup-main') },
-        onClose,
-        qrCode: qrCode,
-        groupName
-      })}
-      { viewMode.startsWith('createVerifiedGroup-main') &&
+      { viewMode.startsWith(viewPrefix + '-main') &&
       <>
         <DeltaDialogHeader
-          title={tx('menu_new_verified_group')}
+          title={ isVerified ? tx('menu_new_verified_group') : tx('menu_new_group')}
           onClickBack={() => setViewMode('main')}
         />
         <div className={Classes.DIALOG_BODY}>
