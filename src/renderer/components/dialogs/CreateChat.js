@@ -15,7 +15,7 @@ import {
   PseudoListItemAddContact
 } from '../helpers/PseudoListItem'
 
-import { DeltaButtonPrimary } from './SmallDialog'
+import { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   CreateChatSearchInput,
@@ -346,6 +346,12 @@ export function CreateGroupInner (props) {
           </div>
           <DeltaDialogFooter>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+              <DeltaButtonDanger
+                noPadding
+                onClick={onClose}
+              >
+                {tx('cancel')}
+              </DeltaButtonDanger>
               <DeltaButtonPrimary
                 noPadding
                 onClick={finishCreateGroup}
