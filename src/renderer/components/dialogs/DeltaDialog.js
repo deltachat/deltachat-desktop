@@ -152,7 +152,7 @@ export function DeltaDialogContentTextSeperator (props) {
 }
 
 export function DeltaDialogContentSeperator (props) {
-  return <div style={props.style} className='delta-dialog-content-seperator'/>
+  return <div style={props.style} className='delta-dialog-content-seperator' />
 }
 
 export function DeltaDialogButton (props) {

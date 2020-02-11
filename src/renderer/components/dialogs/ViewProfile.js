@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentSeperator, DeltaDialogContentTextSeperator, DeltaDialogButton } from './DeltaDialog'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
 import { integerToHexColor } from '../../../shared/util'
 import styled from 'styled-components'
@@ -7,7 +7,6 @@ import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
-import { PseudoListItem } from '../helpers/PseudoListItem'
 import { Button } from '@blueprintjs/core'
 
 export const ProfileInfoContainer = styled.div`
@@ -99,7 +98,7 @@ export default function ViewProfile (props) {
             <ProfileInfoName name={contact.displayName} address={contact.address} />
           </ProfileInfoContainer>
           <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>{tx('send_message')}</Button>
-          <DeltaDialogContentTextSeperator style={{margin: '10px 0px'}} text={tx('profile_shared_chats')} />
+          <DeltaDialogContentTextSeperator style={{ margin: '10px 0px' }} text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
             {
               chatListIds.map(chatId => <ChatListItem key={chatId} chatListItem={chatItems[chatId]} onClick={onChatClick.bind(null, chatId)} />

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { ContactListItem } from '../conversations'
 import C from 'deltachat-node/constants'
 import classNames from 'classnames'
@@ -60,17 +60,14 @@ export function Avatar (props) {
   const { avatarPath, color, displayName } = props
   if (avatarPath) {
     return (
-      <img className={classNames('AvatarImage', {'large': props.large})} src={avatarPath} />
+      <img className={classNames('AvatarImage', { large: props.large })} src={avatarPath} />
     )
   }
   const codepoint = displayName.codePointAt(0)
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
-  
-  
-
   return (
-    <div className={classNames('AvatarBubble', {'large': props.large})} style={{ backgroundColor: color }}>
+    <div className={classNames('AvatarBubble', { large: props.large })} style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
