@@ -5,7 +5,7 @@ import { ipcRenderer } from 'electron'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import {
-  Menu,
+  Menu
 } from '@blueprintjs/core'
 import {
   archiveChat,
@@ -15,11 +15,11 @@ import {
   openEditGroupDialog
 } from './helpers/ChatMethods'
 
-export function DeltaMenuItem ({text, onClick}) {
+export function DeltaMenuItem ({ text, onClick }) {
   return (
     <li onClick={onClick}>
-      <a className="bp3-menu-item bp3-popover-dismiss">
-        <div className="bp3-text-overflow-ellipsis bp3-fill">
+      <a className='bp3-menu-item bp3-popover-dismiss'>
+        <div className='bp3-text-overflow-ellipsis bp3-fill'>
           {text}
         </div>
       </a>
