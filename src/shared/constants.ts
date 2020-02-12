@@ -12,4 +12,4 @@ const { version } = require('../../package.json')
 
 export const appVersion = `${version}-PREVIEW`
 
-export const appWindowTitle = `${appName} (${appVersion})`
+export const appWindowTitle = appName
