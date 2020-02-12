@@ -59,8 +59,9 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
   }
 
   render() {
-    const { medias } = this.state
+    const { medias, id } = this.state
     const tx = window.translate
+    const emptyTabMessage = (id === 'documents') ? tx('tab_docs_empty_hint') : tx('tab_gallery_empty_hint')
     return <div className='media-view' >
       <div className='bp3-tabs' style={{ minWidth: 200 }
       }>
@@ -78,6 +79,7 @@ mediaProps, { id: MediaTabKey, msgTypes: number[], medias: any }> {
         </ul>
         < div className='bp3-tab-panel' role='tabpanel' >
           <div className='gallery' >
+            {medias.length < 1 ? <p className='no-media-message'>{emptyTabMessage}</p> : ''}
             {
               medias.map((message:message) => {
                 var msg = message.msg
