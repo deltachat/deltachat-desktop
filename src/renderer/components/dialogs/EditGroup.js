@@ -4,7 +4,7 @@ import { C } from 'deltachat-node'
 import differ from 'array-differ'
 import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogFooter } from './DeltaDialog'
-import { DeltaButtonPrimary } from './SmallDialog'
+import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 import { useGroupImage, useContactSearch, GroupSettingsSetNameAndProfileImage, AddMemberInnerDialog, ShowQrCodeInnerDialog } from './CreateChat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
@@ -141,7 +141,13 @@ export function EditGroupInner (props) {
           </Card>
         </div>
         <DeltaDialogFooter>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <div style={{ justifyContent: 'space-between' }} className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <DeltaButton
+              noPadding
+              onClick={onClose}
+            >
+              {tx('cancel')}
+            </DeltaButton>
             <DeltaButtonPrimary
               noPadding
               onClick={onUpdateGroup}
