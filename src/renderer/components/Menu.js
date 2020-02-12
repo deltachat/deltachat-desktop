@@ -71,6 +71,7 @@ export default function DeltaMenu (props) {
         />
         <MenuItem
           key='leave'
+          text={tx('menu_leave_group')}
           onClick={onLeaveGroup}
         />
       </>,
