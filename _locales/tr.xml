@@ -163,7 +163,6 @@
     <string name="menu_pause">Duraklat</string>
     <string name="menu_scroll_to_bottom">Alta kaydır</string>
     <string name="menu_scroll_to_top">Üste kaydır</string>
-    <string name="menu_invite">Arkadaşları davet et</string>
     <string name="menu_help">Yardım</string>
     <string name="menu_select_all">Tümünü seç</string>
     <string name="menu_expand">Genişlet</string>
@@ -198,6 +197,7 @@
     <string name="share_location_for_two_hours">2 saatliğine</string>
     <string name="share_location_for_six_hours">6 saatliğine</string>
 
+    <string name="file_saved_to">Dosya \"%1$s\" üzerine kaydedildi.</string>
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Bu gruptan ayrılmak istediğinizden emin misiniz?</string>
@@ -300,11 +300,7 @@
     <string name="tab_gallery_empty_hint">Bu sohbette paylaşılan görseller ve videolar burada görüntülenecek.</string>
     <string name="tab_docs_empty_hint">Bu sohbette paylaşılan belgeler, müzik ve diğer dosyalar burada görüntülenecek.</string>
     <string name="media_preview">Ortam önizlemesi</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Arkadaşlar, arkadaşların iletileşme silolarına kilitlenmesine izin vermez.</string>
-    <string name="invite_default_text">Delta Chat\'e geçelim - %1$s - %2$s üzerinden bana yazabilirsiniz</string>
+    <string name="send_message">İleti gönder</string>
 
 
     <!-- welcome and login -->
@@ -329,6 +325,7 @@
     <string name="login_auth_method">Yetkilendirme yöntemi</string>
     <string name="login_info_oauth2_title">Basitleştirilen ayarlamayla sürdürülsün mü?</string>
     <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'in E-posta ile Sohbet uygulamanız olarak davranmasına izin verin.\n\nDelta Chat sunucuları yoktur; verileriniz aygıtınızda kalır.</string>
+    <string name="login_manually">Elle oturum aç</string>
     <string name="login_info_gmail_text">Gmail Hesapları için \"2 Adımlı Doğrulama\"yı etkinleştirdiyseniz, bir uygulama parolası oluşturmanız gerekir. Bu ayar kullanılabilir değilse, \"Güvenliği düşük uygulamalar\"ı etkinleştirmeniz gerekir.</string>
     <string name="login_certificate_checks">Sertifika denetimleri</string>
     <string name="login_error_mail">Lütfen geçerli bir e-posta adresi girin</string>
@@ -359,10 +356,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_summary_on">açık</string>
-    <string name="pref_summary_off">kapalı</string>
-    <string name="pref_summary_default">varsayılan</string>
-    <string name="pref_summary_custom">özel</string>
     <string name="pref_using_custom">Özel kullanılıyor: %s</string>
     <string name="pref_using_default">Varsayılan kullanılıyor: %s</string>
     <string name="pref_profile_info_headline">Profil bilginiz</string>
@@ -576,7 +569,7 @@
     <string name="perm_explain_access_to_location_denied">Bir konum iliştirmek için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Konum\"u etkinleştirin.</string>
     <string name="perm_enable_bg_reminder_title">Delta Chat artalandayken iletileri almak için buraya dokunun.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
-    <string name="perm_enable_bg_already_done">Delta Chat\'in iletileri artalanda almasına zaten izin verdiniz.\n\nArtalanda iletiler hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
+    <string name="perm_enable_bg_already_done">Delta Chat\'in iletileri artalanda almasına zaten izin verdiniz.\n\nİletiler artalanda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Şifrelenen ileti</string>
@@ -617,13 +610,10 @@
     <string name="verified_desktop">doğrulanan</string>
     <string name="remove_desktop">Kaldır</string>
     <string name="save_desktop">Kaydet</string>
-    <string name="show_qr_verify_code_desktop">QR davet kodunu göster</string>
-    <string name="show_qr_invite_code_desktop">QR davet kodunu göster</string>
     <string name="add_contact_desktop">Kişi ekle</string>
     <string name="login_required_desktop">gerekli</string>
     <string name="name_desktop">Ad</string>
     <string name="autocrypt_key_transfer_desktop">Autocrypt anahtar aktarımı</string>
-    <string name="initiate_key_transfer_title_desktop">Anahtar aktarımına başla</string>
     <string name="initiate_key_transfer_desktop">Bir Autocrypt Ayarlama İletisi, uçtan uca ayarlamanızı diğer Autocrypt uyumlu uygulamalarla güvenli olarak paylaşır. Ayarlama, burada görüntülenen ve diğer aygıtta yazılması gereken bir ayarlama kodu tarafından şifrelenecek.</string>
     <string name="reply_to_message_desktop">İletiye yanıt ver</string>
     <string name="select_group_image_desktop">Grup görseli seç</string>
@@ -665,9 +655,9 @@
     <string name="a11y_message_context_menu_btn_label">İleti eylemleri</string>
     <string name="a11y_background_preview_label">Artalan önizlemesi</string>
 
-    <!-- Translators: These strings are only used on iOS -->
-    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Kameraya erişime izin vermek, fotoğraflar ve videolar çekmenize izin verir.</string>
-    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Adres defterinize erişime izin vermek, aygıtınızdan gelen kişilerle sohbet etmenize izin verir.</string>
-    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Mikrofona erişime izin vermek, ses kaydetmenize izin verir.</string>
-    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Fotoğraf kitaplığına erişime izin vermek, ondan gelen görselleri karşıya yüklemenize izin verir.</string>
+    <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
+    <string name="InfoPlist_NSCameraUsageDescription">Delta Chat, fotoğraflar ve videolar çekmek ve göndermek için ve QR kodları taramak için kameranızı kullanır.</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz e-posta adreslerinin bir listesini göstermek için kişilerinizi kullanır. Delta Chat\'in sunucusu yoktur; kişileriniz hiçbir yere gönderilmez.</string>
+    <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır.</string>
+    <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat, göndermek için kitaplığınızdan fotoğraflar seçmenizi sağlayacak.</string>
 </resources>

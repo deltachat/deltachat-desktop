@@ -7,14 +7,14 @@ import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
-import { PseudoListItem } from '../helpers/PseudoListItem'
+import { Button } from '@blueprintjs/core'
 
 export const ProfileInfoContainer = styled.div`
   margin-left: 10px;
   display: flex;
-  width: calc(100% - 20px);
+  width: calc(100% - 27px);
   .profile-info-name-container {
-    margin: auto 10px;
+    margin: auto 17px;
     flex-grow: 1;
     .name {
       font-size: medium;
@@ -45,7 +45,8 @@ export function ContactAvatar ({ contact }) {
   return Avatar({
     avatarPath: profileImage,
     color,
-    displayName
+    displayName,
+    large: true
   })
 }
 
@@ -65,9 +66,8 @@ export default function ViewProfile (props) {
   const { isOpen, onClose, contact } = props
 
   const { chatListIds } = useChatListIds('', 0, contact.id)
+  // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
-
-  const dmChatId = useStateAsync(false, callDcMethodAsync('contacts.getChatIdByContactId', [contact.id]))[0]
 
   const tx = window.translate
 
@@ -75,7 +75,7 @@ export default function ViewProfile (props) {
     selectChat(chatId)
     onClose()
   }
-  const onNewChat = async () => {
+  const onSendMessage = async () => {
     const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [contact.id])
     onChatClick(dmChatId)
   }
@@ -97,20 +97,13 @@ export default function ViewProfile (props) {
             <ProfileInfoAvatar contact={contact} />
             <ProfileInfoName name={contact.displayName} address={contact.address} />
           </ProfileInfoContainer>
-          <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
+          <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>{tx('send_message')}</Button>
+          <DeltaDialogContentTextSeperator style={{ margin: '10px 0px' }} text={tx('profile_shared_chats')} />
           <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            { dmChatId === 0 && <PseudoListItem id='addmember' cutoff='+' text={tx('menu_new_chat')} onClick={onNewChat} style={{ paddingLeft: '10px' }} />}
-            { dmChatId > 0 && <ChatListItem key={dmChatId} chatListItem={chatItems[dmChatId]} onClick={onChatClick.bind(null, dmChatId)} />}
-            {chatListIds.map(chatId => {
-              if (chatId === dmChatId) return
-              return (
-                <ChatListItem
-                  key={chatId}
-                  chatListItem={chatItems[chatId]}
-                  onClick={onChatClick.bind(null, chatId)}
-                />
+            {
+              chatListIds.map(chatId => <ChatListItem key={chatId} chatListItem={chatItems[chatId]} onClick={onChatClick.bind(null, chatId)} />
               )
-            })}
+            }
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>

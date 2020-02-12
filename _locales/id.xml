@@ -1,3 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="draft">Draf</string>
+    <string name="contact">Kontak</string>
+    <string name="camera">Kamera</string>
+    <string name="menu_new_group">Grup baru</string>
+    <string name="menu_delete_chat">Hapus obrolan</string>
+    <string name="menu_mute">Nonaktifkan notifikasi</string>
+    <string name="menu_unmute">Aktifkan notifikasi</string>
+    <string name="menu_share">Bagikan</string>
+    <string name="menu_settings">Setelan</string>
+    <string name="chat_input_placeholder">Pesan</string>
+    <!-- search -->
+    <string name="search">Cari</string>
+    <string name="no_chats_desktop">Belum ada obrolan</string>
     </resources>

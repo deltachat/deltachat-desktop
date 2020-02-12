@@ -16,6 +16,7 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   &:hover {
     background-color:#bbb;
   }
+
   &.skeleton {
     background-repeat: no-repeat;
     background-image: radial-gradient(circle 24px, grey 99%, transparent 0),linear-gradient(grey 40px, transparent 0), linear-gradient(grey 40px, transparent 0), linear-gradient(grey 40px, transparent 0);
