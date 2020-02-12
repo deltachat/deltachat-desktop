@@ -125,9 +125,8 @@ export function EditGroupInner (props) {
               <ContactList2
                 contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
                 onClick={removeGroupMember}
-                showCheckbox
-                isChecked={() => true}
-                onCheckboxClick={removeGroupMember}
+                showRemove
+                onRemoveClick={removeGroupMember}
               />
               {queryStr !== '' && searchContactsToAdd.length !== 0 && (
               <>
@@ -135,9 +134,6 @@ export function EditGroupInner (props) {
                 <ContactList2
                   contacts={searchContactsToAdd}
                   onClick={addGroupMember}
-                  showCheckbox
-                  isChecked={() => false}
-                  onCheckboxClick={addGroupMember}
                 />
               </>
               )}

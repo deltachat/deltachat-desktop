@@ -345,10 +345,7 @@ export function CreateGroupInner (props) {
                 <GroupSeperator noMargin>{tx('group_add_members')}</GroupSeperator>
                 <ContactList2
                   contacts={searchContactsToAdd}
-                  onClick={() => {}}
-                  showCheckbox
-                  isChecked={() => false}
-                  onCheckboxClick={addGroupMember}
+                  onClick={addGroupMember}
                 />
               </>
               )}
