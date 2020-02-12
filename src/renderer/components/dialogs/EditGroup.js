@@ -124,7 +124,6 @@ export function EditGroupInner (props) {
               {renderAddMemberIfNeeded()}
               <ContactList2
                 contacts={searchContacts.filter(({ id }) => groupMembers.indexOf(id) !== -1)}
-                onClick={removeGroupMember}
                 showRemove
                 onRemoveClick={removeGroupMember}
               />
