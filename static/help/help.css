@@ -1,0 +1,66 @@
+html {
+    font-family: Roboto,Apple Color Emoji,NotoEmoji,Helvetica Neue,Arial,Helvetica,NotoMono,sans-serif!important;
+}
+head {
+    height: 50px;
+    background-color: #415e6b;
+    display: block;
+}
+
+head::after {
+    content: 'DeltaChat - Help';
+    text-align: center;
+    color: #fff;
+    line-height: 50px;
+    font-size: -webkit-xxx-large;
+    font-weight: 700;
+    display: block;
+}
+
+body {
+    max-width: 800px;
+    margin: 0 0 auto;
+    padding: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+a {
+    text-decoration: none;
+}
+h2, h3, h4 {
+    margin-top: 2rem;
+}
+ul {
+    margin-left: 20px;
+    padding: 0px;
+}
+ul#top {
+    list-style-type: none;
+    margin: 1.2rem 0 0 0;
+    padding: 0;
+}
+ul#top>li {
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+}
+ul#top li {
+    margin-top: .7rem;
+    margin-bottom: .7rem;
+    font-weight: normal;
+    font-size: 1rem;
+    list-style: none;
+    color: #106ba3;
+}
+ul#top li>ul>li {
+    margin-left: 10px;
+}
+ul#top li>ul>li::before {
+    content: "\2022";
+    color: #106ba3;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+}

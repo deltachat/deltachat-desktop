@@ -66,3 +66,9 @@ export function saveLastChatId (chatId) {
 export function getLastSelectedChatId () {
   return ipcRenderer.sendSync('getLastSelectedChatId')
 }
+
+export function openHelp () {
+  ipcRenderer.send('help', window.localeData.locale)
+}
+
+ipcRenderer.on('showHelpDialog', openHelp)
