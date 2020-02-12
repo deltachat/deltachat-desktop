@@ -71,7 +71,7 @@ export default function Attachment({ attachment, text, conversationType, directi
       : null, withContentAbove
       ? 'content-above'
       : null)}>
-      <video className='attachment-content' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
+      <video className='attachment-content' src={attachment.url} controls={true} />
     </div>);
   }
   else if (isAudio(attachment)) {
