@@ -10,6 +10,7 @@
     .bp3-navbar-heading {
         margin-left: 5px;
         width: 100%;
+        margin-right: 0px;
         overflow-x: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -61,7 +62,7 @@
 
     span.views {
         margin-left: auto;
-        width: 85px;
+        display: flex;
 
         .bp3-button {
             margin: 0 2px;
