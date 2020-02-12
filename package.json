@@ -4,10 +4,7 @@
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
-    "watch": "npm run watch-other && npm run watch-ts",
-    "watch-other": "node bin/watch &",
-    "watch-ts": "tsc -b src/renderer -w &",
-    "watch-js": "npm run watch-ts && parcel src/renderer/*.html --out-dir html-dist --public-url ./ --target electron",
+    "watch": "node bin/watch",
     "test": "npm run test-standard && npm run test-log-conventions && npm run test-unit",
     "test-standard": "standard",
     "test-standard-fix": "standard --fix",
