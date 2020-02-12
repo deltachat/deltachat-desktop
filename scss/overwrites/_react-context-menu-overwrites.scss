@@ -1,13 +1,17 @@
 // Third-party module: react-contextmenu
 
 .react-contextmenu {
-  background-color: var(--contextMenuBg);
-  min-width: 160px;
-  padding: 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border: 1px solid var(--contextMenuBorder);
-  opacity: 0;
+  margin: 0;
+  border-radius: 3px;
+  background: #fff;
+  min-width: 180px;
+  padding: 5px;
+  list-style: none;
+  text-align: left;
+  color: #182026;
+  background-color: var(--bp3MenuBg);
+  color: var(--bp3MenuText);
+  box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 2px 4px rgba(16,22,26,.2), 0 8px 24px rgba(16,22,26,.2);
 }
 
 .react-contextmenu--visible {
@@ -16,15 +20,33 @@
 }
 
 .react-contextmenu-item {
-  color: var(--contextMenuText);
-
-  cursor: pointer;
-  font-size: 13px;
-  line-height: 18px;
-  white-space: nowrap;
-
-  padding: 5px 10px 5px 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  border-radius: 2px;
+  padding: 5px 7px;
+  text-decoration: none;
+  line-height: 20px;
+  color: inherit;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
+}
+
+
+.react-contextmenu-item--selected {
+  background-color: rgba(167,182,194,.3);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--contextMenuSelected);
 }
 
 .react-contextmenu-item--checked:before {
@@ -55,18 +77,18 @@
 
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
-  color: var(--contextMenuSelected);
-  background-color: var(--contextMenuSelectedBg);
+  color: var(--bp3MenuText);
+  background-color: rgba(167,182,194,.3);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active.react-contextmenu-item--checked:before,
 .react-contextmenu-item.react-contextmenu-item--selected.react-contextmenu-item--checked:before {
-  color: var(--contextMenuSelected);
+  color: var(--bp3MenuText);
 }
 
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--active:after,
 .react-contextmenu-item.react-contextmenu-submenu
   > .react-contextmenu-item.react-contextmenu-item--selected:after {
-  color: var(--contextMenuSelected);
+  color: var(--bp3MenuText);
 }
