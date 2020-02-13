@@ -16,7 +16,7 @@
     "name": "Català"
   },
   {
-    "locale": "ca",
+    "locale": "cs",
     "name": "*Czech"
   },
   {
@@ -70,10 +70,6 @@
   {
     "locale": "ko",
     "name": "Korean"
-  },
-  {
-    "locale": "it",
-    "name": "Italian"
   },
   {
     "locale": "nl_NL",
