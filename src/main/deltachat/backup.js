@@ -1,4 +1,4 @@
-const C = require('deltachat-node/constants')
+const {C} = require('deltachat-node')
 const binding = require('deltachat-node/binding')
 const events = require('deltachat-node/events')
 const tempy = require('tempy')

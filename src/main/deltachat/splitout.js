@@ -1,5 +1,5 @@
 /**
- * @typedef {import('deltachat-node')} DeltaChat
+ * @typedef {import('deltachat-node').DeltaChat} DeltaChat
  * @typedef {import('./controller')} DeltaChatController
  */
 module.exports = class SplitOut {

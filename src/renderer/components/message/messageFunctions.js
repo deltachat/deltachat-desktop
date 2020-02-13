@@ -1,6 +1,5 @@
 import path from 'path'
 import { remote, ipcRenderer, shell } from 'electron'
-// import C from 'deltachat-node/constants'
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')

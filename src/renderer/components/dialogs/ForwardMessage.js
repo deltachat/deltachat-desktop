@@ -8,7 +8,7 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
 
-const C = require('deltachat-node/constants')
+const {C} = require('deltachat-node')
 
 export default function ForwardMessage (props) {
   const tx = window.translate

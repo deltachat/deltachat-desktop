@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import crypto from 'crypto'
 import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
-import C from 'deltachat-node/constants'
+import {C} from 'deltachat-node'
 import {
   Elevation,
   H5,
