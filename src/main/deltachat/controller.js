@@ -1,4 +1,4 @@
-const {DeltaChat:DeltaChatNode, C} = require('deltachat-node')
+const { DeltaChat: DeltaChatNode, C } = require('deltachat-node')
 const eventStrings = require('deltachat-node/events')
 const EventEmitter = require('events').EventEmitter
 const log = require('../../shared/logger').getLogger('main/deltachat')

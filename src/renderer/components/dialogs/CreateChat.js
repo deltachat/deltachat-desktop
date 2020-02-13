@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useContext } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { remote } from 'electron'
-import {C} from 'deltachat-node'
+import { C } from 'deltachat-node'
 
 import { callDcMethodAsync } from '../../ipc'
 import { ScreenContext } from '../../contexts'

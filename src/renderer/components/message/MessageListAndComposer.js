@@ -8,7 +8,7 @@ import MessageList from './MessageList'
 
 import { SettingsContext, ScreenContext } from '../../contexts'
 
-import {C} from 'deltachat-node'
+import { C } from 'deltachat-node'
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')

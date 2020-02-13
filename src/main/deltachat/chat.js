@@ -1,4 +1,4 @@
-const {C} = require('deltachat-node')
+const { C } = require('deltachat-node')
 const log = require('../../shared/logger').getLogger('main/deltachat/chat')
 const SplitOut = require('./splitout')
 module.exports = class DCChat extends SplitOut {

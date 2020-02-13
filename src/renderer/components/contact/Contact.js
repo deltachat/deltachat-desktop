@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ContactListItem } from '../conversations'
-import {C} from 'deltachat-node'
+import { C } from 'deltachat-node'
 import classNames from 'classnames'
 
 export function convertContactProps (contact) {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { callDcMethodAsync } from '../../ipc'
-import {C} from 'deltachat-node'
+import { C } from 'deltachat-node'
 import differ from 'array-differ'
 import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogFooter } from './DeltaDialog'
