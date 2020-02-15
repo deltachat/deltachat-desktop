@@ -111,6 +111,20 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
       }
     }
     return { ...state, messages }
+  } else if (type === 'MESSAGE_READ') {
+    const msgId = payload
+
+    const messages = {
+      ...state.messages,
+      [payload]: {
+        ...state.messages[payload],
+        msg: {
+          ...state.messages[payload].msg,
+          status: 'read'
+        }
+      }
+    }
+    return { ...state, messages }
   }
   return state
 })
@@ -210,6 +224,14 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
       messageIdsIncoming,
       messagesIncoming
     }
+  })
+})
+
+ipcBackend.on('DC_EVENT_MSG_READ', (evt, [id, msgId]) => {
+  chatStore.dispatch({
+    type: 'MESSAGE_READ',
+    id,
+    payload: msgId
   })
 })
 
