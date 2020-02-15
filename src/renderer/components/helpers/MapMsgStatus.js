@@ -1,4 +1,4 @@
-const C = require('deltachat-node/constants')
+const { C } = require('deltachat-node')
 
 function mapCoreMsgStatus2String (state) {
   switch (state) {

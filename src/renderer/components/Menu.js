@@ -1,4 +1,4 @@
-import C from 'deltachat-node/constants'
+import { C } from 'deltachat-node'
 import React, { useContext } from 'react'
 import { callDcMethodAsync, openHelp } from '../ipc'
 import { ipcRenderer } from 'electron'

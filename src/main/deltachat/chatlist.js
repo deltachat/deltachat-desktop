@@ -1,4 +1,4 @@
-const C = require('deltachat-node/constants')
+const { C } = require('deltachat-node')
 const log = require('../../shared/logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
 

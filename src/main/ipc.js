@@ -22,7 +22,7 @@ const DeltaChatController = (() => {
     dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
   }
 })()
-const C = require('deltachat-node/constants')
+const { C } = require('deltachat-node')
 
 function init (cwd, state, logHandler) {
   const main = windows.main

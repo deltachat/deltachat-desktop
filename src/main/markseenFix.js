@@ -1,5 +1,5 @@
 const windows = require('./windows')
-const C = require('deltachat-node/constants')
+const { C } = require('deltachat-node')
 const log = require('../shared/logger').getLogger('main/markseenfix')
 
 /** @type {import('./deltachat/controller')} */
