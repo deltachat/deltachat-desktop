@@ -5,7 +5,7 @@ const { ensureDirSync } = require('fs-extra')
 const { app, session } = require('electron')
 const rc = app.rc = require('./rc').default
 
-if (!app.requestSingleInstanceLock()) {
+if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()

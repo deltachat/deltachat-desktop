@@ -38,6 +38,7 @@ export interface RC_Config {
   'log-debug': boolean
   'log-to-console': boolean
   'machine-readable-stacktrace': boolean
+  'multiple-instances': boolean
 }
 
 import { App } from 'electron'
