@@ -51,6 +51,7 @@
   &.delta-dialog-content--no-overflow {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
   }
 }
