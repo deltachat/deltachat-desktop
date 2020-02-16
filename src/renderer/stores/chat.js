@@ -112,8 +112,6 @@ chatStore.reducers.push(({ type, payload, id }, state) => {
     }
     return { ...state, messages }
   } else if (type === 'MESSAGE_READ') {
-    const msgId = payload
-
     const messages = {
       ...state.messages,
       [payload]: {
