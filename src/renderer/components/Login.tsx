@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 
-import { C } from 'deltachat-node/constants.enum';
-import { DeltaChat } from 'deltachat-node';
+import { DeltaChat, C } from 'deltachat-node';
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import update from 'immutability-helper'

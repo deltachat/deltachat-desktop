@@ -21,7 +21,7 @@ const DeltaChatController = (() => {
     dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
   }
 })()
-const C = require('deltachat-node/constants')
+const { C } = require('deltachat-node')
 
 function init (cwd, state, logHandler) {
   const main = windows.main
@@ -254,14 +254,14 @@ function init (cwd, state, logHandler) {
     const DestinationPath = join(getConfigPath(), 'help-cache')
     await fs.ensureDir(join(DestinationPath, 'help'))
 
-    const contentFilePath = join(appPath, `/static/help/${locale}/help.html`)
-    const helpFile = await fs.exists(contentFilePath) ? contentFilePath : join(appPath, `/static/help/en/help.html`)
+    const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
+    const helpFile = await fs.exists(contentFilePath) ? contentFilePath : join(appPath, `/html-dist/help/en/help.html`)
     try {
       await fs.exists(helpFile)
       // copy help files and assets
-      await fs.copy(join(appPath, '/static/help/'), join(DestinationPath, 'help'))
+      await fs.copy(join(appPath, '/html-dist/help/'), join(DestinationPath, 'help'))
       // open new file
-      const newPath = join(DestinationPath, relative(join(appPath, '/static'), helpFile))
+      const newPath = join(DestinationPath, relative(join(appPath, '/html-dist'), helpFile))
       await fs.exists(newPath)
       shell.openItem(newPath)
     } catch (error) {
