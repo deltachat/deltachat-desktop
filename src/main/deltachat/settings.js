@@ -26,7 +26,9 @@ module.exports = class DCSettings extends SplitOut {
     const config = {}
     for (const key of keys) {
       if (key.indexOf('_security') > -1) {
-        config[key] = this.convertServerFlag(this.getConfig('configured_server_flags'), key)
+        config[key] = this.convertServerFlag(this.getConfig('server_flags'), key)
+      } else if (key.indexOf('_port') > -1) {
+        config[key] = this.getConfig(key) === '0' ? '' : this.getConfig(key)
       } else {
         config[key] = this.getConfig(key)
       }
@@ -67,7 +69,9 @@ module.exports = class DCSettings extends SplitOut {
   /* eslint-disable camelcase */
   serverFlags ({ mail_security, send_security }) {
     const flags = []
-
+    if (mail_security === '' && send_security === '') {
+      return ''
+    }
     if (mail_security !== '') {
       flags.push(serverFlagMap['mail_security_' + mail_security])
     }
