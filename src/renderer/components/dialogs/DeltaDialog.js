@@ -108,7 +108,7 @@ export function DeltaDialogHeader (props) {
       { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
       { title && <h4 className='bp3-heading'>{title}</h4> }
       { children }
-      <DeltaDialogCloseButton onClick={onClose} />
+      { typeof onClose === 'function' && <DeltaDialogCloseButton onClick={onClose} /> }
     </div>
   )
 }
@@ -117,7 +117,7 @@ export function DeltaDialogFooter (props) {
   let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{ display: hide ? 'none' : 'unset' }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
+    <div style={{ display: hide ? 'none' : 'unset', ...props.style }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
       {children}
     </div>
   )
@@ -127,7 +127,7 @@ export function DeltaDialogBody (props) {
   let { noFooter, children } = props
   noFooter = noFooter !== false
   return (
-    <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { '.bp3-dialog-body-no-footer': noFooter })}>
+    <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { 'bp3-dialog-body-no-footer': noFooter })}>
       {children}
     </div>
   )
@@ -149,4 +149,12 @@ export function DeltaDialogContent (props) {
 
 export function DeltaDialogContentTextSeperator (props) {
   return <div className='delta-dialog-content-text-seperator'>{props.text}</div>
+}
+
+export function DeltaDialogContentSeperator (props) {
+  return <div style={props.style} className='delta-dialog-content-seperator' />
+}
+
+export function DeltaDialogButton (props) {
+  return <div onClick={props.onClick} className='delta-dialog-button'>{props.children}</div>
 }

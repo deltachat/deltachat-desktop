@@ -94,11 +94,16 @@ const DeltaCheckbox = (props) => {
   )
 }
 export function ContactListItem (props) {
-  const { contact, onClick, showCheckbox, checked, showRemove, onRemoveClick } = props
+  const { contact, onClick, showCheckbox, checked, showRemove } = props
   const onCheckboxClick = e => {
     if (!showCheckbox) return
     e && e.stopPropagation()
     typeof props.onCheckboxClick === 'function' && props.onCheckboxClick(contact)
+  }
+  const onRemoveClick = e => {
+    if (!showRemove) return
+    e && e.stopPropagation()
+    typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
   }
   return (
     <ContactListItemWrapper
@@ -114,8 +119,8 @@ export function ContactListItem (props) {
       {showCheckbox &&
         <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={onCheckboxClick} />
       }
-      {showRemove &&
-        <div className='module-contact-list-item__trash-icon' onClick={onRemoveClick.bind(contact)}><Icon icon='trash' /></div>
+      {showRemove && contact.id !== 1 &&
+        <div className='module-contact-list-item__trash-icon' onClick={onRemoveClick}><Icon icon='cross' /></div>
       }
     </ContactListItemWrapper>
   )

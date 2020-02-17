@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { ContactListItem } from '../conversations'
 import C from 'deltachat-node/constants'
 import classNames from 'classnames'
@@ -57,20 +57,20 @@ export function isValidEmail (email) {
 }
 
 export function Avatar (props) {
-  const { avatarPath, color, displayName } = props
-  if (avatarPath) {
-    return (
-      <AvatarImage src={avatarPath} />
-    )
-  }
+  const { avatarPath, color, displayName, large } = props
+  if (avatarPath) return AvatarImage({ large, avatarPath })
   const codepoint = displayName.codePointAt(0)
   const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 
   return (
-    <div className='AvatarBubble' style={{ backgroundColor: color }}>
+    <div className={classNames('AvatarBubble', { large })} style={{ backgroundColor: color }}>
       {initial}
     </div>
   )
+}
+
+export function AvatarImage ({ avatarPath, large, ...otherProps }) {
+  return <img className={classNames('AvatarImage', { large })} src={avatarPath} {...otherProps} />
 }
 
 export function QRAvatar () {
@@ -87,21 +87,6 @@ const QRAvatarQRCodeImg = styled.img`
   width: 22px;
   height: 22px;
   margin-top: calc((48px - 22px) / 2);
-`
-export const AvatarMixin = css`
-  position: relative;
-  z-index: 2;
-  object-fit: cover;
-  height: 48px;
-  width: 48px;
-  min-width: 48px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-radius: 24px;
-`
-
-export const AvatarImage = styled.img`
-  ${AvatarMixin}
 `
 
 export const VerifiedIconImg = styled.img`

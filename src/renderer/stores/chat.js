@@ -7,7 +7,7 @@ import {
 } from '../ipc'
 import { Store, useStore } from './store'
 
-export const PAGE_SIZE = 30
+export const PAGE_SIZE = 10
 
 const defaultState = {
   id: null,

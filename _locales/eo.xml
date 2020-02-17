@@ -1,3 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="mute">Muta sciigoj</string>
+    <string name="password">Passvorto</string>
+    <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
+    <plurals name="n_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="other">%d horaj</item>
+    </plurals>
+    <plurals name="n_chats">
+        <item quantity="one">%d Parolado</item>
+        <item quantity="other">%d Paroladoj</item>
+    </plurals>
+    <plurals name="n_contacts">
+        <item quantity="one">%d Kontakto</item>
+        <item quantity="other">%d Kontaktoj</item>
+    </plurals>
+    <string name="draft">Malneto</string>
+    <string name="video">Filmo</string>
+    <string name="camera">Ĉambro</string>
+    <string name="gallery">Galerio foto</string>
+    <string name="menu_new_group">Nova grupo</string>
+    <string name="menu_delete_chat">Forigi parolado</string>
+    <string name="menu_mute">Muta sciigoj</string>
+    <string name="menu_unmute">Senmute</string>
+    <string name="menu_help">Helpi</string>
+    <string name="menu_settings">Agordoj</string>
+    <string name="chat_record_slide_to_cancel">Gliti por nuligi</string>
+    <string name="chat_input_placeholder">Mesaĝo</string>
+    <string name="chat_no_messages">Ne mesaĝoj.</string>
+    <!-- search -->
+    <string name="search">Serĉi</string>
+    <string name="tab_gallery">Galerio foto</string>
+    <string name="pref_notifications">Sciigoj</string>
+    <string name="pref_sound">Lia</string>
+    <string name="no_chats_desktop">Neniu parolado ankoraŭ.</string>
+    <string name="message_detail_from_desktop">De</string>
     </resources>

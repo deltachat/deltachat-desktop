@@ -15,15 +15,16 @@
     background-color: var(--messageAttachmentIconBg);
 
     &>.attachment-content {
-        object-fit: cover;
-        min-width: 200px;
+        object-fit: scale-down;
+        object-position: center;
         min-height: 150px;
         max-height: 300px;
-
+        max-width: 40vw;
+        
         // The padding on the bottom of the bubble produces 4 extra pixels of space at the
         //   bottom, so this doesn't match up with the padding numbers above.
         margin-bottom: -4px;
-
+ 
         // redundant with attachment-container, but we get cursor flashing on move otherwise
         cursor: pointer;
     }

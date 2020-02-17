@@ -163,7 +163,6 @@
     <string name="menu_pause">Pausa</string>
     <string name="menu_scroll_to_bottom">Scorri alla fine</string>
     <string name="menu_scroll_to_top">Scorri in cima</string>
-    <string name="menu_invite">Invita amici</string>
     <string name="menu_help">Aiuto</string>
     <string name="menu_select_all">Seleziona tutto</string>
     <string name="menu_expand">Espandi</string>
@@ -182,7 +181,7 @@
     <string name="device_talk">Messaggi del dispositivo</string>
     <string name="device_talk_subtitle">Messaggi generati localmente</string>
     <string name="device_talk_explain">I messaggio in questa chat vengono generati localmente da Delta Chat. Gli sviluppatori li usano per informarti sugli aggiornamenti o sui problemi d\'utilizzo.</string>
-    <string name="device_talk_welcome_message">Benvenuto in Delta Chat! - Delta Chat ha l\'aspetto e lo stile di altre popolari applicazioni di messaggistica, ma non costringe ad un controllo centralizzato, al tracciamento o alla vendita tua,  dei tuoi amici, colleghi o familiari a grandi organizzazioni.\n \n Tecnicamente, Delta Chat è un\'applicazione di posta elettronica con un\'interfaccia moderna. L\'email sotto una nuova vesta 👻 \n \nUtilizza Delta Chat con chiunque: basta conoscere il loro indirizzo e-mail. I destinatari non hanno bisogno di installare Delta Chat, visitare siti web o iscriversi da nessuna parte -  ma, naturalmente se lo desiderano, puoi suggerirgli 👉 https://get.delta.chat</string>
+    <string name="device_talk_welcome_message">Benvenuto in Delta Chat! - Delta Chat ha l\'aspetto e lo stile di altre popolari applicazioni di messaggistica, ma non costringe ad un controllo centralizzato, al tracciamento o alla vendita tua,  dei tuoi amici, colleghi o familiari a grandi organizzazioni.\n \n Tecnicamente, Delta Chat è un\'applicazione di posta elettronica con un\'interfaccia moderna. L\'email in una nuova veste 👻 \n \nUtilizza Delta Chat con chiunque: basta conoscere il loro indirizzo e-mail. I destinatari non hanno bisogno di installare Delta Chat, visitare siti web o iscriversi da nessuna parte -  ma, naturalmente se lo desiderano, puoi suggerirgli 👉 https://get.delta.chat</string>
     <string name="edit_contact">Modifica contatto</string>
 
     <string name="mute_for_one_hour">Silenzia per 1 ora</string>
@@ -198,6 +197,7 @@
     <string name="share_location_for_two_hours">per 2 ore</string>
     <string name="share_location_for_six_hours">per 6 ore</string>
 
+    <string name="file_saved_to">File salvato su \"%1$s\".</string>
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Sei sicuro di voler abbandonare il gruppo?</string>
@@ -300,11 +300,7 @@
     <string name="tab_gallery_empty_hint">Immagini e video condivisi in questa chat vengono mostrati qui.</string>
     <string name="tab_docs_empty_hint">Documenti, musica e altri file condivisi in questa chat vengono mostrati qui.</string>
     <string name="media_preview">Anteprima dei Media</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Non lasciare i tuoi amici bloccati nelle app di messaggistica che li tengono prigionieri.</string>
-    <string name="invite_default_text">Passiamo a Delta Chat - %1$s - puoi scrivermi a %2$s</string>
+    <string name="send_message">Invia messaggio</string>
 
 
     <!-- welcome and login -->
@@ -329,6 +325,7 @@
     <string name="login_auth_method">Metodo di autorizzazione</string>
     <string name="login_info_oauth2_title">Usare il setup semplificato?</string>
     <string name="login_info_oauth2_text">L\'indirizzo email inserito supporta l\'autenticazione semplificata (OAuth2).\n\nContinuando, puoi autorizzare Delta Chat ad operare come app di messaggistica via e-mail.\n\nNon esistono server di Delta Chat, i tuoi dati restano nel tuo dispositivo!</string>
+    <string name="login_manually">Accedi manualmente</string>
     <string name="login_info_gmail_text">Per gli account GMail è necessario creare una password per le app se è attiva la verifica in 2 passaggi. Se queste impostazioni non sono disponibili, è necessario abilitare le app meno sicure.</string>
     <string name="login_certificate_checks">Controlli certificato</string>
     <string name="login_error_mail">Inserisci un indirizzo email valido</string>
@@ -359,10 +356,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_summary_on">o</string>
-    <string name="pref_summary_off">off</string>
-    <string name="pref_summary_default">predefinito</string>
-    <string name="pref_summary_custom">personalizzato</string>
     <string name="pref_using_custom">Personalizzato in uso: %s</string>
     <string name="pref_using_default">Predefinito in uso: %s</string>
     <string name="pref_profile_info_headline">Le tue info profilo</string>
@@ -450,9 +443,9 @@
     <string name="pref_background_btn_gallery">Seleziona dalla galleria</string>
     <string name="pref_imap_folder_handling">Gestione cartella IMAP</string>
     <string name="pref_imap_folder_warn_disable_defaults">Se disabiliti questa opzione assicurati che il tuo server e gli altri client siano configurati allo stesso modo.\n\nAltrimenti le cose potrebbero non funzionare affatto.</string>
-    <string name="pref_watch_inbox_folder">Vedi cartella In Arrivo</string>
-    <string name="pref_watch_sent_folder">Vedi cartella Inviati</string>
-    <string name="pref_watch_mvbox_folder">Vedi cartella DeltaChat</string>
+    <string name="pref_watch_inbox_folder">Controlla cartella In Arrivo</string>
+    <string name="pref_watch_sent_folder">Controlla cartella Inviata</string>
+    <string name="pref_watch_mvbox_folder">Controlla cartella DeltaChat</string>
     <string name="pref_send_copy_to_self">Auto-invia una copia</string>
     <string name="pref_auto_folder_moves">Sposta automaticamente nella cartella DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Le chat vengono spostate per evitare di riempire la cartella In Arrivo</string>
@@ -617,13 +610,10 @@
     <string name="verified_desktop">verificato</string>
     <string name="remove_desktop">Rimuovi</string>
     <string name="save_desktop">Salva</string>
-    <string name="show_qr_verify_code_desktop">Mostra codice QR di invito</string>
-    <string name="show_qr_invite_code_desktop">Mostra codice QR di invito</string>
     <string name="add_contact_desktop">Aggiungi contatto</string>
     <string name="login_required_desktop">richiesto</string>
     <string name="name_desktop">Nome</string>
     <string name="autocrypt_key_transfer_desktop">Trasferimento chiave Autocrypt</string>
-    <string name="initiate_key_transfer_title_desktop">Inizia trasferimento chiave</string>
     <string name="initiate_key_transfer_desktop">Un \'Messaggio di configurazione Autocrypt\' condivide in sicurezza le tue impostazioni end-to-end con altre app compatibili. Le impostazioni sono criptate con un codice mostrato qui che deve essere inserito nell\'altro dispositivo.</string>
     <string name="reply_to_message_desktop">Rispondi al messaggio</string>
     <string name="select_group_image_desktop">Seleziona immagine grupp</string>
@@ -665,9 +655,9 @@
     <string name="a11y_message_context_menu_btn_label">Azioni messaggio</string>
     <string name="a11y_background_preview_label">Anteprima sfondo</string>
 
-    <!-- Translators: These strings are only used on iOS -->
-    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Autorizzare l\'accesso alla camera ti permette di fare foto e video</string>
-    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Autorizzare l\'accesso alla rubrica ti permette di chattare con i contatti nel tuo dispositivo.</string>
-    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Autorizzare l\'accesso al microfono ti permette di registrare audio.</string>
-    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Autorizzare l\'accesso alla galleria ti permette di caricare foto da essa.</string>
+    <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
+    <string name="InfoPlist_NSCameraUsageDescription">Autorizzare l\'accesso alla camera ti permette di fare foto e video</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Autorizzare l\'accesso alla rubrica ti permette di chattare con i contatti nel tuo dispositivo.</string>
+    <string name="InfoPlist_NSMicrophoneUsageDescription">Autorizzare l\'accesso al microfono ti permette di registrare audio.</string>
+    <string name="InfoPlist_NSPhotoLibraryUsageDescription">Autorizzare l\'accesso alla galleria ti permette di caricare foto da essa.</string>
 </resources>

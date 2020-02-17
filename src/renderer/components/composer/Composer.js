@@ -70,12 +70,11 @@ const Composer = React.forwardRef((props, ref) => {
 
   if (isDisabled) {
     if (disabledReason) {
-      return <div
-        ref={ref}
-        className={'composer composer--disabled-message-input'}
-        style={{ textAlign: 'center', padding: '0.5rem', color: '#999' }}>
-        {tx(disabledReason)}
-      </div>
+      return (
+        <div ref={ref} className='composer composer--disabled-message-input'>
+          {tx(disabledReason)}
+        </div>
+      )
     } else {
       return <span />
     }

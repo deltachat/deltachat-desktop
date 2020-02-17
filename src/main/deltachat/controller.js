@@ -12,7 +12,7 @@ const { maybeMarkSeen } = require('../markseenFix')
 const { integerToHexColor } = require('../../shared/util')
 
 /**
- * @typedef {import('deltachat-node')} DeltaChat
+ * @typedef {import('deltachat-node').DeltaChat} DeltaChat
  */
 const DCAutocrypt = require('./autocrypt')
 const DCBackup = require('./backup')
@@ -345,6 +345,10 @@ class DeltaChatController extends EventEmitter {
     } else {
       return DeltaChatNode.getSystemInfo()
     }
+  }
+
+  getProviderInfo (email) {
+    return DeltaChatNode.getProviderFromEmail(email)
   }
 
   /**

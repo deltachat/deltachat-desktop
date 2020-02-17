@@ -68,8 +68,8 @@ export default function App (props:any) {
   function setupLocaleData (locale:string) {
     moment.locale(locale)
     const localeData: LocaleData = sendToBackendSync('locale-data', locale);
-    (window as any).localeData = localeData;
-    (window as any).translate = translate(localeData.messages)
+    window.localeData = localeData;
+    window.translate = translate(localeData.messages)
     setLocaleData(localeData)
   }
 

@@ -17,7 +17,7 @@ type AttachmentProps = { // TODO: replace "any" by the right type here
 }
 
 export default function Attachment({ attachment, text, conversationType, direction, message }: AttachmentProps) {
-  const tx = (window as any).translate;
+  const tx = window.translate;
   if (!attachment) {
     return null;
   }
@@ -53,7 +53,7 @@ export default function Attachment({ attachment, text, conversationType, directi
       : null, withContentAbove
       ? 'content-above'
       : null)}>
-      <img className='attachment-content' style={{ height: !isSticker && Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} />
+      <img className='attachment-content' src={attachment.url} />
     </div>);
   }
   else if (isVideo(attachment)) {
@@ -71,7 +71,7 @@ export default function Attachment({ attachment, text, conversationType, directi
       : null, withContentAbove
       ? 'content-above'
       : null)}>
-      <video className='attachment-content' style={{ height: Math.min(MAXIMUM_IMG_HEIGHT, height) + 'px' }} src={attachment.url} controls={true} />
+      <video className='attachment-content' src={attachment.url} controls={true} />
     </div>);
   }
   else if (isAudio(attachment)) {

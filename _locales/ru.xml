@@ -175,7 +175,6 @@
     <string name="menu_pause">Пауза</string>
     <string name="menu_scroll_to_bottom">Прокрутить вниз</string>
     <string name="menu_scroll_to_top">Прокрутить вверх</string>
-    <string name="menu_invite">Пригласить друзей</string>
     <string name="menu_help">Помощь</string>
     <string name="menu_select_all">Выбрать всё</string>
     <string name="menu_expand">Расширить</string>
@@ -209,7 +208,6 @@
     <string name="share_location_for_one_hour">1 час</string>
     <string name="share_location_for_two_hours">2 часа</string>
     <string name="share_location_for_six_hours">6 часов</string>
-
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Вы уверены, что хотите покинуть эту группу?</string>
@@ -322,13 +320,6 @@
     <string name="tab_gallery_empty_hint">Общедоступные изображения и видео будут отображены здесь, в этом чате.</string>
     <string name="tab_docs_empty_hint">Общедоступная музыка и другие файлы будут отображены здесь, в этом чате.</string>
     <string name="media_preview">Предварительный просмотр медиафайлов</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Друзья, не позволяйте другим, быть запертыми с залежалыми сообщениями.</string>
-    <string name="invite_default_text">Давайте перейдём на Delta Chat %1$s -  вы можете написать мне на %2$s</string>
-
-
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Мессенджер с самой широкой аудиторией в мире. Бесплатный и независимый.</string>
     <string name="welcome_start_messaging">Начать общение</string>
@@ -381,10 +372,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_summary_on">вкл.</string>
-    <string name="pref_summary_off">выкл.</string>
-    <string name="pref_summary_default">по умолчанию</string>
-    <string name="pref_summary_custom">персонализованно</string>
     <string name="pref_using_custom">Использовать персонализованно: %s</string>
     <string name="pref_using_default">Использовать по умолчанию: %s</string>
     <string name="pref_profile_info_headline">Личный профиль</string>
@@ -565,6 +552,9 @@
     <string name="contact_not_verified">Невозможно подтвердить %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Изменены параметры для %1$s</string>
+    <string name="verified_group_explain">Проверенные группы (экспериментальные) защищают от активных атак. Участники проверяются с помощью второго фактора другими участниками и сообщения всегда зашифрованы.</string>
+
+
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d новых сообщений в %2$d чатах.</string>
     <string name="notify_most_recent_from">Последнее от: %1$s</string>
@@ -595,6 +585,10 @@
     <string name="perm_explain_access_to_location_denied">Чтобы передать местоположение приложению Delta Chat нужно разрешить доступ к нему, но сейчас он заблокирован. Перейдите в меню настроек приложения, выберите \"Разрешения приложений\" и включите \"Местоположение\".</string>
     <string name="perm_enable_bg_reminder_title">Нажмите здесь, чтобы получать сообщения, когда Delta Chat находится в фоновом режиме.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat использует минимальные ресурсы и старается не разряжать батарею.</string>
+    <string name="perm_enable_bg_already_done">Вы уже разрешили Delta Chat получать сообщения в фоне.
+
+Если сообщения всё ещё не приходят в фоне, пожалуйста, проверьте также системные настройки.</string>
+
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Зашифрованное сообщение</string>
 
@@ -634,13 +628,10 @@
     <string name="verified_desktop">Проверенный</string>
     <string name="remove_desktop">Удалить</string>
     <string name="save_desktop">Сохранить</string>
-    <string name="show_qr_verify_code_desktop">Показать QR код приглашения</string>
-    <string name="show_qr_invite_code_desktop">Показать QR код приглашения</string>
     <string name="add_contact_desktop">Добавить контакт</string>
     <string name="login_required_desktop">требуется</string>
     <string name="name_desktop">Имя</string>
     <string name="autocrypt_key_transfer_desktop">Передача ключей Autocrypt</string>
-    <string name="initiate_key_transfer_title_desktop">Инициировать передачу ключа</string>
     <string name="initiate_key_transfer_desktop">Сообщение с параметрами Autocrypt служит для безопасной передачи параметров шифрования между собственными приложениями для работы с электронной почтой, поддерживающими протокол Autocrypt.\n\nЭти параметры шифруются с использованием специального кода, который показан здесь и должен быть введён в настраиваемом приложении.  </string>
     <string name="reply_to_message_desktop">Ответить на сообщение</string>
     <string name="select_group_image_desktop">Выбрать изображение группы</string>
@@ -682,9 +673,9 @@
     <string name="a11y_message_context_menu_btn_label">Действия с сообщением</string>
     <string name="a11y_background_preview_label">Предпросмотр фона</string>
 
-    <!-- Translators: These strings are only used on iOS -->
-    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Предоставление доступа к камере позволяет снимать фотографии и видео.</string>
-    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Предоставление доступа к адресной книге позволяет общаться с имеющимися на устройстве контактами.</string>
-    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Предоставление доступа к микрофону позволяет записывать звук.</string>
-    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Предоставление доступа к галерее фотографий позволяет загружать изображения из неё.</string>
+    <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
+    <string name="InfoPlist_NSCameraUsageDescription">Предоставление доступа к камере позволяет снимать фотографии и видео.</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Предоставление доступа к адресной книге позволяет общаться с имеющимися на устройстве контактами.</string>
+    <string name="InfoPlist_NSMicrophoneUsageDescription">Предоставление доступа к микрофону позволяет записывать звук.</string>
+    <string name="InfoPlist_NSPhotoLibraryUsageDescription">Предоставление доступа к галерее фотографий позволяет загружать изображения из неё.</string>
 </resources>

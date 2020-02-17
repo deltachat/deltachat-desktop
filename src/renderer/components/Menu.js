@@ -1,22 +1,31 @@
 import C from 'deltachat-node/constants'
 import React, { useContext } from 'react'
-import { callDcMethodAsync } from '../ipc'
+import { callDcMethodAsync, openHelp } from '../ipc'
 import { ipcRenderer } from 'electron'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import {
-  Menu,
-  MenuItem
+  Menu
 } from '@blueprintjs/core'
 import {
   archiveChat,
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
-  openEncryptionInfoDialog,
-  openEditGroupDialog,
-  openViewProfileDialog
+  openEditGroupDialog
 } from './helpers/ChatMethods'
+
+export function DeltaMenuItem ({ text, onClick }) {
+  return (
+    <li onClick={onClick}>
+      <a className='bp3-menu-item bp3-popover-dismiss'>
+        <div className='bp3-text-overflow-ellipsis bp3-fill'>
+          {text}
+        </div>
+      </a>
+    </li>
+  )
+}
 
 export default function DeltaMenu (props) {
   const {
@@ -45,8 +54,6 @@ export default function DeltaMenu (props) {
     }
     ipcRenderer.send('logout')
   }
-  const onEncrInfo = () => openEncryptionInfoDialog(screenContext, selectedChat)
-  const onViewProfile = async () => openViewProfileDialog(screenContext, selectedChat.contacts[0])
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
     const {
@@ -59,41 +66,28 @@ export default function DeltaMenu (props) {
     chatMenu = [
       <Menu.Divider key='divider1' />,
       showArchivedChats
-        ? <MenuItem key='archive' icon='export' text={tx('menu_unarchive_chat')}
+        ? <DeltaMenuItem key='archive' text={tx('menu_unarchive_chat')}
           onClick={() => onArchiveChat(false)} />
-        : <MenuItem key='unarchive' icon='import' text={tx('menu_archive_chat')}
+        : <DeltaMenuItem key='unarchive' text={tx('menu_archive_chat')}
           onClick={() => onArchiveChat(true)} />,
-      <MenuItem
+      <DeltaMenuItem
         key='delete'
-        icon='delete'
         text={tx('menu_delete_chat')}
         onClick={onDeleteChat} />,
-      !isGroup && <MenuItem
-        key='view'
-        icon='log-out'
-        text={tx('menu_view_profile')}
-        onClick={onViewProfile} />,
-      !isGroup && !isDeviceChat && <MenuItem
-        key='info'
-        icon='lock'
-        text={tx('encryption_info_desktop')}
-        onClick={onEncrInfo} />,
       isGroup && selfInGroup && <>
-        <MenuItem
+        <DeltaMenuItem
           key='edit'
-          icon='edit'
           text={tx('menu_edit_group')}
           onClick={onEditGroup}
         />
-        <MenuItem
+        <DeltaMenuItem
           key='leave'
-          icon='log-out' text={tx('menu_leave_group')}
+          text={tx('menu_leave_group')}
           onClick={onLeaveGroup}
         />
       </>,
-      !isGroup && !(isSelfTalk || isDeviceChat) && <MenuItem
+      !isGroup && !(isSelfTalk || isDeviceChat) && <DeltaMenuItem
         key='block'
-        icon='blocked-person'
         text={tx('menu_block_contact')}
         onClick={onBlockContact}
       />,
@@ -104,42 +98,37 @@ export default function DeltaMenu (props) {
   }
 
   return (<Menu>
-    <MenuItem key='chat' icon='plus' text={tx('menu_new_chat')} onClick={() => onCreateChat(screenContext)} />
-    {chatMenu}
-    <MenuItem
+    <DeltaMenuItem key='chat' text={tx('menu_new_chat')} onClick={() => onCreateChat(screenContext)} />
+    <DeltaMenuItem
+      key='request'
+      text={tx('menu_deaddrop')}
+      onClick={onContactRequests}
+    />
+    <DeltaMenuItem
       key='qr'
-      icon='camera'
       text={tx('qrshow_join_contact_title')}
       onClick={async () => {
         const qrCode = await callDcMethodAsync('chat.getQrCode', 0)
         screenContext.openDialog('QrInviteCode', { qrCode })
       }}
     />
-    <MenuItem
-      key='request'
-      icon='person'
-      text={tx('menu_deaddrop')}
-      onClick={onContactRequests}
-    />
-    <MenuItem
-      key='unblock'
-      icon='blocked-person'
-      text={tx('pref_blocked_contacts')}
-      onClick={onUnblockContacts}
-    />
-    <MenuItem
-      key='help'
-      icon='help'
-      text={tx('menu_help')}
-      id='help-page-link'
-      onClick={() => screenContext.openDialog('HelpPage')}
-    />
-    <MenuItem
+    {chatMenu}
+    <DeltaMenuItem
       key='settings'
-      icon='settings'
       text={tx('menu_settings')}
       onClick={() => screenContext.openDialog('Settings')}
     />
-    <MenuItem key='logout' icon='log-out' text={tx('switch_account_desktop')} onClick={logout} />
+    <DeltaMenuItem
+      key='unblock'
+      text={tx('pref_blocked_contacts')}
+      onClick={onUnblockContacts}
+    />
+    <DeltaMenuItem
+      key='help'
+      text={tx('menu_help')}
+      id='help-page-link'
+      onClick={() => openHelp()}
+    />
+    <DeltaMenuItem key='logout' text={tx('switch_account_desktop')} onClick={logout} />
   </Menu>)
 }

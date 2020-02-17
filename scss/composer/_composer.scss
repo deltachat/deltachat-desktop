@@ -1,6 +1,16 @@
 .composer {
   background-color: var(--composerBg);
   border-left: 1px solid rgba(16,22,26,0.1);
+  &.composer--disabled-message-input {
+    text-align: center;
+    padding: 0.5rem;
+    color: #999;
+    overflow: hidden;
+
+    @media only screen and (max-width: 830px) {
+      padding: 0px 3px;
+    }
+  }
 }
 
 .composer__attachment-button, .composer__emoji-button {

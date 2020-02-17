@@ -21,7 +21,6 @@ export default class ScreenController extends Component {
   state: { message: userFeedback|false };
   changeScreen:any;
   onShowAbout:any;
-  onShowHelp:any;
 
   constructor (public props:{logins:Login[], deltachat: AppState['deltachat']}) {
     super(props)
@@ -36,7 +35,6 @@ export default class ScreenController extends Component {
     this.openDialog = this.openDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
-    this.onShowHelp = this.showHelp.bind(this)
     this.dialogs = createRef()
   }
 
@@ -53,18 +51,16 @@ export default class ScreenController extends Component {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
-    ipcRenderer.on('showHelpDialog', this.onShowHelp)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('showHelpDialog', this.onShowHelp)
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
   }
 
   onError (_event:any, error:Error) {
-    const tx = (window as any).translate
+    const tx = window.translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
@@ -75,10 +71,6 @@ export default class ScreenController extends Component {
 
   showAbout () {
     this.openDialog('About')
-  }
-
-  showHelp () {
-    this.openDialog('HelpPage')
   }
   
   openDialog (name: string, props?:any) {

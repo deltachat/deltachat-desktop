@@ -91,11 +91,24 @@ export const MessageListInner = React.memo((props) => {
   } = props
 
   const _messageIdsToShow = messageIdsToShow(oldestFetchedMessageIndex, messageIds)
+  const tx = window.translate
 
   let specialMessageIdCounter = 0
+
+  let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
+
+  if (chat.isGroup) {
+    emptyChatMessage = chat.isUnpromoted ? tx('chat_new_group_hint') : tx('chat_no_messages')
+  } else if (chat.isSelfTalk) {
+    emptyChatMessage = tx('saved_messages_explain')
+  } else if (chat.isDeviceChat) {
+    emptyChatMessage = tx('device_talk_explain')
+  }
+
   return (
     <div id='message-list' ref={messageListRef} onScroll={onScroll}>
-      <ul >
+      <ul>
+        { messageIds.length < 1 ? <li><InfoMessage><p className='info-message'>{emptyChatMessage}</p></InfoMessage></li> : ''}
         {_messageIdsToShow.map((messageId, i) => {
           if (messageId === C.DC_MSG_ID_DAYMARKER) {
             const key = 'magic' + messageId + '_' + specialMessageIdCounter++
@@ -120,6 +133,7 @@ export const MessageListInner = React.memo((props) => {
   )
 }, (prevProps, nextProps) => {
   const areEqual = prevProps.messageIds === nextProps.messageIds &&
+    prevProps.messages === nextProps.messages &&
     prevProps.oldestFetchedMessageIndex === nextProps.oldestFetchedMessageIndex &&
     prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
 

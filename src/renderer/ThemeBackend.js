@@ -1,4 +1,5 @@
 const Color = require('color')
+
 const log = require('../shared/logger').getLogger('render/theme-backend')
 
 function changeContrast (colorString, factor) {
@@ -50,9 +51,9 @@ export function ThemeDataBuilder (theme) {
   // because it gets merged with the default theme later anyway
   let themeData = {
     // Misc
-    colorPrimary: '#53948c',
-    colorDanger: '#f96856',
-    colorNone: '#8ca5a1',
+    colorPrimary: theme.colorPrimary,
+    colorDanger: theme.colorDanger,
+    colorNone: theme.colorNone,
     ovalButtonBg: theme.ovalButtonBg,
     ovalButtonBgHover: undefinedGuard(
       theme.ovalButtonBg, c => changeContrast(c, 0.7)
@@ -125,8 +126,8 @@ export function ThemeDataBuilder (theme) {
     messageAttachmentIconBg: 'transparent', // Only changable with theme.raw
     messageAttachmentFileInfo: theme.textPrimary,
     // Login Screen
-    loginInputFocusColor: '#42A5F5',
-    loginButtonText: '#42A5F5',
+    loginInputFocusColor: theme.colorPrimary,
+    loginButtonText: theme.colorPrimary,
     deltaChatPrimaryFg: theme.textPrimary, // todo rename this var
     deltaChatPrimaryFgLight: theme.textSecondary, // todo rename this var
     // Context Menu
@@ -170,7 +171,7 @@ export function ThemeDataBuilder (theme) {
     // EmojiMart overwrites
     emojiMartText: theme.textPrimary,
     emojiMartBorder: theme.outlineColor,
-    emojiMartSearchBorder: theme.emojiMartBorder,
+    emojiMartSearchBorder: 'lightgrey',
     emojiMartBg: theme.bgPrimary,
     emojiMartOutsideRadius: '5px',
     emojiMartCategoryIcons: undefinedGuard(

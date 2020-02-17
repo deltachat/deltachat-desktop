@@ -6,12 +6,17 @@
     margin-top: 50px;
 
     & .gallery {
-        height: calc(100vh - 50px - 40px - 10px);
         overflow: scroll;
         padding-top: 20px;
 
         &>.item {
             float: left;
+            padding: 5px 5px 5px 5px;
         }
+    }
+    .no-media-message {
+      font-size: 1.1rem;
+      text-align: center;
+      margin-top: 5rem;
     }
 }

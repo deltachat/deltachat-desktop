@@ -137,6 +137,8 @@ $emojimart-search-height: 31px + 6px;
   border: none;
   background: var(--emojiMartBg);
   border-radius: 0px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
 }
 
 .emoji-mart-anchors svg,
@@ -151,6 +153,8 @@ $emojimart-search-height: 31px + 6px;
   top: calc(#{$esp-height} - #{$esp-header-height} + 13px);
   border-top: 0 solid var(--emojiMartBorder);
   background: var(--emojiMartBg);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 
 .emoji-mart-bar:first-child {

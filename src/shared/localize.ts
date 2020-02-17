@@ -12,8 +12,10 @@ export interface LocaleData {
 
 type getMessageOptions = { quantity?:string | number }
 
-export function translate (messages:LocaleData['messages']) {
-  function getMessage (key:string, substitutions:string[], raw_opts:string | getMessageOptions) {
+export type getMessageFunction = (key:string, substitutions?: string | string[], raw_opts?:string | getMessageOptions) => string
+
+export function translate (messages:LocaleData['messages']):getMessageFunction {
+  function getMessage (key:string, substitutions?: string | string[], raw_opts?:string | getMessageOptions) {
     let opts: getMessageOptions = {}
     if (typeof raw_opts === 'string') 
     opts = { quantity: raw_opts }

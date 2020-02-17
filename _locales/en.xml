@@ -163,7 +163,6 @@
     <string name="menu_pause">Pause</string>
     <string name="menu_scroll_to_bottom">Scroll to the bottom</string>
     <string name="menu_scroll_to_top">Scroll to the top</string>
-    <string name="menu_invite">Invite friends</string>
     <string name="menu_help">Help</string>
     <string name="menu_select_all">Select all</string>
     <string name="menu_expand">Expand</string>
@@ -198,6 +197,7 @@
     <string name="share_location_for_two_hours">for 2 hours</string>
     <string name="share_location_for_six_hours">for 6 hours</string>
 
+    <string name="file_saved_to">File saved to \"%1$s\".</string>
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Are you sure you want to leave this group?</string>
@@ -300,11 +300,7 @@
     <string name="tab_gallery_empty_hint">Images and videos shared in this chat will be displayed here.</string>
     <string name="tab_docs_empty_hint">Documents, music and other files shared in this chat will be displayed here.</string>
     <string name="media_preview">Media preview</string>
-    
-
-    <!-- invite -->
-    <string name="invite_slogan">Friends don\'t let friends locked in messaging silos.</string>
-    <string name="invite_default_text">Let\'s switch to Delta Chat - %1$s - you can text me at %2$s</string>
+    <string name="send_message">Send message</string>
 
 
     <!-- welcome and login -->
@@ -329,6 +325,7 @@
     <string name="login_auth_method">Authorization method</string>
     <string name="login_info_oauth2_title">Continue with simplified setup?</string>
     <string name="login_info_oauth2_text">The entered email address supports a simplified setup (OAuth 2.0).\n\nIn the next step, please allow Delta Chat to act as your Chat over Email app.\n\nThere are no Delta Chat servers, your data stays on your device.</string>
+    <string name="login_manually">Login manually</string>
     <string name="login_info_gmail_text">For Gmail Accounts you need to create an App-Password if you have \"2-Step Verification\" enabled. If this setting is not available, you need to enable \"Less secure apps\".</string>
     <string name="login_certificate_checks">Certificate checks</string>
     <string name="login_error_mail">Please enter a valid email address</string>
@@ -359,10 +356,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_summary_on">on</string>
-    <string name="pref_summary_off">off</string>
-    <string name="pref_summary_default">default</string>
-    <string name="pref_summary_custom">custom</string>
     <string name="pref_using_custom">Using custom: %s</string>
     <string name="pref_using_default">Using default: %s</string>
     <string name="pref_profile_info_headline">Your profile info</string>
@@ -617,13 +610,10 @@
     <string name="verified_desktop">verified</string>
     <string name="remove_desktop">Remove</string>
     <string name="save_desktop">Save</string>
-    <string name="show_qr_verify_code_desktop">Show QR invite code</string>
-    <string name="show_qr_invite_code_desktop">Show QR invite code</string>
     <string name="add_contact_desktop">Add contact</string>
     <string name="login_required_desktop">required</string>
     <string name="name_desktop">Name</string>
     <string name="autocrypt_key_transfer_desktop">Autocrypt key transfer</string>
-    <string name="initiate_key_transfer_title_desktop">Initiate key transfer</string>
     <string name="initiate_key_transfer_desktop">An Autocrypt Setup Message securely shares your end-to-end setup with other Autocrypt-compliant apps. The setup will be encrypted by a setup code displayed here and must be typed on the other device.</string>
     <string name="reply_to_message_desktop">Reply to message</string>
     <string name="select_group_image_desktop">Select group image</string>
@@ -665,9 +655,9 @@
     <string name="a11y_message_context_menu_btn_label">Message actions</string>
     <string name="a11y_background_preview_label">Background preview</string>
 
-    <!-- Translators: These strings are only used on iOS -->
-    <string name="INFOPLIST.Privacy._.Camera.Usage.Description">Allowing access to the camera lets you take photos and videos.</string>
-    <string name="INFOPLIST.Privacy._.Contacts.Usage.Description">Allowing access to your address book lets you chat with contacts from your device.</string>
-    <string name="INFOPLIST.Privacy._.Microphone.Usage.Description">Allowing access to the microphone lets you record audio.</string>
-    <string name="INFOPLIST.Privacy._.Photo.Library.Usage.Description">Allowing access to the photo library allows you to upload images from it.</string>
+    <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
+    <string name="InfoPlist_NSCameraUsageDescription">Delta Chat uses your camera to take and send photos and videos and to scan QR codes.</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat uses your contacts to show a list of email addresses you can write to. Delta Chat has no server, your contacts are not sent anywhere.</string>
+    <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat uses your microphone to record and send voice messages and videos with sound.</string>
+    <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat will let you choose which photos from your library to send.</string>
 </resources>

@@ -2,6 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- open help via F1
+
+### Changed
+- Open Help in browser
+
+## Fixed
+
 ## [0.999.1] - 2020-02-02
 
 ### Fixed

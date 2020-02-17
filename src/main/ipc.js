@@ -1,7 +1,8 @@
 module.exports = { init }
 
-const { app, ipcMain, dialog } = require('electron')
+const { app, ipcMain, dialog, shell } = require('electron')
 const path = require('path')
+const { join, relative } = require('path')
 const fs = require('fs-extra')
 const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
 const { getConfigPath } = require('./application-constants')
@@ -246,6 +247,26 @@ function init (cwd, state, logHandler) {
     dcController.configuring = false
     const deltachat = dcController.getState()
     sendState(deltachat)
+  })
+
+  ipcMain.on('help', async (_ev, locale) => {
+    const appPath = app.getAppPath()
+    const DestinationPath = join(getConfigPath(), 'help-cache')
+    await fs.ensureDir(join(DestinationPath, 'help'))
+
+    const contentFilePath = join(appPath, `/static/help/${locale}/help.html`)
+    const helpFile = await fs.exists(contentFilePath) ? contentFilePath : join(appPath, `/static/help/en/help.html`)
+    try {
+      await fs.exists(helpFile)
+      // copy help files and assets
+      await fs.copy(join(appPath, '/static/help/'), join(DestinationPath, 'help'))
+      // open new file
+      const newPath = join(DestinationPath, relative(join(appPath, '/static'), helpFile))
+      await fs.exists(newPath)
+      shell.openItem(newPath)
+    } catch (error) {
+      log.error('Can not load help file', error)
+    }
   })
 
   function sendStateToRenderer () {
