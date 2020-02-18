@@ -40,6 +40,8 @@ class DeltaChatController extends EventEmitter {
     super()
     this.cwd = cwd
     this.accountDir = false
+    this.configuring = false
+    this.updating = false
     this._resetState()
     if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
     /**
@@ -251,7 +253,6 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
       onError(error)
       if (this.configuring) {
-        // error when updating login credentials when being logged in
         this.onLoginFailure()
       }
     })
@@ -263,13 +264,20 @@ class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
       if (Number(progress) === 0) { // login failed
         this.onLoginFailure()
+        this.sendToRenderer('DC_EVENT_CONFIGURE_FAILED')
       }
     })
   }
 
   onLoginFailure () {
-    this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
-    this.loginController.logout()
+    if (this.updating) {
+      // error when updating login credentials when being logged in
+      this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
+      this.configuring = false
+      this.updating = false
+    } else {
+      this.loginController.logout()
+    }
   }
 
   onChatListChanged () {

@@ -49,6 +49,12 @@ export default class Settings extends React.Component {
   }
 
   async componentDidMount () {
+    await this.loadSettings()
+    const selfContact = await callDcMethodAsync('getContact', [C.DC_CONTACT_ID_SELF])
+    this.setState({ selfContact })
+  }
+
+  async loadSettings () {
     const settings = await callDcMethodAsync('settings.getConfigFor', [[
       'addr',
       'mail_pw',
@@ -91,9 +97,7 @@ export default class Settings extends React.Component {
       e2ee_enabled: settings['e2ee_enabled']
     }
 
-    const selfContact = await callDcMethodAsync('getContact', [C.DC_CONTACT_ID_SELF])
-
-    this.setState({ settings, advancedSettings, selfContact })
+    this.setState({ settings, advancedSettings })
   }
 
   onKeyTransferComplete () {
@@ -198,12 +202,21 @@ export default class Settings extends React.Component {
   }
 
   onLoginSubmit (config) {
+    const { closeDialog } = this.props
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
     ipcRenderer.send('updateCredentials', config)
+    ipcRenderer.once('DC_EVENT_CONFIGURE_FAILED', () => {
+      closeDialog('Settings')
+    })
+  }
+
+  onLoginSuccess () {
+    this.loadSettings()
   }
 
   onCancelLogin () {
+    // not yet implemented in core (issue #1159)
     ipcRenderer.send('cancelCredentialsUpdate')
   }
 

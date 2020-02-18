@@ -4,7 +4,6 @@ const { app, ipcMain, dialog, shell } = require('electron')
 const path = require('path')
 const { join, relative } = require('path')
 const fs = require('fs-extra')
-const os = require('os')
 const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
 const { getConfigPath } = require('./application-constants')
 
@@ -230,43 +229,23 @@ function init (cwd, state, logHandler) {
   })
 
   ipcMain.on('updateCredentials', (e, credentials) => {
-    const dir = path.join(os.tmpdir(), Date.now().toString())
-    if (!credentials.mail_pw) credentials.mail_pw = dcController.settings.getConfig('mail_pw')
-    // create a new instance to test the new login credentials
-    const tmp = new DeltaChatController(dir, state.saved)
-
-    tmp.on('error', error => main.send('error', error))
-
-    function onReadyCallback () {
-      const deltachat = dcController.getState()
-      const tmpDeltachat = tmp.getState()
-      deltachat.configuring = tmpDeltachat.configuring
-      sendState(deltachat)
-      if (tmpDeltachat.ready) {
-        // test login was successfull so we log in with the current account to update the DB config
-        dcController.loginController.login(
-          dcController.accountDir,
-          credentials,
-          sendStateToRenderer,
-          txCoreStrings(),
-          true
-        )
-        main.send('success', 'Configuration success!')
-        tmp.loginController.close()
-      }
+    if (!credentials.mail_pw) {
+      // this means another setting value was changed
+      credentials.mail_pw = dcController.settings.getConfig('mail_pw')
     }
-    // test login with a temporary instance
-    tmp.loginController.login(
-      dcController.accountDir,
-      credentials,
-      onReadyCallback,
-      txCoreStrings()
-    )
+    dcController.configuring = true
+    dcController.updating = true
+    sendStateToRenderer()
+    dcController.loginController.configure(credentials, () => {
+      dcController.configuring = false
+      main.send('success', 'Configuration success!')
+      sendStateToRenderer()
+    })
   })
 
   ipcMain.on('cancelCredentialsUpdate', () => {
+    dcController.configuring = false
     const deltachat = dcController.getState()
-    deltachat.configuring = false
     sendState(deltachat)
   })
 
