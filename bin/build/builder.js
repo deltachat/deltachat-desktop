@@ -7,7 +7,7 @@ run ./bin/build/builder.js
 
 General options:
 
--s              enable sourcemaps
+-S              disable sourcemaps
 -w, --watch     watch folder
 
 Only run specific stuff (default is everything):
@@ -31,7 +31,7 @@ const rc = require('rc')("Deltachat-Desktop-Builder", {
     static: false,
     special: false,
     // general options
-    s: true, // source maps
+    S: false, // no source maps
     watch: false, w: false, //watch
 })
 const {jsBuilder} = require('./build-js')
@@ -39,7 +39,7 @@ const {jsBuilder} = require('./build-js')
 const buildEverything = !(rc.styles || rc.js || rc.translations || rc.static || rc.special)
 
 const watch = rc.watch || rc.w
-const sourceMaps = rc.s
+const sourceMaps = !rc.S
 
 // General Preperations
 
@@ -69,7 +69,7 @@ if (buildEverything || rc.js) {
 
 // TRANSLATIONS
 
-if (buildEverything || rc.styles) {
+if (buildEverything || rc.translations) {
     const buildTranslations = (done) => {
         const { stdout, stderr, on } = child.spawn('node', ['bin/convert-translations-from-xml-to-json.js'])
         stdout.pipe(process.stdout)
