@@ -77,11 +77,10 @@ if (buildEverything || rc.translations) {
     stderr.pipe(process.stderr)
     if (done) on('close', done)
   }
+  buildTranslations()
   if (watch) {
     // (whats the usecase of this? live update after pulling in translations??)
     globWatch(['./_locales/*.xml'], buildTranslations)
-  } else {
-    buildTranslations()
   }
 }
 
@@ -91,15 +90,13 @@ if (buildEverything || rc.static) {
   const copyAction = async () => {
     // docs of fs-extra.copy https://github.com/jprichardson/node-fs-extra/blob/master/docs/copy.md
     await fs.copy('./static/', './html-dist/')
+    console.log('DONE: copy files from static folder')
   }
+  copyAction()
   if (watch) {
     // (whats the usecase of this? live update after pulling in translations??)
     globWatch(['./static/*'], (done) => {
       copyAction.then(done)
-    })
-  } {
-    copyAction().then(_ => {
-      console.log('DONE: copy files from static folder')
     })
   }
 }
