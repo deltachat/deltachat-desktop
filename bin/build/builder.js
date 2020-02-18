@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-/*
-
+const HELP = `
 run ./bin/build/builder.js
 (you need to run this in the projects directory)
 
@@ -17,9 +16,9 @@ Only run specific stuff (default is everything):
 --translations  build only translations
 --static        copy only static files
 
-// --special      release stuff like generating thumbnails for bg images
+${/* --special      release stuff like generating thumbnails for bg images */''}
+`.trim() + '\n'
 
-*/
 const child = require('child_process')
 const fs = require('fs-extra')
 const globWatch = require('glob-watcher')
@@ -36,6 +35,11 @@ const rc = require('rc')('Deltachat-Desktop-Builder', {
   w: false // watch
 })
 const { jsBuilder } = require('./build-js')
+
+if (rc.help || rc.h) {
+  process.stdout.write(HELP)
+  process.exit()
+}
 
 const buildEverything = !(rc.styles || rc.js || rc.translations || rc.static || rc.special)
 
