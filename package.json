@@ -101,7 +101,6 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-intl": "^3.0.0",
-    "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "cp-file": "^7.0.0",
     "depcheck": "^0.8.4",
