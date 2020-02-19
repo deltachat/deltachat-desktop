@@ -20,7 +20,7 @@ async function jsBuilder (watch, sourcemap) {
     '--out-dir', 'html-dist',
     '--out-file', 'bundle.js',
     '--public-url', './',
-    '--target', 'electron'
+    '--target', 'browser'
   ]
   if (!sourcemap) parcelArgs.push('--no-source-maps')
   await run('npx', parcelArgs)
