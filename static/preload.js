@@ -11,5 +11,9 @@
         clipboard: electron.clipboard
     }
 
+    window.native_dependency = {
+        EventEmitter: require('events').EventEmitter
+    }
+
     console.log({ global })
 })()

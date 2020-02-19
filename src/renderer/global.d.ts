@@ -10,6 +10,9 @@ declare global {
             remote: import('electron').Remote
             shell: import('electron').Shell
             clipboard: import('electron').Clipboard
+        },
+        native_dependency: {
+            EventEmitter: import('events').EventEmitter
         }
     }
 }
