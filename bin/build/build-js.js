@@ -5,7 +5,7 @@ const fs = require('fs-extra')
  * @param {boolean} watch
  * @param {boolean} sourcemap
  */
-async function jsBuilder (watch, sourcemap) {
+async function jsBuilder (watch, sourcemap, dev) {
   if (watch) {
     console.error('jsBuilder: Watch is not implemented yet')
     return
@@ -22,7 +22,14 @@ async function jsBuilder (watch, sourcemap) {
     '--public-url', './',
     '--target', 'electron'
   ]
+  const parcelENV = {}
+
   if (!sourcemap) parcelArgs.push('--no-source-maps')
+  if (dev) {
+    parcelArgs.push('--no-minify')
+    parcelENV['NODE_ENV'] = 'development'
+  }
+
   await run('npx', parcelArgs)
   console.log('Parcel (bundle + minification) completed')
 

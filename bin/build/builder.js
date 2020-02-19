@@ -8,6 +8,7 @@ General options:
 
 -S              disable sourcemaps
 -w, --watch     watch folder
+--prod          Enable minify and other optimisations that are disabled during development
 
 Only run specific stuff (default is everything):
 
@@ -32,7 +33,8 @@ const rc = require('rc')('Deltachat-Desktop-Builder', {
   // general options
   S: false, // no source maps
   watch: false,
-  w: false // watch
+  w: false, // watch
+  prod: false // production mode
 })
 const { jsBuilder } = require('./build-js')
 
@@ -45,6 +47,7 @@ const buildEverything = !(rc.styles || rc.js || rc.translations || rc.static || 
 
 const watch = rc.watch || rc.w
 const sourceMaps = !rc.S
+const envDev = !rc.prod
 
 // General Preperations
 
@@ -69,7 +72,7 @@ if (buildEverything || rc.styles) {
 // JS
 
 if (buildEverything || rc.js) {
-  jsBuilder(watch, sourceMaps)
+  jsBuilder(watch, sourceMaps, envDev)
 }
 
 // TRANSLATIONS
