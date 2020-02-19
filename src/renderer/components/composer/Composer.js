@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Button } from '@blueprintjs/core'
-const { remote } = window.electron_functions
 
 import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import logger from '../../../shared/logger'
 import EmojiAndStickerPicker from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
+const { remote } = window.electron_functions
 
 const log = logger.getLogger('renderer/composer')
 

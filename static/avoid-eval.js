@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 const eval = window.eval = function () {
   throw new Error(`Sorry, this app does not support window.eval().`)
 }

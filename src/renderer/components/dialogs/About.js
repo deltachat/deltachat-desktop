@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-const { openExternal } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
@@ -10,6 +9,7 @@ import {
   gitHubUrl,
   gitHubLicenseUrl
 } from '../../../shared/constants'
+const { openExternal } = window.electron_functions
 
 const log = logger.getLogger('renderer/dialogs/About')
 

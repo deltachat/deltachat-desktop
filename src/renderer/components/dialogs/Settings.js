@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-const { remote } = window.electron_functions
-const { ipcRenderer } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
 import { C } from 'deltachat-node/dist/constants'
 import {
@@ -18,6 +16,8 @@ import {
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
+const { remote } = window.electron_functions
+const { ipcRenderer } = window.electron_functions
 const { SettingsContext } = require('../../contexts')
 const MAGIC_PW = '9bbdc87b50bbc684'
 

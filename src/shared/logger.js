@@ -22,7 +22,7 @@ let handler, rc
 function setLogHandler (LogHandler, rcObject) {
   handler = LogHandler
   // get a clean, non-remote object that has just the values
-  rc = JSON.parse(JSON.stringify(rcObject)) 
+  rc = JSON.parse(JSON.stringify(rcObject))
 }
 
 function log ({ channel, isMainProcess }, level, stacktrace, args) {

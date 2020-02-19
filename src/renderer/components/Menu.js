@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
 import { callDcMethodAsync, openHelp } from '../ipc'
-const { ipcRenderer } = window.electron_functions
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import {
@@ -14,6 +13,7 @@ import {
   openBlockContactDialog,
   openEditGroupDialog
 } from './helpers/ChatMethods'
+const { ipcRenderer } = window.electron_functions
 
 export function DeltaMenuItem ({ text, onClick }) {
   return (

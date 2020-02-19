@@ -1,5 +1,4 @@
 import React from 'react'
-const { ipcRenderer } = window.electron_functions
 import { DeltaButtonPrimary } from './SmallDialog'
 import {
   Card,
@@ -9,6 +8,7 @@ import {
 } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
+const { ipcRenderer } = window.electron_functions
 
 class SetupMessagePanel extends React.Component {
   constructor (props) {
