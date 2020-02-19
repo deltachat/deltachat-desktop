@@ -52,7 +52,7 @@ function init (app, options) {
     x: initialBounds.x,
     y: initialBounds.y,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
       preload: defaults.preload
     }
   })
