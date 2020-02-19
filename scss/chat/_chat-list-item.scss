@@ -32,25 +32,6 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   }
 }
 
-.chat-list-item__avatar {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  height: 48px;
-  width: 48px;
-  border-radius: 24px;
-  min-width: 48px;
-
-  object-fit: cover;
-}
-.chat-list-item__default-avatar {
-  color: $color-chat-list-item-avatar-text;
-  font-size: 26px;
-  line-height: 48px;
-  text-align: center;
-
-  background-color: $color-chat-list-item-default-avatar-bg;
-}
-
 .chat-list-item__content {
   flex-grow: 1;
   margin-left: 10px;

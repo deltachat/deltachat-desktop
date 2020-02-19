@@ -17,6 +17,7 @@
   font-size: 26px;
   line-height: 48px;
   text-align: center;
+  user-select: none;
   &.large {
     height: 64px;
     width: 64px;
@@ -42,6 +43,7 @@
   margin-top: 8px;
   margin-bottom: 8px;
   border-radius: 100%;
+  user-select: none;
   &.large {
     height: 64px;
     width: 64px;
