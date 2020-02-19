@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import styled from 'styled-components'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'

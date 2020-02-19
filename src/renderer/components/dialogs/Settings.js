@@ -3,7 +3,7 @@ import crypto from 'crypto'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import {
   Elevation,
   H5,
