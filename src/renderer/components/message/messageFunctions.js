@@ -1,4 +1,3 @@
-import path from 'path'
 const { ipcRenderer, remote, shell } = window.electron_functions
 
 import { getLogger } from '../../../shared/logger'
@@ -29,12 +28,7 @@ const log = getLogger('render/msgFunctions')
  * @param {MsgObject} msg
  */
 export function onDownload (msg) {
-  const defaultPath = path.join(remote.app.getPath('downloads'), path.basename(msg.file))
-  remote.dialog.showSaveDialog({
-    defaultPath
-  }, (filename) => {
-    if (filename) ipcRenderer.send('saveFile', msg.file, filename)
-  })
+  window.preload_functions.downloadFile(msg.file)
 }
 
 /**

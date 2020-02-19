@@ -13,6 +13,9 @@ declare global {
         },
         native_dependency: {
             EventEmitter: import('events').EventEmitter
+        },
+        preload_functions: {
+            downloadFile: (file:string) => void
         }
     }
 }
