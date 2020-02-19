@@ -4,5 +4,12 @@ declare global {
     interface Window {
         translate: getMessageFunction
         localeData: LocaleData
+        electron_functions: {
+            // see static/preload.js
+            ipcRenderer: import('electron').IpcRenderer
+            remote: import('electron').Remote
+            shell: import('electron').Shell
+            clipboard: import('electron').Clipboard
+        }
     }
 }

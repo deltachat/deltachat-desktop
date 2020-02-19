@@ -1,6 +1,6 @@
 const React = require('react')
 const { defaultRules, blockRegex, anyScopeRegex } = require('simple-markdown')
-const { remote } = require('electron')
+const { remote } = window.electron_functions
 
 var ignoreCapture = function () { return {} }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { remote, clipboard } from 'electron'
+const { remote, clipboard } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'

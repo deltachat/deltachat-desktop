@@ -1,5 +1,5 @@
 import path from 'path'
-import { remote, ipcRenderer, shell } from 'electron'
+const { ipcRenderer, remote, shell } = window.electron_functions
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')

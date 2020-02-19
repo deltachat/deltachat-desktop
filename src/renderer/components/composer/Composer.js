@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Button } from '@blueprintjs/core'
-import { remote } from 'electron'
+const { remote } = window.electron_functions
 
 import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'

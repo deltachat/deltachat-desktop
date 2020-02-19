@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import crypto from 'crypto'
-import { ipcRenderer, remote } from 'electron'
+const { remote } = window.electron_functions
+const { ipcRenderer } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
 import { C } from 'deltachat-node'
 import {

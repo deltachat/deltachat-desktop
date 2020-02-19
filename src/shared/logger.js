@@ -1,11 +1,8 @@
 const esp = require('error-stack-parser')
-const { app, remote } = require('electron')
 const colors = require('colors/safe')
 const startTime = Date.now()
 
 const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
-
-const rc = remote ? remote.app.rc : app ? app.rc : {}
 
 const LoggerVariants = [
   { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
@@ -20,10 +17,12 @@ function printProcessLogLevelInfo () {
   console.info(`%cLogging Levels:\n${LoggerVariants.map((v) => `${v.emoji} ${v.level}`).join('\n')}`, emojiFontCss)
 }
 
-let handler
+let handler, rc
 
-function setLogHandler (LogHandler) {
+function setLogHandler (LogHandler, rcObject) {
   handler = LogHandler
+  // get a clean, non-remote object that has just the values
+  rc = JSON.parse(JSON.stringify(rcObject)) 
 }
 
 function log ({ channel, isMainProcess }, level, stacktrace, args) {
@@ -65,8 +64,6 @@ function getStackTrace () {
   return rc['machine-readable-stacktrace'] ? stack : stack.map(s => `\n${s.toString()}`).join()
 }
 
-const LOG_DEBUG = rc['log-debug']
-
 class Logger {
   constructor (channel) {
     this.channel = channel
@@ -74,7 +71,7 @@ class Logger {
   }
 
   debug (...args) {
-    if (!LOG_DEBUG) return
+    if (!rc['log-debug']) return
     log(this, 0, undefined, args)
   }
 

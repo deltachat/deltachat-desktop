@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
-import { remote } from 'electron'
+const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend } from '../ipc'
 import Login from './Login'
 import {

@@ -2,7 +2,7 @@
 
 import { DeltaChat, C } from 'deltachat-node';
 import React from 'react'
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron_functions
 import update from 'immutability-helper'
 import {
   DeltaInput,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron_functions
 import { DeltaButtonPrimary } from './SmallDialog'
 import {
   Card,

@@ -3,7 +3,7 @@
  * to be able to switch this layer later on...
  */
 
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron_functions
 const log = require('../shared/logger').getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer

@@ -1,5 +1,5 @@
 import React from 'react'
-import { remote } from 'electron'
+const { remote } = window.electron_functions
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 
