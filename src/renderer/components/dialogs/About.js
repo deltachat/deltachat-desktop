@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-const { openExternal, clipboard } = window.electron_functions
+const { openExternal } = window.electron_functions
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
@@ -32,7 +32,7 @@ export function DCInfo (props) {
   }, [])
 
   const copy2Clipboard = () => {
-    clipboard.writeText(JSON.stringify(content, null, 4))
+    navigator.clipboard.writeText(JSON.stringify(content, null, 4))
   }
 
   const keys = content && Object.keys(content)

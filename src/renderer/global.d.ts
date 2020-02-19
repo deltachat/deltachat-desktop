@@ -10,7 +10,6 @@ declare global {
             // see static/preload.js
             ipcRenderer: import('electron').IpcRenderer
             remote: import('electron').Remote
-            clipboard: import('electron').Clipboard
             openExternal: typeof Electron.shell.openExternal
             openItem: typeof Electron.shell.openItem
         },

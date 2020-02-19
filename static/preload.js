@@ -10,7 +10,6 @@
     window.electron_functions = {
         ipcRenderer: electron.ipcRenderer,
         remote: electron.remote,
-        clipboard: electron.clipboard,
         openExternal: electron.shell.openExternal,
         openItem: electron.shell.openItem,
     }
