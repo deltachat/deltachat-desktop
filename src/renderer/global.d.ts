@@ -1,5 +1,7 @@
 import { getMessageFunction, LocaleData } from "../shared/localize";
 
+import Electron from 'electron'
+
 declare global {
     interface Window {
         translate: getMessageFunction
@@ -8,8 +10,9 @@ declare global {
             // see static/preload.js
             ipcRenderer: import('electron').IpcRenderer
             remote: import('electron').Remote
-            shell: import('electron').Shell
             clipboard: import('electron').Clipboard
+            openExternal: typeof Electron.shell.openExternal
+            openItem: typeof Electron.shell.openItem
         },
         native_dependency: {
             EventEmitter: import('events').EventEmitter

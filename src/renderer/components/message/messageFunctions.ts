@@ -1,4 +1,4 @@
-const { shell } = window.electron_functions
+const { openItem } = window.electron_functions
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
@@ -13,7 +13,7 @@ export function onDownload (msg: MsgObject) {
 }
 
 export function openAttachmentInShell (msg: MsgObject) {
-  if (!shell.openItem(msg.file)) {
+  if (!openItem(msg.file)) {
     log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
   }
 }

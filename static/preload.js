@@ -1,5 +1,7 @@
 // this is not a module
 
+// make sure to also update src/renderer/global.d.ts
+// when making changes to this file!
 
 (() => {
     const electron = require('electron')
@@ -8,8 +10,9 @@
     window.electron_functions = {
         ipcRenderer: electron.ipcRenderer,
         remote: electron.remote,
-        shell: electron.shell,
-        clipboard: electron.clipboard
+        clipboard: electron.clipboard,
+        openExternal: electron.shell.openExternal,
+        openItem: electron.shell.openItem,
     }
 
     window.native_dependency = {
