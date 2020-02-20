@@ -1,5 +1,5 @@
 import path from 'path'
-import { remote, ipcRenderer, shell } from 'electron'
+import { ipcBackend, openItem, showSaveDialog } from '../../ipc'
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
@@ -30,10 +30,8 @@ const log = getLogger('render/msgFunctions')
  */
 export function onDownload (msg) {
   const defaultPath = path.join(remote.app.getPath('downloads'), path.basename(msg.file))
-  remote.dialog.showSaveDialog({
-    defaultPath
-  }, (filename) => {
-    if (filename) ipcRenderer.send('saveFile', msg.file, filename)
+  showSaveDialog({defaultPath}, (filename) => {
+    if (filename) ipcBackend.send('saveFile', msg.file, filename)
   })
 }
 
@@ -41,7 +39,7 @@ export function onDownload (msg) {
  * @param {MsgObject} msg
  */
 export function openAttachmentInShell (msg) {
-  if (!shell.openItem(msg.file)) {
+  if (!openItem(msg.file)) {
     log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
   }
 }

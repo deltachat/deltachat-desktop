@@ -1,9 +1,8 @@
 import React, { Fragment, useState, useContext } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { remote } from 'electron'
 import { C } from 'deltachat-node'
 
-import { callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync, showOpenDialog } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
@@ -139,7 +138,7 @@ export function useGroupImage (image) {
   const tx = window.translate
 
   const onSetGroupImage = () => {
-    remote.dialog.showOpenDialog({
+    showOpenDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile']

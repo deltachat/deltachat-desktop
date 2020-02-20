@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
-import { remote } from 'electron'
-import { sendToBackend, ipcBackend } from '../ipc'
+import { sendToBackend, ipcBackend, showOpenDialog } from '../ipc'
 import Login from './Login'
 import {
   Button,
@@ -100,7 +99,7 @@ const ImportButton = React.memo(function ImportButton (props) {
       filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
     }
 
-    remote.dialog.showOpenDialog(opts, filenames => {
+    showOpenDialog(opts, filenames => {
       if (!filenames || !filenames.length) return
       sendToBackend('backupImport', filenames[0])
       setShowDialog(true)

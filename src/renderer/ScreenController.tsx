@@ -2,7 +2,8 @@ import { Login, AppState } from "../shared/shared-types"
 
 import React from "react"
 import { Component, createRef } from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from './ipc'
+
 
 import { ScreenContext } from './contexts'
 import LoginScreen from'./components/LoginScreen'
@@ -48,15 +49,15 @@ export default class ScreenController extends Component {
   }
 
   componentDidMount () {
-    ipcRenderer.on('error', this.onError)
-    ipcRenderer.on('success', this.onSuccess)
-    ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcBackend.on('error', this.onError)
+    ipcBackend.on('success', this.onSuccess)
+    ipcBackend.on('showAboutDialog', this.onShowAbout)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
-    ipcRenderer.removeListener('error', this.onError)
-    ipcRenderer.removeListener('success', this.onSuccess)
+    ipcBackend.removeListener('showAboutDialog', this.onShowAbout)
+    ipcBackend.removeListener('error', this.onError)
+    ipcBackend.removeListener('success', this.onSuccess)
   }
 
   onError (_event:any, error:Error) {

@@ -2,7 +2,6 @@
 
 import { DeltaChat, C } from 'deltachat-node';
 import React from 'react'
-import { ipcRenderer } from 'electron'
 import update from 'immutability-helper'
 import {
   DeltaInput,
@@ -14,7 +13,7 @@ import {
   Collapse,
   Intent
 } from '@blueprintjs/core'
-import { callDcMethodAsync } from '../ipc'
+import { callDcMethodAsync, ipcBackend } from '../ipc'
 import ClickableLink from './helpers/ClickableLink';
 
 type credentialState = {
@@ -74,11 +73,11 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
   }
 
   componentDidMount () {
-    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
+    ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
+    ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', this._updateProgress)
   }
 
   _updateProgress (ev:any, [progress, _]:[number, any]) {
@@ -140,8 +139,8 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
 
   async emailChange (event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) {
     this.handleCredentialsChange(event)
-    const result = await callDcMethodAsync('getProviderInfo', [event.target.value])
-    this.setState({ provider_info: result || null })
+    const provider_info = (await callDcMethodAsync('getProviderInfo', [event.target.value]) || null) as ReturnType<typeof DeltaChat.getProviderFromEmail>
+    this.setState({ provider_info })
   }
 
   handleSubmit (event: any) {
@@ -167,7 +166,7 @@ export default class Login extends React.Component<LoginProps, LoginComponentSta
     if (mode === 'update') {
       this.props.onCancel()
     } else {
-      ipcRenderer.send('logout')
+      ipcBackend.send('logout')
     }
   }
 

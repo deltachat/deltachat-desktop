@@ -1,7 +1,6 @@
 import { C } from 'deltachat-node'
 import React, { useContext } from 'react'
-import { callDcMethodAsync, openHelp } from '../ipc'
-import { ipcRenderer } from 'electron'
+import { callDcMethodAsync, openHelp, ipcBackend } from '../ipc'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import {
@@ -52,7 +51,7 @@ export default function DeltaMenu (props) {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
     }
-    ipcRenderer.send('logout')
+    ipcBackend.send('logout')
   }
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {

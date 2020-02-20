@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from '../../ipc'
 import {
   Intent,
   ProgressBar,
@@ -22,11 +22,11 @@ export default class ImexProgress extends React.Component {
   }
 
   componentDidMount () {
-    ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
+    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
+    ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', this.onDcEventImexProgress)
   }
 
   render () {

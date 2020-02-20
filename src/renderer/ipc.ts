@@ -3,10 +3,29 @@
  * to be able to switch this layer later on...
  */
 
-import { ipcRenderer } from 'electron'
-const log = require('../shared/logger').getLogger('renderer/ipc')
+import { ipcRenderer, remote, clipboard as _clipboard } from 'electron'
+import { ExtendedApp, AppState } from '../shared/shared-types'
+import logger from '../shared/logger'
+
+const log = logger.getLogger('renderer/ipc')    
 
 export const ipcBackend = ipcRenderer
+
+export const appState: AppState = (remote.app as ExtendedApp).state 
+
+export const showOpenDialog = remote.dialog.showOpenDialog  
+
+export const openExternal = remote.shell.openExternal
+
+export const openItem = remote.shell.openItem
+
+export const showSaveDialog = remote.dialog.showSaveDialog
+
+export const showMessageBox = remote.dialog.showMessageBox
+
+export const getPath = remote.app.getPath 
+
+export const clipboard = _clipboard
 
 var backendLoggingStarted = false
 export function startBackendLogging () {
@@ -17,13 +36,13 @@ export function startBackendLogging () {
   ipcBackend.on('error', (e, ...args) => log.error(...args))
 }
 
-export function sendToBackend (event, ...args) {
+export function sendToBackend (event: string, ...args: any[]) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   ipcRenderer.send(event, ...args)
 }
 
-export function sendToBackendSync (event, ...args) {
+export function sendToBackendSync (event: string, ...args: any[]) {
   log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   return ipcRenderer.sendSync(event, ...args)
@@ -32,7 +51,7 @@ export function sendToBackendSync (event, ...args) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
-export function callDcMethod (methodName, args, cb) {
+export function callDcMethod (methodName: string, args?: any[], cb?: any) {
   const identifier = callDcMethodIdentifier++
   if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = 0
   const ignoreReturn = typeof cb !== 'function'
@@ -48,7 +67,7 @@ export function callDcMethod (methodName, args, cb) {
   })
 }
 
-export function callDcMethodAsync (fnName, args) {
+export function callDcMethodAsync (fnName: string, args: any[]) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
@@ -56,7 +75,7 @@ export function mainProcessUpdateBadge () {
   ipcRenderer.send('update-badge')
 }
 
-export function saveLastChatId (chatId) {
+export function saveLastChatId (chatId: number) {
   ipcRenderer.send('saveLastChatId', chatId)
 }
 

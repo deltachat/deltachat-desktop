@@ -1,11 +1,11 @@
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from './ipc'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 
 function main () {
   const logger = require('../shared/logger')
-  logger.setLogHandler((...args:any[]) => ipcRenderer.send('handleLogMessage', ...args))
+  logger.setLogHandler((...args:any[]) => ipcBackend.send('handleLogMessage', ...args))
   logger.printProcessLogLevelInfo()
 
   const App = require('./App').default

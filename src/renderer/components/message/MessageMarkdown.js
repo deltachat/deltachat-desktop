@@ -1,6 +1,6 @@
 const React = require('react')
 const { defaultRules, blockRegex, anyScopeRegex } = require('simple-markdown')
-const { remote } = require('electron')
+const { openExternal } = require('../../ipc')
 
 var ignoreCapture = function () { return {} }
 
@@ -54,7 +54,7 @@ const rules = Object.assign({
     react: function (node, output, state) {
       const onClick = (ev) => {
         ev.preventDefault()
-        remote.shell.openExternal(node.content)
+        openExternal(node.content)
       }
       return <a href={node.content} key={state.key} onClick={onClick}>{node.content}</a>
     }

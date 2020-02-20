@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from '../../ipc'
 
 import {
   Card,
@@ -77,11 +77,11 @@ export default class SendAutocryptSetupMessage extends React.Component {
   }
 
   componentDidMount () {
-    ipcRenderer.on('initiateKeyTransferResp', this.initiateKeyTransferResp)
+    ipcBackend.on('initiateKeyTransferResp', this.initiateKeyTransferResp)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('initiateKeyTransferResp', this.initiateKeyTransferResp)
+    ipcBackend.removeListener('initiateKeyTransferResp', this.initiateKeyTransferResp)
   }
 
   onClose () {
@@ -90,7 +90,7 @@ export default class SendAutocryptSetupMessage extends React.Component {
   }
 
   initiateKeyTransfer () {
-    ipcRenderer.send('initiateKeyTransfer')
+    ipcBackend.send('initiateKeyTransfer')
     this.setState({ loading: true })
   }
 

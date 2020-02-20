@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from '../../ipc'
 import { DeltaButtonPrimary } from './SmallDialog'
 import {
   Card,
@@ -79,16 +79,16 @@ export default class EnterAutocryptSetupMessage extends React.Component {
   }
 
   componentDidMount () {
-    ipcRenderer.on('continueKeyTransferResp', this.continueKeyTransferResp)
+    ipcBackend.on('continueKeyTransferResp', this.continueKeyTransferResp)
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeListener('continueKeyTransferResp', this.continueKeyTransferResp)
+    ipcBackend.removeListener('continueKeyTransferResp', this.continueKeyTransferResp)
   }
 
   continueKeyTransfer (key) {
     this.setState({ key, loading: true })
-    ipcRenderer.send('continueKeyTransfer', this.props.message.msg.id, key)
+    ipcBackend.send('continueKeyTransfer', this.props.message.msg.id, key)
   }
 
   render () {

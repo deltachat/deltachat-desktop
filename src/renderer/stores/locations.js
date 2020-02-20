@@ -1,6 +1,5 @@
-const { callDcMethod } = require('../ipc')
-const { ipcRenderer } = require('electron')
-const { Store } = require('./store')
+import { callDcMethod, ipcBackend } from '../ipc'
+import { Store } from './store'
 
 const defaultState = {
   selectedChat: null,
@@ -10,7 +9,7 @@ const defaultState = {
   },
   locations: []
 }
-const locationStore = new Store(defaultState)
+export const locationStore = new Store(defaultState)
 
 const getLocations = (chatId, mapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
@@ -29,7 +28,7 @@ const onLocationChange = (evt, payload) => {
   }
 }
 
-ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
+ipcBackend.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
   const { selectedChat, mapSettings } = locationStore.getState()
   if (contactId === 0) {
     // this means all locations were deleted
@@ -44,8 +43,8 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
 })
 
 // sometimes a MSGS_CHANGED is sent instead of locations changed
-ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
-ipcRenderer.on('DC_EVENT_INCOMING_MSG', onLocationChange)
+ipcBackend.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
+ipcBackend.on('DC_EVENT_INCOMING_MSG', onLocationChange)
 
 locationStore.reducers.push((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
@@ -62,4 +61,3 @@ locationStore.effects.push((action, state) => {
   }
 })
 
-module.exports = locationStore

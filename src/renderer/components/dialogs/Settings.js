@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import crypto from 'crypto'
-import { ipcRenderer, remote } from 'electron'
-import { callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync, ipcBackend, getPath, showOpenDialog} from '../../ipc'
 import { C } from 'deltachat-node'
 import {
   Elevation,
@@ -107,10 +106,10 @@ export default class Settings extends React.Component {
   onKeysImport () {
     const opts = {
       title: window.translate('pref_managekeys_import_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
+      defaultPath: getPath('downloads'),
       properties: ['openDirectory']
     }
-    remote.dialog.showOpenDialog(
+    showOpenDialog(
       opts,
       filenames => {
         if (filenames && filenames.length) {
@@ -118,7 +117,7 @@ export default class Settings extends React.Component {
             if (!response) {
               return
             }
-            ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
+            ipcBackend.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
               if (progress === 1000) {
                 this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_imported_from_x', filenames[0]) })
               }
@@ -132,7 +131,7 @@ export default class Settings extends React.Component {
 
   onKeysExport () {
     // TODO: ask for the user's password and check it using
-    // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
+    // var matches = ipcBackend.sendSync('dispatchSync', 'checkPassword', password)
 
     const opts = {
       title: window.translate('pref_managekeys_export_secret_keys'),
@@ -145,7 +144,7 @@ export default class Settings extends React.Component {
         confirmationDialog(this.translate('pref_managekeys_export_explain').replace('%1$s', filenames[0]), response => {
           if (!response) return
           if (filenames && filenames.length) {
-            ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+            ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
               this.props.userFeedback({ type: 'success', text: this.translate('pref_managekeys_secret_keys_exported_to_x', filename) })
             })
             callDcMethodAsync('settings.keysExport', [filenames[0]])
@@ -171,12 +170,12 @@ export default class Settings extends React.Component {
         if (!filenames || !filenames.length) {
           return
         }
-        ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+        ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
           this.props.userFeedback({ type: 'success', text: this.translate('pref_backup_written_to_x', filename) })
 
           closeDialog('ImexProgress')
         })
-        ipcRenderer.send('backupExport', filenames[0])
+        ipcBackend.send('backupExport', filenames[0])
         openDialog('ImexProgress', {})
       })
     })
@@ -187,15 +186,15 @@ export default class Settings extends React.Component {
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
   handleDesktopSettingsChange (key, value) {
-    ipcRenderer.send('updateDesktopSetting', key, value)
+    ipcBackend.send('updateDesktopSetting', key, value)
     if (key === 'notifications' && value === false) {
-      ipcRenderer.send('updateDesktopSetting', 'showNotificationContent', false)
+      ipcBackend.send('updateDesktopSetting', 'showNotificationContent', false)
     }
   }
 
   /** Saves settings to deltachat core */
   handleDeltaSettingsChange (key, value) {
-    ipcRenderer.sendSync('setConfig', key, value)
+    ipcBackend.sendSync('setConfig', key, value)
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
@@ -205,8 +204,8 @@ export default class Settings extends React.Component {
     const { closeDialog } = this.props
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
-    ipcRenderer.send('updateCredentials', config)
-    ipcRenderer.once('DC_EVENT_CONFIGURE_FAILED', () => {
+    ipcBackend.send('updateCredentials', config)
+    ipcBackend.once('DC_EVENT_CONFIGURE_FAILED', () => {
       closeDialog('Settings')
     })
   }
@@ -217,7 +216,7 @@ export default class Settings extends React.Component {
 
   onCancelLogin () {
     // not yet implemented in core (issue #1159)
-    ipcRenderer.send('cancelCredentialsUpdate')
+    ipcBackend.send('cancelCredentialsUpdate')
   }
 
   /*
@@ -265,7 +264,7 @@ export default class Settings extends React.Component {
   }
 
   componentWillUnmount () {
-    ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
+    ipcBackend.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
   renderDialogContent () {
@@ -466,10 +465,10 @@ class BackgroundSelector extends React.Component {
         this.setValue('var(--chatViewBg)')
         break
       case 'image':
-        ipcRenderer.send('selectBackgroundImage')
+        ipcBackend.send('selectBackgroundImage')
         break
       case 'pimage':
-        ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
+        ipcBackend.send('selectBackgroundImage', ev.target.dataset.url)
         break
       case 'color':
         this.colorInput && this.colorInput.click()

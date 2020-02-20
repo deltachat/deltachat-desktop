@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+import { ipcBackend } from '../../ipc'
 import mimeTypes from 'mime-types'
 
 /* Section - Data Copied in part from Signal */
@@ -77,6 +77,6 @@ export function getExtension({ fileName, contentType }: attachment) {
 
 export function dragAttachmentOut({ url }: attachment, dragEvent: DragEvent) {
   dragEvent.preventDefault()
-  ipcRenderer.send('ondragstart', url)
+  ipcBackend.send('ondragstart', url)
 }
 

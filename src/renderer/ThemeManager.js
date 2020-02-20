@@ -2,7 +2,7 @@ const React = require('react')
 const StyledThemeProvider = require('styled-components').ThemeProvider
 const { EventEmitter } = require('events')
 const { defaultTheme, ThemeDataBuilder: ThemeBuilder, defaultThemeData, ThemeVarOverwrite } = require('./ThemeBackend.js')
-const { ipcRenderer } = require('electron')
+const { ipcBackend } = require('./ipc')
 
 class ThemeManager extends EventEmitter {
   constructor () {
@@ -11,7 +11,7 @@ class ThemeManager extends EventEmitter {
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     window.ThemeManager = this // only for using from the dev console
-    ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
+    ipcBackend.on('theme-update', (e, data) => this.setTheme(data))
   }
 
   setTheme (theme) {

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Button } from '@blueprintjs/core'
-import { remote } from 'electron'
+import { showOpenDialog } from '../../ipc'
 
 import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
@@ -39,7 +39,7 @@ const Composer = React.forwardRef((props, ref) => {
   }
 
   const addFilename = () => {
-    remote.dialog.showOpenDialog({ properties: ['openFile'] }, filenames => {
+    showOpenDialog({ properties: ['openFile'] }, filenames => {
       if (filenames && filenames[0]) {
         chatStoreDispatch({ type: 'SEND_MESSAGE', payload: [chatId, '', filenames[0]] })
       }

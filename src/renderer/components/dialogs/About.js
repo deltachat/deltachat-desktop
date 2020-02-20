@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { remote, clipboard } from 'electron'
-import { callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync, openExternal, clipboard } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
 import logger from '../../../shared/logger'
@@ -15,7 +14,7 @@ const log = logger.getLogger('renderer/dialogs/About')
 
 export function ClickableLink (props) {
   const { href, text } = props
-  const onClick = () => { remote.shell.openExternal(href) }
+  const onClick = () => { openExternal(href) }
 
   return <a onClick={onClick} href={href}>{text}</a>
 }

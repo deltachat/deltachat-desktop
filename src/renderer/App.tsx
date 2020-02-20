@@ -4,7 +4,7 @@ import { SettingsContext } from './contexts'
 import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-import { remote } from 'electron'
+import { appState } from './ipc'
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
@@ -20,7 +20,7 @@ addLocaleData(enLocaleData)
 attachKeybindingsListener()
 
 export default function App (props:any) {
-  const [state, setState] = useState<AppState>((remote.app as ExtendedApp).state)
+  const [state, setState] = useState<AppState>(appState)
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {

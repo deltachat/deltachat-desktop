@@ -1,5 +1,5 @@
 import React from 'react'
-import { remote } from 'electron'
+import { showMessageBox } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 
@@ -12,7 +12,7 @@ export function confirmationDialogLegacy (message, opts, cb) {
     message: message,
     buttons: [tx('no'), tx('yes')]
   }
-  remote.dialog.showMessageBox(Object.assign(defaultOpts, opts), response => {
+  showMessageBox(Object.assign(defaultOpts, opts), response => {
     cb(response === 1) // eslint-disable-line
   })
 }
