@@ -1,7 +1,6 @@
 const React = require('react')
 const { openExternal } = require('../../ipc')
 
-
 class ClickableLink extends React.Component {
   constructor (props) {
     super(props)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import crypto from 'crypto'
-import { callDcMethodAsync, ipcBackend, getPath, showOpenDialog} from '../../ipc'
+import { callDcMethodAsync, ipcBackend, getPath, showOpenDialog } from '../../ipc'
 import { C } from 'deltachat-node'
 import {
   Elevation,
@@ -135,11 +135,11 @@ export default class Settings extends React.Component {
 
     const opts = {
       title: window.translate('pref_managekeys_export_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
+      defaultPath: getPath('downloads'),
       properties: ['openDirectory']
     }
 
-    remote.dialog.showOpenDialog(opts, filenames => {
+    showOpenDialog(opts, filenames => {
       if (filenames && filenames.length) {
         confirmationDialog(this.translate('pref_managekeys_export_explain').replace('%1$s', filenames[0]), response => {
           if (!response) return
@@ -163,10 +163,10 @@ export default class Settings extends React.Component {
       if (!response) return
       const opts = {
         title: this.translate('export_backup_desktop'),
-        defaultPath: remote.app.getPath('downloads'),
+        defaultPath: getPath('downloads'),
         properties: ['openDirectory']
       }
-      remote.dialog.showOpenDialog(opts, filenames => {
+      showOpenDialog(opts, filenames => {
         if (!filenames || !filenames.length) {
           return
         }
@@ -500,7 +500,7 @@ function ProfileImageSelector (props) {
   }
 
   const openSelectionDialog = () => {
-    remote.dialog.showOpenDialog({
+    showOpenDialog({
       title: tx('select_profile_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile']

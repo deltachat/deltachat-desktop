@@ -60,4 +60,3 @@ locationStore.effects.push((action, state) => {
     getLocations(chatId, state.mapSettings)
   }
 })
-

@@ -1,5 +1,5 @@
 import path from 'path'
-import { ipcBackend, openItem, showSaveDialog } from '../../ipc'
+import { ipcBackend, openItem, showSaveDialog, getPath } from '../../ipc'
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
@@ -29,8 +29,8 @@ const log = getLogger('render/msgFunctions')
  * @param {MsgObject} msg
  */
 export function onDownload (msg) {
-  const defaultPath = path.join(remote.app.getPath('downloads'), path.basename(msg.file))
-  showSaveDialog({defaultPath}, (filename) => {
+  const defaultPath = path.join(getPath('downloads'), path.basename(msg.file))
+  showSaveDialog({ defaultPath }, (filename) => {
     if (filename) ipcBackend.send('saveFile', msg.file, filename)
   })
 }
