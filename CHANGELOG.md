@@ -7,9 +7,7 @@
 
 ### Changed
 - Open Help in browser
-
-- Upgrade deltachat-node to `v1.0.0-beta.26`
-  - upgrade deltachat core version to `v1.0.0-beta.24`(https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta24)
+- Upgrade deltachat-node to `v1.25.0`
 
 ## Fixed
 
