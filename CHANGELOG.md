@@ -3,13 +3,44 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- open help via F1
 
 ### Changed
-- Open Help in browser
-- Upgrade deltachat-node to `v1.25.0`
 
 ## Fixed
+
+## Removed
+
+## [1.0.0] - 2020-02-22
+
+### Added
+- open help via F1
+- button to open DM chat in profile view
+- info messages are now selecteable
+- provider info
+- info message in empty chats
+- `--multiple-instances` flag to allow multiple deltachat instances 
+
+### Changed
+- Upgrade deltachat-node to `v1.25.0`
+- upgrade electron builder to `22.3.2`
+- upgrade electron to `6.1.7`
+- Open Help in browser
+- improved build process
+- Chat scrolling improvements
+- replace webpack with parcel
+- convert more
+- Restyle main menu
+- Media view doesn't go into fullscreen anymore.
+
+### Fixed
+- Small styling fixes
+- Fix qr images getting scrollable
+- Duplicate language entries in Language selection menu
+- Fix Message state was not updated in ChatView
+- Fix images so they don't cause horizontal scrolling anymore.
+
+### Removed
+- remove version from titlebar
 
 ## [0.999.1] - 2020-02-02
 
