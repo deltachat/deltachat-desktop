@@ -22,7 +22,7 @@ const DCLoginController = require('./login')
 const DCSettings = require('./settings')
 const DCStickers = require('./stickers')
 const DCChat = require('./chat')
-const DCContacts = require('./contacts')
+const DCContacts = require('./contacts').default
 const DCContext = require('./context')
 
 /**
