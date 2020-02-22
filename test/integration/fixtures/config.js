@@ -3,7 +3,7 @@ const conf = require('rc')('DCC', {})
 const fetch = require('node-fetch')
 
 if (conf.NEW_TMP_EMAIL === undefined) {
-  console.error('Missing NEW_TMP_EMAIL environment variable!')
+  console.error('Missing DCC_NEW_TMP_EMAIL environment variable!')
   process.exit(1)
 }
 
