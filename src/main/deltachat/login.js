@@ -90,23 +90,21 @@ module.exports = class DCLoginController extends SplitOut {
 
   updateDeviceChats () {
     this._dc.updateDeviceChats()
-    this._dc.addDeviceMessage('changelog-version-0.900.0-test9', `Changes in v0.900.0
+    this._dc.addDeviceMessage('changelog-version-1.0.0-4', `Changes in v1.0.0
 
-- Many new background images🖼️
-- You can copy a link by right clicking on the message and selecting "Copy link"
-- Finally keybindings. Press ALT+ArrowUp/Down to select next/previous chat. Jump to search with CTRL+k.
-- Fixed many message list annoyances
-- Performance & stability improvements
+We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This release includes traffic reductions, better performance, user experience improvements and bug fixes. Besides this, new users will be warned about providers which are known to make trouble with DeltaChat and get better & smaller cryptographic keys.
 
-Full changelog: http://delta.chat/a5f/ 
-    `)
+- sending of messages is now faster and more reliable
+- only messages that are displayed get downloaded
+- new button to open one-on-one chats
+- you can start multiple DeltaChat instances if you start it with the "--multiple-instances" argument (be careful with this one, don't use the same account in multiple instances!)
+- performance improvements on chat scrolling
+- restyle of various menus
+- many bug fixes
+- new users will get informed if their provider is known to need special care to run seamless with DeltaChat
+- new users will use Ed25519 keys (shorter & better cryptographic keys)            
 
-    this._dc.addDeviceMessage('changelog-version-0.999.0', `Changes in v0.999.0
-
-- You want to know better how DeltaChat works? The whole FAQ is now accessible in the app, even if you're offline. You can open it by clicking on "Help" in the menu!
-- We also fixed many bugs, the chatlist loads faster and the whole app feels more responsive.
-
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#09990---2020-02-02
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#10000---2020-02-22
     `)
   }
 }
