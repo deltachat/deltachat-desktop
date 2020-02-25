@@ -3,7 +3,7 @@ console.time('init')
 const fs = require('fs')
 const { ensureDirSync } = require('fs-extra')
 const { app, session } = require('electron')
-const rc = app.rc = require('./rc').default
+const rc = (app.rc = require('./rc').default)
 
 if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
@@ -12,7 +12,11 @@ if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
 }
 
 // Setup folders
-const { getConfigPath, getLogsPath, getAccountsPath } = require('./application-constants')
+const {
+  getConfigPath,
+  getLogsPath,
+  getAccountsPath,
+} = require('./application-constants')
 ensureDirSync(getConfigPath())
 ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())
@@ -26,7 +30,7 @@ logger.setLogHandler(logHandler.log, rc)
 process.on('exit', logHandler.end)
 
 // Report uncaught exceptions
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
   const error = { message: err.message, stack: err.stack }
   log.error('uncaughtError', error)
   throw err
@@ -46,7 +50,7 @@ app.isQuitting = false
 Promise.all([
   getLogins(),
   new Promise((resolve, reject) => app.on('ready', resolve)),
-  State.load()
+  State.load(),
 ])
   .then(onReady)
   .catch(error => {
@@ -54,7 +58,7 @@ Promise.all([
     process.exit(1)
   })
 
-function updateTheme () {
+function updateTheme() {
   const sendTheme = () => {
     const content = fs.readFileSync(app.rc['theme'])
     windows.main.send('theme-update', JSON.parse(content))
@@ -67,8 +71,8 @@ function updateTheme () {
   sendTheme()
 }
 
-function onReady ([logins, _appReady, loadedState]) {
-  const state = app.state = loadedState
+function onReady([logins, _appReady, loadedState]) {
+  const state = (app.state = loadedState)
   state.logins = logins
 
   app.saveState = () => State.save({ saved: state.saved })
@@ -114,7 +118,9 @@ function onReady ([logins, _appReady, loadedState]) {
     }
   }
 
-  cleanupLogFolder().catch(err => log.error('Cleanup of old logfiles failed: ', err))
+  cleanupLogFolder().catch(err =>
+    log.error('Cleanup of old logfiles failed: ', err)
+  )
 }
 
 app.once('ipcReady', () => {
@@ -132,13 +138,13 @@ app.once('ipcReady', () => {
   })
 })
 
-function quit (e) {
+function quit(e) {
   if (app.isQuitting) return
 
   app.isQuitting = true
   e.preventDefault()
 
-  function doQuit () {
+  function doQuit() {
     log.info('Quitting now. Bye.')
     app.quit()
   }
@@ -163,9 +169,10 @@ app.on('web-contents-created', (e, contents) => {
   })
 })
 
-let contentSecurity = 'default-src \' \'none\''
+let contentSecurity = "default-src ' 'none'"
 if (process.env.NODE_ENV === 'test') {
-  contentSecurity = 'default-src \'unsafe-inline\' \'self\' \'unsafe-eval\'; img-src \'self\' data:;'
+  contentSecurity =
+    "default-src 'unsafe-inline' 'self' 'unsafe-eval'; img-src 'self' data:;"
 }
 
 app.once('ready', () => {
@@ -174,8 +181,8 @@ app.once('ready', () => {
     fun({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurity]
-      }
+        'Content-Security-Policy': [contentSecurity],
+      },
     })
   })
 })

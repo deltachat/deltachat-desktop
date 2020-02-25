@@ -14,19 +14,24 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   cursor: pointer;
 
   &:hover {
-    background-color:#bbb;
+    background-color: #bbb;
   }
 
   &.skeleton {
     background-repeat: no-repeat;
-    background-image: radial-gradient(circle 24px, grey 99%, transparent 0),linear-gradient(grey 40px, transparent 0), linear-gradient(grey 40px, transparent 0), linear-gradient(grey 40px, transparent 0);
+    background-image: radial-gradient(circle 24px, grey 99%, transparent 0),
+      linear-gradient(grey 40px, transparent 0),
+      linear-gradient(grey 40px, transparent 0),
+      linear-gradient(grey 40px, transparent 0);
     background-size: 56px 56px, 200px 18px, 300px 16px, 40px 16px;
     background-position: 6px, 67px 12px, 67px 35px, 96% 12px;
     opacity: 0.1;
   }
 
   &.has-unread {
-    .chat-list-item__header__name, .chat-list-item__header__date, .chat-list-item__message__text{
+    .chat-list-item__header__name,
+    .chat-list-item__header__date,
+    .chat-list-item__message__text {
       font-weight: 300;
     }
   }
@@ -106,12 +111,11 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 }
 
 .forward-message-list-chat-list .chat-list-item {
-    padding-right: 20px;
-    padding-left: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
-
-.chat-list-item { 
+.chat-list-item {
   padding-right: 10px;
   padding-left: 10px;
 
@@ -134,7 +138,8 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   background-color: var(--chatListItemSelectedBg);
   color: var(--chatListItemSelectedText);
 
-  span.module-contact-name, .chat-list-item__message__text {
+  span.module-contact-name,
+  .chat-list-item__message__text {
     color: var(--chatListItemSelectedText);
   }
 
@@ -143,7 +148,7 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   }
 
   &:hover {
-      background-color: var(--chatListItemSelectedBg);
+    background-color: var(--chatListItemSelectedBg);
   }
 }
 
@@ -181,7 +186,7 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   font-size: medium;
 }
 
-.chat-list-item__archive-link { 
+.chat-list-item__archive-link {
   top: calc((64px - 18px) / 2);
   width: 100%;
   font-weight: 200;
@@ -193,6 +198,5 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   background-color: #ccc;
   &:hover {
     background-color: #bbb;
-  } 
+  }
 }
-

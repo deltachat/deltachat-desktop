@@ -10,7 +10,7 @@ $emojimart-search-height: 31px + 6px;
   height: $esp-height;
   right: 13px;
   bottom: 50px;
-  background-color:var(--emojiMartBg);
+  background-color: var(--emojiMartBg);
   border-radius: var(--emojiMartOutsideRadius);
   box-shadow: 0px 0px 0px 1px #00000017;
 }
@@ -18,7 +18,9 @@ $emojimart-search-height: 31px + 6px;
 .emoji-sticker-picker__sticker-picker {
   background: var(--emojiMartBg);
   width: 100%;
-  height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} + 1px);
+  height: calc(
+    #{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} + 1px
+  );
   margin-top: -1px;
   overflow: overlay;
   .disable-sticker & {
@@ -42,7 +44,6 @@ $emojimart-search-height: 31px + 6px;
   background: var(--emojiMartBg);
   border-top-left-radius: var(--emojiMartOutsideRadius);
   border-top-right-radius: var(--emojiMartOutsideRadius);
-
 }
 
 .emoji-sticker-picker__emoji-or-sticker-selector__button {
@@ -90,7 +91,8 @@ $emojimart-search-height: 31px + 6px;
   font-size: large;
   font-weight: 500;
   text-transform: capitalize;
-  font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif;
+  font-family: Roboto, 'Apple Color Emoji', NotoEmoji, 'Helvetica Neue', Arial,
+    Helvetica, NotoMono, sans-serif;
   font-size: 16px;
   font-weight: 500;
   height: 28px;
@@ -126,9 +128,8 @@ $emojimart-search-height: 31px + 6px;
   }
 }
 
-
 // Emojimart overwrites
-.emoji-mart-category-list>li {
+.emoji-mart-category-list > li {
   min-width: initial;
 }
 
@@ -176,7 +177,7 @@ $emojimart-search-height: 31px + 6px;
 .emoji-mart-search-icon {
   display: none;
 }
-.emoji-mart-search input{
+.emoji-mart-search input {
   background: var(--emojiMartBg);
   border-color: var(--emojiMartSearchBorder);
   color: var(--emojiMartInputText);
@@ -194,7 +195,7 @@ $emojimart-search-height: 31px + 6px;
 
 .emoji-mart-emoji-native,
 .emoji-mart {
-  font-family: inherit
+  font-family: inherit;
 }
 
 .emoji-mart-category .emoji-mart-emoji span {
@@ -216,10 +217,14 @@ $emojimart-search-height: 31px + 6px;
 }
 
 .emoji-mart-scroll {
-  height: calc(#{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} - #{$emojimart-search-height});
+  height: calc(
+    #{$esp-height} - #{$esp-header-height} - #{$esp-footer-height} - #{$emojimart-search-height}
+  );
   padding: 0 6px;
   .disable-sticker & {
-    height: calc(#{$esp-height} - #{$esp-footer-height} - #{$emojimart-search-height});
+    height: calc(
+      #{$esp-height} - #{$esp-footer-height} - #{$emojimart-search-height}
+    );
   }
 }
 

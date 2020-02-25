@@ -1,5 +1,5 @@
 .module-contact-name__profile-name {
-    font-style: italic;
+  font-style: italic;
 }
 
 .AvatarBubble {
@@ -26,7 +26,7 @@
   }
 }
 .AvatarBubble--NoSearchResults {
-  transform: rotate(45deg); 
+  transform: rotate(45deg);
   line-height: 46px;
   letter-spacing: 1px;
   &::after {
@@ -57,11 +57,11 @@
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
   }
-  
+
   .chat-list & {
     padding-left: 0px;
   }
-  
+
   .forward-message-list-chat-list & {
     width: 100%;
     padding: 0px 20px;

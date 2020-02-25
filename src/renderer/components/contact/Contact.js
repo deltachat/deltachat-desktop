@@ -4,39 +4,39 @@ import { ContactListItem } from '../conversations'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
 
-export function convertContactProps (contact) {
+export function convertContactProps(contact) {
   return {
     name: contact.name,
     email: contact.address,
     avatarPath: contact.profileImage,
     profileName: contact.displayName,
     isMe: contact.id === C.DC_CONTACT_ID_SELF,
-    verified: contact.isVerified
+    verified: contact.isVerified,
   }
 }
 
-export function RenderContact (props) {
+export function RenderContact(props) {
   const contact = props.contact
 
   var outgoingProps = convertContactProps(contact)
 
   const oldOnClick = props.onClick
-  outgoingProps.onClick = function (event) {
+  outgoingProps.onClick = function(event) {
     if (oldOnClick) oldOnClick(contact)
   }
 
   outgoingProps.color = props.color
 
-  return (<ContactListItem {...outgoingProps} />)
+  return <ContactListItem {...outgoingProps} />
 }
 
-export function renderAvatar (avatarPath, color, displayName) {
+export function renderAvatar(avatarPath, color, displayName) {
   return (
     <Avatar avatarPath={avatarPath} color={color} displayName={displayName} />
   )
 }
 
-export function isValidEmail (email) {
+export function isValidEmail(email) {
   // empty string is not allowed
   if (email === '') return false
   const parts = email.split('@')
@@ -56,27 +56,39 @@ export function isValidEmail (email) {
   return true
 }
 
-export function Avatar (props) {
+export function Avatar(props) {
   const { avatarPath, color, displayName, large } = props
   if (avatarPath) return AvatarImage({ large, avatarPath })
   const codepoint = displayName.codePointAt(0)
-  const initial = codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
+  const initial = codepoint
+    ? String.fromCodePoint(codepoint).toUpperCase()
+    : '#'
 
   return (
-    <div className={classNames('AvatarBubble', { large })} style={{ backgroundColor: color }}>
+    <div
+      className={classNames('AvatarBubble', { large })}
+      style={{ backgroundColor: color }}
+    >
       {initial}
     </div>
   )
 }
 
-export function AvatarImage ({ avatarPath, large, ...otherProps }) {
-  return <img className={classNames('AvatarImage', { large })} src={avatarPath} {...otherProps} />
+export function AvatarImage({ avatarPath, large, ...otherProps }) {
+  return (
+    <img
+      className={classNames('AvatarImage', { large })}
+      src={avatarPath}
+      {...otherProps}
+    />
+  )
 }
 
-export function QRAvatar () {
+export function QRAvatar() {
   return (
     <div className='AvatarBubble'>
-      <QRAvatarQRCodeImg src='../images/qr_icon.png'
+      <QRAvatarQRCodeImg
+        src='../images/qr_icon.png'
         className='sharp-pixel-image'
       />
     </div>
@@ -94,7 +106,9 @@ export const VerifiedIconImg = styled.img`
   height: 0.75em;
   margin-right: 2px;
 `
-export const VerifiedIcon = props => <VerifiedIconImg src='../images/verified.png' style={props.style} />
+export const VerifiedIcon = props => (
+  <VerifiedIconImg src='../images/verified.png' style={props.style} />
+)
 
 const ContactNameWrapper = styled.div`
   display: inline-block;
@@ -124,7 +138,7 @@ const ContactNameEmail = styled.p`
   text-overflow: ellipsis;
 `
 
-export function ContactName (displayName, address, isVerified) {
+export function ContactName(displayName, address, isVerified) {
   return (
     <ContactNameWrapper>
       <ContactNameDisplayName>
@@ -146,8 +160,14 @@ const ContactWrapper = styled.div`
     padding: 0px 10px;
   }
 `
-export default function Contact (props) {
-  const { profileImage, color, displayName, address, isVerified } = props.contact
+export default function Contact(props) {
+  const {
+    profileImage,
+    color,
+    displayName,
+    address,
+    isVerified,
+  } = props.contact
   return (
     <ContactWrapper>
       <Avatar {...{ avatarPath: profileImage, color, displayName }} />
@@ -163,18 +183,22 @@ const PseudoContactText = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
 `
-export function PseudoContact (props) {
+export function PseudoContact(props) {
   const { cutoff, text, subText } = props
   return (
     <ContactWrapper>
       {props.children ? props.children : renderAvatar(false, '#505050', cutoff)}
-      { !subText && <ContactNameWrapper><PseudoContactText>{text}</PseudoContactText></ContactNameWrapper> }
-      { subText && ContactName(text, subText, false) }
+      {!subText && (
+        <ContactNameWrapper>
+          <PseudoContactText>{text}</PseudoContactText>
+        </ContactNameWrapper>
+      )}
+      {subText && ContactName(text, subText, false)}
     </ContactWrapper>
   )
 }
 
-export function AvatarBubble (props) {
+export function AvatarBubble(props) {
   return (
     <div
       className={classNames(

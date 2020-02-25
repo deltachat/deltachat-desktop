@@ -1,9 +1,8 @@
-
 module.exports = {
-  integerToHexColor: function (integerColor) {
+  integerToHexColor: function(integerColor) {
     return '#' + integerColor.toString(16)
   },
-  escapeEmailForAccountFolder: function (path) {
+  escapeEmailForAccountFolder: function(path) {
     return encodeURIComponent(path).replace(/%/g, 'P')
-  }
+  },
 }

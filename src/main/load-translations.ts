@@ -6,7 +6,7 @@ const log = require('../shared/logger').getLogger('load-transaltions')
 
 import { translate } from '../shared/localize'
 
-export default function setup (app:any, locale:string) {
+export default function setup(app: any, locale: string) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
   let messages
@@ -45,12 +45,12 @@ export default function setup (app:any, locale:string) {
   return localeData
 }
 
-function retrieveLocaleFile (locale:string) {
+function retrieveLocaleFile(locale: string) {
   const onDiskLocale = locale.replace('-', '_')
   return path.join(__dirname, '..', '..', '_locales', onDiskLocale + '.json')
 }
 
-function getLocaleMessages (file:string) {
+function getLocaleMessages(file: string) {
   if (!fs.existsSync(file)) return false
   try {
     return JSON.parse(fs.readFileSync(file, 'utf-8'))

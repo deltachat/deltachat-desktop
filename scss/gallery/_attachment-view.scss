@@ -1,45 +1,45 @@
 .attachment-overlay {
-    .attachment-view {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(49, 49, 49, 1);
+  .attachment-view {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(49, 49, 49, 1);
 
-        img,
-        video {
-            width: 100vw;
-            max-height: 100vh;
-            object-fit: contain;
-        }
-
-        video {
-            width: 95vw;
-        }
+    img,
+    video {
+      width: 100vw;
+      max-height: 100vh;
+      object-fit: contain;
     }
 
-    .render-media-wrapper {
-        width: 100vw;
-        height: 100vh;
+    video {
+      width: 95vw;
     }
+  }
 
-    .btn-wrapper {
-        float: right;
-        position: absolute;
-        z-index: 10;
-        cursor: pointer;
+  .render-media-wrapper {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .btn-wrapper {
+    float: right;
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .download-btn {
+    height: 36px;
+    width: 36px;
+    display: inline-block;
+    @include color-svg('../images/download.svg', var(--messageButtons));
+
+    &:hover {
+      background-color: var(--messageButtons);
     }
-
-    .download-btn {
-        height: 36px;
-        width: 36px;
-        display: inline-block;
-        @include color-svg('../images/download.svg', var(--messageButtons));
-
-        &:hover {
-            background-color: var(--messageButtons);
-        }
-    }
+  }
 }

@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { AvatarBubble, AvatarImage } from '../contact/Contact'
-import {
-  CreateChatSearchInput
-} from './CreateChat-Styles'
+import { CreateChatSearchInput } from './CreateChat-Styles'
 
 export const GroupNameInput = styled.input`
   margin-left: 20px;
@@ -24,7 +22,7 @@ export const GroupSettingsContainer = styled.div`
   padding: 0px 40px 0px 40px;
 `
 export const GroupSeperator = styled.div`
-  margin: ${({ noMargin }) => noMargin ? '0px' : '20px -20px 0px -20px'};
+  margin: ${({ noMargin }) => (noMargin ? '0px' : '20px -20px 0px -20px')};
   padding: 10px 20px;
   background-color: var(--bp3DialogBgSecondary);
   color: var(--bp3MenuText);
@@ -49,7 +47,8 @@ export const GroupImageUnsetButtonWrapper = styled.div`
   top: -2px;
   background-color: #e56555;
   border-radius: 50%;
-  &:hover, span:hover {
+  &:hover,
+  span:hover {
     cursor: pointer;
   }
   span {
@@ -70,8 +69,13 @@ export const GroupImageUnsetButtonWrapper = styled.div`
   }
 `
 
-export const GroupImageUnsetButton = (props) => {
-  return <GroupImageUnsetButtonWrapper {...props} ><span /><span /></GroupImageUnsetButtonWrapper>
+export const GroupImageUnsetButton = props => {
+  return (
+    <GroupImageUnsetButtonWrapper {...props}>
+      <span />
+      <span />
+    </GroupImageUnsetButtonWrapper>
+  )
 }
 
 export const GroupImageWrapper = styled.div`
@@ -80,13 +84,31 @@ export const GroupImageWrapper = styled.div`
   }
 `
 
-export const GroupImage = (props) => {
-  const { groupImage, onSetGroupImage, onUnsetGroupImage, ...otherProps } = props
+export const GroupImage = props => {
+  const {
+    groupImage,
+    onSetGroupImage,
+    onUnsetGroupImage,
+    ...otherProps
+  } = props
   return (
     <GroupImageWrapper>
-      { groupImage && <AvatarImage avatarPath={groupImage} onClick={onSetGroupImage} {...otherProps} /> }
-      { !groupImage && <AvatarBubble onClick={onSetGroupImage} {...otherProps}>G</AvatarBubble> }
-      <GroupImageUnsetButton style={{ visibility: groupImage ? 'visible' : 'hidden' }} onClick={onUnsetGroupImage} />
+      {groupImage && (
+        <AvatarImage
+          avatarPath={groupImage}
+          onClick={onSetGroupImage}
+          {...otherProps}
+        />
+      )}
+      {!groupImage && (
+        <AvatarBubble onClick={onSetGroupImage} {...otherProps}>
+          G
+        </AvatarBubble>
+      )}
+      <GroupImageUnsetButton
+        style={{ visibility: groupImage ? 'visible' : 'hidden' }}
+        onClick={onUnsetGroupImage}
+      />
     </GroupImageWrapper>
   )
 }

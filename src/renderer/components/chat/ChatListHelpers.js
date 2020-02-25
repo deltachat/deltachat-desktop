@@ -6,11 +6,18 @@ import { useDebouncedCallback } from 'use-debounce'
 
 const log = logger.getLogger('renderer/helpers/ChatList')
 
-const debouncedGetChatListIds = debounce((listFlags, queryStr, queryContactId, cb) => {
-  callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], cb)
-}, 200)
+const debouncedGetChatListIds = debounce(
+  (listFlags, queryStr, queryContactId, cb) => {
+    callDcMethod(
+      'chatList.getChatListIds',
+      [listFlags, queryStr, queryContactId],
+      cb
+    )
+  },
+  200
+)
 
-export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
+export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
   if (!_queryStr) _queryStr = ''
 
   const [listFlags, setListFlags] = useState(_listFlags)
@@ -20,7 +27,11 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
 
   const getAndSetChatListIds = immediatly => {
     if (immediatly === true) {
-      callDcMethod('chatList.getChatListIds', [listFlags, queryStr, queryContactId], setChatListIds)
+      callDcMethod(
+        'chatList.getChatListIds',
+        [listFlags, queryStr, queryContactId],
+        setChatListIds
+      )
       return
     }
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
@@ -40,11 +51,21 @@ export function useChatListIds (_listFlags, _queryStr, _queryContactId) {
   }, [listFlags, queryStr, queryContactId])
 
   useEffect(() => {
-    log.debug('useChatListIds: listFlags, queryStr or queryContactId changed, refetching chatlistids')
+    log.debug(
+      'useChatListIds: listFlags, queryStr or queryContactId changed, refetching chatlistids'
+    )
     getAndSetChatListIds()
   }, [listFlags, queryStr, queryContactId])
 
-  return { chatListIds, listFlags, setListFlags, queryStr, setQueryStr, queryContactId, setQueryContactId }
+  return {
+    chatListIds,
+    listFlags,
+    setListFlags,
+    queryStr,
+    setQueryStr,
+    queryContactId,
+    setQueryContactId,
+  }
 }
 
 /**
@@ -77,7 +98,7 @@ export const useLazyChatListItems = chatListIds => {
     return [indexStart, indexEnd]
   }
 
-  const chatIdsInView = (offset) => {
+  const chatIdsInView = offset => {
     let [indexStart, indexEnd] = getIndexStartEndInView()
     if (offset) {
       indexStart = indexStart - offset
@@ -97,14 +118,16 @@ export const useLazyChatListItems = chatListIds => {
 
   const isChatIdInView = chatId => chatIdsInView().indexOf(chatId) !== -1
 
-  const fetchChatsInView = async (offset) => {
+  const fetchChatsInView = async offset => {
     if (isNotReady()) return
     const chatIds = chatIdsInView(offset)
     const chats = await fetchChats(chatIds)
 
     if (!chats) return
     // log.debug('useLazyChatListItems: Fetched chats in view', Object.keys(chats))
-    setChatItems(chatItems => { return { ...chatItems, ...chats } })
+    setChatItems(chatItems => {
+      return { ...chatItems, ...chats }
+    })
   }
 
   /**
@@ -121,9 +144,13 @@ export const useLazyChatListItems = chatListIds => {
   }
 
   const fetchChats = async (chatIds, force) => {
-    const chatIdsToFetch = chatIds.filter((i) => {
+    const chatIdsToFetch = chatIds.filter(i => {
       if (fetching.current.indexOf(i) === -1) {
-        if (typeof chatItems[i] === 'undefined' || chatItems[i] === null || force === true) {
+        if (
+          typeof chatItems[i] === 'undefined' ||
+          chatItems[i] === null ||
+          force === true
+        ) {
           return true
         }
       }
@@ -131,24 +158,34 @@ export const useLazyChatListItems = chatListIds => {
     })
     if (chatIdsToFetch.length === 0) return
     fetching.current.push(...chatIdsToFetch)
-    const chats = await callDcMethodAsync('chatList.getChatListItemsByIds', [chatIdsToFetch])
-    fetching.current = fetching.current.filter(i => chatIdsToFetch.indexOf(i) === -1)
+    const chats = await callDcMethodAsync('chatList.getChatListItemsByIds', [
+      chatIdsToFetch,
+    ])
+    fetching.current = fetching.current.filter(
+      i => chatIdsToFetch.indexOf(i) === -1
+    )
     return chats
   }
 
-  const refetchChatIfInViewUnsetOtherwise = async (chatId) => {
+  const refetchChatIfInViewUnsetOtherwise = async chatId => {
     if (chatId === 0) return
     if (isChatIdInView(chatId)) {
-      log.debug(`useLazyChatListItems: chat with id ${chatId} changed, it's in view therefore refetching`)
-      const chats = await fetchChats([chatId], true)
-      setChatItems(chatItems => { return { ...chatItems, ...chats } })
-    } else {
-      log.debug(`useLazyChatListItems: chat with id ${chatId} changed, it's NOT in view, unsetting if needed`)
-      setChatItems(chatItems => {
-        if (typeof chatItems[chatId] !== 'undefined') return { ...chatItems, [chatId]: undefined }
-        return chatItems
-      }
+      log.debug(
+        `useLazyChatListItems: chat with id ${chatId} changed, it's in view therefore refetching`
       )
+      const chats = await fetchChats([chatId], true)
+      setChatItems(chatItems => {
+        return { ...chatItems, ...chats }
+      })
+    } else {
+      log.debug(
+        `useLazyChatListItems: chat with id ${chatId} changed, it's NOT in view, unsetting if needed`
+      )
+      setChatItems(chatItems => {
+        if (typeof chatItems[chatId] !== 'undefined')
+          return { ...chatItems, [chatId]: undefined }
+        return chatItems
+      })
     }
   }
 
@@ -172,11 +209,16 @@ export const useLazyChatListItems = chatListIds => {
   }, [chatListIds, chatItems, scrollRef])
 
   useEffect(() => {
-    log.debug('useLazyChatListItems: chatListIds changed, updating chats in view')
+    log.debug(
+      'useLazyChatListItems: chatListIds changed, updating chats in view'
+    )
     fetchChatsInView(0)
     ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
     return () => {
-      ipcBackend.removeListener('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
+      ipcBackend.removeListener(
+        'DD_EVENT_CHATLIST_ITEM_CHANGED',
+        onChatListItemChanged
+      )
     }
   }, [chatListIds, chatItems, scrollRef])
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import logger from '../../shared/logger'
 
-export function useStore (StoreInstance) {
+export function useStore(StoreInstance) {
   const [state, setState] = useState(StoreInstance.getState())
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export function useStore (StoreInstance) {
 }
 
 class Store {
-  constructor (state, name) {
+  constructor(state, name) {
     this.state = state
     this.listeners = []
     this.reducers = []
@@ -22,15 +22,15 @@ class Store {
     this._log = logger.getLogger('renderer/stores/' + name)
   }
 
-  get log () {
+  get log() {
     return this._log
   }
 
-  getState () {
+  getState() {
     return this.state
   }
 
-  dispatch (action) {
+  dispatch(action) {
     this.log.debug('DISPATCH:', action)
     let state = this.state
     this.reducers.forEach(reducer => {
@@ -40,23 +40,28 @@ class Store {
       effect(action, state)
     })
     if (state !== this.state) {
-      this.log.debug(`DISPATCHING of "${action.type}" changed the state. Before:`, this.state, 'After:', state)
+      this.log.debug(
+        `DISPATCHING of "${action.type}" changed the state. Before:`,
+        this.state,
+        'After:',
+        state
+      )
       this.state = state
       this.listeners.forEach(listener => listener(this.state))
     }
   }
 
-  subscribe (listener) {
+  subscribe(listener) {
     this.listeners.push(listener)
     return this.unsubscribe.bind(this, listener)
   }
 
-  unsubscribe (listener) {
+  unsubscribe(listener) {
     const index = this.listeners.indexOf(listener)
     this.listeners.splice(index, 1)
   }
 
-  setState (state) {
+  setState(state) {
     this.state = state
     this.listeners.forEach(listener => listener(this.state))
   }

@@ -8,11 +8,18 @@ import { isValidEmail } from '../dialogs/CreateChat'
 import { callDcMethodAsync } from '../../ipc'
 import { selectChat } from '../../stores/chat'
 
-export default function ChatList (props) {
-  const { selectedChatId, showArchivedChats, onShowArchivedChats, queryStr } = props
+export default function ChatList(props) {
+  const {
+    selectedChatId,
+    showArchivedChats,
+    onShowArchivedChats,
+    queryStr,
+  } = props
   const queryStrIsEmail = isValidEmail(queryStr)
   const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
-  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
+  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
+    chatListIds
+  )
   const realOpenContextMenu = useRef(null)
 
   const onChatClick = chatId => {
@@ -21,10 +28,19 @@ export default function ChatList (props) {
   }
 
   useEffect(() => setQueryStr(queryStr), [queryStr])
-  useEffect(() => showArchivedChats ? setListFlags(C.DC_GCL_ARCHIVED_ONLY) : setListFlags(0), [showArchivedChats])
+  useEffect(
+    () =>
+      showArchivedChats
+        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
+        : setListFlags(0),
+    [showArchivedChats]
+  )
 
   const openContextMenu = (event, chatId) => {
-    if (realOpenContextMenu.current === null) throw new Error('Tried to open ChatListContextMenu before we recieved open method')
+    if (realOpenContextMenu.current === null)
+      throw new Error(
+        'Tried to open ChatListContextMenu before we recieved open method'
+      )
     const chat = chatItems[chatId]
     realOpenContextMenu.current(event, chat)
   }
@@ -32,14 +48,24 @@ export default function ChatList (props) {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('contacts.createContact', [false, queryStr])
-    const chatId = await callDcMethodAsync('contacts.createChatByContactId', contactId)
+    const contactId = await callDcMethodAsync('contacts.createContact', [
+      false,
+      queryStr,
+    ])
+    const chatId = await callDcMethodAsync(
+      'contacts.createChatByContactId',
+      contactId
+    )
     selectChat(chatId)
   }
 
   const renderAddContactIfNeeded = () => {
     if (queryStr === '' || chatListIds.length > 0) return null
-    return PseudoListItemAddContact({ queryStr, queryStrIsEmail, onClick: addContactOnClick })
+    return PseudoListItemAddContact({
+      queryStr,
+      queryStrIsEmail,
+      onClick: addContactOnClick,
+    })
   }
 
   return (
@@ -52,18 +78,20 @@ export default function ChatList (props) {
               key={chatId}
               chatListItem={chatItems[chatId]}
               onClick={onChatClick.bind(null, chatId)}
-              onContextMenu={(event) => { openContextMenu(event, chatId) }}
+              onContextMenu={event => {
+                openContextMenu(event, chatId)
+              }}
             />
           )
         })}
-        {chatListIds.length === 0 && queryStr === '' &&
-         null
-        }
+        {chatListIds.length === 0 && queryStr === '' && null}
         {renderAddContactIfNeeded()}
       </div>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}
-        getShow={show => { realOpenContextMenu.current = show }}
+        getShow={show => {
+          realOpenContextMenu.current = show
+        }}
       />
     </>
   )

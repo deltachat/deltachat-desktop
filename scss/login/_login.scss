@@ -1,5 +1,5 @@
 .login-form {
-  button[type="submit"] {
+  button[type='submit'] {
     margin-right: 1rem;
   }
 
@@ -155,8 +155,8 @@ div.delta-form-group {
 
   &.delta-select {
     .bp3-select::after {
-      content: ">";
-      font: 11px "Consolas", monospace;
+      content: '>';
+      font: 11px 'Consolas', monospace;
       transform: rotate(90deg);
     }
     .bp3-select {

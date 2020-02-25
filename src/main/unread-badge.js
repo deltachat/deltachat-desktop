@@ -4,13 +4,16 @@ const { app, ipcMain } = require('electron')
 /**
  * @param {import('./deltachat/controller')} dc
  */
-function setupUnreadBadge (dc) {
+function setupUnreadBadge(dc) {
   if (process.platform !== 'linux' && process.platform !== 'darwin') return
 
   let reUpdateTimeOut
 
-  async function update () {
-    const count = await dc.callMethod(null, 'chatList.getGeneralFreshMessageCounter')
+  async function update() {
+    const count = await dc.callMethod(
+      null,
+      'chatList.getGeneralFreshMessageCounter'
+    )
     app.setBadgeCount(count)
   }
 

@@ -1,4 +1,4 @@
-function selectFirstChatListItem () {
+function selectFirstChatListItem() {
   let chatItemToSelect = document.querySelector('.chat-list-item')
   if (chatItemToSelect.classList.contains('chat-list-item--is-deaddrop')) {
     chatItemToSelect = chatItemToSelect.nextSibling
@@ -6,35 +6,44 @@ function selectFirstChatListItem () {
   selectChatItem(chatItemToSelect)
 }
 
-function selectChatItem (domChatItem) {
+function selectChatItem(domChatItem) {
   if (domChatItem.classList.contains('chat-list-item--is-deaddrop')) return
   domChatItem.click()
   domChatItem.scrollIntoView({ block: 'nearest' })
   setTimeout(() => document.querySelector('#composer-textarea').focus(), 300)
 }
 
-function scrollSelectedChatItemIntoView () {
-  const selectedChatItem = document.querySelector('.chat-list-item--is-selected')
+function scrollSelectedChatItemIntoView() {
+  const selectedChatItem = document.querySelector(
+    '.chat-list-item--is-selected'
+  )
   if (selectedChatItem) selectedChatItem.scrollIntoView({ block: 'nearest' })
 }
 
-function setSearchInputValue (value) {
+function setSearchInputValue(value) {
   const chatListSearch = document.querySelector('#chat-list-search')
-  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+    window.HTMLInputElement.prototype,
+    'value'
+  ).set
   nativeInputValueSetter.call(chatListSearch, value)
-  const ev2 = new Event('input', { bubbles: true}); // eslint-disable-line
+  const ev2 = new Event('input', { bubbles: true }) // eslint-disable-line
   chatListSearch.dispatchEvent(ev2)
 }
 
-export default function attachKeybindingsListener () {
-  document.addEventListener('keydown', function (Event) {
+export default function attachKeybindingsListener() {
+  document.addEventListener('keydown', function(Event) {
     if (Event.altKey && Event.key === 'ArrowDown') {
-      const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
+      const selectedChatItems = document.getElementsByClassName(
+        'chat-list-item--is-selected'
+      )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const nextChatItem = selectedChatItems[0].nextSibling
       selectChatItem(nextChatItem)
     } else if (Event.altKey && Event.key === 'ArrowUp') {
-      const selectedChatItems = document.getElementsByClassName('chat-list-item--is-selected')
+      const selectedChatItems = document.getElementsByClassName(
+        'chat-list-item--is-selected'
+      )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const previousChatItem = selectedChatItems[0].previousSibling
       selectChatItem(previousChatItem)
@@ -42,11 +51,17 @@ export default function attachKeybindingsListener () {
       const chatListSearch = document.querySelector('#chat-list-search')
       setSearchInputValue('')
       chatListSearch.focus()
-    } else if (Event.key === 'Escape' && Event.target.id === 'chat-list-search') {
+    } else if (
+      Event.key === 'Escape' &&
+      Event.target.id === 'chat-list-search'
+    ) {
       setSearchInputValue('')
       document.querySelector('#composer-textarea').focus()
       setTimeout(() => scrollSelectedChatItemIntoView(), 300)
-    } else if (Event.key === 'Enter' && Event.target.id === 'chat-list-search') {
+    } else if (
+      Event.key === 'Enter' &&
+      Event.target.id === 'chat-list-search'
+    ) {
       Event.preventDefault()
       selectFirstChatListItem()
       setSearchInputValue('')

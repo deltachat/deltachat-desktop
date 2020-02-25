@@ -4,11 +4,11 @@ import { Dialog } from '@blueprintjs/core'
 
 export const DeltaButton = styled.p`
   color: ${({ color }) => color || 'var(--colorNone)'};
-  padding: ${({ noPadding }) => !noPadding ? '0 2px' : '0px'};
+  padding: ${({ noPadding }) => (!noPadding ? '0 2px' : '0px')};
   margin-bottom: 0px;
-  letter-spacing: ${({ bold }) => bold === false ? '0px' : '2px'};
+  letter-spacing: ${({ bold }) => (bold === false ? '0px' : '2px')};
   font-size: initial;
-  font-weight: ${({ bold }) => bold === false ? 'initial' : 'bold'};
+  font-weight: ${({ bold }) => (bold === false ? 'initial' : 'bold')};
   text-align: center;
   text-transform: uppercase;
   padding: 5px;
@@ -28,7 +28,7 @@ export const DeltaButtonDanger = styled(DeltaButton)`
   color: var(--colorDanger);
 `
 
-export default function SmallDialog (props) {
+export default function SmallDialog(props) {
   return (
     <Dialog
       isOpen={props.isOpen}

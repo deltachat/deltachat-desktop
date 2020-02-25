@@ -2,21 +2,18 @@ const windows = require('./windows')
 const { appIcon } = require('./application-constants')
 const { appName } = require('../shared/constants')
 
-const {
-  app,
-  Notification
-} = require('electron')
+const { app, Notification } = require('electron')
 
 /**
  * @param {import('./deltachat/controller')} dc
  * @param {*} settings
  */
-module.exports = function (dc, settings) {
+module.exports = function(dc, settings) {
   if (!Notification.isSupported()) return
 
   let notify
 
-  async function getMsgBody (msgId) {
+  async function getMsgBody(msgId) {
     const tx = app.translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
     var json = await dc.callMethod(null, 'messageList.messageIdToJson', [msgId])
@@ -29,7 +26,7 @@ module.exports = function (dc, settings) {
       notify = new Notification({
         title: appName,
         body: await getMsgBody(msgId),
-        icon: appIcon()
+        icon: appIcon(),
       })
       notify.show()
       notify.on('click', () => {

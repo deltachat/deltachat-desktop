@@ -2,49 +2,72 @@ const Color = require('color')
 
 const log = require('../shared/logger').getLogger('render/theme-backend')
 
-function changeContrast (colorString, factor) {
+function changeContrast(colorString, factor) {
   // TODO make the black check code work
-  const color = Color(colorString).hex() === '#000000' ? Color('#010101') : Color(colorString)
+  const color =
+    Color(colorString).hex() === '#000000'
+      ? Color('#010101')
+      : Color(colorString)
   if (color.isDark()) {
     // console.log('dark')
-    return color.lighten(factor).rgb().string()
+    return color
+      .lighten(factor)
+      .rgb()
+      .string()
   } else if (color.isLight()) {
     // console.log('light')
-    return color.darken(factor).rgb().string()
+    return color
+      .darken(factor)
+      .rgb()
+      .string()
   }
 }
 
-function invertColor (colorString) {
-  return Color(colorString).negate().rgb().string()
+function invertColor(colorString) {
+  return Color(colorString)
+    .negate()
+    .rgb()
+    .string()
 }
 
-function changeSaturation (colorString, factor) {
+function changeSaturation(colorString, factor) {
   const color = Color(colorString)
   if (factor < 0) {
-    return color.desaturate(factor *= -1).rgb().string()
+    return color
+      .desaturate((factor *= -1))
+      .rgb()
+      .string()
   } else if (factor > 0) {
-    return color.saturate(factor).rgb().string()
+    return color
+      .saturate(factor)
+      .rgb()
+      .string()
   } else {
     return color.rgb().string()
   }
 }
 
-function blendColor (colorString0, colorString1, factor) {
+function blendColor(colorString0, colorString1, factor) {
   const color0 = Color(colorString0)
   const color1 = Color(colorString1)
-  return color0.mix(color1, factor).rgb().string()
+  return color0
+    .mix(color1, factor)
+    .rgb()
+    .string()
 }
 
-function undefinedGuard (rawValue, func) {
+function undefinedGuard(rawValue, func) {
   const values = Array.isArray(rawValue) ? rawValue : [rawValue]
   return notUndefined(...values) ? func(...values) : undefined
 }
 
-function notUndefined (...variables) {
-  return !variables.map(v => typeof v === 'undefined').reduce((acc, cur) => acc || cur)
+function notUndefined(...variables) {
+  return !variables
+    .map(v => typeof v === 'undefined')
+    .reduce((acc, cur) => acc || cur)
 }
 
-export function ThemeDataBuilder (theme) {
+export function ThemeDataBuilder(theme) {
   // todo resolve all strings to be dependent on vars of the highLevelObject
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
@@ -55,49 +78,58 @@ export function ThemeDataBuilder (theme) {
     colorDanger: theme.colorDanger,
     colorNone: theme.colorNone,
     ovalButtonBg: theme.ovalButtonBg,
-    ovalButtonBgHover: undefinedGuard(
-      theme.ovalButtonBg, c => changeContrast(c, 0.7)
+    ovalButtonBgHover: undefinedGuard(theme.ovalButtonBg, c =>
+      changeContrast(c, 0.7)
     ),
     ovalButtonText: theme.ovalButtonText,
-    ovalButtonTextHover: undefinedGuard(
-      theme.ovalButtonText, c => changeSaturation(invertColor(c), -1)
+    ovalButtonTextHover: undefinedGuard(theme.ovalButtonText, c =>
+      changeSaturation(invertColor(c), -1)
     ),
     // NavBar
     navBarBackground: theme.bgNavBar,
     navBarText: theme.textNavBar,
     navBarSearchPlaceholder: undefinedGuard(
-      theme.textNavBar, c => changeContrast(c, 0.27) // '#d0d0d0',
+      theme.textNavBar,
+      c => changeContrast(c, 0.27) // '#d0d0d0',
     ),
-    navBarGroupSubtitle: undefinedGuard(
-      theme.textNavBar, c => changeContrast(c, 0.27)
+    navBarGroupSubtitle: undefinedGuard(theme.textNavBar, c =>
+      changeContrast(c, 0.27)
     ),
     // ChatView
     chatViewBg: theme.bgChatView,
-    chatViewBgImgPath: undefinedGuard(
-      theme.bgImagePath, path => path !== 'none' ? `url(${path})` : 'none'
+    chatViewBgImgPath: undefinedGuard(theme.bgImagePath, path =>
+      path !== 'none' ? `url(${path})` : 'none'
     ),
     // ChatView - Composer
     composerBg: theme.bgPrimary,
     composerText: theme.textPrimary,
-    composerPlaceholderText: undefinedGuard(
-      theme.textPrimary, c => Color(c).alpha(0.5).rgb().string()
+    composerPlaceholderText: undefinedGuard(theme.textPrimary, c =>
+      Color(c)
+        .alpha(0.5)
+        .rgb()
+        .string()
     ),
-    composerBtnColor: undefinedGuard(
-      theme.textPrimary, c => Color(c).alpha(0.9).rgb().string()
+    composerBtnColor: undefinedGuard(theme.textPrimary, c =>
+      Color(c)
+        .alpha(0.9)
+        .rgb()
+        .string()
     ),
     composerSendButton: '#415e6b',
     emojiSelectorSelectionColor: theme.accentColor,
     // Chat List
     chatListItemSelectedBg: '#4c6e7d',
-    chatListItemSelectedBgHover: undefinedGuard(
-      true, _ => Color('#4c6e7d').lighten(0.24).hex()
+    chatListItemSelectedBgHover: undefinedGuard(true, _ =>
+      Color('#4c6e7d')
+        .lighten(0.24)
+        .hex()
     ),
     chatListItemSelectedText: theme.bgPrimary,
-    chatListItemBgHover: undefinedGuard(
-      theme.bgPrimary, c => changeContrast(c, 0.3)
+    chatListItemBgHover: undefinedGuard(theme.bgPrimary, c =>
+      changeContrast(c, 0.3)
     ),
-    chatListBorderColor: undefinedGuard(
-      theme.bgPrimary, bg => Color(bg).isDark() ? '#111' : '#b9b9b9'
+    chatListBorderColor: undefinedGuard(theme.bgPrimary, bg =>
+      Color(bg).isDark() ? '#111' : '#b9b9b9'
     ),
     chatListBorder: '1px solid ' + undefinedGuard(theme.chatListBorderColor),
     // Message Bubble
@@ -132,8 +164,8 @@ export function ThemeDataBuilder (theme) {
     deltaChatPrimaryFgLight: theme.textSecondary, // todo rename this var
     // Context Menu
     contextMenuBg: theme.bgPrimary,
-    contextMenuBorder: undefinedGuard(
-      theme.bgSecondary, c => changeContrast(c, 0.1)
+    contextMenuBorder: undefinedGuard(theme.bgSecondary, c =>
+      changeContrast(c, 0.1)
     ),
     contextMenuText: theme.textSecondary,
     contextMenuSelected: theme.bgSecondary,
@@ -175,15 +207,17 @@ export function ThemeDataBuilder (theme) {
     emojiMartBg: theme.bgPrimary,
     emojiMartOutsideRadius: '5px',
     emojiMartCategoryIcons: undefinedGuard(
-      [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.4)
+      [theme.textPrimary, theme.bgSecondary],
+      (c1, c2) => blendColor(c1, c2, 0.4)
     ),
     emojiMartInputBg: theme.bgSecondary,
     emojiMartInputText: theme.textPrimary,
     emojiMartInputPlaceholder: undefinedGuard(
-      [theme.textPrimary, theme.bgSecondary], (c1, c2) => blendColor(c1, c2, 0.3)
+      [theme.textPrimary, theme.bgSecondary],
+      (c1, c2) => blendColor(c1, c2, 0.3)
     ),
-    emojiMartSelect: undefinedGuard(
-      theme.bgSecondary, c => blendColor(c, invertColor(c), 0.2)
+    emojiMartSelect: undefinedGuard(theme.bgSecondary, c =>
+      blendColor(c, invertColor(c), 0.2)
     ),
     // Misc
     galleryBg: theme.bgPrimary,
@@ -204,15 +238,24 @@ export function ThemeDataBuilder (theme) {
     videoPlayBtnBg: '#ffffff', // Only changable with theme.raw
     scrollbarThumb: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
-      (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t).rgb().string()
+      (t, c) =>
+        Color(Color(c).isDark() ? 'white' : 'grey')
+          .alpha(t)
+          .rgb()
+          .string()
     ),
     scrollbarThumbHover: undefinedGuard(
       [theme.scrollbarTransparency, theme.bgPrimary],
-      (t, c) => Color(Color(c).isDark() ? 'white' : 'grey').alpha(t + 0.14).rgb().string()
-    )
-
+      (t, c) =>
+        Color(Color(c).isDark() ? 'white' : 'grey')
+          .alpha(t + 0.14)
+          .rgb()
+          .string()
+    ),
   }
-  Object.keys(themeData).forEach(key => themeData[key] === undefined ? delete themeData[key] : '')
+  Object.keys(themeData).forEach(key =>
+    themeData[key] === undefined ? delete themeData[key] : ''
+  )
   if (theme.raw) {
     themeData = Object.assign(themeData, theme.raw)
     log.debug('theme.raw', theme.raw, themeData)
@@ -225,7 +268,7 @@ export const defaultTheme = Object.freeze(require('../../themes/light.json'))
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ThemeVarOverwrite = (theme) => {
+export const ThemeVarOverwrite = theme => {
   var css = ''
   for (var key in defaultThemeData) {
     if (Object.hasOwnProperty.bind(defaultThemeData, key)) {

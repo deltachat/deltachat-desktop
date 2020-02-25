@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
-import DeltaDialog, {
-  DeltaDialogBody,
-  DeltaDialogContent
-} from './DeltaDialog'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import contactsStore from '../../stores/contacts'
 
 import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
 
-export default function UnblockContacts (props) {
+export default function UnblockContacts(props) {
   const { isOpen, onClose } = props
   const [blockedContacts, setBlockedContacts] = useState(null)
   const [hadBlockedContacts, setHadBlockedContacts] = useState(null)
   const screenContext = useContext(ScreenContext)
 
   const onContactsUpdate = ({ blockedContacts }) => {
-    if (hadBlockedContacts === null) setHadBlockedContacts(blockedContacts.length !== 0)
+    if (hadBlockedContacts === null)
+      setHadBlockedContacts(blockedContacts.length !== 0)
     setBlockedContacts(blockedContacts)
   }
   useEffect(() => {
@@ -32,7 +30,7 @@ export default function UnblockContacts (props) {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
-      cb: yes => yes && blockContact(id)
+      cb: yes => yes && blockContact(id),
     })
   }
 
@@ -47,17 +45,21 @@ export default function UnblockContacts (props) {
     >
       <DeltaDialogBody>
         <DeltaDialogContent>
-          { blockedContacts.length === 0 &&
-            <p>{tx('none_blocked_desktop')}</p>
-          }
-          { blockedContacts.length > 0 &&
-            <div style={{ overflow: 'scroll', height: '100%', backgroundColor: 'var(--bp3DialogBgPrimary)' }}>
+          {blockedContacts.length === 0 && <p>{tx('none_blocked_desktop')}</p>}
+          {blockedContacts.length > 0 && (
+            <div
+              style={{
+                overflow: 'scroll',
+                height: '100%',
+                backgroundColor: 'var(--bp3DialogBgPrimary)',
+              }}
+            >
               <ContactList2
                 contacts={blockedContacts}
                 onClick={onUnblockContact}
               />
             </div>
-          }
+          )}
         </DeltaDialogContent>
       </DeltaDialogBody>
     </DeltaDialog>

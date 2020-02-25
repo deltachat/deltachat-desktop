@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogContentTextSeperator } from './DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogHeader,
+  DeltaDialogBody,
+  DeltaDialogContent,
+  DeltaDialogContentTextSeperator,
+} from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
 import { integerToHexColor } from '../../../shared/util'
 import styled from 'styled-components'
@@ -37,7 +43,7 @@ export const ProfileInfoName = ({ name, address }) => {
 
 export const ProfileInfoAvatar = ContactAvatar
 
-export function ContactAvatar ({ contact }) {
+export function ContactAvatar({ contact }) {
   const { displayName, profileImage } = contact
   const color = Number.isInteger(contact.color)
     ? integerToHexColor(contact.color)
@@ -46,15 +52,17 @@ export function ContactAvatar ({ contact }) {
     avatarPath: profileImage,
     color,
     displayName,
-    large: true
+    large: true,
   })
 }
 
-export function useEffectAsync (cb, dependencies) {
-  useEffect(() => { cb() }, dependencies)
+export function useEffectAsync(cb, dependencies) {
+  useEffect(() => {
+    cb()
+  }, dependencies)
 }
 
-export function useStateAsync (initial, cb) {
+export function useStateAsync(initial, cb) {
   const [value, setValue] = useState(initial)
   useEffectAsync(async () => {
     setValue(await Promise.resolve(cb))
@@ -62,12 +70,14 @@ export function useStateAsync (initial, cb) {
   return [value, setValue]
 }
 
-export default function ViewProfile (props) {
+export default function ViewProfile(props) {
   const { isOpen, onClose, contact } = props
 
   const { chatListIds } = useChatListIds('', 0, contact.id)
   // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
-  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
+  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
+    chatListIds
+  )
 
   const tx = window.translate
 
@@ -76,16 +86,14 @@ export default function ViewProfile (props) {
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [contact.id])
+    const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [
+      contact.id,
+    ])
     onChatClick(dmChatId)
   }
 
   return (
-    <DeltaDialogBase
-      isOpen={isOpen}
-      onClose={onClose}
-      fixed
-    >
+    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       <DeltaDialogHeader
         title={tx('menu_view_profile')}
         onClose={onClose}
@@ -95,15 +103,33 @@ export default function ViewProfile (props) {
         <DeltaDialogContent noPadding>
           <ProfileInfoContainer>
             <ProfileInfoAvatar contact={contact} />
-            <ProfileInfoName name={contact.displayName} address={contact.address} />
+            <ProfileInfoName
+              name={contact.displayName}
+              address={contact.address}
+            />
           </ProfileInfoContainer>
-          <Button style={{ marginLeft: '90px', marginBottom: '30px' }} onClick={onSendMessage}>{tx('send_message')}</Button>
-          <DeltaDialogContentTextSeperator style={{ margin: '10px 0px' }} text={tx('profile_shared_chats')} />
-          <div className='mutual-chats' ref={scrollRef} onScroll={onChatListScroll}>
-            {
-              chatListIds.map(chatId => <ChatListItem key={chatId} chatListItem={chatItems[chatId]} onClick={onChatClick.bind(null, chatId)} />
-              )
-            }
+          <Button
+            style={{ marginLeft: '90px', marginBottom: '30px' }}
+            onClick={onSendMessage}
+          >
+            {tx('send_message')}
+          </Button>
+          <DeltaDialogContentTextSeperator
+            style={{ margin: '10px 0px' }}
+            text={tx('profile_shared_chats')}
+          />
+          <div
+            className='mutual-chats'
+            ref={scrollRef}
+            onScroll={onChatListScroll}
+          >
+            {chatListIds.map(chatId => (
+              <ChatListItem
+                key={chatId}
+                chatListItem={chatItems[chatId]}
+                onClick={onChatClick.bind(null, chatId)}
+              />
+            ))}
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>

@@ -36,14 +36,17 @@ class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  constructor (cwd, saved) {
+  constructor(cwd, saved) {
     super()
     this.cwd = cwd
     this.accountDir = false
     this.configuring = false
     this.updating = false
     this._resetState()
-    if (!saved) throw new Error('Saved settings are a required argument to DeltaChatController')
+    if (!saved)
+      throw new Error(
+        'Saved settings are a required argument to DeltaChatController'
+      )
     /**
      * @type {DeltaChat}
      */
@@ -60,55 +63,55 @@ class DeltaChatController extends EventEmitter {
       messageList: new DCMessageList(this),
       settings: new DCSettings(this),
       stickers: new DCStickers(this),
-      context: new DCContext(this)
+      context: new DCContext(this),
     }
   }
 
-  get autocrypt () {
+  get autocrypt() {
     return this.__private.autocrypt
   }
 
-  get backup () {
+  get backup() {
     return this.__private.backup
   }
 
-  get chatList () {
+  get chatList() {
     return this.__private.chatList
   }
 
-  get contacts () {
+  get contacts() {
     return this.__private.contacts
   }
 
-  get chat () {
+  get chat() {
     return this.__private.chat
   }
 
-  get locations () {
+  get locations() {
     return this.__private.locations
   }
 
-  get loginController () {
+  get loginController() {
     return this.__private.loginController
   }
 
-  get messageList () {
+  get messageList() {
     return this.__private.messageList
   }
 
-  get settings () {
+  get settings() {
     return this.__private.settings
   }
 
-  get stickers () {
+  get stickers() {
     return this.__private.stickers
   }
 
-  get context () {
+  get context() {
     return this.__private.context
   }
 
-  logCoreEvent (event, data1, data2) {
+  logCoreEvent(event, data1, data2) {
     if (!isNaN(event)) {
       event = eventStrings[event]
     }
@@ -121,10 +124,12 @@ class DeltaChatController extends EventEmitter {
   /**
    * @param {string} methodName
    */
-  __resolveNestedMethod (self, methodName) {
+  __resolveNestedMethod(self, methodName) {
     const parts = methodName.split('.')
     if (parts.length > 2) {
-      const message = 'Resolving of nested method name failed: Too many parts, only two allowed: ' + methodName
+      const message =
+        'Resolving of nested method name failed: Too many parts, only two allowed: ' +
+        methodName
       log.error(message)
       throw new Error(message)
     }
@@ -149,23 +154,27 @@ class DeltaChatController extends EventEmitter {
    * @param {string} methodName
    * @param {*} args
    */
-  async callMethod (evt, methodName, args = []) {
-    const method = methodName.indexOf('.') !== -1 ? this.__resolveNestedMethod(this, methodName)
-      : ((methodName) => {
-        const method = this[methodName]
-        if (typeof method !== 'function') {
-          const message = 'Method is not of type function: ' + methodName
-          log.error(message)
-          throw new Error(message)
-        }
-        return method.bind(this)
-      })(methodName)
+  async callMethod(evt, methodName, args = []) {
+    const method =
+      methodName.indexOf('.') !== -1
+        ? this.__resolveNestedMethod(this, methodName)
+        : (methodName => {
+            const method = this[methodName]
+            if (typeof method !== 'function') {
+              const message = 'Method is not of type function: ' + methodName
+              log.error(message)
+              throw new Error(message)
+            }
+            return method.bind(this)
+          })(methodName)
 
     let returnValue
     try {
       returnValue = await method(...args)
     } catch (err) {
-      log.error(`Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`)
+      log.error(
+        `Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`
+      )
     }
     return returnValue
   }
@@ -174,26 +183,28 @@ class DeltaChatController extends EventEmitter {
    * @param {string} eventType
    * @param {object} payload
    */
-  sendToRenderer (eventType, payload) {
+  sendToRenderer(eventType, payload) {
     log.debug('sendToRenderer: ' + eventType, payload)
     windows.main.send('ALL', eventType, payload)
     if (!eventType) {
-      log.error('Tried to send an undefined event to the renderer.\n' +
-      'This is not allowed and will normaly produce a crash of electron')
+      log.error(
+        'Tried to send an undefined event to the renderer.\n' +
+          'This is not allowed and will normaly produce a crash of electron'
+      )
       return
     }
     windows.main.send(eventType, payload)
   }
 
-  translate (key, substitutions, opts) {
+  translate(key, substitutions, opts) {
     return app.translate(key, substitutions, opts)
   }
 
-  checkPassword (password) {
+  checkPassword(password) {
     return password === this.settings.getConfig('mail_pw')
   }
 
-  registerEventHandler (dc) {
+  registerEventHandler(dc) {
     dc.on('ALL', (event, ...args) => {
       if (!isNaN(event)) {
         event = eventStrings[event]
@@ -237,7 +248,7 @@ class DeltaChatController extends EventEmitter {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_WARNING', (warning) => {
+    dc.on('DC_EVENT_WARNING', warning => {
       log.warn(warning)
     })
 
@@ -246,7 +257,7 @@ class DeltaChatController extends EventEmitter {
       log.error(error)
     }
 
-    dc.on('DC_EVENT_ERROR', (error) => {
+    dc.on('DC_EVENT_ERROR', error => {
       onError(error)
     })
 
@@ -257,19 +268,20 @@ class DeltaChatController extends EventEmitter {
       }
     })
 
-    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error) => {
+    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', error => {
       onError(error)
     })
 
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
-      if (Number(progress) === 0) { // login failed
+      if (Number(progress) === 0) {
+        // login failed
         this.onLoginFailure()
         this.sendToRenderer('DC_EVENT_CONFIGURE_FAILED')
       }
     })
   }
 
-  onLoginFailure () {
+  onLoginFailure() {
     if (this.updating) {
       // error when updating login credentials when being logged in
       this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
@@ -280,65 +292,69 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  onChatListChanged () {
+  onChatListChanged() {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  onChatListItemChanged (chatId) {
+  onChatListItemChanged(chatId) {
     this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
   }
 
-  updateBlockedContacts () {
+  updateBlockedContacts() {
     const blockedContacts = this._blockedContacts()
-    this.sendToRenderer('DD_EVENT_BLOCKED_CONTACTS_UPDATED', { blockedContacts })
+    this.sendToRenderer('DD_EVENT_BLOCKED_CONTACTS_UPDATED', {
+      blockedContacts,
+    })
   }
 
   /**
    * Returns the state in json format
    */
-  getState () {
+  getState() {
     return {
       configuring: this.configuring,
       credentials: this.credentials,
-      ready: this.ready
+      ready: this.ready,
     }
   }
 
   // ToDo: Deprecated, use contacts.getContact
-  getContact (id) {
+  getContact(id) {
     const contact = this._dc.getContact(id).toJson()
     contact.color = integerToHexColor(contact.color)
     return contact
   }
 
   // ToDo: move to contacts.
-  _blockedContacts () {
+  _blockedContacts() {
     if (!this._dc) return []
     return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }
 
   // ToDo: move to contacts.
-  getContacts2 (listFlags, queryStr) {
-    const distinctIds = Array.from(new Set(this._dc.getContacts(listFlags, queryStr)))
+  getContacts2(listFlags, queryStr) {
+    const distinctIds = Array.from(
+      new Set(this._dc.getContacts(listFlags, queryStr))
+    )
     const contacts = distinctIds.map(this.getContact.bind(this))
     return contacts
   }
 
   // ToDo: move to contacts.
-  getContacts (listFlags, queryStr) {
+  getContacts(listFlags, queryStr) {
     const contacts = this.getContacts2(listFlags, queryStr)
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
   }
 
-  setProfilePicture (newImage) {
+  setProfilePicture(newImage) {
     this._dc.setConfig('selfavatar', newImage)
   }
 
-  getProfilePicture () {
+  getProfilePicture() {
     return this._dc.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
   }
 
-  getInfo () {
+  getInfo() {
     if (this.ready === true) {
       return this._dc.getInfo()
     } else {
@@ -346,7 +362,7 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  getProviderInfo (email) {
+  getProviderInfo(email) {
     return DeltaChatNode.getProviderFromEmail(email)
   }
 
@@ -354,7 +370,7 @@ class DeltaChatController extends EventEmitter {
    * Internal
    * Reset state related to login
    */
-  _resetState () {
+  _resetState() {
     this.ready = false
     this.configuring = false
     this.credentials = { addr: '' }

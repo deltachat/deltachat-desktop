@@ -2,21 +2,23 @@ const React = require('react')
 const { openExternal } = window.electron_functions
 
 class ClickableLink extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.href = props.href
 
     this.onClick = this.onClick.bind(this)
   }
 
-  onClick (event) {
+  onClick(event) {
     event.preventDefault()
     openExternal(this.href)
   }
 
-  render () {
+  render() {
     return (
-      <a href={this.href} onClick={this.onClick}>{this.props.children}</a>
+      <a href={this.href} onClick={this.onClick}>
+        {this.props.children}
+      </a>
     )
   }
 }

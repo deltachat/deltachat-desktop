@@ -11,7 +11,8 @@
   color: #182026;
   background-color: var(--bp3MenuBg);
   color: var(--bp3MenuText);
-  box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 2px 4px rgba(16,22,26,.2), 0 8px 24px rgba(16,22,26,.2);
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2);
 }
 
 .react-contextmenu--visible {
@@ -41,9 +42,8 @@
   user-select: none;
 }
 
-
 .react-contextmenu-item--selected {
-  background-color: rgba(167,182,194,.3);
+  background-color: rgba(167, 182, 194, 0.3);
   cursor: pointer;
   text-decoration: none;
   color: var(--contextMenuSelected);
@@ -78,7 +78,7 @@
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
   color: var(--bp3MenuText);
-  background-color: rgba(167,182,194,.3);
+  background-color: rgba(167, 182, 194, 0.3);
 }
 
 .react-contextmenu-item.react-contextmenu-item--active.react-contextmenu-item--checked:before,

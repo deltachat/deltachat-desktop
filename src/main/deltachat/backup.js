@@ -11,19 +11,21 @@ const { getNewAccountPath } = require('../logins')
 
 const SplitOut = require('./splitout')
 module.exports = class DCBackup extends SplitOut {
-  export (dir) {
+  export(dir) {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)
   }
 
-  import (file) {
+  import(file) {
     const { sendToRenderer } = this._controller
 
-    async function moveImportedConfigFolder (addr, newPath, overwrite = false) {
+    async function moveImportedConfigFolder(addr, newPath, overwrite = false) {
       if (overwrite === true) {
         await fs.remove(newPath)
       }
       await fs.move(tmpConfigPath, newPath)
-      log.debug(`backupImport: ${tmpConfigPath} successfully copied to ${newPath}`)
+      log.debug(
+        `backupImport: ${tmpConfigPath} successfully copied to ${newPath}`
+      )
     }
 
     const dcnContext = binding.dcn_context_new()
@@ -31,7 +33,7 @@ module.exports = class DCBackup extends SplitOut {
     const tmpConfigPath = tempy.directory()
     log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
     const db = path.join(tmpConfigPath, 'db.sqlite')
-    const onError = (err) => {
+    const onError = err => {
       sendToRenderer('DD_EVENT_BACKUP_IMPORT_ERROR', err)
       binding.dcn_close(dcnContext, () => {
         log.debug(`closed context for backupImport ${file}`)
@@ -54,15 +56,15 @@ module.exports = class DCBackup extends SplitOut {
       }
     })
 
-    function onSuccessfulMove (addr) {
+    function onSuccessfulMove(addr) {
       sendToRenderer('DD_EVENT_BACKUP_IMPORTED', addr)
     }
 
-    function onSuccessfulImport () {
+    function onSuccessfulImport() {
       const addr = binding.dcn_get_config(dcnContext, 'addr')
 
       log.debug(`backupImport: Closing dc instance...`)
-      binding.dcn_close(dcnContext, async (err) => {
+      binding.dcn_close(dcnContext, async err => {
         if (err) throw err
 
         sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
@@ -87,9 +89,13 @@ module.exports = class DCBackup extends SplitOut {
           try {
             // future compatibiliy: remove a symlink if it exists
             if ((await fs.lstat(newPath)).isSymbolicLink()) {
-              await fs.remove(newPath).catch(log.error.bind(null, 'symlink removing failed'))
+              await fs
+                .remove(newPath)
+                .catch(log.error.bind(null, 'symlink removing failed'))
             }
-          } catch (error) { /* but we don't care about the error of a not found symlink */ }
+          } catch (error) {
+            /* but we don't care about the error of a not found symlink */
+          }
           await moveImportedConfigFolder(addr, newPath, false)
           onSuccessfulMove(addr)
         }

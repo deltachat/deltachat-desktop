@@ -19,7 +19,10 @@
 
 // we need these, or we'll make conversation items too big in the left-nav
 .conversations {
-  .emoji-container.small, .emoji-container.medium, .emoji-container.large, .emoji-container.jumbo {
+  .emoji-container.small,
+  .emoji-container.medium,
+  .emoji-container.large,
+  .emoji-container.jumbo {
     font-size: 1em;
   }
 }

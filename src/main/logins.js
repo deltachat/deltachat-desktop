@@ -10,7 +10,7 @@ const { getAccountsPath, getConfigPath } = require('./application-constants')
 // change this in the future to enable new account format and break compatibility to really old dcversions on windows
 const NEW_ACCOUNT_FORMAT = false
 
-async function getLogins () {
+async function getLogins() {
   if (NEW_ACCOUNT_FORMAT) {
     // search for old accounts and convert them
     await migrate(getConfigPath())
@@ -20,24 +20,34 @@ async function getLogins () {
   var accounts = await readDeltaAccounts(getAccountsPath())
   if (!NEW_ACCOUNT_FORMAT) {
     // search for old accounts and use them
-    accounts.push(...await readDeltaAccounts(getConfigPath()))
+    accounts.push(...(await readDeltaAccounts(getConfigPath())))
   }
   log.debug('Found following accounts:', accounts)
   return accounts
 }
 
-async function migrate (dir) {
+async function migrate(dir) {
   const oldAccounts = await readDeltaAccounts(dir)
 
   if (oldAccounts.length > 0) {
-    log.info('Old format accounts detected, trying to convert them', oldAccounts)
+    log.info(
+      'Old format accounts detected, trying to convert them',
+      oldAccounts
+    )
     for (const account of oldAccounts) {
-      const newFolder = join('accounts', escapeEmailForAccountFolder(account.addr))
+      const newFolder = join(
+        'accounts',
+        escapeEmailForAccountFolder(account.addr)
+      )
       await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
       // Backwards compatibility
       try {
         const compatPath = Buffer.from(account.addr).toString('hex')
-        log.info('symlink, for backwards compatibility', join('./', newFolder), join(dir, compatPath))
+        log.info(
+          'symlink, for backwards compatibility',
+          join('./', newFolder),
+          join(dir, compatPath)
+        )
         await fs.symlink(join('./', newFolder), join(dir, compatPath))
       } catch (error) {
         log.error('symlinking failed', error)
@@ -47,14 +57,16 @@ async function migrate (dir) {
   }
 }
 
-async function getAccountInfo (path) {
+async function getAccountInfo(path) {
   try {
     const config = await getConfig(path)
-    if (typeof config.addr !== 'string') { throw new Error('Account has no address defined') }
+    if (typeof config.addr !== 'string') {
+      throw new Error('Account has no address defined')
+    }
 
     return {
       path,
-      addr: config.addr
+      addr: config.addr,
     }
   } catch (error) {
     log.error(`Account ${path} is inaccessible`, error)
@@ -62,36 +74,50 @@ async function getAccountInfo (path) {
   }
 }
 
-async function readDeltaAccounts (accountFolderPath) {
-  const paths = (await fs.readdir(accountFolderPath)).map(filename => join(accountFolderPath, filename))
+async function readDeltaAccounts(accountFolderPath) {
+  const paths = (await fs.readdir(accountFolderPath)).map(filename =>
+    join(accountFolderPath, filename)
+  )
   const accountFolders = paths.filter(path => {
     // isDeltaAccountFolder
-    return fs.existsSync(join(path, 'db.sqlite')) && !fs.lstatSync(path).isSymbolicLink()
+    return (
+      fs.existsSync(join(path, 'db.sqlite')) &&
+      !fs.lstatSync(path).isSymbolicLink()
+    )
   })
 
-  return (await Promise.all(accountFolders.map(getAccountInfo))).filter(accounts => accounts !== null)
+  return (await Promise.all(accountFolders.map(getAccountInfo))).filter(
+    accounts => accounts !== null
+  )
 }
 
-function getConfig (cwd) {
+function getConfig(cwd) {
   return new Promise((resolve, reject) => {
     DeltaChat.getConfig(cwd, (err, result) => {
-      if (err) { reject(err) } else { resolve(result) }
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
     })
   })
 }
 
-async function removeAccount (accountPath) {
+async function removeAccount(accountPath) {
   const account = (await getLogins()).find(({ path }) => accountPath === path)
   if (!account) {
     throw new Error('Removing account failed: Account not found')
-  } else if (!await fs.pathExists(account.path)) {
+  } else if (!(await fs.pathExists(account.path))) {
     log.error('Removing account failed: path does not exist', account)
-    throw new Error('Removing account failed: path does not exist:', account.path)
+    throw new Error(
+      'Removing account failed: path does not exist:',
+      account.path
+    )
   }
   await fs.remove(account.path)
 }
 
-function getNewAccountPath (addr) {
+function getNewAccountPath(addr) {
   if (NEW_ACCOUNT_FORMAT) {
     return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
   } else {

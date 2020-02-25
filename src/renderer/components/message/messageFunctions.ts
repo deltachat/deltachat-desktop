@@ -8,12 +8,14 @@ import { Message } from 'deltachat-node'
  */
 type MsgObject = ReturnType<typeof Message.prototype.toJson>
 
-export function onDownload (msg: MsgObject) {
+export function onDownload(msg: MsgObject) {
   window.preload_functions.downloadFile(msg.file)
 }
 
-export function openAttachmentInShell (msg: MsgObject) {
+export function openAttachmentInShell(msg: MsgObject) {
   if (!openItem(msg.file)) {
-    log.info("file couldn't be opened, try saving it in a different place and try to open it from there")
+    log.info(
+      "file couldn't be opened, try saving it in a different place and try to open it from there"
+    )
   }
 }

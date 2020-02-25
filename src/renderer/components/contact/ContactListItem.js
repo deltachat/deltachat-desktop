@@ -4,7 +4,11 @@ import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 
 export const ContactListItemWrapper = props => {
-  return <div className='ContactListItemWrapper' {...props}>{props.children}</div>
+  return (
+    <div className='ContactListItemWrapper' {...props}>
+      {props.children}
+    </div>
+  )
 }
 
 const ContactListItemContactWrapper = styled.div`
@@ -38,11 +42,12 @@ const ContactListItemCheckboxWrapper = styled.div`
     display: block;
     position: relative;
     top: -20px;
-    visibility: ${({ checked }) => checked ? 'visible' : 'hidden'};
+    visibility: ${({ checked }) => (checked ? 'visible' : 'hidden')};
   }
 
-  input:hover, .DeltaCheckmarkIcon:hover {
-    cursor: ${({ disabled }) => disabled ? 'default' : 'pointer'};
+  input:hover,
+  .DeltaCheckmarkIcon:hover {
+    cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   }
 `
 
@@ -75,9 +80,14 @@ const DeltaCheckmarkIconWrapper = styled.div`
   }
 `
 
-const DeltaCheckmarkIcon = (props) => <DeltaCheckmarkIconWrapper {...props} className='DeltaCheckmarkIcon'><span /><span /></DeltaCheckmarkIconWrapper>
+const DeltaCheckmarkIcon = props => (
+  <DeltaCheckmarkIconWrapper {...props} className='DeltaCheckmarkIcon'>
+    <span />
+    <span />
+  </DeltaCheckmarkIconWrapper>
+)
 
-const DeltaCheckbox = (props) => {
+const DeltaCheckbox = props => {
   const { checked, disabled } = props
   const _onClick = props.onClick
   const onClick = e => typeof _onClick === 'function' && _onClick(e)
@@ -93,12 +103,13 @@ const DeltaCheckbox = (props) => {
     </ContactListItemCheckboxWrapper>
   )
 }
-export function ContactListItem (props) {
+export function ContactListItem(props) {
   const { contact, onClick, showCheckbox, checked, showRemove } = props
   const onCheckboxClick = e => {
     if (!showCheckbox) return
     e && e.stopPropagation()
-    typeof props.onCheckboxClick === 'function' && props.onCheckboxClick(contact)
+    typeof props.onCheckboxClick === 'function' &&
+      props.onCheckboxClick(contact)
   }
   const onRemoveClick = e => {
     if (!showRemove) return
@@ -116,12 +127,21 @@ export function ContactListItem (props) {
       <ContactListItemContactWrapper>
         <Contact contact={contact} />
       </ContactListItemContactWrapper>
-      {showCheckbox &&
-        <DeltaCheckbox checked={checked} disabled={contact.id === 1} onClick={onCheckboxClick} />
-      }
-      {showRemove && contact.id !== 1 &&
-        <div className='module-contact-list-item__trash-icon' onClick={onRemoveClick}><Icon icon='cross' /></div>
-      }
+      {showCheckbox && (
+        <DeltaCheckbox
+          checked={checked}
+          disabled={contact.id === 1}
+          onClick={onCheckboxClick}
+        />
+      )}
+      {showRemove && contact.id !== 1 && (
+        <div
+          className='module-contact-list-item__trash-icon'
+          onClick={onRemoveClick}
+        >
+          <Icon icon='cross' />
+        </div>
+      )}
     </ContactListItemWrapper>
   )
 }

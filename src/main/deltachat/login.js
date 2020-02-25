@@ -11,7 +11,7 @@ module.exports = class DCLoginController extends SplitOut {
    * Called when this controller is created and when current
    * locale changes
    */
-  setCoreStrings (strings) {
+  setCoreStrings(strings) {
     if (!this._dc) return
 
     Object.keys(strings).forEach(key => {
@@ -21,7 +21,13 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer()
   }
 
-  login (accountDir, credentials, sendStateToRenderer, coreStrings, updateConfiguration) {
+  login(
+    accountDir,
+    credentials,
+    sendStateToRenderer,
+    coreStrings,
+    updateConfiguration
+  ) {
     // Creates a separate DB file for each login
     this._controller.accountDir = accountDir
     log.info(`Using deltachat instance ${this._controller.accountDir}`)
@@ -31,7 +37,10 @@ module.exports = class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer = sendStateToRenderer
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-      this._controller.emit('error', this._controller.translate('bad_email_address'))
+      this._controller.emit(
+        'error',
+        this._controller.translate('bad_email_address')
+      )
       return
     }
 
@@ -62,35 +71,38 @@ module.exports = class DCLoginController extends SplitOut {
     setupMarkseenFix(this._controller)
   }
 
-  logout () {
+  logout() {
     this.close()
     this._controller._resetState()
 
     log.info('Logged out')
     this._controller.emit('logout')
-    if (typeof this._controller._sendStateToRenderer === 'function') this._controller._sendStateToRenderer()
+    if (typeof this._controller._sendStateToRenderer === 'function')
+      this._controller._sendStateToRenderer()
   }
 
-  configure (credentials, cb) {
+  configure(credentials, cb) {
     this._controller.configuring = true
     this._dc.configure(this.addServerFlags(credentials), cb)
   }
 
-  close () {
+  close() {
     if (!this._dc) return
     this._dc.close()
     this._controller._dc = null
   }
 
-  addServerFlags (credentials) {
+  addServerFlags(credentials) {
     return Object.assign({}, credentials, {
-      server_flags: this._controller.settings.serverFlags(credentials)
+      server_flags: this._controller.settings.serverFlags(credentials),
     })
   }
 
-  updateDeviceChats () {
+  updateDeviceChats() {
     this._dc.updateDeviceChats()
-    this._dc.addDeviceMessage('changelog-version-1.0.0-4', `Changes in v1.0.0
+    this._dc.addDeviceMessage(
+      'changelog-version-1.0.0-4',
+      `Changes in v1.0.0
 
 We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This release includes traffic reductions, better performance, user experience improvements and bug fixes. Besides this, new users will be warned about providers which are known to make trouble with DeltaChat and get better & smaller cryptographic keys.
 
@@ -105,6 +117,7 @@ We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This re
 - new users will use Ed25519 keys (shorter & better cryptographic keys)            
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#10000---2020-02-22
-    `)
+    `
+    )
   }
 }

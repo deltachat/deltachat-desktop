@@ -1,23 +1,26 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
+import SmallDialog, {
+  DeltaButtonPrimary,
+  DeltaButtonDanger,
+} from './SmallDialog'
 const { remote } = window.electron_functions
 
-export function confirmationDialogLegacy (message, opts, cb) {
+export function confirmationDialogLegacy(message, opts, cb) {
   if (!cb) cb = opts
   if (!opts) opts = {}
   const tx = window.translate
   var defaultOpts = {
     type: 'question',
     message: message,
-    buttons: [tx('no'), tx('yes')]
+    buttons: [tx('no'), tx('yes')],
   }
   remote.dialog.showMessageBox(Object.assign(defaultOpts, opts), response => {
     cb(response === 1) // eslint-disable-line
   })
 }
 
-export default function ConfirmationDialog (props) {
+export default function ConfirmationDialog(props) {
   const { message, cancelLabel, confirmLabel, cb } = props
 
   const isOpen = !!message
@@ -42,16 +45,10 @@ export default function ConfirmationDialog (props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaButtonPrimary
-              noPadding
-              onClick={() => onClick(false)}
-            >
+            <DeltaButtonPrimary noPadding onClick={() => onClick(false)}>
               {cancelLabel || tx('cancel')}
             </DeltaButtonPrimary>
-            <DeltaButtonDanger
-              noPadding
-              onClick={() => onClick(true)}
-            >
+            <DeltaButtonDanger noPadding onClick={() => onClick(true)}>
               {confirmLabel || tx('yes')}
             </DeltaButtonDanger>
           </div>

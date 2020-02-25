@@ -15,7 +15,7 @@ function logName() {
     `${pad(d.getHours())}-`,
     `${pad(d.getMinutes())}-`,
     `${pad(d.getSeconds())}`,
-    '.log.tsv'
+    '.log.tsv',
   ].join('')
   return join(dir, fileName)
 }
@@ -33,7 +33,12 @@ export function createLogHandler() {
      * @param stacktrace Stack trace if WARNING, ERROR or CRITICAL
      * @param ...args Variadic parameters. Stringified before logged to file
      */
-    log: (channel: string, level: string, stacktrace: any[], ...args: any[]) => {
+    log: (
+      channel: string,
+      level: string,
+      stacktrace: any[],
+      ...args: any[]
+    ) => {
       const timestamp = new Date().toISOString()
       let line = [timestamp, channel, level]
       line = line
@@ -42,7 +47,7 @@ export function createLogHandler() {
       stream.write(`${line.join('\t')}\n`)
     },
     end: () => stream.end(),
-    logFilePath: () => fileName
+    logFilePath: () => fileName,
   }
 }
 
@@ -54,14 +59,12 @@ export async function cleanupLogFolder() {
   const logDir = getLogsPath()
 
   const logDirContent = await readdir(logDir)
-  const filesWithDates = (await Promise.all(
-    logDirContent.map(
-      async (logFileName) => ({
-        filename: logFileName,
-        mtime: (await lstat(join(logDir, logFileName))).mtime.getTime(),
-      })
-    )
-  ))
+  const filesWithDates = await Promise.all(
+    logDirContent.map(async logFileName => ({
+      filename: logFileName,
+      mtime: (await lstat(join(logDir, logFileName))).mtime.getTime(),
+    }))
+  )
 
   let sortedFiles = filesWithDates.sort((a, b) => a.mtime - b.mtime)
 
@@ -70,9 +73,7 @@ export async function cleanupLogFolder() {
     sortedFiles.splice(sortedFiles.length - 11)
 
     const fileCount = await Promise.all(
-      sortedFiles.map(
-        ({ filename }) => unlink(join(logDir, filename))
-      )
+      sortedFiles.map(({ filename }) => unlink(join(logDir, filename)))
     )
 
     log.info(`Successfuly deleted ${fileCount.length} old logfiles`)

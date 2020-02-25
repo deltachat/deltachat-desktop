@@ -12,10 +12,10 @@ import { C } from 'deltachat-node/dist/constants'
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')
-export default function MessageListAndComposer (props) {
+export default function MessageListAndComposer(props) {
   const [state, setState] = useState({
     error: false,
-    composerSize: 40
+    composerSize: 40,
   })
   const { chat } = props
   const conversationRef = useRef(null)
@@ -24,7 +24,7 @@ export default function MessageListAndComposer (props) {
 
   const setComposerSize = size => setState({ composerSize: size })
 
-  const onDrop = (e) => {
+  const onDrop = e => {
     const files = e.target.files || e.dataTransfer.files
     e.preventDefault()
     e.stopPropagation()
@@ -39,12 +39,11 @@ export default function MessageListAndComposer (props) {
           message: tx('ask_send_file_desktop', [name, chat.name]),
           confirmLabel: tx('menu_send'),
           cb: yes => {
-            if (!yes) { return }
-            callDcMethod(
-              'messageList.sendMessage',
-              [chat.id, null, path]
-            )
-          }
+            if (!yes) {
+              return
+            }
+            callDcMethod('messageList.sendMessage', [chat.id, null, path])
+          },
         })
       } else {
         log.warn('Prevented a file from being send again while dragging it out')
@@ -52,7 +51,7 @@ export default function MessageListAndComposer (props) {
     }
   }
 
-  const onDragOver = (e) => {
+  const onDragOver = e => {
     e.preventDefault()
     e.stopPropagation()
   }
@@ -72,9 +71,15 @@ export default function MessageListAndComposer (props) {
   })(chat)
 
   const settings = useContext(SettingsContext)
-  const style = { backgroundSize: 'cover', gridTemplateRows: `auto ${state.composerSize}px` }
+  const style = {
+    backgroundSize: 'cover',
+    gridTemplateRows: `auto ${state.composerSize}px`,
+  }
   if (settings['chatViewBgImg']) {
-    if (settings['chatViewBgImg'] && settings['chatViewBgImg'].indexOf('url') !== -1) {
+    if (
+      settings['chatViewBgImg'] &&
+      settings['chatViewBgImg'].indexOf('url') !== -1
+    ) {
       style.backgroundImage = settings['chatViewBgImg']
     } else {
       style.backgroundColor = settings['chatViewBgImg']
@@ -83,11 +88,19 @@ export default function MessageListAndComposer (props) {
   }
 
   return (
-    <div className='message-list-and-composer'
+    <div
+      className='message-list-and-composer'
       style={style}
-      ref={conversationRef} onDrop={onDrop.bind({ props: { chat } })} onDragOver={onDragOver} >
+      ref={conversationRef}
+      onDrop={onDrop.bind({ props: { chat } })}
+      onDragOver={onDragOver}
+    >
       <div className='message-list-and-composer__message-list'>
-        <MessageList chat={chat} refComposer={refComposer} locationStreamingEnabled={settings.enableOnDemandLocationStreaming} />
+        <MessageList
+          chat={chat}
+          refComposer={refComposer}
+          locationStreamingEnabled={settings.enableOnDemandLocationStreaming}
+        />
       </div>
       <Composer
         ref={refComposer}

@@ -1,12 +1,13 @@
 $emojifonts: 'Apple Color Emoji', NotoEmoji;
 
-$roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
-$roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono, sans-serif;
+$roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono,
+  sans-serif;
+$roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica,
+  NotoMono, sans-serif;
 
 /* Theming Colors */
 
-
-// Belongs to stuff we plan to remove / change anyway 
+// Belongs to stuff we plan to remove / change anyway
 // so we don't put this into theming yet
 // because it will change
 $color-message-detail-delete-button-border: #a4a6a9;

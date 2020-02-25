@@ -6,7 +6,7 @@ const { integerToHexColor } = require('../../shared/util')
 
 const SplitOut = require('./splitout')
 module.exports = class DCChatList extends SplitOut {
-  async selectChat (chatId) {
+  async selectChat(chatId) {
     this._controller._selectedChatId = chatId
     const chat = await this.getFullChatById(chatId, true)
     if (!chat) {
@@ -17,7 +17,9 @@ module.exports = class DCChatList extends SplitOut {
       this._dc.markNoticedChat(chat.id)
       chat.freshMessageCounter = 0
       const messagIds = this._controller.messageList.getMessageIds(chatId)
-      log.debug(`markSeenMessages ${messagIds.length} messages for chat ${chatId}`)
+      log.debug(
+        `markSeenMessages ${messagIds.length} messages for chat ${chatId}`
+      )
       // TODO: move mark seen logic to frontend
       setTimeout(() => this._dc.markSeenMessages(messagIds))
       app.setBadgeCount(this.getGeneralFreshMessageCounter())
@@ -28,21 +30,21 @@ module.exports = class DCChatList extends SplitOut {
   /**
    * @returns {number} chat id
    */
-  getSelectedChatId () {
+  getSelectedChatId() {
     return this._controller._selectedChatId
   }
 
-  async onChatModified (chatId) {
+  async onChatModified(chatId) {
     // TODO: move event handling to store
     const chat = await this.getFullChatById(chatId)
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
-  async _chatListGetChatId (list, index) {
+  async _chatListGetChatId(list, index) {
     return list.getChatId(index)
   }
 
-  async getChatListIds (listFlags, queryStr, queryContactId) {
+  async getChatListIds(listFlags, queryStr, queryContactId) {
     const chatList = this._dc.getChatList(listFlags, queryStr, queryContactId)
     const chatListIds = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
@@ -52,11 +54,11 @@ module.exports = class DCChatList extends SplitOut {
     return chatListIds
   }
 
-  async _getChatList (listflags, queryStr, queryContactId) {
+  async _getChatList(listflags, queryStr, queryContactId) {
     return this._dc.getChatList(listflags, queryStr, queryContactId)
   }
 
-  async getListAndIndexForChatId (chatId) {
+  async getListAndIndexForChatId(chatId) {
     let list = await this._getChatList(0, '', 0)
     let i = await findIndexOfChatIdInChatList(list, chatId)
 
@@ -67,7 +69,7 @@ module.exports = class DCChatList extends SplitOut {
     return [list, i]
   }
 
-  async getChatListItemsByIds (chatIds) {
+  async getChatListItemsByIds(chatIds) {
     const label = '[BENCH] getChatListItemByIds'
     console.time(label)
     const chats = {}
@@ -75,7 +77,7 @@ module.exports = class DCChatList extends SplitOut {
     let i = 0
     for (const chatId of chatIds) {
       if (!list) {
-        [list, i] = await this.getListAndIndexForChatId(chatIds[0])
+        ;[list, i] = await this.getListAndIndexForChatId(chatIds[0])
       } else {
         i = await findIndexOfChatIdInChatList(list, chatId, i)
       }
@@ -87,11 +89,11 @@ module.exports = class DCChatList extends SplitOut {
     return chats
   }
 
-  async getChatListSummary (list, i) {
+  async getChatListSummary(list, i) {
     return list.getSummary(i).toJson()
   }
 
-  async getChatListItemById (chatId, list, i) {
+  async getChatListItemById(chatId, list, i) {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
@@ -119,7 +121,7 @@ module.exports = class DCChatList extends SplitOut {
       summary: {
         text1: summary.text1,
         text2: summary.text2,
-        status: mapCoreMsgStatus2String(summary.state)
+        status: mapCoreMsgStatus2String(summary.state),
       },
       deaddrop: chat.deaddrop,
       isVerified: chat.isVerified,
@@ -129,33 +131,33 @@ module.exports = class DCChatList extends SplitOut {
       contactIds,
       isSelfTalk: chat.isSelfTalk,
       isDeviceTalk: chat.isDeviceTalk,
-      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
+      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
     }
 
     return chatListItem
   }
 
-  async _getChatById (chatId) {
+  async _getChatById(chatId) {
     if (!chatId) return null
     const rawChat = this._dc.getChat(chatId)
     if (!rawChat) return null
     return rawChat.toJson()
   }
 
-  async _getDraft (chatId) {
+  async _getDraft(chatId) {
     const draft = this._dc.getDraft(chatId)
     return draft ? draft.getText() : ''
   }
 
-  async _getChatContactIds (chatId) {
+  async _getChatContactIds(chatId) {
     return this._dc.getChatContacts(chatId)
   }
 
-  async _getChatContact (contactId) {
+  async _getChatContact(contactId) {
     return this._dc.getContact(contactId).toJson()
   }
 
-  async _getChatContacts (contactIds) {
+  async _getChatContacts(contactIds) {
     const contacts = []
     for (let i = 0; i < contactIds.length; i++) {
       const contact = await this._getChatContact(contactIds[i])
@@ -164,7 +166,7 @@ module.exports = class DCChatList extends SplitOut {
     return contacts
   }
 
-  async getFullChatById (chatId) {
+  async getFullChatById(chatId) {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0
@@ -197,11 +199,11 @@ module.exports = class DCChatList extends SplitOut {
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
       isDeviceChat: chat.isDeviceTalk,
       draft,
-      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1
+      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
     }
   }
 
-  _chatSubtitle (chat, contacts) {
+  _chatSubtitle(chat, contacts) {
     const tx = this._controller.translate
     if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
       if (isGroupChat(chat)) {
@@ -225,17 +227,17 @@ module.exports = class DCChatList extends SplitOut {
     return 'ErrTitle'
   }
 
-  getGeneralFreshMessageCounter () {
+  getGeneralFreshMessageCounter() {
     return this._dc.getFreshMessages().length
   }
 
-  updateChatList () {
+  updateChatList() {
     log.debug('updateChatList')
     this._controller.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
   }
 }
 // section: Internal functions
-async function findIndexOfChatIdInChatList (list, chatId, startI = 0) {
+async function findIndexOfChatIdInChatList(list, chatId, startI = 0) {
   let i = -1
   const listCount = list.getCount()
   for (let counter = startI; counter < listCount; counter++) {
@@ -249,11 +251,11 @@ async function findIndexOfChatIdInChatList (list, chatId, startI = 0) {
   return i
 }
 
-async function chatListGetChatId (list, index) {
+async function chatListGetChatId(list, index) {
   return list.getChatId(index)
 }
 
-function mapCoreMsgStatus2String (state) {
+function mapCoreMsgStatus2String(state) {
   switch (state) {
     case C.DC_STATE_OUT_FAILED:
       return 'error'
@@ -271,10 +273,9 @@ function mapCoreMsgStatus2String (state) {
       return '' // to display no icon on unknown state
   }
 }
-function isGroupChat (chat) {
-  return [
-    C.DC_CHAT_TYPE_GROUP,
-    C.DC_CHAT_TYPE_VERIFIED_GROUP
-  ].includes(chat && chat.type)
+function isGroupChat(chat) {
+  return [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP].includes(
+    chat && chat.type
+  )
 }
 // end section Internal functions
