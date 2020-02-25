@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useContext } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
-import { remote } from 'electron'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 
 import { callDcMethodAsync } from '../../ipc'
 import { ScreenContext } from '../../contexts'
@@ -32,6 +31,7 @@ import {
 } from './Group-Styles'
 
 import { DeltaDialogQrInner } from './QrInviteCode'
+const { remote } = window.electron_functions
 
 export default function CreateChat (props) {
   const { isOpen, onClose } = props

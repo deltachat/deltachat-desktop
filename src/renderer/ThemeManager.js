@@ -1,8 +1,8 @@
 const React = require('react')
 const StyledThemeProvider = require('styled-components').ThemeProvider
-const { EventEmitter } = require('events')
+const { EventEmitter } = window.native_dependency
 const { defaultTheme, ThemeDataBuilder: ThemeBuilder, defaultThemeData, ThemeVarOverwrite } = require('./ThemeBackend.js')
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = window.electron_functions
 
 class ThemeManager extends EventEmitter {
   constructor () {

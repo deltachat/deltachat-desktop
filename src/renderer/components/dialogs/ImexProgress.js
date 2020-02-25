@@ -1,11 +1,11 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
 import {
   Intent,
   ProgressBar,
   Classes
 } from '@blueprintjs/core'
 import DeltaDialog from './DeltaDialog'
+const { ipcRenderer } = window.electron_functions
 
 export default class ImexProgress extends React.Component {
   constructor (props) {

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Timestamp } from '../conversations'
 import MessageBody from '../message/MessageBody'
 import { Avatar, VerifiedIcon } from '../contact/Contact'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 
 const FreshMessageCounter = React.memo(props => {

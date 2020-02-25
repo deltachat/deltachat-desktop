@@ -1,5 +1,5 @@
 const { callDcMethod } = require('../ipc')
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = window.electron_functions
 const { Store } = require('./store')
 
 const defaultState = {

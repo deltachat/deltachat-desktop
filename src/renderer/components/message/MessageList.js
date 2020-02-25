@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import MessageWrapper, { InfoMessage } from './MessageWrapper'
 import { useChatStore } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'

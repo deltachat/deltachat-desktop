@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 
 import { callDcMethodAsync } from '../ipc'
 import { ScreenContext } from '../contexts'

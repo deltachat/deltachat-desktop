@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { openAttachmentInShell } from '../message/messageFunctions';
-import { C } from 'deltachat-node';
+import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts';
 import { isDisplayableByFullscreenMedia, isImage, isVideo, isAudio, getExtension, dragAttachmentOut, attachment } from './Attachment';
 
