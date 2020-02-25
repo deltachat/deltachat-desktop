@@ -10,7 +10,7 @@ import {
   Alignment,
   Navbar,
   NavbarGroup,
-  NavbarHeading
+  NavbarHeading,
 } from '@blueprintjs/core'
 import { DeltaProgressBar } from './Login-Styles'
 import logger from '../../shared/logger'
@@ -20,7 +20,7 @@ const { remote } = window.electron_functions
 
 const log = logger.getLogger('renderer/components/LoginScreen')
 
-const ImportDialogContent = React.memo(function ImportDialogContent (props) {
+const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   const tx = window.translate
   const [importProgress, setImportProgress] = useState(0)
   const [error, setError] = useState(null)
@@ -31,7 +31,9 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
   useEffect(() => {
     log.debug('useEffect', ipcBackend)
     let wasCanceled = false
-    ipcBackend.on('ALL', (eventName, data1, data2) => log.debug('ALL core events: ', eventName, data1, data2))
+    ipcBackend.on('ALL', (eventName, data1, data2) =>
+      log.debug('ALL core events: ', eventName, data1, data2)
+    )
     ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => log.debug('test'))
     ipcBackend.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
       log.debug('DC_EVENT_IMEX_PROGRESS', progress)
@@ -63,41 +65,50 @@ const ImportDialogContent = React.memo(function ImportDialogContent (props) {
     }
   }, [])
 
-  function overwriteBackup () {
+  function overwriteBackup() {
     sendToBackend('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
   }
 
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card elevation={Elevation.ONE}>
-        { error && <p>Error: {error}</p> }
-        { importState[0] === 'INIT' && <p /> }
-        { importState[0] === 'IMPORT_EXISTS' &&
+        {error && <p>Error: {error}</p>}
+        {importState[0] === 'INIT' && <p />}
+        {importState[0] === 'IMPORT_EXISTS' && (
           <>
             {`Seems like there's already an existing Account with the ${addr} address.
             To import this backup you need to overwrite the existing account. Do you want to?`}
             <br />
-            <Button onClick={overwriteBackup} type='submit' text='Yes!' className='override-backup' />
+            <Button
+              onClick={overwriteBackup}
+              type='submit'
+              text='Yes!'
+              className='override-backup'
+            />
             <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
           </>
-        }
-        { importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup' }
-        { importState[0] !== 'IMPORT_COMPLETE' &&
-          <DeltaProgressBar progress={importProgress} intent={error === false ? Intent.SUCCESS : Intent.ERROR} /> }
+        )}
+        {importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup'}
+        {importState[0] !== 'IMPORT_COMPLETE' && (
+          <DeltaProgressBar
+            progress={importProgress}
+            intent={error === false ? Intent.SUCCESS : Intent.ERROR}
+          />
+        )}
       </Card>
     </div>
   )
 })
 
-const ImportButton = React.memo(function ImportButton (props) {
+const ImportButton = React.memo(function ImportButton(props) {
   const tx = window.translate
   const [showDialog, setShowDialog] = useState(false)
 
-  function onClickImportBackup () {
+  function onClickImportBackup() {
     const opts = {
       title: tx('import_backup_title'),
       properties: ['openFile'],
-      filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }]
+      filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }],
     }
 
     remote.dialog.showOpenDialog(opts, filenames => {
@@ -113,10 +124,10 @@ const ImportButton = React.memo(function ImportButton (props) {
 
   return (
     <Fragment>
-      <div className='delta-blue-button' onClick={onClickImportBackup} >
-        <p>{tx('import_backup_title') }</p>
+      <div className='delta-blue-button' onClick={onClickImportBackup}>
+        <p>{tx('import_backup_title')}</p>
       </div>
-      {showDialog &&
+      {showDialog && (
         <DeltaDialog
           onClose={onHandleClose}
           title={tx('import_backup_title')}
@@ -125,29 +136,32 @@ const ImportButton = React.memo(function ImportButton (props) {
           style={{ top: '40%' }}
         >
           <ImportDialogContent onClose={onHandleClose} />
-        </DeltaDialog> }
+        </DeltaDialog>
+      )}
     </Fragment>
   )
 })
 
-export default function LoginScreen (props) {
+export default function LoginScreen(props) {
   const tx = window.translate
   const { openDialog } = useContext(ScreenContext)
 
-  function onClickLogin (credentials) {
+  function onClickLogin(credentials) {
     sendToBackend('login', credentials)
   }
 
-  function onClickLoadAccount (login) {
+  function onClickLoadAccount(login) {
     sendToBackend('loadAccount', login)
   }
 
-  function forgetLogin (login) {
+  function forgetLogin(login) {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
       confirmLabel: tx('remove_account'),
-      cb: yes => { if (yes) sendToBackend('forgetLogin', login) }
+      cb: yes => {
+        if (yes) sendToBackend('forgetLogin', login)
+      },
     })
   }
 
@@ -161,22 +175,34 @@ export default function LoginScreen (props) {
         </Navbar>
       </div>
       <div className='window'>
-        { props.logins.length > 0 && <Card>
-          <p className='delta-headline'>{tx('login_known_accounts_title_desktop')}</p>
-          <ul>
-            {props.logins.map((login) => <li className='login-item' key={login.path}>
-              <Button large minimal onClick={() => onClickLoadAccount(login)} title={login.path}>
-                {login.addr}
-              </Button>
-              <Button
-                intent={Intent.DANGER} minimal icon='cross'
-                onClick={() => forgetLogin(login)}
-                aria-label={tx('a11y_remove_account_btn_label')} />
-            </li>
-            )}
-          </ul>
-        </Card>
-        }
+        {props.logins.length > 0 && (
+          <Card>
+            <p className='delta-headline'>
+              {tx('login_known_accounts_title_desktop')}
+            </p>
+            <ul>
+              {props.logins.map(login => (
+                <li className='login-item' key={login.path}>
+                  <Button
+                    large
+                    minimal
+                    onClick={() => onClickLoadAccount(login)}
+                    title={login.path}
+                  >
+                    {login.addr}
+                  </Button>
+                  <Button
+                    intent={Intent.DANGER}
+                    minimal
+                    icon='cross'
+                    onClick={() => forgetLogin(login)}
+                    aria-label={tx('a11y_remove_account_btn_label')}
+                  />
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
         <Card>
           <p className='delta-headline'>{tx('login_title')}</p>
           <Login onSubmit={onClickLogin} loading={props.deltachat.configuring}>

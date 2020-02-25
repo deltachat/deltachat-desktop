@@ -2,12 +2,12 @@ const React = require('react')
 const classNames = require('classnames')
 
 // TODO this function can be found in many places, refactor!
-function getInitial (name) {
+function getInitial(name) {
   return name.trim()[0] || '#'
 }
 
 class ContactListItem extends React.Component {
-  renderAvatar ({ displayName }) {
+  renderAvatar({ displayName }) {
     const { avatarPath, color, name } = this.props
     const tx = window.translate
 
@@ -23,9 +23,7 @@ class ContactListItem extends React.Component {
 
     return (
       <div
-        className={classNames(
-          'module-contact-list-item__avatar-default'
-        )}
+        className={classNames('module-contact-list-item__avatar-default')}
         style={{ backgroundColor: color }}
       >
         <div className='module-contact-list-item__avatar-default__label'>
@@ -35,15 +33,8 @@ class ContactListItem extends React.Component {
     )
   }
 
-  render () {
-    const {
-      name,
-      onClick,
-      isMe,
-      email,
-      profileName,
-      verified
-    } = this.props
+  render() {
+    const { name, onClick, isMe, email, profileName, verified } = this.props
     const tx = window.translate
 
     const title = name || email
@@ -75,7 +66,10 @@ class ContactListItem extends React.Component {
           </div>
           <div className='module-contact-list-item__text__additional-data'>
             {showVerified ? (
-              <img className='module-contact-list-item__text__verified-icon' src='../images/verified.png' />
+              <img
+                className='module-contact-list-item__text__verified-icon'
+                src='../images/verified.png'
+              />
             ) : null}
             {showVerified ? ` ${tx('verified_desktop')}` : null}
             {showVerified && showNumber ? ' ∙ ' : null}

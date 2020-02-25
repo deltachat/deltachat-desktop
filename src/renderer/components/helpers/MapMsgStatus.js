@@ -1,6 +1,6 @@
 const { C } = require('deltachat-node/dist/constants')
 
-function mapCoreMsgStatus2String (state) {
+function mapCoreMsgStatus2String(state) {
   switch (state) {
     case C.DC_STATE_OUT_FAILED:
       return 'error'

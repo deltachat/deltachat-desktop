@@ -6,28 +6,29 @@ import { callDcMethodAsync } from '../../ipc'
 import { Card, Callout } from '@blueprintjs/core'
 
 class MessageInfo extends React.Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       loading: true,
-      content: undefined
+      content: undefined,
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refresh()
   }
 
-  refresh () {
+  refresh() {
     this.setState({ loading: true })
-    callDcMethodAsync('messageList.getMessageInfo', this.props.message.id)
-      .then(info => {
+    callDcMethodAsync('messageList.getMessageInfo', this.props.message.id).then(
+      info => {
         this.setState({ loading: false, content: info })
         this.forceUpdate()
-      })
+      }
+    )
   }
 
-  render () {
+  render() {
     const { errors, message, receivedAt, sentAt } = this.props
     const tx = window.translate
 
@@ -40,9 +41,7 @@ class MessageInfo extends React.Component {
           <tbody>
             {(errors || []).map((error, index) => (
               <tr key={message.id}>
-                <td className='module-message-detail__label'>
-                  {tx('error')}
-                </td>
+                <td className='module-message-detail__label'>{tx('error')}</td>
                 <td>
                   {' '}
                   <span className='error-message'>{error.message}</span>{' '}
@@ -50,7 +49,9 @@ class MessageInfo extends React.Component {
               </tr>
             ))}
             <tr>
-              <td className='module-message-detail__label'>{tx('message_detail_sent_desktop')}</td>
+              <td className='module-message-detail__label'>
+                {tx('message_detail_sent_desktop')}
+              </td>
               <td>
                 {moment(sentAt).format('LLLL')}{' '}
                 <span className='module-message-detail__unix-timestamp'>
@@ -78,7 +79,7 @@ class MessageInfo extends React.Component {
   }
 }
 
-export default function MessageDetail (props) {
+export default function MessageDetail(props) {
   const { chat, message, onClose } = props
   const isOpen = !!message
   const tx = window.translate
@@ -92,13 +93,17 @@ export default function MessageDetail (props) {
       ? chat.contacts.map(convertContactProps)
       : [convertContactProps(message.contact)]
 
-    body = <Card><MessageInfo
-      contacts={contacts}
-      status={msg.status}
-      message={msg}
-      sentAt={msg.sentAt}
-      receivedAt={msg.receivedAt}
-    /></Card>
+    body = (
+      <Card>
+        <MessageInfo
+          contacts={contacts}
+          status={msg.status}
+          message={msg}
+          sentAt={msg.sentAt}
+          receivedAt={msg.receivedAt}
+        />
+      </Card>
+    )
   }
 
   return (

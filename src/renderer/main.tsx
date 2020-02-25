@@ -4,10 +4,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { ExtendedApp } from '../shared/shared-types'
 
-function main () {
+function main() {
   const logger = require('../shared/logger')
   logger.setLogHandler(
-    (...args:any[]) => ipcRenderer.send('handleLogMessage', ...args),
+    (...args: any[]) => ipcRenderer.send('handleLogMessage', ...args),
     (remote.app as ExtendedApp).rc
   )
   logger.printProcessLogLevelInfo()

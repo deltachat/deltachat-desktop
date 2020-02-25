@@ -5,10 +5,10 @@ const { promisify } = require('util')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
-const State = module.exports = Object.assign(new EventEmitter(), {
+const State = (module.exports = Object.assign(new EventEmitter(), {
   load,
   // state.save() calls are rate-limited. Use state.saveImmediate() to skip limit.
-  save: function () {
+  save: function() {
     // Perf optimization: Lazy-require debounce (and it's dependencies)
     const debounce = require('debounce')
     // After first State.save() invokation, future calls go straight to the
@@ -16,12 +16,12 @@ const State = module.exports = Object.assign(new EventEmitter(), {
     State.save = debounce(saveImmediate, SAVE_DEBOUNCE_INTERVAL)
     State.save(...arguments)
   },
-  saveImmediate
-})
+  saveImmediate,
+}))
 
 const { getDefaultState } = require('../shared/state')
 
-async function load () {
+async function load() {
   var state = getDefaultState()
   var saved = {}
   try {
@@ -34,7 +34,7 @@ async function load () {
   return state
 }
 
-function saveImmediate (state, cb) {
+function saveImmediate(state, cb) {
   log.info(`Saving state to ${appConfig.filePath}`)
   const copy = Object.assign({}, state.saved)
   appConfig.write(copy, err => {

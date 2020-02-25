@@ -10,11 +10,11 @@ const ListDiv = styled.div`
 `
 
 export default class SearchableList extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       queryStr: '',
-      data: []
+      data: [],
     }
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
@@ -22,42 +22,46 @@ export default class SearchableList extends React.Component {
     this.updateQuery = debounce(this.search, 200)
   }
 
-  handleSearch (event) {
+  handleSearch(event) {
     this.updateQuery(event.target.value)
     this.setState({ queryStr: event.target.value })
   }
 
   // could be overwritten by child class
-  search (queryStr) {
+  search(queryStr) {
     this.setState({ queryStr })
   }
 
-  _getData () {
+  _getData() {
     return this.state.data
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.search('')
   }
 
   // should be overwritten by child class
-  renderItem (item, index, array) {
-    return <div>
-      {JSON.stringify(item)}<br />
-    </div>
+  renderItem(item, index, array) {
+    return (
+      <div>
+        {JSON.stringify(item)}
+        <br />
+      </div>
+    )
   }
 
-  render (renderFunction) {
+  render(renderFunction) {
     const data = this._getData()
-    return <div>
-      <SearchInput
-        onChange={this.handleSearch}
-        value={this.state.queryStr}
-      />
-      <ListDiv>
-        { this.state.queryStr === '' && typeof this.props.renderOnEmptySearch === 'function' && this.props.renderOnEmptySearch() }
-        {data.map(this.renderItem.bind(this))}
-      </ListDiv>
-    </div>
+    return (
+      <div>
+        <SearchInput onChange={this.handleSearch} value={this.state.queryStr} />
+        <ListDiv>
+          {this.state.queryStr === '' &&
+            typeof this.props.renderOnEmptySearch === 'function' &&
+            this.props.renderOnEmptySearch()}
+          {data.map(this.renderItem.bind(this))}
+        </ListDiv>
+      </div>
+    )
   }
 }

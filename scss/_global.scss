@@ -11,7 +11,7 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
-  font-family: $roboto!important;
+  font-family: $roboto !important;
   font-size: 14px;
   color: var(--globalText);
   background-color: var(--globalBackground);
@@ -32,7 +32,16 @@ ul {
   padding-left: 0;
 }
 
-h1, h2, h3, h4, h5, p, .bp3-button, .bp3-dialog-header, button>span, label {
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+.bp3-button,
+.bp3-dialog-header,
+button > span,
+label {
   user-select: none;
 }
 
@@ -76,7 +85,7 @@ input:focus {
 }
 
 //yellow/blue border fix
-button:focus  {
+button:focus {
   outline: none;
 }
 button:focus {
@@ -118,7 +127,7 @@ code {
   border: 1pt rgba(0, 0, 0, 0.35) solid;
 }
 
-.markdown-code > code{
+.markdown-code > code {
   background-color: none;
   border-radius: 0;
   padding: none;
@@ -165,11 +174,10 @@ code {
     display: none;
   }
 
-  &.bp3-button[class*="bp3-icon-"]::before {
+  &.bp3-button[class*='bp3-icon-']::before {
     color: white;
   }
   &.bp3-button.bp3-minimal:hover {
     background-color: unset;
   }
 }
-

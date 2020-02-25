@@ -1,4 +1,4 @@
-const main = module.exports = {
+const main = (module.exports = {
   hide,
   init,
   send,
@@ -11,32 +11,26 @@ const main = module.exports = {
   toggleAlwaysOnTop,
   isAlwaysOnTop,
   toggleDevTools,
-  win: null
-}
+  win: null,
+})
 
 const electron = require('electron')
 const debounce = require('debounce')
-const {
-  appIcon,
-  windowDefaults
-} = require('../application-constants')
+const { appIcon, windowDefaults } = require('../application-constants')
 const { appWindowTitle } = require('../../shared/constants')
 
 const log = require('../../shared/logger').getLogger('main/mainWindow')
 
-function init (app, options) {
+function init(app, options) {
   if (main.win) {
     return main.win.show()
   }
 
   const state = app.state
   const defaults = windowDefaults()
-  const initialBounds = Object.assign(
-    defaults.bounds,
-    state.saved.bounds
-  )
+  const initialBounds = Object.assign(defaults.bounds, state.saved.bounds)
 
-  const win = main.win = new electron.BrowserWindow({
+  const win = (main.win = new electron.BrowserWindow({
     backgroundColor: '#282828',
     backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
@@ -53,9 +47,9 @@ function init (app, options) {
     y: initialBounds.y,
     webPreferences: {
       nodeIntegration: false,
-      preload: defaults.preload
-    }
-  })
+      preload: defaults.preload,
+    },
+  }))
 
   win.loadURL(defaults.main)
 
@@ -84,29 +78,39 @@ function init (app, options) {
     e.preventDefault()
   })
 
-  win.on('move', debounce(e => {
-    state.saved.bounds = e.sender.getBounds()
-    app.saveState()
-  }, 1000))
+  win.on(
+    'move',
+    debounce(e => {
+      state.saved.bounds = e.sender.getBounds()
+      app.saveState()
+    }, 1000)
+  )
 
-  win.on('resize', debounce(e => {
-    state.saved.bounds = e.sender.getBounds()
-    app.saveState()
-  }, 1000))
+  win.on(
+    'resize',
+    debounce(e => {
+      state.saved.bounds = e.sender.getBounds()
+      app.saveState()
+    }, 1000)
+  )
 
   win.on('close', e => {})
-  win.on('blur', e => { win.hidden = true })
-  win.on('focus', e => { win.hidden = false })
+  win.on('blur', e => {
+    win.hidden = true
+  })
+  win.on('focus', e => {
+    win.hidden = false
+  })
 }
 
-function hide () {
+function hide() {
   if (!main.win) return
   main.win.hide()
 }
 
-function send (...args) {
+function send(...args) {
   if (!main.win) {
-    log.warn('main.win not defined, can\'t send ipc to renderer')
+    log.warn("main.win not defined, can't send ipc to renderer")
     return
   }
   main.win.send(...args)
@@ -115,12 +119,12 @@ function send (...args) {
 /**
  * Enforce window aspect ratio. Remove with 0. (Mac)
  */
-function setAspectRatio (aspectRatio) {
+function setAspectRatio(aspectRatio) {
   if (!main.win) return
   main.win.setAspectRatio(aspectRatio)
 }
 
-function setBounds (bounds, maximize) {
+function setBounds(bounds, maximize) {
   // Maximize or minimize, if the second argument is present
   if (maximize === true && !main.win.isMaximized()) {
     log.debug('setBounds: maximizing')
@@ -130,15 +134,20 @@ function setBounds (bounds, maximize) {
     main.win.unmaximize()
   }
 
-  const willBeMaximized = typeof maximize === 'boolean' ? maximize : main.win.isMaximized()
+  const willBeMaximized =
+    typeof maximize === 'boolean' ? maximize : main.win.isMaximized()
   // Assuming we're not maximized or maximizing, set the window size
   if (!willBeMaximized) {
     log.debug(`setBounds: setting bounds to ${JSON.stringify(bounds)}`)
     if (bounds.x === null && bounds.y === null) {
       // X and Y not specified? By default, center on current screen
       const scr = electron.screen.getDisplayMatching(main.win.getBounds())
-      bounds.x = Math.round(scr.bounds.x + (scr.bounds.width / 2) - (bounds.width / 2))
-      bounds.y = Math.round(scr.bounds.y + (scr.bounds.height / 2) - (bounds.height / 2))
+      bounds.x = Math.round(
+        scr.bounds.x + scr.bounds.width / 2 - bounds.width / 2
+      )
+      bounds.y = Math.round(
+        scr.bounds.y + scr.bounds.height / 2 - bounds.height / 2
+      )
       log.debug(`setBounds: centered to ${JSON.stringify(bounds)}`)
     }
     // Resize the window's content area (so window border doesn't need to be taken
@@ -156,12 +165,12 @@ function setBounds (bounds, maximize) {
 /**
  * Set progress bar to [0, 1]. Indeterminate when > 1. Remove with < 0.
  */
-function setProgress (progress) {
+function setProgress(progress) {
   if (!main.win) return
   main.win.setProgressBar(progress)
 }
 
-function setTitle (title) {
+function setTitle(title) {
   if (!main.win) return
   if (title) {
     main.win.setTitle(`${appWindowTitle} - ${title}`)
@@ -170,23 +179,23 @@ function setTitle (title) {
   }
 }
 
-function show () {
+function show() {
   if (!main.win) return
   main.win.show()
 }
 
-function toggleAlwaysOnTop () {
+function toggleAlwaysOnTop() {
   if (!main.win) return
   const flag = !main.win.isAlwaysOnTop()
   log.info(`toggleAlwaysOnTop ${flag}`)
   main.win.setAlwaysOnTop(flag)
 }
 
-function isAlwaysOnTop () {
+function isAlwaysOnTop() {
   return main.win ? main.win.isAlwaysOnTop() : false
 }
 
-function toggleDevTools () {
+function toggleDevTools() {
   if (!main.win) return
   log.info('toggleDevTools')
   if (main.win.webContents.isDevToolsOpened()) {
@@ -196,6 +205,6 @@ function toggleDevTools () {
   }
 }
 
-function chooseLanguage (locale) {
+function chooseLanguage(locale) {
   main.win.send('chooseLanguage', locale)
 }

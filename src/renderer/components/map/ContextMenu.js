@@ -1,23 +1,29 @@
 const React = require('react')
 
 class ContextMenu extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.poiLabel = React.createRef()
     this.onClick = this.onClick.bind(this)
   }
 
-  onClick () {
+  onClick() {
     this.props.onSetPoi(this.poiLabel.current.value)
     this.poiLabel.current.value = ''
   }
 
-  render () {
+  render() {
     return (
       <div className={'context-menu'}>
-        <div className={'send-button-wrapper'}><button title={'Send POI'} onClick={this.onClick} /></div>
+        <div className={'send-button-wrapper'}>
+          <button title={'Send POI'} onClick={this.onClick} />
+        </div>
         <label>Send POI</label>
-        <input type={'text'} ref={this.poiLabel} placeholder={'Enter label here'} />
+        <input
+          type={'text'}
+          ref={this.poiLabel}
+          placeholder={'Enter label here'}
+        />
       </div>
     )
   }

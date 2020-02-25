@@ -10,11 +10,15 @@ import { callDcMethod } from '../../ipc'
 
 const { C } = require('deltachat-node/dist/constants')
 
-export default function ForwardMessage (props) {
+export default function ForwardMessage(props) {
   const tx = window.translate
   const { message, onClose } = props
-  const { chatListIds, queryStr, setQueryStr } = useChatListIds(C.DC_GCL_NO_SPECIALS)
-  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(chatListIds)
+  const { chatListIds, queryStr, setQueryStr } = useChatListIds(
+    C.DC_GCL_NO_SPECIALS
+  )
+  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
+    chatListIds
+  )
 
   const onChatClick = chatid => {
     callDcMethod('messageList.forwardMessage', [message.msg.id, chatid])
@@ -31,17 +35,33 @@ export default function ForwardMessage (props) {
       fixed
     >
       <DeltaDialogHeader onClose={onClose}>
-        <CreateChatSearchInput onChange={onSearchChange} value={queryStr} placeholder={tx('contacts_enter_name_or_email')} autoFocus />
+        <CreateChatSearchInput
+          onChange={onSearchChange}
+          value={queryStr}
+          placeholder={tx('contacts_enter_name_or_email')}
+          autoFocus
+        />
       </DeltaDialogHeader>
-      <div ref={scrollRef} className={classNames(Classes.DIALOG_BODY, '.bp3-dialog-body-no-footer')} onScroll={onChatListScroll}>
+      <div
+        ref={scrollRef}
+        className={classNames(
+          Classes.DIALOG_BODY,
+          '.bp3-dialog-body-no-footer'
+        )}
+        onScroll={onChatListScroll}
+      >
         <Card style={{ padding: '0px' }}>
           <div className='forward-message-list-chat-list'>
-            {chatListIds.map(chatId => <ChatListItem
-              key={chatId}
-              chatListItem={chatItems[chatId]}
-              onClick={onChatClick.bind(null, chatId)}
-            />)}
-            {chatListIds.length === 0 && queryStr !== '' && PseudoListItemNoSearchResults({ queryStr })}
+            {chatListIds.map(chatId => (
+              <ChatListItem
+                key={chatId}
+                chatListItem={chatItems[chatId]}
+                onClick={onChatClick.bind(null, chatId)}
+              />
+            ))}
+            {chatListIds.length === 0 &&
+              queryStr !== '' &&
+              PseudoListItemNoSearchResults({ queryStr })}
           </div>
         </Card>
       </div>

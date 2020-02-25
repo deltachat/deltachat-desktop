@@ -11,7 +11,7 @@ export const CreateDeltaDialogGlobal = createGlobalStyle`
   }
 `
 
-export const DeltaDialogBase = React.memo((props) => {
+export const DeltaDialogBase = React.memo(props => {
   const isFixed = props.fixed && props.fixed !== false
   return (
     <Fragment>
@@ -21,7 +21,10 @@ export const DeltaDialogBase = React.memo((props) => {
         onClose={props.onClose}
         canOutsideClickClose={false}
         canEscapeKeyClose
-        className={classNames(isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog', [props.className])}
+        className={classNames(
+          isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog',
+          [props.className]
+        )}
         style={props.style}
       >
         {props.children}
@@ -47,10 +50,14 @@ export const DeltaDialogCloseButtonWrapper = styled.div`
   }
 `
 
-export function DeltaDialogCloseButton (props) {
+export function DeltaDialogCloseButton(props) {
   return (
     <DeltaDialogCloseButtonWrapper>
-      <button {...props} aria-label='Close' className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross' />
+      <button
+        {...props}
+        aria-label='Close'
+        className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross'
+      />
     </DeltaDialogCloseButtonWrapper>
   )
 }
@@ -62,15 +69,18 @@ export const DeltaDialogBackButtonWrapper = styled.div`
   }
 `
 
-export function DeltaDialogBackButton (props) {
+export function DeltaDialogBackButton(props) {
   return (
     <DeltaDialogBackButtonWrapper>
-      <button {...props} className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left' />
+      <button
+        {...props}
+        className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left'
+      />
     </DeltaDialogBackButtonWrapper>
   )
 }
 
-const DeltaDialog = React.memo((props) => {
+const DeltaDialog = React.memo(props => {
   return (
     <DeltaDialogBase {...props}>
       <DeltaDialogHeader {...{ ...props, children: undefined }} />
@@ -81,10 +91,10 @@ const DeltaDialog = React.memo((props) => {
 
 export default DeltaDialog
 
-export const useDialog = (DialogComponent) => {
+export const useDialog = DialogComponent => {
   const [isOpen, setIsOpen] = useState(false)
   const [props, setProps] = useState({})
-  const showDialog = (props) => {
+  const showDialog = props => {
     setProps(props || {})
     setIsOpen(true)
   }
@@ -100,61 +110,85 @@ export const useDialog = (DialogComponent) => {
   return [renderDialog, showDialog]
 }
 
-export function DeltaDialogHeader (props) {
+export function DeltaDialogHeader(props) {
   let { onClickBack, title, onClose, children, showBackButton } = props
-  if (typeof showBackButton === 'undefined') showBackButton = typeof onClickBack === 'function'
+  if (typeof showBackButton === 'undefined')
+    showBackButton = typeof onClickBack === 'function'
   return (
-    <div className={classNames(Classes.DIALOG_HEADER, 'bp3-dialog-header-border-bottom')}>
-      { showBackButton && <DeltaDialogBackButton onClick={onClickBack} /> }
-      { title && <h4 className='bp3-heading'>{title}</h4> }
-      { children }
-      { typeof onClose === 'function' && <DeltaDialogCloseButton onClick={onClose} /> }
+    <div
+      className={classNames(
+        Classes.DIALOG_HEADER,
+        'bp3-dialog-header-border-bottom'
+      )}
+    >
+      {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
+      {title && <h4 className='bp3-heading'>{title}</h4>}
+      {children}
+      {typeof onClose === 'function' && (
+        <DeltaDialogCloseButton onClick={onClose} />
+      )}
     </div>
   )
 }
 
-export function DeltaDialogFooter (props) {
+export function DeltaDialogFooter(props) {
   let { hide, children } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
-    <div style={{ display: hide ? 'none' : 'unset', ...props.style }} className={classNames(Classes.DIALOG_FOOTER, 'bp3-dialog-footer-border-top')}>
+    <div
+      style={{ display: hide ? 'none' : 'unset', ...props.style }}
+      className={classNames(
+        Classes.DIALOG_FOOTER,
+        'bp3-dialog-footer-border-top'
+      )}
+    >
       {children}
     </div>
   )
 }
 
-export function DeltaDialogBody (props) {
+export function DeltaDialogBody(props) {
   let { noFooter, children } = props
   noFooter = noFooter !== false
   return (
-    <div ref={props.ref} className={classNames(Classes.DIALOG_BODY, { 'bp3-dialog-body-no-footer': noFooter })}>
+    <div
+      ref={props.ref}
+      className={classNames(Classes.DIALOG_BODY, {
+        'bp3-dialog-body-no-footer': noFooter,
+      })}
+    >
       {children}
     </div>
   )
 }
 
-export function DeltaDialogContent (props) {
+export function DeltaDialogContent(props) {
   const { noPadding, noOverflow } = props
   return (
-    <div style={props.style} className={classNames(
-      'delta-dialog-content', {
+    <div
+      style={props.style}
+      className={classNames('delta-dialog-content', {
         'delta-dialog-content--no-padding': noPadding,
-        'delta-dialog-content--no-overflow': noOverflow
-
-      })}>
+        'delta-dialog-content--no-overflow': noOverflow,
+      })}
+    >
       {props.children}
     </div>
   )
 }
 
-export function DeltaDialogContentTextSeperator (props) {
+export function DeltaDialogContentTextSeperator(props) {
   return <div className='delta-dialog-content-text-seperator'>{props.text}</div>
 }
 
-export function DeltaDialogContentSeperator (props) {
+export function DeltaDialogContentSeperator(props) {
   return <div style={props.style} className='delta-dialog-content-seperator' />
 }
 
-export function DeltaDialogButton (props) {
-  return <div onClick={props.onClick} className='delta-dialog-button'>{props.children}</div>
+export function DeltaDialogButton(props) {
+  return (
+    <div onClick={props.onClick} className='delta-dialog-button'>
+      {props.children}
+    </div>
+  )
 }

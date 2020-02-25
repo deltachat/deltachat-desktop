@@ -1,12 +1,23 @@
 import React, { useContext } from 'react'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogContent, DeltaDialogFooter, DeltaDialogButton } from './DeltaDialog'
+import DeltaDialog, {
+  DeltaDialogBody,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+  DeltaDialogButton,
+} from './DeltaDialog'
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
 import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 
-export function DeltaDialogQrInner ({ qrCode, description }:{ qrCode:string, description:string }) {
+export function DeltaDialogQrInner({
+  qrCode,
+  description,
+}: {
+  qrCode: string
+  description: string
+}) {
   const tx = window.translate
   const { userFeedback } = useContext(ScreenContext)
   return (
@@ -24,11 +35,21 @@ export function DeltaDialogQrInner ({ qrCode, description }:{ qrCode:string, des
             <div className='content' aria-label={tx('a11y_qr_data')}>
               {qrCode}
             </div>
-            <div className='copy-btn' role='button' onClick={() => {
-              navigator.clipboard.writeText(qrCode).then(
-              _ => userFeedback({ type: 'success', text: tx('a11y_copy_qr_data') })
-              )
-            }} aria-label={tx('copy_qr_data_success')}>
+            <div
+              className='copy-btn'
+              role='button'
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(qrCode)
+                  .then(_ =>
+                    userFeedback({
+                      type: 'success',
+                      text: tx('a11y_copy_qr_data'),
+                    })
+                  )
+              }}
+              aria-label={tx('copy_qr_data_success')}
+            >
               <Icon icon='clipboard' />
             </div>
           </div>
@@ -41,9 +62,17 @@ export function DeltaDialogQrInner ({ qrCode, description }:{ qrCode:string, des
   )
 }
 
-export default function QrInviteCode (
-  { onClose, isOpen, qrCode, deltachat }:{ onClose:()=>void, isOpen:boolean, qrCode:string, deltachat:LocalSettings }
-  ) {
+export default function QrInviteCode({
+  onClose,
+  isOpen,
+  qrCode,
+  deltachat,
+}: {
+  onClose: () => void
+  isOpen: boolean
+  qrCode: string
+  deltachat: LocalSettings
+}) {
   const tx = window.translate
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
@@ -52,7 +81,12 @@ export default function QrInviteCode (
       isOpen={isOpen}
       onClose={onClose}
     >
-      <DeltaDialogQrInner description={tx('qrshow_join_contact_hint', [deltachat.credentials.addr])} qrCode={qrCode} />
+      <DeltaDialogQrInner
+        description={tx('qrshow_join_contact_hint', [
+          deltachat.credentials.addr,
+        ])}
+        qrCode={qrCode}
+      />
     </Dialog>
   )
 }

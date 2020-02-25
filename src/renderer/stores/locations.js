@@ -6,9 +6,9 @@ const defaultState = {
   selectedChat: null,
   mapSettings: {
     timestampFrom: 0,
-    timestampTo: 0
+    timestampTo: 0,
   },
-  locations: []
+  locations: [],
 }
 const locationStore = new Store(defaultState)
 
@@ -17,7 +17,8 @@ const getLocations = (chatId, mapSettings) => {
   callDcMethod(
     'locations.getLocations',
     [chatId, 0, timestampFrom, timestampTo],
-    (locations) => locationStore.setState({ ...locationStore.getState(), locations })
+    locations =>
+      locationStore.setState({ ...locationStore.getState(), locations })
   )
 }
 
@@ -36,7 +37,9 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
     getLocations(selectedChat.id, mapSettings)
   }
   if (selectedChat && selectedChat.contacts) {
-    const isMemberOfSelectedChat = selectedChat.contacts.find(contact => contact.id === contactId)
+    const isMemberOfSelectedChat = selectedChat.contacts.find(
+      contact => contact.id === contactId
+    )
     if (isMemberOfSelectedChat) {
       getLocations(selectedChat.id, mapSettings)
     }

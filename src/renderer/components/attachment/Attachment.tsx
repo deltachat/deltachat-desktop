@@ -13,21 +13,30 @@ const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
   'image/webp',
   'image/x-xbitmap',
   // ICO
-  'image/vnd.microsoft.icon', 'image/ico', 'image/icon', 'image/x-icon',
+  'image/vnd.microsoft.icon',
+  'image/ico',
+  'image/icon',
+  'image/x-icon',
   // PNG
-  'image/apng', 'image/png'
+  'image/apng',
+  'image/png',
 ])
 // See: https://www.chromium.org/audio-video
 const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
   'video/mp4',
   'video/ogg',
-  'video/webm'
+  'video/webm',
 ])
 /* EndSection - Data Copied in part from Signal */
 
-// TODO define this correctly 
+// TODO define this correctly
 // (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
-export type attachment = { [key: string]: any, contentType: string, fileName: string, url: any }
+export type attachment = {
+  [key: string]: any
+  contentType: string
+  fileName: string
+  url: any
+}
 
 export function isImage(attachment: attachment) {
   return (
@@ -55,7 +64,9 @@ export function hasVideoScreenshot(attachment: attachment) {
 
 export function isAudio(attachment: attachment) {
   return (
-    attachment && attachment.contentType && attachment.contentType.startsWith('audio/')
+    attachment &&
+    attachment.contentType &&
+    attachment.contentType.startsWith('audio/')
   )
 }
 
@@ -79,4 +90,3 @@ export function dragAttachmentOut({ url }: attachment, dragEvent: DragEvent) {
   dragEvent.preventDefault()
   ipcRenderer.send('ondragstart', url)
 }
-

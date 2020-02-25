@@ -7,7 +7,11 @@ import ChatList from './chat/ChatList'
 import MessageListAndComposer from './message/MessageListAndComposer'
 import SearchInput from './SearchInput'
 import { useChatStore } from '../stores/chat'
-import { openEditGroupDialog, openMapDialog, openViewProfileDialog } from './helpers/ChatMethods'
+import {
+  openEditGroupDialog,
+  openMapDialog,
+  openViewProfileDialog,
+} from './helpers/ChatMethods'
 
 import {
   Alignment,
@@ -17,11 +21,11 @@ import {
   NavbarHeading,
   Position,
   Popover,
-  Button
+  Button,
 } from '@blueprintjs/core'
 import { getLastSelectedChatId } from '../ipc'
 
-export default function MainScreen () {
+export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
@@ -59,22 +63,20 @@ export default function MainScreen () {
 
   const tx = window.translate
 
-  const menu = <Menu
-    selectedChat={selectedChat}
-    showArchivedChats={showArchivedChats}
-  />
-  const MessageListView = selectedChat.id
-    ? media ? <Media
-      chat={selectedChat}
-    />
-      : (<MessageListAndComposer
-        chat={selectedChat}
-      />)
-    : (
-      <div className='no-chat-selected-screen'>
-        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-      </div>
+  const menu = (
+    <Menu selectedChat={selectedChat} showArchivedChats={showArchivedChats} />
+  )
+  const MessageListView = selectedChat.id ? (
+    media ? (
+      <Media chat={selectedChat} />
+    ) : (
+      <MessageListAndComposer chat={selectedChat} />
     )
+  ) : (
+    <div className='no-chat-selected-screen'>
+      <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+    </div>
+  )
 
   // StandardJS won't let me use '&& { } || { }', so the following code
   // compares with showArchivedChats twice.
@@ -83,66 +85,93 @@ export default function MainScreen () {
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            { showArchivedChats && (
+            {showArchivedChats && (
               <>
-                <div className='archived-chats-title'>{tx('chat_archived_chats_title')}</div>
+                <div className='archived-chats-title'>
+                  {tx('chat_archived_chats_title')}
+                </div>
                 <Button
-                  className={[Classes.MINIMAL, 'icon-rotated', 'archived-chats-return-button']}
-                  icon='undo' onClick={() => setShowArchivedChats(false)}
-                  aria-label={tx('back')} />
+                  className={[
+                    Classes.MINIMAL,
+                    'icon-rotated',
+                    'archived-chats-return-button',
+                  ]}
+                  icon='undo'
+                  onClick={() => setShowArchivedChats(false)}
+                  aria-label={tx('back')}
+                />
               </>
-            ) }
-            { showArchivedChats || (
+            )}
+            {showArchivedChats || (
               <SearchInput
                 id='chat-list-search'
                 onChange={handleSearchChange}
                 value={queryStr}
                 className='icon-rotated'
               />
-            ) }
+            )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
             <NavbarHeading>
               <div className='navbar-chat-name' onClick={onTitleClick}>
                 {selectedChat ? selectedChat.name : ''}
-                {selectedChat.isVerified && <img src='../images/verified.png' className='verified-icon' />}
+                {selectedChat.isVerified && (
+                  <img src='../images/verified.png' className='verified-icon' />
+                )}
               </div>
               <div className='navbar-chat-subtile' onClick={onTitleClick}>
                 {selectedChat ? selectedChat.subtitle : ''}
               </div>
             </NavbarHeading>
-            {selectedChat && selectedChat.id && <span className='views'>
-              <Button
-                onClick={() => setMedia(false)}
-                minimal
-                large
-                active={!media}
-                // aria-selected={!media}
-                icon={'chat'}
-                aria-label={tx('chat')} />
-              <Button
-                onClick={() => setMedia(true)}
-                minimal
-                large
-                active={media}
-                // aria-selected={media}
-                icon={'media'}
-                aria-label={tx('media')} />
-              <SettingsContext.Consumer>
-                {({ enableOnDemandLocationStreaming }) => (
-                  enableOnDemandLocationStreaming &&
-                  <Button
-                    minimal
-                    large
-                    icon='map'
-                    style={{ marginLeft: 0 }}
-                    onClick={onMapIconClick} aria-label={tx('tab_map')} />
-                )}
-              </SettingsContext.Consumer>
-            </span>}
-            <span style={{ marginLeft: selectedChat && selectedChat.id ? 0 : 'auto' }}>
+            {selectedChat && selectedChat.id && (
+              <span className='views'>
+                <Button
+                  onClick={() => setMedia(false)}
+                  minimal
+                  large
+                  active={!media}
+                  // aria-selected={!media}
+                  icon={'chat'}
+                  aria-label={tx('chat')}
+                />
+                <Button
+                  onClick={() => setMedia(true)}
+                  minimal
+                  large
+                  active={media}
+                  // aria-selected={media}
+                  icon={'media'}
+                  aria-label={tx('media')}
+                />
+                <SettingsContext.Consumer>
+                  {({ enableOnDemandLocationStreaming }) =>
+                    enableOnDemandLocationStreaming && (
+                      <Button
+                        minimal
+                        large
+                        icon='map'
+                        style={{ marginLeft: 0 }}
+                        onClick={onMapIconClick}
+                        aria-label={tx('tab_map')}
+                      />
+                    )
+                  }
+                </SettingsContext.Consumer>
+              </span>
+            )}
+            <span
+              style={{
+                marginLeft: selectedChat && selectedChat.id ? 0 : 'auto',
+              }}
+            >
               <Popover content={menu} position={Position.RIGHT_TOP}>
-                <Button className='icon-rotated' minimal icon='more' id='main-menu-button' aria-label={tx('main_menu')} />
+                <Button
+                  className='icon-rotated'
+                  minimal
+                  icon='more'
+                  id='main-menu-button'
+                  aria-label={tx('main_menu')}
+                />
               </Popover>
             </span>
           </NavbarGroup>

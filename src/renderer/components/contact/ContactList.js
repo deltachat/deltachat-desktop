@@ -15,14 +15,30 @@ const ContactListDiv = styled.div`
   }
 `
 
-export function ContactList2 (props) {
-  const { contacts, onClick, showCheckbox, isChecked, onCheckboxClick, showRemove, onRemoveClick } = props
+export function ContactList2(props) {
+  const {
+    contacts,
+    onClick,
+    showCheckbox,
+    isChecked,
+    onCheckboxClick,
+    showRemove,
+    onRemoveClick,
+  } = props
   return contacts.map(contact => {
     let checked = null
     if (showCheckbox && typeof isChecked === 'function') {
       checked = isChecked(contact)
     }
-    return ContactListItem({ contact, onClick, showCheckbox, checked, onCheckboxClick, showRemove, onRemoveClick })
+    return ContactListItem({
+      contact,
+      onClick,
+      showCheckbox,
+      checked,
+      onCheckboxClick,
+      showRemove,
+      onRemoveClick,
+    })
   })
 }
 
@@ -45,10 +61,11 @@ const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
   callDcMethod('getContacts2', [listFlags, queryStr], cb)
 }, 200)
 
-export function useContacts (listFlags, queryStr) {
+export function useContacts(listFlags, queryStr) {
   const [contacts, setContacts] = useState([])
 
-  const updateContacts = queryStr => debouncedGetContacts2(listFlags, queryStr, setContacts)
+  const updateContacts = queryStr =>
+    debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {
     callDcMethod('getContacts2', [listFlags, queryStr], setContacts)
@@ -58,14 +75,14 @@ export function useContacts (listFlags, queryStr) {
 }
 
 export default class ContactList extends SearchableList {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state.showVerifiedContacts = false
     this.handleSearch = this.handleSearch.bind(this)
     this.search = this.search.bind(this)
   }
 
-  _getData () {
+  _getData() {
     const { filterFunction, contacts } = this.props
     if (!contacts || contacts.length === 0) {
       return []
@@ -74,8 +91,11 @@ export default class ContactList extends SearchableList {
     if (filterFunction) {
       data = contacts.filter(filterFunction)
     }
-    data = data.filter(contact =>
-      `${contact.name}${contact.address}${contact.displayName}`.indexOf(this.state.queryStr) !== -1
+    data = data.filter(
+      contact =>
+        `${contact.name}${contact.address}${contact.displayName}`.indexOf(
+          this.state.queryStr
+        ) !== -1
     )
     if (this.props.showVerifiedContacts) {
       data = data.filter(contact => contact.isVerified)
@@ -83,20 +103,20 @@ export default class ContactList extends SearchableList {
     return data
   }
 
-  render () {
-    return <ContactListDiv>
-      {super.render()}
-    </ContactListDiv>
+  render() {
+    return <ContactListDiv>{super.render()}</ContactListDiv>
   }
 
-  renderItem (contact) {
+  renderItem(contact) {
     const { childProps, onContactClick } = this.props
     const props = childProps ? childProps(contact) : {}
-    return <RenderContact
-      key={contact.id}
-      onClick={() => onContactClick(contact)}
-      contact={contact}
-      {...props}
-    />
+    return (
+      <RenderContact
+        key={contact.id}
+        onClick={() => onContactClick(contact)}
+        contact={contact}
+        {...props}
+      />
+    )
   }
 }

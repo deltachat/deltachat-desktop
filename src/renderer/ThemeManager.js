@@ -1,11 +1,16 @@
 const React = require('react')
 const StyledThemeProvider = require('styled-components').ThemeProvider
 const { EventEmitter } = window.native_dependency
-const { defaultTheme, ThemeDataBuilder: ThemeBuilder, defaultThemeData, ThemeVarOverwrite } = require('./ThemeBackend.js')
+const {
+  defaultTheme,
+  ThemeDataBuilder: ThemeBuilder,
+  defaultThemeData,
+  ThemeVarOverwrite,
+} = require('./ThemeBackend.js')
 const { ipcRenderer } = window.electron_functions
 
 class ThemeManager extends EventEmitter {
-  constructor () {
+  constructor() {
     super()
     const themeJSON = window.localStorage.getItem('theme')
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
@@ -14,30 +19,30 @@ class ThemeManager extends EventEmitter {
     ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
   }
 
-  setTheme (theme) {
+  setTheme(theme) {
     window.localStorage.setItem('theme', JSON.stringify(theme))
     this.currentTheme = theme
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     this.emit('update')
   }
 
-  getCurrentlyAppliedThemeData () {
+  getCurrentlyAppliedThemeData() {
     return Object.assign({}, defaultThemeData, this.currentThemeData)
   }
 
-  getCurrentlyAppliedTheme () {
+  getCurrentlyAppliedTheme() {
     return Object.assign({}, defaultTheme, this.currentTheme)
   }
 
-  getCurrentTheme () {
+  getCurrentTheme() {
     return this.currentTheme
   }
 
-  getDefaultThemeData () {
+  getDefaultThemeData() {
     return defaultThemeData
   }
 
-  getDefaultTheme () {
+  getDefaultTheme() {
     return defaultTheme
   }
 }
@@ -45,38 +50,42 @@ class ThemeManager extends EventEmitter {
 const manager = new ThemeManager()
 
 class ThemeProvider extends React.Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
-      theme: manager.getCurrentlyAppliedThemeData()
+      theme: manager.getCurrentlyAppliedThemeData(),
     }
     this.update = this.update.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     manager.addListener('update', this.update)
     this.update()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     manager.removeListener('update', this.update)
   }
 
-  update (ev) {
+  update(ev) {
     const theme = manager.getCurrentlyAppliedThemeData()
     this.setState({ theme })
-    window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(theme)
+    window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(
+      theme
+    )
   }
 
-  render () {
-    return <StyledThemeProvider theme={this.state.theme}>
-      {this.props.children}
-    </StyledThemeProvider>
+  render() {
+    return (
+      <StyledThemeProvider theme={this.state.theme}>
+        {this.props.children}
+      </StyledThemeProvider>
+    )
   }
 }
 
 module.exports = {
   defaultTheme,
   manager,
-  ThemeProvider
+  ThemeProvider,
 }

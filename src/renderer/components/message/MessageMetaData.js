@@ -4,7 +4,7 @@ const Timestamp = require('../conversations/Timestamp').default
 const Attachment = require('../attachment/Attachment')
 
 class MessageMetaData extends React.Component {
-  render () {
+  render() {
     const {
       padlock,
       username,
@@ -13,26 +13,26 @@ class MessageMetaData extends React.Component {
       status,
       text,
       timestamp,
-      hasLocation
+      hasLocation,
     } = this.props
     const tx = window.translate
 
     const withImageNoCaption = Boolean(
       !text &&
         ((Attachment.isImage(attachment) && Attachment.hasImage(attachment)) ||
-          (Attachment.isVideo(attachment) && Attachment.hasVideoScreenshot(attachment)))
+          (Attachment.isVideo(attachment) &&
+            Attachment.hasVideoScreenshot(attachment)))
     )
     const showError = status === 'error' && direction === 'outgoing'
 
     return (
       <div
-        className={classNames(
-          'metadata',
-          { 'with-image-no-caption': withImageNoCaption }
-        )}
+        className={classNames('metadata', {
+          'with-image-no-caption': withImageNoCaption,
+        })}
       >
         {username !== undefined ? (
-          <div className='username' >{username}</div>
+          <div className='username'>{username}</div>
         ) : null}
         {padlock === true && status !== 'error' ? (
           <div
@@ -40,14 +40,9 @@ class MessageMetaData extends React.Component {
             className={'padlock-icon'}
           />
         ) : null}
-        {hasLocation ? (
-          <span className={'location-icon'} />
-        ) : null}
+        {hasLocation ? <span className={'location-icon'} /> : null}
         {showError ? (
-          <span
-            className='date'
-            style={{ color: 'red' }}
-          >
+          <span className='date' style={{ color: 'red' }}>
             {tx('send_failed')}
           </span>
         ) : (
@@ -61,10 +56,7 @@ class MessageMetaData extends React.Component {
         <span className='spacer' />
         {direction === 'outgoing' ? (
           <div
-            className={classNames(
-              'status-icon',
-              status
-            )}
+            className={classNames('status-icon', status)}
             aria-label={tx(`a11y_delivery_status_${status}`)}
           />
         ) : null}

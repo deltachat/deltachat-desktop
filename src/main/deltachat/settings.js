@@ -9,24 +9,27 @@ const serverFlagMap = {
   mail_security_plain: C.DC_LP_IMAP_SOCKET_PLAIN,
   send_security_ssl: C.DC_LP_SMTP_SOCKET_SSL,
   send_security_starttls: C.DC_LP_SMTP_SOCKET_STARTTLS,
-  send_security_plain: C.DC_LP_SMTP_SOCKET_PLAIN
+  send_security_plain: C.DC_LP_SMTP_SOCKET_PLAIN,
 }
 
 module.exports = class DCSettings extends SplitOut {
-  setConfig (key, value) {
+  setConfig(key, value) {
     log.info(`Setting config ${key}:${value}`)
     return this._dc.setConfig(key, String(value))
   }
 
-  getConfig (key) {
+  getConfig(key) {
     return this._dc.getConfig(key)
   }
 
-  getConfigFor (keys) {
+  getConfigFor(keys) {
     const config = {}
     for (const key of keys) {
       if (key.indexOf('_security') > -1) {
-        config[key] = this.convertServerFlag(this.getConfig('server_flags'), key)
+        config[key] = this.convertServerFlag(
+          this.getConfig('server_flags'),
+          key
+        )
       } else if (key.indexOf('_port') > -1) {
         config[key] = this.getConfig(key) === '0' ? '' : this.getConfig(key)
       } else {
@@ -36,11 +39,11 @@ module.exports = class DCSettings extends SplitOut {
     return config
   }
 
-  keysImport (directory) {
+  keysImport(directory) {
     this._dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory)
   }
 
-  keysExport (directory) {
+  keysExport(directory) {
     this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory)
   }
 
@@ -51,23 +54,21 @@ module.exports = class DCSettings extends SplitOut {
    * @param {*} flags bitmask
    * @param {*} configKey string
    */
-  convertServerFlag (flags, configKey) {
+  convertServerFlag(flags, configKey) {
     configKey = configKey.replace('configured_', '')
     let result = 'automatic'
-    Object.keys(serverFlagMap).map(
-      (key) => {
-        if (flags & serverFlagMap[key]) {
-          if (key.indexOf(configKey) === 0) {
-            result = key.replace(configKey + '_', '')
-          }
+    Object.keys(serverFlagMap).map(key => {
+      if (flags & serverFlagMap[key]) {
+        if (key.indexOf(configKey) === 0) {
+          result = key.replace(configKey + '_', '')
         }
       }
-    )
+    })
     return result
   }
 
   /* eslint-disable camelcase */
-  serverFlags ({ mail_security, send_security }) {
+  serverFlags({ mail_security, send_security }) {
     const flags = []
     if (mail_security === '' && send_security === '') {
       return ''

@@ -2,7 +2,7 @@ const React = require('react')
 const MessageMetaData = require('../message/MessageMetaData')
 
 class PopupMessage extends React.Component {
-  render () {
+  render() {
     const { username, formattedDate, message } = this.props
     if (message) {
       const props = Object.assign({}, message)
@@ -16,7 +16,12 @@ class PopupMessage extends React.Component {
         </div>
       )
     } else {
-      return <div> {username} <br /> {formattedDate} </div>
+      return (
+        <div>
+          {' '}
+          {username} <br /> {formattedDate}{' '}
+        </div>
+      )
     }
   }
 }

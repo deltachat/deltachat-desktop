@@ -1,7 +1,7 @@
 const SplitOut = require('./splitout')
 
 module.exports = class DCContext extends SplitOut {
-  maybeNetwork () {
+  maybeNetwork() {
     this._dc.maybeNetwork()
   }
 }

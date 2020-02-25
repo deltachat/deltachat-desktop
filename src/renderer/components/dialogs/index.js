@@ -34,21 +34,21 @@ export const allDialogs = {
   MapDialog,
   QrInviteCode,
   ConfirmationDialog,
-  UnblockContacts
+  UnblockContacts,
 }
 
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
 export class Controller extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     var dialogs = {}
-    Object.keys(allDialogs).forEach((key) => {
+    Object.keys(allDialogs).forEach(key => {
       dialogs[key] = {
         name: key,
         Component: allDialogs[key],
-        props: false
+        props: false,
       }
     })
 
@@ -56,28 +56,29 @@ export class Controller extends React.Component {
     this.close = this.close.bind(this)
   }
 
-  open (name, props) {
+  open(name, props) {
     log.debug('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
-    if (!Component) throw new Error(`Component with name ${name} does not exist`)
+    if (!Component)
+      throw new Error(`Component with name ${name} does not exist`)
     if (!props) props = {}
     this.state.dialogs[name].props = props
     this.setState({ dialogs: this.state.dialogs })
   }
 
-  close (name) {
+  close(name) {
     this.state.dialogs[name].props = false
     this.setState({ dialogs: this.state.dialogs })
   }
 
-  render () {
+  render() {
     const { userFeedback, deltachat } = this.props
     const { dialogs, attachedDialogs } = this.state
     // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
     return (
       <div>
-        {Object.values(dialogs).map((dialog) => {
+        {Object.values(dialogs).map(dialog => {
           const isOpen = dialog.props !== false
           if (!isOpen) return null
 
@@ -89,7 +90,7 @@ export class Controller extends React.Component {
             deltachat,
             key: name,
             openDialog: this.open.bind(this),
-            closeDialog: this.close.bind(this)
+            closeDialog: this.close.bind(this),
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})

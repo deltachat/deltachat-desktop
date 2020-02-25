@@ -1,145 +1,142 @@
 .media-attachment-media {
-    // Entirely to ensure that images are centered if they aren't full width of bubble
-    text-align: center;
-    position: relative;
+  // Entirely to ensure that images are centered if they aren't full width of bubble
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+
+  overflow: hidden;
+
+  & > .attachment-content {
+    object-fit: cover;
+    width: 120pt;
+    height: 120pt;
+
+    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
+    //   bottom, so this doesn't match up with the padding numbers above.
+    margin-bottom: -4px;
+
+    // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
+  }
 
-    overflow: hidden;
+  & > .video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-    &>.attachment-content {
-        object-fit: cover;
-        width: 120pt;
-        height: 120pt;
+    width: 48px;
+    height: 48px;
+    background-color: var(--videoPlayBtnBg);
+    border-radius: 24px;
 
-        // The padding on the bottom of the bubble produces 4 extra pixels of space at the
-        //   bottom, so this doesn't match up with the padding numbers above.
-        margin-bottom: -4px;
+    & > .video-play-btn-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-        // redundant with attachment-container, but we get cursor flashing on move otherwise
-        cursor: pointer;
+      height: 36px;
+      width: 36px;
+      @include color-svg('../images/play.svg', var(--videoPlayBtnIcon));
     }
-
-    &>.video-play-btn {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        width: 48px;
-        height: 48px;
-        background-color: var(--videoPlayBtnBg);
-        border-radius: 24px;
-
-        &>.video-play-btn-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-
-            height: 36px;
-            width: 36px;
-            @include color-svg('../images/play.svg', var(--videoPlayBtnIcon));
-        }
-    }
-
+  }
 }
 
 .media-attachment-broken-media {
-    font-size: 11px;
-    line-height: 16px;
-    letter-spacing: 0.3px;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
 
-    padding: 10px;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--brokenMediaBg);
-
+  padding: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--brokenMediaBg);
 }
 
 .media-attachment-audio {
-    margin: 2px;
-    padding: 4px;
-    background-color: rgba(130, 130, 130, 0.08);
-    &>.heading {
-        &>.name {
-            font-size: 17px;
-            display: inline-block;
-            font-weight: bold;
-        }
-        &>span.date {
-            float: right;
-            color: grey;
-        }
+  margin: 2px;
+  padding: 4px;
+  background-color: rgba(130, 130, 130, 0.08);
+  & > .heading {
+    & > .name {
+      font-size: 17px;
+      display: inline-block;
+      font-weight: bold;
     }
+    & > span.date {
+      float: right;
+      color: grey;
+    }
+  }
 }
 
 .media-attachment-generic {
+  display: flex;
+  flex-direction: row;
+  width: 400px;
+  margin: 5px 3px;
+
+  & > .file-icon {
+    background: url('../images/file-gradient.svg') no-repeat center;
+    height: 44px;
+    width: 56px;
+    margin-left: -13px;
+    margin-right: -14px;
+    margin-bottom: -4px;
+
+    // So we can center the extension text inside this icon
     display: flex;
     flex-direction: row;
-    width: 400px;
-    margin: 5px 3px;
+    align-items: center;
 
+    & > .file-extension {
+      font-size: 10px;
+      line-height: 13px;
+      letter-spacing: 0.1px;
+      text-transform: uppercase;
 
-    &>.file-icon {
-        background: url('../images/file-gradient.svg') no-repeat center;
-        height: 44px;
-        width: 56px;
-        margin-left: -13px;
-        margin-right: -14px;
-        margin-bottom: -4px;
+      // Along with flow layout in parent item, centers text
+      text-align: center;
+      width: 25px;
+      margin-left: auto;
+      margin-right: auto;
 
-        // So we can center the extension text inside this icon
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+      // We don't have much room for text here, cut it off without ellipse
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: clip;
 
-        &>.file-extension {
-            font-size: 10px;
-            line-height: 13px;
-            letter-spacing: 0.1px;
-            text-transform: uppercase;
+      color: var(--messageAttachmentIconExtentionColor);
+      font-family: monospace;
+    }
+  }
 
-            // Along with flow layout in parent item, centers text
-            text-align: center;
-            width: 25px;
-            margin-left: auto;
-            margin-right: auto;
+  & > .text-part {
+    flex-grow: 1;
+    margin-left: 8px;
+    // The width of the icon plus our 8px margin
+    max-width: calc(100% - 37px);
 
-            // We don't have much room for text here, cut it off without ellipse
-            overflow-x: hidden;
-            white-space: nowrap;
-            text-overflow: clip;
+    & > .name {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 300;
+      margin-top: 2px;
 
-            color: var(--messageAttachmentIconExtentionColor);
-            font-family: monospace;
-        }
+      // Handling really long filenames - cut them off
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
-    &>.text-part {
-        flex-grow: 1;
-        margin-left: 8px;
-        // The width of the icon plus our 8px margin
-        max-width: calc(100% - 37px);
-
-        &>.name {
-            color: var(--messageAttachmentFileInfo);
-            font-size: 14px;
-            line-height: 18px;
-            font-weight: 300;
-            margin-top: 2px;
-
-            // Handling really long filenames - cut them off
-            overflow-x: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        &>.size {
-            color: var(--messageAttachmentFileInfo);
-            font-size: 11px;
-            line-height: 16px;
-            letter-spacing: 0.3px;
-            margin-top: 3px;
-        }
+    & > .size {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 11px;
+      line-height: 16px;
+      letter-spacing: 0.3px;
+      margin-top: 3px;
     }
+  }
 }

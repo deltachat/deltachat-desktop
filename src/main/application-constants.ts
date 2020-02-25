@@ -1,12 +1,12 @@
 import appConfig from './application-config'
 import { dirname, join } from 'path'
 
-export function appIcon () {
+export function appIcon() {
   // TODO Add .ico file for windows
   return join(__dirname, '..', 'images', 'deltachat.png')
 }
 
-export function windowDefaults () {
+export function windowDefaults() {
   let targetFile = 'main.html'
   let defaultWidth = 500
   if (process.env.NODE_ENV === 'test') {
@@ -18,7 +18,7 @@ export function windowDefaults () {
   return {
     bounds: {
       width: 1600,
-      height: headerHeight + messageHeight * 6
+      height: headerHeight + messageHeight * 6,
     },
     headerHeight,
     minWidth: 450,
@@ -28,14 +28,14 @@ export function windowDefaults () {
   }
 }
 
-export function getConfigPath () {
+export function getConfigPath() {
   return dirname(appConfig.filePath)
 }
 
-export function getLogsPath () {
+export function getLogsPath() {
   return join(getConfigPath(), 'logs')
 }
 
-export function getAccountsPath () {
+export function getAccountsPath() {
   return join(getConfigPath(), 'accounts')
 }

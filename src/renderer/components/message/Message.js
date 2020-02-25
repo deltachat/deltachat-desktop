@@ -9,12 +9,7 @@ import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
 
 const Avatar = (contact, onContactClick) => {
-  const {
-    profileImage,
-    color,
-    name,
-    address
-  } = contact
+  const { profileImage, color, name, address } = contact
 
   const alt = `${name || address}`
   const onClick = () => onContactClick(contact)
@@ -27,13 +22,8 @@ const Avatar = (contact, onContactClick) => {
     )
   } else {
     return (
-      <div className='author-avatar default'
-        alt={alt}
-        onClick={onClick}
-      >
-        <div
-          style={{ backgroundColor: color }}
-          className='label'>
+      <div className='author-avatar default' alt={alt} onClick={onClick}>
+        <div style={{ backgroundColor: color }} className='label'>
           {(name && name.trim()[0]) || '#'}
         </div>
       </div>
@@ -41,7 +31,7 @@ const Avatar = (contact, onContactClick) => {
   }
 }
 
-const ContactName = (props) => {
+const ContactName = props => {
   const { email, name, profileName, module, color, onClick } = props
   const prefix = module || 'module-contact-name'
 
@@ -63,11 +53,7 @@ const ContactName = (props) => {
 }
 
 const Author = (contact, onContactClick) => {
-  const {
-    color,
-    name,
-    address
-  } = contact
+  const { color, name, address } = contact
 
   return (
     <ContactName
@@ -81,24 +67,19 @@ const Author = (contact, onContactClick) => {
 }
 
 const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
-  const {
-    attachment,
-    message,
-    onReply,
-    viewType
-  } = props
+  const { attachment, message, onReply, viewType } = props
   const tx = window.translate
 
   return (
     <div className='message-buttons'>
-      {
-        attachment && viewType !== 23 && <div
+      {attachment && viewType !== 23 && (
+        <div
           onClick={onDownload.bind(null, message.msg)}
           role='button'
           className='msg-button download hide-on-small'
           aria-label={tx('save')}
         />
-      }
+      )}
       <div
         onClick={onReply}
         role='button'
@@ -126,7 +107,7 @@ const contextMenu = (props, textSelected, link, triggerId) => {
     // onReply,
     onForward,
     onRetrySend,
-    onShowDetail
+    onShowDetail,
   } = props
   const tx = window.translate
 
@@ -143,7 +124,7 @@ const contextMenu = (props, textSelected, link, triggerId) => {
       </MenuItem>
       <MenuItem
         attributes={{
-          hidden: !textSelected
+          hidden: !textSelected,
         }}
         onClick={_ => {
           navigator.clipboard.writeText(window.getSelection().toString())
@@ -161,25 +142,17 @@ const contextMenu = (props, textSelected, link, triggerId) => {
         {tx('reply_to_message_desktop')}
       </MenuItem>
        */}
-      <MenuItem onClick={onForward}>
-        {tx('menu_forward')}
-      </MenuItem>
-      <MenuItem onClick={onShowDetail}>
-        {tx('more_info_desktop')}
-      </MenuItem>
+      <MenuItem onClick={onForward}>{tx('menu_forward')}</MenuItem>
+      <MenuItem onClick={onShowDetail}>{tx('more_info_desktop')}</MenuItem>
       {showRetry ? (
-        <MenuItem onClick={onRetrySend}>
-          {tx('retry_send')}
-        </MenuItem>
+        <MenuItem onClick={onRetrySend}>{tx('retry_send')}</MenuItem>
       ) : null}
-      <MenuItem onClick={onDelete} >
-        {tx('delete_message_desktop')}
-      </MenuItem>
+      <MenuItem onClick={onDelete}>{tx('delete_message_desktop')}</MenuItem>
     </ContextMenu>
   )
 }
 
-const Message = (props) => {
+const Message = props => {
   const {
     direction,
     id,
@@ -192,7 +165,7 @@ const Message = (props) => {
     status,
     attachment,
     onContactClick,
-    onClickMessageBody
+    onClickMessageBody,
   } = props
   const tx = window.translate
 
@@ -208,7 +181,7 @@ const Message = (props) => {
   const [textSelected, setTextSelected] = useState(false)
   const [link, setLink] = useState('')
 
-  const showMenu = (event) => {
+  const showMenu = event => {
     if (MenuRef.current) {
       setTextSelected(window.getSelection().toString() !== '')
       setLink(event.target.href || '')
@@ -232,30 +205,49 @@ const Message = (props) => {
         { forwarded: message.msg.isForwarded }
       )}
     >
-      {conversationType === 'group' && direction === 'incoming' && Avatar(message.contact, onContactClick)}
+      {conversationType === 'group' &&
+        direction === 'incoming' &&
+        Avatar(message.contact, onContactClick)}
       {menu}
-      <div
-        onContextMenu={showMenu}
-        className='msg-container'
-      >
-        {message.msg.isForwarded && <div className='forwarded-indicator'>{tx('forwarded_message')}</div>}
-        {direction === 'incoming' && conversationType === 'group' && Author(message.contact, onContactClick)}
-        <div className={classNames('msg-body', { 'msg-body--clickable': onClickMessageBody })} onClick={props.onClickMessageBody}>
-          <Attachment {...{
-            attachment,
-            text,
-            conversationType,
-            direction,
-            message }} />
+      <div onContextMenu={showMenu} className='msg-container'>
+        {message.msg.isForwarded && (
+          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
+        )}
+        {direction === 'incoming' &&
+          conversationType === 'group' &&
+          Author(message.contact, onContactClick)}
+        <div
+          className={classNames('msg-body', {
+            'msg-body--clickable': onClickMessageBody,
+          })}
+          onClick={props.onClickMessageBody}
+        >
+          <Attachment
+            {...{
+              attachment,
+              text,
+              conversationType,
+              direction,
+              message,
+            }}
+          />
 
           <div dir='auto' className='text'>
-            {message.msg.isSetupmessage ? tx('autocrypt_asm_click_body') : <MessageBody text={text || ''} />}
+            {message.msg.isSetupmessage ? (
+              tx('autocrypt_asm_click_body')
+            ) : (
+              <MessageBody text={text || ''} />
+            )}
           </div>
           {longMessage && <button onClick={onShowDetail}>...</button>}
           <MessageMetaData {...props} />
         </div>
       </div>
-      <div onClick={ev => { ev.stopPropagation() }}>
+      <div
+        onClick={ev => {
+          ev.stopPropagation()
+        }}
+      >
         {contextMenu(props, textSelected, link, triggerId)}
       </div>
     </div>

@@ -7,28 +7,33 @@ import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   appVersion,
   gitHubUrl,
-  gitHubLicenseUrl
+  gitHubLicenseUrl,
 } from '../../../shared/constants'
 const { openExternal } = window.electron_functions
 
 const log = logger.getLogger('renderer/dialogs/About')
 
-export function ClickableLink (props) {
+export function ClickableLink(props) {
   const { href, text } = props
-  const onClick = () => { openExternal(href) }
+  const onClick = () => {
+    openExternal(href)
+  }
 
-  return <a onClick={onClick} href={href}>{text}</a>
+  return (
+    <a onClick={onClick} href={href}>
+      {text}
+    </a>
+  )
 }
 
-export function DCInfo (props) {
+export function DCInfo(props) {
   const [content, setContent] = useState(undefined)
 
-  useEffect(function fetchContent () {
-    callDcMethodAsync('getInfo')
-      .then(info => {
-        setContent(info)
-        log.debug('dcInfo', info)
-      })
+  useEffect(function fetchContent() {
+    callDcMethodAsync('getInfo').then(info => {
+      setContent(info)
+      log.debug('dcInfo', info)
+    })
   }, [])
 
   const copy2Clipboard = () => {
@@ -43,27 +48,40 @@ export function DCInfo (props) {
       <div className='dialog-about__dc-details'>
         <table>
           <tbody>
-            {
-              keys && keys.map(key => <tr key={key}>
-                <td className='key'>{key.replace(/_/g, ' ')}</td>
-                <td className='value'>{content[key]}</td>
-              </tr>)
-            }
+            {keys &&
+              keys.map(key => (
+                <tr key={key}>
+                  <td className='key'>{key.replace(/_/g, ' ')}</td>
+                  <td className='value'>{content[key]}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
-      <button style={{ float: 'right' }} onClick={copy2Clipboard}>Copy JSON</button>
+      <button style={{ float: 'right' }} onClick={copy2Clipboard}>
+        Copy JSON
+      </button>
     </>
   )
 }
 
-export default function About (props) {
+export default function About(props) {
   const { isOpen, onClose } = props
   const tx = window.translate
 
-  const desktopString = reactStringReplace(tx('about_offical_app_desktop'), 'Delta Chat', () => <ClickableLink href='https://delta.chat' text='Delta Chat' />)
-  let versionString = reactStringReplace(tx('about_licensed_under_desktop'), 'GNU GPL version 3', () => <ClickableLink href={gitHubLicenseUrl} text='GNU GPL version 3' />)
-  versionString = reactStringReplace(versionString, 'GitHub', () => <ClickableLink href={gitHubUrl} text='GitHub' />)
+  const desktopString = reactStringReplace(
+    tx('about_offical_app_desktop'),
+    'Delta Chat',
+    () => <ClickableLink href='https://delta.chat' text='Delta Chat' />
+  )
+  let versionString = reactStringReplace(
+    tx('about_licensed_under_desktop'),
+    'GNU GPL version 3',
+    () => <ClickableLink href={gitHubLicenseUrl} text='GNU GPL version 3' />
+  )
+  versionString = reactStringReplace(versionString, 'GitHub', () => (
+    <ClickableLink href={gitHubUrl} text='GitHub' />
+  ))
 
   return (
     <DeltaDialog
@@ -73,10 +91,13 @@ export default function About (props) {
     >
       <DeltaDialogBody>
         <Card>
-          <p style={{ color: 'grey', userSelect: 'all' }}>{`Version ${appVersion}`}</p>
+          <p
+            style={{ color: 'grey', userSelect: 'all' }}
+          >{`Version ${appVersion}`}</p>
           <p>
             {desktopString}
-            <br /><br />
+            <br />
+            <br />
             {versionString}
           </p>
           <DCInfo />

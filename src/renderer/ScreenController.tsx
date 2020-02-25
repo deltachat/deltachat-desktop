@@ -1,31 +1,31 @@
-import { Login, AppState } from "../shared/shared-types"
+import { Login, AppState } from '../shared/shared-types'
 
-import React from "react"
+import React from 'react'
 import { Component, createRef } from 'react'
 const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
-import LoginScreen from'./components/LoginScreen'
+import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
-import {Controller as DialogController} from './components/dialogs/index'
-
+import { Controller as DialogController } from './components/dialogs/index'
 
 export interface userFeedback {
-  type: 'error'|'success'
+  type: 'error' | 'success'
   text: string
 }
 
 export default class ScreenController extends Component {
+  dialogs: React.RefObject<DialogController>
+  state: { message: userFeedback | false }
+  changeScreen: any
+  onShowAbout: any
 
-  dialogs: React.RefObject<DialogController>;
-  state: { message: userFeedback|false };
-  changeScreen:any;
-  onShowAbout:any;
-
-  constructor (public props:{logins:Login[], deltachat: AppState['deltachat']}) {
+  constructor(
+    public props: { logins: Login[]; deltachat: AppState['deltachat'] }
+  ) {
     super(props)
     this.state = {
-      message: false
+      message: false,
     }
 
     this.onError = this.onError.bind(this)
@@ -38,74 +38,80 @@ export default class ScreenController extends Component {
     this.dialogs = createRef()
   }
 
-  userFeedback (message:userFeedback|false) {
+  userFeedback(message: userFeedback | false) {
     if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
   }
 
-  userFeedbackClick () {
+  userFeedbackClick() {
     this.userFeedback(false)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
   }
 
-  onError (_event:any, error:Error) {
+  onError(_event: any, error: Error) {
     const tx = window.translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
   }
 
-  onSuccess (_event:any, text: string) {
+  onSuccess(_event: any, text: string) {
     this.userFeedback({ type: 'success', text })
   }
 
-  showAbout () {
+  showAbout() {
     this.openDialog('About')
   }
-  
-  openDialog (name: string, props?:any) {
+
+  openDialog(name: string, props?: any) {
     this.dialogs.current.open(name, props)
   }
 
-  closeDialog (name: string) {
+  closeDialog(name: string) {
     this.dialogs.current.close(name)
   }
 
-  render () {
+  render() {
     const { logins, deltachat } = this.props
 
     return (
       <div>
         {this.state.message && (
-          <div onClick={this.userFeedbackClick}
-            className={`user-feedback ${this.state.message.type}`}>
+          <div
+            onClick={this.userFeedbackClick}
+            className={`user-feedback ${this.state.message.type}`}
+          >
             <p>{this.state.message.text}</p>
           </div>
         )}
-        <ScreenContext.Provider value={{
-          openDialog: this.openDialog,
-          closeDialog: this.closeDialog,
-          userFeedback: this.userFeedback,
-          changeScreen: this.changeScreen,
-        }}>
-          {!deltachat.ready
-            ? <LoginScreen logins={logins} deltachat={deltachat} />
-            : <MainScreen/>
-          }
+        <ScreenContext.Provider
+          value={{
+            openDialog: this.openDialog,
+            closeDialog: this.closeDialog,
+            userFeedback: this.userFeedback,
+            changeScreen: this.changeScreen,
+          }}
+        >
+          {!deltachat.ready ? (
+            <LoginScreen logins={logins} deltachat={deltachat} />
+          ) : (
+            <MainScreen />
+          )}
           <DialogController
             ref={this.dialogs}
             deltachat={deltachat}
-            userFeedback={this.userFeedback} />
+            userFeedback={this.userFeedback}
+          />
         </ScreenContext.Provider>
       </div>
     )

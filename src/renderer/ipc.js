@@ -9,21 +9,24 @@ const log = require('../shared/logger').getLogger('renderer/ipc')
 export const ipcBackend = ipcRenderer
 
 var backendLoggingStarted = false
-export function startBackendLogging () {
-  if (backendLoggingStarted === true) return log.error('Backend logging is already started!')
+export function startBackendLogging() {
+  if (backendLoggingStarted === true)
+    return log.error('Backend logging is already started!')
   backendLoggingStarted = true
 
-  ipcBackend.on('ALL', (e, eName, ...args) => log.debug('backend', eName, ...args))
+  ipcBackend.on('ALL', (e, eName, ...args) =>
+    log.debug('backend', eName, ...args)
+  )
   ipcBackend.on('error', (e, ...args) => log.error(...args))
 }
 
-export function sendToBackend (event, ...args) {
+export function sendToBackend(event, ...args) {
   log.debug(`sendToBackend: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   ipcRenderer.send(event, ...args)
 }
 
-export function sendToBackendSync (event, ...args) {
+export function sendToBackendSync(event, ...args) {
   log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
   ipcRenderer.send('ALL', event, ...args)
   return ipcRenderer.sendSync(event, ...args)
@@ -32,7 +35,7 @@ export function sendToBackendSync (event, ...args) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
-export function callDcMethod (methodName, args, cb) {
+export function callDcMethod(methodName, args, cb) {
   const identifier = callDcMethodIdentifier++
   if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = 0
   const ignoreReturn = typeof cb !== 'function'
@@ -42,32 +45,39 @@ export function callDcMethod (methodName, args, cb) {
 
   if (ignoreReturn) return
 
-  ipcRenderer.once(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, (_ev, returnValue) => {
-    log.debug(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, 'Got back return: ', returnValue)
-    cb(returnValue)
-  })
+  ipcRenderer.once(
+    `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+    (_ev, returnValue) => {
+      log.debug(
+        `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+        'Got back return: ',
+        returnValue
+      )
+      cb(returnValue)
+    }
+  )
 }
 
-export function callDcMethodAsync (fnName, args) {
+export function callDcMethodAsync(fnName, args) {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
-export function mainProcessUpdateBadge () {
+export function mainProcessUpdateBadge() {
   ipcRenderer.send('update-badge')
 }
 
-export function saveLastChatId (chatId) {
+export function saveLastChatId(chatId) {
   ipcRenderer.send('saveLastChatId', chatId)
 }
 
 /**
  * get the last selected chats id from previous session
  */
-export function getLastSelectedChatId () {
+export function getLastSelectedChatId() {
   return ipcRenderer.sendSync('getLastSelectedChatId')
 }
 
-export function openHelp () {
+export function openHelp() {
   ipcRenderer.send('help', window.localeData.locale)
 }
 

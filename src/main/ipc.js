@@ -15,15 +15,21 @@ const DeltaChatController = (() => {
   try {
     return require('./deltachat/controller')
   } catch (error) {
-    log.critical('Fatal: The DeltaChat Module couldn\'t be loaded. Please check if all dependencies for deltachat-core are installed!', error)
+    log.critical(
+      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
+      error
+    )
     const { dialog } = require('electron')
     const { getLogsPath } = require('./application-constants')
-    dialog.showErrorBox('Fatal Error', `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`)
+    dialog.showErrorBox(
+      'Fatal Error',
+      `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`
+    )
   }
 })()
 const { C } = require('deltachat-node')
 
-function init (cwd, state, logHandler) {
+function init(cwd, state, logHandler) {
   const main = windows.main
   const dcController = new DeltaChatController(cwd, state.saved)
 
@@ -53,7 +59,9 @@ function init (cwd, state, logHandler) {
 
   dcController.on('error', error => main.send('error', error))
 
-  dcController.on('DC_EVENT_LOGIN_FAILED', () => main.send('error', 'Login failed!'))
+  dcController.on('DC_EVENT_LOGIN_FAILED', () =>
+    main.send('error', 'Login failed!')
+  )
 
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
@@ -83,12 +91,18 @@ function init (cwd, state, logHandler) {
   })
 
   /* dispatch a method on DC core with result passed to callback */
-  ipcMain.on('EVENT_DC_DISPATCH_CB', async (e, identifier, methodName, args) => {
-    if (!Array.isArray(args)) args = [args]
-    log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-    const returnValue = await dcController.callMethod(e, methodName, args)
-    main.send(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, returnValue)
-  })
+  ipcMain.on(
+    'EVENT_DC_DISPATCH_CB',
+    async (e, identifier, methodName, args) => {
+      if (!Array.isArray(args)) args = [args]
+      log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
+      const returnValue = await dcController.callMethod(e, methodName, args)
+      main.send(
+        `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+        returnValue
+      )
+    }
+  )
 
   ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
 
@@ -137,7 +151,9 @@ function init (cwd, state, logHandler) {
   })
   */
 
-  ipcMain.on('backupImport', (e, fileName) => dcController.backup.import(fileName))
+  ipcMain.on('backupImport', (e, fileName) =>
+    dcController.backup.import(fileName)
+  )
   ipcMain.on('backupExport', (e, dir) => dcController.backup.export(dir))
 
   ipcMain.on('setConfig', (e, key, value) => {
@@ -146,7 +162,7 @@ function init (cwd, state, logHandler) {
 
   ipcMain.on('logout', () => dcController.loginController.logout())
 
-  ipcMain.on('initiateKeyTransfer', (e) => {
+  ipcMain.on('initiateKeyTransfer', e => {
     dcController.autocrypt.initiateKeyTransfer((err, resp) => {
       main.send('initiateKeyTransferResp', err, resp)
     })
@@ -191,37 +207,51 @@ function init (cwd, state, logHandler) {
     // and it's not important data
   })
 
-  ipcMain.on('getLastSelectedChatId', (e) => {
+  ipcMain.on('getLastSelectedChatId', e => {
     const { lastChats } = app.state.saved
     e.returnValue = lastChats[dcController.credentials.addr]
   })
 
   ipcMain.on('selectBackgroundImage', (e, file) => {
-    const copyAndSetBg = async (originalfile) => {
+    const copyAndSetBg = async originalfile => {
       await fs.ensureDir(path.join(getConfigPath(), 'background/'))
       await fs.emptyDir(path.join(getConfigPath(), 'background/'))
-      const newPath = path.join(getConfigPath(), 'background/', `background_${Date.now()}` + path.extname(originalfile))
-      fs.copyFile(originalfile, newPath, (err) => {
+      const newPath = path.join(
+        getConfigPath(),
+        'background/',
+        `background_${Date.now()}` + path.extname(originalfile)
+      )
+      fs.copyFile(originalfile, newPath, err => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)
           return
         }
-        updateDesktopSetting(null, 'chatViewBgImg', `url("${newPath.replace(/\\/g, '/')}")`)
+        updateDesktopSetting(
+          null,
+          'chatViewBgImg',
+          `url("${newPath.replace(/\\/g, '/')}")`
+        )
       })
     }
     if (!file) {
-      dialog.showOpenDialog(undefined, {
-        title: 'Select Background Image',
-        filters: [
-          { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-          { name: 'All Files', extensions: ['*'] }
-        ],
-        properties: ['openFile']
-      }, (filenames) => {
-        if (!filenames) { return }
-        log.info('BG-IMG Selected File:', filenames[0])
-        copyAndSetBg(filenames[0])
-      })
+      dialog.showOpenDialog(
+        undefined,
+        {
+          title: 'Select Background Image',
+          filters: [
+            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+            { name: 'All Files', extensions: ['*'] },
+          ],
+          properties: ['openFile'],
+        },
+        filenames => {
+          if (!filenames) {
+            return
+          }
+          log.info('BG-IMG Selected File:', filenames[0])
+          copyAndSetBg(filenames[0])
+        }
+      )
     } else {
       const filepath = path.join(__dirname, '../../images/backgrounds/', file)
       copyAndSetBg(filepath)
@@ -255,13 +285,21 @@ function init (cwd, state, logHandler) {
     await fs.ensureDir(join(DestinationPath, 'help'))
 
     const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
-    const helpFile = await fs.exists(contentFilePath) ? contentFilePath : join(appPath, `/html-dist/help/en/help.html`)
+    const helpFile = (await fs.exists(contentFilePath))
+      ? contentFilePath
+      : join(appPath, `/html-dist/help/en/help.html`)
     try {
       await fs.exists(helpFile)
       // copy help files and assets
-      await fs.copy(join(appPath, '/html-dist/help/'), join(DestinationPath, 'help'))
+      await fs.copy(
+        join(appPath, '/html-dist/help/'),
+        join(DestinationPath, 'help')
+      )
       // open new file
-      const newPath = join(DestinationPath, relative(join(appPath, '/html-dist'), helpFile))
+      const newPath = join(
+        DestinationPath,
+        relative(join(appPath, '/html-dist'), helpFile)
+      )
       await fs.exists(newPath)
       shell.openItem(newPath)
     } catch (error) {
@@ -269,14 +307,14 @@ function init (cwd, state, logHandler) {
     }
   })
 
-  function sendStateToRenderer () {
+  function sendStateToRenderer() {
     log.debug('RENDER')
     const deltachat = dcController.getState()
     main.setTitle(deltachat.credentials.addr)
     sendState(deltachat)
   }
 
-  function sendState (deltachat) {
+  function sendState(deltachat) {
     Object.assign(state, { deltachat })
     main.send('render', state)
   }
@@ -285,10 +323,14 @@ function init (cwd, state, logHandler) {
   // which will create a new Deltachat instance which
   // is bound to a certain account
   const savedCredentials = state.saved.credentials
-  if (savedCredentials &&
-      typeof savedCredentials === 'object' &&
-      Object.keys(savedCredentials).length !== 0) {
-    const selectedAccount = state.logins.find(account => account.addr === savedCredentials.addr)
+  if (
+    savedCredentials &&
+    typeof savedCredentials === 'object' &&
+    Object.keys(savedCredentials).length !== 0
+  ) {
+    const selectedAccount = state.logins.find(
+      account => account.addr === savedCredentials.addr
+    )
 
     if (selectedAccount) {
       dcController.loginController.login(
@@ -298,12 +340,17 @@ function init (cwd, state, logHandler) {
         txCoreStrings()
       )
     } else {
-      log.error('Previous account not found!', state.saved.credentials, 'is not in the list of found logins:', state.logins)
+      log.error(
+        'Previous account not found!',
+        state.saved.credentials,
+        'is not in the list of found logins:',
+        state.logins
+      )
     }
   }
 }
 
-function txCoreStrings () {
+function txCoreStrings() {
   const tx = app.translate
   const strings = {}
   // TODO: Check if we need the uncommented core translations

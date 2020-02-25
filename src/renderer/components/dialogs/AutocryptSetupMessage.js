@@ -36,7 +36,7 @@ export const SetupMessagePartialInputSeperator = styled.div`
   }
 `
 
-export default function InputTransferKey ({ autocryptkey, onChange, disabled }) {
+export default function InputTransferKey({ autocryptkey, onChange, disabled }) {
   if (disabled !== true) disabled = false
   const inputs = []
   for (let i = 0; i < 9; i++) {
@@ -50,10 +50,11 @@ export default function InputTransferKey ({ autocryptkey, onChange, disabled }) 
           onChange={onChange}
           value={autocryptkey[i]}
         />
-        {i !== 8 &&
-          i !== 2 &&
-          i !== 5 &&
-            <SetupMessagePartialInputSeperator><Icon icon='small-minus' /></SetupMessagePartialInputSeperator>}
+        {i !== 8 && i !== 2 && i !== 5 && (
+          <SetupMessagePartialInputSeperator>
+            <Icon icon='small-minus' />
+          </SetupMessagePartialInputSeperator>
+        )}
       </SetupMessagePartialInputWrapper>
     )
   }

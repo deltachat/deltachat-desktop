@@ -1,18 +1,13 @@
 import React from 'react'
 
-import {
-  Card,
-  Callout,
-  Spinner,
-  Classes
-} from '@blueprintjs/core'
+import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import { DeltaButton } from './SmallDialog'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 const { ipcRenderer } = window.electron_functions
 
 class KeyViewPanel extends React.Component {
-  render () {
+  render() {
     const tx = window.translate
     return (
       <React.Fragment>
@@ -20,7 +15,10 @@ class KeyViewPanel extends React.Component {
           <Card>
             <Callout>{tx('show_key_transfer_message_desktop')}</Callout>
             <div className={Classes.DIALOG_BODY}>
-              <InputTransferKey autocryptkey={this.props.autocryptKey.split('-')} disabled />
+              <InputTransferKey
+                autocryptkey={this.props.autocryptKey.split('-')}
+                disabled
+              />
             </div>
           </Card>
         </div>
@@ -35,7 +33,7 @@ class KeyViewPanel extends React.Component {
 }
 
 class KeyLoadingPanel extends React.Component {
-  render () {
+  render() {
     return (
       <div className={Classes.DIALOG_BODY}>
         <Card>
@@ -47,13 +45,18 @@ class KeyLoadingPanel extends React.Component {
 }
 
 class InitiatePanel extends React.Component {
-  render () {
+  render() {
     const tx = window.translate
     return (
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
-          <DeltaButton style={{ float: 'right', marginTop: '20px' }} onClick={this.props.onClick}>{tx('ok')}</DeltaButton>
+          <DeltaButton
+            style={{ float: 'right', marginTop: '20px' }}
+            onClick={this.props.onClick}
+          >
+            {tx('ok')}
+          </DeltaButton>
         </Card>
       </div>
     )
@@ -61,54 +64,59 @@ class InitiatePanel extends React.Component {
 }
 
 export default class SendAutocryptSetupMessage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       loading: false,
-      key: false
+      key: false,
     }
     this.onClose = this.onClose.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.initiateKeyTransferResp = this.initiateKeyTransferResp.bind(this)
   }
 
-  initiateKeyTransferResp (e, err, key) {
+  initiateKeyTransferResp(e, err, key) {
     this.setState({ loading: false, key })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     ipcRenderer.on('initiateKeyTransferResp', this.initiateKeyTransferResp)
   }
 
-  componentWillUnmount () {
-    ipcRenderer.removeListener('initiateKeyTransferResp', this.initiateKeyTransferResp)
+  componentWillUnmount() {
+    ipcRenderer.removeListener(
+      'initiateKeyTransferResp',
+      this.initiateKeyTransferResp
+    )
   }
 
-  onClose () {
+  onClose() {
     this.setState({ key: null })
     this.props.onClose()
   }
 
-  initiateKeyTransfer () {
+  initiateKeyTransfer() {
     ipcRenderer.send('initiateKeyTransfer')
     this.setState({ loading: true })
   }
 
-  render () {
+  render() {
     const { isOpen } = this.props
     const { loading, key } = this.state
     const tx = window.translate
 
     let body
     if (loading) body = <KeyLoadingPanel />
-    else if (key) body = <KeyViewPanel autocryptKey={key} onClose={this.onClose} />
+    else if (key)
+      body = <KeyViewPanel autocryptKey={key} onClose={this.onClose} />
     else body = <InitiatePanel onClick={this.initiateKeyTransfer} />
     return (
       <DeltaDialog
         isOpen={isOpen}
         title={tx('autocrypt_key_transfer_desktop')}
         onClose={this.onClose}
-        canOutsideClickClose={false}>
+        canOutsideClickClose={false}
+      >
         {body}
       </DeltaDialog>
     )

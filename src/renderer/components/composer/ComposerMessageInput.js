@@ -28,14 +28,15 @@ const MessageInputTextarea = styled.textarea`
 
   &.scroll {
     overflow-y: scroll;
-  }`
+  }
+`
 
 class ComposerMessageInput extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       text: props.draft ? props.draft : '',
-      chatId: props.chatId
+      chatId: props.chatId,
     }
 
     this.composerSize = 48
@@ -43,7 +44,9 @@ class ComposerMessageInput extends React.Component {
     this.setCursorPosition = false
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(this)
+    this.insertStringAtCursorPosition = this.insertStringAtCursorPosition.bind(
+      this
+    )
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
@@ -53,31 +56,31 @@ class ComposerMessageInput extends React.Component {
     this.textareaRef = React.createRef()
   }
 
-  static getDerivedStateFromProps (props, currentState) {
+  static getDerivedStateFromProps(props, currentState) {
     if (currentState.chatId !== props.chatId) {
       return { chatId: props.chatId, text: props.draft ? props.draft : '' }
     }
     return null
   }
 
-  setComposerSize (size) {
+  setComposerSize(size) {
     this.composerSize = size
     this.props.setComposerSize(size)
   }
 
-  focus () {
+  focus() {
     this.textareaRef.current.focus()
   }
 
-  getText () {
+  getText() {
     return this.state.text
   }
 
-  clearText () {
+  clearText() {
     this.setState({ text: '' })
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
@@ -96,27 +99,27 @@ class ComposerMessageInput extends React.Component {
     }
   }
 
-  onChange (e) {
+  onChange(e) {
     this.setState({ text: e.target.value, error: false })
     this.saveDraft()
   }
 
-  keyEventToAction (e) {
+  keyEventToAction(e) {
     const enterKeySends = this.props.enterKeySends
 
     // ENTER + SHIFT
     if (e.keyCode === 13 && e.shiftKey) {
       return 'NEWLINE'
-    // ENTER + CTRL
+      // ENTER + CTRL
     } else if (e.keyCode === 13 && e.ctrlKey) {
       return 'SEND'
-    // ENTER
+      // ENTER
     } else if (e.keyCode === 13 && !e.shiftKey) {
       return enterKeySends ? 'SEND' : 'NEWLINE'
     }
   }
 
-  onKeyDown (e) {
+  onKeyDown(e) {
     const action = this.keyEventToAction(e)
 
     if (!action) return
@@ -130,7 +133,7 @@ class ComposerMessageInput extends React.Component {
     e.stopPropagation()
   }
 
-  resizeTextareaAndComposer () {
+  resizeTextareaAndComposer() {
     const maxScrollHeight = 9 * 24
 
     const el = this.textareaRef.current
@@ -161,7 +164,7 @@ class ComposerMessageInput extends React.Component {
     }
   }
 
-  insertStringAtCursorPosition (str) {
+  insertStringAtCursorPosition(str) {
     const textareaElem = this.textareaRef.current
     const { selectionStart, selectionEnd } = textareaElem
     const textValue = this.state.text
@@ -176,7 +179,7 @@ class ComposerMessageInput extends React.Component {
     this.setState({ text: updatedText })
   }
 
-  render () {
+  render() {
     const tx = window.translate
 
     return (

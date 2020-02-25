@@ -5,7 +5,13 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
-import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
+import {
+  callDcMethod,
+  sendToBackend,
+  sendToBackendSync,
+  ipcBackend,
+  startBackendLogging,
+} from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
 
@@ -19,23 +25,32 @@ addLocaleData(enLocaleData)
 
 attachKeybindingsListener()
 
-export default function App (props:any) {
-  const [state, setState] = useState<AppState>((remote.app as ExtendedApp).state)
+export default function App(props: any) {
+  const [state, setState] = useState<AppState>(
+    (remote.app as ExtendedApp).state
+  )
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
     sendToBackend('ipcReady')
-    window.addEventListener('keydown', function (ev: KeyboardEvent) {
+    window.addEventListener('keydown', function(ev: KeyboardEvent) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
-        if ((ev.target as HTMLElement).localName === 'textarea' || (ev.target as HTMLElement).localName === 'input') {
+        if (
+          (ev.target as HTMLElement).localName === 'textarea' ||
+          (ev.target as HTMLElement).localName === 'input'
+        ) {
           stop = false
         } else {
           // KeyboardEvent ev.path does ONLY exist in CHROMIUM
-          const invokePath:HTMLElement[] = (ev as any).path
+          const invokePath: HTMLElement[] = (ev as any).path
           for (let index = 0; index < invokePath.length; index++) {
             const element: HTMLElement = invokePath[index]
-            if (element.localName === 'textarea' || element.localName === 'input') stop = false
+            if (
+              element.localName === 'textarea' ||
+              element.localName === 'input'
+            )
+              stop = false
           }
         }
         if (stop) {
@@ -54,7 +69,7 @@ export default function App (props:any) {
     startBackendLogging()
     setupLocaleData(state.saved.locale)
   }, [])
-  const onRender = (e:any, state:AppState) => {
+  const onRender = (e: any, state: AppState) => {
     log.debug('onRenderer')
     setState(state)
   }
@@ -65,15 +80,15 @@ export default function App (props:any) {
     }
   }, [state])
 
-  function setupLocaleData (locale:string) {
+  function setupLocaleData(locale: string) {
     moment.locale(locale)
-    const localeData: LocaleData = sendToBackendSync('locale-data', locale);
-    window.localeData = localeData;
+    const localeData: LocaleData = sendToBackendSync('locale-data', locale)
+    window.localeData = localeData
     window.translate = translate(localeData.messages)
     setLocaleData(localeData)
   }
 
-  const onChooseLanguage = (e:any, locale:string) => {
+  const onChooseLanguage = (e: any, locale: string) => {
     setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
@@ -89,9 +104,7 @@ export default function App (props:any) {
     <SettingsContext.Provider value={state.saved}>
       <IntlProvider locale={localeData.locale}>
         <ThemeProvider>
-          <ScreenController
-            logins={state.logins}
-            deltachat={state.deltachat} />
+          <ScreenController logins={state.logins} deltachat={state.deltachat} />
         </ThemeProvider>
       </IntlProvider>
     </SettingsContext.Provider>

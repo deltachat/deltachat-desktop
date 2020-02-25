@@ -1,12 +1,14 @@
 const { C } = require('deltachat-node')
-const log = require('../../shared/logger').getLogger('main/deltachat/messagelist')
+const log = require('../../shared/logger').getLogger(
+  'main/deltachat/messagelist'
+)
 const { integerToHexColor } = require('../../shared/util')
 const filesizeConverter = require('filesize')
 const mime = require('mime-types')
 
 const SplitOut = require('./splitout')
 module.exports = class DCMessageList extends SplitOut {
-  sendMessage (chatId, text, filename, location) {
+  sendMessage(chatId, text, filename, location) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename)
@@ -16,34 +18,34 @@ module.exports = class DCMessageList extends SplitOut {
     return [messageId, this.getMessage(messageId)]
   }
 
-  sendSticker (chatId, stickerPath) {
+  sendSticker(chatId, stickerPath) {
     const viewType = 23
     const msg = this._dc.messageNew(viewType)
     msg.setFile(stickerPath)
     this._dc.sendMessage(chatId, msg)
   }
 
-  deleteMessage (id) {
+  deleteMessage(id) {
     log.info(`deleting message ${id}`)
     this._dc.deleteMessages(id)
   }
 
-  getMessage (msgId) {
+  getMessage(msgId) {
     return this.messageIdToJson(msgId)
   }
 
-  getMessageInfo (msgId) {
+  getMessageInfo(msgId) {
     return this._dc.getMessageInfo(msgId)
   }
 
-  setDraft (chatId, msgText) {
+  setDraft(chatId, msgText) {
     const msg = this._dc.messageNew()
     msg.setText(msgText)
 
     this._dc.setDraft(chatId, msg)
   }
 
-  messageIdToJson (id) {
+  messageIdToJson(id) {
     const msg = this._dc.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
@@ -52,7 +54,7 @@ module.exports = class DCMessageList extends SplitOut {
     return this.messageToJson(msg)
   }
 
-  messageToJson (msg) {
+  messageToJson(msg) {
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
@@ -75,21 +77,25 @@ module.exports = class DCMessageList extends SplitOut {
       isMe,
       contact,
       isInfo: msg.isInfo(),
-      setupCodeBegin
+      setupCodeBegin,
     })
   }
 
-  forwardMessage (msgId, chatId) {
+  forwardMessage(msgId, chatId) {
     this._dc.forwardMessages(msgId, chatId)
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds (chatId) {
-    const messageIds = this._dc.getChatMessages(chatId, C.DC_GCM_ADDDAYMARKER, 0)
+  getMessageIds(chatId) {
+    const messageIds = this._dc.getChatMessages(
+      chatId,
+      C.DC_GCM_ADDDAYMARKER,
+      0
+    )
     return messageIds
   }
 
-  getMessages (messageIds) {
+  getMessages(messageIds) {
     const messages = {}
     messageIds.forEach(messageId => {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
@@ -101,19 +107,19 @@ module.exports = class DCMessageList extends SplitOut {
   /**
    * @param {number[]} messageIds
    */
-  markSeenMessages (messageIds) {
+  markSeenMessages(messageIds) {
     this._dc.markSeenMessages(messageIds)
   }
 }
 
-function convert (message) {
+function convert(message) {
   const msg = message.msg
 
   Object.assign(msg, {
     sentAt: msg.timestamp * 1000,
     receivedAt: msg.receivedTimestamp * 1000,
     direction: message.isMe ? 'outgoing' : 'incoming',
-    status: convertMessageStatus(msg.state)
+    status: convertMessageStatus(msg.state),
   })
 
   if (msg.file) {
@@ -121,14 +127,14 @@ function convert (message) {
       url: msg.file,
       contentType: convertContentType(message),
       fileName: message.filename || msg.text,
-      fileSize: filesizeConverter(message.filesize)
+      fileSize: filesizeConverter(message.filesize),
     }
   }
 
   return message
 }
 
-function convertMessageStatus (s) {
+function convertMessageStatus(s) {
   switch (s) {
     case C.DC_STATE_IN_FRESH:
       return 'sent'
@@ -149,7 +155,7 @@ function convertMessageStatus (s) {
   }
 }
 
-function convertContentType (message) {
+function convertContentType(message) {
   const filemime = message.filemime
 
   if (!filemime) return 'application/octet-stream'
