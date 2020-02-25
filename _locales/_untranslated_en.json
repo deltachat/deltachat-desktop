@@ -73,5 +73,14 @@
   },
   "profile_action_direct_message": {
     "message": "Open Chat"
+  },
+  "a11y_qr_data": {
+    "message": "QR code data"
+  },
+  "a11y_copy_qr_data": {
+    "message": "Copy Qr code data to clipboard"
+  },
+  "copy_qr_data_success": {
+    "message": "Copied qr code data to clipboard"
   }
 }

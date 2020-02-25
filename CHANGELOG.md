@@ -4,6 +4,8 @@
 
 ### Added
 
+- Add copy qr code manually
+
 ### Changed
 
 ## Fixed
