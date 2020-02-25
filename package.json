@@ -180,6 +180,8 @@
     ]
   },
   "standard": {
-    "ignore": ["static/avoid-eval.js"]
+    "ignore": [
+      "static/avoid-eval.js"
+    ]
   }
 }
