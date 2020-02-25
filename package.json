@@ -178,5 +178,8 @@
       "!**/*.css.map",
       "!html-dist/report.html"
     ]
+  },
+  "standard": {
+    "ignore": ["static/avoid-eval.js"]
   }
 }

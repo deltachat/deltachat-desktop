@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron_functions
 import mimeTypes from 'mime-types'
 
 /* Section - Data Copied in part from Signal */

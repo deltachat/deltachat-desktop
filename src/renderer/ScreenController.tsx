@@ -2,7 +2,7 @@ import { Login, AppState } from "../shared/shared-types"
 
 import React from "react"
 import { Component, createRef } from 'react'
-import { ipcRenderer } from 'electron'
+const { ipcRenderer } = window.electron_functions
 
 import { ScreenContext } from './contexts'
 import LoginScreen from'./components/LoginScreen'

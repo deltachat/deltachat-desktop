@@ -1,5 +1,4 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
 
 import {
   Card,
@@ -10,6 +9,7 @@ import {
 import { DeltaButton } from './SmallDialog'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
+const { ipcRenderer } = window.electron_functions
 
 class KeyViewPanel extends React.Component {
   render () {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { remote, clipboard } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
@@ -10,12 +9,13 @@ import {
   gitHubUrl,
   gitHubLicenseUrl
 } from '../../../shared/constants'
+const { openExternal } = window.electron_functions
 
 const log = logger.getLogger('renderer/dialogs/About')
 
 export function ClickableLink (props) {
   const { href, text } = props
-  const onClick = () => { remote.shell.openExternal(href) }
+  const onClick = () => { openExternal(href) }
 
   return <a onClick={onClick} href={href}>{text}</a>
 }
@@ -32,7 +32,7 @@ export function DCInfo (props) {
   }, [])
 
   const copy2Clipboard = () => {
-    clipboard.writeText(JSON.stringify(content, null, 4))
+    navigator.clipboard.writeText(JSON.stringify(content, null, 4))
   }
 
   const keys = content && Object.keys(content)

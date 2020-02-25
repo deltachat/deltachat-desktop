@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import crypto from 'crypto'
-import { ipcRenderer, remote } from 'electron'
 import { callDcMethodAsync } from '../../ipc'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import {
   Elevation,
   H5,
@@ -18,8 +16,10 @@ import {
 import { DeltaDialogBase, DeltaDialogBody, DeltaDialogHeader } from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
+const { remote } = window.electron_functions
+const { ipcRenderer } = window.electron_functions
 const { SettingsContext } = require('../../contexts')
-const MAGIC_PW = crypto.randomBytes(8).toString('hex')
+const MAGIC_PW = '9bbdc87b50bbc684'
 
 function flipDeltaBoolean (value) {
   return value === '1' ? '0' : '1'

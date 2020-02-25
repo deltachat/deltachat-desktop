@@ -20,7 +20,7 @@ async function jsBuilder (watch, sourcemap, dev) {
     '--out-dir', 'html-dist',
     '--out-file', 'bundle.js',
     '--public-url', './',
-    '--target', 'electron'
+    '--target', 'browser'
   ]
   const parcelENV = {}
 

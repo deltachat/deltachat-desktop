@@ -4,7 +4,7 @@ import { SettingsContext } from './contexts'
 import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-import { remote } from 'electron'
+const { remote } = window.electron_functions
 import { callDcMethod, sendToBackend, sendToBackendSync, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'

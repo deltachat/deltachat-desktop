@@ -22,7 +22,7 @@ const { cleanupLogFolder } = require('./log-handler')
 const logHandler = require('./log-handler').createLogHandler()
 const logger = require('../shared/logger')
 const log = logger.getLogger('main/index')
-logger.setLogHandler(logHandler.log)
+logger.setLogHandler(logHandler.log, rc)
 process.on('exit', logHandler.end)
 
 // Report uncaught exceptions
