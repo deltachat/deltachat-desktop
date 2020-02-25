@@ -39,14 +39,12 @@ export function DeltaDialogQrInner({
               className='copy-btn'
               role='button'
               onClick={() => {
-                navigator.clipboard
-                  .writeText(qrCode)
-                  .then(_ =>
-                    userFeedback({
-                      type: 'success',
-                      text: tx('a11y_copy_qr_data'),
-                    })
-                  )
+                navigator.clipboard.writeText(qrCode).then(_ =>
+                  userFeedback({
+                    type: 'success',
+                    text: tx('a11y_copy_qr_data'),
+                  })
+                )
               }}
               aria-label={tx('copy_qr_data_success')}
             >
