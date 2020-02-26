@@ -15,3 +15,7 @@ export const ScreenContext = React.createContext({
 export const SettingsContext: React.Context<LocalSettings> = React.createContext(
   getDefaultState().saved
 )
+
+export type unwrapContext<T> = T extends import('react').Context<infer R>
+  ? R
+  : null

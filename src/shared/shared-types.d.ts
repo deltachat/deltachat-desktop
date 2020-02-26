@@ -43,6 +43,7 @@ export interface RC_Config {
 
 import { App } from 'electron'
 import { LocaleData } from '../shared/localize'
+import { bool } from 'prop-types'
 
 export interface ExtendedApp extends App {
   rc: RC_Config
@@ -50,4 +51,26 @@ export interface ExtendedApp extends App {
   ipcReady: boolean
   localeData?: LocaleData
   state?: AppState
+}
+
+export interface ChatListItemType {
+  id: number
+  name: string
+  avatarPath: string
+  color: string
+  lastUpdated: number
+  summary: {
+    text1: any
+    text2: any
+    status: string
+  }
+  deaddrop: any
+  isVerified: boolean
+  isGroup: boolean
+  freshMessageCounter: number
+  isArchiveLink: boolean
+  contactIds: number[]
+  isSelfTalk: boolean
+  isDeviceTalk: boolean
+  selfInGroup: boolean
 }
