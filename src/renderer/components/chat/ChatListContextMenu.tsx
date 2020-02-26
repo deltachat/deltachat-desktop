@@ -12,18 +12,22 @@ import {
 } from '../helpers/ChatMethods'
 
 import { callDcMethodAsync } from '../../ipc'
+import { ChatListItemType } from '../../../shared/shared-types'
 
 // const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
 
-const ChatListContextMenu = React.memo(
+const ChatListContextMenu = React.memo<{
+  showArchivedChats: boolean
+  getShow: (cb: (event: MouseEvent, chat: ChatListItemType) => void) => void
+}>(
   props => {
     const screenContext = useContext(ScreenContext)
     const { showArchivedChats } = props
-    const [chat, setChat] = useState({ isGroup: false })
+    const [chat, setChat] = useState<ChatListItemType | null>(null)
     const [showEvent, setShowEvent] = useState(null)
     const contextMenu = useRef(null)
 
-    const show = (event, chat) => {
+    const show = (event: MouseEvent, chat: ChatListItemType) => {
       // no log.debug, because passing the event object to through ipc freezes the application
       // console.debug('ChatListContextMenu.show', chat, event) // also commented out because it's not needed
 
@@ -49,10 +53,10 @@ const ChatListContextMenu = React.memo(
 
     const reset = () => {
       setShowEvent(null)
-      setChat({})
+      setChat(null)
     }
 
-    const onArchiveChat = archive => archiveChat(chat.id, archive)
+    const onArchiveChat = (archive: boolean) => archiveChat(chat.id, archive)
     const onDeleteChat = () => openDeleteChatDialog(screenContext, chat)
     const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
     const onEditGroup = async () => {
@@ -74,49 +78,47 @@ const ChatListContextMenu = React.memo(
 
     const tx = window.translate
 
-    const menu = [
-      showArchivedChats ? (
-        <MenuItem onClick={() => onArchiveChat(false)} key='export'>
-          {tx('menu_unarchive_chat')}
-        </MenuItem>
-      ) : (
-        <MenuItem
-          icon='import'
-          onClick={() => onArchiveChat(true)}
-          key='import'
-        >
-          {tx('menu_archive_chat')}
-        </MenuItem>
-      ),
-      <MenuItem onClick={onDeleteChat} key='delete'>
-        {tx('menu_delete_chat')}
-      </MenuItem>,
-      !chat.isGroup && !chat.isDeviceTalk && (
-        <MenuItem onClick={onEncrInfo} key='info'>
-          {tx('encryption_info_desktop')}
-        </MenuItem>
-      ),
-      chat.isGroup && chat.selfInGroup && (
-        <>
-          <MenuItem onClick={onEditGroup} key='edit'>
-            {tx('menu_edit_group')}
-          </MenuItem>
-          <MenuItem onClick={onLeaveGroup} key='leave'>
-            {tx('menu_leave_group')}
-          </MenuItem>
-        </>
-      ),
-      !chat.isGroup && (
-        <MenuItem onClick={onViewProfile} key='view'>
-          {tx('menu_view_profile')}
-        </MenuItem>
-      ),
-      !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && (
-        <MenuItem onClick={onBlockContact} key='block'>
-          {tx('menu_block_contact')}
-        </MenuItem>
-      ),
-    ]
+    const menu = chat
+      ? [
+          showArchivedChats ? (
+            <MenuItem onClick={() => onArchiveChat(false)} key='export'>
+              {tx('menu_unarchive_chat')}
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={() => onArchiveChat(true)} key='import'>
+              {tx('menu_archive_chat')}
+            </MenuItem>
+          ),
+          <MenuItem onClick={onDeleteChat} key='delete'>
+            {tx('menu_delete_chat')}
+          </MenuItem>,
+          !chat.isGroup && !chat.isDeviceTalk && (
+            <MenuItem onClick={onEncrInfo} key='info'>
+              {tx('encryption_info_desktop')}
+            </MenuItem>
+          ),
+          chat.isGroup && chat.selfInGroup && (
+            <>
+              <MenuItem onClick={onEditGroup} key='edit'>
+                {tx('menu_edit_group')}
+              </MenuItem>
+              <MenuItem onClick={onLeaveGroup} key='leave'>
+                {tx('menu_leave_group')}
+              </MenuItem>
+            </>
+          ),
+          !chat.isGroup && (
+            <MenuItem onClick={onViewProfile} key='view'>
+              {tx('menu_view_profile')}
+            </MenuItem>
+          ),
+          !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && (
+            <MenuItem onClick={onBlockContact} key='block'>
+              {tx('menu_block_contact')}
+            </MenuItem>
+          ),
+        ]
+      : []
 
     return (
       <ContextMenu id='chat-options' ref={contextMenu} onHide={reset}>

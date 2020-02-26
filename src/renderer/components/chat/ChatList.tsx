@@ -8,7 +8,13 @@ import { isValidEmail } from '../dialogs/CreateChat'
 import { callDcMethodAsync } from '../../ipc'
 import { selectChat } from '../../stores/chat'
 
-export default function ChatList(props) {
+export default function ChatList(props: {
+  selectedChatId: number
+  showArchivedChats: boolean
+  onShowArchivedChats: () => void
+  queryStr?: string
+  onChatClick: (chatId: number) => void
+}) {
   const {
     selectedChatId,
     showArchivedChats,
@@ -22,7 +28,7 @@ export default function ChatList(props) {
   )
   const realOpenContextMenu = useRef(null)
 
-  const onChatClick = chatId => {
+  const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
     props.onChatClick(chatId)
   }
@@ -36,7 +42,10 @@ export default function ChatList(props) {
     [showArchivedChats]
   )
 
-  const openContextMenu = (event, chatId) => {
+  const openContextMenu = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    chatId: number
+  ) => {
     if (realOpenContextMenu.current === null)
       throw new Error(
         'Tried to open ChatListContextMenu before we recieved open method'

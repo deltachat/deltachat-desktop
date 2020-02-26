@@ -3,11 +3,17 @@ import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import logger from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
+import { ChatListItemType } from '../../../shared/shared-types'
 
 const log = logger.getLogger('renderer/helpers/ChatList')
 
 const debouncedGetChatListIds = debounce(
-  (listFlags, queryStr, queryContactId, cb) => {
+  (
+    listFlags: number,
+    queryStr: string,
+    queryContactId: number,
+    cb: (...args: any) => void
+  ) => {
     callDcMethod(
       'chatList.getChatListIds',
       [listFlags, queryStr, queryContactId],
@@ -17,7 +23,11 @@ const debouncedGetChatListIds = debounce(
   200
 )
 
-export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
+export function useChatListIds(
+  _listFlags?: number,
+  _queryStr?: string,
+  _queryContactId?: number
+) {
   if (!_queryStr) _queryStr = ''
 
   const [listFlags, setListFlags] = useState(_listFlags)
@@ -25,7 +35,7 @@ export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
   const [chatListIds, setChatListIds] = useState([])
 
-  const getAndSetChatListIds = immediatly => {
+  const getAndSetChatListIds = (immediatly: boolean = false) => {
     if (immediatly === true) {
       callDcMethod(
         'chatList.getChatListIds',
@@ -74,10 +84,12 @@ export function useChatListIds(_listFlags, _queryStr, _queryContactId) {
  * - in view
  * - not already loaded
  */
-export const useLazyChatListItems = chatListIds => {
+export const useLazyChatListItems = (chatListIds: number[]) => {
   const scrollRef = useRef(null)
   const fetching = useRef([])
-  const [chatItems, setChatItems] = useState({})
+  const [chatItems, setChatItems] = useState<{
+    [key: number]: ChatListItemType
+  }>({})
 
   const isNotReady = () => {
     if (chatListIds.length === 0) return true
@@ -98,7 +110,7 @@ export const useLazyChatListItems = chatListIds => {
     return [indexStart, indexEnd]
   }
 
-  const chatIdsInView = offset => {
+  const chatIdsInView = (offset?: number) => {
     let [indexStart, indexEnd] = getIndexStartEndInView()
     if (offset) {
       indexStart = indexStart - offset
@@ -116,9 +128,10 @@ export const useLazyChatListItems = chatListIds => {
     return chatIds
   }
 
-  const isChatIdInView = chatId => chatIdsInView().indexOf(chatId) !== -1
+  const isChatIdInView = (chatId: number) =>
+    chatIdsInView().indexOf(chatId) !== -1
 
-  const fetchChatsInView = async offset => {
+  const fetchChatsInView = async (offset: number) => {
     if (isNotReady()) return
     const chatIds = chatIdsInView(offset)
     const chats = await fetchChats(chatIds)
@@ -143,7 +156,7 @@ export const useLazyChatListItems = chatListIds => {
     setChatItems(chats)
   }
 
-  const fetchChats = async (chatIds, force) => {
+  const fetchChats = async (chatIds: number[], force = false) => {
     const chatIdsToFetch = chatIds.filter(i => {
       if (fetching.current.indexOf(i) === -1) {
         if (
@@ -167,7 +180,7 @@ export const useLazyChatListItems = chatListIds => {
     return chats
   }
 
-  const refetchChatIfInViewUnsetOtherwise = async chatId => {
+  const refetchChatIfInViewUnsetOtherwise = async (chatId: number) => {
     if (chatId === 0) return
     if (isChatIdInView(chatId)) {
       log.debug(
@@ -193,7 +206,10 @@ export const useLazyChatListItems = chatListIds => {
     fetchChatsInView(0)
   }, 30)
 
-  const onChatListItemChanged = (event, { chatId }) => {
+  const onChatListItemChanged = (
+    _event: any,
+    { chatId }: { chatId: number }
+  ) => {
     if (chatId === 0) {
       updateChatsInViewUnsetOthers()
     } else {

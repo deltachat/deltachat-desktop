@@ -1,3 +1,5 @@
+import { ChatListItemType } from '../../shared/shared-types'
+
 const { C } = require('deltachat-node')
 const log = require('../../shared/logger').getLogger('main/deltachat/chatlist')
 const { app } = require('electron')
@@ -92,7 +94,9 @@ module.exports = class DCChatList extends SplitOut {
   async getChatListSummary(list, i) {
     return list.getSummary(i).toJson()
   }
-
+  /**
+   * @returns {Promise<ChatListItemType>}
+   */
   async getChatListItemById(chatId, list, i) {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null

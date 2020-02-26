@@ -53,6 +53,7 @@
     "@blueprintjs/core": "^3.22.3",
     "@blueprintjs/select": "^3.11.2",
     "@mapbox/geojson-extent": "^0.3.2",
+    "@types/debounce": "^1.2.0",
     "application-config": "^1.0.1",
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
