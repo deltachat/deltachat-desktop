@@ -1,4 +1,3 @@
-const merge = require('lodash.merge')
 const path = require('path')
 const fs = require('fs')
 
@@ -27,13 +26,13 @@ export default function setup(app: any, locale: string) {
   }
 
   if (localeMessages) {
-    messages = merge(messagesEnglish, localeMessages)
+    messages = Object.assign({}, messagesEnglish, localeMessages)
   }
 
   const experimentalFile = retrieveLocaleFile('_untranslated_en')
   const experimentalMessages = getLocaleMessages(experimentalFile)
   if (experimentalMessages) {
-    messages = merge(messages, experimentalMessages)
+    messages = Object.assign(messages, experimentalMessages)
   } else {
     log.debug(`No experimental language file (${experimentalFile}) found`)
   }

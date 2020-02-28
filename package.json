@@ -66,8 +66,6 @@
     "filesize": "^4.2.1",
     "fs-extra": "^8.1.0",
     "immutability-helper": "^3.0.1",
-    "lodash": "^4.17.15",
-    "lodash.merge": "^4.6.1",
     "mapbox-gl": "^1.6.1",
     "mime-types": "^2.1.25",
     "moment": "^2.22.2",
