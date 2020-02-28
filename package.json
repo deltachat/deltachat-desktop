@@ -77,7 +77,6 @@
     "react-intl": "^2.9.0",
     "react-qr-svg": "^2.1.0",
     "react-string-replace": "^0.4.4",
-    "rimraf": "^2.7.1",
     "simple-markdown": "^0.7.1",
     "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
