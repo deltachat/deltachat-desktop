@@ -1,7 +1,6 @@
 const Application = require('spectron').Application
-const cpFile = require('cp-file')
 const electronPath = require('electron')
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const tempy = require('tempy')
 const PNG = require('pngjs').PNG
@@ -152,7 +151,7 @@ function compareFiles (t, pathActual, pathExpected) {
 
 function copy (pathFrom, pathTo) {
   try {
-    cpFile.sync(pathFrom, pathTo)
+    fs.copyFileSync(pathFrom, pathTo)
   } catch (err) {
     // Windows lets us create files and folders under C:\Windows\Temp,
     // but when you try to `copySync` into one of those folders, you get EPERM
