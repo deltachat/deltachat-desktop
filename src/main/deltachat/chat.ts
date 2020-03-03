@@ -1,13 +1,16 @@
-const { C } = require('deltachat-node')
-const log = require('../../shared/logger').getLogger('main/deltachat/chat')
-const SplitOut = require('./splitout')
-module.exports = class DCChat extends SplitOut {
-  getChatMedia(msgType1, msgType2) {
+import { C } from 'deltachat-node'
+import logger from '../../shared/logger'
+import SplitOut from './splitout'
+
+const log = logger.getLogger('main/deltachat/chat')
+export default class DCChat extends SplitOut {
+  getChatMedia(msgType1: number, msgType2: number) {
     if (!this._controller._selectedChatId) return
     const mediaMessages = this._dc.getChatMedia(
       this._controller._selectedChatId,
       msgType1,
-      msgType2
+      msgType2,
+      null
     )
     return mediaMessages.map(
       this._controller.messageList.messageIdToJson.bind(
@@ -16,7 +19,7 @@ module.exports = class DCChat extends SplitOut {
     )
   }
 
-  getEncryptionInfo(contactId) {
+  getEncryptionInfo(contactId: number) {
     return this._dc.getContactEncryptionInfo(contactId)
   }
 
@@ -24,16 +27,16 @@ module.exports = class DCChat extends SplitOut {
     return this._dc.getSecurejoinQrCode(chatId)
   }
 
-  leaveGroup(chatId) {
+  leaveGroup(chatId: number) {
     log.debug(`action - leaving chat ${chatId}`)
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  setName(chatId, name) {
+  setName(chatId: number, name: any) {
     return this._dc.setChatName(chatId, name)
   }
 
-  modifyGroup(chatId, name, image, remove, add) {
+  modifyGroup(chatId: number, name: any, image: any, remove: number[], add: number[]) {
     log.debug('action - modify group', { chatId, name, image, remove, add })
     this._dc.setChatName(chatId, name)
     const chat = this._dc.getChat(chatId)
@@ -45,15 +48,15 @@ module.exports = class DCChat extends SplitOut {
     return true
   }
 
-  addContactToChat(chatId, contactId) {
+  addContactToChat(chatId: number, contactId: number) {
     return this._dc.addContactToChat(chatId, contactId)
   }
 
-  setProfileImage(chatId, newImage) {
+  setProfileImage(chatId: number, newImage: any) {
     return this._dc.setChatProfileImage(chatId, newImage)
   }
 
-  createGroupChat(verified, name) {
+  createGroupChat(verified: boolean, name: any) {
     const chatId =
       verified === true
         ? this._dc.createVerifiedGroupChat(name)
@@ -61,25 +64,25 @@ module.exports = class DCChat extends SplitOut {
     return chatId
   }
 
-  delete(chatId) {
+  delete(chatId: number) {
     log.debug(`action - deleting chat ${chatId}`)
     this._dc.deleteChat(chatId)
     this._controller.chatList.updateChatList()
   }
 
-  archive(chatId, archive) {
+  archive(chatId: number, archive: any) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
   }
 
-  getChatContacts(chatId) {
+  getChatContacts(chatId: number) {
     return this._dc.getChatContacts(chatId)
   }
 
   /**
    * @param {number} chatId
    */
-  markNoticedChat(chatId) {
+  markNoticedChat(chatId: number) {
     this._dc.markNoticedChat(chatId)
   }
 }
