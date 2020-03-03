@@ -88,6 +88,7 @@ export function EditGroupInner(props) {
   const tx = window.translate
 
   const [groupName, setGroupName] = useState(chat.name)
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
     chat.profileImage
   )
@@ -178,6 +179,8 @@ export function EditGroupInner(props) {
                 onUnsetGroupImage,
                 groupName,
                 setGroupName,
+                errorMissingGroupName,
+                setErrorMissingGroupName,
               })}
               <GroupSeperator>
                 {tx(
