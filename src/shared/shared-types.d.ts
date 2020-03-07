@@ -44,7 +44,6 @@ export interface RC_Config {
 
 import { App } from 'electron'
 import { LocaleData } from '../shared/localize'
-import { bool } from 'prop-types'
 
 export interface ExtendedApp extends App {
   rc: RC_Config
@@ -78,3 +77,9 @@ export interface ChatListItemType {
   isDeviceTalk: boolean
   selfInGroup: boolean
 }
+
+import { Chat, Contact } from 'deltachat-node'
+
+export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
+
+export type JsonContact = ReturnType<typeof Contact.prototype.toJson>

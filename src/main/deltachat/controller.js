@@ -15,7 +15,7 @@ const { integerToHexColor } = require('../../shared/util')
  */
 const DCAutocrypt = require('./autocrypt').default
 const DCBackup = require('./backup').default
-const DCChatList = require('./chatlist')
+const DCChatList = require('./chatlist').default
 const DCMessageList = require('./messagelist')
 const DCLocations = require('./locations').default
 const DCLoginController = require('./login')
@@ -181,7 +181,7 @@ class DeltaChatController extends EventEmitter {
 
   /**
    * @param {string} eventType
-   * @param {object} payload
+   * @param {object} [payload]
    */
   sendToRenderer(eventType, payload) {
     log.debug('sendToRenderer: ' + eventType, payload)
