@@ -3,9 +3,11 @@ const fs = require('fs-extra')
 const { DeltaChat } = require('deltachat-node')
 const logger = require('../shared/logger')
 const log = logger.getLogger('main/find_logins', true)
-const { escapeEmailForAccountFolder } = require('./deltachat/util')
-
 const { getAccountsPath, getConfigPath } = require('./application-constants')
+
+function escapeEmailForAccountFolder(path) {
+  return encodeURIComponent(path).replace(/%/g, 'P')
+}
 
 // change this in the future to enable new account format and break compatibility to really old dcversions on windows
 const NEW_ACCOUNT_FORMAT = false
