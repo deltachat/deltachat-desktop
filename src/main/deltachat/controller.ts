@@ -43,7 +43,6 @@ export default class DeltaChatController extends EventEmitter {
   _showArchivedChats = false
   _pages = 0
   _query = ''
-  __private: any
   _sendStateToRenderer: () => void
   constructor(public cwd: string, saved: LocalSettings) {
     super()
@@ -52,65 +51,19 @@ export default class DeltaChatController extends EventEmitter {
       throw new Error(
         'Saved settings are a required argument to DeltaChatController'
       )
-
-    this.__private = {
-      autocrypt: new DCAutocrypt(this),
-      backup: new DCBackup(this),
-      chatList: new DCChatList(this),
-      contacts: new DCContacts(this),
-      chat: new DCChat(this),
-      locations: new DCLocations(this),
-      loginController: new DCLoginController(this),
-      messageList: new DCMessageList(this),
-      settings: new DCSettings(this),
-      stickers: new DCStickers(this),
-      context: new DCContext(this),
-    }
   }
 
-  get autocrypt() {
-    return this.__private.autocrypt
-  }
-
-  get backup() {
-    return this.__private.backup
-  }
-
-  get chatList() {
-    return this.__private.chatList
-  }
-
-  get contacts() {
-    return this.__private.contacts
-  }
-
-  get chat() {
-    return this.__private.chat
-  }
-
-  get locations() {
-    return this.__private.locations
-  }
-
-  get loginController() {
-    return this.__private.loginController
-  }
-
-  get messageList() {
-    return this.__private.messageList
-  }
-
-  get settings() {
-    return this.__private.settings
-  }
-
-  get stickers() {
-    return this.__private.stickers
-  }
-
-  get context() {
-    return this.__private.context
-  }
+  readonly autocrypt = new DCAutocrypt(this)
+  readonly backup = new DCBackup(this)
+  readonly chatList = new DCChatList(this)
+  readonly contacts = new DCContacts(this)
+  readonly chat = new DCChat(this)
+  readonly locations = new DCLocations(this)
+  readonly loginController = new DCLoginController(this)
+  readonly messageList = new DCMessageList(this)
+  readonly settings = new DCSettings(this)
+  readonly stickers = new DCStickers(this)
+  readonly context = new DCContext(this)
 
   logCoreEvent(event: any, data1: any, data2: any) {
     if (!isNaN(event)) {
