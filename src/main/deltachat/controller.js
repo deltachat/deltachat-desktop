@@ -14,7 +14,7 @@ const { integerToHexColor } = require('../../shared/util')
  * @typedef {import('deltachat-node').DeltaChat} DeltaChat
  */
 const DCAutocrypt = require('./autocrypt').default
-const DCBackup = require('./backup')
+const DCBackup = require('./backup').default
 const DCChatList = require('./chatlist')
 const DCMessageList = require('./messagelist')
 const DCLocations = require('./locations').default
