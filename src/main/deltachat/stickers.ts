@@ -23,7 +23,7 @@ export default class DCStickers extends SplitOut {
       return {}
     }
 
-    const stickers: { property: string; } = {}
+    const stickers: { [key:string]: string[]; } = {}
 
     const list = await fsExtra.readdir(stickerFolder)
     for (const stickerPack of list) {
