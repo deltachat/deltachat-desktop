@@ -32,11 +32,11 @@ export default class DCChat extends SplitOut {
     this._dc.removeContactFromChat(chatId, C.DC_CONTACT_ID_SELF)
   }
 
-  setName(chatId: number, name: any) {
+  setName(chatId: number, name: string) {
     return this._dc.setChatName(chatId, name)
   }
 
-  modifyGroup(chatId: number, name: any, image: any, remove: number[], add: number[]) {
+  modifyGroup(chatId: number, name: string, image: string, remove: number[], add: number[]) {
     log.debug('action - modify group', { chatId, name, image, remove, add })
     this._dc.setChatName(chatId, name)
     const chat = this._dc.getChat(chatId)
@@ -52,11 +52,11 @@ export default class DCChat extends SplitOut {
     return this._dc.addContactToChat(chatId, contactId)
   }
 
-  setProfileImage(chatId: number, newImage: any) {
+  setProfileImage(chatId: number, newImage: string) {
     return this._dc.setChatProfileImage(chatId, newImage)
   }
 
-  createGroupChat(verified: boolean, name: any) {
+  createGroupChat(verified: boolean, name: string) {
     const chatId =
       verified === true
         ? this._dc.createVerifiedGroupChat(name)
@@ -70,7 +70,7 @@ export default class DCChat extends SplitOut {
     this._controller.chatList.updateChatList()
   }
 
-  archive(chatId: number, archive: any) {
+  archive(chatId: number, archive: boolean) {
     log.debug(`action - archiving chat ${chatId}`)
     this._dc.archiveChat(chatId, archive)
   }
