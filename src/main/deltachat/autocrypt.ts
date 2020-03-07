@@ -1,12 +1,13 @@
 import SplitOut from './splitout'
+import { DeltaChat } from 'deltachat-node'
 
 
 export default class DCAutocrypt extends SplitOut {
-  initiateKeyTransfer(cb: any) {
-    return this._dc.initiateKeyTransfer(cb)
+  initiateKeyTransfer(...args: Parameters<typeof DeltaChat.prototype.initiateKeyTransfer>) {
+    return this._dc.initiateKeyTransfer(...args)
   }
 
-  continueKeyTransfer(messageId: number, setupCode:any, cb: any) {
-    return this._dc.continueKeyTransfer(messageId, setupCode, cb)
+  continueKeyTransfer(...args: Parameters<typeof DeltaChat.prototype.continueKeyTransfer>) {
+    return this._dc.continueKeyTransfer(...args)
   }
 }
