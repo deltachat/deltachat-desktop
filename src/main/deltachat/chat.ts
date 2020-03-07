@@ -36,7 +36,13 @@ export default class DCChat extends SplitOut {
     return this._dc.setChatName(chatId, name)
   }
 
-  modifyGroup(chatId: number, name: string, image: string, remove: number[], add: number[]) {
+  modifyGroup(
+    chatId: number,
+    name: string,
+    image: string,
+    remove: number[],
+    add: number[]
+  ) {
     log.debug('action - modify group', { chatId, name, image, remove, add })
     this._dc.setChatName(chatId, name)
     const chat = this._dc.getChat(chatId)

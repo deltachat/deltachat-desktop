@@ -1,7 +1,7 @@
 import fsExtra from 'fs-extra'
 import path from 'path'
 import logger from '../../shared/logger'
-import  SplitOut from './splitout'
+import SplitOut from './splitout'
 
 const log = logger.getLogger('main/deltachat/stickers')
 
@@ -16,14 +16,17 @@ async function isFile(path: string) {
 }
 export default class DCStickers extends SplitOut {
   async getStickers() {
-    const stickerFolder = path.join(String(this._controller.accountDir), 'stickers')
+    const stickerFolder = path.join(
+      String(this._controller.accountDir),
+      'stickers'
+    )
 
     if (!(await fsExtra.pathExists(stickerFolder))) {
       log.info(`Sticker folder ${stickerFolder} does not exist`)
       return {}
     }
 
-    const stickers: { [key:string]: string[]; } = {}
+    const stickers: { [key: string]: string[] } = {}
 
     const list = await fsExtra.readdir(stickerFolder)
     for (const stickerPack of list) {
