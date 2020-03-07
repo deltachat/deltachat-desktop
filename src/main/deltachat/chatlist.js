@@ -6,7 +6,7 @@ const { app } = require('electron')
 
 const { integerToHexColor } = require('../../shared/util')
 
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 module.exports = class DCChatList extends SplitOut {
   async selectChat(chatId) {
     this._controller._selectedChatId = chatId

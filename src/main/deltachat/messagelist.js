@@ -6,7 +6,7 @@ const { integerToHexColor } = require('../../shared/util')
 const filesizeConverter = require('filesize')
 const mime = require('mime-types')
 
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 module.exports = class DCMessageList extends SplitOut {
   sendMessage(chatId, text, filename, location) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT

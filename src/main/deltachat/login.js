@@ -5,7 +5,7 @@ const setupUnreadBadgeCounter = require('../unread-badge')
 const { setupMarkseenFix } = require('../markseenFix')
 const { app } = require('electron')
 
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 module.exports = class DCLoginController extends SplitOut {
   /**
    * Called when this controller is created and when current

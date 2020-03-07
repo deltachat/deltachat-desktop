@@ -9,7 +9,7 @@ const EventEmitter = require('events').EventEmitter
 const log = require('../../shared/logger').getLogger('main/deltachat/backup')
 const { getNewAccountPath } = require('../logins')
 
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 module.exports = class DCBackup extends SplitOut {
   export(dir) {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir)

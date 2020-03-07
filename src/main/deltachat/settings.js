@@ -1,7 +1,7 @@
 const { C } = require('deltachat-node')
 const log = require('../../shared/logger').getLogger('main/deltachat/settings')
 
-const SplitOut = require('./splitout')
+import SplitOut from './splitout'
 
 const serverFlagMap = {
   mail_security_ssl: C.DC_LP_IMAP_SOCKET_SSL,
