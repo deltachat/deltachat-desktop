@@ -13,7 +13,7 @@ import logger from '../../shared/logger'
 const log = logger.getLogger('main/deltachat/backup')
 
 import SplitOut from './splitout'
-module.exports = class DCBackup extends SplitOut {
+export default class DCBackup extends SplitOut {
   export(dir: string) {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
   }
