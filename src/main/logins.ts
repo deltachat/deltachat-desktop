@@ -1,18 +1,18 @@
-const { join, basename } = require('path')
-const fs = require('fs-extra')
-const { DeltaChat } = require('deltachat-node')
-const logger = require('../shared/logger')
-const log = logger.getLogger('main/find_logins', true)
-const { getAccountsPath, getConfigPath } = require('./application-constants')
+import { join, basename } from 'path'
+import fs from 'fs-extra'
+import { DeltaChat } from 'deltachat-node'
+import logger from '../shared/logger'
+const log = logger.getLogger('main/find_logins')
+import { getAccountsPath, getConfigPath } from './application-constants'
 
-function escapeEmailForAccountFolder(path) {
+function escapeEmailForAccountFolder(path: string) {
   return encodeURIComponent(path).replace(/%/g, 'P')
 }
 
 // change this in the future to enable new account format and break compatibility to really old dcversions on windows
 const NEW_ACCOUNT_FORMAT = false
 
-async function getLogins() {
+export async function getLogins() {
   if (NEW_ACCOUNT_FORMAT) {
     // search for old accounts and convert them
     await migrate(getConfigPath())
@@ -28,7 +28,7 @@ async function getLogins() {
   return accounts
 }
 
-async function migrate(dir) {
+async function migrate(dir: string) {
   const oldAccounts = await readDeltaAccounts(dir)
 
   if (oldAccounts.length > 0) {
@@ -59,7 +59,7 @@ async function migrate(dir) {
   }
 }
 
-async function getAccountInfo(path) {
+async function getAccountInfo(path: string) {
   try {
     const config = await getConfig(path)
     if (typeof config.addr !== 'string') {
@@ -76,7 +76,7 @@ async function getAccountInfo(path) {
   }
 }
 
-async function readDeltaAccounts(accountFolderPath) {
+async function readDeltaAccounts(accountFolderPath: string) {
   const paths = (await fs.readdir(accountFolderPath)).map(filename =>
     join(accountFolderPath, filename)
   )
@@ -93,7 +93,7 @@ async function readDeltaAccounts(accountFolderPath) {
   )
 }
 
-function getConfig(cwd) {
+function getConfig(cwd: string): Promise<{ [key: string]: string }> {
   return new Promise((resolve, reject) => {
     DeltaChat.getConfig(cwd, (err, result) => {
       if (err) {
@@ -105,26 +105,23 @@ function getConfig(cwd) {
   })
 }
 
-async function removeAccount(accountPath) {
+export async function removeAccount(accountPath: string) {
   const account = (await getLogins()).find(({ path }) => accountPath === path)
   if (!account) {
     throw new Error('Removing account failed: Account not found')
   } else if (!(await fs.pathExists(account.path))) {
     log.error('Removing account failed: path does not exist', account)
     throw new Error(
-      'Removing account failed: path does not exist:',
-      account.path
+      'Removing account failed: path does not exist: ' + account.path
     )
   }
   await fs.remove(account.path)
 }
 
-function getNewAccountPath(addr) {
+export function getNewAccountPath(addr: string) {
   if (NEW_ACCOUNT_FORMAT) {
     return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
   } else {
     return join(getConfigPath(), Buffer.from(addr).toString('hex'))
   }
 }
-
-module.exports = { getLogins, removeAccount, getNewAccountPath }
