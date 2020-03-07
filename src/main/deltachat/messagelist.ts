@@ -1,60 +1,68 @@
-const { C } = require('deltachat-node')
+import { C } from 'deltachat-node'
 const log = require('../../shared/logger').getLogger(
   'main/deltachat/messagelist'
 )
-const { integerToHexColor } = require('../../shared/util')
+import { integerToHexColor } from '../../shared/util'
+
 const filesizeConverter = require('filesize')
-const mime = require('mime-types')
+import mime from 'mime-types'
 
 import SplitOut from './splitout'
-module.exports = class DCMessageList extends SplitOut {
-  sendMessage(chatId, text, filename, location) {
+import { Message } from 'deltachat-node'
+export default class DCMessageList extends SplitOut {
+  sendMessage(
+    chatId: number,
+    text: string,
+    filename: string,
+    location: { lat: number; lng: number }
+  ) {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
-    if (filename) msg.setFile(filename)
+    if (filename) msg.setFile(filename, undefined)
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
     const messageId = this._dc.sendMessage(chatId, msg)
     return [messageId, this.getMessage(messageId)]
   }
 
-  sendSticker(chatId, stickerPath) {
-    const viewType = 23
+  sendSticker(chatId: number, stickerPath: string) {
+    const viewType = C.DC_MSG_STICKER
     const msg = this._dc.messageNew(viewType)
-    msg.setFile(stickerPath)
+    msg.setFile(stickerPath, undefined)
     this._dc.sendMessage(chatId, msg)
   }
 
-  deleteMessage(id) {
-    log.info(`deleting message ${id}`)
-    this._dc.deleteMessages(id)
+  deleteMessage(id: number) {
+    log.info(`deleting messages ${id}`)
+    this._dc.deleteMessages([id])
   }
 
-  getMessage(msgId) {
+  getMessage(msgId: number) {
     return this.messageIdToJson(msgId)
   }
 
-  getMessageInfo(msgId) {
+  getMessageInfo(msgId: number) {
     return this._dc.getMessageInfo(msgId)
   }
 
-  setDraft(chatId, msgText) {
+  setDraft(chatId: number, msgText: string) {
     const msg = this._dc.messageNew()
     msg.setText(msgText)
 
     this._dc.setDraft(chatId, msg)
   }
 
-  messageIdToJson(id) {
+  messageIdToJson(id: number) {
     const msg = this._dc.getMessage(id)
     if (!msg) {
       log.warn('No message found for ID ' + id)
-      return { msg: null }
+      const empty: { msg: null } = { msg: null }
+      return empty
     }
     return this.messageToJson(msg)
   }
 
-  messageToJson(msg) {
+  messageToJson(msg: Message) {
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
@@ -62,31 +70,50 @@ module.exports = class DCMessageList extends SplitOut {
     const fromId = msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
-    const contact = fromId ? this._dc.getContact(fromId).toJson() : {}
-    if (contact.color) {
-      contact.color = integerToHexColor(contact.color)
+    const contact = fromId && this._dc.getContact(fromId).toJson()
+
+    const jsonMSG = msg.toJson()
+
+    let attachment = jsonMSG.file && {
+      url: jsonMSG.file,
+      contentType: convertContentType({
+        filemime,
+        viewType: jsonMSG.viewType,
+        file: jsonMSG.file,
+      }),
+      fileName: filename || jsonMSG.text,
+      fileSize: filesizeConverter(filesize),
     }
-    return convert({
-      id: msg.id,
-      msg: msg.toJson(),
+
+    return {
+      id: msg.getId(),
+      msg: Object.assign(jsonMSG, {
+        sentAt: jsonMSG.timestamp * 1000,
+        receivedAt: jsonMSG.receivedTimestamp * 1000,
+        direction: isMe ? 'outgoing' : 'incoming',
+        status: convertMessageStatus(jsonMSG.state),
+        attachment,
+      }),
       filemime,
       filename,
       filesize,
       viewType,
       fromId,
       isMe,
-      contact,
+      contact: contact
+        ? { ...contact, color: integerToHexColor(contact.color) }
+        : {},
       isInfo: msg.isInfo(),
       setupCodeBegin,
-    })
+    }
   }
 
-  forwardMessage(msgId, chatId) {
-    this._dc.forwardMessages(msgId, chatId)
+  forwardMessage(msgId: number, chatId: number) {
+    this._dc.forwardMessages([msgId], chatId)
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId) {
+  getMessageIds(chatId: number) {
     const messageIds = this._dc.getChatMessages(
       chatId,
       C.DC_GCM_ADDDAYMARKER,
@@ -95,8 +122,10 @@ module.exports = class DCMessageList extends SplitOut {
     return messageIds
   }
 
-  getMessages(messageIds) {
-    const messages = {}
+  getMessages(messageIds: number[]) {
+    const messages: {
+      [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
+    } = {}
     messageIds.forEach(messageId => {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       messages[messageId] = this.messageIdToJson(messageId)
@@ -104,37 +133,12 @@ module.exports = class DCMessageList extends SplitOut {
     return messages
   }
 
-  /**
-   * @param {number[]} messageIds
-   */
-  markSeenMessages(messageIds) {
+  markSeenMessages(messageIds: number[]) {
     this._dc.markSeenMessages(messageIds)
   }
 }
 
-function convert(message) {
-  const msg = message.msg
-
-  Object.assign(msg, {
-    sentAt: msg.timestamp * 1000,
-    receivedAt: msg.receivedTimestamp * 1000,
-    direction: message.isMe ? 'outgoing' : 'incoming',
-    status: convertMessageStatus(msg.state),
-  })
-
-  if (msg.file) {
-    msg.attachment = {
-      url: msg.file,
-      contentType: convertContentType(message),
-      fileName: message.filename || msg.text,
-      fileSize: filesizeConverter(message.filesize),
-    }
-  }
-
-  return message
-}
-
-function convertMessageStatus(s) {
+function convertMessageStatus(s: number) {
   switch (s) {
     case C.DC_STATE_IN_FRESH:
       return 'sent'
@@ -155,19 +159,25 @@ function convertMessageStatus(s) {
   }
 }
 
-function convertContentType(message) {
-  const filemime = message.filemime
-
+function convertContentType({
+  filemime,
+  viewType,
+  file,
+}: {
+  filemime: string
+  viewType: number
+  file: string
+}) {
   if (!filemime) return 'application/octet-stream'
   if (filemime !== 'application/octet-stream') return filemime
 
-  switch (message.msg.viewType) {
+  switch (viewType) {
     case C.DC_MSG_IMAGE:
       return 'image/jpg'
     case C.DC_MSG_VOICE:
       return 'audio/ogg'
     case C.DC_MSG_FILE:
-      const type = mime.lookup(message.msg.file)
+      const type = mime.lookup(file)
       if (type) return type
       else return 'application/octet-stream'
     default:
