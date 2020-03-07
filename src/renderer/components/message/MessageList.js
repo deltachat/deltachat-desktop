@@ -65,6 +65,9 @@ export default function MessageList({
 
   useEffect(() => {
     isFetching.current = false
+
+    const composerTextarea = refComposer.current.childNodes[1]
+    composerTextarea && composerTextarea.focus()
   }, [chat.id])
 
   const [fetchMore] = useDebouncedCallback(
