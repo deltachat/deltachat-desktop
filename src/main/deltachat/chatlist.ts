@@ -218,7 +218,9 @@ export default class DCChatList extends SplitOut {
     const tx = this._controller.translate
     if (chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
       if (isGroupChat(chat)) {
-        return tx('n_members', [contacts.length], { quantity: contacts.length })
+        return tx('n_members', [String(contacts.length)], {
+          quantity: contacts.length,
+        })
       } else if (contacts.length >= 1) {
         if (chat.isSelfTalk) {
           return tx('chat_self_talk_subtitle')

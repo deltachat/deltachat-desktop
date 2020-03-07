@@ -5,7 +5,7 @@ const { appName } = require('../shared/constants')
 const { app, Notification } = require('electron')
 
 /**
- * @param {import('./deltachat/controller')} dc
+ * @param {import('./deltachat/controller').default} dc
  * @param {*} settings
  */
 module.exports = function(dc, settings) {

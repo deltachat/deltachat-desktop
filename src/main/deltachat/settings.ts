@@ -14,7 +14,7 @@ const serverFlagMap: { [key: string]: number } = {
   send_security_plain: C.DC_LP_SMTP_SOCKET_PLAIN,
 }
 
-module.exports = class DCSettings extends SplitOut {
+export default class DCSettings extends SplitOut {
   setConfig(key: string, value: string) {
     log.info(`Setting config ${key}:${value}`)
     return this._dc.setConfig(key, String(value))

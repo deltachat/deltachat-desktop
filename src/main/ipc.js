@@ -13,7 +13,7 @@ const windows = require('./windows')
 const log = require('../shared/logger').getLogger('main/ipc')
 const DeltaChatController = (() => {
   try {
-    return require('./deltachat/controller')
+    return require('./deltachat/controller').default
   } catch (error) {
     log.critical(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",

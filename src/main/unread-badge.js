@@ -2,7 +2,7 @@ const windows = require('./windows')
 const { app, ipcMain } = require('electron')
 
 /**
- * @param {import('./deltachat/controller')} dc
+ * @param {import('./deltachat/controller').default} dc
  */
 function setupUnreadBadge(dc) {
   if (process.platform !== 'linux' && process.platform !== 'darwin') return

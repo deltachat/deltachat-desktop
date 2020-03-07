@@ -1,7 +1,9 @@
-export default class SplitOut {
-  _controller: import('./controller')
+import DeltaChatController from './controller'
 
-  constructor(controller: import('./controller')) {
+export default class SplitOut {
+  _controller: DeltaChatController
+
+  constructor(controller: DeltaChatController) {
     this._controller = controller
   }
 

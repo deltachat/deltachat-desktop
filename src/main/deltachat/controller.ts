@@ -1,29 +1,26 @@
-const { DeltaChat: DeltaChatNode, C } = require('deltachat-node')
+import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
+import { app } from 'electron'
+import { EventEmitter } from 'events'
+import { getLogger } from '../../shared/logger'
+import { LocalSettings } from '../../shared/shared-types'
+import { integerToHexColor } from '../../shared/util'
+import { maybeMarkSeen } from '../markseenFix'
+import windows from '../windows'
+import DCAutocrypt from './autocrypt'
+import DCBackup from './backup'
+import DCChat from './chat'
+import DCChatList from './chatlist'
+import DCContacts from './contacts'
+import DCContext from './context'
+import DCLocations from './locations'
+import DCLoginController from './login'
+import DCMessageList from './messagelist'
+import DCSettings from './settings'
+import DCStickers from './stickers'
+
 const eventStrings = require('deltachat-node/events')
-const EventEmitter = require('events').EventEmitter
-const log = require('../../shared/logger').getLogger('main/deltachat')
-const logCoreEv = require('../../shared/logger').getLogger('core/event')
-const windows = require('../windows')
-const { app } = require('electron')
-
-const { maybeMarkSeen } = require('../markseenFix')
-
-const { integerToHexColor } = require('../../shared/util')
-
-/**
- * @typedef {import('deltachat-node').DeltaChat} DeltaChat
- */
-const DCAutocrypt = require('./autocrypt').default
-const DCBackup = require('./backup').default
-const DCChatList = require('./chatlist').default
-const DCMessageList = require('./messagelist').default
-const DCLocations = require('./locations').default
-const DCLoginController = require('./login')
-const DCSettings = require('./settings').default
-const DCStickers = require('./stickers').default
-const DCChat = require('./chat').default
-const DCContacts = require('./contacts').default
-const DCContext = require('./context').default
+const log = getLogger('main/deltachat')
+const logCoreEv = getLogger('core/event')
 
 /**
  * DeltaChatController
@@ -32,25 +29,29 @@ const DCContext = require('./context').default
  * - sends events to renderer
  * - handles events from renderer
  */
-class DeltaChatController extends EventEmitter {
+export default class DeltaChatController extends EventEmitter {
   /**
    * Created and owned by ipc on the backend
    */
-  constructor(cwd, saved) {
+  _dc: DeltaChat = undefined
+  accountDir: string
+  configuring = false
+  updating = false
+  ready = false
+  credentials = { addr: '' }
+  _selectedChatId: number | null = null
+  _showArchivedChats = false
+  _pages = 0
+  _query = ''
+  __private: any
+  _sendStateToRenderer: () => void
+  constructor(public cwd: string, saved: LocalSettings) {
     super()
-    this.cwd = cwd
-    this.accountDir = false
-    this.configuring = false
-    this.updating = false
     this._resetState()
     if (!saved)
       throw new Error(
         'Saved settings are a required argument to DeltaChatController'
       )
-    /**
-     * @type {DeltaChat}
-     */
-    this._dc = undefined
 
     this.__private = {
       autocrypt: new DCAutocrypt(this),
@@ -111,7 +112,7 @@ class DeltaChatController extends EventEmitter {
     return this.__private.context
   }
 
-  logCoreEvent(event, data1, data2) {
+  logCoreEvent(event: any, data1: any, data2: any) {
     if (!isNaN(event)) {
       event = eventStrings[event]
     }
@@ -124,7 +125,7 @@ class DeltaChatController extends EventEmitter {
   /**
    * @param {string} methodName
    */
-  __resolveNestedMethod(self, methodName) {
+  __resolveNestedMethod(self: DeltaChatController, methodName: string) {
     const parts = methodName.split('.')
     if (parts.length > 2) {
       const message =
@@ -133,7 +134,7 @@ class DeltaChatController extends EventEmitter {
       log.error(message)
       throw new Error(message)
     }
-    const scope = self[parts[0]]
+    const scope = (self as any)[parts[0]]
     if (typeof scope === 'undefined') {
       const message = 'Resolving of nested method name failed: ' + methodName
       log.error(message)
@@ -154,12 +155,12 @@ class DeltaChatController extends EventEmitter {
    * @param {string} methodName
    * @param {*} args
    */
-  async callMethod(evt, methodName, args = []) {
+  async callMethod(_evt: any, methodName: string, args: any[] = []) {
     const method =
       methodName.indexOf('.') !== -1
         ? this.__resolveNestedMethod(this, methodName)
         : (methodName => {
-            const method = this[methodName]
+            const method = (this as any)[methodName]
             if (typeof method !== 'function') {
               const message = 'Method is not of type function: ' + methodName
               log.error(message)
@@ -179,11 +180,7 @@ class DeltaChatController extends EventEmitter {
     return returnValue
   }
 
-  /**
-   * @param {string} eventType
-   * @param {object} [payload]
-   */
-  sendToRenderer(eventType, payload) {
+  sendToRenderer(eventType: string, payload?: any) {
     log.debug('sendToRenderer: ' + eventType, payload)
     windows.main.send('ALL', eventType, payload)
     if (!eventType) {
@@ -196,83 +193,85 @@ class DeltaChatController extends EventEmitter {
     windows.main.send(eventType, payload)
   }
 
-  translate(key, substitutions, opts) {
-    return app.translate(key, substitutions, opts)
+  translate(
+    ...args: Parameters<import('../../shared/localize').getMessageFunction>
+  ) {
+    return (app as any).translate(...args)
   }
 
-  checkPassword(password) {
+  checkPassword(password: string) {
     return password === this.settings.getConfig('mail_pw')
   }
 
-  registerEventHandler(dc) {
-    dc.on('ALL', (event, ...args) => {
+  registerEventHandler(dc: DeltaChat) {
+    dc.on('ALL', (event: any, data1: any, data2: any) => {
       if (!isNaN(event)) {
         event = eventStrings[event]
       }
-      this.logCoreEvent(event, ...args)
+      this.logCoreEvent(event, data1, data2)
       if (!event || event === 'DC_EVENT_INFO') return
-      this.sendToRenderer(event, args)
+      this.sendToRenderer(event, [data1, data2])
     })
 
     dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
 
     // TODO: move event handling to frontend store
-    dc.on('DC_EVENT_MSGS_CHANGED', (chatId, msgId) => {
+    dc.on('DC_EVENT_MSGS_CHANGED', (chatId: number, msgId: number) => {
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.chatList.onChatModified(chatId)
     })
 
-    dc.on('DC_EVENT_INCOMING_MSG', (chatId, msgId) => {
+    dc.on('DC_EVENT_INCOMING_MSG', (chatId: number, msgId: number) => {
       maybeMarkSeen(chatId, msgId)
       this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.chatList.onChatModified(chatId)
     })
 
-    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId, msgId) => {
-      this.onChatListChanged(chatId)
+    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId: number, msgId: number) => {
+      this.onChatListChanged()
       this.onChatListItemChanged(chatId)
       this.chatList.onChatModified(chatId)
     })
 
-    dc.on('DC_EVENT_MSG_FAILED', (chatId, msgId) => {
+    dc.on('DC_EVENT_MSG_FAILED', (chatId: number, msgId: number) => {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_MSG_DELIVERED', (chatId, msgId) => {
+    dc.on('DC_EVENT_MSG_DELIVERED', (chatId: number, msgId: number) => {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_MSG_READ', (chatId, msgId) => {
+    dc.on('DC_EVENT_MSG_READ', (chatId: number, msgId: number) => {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_WARNING', warning => {
+    dc.on('DC_EVENT_WARNING', (warning: any) => {
       log.warn(warning)
     })
 
-    const onError = error => {
+    const onError = (error: any) => {
       this.emit('error', error)
       log.error(error)
     }
 
-    dc.on('DC_EVENT_ERROR', error => {
+    dc.on('DC_EVENT_ERROR', (error: any) => {
       onError(error)
     })
 
-    dc.on('DC_EVENT_ERROR_NETWORK', (first, error) => {
+    dc.on('DC_EVENT_ERROR_NETWORK', (_first: any, error: any) => {
       onError(error)
       if (this.configuring) {
         this.onLoginFailure()
       }
     })
 
-    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', error => {
+    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error: any) => {
       onError(error)
     })
 
-    dc.on('DC_EVENT_CONFIGURE_PROGRESS', progress => {
+    dc.on('DC_EVENT_CONFIGURE_PROGRESS', (progress: string) => {
       if (Number(progress) === 0) {
         // login failed
         this.onLoginFailure()
@@ -296,7 +295,7 @@ class DeltaChatController extends EventEmitter {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
-  onChatListItemChanged(chatId) {
+  onChatListItemChanged(chatId: number) {
     this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
   }
 
@@ -319,10 +318,9 @@ class DeltaChatController extends EventEmitter {
   }
 
   // ToDo: Deprecated, use contacts.getContact
-  getContact(id) {
+  getContact(id: number) {
     const contact = this._dc.getContact(id).toJson()
-    contact.color = integerToHexColor(contact.color)
-    return contact
+    return { ...contact, color: integerToHexColor(contact.color) }
   }
 
   // ToDo: move to contacts.
@@ -332,7 +330,7 @@ class DeltaChatController extends EventEmitter {
   }
 
   // ToDo: move to contacts.
-  getContacts2(listFlags, queryStr) {
+  getContacts2(listFlags: number, queryStr: string) {
     const distinctIds = Array.from(
       new Set(this._dc.getContacts(listFlags, queryStr))
     )
@@ -341,12 +339,12 @@ class DeltaChatController extends EventEmitter {
   }
 
   // ToDo: move to contacts.
-  getContacts(listFlags, queryStr) {
+  getContacts(listFlags: number, queryStr: string) {
     const contacts = this.getContacts2(listFlags, queryStr)
     this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
   }
 
-  setProfilePicture(newImage) {
+  setProfilePicture(newImage: string) {
     this._dc.setConfig('selfavatar', newImage)
   }
 
@@ -362,7 +360,7 @@ class DeltaChatController extends EventEmitter {
     }
   }
 
-  getProviderInfo(email) {
+  getProviderInfo(email: string) {
     return DeltaChatNode.getProviderFromEmail(email)
   }
 
@@ -380,5 +378,3 @@ class DeltaChatController extends EventEmitter {
     this._query = ''
   }
 }
-
-module.exports = DeltaChatController
