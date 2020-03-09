@@ -1,24 +1,33 @@
-import React from 'react'
+import React, { PropsWithChildren, CSSProperties } from 'react'
 import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
 import { ContactListItemWrapper } from '../contact/ContactListItem'
 
-export function PseudoListItem(props) {
-  const { id, cutoff, text, subText, onClick, avatar, style } = props
+export function PseudoListItem(
+  props: PropsWithChildren<{
+    id: string
+    /** replacement for avatar letter */
+    cutoff?: string
+    text: string
+    subText?: string
+    onClick?: (ev: MouseEvent) => void
+    style?: CSSProperties
+  }>
+) {
+  const { id, cutoff, text, subText, onClick, style } = props
   return (
     <ContactListItemWrapper key={id} onClick={onClick} style={style}>
-      <PseudoContact
-        cutoff={cutoff}
-        text={text}
-        subText={subText}
-        avatar={avatar}
-      >
+      <PseudoContact cutoff={cutoff} text={text} subText={subText}>
         {props.children}
       </PseudoContact>
     </ContactListItemWrapper>
   )
 }
 
-export const PseudoListItemNoSearchResults = ({ queryStr }) => {
+export const PseudoListItemNoSearchResults = ({
+  queryStr,
+}: {
+  queryStr: string
+}) => {
   const tx = window.translate
   return (
     <PseudoListItem
@@ -30,7 +39,11 @@ export const PseudoListItemNoSearchResults = ({ queryStr }) => {
   )
 }
 
-export const PseudoListItemShowQrCode = ({ onClick }) => {
+export const PseudoListItemShowQrCode = ({
+  onClick,
+}: {
+  onClick: (ev: MouseEvent) => void
+}) => {
   const tx = window.translate
   return (
     <PseudoListItem id='showqrcode' text={tx('qrshow_title')} onClick={onClick}>
@@ -39,7 +52,11 @@ export const PseudoListItemShowQrCode = ({ onClick }) => {
   )
 }
 
-export const PseudoListItemAddMember = ({ onClick }) => {
+export const PseudoListItemAddMember = ({
+  onClick,
+}: {
+  onClick: (ev: MouseEvent) => void
+}) => {
   const tx = window.translate
   return (
     <PseudoListItem
@@ -55,6 +72,10 @@ export const PseudoListItemAddContact = ({
   queryStr,
   queryStrIsEmail,
   onClick,
+}: {
+  queryStr: string
+  queryStrIsEmail: boolean
+  onClick: (ev: MouseEvent) => void
 }) => {
   const tx = window.translate
   return (

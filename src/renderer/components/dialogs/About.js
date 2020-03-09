@@ -9,22 +9,9 @@ import {
   gitHubUrl,
   gitHubLicenseUrl,
 } from '../../../shared/constants'
-const { openExternal } = window.electron_functions
+import ClickableLink from './helpers/ClickableLink'
 
 const log = logger.getLogger('renderer/dialogs/About')
-
-export function ClickableLink(props) {
-  const { href, text } = props
-  const onClick = () => {
-    openExternal(href)
-  }
-
-  return (
-    <a onClick={onClick} href={href}>
-      {text}
-    </a>
-  )
-}
 
 export function DCInfo(props) {
   const [content, setContent] = useState(undefined)
