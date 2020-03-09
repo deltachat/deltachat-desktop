@@ -53,6 +53,9 @@ export interface ExtendedApp extends App {
   state?: AppState
 }
 
+import { Contact } from 'deltachat-node'
+
+export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
   id: number
   name: string

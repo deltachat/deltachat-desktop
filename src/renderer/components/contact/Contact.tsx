@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { CSSProperties, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { ContactListItem } from '../conversations'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
+import { ContactJSON } from '../../../shared/shared-types'
 
-export function convertContactProps(contact) {
+export function convertContactProps(contact: ContactJSON) {
   return {
     name: contact.name,
     email: contact.address,
@@ -15,28 +16,38 @@ export function convertContactProps(contact) {
   }
 }
 
-export function RenderContact(props) {
-  const contact = props.contact
-
-  var outgoingProps = convertContactProps(contact)
+export function RenderContact(props: {
+  contact: ContactJSON
+  color: string
+  onClick?: (contact: ContactJSON) => void
+}) {
+  const { contact, color } = props
 
   const oldOnClick = props.onClick
-  outgoingProps.onClick = function(event) {
+  const onClick = function(event: MouseEvent) {
     if (oldOnClick) oldOnClick(contact)
   }
 
-  outgoingProps.color = props.color
-
-  return <ContactListItem {...outgoingProps} />
+  return (
+    <ContactListItem
+      color={color}
+      onClick={onClick}
+      {...convertContactProps(contact)}
+    />
+  )
 }
 
-export function renderAvatar(avatarPath, color, displayName) {
+export function renderAvatar(
+  avatarPath: string,
+  color: string,
+  displayName: string
+) {
   return (
     <Avatar avatarPath={avatarPath} color={color} displayName={displayName} />
   )
 }
 
-export function isValidEmail(email) {
+export function isValidEmail(email: string) {
   // empty string is not allowed
   if (email === '') return false
   const parts = email.split('@')
@@ -56,7 +67,12 @@ export function isValidEmail(email) {
   return true
 }
 
-export function Avatar(props) {
+export function Avatar(props: {
+  avatarPath?: string
+  color?: string
+  displayName: string
+  large?: boolean
+}) {
   const { avatarPath, color, displayName, large } = props
   if (avatarPath) return AvatarImage({ large, avatarPath })
   const codepoint = displayName.codePointAt(0)
@@ -74,7 +90,15 @@ export function Avatar(props) {
   )
 }
 
-export function AvatarImage({ avatarPath, large, ...otherProps }) {
+export function AvatarImage({
+  avatarPath,
+  large,
+  ...otherProps
+}: {
+  avatarPath: string
+  large?: boolean
+  [key: string]: any /* todo remove the [key:string]:any type here */
+}) {
   return (
     <img
       className={classNames('AvatarImage', { large })}
@@ -106,7 +130,7 @@ export const VerifiedIconImg = styled.img`
   height: 0.75em;
   margin-right: 2px;
 `
-export const VerifiedIcon = props => (
+export const VerifiedIcon = (props: { style?: CSSProperties }) => (
   <VerifiedIconImg src='../images/verified.png' style={props.style} />
 )
 
@@ -138,7 +162,11 @@ const ContactNameEmail = styled.p`
   text-overflow: ellipsis;
 `
 
-export function ContactName(displayName, address, isVerified) {
+export function ContactName(
+  displayName: string,
+  address: string,
+  isVerified: boolean
+) {
   return (
     <ContactNameWrapper>
       <ContactNameDisplayName>
@@ -160,7 +188,15 @@ const ContactWrapper = styled.div`
     padding: 0px 10px;
   }
 `
-export default function Contact(props) {
+export default function Contact(props: {
+  contact: {
+    profileImage: string
+    color: string
+    displayName: string
+    address: string
+    isVerified: boolean
+  }
+}) {
   const {
     profileImage,
     color,
@@ -183,11 +219,13 @@ const PseudoContactText = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
 `
-export function PseudoContact(props) {
+export function PseudoContact(
+  props: PropsWithChildren<{ cutoff: string; text: string; subText?: string }>
+) {
   const { cutoff, text, subText } = props
   return (
     <ContactWrapper>
-      {props.children ? props.children : renderAvatar(false, '#505050', cutoff)}
+      {props.children ? props.children : renderAvatar(null, '#505050', cutoff)}
       {!subText && (
         <ContactNameWrapper>
           <PseudoContactText>{text}</PseudoContactText>
@@ -198,7 +236,13 @@ export function PseudoContact(props) {
   )
 }
 
-export function AvatarBubble(props) {
+export function AvatarBubble(
+  props: PropsWithChildren<{
+    className?: string
+    noSearchResults?: boolean
+    [key: string]: any
+  } /* todo remove the [key:string]:any type here */>
+) {
   return (
     <div
       className={classNames(
