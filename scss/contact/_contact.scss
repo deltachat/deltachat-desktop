@@ -50,6 +50,63 @@
   }
 }
 
+.AvatarBubble > .avatar-qr-code-img {
+  width: 22px;
+  height: 22px;
+  margin-top: calc((48px - 22px) / 2);
+}
+
+img.verified-icon {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}
+
+div.contact-name {
+  display: inline-block;
+  width: calc(100% - 64px);
+  height: 54px;
+  margin-left: 10px;
+  .chat-list & {
+    width: calc(100% - 84px);
+  }
+  .display-name {
+    font-weight: bold;
+    margin-bottom: 0px;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .email {
+    color: var(--contactEmailColor);
+    margin-bottom: 3px;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+div.contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 300px;
+  .chat-list & {
+    width: 30vw;
+    padding: 0px 10px;
+  }
+
+  & > .pseudo-contact-text {
+    padding-top: calc((54px - 18px) / 2);
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .ContactListItemWrapper {
   display: flex;
   padding-left: 40px;
