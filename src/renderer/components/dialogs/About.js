@@ -9,7 +9,7 @@ import {
   gitHubUrl,
   gitHubLicenseUrl,
 } from '../../../shared/constants'
-import ClickableLink from './helpers/ClickableLink'
+import ClickableLink from '../helpers/ClickableLink'
 
 const log = logger.getLogger('renderer/dialogs/About')
 
@@ -59,15 +59,21 @@ export default function About(props) {
   const desktopString = reactStringReplace(
     tx('about_offical_app_desktop'),
     'Delta Chat',
-    () => <ClickableLink href='https://delta.chat' text='Delta Chat' />
+    () => (
+      <ClickableLink href='https://delta.chat'>{'Delta Chat'}</ClickableLink>
+    )
   )
   let versionString = reactStringReplace(
     tx('about_licensed_under_desktop'),
     'GNU GPL version 3',
-    () => <ClickableLink href={gitHubLicenseUrl} text='GNU GPL version 3' />
+    () => (
+      <ClickableLink href={gitHubLicenseUrl}>
+        {'GNU GPL version 3'}
+      </ClickableLink>
+    )
   )
   versionString = reactStringReplace(versionString, 'GitHub', () => (
-    <ClickableLink href={gitHubUrl} text='GitHub' />
+    <ClickableLink href={gitHubUrl}>{'GitHub'}</ClickableLink>
   ))
 
   return (
