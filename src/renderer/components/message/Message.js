@@ -21,10 +21,14 @@ const Avatar = (contact, onContactClick) => {
       </div>
     )
   } else {
+    const codepoint = name.codePointAt(0)
+    const initial = codepoint
+      ? String.fromCodePoint(codepoint).toUpperCase()
+      : '#'
     return (
       <div className='author-avatar default' alt={alt} onClick={onClick}>
         <div style={{ backgroundColor: color }} className='label'>
-          {(name && name.trim()[0]) || '#'}
+          {initial}
         </div>
       </div>
     )
