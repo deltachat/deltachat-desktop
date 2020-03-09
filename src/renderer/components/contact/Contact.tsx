@@ -1,5 +1,4 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
-import styled from 'styled-components'
 import { ContactListItem } from '../conversations'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
@@ -111,56 +110,21 @@ export function AvatarImage({
 export function QRAvatar() {
   return (
     <div className='AvatarBubble'>
-      <QRAvatarQRCodeImg
+      <img
+        className='avatar-qr-code-img sharp-pixel-image'
         src='../images/qr_icon.png'
-        className='sharp-pixel-image'
       />
     </div>
   )
 }
 
-const QRAvatarQRCodeImg = styled.img`
-  width: 22px;
-  height: 22px;
-  margin-top: calc((48px - 22px) / 2);
-`
-
-export const VerifiedIconImg = styled.img`
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 2px;
-`
 export const VerifiedIcon = (props: { style?: CSSProperties }) => (
-  <VerifiedIconImg src='../images/verified.png' style={props.style} />
+  <img
+    className='verified-icon'
+    src='../images/verified.png'
+    style={props.style}
+  />
 )
-
-const ContactNameWrapper = styled.div`
-  display: inline-block;
-  width: calc(100% - 64px);
-  height: 54px;
-  margin-left: 10px;
-  .chat-list & {
-    width: calc(100% - 84px);
-  }
-`
-
-const ContactNameDisplayName = styled.p`
-  font-weight: bold;
-  margin-bottom: 0px;
-  margin-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
-
-const ContactNameEmail = styled.p`
-  color: var(--contactEmailColor);
-  margin-bottom: 3px;
-  margin-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
 
 export function ContactName(
   displayName: string,
@@ -168,26 +132,16 @@ export function ContactName(
   isVerified: boolean
 ) {
   return (
-    <ContactNameWrapper>
-      <ContactNameDisplayName>
+    <div className='contact-name'>
+      <div className='display-name'>
         {displayName}
         {isVerified && <VerifiedIcon style={{ marginLeft: '4px' }} />}
-      </ContactNameDisplayName>
-      <ContactNameEmail>{address}</ContactNameEmail>
-    </ContactNameWrapper>
+      </div>
+      <div className='email'>{address}</div>
+    </div>
   )
 }
 
-const ContactWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 300px;
-  .chat-list & {
-    width: 30vw;
-    padding: 0px 10px;
-  }
-`
 export default function Contact(props: {
   contact: {
     profileImage: string
@@ -205,34 +159,27 @@ export default function Contact(props: {
     isVerified,
   } = props.contact
   return (
-    <ContactWrapper>
+    <div className='contact'>
       <Avatar {...{ avatarPath: profileImage, color, displayName }} />
       {ContactName(displayName, address, isVerified)}
-    </ContactWrapper>
+    </div>
   )
 }
 
-const PseudoContactText = styled.p`
-  padding-top: calc((54px - 18px) / 2);
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
 export function PseudoContact(
   props: PropsWithChildren<{ cutoff: string; text: string; subText?: string }>
 ) {
   const { cutoff, text, subText } = props
   return (
-    <ContactWrapper>
+    <div className='contact'>
       {props.children ? props.children : renderAvatar(null, '#505050', cutoff)}
       {!subText && (
-        <ContactNameWrapper>
-          <PseudoContactText>{text}</PseudoContactText>
-        </ContactNameWrapper>
+        <div className='contact-name'>
+          <div className='pseudo-contact-text'>{text}</div>
+        </div>
       )}
       {subText && ContactName(text, subText, false)}
-    </ContactWrapper>
+    </div>
   )
 }
 
