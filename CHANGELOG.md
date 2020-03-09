@@ -5,6 +5,7 @@
 ### Added
 
 - Add copy qr code manually
+- Add zoom factor option in order to adjust font size. (It's found under `View`->`Zoom Factor`)
 
 ### Changed
 

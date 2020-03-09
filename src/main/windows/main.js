@@ -11,7 +11,9 @@ const main = (module.exports = {
   toggleAlwaysOnTop,
   isAlwaysOnTop,
   toggleDevTools,
+  /** @type {electron.BrowserWindow} */
   win: null,
+  setZoomFactor,
 })
 
 const electron = require('electron')
@@ -94,6 +96,9 @@ function init(app, options) {
     }, 1000)
   )
 
+  win.once('show', e => {
+    win.webContents.setZoomFactor(state.saved.zoomFactor)
+  })
   win.on('close', e => {})
   win.on('blur', e => {
     win.hidden = true
@@ -207,4 +212,10 @@ function toggleDevTools() {
 
 function chooseLanguage(locale) {
   main.win.send('chooseLanguage', locale)
+}
+
+function setZoomFactor(factor) {
+  if (!main.win) return
+  log.info('setZoomFactor', factor)
+  main.win.webContents.setZoomFactor(factor)
 }
