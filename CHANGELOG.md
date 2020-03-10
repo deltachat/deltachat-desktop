@@ -8,7 +8,7 @@
 
 ## Removed
 
-## [1.1.0] - 2020-03-10
+## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/1.0.0...1.1.0) - 2020-03-10
 
 ### Added
 
@@ -19,7 +19,7 @@
 - Development related:
   - new code formatter (prettier insted of standardjs)
   - convert some more code to typescript
-- update deltachat node 1.26.0 
+- update deltachat node 1.26.0
     - update core in order to get the Ed25519-key bugfix in https://github.com/deltachat/deltachat-core-rust/pull/1327
 
 ## Fixed
@@ -36,7 +36,7 @@
 ## Known Bugs
 - inApp help is broken on MacOS Help
 
-## [1.0.0] - 2020-02-22
+## [1.0.0](https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...1.0.0) - 2020-02-22
 
 ## Known Bugs
 - Ed25519 keys are broken sometimes due to a bug in core (https://github.com/deltachat/deltachat-core-rust/issues/1326)
