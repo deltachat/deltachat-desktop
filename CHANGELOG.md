@@ -6,7 +6,7 @@
 
 ### Changed
 
-## Removed
+### Removed
 
 ## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/1.0.0...1.1.0) - 2020-03-10
 
@@ -22,7 +22,7 @@
 - update deltachat node 1.26.0
     - update core in order to get the Ed25519-key bugfix in https://github.com/deltachat/deltachat-core-rust/pull/1327
 
-## Fixed
+### Fixed
 - fix focus composer textarea when chat id changes
 - fix group name editable
 - fix avatar shrink bug on too long names (profile view)
@@ -30,15 +30,15 @@
 - fix a css bug that destroyed the app layout in media view (eadd48719f5b796e3c6c53f3bc04fe348b97abfe)
 - fix copy to selection button shown even when nothing was selected.
 
-## Removed
+### Removed
 - removed some unused dependencies
 
-## Known Bugs
+### Known Bugs
 - inApp help is broken on MacOS Help
 
 ## [1.0.0](https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...1.0.0) - 2020-02-22
 
-## Known Bugs
+### Known Bugs
 - Ed25519 keys are broken sometimes due to a bug in core (https://github.com/deltachat/deltachat-core-rust/issues/1326)
 - inApp help is broken on MacOS Help
 
