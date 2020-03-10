@@ -21,6 +21,7 @@
     "builder": "node ./bin/build/builder.js",
     "builder-help": "npm run builder -- --help",
     "build-scss": "npm run builder -- --styles",
+    "build-prod": "npm run builder -- --prod",
     "pull-translations": "tx pull -l en && tx pull -f",
     "update-translations": "npm run pull-translations && npm run builder -- --translations",
     "hallmark": "hallmark --fix",
