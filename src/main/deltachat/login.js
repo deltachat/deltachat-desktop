@@ -118,6 +118,16 @@ We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This re
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#10000---2020-02-22
     `
+    ),
+  this._dc.addDeviceMessage(
+      'changelog-version-1.1.0-0',
+      `Changes in v1.1.0
+
+- Add an zoom🔍 option in order to adjust interface and font size. (It's found under View -> Zoom Factor)
+- some interface bug fixes
+- fixed encrypting to Ed25519 keys (there was a bug that broke encrypting to people with Ed25519 keys)            
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#10100---2020-03-10
+    `
     )
   }
 }

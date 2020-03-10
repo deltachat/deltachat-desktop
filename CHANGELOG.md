@@ -4,16 +4,43 @@
 
 ### Added
 
+### Changed
+
+## Removed
+
+## [1.1.0] - 2020-03-10
+
+### Added
+
 - Add copy qr code manually
 - Add zoom factor option in order to adjust font size. (It's found under `View`->`Zoom Factor`)
 
 ### Changed
+- Development related:
+  - new code formatter (prettier insted of standardjs)
+  - convert some more code to typescript
+- update deltachat node 1.26.0 
+    - update core in order to get the Ed25519-key bugfix in https://github.com/deltachat/deltachat-core-rust/pull/1327
 
 ## Fixed
+- fix focus composer textarea when chat id changes
+- fix group name editable
+- fix avatar shrink bug on too long names (profile view)
+- fix emoji name/initial avatars in message list 
+- fix a css bug that destroyed the app layout in media view (eadd48719f5b796e3c6c53f3bc04fe348b97abfe)
+- fix copy to selection button shown even when nothing was selected.
 
 ## Removed
+- removed some unused dependencies
+
+## Known Bugs
+- inApp help is broken on MacOS Help
 
 ## [1.0.0] - 2020-02-22
+
+## Known Bugs
+- Ed25519 keys are broken sometimes due to a bug in core (https://github.com/deltachat/deltachat-core-rust/issues/1326)
+- inApp help is broken on MacOS Help
 
 ### Added
 - open help via F1
