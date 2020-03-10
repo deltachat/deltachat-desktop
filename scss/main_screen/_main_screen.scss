@@ -21,7 +21,7 @@
   .no-chat-selected-screen {
     width: 70%;
     float: right;
-    height: calc(100vh - 50px);
+    height: $content-height;
     margin-top: 50px;
     text-align: center;
   }

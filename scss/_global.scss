@@ -18,8 +18,8 @@ body {
 }
 
 .window {
-  height: calc(100vh - 50px);
-  margin-top: 50px;
+  height: $content-height;
+  margin-top: $nav-bar-height;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

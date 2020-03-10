@@ -3,8 +3,8 @@
   float: right;
   display: grid;
   grid-template-columns: auto;
-  height: calc(100vh - 50px);
-  margin-top: 50px;
+  height: $content-height;
+  margin-top: $nav-bar-height;
   background-image: var(--chatViewBgImgPath);
   background-size: cover;
   background-color: var(--chatViewBg);
