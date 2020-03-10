@@ -10,6 +10,7 @@ const p = JSON.parse(fs.readFileSync(packageJSON))
 p.name = 'deltachat-desktop-dev'
 p.productName = 'DeltaChat-DevBuild'
 p.build.appId = 'chat.delta.desktop.electron.dev'
+p.version = version + '-DevBuild'
 
 fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 

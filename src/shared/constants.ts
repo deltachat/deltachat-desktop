@@ -9,6 +9,6 @@ export const gitHubLicenseUrl = gitHubUrl + '/blob/master/LICENSE'
 // for this line
 const { version } = require('../../package.json')
 
-export const appVersion = `${version}-PREVIEW`
+export const appVersion = version
 
 export const appWindowTitle = appName
