@@ -120,12 +120,11 @@ const contextMenu = (props, textSelected, link, triggerId) => {
 
   return (
     <ContextMenu id={triggerId}>
-      <MenuItem
-        attributes={{ hidden: link === '' }}
+      {link !== '' && <MenuItem
         onClick={_ => navigator.clipboard.writeText(link)}
       >
         {tx('menu_copy_link_to_clipboard')}
-      </MenuItem>
+      </MenuItem>}
       <MenuItem
         attributes={{
           hidden: !textSelected,
