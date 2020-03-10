@@ -5,6 +5,8 @@ $roboto: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica, NotoMono,
 $roboto-light: Roboto-Light, $emojifonts, 'Helvetica Neue', Arial, Helvetica,
   NotoMono, sans-serif;
 
+$nav-bar-height: 50px;
+$content-height: calc(100vh - #{$nav-bar-height});
 /* Theming Colors */
 
 // Belongs to stuff we plan to remove / change anyway
