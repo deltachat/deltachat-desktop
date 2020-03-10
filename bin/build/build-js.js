@@ -22,15 +22,17 @@ async function jsBuilder (watch, sourcemap, dev) {
     '--public-url', './',
     '--target', 'browser'
   ]
-  const parcelENV = {}
+  const parcelENV = Object.assign({}, process.env)
 
   if (!sourcemap) parcelArgs.push('--no-source-maps')
   if (dev) {
     parcelArgs.push('--no-minify')
     parcelENV['NODE_ENV'] = 'development'
+  } else {
+    parcelENV['NODE_ENV'] = 'production'
   }
 
-  await run('npx', parcelArgs)
+  await run('npx', parcelArgs, {env:parcelENV})
   console.log('Parcel (bundle + minification) completed')
 
   if (sourcemap) {
@@ -48,10 +50,11 @@ async function jsBuilder (watch, sourcemap, dev) {
 /**
  *
  * @param {string[]} args arguments for the command
+ * @param {import('child_process').SpawnOptionsWithoutStdio} options
  */
-async function run (command, args) {
+async function run (command, args, options) {
   return new Promise((resolve, reject) => {
-    const p = child.spawn(command, args)
+    const p = child.spawn(command, args, options)
     p.stdout.pipe(process.stdout)
     p.stderr.pipe(process.stderr)
     p.on('close', resolve)

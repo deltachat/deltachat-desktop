@@ -1,5 +1,20 @@
 #!/usr/bin/env node
 
+let hasError = false
+
+const errorFunction = (err) => {
+  console.error(err);
+  hasError = true;
+}
+
+function attachErrorCatcher(c){
+  c.on('error', errorFunction)
+  c.on('exit', (code)=>{
+    if (code != 0) errorFunction('ERR CODE '+ code)
+  })
+  return c
+}
+
 const HELP = `
 run ./bin/build/builder.js
 (you need to run this in the projects directory)
@@ -64,7 +79,7 @@ if (buildEverything || rc.styles) {
   if (watch) command.push('--watch')
   if (sourceMaps) command.push('--source-map', 'true')
 
-  const { stdout, stderr } = child.spawn('npx', command)
+  const { stdout, stderr } = attachErrorCatcher(child.spawn('npx', command))
   stdout.pipe(process.stdout)
   stderr.pipe(process.stderr)
 }
@@ -73,16 +88,20 @@ if (buildEverything || rc.styles) {
 
 if (buildEverything || rc.js) {
   jsBuilder(watch, sourceMaps, envDev)
+  .catch(errorFunction)
 }
 
 // TRANSLATIONS
 
 if (buildEverything || rc.translations) {
   const buildTranslations = (done) => {
-    const { stdout, stderr, on } = child.spawn('node', ['bin/convert-translations-from-xml-to-json.js'])
+    const c = attachErrorCatcher(
+      child.spawn('node', ['bin/convert-translations-from-xml-to-json.js'])
+    )
+    const { stdout, stderr } = c
     stdout.pipe(process.stdout)
     stderr.pipe(process.stderr)
-    if (done) on('close', done)
+    if (done) c.on('close', done)
   }
   buildTranslations()
   if (watch) {
@@ -99,7 +118,7 @@ if (buildEverything || rc.static) {
     await fs.copy('./static/', './html-dist/')
     console.log('DONE: copy files from static folder')
   }
-  copyAction()
+  copyAction().catch(errorFunction)
   if (watch) {
     // (whats the usecase of this? live update after pulling in translations??)
     globWatch(['./static/*'], (done) => {
@@ -116,3 +135,7 @@ if (buildEverything || rc.static) {
 // (compare with cache file, that has the previous hashes)
 
 // TODO -> log all verbose output to seperate temp log files
+
+process.on('beforeExit', ()=>{
+  process.exitCode = hasError?1:0
+})
