@@ -22,6 +22,7 @@ export interface LocalSettings {
   notifications: boolean
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
+  zoomFactor: number
 }
 
 export interface AppState {

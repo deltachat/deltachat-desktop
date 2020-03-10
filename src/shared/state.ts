@@ -29,6 +29,7 @@ export function getDefaultState(): AppState {
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
       lastChats: {},
+      zoomFactor: 1,
     },
   }
 }

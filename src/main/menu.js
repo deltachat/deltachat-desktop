@@ -64,6 +64,46 @@ function getAvailableLanguages() {
     })
 }
 
+function getZoomFactors() {
+  // for now this solution is electron specific
+  const zoomFactors = [
+    { scale: 0.6, key: 'micro' },
+    { scale: 0.8, key: 'small' },
+    { scale: 1.0, key: 'default' },
+    { scale: 1.2, key: 'large' },
+    { scale: 1.4, key: 'huge' },
+  ]
+
+  if (
+    zoomFactors
+      .map(({ scale }) => scale)
+      .indexOf(app.state.saved.zoomFactor) === -1
+  )
+    zoomFactors.push({ scale: app.state.saved.zoomFactor, key: 'custom' })
+
+  return zoomFactors.map(({ key, scale }) => {
+    return {
+      label: !(scale === 1 && key === 'custom')
+        ? `${scale}x ${app.translate('global_zoom_factor_' + key)}`
+        : app.translate('global_zoom_factor_custom'),
+      type: 'radio',
+      checked:
+        scale === app.state.saved.zoomFactor &&
+        !(scale === 1 && key === 'custom'),
+      click: () => {
+        if (key !== 'custom') {
+          app.state.saved.zoomFactor = scale
+          windows.main.setZoomFactor(scale)
+          app.saveState()
+        } else {
+          // todo? currently it is a no-op and the 'option' is only shown
+          // when the config value was changed by the user
+        }
+      },
+    }
+  })
+}
+
 function getMenuTemplate(logHandler) {
   return [
     {
@@ -118,6 +158,10 @@ function getMenuTemplate(logHandler) {
           translate: 'global_menu_view_floatontop_desktop',
           type: 'checkbox',
           click: () => windows.main.toggleAlwaysOnTop(),
+        },
+        {
+          translate: 'global_menu_view_zoom_factor',
+          submenu: getZoomFactors(),
         },
         {
           translate: 'pref_language',
