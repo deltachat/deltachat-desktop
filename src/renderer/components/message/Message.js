@@ -120,12 +120,11 @@ const contextMenu = (props, textSelected, link, triggerId) => {
 
   return (
     <ContextMenu id={triggerId}>
-      <MenuItem
-        attributes={{ hidden: link === '' }}
-        onClick={_ => navigator.clipboard.writeText(link)}
-      >
-        {tx('menu_copy_link_to_clipboard')}
-      </MenuItem>
+      {link !== '' && (
+        <MenuItem onClick={_ => navigator.clipboard.writeText(link)}>
+          {tx('menu_copy_link_to_clipboard')}
+        </MenuItem>
+      )}
       {textSelected && (
         <MenuItem
           onClick={_ => {
@@ -135,7 +134,6 @@ const contextMenu = (props, textSelected, link, triggerId) => {
           {tx('menu_copy_to_clipboard')}
         </MenuItem>
       )}
-
       {attachment ? (
         <MenuItem onClick={onDownload.bind(null, message.msg)}>
           {tx('download_attachment_desktop')}
