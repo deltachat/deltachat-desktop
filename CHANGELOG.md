@@ -8,6 +8,13 @@
 
 ### Removed
 
+## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/1.1.0...1.1.1) - 2020-03-14
+
+### Changed
+
+- Update deltachat-node/deltachat-core-rust to v1.27.0
+  - This fixes a bug of undecryptable messages
+
 ## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/1.0.0...1.1.0) - 2020-03-10
 
 ### Added
@@ -16,33 +23,39 @@
 - Add zoom factor option in order to adjust font size. (It's found under `View`->`Zoom Factor`)
 
 ### Changed
+
 - Development related:
   - new code formatter (prettier insted of standardjs)
   - convert some more code to typescript
 - update deltachat node 1.26.0
-    - update core in order to get the Ed25519-key bugfix in https://github.com/deltachat/deltachat-core-rust/pull/1327
+  - update core in order to get the [`Ed25519`](https://github.com/deltachat/deltachat-desktop/commit/Ed25519)-key bugfix in [deltachat/deltachat-core-rust#1327](https://github.com/deltachat/deltachat-core-rust/pull/1327)
 
 ### Fixed
+
 - fix focus composer textarea when chat id changes
 - fix group name editable
 - fix avatar shrink bug on too long names (profile view)
 - fix emoji name/initial avatars in message list 
-- fix a css bug that destroyed the app layout in media view (eadd48719f5b796e3c6c53f3bc04fe348b97abfe)
+- fix a css bug that destroyed the app layout in media view ([`eadd487`](https://github.com/deltachat/deltachat-desktop/commit/eadd48719f5b796e3c6c53f3bc04fe348b97abfe))
 - fix copy to selection button shown even when nothing was selected.
 
 ### Removed
+
 - removed some unused dependencies
 
 ### Known Bugs
+
 - inApp help is broken on MacOS Help
 
 ## [1.0.0](https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...1.0.0) - 2020-02-22
 
 ### Known Bugs
-- Ed25519 keys are broken sometimes due to a bug in core (https://github.com/deltachat/deltachat-core-rust/issues/1326)
+
+- [`Ed25519`](https://github.com/deltachat/deltachat-desktop/commit/Ed25519) keys are broken sometimes due to a bug in core ([deltachat/deltachat-core-rust#1326](https://github.com/deltachat/deltachat-core-rust/issues/1326))
 - inApp help is broken on MacOS Help
 
 ### Added
+
 - open help via F1
 - button to open DM chat in profile view
 - info messages are now selecteable
@@ -51,6 +64,7 @@
 - `--multiple-instances` flag to allow multiple deltachat instances 
 
 ### Changed
+
 - Upgrade deltachat-node to `v1.25.0`
 - upgrade electron builder to `22.3.2`
 - upgrade electron to `6.1.7`
@@ -63,6 +77,7 @@
 - Media view doesn't go into fullscreen anymore.
 
 ### Fixed
+
 - Small styling fixes
 - Fix qr images getting scrollable
 - Duplicate language entries in Language selection menu
@@ -70,6 +85,7 @@
 - Fix images so they don't cause horizontal scrolling anymore.
 
 ### Removed
+
 - remove version from titlebar
 
 ## [0.999.1] - 2020-02-02
@@ -874,7 +890,6 @@
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.1...HEAD
 
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
-
 
 [0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
 
