@@ -74,7 +74,7 @@ export function Avatar(props: {
 }) {
   const { avatarPath, color, displayName, large } = props
   if (avatarPath) return AvatarImage({ large, avatarPath })
-  const codepoint = displayName.codePointAt(0)
+  const codepoint = displayName && displayName.codePointAt(0)
   const initial = codepoint
     ? String.fromCodePoint(codepoint).toUpperCase()
     : '#'
