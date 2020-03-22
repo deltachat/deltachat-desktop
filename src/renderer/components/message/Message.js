@@ -108,6 +108,7 @@ const contextMenu = (props, textSelected, link, triggerId) => {
     status,
     onDelete,
     message,
+    text,
     // onReply,
     onForward,
     onRetrySend,
@@ -125,10 +126,18 @@ const contextMenu = (props, textSelected, link, triggerId) => {
           {tx('menu_copy_link_to_clipboard')}
         </MenuItem>
       )}
-      {textSelected && (
+      {textSelected ? (
         <MenuItem
           onClick={_ => {
             navigator.clipboard.writeText(window.getSelection().toString())
+          }}
+        >
+          {tx('menu_copy_selection_to_clipboard')}
+        </MenuItem>
+      ) : (
+        <MenuItem
+          onClick={_ => {
+            navigator.clipboard.writeText(text)
           }}
         >
           {tx('menu_copy_to_clipboard')}

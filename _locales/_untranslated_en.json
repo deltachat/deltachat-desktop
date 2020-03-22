@@ -1,4 +1,7 @@
 {
+  "menu_copy_selection_to_clipboard": {
+    "message": "Copy Selection"
+  },
   "menu_copy_link_to_clipboard": {
     "message": "Copy link"
   },
