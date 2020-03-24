@@ -54,7 +54,8 @@ test('create chat', async t => {
   await clickAppMenuItem('New chat')
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', conf.account2.email)
-    .click(Selector('p').withText('New contact'))
+  await t.expect(Selector('div.display-name').withText('New contact').exists).ok()
+  await t.click(Selector('div.display-name').withText('New contact').parent(0))
   await clickChatByName(t, conf.account2.email)
 })
 
@@ -68,8 +69,7 @@ test('write message', async t => {
 test('Contact request and receive message works', async t => {
   await t.click(accountButton2)
     .expect(Selector('h2', { timeout: waitForLogin }).innerText).eql(welcomeMessage)
-    .expect(Selector('.chat-list-item__name').withText('Contact request').exists).ok()
-  await t.expect(Selector('.chat-list-item__name', { timeout: 20000 }).withText('Contact request').exists).ok()
+  await t.expect(Selector('.chat-list-item__name').withText('Contact request').exists).ok({ timeout: 15000 })
   await clickChatByName(t, 'Contact request')
   await t.click(Selector('p').withText('YES'))
     .expect(Selector('#message-list li').count).eql(1)
