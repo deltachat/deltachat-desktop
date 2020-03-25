@@ -124,7 +124,7 @@ We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This re
 - new users will use Ed25519 keys (shorter & better cryptographic keys)
 
 Full changelog: https://delta.chat/a3e/
-    `
+    ` as any
     ),
       this._dc.addDeviceMessage(
         'changelog-version-1.1.0-0',
