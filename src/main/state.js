@@ -1,4 +1,4 @@
-const appConfig = require('./application-config')
+const appConfig = require('./application-config').default
 const { EventEmitter } = require('events')
 const log = require('../shared/logger').getLogger('main/state')
 const { promisify } = require('util')
