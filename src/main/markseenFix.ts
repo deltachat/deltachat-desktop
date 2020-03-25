@@ -1,11 +1,12 @@
 const windows = require('./windows')
-const { C } = require('deltachat-node')
-const log = require('../shared/logger').getLogger('main/markseenfix')
+import { C } from 'deltachat-node'
+import DeltaChatController from './deltachat/controller'
+import { getLogger } from '../shared/logger'
+const log = getLogger('main/markseenfix')
 
-/** @type {import('./deltachat/controller').default} */
-let dc
+let dc:DeltaChatController
 
-async function maybeMarkSeen(chatId, msgId) {
+export async function maybeMarkSeen(chatId:number, msgId:number) {
   if (!dc) {
     return
   }
@@ -21,7 +22,7 @@ async function maybeMarkSeen(chatId, msgId) {
   }
 }
 
-function setupMarkseenFix(dcClass) {
+export function setupMarkseenFix(dcClass:DeltaChatController) {
   dc = dcClass
   dc.on('ready', _ => {
     windows.main.win.on('focus', async () => {
@@ -45,9 +46,4 @@ function setupMarkseenFix(dcClass) {
       }
     })
   })
-}
-
-module.exports = {
-  setupMarkseenFix,
-  maybeMarkSeen,
 }
