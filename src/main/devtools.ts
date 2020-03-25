@@ -1,9 +1,10 @@
-const log = require('../shared/logger').getLogger('main/dev')
+import { getLogger } from '../shared/logger'
+const log = getLogger('main/dev')
 
 /**
  * Only works when it's installed (aka when its a dev enviroment)
  */
-async function tryInstallReactDevTools() {
+export async function tryInstallReactDevTools() {
   try {
     const {
       default: installExtension,
@@ -21,5 +22,3 @@ async function tryInstallReactDevTools() {
     )
   }
 }
-
-module.exports = { tryInstallReactDevTools }
