@@ -74,8 +74,8 @@ export default class DCSettings extends SplitOut {
     mail_security,
     send_security,
   }: {
-    mail_security: string
-    send_security: string
+    mail_security?: string
+    send_security?: string
   }) {
     const flags = []
     if (mail_security === '' && send_security === '') {

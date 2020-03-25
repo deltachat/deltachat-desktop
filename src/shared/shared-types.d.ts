@@ -78,7 +78,7 @@ export interface ChatListItemType {
   selfInGroup: boolean
 }
 
-import { Chat, Contact } from 'deltachat-node'
+import { Chat } from 'deltachat-node'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 

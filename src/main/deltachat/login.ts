@@ -8,6 +8,14 @@ import SplitOut from './splitout'
 import DeltaChatController from './controller'
 const log = logger.getLogger('main/deltachat/login')
 
+type credential_config = {
+  mail_security?: string
+  send_security?: string
+  addr: string
+  mail_pw?: string
+  [key: string]: string
+}
+
 export default class DCLoginController extends SplitOut {
   /**
    * Called when this controller is created and when current
@@ -25,7 +33,7 @@ export default class DCLoginController extends SplitOut {
 
   login(
     accountDir: string,
-    credentials: any,
+    credentials: credential_config,
     sendStateToRenderer: typeof DeltaChatController.prototype._sendStateToRenderer,
     coreStrings: Parameters<
       typeof DCLoginController.prototype.setCoreStrings
@@ -136,6 +144,6 @@ Full changelog: https://delta.chat/a3e/
 
 Full changelog: https://delta.chat/f32/
     ` as any
-    )
+      )
   }
 }
