@@ -1,17 +1,23 @@
-module.exports = { init }
+import { app as rawApp, ipcMain, dialog, shell } from 'electron'
+import { join, relative, extname } from 'path'
+import {
+  copyFile,
+  ensureDir,
+  emptyDir,
+  copy,
+  pathExists,
+} from 'fs-extra'
+import { getLogins, removeAccount, getNewAccountPath } from './logins'
+import { getConfigPath } from './application-constants'
 
-const { app, ipcMain, dialog, shell } = require('electron')
-const path = require('path')
-const { join, relative } = require('path')
-const fs = require('fs-extra')
-const { getLogins, removeAccount, getNewAccountPath } = require('./logins')
-const { getConfigPath } = require('./application-constants')
-
-const loadTranslations = require('./load-translations').default
-const menu = require('./menu')
+import loadTranslations from './load-translations'
+import { init as refreshMenu } from './menu'
 import * as mainWindow from './windows/main'
-const log = require('../shared/logger').getLogger('main/ipc')
-const DeltaChatController = (() => {
+import { LogHandler } from './log-handler'
+import { getLogger } from '../shared/logger'
+import { AppState, Credentials, LocalSettings } from '../shared/shared-types'
+const log = getLogger('main/ipc')
+const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
   try {
     return require('./deltachat/controller').default
   } catch (error) {
@@ -27,19 +33,27 @@ const DeltaChatController = (() => {
     )
   }
 })()
-const { C } = require('deltachat-node')
+import { C } from 'deltachat-node'
+import { DeltaChatAccount } from './logins'
+import { ExtendedAppMainProcess } from './types'
+import { credential_config } from './deltachat/login'
 
-function init(cwd, state, logHandler) {
+const app = rawApp as ExtendedAppMainProcess
+
+export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd, state.saved)
 
-  dcController.on('ready', async credentials => {
+  dcController.on('ready', async (credentials: Credentials) => {
     if (!state.logins.find(({ addr }) => addr === credentials.addr)) {
       state.logins = await getLogins()
     }
-    state.saved.credentials = credentials
-    delete state.saved.credentials.mail_pw
-    delete state.saved.credentials.send_pw
+    // update saved / last account + make sure no passwords are present
+    state.saved.credentials = {
+      ...credentials,
+      mail_pw: undefined,
+      send_pw: undefined,
+    } as Credentials
     app.saveState()
   })
 
@@ -48,16 +62,16 @@ function init(cwd, state, logHandler) {
     app.saveState()
   })
 
-  dcController.on('DC_EVENT_IMEX_FILE_WRITTEN', filename => {
+  dcController.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename: string) => {
     log.debug('DC_EVENT_IMEX_FILE_WRITTEN: ' + filename)
     main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
   })
 
-  dcController.on('DC_EVENT_IMEX_PROGRESS', progress => {
+  dcController.on('DC_EVENT_IMEX_PROGRESS', (progress: number) => {
     main.send('DC_EVENT_IMEX_PROGRESS', progress)
   })
 
-  dcController.on('error', error => main.send('error', error))
+  dcController.on('error', (error: any) => main.send('error', error))
 
   dcController.on('DC_EVENT_LOGIN_FAILED', () =>
     main.send('error', 'Login failed!')
@@ -68,32 +82,35 @@ function init(cwd, state, logHandler) {
     app.emit('ipcReady')
   })
 
-  ipcMain.on('all', (e, ...args) => {
+  ipcMain.on('all', (e, ...args: any[]) => {
     log.debug('Renderer event:', e, ...args)
   })
 
   // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
-  ipcMain.on('setBounds', (e, ...args) => main.setBounds(...args))
-  ipcMain.on('setProgress', (e, ...args) => main.setProgress(...args))
+  // ipcMain.on('setBounds', (e, ...args:any[]) => main.setBounds(...args))
+  ipcMain.on('setProgress', (e, progress: number) => main.setProgress(progress))
   ipcMain.on('show', () => main.show())
-  ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
-  ipcMain.on('chooseLanguage', (e, locale) => {
+  // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
+  ipcMain.on('chooseLanguage', (e, locale: string) => {
     loadTranslations(app, locale)
     dcController.loginController.setCoreStrings(txCoreStrings())
-    menu.init(logHandler)
+    refreshMenu(logHandler)
   })
 
   /* dispatch a method on DC core */
-  ipcMain.on('EVENT_DC_DISPATCH', (e, identifier, methodName, args) => {
-    if (!Array.isArray(args)) args = [args]
-    log.debug('EVENT_DC_DISPATCH: ', methodName, args)
-    dcController.callMethod(e, methodName, args)
-  })
+  ipcMain.on(
+    'EVENT_DC_DISPATCH',
+    (e: any, identifier: number, methodName: string, args: any[]) => {
+      if (!Array.isArray(args)) args = [args]
+      log.debug('EVENT_DC_DISPATCH: ', methodName, args)
+      dcController.callMethod(e, methodName, args)
+    }
+  )
 
   /* dispatch a method on DC core with result passed to callback */
   ipcMain.on(
     'EVENT_DC_DISPATCH_CB',
-    async (e, identifier, methodName, args) => {
+    async (e: any, identifier: number, methodName: string, args: any[]) => {
       if (!Array.isArray(args)) args = [args]
       log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
       const returnValue = await dcController.callMethod(e, methodName, args)
@@ -104,9 +121,11 @@ function init(cwd, state, logHandler) {
     }
   )
 
-  ipcMain.on('handleLogMessage', (e, ...args) => logHandler.log(...args))
+  ipcMain.on('handleLogMessage', (e, channel, level, stacktrace, ...args) =>
+    logHandler.log(channel, level, stacktrace, ...args)
+  )
 
-  ipcMain.on('login', (e, credentials) => {
+  ipcMain.on('login', (_e: any, credentials) => {
     dcController.loginController.login(
       getNewAccountPath(credentials.addr),
       credentials,
@@ -115,10 +134,10 @@ function init(cwd, state, logHandler) {
     )
   })
 
-  ipcMain.on('loadAccount', (e, login) => {
+  ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
     dcController.loginController.login(
       login.path,
-      { addr: login.addr, mail_pw: true },
+      { addr: login.addr },
       sendStateToRenderer,
       txCoreStrings()
     )
@@ -129,7 +148,7 @@ function init(cwd, state, logHandler) {
     sendStateToRenderer()
   }
 
-  ipcMain.on('forgetLogin', async (e, login) => {
+  ipcMain.on('forgetLogin', async (_e: any, login: DeltaChatAccount) => {
     try {
       await removeAccount(login.path)
       main.send('success', 'successfully forgot account')
@@ -141,7 +160,7 @@ function init(cwd, state, logHandler) {
 
   ipcMain.on('updateLogins', updateLogins)
 
-  ipcMain.on('getMessage', (e, msgId) => {
+  ipcMain.on('getMessage', (e, msgId: number) => {
     e.returnValue = dcController.messageList.messageIdToJson(msgId)
   })
 
@@ -175,13 +194,13 @@ function init(cwd, state, logHandler) {
   })
 
   ipcMain.on('saveFile', (e, source, target) => {
-    fs.copyFile(source, target, err => {
+    copyFile(source, target, err => {
       if (err) main.send('error', err.message)
     })
   })
 
   ipcMain.on('ondragstart', (event, filePath) => {
-    event.sender.startDrag({ file: filePath, icon: '' })
+    event.sender.startDrag({ file: filePath, icon: null })
   })
 
   ipcMain.on('render', sendStateToRenderer)
@@ -191,9 +210,13 @@ function init(cwd, state, logHandler) {
     e.returnValue = app.localeData
   })
 
-  const updateDesktopSetting = (e, key, value) => {
+  const updateDesktopSetting = (
+    e: Electron.IpcMainEvent,
+    key: keyof LocalSettings,
+    value: string
+  ) => {
     const { saved } = app.state
-    saved[key] = value
+    ;(saved as any)[key] = value
     app.saveState({ saved })
     sendStateToRenderer()
   }
@@ -213,15 +236,15 @@ function init(cwd, state, logHandler) {
   })
 
   ipcMain.on('selectBackgroundImage', (e, file) => {
-    const copyAndSetBg = async originalfile => {
-      await fs.ensureDir(path.join(getConfigPath(), 'background/'))
-      await fs.emptyDir(path.join(getConfigPath(), 'background/'))
-      const newPath = path.join(
+    const copyAndSetBg = async (originalfile: string) => {
+      await ensureDir(join(getConfigPath(), 'background/'))
+      await emptyDir(join(getConfigPath(), 'background/'))
+      const newPath = join(
         getConfigPath(),
         'background/',
-        `background_${Date.now()}` + path.extname(originalfile)
+        `background_${Date.now()}` + extname(originalfile)
       )
-      fs.copyFile(originalfile, newPath, err => {
+      copyFile(originalfile, newPath, (err: Error) => {
         if (err) {
           log.error('BG-IMG Copy Failed', err)
           return
@@ -244,7 +267,7 @@ function init(cwd, state, logHandler) {
           ],
           properties: ['openFile'],
         },
-        filenames => {
+        (filenames: string[]) => {
           if (!filenames) {
             return
           }
@@ -253,7 +276,7 @@ function init(cwd, state, logHandler) {
         }
       )
     } else {
-      const filepath = path.join(__dirname, '../../images/backgrounds/', file)
+      const filepath = join(__dirname, '../../images/backgrounds/', file)
       copyAndSetBg(filepath)
     }
   })
@@ -282,16 +305,16 @@ function init(cwd, state, logHandler) {
   ipcMain.on('help', async (_ev, locale) => {
     const appPath = app.getAppPath()
     const DestinationPath = join(getConfigPath(), 'help-cache')
-    await fs.ensureDir(join(DestinationPath, 'help'))
+    await ensureDir(join(DestinationPath, 'help'))
 
     const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
-    const helpFile = (await fs.exists(contentFilePath))
+    const helpFile = (await pathExists(contentFilePath))
       ? contentFilePath
       : join(appPath, `/html-dist/help/en/help.html`)
     try {
-      await fs.exists(helpFile)
+      await pathExists(helpFile)
       // copy help files and assets
-      await fs.copy(
+      await copy(
         join(appPath, '/html-dist/help/'),
         join(DestinationPath, 'help')
       )
@@ -300,7 +323,7 @@ function init(cwd, state, logHandler) {
         DestinationPath,
         relative(join(appPath, '/html-dist'), helpFile)
       )
-      await fs.exists(newPath)
+      await pathExists(newPath)
       shell.openItem(newPath)
     } catch (error) {
       log.error('Can not load help file', error)
@@ -314,7 +337,7 @@ function init(cwd, state, logHandler) {
     sendState(deltachat)
   }
 
-  function sendState(deltachat) {
+  function sendState(deltachat: AppState['deltachat']) {
     Object.assign(state, { deltachat })
     main.send('render', state)
   }
@@ -335,7 +358,7 @@ function init(cwd, state, logHandler) {
     if (selectedAccount) {
       dcController.loginController.login(
         selectedAccount.path,
-        savedCredentials,
+        savedCredentials as credential_config,
         sendStateToRenderer,
         txCoreStrings()
       )
@@ -352,7 +375,7 @@ function init(cwd, state, logHandler) {
 
 function txCoreStrings() {
   const tx = app.translate
-  const strings = {}
+  const strings: { [key: number]: string } = {}
   // TODO: Check if we need the uncommented core translations
   strings[C.DC_STR_NOMESSAGES] = tx('chat_no_messages')
   strings[C.DC_STR_SELF] = tx('self')

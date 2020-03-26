@@ -1,3 +1,5 @@
+type PromiseType<T> = T extends Promise<infer U> ? U : any
+
 export interface Login {
   addr: string
   path: string
