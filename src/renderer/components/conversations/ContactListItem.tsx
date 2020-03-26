@@ -2,17 +2,21 @@ import React from 'react'
 import classNames from 'classnames'
 
 // TODO this function can be found in many places, refactor!
-function getInitial(name:string) {
+function getInitial(name: string) {
   return name.trim()[0] || '#'
 }
 
 export default class ContactListItem extends React.Component<{
-  name:string, onClick:any, isMe:boolean, email:string, profileName:string,
-  verified:boolean,
-  avatarPath:string,
-  color:string,
+  name: string
+  onClick: any
+  isMe: boolean
+  email: string
+  profileName: string
+  verified: boolean
+  avatarPath: string
+  color: string
 }> {
-  renderAvatar({ displayName }:{ displayName:string }) {
+  renderAvatar({ displayName }: { displayName: string }) {
     const { avatarPath, color, name } = this.props
     const tx = window.translate
 
