@@ -1,21 +1,34 @@
-import React, { useState, useEffect } from 'react'
-import { Picker } from 'emoji-mart'
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  PropsWithChildren,
+} from 'react'
+import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
 import { callDcMethod, callDcMethodAsync } from '../../ipc'
 
-export const useAsyncEffect = (asyncEffect, ...args) =>
+export const useAsyncEffect = (
+  asyncEffect: () => {},
+  deps?: React.DependencyList
+) =>
   useEffect(() => {
     asyncEffect()
-  }, ...args)
+  }, deps)
 
-export const StickerDiv = props => {
+export const StickerDiv = (props: {
+  stickerPackName: string
+  stickerPackImages: string[]
+  chatId: number
+  setShowEmojiPicker: (enabled: boolean) => void
+}) => {
   const {
     stickerPackName,
     stickerPackImages,
     chatId,
     setShowEmojiPicker,
   } = props
-  const onClickSticker = fileName => {
+  const onClickSticker = (fileName: string) => {
     callDcMethod('messageList.sendSticker', [chatId, fileName])
     setShowEmojiPicker(false)
   }
@@ -44,7 +57,11 @@ export const StickerDiv = props => {
   )
 }
 
-export const StickerPicker = props => {
+export const StickerPicker = (props: {
+  stickers: { [key: string]: string[] }
+  chatId: number
+  setShowEmojiPicker: (enabled: boolean) => void
+}) => {
   const { stickers, chatId, setShowEmojiPicker } = props
   return (
     <div className='emoji-sticker-picker__sticker-picker'>
@@ -65,7 +82,9 @@ export const StickerPicker = props => {
   )
 }
 
-export const EmojiOrStickerSelectorButton = props => {
+const EmojiOrStickerSelectorButton = (
+  props: PropsWithChildren<{ onClick: () => void; isSelected: boolean }>
+) => {
   return (
     <div
       className={classNames(
@@ -82,8 +101,15 @@ export const EmojiOrStickerSelectorButton = props => {
   )
 }
 
-const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
-  const { onEmojiSelect, emojiTooltip, chatId, setShowEmojiPicker } = props
+export const EmojiAndStickerPicker = forwardRef<
+  HTMLDivElement,
+  {
+    onEmojiSelect: (emoji: EmojiData) => void
+    chatId: number
+    setShowEmojiPicker: React.Dispatch<React.SetStateAction<boolean>>
+  }
+>((props, ref) => {
+  const { onEmojiSelect, chatId, setShowEmojiPicker } = props
 
   const [showSticker, setShowSticker] = useState(false)
   const [stickers, setStickers] = useState(null)
@@ -125,7 +151,7 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
               onSelect={onEmojiSelect}
               showPreview={false}
               showSkinTones={false}
-              emojiTooltip={emojiTooltip}
+              emojiTooltip={false}
             />
           </div>
         )}
@@ -140,5 +166,3 @@ const EmojiAndStickerPicker = React.forwardRef((props, ref) => {
     </div>
   )
 })
-
-export default EmojiAndStickerPicker

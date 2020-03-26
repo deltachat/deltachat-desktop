@@ -1,16 +1,22 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, forwardRef } from 'react'
 import { Button } from '@blueprintjs/core'
 
 import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import logger from '../../../shared/logger'
-import EmojiAndStickerPicker from './EmojiAndStickerPicker'
+import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
+import { EmojiData, BaseEmoji } from 'emoji-mart'
 const { remote } = window.electron_functions
 
 const log = logger.getLogger('renderer/composer')
 
-const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
+const insideBoundingRect = (
+  mouseX: number,
+  mouseY: number,
+  boundingRect: DOMRect,
+  margin = 0
+) => {
   return (
     mouseX >= boundingRect.x - margin &&
     mouseX <= boundingRect.x + boundingRect.width + margin &&
@@ -19,13 +25,22 @@ const insideBoundingRect = (mouseX, mouseY, boundingRect, margin = 0) => {
   )
 }
 
-const Composer = React.forwardRef((props, ref) => {
+const Composer = forwardRef<
+  any,
+  {
+    isDisabled: boolean
+    disabledReason: string
+    chatId: number
+    draft: string
+    setComposerSize: (size: number) => void
+  }
+>((props, ref) => {
   const { isDisabled, disabledReason, chatId, draft } = props
   const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  const messageInputRef = useRef()
-  const emojiAndStickerRef = useRef()
+  const messageInputRef = useRef<ComposerMessageInput>()
+  const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
 
   const sendMessage = () => {
@@ -44,26 +59,37 @@ const Composer = React.forwardRef((props, ref) => {
   }
 
   const addFilename = () => {
-    remote.dialog.showOpenDialog({ properties: ['openFile'] }, filenames => {
-      if (filenames && filenames[0]) {
-        chatStoreDispatch({
-          type: 'SEND_MESSAGE',
-          payload: [chatId, '', filenames[0]],
-        })
+    remote.dialog.showOpenDialog(
+      { properties: ['openFile'] },
+      (filenames: string[]) => {
+        if (filenames && filenames[0]) {
+          chatStoreDispatch({
+            type: 'SEND_MESSAGE',
+            payload: [chatId, '', filenames[0]],
+          })
+        }
       }
-    })
+    )
   }
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
 
-  const onEmojiSelect = emoji => {
+  const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    messageInputRef.current.insertStringAtCursorPosition(emoji.native)
+    messageInputRef.current.insertStringAtCursorPosition(
+      (emoji as BaseEmoji).native
+    )
   }
 
   useEffect(() => {
     if (!showEmojiPicker) return
-    const onClick = ({ clientX, clientY }) => {
+    const onClick = ({
+      clientX,
+      clientY,
+    }: {
+      clientX: number
+      clientY: number
+    }) => {
       if (!emojiAndStickerRef.current) return
       const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
       const clickIsOutSideEmojiPicker = !insideBoundingRect(

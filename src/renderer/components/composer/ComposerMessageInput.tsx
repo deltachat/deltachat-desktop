@@ -1,38 +1,30 @@
-const React = require('react')
-const styled = require('styled-components').default
+import React from 'react'
 const debounce = require('debounce')
 const { callDcMethod } = require('../../ipc')
-const MessageInputTextarea = styled.textarea`
-  float: left;
-  width: calc(100% - 120px);
-  resize: unset;
-  padding: 0px;
-  border-color: transparent;
-  border-width: 0px;
-  height: auto;
-  line-height: 24px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  margin-left: 40px;
-  overflow-y: hidden;
-  background-color: ${props => props.theme.composerBg};
-  color: ${props => props.theme.composerText};
 
-  &::placeholder {
-    color: ${props => props.theme.composerPlaceholderText};
-  }
+type ComposerMessageInputProps = {
+  draft: string
+  chatId: number
+  setComposerSize: (size: number) => void
+  sendMessage: () => void
+  enterKeySends: boolean
+}
 
-  &:focus {
-    outline: none;
-  }
+type ComposerMessageInputState = {
+  text: string
+  chatId: number
+  // error?:boolean|Error
+}
 
-  &.scroll {
-    overflow-y: scroll;
-  }
-`
-
-class ComposerMessageInput extends React.Component {
-  constructor(props) {
+export default class ComposerMessageInput extends React.Component<
+  ComposerMessageInputProps,
+  ComposerMessageInputState
+> {
+  composerSize: number
+  setCursorPosition: number | false
+  textareaRef: React.RefObject<HTMLTextAreaElement>
+  saveDraft: () => void
+  constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
       text: props.draft ? props.draft : '',
@@ -56,14 +48,17 @@ class ComposerMessageInput extends React.Component {
     this.textareaRef = React.createRef()
   }
 
-  static getDerivedStateFromProps(props, currentState) {
+  static getDerivedStateFromProps(
+    props: ComposerMessageInputProps,
+    currentState: ComposerMessageInputState
+  ) {
     if (currentState.chatId !== props.chatId) {
       return { chatId: props.chatId, text: props.draft ? props.draft : '' }
     }
     return null
   }
 
-  setComposerSize(size) {
+  setComposerSize(size: number) {
     this.composerSize = size
     this.props.setComposerSize(size)
   }
@@ -80,7 +75,10 @@ class ComposerMessageInput extends React.Component {
     this.setState({ text: '' })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(
+    prevProps: ComposerMessageInputProps,
+    prevState: ComposerMessageInputState
+  ) {
     if (this.setCursorPosition) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
@@ -99,12 +97,12 @@ class ComposerMessageInput extends React.Component {
     }
   }
 
-  onChange(e) {
-    this.setState({ text: e.target.value, error: false })
+  onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    this.setState({ text: e.target.value /*error: false*/ })
     this.saveDraft()
   }
 
-  keyEventToAction(e) {
+  keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const enterKeySends = this.props.enterKeySends
 
     // ENTER + SHIFT
@@ -119,7 +117,7 @@ class ComposerMessageInput extends React.Component {
     }
   }
 
-  onKeyDown(e) {
+  onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const action = this.keyEventToAction(e)
 
     if (!action) return
@@ -164,7 +162,7 @@ class ComposerMessageInput extends React.Component {
     }
   }
 
-  insertStringAtCursorPosition(str) {
+  insertStringAtCursorPosition(str: string) {
     const textareaElem = this.textareaRef.current
     const { selectionStart, selectionEnd } = textareaElem
     const textValue = this.state.text
@@ -183,12 +181,13 @@ class ComposerMessageInput extends React.Component {
     const tx = window.translate
 
     return (
-      <MessageInputTextarea
+      <textarea
+        className='message-input-area'
         id='composer-textarea'
         ref={this.textareaRef}
-        rows='1'
-        intent={this.state.error ? 'danger' : 'none'}
-        large
+        rows={1}
+        // intent={this.state.error ? 'danger' : 'none'}
+        // large
         value={this.state.text}
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
@@ -197,5 +196,3 @@ class ComposerMessageInput extends React.Component {
     )
   }
 }
-
-module.exports = ComposerMessageInput
