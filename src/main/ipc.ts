@@ -1,21 +1,23 @@
-import { app as rawApp, ipcMain, dialog, shell } from 'electron'
-import { join, relative, extname } from 'path'
-import {
-  copyFile,
-  ensureDir,
-  emptyDir,
-  copy,
-  pathExists,
-} from 'fs-extra'
-import { getLogins, removeAccount, getNewAccountPath } from './logins'
-import { getConfigPath } from './application-constants'
-
-import loadTranslations from './load-translations'
-import { init as refreshMenu } from './menu'
-import * as mainWindow from './windows/main'
-import { LogHandler } from './log-handler'
+import { C } from 'deltachat-node'
+import { app as rawApp, dialog, ipcMain, shell } from 'electron'
+import { copy, copyFile, emptyDir, ensureDir, pathExists } from 'fs-extra'
+import { extname, join, relative } from 'path'
 import { getLogger } from '../shared/logger'
 import { AppState, Credentials, LocalSettings } from '../shared/shared-types'
+import { getConfigPath } from './application-constants'
+import { credential_config } from './deltachat/login'
+import loadTranslations from './load-translations'
+import { LogHandler } from './log-handler'
+import {
+  DeltaChatAccount,
+  getLogins,
+  getNewAccountPath,
+  removeAccount,
+} from './logins'
+import { init as refreshMenu } from './menu'
+import { ExtendedAppMainProcess } from './types'
+import * as mainWindow from './windows/main'
+
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
   try {
@@ -33,10 +35,6 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
     )
   }
 })()
-import { C } from 'deltachat-node'
-import { DeltaChatAccount } from './logins'
-import { ExtendedAppMainProcess } from './types'
-import { credential_config } from './deltachat/login'
 
 const app = rawApp as ExtendedAppMainProcess
 
