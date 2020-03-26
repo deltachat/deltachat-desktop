@@ -4,9 +4,9 @@ import DeltaChatController from './deltachat/controller'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/markseenfix')
 
-let dc:DeltaChatController
+let dc: DeltaChatController
 
-export async function maybeMarkSeen(chatId:number, msgId:number) {
+export async function maybeMarkSeen(chatId: number, msgId: number) {
   if (!dc) {
     return
   }
@@ -22,7 +22,7 @@ export async function maybeMarkSeen(chatId:number, msgId:number) {
   }
 }
 
-export function setupMarkseenFix(dcClass:DeltaChatController) {
+export function setupMarkseenFix(dcClass: DeltaChatController) {
   dc = dcClass
   dc.on('ready', _ => {
     windows.main.win.on('focus', async () => {
@@ -39,7 +39,7 @@ export function setupMarkseenFix(dcClass:DeltaChatController) {
       if (chat && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
         if (chat.freshMessageCounter > 0) {
           await dc.callMethod(null, 'chat.markNoticedChat', [chat.id])
-          const messagIds = (chat.messages || []).map(msg => msg.id)
+          const messagIds = (chat.messages || []).map((msg:any) => msg.id)
           log.debug('markSeenMessages', messagIds)
           await dc.callMethod(null, 'messageList.markSeenMessages', [messagIds])
         }

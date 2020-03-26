@@ -1,52 +1,63 @@
-module.exports = { init }
+import { app, Menu, shell } from 'electron'
+import { gitHubIssuesUrl, gitHubUrl, homePageUrl } from '../shared/constants'
+import { getLogger } from '../shared/logger'
+import { getLogsPath } from './application-constants'
+import { LogHandler } from './log-handler'
+import { ExtendedAppMainProcess } from './types'
 
-const { app, Menu, shell } = require('electron')
-const log = require('../shared/logger').getLogger('main/menu')
+const log = getLogger('main/menu')
 const windows = require('./windows')
-const { getLogsPath } = require('./application-constants')
 
-const {
-  homePageUrl,
-  gitHubUrl,
-  gitHubIssuesUrl,
-} = require('../shared/constants')
+const languages: {
+  locale: string
+  name: string
+}[] = require('../../_locales/_languages.json')
 
-const languages = require('../../_locales/_languages.json')
-
-function init(logHandler) {
-  log.info(`rebuilding menu with locale ${app.localeData.locale}`)
+export function init(logHandler: LogHandler) {
+  log.info(
+    `rebuilding menu with locale ${
+      (app as ExtendedAppMainProcess).localeData.locale
+    }`
+  )
   const template = getMenuTemplate(logHandler)
   const menu = Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(
     menu,
-    app.translate('global_menu_view_floatontop_desktop')
+    (app as ExtendedAppMainProcess).translate(
+      'global_menu_view_floatontop_desktop'
+    )
   )
   if (item) item.checked = windows.main.isAlwaysOnTop()
   Menu.setApplicationMenu(menu)
 }
 
-function setLabels(menu) {
+interface rawMenuItem extends Electron.MenuItemConstructorOptions {
+  translate?: string
+  submenu?: (rawMenuItem | Electron.MenuItemConstructorOptions)[]
+}
+
+function setLabels(menu: rawMenuItem[]): Electron.MenuItemConstructorOptions[] {
   // JANKY
   // Electron doesn't allow us to modify the menu with a new template,
   // so we must modify the labels directly in order to change
   // the menu item labels when the user changes languages
-  const translate = app.translate
+  const translate = (app as ExtendedAppMainProcess).translate
 
   doTranslation(menu)
 
-  function doTranslation(menu) {
+  function doTranslation(menu: rawMenuItem[]) {
     menu.forEach(item => {
       if (item.translate) {
         item.label = translate(item.translate)
       }
-      if (item.submenu) doTranslation(item.submenu)
+      if (item.submenu) doTranslation(item.submenu as any)
     })
   }
 
   return menu
 }
 
-function getAvailableLanguages() {
+function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
   return languages
     .filter(({ name }) => name.indexOf('*') === -1)
     .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1))
@@ -54,17 +65,17 @@ function getAvailableLanguages() {
       return {
         label: name,
         type: 'radio',
-        checked: locale === app.localeData.locale,
+        checked: locale === (app as ExtendedAppMainProcess).localeData.locale,
         click: () => {
-          app.state.saved.locale = locale
-          app.saveState()
+          ;(app as ExtendedAppMainProcess).state.saved.locale = locale
+          ;(app as ExtendedAppMainProcess).saveState()
           windows.main.chooseLanguage(locale)
         },
       }
     })
 }
 
-function getZoomFactors() {
+function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   // for now this solution is electron specific
   const zoomFactors = [
     { scale: 0.6, key: 'micro' },
@@ -77,24 +88,32 @@ function getZoomFactors() {
   if (
     zoomFactors
       .map(({ scale }) => scale)
-      .indexOf(app.state.saved.zoomFactor) === -1
+      .indexOf((app as ExtendedAppMainProcess).state.saved.zoomFactor) === -1
   )
-    zoomFactors.push({ scale: app.state.saved.zoomFactor, key: 'custom' })
+    zoomFactors.push({
+      scale: (app as ExtendedAppMainProcess).state.saved.zoomFactor,
+      key: 'custom',
+    })
 
   return zoomFactors.map(({ key, scale }) => {
     return {
       label: !(scale === 1 && key === 'custom')
-        ? `${scale}x ${app.translate('global_zoom_factor_' + key)}`
-        : app.translate('global_zoom_factor_custom'),
+        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(
+            'global_zoom_factor_' + key
+          )}`
+        : (app as ExtendedAppMainProcess).translate(
+            'global_zoom_factor_custom'
+          ),
       type: 'radio',
       checked:
-        scale === app.state.saved.zoomFactor &&
+        scale === (app as ExtendedAppMainProcess).state.saved.zoomFactor &&
         !(scale === 1 && key === 'custom'),
       click: () => {
         if (key !== 'custom') {
-          app.state.saved.zoomFactor = scale
-          windows.main.setZoomFactor(scale)
-          app.saveState()
+          ;(app as ExtendedAppMainProcess).state.saved.zoomFactor = scale
+          windows.main
+            .setZoomFactor(scale)(app as ExtendedAppMainProcess)
+            .saveState()
         } else {
           // todo? currently it is a no-op and the 'option' is only shown
           // when the config value was changed by the user
@@ -104,7 +123,7 @@ function getZoomFactors() {
   })
 }
 
-function getMenuTemplate(logHandler) {
+function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
   return [
     {
       translate: 'global_menu_file_desktop',
@@ -147,7 +166,7 @@ function getMenuTemplate(logHandler) {
         },
         {
           translate: 'menu_select_all',
-          role: 'selectall',
+          role: 'selectAll',
         },
       ],
     },
@@ -236,7 +255,7 @@ function getMenuTemplate(logHandler) {
   ]
 }
 
-function getMenuItem(menu, label) {
+function getMenuItem(menu: Menu, label: string) {
   for (let i = 0; i < menu.items.length; i++) {
     const menuItem = menu.items[i].submenu.items.find(function(item) {
       return item.label === label

@@ -50,6 +50,7 @@ export function createLogHandler() {
     logFilePath: () => fileName,
   }
 }
+export type LogHandler = ReturnType<typeof createLogHandler>
 
 import { readdir, lstat, unlink } from 'fs-extra'
 import { getLogger } from '../shared/logger'
