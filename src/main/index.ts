@@ -1,9 +1,11 @@
 console.time('init')
 
-const fs = require('fs')
-const { ensureDirSync } = require('fs-extra')
-const { app, session } = require('electron')
-const rc = (app.rc = require('./rc').default)
+import { ensureDirSync, readJsonSync, watchFile, existsSync } from 'fs-extra'
+import { app as rawApp, session, EventEmitter } from 'electron'
+import rc from './rc'
+
+const app = rawApp as ExtendedAppMainProcess
+app.rc = rc
 
 if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
@@ -12,19 +14,19 @@ if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
 }
 
 // Setup folders
-const {
+import {
   getConfigPath,
   getLogsPath,
   getAccountsPath,
-} = require('./application-constants')
+} from './application-constants'
 ensureDirSync(getConfigPath())
 ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())
 
 // Setup Logger
-const { cleanupLogFolder } = require('./log-handler')
-const logHandler = require('./log-handler').createLogHandler()
-const logger = require('../shared/logger')
+import { cleanupLogFolder, createLogHandler } from './log-handler'
+const logHandler = createLogHandler()
+import logger from '../shared/logger'
 const log = logger.getLogger('main/index')
 logger.setLogHandler(logHandler.log, rc)
 process.on('exit', logHandler.end)
@@ -36,13 +38,15 @@ process.on('uncaughtException', err => {
   throw err
 })
 
-const loadTranslations = require('./load-translations').default
-const { getLogins } = require('./logins')
+import loadTranslations from './load-translations'
+import { getLogins } from './logins'
 const ipc = require('./ipc')
-const menu = require('./menu')
-const State = require('./state')
+import { init as initMenu } from './menu'
+import State from './state'
 import * as mainWindow from './windows/main'
-const devTools = require('./devtools')
+import * as devTools from './devtools'
+import { AppState } from '../shared/shared-types'
+import { ExtendedAppMainProcess } from './types'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -60,18 +64,25 @@ Promise.all([
 
 function updateTheme() {
   const sendTheme = () => {
-    const content = fs.readFileSync(app.rc['theme'])
-    mainWindow.send('theme-update', JSON.parse(content))
+    const content = readJsonSync(app.rc['theme'])
+    mainWindow.send('theme-update', content)
   }
   if (!app.ipcReady) {
     log.info('theme: Waiting for ipc to be ready before setting theme.')
-    app.once('ipcReady', sendTheme)
+    ;(app as EventEmitter).once('ipcReady', sendTheme)
     return
   }
   sendTheme()
 }
 
-function onReady([logins, _appReady, loadedState]) {
+function onReady([logins, _appReady, loadedState]: [
+  {
+    path: string
+    addr: string
+  }[],
+  any,
+  AppState
+]) {
   const state = (app.state = loadedState)
   state.logins = logins
 
@@ -84,12 +95,12 @@ function onReady([logins, _appReady, loadedState]) {
   ipc.init(cwd, state, logHandler)
 
   mainWindow.init(app, { hidden: false })
-  menu.init(logHandler)
+  initMenu(logHandler)
 
   if (rc.debug) mainWindow.toggleDevTools()
 
   if (app.rc['translation-watch']) {
-    fs.watchFile('_locales/_untranslated_en.json', (curr, prev) => {
+    watchFile('_locales/_untranslated_en.json', (curr, prev) => {
       if (curr.mtime !== prev.mtime) {
         log.info('translation-watch: File changed reloading translation data')
         mainWindow.chooseLanguage(app.localeData.locale)
@@ -100,12 +111,12 @@ function onReady([logins, _appReady, loadedState]) {
 
   if (app.rc['theme']) {
     log.info(`theme: trying to load theme from '${app.rc['theme']}'`)
-    if (fs.existsSync(app.rc['theme'])) {
+    if (existsSync(app.rc['theme'])) {
       updateTheme()
       log.info(`theme: set theme`)
       if (app.rc['theme-watch']) {
         log.info('theme-watch: activated', app.rc['theme-watch'])
-        fs.watchFile(app.rc['theme'], (curr, prev) => {
+        watchFile(app.rc['theme'], (curr, prev) => {
           if (curr.mtime !== prev.mtime) {
             log.info('theme-watch: File changed reloading theme data')
             updateTheme()
@@ -123,7 +134,7 @@ function onReady([logins, _appReady, loadedState]) {
   )
 }
 
-app.once('ipcReady', () => {
+;(app as EventEmitter).once('ipcReady', () => {
   console.timeEnd('init')
   if (process.env.NODE_ENV === 'test') {
     mainWindow.window.maximize()
@@ -137,7 +148,7 @@ app.once('ipcReady', () => {
   })
 })
 
-function quit(e) {
+function quit(e: Electron.Event) {
   if (app.isQuitting) return
 
   app.isQuitting = true
@@ -157,7 +168,7 @@ function quit(e) {
 }
 
 app.on('before-quit', e => quit(e))
-app.on('window-all-closed', e => quit(e))
+app.on('window-all-closed', (e: Electron.Event) => quit(e))
 
 app.on('web-contents-created', (e, contents) => {
   contents.on('will-navigate', (e, navigationUrl) => {

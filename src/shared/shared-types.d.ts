@@ -40,6 +40,10 @@ export interface RC_Config {
   'log-to-console': boolean
   'machine-readable-stacktrace': boolean
   'multiple-instances': boolean
+  theme: string | undefined
+  'theme-watch': boolean
+  debug: boolean
+  'translation-watch': boolean
 }
 
 import { App } from 'electron'

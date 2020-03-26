@@ -5,4 +5,5 @@ export interface ExtendedAppMainProcess extends ExtendedApp {
   saveState?: (arg?: AppState) => void
   // saveState is likely not shared to renderer so the type ExtendedApp can not be shared with renderer
   translate: getMessageFunction
+  // once: (event: 'ipcReady', listener: () => void) => this // how can we overload this function without overwriting it?
 }
