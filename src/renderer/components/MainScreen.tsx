@@ -32,15 +32,16 @@ export default function MainScreen() {
   const screenContext = useContext(ScreenContext)
   const [selectedChat, chatStoreDispatch] = useChatStore()
 
-  const onChatClick = chatId => {
+  const onChatClick = (chatId: number) => {
     // avoid double clicks
     if (chatId === selectedChat.id) return
 
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     setMedia(false)
   }
-  const searchChats = queryStr => setQueryStr(queryStr)
-  const handleSearchChange = event => searchChats(event.target.value)
+  const searchChats = (queryStr: string) => setQueryStr(queryStr)
+  const handleSearchChange = (event: { target: { value: '' } }) =>
+    searchChats(event.target.value)
   const onMapIconClick = () => openMapDialog(screenContext, selectedChat)
   const onTitleClick = () => {
     if (!selectedChat) return
@@ -95,7 +96,7 @@ export default function MainScreen() {
                     Classes.MINIMAL,
                     'icon-rotated',
                     'archived-chats-return-button',
-                  ]}
+                  ].join(' ')}
                   icon='undo'
                   onClick={() => setShowArchivedChats(false)}
                   aria-label={tx('back')}

@@ -12,20 +12,19 @@ import { C } from 'deltachat-node/dist/constants'
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')
-export default function MessageListAndComposer(props) {
+export default function MessageListAndComposer({ chat }: { chat: any }) {
   const [state, setState] = useState({
-    error: false,
+    //error: false,
     composerSize: 40,
   })
-  const { chat } = props
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const setComposerSize = size => setState({ composerSize: size })
+  const setComposerSize = (size: number) => setState({ composerSize: size })
 
-  const onDrop = e => {
-    const files = e.target.files || e.dataTransfer.files
+  const onDrop = (e: React.DragEvent<any>) => {
+    const files = (e.target as any).files || e.dataTransfer.files
     e.preventDefault()
     e.stopPropagation()
     const tx = window.translate
@@ -38,7 +37,7 @@ export default function MessageListAndComposer(props) {
         openDialog('ConfirmationDialog', {
           message: tx('ask_send_file_desktop', [name, chat.name]),
           confirmLabel: tx('menu_send'),
-          cb: yes => {
+          cb: (yes: boolean) => {
             if (!yes) {
               return
             }
@@ -51,27 +50,31 @@ export default function MessageListAndComposer(props) {
     }
   }
 
-  const onDragOver = e => {
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
-  const [disabled, disabledReason] = (({ id, isGroup, selfInGroup }) => {
+  const [disabled, disabledReason] = (({
+    id,
+    isGroup,
+    selfInGroup,
+  }): [boolean, string] => {
     if (id === DC_CHAT_ID_DEADDROP) {
       return [true, 'messaging_disabled_deaddrop']
     } else if (chat.isDeviceChat === true) {
       return [true, 'messaging_disabled_device_chat']
     } else if (id === DC_CHAT_ID_STARRED) {
-      return [true]
+      return [true, '']
     } else if (isGroup && !selfInGroup) {
       return [true, 'messaging_disabled_not_in_group']
     } else {
-      return [false]
+      return [false, '']
     }
   })(chat)
 
   const settings = useContext(SettingsContext)
-  const style = {
+  const style: React.CSSProperties = {
     backgroundSize: 'cover',
     gridTemplateRows: `auto ${state.composerSize}px`,
   }

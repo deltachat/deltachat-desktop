@@ -1,18 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
-import { CreateChatSearchInput } from './dialogs/CreateChat-Styles'
 import classNames from 'classnames'
 
-const SearchInputWrap = styled(CreateChatSearchInput)`
-  margin-left: 40px;
-  padding: 10px 0px;
-  width: calc(100% - 80px);
-  .bp3-navbar & {
-    margin-left: 0px;
-  }
-`
-
-export function ClearButton(props) {
+export function ClearButton(props: {
+  onChange: (event: { target: { value: '' } }) => void
+  value: string
+}) {
   const { onChange, value } = props
   const onClear = () => onChange({ target: { value: '' } })
 
@@ -28,18 +20,25 @@ export function ClearButton(props) {
   )
 }
 
-export default function SearchInput(props) {
+export default function SearchInput(props: {
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement> & { target: { value: '' } }
+  ) => void
+  value: string
+  className: string
+  id: string
+}) {
   const { onChange, value, className, id } = props
   const tx = window.translate
   return (
     <>
-      <SearchInputWrap
+      <input
         id={id}
         placeholder={tx('search')}
         autoFocus
         onChange={onChange}
         value={value}
-        className={className}
+        className={'search-input ' + className}
       />
       <ClearButton value={value} onChange={onChange} />
     </>

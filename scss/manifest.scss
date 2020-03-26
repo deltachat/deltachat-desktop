@@ -58,6 +58,9 @@
 @import 'message/_metadata';
 @import 'message/_status-icon';
 
+// misc
+@import 'misc/_search-input.scss';
+
 // Overwrites for third party node modules
 @import 'overwrites/_bp3-overwrites';
 @import 'overwrites/_react-context-menu-overwrites';

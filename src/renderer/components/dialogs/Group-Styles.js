@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { AvatarBubble, AvatarImage } from '../contact/Contact'
-import { CreateChatSearchInput } from './CreateChat-Styles'
 
 export const GroupNameInput = styled.input`
   margin-left: 20px;
@@ -31,12 +30,6 @@ export const GroupSeperator = styled.div`
 export const GroupMemberContactListWrapper = styled.div`
   margin-left: -20px;
   margin-right: -20px;
-`
-
-export const GroupMemberSearchInput = styled(CreateChatSearchInput)`
-  margin-left: 40px;
-  padding: 10px 0px;
-  width: calc(100% - 80px);
 `
 
 export const GroupImageUnsetButtonWrapper = styled.div`
