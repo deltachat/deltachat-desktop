@@ -1,25 +1,28 @@
-const appConfig = require('./application-config').default
-const { EventEmitter } = require('events')
-const log = require('../shared/logger').getLogger('main/state')
-const { promisify } = require('util')
+import { EventEmitter } from 'events'
+import { promisify } from 'util'
+import { getLogger } from '../shared/logger'
+import { AppState } from '../shared/shared-types'
+import { getDefaultState } from '../shared/state'
+import appConfig from './application-config'
+const log = getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
-const State = (module.exports = Object.assign(new EventEmitter(), {
+const State = Object.assign(new EventEmitter(), {
   load,
   // state.save() calls are rate-limited. Use state.saveImmediate() to skip limit.
-  save: function() {
+  save: function(state: Partial<AppState>, cb?: (err: any) => void) {
     // Perf optimization: Lazy-require debounce (and it's dependencies)
     const debounce = require('debounce')
     // After first State.save() invokation, future calls go straight to the
     // debounced function
     State.save = debounce(saveImmediate, SAVE_DEBOUNCE_INTERVAL)
-    State.save(...arguments)
+    saveImmediate(state, cb)
   },
   saveImmediate,
-}))
+})
 
-const { getDefaultState } = require('../shared/state')
+export default State
 
 async function load() {
   var state = getDefaultState()
@@ -34,10 +37,10 @@ async function load() {
   return state
 }
 
-function saveImmediate(state, cb) {
+function saveImmediate(state: Partial<AppState>, cb?: (err: any) => void) {
   log.info(`Saving state to ${appConfig.filePath}`)
   const copy = Object.assign({}, state.saved)
-  appConfig.write(copy, err => {
+  appConfig.write(copy, (err: any) => {
     if (err) {
       log.error('State save failed', err)
     }
