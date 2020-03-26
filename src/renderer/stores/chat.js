@@ -198,7 +198,7 @@ chatStore.effects.push(async ({ type, payload }, state) => {
     if (payload[0] !== chatStore.state.id) return
     const messageObj = await callDcMethodAsync(
       'messageList.sendMessage',
-      payload
+      payload /* [chatId, text, filename, location]*/
     )
     chatStore.dispatch({
       type: 'MESSAGE_SENT',
