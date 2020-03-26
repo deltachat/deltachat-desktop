@@ -41,7 +41,7 @@ const { getLogins } = require('./logins')
 const ipc = require('./ipc')
 const menu = require('./menu')
 const State = require('./state')
-const windows = require('./windows')
+import * as mainWindow from './windows/main'
 const devTools = require('./devtools')
 
 app.ipcReady = false
@@ -61,7 +61,7 @@ Promise.all([
 function updateTheme() {
   const sendTheme = () => {
     const content = fs.readFileSync(app.rc['theme'])
-    windows.main.send('theme-update', JSON.parse(content))
+    mainWindow.send('theme-update', JSON.parse(content))
   }
   if (!app.ipcReady) {
     log.info('theme: Waiting for ipc to be ready before setting theme.')
@@ -83,16 +83,16 @@ function onReady([logins, _appReady, loadedState]) {
   log.info(`cwd ${cwd}`)
   ipc.init(cwd, state, logHandler)
 
-  windows.main.init(app, { hidden: false })
+  mainWindow.init(app, { hidden: false })
   menu.init(logHandler)
 
-  if (rc.debug) windows.main.toggleDevTools()
+  if (rc.debug) mainWindow.toggleDevTools()
 
   if (app.rc['translation-watch']) {
     fs.watchFile('_locales/_untranslated_en.json', (curr, prev) => {
       if (curr.mtime !== prev.mtime) {
         log.info('translation-watch: File changed reloading translation data')
-        windows.main.chooseLanguage(app.localeData.locale)
+        mainWindow.chooseLanguage(app.localeData.locale)
         log.info('translation-watch: reloading translation data - done')
       }
     })
@@ -125,14 +125,13 @@ function onReady([logins, _appReady, loadedState]) {
 
 app.once('ipcReady', () => {
   console.timeEnd('init')
-  const win = windows.main.win
   if (process.env.NODE_ENV === 'test') {
-    win.maximize()
+    mainWindow.window.maximize()
   }
-  win.on('close', e => {
+  mainWindow.window.on('close', e => {
     if (!app.isQuitting) {
       e.preventDefault()
-      windows.main.hide()
+      mainWindow.hide()
       quit(e)
     }
   })

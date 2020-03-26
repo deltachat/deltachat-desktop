@@ -9,7 +9,7 @@ const { getConfigPath } = require('./application-constants')
 
 const loadTranslations = require('./load-translations').default
 const menu = require('./menu')
-const windows = require('./windows')
+import * as mainWindow from './windows/main'
 const log = require('../shared/logger').getLogger('main/ipc')
 const DeltaChatController = (() => {
   try {
@@ -30,7 +30,7 @@ const DeltaChatController = (() => {
 const { C } = require('deltachat-node')
 
 function init(cwd, state, logHandler) {
-  const main = windows.main
+  const main = mainWindow
   const dcController = new DeltaChatController(cwd, state.saved)
 
   dcController.on('ready', async credentials => {
@@ -72,7 +72,7 @@ function init(cwd, state, logHandler) {
     log.debug('Renderer event:', e, ...args)
   })
 
-  ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
+  // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
   ipcMain.on('setBounds', (e, ...args) => main.setBounds(...args))
   ipcMain.on('setProgress', (e, ...args) => main.setProgress(...args))
   ipcMain.on('show', () => main.show())

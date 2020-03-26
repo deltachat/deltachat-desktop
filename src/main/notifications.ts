@@ -1,4 +1,4 @@
-const windows = require('./windows')
+import * as mainWindow from './windows/main'
 import { app, Notification } from 'electron'
 import { appName } from '../shared/constants'
 import { appIcon } from './application-constants'
@@ -19,7 +19,7 @@ export default function(dc: DeltaChatController, settings: any) {
   }
 
   dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
-    if (!notify && settings.notifications && windows.main.win.hidden) {
+    if (!notify && settings.notifications && mainWindow.window.hidden) {
       notify = new Notification({
         title: appName,
         body: await getMsgBody(msgId),
@@ -28,7 +28,7 @@ export default function(dc: DeltaChatController, settings: any) {
       notify.show()
       notify.on('click', () => {
         dc.sendToRenderer('ClickOnNotification', { chatId, msgId })
-        windows.main.show()
+        mainWindow.show()
         app.focus()
         notify = null
       })

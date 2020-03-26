@@ -5,7 +5,7 @@ import { getLogger } from '../../shared/logger'
 import { LocalSettings } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
-import windows from '../windows'
+import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
 import DCBackup from './backup'
 import DCChat from './chat'
@@ -135,7 +135,7 @@ export default class DeltaChatController extends EventEmitter {
 
   sendToRenderer(eventType: string, payload?: any) {
     log.debug('sendToRenderer: ' + eventType, payload)
-    windows.main.send('ALL', eventType, payload)
+    mainWindow.send('ALL', eventType, payload)
     if (!eventType) {
       log.error(
         'Tried to send an undefined event to the renderer.\n' +
@@ -143,7 +143,7 @@ export default class DeltaChatController extends EventEmitter {
       )
       return
     }
-    windows.main.send(eventType, payload)
+    mainWindow.send(eventType, payload)
   }
 
   translate(

@@ -4,9 +4,9 @@ import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
+import * as mainWindow from './windows/main'
 
 const log = getLogger('main/menu')
-const windows = require('./windows')
 
 const languages: {
   locale: string
@@ -27,7 +27,7 @@ export function init(logHandler: LogHandler) {
       'global_menu_view_floatontop_desktop'
     )
   )
-  if (item) item.checked = windows.main.isAlwaysOnTop()
+  if (item) item.checked = mainWindow.isAlwaysOnTop()
   Menu.setApplicationMenu(menu)
 }
 
@@ -69,7 +69,7 @@ function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
         click: () => {
           ;(app as ExtendedAppMainProcess).state.saved.locale = locale
           ;(app as ExtendedAppMainProcess).saveState()
-          windows.main.chooseLanguage(locale)
+          mainWindow.chooseLanguage(locale)
         },
       }
     })
@@ -111,9 +111,8 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
       click: () => {
         if (key !== 'custom') {
           ;(app as ExtendedAppMainProcess).state.saved.zoomFactor = scale
-          windows.main
-            .setZoomFactor(scale)(app as ExtendedAppMainProcess)
-            .saveState()
+          mainWindow.setZoomFactor(scale)
+          ;(app as ExtendedAppMainProcess).saveState()
         } else {
           // todo? currently it is a no-op and the 'option' is only shown
           // when the config value was changed by the user
@@ -176,7 +175,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
         {
           translate: 'global_menu_view_floatontop_desktop',
           type: 'checkbox',
-          click: () => windows.main.toggleAlwaysOnTop(),
+          click: () => mainWindow.toggleAlwaysOnTop(),
         },
         {
           translate: 'global_menu_view_zoom_factor',
@@ -198,7 +197,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
                 process.platform === 'darwin'
                   ? 'Alt+Command+I'
                   : 'Ctrl+Shift+I',
-              click: () => windows.main.toggleDevTools(),
+              click: () => mainWindow.toggleDevTools(),
             },
             {
               translate: 'menu.view.developer.open.log.folder',
@@ -219,7 +218,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
         {
           translate: 'menu_help',
           click: () => {
-            windows.main.send('showHelpDialog')
+            mainWindow.send('showHelpDialog')
           },
           accelerator: 'F1',
         },
@@ -247,7 +246,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
         {
           translate: 'global_menu_help_about_desktop',
           click: () => {
-            windows.main.send('showAboutDialog')
+            mainWindow.send('showAboutDialog')
           },
         },
       ],

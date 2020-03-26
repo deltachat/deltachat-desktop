@@ -1,8 +1,8 @@
-const windows = require('./windows')
+import * as mainWindow from './windows/main'
 import { app, ipcMain } from 'electron'
 import DeltaChatController from './deltachat/controller'
 
-export function setupUnreadBadge(dc: DeltaChatController) {
+export default function setupUnreadBadge(dc: DeltaChatController) {
   if (process.platform !== 'linux' && process.platform !== 'darwin') return
 
   let reUpdateTimeOut: NodeJS.Timeout
@@ -17,7 +17,7 @@ export function setupUnreadBadge(dc: DeltaChatController) {
 
   dc._dc.on('DC_EVENT_INCOMING_MSG', (_chatId: number, _msgId: number) => {
     // don't update imidiately if the app is in focused
-    if (windows.main.win.hidden) update()
+    if (mainWindow.window.hidden) update()
 
     // update after a delay again to make sure its up to date
     if (reUpdateTimeOut) clearTimeout(reUpdateTimeOut)

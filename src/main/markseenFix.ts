@@ -1,4 +1,4 @@
-const windows = require('./windows')
+import * as mainWindow from './windows/main'
 import { C } from 'deltachat-node'
 import DeltaChatController from './deltachat/controller'
 import { getLogger } from '../shared/logger'
@@ -10,7 +10,7 @@ export async function maybeMarkSeen(chatId: number, msgId: number) {
   if (!dc) {
     return
   }
-  if (!windows.main.win.hidden) {
+  if (!mainWindow.window.hidden) {
     const selectedChatId = await dc.callMethod(
       null,
       'chatList.getSelectedChatId',
@@ -25,7 +25,7 @@ export async function maybeMarkSeen(chatId: number, msgId: number) {
 export function setupMarkseenFix(dcClass: DeltaChatController) {
   dc = dcClass
   dc.on('ready', _ => {
-    windows.main.win.on('focus', async () => {
+    mainWindow.window.on('focus', async () => {
       const selectedChatId = await dc.callMethod(
         null,
         'chatList.getSelectedChatId',
