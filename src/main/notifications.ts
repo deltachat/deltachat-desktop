@@ -1,27 +1,25 @@
 const windows = require('./windows')
-const { appIcon } = require('./application-constants')
-const { appName } = require('../shared/constants')
+import { app, Notification } from 'electron'
+import { appName } from '../shared/constants'
+import { appIcon } from './application-constants'
+import DeltaChatController from './deltachat/controller'
+import { ExtendedAppMainProcess } from './types'
 
-const { app, Notification } = require('electron')
 
-/**
- * @param {import('./deltachat/controller').default} dc
- * @param {*} settings
- */
-module.exports = function(dc, settings) {
+export default function(dc:DeltaChatController, settings:any) {
   if (!Notification.isSupported()) return
 
-  let notify
+  let notify:Notification
 
-  async function getMsgBody(msgId) {
-    const tx = app.translate
+  async function getMsgBody(msgId:number) {
+    const tx = (app as ExtendedAppMainProcess).translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
     var json = await dc.callMethod(null, 'messageList.messageIdToJson', [msgId])
     var summary = json.msg.summary
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
 
-  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId, msgId) => {
+  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId:number, msgId:number) => {
     if (!notify && settings.notifications && windows.main.win.hidden) {
       notify = new Notification({
         title: appName,
