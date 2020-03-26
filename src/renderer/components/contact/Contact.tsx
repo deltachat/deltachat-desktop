@@ -1,5 +1,5 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
-import { ContactListItem } from '../conversations'
+import ContactListItem from '../conversations/ContactListItem'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
 import { ContactJSON } from '../../../shared/shared-types'

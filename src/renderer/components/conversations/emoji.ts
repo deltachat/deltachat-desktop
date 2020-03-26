@@ -6,11 +6,11 @@ const instance = new EmojiConvertor()
 instance.init_unified()
 instance.init_colons()
 
-exports.getRegex = function() {
+export function getRegex () {
   return instance.rx_unified
 }
 
-exports.replaceColons = function(str) {
+export function replaceColons (str:string) {
   return str.replace(instance.rx_colons, m => {
     const name = m.substr(1, m.length - 2)
     const code = instance.map.colons[name]
@@ -22,7 +22,7 @@ exports.replaceColons = function(str) {
   })
 }
 
-function getCountOfAllMatches(str, regex) {
+function getCountOfAllMatches(str:string, regex:RegExp) {
   let match = regex.exec(str)
   let count = 0
 
@@ -38,12 +38,12 @@ function getCountOfAllMatches(str, regex) {
   return count
 }
 
-function hasNormalCharacters(str) {
+function hasNormalCharacters(str:string) {
   const noEmoji = str.replace(instance.rx_unified, '').trim()
   return noEmoji.length > 0
 }
 
-exports.getSizeClass = function(str) {
+export function getSizeClass(str:string) {
   if (hasNormalCharacters(str)) {
     return ''
   }

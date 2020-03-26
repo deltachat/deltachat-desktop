@@ -1,13 +1,18 @@
-const React = require('react')
-const classNames = require('classnames')
+import React from 'react'
+import classNames from 'classnames'
 
 // TODO this function can be found in many places, refactor!
-function getInitial(name) {
+function getInitial(name:string) {
   return name.trim()[0] || '#'
 }
 
-class ContactListItem extends React.Component {
-  renderAvatar({ displayName }) {
+export default class ContactListItem extends React.Component<{
+  name:string, onClick:any, isMe:boolean, email:string, profileName:string,
+  verified:boolean,
+  avatarPath:string,
+  color:string,
+}> {
+  renderAvatar({ displayName }:{ displayName:string }) {
     const { avatarPath, color, name } = this.props
     const tx = window.translate
 
@@ -80,5 +85,3 @@ class ContactListItem extends React.Component {
     )
   }
 }
-
-module.exports = ContactListItem
