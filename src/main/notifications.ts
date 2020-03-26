@@ -5,13 +5,12 @@ import { appIcon } from './application-constants'
 import DeltaChatController from './deltachat/controller'
 import { ExtendedAppMainProcess } from './types'
 
-
-export default function(dc:DeltaChatController, settings:any) {
+export default function(dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
 
-  let notify:Notification
+  let notify: Notification
 
-  async function getMsgBody(msgId:number) {
+  async function getMsgBody(msgId: number) {
     const tx = (app as ExtendedAppMainProcess).translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
     var json = await dc.callMethod(null, 'messageList.messageIdToJson', [msgId])
@@ -19,7 +18,7 @@ export default function(dc:DeltaChatController, settings:any) {
     return `${summary.text1 || json.contact.displayName}: ${summary.text2}`
   }
 
-  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId:number, msgId:number) => {
+  dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
     if (!notify && settings.notifications && windows.main.win.hidden) {
       notify = new Notification({
         title: appName,
