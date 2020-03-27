@@ -1,8 +1,9 @@
-const Color = require('color')
+import Color from 'color'
+import { getLogger } from '../shared/logger'
 
-const log = require('../shared/logger').getLogger('render/theme-backend')
+const log = getLogger('render/theme-backend')
 
-function changeContrast(colorString, factor) {
+function changeContrast(colorString: string, factor: number): string {
   // TODO make the black check code work
   const color =
     Color(colorString).hex() === '#000000'
@@ -23,14 +24,14 @@ function changeContrast(colorString, factor) {
   }
 }
 
-function invertColor(colorString) {
+function invertColor(colorString: string): string {
   return Color(colorString)
     .negate()
     .rgb()
     .string()
 }
 
-function changeSaturation(colorString, factor) {
+function changeSaturation(colorString: string, factor: number): string {
   const color = Color(colorString)
   if (factor < 0) {
     return color
@@ -47,7 +48,11 @@ function changeSaturation(colorString, factor) {
   }
 }
 
-function blendColor(colorString0, colorString1, factor) {
+function blendColor(
+  colorString0: string,
+  colorString1: string,
+  factor: number
+): string {
   const color0 = Color(colorString0)
   const color1 = Color(colorString1)
   return color0
@@ -56,18 +61,23 @@ function blendColor(colorString0, colorString1, factor) {
     .string()
 }
 
-function undefinedGuard(rawValue, func) {
-  const values = Array.isArray(rawValue) ? rawValue : [rawValue]
+function undefinedGuard<T, R>(
+  rawValue: T,
+  func: (...values: T extends any[] ? T : [T]) => R
+): R {
+  const values = (Array.isArray(rawValue)
+    ? rawValue
+    : [rawValue]) as T extends any[] ? T : [T]
   return notUndefined(...values) ? func(...values) : undefined
 }
 
-function notUndefined(...variables) {
+function notUndefined(...variables: (any | undefined)[]) {
   return !variables
     .map(v => typeof v === 'undefined')
     .reduce((acc, cur) => acc || cur)
 }
 
-export function ThemeDataBuilder(theme) {
+export function ThemeDataBuilder(theme: { [key: string]: string }) {
   // todo resolve all strings to be dependent on vars of the highLevelObject
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
@@ -131,7 +141,10 @@ export function ThemeDataBuilder(theme) {
     chatListBorderColor: undefinedGuard(theme.bgPrimary, bg =>
       Color(bg).isDark() ? '#111' : '#b9b9b9'
     ),
-    chatListBorder: '1px solid ' + undefinedGuard(theme.chatListBorderColor),
+    chatListBorder: undefinedGuard(
+      theme.chatListBorderColor,
+      c => '1px solid ' + c
+    ),
     // Message Bubble
     messageText: theme.textPrimary,
     messageTextLink: theme.textPrimary, // same as message text
@@ -240,7 +253,7 @@ export function ThemeDataBuilder(theme) {
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) =>
         Color(Color(c).isDark() ? 'white' : 'grey')
-          .alpha(t)
+          .alpha(Number(t))
           .rgb()
           .string()
     ),
@@ -248,12 +261,12 @@ export function ThemeDataBuilder(theme) {
       [theme.scrollbarTransparency, theme.bgPrimary],
       (t, c) =>
         Color(Color(c).isDark() ? 'white' : 'grey')
-          .alpha(t + 0.14)
+          .alpha(Number(t) + 0.14)
           .rgb()
           .string()
     ),
   }
-  Object.keys(themeData).forEach(key =>
+  Object.keys(themeData).forEach((key: keyof typeof themeData) =>
     themeData[key] === undefined ? delete themeData[key] : ''
   )
   if (theme.raw) {
@@ -268,11 +281,15 @@ export const defaultTheme = Object.freeze(require('../../themes/light.json'))
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
-export const ThemeVarOverwrite = theme => {
+export const ThemeVarOverwrite = (
+  themeData: ReturnType<typeof ThemeDataBuilder>
+) => {
   var css = ''
   for (var key in defaultThemeData) {
     if (Object.hasOwnProperty.bind(defaultThemeData, key)) {
-      css += `--${key}: ${theme[key]};`
+      css += `--${key}: ${
+        themeData[key as keyof ReturnType<typeof ThemeDataBuilder>]
+      };`
     }
   }
   return `:root {${css}}`

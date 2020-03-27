@@ -1,15 +1,21 @@
-const React = require('react')
-const StyledThemeProvider = require('styled-components').ThemeProvider
-const { EventEmitter } = window.native_dependency
-const {
+import React from 'react'
+import { ThemeProvider as StyledThemeProvider } from 'styled-components'
+import {
   defaultTheme,
-  ThemeDataBuilder: ThemeBuilder,
+  ThemeDataBuilder as ThemeBuilder,
   defaultThemeData,
   ThemeVarOverwrite,
-} = require('./ThemeBackend.js')
+} from './ThemeBackend'
+import EventEmitter from 'wolfy87-eventemitter'
 const { ipcRenderer } = window.electron_functions
 
-class ThemeManager extends EventEmitter {
+// do we need an event emitter here?
+// if yes please replace it by another module and not use the native electron module
+
+export class ThemeManager extends EventEmitter {
+  currentTheme: { [key: string]: string }
+  currentThemeData: ReturnType<typeof ThemeBuilder>
+
   constructor() {
     super()
     const themeJSON = window.localStorage.getItem('theme')
@@ -19,7 +25,7 @@ class ThemeManager extends EventEmitter {
     ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
   }
 
-  setTheme(theme) {
+  setTheme(theme: { [key: string]: string }) {
     window.localStorage.setItem('theme', JSON.stringify(theme))
     this.currentTheme = theme
     this.currentThemeData = ThemeBuilder(this.currentTheme)
@@ -47,11 +53,14 @@ class ThemeManager extends EventEmitter {
   }
 }
 
-const manager = new ThemeManager()
+export const manager = new ThemeManager()
 
-class ThemeProvider extends React.Component {
-  constructor() {
-    super()
+export class ThemeProvider extends React.Component<
+  any,
+  { theme: ReturnType<typeof ThemeBuilder> }
+> {
+  constructor(props: any) {
+    super(props)
     this.state = {
       theme: manager.getCurrentlyAppliedThemeData(),
     }
@@ -67,7 +76,7 @@ class ThemeProvider extends React.Component {
     manager.removeListener('update', this.update)
   }
 
-  update(ev) {
+  update(ev?: any) {
     const theme = manager.getCurrentlyAppliedThemeData()
     this.setState({ theme })
     window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(
@@ -82,10 +91,4 @@ class ThemeProvider extends React.Component {
       </StyledThemeProvider>
     )
   }
-}
-
-module.exports = {
-  defaultTheme,
-  manager,
-  ThemeProvider,
 }

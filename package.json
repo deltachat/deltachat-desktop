@@ -54,6 +54,7 @@
     "@blueprintjs/core": "^3.22.3",
     "@blueprintjs/select": "^3.11.2",
     "@mapbox/geojson-extent": "^0.3.2",
+    "@types/color": "^3.0.1",
     "@types/debounce": "^1.2.0",
     "@types/emoji-mart": "^2.11.3",
     "application-config": "^1.0.1",
@@ -82,7 +83,8 @@
     "simple-markdown": "^0.7.1",
     "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
-    "use-debounce": "^3.3.0"
+    "use-debounce": "^3.3.0",
+    "wolfy87-eventemitter": "^5.2.9"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",

@@ -14,10 +14,6 @@
     openItem: electron.shell.openItem
   }
 
-  window.native_dependency = {
-    EventEmitter: require('events').EventEmitter
-  }
-
   window.preload_functions = {
     downloadFile: (file) => {
       const defaultPath = join(electron.remote.app.getPath('downloads'), basename(file))
