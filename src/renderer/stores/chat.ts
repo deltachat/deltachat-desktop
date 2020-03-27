@@ -47,7 +47,7 @@ const defaultState = new state()
 const chatStore = new Store<state>(new state(), 'ChatStore')
 const log = chatStore.log
 
-chatStore.reducers.push(({ type, payload, id }: Action, state: state) => {
+chatStore.attachReducer(({ type, payload, id }, state) => {
   if (type === 'SELECTED_CHAT') {
     return { ...defaultState, ...payload }
   }

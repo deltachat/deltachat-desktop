@@ -67,7 +67,10 @@ export function callDcMethod(
   )
 }
 
-export function callDcMethodAsync(fnName: string, args?: any[]|any): Promise<any> {
+export function callDcMethodAsync(
+  fnName: string,
+  args?: any[] | any
+): Promise<any> {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 

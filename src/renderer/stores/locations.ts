@@ -52,7 +52,7 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
 ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
 ipcRenderer.on('DC_EVENT_INCOMING_MSG', onLocationChange)
 
-locationStore.reducers.push((action: Action, state: state) => {
+locationStore.attachReducer((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
     const { timestampFrom, timestampTo } = action.payload
     state = { ...state, mapSettings: { timestampFrom, timestampTo } }

@@ -7,13 +7,13 @@ const log = logger.getLogger('renderer/stores/contacts')
 
 class state {
   contacts: JsonContact[] = []
-  blockedContacts: todo = []
+  blockedContacts: JsonContact[] = []
   queryGroupContacts = ''
   queryNonGroupContacts = ''
 }
 const contactsStore = new Store(new state(), 'contact')
 
-contactsStore.attachEffect((action) => {
+contactsStore.attachEffect(action => {
   if (action.type === 'UI_UNBLOCK_CONTACT') {
     const contactId = action.payload
     callDcMethod('contacts.unblockContact', [contactId], () => {

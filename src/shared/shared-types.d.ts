@@ -68,11 +68,13 @@ export interface ChatListItemType {
   avatarPath: string
   color: string
   lastUpdated: number
-  summary: {
-    text1: any
-    text2: any
-    status: string
-  } | undefined
+  summary:
+    | {
+        text1: any
+        text2: any
+        status: string
+      }
+    | undefined
   deaddrop: any
   isVerified: boolean
   isGroup: boolean
