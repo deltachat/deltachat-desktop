@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { LocalSettings } from '../../shared/shared-types'
+import { LocalSettings, JsonContact } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
@@ -277,7 +277,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   // ToDo: move to contacts.
-  _blockedContacts() {
+  _blockedContacts(): JsonContact[] {
     if (!this._dc) return []
     return this._dc.getBlockedContacts().map(this.getContact.bind(this))
   }

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import logger from '../../shared/logger'
 
-export function useStore(StoreInstance) {
+export function useStore<T extends Store<any>>(
+  StoreInstance: T
+): [T extends Store<infer S> ? S : any, T["dispatch"]] {
   const [state, setState] = useState(StoreInstance.getState())
 
   useEffect(() => {
@@ -12,12 +14,18 @@ export function useStore(StoreInstance) {
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }
 
-class Store {
-  constructor(state, name) {
-    this.state = state
-    this.listeners = []
-    this.reducers = []
-    this.effects = []
+export interface Action {
+  type: string
+  payload?: any
+  id?: number
+}
+
+export class Store<S> {
+  private listeners: todo[] = []
+  public reducers: todo[] = []
+  public effects: todo[] = []
+  private _log: ReturnType<typeof logger.getLogger>
+  constructor(public state: S, name?: string) {
     if (!name) name = 'Store'
     this._log = logger.getLogger('renderer/stores/' + name)
   }
@@ -30,7 +38,7 @@ class Store {
     return this.state
   }
 
-  dispatch(action) {
+  dispatch(action: Action) {
     this.log.debug('DISPATCH:', action)
     let state = this.state
     this.reducers.forEach(reducer => {
@@ -51,20 +59,28 @@ class Store {
     }
   }
 
-  subscribe(listener) {
+  subscribe(listener: todo) {
     this.listeners.push(listener)
     return this.unsubscribe.bind(this, listener)
   }
 
-  unsubscribe(listener) {
+  unsubscribe(listener: todo) {
     const index = this.listeners.indexOf(listener)
     this.listeners.splice(index, 1)
   }
 
-  setState(state) {
+  setState(state: S) {
     this.state = state
     this.listeners.forEach(listener => listener(this.state))
   }
 }
 
-export { Store }
+/* TODO
+
+- function to attach effects and reducers
+(so that we can make them protected/private again and give the callback functions types)
+- partial state update (location fetches the old state)?
+
+- resolve 'todo' types
+
+*/

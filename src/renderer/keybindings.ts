@@ -10,7 +10,10 @@ function selectChatItem(domChatItem: HTMLElement) {
   if (domChatItem.classList.contains('chat-list-item--is-deaddrop')) return
   domChatItem.click()
   domChatItem.scrollIntoView({ block: 'nearest' })
-  setTimeout(() => document.querySelector<HTMLElement>('#composer-textarea').focus(), 300)
+  setTimeout(
+    () => document.querySelector<HTMLElement>('#composer-textarea').focus(),
+    300
+  )
 }
 
 function scrollSelectedChatItemIntoView() {
@@ -20,7 +23,7 @@ function scrollSelectedChatItemIntoView() {
   if (selectedChatItem) selectedChatItem.scrollIntoView({ block: 'nearest' })
 }
 
-function setSearchInputValue(value:string) {
+function setSearchInputValue(value: string) {
   const chatListSearch = document.querySelector('#chat-list-search')
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
     window.HTMLInputElement.prototype,
@@ -45,10 +48,13 @@ export default function attachKeybindingsListener() {
         'chat-list-item--is-selected'
       )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
-      const previousChatItem = selectedChatItems[0].previousSibling as HTMLElement
+      const previousChatItem = selectedChatItems[0]
+        .previousSibling as HTMLElement
       selectChatItem(previousChatItem)
     } else if (Event.ctrlKey && Event.key === 'k') {
-      const chatListSearch = document.querySelector<HTMLElement>('#chat-list-search')
+      const chatListSearch = document.querySelector<HTMLElement>(
+        '#chat-list-search'
+      )
       setSearchInputValue('')
       chatListSearch.focus()
     } else if (

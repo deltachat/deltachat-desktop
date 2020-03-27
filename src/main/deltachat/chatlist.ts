@@ -5,6 +5,7 @@ import {
   ChatListItemType,
   JsonChat,
   JsonContact,
+  FullChat,
 } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import SplitOut from './splitout'
@@ -169,7 +170,7 @@ export default class DCChatList extends SplitOut {
     return this._dc.getContact(contactId).toJson()
   }
 
-  async _getChatContacts(contactIds: number[]) {
+  async _getChatContacts(contactIds: number[]): Promise<JsonContact[]> {
     const contacts = []
     for (let i = 0; i < contactIds.length; i++) {
       const contact = await this._getChatContact(contactIds[i])
@@ -178,7 +179,7 @@ export default class DCChatList extends SplitOut {
     return contacts
   }
 
-  async getFullChatById(chatId: number) {
+  async getFullChatById(chatId: number): Promise<FullChat> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
     this._controller._pages = 0

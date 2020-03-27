@@ -59,7 +59,7 @@ export interface ExtendedApp extends App {
   state?: AppState
 }
 
-import { Contact } from 'deltachat-node'
+import DeltaChat, { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
@@ -72,7 +72,7 @@ export interface ChatListItemType {
     text1: any
     text2: any
     status: string
-  }
+  } | undefined
   deaddrop: any
   isVerified: boolean
   isGroup: boolean
@@ -85,7 +85,31 @@ export interface ChatListItemType {
 }
 
 import { Chat } from 'deltachat-node'
+import { type } from 'os'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
 export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
+
+export type JsonLocations = ReturnType<typeof DeltaChat.prototype.getLocations>
+
+export interface FullChat {
+  id: number
+  name: string
+  isVerified: boolean
+  profileImage: string
+  archived: boolean
+  subtitle: any
+  type: number
+  isUnpromoted: boolean
+  isSelfTalk: boolean
+  contacts: JsonContact[]
+  contactIds: number[]
+  color: string
+  freshMessageCounter: number
+  isGroup: boolean
+  isDeaddrop: boolean
+  isDeviceChat: boolean
+  draft: string
+  selfInGroup: boolean
+}

@@ -1,30 +1,32 @@
-const { callDcMethod } = require('../ipc')
-const { ipcRenderer } = window.electron_functions
-const { Store } = require('./store')
+import { JsonLocations } from '../../shared/shared-types'
+import { callDcMethod } from '../ipc'
+import { Store, Action } from './store'
 
-const defaultState = {
-  selectedChat: null,
-  mapSettings: {
+const { ipcRenderer } = window.electron_functions
+
+class state {
+  selectedChat: { [key: string]: todo; contacts: todo[] } = null
+  mapSettings = {
     timestampFrom: 0,
     timestampTo: 0,
-  },
-  locations: [],
+  }
+  locations: JsonLocations = []
 }
-const locationStore = new Store(defaultState)
 
-const getLocations = (chatId, mapSettings) => {
+export const locationStore = new Store(new state(), 'location')
+
+const getLocations = (chatId: number, mapSettings: todo) => {
   const { timestampFrom, timestampTo } = mapSettings
   callDcMethod(
     'locations.getLocations',
     [chatId, 0, timestampFrom, timestampTo],
-    locations =>
+    (locations: JsonLocations) =>
       locationStore.setState({ ...locationStore.getState(), locations })
   )
 }
 
-const onLocationChange = (evt, payload) => {
+const onLocationChange = (evt: any, [chatId]: [number]) => {
   const { selectedChat, mapSettings } = locationStore.getState()
-  const [chatId] = payload
   if (selectedChat && chatId === selectedChat.id) {
     getLocations(chatId, mapSettings)
   }
@@ -50,7 +52,7 @@ ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
 ipcRenderer.on('DC_EVENT_MSGS_CHANGED', onLocationChange)
 ipcRenderer.on('DC_EVENT_INCOMING_MSG', onLocationChange)
 
-locationStore.reducers.push((action, state) => {
+locationStore.reducers.push((action: Action, state: state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
     const { timestampFrom, timestampTo } = action.payload
     state = { ...state, mapSettings: { timestampFrom, timestampTo } }
@@ -58,11 +60,9 @@ locationStore.reducers.push((action, state) => {
   }
 })
 
-locationStore.effects.push((action, state) => {
+locationStore.effects.push((action: Action, state: state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
     const { chatId } = action.payload
     getLocations(chatId, state.mapSettings)
   }
 })
-
-module.exports = locationStore
