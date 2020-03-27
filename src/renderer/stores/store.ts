@@ -23,7 +23,7 @@ export interface Action {
 export class Store<S> {
   private listeners: todo[] = []
   public reducers: todo[] = []
-  public effects: todo[] = []
+  private effects: todo[] = []
   private _log: ReturnType<typeof logger.getLogger>
   constructor(public state: S, name?: string) {
     if (!name) name = 'Store'
@@ -67,6 +67,10 @@ export class Store<S> {
   unsubscribe(listener: todo) {
     const index = this.listeners.indexOf(listener)
     this.listeners.splice(index, 1)
+  }
+
+  attachEffect(effect: (action: Action, state: S) => void){
+    this.effects.push(effect)
   }
 
   setState(state: S) {

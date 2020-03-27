@@ -60,7 +60,7 @@ locationStore.reducers.push((action: Action, state: state) => {
   }
 })
 
-locationStore.effects.push((action: Action, state: state) => {
+locationStore.attachEffect((action, state) => {
   if (action.type === 'DC_GET_LOCATIONS') {
     const { chatId } = action.payload
     getLocations(chatId, state.mapSettings)

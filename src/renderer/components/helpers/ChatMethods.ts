@@ -1,7 +1,7 @@
 import { callDcMethod, callDcMethodAsync } from '../../ipc'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { ChatListItemType, JsonContact } from '../../../shared/shared-types'
+import { ChatListItemType, JsonContact, FullChat } from '../../../shared/shared-types'
 
 type Chat = ChatListItemType | FullChat
 

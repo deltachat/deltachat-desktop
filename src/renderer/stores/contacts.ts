@@ -13,7 +13,7 @@ class state {
 }
 const contactsStore = new Store(new state(), 'contact')
 
-contactsStore.effects.push((action: Action) => {
+contactsStore.attachEffect((action) => {
   if (action.type === 'UI_UNBLOCK_CONTACT') {
     const contactId = action.payload
     callDcMethod('contacts.unblockContact', [contactId], () => {

@@ -143,7 +143,7 @@ chatStore.reducers.push(({ type, payload, id }: Action, state: state) => {
   return state
 })
 
-chatStore.effects.push(async ({ type, payload }: Action, state: state) => {
+chatStore.attachEffect(async ({ type, payload }, state) => {
   if (type === 'SELECT_CHAT') {
     const chatId = payload
     // these methods were called in backend before
