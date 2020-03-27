@@ -1,5 +1,4 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
-import ContactListItem from '../conversations/ContactListItem'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
 import { ContactJSON } from '../../../shared/shared-types'
@@ -13,27 +12,6 @@ export function convertContactProps(contact: ContactJSON) {
     isMe: contact.id === C.DC_CONTACT_ID_SELF,
     verified: contact.isVerified,
   }
-}
-
-export function RenderContact(props: {
-  contact: ContactJSON
-  color: string
-  onClick?: (contact: ContactJSON) => void
-}) {
-  const { contact, color } = props
-
-  const oldOnClick = props.onClick
-  const onClick = function(event: MouseEvent) {
-    if (oldOnClick) oldOnClick(contact)
-  }
-
-  return (
-    <ContactListItem
-      color={color}
-      onClick={onClick}
-      {...convertContactProps(contact)}
-    />
-  )
 }
 
 export function renderAvatar(
