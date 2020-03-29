@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Update deltachat-node/deltachat-core-rust to v1.28.0
+
 ### Removed
 
 ## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/1.1.0...1.1.1) - 2020-03-14
