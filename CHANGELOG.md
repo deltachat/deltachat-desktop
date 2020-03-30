@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]\(<https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...HEAD>)
+## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...HEAD)
 
 ## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/1.1.1...1.2.0) - 2020-03-30
 
