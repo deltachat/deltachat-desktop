@@ -1,14 +1,20 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [Unreleased]\(<https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...HEAD>)
 
-### Added
+## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/1.1.1...1.2.0) - 2020-03-30
 
 ### Changed
 
 - Update deltachat-node/deltachat-core-rust to v1.28.0
+- Some typescript convertions [**@Simon-Laux**](https://github.com/Simon-Laux)
 
-### Removed
+### Fixed
+
+- Fix a bug on incoming message where screen went blank [**@Simon-Laux**](https://github.com/Simon-Laux) [#1523](https://github.com/deltachat/deltachat-desktop/issues/1523)
+- Copy whole message to clipboard [**@Simon-Laux**](https://github.com/Simon-Laux) 
+- Fix about dialog links [**@Simon-Laux**](https://github.com/Simon-Laux)
+- Make e2e tests more stable [**@nicodh**](https://github.com/nicodh)
 
 ## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/1.1.0...1.1.1) - 2020-03-14
 
@@ -888,8 +894,6 @@
 
 - Do not scroll to bottom when opening message context menu ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
-
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.1...HEAD
 
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
 
