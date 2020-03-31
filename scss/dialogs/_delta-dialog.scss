@@ -86,3 +86,9 @@
     }
   }
 }
+
+.FixedDeltaDialog {
+  top: 50px;
+  width: 400px;
+  height: calc(100% - 50px);
+}

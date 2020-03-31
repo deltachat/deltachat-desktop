@@ -32,10 +32,11 @@
 @import 'gallery/media';
 
 // Dialogs
+@import 'dialogs/_about';
+@import 'dialogs/_autocrypt_setup.scss';
+@import 'dialogs/_delta-dialog';
 @import 'dialogs/_forward-message';
 @import 'dialogs/_settings';
-@import 'dialogs/_about';
-@import 'dialogs/_delta-dialog';
 
 // Login
 @import 'login/_login.scss';

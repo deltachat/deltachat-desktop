@@ -13,7 +13,7 @@ import ClickableLink from '../helpers/ClickableLink'
 
 const log = logger.getLogger('renderer/dialogs/About')
 
-export function DCInfo(props) {
+export function DCInfo(_props: any) {
   const [content, setContent] = useState(undefined)
 
   useEffect(function fetchContent() {
@@ -52,7 +52,7 @@ export function DCInfo(props) {
   )
 }
 
-export default function About(props) {
+export default function About(props: { isOpen: boolean; onClose: () => void }) {
   const { isOpen, onClose } = props
   const tx = window.translate
 
