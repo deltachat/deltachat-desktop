@@ -42,7 +42,7 @@ export type DialogId = keyof typeof allDialogs
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
 type dialogs = {
-  [key:string]: {
+  [key: string]: {
     name: DialogId
     Component: todo
     props: false
@@ -59,7 +59,7 @@ export class Controller extends React.Component<
     super(props)
 
     var dialogs: dialogs = {}
-    Object.keys(allDialogs).forEach((key:DialogId) => {
+    Object.keys(allDialogs).forEach((key: DialogId) => {
       dialogs[key as string] = {
         name: key,
         Component: allDialogs[key],
@@ -67,14 +67,11 @@ export class Controller extends React.Component<
       }
     })
 
-  this.state = { dialogs }
+    this.state = { dialogs }
     this.close = this.close.bind(this)
   }
 
-  open<T extends DialogId>(
-    name: T,
-    props: todo /* infer from component */
-  ) {
+  open<T extends DialogId>(name: T, props: todo /* infer from component */) {
     log.debug('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
     if (!Component)

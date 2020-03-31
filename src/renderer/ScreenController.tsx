@@ -7,7 +7,10 @@ const { ipcRenderer } = window.electron_functions
 import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
-import { Controller as DialogController, DialogId } from './components/dialogs/index'
+import {
+  Controller as DialogController,
+  DialogId,
+} from './components/dialogs/index'
 
 export interface userFeedback {
   type: 'error' | 'success'
