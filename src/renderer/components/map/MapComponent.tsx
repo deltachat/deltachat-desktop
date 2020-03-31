@@ -368,7 +368,7 @@ export default class MapComponent extends React.Component<
     }
     this.map.addSource(data.pointsLayerId, source)
     const layer = MapLayerFactory.getGeoJSONPointsLayer(
-      data.pointsLayerId,
+      data.pointsLayerId
       // data.contact.color
     )
     this.map.addLayer(layer)

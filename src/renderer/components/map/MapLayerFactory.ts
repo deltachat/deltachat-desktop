@@ -45,7 +45,7 @@ export default class MapLayerFactory {
   }
 
   static getGeoJSONPointsLayer(
-    pointsLayerId: string,
+    pointsLayerId: string
     // color: todo
   ): mapboxgl.Layer {
     return {
