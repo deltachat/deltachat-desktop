@@ -1,27 +1,71 @@
-const { callDcMethod } = require('../../ipc')
-const React = require('react')
-const ReactDOMServer = require('react-dom/server')
-const ReactDOM = require('react-dom')
+import { callDcMethod } from '../../ipc'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+import ReactDOM from 'react-dom'
 const debounce = require('debounce')
-const mapboxgl = require('mapbox-gl')
-const locationStore = require('../../stores/locations')
-const geojsonExtent = require('@mapbox/geojson-extent')
-const moment = require('moment/moment')
-const formatRelativeTime = require('../conversations/formatRelativeTime')
-  .default
-const MapLayerFactory = require('./MapLayerFactory')
-const { Slider, Button, Collapse } = require('@blueprintjs/core/lib/cjs/index')
-const PopupMessage = require('./PopupMessage')
-const SessionStorage = require('../helpers/SessionStorage')
-const { SettingsContext } = require('../../contexts')
-const chatStore = require('../../stores/chat').default
+import mapboxgl from 'mapbox-gl'
+import { locationStore } from '../../stores/locations'
+import geojsonExtent from '@mapbox/geojson-extent'
+import moment from 'moment'
+import formatRelativeTime from '../conversations/formatRelativeTime'
+import MapLayerFactory from './MapLayerFactory'
+import { Slider, Button, Collapse } from '@blueprintjs/core'
+import PopupMessage from './PopupMessage'
+import * as SessionStorage from '../helpers/SessionStorage'
+import { SettingsContext } from '../../contexts'
+import chatStore from '../../stores/chat'
 
-const ContextMenu = require('./ContextMenu')
+import { state as LocationStoreState } from '../../stores/locations'
 
-class MapComponent extends React.Component {
-  constructor(props) {
+import ContextMenu from './ContextMenu'
+import {
+  FullChat,
+  MessageType,
+  JsonMessage,
+  JsonContact,
+  JsonLocations,
+} from '../../../shared/shared-types'
+
+type MapData = {
+  contact: JsonContact
+  pathLayerId: string
+  pointsLayerId: string
+  hidden: Boolean
+  marker?: mapboxgl.Marker
+}
+
+type Point = [number, number]
+
+type Contact = JsonContact & { hidden?: boolean }
+
+type MapProps = {
+  selectedChat: FullChat
+}
+
+export default class MapComponent extends React.Component<
+  MapProps,
+  {
+    timeOffset: number
+    mapStyle: 'default' | 'satellite'
+    showControls: boolean
+    showPathLayer: boolean
+    currentContacts: Contact[]
+  }
+> {
+  maxZoomAfterFitBounds = 20
+  mapDataStore = new Map<number | string, todo>()
+  contextMenu = React.createRef<ContextMenu>()
+  contextMenuPopup: mapboxgl.Popup | null = null
+  poiLocation: mapboxgl.LngLat | null = null
+  refreshLocations: typeof MapComponent.prototype.getLocations = debounce(
+    this.getLocations,
+    1000
+  )
+  map: mapboxgl.Map
+  currentUserAddress: string
+  stateFromSession: boolean
+  constructor(props: MapProps) {
     super(props)
-    this.maxZoomAfterFitBounds = 20
     this.state = {
       timeOffset: 50,
       mapStyle: 'default',
@@ -29,8 +73,6 @@ class MapComponent extends React.Component {
       showPathLayer: false,
       currentContacts: [],
     }
-    this.mapDataStore = new Map()
-    this.refreshLocations = debounce(this.getLocations, 1000)
     this.getLocations = this.getLocations.bind(this)
     this.onLocationsUpdate = this.onLocationsUpdate.bind(this)
     this.onMapClick = this.onMapClick.bind(this)
@@ -40,15 +82,15 @@ class MapComponent extends React.Component {
     this.onRangeChange = this.onRangeChange.bind(this)
     this.changeMapStyle = this.changeMapStyle.bind(this)
     this.renderContactCheckbox = this.renderContactCheckbox.bind(this)
-    this.contextMenu = React.createRef()
-    this.contextMenuPopup = null
-    this.poiLocation = null
   }
 
   componentDidMount() {
     const { selectedChat } = this.props
     this.currentUserAddress = this.context.credentials.addr
-    let mapSettings = { zoom: 4, center: [8, 48] } // <- default
+    let mapSettings: { zoom: number; center: mapboxgl.LngLatLike } = {
+      zoom: 4,
+      center: [8, 48],
+    } // <- default
     const savedData = SessionStorage.getItem(
       this.currentUserAddress,
       `${selectedChat.id}_map`
@@ -99,7 +141,7 @@ class MapComponent extends React.Component {
     locationStore.unsubscribe(this.onLocationsUpdate)
   }
 
-  onLocationsUpdate(locationState) {
+  onLocationsUpdate(locationState: LocationStoreState) {
     const { locations } = locationState
     this.renderLayers(locations)
   }
@@ -118,15 +160,14 @@ class MapComponent extends React.Component {
     locationStore.dispatch(action)
   }
 
-  renderLayers(locations) {
+  renderLayers(locations: LocationStoreState['locations']) {
     // remove all layer since source update does not remove existing points
     this.removeAllLayer()
     this.mapDataStore.clear()
     const { selectedChat } = this.props
-    let allPoints = []
-    const currentContacts = []
-
-    this.mapDataStore.locationCount = locations.length
+    let allPoints: Point[] = []
+    const currentContacts: JsonContact[] = []
+    ;(this.mapDataStore as any).locationCount = locations.length
     if (locations.length > 0) {
       selectedChat.contacts.map(contact => {
         const locationsForContact = locations.filter(
@@ -147,11 +188,14 @@ class MapComponent extends React.Component {
       )
       if (poiLocations.length > 0) {
         if (!this.map.hasImage('poi-marker')) {
-          this.map.loadImage('./icons/poi-marker.png', (error, image) => {
-            if (!error) {
-              this.map.addImage('poi-marker', image)
+          this.map.loadImage(
+            './icons/poi-marker.png',
+            (error: any, image: any) => {
+              if (!error) {
+                this.map.addImage('poi-marker', image)
+              }
             }
-          })
+          )
         }
         const poiLayer = MapLayerFactory.getPOILayer(poiLocations)
         this.mapDataStore.set('poi-layer', poiLayer)
@@ -161,7 +205,7 @@ class MapComponent extends React.Component {
         location => location.isIndependent && location.marker
       )
       if (poiWithMarker.length) {
-        const poiMarker = []
+        const poiMarker: mapboxgl.Marker[] = []
         poiWithMarker.map(location => {
           var el = document.createElement('div')
           el.className = 'marker-icon'
@@ -170,7 +214,7 @@ class MapComponent extends React.Component {
           const m = new mapboxgl.Marker(el)
             .setLngLat([location.longitude, location.latitude])
             .addTo(this.map)
-          m.location = location
+          ;(m as any).location = location
           poiMarker.push(m)
         })
         this.mapDataStore.set('poi-marker', poiMarker)
@@ -190,9 +234,9 @@ class MapComponent extends React.Component {
     }
   }
 
-  renderContactLayer(contact, locationsForContact) {
-    let pointsForLayer = []
-    let lastPoint = null
+  renderContactLayer(contact: Contact, locationsForContact: JsonLocations) {
+    let pointsForLayer: [number, number][] = []
+    let lastPoint: todo | null = null
     if (locationsForContact && locationsForContact.length) {
       pointsForLayer = locationsForContact.map(location => {
         if (!lastPoint && !location.isIndependent) {
@@ -201,7 +245,7 @@ class MapComponent extends React.Component {
         return [location.longitude, location.latitude]
       })
       // map data to handle map state
-      const mapData = {
+      const mapData: MapData = {
         contact: contact,
         pathLayerId: 'contact-route-' + contact.id,
         pointsLayerId: 'points-' + contact.id,
@@ -245,7 +289,7 @@ class MapComponent extends React.Component {
 
   removeAllLayer() {
     if (this.mapDataStore.has('poi-marker')) {
-      this.mapDataStore.get('poi-marker').map(m => m.remove())
+      this.mapDataStore.get('poi-marker').map((m: todo) => m.remove())
       this.mapDataStore.delete('poi-marker')
     }
     if (this.map.getLayer('poi-layer')) {
@@ -268,36 +312,35 @@ class MapComponent extends React.Component {
     })
   }
 
-  addOrUpdateLayerForContact(mapData, locationsForContact) {
+  addOrUpdateLayerForContact(
+    mapData: MapData,
+    locationsForContact: JsonLocations
+  ) {
     if (!this.map.getSource(mapData.pathLayerId)) {
       this.addPathLayer(locationsForContact, mapData)
     } else {
       // update source
-      this.map
-        .getSource(mapData.pathLayerId)
-        .setData(
-          MapLayerFactory.getGeoJSONLineSourceData(
-            locationsForContact.filter(location => !location.isIndependent)
-          )
+      ;(this.map.getSource(mapData.pathLayerId) as todo).setData(
+        MapLayerFactory.getGeoJSONLineSourceData(
+          locationsForContact.filter(location => !location.isIndependent)
         )
+      )
     }
     if (!this.map.getSource(mapData.pointsLayerId)) {
       this.addPathJointsLayer(locationsForContact, mapData)
     } else {
-      this.map
-        .getSource(mapData.pointsLayerId)
-        .setData(
-          MapLayerFactory.getGeoJSONPointsLayerSourceData(
-            locationsForContact,
-            mapData.contact,
-            true
-          )
+      ;(this.map.getSource(mapData.pointsLayerId) as todo).setData(
+        MapLayerFactory.getGeoJSONPointsLayerSourceData(
+          locationsForContact,
+          mapData.contact,
+          true
         )
+      )
     }
   }
 
-  addPathLayer(locationsForContact, mapData) {
-    const source = {
+  addPathLayer(locationsForContact: JsonLocations, mapData: MapData) {
+    const source: mapboxgl.GeoJSONSourceRaw = {
       type: 'geojson',
       data: MapLayerFactory.getGeoJSONLineSourceData(
         locationsForContact.filter(location => !location.isIndependent)
@@ -314,8 +357,8 @@ class MapComponent extends React.Component {
     }
   }
 
-  addPathJointsLayer(locationsForContact, data) {
-    const source = {
+  addPathJointsLayer(locationsForContact: JsonLocations, data: MapData) {
+    const source: mapboxgl.GeoJSONSourceRaw = {
       type: 'geojson',
       data: MapLayerFactory.getGeoJSONPointsLayerSourceData(
         locationsForContact,
@@ -326,13 +369,13 @@ class MapComponent extends React.Component {
     this.map.addSource(data.pointsLayerId, source)
     const layer = MapLayerFactory.getGeoJSONPointsLayer(
       data.pointsLayerId,
-      data.contact.color
+      // data.contact.color
     )
     this.map.addLayer(layer)
   }
 
-  async onMapClick(event) {
-    let message
+  async onMapClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
+    let message: JsonMessage
     const features = this.map.queryRenderedFeatures(event.point)
     const contactFeature = features.find(f => {
       return f.properties.contact !== undefined || f.properties.isPoi
@@ -342,7 +385,7 @@ class MapComponent extends React.Component {
         callDcMethod(
           'messageList.getMessage',
           contactFeature.properties.msgId,
-          messageObj => {
+          (messageObj: MessageType) => {
             if (messageObj) {
               message = messageObj.msg
             }
@@ -355,7 +398,7 @@ class MapComponent extends React.Component {
             )
             new mapboxgl.Popup({ offset: [0, -15] })
               .setHTML(markup)
-              .setLngLat(contactFeature.geometry.coordinates)
+              .setLngLat((contactFeature.geometry as any).coordinates)
               .addTo(this.map)
           }
         )
@@ -363,7 +406,7 @@ class MapComponent extends React.Component {
     }
   }
 
-  onMapRightClick(event) {
+  onMapRightClick(event: mapboxgl.MapMouseEvent & mapboxgl.EventData) {
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()
     }
@@ -378,7 +421,7 @@ class MapComponent extends React.Component {
       })
   }
 
-  sendPoiMessage(message) {
+  sendPoiMessage(message: string) {
     const { selectedChat } = this.props
     if (!this.poiLocation) {
       return
@@ -411,12 +454,12 @@ class MapComponent extends React.Component {
     })
   }
 
-  onRangeChange(value) {
+  onRangeChange(value: number) {
     this.setState({ timeOffset: value })
     this.refreshLocations()
   }
 
-  changeMapStyle(style) {
+  changeMapStyle(style: 'default' | 'satellite') {
     this.setState({ mapStyle: style })
     const visibility = style === 'satellite' ? 'visible' : 'none'
 
@@ -438,7 +481,7 @@ class MapComponent extends React.Component {
     this.map.setLayoutProperty('satellite', 'visibility', visibility)
   }
 
-  rangeSliderLabelRenderer(value) {
+  rangeSliderLabelRenderer(value: number) {
     const rangeMap = MapLayerFactory.getRangeMap()
     return rangeMap[value].label
   }
@@ -452,7 +495,7 @@ class MapComponent extends React.Component {
     }
   }
 
-  toggleContactLayer(contactId, isHidden) {
+  toggleContactLayer(contactId: number, isHidden: boolean) {
     const mapDataItem = this.mapDataStore.get(contactId)
     const visibility = isHidden ? 'visible' : 'none' // set visibility to...
     if (!isHidden) {
@@ -491,7 +534,7 @@ class MapComponent extends React.Component {
   }
 
   setBoundToMarker() {
-    const markerCoordinates = []
+    const markerCoordinates: Point[] = []
     this.mapDataStore.forEach(mapDataitem => {
       if (mapDataitem.marker && !mapDataitem.hidden) {
         const lngLat = mapDataitem.marker.getLngLat()
@@ -506,7 +549,11 @@ class MapComponent extends React.Component {
     }
   }
 
-  renderPopupMessage(contactName, formattedDate, message) {
+  renderPopupMessage(
+    contactName: string,
+    formattedDate: string,
+    message: JsonMessage
+  ) {
     return ReactDOMServer.renderToStaticMarkup(
       <PopupMessage
         username={contactName}
@@ -516,12 +563,12 @@ class MapComponent extends React.Component {
     )
   }
 
-  renderContactCheckbox(contact) {
+  renderContactCheckbox(contact: Contact) {
     return (
       <div key={contact.id}>
         <input
           type='checkbox'
-          name={contact.id}
+          name={'contact-' + contact.id}
           onChange={() => this.toggleContactLayer(contact.id, contact.hidden)}
           checked={contact.hidden}
         />
@@ -588,7 +635,7 @@ class MapComponent extends React.Component {
               labelRenderer={this.rangeSliderLabelRenderer}
               onChange={this.onRangeChange}
               value={this.state.timeOffset}
-              vertical='true'
+              vertical={true}
             />
             <div className='contactFilter'>
               <h3>Hide contacts</h3>
@@ -604,4 +651,3 @@ class MapComponent extends React.Component {
 }
 
 MapComponent.contextType = SettingsContext
-module.exports = MapComponent

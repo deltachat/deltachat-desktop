@@ -4,7 +4,7 @@ import { Store, Action } from './store'
 
 const { ipcRenderer } = window.electron_functions
 
-class state {
+export class state {
   selectedChat: { [key: string]: todo; contacts: todo[] } = null
   mapSettings = {
     timestampFrom: 0,

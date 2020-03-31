@@ -1,9 +1,13 @@
+import { JsonLocations, JsonContact } from '../../../shared/shared-types'
+
 // todo: get this from some settings/config file
 const accessToken =
   'pk.eyJ1IjoiZGVsdGFjaGF0IiwiYSI6ImNqc3c1aWczMzBjejY0M28wZmU0a3cwMzMifQ.ZPTH9dFJaav06RAu4rTYHw'
 
-class MapLayerFactory {
-  static getGeoJSONLineSourceData(locations) {
+export default class MapLayerFactory {
+  static getGeoJSONLineSourceData(
+    locations: JsonLocations
+  ): mapboxgl.GeoJSONSourceOptions['data'] {
     const coordinates = locations.map(point => [
       point.longitude,
       point.latitude,
@@ -23,7 +27,7 @@ class MapLayerFactory {
     }
   }
 
-  static getGeoJSONLineLayer(pathLayerId, color) {
+  static getGeoJSONLineLayer(pathLayerId: string, color: todo): mapboxgl.Layer {
     return {
       id: pathLayerId,
       type: 'line',
@@ -40,7 +44,10 @@ class MapLayerFactory {
     }
   }
 
-  static getGeoJSONPointsLayer(pointsLayerId, color) {
+  static getGeoJSONPointsLayer(
+    pointsLayerId: string,
+    // color: todo
+  ): mapboxgl.Layer {
     return {
       id: pointsLayerId,
       type: 'symbol',
@@ -52,7 +59,11 @@ class MapLayerFactory {
     }
   }
 
-  static getGeoJSONPointsLayerSourceData(locations, contact, withMessageOnly) {
+  static getGeoJSONPointsLayerSourceData(
+    locations: JsonLocations,
+    contact: JsonContact,
+    withMessageOnly: boolean
+  ): mapboxgl.GeoJSONSourceOptions['data'] {
     return {
       type: 'FeatureCollection',
       features: locations.reduce((features, location) => {
@@ -78,8 +89,8 @@ class MapLayerFactory {
     }
   }
 
-  static getPOILayer(locations) {
-    const layer = {
+  static getPOILayer(locations: JsonLocations) {
+    const layer: mapboxgl.Layer = {
       id: 'poi-layer',
       type: 'symbol',
       /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
@@ -95,7 +106,7 @@ class MapLayerFactory {
       },
     }
     locations.map(location => {
-      layer.source.data.features.push({
+      ;((<mapboxgl.GeoJSONSourceRaw>layer.source).data as todo).features.push({
         type: 'Feature',
         properties: {
           reported: location.timestamp,
@@ -111,7 +122,7 @@ class MapLayerFactory {
     return layer
   }
 
-  static getSatelliteMapLayer(styleKey) {
+  static getSatelliteMapLayer(styleKey: string): mapboxgl.Layer {
     return {
       id: styleKey,
       source: {
@@ -127,7 +138,7 @@ class MapLayerFactory {
     }
   }
 
-  static getRangeMap() {
+  static getRangeMap(): { [key: number]: { minutes: number; label: string } } {
     return {
       10: { minutes: 30, label: '30 min' },
       20: { minutes: 60, label: '1 h' },
@@ -145,5 +156,3 @@ class MapLayerFactory {
     return accessToken
   }
 }
-
-module.exports = MapLayerFactory

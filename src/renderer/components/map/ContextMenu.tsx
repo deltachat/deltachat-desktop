@@ -1,9 +1,14 @@
-const React = require('react')
+import React from 'react'
+import MapComponent from './MapComponent'
 
-class ContextMenu extends React.Component {
-  constructor(props) {
+type ContextMenuProps = {
+  onSetPoi: MapComponent['sendPoiMessage']
+}
+
+export default class ContextMenu extends React.Component<ContextMenuProps> {
+  poiLabel = React.createRef<HTMLInputElement>()
+  constructor(props: ContextMenuProps) {
     super(props)
-    this.poiLabel = React.createRef()
     this.onClick = this.onClick.bind(this)
   }
 
@@ -28,5 +33,3 @@ class ContextMenu extends React.Component {
     )
   }
 }
-
-module.exports = ContextMenu

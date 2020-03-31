@@ -1,6 +1,6 @@
-const { C } = require('deltachat-node/dist/constants')
+import { C } from 'deltachat-node/dist/constants'
 
-function mapCoreMsgStatus2String(state: number) {
+export function mapCoreMsgStatus2String(state: number) {
   switch (state) {
     case C.DC_STATE_OUT_FAILED:
       return 'error'
@@ -24,5 +24,3 @@ function mapCoreMsgStatus2String(state: number) {
       return '' // to display no icon on unknown state
   }
 }
-
-module.exports = mapCoreMsgStatus2String

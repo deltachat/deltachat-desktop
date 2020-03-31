@@ -86,7 +86,7 @@ export interface ChatListItemType {
   selfInGroup: boolean
 }
 
-import { Chat } from 'deltachat-node'
+import { Chat, Message } from 'deltachat-node'
 import { type } from 'os'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
@@ -94,6 +94,8 @@ export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
 
 export type JsonLocations = ReturnType<typeof DeltaChat.prototype.getLocations>
+
+export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
 
 export interface FullChat {
   id: number
@@ -114,4 +116,30 @@ export interface FullChat {
   isDeviceChat: boolean
   draft: string
   selfInGroup: boolean
+}
+
+type todo = any
+export interface MessageType {
+  id: number
+  msg: JsonMessage & {
+    sentAt: number
+    receivedAt: number
+    direction: 'outgoing' | 'incoming'
+    status: todo
+    attachment?: {
+      url: string
+      contentType: string
+      fileName: string
+      fileSize: string
+    }
+  }
+  filemime: string
+  filename: string
+  filesize: todo
+  viewType: todo
+  fromId: number
+  isMe: boolean
+  contact: JsonContact
+  isInfo: boolean
+  setupCodeBegin: todo
 }

@@ -133,3 +133,7 @@ div.context-menu {
     }
   }
 }
+
+.map-popup {
+  font-family: $roboto; // fix that emojis get displayed right in the popups
+}

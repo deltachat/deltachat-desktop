@@ -1,9 +1,24 @@
-const React = require('react')
-const classNames = require('classnames')
-const Timestamp = require('../conversations/Timestamp').default
-const Attachment = require('../attachment/Attachment')
+import React from 'react'
+import classNames from 'classnames'
+import Timestamp from '../conversations/Timestamp'
+import {
+  isImage,
+  isVideo,
+  hasVideoScreenshot,
+  hasImage,
+  attachment,
+} from '../attachment/Attachment'
 
-class MessageMetaData extends React.Component {
+export default class MessageMetaData extends React.Component<{
+  padlock: boolean
+  username: todo
+  attachment?: attachment
+  direction?: 'incoming' | 'outgoing'
+  status: 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
+  text?: string
+  timestamp: number
+  hasLocation?: boolean
+}> {
   render() {
     const {
       padlock,
@@ -19,9 +34,8 @@ class MessageMetaData extends React.Component {
 
     const withImageNoCaption = Boolean(
       !text &&
-        ((Attachment.isImage(attachment) && Attachment.hasImage(attachment)) ||
-          (Attachment.isVideo(attachment) &&
-            Attachment.hasVideoScreenshot(attachment)))
+        ((isImage(attachment) && hasImage(attachment)) ||
+          (isVideo(attachment) && hasVideoScreenshot(attachment)))
     )
     const showError = status === 'error' && direction === 'outgoing'
 
@@ -64,5 +78,3 @@ class MessageMetaData extends React.Component {
     )
   }
 }
-
-module.exports = MessageMetaData
