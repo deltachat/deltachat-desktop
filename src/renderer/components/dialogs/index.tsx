@@ -37,26 +37,44 @@ export const allDialogs = {
   UnblockContacts,
 }
 
+export type DialogId = keyof typeof allDialogs
+
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
-export class Controller extends React.Component {
-  constructor(props) {
+type dialogs = {
+  [key:string]: {
+    name: DialogId
+    Component: todo
+    props: false
+  }
+}
+
+export class Controller extends React.Component<
+  any,
+  {
+    dialogs: dialogs
+  }
+> {
+  constructor(props: any) {
     super(props)
 
-    var dialogs = {}
-    Object.keys(allDialogs).forEach(key => {
-      dialogs[key] = {
+    var dialogs: dialogs = {}
+    Object.keys(allDialogs).forEach((key:DialogId) => {
+      dialogs[key as string] = {
         name: key,
         Component: allDialogs[key],
         props: false,
       }
     })
 
-    this.state = { dialogs, attachedDialogs: [] }
+  this.state = { dialogs }
     this.close = this.close.bind(this)
   }
 
-  open(name, props) {
+  open<T extends DialogId>(
+    name: T,
+    props: todo /* infer from component */
+  ) {
     log.debug('openDialog: ', name, props)
     var Component = this.state.dialogs[name]
     if (!Component)
@@ -66,14 +84,14 @@ export class Controller extends React.Component {
     this.setState({ dialogs: this.state.dialogs })
   }
 
-  close(name) {
+  close(name: DialogId) {
     this.state.dialogs[name].props = false
     this.setState({ dialogs: this.state.dialogs })
   }
 
   render() {
     const { userFeedback, deltachat } = this.props
-    const { dialogs, attachedDialogs } = this.state
+    const { dialogs } = this.state
     // ToDo: This is shit. We can't alway renders all Dialogs and show them if something happens. We need to hook them up if they are needed, not always
 
     return (
@@ -85,7 +103,7 @@ export class Controller extends React.Component {
           var name = dialog.name
           var defaultProps = {
             isOpen,
-            onClose: () => this.close(name),
+            onClose: () => this.close(name as DialogId),
             userFeedback,
             deltachat,
             key: name,
@@ -95,9 +113,6 @@ export class Controller extends React.Component {
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
           return <dialog.Component {...props} />
-        })}
-        {attachedDialogs.map(([Component, props], id) => {
-          return <Component {...props} onClose={() => this.detachDialog(id)} />
         })}
       </div>
     )
