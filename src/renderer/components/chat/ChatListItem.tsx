@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
-import { Timestamp } from '../conversations'
+import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { Avatar, VerifiedIcon } from '../contact/Contact'
 import { C } from 'deltachat-node/dist/constants'

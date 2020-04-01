@@ -1,3 +1,5 @@
+type PromiseType<T> = T extends Promise<infer U> ? U : any
+
 export interface Login {
   addr: string
   path: string
@@ -40,11 +42,14 @@ export interface RC_Config {
   'log-to-console': boolean
   'machine-readable-stacktrace': boolean
   'multiple-instances': boolean
+  theme: string | undefined
+  'theme-watch': boolean
+  debug: boolean
+  'translation-watch': boolean
 }
 
 import { App } from 'electron'
 import { LocaleData } from '../shared/localize'
-import { bool } from 'prop-types'
 
 export interface ExtendedApp extends App {
   rc: RC_Config
@@ -54,7 +59,7 @@ export interface ExtendedApp extends App {
   state?: AppState
 }
 
-import { Contact } from 'deltachat-node'
+import DeltaChat, { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
@@ -63,11 +68,13 @@ export interface ChatListItemType {
   avatarPath: string
   color: string
   lastUpdated: number
-  summary: {
-    text1: any
-    text2: any
-    status: string
-  }
+  summary:
+    | {
+        text1: any
+        text2: any
+        status: string
+      }
+    | undefined
   deaddrop: any
   isVerified: boolean
   isGroup: boolean
@@ -77,4 +84,62 @@ export interface ChatListItemType {
   isSelfTalk: boolean
   isDeviceTalk: boolean
   selfInGroup: boolean
+}
+
+import { Chat, Message } from 'deltachat-node'
+import { type } from 'os'
+
+export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
+
+export type JsonContact = ReturnType<typeof Contact.prototype.toJson>
+
+export type JsonLocations = ReturnType<typeof DeltaChat.prototype.getLocations>
+
+export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
+
+export interface FullChat {
+  id: number
+  name: string
+  isVerified: boolean
+  profileImage: string
+  archived: boolean
+  subtitle: any
+  type: number
+  isUnpromoted: boolean
+  isSelfTalk: boolean
+  contacts: JsonContact[]
+  contactIds: number[]
+  color: string
+  freshMessageCounter: number
+  isGroup: boolean
+  isDeaddrop: boolean
+  isDeviceChat: boolean
+  draft: string
+  selfInGroup: boolean
+}
+
+type todo = any
+export interface MessageType {
+  id: number
+  msg: JsonMessage & {
+    sentAt: number
+    receivedAt: number
+    direction: 'outgoing' | 'incoming'
+    status: todo
+    attachment?: {
+      url: string
+      contentType: string
+      fileName: string
+      fileSize: string
+    }
+  }
+  filemime: string
+  filename: string
+  filesize: todo
+  viewType: todo
+  fromId: number
+  isMe: boolean
+  contact: JsonContact
+  isInfo: boolean
+  setupCodeBegin: todo
 }

@@ -22,11 +22,7 @@ import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
-import {
-  GroupSeperator,
-  GroupMemberContactListWrapper,
-  GroupMemberSearchInput,
-} from './Group-Styles'
+import { GroupSeperator, GroupMemberContactListWrapper } from './Group-Styles'
 
 export default function EditGroup(props) {
   const { isOpen, onClose, chat } = props
@@ -190,7 +186,8 @@ export function EditGroupInner(props) {
                 )}
               </GroupSeperator>
               <GroupMemberContactListWrapper>
-                <GroupMemberSearchInput
+                <input
+                  className='search-input group-member-search'
                   onChange={onSearchChange}
                   value={queryStr}
                   placeholder={tx('search')}

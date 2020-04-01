@@ -3,7 +3,6 @@ import { Card, Classes } from '@blueprintjs/core'
 import { DeltaDialogBase, DeltaDialogHeader } from './DeltaDialog'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import ChatListItem from '../chat/ChatListItem'
-import { CreateChatSearchInput } from './CreateChat-Styles'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
@@ -35,7 +34,8 @@ export default function ForwardMessage(props) {
       fixed
     >
       <DeltaDialogHeader onClose={onClose}>
-        <CreateChatSearchInput
+        <input
+          className='search-input'
           onChange={onSearchChange}
           value={queryStr}
           placeholder={tx('contacts_enter_name_or_email')}

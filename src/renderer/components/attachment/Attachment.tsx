@@ -32,7 +32,7 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
 // TODO define this correctly
 // (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
 export type attachment = {
-  [key: string]: any
+  [key: string]: todo
   contentType: string
   fileName: string
   url: any

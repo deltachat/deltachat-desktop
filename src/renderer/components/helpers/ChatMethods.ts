@@ -1,9 +1,13 @@
 import { callDcMethod, callDcMethodAsync } from '../../ipc'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import { ChatListItemType } from '../../../shared/shared-types'
+import {
+  ChatListItemType,
+  JsonContact,
+  FullChat,
+} from '../../../shared/shared-types'
 
-type Chat = ChatListItemType //| ChatType
+type Chat = ChatListItemType | FullChat
 
 const unselectChat = () => {
   chatStore.dispatch({ type: 'UI_UNSELECT_CHAT' })
@@ -81,9 +85,9 @@ export function openMapDialog(
 
 export async function openViewProfileDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  contact: number /* |ContactType */
+  contact: number | JsonContact
 ) {
-  if (Number.isInteger(contact)) {
+  if (typeof contact === 'number' && Number.isInteger(contact)) {
     contact = await callDcMethodAsync('chatList.getContact', contact)
   }
   screenContext.openDialog('ViewProfile', { contact })
