@@ -4,6 +4,7 @@ import { DeltaChat } from 'deltachat-node'
 import logger from '../shared/logger'
 const log = logger.getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
+import { PromiseType } from '../shared/shared-types'
 
 function escapeEmailForAccountFolder(path: string) {
   return encodeURIComponent(path).replace(/%/g, 'P')
@@ -75,6 +76,8 @@ async function getAccountInfo(path: string) {
     return null
   }
 }
+
+export type DeltaChatAccount = PromiseType<ReturnType<typeof getAccountInfo>>
 
 async function readDeltaAccounts(accountFolderPath: string) {
   const paths = (await fs.readdir(accountFolderPath)).map(filename =>

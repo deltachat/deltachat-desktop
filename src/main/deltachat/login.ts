@@ -6,12 +6,12 @@ import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import DeltaChatController from './controller'
+import { Credentials } from '../../shared/shared-types'
 const log = logger.getLogger('main/deltachat/login')
 
-type credential_config = {
+export interface credential_config extends Credentials {
   mail_security?: string
   send_security?: string
-  addr: string
   mail_pw?: string
   [key: string]: string
 }

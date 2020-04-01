@@ -7,7 +7,10 @@ const { ipcRenderer } = window.electron_functions
 import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
-import { Controller as DialogController } from './components/dialogs/index'
+import {
+  Controller as DialogController,
+  DialogId,
+} from './components/dialogs/index'
 
 export interface userFeedback {
   type: 'error' | 'success'
@@ -73,11 +76,11 @@ export default class ScreenController extends Component {
     this.openDialog('About')
   }
 
-  openDialog(name: string, props?: any) {
+  openDialog(name: DialogId, props?: any) {
     this.dialogs.current.open(name, props)
   }
 
-  closeDialog(name: string) {
+  closeDialog(name: DialogId) {
     this.dialogs.current.close(name)
   }
 

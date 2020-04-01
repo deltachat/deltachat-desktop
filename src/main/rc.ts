@@ -6,6 +6,10 @@ const defaults: RC_Config = {
   'log-to-console': false,
   'machine-readable-stacktrace': false,
   'multiple-instances': false,
+  theme: undefined,
+  debug: false,
+  'translation-watch': false,
+  'theme-watch': false,
 }
 
 const rc_config = Object.freeze(rc('DeltaChat', defaults) as RC_Config)

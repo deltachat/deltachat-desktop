@@ -32,10 +32,11 @@
 @import 'gallery/media';
 
 // Dialogs
+@import 'dialogs/_about';
+@import 'dialogs/_autocrypt_setup.scss';
+@import 'dialogs/_delta-dialog';
 @import 'dialogs/_forward-message';
 @import 'dialogs/_settings';
-@import 'dialogs/_about';
-@import 'dialogs/_delta-dialog';
 
 // Login
 @import 'login/_login.scss';
@@ -57,6 +58,9 @@
 @import 'message/_message';
 @import 'message/_metadata';
 @import 'message/_status-icon';
+
+// misc
+@import 'misc/_search-input.scss';
 
 // Overwrites for third party node modules
 @import 'overwrites/_bp3-overwrites';

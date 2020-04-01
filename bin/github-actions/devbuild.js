@@ -14,7 +14,7 @@ p.version = p.version + '-DevBuild'
 
 fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 
-const appConfig = join(__dirname, '../../src/main/application-config.js')
+const appConfig = join(__dirname, '../../src/main/application-config.ts')
 
 const fileContent = fs.readFileSync(appConfig, 'utf-8')
   .replace(

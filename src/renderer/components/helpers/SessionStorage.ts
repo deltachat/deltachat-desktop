@@ -17,3 +17,4 @@ export function getItem(scopeName: string, key: string): any {
 export function remove(scopeName: string, key: string) {
   window.sessionStorage.removeItem(`${scopeName}-${key}`)
 }
+export default { storeItem, getItem, remove }

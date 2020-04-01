@@ -2,11 +2,12 @@ import React from 'react'
 import { LocalSettings } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import { userFeedback } from './ScreenController'
+import { DialogId } from './components/dialogs'
 
 const noop: Function = () => {}
 
 export const ScreenContext = React.createContext({
-  openDialog: (name: string, props?: any) => {},
+  openDialog: (name: DialogId, props?: any) => {},
   closeDialog: (name: string) => {},
   userFeedback: (message: false | userFeedback) => {},
   changeScreen: noop,

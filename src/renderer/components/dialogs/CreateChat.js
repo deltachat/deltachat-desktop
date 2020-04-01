@@ -20,10 +20,7 @@ import {
   DeltaDialogHeader,
   DeltaDialogBody,
 } from './DeltaDialog'
-import {
-  CreateChatSearchInput,
-  CreateChatContactListWrapper,
-} from './CreateChat-Styles'
+import { CreateChatContactListWrapper } from './CreateChat-Styles'
 
 import {
   GroupSettingsContainer,
@@ -31,7 +28,6 @@ import {
   GroupMemberContactListWrapper,
   GroupImage,
   GroupNameInput,
-  GroupMemberSearchInput,
 } from './Group-Styles'
 
 import { DeltaDialogQrInner } from './QrInviteCode'
@@ -118,7 +114,8 @@ export default function CreateChat(props) {
       {viewMode.startsWith('main') && (
         <>
           <DeltaDialogHeader onClose={onClose}>
-            <CreateChatSearchInput
+            <input
+              className='search-input'
               onChange={onSearchChange}
               value={queryStr}
               placeholder={tx('contacts_enter_name_or_email')}
@@ -255,7 +252,8 @@ export const AddMemberInnerDialog = ({
       />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
-          <GroupMemberSearchInput
+          <input
+            className='search-input group-member-search'
             style={{ marginLeft: '20px' }}
             onChange={onSearchChange}
             value={queryStr}
@@ -456,7 +454,8 @@ export function CreateGroupInner(props) {
                 )}
               </GroupSeperator>
               <GroupMemberContactListWrapper>
-                <GroupMemberSearchInput
+                <input
+                  className='search-input group-member-search'
                   onChange={onSearchChange}
                   value={queryStr}
                   placeholder={tx('search')}
