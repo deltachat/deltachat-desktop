@@ -59,6 +59,12 @@ async function run (command, args, options) {
     p.stderr.pipe(process.stderr)
     p.on('close', resolve)
     p.on('error', reject)
+    p.on('exit', (code)=>{
+      if (code != 0) {
+        console.log(command + 'exited with ERR CODE '+ code)
+        reject('ERR CODE '+ code)
+      }
+    })
   })
 }
 
