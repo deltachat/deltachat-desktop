@@ -8,6 +8,7 @@ declare global {
     translate: getMessageFunction
     localeData: LocaleData
     ThemeManager: ThemeManager
+    exp: todo
     electron_functions: {
       // see static/preload.js
       ipcRenderer: import('electron').IpcRenderer
