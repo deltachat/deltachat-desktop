@@ -17,6 +17,7 @@ import {
 import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
+import { openHelpWindow } from './windows/help'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -301,31 +302,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   })
 
   ipcMain.on('help', async (_ev, locale) => {
-    const appPath = app.getAppPath()
-    const DestinationPath = join(getConfigPath(), 'help-cache')
-    await ensureDir(join(DestinationPath, 'help'))
-
-    const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
-    const helpFile = (await pathExists(contentFilePath))
-      ? contentFilePath
-      : join(appPath, `/html-dist/help/en/help.html`)
-    try {
-      await pathExists(helpFile)
-      // copy help files and assets
-      await copy(
-        join(appPath, '/html-dist/help/'),
-        join(DestinationPath, 'help')
-      )
-      // open new file
-      const newPath = join(
-        DestinationPath,
-        relative(join(appPath, '/html-dist'), helpFile)
-      )
-      await pathExists(newPath)
-      shell.openItem(newPath)
-    } catch (error) {
-      log.error('Can not load help file', error)
-    }
+    await openHelpWindow(locale)
   })
 
   function sendStateToRenderer() {
