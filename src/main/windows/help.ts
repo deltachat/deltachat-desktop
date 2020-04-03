@@ -61,7 +61,6 @@ export async function openHelpWindow(locale: string) {
 
   log.debug(url)
 
-  win.setMenuBarVisibility(false)
   win.loadURL('file://' + url)
 
   win.once('ready-to-show', () => {
@@ -80,4 +79,6 @@ export async function openHelpWindow(locale: string) {
   win.on('close', e => {
     win = null
   })
+
+  win.setMenu(Menu.buildFromTemplate([{ role: 'viewMenu' }]))
 }
