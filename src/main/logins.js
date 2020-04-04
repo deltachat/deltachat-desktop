@@ -1,6 +1,6 @@
 const { join, basename } = require('path')
 const fs = require('fs-extra')
-const DeltaChat = require('deltachat-node')
+const DeltaChat = require('deltachat-node').default
 const logger = require('../logger')
 const log = logger.getLogger('main/find_logins', true)
 const { escapeEmailForAccountFolder } = require('./deltachat/util')
