@@ -5,6 +5,12 @@ html {
     background-color: white;
 }
 
+.back-btn {
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+}
+
 body {
     max-width: 800px;
     margin: 0 0 auto;
@@ -28,6 +34,10 @@ ul#top {
     list-style-type: none;
     margin: 1.2rem 0 0 0;
     padding: 0;
+    margin-block-start: 0;
+}
+ul#top:first-child {
+    margin-top: 0;
 }
 ul#top>li {
     font-weight: bold !important;

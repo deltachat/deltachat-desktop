@@ -82,4 +82,13 @@ export async function openHelpWindow(locale: string) {
   })
 
   win.setMenu(Menu.buildFromTemplate([{ role: 'viewMenu' }]))
+
+  win.webContents.executeJavaScript(`
+    const body = document.getElementsByTagName('body')[0];
+    const back_btn = document.createElement('button');
+    back_btn.className = 'back-btn';
+    back_btn.onclick = (ev) => {document.body.scrollTop = 0; document.documentElement.scrollTop = 0;};
+    back_btn.innerText = '↑ ${app.translate('back_to_top')}';
+    body.append(back_btn);
+  `)
 }

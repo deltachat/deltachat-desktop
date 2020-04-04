@@ -106,5 +106,8 @@
   },
   "global_zoom_factor_huge": {
     "message": "huge"
+  },
+  "back_to_top": {
+    "message": "Back to Top"
   }
 }
