@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -14,18 +14,45 @@ import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
 import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
+import { C } from 'deltachat-node/dist/constants'
 
-const ProfileInfoName = ({
-  name,
-  address,
-}: {
-  name: string
-  address: string
-}) => {
+const ProfileInfoName = ({ contactId }: { contactId: number }) => {
+  const [contact, setContact] = useState<{
+    displayName: string
+    address: string
+  }>({ displayName: '', address: '' })
+
+  const loadContact = async (contactId: number) => {
+    setContact(await callDcMethodAsync('contacts.getContact', [contactId]))
+  }
+
+  useEffect(() => {
+    loadContact(contactId)
+  }, [contactId])
+
+  const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = ev.target.value
+    if (
+      (await callDcMethodAsync('contacts.changeNickname', [
+        contactId,
+        newName,
+      ])) !== 0
+    ) {
+      loadContact(contactId)
+    }
+  }
+
   return (
     <div className='profile-info-name-container'>
-      <div className='name'>{name}</div>
-      <div className='address'>{address}</div>
+      <div>
+        <input
+          className='name'
+          value={contact.displayName}
+          onChange={onChange}
+          disabled={contactId === C.DC_CONTACT_ID_SELF}
+        />
+      </div>
+      <div className='address'>{contact.address}</div>
     </div>
   )
 }
@@ -78,10 +105,7 @@ export default function ViewProfile(props: {
         <DeltaDialogContent noPadding>
           <div className='profile-info-container'>
             <ProfileInfoAvatar contact={contact} />
-            <ProfileInfoName
-              name={contact.displayName}
-              address={contact.address}
-            />
+            <ProfileInfoName contactId={contact.id} />
           </div>
           <Button
             style={{ marginLeft: '90px', marginBottom: '30px' }}
