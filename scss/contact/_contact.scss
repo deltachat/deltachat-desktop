@@ -63,7 +63,7 @@ img.verified-icon {
 div.contact-name {
   display: inline-block;
   width: calc(100% - 64px);
-  height: 54px;
+  // height: 54px;
   margin-left: 10px;
   .chat-list & {
     width: calc(100% - 84px);
@@ -84,6 +84,14 @@ div.contact-name {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .pseudo-contact-text {
+    font-weight: bold;
+    margin-bottom: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: medium;
+  }
 }
 
 div.contact {
@@ -94,14 +102,6 @@ div.contact {
   .chat-list & {
     width: 30vw;
     padding: 0px 10px;
-  }
-
-  & > .pseudo-contact-text {
-    padding-top: calc((54px - 18px) / 2);
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 }
 
