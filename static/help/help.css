@@ -1,21 +1,8 @@
+@import '../fonts/fonts.css';
+
 html {
     font-family: Roboto,Apple Color Emoji,NotoEmoji,Helvetica Neue,Arial,Helvetica,NotoMono,sans-serif!important;
-    background-color: rgb(255, 251, 244);
-}
-head {
-    height: 50px;
-    background-color: #415e6b;
-    display: block;
-}
-
-head::after {
-    content: 'DeltaChat - Help';
-    text-align: center;
-    color: #fff;
-    line-height: 50px;
-    font-size: -webkit-xxx-large;
-    font-weight: 700;
-    display: block;
+    background-color: white;
 }
 
 body {
@@ -26,7 +13,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-
 
 a {
     text-decoration: none;
