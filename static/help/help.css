@@ -1,63 +1,66 @@
 @import '../fonts/fonts.css';
 
 html {
-    font-family: Roboto,Apple Color Emoji,NotoEmoji,Helvetica Neue,Arial,Helvetica,NotoMono,sans-serif!important;
-    background-color: white;
+  font-family: Roboto, Apple Color Emoji, NotoEmoji, Helvetica Neue, Arial,
+    Helvetica, NotoMono, sans-serif !important;
+  background-color: white;
 }
 
 .back-btn {
-    position: fixed;
-    bottom: 8px;
-    right: 8px;
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
 }
 
 body {
-    max-width: 800px;
-    margin: 0 0 auto;
-    padding: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  max-width: 800px;
+  margin: 0 0 auto;
+  padding: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
-h2, h3, h4 {
-    margin-top: 2rem;
+h2,
+h3,
+h4 {
+  margin-top: 2rem;
 }
 ul {
-    margin-left: 20px;
-    padding: 0px;
+  margin-left: 20px;
+  padding: 0px;
 }
 ul#top {
-    list-style-type: none;
-    margin: 1.2rem 0 0 0;
-    padding: 0;
-    margin-block-start: 0;
+  list-style-type: none;
+  margin: 1.2rem 0 0 0;
+  padding: 0;
+  margin-block-start: 0;
 }
 ul#top:first-child {
-    margin-top: 0;
+  margin-top: 0;
 }
-ul#top>li {
-    font-weight: bold !important;
-    font-size: 1.2rem !important;
+ul#top > li {
+  font-weight: bold !important;
+  font-size: 1.2rem !important;
 }
 ul#top li {
-    margin-top: .7rem;
-    margin-bottom: .7rem;
-    font-weight: normal;
-    font-size: 1rem;
-    list-style: none;
-    color: #106ba3;
+  margin-top: 0.7rem;
+  margin-bottom: 0.7rem;
+  font-weight: normal;
+  font-size: 1rem;
+  list-style: none;
+  color: #106ba3;
 }
-ul#top li>ul>li {
-    margin-left: 10px;
+ul#top li > ul > li {
+  margin-left: 10px;
 }
-ul#top li>ul>li::before {
-    content: "\2022";
-    color: #106ba3;
-    font-weight: bold;
-    display: inline-block;
-    width: 1em;
+ul#top li > ul > li::before {
+  content: '\2022';
+  color: #106ba3;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
 }
