@@ -4,6 +4,7 @@ import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
 import { pathExists } from 'fs-extra'
+import { appWindowTitle } from '../../shared/constants'
 
 const log = getLogger('main/help')
 const app = rawApp as ExtendedAppMainProcess
@@ -48,7 +49,7 @@ export async function openHelpWindow(locale: string) {
     minHeight: defaults.minHeight,
     minWidth: defaults.minWidth,
     show: false,
-    title: 'DeltaChat inApp Help',
+    title: appWindowTitle + '-' + app.translate('menu_help'),
     titleBarStyle: 'hiddenInset', // Hide title bar (Mac)
     useContentSize: true, // Specify web page size without OS chrome
 
