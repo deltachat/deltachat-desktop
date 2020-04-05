@@ -6,4 +6,4 @@ Search contact list: `ctrl + k`
 
 Focus message composer: `ctrl + n` 
 
-Open settings: `ctrl + ,`
+Open settings: `cmd + ,` or `ctrl + ,`
