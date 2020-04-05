@@ -62,7 +62,7 @@ export default function attachKeybindingsListener() {
       chatListSearch.focus()
     } else if (Event.ctrlKey && Event.key === 'n') {
       document.querySelector<HTMLElement>('#composer-textarea').focus()
-    } else if ((Event.metaKey||Event.ctrlKey) && Event.key === ',') {
+    } else if ((Event.metaKey || Event.ctrlKey) && Event.key === ',') {
       // open settings
       if (window.__openDialog) {
         window.__openDialog('Settings')
