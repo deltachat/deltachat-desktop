@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -15,6 +15,7 @@ import { callDcMethodAsync } from '../../ipc'
 import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
+import { ScreenContext } from '../../contexts'
 
 const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   const [contact, setContact] = useState<{
@@ -78,6 +79,7 @@ export default function ViewProfile(props: {
   contact: JsonContact
 }) {
   const { isOpen, onClose, contact } = props
+  const { openDialog } = useContext(ScreenContext)
 
   const { chatListIds } = useChatListIds(0, '', contact.id)
   // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
@@ -104,7 +106,19 @@ export default function ViewProfile(props: {
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
           <div className='profile-info-container'>
-            <ProfileInfoAvatar contact={contact} />
+            <div onClick={() => {
+              openDialog('FullscreenMedia', { message: {
+                msg: {
+                  attachment: {
+                    url: contact.profileImage,
+                    contentType: 'image/x',
+                  },
+                  file: contact.profileImage
+                }
+              } })
+            }} style={{cursor:'pointer'}}>
+              <ProfileInfoAvatar contact={contact} />
+            </div>
             <ProfileInfoName contactId={contact.id} />
           </div>
           <Button
