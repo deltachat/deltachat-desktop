@@ -106,17 +106,22 @@ export default function ViewProfile(props: {
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
           <div className='profile-info-container'>
-            <div onClick={() => {
-              openDialog('FullscreenMedia', { message: {
-                msg: {
-                  attachment: {
-                    url: contact.profileImage,
-                    contentType: 'image/x',
+            <div
+              onClick={() => {
+                openDialog('FullscreenMedia', {
+                  message: {
+                    msg: {
+                      attachment: {
+                        url: contact.profileImage,
+                        contentType: 'image/x',
+                      },
+                      file: contact.profileImage,
+                    },
                   },
-                  file: contact.profileImage
-                }
-              } })
-            }} style={{cursor:'pointer'}}>
+                })
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               <ProfileInfoAvatar contact={contact} />
             </div>
             <ProfileInfoName contactId={contact.id} />
