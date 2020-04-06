@@ -2,6 +2,7 @@ import { getMessageFunction, LocaleData } from '../shared/localize'
 
 import Electron from 'electron'
 import { ThemeManager } from './ThemeManager'
+import { DialogId } from './components/dialogs'
 
 declare global {
   interface Window {
@@ -18,5 +19,7 @@ declare global {
     preload_functions: {
       downloadFile: (file: string) => void
     }
+    __openDialog: (name: DialogId, props?: any) => {}
+    __isReady: boolean
   }
 }

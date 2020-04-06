@@ -1,5 +1,10 @@
 import { app, Menu, shell } from 'electron'
-import { gitHubIssuesUrl, gitHubUrl, homePageUrl } from '../shared/constants'
+import {
+  gitHubIssuesUrl,
+  gitHubUrl,
+  homePageUrl,
+  appWindowTitle,
+} from '../shared/constants'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
@@ -123,16 +128,41 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
 }
 
 function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
-  return [
+  const isMac = process.platform === 'darwin'
+  const AppMenu: rawMenuItem[] = [
     {
-      translate: 'global_menu_file_desktop',
+      label: appWindowTitle,
       submenu: [
         {
-          translate: 'global_menu_file_quit_desktop',
-          role: 'quit',
+          role: 'about',
+          click: () => {
+            mainWindow.send('showAboutDialog')
+          },
         },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { translate: 'global_menu_file_quit_desktop', role: 'quit' },
       ],
     },
+  ]
+  return [
+    ...(isMac ? AppMenu : []),
+    ...(!isMac
+      ? <rawMenuItem[]>[
+          {
+            translate: 'global_menu_file_desktop',
+            submenu: [
+              {
+                translate: 'global_menu_file_quit_desktop',
+                role: 'quit',
+              },
+            ],
+          },
+        ]
+      : []),
     {
       translate: 'global_menu_edit_desktop',
       submenu: [

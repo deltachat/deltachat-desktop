@@ -36,6 +36,9 @@ function setSearchInputValue(value: string) {
 
 export default function attachKeybindingsListener() {
   document.addEventListener('keydown', function(Event) {
+    // only listen to those events when logged in
+    if (!window.__isReady) return
+
     if (Event.altKey && Event.key === 'ArrowDown') {
       const selectedChatItems = document.getElementsByClassName(
         'chat-list-item--is-selected'
@@ -57,6 +60,13 @@ export default function attachKeybindingsListener() {
       )
       setSearchInputValue('')
       chatListSearch.focus()
+    } else if (Event.ctrlKey && Event.key === 'n') {
+      document.querySelector<HTMLElement>('#composer-textarea').focus()
+    } else if ((Event.metaKey || Event.ctrlKey) && Event.key === ',') {
+      // open settings
+      if (window.__openDialog) {
+        window.__openDialog('Settings')
+      }
     } else if (
       Event.key === 'Escape' &&
       (Event.target as any).id === 'chat-list-search'
