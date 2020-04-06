@@ -5,11 +5,11 @@ import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
-  archiveChat,
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
   openEditGroupDialog,
+  setChatVisibility,
 } from './helpers/ChatMethods'
 const { ipcRenderer } = window.electron_functions
 
@@ -36,7 +36,6 @@ export default function DeltaMenu(props) {
   const onCreateChat = () => screenContext.openDialog('CreateChat', {})
   const onEditGroup = () => openEditGroupDialog(screenContext, selectedChat)
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
-  const onArchiveChat = archive => archiveChat(selectedChat.id, archive)
   const onBlockContact = () =>
     openBlockContactDialog(screenContext, selectedChat)
   const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat)
@@ -58,15 +57,27 @@ export default function DeltaMenu(props) {
       <Menu.Divider key='divider1' />,
       showArchivedChats ? (
         <DeltaMenuItem
-          key='archive'
+          key='unarchive'
           text={tx('menu_unarchive_chat')}
-          onClick={() => onArchiveChat(false)}
+          onClick={() =>
+            setChatVisibility(
+              selectedChat.id,
+              C.DC_CHAT_VISIBILITY_NORMAL,
+              true
+            )
+          }
         />
       ) : (
         <DeltaMenuItem
-          key='unarchive'
+          key='archive'
           text={tx('menu_archive_chat')}
-          onClick={() => onArchiveChat(true)}
+          onClick={() =>
+            setChatVisibility(
+              selectedChat.id,
+              C.DC_CHAT_VISIBILITY_ARCHIVED,
+              true
+            )
+          }
         />
       ),
       <DeltaMenuItem

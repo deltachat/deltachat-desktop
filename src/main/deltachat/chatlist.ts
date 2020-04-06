@@ -145,6 +145,8 @@ export default class DCChatList extends SplitOut {
       isSelfTalk: chat.isSelfTalk,
       isDeviceTalk: chat.isDeviceTalk,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
+      archived: chat.archived,
+      pinned: chat.pinned,
     }
 
     return chatListItem

@@ -2,19 +2,79 @@ import React, { useState, useRef, useContext, useEffect } from 'react'
 import { ScreenContext } from '../../contexts'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import {
-  archiveChat,
   openLeaveChatDialog,
   openDeleteChatDialog,
   openBlockContactDialog,
   openEncryptionInfoDialog,
   openEditGroupDialog,
   openViewProfileDialog,
+  setChatVisibility,
 } from '../helpers/ChatMethods'
 
 import { callDcMethodAsync } from '../../ipc'
 import { ChatListItemType } from '../../../shared/shared-types'
+import { C } from 'deltachat-node/dist/constants'
 
 // const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
+
+const ArchiveStateMenu = (chat: ChatListItemType) => {
+  const tx = window.translate
+
+  const archive = (
+    <MenuItem
+      onClick={() =>
+        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_ARCHIVED, true)
+      }
+      key='import'
+    >
+      {tx('menu_archive_chat')}
+    </MenuItem>
+  )
+  const unArchive = (
+    <MenuItem
+      onClick={() =>
+        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL, true)
+      }
+      key='export'
+    >
+      {tx('menu_unarchive_chat')}
+    </MenuItem>
+  )
+  const pin = (
+    <MenuItem
+      onClick={() =>
+        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.archived)
+      }
+      key='pinChat'
+    >
+      {tx('pin_chat')}
+    </MenuItem>
+  )
+  const unPin = (
+    <MenuItem
+      onClick={() => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL)}
+      key='pinChat'
+    >
+      {tx('unpin_chat')}
+    </MenuItem>
+  )
+
+  /*
+            Archive	UnArchive	Pin	UnPin
+  pinned	  y	      n       	n	  y
+  archived  n       y       	y	  n
+  normal	  y	      n       	y	  n
+  */
+
+  if (chat.pinned) {
+    return [unPin, archive]
+  } else if (chat.archived) {
+    return [pin, unArchive]
+  } else {
+    // normal
+    return [pin, archive]
+  }
+}
 
 const ChatListContextMenu = React.memo<{
   showArchivedChats: boolean
@@ -56,7 +116,6 @@ const ChatListContextMenu = React.memo<{
       setChat(null)
     }
 
-    const onArchiveChat = (archive: boolean) => archiveChat(chat.id, archive)
     const onDeleteChat = () => openDeleteChatDialog(screenContext, chat)
     const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
     const onEditGroup = async () => {
@@ -80,15 +139,7 @@ const ChatListContextMenu = React.memo<{
 
     const menu = chat
       ? [
-          showArchivedChats ? (
-            <MenuItem onClick={() => onArchiveChat(false)} key='export'>
-              {tx('menu_unarchive_chat')}
-            </MenuItem>
-          ) : (
-            <MenuItem onClick={() => onArchiveChat(true)} key='import'>
-              {tx('menu_archive_chat')}
-            </MenuItem>
-          ),
+          ...ArchiveStateMenu(chat),
           <MenuItem onClick={onDeleteChat} key='delete'>
             {tx('menu_delete_chat')}
           </MenuItem>,
