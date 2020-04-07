@@ -13,5 +13,7 @@
     "scrollbarTransparency": 0.34,
     "bgMessageBubbleIncoming": "#303030",
     "bgMessageBubbleOutgoing": "#354535",
-    "raw": {}
+    "raw": {
+        "chatListItemBgPinned": "#222222"
+    }
 }

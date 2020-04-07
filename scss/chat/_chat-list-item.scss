@@ -34,6 +34,10 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
       font-weight: 300;
     }
   }
+
+  &.pinned {
+    background-color: var(--chatListItemBgPinned);
+  }
 }
 
 .chat-list-item__content {
