@@ -20,6 +20,21 @@ export default class DCContacts extends SplitOut {
     log.debug(`Blocked contact ${name} (id = ${contactId})`)
   }
 
+  changeNickname(contactId: number, name: string) {
+    const contact = this._dc.getContact(contactId)
+    const address = contact.getAddress()
+    const result = this._dc.createContact(name, address)
+
+    // trigger interface updates
+    const chatId = this.getChatIdByContactId(contactId)
+    this._controller.chatList.onChatModified(chatId)
+    this._controller.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', {
+      chatId,
+    })
+
+    return result
+  }
+
   acceptContactRequest({
     messageId,
     contactId,
