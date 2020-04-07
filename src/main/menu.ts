@@ -33,7 +33,7 @@ export function init(logHandler: LogHandler) {
     )
   )
   if (item) item.checked = mainWindow.isAlwaysOnTop()
-  Menu.setApplicationMenu(menu)
+  mainWindow.window.setMenu(menu)
 }
 
 interface rawMenuItem extends Electron.MenuItemConstructorOptions {
