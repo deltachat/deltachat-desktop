@@ -13,7 +13,7 @@ export default function ForwardMessage(props) {
   const tx = window.translate
   const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatListIds(
-    C.DC_GCL_NO_SPECIALS
+    C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
   )
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
     chatListIds
