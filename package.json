@@ -22,8 +22,8 @@
     "builder-help": "npm run builder -- --help",
     "build-scss": "npm run builder -- --styles",
     "build4production": "npm run build-main && npm run builder -- --prod",
-    "pull-translations": "tx pull -l en && tx pull -f",
-    "update-translations": "npm run pull-translations && npm run builder -- --translations",
+    "translations-pull": "tx pull -l en && tx pull -f",
+    "translations-update": "npm run translations-pull && npm run builder -- --translations",
     "hallmark": "hallmark --fix",
     "check-types": "tsc"
   },

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Otkaži</string>
     <string name="yes">Da</string>
@@ -10,6 +12,7 @@
     <string name="custom">Prilagođeno</string>
     <string name="none">Ništa</string>
     <string name="automatic">Automatski</string>
+    <string name="strict">Strog</string>
     <string name="open">Otvori</string>
     <string name="delete">Obriši</string>
     <string name="info">Info</string>
@@ -19,8 +22,10 @@
     <string name="close">Zatvori</string>
     <string name="forward">Proslijedi</string>
     <string name="archive">Arhiviraj</string>
+    <string name="unarchive">Dearhiviraj</string>
     <string name="mute">Prigušiti</string>
     <string name="save">Spremi</string>
+    <string name="media">Medij</string>
     <string name="main_menu">Glavni izbornik</string>
     <string name="show_password">Prikaži lozinku</string>
     <string name="hide_password">Sakrij lozinku</string>
@@ -33,6 +38,7 @@
     <string name="error_x">Greška: %1$s</string>
     <string name="error_no_network">Mreža nije dostupna.</string>
     <string name="file_not_found">%1$s nije pronađeno.</string>
+    <string name="copied_to_clipboard">Kopirano u međuspremnik.</string>
     <string name="contacts_headline">Kontakti</string>
     <string name="password">Lozinka</string>
     <string name="now">Sada</string>
@@ -75,6 +81,7 @@
     </plurals>
 
     <string name="self">Ja</string>
+    <string name="draft">Skica</string>
     <string name="image">Slika</string>
     <string name="gif">Gif</string>
     <string name="images">Slike</string>
@@ -83,10 +90,22 @@
     <string name="contact">Kontakt</string>
     <string name="camera">Kamera</string>
     <string name="location">Lokacija</string>
+    <string name="gallery">Galerija</string>
+    <string name="file">Datoteka</string>
+    <string name="unknown">Nepoznato</string>
+
     <string name="green">Zeleno</string>
     <string name="red">Crveno</string>
     <string name="blue">Plavo</string>
+    <string name="orange">Narančasta</string>
+    <string name="cyan">Cijan</string>
+    <string name="magenta">Magenta</string>
     <string name="white">Bijelo</string>
+
+    <string name="small">Mala</string>
+    <string name="normal">Normalna</string>
+    <string name="large">Velika</string>
+    <string name="extra_large">Ekstra velika</string>
 
     <string name="fast">Brzo</string>
     <string name="slow">Sporo</string>
@@ -99,6 +118,7 @@
     <string name="menu_new_contact">Novi kontakt</string>
     <string name="menu_new_group">Nova grupa</string>
     <string name="menu_send">Pošalji</string>
+    <string name="menu_edit_group">Uredi grupu</string>
     <string name="menu_show_map">Prikaži mapu</string>
     <string name="menu_show_global_map">Prikaži sve lokacije</string>
     <string name="menu_add_attachment">Dodaj privitak</string>
@@ -107,13 +127,28 @@
     <string name="menu_delete_image">Obriši sliku</string>
     <string name="menu_delete_locations">Obrisati sve lokacije?</string>
     <string name="menu_delete_location">Obrisati ovu lokaciju?</string>
+    <string name="menu_message_details">Detalji poruke</string>
+    <string name="menu_copy_to_clipboard">Kopiraj u međuspremnik</string>
     <string name="menu_forward">Proslijedi poruku</string>
+    <string name="menu_resend">Ponovno pošalji poruku</string>
     <string name="menu_reply">Odgovori na poruku</string>
+    <string name="menu_mute">Utišaj obavijesti</string>
+    <string name="menu_unmute">Ukloni utišanje</string>
+    <string name="menu_all_media">Svi mediji</string>
     <string name="menu_share">Podijeli</string>
     <string name="menu_help">Pomoć</string>
     <string name="menu_select_all">Označi sve</string>
+    <string name="menu_settings">Postavke</string>
+    <string name="menu_advanced">Napredno</string>
+    <string name="mute_for_one_hour">Utišaj na 1 sat</string>
+    <string name="mute_for_two_hours">Utišaj na 2 sata</string>
+    <string name="mute_for_one_day">Utišaj na 1 dan</string>
+    <string name="mute_for_seven_days">Utišaj na 7 dana</string>
     <!-- contact list -->
     <string name="contacts_title">Kontakti</string>
+    <string name="contacts_empty_hint">Nema kontakata.</string>
+
+
     <string name="chat_please_enter_message">Molimo unesite poruku.</string>
     <string name="chat_camera_unavailable">Kamera nije dostupna.</string>
     <plurals name="chat_n_new_messages">
@@ -121,16 +156,21 @@
         <item quantity="few">%d nove poruke</item>
         <item quantity="other">%d novih poruka</item>
     </plurals>
+    <string name="chat_record_slide_to_cancel">Kliznite za otkazivanje</string>
+    <string name="chat_record_explain">Pritisnite i držite kako biste snimili glasovnu poruku, pustite za slanje</string>
     <string name="chat_share_with_title">Podijeli sa</string>
     <string name="chat_input_placeholder">Poruka</string>
     <string name="chat_archived_label">Arhivirano</string>
     <string name="chat_no_messages">Nema poruka.</string>
     <string name="saved_messages">Sačuvane poruke</string>
+    <!-- search -->
+    <string name="search">Traži</string>
     <string name="search_no_result_for_x">Nema pronađenih rezultata za \"%s\"</string>
 
 
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Naziv grupe</string>
+    <string name="group_avatar">Grupni avatar</string>
     <string name="group_add_members">Dodaj članove</string>
     <string name="profile_encryption">Šifriranje</string>
     <string name="tab_contact">Kontakt</string>
@@ -138,6 +178,7 @@
     <string name="tab_members">Članovi</string>
     <string name="tab_gallery">Galerija</string>
     <string name="tab_map">Mapa</string>
+    <string name="media_preview">Prikaz medija</string>
     <string name="login_imap_server">IMAP server</string>
     <string name="login_smtp_password">SMTP lozinka</string>
     <string name="login_smtp_server">SMTP server</string>
@@ -153,18 +194,41 @@
     <string name="pref_password_and_account_settings">Lozinka i račun</string>
     <string name="pref_who_can_see_this_information">Tko može ovo vidjeti?</string>
     <string name="pref_your_name">Vaše ime</string>
+    <string name="pref_enter_sends">Enter šalje poruku</string>
+    <string name="pref_enter_sends_explain">Pritisak na Enter će poslati tekst poruku</string>
+    <string name="pref_vibrate">Vibracija</string>
+    <string name="pref_chat_settings">Postavke razgovora</string>
+    <string name="pref_screen_security">Sigurnost ekrana</string>
+    <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
+    <string name="pref_screen_security_explain">Onemogući snimanje ekrana na popisu nedavnih i unutar aplikacije</string>
     <string name="pref_notifications">Obavijesti</string>
     <string name="pref_notifications_show">Prikaži</string>
+    <string name="pref_notifications_priority">Prioritet</string>
     <string name="pref_led_color">Boja LED</string>
+    <string name="pref_led_pattern">LED uzorak treptanja</string>
     <string name="pref_sound">Zvuk</string>
     <string name="pref_silent">Tiho</string>
     <string name="pref_privacy">Privatnost</string>
+    <string name="pref_chats_and_media">Razgovori i media</string>
     <!-- Translators: "light" in the meaning "opposite of dark" -->
     <string name="pref_light_theme">Svijetlo</string>
     <string name="pref_dark_theme">Tamno</string>
+    <string name="pref_appearance">Izgled</string>
     <string name="pref_theme">Tema</string>
     <string name="pref_language">Jezik</string>
+    <string name="pref_incognito_keyboard">Inkognito tipkovnica</string>
+    <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
+    <string name="pref_incognito_keyboard_explain">Zahtijevaj od tipkovnice da onemogući personalizirano učenje</string>
+    <string name="pref_read_receipts">Potvrde čitanja</string>
+    <string name="pref_read_receipts_explain">Ukoliko ste onemogućili potvrdu čitanja kod sebe, nećete moći vidjeti potvrde čitanja od drugih.</string>
+    <string name="pref_use_system_emoji">Koristi emotikone sustava</string>
+    <string name="pref_use_system_emoji_explain">Onemogući ugrađenu Delta Chat podršku za emotikone</string>
+    <string name="pref_app_access">Pristup aplikaciji</string>
+    <string name="pref_communication">Komunikacija</string>
+    <string name="pref_chats">Razgovori</string>
     <string name="pref_messages">Poruke</string>
+    <string name="pref_in_chat_sounds">Zvuk unutar razgovora</string>
+    <string name="pref_message_text_size">Veličina fonta poruke</string>
     <string name="pref_other">Ostalo</string>
     <string name="pref_backup">Sigurnosna kopija</string>
     <string name="pref_background">Pozadina</string>
@@ -178,27 +242,43 @@
     <string name="systemmsg_action_by_user">%1$s od %2$s.</string>
 
 
+    <!-- screen lock -->
+    <string name="screenlock_title">Zaključavanje zaslona</string>
+    <string name="screenlock_explain">Zaključi pristup Delta Chat-u putem zaključavanjem ekrana Androida ili otiska prsta.</string>
+    <string name="screenlock_unlock_title">Otključaj Delta Chat</string>
+    <string name="screenlock_inactivity_timeout_explain">Automatski zaključaj Delta Chat nakon određenog vremenskog intervala neaktivnosti</string>
     <!-- qr code stuff -->
     <string name="qr_code">QR kod</string>
     <string name="qrscan_fingerprint_label">Otisak prsta</string>
     <string name="notify_mark_all_read">Označi sve kao pročitane</string>
     <string name="notify_mark_read">Označi pročitano</string>
+    <string name="notify_media_message">Multimedijalna poruka</string>
     <string name="notify_reply_button">Odgovori</string>
     <string name="notify_new_message">Nova poruka</string>
+    <string name="notify_priority_high">Visoko</string>
+    <string name="notify_priority_max">Maks</string>
     <string name="notify_name_and_message">Ime i poruka</string>
     <string name="notify_name_only">Samo ime</string>
     <string name="notify_no_name_or_message">Bez imena ili poruke</string>
 
 
+    <!-- permissions -->
+    <string name="perm_required_title">Potrebna je dozvola</string>
     <string name="perm_continue">Nastavi</string>
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
+    <string name="welcome_desktop">Dobro došli u Delta Chat</string>
     <string name="global_menu_preferences_language_desktop">Jezik</string>
+    <string name="global_menu_file_desktop">Datoteka</string>
     <string name="global_menu_file_quit_desktop">Izlaz</string>
+    <string name="global_menu_edit_desktop">Uredi</string>
+    <string name="global_menu_edit_undo_desktop">Vrati</string>
     <string name="global_menu_edit_copy_desktop">Kopiraj</string>
     <string name="global_menu_edit_paste_desktop">Zalijepi</string>
     <string name="global_menu_view_desktop">Pogledaj</string>
     <string name="global_menu_help_desktop">Pomoć</string>
     <string name="global_menu_help_report_desktop">Prijavite problem</string>
     <string name="delete_message_desktop">Obriši poruku</string>
+    <string name="more_info_desktop">Više informacija</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
     <string name="remove_desktop">Ukloni</string>
     <string name="save_desktop">Spremi</string>
@@ -209,6 +289,7 @@
     <string name="download_attachment_desktop">Preuzmi privitak</string>
     <string name="new_message_from_desktop">Nova poruka od</string>
     <string name="me_desktop">ja</string>
+    <string name="in_this_group_desktop">Članovi grupe</string>
     <string name="message_detail_sent_desktop">poslano</string>
     <string name="message_detail_received_desktop">primljeno</string>
     <string name="message_detail_from_desktop">od</string>
