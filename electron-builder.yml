@@ -1,0 +1,91 @@
+# unpack core from asar
+asarUnpack:
+ - 'node_modules/deltachat-node/prebuilds'
+
+files:
+  - filter:
+    - "**/*" 
+    # misc unrelated stuff
+    - "!README_ASSETS/"
+    - "!README.md"
+    - "!.*"
+    - "!bin/"
+    - "!test/"
+    - "!jenkins/"
+    - "!ci_scripts/"
+    - "!**/.github/*"
+    # Source files
+    - "!src/"
+    - "!scss/"
+    - "!static/"
+    - "!**/*.scss"
+    - "!**/*.ts"
+    - "!**/*.d.ts"
+    # Build artifacts
+    - "!tsc-dist/renderer/"
+    - "!**/*.tsbuildinfo"
+    - "!**/*.js.map"
+    - "!**/*.css.map"
+    - "!html-dist/report.htm"
+    - "!node_modules/typescript/"
+    - "!node_modules/@babel/"
+    # remove stuff that was already bundled by parcel
+    - "!node_modules/mapbox-gl/"
+    - "!node_modules/@blueprintjs/"
+    - "!node_modules/vt-pbf/"
+    - "!node_modules/emoji-mart/"
+    - "!node_modules/react-dom/"
+    - "!node_modules/styled-components/"
+    - "!node_modules/emoji-js-clean/"
+    - "!node_modules/@mapbox/"
+    - "!node_modules/react/"
+    - "!node_modules/react-contextmenu/"
+    - "!node_modules/react-transition-group/"
+    - "!node_modules/css-to-react-native"
+    - "!node_modules/simple-markdown"
+    - "!node_modules/babel-plugin-styled-components"
+    - "!node_modules/wolfy87-eventemitter"
+    # re-add needed css stuff
+    - "node_modules/normalize.css/normalize.css"
+    - "node_modules/@blueprintjs/core/lib/css/blueprint.css"
+    - "node_modules/@blueprintjs/icons/resources/icons/"
+    - "node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css"
+    - "node_modules/emoji-mart/css/emoji-mart.css"
+    - "node_modules/mapbox-gl/dist/mapbox-gl.css"
+    # cleanup deltachat-node
+    - "!node_modules/deltachat-node/deltachat-core-rust/"
+    - "!node_modules/deltachat-node/src"
+
+afterSign: "build/notarize.js"
+# platform specific
+mac:
+  category: public.app-category.social-networking
+  appId: chat.delta.desktop.electron
+  icon: resources/icon.icns
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+dmg:
+  sign: false
+  contents:
+    - x: 220
+      y: 200
+    - x: 448
+      y: 200
+      type: "link"
+      path: "/Applications"
+linux:
+  target:
+    - AppImage
+    - deb
+  category: "Network;Chat;InstantMessaging;"
+  desktop:
+    comment: "Delta Chat email-based messenger"
+    keywords: "dc;chat;delta;messaging;messenger;email"
+  # files: # for some reason this replaces the global exclude list instead of merging into it
+  #   - filter:
+  #     - "!node_modules/deltachat-node/prebuilds/darwin-x64/${/*}"
+  #     - "!node_modules/deltachat-node/prebuilds/win32-x64/${/*}"
+win:
+  icon: "images/deltachat.ico"

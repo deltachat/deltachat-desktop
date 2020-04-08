@@ -123,6 +123,7 @@
     "electron": "6.1.9",
     "electron-builder": "^22.6.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-notarize": "^0.3.0",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^2.0.0",

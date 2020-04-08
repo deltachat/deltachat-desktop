@@ -79,3 +79,6 @@ static/fallback-theme.css
 themes/*.css
 
 src/shared/build-info.ts
+# ignore provisioning file
+embedded.provisionprofile
+
