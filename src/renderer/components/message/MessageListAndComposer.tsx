@@ -20,7 +20,10 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const [setComposerSize] = useDebouncedCallback((size: number) => setState({ composerSize: size }), 25)
+  const [setComposerSize] = useDebouncedCallback(
+    (size: number) => setState({ composerSize: size }),
+    25
+  )
 
   const onDrop = (e: React.DragEvent<any>) => {
     const files = (e.target as any).files || e.dataTransfer.files
