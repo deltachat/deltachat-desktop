@@ -590,7 +590,9 @@ class BackgroundSelector extends React.Component {
           ].map(elem => (
             <div
               onClick={this.onButton.bind(this, 'pimage')}
-              style={{ backgroundImage: `url(../images/backgrounds/${elem})` }}
+              style={{
+                backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
+              }}
               key={elem}
               data-url={elem}
             />
