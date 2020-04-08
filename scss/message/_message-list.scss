@@ -8,6 +8,7 @@
   background-image: var(--chatViewBgImgPath);
   background-size: cover;
   background-color: var(--chatViewBg);
+  overflow: hidden;
 }
 
 .message-list-and-composer__message-list {
