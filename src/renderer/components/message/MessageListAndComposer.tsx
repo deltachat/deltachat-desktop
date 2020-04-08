@@ -1,18 +1,16 @@
 import React, { useRef, useState, useContext } from 'react'
 import { callDcMethod } from '../../ipc'
-
 import Composer from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
-
 import MessageList from './MessageList'
-
 import { SettingsContext, ScreenContext } from '../../contexts'
-
 import { C } from 'deltachat-node/dist/constants'
-import { debounce } from 'debounce'
+import { useDebouncedCallback } from 'use-debounce'
+
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')
+
 export default function MessageListAndComposer({ chat }: { chat: any }) {
   const [state, setState] = useState({
     //error: false,
@@ -22,9 +20,9 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const setComposerSize = debounce(
+  const [setComposerSize] = useDebouncedCallback(
     (size: number) => setState({ composerSize: size }),
-    50
+    25
   )
 
   const onDrop = (e: React.DragEvent<any>) => {
