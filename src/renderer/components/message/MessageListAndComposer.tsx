@@ -9,6 +9,7 @@ import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 
 import { C } from 'deltachat-node/dist/constants'
+import { debounce } from 'debounce'
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')
@@ -21,7 +22,10 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const setComposerSize = (size: number) => setState({ composerSize: size })
+  const setComposerSize = debounce(
+    (size: number) => setState({ composerSize: size }),
+    50
+  )
 
   const onDrop = (e: React.DragEvent<any>) => {
     const files = (e.target as any).files || e.dataTransfer.files
