@@ -54,8 +54,13 @@ async function run (command, args) {
     const p = child.spawn(command, args)
     p.stdout.pipe(process.stdout)
     p.stderr.pipe(process.stderr)
-    p.on('close', resolve)
-    p.on('error', reject)
+    p.on('exit', (err) => {
+      if (err) {
+        reject('running "' + command + ' ' + args.join(' ') + '" failed')
+      } else {
+        resolve()
+      }
+    })
   })
 }
 

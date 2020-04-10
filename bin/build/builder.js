@@ -72,7 +72,10 @@ if (buildEverything || rc.styles) {
 // JS
 
 if (buildEverything || rc.js) {
-  jsBuilder(watch, sourceMaps, envDev)
+  jsBuilder(watch, sourceMaps, envDev).catch(err => {
+    console.log(err)
+    process.exit(1) // needed to stop npm run to execute next step
+  })
 }
 
 // TRANSLATIONS
