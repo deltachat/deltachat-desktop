@@ -43,11 +43,48 @@ export function DeltaDialogImportQrInner({
   const tx = window.translate
   const [ qrCode, setQrCode ] = useState('')
   const screenContext = useContext(ScreenContext)
+
+  const handleResponse = async(txt: string) =>
+  {
+    setQrCode(txt)
+    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', txt)
+    if (response === null) {
+      return
+    }
+    const tx = window.translate
+    const state = qrStates[response.state]
+    if ( state === 'QrAskVerifyContact') {
+      const contact = await callDcMethodAsync('contacts.getContact', response.id);
+      screenContext.openDialog('ConfirmationDialog', {
+        message: tx('ask_start_chat_with', contact.address),
+        confirmLabel: tx('ok'),
+        cb: async (confirmed: boolean) => {
+          if (confirmed) {
+            const chatId = await callDcMethodAsync('contacts.createChatByContactId', response.id)
+            selectChat(chatId)
+            onClose()
+          }
+        }
+      })
+    } else if ( state === 'QrAskVerifyGroup') {
+      screenContext.openDialog('ConfirmationDialog', {
+        message: tx('qrscan_ask_join_group', response.text1),
+        confirmLabel: tx('ok'),
+        cb: async (confirmed: boolean) => {
+          if (confirmed) {
+            const chatId = await callDcMethodAsync('chat.createGroupChat', [false, response.text1])
+            selectChat(chatId)
+            onClose()
+          }
+        }
+      })
+    }
+  }
+
   return (
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding>
-          
           <div className='qr-data'>
             <div className='content' aria-label={tx('a11y_qr_data')}>
               {qrCode}
@@ -56,33 +93,7 @@ export function DeltaDialogImportQrInner({
               className='copy-btn'
               role='button'
               onClick={() => {
-                navigator.clipboard.readText().then(async(txt) =>
-                  {
-                    setQrCode(txt)
-                    console.log(txt)
-                    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', txt)
-                    console.log(response) // tsdj
-                    if (response === null) {
-                      return
-                    }
-                    const tx = window.translate
-                    const state = qrStates[response.state]
-                    if ( state === 'QrAskVerifyContact') {
-                      const contact = await callDcMethodAsync('getContact', response.id);
-                      screenContext.openDialog('ConfirmationDialog', {
-                        message: tx('ask_start_chat_with', contact.address),
-                        confirmLabel: tx('ok'),
-                        cb: async (confirmed: boolean) => {
-                          if (confirmed) {
-                            const chatId = await callDcMethodAsync('contacts.createChatByContactId', response.id)
-                            selectChat(chatId)
-                            onClose()
-                          }
-                        },
-                      })
-                    }
-                  }
-                )
+                navigator.clipboard.readText().then(handleResponse)
               }}
             >
               <Icon icon='clipboard' />
