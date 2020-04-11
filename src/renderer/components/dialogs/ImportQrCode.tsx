@@ -1,0 +1,130 @@
+import React, { useContext, useState } from 'react'
+import DeltaDialog, {
+  DeltaDialogBody,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+} from './DeltaDialog'
+import { ScreenContext } from '../../contexts'
+import { Icon } from '@blueprintjs/core'
+import { LocalSettings } from '../../../shared/shared-types'
+import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { useChatStore } from '../../stores/chat'
+import { Contact } from 'deltachat-node'
+
+interface QrStates {
+  [key: number]: string;
+}const tx = window.translate
+
+const qrStates: QrStates = {
+  200: 'QrAskVerifyContact', // id = contact
+  202: 'QrAskVerifyGroup', // text1=groupname
+  210: 'QrFprOk', // finger print ok for id=contact
+  220: 'QrFprMissmatch', // finger print not ok for id=contact
+  230: 'QrFprWithoutAddr', 
+  250: 'QrAccount', // text1=domain
+  320: 'QrAddr', // id=contact
+  330: 'QrText', // text1=text
+  332: 'QrUrl', // text1=URL
+  400: 'QrError' // text1=error string
+}
+
+declare type QrCodeResponse = {
+  state: keyof QrStates;
+  id: number;
+  text1: string;
+}
+
+async function handleQrResponse(lot: QrCodeResponse) {
+  const screenContext = useContext(ScreenContext)
+  console.log(lot) // tsdj
+  if (lot === null) {
+    return
+  }
+  const tx = window.translate
+  const state = qrStates[lot.state]
+  const chatStoreDispatch = useChatStore()[1]
+  if ( state === 'QrAskVerifyContact') {
+    const contact: Contact = await callDcMethodAsync('getContact', lot.id)
+    screenContext.openDialog('ConfirmationDialog', {
+      message: tx('ask_start_chat_with', contact.getAddress()),
+      confirmLabel: tx('ok'),
+      cb: async (confirmed: boolean) => {
+        if (confirmed) {
+          const chatId = await callDcMethodAsync('createChatByContactId', lot.id)
+          chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+        }
+      },
+    })
+  }
+}
+
+export function DeltaDialogImportQrInner({
+  description,
+}: {
+  qrCode: string
+  description: string
+}) {
+  const tx = window.translate
+  const [ qrCode, setQrCode ] = useState('')
+  return (
+    <>
+      <DeltaDialogBody>
+        <DeltaDialogContent noOverflow noPadding>
+          
+          <div className='qr-data'>
+            <div className='content' aria-label={tx('a11y_qr_data')}>
+              {qrCode}
+            </div>
+            <div
+              className='copy-btn'
+              role='button'
+              onClick={() => {
+                navigator.clipboard.readText().then(txt =>
+                  {
+                    setQrCode(txt)
+                    console.log(txt)
+                    callDcMethod('checkQrCode', txt, handleQrResponse)
+                  }
+                )
+              }}
+            >
+              <Icon icon='clipboard' />
+            </div>
+          </div>
+        </DeltaDialogContent>
+      </DeltaDialogBody>
+      <DeltaDialogFooter>
+        <p style={{ textAlign: 'center' }}>{description}</p>
+      </DeltaDialogFooter>
+    </>
+  )
+}
+
+export default function ImportQrCode({
+  onClose,
+  isOpen,
+  qrCode,
+  deltachat,
+}: {
+  onClose: () => void
+  isOpen: boolean
+  qrCode: string
+  deltachat: LocalSettings
+}) {
+  const tx = window.translate
+  const Dialog = DeltaDialog as any // todo remove this cheat.
+  return (
+    <Dialog
+      title={tx('qrshow_join_contact_title')}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <DeltaDialogImportQrInner
+        description={tx('qrshow_join_contact_hint', [
+          deltachat.credentials.addr,
+        ])}
+        qrCode={qrCode}
+      />
+    </Dialog>
+  )
+}

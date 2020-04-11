@@ -259,6 +259,10 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
+  checkQrCode(qrCode) {
+    return this._dc.checkQrCode(qrCode)
+  }
+
   // ToDo: Deprecated, use contacts.getContact
   getContact(id: number) {
     const contact = this._dc.getContact(id).toJson()
