@@ -38,9 +38,10 @@ async function jsBuilder (watch, sourcemap, dev) {
   if (sourcemap) {
     // fix source maps
     const sourceMap = await fs.readJSON('./html-dist/bundle.js.map')
-    sourceMap.sources = sourceMap.sources.map((source) => {
-      return source.replace(/\.\.\//g, '')
-    })
+    sourceMap.sources = sourceMap.sources.map((source) => 
+      // fix path depth & move all non renderer souces to .ignore folder
+-     (source.indexOf('src/renderer') > -1) ? source.replace(/\.\.\//g, '') : source.replace(/\.\.\//g, '.ignore/')
+    )
     sourceMap.sourceRoot = '../'
 
     await fs.writeJSON('./html-dist/bundle.js.map', sourceMap)

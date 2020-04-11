@@ -7,9 +7,8 @@ import DeltaDialog, {
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
-import { useChatStore } from '../../stores/chat'
-import { Contact } from 'deltachat-node'
+import { callDcMethodAsync } from '../../ipc'
+import { selectChat } from '../../stores/chat'
 
 interface QrStates {
   [key: number]: string;
@@ -34,38 +33,16 @@ declare type QrCodeResponse = {
   text1: string;
 }
 
-async function handleQrResponse(lot: QrCodeResponse) {
-  const screenContext = useContext(ScreenContext)
-  console.log(lot) // tsdj
-  if (lot === null) {
-    return
-  }
-  const tx = window.translate
-  const state = qrStates[lot.state]
-  const chatStoreDispatch = useChatStore()[1]
-  if ( state === 'QrAskVerifyContact') {
-    const contact: Contact = await callDcMethodAsync('getContact', lot.id)
-    screenContext.openDialog('ConfirmationDialog', {
-      message: tx('ask_start_chat_with', contact.getAddress()),
-      confirmLabel: tx('ok'),
-      cb: async (confirmed: boolean) => {
-        if (confirmed) {
-          const chatId = await callDcMethodAsync('createChatByContactId', lot.id)
-          chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
-        }
-      },
-    })
-  }
-}
 
 export function DeltaDialogImportQrInner({
-  description,
+  description, onClose
 }: {
-  qrCode: string
-  description: string
+  description: string,
+  onClose: () => void
 }) {
   const tx = window.translate
   const [ qrCode, setQrCode ] = useState('')
+  const screenContext = useContext(ScreenContext)
   return (
     <>
       <DeltaDialogBody>
@@ -79,11 +56,31 @@ export function DeltaDialogImportQrInner({
               className='copy-btn'
               role='button'
               onClick={() => {
-                navigator.clipboard.readText().then(txt =>
+                navigator.clipboard.readText().then(async(txt) =>
                   {
                     setQrCode(txt)
                     console.log(txt)
-                    callDcMethod('checkQrCode', txt, handleQrResponse)
+                    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', txt)
+                    console.log(response) // tsdj
+                    if (response === null) {
+                      return
+                    }
+                    const tx = window.translate
+                    const state = qrStates[response.state]
+                    if ( state === 'QrAskVerifyContact') {
+                      const contact = await callDcMethodAsync('getContact', response.id);
+                      screenContext.openDialog('ConfirmationDialog', {
+                        message: tx('ask_start_chat_with', contact.address),
+                        confirmLabel: tx('ok'),
+                        cb: async (confirmed: boolean) => {
+                          if (confirmed) {
+                            const chatId = await callDcMethodAsync('contacts.createChatByContactId', response.id)
+                            selectChat(chatId)
+                            onClose()
+                          }
+                        },
+                      })
+                    }
                   }
                 )
               }}
@@ -123,7 +120,7 @@ export default function ImportQrCode({
         description={tx('qrshow_join_contact_hint', [
           deltachat.credentials.addr,
         ])}
-        qrCode={qrCode}
+        onClose={onClose}
       />
     </Dialog>
   )

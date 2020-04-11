@@ -259,7 +259,7 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  checkQrCode(qrCode) {
+  checkQrCode(qrCode: string) {
     return this._dc.checkQrCode(qrCode)
   }
 

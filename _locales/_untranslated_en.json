@@ -85,11 +85,6 @@
   },
   "copy_qr_data_success": {
     "message": "Copied qr code data to clipboard"
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Add import QR dialog
   },
   "global_menu_view_zoom_factor": {
     "message": "Zoom Factor"
