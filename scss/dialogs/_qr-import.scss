@@ -1,0 +1,17 @@
+div.import-qr-code-dialog {
+  text-align: center;
+  .qr-image-loader {
+    max-height: 0;
+  }
+  .qr-data .content {
+    height: 25px;
+    text-align: left;
+  }
+  .copy-btn {
+    position: absolute;
+    right: 20px;
+  }
+  .bp3-button {
+    margin: 10px;
+  }
+}

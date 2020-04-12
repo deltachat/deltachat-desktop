@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
@@ -9,6 +9,7 @@ import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
 import { callDcMethodAsync } from '../../ipc'
 import { selectChat } from '../../stores/chat'
+import QrReader from 'react-qr-reader'
 
 interface QrStates {
   [key: number]: string;
@@ -33,7 +34,6 @@ declare type QrCodeResponse = {
   text1: string;
 }
 
-
 export function DeltaDialogImportQrInner({
   description, onClose
 }: {
@@ -42,18 +42,27 @@ export function DeltaDialogImportQrInner({
 }) {
   const tx = window.translate
   const [ qrCode, setQrCode ] = useState('')
+  const [ useCamera, setUseCamera ] = useState(false)
   const screenContext = useContext(ScreenContext)
 
   const handleResponse = async(txt: string) =>
   {
     setQrCode(txt)
+    const tx = window.translate
+    let error = false
     const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', txt)
     if (response === null) {
-      return
+      error = true
     }
-    const tx = window.translate
     const state = qrStates[response.state]
-    if ( state === 'QrAskVerifyContact') {
+    if (error || state === 'QrError' || state === 'QrText') {
+      screenContext.userFeedback({
+        type: 'error',
+        text: tx('import_qr_error'),
+      });
+      return;
+    }
+    if (state === 'QrAskVerifyContact') {
       const contact = await callDcMethodAsync('contacts.getContact', response.id);
       screenContext.openDialog('ConfirmationDialog', {
         message: tx('ask_start_chat_with', contact.address),
@@ -81,28 +90,91 @@ export function DeltaDialogImportQrInner({
     }
   }
 
+  const qrImageReader = useRef<any>()
+
+  const handleScan = (data: string) => {
+    if (data) {
+      handleResponse(data)
+    }
+  }
+
+  const onImageLoad = (img: ImageBitmap) => {
+    console.log(img)
+  }
+
+  const handleError = (err: string) => {
+    console.error(err)
+  }
+
+  const toggleCamera = () => {
+    setUseCamera(!useCamera)
+  }
+
+  const openImageDialog = () => {
+    qrImageReader.current.openImageDialog()
+  }
+
   return (
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding>
-          <div className='qr-data'>
-            <div className='content' aria-label={tx('a11y_qr_data')}>
-              {qrCode}
+          <div className='import-qr-code-dialog'>
+            <div className='qr-data'>
+              <div className='content' aria-label={tx('a11y_qr_data')}>
+                {qrCode}
+              </div>
+              <div
+                title={tx('paste_from_clipboard')}
+                className='copy-btn'
+                role='button'
+                onClick={() => {
+                  navigator.clipboard.readText().then(handleResponse)
+                }}
+              >
+                <Icon icon='clipboard' />
+              </div>
             </div>
-            <div
-              className='copy-btn'
-              role='button'
-              onClick={() => {
-                navigator.clipboard.readText().then(handleResponse)
-              }}
-            >
-              <Icon icon='clipboard' />
+            <button onClick={openImageDialog} className={'bp3-button'}>
+            {tx('load_qr_code_as_image')}
+            </button>
+            {!useCamera && 
+            <button
+              aria-label={tx('scan_with_camera')}
+              onClick={toggleCamera}
+              className={'bp3-button'}
+            >{tx('scan_with_camera')}</button>}
+            {useCamera && 
+            <div>
+              <button
+              aria-label={tx('cancel_camera')}
+              onClick={toggleCamera}
+              className={'bp3-button'}
+              >{tx('cancel_camera')}</button> 
+              <div>
+                <QrReader
+                  delay={300}
+                  onError={handleError}
+                  onScan={handleScan}
+                  style={{ width: '100%' }}
+                />
+                
+              </div>
+            </div>}
+            <div className='qr-image-loader'>
+              <QrReader
+                delay={300}
+                ref={qrImageReader}
+                onError={handleError}
+                onScan={handleScan}
+                onImageLoad={onImageLoad}
+                style={{ width: '100%' }}
+                legacyMode
+              />
             </div>
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
       <DeltaDialogFooter>
-        <p style={{ textAlign: 'center' }}>{description}</p>
       </DeltaDialogFooter>
     </>
   )
@@ -111,7 +183,6 @@ export function DeltaDialogImportQrInner({
 export default function ImportQrCode({
   onClose,
   isOpen,
-  qrCode,
   deltachat,
 }: {
   onClose: () => void
@@ -123,14 +194,12 @@ export default function ImportQrCode({
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
     <Dialog
-      title={tx('qrshow_join_contact_title')}
+      title={tx('import_qr_title')}
       isOpen={isOpen}
       onClose={onClose}
     >
       <DeltaDialogImportQrInner
-        description={tx('qrshow_join_contact_hint', [
-          deltachat.credentials.addr,
-        ])}
+        description=''
         onClose={onClose}
       />
     </Dialog>
