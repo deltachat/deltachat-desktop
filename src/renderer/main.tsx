@@ -9,9 +9,12 @@ import App from './App'
 
 function main() {
   exp.help //make sure experimental.ts is used
+  const rc = (remote.app as ExtendedApp).rc
+  console.log('rc', rc)
   logger.setLogHandler(
     (...args: any[]) => ipcRenderer.send('handleLogMessage', ...args),
-    (remote.app as ExtendedApp).rc
+    rc
+    
   )
   logger.printProcessLogLevelInfo()
 

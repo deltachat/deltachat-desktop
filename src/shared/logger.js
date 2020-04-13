@@ -96,7 +96,7 @@ class Logger {
   }
 
   debug(...args) {
-    if (!rc['log-debug']) return
+    if (!rc || !rc['log-debug']) return
     log(this, 0, undefined, args)
   }
 
