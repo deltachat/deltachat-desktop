@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import logger from '../../shared/logger'
+import * as logger from '../../../shared/logger'
 
 export function useStore<T extends Store<any>>(
   StoreInstance: T

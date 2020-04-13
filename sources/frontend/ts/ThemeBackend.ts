@@ -1,5 +1,5 @@
 import Color from 'color'
-import { getLogger } from '../shared/logger'
+import { getLogger } from '../../shared/logger'
 
 const log = getLogger('render/theme-backend')
 

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
-import logger from '../../../shared/logger'
+import * as logger from '../../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   appVersion,
   gitHubUrl,
   gitHubLicenseUrl,
-} from '../../../shared/constants'
+} from '../../../../shared/constants'
 import ClickableLink from '../helpers/ClickableLink'
 
 const log = logger.getLogger('renderer/dialogs/About')

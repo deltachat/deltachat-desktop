@@ -13,9 +13,9 @@ import {
   startBackendLogging,
 } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState } from '../shared/shared-types'
-import { translate, LocaleData } from '../shared/localize'
-import logger from '../shared/logger'
+import { ExtendedApp, AppState } from '../../shared/shared-types'
+import { translate, LocaleData } from '../../shared/localize'
+import * as logger from '../../shared/logger'
 
 
 const log = logger.getLogger('renderer/App')

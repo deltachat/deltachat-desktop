@@ -7,13 +7,13 @@ import {
   DeltaDialogContentTextSeperator,
 } from './DeltaDialog'
 import { Avatar } from '../contact/Contact'
-import { integerToHexColor } from '../../../shared/util'
+import { integerToHexColor } from '../../../../shared/util'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { callDcMethodAsync } from '../../ipc'
 import { Button } from '@blueprintjs/core'
-import { JsonContact } from '../../../shared/shared-types'
+import { JsonContact } from '../../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 

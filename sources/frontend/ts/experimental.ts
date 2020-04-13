@@ -1,5 +1,5 @@
 import { callDcMethodAsync } from './ipc'
-import { getLogger } from '../shared/logger'
+import { getLogger } from '../../shared/logger'
 
 const log = getLogger('renderer/experiments')
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import MessageMetaData from '../message/MessageMetaData'
-import { JsonMessage } from '../../../shared/shared-types'
+import { JsonMessage } from '../../../../shared/shared-types'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 export default class PopupMessage extends React.Component<{

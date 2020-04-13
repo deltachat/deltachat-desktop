@@ -38,7 +38,7 @@ export const allDialogs = {
 }
 
 export type DialogId = keyof typeof allDialogs
-import logger from '../../../shared/logger'
+import * as logger from '../../../../shared/logger'
 const log = logger.getLogger('renderer/dialogs')
 
 type dialogs = {

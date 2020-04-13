@@ -1,4 +1,4 @@
-import { JsonLocations } from '../../shared/shared-types'
+import { JsonLocations } from '../../../shared/shared-types'
 import { callDcMethod } from '../ipc'
 import { Store, Action } from './store'
 

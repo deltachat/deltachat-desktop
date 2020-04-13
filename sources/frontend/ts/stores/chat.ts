@@ -6,7 +6,7 @@ import {
   saveLastChatId,
 } from '../ipc'
 import { Store, useStore, Action } from './store'
-import { JsonContact, FullChat } from '../../shared/shared-types'
+import { JsonContact, FullChat } from '../../../shared/shared-types'
 
 export const PAGE_SIZE = 10
 

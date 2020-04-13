@@ -1,4 +1,4 @@
-import { getMessageFunction, LocaleData } from '../shared/localize'
+import { getMessageFunction, LocaleData } from '../../shared/localize'
 
 import Electron from 'electron'
 import { ThemeManager } from './ThemeManager'

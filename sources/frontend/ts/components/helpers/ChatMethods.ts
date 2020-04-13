@@ -5,7 +5,7 @@ import {
   ChatListItemType,
   JsonContact,
   FullChat,
-} from '../../../shared/shared-types'
+} from '../../../../shared/shared-types'
 
 type Chat = ChatListItemType | FullChat
 
