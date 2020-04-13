@@ -1,10 +1,10 @@
 // Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
 
 // import node_module dependencies
-@import '../node_modules/normalize.css/normalize.css';
-@import '../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
-@import '../node_modules/@blueprintjs/core/lib/css/blueprint.css';
-@import '../node_modules/emoji-mart/css/emoji-mart.css';
+@import '../../../node_modules/normalize.css/normalize.css';
+@import '../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import '../../../node_modules/@blueprintjs/core/lib/css/blueprint.css';
+@import '../../../node_modules/emoji-mart/css/emoji-mart.css';
 
 // Global Settings, Variables, and Mixins
 @import 'variables';

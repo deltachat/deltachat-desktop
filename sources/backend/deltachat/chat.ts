@@ -1,5 +1,5 @@
 import { C } from 'deltachat-node'
-import logger from '../../shared/logger'
+import * as logger from '../../shared/logger'
 import SplitOut from './splitout'
 
 const log = logger.getLogger('main/deltachat/chat')

@@ -1,6 +1,6 @@
 import DeltaChat, { C, Chat, ChatList } from 'deltachat-node'
 import { app } from 'electron'
-import logger from '../../shared/logger'
+import * as logger from '../../shared/logger'
 import {
   ChatListItemType,
   JsonChat,

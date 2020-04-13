@@ -1,32 +1,30 @@
 {
   "compilerOptions": {
-    "outDir": "../../dist/backend",
-    "rootDir": ".",
+      "outDir": "../../dist/backend/",
+      "rootDir": ".",
+    
+      // Compile for node/electron main process
+      "module": "commonjs",
+      "target": "es6",
 
-    // Compile for node/electron main process
-    "module": "commonjs",
-    "target": "es6",
+      // Enable source maps for debugging  
+      "sourceMap": true,
+      "sourceRoot": "../../dist/backend/",
+      "inlineSources": true,
+  
+      // Incremental builds
+      "composite": true,
+      "incremental": true,
+      "tsBuildInfoFile": "../../dist/backend/.tsbuildinfo",
 
-    // Enable source maps for debugging  
-    "sourceMap": true,
-    "sourceRoot": "../../../dist/backend",   
-
-    // Incremental builds
-    "composite": true,
-    "incremental": true,
-    "tsBuildInfoFile": "../../../dist/backend/.tsbuildinfo",
-
-    "noImplicitAny": true,
-    "allowJs": true,
-    "esModuleInterop": true
+      "allowJs": true,
+      "noImplicitAny": true,
+      "esModuleInterop": true,
+        
   },
-  "include": [
-    "./**/*.ts",
-    "./**/*.js"
-  ],
   "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
+      {
+          "path": "../shared/tsconfig.json"
+      }
   ]
 }

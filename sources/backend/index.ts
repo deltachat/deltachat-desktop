@@ -26,7 +26,7 @@ ensureDirSync(getAccountsPath())
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'
 const logHandler = createLogHandler()
-import logger from '../shared/logger'
+import * as logger from '../shared/logger'
 const log = logger.getLogger('main/index')
 logger.setLogHandler(logHandler.log, rc)
 process.on('exit', logHandler.end)
@@ -179,20 +179,6 @@ app.on('web-contents-created', (e, contents) => {
   })
 })
 
-let contentSecurity = "default-src ' 'none'"
-if (process.env.NODE_ENV === 'test') {
-  contentSecurity =
-    "default-src 'unsafe-inline' 'self' 'unsafe-eval'; img-src 'self' data:;"
-}
-
 app.once('ready', () => {
   devTools.tryInstallReactDevTools()
-  session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
-    fun({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurity],
-      },
-    })
-  })
 })

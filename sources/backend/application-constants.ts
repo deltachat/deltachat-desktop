@@ -23,8 +23,8 @@ export function windowDefaults() {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${join(__dirname, '..', '..', 'html-dist', targetFile)}`,
-    preload: join(__dirname, '..', '..', 'html-dist', 'preload.js'),
+    main: `file://${join(__dirname, '..', '..', 'dist', 'frontend', targetFile)}`,
+    preload: join(__dirname, '..', '..', 'dist', 'frontend', 'preload.js'),
   }
 }
 

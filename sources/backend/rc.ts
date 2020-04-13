@@ -12,6 +12,6 @@ const defaults: RC_Config = {
   'theme-watch': false,
 }
 
-const rc_config = Object.freeze(rc('DeltaChat', defaults) as RC_Config)
+const rc_config:any = Object.freeze(rc('DeltaChat', defaults) as RC_Config)
 
 export default rc_config

@@ -24,6 +24,7 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
   try {
     return require('./deltachat/controller').default
   } catch (error) {
+    console.error(error)
     log.critical(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error

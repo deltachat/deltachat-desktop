@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'none';
+          content="default-src 'sha256-Jn5I+BB3vYJLolQ8WAbK5x/634RemOeC63UpaZP8poM=';
                    style-src 'self' 'unsafe-inline';
                    font-src 'self';
-                   script-src 'self';
+                   script-src 'self' 'sha256-Jn5I+BB3vYJLolQ8WAbK5x/634RemOeC63UpaZP8poM=';
                    worker-src blob: ;
                    child-src blob: ;
                    img-src 'self' data: blob: ;
@@ -16,13 +16,13 @@
     >
     <link rel="stylesheet" href="./fonts/fonts.css">
     <!-- add other blueprint-*.css files here -->
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="./css/main.css">
     <style id="theme-vars"></style>
   </head>
   <body>
     <div id='root'></div>
     <script type="text/javascript" src="./avoid-eval.js"></script>
-    <script type="module" src="./js/app/app.js"></script>
+    <script type="module" src="./js/app/App.js"></script>
     <div hidden>
       <input id='color-input' type='color'/>
     </div>

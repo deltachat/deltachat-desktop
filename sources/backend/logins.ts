@@ -1,7 +1,7 @@
 import { join, basename } from 'path'
 import fs from 'fs-extra'
 import { DeltaChat } from 'deltachat-node'
-import logger from '../shared/logger'
+import * as logger from '../shared/logger'
 const log = logger.getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { PromiseType } from '../shared/shared-types'

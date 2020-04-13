@@ -3,7 +3,6 @@
         "composite": true,
         "declaration": true,
         "outDir": "../../dist/shared",
-        "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es6",

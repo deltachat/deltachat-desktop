@@ -12,14 +12,14 @@ const app = rawApp as ExtendedAppMainProcess
 async function getHelpFileForLang(locale: string) {
   const appPath = app.getAppPath()
 
-  const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
+  const contentFilePath = join(appPath, `/dist/frontend/help/${locale}/help.html`)
   if (await pathExists(contentFilePath)) {
     return contentFilePath
   } else {
     log.warn(
       `Did not found help file for language ${locale}, falling back to english`
     )
-    return join(appPath, `/html-dist/help/en/help.html`)
+    return join(appPath, `/dist/frontend/help/en/help.html`)
   }
 }
 
