@@ -1,6 +1,6 @@
 import React from 'react'
-const debounce = require('debounce')
-const { callDcMethod } = require('../../ipc')
+import debounce from 'debounce'
+import { callDcMethod } from '../../ipc'
 
 type ComposerMessageInputProps = {
   draft: string

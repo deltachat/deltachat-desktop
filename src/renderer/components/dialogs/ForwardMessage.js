@@ -6,8 +6,7 @@ import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { callDcMethod } from '../../ipc'
-
-const { C } = require('deltachat-node/dist/constants')
+import { C } from 'deltachat-node/dist/constants'
 
 export default function ForwardMessage(props) {
   const tx = window.translate

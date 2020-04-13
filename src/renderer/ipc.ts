@@ -2,9 +2,10 @@
  * Encapsulate frontend <-> backend communication
  * to be able to switch this layer later on...
  */
+import logger from '../shared/logger'
 
 const { ipcRenderer } = window.electron_functions
-const log = require('../shared/logger').getLogger('renderer/ipc')
+const log = logger.getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
 

@@ -1,5 +1,5 @@
 // @ts-ignore
-const EmojiConvertor = require('emoji-js-clean')
+import EmojiConvertor from 'emoji-js-clean'
 // We only really need the regExes and the emoji data of this module
 
 const instance = new EmojiConvertor()

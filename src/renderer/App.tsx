@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { addLocaleData, IntlProvider } from 'react-intl'
+import enLocaleData from 'react-intl/locale-data/en'
+import moment from 'moment'
 import { ThemeProvider } from './ThemeManager'
 import { SettingsContext } from './contexts'
 import ScreenController from './ScreenController'
-import { addLocaleData, IntlProvider } from 'react-intl'
-import enLocaleData from 'react-intl/locale-data/en'
-const { remote } = window.electron_functions
 import {
   callDcMethod,
   sendToBackend,
@@ -14,12 +14,13 @@ import {
 } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
-
 import { translate, LocaleData } from '../shared/localize'
 import logger from '../shared/logger'
 
+
 const log = logger.getLogger('renderer/App')
-const moment = require('moment')
+const { remote } = window.electron_functions
+
 
 addLocaleData(enLocaleData)
 

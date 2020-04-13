@@ -77,7 +77,7 @@ function notUndefined(...variables: (any | undefined)[]) {
     .reduce((acc, cur) => acc || cur)
 }
 
-export function ThemeDataBuilder(theme: { [key: string]: string }) {
+export function ThemeDataBuilder(theme: any) {
   // todo resolve all strings to be dependent on vars of the highLevelObject
   // Its ok when highLevelObject is missing some properties
   // and the returned object misses some values as result,
@@ -277,7 +277,30 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
   return themeData
 }
 
-export const defaultTheme = Object.freeze(require('../../themes/light.json'))
+export const defaultTheme = Object.freeze({
+  "colorPrimary": "#42A5F5",
+  "colorDanger": "#f96856",
+  "colorNone": "#a0a0a0",
+  "bgImagePath": "../images/background_light.svg",
+  "bgPrimary": "#fff",
+  "bgSecondary": "#f5f5f5",
+  "accentColor": "#2090ea",
+  "textPrimary": "#010101",
+  "textSecondary": "#62656a",
+  "ovalButtonBg": "#415e6b",
+  "ovalButtonText": "#fff",
+  "bgChatView": "#e6dcd4",
+  "bgNavBar": "#415e6b",
+  "textNavBar": "#fff",
+  "bgMessageBubbleIncoming": "#fff",
+  "bgMessageBubbleOutgoing": "#efffde",
+  "raw": {
+      "scrollbarThumb": "#666666",
+      "scrollbarThumbHover": "#606060",
+      "bp3DialogBgSecondary": "#ececec",
+      "chatListItemBgHover": "rgb(228, 228, 228)"
+  }
+})
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 

@@ -14,7 +14,8 @@ import {
 import { callDcMethodAsync } from '../../ipc'
 import { ChatListItemType } from '../../../shared/shared-types'
 
-// const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
+// import logger from '../../shared/logger'
+// const log = logger.getLogger('renderer/ChatListContextMenu')
 
 const ChatListContextMenu = React.memo<{
   showArchivedChats: boolean

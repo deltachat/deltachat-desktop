@@ -38,8 +38,8 @@ export const allDialogs = {
 }
 
 export type DialogId = keyof typeof allDialogs
-
-const log = require('../../../shared/logger').getLogger('renderer/dialogs')
+import logger from '../../../shared/logger'
+const log = logger.getLogger('renderer/dialogs')
 
 type dialogs = {
   [key: string]: {

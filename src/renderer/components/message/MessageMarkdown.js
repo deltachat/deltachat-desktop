@@ -1,5 +1,5 @@
-const React = require('react')
-const { defaultRules, blockRegex, anyScopeRegex } = require('simple-markdown')
+import React from 'react'
+import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
 const { openExternal } = window.electron_functions
 
 var ignoreCapture = function() {
