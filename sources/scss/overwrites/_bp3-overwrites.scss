@@ -1,0 +1,238 @@
+$bp3-dialog-radius: 2px;
+
+.bp3-dialog {
+  position: absolute !important;
+  max-height: calc(100vh - 90px);
+  max-width: 90vw;
+  margin: 0px;
+  padding: 0px;
+  background: var(--bp3DialogBgSecondary);
+  border-radius: $bp3-dialog-radius;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 4px 8px rgba(16, 22, 26, 0.2),
+    0 0 20px 3px rgba(16, 22, 26, 0.2);
+}
+
+.bp3-dialog-body {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: overlay;
+}
+
+.bp3-dialog-body-with-padding {
+  padding: 20px;
+}
+
+.bp3-dialog-body-no-footer {
+  border-bottom-left-radius: $bp3-dialog-radius;
+  border-bottom-right-radius: $bp3-dialog-radius;
+}
+
+.bp3-dialog-footer-border-top {
+  border-top: var(--outlineProperties);
+}
+
+.bp3-dialog-footer {
+  background-color: var(--bp3DialogBgPrimary);
+  margin: 0;
+  padding: 15px;
+  border-radius: $bp3-dialog-radius;
+}
+
+.bp3-card {
+  background-color: var(--bp3DialogBgPrimary);
+  border-radius: 0px;
+  margin-top: 20px;
+  &:first-child {
+    margin-top: 0px;
+  }
+  &:last-child {
+    margin-bottom: -20px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+}
+
+.bp3-elevation-1,
+.bp3-elevation-0 {
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+    0 1px 1px rgba(16, 22, 26, 0.2);
+  &:first-child {
+    box-shadow: 0 0 0 0px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+      0 1px 1px rgba(16, 22, 26, 0.2);
+    flex: 1 1 auto;
+    margin-bottom: 0px;
+  }
+}
+
+.bp3-callout {
+  width: calc(100% + 40px);
+  left: -20px;
+  padding: 10px 20px;
+  border-radius: 0px;
+}
+
+.bp3-heading {
+  color: var(--bp3Heading);
+}
+.bp3-button[class*='bp3-icon-']::before {
+  color: var(--scrollbarThumb);
+}
+.bp3-button:not([class*='bp3-intent-'], :icon) {
+  color: var(--bp3ButtonText);
+  background-color: var(--bp3ButtonBg);
+  background-image: linear-gradient(
+    to bottom,
+    var(--bp3ButtonGradientTop),
+    var(--bp3ButtonGradientBottom)
+  );
+}
+.bp3-button:not([class*='bp3-intent-'], :icon):hover {
+  background-color: var(--bp3ButtonHoverBg);
+}
+
+// .bp3-button[class*="bp3-intent-"]:active {
+//   box-shadow: 0 0 0 1px rgba(16,22,26,.4),inset 0 1px 2px rgba(16,22,26,.2);
+// }
+
+.bp3-button.bp3-minimal {
+  color: var(--bp3ButtonText);
+}
+.bp3-button.bp3-minimal:hover {
+  color: inherit; // todo adjust this to be an extra var
+}
+
+.bp3-dialog-header {
+  background-color: var(--bp3DialogHeaderBg);
+  // We should have one variable for dialog/context menu border radius
+  border-radius: 2px 2px 0 0;
+  padding: 20px;
+}
+
+.bp3-dialog-header-border-bottom {
+  border-bottom: var(--outlineProperties);
+}
+
+.bp3-input {
+  background-color: var(--bp3InputBg);
+  color: var(--bp3InputText);
+}
+
+.bp3-input::placeholder {
+  color: var(--bp3InputPlaceholder);
+}
+
+.bp3-control.bp3-switch input ~ .bp3-control-indicator,
+.bp3-control.bp3-switch:hover input ~ .bp3-control-indicator {
+  background: var(--bp3Switch);
+  box-shadow: var(--bp3SwitchShadow);
+}
+
+.bp3-control.bp3-switch input:checked ~ .bp3-control-indicator,
+.bp3-control.bp3-switch:hover input:checked ~ .bp3-control-indicator {
+  box-shadow: var(--bp3SwitchShadowChecked);
+  background: var(--bp3SwitchChecked);
+}
+
+.bp3-control.bp3-switch .bp3-control-indicator::before {
+  margin-left: -2px;
+  margin-top: -2px;
+  width: calc(1em + 4px);
+  height: calc(1em + 4px);
+  box-shadow: var(--bp3SwitchKnobShadow);
+  background: var(--bp3SwitchKnob);
+}
+.bp3-control.bp3-switch input:checked ~ .bp3-control-indicator::before {
+  box-shadow: var(--bp3SwitchKnobShadowChecked);
+  background: var(--bp3SwitchKnobChecked);
+}
+
+.bp3-control .bp3-control-indicator,
+.bp3-control:hover .bp3-control-indicator {
+  background-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    var(--bp3SelectorTop),
+    var(--bp3SelectorBottom)
+  );
+}
+
+.bp3-control input:checked ~ .bp3-control-indicator,
+.bp3-control:hover input:checked ~ .bp3-control-indicator {
+  box-shadow: var(--bp3SwitchKnobShadowChecked);
+  background: var(--bp3SwitchKnobChecked);
+}
+.bp3-dialog-header .bp3-icon-large,
+.bp3-dialog-header .bp3-icon {
+  // the sliders/dials icon in the dialog header in the settings dialog
+  color: var(--bp3DialogHeaderIcon);
+}
+
+.bp3-menu {
+  background-color: var(--bp3MenuBg);
+  color: var(--bp3MenuText);
+}
+
+.bp3-popover .bp3-popover-content {
+  background: unset;
+}
+
+.bp3-popover {
+  -webkit-box-shadow: none;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2); // TODO include color into theming
+}
+
+.bp3-popover .bp3-popover-arrow-fill {
+  fill: var(--bp3MenuBg);
+}
+
+.bp3-menu-divider {
+  border-top: 1px solid rgba(16, 22, 26, 0.15); // TODO include color into theming
+}
+
+:focus,
+.bp3-control input:focus ~ .bp3-control-indicator,
+input[type='text']:active,
+input[type='text']:focus {
+  outline: unset;
+}
+
+.bp3-spinner-animation {
+  animation: pt-spinner-animation 500ms linear infinite reverse;
+}
+
+.bp3-spinner {
+  .bp3-spinner-track {
+    stroke: var(--bp3SpinnerTrack);
+  }
+  .bp3-spinner-head {
+    transition: stroke-dashoffset 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    stroke: var(--bp3SpinnerHead);
+    stroke-dashoffset: 100;
+  }
+}
+
+.bp3-overlay-backdrop {
+  background-color: rgba(12, 12, 12, 0.1);
+}
+
+.bp3-tab {
+  font-size: 19px;
+  padding: 0.5rem;
+}
+
+.bp3-tab:not([aria-disabled='true']):hover,
+.bp3-tab[aria-selected='true'] {
+  color: var(--colorPrimary);
+}
+
+.bp3-tab[aria-selected='true'] {
+  -webkit-box-shadow: inset 0 -3px 0 var(--colorPrimary);
+  box-shadow: inset 0 -3px 0 var(--colorPrimary);
+}
+
+.bp3-popover-arrow {
+  display: none;
+}

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "../../dist/frontend/js/app",
+        "outDir": "../../../dist/frontend/js/app",
         "rootDir": ".",
 
         // Compile to be compatible with ESM/snowpack compatible 
@@ -14,13 +14,13 @@
 
         // Enable source maps for debugging  
         "sourceMap": true,
-        "sourceRoot": "../../dist/frontend/js/app",
+        "sourceRoot": "../../../dist/frontend/js/app",
         "inlineSources": true,
     
         // Incremental builds
         "composite": true,
         "incremental": true,
-        "tsBuildInfoFile": "../../dist/frontend/js/app/.tsbuildinfo",
+        "tsBuildInfoFile": "../../../dist/frontend/js/app/.tsbuildinfo",
 
         "allowJs": true,
         "noImplicitAny": true,

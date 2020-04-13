@@ -1,0 +1,56 @@
+.message-list-and-composer {
+  width: 70%;
+  float: right;
+  display: grid;
+  grid-template-columns: auto;
+  height: $content-height;
+  margin-top: $nav-bar-height;
+  background-image: var(--chatViewBgImgPath);
+  background-size: cover;
+  background-color: var(--chatViewBg);
+  overflow: hidden;
+}
+
+.message-list-and-composer__message-list {
+  position: relative;
+
+  #message-list {
+    position: absolute;
+    bottom: 0;
+    overflow: scroll;
+    max-height: 100%;
+    width: 100%;
+    padding: 0 0.5em;
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  ul {
+    list-style: none;
+    min-width: 200px;
+
+    li {
+      margin-bottom: 10px;
+      min-width: 200px;
+
+      &::after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: ' ';
+        clear: both;
+        height: 0;
+      }
+      .info-message {
+        max-width: 550px;
+        font-size: 1rem;
+        padding: 2rem;
+        font-style: normal;
+        white-space: pre-wrap;
+        text-align: left;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../tsc-dist/main",
+    "outDir": "../../dist/backend",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",

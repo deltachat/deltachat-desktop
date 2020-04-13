@@ -12,7 +12,7 @@ import {
 } from '../helpers/ChatMethods'
 
 import { callDcMethodAsync } from '../../ipc'
-import { ChatListItemType } from '../../../../../shared/shared-types'
+import { ChatListItemType } from '../../../shared/shared-types'
 
 // import logger from '../../shared/logger'
 // const log = logger.getLogger('renderer/ChatListContextMenu')

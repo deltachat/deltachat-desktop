@@ -1,0 +1,65 @@
+// Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
+
+// import node_module dependencies
+@import '../node_modules/normalize.css/normalize.css';
+@import '../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import '../node_modules/@blueprintjs/core/lib/css/blueprint.css';
+@import '../node_modules/emoji-mart/css/emoji-mart.css';
+
+// Global Settings, Variables, and Mixins
+@import 'variables';
+@import 'mixins';
+@import 'global';
+
+// Components
+@import 'emoji';
+
+// Chat
+@import 'chat/_chat-list-item';
+@import 'chat/_chat-list';
+
+// Composer
+@import 'composer/_composer';
+@import 'composer/_emoji-sticker-picker';
+
+// Contact
+@import 'contact/_contact-list';
+@import 'contact/_contact';
+
+// Gallery (media view)
+@import 'gallery/attachment-view';
+@import 'gallery/_media-attachment';
+@import 'gallery/media';
+
+// Dialogs
+@import 'dialogs/_about';
+@import 'dialogs/_autocrypt_setup.scss';
+@import 'dialogs/_delta-dialog';
+@import 'dialogs/_forward-message';
+@import 'dialogs/_settings';
+@import 'dialogs/_view_profile';
+
+// Login
+@import 'login/_login.scss';
+
+// MainScreen
+@import 'main_screen/main_screen';
+@import 'main_screen/navbar_wrapper';
+
+// Map
+@import 'map/_map';
+
+// Message
+@import 'message/_message-attachment';
+@import 'message/_message-detail';
+@import 'message/_message-list';
+@import 'message/_message';
+@import 'message/_metadata';
+@import 'message/_status-icon';
+
+// misc
+@import 'misc/_search-input.scss';
+
+// Overwrites for third party node modules
+@import 'overwrites/_bp3-overwrites';
+@import 'overwrites/_react-context-menu-overwrites';

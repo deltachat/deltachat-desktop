@@ -1,0 +1,127 @@
+.composer {
+  background-color: var(--composerBg);
+  border-left: 1px solid rgba(16, 22, 26, 0.1);
+  &.composer--disabled-message-input {
+    text-align: center;
+    padding: 0.5rem;
+    color: #999;
+    overflow: hidden;
+
+    @media only screen and (max-width: 830px) {
+      padding: 0px 3px;
+    }
+  }
+}
+
+.composer__attachment-button,
+.composer__emoji-button {
+  float: left;
+
+  position: fixed;
+  bottom: 0;
+
+  .bp3-button.bp3-minimal {
+    width: 40px;
+    height: 40px;
+
+    &:hover {
+      background: none;
+      cursor: pointer;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.composer__emoji-button {
+  height: 40px;
+  right: 45px;
+  margin-right: 0px !important;
+  padding: 0px;
+  border: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: var(--composerBg);
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+
+  span {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-top: calc((40px - 25px) / 2);
+    background-image: url(../images/emoji.png);
+    background-size: contain;
+  }
+}
+
+.composer__send-button-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  float: right;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-right: 5px;
+  background-color: var(--composerSendButton);
+  border-radius: 180px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  button {
+    height: 24px;
+    width: 24px;
+    margin: 4px;
+    padding-left: 16px;
+    border: none;
+    background-image: url(../images/send-button.png);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 3px 1px;
+    background-size: contain;
+    vertical-align: middle;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+textarea.message-input-area {
+  float: left;
+  width: calc(100% - 120px);
+  resize: unset;
+  padding: 0px;
+  border-color: transparent;
+  border-width: 0px;
+  height: auto;
+  line-height: 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-left: 40px;
+  overflow-y: hidden;
+  background-color: var(--composerBg);
+  color: var(--composerText);
+
+  &::placeholder {
+    color: var(--composerPlaceholderText);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.scroll {
+    overflow-y: scroll;
+  }
+}

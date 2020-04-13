@@ -1,0 +1,202 @@
+/* Chat List (conversation list) */
+$color-chat-list-item-unread-count-bg: var(--unreadCountBg);
+$color-chat-list-item-unread-count-label: var(--unreadCountLabel);
+$color-chat-list-item-message-error: var(--errorColor);
+$color-chat-list-item-avatar-text: var(--avatarLabelColor);
+
+.chat-list-item {
+  height: 64px;
+  display: flex;
+  flex-direction: row;
+  padding-right: 10px;
+  padding-left: 10px;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #bbb;
+  }
+
+  &.skeleton {
+    background-repeat: no-repeat;
+    background-image: radial-gradient(circle 24px, grey 99%, transparent 0),
+      linear-gradient(grey 40px, transparent 0),
+      linear-gradient(grey 40px, transparent 0),
+      linear-gradient(grey 40px, transparent 0);
+    background-size: 56px 56px, 200px 18px, 300px 16px, 40px 16px;
+    background-position: 6px, 67px 12px, 67px 35px, 96% 12px;
+    opacity: 0.1;
+  }
+
+  &.has-unread {
+    .chat-list-item__header__name,
+    .chat-list-item__header__date,
+    .chat-list-item__message__text {
+      font-weight: 300;
+    }
+  }
+}
+
+.chat-list-item__content {
+  flex-grow: 1;
+  margin-left: 10px;
+  // parent - 48px (for avatar) - 16px (our right margin)
+  max-width: calc(100% - 64px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.chat-list-item__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chat-list-item__header__name {
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: 14px;
+  line-height: 18px;
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  .emoji-container {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.chat-list-item__header__timestamp {
+  flex-shrink: 0;
+  margin-left: 6px;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.chat-list-item__message {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 3px;
+}
+
+.chat-list-item__message__text {
+  max-width: calc(100% - 18px);
+  height: 1.3em;
+  flex-grow: 1;
+  flex-shrink: 1;
+  font-size: 13px;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #565656;
+}
+
+.chat-list-item__is-verified {
+  width: 0.75em;
+  height: 0.75em;
+  margin-right: 2px;
+}
+
+.forward-message-list-chat-list .chat-list-item {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.chat-list-item {
+  padding-right: 10px;
+  padding-left: 10px;
+
+  .status-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
+  .status-icon.sending {
+    background-color: white;
+  }
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.chat-list-item--is-selected {
+  background-color: var(--chatListItemSelectedBg);
+  color: var(--chatListItemSelectedText);
+
+  span.module-contact-name,
+  .chat-list-item__message__text {
+    color: var(--chatListItemSelectedText);
+  }
+
+  .chat-list-item__is-group {
+    filter: unset;
+  }
+
+  &:hover {
+    background-color: var(--chatListItemSelectedBg);
+  }
+}
+
+.chat-list-item__header__name {
+  width: 90%;
+}
+
+.chat-list-item__message__text__summary {
+  float: left;
+  margin-right: 2px;
+}
+
+.chat-list-item__message__text__summary--draft {
+  color: var(--draftTextColor);
+}
+.chat-list-item__fresh-message-counter {
+  color: var(--unreadCountLabel);
+  background-color: var(--unreadCountBg);
+  text-align: center;
+
+  // For alignment with the message text
+  margin-top: 1px;
+
+  font-size: 9pt;
+  margin-left: 5px;
+  height: 20px;
+  padding: 0 5pt;
+  line-height: 20px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.chat-list-item__name {
+  font-weight: 200;
+  font-size: medium;
+}
+
+.chat-list-item__archive-link {
+  top: calc((64px - 18px) / 2);
+  width: 100%;
+  font-weight: 200;
+  text-align: center;
+  color: #565656;
+}
+
+.chat-list-item--is-deaddrop {
+  background-color: #ccc;
+  &:hover {
+    background-color: #bbb;
+  }
+}

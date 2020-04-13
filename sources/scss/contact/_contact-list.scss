@@ -1,0 +1,57 @@
+// Module: Contact List Item
+$color-contact-default-label: var(--avatarLabelColor);
+$color-contact-list-item: var(--contactListItemBg);
+
+.module-contact-list-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  color: $color-contact-list-item;
+}
+
+.module-contact-list-item--with-click-handler {
+  cursor: pointer;
+}
+
+.module-contact-list-item__text {
+  margin-left: 8px;
+}
+
+.module-contact-list-item__text__name {
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.module-contact-list-item__text__profile-name {
+  font-style: italic;
+}
+
+.module-contact-list-item__text__additional-data {
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+.module-contact-list-item__text__verified-icon {
+  width: 0.75em;
+  height: 0.75em;
+  // Trying to account for the whitespace around the check mark
+  margin-bottom: -1px;
+}
+
+.module-contact-list-item__trash-icon {
+  margin-top: calc((64px - 20px) / 2);
+  margin-right: 40px;
+  .bp3-icon > svg {
+    width: 20px;
+    height: 20px;
+    fill: grey;
+  }
+}
+
+span.module-contact-name {
+  font-weight: 200;
+  font-size: medium;
+}

@@ -28,7 +28,7 @@ const LoggerVariants = [
   },
 ]
 
-function printProcessLogLevelInfo() {
+export function printProcessLogLevelInfo() {
   /* ignore-console-log */
   console.info(
     `%cLogging Levels:\n${LoggerVariants.map(v => `${v.emoji} ${v.level}`).join(
@@ -40,13 +40,13 @@ function printProcessLogLevelInfo() {
 
 let handler, rc
 
-function setLogHandler(LogHandler, rcObject) {
+export function setLogHandler(LogHandler, rcObject) {
   handler = LogHandler
   // get a clean, non-remote object that has just the values
   rc = JSON.parse(JSON.stringify(rcObject))
 }
 
-function log({ channel, isMainProcess }, level, stacktrace, args) {
+export function log({ channel, isMainProcess }, level, stacktrace, args) {
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
@@ -81,7 +81,7 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
   }
 }
 
-function getStackTrace() {
+export function getStackTrace() {
   const rawStack = esp.parse(new Error('Get Stacktrace'))
   const stack = rawStack.slice(2, rawStack.length)
   return rc['machine-readable-stacktrace']
@@ -89,7 +89,7 @@ function getStackTrace() {
     : stack.map(s => `\n${s.toString()}`).join()
 }
 
-class Logger {
+export class Logger {
   constructor(channel) {
     this.channel = channel
     this.isMainProcess = typeof window === 'undefined'
@@ -117,8 +117,6 @@ class Logger {
   }
 }
 
-function getLogger(channel) {
+export function getLogger(channel) {
   return new Logger(channel)
-}
-
-module.exports = { setLogHandler, Logger, getLogger, printProcessLogLevelInfo }
+} 
