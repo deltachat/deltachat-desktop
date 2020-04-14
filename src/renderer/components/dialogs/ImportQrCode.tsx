@@ -6,10 +6,13 @@ import DeltaDialog, {
 } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
-import { LocalSettings } from '../../../shared/shared-types'
-import { callDcMethodAsync } from '../../ipc'
+import { LocalSettings, ChatListItemType } from '../../../shared/shared-types'
+import { callDcMethodAsync,callDcMethod } from '../../ipc'
+const { ipcRenderer } = window.electron_functions
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
+import { Intent, ProgressBar } from '@blueprintjs/core'
+import { Chat } from 'deltachat-node'
 
 interface QrStates {
   [key: number]: string;
@@ -44,13 +47,14 @@ export function DeltaDialogImportQrInner({
   const [ qrCode, setQrCode ] = useState('')
   const [ useCamera, setUseCamera ] = useState(false)
   const screenContext = useContext(ScreenContext)
+  const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
-  const handleResponse = async(txt: string) =>
+  const handleResponse = async(scannedQrCode: string) =>
   {
-    setQrCode(txt)
+    setQrCode(scannedQrCode)
     const tx = window.translate
     let error = false
-    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', txt)
+    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', scannedQrCode)
     if (response === null) {
       error = true
     }
@@ -62,6 +66,31 @@ export function DeltaDialogImportQrInner({
       });
       return;
     }
+    const selectGroupChat = (evt: Event, payload: {chatId: number, chat: ChatListItemType}) => {
+      console.log('selectGroupChat payload: ', payload)
+      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
+      if (payload.chat && payload.chat.isGroup) {
+        selectChat(payload.chatId)
+        unsubscribe('group')
+        onClose()
+      }
+    }
+    const selectChatAndClose = (evt: Event, payload: {chatId: number, chat: ChatListItemType}) => {
+      console.log('selectChatAndClose payload: ', payload)
+      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
+      if (payload.chatId) {
+        selectChat(payload.chatId)
+        unsubscribe('single')
+        onClose()
+      }
+    }
+    const unsubscribe = (type: string) => {
+      if (type === 'group') {
+        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
+      } else {
+        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
+      }
+    }
     if (state === 'QrAskVerifyContact') {
       const contact = await callDcMethodAsync('contacts.getContact', response.id);
       screenContext.openDialog('ConfirmationDialog', {
@@ -69,9 +98,12 @@ export function DeltaDialogImportQrInner({
         confirmLabel: tx('ok'),
         cb: async (confirmed: boolean) => {
           if (confirmed) {
-            const chatId = await callDcMethodAsync('contacts.createChatByContactId', response.id)
-            selectChat(chatId)
-            onClose()
+            setSecureJoinOngoing(true)
+            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
+              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+            })
+            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
+            callDcMethodAsync('joinSecurejoin', scannedQrCode)
           }
         }
       })
@@ -79,12 +111,16 @@ export function DeltaDialogImportQrInner({
       screenContext.openDialog('ConfirmationDialog', {
         message: tx('qrscan_ask_join_group', response.text1),
         confirmLabel: tx('ok'),
-        cb: async (confirmed: boolean) => {
+        cb: (confirmed: boolean) => {
           if (confirmed) {
-            const chatId = await callDcMethodAsync('chat.createGroupChat', [false, response.text1])
-            selectChat(chatId)
-            onClose()
+            setSecureJoinOngoing(true)
+            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
+              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+            })
+            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
+            callDcMethodAsync('joinSecurejoin', scannedQrCode)
           }
+          return
         }
       })
     }
@@ -118,6 +154,14 @@ export function DeltaDialogImportQrInner({
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding>
+          {secureJoinOngoing && <div>
+            <p>Secure join in progress...</p>
+            <ProgressBar
+              intent={Intent.PRIMARY}
+              value= {100}
+            />
+            </div>}
+          {!secureJoinOngoing &&
           <div className='import-qr-code-dialog'>
             <div className='qr-data'>
               <div className='content' aria-label={tx('a11y_qr_data')}>
@@ -171,7 +215,7 @@ export function DeltaDialogImportQrInner({
                 legacyMode
               />
             </div>
-          </div>
+          </div>}
         </DeltaDialogContent>
       </DeltaDialogBody>
       <DeltaDialogFooter>
