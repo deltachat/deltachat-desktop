@@ -75,7 +75,7 @@ export default function DeltaMenu(props) {
         onClick={onDeleteChat}
       />,
       isGroup && selfInGroup && (
-        <>
+        <span key='groupitems'>
           <DeltaMenuItem
             key='edit'
             text={tx('menu_edit_group')}
@@ -86,7 +86,7 @@ export default function DeltaMenu(props) {
             text={tx('menu_leave_group')}
             onClick={onLeaveGroup}
           />
-        </>
+        </span>
       ),
       !isGroup && !(isSelfTalk || isDeviceChat) && (
         <DeltaMenuItem
