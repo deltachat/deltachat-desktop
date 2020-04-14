@@ -155,7 +155,7 @@ export function DeltaDialogImportQrInner({
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding>
           {secureJoinOngoing && <div>
-            <p>Secure join in progress...</p>
+            <p className='progress-info'>Secure join in progress...</p>
             <ProgressBar
               intent={Intent.PRIMARY}
               value= {100}
@@ -227,7 +227,6 @@ export function DeltaDialogImportQrInner({
 export default function ImportQrCode({
   onClose,
   isOpen,
-  deltachat,
 }: {
   onClose: () => void
   isOpen: boolean
