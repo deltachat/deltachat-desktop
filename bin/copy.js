@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import fsExtra from 'fs-extra'
-import fs from 'fs'
-import {  resolve, join } from 'path'
-import globWatcher from 'glob-watcher'
+const fsExtra = require('fs-extra')
+const fs = require('fs')
+const {  resolve, join } = require('path')
+const globWatcher = require('glob-watcher')
 
-export default async function copy(source, destination, watch=false) {
+async function copy(source, destination, watch=false) {
     await fsExtra.ensureDir(destination)
     
     fs.readdir(source, async (err, files) => {

@@ -23,7 +23,7 @@
     "build:frontend": "npm run build:frontend:web-modules && npm run build:frontend:ts && npm run build:frontend:static && npm run build:frontend:scss",
     "build:frontend:web-modules": "",
     "build:frontend:ts": "npx ttsc --build ./sources/frontend/ts/tsconfig.json",
-    "build:frontend:static": "node ./bin/copy.mjs ./sources/frontend/static ./dist/frontend",
+    "build:frontend:static": "node ./bin/copy.js ./sources/frontend/static ./dist/frontend",
     "build:frontend:scss": "npx node-sass ./sources/frontend/scss/manifest.scss dist/frontend/css/main.css --output-style compressed",
     "translations-pull": "tx pull -l en && tx pull -f",
     "translations-update": "npm run translations-pull && npm run builder -- --translations",
