@@ -4,9 +4,8 @@
         "rootDir": ".",
 
         // Compile to be compatible with ESM/snowpack compatible 
-        "target": "es2017",
-        "module": "esnext",
-        "moduleResolution": "node",
+        "module": "commonjs",
+        "target": "es2015",
 
         // Enable JSX/Preact support
         "jsx": "react",
@@ -24,22 +23,11 @@
 
         "allowJs": true,
         "noImplicitAny": true,
-        "esModuleInterop": true,
-
-        // Better integration of snowpack/esm modules
-        "plugins": [
-            {
-                "transform": "@magic-works/ttypescript-browser-like-import-transformer",
-                "after": true,
-                "bareModuleRewrite": "snowpack",
-                "webModulePath": "/js/web_modules/"
-            }
-        ]
-           
+        "esModuleInterop": true
     },
     "references": [
         {
-            "path": "../../shared/tsconfig.json"
+            "path": "../../shared/tsconfig.frontend.json"
         }
     ]
 }

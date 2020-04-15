@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
+        "module": "commonjs",
+        "target": "esnext",
+
+
         "composite": true,
         "declaration": true,
         "outDir": "../../dist/shared",
         "noImplicitAny": true,
-        "module": "commonjs",
-        "target": "es6",
         "allowJs": true,
     },
     "include": [

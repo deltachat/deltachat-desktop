@@ -6,9 +6,9 @@ import {
   defaultThemeData,
   ThemeVarOverwrite,
 } from './ThemeBackend'
-import EventEmitter from 'wolfy87-eventemitter'
 const { ipcRenderer } = window.electron_functions
 
+const EventEmitter = window.eventemitter
 // do we need an event emitter here?
 // if yes please replace it by another module and not use the native electron module
 

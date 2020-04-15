@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "outDir": "../../dist/frontend/js/shared",
+        "rootDir": ".",
+
+        // Compile to be compatible with ESM/snowpack compatible 
+        "module": "commonjs",
+        "target": "es2015",
+
+        // Enable JSX/Preact support
+        "jsx": "react",
+        "baseUrl": ".",
+
+        // Enable source maps for debugging  
+        "sourceMap": true,
+        "sourceRoot": "../../dist/frontend/js/shared",
+        "inlineSources": true,
+    
+        // Incremental builds
+        "composite": true,
+        "incremental": true,
+        "tsBuildInfoFile": "../../dist/frontend/js/shared/.tsbuildinfo",
+
+        "allowJs": true,
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+
+        // Better integration of snowpack/esm modules
+        "plugins": [
+            {
+                "transform": "@magic-works/ttypescript-browser-like-import-transformer",
+                "after": true,
+                "bareModuleRewrite": "snowpack",
+                "webModulePath": "/web_modules/"
+            }
+        ]
+    }
+}
+ 

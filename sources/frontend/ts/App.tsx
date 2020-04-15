@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { addLocaleData, IntlProvider } from 'react-intl'
-import enLocaleData from 'react-intl/locale-data/en'
+import { IntlProvider } from 'react-intl'
 import moment from 'moment'
 import { ThemeProvider } from './ThemeManager'
 import { SettingsContext } from './contexts'
@@ -20,9 +19,6 @@ import * as logger from '../../shared/logger'
 
 const log = logger.getLogger('renderer/App')
 const { remote } = window.electron_functions
-
-
-addLocaleData(enLocaleData)
 
 attachKeybindingsListener()
 

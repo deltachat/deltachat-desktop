@@ -3,7 +3,7 @@ import { C } from 'deltachat-node/dist/constants'
 import styled from 'styled-components'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'
-import logger from '../../../shared/logger'
+import * as logger from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = logger.getLogger('renderer/messageWrapper')

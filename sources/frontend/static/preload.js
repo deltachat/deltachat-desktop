@@ -25,5 +25,8 @@
     }
   }
 
+  window.moment = require('moment')
+  window.eventemitter = require('wolfy87-eventemitter')
+
   console.log({ global })
 })()

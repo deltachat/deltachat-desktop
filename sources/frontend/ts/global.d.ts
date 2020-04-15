@@ -20,6 +20,8 @@ declare global {
     preload_functions: {
       downloadFile: (file: string) => void
     }
+    eventemitter: any
+    moment: any
     __openDialog: (name: DialogId, props?: any) => {}
     __isReady: boolean
   }

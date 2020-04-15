@@ -36,7 +36,7 @@ export function init(
     x: initialBounds.x,
     y: initialBounds.y,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       preload: defaults.preload,
     },
   })
