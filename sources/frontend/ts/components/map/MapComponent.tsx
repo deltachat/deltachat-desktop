@@ -170,7 +170,7 @@ export default class MapComponent extends React.Component<
     if (locations.length > 0) {
       selectedChat.contacts.map(contact => {
         const locationsForContact = locations.filter(
-          (location:any) =>
+          (location: any) =>
             location.contactId === contact.id && !location.isIndependent
         )
         if (locationsForContact.length > 0) {
@@ -183,7 +183,7 @@ export default class MapComponent extends React.Component<
         allPoints = allPoints.concat(pointsForLayer)
       })
       const poiLocations = locations.filter(
-        (location:any) => location.isIndependent && !location.marker
+        (location: any) => location.isIndependent && !location.marker
       )
       if (poiLocations.length > 0) {
         if (!this.map.hasImage('poi-marker')) {
@@ -201,11 +201,11 @@ export default class MapComponent extends React.Component<
         this.map.addLayer(poiLayer)
       }
       const poiWithMarker = locations.filter(
-        (location:any) => location.isIndependent && location.marker
+        (location: any) => location.isIndependent && location.marker
       )
       if (poiWithMarker.length) {
         const poiMarker: mapboxgl.Marker[] = []
-        poiWithMarker.map((location:any) => {
+        poiWithMarker.map((location: any) => {
           var el = document.createElement('div')
           el.className = 'marker-icon'
           el.innerHTML = location.marker

@@ -14,7 +14,6 @@ function main() {
   logger.setLogHandler(
     (...args: any[]) => ipcRenderer.send('handleLogMessage', ...args),
     rc
-    
   )
   logger.printProcessLogLevelInfo()
 

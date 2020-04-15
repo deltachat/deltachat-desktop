@@ -33,10 +33,13 @@ export default class PopupMessage extends React.Component<{
   }
 }
 
-export function PopupMessageString(username: string, formattedDate: string, message: JsonMessage) {
+export function PopupMessageString(
+  username: string,
+  formattedDate: string,
+  message: JsonMessage
+) {
   if (message) {
-    return (
-      `<div className='map-popup'>
+    return `<div className='map-popup'>
         <div>${message.text}</div>
         <pre>
         status=${mapCoreMsgStatus2String(message.state)}
@@ -45,13 +48,10 @@ export function PopupMessageString(username: string, formattedDate: string, mess
         username=${username}
         <pre/>
       </div>`
-    )
   } else {
-    return (
-      `<div className='map-popup'>
+    return `<div className='map-popup'>
         ${' '}
         ${username} <br /> ${formattedDate}{' '}
       </div>`
-    )
   }
 }

@@ -16,7 +16,6 @@ import { ExtendedApp, AppState } from '../../shared/shared-types'
 import { translate, LocaleData } from '../../shared/localize'
 import * as logger from '../../shared/logger'
 
-
 const log = logger.getLogger('renderer/App')
 const { remote } = window.electron_functions
 
