@@ -112,15 +112,14 @@ export function DeltaDialogImportQrInner({
         cb: async (confirmed: boolean) => {
           if (confirmed) {
             setSecureJoinOngoing(true)
-            ipcRenderer.once(
-              'DC_EVENT_SECUREJOIN_FAILED',
-              (evt: Event, payload: any) => {
-                /* ignore-console-log */
-                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-              }
-            )
-            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
-            callDcMethodAsync('joinSecurejoin', scannedQrCode)
+            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
+              /* ignore-console-log */
+              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+            })
+            callDcMethodAsync('joinSecurejoin', scannedQrCode).then(chatId => {
+              selectChat(chatId)
+              onClose()
+            })
           }
         },
       })
@@ -131,15 +130,14 @@ export function DeltaDialogImportQrInner({
         cb: (confirmed: boolean) => {
           if (confirmed) {
             setSecureJoinOngoing(true)
-            ipcRenderer.once(
-              'DC_EVENT_SECUREJOIN_FAILED',
-              (evt: Event, payload: any) => {
-                /* ignore-console-log */
-                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-              }
-            )
-            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
-            callDcMethodAsync('joinSecurejoin', scannedQrCode)
+            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
+              /* ignore-console-log */
+              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+            })
+            callDcMethodAsync('joinSecurejoin', scannedQrCode).then(chatId => {
+              selectChat(chatId)
+              onClose()
+            })
           }
           return
         },
