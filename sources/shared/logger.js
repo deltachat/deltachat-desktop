@@ -1,5 +1,5 @@
-const esp = require('error-stack-parser')
-const colors = require('colors/safe')
+import esp from 'error-stack-parser'
+import colors from 'colors'
 const startTime = Date.now()
 
 const emojiFontCss =

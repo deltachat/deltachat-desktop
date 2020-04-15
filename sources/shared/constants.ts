@@ -7,7 +7,7 @@ export const gitHubLicenseUrl = gitHubUrl + '/blob/master/LICENSE'
 // we can only convert this to an import when we find out how we can ignore
 // "'rootDir' is expected to contain all source files."
 // for this line
-const { version } = require('../../package.json')
+const version = "v1.2.0"
 
 export const appVersion = version
 
