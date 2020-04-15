@@ -1,32 +1,30 @@
 import esp from 'error-stack-parser'
-import colors from 'colors/safe'
 const startTime = Date.now()
 
-console.log('colors', colors)
 
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
 const LoggerVariants = [
   { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
-  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: colors.blue('[i]') },
+  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: '[i]' },
   {
     log: console.warn,
     level: 'WARNING',
     emoji: '⚠️',
-    symbol: colors.yellow('[w]'),
+    symbol: '[w]',
   },
   {
     log: console.error,
     level: 'ERROR',
     emoji: '🚨',
-    symbol: colors.red('[E]'),
+    symbol: '[E]',
   },
   {
     log: console.error,
     level: 'CRITICAL',
     emoji: '🚨🚨',
-    symbol: colors.red('[C]'),
+    symbol: '[C]',
   },
 ]
 
@@ -62,13 +60,13 @@ export function log({ channel, isMainProcess }, level, stacktrace, args) {
     if (isMainProcess) {
       const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
         LoggerVariants[level].symbol
-      }${colors.grey(channel)}:`
+      }${channel}:`
       if (!stacktrace) {
         /* ignore-console-log */
         console.log(begining, ...args)
       } else {
         /* ignore-console-log */
-        console.log(begining, ...args, colors.red(stacktrace))
+        console.log(begining, ...args, stacktrace)
       }
     } else {
       const prefix = `%c${variant.emoji}%c${channel}`
