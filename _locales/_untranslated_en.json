@@ -111,7 +111,7 @@
     "message": "Back to Top"
   },
   "import_qr_title": {
-    "message": "Import QR code"
+    "message": "Scan QR code"
   },
   "import_qr_error": {
     "message": "QR could not be decoded"

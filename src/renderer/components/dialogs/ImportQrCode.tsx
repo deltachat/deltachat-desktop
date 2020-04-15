@@ -44,8 +44,8 @@ export function DeltaDialogImportQrInner({
   onClose: () => void
 }) {
   const tx = window.translate
-  const [qrCode, setQrCode] = useState('')
-  const [useCamera, setUseCamera] = useState(false)
+  const [ qrCode, setQrCode ] = useState('')
+  const [ useCamera, setUseCamera ] = useState(true)
   const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
@@ -68,39 +68,13 @@ export function DeltaDialogImportQrInner({
       })
       return
     }
-    const selectGroupChat = (
-      evt: Event,
-      payload: { chatId: number; chat: ChatListItemType }
-    ) => {
+    
+    const selectChatAndClose = (chatId: number) => {
       /* ignore-console-log */
-      console.log('selectGroupChat payload: ', payload)
-      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
-      if (payload.chat && payload.chat.isGroup) {
-        selectChat(payload.chatId)
-        unsubscribe('group')
+        selectChat(chatId)
         onClose()
-      }
-    }
-    const selectChatAndClose = (
-      evt: Event,
-      payload: { chatId: number; chat: ChatListItemType }
-    ) => {
-      /* ignore-console-log */
-      console.log('selectChatAndClose payload: ', payload)
-      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
-      if (payload.chatId) {
-        selectChat(payload.chatId)
-        unsubscribe('single')
-        onClose()
-      }
-    }
-    const unsubscribe = (type: string) => {
-      if (type === 'group') {
-        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
-      } else {
-        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
-      }
-    }
+    };
+
     if (state === 'QrAskVerifyContact') {
       const contact = await callDcMethodAsync(
         'contacts.getContact',
@@ -116,10 +90,7 @@ export function DeltaDialogImportQrInner({
               /* ignore-console-log */
               console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
             })
-            callDcMethodAsync('joinSecurejoin', scannedQrCode).then(chatId => {
-              selectChat(chatId)
-              onClose()
-            })
+            callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
           }
         },
       })
@@ -134,10 +105,7 @@ export function DeltaDialogImportQrInner({
               /* ignore-console-log */
               console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
             })
-            callDcMethodAsync('joinSecurejoin', scannedQrCode).then(chatId => {
-              selectChat(chatId)
-              onClose()
-            })
+            callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
           }
           return
         },
@@ -166,78 +134,61 @@ export function DeltaDialogImportQrInner({
   }
 
   return (
-    <>
       <DeltaDialogBody>
         <DeltaDialogContent noOverflow noPadding>
-          {secureJoinOngoing && (
+          {secureJoinOngoing && 
             <div>
               <p className='progress-info'>Secure join in progress...</p>
-              <ProgressBar intent={Intent.PRIMARY} value={100} />
+              <ProgressBar
+                intent={Intent.PRIMARY}
+                value= {100}
+              />
             </div>
-          )}
-          {!secureJoinOngoing && (
-            <div className='import-qr-code-dialog'>
-              <div className='qr-data'>
-                <div className='content' aria-label={tx('a11y_qr_data')}>
-                  {qrCode}
-                </div>
-                <div
-                  title={tx('paste_from_clipboard')}
-                  className='copy-btn'
-                  role='button'
-                  onClick={() => {
-                    navigator.clipboard.readText().then(handleResponse)
-                  }}
-                >
-                  <Icon icon='clipboard' />
-                </div>
-              </div>
-              <button onClick={openImageDialog} className={'bp3-button'}>
-                {tx('load_qr_code_as_image')}
-              </button>
-              {!useCamera && (
-                <button
-                  aria-label={tx('scan_with_camera')}
-                  onClick={toggleCamera}
-                  className={'bp3-button'}
-                >
-                  {tx('scan_with_camera')}
-                </button>
-              )}
-              {useCamera && (
-                <div>
-                  <button
-                    aria-label={tx('cancel_camera')}
-                    onClick={toggleCamera}
-                    className={'bp3-button'}
-                  >
-                    {tx('cancel_camera')}
-                  </button>
-                  <div>
-                    <QrReader
-                      delay={300}
-                      onError={handleError}
-                      onScan={handleScan}
-                      style={{ width: '100%' }}
-                    />
-                  </div>
-                </div>
-              )}
-              <div className='qr-image-loader'>
+          }
+          {!secureJoinOngoing &&
+          <div className='import-qr-code-dialog'>
+            <div>
+              <div>
                 <QrReader
                   delay={300}
-                  ref={qrImageReader}
                   onError={handleError}
                   onScan={handleScan}
                   style={{ width: '100%' }}
-                  legacyMode
                 />
               </div>
             </div>
-          )}
+            <div className='qr-data'>
+              <div className='content' aria-label={tx('a11y_qr_data')}>
+                {qrCode}
+              </div>
+              <div
+                title={tx('paste_from_clipboard')}
+                className='copy-btn'
+                role='button'
+                onClick={() => {
+                  navigator.clipboard.readText().then(handleResponse)
+                }}
+              >
+                <Icon icon='clipboard' />
+              </div>
+            </div>
+            <button onClick={openImageDialog} className={'bp3-button'}>
+            {tx('load_qr_code_as_image')}
+            </button>
+            <div className='qr-image-loader'>
+              <QrReader
+                delay={300}
+                ref={qrImageReader}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: '100%' }}
+                legacyMode
+              />
+            </div>
+          </div>
+          }
         </DeltaDialogContent>
       </DeltaDialogBody>
-    </>
   )
 }
 
