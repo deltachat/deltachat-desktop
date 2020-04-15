@@ -72,7 +72,11 @@ export default class DeltaChatController extends EventEmitter {
 
     if (data1 === 0) data1 = ''
 
-    logCoreEv.debug(event, data1, data2)
+    if (event === 'DC_EVENT_INFO') {
+      logCoreEv.info(event, data1, data2)
+    } else {
+      logCoreEv.debug(event, data1, data2)
+    }
   }
 
   /**
