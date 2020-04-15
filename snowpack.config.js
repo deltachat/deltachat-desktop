@@ -24,7 +24,9 @@ module.exports =  {
     "emoji-mart",
     "emoji-js-clean",
     "colors",
-    "error-stack-parser"
+    "colors/safe.js",
+    "error-stack-parser",
+    "deltachat-node/dist/constants.js"
   ],
   "installOptions": {
     "dest": "./dist/frontend/js/web_modules"

@@ -1,6 +1,8 @@
 import esp from 'error-stack-parser'
-import colors from 'colors'
+import colors from 'colors/safe'
 const startTime = Date.now()
+
+console.log('colors', colors)
 
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
