@@ -72,11 +72,7 @@ export default class DeltaChatController extends EventEmitter {
 
     if (data1 === 0) data1 = ''
 
-    if (event === 'DC_EVENT_INFO') {
-      logCoreEv.info(event, data1, data2)
-    } else {
-      logCoreEv.debug(event, data1, data2)
-    }
+    logCoreEv.debug(event, data1, data2)
   }
 
   /**
@@ -165,8 +161,8 @@ export default class DeltaChatController extends EventEmitter {
       if (!isNaN(event)) {
         event = eventStrings[event]
       }
-      this.logCoreEvent(event, data1, data2)
       if (!event || event === 'DC_EVENT_INFO') return
+      this.logCoreEvent(event, data1, data2)
       this.sendToRenderer(event, [data1, data2])
     })
 
@@ -204,8 +200,12 @@ export default class DeltaChatController extends EventEmitter {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_WARNING', (warning: any) => {
+    dc.on('DC_EVENT_WARNING', (warning: string) => {
       log.warn(warning)
+    })
+
+    dc.on('DC_EVENT_INFO', (info: string) => {
+      log.info(info)
     })
 
     const onError = (error: any) => {
@@ -213,7 +213,7 @@ export default class DeltaChatController extends EventEmitter {
       log.error(error)
     }
 
-    dc.on('DC_EVENT_ERROR', (error: any) => {
+    dc.on('DC_EVENT_ERROR', (error: string) => {
       onError(error)
     })
 
