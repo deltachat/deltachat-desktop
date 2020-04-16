@@ -1,5 +1,5 @@
 import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
-import { app } from 'electron'
+import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { LocalSettings, JsonContact } from '../../shared/shared-types'
@@ -17,10 +17,12 @@ import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
+import { ExtendedAppMainProcess } from '../types'
+const app = rawApp as ExtendedAppMainProcess
 
 const eventStrings = require('deltachat-node/events')
 const log = getLogger('main/deltachat')
-const logCoreEv = getLogger('core/event')
+const logCoreEvent = getLogger('core/event')
 
 /**
  * DeltaChatController
@@ -64,16 +66,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-
-  logCoreEvent(event: any, data1: any, data2: any) {
-    if (!isNaN(event)) {
-      event = eventStrings[event]
-    }
-
-    if (data1 === 0) data1 = ''
-
-    logCoreEv.debug(event, data1, data2)
-  }
 
   /**
    * @param {string} methodName
@@ -157,12 +149,30 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   registerEventHandler(dc: DeltaChat) {
+    if (app.rc['log-debug']) {
+      // in debug mode log all core events
+      dc.on('ALL', (event: any, data1: any, data2: any) => {
+        if (!isNaN(event)) {
+          event = eventStrings[event]
+        }
+        if (data1 === 0) data1 = ''
+        if (
+          event === 'DC_EVENT_ERROR' ||
+          event === 'DC_EVENT_INFO' ||
+          event === 'DC_EVENT_WARNING' ||
+          event === 'DC_EVENT_ERROR_NETWORK'
+        )
+          return
+        else logCoreEvent.debug(event, data1, data2)
+      })
+    }
+
     dc.on('ALL', (event: any, data1: any, data2: any) => {
+      // This relays the events over to renderer so that we can use them there.
       if (!isNaN(event)) {
         event = eventStrings[event]
       }
       if (!event || event === 'DC_EVENT_INFO') return
-      this.logCoreEvent(event, data1, data2)
       this.sendToRenderer(event, [data1, data2])
     })
 
@@ -201,16 +211,16 @@ export default class DeltaChatController extends EventEmitter {
     })
 
     dc.on('DC_EVENT_WARNING', (warning: string) => {
-      log.warn(warning)
+      logCoreEvent.warn(warning)
     })
 
     dc.on('DC_EVENT_INFO', (info: string) => {
-      log.info(info)
+      logCoreEvent.info(info)
     })
 
     const onError = (error: any) => {
       this.emit('error', error)
-      log.error(error)
+      logCoreEvent.error(error)
     }
 
     dc.on('DC_EVENT_ERROR', (error: string) => {
