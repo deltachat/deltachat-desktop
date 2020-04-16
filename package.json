@@ -115,6 +115,7 @@
     "electron-builder": "^22.3.2",
     "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3",
+    "es-abstract": "^1.17.5",
     "glob-watcher": "^5.0.1",
     "hallmark": "^1.2.0",
     "node-fetch": "^2.6.0",
