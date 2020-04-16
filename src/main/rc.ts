@@ -12,9 +12,9 @@ const defaults: RC_Config = {
   'theme-watch': false,
 }
 
-const config = rc('DeltaChat', defaults) as RC_Config;
+const config = rc('DeltaChat', defaults) as RC_Config
 
-if(config.debug) {
+if (config.debug) {
   config['log-debug'] = true
   config['log-to-console'] = true
 }
