@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "npm run watch:backend & npm run watch:frontend",
-    "test": "npm run check-formatting && npm run test-log-conventions && npm run test-unit",
+    "test": "npm run lint && npm run test-log-conventions && npm run test-unit",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
     "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test_ci.js\"",
