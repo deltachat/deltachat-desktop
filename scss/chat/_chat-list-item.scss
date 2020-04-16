@@ -197,8 +197,8 @@
 }
 
 .chat-list-item.is-deaddrop {
-  background-color: #ccc;
+  background-color: var(--chatListItemDeaddropBg);
   &:hover {
-    background-color: #bbb;
+    background-color: var(--chatListItemBgHover);
   }
 }
