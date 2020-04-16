@@ -8,7 +8,6 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   height: 64px;
   display: flex;
   flex-direction: row;
-  padding-right: 10px;
   padding-left: 10px;
   align-items: center;
   cursor: pointer;
@@ -34,6 +33,10 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
     .chat-list-item__message__text {
       font-weight: 300;
     }
+  }
+
+  &.pinned {
+    background-color: var(--chatListItemBgPinned);
   }
 }
 
@@ -71,6 +74,13 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   }
 }
 
+.chat-list-item__header__pin_icon {
+  flex-shrink: 0;
+  @include color-svg('../images/pin.svg', var(--globalText));
+  width: 16px;
+  height: 16px;
+}
+
 .chat-list-item__header__timestamp {
   flex-shrink: 0;
   margin-left: 6px;
@@ -89,6 +99,15 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   align-items: center;
 
   margin-top: 3px;
+
+  .archived-label {
+    border: 1px solid #a5a5a5;
+    color: #3a3a3a;
+    border-radius: 2px;
+    font-size: 11px;
+    padding: 1px 4px;
+    margin-left: 2px;
+  }
 }
 
 .chat-list-item__message__text {
@@ -116,7 +135,7 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 }
 
 .chat-list-item {
-  padding-right: 10px;
+  padding-right: 0px;
   padding-left: 10px;
 
   .status-icon {
@@ -139,7 +158,8 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
   color: var(--chatListItemSelectedText);
 
   span.module-contact-name,
-  .chat-list-item__message__text {
+  .chat-list-item__message__text,
+  .archived-label {
     color: var(--chatListItemSelectedText);
   }
 
@@ -149,6 +169,10 @@ $color-chat-list-item-avatar-text: var(--avatarLabelColor);
 
   &:hover {
     background-color: var(--chatListItemSelectedBg);
+  }
+
+  .chat-list-item__header__pin_icon {
+    background-color: var(--chatListItemSelectedText);
   }
 }
 

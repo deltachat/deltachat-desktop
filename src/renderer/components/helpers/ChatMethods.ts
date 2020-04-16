@@ -6,6 +6,7 @@ import {
   JsonContact,
   FullChat,
 } from '../../../shared/shared-types'
+import { C } from 'deltachat-node/dist/constants'
 
 type Chat = ChatListItemType | FullChat
 
@@ -13,8 +14,17 @@ const unselectChat = () => {
   chatStore.dispatch({ type: 'UI_UNSELECT_CHAT' })
 }
 
-export function archiveChat(chatId: number, archive: boolean) {
-  callDcMethod('chat.archive', [chatId, archive], unselectChat)
+export async function setChatVisibility(
+  chatId: number,
+  visibility:
+    | C.DC_CHAT_VISIBILITY_NORMAL
+    | C.DC_CHAT_VISIBILITY_ARCHIVED
+    | C.DC_CHAT_VISIBILITY_PINNED,
+  shouldUnselectChat: boolean = false
+) {
+  await callDcMethodAsync('chat.setVisibility', [chatId, visibility])
+  if (shouldUnselectChat || visibility === C.DC_CHAT_VISIBILITY_ARCHIVED)
+    unselectChat()
 }
 
 export function openLeaveChatDialog(

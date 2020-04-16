@@ -76,9 +76,15 @@ export default class DCChat extends SplitOut {
     this._controller.chatList.updateChatList()
   }
 
-  archive(chatId: number, archive: boolean) {
-    log.debug(`action - archiving chat ${chatId}`)
-    this._dc.archiveChat(chatId, archive)
+  setVisibility(
+    chatId: number,
+    visibility:
+      | C.DC_CHAT_VISIBILITY_NORMAL
+      | C.DC_CHAT_VISIBILITY_ARCHIVED
+      | C.DC_CHAT_VISIBILITY_PINNED
+  ) {
+    log.debug(`action - set chat ${chatId} visibility ${visibility}`)
+    this._dc.setChatVisibility(chatId, visibility)
   }
 
   getChatContacts(chatId: number) {

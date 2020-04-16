@@ -14,13 +14,19 @@ const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
 
 const Header = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { lastUpdated, name, isVerified } = chatListItem
+    const { lastUpdated, name, isVerified, pinned } = chatListItem
     return (
       <div className='chat-list-item__header'>
         <div className='chat-list-item__header__name'>
           {isVerified && <VerifiedIcon />}
           <span className='chat-list-item__name'>{name + ' '}</span>
         </div>
+        {pinned && (
+          <div
+            className='chat-list-item__header__pin_icon'
+            aria-label={window.translate('pin')}
+          />
+        )}
         <div className='chat-list-item__header__date'>
           <Timestamp
             timestamp={lastUpdated}
@@ -35,7 +41,7 @@ const Header = React.memo(
 
 const Message = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { summary, freshMessageCounter } = chatListItem
+    const { summary, freshMessageCounter, archived } = chatListItem
     if (!summary) return null
 
     return (
@@ -53,7 +59,12 @@ const Message = React.memo(
           )}
           <MessageBody text={summary.text2 || ''} disableJumbomoji preview />
         </div>
-        {summary.status && (
+        {archived && (
+          <div className='archived-label'>
+            {window.translate('chat_archived_label')}
+          </div>
+        )}
+        {!archived && summary.status && (
           <div className={classNames('status-icon', summary.status)} />
         )}
         <FreshMessageCounter counter={freshMessageCounter} />
@@ -92,6 +103,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'chat-list-item--is-selected': isSelected,
+        pinned: chatListItem.pinned,
       })}
     >
       <Avatar {...chatListItem} displayName={chatListItem.name} />
