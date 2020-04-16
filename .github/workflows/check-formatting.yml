@@ -1,4 +1,4 @@
-name: npm test
+name: Check formatting
 
 on: [push]
 
@@ -11,10 +11,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install, build, and test
-      run: |
-        npm ci
-        npm run build
-        npm run test
+    - name: Install dependencies
+      run: npm ci
       env:
         CI: true
+    - name: Check formatting
+      run: npm run lint
