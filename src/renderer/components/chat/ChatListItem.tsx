@@ -103,7 +103,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'chat-list-item--is-selected': isSelected,
-        'pinned': chatListItem.pinned
+        pinned: chatListItem.pinned,
       })}
     >
       <Avatar {...chatListItem} displayName={chatListItem.name} />
