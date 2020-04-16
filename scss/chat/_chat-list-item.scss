@@ -147,6 +147,9 @@
 
 .chat-list-item.pinned {
   background-color: var(--chatListItemBgPinned);
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
   .chat-list-item__header__pin_icon {
     flex-shrink: 0;
     @include color-svg('../images/pin.svg', var(--globalText));
