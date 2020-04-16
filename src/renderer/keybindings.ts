@@ -1,13 +1,13 @@
 function selectFirstChatListItem() {
   let chatItemToSelect = document.querySelector<HTMLElement>('.chat-list-item')
-  if (chatItemToSelect.classList.contains('chat-list-item--is-deaddrop')) {
+  if (chatItemToSelect.classList.contains('is-deaddrop')) {
     chatItemToSelect = chatItemToSelect.nextSibling as HTMLElement
   }
   selectChatItem(chatItemToSelect)
 }
 
 function selectChatItem(domChatItem: HTMLElement) {
-  if (domChatItem.classList.contains('chat-list-item--is-deaddrop')) return
+  if (domChatItem.classList.contains('is-deaddrop')) return
   domChatItem.click()
   domChatItem.scrollIntoView({ block: 'nearest' })
   setTimeout(
@@ -17,9 +17,7 @@ function selectChatItem(domChatItem: HTMLElement) {
 }
 
 function scrollSelectedChatItemIntoView() {
-  const selectedChatItem = document.querySelector(
-    '.chat-list-item--is-selected'
-  )
+  const selectedChatItem = document.querySelector('.chat-list-item.selected')
   if (selectedChatItem) selectedChatItem.scrollIntoView({ block: 'nearest' })
 }
 
@@ -41,14 +39,14 @@ export default function attachKeybindingsListener() {
 
     if (Event.altKey && Event.key === 'ArrowDown') {
       const selectedChatItems = document.getElementsByClassName(
-        'chat-list-item--is-selected'
+        'chat-list-item.selected'
       )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const nextChatItem = selectedChatItems[0].nextSibling as HTMLElement
       selectChatItem(nextChatItem)
     } else if (Event.altKey && Event.key === 'ArrowUp') {
       const selectedChatItems = document.getElementsByClassName(
-        'chat-list-item--is-selected'
+        'chat-list-item.selected'
       )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const previousChatItem = selectedChatItems[0]

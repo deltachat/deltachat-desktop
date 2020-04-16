@@ -9,17 +9,17 @@ import { ChatListItemType } from '../../../shared/shared-types'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
-  return <div className='chat-list-item__fresh-message-counter'>{counter}</div>
+  return <div className='fresh-message-counter'>{counter}</div>
 })
 
 const Header = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
     const { lastUpdated, name, isVerified, pinned } = chatListItem
     return (
-      <div className='chat-list-item__header'>
-        <div className='chat-list-item__header__name'>
+      <div className='header'>
+        <div className='name'>
           {isVerified && <VerifiedIcon />}
-          <span className='chat-list-item__name'>{name + ' '}</span>
+          <span>{name + ' '}</span>
         </div>
         {pinned && (
           <div
@@ -27,11 +27,11 @@ const Header = React.memo(
             aria-label={window.translate('pin')}
           />
         )}
-        <div className='chat-list-item__header__date'>
+        <div>
           <Timestamp
             timestamp={lastUpdated}
             extended={false}
-            module='chat-list-item__header__timestamp'
+            module='timestamp'
           />
         </div>
       </div>
@@ -45,13 +45,12 @@ const Message = React.memo(
     if (!summary) return null
 
     return (
-      <div className='chat-list-item__message'>
-        <div className='chat-list-item__message__text'>
+      <div className='chat-list-item-message'>
+        <div className='text'>
           {summary.text1 !== null && (
             <div
-              className={classNames('chat-list-item__message__text__summary', {
-                'chat-list-item__message__text__summary--draft':
-                  summary.status === 'draft',
+              className={classNames('summary', {
+                draft: summary.status === 'draft',
               })}
             >
               {summary.text1 + ': '}
@@ -87,7 +86,7 @@ const ChatListItemArchiveLink = React.memo(
   }) => {
     return (
       <div role='button' onClick={onClick} className={'chat-list-item'}>
-        <div className='chat-list-item__archive-link'>{chatListItem.name}</div>
+        <div className='archive-link'>{chatListItem.name}</div>
       </div>
     )
   }
@@ -102,12 +101,12 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       onContextMenu={onContextMenu}
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
-        'chat-list-item--is-selected': isSelected,
         pinned: chatListItem.pinned,
+        selected: isSelected,
       })}
     >
       <Avatar {...chatListItem} displayName={chatListItem.name} />
-      <div className='chat-list-item__content'>
+      <div className='content'>
         <Header chatListItem={chatListItem} />
         <Message chatListItem={chatListItem} />
       </div>
@@ -124,10 +123,10 @@ const ChatListItemDeaddrop = React.memo(
       <div
         role='button'
         onClick={onClick}
-        className={classNames('chat-list-item', 'chat-list-item--is-deaddrop')}
+        className='chat-list-item is-deaddrop'
       >
         <Avatar displayName={chatListItem.deaddrop.contact.address} />
-        <div className='chat-list-item__content'>
+        <div className='content'>
           <Header
             chatListItem={{ ...chatListItem, name: tx('chat_contact_request') }}
           />
