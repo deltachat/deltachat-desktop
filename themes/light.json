@@ -19,7 +19,6 @@
       "scrollbarThumb": "#666666",
       "scrollbarThumbHover": "#606060",
       "bp3DialogBgSecondary": "#ececec",
-      "chatListItemBgHover": "rgb(228, 228, 228)",
-      "chatListItemBgPinned": "#eeeeee"
+      "chatListItemBgHover": "rgb(228, 228, 228)"
   }
 }

@@ -138,9 +138,6 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
     chatListItemBgHover: undefinedGuard(theme.bgPrimary, c =>
       changeContrast(c, 0.3)
     ),
-    chatListItemBgPinned: undefinedGuard(theme.bgPrimary, c =>
-      changeContrast(c, 0.1)
-    ),
     chatListBorderColor: undefinedGuard(theme.bgPrimary, bg =>
       Color(bg).isDark() ? '#111' : '#b9b9b9'
     ),

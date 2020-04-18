@@ -12,8 +12,5 @@
     "textNavBar": "#ddddf0",
     "scrollbarTransparency": 0.34,
     "bgMessageBubbleIncoming": "#303030",
-    "bgMessageBubbleOutgoing": "#354535",
-    "raw": {
-        "chatListItemBgPinned": "#222222"
-    }
+    "bgMessageBubbleOutgoing": "#354535"
 }
