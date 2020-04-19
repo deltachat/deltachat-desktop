@@ -139,14 +139,10 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
       changeContrast(c, 0.3)
     ),
     chatListItemBgPinned: undefinedGuard(theme.bgPrimary, c =>
-      changeContrast(c, 0.1)
+      changeContrast(c, 0.03)
     ),
-    chatListBorderColor: undefinedGuard(theme.bgPrimary, bg =>
-      Color(bg).isDark() ? '#111' : '#b9b9b9'
-    ),
-    chatListBorder: undefinedGuard(
-      theme.chatListBorderColor,
-      c => '1px solid ' + c
+    chatListItemDeaddropBg: undefinedGuard(theme.bgPrimary, c =>
+      changeContrast(c, 0.15)
     ),
     // Message Bubble
     messageText: theme.textPrimary,
