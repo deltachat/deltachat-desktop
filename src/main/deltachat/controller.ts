@@ -1,5 +1,5 @@
 import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
-import { app } from 'electron'
+import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { LocalSettings, JsonContact } from '../../shared/shared-types'
@@ -17,10 +17,13 @@ import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
+import { ExtendedAppMainProcess } from '../types'
+import { string } from 'prop-types'
+const app = rawApp as ExtendedAppMainProcess
 
 const eventStrings = require('deltachat-node/events')
 const log = getLogger('main/deltachat')
-const logCoreEv = getLogger('core/event')
+const logCoreEvent = getLogger('core/event')
 
 /**
  * DeltaChatController
@@ -64,16 +67,6 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
-
-  logCoreEvent(event: any, data1: any, data2: any) {
-    if (!isNaN(event)) {
-      event = eventStrings[event]
-    }
-
-    if (data1 === 0) data1 = ''
-
-    logCoreEv.debug(event, data1, data2)
-  }
 
   /**
    * @param {string} methodName
@@ -157,12 +150,26 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   registerEventHandler(dc: DeltaChat) {
-    dc.on('ALL', (event: any, data1: any, data2: any) => {
-      if (!isNaN(event)) {
-        event = eventStrings[event]
+    // in debug mode log all core events
+    dc.on('ALL', (_event: any, data1: any, data2: any) => {
+      const event: string = !isNaN(_event)
+        ? eventStrings[_event]
+        : String(_event)
+
+      if (data1 === 0) data1 = ''
+
+      if (event === 'DC_EVENT_WARNING') {
+        logCoreEvent.warn(event, data1, data2)
+      } else if (event === 'DC_EVENT_INFO') {
+        logCoreEvent.info(event, data1, data2)
+      } else if (event.startsWith('DC_EVENT_ERROR')) {
+        this.emit('error', event, data1, data2)
+        logCoreEvent.error(event, data1, data2)
+      } else if (app.rc['log-debug']) {
+        // in debug mode log all core events
+        logCoreEvent.debug(event, data1, data2)
       }
-      this.logCoreEvent(event, data1, data2)
-      if (!event || event === 'DC_EVENT_INFO') return
+
       this.sendToRenderer(event, [data1, data2])
     })
 
@@ -200,35 +207,17 @@ export default class DeltaChatController extends EventEmitter {
       this.onChatListItemChanged(chatId)
     })
 
-    dc.on('DC_EVENT_WARNING', (warning: any) => {
-      log.warn(warning)
-    })
-
-    const onError = (error: any) => {
-      this.emit('error', error)
-      log.error(error)
-    }
-
-    dc.on('DC_EVENT_ERROR', (error: any) => {
-      onError(error)
-    })
-
-    dc.on('DC_EVENT_ERROR_NETWORK', (_first: any, error: any) => {
-      onError(error)
-      if (this.configuring) {
-        this.onLoginFailure()
-      }
-    })
-
-    dc.on('DC_EVENT_ERROR_SELF_NOT_IN_GROUP', (error: any) => {
-      onError(error)
-    })
-
     dc.on('DC_EVENT_CONFIGURE_PROGRESS', (progress: string) => {
       if (Number(progress) === 0) {
         // login failed
         this.onLoginFailure()
         this.sendToRenderer('DC_EVENT_CONFIGURE_FAILED')
+      }
+    })
+
+    dc.on('DC_EVENT_ERROR_NETWORK', (_first: any, error: any) => {
+      if (this.configuring) {
+        this.onLoginFailure()
       }
     })
   }

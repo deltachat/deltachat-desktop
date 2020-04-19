@@ -12,6 +12,13 @@ const defaults: RC_Config = {
   'theme-watch': false,
 }
 
-const rc_config = Object.freeze(rc('DeltaChat', defaults) as RC_Config)
+const config = rc('DeltaChat', defaults) as RC_Config
+
+if (config.debug) {
+  config['log-debug'] = true
+  config['log-to-console'] = true
+}
+
+const rc_config = Object.freeze(config)
 
 export default rc_config
