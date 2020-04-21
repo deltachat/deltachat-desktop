@@ -55,7 +55,10 @@ export function DeltaDialogImportQrInner({
   const handleResponse = async (scannedQrCode: string) => {
     setQrCode(scannedQrCode)
     let error = false
-    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', scannedQrCode)
+    const response: QrCodeResponse = await callDcMethodAsync(
+      'checkQrCode',
+      scannedQrCode
+    )
 
     if (response === null) error = true
 
@@ -91,7 +94,10 @@ export function DeltaDialogImportQrInner({
               log.error('DC_EVENT_SECUREJOIN_FAILED', payload)
             }
           )
-          const chatId:number = await callDcMethodAsync('joinSecurejoin', scannedQrCode)
+          const chatId: number = await callDcMethodAsync(
+            'joinSecurejoin',
+            scannedQrCode
+          )
           if (chatId !== 0) selectChatAndClose(chatId)
         },
       })
@@ -102,10 +108,16 @@ export function DeltaDialogImportQrInner({
         cb: async (confirmed: boolean) => {
           if (!confirmed) return
           setSecureJoinOngoing(true)
-          ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
-            log.error('DC_EVENT_SECUREJOIN_FAILED', payload)
-          })
-          const chatId:number = await callDcMethodAsync('joinSecurejoin', scannedQrCode)
+          ipcRenderer.once(
+            'DC_EVENT_SECUREJOIN_FAILED',
+            (evt: Event, payload: any) => {
+              log.error('DC_EVENT_SECUREJOIN_FAILED', payload)
+            }
+          )
+          const chatId: number = await callDcMethodAsync(
+            'joinSecurejoin',
+            scannedQrCode
+          )
           if (chatId !== 0) selectChatAndClose(chatId)
         },
       })
