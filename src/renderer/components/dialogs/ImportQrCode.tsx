@@ -12,6 +12,9 @@ const { ipcRenderer } = window.electron_functions
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar } from '@blueprintjs/core'
+import * as logger from '../../../shared/logger'
+
+const log = logger.getLogger('dialogs/importQrCode')
 
 interface QrStates {
   [key: number]: string
@@ -51,15 +54,11 @@ export function DeltaDialogImportQrInner({
 
   const handleResponse = async (scannedQrCode: string) => {
     setQrCode(scannedQrCode)
-    const tx = window.translate
     let error = false
-    const response: QrCodeResponse = await callDcMethodAsync(
-      'checkQrCode',
-      scannedQrCode
-    )
-    if (response === null) {
-      error = true
-    }
+    const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', scannedQrCode)
+
+    if (response === null) error = true
+
     const state = qrStates[response.state]
     if (error || state === 'QrError' || state === 'QrText') {
       screenContext.userFeedback({
@@ -68,39 +67,13 @@ export function DeltaDialogImportQrInner({
       })
       return
     }
-    const selectGroupChat = (
-      evt: Event,
-      payload: { chatId: number; chat: ChatListItemType }
-    ) => {
-      /* ignore-console-log */
-      console.log('selectGroupChat payload: ', payload)
-      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
-      if (payload.chat && payload.chat.isGroup) {
-        selectChat(payload.chatId)
-        unsubscribe('group')
-        onClose()
-      }
+
+    const selectChatAndClose = (chatId: number) => {
+      log.debug('selectChatAndClose chatId:', chatId)
+      selectChat(chatId)
+      onClose()
     }
-    const selectChatAndClose = (
-      evt: Event,
-      payload: { chatId: number; chat: ChatListItemType }
-    ) => {
-      /* ignore-console-log */
-      console.log('selectChatAndClose payload: ', payload)
-      // CHAT MODIFIED EVENT is also sent when chat with inviting user is created
-      if (payload.chatId) {
-        selectChat(payload.chatId)
-        unsubscribe('single')
-        onClose()
-      }
-    }
-    const unsubscribe = (type: string) => {
-      if (type === 'group') {
-        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
-      } else {
-        ipcRenderer.removeListener('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
-      }
-    }
+
     if (state === 'QrAskVerifyContact') {
       const contact = await callDcMethodAsync(
         'contacts.getContact',
@@ -110,38 +83,30 @@ export function DeltaDialogImportQrInner({
         message: tx('ask_start_chat_with', contact.address),
         confirmLabel: tx('ok'),
         cb: async (confirmed: boolean) => {
-          if (confirmed) {
-            setSecureJoinOngoing(true)
-            ipcRenderer.once(
-              'DC_EVENT_SECUREJOIN_FAILED',
-              (evt: Event, payload: any) => {
-                /* ignore-console-log */
-                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-              }
-            )
-            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectChatAndClose)
-            callDcMethodAsync('joinSecurejoin', scannedQrCode)
-          }
+          if (!confirmed) return
+          setSecureJoinOngoing(true)
+          ipcRenderer.once(
+            'DC_EVENT_SECUREJOIN_FAILED',
+            (evt: Event, payload: any) => {
+              log.error('DC_EVENT_SECUREJOIN_FAILED', payload)
+            }
+          )
+          const chatId:number = await callDcMethodAsync('joinSecurejoin', scannedQrCode)
+          if (chatId !== 0) selectChatAndClose(chatId)
         },
       })
     } else if (state === 'QrAskVerifyGroup') {
       screenContext.openDialog('ConfirmationDialog', {
         message: tx('qrscan_ask_join_group', response.text1),
         confirmLabel: tx('ok'),
-        cb: (confirmed: boolean) => {
-          if (confirmed) {
-            setSecureJoinOngoing(true)
-            ipcRenderer.once(
-              'DC_EVENT_SECUREJOIN_FAILED',
-              (evt: Event, payload: any) => {
-                /* ignore-console-log */
-                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-              }
-            )
-            ipcRenderer.on('DD_EVENT_CHAT_MODIFIED', selectGroupChat)
-            callDcMethodAsync('joinSecurejoin', scannedQrCode)
-          }
-          return
+        cb: async (confirmed: boolean) => {
+          if (!confirmed) return
+          setSecureJoinOngoing(true)
+          ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
+            log.error('DC_EVENT_SECUREJOIN_FAILED', payload)
+          })
+          const chatId:number = await callDcMethodAsync('joinSecurejoin', scannedQrCode)
+          if (chatId !== 0) selectChatAndClose(chatId)
         },
       })
     }
@@ -155,17 +120,9 @@ export function DeltaDialogImportQrInner({
     }
   }
 
-  const handleError = (err: string) => {
-    console.error(err)
-  }
-
-  const toggleCamera = () => {
-    setUseCamera(!useCamera)
-  }
-
-  const openImageDialog = () => {
-    qrImageReader.current.openImageDialog()
-  }
+  const handleError = (err: string) => log.error('QR Scanning eror:', err)
+  const toggleCamera = () => setUseCamera(!useCamera)
+  const openImageDialog = () => qrImageReader.current.openImageDialog()
 
   return (
     <>

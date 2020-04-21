@@ -273,7 +273,9 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   joinSecurejoin(qrCode: string) {
-    this._dc.joinSecurejoin(qrCode)
+    return new Promise(resolve => {
+      this._dc.joinSecurejoin(qrCode, resolve)
+    })
   }
 
   // ToDo: Deprecated, use contacts.getContact
