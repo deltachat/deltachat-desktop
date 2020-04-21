@@ -115,6 +115,7 @@ export function DeltaDialogImportQrInner({
   const qrImageReader = useRef<any>()
 
   const handleScan = (data: string) => {
+    log.debug('handleScan:', data)
     if (data) {
       handleResponse(data)
     }
