@@ -39,14 +39,14 @@ export default function attachKeybindingsListener() {
 
     if (Event.altKey && Event.key === 'ArrowDown') {
       const selectedChatItems = document.getElementsByClassName(
-        'chat-list-item.selected'
+        'chat-list-item selected'
       )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const nextChatItem = selectedChatItems[0].nextSibling as HTMLElement
       selectChatItem(nextChatItem)
     } else if (Event.altKey && Event.key === 'ArrowUp') {
       const selectedChatItems = document.getElementsByClassName(
-        'chat-list-item.selected'
+        'chat-list-item selected'
       )
       if (selectedChatItems.length === 0) return selectFirstChatListItem()
       const previousChatItem = selectedChatItems[0]
