@@ -1,6 +1,5 @@
 import {
   ipcBackend,
-  callDcMethod,
   callDcMethodAsync,
   mainProcessUpdateBadge,
   saveLastChatId,
@@ -179,7 +178,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     saveLastChatId(chatId)
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
-    callDcMethod('messageList.deleteMessage', [msgId])
+    callDcMethodAsync('messageList.deleteMessage', [msgId])
   } else if (type === 'FETCH_MORE_MESSAGES') {
     const oldestFetchedMessageIndex = Math.max(
       state.oldestFetchedMessageIndex - PAGE_SIZE,

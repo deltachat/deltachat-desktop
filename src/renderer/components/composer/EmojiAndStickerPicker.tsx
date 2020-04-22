@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 
 export const useAsyncEffect = (
   asyncEffect: () => {},
@@ -29,7 +29,7 @@ export const StickerDiv = (props: {
     setShowEmojiPicker,
   } = props
   const onClickSticker = (fileName: string) => {
-    callDcMethod('messageList.sendSticker', [chatId, fileName])
+    callDcMethodAsync('messageList.sendSticker', [chatId, fileName])
     setShowEmojiPicker(false)
   }
 

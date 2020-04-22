@@ -16,7 +16,7 @@ export default function DeadDrop(props) {
   const chatStoreDispatch = useChatStore()[1]
 
   const never = () => {
-    callDcMethod('contacts.blockContact', [contact.id])
+    callDcMethodAsync('contacts.blockContact', [contact.id])
     onClose()
   }
 

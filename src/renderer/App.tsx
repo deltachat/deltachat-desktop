@@ -6,7 +6,6 @@ import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import {
-  callDcMethod,
   sendToBackend,
   ipcBackend,
   startBackendLogging,
@@ -61,7 +60,7 @@ export default function App(props: any) {
     })
 
     window.addEventListener('online', () => {
-      callDcMethod('context.maybeNetwork')
+      callDcMethodAsync('context.maybeNetwork')
     })
   }, [])
 

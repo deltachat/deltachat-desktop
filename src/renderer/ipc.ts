@@ -29,7 +29,7 @@ export function sendToBackend(event: string, ...args: any[]) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
-export function callDcMethod(
+function callDcMethod(
   methodName: string,
   args?: any[] | any,
   cb?: (returnValue: any) => void

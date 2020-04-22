@@ -1,6 +1,6 @@
 import React from 'react'
+import { callDcMethodAsync } from '../../ipc'
 const debounce = require('debounce')
-const { callDcMethod } = require('../../ipc')
 
 type ComposerMessageInputProps = {
   draft: string
@@ -42,7 +42,7 @@ export default class ComposerMessageInput extends React.Component<
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
-      callDcMethod('messageList.setDraft', [chatId, text])
+      callDcMethodAsync('messageList.setDraft', [chatId, text])
     }, 500)
 
     this.textareaRef = React.createRef()

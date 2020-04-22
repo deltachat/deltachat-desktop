@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { callDcMethod } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import contactsStore from '../../stores/contacts'
 
@@ -19,7 +19,7 @@ export default function UnblockContacts(props) {
   }
   useEffect(() => {
     contactsStore.subscribe(onContactsUpdate)
-    callDcMethod('updateBlockedContacts')
+    callDcMethodAsync('updateBlockedContacts')
     return () => contactsStore.unsubscribe(onContactsUpdate)
   }, [])
 

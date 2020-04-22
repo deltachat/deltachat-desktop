@@ -1,4 +1,4 @@
-import { callDcMethod, ipcBackend } from '../ipc'
+import { ipcBackend, callDcMethodAsync } from '../ipc'
 import { Store, Action } from './store'
 import logger from '../../shared/logger'
 import debounce from 'debounce'
@@ -13,12 +13,11 @@ class state {
 }
 const contactsStore = new Store(new state(), 'contact')
 
-contactsStore.attachEffect(action => {
+contactsStore.attachEffect(async action => {
   if (action.type === 'UI_UNBLOCK_CONTACT') {
     const contactId = action.payload
-    callDcMethod('contacts.unblockContact', [contactId], () => {
-      callDcMethod('updateBlockedContacts')
-    })
+    await callDcMethodAsync('contacts.unblockContact', [contactId])
+    await callDcMethodAsync('updateBlockedContacts')
   }
 })
 

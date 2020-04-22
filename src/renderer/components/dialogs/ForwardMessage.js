@@ -5,7 +5,7 @@ import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
-import { callDcMethod } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 
 const { C } = require('deltachat-node/dist/constants')
 
@@ -20,7 +20,7 @@ export default function ForwardMessage(props) {
   )
 
   const onChatClick = chatid => {
-    callDcMethod('messageList.forwardMessage', [message.msg.id, chatid])
+    callDcMethodAsync('messageList.forwardMessage', [message.msg.id, chatid])
     onClose()
   }
   const onSearchChange = e => setQueryStr(e.target.value)

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react'
-import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
+import { callDcMethodAsync, ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import logger from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
@@ -14,11 +14,11 @@ const debouncedGetChatListIds = debounce(
     queryContactId: number,
     cb: (...args: any) => void
   ) => {
-    callDcMethod(
-      'chatList.getChatListIds',
-      [listFlags, queryStr, queryContactId],
-      cb
-    )
+    callDcMethodAsync('chatList.getChatListIds', [
+      listFlags,
+      queryStr,
+      queryContactId,
+    ]).then(cb)
   },
   200
 )
@@ -37,11 +37,11 @@ export function useChatListIds(
 
   const getAndSetChatListIds = (immediatly: boolean = false) => {
     if (immediatly === true) {
-      callDcMethod(
-        'chatList.getChatListIds',
-        [listFlags, queryStr, queryContactId],
-        setChatListIds
-      )
+      callDcMethodAsync('chatList.getChatListIds', [
+        listFlags,
+        queryStr,
+        queryContactId,
+      ]).then(setChatListIds)
       return
     }
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)

@@ -1,4 +1,4 @@
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import {
@@ -35,7 +35,7 @@ export function openLeaveChatDialog(
   screenContext.openDialog('ConfirmationDialog', {
     message: tx('ask_leave_group'),
     confirmLabel: tx('menu_leave_group'),
-    cb: (yes: boolean) => yes && callDcMethod('chat.leaveGroup', chatId),
+    cb: (yes: boolean) => yes && callDcMethodAsync('chat.leaveGroup', chatId),
   })
 }
 
@@ -48,7 +48,7 @@ export function openDeleteChatDialog(
     message: tx('ask_delete_chat_desktop', chat.name),
     confirmLabel: tx('delete'),
     cb: (yes: boolean) =>
-      yes && callDcMethod('chat.delete', chat.id, unselectChat),
+      yes && callDcMethodAsync('chat.delete', chat.id).then(unselectChat),
   })
 }
 
@@ -63,11 +63,10 @@ export function openBlockContactDialog(
       confirmLabel: tx('menu_block_contact'),
       cb: (yes: boolean) =>
         yes &&
-        callDcMethod(
+        callDcMethodAsync(
           'contacts.blockContact',
-          selectedChat.contactIds[0],
-          unselectChat
-        ),
+          selectedChat.contactIds[0]
+        ).then(unselectChat),
     })
   }
 }

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from 'react'
-import { callDcMethod } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 import Composer from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
@@ -43,7 +43,7 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
             if (!yes) {
               return
             }
-            callDcMethod('messageList.sendMessage', [chat.id, null, path])
+            callDcMethodAsync('messageList.sendMessage', [chat.id, null, path])
           },
         })
       } else {
