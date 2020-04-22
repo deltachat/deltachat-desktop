@@ -221,14 +221,6 @@ export default class DeltaChatController extends EventEmitter {
       }
     })
 
-    dc.on('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', (progress: string) => {
-      if (Number(progress) === 0) {
-        // login failed
-        this.onLoginFailure()
-        this.sendToRenderer('DC_EVENT_SECUREJOIN_FAILED')
-      }
-      this.sendToRenderer('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', progress)
-    })
   }
 
   onLoginFailure() {
