@@ -44,8 +44,8 @@ export function DeltaDialogImportQrInner({
   onClose: () => void
 }) {
   const tx = window.translate
-  const [ qrCode, setQrCode ] = useState('')
-  const [ useCamera, setUseCamera ] = useState(true)
+  const [qrCode, setQrCode] = useState('')
+  const [useCamera, setUseCamera] = useState(true)
   const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
@@ -68,12 +68,11 @@ export function DeltaDialogImportQrInner({
       })
       return
     }
-    
+
     const selectChatAndClose = (chatId: number) => {
-      /* ignore-console-log */
-        selectChat(chatId)
-        onClose()
-    };
+      selectChat(chatId)
+      onClose()
+    }
 
     if (state === 'QrAskVerifyContact') {
       const contact = await callDcMethodAsync(
@@ -86,10 +85,13 @@ export function DeltaDialogImportQrInner({
         cb: async (confirmed: boolean) => {
           if (confirmed) {
             setSecureJoinOngoing(true)
-            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
-              /* ignore-console-log */
-              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-            })
+            ipcRenderer.once(
+              'DC_EVENT_SECUREJOIN_FAILED',
+              (evt: Event, payload: any) => {
+                /* ignore-console-log */
+                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+              }
+            )
             callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
           }
         },
@@ -101,10 +103,13 @@ export function DeltaDialogImportQrInner({
         cb: (confirmed: boolean) => {
           if (confirmed) {
             setSecureJoinOngoing(true)
-            ipcRenderer.once('DC_EVENT_SECUREJOIN_FAILED', (evt: Event, payload: any) => {
-              /* ignore-console-log */
-              console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
-            })
+            ipcRenderer.once(
+              'DC_EVENT_SECUREJOIN_FAILED',
+              (evt: Event, payload: any) => {
+                /* ignore-console-log */
+                console.log('DC_EVENT_SECUREJOIN_FAILED', payload)
+              }
+            )
             callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
           }
           return
@@ -122,11 +127,8 @@ export function DeltaDialogImportQrInner({
   }
 
   const handleError = (err: string) => {
+    /* ignore-console-log */
     console.error(err)
-  }
-
-  const toggleCamera = () => {
-    setUseCamera(!useCamera)
   }
 
   const openImageDialog = () => {
@@ -134,18 +136,15 @@ export function DeltaDialogImportQrInner({
   }
 
   return (
-      <DeltaDialogBody>
-        <DeltaDialogContent noOverflow noPadding>
-          {secureJoinOngoing && 
-            <div>
-              <p className='progress-info'>Secure join in progress...</p>
-              <ProgressBar
-                intent={Intent.PRIMARY}
-                value= {100}
-              />
-            </div>
-          }
-          {!secureJoinOngoing &&
+    <DeltaDialogBody>
+      <DeltaDialogContent noOverflow noPadding>
+        {secureJoinOngoing && (
+          <div>
+            <p className='progress-info'>Secure join in progress...</p>
+            <ProgressBar intent={Intent.PRIMARY} value={100} />
+          </div>
+        )}
+        {!secureJoinOngoing && (
           <div className='import-qr-code-dialog'>
             <div>
               <div>
@@ -173,7 +172,7 @@ export function DeltaDialogImportQrInner({
               </div>
             </div>
             <button onClick={openImageDialog} className={'bp3-button'}>
-            {tx('load_qr_code_as_image')}
+              {tx('load_qr_code_as_image')}
             </button>
             <div className='qr-image-loader'>
               <QrReader
@@ -186,9 +185,9 @@ export function DeltaDialogImportQrInner({
               />
             </div>
           </div>
-          }
-        </DeltaDialogContent>
-      </DeltaDialogBody>
+        )}
+      </DeltaDialogContent>
+    </DeltaDialogBody>
   )
 }
 
