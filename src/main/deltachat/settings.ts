@@ -28,7 +28,7 @@ export default class DCSettings extends SplitOut {
     const config: { [key: string]: string } = {}
     for (const key of keys) {
       if (key.indexOf('_security') > -1) {
-        config[key] = this.convertServerFlag(
+        config[key] = this._convertServerFlag(
           Number(this.getConfig('server_flags')),
           key
         )
@@ -56,7 +56,7 @@ export default class DCSettings extends SplitOut {
    * @param flags bitmask
    * @param configKey string
    */
-  convertServerFlag(flags: number, configKey: string) {
+  _convertServerFlag(flags: number, configKey: string) {
     configKey = configKey.replace('configured_', '')
     let result = 'automatic'
     Object.keys(serverFlagMap).map(key => {

@@ -57,7 +57,7 @@ export default class Settings extends React.Component {
   async componentDidMount() {
     await this.loadSettings()
     const selfContact = await callDcMethodAsync(
-      'getContact',
+      'contacts.getContact',
       C.DC_CONTACT_ID_SELF
     )
     this.setState({ selfContact })

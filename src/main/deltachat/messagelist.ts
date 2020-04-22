@@ -9,13 +9,14 @@ import mime from 'mime-types'
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
+import { JsonMessage, MessageType } from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
     text: string,
     filename: string,
     location: { lat: number; lng: number }
-  ) {
+  ): [number, MessageType | { msg: null }] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
@@ -59,10 +60,10 @@ export default class DCMessageList extends SplitOut {
       const empty: { msg: null } = { msg: null }
       return empty
     }
-    return this.messageToJson(msg)
+    return this._messageToJson(msg)
   }
 
-  messageToJson(msg: Message) {
+  _messageToJson(msg: Message): MessageType {
     const filemime = msg.getFilemime()
     const filename = msg.getFilename()
     const filesize = msg.getFilebytes()
@@ -90,7 +91,7 @@ export default class DCMessageList extends SplitOut {
       msg: Object.assign(jsonMSG, {
         sentAt: jsonMSG.timestamp * 1000,
         receivedAt: jsonMSG.receivedTimestamp * 1000,
-        direction: isMe ? 'outgoing' : 'incoming',
+        direction: (isMe ? 'outgoing' : 'incoming') as 'outgoing' | 'incoming',
         status: convertMessageStatus(jsonMSG.state),
         attachment,
       }),
@@ -100,9 +101,9 @@ export default class DCMessageList extends SplitOut {
       viewType,
       fromId,
       isMe,
-      contact: contact
+      contact: (contact
         ? { ...contact, color: integerToHexColor(contact.color) }
-        : {},
+        : {}) as any,
       isInfo: msg.isInfo(),
       setupCodeBegin,
     }

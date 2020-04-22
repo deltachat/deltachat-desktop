@@ -147,9 +147,9 @@ export default class DeltaChatController extends EventEmitter {
     return (app as any).translate(...args)
   }
 
-  checkPassword(password: string) {
-    return password === this.settings.getConfig('mail_pw')
-  }
+  // checkPassword(password: string) {
+  //   return password === this.settings.getConfig('mail_pw')
+  // }
 
   registerEventHandler(dc: DeltaChat) {
     // in debug mode log all core events
@@ -262,7 +262,7 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   // ToDo: Deprecated, use contacts.getContact
-  getContact(id: number) {
+  _getContact(id: number) {
     const contact = this._dc.getContact(id).toJson()
     return { ...contact, color: integerToHexColor(contact.color) }
   }
@@ -270,7 +270,7 @@ export default class DeltaChatController extends EventEmitter {
   // ToDo: move to contacts.
   _blockedContacts(): JsonContact[] {
     if (!this._dc) return []
-    return this._dc.getBlockedContacts().map(this.getContact.bind(this))
+    return this._dc.getBlockedContacts().map(this._getContact.bind(this))
   }
 
   // ToDo: move to contacts.
@@ -278,14 +278,8 @@ export default class DeltaChatController extends EventEmitter {
     const distinctIds = Array.from(
       new Set(this._dc.getContacts(listFlags, queryStr))
     )
-    const contacts = distinctIds.map(this.getContact.bind(this))
+    const contacts = distinctIds.map(this._getContact.bind(this))
     return contacts
-  }
-
-  // ToDo: move to contacts.
-  getContacts(listFlags: number, queryStr: string) {
-    const contacts = this.getContacts2(listFlags, queryStr)
-    this.sendToRenderer('DD_EVENT_CONTACTS_UPDATED', { contacts })
   }
 
   setProfilePicture(newImage: string) {
