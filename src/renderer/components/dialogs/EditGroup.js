@@ -47,13 +47,14 @@ export const useEditGroup = (
   const updateGroup = async () => {
     const remove = differ(initialGroupMembers, groupMembers)
     const add = differ(groupMembers, initialGroupMembers)
-    await callDcMethodAsync('chat.modifyGroup', [
+    await callDcMethodAsync(
+      'chat.modifyGroup',
       groupId,
       groupName,
       groupImage,
       remove,
-      add,
-    ])
+      add
+    )
   }
   const onUpdateGroup = async () => {
     if (groupName === '') return

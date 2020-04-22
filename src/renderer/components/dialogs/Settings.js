@@ -56,40 +56,39 @@ export default class Settings extends React.Component {
 
   async componentDidMount() {
     await this.loadSettings()
-    const selfContact = await callDcMethodAsync('getContact', [
-      C.DC_CONTACT_ID_SELF,
-    ])
+    const selfContact = await callDcMethodAsync(
+      'getContact',
+      C.DC_CONTACT_ID_SELF
+    )
     this.setState({ selfContact })
   }
 
   async loadSettings() {
     const settings = await callDcMethodAsync('settings.getConfigFor', [
-      [
-        'addr',
-        'mail_pw',
-        'inbox_watch',
-        'sentbox_watch',
-        'mvbox_watch',
-        'mvbox_move',
-        'e2ee_enabled',
-        'mail_server',
-        'mail_user',
-        'mail_port',
-        'mail_security',
-        'imap_certificate_checks',
-        'send_user',
-        'send_pw',
-        'send_server',
-        'send_port',
-        'send_security',
-        'smtp_certificate_checks',
-        'e2ee_enabled',
-        'displayname',
-        'selfstatus',
-        'mdns_enabled',
-        'show_emails',
-        'bcc_self',
-      ],
+      'addr',
+      'mail_pw',
+      'inbox_watch',
+      'sentbox_watch',
+      'mvbox_watch',
+      'mvbox_move',
+      'e2ee_enabled',
+      'mail_server',
+      'mail_user',
+      'mail_port',
+      'mail_security',
+      'imap_certificate_checks',
+      'send_user',
+      'send_pw',
+      'send_server',
+      'send_port',
+      'send_security',
+      'smtp_certificate_checks',
+      'e2ee_enabled',
+      'displayname',
+      'selfstatus',
+      'mdns_enabled',
+      'show_emails',
+      'bcc_self',
     ])
 
     const advancedSettings = {
@@ -139,7 +138,7 @@ export default class Settings extends React.Component {
                 })
               }
             })
-            callDcMethodAsync('settings.keysImport', [filenames[0]])
+            callDcMethodAsync('settings.keysImport', filenames[0])
           }
         )
       }
@@ -178,7 +177,7 @@ export default class Settings extends React.Component {
                   })
                 }
               )
-              callDcMethodAsync('settings.keysExport', [filenames[0]])
+              callDcMethodAsync('settings.keysExport', filenames[0])
             }
           }
         )
@@ -648,7 +647,7 @@ function ProfileImageSelector(props) {
   )
 
   const changeProfilePicture = async picture => {
-    await callDcMethodAsync('setProfilePicture', [picture])
+    await callDcMethodAsync('setProfilePicture', picture)
     setProfileImagePreview(await callDcMethodAsync('getProfilePicture'))
   }
 

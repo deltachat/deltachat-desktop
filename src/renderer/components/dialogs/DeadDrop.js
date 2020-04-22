@@ -1,5 +1,5 @@
 import React from 'react'
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { callDcMethodAsync } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, {
   DeltaButton,
@@ -16,22 +16,23 @@ export default function DeadDrop(props) {
   const chatStoreDispatch = useChatStore()[1]
 
   const never = () => {
-    callDcMethodAsync('contacts.blockContact', [contact.id])
+    callDcMethodAsync('contacts.blockContact', contact.id)
     onClose()
   }
 
   const notNow = async () => {
     const contactId = contact.id
-    await callDcMethodAsync('contacts.markNoticedContact', [contactId])
+    await callDcMethodAsync('contacts.markNoticedContact', contactId)
     onClose()
   }
 
   const yes = async () => {
     const messageId = msg.id
     const contactId = contact.id
-    const chatId = await callDcMethodAsync('contacts.acceptContactRequest', [
-      { messageId, contactId },
-    ])
+    const chatId = await callDcMethodAsync('contacts.acceptContactRequest', {
+      messageId,
+      contactId,
+    })
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
     onClose()
   }

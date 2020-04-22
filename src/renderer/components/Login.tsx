@@ -150,9 +150,10 @@ export default class Login extends React.Component<
     event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
   ) {
     this.handleCredentialsChange(event)
-    const result = (await callDcMethodAsync('getProviderInfo', [
-      event.target.value,
-    ])) as any
+    const result = (await callDcMethodAsync(
+      'getProviderInfo',
+      event.target.value
+    )) as any
     this.setState({ provider_info: result || null })
   }
 

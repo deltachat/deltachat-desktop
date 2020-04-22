@@ -22,7 +22,7 @@ export async function setChatVisibility(
     | C.DC_CHAT_VISIBILITY_PINNED,
   shouldUnselectChat: boolean = false
 ) {
-  await callDcMethodAsync('chat.setVisibility', [chatId, visibility])
+  await callDcMethodAsync('chat.setVisibility', chatId, visibility)
   if (shouldUnselectChat || visibility === C.DC_CHAT_VISIBILITY_ARCHIVED)
     unselectChat()
 }

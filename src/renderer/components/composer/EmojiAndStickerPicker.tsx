@@ -29,7 +29,7 @@ export const StickerDiv = (props: {
     setShowEmojiPicker,
   } = props
   const onClickSticker = (fileName: string) => {
-    callDcMethodAsync('messageList.sendSticker', [chatId, fileName])
+    callDcMethodAsync('messageList.sendSticker', chatId, fileName)
     setShowEmojiPicker(false)
   }
 

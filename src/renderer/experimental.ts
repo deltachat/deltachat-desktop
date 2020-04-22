@@ -17,10 +17,11 @@ These functions are highly experimental, use at your own risk.
     let error_count = 0
     for (const contact of contacts) {
       if (
-        await callDcMethodAsync('contacts.createContact', [
+        await callDcMethodAsync(
+          'contacts.createContact',
           contact[1],
-          contact[0],
-        ])
+          contact[0]
+        )
       )
         log.debug('created contact', contact[1], contact[0])
       else {

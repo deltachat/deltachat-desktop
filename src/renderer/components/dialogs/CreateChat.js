@@ -83,10 +83,11 @@ export default function CreateChat(props) {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('contacts.createContact', [
+    const contactId = await callDcMethodAsync(
+      'contacts.createContact',
       false,
-      queryStr,
-    ])
+      queryStr
+    )
     const chatId = await callDcMethodAsync(
       'contacts.createChatByContactId',
       contactId
@@ -313,21 +314,18 @@ export const useCreateGroup = (
   const lazilyCreateOrUpdateGroup = async finishing => {
     let gId = groupId
     if (gId === -1) {
-      gId = await callDcMethodAsync('chat.createGroupChat', [
-        verified,
-        groupName,
-      ])
+      gId = await callDcMethodAsync('chat.createGroupChat', verified, groupName)
       setGroupId(gId)
     } else {
-      await callDcMethodAsync('chat.setName', [gId, groupName])
+      await callDcMethodAsync('chat.setName', gId, groupName)
     }
     if (finishing === true) {
       if (groupImage !== '') {
-        await callDcMethodAsync('chat.setProfileImage', [gId, groupImage])
+        await callDcMethodAsync('chat.setProfileImage', gId, groupImage)
       }
       for (const contactId of groupMembers) {
         if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await callDcMethodAsync('chat.addContactToChat', [gId, contactId])
+          await callDcMethodAsync('chat.addContactToChat', gId, contactId)
         }
       }
     }

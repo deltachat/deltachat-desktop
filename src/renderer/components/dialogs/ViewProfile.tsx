@@ -24,7 +24,7 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   }>({ displayName: '', address: '' })
 
   const loadContact = async (contactId: number) => {
-    setContact(await callDcMethodAsync('contacts.getContact', [contactId]))
+    setContact(await callDcMethodAsync('contacts.getContact', contactId))
   }
 
   useEffect(() => {
@@ -34,10 +34,11 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
     if (
-      (await callDcMethodAsync('contacts.changeNickname', [
+      (await callDcMethodAsync(
+        'contacts.changeNickname',
         contactId,
-        newName,
-      ])) !== 0
+        newName
+      )) !== 0
     ) {
       loadContact(contactId)
     }
@@ -94,9 +95,7 @@ export default function ViewProfile(props: {
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [
-      contact.id,
-    ])
+    const dmChatId = await callDcMethodAsync('contacts.getDMChatId', contact.id)
     onChatClick(dmChatId)
   }
 

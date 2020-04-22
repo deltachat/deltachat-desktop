@@ -148,10 +148,10 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     // these methods were called in backend before
     // might be an issue if callDcMethodAsync has a significant delay
     const chat = <FullChat>(
-      await callDcMethodAsync('chatList.selectChat', [chatId])
+      await callDcMethodAsync('chatList.selectChat', chatId)
     )
     const messageIds = <number[]>(
-      await callDcMethodAsync('messageList.getMessageIds', [chatId])
+      await callDcMethodAsync('messageList.getMessageIds', chatId)
     )
     const oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
     const newestFetchedMessageIndex = messageIds.length
@@ -160,9 +160,10 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       oldestFetchedMessageIndex,
       newestFetchedMessageIndex
     )
-    const messages = await callDcMethodAsync('messageList.getMessages', [
-      messageIdsToFetch,
-    ])
+    const messages = await callDcMethodAsync(
+      'messageList.getMessages',
+      messageIdsToFetch
+    )
     chatStore.dispatch({
       type: 'SELECTED_CHAT',
       payload: {
@@ -178,7 +179,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     saveLastChatId(chatId)
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
-    callDcMethodAsync('messageList.deleteMessage', [msgId])
+    callDcMethodAsync('messageList.deleteMessage', msgId)
   } else if (type === 'FETCH_MORE_MESSAGES') {
     const oldestFetchedMessageIndex = Math.max(
       state.oldestFetchedMessageIndex - PAGE_SIZE,
@@ -192,9 +193,10 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     )
     if (fetchedMessageIds.length === 0) return
 
-    const fetchedMessages = await callDcMethodAsync('messageList.getMessages', [
-      fetchedMessageIds,
-    ])
+    const fetchedMessages = await callDcMethodAsync(
+      'messageList.getMessages',
+      fetchedMessageIds
+    )
 
     chatStore.dispatch({
       type: 'FETCHED_MORE_MESSAGES',
@@ -209,7 +211,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     if (payload[0] !== chatStore.state.id) return
     const messageObj = await callDcMethodAsync(
       'messageList.sendMessage',
-      payload /* [chatId, text, filename, location]*/
+      ...payload /* [chatId, text, filename, location]*/
     )
     chatStore.dispatch({
       type: 'MESSAGE_SENT',
@@ -253,14 +255,15 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
     return
   }
   const messageIds = <number[]>(
-    await callDcMethodAsync('messageList.getMessageIds', [chatId])
+    await callDcMethodAsync('messageList.getMessageIds', chatId)
   )
   const messageIdsIncoming = messageIds.filter(
     x => !chatStore.state.messageIds.includes(x)
   )
-  const messagesIncoming = await callDcMethodAsync('messageList.getMessages', [
-    messageIdsIncoming,
-  ])
+  const messagesIncoming = await callDcMethodAsync(
+    'messageList.getMessages',
+    messageIdsIncoming
+  )
   chatStore.dispatch({
     type: 'FETCHED_INCOMING_MESSAGES',
     payload: {
@@ -288,7 +291,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'changed message seems to be message we already know'
     )
     const messagesChanged = await callDcMethodAsync('messageList.getMessages', [
-      [messageId],
+      messageId,
     ])
     chatStore.dispatch({
       type: 'MESSAGE_CHANGED',
@@ -303,14 +306,14 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'changed message seems to be a new message'
     )
     const messageIds = <number[]>(
-      await callDcMethodAsync('messageList.getMessageIds', [id])
+      await callDcMethodAsync('messageList.getMessageIds', id)
     )
     const messageIdsIncoming = messageIds.filter(
       x => !chatStore.state.messageIds.includes(x)
     )
     const messagesIncoming = await callDcMethodAsync(
       'messageList.getMessages',
-      [messageIdsIncoming]
+      messageIdsIncoming
     )
     chatStore.dispatch({
       type: 'FETCHED_INCOMING_MESSAGES',

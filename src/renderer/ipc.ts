@@ -29,9 +29,10 @@ export function sendToBackend(event: string, ...args: any[]) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
+// private function, please use `callDcMethodAsync` instead
 function callDcMethod(
   methodName: string,
-  args?: any[] | any,
+  args: any[],
   cb?: (returnValue: any) => void
 ) {
   const identifier = callDcMethodIdentifier++
@@ -39,12 +40,7 @@ function callDcMethod(
   const ignoreReturn = typeof cb !== 'function'
   const eventName = ignoreReturn ? 'EVENT_DC_DISPATCH' : 'EVENT_DC_DISPATCH_CB'
 
-  sendToBackend(
-    eventName,
-    identifier,
-    methodName,
-    Array.isArray(args) ? args : [args]
-  )
+  sendToBackend(eventName, identifier, methodName, args)
 
   if (ignoreReturn) return
 
@@ -63,7 +59,7 @@ function callDcMethod(
 
 export function callDcMethodAsync(
   fnName: string,
-  args?: any[] | any
+  ...args: any[]
 ): Promise<any> {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }

@@ -43,7 +43,7 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
             if (!yes) {
               return
             }
-            callDcMethodAsync('messageList.sendMessage', [chat.id, null, path])
+            callDcMethodAsync('messageList.sendMessage', chat.id, null, path)
           },
         })
       } else {

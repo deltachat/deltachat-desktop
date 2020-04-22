@@ -19,7 +19,10 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
   const { timestampFrom, timestampTo } = mapSettings
   const locations: JsonLocations = await callDcMethodAsync(
     'locations.getLocations',
-    [chatId, 0, timestampFrom, timestampTo]
+    chatId,
+    0,
+    timestampFrom,
+    timestampTo
   )
   locationStore.setState({ ...locationStore.getState(), locations })
 }

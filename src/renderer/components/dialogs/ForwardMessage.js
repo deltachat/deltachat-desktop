@@ -20,7 +20,7 @@ export default function ForwardMessage(props) {
   )
 
   const onChatClick = chatid => {
-    callDcMethodAsync('messageList.forwardMessage', [message.msg.id, chatid])
+    callDcMethodAsync('messageList.forwardMessage', message.msg.id, chatid)
     onClose()
   }
   const onSearchChange = e => setQueryStr(e.target.value)

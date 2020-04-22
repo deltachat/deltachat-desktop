@@ -55,7 +55,7 @@ export default class Media extends Component<
 
   onSelect(id: MediaTabKey) {
     const msgTypes = MediaTabs[id].values
-    callDcMethodAsync('chat.getChatMedia', [msgTypes[0], msgTypes[1]]).then(
+    callDcMethodAsync('chat.getChatMedia', msgTypes[0], msgTypes[1]).then(
       medias => {
         this.setState({ id, msgTypes, medias })
         this.forceUpdate()

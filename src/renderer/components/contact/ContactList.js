@@ -47,7 +47,7 @@ export const ContactListSearchInput = styled.input`
 `
 
 const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
-  callDcMethodAsync('getContacts2', [listFlags, queryStr]).then(cb)
+  callDcMethodAsync('getContacts2', listFlags, queryStr).then(cb)
 }, 200)
 
 export function useContacts(listFlags, queryStr) {
@@ -57,7 +57,7 @@ export function useContacts(listFlags, queryStr) {
     debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {
-    callDcMethodAsync('getContacts2', [listFlags, queryStr]).then(setContacts)
+    callDcMethodAsync('getContacts2', listFlags, queryStr).then(setContacts)
   }, [])
 
   return [contacts, updateContacts]

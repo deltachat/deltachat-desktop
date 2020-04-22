@@ -57,10 +57,11 @@ export default function ChatList(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('contacts.createContact', [
+    const contactId = await callDcMethodAsync(
+      'contacts.createContact',
       false,
-      queryStr,
-    ])
+      queryStr
+    )
     const chatId = await callDcMethodAsync(
       'contacts.createChatByContactId',
       contactId

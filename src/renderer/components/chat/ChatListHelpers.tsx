@@ -14,11 +14,12 @@ const debouncedGetChatListIds = debounce(
     queryContactId: number,
     cb: (...args: any) => void
   ) => {
-    callDcMethodAsync('chatList.getChatListIds', [
+    callDcMethodAsync(
+      'chatList.getChatListIds',
       listFlags,
       queryStr,
-      queryContactId,
-    ]).then(cb)
+      queryContactId
+    ).then(cb)
   },
   200
 )
@@ -37,11 +38,12 @@ export function useChatListIds(
 
   const getAndSetChatListIds = (immediatly: boolean = false) => {
     if (immediatly === true) {
-      callDcMethodAsync('chatList.getChatListIds', [
+      callDcMethodAsync(
+        'chatList.getChatListIds',
         listFlags,
         queryStr,
-        queryContactId,
-      ]).then(setChatListIds)
+        queryContactId
+      ).then(setChatListIds)
       return
     }
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
@@ -171,9 +173,10 @@ export const useLazyChatListItems = (chatListIds: number[]) => {
     })
     if (chatIdsToFetch.length === 0) return
     fetching.current.push(...chatIdsToFetch)
-    const chats = await callDcMethodAsync('chatList.getChatListItemsByIds', [
-      chatIdsToFetch,
-    ])
+    const chats = await callDcMethodAsync(
+      'chatList.getChatListItemsByIds',
+      chatIdsToFetch
+    )
     fetching.current = fetching.current.filter(
       i => chatIdsToFetch.indexOf(i) === -1
     )
