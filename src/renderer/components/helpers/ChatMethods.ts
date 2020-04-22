@@ -97,7 +97,7 @@ export async function openViewProfileDialog(
   contact: number | JsonContact
 ) {
   if (typeof contact === 'number' && Number.isInteger(contact)) {
-    contact = await DeltaBackend.call('chatList.getContact', contact)
+    contact = await DeltaBackend.call('contacts.getContact', contact)
   }
   screenContext.openDialog('ViewProfile', { contact })
 }

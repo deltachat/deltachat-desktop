@@ -207,7 +207,12 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     if (payload[0] !== chatStore.state.id) return
     const messageObj = await DeltaBackend.call(
       'messageList.sendMessage',
-      ...payload /* [chatId, text, filename, location]*/
+      ...(payload as [
+        number,
+        string,
+        string,
+        any
+      ]) /* [chatId, text, filename, location]*/
     )
     chatStore.dispatch({
       type: 'MESSAGE_SENT',

@@ -164,7 +164,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.sendMessage',
     chatId: number,
-    text: string,
+    text: string | null,
     filename?: string,
     location?: {
       lat: number
@@ -191,6 +191,10 @@ class DeltaRemote {
     fnName: 'messageList.getMessage',
     msgId: number
   ): Promise<{ msg: null } | MessageType>
+  call(
+    fnName: 'messageList.getMessages',
+    messageIds: number[]
+  ): Promise<{ [key: number]: MessageType | { msg: null } }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(
     fnName: 'messageList.setDraft',
@@ -201,6 +205,7 @@ class DeltaRemote {
     fnName: 'messageList.messageIdToJson',
     id: number
   ): Promise<{ msg: null } | MessageType>
+  call(fnName: 'messageList.getMessageIds', chatid: number): Promise<number[]>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',
@@ -239,7 +244,7 @@ class DeltaRemote {
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {
-    return _callDcMethodAsync(fnName, [...arguments].slice(1))
+    return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
   }
 }
 
