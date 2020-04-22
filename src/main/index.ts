@@ -88,7 +88,7 @@ function onReady([logins, _appReady, loadedState]: [
 
   app.saveState = () => State.save({ saved: state.saved })
 
-  loadTranslations(app, state.saved.locale || app.getLocale())
+  loadTranslations(state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
   log.info(`cwd ${cwd}`)

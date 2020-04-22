@@ -19,6 +19,7 @@ import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import { string } from 'prop-types'
+import Extras from './extras'
 const app = rawApp as ExtendedAppMainProcess
 
 const eventStrings = require('deltachat-node/events')
@@ -67,6 +68,7 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
+  readonly extras = new Extras(this)
 
   /**
    * @param {string} methodName

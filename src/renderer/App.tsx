@@ -8,9 +8,9 @@ const { remote } = window.electron_functions
 import {
   callDcMethod,
   sendToBackend,
-  sendToBackendSync,
   ipcBackend,
   startBackendLogging,
+  callDcMethodAsync,
 } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
@@ -80,16 +80,19 @@ export default function App(props: any) {
     }
   }, [state])
 
-  function setupLocaleData(locale: string) {
+  async function setupLocaleData(locale: string) {
     moment.locale(locale)
-    const localeData: LocaleData = sendToBackendSync('locale-data', locale)
+    const localeData: LocaleData = await callDcMethodAsync(
+      'extras.getLocaleData',
+      locale
+    )
     window.localeData = localeData
     window.translate = translate(localeData.messages)
     setLocaleData(localeData)
   }
 
-  const onChooseLanguage = (e: any, locale: string) => {
-    setupLocaleData(locale)
+  const onChooseLanguage = async (e: any, locale: string) => {
+    await setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
   useEffect(() => {

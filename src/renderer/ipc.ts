@@ -26,12 +26,6 @@ export function sendToBackend(event: string, ...args: any[]) {
   ipcRenderer.send(event, ...args)
 }
 
-export function sendToBackendSync(event: string, ...args: any[]) {
-  log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
-  ipcRenderer.send('ALL', event, ...args)
-  return ipcRenderer.sendSync(event, ...args)
-}
-
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
