@@ -5,17 +5,13 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
-import {
-  sendToBackend,
-  ipcBackend,
-  startBackendLogging,
-  callDcMethodAsync,
-} from './ipc'
+import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import logger from '../shared/logger'
+import { DeltaBackend } from './delta-remote'
 
 const log = logger.getLogger('renderer/App')
 const moment = require('moment')
@@ -60,7 +56,7 @@ export default function App(props: any) {
     })
 
     window.addEventListener('online', () => {
-      callDcMethodAsync('context.maybeNetwork')
+      DeltaBackend.call('context.maybeNetwork')
     })
   }, [])
 
@@ -81,7 +77,7 @@ export default function App(props: any) {
 
   async function setupLocaleData(locale: string) {
     moment.locale(locale)
-    const localeData: LocaleData = await callDcMethodAsync(
+    const localeData: LocaleData = await DeltaBackend.call(
       'extras.getLocaleData',
       locale
     )

@@ -1,5 +1,5 @@
 import { DeltaChat, ChatList, C } from 'deltachat-node'
-import { callDcMethodAsync } from './ipc'
+import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
   ChatListItemType,
@@ -8,7 +8,7 @@ import {
 } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
-export class DeltaRemote {
+class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'updateBlockedContacts'): Promise<void>
   call(fnName: 'setProfilePicture', newImage: string): Promise<void>
@@ -53,15 +53,15 @@ export class DeltaRemote {
   call(fnName: 'chatList.getFullChatById', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getGeneralFreshMessageCounter'): Promise<number> // this method might be used for a favicon badge counter
   // contacts ------------------------------------------------------------
-  call(fnName: 'chatList.unblockContact', contactId: number): Promise<void>
-  call(fnName: 'chatList.blockContact', contactId: number): Promise<void>
+  call(fnName: 'contacts.unblockContact', contactId: number): Promise<void>
+  call(fnName: 'contacts.blockContact', contactId: number): Promise<void>
   call(
-    fnName: 'chatList.changeNickname',
+    fnName: 'contacts.changeNickname',
     contactId: number,
     name: string
   ): Promise<number>
   call(
-    fnName: 'chatList.acceptContactRequest',
+    fnName: 'contacts.acceptContactRequest',
     {
       messageId,
       contactId,
@@ -71,16 +71,16 @@ export class DeltaRemote {
     }
   ): Promise<number>
   call(
-    fnName: 'chatList.createContact',
-    name: string,
-    email: string
+    fnName: 'contacts.createContact',
+    email: string,
+    name?: string
   ): Promise<number>
   call(
-    fnName: 'chatList.createChatByContactId',
+    fnName: 'contacts.createChatByContactId',
     contactId: number
   ): Promise<number>
   call(
-    fnName: 'chatList.getContact',
+    fnName: 'contacts.getContact',
     contactId: number
   ): Promise<{
     address: string
@@ -94,12 +94,12 @@ export class DeltaRemote {
     isBlocked: boolean
     isVerified: boolean
   }>
-  call(fnName: 'chatList.markNoticedContact', contactId: number): Promise<void>
+  call(fnName: 'contacts.markNoticedContact', contactId: number): Promise<void>
   call(
-    fnName: 'chatList.getChatIdByContactId',
+    fnName: 'contacts.getChatIdByContactId',
     contactId: number
   ): Promise<number>
-  call(fnName: 'chatList.getDMChatId', contactId: number): Promise<number>
+  call(fnName: 'contacts.getDMChatId', contactId: number): Promise<number>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.getChatMedia',
@@ -157,7 +157,7 @@ export class DeltaRemote {
     contactId: number,
     timestampFrom: number,
     timestampTo: number
-  ): Promise<JsonLocations[]>
+  ): Promise<JsonLocations>
   // loginController ----------------------------------------------------
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
@@ -165,8 +165,8 @@ export class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     text: string,
-    filename: string,
-    location: {
+    filename?: string,
+    location?: {
       lat: number
       lng: number
     }
@@ -181,7 +181,6 @@ export class DeltaRemote {
       )
     ]
   >
-
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
@@ -204,21 +203,21 @@ export class DeltaRemote {
   ): Promise<{ msg: null } | MessageType>
   // settings -----------------------------------------------------------
   call(
-    fnName: 'messageList.setConfig',
+    fnName: 'settings.setConfig',
     key: string,
     value: string
   ): Promise<number>
-  call(fnName: 'messageList.getConfig', key: string): Promise<string>
+  call(fnName: 'settings.getConfig', key: string): Promise<string>
   call(
-    fnName: 'messageList.getConfigFor',
+    fnName: 'settings.getConfigFor',
     keys: string[]
   ): Promise<{
     [key: string]: string
   }>
-  call(fnName: 'messageList.keysImport', directory: string): Promise<void>
-  call(fnName: 'messageList.keysExport', directory: string): Promise<void>
+  call(fnName: 'settings.keysImport', directory: string): Promise<void>
+  call(fnName: 'settings.keysExport', directory: string): Promise<void>
   call(
-    fnName: 'messageList.serverFlags',
+    fnName: 'settings.serverFlags',
     {
       mail_security,
       send_security,
@@ -234,11 +233,14 @@ export class DeltaRemote {
     [key: string]: string[]
   }>
   // context ------------------------------------------------------------
-  call(fnName: 'context.maybeNetwork'): void
+  call(fnName: 'context.maybeNetwork'): Promise<void>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   // catchall: ----------------------------------------------------------
-  call(fnName: string, args?: any[] | any): Promise<any> {
-    return callDcMethodAsync(fnName, [...arguments].slice(1))
+  call(fnName: string): Promise<any>
+  call(fnName: string, ...args: any[]): Promise<any> {
+    return _callDcMethodAsync(fnName, [...arguments].slice(1))
   }
 }
+
+export const DeltaBackend = new DeltaRemote()

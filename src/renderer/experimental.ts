@@ -1,4 +1,4 @@
-import { callDcMethodAsync } from './ipc'
+import { DeltaBackend } from './delta-remote'
 import { getLogger } from '../shared/logger'
 
 const log = getLogger('renderer/experiments')
@@ -17,10 +17,10 @@ These functions are highly experimental, use at your own risk.
     let error_count = 0
     for (const contact of contacts) {
       if (
-        await callDcMethodAsync(
+        await DeltaBackend.call(
           'contacts.createContact',
-          contact[1],
-          contact[0]
+          contact[0],
+          contact[1]
         )
       )
         log.debug('created contact', contact[1], contact[0])

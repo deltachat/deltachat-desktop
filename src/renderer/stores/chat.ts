@@ -1,11 +1,7 @@
-import {
-  ipcBackend,
-  callDcMethodAsync,
-  mainProcessUpdateBadge,
-  saveLastChatId,
-} from '../ipc'
+import { ipcBackend, mainProcessUpdateBadge, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
 import { JsonContact, FullChat } from '../../shared/shared-types'
+import { DeltaBackend } from '../delta-remote'
 
 export const PAGE_SIZE = 10
 
@@ -146,12 +142,12 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
   if (type === 'SELECT_CHAT') {
     const chatId = payload
     // these methods were called in backend before
-    // might be an issue if callDcMethodAsync has a significant delay
+    // might be an issue if DeltaBackend.call has a significant delay
     const chat = <FullChat>(
-      await callDcMethodAsync('chatList.selectChat', chatId)
+      await DeltaBackend.call('chatList.selectChat', chatId)
     )
     const messageIds = <number[]>(
-      await callDcMethodAsync('messageList.getMessageIds', chatId)
+      await DeltaBackend.call('messageList.getMessageIds', chatId)
     )
     const oldestFetchedMessageIndex = Math.max(messageIds.length - PAGE_SIZE, 0)
     const newestFetchedMessageIndex = messageIds.length
@@ -160,7 +156,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       oldestFetchedMessageIndex,
       newestFetchedMessageIndex
     )
-    const messages = await callDcMethodAsync(
+    const messages = await DeltaBackend.call(
       'messageList.getMessages',
       messageIdsToFetch
     )
@@ -179,7 +175,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     saveLastChatId(chatId)
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
-    callDcMethodAsync('messageList.deleteMessage', msgId)
+    DeltaBackend.call('messageList.deleteMessage', msgId)
   } else if (type === 'FETCH_MORE_MESSAGES') {
     const oldestFetchedMessageIndex = Math.max(
       state.oldestFetchedMessageIndex - PAGE_SIZE,
@@ -193,7 +189,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     )
     if (fetchedMessageIds.length === 0) return
 
-    const fetchedMessages = await callDcMethodAsync(
+    const fetchedMessages = await DeltaBackend.call(
       'messageList.getMessages',
       fetchedMessageIds
     )
@@ -209,7 +205,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     })
   } else if (type === 'SEND_MESSAGE') {
     if (payload[0] !== chatStore.state.id) return
-    const messageObj = await callDcMethodAsync(
+    const messageObj = await DeltaBackend.call(
       'messageList.sendMessage',
       ...payload /* [chatId, text, filename, location]*/
     )
@@ -255,12 +251,12 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
     return
   }
   const messageIds = <number[]>(
-    await callDcMethodAsync('messageList.getMessageIds', chatId)
+    await DeltaBackend.call('messageList.getMessageIds', chatId)
   )
   const messageIdsIncoming = messageIds.filter(
     x => !chatStore.state.messageIds.includes(x)
   )
-  const messagesIncoming = await callDcMethodAsync(
+  const messagesIncoming = await DeltaBackend.call(
     'messageList.getMessages',
     messageIdsIncoming
   )
@@ -290,7 +286,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'DC_EVENT_MSGS_CHANGED',
       'changed message seems to be message we already know'
     )
-    const messagesChanged = await callDcMethodAsync('messageList.getMessages', [
+    const messagesChanged = await DeltaBackend.call('messageList.getMessages', [
       messageId,
     ])
     chatStore.dispatch({
@@ -306,12 +302,12 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'changed message seems to be a new message'
     )
     const messageIds = <number[]>(
-      await callDcMethodAsync('messageList.getMessageIds', id)
+      await DeltaBackend.call('messageList.getMessageIds', id)
     )
     const messageIdsIncoming = messageIds.filter(
       x => !chatStore.state.messageIds.includes(x)
     )
-    const messagesIncoming = await callDcMethodAsync(
+    const messagesIncoming = await DeltaBackend.call(
       'messageList.getMessages',
       messageIdsIncoming
     )

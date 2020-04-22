@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 
-import { callDcMethodAsync } from '../ipc'
+import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
 
@@ -55,7 +55,7 @@ export default class Media extends Component<
 
   onSelect(id: MediaTabKey) {
     const msgTypes = MediaTabs[id].values
-    callDcMethodAsync('chat.getChatMedia', msgTypes[0], msgTypes[1]).then(
+    DeltaBackend.call('chat.getChatMedia', msgTypes[0], msgTypes[1]).then(
       medias => {
         this.setState({ id, msgTypes, medias })
         this.forceUpdate()

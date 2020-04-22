@@ -1,4 +1,5 @@
-import { ipcBackend, callDcMethodAsync } from '../ipc'
+import { ipcBackend } from '../ipc'
+import { DeltaBackend } from '../delta-remote'
 import { Store, Action } from './store'
 import logger from '../../shared/logger'
 import debounce from 'debounce'
@@ -16,8 +17,8 @@ const contactsStore = new Store(new state(), 'contact')
 contactsStore.attachEffect(async action => {
   if (action.type === 'UI_UNBLOCK_CONTACT') {
     const contactId = action.payload
-    await callDcMethodAsync('contacts.unblockContact', contactId)
-    await callDcMethodAsync('updateBlockedContacts')
+    await DeltaBackend.call('contacts.unblockContact', contactId)
+    await DeltaBackend.call('updateBlockedContacts')
   }
 })
 

@@ -53,7 +53,7 @@ export default class DCContacts extends SplitOut {
     return chatId
   }
 
-  createContact(name: string, email: string) {
+  createContact(email: string, name?: string) {
     if (!DeltaChat.maybeValidAddr(email)) {
       this._controller.emit(
         'error',

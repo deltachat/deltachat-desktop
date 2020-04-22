@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { callDcMethodAsync } from '../../ipc'
 import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButton } from './SmallDialog'
 
@@ -8,7 +7,7 @@ export default function EncryptionInfo(props) {
   useEffect(() => {
     const { chat } = props
     if (!chat) return
-    callDcMethodAsync('chat.getEncryptionInfo', chat.contactIds[0]).then(
+    DeltaBackend.call('chat.getEncryptionInfo', chat.contactIds[0]).then(
       setEncryptionInfo
     )
   })

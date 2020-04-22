@@ -5,8 +5,8 @@ import ChatListItem from './ChatListItem'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
 import { isValidEmail } from '../dialogs/CreateChat'
-import { callDcMethodAsync } from '../../ipc'
 import { selectChat } from '../../stores/chat'
+import { DeltaBackend } from '../../delta-remote'
 
 export default function ChatList(props: {
   selectedChatId: number
@@ -57,12 +57,11 @@ export default function ChatList(props: {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync(
+    const contactId = await DeltaBackend.call(
       'contacts.createContact',
-      false,
       queryStr
     )
-    const chatId = await callDcMethodAsync(
+    const chatId = await DeltaBackend.call(
       'contacts.createChatByContactId',
       contactId
     )

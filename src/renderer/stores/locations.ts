@@ -1,5 +1,5 @@
 import { JsonLocations } from '../../shared/shared-types'
-import { callDcMethodAsync } from '../ipc'
+import { DeltaBackend } from '../delta-remote'
 import { Store, Action } from './store'
 
 const { ipcRenderer } = window.electron_functions
@@ -17,7 +17,7 @@ export const locationStore = new Store(new state(), 'location')
 
 const getLocations = async (chatId: number, mapSettings: todo) => {
   const { timestampFrom, timestampTo } = mapSettings
-  const locations: JsonLocations = await callDcMethodAsync(
+  const locations: JsonLocations = await DeltaBackend.call(
     'locations.getLocations',
     chatId,
     0,

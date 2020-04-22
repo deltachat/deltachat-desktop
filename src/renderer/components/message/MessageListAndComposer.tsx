@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from 'react'
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import Composer from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
@@ -43,7 +43,7 @@ export default function MessageListAndComposer({ chat }: { chat: any }) {
             if (!yes) {
               return
             }
-            callDcMethodAsync('messageList.sendMessage', chat.id, null, path)
+            DeltaBackend.call('messageList.sendMessage', chat.id, null, path)
           },
         })
       } else {

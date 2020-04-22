@@ -1,4 +1,4 @@
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
@@ -382,7 +382,7 @@ export default class MapComponent extends React.Component<
     })
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
-        callDcMethodAsync(
+        DeltaBackend.call(
           'messageList.getMessage',
           contactFeature.properties.msgId
         ).then((messageObj: MessageType) => {

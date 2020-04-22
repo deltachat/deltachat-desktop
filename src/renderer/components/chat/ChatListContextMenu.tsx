@@ -11,9 +11,9 @@ import {
   setChatVisibility,
 } from '../helpers/ChatMethods'
 
-import { callDcMethodAsync } from '../../ipc'
 import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
+import { DeltaBackend } from '../../delta-remote'
 
 // const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
 
@@ -119,14 +119,14 @@ const ChatListContextMenu = React.memo<{
     const onDeleteChat = () => openDeleteChatDialog(screenContext, chat)
     const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
     const onEditGroup = async () => {
-      const fullChat = await callDcMethodAsync(
+      const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
         chat.id
       )
       openEditGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
-      const fullChat = await callDcMethodAsync(
+      const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
         chat.id
       )

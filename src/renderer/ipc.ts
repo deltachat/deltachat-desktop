@@ -29,7 +29,7 @@ export function sendToBackend(event: string, ...args: any[]) {
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
-// private function, please use `callDcMethodAsync` instead
+// private function, please use `DeltaBackend.call` instead
 function callDcMethod(
   methodName: string,
   args: any[],
@@ -57,7 +57,7 @@ function callDcMethod(
   )
 }
 
-export function callDcMethodAsync(
+export function _callDcMethodAsync(
   fnName: string,
   ...args: any[]
 ): Promise<any> {
