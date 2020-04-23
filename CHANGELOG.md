@@ -1,6 +1,56 @@
 # Changelog
 
-## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...HEAD)
+## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...HEAD)
+
+## [1.3.0](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0) - 2020-04-2???
+
+### Added
+
+- add Pinned chats
+- add Big view of profile image (closes #1356)
+- add option to change a contacts displayname (#1502)
+- add some Mac keybindings (related to #1451)
+  - add `cmd + ,` as shortcut to open the settings
+  - focus the message composer
+  - mac specific hide window (solves #634)
+- add primitive & experimental contact import (you can import a json array of contacts in the devconsole)
+- add archive Label to archived chats
+
+### Changed
+
+- `--debug` enables now `--log-debug` & `--log-to-console`
+- forward dialog now show `saved messages` as first option.
+
+### Performance Improvements
+
+- remove lag when scolling the settings (add thumbnails for chat backgrounds in settings screen)
+
+### Bugfixes
+
+- Info events are now always logged (not only when `--log-debug` is enabled)
+- fix that emojis get displayed right in the popups
+- fix #1529
+- fix composer whitescreen when having a zoomlevel
+- Some styling fixes:
+  - remove unneccessary border on chatlist
+  - changer caret color of sarch input to the same color as the placeholder
+  - make dialog height overlap navbar/composer for fixed dialogs
+  - Fix fake-contact-item label
+- fixes help won't open on mac (open help in seperate electron window)
+- fix hover color for selected chats and make it a lot more slight
+
+### Technical
+
+This section is only relevant to contributors.
+
+- Convert Project files to typescript (75% complete)
+- Move more styled components to scss and cleanup some unsused classes
+- add top-evil script (shows places that need work)
+
+### Updated
+
+- Update translations & languages shown in menu, change prefix of npm translation scripts
+- Update Core to `1.???`
 
 ## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/1.1.1...1.2.0) - 2020-03-30
 
@@ -12,7 +62,7 @@
 ### Fixed
 
 - Fix a bug on incoming message where screen went blank [**@Simon-Laux**](https://github.com/Simon-Laux) [#1523](https://github.com/deltachat/deltachat-desktop/issues/1523)
-- Copy whole message to clipboard [**@Simon-Laux**](https://github.com/Simon-Laux) 
+- Copy whole message to clipboard [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Fix about dialog links [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Make e2e tests more stable [**@nicodh**](https://github.com/nicodh)
 
@@ -43,7 +93,7 @@
 - fix focus composer textarea when chat id changes
 - fix group name editable
 - fix avatar shrink bug on too long names (profile view)
-- fix emoji name/initial avatars in message list 
+- fix emoji name/initial avatars in message list
 - fix a css bug that destroyed the app layout in media view ([`eadd487`](https://github.com/deltachat/deltachat-desktop/commit/eadd48719f5b796e3c6c53f3bc04fe348b97abfe))
 - fix copy to selection button shown even when nothing was selected.
 
@@ -69,7 +119,7 @@
 - info messages are now selecteable
 - provider info
 - info message in empty chats
-- `--multiple-instances` flag to allow multiple deltachat instances 
+- `--multiple-instances` flag to allow multiple deltachat instances
 
 ### Changed
 
@@ -116,7 +166,7 @@
 
 ### Changed
 
-- Improve chatlist performance 
+- Improve chatlist performance
 - Removed welcome screen and image
 - Rewrite account folder logic
 - Improve styling of media gallery
@@ -240,8 +290,7 @@
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
-
-- Update deltachat-node to 1.0.0-beta.15
+* Update deltachat-node to 1.0.0-beta.15
   - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
 ## [0.840.0] - 2019-11-05
@@ -249,7 +298,7 @@
 ### Changed
 
 - ChatView refactoring [#1017](https://github.com/deltachat/deltachat-desktop/issues/1017) [**@nicodh**](https://github.com/nicodh)
-- Add janka's welcome image [**@jankass**](https://github.com/jankass) [**@Simon-Laux**](https://github.com/Simon-Laux) [**@jikstra**](https://github.com/jikstra) 
+- Add janka's welcome image [**@jankass**](https://github.com/jankass) [**@Simon-Laux**](https://github.com/Simon-Laux) [**@jikstra**](https://github.com/jikstra)
 - Rename the `Create group` button to a more generic `ok` button [**@Jikstra**](https://github.com/Jikstra)
 - Improve backend & frontend logging [#1026](https://github.com/deltachat/deltachat-desktop/issues/1026) [#1030](https://github.com/deltachat/deltachat-desktop/issues/1030) [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Various styling tweaks [**@Simon-Laux**](https://github.com/Simon-Laux) [#1039](https://github.com/deltachat/deltachat-desktop/issues/1039)
@@ -257,7 +306,7 @@
 - Reorder settings [**@jikstra**](https://github.com/jikstra) ([#1035](https://github.com/deltachat/deltachat-desktop/issues/1035))
 - Upload preview builts to download.delta.chat (CI) [**@lefherz**](https://github.com/lefherz) [#1088](https://github.com/deltachat/deltachat-desktop/issues/1088)
 - Implement ssl certificate settings [**@link2xt**](https://github.com/link2xt) [#1076](https://github.com/deltachat/deltachat-desktop/issues/1076)
-- Restyle user-feedback [**@jikstra**](https://github.com/jikstra) [#1100](https://github.com/deltachat/deltachat-desktop/issues/1100) 
+- Restyle user-feedback [**@jikstra**](https://github.com/jikstra) [#1100](https://github.com/deltachat/deltachat-desktop/issues/1100)
 - Add new zealand background image of [**@nicodh**](https://github.com/nicodh) [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Update deltachat-node to v1.0.0-alpha.11
 - Restyle about dialog [**@jikstra**](https://github.com/jikstra)
@@ -273,12 +322,12 @@
 - Fix showing user feedback/errors again [**@Simon-Laux**](https://github.com/Simon-Laux) [#1047](https://github.com/deltachat/deltachat-desktop/issues/1047)
 - Fix mark message as seen [**@Simon-Laux**](https://github.com/Simon-Laux) [#1054](https://github.com/deltachat/deltachat-desktop/issues/1054)
 - Fix showing line breaks in Messages [**@Jikstra**](https://github.com/Jikstra) [#1062](https://github.com/deltachat/deltachat-desktop/issues/1062)
-- Close edit group dialog when clicking on save button [**@jikstra**](https://github.com/jikstra) ([#1067](https://github.com/deltachat/deltachat-desktop/issues/1067)) 
+- Close edit group dialog when clicking on save button [**@jikstra**](https://github.com/jikstra) ([#1067](https://github.com/deltachat/deltachat-desktop/issues/1067))
 - Fix broken notificatins [**@nicodh**](https://github.com/nicodh) [#1071](https://github.com/deltachat/deltachat-desktop/issues/1071)
 - Fix media view [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Fix showing qr code on group creation [**@Jikstra**](https://github.com/Jikstra) [#1101](https://github.com/deltachat/deltachat-desktop/issues/1101)
 - Fix various key warnings [**@Jikstra**](https://github.com/Jikstra) [#1103](https://github.com/deltachat/deltachat-desktop/issues/1103)
-- Do not call messageToJson for daymarker messages [**@link2xt**](https://github.com/link2xt) 
+- Do not call messageToJson for daymarker messages [**@link2xt**](https://github.com/link2xt)
 - Fix updating account settings [**@nicodh**](https://github.com/nicodh)
 - Fix serverFlags [**@link2xt**](https://github.com/link2xt)
 
@@ -327,7 +376,7 @@
 ### Added
 
 - Add ci deb building scripts [**@hpk42**](https://github.com/hpk42) [**@jikstra**](https://github.com/jikstra) [#752](https://github.com/deltachat/deltachat-desktop/issues/752)
-- Add ci deb build instructions for ubuntu 19.04 [**@jikstra**](https://github.com/jikstra) 
+- Add ci deb build instructions for ubuntu 19.04 [**@jikstra**](https://github.com/jikstra)
 - Add ci deb build instructions for 19.04 with netpgp [**@jikstra**](https://github.com/jikstra) [#814](https://github.com/deltachat/deltachat-desktop/issues/814)
 - Add settings for displayname and signature [**@Simon-Laux**](https://github.com/Simon-Laux) [#810](https://github.com/deltachat/deltachat-desktop/issues/810)
 - Add progress indicator on login [**@Simon-Laux**](https://github.com/Simon-Laux) [#811](https://github.com/deltachat/deltachat-desktop/issues/811)
@@ -418,7 +467,7 @@
 
 - Sort languages alphabetically ([#640](https://github.com/deltachat/deltachat-desktop/issues/640)) ([**@Simon-Laux**](https://github.com/Simon-Laux))
 - Set this.chatView.current from the start ([**@ralphtheninja**](https://github.com/ralphtheninja))
-- Fix some typos and tweak logging docs  ([**@ralphtheninja**](https://github.com/ralphtheninja))
+- Fix some typos and tweak logging docs ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Update github issue template ([#647](https://github.com/deltachat/deltachat-desktop/issues/647)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Cleanup ipc ([#641](https://github.com/deltachat/deltachat-desktop/issues/641)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
 - Hide error message when attempting to login ([#644](https://github.com/deltachat/deltachat-desktop/issues/644)) ([**@ralphtheninja**](https://github.com/ralphtheninja))
@@ -896,39 +945,21 @@
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
-
 [0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
-
 [0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...v0.901.0
-
 [0.900.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.840.0...v0.900.0
-
 [0.840.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...v0.840.0
-
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.201.0
-
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
-
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
-
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
-
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
-
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
-
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
-
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
-
 [0.98.2]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...v0.98.2
-
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
-
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
-
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
-
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
-
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
