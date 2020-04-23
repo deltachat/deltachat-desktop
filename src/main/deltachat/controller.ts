@@ -220,7 +220,6 @@ export default class DeltaChatController extends EventEmitter {
         this.onLoginFailure()
       }
     })
-
   }
 
   onLoginFailure() {

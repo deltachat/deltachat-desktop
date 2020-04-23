@@ -11,7 +11,7 @@ import { callDcMethodAsync, callDcMethod } from '../../ipc'
 const { ipcRenderer } = window.electron_functions
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
-import { Intent, ProgressBar } from '@blueprintjs/core'
+import { Intent, ProgressBar, Card } from '@blueprintjs/core'
 
 interface QrStates {
   [key: number]: string
@@ -45,7 +45,6 @@ export function DeltaDialogImportQrInner({
 }) {
   const tx = window.translate
   const [qrCode, setQrCode] = useState('')
-  const [useCamera, setUseCamera] = useState(true)
   const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
@@ -189,8 +188,23 @@ export default function ImportQrCode({
   const tx = window.translate
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
-    <Dialog title={tx('import_qr_title')} isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogImportQrInner description='' onClose={onClose} />
+    <Dialog title={tx('qrscan_title')} isOpen={isOpen} onClose={onClose}>
+      {navigator.onLine && (
+        <DeltaDialogImportQrInner description='' onClose={onClose} />
+      )}
+      {!navigator.onLine && (
+        <DeltaDialogContent>
+          <DeltaDialogBody>
+            <Card>
+              <p>{tx('qrshow_join_contact_no_connection_hint')}</p>
+            </Card>
+            <button onClick={onClose} className={'bp3-button'}>
+              <span className='bp3-button-text'>{tx('ok')}</span>
+            </button>
+            <br />
+          </DeltaDialogBody>
+        </DeltaDialogContent>
+      )}
     </Dialog>
   )
 }

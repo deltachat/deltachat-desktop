@@ -110,20 +110,11 @@
   "back_to_top": {
     "message": "Back to Top"
   },
-  "import_qr_title": {
-    "message": "Scan QR code"
-  },
   "import_qr_error": {
     "message": "QR could not be decoded"
   },
   "load_qr_code_as_image": {
     "message": "Load QR code as image"
-  },
-  "scan_with_camera": {
-    "message": "Scan with camera"
-  },
-  "cancel_camera": {
-    "message": "Cancel camera"
   },
   "paste_from_clipboard": {
     "message": "Click to paste from clip board"

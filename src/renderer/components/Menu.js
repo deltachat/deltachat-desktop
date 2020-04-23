@@ -134,7 +134,7 @@ export default function DeltaMenu(props) {
       />
       <DeltaMenuItem
         key='importqr'
-        text={tx('import_qr_title')}
+        text={tx('qrscan_title')}
         onClick={async () => {
           screenContext.openDialog('ImportQrCode')
         }}
