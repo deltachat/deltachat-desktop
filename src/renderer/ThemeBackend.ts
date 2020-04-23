@@ -131,7 +131,7 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
     chatListItemSelectedBg: '#4c6e7d',
     chatListItemSelectedBgHover: undefinedGuard(true, _ =>
       Color('#4c6e7d')
-        .lighten(0.24)
+        .lighten(0.02)
         .hex()
     ),
     chatListItemSelectedText: theme.bgPrimary,
