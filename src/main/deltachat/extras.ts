@@ -10,8 +10,6 @@ const log = logger.getLogger('main/deltachat/extras')
 // Extras, mainly Electron functions
 export default class Extras extends SplitOut {
   getLocaleData(locale: string): LocaleData {
-    // locale-data
-    console.log(typeof locale, locale)
     if (locale) {
       loadTranslations(locale)
     }
