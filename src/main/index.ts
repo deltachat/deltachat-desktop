@@ -1,6 +1,6 @@
 console.time('init')
 
-import { ensureDirSync, readJsonSync, watchFile, existsSync } from 'fs-extra'
+import { ensureDirSync, watchFile, existsSync } from 'fs-extra'
 import { app as rawApp, session, EventEmitter } from 'electron'
 import rc from './rc'
 
@@ -63,19 +63,6 @@ Promise.all([
     process.exit(1)
   })
 
-function updateTheme() {
-  const sendTheme = () => {
-    const content = readJsonSync(app.rc['theme'])
-    mainWindow.send('theme-update', content)
-  }
-  if (!app.ipcReady) {
-    log.info('theme: Waiting for ipc to be ready before setting theme.')
-    ;(app as EventEmitter).once('ipcReady', sendTheme)
-    return
-  }
-  sendTheme()
-}
-
 function onReady([logins, _appReady, loadedState]: [
   {
     path: string
@@ -113,15 +100,16 @@ function onReady([logins, _appReady, loadedState]: [
   if (app.rc['theme']) {
     log.info(`theme: trying to load theme from '${app.rc['theme']}'`)
     if (existsSync(app.rc['theme'])) {
-      updateTheme()
+      app.state.saved.activeTheme = app.rc['theme']
       log.info(`theme: set theme`)
       if (app.rc['theme-watch']) {
         log.info('theme-watch: activated', app.rc['theme-watch'])
         watchFile(app.rc['theme'], (curr, prev) => {
           if (curr.mtime !== prev.mtime) {
-            log.info('theme-watch: File changed reloading theme data')
-            updateTheme()
-            log.info('theme-watch: reloading theme data - done')
+            log.info(
+              'theme-watch: File changed reminding frontend to reload theme'
+            )
+            app.ipcReady && mainWindow.send('theme-update')
           }
         })
       }

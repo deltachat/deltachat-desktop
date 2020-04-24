@@ -6,7 +6,26 @@ import {
   ThemeVarOverwrite,
 } from './ThemeBackend'
 import EventEmitter from 'wolfy87-eventemitter'
+import { callDcMethodAsync } from './ipc'
 const { ipcRenderer } = window.electron_functions
+
+function request(url: string): Promise<string> {
+  return new Promise((res, rej) => {
+    var xhr = new XMLHttpRequest()
+    xhr.addEventListener('error', ev => {
+      rej(ev)
+    })
+    xhr.open('GET', url)
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        res(xhr.responseText)
+      } else {
+        rej(new Error(`xhr.status: ${xhr.status} != 200`))
+      }
+    }
+    xhr.send()
+  })
+}
 
 // do we need an event emitter here?
 // if yes please replace it by another module and not use the native electron module
@@ -17,15 +36,23 @@ export class ThemeManager extends EventEmitter {
 
   constructor() {
     super()
-    const themeJSON = window.localStorage.getItem('theme')
-    this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
+    this.currentTheme = {}
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     window.ThemeManager = this // only for using from the dev console
-    ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
+    ipcRenderer.on('theme-update', _e => this.refresh())
+    this.refresh()
+  }
+
+  async refresh() {
+    const path = await callDcMethodAsync('getThemeFilePath')
+    this.setTheme(await this._loadThemeFile(path))
+  }
+
+  async _loadThemeFile(theme_file_path: string) {
+    return JSON.parse(await request(`file://${theme_file_path}`))
   }
 
   setTheme(theme: { [key: string]: string }) {
-    window.localStorage.setItem('theme', JSON.stringify(theme))
     this.currentTheme = theme
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     this.emit('update')

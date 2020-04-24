@@ -1,12 +1,13 @@
 ## Information how the experimental theme system works
-(it's in the code, because for now its only for developers)
-> Warning: This will change in the future.
 
+(it's in the code, because for now its only for developers)
+
+> Warning: This will change in the future.
 
 There are two objects: Theme and Theme-data -> the theme-data gets generated from the theme
 
-
 dev console:
+
 ```
 You can set the theme like this:
 window.ThemeManager.setTheme([object with theme properties you want to overwrite])
@@ -18,23 +19,23 @@ You can reset your overwrites with an empty object:
 window.ThemeManager.setTheme({})
 ```
 
-The theme you set gets stored in localstorage for now.
+The theme you set this way isn't persistant, its only for quick testing/playing-around,
+so rather use the `--theme-watch` option and create your own `your-theme.json` file.
 
 There are also some helper methods that allow you to see the theme(-data) at various points:
 
 ```js
 // Get the currently active theme/-data
-getCurrentlyAppliedThemeData ()
-getCurrentlyAppliedTheme ()
+getCurrentlyAppliedThemeData()
+getCurrentlyAppliedTheme()
 
 // get the theme data as you set it/ like it is stored in localstorage
-getCurrentTheme ()
+getCurrentTheme()
 
 // get the default theme/-data for reference
-getDefaultThemeData ()
-getDefaultTheme ()
+getDefaultThemeData()
+getDefaultTheme()
 ```
-
 
 ## Setting a theme from CLI
 
@@ -54,24 +55,22 @@ You can also enable hot reload for loaded theme with:
 npm run start -- --theme "./themes/dark.json" --theme-watch
 ```
 
-Quirks:
-- Doesn't work with `npm run dev` because this argument gets lost
+## Creating your own Theme:
 
-### TODO
-delete this section after done before merge!
+1. create a new json file for your new theme with an epmty object as content:
 
-- toggle hover
-- gallery
-    - tabs // do we relly need that? we will transform it into a dialog and make new styles there anyway.
+```json
+{}
+```
 
-- see todo comments in _bp3_overwrites.scss
-    - dialog shadows in darkmode look weird
-    - main menu shadow thingie looks weird in dark modes
-    - map controlls hover
-    - main menu seperation bars
+2. start deltachat from your terminal with your theme selected in watch mode:
 
-- gradients? namely:
-    - bp3 input focus
-    - gradient between chatlist and chatview
+```sh
+deltachat --theme ./path/to/your_theme.json --theme-watch
+```
 
-- don't forget to fix standard stuff (`npm test`)
+3. Open your theme file in your favorite code/text editor and edit it,
+   when you save it your changes should be applied a second later.
+
+Look into the default theme(`themes/light.json`)[../themes/light.json]) for inspiration.
+If you need more controll you can use the `raw` property to overwrite generated colors, you can get a list of all availible raw-properties by running `ThemeManager.getCurrentlyAppliedThemeData()` in the DeltaChat DevConsole.
