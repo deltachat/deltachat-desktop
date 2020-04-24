@@ -1,14 +1,9 @@
 import React, { useContext, useState, useRef } from 'react'
-import DeltaDialog, {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './DeltaDialog'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
-import { LocalSettings, ChatListItemType } from '../../../shared/shared-types'
+import { LocalSettings } from '../../../shared/shared-types'
 import { callDcMethodAsync, callDcMethod } from '../../ipc'
-const { ipcRenderer } = window.electron_functions
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
@@ -122,7 +117,7 @@ export function DeltaDialogImportQrInner({
 
   return (
     <DeltaDialogBody>
-      <DeltaDialogContent noOverflow noPadding>
+      <DeltaDialogContent noPadding>
         {secureJoinOngoing && (
           <div>
             <p className='progress-info'>Secure join in progress...</p>

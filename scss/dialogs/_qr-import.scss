@@ -1,15 +1,20 @@
 div.import-qr-code-dialog {
   text-align: center;
   .qr-image-loader {
-    max-height: 0;
+    max-height: 0px;
+    overflow: hidden;
   }
-  .qr-data .content {
-    height: 25px;
-    text-align: left;
+  .qr-data {
+    position: relative;
+    .content {
+      height: 25px;
+      text-align: left;
+    }
   }
+
   .copy-btn {
     position: absolute;
-    right: 20px;
+    right: 0px;
   }
   .bp3-button {
     margin: 10px;
