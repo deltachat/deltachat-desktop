@@ -25,6 +25,8 @@ export interface LocalSettings {
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
   zoomFactor: number
+  /** path to the active theme file */
+  activeTheme: string
 }
 
 export interface AppState {
