@@ -38,6 +38,7 @@ test('shows correct headline', async t => {
 
 test('login works', async t => {
   conf.account1 = await loginWithTmpUser()
+  console.log(conf.account1)
   await logout()
 })
 
@@ -48,6 +49,7 @@ test('login button is shown', async t => {
 
 test('second login works', async t => {
   conf.account2 = await loginWithTmpUser()
+  console.log(conf.account2)
   await logout()
 })
 

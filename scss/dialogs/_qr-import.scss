@@ -1,0 +1,33 @@
+div.import-qr-code-dialog {
+  text-align: center;
+  .qr-image-loader {
+    max-height: 0px;
+    overflow: hidden;
+  }
+  .qr-data {
+    position: relative;
+    .content {
+      height: 25px;
+      text-align: left;
+    }
+  }
+
+  .copy-btn {
+    position: absolute;
+    right: 0px;
+  }
+  .bp3-button {
+    margin: 10px;
+  }
+}
+
+.delta-dialog-content {
+  .bp3-progress-bar {
+    width: 92%;
+    text-align: center;
+    margin: 30px 20px;
+  }
+  p.progress-info {
+    margin-left: 20px;
+  }
+}

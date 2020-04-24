@@ -109,5 +109,14 @@
   },
   "back_to_top": {
     "message": "Back to Top"
+  },
+  "import_qr_error": {
+    "message": "QR could not be decoded"
+  },
+  "load_qr_code_as_image": {
+    "message": "Load QR code as image"
+  },
+  "paste_from_clipboard": {
+    "message": "Click to paste from clip board"
   }
 }

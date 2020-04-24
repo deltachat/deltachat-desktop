@@ -78,6 +78,7 @@
     "react-contextmenu": "^2.13.0",
     "react-dom": "^16.12.0",
     "react-intl": "^2.9.0",
+    "react-qr-reader": "^2.2.1",
     "react-qr-svg": "^2.1.0",
     "react-string-replace": "^0.4.4",
     "simple-markdown": "^0.7.1",

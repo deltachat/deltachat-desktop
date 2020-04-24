@@ -132,6 +132,13 @@ export default function DeltaMenu(props) {
           screenContext.openDialog('QrInviteCode', { qrCode })
         }}
       />
+      <DeltaMenuItem
+        key='importqr'
+        text={tx('qrscan_title')}
+        onClick={async () => {
+          screenContext.openDialog('ImportQrCode')
+        }}
+      />
       {chatMenu}
       <DeltaMenuItem
         key='settings'
