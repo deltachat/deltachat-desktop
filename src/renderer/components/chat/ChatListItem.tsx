@@ -22,10 +22,7 @@ const Header = React.memo(
           <span>{name + ' '}</span>
         </div>
         {pinned && (
-          <div
-            className='chat-list-item__header__pin_icon'
-            aria-label={window.translate('pin')}
-          />
+          <div className='pin_icon' aria-label={window.translate('pin')} />
         )}
         <div>
           <Timestamp

@@ -150,7 +150,7 @@
   &:hover {
     background-color: var(--chatListItemBgHover);
   }
-  .chat-list-item__header__pin_icon {
+  .pin_icon {
     flex-shrink: 0;
     @include color-svg('../images/pin.svg', var(--globalText));
     width: 16px;
@@ -171,7 +171,7 @@
     background-color: var(--chatListItemSelectedBgHover);
   }
 
-  .chat-list-item__header__pin_icon {
+  .pin_icon {
     background-color: var(--chatListItemSelectedText);
   }
 
