@@ -11,6 +11,7 @@ if (rc['multiple-instances'] === false && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()
+  process.exit(0)
 }
 
 // Setup folders

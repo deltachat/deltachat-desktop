@@ -126,6 +126,10 @@
     "xml-js": "^1.6.8"
   },
   "build": {
+    "protocols": {
+      "name": "electron-deep-linking",
+      "schemes": ["openpgp4fpr"]
+    },
     "mac": {
       "category": "public.app-category.social-networking"
     },

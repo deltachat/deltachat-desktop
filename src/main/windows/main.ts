@@ -1,5 +1,5 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle } from 'electron'
+import electron, { BrowserWindow, Rectangle, ipcMain } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
@@ -43,8 +43,38 @@ export function init(
 
   window.loadURL(defaults.main)
 
-  app.on('second-instance', () => {
+  // Define custom protocol handler. Deep linking works on packaged versions of the application!
+  app.setAsDefaultProtocolClient('openpgp4fpr')
+
+  app.on('open-url', function (event: Event, url:string) {
+    if(event) event.preventDefault()
+    const sendOpenUrlEvent = () => {
+      log.info('open-url: Sending url to frontend.');
+      send('open-url', url)
+        
+    }
+    if (app.ipcReady) return sendOpenUrlEvent()
+  
+    log.info('open-url: Waiting for ipc to be ready before opening url.')
+    ipcMain.once('ipcReady', sendOpenUrlEvent)
+  })
+
+  // Iterate over arguments and look out for uris
+  const openUrlFromArgv = (argv: string[]) => {
+    for(let i = 1; i < process.argv.length; i++) {
+      let arg = process.argv[i]
+      if(!arg.startsWith('openpgp4fpr:')) continue
+  
+      app.emit('open-url', null, arg)
+    }
+  }
+
+  openUrlFromArgv(process.argv)
+  
+
+  app.on('second-instance', (event: Event, argv: string[]) => {
     log.debug('Someone tried to run a second instance')
+    openUrlFromArgv(argv)
     if (window) {
       if (window.isMinimized()) window.show()
       window.focus()
