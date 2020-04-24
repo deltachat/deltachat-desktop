@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import { callDcMethod } from '../../ipc'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
@@ -30,21 +29,6 @@ export function ContactList2(props) {
     })
   })
 }
-
-export const ContactListSearchInput = styled.input`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  margin: 0;
-  line-height: inherit;
-  border: 0px;
-  margin-left: 20px;
-  font-size: 18px;
-`
 
 const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
   callDcMethod('getContacts2', [listFlags, queryStr], cb)

@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 
@@ -66,18 +65,3 @@ export function ContactListItem(props) {
     </div>
   )
 }
-
-export const ContactListSearchInput = styled.input`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  margin: 0;
-  line-height: inherit;
-  border: 0px;
-  margin-left: 20px;
-  font-size: 18px;
-`
