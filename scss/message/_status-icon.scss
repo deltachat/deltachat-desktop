@@ -1,8 +1,4 @@
 /* Message Status */
-$color-msg-status-icon-delivered: var(--messageStatusIcon);
-$color-msg-status-icon-read: var(--messageStatusIcon);
-$color-msg-status-icon-error: var(--errorColor);
-$color-msg-status-icon-sending: var(--messageStatusIconSending);
 
 @keyframes __status-icon--spinning {
   100% {
@@ -18,22 +14,25 @@ $color-msg-status-icon-sending: var(--messageStatusIconSending);
   margin-left: 2px;
 
   &.sending {
-    @include color-svg('../images/sending.svg', $color-msg-status-icon-sending);
+    @include color-svg(
+      '../images/sending.svg',
+      var(--messageStatusIconSending)
+    );
     animation: __status-icon--spinning 4s linear infinite;
     // ensure the element takes always the same width:
     width: 12px;
     margin-left: 8px;
   }
   &.delivered {
-    @include color-svg('../images/sent.svg', $color-msg-status-icon-delivered);
+    @include color-svg('../images/sent.svg', var(--messageStatusIcon));
   }
 
   &.read {
-    @include color-svg('../images/read.svg', $color-msg-status-icon-read);
+    @include color-svg('../images/read.svg', var(--messageStatusIcon));
   }
 
   &.error {
-    @include color-svg('../images/error.svg', $color-msg-status-icon-error);
+    @include color-svg('../images/error.svg', var(--errorColor));
     // ensure the element takes always the same width:
     width: 12px;
     margin-left: 8px;
