@@ -44,6 +44,10 @@ export function DeltaDialogImportQrInner({
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
   const handleResponse = async (scannedQrCode: string) => {
+    // Work around: Some browsers lower-case the prefix when using "Copy Link
+    // Location", but the core only accepts the string if the prefix is
+    // upper-case.
+    scannedQrCode = scannedQrCode.replace('openpgp4fpr', 'OPENPGP4FPR')
     setQrCode(scannedQrCode)
     const tx = window.translate
     let error = false
