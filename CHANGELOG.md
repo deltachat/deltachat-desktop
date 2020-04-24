@@ -6,7 +6,8 @@
 
 ### Added
 
-- add Pinned chats
+- add Import/Scan QR code (enables you to verify contacts and to join verifed groups from desktop) (#1550)
+- add Pinned chats #1537
 - add Big view of profile image (closes #1356)
 - add option to change a contacts displayname (#1502)
 - add some Mac keybindings (related to #1451)
@@ -14,7 +15,7 @@
   - focus the message composer
   - mac specific hide window (solves #634)
 - add primitive & experimental contact import (you can import a json array of contacts in the devconsole)
-- add archive Label to archived chats
+- add archive Label to archived chats #1537
 
 ### Changed
 
@@ -29,13 +30,12 @@
 
 - Info events are now always logged (not only when `--log-debug` is enabled)
 - fix that emojis get displayed right in the popups
-- fix #1529
 - fix composer whitescreen when having a zoomlevel
 - Some styling fixes:
   - remove unneccessary border on chatlist
   - changer caret color of sarch input to the same color as the placeholder
   - make dialog height overlap navbar/composer for fixed dialogs
-  - Fix fake-contact-item label
+  - Fix fake-contact-item label #1529
 - fixes help won't open on mac (open help in seperate electron window)
 - fix hover color for selected chats and make it a lot more slight
 
@@ -50,7 +50,7 @@ This section is only relevant to contributors.
 ### Updated
 
 - Update translations & languages shown in menu, change prefix of npm translation scripts
-- Update Core to `1.???`
+- Update Core to [`deltachat-core-rust @ 979d7c5`](https://github.com/deltachat/deltachat-core-rust/tree/979d7c562515da2a30983993048cd5184889059c) (deltachat-node `v1.29.1`)
 
 ## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/1.1.1...1.2.0) - 2020-03-30
 
