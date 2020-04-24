@@ -369,3 +369,35 @@
     }
   }
 }
+
+.info-message {
+  width: 100%;
+  text-align: center;
+  margin: 26px 0px;
+
+  p {
+    display: inline-block;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    padding: 7px 14px;
+    background-color: var(--infoMessageBubbleBg);
+    border-radius: 10px;
+    opacity: 0.9;
+    color: var(--infoMessageBubbleText);
+  }
+
+  &[custom-selectable] {
+    user-select: auto;
+    user-select: all;
+  }
+
+  &.big > p {
+    max-width: 550px;
+    font-size: 1rem;
+    padding: 2rem;
+    font-style: normal;
+    white-space: pre-wrap;
+    text-align: left;
+  }
+}

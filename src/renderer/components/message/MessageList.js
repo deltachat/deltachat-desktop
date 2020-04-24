@@ -146,9 +146,9 @@ export const MessageListInner = React.memo(
         <ul>
           {messageIds.length < 1 ? (
             <li>
-              <InfoMessage>
-                <p className='info-message'>{emptyChatMessage}</p>
-              </InfoMessage>
+              <div className='info-message big'>
+                <p>{emptyChatMessage}</p>
+              </div>
             </li>
           ) : (
             ''
@@ -194,7 +194,7 @@ export function DayMarker(props) {
   const { timestamp } = props
   const tx = window.translate
   return (
-    <InfoMessage>
+    <div className='info-message'>
       <p style={{ textTransform: 'capitalize' }}>
         {moment.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
@@ -203,6 +203,6 @@ export function DayMarker(props) {
           sameElse: 'LL',
         })}
       </p>
-    </InfoMessage>
+    </div>
   )
 }
