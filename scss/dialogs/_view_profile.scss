@@ -5,9 +5,11 @@ div.profile-info-container {
   .profile-info-name-container {
     margin: auto 0px auto 17px;
     flex-grow: 1;
-    .name {
+    input.name {
       font-size: medium;
       font-weight: bold;
+      background-color: transparent;
+      color: var(--globalText);
     }
     .address {
       color: #565656;

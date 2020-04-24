@@ -231,6 +231,7 @@ input[type='text']:focus {
 .bp3-tab {
   font-size: 19px;
   padding: 0.5rem;
+  color: var(--globalText);
 }
 
 .bp3-tab:not([aria-disabled='true']):hover,
