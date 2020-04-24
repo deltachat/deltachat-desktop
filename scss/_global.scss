@@ -98,7 +98,7 @@ button:focus {
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background: var(--globalBackground);
 }
 
 ::-webkit-scrollbar-thumb {
