@@ -1,5 +1,4 @@
 import React from 'react'
-import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import {
   defaultTheme,
   ThemeDataBuilder as ThemeBuilder,
@@ -85,10 +84,6 @@ export class ThemeProvider extends React.Component<
   }
 
   render() {
-    return (
-      <StyledThemeProvider theme={this.state.theme}>
-        {this.props.children}
-      </StyledThemeProvider>
-    )
+    return this.props.children
   }
 }
