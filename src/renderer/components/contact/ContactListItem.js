@@ -3,104 +3,27 @@ import styled from 'styled-components'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 
-export const ContactListItemWrapper = props => {
-  return (
-    <div className='ContactListItemWrapper' {...props}>
-      {props.children}
-    </div>
-  )
-}
-
-const ContactListItemContactWrapper = styled.div`
-  width: 100%;
-`
-
-const ContactListItemCheckboxWrapper = styled.div`
-  width: 40px;
-  margin-right: 40px;
-  input {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    margin-top: calc((64px - 20px) / 2);
-    border: solid;
-    border-radius: 3px;
-    border-width: 2px;
-    border-color: grey;
-    &:checked {
-      border-color: var(--loginInputFocusColor);
-      background-color: var(--loginInputFocusColor);
-    }
-    &:disabled {
-      border-color: grey;
-      background-color: grey;
-      cursor: default;
-    }
-  }
-
-  .DeltaCheckmarkIcon {
-    display: block;
-    position: relative;
-    top: -20px;
-    visibility: ${({ checked }) => (checked ? 'visible' : 'hidden')};
-  }
-
-  input:hover,
-  .DeltaCheckmarkIcon:hover {
-    cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  }
-`
-
-const DeltaCheckmarkIconWrapper = styled.div`
-  width: 20px;
-  height: 20px;
-  span:nth-child(1) {
-    display: block;
-    position: relative;
-    width: 9px;
-    height: 3px;
-    right: -1px;
-    bottom: -7px;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    background-color: white;
-  }
-  span:nth-child(2) {
-    display: block;
-    position: relative;
-    height: 3px;
-    width: 14px;
-    top: 1px;
-    right: -6px;
-    -webkit-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    background-color: white;
-  }
-`
-
-const DeltaCheckmarkIcon = props => (
-  <DeltaCheckmarkIconWrapper {...props} className='DeltaCheckmarkIcon'>
-    <span />
-    <span />
-  </DeltaCheckmarkIconWrapper>
-)
-
 const DeltaCheckbox = props => {
   const { checked, disabled } = props
   const _onClick = props.onClick
   const onClick = e => typeof _onClick === 'function' && _onClick(e)
   return (
-    <ContactListItemCheckboxWrapper checked={checked} disabled={disabled}>
+    <div className='checkbox' checked={checked} disabled={disabled}>
       <input
         type='checkbox'
         disabled={disabled}
         onChange={onClick}
         checked={checked}
       />
-      <DeltaCheckmarkIcon onClick={onClick} />
-    </ContactListItemCheckboxWrapper>
+      <div
+        className='checkmark'
+        onClick={onClick}
+        style={{ visibility: checked ? 'visible' : 'hidden' }}
+      >
+        <span />
+        <span />
+      </div>
+    </div>
   )
 }
 export function ContactListItem(props) {
@@ -117,16 +40,17 @@ export function ContactListItem(props) {
     typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
   }
   return (
-    <ContactListItemWrapper
+    <div
+      className='contact-list-item'
       key={contact.id}
       onClick={() => {
         onClick(contact)
         onCheckboxClick()
       }}
     >
-      <ContactListItemContactWrapper>
+      <div style={{ width: '100%' }}>
         <Contact contact={contact} />
-      </ContactListItemContactWrapper>
+      </div>
       {showCheckbox && (
         <DeltaCheckbox
           checked={checked}
@@ -135,14 +59,11 @@ export function ContactListItem(props) {
         />
       )}
       {showRemove && contact.id !== 1 && (
-        <div
-          className='module-contact-list-item__trash-icon'
-          onClick={onRemoveClick}
-        >
+        <div className='remove-icon' onClick={onRemoveClick}>
           <Icon icon='cross' />
         </div>
       )}
-    </ContactListItemWrapper>
+    </div>
   )
 }
 

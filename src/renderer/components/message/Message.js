@@ -36,8 +36,8 @@ const Avatar = (contact, onContactClick) => {
 }
 
 const ContactName = props => {
-  const { email, name, profileName, module, color, onClick } = props
-  const prefix = module || 'module-contact-name'
+  const { email, name, profileName, color, onClick } = props
+  const prefix = 'author'
 
   const title = name || email
   const shouldShowProfile = Boolean(profileName && !name)
@@ -63,7 +63,6 @@ const Author = (contact, onContactClick) => {
     <ContactName
       email={address}
       name={name}
-      module='author'
       color={color}
       onClick={() => onContactClick(contact)}
     />
