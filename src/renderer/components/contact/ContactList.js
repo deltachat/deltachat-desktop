@@ -31,7 +31,7 @@ export function ContactList2(props) {
 }
 
 const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
-  callDcMethod('getContacts2', [listFlags, queryStr], cb)
+  DeltaBackend.call('getContacts2', listFlags, queryStr).then(cb)
 }, 200)
 
 export function useContacts(listFlags, queryStr) {
@@ -41,7 +41,7 @@ export function useContacts(listFlags, queryStr) {
     debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {
-    callDcMethod('getContacts2', [listFlags, queryStr], setContacts)
+    DeltaBackend.call('getContacts2', listFlags, queryStr).then(setContacts)
   }, [])
 
   return [contacts, updateContacts]

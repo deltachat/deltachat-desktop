@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import differ from 'array-differ'
 import { Card, Classes } from '@blueprintjs/core'
@@ -47,13 +47,14 @@ export const useEditGroup = (
   const updateGroup = async () => {
     const remove = differ(initialGroupMembers, groupMembers)
     const add = differ(groupMembers, initialGroupMembers)
-    await callDcMethodAsync('chat.modifyGroup', [
+    await DeltaBackend.call(
+      'chat.modifyGroup',
       groupId,
       groupName,
       groupImage,
       remove,
-      add,
-    ])
+      add
+    )
   }
   const onUpdateGroup = async () => {
     if (groupName === '') return
@@ -126,7 +127,7 @@ export function EditGroupInner(props) {
         <PseudoListItemAddMember onClick={() => setViewMode('addMember')} />
         <PseudoListItemShowQrCode
           onClick={async () => {
-            const qrCode = await callDcMethodAsync('chat.getQrCode', groupId)
+            const qrCode = await DeltaBackend.call('chat.getQrCode', groupId)
             setQrCode(qrCode)
             setViewMode('showQrCode')
           }}

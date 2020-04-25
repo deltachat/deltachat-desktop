@@ -1,6 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
-import { callDcMethodAsync, openHelp } from '../ipc'
+import { openHelp } from '../ipc'
+import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
@@ -128,7 +129,7 @@ export default function DeltaMenu(props) {
         key='qr'
         text={tx('qrshow_join_contact_title')}
         onClick={async () => {
-          const qrCode = await callDcMethodAsync('chat.getQrCode', 0)
+          const qrCode = await DeltaBackend.call('chat.getQrCode', 0)
           screenContext.openDialog('QrInviteCode', { qrCode })
         }}
       />

@@ -1,11 +1,16 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
 
-const log = require('../shared/logger').getLogger('load-transaltions')
+import logger from '../shared/logger'
+const log = logger.getLogger('load-transaltions')
+
+import { app as rawApp } from 'electron'
+import { ExtendedAppMainProcess } from './types'
+const app = rawApp as ExtendedAppMainProcess
 
 import { translate } from '../shared/localize'
 
-export default function setup(app: any, locale: string) {
+export default function setup(locale: string) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
   let messages

@@ -26,18 +26,13 @@ export function sendToBackend(event: string, ...args: any[]) {
   ipcRenderer.send(event, ...args)
 }
 
-export function sendToBackendSync(event: string, ...args: any[]) {
-  log.debug(`sendToBackendSync: ${event} ${args.join(' ')}`)
-  ipcRenderer.send('ALL', event, ...args)
-  return ipcRenderer.sendSync(event, ...args)
-}
-
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
 var callDcMethodIdentifier = 0
-export function callDcMethod(
+// private function, please use `DeltaBackend.call` instead
+function callDcMethod(
   methodName: string,
-  args?: any[] | any,
+  args: any[],
   cb?: (returnValue: any) => void
 ) {
   const identifier = callDcMethodIdentifier++
@@ -45,12 +40,7 @@ export function callDcMethod(
   const ignoreReturn = typeof cb !== 'function'
   const eventName = ignoreReturn ? 'EVENT_DC_DISPATCH' : 'EVENT_DC_DISPATCH_CB'
 
-  sendToBackend(
-    eventName,
-    identifier,
-    methodName,
-    Array.isArray(args) ? args : [args]
-  )
+  sendToBackend(eventName, identifier, methodName, args)
 
   if (ignoreReturn) return
 
@@ -67,9 +57,9 @@ export function callDcMethod(
   )
 }
 
-export function callDcMethodAsync(
+export function _callDcMethodAsync(
   fnName: string,
-  args?: any[] | any
+  ...args: any[]
 ): Promise<any> {
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }

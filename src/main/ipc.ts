@@ -91,7 +91,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale: string) => {
-    loadTranslations(app, locale)
+    loadTranslations(locale)
     dcController.loginController.setCoreStrings(txCoreStrings())
     refreshMenu(logHandler)
   })
@@ -203,11 +203,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   })
 
   ipcMain.on('render', sendStateToRenderer)
-
-  ipcMain.on('locale-data', (e, locale) => {
-    if (locale) app.localeData = loadTranslations(app, locale)
-    e.returnValue = app.localeData
-  })
 
   const updateDesktopSetting = (
     e: Electron.IpcMainEvent,

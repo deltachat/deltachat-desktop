@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 
 export const useAsyncEffect = (
   asyncEffect: () => {},
@@ -29,7 +29,7 @@ export const StickerDiv = (props: {
     setShowEmojiPicker,
   } = props
   const onClickSticker = (fileName: string) => {
-    callDcMethod('messageList.sendSticker', [chatId, fileName])
+    DeltaBackend.call('messageList.sendSticker', chatId, fileName)
     setShowEmojiPicker(false)
   }
 
@@ -117,7 +117,7 @@ export const EmojiAndStickerPicker = forwardRef<
     stickers === null || Object.keys(stickers).length === 0
 
   useAsyncEffect(async () => {
-    const stickers = await callDcMethodAsync('stickers.getStickers')
+    const stickers = await DeltaBackend.call('stickers.getStickers')
     setStickers(stickers)
   }, [])
 

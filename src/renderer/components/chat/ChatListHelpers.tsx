@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react'
-import { callDcMethod, callDcMethodAsync, ipcBackend } from '../../ipc'
+import { ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import logger from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
 import { ChatListItemType } from '../../../shared/shared-types'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = logger.getLogger('renderer/helpers/ChatList')
 
@@ -14,11 +15,12 @@ const debouncedGetChatListIds = debounce(
     queryContactId: number,
     cb: (...args: any) => void
   ) => {
-    callDcMethod(
+    DeltaBackend.call(
       'chatList.getChatListIds',
-      [listFlags, queryStr, queryContactId],
-      cb
-    )
+      listFlags,
+      queryStr,
+      queryContactId
+    ).then(cb)
   },
   200
 )
@@ -37,11 +39,12 @@ export function useChatListIds(
 
   const getAndSetChatListIds = (immediatly: boolean = false) => {
     if (immediatly === true) {
-      callDcMethod(
+      DeltaBackend.call(
         'chatList.getChatListIds',
-        [listFlags, queryStr, queryContactId],
-        setChatListIds
-      )
+        listFlags,
+        queryStr,
+        queryContactId
+      ).then(setChatListIds)
       return
     }
     debouncedGetChatListIds(listFlags, queryStr, queryContactId, setChatListIds)
@@ -171,9 +174,10 @@ export const useLazyChatListItems = (chatListIds: number[]) => {
     })
     if (chatIdsToFetch.length === 0) return
     fetching.current.push(...chatIdsToFetch)
-    const chats = await callDcMethodAsync('chatList.getChatListItemsByIds', [
-      chatIdsToFetch,
-    ])
+    const chats = await DeltaBackend.call(
+      'chatList.getChatListItemsByIds',
+      chatIdsToFetch
+    )
     fetching.current = fetching.current.filter(
       i => chatIdsToFetch.indexOf(i) === -1
     )

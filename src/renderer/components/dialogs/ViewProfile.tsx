@@ -11,7 +11,7 @@ import { integerToHexColor } from '../../../shared/util'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
@@ -24,7 +24,7 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   }>({ displayName: '', address: '' })
 
   const loadContact = async (contactId: number) => {
-    setContact(await callDcMethodAsync('contacts.getContact', [contactId]))
+    setContact(await DeltaBackend.call('contacts.getContact', contactId))
   }
 
   useEffect(() => {
@@ -34,10 +34,11 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
     if (
-      (await callDcMethodAsync('contacts.changeNickname', [
+      (await DeltaBackend.call(
+        'contacts.changeNickname',
         contactId,
-        newName,
-      ])) !== 0
+        newName
+      )) !== 0
     ) {
       loadContact(contactId)
     }
@@ -94,9 +95,7 @@ export default function ViewProfile(props: {
     onClose()
   }
   const onSendMessage = async () => {
-    const dmChatId = await callDcMethodAsync('contacts.getDMChatId', [
-      contact.id,
-    ])
+    const dmChatId = await DeltaBackend.call('contacts.getDMChatId', contact.id)
     onChatClick(dmChatId)
   }
 

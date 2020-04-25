@@ -1,4 +1,4 @@
-import { callDcMethod, callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import {
@@ -22,7 +22,7 @@ export async function setChatVisibility(
     | C.DC_CHAT_VISIBILITY_PINNED,
   shouldUnselectChat: boolean = false
 ) {
-  await callDcMethodAsync('chat.setVisibility', [chatId, visibility])
+  await DeltaBackend.call('chat.setVisibility', chatId, visibility)
   if (shouldUnselectChat || visibility === C.DC_CHAT_VISIBILITY_ARCHIVED)
     unselectChat()
 }
@@ -35,7 +35,7 @@ export function openLeaveChatDialog(
   screenContext.openDialog('ConfirmationDialog', {
     message: tx('ask_leave_group'),
     confirmLabel: tx('menu_leave_group'),
-    cb: (yes: boolean) => yes && callDcMethod('chat.leaveGroup', chatId),
+    cb: (yes: boolean) => yes && DeltaBackend.call('chat.leaveGroup', chatId),
   })
 }
 
@@ -48,7 +48,7 @@ export function openDeleteChatDialog(
     message: tx('ask_delete_chat_desktop', chat.name),
     confirmLabel: tx('delete'),
     cb: (yes: boolean) =>
-      yes && callDcMethod('chat.delete', chat.id, unselectChat),
+      yes && DeltaBackend.call('chat.delete', chat.id).then(unselectChat),
   })
 }
 
@@ -63,11 +63,10 @@ export function openBlockContactDialog(
       confirmLabel: tx('menu_block_contact'),
       cb: (yes: boolean) =>
         yes &&
-        callDcMethod(
+        DeltaBackend.call(
           'contacts.blockContact',
-          selectedChat.contactIds[0],
-          unselectChat
-        ),
+          selectedChat.contactIds[0]
+        ).then(unselectChat),
     })
   }
 }
@@ -98,7 +97,7 @@ export async function openViewProfileDialog(
   contact: number | JsonContact
 ) {
   if (typeof contact === 'number' && Number.isInteger(contact)) {
-    contact = await callDcMethodAsync('chatList.getContact', contact)
+    contact = await DeltaBackend.call('contacts.getContact', contact)
   }
   screenContext.openDialog('ViewProfile', { contact })
 }

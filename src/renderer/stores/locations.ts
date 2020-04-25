@@ -1,5 +1,5 @@
 import { JsonLocations } from '../../shared/shared-types'
-import { callDcMethod } from '../ipc'
+import { DeltaBackend } from '../delta-remote'
 import { Store, Action } from './store'
 
 const { ipcRenderer } = window.electron_functions
@@ -15,14 +15,16 @@ export class state {
 
 export const locationStore = new Store(new state(), 'location')
 
-const getLocations = (chatId: number, mapSettings: todo) => {
+const getLocations = async (chatId: number, mapSettings: todo) => {
   const { timestampFrom, timestampTo } = mapSettings
-  callDcMethod(
+  const locations: JsonLocations = await DeltaBackend.call(
     'locations.getLocations',
-    [chatId, 0, timestampFrom, timestampTo],
-    (locations: JsonLocations) =>
-      locationStore.setState({ ...locationStore.getState(), locations })
+    chatId,
+    0,
+    timestampFrom,
+    timestampTo
   )
+  locationStore.setState({ ...locationStore.getState(), locations })
 }
 
 const onLocationChange = (evt: any, [chatId]: [number]) => {

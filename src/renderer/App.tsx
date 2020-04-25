@@ -5,18 +5,13 @@ import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
-import {
-  callDcMethod,
-  sendToBackend,
-  sendToBackendSync,
-  ipcBackend,
-  startBackendLogging,
-} from './ipc'
+import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import logger from '../shared/logger'
+import { DeltaBackend } from './delta-remote'
 
 const log = logger.getLogger('renderer/App')
 const moment = require('moment')
@@ -61,7 +56,7 @@ export default function App(props: any) {
     })
 
     window.addEventListener('online', () => {
-      callDcMethod('context.maybeNetwork')
+      DeltaBackend.call('context.maybeNetwork')
     })
   }, [])
 
@@ -80,16 +75,19 @@ export default function App(props: any) {
     }
   }, [state])
 
-  function setupLocaleData(locale: string) {
+  async function setupLocaleData(locale: string) {
     moment.locale(locale)
-    const localeData: LocaleData = sendToBackendSync('locale-data', locale)
+    const localeData: LocaleData = await DeltaBackend.call(
+      'extras.getLocaleData',
+      locale
+    )
     window.localeData = localeData
     window.translate = translate(localeData.messages)
     setLocaleData(localeData)
   }
 
-  const onChooseLanguage = (e: any, locale: string) => {
-    setupLocaleData(locale)
+  const onChooseLanguage = async (e: any, locale: string) => {
+    await setupLocaleData(locale)
     sendToBackend('chooseLanguage', locale)
   }
   useEffect(() => {

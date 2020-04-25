@@ -1,4 +1,4 @@
-import { callDcMethod } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
@@ -382,26 +382,25 @@ export default class MapComponent extends React.Component<
     })
     if (contactFeature) {
       if (contactFeature.properties.msgId) {
-        callDcMethod(
+        DeltaBackend.call(
           'messageList.getMessage',
-          contactFeature.properties.msgId,
-          (messageObj: MessageType) => {
-            if (messageObj) {
-              message = messageObj.msg
-            }
-            const markup = this.renderPopupMessage(
-              contactFeature.properties.contact,
-              formatRelativeTime(contactFeature.properties.reported * 1000, {
-                extended: true,
-              }),
-              message
-            )
-            new mapboxgl.Popup({ offset: [0, -15] })
-              .setHTML(markup)
-              .setLngLat((contactFeature.geometry as any).coordinates)
-              .addTo(this.map)
+          contactFeature.properties.msgId
+        ).then((messageObj: MessageType) => {
+          if (messageObj) {
+            message = messageObj.msg
           }
-        )
+          const markup = this.renderPopupMessage(
+            contactFeature.properties.contact,
+            formatRelativeTime(contactFeature.properties.reported * 1000, {
+              extended: true,
+            }),
+            message
+          )
+          new mapboxgl.Popup({ offset: [0, -15] })
+            .setHTML(markup)
+            .setLngLat((contactFeature.geometry as any).coordinates)
+            .addTo(this.map)
+        })
       }
     }
   }

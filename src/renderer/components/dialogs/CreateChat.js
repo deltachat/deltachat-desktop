@@ -2,7 +2,7 @@ import React, { Fragment, useState, useContext } from 'react'
 import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
 
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import { ScreenContext } from '../../contexts'
 import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
@@ -48,7 +48,7 @@ export default function CreateChat(props) {
   }
 
   const chooseContact = async ({ id }) => {
-    const chatId = await callDcMethodAsync('contacts.createChatByContactId', id)
+    const chatId = await DeltaBackend.call('contacts.createChatByContactId', id)
 
     if (!chatId) {
       return userFeedback({
@@ -82,11 +82,11 @@ export default function CreateChat(props) {
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
 
-    const contactId = await callDcMethodAsync('contacts.createContact', [
-      false,
-      queryStr,
-    ])
-    const chatId = await callDcMethodAsync(
+    const contactId = await DeltaBackend.call(
+      'contacts.createContact',
+      queryStr
+    )
+    const chatId = await DeltaBackend.call(
       'contacts.createChatByContactId',
       contactId
     )
@@ -312,21 +312,18 @@ export const useCreateGroup = (
   const lazilyCreateOrUpdateGroup = async finishing => {
     let gId = groupId
     if (gId === -1) {
-      gId = await callDcMethodAsync('chat.createGroupChat', [
-        verified,
-        groupName,
-      ])
+      gId = await DeltaBackend.call('chat.createGroupChat', verified, groupName)
       setGroupId(gId)
     } else {
-      await callDcMethodAsync('chat.setName', [gId, groupName])
+      await DeltaBackend.call('chat.setName', gId, groupName)
     }
     if (finishing === true) {
       if (groupImage !== '') {
-        await callDcMethodAsync('chat.setProfileImage', [gId, groupImage])
+        await DeltaBackend.call('chat.setProfileImage', gId, groupImage)
       }
       for (const contactId of groupMembers) {
         if (contactId !== C.DC_CONTACT_ID_SELF) {
-          await callDcMethodAsync('chat.addContactToChat', [gId, contactId])
+          await DeltaBackend.call('chat.addContactToChat', gId, contactId)
         }
       }
     }
@@ -392,7 +389,7 @@ export function CreateGroupInner(props) {
               return
             }
             const gId = await lazilyCreateOrUpdateGroup(false)
-            const qrCode = await callDcMethodAsync('chat.getQrCode', gId)
+            const qrCode = await DeltaBackend.call('chat.getQrCode', gId)
             setQrCode(qrCode)
             setViewMode(viewPrefix + '-showQrCode')
           }}

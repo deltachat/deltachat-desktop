@@ -2,7 +2,7 @@ import React from 'react'
 import { convertContactProps } from '../contact/Contact'
 import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
-import { callDcMethodAsync } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
 
 class MessageInfo extends React.Component {
@@ -20,7 +20,7 @@ class MessageInfo extends React.Component {
 
   refresh() {
     this.setState({ loading: true })
-    callDcMethodAsync('messageList.getMessageInfo', this.props.message.id).then(
+    DeltaBackend.call('messageList.getMessageInfo', this.props.message.id).then(
       info => {
         this.setState({ loading: false, content: info })
         this.forceUpdate()

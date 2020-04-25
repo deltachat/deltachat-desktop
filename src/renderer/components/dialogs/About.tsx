@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { callDcMethodAsync } from '../../ipc'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
 import logger from '../../../shared/logger'
@@ -10,6 +9,7 @@ import {
   gitHubLicenseUrl,
 } from '../../../shared/constants'
 import ClickableLink from '../helpers/ClickableLink'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = logger.getLogger('renderer/dialogs/About')
 
@@ -17,7 +17,7 @@ export function DCInfo(_props: any) {
   const [content, setContent] = useState(undefined)
 
   useEffect(function fetchContent() {
-    callDcMethodAsync('getInfo').then(info => {
+    DeltaBackend.call('getInfo').then(info => {
       setContent(info)
       log.debug('dcInfo', info)
     })
