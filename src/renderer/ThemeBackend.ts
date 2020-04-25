@@ -238,7 +238,6 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
     brokenMediaBg: '#ffffff',
     unreadCountBg: theme.accentColor,
     unreadCountLabel: '#ffffff', // Only changable with theme.raw
-    contactListItemBg: '#62656a',
     contactListInitalColor: theme.textSecondary,
     contactEmailColor: theme.textSecondary,
     errorColor: '#f44336',

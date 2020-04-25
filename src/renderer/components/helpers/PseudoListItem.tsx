@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, CSSProperties } from 'react'
 import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
-import { ContactListItemWrapper } from '../contact/ContactListItem'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -9,17 +8,17 @@ export function PseudoListItem(
     cutoff?: string
     text: string
     subText?: string
-    onClick?: (ev: MouseEvent) => void
+    onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
     style?: CSSProperties
   }>
 ) {
   const { id, cutoff, text, subText, onClick, style } = props
   return (
-    <ContactListItemWrapper key={id} onClick={onClick} style={style}>
+    <div className='contact-list-item' key={id} onClick={onClick} style={style}>
       <PseudoContact cutoff={cutoff} text={text} subText={subText}>
         {props.children}
       </PseudoContact>
-    </ContactListItemWrapper>
+    </div>
   )
 }
 
@@ -42,7 +41,7 @@ export const PseudoListItemNoSearchResults = ({
 export const PseudoListItemShowQrCode = ({
   onClick,
 }: {
-  onClick: (ev: MouseEvent) => void
+  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
   const tx = window.translate
   return (
@@ -55,7 +54,7 @@ export const PseudoListItemShowQrCode = ({
 export const PseudoListItemAddMember = ({
   onClick,
 }: {
-  onClick: (ev: MouseEvent) => void
+  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
   const tx = window.translate
   return (
@@ -75,7 +74,7 @@ export const PseudoListItemAddContact = ({
 }: {
   queryStr: string
   queryStrIsEmail: boolean
-  onClick: (ev: MouseEvent) => void
+  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
   const tx = window.translate
   return (

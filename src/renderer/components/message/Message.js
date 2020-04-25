@@ -36,19 +36,16 @@ const Avatar = (contact, onContactClick) => {
 }
 
 const ContactName = props => {
-  const { email, name, profileName, module, color, onClick } = props
-  const prefix = module || 'module-contact-name'
+  const { email, name, profileName, color, onClick } = props
 
   const title = name || email
   const shouldShowProfile = Boolean(profileName && !name)
   const profileElement = shouldShowProfile ? (
-    <span className={`${prefix}__profile-name`} style={{ color: color }}>
-      ~{profileName || ''}
-    </span>
+    <span style={{ color: color }}>~{profileName || ''}</span>
   ) : null
 
   return (
-    <span className={prefix} style={{ color: color }} onClick={onClick}>
+    <span className='author' style={{ color: color }} onClick={onClick}>
       {title}
       {shouldShowProfile ? ' ' : null}
       {profileElement}
@@ -63,7 +60,6 @@ const Author = (contact, onContactClick) => {
     <ContactName
       email={address}
       name={name}
-      module='author'
       color={color}
       onClick={() => onContactClick(contact)}
     />

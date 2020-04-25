@@ -20,7 +20,6 @@ import {
   DeltaDialogHeader,
   DeltaDialogBody,
 } from './DeltaDialog'
-import { CreateChatContactListWrapper } from './CreateChat-Styles'
 
 import {
   GroupSettingsContainer,
@@ -124,11 +123,11 @@ export default function CreateChat(props) {
           </DeltaDialogHeader>
           <DeltaDialogBody noFooter>
             <Card>
-              <CreateChatContactListWrapper>
+              <div className='create-chat-contact-list-wrapper'>
                 {renderAddGroupIfNeeded()}
                 <ContactList2 contacts={contacts} onClick={chooseContact} />
                 {renderAddContactIfNeeded()}
-              </CreateChatContactListWrapper>
+              </div>
             </Card>
           </DeltaDialogBody>
         </>

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
-import styled from 'styled-components'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'
 import logger from '../../../shared/logger'
@@ -9,30 +8,6 @@ import { openViewProfileDialog } from '../helpers/ChatMethods'
 const log = logger.getLogger('renderer/messageWrapper')
 
 const GROUP_TYPES = [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP]
-
-export const InfoMessage = styled.div`
-  width: 100%;
-  text-align: center;
-  margin: 26px 0px;
-
-  p {
-    display: inline-block;
-    text-align: center;
-    font-style: italic;
-    font-weight: bold;
-    padding: 7px 14px;
-    background-color: ${props => props.theme.infoMessageBubbleBg};
-    border-radius: 10px;
-    opacity: 0.9;
-    color: ${props => props.theme.infoMessageBubbleText};
-    ${props =>
-      props['custom-selectable'] &&
-      `
-      user-select: auto;
-      user-select: all;
-    `}
-  }
-`
 
 export const render = props => {
   return (
@@ -116,9 +91,13 @@ export const RenderMessage = React.memo(
     if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
     if (message.isInfo)
       return (
-        <InfoMessage onContextMenu={onShowDetail} custom-selectable>
+        <div
+          className='info-message'
+          onContextMenu={onShowDetail}
+          custom-selectable
+        >
           <p>{msg.text}</p>
-        </InfoMessage>
+        </div>
       )
 
     return <Message {...props} />

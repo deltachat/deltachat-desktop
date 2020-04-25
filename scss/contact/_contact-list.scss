@@ -1,57 +1,94 @@
-// Module: Contact List Item
-$color-contact-default-label: var(--avatarLabelColor);
-$color-contact-list-item: var(--contactListItemBg);
-
-.module-contact-list-item {
-  padding-top: 5px;
-  padding-bottom: 5px;
+.contact-list-item {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  padding-left: 40px;
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
 
-  color: $color-contact-list-item;
-}
+  .chat-list & {
+    padding-left: 0px;
+  }
 
-.module-contact-list-item--with-click-handler {
-  cursor: pointer;
-}
+  .forward-message-list-chat-list & {
+    width: 100%;
+    padding: 0px 20px;
+  }
 
-.module-contact-list-item__text {
-  margin-left: 8px;
-}
+  .checkbox {
+    width: 40px;
+    margin-right: 40px;
+    input {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      margin-top: calc((64px - 20px) / 2);
+      border: solid;
+      border-radius: 3px;
+      border-width: 2px;
+      border-color: grey;
+      &:checked {
+        border-color: var(--loginInputFocusColor);
+        background-color: var(--loginInputFocusColor);
+      }
+      &:disabled {
+        border-color: grey;
+        background-color: grey;
+        cursor: default;
+      }
+    }
 
-.module-contact-list-item__text__name {
-  font-weight: 300;
-  font-size: 14px;
-}
+    .checkmark {
+      display: block;
+      position: relative;
+      top: -20px;
+      width: 20px;
+      height: 20px;
+      span {
+        display: block;
+        position: relative;
+        background-color: white;
+      }
+      span:nth-child(1) {
+        width: 9px;
+        height: 3px;
+        right: -1px;
+        bottom: -7px;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+      span:nth-child(2) {
+        height: 3px;
+        width: 14px;
+        top: 1px;
+        right: -6px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+      }
+    }
+  }
 
-.module-contact-list-item__text__profile-name {
-  font-style: italic;
-}
+  &[disabled] {
+    input:hover,
+    .checkmark:hover {
+      cursor: 'default';
+    }
+  }
 
-.module-contact-list-item__text__additional-data {
-  margin-top: 3px;
-  font-size: 14px;
-}
-
-.module-contact-list-item__text__verified-icon {
-  width: 0.75em;
-  height: 0.75em;
-  // Trying to account for the whitespace around the check mark
-  margin-bottom: -1px;
-}
-
-.module-contact-list-item__trash-icon {
-  margin-top: calc((64px - 20px) / 2);
-  margin-right: 40px;
-  .bp3-icon > svg {
-    width: 20px;
-    height: 20px;
-    fill: grey;
+  .remove-icon {
+    margin-top: calc((64px - 20px) / 2);
+    margin-right: 40px;
+    .bp3-icon > svg {
+      width: 20px;
+      height: 20px;
+      fill: grey;
+    }
   }
 }
 
-span.module-contact-name {
-  font-weight: 200;
-  font-size: medium;
+div.create-chat-contact-list-wrapper {
+  margin: -20px;
+  background-color: var(--bp3DialogBgPrimary);
 }
