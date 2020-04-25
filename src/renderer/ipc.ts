@@ -84,3 +84,6 @@ export function openHelp() {
 }
 
 ipcRenderer.on('showHelpDialog', openHelp)
+ipcRenderer.on('open-url', (event: Event, url: string) => {
+  log.debug('open-url: received url:', url)
+})

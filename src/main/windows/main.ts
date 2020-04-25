@@ -1,5 +1,5 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle, ipcMain } from 'electron'
+import electron, { BrowserWindow, Rectangle, ipcMain, EventEmitter } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
@@ -53,18 +53,26 @@ export function init(
       send('open-url', url)
         
     }
+    log.debug('open-url: sending to frontend:', url)
     if (app.ipcReady) return sendOpenUrlEvent()
   
-    log.info('open-url: Waiting for ipc to be ready before opening url.')
-    ipcMain.once('ipcReady', sendOpenUrlEvent)
+    log.debug('open-url: Waiting for ipc to be ready before opening url.')
+    ;(app as EventEmitter).once('ipcReady', () => {
+      log.debug('open-url: IPC ready.')
+      sendOpenUrlEvent()
+    })
   })
 
   // Iterate over arguments and look out for uris
   const openUrlFromArgv = (argv: string[]) => {
-    for(let i = 1; i < process.argv.length; i++) {
-      let arg = process.argv[i]
-      if(!arg.startsWith('openpgp4fpr:')) continue
-  
+    for(let i = 1; i < argv.length; i++) {
+      let arg = argv[i]
+      if(!arg.startsWith('openpgp4fpr:')) {
+        log.debug('open-url: URI doesn\'t start with openpgp4fpr:', arg)
+        continue
+      }
+      
+      log.debug('open-url: Detected URI: ', arg)
       app.emit('open-url', null, arg)
     }
   }
