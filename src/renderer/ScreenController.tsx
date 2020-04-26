@@ -11,6 +11,12 @@ import {
   Controller as DialogController,
   DialogId,
 } from './components/dialogs/index'
+import { processOPENPGP4FPRUrl, QrCodeResponse, qrStates } from "./components/dialogs/ImportQrCode"
+import { callDcMethodAsync } from './ipc'
+
+import * as logger from '../shared/logger'
+
+const log = logger.getLogger('renderer/ScreenController')
 
 export interface userFeedback {
   type: 'error' | 'success'
@@ -37,6 +43,7 @@ export default class ScreenController extends Component {
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
     window.__openDialog = this.openDialog.bind(this)
+    window.__userFeedback = this.userFeedback.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogs = createRef()
@@ -55,12 +62,14 @@ export default class ScreenController extends Component {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
+    ipcRenderer.on('open-url', this.onOpenUrl)
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
+    ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
   onError(_event: any, error: Error) {
@@ -75,6 +84,10 @@ export default class ScreenController extends Component {
 
   showAbout() {
     this.openDialog('About')
+  }
+
+  async onOpenUrl(event: Event, url:string) {
+    processOPENPGP4FPRUrl(url)
   }
 
   openDialog(name: DialogId, props?: any) {

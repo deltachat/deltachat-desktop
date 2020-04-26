@@ -45,6 +45,7 @@ export function init(
 
   // Define custom protocol handler. Deep linking works on packaged versions of the application!
   app.setAsDefaultProtocolClient('openpgp4fpr')
+  app.setAsDefaultProtocolClient('OPENPGP4FPR')
 
   app.on('open-url', function (event: Event, url:string) {
     if(event) event.preventDefault()
@@ -67,8 +68,8 @@ export function init(
   const openUrlFromArgv = (argv: string[]) => {
     for(let i = 1; i < argv.length; i++) {
       let arg = argv[i]
-      if(!arg.startsWith('openpgp4fpr:')) {
-        log.debug('open-url: URI doesn\'t start with openpgp4fpr:', arg)
+      if(!arg.startsWith('OPENPGP4FPR:') && !arg.startsWith('openpgp4fpr:')) {
+        log.debug('open-url: URI doesn\'t start with OPENPGP4FPR:', arg)
         continue
       }
       
