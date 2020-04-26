@@ -11,7 +11,11 @@ import {
   Controller as DialogController,
   DialogId,
 } from './components/dialogs/index'
-import { processOPENPGP4FPRUrl, QrCodeResponse, qrStates } from "./components/dialogs/ImportQrCode"
+import {
+  processOPENPGP4FPRUrl,
+  QrCodeResponse,
+  qrStates,
+} from './components/dialogs/ImportQrCode'
 import { callDcMethodAsync } from './ipc'
 
 import * as logger from '../shared/logger'
@@ -86,7 +90,7 @@ export default class ScreenController extends Component {
     this.openDialog('About')
   }
 
-  async onOpenUrl(event: Event, url:string) {
+  async onOpenUrl(event: Event, url: string) {
     processOPENPGP4FPRUrl(url)
   }
 

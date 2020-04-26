@@ -1,5 +1,10 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle, ipcMain, EventEmitter } from 'electron'
+import electron, {
+  BrowserWindow,
+  Rectangle,
+  ipcMain,
+  EventEmitter,
+} from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
@@ -47,16 +52,15 @@ export function init(
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
 
-  app.on('open-url', function (event: Event, url:string) {
-    if(event) event.preventDefault()
+  app.on('open-url', function(event: Event, url: string) {
+    if (event) event.preventDefault()
     const sendOpenUrlEvent = () => {
-      log.info('open-url: Sending url to frontend.');
+      log.info('open-url: Sending url to frontend.')
       send('open-url', url)
-        
     }
     log.debug('open-url: sending to frontend:', url)
     if (app.ipcReady) return sendOpenUrlEvent()
-  
+
     log.debug('open-url: Waiting for ipc to be ready before opening url.')
     ;(app as EventEmitter).once('ipcReady', () => {
       log.debug('open-url: IPC ready.')
@@ -66,20 +70,19 @@ export function init(
 
   // Iterate over arguments and look out for uris
   const openUrlFromArgv = (argv: string[]) => {
-    for(let i = 1; i < argv.length; i++) {
+    for (let i = 1; i < argv.length; i++) {
       let arg = argv[i]
-      if(!arg.startsWith('OPENPGP4FPR:') && !arg.startsWith('openpgp4fpr:')) {
-        log.debug('open-url: URI doesn\'t start with OPENPGP4FPR:', arg)
+      if (!arg.startsWith('OPENPGP4FPR:') && !arg.startsWith('openpgp4fpr:')) {
+        log.debug("open-url: URI doesn't start with OPENPGP4FPR:", arg)
         continue
       }
-      
+
       log.debug('open-url: Detected URI: ', arg)
       app.emit('open-url', null, arg)
     }
   }
 
   openUrlFromArgv(process.argv)
-  
 
   app.on('second-instance', (event: Event, argv: string[]) => {
     log.debug('Someone tried to run a second instance')

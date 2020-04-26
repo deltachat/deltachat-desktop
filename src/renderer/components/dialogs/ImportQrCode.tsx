@@ -31,13 +31,10 @@ export declare type QrCodeResponse = {
   text1: string
 }
 
-export async function processOPENPGP4FPRUrl(url: string, onClose:any=null) {
+export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
   const tx = window.translate
   let error = false
-  const response: QrCodeResponse = await callDcMethodAsync(
-    'checkQrCode',
-    url
-  )
+  const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', url)
   if (response === null) {
     error = true
   }
@@ -56,10 +53,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose:any=null) {
   }
 
   if (state === 'QrAskVerifyContact') {
-    const contact = await callDcMethodAsync(
-      'contacts.getContact',
-      response.id
-    )
+    const contact = await callDcMethodAsync('contacts.getContact', response.id)
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
@@ -81,10 +75,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose:any=null) {
       },
     })
   } else if (state === 'QrFprOk') {
-    const contact = await callDcMethodAsync(
-      'contacts.getContact',
-      response.id
-    )
+    const contact = await callDcMethodAsync('contacts.getContact', response.id)
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayname} is valid!`,
       confirmLabel: tx('ok'),
@@ -93,7 +84,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose:any=null) {
   } else {
     window.__userFeedback({
       type: 'error',
-      text: 'Don\'t know what to do with this URL :/',
+      text: "Don't know what to do with this URL :/",
     })
   }
 }

@@ -3,7 +3,6 @@
  * to be able to switch this layer later on...
  */
 
-
 const { ipcRenderer } = window.electron_functions
 const log = require('../shared/logger').getLogger('renderer/ipc')
 
