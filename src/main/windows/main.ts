@@ -54,6 +54,7 @@ export function init(
   })
 
   // Define custom protocol handler. Deep linking works on packaged versions of the application!
+  // These calls are for mac and windows, on linux it uses the desktop file.
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
 

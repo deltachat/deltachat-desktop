@@ -127,8 +127,12 @@
   },
   "build": {
     "protocols": {
-      "name": "electron-deep-linking",
-      "schemes": ["openpgp4fpr", "OPENPGP4FPR"]
+      "name": "QR code data",
+      "role": "Viewer",
+      "schemes": [
+        "openpgp4fpr",
+        "OPENPGP4FPR"
+      ]
     },
     "mac": {
       "category": "public.app-category.social-networking"
