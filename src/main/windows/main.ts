@@ -48,6 +48,11 @@ export function init(
 
   window.loadURL(defaults.main)
 
+  let frontend_ready = false
+  ;(app as EventEmitter).once('frontendReady', () => {
+    frontend_ready = true
+  })
+
   // Define custom protocol handler. Deep linking works on packaged versions of the application!
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
@@ -56,7 +61,13 @@ export function init(
     if (event) event.preventDefault()
     const sendOpenUrlEvent = () => {
       log.info('open-url: Sending url to frontend.')
-      send('open-url', url)
+      if (frontend_ready) {
+        send('open-url', url)
+      } else {
+        ;(app as EventEmitter).once('frontendReady', () => {
+          send('open-url', url)
+        })
+      }
     }
     log.debug('open-url: sending to frontend:', url)
     if (app.ipcReady) return sendOpenUrlEvent()

@@ -62,6 +62,8 @@ export default class ScreenController extends Component {
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
+
+    ipcRenderer.send('frontendReady')
   }
 
   componentWillUnmount() {
@@ -85,7 +87,7 @@ export default class ScreenController extends Component {
     this.openDialog('About')
   }
 
-  async onOpenUrl(event: Event, url: string) {
+  async onOpenUrl(_event: Event, url: string) {
     processOPENPGP4FPRUrl(url)
   }
 
