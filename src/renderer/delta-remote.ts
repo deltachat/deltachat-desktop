@@ -22,6 +22,18 @@ class DeltaRemote {
     overview_page: any
     status: any
   }>
+  call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
+  call(
+    fnName: 'checkQrCode',
+    qrCode: string
+  ): Promise<{
+    state: number
+    text1: string
+    text1Meaning: string
+    text2: string
+    timestamp: number
+    id: number
+  }>
   // autocrypt ----------------------------------------------------------
   call(
     fnName: 'autocrypt.initiateKeyTransfer',

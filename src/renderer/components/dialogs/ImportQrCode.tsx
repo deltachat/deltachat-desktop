@@ -3,10 +3,10 @@ import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
-import { callDcMethodAsync, callDcMethod } from '../../ipc'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
+import { DeltaBackend } from '../../delta-remote'
 
 interface QrStates {
   [key: number]: string
@@ -34,7 +34,7 @@ export declare type QrCodeResponse = {
 export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
   const tx = window.translate
   let error = false
-  const response: QrCodeResponse = await callDcMethodAsync('checkQrCode', url)
+  const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
   if (response === null) {
     error = true
   }
@@ -53,13 +53,13 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
   }
 
   if (state === 'QrAskVerifyContact') {
-    const contact = await callDcMethodAsync('contacts.getContact', response.id)
+    const contact = await DeltaBackend.call('contacts.getContact', response.id)
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
       cb: async (confirmed: boolean) => {
         if (confirmed) {
-          callDcMethod('joinSecurejoin', url, selectChatAndClose)
+          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
         }
       },
     })
@@ -69,15 +69,15 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
         if (confirmed) {
-          callDcMethod('joinSecurejoin', url, selectChatAndClose)
+          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
         }
         return
       },
     })
   } else if (state === 'QrFprOk') {
-    const contact = await callDcMethodAsync('contacts.getContact', response.id)
+    const contact = await DeltaBackend.call('contacts.getContact', response.id)
     window.__openDialog('ConfirmationDialog', {
-      message: `The fingerprint of ${contact.displayname} is valid!`,
+      message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
       cb: onClose,
     })

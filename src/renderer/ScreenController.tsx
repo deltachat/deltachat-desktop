@@ -11,12 +11,7 @@ import {
   Controller as DialogController,
   DialogId,
 } from './components/dialogs/index'
-import {
-  processOPENPGP4FPRUrl,
-  QrCodeResponse,
-  qrStates,
-} from './components/dialogs/ImportQrCode'
-import { callDcMethodAsync } from './ipc'
+import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
 import * as logger from '../shared/logger'
 
