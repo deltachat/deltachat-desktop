@@ -96,6 +96,8 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     refreshMenu(logHandler)
   })
 
+  ipcMain.once('frontendReady', () => app.emit('frontendReady'))
+
   /* dispatch a method on DC core */
   ipcMain.on(
     'EVENT_DC_DISPATCH',

@@ -126,6 +126,14 @@
     "xml-js": "^1.6.8"
   },
   "build": {
+    "protocols": {
+      "name": "QR code data",
+      "role": "Viewer",
+      "schemes": [
+        "openpgp4fpr",
+        "OPENPGP4FPR"
+      ]
+    },
     "mac": {
       "category": "public.app-category.social-networking"
     },

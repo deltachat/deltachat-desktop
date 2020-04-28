@@ -3,16 +3,16 @@ import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
-import { callDcMethodAsync, callDcMethod } from '../../ipc'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
+import { DeltaBackend } from '../../delta-remote'
 
 interface QrStates {
   [key: number]: string
 }
 
-const qrStates: QrStates = {
+export const qrStates: QrStates = {
   200: 'QrAskVerifyContact', // id = contact
   202: 'QrAskVerifyGroup', // text1=groupname
   210: 'QrFprOk', // finger print ok for id=contact
@@ -25,10 +25,68 @@ const qrStates: QrStates = {
   400: 'QrError', // text1=error string
 }
 
-declare type QrCodeResponse = {
+export declare type QrCodeResponse = {
   state: keyof QrStates
   id: number
   text1: string
+}
+
+export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
+  const tx = window.translate
+  let error = false
+  const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
+  if (response === null) {
+    error = true
+  }
+  const state = qrStates[response.state]
+  if (error || state === 'QrError' || state === 'QrText') {
+    window.__userFeedback({
+      type: 'error',
+      text: tx('import_qr_error'),
+    })
+    return
+  }
+
+  const selectChatAndClose = (chatId: number) => {
+    selectChat(chatId)
+    onClose()
+  }
+
+  if (state === 'QrAskVerifyContact') {
+    const contact = await DeltaBackend.call('contacts.getContact', response.id)
+    window.__openDialog('ConfirmationDialog', {
+      message: tx('ask_start_chat_with', contact.address),
+      confirmLabel: tx('ok'),
+      cb: async (confirmed: boolean) => {
+        if (confirmed) {
+          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
+        }
+      },
+    })
+  } else if (state === 'QrAskVerifyGroup') {
+    window.__openDialog('ConfirmationDialog', {
+      message: tx('qrscan_ask_join_group', response.text1),
+      confirmLabel: tx('ok'),
+      cb: (confirmed: boolean) => {
+        if (confirmed) {
+          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
+        }
+        return
+      },
+    })
+  } else if (state === 'QrFprOk') {
+    const contact = await DeltaBackend.call('contacts.getContact', response.id)
+    window.__openDialog('ConfirmationDialog', {
+      message: `The fingerprint of ${contact.displayName} is valid!`,
+      confirmLabel: tx('ok'),
+      cb: onClose,
+    })
+  } else {
+    window.__userFeedback({
+      type: 'error',
+      text: "Don't know what to do with this URL :/",
+    })
+  }
 }
 
 export function DeltaDialogImportQrInner({
@@ -44,58 +102,7 @@ export function DeltaDialogImportQrInner({
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
   const handleResponse = async (scannedQrCode: string) => {
-    setQrCode(scannedQrCode)
-    const tx = window.translate
-    let error = false
-    const response: QrCodeResponse = await callDcMethodAsync(
-      'checkQrCode',
-      scannedQrCode
-    )
-    if (response === null) {
-      error = true
-    }
-    const state = qrStates[response.state]
-    if (error || state === 'QrError' || state === 'QrText') {
-      screenContext.userFeedback({
-        type: 'error',
-        text: tx('import_qr_error'),
-      })
-      return
-    }
-
-    const selectChatAndClose = (chatId: number) => {
-      selectChat(chatId)
-      onClose()
-    }
-
-    if (state === 'QrAskVerifyContact') {
-      const contact = await callDcMethodAsync(
-        'contacts.getContact',
-        response.id
-      )
-      screenContext.openDialog('ConfirmationDialog', {
-        message: tx('ask_start_chat_with', contact.address),
-        confirmLabel: tx('ok'),
-        cb: async (confirmed: boolean) => {
-          if (confirmed) {
-            setSecureJoinOngoing(true)
-            callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
-          }
-        },
-      })
-    } else if (state === 'QrAskVerifyGroup') {
-      screenContext.openDialog('ConfirmationDialog', {
-        message: tx('qrscan_ask_join_group', response.text1),
-        confirmLabel: tx('ok'),
-        cb: (confirmed: boolean) => {
-          if (confirmed) {
-            setSecureJoinOngoing(true)
-            callDcMethod('joinSecurejoin', scannedQrCode, selectChatAndClose)
-          }
-          return
-        },
-      })
-    }
+    processOPENPGP4FPRUrl(scannedQrCode, onClose)
   }
 
   const qrImageReader = useRef<any>()

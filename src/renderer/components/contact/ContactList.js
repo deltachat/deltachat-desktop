@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { callDcMethod } from '../../ipc'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
+import { DeltaBackend } from '../../delta-remote'
 
 export function ContactList2(props) {
   const {
