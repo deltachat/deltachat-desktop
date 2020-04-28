@@ -173,7 +173,10 @@ export function AvatarBubble(
     <div
       className={classNames(
         'AvatarBubble',
-        { 'AvatarBubble--NoSearchResults': props.noSearchResults, 'large': props.large },
+        {
+          'AvatarBubble--NoSearchResults': props.noSearchResults,
+          large: props.large,
+        },
         props.className
       )}
       {...props}

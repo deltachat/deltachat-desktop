@@ -54,7 +54,7 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
           onChange={onChange}
           disabled={contactId === C.DC_CONTACT_ID_SELF}
           autoFocus
-          style={{marginLeft: '0px', marginBottom: '10px'}}
+          style={{ marginLeft: '0px', marginBottom: '10px' }}
         />
       </div>
       <div className='address'>{contact.address}</div>

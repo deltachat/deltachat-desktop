@@ -20,7 +20,7 @@ export const GroupSettingsContainer = styled.div`
   margin-left: -20px;
   margin-right: -20px;
   padding: 0px 65px 0px 20px;
-  `
+`
 export const GroupSeperator = styled.div`
   margin: ${({ noMargin }) => (noMargin ? '0px' : '20px -20px 0px -20px')};
   padding: 10px 15px;

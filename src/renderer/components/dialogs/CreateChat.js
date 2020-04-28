@@ -226,7 +226,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
           marginLeft: '17px',
           width: 'calc(100% - 65px - 17px)',
           top: '-7px',
-          position: 'relative'
+          position: 'relative',
         }}
       />
       {errorMissingGroupName && (
