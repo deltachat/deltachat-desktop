@@ -1,9 +1,9 @@
 div.profile-info-container {
-  margin-left: 10px;
+  margin-left: 20px;
   display: flex;
-  width: calc(100% - 27px);
+  width: calc(100% - 65px);
   .profile-info-name-container {
-    margin: auto 17px;
+    margin: auto 0px auto 17px;
     flex-grow: 1;
     .name {
       font-size: medium;
@@ -12,5 +12,12 @@ div.profile-info-container {
     .address {
       color: #565656;
     }
+  }
+}
+
+.mutual-chats {
+  .chat-list-item {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }

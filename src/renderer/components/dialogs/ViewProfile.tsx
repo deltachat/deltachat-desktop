@@ -54,7 +54,7 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
           onChange={onChange}
           disabled={contactId === C.DC_CONTACT_ID_SELF}
           autoFocus
-          style={{marginLeft: '0px', marginBottom: '3px'}}
+          style={{marginLeft: '0px', marginBottom: '10px'}}
         />
       </div>
       <div className='address'>{contact.address}</div>
@@ -129,7 +129,7 @@ export default function ViewProfile(props: {
             <ProfileInfoName contactId={contact.id} />
           </div>
           <Button
-            style={{ marginLeft: '90px', marginBottom: '30px' }}
+            style={{ marginLeft: '100px', marginBottom: '30px' }}
             onClick={onSendMessage}
           >
             {tx('send_message')}

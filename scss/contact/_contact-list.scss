@@ -1,6 +1,7 @@
 .contact-list-item {
   display: flex;
-  padding-left: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
   &:hover {
     background-color: var(--chatListItemBgHover);
     cursor: pointer;
@@ -16,8 +17,7 @@
   }
 
   .checkbox {
-    width: 40px;
-    margin-right: 40px;
+    margin-right: 10px;
     input {
       -webkit-appearance: none;
       width: 20px;
@@ -27,6 +27,7 @@
       border-radius: 3px;
       border-width: 2px;
       border-color: grey;
+      cursor: pointer;
       &:checked {
         border-color: var(--loginInputFocusColor);
         background-color: var(--loginInputFocusColor);
@@ -79,7 +80,7 @@
 
   .remove-icon {
     margin-top: calc((64px - 20px) / 2);
-    margin-right: 40px;
+    margin-right: 10px;
     .bp3-icon > svg {
       width: 20px;
       height: 20px;

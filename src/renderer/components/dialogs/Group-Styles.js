@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import { AvatarBubble, AvatarImage } from '../contact/Contact'
 
 export const GroupNameInput = styled.input`
-  margin-left: 20px;
+  margin-left: 0px;
+  margin-bottom: 10px;
   font-size: x-large;
-  width: 78%;
+  width: 100%;
   border: 0;
   border-bottom: solid;
   border-color: var(--loginInputFocusColor);
-  height: 32px;
+  height: 33px;
   background-color: transparent;
   color: var(--bp3MenuText);
 `
@@ -18,11 +19,11 @@ export const GroupSettingsContainer = styled.div`
   margin-top: -8px;
   margin-left: -20px;
   margin-right: -20px;
-  padding: 0px 40px 0px 40px;
-`
+  padding: 0px 65px 0px 20px;
+  `
 export const GroupSeperator = styled.div`
   margin: ${({ noMargin }) => (noMargin ? '0px' : '20px -20px 0px -20px')};
-  padding: 10px 20px;
+  padding: 10px 15px;
   background-color: var(--bp3DialogBgSecondary);
   color: var(--bp3MenuText);
 `
@@ -91,10 +92,11 @@ export const GroupImage = props => {
           avatarPath={groupImage}
           onClick={onSetGroupImage}
           {...otherProps}
+          large
         />
       )}
       {!groupImage && (
-        <AvatarBubble onClick={onSetGroupImage} {...otherProps}>
+        <AvatarBubble onClick={onSetGroupImage} {...otherProps} large>
           G
         </AvatarBubble>
       )}
