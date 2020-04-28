@@ -16,6 +16,7 @@ import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
+import { GroupNameInput } from './Group-Styles'
 
 const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   const [contact, setContact] = useState<{
@@ -47,11 +48,13 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   return (
     <div className='profile-info-name-container'>
       <div>
-        <input
-          className='name'
+        <GroupNameInput
+          placeholder={contact.displayName}
           value={contact.displayName}
           onChange={onChange}
           disabled={contactId === C.DC_CONTACT_ID_SELF}
+          autoFocus
+          style={{marginLeft: '0px', marginBottom: '3px'}}
         />
       </div>
       <div className='address'>{contact.address}</div>
