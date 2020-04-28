@@ -6,21 +6,22 @@
 
 ### Added
 
-- add Import/Scan QR code (enables you to verify contacts and to join verifed groups from desktop) (#1550)
-- add Pinned chats #1537
-- add Big view of profile image (closes #1356)
+- add Import/Scan QR code which enables you to verify contacts and to join verifed groups from desktop (#1550)
+- add pinned chats #1537
+- add big view of profile image (closes #1356)
 - add option to change a contacts displayname (#1502)
 - add some Mac keybindings (related to #1451)
   - add `cmd + ,` as shortcut to open the settings
   - focus the message composer
   - mac specific hide window (solves #634)
 - add primitive & experimental contact import (you can import a json array of contacts in the devconsole)
-- add archive Label to archived chats #1537
+- add archive label to archived chats #1537
+- add support for opening openpgp4fpr uris with deltachat-desktop
 
 ### Changed
 
 - `--debug` enables now `--log-debug` & `--log-to-console`
-- forward dialog now show `saved messages` as first option.
+- The forward message dialog now shows `saved messages` as first option.
 
 ### Performance Improvements
 
@@ -43,7 +44,7 @@
 
 This section is only relevant to contributors.
 
-- Convert Project files to typescript (75% complete)
+- Convert project files to typescript (75% complete)
 - Move more styled components to scss and cleanup some unsused classes
 - add top-evil script (shows places that need work)
 
