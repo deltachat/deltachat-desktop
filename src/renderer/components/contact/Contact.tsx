@@ -166,13 +166,17 @@ export function AvatarBubble(
     className?: string
     noSearchResults?: boolean
     [key: string]: any
+    large?: boolean
   } /* todo remove the [key:string]:any type here */>
 ) {
   return (
     <div
       className={classNames(
         'AvatarBubble',
-        { 'AvatarBubble--NoSearchResults': props.noSearchResults },
+        {
+          'AvatarBubble--NoSearchResults': props.noSearchResults,
+          large: props.large,
+        },
         props.className
       )}
       {...props}

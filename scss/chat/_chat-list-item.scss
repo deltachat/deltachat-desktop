@@ -4,15 +4,15 @@
   height: 64px;
   display: flex;
   flex-direction: row;
-  padding-left: 10px;
+  padding: 0px 10px;
   align-items: center;
   cursor: pointer;
 
   & > .content {
     flex-grow: 1;
     margin-left: 10px;
-    // parent - 48px (for avatar) - 16px (our right margin)
-    max-width: calc(100% - 64px);
+    // parent - 48px (for avatar) - 10px (our right padding)
+    max-width: calc(100% - 58px);
 
     display: flex;
     flex-direction: column;

@@ -210,7 +210,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
     setGroupName(target.value)
   }
   return (
-    <GroupSettingsContainer style={{ paddingBottom: '20px' }}>
+    <GroupSettingsContainer>
       <GroupImage
         style={{ float: 'left' }}
         groupImage={groupImage}
@@ -222,9 +222,15 @@ export const GroupSettingsSetNameAndProfileImage = ({
         value={groupName}
         onChange={onChange}
         autoFocus
+        style={{
+          marginLeft: '17px',
+          width: 'calc(100% - 65px - 17px)',
+          top: '-7px',
+          position: 'relative',
+        }}
       />
       {errorMissingGroupName && (
-        <p style={{ color: 'var(--colorDanger)', marginLeft: '68px' }}>
+        <p style={{ color: 'var(--colorDanger)', marginLeft: '80px' }}>
           {tx('group_please_enter_group_name')}
         </p>
       )}
@@ -253,7 +259,7 @@ export const AddMemberInnerDialog = ({
         <Card style={{ padding: '0px 20px' }}>
           <input
             className='search-input group-member-search'
-            style={{ marginLeft: '20px' }}
+            style={{ marginLeft: '0px' }}
             onChange={onSearchChange}
             value={queryStr}
             placeholder={tx('search')}
