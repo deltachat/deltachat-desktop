@@ -1,7 +1,7 @@
 import Color from 'color'
 import { getLogger } from '../shared/logger'
-import { readJsonSync } from 'fs-extra'
 import path from 'path'
+import { _callDcMethodAsync } from './ipc'
 
 const log = getLogger('render/theme-backend')
 
@@ -277,11 +277,11 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
   return themeData
 }
 
-export const defaultTheme = Object.freeze(readJsonSync(path.join(__dirname, '../../themes/light.json')))
-
-export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
+export const getTheme = async (theme:string) => await _callDcMethodAsync('getTheme', [theme])
+export const getDefaultTheme = async () => await getTheme('light')
 
 export const ThemeVarOverwrite = (
+  defaultThemeData: ReturnType<typeof ThemeDataBuilder>,
   themeData: ReturnType<typeof ThemeDataBuilder>
 ) => {
   var css = ''

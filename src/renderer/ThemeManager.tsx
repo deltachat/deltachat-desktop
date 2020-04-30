@@ -1,9 +1,8 @@
 import React from 'react'
 import {
-  defaultTheme,
   ThemeDataBuilder as ThemeBuilder,
-  defaultThemeData,
-  ThemeVarOverwrite,
+  getDefaultTheme,
+  ThemeVarOverwrite
 } from './ThemeBackend'
 import EventEmitter from 'wolfy87-eventemitter'
 const { ipcRenderer } = window.electron_functions
@@ -14,14 +13,22 @@ const { ipcRenderer } = window.electron_functions
 export class ThemeManager extends EventEmitter {
   currentTheme: { [key: string]: string }
   currentThemeData: ReturnType<typeof ThemeBuilder>
+  defaultTheme: { [key: string]: string }
+  defaultThemeData: ReturnType<typeof ThemeBuilder>
 
   constructor() {
     super()
+  }
+
+  async setup() {
     const themeJSON = window.localStorage.getItem('theme')
+    this.defaultTheme = await this.getDefaultTheme()
+    this.defaultThemeData = ThemeBuilder(this.defaultTheme)
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     window.ThemeManager = this // only for using from the dev console
     ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
+
   }
 
   setTheme(theme: { [key: string]: string }) {
@@ -32,11 +39,11 @@ export class ThemeManager extends EventEmitter {
   }
 
   getCurrentlyAppliedThemeData() {
-    return Object.assign({}, defaultThemeData, this.currentThemeData)
+    return Object.assign({}, this.defaultThemeData, this.currentThemeData)
   }
 
   getCurrentlyAppliedTheme() {
-    return Object.assign({}, defaultTheme, this.currentTheme)
+    return Object.assign({}, this.defaultTheme, this.currentTheme)
   }
 
   getCurrentTheme() {
@@ -44,11 +51,11 @@ export class ThemeManager extends EventEmitter {
   }
 
   getDefaultThemeData() {
-    return defaultThemeData
+    return this.defaultThemeData
   }
 
   getDefaultTheme() {
-    return defaultTheme
+    return this.defaultTheme
   }
 }
 
@@ -79,6 +86,7 @@ export class ThemeProvider extends React.Component<
     const theme = manager.getCurrentlyAppliedThemeData()
     this.setState({ theme })
     window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(
+      manager.getDefaultThemeData(),
       theme
     )
   }

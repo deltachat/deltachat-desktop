@@ -19,11 +19,13 @@ import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import { string } from 'prop-types'
+import path from 'path'
 import Extras from './extras'
 const app = rawApp as ExtendedAppMainProcess
 
 //@ts-ignore
 import events from 'deltachat-node/events'
+import { readJsonSync, readJson } from 'fs-extra'
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
 
@@ -325,5 +327,20 @@ export default class DeltaChatController extends EventEmitter {
     this._showArchivedChats = false
     this._pages = 0
     this._query = ''
+  }
+
+  async getTheme(theme: string) {
+    const THEME_WHITELIST = ['light', 'dark', 'dark_amoled', 'darkpurple']
+    if (THEME_WHITELIST.indexOf(theme) === -1) {
+      log.error('getTheme: someone tried to get a non whitelisted theme:', theme)
+      return 0
+    }
+    const themePath: string = path.join(__dirname, '../../../themes', theme)
+    try {
+      return await readJson(themePath)
+    } catch (err) {
+      log.error('getTheme: Error on reading json from "' + themePath + '":', err)
+    }
+    return 0
   }
 }

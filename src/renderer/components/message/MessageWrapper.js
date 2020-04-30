@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'
-import logger from '../../../shared/logger'
+import {getLogger} from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 
-const log = logger.getLogger('renderer/messageWrapper')
+const log = getLogger('renderer/messageWrapper')
 
 const GROUP_TYPES = [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP]
 
