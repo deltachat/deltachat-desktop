@@ -1,7 +1,7 @@
 // this file gets run BEFORE `npm i` so you CAN NOT use npm packages here
 
-import { join } from 'path'
 import fs from 'fs'
+import path, { join } from 'path'
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
