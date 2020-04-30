@@ -328,7 +328,6 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   async getTheme(theme: string) {
-    console.log('getTheme', theme)
     const THEME_WHITELIST = ['light', 'dark', 'dark_amoled', 'darkpurple']
     if (THEME_WHITELIST.indexOf(theme) === -1) {
       log.error(
