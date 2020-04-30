@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...HEAD)
 
-## [1.3.0](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0) - 2020-04-2???
+## [1.3.0](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0) - 2020-04-30
 
 ### Added
 
@@ -53,7 +53,7 @@ This section is only relevant to contributors.
 - Update translations & languages shown in menu, change prefix of npm translation scripts
 - Update Core to [`deltachat-core-rust @ 979d7c5`](https://github.com/deltachat/deltachat-core-rust/tree/979d7c562515da2a30983993048cd5184889059c) (deltachat-node `v1.29.1`)
 
-## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/1.1.1...1.2.0) - 2020-03-30
+## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/v1.1.1...v1.2.0) - 2020-03-30
 
 ### Changed
 
@@ -67,14 +67,14 @@ This section is only relevant to contributors.
 - Fix about dialog links [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Make e2e tests more stable [**@nicodh**](https://github.com/nicodh)
 
-## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/1.1.0...1.1.1) - 2020-03-14
+## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/v1.1.0...v1.1.1) - 2020-03-14
 
 ### Changed
 
 - Update deltachat-node/deltachat-core-rust to v1.27.0
   - This fixes a bug of undecryptable messages
 
-## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/1.0.0...1.1.0) - 2020-03-10
+## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/v1.0.0...v1.1.0) - 2020-03-10
 
 ### Added
 

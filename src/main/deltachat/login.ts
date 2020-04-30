@@ -115,34 +115,24 @@ export default class DCLoginController extends SplitOut {
 
   updateDeviceChats() {
     this._dc.updateDeviceChats()
-    this._dc.addDeviceMessage(
-      'changelog-version-1.0.0-4',
-      `Changes in v1.0.0
-
-We are happy to announce version 1.0.0 release of DeltaChat Desktop! 🎉This release includes traffic reductions, better performance, user experience improvements and bug fixes. Besides this, new users will be warned about providers which are known to make trouble with DeltaChat and get better & smaller cryptographic keys.
-
-- sending of messages is now faster and more reliable
-- only messages that are displayed get downloaded
-- new button to open one-on-one chats
-- you can start multiple DeltaChat instances if you start it with the "--multiple-instances" argument (be careful with this one, don't use the same account in multiple instances!)
-- performance improvements on chat scrolling
-- restyle of various menus
-- many bug fixes
-- new users will get informed if their provider is known to need special care to run seamless with DeltaChat
-- new users will use Ed25519 keys (shorter & better cryptographic keys)
-
-Full changelog: https://delta.chat/a3e/
-    ` as any
-    ),
       this._dc.addDeviceMessage(
-        'changelog-version-1.1.0-0',
-        `Changes in v1.1.0
+        'changelog-version-1.3.0-1',
+        `Changes in v1.3.0
 
-- Add an zoom🔍 option in order to adjust interface and font size. (It's found under View -> Zoom Factor)
-- some interface bug fixes
-- fixed encrypting to Ed25519 keys (there was a bug that broke encrypting to people with Ed25519 keys)
+- QR codes can now be scanned from desktop as you know it from Android/iOS. Try
+  it out by clicking on Menu -> Scan QR code. Besides using any available webcam,
+  you can also scan a qr code by importing a picture of it. This way we can 
+  finally join verified groups from desktop!
+- Support for openpgp4fpr urls. They allow you to do the same things as with qr
+  codes, but the information is baked into an url. Wanna try it out? Try to
+  login to our support forum (https://support.delta.chat) with DeltaChat and the
+  "Manual link" option :)
+- You can now pin chats. This will make sure they stay on the top of your list
+  of chats.
+- It's now possible to change the name of a contact in the same way as it's with
+  changing the name of a group.
 
-Full changelog: https://delta.chat/f32/
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#130---2020-04-30
     ` as any
       )
   }
