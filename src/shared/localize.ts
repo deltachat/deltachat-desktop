@@ -1,4 +1,5 @@
-const log = require('./logger').getLogger('localize')
+import { getLogger } from './logger'
+const log = getLogger('localize')
 
 export interface LocaleData {
   locale: string

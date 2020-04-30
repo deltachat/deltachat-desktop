@@ -20,22 +20,8 @@ import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
 
 const log = getLogger('main/ipc')
-const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
-  try {
-    return require('./deltachat/controller').default
-  } catch (error) {
-    log.critical(
-      "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
-      error
-    )
-    const { dialog } = require('electron')
-    const { getLogsPath } = require('./application-constants')
-    dialog.showErrorBox(
-      'Fatal Error',
-      `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`
-    )
-  }
-})()
+
+import DeltaChatController from './deltachat/controller'
 
 const app = rawApp as ExtendedAppMainProcess
 

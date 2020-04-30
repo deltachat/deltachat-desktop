@@ -1,4 +1,8 @@
-const appConfig = require('application-config')('DeltaChat')
+// @ts-ignore
+import applicationConfig from 'application-config'
+
+
+const appConfig = applicationConfig('DeltaChat')
 import { join } from 'path'
 
 if (process.env.TEST_DIR) {

@@ -17,6 +17,7 @@ import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
+import { getLogger } from '../../../shared/logger'
 
 export const allDialogs = {
   DeadDrop,
@@ -41,7 +42,7 @@ export const allDialogs = {
 
 export type DialogId = keyof typeof allDialogs
 
-const log = require('../../../shared/logger').getLogger('renderer/dialogs')
+const log = getLogger('renderer/dialogs')
 
 type dialogs = {
   [key: string]: {

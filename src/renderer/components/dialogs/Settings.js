@@ -20,9 +20,10 @@ import {
 } from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
+import { SettingsContext } from '../../contexts'
+
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
-const { SettingsContext } = require('../../contexts')
 const MAGIC_PW = '9bbdc87b50bbc684'
 
 function flipDeltaBoolean(value) {

@@ -22,7 +22,8 @@ import { string } from 'prop-types'
 import Extras from './extras'
 const app = rawApp as ExtendedAppMainProcess
 
-const eventStrings = require('deltachat-node/events')
+//@ts-ignore
+import events from 'deltachat-node/events'
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
 
@@ -155,7 +156,7 @@ export default class DeltaChatController extends EventEmitter {
     // in debug mode log all core events
     dc.on('ALL', (_event: any, data1: any, data2: any) => {
       const event: string = !isNaN(_event)
-        ? eventStrings[_event]
+        ? events[_event]
         : String(_event)
 
       if (data1 === 0) data1 = ''

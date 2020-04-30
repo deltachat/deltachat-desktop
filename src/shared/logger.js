@@ -1,34 +1,41 @@
-const esp = require('error-stack-parser')
-const colors = require('colors/safe')
+import esp from 'error-stack-parser'
 const startTime = Date.now()
+
+const colorize = colorReference => str => `${colorReference}${str}\x1b[0m`
+const blue = colorize('\x1b[34m')
+const red = colorize('\x1b[31m')
+const yellow = colorize('\x1b[33m')
+const grey = colorize('\x1b[37m')
+
+
 
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
-const LoggerVariants = [
+export const LoggerVariants = [
   { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
-  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: colors.blue('[i]') },
+  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: blue('[i]') },
   {
     log: console.warn,
     level: 'WARNING',
     emoji: '⚠️',
-    symbol: colors.yellow('[w]'),
+    symbol: yellow('[w]'),
   },
   {
     log: console.error,
     level: 'ERROR',
     emoji: '🚨',
-    symbol: colors.red('[E]'),
+    symbol: red('[E]'),
   },
   {
     log: console.error,
     level: 'CRITICAL',
     emoji: '🚨🚨',
-    symbol: colors.red('[C]'),
+    symbol: red('[C]'),
   },
 ]
 
-function printProcessLogLevelInfo() {
+export function printProcessLogLevelInfo() {
   /* ignore-console-log */
   console.info(
     `%cLogging Levels:\n${LoggerVariants.map(v => `${v.emoji} ${v.level}`).join(
@@ -40,13 +47,13 @@ function printProcessLogLevelInfo() {
 
 let handler, rc
 
-function setLogHandler(LogHandler, rcObject) {
+export function setLogHandler(LogHandler, rcObject) {
   handler = LogHandler
   // get a clean, non-remote object that has just the values
   rc = JSON.parse(JSON.stringify(rcObject))
 }
 
-function log({ channel, isMainProcess }, level, stacktrace, args) {
+export function log({ channel, isMainProcess }, level, stacktrace, args) {
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
@@ -60,13 +67,13 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
     if (isMainProcess) {
       const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
         LoggerVariants[level].symbol
-      }${colors.grey(channel)}:`
+      }${grey(channel)}:`
       if (!stacktrace) {
         /* ignore-console-log */
         console.log(begining, ...args)
       } else {
         /* ignore-console-log */
-        console.log(begining, ...args, colors.red(stacktrace))
+        console.log(begining, ...args, red(stacktrace))
       }
     } else {
       const prefix = `%c${variant.emoji}%c${channel}`
@@ -81,7 +88,7 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
   }
 }
 
-function getStackTrace() {
+export function getStackTrace() {
   const rawStack = esp.parse(new Error('Get Stacktrace'))
   const stack = rawStack.slice(2, rawStack.length)
   return rc['machine-readable-stacktrace']
@@ -89,7 +96,7 @@ function getStackTrace() {
     : stack.map(s => `\n${s.toString()}`).join()
 }
 
-class Logger {
+export default class Logger {
   constructor(channel) {
     this.channel = channel
     this.isMainProcess = typeof window === 'undefined'
@@ -117,8 +124,7 @@ class Logger {
   }
 }
 
-function getLogger(channel) {
+export function getLogger(channel) {
   return new Logger(channel)
 }
 
-module.exports = { setLogHandler, Logger, getLogger, printProcessLogLevelInfo }

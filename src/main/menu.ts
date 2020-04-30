@@ -10,13 +10,14 @@ import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
+import { readJsonSync } from 'fs-extra'
 
 const log = getLogger('main/menu')
 
 const languages: {
   locale: string
   name: string
-}[] = require('../../_locales/_languages.json')
+}[] = readJsonSync('../../_locales/_languages.json')
 
 export function init(logHandler: LogHandler) {
   log.info(

@@ -6,10 +6,12 @@ const log = getLogger('main/dev')
  */
 export async function tryInstallReactDevTools() {
   try {
+    
     const {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
-    } = require('electron-devtools-installer')
+    //@ts-ignore
+    } = await import('electron-devtools-installer')
     try {
       const name = await installExtension(REACT_DEVELOPER_TOOLS)
       log.debug(`Added Extension:  ${name}`)

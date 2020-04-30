@@ -1,7 +1,9 @@
 import { C } from 'deltachat-node'
 
-const binding = require('deltachat-node/binding')
-const events = require('deltachat-node/events')
+//@ts-ignore
+import binding from 'deltachat-node/binding'
+//@ts-ignore
+import events from 'deltachat-node/events'
 import tempy from 'tempy'
 import fs from 'fs-extra'
 import { ipcMain } from 'electron'
@@ -9,8 +11,8 @@ import path from 'path'
 import { EventEmitter } from 'events'
 import { getNewAccountPath } from '../logins'
 
-import logger from '../../shared/logger'
-const log = logger.getLogger('main/deltachat/backup')
+import { getLogger } from '../../shared/logger'
+const log = getLogger('main/deltachat/backup')
 
 import SplitOut from './splitout'
 export default class DCBackup extends SplitOut {

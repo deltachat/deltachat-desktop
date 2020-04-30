@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
-import logger from '../../../shared/logger'
+import {getLogger} from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   appVersion,
@@ -11,7 +11,7 @@ import {
 import ClickableLink from '../helpers/ClickableLink'
 import { DeltaBackend } from '../../delta-remote'
 
-const log = logger.getLogger('renderer/dialogs/About')
+const log = getLogger('renderer/dialogs/About')
 
 export function DCInfo(_props: any) {
   const [content, setContent] = useState(undefined)

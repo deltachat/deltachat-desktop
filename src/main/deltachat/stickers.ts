@@ -1,9 +1,9 @@
 import fsExtra from 'fs-extra'
 import path from 'path'
-import logger from '../../shared/logger'
+import {getLogger} from '../../shared/logger'
 import SplitOut from './splitout'
 
-const log = logger.getLogger('main/deltachat/stickers')
+const log = getLogger('main/deltachat/stickers')
 
 async function isDirectory(path: string) {
   const lstat = await fsExtra.lstat(path)

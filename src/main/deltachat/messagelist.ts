@@ -1,10 +1,11 @@
 import { C } from 'deltachat-node'
-const log = require('../../shared/logger').getLogger(
-  'main/deltachat/messagelist'
-)
+import { getLogger } from '../../shared/logger'
+const log = getLogger('main/deltachat/messagelist')
+
 import { integerToHexColor } from '../../shared/util'
 
-const filesizeConverter = require('filesize')
+//@ts-ignore
+import filesizeConverter from 'filesize'
 import mime from 'mime-types'
 
 import SplitOut from './splitout'

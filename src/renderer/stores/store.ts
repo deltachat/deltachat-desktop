@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import logger from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 
 export function useStore<T extends Store<any>>(
   StoreInstance: T
@@ -24,10 +24,10 @@ export class Store<S> {
   private listeners: ((state: S) => void)[] = []
   private reducers: ((action: Action, state: S) => S)[] = []
   private effects: ((action: Action, state: S) => void)[] = []
-  private _log: ReturnType<typeof logger.getLogger>
+  private _log: ReturnType<typeof getLogger>
   constructor(public state: S, name?: string) {
     if (!name) name = 'Store'
-    this._log = logger.getLogger('renderer/stores/' + name)
+    this._log = getLogger('renderer/stores/' + name)
   }
 
   get log() {

@@ -7,7 +7,7 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 
-const { C } = require('deltachat-node/dist/constants')
+import { C } from 'deltachat-node/dist/constants'
 
 export default function ForwardMessage(props) {
   const tx = window.translate

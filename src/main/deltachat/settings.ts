@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
-import logModule from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 
-const log = logModule.getLogger('main/deltachat/settings')
+const log = getLogger('main/deltachat/settings')
 
 import SplitOut from './splitout'
 
