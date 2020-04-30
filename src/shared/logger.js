@@ -1,11 +1,8 @@
 import esp from 'error-stack-parser'
 const startTime = Date.now()
 
-const colorize = colorReference => str => `${colorReference}${str}\x1b[0m`
-const blue = colorize('\x1b[34m')
-const red = colorize('\x1b[31m')
-const yellow = colorize('\x1b[33m')
-const grey = colorize('\x1b[37m')
+import { blue, red, yellow, grey, green, cyan } from './colors.js'
+
 
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'

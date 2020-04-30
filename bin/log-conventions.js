@@ -1,19 +1,19 @@
-require('colors')
+import { blue, red, yellow, grey, green, cyan } from '../src/shared/colors.js'
 
 function formattedOutput (location, lines) {
-  console.log(
-    `${'Console log function'.red} in ${location.yellow}
+  console.log(`${red('Console log function')} in ${yellow(location)})
 
 ${lines}
 
-Consider using our logger (log.debug) or add this line ${'/* ignore-console-log */'.green} above to add an exception
-${'------------------------------------------------'.blue}`
+Consider using our logger (log.debug) or add this line ${green('/* ignore-console-log */')} above to add an exception
+${blue('------------------------------------------------')}`
   )
 }
 
-const walk = require('walk')
-const fs = require('fs')
-const path = require('path')
+import walk from 'walk'
+import fs from 'fs'
+import path from 'path'
+
 const walker = walk.walk('./src')
 let found = 0
 
@@ -41,7 +41,7 @@ walker.on('file', function (root, fileStats, next) {
         `${filename}:${i + 1}`,
         lines.slice(i - 1, i + 2).join('\n').replace(
           line,
-          string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${s1.cyan}${s2.red}${s3.cyan}`)
+          string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${cyan(s1)}${red(s2)}${cyan(s3)}`)
         )
       )
       found++
@@ -55,7 +55,7 @@ walker.on('errors', function (root, nodeStatsArray, next) {
 })
 
 walker.on('end', function () {
-  console.log(`found ${found.toString()[found > 0 ? 'bgRed' : 'bgGreen']} misplaced console.log statements ( ${'// comment'.grey} lines were ignored)`)
+  console.log(`found ${found.toString()[found > 0 ? 'bgRed' : 'bgGreen']} misplaced console.log statements ( ${grey('// comment')} lines were ignored)`)
   process.exit(
     found > 0 ? 1 : 0
   )

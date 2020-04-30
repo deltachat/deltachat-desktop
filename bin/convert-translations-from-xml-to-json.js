@@ -1,6 +1,9 @@
-const converter = require('xml-js')
-const path = require('path')
-const fs = require('fs')
+import converter from 'xml-js'
+import path from 'path'
+import fs from 'fs'
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
 const LOCALES_DIR = path.join(__dirname, '..', '_locales')
 
 const start = Date.now()

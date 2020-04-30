@@ -1,11 +1,11 @@
-const child = require('child_process')
-const fs = require('fs-extra')
+import child from 'child_process'
+import fs from 'fs-extra'
 /**
  *
  * @param {boolean} watch
  * @param {boolean} sourcemap
  */
-async function jsBuilder (watch, sourcemap, dev) {
+export async function jsBuilder (watch, sourcemap, dev) {
   if (watch) {
     console.error('jsBuilder: Watch is not implemented yet')
     return
@@ -53,7 +53,7 @@ async function jsBuilder (watch, sourcemap, dev) {
  * @param {string[]} args arguments for the command
  * @param {import('child_process').SpawnOptionsWithoutStdio} options
  */
-async function run (command, args, options) {
+export async function run (command, args, options) {
   return new Promise((resolve, reject) => {
     const p = child.spawn(command, args, options)
     p.stdout.pipe(process.stdout)
@@ -68,5 +68,3 @@ async function run (command, args, options) {
     })
   })
 }
-
-module.exports = { jsBuilder }

@@ -35,10 +35,12 @@ Only run specific stuff (default is everything):
 ${/* --special      release stuff like generating thumbnails for bg images */''}
 `.trim() + '\n'
 
-const child = require('child_process')
-const fs = require('fs-extra')
-const globWatch = require('glob-watcher')
-const rc = require('rc')('Deltachat-Desktop-Builder', {
+import child from 'child_process'
+import fs from 'fs-extra'
+import globWatch from 'glob-watcher'
+import _rc from 'rc'
+
+const rc = _rc('Deltachat-Desktop-Builder', {
   // only some things are run:
   styles: false,
   js: false,
@@ -51,7 +53,8 @@ const rc = require('rc')('Deltachat-Desktop-Builder', {
   w: false, // watch
   prod: false // production mode
 })
-const { jsBuilder } = require('./build-js')
+
+import { jsBuilder } from './build-js.js'
 
 if (rc.help || rc.h) {
   process.stdout.write(HELP)

@@ -3,6 +3,7 @@
   "version": "1.3.0",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "watch": "node node ./bin/build/builder.js -w",
     "test": "npm run check-formatting && npm run test-log-conventions && npm run test-unit",
