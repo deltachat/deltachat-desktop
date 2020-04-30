@@ -1,7 +1,7 @@
 // this file gets run BEFORE `npm i` so you CAN NOT use npm packages here
 
-const { join } = require('path')
-const fs = require('fs')
+import { join } from 'path'
+import fs from 'fs'
 
 const packageJSON = join(__dirname, '../../package.json')
 
@@ -18,8 +18,8 @@ const appConfig = join(__dirname, '../../src/main/application-config.ts')
 
 const fileContent = fs.readFileSync(appConfig, 'utf-8')
   .replace(
-    "require('application-config')('DeltaChat')",
-    "require('application-config')('DeltaChatDev')"
+    "applicationConfig('DeltaChat')",
+    "applicationConfig('DeltaChatDev')"
   )
 
 fs.writeFileSync(appConfig, fileContent)
