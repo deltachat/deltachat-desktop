@@ -3,7 +3,6 @@ const startTime = Date.now()
 
 import { blue, red, yellow, grey, green, cyan } from './colors.js'
 
-
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
