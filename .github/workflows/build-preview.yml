@@ -28,10 +28,10 @@ jobs:
         sudo apt update
         sudo apt install --yes wine-stable wine32
     - uses: actions/checkout@v1
-    - name: Use Node.js 10.x
+    - name: Use Node.js 13.x
       uses: actions/setup-node@v1
       with:
-        node-version: 10.x
+        node-version: 13.x
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
