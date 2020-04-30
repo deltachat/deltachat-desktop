@@ -277,7 +277,7 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
   return themeData
 }
 
-export const getTheme = async (theme:string) => await _callDcMethodAsync('getTheme', [theme])
+export const getTheme = async (theme:string) => await _callDcMethodAsync('getTheme', theme)
 export const getDefaultTheme = async () => await getTheme('light')
 
 export const ThemeVarOverwrite = (

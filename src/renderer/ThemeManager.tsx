@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   ThemeDataBuilder as ThemeBuilder,
   getDefaultTheme,
@@ -6,6 +6,7 @@ import {
 } from './ThemeBackend'
 import EventEmitter from 'wolfy87-eventemitter'
 const { ipcRenderer } = window.electron_functions
+import { ipcBackend } from './ipc'
 
 // do we need an event emitter here?
 // if yes please replace it by another module and not use the native electron module
@@ -22,7 +23,7 @@ export class ThemeManager extends EventEmitter {
 
   async setup() {
     const themeJSON = window.localStorage.getItem('theme')
-    this.defaultTheme = await this.getDefaultTheme()
+    this.defaultTheme = await getDefaultTheme()
     this.defaultThemeData = ThemeBuilder(this.defaultTheme)
     this.currentTheme = themeJSON !== null ? JSON.parse(themeJSON) : {}
     this.currentThemeData = ThemeBuilder(this.currentTheme)
@@ -59,39 +60,30 @@ export class ThemeManager extends EventEmitter {
   }
 }
 
-export const manager = new ThemeManager()
+export function ThemeProvider(props: any) {
+  const manager = useRef(null)
+  const [theme, setTheme] = useState(false)
 
-export class ThemeProvider extends React.Component<
-  any,
-  { theme: ReturnType<typeof ThemeBuilder> }
-> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      theme: manager.getCurrentlyAppliedThemeData(),
-    }
-    this.update = this.update.bind(this)
-  }
-
-  componentDidMount() {
-    manager.addListener('update', this.update)
-    this.update()
-  }
-
-  componentWillUnmount() {
-    manager.removeListener('update', this.update)
-  }
-
-  update(ev?: any) {
-    const theme = manager.getCurrentlyAppliedThemeData()
-    this.setState({ theme })
+  const update = () => {
+    const theme = manager.current.getCurrentlyAppliedThemeData()
+    setTheme(theme)
     window.document.getElementById('theme-vars').innerText = ThemeVarOverwrite(
-      manager.getDefaultThemeData(),
+      manager.current.getDefaultThemeData(),
       theme
     )
   }
 
-  render() {
-    return this.props.children
-  }
+  useEffect(() => {
+    (async () => {
+      manager.current = new ThemeManager()
+      await manager.current.setup()
+      manager.current.addListener('update', update)
+      update()
+    })()
+    return () => {
+      if(manager.current) manager.current.removeListener('update', update)
+    }
+  }, [])
+
+  return props.children
 }

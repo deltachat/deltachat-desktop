@@ -330,12 +330,13 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   async getTheme(theme: string) {
+    console.log('getTheme', theme)
     const THEME_WHITELIST = ['light', 'dark', 'dark_amoled', 'darkpurple']
     if (THEME_WHITELIST.indexOf(theme) === -1) {
       log.error('getTheme: someone tried to get a non whitelisted theme:', theme)
       return 0
     }
-    const themePath: string = path.join(__dirname, '../../../themes', theme)
+    const themePath: string = path.join(__dirname, '../../../themes', theme + '.json')
     try {
       return await readJson(themePath)
     } catch (err) {

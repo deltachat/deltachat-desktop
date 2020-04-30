@@ -14,7 +14,6 @@ function main() {
     (remote.app as ExtendedApp).rc
   )
   logger.printProcessLogLevelInfo()
-
   ReactDOM.render(<App />, document.querySelector('#root'))
 }
 

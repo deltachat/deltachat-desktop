@@ -45,12 +45,15 @@ export function printProcessLogLevelInfo() {
   )
 }
 
-let handler, rc
+let handler
+let rc = {}
 
 export function setLogHandler(LogHandler, rcObject) {
   handler = LogHandler
   // get a clean, non-remote object that has just the values
   rc = JSON.parse(JSON.stringify(rcObject))
+
+  log({channel: 'shared/logger', isMainProcess: false}, 0, undefined, ['Successfully set the log handler'])
 }
 
 export function log({ channel, isMainProcess }, level, stacktrace, args) {
@@ -103,7 +106,6 @@ export default class Logger {
   }
 
   debug(...args) {
-    if (!rc['log-debug']) return
     log(this, 0, undefined, args)
   }
 
