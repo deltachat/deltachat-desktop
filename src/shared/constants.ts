@@ -7,6 +7,6 @@ export const gitHubLicenseUrl = gitHubUrl + '/blob/master/LICENSE'
 // we can only convert this to an import when we find out how we can ignore
 // "'rootDir' is expected to contain all source files."
 // for this line
-export const appVersion = "1.3.0"
+export const appVersion = '1.3.0'
 
 export const appWindowTitle = appName

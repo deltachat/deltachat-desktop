@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 import Message from './Message'
 import { ScreenContext } from '../../contexts'
-import {getLogger} from '../../../shared/logger'
+import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/messageWrapper')

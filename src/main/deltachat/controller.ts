@@ -157,9 +157,7 @@ export default class DeltaChatController extends EventEmitter {
   registerEventHandler(dc: DeltaChat) {
     // in debug mode log all core events
     dc.on('ALL', (_event: any, data1: any, data2: any) => {
-      const event: string = !isNaN(_event)
-        ? events[_event]
-        : String(_event)
+      const event: string = !isNaN(_event) ? events[_event] : String(_event)
 
       if (data1 === 0) data1 = ''
 
@@ -333,14 +331,24 @@ export default class DeltaChatController extends EventEmitter {
     console.log('getTheme', theme)
     const THEME_WHITELIST = ['light', 'dark', 'dark_amoled', 'darkpurple']
     if (THEME_WHITELIST.indexOf(theme) === -1) {
-      log.error('getTheme: someone tried to get a non whitelisted theme:', theme)
+      log.error(
+        'getTheme: someone tried to get a non whitelisted theme:',
+        theme
+      )
       return 0
     }
-    const themePath: string = path.join(__dirname, '../../../themes', theme + '.json')
+    const themePath: string = path.join(
+      __dirname,
+      '../../../themes',
+      theme + '.json'
+    )
     try {
       return await readJson(themePath)
     } catch (err) {
-      log.error('getTheme: Error on reading json from "' + themePath + '":', err)
+      log.error(
+        'getTheme: Error on reading json from "' + themePath + '":',
+        err
+      )
     }
     return 0
   }

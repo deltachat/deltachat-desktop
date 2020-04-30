@@ -1,6 +1,6 @@
 import { DeltaChat } from 'deltachat-node'
 import { app } from 'electron'
-import { getLogger}  from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'

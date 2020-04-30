@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
-import {getLogger} from '../../../shared/logger'
+import { getLogger } from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import {
   appVersion,

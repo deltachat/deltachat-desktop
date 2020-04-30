@@ -4,7 +4,7 @@
  */
 
 const { ipcRenderer } = window.electron_functions
-import { getLogger} from '../shared/logger'
+import { getLogger } from '../shared/logger'
 const log = getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer

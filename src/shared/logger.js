@@ -7,8 +7,6 @@ const red = colorize('\x1b[31m')
 const yellow = colorize('\x1b[33m')
 const grey = colorize('\x1b[37m')
 
-
-
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
@@ -53,7 +51,9 @@ export function setLogHandler(LogHandler, rcObject) {
   // get a clean, non-remote object that has just the values
   rc = JSON.parse(JSON.stringify(rcObject))
 
-  log({channel: 'shared/logger', isMainProcess: false}, 0, undefined, ['Successfully set the log handler'])
+  log({ channel: 'shared/logger', isMainProcess: false }, 0, undefined, [
+    'Successfully set the log handler',
+  ])
 }
 
 export function log({ channel, isMainProcess }, level, stacktrace, args) {
@@ -129,4 +129,3 @@ export default class Logger {
 export function getLogger(channel) {
   return new Logger(channel)
 }
-

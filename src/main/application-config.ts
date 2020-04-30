@@ -1,7 +1,6 @@
 // @ts-ignore
 import applicationConfig from 'application-config'
 
-
 const appConfig = applicationConfig('DeltaChat')
 import { join } from 'path'
 

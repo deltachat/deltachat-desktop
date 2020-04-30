@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
 import {
   ThemeDataBuilder as ThemeBuilder,
   getDefaultTheme,
-  ThemeVarOverwrite
+  ThemeVarOverwrite,
 } from './ThemeBackend'
 import EventEmitter from 'wolfy87-eventemitter'
 const { ipcRenderer } = window.electron_functions
@@ -29,7 +29,6 @@ export class ThemeManager extends EventEmitter {
     this.currentThemeData = ThemeBuilder(this.currentTheme)
     window.ThemeManager = this // only for using from the dev console
     ipcRenderer.on('theme-update', (e, data) => this.setTheme(data))
-
   }
 
   setTheme(theme: { [key: string]: string }) {
@@ -74,14 +73,14 @@ export function ThemeProvider(props: any) {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       manager.current = new ThemeManager()
       await manager.current.setup()
       manager.current.addListener('update', update)
       update()
     })()
     return () => {
-      if(manager.current) manager.current.removeListener('update', update)
+      if (manager.current) manager.current.removeListener('update', update)
     }
   }, [])
 

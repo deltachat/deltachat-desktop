@@ -1,6 +1,6 @@
 import fsExtra from 'fs-extra'
 import path from 'path'
-import {getLogger} from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 
 const log = getLogger('main/deltachat/stickers')
