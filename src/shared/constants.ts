@@ -1,4 +1,5 @@
 import { readJsonSync } from "fs-extra"
+import path from 'path'
 
 export const appName = 'DeltaChat'
 export const homePageUrl = 'https://delta.chat'
@@ -9,7 +10,7 @@ export const gitHubLicenseUrl = gitHubUrl + '/blob/master/LICENSE'
 // we can only convert this to an import when we find out how we can ignore
 // "'rootDir' is expected to contain all source files."
 // for this line
-const { version } = readJsonSync('../../package.json')
+const { version } = readJsonSync(path.join(__dirname, '../../package.json'))
 
 export const appVersion = version
 

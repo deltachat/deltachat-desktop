@@ -8,6 +8,7 @@
         "module": "commonjs",
         "target": "es6",
         "allowJs": true,
+        "esModuleInterop": true
     },
     "include": [
         "./**/*.ts",

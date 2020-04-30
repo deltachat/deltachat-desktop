@@ -1,6 +1,7 @@
 import Color from 'color'
 import { getLogger } from '../shared/logger'
 import { readJsonSync } from 'fs-extra'
+import path from 'path'
 
 const log = getLogger('render/theme-backend')
 
@@ -276,7 +277,7 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
   return themeData
 }
 
-export const defaultTheme = Object.freeze(readJsonSync('../../themes/light.json'))
+export const defaultTheme = Object.freeze(readJsonSync(path.join(__dirname, '../../themes/light.json')))
 
 export const defaultThemeData = Object.freeze(ThemeDataBuilder(defaultTheme))
 
