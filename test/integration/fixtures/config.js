@@ -1,6 +1,6 @@
-const conf = require('rc')('DCC', {})
-// const request = require('request')
-const fetch = require('node-fetch')
+import rc from 'rc'
+import fetch from 'node-fetch'
+const conf = rc('DCC', {})
 
 if (conf.NEW_TMP_EMAIL === undefined) {
   console.error('Missing DCC_NEW_TMP_EMAIL environment variable!')

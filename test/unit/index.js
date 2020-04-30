@@ -1,6 +1,9 @@
-const test = require('tape')
-const fs = require('fs')
-const path = require('path')
+import test from 'tape'
+import fs from 'fs'
+import path from 'path'
+import * as fsExtra from 'fs-extra'
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 test('that translation files are valid json', t => {
   const dir = path.join(__dirname, '../../_locales')
@@ -19,7 +22,7 @@ test('that translation files are valid json', t => {
     const testFile = file => {
       let json = null
       try {
-        json = require(file)
+        json = fsExtra.readJsonSync(file)
       } catch (e) {
         console.error(e.message)
         return false
@@ -63,8 +66,8 @@ test('that translation files are valid json', t => {
   })
 })
 
-test('test translation method', t => {
-  const l = require('../../tsc-dist/shared/localize')
+test('test translation method', async t => {
+  const l = await import('../../tsc-dist/shared/localize.js')
   const translate = l.translate({
     test_a: {
       message: 'foo %1$s %2$s blubb'

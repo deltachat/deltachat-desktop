@@ -1,11 +1,11 @@
-const Application = require('spectron').Application
-const electronPath = require('electron')
-const fs = require('fs-extra')
-const path = require('path')
-const tempy = require('tempy')
-const PNG = require('pngjs').PNG
+import { Application } from 'spectron'
+import electronPath from 'electron'
+import fs from 'fs-extra'
+import path from 'path'
+import tempy from 'tempy'
+import { PNG } from 'pngjs'
 
-const getConfig = require(path.join(__dirname, 'fixtures/config'))
+import getConfig from './fixtures/config'
 
 module.exports = {
   createApp,

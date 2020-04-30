@@ -1,8 +1,8 @@
 process.env.NODE_ENV = 'test'
 
-const test = require('tape')
-const setup = require('./setup')
-const domHelper = require('./domHelper')
+import test from 'tape'
+import setup from './setup.js'
+import domHelper from './domHelper.js'
 const testCredentials = setup.getConfig().credentials
 
 test('app runs', async (t) => {

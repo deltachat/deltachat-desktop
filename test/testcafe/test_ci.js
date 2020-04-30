@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
-const { createTmpUser } = require('../integration/fixtures/config')
+import { createTmpUser } from '../integration/fixtures/config'
 
 /* global fixture, test */
 
