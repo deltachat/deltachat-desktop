@@ -115,9 +115,9 @@ export default class DCLoginController extends SplitOut {
 
   updateDeviceChats() {
     this._dc.updateDeviceChats()
-      this._dc.addDeviceMessage(
-        'changelog-version-1.3.0-1',
-        `Changes in v1.3.0
+    this._dc.addDeviceMessage(
+      'changelog-version-1.3.0-1',
+      `Changes in v1.3.0
 
 - QR codes can now be scanned from desktop as you know it from Android/iOS. Try
   it out by clicking on Menu -> Scan QR code. Besides using any available webcam,
@@ -134,6 +134,6 @@ export default class DCLoginController extends SplitOut {
 
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#130---2020-04-30
     ` as any
-      )
+    )
   }
 }
