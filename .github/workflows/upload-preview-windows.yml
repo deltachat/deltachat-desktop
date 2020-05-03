@@ -50,7 +50,6 @@ jobs:
         ls preview
         cd ..
     - name: upload folder
-      if: steps.prepare.outputs.uploadtoserver
       uses: horochx/deploy-via-scp@v1.0.1
       with:
         user: ${{ secrets.USERNAME }}
@@ -68,12 +67,3 @@ jobs:
         export EXE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.exe"
         export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
         curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-    - name: "zip result"
-      if: steps.prepare.outputs.uploadtoserver == false
-      run: zip -r dist/preview.zip dist/preview/
-    - name: Upload result to artifacts
-      if: steps.prepare.outputs.uploadtoserver == false
-      uses: actions/upload-artifact@master
-      with:
-        name: Files
-        path: dist/preview.zip
