@@ -1,0 +1,73 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
+name: Preview (MacOs)
+
+on: 
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+
+jobs:
+  build:
+    name: "Upload Prebuild"
+    runs-on: macos-latest
+
+    steps:
+    - name: System info
+      run: |
+        rustc -vV
+        rustup -vV
+        cargo -vV
+        npm --version
+        node --version
+    - name: Get Pullrequest ID
+      id: prepare
+      run: |
+        export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        export SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
+        export BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
+        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        echo ::set-output name=sha::$SHA
+        echo ::set-output name=base-url::$BASE_URL
+        echo ::set-output name=prid::$PULLREQUEST_ID
+    - uses: actions/checkout@v1
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: change build name and Product Name to development id
+      run: |
+        node ./bin/github-actions/devbuild.js
+    - name: npm install, build, test
+      run: |
+        npm install
+        npm run build
+    - name: electron builder
+      run: npx electron-builder --mac mas || true
+    - name: compressing mas
+      run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+    - name: upload folder
+      if: steps.prepare.outputs.uploadtoserver
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "dist/preview/*"
+        remote: "/var/www/html/download/desktop/preview/"
+    - name: "Post links to details"
+      if: steps.prepare.outputs.uploadtoserver
+      run: |
+        export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
+        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
+        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
+        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+    - name: "zip result"
+      if: steps.prepare.outputs.uploadtoserver == false
+      run: zip -r dist/preview.zip dist/preview/
+    - name: Upload result to artifacts
+      if: steps.prepare.outputs.uploadtoserver == false
+      uses: actions/upload-artifact@master
+      with:
+        name: Files
+        path: dist/preview.zip
