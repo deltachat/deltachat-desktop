@@ -1,19 +1,23 @@
-require('colors')
-
-function formattedOutput (location, lines) {
-  console.log(
-    `${'Console log function'.red} in ${location.yellow}
-
-${lines}
-
-Consider using our logger (log.debug) or add this line ${'/* ignore-console-log */'.green} above to add an exception
-${'------------------------------------------------'.blue}`
-  )
-}
-
 const walk = require('walk')
 const fs = require('fs')
 const path = require('path')
+
+const colorize = (light, code) => str => '\x1B[' + light + ';' + code + 'm' + str + '\x1b[0m'
+const blue = colorize(1, 34)
+const red = colorize(1, 31)
+const yellow = colorize(1, 33)
+const grey = colorize(0, 37)
+const green = colorize(1, 37)
+const cyan = colorize(1, 36)
+
+function formattedOutput (location, lines) {
+  console.log(`${red('Console log function')} in ${yellow(location)})
+${lines}
+Consider using our logger (log.debug) or add this line ${green('/* ignore-console-log */')} above to add an exception
+${blue('------------------------------------------------')}`
+  )
+}
+
 const walker = walk.walk('./src')
 let found = 0
 
@@ -41,7 +45,7 @@ walker.on('file', function (root, fileStats, next) {
         `${filename}:${i + 1}`,
         lines.slice(i - 1, i + 2).join('\n').replace(
           line,
-          string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${s1.cyan}${s2.red}${s3.cyan}`)
+          string => string.replace(/^([^]*)(console.(?:debug|log|info|error))([^]*)$/, (_s, s1, s2, s3) => `${cyan(s1)}${red(s2)}${cyan(s3)}`)
         )
       )
       found++
@@ -55,7 +59,7 @@ walker.on('errors', function (root, nodeStatsArray, next) {
 })
 
 walker.on('end', function () {
-  console.log(`found ${found.toString()[found > 0 ? 'bgRed' : 'bgGreen']} misplaced console.log statements ( ${'// comment'.grey} lines were ignored)`)
+  console.log(`found ${found.toString()[found > 0 ? 'bgRed' : 'bgGreen']} misplaced console.log statements ( ${grey('// comment')} lines were ignored)`)
   process.exit(
     found > 0 ? 1 : 0
   )
