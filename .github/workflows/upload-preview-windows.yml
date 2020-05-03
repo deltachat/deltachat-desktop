@@ -19,8 +19,6 @@ jobs:
         cargo -vV
         npm --version
         node --version
-        scp --version
-        pscp --version
     - name: Get Pullrequest ID
       id: prepare
       run: |
