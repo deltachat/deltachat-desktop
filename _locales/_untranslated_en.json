@@ -11,7 +11,7 @@
   "messaging_disabled_device_chat": {
     "message": "This chat contains locally generated messages. Therefore you cannot write any messages."
   },
-  "messaging_disabled_deaddrop":{
+  "messaging_disabled_deaddrop": {
     "message": "Click on a message to start accept or deny the contact request"
   },
   "ask_delete_chat_desktop": {
@@ -38,22 +38,22 @@
   "about_licensed_under_desktop": {
     "message": "This software is licensed under GNU GPL version 3 and the source code is available on GitHub."
   },
-  "switch_account_desktop":{
+  "switch_account_desktop": {
     "message": "Switch account"
   },
   "select_profile_image_desktop": {
     "message": "Select your new profile image"
   },
-  "a11y_profile_image_label":{
+  "a11y_profile_image_label": {
     "message": "Your profile image"
   },
-  "a11y_profile_image_select":{
+  "a11y_profile_image_select": {
     "message": "set a new profile image"
   },
-  "a11y_profile_image_remove":{
+  "a11y_profile_image_remove": {
     "message": "remove your profile image"
   },
-  "ask_send_file_desktop":{
+  "ask_send_file_desktop": {
     "message": "Send %s to %s?"
   },
   "remove_account": {
@@ -118,5 +118,11 @@
   },
   "paste_from_clipboard": {
     "message": "Click to paste from clip board"
+  },
+  "pref_theming": {
+    "message": "Theming"
+  },
+  "pref_system_theme": {
+    "message": "Auto select theme (light/dark) based on your system settings"
   }
 }
