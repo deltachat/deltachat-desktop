@@ -1,76 +1,59 @@
 ## Information how the experimental theme system works
 
-(it's in the code, because for now its only for developers)
+Themes are scss files that act as themes by containing many differnt css variables.
+Most of these variables are small variations of the base colors of the theme so scss allows us to generate them from the base colors to safe us work.
+But of course we can overwrite those variables manualy too, we can even overwrite css classes if our theme needs it.
 
-> Warning: This will change in the future.
+## Theme codes
 
-There are two objects: Theme and Theme-data -> the theme-data gets generated from the theme
+There are two types of themes `dc`(build-in) and `custom` themes.
+DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat instalation and the theme folder in the deltachat userdata folder of the users account (custom themes).
 
-dev console:
+The actual theme code is build as follows:
 
 ```
-You can set the theme like this:
-window.ThemeManager.setTheme([object with theme properties you want to overwrite])
-
-you can also overwrite theme-data directly using the raw property:
-window.ThemeManager.setTheme({raw:{chatViewBg:'lime'}})
-
-You can reset your overwrites with an empty object:
-window.ThemeManager.setTheme({})
+[location/type]:[name of themefile without extention]
 ```
 
-The theme you set this way isn't persistant, its only for quick testing/playing-around,
-so rather use the `--theme-watch` option and create your own `your-theme.json` file.
+Some examples:
 
-There are also some helper methods that allow you to see the theme(-data) at various points:
-
-```js
-// Get the currently active theme/-data
-getCurrentlyAppliedThemeData()
-getCurrentlyAppliedTheme()
-
-// get the theme data as you set it/ like it is stored in localstorage
-getCurrentTheme()
-
-// get the default theme/-data for reference
-getDefaultThemeData()
-getDefaultTheme()
 ```
+dc:dark -> ./themes/dark.scss
+dc:light -> ./themes/light.scss
+custom:mytheme -> ~/.config/DeltaChat/custom-themes/mytheme.scss
+```
+
+There is a special code that is an exception to this: `system` it gets translated into `dc:dark` or `dc:light` depending on the system theme of the host os.
 
 ## Setting a theme from CLI
 
 > Warning: This will also (probably) change in the future.
 
 ```
-npx electron . --theme "./themes/dark.json"
+npx electron . --theme dc:dark
 or
-npm run dev -- --theme "./themes/dark.json"
+npm run dev -- --theme dc:dark
 or
-npm run start -- --theme "./themes/dark.json"
+npm run start -- --theme dc:dark
 ```
 
 You can also enable hot reload for loaded theme with:
 
 ```
-npm run start -- --theme "./themes/dark.json" --theme-watch
+npm run start -- --theme dc:dark --theme-watch
 ```
 
 ## Creating your own Theme:
 
-1. create a new json file for your new theme with an epmty object as content:
-
-```json
-{}
-```
+1. copy the light or dark theme and save it to your user deltachat folder DeltaChat/custom-themes/my_theme.scss
 
 2. start deltachat from your terminal with your theme selected in watch mode:
 
 ```sh
-deltachat --theme ./path/to/your_theme.json --theme-watch
+deltachat --theme custom:my_theme --theme-watch
 ```
 
 3. Open your theme file in your favorite code/text editor and edit it,
-   when you save it your changes should be applied a second later.
+   when you save it your changes should be applied 1-2 seconds later.
 
-Look into the default theme(`themes/light.json`)[../themes/light.json]) for inspiration.
-If you need more controll you can use the `raw` property to overwrite generated colors, you can get a list of all availible raw-properties by running `ThemeManager.getCurrentlyAppliedThemeData()` in the DeltaChat DevConsole.
+Read the comments in the theme files for additional information.
