@@ -30,7 +30,7 @@ export function getDefaultState(): AppState {
       chatViewBgImg: undefined,
       lastChats: {},
       zoomFactor: 1,
-      activeTheme: undefined,
+      activeTheme: 'system',
     },
   }
 }

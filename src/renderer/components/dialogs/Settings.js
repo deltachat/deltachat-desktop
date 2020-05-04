@@ -328,6 +328,43 @@ export default class Settings extends React.Component {
     ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
+  renderThemeSelection() {
+    return (
+      <SettingsContext.Consumer>
+        {settings => (
+          <div>
+            <H6>{this.translate('pref_theming')}</H6>
+            <div className='theme-meta'>
+              <b>
+                <p className='name'></p>
+              </b>
+              <p className='description'></p>
+            </div>
+            <HTMLSelect
+              onChange={async ev => {
+                console.log(ev.target.value)
+                await DeltaBackend.call('extras.setTheme', ev.target.value)
+                await ThemeManager.refresh()
+                this.forceUpdate()
+              }}
+              value={settings['activeTheme']}
+            >
+              <option key={'system'} value={'system'}>
+                Auto select theme (light/dark) based on your system settings
+              </option>
+              {this.state.availibleThemes.map(theme => (
+                <option key={theme.address} value={theme.address}>
+                  {theme.name} - {theme.description} [{theme.address}]
+                </option>
+              ))}
+            </HTMLSelect>
+            <br />
+          </div>
+        )}
+      </SettingsContext.Consumer>
+    )
+  }
+
   renderDialogContent() {
     const { deltachat, openDialog } = this.props
     const { settings, advancedSettings } = this.state
@@ -435,35 +472,7 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
-            <H6>{this.translate('pref_theming')}</H6>
-            <div className='theme-meta'>
-              <b>
-                <p className='name'></p>
-              </b>
-              <p className='description'></p>
-            </div>
-            <HTMLSelect
-              onChange={async ev => {
-                console.log(ev.target.value)
-                await DeltaBackend.call('extras.setTheme', ev.target.value)
-                await ThemeManager.refresh()
-                this.forceUpdate()
-              }}
-            >
-              {this.state.availibleThemes.map(theme => (
-                <option
-                  key={theme.address}
-                  value={theme.address}
-                  selected={
-                    theme.address ==
-                    ThemeManager.getCurrentThemeMetaData().address
-                  }
-                >
-                  {theme.name} - {theme.description} [{theme.address}]
-                </option>
-              ))}
-            </HTMLSelect>
-            <br />
+            {this.renderThemeSelection()}
             <br />
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(
