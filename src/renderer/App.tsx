@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { ThemeProvider } from './ThemeManager'
 import { SettingsContext } from './contexts'
 import ScreenController from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
@@ -12,6 +11,7 @@ import { ExtendedApp, AppState } from '../shared/shared-types'
 import { translate, LocaleData } from '../shared/localize'
 import logger from '../shared/logger'
 import { DeltaBackend } from './delta-remote'
+import { ThemeManager } from './ThemeManager'
 
 const log = logger.getLogger('renderer/App')
 const moment = require('moment')
@@ -19,6 +19,9 @@ const moment = require('moment')
 addLocaleData(enLocaleData)
 
 attachKeybindingsListener()
+
+// This export is just used to activate the theme manager for now
+export const theme_manager = ThemeManager
 
 export default function App(props: any) {
   const [state, setState] = useState<AppState>(
@@ -101,9 +104,7 @@ export default function App(props: any) {
   return (
     <SettingsContext.Provider value={state.saved}>
       <IntlProvider locale={localeData.locale}>
-        <ThemeProvider>
-          <ScreenController logins={state.logins} deltachat={state.deltachat} />
-        </ThemeProvider>
+        <ScreenController logins={state.logins} deltachat={state.deltachat} />
       </IntlProvider>
     </SettingsContext.Provider>
   )

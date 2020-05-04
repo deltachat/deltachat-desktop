@@ -1,6 +1,6 @@
 console.time('init')
 
-import { ensureDirSync, watchFile, existsSync } from 'fs-extra'
+import { ensureDirSync, watchFile } from 'fs-extra'
 import { app as rawApp, session, EventEmitter } from 'electron'
 import rc from './rc'
 
@@ -19,10 +19,12 @@ import {
   getConfigPath,
   getLogsPath,
   getAccountsPath,
+  getCustomThemesPath,
 } from './application-constants'
 ensureDirSync(getConfigPath())
 ensureDirSync(getLogsPath())
 ensureDirSync(getAccountsPath())
+ensureDirSync(getCustomThemesPath())
 
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'
@@ -48,6 +50,7 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { AppState } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
+import { resolveThemeAddress, acceptThemeCLI } from './themes'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -96,27 +99,7 @@ function onReady([logins, _appReady, loadedState]: [
       }
     })
   }
-
-  if (app.rc['theme']) {
-    log.info(`theme: trying to load theme from '${app.rc['theme']}'`)
-    if (existsSync(app.rc['theme'])) {
-      app.state.saved.activeTheme = app.rc['theme']
-      log.info(`theme: set theme`)
-      if (app.rc['theme-watch']) {
-        log.info('theme-watch: activated', app.rc['theme-watch'])
-        watchFile(app.rc['theme'], (curr, prev) => {
-          if (curr.mtime !== prev.mtime) {
-            log.info(
-              'theme-watch: File changed reminding frontend to reload theme'
-            )
-            app.ipcReady && mainWindow.send('theme-update')
-          }
-        })
-      }
-    } else {
-      log.error("theme: couldn't find file")
-    }
-  }
+  acceptThemeCLI()
 
   cleanupLogFolder().catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)

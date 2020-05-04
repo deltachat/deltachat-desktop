@@ -1,0 +1,39 @@
+.theme-meta {
+  --name: 'Light Theme';
+  --description: 'Our default theme.';
+}
+
+/* Set theme variables used for theme Generation */
+$outlineColor: #b9b9b9;
+$accentColor: #2090ea;
+$bgChatView: #e6dcd4;
+$bgImagePath: '../images/background_light.svg';
+$bgMessageBubbleIncoming: #fff;
+$bgMessageBubbleOutgoing: #efffde;
+$bgNavBar: #415e6b;
+$bgPrimary: #fff;
+$bgSecondary: #f5f5f5;
+$colorDanger: #f96856;
+$colorNone: #a0a0a0;
+$colorPrimary: #42a5f5;
+$ovalButtonBg: #415e6b;
+$ovalButtonText: #fff;
+$textNavBar: #fff;
+$textPrimary: #010101;
+$textSecondary: #62656a;
+
+$scrollbarTransparency: 0.5;
+
+/* Derive the themedata from the theme variables */
+@import '_themebase.scss';
+
+/* overwrite themedata */
+:root {
+  --scrollbarThumb: #666666;
+  --scrollbarThumbHover: #606060;
+  --bp3DialogBgSecondary: #ececec;
+  --chatListItemBgHover: rgb(228, 228, 228);
+  //--chatListItemBgPinned: #eeeeee;
+}
+
+/* overwrite css */
