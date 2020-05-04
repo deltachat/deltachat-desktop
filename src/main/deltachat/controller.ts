@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { LocalSettings, JsonContact } from '../../shared/shared-types'
+import { JsonContact } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
@@ -19,7 +19,6 @@ import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
-import path from 'path'
 const app = rawApp as ExtendedAppMainProcess
 
 const eventStrings = require('deltachat-node/events')
@@ -320,16 +319,5 @@ export default class DeltaChatController extends EventEmitter {
     this._showArchivedChats = false
     this._pages = 0
     this._query = ''
-  }
-
-  /** Theming -> move this to extras when merging with delta-remote */
-  getThemeFilePath(): string {
-    const file = app.state.saved.activeTheme
-    return path.isAbsolute(file) ? file : path.join(process.cwd(), file)
-  }
-  setThemeFilePath(path: string) {
-    // todo check if file exists
-    app.state.saved.activeTheme = path
-    app.saveState()
   }
 }

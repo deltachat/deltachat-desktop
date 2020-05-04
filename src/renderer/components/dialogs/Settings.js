@@ -4,6 +4,7 @@ import { C } from 'deltachat-node/dist/constants'
 import {
   Elevation,
   H5,
+  H6,
   Card,
   Classes,
   Button,
@@ -11,6 +12,7 @@ import {
   Label,
   RadioGroup,
   Radio,
+  HTMLSelect,
 } from '@blueprintjs/core'
 
 import {
@@ -20,6 +22,7 @@ import {
 } from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
+import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 const { SettingsContext } = require('../../contexts')
@@ -39,6 +42,7 @@ export default class Settings extends React.Component {
       settings: {},
       show: 'main',
       selfContact: {},
+      availibleThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
@@ -61,6 +65,9 @@ export default class Settings extends React.Component {
       C.DC_CONTACT_ID_SELF
     )
     this.setState({ selfContact })
+    const availibleThemes = await DeltaBackend.call('extras.getAvailibleThemes')
+    this.setState({ availibleThemes })
+    console.log({ availibleThemes })
   }
 
   async loadSettings() {
@@ -428,6 +435,35 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
+            <H6>{this.translate('pref_theming')}</H6>
+            <div className='theme-meta'>
+              <b>
+                <p className='name'></p>
+              </b>
+              <p className='description'></p>
+            </div>
+            <HTMLSelect
+              onChange={async ev => {
+                console.log(ev.target.value)
+                await DeltaBackend.call('extras.setTheme', ev.target.value)
+                await ThemeManager.refresh()
+                this.forceUpdate()
+              }}
+            >
+              {this.state.availibleThemes.map(theme => (
+                <option
+                  key={theme.address}
+                  value={theme.address}
+                  selected={
+                    theme.address ==
+                    ThemeManager.getCurrentThemeMetaData().address
+                  }
+                >
+                  {theme.name} - {theme.description} [{theme.address}]
+                </option>
+              ))}
+            </HTMLSelect>
+            <br />
             <br />
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(

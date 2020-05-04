@@ -74,3 +74,5 @@ static/conversations.css
 
 # portable config folders
 DeltaChatData
+
+static/light-theme.css
