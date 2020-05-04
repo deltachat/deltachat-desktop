@@ -44,7 +44,10 @@ jobs:
     - name: electron builder
       run: npx electron-builder --mac mas || true
     - name: compressing mas
-      run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+      
+      run: |
+        ls -al dist
+        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
       if: steps.prepare.outputs.uploadtoserver
       uses: horochx/deploy-via-scp@v1.0.1
