@@ -18,7 +18,7 @@ export default class Extras extends SplitOut {
   }
   async getActiveTheme() {
     try {
-      console.log('theme', app.state.saved.activeTheme)
+      log.debug('theme', app.state.saved.activeTheme)
       return await loadTheme(app.state.saved.activeTheme)
     } catch (error) {
       log.error('loading theme failed:', error)

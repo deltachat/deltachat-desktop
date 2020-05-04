@@ -67,7 +67,6 @@ export default class Settings extends React.Component {
     this.setState({ selfContact })
     const availibleThemes = await DeltaBackend.call('extras.getAvailibleThemes')
     this.setState({ availibleThemes })
-    console.log({ availibleThemes })
   }
 
   async loadSettings() {
@@ -342,7 +341,6 @@ export default class Settings extends React.Component {
             </div>
             <HTMLSelect
               onChange={async ev => {
-                console.log(ev.target.value)
                 await DeltaBackend.call('extras.setTheme', ev.target.value)
                 await ThemeManager.refresh()
                 this.forceUpdate()
