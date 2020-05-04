@@ -348,7 +348,7 @@ export default class Settings extends React.Component {
               value={settings['activeTheme']}
             >
               <option key={'system'} value={'system'}>
-                Auto select theme (light/dark) based on your system settings
+                {this.translate('pref_system_theme')}
               </option>
               {this.state.availibleThemes.map(theme => (
                 <option key={theme.address} value={theme.address}>
