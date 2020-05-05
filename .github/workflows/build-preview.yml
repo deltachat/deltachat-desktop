@@ -20,17 +20,6 @@ jobs:
         echo ::set-output name=sha::$SHA
         echo ::set-output name=base-url::$BASE_URL
         echo ::set-output name=prid::$PULLREQUEST_ID
-    - name: install wine
-      run: |
-        sudo dpkg --add-architecture i386
-        wget -nc https://dl.winehq.org/wine-builds/winehq.key
-        sudo apt-key add winehq.key
-        sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
-        wget -nc https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key
-        sudo apt-key add Release.key
-        echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04 ./" | sudo tee /etc/apt/sources.list.d/wine-obs.list
-        sudo apt update
-        sudo apt install --yes --install-recommends winehq-stable
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
@@ -44,13 +33,12 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --linux --win portable --mac mas || true
+      run: npx electron-builder --linux --mac mas || true
     - name: renaming
       run: |
         cd dist
         mkdir preview
         mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
-        mv *.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe
         ls preview
         cd ..
     - name: compressing mas
@@ -84,12 +72,9 @@ jobs:
         export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
         export APPIMAGE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.AppImage"
         export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
-        export EXE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.exe"
         export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
         curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
         export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
-        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Windows Preview Build\", \"target_url\": \"${EXE_URL}\"}"
         curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
