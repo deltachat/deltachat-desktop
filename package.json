@@ -104,7 +104,7 @@
     "@types/react-intl": "^3.0.0",
     "depcheck": "^0.8.4",
     "electron": "^6.1.7",
-    "electron-builder": "^22.3.2",
+    "electron-builder": "^22.6.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
