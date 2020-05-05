@@ -24,7 +24,7 @@ jobs:
       run: |
         sudo dpkg --add-architecture i386
         sudo apt update
-        sudo apt install --yes wine-stable wine32
+        sudo apt install --yes wine-stable wine32 libwine:i386
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
