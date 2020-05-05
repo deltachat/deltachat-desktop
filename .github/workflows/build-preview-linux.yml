@@ -1,5 +1,5 @@
 # documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
-name: Preview
+name: Linux
 
 on: 
   pull_request:
@@ -7,8 +7,9 @@ on:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
 jobs:
-  build:
+  upload-preview-linux:
     runs-on: ubuntu-18.04
+    name: Upload Preview
     steps:
     - name: Get Pullrequest ID
       id: prepare
@@ -33,7 +34,7 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --linux --mac mas || true
+      run: npx electron-builder --linux || true
     - name: renaming
       run: |
         cd dist
@@ -41,8 +42,6 @@ jobs:
         mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
         ls preview
         cd ..
-    - name: compressing mas
-      run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
       if: steps.prepare.outputs.uploadtoserver
       uses: horochx/deploy-via-scp@v1.0.1
@@ -71,10 +70,7 @@ jobs:
       run: |
         export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
         export APPIMAGE_URL="${{ steps.prepare.outputs.base-url }}${{ steps.prepare.outputs.prid }}.AppImage"
-        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
         export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"Linux Preview Build\", \"target_url\": \"${APPIMAGE_URL}\"}"
-        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
-        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
         curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
     - name: "zip result"
       if: steps.prepare.outputs.uploadtoserver == false
