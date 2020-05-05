@@ -26,7 +26,7 @@ jobs:
         wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
         sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
         sudo apt update
-        sudo apt install --yes --install-recommends winehq-stable
+        sudo apt-get install -y --install-recommends winehq-stable=4.0.3~bionic wine-stable=4.0.3~bionic wine-stable-amd64=4.0.3~bionic wine-stable-i386=4.0.3~bionic
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
