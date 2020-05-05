@@ -23,7 +23,7 @@ jobs:
     - name: install wine
       run: |
         sudo apt update
-        sudo apt install --yes wine-stable
+        sudo apt install --yes wine-stable wine32
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
