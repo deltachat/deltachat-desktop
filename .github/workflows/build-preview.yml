@@ -22,6 +22,7 @@ jobs:
         echo ::set-output name=prid::$PULLREQUEST_ID
     - name: install wine
       run: |
+        sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install --yes wine-stable wine32
     - uses: actions/checkout@v1
