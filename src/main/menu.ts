@@ -36,8 +36,8 @@ export function init(logHandler: LogHandler) {
   const isMac = process.platform === 'darwin'
   if (isMac === true) {
     Menu.setApplicationMenu(menu)
-    return 
-  } 
+    return
+  }
   mainWindow.window.setMenu(menu)
 }
 
