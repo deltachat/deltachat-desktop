@@ -1,21 +1,29 @@
 # Changelog
 
-## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...HEAD)
+## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...HEAD)
+
+## [1.3.1](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.3.1) - 2020-05-05
+
+### Fixed
+
+- Fix showing the correct menu on Mac
+- Fix showing the titlebar on Mac
+- Fix qr scanning on Mac
 
 ## [1.3.0](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0) - 2020-04-30
 
 ### Added
 
-- add Import/Scan QR code which enables you to verify contacts and to join verifed groups from desktop (#1550)
-- add pinned chats #1537
-- add big view of profile image (closes #1356)
-- add option to change a contacts displayname (#1502)
-- add some Mac keybindings (related to #1451)
+- add Import/Scan QR code which enables you to verify contacts and to join verifed groups from desktop ([#1550](https://github.com/deltachat/deltachat-desktop/issues/1550))
+- add pinned chats [#1537](https://github.com/deltachat/deltachat-desktop/issues/1537)
+- add big view of profile image (closes [#1356](https://github.com/deltachat/deltachat-desktop/issues/1356))
+- add option to change a contacts displayname ([#1502](https://github.com/deltachat/deltachat-desktop/issues/1502))
+- add some Mac keybindings (related to [#1451](https://github.com/deltachat/deltachat-desktop/issues/1451))
   - add `cmd + ,` as shortcut to open the settings
   - focus the message composer
-  - mac specific hide window (solves #634)
+  - mac specific hide window (solves [#634](https://github.com/deltachat/deltachat-desktop/issues/634))
 - add primitive & experimental contact import (you can import a json array of contacts in the devconsole)
-- add archive label to archived chats #1537
+- add archive label to archived chats [#1537](https://github.com/deltachat/deltachat-desktop/issues/1537)
 - add support for opening openpgp4fpr uris with deltachat-desktop
 
 ### Changed
@@ -36,7 +44,7 @@
   - remove unneccessary border on chatlist
   - changer caret color of sarch input to the same color as the placeholder
   - make dialog height overlap navbar/composer for fixed dialogs
-  - Fix fake-contact-item label #1529
+  - Fix fake-contact-item label [#1529](https://github.com/deltachat/deltachat-desktop/issues/1529)
 - fixes help won't open on mac (open help in seperate electron window)
 - fix hover color for selected chats and make it a lot more slight
 
@@ -291,7 +299,8 @@ This section is only relevant to contributors.
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
-* Update deltachat-node to 1.0.0-beta.15
+
+- Update deltachat-node to 1.0.0-beta.15
   - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
 ## [0.840.0] - 2019-11-05
@@ -946,21 +955,39 @@ This section is only relevant to contributors.
 - Make sure `Float on Top` menu item stays checked/unchecked when language is changed ([**@ralphtheninja**](https://github.com/ralphtheninja))
 
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
+
 [0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
+
 [0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...v0.901.0
+
 [0.900.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.840.0...v0.900.0
+
 [0.840.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...v0.840.0
+
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.201.0
+
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
+
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
+
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
+
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
+
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
+
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
+
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
+
 [0.98.2]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...v0.98.2
+
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
+
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
+
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
+
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
+
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
