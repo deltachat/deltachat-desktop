@@ -22,11 +22,7 @@ jobs:
         echo ::set-output name=prid::$PULLREQUEST_ID
     - name: install wine
       run: |
-        sudo dpkg --add-architecture i386
-        wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-        sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
-        sudo apt update
-        sudo apt install --yes --install-recommends winehq-devel
+        sudo apt install --yes wine
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
