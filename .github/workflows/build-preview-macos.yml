@@ -17,7 +17,7 @@ jobs:
         export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
         export SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
         export BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
-        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        echo ::set-output name=uploadtoserver::true
         echo ::set-output name=sha::$SHA
         echo ::set-output name=base-url::$BASE_URL
         echo ::set-output name=prid::$PULLREQUEST_ID
