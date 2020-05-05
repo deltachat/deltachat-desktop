@@ -45,27 +45,10 @@ jobs:
       run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
       if: steps.prepare.outputs.uploadtoserver
-      uses: horochx/deploy-via-scp@v1.0.1
-      with:
-        user: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        host: "download.delta.chat"
-        port: 22
-        local: "dist/preview/*"
-        remote: "/var/www/html/download/desktop/preview/"
-#   - name: "Post Links"
-#     if: steps.prepare.outputs.uploadtoserver
-#     uses: rytswd/respost@v0.1.0
-#     env:
-#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     with:
-#       title: "Download Preview Builds"
-#       body: "Thanks for your contribution! You can download the preview builds here: \n \
-#              Linux (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage\n \
-#              MacOS (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip\n \
-#              Windows (portable): https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe\n"
-#              Linux: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.deb \
-#              Windows: https://download.delta.chat/desktop/preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe \
+      run: |
+        echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
+        chmod 600 __TEMP_INPUT_KEY_FILE
+        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r "dist/preview/*" "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
     - name: "Post links to details"
       if: steps.prepare.outputs.uploadtoserver
       run: |
