@@ -50,7 +50,6 @@ export async function openHelpWindow(locale: string) {
     minWidth: defaults.minWidth,
     show: false,
     title: appWindowTitle + ' - ' + app.translate('menu_help'),
-    titleBarStyle: 'hiddenInset', // Hide title bar (Mac)
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
