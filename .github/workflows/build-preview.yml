@@ -23,8 +23,14 @@ jobs:
     - name: install wine
       run: |
         sudo dpkg --add-architecture i386
+        wget -nc https://dl.winehq.org/wine-builds/winehq.key
+        sudo apt-key add winehq.key
+        sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
+        wget -nc https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key
+        sudo apt-key add Release.key
+        echo "deb http://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04 ./" | sudo tee /etc/apt/sources.list.d/wine-obs.list
         sudo apt update
-        sudo apt install --yes wine-stable wine32 libwine:i386
+        sudo apt install --yes --install-recommends winehq-stable
     - uses: actions/checkout@v1
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
