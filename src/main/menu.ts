@@ -33,6 +33,11 @@ export function init(logHandler: LogHandler) {
     )
   )
   if (item) item.checked = mainWindow.isAlwaysOnTop()
+  const isMac = process.platform === 'darwin'
+  if (isMac === true) {
+    Menu.setApplicationMenu(menu)
+    return 
+  } 
   mainWindow.window.setMenu(menu)
 }
 
