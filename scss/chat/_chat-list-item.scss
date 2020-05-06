@@ -8,6 +8,8 @@
   align-items: center;
   cursor: pointer;
 
+  border-bottom: 1px solid var(--chat-list-item-seperator);
+
   & > .content {
     flex-grow: 1;
     margin-left: 10px;
@@ -187,12 +189,15 @@
 
 // Pseudo chats
 
-.chat-list-item > div.archive-link {
-  top: calc((64px - 18px) / 2);
-  width: 100%;
-  font-weight: 200;
-  text-align: center;
-  color: #565656;
+.chat-list-item.archive-link {
+  border-bottom: none;
+  & > div {
+    top: calc((64px - 18px) / 2);
+    width: 100%;
+    font-weight: 200;
+    text-align: center;
+    color: #565656;
+  }
 }
 
 .chat-list-item.is-deaddrop {

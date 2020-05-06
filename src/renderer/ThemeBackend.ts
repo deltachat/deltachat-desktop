@@ -144,6 +144,7 @@ export function ThemeDataBuilder(theme: { [key: string]: string }) {
     chatListItemDeaddropBg: undefinedGuard(theme.bgPrimary, c =>
       changeContrast(c, 0.15)
     ),
+    'chat-list-item-seperator': '#dddddd',
     // Message Bubble
     messageText: theme.textPrimary,
     messageTextLink: theme.textPrimary, // same as message text

@@ -82,8 +82,12 @@ const ChatListItemArchiveLink = React.memo(
     onClick: () => void
   }) => {
     return (
-      <div role='button' onClick={onClick} className={'chat-list-item'}>
-        <div className='archive-link'>{chatListItem.name}</div>
+      <div
+        role='button'
+        onClick={onClick}
+        className={'chat-list-item archive-link'}
+      >
+        <div>{chatListItem.name}</div>
       </div>
     )
   }
