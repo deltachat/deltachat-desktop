@@ -4,7 +4,7 @@ import logger from '../../shared/logger'
 import SplitOut from './splitout'
 import { LocaleData } from '../../shared/localize'
 import loadTranslations from '../load-translations'
-import { loadTheme, getAvailibleThemes, resolveThemeAddress } from '../themes'
+import { loadTheme, getAvailableThemes, resolveThemeAddress } from '../themes'
 const app = rawApp as ExtendedAppMainProcess
 const log = logger.getLogger('main/deltachat/extras')
 
@@ -34,7 +34,7 @@ export default class Extras extends SplitOut {
       log.error('set theme failed: ', error)
     }
   }
-  async getAvailibleThemes() {
-    return await getAvailibleThemes()
+  async getAvailableThemes() {
+    return await getAvailableThemes()
   }
 }

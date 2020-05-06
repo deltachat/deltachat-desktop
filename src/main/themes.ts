@@ -60,7 +60,7 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
   )
 }
 
-export async function getAvailibleThemes(): Promise<Theme[]> {
+export async function getAvailableThemes(): Promise<Theme[]> {
   // look at the common places for themes
   return [
     ...(await readThemeDir(dc_theme_dir, 'dc')),

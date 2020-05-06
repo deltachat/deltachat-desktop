@@ -42,7 +42,7 @@ export default class Settings extends React.Component {
       settings: {},
       show: 'main',
       selfContact: {},
-      availibleThemes: [],
+      availableThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
@@ -65,8 +65,8 @@ export default class Settings extends React.Component {
       C.DC_CONTACT_ID_SELF
     )
     this.setState({ selfContact })
-    const availibleThemes = await DeltaBackend.call('extras.getAvailibleThemes')
-    this.setState({ availibleThemes })
+    const availableThemes = await DeltaBackend.call('extras.getAvailableThemes')
+    this.setState({ availableThemes })
   }
 
   async loadSettings() {
@@ -350,7 +350,7 @@ export default class Settings extends React.Component {
               <option key={'system'} value={'system'}>
                 {this.translate('pref_system_theme')}
               </option>
-              {this.state.availibleThemes.map(theme => (
+              {this.state.availableThemes.map(theme => (
                 <option key={theme.address} value={theme.address}>
                   {theme.name} - {theme.description} [{theme.address}]
                 </option>
