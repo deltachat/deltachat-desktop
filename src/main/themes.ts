@@ -69,11 +69,11 @@ export async function getAvailableThemes(): Promise<Theme[]> {
 }
 
 export async function loadTheme(
-  theme_path: string
+  theme_address: string
 ): Promise<{ theme: Theme; data: string }> {
   // load theme file
-  const effective_path = resolveThemeAddress(theme_path)
-  log.debug('load theme file', theme_path, effective_path)
+  const effective_path = resolveThemeAddress(theme_address)
+  log.debug('load theme file', theme_address, effective_path)
   const rawTheme = await readFile(effective_path, 'utf-8')
   let themedata
   let theme_meta: ReturnType<typeof parseThemeMetaData>
@@ -87,7 +87,7 @@ export async function loadTheme(
     theme: {
       name: theme_meta.name,
       description: theme_meta.description,
-      address: theme_path,
+      address: theme_address,
     },
     data: themedata,
   }
