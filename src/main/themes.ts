@@ -130,7 +130,10 @@ export function resolveThemeAddress(address: string): string {
   } else {
     throw 'unknown "location", valid locations are dc or custom'
   }
-  const result = join(realPath, addressParts[1] + '.scss')
+  const result = join(
+    realPath,
+    addressParts[1].replace(/\/|\\|../g, '') + '.scss'
+  )
 
   if (existsSync(result)) {
     return result
