@@ -34,12 +34,8 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
 
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
-    await DeltaBackend.call(
-      'contacts.changeNickname',
-      contactId,
-      newName
-    )
-    setContact({...contact, displayName: newName})
+    await DeltaBackend.call('contacts.changeNickname', contactId, newName)
+    setContact({ ...contact, displayName: newName })
   }
 
   return (
