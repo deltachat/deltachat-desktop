@@ -140,6 +140,7 @@ export function DeltaDialogImportQrInner({
                   onError={handleError}
                   onScan={handleScan}
                   style={{ width: '100%' }}
+                  facingMode='user'
                 />
               </div>
             </div>
