@@ -50,6 +50,7 @@
     <string name="email_address">Адрес эл.почты</string>
     <string name="bad_email_address">Неправильный адрес эл.почты.</string>
     <string name="password">Пароль</string>
+    <string name="existing_password">Существующий пароль</string>
     <string name="now">Сейчас</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Опасность</string>
@@ -288,7 +289,7 @@
     <string name="chat_all_archived">Все чаты заархивированы.\nНажмите на \"+\" для начала нового чата.</string>
     <string name="chat_share_with_title">Поделиться с</string>
     <string name="chat_input_placeholder">Сообщение</string>
-    <string name="chat_archived_label">Ахивировано</string>
+    <string name="chat_archived_label">Архивировано</string>
     <string name="chat_no_messages">Нет сообщений.</string>
     <string name="chat_self_talk_subtitle">Сообщения отправленные себе</string>
     <string name="saved_messages">Сохранённые сообщения</string>
@@ -355,7 +356,6 @@
     <string name="login_auth_method">Метод авторизации</string>
     <string name="login_info_oauth2_title">Продолжить упрощенную настройку?</string>
     <string name="login_info_oauth2_text">Введённый адрес электронной почты поддерживает упрощённую настройку (OAuth2).\n\nНа следующем шаге разрешите, пожалуйста, Delta Chat выступать в качестве Вашего приложения для чата с помощью электронной почты.\n\nУ Delta Chat нет серверов, Ваши данные остаются на Вашем устройстве!</string>
-    <string name="login_info_gmail_text">Для учётных записей GMail необходимо задать пароль для приложений (App-Password), если включена двухфакторная аутентификация (2FA). Если эти настройки недоступны, вам нужно активировать параметр «Менее безопасные приложения» (Less Secure Apps).</string>
     <string name="login_certificate_checks">Проверки сертификатов</string>
     <string name="login_error_mail">Укажите действительный адрес эл. почты</string>
     <string name="login_error_server">Укажите действительный сервер / IP адрес</string>
@@ -374,8 +374,11 @@
     <string name="accept_invalid_certificates">Принимать недействительные сертификаты</string>
 
     <string name="used_settings">Используемые настройки:</string>
+    <string name="switch_account">Сменить аккаунт</string>
+    <string name="add_account">Добавить аккаунт</string>
     <string name="delete_account">Удалить аккаунт</string>
     <string name="delete_account_ask">Вы уверены, что хотите удалить данные учётной записи?</string>
+    <string name="switching_account">Меняем аккаунт...</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -470,7 +473,7 @@
     <string name="pref_watch_mvbox_folder">Следить за папкой DeltaChat</string>
     <string name="pref_send_copy_to_self">Отправлять копию себе</string>
     <string name="pref_auto_folder_moves">Автоматически Перемещать в папку DeltaChat</string>
-    <string name="pref_auto_folder_moves_explain">Чаты были перемещены, чтобы избежать путаницы в папке Входящие</string>
+    <string name="pref_auto_folder_moves_explain">Сообщения чатов переносятся, чтобы избежать путаницы в папке «Входящие»</string>
     <string name="pref_email_interaction_title">Взаимодействие с электронной почтой</string>
     <string name="pref_show_emails">Показывать обычную почту</string>
     <string name="pref_show_emails_no">Нет, только чаты</string>
@@ -487,6 +490,27 @@
     <string name="pref_background_default_color">Цвет по умолчанию</string>
     <string name="pref_background_custom_image">Пользовательское изображение</string>
     <string name="pref_background_custom_color">Пользовательский цвет</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Надежное фоновое соединение</string>
+    <string name="pref_reliable_service_explain">Требует постоянного уведомления</string>
+
+
+    <!-- automatically delete message -->
+    <string name="autodel_title">Автоматическое удаление сообщений</string>
+    <string name="autodel_title_short">Автоматическое удаление</string>
+    <string name="autodel_device_title">Удалять сообщения с устройства</string>
+    <string name="autodel_server_title">Удалять сообщения с сервера</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Вы хотите удалить %1$d сообщений сейчас и все новые загруженные сообщения \"%2$s\" в будущем?\n\n• Это включает в себя все медиафайлы\n\n• Сообщения будут удалены независимо от того, были ли они прочитаны\n\n• \"Сохраненные сообщения\" будут пропущены при локальном удалении</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Вы хотите удалить %1$d сообщений сейчас и все новые загруженные сообщения \"%2$s\" в будущем?\n\n• Это включает в себя все медиафайлы\n\n• Это также удалит почту, затронутую опцией \"Показывать обычную почту\"\n\n• \"Сохраненные сообщения\" также будут удалены с сервера</string>
+    <string name="autodel_confirm">Я понимаю, удалите все эти сообщения</string>
+    <string name="autodel_at_once">Сразу</string>
+    <string name="autodel_after_1_hour">Через 1 час</string>
+    <string name="autodel_after_1_day">Через 1 день</string>
+    <string name="autodel_after_1_week">Через 1 неделю</string>
+    <string name="autodel_after_4_weeks">Через 4 недели</string>
+    <string name="autodel_after_1_year">Через 1 год</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -554,6 +578,10 @@
     <string name="qrshow_join_contact_hint">Отсканируйте, чтобы создать контакт с %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">Для настройки по QR коду необходимо интернет соединение. Сначала подключитесь к сети интернет.</string>
     <string name="qrshow_join_contact_no_connection_toast">Нет соединения к интернету, невозможно начать процесс настройки по QR коду.</string>
+    <string name="qraccount_ask_create_and_login">Создать новый адрес электронной почты на \"%1$s\" и войти?</string>
+    <string name="qraccount_success_enter_name">Вход удался—ваш адрес электронной почты %1$s\n\nЕсли хотите, вы можете ввести имя и установить аватар, которые будут отображаться людям, которым вы пишете.</string>
+    <string name="qraccount_qr_code_cannot_be_used">Отсканированный QR-код не может быть использован для создания нового аккаунта.</string>
+    <string name="qraccount_use_on_new_install">Отсканированный QR-код предназначен для создания нового аккаунта. Вы можете отсканировать QR-код при установке Delta Chat.</string>
     <string name="contact_verified">%1$s подтвержден.</string>
     <string name="contact_not_verified">Невозможно подтвердить %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -667,7 +695,7 @@
     <string name="user_location_permission_explanation">Для отображения и публикации вашего местоположения Delta Chat необходимо разрешение на местоположение.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Статус доставки: Ошибка</string>
     <string name="a11y_encryption_padlock">Значок шифрования</string>
     <string name="a11y_delivery_status_sending">Статус доставки: Отправляется</string>
@@ -684,4 +712,11 @@
     <string name="InfoPlist_NSContactsUsageDescription">Предоставление доступа к адресной книге позволяет общаться с имеющимися на устройстве контактами.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Предоставление доступа к микрофону позволяет записывать звук.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Предоставление доступа к галерее фотографий позволяет загружать изображения из неё.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">Как вы уже могли заметить, система теперь отображает уведомление «Соединение в фоновом режиме включено».\n\n👉 Это уведомление предотвращает остановку соединения между Delta Chat и вашим сервером операционной системой.\n\n👉 Если уведомление исчезает без каких-либо действий с вашей стороны, значит соединение все равно было остановлено\nЕсли вы считаете, что это странно — мы полностью согласны — но многие производители телефонов требуют именно этого. Сайт https://dontkillmyapp.com показывает некоторые обходные пути.\n\nТем не менее, мы рады, что нам удалось улучшить доставку сообщений в фоне с помощью этого изменения и удовлетворить пожелания многих пользователей — спасибо за сообщения об ошибках. 🤗</string>
+
+
 </resources>

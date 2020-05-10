@@ -50,11 +50,12 @@
     <string name="email_address">Indirizzo email</string>
     <string name="bad_email_address">Indirizzo non valido</string>
     <string name="password">Password</string>
+    <string name="existing_password">Password esistente</string>
     <string name="now">Ora</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Attenzione</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d min</string>
+    <string name="n_min_ago">%d min.</string>
     <string name="today">Oggi</string>
     <string name="yesterday">Ieri</string>
     <string name="this_week">Questa settimana</string>
@@ -64,7 +65,7 @@
     <!-- Translators: show beside messages that are "N minutes old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
-        <item quantity="other">%d min</item>
+        <item quantity="other">%d min.</item>
     </plurals>
     <!-- Translators: show beside messages that are "N hours old". prefer a short string, prefer abbreviations if they're well-known -->
     <plurals name="n_hours">
@@ -133,8 +134,8 @@
     <string name="menu_new_group">Nuovo gruppo</string>
     <string name="menu_new_verified_group">Nuovo gruppo verificato</string>
     <string name="menu_send">Inviato</string>
-    <string name="menu_toggle_keyboard">Alterna tastiera emoji</string>
-    <string name="menu_edit_group">Modifica grupp</string>
+    <string name="menu_toggle_keyboard">Attiva/Disattiva tastiera emoji</string>
+    <string name="menu_edit_group">Modifica gruppo</string>
     <string name="menu_group_name_and_image">Nome e immagine gruppo</string>
     <string name="menu_show_map">Mostra mappa</string>
     <string name="menu_show_global_map">Mostra tutte le posizioni</string>
@@ -180,9 +181,18 @@
     <string name="title_share_location">Condividi posizione con tutti i membri</string>
     <string name="device_talk">Messaggi del dispositivo</string>
     <string name="device_talk_subtitle">Messaggi generati localmente</string>
-    <string name="device_talk_explain">I messaggio in questa chat vengono generati localmente da Delta Chat. Gli sviluppatori li usano per informarti sugli aggiornamenti o sui problemi d\'utilizzo.</string>
+    <string name="device_talk_explain">I messaggi in questa chat vengono generati localmente da Delta Chat. Gli sviluppatori li usano per informarti sugli aggiornamenti o sui problemi d\'utilizzo.</string>
     <string name="device_talk_welcome_message">Benvenuto in Delta Chat! - Delta Chat ha l\'aspetto e lo stile di altre popolari applicazioni di messaggistica, ma non costringe ad un controllo centralizzato, al tracciamento o alla vendita tua,  dei tuoi amici, colleghi o familiari a grandi organizzazioni.\n \n Tecnicamente, Delta Chat è un\'applicazione di posta elettronica con un\'interfaccia moderna. L\'email in una nuova veste 👻 \n \nUtilizza Delta Chat con chiunque: basta conoscere il loro indirizzo e-mail. I destinatari non hanno bisogno di installare Delta Chat, visitare siti web o iscriversi da nessuna parte -  ma, naturalmente se lo desiderano, puoi suggerirgli 👉 https://get.delta.chat</string>
     <string name="edit_contact">Modifica contatto</string>
+    <!-- Translators: "Pin" here is the verb for pinning, making sth. sticky. this is NOT the appreviation for "pin number". -->
+    <string name="pin_chat">Fissa chat</string>
+    <!-- Translators: this is the opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <string name="unpin_chat">Sblocca chat</string>
+    <!-- Translators: this is the verb for pinning, making sth. sticky. this is NOT the appreviation for "pin number". -->
+    <string name="pin">Fissa</string>
+    <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
+    <string name="unpin">Sblocca</string>
+
     <string name="mute_for_one_hour">Silenzia per 1 ora</string>
     <string name="mute_for_two_hours">Silenzia per 2 ore</string>
     <string name="mute_for_one_day">Silenzia per 1 giorno</string>
@@ -215,10 +225,10 @@
     <string name="ask_delete_contacts">Eliminare il contatto? Questo eliminerà per sempre il contatto selezionato.\n\nI contatti con chat attive o presenti nella rubrica del sistema non possono essere eliminati permanentemente.</string>
     <string name="ask_delete_contact">Vuoi eliminare per sempre %1$s?\n\nI contatti con chat attive e quelli in rubrica non possono essere eliminati permanentemente.</string>
     <string name="cannot_delete_contacts_in_use">Impossibile eliminare contatti con chat in corso.</string>
-    <string name="ask_start_chat_with">Chattare with %1$s?</string>
+    <string name="ask_start_chat_with">Chattare con %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Rimuovere %1$s dal gruppo?</string>
-    <string name="info_outdated_app_title">La applicazione non è aggiornata.</string>
+    <string name="info_outdated_app_title">L\' applicazione non è aggiornata.</string>
     <string name="info_outdated_app_text">Sembra che tu abbia installato Delta Chat da una sorgente che non fornisce aggiornamenti automatici (es. GitHub). Scaricala da uno store per riceve nuove funzionalità e bug fix.</string>
     <string name="info_outdated_app_dialog_title">Aggiorna sorgenti</string>
     <string name="info_outdated_app_dialog_text">Delta Chat è disponibile su:</string>
@@ -323,8 +333,7 @@
     <string name="login_smtp_security">Sicurezza SMTP</string>
     <string name="login_auth_method">Metodo di autorizzazione</string>
     <string name="login_info_oauth2_title">Usare il setup semplificato?</string>
-    <string name="login_info_oauth2_text">L\'indirizzo email inserito supporta l\'autenticazione semplificata (OAuth2).\n\nContinuando, puoi autorizzare Delta Chat ad operare come app di messaggistica via e-mail.\n\nNon esistono server di Delta Chat, i tuoi dati restano nel tuo dispositivo!</string>
-    <string name="login_info_gmail_text">Per gli account GMail è necessario creare una password per le app se è attiva la verifica in 2 passaggi. Se queste impostazioni non sono disponibili, è necessario abilitare le app meno sicure.</string>
+    <string name="login_info_oauth2_text">L\'indirizzo email inserito supporta l\'autenticazione semplificata (OAuth2.0).\n\nContinuando, puoi autorizzare Delta Chat ad operare come app di messaggistica via e-mail.\n\nNon esistono server di Delta Chat, i tuoi dati restano nel tuo dispositivo!</string>
     <string name="login_certificate_checks">Controlli certificato</string>
     <string name="login_error_mail">Inserisci un indirizzo email valido</string>
     <string name="login_error_server">Inserisci un server / indirizzo IP valido</string>
@@ -343,8 +352,11 @@
     <string name="accept_invalid_certificates">Accetta certificati non validi</string>
 
     <string name="used_settings">Impostazioni in uso:</string>
+    <string name="switch_account">Cambia account</string>
+    <string name="add_account">Aggiungi account</string>
     <string name="delete_account">Elimina account</string>
     <string name="delete_account_ask">Sei certo di voler eliminare i dati dell\'account?</string>
+    <string name="switching_account">Cambio account</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -360,7 +372,7 @@
     <string name="pref_profile_photo">Foto profilo</string>
     <string name="pref_blocked_contacts">Contatti bloccati</string>
     <string name="pref_profile_photo_remove_ask">Rimuvere la foto profilo?</string>
-    <string name="pref_help_url">https://delta.chat/en/help</string>
+    <string name="pref_help_url">https://delta.chat/it/help</string>
     <string name="pref_password_and_account_settings">Password e account</string>
     <string name="pref_who_can_see_this_information">Chi può vedere queste informazioni?</string>
     <string name="pref_who_can_see_profile_explain">L\'immagine del tuo profilo e il tuo nome saranno mostrati insieme ai tuoi messaggi quando comunichi con altri utenti. Le informazioni già inviate non possono essere cancellate o rimosse.</string>
@@ -456,6 +468,27 @@
     <string name="pref_background_default_color">Colore predefinito</string>
     <string name="pref_background_custom_image">Immagine personalizzata</string>
     <string name="pref_background_custom_color">Colore personalizzato</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Connessione in background affidabile</string>
+    <string name="pref_reliable_service_explain">Richiede una notifica permanente</string>
+
+
+    <!-- automatically delete message -->
+    <string name="autodel_title">Auto eliminazione dei messaggi</string>
+    <string name="autodel_title_short">Auto-eliminazione</string>
+    <string name="autodel_device_title">Elimina messaggi dal dispositivo</string>
+    <string name="autodel_server_title">Elimina messaggi dal server</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi arrivati \"%2$s\" nel futuro?\n\n• Questo include tutti i media\n\n• I messaggi verranno eliminati anche se non sono stati letti\n\n• I \"Messaggi salvati\" vengono preservati dalla cancellazione locale.</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi arrivati \"%2$s\" nel futuro?\n\n• Questo include tutti i media\n\n• Verranno eliminate anche le email legate all\'opzione \"Mostra email classiche\"\n\n• Anche i \"Messaggi salvati\" verranno eliminati dal server.</string>
+    <string name="autodel_confirm">Ho capito, elimina tutti i messaggi</string>
+    <string name="autodel_at_once">Una volta</string>
+    <string name="autodel_after_1_hour">Dopo 1 ora</string>
+    <string name="autodel_after_1_day">Dopo 1 giorno</string>
+    <string name="autodel_after_1_week">Dopo 1 settimana</string>
+    <string name="autodel_after_4_weeks">Dopo 4 settimane</string>
+    <string name="autodel_after_1_year">Dopo 1 anno</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -483,7 +516,7 @@
     <string name="systemmsg_member_removed">Membro %1$s rimosso.</string>
     <string name="systemmsg_group_left">Gruppo abbandonato.</string>
     <string name="systemmsg_read_receipt_subject">Ricevuta di lettura</string>
-    <string name="systemmsg_read_receipt_body">Questa è una ricevuta di lettura del messaggio \"%1$s\".\n\nCiò significa che il messaggio è stato mostrato nel dispositivo del destinatario, ma necessariamente che il contenuto è stato letto.</string>
+    <string name="systemmsg_read_receipt_body">Questa è una ricevuta di lettura del messaggio \"%1$s\".\n\nCiò significa che il messaggio è stato mostrato nel dispositivo del destinatario, ma non necessariamente che il contenuto è stato letto.</string>
     <string name="systemmsg_cannot_decrypt">Questo messaggio non può essere decrittato.\n\n• Potrebbe essere sufficiente rispondere a questo messaggio e chiedere al mittente di rispedirlo.\n\n• Se hai reinstallato Delta Chat o usi un altro client email dovresti inviare un Messaggio di configurazione Autocrypt dal dispositivo originario.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
     <string name="systemmsg_action_by_me">%1$s da me.</string>
@@ -503,7 +536,7 @@
 
 
     <!-- qr code stuff -->
-    <string name="qr_code">Codic QR</string>
+    <string name="qr_code">Codice QR</string>
     <string name="qrscan_title">Scansiona codice QR</string>
     <string name="qrscan_hint">Posiziona la camera sopra il codice QR</string>
     <string name="qrscan_ask_join_group">Vuoi entrare nel gruppo \"%1$s\"?</string>
@@ -523,6 +556,10 @@
     <string name="qrshow_join_contact_hint">Scansionalo per creare un contatto per %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">Il setup tramite codice QR richiede una connessione internet. Collegati a una rete prima di procedere.</string>
     <string name="qrshow_join_contact_no_connection_toast">Nessuna connessione internet, impossibile effettuare l\'impostazione tramite QR.</string>
+    <string name="qraccount_ask_create_and_login">Creo un nuovo indirizzo email su \"%1$s\" e accedo?</string>
+    <string name="qraccount_success_enter_name">Accesso completato—il tuo indirizzo email è %1$s\n\nSe vuoi, puoi inserire un nome e un\'immagine profilo che verranno mostrati a chi ti scrive.</string>
+    <string name="qraccount_qr_code_cannot_be_used">Il codice QR scansionato non può essere usato per creare un nuovo account.</string>
+    <string name="qraccount_use_on_new_install">Il codice QR scansionato serve a creare un nuovo account. Puoi scansionare il codice quando configuri una nuova installazione di Delta Chat.</string>
     <string name="contact_verified">%1$s verificato.</string>
     <string name="contact_not_verified">Impossibile verificare %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -539,7 +576,7 @@
     <string name="notify_media_message">Messaggio multimediale</string>
     <string name="notify_reply_button">Rispondi</string>
     <string name="notify_new_message">Nuovo messaggio</string>
-    <string name="notify_background_connection_enabled">Connession in background abilitata</string>
+    <string name="notify_background_connection_enabled">Connessione in background abilitata</string>
     <string name="notify_priority_high">Alta</string>
     <string name="notify_priority_max">Massima</string>
     <string name="notify_name_and_message">Nome e messaggio</string>
@@ -607,7 +644,7 @@
     <string name="autocrypt_key_transfer_desktop">Trasferimento chiave Autocrypt</string>
     <string name="initiate_key_transfer_desktop">Un \'Messaggio di configurazione Autocrypt\' condivide in sicurezza le tue impostazioni end-to-end con altre app compatibili. Le impostazioni sono criptate con un codice mostrato qui che deve essere inserito nell\'altro dispositivo.</string>
     <string name="reply_to_message_desktop">Rispondi al messaggio</string>
-    <string name="select_group_image_desktop">Seleziona immagine grupp</string>
+    <string name="select_group_image_desktop">Seleziona immagine gruppo</string>
     <string name="imex_progress_title_desktop">Avanzamento backup</string>
     <string name="download_attachment_desktop">Scarica allegato</string>
     <string name="export_backup_desktop">Esporta backup</string>
@@ -634,7 +671,7 @@
     <string name="user_location_permission_explanation">Delta Chat richiede i permessi di localizzazione per mostrare e condividere la posizione.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Stato di consegna: errore</string>
     <string name="a11y_encryption_padlock">Lucchetto di cifratura</string>
     <string name="a11y_delivery_status_sending">Stato consegna: in uscita</string>
@@ -651,4 +688,11 @@
     <string name="InfoPlist_NSContactsUsageDescription">Autorizzare l\'accesso alla rubrica ti permette di chattare con i contatti nel tuo dispositivo.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Autorizzare l\'accesso al microfono ti permette di registrare audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Autorizzare l\'accesso alla galleria ti permette di caricare foto da essa.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">Potresti aver già notato che esiste una notifica \"Connessione in background abilitata\" mostrata dal sistema.\n\n 👉 La notifica normalmente impedisce al sistema operativo di interrompere la connessione tra Delta Chat e il tuo server.\n\n👉 Se la notifica scompare senza alcuna azione da parte tua, la connessione è stata probabilmente soppressa.\nSe pensi che sia strano, siamo totalmente d\'accordo - ma molti produttori fanno esattamente questo. Il sito https://dontkillmyapp.com mostra alcune soluzioni alternative.\n\nTuttavia, siamo felici di poter migliorare la ricezione dei messaggi in background con questa modifica e di soddisfare le richieste di molti utenti, grazie per avercelo segnalato 🤗</string>
+
+
 </resources>

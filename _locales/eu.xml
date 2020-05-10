@@ -50,6 +50,7 @@
     <string name="email_address">E-mail helbidea</string>
     <string name="bad_email_address">E-mail helbide okerra.</string>
     <string name="password">Pasahitza</string>
+    <string name="existing_password">Oraingo pasahitza</string>
     <string name="now">Orain</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Arriskua</string>
@@ -333,7 +334,6 @@
     <string name="login_auth_method">Baimentze metodoa</string>
     <string name="login_info_oauth2_title">Jarraitu ezarpen sinplifikatuarekin</string>
     <string name="login_info_oauth2_text">Sartu duzun e-mail helbideak ezarpen sinplifikatua onartzen du (OAuth2).\n\nHurrengo urratsean, baimendu Detla Chat zure e-mail bidezko txat aplikazio gisa erabili ahal izateko.\n\nEz dago Delta Chat zerbitzaririk, zure datuak zure gailuan mantentzen dira!</string>
-    <string name="login_info_gmail_text">GMail kontu bat erabiltzeko Aplikazio-pasahitza sortu behar duzu 2FA aktibatuta baduzu. Ezarpen hau eskuragarri ez baduzu, aplikazio ez hain seguruak gaitu behar dituzu.</string>
     <string name="login_certificate_checks">Ziurtagiri-egiaztaketak</string>
     <string name="login_error_mail">Sartu baliozko e-mail helbide bat</string>
     <string name="login_error_server">Sartu baliozko zerbitzari / IP helbide bat</string>
@@ -352,8 +352,11 @@
     <string name="accept_invalid_certificates">Onartu ziurtagiri baliogabeak</string>
 
     <string name="used_settings">Erabilitako ezarpenak:</string>
+    <string name="switch_account">Aldatu kontua</string>
+    <string name="add_account">Gehitu kontua</string>
     <string name="delete_account">Ezabatu kontua</string>
     <string name="delete_account_ask">Ziur al zaude zure kontuaren datuak ezabatu nahi dituzula?</string>
+    <string name="switching_account">Kontua aldatzen...</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -404,7 +407,7 @@
     <string name="pref_light_theme">Argia</string>
     <string name="pref_dark_theme">Iluna</string>
     <string name="pref_appearance">Itxura</string>
-    <string name="pref_theme">Gaia</string>
+    <string name="pref_theme">Azala</string>
     <string name="pref_language">Hizkuntza</string>
     <string name="pref_incognito_keyboard">Teklatu pribatua</string>
     <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
@@ -465,6 +468,22 @@
     <string name="pref_background_default_color">Lehenetsitako kolorea</string>
     <string name="pref_background_custom_image">Irudi pertsonalizatua</string>
     <string name="pref_background_custom_color">Kolore pertsonalizatua</string>
+    <!-- automatically delete message -->
+    <string name="autodel_title">Automatikoki ezabatu mezuak</string>
+    <string name="autodel_title_short">Automatikoki ezabatu</string>
+    <string name="autodel_device_title">Ezabatu mezuak gailutik</string>
+    <string name="autodel_server_title">Ezabatu mezuak zerbitzaritik</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">%1$d mezu ezabatu nahi dituzu orain eta \"%2$s\" etorkizunean jasotako mezuak ere?\n\n• Honek multimedia ere barne hartzen du\n\n• Mezuak ikusi ala ez ezabatuko dira\n\n• \"Gordetako mezuak\" ez dira lokalki ezabatuko</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">%1$d mezu ezabatu nahi dituzu orain eta \"%2$s\" etorkizunean jasotako mezuak ere?\n\n• Honek \"Erakutsi e-mail klasikoak\" aukerak ekarritako e-mailei ere eragingo die\n\n• \"Gordetako mezuak\" ere zerbitzaritik ezabatuko dira</string>
+    <string name="autodel_confirm">Ulertzen dut, ezabatu mezuk guzti hauek</string>
+    <string name="autodel_at_once">Berehala</string>
+    <string name="autodel_after_1_hour">Ordubete eta gero</string>
+    <string name="autodel_after_1_day">Egun bat eta gero</string>
+    <string name="autodel_after_1_week">Aste bat eta gero</string>
+    <string name="autodel_after_4_weeks">4 aste eta gero</string>
+    <string name="autodel_after_1_year">Urtebete eta gero</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -532,6 +551,10 @@
     <string name="qrshow_join_contact_hint">Eskaneatu hau %1$s erabiltzailearen kontaktua ezartzeko</string>
     <string name="qrshow_join_contact_no_connection_hint">Ezarpen QR kodeak Internet konexioa behar du. Konektatu sarera jarraitu aurretik</string>
     <string name="qrshow_join_contact_no_connection_toast">Ez dago Internet konexiorik, ezin da QR kode bidezko ezarpena aplikatu</string>
+    <string name="qraccount_ask_create_and_login">Sortu kontu berria \"%1$s\" zerbitzarian eta saioa han hasi?</string>
+    <string name="qraccount_success_enter_name">Saioa ongi hasi duzu, zure e-mail helbidea %1$s da\n\n Nahiez gero, izen eta abatar bat jarri ditzakezu, zure harremanek ikusiko dituztenak</string>
+    <string name="qraccount_qr_code_cannot_be_used">Eskaneatutako QR kodea ezin da kontu berri bat ezartzeko erabili.</string>
+    <string name="qraccount_use_on_new_install">Eskaneatutako QR kodea kontu berri bat ezartzeko da. QR kodea Delta Chat instalazio berri batean eskaneatu dezakezu.</string>
     <string name="contact_verified">%1$s egiaztatuta.</string>
     <string name="contact_not_verified">Ezin da %1$s egiaztatu</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
@@ -644,7 +667,7 @@ Kideak beste kide batzuek egiatzen dituzte bigarren faktore batekin eta mezuak b
     <string name="user_location_permission_explanation">Delta Chat-ek kokalekua atzitzeko baimena behar du zure kokalekua erakutsi eta partekatu ahal izateko.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Bidalketa-egoera: Errorea</string>
     <string name="a11y_encryption_padlock">Zifratze giltzarrapoa</string>
     <string name="a11y_delivery_status_sending">Bidalketa-egoera: Bidaltzen</string>
@@ -661,4 +684,6 @@ Kideak beste kide batzuek egiatzen dituzte bigarren faktore batekin eta mezuak b
     <string name="InfoPlist_NSContactsUsageDescription">Kontaktuen liburua atzitzeko baimena emateak zure gailuko kontaktuekin txateatzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Mikrofonoa  atzitzeko baimena emateak audioa grabatzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Argazkien bilduma atzitzeko baimena emateak bertatik argazkiak igotzea ahalbidetzen dizu.</string>
-</resources>
+
+
+    </resources>

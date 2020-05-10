@@ -50,6 +50,7 @@
     <string name="email_address">E-mailadres</string>
     <string name="bad_email_address">Ongeldig e-mailadres.</string>
     <string name="password">Wachtwoord</string>
+    <string name="existing_password">Bestaand wachtwoord</string>
     <string name="now">Nu</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Gevarenzone</string>
@@ -333,7 +334,6 @@
     <string name="login_auth_method">Autorisatiemethode</string>
     <string name="login_info_oauth2_title">Wil je doorgaan met vereenvoudigd instellen?</string>
     <string name="login_info_oauth2_text">Het ingevoerde e-mailadres ondersteunt vereenvoudigd instellen (OAuth2).\n\nTijdens de volgende stap moet je Delta Chat toestaan te fungeren als je e-mailapp.\n\nDelta Chat heeft geen eigen servers; jóuw gegevens blijven op jóuw apparaat!</string>
-    <string name="login_info_gmail_text">Bij Gmail-accounts moet je een app-wachtwoord creëren als je authenticatie in twee stappen hebt ingeschakeld. Als dit niet beschikbaar is, schakel dan \'Minder veilige apps\' in.</string>
     <string name="login_certificate_checks">Certificaatcontrole</string>
     <string name="login_error_mail">Voer een geldig e-mailadres in</string>
     <string name="login_error_server">Voer een geldig(e) IP-adres/server in</string>
@@ -352,8 +352,11 @@
     <string name="accept_invalid_certificates">Ongeldige certificaten accepteren</string>
 
     <string name="used_settings">Gebruikte instellingen:</string>
+    <string name="switch_account">Ander account kiezen</string>
+    <string name="add_account">Account toevoegen</string>
     <string name="delete_account">Account verwijderen</string>
     <string name="delete_account_ask">Weet je zeker dat je je accountgegevens wilt verwijderen?</string>
+    <string name="switching_account">Bezig met overschakelen…</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -465,22 +468,27 @@
     <string name="pref_background_default_color">Standaard kleur</string>
     <string name="pref_background_custom_image">Eigen afbeelding</string>
     <string name="pref_background_custom_color">Eigen kleur</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Betrouwbare achtergrondverbinding</string>
+    <string name="pref_reliable_service_explain">Vereist een permanente melding</string>
+
 
     <!-- automatically delete message -->
     <string name="autodel_title">Berichten automatisch verwijderen</string>
     <string name="autodel_title_short">Automatisch verwijderen</string>
     <string name="autodel_device_title">Berichten verwijderen van apparaat</string>
     <string name="autodel_server_title">Berichten verwijderen van server</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_device_ask">Wil je nu %1$d berichten verwijderen en toekomstige berichten %2$s?\n\n• Dit omvat alle media\n\n• Berichten worden verwijderd, ongeacht of ze bekeken zijn\n\n• Het gesprek \'Opgeslagen berichten\' wordt overgeslagen</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_server_ask">Wil je nu %1$d berichten verwijderen en toekomstige berichten %2$s?\n\n• Dit omvat alle media\n\n• Berichten worden verwijderd, ongeacht of ze bekeken zijn\n\n• Het gesprek \'Opgeslagen berichten\' wordt eveneens verwijderd van de server</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Wil je nu %1$d berichten verwijderen en toekomstige berichten \'%2$s\'?\n\n• Dit omvat alle media\n\n• Berichten worden verwijderd, ongeacht of ze bekeken zijn\n\n• Het gesprek \'Opgeslagen berichten\' wordt overgeslagen</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Wil je nu %1$d berichten verwijderen en toekomstige berichten \'%2$s\'?\n\n• Dit omvat alle media\n\n• Berichten worden verwijderd, ongeacht of ze bekeken zijn\n\n• Het gesprek \'Opgeslagen berichten\' wordt eveneens verwijderd van de server</string>
     <string name="autodel_confirm">Ik begrijp het; verwijder alle berichten</string>
     <string name="autodel_at_once">Direct</string>
     <string name="autodel_after_1_hour">Na 1 uur</string>
     <string name="autodel_after_1_day">Na 1 dag</string>
     <string name="autodel_after_1_week">Na 1 week</string>
     <string name="autodel_after_4_weeks">Na 4 weken</string>
+    <string name="autodel_after_1_year">Na 1 jaar</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -663,7 +671,7 @@
     <string name="user_location_permission_explanation">Delta Chat heeft de locatiemachtiging nodig om je locatie te kunnen tonen en delen.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Bezorgstatus: afleveren mislukt</string>
     <string name="a11y_encryption_padlock">Versleutelingsslot</string>
     <string name="a11y_delivery_status_sending">Bezorgstatus: bezig met versturen</string>
@@ -680,4 +688,11 @@
     <string name="InfoPlist_NSContactsUsageDescription">Geef Delta Chat toegang tot je adresboek om gesprekken te voeren met contactpersonen. Delta Chat heeft geen servers, dus je contactpersonen worden niet opgestuurd.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Geef Delta Chat toegang tot je microfoon om audio op te nemen voor spraakberichten en in video\'s.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Geef Delta Chat toegang tot je foto\'s om afbeeldingen te versturen.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">Je hebt wellicht al gemerkt dat er een systeemmelding \'Achtergrondverbinding ingeschakeld\' wordt getoond.\n\n👉 Deze melding voorkomt dat het systeem de verbinding tussen Delta Chat en je server verbreekt.\n\n👉 Als de melding zomaar verdwijnt, dan is de verbinding waarschijnlijk verbroken.\nVind je dat vreemd? Wij ook. Maar helaas doen sommige fabrikanten dit. Op de website https://dontkillmyapp.com vind je mogelijke oplossingen hiervoor.\n\nDesalniettemin zijn we blij dat we op deze manier het ophalen van berichten op de achtergrond hebben verbeterd en daarmee een grote gebruikerswens in vervulling hebben laten gaan. Bedankt voor alle steun 🤗</string>
+
+
 </resources>

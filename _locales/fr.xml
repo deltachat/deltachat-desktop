@@ -333,7 +333,6 @@
     <string name="login_auth_method">Méthode d\'autorisation</string>
     <string name="login_info_oauth2_title">Continuer avec une configuration simplifiée ?</string>
     <string name="login_info_oauth2_text">L\'adresse de courriel saisie prend en charge une configuration simplifiée (OAuth2.0). \n\nDans l\'étape suivante, autorisez Delta Chat à agir comme votre application de Chat avec courriel . Il n\'y a pas de serveur Delta Chat, vos données restent sur votre appareil !</string>
-    <string name="login_info_gmail_text">Pour les comptes GMail, vous devez créer un mot de passe d\'application si vous avez activé 2FA. Si ce paramètre n\'est pas disponible, vous devez autoriser des applications moins sécurisées.</string>
     <string name="login_certificate_checks">Vérification du certificat</string>
     <string name="login_error_mail">Entrez une adresse email valide</string>
     <string name="login_error_server">Entre un serveur / adresse IP valide</string>
@@ -354,7 +353,6 @@
     <string name="used_settings">Paramètres utilisés :</string>
     <string name="delete_account">Supprimer le compte</string>
     <string name="delete_account_ask">Êtes-vous sûr de vouloir supprimer les données de votre compte ?</string>
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Transférer à …</string>
@@ -465,7 +463,6 @@
     <string name="pref_background_default_color">Couleur par défaut</string>
     <string name="pref_background_custom_image">Image personnalisée</string>
     <string name="pref_background_custom_color">Couleur personnalisée</string>
-
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
     <string name="autocrypt_explain">Autocrypt est une nouvelle spécification ouverte pour le chiffrement automatique de bout en bout des courriels.\n\nVotre configuration de bout en bout est créée automatiquement si nécessaire et vous pouvez la transférer entre les périphériques avec les messages de configuration Autocrypt.</string>
@@ -643,7 +640,7 @@
     <string name="user_location_permission_explanation">DeltaChat a besoin de l\'autorisation de votre position pour l\'afficher et la partager.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">État de la livraison : Erreur</string>
     <string name="a11y_encryption_padlock">Cadenas de chiffrement</string>
     <string name="a11y_delivery_status_sending">État de la livraison : envoi en cours</string>
@@ -660,4 +657,6 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat utilise vos contacts pour montrer une liste d\'adresses de courriel auxquels vous pouvez écrire. Delta Chat n\'a pas de serveur, vos contacts ne sont envoyés nulle part.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat utilise votre micro pour enregistrer et envoyer des messages vocaux et des vidéos avec bande son.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat vous laisse choisir quelles photos envoyer de votre photothèque. </string>
-</resources>
+
+
+    </resources>

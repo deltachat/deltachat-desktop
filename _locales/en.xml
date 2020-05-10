@@ -50,6 +50,7 @@
     <string name="email_address">Email address</string>
     <string name="bad_email_address">Bad email address.</string>
     <string name="password">Password</string>
+    <string name="existing_password">Existing password</string>
     <string name="now">Now</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Danger</string>
@@ -333,7 +334,6 @@
     <string name="login_auth_method">Authorization method</string>
     <string name="login_info_oauth2_title">Continue with simplified setup?</string>
     <string name="login_info_oauth2_text">The entered email address supports a simplified setup (OAuth 2.0).\n\nIn the next step, please allow Delta Chat to act as your Chat over Email app.\n\nThere are no Delta Chat servers, your data stays on your device.</string>
-    <string name="login_info_gmail_text">For Gmail Accounts you need to create an App-Password if you have \"2-Step Verification\" enabled. If this setting is not available, you need to enable \"Less secure apps\".</string>
     <string name="login_certificate_checks">Certificate checks</string>
     <string name="login_error_mail">Please enter a valid email address</string>
     <string name="login_error_server">Please enter a valid server / IP address</string>
@@ -352,8 +352,11 @@
     <string name="accept_invalid_certificates">Accept invalid certificates</string>
 
     <string name="used_settings">Used settings:</string>
+    <string name="switch_account">Switch account</string>
+    <string name="add_account">Add account</string>
     <string name="delete_account">Delete account</string>
     <string name="delete_account_ask">Are you sure you want to delete your account data?</string>
+    <string name="switching_account">Switching account…</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -465,22 +468,27 @@
     <string name="pref_background_default_color">Default color</string>
     <string name="pref_background_custom_image">Custom image</string>
     <string name="pref_background_custom_color">Custom color</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Reliable background connection</string>
+    <string name="pref_reliable_service_explain">Requires a permanent notification</string>
+
 
     <!-- automatically delete message -->
     <string name="autodel_title">Auto-delete messages</string>
     <string name="autodel_title_short">Auto-delete</string>
     <string name="autodel_device_title">Delete messages from device</string>
     <string name="autodel_server_title">Delete messages from server</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_device_ask">Do you want to delete %1$d messages now and all newly fetched messages %2$s in the future?\n\n• This includes all media\n\n• Message will be deleted whether they were seen or not\n\n• \"Saved messages\" will be skipped from local deletion</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_server_ask">Do you want to delete %1$d messages now and all newly fetched messages %2$s in the future?\n\n• This includes all media\n\n• This will also delete emails affected by the \"Show classic emails\" option\n\n• \"Saved messages\" will be deleted from the server as well</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Do you want to delete %1$d messages now and all newly fetched messages \"%2$s\" in the future?\n\n• This includes all media\n\n• Messages will be deleted whether they were seen or not\n\n• \"Saved messages\" will be skipped from local deletion</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Do you want to delete %1$d messages now and all newly fetched messages \"%2$s\" in the future?\n\n• This includes all media\n\n• This will also delete emails affected by the \"Show classic emails\" option\n\n• \"Saved messages\" will be deleted from the server as well</string>
     <string name="autodel_confirm">I understand, delete all these messages</string>
     <string name="autodel_at_once">At once</string>
     <string name="autodel_after_1_hour">After 1 hour</string>
     <string name="autodel_after_1_day">After 1 day</string>
     <string name="autodel_after_1_week">After 1 week</string>
     <string name="autodel_after_4_weeks">After 4 weeks</string>
+    <string name="autodel_after_1_year">After 1 year</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -663,7 +671,7 @@
     <string name="user_location_permission_explanation">Delta Chat needs the location permission in order to show and share your location.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Delivery status: Error</string>
     <string name="a11y_encryption_padlock">Encryption padlock</string>
     <string name="a11y_delivery_status_sending">Delivery status: Sending</string>
@@ -680,4 +688,11 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat uses your contacts to show a list of email addresses you can write to. Delta Chat has no server, your contacts are not sent anywhere.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat uses your microphone to record and send voice messages and videos with sound.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat will let you choose which photos from your library to send.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">You may already have noticed, that there is a hint \"Background connection enabled\" shown by the system.\n\n👉 The hint normally prevents the operating system from killing the connection between Delta Chat and your server.\n\n👉 If the hint disappears without any action on your part, the connection has probably been killed anyway.\nIf you think this is weird, we totally agree - but many manufacturers do exactly that. The site https://dontkillmyapp.com shows some workarounds.\n\nHowever, we are happy that we could improve the receiving of messages in background with this change and could fulfil the requests of many users - thanks for reporting 🤗</string>
+
+
 </resources>

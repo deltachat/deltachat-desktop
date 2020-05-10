@@ -50,6 +50,7 @@
     <string name="email_address">电子邮件地址</string>
     <string name="bad_email_address">错误的电子邮件地址。</string>
     <string name="password">密码</string>
+    <string name="existing_password">现有密码</string>
     <string name="now">现在</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">危险</string>
@@ -322,7 +323,6 @@
     <string name="login_auth_method">认证方法</string>
     <string name="login_info_oauth2_title">使用简化设置继续？</string>
     <string name="login_info_oauth2_text">输入的电子邮件地址支持简化设置（OAuth 2.0）。\n\n在下一步中，请允许 Delta Chat 充当您的“通过电子邮件聊天”应用程序。\n\n不存在 Delta Chat 服务器，您的数据保留于您的设备！</string>
-    <string name="login_info_gmail_text">对于 GMail 帐户，如果您启用了“两步验证”，则需要创建应用专用密码。 如果此设置不可用，则需要启用“安全性较低的应用”。</string>
     <string name="login_certificate_checks">证书检查</string>
     <string name="login_error_mail">请输入有效的电子邮件地址</string>
     <string name="login_error_server">请输入有效的服务器 / IP 地址</string>
@@ -341,8 +341,11 @@
     <string name="accept_invalid_certificates">接受无效的证书</string>
 
     <string name="used_settings">已使用设置：</string>
+    <string name="switch_account">切换账户 </string>
+    <string name="add_account">添加账户</string>
     <string name="delete_account">删除账户</string>
     <string name="delete_account_ask">您确定要删除您的账户数据吗？</string>
+    <string name="switching_account">切换账户 …</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -454,6 +457,27 @@
     <string name="pref_background_default_color">默认颜色</string>
     <string name="pref_background_custom_image">自定义图像</string>
     <string name="pref_background_custom_color">自定义颜色</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">可靠后台连接</string>
+    <string name="pref_reliable_service_explain">需要一个永久通知</string>
+
+
+    <!-- automatically delete message -->
+    <string name="autodel_title">自动删除消息</string>
+    <string name="autodel_title_short">自动删除</string>
+    <string name="autodel_device_title">从设备删除消息</string>
+    <string name="autodel_server_title">从服务器删除消息</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">您要删除目前的 %1$d 条消息以及之后 %2$s 内新收到的消息吗？\n\n• 这包括所有媒体文件\n\n• 无论消息是否被浏览过，它们都将会被删除\n\n• 在本地删除中，“保存的消息”将被跳过</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">您要删除目前的 %1$d 条消息以及之后 %2$s 内新收到的消息吗？\n\n• 这包括所有媒体文件\n\n• 这也会删除被“显示传统电子邮件”选项影响的电子邮件\n\n• “保存的消息”也将从服务器中删除</string>
+    <string name="autodel_confirm">我了解，将这些消息全部删除</string>
+    <string name="autodel_at_once">立刻</string>
+    <string name="autodel_after_1_hour">1 小时后</string>
+    <string name="autodel_after_1_day">1 天后</string>
+    <string name="autodel_after_1_week">1 周后</string>
+    <string name="autodel_after_4_weeks">4 星期后</string>
+    <string name="autodel_after_1_year">1 年后</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -636,7 +660,7 @@
     <string name="user_location_permission_explanation">Delta Chat 需要位置权限来显示和分享您的位置。</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">发送状态：错误</string>
     <string name="a11y_encryption_padlock">加密挂锁</string>
     <string name="a11y_delivery_status_sending">发送状态：发送中</string>
@@ -653,4 +677,11 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat 使用您的联系人来显示您可以写信到的电子邮件地址列表。 Delta Chat 没有服务器，您的联系人不会被发送到任何地方。</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat 使用您的麦克风来录制、发送语音消息和带有声音的视频。</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat 将让您选择要从图库中发送哪些照片。</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">您可能已经注意到了，系统显示了“后台连接已启用”的提示。\n\n👉通常，该提示可防止操作系统终止 Delta Chat 与您的服务器之间的连接。\n\n👉如果您没有采取任何行动而提示消失了，则连接可能已被终止。\n如果您认为这很奇怪，我们完全同意——但许多制造商确实是这么做的。网站 https://dontkillmyapp.com 给出了一些解决办法。\n\n不过，我们很高兴可以通过此更改改善后台的消息接收并能满足许多用户的请求——感谢您的报告🤗</string>
+
+
 </resources>
