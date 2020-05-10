@@ -17,6 +17,7 @@ import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
+import { AppState } from '../../../shared/shared-types'
 
 export const allDialogs: {[key:string]: any} = {
   DeadDrop,
@@ -49,6 +50,17 @@ type dialogs = {
     props: false,
     fnc: any
   }
+}
+
+export type DialogProps = {
+  isOpen: boolean,
+  onClose: () => void,
+  userFeedback: todo,
+  deltachat: AppState['deltachat'],
+  key: string,
+  openDialog: todo,
+  closeDialog: todo,
+  [key:string]: any
 }
 
 export class Controller extends React.Component<
@@ -104,7 +116,7 @@ export class Controller extends React.Component<
       <div>
         {Object.keys(dialogs).map((id: string) => {
           const dialog = dialogs[id]
-          var defaultProps = {
+          var defaultProps: DialogProps = {
             isOpen: true,
             onClose: () => this.close(id),
             userFeedback,
