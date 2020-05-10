@@ -95,6 +95,8 @@ export default class Settings extends React.Component {
       'mdns_enabled',
       'show_emails',
       'bcc_self',
+      'delete_device_after',
+      'delete_server_after'
     ])
 
     const advancedSettings = {
@@ -307,6 +309,47 @@ export default class Settings extends React.Component {
     )
   }
 
+  renderTimeDurationSwitch() {
+    return (
+      <>
+        <Radio
+        label={this.translate('off')}
+        value={Number(0)}
+        />
+        {/* Delete after 1 hour (60*60 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_1_hour')}
+          value={Number(60*60)}
+        />
+        {/* Delete after 1 day (60*60*24 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_1_day')}
+          value={Number(60*60*24)}
+        />
+        {/* Delete after 1 week (60*60*24*7 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_1_week')}
+          value={Number(60*60*24*7)}
+        />
+        {/* Delete after 4 weeks (60*60*24*7*4 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_4_weeks')}
+          value={Number(60*60*24*7*4)}
+        />
+        {/* Delete after 4 weeks (60*60*24*7*4 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_4_weeks')}
+          value={Number(60*60*24*7*4)}
+        />
+        {/* Delete after 1 year (60*60*24*365 seconds) */}
+        <Radio
+          label={this.translate('autodel_after_1_year')}
+          value={Number(60*60*24*365)}
+        />
+      </>
+    )
+  }
+
   renderDeltaInput(configKey, label) {
     const configValue = this.state.settings[configKey]
     return (
@@ -419,6 +462,40 @@ export default class Settings extends React.Component {
               'mdns_enabled',
               this.translate('pref_read_receipts')
             )}
+            <br />
+            <H5>{this.translate()}</H5>
+            <Button onClick={() => openDialog2('SetDeviceDeleteDuration', ({isOpen, onClose}) => {
+              return (
+                <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
+                  <DeltaDialogBody>
+                    <DeltaDialogContent noPadding>
+                      Test
+                    </DeltaDialogContent>
+                  </DeltaDialogBody>
+                </DeltaDialogBase>
+              )
+            })}>
+              {this.translate('autodel_title')}
+            </Button>
+            <RadioGroup
+              label={this.translate('autodel_device_title')}
+              onChange={ev =>
+                this.handleDeltaSettingsChange('delete_device_after', ev.target.value)
+              }
+              selectedValue={Number(settings['delete_device_after'])}
+            >
+              {this.renderTimeDurationSwitch()}
+            </RadioGroup>
+            <br />
+            <RadioGroup
+              label={this.translate('autodel_server_title')}
+              onChange={ev =>
+                this.handleDeltaSettingsChange('delete_server_after', ev.target.value)
+              }
+              selectedValue={Number(settings['delete_server_after'])}
+            >
+              {this.renderTimeDurationSwitch()}
+            </RadioGroup>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>

@@ -41,7 +41,9 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
+    this.openDialog2 = this.openDialog2.bind(this)
     window.__openDialog = this.openDialog.bind(this)
+    window.__openDialog2 = this.openDialog2.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
@@ -95,6 +97,10 @@ export default class ScreenController extends Component {
     this.dialogs.current.open(name, props)
   }
 
+  openDialog2(name: DialogId, fnc: any, props?: any) {
+    this.dialogs.current.open2(name, fnc, props)
+  }
+
   closeDialog(name: DialogId) {
     this.dialogs.current.close(name)
   }
@@ -116,6 +122,7 @@ export default class ScreenController extends Component {
         <ScreenContext.Provider
           value={{
             openDialog: this.openDialog,
+            openDialog2: this.openDialog2,
             closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,

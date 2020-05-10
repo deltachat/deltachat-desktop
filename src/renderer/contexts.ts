@@ -8,6 +8,7 @@ const noop: Function = () => {}
 
 export const ScreenContext = React.createContext({
   openDialog: (name: DialogId, props?: any) => {},
+  openDialog2: (name: DialogId, func: any, props?: any) => {},
   closeDialog: (name: string) => {},
   userFeedback: (message: false | userFeedback) => {},
   changeScreen: noop,

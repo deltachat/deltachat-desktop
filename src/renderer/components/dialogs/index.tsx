@@ -19,12 +19,12 @@ import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 
 export const allDialogs = {
-  DeadDrop,
-  FullscreenMedia,
-  MessageDetail,
-  EnterAutocryptSetupMessage,
-  SendAutocryptSetupMessage,
-  ImexProgress,
+  'DeadDrop': DeadDrop,
+  'FullScreenMedia': FullscreenMedia,
+  'MessageDetail': MessageDetail,
+  'EnterAutocryptSetupMessage': EnterAutocryptSetupMessage,
+  'SendAutocryptSetupMessage': SendAutocryptSetupMessage,
+  'ImexProgress': ImexProgress,
   About,
   Settings,
   ForwardMessage,
@@ -39,15 +39,16 @@ export const allDialogs = {
   UnblockContacts,
 }
 
-export type DialogId = keyof typeof allDialogs
+export type DialogId = keyof typeof allDialogs | string
 
 const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
 type dialogs = {
   [key: string]: {
     name: DialogId
-    Component: todo
-    props: false
+    Component: any
+    props: false,
+    fnc?: any
   }
 }
 
@@ -61,10 +62,11 @@ export class Controller extends React.Component<
     super(props)
 
     var dialogs: dialogs = {}
-    Object.keys(allDialogs).forEach((key: DialogId) => {
-      dialogs[key as string] = {
+    Object.keys(allDialogs).forEach((key: string) => {
+      const component: any = allDialogs[key]
+      dialogs[key] = {
         name: key,
-        Component: allDialogs[key],
+        Component: component,
         props: false,
       }
     })
@@ -83,9 +85,19 @@ export class Controller extends React.Component<
     this.setState({ dialogs: this.state.dialogs })
   }
 
-  close(name: DialogId) {
-    this.state.dialogs[name].props = false
+  open2<T extends DialogId>(name: T, fnc: any, props: todo) {
+    log.debug('openDialog2: ', name, props)
+    var Component = this.state.dialogs[name]
+    if (typeof fnc !== 'function')
+      throw new Error(`fnc is not a function but ${typeof fnc}`)
+    if (!props) props = {}
+    this.state.dialogs[name].props = props
+    this.state.dialogs[name].fnc = fnc
     this.setState({ dialogs: this.state.dialogs })
+  }
+
+  close(key: DialogId) {
+    this.setState({ dialogs: { ...this.state.dialogs, [key]: undefined }})
   }
 
   render() {
@@ -95,14 +107,15 @@ export class Controller extends React.Component<
 
     return (
       <div>
-        {Object.values(dialogs).map(dialog => {
+        {Object.keys(dialogs).map(key => {
+          const dialog = dialogs[key]
           const isOpen = dialog.props !== false
           if (!isOpen) return null
 
           var name = dialog.name
           var defaultProps = {
             isOpen,
-            onClose: () => this.close(name as DialogId),
+            onClose: () => this.close(key),
             userFeedback,
             deltachat,
             key: name,
@@ -111,6 +124,7 @@ export class Controller extends React.Component<
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
+          if (dialog.fnc) return dialog.fnc(props)
           return <dialog.Component {...props} />
         })}
       </div>

@@ -20,6 +20,7 @@ declare global {
       downloadFile: (file: string) => void
     }
     __openDialog: (name: DialogId, props?: any) => {}
+    __openDialog2: (name: DialogId, fnc: any, props?: any) => {}
     __userFeedback: (message: userFeedback | false) => {}
     __isReady: boolean
   }
