@@ -10,21 +10,12 @@ function escapeEmailForAccountFolder(path: string) {
   return encodeURIComponent(path).replace(/%/g, 'P')
 }
 
-// change this in the future to enable new account format and break compatibility to really old dcversions on windows
-const NEW_ACCOUNT_FORMAT = false
-
 export async function getLogins() {
-  if (NEW_ACCOUNT_FORMAT) {
-    // search for old accounts and convert them
-    await migrate(getConfigPath())
-  }
+  // search for old accounts and convert them
+  await migrate(getConfigPath())
 
   // list new accounts
   var accounts = await readDeltaAccounts(getAccountsPath())
-  if (!NEW_ACCOUNT_FORMAT) {
-    // search for old accounts and use them
-    accounts.push(...(await readDeltaAccounts(getConfigPath())))
-  }
   log.debug('Found following accounts:', accounts)
   return accounts
 }
@@ -122,9 +113,5 @@ export async function removeAccount(accountPath: string) {
 }
 
 export function getNewAccountPath(addr: string) {
-  if (NEW_ACCOUNT_FORMAT) {
-    return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
-  } else {
-    return join(getConfigPath(), Buffer.from(addr).toString('hex'))
-  }
+  return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
 }
