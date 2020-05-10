@@ -350,7 +350,7 @@ export default class Settings extends React.Component {
               <option key={'system'} value={'system'}>
                 {this.translate('pref_system_theme')}
               </option>
-              {this.state.availableThemes.map(theme => (
+              {this.state.availableThemes?.map(theme => (
                 <option key={theme.address} value={theme.address}>
                   {theme.name} - {theme.description} [{theme.address}]
                 </option>
