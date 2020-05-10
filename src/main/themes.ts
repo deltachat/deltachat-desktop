@@ -132,7 +132,7 @@ export function resolveThemeAddress(address: string): string {
   }
   const result = join(
     realPath,
-    addressParts[1].replace(/\/|\\|../g, '') + '.scss'
+    addressParts[1].replace(/\/|\\|\.\./g, '') + '.scss'
   )
 
   if (existsSync(result)) {
