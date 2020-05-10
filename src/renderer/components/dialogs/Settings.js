@@ -18,6 +18,7 @@ import {
 import {
   DeltaDialogBase,
   DeltaDialogBody,
+  DeltaDialogContent,
   DeltaDialogHeader,
 } from './DeltaDialog'
 import Login from '../Login'
@@ -464,7 +465,7 @@ export default class Settings extends React.Component {
             )}
             <br />
             <H5>{this.translate()}</H5>
-            <Button onClick={() => openDialog2('SetDeviceDeleteDuration', ({isOpen, onClose}) => {
+            <Button onClick={() => openDialog(({isOpen, onClose}) => {
               return (
                 <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
                   <DeltaDialogBody>
