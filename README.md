@@ -12,6 +12,8 @@
 
 ## Table of Contents
 
+> TODO: update this toc to conatin all points
+
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
@@ -39,7 +41,7 @@ also has a setup guide for many Linux platforms.
 
 #### Arch Linux
 
-**WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
+> **WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
 
 If you have a AUR helper like yay installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
 
@@ -70,7 +72,8 @@ $ brew install openssl
 
 ### From Source
 
-Get the code:
+> ⚠ Information on this section might be deprecated. [TODO update this section]
+> Get the code:
 
 ```
 $ git clone https://github.com/deltachat/deltachat-desktop.git
@@ -125,175 +128,13 @@ Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
 
-### Logging
-
-#### Logging Options
-
-Debug messages are disabled by default, enable them with the `--log-debug` flag.
-
-| Flag                            | Effect                                       |
-| ------------------------------- | -------------------------------------------- |
-| `--log-debug`                   | Log debug messages                           |
-| `--log-to-console`              | Output the log to stout / chrome dev console |
-| `--machine-readable-stacktrace` | Enable JSON stacktrace                       |
-| `--no-color`                    | Disable colors in the output of main process |
-
-#### Log locations
-
-The logs can be found in:
-
-```
-Linux: ~/.config/DeltaChat/logs/
-Mac: ~/Library/Application\ Support/DeltaChat/logs
-```
-
-You can also access the log folder and the current log file under the `View->Developer` menu:
-
-<center><img src="README_ASSETS/devMenu.png"/></center>
-
-##### Format
-
-The log files have the extension `.log`, the file name represents the point in time the log started.
-Basically the log files are **tab separated** `csv`-files(also known as `tsv`):
-
-```
-"2019-01-27T13:46:31.801Z"	"main/deltachat"	"INFO"	[]	"dc_get_info"
-```
-
-| timestamp                  | location / module | level  | stacktrace | arg1          | arg2 | ... |
-| -------------------------- | ----------------- | ------ | ---------- | ------------- | ---- | --- |
-| "2019-01-27T13:46:31.801Z" | "main/deltachat"  | "INFO" | \[]        | "dc_get_info" | -    | ... |
-
 ## How to Contribute
 
-### Code Structure
+Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 
-Some important folders and files:
+## Logging
 
-```
-├── _locales                  # translation files in xml and json
-│   ├── _untranslated_en.json # can contain experimental language strings
-│   └── languages.json        # central file which keeps the human readable language
-├── bin                       # various helper scripts
-├── build                     # files needed only at build time
-├── ci_scripts                # scripts and dockerfiles used by the CI
-├── images                    # image files used in conversations
-├── index.js                  # entry point for the main process
-├── jenkins                   # pipelines for building on Jenkins
-names
-├── scss                      # styelsheets which need preprocessing
-├── src
-│   ├── main                  # javascript for the main process
-│   └── renderer              # javascript for the renderer process
-├── static
-│   ├── bundle.js             # javascript bundle built by webpack
-│   ├── conversations.css     # css bundle built from conversations scss files
-│   ├── fonts                 # fonts
-│   ├── main.css              # main css file
-│   └── main.html             # main html file in renderer process
-├── README_ASSETS             # Images used in this readme file
-├── test
-│   ├── integration           # integration tests
-│   └── unit                  # unit tests
-├── .travis.yml               # build script for Travis
-├── .tx                       # configuration for Transifex
-└── webpack.config.js         # configuration for webpack
-```
-
-### Run the Code
-
-While developing the following command will build the app and start `electron` in debug mode with http cache disabled:
-
-```
-$ npm run dev
-```
-
-It's also handy to run this watch command in a separate terminal
-
-```
-$ npm run watch
-```
-
-### Add experimental language strings
-
-Sometimes you need to add new language strings, but don't want to push them to
-transifex immediately because it's unsure if the string will be adjusted in the
-short future or it's unclear if the pr will even get merged or you simply don't
-have push rights to the transifex language repo. To still be able to implement
-new language strings, you can add them to the `_locales/_untranslated_en.json`
-file. You can also overload every other language string if you need to.
-The syntax is the exact same as for all other `_locales/*.json` files.
-
-Example:
-`{"foobar_desktop": {"message": "This is a test"}}`
-
-> Tipp: run with `--translation-watch` (included in `npm start`) to start in translation
-> watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save
-
-### Tests
-
-Running `npm test` does the following:
-
-- runs `prettier` for code formatting
-- runs `standard` as code linter
-- runs the unit tests
-
-Running `npm run test-integration` executes the integration tests.
-Make sure you specify the enviroment variables `DC_ADDR` and `DC_MAIL_PW` before running the integration tests.
-
-The integration tests use `spectron` and `tape`. They click through the app, taking screenshots and comparing each one to a reference. Why screenshots?
-
-- Ad-hoc checking makes the tests a lot more work to write
-- Even diffing the whole HTML is not as thorough as screenshot diffing. For example, it wouldn't
-  catch an bug where hitting ESC from a video doesn't correctly restore window size.
-- Chrome's own integration tests use screenshot diffing iirc
-- Small UI changes will break a few tests, but the fix is as easy as deleting the offending
-  screenshots and running the tests, which will recreate them with the new look.
-- The resulting Github PR will then show, pixel by pixel, the exact UI changes that were made! See
-  <https://github.com/blog/817-behold-image-view-modes>
-
-For MacOS, you'll need a Retina screen for the integration tests to pass. Your screen should have the same resolution as a 2016 12" Macbook.
-
-For Windows, you'll need Windows 10 with a 1366x768 screen.
-
-When running integration tests, keep the mouse on the edge of the screen and don't touch the mouse or keyboard while the tests are running.
-
-### Translations
-
-Install the [transifex-client](https://docs.transifex.com/client) and get added to the `Delta Chat App` project.
-
-And periodically we can run the following command to get the new translation strings from translators:
-
-```
-npm run update-translations
-```
-
-When you need to modify language strings, this should be done in `_locales/en.xml`. Run the following command to sync with Transifex:
-
-```
-tx push --source
-```
-
-### CI
-
-For Continuous Integration we currently use Travis.
-
-### Release Workflow
-
-1. Create a draft release on github, e.g. `vX.Y.Z`.
-2. Change `version` field in `package.json` to `X.Y.Z`.
-3. Update, commit and push `static/chat.delta.desktopp.appdata.xml`
-   with the new release information.
-4. Regenerate `package-lock.json` using `npm install`, commit and push
-   modified `package.json` and `package-lock.json` (repeat until
-   release is ready).
-5. Once done, publish the release on github, which will create the
-   tag.
-6. File an issue at
-   <https://github.com/flathub/chat.delta.desktop/issues> to make a new
-   release.
-
-Also see <https://www.electron.build/configuration/publish>
+Read [docs/LOGGING.md](docs/LOGGING.md) for an explaination about our logging system. (availible **options**, log **location** and information abour the used Log-**Format**)
 
 ## License
 
