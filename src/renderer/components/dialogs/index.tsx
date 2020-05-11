@@ -125,7 +125,6 @@ export class Controller extends React.Component<
             openDialog: this.open.bind(this),
             closeDialog: this.close.bind(this),
           }
-          console.log(id)
           var props = Object.assign({}, defaultProps, dialog.props || {})
           return <dialog.fnc key={id} {...props} />
         })}
