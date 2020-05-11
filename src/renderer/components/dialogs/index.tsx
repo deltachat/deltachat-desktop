@@ -63,7 +63,6 @@ export type DialogProps = {
   [key: string]: any
 }
 
-
 var dialogCounter = 1
 
 export class Controller extends React.Component<
@@ -75,7 +74,7 @@ export class Controller extends React.Component<
   constructor(props: any) {
     super(props)
 
-    this.state = { dialogs: {}}
+    this.state = { dialogs: {} }
     this.close = this.close.bind(this)
   }
 
@@ -93,8 +92,8 @@ export class Controller extends React.Component<
       id = dialogCounter = 0
     }
 
-    log.debug(`Add dialog with id: ${id}`)  
-    this.setState((state) => {
+    log.debug(`Add dialog with id: ${id}`)
+    this.setState(state => {
       return {
         dialogs: {
           ...state.dialogs,
@@ -103,14 +102,14 @@ export class Controller extends React.Component<
             fnc,
             props,
           },
-        }
+        },
       }
     })
   }
 
   close(id: DialogId) {
     const { [id]: closedDialog, ...dialogs } = this.state.dialogs
-    log.debug(`Close dialog with id: ${id}`)  
+    log.debug(`Close dialog with id: ${id}`)
     this.setState({ dialogs })
   }
 
