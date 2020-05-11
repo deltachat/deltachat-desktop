@@ -20,19 +20,16 @@ const dc_theme_dir = join(__dirname, '../../themes')
               sourceMap: false,
             },
             async (err, result) => {
-              if (err) {
+              if (err) return rej(err)
+              try {
+                const resulting_filename = theme.replace('.scss', '.css')
+                await fs.writeFile(
+                  join(dc_theme_dir, resulting_filename),
+                  result.css
+                )
+                res([theme, result.stats.duration])
+              } catch (error) {
                 rej(err)
-              } else {
-                try {
-                  const resulting_filename = theme.replace('.scss', '.css')
-                  await fs.writeFile(
-                    join(dc_theme_dir, resulting_filename),
-                    result.css
-                  )
-                  res([theme, result.stats.duration])
-                } catch (error) {
-                  rej(err)
-                }
               }
             }
           )
