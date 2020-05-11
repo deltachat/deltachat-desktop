@@ -2,10 +2,11 @@
 
 **Desktop Application for [delta.chat](https://delta.chat)**
 
-[![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
 <center><img src="README_ASSETS/screenshot.png"/></center>
+
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![npm test](https://github.com/deltachat/deltachat-desktop/workflows/npm%20test/badge.svg)](https://github.com/deltachat/deltachat-desktop/actions?query=workflow%3A%22npm+test%22+branch%3Amaster)
+[![Build Status](https://travis-ci.org/deltachat/deltachat-desktop.svg?branch=master)](https://travis-ci.org/deltachat/deltachat-desktop)
 
 **If you are upgrading:** please see [`UPGRADING.md`](UPGRADING.md).
 
@@ -30,7 +31,7 @@ The application can be downloaded from the [`Releases`](https://github.com/delta
 #### Flatpak
 
 The primary distribution-independed way to install is to use the
-flatpak build.  This is maintained in [it's own
+flatpak build. This is maintained in [it's own
 repository](https://github.com/flathub/chat.delta.desktop), however a
 pre-built binary can be downloaded and installed from
 [flathub](https://flathub.org/apps/details/chat.delta.desktop) which
@@ -172,7 +173,7 @@ Some important folders and files:
 ```
 ├── _locales                  # translation files in xml and json
 │   ├── _untranslated_en.json # can contain experimental language strings
-│   └── languages.json        # central file which keeps the human readable language 
+│   └── languages.json        # central file which keeps the human readable language
 ├── bin                       # various helper scripts
 ├── build                     # files needed only at build time
 ├── ci_scripts                # scripts and dockerfiles used by the CI
@@ -221,13 +222,13 @@ short future or it's unclear if the pr will even get merged or you simply don't
 have push rights to the transifex language repo. To still be able to implement
 new language strings, you can add them to the `_locales/_untranslated_en.json`
 file. You can also overload every other language string if you need to.
-The syntax is the exact same as for all other `_locales/*.json` files. 
+The syntax is the exact same as for all other `_locales/*.json` files.
 
 Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
 
 > Tipp: run with `--translation-watch` (included in `npm start`) to start in translation
->  watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save 
+> watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save
 
 ### Tests
 
@@ -298,17 +299,17 @@ Also see <https://www.electron.build/configuration/publish>
 
 Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
 
->    Copyright © 2019 `DeltaChat` contributors.
+> Copyright © 2019 `DeltaChat` contributors.
 
->    This program is free software: you can redistribute it and/or modify
->    it under the terms of the GNU General Public License as published by
->    the Free Software Foundation, either version 3 of the License, or
->    (at your option) any later version.
+> This program is free software: you can redistribute it and/or modify
+> it under the terms of the GNU General Public License as published by
+> the Free Software Foundation, either version 3 of the License, or
+> (at your option) any later version.
 
->    This program is distributed in the hope that it will be useful,
->    but WITHOUT ANY WARRANTY; without even the implied warranty of
->    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
->    GNU General Public License for more details.
+> This program is distributed in the hope that it will be useful,
+> but WITHOUT ANY WARRANTY; without even the implied warranty of
+> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+> GNU General Public License for more details.
 
->    You should have received a copy of the GNU General Public License
->    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+> You should have received a copy of the GNU General Public License
+> along with this program. If not, see <http://www.gnu.org/licenses/>.
