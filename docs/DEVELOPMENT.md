@@ -116,38 +116,35 @@ Also see <https://www.electron.build/configuration/publish>
 
 ### Code Structure
 
-> ⚠ Information on this section might be deprecated. [TODO update this section]
-
 Some important folders and files:
 
-```
-├── _locales                  # translation files in xml and json
+```powershell
+├── _locales/                 # translation files in xml and json
 │   ├── _untranslated_en.json # can contain experimental language strings
 │   └── languages.json        # central file which keeps the human readable language
-├── bin                       # various helper scripts
-├── build                     # files needed only at build time
-├── ci_scripts                # scripts and dockerfiles used by the CI
-├── images                    # image files used in conversations
+├── .gihub/workflows          # source of our github actions
+├── bin/                      # various helper scripts
+│   └── build/                # Build scripts
+├── build/                    # files needed for electron-builder
+├── ci_scripts/               # scripts and dockerfiles used by the CI
+├── docs/                     # documentation
+├── images/                   # image files like icons or backgrounds
 ├── index.js                  # entry point for the main process
-├── jenkins                   # pipelines for building on Jenkins
-names
-├── scss                      # styelsheets which need preprocessing
-├── src
-│   ├── main                  # javascript for the main process
-│   └── renderer              # javascript for the renderer process
-├── static
-│   ├── bundle.js             # javascript bundle built by webpack
-│   ├── conversations.css     # css bundle built from conversations scss files
-│   ├── fonts                 # fonts
-│   ├── main.css              # main css file
+├── README_ASSETS/            # Images used in the readme file and documentation
+├── scss/                     # styelsheets which need preprocessing
+├── src/
+│   ├── main/                 # typescript for the main process
+│   ├── renderer/             # typescript for the renderer process
+│   └── shared/               # typescript that is shared between both processes
+├── static/
+│   ├── fonts/                # fonts
+│   ├── help/                 # the in-app help
 │   └── main.html             # main html file in renderer process
-├── README_ASSETS             # Images used in the readme file and documentation
-├── test
-│   ├── integration           # integration tests
-│   └── unit                  # unit tests
-├── .travis.yml               # build script for Travis
-├── .tx                       # configuration for Transifex
-└── webpack.config.js         # configuration for webpack
+├── test/
+│   ├── integration/          # integration tests
+│   ├── testcafe/             # testcafe tests
+│   └── unit/                 # unit tests
+└── themes/                   # default themes
 ```
 
 <a id="specific-tipps" ></a>
