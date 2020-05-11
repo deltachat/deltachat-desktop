@@ -77,22 +77,3 @@
     }
   }
 }
-
-.theme-meta {
-  background-color: #80808082;
-  padding: 6px;
-  margin: 3px;
-  border-radius: 4px;
-  margin-bottom: 10px;
-
-  p {
-    margin-bottom: 0px;
-  }
-
-  p.name:before {
-    content: var(--name);
-  }
-  p.description:before {
-    content: var(--description);
-  }
-}

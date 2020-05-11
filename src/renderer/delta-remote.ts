@@ -5,7 +5,6 @@ import {
   ChatListItemType,
   MessageType,
   JsonLocations,
-  Theme,
 } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
@@ -254,14 +253,6 @@ class DeltaRemote {
   call(fnName: 'context.maybeNetwork'): Promise<void>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
-  call(
-    fnName: 'extras.getActiveTheme'
-  ): Promise<{
-    theme: Theme
-    data: string
-  } | null>
-  call(fnName: 'extras.setThemeFilePath', address: string): void
-  call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

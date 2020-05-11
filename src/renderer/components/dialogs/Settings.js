@@ -4,7 +4,6 @@ import { C } from 'deltachat-node/dist/constants'
 import {
   Elevation,
   H5,
-  H6,
   Card,
   Classes,
   Button,
@@ -12,7 +11,6 @@ import {
   Label,
   RadioGroup,
   Radio,
-  HTMLSelect,
 } from '@blueprintjs/core'
 
 import {
@@ -22,7 +20,6 @@ import {
 } from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
-import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 const { SettingsContext } = require('../../contexts')
@@ -42,7 +39,6 @@ export default class Settings extends React.Component {
       settings: {},
       show: 'main',
       selfContact: {},
-      availableThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
@@ -65,8 +61,6 @@ export default class Settings extends React.Component {
       C.DC_CONTACT_ID_SELF
     )
     this.setState({ selfContact })
-    const availableThemes = await DeltaBackend.call('extras.getAvailableThemes')
-    this.setState({ availableThemes })
   }
 
   async loadSettings() {
@@ -327,42 +321,6 @@ export default class Settings extends React.Component {
     ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
-  renderThemeSelection() {
-    return (
-      <SettingsContext.Consumer>
-        {settings => (
-          <div>
-            <H6>{this.translate('pref_theming')}</H6>
-            <div className='theme-meta'>
-              <b>
-                <p className='name'></p>
-              </b>
-              <p className='description'></p>
-            </div>
-            <HTMLSelect
-              onChange={async ev => {
-                await DeltaBackend.call('extras.setTheme', ev.target.value)
-                await ThemeManager.refresh()
-                this.forceUpdate()
-              }}
-              value={settings['activeTheme']}
-            >
-              <option key={'system'} value={'system'}>
-                {this.translate('pref_system_theme')}
-              </option>
-              {this.state.availableThemes?.map(theme => (
-                <option key={theme.address} value={theme.address}>
-                  {theme.name} - {theme.description} [{theme.address}]
-                </option>
-              ))}
-            </HTMLSelect>
-            <br />
-          </div>
-        )}
-      </SettingsContext.Consumer>
-    )
-  }
-
   renderDialogContent() {
     const { deltachat, openDialog } = this.props
     const { settings, advancedSettings } = this.state
@@ -470,7 +428,6 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
-            {this.renderThemeSelection()}
             <br />
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(

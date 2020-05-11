@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact } from '../../shared/shared-types'
+import { LocalSettings, JsonContact } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
@@ -18,6 +18,7 @@ import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
+import { string } from 'prop-types'
 import Extras from './extras'
 const app = rawApp as ExtendedAppMainProcess
 
@@ -47,9 +48,13 @@ export default class DeltaChatController extends EventEmitter {
   _pages = 0
   _query = ''
   _sendStateToRenderer: () => void
-  constructor(public cwd: string) {
+  constructor(public cwd: string, saved: LocalSettings) {
     super()
     this._resetState()
+    if (!saved)
+      throw new Error(
+        'Saved settings are a required argument to DeltaChatController'
+      )
   }
 
   readonly autocrypt = new DCAutocrypt(this)
