@@ -1,6 +1,18 @@
 # Changelog
 
-## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...HEAD)
+## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...HEAD)
+
+## [1.3.2](https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...v1.3.2) - 2020-05-11
+
+### Fixed
+
+- Fix not being able to delete the first character when renaming a contact
+
+### Changed
+
+- Mirror picture when scanning a QR code
+- Update deltachat-node to v1.32.0
+
 
 ## [1.3.1](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.3.1) - 2020-05-05
 
