@@ -40,7 +40,6 @@ export default function MessageListAndComposer({
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     for (let i = 0; i < files.length; i++) {
       const { path, name } = files[i]
-      console.log('Drop!', path, name)
       if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
         openDialog('ConfirmationDialog', {
           message: tx('ask_send_file_desktop', [name, chat.name]),
