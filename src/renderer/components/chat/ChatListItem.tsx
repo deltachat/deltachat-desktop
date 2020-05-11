@@ -14,13 +14,16 @@ const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
 
 const Header = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { lastUpdated, name, isVerified, pinned } = chatListItem
+    const { lastUpdated, name, isVerified, pinned, muted } = chatListItem
     return (
       <div className='header'>
         <div className='name'>
           {isVerified && <VerifiedIcon />}
           <span>{name + ' '}</span>
         </div>
+        {muted && (
+          <div className='mute_icon' aria-label={window.translate('mute')} />
+        )}
         {pinned && (
           <div className='pin_icon' aria-label={window.translate('pin')} />
         )}
@@ -99,6 +102,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
       className={classNames('chat-list-item', {
         'has-unread': chatListItem.freshMessageCounter > 0,
         pinned: chatListItem.pinned,
+        muted: chatListItem.muted,
         selected: isSelected,
       })}
     >

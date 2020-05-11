@@ -101,3 +101,15 @@ export async function openViewProfileDialog(
     contact: await DeltaBackend.call('contacts.getContact', contact_id),
   })
 }
+
+export async function openMuteChatDialog(
+  screenContext: unwrapContext<typeof ScreenContext>,
+  chat: Chat
+) {
+  // todo open dialog to ask for duration
+  await DeltaBackend.call('chat.setMuteDuration', chat.id, -1)
+}
+
+export async function unMuteChat(chatId: number) {
+  await DeltaBackend.call('chat.setMuteDuration', chatId, 0)
+}

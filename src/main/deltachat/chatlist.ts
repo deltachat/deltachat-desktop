@@ -147,6 +147,7 @@ export default class DCChatList extends SplitOut {
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
       archived: chat.archived,
       pinned: chat.pinned,
+      muted: chat.muted,
     }
 
     return chatListItem
@@ -179,6 +180,11 @@ export default class DCChatList extends SplitOut {
       contacts.push(contact)
     }
     return contacts
+  }
+
+  async isChatMuted(chatId: number): Promise<boolean> {
+    const chat = await this._getChatById(chatId)
+    return chat.muted
   }
 
   async getFullChatById(chatId: number): Promise<FullChat> {

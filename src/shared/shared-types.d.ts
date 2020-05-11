@@ -88,6 +88,7 @@ export interface ChatListItemType {
   selfInGroup: boolean
   archived: boolean
   pinned: boolean
+  muted: boolean
 }
 
 import { Chat, Message } from 'deltachat-node'

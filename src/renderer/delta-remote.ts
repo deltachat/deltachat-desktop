@@ -134,6 +134,11 @@ class DeltaRemote {
     newImage: string
   ): Promise<boolean>
   call(
+    fnName: 'chat.setMuteDuration',
+    chatId: number,
+    duration: number
+  ): Promise<boolean>
+  call(
     fnName: 'chat.createGroupChat',
     verified: boolean,
     name: string

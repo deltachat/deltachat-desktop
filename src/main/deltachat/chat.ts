@@ -88,6 +88,14 @@ export default class DCChat extends SplitOut {
     this._dc.setChatVisibility(chatId, visibility)
   }
 
+  setMuteDuration(
+    chatId: number,
+    duration: number
+  ) {
+    log.debug(`action - set chat ${chatId} muteduration ${duration}`)
+    return this._dc.setChatMuteDuration(chatId, duration)
+  }
+
   getChatContacts(chatId: number) {
     return this._dc.getChatContacts(chatId)
   }
