@@ -1,7 +1,6 @@
 import { DeltaBackend } from './delta-remote'
 import { Theme } from '../shared/shared-types'
-
-const { ipcRenderer } = window.electron_functions
+import { ipcBackend } from './ipc'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme
@@ -17,7 +16,7 @@ export namespace ThemeManager {
     }
   }
 
-  ipcRenderer.on('theme-update', _e => refresh())
+  ipcBackend.on('theme-update', _e => refresh())
   refresh()
 
   export function getCurrentThemeMetaData() {
