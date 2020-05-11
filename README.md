@@ -30,7 +30,7 @@
 
 ## Install <a id="install"></a>
 
-The application can be downloaded from <https://get.delta.chat>. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
+The application can be downloaded from **<https://get.delta.chat>**. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
 
 ### Linux <a id="linux"></a>
 
