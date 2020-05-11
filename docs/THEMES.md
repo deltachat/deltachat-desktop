@@ -1,77 +1,74 @@
 ## Information how the experimental theme system works
-(it's in the code, because for now its only for developers)
-> Warning: This will change in the future.
 
+Themes are css files that act as themes by containing many differnt css variables.
 
-There are two objects: Theme and Theme-data -> the theme-data gets generated from the theme
+Most of these variables are small variations of the base colors of the theme so using scss allows us to generate them from the base colors to save us work.
+But of course we can overwrite those variables manualy too, we can even overwrite css classes if our theme needs it.
 
+## Theme codes
 
-dev console:
+There are two types of themes `dc`(build-in) and `custom` themes.
+DeltaChat Desktop searches in two places for themes, the theme folder contained in the deltachat instalation and the theme folder in the deltachat userdata folder of the users account (custom themes).
+
+The actual theme code is build as follows:
+
 ```
-You can set the theme like this:
-window.ThemeManager.setTheme([object with theme properties you want to overwrite])
-
-you can also overwrite theme-data directly using the raw property:
-window.ThemeManager.setTheme({raw:{chatViewBg:'lime'}})
-
-You can reset your overwrites with an empty object:
-window.ThemeManager.setTheme({})
+[location/type]:[name of themefile without extention]
 ```
 
-The theme you set gets stored in localstorage for now.
+Some examples:
 
-There are also some helper methods that allow you to see the theme(-data) at various points:
-
-```js
-// Get the currently active theme/-data
-getCurrentlyAppliedThemeData ()
-getCurrentlyAppliedTheme ()
-
-// get the theme data as you set it/ like it is stored in localstorage
-getCurrentTheme ()
-
-// get the default theme/-data for reference
-getDefaultThemeData ()
-getDefaultTheme ()
+```
+dc:dark -> ./themes/dark.css
+dc:light -> ./themes/light.css
+custom:mytheme -> ~/.config/DeltaChat/custom-themes/mytheme.css
 ```
 
+There is a special code that is an exception to this: `system` it gets translated into `dc:dark` or `dc:light` depending on the system theme of the host os.
 
 ## Setting a theme from CLI
 
 > Warning: This will also (probably) change in the future.
 
 ```
-npx electron . --theme "./themes/dark.json"
+npx electron . --theme dc:dark
 or
-npm run dev -- --theme "./themes/dark.json"
+npm run dev -- --theme dc:dark
 or
-npm run start -- --theme "./themes/dark.json"
+npm run start -- --theme dc:dark
 ```
 
 You can also enable hot reload for loaded theme with:
 
 ```
-npm run start -- --theme "./themes/dark.json" --theme-watch
+npm run start -- --theme dc:dark --theme-watch
 ```
 
-Quirks:
-- Doesn't work with `npm run dev` because this argument gets lost
+## Creating your own Theme:
 
-### TODO
-delete this section after done before merge!
+We use scss to create themes, because it allows us to save work by using its color transformation functions (such as `lighten` or `darken`)
 
-- toggle hover
-- gallery
-    - tabs // do we relly need that? we will transform it into a dialog and make new styles there anyway.
+0. install the sass compiler via `npm i -g node-sass` (if it says that npm was not found, then you need to install nodejs first)
 
-- see todo comments in _bp3_overwrites.scss
-    - dialog shadows in darkmode look weird
-    - main menu shadow thingie looks weird in dark modes
-    - map controlls hover
-    - main menu seperation bars
+1. copy the light or dark theme and save it to your user deltachat folder DeltaChat/custom-themes/my_theme.scss
 
-- gradients? namely:
-    - bp3 input focus
-    - gradient between chatlist and chatview
+1. compile the theme to css in watchmode
 
-- don't forget to fix standard stuff (`npm test`)
+```sh
+node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css
+# for linux:
+node-sass -w node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css
+```
+
+3. open a new terminal window/tab
+
+4. start deltachat from your terminal with your theme selected in watch mode:
+
+```sh
+deltachat --theme custom:my_theme --theme-watch
+```
+
+5. Open your theme file in your favorite code/text editor and edit it,
+   when you save it your changes should be applied 1-2 seconds later.
+
+Read the comments in the theme files for additional information.
