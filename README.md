@@ -12,25 +12,29 @@
 
 ## Table of Contents
 
-> TODO: update this toc to conatin all points
-
 <details><summary>Click to expand</summary>
 
 - [Install](#install)
-- [Configuration and Databases](#configuration-and-databases)
-- [Troubleshooting](#troubleshooting)
+  - [Linux](#linux)
+    - [Flatpak](#flatpak)
+    - [Arch Linux](#arch-linux)
+  - [Mac OS](#mac)
+  - [From Source](#source)
+  - [Troubleshooting](#troubleshooting)
+- [Configuration and Databases](#config-and-db)
 - [How to Contribute](#how-to-contribute)
+- [Logging](#logging)
 - [License](#license)
 
 </details>
 
-## Install
+## Install <a id="install"></a>
 
 The application can be downloaded from <https://get.delta.chat>. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
 
-### Linux
+### Linux <a id="linux"></a>
 
-#### Flatpak
+#### Flatpak <a id="flatpak"></a>
 
 The primary distribution-independed way to install is to use the
 flatpak build.
@@ -40,7 +44,7 @@ pre-built binary can be downloaded and installed from
 [flathub](https://flathub.org/apps/details/chat.delta.desktop) which
 also has a setup guide for many Linux platforms.
 
-#### Arch Linux
+#### Arch Linux <a id="arch-linux"></a>
 
 > **WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
 
@@ -65,7 +69,7 @@ makepkg -si
 sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ```
 
-### Mac OS
+### Mac OS <a id="mac"></a>
 
 Simply install the `.dmg` file as you do it with all other software on mac.
 
@@ -75,7 +79,7 @@ If you are getting an openssl error message at the first start up you need to in
 $ brew install openssl
 ```
 
-### From Source
+### From Source <a id="source"></a>
 
 > ⚠ This is mostly for development purposes, this won't install/integrate deltachat into your system.
 > So unless you know what you are doing, we recomment to stick to the methods above if possible.
@@ -95,13 +99,7 @@ $ npm run build
 $ npm start
 ```
 
-## Configuration and Databases
-
-The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
-
-Each database is a sqlite file that represents the account for a given email address.
-
-## Troubleshooting
+### Troubleshooting <a id="troubleshooting"></a>
 
 This module builds on top of `deltachat-core-rust`, which in turn has external dependencies. Instructions below assumes a Linux system (e.g. Ubuntu 18.10).
 
@@ -115,11 +113,17 @@ Then try running `npm install` again.
 If you still get errors look at the instructions in the deltchat-node and
 deltachat-rust-core README files to set things up **or write an issue**.
 
-## How to Contribute
+## Configuration and Databases <a id="config-and-db"></a>
+
+The configuration files and database are stored at [application-config's default filepaths](https://www.npmjs.com/package/application-config#config-location).
+
+Each database is a sqlite file that represents the account for a given email address.
+
+## How to Contribute <a id="how-to-contribute"></a>
 
 Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 
-## Logging
+## Logging <a id="logging"></a>
 
 You can access the log folder and the current log file under the `View->Developer` menu:
 
@@ -127,7 +131,7 @@ You can access the log folder and the current log file under the `View->Develope
 
 Read [docs/LOGGING.md](docs/LOGGING.md) for an explaination about our logging system. (availible **options**, log **location** and information abour the used Log-**Format**)
 
-## License
+## License <a id="license"></a>
 
 Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
 
