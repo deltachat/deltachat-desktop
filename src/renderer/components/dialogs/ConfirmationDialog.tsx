@@ -21,7 +21,7 @@ export function confirmationDialogLegacy(
     message: message,
     buttons: [tx('no'), tx('yes')],
   }
-  
+
   remote.dialog.showMessageBox(
     Object.assign(defaultOpts, opts),
     //@ts-ignore
