@@ -143,7 +143,7 @@ export function useDialog<T extends (props: any) => JSX.Element>(
 export function DeltaDialogHeader(props: {
   onClickBack?: () => void
   title: string
-  onClose: () => void
+  onClose?: () => void
   children?: React.ReactNode
   showBackButton?: boolean
 }) {

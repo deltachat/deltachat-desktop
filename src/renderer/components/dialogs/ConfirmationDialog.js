@@ -49,7 +49,7 @@ export default function ConfirmationDialog(props) {
               {cancelLabel || tx('cancel')}
             </DeltaButtonPrimary>
             <DeltaButtonDanger noPadding onClick={() => onClick(true)}>
-              {confirmLabel || tx('yes')}
+              {tx('save_desktop')}
             </DeltaButtonDanger>
           </div>
         </div>

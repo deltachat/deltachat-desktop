@@ -19,7 +19,7 @@ import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 import { AppState } from '../../../shared/shared-types'
 
-export const allDialogs: {[key:string]: any} = {
+export const allDialogs: { [key: string]: any } = {
   DeadDrop,
   FullscreenMedia,
   MessageDetail,
@@ -46,34 +46,34 @@ const log = require('../../../shared/logger').getLogger('renderer/dialogs')
 
 type dialogs = {
   [key: string]: {
-    id: number,
-    props: false,
+    id: number
+    props: false
     fnc: any
   }
 }
 
 export type DialogProps = {
-  isOpen: boolean,
-  onClose: () => void,
-  userFeedback: todo,
-  deltachat: AppState['deltachat'],
-  key: string,
-  openDialog: todo,
-  closeDialog: todo,
-  [key:string]: any
+  isOpen: boolean
+  onClose: () => void
+  userFeedback: todo
+  deltachat: AppState['deltachat']
+  key: string
+  openDialog: todo
+  closeDialog: todo
+  [key: string]: any
 }
 
 export class Controller extends React.Component<
   any,
   {
-    dialogs: dialogs,
+    dialogs: dialogs
     dialogCounter: number
   }
 > {
   constructor(props: any) {
     super(props)
 
-    this.state = { dialogs: {}, dialogCounter: 0}
+    this.state = { dialogs: {}, dialogCounter: 0 }
     this.close = this.close.bind(this)
   }
 
@@ -83,27 +83,27 @@ export class Controller extends React.Component<
       if (!fnc) throw new Error(`Dialog with name ${name} does not exist`)
     }
 
-    if(!props) props = {}
+    if (!props) props = {}
     log.debug('openDialog: ', fnc, props)
-    
+
     let id: number = this.state.dialogCounter + 1
     if (id >= Number.MAX_SAFE_INTEGER - 1) id = 0
-  
+
     this.setState({
       dialogs: {
         ...this.state.dialogs,
         [id]: {
           id,
           fnc,
-          props
-        }
+          props,
+        },
       },
-      dialogCounter: id
+      dialogCounter: id,
     })
   }
 
   close(key: DialogId) {
-    const {[key]: closedDialog, ...dialogs} = this.state.dialogs
+    const { [key]: closedDialog, ...dialogs } = this.state.dialogs
     this.setState({ dialogs })
   }
 
@@ -127,7 +127,7 @@ export class Controller extends React.Component<
           }
 
           var props = Object.assign({}, defaultProps, dialog.props || {})
-          return <dialog.fnc {...props} />
+          return <dialog.fnc key={id} {...props} />
         })}
       </div>
     )

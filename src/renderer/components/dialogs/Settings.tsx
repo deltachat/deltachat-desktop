@@ -32,24 +32,43 @@ const MAGIC_PW = '9bbdc87b50bbc684'
 import { OpenDialogOptions } from 'electron'
 import { AppState } from '../../../shared/shared-types'
 import { DialogProps } from '.'
+import SettingsAutodelete from './Settings-Autodelete'
+import SettingsManageKeys from './Settings-ManageKeys'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
 }
 
+export function SettingsButton(props: any) {
+  const { onClick, children, ...otherProps } = props
+  return (
+    <div className='SettingsButton' onClick={onClick}>
+      <button {...otherProps}>{children}</button>
+    </div>
+  )
+}
+
+export function SettingsSelector(props: any) {
+  const { onClick, currentValue, children, ...otherProps } = props
+  return (
+    <div className='SettingsSelector' onClick={onClick}>
+      <button {...otherProps}>{children}</button>
+      <div className='CurrentValue'>{currentValue}</div>
+    </div>
+  )
+}
+
 export default class Settings extends React.Component {
   translate: todo
   state: {
-    advancedSettings: todo,
-    showSettingsDialog: boolean,
-    mail_pw: string,
-    settings: todo,
-    show: string,
-    selfContact: todo,
+    advancedSettings: todo
+    showSettingsDialog: boolean
+    mail_pw: string
+    settings: todo
+    show: string
+    selfContact: todo
   }
-  constructor(
-    public props: DialogProps
-  ) {
+  constructor(public props: DialogProps) {
     super(props)
     this.state = {
       advancedSettings: {},
@@ -62,8 +81,6 @@ export default class Settings extends React.Component {
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.onBackupExport = this.onBackupExport.bind(this)
-    this.onKeysExport = this.onKeysExport.bind(this)
-    this.onKeysImport = this.onKeysImport.bind(this)
     this.handleDesktopSettingsChange = this.handleDesktopSettingsChange.bind(
       this
     )
@@ -112,7 +129,7 @@ export default class Settings extends React.Component {
       'show_emails',
       'bcc_self',
       'delete_device_after',
-      'delete_server_after'
+      'delete_server_after',
     ])
 
     const advancedSettings = {
@@ -137,78 +154,6 @@ export default class Settings extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  onKeysImport() {
-    const opts: OpenDialogOptions = {
-      title: window.translate('pref_managekeys_import_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
-      properties: ['openDirectory'],
-    }
-    remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
-      if (filenames && filenames.length) {
-        confirmationDialog(
-          window.translate('pref_managekeys_import_explain', filenames[0]),
-          (response: todo) => {
-            if (!response) {
-              return
-            }
-            ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
-              if (progress === 1000) {
-                this.props.userFeedback({
-                  type: 'success',
-                  text: this.translate(
-                    'pref_managekeys_secret_keys_imported_from_x',
-                    filenames[0]
-                  ),
-                })
-              }
-            })
-            DeltaBackend.call('settings.keysImport', filenames[0])
-          }
-        )
-      }
-    })
-  }
-
-  onKeysExport() {
-    // TODO: ask for the user's password and check it using
-    // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
-
-    const opts: OpenDialogOptions = {
-      title: window.translate('pref_managekeys_export_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
-      properties: ['openDirectory'],
-    }
-
-    remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
-      if (filenames && filenames.length) {
-        confirmationDialog(
-          this.translate('pref_managekeys_export_explain').replace(
-            '%1$s',
-            filenames[0]
-          ),
-          (response:todo) => {
-            if (!response) return
-            if (filenames && filenames.length) {
-              ipcRenderer.once(
-                'DC_EVENT_IMEX_FILE_WRITTEN',
-                (_event, filename) => {
-                  this.props.userFeedback({
-                    type: 'success',
-                    text: this.translate(
-                      'pref_managekeys_secret_keys_exported_to_x',
-                      filename
-                    ),
-                  })
-                }
-              )
-              DeltaBackend.call('settings.keysExport', filenames[0])
-            }
-          }
-        )
-      }
-    })
-  }
-
   onBackupExport() {
     const { openDialog, closeDialog } = this.props
     const confirmOpts = {
@@ -220,7 +165,7 @@ export default class Settings extends React.Component {
     confirmationDialog(
       this.translate('pref_backup_export_explain'),
       confirmOpts,
-      (response:todo) => {
+      (response: todo) => {
         if (!response) return
         const opts: OpenDialogOptions = {
           title: this.translate('export_backup_desktop'),
@@ -250,7 +195,7 @@ export default class Settings extends React.Component {
    * Saves settings for the Deltachat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
-  handleDesktopSettingsChange(key:string, value:string|boolean) {
+  handleDesktopSettingsChange(key: string, value: string | boolean) {
     ipcRenderer.send('updateDesktopSetting', key, value)
     if (key === 'notifications' && !value) {
       ipcRenderer.send('updateDesktopSetting', 'showNotificationContent', false)
@@ -258,14 +203,14 @@ export default class Settings extends React.Component {
   }
 
   /** Saves settings to deltachat core */
-  handleDeltaSettingsChange(key:string, value:string|boolean) {
+  handleDeltaSettingsChange(key: string, value: string | boolean) {
     ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
   }
 
-  onLoginSubmit(config:todo) {
+  onLoginSubmit(config: todo) {
     const { closeDialog } = this.props
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
@@ -287,10 +232,10 @@ export default class Settings extends React.Component {
   /*
    * render switch for Desktop Setings
    */
-  renderDTSettingSwitch(configKey:string, label:string) {
+  renderDTSettingSwitch(configKey: string, label: string) {
     return (
       <SettingsContext.Consumer>
-        {(settings:todo) => (
+        {(settings: todo) => (
           <Switch
             checked={settings[configKey]}
             className={settings[configKey] ? 'active' : 'inactive'}
@@ -308,7 +253,7 @@ export default class Settings extends React.Component {
     )
   }
 
-  renderDeltaSwitch(configKey:string, label:string) {
+  renderDeltaSwitch(configKey: string, label: string) {
     const configValue = this.state.settings[configKey]
     return (
       <Switch
@@ -325,48 +270,7 @@ export default class Settings extends React.Component {
     )
   }
 
-  renderTimeDurationSwitch() {
-    return (
-      <>
-        <Radio
-        label={this.translate('off')}
-        value={Number(0)}
-        />
-        {/* Delete after 1 hour (60*60 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_1_hour')}
-          value={Number(60*60)}
-        />
-        {/* Delete after 1 day (60*60*24 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_1_day')}
-          value={Number(60*60*24)}
-        />
-        {/* Delete after 1 week (60*60*24*7 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_1_week')}
-          value={Number(60*60*24*7)}
-        />
-        {/* Delete after 4 weeks (60*60*24*7*4 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_4_weeks')}
-          value={Number(60*60*24*7*4)}
-        />
-        {/* Delete after 4 weeks (60*60*24*7*4 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_4_weeks')}
-          value={Number(60*60*24*7*4)}
-        />
-        {/* Delete after 1 year (60*60*24*365 seconds) */}
-        <Radio
-          label={this.translate('autodel_after_1_year')}
-          value={Number(60*60*24*365)}
-        />
-      </>
-    )
-  }
-
-  renderDeltaInput(configKey:string, label:string) {
+  renderDeltaInput(configKey: string, label: string) {
     const configValue = this.state.settings[configKey]
     return (
       <Label>
@@ -455,7 +359,10 @@ export default class Settings extends React.Component {
             <RadioGroup
               label={this.translate('pref_show_emails')}
               onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                this.handleDeltaSettingsChange('show_emails', ev.currentTarget.value)
+                this.handleDeltaSettingsChange(
+                  'show_emails',
+                  ev.currentTarget.value
+                )
               }
               selectedValue={Number(settings['show_emails'])}
             >
@@ -479,39 +386,12 @@ export default class Settings extends React.Component {
               this.translate('pref_read_receipts')
             )}
             <br />
-            <Button onClick={() => openDialog(({isOpen, onClose}: DialogProps) => {
-              return (
-                <DeltaDialog isOpen={isOpen} onClose={onClose} title= {this.translate('autodel_title')}>
-                  <DeltaDialogBody>
-                    <DeltaDialogContent noPadding>
-                      Test
-                    </DeltaDialogContent>
-                  </DeltaDialogBody>
-                  <DeltaDialogFooter />
-                </DeltaDialog>
-              )
-            })}>
-              {this.translate('autodel_title')}
-            </Button>
-            <RadioGroup
-              label={this.translate('autodel_device_title')}
-              onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                this.handleDeltaSettingsChange('delete_device_after', ev.currentTarget.value)
-              }
-              selectedValue={Number(settings['delete_device_after'])}
-            >
-              {this.renderTimeDurationSwitch()}
-            </RadioGroup>
-            <br />
-            <RadioGroup
-              label={this.translate('autodel_server_title')}
-              onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                this.handleDeltaSettingsChange('delete_server_after', ev.currentTarget.value)
-              }
-              selectedValue={Number(settings['delete_server_after'])}
-            >
-              {this.renderTimeDurationSwitch()}
-            </RadioGroup>
+            <SettingsAutodelete
+              {...{
+                handleDeltaSettingsChange: this.handleDeltaSettingsChange,
+                settings,
+              }}
+            />
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>
@@ -587,15 +467,7 @@ export default class Settings extends React.Component {
               this.translate('pref_auto_folder_moves')
             )}
           </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_managekeys_menu_title')}</H5>
-            <Button onClick={this.onKeysExport}>
-              {this.translate('pref_managekeys_export_secret_keys')}...
-            </Button>
-            <Button onClick={this.onKeysImport}>
-              {this.translate('pref_managekeys_import_secret_keys')}...
-            </Button>
-          </Card>
+          <SettingsManageKeys />
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_backup')}</H5>
             <Button onClick={this.onBackupExport}>
@@ -680,7 +552,7 @@ class BackgroundSelector extends React.Component {
       <div>
         <div className={'bg-option-wrap'}>
           <SettingsContext.Consumer>
-            {(settings:any) => (
+            {(settings: any) => (
               <div
                 style={{
                   backgroundImage: settings['chatViewBgImg'],
@@ -743,7 +615,7 @@ class BackgroundSelector extends React.Component {
     )
   }
 
-  setValue(val:string) {
+  setValue(val: string) {
     this.props.onChange(val)
   }
 
@@ -776,17 +648,14 @@ class BackgroundSelector extends React.Component {
   }
 }
 
-function ProfileImageSelector(props:any) {
+function ProfileImageSelector(props: any) {
   const { displayName, color } = props
   const tx = window.translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
-  useEffect(
-    () => {
-      DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-      // return nothing because reacts wants it like that
-    },
-    [profileImagePreview]
-  )
+  useEffect(() => {
+    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
+    // return nothing because reacts wants it like that
+  }, [profileImagePreview])
 
   const changeProfilePicture = async (picture: string) => {
     await DeltaBackend.call('setProfilePicture', picture)
