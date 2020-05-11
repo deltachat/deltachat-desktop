@@ -41,7 +41,7 @@ const app = rawApp as ExtendedAppMainProcess
 
 export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   const main = mainWindow
-  const dcController = new DeltaChatController(cwd)
+  const dcController = new DeltaChatController(cwd, state.saved)
 
   dcController.on('ready', async (credentials: Credentials) => {
     if (!state.logins.find(({ addr }) => addr === credentials.addr)) {

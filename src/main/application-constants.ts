@@ -39,7 +39,3 @@ export function getLogsPath() {
 export function getAccountsPath() {
   return join(getConfigPath(), 'accounts')
 }
-
-export function getCustomThemesPath() {
-  return join(getConfigPath(), 'custom-themes')
-}

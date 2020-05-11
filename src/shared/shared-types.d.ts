@@ -25,8 +25,6 @@ export interface LocalSettings {
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
   zoomFactor: number
-  /** adress to the active theme file scheme: "custom:name" or "dc:name" */
-  activeTheme: string
 }
 
 export interface AppState {
@@ -156,10 +154,4 @@ export interface MessageType {
   contact: JsonContact
   isInfo: boolean
   setupCodeBegin: todo
-}
-
-export type Theme = {
-  name: string
-  description: string
-  address: string
 }
