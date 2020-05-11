@@ -96,3 +96,59 @@
     content: var(--description);
   }
 }
+
+.SettingsButton {
+  position: relative;
+  height: 40px;
+  width: calc(100% + 40px);
+  left: -20px;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {  
+    margin-left: 20px;
+    padding: 0;
+
+    background-color: unset;
+    border: none;
+
+    text-align: center;
+    line-height: 40px;
+  }
+}
+
+.SettingsSelector {
+  position: relative;
+  height: 40px;
+  width: calc(100% + 40px);
+  left: -20px;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  button {  
+    margin-left: 20px;
+    padding: 0;
+
+    background-color: unset;
+    border: none;
+
+    text-align: center;
+    line-height: 40px;
+  }
+
+  .CurrentValue {
+    padding-right: 40px;
+    line-height: 40px;
+    color: var(--colorPrimary);
+    font-weight: lighter;
+  }
+
+}
