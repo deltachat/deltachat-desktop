@@ -65,7 +65,8 @@ export default class Settings extends React.Component {
     mail_pw: string
     settings: todo
     show: string
-    selfContact: todo
+    selfContact: todo,
+    availableThemes: string[]
   }
   constructor(public props: DialogProps) {
     super(props)
@@ -254,7 +255,7 @@ export default class Settings extends React.Component {
   renderThemeSelection() {
     return (
       <SettingsContext.Consumer>
-        {settings => (
+        {(settings:any) => (
           <div>
             <H6>{this.translate('pref_theming')}</H6>
             <div className='theme-meta'>
@@ -274,7 +275,7 @@ export default class Settings extends React.Component {
               <option key={'system'} value={'system'}>
                 {this.translate('pref_system_theme')}
               </option>
-              {this.state.availableThemes?.map(theme => (
+              {this.state.availableThemes?.map((theme:todo) => (
                 <option key={theme.address} value={theme.address}>
                   {theme.name} - {theme.description} [{theme.address}]
                 </option>
