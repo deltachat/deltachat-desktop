@@ -63,17 +63,19 @@ export type DialogProps = {
   [key: string]: any
 }
 
+
+var dialogCounter = 1
+
 export class Controller extends React.Component<
   any,
   {
     dialogs: dialogs
-    dialogCounter: number
   }
 > {
   constructor(props: any) {
     super(props)
 
-    this.state = { dialogs: {}, dialogCounter: 0 }
+    this.state = { dialogs: {}}
     this.close = this.close.bind(this)
   }
 
@@ -86,24 +88,29 @@ export class Controller extends React.Component<
     if (!props) props = {}
     log.debug('openDialog: ', fnc, props)
 
-    let id: number = this.state.dialogCounter + 1
-    if (id >= Number.MAX_SAFE_INTEGER - 1) id = 0
+    let id: number = dialogCounter++
+    if (id >= Number.MAX_SAFE_INTEGER - 1) {
+      id = dialogCounter = 0
+    }
 
-    this.setState({
-      dialogs: {
-        ...this.state.dialogs,
-        [id]: {
-          id,
-          fnc,
-          props,
-        },
-      },
-      dialogCounter: id,
+    log.debug(`Add dialog with id: ${id}`)  
+    this.setState((state) => {
+      return {
+        dialogs: {
+          ...state.dialogs,
+          [id]: {
+            id,
+            fnc,
+            props,
+          },
+        }
+      }
     })
   }
 
-  close(key: DialogId) {
-    const { [key]: closedDialog, ...dialogs } = this.state.dialogs
+  close(id: DialogId) {
+    const { [id]: closedDialog, ...dialogs } = this.state.dialogs
+    log.debug(`Close dialog with id: ${id}`)  
     this.setState({ dialogs })
   }
 
@@ -115,6 +122,7 @@ export class Controller extends React.Component<
     return (
       <div>
         {Object.keys(dialogs).map((id: string) => {
+          log.debug(`Rendering dialog with id ${id}`)
           const dialog = dialogs[id]
           var defaultProps: DialogProps = {
             isOpen: true,
