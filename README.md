@@ -26,14 +26,15 @@
 
 ## Install
 
-The application can be downloaded from the [`Releases`](https://github.com/deltachat/deltachat-desktop/releases) page. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
+The application can be downloaded from <https://get.delta.chat>. Here you'll find prebuilt releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
 
 ### Linux
 
 #### Flatpak
 
 The primary distribution-independed way to install is to use the
-flatpak build. This is maintained in [it's own
+flatpak build.
+This is maintained in [it's own
 repository](https://github.com/flathub/chat.delta.desktop), however a
 pre-built binary can be downloaded and installed from
 [flathub](https://flathub.org/apps/details/chat.delta.desktop) which
@@ -47,7 +48,7 @@ If you have a AUR helper like yay installed, you can install it by running `yay 
 
 Otherwise you can still do it manually:
 
-```
+```sh
 # Download the latest snapshot of the PKGBUILD
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz
 # extract the archive and rm the archive file afterwards
@@ -72,34 +73,23 @@ $ brew install openssl
 
 ### From Source
 
-> ⚠ Information on this section might be deprecated. [TODO update this section]
-> Get the code:
+> ⚠ This is mostly for development purposes, this won't install/integrate deltachat into your system.
+> So unless you know what you are doing, we recomment to stick to the methods above if possible.
+
+Get the code:
 
 ```
 $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
 ```
 
-Install dependencies, there are two options:
-
-1. Use system-wide installed `libdeltachat.so`:
-
-```
-$ npm install --dc-system-lib=true
-```
-
-2. Use the deltachat-core-rust code included as a git submodule in the
-   deltachat-node bindings:
+Install dependencies:
 
 ```
 $ npm install
 ```
 
-For both these see the instructions in the deltchat-node and
-deltachat-rust-core README files to set things up.
-
-Build the app (only needed if the code has changed or if the app has
-never been built before):
+Build the app (only needed on the first time or if the code was changed):
 
 ```
 $ npm run build
@@ -127,6 +117,9 @@ If `rust` or `cargo` is missing:
 Follow the instruction on <https://rustup.rs/> to install rust and cargo.
 
 Then try running `npm install` again.
+
+If you still get errors look at the instructions in the deltchat-node and
+deltachat-rust-core README files to set things up **or write an issue**.
 
 ## How to Contribute
 
