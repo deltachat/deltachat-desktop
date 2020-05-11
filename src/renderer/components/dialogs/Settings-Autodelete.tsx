@@ -121,7 +121,7 @@ function SelectAutodeleteDurationDialog(props: DialogProps) {
           display: 'flex',
           justifyContent: 'space-between',
           marginTop: '0px',
-          padding: '7px 13px',
+          padding: '7px 13px 10px 13px',
         }}
       >
         <DeltaButtonDanger onClick={onClose}>{tx('cancel')}</DeltaButtonDanger>

@@ -1,16 +1,18 @@
 import React from 'react'
 import { Card, Elevation, H5, Button } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
-import { DialogProps } from '.'
-import { OpenDialogOptions, remote, ipcRenderer } from 'electron'
+import { OpenDialogOptions } from 'electron'
 import { DeltaBackend } from '../../delta-remote'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
+import { ipcBackend } from '../../ipc'
+
+const { remote } = window.electron_functions
 
 function onKeysImport() {
   const tx = window.translate
 
   const opts: OpenDialogOptions = {
-    title: window.translate('pref_managekeys_import_secret_keys'),
+    title: tx('pref_managekeys_import_secret_keys'),
     defaultPath: remote.app.getPath('downloads'),
     properties: ['openDirectory'],
   }
@@ -25,7 +27,7 @@ function onKeysImport() {
         'pref_managekeys_secret_keys_imported_from_x',
         filenames[0]
       )
-      ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
+      ipcBackend.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
         if (progress !== 1000) return
         this.props.userFeedback({ type: 'success', text })
       })
@@ -35,6 +37,7 @@ function onKeysImport() {
 }
 
 function onKeysExport() {
+  
   // TODO: ask for the user's password and check it using
   // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
   const tx = window.translate
@@ -53,7 +56,7 @@ function onKeysExport() {
     )
     confirmationDialog(title, (response: todo) => {
       if (!response || !filenames || !filenames.length) return
-      ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
         this.props.userFeedback({
           type: 'success',
           text: tx('pref_managekeys_secret_keys_exported_to_x', filename),

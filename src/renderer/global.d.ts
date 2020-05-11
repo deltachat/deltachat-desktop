@@ -21,6 +21,7 @@ declare global {
     }
     __openDialog: (name: DialogId, props?: any) => {}
     __userFeedback: (message: userFeedback | false) => {}
+    __closeDialog: (key: string) => {}
     __isReady: boolean
   }
 }

@@ -43,6 +43,7 @@ export default class ScreenController extends Component {
     this.openDialog = this.openDialog.bind(this)
     window.__openDialog = this.openDialog.bind(this)
     window.__userFeedback = this.userFeedback.bind(this)
+    window.__closeDialog = this.closeDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogs = createRef()

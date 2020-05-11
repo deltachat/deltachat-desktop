@@ -15,13 +15,6 @@ import {
   HTMLSelect,
 } from '@blueprintjs/core'
 
-import DeltaDialog, {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogFooter,
-  DeltaDialogContent,
-  DeltaDialogHeader,
-} from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
 import { ThemeManager } from '../../ThemeManager'
@@ -34,6 +27,8 @@ import { AppState } from '../../../shared/shared-types'
 import { DialogProps } from '.'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
+import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody } from './DeltaDialog'
+import SettingsBackup from './Settings-Backup'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -80,7 +75,6 @@ export default class Settings extends React.Component {
       availableThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.onBackupExport = this.onBackupExport.bind(this)
     this.handleDesktopSettingsChange = this.handleDesktopSettingsChange.bind(
       this
     )
@@ -154,42 +148,7 @@ export default class Settings extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  onBackupExport() {
-    const { openDialog, closeDialog } = this.props
-    const confirmOpts = {
-      buttons: [
-        this.translate('cancel'),
-        this.translate('export_backup_desktop'),
-      ],
-    }
-    confirmationDialog(
-      this.translate('pref_backup_export_explain'),
-      confirmOpts,
-      (response: todo) => {
-        if (!response) return
-        const opts: OpenDialogOptions = {
-          title: this.translate('export_backup_desktop'),
-          defaultPath: remote.app.getPath('downloads'),
-          properties: ['openDirectory'],
-        }
-        remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
-          if (!filenames || !filenames.length) {
-            return
-          }
-          ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-            this.props.userFeedback({
-              type: 'success',
-              text: this.translate('pref_backup_written_to_x', filename),
-            })
 
-            closeDialog('ImexProgress')
-          })
-          ipcRenderer.send('backupExport', filenames[0])
-          openDialog('ImexProgress', {})
-        })
-      }
-    )
-  }
 
   /*
    * Saves settings for the Deltachat Desktop
@@ -408,13 +367,13 @@ export default class Settings extends React.Component {
               'e2ee_enabled',
               this.translate('autocrypt_prefer_e2ee')
             )}
-            <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
-              {this.translate('autocrypt_send_asm_button')}
-            </Button>
             <br />
-            <p style={{ marginTop: '10px' }}>
+            <SettingsButton style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }} onClick={() => openDialog('SendAutocryptSetupMessage')}>
+              {this.translate('autocrypt_send_asm_button')}
+            </SettingsButton>
+            <div className="bp3-callout">
               {this.translate('autocrypt_explain')}
-            </p>
+            </div>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
@@ -468,12 +427,7 @@ export default class Settings extends React.Component {
             )}
           </Card>
           <SettingsManageKeys />
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_backup')}</H5>
-            <Button onClick={this.onBackupExport}>
-              {this.translate('pref_backup_export_start_button')}
-            </Button>
-          </Card>
+          <SettingsBackup />
         </div>
       )
     } else if (this.state.show === 'login') {
