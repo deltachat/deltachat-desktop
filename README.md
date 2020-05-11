@@ -76,28 +76,18 @@ $ brew install openssl
 > ⚠ This is mostly for development purposes, this won't install/integrate deltachat into your system.
 > So unless you know what you are doing, we recomment to stick to the methods above if possible.
 
-Get the code:
-
-```
+```sh
+# Get the code
 $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
-```
 
-Install dependencies:
-
-```
+# Install dependencies
 $ npm install
-```
 
-Build the app (only needed on the first time or if the code was changed):
-
-```
+# Build the app (only needed on the first time or if the code was changed)
 $ npm run build
-```
 
-Start the application:
-
-```
+# Start the application:
 $ npm start
 ```
 
