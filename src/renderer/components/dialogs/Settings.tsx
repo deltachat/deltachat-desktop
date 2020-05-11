@@ -311,9 +311,9 @@ export default class Settings extends React.Component {
               'selfstatus',
               this.translate('pref_default_status_label')
             )}
-            <Button onClick={() => this.setState({ show: 'login' })}>
+            <SettingsButton onClick={() => this.setState({ show: 'login' })}>
               {this.translate('pref_password_and_account_settings')}
-            </Button>
+            </SettingsButton>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_communication')}</H5>

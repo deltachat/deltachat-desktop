@@ -21,9 +21,10 @@ export function confirmationDialogLegacy(
     message: message,
     buttons: [tx('no'), tx('yes')],
   }
-  //@ts-ignore
+  
   remote.dialog.showMessageBox(
     Object.assign(defaultOpts, opts),
+    //@ts-ignore
     (response: number) => {
       cb(response === 1) // eslint-disable-line
     }
