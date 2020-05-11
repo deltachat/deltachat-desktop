@@ -51,12 +51,16 @@ Otherwise you can still do it manually:
 ```sh
 # Download the latest snapshot of the PKGBUILD
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/deltachat-desktop-git.tar.gz
+
 # extract the archive and rm the archive file afterwards
 tar xzfv deltachat-desktop-git.tar.gz && rm deltachat-desktop-git.tar.gz
+
 # cd into extracted folder
 cd deltachat-desktop-git
+
 # build package
 makepkg -si
+
 # install package (you need to replace <version> with whatever version makepkg built)
 sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ```
