@@ -27,7 +27,11 @@ import { AppState } from '../../../shared/shared-types'
 import { DialogProps } from '.'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
-import { DeltaDialogBase, DeltaDialogHeader, DeltaDialogBody } from './DeltaDialog'
+import {
+  DeltaDialogBase,
+  DeltaDialogHeader,
+  DeltaDialogBody,
+} from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 
 function flipDeltaBoolean(value: string) {
@@ -147,8 +151,6 @@ export default class Settings extends React.Component {
   onKeyTransferComplete() {
     this.setState({ keyTransfer: false })
   }
-
-
 
   /*
    * Saves settings for the Deltachat Desktop
@@ -368,10 +370,13 @@ export default class Settings extends React.Component {
               this.translate('autocrypt_prefer_e2ee')
             )}
             <br />
-            <SettingsButton style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }} onClick={() => openDialog('SendAutocryptSetupMessage')}>
+            <SettingsButton
+              style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
+              onClick={() => openDialog('SendAutocryptSetupMessage')}
+            >
               {this.translate('autocrypt_send_asm_button')}
             </SettingsButton>
-            <div className="bp3-callout">
+            <div className='bp3-callout'>
               {this.translate('autocrypt_explain')}
             </div>
           </Card>

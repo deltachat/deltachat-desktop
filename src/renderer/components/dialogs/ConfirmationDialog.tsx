@@ -8,7 +8,11 @@ import { MessageBoxOptions } from 'electron'
 
 const { remote } = window.electron_functions
 
-export function confirmationDialogLegacy(message:string, opts?:any, cb?:any) {
+export function confirmationDialogLegacy(
+  message: string,
+  opts?: any,
+  cb?: any
+) {
   if (!cb) cb = opts
   if (!opts) opts = {}
   const tx = window.translate
@@ -18,15 +22,19 @@ export function confirmationDialogLegacy(message:string, opts?:any, cb?:any) {
     buttons: [tx('no'), tx('yes')],
   }
   //@ts-ignore
-  remote.dialog.showMessageBox(Object.assign(defaultOpts, opts), (response: number) => {
-    cb(response === 1) // eslint-disable-line
-  })
+  remote.dialog.showMessageBox(
+    Object.assign(defaultOpts, opts),
+    (response: number) => {
+      cb(response === 1) // eslint-disable-line
+    }
+  )
 }
 
 export default function ConfirmationDialog(props: todo) {
   const { message, cancelLabel, confirmLabel, cb } = props
 
-  const yesisPrimary = typeof props.yesIsPrimary === 'undefined' ? false : props.yesIsPrimary
+  const yesisPrimary =
+    typeof props.yesIsPrimary === 'undefined' ? false : props.yesIsPrimary
 
   const isOpen = !!message
   const tx = window.translate
@@ -52,14 +60,14 @@ export default function ConfirmationDialog(props: todo) {
           >
             {React.createElement(
               yesisPrimary ? DeltaButtonDanger : DeltaButtonPrimary,
-              { noPadding: true,  onClick: () => onClick(false) },
+              { noPadding: true, onClick: () => onClick(false) },
               cancelLabel || tx('cancel')
             )}
             {React.createElement(
               yesisPrimary ? DeltaButtonPrimary : DeltaButtonDanger,
-              { noPadding: true,  onClick: () => onClick(true) },
+              { noPadding: true, onClick: () => onClick(true) },
               confirmLabel || tx('yes')
-            )}          
+            )}
           </div>
         </div>
       </div>
