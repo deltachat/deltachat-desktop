@@ -101,10 +101,8 @@ function SelectAutodeleteDurationDialog(props: DialogProps) {
   }
   const onChange = (ev: React.FormEvent<HTMLInputElement>) => {
     const value: string = ev.currentTarget.value
-    console.log('onChange', value)
     setSelectedValue(value)
   }
-  console.log('Dialog', selectedValue)
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <DeltaDialogHeader title={label} />
