@@ -74,9 +74,9 @@ export function openBlockContactDialog(
 
 export function openEncryptionInfoDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chat: Chat
+  chatListItem: ChatListItemType
 ) {
-  screenContext.openDialog('EncryptionInfo', { chat })
+  screenContext.openDialog('EncryptionInfo', { chatListItem })
 }
 
 export function openEditGroupDialog(

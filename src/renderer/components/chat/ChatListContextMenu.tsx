@@ -83,7 +83,7 @@ const ChatListContextMenu = React.memo<{
   props => {
     const screenContext = useContext(ScreenContext)
     const { showArchivedChats } = props
-    const [chat, setChat] = useState<ChatListItemType | null>(null)
+    const [chatListItem, setChat] = useState<ChatListItemType | null>(null)
     const [showEvent, setShowEvent] = useState(null)
     const contextMenu = useRef(null)
 
@@ -116,39 +116,42 @@ const ChatListContextMenu = React.memo<{
       setChat(null)
     }
 
-    const onDeleteChat = () => openDeleteChatDialog(screenContext, chat)
-    const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chat)
+    const onDeleteChat = () => openDeleteChatDialog(screenContext, chatListItem)
+    const onEncrInfo = () =>
+      openEncryptionInfoDialog(screenContext, chatListItem)
     const onEditGroup = async () => {
       const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
-        chat.id
+        chatListItem.id
       )
       openEditGroupDialog(screenContext, fullChat)
     }
     const onViewProfile = async () => {
       const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
-        chat.id
+        chatListItem.id
       )
       openViewProfileDialog(screenContext, fullChat.contacts[0].id)
     }
-    const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
-    const onBlockContact = () => openBlockContactDialog(screenContext, chat)
+    const onLeaveGroup = () =>
+      openLeaveChatDialog(screenContext, chatListItem.id)
+    const onBlockContact = () =>
+      openBlockContactDialog(screenContext, chatListItem)
 
     const tx = window.translate
 
-    const menu = chat
+    const menu = chatListItem
       ? [
-          ...ArchiveStateMenu(chat),
+          ...ArchiveStateMenu(chatListItem),
           <MenuItem onClick={onDeleteChat} key='delete'>
             {tx('menu_delete_chat')}
           </MenuItem>,
-          !chat.isGroup && !chat.isDeviceTalk && (
+          !chatListItem.isGroup && !chatListItem.isDeviceTalk && (
             <MenuItem onClick={onEncrInfo} key='info'>
               {tx('encryption_info_desktop')}
             </MenuItem>
           ),
-          chat.isGroup && chat.selfInGroup && (
+          chatListItem.isGroup && chatListItem.selfInGroup && (
             <>
               <MenuItem onClick={onEditGroup} key='edit'>
                 {tx('menu_edit_group')}
@@ -158,16 +161,17 @@ const ChatListContextMenu = React.memo<{
               </MenuItem>
             </>
           ),
-          !chat.isGroup && (
+          !chatListItem.isGroup && (
             <MenuItem onClick={onViewProfile} key='view'>
               {tx('menu_view_profile')}
             </MenuItem>
           ),
-          !chat.isGroup && !(chat.isSelfTalk || chat.isDeviceTalk) && (
-            <MenuItem onClick={onBlockContact} key='block'>
-              {tx('menu_block_contact')}
-            </MenuItem>
-          ),
+          !chatListItem.isGroup &&
+            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && (
+              <MenuItem onClick={onBlockContact} key='block'>
+                {tx('menu_block_contact')}
+              </MenuItem>
+            ),
         ]
       : []
 
