@@ -15,7 +15,7 @@ import { Collapse, Intent } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
 import ClickableLink from './helpers/ClickableLink'
 
-type credentialState = {
+export type credentialState = {
   [key: string]: any
   addr?: string
   mail_user?: string
@@ -35,7 +35,7 @@ type credentialState = {
 type LoginProps = React.PropsWithChildren<
   {
     [key: string]: any
-    mode: 'update' | undefined
+    mode?: 'update'
   } & credentialState
 >
 
