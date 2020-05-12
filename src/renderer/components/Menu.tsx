@@ -31,11 +31,8 @@ export function DeltaMenuItem({
   )
 }
 
-export default function DeltaMenu(props: {
-  selectedChat: FullChat
-  showArchivedChats: boolean
-}) {
-  const { selectedChat, showArchivedChats } = props
+export default function DeltaMenu(props: { selectedChat: FullChat }) {
+  const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
   const tx = window.translate
@@ -66,7 +63,7 @@ export default function DeltaMenu(props: {
 
     chatMenu = [
       <Menu.Divider key='divider1' />,
-      showArchivedChats ? (
+      selectedChat.archived ? (
         <DeltaMenuItem
           key='unarchive'
           text={tx('menu_unarchive_chat')}
