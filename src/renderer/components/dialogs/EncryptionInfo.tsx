@@ -4,13 +4,22 @@ import SmallDialog, { DeltaButton } from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
 
-export default function EncryptionInfo({chatListItem, isOpen, onClose} : {chatListItem: ChatListItemType, isOpen: boolean, onClose: Function}) {
+export default function EncryptionInfo({
+  chatListItem,
+  isOpen,
+  onClose,
+}: {
+  chatListItem: ChatListItemType
+  isOpen: boolean
+  onClose: Function
+}) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
-    DeltaBackend.call('chat.getEncryptionInfo', chatListItem.contactIds[0]).then(
-      setEncryptionInfo
-    )
+    DeltaBackend.call(
+      'chat.getEncryptionInfo',
+      chatListItem.contactIds[0]
+    ).then(setEncryptionInfo)
   })
 
   const tx = window.translate

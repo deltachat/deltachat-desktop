@@ -117,7 +117,8 @@ const ChatListContextMenu = React.memo<{
     }
 
     const onDeleteChat = () => openDeleteChatDialog(screenContext, chatListItem)
-    const onEncrInfo = () => openEncryptionInfoDialog(screenContext, chatListItem)
+    const onEncrInfo = () =>
+      openEncryptionInfoDialog(screenContext, chatListItem)
     const onEditGroup = async () => {
       const fullChat = await DeltaBackend.call(
         'chatList.getFullChatById',
@@ -132,8 +133,10 @@ const ChatListContextMenu = React.memo<{
       )
       openViewProfileDialog(screenContext, fullChat.contacts[0])
     }
-    const onLeaveGroup = () => openLeaveChatDialog(screenContext, chatListItem.id)
-    const onBlockContact = () => openBlockContactDialog(screenContext, chatListItem)
+    const onLeaveGroup = () =>
+      openLeaveChatDialog(screenContext, chatListItem.id)
+    const onBlockContact = () =>
+      openBlockContactDialog(screenContext, chatListItem)
 
     const tx = window.translate
 
@@ -163,11 +166,12 @@ const ChatListContextMenu = React.memo<{
               {tx('menu_view_profile')}
             </MenuItem>
           ),
-          !chatListItem.isGroup && !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && (
-            <MenuItem onClick={onBlockContact} key='block'>
-              {tx('menu_block_contact')}
-            </MenuItem>
-          ),
+          !chatListItem.isGroup &&
+            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && (
+              <MenuItem onClick={onBlockContact} key='block'>
+                {tx('menu_block_contact')}
+              </MenuItem>
+            ),
         ]
       : []
 
