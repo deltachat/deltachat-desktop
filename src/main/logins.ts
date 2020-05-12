@@ -38,13 +38,13 @@ async function migrate(dir: string) {
         await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
       } catch (error) {
         log.error(
-          "Moving failed, make sure you don't have multiple account folders for the same account!",
+          "Moving failed, make sure you don't have multiple account folders for the same e-mail address!",
           error
         )
         dialog.showErrorBox(
           'Account migration',
           `Migration of ${account.addr} failed,\n` +
-            "make sure you don't have multiple account folders for the same account!\n" +
+            "Please make sure that you don't have multiple account folders for the same e-mail address!\n" +
             'See the logfile for details'
         )
         continue
