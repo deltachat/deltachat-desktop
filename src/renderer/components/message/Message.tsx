@@ -7,8 +7,15 @@ import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
+import { MessageType, DCContact } from '../../../shared/shared-types'
+import { attachment } from '../attachment/Attachment'
 
-const Avatar = (contact, onContactClick) => {
+type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
+
+const Avatar = (
+  contact: DCContact,
+  onContactClick: (contact: DCContact) => void
+) => {
   const { profileImage, color, name, address } = contact
 
   const alt = `${name || address}`
@@ -26,7 +33,7 @@ const Avatar = (contact, onContactClick) => {
       ? String.fromCodePoint(codepoint).toUpperCase()
       : '#'
     return (
-      <div className='author-avatar default' alt={alt} onClick={onClick}>
+      <div className='author-avatar default' aria-label={alt} onClick={onClick}>
         <div style={{ backgroundColor: color }} className='label'>
           {initial}
         </div>
@@ -35,7 +42,13 @@ const Avatar = (contact, onContactClick) => {
   }
 }
 
-const ContactName = props => {
+const ContactName = (props: {
+  email: string
+  name: string
+  profileName?: string
+  color: string
+  onClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
+}) => {
   const { email, name, profileName, color, onClick } = props
 
   const title = name || email
@@ -53,7 +66,10 @@ const ContactName = props => {
   )
 }
 
-const Author = (contact, onContactClick) => {
+const Author = (
+  contact: DCContact,
+  onContactClick: (contact: DCContact) => void
+) => {
   const { color, name, address } = contact
 
   return (
@@ -66,8 +82,18 @@ const Author = (contact, onContactClick) => {
   )
 }
 
-const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
-  const { attachment, message, onReply, viewType } = props
+const InlineMenu = (
+  MenuRef: todo,
+  showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
+  triggerId: string,
+  props: {
+    attachment: attachment
+    message: MessageType | { msg: null }
+    // onReply
+    viewType: number
+  }
+) => {
+  const { attachment, message, /*onReply,*/ viewType } = props
   const tx = window.translate
 
   return (
@@ -80,11 +106,11 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
           aria-label={tx('save')}
         />
       )}
-      <div
+      {/* <div
         onClick={onReply}
         role='button'
         className='msg-button reply hide-on-small'
-      />
+      /> */}
       <ContextMenuTrigger id={triggerId} ref={MenuRef}>
         <div
           role='button'
@@ -97,7 +123,23 @@ const InlineMenu = (MenuRef, showMenu, triggerId, props) => {
   )
 }
 
-const contextMenu = (props, textSelected, link, triggerId) => {
+const contextMenu = (
+  props: {
+    attachment: attachment
+    direction: 'incoming' | 'outgoing'
+    status: msgStatus
+    onDelete: Function
+    message: MessageType | { msg: null }
+    text?: string
+    // onReply:Function
+    onForward: Function
+    // onRetrySend: Function
+    onShowDetail: Function
+  },
+  textSelected: boolean,
+  link: string,
+  triggerId: string
+) => {
   const {
     attachment,
     direction,
@@ -107,13 +149,12 @@ const contextMenu = (props, textSelected, link, triggerId) => {
     text,
     // onReply,
     onForward,
-    onRetrySend,
+    // onRetrySend,
     onShowDetail,
   } = props
   const tx = window.translate
 
-  let showRetry = status === 'error' && direction === 'outgoing'
-  showRetry = false // TODO: retry send is not yet implemented
+  // let showRetry = status === 'error' && direction === 'outgoing'
 
   return (
     <ContextMenu id={triggerId}>
@@ -151,15 +192,35 @@ const contextMenu = (props, textSelected, link, triggerId) => {
        */}
       <MenuItem onClick={onForward}>{tx('menu_forward')}</MenuItem>
       <MenuItem onClick={onShowDetail}>{tx('more_info_desktop')}</MenuItem>
-      {showRetry ? (
+      {/* {showRetry ? (
         <MenuItem onClick={onRetrySend}>{tx('retry_send')}</MenuItem>
-      ) : null}
+      ) : null} */}
       <MenuItem onClick={onDelete}>{tx('delete_message_desktop')}</MenuItem>
     </ContextMenu>
   )
 }
 
-const Message = props => {
+const Message = (props: {
+  direction: 'incoming' | 'outgoing'
+  id: number
+  timestamp: number
+  viewType: number
+  conversationType: 'group' | 'direct'
+  message: MessageType
+  text?: string
+  disableMenu?: boolean
+  status: msgStatus
+  attachment: attachment
+  onContactClick: (contact: DCContact) => void
+  onClickMessageBody: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void
+  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  padlock: boolean
+  onDelete: () => void
+  onForward: () => void
+  /* onRetrySend */
+}) => {
   const {
     direction,
     id,
@@ -173,6 +234,7 @@ const Message = props => {
     attachment,
     onContactClick,
     onClickMessageBody,
+    onShowDetail,
   } = props
   const tx = window.translate
 
@@ -182,16 +244,16 @@ const Message = props => {
   //   It needs to be unique.
   const triggerId = String(id || `${authorAddress}-${timestamp}`)
 
-  const onShowDetail = props.onShowDetail
-
   const MenuRef = useRef(null)
   const [textSelected, setTextSelected] = useState(false)
   const [link, setLink] = useState('')
 
-  const showMenu = event => {
+  const showMenu: (
+    event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+  ) => void = event => {
     if (MenuRef.current) {
       setTextSelected(window.getSelection().toString() !== '')
-      setLink(event.target.href || '')
+      setLink((event.target as any).href || '')
       MenuRef.current.handleContextClick(event)
     }
   }

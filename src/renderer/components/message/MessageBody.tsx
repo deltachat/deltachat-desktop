@@ -6,9 +6,13 @@ import SimpleMarkdown from 'simple-markdown'
 
 const emojiRegex = getRegex()
 const parser = SimpleMarkdown.parserFor(rules)
-const ast2react = SimpleMarkdown.outputFor(rules, 'react')
+const ast2react = (SimpleMarkdown.outputFor as any)(rules, 'react')
 
-export default function MessageBody(props) {
+export default function MessageBody(props: {
+  text: string
+  disableJumbomoji?: boolean
+  preview?: boolean
+}) {
   const { text, disableJumbomoji, preview } = props
   // if text is only emojis and Jumbomoji is enabled
   const emojifiedText = trim(text.replace(/:[\w\d_\-+]*:/g, replaceColons))
@@ -32,6 +36,6 @@ export default function MessageBody(props) {
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
 
 /** removes linebreaks at start and end */
-function trim(str) {
+function trim(str: string) {
   return str.replace(trimRegex, '')
 }

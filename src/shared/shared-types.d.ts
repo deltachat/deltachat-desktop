@@ -153,10 +153,12 @@ export interface MessageType {
   viewType: todo
   fromId: number
   isMe: boolean
-  contact: JsonContact
+  contact: Omit<JsonContact, 'color'> & { color: string }
   isInfo: boolean
   setupCodeBegin: todo
 }
+
+export type DCContact = Omit<JsonContact, 'color'> & { color: string }
 
 export type Theme = {
   name: string

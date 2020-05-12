@@ -1,14 +1,22 @@
 import React, { useRef, useEffect } from 'react'
-import MessageWrapper, { InfoMessage } from './MessageWrapper'
-import { useChatStore } from '../../stores/chat'
+import { MessageWrapper } from './MessageWrapper'
+import {
+  useChatStore,
+  ChatStoreState,
+  ChatStoreDispatch,
+} from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
+import { MessageType } from '../../../shared/shared-types'
 const log = getLogger('render/msgList')
 
-const messageIdsToShow = (oldestFetchedMessageIndex, messageIds) => {
+const messageIdsToShow = (
+  oldestFetchedMessageIndex: number,
+  messageIds: number[]
+) => {
   const messageIdsToShow = []
   for (let i = oldestFetchedMessageIndex; i < messageIds.length; i++) {
     messageIdsToShow.push(messageIds[i])
@@ -20,6 +28,10 @@ export default function MessageList({
   chat,
   refComposer,
   locationStreamingEnabled,
+}: {
+  chat: ChatStoreState
+  refComposer: todo
+  locationStreamingEnabled: boolean
 }) {
   const [
     {
@@ -33,7 +45,7 @@ export default function MessageList({
     chatStoreDispatch,
   ] = useChatStore()
   const messageListRef = useRef(null)
-  const lastKnownScrollHeight = useRef([null, null])
+  const lastKnownScrollHeight = useRef<number>(null)
   const isFetching = useRef(false)
 
   useEffect(() => {
@@ -81,7 +93,7 @@ export default function MessageList({
     { leading: true }
   )
 
-  const onScroll = Event => {
+  const onScroll = (Event: React.UIEvent<HTMLDivElement>) => {
     if (messageListRef.current.scrollTop !== 0) return
     if (isFetching.current === false) {
       lastKnownScrollHeight.current = messageListRef.current.scrollHeight
@@ -109,7 +121,16 @@ export default function MessageList({
 }
 
 export const MessageListInner = React.memo(
-  props => {
+  (props: {
+    onScroll: (event: React.UIEvent<HTMLDivElement>) => void
+    oldestFetchedMessageIndex: number
+    messageIds: number[]
+    messages: ChatStoreState['messages']
+    messageListRef: todo
+    locationStreamingEnabled: boolean
+    chat: ChatStoreState
+    chatStoreDispatch: ChatStoreDispatch
+  }) => {
     const {
       onScroll,
       oldestFetchedMessageIndex,
@@ -163,11 +184,11 @@ export const MessageListInner = React.memo(
               )
             }
             const message = messages[messageId]
-            if (!message) return
+            if (!message || message.msg == null) return
             return (
-              <MessageWrapper.render
+              <MessageWrapper
                 key={messageId}
-                message={message}
+                message={message as MessageType}
                 locationStreamingEnabled={locationStreamingEnabled}
                 chat={chat}
                 chatStoreDispatch={chatStoreDispatch}
@@ -190,7 +211,7 @@ export const MessageListInner = React.memo(
   }
 )
 
-export function DayMarker(props) {
+export function DayMarker(props: { timestamp: number }) {
   const { timestamp } = props
   const tx = window.translate
   return (

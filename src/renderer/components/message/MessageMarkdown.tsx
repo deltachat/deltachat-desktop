@@ -6,7 +6,7 @@ var ignoreCapture = function() {
   return {}
 }
 
-function assign(rule, order, object = {}) {
+function assign(rule: any, order: any, object = {}) {
   return Object.assign({}, rule, { order }, object)
 }
 
@@ -20,7 +20,7 @@ function assign(rule, order, object = {}) {
 //   return ignoreScope(assign(rule, order, object))
 // }
 
-const previewRules = {
+export const previewRules: SimpleMarkdown.ParserRules = {
   Array: defaultRules.Array,
   // strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
   // em: ignoreScopeAssign(defaultRules.em, 1), // italics
@@ -29,7 +29,7 @@ const previewRules = {
   // inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
   text: assign(defaultRules.text, 100),
 }
-const rules = Object.assign(
+export const rules: SimpleMarkdown.ParserRules = Object.assign(
   {
     // new mailto (open chat in dc?)
     // blockQuote ? (requires css; could be used for replies)
@@ -51,11 +51,11 @@ const rules = Object.assign(
     link: {
       order: 18,
       match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
-      parse: function(capture, recurseParse, state) {
+      parse: function(capture: any[], recurseParse: any, state: any) {
         return { content: capture[1] }
       },
-      react: function(node, output, state) {
-        const onClick = ev => {
+      react: function(node: any, output: any, state: any) {
+        const onClick = (ev: any) => {
           ev.preventDefault()
           openExternal(node.content)
         }
@@ -70,7 +70,7 @@ const rules = Object.assign(
       order: 19,
       match: blockRegex(/^(?:\n *){2,}\n/),
       parse: ignoreCapture,
-      react: function(node, output, state) {
+      react: function(node: any, output: any, state: any) {
         return <div key={state.key} className='double-line-break' />
       },
     },
@@ -78,15 +78,10 @@ const rules = Object.assign(
       order: 20,
       match: blockRegex(/^(?:\n *)\n/),
       parse: ignoreCapture,
-      react: function(node, output, state) {
+      react: function(node: any, output: any, state: any) {
         return <div key={state.key} className='line-break' />
       },
     },
   },
   previewRules
 )
-
-module.exports = {
-  previewRules,
-  rules,
-}

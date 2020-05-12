@@ -130,7 +130,7 @@ const ChatListContextMenu = React.memo<{
         'chatList.getFullChatById',
         chat.id
       )
-      openViewProfileDialog(screenContext, fullChat.contacts[0])
+      openViewProfileDialog(screenContext, fullChat.contacts[0].id)
     }
     const onLeaveGroup = () => openLeaveChatDialog(screenContext, chat.id)
     const onBlockContact = () => openBlockContactDialog(screenContext, chat)

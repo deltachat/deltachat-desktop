@@ -20,7 +20,7 @@ type AttachmentProps = {
   // TODO: replace "any" by the right type here
   attachment: attachment
   text?: any
-  conversationType: any
+  conversationType: 'group' | 'direct'
   direction: any
   message: any
 }
