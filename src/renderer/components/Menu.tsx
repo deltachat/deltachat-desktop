@@ -12,9 +12,16 @@ import {
   openEditGroupDialog,
   setChatVisibility,
 } from './helpers/ChatMethods'
+import { FullChat } from '../../shared/shared-types'
 const { ipcRenderer } = window.electron_functions
 
-export function DeltaMenuItem({ text, onClick }) {
+export function DeltaMenuItem({
+  text,
+  onClick,
+}: {
+  text: string
+  onClick: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void
+}) {
   return (
     <li onClick={onClick}>
       <a className='bp3-menu-item bp3-popover-dismiss'>
@@ -24,7 +31,10 @@ export function DeltaMenuItem({ text, onClick }) {
   )
 }
 
-export default function DeltaMenu(props) {
+export default function DeltaMenu(props: {
+  selectedChat: FullChat
+  showArchivedChats: boolean
+}) {
   const { selectedChat, showArchivedChats } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -32,7 +42,7 @@ export default function DeltaMenu(props) {
 
   const screenContext = useContext(ScreenContext)
 
-  let chatMenu = <div />
+  let chatMenu: any = <div />
 
   const onCreateChat = () => screenContext.openDialog('CreateChat', {})
   const onEditGroup = () => openEditGroupDialog(screenContext, selectedChat)
@@ -118,7 +128,7 @@ export default function DeltaMenu(props) {
       <DeltaMenuItem
         key='chat'
         text={tx('menu_new_chat')}
-        onClick={() => onCreateChat(screenContext)}
+        onClick={onCreateChat}
       />
       <DeltaMenuItem
         key='request'
@@ -151,12 +161,7 @@ export default function DeltaMenu(props) {
         text={tx('pref_blocked_contacts')}
         onClick={onUnblockContacts}
       />
-      <DeltaMenuItem
-        key='help'
-        text={tx('menu_help')}
-        id='help-page-link'
-        onClick={() => openHelp()}
-      />
+      <DeltaMenuItem key='help' text={tx('menu_help')} onClick={openHelp} />
       <DeltaMenuItem
         key='logout'
         text={tx('switch_account_desktop')}
