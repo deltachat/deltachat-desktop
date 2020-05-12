@@ -1,7 +1,7 @@
 console.time('init')
 
 import { ensureDirSync, watchFile } from 'fs-extra'
-import { app as rawApp, session, EventEmitter } from 'electron'
+import { app as rawApp, session, EventEmitter, dialog } from 'electron'
 import rc from './rc'
 
 const app = rawApp as ExtendedAppMainProcess
@@ -37,8 +37,17 @@ process.on('exit', logHandler.end)
 // Report uncaught exceptions
 process.on('uncaughtException', err => {
   const error = { message: err.message, stack: err.stack }
-  log.error('uncaughtError', error)
-  throw err
+  if (log) {
+    log.error('uncaughtError', error)
+  } else {
+    /* ignore-console-log */
+    console.error('uncaughtException', error)
+  }
+  dialog.showErrorBox(
+    'Error - uncaughtException',
+    `See the logfile (${logHandler.logFilePath()}) for details and contact the developers about this issue:\n` +
+      JSON.stringify(error)
+  )
 })
 
 import loadTranslations from './load-translations'
@@ -63,6 +72,7 @@ Promise.all([
   .then(onReady)
   .catch(error => {
     log.critical('Fatal Error during init', error)
+    dialog.showErrorBox('Fatal Error during init', '' + error)
     process.exit(1)
   })
 

@@ -2,6 +2,14 @@
 
 ## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...HEAD)
 
+### Changed
+
+- Account Path: old accounts are now migrated to the new account system.
+
+> If you experience startup problems make sure you don't have two account folders of the same account.\
+> This could happen if you duplicated an account folder for backup purposes, for example.
+> If you did not modify the account folders please open an issue on github.
+
 ## [1.3.2](https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...v1.3.2) - 2020-05-11
 
 ### Fixed

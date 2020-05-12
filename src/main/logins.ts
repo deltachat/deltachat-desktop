@@ -5,6 +5,7 @@ import logger from '../shared/logger'
 const log = logger.getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { PromiseType } from '../shared/shared-types'
+import { dialog } from 'electron'
 
 function escapeEmailForAccountFolder(path: string) {
   return encodeURIComponent(path).replace(/%/g, 'P')
@@ -33,8 +34,23 @@ async function migrate(dir: string) {
         'accounts',
         escapeEmailForAccountFolder(account.addr)
       )
-      await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
-      // Backwards compatibility
+      try {
+        await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
+      } catch (error) {
+        log.error(
+          "Moving failed, make sure you don't have multiple account folders for the same e-mail address!",
+          error
+        )
+        dialog.showErrorBox(
+          'Account migration',
+          `Migration of ${account.addr} failed,\n` +
+            "Please make sure that you don't have multiple account folders for the same e-mail address!\n" +
+            'See the logfile for details'
+        )
+        continue
+      }
+      // Backwards compatibility for versions older than 0.999.0
+      // (doesn't work on windows as symlinks need admin rights there)
       try {
         const compatPath = Buffer.from(account.addr).toString('hex')
         log.info(
