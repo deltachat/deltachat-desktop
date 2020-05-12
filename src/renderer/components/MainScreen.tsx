@@ -49,7 +49,7 @@ export default function MainScreen() {
     if (selectedChat.isGroup) {
       openEditGroupDialog(screenContext, selectedChat)
     } else {
-      openViewProfileDialog(screenContext, selectedChat.contacts[0])
+      openViewProfileDialog(screenContext, selectedChat.contacts[0].id)
     }
   }
 
@@ -64,9 +64,7 @@ export default function MainScreen() {
 
   const tx = window.translate
 
-  const menu = (
-    <Menu selectedChat={selectedChat} showArchivedChats={showArchivedChats} />
-  )
+  const menu = <Menu selectedChat={selectedChat} />
   const MessageListView = selectedChat.id ? (
     media ? (
       <Media chat={selectedChat} />

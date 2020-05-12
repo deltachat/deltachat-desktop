@@ -2,8 +2,17 @@ import { useState, useEffect } from 'react'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
+import { DCContact } from '../../../shared/shared-types'
 
-export function ContactList2(props) {
+export function ContactList2(props: {
+  contacts: DCContact[]
+  onClick: (contact: DCContact) => void
+  showCheckbox: boolean
+  isChecked?: (contact: DCContact) => boolean
+  onCheckboxClick?: (contact: DCContact) => void
+  showRemove: boolean
+  onRemoveClick?: (contact: DCContact) => void
+}) {
   const {
     contacts,
     onClick,
@@ -30,14 +39,17 @@ export function ContactList2(props) {
   })
 }
 
-const debouncedGetContacts2 = debounce((listFlags, queryStr, cb) => {
-  DeltaBackend.call('getContacts2', listFlags, queryStr).then(cb)
-}, 200)
+const debouncedGetContacts2 = debounce(
+  (listFlags: number, queryStr: string, cb: (value: DCContact[]) => void) => {
+    DeltaBackend.call('getContacts2', listFlags, queryStr).then(cb)
+  },
+  200
+)
 
-export function useContacts(listFlags, queryStr) {
+export function useContacts(listFlags: number, queryStr: string) {
   const [contacts, setContacts] = useState([])
 
-  const updateContacts = queryStr =>
+  const updateContacts = (queryStr: string) =>
     debouncedGetContacts2(listFlags, queryStr, setContacts)
 
   useEffect(() => {

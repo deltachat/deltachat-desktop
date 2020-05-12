@@ -5,6 +5,7 @@ import {
   ChatListItemType,
   JsonContact,
   FullChat,
+  DCContact,
 } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -94,10 +95,9 @@ export function openMapDialog(
 
 export async function openViewProfileDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  contact: number | JsonContact
+  contact_id: number
 ) {
-  if (typeof contact === 'number' && Number.isInteger(contact)) {
-    contact = await DeltaBackend.call('contacts.getContact', contact)
-  }
-  screenContext.openDialog('ViewProfile', { contact })
+  screenContext.openDialog('ViewProfile', {
+    contact: await DeltaBackend.call('contacts.getContact', contact_id),
+  })
 }

@@ -1,13 +1,22 @@
 import React from 'react'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
+import { DCContact } from '../../../shared/shared-types'
 
-const DeltaCheckbox = props => {
+const DeltaCheckbox = (props: {
+  checked: boolean
+  disabled: boolean
+  onClick?: (event: React.SyntheticEvent) => void
+}) => {
   const { checked, disabled } = props
   const _onClick = props.onClick
-  const onClick = e => typeof _onClick === 'function' && _onClick(e)
+  const onClick = (
+    event: React.ChangeEvent<any> | React.MouseEvent<any, MouseEvent>
+  ) => {
+    typeof _onClick === 'function' && _onClick(event)
+  }
   return (
-    <div className='checkbox' checked={checked} disabled={disabled}>
+    <div className='checkbox'>
       <input
         type='checkbox'
         disabled={disabled}
@@ -25,15 +34,23 @@ const DeltaCheckbox = props => {
     </div>
   )
 }
-export function ContactListItem(props) {
+export function ContactListItem(props: {
+  contact: DCContact
+  onClick: (contact: DCContact) => void
+  showCheckbox: boolean
+  checked: boolean
+  showRemove: boolean
+  onCheckboxClick?: (contact: DCContact) => void
+  onRemoveClick?: (contact: DCContact) => void
+}) {
   const { contact, onClick, showCheckbox, checked, showRemove } = props
-  const onCheckboxClick = e => {
+  const onCheckboxClick = (e?: React.SyntheticEvent) => {
     if (!showCheckbox) return
     e && e.stopPropagation()
     typeof props.onCheckboxClick === 'function' &&
       props.onCheckboxClick(contact)
   }
-  const onRemoveClick = e => {
+  const onRemoveClick = (e?: React.SyntheticEvent) => {
     if (!showRemove) return
     e && e.stopPropagation()
     typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)

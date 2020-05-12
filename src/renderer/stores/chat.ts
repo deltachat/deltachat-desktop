@@ -1,6 +1,6 @@
 import { ipcBackend, mainProcessUpdateBadge, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
-import { JsonContact, FullChat } from '../../shared/shared-types'
+import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 
 export const PAGE_SIZE = 10
@@ -29,13 +29,15 @@ class state implements FullChat {
   draft: string | null = null
 
   messageIds: number[] = []
-  messages: { [key: number]: todo } = {}
+  messages: { [key: number]: MessageType | { msg: null } } = {}
   oldestFetchedMessageIndex = -1
   scrollToBottom = false // if true the UI will scroll to bottom
   scrollToLastPage = false // after fetching more messages reset scroll bar to old position
   scrollHeight = 0
   countFetchedMessages = 0
 }
+
+export { state as ChatStoreState }
 
 const defaultState = new state()
 
@@ -341,3 +343,5 @@ export const selectChat = (chatId: number) =>
   chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
 
 export default chatStore
+
+export type ChatStoreDispatch = Store<state>['dispatch']

@@ -11,7 +11,7 @@ import {
 
 export default class MessageMetaData extends React.Component<{
   padlock: boolean
-  username: todo
+  username?: string
   attachment?: attachment
   direction?: 'incoming' | 'outgoing'
   status: 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { sendToBackend, ipcBackend } from '../ipc'
-import Login from './Login'
+import Login, { credentialState } from './Login'
 import {
   Button,
   Classes,
@@ -20,7 +20,14 @@ const { remote } = window.electron_functions
 
 const log = logger.getLogger('renderer/components/LoginScreen')
 
-const ImportDialogContent = React.memo(function ImportDialogContent(props) {
+type DeltaChatAccount = {
+  path: string
+  addr: string
+}
+
+const ImportDialogContent = React.memo(function ImportDialogContent(props: {
+  onClose: (ev: React.SyntheticEvent) => void
+}) {
   const tx = window.translate
   const [importProgress, setImportProgress] = useState(0)
   const [error, setError] = useState(null)
@@ -85,14 +92,14 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
               text='Yes!'
               className='override-backup'
             />
-            <Button onClick={props.onClose} type='cancel' text={tx('cancel')} />
+            <Button onClick={props.onClose} text={tx('cancel')} />
           </>
         )}
         {importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup'}
         {importState[0] !== 'IMPORT_COMPLETE' && (
           <DeltaProgressBar
             progress={importProgress}
-            intent={error === false ? Intent.SUCCESS : Intent.ERROR}
+            intent={error === false ? Intent.SUCCESS : Intent.DANGER}
           />
         )}
       </Card>
@@ -100,22 +107,23 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props) {
   )
 })
 
-const ImportButton = React.memo(function ImportButton(props) {
+const ImportButton = React.memo(function ImportButton(_) {
   const tx = window.translate
   const [showDialog, setShowDialog] = useState(false)
 
   function onClickImportBackup() {
-    const opts = {
-      title: tx('import_backup_title'),
-      properties: ['openFile'],
-      filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }],
-    }
-
-    remote.dialog.showOpenDialog(opts, filenames => {
-      if (!filenames || !filenames.length) return
-      sendToBackend('backupImport', filenames[0])
-      setShowDialog(true)
-    })
+    remote.dialog.showOpenDialog(
+      {
+        title: tx('import_backup_title'),
+        properties: ['openFile'],
+        filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }],
+      },
+      (filenames: string[]) => {
+        if (!filenames || !filenames.length) return
+        sendToBackend('backupImport', filenames[0])
+        setShowDialog(true)
+      }
+    )
   }
   const onHandleClose = () => {
     setShowDialog(false)
@@ -131,7 +139,7 @@ const ImportButton = React.memo(function ImportButton(props) {
         <DeltaDialog
           onClose={onHandleClose}
           title={tx('import_backup_title')}
-          canOutsideClickClose
+          // canOutsideClickClose
           isOpen={showDialog}
           style={{ top: '40%' }}
         >
@@ -142,24 +150,27 @@ const ImportButton = React.memo(function ImportButton(props) {
   )
 })
 
-export default function LoginScreen(props) {
+export default function LoginScreen(props: {
+  logins: DeltaChatAccount[]
+  deltachat: { configuring: boolean }
+}) {
   const tx = window.translate
   const { openDialog } = useContext(ScreenContext)
 
-  function onClickLogin(credentials) {
+  function onClickLogin(credentials: credentialState) {
     sendToBackend('login', credentials)
   }
 
-  function onClickLoadAccount(login) {
+  function onClickLoadAccount(login: DeltaChatAccount) {
     sendToBackend('loadAccount', login)
   }
 
-  function forgetLogin(login) {
+  function forgetLogin(login: DeltaChatAccount) {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
       confirmLabel: tx('remove_account'),
-      cb: yes => {
+      cb: (yes: boolean) => {
         if (yes) sendToBackend('forgetLogin', login)
       },
     })
@@ -208,7 +219,7 @@ export default function LoginScreen(props) {
           <Login onSubmit={onClickLogin} loading={props.deltachat.configuring}>
             <br />
             <Button type='submit' text={tx('login_title')} />
-            <Button type='cancel' text={tx('cancel')} />
+            <Button text={tx('cancel')} />
           </Login>
           <ImportButton />
         </Card>

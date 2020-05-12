@@ -6,12 +6,17 @@ import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
 import { useDebouncedCallback } from 'use-debounce'
+import { ChatStoreState } from '../../stores/chat'
 
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
 const log = getLogger('renderer/messageListAndComposer')
 
-export default function MessageListAndComposer({ chat }: { chat: any }) {
+export default function MessageListAndComposer({
+  chat,
+}: {
+  chat: ChatStoreState
+}) {
   const [state, setState] = useState({
     //error: false,
     composerSize: 40,

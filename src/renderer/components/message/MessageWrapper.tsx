@@ -4,12 +4,22 @@ import Message from './Message'
 import { ScreenContext } from '../../contexts'
 import logger from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
+import { ChatStoreState, ChatStoreDispatch } from '../../stores/chat'
+import { MessageType, DCContact } from '../../../shared/shared-types'
 
 const log = logger.getLogger('renderer/messageWrapper')
 
 const GROUP_TYPES = [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP]
 
-export const render = props => {
+type RenderMessageProps = {
+  message: MessageType
+  locationStreamingEnabled: boolean
+  chat: ChatStoreState
+  chatStoreDispatch: ChatStoreDispatch
+  disableMenu?: boolean
+}
+
+export const MessageWrapper = (props: RenderMessageProps) => {
   return (
     <li>
       <RenderMessage {...props} />
@@ -18,7 +28,7 @@ export const render = props => {
 }
 
 export const RenderMessage = React.memo(
-  props => {
+  (props: RenderMessageProps) => {
     const { message, locationStreamingEnabled, chat, chatStoreDispatch } = props
     const { fromId, id } = message.msg
     const msg = message.msg
@@ -26,9 +36,7 @@ export const RenderMessage = React.memo(
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
-    message.onForward = () => openDialog('ForwardMessage', { message })
-
-    const conversationType = GROUP_TYPES.includes(chat.type)
+    const conversationType: 'group' | 'direct' = GROUP_TYPES.includes(chat.type)
       ? 'group'
       : 'direct'
     const onShowDetail = () => openDialog('MessageDetail', { message, chat })
@@ -36,12 +44,12 @@ export const RenderMessage = React.memo(
       openDialog('ConfirmationDialog', {
         message: tx('ask_delete_message_desktop'),
         confirmLabel: tx('delete'),
-        cb: yes =>
+        cb: (yes: boolean) =>
           yes &&
           chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id }),
       })
-    const onContactClick = async contact => {
-      openViewProfileDialog(screenContext, contact)
+    const onContactClick = async (contact: DCContact) => {
+      openViewProfileDialog(screenContext, contact.id)
     }
 
     const contact = {
@@ -58,12 +66,12 @@ export const RenderMessage = React.memo(
       msg.text = window.translate('message_not_verified')
     }
 
-    props = {
+    let new_props = {
       padlock: msg.showPadlock,
       id,
       conversationType,
-      onReply: message.onReply,
-      onForward: message.onForward,
+      // onReply: message.onReply,
+      onForward: () => openDialog('ForwardMessage', { message }),
       onDelete,
       onShowDetail,
       onContactClick,
@@ -75,20 +83,21 @@ export const RenderMessage = React.memo(
       viewType: msg.viewType,
       message,
       hasLocation: msg.hasLocation && locationStreamingEnabled,
+      attachment: msg.attachment && !msg.isSetupmessage && msg.attachment,
+      onClickMessageBody: null as () => void,
     }
 
     const isSetupmessage = message.msg.isSetupmessage
     const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
     if (isSetupmessage) {
-      props.onClickMessageBody = () =>
+      new_props.onClickMessageBody = () =>
         openDialog('EnterAutocryptSetupMessage', { message })
     } else if (isDeadDrop) {
-      props.onClickMessageBody = () => {
+      new_props.onClickMessageBody = () => {
         openDialog('DeadDrop', message)
       }
     }
 
-    if (msg.attachment && !msg.isSetupmessage) props.attachment = msg.attachment
     if (message.isInfo)
       return (
         <div
@@ -100,12 +109,10 @@ export const RenderMessage = React.memo(
         </div>
       )
 
-    return <Message {...props} />
+    return <Message {...props} {...new_props} />
   },
   (prevProps, nextProps) => {
     const areEqual = prevProps.message === nextProps.message
     return areEqual
   }
 )
-const MessageWrapper = { render }
-export default MessageWrapper

@@ -6,6 +6,7 @@ import {
   MessageType,
   JsonLocations,
   Theme,
+  DCContact,
 } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
@@ -92,21 +93,12 @@ class DeltaRemote {
     fnName: 'contacts.createChatByContactId',
     contactId: number
   ): Promise<number>
+  call(fnName: 'contacts.getContact', contactId: number): Promise<DCContact>
   call(
-    fnName: 'contacts.getContact',
-    contactId: number
-  ): Promise<{
-    address: string
-    color: number
-    displayName: string
-    firstName: string
-    id: number
-    name: string
-    profileImage: string
-    nameAndAddr: string
-    isBlocked: boolean
-    isVerified: boolean
-  }>
+    fnName: 'getContacts2',
+    listFlags: number,
+    queryStr: string
+  ): Promise<DCContact[]>
   call(fnName: 'contacts.markNoticedContact', contactId: number): Promise<void>
   call(
     fnName: 'contacts.getChatIdByContactId',
