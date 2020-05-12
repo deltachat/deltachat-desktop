@@ -51,13 +51,16 @@ Running `npm test` does the following:
 
 - runs `prettier` to check the code formatting
 - runs the unit tests
+- checks for ilegal use of console.log()
 
-> ⚠ Information on this section might be deprecated. [TODO update this section]
+<!-- TODO write something about the integration tests -->
 
-Running `npm run test-integration` executes the integration tests.
-Make sure you specify the enviroment variables `DC_ADDR` and `DC_MAIL_PW` before running the integration tests.
+#### E2E testing
 
-The integration tests use `spectron` and `tape`. They click through the app,
+Run `npm run test-e2e` for end to end testing.
+In E2E testing testcafe clicks through the app an simulates normal usage.
+
+You need to provide a temp email account generation token via the enviroment variable `DCC_NEW_TMP_EMAIL`. (ask contributers on how to get one of these tokens)
 
 ### Translations
 
