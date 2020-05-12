@@ -57,7 +57,7 @@ Running `npm test` does the following:
 
 - runs `prettier` to check the code formatting
 - runs the unit tests
-- checks for ilegal use of console.log()
+- checks for illegal use of console.log()
 
 <!-- TODO write something about the integration tests -->
 
