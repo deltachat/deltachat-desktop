@@ -2,6 +2,8 @@
 
 This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
 
-## v2.0.0
+## v1.4 up
 
-To improve the user experience with `Delta Chat` using multiple devices, we experimentally changed the behaviour of `Delta Chat`. Therefore, beginning with this release, we aren't compatible with the **old android client** which you can currently find in the f-droid store. Please use the **new development** version. You can find it [here](https://github.com/deltachat/deltachat-android/releases).
+If you experience startup problems make sure you don't have two account folders of the same account.\
+This could happen if you duplicated an account folder for backup purposes, for example.
+If you did not modify the account folders please open an issue on github.
