@@ -167,6 +167,9 @@ code {
   &.success p {
     background-color: #3ca26a;
   }
+  &.warning p {
+    background-color: yellow;
+  }
 }
 
 .clear-button {

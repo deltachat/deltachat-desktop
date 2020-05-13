@@ -1,5 +1,5 @@
 import { DeltaChat, ChatList, C } from 'deltachat-node'
-import { _callDcMethodAsync } from './ipc'
+import { _callDcMethodAsync, ipcBackend } from './ipc'
 import {
   FullChat,
   ChatListItemType,
@@ -264,6 +264,18 @@ class DeltaRemote {
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {
     return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
+  }
+
+  on(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+    ipcBackend.on(channel, listener)
+  }
+
+  once(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+    ipcBackend.once(channel, listener)
+  }
+
+  removeListener(channel: string, listener: Function) {
+    ipcBackend.removeListener(channel, listener)
   }
 }
 

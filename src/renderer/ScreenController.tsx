@@ -18,7 +18,7 @@ import * as logger from '../shared/logger'
 const log = logger.getLogger('renderer/ScreenController')
 
 export interface userFeedback {
-  type: 'error' | 'success'
+  type: 'error' | 'success' | 'warning'
   text: string
 }
 
@@ -37,6 +37,7 @@ export default class ScreenController extends Component {
     }
 
     this.onError = this.onError.bind(this)
+    this.onWarning = this.onWarning.bind(this)
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
@@ -60,6 +61,10 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
+    ipcRenderer.on('DC_EVENT_ERROR', this.onError)
+    ipcRenderer.on('DC_EVENT_LOGIN_FAILED', this.onError)
+    ipcRenderer.on('DC_EVENT_ERROR_NETWORK', this.onError)
+    ipcRenderer.on('DC_EVENT_WARNING', this.onWarning)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -70,14 +75,25 @@ export default class ScreenController extends Component {
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_LOGIN_FAILED', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_ERROR_NETWORK', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_WARNING', this.onWarning)
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
-  onError(_event: any, error: Error) {
-    const tx = window.translate
-    const text = error ? error.toString() : tx('unknown')
+  onError(_event: any, data1: string, data2: string) {
+    if(!data2) data2 = ""
+    const text = data1 + " " + data2
     this.userFeedback({ type: 'error', text })
+  }
+
+  onWarning(_event: any, data1: string, data2: string) {
+    return
+    if(!data2) data2 = ""
+    const text = data1 + " " + data2
+    this.userFeedback({ type: 'warning', text })
   }
 
   onSuccess(_event: any, text: string) {

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
@@ -7,6 +7,9 @@ import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/dialogs/ImportQrCode')
 
 interface QrStates {
   [key: number]: string
@@ -48,8 +51,29 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
   }
 
   const selectChatAndClose = (chatId: number) => {
-    selectChat(chatId)
-    onClose()
+    if (chatId > 0) {
+      selectChat(chatId)
+      onClose()
+    } else {
+      log.error("Can't select a chat with id 0. Probably an error happend?")
+      window.__userFeedback({
+        type: 'error',
+        text: "Can't select a chat with id 0. Probably an error happend?",
+      })
+    }
+    
+  }
+
+  const openSecureJoinJoinerProgressDialog = () => {
+    window.__openDialog(() => {
+      const [progress, setProgress] = useState<number>(0)
+      const onProgress = (_e, progress: number) => setProgress(progress)
+      useEffect(() => {
+        DeltaBackend.on('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
+        return () => DeltaBackend.removeListener('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
+      }, [])
+      return <p>{progress}</p>
+    })
   }
 
   if (state === 'QrAskVerifyContact') {
@@ -82,6 +106,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
       cb: onClose,
     })
   } else {
+    log.error("Don't know what to do with this URL :/", url)
     window.__userFeedback({
       type: 'error',
       text: "Don't know what to do with this URL :/",
@@ -100,27 +125,12 @@ export function DeltaDialogImportQrInner({
   const [qrCode, setQrCode] = useState('')
   const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
-
-  const handleResponse = async (scannedQrCode: string) => {
-    processOPENPGP4FPRUrl(scannedQrCode, onClose)
-  }
-
   const qrImageReader = useRef<any>()
 
-  const handleScan = (data: string) => {
-    if (data) {
-      handleResponse(data)
-    }
-  }
-
-  const handleError = (err: string) => {
-    /* ignore-console-log */
-    console.error(err)
-  }
-
-  const openImageDialog = () => {
-    qrImageReader.current.openImageDialog()
-  }
+  const handleResponse = (scannedQrCode: string) => processOPENPGP4FPRUrl(scannedQrCode, onClose)
+  const handleScan = (data: string) => { if (data) handleResponse(data) }
+  const handleError = (err: string) => log.error(err)
+  const openImageDialog = () => qrImageReader.current.openImageDialog()
 
   return (
     <DeltaDialogBody>
