@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
 import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
@@ -253,5 +253,23 @@ export function DeltaDialogButton(
     <div onClick={props.onClick} className='delta-dialog-button'>
       {props.children}
     </div>
+  )
+}
+
+export function SmallDialog(
+  props: PropsWithChildren<{
+    isOpen: DialogProps['isOpen']
+    onClose: DialogProps['onClose']
+  }>
+) {
+  return (
+    <Dialog
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      canOutsideClickClose
+      className='delta-dialog-small-dialog'
+    >
+      {props.children}
+    </Dialog>
   )
 }

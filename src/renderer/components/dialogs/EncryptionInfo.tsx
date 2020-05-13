@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, { DeltaButton } from './SmallDialog'
+import { DeltaButton } from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from '.'
+import { SmallDialog } from './DeltaDialog'
 
 export default function EncryptionInfo({
   chatListItem,

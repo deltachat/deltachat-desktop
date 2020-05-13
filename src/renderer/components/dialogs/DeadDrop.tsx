@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, {
+import {
   DeltaButton,
   DeltaButtonPrimary,
   DeltaButtonDanger,
@@ -9,6 +9,7 @@ import SmallDialog, {
 import { useChatStore } from '../../stores/chat'
 import { DialogProps } from '.'
 import { DCContact, MessageType } from '../../../shared/shared-types'
+import { SmallDialog } from './DeltaDialog'
 
 /**
  * handle contact requests

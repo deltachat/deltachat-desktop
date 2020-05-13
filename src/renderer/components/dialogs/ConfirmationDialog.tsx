@@ -1,10 +1,8 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, {
-  DeltaButtonPrimary,
-  DeltaButtonDanger,
-} from './SmallDialog'
+import { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 import { MessageBoxOptions } from 'electron'
+import { SmallDialog } from './DeltaDialog'
 
 const { remote } = window.electron_functions
 

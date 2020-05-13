@@ -6,12 +6,10 @@ import DeltaDialog, {
   DeltaDialogContent,
   DeltaDialogFooter,
   DeltaDialogHeader,
+  SmallDialog,
 } from './DeltaDialog'
 import { DialogProps } from '.'
-import SmallDialog, {
-  DeltaButtonPrimary,
-  DeltaButtonDanger,
-} from './SmallDialog'
+import { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
 

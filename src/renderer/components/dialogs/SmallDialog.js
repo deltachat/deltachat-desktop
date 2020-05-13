@@ -1,6 +1,4 @@
-import React from 'react'
 import styled from 'styled-components'
-import { Dialog } from '@blueprintjs/core'
 
 export const DeltaButton = styled.p`
   color: ${({ color }) => color || 'var(--colorNone)'};
@@ -27,16 +25,3 @@ export const DeltaButtonPrimary = styled(DeltaButton)`
 export const DeltaButtonDanger = styled(DeltaButton)`
   color: var(--colorDanger);
 `
-
-export default function SmallDialog(props) {
-  return (
-    <Dialog
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      // canOutsideClickClose
-      className='delta-dialog-small-dialog'
-    >
-      {props.children}
-    </Dialog>
-  )
-}
