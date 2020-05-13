@@ -1,8 +1,13 @@
 import React from 'react'
 import MapComponent from '../map/MapComponent'
-import DeltaDialog from '../dialogs/DeltaDialog'
+import DeltaDialog from './DeltaDialog'
+import { DialogProps } from '.'
+import { FullChat } from '../../../shared/shared-types'
 
-export default function MapDialog(props) {
+export default function MapDialog(props: {
+  selectedChat: FullChat
+  onClose: DialogProps['onClose']
+}) {
   const { selectedChat, onClose } = props
   const isOpen = !!selectedChat
   const title = selectedChat
@@ -13,6 +18,7 @@ export default function MapDialog(props) {
       isOpen={isOpen}
       title={title}
       onClose={onClose}
+      canEscapeKeyClose
       fixed
       style={{ width: 'calc(100vw - 50px)' }}
     >

@@ -20,7 +20,7 @@ import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDi
 import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
-const { SettingsContext } = require('../../contexts')
+import { SettingsContext } from '../../contexts'
 const MAGIC_PW = '9bbdc87b50bbc684'
 import { OpenDialogOptions } from 'electron'
 import { AppState } from '../../../shared/shared-types'
@@ -65,7 +65,7 @@ export default class Settings extends React.Component {
     mail_pw: string
     settings: todo
     show: string
-    selfContact: todo,
+    selfContact: todo
     availableThemes: string[]
   }
   constructor(public props: DialogProps) {
@@ -255,7 +255,7 @@ export default class Settings extends React.Component {
   renderThemeSelection() {
     return (
       <SettingsContext.Consumer>
-        {(settings:any) => (
+        {(settings: any) => (
           <div>
             <H6>{this.translate('pref_theming')}</H6>
             <div className='theme-meta'>
@@ -275,7 +275,7 @@ export default class Settings extends React.Component {
               <option key={'system'} value={'system'}>
                 {this.translate('pref_system_theme')}
               </option>
-              {this.state.availableThemes?.map((theme:todo) => (
+              {this.state.availableThemes?.map((theme: todo) => (
                 <option key={theme.address} value={theme.address}>
                   {theme.name} - {theme.description} [{theme.address}]
                 </option>

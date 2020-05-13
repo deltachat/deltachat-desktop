@@ -3,13 +3,11 @@ import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogFooter,
-  DeltaDialogButton,
 } from './DeltaDialog'
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
-import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 
 export function DeltaDialogQrInner({
   qrCode,
@@ -78,6 +76,7 @@ export default function QrInviteCode({
       title={tx('qrshow_join_contact_title')}
       isOpen={isOpen}
       onClose={onClose}
+      className='delta-dialog'
     >
       <DeltaDialogQrInner
         description={tx('qrshow_join_contact_hint', [

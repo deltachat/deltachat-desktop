@@ -110,7 +110,7 @@ export const useLazyChatListItems = (chatListIds: number[]) => {
     const indexStart = Math.floor(scrollTop / itemHeight)
     const indexEnd = Math.floor(1 + indexStart + clientHeight / itemHeight)
     // console.log('useLazyChatListItems: getIndexStartEndInView indexStart indexEnd', indexStart, indexEnd)
-    return [indexStart, indexEnd]
+    return [indexStart, indexEnd] as [number, number]
   }
 
   const chatIdsInView = (offset?: number) => {

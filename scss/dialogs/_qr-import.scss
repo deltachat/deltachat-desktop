@@ -31,3 +31,33 @@ div.import-qr-code-dialog {
     margin-left: 20px;
   }
 }
+
+.qr-data {
+  border: 1px solid #b1b1b1;
+  border-radius: 4px;
+  margin: 10px 20px;
+  display: flex;
+  overflow: hidden;
+
+  & > .content {
+    overflow-x: scroll;
+    user-select: all;
+    padding: 3px;
+    white-space: nowrap;
+    &::-webkit-scrollbar {
+      height: 3px;
+      border-radius: 6px;
+    }
+  }
+
+  & > .copy-btn {
+    background-color: hsla(0, 0%, 59.2%, 0.51);
+    padding: 5px;
+    line-height: 15px;
+    border-left: 1px solid #b1b1b1;
+    color: rgb(103, 103, 103);
+    &:hover {
+      background-color: hsla(0, 0%, 44%, 0.51);
+    }
+  }
+}

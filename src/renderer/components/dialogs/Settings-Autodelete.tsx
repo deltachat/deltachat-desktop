@@ -6,12 +6,9 @@ import DeltaDialog, {
   DeltaDialogContent,
   DeltaDialogFooter,
   DeltaDialogHeader,
+  SmallDialog,
 } from './DeltaDialog'
 import { DialogProps } from '.'
-import SmallDialog, {
-  DeltaButtonPrimary,
-  DeltaButtonDanger,
-} from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
 
@@ -122,10 +119,12 @@ function SelectAutodeleteDurationDialog(props: DialogProps) {
           padding: '7px 13px 10px 13px',
         }}
       >
-        <DeltaButtonDanger onClick={onClose}>{tx('cancel')}</DeltaButtonDanger>
-        <DeltaButtonPrimary onClick={saveAndClose}>
+        <p className='delta-button danger bold' onClick={onClose}>
+          {tx('cancel')}
+        </p>
+        <p className='delta-button primary bold' onClick={saveAndClose}>
           {tx('save_desktop')}
-        </DeltaButtonPrimary>
+        </p>
       </DeltaDialogFooter>
     </SmallDialog>
   )

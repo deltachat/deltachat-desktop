@@ -12,17 +12,17 @@ import {
   dragAttachmentOut,
   attachment,
 } from './Attachment'
+import { MessageType } from '../../../shared/shared-types'
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
 
 type AttachmentProps = {
-  // TODO: replace "any" by the right type here
   attachment: attachment
-  text?: any
+  text?: string
   conversationType: 'group' | 'direct'
-  direction: any
-  message: any
+  direction: MessageType['msg']['direction']
+  message: MessageType
 }
 
 export default function Attachment({
@@ -41,8 +41,8 @@ export default function Attachment({
   const onClickAttachment = (ev: any) => {
     if (msg.viewType === C.DC_MSG_STICKER) return
     ev.stopPropagation()
-    if (isDisplayableByFullscreenMedia(message.msg.attachment)) {
-      openDialog('FullscreenMedia', { message })
+    if (isDisplayableByFullscreenMedia(msg.attachment)) {
+      openDialog('FullscreenMedia', { msg })
     } else {
       openAttachmentInShell(msg)
     }
@@ -54,7 +54,7 @@ export default function Attachment({
     conversationType === 'group' && direction === 'incoming'
   const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
-  const height = Math.max(MINIMUM_IMG_HEIGHT, dimensions.height || 0)
+  const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
   if (isImage(attachment)) {
     const isSticker = message.msg.viewType === C.DC_MSG_STICKER
     if (!attachment.url) {

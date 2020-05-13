@@ -1,18 +1,21 @@
 import { onDownload } from '../message/messageFunctions'
 import React from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
+import { DialogProps } from '.'
+import { MessageType } from '../../../shared/shared-types'
 
-export default function FullscreenMedia(props) {
+export default function FullscreenMedia(props: {
+  msg: MessageType['msg']
+  onClose: DialogProps['onClose']
+}) {
   const tx = window.translate
-  const { message, onClose } = props
+  const { msg, onClose } = props
   let elm = <div />
-  if (!message || !message.msg || !message.msg.attachment) return elm
-  const attachment = message.msg.attachment
+  if (!msg || !msg.attachment) return elm
+  const attachment = msg.attachment
   const url = attachment.url
   const contentType = attachment.contentType
 
-  // TODO: there must be a stable external library for figuring out the right
-  // html element to render
   switch (contentType.split('/')[0]) {
     case 'image':
       elm = (
@@ -22,10 +25,10 @@ export default function FullscreenMedia(props) {
       )
       break
     case 'audio':
-      elm = <audio src={url} controls={1} />
+      elm = <audio src={url} controls />
       break
     case 'video':
-      elm = <video src={url} controls={1} autoPlay />
+      elm = <video src={url} controls autoPlay />
       break
     default:
       elm = null
@@ -52,7 +55,7 @@ export default function FullscreenMedia(props) {
         <div className='btn-wrapper' style={{ right: 0, bottom: 0 }}>
           <div
             role='button'
-            onClick={onDownload.bind(null, message.msg)}
+            onClick={onDownload.bind(null, msg)}
             className='download-btn'
             aria-label={tx('save')}
           />
