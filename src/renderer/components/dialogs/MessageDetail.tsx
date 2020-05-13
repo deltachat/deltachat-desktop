@@ -4,10 +4,24 @@ import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
+import { MessageType } from '../../../shared/shared-types'
+import { DialogProps } from '.'
 
-class MessageInfo extends React.Component {
-  constructor() {
-    super()
+type MessageInfoProps = {
+  messageId: number
+  receivedAt: number
+  sentAt: number
+}
+
+class MessageInfo extends React.Component<
+  MessageInfoProps,
+  {
+    loading: boolean
+    content: string
+  }
+> {
+  constructor(props: MessageInfoProps) {
+    super(props)
     this.state = {
       loading: true,
       content: undefined,
@@ -20,7 +34,7 @@ class MessageInfo extends React.Component {
 
   refresh() {
     this.setState({ loading: true })
-    DeltaBackend.call('messageList.getMessageInfo', this.props.message.id).then(
+    DeltaBackend.call('messageList.getMessageInfo', this.props.messageId).then(
       info => {
         this.setState({ loading: false, content: info })
         this.forceUpdate()
@@ -29,7 +43,7 @@ class MessageInfo extends React.Component {
   }
 
   render() {
-    const { errors, message, receivedAt, sentAt } = this.props
+    const { receivedAt, sentAt } = this.props
     const tx = window.translate
 
     return (
@@ -39,15 +53,6 @@ class MessageInfo extends React.Component {
         </Callout>
         <table className='module-message-detail__info'>
           <tbody>
-            {(errors || []).map((error, index) => (
-              <tr key={message.id}>
-                <td className='module-message-detail__label'>{tx('error')}</td>
-                <td>
-                  {' '}
-                  <span className='error-message'>{error.message}</span>{' '}
-                </td>
-              </tr>
-            ))}
             <tr>
               <td className='module-message-detail__label'>
                 {tx('message_detail_sent_desktop')}
@@ -79,29 +84,21 @@ class MessageInfo extends React.Component {
   }
 }
 
-export default function MessageDetail(props) {
-  const { chat, message, onClose } = props
+export default function MessageDetail(props: {
+  message: MessageType
+  onClose: DialogProps['onClose']
+}) {
+  const { message, onClose } = props
   const isOpen = !!message
   const tx = window.translate
 
   let body = <div />
   if (isOpen) {
-    const msg = message.msg
-    msg.disableMenu = true
-    msg.onDelete = message.onDelete
-    const contacts = message.isMe
-      ? chat.contacts.map(convertContactProps)
-      : [convertContactProps(message.contact)]
+    const { id, sentAt, receivedAt } = message.msg
 
     body = (
       <Card>
-        <MessageInfo
-          contacts={contacts}
-          status={msg.status}
-          message={msg}
-          sentAt={msg.sentAt}
-          receivedAt={msg.receivedAt}
-        />
+        <MessageInfo messageId={id} sentAt={sentAt} receivedAt={receivedAt} />
       </Card>
     )
   }
