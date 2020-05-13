@@ -57,7 +57,7 @@ We use scss to create themes, because it allows us to save work by using its col
 ```sh
 node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css
 # for linux:
-node-sass -w node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css
+node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css
 ```
 
 3. open a new terminal window/tab
