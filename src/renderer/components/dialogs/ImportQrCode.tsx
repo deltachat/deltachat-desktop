@@ -1,5 +1,5 @@
-import React, { useContext, useState, useRef, useEffect } from 'react'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
+import React, { useContext, useState, useRef, useEffect, ReactElement } from 'react'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent, SmallDialog, DeltaDialogHeader, DeltaDialogFooter } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
@@ -8,6 +8,8 @@ import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
+import { AutodeleteTimeDurations } from './Settings-Autodelete'
+import { Spinner } from '@blueprintjs/core'
 
 const log = getLogger('renderer/dialogs/ImportQrCode')
 
@@ -34,14 +36,62 @@ export declare type QrCodeResponse = {
   text1: string
 }
 
+export function SecureJoinDialog(
+  { isOpen, onClose, url, title, closeParentDialog} : 
+  { isOpen: boolean, onClose: () => void, url: string, title: string, closeParentDialog?: () => void }
+) {
+  const [progress, setProgress] = useState<number>(0)
+  const onProgress = (_e: any, progress: number) => setProgress(progress)
+  const tx = window.translate
+
+  useEffect(() => {
+    DeltaBackend.on('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
+    ;(async () => {
+      const chatId = await DeltaBackend.call('joinSecurejoin', url)
+      if (chatId > 0) {
+        selectChat(chatId)
+        if(closeParentDialog) closeParentDialog()
+        onClose()
+      } else {
+        log.error("Can't select a chat with id 0. Probably an error happend?")
+        window.__userFeedback({
+          type: 'error',
+          text: "Can't select a chat with id 0. Probably an error happend?",
+        })
+      }
+    })()
+    return () => DeltaBackend.removeListener('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
+  }, [])
+
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <DeltaDialogHeader title={title} />
+    <DeltaDialogBody style={{overflow: 'hidden'}}>
+      <DeltaDialogContent>
+        <Spinner />  
+      </DeltaDialogContent>
+    </DeltaDialogBody>
+    <DeltaDialogFooter style={{ marginTop: '0px', padding: '7px 13px 10px 13px' }}>
+      <p className='delta-button danger bold' onClick={onClose}>{tx('cancel')}</p>
+    </DeltaDialogFooter>
+  </SmallDialog>
+  )
+}
+
+
 export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
   const tx = window.translate
   let error = false
+
+
   const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
-  if (response === null) {
-    error = true
-  }
+  if (response === null) error = true
   const state = qrStates[response.state]
+
+  const  openSecureJoinDialog = (url: string, title: string) => {
+    window.__openDialog(SecureJoinDialog, {url, title, closeParentDialog: onClose})
+  }
+
   if (error || state === 'QrError' || state === 'QrText') {
     window.__userFeedback({
       type: 'error',
@@ -50,53 +100,18 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
     return
   }
 
-  const selectChatAndClose = (chatId: number) => {
-    if (chatId > 0) {
-      selectChat(chatId)
-      onClose()
-    } else {
-      log.error("Can't select a chat with id 0. Probably an error happend?")
-      window.__userFeedback({
-        type: 'error',
-        text: "Can't select a chat with id 0. Probably an error happend?",
-      })
-    }
-    
-  }
-
-  const openSecureJoinJoinerProgressDialog = () => {
-    window.__openDialog(() => {
-      const [progress, setProgress] = useState<number>(0)
-      const onProgress = (_e, progress: number) => setProgress(progress)
-      useEffect(() => {
-        DeltaBackend.on('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
-        return () => DeltaBackend.removeListener('DC_EVENT_SECUREJOIN_JOINER_PROGRESS', onProgress)
-      }, [])
-      return <p>{progress}</p>
-    })
-  }
-
   if (state === 'QrAskVerifyContact') {
     const contact = await DeltaBackend.call('contacts.getContact', response.id)
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
-      cb: async (confirmed: boolean) => {
-        if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
-        }
-      },
+      cb: (confirmed: boolean) => { if (confirmed) openSecureJoinDialog(url, `Verifying ${contact.address}...`) }
     })
   } else if (state === 'QrAskVerifyGroup') {
     window.__openDialog('ConfirmationDialog', {
       message: tx('qrscan_ask_join_group', response.text1),
       confirmLabel: tx('ok'),
-      cb: (confirmed: boolean) => {
-        if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
-        }
-        return
-      },
+      cb: (confirmed: boolean) => { if (confirmed) openSecureJoinDialog(url, `Joining ${response.text1}...`) }
     })
   } else if (state === 'QrFprOk') {
     const contact = await DeltaBackend.call('contacts.getContact', response.id)

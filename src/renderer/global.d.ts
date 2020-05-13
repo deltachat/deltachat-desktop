@@ -19,7 +19,7 @@ declare global {
     preload_functions: {
       downloadFile: (file: string) => void
     }
-    __openDialog: (name: DialogId, props?: any) => {}
+    __openDialog: (fnc: any, props?: todo) => {}
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: (key: string) => {}
     __isReady: boolean
