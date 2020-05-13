@@ -1,3 +1,5 @@
+$hover-contrast-change: 2%;
+
 @function changeContrast($color, $factor) {
   @if lightness($color) < 50 {
     @return lighten($color, $factor);
@@ -32,11 +34,22 @@
   --emojiSelectorSelectionColor: #{$accentColor};
   /* Chat List */
   --chatListItemSelectedBg: #4c6e7d;
-  --chatListItemSelectedBgHover: #{lighten(#4c6e7d, 1%)};
+  --chatListItemSelectedBgHover: #{changeContrast(
+      #4c6e7d,
+      1% + $hover-contrast-change
+    )};
   --chatListItemSelectedText: #{$bgPrimary};
-  --chatListItemBgHover: #{changeContrast($bgPrimary, 5%)};
+  --chatListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
   --chatListItemBgPinned: #{changeContrast($bgPrimary, 7%)};
+  --chatListItemBgPinnedHover: #{changeContrast(
+      $bgPrimary,
+      7% + $hover-contrast-change
+    )};
   --chatListItemDeaddropBg: #{changeContrast($bgPrimary, 15%)};
+  --chatListItemDeaddropBgHover: #{changeContrast(
+      $bgPrimary,
+      15% + $hover-contrast-change
+    )};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
