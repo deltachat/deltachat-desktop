@@ -3,6 +3,7 @@ import { Classes } from '@blueprintjs/core'
 import SmallDialog, { DeltaButton } from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
+import { DialogProps } from '.'
 
 export default function EncryptionInfo({
   chatListItem,
@@ -11,7 +12,7 @@ export default function EncryptionInfo({
 }: {
   chatListItem: ChatListItemType
   isOpen: boolean
-  onClose: Function
+  onClose: DialogProps['onClose']
 }) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
