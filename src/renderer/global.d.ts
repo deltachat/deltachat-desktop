@@ -1,8 +1,11 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
 import Electron from 'electron'
-import { DialogId } from './components/dialogs'
 import { userFeedback } from './ScreenController'
+import {
+  OpenDialogFunctionType,
+  CloseDialogFunctionType,
+} from './components/dialogs/DialogController'
 
 declare global {
   interface Window {
@@ -19,9 +22,9 @@ declare global {
     preload_functions: {
       downloadFile: (file: string) => void
     }
-    __openDialog: (fnc: any, props?: todo) => {}
+    __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}
-    __closeDialog: (key: string) => {}
+    __closeDialog: CloseDialogFunctionType
     __isReady: boolean
   }
 }

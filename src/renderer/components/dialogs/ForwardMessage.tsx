@@ -6,7 +6,7 @@ import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 
 import { C } from 'deltachat-node/dist/constants'

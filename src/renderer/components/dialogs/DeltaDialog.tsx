@@ -2,7 +2,7 @@ import React, { Fragment, useState, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
 import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
@@ -201,7 +201,11 @@ export function DeltaDialogFooter(
 }
 
 export function DeltaDialogBody(
-  props: React.PropsWithChildren<{ noFooter?: boolean; ref?: todo, style?: any }>
+  props: React.PropsWithChildren<{
+    noFooter?: boolean
+    ref?: todo
+    style?: any
+  }>
 ) {
   let { noFooter, children, style } = props
   return (

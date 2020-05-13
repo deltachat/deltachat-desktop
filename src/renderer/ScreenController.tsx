@@ -7,10 +7,11 @@ const { ipcRenderer } = window.electron_functions
 import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
-import {
-  Controller as DialogController,
+import DialogController, {
   DialogId,
-} from './components/dialogs/index'
+  OpenDialogFunctionType,
+  CloseDialogFunctionType,
+} from './components/dialogs/DialogController'
 import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
 import * as logger from '../shared/logger'
@@ -23,7 +24,7 @@ export interface userFeedback {
 }
 
 export default class ScreenController extends Component {
-  dialogs: React.RefObject<DialogController>
+  dialogController: React.RefObject<DialogController>
   state: { message: userFeedback | false }
   changeScreen: any
   onShowAbout: any
@@ -47,7 +48,7 @@ export default class ScreenController extends Component {
     window.__closeDialog = this.closeDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
-    this.dialogs = createRef()
+    this.dialogController = createRef()
   }
 
   userFeedback(message: userFeedback | false) {
@@ -56,6 +57,7 @@ export default class ScreenController extends Component {
   }
 
   userFeedbackClick() {
+    this.openDialog('Test234')
     this.userFeedback(false)
   }
 
@@ -84,15 +86,15 @@ export default class ScreenController extends Component {
   }
 
   onError(_event: any, data1: string, data2: string) {
-    if(!data2) data2 = ""
-    const text = data1 + " " + data2
+    if (!data2) data2 = ''
+    const text = data1 + ' ' + data2
     this.userFeedback({ type: 'error', text })
   }
 
   onWarning(_event: any, data1: string, data2: string) {
     return
-    if(!data2) data2 = ""
-    const text = data1 + " " + data2
+    if (!data2) data2 = ''
+    const text = data1 + ' ' + data2
     this.userFeedback({ type: 'warning', text })
   }
 
@@ -108,12 +110,12 @@ export default class ScreenController extends Component {
     processOPENPGP4FPRUrl(url)
   }
 
-  openDialog(fnc: any, props?: any) {
-    this.dialogs.current.open(fnc, props)
+  openDialog(...args: Parameters<OpenDialogFunctionType>) {
+    this.dialogController.current.openDialog(...args)
   }
 
-  closeDialog(name: DialogId) {
-    this.dialogs.current.close(name)
+  closeDialog(...args: Parameters<CloseDialogFunctionType>) {
+    this.dialogController.current.closeDialog(...args)
   }
 
   render() {
@@ -144,7 +146,7 @@ export default class ScreenController extends Component {
             <MainScreen />
           )}
           <DialogController
-            ref={this.dialogs}
+            ref={this.dialogController}
             deltachat={deltachat}
             userFeedback={this.userFeedback}
           />

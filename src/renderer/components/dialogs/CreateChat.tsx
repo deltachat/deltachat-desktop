@@ -24,7 +24,7 @@ import { GroupImage } from './Group-Styles'
 
 import { DeltaDialogQrInner } from './QrInviteCode'
 import { JsonContact, DCContact } from '../../../shared/shared-types'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import { isValidEmail } from '../../../shared/util'
 const { remote } = window.electron_functions
 

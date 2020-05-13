@@ -266,11 +266,17 @@ class DeltaRemote {
     return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
   }
 
-  on(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+  on(
+    channel: string,
+    listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+  ) {
     ipcBackend.on(channel, listener)
   }
 
-  once(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+  once(
+    channel: string,
+    listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
+  ) {
     ipcBackend.once(channel, listener)
   }
 

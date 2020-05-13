@@ -3,7 +3,7 @@ import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 const { ipcRenderer } = window.electron_functions
 

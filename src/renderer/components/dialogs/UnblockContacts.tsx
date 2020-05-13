@@ -5,7 +5,7 @@ import contactsStore, { contactsStoreState } from '../../stores/contacts'
 
 import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 
 export default function UnblockContacts(props: {
   isOpen: DialogProps['isOpen']
