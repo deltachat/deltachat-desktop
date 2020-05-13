@@ -8,7 +8,6 @@ import {
   DeltaDialogHeader,
   DeltaDialogFooter,
 } from './DeltaDialog'
-import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 import {
   useGroupImage,
   useContactSearch,
@@ -248,12 +247,15 @@ function EditGroupInner(props: {
               style={{ justifyContent: 'space-between' }}
               className={Classes.DIALOG_FOOTER_ACTIONS}
             >
-              <DeltaButton noPadding onClick={onClose}>
+              <p className='delta-button no-padding bold' onClick={onClose}>
                 {tx('cancel')}
-              </DeltaButton>
-              <DeltaButtonPrimary noPadding onClick={onUpdateGroup}>
+              </p>
+              <p
+                className='delta-button no-padding primary bold'
+                onClick={onUpdateGroup}
+              >
                 {tx('save_desktop')}
-              </DeltaButtonPrimary>
+              </p>
             </div>
           </DeltaDialogFooter>
         </>

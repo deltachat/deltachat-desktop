@@ -3,13 +3,11 @@ import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogFooter,
-  DeltaDialogButton,
 } from './DeltaDialog'
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
-import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 
 export function DeltaDialogQrInner({
   qrCode,

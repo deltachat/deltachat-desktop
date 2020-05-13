@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Classes } from '@blueprintjs/core'
-import { DeltaButton } from './SmallDialog'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from '.'
@@ -37,9 +36,13 @@ export default function EncryptionInfo({
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ marginTop: '7px' }}
           >
-            <DeltaButton style={{ float: 'right' }} onClick={onClose}>
+            <p
+              className='delta-button bold'
+              style={{ float: 'right' }}
+              onClick={onClose}
+            >
               {tx('ok')}
-            </DeltaButton>
+            </p>
           </div>
         </div>
       </div>

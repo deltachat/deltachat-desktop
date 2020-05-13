@@ -1,5 +1,4 @@
 import React from 'react'
-import { DeltaButtonPrimary } from './SmallDialog'
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
@@ -69,9 +68,12 @@ class SetupMessagePanel extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <DeltaButtonPrimary onClick={this.onClick.bind(this)}>
+            <p
+              className='delta-button primary bold'
+              onClick={this.onClick.bind(this)}
+            >
               {tx('ok')}
-            </DeltaButtonPrimary>
+            </p>
           </div>
         </div>
       </React.Fragment>

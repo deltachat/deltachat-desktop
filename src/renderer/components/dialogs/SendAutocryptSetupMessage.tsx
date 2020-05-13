@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
-import { DeltaButton } from './SmallDialog'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { DialogProps } from '.'
@@ -28,7 +27,9 @@ class KeyViewPanel extends React.Component<{
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <DeltaButton onClick={this.props.onClose}>{tx('done')}</DeltaButton>
+            <p className='delta-button bold' onClick={this.props.onClose}>
+              {tx('done')}
+            </p>
           </div>
         </div>
       </React.Fragment>
@@ -57,12 +58,13 @@ class InitiatePanel extends React.Component<{
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
-          <DeltaButton
+          <p
+            className='delta-button bold'
             style={{ float: 'right', marginTop: '20px' }}
             onClick={this.props.onClick}
           >
             {tx('ok')}
-          </DeltaButton>
+          </p>
         </Card>
       </div>
     )

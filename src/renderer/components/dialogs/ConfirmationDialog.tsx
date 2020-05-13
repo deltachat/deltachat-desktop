@@ -1,6 +1,5 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
-import { DeltaButtonPrimary, DeltaButtonDanger } from './SmallDialog'
 import { MessageBoxOptions } from 'electron'
 import { SmallDialog } from './DeltaDialog'
 
@@ -57,16 +56,22 @@ export default function ConfirmationDialog(props: todo) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            {React.createElement(
-              yesisPrimary ? DeltaButtonDanger : DeltaButtonPrimary,
-              { noPadding: true, onClick: () => onClick(false) },
-              cancelLabel || tx('cancel')
-            )}
-            {React.createElement(
-              yesisPrimary ? DeltaButtonPrimary : DeltaButtonDanger,
-              { noPadding: true, onClick: () => onClick(true) },
-              confirmLabel || tx('yes')
-            )}
+            <p
+              className={`delta-button no-padding bold ${
+                yesisPrimary ? 'danger' : 'primary'
+              }`}
+              onClick={() => onClick(false)}
+            >
+              {cancelLabel || tx('cancel')}
+            </p>
+            <p
+              className={`delta-button no-padding bold ${
+                !yesisPrimary ? 'danger' : 'primary'
+              }`}
+              onClick={() => onClick(true)}
+            >
+              {confirmLabel || tx('yes')}
+            </p>
           </div>
         </div>
       </div>

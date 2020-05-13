@@ -63,4 +63,40 @@
       overflow: hidden;
     }
   }
+
+  p.delta-button {
+    color: var(--colorNone);
+    padding: 0 2px;
+    margin-bottom: 0px;
+    letter-spacing: 0px;
+    font-size: initial;
+    font-weight: 'initial';
+    text-align: center;
+    text-transform: uppercase;
+    padding: 5px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 2px;
+    &:hover {
+      cursor: pointer;
+      background-color: #f1f1f1;
+    }
+
+    &.no-padding {
+      padding: 0px;
+    }
+
+    &.bold {
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+
+    &.primary {
+      color: var(--colorPrimary);
+    }
+
+    &.danger {
+      color: var(--colorDanger);
+    }
+  }
 }

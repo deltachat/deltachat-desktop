@@ -14,7 +14,6 @@ import {
   PseudoListItemAddContact,
 } from '../helpers/PseudoListItem'
 
-import { DeltaButtonPrimary, DeltaButton } from './SmallDialog'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -539,11 +538,11 @@ function CreateGroupInner(props: {
               style={{ justifyContent: 'space-between' }}
               className={Classes.DIALOG_FOOTER_ACTIONS}
             >
-              <DeltaButton noPadding onClick={onClose}>
+              <p className='delta-button no-padding bold' onClick={onClose}>
                 {tx('cancel')}
-              </DeltaButton>
-              <DeltaButtonPrimary
-                noPadding
+              </p>
+              <p
+                className='delta-button no-padding primary bold'
                 onClick={() => {
                   if (groupName === '') {
                     setErrorMissingGroupName(true)
@@ -553,7 +552,7 @@ function CreateGroupInner(props: {
                 }}
               >
                 {tx('group_create_button')}
-              </DeltaButtonPrimary>
+              </p>
             </div>
           </div>
         </>
