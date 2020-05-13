@@ -39,14 +39,12 @@ class DeltaRemote {
   }>
   call(fnName: 'getNetworkStatus'): Promise<[boolean, string]>
   // autocrypt ----------------------------------------------------------
-  call(
-    fnName: 'autocrypt.initiateKeyTransfer',
-    ...args: Parameters<typeof DeltaChat.prototype.initiateKeyTransfer>
-  ): Promise<void>
+  call(fnName: 'autocrypt.initiateKeyTransfer'): Promise<string>
   call(
     fnName: 'autocrypt.continueKeyTransfer',
-    ...args: Parameters<typeof DeltaChat.prototype.continueKeyTransfer>
-  ): Promise<string>
+    messageId: number,
+    key: string
+  ): Promise<number>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<void>

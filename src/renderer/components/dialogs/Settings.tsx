@@ -27,6 +27,7 @@ import { AppState } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
+import SettingsEncryption from './Settings-Encryption'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
@@ -363,24 +364,7 @@ export default class Settings extends React.Component {
               }
             />
           </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('autocrypt')}</H5>
-            <br />
-            {this.renderDeltaSwitch(
-              'e2ee_enabled',
-              this.translate('autocrypt_prefer_e2ee')
-            )}
-            <br />
-            <SettingsButton
-              style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
-              onClick={() => openDialog('SendAutocryptSetupMessage')}
-            >
-              {this.translate('autocrypt_send_asm_button')}
-            </SettingsButton>
-            <div className='bp3-callout'>
-              {this.translate('autocrypt_explain')}
-            </div>
-          </Card>
+          <SettingsEncryption renderDeltaSwitch={this.renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
             <br />

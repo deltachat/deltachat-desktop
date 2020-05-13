@@ -1,16 +1,20 @@
 import SplitOut from './splitout'
-import { DeltaChat } from 'deltachat-node'
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('main/deltachat/autocrypt')
 
 export default class DCAutocrypt extends SplitOut {
-  initiateKeyTransfer(
-    ...args: Parameters<typeof DeltaChat.prototype.initiateKeyTransfer>
-  ) {
-    return this._dc.initiateKeyTransfer(...args)
+  initiateKeyTransfer() {
+    return new Promise(resolve => {
+      this._dc.initiateKeyTransfer2((key: string) => {
+        resolve(key)
+      })
+    })
   }
 
-  continueKeyTransfer(
-    ...args: Parameters<typeof DeltaChat.prototype.continueKeyTransfer>
-  ) {
-    return this._dc.continueKeyTransfer(...args)
+  continueKeyTransfer(messageId: number, setupCode: string) {
+    return new Promise(resolve => {
+      this._dc.continueKeyTransfer2(messageId, setupCode, resolve)
+    })
   }
 }
