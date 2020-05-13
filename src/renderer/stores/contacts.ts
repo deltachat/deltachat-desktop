@@ -6,13 +6,13 @@ import debounce from 'debounce'
 import { JsonContact } from '../../shared/shared-types'
 const log = logger.getLogger('renderer/stores/contacts')
 
-class state {
+export class contactsStoreState {
   contacts: JsonContact[] = []
   blockedContacts: JsonContact[] = []
   queryGroupContacts = ''
   queryNonGroupContacts = ''
 }
-const contactsStore = new Store(new state(), 'contact')
+const contactsStore = new Store(new contactsStoreState(), 'contact')
 
 contactsStore.attachEffect(async action => {
   if (action.type === 'UI_UNBLOCK_CONTACT') {
