@@ -12,11 +12,11 @@ import {
   attachment,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
+import { MessageType } from '../../../shared/shared-types'
 
 type AttachmentProps = {
-  // TODO: replace "any" by the right type here
   attachment: attachment
-  message: any
+  message: MessageType
 }
 
 export default function MediaAttachment({
@@ -32,7 +32,7 @@ export default function MediaAttachment({
   const onClickAttachment = (ev: any) => {
     ev.stopPropagation()
     if (isDisplayableByFullscreenMedia(message.msg.attachment)) {
-      openDialog('FullscreenMedia', { message })
+      openDialog('FullscreenMedia', { msg })
     } else {
       openAttachmentInShell(msg)
     }

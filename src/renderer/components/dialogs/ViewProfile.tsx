@@ -104,14 +104,12 @@ export default function ViewProfile(props: {
             <div
               onClick={() => {
                 openDialog('FullscreenMedia', {
-                  message: {
-                    msg: {
-                      attachment: {
-                        url: contact.profileImage,
-                        contentType: 'image/x',
-                      },
-                      file: contact.profileImage,
+                  msg: {
+                    attachment: {
+                      url: contact.profileImage,
+                      contentType: 'image/x',
                     },
+                    file: contact.profileImage,
                   },
                 })
               }}
