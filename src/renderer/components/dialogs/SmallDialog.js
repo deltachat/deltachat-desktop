@@ -33,7 +33,7 @@ export default function SmallDialog(props) {
     <Dialog
       isOpen={props.isOpen}
       onClose={props.onClose}
-      canOutsideClickClose
+      // canOutsideClickClose
       className='delta-dialog-small-dialog'
     >
       {props.children}
