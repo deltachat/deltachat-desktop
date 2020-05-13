@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
+import { DialogProps } from '.'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
@@ -137,13 +138,13 @@ export function useDialog<T extends (props: any) => JSX.Element>(
     const Component = DialogComponent as (props: any) => JSX.Element
     return <Component {...{ ...props, isOpen, onClose }} />
   }
-  return [renderDialog, showDialog]
+  return [renderDialog, showDialog] as [typeof renderDialog, typeof showDialog]
 }
 
 export function DeltaDialogHeader(props: {
   onClickBack?: () => void
-  title: string
-  onClose?: () => void
+  title?: string
+  onClose?: DialogProps['onClose']
   children?: React.ReactNode
   showBackButton?: boolean
 }) {

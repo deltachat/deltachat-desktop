@@ -81,7 +81,7 @@ export function openEncryptionInfoDialog(
 
 export function openEditGroupDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: Chat
+  selectedChat: FullChat
 ) {
   screenContext.openDialog('EditGroup', { chat: selectedChat })
 }

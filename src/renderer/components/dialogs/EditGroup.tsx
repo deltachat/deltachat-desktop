@@ -22,9 +22,18 @@ import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
-import { GroupSeperator, GroupMemberContactListWrapper } from './Group-Styles'
+import { DialogProps } from '.'
+import {
+  ChatListItemType,
+  FullChat,
+  JsonContact,
+} from '../../../shared/shared-types'
 
-export default function EditGroup(props) {
+export default function EditGroup(props: {
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
+  chat: FullChat
+}) {
   const { isOpen, onClose, chat } = props
   const [viewMode, setViewMode] = useState('main')
 
@@ -36,12 +45,12 @@ export default function EditGroup(props) {
 }
 
 export const useEditGroup = (
-  verified,
-  groupName,
-  groupImage,
-  groupMembers,
-  groupId,
-  onClose
+  verified: boolean,
+  groupName: string,
+  groupImage: string,
+  groupMembers: number[],
+  groupId: number,
+  onClose: DialogProps['onClose']
 ) => {
   const [initialGroupMembers] = useState(groupMembers)
   const updateGroup = async () => {
@@ -61,26 +70,47 @@ export const useEditGroup = (
     await updateGroup()
     onClose()
   }
-  return [groupId, onUpdateGroup, updateGroup, onClose]
+  return [groupId, onUpdateGroup, updateGroup] as [
+    number,
+    typeof onUpdateGroup,
+    typeof updateGroup
+  ]
 }
 
-export function useGroupMembers(initialMembers) {
+export function useGroupMembers(initialMembers: JsonContact[]) {
   const [groupMembers, setGroupMembers] = useState(
     initialMembers.map(member => member.id)
   )
 
-  const removeGroupMember = ({ id }) =>
+  const removeGroupMember = ({ id }: JsonContact | { id: number }) =>
     id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }) => setGroupMembers([...groupMembers, id])
-  const addRemoveGroupMember = ({ id }) => {
+  const addGroupMember = ({ id }: JsonContact | { id: number }) =>
+    setGroupMembers([...groupMembers, id])
+  const addRemoveGroupMember = ({ id }: JsonContact | { id: number }) => {
     groupMembers.indexOf(id) !== -1
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
-  return [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember]
+
+  return [
+    groupMembers,
+    removeGroupMember,
+    addGroupMember,
+    addRemoveGroupMember,
+  ] as [
+    number[],
+    typeof removeGroupMember,
+    typeof addGroupMember,
+    typeof addRemoveGroupMember
+  ]
 }
 
-export function EditGroupInner(props) {
+function EditGroupInner(props: {
+  viewMode: string
+  setViewMode: (newViewMode: string) => void
+  onClose: DialogProps['onClose']
+  chat: FullChat
+}) {
   const { viewMode, setViewMode, onClose, chat } = props
   const tx = window.translate
 
@@ -144,7 +174,6 @@ export function EditGroupInner(props) {
             updateSearch('')
             setViewMode('main')
           },
-          onClose,
           onSearchChange,
           queryStr,
           searchContacts,
@@ -163,11 +192,7 @@ export function EditGroupInner(props) {
         })}
       {viewMode === 'main' && (
         <>
-          <DeltaDialogHeader
-            title={tx('menu_edit_group')}
-            onClose={onClose}
-            borderBottom
-          />
+          <DeltaDialogHeader title={tx('menu_edit_group')} onClose={onClose} />
           <div className={Classes.DIALOG_BODY}>
             <Card>
               {GroupSettingsSetNameAndProfileImage({
@@ -179,14 +204,14 @@ export function EditGroupInner(props) {
                 errorMissingGroupName,
                 setErrorMissingGroupName,
               })}
-              <GroupSeperator>
+              <div className='group-seperator'>
                 {tx(
                   'n_members',
-                  groupMembers.length,
+                  groupMembers.length.toString(),
                   groupMembers.length <= 1 ? 'one' : 'other'
                 )}
-              </GroupSeperator>
-              <GroupMemberContactListWrapper>
+              </div>
+              <div className='group-member-contact-list-wrapper'>
                 <input
                   className='search-input group-member-search'
                   onChange={onSearchChange}
@@ -203,9 +228,9 @@ export function EditGroupInner(props) {
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                   <>
-                    <GroupSeperator noMargin>
+                    <div className='group-seperator no-margin'>
                       {tx('group_add_members')}
-                    </GroupSeperator>
+                    </div>
                     <ContactList2
                       contacts={searchContactsToAdd}
                       onClick={addGroupMember}
@@ -215,7 +240,7 @@ export function EditGroupInner(props) {
                 {queryStr !== '' &&
                   searchContacts.length === 0 &&
                   PseudoListItemNoSearchResults({ queryStr })}
-              </GroupMemberContactListWrapper>
+              </div>
             </Card>
           </div>
           <DeltaDialogFooter>

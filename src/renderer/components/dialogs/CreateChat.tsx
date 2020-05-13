@@ -21,18 +21,17 @@ import {
   DeltaDialogBody,
 } from './DeltaDialog'
 
-import {
-  GroupSettingsContainer,
-  GroupSeperator,
-  GroupMemberContactListWrapper,
-  GroupImage,
-  GroupNameInput,
-} from './Group-Styles'
+import { GroupImage } from './Group-Styles'
 
 import { DeltaDialogQrInner } from './QrInviteCode'
+import { JsonContact, DCContact } from '../../../shared/shared-types'
+import { DialogProps } from '.'
 const { remote } = window.electron_functions
 
-export default function CreateChat(props) {
+export default function CreateChat(props: {
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
+}) {
   const { isOpen, onClose } = props
   const tx = window.translate
   const { userFeedback } = useContext(ScreenContext)
@@ -42,12 +41,12 @@ export default function CreateChat(props) {
   const [queryStr, onSearchChange] = useContactSearch(updateContacts)
   const queryStrIsEmail = isValidEmail(queryStr)
 
-  const closeDialogAndSelectChat = chatId => {
+  const closeDialogAndSelectChat = (chatId: number) => {
     selectChat(chatId)
     onClose()
   }
 
-  const chooseContact = async ({ id }) => {
+  const chooseContact = async ({ id }: DCContact) => {
     const chatId = await DeltaBackend.call('contacts.createChatByContactId', id)
 
     if (!chatId) {
@@ -145,54 +144,72 @@ export default function CreateChat(props) {
   )
 }
 
-export function useContactSearch(updateContacts) {
+export function useContactSearch(
+  updateContacts: (searchString: string) => void
+) {
   const [searchString, setSearchString] = useState('')
 
-  const updateSearch = searchString => {
+  const updateSearch = (searchString: string) => {
     setSearchString(searchString)
     updateContacts(searchString)
   }
 
-  const onSearchChange = e => updateSearch(e.target.value)
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    updateSearch(e.target.value)
 
-  return [searchString, onSearchChange, updateSearch]
+  return [searchString, onSearchChange, updateSearch] as [
+    string,
+    typeof onSearchChange,
+    typeof updateSearch
+  ]
 }
 
-export function useGroupImage(image) {
+export function useGroupImage(image?: string) {
   const [groupImage, setGroupImage] = useState(image)
   const tx = window.translate
 
-  const onSetGroupImage = () => {
-    remote.dialog.showOpenDialog(
-      {
-        title: tx('select_group_image_desktop'),
-        filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
-        properties: ['openFile'],
-      },
-      files => {
-        if (Array.isArray(files) && files.length > 0) {
-          setGroupImage(files[0])
-        }
-      }
-    )
+  const onSetGroupImage = async () => {
+    let { filePaths } = await remote.dialog.showOpenDialog({
+      title: tx('select_group_image_desktop'),
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile'],
+    })
+    if (Array.isArray(filePaths) && filePaths.length > 0) {
+      setGroupImage(filePaths[0])
+    }
   }
   const onUnsetGroupImage = () => setGroupImage('')
 
-  return [groupImage, onSetGroupImage, onUnsetGroupImage]
+  return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
+    typeof groupImage,
+    typeof onSetGroupImage,
+    typeof onUnsetGroupImage
+  ]
 }
 
-export function useGroupMembers() {
+function useGroupMembers() {
   const [groupMembers, setGroupMembers] = useState([1])
 
-  const removeGroupMember = ({ id }) =>
+  const removeGroupMember = ({ id }: JsonContact | { id: number }) =>
     id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }) => setGroupMembers([...groupMembers, id])
-  const addRemoveGroupMember = ({ id }) => {
+  const addGroupMember = ({ id }: JsonContact | { id: number }) =>
+    setGroupMembers([...groupMembers, id])
+  const addRemoveGroupMember = ({ id }: JsonContact | { id: number }) => {
     groupMembers.indexOf(id) !== -1
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
-  return [groupMembers, removeGroupMember, addGroupMember, addRemoveGroupMember]
+  return [
+    groupMembers,
+    removeGroupMember,
+    addGroupMember,
+    addRemoveGroupMember,
+  ] as [
+    number[],
+    typeof removeGroupMember,
+    typeof addGroupMember,
+    typeof addRemoveGroupMember
+  ]
 }
 
 export const GroupSettingsSetNameAndProfileImage = ({
@@ -203,21 +220,30 @@ export const GroupSettingsSetNameAndProfileImage = ({
   setGroupName,
   errorMissingGroupName,
   setErrorMissingGroupName,
+}: {
+  groupImage: string
+  onSetGroupImage: (event: React.SyntheticEvent) => void
+  onUnsetGroupImage: (event: React.SyntheticEvent) => void
+  groupName: string
+  setGroupName: (newGroupName: string) => void
+  errorMissingGroupName: boolean
+  setErrorMissingGroupName: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const tx = window.translate
-  const onChange = ({ target }) => {
+  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.value.length > 0) setErrorMissingGroupName(false)
     setGroupName(target.value)
   }
   return (
-    <GroupSettingsContainer>
+    <div className='group-settings-container'>
       <GroupImage
         style={{ float: 'left' }}
         groupImage={groupImage}
         onSetGroupImage={onSetGroupImage}
         onUnsetGroupImage={onUnsetGroupImage}
       />
-      <GroupNameInput
+      <input
+        className='group-name-input'
         placeholder={tx('group_name')}
         value={groupName}
         onChange={onChange}
@@ -234,18 +260,24 @@ export const GroupSettingsSetNameAndProfileImage = ({
           {tx('group_please_enter_group_name')}
         </p>
       )}
-    </GroupSettingsContainer>
+    </div>
   )
 }
 
 export const AddMemberInnerDialog = ({
   onClickBack,
-  onClose,
   onSearchChange,
   queryStr,
   searchContacts,
   groupMembers,
   addRemoveGroupMember,
+}: {
+  onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
+  onSearchChange: ReturnType<typeof useContactSearch>[1]
+  queryStr: string
+  searchContacts: DCContact[]
+  groupMembers: number[]
+  addRemoveGroupMember: ReturnType<typeof useGroupMembers>[3]
 }) => {
   const tx = window.translate
 
@@ -265,7 +297,7 @@ export const AddMemberInnerDialog = ({
             placeholder={tx('search')}
             autoFocus
           />
-          <GroupMemberContactListWrapper>
+          <div className='group-member-contact-list-wrapper'>
             <ContactList2
               contacts={searchContacts}
               onClick={() => {}}
@@ -276,7 +308,7 @@ export const AddMemberInnerDialog = ({
             {queryStr !== '' &&
               searchContacts.length === 0 &&
               PseudoListItemNoSearchResults({ queryStr })}
-          </GroupMemberContactListWrapper>
+          </div>
         </Card>
       </DeltaDialogBody>
     </>
@@ -288,6 +320,11 @@ export const ShowQrCodeInnerDialog = ({
   onClose,
   qrCode,
   groupName,
+}: {
+  onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
+  onClose: DialogProps['onClose']
+  qrCode: string
+  groupName: string
 }) => {
   const tx = window.translate
 
@@ -306,16 +343,16 @@ export const ShowQrCodeInnerDialog = ({
   )
 }
 
-export const useCreateGroup = (
-  verified,
-  groupName,
-  groupImage,
-  groupMembers,
-  onClose
+const useCreateGroup = (
+  verified: boolean,
+  groupName: string,
+  groupImage: string,
+  groupMembers: number[],
+  onClose: DialogProps['onClose']
 ) => {
   const [groupId, setGroupId] = useState(-1)
 
-  const lazilyCreateOrUpdateGroup = async finishing => {
+  const lazilyCreateOrUpdateGroup = async (finishing: boolean) => {
     let gId = groupId
     if (gId === -1) {
       gId = await DeltaBackend.call('chat.createGroupChat', verified, groupName)
@@ -341,10 +378,19 @@ export const useCreateGroup = (
     onClose()
     selectChat(gId)
   }
-  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup]
+  return [groupId, lazilyCreateOrUpdateGroup, finishCreateGroup] as [
+    number,
+    typeof lazilyCreateOrUpdateGroup,
+    typeof finishCreateGroup
+  ]
 }
 
-export function CreateGroupInner(props) {
+function CreateGroupInner(props: {
+  viewMode: string
+  setViewMode: (newViewMode: string) => void
+  onClose: DialogProps['onClose']
+  isVerified: boolean
+}) {
   const { viewMode, setViewMode, onClose, isVerified } = props
   const tx = window.translate
 
@@ -412,7 +458,6 @@ export function CreateGroupInner(props) {
             updateSearch('')
             setViewMode(viewPrefix + '-main')
           },
-          onClose,
           onSearchChange,
           queryStr,
           searchContacts,
@@ -448,14 +493,14 @@ export function CreateGroupInner(props) {
                 errorMissingGroupName,
                 setErrorMissingGroupName,
               })}
-              <GroupSeperator>
+              <div className='group-seperator'>
                 {tx(
                   'n_members',
-                  groupMembers.length,
+                  groupMembers.length.toString(),
                   groupMembers.length <= 1 ? 'one' : 'other'
                 )}
-              </GroupSeperator>
-              <GroupMemberContactListWrapper>
+              </div>
+              <div className='group-member-contact-list-wrapper'>
                 <input
                   className='search-input group-member-search'
                   onChange={onSearchChange}
@@ -473,9 +518,9 @@ export function CreateGroupInner(props) {
                 />
                 {queryStr !== '' && searchContactsToAdd.length !== 0 && (
                   <>
-                    <GroupSeperator noMargin>
+                    <div className='group-seperator no-margin'>
                       {tx('group_add_members')}
-                    </GroupSeperator>
+                    </div>
                     <ContactList2
                       contacts={searchContactsToAdd}
                       onClick={addGroupMember}
@@ -485,7 +530,7 @@ export function CreateGroupInner(props) {
                 {queryStr !== '' &&
                   searchContacts.length === 0 &&
                   PseudoListItemNoSearchResults({ queryStr })}
-              </GroupMemberContactListWrapper>
+              </div>
             </Card>
           </div>
           <div className={Classes.DIALOG_FOOTER}>
@@ -516,7 +561,7 @@ export function CreateGroupInner(props) {
   )
 }
 
-export function isValidEmail(email) {
+export function isValidEmail(email: string) {
   // empty string is not allowed
   if (email === '') return false
   const parts = email.split('@')
