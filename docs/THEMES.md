@@ -55,10 +55,12 @@ We use scss to create themes, because it allows us to save work by using its col
 1. compile the theme to css in watchmode
 
 ```sh
-node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css
+node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --include-path path/to/deltachat-desktop-git-folder/themes/
 # for linux:
-node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css
+node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --include-path themes/
 ```
+
+> Note: you have to set --include-path to the theme folder in an deltachat-desktop git checkout, otherwise you'll get an error!
 
 3. open a new terminal window/tab
 
