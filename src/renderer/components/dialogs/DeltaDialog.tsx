@@ -1,12 +1,16 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
 import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
+import { DialogProps } from '.'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
     isOpen: boolean
     onClose: () => void
+    canOutsideClickClose?: boolean
+    isCloseButtonShown?: boolean
+    canEscapeKeyClose?: boolean
     fixed?: boolean
     className?: string
     style?: React.CSSProperties
@@ -18,9 +22,11 @@ export const DeltaDialogBase = React.memo<
       <Dialog
         isOpen={props.isOpen}
         onClose={props.onClose}
-        canOutsideClickClose={false}
-        canEscapeKeyClose
+        canOutsideClickClose={props.canOutsideClickClose}
+        isCloseButtonShown={props.isCloseButtonShown}
+        canEscapeKeyClose={props.canEscapeKeyClose}
         className={classNames(
+          'delta-dialog',
           isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog',
           [props.className]
         )}
@@ -93,6 +99,9 @@ const DeltaDialog = React.memo<
     style?: React.CSSProperties
     onClickBack?: () => void
     showBackButton?: boolean
+    canOutsideClickClose?: boolean
+    isCloseButtonShown?: boolean
+    canEscapeKeyClose?: boolean
   }>
 >(props => {
   return (
@@ -102,6 +111,9 @@ const DeltaDialog = React.memo<
       fixed={props.fixed}
       className={props.className}
       style={props.style}
+      canOutsideClickClose={props.canOutsideClickClose}
+      isCloseButtonShown={props.isCloseButtonShown}
+      canEscapeKeyClose={props.canEscapeKeyClose}
     >
       <DeltaDialogHeader
         onClose={props.onClose}
@@ -137,13 +149,13 @@ export function useDialog<T extends (props: any) => JSX.Element>(
     const Component = DialogComponent as (props: any) => JSX.Element
     return <Component {...{ ...props, isOpen, onClose }} />
   }
-  return [renderDialog, showDialog]
+  return [renderDialog, showDialog] as [typeof renderDialog, typeof showDialog]
 }
 
 export function DeltaDialogHeader(props: {
   onClickBack?: () => void
-  title: string
-  onClose: () => void
+  title?: string
+  onClose?: DialogProps['onClose']
   children?: React.ReactNode
   showBackButton?: boolean
 }) {
@@ -242,5 +254,23 @@ export function DeltaDialogButton(
     <div onClick={props.onClick} className='delta-dialog-button'>
       {props.children}
     </div>
+  )
+}
+
+export function SmallDialog(
+  props: PropsWithChildren<{
+    isOpen: DialogProps['isOpen']
+    onClose: DialogProps['onClose']
+  }>
+) {
+  return (
+    <Dialog
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      canOutsideClickClose
+      className='delta-dialog small-dialog'
+    >
+      {props.children}
+    </Dialog>
   )
 }

@@ -50,6 +50,7 @@
     <string name="email_address">E-Mail-Adresse</string>
     <string name="bad_email_address">Ungültige E-Mail-Adresse</string>
     <string name="password">Passwort</string>
+    <string name="existing_password">Bestehendes Passwort</string>
     <string name="now">Jetzt</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Achtung</string>
@@ -333,7 +334,6 @@
     <string name="login_auth_method">Autorisierungsmethode</string>
     <string name="login_info_oauth2_title">Weiter mit vereinfachter Einrichtung?</string>
     <string name="login_info_oauth2_text">Die eingegebene E-Mail-Adresse unterstützt eine vereinfachte Einrichtung (OAuth 2.0).\n\nBitte erlauben Sie Delta Chat im nächsten Schritt, als Chat-über-E-Mail-App zu arbeiten.\n\nEs gibt keine Delta Chat Server! Ihre Daten bleiben auf Ihrem Gerät!</string>
-    <string name="login_info_gmail_text">Für GMail-Konten muss ein App-Passwort erstellt werden, wenn die 2FA (Zwei-Faktor-Authentifizierung) aktiviert ist. Wenn diese Einstellung nicht verfügbar ist, muss \"Zugriff durch weniger sichere Anwendungen\" aktiviert werden.</string>
     <string name="login_certificate_checks">Zertifikatsüberprüfung</string>
     <string name="login_error_mail">Bitte eine gültige E-Mail-Adresse eingeben</string>
     <string name="login_error_server">Bitte eine gültige Server/IP-Adresse eingeben</string>
@@ -354,8 +354,11 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="accept_invalid_certificates">Ungültige Zertifikate akzeptieren</string>
 
     <string name="used_settings">Verwendete Einstellungen:</string>
-    <string name="delete_account">Account löschen</string>
+    <string name="switch_account">E-Mail-Konto wechseln</string>
+    <string name="add_account">E-Mail-Konto hinzufügen</string>
+    <string name="delete_account">E-Mail-Konto löschen</string>
     <string name="delete_account_ask">Möchten Sie das E-Mail-Konto und alle Daten wirklich von diesem Gerät löschen?</string>
+    <string name="switching_account">E-Mail-Konto wechseln…</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -467,22 +470,27 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_background_default_color">Voreingestellte Farbe</string>
     <string name="pref_background_custom_image">Benutzerdefiniertes Hintergrundbild</string>
     <string name="pref_background_custom_color">Benutzerdefinierte Farbe</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Zuverlässige Hintergrundverbindung</string>
+    <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
+
 
     <!-- automatically delete message -->
     <string name="autodel_title">Nachrichten automatisch löschen</string>
     <string name="autodel_title_short">Automatisch löschen</string>
     <string name="autodel_device_title">Nachrichten vom Gerät löschen</string>
     <string name="autodel_server_title">Nachrichten vom Server löschen</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_device_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten %2$s löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• Nachrichten werden gelöscht, auch wenn sie nicht angesehen wurden\n\n• \"Gespeicherte Nachrichten\" werden nicht gelöscht</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten %2$s löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• E-Mails, die aufgrund von \"Normale E-Mails anzeigen\" angezeigt werden, werden ebenfalls vom Server gelöscht\n\n• \"Gespeicherte Nachrichten\" werden ebenfalls vom Server gelöschet</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• Nachrichten werden gelöscht, auch wenn sie nicht angesehen wurden\n\n• \"Gespeicherte Nachrichten\" werden nicht gelöscht</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• E-Mails, die aufgrund von \"Normale E-Mails anzeigen\" angezeigt werden, werden ebenfalls vom Server gelöscht\n\n• \"Gespeicherte Nachrichten\" werden ebenfalls vom Server gelöschet</string>
     <string name="autodel_confirm">Verstanden, löschen all diese Nachrichten</string>
     <string name="autodel_at_once">Sofort</string>
     <string name="autodel_after_1_hour">Nach 1 Stunde</string>
     <string name="autodel_after_1_day">Nach 1 Tag</string>
     <string name="autodel_after_1_week">Nach 1 Woche</string>
     <string name="autodel_after_4_weeks">Nach 4 Wochen</string>
+    <string name="autodel_after_1_year">Nach 1 Jahr</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -550,8 +558,8 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="qrshow_join_contact_hint">Scannen, um einen Kontakt mit %1$s herzustellen.</string>
     <string name="qrshow_join_contact_no_connection_hint">Der Austausch von QR-Codes erfordert eine Verbindung zum Internet. Bitte stellen Sie diese her, bevor Sie fortfahtren.</string>
     <string name="qrshow_join_contact_no_connection_toast">Keine Verbindung zum Internet, Austausch des QR-Codes nicht möglich.</string>
-    <string name="qraccount_ask_create_and_login"> \"%1$s\" erzeugen und dort anmelden?</string>
-    <string name="qraccount_success_enter_name">Anmeldung Erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und einen Avatar festlegen, der den ChatpartnerInnen angezeigt wird.</string>
+    <string name="qraccount_ask_create_and_login">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?</string>
+    <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und einen Avatar festlegen, der den ChatpartnerInnen angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
     <string name="contact_verified">%1$s verifiziert.</string>
@@ -570,7 +578,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="notify_media_message">Medienmitteilung</string>
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
-    <string name="notify_background_connection_enabled">Verbindung im Hintergrund aktiviert</string>
+    <string name="notify_background_connection_enabled">Hintergrundverbindung aktiviert</string>
     <string name="notify_priority_high">Hoch</string>
     <string name="notify_priority_max">Maximum</string>
     <string name="notify_name_and_message">Name und Nachricht</string>
@@ -598,7 +606,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
 
     <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="welcome_desktop">Willkommen bei Delta Chat</string>
-    <string name="login_known_accounts_title_desktop">Bekannte Konten</string>
+    <string name="login_known_accounts_title_desktop">Bekannte E-Mail-Konten</string>
     <string name="global_menu_preferences_language_desktop">Sprache</string>
     <string name="global_menu_file_desktop">Datei</string>
     <string name="global_menu_file_quit_desktop">Beenden</string>
@@ -665,7 +673,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="user_location_permission_explanation">Delta Chat benötigt die Standortberechtigung, um Ihren Standort anzuzeigen und zu teilen.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Übertragungsstatus: Fehler</string>
     <string name="a11y_encryption_padlock">Verschlüsselungsschloss</string>
     <string name="a11y_delivery_status_sending">Übertragungsstatus: Sendet</string>
@@ -673,7 +681,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="a11y_delivery_status_delivered">Übertragungsstatus: Versendet</string>
     <string name="a11y_delivery_status_read">Übertragungsstatus: Gelesen</string>
     <string name="a11y_delivery_status_invalid">Übertragungsstatus: Ungültig</string>
-    <string name="a11y_remove_account_btn_label">Account löschen</string>
+    <string name="a11y_remove_account_btn_label">E-Mail-Konto löschen</string>
     <string name="a11y_message_context_menu_btn_label">Nachrichtaktionen</string>
     <string name="a11y_background_preview_label">Vorschau für Hintergrundbild</string>
 
@@ -682,4 +690,11 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat verwendet die Kontakte, um eine Liste von E-Mail-Adressen anzuzeigen, an die Sie schreiben können. Delta Chat hat keine Server; das Adressbuch wird nicht versandt.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat verwendet das Mikrofon, um Sprachnachrichten und Videos mit Sound aufzunehmen und zu versenden.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat verwendet die Fotos, um Ihnen die Möglichkeit zu geben, diese auszuwählen und zu versenden.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">Zum Hinweis \"Hintergrundverbindung aktiviert\" im Systembereich:\n\n👉 Der Hinweis hält das Betriebssystem normalerweise davon ab, die Verbindung zwischen Delta Chat und Ihrem Server zu unterbrechen.\n\n👉 Wenn der Hinweis ohne Ihr Zutun verschwindet wurde die Verbindung vermutlich dennoch unterbrochen. Auch wenn dies seltsam erscheint - viele Handyhersteller tun genau dies - auf der Seite https://dontkillmyapp.com finden Sie herstellerspezifische Hinweise, was Sie dagegen tun können.\n\nWie auch immer - wir freuen uns, dass wir die Hintergrundverbindung grundsätzlich stabiler gestalten konnten und so viele Benutzerwünsche erfüllen könnten 🤗</string>
+
+
 </resources>

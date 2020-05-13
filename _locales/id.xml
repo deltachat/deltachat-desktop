@@ -6,26 +6,37 @@
     <string name="cancel">Batalkan</string>
     <string name="yes">Ya</string>
     <string name="no">Tidak</string>
+    <string name="on">Nyala</string>
+    <string name="off">Mati</string>
+    <string name="def">Default</string>
+    <string name="custom">Menurut pesanan</string>
     <string name="none">Tidak ada</string>
     <string name="automatic">Otomatis</string>
+    <string name="strict">Ketat</string>
     <string name="open">Buka</string>
     <string name="delete">Hapus</string>
     <string name="info">Info</string>
+    <string name="update">Memperbarui</string>
     <string name="emoji">Emoji</string>
     <string name="attachment">Lampiran</string>
     <string name="back">Kembali</string>
     <string name="close">Tutup</string>
     <string name="forward">Teruskan</string>
     <string name="archive">Arsip</string>
+    <string name="unarchive">Tidak diarsip</string>
     <string name="mute">Diam</string>
     <string name="save">Simpan</string>
+    <string name="chat">Chat</string>
     <string name="media">Media</string>
     <string name="main_menu">Menu utama</string>
-    <string name="start_chat">Mulai chat</string>
+    <string name="start_chat">Mulai obrolan</string>
     <string name="show_password">Tunjukkan kata kunci</string>
     <string name="hide_password">Sembunyikan kata kunci</string>
     <string name="not_now">Tidak sekarang</string>
+    <string name="never">Tidak pernah</string>
+    <string name="one_moment">Sebentar...</string>
     <string name="done">Selesai</string>
+    <string name="undo">Undo</string>
     <!-- Translators: used eg. for the next view, could also be "continue" or so. as used in ios headers, the string should be as short as possible, though. -->
     <string name="next">Berikutnya</string>
     <string name="error">Eror</string>
@@ -34,10 +45,15 @@
     <string name="no_app_to_handle_data">Tidak menemukan aplikasi untuk jenis data ini.</string>
     <string name="no_browser_installed">Tak ada browser yang terpasang.</string>
     <string name="file_not_found">Tak bisa menemukan %1$s.</string>
+    <string name="copied_to_clipboard">Sudah dikopi di papan klip.</string>
     <string name="contacts_headline">Kontak</string>
     <string name="email_address">Alamat email</string>
+    <string name="bad_email_address">Alamat surel jelek.</string>
     <string name="password">Kata kunci</string>
+    <string name="existing_password">Kata sandi sudah pernah</string>
     <string name="now">Sekarang</string>
+    <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
+    <string name="danger">Bahaya</string>
     <!-- n_min_ago is deprecated, use n_minutes instead -->
     <string name="n_min_ago">%dmenit</string>
     <string name="today">Hari ini</string>
@@ -54,6 +70,9 @@
     <plurals name="n_hours">
         <item quantity="other">%djam</item>
     </plurals>
+    <plurals name="n_chats">
+        <item quantity="other">%d obrolan</item>
+    </plurals>
     <plurals name="n_contacts">
         <item quantity="other">%dkontak</item>
     </plurals>
@@ -68,6 +87,7 @@
     <string name="draft">Draf</string>
     <string name="image">Gambar</string>
     <string name="gif">Gif</string>
+    <string name="images">Gambar</string>
     <string name="audio">Audio</string>
     <string name="voice_message">Pesan suara</string>
     <string name="forwarded_message">Pesan yang diteruskan</string>
@@ -85,6 +105,7 @@
     <string name="red">Merah</string>
     <string name="blue">Biru</string>
     <string name="orange">Oranye</string>
+    <string name="cyan">Biru</string>
     <string name="purple">Ungu</string>
     <string name="magenta">Magenta</string>
     <string name="white">Putih</string>
@@ -103,13 +124,17 @@
 
     <!-- menu labels (or icon, buttons...) -->
     <string name="menu_new_contact">Kontak baru</string>
+    <string name="menu_new_chat">Obrolan baru</string>
     <string name="menu_new_group">Grup baru</string>
     <string name="menu_new_verified_group">Grup baru terverifikasi</string>
     <string name="menu_send">Terkirim</string>
+    <string name="menu_toggle_keyboard">Tekan tombol emoji keyboard</string>
     <string name="menu_edit_group">Edit grup</string>
     <string name="menu_group_name_and_image">Nama dan gambar grup</string>
     <string name="menu_show_map">Tunjukkan peta</string>
     <string name="menu_show_global_map">Tunjukkan semua lokasi</string>
+    <string name="menu_archive_chat">Arsip obrolan</string>
+    <string name="menu_unarchive_chat">Obrolan Tak Terarsip</string>
     <string name="menu_add_attachment">Tambah lampiran</string>
     <string name="menu_leave_group">Tinggalkan grup</string>
     <string name="menu_delete_chat">Hapus obrolan</string>
@@ -118,6 +143,7 @@
     <string name="menu_delete_locations">Hapus semua lokasi?</string>
     <string name="menu_delete_location">Hapus lokasi ini?</string>
     <string name="menu_message_details">Detail pesan</string>
+    <string name="menu_copy_to_clipboard">Kopi ke papan klip</string>
     <string name="menu_forward">Teruskan pesan</string>
     <string name="menu_resend">Kirim ulang pesan</string>
     <string name="menu_reply">Balas pesan</string>
@@ -129,6 +155,9 @@
     <string name="menu_block_contact">Blokir kontak</string>
     <string name="menu_unblock_contact">Buka blokir kontak</string>
     <string name="menu_play">Mainkan</string>
+    <string name="menu_pause">Jeda</string>
+    <string name="menu_scroll_to_bottom">Gelincir ke bawah</string>
+    <string name="menu_scroll_to_top">Gelincir ke atas</string>
     <string name="menu_help">Bantuan</string>
     <string name="menu_select_all">Pilih semua</string>
     <string name="menu_expand">Perluas</string>
@@ -138,14 +167,445 @@
     <string name="menu_settings">Setelan</string>
     <string name="menu_advanced">Lanjutan</string>
     <string name="menu_deaddrop">Permintaan kontak</string>
-    <string name="menu_deaddrop_subtitle">Tekan pesan untuk memulai obrolan</string>
+    <string name="menu_deaddrop_subtitle">Tekan pesan untuk memulai ngobrol</string>
     <string name="menu_view_profile">Lihat profil</string>
+    <string name="menu_zoom_in">Zoom perbesar</string>
+    <string name="menu_zoom_out">Zoom perkecil</string>
     <string name="menu_save_log">Simpan log</string>
     <string name="title_share_location">Bagikan lokasi kepada seluruh anggota grup</string>
-    <string name="device_talk">Hapus pesan</string>
-    <string name="device_talk_welcome_message">Selamat datang di Delta Chat! – Delta Chat terlihat dan terasa seperti aplikasi messenger populer lainnya, tapi tidak menggunakan kontrol yang tersentralisasi, melacak atau menjual anda, teman, kolega atau keluarga ke organisasi-organisasi besar.\n\nSecara teknis, Delta Chat merupakan sebuah aplikasi email dengan penampilan chat yang modern. Katakanlah email dengan tampilan baru 👻\n\nGunakan Delta Chat dengan siapa pun dari miliaran orang di luar sana: cukup gunakan alamat email mereka. Penerima tak harus mengunduh Delta Chat, kunjungi website atau daftar di mana pun - karena tentu saja, jika mereka menyukai anda, ajaklah mereka ke 👉 https://get.delta.chat</string>
+    <string name="device_talk">Pesan perangkat</string>
+    <string name="device_talk_subtitle">Pesan-pesan buatan lokal</string>
+    <string name="device_talk_explain">Pesan dalam obrolan ini dihasilkan dalam aplikasi Delta Chat anda secara lokal. Para penciptanya memakai obrolan ini untuk memberi tahu aplikasi mutakhir dan masalah-masalah selama digunakan.</string>
+    <string name="device_talk_welcome_message">Selamat datang di Delta Chat! – Delta Chat tampak dan terasa seperti aplikasi percakapan populer lainnya, tapi tidak menggunakan kontrol yang tersentralisasi, melacak atau menjual anda, teman, kolega atau keluarga ke organisasi-organisasi besar.\n\nSecara teknis, Delta Chat merupakan sebuah aplikasi surel dengan tampilan obrolan modern. Katakanlah surel dengan tampilan baru 👻\n\nGunakan Delta Chat dengan siapa pun dari milyaran orang di luar sana: cukup gunakan alamat surel mereka. Penerima tak harus mengunduh Delta Chat, kunjungi laman atau daftar di mana pun - karena tentu saja, jika mereka menyukai anda, ajaklah mereka ke 👉 https://get.delta.chat</string>
+    <string name="edit_contact">Edit kontak</string>
+    <!-- Translators: "Pin" here is the verb for pinning, making sth. sticky. this is NOT the appreviation for "pin number". -->
+    <string name="pin_chat">Pin obrolan</string>
+    <!-- Translators: this is the opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <string name="unpin_chat">Lepas pin obrolan</string>
+    <!-- Translators: this is the verb for pinning, making sth. sticky. this is NOT the appreviation for "pin number". -->
+    <string name="pin">Sematkan</string>
+    <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
+    <string name="unpin">Lepas pin</string>
+
+    <string name="mute_for_one_hour">Diamkan untuk 1 jam</string>
+    <string name="mute_for_two_hours">Diamkan untuk 2 jam</string>
+    <string name="mute_for_one_day">Diamkan untuk 1 hari</string>
+    <string name="mute_for_seven_days">Diamkan untuk 7 hari</string>
+    <string name="mute_forever">Diamkan seterusnya</string>
+
+    <string name="share_location_once">sekali</string>
+    <string name="share_location_for_5_minutes">untuk 5 menit</string>
+    <string name="share_location_for_30_minutes">untuk 30 menit</string>
+    <string name="share_location_for_one_hour">untuk 1 jam</string>
+    <string name="share_location_for_two_hours">untuk 2 jam</string>
+    <string name="share_location_for_six_hours">untuk 6 jam</string>
+
+    <string name="file_saved_to">Berkas disimpan ke \"%1$s\".</string>
+
+    <!-- get confirmations -->
+    <string name="ask_leave_group">Apakah anda yakin untuk keluar dari grup ini?</string>
+    <plurals name="ask_delete_chat">
+        <item quantity="other">Hapus %d obrolan? Obrolan ini akan menghilang dari daftar tetapi pesan-pesannya akan tetap tersimpan di server.</item>
+    </plurals>
+    <plurals name="ask_delete_messages">
+        <item quantity="other">Hapus %d pesan disini dan di server?</item>
+    </plurals>
+    <string name="ask_forward">Teruskan pesan ke %1$s?</string>
+    <string name="ask_export_attachment">Ekspor lampiran? Mengekspor lampiran akan membuat aplikasi lain di perangkat anda terakses.\n\nLanjut?</string>
+    <string name="ask_block_contact">Blokir kontak ini? Anda tak akan lagi menerima pesan dari kontak ini.</string>
+    <string name="ask_unblock_contact">Buka blokir kontak ini? Anda akan bisa kembali menerima pesan dari kontak ini.</string>
+    <string name="ask_delete_contacts">Hapus kontak?\n\nKontak dengan obrolan yang sedang berlangsung dan dari buku alamat pada sistem tak bisa dihapus secara permanen.</string>
+    <string name="ask_delete_contact">Hapus kontak %1$s?\n\nKontak dengan obrolan yang sedang berlangsung dan dari buku alamat pada sistem tak bisa dihapus secara permanen.</string>
+    <string name="cannot_delete_contacts_in_use">Tak bisa menghapus kontak yang sedang dalam obrolan.</string>
+    <string name="ask_start_chat_with">Ngobrol dengan %1$s?</string>
+    <!-- Translators: %1$s will be replaces by a comma separated list of names -->
+    <string name="ask_remove_members">Hapus %1$s dari grup?</string>
+    <string name="info_outdated_app_title">Versi aplikasi anda tidak update.</string>
+    <string name="info_outdated_app_text">Tampaknya anda menginstal Delta Chat dari sumber tanpa pemutakhiran otomatis (contoh: GitHub). Silakan ubah ke versi toko untuk mendapatkan fitur-fitur terbaru dan perbaikan bug.</string>
+    <string name="info_outdated_app_dialog_title">Mutakhirkan sumber</string>
+    <string name="info_outdated_app_dialog_text">Delta Chat tersedia di:</string>
+
+
+    <!-- contact list -->
+    <string name="contacts_title">Kontak</string>
+    <string name="contacts_enter_name_or_email">Masukkan nama atau alamat email</string>
+    <string name="contacts_type_email_above">Ketik alamat email di atas</string>
+    <string name="contacts_empty_hint">Tidak ada kontak.</string>
+
+
+    <!-- chatlist and chat view -->
+    <plurals name="chat_archived">
+        <item quantity="other">%dobrolan terarsip</item>
+    </plurals>
+    <plurals name="chat_unarchived">
+        <item quantity="other">%d obrolan tidak terarsip</item>
+    </plurals>
+    <string name="chat_archived_chats_title">Obrolan terarsip</string>
+    <string name="chat_please_enter_message">Silakan masukkan pesan.</string>
+    <string name="chat_camera_unavailable">Kamera tak tersedia.</string>
+    <string name="chat_unable_to_record_audio">Tak bias merekam audio.</string>
+    <plurals name="chat_n_new_messages">
+        <item quantity="other">%dpesan baru</item>
+    </plurals>
+    <string name="chat_no_messages_hint">Kirim pesan ke %1$s:\n\n• Tak masalah jika %2$s tidak menggunakan Delta Chat.\n\n• Mengirimkan pesan pertama membutuhkan waktu dan mungkin tidak terenkripsi.</string>
+    <string name="chat_new_group_hint">Buat pesan pertama, perbolehkan yang lain untuk membalas dalam grup ini.\n\n• Tak masalah jika tidak semua anggota menggunakan Delta Chat.\n\n• Mengirim pesan pertama membutuhkan waktu.</string>
+    <string name="chat_record_slide_to_cancel">Geser untuk batalkan</string>
+    <string name="chat_record_explain">Ketuk dan tahan untuk merekam pesan suara, lepaskan untuk mengirim</string>
+    <string name="chat_no_chats_yet_title">Kosongkan inbox.\nTekan \"+\" untuk memulai obrolan baru.</string>
+    <string name="chat_no_chats_yet_hint">Anda bisa ngobrol dengan pengguna Delta Chat lain maupun dengan siapa pun yang memiliki alamat surel.</string>
+    <string name="chat_all_archived">Semua obrolan terarsip.\nTekan \"+\" untuk mulai obrolan baru.</string>
+    <string name="chat_share_with_title">Bagi kepada</string>
     <string name="chat_input_placeholder">Pesan</string>
+    <string name="chat_archived_label">Diarsipkan</string>
+    <string name="chat_no_messages">Tak ada pesan.</string>
+    <string name="chat_self_talk_subtitle">Pesan yang saya kirimkan pada saya sendiri</string>
+    <string name="saved_messages">Pesan yang disimpan</string>
+    <string name="saved_messages_explain">• Teruskan pesan di sini untuk akses yang mudah\n\n• Buat catatan atau memo suara\n\n• Lampirkan media untuk menyimpannya</string>
+    <string name="chat_contact_request">Permintaan kontak</string>
+    <string name="chat_no_contact_requests">Tak ada permintaan kontak.\n\nJika anda ingin email klasik muncul di sini sebagai permintaan kontak, anda bisa mengubah aturannya di aplikasi.</string>
+    <string name="retry_send">Coba lagi mengirim pesan</string>
+    <string name="send_failed">Tak bisa mengirim pesan</string>
+
+    <!-- map -->
+    <string name="filter_map_on_time">Tunjukkan lokasi dalam jangka waktu</string>
+    <string name="show_location_traces">Tunjukkan jejak</string>
+    <string name="add_poi">Kirim titik menarik</string>
+
+
     <!-- search -->
     <string name="search">Cari</string>
+    <string name="search_explain">Mencari obrolan, kontak dan pesan</string>
+    <string name="search_no_result_for_x">Tak ada hasil dari \"%s\"</string>
+
+
+    <!-- create/edit groups, contact/group profile -->
+    <string name="group_name">Nama grup</string>
+    <string name="group_avatar">Avatar grup</string>
+    <string name="group_create_button">Buat grup</string>
+    <string name="group_please_enter_group_name">Silakan masukkan nama untuk grup.</string>
+    <string name="group_add_members">Tambah anggota</string>
+    <string name="group_hello_draft">Halo, saya baru saja membuat grup \"%1$s\" untuk kita.</string>
+    <string name="group_self_not_in_group">Anda harus menjadi anggota grup untuk melakukan tindakan ini.</string>
+    <string name="profile_encryption">Enkripsi</string>
+    <string name="profile_shared_chats">Obrolan terbagi</string>
+    <string name="tab_contact">Kontak</string>
+    <string name="tab_group">Grup</string>
+    <string name="tab_members">Anggota</string>
+    <string name="tab_gallery">Galeri</string>
+    <string name="tab_docs">Dokumen</string>
+    <string name="tab_links">Tautan</string>
+    <string name="tab_map">Peta</string>
+    <string name="tab_gallery_empty_hint">Gambar dan video yang dibagikan di obrolan ini akan ditampilkan disini.</string>
+    <string name="tab_docs_empty_hint">Dokumen, musik dan berkas yang dibagikan di obrolan ini akan ditampilkan disini.</string>
+    <string name="media_preview">Tampilan media</string>
+    <string name="send_message">Kirim pesan</string>
+
+
+    <!-- welcome and login -->
+    <string name="welcome_intro1_message">Percakapan dengan pemirsa terluas di dunia. Gratis dan independen.</string>
+    <string name="welcome_start_messaging">Mulai obrolan</string>
+    <string name="login_title">Masuk</string>
+    <string name="login_header">Masuk ke server Anda</string>
+    <string name="login_explain">Masuk dengan akun surel yang ada</string>
+    <string name="login_subheader">Pengaturan surel penyedia tambahan yang sudah diketahui dipasang secara otomatis. Terkadang IMAP perlu daktifkan di pengaturan aplikasi. Hubungi surel penyedia Anda atau minta tolong teman.</string>
+    <string name="login_no_servers_hint">Tidak ada server Delta Chat, data Anda tetap di perangkat Anda.</string>
+    <string name="login_inbox">Surel masuk</string>
+    <string name="login_imap_login">Nama login IMAP</string>
+    <string name="login_imap_server">Server IMAP</string>
+    <string name="login_imap_port">IMAP port</string>
+    <string name="login_imap_security">Keamanan IMAP</string>
+    <string name="login_outbox">Surel keluar</string>
+    <string name="login_smtp_login">Nama login SMTP</string>
+    <string name="login_smtp_password">Kata sandi SMTP</string>
+    <string name="login_smtp_server">Server SMTP</string>
+    <string name="login_smtp_port">SMTP port</string>
+    <string name="login_smtp_security">Keamanan SMTP</string>
+    <string name="login_auth_method">Metode otorisasi</string>
+    <string name="login_info_oauth2_title">Lanjutkan dengan pengaturan yang disederhanakan?</string>
+    <string name="login_info_oauth2_text">Bantuan untuk alamat surel yang telah dimasukkan adalah pengaturan yang disederhanakan (OAuth 2.0).\n\nPada langkah selanjutnya, izinkan Delta Chat sebagai Obrolan Anda pada aplikasi Surel.\n\nTidak ada server Delta Chat, obrolan Anda tetap di perangkat Anda.</string>
+    <string name="login_certificate_checks">Cek sertifikat</string>
+    <string name="login_error_mail">Masukkan alamat surel yang sahih</string>
+    <string name="login_error_server">Tolong masukan server / alamat IP yang sah</string>
+    <string name="login_error_port">Silakan masukkan port yang sah (1–65535)</string>
+    <string name="login_error_required_fields">Silakan masukkan alamat email dan kata sandi yang sah</string>
+    <string name="import_backup_title">Impor cadangan</string>
+    <string name="import_backup_ask">Cadangan ditemukan di \"%1$s\".\n\n Apakah Anda ingin mengimpor dan menggunakan semua data dan pengaturan darinya?</string>
+    <string name="import_backup_no_backup_found">Cadangan tidak ketemu.\n\nKopi cadangan ke \"%1$s\" dan coba lagi. Cara lain, tekan \"Mulai obrolan\" untuk melanjutkan proses pengaturan normal.</string>
+    <!-- Translators: %1$s will be replaced by the email address -->
+    <string name="login_error_cannot_login">Tidak bisa login sebagai \"%1$s\". Mohon cek apakah alamat surel dan kata sandi benar.</string>
+    <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
+    <string name="login_error_server_response">Tanggapan dari %1$s: %2$s\n\nBeberapa penyedia layanan (provider) menempatkan informasi tambahan di kotak masuk Anda; Anda bisa memeriksanya, misalnya di beranda depan web. Konsultasikan dengan penyedia atau teman Anda jika Anda mengalami masalah.</string>
+
+    <string name="used_settings">Setelan yang digunakan:</string>
+    <string name="switch_account">Alihkan akun</string>
+    <string name="add_account">Tambah akun</string>
+    <string name="delete_account">Hapus Akun</string>
+    <string name="delete_account_ask">Apakah anda yakin ingin menghapus data akun anda?</string>
+    <string name="switching_account">Ubah akun</string>
+
+    <!-- share and forward messages -->
+    <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
+    <string name="forward_to">Diteruskan ke…</string>
+    <string name="share_multiple_attachments">Apakah Anda ingin mengirim berkas %1$d di ombrolan terpilih?\n\nBerkas dikirim tanpa dimodifikasi dalam ukuran asli, mis. gambar-gambar dan video juga tidak dikode ulang.</string>
+    <string name="share_abort">Pembagian dibatalkan karena tidak ada izin.</string>
+
+
+    <!-- preferences -->
+    <string name="pref_using_custom">Menggunakan custom: %s</string>
+    <string name="pref_using_default">Menggunakan default: %s</string>
+    <string name="pref_profile_info_headline">Info profil Anda</string>
+    <string name="pref_profile_photo">Gambar profil</string>
+    <string name="pref_blocked_contacts">Kontak yang diblokir</string>
+    <string name="pref_profile_photo_remove_ask">Hapus foto profil?</string>
+    <string name="pref_help_url">https://delta.chat/help</string>
+    <string name="pref_password_and_account_settings">Kata sandi dan akun</string>
+    <string name="pref_who_can_see_this_information">Siapa yang dapat melihat ini?</string>
+    <string name="pref_who_can_see_profile_explain">Foto dan nama profil Anda akan tampak bersama dengan pesan-pesan ketika berkomunikasi dengan pengguna lain. Informasi yang telah dikirimkan tidak dapat dihapus atau dipindah.</string>
+    <string name="pref_your_name">Nama Anda</string>
+    <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
+    <string name="pref_default_status_label">Signature text</string>
+    <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
+    <string name="pref_default_status_text">Kirim dengan Percakapan Delta Chat: https://delta.chat</string>
+    <string name="pref_enter_sends">Tombol Enter mengirim</string>
+    <string name="pref_enter_sends_explain">Menekan tombol Enter akan mengirimkan teks pesan</string>
+    <string name="pref_outgoing_media_quality">Kualitas media yang dikirim</string>
+    <string name="pref_outgoing_balanced">Seimbang</string>
+    <string name="pref_outgoing_worse">Kualitas rendah, ukuran kecil</string>
+    <string name="pref_vibrate">Bergetar</string>
+    <string name="pref_chat_settings">Setelan chat</string>
+    <string name="pref_change_secret">Ubah rahasia</string>
+    <string name="pref_change_secret_explain">Ubah PIN / pola / sidik jari melalui setelan sistem</string>
+    <string name="pref_screen_security">Keamanan layar</string>
+    <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
+    <string name="pref_screen_security_explain">Permintaan untuk memblok screenshot di daftar terbaru dan di dalam aplikasi</string>
+    <string name="pref_screen_security_please_restart_hint">Untuk menjalankan fungsi keamanan layar mohon aplikasi dibuka ulang.</string>
+    <string name="pref_notifications">Notifikasi</string>
+    <string name="pref_notifications_show">Menunjukkan</string>
+    <string name="pref_notifications_priority">Prioritas</string>
+    <string name="pref_led_color">Warna LED</string>
+    <string name="pref_led_pattern">Pola kedip LED</string>
+    <string name="pref_sound">Suara</string>
+    <string name="pref_silent">Sunyi</string>
+    <string name="pref_privacy">Privasi</string>
+    <string name="pref_chats_and_media">Obrolan dan media</string>
+    <!-- Translators: "light" in the meaning "opposite of dark" -->
+    <string name="pref_light_theme">Cahaya</string>
+    <string name="pref_dark_theme">Gelap</string>
+    <string name="pref_appearance">Penampilan</string>
+    <string name="pref_theme">Tema</string>
+    <string name="pref_language">Bahasa</string>
+    <string name="pref_incognito_keyboard">Keyboard penyamaran</string>
+    <string name="pref_read_receipts">Baca tanda terima</string>
+    <string name="pref_read_receipts_explain">Jika tanda terima baca dinonaktifkan, Anda tidak akan dapat melihat tanda terima baca dari orang lain.</string>
+    <string name="pref_use_system_emoji">Gunakan emoji sistem</string>
+    <string name="pref_use_system_emoji_explain">Matikan dukungan emoji Delta Chat yang ada</string>
+    <string name="pref_app_access">Akes Aplikasi</string>
+    <string name="pref_communication">Komunikasi</string>
+    <string name="pref_chats">Obrolan</string>
+    <string name="pref_messages">Pesan</string>
+    <string name="pref_message_text_size">Ukuran huruf pesan</string>
+    <string name="pref_view_log">Lihat catatan</string>
+    <string name="pref_saved_log">Menyimpan log ke folder \"Unduhan\"</string>
+    <string name="pref_save_log_failed">Gagal menyimpan log</string>
+    <string name="pref_log_header">Catatan</string>
+    <string name="pref_other">Lain</string>
+    <string name="pref_backup">Cadangkan</string>
+    <string name="pref_backup_explain">Cadangkan obrolan di external storage</string>
+    <string name="pref_backup_export_explain">Cadangan membantu Anda untuk membuat instalasi baru di perangkat ini atau perangkat lain.\n\nDalam cadangan terdapat semua pesan, kontak dan obrolan dan pengaturan Autocrypt ujung ke ujung Anda. Simpan berkas cadangan di tempat yang aman atau hapus secepatnya.</string>
+    <string name="pref_backup_export_start_button">Mulai Cadangkan</string>
+    <string name="pref_backup_written_to_x">Cadangan berhasil ditulis ke \"%1$s\".</string>
+    <string name="pref_managekeys_menu_title">Kelola kunci</string>
+    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat perlu akses ke berkas Anda untuk impor/ekspor kunci.</string>
+    <string name="pref_managekeys_export_secret_keys">Ekspor kunci rahasia</string>
+    <string name="pref_managekeys_export_explain">Ekspor kunci rahasia ke \"%1$s\"?</string>
+    <string name="pref_managekeys_import_secret_keys">Impor kunci rahasia</string>
+    <string name="pref_managekeys_import_explain">Impor kunci rahasia dari \"%1$s\"?\n\n• Kunci rahasia sebelumnya tidak akan terhapus\n\n• Kunci terakhir yang diimpo akan digunakan sebagai kunci default baru kecuali ada kata \"legacy\" di nama berkas.</string>
+    <string name="pref_managekeys_secret_keys_imported_from_x">Kunci rahasia diimpor dari \"%1$s\".</string>
+    <string name="pref_background">Latar belakang</string>
+    <string name="pref_background_btn_gallery">Pilih dari galeri</string>
+    <string name="pref_watch_mvbox_folder">Saksikan berkas DeltaChat</string>
+    <string name="pref_send_copy_to_self">Kirim salinan ke saya</string>
+    <string name="pref_auto_folder_moves">Perpindahan otomatis ke berkas DeltaChat</string>
+    <string name="pref_auto_folder_moves_explain">Percakapan dipindahkan untuk menghindari memenuhi kotak masuk</string>
+    <string name="pref_email_interaction_title">Interaksi surel</string>
+    <string name="pref_show_emails_all">Semua</string>
+    <string name="pref_empty_server_title">Hapus surel dari server</string>
+    <string name="pref_empty_server_inbox">Hapus semuail email di berkas \"Pesan Masuk\"</string>
+    <string name="pref_empty_server_mvbox">Hapus semua email di berkas \"DeltaChat\"</string>
+    <string name="pref_empty_server_do_button">Hapus email</string>
+    <string name="autodel_device_title">Hapus pesarn dari perangkat</string>
+    <string name="autodel_server_title">Hapus pesan dari server</string>
+    <string name="autodel_confirm">Saya mengerti, hapus semua pesan ini</string>
+    <string name="autodel_at_once">Segera</string>
+    <string name="autodel_after_1_hour">Setelah 1 jam</string>
+    <string name="autodel_after_1_day">Setelah 1 hari</string>
+    <string name="autodel_after_1_week">Setelah 1 minggu</string>
+    <string name="autodel_after_4_weeks">Setelah 4 minggu</string>
+    <!-- autocrypt -->
+    <string name="autocrypt">Autocrypt</string>
+    <string name="autocrypt_explain">Autocrypt adalah spesifikasi baru dan terbuka untuk enkripsi otomatis dimana surel yang dikirim hanya akan terlihat oleh si penerima yang disebut dengan istilah end-to-end atau ujung ke ujung.\n\nPengaturan ujung ke ujung ini dibuat secara otomatis sesuai kebutuhan dan dapat Anda transfer antar perangkat berkat Autocrypt Setup Messages.</string>
+    <string name="autocrypt_send_asm_title">Kirim Pengaturan Pesan Autocrypt</string>
+    <string name="autocrypt_send_asm_explain_before">Pengaturan Pesan Autocrypt membagi pengaturan ujung ke ujung Anda secara aman dengan aplikasi Autocrypt-compliant lain.\n\nPengaturan ini akan dienkripsi oleh kode pengaturan yang ditampilkan disini dan harus diketik di perangkat lainnya.</string>
+    <string name="autocrypt_send_asm_button">Kirim Pengaturan Pesan Autocrypt</string>
+    <string name="autocrypt_send_asm_explain_after">Pengaturan Anda sudah dikirim ke Anda sendiri. Lihat pesan pengaturan di perangkat yang lain. Seharusnya Anda akan diminta kode pengaturan. Masukkan angka berikut:\n\n%1$s</string>
+    <string name="autocrypt_prefer_e2ee">Lebih baik enkripsi ujung ke ujung</string>
+    <string name="autocrypt_asm_subject">Pengaturan Pesan Autocrypt</string>
+    <string name="autocrypt_asm_general_body">Inilah Autocrypt Setup Message yang digunakan utuk mentransfer pengaturan ujung ke ujung Anda antar pelanggan.\n\nUntuk membuka enkirpsi dan menggunakan pengaturan Anda, bukan pesan di Autocrypt-compliant pelanggan dan masukkan kode pengaturan yang ditampikan untuk perangkat terkait.</string>
+    <string name="autocrypt_asm_click_body">Inilah Autocrypt Setup Message yang digunakan untuk mentransfer pengaturan ujung ke ujung antar pelanggan.\n\nUntuk membuka enkripsi dan membuka pengaturan Anda, ketuk atau klik pesan ini.</string>
+    <string name="autocrypt_continue_transfer_title">Pengaturan Pesan Autocrypt</string>
+    <string name="autocrypt_continue_transfer_please_enter_code">Masukkan kode pengaturan yang ditampilkan di perangkat lain.</string>
+    <string name="autocrypt_continue_transfer_succeeded">Pengaturan ujung ke ujung sudah ditransfer. Sekarang perangkat ini sudah siap dengan pengaturan Autocrypt yang sama dengan perangkat lain.</string>
+    <string name="autocrypt_bad_setup_code">Kode pengaturan jelek. Ayo cakepan lagi.\n\nKalau Anda lupa kode pengaturan, kirim lagi Autocrypt Setup Message dari perangkat lainnya.</string>
+
+
+    <string name="systemmsg_read_receipt_subject">Pesan dibuka</string>
+    <string name="systemmsg_read_receipt_body">Pesan \"%1$s\" yang Anda kirimkan tampak di layar penerima.\n\nIni bukan jaminan kalau isinya dibaca.</string>
+    <string name="systemmsg_cannot_decrypt">Pesan ini tidak bisa dienkripsi.\n\n• Ada baiknya menjawab pesan ini dan meminta pengirimnya untuk kirim ulang.\n\n• Dalam kasus Anda menginstal ulang Delta Chat atau program surel lain di perangkat ini atau perangkat lain, sebaiknya Anda mengirim Pengaturan Pesan Autocrypt dari sana.</string>
+    <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
+    <string name="systemmsg_action_by_me">%1$s oleh saya.</string>
+    <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
+    <string name="systemmsg_action_by_user">%1$s oleh %2$s.</string>
+
+
+    <!-- screen lock -->
+    <string name="screenlock_title">Kunci Layar</string>
+    <string name="screenlock_explain">Kunci akses dengan kunci layar Android atau sidik jari; kalau tidak mau menampilkan konten sebelumnya, mohon aktifkan pula \"Keamanan Layar\".</string>
+    <string name="screenlock_authentication_failed">Autentikasi gagal.</string>
+    <string name="screenlock_unlock_title">Buka kunci Delta Chat</string>
+    <string name="screenlock_unlock_description">Silakan tekan sistem rahasia yang sudah Anda tetapkan untuk membuka kunci Delta Chat.</string>
+    <string name="screenlock_inactivity_timeout_explain">Setelah tak aktif selama kurun waktu tertentu Delta Chat terkunci secara otomatis</string>
+    <!-- qr code stuff -->
+    <string name="qr_code">Kode QR</string>
+    <string name="qrscan_title">Pindah kode QR</string>
+    <string name="qrscan_hint">Pegang kamera Anda di atas kode QR.</string>
+    <string name="qrscan_ask_join_group">Apakah anda ingin bergabung dengan grup \"%1$s\"?</string>
+    <string name="qrscan_contains_text">Kode QR yang dipindai  text:\n\n%1$s</string>
+    <string name="qrscan_contains_url">Kode QR yang dipindai URL:\n\n%1$s</string>
+    <string name="qrscan_fingerprint_label">Sidik jari</string>
+    <string name="qrscan_x_verified_introduce_myself">%1$s diverifikasi, perkenalkan diri saya ...</string>
+    <string name="qrshow_title">Kode undangan QR</string>
+    <string name="qrshow_x_joining">%1$sbergabung.</string>
+    <string name="qrshow_x_verified">%1$sdiverifikasi.</string>
+    <string name="qrshow_x_has_joined_group">%1$sbergabung dengan grup.</string>
+    <string name="qrshow_join_group_title">Kode undangan QR</string>
+    <string name="qrshow_join_group_hint">Pindai ini untuk bergabung dengan grup \"%1$s\".</string>
+    <string name="qrshow_join_contact_title">Kode undangan QR</string>
+    <string name="qrshow_join_contact_hint">Pindai ini untuk mengatur kontak dengan%1$s.</string>
+    <string name="qrshow_join_contact_no_connection_hint">Pengaturan kode QR membutuhkan koneksi internet. Mohon nyalakan koneksi ke jaringan sebelum mulai proses.</string>
+    <string name="qrshow_join_contact_no_connection_toast">Tidak ada koneksi internet, tidak bisa menjalankan kode pengaturan QR.</string>
+    <string name="qraccount_ask_create_and_login">Buat alamat email baru di \"%1$s\" dan login di sana?</string>
+    <string name="qraccount_success_enter_name">Login berhasil—alamat surel Anda %1$s\n\nKalau mau, masukkan satu nama dan gambar avatar yang dapat dilihat oleh orang yang ngobrol dengan Anda.</string>
+    <string name="qraccount_qr_code_cannot_be_used">Kode QR yang dipindai tidak dapat digunakan untuk mengatur akun baru.</string>
+    <string name="qraccount_use_on_new_install">Kode QR yang dipindai adalah untuk mengatur akun baru. Anda dapat memindai kode QR saat mengatur instalasi Delta Chat baru.</string>
+    <string name="contact_verified">%1$sdiverifikasi.</string>
+    <string name="contact_not_verified">Tidak bisa memverifikasi %1$s.</string>
+    <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
+    <string name="contact_setup_changed">Ubah pengaturan untuk %1$s.</string>
+    <string name="verified_group_explain">Kelompok yang sudah diverifikasi (eksperimental) menjaga keamanan dari serangan aktif. Anggota diverifikasi dengan faktor kedua oleh anggota lain dan selalu dengan pesan yang terinkripsi ujung ke ujung.</string>
+
+
+    <!-- notifications  -->
+    <string name="notify_n_messages_in_m_chats">%1$dpesan baru di%2$d obrolan</string>
+    <string name="notify_most_recent_from">Terbaru dari: %1$s</string>
+    <string name="notify_media_message_with_text">Pesan media: %s</string>
+    <string name="notify_mark_all_read">Tandai semua telah dibaca</string>
+    <string name="notify_media_message">Pesan media</string>
+    <string name="notify_reply_button">Balasan</string>
+    <string name="notify_new_message">Pesan baru</string>
+    <string name="notify_background_connection_enabled">Koneksi latar diaktifkan</string>
+    <string name="notify_priority_high">Tinggi</string>
+    <string name="notify_priority_max">Maks</string>
+    <string name="notify_name_and_message">Nama dan pesan</string>
+    <string name="notify_name_only">Hanya nama</string>
+    <string name="notify_no_name_or_message">Tidak ada nama atau pesan</string>
+
+
+    <!-- permissions -->
+    <string name="perm_required_title">Perlu izin</string>
+    <string name="perm_continue">Lanjutkan</string>
+    <string name="perm_explain_need_for_camera_access">Untuk mengambil foto dan video, izinkan akses Delta Chat ke kamera.</string>
+    <string name="perm_explain_need_for_mic_access">Untuk mengirim pesan suara, izinkan akses Delta Chat ke mikrofon.</string>
+    <string name="perm_explain_need_for_storage_access">Delta Chat perlu akses ke berkas-berkas Anda untuk mengekspor berkas atau membuat cadangan.</string>
+    <string name="perm_explain_need_for_storage_access_share">Delta Chat perlu akses ke berkas-berkas Anda supaya bisa membagikannya.</string>
+    <string name="perm_explain_access_to_camera_denied">Untuk mengambil foto atau merekam video, lihat pengaturan aplikasi, pilih \"Perizinan\", dan aktifkan \"Kamera\".</string>
+    <string name="perm_explain_access_to_mic_denied">Untuk mengirim pesan audio, lihat pengaturan aplikasi, pilih \"Perizinan\", dan aktifkan \"Mikrofon\".</string>
+    <string name="perm_explain_access_to_storage_denied">Untuk menerima atau mengirim berkas, pergi ke pengaturan aplikasi, pilih \"Perizinan\", dan fungsikan \"Penyimpanan\".</string>
+    <string name="perm_explain_access_to_location_denied">Untuk melampirkan lokasi, lihat pengaturan aplikasi, pilih \"Perizinan\", dan aktifkan \"Lokasi\".</string>
+    <!-- dc_str_* resources -->
+    <string name="encrypted_message">Pesan terenkripsi</string>
+
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
+    <string name="welcome_desktop">Selamat Datang di Delta Chat</string>
+    <string name="login_known_accounts_title_desktop">Akun yang dikenal</string>
+    <string name="global_menu_preferences_language_desktop">Bahasa</string>
+    <string name="global_menu_file_desktop">Berkas</string>
+    <string name="global_menu_file_quit_desktop">Keluar</string>
+    <string name="global_menu_edit_desktop">Ubah</string>
+    <string name="global_menu_edit_undo_desktop">Batalkan</string>
+    <string name="global_menu_edit_redo_desktop">Mengulangi</string>
+    <string name="global_menu_edit_cut_desktop">Potong</string>
+    <string name="global_menu_edit_copy_desktop">Salin</string>
+    <string name="global_menu_edit_paste_desktop">Tempel</string>
+    <string name="global_menu_view_desktop">Melihat</string>
+    <string name="global_menu_view_developer_desktop">Pengembang</string>
+    <string name="global_menu_view_developer_tools_desktop">Alat pengembang</string>
+    <string name="global_menu_help_desktop">Bantuan</string>
+    <string name="global_menu_help_learn_desktop">Pelajari lebih lanjut Delta Chat</string>
+    <string name="global_menu_help_contribute_desktop">Kontribusi di GitHub</string>
+    <string name="global_menu_help_report_desktop">Laporkan masalah</string>
+    <string name="global_menu_help_about_desktop">Tentang Delta Chat</string>
+    <string name="no_chat_selected_suggestion_desktop">Pilih obrolan atau buat sebuah obrolan baru</string>
+    <string name="write_message_desktop">Tulis sebuah pesan</string>
+    <string name="encryption_info_title_desktop">Info enkripsi</string>
+    <string name="contact_detail_title_desktop">Detail Kontak</string>
+    <string name="contact_request_title_desktop">Permintaan kontak</string>
+    <string name="delete_message_desktop">Hapus pesan</string>
+    <string name="more_info_desktop">Info lebih lanjut</string>
+    <string name="logout_desktop">Keluar</string>
+    <string name="timestamp_format_m_desktop">MMM D</string>
+    <string name="no_archived_chats_desktop">Tidak ada arsip chat</string>
     <string name="no_chats_desktop">Belum ada obrolan</string>
+    <string name="encryption_info_desktop">Tampilkan info enkripsi</string>
+    <string name="verified_desktop">Diverifikasi</string>
+    <string name="remove_desktop">Menghapus</string>
+    <string name="save_desktop">Menyimpan</string>
+    <string name="add_contact_desktop">Tambah kontak</string>
+    <string name="login_required_desktop">yg dibutuhkan</string>
+    <string name="name_desktop">Nama</string>
+    <string name="autocrypt_key_transfer_desktop">Transfer kunci Autocrypt</string>
+    <string name="initiate_key_transfer_desktop">Pengaturan Pesan Autocrypt secara aman membagikan pengaturan ujung ke ujung Anda dengan aplikasi lain yang sesuai dengan Autocrypt. Pengaturan akan dienkripsi dengan kode pengaturan yang ditampilkan di sini dan harus diketik di perangkat lain.</string>
+    <string name="reply_to_message_desktop">Balas pesan</string>
+    <string name="show_key_transfer_message_desktop">Kunci Anda sudah dikirim ke Anda sendiri. Lihat pesan pengaturan di perangkat yang lain. Seharusnya Anda akan diminta kode pengaturan. Masukkan angka berikut:</string>
+    <string name="new_message_from_desktop">Pesan baru dari</string>
+    <string name="unblock_contacts_desktop">Buka blokir kontak</string>
+    <string name="none_blocked_desktop">Belum ada kontak yang diblokir</string>
+    <string name="autocrypt_correct_desktop">Pengaturan Autocrypt ditransfer.</string>
+    <string name="autocrypt_incorrect_desktop">Kode pengaturan salah. Coba lagi.</string>
+    <string name="create_chat_error_desktop">Tidak dapat membuat obrolan.</string>
+    <string name="ask_delete_chat_desktop">Hapus obrolan ini?</string>
+    <string name="email_validation_failed_desktop">Alamat email dibutuhkan</string>
+    <string name="forget_login_confirmation_desktop">Hapus login ini? Semuanya akan dihapus, termasuk pengaturan ujung ke ujung, kontak, obrolan, pesan dan media. Kalau diklik tidak bisa balik lagi.</string>
+    <string name="me_desktop">saya</string>
+    <string name="in_this_group_desktop">Anggota kelompok</string>
+    <string name="not_in_this_group_desktop">Anggota kelompok potensial (tidak dalam kelompok)</string>
+    <string name="message_detail_sent_desktop">kirim</string>
+    <string name="message_detail_received_desktop">diterima</string>
+    <string name="message_detail_from_desktop">dari</string>
+    <string name="message_detail_to_desktop">ke</string>
+    <string name="menu.view.developer.open.log.folder">Buka folder log</string>
+    <string name="menu.view.developer.open.current.log.file">Buka log berkas saat ini</string>
+    <string name="user_location_permission_explanation">Delta Chat memerlukan izin lokasi untuk menunjukkan dan membagikan lokasi Anda.</string>
+
+
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
+    <string name="a11y_delivery_status_error">Status pengiriman: Kesalahan</string>
+    <string name="a11y_delivery_status_sending">Status pengiriman: Mengirim</string>
+    <string name="a11y_delivery_status_draft">Status pengiriman: Draft</string>
+    <string name="a11y_delivery_status_delivered">Status pengiriman: Terkirim</string>
+    <string name="a11y_delivery_status_read">Status pengiriman: Dibaca</string>
+    <string name="a11y_delivery_status_invalid">Status pengiriman tidak valid</string>
+    <string name="a11y_remove_account_btn_label">Menghapus akun</string>
+    <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat akan memungkinkan Anda memilih foto dari perpustakaan Anda untuk dikirim.</string>
+
+
     </resources>

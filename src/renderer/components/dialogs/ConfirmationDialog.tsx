@@ -1,27 +1,38 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, {
-  DeltaButtonPrimary,
-  DeltaButtonDanger,
-} from './SmallDialog'
+import { MessageBoxOptions } from 'electron'
+import { SmallDialog } from './DeltaDialog'
+
 const { remote } = window.electron_functions
 
-export function confirmationDialogLegacy(message, opts, cb) {
+export function confirmationDialogLegacy(
+  message: string,
+  opts?: any,
+  cb?: any
+) {
   if (!cb) cb = opts
   if (!opts) opts = {}
   const tx = window.translate
-  var defaultOpts = {
+  var defaultOpts: MessageBoxOptions = {
     type: 'question',
     message: message,
     buttons: [tx('no'), tx('yes')],
   }
-  remote.dialog.showMessageBox(Object.assign(defaultOpts, opts), response => {
-    cb(response === 1) // eslint-disable-line
-  })
+
+  remote.dialog.showMessageBox(
+    Object.assign(defaultOpts, opts),
+    //@ts-ignore
+    (response: number) => {
+      cb(response === 1) // eslint-disable-line
+    }
+  )
 }
 
-export default function ConfirmationDialog(props) {
+export default function ConfirmationDialog(props: todo) {
   const { message, cancelLabel, confirmLabel, cb } = props
+
+  const yesisPrimary =
+    typeof props.yesIsPrimary === 'undefined' ? false : props.yesIsPrimary
 
   const isOpen = !!message
   const tx = window.translate
@@ -31,7 +42,7 @@ export default function ConfirmationDialog(props) {
     cb(false)
   }
 
-  const onClick = yes => {
+  const onClick = (yes: boolean) => {
     props.onClose()
     cb(yes)
   }
@@ -45,12 +56,22 @@ export default function ConfirmationDialog(props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaButtonPrimary noPadding onClick={() => onClick(false)}>
+            <p
+              className={`delta-button no-padding bold ${
+                yesisPrimary ? 'danger' : 'primary'
+              }`}
+              onClick={() => onClick(false)}
+            >
               {cancelLabel || tx('cancel')}
-            </DeltaButtonPrimary>
-            <DeltaButtonDanger noPadding onClick={() => onClick(true)}>
+            </p>
+            <p
+              className={`delta-button no-padding bold ${
+                !yesisPrimary ? 'danger' : 'primary'
+              }`}
+              onClick={() => onClick(true)}
+            >
               {confirmLabel || tx('yes')}
-            </DeltaButtonDanger>
+            </p>
           </div>
         </div>
       </div>

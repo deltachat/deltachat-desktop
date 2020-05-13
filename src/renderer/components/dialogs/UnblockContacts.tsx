@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
-import contactsStore from '../../stores/contacts'
+import contactsStore, { contactsStoreState } from '../../stores/contacts'
 
 import { ContactList2 } from '../contact/ContactList'
 import { ScreenContext } from '../../contexts'
+import { DialogProps } from '.'
 
-export default function UnblockContacts(props) {
+export default function UnblockContacts(props: {
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
+}) {
   const { isOpen, onClose } = props
   const [blockedContacts, setBlockedContacts] = useState(null)
   const [hadBlockedContacts, setHadBlockedContacts] = useState(null)
   const screenContext = useContext(ScreenContext)
 
-  const onContactsUpdate = ({ blockedContacts }) => {
+  const onContactsUpdate = ({ blockedContacts }: contactsStoreState) => {
     if (hadBlockedContacts === null)
       setHadBlockedContacts(blockedContacts.length !== 0)
     setBlockedContacts(blockedContacts)
@@ -23,14 +27,14 @@ export default function UnblockContacts(props) {
     return () => contactsStore.unsubscribe(onContactsUpdate)
   }, [])
 
-  const blockContact = id => {
+  const blockContact = (id: number) => {
     contactsStore.dispatch({ type: 'UI_UNBLOCK_CONTACT', payload: id })
   }
-  const onUnblockContact = ({ id }) => {
+  const onUnblockContact = ({ id }: { id: number }) => {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_unblock_contact'),
       confirmLabel: tx('menu_unblock_contact'),
-      cb: yes => yes && blockContact(id),
+      cb: (yes: boolean) => yes && blockContact(id),
     })
   }
 

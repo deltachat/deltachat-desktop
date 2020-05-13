@@ -1,17 +1,19 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
-import SmallDialog, {
-  DeltaButton,
-  DeltaButtonPrimary,
-  DeltaButtonDanger,
-} from './SmallDialog'
 import { useChatStore } from '../../stores/chat'
+import { DialogProps } from '.'
+import { DCContact, MessageType } from '../../../shared/shared-types'
+import { SmallDialog } from './DeltaDialog'
 
 /**
  * handle contact requests
  */
-export default function DeadDrop(props) {
+export default function DeadDrop(props: {
+  contact: DCContact
+  msg: MessageType['msg']
+  onClose: DialogProps['onClose']
+}) {
   const { contact, msg, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -52,15 +54,15 @@ export default function DeadDrop(props) {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <DeltaButtonDanger bold={false} onClick={never}>
+            <p className='delta-button danger' onClick={never}>
               {tx('never').toUpperCase()}
-            </DeltaButtonDanger>
-            <DeltaButton bold={false} onClick={notNow}>
+            </p>
+            <p className='delta-button' onClick={notNow}>
               {tx('not_now').toUpperCase()}
-            </DeltaButton>
-            <DeltaButtonPrimary bold={false} onClick={yes}>
+            </p>
+            <p className='delta-button primary' onClick={yes}>
               {tx('yes').toUpperCase()}
-            </DeltaButtonPrimary>
+            </p>
           </div>
         </div>
       </div>

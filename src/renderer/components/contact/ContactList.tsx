@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
@@ -6,11 +6,11 @@ import { DCContact } from '../../../shared/shared-types'
 
 export function ContactList2(props: {
   contacts: DCContact[]
-  onClick: (contact: DCContact) => void
-  showCheckbox: boolean
+  onClick?: (contact: DCContact) => void
+  showCheckbox?: boolean
   isChecked?: (contact: DCContact) => boolean
   onCheckboxClick?: (contact: DCContact) => void
-  showRemove: boolean
+  showRemove?: boolean
   onRemoveClick?: (contact: DCContact) => void
 }) {
   const {
@@ -22,21 +22,25 @@ export function ContactList2(props: {
     showRemove,
     onRemoveClick,
   } = props
-  return contacts.map(contact => {
-    let checked = null
-    if (showCheckbox && typeof isChecked === 'function') {
-      checked = isChecked(contact)
-    }
-    return ContactListItem({
-      contact,
-      onClick,
-      showCheckbox,
-      checked,
-      onCheckboxClick,
-      showRemove,
-      onRemoveClick,
-    })
-  })
+  return (
+    <div>
+      {contacts.map(contact => {
+        let checked = null
+        if (showCheckbox && typeof isChecked === 'function') {
+          checked = isChecked(contact)
+        }
+        return ContactListItem({
+          contact,
+          onClick,
+          showCheckbox,
+          checked,
+          onCheckboxClick,
+          showRemove,
+          onRemoveClick,
+        })
+      })}
+    </div>
+  )
 }
 
 const debouncedGetContacts2 = debounce(
@@ -47,7 +51,7 @@ const debouncedGetContacts2 = debounce(
 )
 
 export function useContacts(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState([])
+  const [contacts, setContacts] = useState<DCContact[]>([])
 
   const updateContacts = (queryStr: string) =>
     debouncedGetContacts2(listFlags, queryStr, setContacts)
@@ -56,5 +60,5 @@ export function useContacts(listFlags: number, queryStr: string) {
     DeltaBackend.call('getContacts2', listFlags, queryStr).then(setContacts)
   }, [])
 
-  return [contacts, updateContacts]
+  return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }

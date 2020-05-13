@@ -50,6 +50,7 @@
     <string name="email_address">E-posta adresi</string>
     <string name="bad_email_address">Yanlış e-posta adresi.</string>
     <string name="password">Parola</string>
+    <string name="existing_password">Varolan parola</string>
     <string name="now">Şimdi</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Tehlikeli</string>
@@ -246,8 +247,8 @@
         <item quantity="other">%d sohbet arşivlendi</item>
     </plurals>
     <plurals name="chat_unarchived">
-        <item quantity="one">%d sohbet arşivlenmiyor</item>
-        <item quantity="other">%d sohbet arşivlenmiyor</item>
+        <item quantity="one">%d sohbet arşivlenmedi</item>
+        <item quantity="other">%d sohbet arşivlenmedi</item>
     </plurals>
     <string name="chat_archived_chats_title">Arşivlenen sohbetler</string>
     <string name="chat_please_enter_message">Lütfen bir ileti girin.</string>
@@ -312,7 +313,7 @@
 
 
     <!-- welcome and login -->
-    <string name="welcome_intro1_message">Dünyanın en geniş kitleli ulağı. Özgür ve bağımsızdır.</string>
+    <string name="welcome_intro1_message">Dünyanın en geniş kitleli ulağı. Özgür ve bağımsız.</string>
     <string name="welcome_start_messaging">İletileşmeye başla</string>
     <string name="login_title">Oturum aç</string>
     <string name="login_header">Sunucunuzda oturum açın</string>
@@ -333,7 +334,6 @@
     <string name="login_auth_method">Yetkilendirme yöntemi</string>
     <string name="login_info_oauth2_title">Basitleştirilen ayarlamayla sürdürülsün mü?</string>
     <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'in E-posta ile Sohbet uygulamanız olarak davranmasına izin verin.\n\nDelta Chat sunucuları yoktur; verileriniz aygıtınızda kalır.</string>
-    <string name="login_info_gmail_text">Gmail Hesapları için \"2 Adımlı Doğrulama\"yı etkinleştirdiyseniz, bir uygulama parolası oluşturmanız gerekir. Bu ayar kullanılabilir değilse, \"Güvenliği düşük uygulamalar\"ı etkinleştirmeniz gerekir.</string>
     <string name="login_certificate_checks">Sertifika denetimleri</string>
     <string name="login_error_mail">Lütfen geçerli bir e-posta adresi girin</string>
     <string name="login_error_server">Lütfen geçerli bir sunucu / IP adresi girin</string>
@@ -352,8 +352,11 @@
     <string name="accept_invalid_certificates">Geçersiz sertifikaları kabul et</string>
 
     <string name="used_settings">Kullanılan ayarlar:</string>
+    <string name="switch_account">Hesap değiştir</string>
+    <string name="add_account">Hesap ekle</string>
     <string name="delete_account">Hesabı sil</string>
     <string name="delete_account_ask">Hesap verilerinizi silmek istediğinizden emin misiniz?</string>
+    <string name="switching_account">Hesap değiştiriliyor…</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -465,22 +468,27 @@
     <string name="pref_background_default_color">Varsayılan renk</string>
     <string name="pref_background_custom_image">Özel görsel</string>
     <string name="pref_background_custom_color">Özel renk</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Güvenilir arka plan bağlantısı</string>
+    <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
+
 
     <!-- automatically delete message -->
     <string name="autodel_title">İletileri otomatik sil</string>
     <string name="autodel_title_short">Otomatik sil</string>
     <string name="autodel_device_title">İletileri aygıttan sil</string>
     <string name="autodel_server_title">İletileri sunucudan sil</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_device_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri %2$s silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• İleti görülse de görülmese de silinecek\n\n• \"Kaydedilen iletiler\" yerel silmeden atlanacak</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan in italics or so. -->
-    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri %2$s silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• Bu, \"Klasik e-postaları göster\" seçeneği tarafından etkilenen e-postaları da silecek\n\n• \"Kaydedilen iletiler\" sunucudan da silinecek</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• İletiler görülse de görülmese de silinecek\n\n• \"Kaydedilen iletiler\" yerel silmeden atlanacak</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• Bu, \"Klasik e-postaları göster\" seçeneği tarafından etkilenen e-postaları da silecek\n\n• \"Kaydedilen iletiler\" sunucudan da silinecek</string>
     <string name="autodel_confirm">Anladım, tüm bu iletileri sil</string>
     <string name="autodel_at_once">Bir kerede</string>
     <string name="autodel_after_1_hour">1 saat sonra</string>
     <string name="autodel_after_1_day">1 gün sonra</string>
     <string name="autodel_after_1_week">1 hafta sonra</string>
     <string name="autodel_after_4_weeks">4 hafta sonra</string>
+    <string name="autodel_after_1_year">1 yıl sonra</string>
 
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
@@ -589,7 +597,7 @@
     <string name="perm_explain_access_to_location_denied">Bir konum iliştirmek için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Konum\"u etkinleştirin.</string>
     <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
-    <string name="perm_enable_bg_already_done">Delta Chat\'in iletileri arka planda almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
+    <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Şifrelenen ileti</string>
@@ -663,7 +671,7 @@
     <string name="user_location_permission_explanation">Delta Chat\'in konumunuzu göstermesi ya da paylaşması için konum izni gerekir.</string>
 
 
-    <!-- accessibility -->
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Teslimat durumu: Hata</string>
     <string name="a11y_encryption_padlock">Şifreleme asma kilidi</string>
     <string name="a11y_delivery_status_sending">Teslimat durumu: Gönderiliyor</string>
@@ -677,7 +685,14 @@
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat, fotoğraflar ve videolar çekmek ve göndermek için ve QR kodları taramak için kameranızı kullanır.</string>
-    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz e-posta adreslerinin bir listesini göstermek için kişilerinizi kullanır. Delta Chat\'in sunucusu yoktur; kişileriniz hiçbir yere gönderilmez.</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz e-posta adreslerinin bir listesini göstermek için kişilerinizi kullanır. Delta Chat\'in sunucusu yoktur; kişileriniz herhangi bir yere gönderilmez.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat, göndermek için kitaplığınızdan fotoğraflar seçmenizi sağlayacak.</string>
+
+
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
+    <string name="device_talk_background_connection_android">Sistem tarafından gösterilen bir \"Arka plan bağlantısı etkinleştirildi\" ipucu olduğunu zaten fark etmiş olabilirsiniz.\n\n👉 İpucu, normal olarak işletim sisteminin Delta Chat ve sunucunuz arasındaki bağlantıyı öldürmesini önler.\n\n👉 İpucu, tarafınızda herhangi bir eylem olmadan kaybolursa, bağlantı belki de öldürülmüştür.\nBunun olmaması gerektiğini düşünüyorsanız, genelde buna katılırız - ama çoğu üretici tam olarak bunu yapar. https://dontkillmyapp.com sitesi, bazı geçici çözümleri gösterir.\n\nBununla birlikte, bu değişiklikle arka planda iletilerin alınmasını iyileştirebildiğimiz ve çoğu kullanıcının isteklerini yerine getirebildiğimiz için mutluyuz - raporlama için teşekkürler 🤗</string>
+
+
 </resources>

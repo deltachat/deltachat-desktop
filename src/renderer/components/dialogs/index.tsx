@@ -17,8 +17,10 @@ import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
+import { AppState } from '../../../shared/shared-types'
+import { getLogger } from '../../../shared/logger'
 
-export const allDialogs = {
+export const allDialogs: { [key: string]: any } = {
   DeadDrop,
   FullscreenMedia,
   MessageDetail,
@@ -39,17 +41,30 @@ export const allDialogs = {
   UnblockContacts,
 }
 
-export type DialogId = keyof typeof allDialogs
+export type DialogId = keyof typeof allDialogs | string
 
-const log = require('../../../shared/logger').getLogger('renderer/dialogs')
+const log = getLogger('renderer/dialogs')
 
 type dialogs = {
   [key: string]: {
-    name: DialogId
-    Component: todo
+    id: number
     props: false
+    fnc: any
   }
 }
+
+export type DialogProps = {
+  isOpen: boolean
+  onClose: () => void
+  userFeedback: todo
+  deltachat: AppState['deltachat']
+  key: string
+  openDialog: todo
+  closeDialog: todo
+  [key: string]: any
+}
+
+var dialogCounter = 1
 
 export class Controller extends React.Component<
   any,
@@ -60,32 +75,43 @@ export class Controller extends React.Component<
   constructor(props: any) {
     super(props)
 
-    var dialogs: dialogs = {}
-    Object.keys(allDialogs).forEach((key: DialogId) => {
-      dialogs[key as string] = {
-        name: key,
-        Component: allDialogs[key],
-        props: false,
-      }
-    })
-
-    this.state = { dialogs }
+    this.state = { dialogs: {} }
     this.close = this.close.bind(this)
   }
 
-  open<T extends DialogId>(name: T, props: todo /* infer from component */) {
-    log.debug('openDialog: ', name, props)
-    var Component = this.state.dialogs[name]
-    if (!Component)
-      throw new Error(`Component with name ${name} does not exist`)
+  open(fnc: any, props?: todo /* infer from component */) {
+    if (typeof fnc === 'string') {
+      fnc = allDialogs[fnc]
+      if (!fnc) throw new Error(`Dialog with name ${name} does not exist`)
+    }
+
     if (!props) props = {}
-    this.state.dialogs[name].props = props
-    this.setState({ dialogs: this.state.dialogs })
+    log.debug('openDialog: ', fnc, props)
+
+    let id: number = dialogCounter++
+    if (id >= Number.MAX_SAFE_INTEGER - 1) {
+      id = dialogCounter = 0
+    }
+
+    log.debug(`Add dialog with id: ${id}`)
+    this.setState(state => {
+      return {
+        dialogs: {
+          ...state.dialogs,
+          [id]: {
+            id,
+            fnc,
+            props,
+          },
+        },
+      }
+    })
   }
 
-  close(name: DialogId) {
-    this.state.dialogs[name].props = false
-    this.setState({ dialogs: this.state.dialogs })
+  close(id: DialogId) {
+    const { [id]: closedDialog, ...dialogs } = this.state.dialogs
+    log.debug(`Close dialog with id: ${id}`)
+    this.setState({ dialogs })
   }
 
   render() {
@@ -95,23 +121,20 @@ export class Controller extends React.Component<
 
     return (
       <div>
-        {Object.values(dialogs).map(dialog => {
-          const isOpen = dialog.props !== false
-          if (!isOpen) return null
-
-          var name = dialog.name
-          var defaultProps = {
-            isOpen,
-            onClose: () => this.close(name as DialogId),
+        {Object.keys(dialogs).map((id: string) => {
+          log.debug(`Rendering dialog with id ${id}`)
+          const dialog = dialogs[id]
+          var defaultProps: DialogProps = {
+            isOpen: true,
+            onClose: () => this.close(id),
             userFeedback,
             deltachat,
             key: name,
             openDialog: this.open.bind(this),
             closeDialog: this.close.bind(this),
           }
-
           var props = Object.assign({}, defaultProps, dialog.props || {})
-          return <dialog.Component {...props} />
+          return <dialog.fnc key={id} {...props} />
         })}
       </div>
     )

@@ -16,7 +16,6 @@ import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
-import { GroupNameInput } from './Group-Styles'
 
 const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   const [contact, setContact] = useState<{
@@ -41,7 +40,8 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
   return (
     <div className='profile-info-name-container'>
       <div>
-        <GroupNameInput
+        <input
+          className='group-name-input'
           placeholder={contact.displayName}
           value={contact.displayName}
           onChange={onChange}
@@ -104,14 +104,12 @@ export default function ViewProfile(props: {
             <div
               onClick={() => {
                 openDialog('FullscreenMedia', {
-                  message: {
-                    msg: {
-                      attachment: {
-                        url: contact.profileImage,
-                        contentType: 'image/x',
-                      },
-                      file: contact.profileImage,
+                  msg: {
+                    attachment: {
+                      url: contact.profileImage,
+                      contentType: 'image/x',
                     },
+                    file: contact.profileImage,
                   },
                 })
               }}

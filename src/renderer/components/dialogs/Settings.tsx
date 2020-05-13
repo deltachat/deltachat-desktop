@@ -15,25 +15,60 @@ import {
   HTMLSelect,
 } from '@blueprintjs/core'
 
-import {
-  DeltaDialogBase,
-  DeltaDialogBody,
-  DeltaDialogHeader,
-} from './DeltaDialog'
 import Login from '../Login'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
 import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
-const { SettingsContext } = require('../../contexts')
+import { SettingsContext } from '../../contexts'
 const MAGIC_PW = '9bbdc87b50bbc684'
+import { OpenDialogOptions } from 'electron'
+import { AppState } from '../../../shared/shared-types'
+import { DialogProps } from '.'
+import SettingsAutodelete from './Settings-Autodelete'
+import SettingsManageKeys from './Settings-ManageKeys'
+import {
+  DeltaDialogBase,
+  DeltaDialogHeader,
+  DeltaDialogBody,
+} from './DeltaDialog'
+import SettingsBackup from './Settings-Backup'
 
-function flipDeltaBoolean(value) {
+function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
 }
 
+export function SettingsButton(props: any) {
+  const { onClick, children, ...otherProps } = props
+  return (
+    <div className='SettingsButton' onClick={onClick}>
+      <button {...otherProps}>{children}</button>
+    </div>
+  )
+}
+
+export function SettingsSelector(props: any) {
+  const { onClick, currentValue, children, ...otherProps } = props
+  return (
+    <div className='SettingsSelector' onClick={onClick}>
+      <button {...otherProps}>{children}</button>
+      <div className='CurrentValue'>{currentValue}</div>
+    </div>
+  )
+}
+
 export default class Settings extends React.Component {
-  constructor(props) {
+  translate: todo
+  state: {
+    advancedSettings: todo
+    showSettingsDialog: boolean
+    mail_pw: string
+    settings: todo
+    show: string
+    selfContact: todo
+    availableThemes: string[]
+  }
+  constructor(public props: DialogProps) {
     super(props)
     this.state = {
       advancedSettings: {},
@@ -45,9 +80,6 @@ export default class Settings extends React.Component {
       availableThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
-    this.onBackupExport = this.onBackupExport.bind(this)
-    this.onKeysExport = this.onKeysExport.bind(this)
-    this.onKeysImport = this.onKeysImport.bind(this)
     this.handleDesktopSettingsChange = this.handleDesktopSettingsChange.bind(
       this
     )
@@ -95,6 +127,8 @@ export default class Settings extends React.Component {
       'mdns_enabled',
       'show_emails',
       'bcc_self',
+      'delete_device_after',
+      'delete_server_after',
     ])
 
     const advancedSettings = {
@@ -119,135 +153,26 @@ export default class Settings extends React.Component {
     this.setState({ keyTransfer: false })
   }
 
-  onKeysImport() {
-    const opts = {
-      title: window.translate('pref_managekeys_import_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
-      properties: ['openDirectory'],
-    }
-    remote.dialog.showOpenDialog(opts, filenames => {
-      if (filenames && filenames.length) {
-        confirmationDialog(
-          window.translate('pref_managekeys_import_explain', filenames[0]),
-          response => {
-            if (!response) {
-              return
-            }
-            ipcRenderer.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
-              if (progress === 1000) {
-                this.props.userFeedback({
-                  type: 'success',
-                  text: this.translate(
-                    'pref_managekeys_secret_keys_imported_from_x',
-                    filenames[0]
-                  ),
-                })
-              }
-            })
-            DeltaBackend.call('settings.keysImport', filenames[0])
-          }
-        )
-      }
-    })
-  }
-
-  onKeysExport() {
-    // TODO: ask for the user's password and check it using
-    // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
-
-    const opts = {
-      title: window.translate('pref_managekeys_export_secret_keys'),
-      defaultPath: remote.app.getPath('downloads'),
-      properties: ['openDirectory'],
-    }
-
-    remote.dialog.showOpenDialog(opts, filenames => {
-      if (filenames && filenames.length) {
-        confirmationDialog(
-          this.translate('pref_managekeys_export_explain').replace(
-            '%1$s',
-            filenames[0]
-          ),
-          response => {
-            if (!response) return
-            if (filenames && filenames.length) {
-              ipcRenderer.once(
-                'DC_EVENT_IMEX_FILE_WRITTEN',
-                (_event, filename) => {
-                  this.props.userFeedback({
-                    type: 'success',
-                    text: this.translate(
-                      'pref_managekeys_secret_keys_exported_to_x',
-                      filename
-                    ),
-                  })
-                }
-              )
-              DeltaBackend.call('settings.keysExport', filenames[0])
-            }
-          }
-        )
-      }
-    })
-  }
-
-  onBackupExport() {
-    const { openDialog, closeDialog } = this.props
-    const confirmOpts = {
-      buttons: [
-        this.translate('cancel'),
-        this.translate('export_backup_desktop'),
-      ],
-    }
-    confirmationDialog(
-      this.translate('pref_backup_export_explain'),
-      confirmOpts,
-      response => {
-        if (!response) return
-        const opts = {
-          title: this.translate('export_backup_desktop'),
-          defaultPath: remote.app.getPath('downloads'),
-          properties: ['openDirectory'],
-        }
-        remote.dialog.showOpenDialog(opts, filenames => {
-          if (!filenames || !filenames.length) {
-            return
-          }
-          ipcRenderer.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-            this.props.userFeedback({
-              type: 'success',
-              text: this.translate('pref_backup_written_to_x', filename),
-            })
-
-            closeDialog('ImexProgress')
-          })
-          ipcRenderer.send('backupExport', filenames[0])
-          openDialog('ImexProgress', {})
-        })
-      }
-    )
-  }
-
   /*
    * Saves settings for the Deltachat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
-  handleDesktopSettingsChange(key, value) {
+  handleDesktopSettingsChange(key: string, value: string | boolean) {
     ipcRenderer.send('updateDesktopSetting', key, value)
-    if (key === 'notifications' && value === false) {
+    if (key === 'notifications' && !value) {
       ipcRenderer.send('updateDesktopSetting', 'showNotificationContent', false)
     }
   }
 
   /** Saves settings to deltachat core */
-  handleDeltaSettingsChange(key, value) {
+  handleDeltaSettingsChange(key: string, value: string | boolean) {
     ipcRenderer.sendSync('setConfig', key, value)
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
   }
 
-  onLoginSubmit(config) {
+  onLoginSubmit(config: todo) {
     const { closeDialog } = this.props
     this.props.userFeedback(false)
     if (config.mail_pw === MAGIC_PW) delete config.mail_pw
@@ -269,10 +194,10 @@ export default class Settings extends React.Component {
   /*
    * render switch for Desktop Setings
    */
-  renderDTSettingSwitch(configKey, label) {
+  renderDTSettingSwitch(configKey: string, label: string) {
     return (
       <SettingsContext.Consumer>
-        {settings => (
+        {(settings: todo) => (
           <Switch
             checked={settings[configKey]}
             className={settings[configKey] ? 'active' : 'inactive'}
@@ -290,7 +215,7 @@ export default class Settings extends React.Component {
     )
   }
 
-  renderDeltaSwitch(configKey, label) {
+  renderDeltaSwitch(configKey: string, label: string) {
     const configValue = this.state.settings[configKey]
     return (
       <Switch
@@ -307,7 +232,7 @@ export default class Settings extends React.Component {
     )
   }
 
-  renderDeltaInput(configKey, label) {
+  renderDeltaInput(configKey: string, label: string) {
     const configValue = this.state.settings[configKey]
     return (
       <Label>
@@ -330,7 +255,7 @@ export default class Settings extends React.Component {
   renderThemeSelection() {
     return (
       <SettingsContext.Consumer>
-        {settings => (
+        {(settings: any) => (
           <div>
             <H6>{this.translate('pref_theming')}</H6>
             <div className='theme-meta'>
@@ -350,7 +275,7 @@ export default class Settings extends React.Component {
               <option key={'system'} value={'system'}>
                 {this.translate('pref_system_theme')}
               </option>
-              {this.state.availableThemes?.map(theme => (
+              {this.state.availableThemes?.map((theme: todo) => (
                 <option key={theme.address} value={theme.address}>
                   {theme.name} - {theme.description} [{theme.address}]
                 </option>
@@ -387,16 +312,19 @@ export default class Settings extends React.Component {
               'selfstatus',
               this.translate('pref_default_status_label')
             )}
-            <Button onClick={() => this.setState({ show: 'login' })}>
+            <SettingsButton onClick={() => this.setState({ show: 'login' })}>
               {this.translate('pref_password_and_account_settings')}
-            </Button>
+            </SettingsButton>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_communication')}</H5>
             <RadioGroup
               label={this.translate('pref_show_emails')}
-              onChange={ev =>
-                this.handleDeltaSettingsChange('show_emails', ev.target.value)
+              onChange={(ev: React.FormEvent<HTMLInputElement>) =>
+                this.handleDeltaSettingsChange(
+                  'show_emails',
+                  ev.currentTarget.value
+                )
               }
               selectedValue={Number(settings['show_emails'])}
             >
@@ -419,11 +347,18 @@ export default class Settings extends React.Component {
               'mdns_enabled',
               this.translate('pref_read_receipts')
             )}
+            <br />
+            <SettingsAutodelete
+              {...{
+                handleDeltaSettingsChange: this.handleDeltaSettingsChange,
+                settings,
+              }}
+            />
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_background')}</H5>
             <BackgroundSelector
-              onChange={val =>
+              onChange={(val: string) =>
                 this.handleDesktopSettingsChange('chatViewBgImg', val)
               }
             />
@@ -435,13 +370,16 @@ export default class Settings extends React.Component {
               'e2ee_enabled',
               this.translate('autocrypt_prefer_e2ee')
             )}
-            <Button onClick={() => openDialog('SendAutocryptSetupMessage')}>
-              {this.translate('autocrypt_send_asm_button')}
-            </Button>
             <br />
-            <p style={{ marginTop: '10px' }}>
+            <SettingsButton
+              style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
+              onClick={() => openDialog('SendAutocryptSetupMessage')}
+            >
+              {this.translate('autocrypt_send_asm_button')}
+            </SettingsButton>
+            <div className='bp3-callout'>
               {this.translate('autocrypt_explain')}
-            </p>
+            </div>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
@@ -494,21 +432,8 @@ export default class Settings extends React.Component {
               this.translate('pref_auto_folder_moves')
             )}
           </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_managekeys_menu_title')}</H5>
-            <Button onClick={this.onKeysExport}>
-              {this.translate('pref_managekeys_export_secret_keys')}...
-            </Button>
-            <Button onClick={this.onKeysImport}>
-              {this.translate('pref_managekeys_import_secret_keys')}...
-            </Button>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_backup')}</H5>
-            <Button onClick={this.onBackupExport}>
-              {this.translate('pref_backup_export_start_button')}
-            </Button>
-          </Card>
+          <SettingsManageKeys />
+          <SettingsBackup />
         </div>
       )
     } else if (this.state.show === 'login') {
@@ -526,12 +451,12 @@ export default class Settings extends React.Component {
             addrDisabled
           >
             <Button type='submit' text={this.translate('update')} />
-            <Button type='cancel' text={this.translate('cancel')} />
+            <Button type='reset' text={this.translate('cancel')} />
           </Login>
         </Card>
       )
     } else {
-      throw new Error('Invalid state name: ' + this.state.name)
+      throw new Error('Invalid state name: ' + this.state.show)
     }
   }
 
@@ -564,11 +489,17 @@ export default class Settings extends React.Component {
 }
 
 class BackgroundSelector extends React.Component {
-  constructor() {
-    super()
+  fileInput: todo
+  colorInput: todo
+  constructor(
+    public props: {
+      onChange: (value: string) => void
+    }
+  ) {
+    super(props)
     this.fileInput = React.createRef()
     this.colorInput = document.getElementById('color-input') // located in index.html outside of react
-    this.colorInput.onchange = ev => this.onColor.bind(this)(ev)
+    this.colorInput.onchange = (ev: any) => this.onColor.bind(this)(ev)
   }
 
   componentWillUnmount() {
@@ -581,7 +512,7 @@ class BackgroundSelector extends React.Component {
       <div>
         <div className={'bg-option-wrap'}>
           <SettingsContext.Consumer>
-            {settings => (
+            {(settings: any) => (
               <div
                 style={{
                   backgroundImage: settings['chatViewBgImg'],
@@ -644,11 +575,11 @@ class BackgroundSelector extends React.Component {
     )
   }
 
-  setValue(val) {
+  setValue(val: string) {
     this.props.onChange(val)
   }
 
-  onButton(type, ev) {
+  onButton(type: string, ev: any) {
     switch (type) {
       case 'def':
         this.setValue(undefined)
@@ -671,25 +602,22 @@ class BackgroundSelector extends React.Component {
     }
   }
 
-  onColor(ev) {
+  onColor(ev: any) {
     // TODO debounce
     this.setValue(ev.target.value)
   }
 }
 
-function ProfileImageSelector(props) {
+function ProfileImageSelector(props: any) {
   const { displayName, color } = props
   const tx = window.translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
-  useEffect(
-    _ => {
-      DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-      // return nothing because reacts wants it like that
-    },
-    [profileImagePreview]
-  )
+  useEffect(() => {
+    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
+    // return nothing because reacts wants it like that
+  }, [profileImagePreview])
 
-  const changeProfilePicture = async picture => {
+  const changeProfilePicture = async (picture: string) => {
     await DeltaBackend.call('setProfilePicture', picture)
     setProfileImagePreview(await DeltaBackend.call('getProfilePicture'))
   }
@@ -701,7 +629,7 @@ function ProfileImageSelector(props) {
         filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
         properties: ['openFile'],
       },
-      async files => {
+      async (files: string[]) => {
         if (Array.isArray(files) && files.length > 0) {
           changeProfilePicture(files[0])
         }

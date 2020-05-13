@@ -4,9 +4,9 @@ import { useChatListIds, useLazyChatListItems } from './ChatListHelpers'
 import ChatListItem from './ChatListItem'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
-import { isValidEmail } from '../dialogs/CreateChat'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
+import { isValidEmail } from '../../../shared/util'
 
 export default function ChatList(props: {
   selectedChatId: number

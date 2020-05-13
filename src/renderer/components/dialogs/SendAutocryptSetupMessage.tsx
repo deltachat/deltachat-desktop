@@ -1,12 +1,15 @@
 import React from 'react'
 
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
-import { DeltaButton } from './SmallDialog'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
+import { DialogProps } from '.'
 const { ipcRenderer } = window.electron_functions
 
-class KeyViewPanel extends React.Component {
+class KeyViewPanel extends React.Component<{
+  onClose: DialogProps['onClose']
+  autocryptKey: string
+}> {
   render() {
     const tx = window.translate
     return (
@@ -24,7 +27,9 @@ class KeyViewPanel extends React.Component {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <DeltaButton onClick={this.props.onClose}>{tx('done')}</DeltaButton>
+            <p className='delta-button bold' onClick={this.props.onClose}>
+              {tx('done')}
+            </p>
           </div>
         </div>
       </React.Fragment>
@@ -44,38 +49,49 @@ class KeyLoadingPanel extends React.Component {
   }
 }
 
-class InitiatePanel extends React.Component {
+class InitiatePanel extends React.Component<{
+  onClick: todo
+}> {
   render() {
     const tx = window.translate
     return (
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <Callout>{tx('initiate_key_transfer_desktop')}</Callout>
-          <DeltaButton
+          <p
+            className='delta-button bold'
             style={{ float: 'right', marginTop: '20px' }}
             onClick={this.props.onClick}
           >
             {tx('ok')}
-          </DeltaButton>
+          </p>
         </Card>
       </div>
     )
   }
 }
 
-export default class SendAutocryptSetupMessage extends React.Component {
-  constructor(props) {
+type SendAutocryptSetupMessageProps = Readonly<{
+  onClose: DialogProps['onClose']
+  isOpen: DialogProps['isOpen']
+}>
+
+export default class SendAutocryptSetupMessage extends React.Component<
+  SendAutocryptSetupMessageProps,
+  { loading: boolean; key: string }
+> {
+  constructor(props: SendAutocryptSetupMessageProps) {
     super(props)
     this.state = {
       loading: false,
-      key: false,
+      key: null,
     }
     this.onClose = this.onClose.bind(this)
     this.initiateKeyTransfer = this.initiateKeyTransfer.bind(this)
     this.initiateKeyTransferResp = this.initiateKeyTransferResp.bind(this)
   }
 
-  initiateKeyTransferResp(e, err, key) {
+  initiateKeyTransferResp(e: any, err: any, key: string) {
     this.setState({ loading: false, key })
   }
 

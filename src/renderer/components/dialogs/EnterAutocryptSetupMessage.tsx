@@ -1,19 +1,31 @@
 import React from 'react'
-import { DeltaButtonPrimary } from './SmallDialog'
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
+import { ScreenContext } from '../../contexts'
+import { DialogProps } from '.'
+import { MessageType } from '../../../shared/shared-types'
 const { ipcRenderer } = window.electron_functions
 
-class SetupMessagePanel extends React.Component {
-  constructor(props) {
+type SetupMessagePanelProps = Readonly<{
+  setupCodeBegin: string
+  continueKeyTransfer: typeof EnterAutocryptSetupMessage.prototype.continueKeyTransfer
+}>
+
+class SetupMessagePanel extends React.Component<
+  SetupMessagePanelProps,
+  { key: string[] }
+> {
+  constructor(props: SetupMessagePanelProps) {
     super(props)
     this.state = { key: Array(9).fill('') }
     this.state.key[0] = props.setupCodeBegin
     this.handleChangeKey = this.handleChangeKey.bind(this)
   }
 
-  handleChangeKey(event) {
+  handleChangeKey(
+    event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
+  ) {
     const value = event.target.value
     const valueNumber = Number(value)
     if (
@@ -56,9 +68,12 @@ class SetupMessagePanel extends React.Component {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <DeltaButtonPrimary onClick={this.onClick.bind(this)}>
+            <p
+              className='delta-button primary bold'
+              onClick={this.onClick.bind(this)}
+            >
               {tx('ok')}
-            </DeltaButtonPrimary>
+            </p>
           </div>
         </div>
       </React.Fragment>
@@ -66,25 +81,35 @@ class SetupMessagePanel extends React.Component {
   }
 }
 
-export default class EnterAutocryptSetupMessage extends React.Component {
-  constructor(props) {
+type EnterAutocryptSetupMessageProps = Readonly<{
+  onClose: DialogProps['onClose']
+  message: MessageType
+}>
+
+export default class EnterAutocryptSetupMessage extends React.Component<
+  EnterAutocryptSetupMessageProps,
+  { loading: boolean; key: string }
+> {
+  static contextType = ScreenContext
+  declare context: React.ContextType<typeof ScreenContext>
+  constructor(props: EnterAutocryptSetupMessageProps) {
     super(props)
-    this.state = { loading: false }
+    this.state = { loading: false, key: undefined }
     this.continueKeyTransfer = this.continueKeyTransfer.bind(this)
     this.continueKeyTransferResp = this.continueKeyTransferResp.bind(this)
   }
 
-  continueKeyTransferResp(e, err) {
+  continueKeyTransferResp(e: any, err: Error) {
     const tx = window.translate
     if (err) {
       this.setState({ loading: false })
-      this.props.userFeedback({
+      this.context.userFeedback({
         type: 'error',
         text: tx('autocrypt_incorrect_desktop'),
       })
     } else {
       this.setState({ loading: false })
-      this.props.userFeedback({
+      this.context.userFeedback({
         type: 'success',
         text: tx('autocrypt_correct_desktop'),
       })
@@ -103,7 +128,7 @@ export default class EnterAutocryptSetupMessage extends React.Component {
     )
   }
 
-  continueKeyTransfer(key) {
+  continueKeyTransfer(key: string) {
     this.setState({ key, loading: true })
     ipcRenderer.send('continueKeyTransfer', this.props.message.msg.id, key)
   }
