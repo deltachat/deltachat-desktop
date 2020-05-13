@@ -1,17 +1,18 @@
 import React from 'react'
 import { Icon, InputGroup } from '@blueprintjs/core'
 
-export default function InputTransferKey({
-  autocryptkey,
-  onChange,
-  disabled,
-}: {
-  autocryptkey: string
-  onChange: ((event: React.FormEvent<HTMLElement>) => void) &
-    ((event: React.ChangeEvent<HTMLInputElement>) => void)
-  disabled: boolean
-}) {
-  if (disabled !== true) disabled = false
+export default function InputTransferKey(
+  props:
+    | {
+        autocryptkey: string[]
+        onChange: ((event: React.FormEvent<HTMLElement>) => void) &
+          ((event: React.ChangeEvent<HTMLInputElement>) => void)
+      }
+    | {
+        autocryptkey: string[]
+        disabled: true
+      }
+) {
   const inputs = []
   for (let i = 0; i < 9; i++) {
     inputs.push(
@@ -20,9 +21,9 @@ export default function InputTransferKey({
           key={i}
           data-index={i}
           id={'autocrypt-input-' + i}
-          disabled={disabled}
-          onChange={onChange}
-          value={autocryptkey[i]}
+          disabled={(props as any).disabled || false}
+          onChange={(props as any).onChange}
+          value={props.autocryptkey[i]}
         />
         {i !== 8 && i !== 2 && i !== 5 && (
           <div className='seperator'>
