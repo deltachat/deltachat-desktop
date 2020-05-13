@@ -7,11 +7,17 @@ import SmallDialog, {
   DeltaButtonDanger,
 } from './SmallDialog'
 import { useChatStore } from '../../stores/chat'
+import { DialogProps } from '.'
+import { DCContact, MessageType } from '../../../shared/shared-types'
 
 /**
  * handle contact requests
  */
-export default function DeadDrop(props) {
+export default function DeadDrop(props: {
+  contact: DCContact
+  msg: MessageType['msg']
+  onClose: DialogProps['onClose']
+}) {
   const { contact, msg, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
 
