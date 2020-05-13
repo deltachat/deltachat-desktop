@@ -211,6 +211,11 @@ class DeltaRemote {
     id: number
   ): Promise<{ msg: null } | MessageType>
   call(fnName: 'messageList.getMessageIds', chatid: number): Promise<number[]>
+  call(
+    fnName: 'messageList.forwardMessage',
+    msgId: number,
+    chatId: number
+  ): Promise<void>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',

@@ -6,10 +6,15 @@ import ChatListItem from '../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
+import { DialogProps } from '.'
+import { MessageType } from '../../../shared/shared-types'
 
-const { C } = require('deltachat-node/dist/constants')
+import { C } from 'deltachat-node/dist/constants'
 
-export default function ForwardMessage(props) {
+export default function ForwardMessage(props: {
+  message: MessageType
+  onClose: DialogProps['onClose']
+}) {
   const tx = window.translate
   const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatListIds(
@@ -19,20 +24,16 @@ export default function ForwardMessage(props) {
     chatListIds
   )
 
-  const onChatClick = chatid => {
+  const onChatClick = (chatid: number) => {
     DeltaBackend.call('messageList.forwardMessage', message.msg.id, chatid)
     onClose()
   }
-  const onSearchChange = e => setQueryStr(e.target.value)
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setQueryStr(e.target.value)
 
   var isOpen = !!message
   return (
-    <DeltaDialogBase
-      isOpen={isOpen}
-      title={tx('menu_forward')}
-      onClose={onClose}
-      fixed
-    >
+    <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       <DeltaDialogHeader onClose={onClose}>
         <input
           className='search-input'
