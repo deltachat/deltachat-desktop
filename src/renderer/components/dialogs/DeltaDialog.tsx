@@ -9,6 +9,8 @@ export const DeltaDialogBase = React.memo<
     isOpen: boolean
     onClose: () => void
     canOutsideClickClose?: boolean
+    isCloseButtonShown?: boolean
+    canEscapeKeyClose?: boolean
     fixed?: boolean
     className?: string
     style?: React.CSSProperties
@@ -21,7 +23,8 @@ export const DeltaDialogBase = React.memo<
         isOpen={props.isOpen}
         onClose={props.onClose}
         canOutsideClickClose={props.canOutsideClickClose}
-        canEscapeKeyClose
+        isCloseButtonShown={props.isCloseButtonShown}
+        canEscapeKeyClose={props.canEscapeKeyClose}
         className={classNames(
           isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog',
           [props.className]
@@ -96,6 +99,8 @@ const DeltaDialog = React.memo<
     onClickBack?: () => void
     showBackButton?: boolean
     canOutsideClickClose?: boolean
+    isCloseButtonShown?: boolean
+    canEscapeKeyClose?: boolean
   }>
 >(props => {
   return (
@@ -106,6 +111,8 @@ const DeltaDialog = React.memo<
       className={props.className}
       style={props.style}
       canOutsideClickClose={props.canOutsideClickClose}
+      isCloseButtonShown={props.isCloseButtonShown}
+      canEscapeKeyClose={props.canEscapeKeyClose}
     >
       <DeltaDialogHeader
         onClose={props.onClose}

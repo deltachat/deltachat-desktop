@@ -3,9 +3,12 @@ import { Intent, ProgressBar, Classes } from '@blueprintjs/core'
 import DeltaDialog from './DeltaDialog'
 const { ipcRenderer } = window.electron_functions
 
-export default class ImexProgress extends React.Component {
-  constructor(props) {
-    super(props)
+export default class ImexProgress extends React.Component<
+  any,
+  { progress: number }
+> {
+  constructor(_props: any) {
+    super(_props)
     this.state = {
       progress: 0,
     }
@@ -13,7 +16,7 @@ export default class ImexProgress extends React.Component {
     this.onDcEventImexProgress = this.onDcEventImexProgress.bind(this)
   }
 
-  onDcEventImexProgress(_event, progress) {
+  onDcEventImexProgress(_event: any, progress: number) {
     this.setState({ progress })
   }
 
@@ -39,6 +42,7 @@ export default class ImexProgress extends React.Component {
         title={tx('imex_progress_title_desktop')}
         canEscapeKeyClose={false}
         isCloseButtonShown={false}
+        onClose={() => {}}
         canOutsideClickClose={false}
       >
         <div className={Classes.DIALOG_BODY}>
