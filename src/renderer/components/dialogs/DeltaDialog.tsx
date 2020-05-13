@@ -26,6 +26,7 @@ export const DeltaDialogBase = React.memo<
         isCloseButtonShown={props.isCloseButtonShown}
         canEscapeKeyClose={props.canEscapeKeyClose}
         className={classNames(
+          'delta-dialog',
           isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog',
           [props.className]
         )}
@@ -267,7 +268,7 @@ export function SmallDialog(
       isOpen={props.isOpen}
       onClose={props.onClose}
       canOutsideClickClose
-      className='delta-dialog-small-dialog'
+      className='delta-dialog small-dialog'
     >
       {props.children}
     </Dialog>

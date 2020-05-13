@@ -78,6 +78,7 @@ export default function QrInviteCode({
       title={tx('qrshow_join_contact_title')}
       isOpen={isOpen}
       onClose={onClose}
+      className='delta-dialog'
     >
       <DeltaDialogQrInner
         description={tx('qrshow_join_contact_hint', [
