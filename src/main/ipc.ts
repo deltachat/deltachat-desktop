@@ -61,21 +61,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     app.saveState()
   })
 
-  dcController.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename: string) => {
-    log.debug('DC_EVENT_IMEX_FILE_WRITTEN: ' + filename)
-    main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
-  })
-
-  dcController.on('DC_EVENT_IMEX_PROGRESS', (progress: number) => {
-    main.send('DC_EVENT_IMEX_PROGRESS', progress)
-  })
-
-  dcController.on('error', (error: any) => main.send('error', error))
-
-  dcController.on('DC_EVENT_LOGIN_FAILED', () =>
-    main.send('error', 'Login failed!')
-  )
-
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
