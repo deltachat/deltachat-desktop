@@ -52,6 +52,9 @@ $hover-contrast-change: 2%;
   --chat-list-item-summary-text: #{changeContrast($textPrimary, 33%)};
   --chat-list-item-archived-label: #{changeContrast($textPrimary, 20%)};
   --chat-list-item-archived-label-border: #{changeContrast($textPrimary, 33%)};
+  /* Chat List - search */
+  --cli-search-result-divider: #{changeContrast($bgSecondary, 5%)};
+  --cli-search-result-divider-border: #{changeContrast($bgSecondary, 10%)};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};

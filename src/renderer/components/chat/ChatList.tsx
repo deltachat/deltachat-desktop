@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import { useChatListIds, useLazyChatListItems } from './ChatListHelpers'
 import ChatListItem from './ChatListItem'
@@ -7,6 +7,8 @@ import { C } from 'deltachat-node/dist/constants'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { isValidEmail } from '../../../shared/util'
+import { ContactListItem } from '../contact/ContactListItem'
+import { useContacts } from '../contact/ContactList'
 
 export default function ChatList(props: {
   selectedChatId: number
@@ -68,8 +70,10 @@ export default function ChatList(props: {
     selectChat(chatId)
   }
 
+  const isSearchActive = queryStr !== ''
+
   const renderAddContactIfNeeded = () => {
-    if (queryStr === '' || chatListIds.length > 0) return null
+    if (chatListIds.length > 0) return null
     return PseudoListItemAddContact({
       queryStr,
       queryStrIsEmail,
@@ -77,9 +81,19 @@ export default function ChatList(props: {
     })
   }
 
+  const [contacts, updateContactSearch] = useContacts(0, queryStr)
+  useEffect(() => {
+    updateContactSearch(queryStr)
+  }, [queryStr])
+
   return (
     <>
       <div className='chat-list' ref={scrollRef} onScroll={onChatListScroll}>
+        {isSearchActive && (
+          <div className='search-result-divider'>
+            {translate_n('n_chats', chatListIds.length)}
+          </div>
+        )}
         {chatListIds.map(chatId => {
           return (
             <ChatListItem
@@ -93,8 +107,34 @@ export default function ChatList(props: {
             />
           )
         })}
-        {chatListIds.length === 0 && queryStr === '' && null}
-        {renderAddContactIfNeeded()}
+        {isSearchActive && (
+          <>
+            <div className='search-result-divider'>
+              {translate_n('n_contacts', contacts.length)}
+            </div>
+            {contacts.map(contact => (
+              <ContactListItem
+                contact={contact}
+                showCheckbox={false}
+                checked={false}
+                showRemove={false}
+                onClick={async _ => {
+                  let chatId = await DeltaBackend.call(
+                    'contacts.getChatIdByContactId',
+                    contact.id
+                  )
+                  onChatClick(chatId)
+                }}
+                key={contact.id}
+              />
+            ))}
+            {renderAddContactIfNeeded()}
+            <div className='search-result-divider'>
+              {translate_n('n_messages', -1)}
+            </div>
+            (todo messages)
+          </>
+        )}
       </div>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}
@@ -104,4 +144,8 @@ export default function ChatList(props: {
       />
     </>
   )
+}
+
+function translate_n(key: string, quantity: number) {
+  return window.translate(key, String(quantity), { quantity }).toUpperCase()
 }

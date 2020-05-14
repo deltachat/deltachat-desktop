@@ -7,4 +7,14 @@
     0 1px 1px rgba(16, 22, 26, 0.2);
   user-select: none;
   margin-top: $nav-bar-height;
+
+  .search-result-divider {
+    line-height: 43px;
+    height: 40px;
+    padding-left: 15px;
+    font-weight: 200;
+    color: var(--globaltext);
+    background: var(--cli-search-result-divider);
+    border-bottom: 2px solid var(--cli-search-result-divider-border);
+  }
 }
