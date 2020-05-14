@@ -8,7 +8,7 @@ import DeltaDialog, {
   DeltaDialogHeader,
   SmallDialog,
 } from './DeltaDialog'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
 

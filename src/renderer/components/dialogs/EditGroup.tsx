@@ -21,7 +21,7 @@ import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import {
   ChatListItemType,
   FullChat,

@@ -24,7 +24,7 @@ import { SettingsContext } from '../../contexts'
 const MAGIC_PW = '9bbdc87b50bbc684'
 import { OpenDialogOptions } from 'electron'
 import { AppState } from '../../../shared/shared-types'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
 import {
