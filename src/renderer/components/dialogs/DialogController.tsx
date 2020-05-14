@@ -43,14 +43,13 @@ export const allDialogs: { [key: string]: any } = {
 
 export type DialogId = keyof typeof allDialogs | string
 
-const log = getLogger('renderer/dialogs')
+const log = getLogger('renderer/dialogs/DialogController')
 
-type dialogs = {
-  [key: string]: {
-    id: number
-    props: false
-    fnc: any
-  }
+export type DialogAdditionProps = { [key: string]: any }
+export type Dialog = {
+  id: number
+  additionalProps: DialogAdditionProps
+  fnc: any
 }
 
 export type DialogProps = {
@@ -66,27 +65,36 @@ export type DialogProps = {
 
 var dialogCounter = 1
 
-export class Controller extends React.Component<
+export type OpenDialogFunctionType = typeof DialogController.prototype.openDialog
+export type CloseDialogFunctionType = typeof DialogController.prototype.closeDialog
+
+export default class DialogController extends React.Component<
   any,
   {
-    dialogs: dialogs
+    dialogs: {
+      [key: string]: Dialog
+    }
   }
 > {
   constructor(props: any) {
     super(props)
 
     this.state = { dialogs: {} }
-    this.close = this.close.bind(this)
+    this.openDialog = this.openDialog.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
   }
 
-  open(fnc: any, props?: todo /* infer from component */) {
+  openDialog(
+    fnc: DialogId | ((props: DialogProps) => React.ReactElement),
+    additionalProps?: DialogAdditionProps /* infer from component */
+  ) {
     if (typeof fnc === 'string') {
       fnc = allDialogs[fnc]
       if (!fnc) throw new Error(`Dialog with name ${name} does not exist`)
     }
 
-    if (!props) props = {}
-    log.debug('openDialog: ', fnc, props)
+    if (!additionalProps) additionalProps = {}
+    log.debug('openDialog: ', fnc, additionalProps)
 
     let id: number = dialogCounter++
     if (id >= Number.MAX_SAFE_INTEGER - 1) {
@@ -101,14 +109,14 @@ export class Controller extends React.Component<
           [id]: {
             id,
             fnc,
-            props,
+            ...additionalProps,
           },
         },
       }
     })
   }
 
-  close(id: DialogId) {
+  closeDialog(id: DialogId) {
     const { [id]: closedDialog, ...dialogs } = this.state.dialogs
     log.debug(`Close dialog with id: ${id}`)
     this.setState({ dialogs })
@@ -124,16 +132,16 @@ export class Controller extends React.Component<
         {Object.keys(dialogs).map((id: string) => {
           log.debug(`Rendering dialog with id ${id}`)
           const dialog = dialogs[id]
-          var defaultProps: DialogProps = {
+          const props: DialogProps = {
             isOpen: true,
-            onClose: () => this.close(id),
+            onClose: () => this.closeDialog(id),
             userFeedback,
             deltachat,
             key: name,
-            openDialog: this.open.bind(this),
-            closeDialog: this.close.bind(this),
+            openDialog: this.openDialog.bind(this),
+            closeDialog: this.closeDialog.bind(this),
+            ...dialog.additionalProps,
           }
-          var props = Object.assign({}, defaultProps, dialog.props || {})
           return <dialog.fnc key={id} {...props} />
         })}
       </div>

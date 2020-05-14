@@ -3,7 +3,7 @@ import React from 'react'
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 const { ipcRenderer } = window.electron_functions
 
 class KeyViewPanel extends React.Component<{
