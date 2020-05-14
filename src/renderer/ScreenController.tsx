@@ -15,6 +15,7 @@ import DialogController, {
 import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
 import * as logger from '../shared/logger'
+import { DeltaBackend } from './delta-remote'
 
 const log = logger.getLogger('renderer/ScreenController')
 
@@ -35,9 +36,12 @@ export default class ScreenController extends Component {
     super(props)
     this.state = {
       message: false,
+      online: true,
+      tryConnectCooldown: true,
     }
 
     this.onError = this.onError.bind(this)
+    this.onNetworkChange = this.onNetworkChange.bind(this)
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
@@ -47,7 +51,12 @@ export default class ScreenController extends Component {
     window.__closeDialog = this.closeDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
+<<<<<<< HEAD
     this.dialogController = createRef()
+=======
+    this.dialogs = createRef()
+    this.onNetworkChange()
+>>>>>>> 8037b238... display the offline status as permanent toast
   }
 
   userFeedback(message: userFeedback | false) {
@@ -61,9 +70,13 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
+<<<<<<< HEAD
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
     ipcRenderer.on('DC_EVENT_LOGIN_FAILED', this.onError)
     ipcRenderer.on('DC_EVENT_ERROR_NETWORK', this.onError)
+=======
+    ipcRenderer.on('update-network-status', this.onNetworkChange)
+>>>>>>> 8037b238... display the offline status as permanent toast
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -74,9 +87,13 @@ export default class ScreenController extends Component {
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
+<<<<<<< HEAD
     ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
     ipcRenderer.removeListener('DC_EVENT_LOGIN_FAILED', this.onError)
     ipcRenderer.removeListener('DC_EVENT_ERROR_NETWORK', this.onError)
+=======
+    ipcRenderer.removeListener('update-network-status', this.onNetworkChange)
+>>>>>>> 8037b238... display the offline status as permanent toast
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
@@ -85,6 +102,11 @@ export default class ScreenController extends Component {
     if (!data2) data2 = ''
     const text = data1 + ' ' + data2
     this.userFeedback({ type: 'error', text })
+  }
+
+  async onNetworkChange(_event?: any) {
+    console.log(await DeltaBackend.call('getNetworkStatus'))
+    this.setState({ online: await DeltaBackend.call('getNetworkStatus') })
   }
 
   onSuccess(_event: any, text: string) {
@@ -119,6 +141,24 @@ export default class ScreenController extends Component {
             className={`user-feedback ${this.state.message.type}`}
           >
             <p>{this.state.message.text}</p>
+          </div>
+        )}
+        {!this.state.online && (
+          <div className='no-network-toast'>
+            <b>Offline</b>
+            <div
+              onClick={() => {
+                this.setState({ tryConnectCooldown: false })
+                setTimeout(
+                  () => this.setState({ tryConnectCooldown: true }),
+                  15000
+                )
+                setTimeout(() => DeltaBackend.call('context.maybeNetwork'), 100)
+              }}
+              className={this.state.tryConnectCooldown ? '' : 'disabled'}
+            >
+              Try to connect now
+            </div>
           </div>
         )}
         <ScreenContext.Provider

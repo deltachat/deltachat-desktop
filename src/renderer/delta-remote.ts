@@ -36,6 +36,7 @@ class DeltaRemote {
     timestamp: number
     id: number
   }>
+  call(fnName: 'getNetworkStatus'): Promise<boolean>
   // autocrypt ----------------------------------------------------------
   call(
     fnName: 'autocrypt.initiateKeyTransfer',
