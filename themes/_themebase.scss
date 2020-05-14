@@ -22,7 +22,7 @@
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
-  --chatViewBgImgPath: #{url($bgImagePath)};
+  --chatViewBgImgPath: #{$bgImage};
   /* ChatView - Composer */
   --composerBg: #{$bgPrimary};
   --composerText: #{$textPrimary};
