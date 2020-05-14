@@ -105,7 +105,6 @@ export default class ScreenController extends Component {
   }
 
   async onNetworkChange(_event?: any) {
-    console.log(await DeltaBackend.call('getNetworkStatus'))
     this.setState({ online: await DeltaBackend.call('getNetworkStatus') })
   }
 
