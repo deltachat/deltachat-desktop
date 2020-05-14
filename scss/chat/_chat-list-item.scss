@@ -148,7 +148,7 @@
 .chat-list-item.pinned {
   background-color: var(--chatListItemBgPinned);
   &:hover {
-    background-color: var(--chatListItemBgHover);
+    background-color: var(--chatListItemBgPinnedHover);
   }
   .pin_icon {
     flex-shrink: 0;
@@ -198,6 +198,6 @@
 .chat-list-item.is-deaddrop {
   background-color: var(--chatListItemDeaddropBg);
   &:hover {
-    background-color: var(--chatListItemBgHover);
+    background-color: var(--chatListItemDeaddropBgHover);
   }
 }
