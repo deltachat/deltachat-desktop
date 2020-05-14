@@ -99,4 +99,10 @@
       color: var(--colorDanger);
     }
   }
+
+  .drop-file-dialog-file-list > li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre;
+  }
 }

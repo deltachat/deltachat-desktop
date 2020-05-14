@@ -54,7 +54,8 @@
     "message": "remove your profile image"
   },
   "ask_send_file_desktop": {
-    "message": "Send %s to %s?"
+    "one": "Send the following file to %s?",
+    "other": "Send the following %d files to %s?"
   },
   "remove_account": {
     "message": "Remove account"

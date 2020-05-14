@@ -31,30 +31,54 @@ export default function MessageListAndComposer({
   )
 
   const onDrop = (e: React.DragEvent<any>) => {
-    const files = (e.target as any).files || e.dataTransfer.files
     e.preventDefault()
     e.stopPropagation()
-    const tx = window.translate
-
-    // TODO maybe add a clause here for windows because that uses backslash instead of slash
-    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    for (let i = 0; i < files.length; i++) {
-      const { path, name } = files[i]
-      if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        openDialog('ConfirmationDialog', {
-          message: tx('ask_send_file_desktop', [name, chat.name]),
-          confirmLabel: tx('menu_send'),
-          cb: (yes: boolean) => {
-            if (!yes) {
-              return
-            }
-            DeltaBackend.call('messageList.sendMessage', chat.id, null, path)
-          },
-        })
-      } else {
-        log.warn('Prevented a file from being send again while dragging it out')
+    let sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
+    {
+      let fileList: FileList = (e.target as any).files || e.dataTransfer.files
+      // TODO maybe add a clause here for windows because that uses backslash instead of slash
+      const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+      for (let i = 0; i < fileList.length; i++) {
+        const { path, name } = fileList[i]
+        // TODO filter out folders somehow
+        // if that is possible without a backend call to check wheter the file exists,
+        // maybe some browser api like FileReader could help
+        if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
+          sanitizedFileList.push({ path, name })
+        } else {
+          log.warn(
+            'Prevented a file from being send again while dragging it out',
+            name
+          )
+        }
       }
     }
+    const tx = window.translate
+    const fileCount = sanitizedFileList.length
+    openDialog('ConfirmationDialog', {
+      message: (
+        <>
+          {tx(
+            'ask_send_file_desktop',
+            fileCount > 1 ? [String(fileCount), chat.name] : [chat.name],
+            {
+              quantity: fileCount,
+            }
+          )}
+          <ul className='drop-file-dialog-file-list'>
+            {sanitizedFileList.map(({ name }) => (
+              <li key={name}>{' - ' + name}</li>
+            ))}
+          </ul>
+        </>
+      ),
+      confirmLabel: tx('menu_send'),
+      cb: (yes: boolean) =>
+        yes &&
+        sanitizedFileList.forEach(({ path }) =>
+          DeltaBackend.call('messageList.sendMessage', chat.id, null, path)
+        ),
+    })
   }
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
