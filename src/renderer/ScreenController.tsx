@@ -7,8 +7,7 @@ const { ipcRenderer } = window.electron_functions
 import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
-import DialogController,
-{
+import DialogController, {
   DialogId,
   OpenDialogFunctionType,
   CloseDialogFunctionType,
@@ -93,7 +92,6 @@ export default class ScreenController extends Component {
   async onOpenUrl(_event: Event, url: string) {
     processOPENPGP4FPRUrl(url)
   }
-
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
     this.dialogController.current.openDialog(...args)

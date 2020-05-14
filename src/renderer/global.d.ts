@@ -1,7 +1,11 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
 import Electron from 'electron'
-import { DialogId, OpenDialogFunctionType, CloseDialogFunctionType } from './components/dialogs/DialogController'
+import {
+  DialogId,
+  OpenDialogFunctionType,
+  CloseDialogFunctionType,
+} from './components/dialogs/DialogController'
 import { userFeedback } from './ScreenController'
 
 declare global {
