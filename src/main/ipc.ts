@@ -70,6 +70,8 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     log.debug('Renderer event:', e, ...args)
   })
 
+  dcController.on('error', (error: any) => main.send('error', error))
+
   // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
   // ipcMain.on('setBounds', (e, ...args:any[]) => main.setBounds(...args))
   ipcMain.on('setProgress', (e, progress: number) => main.setProgress(progress))
