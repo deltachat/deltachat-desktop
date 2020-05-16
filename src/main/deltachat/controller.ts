@@ -159,7 +159,7 @@ export default class DeltaChatController extends EventEmitter {
         logCoreEvent.warn(event, data1, data2)
       } else if (event === 'DC_EVENT_INFO') {
         logCoreEvent.info(event, data1, data2)
-      } else if (event.startsWith('DC_EVENT_ERROR')) {
+      } else if (event && event.startsWith('DC_EVENT_ERROR')) {
         this.emit('error', event, data1, data2)
         logCoreEvent.error(event, data1, data2)
       } else if (app.rc['log-debug']) {
@@ -264,6 +264,10 @@ export default class DeltaChatController extends EventEmitter {
     return new Promise(resolve => {
       this._dc.joinSecurejoin(qrCode, resolve)
     })
+  }
+
+  stopOngoingProcess() {
+    this._dc.stopOngoingProcess()
   }
 
   // ToDo: Deprecated, use contacts.getContact

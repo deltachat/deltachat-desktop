@@ -25,6 +25,7 @@ class DeltaRemote {
     status: any
   }>
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
+  call(fnName: 'stopOngoingProcess'): Promise<number>
   call(
     fnName: 'checkQrCode',
     qrCode: string
