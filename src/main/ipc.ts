@@ -70,8 +70,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     log.debug('Renderer event:', e, ...args)
   })
 
-  dcController.on('error', (error: any) => main.send('error', error))
-
   // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
   // ipcMain.on('setBounds', (e, ...args:any[]) => main.setBounds(...args))
   ipcMain.on('setProgress', (e, progress: number) => main.setProgress(progress))
@@ -113,21 +111,37 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
+  /** catches an Error of an async function and sends it to the frontend as event */
+  const CatchError2Event = (func: Function) => {
+    setTimeout(async () => {
+      try {
+        await func()
+      } catch (error) {
+        log.error(error)
+        main.send('error', error.message || error)
+      }
+    }, 0)
+  }
+
   ipcMain.on('login', (_e: any, credentials) => {
-    dcController.loginController.login(
-      getNewAccountPath(credentials.addr),
-      credentials,
-      sendStateToRenderer,
-      txCoreStrings()
+    CatchError2Event(() =>
+      dcController.loginController.login(
+        getNewAccountPath(credentials.addr),
+        credentials,
+        sendStateToRenderer,
+        txCoreStrings()
+      )
     )
   })
 
   ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
-    dcController.loginController.login(
-      login.path,
-      { addr: login.addr },
-      sendStateToRenderer,
-      txCoreStrings()
+    CatchError2Event(() =>
+      dcController.loginController.login(
+        login.path,
+        { addr: login.addr },
+        sendStateToRenderer,
+        txCoreStrings()
+      )
     )
   })
 
@@ -315,11 +329,13 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     )
 
     if (selectedAccount) {
-      dcController.loginController.login(
-        selectedAccount.path,
-        savedCredentials as credential_config,
-        sendStateToRenderer,
-        txCoreStrings()
+      CatchError2Event(() =>
+        dcController.loginController.login(
+          selectedAccount.path,
+          savedCredentials as credential_config,
+          sendStateToRenderer,
+          txCoreStrings()
+        )
       )
     } else {
       log.error(
