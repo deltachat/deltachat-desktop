@@ -15,7 +15,7 @@ function logName() {
     `${pad(d.getHours())}-`,
     `${pad(d.getMinutes())}-`,
     `${pad(d.getSeconds())}`,
-    '.log.tsv',
+    '.log',
   ].join('')
   return join(dir, fileName)
 }
@@ -40,10 +40,10 @@ export function createLogHandler() {
       ...args: any[]
     ) => {
       const timestamp = new Date().toISOString()
-      let line = [timestamp, channel, level]
-      line = line
-        .concat([stacktrace, ...args])
-        .map(value => JSON.stringify(value))
+      let line = [timestamp, fillString(channel, 22), level]
+      line = line.concat(
+        [stacktrace, ...args].map(value => JSON.stringify(value))
+      )
       stream.write(`${line.join('\t')}\n`)
     },
     end: () => stream.end(),
@@ -81,4 +81,11 @@ export async function cleanupLogFolder() {
   } else {
     log.debug('Nothing to do (not more than 10 logfiles to delete)')
   }
+}
+
+function fillString(string: string, n: number) {
+  if (string.length < n) {
+    return string + ' '.repeat(n - string.length)
+  }
+  return string
 }
