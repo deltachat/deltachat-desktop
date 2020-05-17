@@ -109,7 +109,7 @@ export default class DialogController extends React.Component<
           [id]: {
             id,
             fnc,
-            ...additionalProps,
+            additionalProps,
           },
         },
       }
