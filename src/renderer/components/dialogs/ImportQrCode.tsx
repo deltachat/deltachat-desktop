@@ -1,6 +1,5 @@
 import React, { useContext, useState, useRef } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
-import { DeltaButtonDanger } from './SmallDialog'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
@@ -139,9 +138,9 @@ export function DeltaDialogImportQrInner({
           <div>
             <p className='progress-info'>Secure join in progress...</p>
             <ProgressBar intent={Intent.PRIMARY} value={100} />
-            <DeltaButtonDanger onClick={cancelProcess}>
+             <p className='delta-button danger'onClick={cancelProcess}>
               {tx('cancel')}
-            </DeltaButtonDanger>
+            </p>
           </div>
         )}
         {!secureJoinOngoing && (
