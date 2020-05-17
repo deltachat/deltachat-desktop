@@ -103,7 +103,7 @@ export const RenderMessage = React.memo(
         <div
           className='info-message'
           onContextMenu={onShowDetail}
-          custom-selectable="true"
+          custom-selectable='true'
         >
           <p>{msg.text}</p>
         </div>
