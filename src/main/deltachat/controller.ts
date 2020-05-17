@@ -180,7 +180,6 @@ export default class DeltaChatController extends EventEmitter {
           this.networkStatus,
           this.networkStatusMessage,
         ])
-        return
       } else if (
         event === 'DC_EVENT_SMTP_CONNECTED' ||
         event === 'DC_EVENT_IMAP_CONNECTED' ||
@@ -194,7 +193,6 @@ export default class DeltaChatController extends EventEmitter {
           this.networkStatus,
           this.networkStatusMessage,
         ])
-        return
       }
 
       this.sendToRenderer(event, [data1, data2])
