@@ -183,35 +183,3 @@ code {
     background-color: unset;
   }
 }
-
-.no-network-toast {
-  position: fixed;
-  bottom: 5px;
-  left: 8px;
-  text-align: center;
-  z-index: 99;
-  background-color: var(--contextMenuBg);
-  border: 1px solid var(--contextMenuBorder);
-  padding: 5px;
-  border-radius: 4px;
-  color: var(--contextMenuText);
-  user-select: none;
-
-  div {
-    display: inline-block;
-    color: var(--colorPrimary);
-    margin-left: 4px;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline solid var(--colorPrimary);
-      opacity: 0.8;
-    }
-
-    &.disabled {
-      text-decoration: none;
-      color: gray;
-      cursor: wait;
-    }
-  }
-}

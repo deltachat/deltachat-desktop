@@ -2,36 +2,50 @@ import React, { Component, useEffect, useState } from 'react'
 import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('renderer/components/OfflineToast')
 
 export default function OfflineToast() {
-  const [online, setOnline] = useState(true)
+  const [networkStatusMessage, setNetworkStatusMessage] = useState('')
+  const [networkStatus, setNetworkStatus] = useState(true)
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
-  const onOffline = () => setOnline(false)
-  const onOnline = () => setOnline(true)
-  const onMaybeOnline = () => DeltaBackend.call('context.maybeNetwork')
-  useEffect(() => {
+  const onNetworkStatus = (
+    _: any,
+    [networkStatus, networkStatusMessage]: [boolean, string]
+  ) => {
+    log.debug(
+      `network status changed, we\'re ${
+        networkStatus ? 'online' : 'offline'
+      }. The message is "${networkStatusMessage}"`
+    )
+    setNetworkStatus(networkStatus)
+    setNetworkStatusMessage(networkStatusMessage)
+  }
+  const onBrowserOffline = () => {
+    log.debug("Browser thinks we're offline, telling rust core")
     DeltaBackend.call('context.maybeNetwork')
-    
-    window.addEventListener('online',  onMaybeOnline);
-    window.addEventListener('offline', onOffline);
-    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onOffline)
-    // ugly hack to find out when the user goes online again:
-    ipcBackend.on('DC_EVENT_SMTP_CONNECTED', onOnline)
-    ipcBackend.on('DC_EVENT_IMAP_CONNECTED', onOnline)
-    ipcBackend.on('DC_EVENT_INCOMING_MSG', onOnline)
-    ipcBackend.on('DC_EVENT_MSG_DELIVERED', onOnline)
-    ipcBackend.on('DC_EVENT_IMAP_MESSAGE_MOVED', onOnline)
+  }
+
+  const onBrowserOnline = () => {
+    log.debug("Browser thinks we're back online, telling rust core")
+    DeltaBackend.call('context.maybeNetwork')
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      const networkStatusReturn = await DeltaBackend.call('getNetworkStatus')
+      onNetworkStatus(null, networkStatusReturn)
+    })()
+    window.addEventListener('online', onBrowserOffline)
+    window.addEventListener('offline', onBrowserOnline)
+    ipcBackend.on('NETWORK_STATUS', onNetworkStatus)
 
     return () => {
-      window.removeEventListener('online',  onMaybeOnline);
-      window.removeEventListener('offline', onOffline);
-      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onOffline)
-      ipcBackend.removeListener('DC_EVENT_SMTP_CONNECTED', onOnline)
-      ipcBackend.removeListener('DC_EVENT_IMAP_CONNECTED', onOnline)
-      ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onOnline)
-      ipcBackend.removeListener('DC_EVENT_MSG_DELIVERED', onOnline)
-      ipcBackend.removeListener('DC_EVENT_IMAP_MESSAGE_MOVED', onOnline)
+      window.removeEventListener('online', onBrowserOffline)
+      window.removeEventListener('offline', onBrowserOnline)
+      ipcBackend.removeListener('NETWORK_STATUS', onNetworkStatus)
     }
   }, [])
 
@@ -42,9 +56,9 @@ export default function OfflineToast() {
   }
 
   return (
-    !online && (
-      <div className='no-network-toast'>
-        <b>Offline</b>
+    networkStatus === false && (
+      <div className='OfflineToast'>
+        <a title={networkStatusMessage}>Offline</a>
         <div
           className={tryConnectCooldown ? '' : 'disabled'}
           onClick={onTryReconnectClick}

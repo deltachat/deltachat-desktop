@@ -48,15 +48,7 @@ export default class ScreenController extends Component {
     window.__closeDialog = this.closeDialog.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
-<<<<<<< HEAD
     this.dialogController = createRef()
-=======
-    this.dialogs = createRef()
-<<<<<<< HEAD
-    this.onNetworkChange()
->>>>>>> 8037b238... display the offline status as permanent toast
-=======
->>>>>>> cd3f20bd... move offline toast to own component
   }
 
   userFeedback(message: userFeedback | false) {
@@ -70,16 +62,8 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
-<<<<<<< HEAD
-<<<<<<< HEAD
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
     ipcRenderer.on('DC_EVENT_LOGIN_FAILED', this.onError)
-    ipcRenderer.on('DC_EVENT_ERROR_NETWORK', this.onError)
-=======
-    ipcRenderer.on('update-network-status', this.onNetworkChange)
->>>>>>> 8037b238... display the offline status as permanent toast
-=======
->>>>>>> cd3f20bd... move offline toast to own component
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -90,16 +74,8 @@ export default class ScreenController extends Component {
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
-<<<<<<< HEAD
-<<<<<<< HEAD
     ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
     ipcRenderer.removeListener('DC_EVENT_LOGIN_FAILED', this.onError)
-    ipcRenderer.removeListener('DC_EVENT_ERROR_NETWORK', this.onError)
-=======
-    ipcRenderer.removeListener('update-network-status', this.onNetworkChange)
->>>>>>> 8037b238... display the offline status as permanent toast
-=======
->>>>>>> cd3f20bd... move offline toast to own component
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }

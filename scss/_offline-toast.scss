@@ -1,0 +1,41 @@
+.OfflineToast {
+  position: fixed;
+  bottom: 5px;
+  left: 8px;
+  text-align: center;
+  z-index: 99;
+  background-color: var(--contextMenuBg);
+  border: 1px solid var(--contextMenuBorder);
+  padding: 5px;
+  border-radius: 4px;
+  color: var(--contextMenuText);
+  user-select: none;
+
+  a {
+    font-weight: bold;
+    color: black;
+    &:hover {
+      cursor: unset;
+      text-decoration: unset;
+      color: unset;
+    }
+  }
+
+  div {
+    display: inline-block;
+    color: var(--colorPrimary);
+    margin-left: 4px;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: solid var(--colorPrimary);
+      opacity: 0.8;
+    }
+
+    &.disabled {
+      text-decoration: none;
+      color: gray;
+      cursor: wait;
+    }
+  }
+}
