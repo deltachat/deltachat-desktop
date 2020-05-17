@@ -5,7 +5,7 @@ import moment from 'moment'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
 import { MessageType } from '../../../shared/shared-types'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 
 type MessageInfoProps = {
   messageId: number

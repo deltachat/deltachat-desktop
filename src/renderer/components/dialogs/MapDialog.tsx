@@ -1,7 +1,7 @@
 import React from 'react'
 import MapComponent from '../map/MapComponent'
 import DeltaDialog from './DeltaDialog'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 import { FullChat } from '../../../shared/shared-types'
 
 export default function MapDialog(props: {

@@ -2,7 +2,7 @@ import React, { Fragment, useState, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
 import { Dialog, Classes } from '@blueprintjs/core'
 import classNames from 'classnames'
-import { DialogProps } from '.'
+import { DialogProps } from './DialogController'
 
 export const DeltaDialogBase = React.memo<
   React.PropsWithChildren<{
