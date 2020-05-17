@@ -6,6 +6,8 @@ export default class OfflineToast extends Component<
   {},
   { online: boolean; tryConnectCooldown: boolean }
 > {
+  onOnline: any
+  onOffline: any
   constructor(props: any) {
     super(props)
     this.state = {
@@ -13,20 +15,31 @@ export default class OfflineToast extends Component<
       tryConnectCooldown: true,
     }
 
-    this.onNetworkChange = this.onNetworkChange.bind(this)
-    this.onNetworkChange()
+    this.onOnline = this.onNetworkChange.bind(this, true)
+    this.onOffline = this.onNetworkChange.bind(this, false)
   }
 
   componentDidMount() {
-    ipcBackend.on('update-network-status', this.onNetworkChange)
+    ipcBackend.on('DC_EVENT_ERROR_NETWORK', this.onOffline)
+    // ugly hack to find out when the user goes online again:
+    ipcBackend.on('DC_EVENT_SMTP_CONNECTED', this.onOnline)
+    ipcBackend.on('DC_EVENT_IMAP_CONNECTED', this.onOnline)
+    ipcBackend.on('DC_EVENT_INCOMING_MSG', this.onOnline)
+    ipcBackend.on('DC_EVENT_MSG_DELIVERED', this.onOnline)
+    ipcBackend.on('DC_EVENT_IMAP_MESSAGE_MOVED', this.onOnline)
   }
 
   componentWillUnmount() {
-    ipcBackend.removeListener('update-network-status', this.onNetworkChange)
+    ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', this.onOffline)
+    ipcBackend.removeListener('DC_EVENT_SMTP_CONNECTED', this.onOnline)
+    ipcBackend.removeListener('DC_EVENT_IMAP_CONNECTED', this.onOnline)
+    ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', this.onOnline)
+    ipcBackend.removeListener('DC_EVENT_MSG_DELIVERED', this.onOnline)
+    ipcBackend.removeListener('DC_EVENT_IMAP_MESSAGE_MOVED', this.onOnline)
   }
 
-  async onNetworkChange(_event?: any) {
-    this.setState({ online: await DeltaBackend.call('getNetworkStatus') })
+  async onNetworkChange(online: boolean, _event?: any) {
+    this.setState({ online })
   }
 
   render() {
