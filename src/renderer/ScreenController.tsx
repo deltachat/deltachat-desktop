@@ -14,7 +14,7 @@ import {
 import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
 import * as logger from '../shared/logger'
-import { DeltaBackend } from './delta-remote'
+import OfflineToast from './components/OfflineToast'
 
 const log = logger.getLogger('renderer/ScreenController')
 
@@ -27,8 +27,6 @@ export default class ScreenController extends Component {
   dialogs: React.RefObject<DialogController>
   state: {
     message: userFeedback | false
-    online: boolean
-    tryConnectCooldown: boolean
   }
   changeScreen: any
   onShowAbout: any
@@ -39,12 +37,9 @@ export default class ScreenController extends Component {
     super(props)
     this.state = {
       message: false,
-      online: true,
-      tryConnectCooldown: true,
     }
 
     this.onError = this.onError.bind(this)
-    this.onNetworkChange = this.onNetworkChange.bind(this)
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
@@ -55,7 +50,6 @@ export default class ScreenController extends Component {
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogs = createRef()
-    this.onNetworkChange()
   }
 
   userFeedback(message: userFeedback | false) {
@@ -69,7 +63,6 @@ export default class ScreenController extends Component {
 
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
-    ipcRenderer.on('update-network-status', this.onNetworkChange)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -80,7 +73,6 @@ export default class ScreenController extends Component {
   componentWillUnmount() {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
-    ipcRenderer.removeListener('update-network-status', this.onNetworkChange)
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
@@ -89,10 +81,6 @@ export default class ScreenController extends Component {
     const tx = window.translate
     const text = error ? error.toString() : tx('unknown')
     this.userFeedback({ type: 'error', text })
-  }
-
-  async onNetworkChange(_event?: any) {
-    this.setState({ online: await DeltaBackend.call('getNetworkStatus') })
   }
 
   onSuccess(_event: any, text: string) {
@@ -129,24 +117,7 @@ export default class ScreenController extends Component {
             <p>{this.state.message.text}</p>
           </div>
         )}
-        {!this.state.online && (
-          <div className='no-network-toast'>
-            <b>Offline</b>
-            <div
-              onClick={() => {
-                this.setState({ tryConnectCooldown: false })
-                setTimeout(
-                  () => this.setState({ tryConnectCooldown: true }),
-                  15000
-                )
-                setTimeout(() => DeltaBackend.call('context.maybeNetwork'), 100)
-              }}
-              className={this.state.tryConnectCooldown ? '' : 'disabled'}
-            >
-              Try to connect now
-            </div>
-          </div>
-        )}
+        <OfflineToast />
         <ScreenContext.Provider
           value={{
             openDialog: this.openDialog,
