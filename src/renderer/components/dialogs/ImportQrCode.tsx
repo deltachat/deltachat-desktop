@@ -31,25 +31,20 @@ export declare type QrCodeResponse = {
   text1: string
 }
 
-export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
+export async function processOPENPGP4FPRUrl(url: string, callback: any = null) {
   const tx = window.translate
   let error = false
   const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
   if (response === null) {
     error = true
   }
-  const state = qrStates[response.state]
+  const state = response ? qrStates[response.state] : null
   if (error || state === 'QrError' || state === 'QrText') {
     window.__userFeedback({
       type: 'error',
       text: tx('import_qr_error'),
     })
     return
-  }
-
-  const selectChatAndClose = (chatId: number) => {
-    selectChat(chatId)
-    onClose()
   }
 
   if (state === 'QrAskVerifyContact') {
@@ -59,7 +54,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
       confirmLabel: tx('ok'),
       cb: async (confirmed: boolean) => {
         if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
+          DeltaBackend.call('joinSecurejoin', url).then(callback)
         }
       },
     })
@@ -69,7 +64,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
         if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(selectChatAndClose)
+          DeltaBackend.call('joinSecurejoin', url).then(callback)
         }
         return
       },
@@ -79,7 +74,7 @@ export async function processOPENPGP4FPRUrl(url: string, onClose: any = null) {
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
-      cb: onClose,
+      cb: callback,
     })
   } else {
     window.__userFeedback({
@@ -101,8 +96,17 @@ export function DeltaDialogImportQrInner({
   const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
+  const handleScanResult = (chatId: number = null) => {
+    setSecureJoinOngoing(false)
+    if (chatId) {
+      selectChat(chatId)
+    }
+    onClose()
+  }
+
   const handleResponse = async (scannedQrCode: string) => {
-    processOPENPGP4FPRUrl(scannedQrCode, onClose)
+    setSecureJoinOngoing(true)
+    processOPENPGP4FPRUrl(scannedQrCode, handleScanResult)
   }
 
   const qrImageReader = useRef<any>()
@@ -111,6 +115,11 @@ export function DeltaDialogImportQrInner({
     if (data) {
       handleResponse(data)
     }
+  }
+
+  const cancelProcess = () => {
+    DeltaBackend.call('stopOngoingProcess')
+    onClose()
   }
 
   const handleError = (err: string) => {
@@ -129,6 +138,9 @@ export function DeltaDialogImportQrInner({
           <div>
             <p className='progress-info'>Secure join in progress...</p>
             <ProgressBar intent={Intent.PRIMARY} value={100} />
+            <p className='delta-button danger' onClick={cancelProcess}>
+              {tx('cancel')}
+            </p>
           </div>
         )}
         {!secureJoinOngoing && (

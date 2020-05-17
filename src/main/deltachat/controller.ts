@@ -294,6 +294,10 @@ export default class DeltaChatController extends EventEmitter {
     })
   }
 
+  stopOngoingProcess() {
+    this._dc.stopOngoingProcess()
+  }
+
   // ToDo: Deprecated, use contacts.getContact
   _getContact(id: number) {
     const contact = this._dc.getContact(id).toJson()
