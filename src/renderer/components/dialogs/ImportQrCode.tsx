@@ -138,7 +138,7 @@ export function DeltaDialogImportQrInner({
           <div>
             <p className='progress-info'>Secure join in progress...</p>
             <ProgressBar intent={Intent.PRIMARY} value={100} />
-             <p className='delta-button danger'onClick={cancelProcess}>
+            <p className='delta-button danger' onClick={cancelProcess}>
               {tx('cancel')}
             </p>
           </div>
