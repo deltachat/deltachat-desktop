@@ -15,6 +15,7 @@ import DialogController, {
 import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
 import * as logger from '../shared/logger'
+import OfflineToast from './components/OfflineToast'
 
 const log = logger.getLogger('renderer/ScreenController')
 
@@ -121,6 +122,7 @@ export default class ScreenController extends Component {
             <p>{this.state.message.text}</p>
           </div>
         )}
+        <OfflineToast />
         <ScreenContext.Provider
           value={{
             openDialog: this.openDialog,

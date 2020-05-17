@@ -148,6 +148,7 @@ code {
   text-align: center;
   width: 100%;
   z-index: 100;
+  pointer-events: none;
 
   p {
     display: inline-block;
@@ -160,6 +161,7 @@ code {
     color: white;
     font-size: medium;
     max-width: 90%;
+    pointer-events: all;
   }
   &.error p {
     background-color: #b73a3a;
