@@ -167,3 +167,12 @@ export type Theme = {
   description: string
   address: string
 }
+
+export type MessageSearchResult = {
+  id: number
+  authorProfileImage: string
+  author_name: string
+  chat_name: string
+  message: string
+  timestamp: number
+}

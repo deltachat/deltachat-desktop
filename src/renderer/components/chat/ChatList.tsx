@@ -1,6 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import { useChatListIds, useLazyChatListItems } from './ChatListHelpers'
+import {
+  useChatListIds,
+  useLazyChatListItems,
+  useMessageResults,
+} from './ChatListHelpers'
 import ChatListItem from './ChatListItem'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
@@ -82,8 +86,10 @@ export default function ChatList(props: {
   }
 
   const [contacts, updateContactSearch] = useContacts(0, queryStr)
+  const [messageResult, updateMessageResult] = useMessageResults(queryStr, 0)
   useEffect(() => {
     updateContactSearch(queryStr)
+    updateMessageResult(queryStr)
   }, [queryStr])
 
   return (
@@ -130,9 +136,9 @@ export default function ChatList(props: {
             ))}
             {renderAddContactIfNeeded()}
             <div className='search-result-divider'>
-              {translate_n('n_messages', -1)}
+              {translate_n('n_messages', messageResult.length)}
             </div>
-            (todo messages)
+            {JSON.stringify(messageResult)}
           </>
         )}
       </div>

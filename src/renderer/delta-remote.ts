@@ -7,6 +7,7 @@ import {
   JsonLocations,
   Theme,
   DCContact,
+  MessageSearchResult,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -222,6 +223,15 @@ class DeltaRemote {
     msgId: number,
     chatId: number
   ): Promise<void>
+  call(
+    fnName: 'messageList.searchMessages',
+    query: string,
+    chatId?: number
+  ): Promise<number[]>
+  call(
+    fnName: 'messageList.msgId2SearchResultItem',
+    msgId: number
+  ): Promise<MessageSearchResult>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',
