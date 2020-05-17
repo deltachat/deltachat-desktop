@@ -164,9 +164,6 @@ export default class DeltaChatController extends EventEmitter {
         logCoreEvent.warn(event, data1, data2)
       } else if (event === 'DC_EVENT_INFO') {
         logCoreEvent.info(event, data1, data2)
-      } else if (_event === C.DC_EVENT_ERROR_NETWORK) {
-        this.networkError = true
-        this.emit('update-network-status')
       } else if (event.startsWith('DC_EVENT_ERROR')) {
         this.emit('error', event, data1, data2)
         logCoreEvent.error(event, data1, data2)
@@ -174,22 +171,6 @@ export default class DeltaChatController extends EventEmitter {
         // in debug mode log all core events
         logCoreEvent.debug(event, data1, data2)
       }
-
-      // ugly hack to find out when the user goes online again:
-      if (
-        this.networkError &&
-        [
-          C.DC_EVENT_SMTP_CONNECTED,
-          C.DC_EVENT_IMAP_CONNECTED,
-          C.DC_EVENT_INCOMING_MSG,
-          C.DC_EVENT_MSG_DELIVERED,
-          C.DC_EVENT_IMAP_MESSAGE_MOVED,
-        ].includes(_event)
-      ) {
-        this.networkError = false
-        this.emit('update-network-status')
-      }
-
       this.sendToRenderer(event, [data1, data2])
     })
 

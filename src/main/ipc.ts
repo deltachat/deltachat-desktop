@@ -72,10 +72,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   dcController.on('error', (error: any) => main.send('error', error))
 
-  dcController.on('update-network-status', () =>
-    main.send('update-network-status')
-  )
-
   dcController.on('DC_EVENT_LOGIN_FAILED', () =>
     main.send('error', 'Login failed!')
   )
