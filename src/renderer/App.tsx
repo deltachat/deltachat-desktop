@@ -57,10 +57,6 @@ export default function App(props: any) {
         }
       }
     })
-
-    window.addEventListener('online', () => {
-      DeltaBackend.call('context.maybeNetwork')
-    })
   }, [])
 
   useEffect(() => {
