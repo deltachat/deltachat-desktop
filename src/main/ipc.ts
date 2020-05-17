@@ -61,21 +61,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     app.saveState()
   })
 
-  dcController.on('DC_EVENT_IMEX_FILE_WRITTEN', (filename: string) => {
-    log.debug('DC_EVENT_IMEX_FILE_WRITTEN: ' + filename)
-    main.send('DC_EVENT_IMEX_FILE_WRITTEN', filename)
-  })
-
-  dcController.on('DC_EVENT_IMEX_PROGRESS', (progress: number) => {
-    main.send('DC_EVENT_IMEX_PROGRESS', progress)
-  })
-
-  dcController.on('error', (error: any) => main.send('error', error))
-
-  dcController.on('DC_EVENT_LOGIN_FAILED', () =>
-    main.send('error', 'Login failed!')
-  )
-
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
@@ -126,21 +111,37 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
+  /** catches an Error of an async function and sends it to the frontend as event */
+  const CatchError2Event = (func: Function) => {
+    setTimeout(async () => {
+      try {
+        await func()
+      } catch (error) {
+        log.error(error)
+        main.send('error', error.message || error)
+      }
+    }, 0)
+  }
+
   ipcMain.on('login', (_e: any, credentials) => {
-    dcController.loginController.login(
-      getNewAccountPath(credentials.addr),
-      credentials,
-      sendStateToRenderer,
-      txCoreStrings()
+    CatchError2Event(() =>
+      dcController.loginController.login(
+        getNewAccountPath(credentials.addr),
+        credentials,
+        sendStateToRenderer,
+        txCoreStrings()
+      )
     )
   })
 
   ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
-    dcController.loginController.login(
-      login.path,
-      { addr: login.addr },
-      sendStateToRenderer,
-      txCoreStrings()
+    CatchError2Event(() =>
+      dcController.loginController.login(
+        login.path,
+        { addr: login.addr },
+        sendStateToRenderer,
+        txCoreStrings()
+      )
     )
   })
 
@@ -328,11 +329,13 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     )
 
     if (selectedAccount) {
-      dcController.loginController.login(
-        selectedAccount.path,
-        savedCredentials as credential_config,
-        sendStateToRenderer,
-        txCoreStrings()
+      CatchError2Event(() =>
+        dcController.loginController.login(
+          selectedAccount.path,
+          savedCredentials as credential_config,
+          sendStateToRenderer,
+          txCoreStrings()
+        )
       )
     } else {
       log.error(

@@ -31,7 +31,7 @@ export default class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer()
   }
 
-  login(
+  async login(
     accountDir: string,
     credentials: credential_config,
     sendStateToRenderer: typeof DeltaChatController.prototype._sendStateToRenderer,
@@ -49,34 +49,35 @@ export default class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer = sendStateToRenderer
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-      this._controller.emit(
-        'error',
-        this._controller.translate('bad_email_address')
-      )
-      return
+      throw new Error(this._controller.translate('bad_email_address'))
     }
 
-    this._dc.open(this._controller.accountDir, (err: any) => {
-      if (err) throw err
-      this.setCoreStrings(coreStrings)
-      const onReady = () => {
-        log.info('Ready')
-        this._controller.ready = true
-        this._controller.configuring = false
-        this._controller.emit('ready', this._controller.credentials)
-        log.info('dc_get_info', dc.getInfo())
-        this.updateDeviceChats()
-        sendStateToRenderer()
-      }
-      if (!this._dc.isConfigured() || updateConfiguration) {
-        this._dc.once('ready', onReady)
-        this._controller.configuring = true
-        this._dc.configure(this.addServerFlags(credentials), undefined)
-        sendStateToRenderer()
-      } else {
-        onReady()
-      }
+    await new Promise((res, rej) => {
+      this._dc.open(this._controller.accountDir, (err: any) => {
+        if (err) rej(err)
+        else res()
+      })
     })
+
+    this.setCoreStrings(coreStrings)
+    const onReady = () => {
+      log.info('Ready')
+      this._controller.ready = true
+      this._controller.configuring = false
+      this._controller.emit('ready', this._controller.credentials)
+      log.info('dc_get_info', dc.getInfo())
+      this.updateDeviceChats()
+      sendStateToRenderer()
+    }
+    if (!this._dc.isConfigured() || updateConfiguration) {
+      this._dc.once('ready', onReady)
+      this._controller.configuring = true
+      this._dc.configure(this.addServerFlags(credentials), undefined)
+      sendStateToRenderer()
+    } else {
+      onReady()
+    }
+
     this._controller.registerEventHandler(dc)
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
