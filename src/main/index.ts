@@ -36,7 +36,6 @@ process.on('exit', logHandler.end)
 process.on('uncaughtException', err => {
   const error = { message: err.message, stack: err.stack }
   log.error('uncaughtError', error)
-  throw err
 })
 
 import loadTranslations from './load-translations'
