@@ -3,13 +3,13 @@ import { Button } from '@blueprintjs/core'
 
 import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
-import logger from '../../../shared/logger'
+import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 const { remote } = window.electron_functions
 
-const log = logger.getLogger('renderer/composer')
+const log = getLogger('renderer/composer')
 
 const insideBoundingRect = (
   mouseX: number,

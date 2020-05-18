@@ -1,9 +1,9 @@
 import DeltaChat from 'deltachat-node'
-import logger from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
 
-const log = logger.getLogger('main/deltachat/contacts')
+const log = getLogger('main/deltachat/contacts')
 
 export default class DCContacts extends SplitOut {
   unblockContact(contactId: number) {

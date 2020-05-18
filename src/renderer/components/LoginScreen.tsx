@@ -13,12 +13,12 @@ import {
   NavbarHeading,
 } from '@blueprintjs/core'
 import { DeltaProgressBar } from './Login-Styles'
-import logger from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 import { ScreenContext } from '../contexts'
 import DeltaDialog from './dialogs/DeltaDialog'
 const { remote } = window.electron_functions
 
-const log = logger.getLogger('renderer/components/LoginScreen')
+const log = getLogger('renderer/components/LoginScreen')
 
 type DeltaChatAccount = {
   path: string

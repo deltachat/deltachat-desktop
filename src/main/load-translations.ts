@@ -1,8 +1,8 @@
 import path from 'path'
 import fs from 'fs'
 
-import logger from '../shared/logger'
-const log = logger.getLogger('load-transaltions')
+import { getLogger } from '../shared/logger'
+const log = getLogger('load-transaltions')
 
 import { app as rawApp } from 'electron'
 import { ExtendedAppMainProcess } from './types'

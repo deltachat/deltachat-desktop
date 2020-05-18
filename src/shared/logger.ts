@@ -1,5 +1,6 @@
-const esp = require('error-stack-parser')
-const colors = require('colors/safe')
+import { parse } from 'error-stack-parser'
+import { blue, yellow, red, grey } from 'colors/safe'
+import { RC_Config } from './shared-types'
 const startTime = Date.now()
 
 const emojiFontCss =
@@ -7,28 +8,28 @@ const emojiFontCss =
 
 const LoggerVariants = [
   { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
-  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: colors.blue('[i]') },
+  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: blue('[i]') },
   {
     log: console.warn,
     level: 'WARNING',
     emoji: '⚠️',
-    symbol: colors.yellow('[w]'),
+    symbol: yellow('[w]'),
   },
   {
     log: console.error,
     level: 'ERROR',
     emoji: '🚨',
-    symbol: colors.red('[E]'),
+    symbol: red('[E]'),
   },
   {
     log: console.error,
     level: 'CRITICAL',
     emoji: '🚨🚨',
-    symbol: colors.red('[C]'),
+    symbol: red('[C]'),
   },
 ]
 
-function printProcessLogLevelInfo() {
+export function printProcessLogLevelInfo() {
   /* ignore-console-log */
   console.info(
     `%cLogging Levels:\n${LoggerVariants.map(v => `${v.emoji} ${v.level}`).join(
@@ -38,15 +39,30 @@ function printProcessLogLevelInfo() {
   )
 }
 
-let handler, rc
+type LogHandlerFunction = (
+  channel: string,
+  level: string,
+  stacktrace: ReturnType<typeof getStackTrace>,
+  ...args: any[]
+) => void
 
-function setLogHandler(LogHandler, rcObject) {
+let handler: LogHandlerFunction, rc: RC_Config
+
+export function setLogHandler(
+  LogHandler: LogHandlerFunction,
+  rcObject: RC_Config
+) {
   handler = LogHandler
   // get a clean, non-remote object that has just the values
   rc = JSON.parse(JSON.stringify(rcObject))
 }
 
-function log({ channel, isMainProcess }, level, stacktrace, args) {
+function log(
+  { channel, isMainProcess }: Logger,
+  level: number,
+  stacktrace: ReturnType<typeof getStackTrace>,
+  args: any[]
+) {
   const variant = LoggerVariants[level]
   if (!handler) {
     /* ignore-console-log */
@@ -60,13 +76,21 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
     if (isMainProcess) {
       const begining = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
         LoggerVariants[level].symbol
-      }${colors.grey(channel)}:`
+      }${grey(channel)}:`
       if (!stacktrace) {
         /* ignore-console-log */
         console.log(begining, ...args)
       } else {
         /* ignore-console-log */
-        console.log(begining, ...args, colors.red(stacktrace))
+        console.log(
+          begining,
+          ...args,
+          red(
+            Array.isArray(stacktrace)
+              ? stacktrace.map(s => `\n${s.toString()}`).join()
+              : stacktrace
+          )
+        )
       }
     } else {
       const prefix = `%c${variant.emoji}%c${channel}`
@@ -82,43 +106,39 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
 }
 
 function getStackTrace() {
-  const rawStack = esp.parse(new Error('Get Stacktrace'))
+  const rawStack = parse(new Error('Get Stacktrace'))
   const stack = rawStack.slice(2, rawStack.length)
   return rc['machine-readable-stacktrace']
     ? stack
     : stack.map(s => `\n${s.toString()}`).join()
 }
 
-class Logger {
-  constructor(channel) {
-    this.channel = channel
-    this.isMainProcess = typeof window === 'undefined'
-  }
+export class Logger {
+  isMainProcess = typeof window === 'undefined'
+  constructor(public readonly channel: string) {}
 
-  debug(...args) {
+  debug(...args: any[]) {
     if (!rc['log-debug']) return
     log(this, 0, undefined, args)
   }
 
-  info(...args) {
+  info(...args: any[]) {
     log(this, 1, undefined, args)
   }
 
-  warn(...args) {
+  warn(...args: any[]) {
     log(this, 2, getStackTrace(), args)
   }
 
-  error(...args) {
+  error(...args: any[]) {
     log(this, 3, getStackTrace(), args)
   }
 
-  critical(...args) {
+  critical(...args: any[]) {
     log(this, 4, getStackTrace(), args)
   }
 }
 
-function getLogger(channel) {
+export function getLogger(channel: string) {
   return new Logger(channel)
 }
-
-module.exports = { setLogHandler, Logger, getLogger, printProcessLogLevelInfo }

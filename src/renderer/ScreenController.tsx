@@ -14,10 +14,10 @@ import DialogController, {
 } from './components/dialogs/DialogController'
 import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
 
-import * as logger from '../shared/logger'
+import { getLogger } from '../shared/logger'
 import OfflineToast from './components/OfflineToast'
 
-const log = logger.getLogger('renderer/ScreenController')
+const log = getLogger('renderer/ScreenController')
 
 export interface userFeedback {
   type: 'error' | 'success'
