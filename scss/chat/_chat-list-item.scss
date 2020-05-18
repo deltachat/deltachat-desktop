@@ -183,7 +183,8 @@
     background-color: var(--chatListItemSelectedBgHover);
   }
 
-  .pin_icon, .mute_icon {
+  .pin_icon,
+  .mute_icon {
     background-color: var(--chatListItemSelectedText);
   }
 
