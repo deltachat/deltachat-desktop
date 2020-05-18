@@ -3,11 +3,8 @@ import { Card } from '@blueprintjs/core'
 import reactStringReplace from 'react-string-replace'
 import { getLogger } from '../../../shared/logger'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
-import {
-  appVersion,
-  gitHubUrl,
-  gitHubLicenseUrl,
-} from '../../../shared/constants'
+import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
+import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { DeltaBackend } from '../../delta-remote'
 
@@ -86,7 +83,7 @@ export default function About(props: { isOpen: boolean; onClose: () => void }) {
         <Card>
           <p
             style={{ color: 'grey', userSelect: 'all' }}
-          >{`Version ${appVersion}`}</p>
+          >{`Version ${VERSION} (git: ${GIT_REF})`}</p>
           <p>
             {desktopString}
             <br />

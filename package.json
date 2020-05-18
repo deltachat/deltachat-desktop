@@ -16,7 +16,7 @@
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npx electron-builder --mac dmg --win nsis portable --linux AppImage deb",
-    "build": "npm run build-themes && npm run build-main && npm run builder",
+    "build": "node ./bin/build/build-info.js && npm run build-themes && npm run build-main && npm run builder",
     "build-main": "tsc --build src/main",
     "builder": "node ./bin/build/builder.js",
     "builder-help": "npm run builder -- --help",
