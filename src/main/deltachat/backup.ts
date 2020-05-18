@@ -1,6 +1,7 @@
 import { C } from 'deltachat-node'
 
-const binding = require('deltachat-node/binding')
+// @ts-ignore
+import binding from 'deltachat-node/binding'
 import { EventId2EventName } from 'deltachat-node/dist/constants'
 import tempy from 'tempy'
 import fs from 'fs-extra'
