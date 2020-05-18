@@ -1,6 +1,6 @@
 import { ipcBackend, mainProcessUpdateBadge, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
-import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
+import { JsonContact, FullChat, MessageType } from '../../shared/shared-types.d'
 import { DeltaBackend } from '../delta-remote'
 
 export const PAGE_SIZE = 10
@@ -35,6 +35,7 @@ class state implements FullChat {
   scrollToLastPage = false // after fetching more messages reset scroll bar to old position
   scrollHeight = 0
   countFetchedMessages = 0
+  muted = false
 }
 
 export { state as ChatStoreState }
@@ -221,6 +222,13 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       payload: messageObj,
       id: payload[0],
     })
+  } else if (type === 'MUTE') {
+    if (payload[0] !== chatStore.state.id) return
+    if (
+      !(await DeltaBackend.call('chat.setMuteDuration', payload[0], payload[1]))
+    ) {
+      return
+    }
   }
 })
 
@@ -238,6 +246,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
       subtitle: chat.subtitle,
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup,
+      muted: chat.muted,
     },
   })
 })

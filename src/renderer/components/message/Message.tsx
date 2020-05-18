@@ -7,7 +7,7 @@ import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, DCContact } from '../../../shared/shared-types'
+import { MessageType, DCContact } from '../../../shared/shared-types.d'
 import { attachment } from '../attachment/Attachment'
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''

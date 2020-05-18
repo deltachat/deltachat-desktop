@@ -5,7 +5,7 @@ import { ScreenContext } from '../../contexts'
 import logger from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 import { ChatStoreState, ChatStoreDispatch } from '../../stores/chat'
-import { MessageType, DCContact } from '../../../shared/shared-types'
+import { MessageType, DCContact } from '../../../shared/shared-types.d'
 
 const log = logger.getLogger('renderer/messageWrapper')
 

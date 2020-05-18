@@ -12,7 +12,7 @@ import {
   dragAttachmentOut,
   attachment,
 } from './Attachment'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types.d'
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300

@@ -131,6 +131,7 @@ export interface FullChat {
   isDeviceChat: boolean
   draft: string
   selfInGroup: boolean
+  muted: boolean
 }
 
 type todo = any

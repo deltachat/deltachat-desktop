@@ -4,7 +4,7 @@ import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types.d'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
 

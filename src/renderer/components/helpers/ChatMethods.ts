@@ -6,7 +6,8 @@ import {
   JsonContact,
   FullChat,
   DCContact,
-} from '../../../shared/shared-types'
+} from '../../../shared/shared-types.d'
+import { MuteDuration } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 
 type Chat = ChatListItemType | FullChat
@@ -104,12 +105,12 @@ export async function openViewProfileDialog(
 
 export async function openMuteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chat: Chat
+  chatId: number
 ) {
   // todo open dialog to ask for duration
-  await DeltaBackend.call('chat.setMuteDuration', chat.id, -1)
+  screenContext.openDialog('MuteChat', { chatId })
 }
 
 export async function unMuteChat(chatId: number) {
-  await DeltaBackend.call('chat.setMuteDuration', chatId, 0)
+  await DeltaBackend.call('chat.setMuteDuration', chatId, MuteDuration.OFF)
 }

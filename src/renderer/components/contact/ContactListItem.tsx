@@ -1,7 +1,7 @@
 import React from 'react'
 import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
-import { DCContact } from '../../../shared/shared-types'
+import { DCContact } from '../../../shared/shared-types.d'
 
 const DeltaCheckbox = (props: {
   checked: boolean

@@ -12,3 +12,11 @@ const { version } = require('../../package.json')
 export const appVersion = version
 
 export const appWindowTitle = appName
+
+export const ZERO_SECONDS = 0
+export const ONE_HOUR_IN_SECONDS = 60 * 60
+export const TWO_HOURS_IN_SECONDS = 60 * 60 * 2
+export const ONE_DAY_IN_SECONDS = 60 * 60 * 24
+export const ONE_WEEK_IN_SECONDS = 60 * 60 * 24 * 7
+export const FOUR_WEEKS_IN_SECONDS = 60 * 60 * 24 * 7 * 4
+export const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365

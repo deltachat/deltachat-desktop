@@ -3,7 +3,7 @@ import { DeltaBackend } from '../delta-remote'
 import { Store, Action } from './store'
 import logger from '../../shared/logger'
 import debounce from 'debounce'
-import { JsonContact } from '../../shared/shared-types'
+import { JsonContact } from '../../shared/shared-types.d'
 const log = logger.getLogger('renderer/stores/contacts')
 
 export class contactsStoreState {

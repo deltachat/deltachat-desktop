@@ -57,7 +57,7 @@ import { init as initMenu } from './menu'
 import State from './state'
 import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
-import { AppState } from '../shared/shared-types'
+import { AppState } from '../shared/shared-types.d'
 import { ExtendedAppMainProcess } from './types'
 import { resolveThemeAddress, acceptThemeCLI } from './themes'
 

@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import { promisify } from 'util'
 import { getLogger } from '../shared/logger'
-import { AppState } from '../shared/shared-types'
+import { AppState } from '../shared/shared-types.d'
 import { getDefaultState } from '../shared/state'
 import appConfig from './application-config'
 const log = getLogger('main/state')

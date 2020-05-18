@@ -4,7 +4,7 @@ import { DeltaChat } from 'deltachat-node'
 import logger from '../shared/logger'
 const log = logger.getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
-import { PromiseType } from '../shared/shared-types'
+import { PromiseType } from '../shared/shared-types.d'
 import { dialog } from 'electron'
 
 function escapeEmailForAccountFolder(path: string) {

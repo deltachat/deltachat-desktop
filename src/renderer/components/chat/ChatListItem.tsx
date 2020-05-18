@@ -5,7 +5,7 @@ import MessageBody from '../message/MessageBody'
 import { Avatar, VerifiedIcon } from '../contact/Contact'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
-import { ChatListItemType } from '../../../shared/shared-types'
+import { ChatListItemType } from '../../../shared/shared-types.d'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null

@@ -16,7 +16,8 @@ import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
-import { AppState } from '../../../shared/shared-types'
+import MuteChat from './MuteChat'
+import { AppState } from '../../../shared/shared-types.d'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {
@@ -37,6 +38,7 @@ export const allDialogs: { [key: string]: any } = {
   ImportQrCode,
   ConfirmationDialog,
   UnblockContacts,
+  MuteChat,
 }
 
 export type DialogId = keyof typeof allDialogs | string

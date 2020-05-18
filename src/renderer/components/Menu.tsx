@@ -11,8 +11,10 @@ import {
   openBlockContactDialog,
   openEditGroupDialog,
   setChatVisibility,
+  openMuteChatDialog,
+  unMuteChat,
 } from './helpers/ChatMethods'
-import { FullChat } from '../../shared/shared-types'
+import { FullChat } from '../../shared/shared-types.d'
 const { ipcRenderer } = window.electron_functions
 
 export function DeltaMenuItem({
@@ -47,6 +49,8 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const onBlockContact = () =>
     openBlockContactDialog(screenContext, selectedChat)
   const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat)
+  const onMuteChat = () => openMuteChatDialog(screenContext, selectedChat.id)
+  const onUnmuteChat = () => unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
     screenContext.openDialog('UnblockContacts', {})
   const onContactRequests = () =>
@@ -112,6 +116,15 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           key='block'
           text={tx('menu_block_contact')}
           onClick={onBlockContact}
+        />
+      ),
+      !selectedChat.muted ? (
+        <DeltaMenuItem key='mute' onClick={onMuteChat} text={tx('menu_mute')} />
+      ) : (
+        <DeltaMenuItem
+          key='unmute'
+          onClick={onUnmuteChat}
+          text={tx('menu_unmute')}
         />
       ),
       <Menu.Divider key='divider2' />,

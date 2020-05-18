@@ -6,7 +6,7 @@ import {
   JsonChat,
   JsonContact,
   FullChat,
-} from '../../shared/shared-types'
+} from '../../shared/shared-types.d'
 import { integerToHexColor } from '../../shared/util'
 import SplitOut from './splitout'
 
@@ -197,6 +197,7 @@ export default class DCChatList extends SplitOut {
 
     const contacts = await this._getChatContacts(contactIds)
     const draft = await this._getDraft(chatId)
+    const muted = await this.isChatMuted(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -220,6 +221,7 @@ export default class DCChatList extends SplitOut {
       isDeviceChat: chat.isDeviceTalk,
       draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
+      muted,
     }
   }
 

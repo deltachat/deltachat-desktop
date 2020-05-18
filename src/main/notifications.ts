@@ -10,7 +10,7 @@ export default function(dc: DeltaChatController, settings: any) {
 
   let notify: Notification
 
-  async function isMuted(chatId:number) {
+  async function isMuted(chatId: number) {
     return await dc.callMethod(null, 'chat.isChatMuted', [chatId])
   }
 
@@ -24,7 +24,7 @@ export default function(dc: DeltaChatController, settings: any) {
 
   dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
     if (!notify && settings.notifications && mainWindow.window.hidden) {
-      if(await isMuted(chatId)) {
+      if (await isMuted(chatId)) {
         return
       }
       notify = new Notification({

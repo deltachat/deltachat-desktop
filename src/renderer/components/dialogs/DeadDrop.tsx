@@ -3,7 +3,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
 import { useChatStore } from '../../stores/chat'
 import { DialogProps } from './DialogController'
-import { DCContact, MessageType } from '../../../shared/shared-types'
+import { DCContact, MessageType } from '../../../shared/shared-types.d'
 import { SmallDialog } from './DeltaDialog'
 
 /**

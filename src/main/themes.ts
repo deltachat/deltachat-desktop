@@ -1,6 +1,6 @@
 import { readFile, existsSync, watchFile, readdir } from 'fs-extra'
 import { join, basename } from 'path'
-import { Theme } from '../shared/shared-types'
+import { Theme } from '../shared/shared-types.d'
 import { getCustomThemesPath } from './application-constants'
 import { app as rawApp, systemPreferences } from 'electron'
 import { ExtendedAppMainProcess } from './types'

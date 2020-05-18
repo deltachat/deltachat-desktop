@@ -3,7 +3,7 @@ import { ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import logger from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
-import { ChatListItemType } from '../../../shared/shared-types'
+import { ChatListItemType } from '../../../shared/shared-types.d'
 import { DeltaBackend } from '../../delta-remote'
 
 const log = logger.getLogger('renderer/helpers/ChatList')

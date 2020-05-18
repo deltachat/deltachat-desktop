@@ -9,7 +9,7 @@ import mime from 'mime-types'
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import { JsonMessage, MessageType } from '../../shared/shared-types'
+import { JsonMessage, MessageType } from '../../shared/shared-types.d'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,

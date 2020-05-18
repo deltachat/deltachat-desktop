@@ -12,7 +12,7 @@ import {
   attachment,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types.d'
 
 type AttachmentProps = {
   attachment: attachment

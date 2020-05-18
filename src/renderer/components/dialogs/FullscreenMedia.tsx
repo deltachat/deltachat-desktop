@@ -2,7 +2,7 @@ import { onDownload } from '../message/messageFunctions'
 import React from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types.d'
 
 export default function FullscreenMedia(props: {
   msg: MessageType['msg']

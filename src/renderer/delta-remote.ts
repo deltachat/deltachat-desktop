@@ -7,7 +7,8 @@ import {
   JsonLocations,
   Theme,
   DCContact,
-} from '../shared/shared-types'
+} from '../shared/shared-types.d'
+import { MuteDuration } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 
 class DeltaRemote {
@@ -136,7 +137,7 @@ class DeltaRemote {
   call(
     fnName: 'chat.setMuteDuration',
     chatId: number,
-    duration: number
+    duration: MuteDuration
   ): Promise<boolean>
   call(
     fnName: 'chat.createGroupChat',

@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
 import logger from '../../shared/logger'
 import SplitOut from './splitout'
-import { MessageType } from '../../shared/shared-types'
+import { MessageType } from '../../shared/shared-types.d'
 
 const log = logger.getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
@@ -88,10 +88,7 @@ export default class DCChat extends SplitOut {
     this._dc.setChatVisibility(chatId, visibility)
   }
 
-  setMuteDuration(
-    chatId: number,
-    duration: number
-  ) {
+  setMuteDuration(chatId: number, duration: number) {
     log.debug(`action - set chat ${chatId} muteduration ${duration}`)
     return this._dc.setChatMuteDuration(chatId, duration)
   }

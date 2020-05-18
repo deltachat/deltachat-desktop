@@ -7,7 +7,7 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types.d'
 
 import { C } from 'deltachat-node/dist/constants'
 

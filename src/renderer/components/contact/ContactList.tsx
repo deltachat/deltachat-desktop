@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import debounce from 'debounce'
 import { ContactListItem } from './ContactListItem'
 import { DeltaBackend } from '../../delta-remote'
-import { DCContact } from '../../../shared/shared-types'
+import { DCContact } from '../../../shared/shared-types.d'
 
 export function ContactList2(props: {
   contacts: DCContact[]

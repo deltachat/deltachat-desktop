@@ -23,7 +23,7 @@ const { ipcRenderer } = window.electron_functions
 import { SettingsContext } from '../../contexts'
 const MAGIC_PW = '9bbdc87b50bbc684'
 import { OpenDialogOptions } from 'electron'
-import { AppState } from '../../../shared/shared-types'
+import { AppState } from '../../../shared/shared-types.d'
 import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'

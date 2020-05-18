@@ -26,7 +26,7 @@ import {
   ChatListItemType,
   FullChat,
   JsonContact,
-} from '../../../shared/shared-types'
+} from '../../../shared/shared-types.d'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']

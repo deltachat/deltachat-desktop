@@ -24,7 +24,7 @@ import {
   JsonMessage,
   JsonContact,
   JsonLocations,
-} from '../../../shared/shared-types'
+} from '../../../shared/shared-types.d'
 
 type MapData = {
   contact: JsonContact
