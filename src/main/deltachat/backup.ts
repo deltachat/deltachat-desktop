@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
 
 const binding = require('deltachat-node/binding')
-const events = require('deltachat-node/events')
+import { EventId2EventName } from 'deltachat-node/dist/constants'
 import tempy from 'tempy'
 import fs from 'fs-extra'
 import { ipcMain } from 'electron'
@@ -51,7 +51,7 @@ export default class DCBackup extends SplitOut {
     binding.dcn_set_event_handler(
       dcnContext,
       (event: any, data1: any, data2: any) => {
-        const eventStr = events[event]
+        const eventStr = EventId2EventName[event]
         log.debug('backup event:', eventStr, data1, data2)
         dcnEvent.emit(eventStr, data1, data2)
       }

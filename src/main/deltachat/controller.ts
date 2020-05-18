@@ -19,9 +19,9 @@ import DCSettings from './settings'
 import DCStickers from './stickers'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
-const app = rawApp as ExtendedAppMainProcess
+import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants'
 
-const eventStrings = require('deltachat-node/events')
+const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
 

@@ -68,7 +68,7 @@
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.11.1",
     "error-stack-parser": "^2.0.4",
-    "filesize": "^4.2.1",
+    "filesize": "^6.1.0",
     "fs-extra": "^8.1.0",
     "immutability-helper": "^3.0.1",
     "mapbox-gl": "^1.6.1",

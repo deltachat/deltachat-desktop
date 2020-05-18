@@ -52,7 +52,7 @@ process.on('uncaughtException', err => {
 
 import loadTranslations from './load-translations'
 import { getLogins } from './logins'
-const ipc = require('./ipc')
+import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import State from './state'
 import * as mainWindow from './windows/main'
