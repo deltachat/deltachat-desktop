@@ -11,7 +11,7 @@ export default function(dc: DeltaChatController, settings: any) {
   let notify: Notification
 
   async function isMuted(chatId: number) {
-    return await dc.callMethod(null, 'chat.isChatMuted', [chatId])
+    return await dc.callMethod(null, 'chatList.isChatMuted', [chatId])
   }
 
   async function getMsgBody(msgId: number) {
