@@ -6,6 +6,8 @@ import { ExtendedApp } from '../shared/shared-types'
 import { exp } from './experimental'
 import { setLogHandler, printProcessLogLevelInfo } from '../shared/logger'
 
+import App from './App'
+
 function main() {
   exp.help //make sure experimental.ts is used
   setLogHandler(
@@ -14,7 +16,6 @@ function main() {
   )
   printProcessLogLevelInfo()
 
-  const App = require('./App').default
   ReactDOM.render(<App />, document.querySelector('#root'))
 }
 

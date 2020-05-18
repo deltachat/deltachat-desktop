@@ -14,7 +14,7 @@ import { DeltaBackend } from './delta-remote'
 import { ThemeManager } from './ThemeManager'
 
 const log = getLogger('renderer/App')
-const moment = require('moment')
+import moment from 'moment'
 
 addLocaleData(enLocaleData)
 

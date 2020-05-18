@@ -2,7 +2,8 @@ import { DeltaBackend } from '../../delta-remote'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
-const debounce = require('debounce')
+// @ts-ignore
+import debounce from 'debounce'
 import mapboxgl from 'mapbox-gl'
 import { locationStore } from '../../stores/locations'
 import geojsonExtent from '@mapbox/geojson-extent'
