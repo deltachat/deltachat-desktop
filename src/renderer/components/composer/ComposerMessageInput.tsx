@@ -1,6 +1,5 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
-// @ts-ignore
 import debounce from 'debounce'
 
 type ComposerMessageInputProps = {
