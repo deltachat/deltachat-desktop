@@ -16,10 +16,11 @@ fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 
 const appConfig = join(__dirname, '../../src/main/application-config.ts')
 
-const fileContent = fs.readFileSync(appConfig, 'utf-8')
+const fileContent = fs
+  .readFileSync(appConfig, 'utf-8')
   .replace(
-    "require('application-config')('DeltaChat')",
-    "require('application-config')('DeltaChatDev')"
+    "const appConfig = applicationConfig('DeltaChat')",
+    "const appConfig = applicationConfig('DeltaChatDev')"
   )
 
 fs.writeFileSync(appConfig, fileContent)
