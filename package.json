@@ -62,7 +62,6 @@
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
     "color": "^3.1.2",
-    "colors": "^1.4.0",
     "debounce": "^1.2.0",
     "deltachat-node": "1.32.1",
     "emoji-js-clean": "^4.0.0",
