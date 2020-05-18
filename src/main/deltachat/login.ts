@@ -49,7 +49,7 @@ export default class DCLoginController extends SplitOut {
     this._controller._sendStateToRenderer = sendStateToRenderer
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
-      this._controller.emit(
+      this._controller.sendToRenderer(
         'error',
         this._controller.translate('bad_email_address')
       )
