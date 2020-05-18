@@ -124,7 +124,21 @@ function getStackTrace() {
 
 export class Logger {
   isMainProcess = typeof window === 'undefined'
-  constructor(public readonly channel: string) {}
+  constructor(public readonly channel: string) {
+    if (channel === 'core/event') {
+      // disable js stacktrace for core events
+      // as it is useless information (always pointing to the event emitter)
+      this.getStackTrace = () => undefined
+    }
+  }
+
+  getStackTrace() {
+    const rawStack = parse(new Error('Get Stacktrace'))
+    const stack = rawStack.slice(2, rawStack.length)
+    return rc['machine-readable-stacktrace']
+      ? stack
+      : stack.map(s => `\n${s.toString()}`).join()
+  }
 
   debug(...args: any[]) {
     if (!rc['log-debug']) return
@@ -136,15 +150,15 @@ export class Logger {
   }
 
   warn(...args: any[]) {
-    log(this, 2, getStackTrace(), args)
+    log(this, 2, this.getStackTrace(), args)
   }
 
   error(...args: any[]) {
-    log(this, 3, getStackTrace(), args)
+    log(this, 3, this.getStackTrace(), args)
   }
 
   critical(...args: any[]) {
-    log(this, 4, getStackTrace(), args)
+    log(this, 4, this.getStackTrace(), args)
   }
 }
 
