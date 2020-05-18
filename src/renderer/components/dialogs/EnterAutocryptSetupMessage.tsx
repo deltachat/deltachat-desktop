@@ -107,8 +107,6 @@ export default function EnterAutocryptSetupMessage({
     )
     setLoading(false)
 
-    console.log(result, typeof result)
-
     if (result === 0) {
       userFeedback({
         type: 'error',
