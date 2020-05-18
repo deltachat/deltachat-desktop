@@ -46,7 +46,8 @@ type LogHandlerFunction = (
   ...args: any[]
 ) => void
 
-let handler: LogHandlerFunction, rc: RC_Config
+let handler: LogHandlerFunction
+let rc: RC_Config = {} as any
 
 export function setLogHandler(
   LogHandler: LogHandlerFunction,
