@@ -1,84 +1,80 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
-const { ipcRenderer } = window.electron_functions
+import { DeltaBackend } from '../../delta-remote'
+import { getLogger } from '../../../shared/logger'
 
-type SetupMessagePanelProps = Readonly<{
+const log = getLogger('frontend/dialogs/EnterAutocryptSetupMessage')
+
+export function SetupMessagePanel({
+  setupCodeBegin,
+  continueKeyTransfer,
+}: {
   setupCodeBegin: string
   continueKeyTransfer: typeof EnterAutocryptSetupMessage.prototype.continueKeyTransfer
-}>
+}) {
+  const [key, setKey] = useState<string[]>([
+    setupCodeBegin,
+    ...Array(8).fill(''),
+  ])
 
-class SetupMessagePanel extends React.Component<
-  SetupMessagePanelProps,
-  { key: string[] }
-> {
-  constructor(props: SetupMessagePanelProps) {
-    super(props)
-    this.state = { key: Array(9).fill('') }
-    this.state.key[0] = props.setupCodeBegin
-    this.handleChangeKey = this.handleChangeKey.bind(this)
-  }
-
-  handleChangeKey(
+  const handleChangeKey = (
     event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
-  ) {
+  ) => {
     const value = event.target.value
     const valueNumber = Number(value)
+    const index = Number(event.target.getAttribute('data-index'))
+
+    log.debug(`handleChangeKey: data-index ${index} value: ${value}`)
     if (
       value.length > 4 ||
       isNaN(valueNumber) ||
       valueNumber < 0 ||
       valueNumber > 9999
-    )
+    ) {
+      log.debug(`handleChangeKey: changed value is invalid`)
       return false
+    }
 
-    const updatedkey = this.state.key
-    let index = Number(event.target.getAttribute('data-index'))
-    updatedkey[index] = value
-    this.setState({ key: updatedkey })
+    const updatedKey = key.map((item, i) => (i === index ? value : item))
+
+    log.debug(`handleChangeKey: updatedKey: ${JSON.stringify(updatedKey)}`)
+    setKey(updatedKey)
     if (value.length === 4) {
-      const next = (index += 1)
+      const next = index + 1
       if (next <= 8) document.getElementById('autocrypt-input-' + next).focus()
     }
   }
 
-  onClick() {
-    this.props.continueKeyTransfer(this.state.key.join(''))
-  }
+  const onClick = () => continueKeyTransfer(key.join(''))
 
-  render() {
-    const tx = window.translate
+  const tx = window.translate
 
-    return (
-      <React.Fragment>
-        <div className={Classes.DIALOG_BODY}>
-          <Card>
-            <Callout>
-              {tx('autocrypt_continue_transfer_please_enter_code')}
-            </Callout>
-            <InputTransferKey
-              autocryptkey={this.state.key}
-              onChange={this.handleChangeKey}
-            />
-          </Card>
+  log.debug(`render: key: ${key}`)
+
+  return (
+    <>
+      <div className={Classes.DIALOG_BODY}>
+        <Card>
+          <Callout>
+            {tx('autocrypt_continue_transfer_please_enter_code')}
+          </Callout>
+          <InputTransferKey autocryptkey={key} onChange={handleChangeKey} />
+        </Card>
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          <p className='delta-button primary bold' onClick={onClick}>
+            {tx('ok')}
+          </p>
         </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <p
-              className='delta-button primary bold'
-              onClick={this.onClick.bind(this)}
-            >
-              {tx('ok')}
-            </p>
-          </div>
-        </div>
-      </React.Fragment>
-    )
-  }
+      </div>
+    </>
+  )
 }
 
 type EnterAutocryptSetupMessageProps = Readonly<{
@@ -86,86 +82,70 @@ type EnterAutocryptSetupMessageProps = Readonly<{
   message: MessageType
 }>
 
-export default class EnterAutocryptSetupMessage extends React.Component<
-  EnterAutocryptSetupMessageProps,
-  { loading: boolean; key: string }
-> {
-  static contextType = ScreenContext
-  declare context: React.ContextType<typeof ScreenContext>
-  constructor(props: EnterAutocryptSetupMessageProps) {
-    super(props)
-    this.state = { loading: false, key: undefined }
-    this.continueKeyTransfer = this.continueKeyTransfer.bind(this)
-    this.continueKeyTransferResp = this.continueKeyTransferResp.bind(this)
-  }
+export default function EnterAutocryptSetupMessage({
+  onClose,
+  message,
+}: {
+  onClose: () => void
+  message: MessageType
+}) {
+  const { userFeedback } = useContext(ScreenContext)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  continueKeyTransferResp(e: any, err: Error) {
-    const tx = window.translate
-    if (err) {
-      this.setState({ loading: false })
-      this.context.userFeedback({
+  const isOpen = !!message
+  const setupCodeBegin = message && message.setupCodeBegin
+
+  const tx = window.translate
+
+  const continueKeyTransfer = async (key: string) => {
+    setLoading(true)
+
+    const result = await DeltaBackend.call(
+      'autocrypt.continueKeyTransfer',
+      message.msg.id,
+      key
+    )
+    setLoading(false)
+
+    if (result === 0) {
+      userFeedback({
         type: 'error',
         text: tx('autocrypt_incorrect_desktop'),
       })
-    } else {
-      this.setState({ loading: false })
-      this.context.userFeedback({
-        type: 'success',
-        text: tx('autocrypt_correct_desktop'),
-      })
-      this.props.onClose()
+      return
     }
+
+    userFeedback({
+      type: 'success',
+      text: tx('autocrypt_correct_desktop'),
+    })
+    onClose()
   }
 
-  componentDidMount() {
-    ipcRenderer.on('continueKeyTransferResp', this.continueKeyTransferResp)
-  }
-
-  componentWillUnmount() {
-    ipcRenderer.removeListener(
-      'continueKeyTransferResp',
-      this.continueKeyTransferResp
+  let body
+  if (loading) {
+    body = (
+      <div className={Classes.DIALOG_BODY}>
+        <Spinner />
+      </div>
+    )
+  } else {
+    body = (
+      <SetupMessagePanel
+        setupCodeBegin={setupCodeBegin}
+        continueKeyTransfer={continueKeyTransfer}
+      />
     )
   }
 
-  continueKeyTransfer(key: string) {
-    this.setState({ key, loading: true })
-    ipcRenderer.send('continueKeyTransfer', this.props.message.msg.id, key)
-  }
-
-  render() {
-    const { message, onClose } = this.props
-    const { loading } = this.state
-    const isOpen = !!message
-    const tx = window.translate
-
-    const setupCodeBegin = message && message.setupCodeBegin
-
-    let body
-    if (loading) {
-      body = (
-        <div className={Classes.DIALOG_BODY}>
-          <Spinner />
-        </div>
-      )
-    } else {
-      body = (
-        <SetupMessagePanel
-          setupCodeBegin={setupCodeBegin}
-          continueKeyTransfer={this.continueKeyTransfer}
-        />
-      )
-    }
-
-    return (
-      <DeltaDialog
-        isOpen={isOpen}
-        title={tx('autocrypt_key_transfer_desktop')}
-        onClose={onClose}
-        canOutsideClickClose={false}
-      >
-        {body}
-      </DeltaDialog>
-    )
-  }
+  return (
+    <DeltaDialog
+      isOpen={isOpen}
+      title={tx('autocrypt_key_transfer_desktop')}
+      onClose={onClose}
+      canOutsideClickClose={false}
+    >
+      {body}
+    </DeltaDialog>
+  )
 }

@@ -183,18 +183,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   ipcMain.on('logout', () => dcController.loginController.logout())
 
-  ipcMain.on('initiateKeyTransfer', e => {
-    dcController.autocrypt.initiateKeyTransfer((err, resp) => {
-      main.send('initiateKeyTransferResp', err, resp)
-    })
-  })
-
-  ipcMain.on('continueKeyTransfer', (e, messageId, setupCode) => {
-    dcController.autocrypt.continueKeyTransfer(messageId, setupCode, err => {
-      main.send('continueKeyTransferResp', err)
-    })
-  })
-
   ipcMain.on('saveFile', (e, source, target) => {
     copyFile(source, target, err => {
       if (err) main.send('error', err.message)
