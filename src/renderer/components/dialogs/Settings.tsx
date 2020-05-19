@@ -13,6 +13,7 @@ import {
   RadioGroup,
   Radio,
   HTMLSelect,
+  Callout,
 } from '@blueprintjs/core'
 
 import Login from '../Login'
@@ -210,6 +211,7 @@ export default class Settings extends React.Component {
             onChange={() =>
               this.handleDesktopSettingsChange(configKey, !settings[configKey])
             }
+            alignIndicator="right"
           />
         )}
       </SettingsContext.Consumer>
@@ -229,6 +231,7 @@ export default class Settings extends React.Component {
             flipDeltaBoolean(configValue)
           )
         }
+        alignIndicator="right"
       />
     )
   }
@@ -258,7 +261,7 @@ export default class Settings extends React.Component {
       <SettingsContext.Consumer>
         {(settings: any) => (
           <div>
-            <H6>{this.translate('pref_theming')}</H6>
+            <H5>{this.translate('pref_theming')}</H5>
             <div className='theme-meta'>
               <b>
                 <p className='name'></p>
@@ -282,7 +285,6 @@ export default class Settings extends React.Component {
                 </option>
               ))}
             </HTMLSelect>
-            <br />
           </div>
         )}
       </SettingsContext.Consumer>
@@ -342,13 +344,13 @@ export default class Settings extends React.Component {
                 value={C.DC_SHOW_EMAILS_ALL}
               />
             </RadioGroup>
-            <br />
+            <br/>
             <H5>{this.translate('pref_privacy')}</H5>
             {this.renderDeltaSwitch(
               'mdns_enabled',
               this.translate('pref_read_receipts')
             )}
-            <br />
+            <br/>
             <SettingsAutodelete
               {...{
                 handleDeltaSettingsChange: this.handleDeltaSettingsChange,
@@ -367,24 +369,18 @@ export default class Settings extends React.Component {
           <SettingsEncryption renderDeltaSwitch={this.renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
-            <br />
             {this.renderDTSettingSwitch(
               'enterKeySends',
-              this.translate('pref_enter_sends')
+              this.translate('pref_enter_sends_explain')
             )}
-            <p>{this.translate('pref_enter_sends_explain')}</p>
-            <br />
             {this.renderDTSettingSwitch(
               'notifications',
-              this.translate('pref_notifications')
+              this.translate('pref_notifications_explain')
             )}
-            <p>{this.translate('pref_notifications_explain')}</p>
-            <br />
             {this.renderDTSettingSwitch(
               'showNotificationContent',
-              this.translate('pref_show_notification_content')
+              this.translate('pref_show_notification_content_explain')
             )}
-            <p>{this.translate('pref_show_notification_content_explain')}</p>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_experimental_features')}</H5>
@@ -392,8 +388,9 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
+            <br/>
             {this.renderThemeSelection()}
-            <br />
+            <br/>   
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(
               'inbox_watch',
