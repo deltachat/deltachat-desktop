@@ -9,6 +9,8 @@ import {
   openEditGroupDialog,
   openViewProfileDialog,
   setChatVisibility,
+  openMuteChatDialog,
+  unMuteChat,
 } from '../helpers/ChatMethods'
 
 import { ChatListItemType } from '../../../shared/shared-types'
@@ -137,7 +139,8 @@ const ChatListContextMenu = React.memo<{
       openLeaveChatDialog(screenContext, chatListItem.id)
     const onBlockContact = () =>
       openBlockContactDialog(screenContext, chatListItem)
-
+    const onMuteChat = () => openMuteChatDialog(screenContext, chatListItem.id)
+    const onUnmuteChat = () => unMuteChat(chatListItem.id)
     const tx = window.translate
 
     const menu = chatListItem
@@ -172,6 +175,15 @@ const ChatListContextMenu = React.memo<{
                 {tx('menu_block_contact')}
               </MenuItem>
             ),
+          !chatListItem.muted ? (
+            <MenuItem onClick={onMuteChat} key='mute'>
+              {tx('menu_mute')}
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={onUnmuteChat} key='unmute'>
+              {tx('menu_unmute')}
+            </MenuItem>
+          ),
         ]
       : []
 

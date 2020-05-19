@@ -88,6 +88,7 @@ export interface ChatListItemType {
   selfInGroup: boolean
   archived: boolean
   pinned: boolean
+  muted: boolean
 }
 
 import { Chat, Message } from 'deltachat-node'
@@ -130,6 +131,7 @@ export interface FullChat {
   isDeviceChat: boolean
   draft: string
   selfInGroup: boolean
+  muted: boolean
 }
 
 type todo = any

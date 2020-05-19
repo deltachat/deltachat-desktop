@@ -158,6 +158,18 @@
   }
 }
 
+.chat-list-item.muted {
+  .fresh-message-counter {
+    background-color: grey;
+  }
+  .mute_icon {
+    flex-shrink: 0;
+    @include color-svg('../images/mute.png', var(--globalText));
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .chat-list-item.selected {
   background-color: var(--chatListItemSelectedBg);
   color: var(--chatListItemSelectedText);
@@ -171,7 +183,8 @@
     background-color: var(--chatListItemSelectedBgHover);
   }
 
-  .pin_icon {
+  .pin_icon,
+  .mute_icon {
     background-color: var(--chatListItemSelectedText);
   }
 

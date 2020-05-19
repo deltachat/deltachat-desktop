@@ -147,6 +147,7 @@ export default class DCChatList extends SplitOut {
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
       archived: chat.archived,
       pinned: chat.pinned,
+      muted: chat.muted,
     }
 
     return chatListItem
@@ -181,6 +182,11 @@ export default class DCChatList extends SplitOut {
     return contacts
   }
 
+  async isChatMuted(chatId: number): Promise<boolean> {
+    const chat = await this._getChatById(chatId)
+    return chat.muted
+  }
+
   async getFullChatById(chatId: number): Promise<FullChat> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
@@ -191,6 +197,7 @@ export default class DCChatList extends SplitOut {
 
     const contacts = await this._getChatContacts(contactIds)
     const draft = await this._getDraft(chatId)
+    const muted = await this.isChatMuted(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -214,6 +221,7 @@ export default class DCChatList extends SplitOut {
       isDeviceChat: chat.isDeviceTalk,
       draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
+      muted,
     }
   }
 

@@ -11,13 +11,7 @@ import DeltaDialog, {
 import { DialogProps } from './DialogController'
 import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
-
-const ZERO_SECONDS = 0
-const ONE_HOUR_IN_SECONDS = 60 * 60
-const ONE_DAY_IN_SECONDS = 60 * 60 * 24
-const ONE_WEEK_IN_SECONDS = 60 * 60 * 24 * 7
-const FOUR_WEEKS_IN_SECONDS = 60 * 60 * 24 * 7 * 4
-const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365
+import { AutodeleteDuration } from '../../../shared/constants'
 
 export function AutodeleteTimeDurations({
   onChange,
@@ -29,36 +23,40 @@ export function AutodeleteTimeDurations({
   const tx = window.translate
   return (
     <RadioGroup onChange={onChange} selectedValue={selectedValue}>
-      <Radio key={'del-0'} label={tx('off')} value={ZERO_SECONDS} />
+      <Radio
+        key={'del-0'}
+        label={tx('off')}
+        value={String(AutodeleteDuration.OFF)}
+      />
       {/* Delete after 1 hour (60*60 seconds) */}
       <Radio
         key={'del-1'}
         label={tx('autodel_after_1_hour')}
-        value={ONE_HOUR_IN_SECONDS}
+        value={String(AutodeleteDuration.ONE_HOUR)}
       />
       {/* Delete after 1 day (60*60*24 seconds) */}
       <Radio
         key={'del-2'}
         label={tx('autodel_after_1_day')}
-        value={ONE_DAY_IN_SECONDS}
+        value={String(AutodeleteDuration.ONE_DAY)}
       />
       {/* Delete after 1 week (60*60*24*7 seconds) */}
       <Radio
         key={'del-3'}
         label={tx('autodel_after_1_week')}
-        value={ONE_WEEK_IN_SECONDS}
+        value={String(AutodeleteDuration.ONE_WEEK)}
       />
       {/* Delete after 4 weeks (60*60*24*7*4 seconds) */}
       <Radio
         key={'del-4'}
         label={tx('autodel_after_4_weeks')}
-        value={FOUR_WEEKS_IN_SECONDS}
+        value={String(AutodeleteDuration.FOUR_WEEKS)}
       />
       {/* Delete after 1 year (60*60*24*365 seconds) */}
       <Radio
         key={'del-5'}
         label={tx('autodel_after_1_year')}
-        value={ONE_YEAR_IN_SECONDS}
+        value={String(AutodeleteDuration.ONE_YEAR)}
       />
     </RadioGroup>
   )
@@ -68,17 +66,17 @@ function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.translate
   switch (configValue) {
-    case ZERO_SECONDS:
+    case AutodeleteDuration.OFF:
       return tx('off')
-    case ONE_HOUR_IN_SECONDS:
+    case AutodeleteDuration.ONE_HOUR:
       return tx('autodel_after_1_hour')
-    case ONE_DAY_IN_SECONDS:
+    case AutodeleteDuration.ONE_DAY:
       return tx('autodel_after_1_day')
-    case ONE_WEEK_IN_SECONDS:
+    case AutodeleteDuration.ONE_WEEK:
       return tx('autodel_after_1_week')
-    case FOUR_WEEKS_IN_SECONDS:
+    case AutodeleteDuration.FOUR_WEEKS:
       return tx('autodel_after_4_weeks')
-    case ONE_YEAR_IN_SECONDS:
+    case AutodeleteDuration.ONE_YEAR:
       return tx('autodel_after_1_year')
     default:
       return configValue + ' seconds'

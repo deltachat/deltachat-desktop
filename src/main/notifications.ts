@@ -10,6 +10,10 @@ export default function(dc: DeltaChatController, settings: any) {
 
   let notify: Notification
 
+  async function isMuted(chatId: number) {
+    return await dc.callMethod(null, 'chatList.isChatMuted', [chatId])
+  }
+
   async function getMsgBody(msgId: number) {
     const tx = (app as ExtendedAppMainProcess).translate
     if (!settings.showNotificationContent) return tx('notify_new_message')
@@ -20,6 +24,9 @@ export default function(dc: DeltaChatController, settings: any) {
 
   dc._dc.on('DC_EVENT_INCOMING_MSG', async (chatId: number, msgId: number) => {
     if (!notify && settings.notifications && mainWindow.window.hidden) {
+      if (await isMuted(chatId)) {
+        return
+      }
       notify = new Notification({
         title: appName,
         body: await getMsgBody(msgId),

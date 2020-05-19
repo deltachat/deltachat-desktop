@@ -8,6 +8,7 @@ import {
   Theme,
   DCContact,
 } from '../shared/shared-types'
+import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
 
 class DeltaRemote {
@@ -132,6 +133,11 @@ class DeltaRemote {
     fnName: 'chat.setProfileImage',
     chatId: number,
     newImage: string
+  ): Promise<boolean>
+  call(
+    fnName: 'chat.setMuteDuration',
+    chatId: number,
+    duration: MuteDuration
   ): Promise<boolean>
   call(
     fnName: 'chat.createGroupChat',
