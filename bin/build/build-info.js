@@ -23,8 +23,15 @@ gatherBuildInfo().then(build_info => {
     join(__dirname, '../../src/shared/build-info.ts'),
     '/// GENERATED FILE run `npm run build` to refresh\n' +
       Object.keys(build_info)
-        .map(key => `export const ${key} = ${JSON.stringify(build_info[key])}`)
-        .join('\n'),
+        .map(
+          key =>
+            `export const ${key} = ${JSON.stringify(build_info[key]).replace(
+              /^"|"$/g,
+              "'"
+            )}`
+        )
+        .join('\n') +
+      '\n',
     'utf-8'
   )
 })
