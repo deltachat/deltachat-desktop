@@ -68,7 +68,7 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        color: #565656;
+        color: var(--chat-list-item-summary-text);
 
         & > .summary {
           float: left;
@@ -192,7 +192,7 @@
   width: 100%;
   font-weight: 200;
   text-align: center;
-  color: #565656;
+  color: var(--chat-list-item-summary-text);
 }
 
 .chat-list-item.is-deaddrop {
