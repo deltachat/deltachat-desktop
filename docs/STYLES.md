@@ -13,19 +13,17 @@ Also make sure that global module-classes don't have a class name that is allrea
 When using generic classnames like `date`, `avatar`, `username`, `error` make sure to scope them in an component scss class.
 
 ```scss
-
 .metadata {
-    .date {
-        color: green;
-    }
-    .avatar {
-        background: url('profile.png');
-    }
-    .error {
-        color: red;
-    }
+  .date {
+    color: green;
+  }
+  .avatar {
+    background: url('profile.png');
+  }
+  .error {
+    color: red;
+  }
 }
-
 ```
 
 ## How do we do colors and theming
