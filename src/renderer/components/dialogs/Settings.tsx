@@ -211,7 +211,7 @@ export default class Settings extends React.Component {
             onChange={() =>
               this.handleDesktopSettingsChange(configKey, !settings[configKey])
             }
-            alignIndicator="right"
+            alignIndicator='right'
           />
         )}
       </SettingsContext.Consumer>
@@ -231,7 +231,7 @@ export default class Settings extends React.Component {
             flipDeltaBoolean(configValue)
           )
         }
-        alignIndicator="right"
+        alignIndicator='right'
       />
     )
   }
@@ -344,13 +344,13 @@ export default class Settings extends React.Component {
                 value={C.DC_SHOW_EMAILS_ALL}
               />
             </RadioGroup>
-            <br/>
+            <br />
             <H5>{this.translate('pref_privacy')}</H5>
             {this.renderDeltaSwitch(
               'mdns_enabled',
               this.translate('pref_read_receipts')
             )}
-            <br/>
+            <br />
             <SettingsAutodelete
               {...{
                 handleDeltaSettingsChange: this.handleDeltaSettingsChange,
@@ -388,9 +388,9 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
-            <br/>
+            <br />
             {this.renderThemeSelection()}
-            <br/>   
+            <br />
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(
               'inbox_watch',
