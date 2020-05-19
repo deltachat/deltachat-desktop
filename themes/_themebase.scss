@@ -50,6 +50,8 @@ $hover-contrast-change: 2%;
       15% + $hover-contrast-change
     )};
   --chat-list-item-summary-text: #{changeContrast($textPrimary, 33%)};
+  --chat-list-item-archived-label: #{changeContrast($textPrimary, 20%)};
+  --chat-list-item-archived-label-border: #{changeContrast($textPrimary, 33%)};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};

@@ -80,8 +80,8 @@
       }
 
       .archived-label {
-        border: 1px solid #a5a5a5;
-        color: #3a3a3a;
+        border: 1px solid var(--chat-list-item-archived-label-border);
+        color: var(--chat-list-item-archived-label);
         border-radius: 2px;
         font-size: 11px;
         padding: 1px 4px;
