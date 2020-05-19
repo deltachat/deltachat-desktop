@@ -1,7 +1,7 @@
 import React, { CSSProperties, PropsWithChildren } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 import classNames from 'classnames'
-import { ContactJSON } from '../../../shared/shared-types.d'
+import { ContactJSON } from '../../../shared/shared-types'
 
 export function convertContactProps(contact: ContactJSON) {
   return {

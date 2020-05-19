@@ -14,7 +14,7 @@ import {
   openMuteChatDialog,
   unMuteChat,
 } from './helpers/ChatMethods'
-import { FullChat } from '../../shared/shared-types.d'
+import { FullChat } from '../../shared/shared-types'
 const { ipcRenderer } = window.electron_functions
 
 export function DeltaMenuItem({

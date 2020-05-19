@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
 import logger from '../../shared/logger'
 import SplitOut from './splitout'
-import { MessageType } from '../../shared/shared-types.d'
+import { MessageType } from '../../shared/shared-types'
 
 const log = logger.getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {

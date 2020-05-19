@@ -1,5 +1,5 @@
 import React from 'react'
-import { LocalSettings } from '../shared/shared-types.d'
+import { LocalSettings } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import { userFeedback } from './ScreenController'
 import { DialogId } from './components/dialogs/DialogController'

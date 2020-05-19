@@ -7,7 +7,7 @@ import {
   JsonLocations,
   Theme,
   DCContact,
-} from '../shared/shared-types.d'
+} from '../shared/shared-types'
 import { MuteDuration } from '../shared/shared-types'
 import { LocaleData } from '../shared/localize'
 

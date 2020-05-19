@@ -7,7 +7,7 @@ import DeltaDialog, {
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
-import { LocalSettings } from '../../../shared/shared-types.d'
+import { LocalSettings } from '../../../shared/shared-types'
 
 export function DeltaDialogQrInner({
   qrCode,

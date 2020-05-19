@@ -6,7 +6,7 @@ import {
   JsonChat,
   JsonContact,
   FullChat,
-} from '../../shared/shared-types.d'
+} from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import SplitOut from './splitout'
 

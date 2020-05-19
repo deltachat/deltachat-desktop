@@ -1,6 +1,6 @@
 import { ipcBackend, mainProcessUpdateBadge, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
-import { JsonContact, FullChat, MessageType } from '../../shared/shared-types.d'
+import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 
 export const PAGE_SIZE = 10

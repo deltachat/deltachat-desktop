@@ -6,7 +6,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState } from '../shared/shared-types.d'
+import { ExtendedApp, AppState } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import logger from '../shared/logger'

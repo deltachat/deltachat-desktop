@@ -1,5 +1,5 @@
 import { DeltaBackend } from './delta-remote'
-import { Theme } from '../shared/shared-types.d'
+import { Theme } from '../shared/shared-types'
 import { ipcBackend } from './ipc'
 
 export namespace ThemeManager {

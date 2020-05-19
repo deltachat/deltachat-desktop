@@ -2,7 +2,7 @@ const { ipcRenderer, remote } = window.electron_functions
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ExtendedApp } from '../shared/shared-types.d'
+import { ExtendedApp } from '../shared/shared-types'
 import { exp } from './experimental'
 
 function main() {

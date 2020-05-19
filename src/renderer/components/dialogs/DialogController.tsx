@@ -17,7 +17,7 @@ import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 import MuteChat from './MuteChat'
-import { AppState } from '../../../shared/shared-types.d'
+import { AppState } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {

@@ -13,7 +13,7 @@ import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { Button } from '@blueprintjs/core'
-import { JsonContact } from '../../../shared/shared-types.d'
+import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 

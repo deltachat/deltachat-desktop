@@ -10,7 +10,7 @@ import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType } from '../../../shared/shared-types.d'
+import { MessageType } from '../../../shared/shared-types'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (

@@ -1,4 +1,4 @@
-import { JsonLocations, JsonContact } from '../../../shared/shared-types.d'
+import { JsonLocations, JsonContact } from '../../../shared/shared-types'
 
 // todo: get this from some settings/config file
 const accessToken =

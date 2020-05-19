@@ -13,7 +13,7 @@ import {
   unMuteChat,
 } from '../helpers/ChatMethods'
 
-import { ChatListItemType } from '../../../shared/shared-types.d'
+import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 

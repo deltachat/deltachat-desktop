@@ -1,4 +1,4 @@
-import { AppState } from './shared-types.d'
+import { AppState } from './shared-types'
 
 export function getDefaultState(): AppState {
   return {

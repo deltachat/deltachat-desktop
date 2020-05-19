@@ -1,4 +1,4 @@
-import { ExtendedApp, AppState, LocalSettings } from '../shared/shared-types.d'
+import { ExtendedApp, AppState, LocalSettings } from '../shared/shared-types'
 import { getMessageFunction } from '../shared/localize'
 
 export interface ExtendedAppMainProcess extends ExtendedApp {

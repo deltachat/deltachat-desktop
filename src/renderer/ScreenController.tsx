@@ -1,4 +1,4 @@
-import { Login, AppState } from '../shared/shared-types.d'
+import { Login, AppState } from '../shared/shared-types'
 
 import React from 'react'
 import { Component, createRef } from 'react'
