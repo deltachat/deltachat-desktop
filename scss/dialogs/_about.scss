@@ -18,6 +18,6 @@
   }
 
   tr:nth-child(odd) {
-    background-color: #ececec;
+    background-color: var(--bp3DialogBgSecondary);
   }
 }
