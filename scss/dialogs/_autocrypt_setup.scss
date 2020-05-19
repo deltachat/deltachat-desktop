@@ -10,10 +10,19 @@
     .bp3-input {
       width: 66%;
       float: left;
+      border: 1px solid var(--globalText);
+      box-shadow: none;
+    }
+
+    .bp3-input:focus {
+      border-color: var(--bp3-input-focused);
     }
 
     .bp3-input:disabled {
       cursor: text;
+      color: inherit;
+      background: inherit;
+      border: none;
     }
 
     & > .seperator {

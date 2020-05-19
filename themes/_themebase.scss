@@ -8,7 +8,6 @@ $hover-contrast-change: 2%;
   }
 }
 
-// generated
 :root {
   --colorPrimary: #{$colorPrimary};
   --colorDanger: #{$colorDanger};
@@ -50,6 +49,9 @@ $hover-contrast-change: 2%;
       $bgPrimary,
       15% + $hover-contrast-change
     )};
+  --chat-list-item-summary-text: #{changeContrast($textPrimary, 33%)};
+  --chat-list-item-archived-label: #{changeContrast($textPrimary, 20%)};
+  --chat-list-item-archived-label-border: #{changeContrast($textPrimary, 33%)};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
@@ -102,6 +104,7 @@ $hover-contrast-change: 2%;
   --bp3InputText: #{$textPrimary};
   --bp3InputBg: #{$bgPrimary};
   --bp3InputPlaceholder: lightgray;
+  --bp3-input-focused: #{$colorPrimary};
   --bp3MenuText: #{$textPrimary};
   --bp3MenuBg: #{$bgPrimary};
   --bp3Switch: #7a8084;
@@ -116,8 +119,11 @@ $hover-contrast-change: 2%;
   --bp3SpinnerHead: #42a5f5;
   --bp3SelectorTop: rgba(255, 255, 255, 0.8);
   --bp3SelectorBottom: rgba(255, 255, 255, 0);
+  --bp3-control-indicator-color: #{rgba($textPrimary, 0.08)};
   --outlineProperties: 1px solid transparent;
   --outlineColor: #{$outlineColor};
+  --delta-dialog-seperator: #{$bgSecondary};
+  --delta-dialog-seperator-text: #{changeContrast($bgSecondary, 24%)};
   /* EmojiMart overwrites */
   --emojiMartText: #{$textPrimary};
   --emojiMartBorder: #{$outlineColor};

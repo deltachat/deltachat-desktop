@@ -68,7 +68,7 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        color: #565656;
+        color: var(--chat-list-item-summary-text);
 
         & > .summary {
           float: left;
@@ -80,8 +80,8 @@
       }
 
       .archived-label {
-        border: 1px solid #a5a5a5;
-        color: #3a3a3a;
+        border: 1px solid var(--chat-list-item-archived-label-border);
+        color: var(--chat-list-item-archived-label);
         border-radius: 2px;
         font-size: 11px;
         padding: 1px 4px;
@@ -205,7 +205,7 @@
   width: 100%;
   font-weight: 200;
   text-align: center;
-  color: #565656;
+  color: var(--chat-list-item-summary-text);
 }
 
 .chat-list-item.is-deaddrop {
