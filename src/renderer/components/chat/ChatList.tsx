@@ -76,15 +76,6 @@ export default function ChatList(props: {
 
   const isSearchActive = queryStr !== ''
 
-  const renderAddContactIfNeeded = () => {
-    if (chatListIds.length > 0) return null
-    return PseudoListItemAddContact({
-      queryStr,
-      queryStrIsEmail,
-      onClick: addContactOnClick,
-    })
-  }
-
   const [contacts, updateContactSearch] = useContacts(0, queryStr)
   const [messageResult, updateMessageResult] = useMessageResults(queryStr, 0)
   useEffect(() => {
@@ -134,7 +125,12 @@ export default function ChatList(props: {
                 key={contact.id}
               />
             ))}
-            {renderAddContactIfNeeded()}
+            {chatListIds.length > 0 ||
+              PseudoListItemAddContact({
+                queryStr,
+                queryStrIsEmail,
+                onClick: addContactOnClick,
+              })}
             <div className='search-result-divider'>
               {translate_n('n_messages', messageResult.length)}
             </div>
