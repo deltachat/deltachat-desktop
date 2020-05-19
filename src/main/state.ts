@@ -4,6 +4,7 @@ import { getLogger } from '../shared/logger'
 import { AppState } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import appConfig from './application-config'
+import debounce from 'debounce'
 const log = getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
@@ -12,8 +13,6 @@ const State = Object.assign(new EventEmitter(), {
   load,
   // state.save() calls are rate-limited. Use state.saveImmediate() to skip limit.
   save: function(state: Partial<AppState>, cb?: (err: any) => void) {
-    // Perf optimization: Lazy-require debounce (and it's dependencies)
-    const debounce = require('debounce')
     // After first State.save() invokation, future calls go straight to the
     // debounced function
     State.save = debounce(saveImmediate, SAVE_DEBOUNCE_INTERVAL)

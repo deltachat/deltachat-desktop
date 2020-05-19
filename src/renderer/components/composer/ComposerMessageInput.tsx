@@ -1,6 +1,6 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
-const debounce = require('debounce')
+import debounce from 'debounce'
 
 type ComposerMessageInputProps = {
   draft: string

@@ -1,6 +1,6 @@
 import DeltaChat, { C, Chat, ChatList } from 'deltachat-node'
 import { app } from 'electron'
-import logger from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 import {
   ChatListItemType,
   JsonChat,
@@ -10,7 +10,7 @@ import {
 import { integerToHexColor } from '../../shared/util'
 import SplitOut from './splitout'
 
-const log = logger.getLogger('main/deltachat/chatlist')
+const log = getLogger('main/deltachat/chatlist')
 
 export default class DCChatList extends SplitOut {
   async selectChat(chatId: number) {

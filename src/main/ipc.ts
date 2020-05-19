@@ -4,7 +4,7 @@ import { copy, copyFile, emptyDir, ensureDir, pathExists } from 'fs-extra'
 import { extname, join, relative } from 'path'
 import { getLogger } from '../shared/logger'
 import { AppState, Credentials, LocalSettings } from '../shared/shared-types'
-import { getConfigPath } from './application-constants'
+import { getConfigPath, getLogsPath } from './application-constants'
 import { credential_config } from './deltachat/login'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
@@ -28,8 +28,6 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error
     )
-    const { dialog } = require('electron')
-    const { getLogsPath } = require('./application-constants')
     dialog.showErrorBox(
       'Fatal Error',
       `The DeltaChat Module couldn't be loaded.\n Please check if all dependencies for deltachat-core are installed!\n The Log file is located in this folder: ${getLogsPath()}`

@@ -1,15 +1,16 @@
 import { C } from 'deltachat-node'
-const log = require('../../shared/logger').getLogger(
-  'main/deltachat/messagelist'
-)
+import { getLogger } from '../../shared/logger'
+
+const log = getLogger('main/deltachat/messagelist')
 import { integerToHexColor } from '../../shared/util'
 
-const filesizeConverter = require('filesize')
+import filesizeConverter from 'filesize'
 import mime from 'mime-types'
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
 import { JsonMessage, MessageType } from '../../shared/shared-types'
+
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,

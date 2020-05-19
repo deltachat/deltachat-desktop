@@ -29,9 +29,9 @@ ensureDirSync(getCustomThemesPath())
 // Setup Logger
 import { cleanupLogFolder, createLogHandler } from './log-handler'
 const logHandler = createLogHandler()
-import logger from '../shared/logger'
-const log = logger.getLogger('main/index')
-logger.setLogHandler(logHandler.log, rc)
+import { getLogger, setLogHandler } from '../shared/logger'
+const log = getLogger('main/index')
+setLogHandler(logHandler.log, rc)
 process.on('exit', logHandler.end)
 
 // Report uncaught exceptions
@@ -52,7 +52,7 @@ process.on('uncaughtException', err => {
 
 import loadTranslations from './load-translations'
 import { getLogins } from './logins'
-const ipc = require('./ipc')
+import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import State from './state'
 import * as mainWindow from './windows/main'

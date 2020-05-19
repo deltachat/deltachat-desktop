@@ -1,13 +1,13 @@
 import { DeltaChat } from 'deltachat-node'
 import { app } from 'electron'
-import logger from '../../shared/logger'
+import { getLogger } from '../../shared/logger'
 import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import DeltaChatController from './controller'
 import { Credentials } from '../../shared/shared-types'
-const log = logger.getLogger('main/deltachat/login')
+const log = getLogger('main/deltachat/login')
 
 export interface credential_config extends Credentials {
   mail_security?: string

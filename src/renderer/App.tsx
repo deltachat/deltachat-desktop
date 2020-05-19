@@ -9,12 +9,12 @@ import attachKeybindingsListener from './keybindings'
 import { ExtendedApp, AppState } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
-import logger from '../shared/logger'
+import { getLogger } from '../shared/logger'
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager } from './ThemeManager'
 
-const log = logger.getLogger('renderer/App')
-const moment = require('moment')
+const log = getLogger('renderer/App')
+import moment from 'moment'
 
 addLocaleData(enLocaleData)
 

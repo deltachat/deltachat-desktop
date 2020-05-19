@@ -17,7 +17,7 @@ import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
 
-// const log = require('../../shared/logger').getLogger('renderer/ChatListContextMenu')
+// const log = getLogger('renderer/ChatListContextMenu')
 
 const ArchiveStateMenu = (chat: ChatListItemType) => {
   const tx = window.translate
