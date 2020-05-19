@@ -8,7 +8,7 @@ import {
   Theme,
   DCContact,
 } from '../shared/shared-types'
-import { MuteDuration } from '../shared/shared-types'
+import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
 
 class DeltaRemote {

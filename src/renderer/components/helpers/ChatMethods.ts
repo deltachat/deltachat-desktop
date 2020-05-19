@@ -7,7 +7,7 @@ import {
   FullChat,
   DCContact,
 } from '../../../shared/shared-types'
-import { MuteDuration } from '../../../shared/shared-types'
+import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/dist/constants'
 
 type Chat = ChatListItemType | FullChat

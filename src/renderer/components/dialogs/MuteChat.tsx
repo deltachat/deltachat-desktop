@@ -11,7 +11,7 @@ import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contex
 import { AutodeleteTimeDurations } from './Settings-Autodelete'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
-import { MuteDuration } from '../../../shared/shared-types'
+import { MuteDuration } from '../../../shared/constants'
 
 export function SelectMuteDuration({
   onSelectMuteDuration,

@@ -11,7 +11,7 @@ import DeltaDialog, {
 import { DialogProps } from './DialogController'
 import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
-import { AutodeleteDuration } from '../../../shared/shared-types'
+import { AutodeleteDuration } from '../../../shared/constants'
 
 export function AutodeleteTimeDurations({
   onChange,
