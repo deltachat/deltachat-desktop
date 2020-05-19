@@ -241,11 +241,12 @@ export function DeltaDialogContentTextSeperator(props: { text: string }) {
   return <div className='delta-dialog-content-text-seperator'>{props.text}</div>
 }
 
-export function DeltaDialogContentSeperator(props: {
-  style?: React.CSSProperties
-}) {
-  return <div style={props.style} className='delta-dialog-content-seperator' />
-}
+// unused - info: scss class is also comented out
+// export function DeltaDialogContentSeperator(props: {
+//   style?: React.CSSProperties
+// }) {
+//   return <div style={props.style} className='delta-dialog-content-seperator' />
+// }
 
 export function DeltaDialogButton(
   props: React.PropsWithChildren<{ onClick: () => void }>

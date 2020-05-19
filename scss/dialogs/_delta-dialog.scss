@@ -26,19 +26,17 @@
       padding-left: 15px;
       /* text-align: center; */
       font-weight: 200;
-      color: #56565682;
-      background: var(--bp3DialogBgSecondary);
-      box-shadow: inset 0px 2px 0 0px rgba(24, 33, 39, 0.14),
-        0px 1px 0 0px rgba(24, 33, 39, 0.18);
+      color: var(--delta-dialog-seperator-text);
+      background: var(--delta-dialog-seperator);
       margin-bottom: 1px;
     }
 
-    .delta-dialog-content-seperator {
-      height: 10px;
-      background: var(--bp3DialogBgSecondary);
-      box-shadow: inset 0px 2px 0 0px rgba(24, 33, 39, 0.14),
-        0px 1px 0 0px rgba(24, 33, 39, 0.18);
-    }
+    // .delta-dialog-content-seperator {
+    //   height: 10px;
+    //   background: var(--delta-dialog-seperator);
+    //   box-shadow: inset 0px 2px 0 0px rgba(24, 33, 39, 0.14),
+    //     0px 1px 0 0px rgba(24, 33, 39, 0.18);
+    // }
 
     .delta-dialog-button {
       color: var(--colorPrimary);

@@ -118,6 +118,8 @@ $hover-contrast-change: 2%;
   --bp3SelectorBottom: rgba(255, 255, 255, 0);
   --outlineProperties: 1px solid transparent;
   --outlineColor: #{$outlineColor};
+  --delta-dialog-seperator: #{$bgSecondary};
+  --delta-dialog-seperator-text: #{changeContrast($bgSecondary, 24%)};
   /* EmojiMart overwrites */
   --emojiMartText: #{$textPrimary};
   --emojiMartBorder: #{$outlineColor};
