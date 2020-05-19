@@ -13,7 +13,7 @@
 
   a {
     font-weight: bold;
-    color: black;
+    color: var(--globalText);
     &:hover {
       cursor: unset;
       text-decoration: unset;
