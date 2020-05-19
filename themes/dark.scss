@@ -4,7 +4,7 @@
 }
 
 /* Set theme variables used for theme Generation */
-$outlineColor: #b9b9b9;
+$outlineColor: #505050;
 $accentColor: #2090ea;
 $bgChatView: #19232b;
 $bgImage: url('../images/background_dark.svg');
@@ -29,7 +29,6 @@ $scrollbarTransparency: 0.34;
 
 /* overwrite themedata */
 :root {
-  --chatListItemBgPinned: #272727;
 }
 
 /* overwrite css */
