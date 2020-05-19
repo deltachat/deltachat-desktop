@@ -117,6 +117,7 @@ $hover-contrast-change: 2%;
   --bp3SpinnerHead: #42a5f5;
   --bp3SelectorTop: rgba(255, 255, 255, 0.8);
   --bp3SelectorBottom: rgba(255, 255, 255, 0);
+  --bp3-control-indicator-color: #{rgba($textPrimary, 0.08)};
   --outlineProperties: 1px solid transparent;
   --outlineColor: #{$outlineColor};
   --delta-dialog-seperator: #{$bgSecondary};
