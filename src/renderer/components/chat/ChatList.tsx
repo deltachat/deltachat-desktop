@@ -1,16 +1,6 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  Validator,
-  useContext,
-} from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import {
-  useChatListIds,
-  useLazyChatListItems,
-  useMessageResults,
-} from './ChatListHelpers'
+import { useChatListIds, useMessageResults } from './ChatListHelpers'
 import ChatListItem, {
   ChatListItemMessageResult,
   PlaceholderChatListItem,
@@ -33,11 +23,8 @@ import {
   List,
   InfiniteLoader,
   Index,
-  WindowScroller,
   IndexRange,
   ListRowRenderer,
-  ScrollParams,
-  OnScrollParams,
 } from 'react-virtualized'
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
