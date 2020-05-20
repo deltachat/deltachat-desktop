@@ -2,6 +2,8 @@ import DeltaChat from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
+import { integerToHexColor } from '../../shared/util'
+import { DCContact } from '../../shared/shared-types'
 
 const log = getLogger('main/deltachat/contacts')
 
@@ -106,5 +108,18 @@ export default class DCContacts extends SplitOut {
 
   getContactIds(listFlags: number, queryStr: string): number[] {
     return this._dc.getContacts(listFlags, queryStr)
+  }
+
+  _getDCContact(id: number) {
+    const contact = this._dc.getContact(id).toJson()
+    return { ...contact, color: integerToHexColor(contact.color) }
+  }
+
+  getContacts(ids: number[]) {
+    const result: { [id: number]: DCContact } = {}
+    for (let id of ids) {
+      result[id] = this._getDCContact(id)
+    }
+    return result
   }
 }

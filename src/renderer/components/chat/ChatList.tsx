@@ -22,8 +22,22 @@ import {
   DCContact,
 } from '../../../shared/shared-types'
 
+import {
+  AutoSizer,
+  List,
+  InfiniteLoader,
+  Index,
+  WindowScroller,
+  IndexRange,
+} from 'react-virtualized'
+
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
+
+const enum LoadStatus {
+  FETCHING = 1,
+  LOADED = 2,
+}
 
 export default function ChatList(props: {
   selectedChatId: number
@@ -42,14 +56,10 @@ export default function ChatList(props: {
   const queryStrIsEmail = isValidEmail(queryStr)
   const realOpenContextMenu = useRef(null)
 
-  const {
-    cache,
-    scrollRef,
-    onScroll,
-    chatListIds,
-    contactIds,
-    messageResultIds,
-  } = useLogic(queryStr, showArchivedChats)
+  const { cache, chatListIds, contactIds, messageResultIds } = useLogic(
+    queryStr,
+    showArchivedChats
+  )
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
@@ -81,77 +91,205 @@ export default function ChatList(props: {
     )
     selectChat(chatId)
   }
+
+  // Chat --------------------
+  const [chatCache, setChatCache] = useState<{
+    [id: number]: ChatListItemType
+  }>({})
+  const [chatLoadState, setChatLoading] = useState<{
+    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
+  }>({})
+
+  const isChatLoaded: (params: Index) => boolean = ({ index }) =>
+    !!chatLoadState[chatListIds[index]]
+  const loadChats: (params: IndexRange) => Promise<void> = async ({
+    startIndex,
+    stopIndex,
+  }) => {
+    const chatIds = chatListIds.slice(startIndex, stopIndex)
+    setChatLoading(state => {
+      chatIds.forEach(id => (state[id] = LoadStatus.FETCHING))
+      return state
+    })
+    const chats = await DeltaBackend.call(
+      'chatList.getChatListItemsByIds',
+      chatIds
+    )
+    setChatCache(cache => ({ ...cache, ...chats }))
+    setChatLoading(state => {
+      chatIds.forEach(id => (state[id] = LoadStatus.LOADED))
+      return state
+    })
+  }
+
+  // todo listen for chat change events and react
+  // todo fix archived chat link
+
+  // Contacts ----------------
+  const [contactCache, setContactCache] = useState<{
+    [id: number]: DCContact
+  }>({})
+  const [contactLoadState, setContactLoading] = useState<{
+    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
+  }>({})
+
+  const isContactLoaded: (params: Index) => boolean = ({ index }) =>
+    !!contactLoadState[contactIds[index]]
+  const loadContact: (params: IndexRange) => Promise<void> = async ({
+    startIndex,
+    stopIndex,
+  }) => {
+    const ids = contactIds.slice(startIndex, stopIndex)
+    setContactLoading(state => {
+      ids.forEach(id => (state[id] = LoadStatus.FETCHING))
+      return state
+    })
+    const contacts = await DeltaBackend.call('contacts.getContacts', ids)
+    setContactCache(cache => ({ ...cache, ...contacts }))
+    setContactLoading(state => {
+      ids.forEach(id => (state[id] = LoadStatus.LOADED))
+      return state
+    })
+  }
+
+  // Render ------------------
   return (
     <>
-      <div className='chat-list' ref={scrollRef} onScroll={onScroll}>
-        {isSearchActive && (
-          <div className='search-result-divider'>
-            {translate_n('n_chats', chatListIds.length)}
-          </div>
-        )}
-        {chatListIds.map(chatId => (
-          <ChatListItem
-            isSelected={selectedChatId === chatId}
-            key={chatId}
-            chatListItem={cache.chats[chatId] || undefined}
-            onClick={onChatClick.bind(null, chatId)}
-            onContextMenu={event => {
-              openContextMenu(event, chatId)
-            }}
-          />
-        ))}
-        {isSearchActive && (
-          <>
-            <div className='search-result-divider'>
-              {translate_n('n_contacts', contactIds.length)}
-            </div>
-            {contactIds.map(id => (
-              <div key={'c' + id}>
-                {cache.contacts[id] ? (
-                  <ContactListItem
-                    contact={cache.contacts[id]}
-                    showCheckbox={false}
-                    checked={false}
-                    showRemove={false}
-                    onClick={async _ => {
-                      let chatId = await DeltaBackend.call(
-                        'contacts.getChatIdByContactId',
-                        id
-                      )
-                      onChatClick(chatId)
-                    }}
-                  />
-                ) : (
-                  <PlaceholderChatListItem />
-                )}
-              </div>
-            ))}
-            {chatListIds.length > 0 ||
-              PseudoListItemAddContact({
-                queryStr,
-                queryStrIsEmail,
-                onClick: addContactOnClick,
-              })}
-            <div className='search-result-divider'>
-              {translate_n('n_messages', messageResultIds.length)}
-            </div>
-            {messageResultIds.slice(0, 500).map(id =>
-              cache.messages[id] ? (
-                <ChatListItemMessageResult
-                  msr={cache.messages[id]}
-                  onClick={() => {
-                    console.log('Clicked on MessageResult with Id', id)
-                  }}
-                  key={'m' + id}
-                />
-              ) : (
-                <div key={'m' + id} className='chat-list-item skeleton' />
-              )
-            )}
-            {messageResultIds.length > 500 &&
-              'message result is trimmed to 500 results for performance'}
-          </>
-        )}
+      <div className='chat-list'>
+        <AutoSizer>
+          {({ width }) => (
+            <WindowScroller>
+              {({ height, isScrolling, registerChild, scrollTop }) => (
+                <div>
+                  <div ref={registerChild}>
+                    {isSearchActive && (
+                      <div
+                        className='search-result-divider'
+                        style={{ width: width }}
+                      >
+                        {translate_n('n_chats', chatListIds.length)}
+                      </div>
+                    )}
+                    <InfiniteLoader
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                    >
+                      {({ onRowsRendered, registerChild }) => (
+                        <List
+                          ref={registerChild}
+                          rowHeight={CHATLISTITEM_HEIGHT}
+                          height={CHATLISTITEM_HEIGHT * chatListIds.length}
+                          onRowsRendered={onRowsRendered}
+                          rowRenderer={({ index, key, style }) => {
+                            const chatId = chatListIds[index]
+                            return (
+                              <ChatListItem
+                                isSelected={selectedChatId === chatId}
+                                key={key}
+                                chatListItem={chatCache[chatId] || undefined}
+                                onClick={onChatClick.bind(null, chatId)}
+                                onContextMenu={event => {
+                                  openContextMenu(event, chatId)
+                                }}
+                              />
+                            )
+                          }}
+                          rowCount={chatListIds.length}
+                          width={width}
+                        />
+                      )}
+                    </InfiniteLoader>
+                    {isSearchActive && (
+                      <>
+                        <div
+                          className='search-result-divider'
+                          style={{ width: width }}
+                        >
+                          {translate_n('n_contacts', contactIds.length)}
+                        </div>
+                        <InfiniteLoader
+                          isRowLoaded={isContactLoaded}
+                          loadMoreRows={loadContact}
+                          rowCount={contactIds.length}
+                        >
+                          {({ onRowsRendered, registerChild }) => (
+                            <List
+                              ref={registerChild}
+                              rowHeight={CHATLISTITEM_HEIGHT}
+                              height={CHATLISTITEM_HEIGHT * contactIds.length}
+                              onRowsRendered={onRowsRendered}
+                              rowRenderer={({ index, key, style }) => {
+                                const contactId = contactIds[index]
+                                return (
+                                  <div key={key}>
+                                    {contactCache[contactId] ? (
+                                      <ContactListItem
+                                        contact={contactCache[contactId]}
+                                        showCheckbox={false}
+                                        checked={false}
+                                        showRemove={false}
+                                        onClick={async _ => {
+                                          let chatId = await DeltaBackend.call(
+                                            'contacts.getChatIdByContactId',
+                                            contactId
+                                          )
+                                          onChatClick(chatId)
+                                        }}
+                                      />
+                                    ) : (
+                                      <PlaceholderChatListItem />
+                                    )}
+                                  </div>
+                                )
+                              }}
+                              rowCount={contactIds.length}
+                              width={width}
+                            />
+                          )}
+                        </InfiniteLoader>
+
+                        {chatListIds.length > 0 ||
+                          PseudoListItemAddContact({
+                            queryStr,
+                            queryStrIsEmail,
+                            onClick: addContactOnClick,
+                          })}
+                        <div
+                          className='search-result-divider'
+                          style={{ width: width }}
+                        >
+                          {translate_n('n_messages', messageResultIds.length)}
+                        </div>
+                        {messageResultIds.slice(0, 500).map(id =>
+                          cache.messages[id] ? (
+                            <ChatListItemMessageResult
+                              msr={cache.messages[id]}
+                              onClick={() => {
+                                console.log(
+                                  'Clicked on MessageResult with Id',
+                                  id
+                                )
+                              }}
+                              key={'m' + id}
+                            />
+                          ) : (
+                            <div
+                              key={'m' + id}
+                              className='chat-list-item skeleton'
+                            />
+                          )
+                        )}
+                        {messageResultIds.length > 500 &&
+                          'message result is trimmed to 500 results for performance'}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </WindowScroller>
+          )}
+        </AutoSizer>
       </div>
       <ChatListContextMenu
         showArchivedChats={showArchivedChats}
@@ -165,104 +303,6 @@ export default function ChatList(props: {
 
 function translate_n(key: string, quantity: number) {
   return window.translate(key, String(quantity), { quantity }).toUpperCase()
-}
-
-function whatsInView(
-  scrollRef: React.MutableRefObject<HTMLDivElement>,
-  isSearchActive: boolean,
-  chatListIds: number[],
-  contactIds: number[],
-  messageResult: number[]
-) {
-  // find out which items are visible and load them in the cache
-  if (!scrollRef.current) {
-    return
-  }
-  const { scrollTop, clientHeight } = scrollRef.current
-
-  const [chatCount, contactCount, messageCount] = [
-    chatListIds.length,
-    contactIds.length,
-    messageResult.length,
-  ]
-
-  let chat_ids: number[] = []
-  let contact_ids: number[] = []
-  let message_ids: number[] = []
-
-  const start_of_chats = isSearchActive ? DIVIDER_HEIGHT : 0
-  const end_of_chats = start_of_chats + chatCount * CHATLISTITEM_HEIGHT
-  const start_of_contacts = end_of_chats + DIVIDER_HEIGHT
-  const end_of_contacts = start_of_contacts + contactCount * CHATLISTITEM_HEIGHT
-  const start_of_messages = end_of_contacts + DIVIDER_HEIGHT
-  const end_of_messages = start_of_contacts + messageCount * CHATLISTITEM_HEIGHT
-
-  const start_of_view = scrollTop
-  const end_of_view = scrollTop + clientHeight
-
-  if (start_of_view < end_of_chats) {
-    // find out which chats to fetch
-    let indexStart = Math.floor(
-      Math.max(start_of_view - start_of_chats, 0) / CHATLISTITEM_HEIGHT
-    )
-    let indexEnd =
-      1 +
-      indexStart +
-      Math.floor(
-        Math.max(Math.min(end_of_chats, end_of_view) - start_of_view, 0) /
-          CHATLISTITEM_HEIGHT
-      )
-    chat_ids = chatListIds.slice(indexStart, indexEnd)
-    // console.log('show chats', { indexStart, indexEnd, chat_ids })
-  }
-
-  if (
-    isSearchActive &&
-    start_of_view < end_of_contacts &&
-    end_of_view > start_of_contacts
-  ) {
-    // find out which contacts to fetch
-    let indexStart = Math.floor(
-      Math.max(start_of_view - start_of_contacts, 0) / CHATLISTITEM_HEIGHT
-    )
-    let indexEnd =
-      1 +
-      indexStart +
-      Math.floor(
-        Math.max(
-          Math.min(end_of_contacts, end_of_view) -
-            Math.max(start_of_view, start_of_contacts),
-          0
-        ) / CHATLISTITEM_HEIGHT
-      )
-    contact_ids = contactIds.slice(indexStart, indexEnd)
-    // console.log('show messages', { indexStart, indexEnd })
-  }
-
-  if (
-    isSearchActive &&
-    start_of_view < end_of_messages &&
-    end_of_view > start_of_messages
-  ) {
-    // find out which messages to fetch
-    let indexStart = Math.floor(
-      Math.max(start_of_view - start_of_messages, 0) / CHATLISTITEM_HEIGHT
-    )
-    let indexEnd =
-      1 +
-      indexStart +
-      Math.floor(
-        Math.max(
-          Math.min(end_of_messages, end_of_view) -
-            Math.max(start_of_view, start_of_messages),
-          0
-        ) / CHATLISTITEM_HEIGHT
-      )
-    message_ids = messageResult.slice(indexStart, indexEnd)
-    // console.log('show messages', { indexStart, indexEnd })
-  }
-
-  return { chat_ids, contact_ids, message_ids }
 }
 
 function useLogic(queryStr: string, showArchivedChats: boolean) {
@@ -283,20 +323,6 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     updateMessageResult(queryStr)
   }, [queryStr])
 
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  const onScroll = (_event: React.UIEvent<HTMLDivElement>) => {
-    const res = whatsInView(
-      scrollRef,
-      isSearchActive,
-      chatListIds,
-      contactIds,
-      messageResultIds
-    )
-    // console.log(res)
-    // todo fetch
-  }
-
   useEffect(
     () =>
       showArchivedChats
@@ -307,8 +333,6 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
 
   return {
     cache,
-    scrollRef,
-    onScroll,
     chatListIds,
     contactIds,
     messageResultIds,

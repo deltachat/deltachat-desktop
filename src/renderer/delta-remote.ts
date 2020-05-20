@@ -102,6 +102,10 @@ class DeltaRemote {
     queryStr: string
   ): Promise<number[]>
   call(
+    fnName: 'contacts.getContacts',
+    ids: number[]
+  ): Promise<{ [id: number]: DCContact }>
+  call(
     fnName: 'getContacts2',
     listFlags: number,
     queryStr: string
