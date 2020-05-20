@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, Validator } from 'react'
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  Validator,
+  useContext,
+} from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import {
   useChatListIds,
@@ -34,6 +40,7 @@ import {
   OnScrollParams,
 } from 'react-virtualized'
 import { ipcBackend } from '../../ipc'
+import { ScreenContext } from '../../contexts'
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -142,6 +149,8 @@ export default function ChatList(props: {
     )
     selectChat(chatId)
   }
+  const screenContext = useContext(ScreenContext)
+  const { openDialog } = screenContext
 
   // Render ------------------
   return (
@@ -273,6 +282,15 @@ export default function ChatList(props: {
                                   'Clicked on MessageResult with Id',
                                   msrId
                                 )
+                                openDialog('MessageDetail', {
+                                  message: {
+                                    msg: {
+                                      id: msrId,
+                                      receivedAt: null,
+                                      sentAt: null,
+                                    },
+                                  },
+                                })
                               }}
                             />
                           ) : (
