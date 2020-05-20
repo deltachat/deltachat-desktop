@@ -207,7 +207,7 @@ export const ChatListItemMessageResult = React.memo<{
           </div>
           <div>
             <Timestamp
-              timestamp={msr.timestamp}
+              timestamp={msr.timestamp * 1000}
               extended={false}
               module='timestamp'
             />
