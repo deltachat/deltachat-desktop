@@ -171,10 +171,9 @@ export default function ChatList(props: {
                 {({ index, key, style }) => {
                   const chatId = chatListIds[index]
                   return (
-                    <div style={style}>
+                    <div style={style} key={key}>
                       <ChatListItem
                         isSelected={selectedChatId === chatId}
-                        key={key}
                         chatListItem={chatCache[chatId] || undefined}
                         onClick={onChatClick.bind(null, chatId)}
                         onContextMenu={event => {
@@ -246,10 +245,20 @@ export default function ChatList(props: {
                     loadMoreRows={loadMessages}
                     rowCount={messageResultIds.length}
                     width={width}
-                    height={Math.min(
-                      height / 3 - DIVIDER_HEIGHT,
-                      messageResultIds.length * CHATLISTITEM_HEIGHT
-                    )}
+                    height={
+                      // take remaining space
+                      height -
+                      DIVIDER_HEIGHT -
+                      Math.min(
+                        height / 3,
+                        chatListIds.length * CHATLISTITEM_HEIGHT +
+                          DIVIDER_HEIGHT
+                      ) -
+                      Math.min(
+                        height / 3,
+                        contactIds.length * CHATLISTITEM_HEIGHT + DIVIDER_HEIGHT
+                      )
+                    }
                   >
                     {({ index, key, style }) => {
                       const msrId = messageResultIds[index]
