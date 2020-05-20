@@ -146,7 +146,7 @@ export default class DCMessageList extends SplitOut {
     return this._dc.searchMessages(chatId, query)
   }
 
-  msgId2SearchResultItem(msgId: number): MessageSearchResult {
+  private _msgId2SearchResultItem(msgId: number): MessageSearchResult {
     const message = this._dc.getMessage(msgId)
     const chat = this._dc.getChat(message.getChatId())
     const author = this._dc.getContact(message.getFromId())
@@ -160,6 +160,14 @@ export default class DCMessageList extends SplitOut {
       message: message.getText(),
       timestamp: message.getTimestamp(),
     }
+  }
+
+  msgIds2SearchResultItems(ids: number[]) {
+    const result: { [id: number]: MessageSearchResult } = {}
+    for (let id of ids) {
+      result[id] = this._msgId2SearchResultItem(id)
+    }
+    return result
   }
 }
 

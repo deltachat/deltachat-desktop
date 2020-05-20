@@ -202,7 +202,7 @@ export const ChatListItemMessageResult = React.memo<{
         <div className='header'>
           <div className='name'>
             <span>
-              {msr.author_name + msr.chat_name ? ' in ' + msr.chat_name : ''}
+              {msr.author_name + (msr.chat_name ? ' in ' + msr.chat_name : '')}
             </span>
           </div>
           <div>

@@ -238,9 +238,9 @@ class DeltaRemote {
     chatId?: number
   ): Promise<number[]>
   call(
-    fnName: 'messageList.msgId2SearchResultItem',
-    msgId: number
-  ): Promise<MessageSearchResult>
+    fnName: 'messageList.msgIds2SearchResultItems',
+    msgIds: number[]
+  ): Promise<{ [id: number]: MessageSearchResult }>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',
