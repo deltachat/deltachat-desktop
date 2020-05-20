@@ -5,7 +5,10 @@ import MessageBody from '../message/MessageBody'
 import { Avatar, VerifiedIcon } from '../contact/Contact'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
-import { ChatListItemType } from '../../../shared/shared-types'
+import {
+  ChatListItemType,
+  MessageSearchResult,
+} from '../../../shared/shared-types'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -72,7 +75,7 @@ const Message = React.memo(
   }
 )
 
-const PlaceholderChatListItem = React.memo(_ => {
+export const PlaceholderChatListItem = React.memo(_ => {
   return <div className={classNames('chat-list-item', 'skeleton')} />
 })
 
@@ -177,3 +180,45 @@ const ChatListItem = React.memo<ChatListItemProps>(
 )
 
 export default ChatListItem
+
+export const ChatListItemMessageResult = React.memo<{
+  msr: MessageSearchResult
+  onClick: () => void
+}>(props => {
+  const { msr, onClick } = props
+  if (typeof msr === 'undefined') return <PlaceholderChatListItem />
+  return (
+    <div
+      role='button'
+      onClick={onClick}
+      className={classNames('chat-list-item')}
+    >
+      <Avatar
+        avatarPath={msr.authorProfileImage}
+        color={msr.author_color}
+        displayName={msr.author_name}
+      />
+      <div className='content'>
+        <div className='header'>
+          <div className='name'>
+            <span>
+              {msr.author_name + msr.chat_name ? ' in ' + msr.chat_name : ''}
+            </span>
+          </div>
+          <div>
+            <Timestamp
+              timestamp={msr.timestamp}
+              extended={false}
+              module='timestamp'
+            />
+          </div>
+        </div>
+        <div className='chat-list-item-message'>
+          <div className='text'>
+            <MessageBody text={msr.message || ''} disableJumbomoji preview />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+})

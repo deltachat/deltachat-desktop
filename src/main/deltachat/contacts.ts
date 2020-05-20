@@ -103,4 +103,8 @@ export default class DCContacts extends SplitOut {
       throw new Error('Could not create chat with contact ' + contactId)
     }
   }
+
+  getContactIds(listFlags: number, queryStr: string): number[] {
+    return this._dc.getContacts(listFlags, queryStr)
+  }
 }

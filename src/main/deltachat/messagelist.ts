@@ -155,7 +155,8 @@ export default class DCMessageList extends SplitOut {
       id: msgId,
       authorProfileImage: author.getProfileImage(),
       author_name: author.getDisplayName(),
-      chat_name: chat.getName(),
+      author_color: integerToHexColor(author.getColor()),
+      chat_name: chat.isSingle() ? null : chat.getName(),
       message: message.getText(),
       timestamp: message.getTimestamp(),
     }

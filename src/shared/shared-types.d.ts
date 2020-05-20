@@ -172,7 +172,8 @@ export type MessageSearchResult = {
   id: number
   authorProfileImage: string
   author_name: string
-  chat_name: string
+  author_color: string
+  chat_name: null | string
   message: string
   timestamp: number
 }
