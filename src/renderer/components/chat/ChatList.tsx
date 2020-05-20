@@ -33,6 +33,7 @@ import {
   ScrollParams,
   OnScrollParams,
 } from 'react-virtualized'
+import { ipcBackend } from '../../ipc'
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -339,7 +340,37 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     })
   }
 
-  // todo listen for chat change events and react
+  const onChatListItemChanged = async (
+    _event: any,
+    { chatId }: { chatId: number }
+  ) => {
+    if (chatId === 0) {
+      // setChatLoading({})
+      // setChatCache({})
+    } else {
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.FETCHING,
+      }))
+      const chats = await DeltaBackend.call('chatList.getChatListItemsByIds', [
+        chatId,
+      ])
+      setChatCache(cache => ({ ...cache, ...chats }))
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.LOADED,
+      }))
+    }
+  }
+  useEffect(() => {
+    ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
+    return () => {
+      ipcBackend.removeListener(
+        'DD_EVENT_CHATLIST_ITEM_CHANGED',
+        onChatListItemChanged
+      )
+    }
+  }, [])
   // todo fix archived chat link
 
   // Contacts ----------------
