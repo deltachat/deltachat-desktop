@@ -139,6 +139,27 @@ export default function ChatList(props: {
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext
 
+  const chatsHeight = (height: number) =>
+    isSearchActive
+      ? Math.min(
+          height / 3 - DIVIDER_HEIGHT,
+          chatListIds.length * CHATLISTITEM_HEIGHT
+        )
+      : height
+
+  const contactsHeight = (height: number) =>
+    Math.min(
+      height / 3 - DIVIDER_HEIGHT,
+      contactIds.length * CHATLISTITEM_HEIGHT
+    )
+
+  const messagesHeight = (height: number) =>
+    height -
+    (DIVIDER_HEIGHT * 3 +
+      chatsHeight(height) +
+      contactsHeight(height) +
+      (chatListIds.length == 0 ? CHATLISTITEM_HEIGHT : 0))
+
   // Render ------------------
   return (
     <>
@@ -156,14 +177,7 @@ export default function ChatList(props: {
                 loadMoreRows={loadChats}
                 rowCount={chatListIds.length}
                 width={width}
-                height={
-                  isSearchActive
-                    ? Math.min(
-                        height / 3 - DIVIDER_HEIGHT,
-                        chatListIds.length * CHATLISTITEM_HEIGHT
-                      )
-                    : height
-                }
+                height={chatsHeight(height)}
               >
                 {({ index, key, style }) => {
                   const chatId = chatListIds[index]
@@ -194,10 +208,7 @@ export default function ChatList(props: {
                     loadMoreRows={loadContact}
                     rowCount={contactIds.length}
                     width={width}
-                    height={Math.min(
-                      height / 3 - DIVIDER_HEIGHT,
-                      contactIds.length * CHATLISTITEM_HEIGHT
-                    )}
+                    height={contactsHeight(height)}
                   >
                     {({ index, key, style }) => {
                       const contactId = contactIds[index]
@@ -244,17 +255,7 @@ export default function ChatList(props: {
                     width={width}
                     height={
                       // take remaining space
-                      height -
-                      DIVIDER_HEIGHT -
-                      Math.min(
-                        height / 3,
-                        chatListIds.length * CHATLISTITEM_HEIGHT +
-                          DIVIDER_HEIGHT
-                      ) -
-                      Math.min(
-                        height / 3,
-                        contactIds.length * CHATLISTITEM_HEIGHT + DIVIDER_HEIGHT
-                      )
+                      messagesHeight(height)
                     }
                   >
                     {({ index, key, style }) => {
