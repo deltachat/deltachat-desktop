@@ -342,7 +342,7 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     const chatIds =
       startIndex == stopIndex
         ? [chatListIds[startIndex]]
-        : chatListIds.slice(startIndex, stopIndex)
+        : chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
       chatIds.forEach(id => (state[id] = LoadStatus.FETCHING))
       return state
@@ -408,7 +408,7 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     const ids =
       startIndex == stopIndex
         ? [contactIds[startIndex]]
-        : contactIds.slice(startIndex, stopIndex)
+        : contactIds.slice(startIndex, stopIndex + 1)
 
     setContactLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
@@ -439,7 +439,7 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     const ids =
       startIndex == stopIndex
         ? [messageResultIds[startIndex]]
-        : messageResultIds.slice(startIndex, stopIndex)
+        : messageResultIds.slice(startIndex, stopIndex + 1)
 
     setMessageLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
