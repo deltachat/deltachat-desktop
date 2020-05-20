@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, Validator } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
 import {
   useChatListIds,
@@ -29,6 +29,7 @@ import {
   Index,
   WindowScroller,
   IndexRange,
+  ListRowRenderer,
 } from 'react-virtualized'
 
 const CHATLISTITEM_HEIGHT = 64
@@ -37,6 +38,40 @@ const DIVIDER_HEIGHT = 40
 const enum LoadStatus {
   FETCHING = 1,
   LOADED = 2,
+}
+
+function ChatListPart({
+  isRowLoaded,
+  loadMoreRows,
+  rowCount,
+  width,
+  children,
+}: {
+  isRowLoaded: (params: Index) => boolean
+  loadMoreRows: (params: IndexRange) => Promise<any>
+  rowCount: number
+  width: number
+  children: ListRowRenderer
+}) {
+  return (
+    <InfiniteLoader
+      isRowLoaded={isRowLoaded}
+      loadMoreRows={loadMoreRows}
+      rowCount={rowCount}
+    >
+      {({ onRowsRendered, registerChild }) => (
+        <List
+          ref={registerChild}
+          rowHeight={CHATLISTITEM_HEIGHT}
+          height={CHATLISTITEM_HEIGHT * rowCount}
+          onRowsRendered={onRowsRendered}
+          rowRenderer={children}
+          rowCount={rowCount}
+          width={width}
+        />
+      )}
+    </InfiniteLoader>
+  )
 }
 
 export default function ChatList(props: {
@@ -170,36 +205,27 @@ export default function ChatList(props: {
                         {translate_n('n_chats', chatListIds.length)}
                       </div>
                     )}
-                    <InfiniteLoader
+                    <ChatListPart
                       isRowLoaded={isChatLoaded}
                       loadMoreRows={loadChats}
                       rowCount={chatListIds.length}
+                      width={width}
                     >
-                      {({ onRowsRendered, registerChild }) => (
-                        <List
-                          ref={registerChild}
-                          rowHeight={CHATLISTITEM_HEIGHT}
-                          height={CHATLISTITEM_HEIGHT * chatListIds.length}
-                          onRowsRendered={onRowsRendered}
-                          rowRenderer={({ index, key, style }) => {
-                            const chatId = chatListIds[index]
-                            return (
-                              <ChatListItem
-                                isSelected={selectedChatId === chatId}
-                                key={key}
-                                chatListItem={chatCache[chatId] || undefined}
-                                onClick={onChatClick.bind(null, chatId)}
-                                onContextMenu={event => {
-                                  openContextMenu(event, chatId)
-                                }}
-                              />
-                            )
-                          }}
-                          rowCount={chatListIds.length}
-                          width={width}
-                        />
-                      )}
-                    </InfiniteLoader>
+                      {({ index, key, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <ChatListItem
+                            isSelected={selectedChatId === chatId}
+                            key={key}
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                            onContextMenu={event => {
+                              openContextMenu(event, chatId)
+                            }}
+                          />
+                        )
+                      }}
+                    </ChatListPart>
                     {isSearchActive && (
                       <>
                         <div
@@ -208,47 +234,37 @@ export default function ChatList(props: {
                         >
                           {translate_n('n_contacts', contactIds.length)}
                         </div>
-                        <InfiniteLoader
+                        <ChatListPart
                           isRowLoaded={isContactLoaded}
                           loadMoreRows={loadContact}
                           rowCount={contactIds.length}
+                          width={width}
                         >
-                          {({ onRowsRendered, registerChild }) => (
-                            <List
-                              ref={registerChild}
-                              rowHeight={CHATLISTITEM_HEIGHT}
-                              height={CHATLISTITEM_HEIGHT * contactIds.length}
-                              onRowsRendered={onRowsRendered}
-                              rowRenderer={({ index, key, style }) => {
-                                const contactId = contactIds[index]
-                                return (
-                                  <div key={key}>
-                                    {contactCache[contactId] ? (
-                                      <ContactListItem
-                                        contact={contactCache[contactId]}
-                                        showCheckbox={false}
-                                        checked={false}
-                                        showRemove={false}
-                                        onClick={async _ => {
-                                          let chatId = await DeltaBackend.call(
-                                            'contacts.getChatIdByContactId',
-                                            contactId
-                                          )
-                                          onChatClick(chatId)
-                                        }}
-                                      />
-                                    ) : (
-                                      <PlaceholderChatListItem />
-                                    )}
-                                  </div>
-                                )
-                              }}
-                              rowCount={contactIds.length}
-                              width={width}
-                            />
-                          )}
-                        </InfiniteLoader>
-
+                          {({ index, key, style }) => {
+                            const contactId = contactIds[index]
+                            return (
+                              <div key={key}>
+                                {contactCache[contactId] ? (
+                                  <ContactListItem
+                                    contact={contactCache[contactId]}
+                                    showCheckbox={false}
+                                    checked={false}
+                                    showRemove={false}
+                                    onClick={async _ => {
+                                      let chatId = await DeltaBackend.call(
+                                        'contacts.getChatIdByContactId',
+                                        contactId
+                                      )
+                                      onChatClick(chatId)
+                                    }}
+                                  />
+                                ) : (
+                                  <PlaceholderChatListItem />
+                                )}
+                              </div>
+                            )
+                          }}
+                        </ChatListPart>
                         {chatListIds.length > 0 ||
                           PseudoListItemAddContact({
                             queryStr,
