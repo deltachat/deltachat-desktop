@@ -183,10 +183,10 @@ export default class DeltaChatController extends EventEmitter {
       } else if (
         this.networkStatus === false &&
         (event === 'DC_EVENT_SMTP_CONNECTED' ||
-        event === 'DC_EVENT_IMAP_CONNECTED' ||
-        event === 'DC_EVENT_INCOMING_MSG' ||
-        event === 'DC_EVENT_MSG_DELIVERED' ||
-        event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
+          event === 'DC_EVENT_IMAP_CONNECTED' ||
+          event === 'DC_EVENT_INCOMING_MSG' ||
+          event === 'DC_EVENT_MSG_DELIVERED' ||
+          event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
       ) {
         this.networkStatus = true
         this.networkStatusMessage = ''
