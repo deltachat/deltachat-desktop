@@ -148,6 +148,18 @@ $bp3-dialog-radius: 2px;
   background: var(--bp3SwitchKnobChecked);
 }
 
+.bp3-control.bp3-switch {
+  padding: 11px 20px;
+  padding-right: 55px !important;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 0px;
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+}
+
 .bp3-control .bp3-control-indicator,
 .bp3-control:hover .bp3-control-indicator {
   background: var(--bp3-control-indicator-color);

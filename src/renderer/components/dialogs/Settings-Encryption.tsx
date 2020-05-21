@@ -128,9 +128,7 @@ export default function SettingsEncryptio({
     <>
       <Card elevation={Elevation.ONE}>
         <H5>{tx('autocrypt')}</H5>
-        <br />
         {renderDeltaSwitch('e2ee_enabled', tx('autocrypt_prefer_e2ee'))}
-        <br />
         <SettingsButton
           style={{ color: 'var(--colorPrimary)', fontWeight: 'lighter' }}
           onClick={() => openDialog(SendAutocryptSetupMessage)}
