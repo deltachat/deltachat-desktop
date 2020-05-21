@@ -22,7 +22,7 @@ import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext } from '../../contexts'
-const MAGIC_PW = '9bbdc87b50bbc684'
+
 import { OpenDialogOptions } from 'electron'
 import { AppState } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
@@ -35,6 +35,7 @@ import {
   DeltaDialogBody,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
+import SettingsAccount from './Settings-Account'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -62,9 +63,7 @@ export function SettingsSelector(props: any) {
 export default class Settings extends React.Component {
   translate: todo
   state: {
-    advancedSettings: todo
     showSettingsDialog: boolean
-    mail_pw: string
     settings: todo
     show: string
     selfContact: todo
@@ -73,9 +72,8 @@ export default class Settings extends React.Component {
   constructor(public props: DialogProps) {
     super(props)
     this.state = {
-      advancedSettings: {},
       showSettingsDialog: false,
-      mail_pw: MAGIC_PW,
+
       settings: {},
       show: 'main',
       selfContact: {},
@@ -88,8 +86,12 @@ export default class Settings extends React.Component {
     this.handleDeltaSettingsChange = this.handleDeltaSettingsChange.bind(this)
     this.renderDTSettingSwitch = this.renderDTSettingSwitch.bind(this)
     this.renderDeltaSwitch = this.renderDeltaSwitch.bind(this)
-    this.onLoginSubmit = this.onLoginSubmit.bind(this)
     this.translate = window.translate
+    this.setShow = this.setShow.bind(this)
+  }
+
+  setShow(show: string) {
+    this.setState({ show })
   }
 
   async componentDidMount() {
@@ -105,24 +107,6 @@ export default class Settings extends React.Component {
 
   async loadSettings() {
     const settings = await DeltaBackend.call('settings.getConfigFor', [
-      'addr',
-      'mail_pw',
-      'inbox_watch',
-      'sentbox_watch',
-      'mvbox_watch',
-      'mvbox_move',
-      'e2ee_enabled',
-      'mail_server',
-      'mail_user',
-      'mail_port',
-      'mail_security',
-      'imap_certificate_checks',
-      'send_user',
-      'send_pw',
-      'send_server',
-      'send_port',
-      'send_security',
-      'smtp_certificate_checks',
       'e2ee_enabled',
       'displayname',
       'selfstatus',
@@ -133,22 +117,7 @@ export default class Settings extends React.Component {
       'delete_server_after',
     ])
 
-    const advancedSettings = {
-      mail_user: settings['mail_user'],
-      mail_server: settings['mail_server'],
-      mail_port: settings['mail_port'],
-      mail_security: settings['mail_security'],
-      imap_certificate_checks: settings['imap_certificate_checks'],
-      send_user: settings['send_user'],
-      send_pw: settings['send_pw'],
-      send_server: settings['send_server'],
-      send_port: settings['send_port'],
-      send_security: settings['send_security'],
-      smtp_certificate_checks: settings['smtp_certificate_checks'],
-      e2ee_enabled: settings['e2ee_enabled'],
-    }
-
-    this.setState({ settings, advancedSettings })
+    this.setState({ settings })
   }
 
   onKeyTransferComplete() {
@@ -172,25 +141,6 @@ export default class Settings extends React.Component {
     const settings = this.state.settings
     settings[key] = String(value)
     this.setState({ settings })
-  }
-
-  onLoginSubmit(config: todo) {
-    const { closeDialog } = this.props
-    this.props.userFeedback(false)
-    if (config.mail_pw === MAGIC_PW) delete config.mail_pw
-    ipcRenderer.send('updateCredentials', config)
-    ipcRenderer.once('DC_EVENT_CONFIGURE_FAILED', () => {
-      closeDialog('Settings')
-    })
-  }
-
-  onLoginSuccess() {
-    this.loadSettings()
-  }
-
-  onCancelLogin() {
-    // not yet implemented in core (issue #1159)
-    ipcRenderer.send('cancelCredentialsUpdate')
   }
 
   /*
@@ -293,7 +243,7 @@ export default class Settings extends React.Component {
 
   renderDialogContent() {
     const { deltachat, openDialog } = this.props
-    const { settings, advancedSettings } = this.state
+    const { settings } = this.state
     if (this.state.show === 'main') {
       return (
         <div>
@@ -419,22 +369,12 @@ export default class Settings extends React.Component {
       )
     } else if (this.state.show === 'login') {
       return (
-        <Card elevation={Elevation.ONE}>
-          <Login
-            {...advancedSettings}
-            mode={'update'}
-            addr={settings.addr}
-            mail_pw={settings.mail_pw}
-            onSubmit={this.onLoginSubmit}
-            loading={deltachat.configuring}
-            onClose={() => this.setState({ showSettingsDialog: false })}
-            onCancel={this.onCancelLogin}
-            addrDisabled
-          >
-            <Button type='submit' text={this.translate('update')} />
-            <Button type='reset' text={this.translate('cancel')} />
-          </Login>
-        </Card>
+        <SettingsAccount
+          deltachat={deltachat}
+          show={this.state.show}
+          setShow={this.setShow}
+          onClose={this.props.onClose}
+        />
       )
     } else {
       throw new Error('Invalid state name: ' + this.state.show)
