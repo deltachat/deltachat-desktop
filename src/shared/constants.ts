@@ -33,3 +33,5 @@ export const enum AutodeleteDuration {
   FOUR_WEEKS = Timespans.FOUR_WEEKS_IN_SECONDS,
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
+
+export const DAYS_UNTIL_UPDATE_SUGGESTION = 90
