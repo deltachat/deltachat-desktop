@@ -107,6 +107,10 @@ export default class Settings extends React.Component {
 
   async loadSettings() {
     const settings = await DeltaBackend.call('settings.getConfigFor', [
+      'inbox_watch',
+      'sentbox_watch',
+      'mvbox_watch',
+      'mvbox_move',
       'e2ee_enabled',
       'displayname',
       'selfstatus',
