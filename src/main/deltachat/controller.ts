@@ -173,7 +173,7 @@ export default class DeltaChatController extends EventEmitter {
       }
 
       // Network Status
-      if (event === 'DC_EVENT_ERROR_NETWORK') {
+      if (this.networkStatus !== false && event === 'DC_EVENT_ERROR_NETWORK') {
         this.networkStatus = false
         this.networkStatusMessage = data1 + data2
         this.sendToRenderer('NETWORK_STATUS', [
@@ -181,11 +181,12 @@ export default class DeltaChatController extends EventEmitter {
           this.networkStatusMessage,
         ])
       } else if (
-        event === 'DC_EVENT_SMTP_CONNECTED' ||
+        this.networkStatus === false &&
+        (event === 'DC_EVENT_SMTP_CONNECTED' ||
         event === 'DC_EVENT_IMAP_CONNECTED' ||
         event === 'DC_EVENT_INCOMING_MSG' ||
         event === 'DC_EVENT_MSG_DELIVERED' ||
-        event === 'DC_EVENT_IMAP_MESSAGE_MOVED'
+        event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
       ) {
         this.networkStatus = true
         this.networkStatusMessage = ''
