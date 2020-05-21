@@ -18,7 +18,7 @@ export function AutodeleteTimeDurations({
   selectedValue,
 }: {
   onChange: any
-  selectedValue: number
+  selectedValue: string
 }) {
   const tx = window.translate
   return (
@@ -105,7 +105,7 @@ function SelectAutodeleteDurationDialog(props: DialogProps) {
         <DeltaDialogContent>
           <AutodeleteTimeDurations
             onChange={onChange}
-            selectedValue={Number(selectedValue)}
+            selectedValue={selectedValue}
           />
         </DeltaDialogContent>
       </DeltaDialogBody>
