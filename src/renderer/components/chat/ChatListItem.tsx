@@ -184,8 +184,9 @@ export default ChatListItem
 export const ChatListItemMessageResult = React.memo<{
   msr: MessageSearchResult
   onClick: () => void
+  queryStr: string
 }>(props => {
-  const { msr, onClick } = props
+  const { msr, onClick, queryStr } = props
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
   return (
     <div
@@ -214,11 +215,42 @@ export const ChatListItemMessageResult = React.memo<{
           </div>
         </div>
         <div className='chat-list-item-message'>
-          <div className='text'>
-            <MessageBody text={msr.message || ''} disableJumbomoji preview />
-          </div>
+          <div className='text'>{rMessage(msr.message, queryStr)}</div>
         </div>
       </div>
     </div>
   )
 })
+
+const VISIBLE_MESSAGE_LENGTH = 50
+const THRUNCATE_KEEP_LENGTH = 20
+
+const rMessage = (msg: string, query: string) => {
+  const pos_of_search_term = msg.toLowerCase().indexOf(query.toLowerCase())
+  if (pos_of_search_term == -1) return msg
+  let text = msg
+  let pos_of_search_term_in_text = pos_of_search_term
+
+  const truncate = pos_of_search_term > VISIBLE_MESSAGE_LENGTH
+
+  //check if needs to be trimmed in order to be displayed
+  if (truncate) {
+    text = msg.slice(pos_of_search_term - THRUNCATE_KEEP_LENGTH)
+    pos_of_search_term_in_text = THRUNCATE_KEEP_LENGTH
+  }
+
+  const before = text.slice(0, pos_of_search_term_in_text)
+  const search_term = text.slice(
+    pos_of_search_term_in_text,
+    pos_of_search_term_in_text + query.length
+  )
+  const after = text.slice(pos_of_search_term_in_text + query.length)
+
+  return (
+    <div>
+      {(truncate && '...') + before}
+      <b>{search_term}</b>
+      {after}
+    </div>
+  )
+}

@@ -264,6 +264,7 @@ export default function ChatList(props: {
                         <div style={style} key={key}>
                           {messageCache[msrId] ? (
                             <ChatListItemMessageResult
+                              queryStr={queryStr}
                               msr={messageCache[msrId]}
                               onClick={() => {
                                 console.log(
