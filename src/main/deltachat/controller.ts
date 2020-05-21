@@ -21,6 +21,9 @@ import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
 import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants'
 
+import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
+import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
+
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
@@ -50,6 +53,11 @@ export default class DeltaChatController extends EventEmitter {
   constructor(public cwd: string) {
     super()
     this._resetState()
+    setInterval(
+      // If the dc is allways on
+      this.hintUpdateIfNessesary.bind(this),
+      Timespans.ONE_DAY_IN_SECONDS * 1000
+    )
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -337,6 +345,20 @@ export default class DeltaChatController extends EventEmitter {
 
   getProviderInfo(email: string) {
     return DeltaChatNode.getProviderFromEmail(email)
+  }
+
+  hintUpdateIfNessesary() {
+    if (
+      this._dc &&
+      Date.now() >
+        Timespans.ONE_DAY_IN_SECONDS * DAYS_UNTIL_UPDATE_SUGGESTION * 1000 +
+          BUILD_TIMESTAMP
+    ) {
+      this._dc.addDeviceMessage(
+        `update-suggestion-${VERSION}`,
+        `This build is over ${DAYS_UNTIL_UPDATE_SUGGESTION} days old - There might be a new version availible. -> https://get.delta.chat`
+      )
+    }
   }
 
   /**

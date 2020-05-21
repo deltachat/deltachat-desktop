@@ -116,6 +116,7 @@ export default class DCLoginController extends SplitOut {
 
   updateDeviceChats() {
     this._dc.updateDeviceChats()
+    this._controller.hintUpdateIfNessesary()
     this._dc.addDeviceMessage(
       'changelog-version-1.3.0-1',
       `Changes in v1.3.0
