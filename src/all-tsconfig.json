@@ -1,11 +1,11 @@
 {
-    "files": [],
-    "references": [
-        {
-            "path": "main/tsconfig.json"
-        },
-        {
-            "path": "renderer/tsconfig.json"
-        }
-    ]
+  "files": [],
+  "references": [
+    {
+      "path": "main/tsconfig.json"
+    },
+    {
+      "path": "renderer/tsconfig.json"
+    }
+  ]
 }
