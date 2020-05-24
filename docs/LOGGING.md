@@ -4,12 +4,12 @@
 
 Debug messages are disabled by default, enable them with the `--log-debug` flag.
 
-| Flag                            | Effect                                       |
-| ------------------------------- | -------------------------------------------- |
-| `--log-debug`                   | Log debug messages                           |
-| `--log-to-console`              | Output the log to stout / chrome dev console |
-| `--machine-readable-stacktrace` | Enable JSON stacktrace                       |
-| `--no-color`                    | Disable colors in the output of main process |
+| Flag                            | Effect                                        |
+| ------------------------------- | --------------------------------------------- |
+| `--log-debug`                   | Log debug messages                            |
+| `--log-to-console`              | Output the log to stdout / chrome dev console |
+| `--machine-readable-stacktrace` | Enable JSON stacktrace                        |
+| `--no-color`                    | Disable colors in the output of main process  |
 
 > as of 1.3.0 `--debug` enables both `--log-debug` and `--log-to-console`
 
