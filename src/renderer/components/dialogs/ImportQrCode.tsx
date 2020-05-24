@@ -5,8 +5,9 @@ import { Icon, Spinner, Classes } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
-import { Intent, ProgressBar, Card } from '@blueprintjs/core'
+import { Intent, Card, Spinner } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
+<<<<<<< HEAD
 import { DeltaProgressBar } from '../Login-Styles'
 
 interface QrStates {
@@ -84,6 +85,9 @@ export async function processOPENPGP4FPRUrl(url: string, callback: any = null) {
     })
   }
 }
+=======
+import processOpenPGP4FPRUrl from '../helpers/OpenPGP4FPRUrl'
+>>>>>>> Move openPGP4FPR url to own file
 
 export function DeltaDialogImportQrInner({
   description,
@@ -94,7 +98,6 @@ export function DeltaDialogImportQrInner({
 }) {
   const tx = window.translate
   const [qrCode, setQrCode] = useState('')
-  const screenContext = useContext(ScreenContext)
   const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
 
   const handleScanResult = (chatId: number = null) => {
@@ -107,7 +110,7 @@ export function DeltaDialogImportQrInner({
 
   const handleResponse = async (scannedQrCode: string) => {
     setSecureJoinOngoing(true)
-    processOPENPGP4FPRUrl(scannedQrCode, handleScanResult)
+    processOpenPGP4FPRUrl(scannedQrCode, handleScanResult)
   }
 
   const qrImageReader = useRef<any>()
@@ -134,6 +137,7 @@ export function DeltaDialogImportQrInner({
 
   return (
     <DeltaDialogBody>
+<<<<<<< HEAD
       {secureJoinOngoing && (
         <>
           <DeltaDialogContent>
@@ -152,6 +156,16 @@ export function DeltaDialogImportQrInner({
                 {tx('cancel')}
               </p>
             </div>
+=======
+      <DeltaDialogContent noPadding>
+        {secureJoinOngoing && (
+          <div>
+            <p className='progress-info'>Secure join in progress...</p>
+            <Spinner />
+            <p className='delta-button danger' onClick={cancelProcess}>
+              {tx('cancel')}
+            </p>
+>>>>>>> Move openPGP4FPR url to own file
           </div>
         </>
       )}
