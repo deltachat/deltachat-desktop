@@ -12,7 +12,7 @@ import DialogController, {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
-import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
+import processOPENPGP4FPRUrl from './components/helpers/OpenPGP4FPRUrl'
 
 import { getLogger } from '../shared/logger'
 import OfflineToast from './components/OfflineToast'
