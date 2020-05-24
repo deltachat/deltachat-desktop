@@ -167,8 +167,6 @@ export default class DeltaChatController extends EventEmitter {
         ? eventStrings[_event]
         : String(_event)
 
-      if (data1 === 0) data1 = ''
-
       if (event === 'DC_EVENT_WARNING') {
         logCoreEvent.warn(event, data1, data2)
       } else if (event === 'DC_EVENT_INFO') {
