@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-        "outDir": "../../tsc-dist/renderer",
-        "rootDir": ".",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "es6",
-        "target": "es6",
-        "jsx": "react",
-        "allowJs": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node"
-    },
-    "references": [
-        {
-            "path": "../shared/tsconfig.json"
-        }
-    ]
+  "compilerOptions": {
+    "outDir": "../../tsc-dist/renderer",
+    "rootDir": ".",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "jsx": "react",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
 }

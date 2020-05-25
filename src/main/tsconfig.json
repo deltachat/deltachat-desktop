@@ -9,10 +9,7 @@
     "allowJs": true,
     "esModuleInterop": true
   },
-  "include": [
-    "./**/*.ts",
-    "./**/*.js"
-  ],
+  "include": ["./**/*.ts", "./**/*.js"],
   "references": [
     {
       "path": "../shared/tsconfig.json"
