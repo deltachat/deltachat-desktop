@@ -18,10 +18,10 @@ export function DeltaDialogImportQrInner({
 }) {
   const tx = window.translate
   const [qrCode, setQrCode] = useState('')
-  const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
+  const [processQrCode, setProcessQrCode] = useState(false)
 
   const handleScanResult = (chatId: number = null) => {
-    setSecureJoinOngoing(false)
+    setProcessQrCode(false)
     if (chatId) {
       selectChat(chatId)
     }
@@ -29,7 +29,7 @@ export function DeltaDialogImportQrInner({
   }
 
   const handleResponse = async (scannedQrCode: string) => {
-    setSecureJoinOngoing(true)
+    setProcessQrCode(true)
     processOpenPGP4FPRUrl(scannedQrCode, handleScanResult)
   }
 
@@ -58,16 +58,16 @@ export function DeltaDialogImportQrInner({
   return (
     <DeltaDialogBody>
       <DeltaDialogContent noPadding>
-        {secureJoinOngoing && (
+        {processQrCode && (
           <div>
-            <p className='progress-info'>Secure join in progress...</p>
             <Spinner />
+            <p />
             <p className='delta-button danger' onClick={cancelProcess}>
               {tx('cancel')}
             </p>
           </div>
         )}
-        {!secureJoinOngoing && (
+        {!processQrCode && (
           <div className='import-qr-code-dialog'>
             <div>
               <div>

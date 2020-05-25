@@ -1,4 +1,6 @@
 import { DeltaBackend } from '../../delta-remote'
+import { sendToBackend } from '../../ipc'
+const { ipcRenderer } = window.electron_functions
 
 interface QrStates {
   [key: number]: string
@@ -17,6 +19,24 @@ export const qrStates: QrStates = {
   400: 'QrError', // text1=error string
 }
 
+const OPENPGP4FPR_SCHEME = 'OPENPGP4FPR'; // yes: uppercase
+const DCACCOUNT_SCHEME  = 'DCACCOUNT';
+const MAILTO_SCHEME  = 'mailto';
+const MATMSG_SCHEME  = 'MATMSG';
+const VCARD_SCHEME  = 'BEGIN:VCARD';
+const SMTP_SCHEME = 'SMTP';
+const HTTP_SCHEME = 'http';
+const HTTPS_SCHEME = 'https';
+
+const UrlSchemesAccountRequired = [
+  OPENPGP4FPR_SCHEME
+];
+
+const UrlSchemesLogoutRequired = [
+  DCACCOUNT_SCHEME
+];
+
+
 export declare type QrCodeResponse = {
   state: keyof QrStates
   id: number
@@ -26,6 +46,35 @@ export declare type QrCodeResponse = {
 export default async function processOpenPGP4FPRUrl(url: string, callback: any = null) {
   const tx = window.translate
   let error = false
+  const scheme = url.substring(0, url.lastIndexOf(':'));
+  const { ready } = await DeltaBackend.call('getState');
+
+  if (UrlSchemesAccountRequired.includes(scheme.toUpperCase()) && !ready) {
+    window.__openDialog('AlertDialog', {
+      message: tx('Please login first')
+    })
+    return
+  }
+  if (url.indexOf(DCACCOUNT_SCHEME) === 0) {
+    if (ready) {
+      window.__openDialog('AlertDialog', {
+        message: tx('Please logout first'),
+      })
+      return
+    }
+    try {
+      const credentials = await DeltaBackend.call('burnerAccounts.create', url.substr(url.indexOf(':') + 1, url.length))
+      sendToBackend('login', {addr: credentials.email, mail_pw: credentials.password});
+      ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
+        // close dialog since now the progress bar is shown
+        callback()
+      })
+      
+    } catch(err) {
+      console.log(err)
+    }
+    return
+  }
   const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
   if (response === null) {
     error = true
@@ -71,7 +120,7 @@ export default async function processOpenPGP4FPRUrl(url: string, callback: any =
   } else {
     window.__userFeedback({
       type: 'error',
-      text: "Don't know what to do with this URL :/",
+      text: 'Don\'t know what to do with this URL :/',
     })
   }
 }
