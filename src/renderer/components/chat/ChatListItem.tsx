@@ -248,7 +248,7 @@ const rMessage = (msg: string, query: string) => {
 
   return (
     <div>
-      {(truncate && '...') + before}
+      {(truncate ? '...' : '') + before}
       <b>{search_term}</b>
       {after}
     </div>
