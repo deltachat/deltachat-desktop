@@ -274,6 +274,8 @@ class DeltaRemote {
   }>
   // context ------------------------------------------------------------
   call(fnName: 'context.maybeNetwork'): Promise<void>
+  // burner accounts ------------------------------------------------------------
+  call(fnName: 'burnerAccounts.create', url: string): Promise<{email: string; password: string}>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
   call(
