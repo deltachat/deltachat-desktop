@@ -29,7 +29,7 @@ import {
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { webviewTag } from 'electron'
-import { KeybindAction } from '../../keybindings'
+import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -189,60 +189,25 @@ export default function ChatList(props: {
   const selectFirstChat = () => selectChat(chatListIds[0])
 
   // KeyboardShortcuts ---------
-  useEffect(() => {
-    const onKeyDown = (ev: KeyboardEvent) => {
-      // general stuff that is to be moved to a keybindings "controller"
-      // which has an event emitter that lets us listen to the actions directly
-      if (!window.__isReady || ev.repeat) return
-      let action = undefined
-      if (ev.altKey && ev.key === 'ArrowDown') {
-        action = KeybindAction.ChatList_SelectNextChat
-      } else if (ev.altKey && ev.key === 'ArrowUp') {
-        action = KeybindAction.ChatList_SelectPreviousChat
-      } else if (ev.altKey && ev.key === 'ArrowLeft') {
-        action = 'chatlist:scroll-to-selected-chat'
-      } else if (
-        ev.key === 'Enter' &&
-        (ev.target as any).id === 'chat-list-search'
-      ) {
-        // todo setSearchInputValue('')
-      } else {
-        return
-      }
-      // actual function ---------------------------
-      console.log(
-        'onKeyPress',
-        selectedChatId,
-        chatListIds.indexOf(selectedChatId),
-        action
-      )
-      const selectChat = (chatId: number) => {
-        console.log('selectChat', chatId)
-        if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return
-        props.onChatClick(chatId)
-      }
+  useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
+    scrollSelectedChatIntoView()
+  )
 
-      if (action == KeybindAction.ChatList_ScrollToSelectedChat) {
-        scrollSelectedChatIntoView()
-      } else if (action == KeybindAction.ChatList_SelectNextChat) {
-        if (selectedChatId === null) return selectFirstChat()
-
-        const current_index = chatListIds.indexOf(selectedChatId)
-        if (chatListIds[current_index + 1]) {
-          selectChat(chatListIds[current_index + 1])
-        }
-      } else if (action == KeybindAction.ChatList_SelectPreviousChat) {
-        if (selectedChatId === null) return selectFirstChat()
-
-        const current_index = chatListIds.indexOf(selectedChatId)
-        if (chatListIds[current_index - 1]) {
-          selectChat(chatListIds[current_index - 1])
-        }
-      }
+  useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
+    console.log('ChatList_SelectNextChat')
+    if (selectedChatId === null) return selectFirstChat()
+    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
+    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+      selectChat(newChatId)
     }
+  })
 
-    document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+  useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
+    if (selectedChatId === null) return selectFirstChat()
+    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) - 1]
+    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+      selectChat(newChatId)
+    }
   })
 
   // Render --------------------

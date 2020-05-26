@@ -73,13 +73,14 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       return
     }
-    handlers[action].filter(h => h === handler)
+    handlers[action] = handlers[action].filter(h => h !== handler)
   }
 
   export function emitAction(action: KeybindAction) {
     if (!Array.isArray(handlers[action])) {
       return
     }
+    console.log('handlers[action]', handlers[action])
     handlers[action].forEach(handler => handler())
   }
 }
