@@ -135,7 +135,6 @@ Some important folders and files:
 ├── bin/                      # various helper scripts
 │   └── build/                # Build scripts
 ├── build/                    # files needed for electron-builder
-├── ci_scripts/               # scripts and dockerfiles used by the CI
 ├── docs/                     # documentation
 ├── images/                   # image files like icons or backgrounds
 ├── index.js                  # entry point for the main process
