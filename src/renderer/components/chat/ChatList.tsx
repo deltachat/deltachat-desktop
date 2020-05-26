@@ -194,7 +194,6 @@ export default function ChatList(props: {
   )
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
-    console.log('ChatList_SelectNextChat')
     if (selectedChatId === null) return selectFirstChat()
     const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
@@ -322,10 +321,6 @@ export default function ChatList(props: {
                               queryStr={queryStr}
                               msr={messageCache[msrId]}
                               onClick={() => {
-                                console.log(
-                                  'Clicked on MessageResult with Id',
-                                  msrId
-                                )
                                 openDialog('MessageDetail', {
                                   message: {
                                     msg: {

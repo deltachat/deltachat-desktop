@@ -1,5 +1,9 @@
 import { useEffect } from 'react'
 
+import { getLogger } from '../shared/logger'
+
+const log = getLogger('renderer/keybindings')
+
 export enum KeybindAction {
   ChatList_SelectNextChat = 'chatlist:select-next-chat',
   ChatList_SelectPreviousChat = 'chatlist:select-previous-chat',
@@ -40,7 +44,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       return
     }
-    console.log('handlers[action]', action, handlers[action])
+    log.debug('fire action', action, 'handlers:', handlers[action])
     handlers[action].forEach(handler => handler())
   }
 }
