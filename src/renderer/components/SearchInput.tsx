@@ -27,6 +27,7 @@ export default function SearchInput(props: {
   value: string
   className: string
   id: string
+  inputRef?: React.ClassAttributes<HTMLInputElement>['ref']
 }) {
   const { onChange, value, className, id } = props
   const tx = window.translate
@@ -39,6 +40,7 @@ export default function SearchInput(props: {
         onChange={onChange}
         value={value}
         className={'search-input ' + className}
+        ref={props.inputRef}
       />
       <ClearButton value={value} onChange={onChange} />
     </>

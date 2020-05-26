@@ -39,7 +39,7 @@ export const RenderMessage = React.memo(
     const conversationType: 'group' | 'direct' = GROUP_TYPES.includes(chat.type)
       ? 'group'
       : 'direct'
-    const onShowDetail = () => openDialog('MessageDetail', { message, chat })
+    const onShowDetail = () => openDialog('MessageDetail', { message })
     const onDelete = () =>
       openDialog('ConfirmationDialog', {
         message: tx('ask_delete_message_desktop'),

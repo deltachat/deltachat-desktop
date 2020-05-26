@@ -62,3 +62,28 @@ export function useContacts(listFlags: number, queryStr: string) {
 
   return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
 }
+
+const debouncedGetContactsIds = debounce(
+  (listFlags: number, queryStr: string, cb: (value: number[]) => void) => {
+    DeltaBackend.call('contacts.getContactIds', listFlags, queryStr).then(cb)
+  },
+  200
+)
+
+export function useContactIds(listFlags: number, queryStr: string) {
+  const [contactIds, setContacts] = useState<number[]>([])
+
+  const updateContacts = (queryStr: string) =>
+    debouncedGetContactsIds(listFlags, queryStr, setContacts)
+
+  useEffect(() => {
+    DeltaBackend.call('contacts.getContactIds', listFlags, queryStr).then(
+      setContacts
+    )
+  }, [])
+
+  return [contactIds, updateContacts] as [
+    typeof contactIds,
+    typeof updateContacts
+  ]
+}

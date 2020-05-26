@@ -9,8 +9,11 @@ import mime from 'mime-types'
 
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
-import { JsonMessage, MessageType } from '../../shared/shared-types'
-
+import {
+  JsonMessage,
+  MessageType,
+  MessageSearchResult,
+} from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -137,6 +140,34 @@ export default class DCMessageList extends SplitOut {
 
   markSeenMessages(messageIds: number[]) {
     this._dc.markSeenMessages(messageIds)
+  }
+
+  searchMessages(query: string, chatId: number = 0): number[] {
+    return this._dc.searchMessages(chatId, query)
+  }
+
+  private _msgId2SearchResultItem(msgId: number): MessageSearchResult {
+    const message = this._dc.getMessage(msgId)
+    const chat = this._dc.getChat(message.getChatId())
+    const author = this._dc.getContact(message.getFromId())
+
+    return {
+      id: msgId,
+      authorProfileImage: author.getProfileImage(),
+      author_name: author.getDisplayName(),
+      author_color: integerToHexColor(author.getColor()),
+      chat_name: chat.isSingle() ? null : chat.getName(),
+      message: message.getText(),
+      timestamp: message.getTimestamp(),
+    }
+  }
+
+  msgIds2SearchResultItems(ids: number[]) {
+    const result: { [id: number]: MessageSearchResult } = {}
+    for (let id of ids) {
+      result[id] = this._msgId2SearchResultItem(id)
+    }
+    return result
   }
 }
 

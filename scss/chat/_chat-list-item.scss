@@ -1,6 +1,7 @@
 /* Chat List (conversation list) */
 
-.chat-list-item {
+.chat-list-item,
+.pseudo-chat-list-item {
   height: 64px;
   display: flex;
   flex-direction: row;

@@ -3,7 +3,10 @@ import { ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import { getLogger } from '../../../shared/logger'
 import { useDebouncedCallback } from 'use-debounce'
-import { ChatListItemType } from '../../../shared/shared-types'
+import {
+  ChatListItemType,
+  MessageSearchResult,
+} from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/helpers/ChatList')
@@ -248,4 +251,26 @@ export const useLazyChatListItems = (chatListIds: number[]) => {
     fetchChatsInView(0)
   }, [chatListIds, chatItems, scrollRef])
   return { chatItems, onChatListScroll, scrollRef }
+}
+
+const debouncedSearchMessages = debounce(
+  (queryStr: string, chatId: number, cb: (value: number[]) => void) => {
+    DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(cb)
+  },
+  200
+)
+
+export function useMessageResults(queryStr: string, chatId: number = 0) {
+  const [ids, setIds] = useState<number[]>([])
+
+  const updateContacts = (queryStr: string, chatId: number = 0) =>
+    debouncedSearchMessages(queryStr, chatId, setIds)
+
+  useEffect(() => {
+    DeltaBackend.call('messageList.searchMessages', queryStr, chatId).then(
+      setIds
+    )
+  }, [])
+
+  return [ids, updateContacts] as [number[], typeof updateContacts]
 }
