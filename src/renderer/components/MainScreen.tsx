@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import { ScreenContext, SettingsContext } from '../contexts'
 
 import Media from './Media'
@@ -24,6 +24,7 @@ import {
   Button,
 } from '@blueprintjs/core'
 import { getLastSelectedChatId } from '../ipc'
+import { useKeyBindingAction, KeybindAction } from '../keybindings'
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
@@ -77,6 +78,20 @@ export default function MainScreen() {
     </div>
   )
 
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  useKeyBindingAction(KeybindAction.ChatList_FocusSearchInput, () => {
+    searchRef.current?.focus()
+  })
+
+  useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
+    if (!searchRef.current) {
+      return
+    }
+    searchRef.current.value = ''
+    searchChats('')
+  })
+
   // StandardJS won't let me use '&& { } || { }', so the following code
   // compares with showArchivedChats twice.
   return (
@@ -107,6 +122,7 @@ export default function MainScreen() {
                 onChange={handleSearchChange}
                 value={queryStr}
                 className='icon-rotated'
+                inputRef={searchRef}
               />
             )}
           </NavbarGroup>

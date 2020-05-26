@@ -1,6 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import debounce from 'debounce'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 type ComposerMessageInputProps = {
   draft: string
@@ -46,6 +47,15 @@ export default class ComposerMessageInput extends React.Component<
     }, 500)
 
     this.textareaRef = React.createRef()
+    this.focus = this.focus.bind(this)
+  }
+
+  componentDidMount() {
+    ActionEmitter.registerHandler(KeybindAction.Composer_Focus, this.focus)
+  }
+
+  componentWillUnmount() {
+    ActionEmitter.unRegisterHandler(KeybindAction.Composer_Focus, this.focus)
   }
 
   static getDerivedStateFromProps(

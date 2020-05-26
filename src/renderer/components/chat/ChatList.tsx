@@ -210,6 +210,10 @@ export default function ChatList(props: {
     }
   })
 
+  useKeyBindingAction(KeybindAction.ChatList_SelectFirstChat, () =>
+    selectFirstChat()
+  )
+
   // Render --------------------
   return (
     <>
