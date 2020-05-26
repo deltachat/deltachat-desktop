@@ -189,11 +189,7 @@ export const ChatListItemMessageResult = React.memo<{
   const { msr, onClick, queryStr } = props
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
   return (
-    <div
-      role='button'
-      onClick={onClick}
-      className={classNames('chat-list-item')}
-    >
+    <div role='button' onClick={onClick} className='pseudo-chat-list-item'>
       <Avatar
         avatarPath={msr.authorProfileImage}
         color={msr.author_color}

@@ -28,6 +28,8 @@ import {
 } from 'react-virtualized'
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
+import { webviewTag } from 'electron'
+import { KeybindAction } from '../../keybindings'
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -44,6 +46,7 @@ function ChatListPart({
   width,
   children,
   height,
+  scrollToIndex,
 }: {
   isRowLoaded: (params: Index) => boolean
   loadMoreRows: (params: IndexRange) => Promise<any>
@@ -51,6 +54,7 @@ function ChatListPart({
   width: number
   children: ListRowRenderer
   height: number
+  scrollToIndex?: number
 }) {
   return (
     <InfiniteLoader
@@ -68,6 +72,7 @@ function ChatListPart({
           rowRenderer={children}
           rowCount={rowCount}
           width={width}
+          scrollToIndex={scrollToIndex}
         />
       )}
     </InfiniteLoader>
@@ -139,6 +144,8 @@ export default function ChatList(props: {
   const screenContext = useContext(ScreenContext)
   const { openDialog } = screenContext
 
+  // divider height ------------
+
   const chatsHeight = (height: number) =>
     isSearchActive
       ? Math.min(
@@ -160,7 +167,85 @@ export default function ChatList(props: {
       contactsHeight(height) +
       (chatListIds.length == 0 ? CHATLISTITEM_HEIGHT : 0))
 
-  // Render ------------------
+  // scroll to selected chat ---
+  const [scrollToChatIndex, setScrollToChatIndex] = useState<number>(-1)
+
+  const scrollSelectedChatIntoView = () => {
+    const index = chatListIds.indexOf(selectedChatId)
+    if (index !== -1) {
+      setScrollToChatIndex(index)
+      setTimeout(() => setScrollToChatIndex(-1), 0)
+    }
+  }
+  // on select chat - scroll to selected chat - chatView
+  useEffect(() => {
+    scrollSelectedChatIntoView()
+  }, [selectedChatId])
+  // follow chat after loading or when it's position in the chatlist changes
+  useEffect(() => {
+    !isSearchActive && scrollSelectedChatIntoView()
+  }, [chatListIds.indexOf(selectedChatId)])
+
+  const selectFirstChat = () => selectChat(chatListIds[0])
+
+  // KeyboardShortcuts ---------
+  useEffect(() => {
+    const onKeyDown = (ev: KeyboardEvent) => {
+      // general stuff that is to be moved to a keybindings "controller"
+      // which has an event emitter that lets us listen to the actions directly
+      if (!window.__isReady || ev.repeat) return
+      let action = undefined
+      if (ev.altKey && ev.key === 'ArrowDown') {
+        action = KeybindAction.ChatList_SelectNextChat
+      } else if (ev.altKey && ev.key === 'ArrowUp') {
+        action = KeybindAction.ChatList_SelectPreviousChat
+      } else if (ev.altKey && ev.key === 'ArrowLeft') {
+        action = 'chatlist:scroll-to-selected-chat'
+      } else if (
+        ev.key === 'Enter' &&
+        (ev.target as any).id === 'chat-list-search'
+      ) {
+        // todo setSearchInputValue('')
+      } else {
+        return
+      }
+      // actual function ---------------------------
+      console.log(
+        'onKeyPress',
+        selectedChatId,
+        chatListIds.indexOf(selectedChatId),
+        action
+      )
+      const selectChat = (chatId: number) => {
+        console.log('selectChat', chatId)
+        if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return
+        props.onChatClick(chatId)
+      }
+
+      if (action == KeybindAction.ChatList_ScrollToSelectedChat) {
+        scrollSelectedChatIntoView()
+      } else if (action == KeybindAction.ChatList_SelectNextChat) {
+        if (selectedChatId === null) return selectFirstChat()
+
+        const current_index = chatListIds.indexOf(selectedChatId)
+        if (chatListIds[current_index + 1]) {
+          selectChat(chatListIds[current_index + 1])
+        }
+      } else if (action == KeybindAction.ChatList_SelectPreviousChat) {
+        if (selectedChatId === null) return selectFirstChat()
+
+        const current_index = chatListIds.indexOf(selectedChatId)
+        if (chatListIds[current_index - 1]) {
+          selectChat(chatListIds[current_index - 1])
+        }
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  })
+
+  // Render --------------------
   return (
     <>
       <div className='chat-list'>
@@ -178,6 +263,7 @@ export default function ChatList(props: {
                 rowCount={chatListIds.length}
                 width={width}
                 height={chatsHeight(height)}
+                scrollToIndex={scrollToChatIndex}
               >
                 {({ index, key, style }) => {
                   const chatId = chatListIds[index]
@@ -283,7 +369,7 @@ export default function ChatList(props: {
                               }}
                             />
                           ) : (
-                            <div className='chat-list-item skeleton' />
+                            <div className='pseudo-chat-list-item skeleton' />
                           )}
                         </div>
                       )
