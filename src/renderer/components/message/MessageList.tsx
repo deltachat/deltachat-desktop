@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { MessageWrapper } from './MessageWrapper'
+import { RenderMessage } from './MessageWrapper'
 import { ChatStoreState } from '../../stores/chat'
 import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
@@ -29,7 +29,7 @@ export default function MessageList({
     new CellMeasurerCache({
       fixedWidth: true,
       defaultHeight: 79,
-      minHeight: 25,
+      minHeight: 67,
     })
   )
 
@@ -144,13 +144,20 @@ export default function MessageList({
                         parent={parent}
                         rowIndex={index}
                       >
-                        <div style={style}>
-                          <MessageWrapper
-                            message={message as MessageType}
-                            locationStreamingEnabled={locationStreamingEnabled}
-                            chat={chat}
-                          />
-                        </div>
+                        {({ measure }) => (
+                          <div style={style}>
+                            <li>
+                              <RenderMessage
+                                message={message as MessageType}
+                                locationStreamingEnabled={
+                                  locationStreamingEnabled
+                                }
+                                chat={chat}
+                                reMeasureHeight={measure}
+                              />
+                            </li>
+                          </div>
+                        )}
                       </CellMeasurer>
                     )
                   }}

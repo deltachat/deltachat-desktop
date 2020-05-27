@@ -17,14 +17,7 @@ type RenderMessageProps = {
   locationStreamingEnabled: boolean
   chat: ChatStoreState
   disableMenu?: boolean
-}
-
-export const MessageWrapper = (props: RenderMessageProps) => {
-  return (
-    <li>
-      <RenderMessage {...props} />
-    </li>
-  )
+  reMeasureHeight?: () => void
 }
 
 export const RenderMessage = React.memo(

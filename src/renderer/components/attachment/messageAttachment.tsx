@@ -23,6 +23,7 @@ type AttachmentProps = {
   conversationType: 'group' | 'direct'
   direction: MessageType['msg']['direction']
   message: MessageType
+  reMeasureHeight?: () => void
 }
 
 export default function Attachment({
@@ -31,6 +32,7 @@ export default function Attachment({
   conversationType,
   direction,
   message,
+  reMeasureHeight,
 }: AttachmentProps) {
   const tx = window.translate
   if (!attachment) {
@@ -76,7 +78,11 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <img className='attachment-content' src={attachment.url} />
+        <img
+          className='attachment-content'
+          src={attachment.url}
+          onLoad={reMeasureHeight}
+        />
       </div>
     )
   } else if (isVideo(attachment)) {
@@ -105,6 +111,7 @@ export default function Attachment({
           className='attachment-content'
           src={attachment.url}
           controls={true}
+          onLoad={reMeasureHeight}
         />
       </div>
     )

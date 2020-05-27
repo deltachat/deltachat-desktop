@@ -220,6 +220,7 @@ const Message = (props: {
   onDelete: () => void
   onForward: () => void
   /* onRetrySend */
+  reMeasureHeight?: () => void
 }) => {
   const {
     direction,
@@ -235,6 +236,7 @@ const Message = (props: {
     onContactClick,
     onClickMessageBody,
     onShowDetail,
+    reMeasureHeight,
   } = props
   const tx = window.translate
 
@@ -299,6 +301,7 @@ const Message = (props: {
               direction,
               message,
             }}
+            reMeasureHeight={reMeasureHeight}
           />
 
           <div dir='auto' className='text'>
