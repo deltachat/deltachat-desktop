@@ -7,7 +7,9 @@ const fs = require('fs-extra')
  * @param {import('child_process').SpawnOptionsWithoutStdio} options
  */
 async function run (command, args, options) {
+
   return new Promise((resolve, reject) => {
+    console.log(`- Executing "${command} ${args.join(' ')}"`)
     const p = child.spawn(command, args, options)
     p.stdout.pipe(process.stdout)
     p.stderr.pipe(process.stderr)
@@ -22,13 +24,19 @@ async function run (command, args, options) {
   })
 }
 
-async function main(sourcemap=true, watch=false) {
-  console.log('- Compiling TypeScript...')
-  await run('npx', `tsc -b src/renderer --pretty`.split(' '))
-  console.log('- Finished compiling TypeScript...')
+async function main({watch, sourcemap}) {
+  if(watch === false) {
+
+    console.log('- Compiling TypeScript...')
+    await run('npx', 'tsc -b src/renderer --pretty'.split(' '))
+    console.log('- Finished compiling TypeScript...')
+  } else {
+    console.log('- Watch is enabled')
+    run('npx', 'tsc -b src/renderer --pretty -w --preserveWatchOutput'.split(' '))
+  } 
 
   const parcelArgs = [
-    'parcel', 'build', 'tsc-dist/renderer/main.js',
+    'parcel', watch ? 'watch' : 'build', 'tsc-dist/renderer/main.js',
     '--out-dir', 'html-dist',
     '--out-file', 'bundle.js',
     '--public-url', './',
@@ -37,7 +45,7 @@ async function main(sourcemap=true, watch=false) {
   const parcelENV = Object.assign({}, process.env)
 
   if (!sourcemap) parcelArgs.push('--no-source-maps')
-  if (process.env['NODE_ENV'] !== 'production') {
+  if (process.env['NODE_ENV'] !== 'production' && !watch) {
     parcelArgs.push('--no-minify')
     parcelENV['NODE_ENV'] = 'development'
   } else {
@@ -61,5 +69,8 @@ async function main(sourcemap=true, watch=false) {
   }
 }
 
-main()
+console.log(process.argv.indexOf('-w'))
+const watch = process.argv.indexOf('-w') !== -1
+
+main({watch, sourcemap: true})
 
