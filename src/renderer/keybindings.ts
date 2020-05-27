@@ -89,6 +89,8 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat
+    } else if (ev.altKey && ev.key === 'End') {
+      return KeybindAction.ChatView_ScrollToBottom
     }
   } else {
     // fire continuesly as long as button is pressed

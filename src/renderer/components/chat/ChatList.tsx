@@ -7,7 +7,7 @@ import ChatListItem, {
 } from './ChatListItem'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
-import { selectChat } from '../../stores/chat'
+import { selectChat, useChatStore2 } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { isValidEmail } from '../../../shared/util'
 import { ContactListItem } from '../contact/ContactListItem'
@@ -213,6 +213,8 @@ export default function ChatList(props: {
     selectFirstChat()
   )
 
+  const { chatStoreDispatch } = useChatStore2()
+
   // Render --------------------
   return (
     <>
@@ -321,14 +323,9 @@ export default function ChatList(props: {
                               queryStr={queryStr}
                               msr={messageCache[msrId]}
                               onClick={() => {
-                                openDialog('MessageDetail', {
-                                  message: {
-                                    msg: {
-                                      id: msrId,
-                                      receivedAt: null,
-                                      sentAt: null,
-                                    },
-                                  },
+                                chatStoreDispatch({
+                                  type: 'JUMP_TO_MESSAGE',
+                                  payload: msrId,
                                 })
                               }}
                             />

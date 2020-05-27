@@ -71,6 +71,13 @@ export default function MessageList({
     Loader.current.resetLoadMoreRowsCache()
   }, [chat.id])
 
+  useEffect(() => {
+    if (!chat.jump_to_messageId)
+      Scroller.current?.scrollToRow(messageIds.length)
+    else
+      Scroller.current?.scrollToRow(messageIds.indexOf(chat.jump_to_messageId))
+  }, [Object.keys(messageCache).length === 0, chat.jump_to_messageId])
+
   return (
     <div className='message-list' style={{ height: '100%' }}>
       <AutoSizer>
@@ -102,7 +109,6 @@ export default function MessageList({
                   overscanRowCount={10}
                   height={height}
                   width={width}
-                  scrollToIndex={messageIds.length - 1}
                   rowCount={messageIds.length}
                   rowHeight={heightCache.current.rowHeight}
                   rowRenderer={({ key, index, parent, style }) => {
@@ -148,7 +154,15 @@ export default function MessageList({
                         rowIndex={index}
                       >
                         {({ measure }) => (
-                          <div style={style}>
+                          <div
+                            style={{
+                              ...style,
+                              backgroundColor:
+                                chat.jump_to_messageId === message.msg.id
+                                  ? 'green'
+                                  : 'transparent',
+                            }}
+                          >
                             <li>
                               <RenderMessage
                                 message={message as MessageType}

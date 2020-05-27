@@ -28,6 +28,7 @@ class state implements FullChat {
   draft: string | null = null
 
   muted = false
+  jump_to_messageId: number = null
 }
 
 export { state as ChatStoreState }
@@ -39,7 +40,11 @@ const log = chatStore.log
 
 chatStore.attachReducer(({ type, payload, id }, state) => {
   if (type === 'SELECTED_CHAT') {
-    return { ...defaultState, ...payload }
+    return {
+      ...defaultState,
+      ...payload,
+      jump_to_messageId: payload.jump_to_messageId || null,
+    }
   }
 
   if (typeof id !== 'undefined' && id !== state.id) {
@@ -75,6 +80,31 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     })
     mainProcessUpdateBadge()
     saveLastChatId(chatId)
+  }
+  if (type === 'JUMP_TO_MESSAGE') {
+    const messageId = payload
+    // these methods were called in backend before
+    // might be an issue if DeltaBackend.call has a significant delay
+
+    const message = await DeltaBackend.call('messageList.getMessage', messageId)
+
+    let chat = {}
+
+    if (state.id !== message.msg.chatId) {
+      // switch To the required chat
+      chat = await DeltaBackend.call('chatList.selectChat', message.msg.chatId)
+    }
+
+    chatStore.dispatch({
+      type: 'SELECTED_CHAT',
+      payload: {
+        ...state,
+        ...chat,
+        jump_to_messageId: messageId,
+      },
+    })
+    mainProcessUpdateBadge()
+    saveLastChatId(message.msg.chatId)
   }
 })
 
