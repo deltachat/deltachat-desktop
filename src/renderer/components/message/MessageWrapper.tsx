@@ -7,6 +7,7 @@ import { openViewProfileDialog } from '../helpers/ChatMethods'
 import { ChatStoreState } from '../../stores/chat'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { UI_DeleteMessage } from './messageFunctions'
+import { openContextMenuFunction } from './MessageContextMenu'
 
 const log = getLogger('renderer/messageWrapper')
 
@@ -18,6 +19,7 @@ type RenderMessageProps = {
   chat: ChatStoreState
   disableMenu?: boolean
   reMeasureHeight?: () => void
+  openContextMenu?: openContextMenuFunction
 }
 
 export const RenderMessage = React.memo(

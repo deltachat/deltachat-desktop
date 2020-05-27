@@ -15,14 +15,17 @@ import {
 } from 'react-virtualized'
 import { useKeyBindingAction, KeybindAction } from '../../keybindings'
 import { useMessageIdList, useMessageList } from './messageListHook'
+import { openContextMenuFunction } from './MessageContextMenu'
 const log = getLogger('render/msgList')
 
 export default function MessageList({
   chat,
   locationStreamingEnabled,
+  openContextMenu,
 }: {
   chat: ChatStoreState
   locationStreamingEnabled: boolean
+  openContextMenu: openContextMenuFunction
 }) {
   console.log('render')
   const heightCache = useRef(
@@ -154,6 +157,7 @@ export default function MessageList({
                                 }
                                 chat={chat}
                                 reMeasureHeight={measure}
+                                openContextMenu={openContextMenu}
                               />
                             </li>
                           </div>

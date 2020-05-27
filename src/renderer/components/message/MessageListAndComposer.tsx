@@ -8,6 +8,10 @@ import { C } from 'deltachat-node/dist/constants'
 import { useDebouncedCallback } from 'use-debounce'
 import { ChatStoreState } from '../../stores/chat'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import {
+  openContextMenuFunction,
+  MessageContextMenu,
+} from './MessageContextMenu'
 
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
@@ -127,6 +131,16 @@ export default function MessageListAndComposer({
     chat.id,
   ])
 
+  const realOpenContextMenu = useRef(null)
+
+  const openContextMenu: openContextMenuFunction = (event, params) => {
+    if (realOpenContextMenu.current === null)
+      throw new Error(
+        'Tried to open ChatListContextMenu before we recieved open method'
+      )
+    realOpenContextMenu.current(event, params)
+  }
+
   return (
     <div
       className='message-list-and-composer'
@@ -136,9 +150,21 @@ export default function MessageListAndComposer({
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
+        <div
+          onClick={ev => {
+            ev.stopPropagation()
+          }}
+        >
+          <MessageContextMenu
+            getShow={show => {
+              realOpenContextMenu.current = show
+            }}
+          />
+        </div>
         <MessageList
           chat={chat}
           locationStreamingEnabled={settings.enableOnDemandLocationStreaming}
+          openContextMenu={openContextMenu}
         />
       </div>
       <Composer
