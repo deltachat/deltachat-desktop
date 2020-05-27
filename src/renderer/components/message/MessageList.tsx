@@ -28,12 +28,11 @@ export default function MessageList({
   const heightCache = useRef(
     new CellMeasurerCache({
       fixedWidth: true,
-      defaultHeight: 60,
+      defaultHeight: 79,
       minHeight: 25,
     })
   )
 
-  useEffect(() => heightCache.current.clearAll(), [chat.id])
   useKeyBindingAction(KeybindAction.Event_Window_Resize, () =>
     heightCache.current.clearAll()
   )
@@ -64,11 +63,16 @@ export default function MessageList({
     Scroller.current?.scrollToRow(messageIds.length)
   })
 
+  useEffect(() => {
+    heightCache.current.clearAll()
+    Loader.current.resetLoadMoreRowsCache()
+  }, [chat.id])
+
   return (
     <div className='message-list' style={{ height: '100%' }}>
       <AutoSizer>
         {({ width, height }) => (
-          <ul style={{ margin: 0 }}>
+          <ul style={{ margin: 0, width }}>
             {messageIds.length < 1 && (
               <li key={'empty-chat-message'}>
                 <div className='info-message big'>
@@ -92,11 +96,13 @@ export default function MessageList({
                     registerChild(ref)
                   }}
                   onRowsRendered={onRowsRendered}
+                  overscanRowCount={10}
                   height={height}
                   width={width}
+                  scrollToIndex={messageIds.length - 1}
                   rowCount={messageIds.length}
                   rowHeight={heightCache.current.rowHeight}
-                  rowRenderer={({ key, index, parent }) => {
+                  rowRenderer={({ key, index, parent, style }) => {
                     console.log('rowRenderer', index, messageIds[index])
                     const msgId = messageIds[index]
 
@@ -111,17 +117,19 @@ export default function MessageList({
                           parent={parent}
                           rowIndex={index}
                         >
-                          <div className='info-message' key={key}>
-                            <p style={{ textTransform: 'capitalize' }}>
-                              {moment
-                                .unix(nextMessage.msg.timestamp)
-                                .calendar(null, {
-                                  sameDay: `[${tx('today')}]`,
-                                  lastDay: `[${tx('yesterday')}]`,
-                                  lastWeek: 'LL',
-                                  sameElse: 'LL',
-                                })}
-                            </p>
+                          <div style={style}>
+                            <div className='info-message' key={key}>
+                              <p style={{ textTransform: 'capitalize' }}>
+                                {moment
+                                  .unix(nextMessage.msg.timestamp)
+                                  .calendar(null, {
+                                    sameDay: `[${tx('today')}]`,
+                                    lastDay: `[${tx('yesterday')}]`,
+                                    lastWeek: 'LL',
+                                    sameElse: 'LL',
+                                  })}
+                              </p>
+                            </div>
                           </div>
                         </CellMeasurer>
                       )
@@ -136,12 +144,13 @@ export default function MessageList({
                         parent={parent}
                         rowIndex={index}
                       >
-                        <MessageWrapper
-                          key={key}
-                          message={message as MessageType}
-                          locationStreamingEnabled={locationStreamingEnabled}
-                          chat={chat}
-                        />
+                        <div style={style}>
+                          <MessageWrapper
+                            message={message as MessageType}
+                            locationStreamingEnabled={locationStreamingEnabled}
+                            chat={chat}
+                          />
+                        </div>
                       </CellMeasurer>
                     )
                   }}
