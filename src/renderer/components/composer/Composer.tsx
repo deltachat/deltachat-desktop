@@ -5,8 +5,8 @@ import { SettingsContext } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
+import { UI_SendMessage } from '../message/messageFunctions'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -36,23 +36,19 @@ const Composer = forwardRef<
   }
 >((props, ref) => {
   const { isDisabled, disabledReason, chatId, draft } = props
-  const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const messageInputRef = useRef<ComposerMessageInput>()
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
 
-  const sendMessage = () => {
+  const sendTextMessage = () => {
     const message = messageInputRef.current.getText()
     if (message.match(/^\s*$/)) {
       log.debug(`Empty message: don't send it...`)
       return
     }
-    chatStoreDispatch({
-      type: 'SEND_MESSAGE',
-      payload: [chatId, message, null],
-    })
+    UI_SendMessage(chatId, { text: message })
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()
@@ -63,10 +59,7 @@ const Composer = forwardRef<
       { properties: ['openFile'] },
       (filenames: string[]) => {
         if (filenames && filenames[0]) {
-          chatStoreDispatch({
-            type: 'SEND_MESSAGE',
-            payload: [chatId, '', filenames[0]],
-          })
+          UI_SendMessage(chatId, { text: '', filename: filenames[0] })
         }
       }
     )
@@ -135,7 +128,7 @@ const Composer = forwardRef<
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={enterKeySends}
-              sendMessage={sendMessage}
+              sendMessage={sendTextMessage}
               setComposerSize={props.setComposerSize}
               chatId={chatId}
               draft={draft}
@@ -158,7 +151,10 @@ const Composer = forwardRef<
             setShowEmojiPicker={setShowEmojiPicker}
           />
         )}
-        <div className='composer__send-button-wrapper' onClick={sendMessage}>
+        <div
+          className='composer__send-button-wrapper'
+          onClick={sendTextMessage}
+        >
           <button aria-label={tx('menu_send')} />
         </div>
       </div>

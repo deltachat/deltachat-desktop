@@ -1,7 +1,7 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
-import { useChatStore } from '../../stores/chat'
+import { selectChat } from '../../stores/chat'
 import { DialogProps } from './DialogController'
 import { DCContact, MessageType } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
@@ -15,7 +15,6 @@ export default function DeadDrop(props: {
   onClose: DialogProps['onClose']
 }) {
   const { contact, msg, onClose } = props
-  const chatStoreDispatch = useChatStore()[1]
 
   const never = () => {
     DeltaBackend.call('contacts.blockContact', contact.id)
@@ -35,7 +34,7 @@ export default function DeadDrop(props: {
       messageId,
       contactId,
     })
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+    selectChat(chatId)
     onClose()
   }
 

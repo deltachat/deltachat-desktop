@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useState, useContext, useEffect } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import Composer from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
@@ -7,6 +7,7 @@ import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
 import { useDebouncedCallback } from 'use-debounce'
 import { ChatStoreState } from '../../stores/chat'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
 
@@ -121,6 +122,11 @@ export default function MessageListAndComposer({
     }
   }
 
+  // Focus composer when switching chats
+  useEffect(() => ActionEmitter.emitAction(KeybindAction.Composer_Focus), [
+    chat.id,
+  ])
+
   return (
     <div
       className='message-list-and-composer'
@@ -132,7 +138,6 @@ export default function MessageListAndComposer({
       <div className='message-list-and-composer__message-list'>
         <MessageList
           chat={chat}
-          refComposer={refComposer}
           locationStreamingEnabled={settings.enableOnDemandLocationStreaming}
         />
       </div>

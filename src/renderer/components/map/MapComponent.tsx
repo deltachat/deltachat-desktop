@@ -13,7 +13,6 @@ import { Slider, Button, Collapse } from '@blueprintjs/core'
 import PopupMessage from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
-import chatStore from '../../stores/chat'
 
 import { state as LocationStoreState } from '../../stores/locations'
 
@@ -25,6 +24,7 @@ import {
   JsonContact,
   JsonLocations,
 } from '../../../shared/shared-types'
+import { UI_SendMessage } from '../message/messageFunctions'
 
 type MapData = {
   contact: JsonContact
@@ -426,10 +426,7 @@ export default class MapComponent extends React.Component<
       return
     }
     const latLng = Object.assign({}, this.poiLocation)
-    chatStore.dispatch({
-      type: 'SEND_MESSAGE',
-      payload: [selectedChat.id, message, null, latLng],
-    })
+    UI_SendMessage(selectedChat.id, { text: message, location: latLng })
 
     if (this.contextMenuPopup) {
       this.contextMenuPopup.remove()

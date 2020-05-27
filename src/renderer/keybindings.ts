@@ -13,11 +13,16 @@ export enum KeybindAction {
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
   Settings_Open = 'settings:open',
+  ChatView_ScrollToBottom = 'chatview:scroll-bottom',
+  ChatView_RefreshMessageList = 'chatview:refresh-message-list',
 
   // Composite Actions (actions that trigger other actions)
   ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
   ChatList_ExitSearch = 'chatlist:exit-search',
   ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
+
+  // Events that are not triggered by keys (abusing the keybindings system for passing events around)
+  Event_Window_Resize = 'window:resize',
 }
 
 export namespace ActionEmitter {
@@ -133,3 +138,9 @@ ActionEmitter.registerHandler(
     ActionEmitter.emitAction(KeybindAction.Composer_Focus)
   }
 )
+
+// Register eventListeners that trigger actions
+
+window.addEventListener('resize', () => {
+  ActionEmitter.emitAction(KeybindAction.Event_Window_Resize)
+})
