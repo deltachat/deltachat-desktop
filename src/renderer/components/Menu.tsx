@@ -174,7 +174,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
       <DeltaMenuItem key='help' text={tx('menu_help')} onClick={openHelp} />
       <DeltaMenuItem
         key='logout'
-        text={tx('switch_account_desktop')}
+        text={tx('switch_account')}
         onClick={logout}
       />
     </Menu>

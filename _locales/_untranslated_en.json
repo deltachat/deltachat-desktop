@@ -38,9 +38,6 @@
   "about_licensed_under_desktop": {
     "message": "This software is licensed under GNU GPL version 3 and the source code is available on GitHub."
   },
-  "switch_account_desktop": {
-    "message": "Switch account"
-  },
   "select_profile_image_desktop": {
     "message": "Select your new profile image"
   },
