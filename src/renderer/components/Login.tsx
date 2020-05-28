@@ -343,7 +343,7 @@ export default class Login extends React.Component<
               value={mail_security}
               onChange={this.handleCredentialsChange as any}
             >
-              <option value='automatic'>Automatic</option>
+              <option value='automatic'>{tx('automatic')}</option>
               <option value='ssl'>SSL/TLS</option>
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>
@@ -395,7 +395,7 @@ export default class Login extends React.Component<
               value={send_security}
               onChange={this.handleCredentialsChange as any}
             >
-              <option value='automatic'>Automatic</option>
+              <option value='automatic'>{tx('automatic')}</option>
               <option value='ssl'>SSL/TLS</option>
               <option value='starttls'>STARTTLS</option>
               <option value='plain'>{tx('off')}</option>

@@ -138,10 +138,6 @@ p.delta-headline {
 }
 
 div.delta-form-group {
-  .bp3-form-content {
-    padding: 0px 10px 0px 10px;
-  }
-
   div.label {
     height: 13px;
     font-size: 13px;
@@ -155,9 +151,10 @@ div.delta-form-group {
 
   &.delta-select {
     .bp3-select::after {
-      content: '>';
-      font: 11px 'Consolas', monospace;
-      transform: rotate(90deg);
+      top: 0px;
+      content: '^';
+      font: 17px 'Consolas', monospace;
+      transform: rotate(180deg);
     }
     .bp3-select {
       width: 100%;
@@ -169,6 +166,7 @@ div.delta-form-group {
         width: 100%;
         color: var(--deltaChatPrimaryFgLight);
         font-size: 17px;
+        padding-left: 0px;
         &:hover,
         &:focus {
           outline: unset;
