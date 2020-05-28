@@ -2,88 +2,16 @@ import { SettingsContext, ScreenContext } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
 import {
   H5,
-  HTMLSelect,
-  RadioGroup,
-  Radio,
   H6,
   Card,
   Elevation,
 } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
-import {
-  SmallDialog,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './DeltaDialog'
-import { DialogProps } from './DialogController'
 import { SettingsSelector } from './Settings'
+import { SmallSelectDialog } from './DeltaDialog'
 const { ipcRenderer } = window.electron_functions
 
-export function SmallSelectDialog({
-  selectedValue,
-  values,
-  onSave,
-  title,
-  isOpen,
-  onClose,
-}: {
-  title: string
-  selectedValue: string
-  values: [string, string][]
-  onSave: (selectedValue: string) => void
-  isOpen: DialogProps['isOpen']
-  onClose: DialogProps['onClose']
-}) {
-  const [actualSelectedValue, setActualSelectedValue] = useState<string>(
-    selectedValue
-  )
-
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const actualSelectedValue: string = String(event.currentTarget.value)
-    setActualSelectedValue(actualSelectedValue)
-  }
-  const saveAndClose = () => {
-    onSave(actualSelectedValue)
-    onClose()
-  }
-
-  const tx = window.translate
-  return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogHeader title={title} />
-      <DeltaDialogBody>
-        <DeltaDialogContent>
-          <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
-            {values.map((element, index) => {
-              const [value, label] = element
-              return (
-                <Radio key={'select-' + index} label={label} value={value} />
-              )
-            })}
-          </RadioGroup>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p className='delta-button danger bold' onClick={onClose}>
-          {tx('cancel')}
-        </p>
-        <p className='delta-button primary bold' onClick={saveAndClose}>
-          {tx('save_desktop')}
-        </p>
-      </DeltaDialogFooter>
-    </SmallDialog>
-  )
-}
 
 class BackgroundSelector extends React.Component {
   fileInput: todo
