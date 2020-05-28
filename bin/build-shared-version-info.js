@@ -8,7 +8,7 @@ async function gatherBuildInfo() {
     console.log(stderr)
     throw new Error('getting git commit failed')
   }
-  const package = await fs.readJSON(join(__dirname, '../../package.json'))
+  const package = await fs.readJSON(join(__dirname, '../package.json'))
   return {
     VERSION: package.version,
     BUILD_TIMESTAMP: Date.now(),
@@ -20,7 +20,7 @@ async function gatherBuildInfo() {
 
 gatherBuildInfo().then(build_info => {
   fs.writeFileSync(
-    join(__dirname, '../../src/shared/build-info.ts'),
+    join(__dirname, '../src/shared/build-info.ts'),
     '/// GENERATED FILE run `npm run build` to refresh\n' +
       Object.keys(build_info)
         .map(

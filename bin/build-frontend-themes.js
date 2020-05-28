@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const sass = require('node-sass')
 const { join } = require('path')
 
-const dc_theme_dir = join(__dirname, '../../themes')
+const dc_theme_dir = join(__dirname, '../themes')
 ;(async () => {
   const files = await fs.readdir(dc_theme_dir)
   const themes = files.filter(f => f.includes('.scss') && f.charAt(0) !== '_')
