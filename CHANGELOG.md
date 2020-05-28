@@ -1,6 +1,19 @@
 # Changelog
 
-## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.3...HEAD)
+## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...HEAD)
+
+## [1.3.4](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.3.4) - 2020-05-18
+
+### Fixed
+
+- Fix crash on login when entering invalid email
+- Fix not being able to login because of old core
+- Fix scanning qr code
+- Fix error toast only showing the event name and not the error message
+
+### Changed
+
+- Upgrade deltachat-node to v1.33.0
 
 ## [1.3.3](https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...v1.3.3) - 2020-05-12
 
