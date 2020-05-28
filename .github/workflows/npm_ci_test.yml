@@ -23,7 +23,7 @@ jobs:
         CI: true
     - uses: DevExpress/testcafe-action@latest
       with:
-        version: "1.6.0"
+        version: "1.8.0"
         args: "--skip-js-errors electron:. ./test/testcafe/test_ci.js"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
