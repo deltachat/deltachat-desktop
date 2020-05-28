@@ -14,16 +14,6 @@ import { DeltaBackend } from '../../delta-remote'
 import { SettingsButton, SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 
-const tx = window.translate
-const AUTODELETE_DURATION_OPTIONS = [
-  [String(AutodeleteDuration.OFF), tx('off')],
-  [String(AutodeleteDuration.ONE_HOUR), tx('autodel_after_1_hour')],
-  [String(AutodeleteDuration.ONE_DAY), tx('autodel_after_1_day')],
-  [String(AutodeleteDuration.ONE_WEEK), tx('autodel_after_1_week')],
-  [String(AutodeleteDuration.FOUR_WEEKS), tx('autodel_after_4_weeks')],
-  [String(AutodeleteDuration.ONE_YEAR), tx('autodel_after_1_year')]
-]
-
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.translate
@@ -48,7 +38,17 @@ function durationToString(configValue: number | string) {
 export default function SettingsAutodelete(props: any) {
   const { openDialog } = useContext(ScreenContext)
   const { handleDeltaSettingsChange, settings } = props
+  
   const tx = window.translate
+  const AUTODELETE_DURATION_OPTIONS = [
+    [String(AutodeleteDuration.OFF), tx('off')],
+    [String(AutodeleteDuration.ONE_HOUR), tx('autodel_after_1_hour')],
+    [String(AutodeleteDuration.ONE_DAY), tx('autodel_after_1_day')],
+    [String(AutodeleteDuration.ONE_WEEK), tx('autodel_after_1_week')],
+    [String(AutodeleteDuration.FOUR_WEEKS), tx('autodel_after_4_weeks')],
+    [String(AutodeleteDuration.ONE_YEAR), tx('autodel_after_1_year')]
+  ]
+
   
   const onOpenDeviceDialog = async () => {
     openDialog(SmallSelectDialog, {
