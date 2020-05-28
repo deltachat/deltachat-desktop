@@ -371,6 +371,8 @@ function txCoreStrings() {
   strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_SERVER_RESPONSE] = tx('login_error_server_response')
+  strings[68] = tx('device_talk')
+  strings[69] = tx('saved_messages')
 
   return strings
 }
