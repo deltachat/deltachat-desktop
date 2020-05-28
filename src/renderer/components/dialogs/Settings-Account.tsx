@@ -85,7 +85,7 @@ export default function SettingsAccount({
       {accountSettings && (
         <Login
           {...accountSettings}
-          mode="update"
+          mode='update'
           onSubmit={onLoginSubmit}
           loading={deltachat.configuring}
           onClose={onClose}
