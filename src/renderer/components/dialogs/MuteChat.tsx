@@ -12,7 +12,6 @@ import { RadioGroup, Radio } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { MuteDuration } from '../../../shared/constants'
 
-
 export default function MuteChat({
   isOpen,
   onClose,
@@ -22,7 +21,6 @@ export default function MuteChat({
   onClose: () => void
   chatId: number
 }) {
-
   const tx = window.translate
 
   const MUTE_DURATION_OPTIONS: [string, string][] = [
@@ -31,8 +29,7 @@ export default function MuteChat({
     [String(MuteDuration.TWO_HOURS), tx('mute_for_two_hours')],
     [String(MuteDuration.ONE_DAY), tx('mute_for_one_day')],
     [String(MuteDuration.SEVEN_DAYS), tx('mute_for_seven_days')],
-    [String(MuteDuration.FOREVER), tx('mute_forever')]
-    
+    [String(MuteDuration.FOREVER), tx('mute_forever')],
   ]
   const [muteDuration, setMuteDuration] = useState<MuteDuration>(
     MuteDuration.OFF
@@ -43,7 +40,7 @@ export default function MuteChat({
   }
 
   return (
-    <SmallSelectDialog 
+    <SmallSelectDialog
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
       selectedValue={String(muteDuration)}

@@ -1,17 +1,11 @@
 import { SettingsContext, ScreenContext } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import {
-  H5,
-  H6,
-  Card,
-  Elevation,
-} from '@blueprintjs/core'
+import { H5, H6, Card, Elevation } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
 const { ipcRenderer } = window.electron_functions
-
 
 class BackgroundSelector extends React.Component {
   fileInput: todo

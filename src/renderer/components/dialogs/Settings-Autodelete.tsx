@@ -38,7 +38,7 @@ function durationToString(configValue: number | string) {
 export default function SettingsAutodelete(props: any) {
   const { openDialog } = useContext(ScreenContext)
   const { handleDeltaSettingsChange, settings } = props
-  
+
   const tx = window.translate
   const AUTODELETE_DURATION_OPTIONS = [
     [String(AutodeleteDuration.OFF), tx('off')],
@@ -46,25 +46,26 @@ export default function SettingsAutodelete(props: any) {
     [String(AutodeleteDuration.ONE_DAY), tx('autodel_after_1_day')],
     [String(AutodeleteDuration.ONE_WEEK), tx('autodel_after_1_week')],
     [String(AutodeleteDuration.FOUR_WEEKS), tx('autodel_after_4_weeks')],
-    [String(AutodeleteDuration.ONE_YEAR), tx('autodel_after_1_year')]
+    [String(AutodeleteDuration.ONE_YEAR), tx('autodel_after_1_year')],
   ]
 
-  
   const onOpenDeviceDialog = async () => {
     openDialog(SmallSelectDialog, {
       values: AUTODELETE_DURATION_OPTIONS,
       selectedValue: settings['delete_device_after'],
       title: tx('autodel_device_title'),
-      onSave: (value:string) => handleDeltaSettingsChange('autodel_device_title', value),
+      onSave: (value: string) =>
+        handleDeltaSettingsChange('autodel_device_title', value),
     })
   }
-  
+
   const onOpenServerDialog = async () => {
     openDialog(SmallSelectDialog, {
       values: AUTODELETE_DURATION_OPTIONS,
       selectedValue: settings['delete_server_after'],
       title: tx('autodel_server_title'),
-      onSave: (value:string) => handleDeltaSettingsChange('delete_server_after', value),
+      onSave: (value: string) =>
+        handleDeltaSettingsChange('delete_server_after', value),
     })
   }
 
