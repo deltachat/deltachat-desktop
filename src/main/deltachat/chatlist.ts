@@ -122,12 +122,13 @@ export default class DCChatList extends SplitOut {
     const summary = await this.getChatListSummary(list, i)
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
+    const name = chat.name|| summary.text1
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
     // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
     const chatListItem = {
       id: chat.id,
-      name: chat.name || summary.text1,
+      name,
       avatarPath: chat.profileImage,
       color: integerToHexColor(chat.color),
       lastUpdated: lastUpdated,
