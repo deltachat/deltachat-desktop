@@ -206,8 +206,6 @@ export default class Settings extends React.Component {
     ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
-
-
   renderDialogContent() {
     const { deltachat, openDialog } = this.props
     const { settings } = this.state
@@ -275,7 +273,10 @@ export default class Settings extends React.Component {
               }}
             />
           </Card>
-          <SettingsAppearance forceUpdate={this.forceUpdate} handleDesktopSettingsChange={this.handleDesktopSettingsChange} />
+          <SettingsAppearance
+            forceUpdate={this.forceUpdate}
+            handleDesktopSettingsChange={this.handleDesktopSettingsChange}
+          />
           <SettingsEncryption renderDeltaSwitch={this.renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
@@ -366,7 +367,6 @@ export default class Settings extends React.Component {
     )
   }
 }
-
 
 function ProfileImageSelector(props: any) {
   const { displayName, color } = props
