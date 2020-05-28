@@ -1,14 +1,12 @@
 import { SettingsContext, ScreenContext } from "../../contexts"
 import React, { useContext, useEffect, useState } from "react"
-import { H5, HTMLSelect, RadioGroup, Radio } from "@blueprintjs/core"
+import { H5, HTMLSelect, RadioGroup, Radio, H6, Card, Elevation } from "@blueprintjs/core"
 import { DeltaBackend } from "../../delta-remote"
 import { ThemeManager } from "../../ThemeManager"
 import { SmallDialog, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogFooter } from "./DeltaDialog"
-import DialogController, { DialogProps } from "./DialogController"
-import { AutodeleteTimeDurations } from "./Settings-Autodelete"
-import { AutodeleteDuration } from "../../../shared/constants"
-import ScreenController from "../../ScreenController"
+import { DialogProps } from "./DialogController"
 import { SettingsSelector } from "./Settings"
+const { ipcRenderer } = window.electron_functions
 
 export function SmallSelectDialog(
     {selectedValue, values, onSave, title, isOpen, onClose} :
@@ -71,7 +69,128 @@ export function SmallSelectDialog(
     )
 }
 
-export default function SettingsAppearance({forceUpdate}:{forceUpdate: any}) {
+
+class BackgroundSelector extends React.Component {
+    fileInput: todo
+    colorInput: todo
+    constructor(
+      public props: {
+        onChange: (value: string) => void
+      }
+    ) {
+      super(props)
+      this.fileInput = React.createRef()
+      this.colorInput = document.getElementById('color-input') // located in index.html outside of react
+      this.colorInput.onchange = (ev: any) => this.onColor.bind(this)(ev)
+    }
+  
+    componentWillUnmount() {
+      this.colorInput.onchange = null
+    }
+  
+    render() {
+      const tx = window.translate
+      return (
+        <div>
+          <div className={'bg-option-wrap'}>
+            <SettingsContext.Consumer>
+              {(settings: any) => (
+                <div
+                  style={{
+                    backgroundImage: settings['chatViewBgImg'],
+                    backgroundSize: 'cover',
+                  }}
+                  aria-label={tx('a11y_background_preview_label')}
+                  className={'background-preview'}
+                />
+              )}
+            </SettingsContext.Consumer>
+            <div className={'background-options'}>
+              <button
+                onClick={this.onButton.bind(this, 'def')}
+                className={'bp3-button'}
+              >
+                {tx('pref_background_default')}
+              </button>
+              <button
+                onClick={this.onButton.bind(this, 'def_color')}
+                className={'bp3-button'}
+              >
+                {tx('pref_background_default_color')}
+              </button>
+              <button
+                onClick={this.onButton.bind(this, 'image')}
+                className={'bp3-button'}
+              >
+                {tx('pref_background_custom_image')}
+              </button>
+              <button
+                onClick={this.onButton.bind(this, 'color')}
+                className={'bp3-button'}
+              >
+                {tx('pref_background_custom_color')}
+              </button>
+            </div>
+          </div>
+          <div className={'background-default-images'}>
+            {[
+              'flower.webp',
+              'bee.webp',
+              'wheat.webp',
+              'mm-1.webp',
+              'mm-2.webp',
+              'lake-tekapo.jpg',
+              'nz-beach.webp',
+              'petito-moreno.webp',
+            ].map(elem => (
+              <div
+                onClick={this.onButton.bind(this, 'pimage')}
+                style={{
+                  backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
+                }}
+                key={elem}
+                data-url={elem}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  
+    setValue(val: string) {
+      this.props.onChange(val)
+    }
+  
+    onButton(type: string, ev: any) {
+      switch (type) {
+        case 'def':
+          this.setValue(undefined)
+          break
+        case 'def_color':
+          this.setValue('var(--chatViewBg)')
+          break
+        case 'image':
+          ipcRenderer.send('selectBackgroundImage')
+          break
+        case 'pimage':
+          ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
+          break
+        case 'color':
+          this.colorInput && this.colorInput.click()
+          break
+        default:
+          /* ignore-console-log */
+          console.error("this shouldn't happen")
+      }
+    }
+  
+    onColor(ev: any) {
+      // TODO debounce
+      this.setValue(ev.target.value)
+    }
+  }
+
+export default function SettingsAppearance({forceUpdate, handleDesktopSettingsChange}:{forceUpdate: any, handleDesktopSettingsChange: todo}) {
     const { activeTheme } = useContext(SettingsContext)
     const { openDialog } = useContext(ScreenContext)
     
@@ -118,7 +237,7 @@ export default function SettingsAppearance({forceUpdate}:{forceUpdate: any}) {
 
     const tx = window.translate
     return (
-          <div>
+            <Card elevation={Elevation.ONE}>
             <H5>{tx('pref_appearance')}</H5>
             <SettingsSelector
                 onClick={onOpenSelectThemeDialog}
@@ -126,6 +245,14 @@ export default function SettingsAppearance({forceUpdate}:{forceUpdate: any}) {
             >
                 {tx('pref_theme')}
             </SettingsSelector>
-          </div>
+            <br/>
+            <H6>{tx('pref_background')}</H6>
+            <BackgroundSelector
+              onChange={(val: string) =>
+                handleDesktopSettingsChange('chatViewBgImg', val)
+              }
+            />
+           
+           </Card>
     )
   }
