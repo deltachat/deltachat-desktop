@@ -7,8 +7,6 @@ import {
   DeltaDialogFooter,
 } from './DeltaDialog'
 import React, { useState } from 'react'
-import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contextMenu'
-import { AutodeleteTimeDurations } from './Settings-Autodelete'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { MuteDuration } from '../../../shared/constants'
