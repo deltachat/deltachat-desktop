@@ -92,6 +92,7 @@
     "react-string-replace": "^0.4.4",
     "react-virtualized": "^9.21.2",
     "sass": "^1.26.5",
+    "react-window": "git+https://github.com/bvaughn/react-window.git#issues/6",
     "simple-markdown": "^0.7.1",
     "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
