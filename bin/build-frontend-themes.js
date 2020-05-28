@@ -1,5 +1,5 @@
 const fs = require('fs-extra')
-const sass = require('node-sass')
+const sass = require('sass')
 const { join } = require('path')
 
 const dc_theme_dir = join(__dirname, '../themes')
