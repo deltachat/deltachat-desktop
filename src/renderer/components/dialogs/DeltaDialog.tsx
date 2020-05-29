@@ -283,13 +283,18 @@ export function SmallSelectDialog({
   title,
   isOpen,
   onClose,
+  onSelect,
+  onCancel
 }: {
   title: string
   selectedValue: string
   values: [string, string][]
-  onSave: (selectedValue: string) => void
+  
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
+  onSave?: (selectedValue: string) => void
+  onSelect?: (selectedValue: string) => void
+  onCancel?: () => void
 }) {
   const [actualSelectedValue, setActualSelectedValue] = useState<string>(
     selectedValue
@@ -298,9 +303,10 @@ export function SmallSelectDialog({
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const actualSelectedValue: string = String(event.currentTarget.value)
     setActualSelectedValue(actualSelectedValue)
+    onSelect && onSelect(actualSelectedValue)
   }
   const saveAndClose = () => {
-    onSave(actualSelectedValue)
+    onSave && onSave(actualSelectedValue)
     onClose()
   }
 
@@ -328,7 +334,7 @@ export function SmallSelectDialog({
           padding: '7px 13px 10px 13px',
         }}
       >
-        <p className='delta-button danger bold' onClick={onClose}>
+        <p className='delta-button danger bold' onClick={() => {onCancel(); onClose();} }>
           {tx('cancel')}
         </p>
         <p className='delta-button primary bold' onClick={saveAndClose}>

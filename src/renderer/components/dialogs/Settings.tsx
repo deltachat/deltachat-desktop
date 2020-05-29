@@ -274,7 +274,6 @@ export default class Settings extends React.Component {
             />
           </Card>
           <SettingsAppearance
-            forceUpdate={this.forceUpdate}
             handleDesktopSettingsChange={this.handleDesktopSettingsChange}
           />
           <SettingsEncryption renderDeltaSwitch={this.renderDeltaSwitch} />

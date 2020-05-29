@@ -128,10 +128,8 @@ class BackgroundSelector extends React.Component {
 }
 
 export default function SettingsAppearance({
-  forceUpdate,
   handleDesktopSettingsChange,
 }: {
-  forceUpdate: any
   handleDesktopSettingsChange: todo
 }) {
   const { activeTheme } = useContext(SettingsContext)
@@ -149,10 +147,14 @@ export default function SettingsAppearance({
     })()
   }, [])
 
-  const onSave = async (theme: string) => {
+  const onCancel = async (theme: string) => {
+    await DeltaBackend.call('extras.setTheme', activeTheme)
+    await ThemeManager.refresh()
+  }
+
+  const onSelect = async (theme: string) => {
     await DeltaBackend.call('extras.setTheme', theme)
     await ThemeManager.refresh()
-    forceUpdate()
   }
 
   const onOpenSelectThemeDialog = async () => {
@@ -170,7 +172,8 @@ export default function SettingsAppearance({
       values,
       selectedValue: activeTheme,
       title: tx('pref_theme'),
-      onSave,
+      onSelect,
+      onCancel
     })
   }
 
