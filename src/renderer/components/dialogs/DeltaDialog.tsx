@@ -284,12 +284,12 @@ export function SmallSelectDialog({
   isOpen,
   onClose,
   onSelect,
-  onCancel
+  onCancel,
 }: {
   title: string
   selectedValue: string
   values: [string, string][]
-  
+
   isOpen: DialogProps['isOpen']
   onClose: DialogProps['onClose']
   onSave?: (selectedValue: string) => void
@@ -334,7 +334,13 @@ export function SmallSelectDialog({
           padding: '7px 13px 10px 13px',
         }}
       >
-        <p className='delta-button danger bold' onClick={() => {onCancel(); onClose();} }>
+        <p
+          className='delta-button danger bold'
+          onClick={() => {
+            onCancel()
+            onClose()
+          }}
+        >
           {tx('cancel')}
         </p>
         <p className='delta-button primary bold' onClick={saveAndClose}>

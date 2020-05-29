@@ -173,7 +173,7 @@ export default function SettingsAppearance({
       selectedValue: activeTheme,
       title: tx('pref_theme'),
       onSelect,
-      onCancel
+      onCancel,
     })
   }
 
