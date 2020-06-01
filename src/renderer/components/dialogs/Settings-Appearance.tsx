@@ -128,8 +128,15 @@ class BackgroundSelector extends React.Component {
 }
 
 export default function SettingsAppearance({
+<<<<<<< HEAD
   handleDesktopSettingsChange,
 }: {
+=======
+  forceUpdate,
+  handleDesktopSettingsChange,
+}: {
+  forceUpdate: any
+>>>>>>> 224aa6d8... We are starting with async core
   handleDesktopSettingsChange: todo
 }) {
   const { activeTheme } = useContext(SettingsContext)
@@ -147,6 +154,7 @@ export default function SettingsAppearance({
     })()
   }, [])
 
+<<<<<<< HEAD
   const onCancel = async (theme: string) => {
     await DeltaBackend.call('extras.setTheme', activeTheme)
     await ThemeManager.refresh()
@@ -155,6 +163,12 @@ export default function SettingsAppearance({
   const onSelect = async (theme: string) => {
     await DeltaBackend.call('extras.setTheme', theme)
     await ThemeManager.refresh()
+=======
+  const onSave = async (theme: string) => {
+    await DeltaBackend.call('extras.setTheme', theme)
+    await ThemeManager.refresh()
+    forceUpdate()
+>>>>>>> 224aa6d8... We are starting with async core
   }
 
   const onOpenSelectThemeDialog = async () => {
@@ -172,8 +186,12 @@ export default function SettingsAppearance({
       values,
       selectedValue: activeTheme,
       title: tx('pref_theme'),
+<<<<<<< HEAD
       onSelect,
       onCancel,
+=======
+      onSave,
+>>>>>>> 224aa6d8... We are starting with async core
     })
   }
 
@@ -209,3 +227,7 @@ export default function SettingsAppearance({
     </Card>
   )
 }
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 224aa6d8... We are starting with async core

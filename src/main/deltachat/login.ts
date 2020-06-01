@@ -53,10 +53,8 @@ export default class DCLoginController extends SplitOut {
     }
 
     await new Promise((res, rej) => {
-      this._dc.open(this._controller.accountDir, (err: any) => {
-        if (err) rej(err)
-        else res()
-      })
+      this._dc.open(this._controller.accountDir)
+      this._dc.startIO(res)
     })
 
     this.setCoreStrings(coreStrings)
@@ -73,6 +71,7 @@ export default class DCLoginController extends SplitOut {
       this._dc.once('ready', onReady)
       this._controller.configuring = true
       this._dc.configure(this.addServerFlags(credentials), undefined)
+      
       sendStateToRenderer()
     } else {
       onReady()
@@ -104,6 +103,7 @@ export default class DCLoginController extends SplitOut {
 
   close() {
     if (!this._dc) return
+    this._dc.stopIO()
     this._dc.close()
     this._controller._dc = null
   }

@@ -112,13 +112,12 @@ export default class DCBackup extends SplitOut {
         }
       })
     }
-    binding.dcn_open(dcnContext, db, '', (err: any) => {
-      if (err) return onError(err)
-      log.debug(`openend context`)
-      log.debug(`Starting backup import of ${file}`)
+    binding.dcn_open(dcnContext, db)
 
-      binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
-      binding.dcn_perform_imap_jobs(dcnContext)
-    })
+    log.debug(`openend context`)
+    log.debug(`Starting backup import of ${file}`)
+
+    binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
+    binding.dcn_perform_imap_jobs(dcnContext)
   }
 }
