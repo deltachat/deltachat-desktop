@@ -36,6 +36,7 @@ import {
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
+import SettingsAppearance from './Settings-Appearance'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -67,17 +68,14 @@ export default class Settings extends React.Component {
     settings: todo
     show: string
     selfContact: todo
-    availableThemes: string[]
   }
   constructor(public props: DialogProps) {
     super(props)
     this.state = {
       showSettingsDialog: false,
-
       settings: {},
       show: 'main',
       selfContact: {},
-      availableThemes: [],
     }
     this.onKeyTransferComplete = this.onKeyTransferComplete.bind(this)
     this.handleDesktopSettingsChange = this.handleDesktopSettingsChange.bind(
@@ -101,8 +99,6 @@ export default class Settings extends React.Component {
       C.DC_CONTACT_ID_SELF
     )
     this.setState({ selfContact })
-    const availableThemes = await DeltaBackend.call('extras.getAvailableThemes')
-    this.setState({ availableThemes })
   }
 
   async loadSettings() {
@@ -210,41 +206,6 @@ export default class Settings extends React.Component {
     ipcRenderer.removeAllListeners('DC_EVENT_IMEX_FILE_WRITTEN')
   }
 
-  renderThemeSelection() {
-    return (
-      <SettingsContext.Consumer>
-        {(settings: any) => (
-          <div>
-            <H5>{this.translate('pref_theming')}</H5>
-            <div className='theme-meta'>
-              <b>
-                <p className='name'></p>
-              </b>
-              <p className='description'></p>
-            </div>
-            <HTMLSelect
-              onChange={async ev => {
-                await DeltaBackend.call('extras.setTheme', ev.target.value)
-                await ThemeManager.refresh()
-                this.forceUpdate()
-              }}
-              value={settings['activeTheme']}
-            >
-              <option key={'system'} value={'system'}>
-                {this.translate('pref_system_theme')}
-              </option>
-              {this.state.availableThemes?.map((theme: todo) => (
-                <option key={theme.address} value={theme.address}>
-                  {theme.name} - {theme.description} [{theme.address}]
-                </option>
-              ))}
-            </HTMLSelect>
-          </div>
-        )}
-      </SettingsContext.Consumer>
-    )
-  }
-
   renderDialogContent() {
     const { deltachat, openDialog } = this.props
     const { settings } = this.state
@@ -312,14 +273,9 @@ export default class Settings extends React.Component {
               }}
             />
           </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{this.translate('pref_background')}</H5>
-            <BackgroundSelector
-              onChange={(val: string) =>
-                this.handleDesktopSettingsChange('chatViewBgImg', val)
-              }
-            />
-          </Card>
+          <SettingsAppearance
+            handleDesktopSettingsChange={this.handleDesktopSettingsChange}
+          />
           <SettingsEncryption renderDeltaSwitch={this.renderDeltaSwitch} />
           <Card elevation={Elevation.ONE}>
             <H5>{this.translate('pref_chats_and_media')}</H5>
@@ -342,8 +298,6 @@ export default class Settings extends React.Component {
               'enableOnDemandLocationStreaming',
               this.translate('pref_on_demand_location_streaming')
             )}
-            <br />
-            {this.renderThemeSelection()}
             <br />
             <H5>{this.translate('pref_imap_folder_handling')}</H5>
             {this.renderDeltaSwitch(
@@ -410,126 +364,6 @@ export default class Settings extends React.Component {
         <DeltaDialogBody noFooter>{this.renderDialogContent()}</DeltaDialogBody>
       </DeltaDialogBase>
     )
-  }
-}
-
-class BackgroundSelector extends React.Component {
-  fileInput: todo
-  colorInput: todo
-  constructor(
-    public props: {
-      onChange: (value: string) => void
-    }
-  ) {
-    super(props)
-    this.fileInput = React.createRef()
-    this.colorInput = document.getElementById('color-input') // located in index.html outside of react
-    this.colorInput.onchange = (ev: any) => this.onColor.bind(this)(ev)
-  }
-
-  componentWillUnmount() {
-    this.colorInput.onchange = null
-  }
-
-  render() {
-    const tx = window.translate
-    return (
-      <div>
-        <div className={'bg-option-wrap'}>
-          <SettingsContext.Consumer>
-            {(settings: any) => (
-              <div
-                style={{
-                  backgroundImage: settings['chatViewBgImg'],
-                  backgroundSize: 'cover',
-                }}
-                aria-label={tx('a11y_background_preview_label')}
-                className={'background-preview'}
-              />
-            )}
-          </SettingsContext.Consumer>
-          <div className={'background-options'}>
-            <button
-              onClick={this.onButton.bind(this, 'def')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_default')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'def_color')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_default_color')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'image')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_custom_image')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'color')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_custom_color')}
-            </button>
-          </div>
-        </div>
-        <div className={'background-default-images'}>
-          {[
-            'flower.webp',
-            'bee.webp',
-            'wheat.webp',
-            'mm-1.webp',
-            'mm-2.webp',
-            'lake-tekapo.jpg',
-            'nz-beach.webp',
-            'petito-moreno.webp',
-          ].map(elem => (
-            <div
-              onClick={this.onButton.bind(this, 'pimage')}
-              style={{
-                backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
-              }}
-              key={elem}
-              data-url={elem}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  setValue(val: string) {
-    this.props.onChange(val)
-  }
-
-  onButton(type: string, ev: any) {
-    switch (type) {
-      case 'def':
-        this.setValue(undefined)
-        break
-      case 'def_color':
-        this.setValue('var(--chatViewBg)')
-        break
-      case 'image':
-        ipcRenderer.send('selectBackgroundImage')
-        break
-      case 'pimage':
-        ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
-        break
-      case 'color':
-        this.colorInput && this.colorInput.click()
-        break
-      default:
-        /* ignore-console-log */
-        console.error("this shouldn't happen")
-    }
-  }
-
-  onColor(ev: any) {
-    // TODO debounce
-    this.setValue(ev.target.value)
   }
 }
 

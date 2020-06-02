@@ -1,6 +1,6 @@
 import React, { Fragment, useState, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
-import { Dialog, Classes } from '@blueprintjs/core'
+import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { DialogProps } from './DialogController'
 
@@ -273,5 +273,80 @@ export function SmallDialog(
     >
       {props.children}
     </Dialog>
+  )
+}
+
+export function SmallSelectDialog({
+  selectedValue,
+  values,
+  onSave,
+  title,
+  isOpen,
+  onClose,
+  onSelect,
+  onCancel,
+}: {
+  title: string
+  selectedValue: string
+  values: [string, string][]
+
+  isOpen: DialogProps['isOpen']
+  onClose: DialogProps['onClose']
+  onSave?: (selectedValue: string) => void
+  onSelect?: (selectedValue: string) => void
+  onCancel?: () => void
+}) {
+  const [actualSelectedValue, setActualSelectedValue] = useState<string>(
+    selectedValue
+  )
+
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const actualSelectedValue: string = String(event.currentTarget.value)
+    setActualSelectedValue(actualSelectedValue)
+    onSelect && onSelect(actualSelectedValue)
+  }
+  const saveAndClose = () => {
+    onSave && onSave(actualSelectedValue)
+    onClose()
+  }
+
+  const tx = window.translate
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <DeltaDialogHeader title={title} />
+      <DeltaDialogBody>
+        <DeltaDialogContent>
+          <RadioGroup onChange={onChange} selectedValue={actualSelectedValue}>
+            {values.map((element, index) => {
+              const [value, label] = element
+              return (
+                <Radio key={'select-' + index} label={label} value={value} />
+              )
+            })}
+          </RadioGroup>
+        </DeltaDialogContent>
+      </DeltaDialogBody>
+      <DeltaDialogFooter
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '0px',
+          padding: '7px 13px 10px 13px',
+        }}
+      >
+        <p
+          className='delta-button danger bold'
+          onClick={() => {
+            onCancel()
+            onClose()
+          }}
+        >
+          {tx('cancel')}
+        </p>
+        <p className='delta-button primary bold' onClick={saveAndClose}>
+          {tx('save_desktop')}
+        </p>
+      </DeltaDialogFooter>
+    </SmallDialog>
   )
 }
