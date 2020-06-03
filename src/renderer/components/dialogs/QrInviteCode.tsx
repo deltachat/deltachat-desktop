@@ -29,6 +29,7 @@ export function DeltaDialogQrInner({
             value={qrCode}
             style={{ padding: '0px 20px', backgroundColor: 'white' }}
           />
+          <p style={{ textAlign: 'center' }}>{description}</p>
           <div className='qr-data'>
             <div className='content' aria-label={tx('a11y_qr_data')}>
               {qrCode}
@@ -51,9 +52,6 @@ export function DeltaDialogQrInner({
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
-      <DeltaDialogFooter>
-        <p style={{ textAlign: 'center' }}>{description}</p>
-      </DeltaDialogFooter>
     </>
   )
 }
