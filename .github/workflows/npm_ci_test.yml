@@ -1,0 +1,30 @@
+name: test-e2e-ci
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm install and build
+      run: |
+        npm ci
+        npm run build
+      env:
+        CI: true
+    - uses: DevExpress/testcafe-action@latest
+      with:
+        version: "1.8.0"
+        args: "--skip-js-errors electron:. ./test/testcafe/test_ci.js"
+      env:
+        DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
+        NODE_ENV: test
