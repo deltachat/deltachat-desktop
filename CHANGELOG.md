@@ -2,6 +2,51 @@
 
 ## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...HEAD)
 
+### Added
+
+- Theming (some Dark themes and the possibibilty to add even custom ones)
+- Mute Chats
+- Add Search for Contacts and Messages
+- (first half of) autodelete setting
+- add Login migration upgrade info
+- add git rev to the version in the about dialog
+- Oportunistic reminder to update after 90days
+
+### Fixed
+
+- Pointer cursor on hovering over document item
+- update Readme a bit
+- Fix whitescreen crash on opening the EncryptionInfoDialog
+- Fix drop send multiple files at once ([#1622](https://github.com/deltachat/deltachat-desktop/issues/1622))
+
+### Changed
+
+- Tweak settings design a bit
+- Adjust chatlistitem hover colors
+- Improve human-readability of logfiles
+- display the offline status as permanent toast instead of the error message
+- open an electron error dialog on uncaught Excerptions
+- Tweak Login styling
+- move qr code description up
+
+### Technical
+
+This section is only relevant to contributors.
+
+- Convert everything in the source folder to typescript
+- move more styles from styled-components to scss
+- Refactor Dialog system to make things easier for developers and fix stacking multiple instances of the same dialog
+- split settings dialog into multiple files
+- convert `require`s to `import`s
+- Refactor Keybindings
+- Split Build script into smaller build scripts.
+- replace `node-sass` with `sass` to remove the native dependency
+
+### Updates
+
+- update Translations
+- update Help
+
 ## [1.3.4](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.3.4) - 2020-05-18
 
 ### Fixed
