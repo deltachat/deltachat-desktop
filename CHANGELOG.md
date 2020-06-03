@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...HEAD)
+## [Unreleased][unreleased]
 
 ### Added
 
@@ -47,7 +47,7 @@ This section is only relevant to contributors.
 - update Translations
 - update Help
 
-## [1.3.4](https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.3.4) - 2020-05-18
+## [1.3.4] - 2020-05-18
 
 ### Fixed
 
@@ -60,7 +60,7 @@ This section is only relevant to contributors.
 
 - Upgrade deltachat-node to v1.33.0
 
-## [1.3.3](https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...v1.3.3) - 2020-05-12
+## [1.3.3] - 2020-05-12
 
 ### Fixed
 
@@ -70,11 +70,11 @@ This section is only relevant to contributors.
 
 - Account Path: old accounts are now migrated to the new account system.
 
-> If you experience startup problems make sure you don't have two account folders of the same account.\
+> If you experience startup problems make sure you don't have two account folders of the same account.\\
 > This could happen if you duplicated an account folder for backup purposes, for example.
 > If you did not modify the account folders please open an issue on github.
 
-## [1.3.2](https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...v1.3.2) - 2020-05-11
+## [1.3.2] - 2020-05-11
 
 ### Fixed
 
@@ -85,7 +85,7 @@ This section is only relevant to contributors.
 - Mirror picture when scanning a QR code
 - Update deltachat-node to v1.32.0
 
-## [1.3.1](https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.3.1) - 2020-05-05
+## [1.3.1] - 2020-05-05
 
 ### Fixed
 
@@ -93,7 +93,7 @@ This section is only relevant to contributors.
 - Fix showing the titlebar on Mac
 - Fix qr scanning on Mac
 
-## [1.3.0](https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0) - 2020-04-30
+## [1.3.0] - 2020-04-30
 
 ### Added
 
@@ -144,7 +144,7 @@ This section is only relevant to contributors.
 - Update translations & languages shown in menu, change prefix of npm translation scripts
 - Update Core to [`deltachat-core-rust @ 979d7c5`](https://github.com/deltachat/deltachat-core-rust/tree/979d7c562515da2a30983993048cd5184889059c) (deltachat-node `v1.29.1`)
 
-## [1.2.0](https://github.com/deltachat/deltachat-desktop/compare/v1.1.1...v1.2.0) - 2020-03-30
+## [1.2.0] - 2020-03-30
 
 ### Changed
 
@@ -158,14 +158,14 @@ This section is only relevant to contributors.
 - Fix about dialog links [**@Simon-Laux**](https://github.com/Simon-Laux)
 - Make e2e tests more stable [**@nicodh**](https://github.com/nicodh)
 
-## [1.1.1](https://github.com/deltachat/deltachat-desktop/compare/v1.1.0...v1.1.1) - 2020-03-14
+## [1.1.1] - 2020-03-14
 
 ### Changed
 
 - Update deltachat-node/deltachat-core-rust to v1.27.0
   - This fixes a bug of undecryptable messages
 
-## [1.1.0](https://github.com/deltachat/deltachat-desktop/compare/v1.0.0...v1.1.0) - 2020-03-10
+## [1.1.0] - 2020-03-10
 
 ### Added
 
@@ -197,7 +197,7 @@ This section is only relevant to contributors.
 
 - inApp help is broken on MacOS Help
 
-## [1.0.0](https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...1.0.0) - 2020-02-22
+## [1.0.0] - 2020-02-22
 
 ### Known Bugs
 
@@ -775,17 +775,37 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...HEAD
+
+[1.3.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.3...v1.3.4
+
+[1.3.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...v1.3.3
+
+[1.3.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...v1.3.2
+
+[1.3.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.3.1
+
+[1.3.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0
+
+[1.2.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.1.1...v1.2.0
+
+[1.1.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.1.0...v1.1.1
+
+[1.1.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.0.0...v1.1.0
+
+[1.0.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.1...v1.0.0
+
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
 
-[0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.901.0...v0.999.0
+[0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/0.901.0...v0.999.0
 
-[0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...v0.901.0
+[0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...0.901.0
 
 [0.900.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.840.0...v0.900.0
 
 [0.840.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...v0.840.0
 
-[0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.201.0
+[0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.200.0...v0.201.0
 
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
 

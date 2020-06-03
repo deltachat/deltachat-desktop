@@ -6,32 +6,32 @@
 | **jikstra**             |                                                  |
 | **Lars-Magnus Skog**    |                                                  |
 | **Nico de Haen**        |                                                  |
-| **Karissa McKelvey**    |                                                  |
+| **Karissa McKelvey**    | [**@karissa**](https://github.com/karissa)       |
 | **Jikstra**             | [**@Jikstra**](https://github.com/Jikstra)       |
-| **holger krekel**       |                                                  |
-| **lefherz**             |                                                  |
-| **pabzm**               |                                                  |
-| **maris**               |                                                  |
 | **Alexander Krotov**    |                                                  |
-| **Maris Alicke**        |                                                  |
-| **björn petersen**      |                                                  |
-| **Tobias Mueller**      |                                                  |
+| **holger krekel**       |                                                  |
+| **Emil Lefherz**        |                                                  |
+| **maris**               |                                                  |
+| **pabzm**               |                                                  |
+| **MIntrovrt**           |                                                  |
 | **Floris Bruynooghe**   |                                                  |
+| **B. Petersen**         |                                                  |
 | **Hansal Bachkaniwala** |                                                  |
+| **Tobias Mueller**      |                                                  |
 | **jankass**             |                                                  |
 | **Asiel Díaz Benítez**  |                                                  |
 | **Ozancan Karataş**     |                                                  |
-| **Pablo**               | [**@pabzm**](https://github.com/pabzm)           |
-| **NeoRon**              |                                                  |
-| **developer**           |                                                  |
-| **Hugo**                |                                                  |
-| **Paula**               | [**@paulaluap**](https://github.com/paulaluap)   |
+| **Alberto Luaces**      |                                                  |
+| **alfaslash**           |                                                  |
 | **bb**                  |                                                  |
 | **Clemens Tolboom**     |                                                  |
-| **Alberto Luaces**      |                                                  |
-| **zafai**               | [**@zafai**](https://github.com/zafai)           |
-| **Noah**                |                                                  |
+| **developer**           |                                                  |
 | **Harald H**            |                                                  |
+| **Hugo**                |                                                  |
+| **NeoRon**              |                                                  |
+| **Noah**                |                                                  |
 | **Oliver Bestwalter**   |                                                  |
-| **alfaslash**           |                                                  |
+| **Pablo**               | [**@pabzm**](https://github.com/pabzm)           |
+| **Paula**               | [**@paulaluap**](https://github.com/paulaluap)   |
 | **substack**            |                                                  |
+| **zafai**               | [**@zafai**](https://github.com/zafai)           |
