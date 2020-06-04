@@ -106,22 +106,7 @@ For Continuous Integration we currently use Travis and Github Actions.
 
 ### Release Workflow <a id="release"></a>
 
-> ⚠ Information on this section might be deprecated. [TODO update this section]
-
-1. Create a draft release on github, e.g. `vX.Y.Z`.
-2. Change `version` field in `package.json` to `X.Y.Z`.
-3. Update, commit and push `static/chat.delta.desktopp.appdata.xml`
-   with the new release information.
-4. Regenerate `package-lock.json` using `npm install`, commit and push
-   modified `package.json` and `package-lock.json` (repeat until
-   release is ready).
-5. Once done, publish the release on github, which will create the
-   tag.
-6. File an issue at
-   <https://github.com/flathub/chat.delta.desktop/issues> to make a new
-   release.
-
-Also see <https://www.electron.build/configuration/publish>
+see [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md)
 
 ### Code Structure <a id="code-structure"></a>
 
