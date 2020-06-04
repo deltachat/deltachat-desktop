@@ -44,7 +44,7 @@
 
 .react-contextmenu-item--selected {
   background-color: var(--chatListItemBgHover);
-  cursor: pointer;
+  cursor: default;
   text-decoration: none;
   color: var(--contextMenuSelected);
 }
