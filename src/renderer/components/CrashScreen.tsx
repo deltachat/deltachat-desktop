@@ -1,5 +1,6 @@
 import React from 'react'
 import { runtime } from '../runtime'
+import { VERSION, GIT_REF } from '../../shared/build-info'
 export class CrashScreen extends React.Component {
   state = {
     hasError: false,
@@ -54,6 +55,9 @@ export class CrashScreen extends React.Component {
             <a href='#' onClick={_ => runtime.openLogFile()}>
               {runtime.getCurrentLogLocation()}
             </a>
+          </p>
+          <p>
+            DeltaChat Version: {VERSION} (git: {GIT_REF})
           </p>
         </div>
       )
