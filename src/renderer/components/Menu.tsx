@@ -1,6 +1,5 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
-import { openHelp } from '../ipc'
 import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
@@ -15,6 +14,7 @@ import {
   unMuteChat,
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
+import { runtime } from '../runtime'
 const { ipcRenderer } = window.electron_functions
 
 export function DeltaMenuItem({
@@ -171,7 +171,11 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
         text={tx('pref_blocked_contacts')}
         onClick={onUnblockContacts}
       />
-      <DeltaMenuItem key='help' text={tx('menu_help')} onClick={openHelp} />
+      <DeltaMenuItem
+        key='help'
+        text={tx('menu_help')}
+        onClick={_ => runtime.openHelpWindow()}
+      />
       <DeltaMenuItem
         key='logout'
         text={tx('switch_account')}

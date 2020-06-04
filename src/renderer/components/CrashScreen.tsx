@@ -1,13 +1,25 @@
 import React from 'react'
+import { runtime } from '../runtime'
 export class CrashScreen extends React.Component {
   state = {
     hasError: false,
-    error: null as any,
+    error: '',
   }
 
   componentDidCatch(error: any) {
-    console.log(error)
-    this.setState({ hasError: true, error })
+    this.setState({
+      hasError: true,
+      error: this.errorToText(error),
+    })
+  }
+
+  errorToText(error: any) {
+    if (error instanceof Error) {
+      // TODO parse the stack and map the sourcemap to provide a usefull stacktrace
+      return error.stack.replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, '')
+    } else {
+      return JSON.stringify(error)
+    }
   }
 
   render() {
@@ -17,10 +29,32 @@ export class CrashScreen extends React.Component {
           <h1>Ooops something crashed</h1>
           <h2>
             Please restart Deltachat, if this problem persists please notify the
-            developers on github issues
-            (https://github.com/deltachat/deltachat-desktop/issues)
+            developers on github issues (
+            <a
+              href='#'
+              onClick={_ =>
+                runtime.openLink(
+                  'https://github.com/deltachat/deltachat-desktop/issues'
+                )
+              }
+            >
+              github.com/deltachat/deltachat-desktop/issues
+            </a>
+            )
           </h2>
-          <code>{JSON.stringify(this.state.error)}</code>
+          <p>
+            <button onClick={_ => runtime.reloadWebContent()}>Reload</button>
+            <button onClick={_ => runtime.openLogFile()}>Open Logfile</button>
+          </p>
+          <p>
+            <pre className='error-details'>{this.state.error}</pre>
+          </p>
+          <p>
+            Full Log under{' '}
+            <a href='#' onClick={_ => runtime.openLogFile()}>
+              {runtime.getCurrentLogLocation()}
+            </a>
+          </p>
         </div>
       )
     } else {

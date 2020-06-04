@@ -189,12 +189,23 @@ code {
 
   h1,
   h2,
-  code {
+  code,
+  pre {
     user-select: text;
   }
 
-  code {
+  p {
+    margin-top: 20px;
+  }
+
+  pre.error-details {
     background-color: rgba(177, 10, 10, 0.25);
     padding: 10px;
+    overflow-x: scroll;
+    font-family: monospace;
+  }
+
+  code {
+    background-color: none;
   }
 }
