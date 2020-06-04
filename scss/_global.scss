@@ -183,3 +183,18 @@ code {
     background-color: unset;
   }
 }
+
+.crash-screen {
+  padding: 10px;
+
+  h1,
+  h2,
+  code {
+    user-select: text;
+  }
+
+  code {
+    background-color: rgba(177, 10, 10, 0.25);
+    padding: 10px;
+  }
+}
