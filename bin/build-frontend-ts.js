@@ -72,5 +72,6 @@ async function main({watch, sourcemap}) {
 console.log(process.argv.indexOf('-w'))
 const watch = process.argv.indexOf('-w') !== -1
 
-main({watch, sourcemap: true})
-
+main({ watch, sourcemap: true }).catch(error => {
+  if (!watch) process.exit(1)
+})
