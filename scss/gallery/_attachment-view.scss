@@ -33,9 +33,10 @@
   }
 
   .download-btn {
-    height: 36px;
-    width: 36px;
+    height: 32px;
+    width: 32px;
     display: inline-block;
+    vertical-align: text-bottom;
     @include color-svg('../images/download.svg', var(--messageButtons));
 
     &:hover {

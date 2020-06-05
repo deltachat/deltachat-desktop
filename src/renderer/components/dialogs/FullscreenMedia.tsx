@@ -42,6 +42,12 @@ export default function FullscreenMedia(props: {
       <div className='render-media-wrapper'>
         {elm && (
           <div className='btn-wrapper' style={{ right: '5px' }}>
+            <div
+              role='button'
+              onClick={onDownload.bind(null, msg)}
+              className='download-btn'
+              aria-label={tx('save')}
+            />
             <Icon
               onClick={onClose}
               icon='cross'
@@ -52,14 +58,6 @@ export default function FullscreenMedia(props: {
           </div>
         )}
         <div className='attachment-view'>{elm}</div>
-        <div className='btn-wrapper' style={{ right: 0, bottom: 0 }}>
-          <div
-            role='button'
-            onClick={onDownload.bind(null, msg)}
-            className='download-btn'
-            aria-label={tx('save')}
-          />
-        </div>
       </div>
     </Overlay>
   )
