@@ -28,6 +28,7 @@
 - open an electron error dialog on uncaught Excerptions
 - Tweak Login styling
 - move qr code description up
+- Tweak: Less cursor type switching
 
 ### Technical
 
