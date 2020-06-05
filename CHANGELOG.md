@@ -18,6 +18,7 @@
 - update Readme a bit
 - Fix whitescreen crash on opening the EncryptionInfoDialog
 - Fix drop send multiple files at once ([#1622](https://github.com/deltachat/deltachat-desktop/issues/1622))
+- fix window bounds are not saved correctly #1705
 
 ### Changed
 

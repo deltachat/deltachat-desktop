@@ -35,7 +35,6 @@ export function init(
     minWidth: defaults.minWidth,
     show: false,
     title: appWindowTitle,
-    useContentSize: true, // Specify web page size without OS chrome
     width: initialBounds.width,
     x: initialBounds.x,
     y: initialBounds.y,
