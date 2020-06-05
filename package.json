@@ -9,8 +9,8 @@
     "test-unit": "node test/unit",
     "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test_ci.js\"",
     "test-e2e": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\"",
-    "check-formatting": "prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\"",
-    "fix-formatting": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\"",
+    "check-formatting": "prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\" && prettier --check \"**/*.md\"",
+    "fix-formatting": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",
     "dev": "npm run build && npm run start --",
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
     "pack": "npm run build && electron-builder --dir",
@@ -121,7 +121,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
-    "hallmark": "^1.2.0",
+    "hallmark": "^2.0.0",
     "node-fetch": "^2.6.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
@@ -136,6 +136,12 @@
     "typescript": "^3.7.5",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8"
+  },
+  "hallmark": {
+    "ignore": [
+      "README.md",
+      "UPGRADING.md"
+    ]
   },
   "build": {
     "protocols": {
