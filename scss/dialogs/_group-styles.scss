@@ -26,6 +26,8 @@ div.group-settings-container {
   margin-left: -20px;
   margin-right: -20px;
   padding: 0px 65px 0px 20px;
+  display: flex;
+  align-items: center;
 }
 
 div.group-member-contact-list-wrapper {
@@ -33,23 +35,26 @@ div.group-member-contact-list-wrapper {
   margin-right: -20px;
 }
 
-div.group-image-edit-button {
+div.group-image-wrapper {
   position: relative;
-  width: 28px;
-  height: 28px;
-  padding: 4px;
-  left: -11px;
-  top: -2px;
-  background-color: #173aaf;
-  border-radius: 50%;
-  z-index: 5;
-  &:hover {
-    cursor: pointer;
-    background-color: #102875;
-  }
-  div {
-    height: 20px;
-    width: 20px;
-    @include color-svg('../images/lead-pencil.svg', white);
+  div.group-image-edit-button {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    left: -11px;
+    top: -2px;
+    background-color: #173aaf;
+    border-radius: 50%;
+    z-index: 5;
+    &:hover {
+      cursor: pointer;
+      background-color: #102875;
+    }
+    div {
+      height: 20px;
+      width: 20px;
+      @include color-svg('../images/lead-pencil.svg', white);
+    }
   }
 }

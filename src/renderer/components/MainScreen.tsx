@@ -25,6 +25,7 @@ import {
 } from '@blueprintjs/core'
 import { getLastSelectedChatId } from '../ipc'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
+import { Avatar } from './Avatar'
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
@@ -127,17 +128,32 @@ export default function MainScreen() {
             )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <NavbarHeading style={{ cursor: 'pointer' }}>
-              <div className='navbar-chat-name' onClick={onTitleClick}>
-                {selectedChat ? selectedChat.name : ''}
-                {selectedChat.isVerified && (
-                  <img src='../images/verified.png' className='verified-icon' />
+            {selectedChat && selectedChat.id && (
+              <NavbarHeading
+                style={{
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                onClick={onTitleClick}
+              >
+                {selectedChat && (
+                  <Avatar
+                    displayName={selectedChat.name}
+                    color={selectedChat.color}
+                    isVerified={selectedChat.isVerified}
+                    avatarPath={selectedChat.profileImage}
+                    small
+                  />
                 )}
-              </div>
-              <div className='navbar-chat-subtile' onClick={onTitleClick}>
-                {selectedChat ? selectedChat.subtitle : ''}
-              </div>
-            </NavbarHeading>
+                <div style={{ marginLeft: '7px' }}>
+                  <div className='navbar-chat-name'>{selectedChat.name}</div>
+                  <div className='navbar-chat-subtile'>
+                    {selectedChat.subtitle}
+                  </div>
+                </div>
+              </NavbarHeading>
+            )}
             {selectedChat && selectedChat.id && (
               <span className='views'>
                 <Button
