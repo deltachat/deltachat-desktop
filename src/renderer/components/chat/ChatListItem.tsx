@@ -108,7 +108,12 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
         selected: isSelected,
       })}
     >
-      <Avatar {...chatListItem} displayName={chatListItem.name} />
+      <Avatar {...{
+        displayName:chatListItem.name,
+        avatarPath:chatListItem.avatarPath,
+        color:chatListItem.color,
+        isVerified:chatListItem.isVerified
+      }} />
       <div className='content'>
         <Header chatListItem={chatListItem} />
         <Message chatListItem={chatListItem} />
