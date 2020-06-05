@@ -41,7 +41,7 @@ export default function FullscreenMedia(props: {
     >
       <div className='render-media-wrapper'>
         {elm && (
-          <div className='btn-wrapper' style={{ right: '5px' }}>
+          <div className='btn-wrapper'>
             <div
               role='button'
               onClick={onDownload.bind(null, msg)}
