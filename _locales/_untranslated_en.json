@@ -122,5 +122,14 @@
   },
   "pref_system_theme": {
     "message": "Auto select theme (light/dark) based on your system settings"
+  },
+  "set_group_avatar": {
+    "message": "Set Group Avatar"
+  },
+  "remove_group_avatar": {
+    "message": "Remove Group Avatar"
+  },
+  "a11y_change_group_image": {
+    "message": "change group image"
   }
 }
