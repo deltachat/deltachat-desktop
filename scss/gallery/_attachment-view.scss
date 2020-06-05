@@ -29,17 +29,29 @@
     float: right;
     position: absolute;
     z-index: 10;
-    cursor: pointer;
-  }
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 3px;
 
-  .download-btn {
-    height: 36px;
-    width: 36px;
-    display: inline-block;
-    @include color-svg('../images/download.svg', var(--messageButtons));
+    right: 8px;
+    top: 6px;
+    padding: 5px;
 
-    &:hover {
-      background-color: var(--messageButtons);
+    .download-btn {
+      height: 32px;
+      width: 32px;
+      display: inline-block;
+      vertical-align: text-bottom;
+      @include color-svg('../images/download.svg', var(--messageButtons));
+
+      &:hover {
+        background-color: var(--messageButtons);
+      }
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .bp3-icon-cross {
+      cursor: pointer;
     }
   }
 }
