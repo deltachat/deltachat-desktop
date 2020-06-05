@@ -241,6 +241,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
         groupImage={groupImage}
         onSetGroupImage={onSetGroupImage}
         onUnsetGroupImage={onUnsetGroupImage}
+        groupName={groupName}
       />
       <input
         className='group-name-input'

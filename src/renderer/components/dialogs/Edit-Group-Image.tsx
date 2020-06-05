@@ -9,9 +9,16 @@ export const GroupImage = (props: {
   onSetGroupImage: (event: React.SyntheticEvent) => void
   onUnsetGroupImage: (event: React.SyntheticEvent) => void
   style?: React.CSSProperties
+  groupName?: string
 }) => {
   const tx = window.translate
-  const { groupImage, onSetGroupImage, onUnsetGroupImage, style } = props
+  const {
+    groupImage,
+    onSetGroupImage,
+    onUnsetGroupImage,
+    style,
+    groupName,
+  } = props
   const realOpenContextMenu = useRef(null)
 
   const { openDialog } = useContext(ScreenContext)
@@ -27,6 +34,8 @@ export const GroupImage = (props: {
       },
     })
 
+  const codepoint = groupName && groupName.codePointAt(0)
+
   return (
     <div className='group-image-wrapper'>
       {groupImage && (
@@ -39,7 +48,7 @@ export const GroupImage = (props: {
       )}
       {!groupImage && (
         <AvatarBubble style={style} large>
-          G
+          {codepoint ? String.fromCodePoint(codepoint).toUpperCase() : 'G'}
         </AvatarBubble>
       )}
       <div
