@@ -1,0 +1,15 @@
+version: 2
+mergeable:
+  - when: pull_request.*
+    name: "Changelog check"
+    validate:
+      - do: dependent
+        changed:
+          file: 'src/**' 
+          required: ['CHANGELOG.md']
+    fail:
+      - do: checks
+        status: 'action_required' 
+        payload:
+          title: Changelog needs to be updated
+          summary: "Please update the changelog"
