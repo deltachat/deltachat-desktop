@@ -20,7 +20,7 @@ import {
   DeltaDialogBody,
 } from './DeltaDialog'
 
-import { GroupImage } from './Group-Styles'
+import { GroupImage } from './Edit-Group-Image'
 
 import { DeltaDialogQrInner } from './QrInviteCode'
 import { JsonContact, DCContact } from '../../../shared/shared-types'

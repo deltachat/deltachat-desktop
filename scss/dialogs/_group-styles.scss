@@ -33,38 +33,23 @@ div.group-member-contact-list-wrapper {
   margin-right: -20px;
 }
 
-div.group-image-unset-button-wrapper {
+div.group-image-edit-button {
   position: relative;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
+  padding: 4px;
   left: -11px;
   top: -2px;
-  background-color: #e56555;
+  background-color: #173aaf;
   border-radius: 50%;
-  &:hover,
-  span:hover {
-    cursor: pointer;
-  }
-  span {
-    display: block;
-    position: relative;
-    width: 16px;
-    height: 3px;
-    left: 5px;
-    background-color: white;
-    &:nth-child(1) {
-      transform: rotate(130deg);
-      top: 11px;
-    }
-    &:nth-child(2) {
-      transform: rotate(-130deg);
-      top: 8px;
-    }
-  }
-}
-
-div.group-image-wrapper {
+  z-index: 5;
   &:hover {
     cursor: pointer;
+    background-color: #102875;
+  }
+  div {
+    height: 20px;
+    width: 20px;
+    @include color-svg('../images/lead-pencil.svg', white);
   }
 }
