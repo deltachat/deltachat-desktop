@@ -289,6 +289,14 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     await openHelpWindow(locale)
   })
 
+  ipcMain.on('reload-main-window', () => {
+    mainWindow.window.webContents.reload()
+  })
+
+  ipcMain.on('get-log-path', ev => {
+    ev.returnValue = logHandler.logFilePath()
+  })
+
   function sendStateToRenderer() {
     log.debug('RENDER')
     const deltachat = dcController.getState()

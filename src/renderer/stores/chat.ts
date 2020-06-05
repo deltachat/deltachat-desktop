@@ -1,7 +1,8 @@
-import { ipcBackend, mainProcessUpdateBadge, saveLastChatId } from '../ipc'
+import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
 import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
+import { runtime } from '../runtime'
 
 export const PAGE_SIZE = 10
 
@@ -174,7 +175,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
         scrollToBottom: true,
       },
     })
-    mainProcessUpdateBadge()
+    runtime.updateBadge()
     saveLastChatId(chatId)
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload

@@ -15,6 +15,7 @@ import { ThemeManager } from './ThemeManager'
 
 const log = getLogger('renderer/App')
 import moment from 'moment'
+import { CrashScreen } from './components/CrashScreen'
 
 addLocaleData(enLocaleData)
 
@@ -98,10 +99,12 @@ export default function App(props: any) {
 
   if (!localeData) return null
   return (
-    <SettingsContext.Provider value={state.saved}>
-      <IntlProvider locale={localeData.locale}>
-        <ScreenController logins={state.logins} deltachat={state.deltachat} />
-      </IntlProvider>
-    </SettingsContext.Provider>
+    <CrashScreen>
+      <SettingsContext.Provider value={state.saved}>
+        <IntlProvider locale={localeData.locale}>
+          <ScreenController logins={state.logins} deltachat={state.deltachat} />
+        </IntlProvider>
+      </SettingsContext.Provider>
+    </CrashScreen>
   )
 }
