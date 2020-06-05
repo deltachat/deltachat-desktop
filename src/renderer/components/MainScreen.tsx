@@ -127,7 +127,7 @@ export default function MainScreen() {
             )}
           </NavbarGroup>
           <NavbarGroup align={Alignment.RIGHT}>
-            <NavbarHeading>
+            <NavbarHeading style={{ cursor: 'pointer' }}>
               <div className='navbar-chat-name' onClick={onTitleClick}>
                 {selectedChat ? selectedChat.name : ''}
                 {selectedChat.isVerified && (

@@ -1,19 +1,14 @@
-const { ipcRenderer, remote } = window.electron_functions
-
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ExtendedApp } from '../shared/shared-types'
 import { exp } from './experimental'
-import { setLogHandler, printProcessLogLevelInfo } from '../shared/logger'
+import { printProcessLogLevelInfo } from '../shared/logger'
 
 import App from './App'
+import { runtime } from './runtime'
 
 function main() {
   exp.help //make sure experimental.ts is used
-  setLogHandler(
-    (...args: any[]) => ipcRenderer.send('handleLogMessage', ...args),
-    (remote.app as ExtendedApp).rc
-  )
+  runtime.initialize()
   printProcessLogLevelInfo()
 
   ReactDOM.render(<App />, document.querySelector('#root'))

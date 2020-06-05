@@ -4,7 +4,6 @@
   padding-right: 20px;
   &:hover {
     background-color: var(--chatListItemBgHover);
-    cursor: pointer;
   }
 
   .chat-list & {

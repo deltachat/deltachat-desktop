@@ -66,9 +66,7 @@ export function _callDcMethodAsync(
   return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
 }
 
-export function mainProcessUpdateBadge() {
-  ipcRenderer.send('update-badge')
-}
+// move this part to the deltachat backend / deltachatcontroller
 
 export function saveLastChatId(chatId: number) {
   ipcRenderer.send('saveLastChatId', chatId)
@@ -81,8 +79,4 @@ export function getLastSelectedChatId() {
   return ipcRenderer.sendSync('getLastSelectedChatId')
 }
 
-export function openHelp() {
-  ipcRenderer.send('help', window.localeData.locale)
-}
-
-ipcRenderer.on('showHelpDialog', openHelp)
+// end-move

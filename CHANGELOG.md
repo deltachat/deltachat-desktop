@@ -11,6 +11,7 @@
 - add Login migration upgrade info
 - add git rev to the version in the about dialog
 - Oportunistic reminder to update after 90days
+- Add a crash-screen that appears instead of the white-screen on a react crash.
 
 ### Fixed
 
@@ -18,6 +19,7 @@
 - update Readme a bit
 - Fix whitescreen crash on opening the EncryptionInfoDialog
 - Fix drop send multiple files at once ([#1622](https://github.com/deltachat/deltachat-desktop/issues/1622))
+- fix window bounds are not saved correctly #1705
 
 ### Changed
 
@@ -28,6 +30,8 @@
 - open an electron error dialog on uncaught Excerptions
 - Tweak Login styling
 - move qr code description up
+- Tweak: Less cursor type switching
+- Improve styling of Fullscreen-Attachment buttons
 
 ### Technical
 
@@ -41,6 +45,7 @@ This section is only relevant to contributors.
 - Refactor Keybindings
 - Split Build script into smaller build scripts.
 - replace `node-sass` with `sass` to remove the native dependency
+- introduce `runtime.ts` as a place to collect electron specific functions (will replace `renderer/ipc.ts`)
 
 ### Updates
 
@@ -382,8 +387,7 @@ This section is only relevant to contributors.
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
-
-- Update deltachat-node to 1.0.0-beta.15
+* Update deltachat-node to 1.0.0-beta.15
   - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
 ## [0.840.0] - 2019-11-05
@@ -808,27 +812,15 @@ This section is only relevant to contributors.
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.200.0...v0.201.0
 
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
-
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
-
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
-
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
-
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
-
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
-
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
-
 [0.98.2]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...v0.98.2
-
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
-
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
-
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
-
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
-
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
