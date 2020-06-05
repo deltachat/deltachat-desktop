@@ -113,7 +113,7 @@ export default function ViewProfile(props: {
                   },
                 })
               }}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: contact.profileImage ? 'pointer' : 'default' }}
             >
               <ProfileInfoAvatar contact={contact} />
             </div>

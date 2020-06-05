@@ -29,6 +29,7 @@
 - Tweak Login styling
 - move qr code description up
 - Tweak: Less cursor type switching
+- Improve styling of Fullscreen-Attachment buttons
 
 ### Technical
 
