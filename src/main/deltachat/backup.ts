@@ -36,7 +36,6 @@ export default class DCBackup extends SplitOut {
       )
     }
 
-
     const tmpConfigPath = tempy.directory()
     log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
     const db = path.join(tmpConfigPath, 'db.sqlite')
