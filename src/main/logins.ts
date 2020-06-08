@@ -84,7 +84,7 @@ function getConfig(
 
     binding.dcn_open(dcn_context, db, '', (err: any) => {
       if (err) {
-        console.log(err)
+        log.error('getConfig', err)
         binding.dcn_close(dcn_context, () => {})
         reject(err)
       }
