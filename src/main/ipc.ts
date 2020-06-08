@@ -124,7 +124,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('login', (_e: any, credentials) => {
     CatchError2Event(() =>
       dcController.loginController.login(
-        getNewAccountPath(credentials.addr),
+        getNewAccountPath(),
         credentials,
         sendStateToRenderer,
         txCoreStrings()

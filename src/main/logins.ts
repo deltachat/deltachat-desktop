@@ -1,15 +1,11 @@
 import { join, basename } from 'path'
 import fs from 'fs-extra'
-import { DeltaChat } from 'deltachat-node'
+//@ts-ignore
+import * as binding from 'deltachat-node/binding'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { PromiseType } from '../shared/shared-types'
-import { dialog } from 'electron'
-
-function escapeEmailForAccountFolder(path: string) {
-  return encodeURIComponent(path).replace(/%/g, 'P')
-}
 
 export async function getLogins() {
   // search for old accounts and convert them
@@ -25,58 +21,35 @@ async function migrate(dir: string) {
   const oldAccounts = await readDeltaAccounts(dir)
 
   if (oldAccounts.length > 0) {
-    log.info(
-      'Old format accounts detected, trying to convert them',
-      oldAccounts
-    )
+    log.info('Old accounts detected, trying to move them', oldAccounts)
     for (const account of oldAccounts) {
-      const newFolder = join(
-        'accounts',
-        escapeEmailForAccountFolder(account.addr)
-      )
       try {
-        await fs.move(join(dir, basename(account.path)), join(dir, newFolder))
+        await fs.move(
+          join(dir, basename(account.path)),
+          join(dir, '/accounts/', basename(account.path))
+        )
       } catch (error) {
-        log.error(
-          "Moving failed, make sure you don't have multiple account folders for the same e-mail address!",
-          error
-        )
-        dialog.showErrorBox(
-          'Account migration',
-          `Migration of ${account.addr} failed,\n` +
-            "Please make sure that you don't have multiple account folders for the same e-mail address!\n" +
-            'See the logfile for details'
-        )
+        log.error('Moving failed', error)
         continue
       }
-      // Backwards compatibility for versions older than 0.999.0
-      // (doesn't work on windows as symlinks need admin rights there)
-      try {
-        const compatPath = Buffer.from(account.addr).toString('hex')
-        log.info(
-          'symlink, for backwards compatibility',
-          join('./', newFolder),
-          join(dir, compatPath)
-        )
-        await fs.symlink(join('./', newFolder), join(dir, compatPath))
-      } catch (error) {
-        log.error('symlinking failed', error)
-      }
     }
-    log.info(`converted ${oldAccounts} accounts to new version`)
+    log.info(`moved ${oldAccounts} accounts to accounts folder`)
   }
 }
 
 async function getAccountInfo(path: string) {
   try {
-    const config = await getConfig(path)
+    const config = await getConfig(path, ['addr', 'displayname'])
     if (typeof config.addr !== 'string') {
+      // this can be old temp accounts or accounts that somehow lost their addr, what should we do with them?
       throw new Error('Account has no address defined')
     }
 
     return {
       path,
+      displayname: config.displayname,
       addr: config.addr,
+      size: await _getAccountSize(path),
     }
   } catch (error) {
     log.error(`Account ${path} is inaccessible`, error)
@@ -103,16 +76,47 @@ async function readDeltaAccounts(accountFolderPath: string) {
   )
 }
 
-function getConfig(cwd: string): Promise<{ [key: string]: string }> {
+function getConfig(
+  dir: string,
+  keys: string[]
+): Promise<{ [key: string]: string }> {
   return new Promise((resolve, reject) => {
-    DeltaChat.getConfig(cwd, (err, result) => {
+    const dcn_context = binding.dcn_context_new()
+    const db = dir.endsWith('db.sqlite') ? dir : join(dir, 'db.sqlite')
+
+    binding.dcn_open(dcn_context, db, '', (err: any) => {
+      console.log('opened')
+
       if (err) {
+        console.log(err)
+        binding.dcn_close(dcn_context, () => {})
         reject(err)
-      } else {
-        resolve(result)
       }
+      let result: { [key: string]: string } = {}
+      if (!binding.dcn_is_configured(dcn_context)) {
+        result = null
+      } else {
+        keys.forEach((key: string) => {
+          result[key] = binding.dcn_get_config(dcn_context, key)
+        })
+      }
+      console.log('result', result, dcn_context)
+      binding.dcn_close(dcn_context, () => {})
+      resolve(result)
     })
   })
+}
+
+async function _getAccountSize(path: string) {
+  const db_size = (await fs.stat(join(path, 'db.sqlite'))).size
+  const blobs = await fs.readdir(join(path, 'db.sqlite-blobs'))
+  const sizes = await Promise.all(
+    blobs.map(
+      async blob => (await fs.stat(join(path, 'db.sqlite-blobs', blob))).size
+    )
+  )
+
+  return db_size + sizes.reduce((a, b) => a + b)
 }
 
 export async function removeAccount(accountPath: string) {
@@ -128,6 +132,16 @@ export async function removeAccount(accountPath: string) {
   await fs.remove(account.path)
 }
 
-export function getNewAccountPath(addr: string) {
-  return join(getAccountsPath(), escapeEmailForAccountFolder(addr))
+export function getNewAccountPath() {
+  let init_count = fs.readdirSync(getAccountsPath()).length
+
+  const constructName = (num: number) =>
+    join(getAccountsPath(), 'ac' + String(num))
+
+  while (fs.pathExistsSync(constructName(init_count))) {
+    console.log(init_count)
+    init_count++
+  }
+
+  return constructName(init_count)
 }
