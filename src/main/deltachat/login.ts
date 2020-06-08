@@ -52,10 +52,8 @@ export default class DCLoginController extends SplitOut {
       throw new Error(this._controller.translate('bad_email_address'))
     }
 
-    await new Promise((res, rej) => {
-      this._dc.open(this._controller.accountDir)
-      this._dc.startIO(res)
-    })
+    await this._dc.open(this._controller.accountDir)
+    await this._dc.startIO()
 
     this.setCoreStrings(coreStrings)
     const onReady = () => {
@@ -67,6 +65,7 @@ export default class DCLoginController extends SplitOut {
       this.updateDeviceChats()
       sendStateToRenderer()
     }
+
     if (!this._dc.isConfigured() || updateConfiguration) {
       this._dc.once('ready', onReady)
       this._controller.configuring = true
