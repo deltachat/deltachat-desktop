@@ -16,14 +16,11 @@ import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext } from '../contexts'
 import DeltaDialog from './dialogs/DeltaDialog'
+import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
+import filesizeConverter from 'filesize'
 
 const log = getLogger('renderer/components/LoginScreen')
-
-type DeltaChatAccount = {
-  path: string
-  addr: string
-}
 
 const ImportDialogContent = React.memo(function ImportDialogContent(props: {
   onClose: (ev: React.SyntheticEvent) => void
@@ -200,7 +197,8 @@ export default function LoginScreen(props: {
                     onClick={() => onClickLoadAccount(login)}
                     title={login.path}
                   >
-                    {login.addr}
+                    {login.displayname} {login.addr} [
+                    {filesizeConverter(login.size)}]
                   </Button>
                   <Button
                     intent={Intent.DANGER}

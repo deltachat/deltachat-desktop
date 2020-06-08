@@ -3,17 +3,17 @@ import { app as rawApp, dialog, ipcMain, shell } from 'electron'
 import { copy, copyFile, emptyDir, ensureDir, pathExists } from 'fs-extra'
 import { extname, join, relative } from 'path'
 import { getLogger } from '../shared/logger'
-import { AppState, Credentials, LocalSettings } from '../shared/shared-types'
+import {
+  AppState,
+  Credentials,
+  LocalSettings,
+  DeltaChatAccount,
+} from '../shared/shared-types'
 import { getConfigPath, getLogsPath } from './application-constants'
 import { credential_config } from './deltachat/login'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
-import {
-  DeltaChatAccount,
-  getLogins,
-  getNewAccountPath,
-  removeAccount,
-} from './logins'
+import { getLogins, getNewAccountPath, removeAccount } from './logins'
 import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'

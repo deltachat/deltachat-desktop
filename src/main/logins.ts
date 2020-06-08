@@ -5,7 +5,7 @@ import * as binding from 'deltachat-node/binding'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
-import { PromiseType } from '../shared/shared-types'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 export async function getLogins() {
   // search for old accounts and convert them
@@ -37,7 +37,7 @@ async function migrate(dir: string) {
   }
 }
 
-async function getAccountInfo(path: string) {
+async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
   try {
     const config = await getConfig(path, ['addr', 'displayname'])
     if (typeof config.addr !== 'string') {
@@ -56,8 +56,6 @@ async function getAccountInfo(path: string) {
     return null
   }
 }
-
-export type DeltaChatAccount = PromiseType<ReturnType<typeof getAccountInfo>>
 
 async function readDeltaAccounts(accountFolderPath: string) {
   const paths = (await fs.readdir(accountFolderPath)).map(filename =>
@@ -85,8 +83,6 @@ function getConfig(
     const db = dir.endsWith('db.sqlite') ? dir : join(dir, 'db.sqlite')
 
     binding.dcn_open(dcn_context, db, '', (err: any) => {
-      console.log('opened')
-
       if (err) {
         console.log(err)
         binding.dcn_close(dcn_context, () => {})
@@ -100,7 +96,6 @@ function getConfig(
           result[key] = binding.dcn_get_config(dcn_context, key)
         })
       }
-      console.log('result', result, dcn_context)
       binding.dcn_close(dcn_context, () => {})
       resolve(result)
     })
@@ -139,7 +134,6 @@ export function getNewAccountPath() {
     join(getAccountsPath(), 'ac' + String(num))
 
   while (fs.pathExistsSync(constructName(init_count))) {
-    console.log(init_count)
     init_count++
   }
 

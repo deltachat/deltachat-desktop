@@ -1,10 +1,5 @@
 type PromiseType<T> = T extends Promise<infer U> ? U : any
 
-export interface Login {
-  addr: string
-  path: string
-}
-
 export interface Credentials {
   addr: string
 }
@@ -35,7 +30,7 @@ export interface AppState {
     credentials: Credentials
     ready: boolean
   }
-  logins: Array<Login>
+  logins: DeltaChatAccount[]
   saved: LocalSettings
 }
 
@@ -176,4 +171,11 @@ export type MessageSearchResult = {
   chat_name: null | string
   message: string
   timestamp: number
+}
+
+export type DeltaChatAccount = {
+  path: string
+  displayname: string
+  addr: string
+  size: number
 }
