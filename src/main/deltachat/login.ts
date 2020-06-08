@@ -70,7 +70,7 @@ export default class DCLoginController extends SplitOut {
       this._dc.once('ready', onReady)
       this._controller.configuring = true
       this._dc.configure(this.addServerFlags(credentials), undefined)
-      
+
       sendStateToRenderer()
     } else {
       onReady()

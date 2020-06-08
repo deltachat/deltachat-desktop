@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Elevation, H5, Classes, ProgressBar, Intent } from '@blueprintjs/core'
+import {
+  Card,
+  Elevation,
+  H5,
+  Classes,
+  ProgressBar,
+  Intent,
+} from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
-import { OpenDialogOptions, } from 'electron'
+import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
 import DeltaDialog from './DeltaDialog'
@@ -10,21 +17,19 @@ import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contex
 const { remote } = window.electron_functions
 
 function ExportProgressDialog(props: DialogProps) {
-
   const userFeedback = window.__userFeedback
 
   const [progress, setProgress] = useState(0)
 
-  const onFileWritten = (_event: any, [_, filename] : [any, string]) => {
-      userFeedback({
-        type: 'success',
-        text: tx('pref_backup_written_to_x', filename),
-      })
-      props.onClose()
-
+  const onFileWritten = (_event: any, [_, filename]: [any, string]) => {
+    userFeedback({
+      type: 'success',
+      text: tx('pref_backup_written_to_x', filename),
+    })
+    props.onClose()
   }
 
-  const onImexProgress = (_ : any, progress : number) => setProgress(progress)
+  const onImexProgress = (_: any, progress: number) => setProgress(progress)
   useEffect(() => {
     ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', onFileWritten)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
@@ -34,7 +39,6 @@ function ExportProgressDialog(props: DialogProps) {
       ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     }
   }, [])
-
 
   return (
     <DeltaDialog
