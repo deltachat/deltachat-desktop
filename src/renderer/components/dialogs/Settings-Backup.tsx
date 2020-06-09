@@ -12,12 +12,15 @@ import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
-import DeltaDialog, { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
+import DeltaDialog, {
+  DeltaDialogBody,
+  DeltaDialogContent,
+  SmallDialog,
+} from './DeltaDialog'
 import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contextMenu'
 import { DeltaProgressBar } from '../Login-Styles'
 
 const { remote } = window.electron_functions
-
 
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
@@ -33,7 +36,7 @@ function ExportProgressDialog(props: DialogProps) {
     props.onClose()
   }
 
-  const onImexProgress = (_: any, [progress, data2] : [number,number]) => {
+  const onImexProgress = (_: any, [progress, data2]: [number, number]) => {
     setProgress(progress)
   }
   useEffect(() => {
@@ -47,19 +50,12 @@ function ExportProgressDialog(props: DialogProps) {
   }, [])
 
   return (
-    <SmallDialog
-      isOpen={props.isOpen}
-      onClose={() => {}}
-    >
+    <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
       <DeltaDialogBody>
         <DeltaDialogContent>
-          <H5 style={{marginTop:'20px'}}>Exporting backup...</H5>
-          <DeltaProgressBar 
-            intent={Intent.PRIMARY}
-            progress={progress}
-          />
+          <H5 style={{ marginTop: '20px' }}>Exporting backup...</H5>
+          <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
         </DeltaDialogContent>
-        
       </DeltaDialogBody>
     </SmallDialog>
   )
