@@ -85,7 +85,7 @@ export default class DCBackup extends SplitOut {
 
       sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
 
-      const newPath = getNewAccountPath(addr)
+      const newPath = getNewAccountPath()
       const configFolderExists = await fs.pathExists(newPath)
 
       if (configFolderExists) {

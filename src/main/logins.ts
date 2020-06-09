@@ -1,7 +1,7 @@
 import { join, basename } from 'path'
 import fs from 'fs-extra'
 //@ts-ignore
-import * as binding from 'deltachat-node/binding'
+import DeltaChat from 'deltachat-node'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
@@ -77,14 +77,11 @@ async function readDeltaAccounts(accountFolderPath: string) {
 async function getConfig(
   dir: string,
   keys: string[]
-): { [key: string]: string } {
-  const dcn_context = binding.dcn_context_new()
-  const db = dir.endsWith('db.sqlite') ? dir : join(dir, 'db.sqlite')
-
+): Promise<{ [key: string]: string }> {
   const dc = new DeltaChat()
-  await dc.open(cwd)
+  await dc.open(dir)
   let config: { [key: string]: string } = {}
-  if (!dc.isConfigured())) {
+  if (!dc.isConfigured()) {
     config = null
   } else {
     keys.forEach((key: string) => {
