@@ -337,7 +337,7 @@ export function SmallSelectDialog({
         <p
           className='delta-button danger bold'
           onClick={() => {
-            onCancel()
+            onCancel && onCancel()
             onClose()
           }}
         >
