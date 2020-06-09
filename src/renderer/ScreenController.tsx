@@ -1,4 +1,4 @@
-import { Login, AppState } from '../shared/shared-types'
+import { AppState, DeltaChatAccount } from '../shared/shared-types'
 
 import React from 'react'
 import { Component, createRef } from 'react'
@@ -31,7 +31,10 @@ export default class ScreenController extends Component {
   onShowAbout: any
 
   constructor(
-    public props: { logins: Login[]; deltachat: AppState['deltachat'] }
+    public props: {
+      logins: DeltaChatAccount[]
+      deltachat: AppState['deltachat']
+    }
   ) {
     super(props)
     this.state = {
