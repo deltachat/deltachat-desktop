@@ -53,7 +53,7 @@ function ExportProgressDialog(props: DialogProps) {
     <SmallDialog isOpen={props.isOpen} onClose={() => {}}>
       <DeltaDialogBody>
         <DeltaDialogContent>
-          <H5 style={{ marginTop: '20px' }}>Exporting backup...</H5>
+          <H5 style={{ marginTop: '20px' }}>{tx('imex_progress_title_desktop')}</H5>
           <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
         </DeltaDialogContent>
       </DeltaDialogBody>
@@ -97,7 +97,7 @@ export default function SettingsBackup() {
       <Card elevation={Elevation.ONE}>
         <H5>{tx('pref_backup')}</H5>
         <SettingsButton onClick={onBackupExport}>
-          {tx('pref_backup_export_start_button')}
+          {tx('export_backup_desktop')}
         </SettingsButton>
       </Card>
     </>
