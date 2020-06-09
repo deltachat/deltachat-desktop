@@ -6,20 +6,24 @@ import {
   Classes,
   ProgressBar,
   Intent,
+  H2,
 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
-import DeltaDialog from './DeltaDialog'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contextMenu'
+import { DeltaProgressBar } from '../Login-Styles'
 
 const { remote } = window.electron_functions
 
+
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
+  const tx = window.translate
 
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0.0)
 
   const onFileWritten = (_event: any, [_, filename]: [any, string]) => {
     userFeedback({
@@ -29,7 +33,9 @@ function ExportProgressDialog(props: DialogProps) {
     props.onClose()
   }
 
-  const onImexProgress = (_: any, progress: number) => setProgress(progress)
+  const onImexProgress = (_: any, [progress, data2] : [number,number]) => {
+    setProgress(progress)
+  }
   useEffect(() => {
     ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', onFileWritten)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
@@ -41,21 +47,21 @@ function ExportProgressDialog(props: DialogProps) {
   }, [])
 
   return (
-    <DeltaDialog
+    <SmallDialog
       isOpen={props.isOpen}
-      title={tx('imex_progress_title_desktop')}
-      canEscapeKeyClose={false}
-      isCloseButtonShown={false}
       onClose={() => {}}
-      canOutsideClickClose={false}
     >
-      <div className={Classes.DIALOG_BODY}>
-        <ProgressBar
-          intent={Intent.PRIMARY}
-          value={isOpen ? progress / 1000 : null}
-        />
-      </div>
-    </DeltaDialog>
+      <DeltaDialogBody>
+        <DeltaDialogContent>
+          <H5 style={{marginTop:'20px'}}>Exporting backup...</H5>
+          <DeltaProgressBar 
+            intent={Intent.PRIMARY}
+            progress={progress}
+          />
+        </DeltaDialogContent>
+        
+      </DeltaDialogBody>
+    </SmallDialog>
   )
 }
 

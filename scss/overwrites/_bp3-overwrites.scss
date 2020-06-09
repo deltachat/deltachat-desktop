@@ -254,3 +254,7 @@ input[type='text']:focus {
 .bp3-popover-arrow {
   display: none;
 }
+
+.bp3-progress-bar.bp3-intent-primary .bp3-progress-meter {
+  background-color: var(--colorPrimary);
+}
