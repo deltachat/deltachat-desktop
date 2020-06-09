@@ -258,3 +258,8 @@ input[type='text']:focus {
 .bp3-progress-bar.bp3-intent-primary .bp3-progress-meter {
   background-color: var(--colorPrimary);
 }
+.bp3-progress-bar {
+  width: auto;
+  text-align: center;
+  margin: 30px 0px;
+}
