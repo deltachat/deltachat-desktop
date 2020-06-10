@@ -60,7 +60,7 @@ export default class DCLoginController extends SplitOut {
     this.setCoreStrings(coreStrings)
     const onReady = async () => {
       log.info('Ready, starting io...')
-      await this._dc.startIO()
+      this._dc.startIO()
       log.debug('Started IO')
 
       this._controller.ready = true
@@ -73,12 +73,14 @@ export default class DCLoginController extends SplitOut {
 
     if (!this._dc.isConfigured() || updateConfiguration) {
       this._controller.configuring = true
-      this._dc.configure(this.addServerFlags(credentials), onReady)
-
-      sendStateToRenderer()
-    } else {
-      onReady()
+      try {
+        await this.configure(this.addServerFlags(credentials))
+      } catch(err) {
+        // Ignore error, we catch it anyways in frontend
+      }
     }
+
+    onReady()
 
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
@@ -95,12 +97,11 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  configure(
+  async configure(
     credentials: any,
-    cb: Parameters<typeof DeltaChat.prototype.configure>[1]
   ) {
     this._controller.configuring = true
-    this._dc.configure(this.addServerFlags(credentials), cb)
+    return await this._dc.configure(this.addServerFlags(credentials))
   }
 
   close() {
