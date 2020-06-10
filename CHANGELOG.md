@@ -35,6 +35,7 @@
 - Improve styling of Fullscreen-Attachment buttons
 - now it is possible to have multiple accounts with the same email address (you can import a backup next to the active account)
 - change account path again - now the account folder name isn't tied to the email address anymore.
+- Add open attachment to message context menu and increase clickable area (click to open attachment)
 
 ### Technical
 
