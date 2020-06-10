@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, CSSProperties } from 'react'
-import { PseudoContact, AvatarBubble, QRAvatar } from '../contact/Contact'
+import { PseudoContact } from '../contact/Contact'
+import { QRAvatar } from '../Avatar'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -33,7 +34,9 @@ export const PseudoListItemNoSearchResults = ({
       id='addmember'
       text={tx('search_no_result_for_x', queryStr)}
     >
-      <AvatarBubble noSearchResults />
+      <div className='avatar no-search-results'>
+        <div className='content'></div>
+      </div>
     </PseudoListItem>
   )
 }

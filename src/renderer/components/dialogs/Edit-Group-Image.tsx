@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
-import { AvatarBubble, AvatarImage } from '../contact/Contact'
 import { ChatListItemType } from '../../../shared/shared-types'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { ScreenContext } from '../../contexts'
+import { Avatar } from '../Avatar'
 
 export const GroupImage = (props: {
   groupImage: string
@@ -34,23 +34,15 @@ export const GroupImage = (props: {
       },
     })
 
-  const codepoint = groupName && groupName.codePointAt(0)
-
   return (
     <div className='group-image-wrapper'>
-      {groupImage && (
-        <AvatarImage
-          avatarPath={groupImage}
-          onClick={showAvatarFullscreen}
-          style={{ ...style, cursor: 'pointer' }}
-          large={true}
-        />
-      )}
-      {!groupImage && (
-        <AvatarBubble style={style} large>
-          {codepoint ? String.fromCodePoint(codepoint).toUpperCase() : 'G'}
-        </AvatarBubble>
-      )}
+      <Avatar
+        displayName={groupName}
+        avatarPath={groupImage}
+        onClick={showAvatarFullscreen}
+        style={{ ...style, cursor: 'pointer' }}
+        large
+      />
       <div
         className='group-image-edit-button'
         onClick={ev => realOpenContextMenu?.current(ev)}

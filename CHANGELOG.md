@@ -13,6 +13,7 @@
 - Oportunistic reminder to update after 90days
 - Add a crash-screen that appears instead of the white-screen on a react crash.
 - Add enlarge group image
+- Add chat image to navbar
 
 ### Fixed
 
@@ -33,6 +34,7 @@
 - move qr code description up
 - Tweak: Less cursor type switching
 - Improve styling of Fullscreen-Attachment buttons
+- move the verified icon over the group avatar
 - now it is possible to have multiple accounts with the same email address (you can import a backup next to the active account)
 - change account path again - now the account folder name isn't tied to the email address anymore.
 
