@@ -52,12 +52,17 @@ export default class DCLoginController extends SplitOut {
       throw new Error(this._controller.translate('bad_email_address'))
     }
 
+    this._controller.registerEventHandler(dc)
+
     await this._dc.open(this._controller.accountDir)
-    await this._dc.startIO()
+    
 
     this.setCoreStrings(coreStrings)
-    const onReady = () => {
-      log.info('Ready')
+    const onReady = async () => {
+      log.info('Ready, starting io...')
+      await this._dc.startIO()
+      log.debug('Started IO')
+
       this._controller.ready = true
       this._controller.configuring = false
       this._controller.emit('ready', this._controller.credentials)
@@ -67,16 +72,14 @@ export default class DCLoginController extends SplitOut {
     }
 
     if (!this._dc.isConfigured() || updateConfiguration) {
-      this._dc.once('ready', onReady)
       this._controller.configuring = true
-      this._dc.configure(this.addServerFlags(credentials), undefined)
+      this._dc.configure(this.addServerFlags(credentials), onReady)
 
       sendStateToRenderer()
     } else {
       onReady()
     }
 
-    this._controller.registerEventHandler(dc)
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
     setupMarkseenFix(this._controller)
