@@ -274,10 +274,10 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     sendStateToRenderer()
     try {
       await dcController.loginController.configure(credentials)
-    } catch(err) {
+    } catch (err) {
       // Ignore error & handle it in frontend
     }
-    
+
     dcController.configuring = false
     main.send('success', 'Configuration success!')
     sendStateToRenderer()

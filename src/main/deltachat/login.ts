@@ -55,7 +55,6 @@ export default class DCLoginController extends SplitOut {
     this._controller.registerEventHandler(dc)
 
     await this._dc.open(this._controller.accountDir)
-    
 
     this.setCoreStrings(coreStrings)
     const onReady = async () => {
@@ -75,7 +74,7 @@ export default class DCLoginController extends SplitOut {
       this._controller.configuring = true
       try {
         await this.configure(this.addServerFlags(credentials))
-      } catch(err) {
+      } catch (err) {
         // Ignore error, we catch it anyways in frontend
       }
     }
@@ -97,21 +96,18 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  async configure(
-    credentials: any,
-  ) {
+  async configure(credentials: any) {
     this._controller.configuring = true
     this._controller._sendStateToRenderer()
 
     try {
-      await this._dc.configure(this.addServerFlags(credentials))  
+      await this._dc.configure(this.addServerFlags(credentials))
     } catch (err) {
       // ignore and handle in frontend
-    }    
+    }
 
     this._controller.configuring = false
     this._controller._sendStateToRenderer()
-
   }
 
   close() {

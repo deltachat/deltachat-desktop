@@ -147,7 +147,7 @@ export default function SettingsAppearance({
     })()
   }, [])
 
-  const setTheme = async(theme: string) => {
+  const setTheme = async (theme: string) => {
     await DeltaBackend.call('extras.setTheme', theme)
     await ThemeManager.refresh()
   }
@@ -161,7 +161,10 @@ export default function SettingsAppearance({
       ['system', tx('automatic')],
       ...availableThemes.map(
         ({ address, name }: { address: string; name: string }) => {
-          return [address, `${name}${address.startsWith('custom') ? ' (Custom)' : ''}`]
+          return [
+            address,
+            `${name}${address.startsWith('custom') ? ' (Custom)' : ''}`,
+          ]
         }
       ),
     ]

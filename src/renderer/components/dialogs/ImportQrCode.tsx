@@ -151,7 +151,6 @@ export function DeltaDialogImportQrInner({
               >
                 {tx('cancel')}
               </p>
-             
             </div>
           </div>
         </>

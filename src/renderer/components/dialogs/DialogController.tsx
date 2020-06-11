@@ -142,7 +142,11 @@ export default class DialogController extends React.Component<
             closeDialog: this.closeDialog.bind(this),
             ...dialog.additionalProps,
           }
-          return <div key={'dialog-'+id}><dialog.fnc  {...props} /></div>
+          return (
+            <div key={'dialog-' + id}>
+              <dialog.fnc {...props} />
+            </div>
+          )
         })}
       </div>
     )
