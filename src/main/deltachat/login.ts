@@ -101,7 +101,17 @@ export default class DCLoginController extends SplitOut {
     credentials: any,
   ) {
     this._controller.configuring = true
-    return await this._dc.configure(this.addServerFlags(credentials))
+    this._controller._sendStateToRenderer()
+
+    try {
+      await this._dc.configure(this.addServerFlags(credentials))  
+    } catch (err) {
+      // ignore and handle in frontend
+    }    
+
+    this._controller.configuring = false
+    this._controller._sendStateToRenderer()
+
   }
 
   close() {
