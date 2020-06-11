@@ -90,3 +90,7 @@ export function dragAttachmentOut({ url }: attachment, dragEvent: DragEvent) {
   dragEvent.preventDefault()
   ipcRenderer.send('ondragstart', url)
 }
+
+export function isGenericAttachment(attachment: attachment) {
+  return !(isImage(attachment) || isVideo(attachment) || isAudio(attachment))
+}

@@ -131,11 +131,11 @@ export default function Attachment({
           withContentBelow ? 'content-below' : null,
           withContentAbove ? 'content-above' : null
         )}
+        onClick={onClickAttachment}
       >
         <div
           className='file-icon'
           draggable='true'
-          onClick={onClickAttachment}
           onDragStart={dragAttachmentOut.bind(null, attachment)}
           title={contentType}
         >
