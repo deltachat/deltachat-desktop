@@ -2,13 +2,13 @@ import React, { useContext } from 'react'
 import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
-import { Avatar, VerifiedIcon } from '../contact/Contact'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 import {
   ChatListItemType,
   MessageSearchResult,
 } from '../../../shared/shared-types'
+import { Avatar } from '../Avatar'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -21,7 +21,6 @@ const Header = React.memo(
     return (
       <div className='header'>
         <div className='name'>
-          {isVerified && <VerifiedIcon />}
           <span>{name + ' '}</span>
         </div>
         {muted && (
@@ -109,7 +108,14 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
         selected: isSelected,
       })}
     >
-      <Avatar {...chatListItem} displayName={chatListItem.name} />
+      <Avatar
+        {...{
+          displayName: chatListItem.name,
+          avatarPath: chatListItem.avatarPath,
+          color: chatListItem.color,
+          isVerified: chatListItem.isVerified,
+        }}
+      />
       <div className='content'>
         <Header chatListItem={chatListItem} />
         <Message chatListItem={chatListItem} />

@@ -131,5 +131,8 @@
   },
   "a11y_change_group_image": {
     "message": "change group image"
+  },
+  "open_attachment_desktop": {
+    "message": "Open Attachment"
   }
 }

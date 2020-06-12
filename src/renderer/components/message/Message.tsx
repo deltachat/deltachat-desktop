@@ -1,4 +1,4 @@
-import { onDownload } from './messageFunctions'
+import { onDownload, openAttachmentInShell } from './messageFunctions'
 import React, { useRef, useState } from 'react'
 
 import classNames from 'classnames'
@@ -8,7 +8,7 @@ import MessageMetaData from './MessageMetaData'
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
 import { MessageType, DCContact } from '../../../shared/shared-types'
-import { attachment } from '../attachment/Attachment'
+import { attachment, isGenericAttachment } from '../attachment/Attachment'
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
@@ -158,6 +158,11 @@ const contextMenu = (
 
   return (
     <ContextMenu id={triggerId}>
+      {attachment && isGenericAttachment(attachment) ? (
+        <MenuItem onClick={openAttachmentInShell.bind(null, message.msg)}>
+          {tx('open_attachment_desktop')}
+        </MenuItem>
+      ) : null}
       {link !== '' && (
         <MenuItem onClick={_ => navigator.clipboard.writeText(link)}>
           {tx('menu_copy_link_to_clipboard')}
