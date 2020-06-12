@@ -23,6 +23,7 @@
 - Fix drop send multiple files at once ([#1622](https://github.com/deltachat/deltachat-desktop/issues/1622))
 - Fix window bounds are not saved correctly #1705
 - Fix export backup progress bar missing
+- Fix `dc_get_msg called with special msg_id=0` warnings printed to console
 
 ### Changed
 
