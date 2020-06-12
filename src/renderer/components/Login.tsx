@@ -88,7 +88,6 @@ export default class Login extends React.Component<
   }
 
   _updateProgress(ev: any, [progress, _]: [number, any]) {
-    console.log(progress)
     this.setState({ progress })
   }
 
