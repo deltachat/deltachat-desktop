@@ -28,7 +28,6 @@ import {
 } from 'react-virtualized'
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
-import { webviewTag } from 'electron'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 
 const CHATLISTITEM_HEIGHT = 64
