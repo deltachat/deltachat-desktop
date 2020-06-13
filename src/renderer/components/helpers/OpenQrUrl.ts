@@ -19,23 +19,18 @@ export const qrStates: QrStates = {
   400: 'QrError', // text1=error string
 }
 
-const OPENPGP4FPR_SCHEME = 'OPENPGP4FPR'; // yes: uppercase
-const DCACCOUNT_SCHEME  = 'DCACCOUNT';
-const MAILTO_SCHEME  = 'mailto';
-const MATMSG_SCHEME  = 'MATMSG';
-const VCARD_SCHEME  = 'BEGIN:VCARD';
-const SMTP_SCHEME = 'SMTP';
-const HTTP_SCHEME = 'http';
-const HTTPS_SCHEME = 'https';
+const OPENPGP4FPR_SCHEME = 'OPENPGP4FPR' // yes: uppercase
+const DCACCOUNT_SCHEME = 'DCACCOUNT'
+const MAILTO_SCHEME = 'mailto'
+const MATMSG_SCHEME = 'MATMSG'
+const VCARD_SCHEME = 'BEGIN:VCARD'
+const SMTP_SCHEME = 'SMTP'
+const HTTP_SCHEME = 'http'
+const HTTPS_SCHEME = 'https'
 
-const UrlSchemesAccountRequired = [
-  OPENPGP4FPR_SCHEME
-];
+const UrlSchemesAccountRequired = [OPENPGP4FPR_SCHEME]
 
-const UrlSchemesLogoutRequired = [
-  DCACCOUNT_SCHEME
-];
-
+const UrlSchemesLogoutRequired = [DCACCOUNT_SCHEME]
 
 export declare type QrCodeResponse = {
   state: keyof QrStates
@@ -43,15 +38,19 @@ export declare type QrCodeResponse = {
   text1: string
 }
 
-export default async function processOpenPGP4FPRUrl(url: string, callback: any = null) {
+export default async function processOpenQrUrl(
+  url: string,
+  callback: any = null
+) {
   const tx = window.translate
   let error = false
-  const scheme = url.substring(0, url.lastIndexOf(':'));
-  const { ready } = await DeltaBackend.call('getState');
+  const scheme = url.substring(0, url.lastIndexOf(':'))
+  const { ready } = await DeltaBackend.call('getState')
 
   if (UrlSchemesAccountRequired.includes(scheme.toUpperCase()) && !ready) {
     window.__openDialog('AlertDialog', {
-      message: tx('Please login first')
+      message: tx('Please login first'),
+      cb: callback,
     })
     return
   }
@@ -59,19 +58,37 @@ export default async function processOpenPGP4FPRUrl(url: string, callback: any =
     if (ready) {
       window.__openDialog('AlertDialog', {
         message: tx('Please logout first'),
+        cb: callback,
       })
       return
     }
     try {
-      const credentials = await DeltaBackend.call('burnerAccounts.create', url.substr(url.indexOf(':') + 1, url.length))
-      sendToBackend('login', {addr: credentials.email, mail_pw: credentials.password});
-      ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
-        // close dialog since now the progress bar is shown
-        callback()
+      const credentials = await DeltaBackend.call(
+        'burnerAccounts.create',
+        url.substr(url.indexOf(':') + 1, url.length)
+      )
+      if (credentials && credentials.email && credentials.password) {
+        sendToBackend('login', {
+          addr: credentials.email,
+          mail_pw: credentials.password,
+        })
+        ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
+          // close dialog since now the progress bar is shown
+          callback()
+        })
+      } else {
+        window.__openDialog('AlertDialog', {
+          message: tx('qraccount_qr_code_cannot_be_used'),
+          cb: callback,
+        })
+        return
+      }
+    } catch (err) {
+      window.__openDialog('AlertDialog', {
+        message: tx('import_qr_error'),
+        cb: callback,
       })
-      
-    } catch(err) {
-      console.log(err)
+      return
     }
     return
   }
@@ -81,9 +98,9 @@ export default async function processOpenPGP4FPRUrl(url: string, callback: any =
   }
   const state = response ? qrStates[response.state] : null
   if (error || state === 'QrError' || state === 'QrText') {
-    window.__userFeedback({
-      type: 'error',
-      text: tx('import_qr_error'),
+    window.__openDialog('AlertDialog', {
+      message: tx('import_qr_error'),
+      cb: callback,
     })
     return
   }
@@ -118,9 +135,9 @@ export default async function processOpenPGP4FPRUrl(url: string, callback: any =
       cb: callback,
     })
   } else {
-    window.__userFeedback({
-      type: 'error',
-      text: 'Don\'t know what to do with this URL :/',
+    window.__openDialog('AlertDialog', {
+      message: "Don't know what to do with this URL :/" + url,
+      cb: callback,
     })
   }
 }

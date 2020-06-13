@@ -14,6 +14,7 @@ import ViewProfile from './ViewProfile'
 import MapDialog from './MapDialog'
 import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
+import AlertDialog from './AlertDialog'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
 import MuteChat from './MuteChat'
@@ -37,6 +38,7 @@ export const allDialogs: { [key: string]: any } = {
   QrInviteCode,
   ImportQrCode,
   ConfirmationDialog,
+  AlertDialog,
   UnblockContacts,
   MuteChat,
 }

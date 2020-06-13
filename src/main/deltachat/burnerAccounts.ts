@@ -4,8 +4,7 @@ const log = getLogger('main/deltachat/burner')
 
 import SplitOut from './splitout'
 export default class DCBurnerAccounts extends SplitOut {
-
-  async postData (url = '') {
+  async postData(url = '') {
     // Default options are marked with *
     const response = await fetch(url, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -13,9 +12,9 @@ export default class DCBurnerAccounts extends SplitOut {
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, *same-origin, omit
       headers: {
-        'cache-control': 'no-cache'
+        'cache-control': 'no-cache',
       },
-      referrerPolicy: 'no-referrer' // no-referrer, *client
+      referrerPolicy: 'no-referrer', // no-referrer, *client
     })
     return response.json() // parses JSON response into native JavaScript objects
   }
