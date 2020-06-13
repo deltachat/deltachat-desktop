@@ -55,15 +55,17 @@ export default function OfflineToast() {
     setTimeout(() => DeltaBackend.call('context.maybeNetwork'), 100)
   }
 
+  const tx = window.translate
+
   return (
     networkStatus === false && (
       <div className='OfflineToast'>
-        <a title={networkStatusMessage}>Offline</a>
+        <a title={networkStatusMessage}>{tx('offline')}</a>
         <div
           className={tryConnectCooldown ? '' : 'disabled'}
           onClick={onTryReconnectClick}
         >
-          Try to connect now
+          {tx('try_connect_now')}
         </div>
       </div>
     )
