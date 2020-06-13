@@ -1,5 +1,6 @@
 import appConfig from './application-config'
 import { dirname, join } from 'path'
+import { screen } from 'electron'
 
 export function appIcon() {
   // TODO Add .ico file for windows
@@ -8,17 +9,24 @@ export function appIcon() {
 
 export function windowDefaults() {
   let targetFile = 'main.html'
-  let defaultWidth = 500
+  let defaultWidth = 1000
   if (process.env.NODE_ENV === 'test') {
     targetFile = 'test.html'
     defaultWidth = 1100
   }
+  const {height:screenHeight, width:screenWidth } = screen.getPrimaryDisplay().workAreaSize
   const headerHeight = 38
-  const messageHeight = 100
+  const defaultHeigth = Math.min(700 + headerHeight, screenHeight)
+  
+  const x = (screenWidth - defaultWidth) / 2
+  const y = (screenHeight - defaultHeigth) / 2
+
   return {
     bounds: {
-      width: 1600,
-      height: headerHeight + messageHeight * 6,
+      height: defaultHeigth,
+      width: defaultWidth,
+      x,
+      y
     },
     headerHeight,
     minWidth: 450,

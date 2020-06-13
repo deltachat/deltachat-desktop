@@ -29,12 +29,12 @@ export function init(
     backgroundColor: '#282828',
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
-    height: initialBounds.height,
     icon: appIcon(),
     minHeight: defaults.minHeight,
     minWidth: defaults.minWidth,
     show: false,
     title: appWindowTitle,
+    height: initialBounds.height,
     width: initialBounds.width,
     x: initialBounds.x,
     y: initialBounds.y,
