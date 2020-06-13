@@ -72,7 +72,7 @@
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
-    "deltachat-node": "1.33.0",
+    "deltachat-node": "1.35.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.11.1",
     "error-stack-parser": "^2.0.4",

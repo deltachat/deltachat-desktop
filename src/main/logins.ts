@@ -1,7 +1,7 @@
 import { join, basename } from 'path'
 import fs from 'fs-extra'
 //@ts-ignore
-import * as binding from 'deltachat-node/binding'
+import DeltaChat from 'deltachat-node'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
@@ -74,32 +74,22 @@ async function readDeltaAccounts(accountFolderPath: string) {
   )
 }
 
-function getConfig(
+async function getConfig(
   dir: string,
   keys: string[]
 ): Promise<{ [key: string]: string }> {
-  return new Promise((resolve, reject) => {
-    const dcn_context = binding.dcn_context_new()
-    const db = dir.endsWith('db.sqlite') ? dir : join(dir, 'db.sqlite')
-
-    binding.dcn_open(dcn_context, db, '', (err: any) => {
-      if (err) {
-        log.error('getConfig', err)
-        binding.dcn_close(dcn_context, () => {})
-        reject(err)
-      }
-      let result: { [key: string]: string } = {}
-      if (!binding.dcn_is_configured(dcn_context)) {
-        result = null
-      } else {
-        keys.forEach((key: string) => {
-          result[key] = binding.dcn_get_config(dcn_context, key)
-        })
-      }
-      binding.dcn_close(dcn_context, () => {})
-      resolve(result)
+  const dc = new DeltaChat()
+  await dc.open(dir)
+  let config: { [key: string]: string } = {}
+  if (!dc.isConfigured()) {
+    config = null
+  } else {
+    keys.forEach((key: string) => {
+      config[key] = dc.getConfig(key)
     })
-  })
+  }
+
+  return config
 }
 
 async function _getAccountSize(path: string) {

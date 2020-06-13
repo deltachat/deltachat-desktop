@@ -1,12 +1,13 @@
 import React, { useContext, useState, useRef } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
-import { Icon } from '@blueprintjs/core'
+import { Icon, Spinner, Classes } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Intent, ProgressBar, Card } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
+import { DeltaProgressBar } from '../Login-Styles'
 
 interface QrStates {
   [key: number]: string
@@ -133,17 +134,29 @@ export function DeltaDialogImportQrInner({
 
   return (
     <DeltaDialogBody>
-      <DeltaDialogContent noPadding>
-        {secureJoinOngoing && (
-          <div>
-            <p className='progress-info'>Secure join in progress...</p>
-            <ProgressBar intent={Intent.PRIMARY} value={100} />
-            <p className='delta-button danger' onClick={cancelProcess}>
-              {tx('cancel')}
-            </p>
+      {secureJoinOngoing && (
+        <>
+          <DeltaDialogContent>
+            <p>Secure join in progress...</p>
+            <Spinner />
+          </DeltaDialogContent>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div
+              className={Classes.DIALOG_FOOTER_ACTIONS}
+              style={{ justifyContent: 'space-between', marginTop: '7px' }}
+            >
+              <p
+                className={`delta-button no-padding bold danger`}
+                onClick={onClose}
+              >
+                {tx('cancel')}
+              </p>
+            </div>
           </div>
-        )}
-        {!secureJoinOngoing && (
+        </>
+      )}
+      {!secureJoinOngoing && (
+        <DeltaDialogContent noPadding>
           <div className='import-qr-code-dialog'>
             <div>
               <div>
@@ -185,8 +198,8 @@ export function DeltaDialogImportQrInner({
               />
             </div>
           </div>
-        )}
-      </DeltaDialogContent>
+        </DeltaDialogContent>
+      )}
     </DeltaDialogBody>
   )
 }

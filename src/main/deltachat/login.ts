@@ -52,16 +52,16 @@ export default class DCLoginController extends SplitOut {
       throw new Error(this._controller.translate('bad_email_address'))
     }
 
-    await new Promise((res, rej) => {
-      this._dc.open(this._controller.accountDir, (err: any) => {
-        if (err) rej(err)
-        else res()
-      })
-    })
+    this._controller.registerEventHandler(dc)
+
+    await this._dc.open(this._controller.accountDir)
 
     this.setCoreStrings(coreStrings)
-    const onReady = () => {
-      log.info('Ready')
+    const onReady = async () => {
+      log.info('Ready, starting io...')
+      this._dc.startIO()
+      log.debug('Started IO')
+
       this._controller.ready = true
       this._controller.configuring = false
       this._controller.emit('ready', this._controller.credentials)
@@ -69,16 +69,18 @@ export default class DCLoginController extends SplitOut {
       this.updateDeviceChats()
       sendStateToRenderer()
     }
+
     if (!this._dc.isConfigured() || updateConfiguration) {
-      this._dc.once('ready', onReady)
       this._controller.configuring = true
-      this._dc.configure(this.addServerFlags(credentials), undefined)
-      sendStateToRenderer()
-    } else {
-      onReady()
+      try {
+        await this.configure(this.addServerFlags(credentials))
+      } catch (err) {
+        // Ignore error, we catch it anyways in frontend
+      }
     }
 
-    this._controller.registerEventHandler(dc)
+    onReady()
+
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
     setupMarkseenFix(this._controller)
@@ -94,16 +96,23 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  configure(
-    credentials: any,
-    cb: Parameters<typeof DeltaChat.prototype.configure>[1]
-  ) {
+  async configure(credentials: any) {
     this._controller.configuring = true
-    this._dc.configure(this.addServerFlags(credentials), cb)
+    this._controller._sendStateToRenderer()
+
+    try {
+      await this._dc.configure(this.addServerFlags(credentials))
+    } catch (err) {
+      // ignore and handle in frontend
+    }
+
+    this._controller.configuring = false
+    this._controller._sendStateToRenderer()
   }
 
   close() {
     if (!this._dc) return
+    this._dc.stopIO()
     this._dc.close()
     this._controller._dc = null
   }

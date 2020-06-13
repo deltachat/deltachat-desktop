@@ -147,15 +147,13 @@ export default function SettingsAppearance({
     })()
   }, [])
 
-  const onCancel = async (theme: string) => {
-    await DeltaBackend.call('extras.setTheme', activeTheme)
-    await ThemeManager.refresh()
-  }
-
-  const onSelect = async (theme: string) => {
+  const setTheme = async (theme: string) => {
     await DeltaBackend.call('extras.setTheme', theme)
     await ThemeManager.refresh()
   }
+
+  const onCancel = async () => setTheme(activeTheme)
+  const onSelect = setTheme
 
   const onOpenSelectThemeDialog = async () => {
     const label = 'Theme'
@@ -163,7 +161,10 @@ export default function SettingsAppearance({
       ['system', tx('automatic')],
       ...availableThemes.map(
         ({ address, name }: { address: string; name: string }) => {
-          return [address, name]
+          return [
+            address,
+            `${name}${address.startsWith('custom') ? ' (Custom)' : ''}`,
+          ]
         }
       ),
     ]

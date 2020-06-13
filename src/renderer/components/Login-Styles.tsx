@@ -149,7 +149,9 @@ export const DeltaProgressBar = function(
     <div style={{ marginTop: '20px', marginBottom: '10px' }}>
       <ProgressBar
         value={props.progress ? props.progress / 1000 : 0}
-        intent={props.intent}
+        intent={Intent.PRIMARY}
+        stripes={false}
+        animate={false}
       />
     </div>
   )

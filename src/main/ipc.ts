@@ -264,7 +264,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.on('updateCredentials', (e, credentials) => {
+  ipcMain.on('updateCredentials', async (e, credentials) => {
     if (!credentials.mail_pw) {
       // this means another setting value was changed
       credentials.mail_pw = dcController.settings.getConfig('mail_pw')
@@ -272,11 +272,15 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     dcController.configuring = true
     dcController.updating = true
     sendStateToRenderer()
-    dcController.loginController.configure(credentials, () => {
-      dcController.configuring = false
-      main.send('success', 'Configuration success!')
-      sendStateToRenderer()
-    })
+    try {
+      await dcController.loginController.configure(credentials)
+    } catch (err) {
+      // Ignore error & handle it in frontend
+    }
+
+    dcController.configuring = false
+    main.send('success', 'Configuration success!')
+    sendStateToRenderer()
   })
 
   ipcMain.on('cancelCredentialsUpdate', () => {
