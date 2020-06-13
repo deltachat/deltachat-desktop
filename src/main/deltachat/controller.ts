@@ -17,6 +17,7 @@ import DCLoginController from './login'
 import DCMessageList from './messagelist'
 import DCSettings from './settings'
 import DCStickers from './stickers'
+import DCBurnerAccounts from './burnerAccounts'
 import { ExtendedAppMainProcess } from '../types'
 import Extras from './extras'
 import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants'
@@ -71,6 +72,7 @@ export default class DeltaChatController extends EventEmitter {
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
   readonly context = new DCContext(this)
+  readonly burnerAccounts = new DCBurnerAccounts(this)
   readonly extras = new Extras(this)
 
   /**

@@ -147,6 +147,37 @@ const ImportButton = React.memo(function ImportButton(_) {
   )
 })
 
+const ScanQRCode = React.memo(function ScanQRCode(_) {
+  const { openDialog } = useContext(ScreenContext)
+  const tx = window.translate
+  const [showDialog, setShowDialog] = useState(false)
+
+  function onClickScanQr() {
+    openDialog('ImportQrCode')
+  }
+  const onHandleClose = () => {
+    setShowDialog(false)
+  }
+
+  return (
+    <Fragment>
+      <div className='delta-blue-button' onClick={onClickScanQr}>
+        <p>{tx('qrscan_title')}</p>
+      </div>
+      {showDialog && (
+        <DeltaDialog
+          onClose={onHandleClose}
+          title={tx('qrscan_title')}
+          isOpen={showDialog}
+          style={{ top: '40%' }}
+        >
+          <ImportDialogContent onClose={onHandleClose} />
+        </DeltaDialog>
+      )}
+    </Fragment>
+  )
+})
+
 export default function LoginScreen(props: {
   logins: DeltaChatAccount[]
   deltachat: { configuring: boolean }
@@ -220,6 +251,7 @@ export default function LoginScreen(props: {
             <Button text={tx('cancel')} />
           </Login>
           <ImportButton />
+          <ScanQRCode />
         </Card>
       </div>
     </div>

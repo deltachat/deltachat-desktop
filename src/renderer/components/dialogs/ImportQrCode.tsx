@@ -1,89 +1,12 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
-import { ScreenContext } from '../../contexts'
-import { Icon, Spinner, Classes } from '@blueprintjs/core'
+import { Icon } from '@blueprintjs/core'
 import { LocalSettings } from '../../../shared/shared-types'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
-import { Intent, ProgressBar, Card } from '@blueprintjs/core'
+import { Card, Spinner } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
-import { DeltaProgressBar } from '../Login-Styles'
-
-interface QrStates {
-  [key: number]: string
-}
-
-export const qrStates: QrStates = {
-  200: 'QrAskVerifyContact', // id = contact
-  202: 'QrAskVerifyGroup', // text1=groupname
-  210: 'QrFprOk', // finger print ok for id=contact
-  220: 'QrFprMissmatch', // finger print not ok for id=contact
-  230: 'QrFprWithoutAddr',
-  250: 'QrAccount', // text1=domain
-  320: 'QrAddr', // id=contact
-  330: 'QrText', // text1=text
-  332: 'QrUrl', // text1=URL
-  400: 'QrError', // text1=error string
-}
-
-export declare type QrCodeResponse = {
-  state: keyof QrStates
-  id: number
-  text1: string
-}
-
-export async function processOPENPGP4FPRUrl(url: string, callback: any = null) {
-  const tx = window.translate
-  let error = false
-  const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
-  if (response === null) {
-    error = true
-  }
-  const state = response ? qrStates[response.state] : null
-  if (error || state === 'QrError' || state === 'QrText') {
-    window.__userFeedback({
-      type: 'error',
-      text: tx('import_qr_error'),
-    })
-    return
-  }
-
-  if (state === 'QrAskVerifyContact') {
-    const contact = await DeltaBackend.call('contacts.getContact', response.id)
-    window.__openDialog('ConfirmationDialog', {
-      message: tx('ask_start_chat_with', contact.address),
-      confirmLabel: tx('ok'),
-      cb: async (confirmed: boolean) => {
-        if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(callback)
-        }
-      },
-    })
-  } else if (state === 'QrAskVerifyGroup') {
-    window.__openDialog('ConfirmationDialog', {
-      message: tx('qrscan_ask_join_group', response.text1),
-      confirmLabel: tx('ok'),
-      cb: (confirmed: boolean) => {
-        if (confirmed) {
-          DeltaBackend.call('joinSecurejoin', url).then(callback)
-        }
-        return
-      },
-    })
-  } else if (state === 'QrFprOk') {
-    const contact = await DeltaBackend.call('contacts.getContact', response.id)
-    window.__openDialog('ConfirmationDialog', {
-      message: `The fingerprint of ${contact.displayName} is valid!`,
-      confirmLabel: tx('ok'),
-      cb: callback,
-    })
-  } else {
-    window.__userFeedback({
-      type: 'error',
-      text: "Don't know what to do with this URL :/",
-    })
-  }
-}
+import processOpenQrUrl from '../helpers/OpenQrUrl'
 
 export function DeltaDialogImportQrInner({
   description,
@@ -94,11 +17,10 @@ export function DeltaDialogImportQrInner({
 }) {
   const tx = window.translate
   const [qrCode, setQrCode] = useState('')
-  const screenContext = useContext(ScreenContext)
-  const [secureJoinOngoing, setSecureJoinOngoing] = useState(false)
+  const [processQrCode, setProcessQrCode] = useState(false)
 
   const handleScanResult = (chatId: number = null) => {
-    setSecureJoinOngoing(false)
+    setProcessQrCode(false)
     if (chatId) {
       selectChat(chatId)
     }
@@ -106,8 +28,8 @@ export function DeltaDialogImportQrInner({
   }
 
   const handleResponse = async (scannedQrCode: string) => {
-    setSecureJoinOngoing(true)
-    processOPENPGP4FPRUrl(scannedQrCode, handleScanResult)
+    setProcessQrCode(true)
+    processOpenQrUrl(scannedQrCode, handleScanResult)
   }
 
   const qrImageReader = useRef<any>()
@@ -134,29 +56,17 @@ export function DeltaDialogImportQrInner({
 
   return (
     <DeltaDialogBody>
-      {secureJoinOngoing && (
-        <>
-          <DeltaDialogContent>
-            <p>Secure join in progress...</p>
+      <DeltaDialogContent noPadding>
+        {processQrCode && (
+          <div>
             <Spinner />
-          </DeltaDialogContent>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-              style={{ justifyContent: 'space-between', marginTop: '7px' }}
-            >
-              <p
-                className={`delta-button no-padding bold danger`}
-                onClick={onClose}
-              >
-                {tx('cancel')}
-              </p>
-            </div>
+            <p />
+            <p className='delta-button danger' onClick={cancelProcess}>
+              {tx('cancel')}
+            </p>
           </div>
-        </>
-      )}
-      {!secureJoinOngoing && (
-        <DeltaDialogContent noPadding>
+        )}
+        {!processQrCode && (
           <div className='import-qr-code-dialog'>
             <div>
               <div>
@@ -198,8 +108,8 @@ export function DeltaDialogImportQrInner({
               />
             </div>
           </div>
-        </DeltaDialogContent>
-      )}
+        )}
+      </DeltaDialogContent>
     </DeltaDialogBody>
   )
 }

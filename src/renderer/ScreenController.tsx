@@ -12,7 +12,7 @@ import DialogController, {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
-import { processOPENPGP4FPRUrl } from './components/dialogs/ImportQrCode'
+import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
 import OfflineToast from './components/OfflineToast'
@@ -100,7 +100,7 @@ export default class ScreenController extends Component {
   }
 
   async onOpenUrl(_event: Event, url: string) {
-    processOPENPGP4FPRUrl(url)
+    processOpenQrUrl(url)
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
