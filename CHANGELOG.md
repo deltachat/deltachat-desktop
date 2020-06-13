@@ -4,6 +4,7 @@
 
 ### Added
 
+- Burner accounts with QR code
 - Theming (some Dark themes and the possibibilty to add even custom ones)
 - Mute Chats
 - Add Search for Contacts and Messages
