@@ -25,6 +25,7 @@
 - Fix window bounds are not saved correctly #1705
 - Fix export backup progress bar missing
 - Fix `dc_get_msg called with special msg_id=0` warnings printed to console
+- Fix window position on first start ([#1711](https://github.com/deltachat/deltachat-desktop/issues/1711))
 
 ### Changed
 

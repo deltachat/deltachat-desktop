@@ -10,7 +10,7 @@ export interface LocalSettings {
     width: number
     x: number
     y: number
-  }
+  }|{}
   chatViewBgImg: string
   credentials: Credentials
   enableOnDemandLocationStreaming: boolean

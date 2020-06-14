@@ -15,12 +15,7 @@ export function getDefaultState(): AppState {
      * Persisted state. Must be JSON.
      */
     saved: {
-      bounds: {
-        height: 38 + 600,
-        width: 500,
-        x: 0,
-        y: 0,
-      },
+      bounds: {},
       enterKeySends: false,
       notifications: true,
       showNotificationContent: true,
