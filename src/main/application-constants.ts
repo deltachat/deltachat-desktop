@@ -16,14 +16,14 @@ export function windowDefaults() {
   }
   const {height:screenHeight, width:screenWidth } = screen.getPrimaryDisplay().workAreaSize
   const headerHeight = 38
-  const defaultHeigth = Math.min(700 + headerHeight, screenHeight)
+  const defaultHeight = Math.min(700 + headerHeight, screenHeight)
   
   const x = (screenWidth - defaultWidth) / 2
-  const y = (screenHeight - defaultHeigth) / 2
+  const y = (screenHeight - defaultHeight) / 2
 
   return {
     bounds: {
-      height: defaultHeigth,
+      height: defaultHeight,
       width: defaultWidth,
       x,
       y
