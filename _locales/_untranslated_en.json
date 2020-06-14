@@ -134,5 +134,11 @@
   },
   "open_attachment_desktop": {
     "message": "Open Attachment"
+  },
+  "offline": {
+    "message": "Offline"
+  },
+  "try_connect_now": {
+    "message": "Try to connect now"
   }
 }
