@@ -5,12 +5,14 @@ export interface Credentials {
 }
 
 export interface LocalSettings {
-  bounds: {
-    height: number
-    width: number
-    x: number
-    y: number
-  }|{}
+  bounds:
+    | {
+        height: number
+        width: number
+        x: number
+        y: number
+      }
+    | {}
   chatViewBgImg: string
   credentials: Credentials
   enableOnDemandLocationStreaming: boolean

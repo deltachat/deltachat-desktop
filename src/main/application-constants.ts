@@ -14,10 +14,13 @@ export function windowDefaults() {
     targetFile = 'test.html'
     defaultWidth = 1100
   }
-  const {height:screenHeight, width:screenWidth } = screen.getPrimaryDisplay().workAreaSize
+  const {
+    height: screenHeight,
+    width: screenWidth,
+  } = screen.getPrimaryDisplay().workAreaSize
   const headerHeight = 38
   const defaultHeight = Math.min(700 + headerHeight, screenHeight)
-  
+
   const x = (screenWidth - defaultWidth) / 2
   const y = (screenHeight - defaultHeight) / 2
 
@@ -26,7 +29,7 @@ export function windowDefaults() {
       height: defaultHeight,
       width: defaultWidth,
       x,
-      y
+      y,
     },
     headerHeight,
     minWidth: 450,
