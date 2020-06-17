@@ -332,13 +332,11 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess
     DeltaBackend.call('login.newLogin', credentials)
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
-    ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
-    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureFailed)
+    ipcBackend.on('DC_EVENT_ERROR', onConfigureFailed)
     return () => {
       ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
-      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
-      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureFailed)
+      ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureFailed)
     }
   }, [])
 
@@ -374,8 +372,7 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
-              Login failed because of: <br/>
-              <p color="red">{error}</p>
+              <p>{error}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter

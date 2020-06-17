@@ -227,6 +227,8 @@ export default function LoginScreen(props: any) {
     })
   }
 
+  if(logins === null) return null
+
   return (
     <div className='login-screen'>
       <div className='navbar-wrapper'>
@@ -237,46 +239,42 @@ export default function LoginScreen(props: any) {
         </Navbar>
       </div>
       <div className='window'>
-        {logins !== null && (
-          <>
-            {logins.length > 0 && (
-              <Card>
-                <p className='delta-headline'>
-                  {tx('login_known_accounts_title_desktop')}
-                </p>
-                <ul>
-                  {logins.map((login: DeltaChatAccount) => (
-                    <li className='login-item' key={login.path}>
-                      <Button
-                        large
-                        minimal
-                        onClick={() => onClickLoadAccount(login)}
-                        title={login.path}
-                      >
-                        {login.displayname} {login.addr} [
-                        {filesizeConverter(login.size)}]
-                      </Button>
-                      <Button
-                        intent={Intent.DANGER}
-                        minimal
-                        icon='cross'
-                        onClick={() => forgetLogin(login)}
-                        aria-label={tx('a11y_remove_account_btn_label')}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            )}
-            <Card>
-              <p className='delta-headline'>{tx('login_title')}</p>
-              <LoginForm credentials={credentials} setCredentials={setCredentials} />
-              <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
-              <ImportButton refreshAccounts={refreshAccounts} />
-              <ScanQRCode />
-            </Card>
-          </>
+        {logins.length > 0 && (
+          <Card>
+            <p className='delta-headline'>
+              {tx('login_known_accounts_title_desktop')}
+            </p>
+            <ul>
+              {logins.map((login: DeltaChatAccount) => (
+                <li className='login-item' key={login.path}>
+                  <Button
+                    large
+                    minimal
+                    onClick={() => onClickLoadAccount(login)}
+                    title={login.path}
+                  >
+                    {login.displayname} {login.addr} [
+                    {filesizeConverter(login.size)}]
+                  </Button>
+                  <Button
+                    intent={Intent.DANGER}
+                    minimal
+                    icon='cross'
+                    onClick={() => forgetLogin(login)}
+                    aria-label={tx('a11y_remove_account_btn_label')}
+                  />
+                </li>
+              ))}
+            </ul>
+          </Card>
         )}
+        <Card>
+          <p className='delta-headline'>{tx('login_title')}</p>
+          <LoginForm credentials={credentials} setCredentials={setCredentials} />
+          <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
+          <ImportButton refreshAccounts={refreshAccounts} />
+          <ScanQRCode />
+        </Card>
       </div>
     </div>
   )

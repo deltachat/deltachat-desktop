@@ -80,6 +80,8 @@ export default class ScreenController extends Component {
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
+    ipcRenderer.on('DC_EVENT_LOGIN_FAILED', this.onError)
+    ipcRenderer.on('DC_EVENT_ERROR_NETWORK', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -91,12 +93,17 @@ export default class ScreenController extends Component {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_LOGIN_FAILED', this.onError)
+    ipcRenderer.removeListener('DC_EVENT_ERROR_NETWORK', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
-  onError(_event: any, data1: string, data2: string) {
-    this.userFeedback({ type: 'error', text: data2 })
+  onError(_event: any, data1: string | number, data2: string) {
+    if (this.state.screen === Screens.Login) return
+    if (data1 === 0) data1 = ''
+    const text = data1 = data2
+    this.userFeedback({ type: 'error', text })
   }
 
   onSuccess(_event: any, text: string) {
