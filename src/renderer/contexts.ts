@@ -11,6 +11,7 @@ export const ScreenContext = React.createContext({
   closeDialog: (name: string) => {},
   userFeedback: (message: false | userFeedback) => {},
   changeScreen: (screen: Screens) => {},
+  screen: null
 })
 
 export const SettingsContext: React.Context<LocalSettings> = React.createContext(

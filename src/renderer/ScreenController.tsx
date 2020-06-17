@@ -15,7 +15,6 @@ import DialogController, {
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
-import OfflineToast from './components/OfflineToast'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -142,13 +141,13 @@ export default class ScreenController extends Component {
             <p>{this.state.message.text}</p>
           </div>
         )}
-        <OfflineToast />
         <ScreenContext.Provider
           value={{
             openDialog: this.openDialog,
             closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
-            changeScreen: this.changeScreen
+            changeScreen: this.changeScreen,
+            screen: this.state.screen
           }}
         >
           { this.renderScreen() }

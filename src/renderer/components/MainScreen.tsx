@@ -26,6 +26,7 @@ import {
 import { getLastSelectedChatId } from '../ipc'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { Avatar } from './Avatar'
+import OfflineToast from './OfflineToast'
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
@@ -218,6 +219,7 @@ export default function MainScreen() {
         />
         {MessageListView}
       </div>
+      <OfflineToast />
     </div>
   )
 }
