@@ -15,7 +15,8 @@ jobs:
       id: prepare
       run: |
         set PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
-        set SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
+        echo $GITHUB_EVENT_PATH > github_event_path.txt
+        set SHA=$(jq .pull_request.head.sha github_event_path.txt)
         set BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
 
         echo ::set-output name=sha::$SHA
