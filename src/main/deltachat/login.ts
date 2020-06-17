@@ -7,14 +7,9 @@ import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import DeltaChatController from './controller'
 import { Credentials } from '../../shared/shared-types'
+import { txCoreStrings } from '../ipc'
+import { getNewAccountPath } from '../logins'
 const log = getLogger('main/deltachat/login')
-
-export interface credential_config extends Credentials {
-  mail_security?: string
-  send_security?: string
-  mail_pw?: string
-  [key: string]: string
-}
 
 export default class DCLoginController extends SplitOut {
   /**
@@ -33,7 +28,7 @@ export default class DCLoginController extends SplitOut {
 
   async login(
     accountDir: string,
-    credentials: credential_config,
+    credentials: Credentials,
     sendStateToRenderer: typeof DeltaChatController.prototype._sendStateToRenderer,
     coreStrings: Parameters<
       typeof DCLoginController.prototype.setCoreStrings
@@ -96,18 +91,22 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  async configure(credentials: any) {
-    this._controller.configuring = true
-    this._controller._sendStateToRenderer()
+  async newLogin(credentials: Credentials) {
+    console.log(credentials)
+    await this.login(
+      getNewAccountPath(),
+      credentials,
+      () => {},
+      txCoreStrings()
+    )
+  }
 
+  async configure(credentials: Credentials) {
     try {
-      await this._dc.configure(this.addServerFlags(credentials))
+      await this._dc.configure(credentials)
     } catch (err) {
       // ignore and handle in frontend
     }
-
-    this._controller.configuring = false
-    this._controller._sendStateToRenderer()
   }
 
   close() {

@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact } from '../../shared/shared-types'
+import { JsonContact, Credentials } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
@@ -45,7 +45,7 @@ export default class DeltaChatController extends EventEmitter {
   configuring = false
   updating = false
   ready = false
-  credentials = { addr: '' }
+  credentials: Credentials = { addr: '', mail_pw: '' }
   _selectedChatId: number | null = null
   _showArchivedChats = false
   _pages = 0
@@ -67,7 +67,7 @@ export default class DeltaChatController extends EventEmitter {
   readonly contacts = new DCContacts(this)
   readonly chat = new DCChat(this)
   readonly locations = new DCLocations(this)
-  readonly loginController = new DCLoginController(this)
+  readonly login = new DCLoginController(this)
   readonly messageList = new DCMessageList(this)
   readonly settings = new DCSettings(this)
   readonly stickers = new DCStickers(this)
@@ -263,7 +263,7 @@ export default class DeltaChatController extends EventEmitter {
       this.configuring = false
       this.updating = false
     } else {
-      this.loginController.logout()
+      this.login.logout()
     }
   }
 

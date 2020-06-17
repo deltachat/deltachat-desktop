@@ -8,6 +8,7 @@ import {
   Theme,
   DCContact,
   MessageSearchResult,
+  Credentials,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -179,7 +180,11 @@ class DeltaRemote {
     timestampFrom: number,
     timestampTo: number
   ): Promise<JsonLocations>
-  // loginController ----------------------------------------------------
+  // login ----------------------------------------------------
+  call(
+    fnName: 'login.newLogin',
+    credentials: Credentials
+  ): Promise<void>
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
   call(

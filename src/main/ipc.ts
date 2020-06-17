@@ -10,7 +10,6 @@ import {
   DeltaChatAccount,
 } from '../shared/shared-types'
 import { getConfigPath, getLogsPath } from './application-constants'
-import { credential_config } from './deltachat/login'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
 import { getLogins, getNewAccountPath, removeAccount } from './logins'
@@ -75,7 +74,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale: string) => {
     loadTranslations(locale)
-    dcController.loginController.setCoreStrings(txCoreStrings())
+    dcController.login.setCoreStrings(txCoreStrings())
     refreshMenu(logHandler)
   })
 
@@ -123,7 +122,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   ipcMain.on('login', (_e: any, credentials) => {
     CatchError2Event(() =>
-      dcController.loginController.login(
+      dcController.login.login(
         getNewAccountPath(),
         credentials,
         sendStateToRenderer,
@@ -134,7 +133,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
     CatchError2Event(() =>
-      dcController.loginController.login(
+      dcController.login.login(
         login.path,
         { addr: login.addr },
         sendStateToRenderer,
@@ -179,7 +178,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     e.returnValue = dcController.settings.setConfig(key, value)
   })
 
-  ipcMain.on('logout', () => dcController.loginController.logout())
+  ipcMain.on('logout', () => dcController.login.logout())
 
   ipcMain.on('saveFile', (e, source, target) => {
     copyFile(source, target, err => {
@@ -273,7 +272,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     dcController.updating = true
     sendStateToRenderer()
     try {
-      await dcController.loginController.configure(credentials)
+      await dcController.login.configure(credentials)
     } catch (err) {
       // Ignore error & handle it in frontend
     }
@@ -328,9 +327,9 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
     if (selectedAccount) {
       CatchError2Event(() =>
-        dcController.loginController.login(
+        dcController.login.login(
           selectedAccount.path,
-          savedCredentials as credential_config,
+          savedCredentials as Credentials,
           sendStateToRenderer,
           txCoreStrings()
         )
@@ -346,7 +345,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   }
 }
 
-function txCoreStrings() {
+export function txCoreStrings() {
   const tx = app.translate
   const strings: { [key: number]: string } = {}
   // TODO: Check if we need the uncommented core translations

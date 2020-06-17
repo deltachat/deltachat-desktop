@@ -16,7 +16,7 @@ import {
   Callout,
 } from '@blueprintjs/core'
 
-import Login from '../Login'
+import LoginForm from '../LoginForm'
 import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
 import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions

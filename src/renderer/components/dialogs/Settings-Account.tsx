@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Elevation, Button, Spinner } from '@blueprintjs/core'
 import React from 'react'
-import Login from '../Login'
+import LoginForm from '../LoginForm'
 import DeltaChat from 'deltachat-node'
 import { CloseDialogFunctionType } from './DialogController'
 
@@ -82,7 +82,7 @@ export default function SettingsAccount({
 
   return (
     <Card elevation={Elevation.ONE}>
-      {accountSettings && (
+      {/*accountSettings && (
         <Login
           {...accountSettings}
           mode='update'
@@ -95,7 +95,7 @@ export default function SettingsAccount({
           <Button type='submit' text={tx('update')} />
           <Button type='reset' text={tx('cancel')} />
         </Login>
-      )}
+      )*/}
     </Card>
   )
 }

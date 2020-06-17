@@ -94,14 +94,14 @@ export default class DialogController extends React.Component<
     }
 
     if (!additionalProps) additionalProps = {}
-    log.debug('openDialog: ', fnc, additionalProps)
+    //log.debug('openDialog: ', typeof fnc === 'string' ? fnc : 'Anonymous', additionalProps)
 
     let id: number = dialogCounter++
     if (id >= Number.MAX_SAFE_INTEGER - 1) {
       id = dialogCounter = 0
     }
 
-    log.debug(`Add dialog with id: ${id}`)
+    //log.debug(`Add dialog with id: ${id}`)
     this.setState(state => {
       return {
         dialogs: {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { sendToBackend, ipcBackend } from '../ipc'
-import Login, { credentialState } from './Login'
+import { Credentials } from '../../shared/shared-types' 
+import LoginForm, { defaultCredentials, ConfigureProgressDialog } from './LoginForm'
 import {
   Button,
   Classes,
@@ -19,6 +20,8 @@ import DeltaDialog from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
+import { DialogProps } from './dialogs/DialogController'
+import { any } from 'prop-types'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -178,6 +181,7 @@ const ScanQRCode = React.memo(function ScanQRCode(_) {
   )
 })
 
+
 export default function LoginScreen(props: {
   logins: DeltaChatAccount[]
   deltachat: { configuring: boolean }
@@ -185,15 +189,15 @@ export default function LoginScreen(props: {
   const tx = window.translate
   const { openDialog } = useContext(ScreenContext)
 
-  function onClickLogin(credentials: credentialState) {
-    sendToBackend('login', credentials)
-  }
+  const [credentials, setCredentials] = useState<Credentials>(defaultCredentials())
 
-  function onClickLoadAccount(login: DeltaChatAccount) {
-    sendToBackend('loadAccount', login)
+  const onClickLogin = () => {
+    console.log('hallo')
+    openDialog(ConfigureProgressDialog, {credentials})    
   }
+  const onClickLoadAccount = (login: DeltaChatAccount) => sendToBackend('loadAccount', login)
 
-  function forgetLogin(login: DeltaChatAccount) {
+  const forgetLogin = (login: DeltaChatAccount) => {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
@@ -245,11 +249,8 @@ export default function LoginScreen(props: {
         )}
         <Card>
           <p className='delta-headline'>{tx('login_title')}</p>
-          <Login onSubmit={onClickLogin} loading={props.deltachat.configuring}>
-            <br />
-            <Button type='submit' text={tx('login_title')} />
-            <Button text={tx('cancel')} />
-          </Login>
+          <LoginForm credentials={credentials} setCredentials={setCredentials} />
+          <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
           <ImportButton />
           <ScanQRCode />
         </Card>

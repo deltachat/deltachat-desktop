@@ -1,7 +1,20 @@
 type PromiseType<T> = T extends Promise<infer U> ? U : any
 
-export interface Credentials {
-  addr: string
+export type Credentials = {
+  [key: string]: any
+  addr?: string
+  mail_user?: string
+  mail_pw?: string
+  mail_server?: string
+  mail_port?: string
+  mail_security?: 'automatic' | '' | 'ssl' | 'default'
+  imap_certificate_checks?: any
+  send_user?: string
+  send_pw?: string
+  send_server?: string
+  send_port?: string
+  send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain'
+  smtp_certificate_checks?: any
 }
 
 export interface LocalSettings {
