@@ -53,11 +53,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     app.saveState()
   })
 
-  dcController.on('logout', () => {
-    state.saved.credentials = null
-    app.saveState()
-  })
-
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
@@ -67,9 +62,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     log.debug('Renderer event:', e, ...args)
   })
 
-  // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
-  // ipcMain.on('setBounds', (e, ...args:any[]) => main.setBounds(...args))
-  ipcMain.on('setProgress', (e, progress: number) => main.setProgress(progress))
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale: string) => {
@@ -120,26 +112,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }, 0)
   }
 
-  ipcMain.on('login', (_e: any, credentials) => {
-    CatchError2Event(() =>
-      dcController.login.login(
-        getNewAccountPath(),
-        credentials,
-        sendStateToRenderer,
-        txCoreStrings()
-      )
-    )
-  })
-
-  ipcMain.on('getMessage', (e, msgId: number) => {
-    e.returnValue = dcController.messageList.messageIdToJson(msgId)
-  })
-
-  /* unused
-  ipcMain.on('getChatContacts', (e, chatId) => {
-    e.returnValue = dc.chat.getChatContacts(chatId)
-  })
-  */
 
   ipcMain.on('backupImport', (e, fileName) =>
     dcController.backup.import(fileName)
@@ -160,7 +132,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     event.sender.startDrag({ file: filePath, icon: null })
   })
 
-  ipcMain.on('render', sendStateToRenderer)
 
   const updateDesktopSetting = (
     e: Electron.IpcMainEvent,
@@ -170,7 +141,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     const { saved } = app.state
     ;(saved as any)[key] = value
     app.saveState({ saved })
-    sendStateToRenderer()
   }
   ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
@@ -233,31 +203,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.on('updateCredentials', async (e, credentials) => {
-    if (!credentials.mail_pw) {
-      // this means another setting value was changed
-      credentials.mail_pw = dcController.settings.getConfig('mail_pw')
-    }
-    dcController.configuring = true
-    dcController.updating = true
-    sendStateToRenderer()
-    try {
-      await dcController.login.configure(credentials)
-    } catch (err) {
-      // Ignore error & handle it in frontend
-    }
-
-    dcController.configuring = false
-    main.send('success', 'Configuration success!')
-    sendStateToRenderer()
-  })
-
-  ipcMain.on('cancelCredentialsUpdate', () => {
-    dcController.configuring = false
-    const deltachat = dcController.getState()
-    sendState(deltachat)
-  })
-
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)
   })
@@ -270,49 +215,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     ev.returnValue = logHandler.logFilePath()
   })
 
-  function sendStateToRenderer() {
-    log.debug('RENDER')
-    const deltachat = dcController.getState()
-    main.setTitle(deltachat.credentials.addr)
-    sendState(deltachat)
-  }
-
-  function sendState(deltachat: AppState['deltachat']) {
-    Object.assign(state, { deltachat })
-    main.send('render', state)
-  }
-
-  // if we find saved credentials we login in with these
-  // which will create a new Deltachat instance which
-  // is bound to a certain account
-  const savedCredentials = state.saved.credentials
-  if (
-    savedCredentials &&
-    typeof savedCredentials === 'object' &&
-    Object.keys(savedCredentials).length !== 0
-  ) {
-    const selectedAccount = state.logins.find(
-      account => account.addr === savedCredentials.addr
-    )
-
-    if (selectedAccount) {
-      CatchError2Event(() =>
-        dcController.login.login(
-          selectedAccount.path,
-          savedCredentials as Credentials,
-          sendStateToRenderer,
-          txCoreStrings()
-        )
-      )
-    } else {
-      log.error(
-        'Previous account not found!',
-        state.saved.credentials,
-        'is not in the list of found logins:',
-        state.logins
-      )
-    }
-  }
 }
 
 export function txCoreStrings() {

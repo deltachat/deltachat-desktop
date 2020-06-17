@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { SettingsContext } from './contexts'
-import ScreenController from './ScreenController'
+import ScreenController, { Screens } from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState } from '../shared/shared-types'
+import { ExtendedApp, AppState, DeltaChatAccount } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -25,9 +25,7 @@ attachKeybindingsListener()
 export const theme_manager = ThemeManager
 
 export default function App(props: any) {
-  const [state, setState] = useState<AppState>(
-    (remote.app as ExtendedApp).state
-  )
+  const [state, setState] = useState<AppState>(null)
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
@@ -60,10 +58,27 @@ export default function App(props: any) {
     })
   }, [])
 
+
   useEffect(() => {
     startBackendLogging()
-    setupLocaleData(state.saved.locale)
+    setupLocaleData('en')
+
+    ;(async () => {
+      const state = await DeltaBackend.call('getState')
+      setState(state)
+      const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call('login.getLastLoggedInAccount')
+      return
+      if (!lastLoggedInAccount) return
+
+      await DeltaBackend.call('login.loadAccount', lastLoggedInAccount)
+      if (typeof window.__changeScreen === 'function') {
+        window.__changeScreen(Screens.Main)
+      } else {
+        throw new Error('window.__changeScreen is not a function')
+      }
+    })()
   }, [])
+
   const onRender = (e: any, state: AppState) => {
     log.debug('onRenderer')
     setState(state)
@@ -97,12 +112,12 @@ export default function App(props: any) {
     }
   }, [localeData])
 
-  if (!localeData) return null
+  if (!localeData || !state) return null
   return (
     <CrashScreen>
       <SettingsContext.Provider value={state.saved}>
         <IntlProvider locale={localeData.locale}>
-          <ScreenController logins={state.logins} deltachat={state.deltachat} />
+          <ScreenController deltachat={state.deltachat} />
         </IntlProvider>
       </SettingsContext.Provider>
     </CrashScreen>

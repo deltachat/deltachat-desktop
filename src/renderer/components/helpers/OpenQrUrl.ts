@@ -1,5 +1,7 @@
 import { DeltaBackend } from '../../delta-remote'
 import { sendToBackend } from '../../ipc'
+import { openMapDialog } from './ChatMethods'
+import { ConfigureProgressDialog } from '../LoginForm'
 const { ipcRenderer } = window.electron_functions
 
 interface QrStates {
@@ -63,15 +65,16 @@ export default async function processOpenQrUrl(
       return
     }
     try {
-      const credentials = await DeltaBackend.call(
+      const burnerAccount = await DeltaBackend.call(
         'burnerAccounts.create',
         url.substr(url.indexOf(':') + 1, url.length)
       )
-      if (credentials && credentials.email && credentials.password) {
-        sendToBackend('login', {
-          addr: credentials.email,
-          mail_pw: credentials.password,
-        })
+      if (burnerAccount && burnerAccount.email && burnerAccount.password) {
+        const credentials = {
+          addr: burnerAccount.email,
+          mail_pw: burnerAccount.password,
+        }
+        window.__openDialog(ConfigureProgressDialog, {credentials})
         ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
           // close dialog since now the progress bar is shown
           callback()

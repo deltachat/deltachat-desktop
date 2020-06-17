@@ -184,14 +184,12 @@ const ScanQRCode = React.memo(function ScanQRCode(_) {
 })
 
 
-export default function LoginScreen(props: {
-  deltachat: { configuring: boolean }
-}) {
+export default function LoginScreen(props: any) {
   const tx = window.translate
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
   const [credentials, setCredentials] = useState<Credentials>(defaultCredentials())
-  const [logins, setLogins] = useState([])
+  const [logins, setLogins] = useState(null)
 
   const refreshAccounts = async () => {
     const logins = await DeltaBackend.call('login.getLogins')
@@ -210,8 +208,9 @@ export default function LoginScreen(props: {
   }
 
   const onClickLoadAccount = async (login: DeltaChatAccount) => {
-    await DeltaBackend.call('login.loadAccount', login)
-    changeScreen(Screens.Main)
+    if(await DeltaBackend.call('login.loadAccount', login) === true) {
+      changeScreen(Screens.Main)
+    }
   }
 
   const forgetLogin = (login: DeltaChatAccount) => {
@@ -238,42 +237,46 @@ export default function LoginScreen(props: {
         </Navbar>
       </div>
       <div className='window'>
-        {logins.length > 0 && (
-          <Card>
-            <p className='delta-headline'>
-              {tx('login_known_accounts_title_desktop')}
-            </p>
-            <ul>
-              {logins.map(login => (
-                <li className='login-item' key={login.path}>
-                  <Button
-                    large
-                    minimal
-                    onClick={() => onClickLoadAccount(login)}
-                    title={login.path}
-                  >
-                    {login.displayname} {login.addr} [
-                    {filesizeConverter(login.size)}]
-                  </Button>
-                  <Button
-                    intent={Intent.DANGER}
-                    minimal
-                    icon='cross'
-                    onClick={() => forgetLogin(login)}
-                    aria-label={tx('a11y_remove_account_btn_label')}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
+        {logins !== null && (
+          <>
+            {logins.length > 0 && (
+              <Card>
+                <p className='delta-headline'>
+                  {tx('login_known_accounts_title_desktop')}
+                </p>
+                <ul>
+                  {logins.map((login: DeltaChatAccount) => (
+                    <li className='login-item' key={login.path}>
+                      <Button
+                        large
+                        minimal
+                        onClick={() => onClickLoadAccount(login)}
+                        title={login.path}
+                      >
+                        {login.displayname} {login.addr} [
+                        {filesizeConverter(login.size)}]
+                      </Button>
+                      <Button
+                        intent={Intent.DANGER}
+                        minimal
+                        icon='cross'
+                        onClick={() => forgetLogin(login)}
+                        aria-label={tx('a11y_remove_account_btn_label')}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            )}
+            <Card>
+              <p className='delta-headline'>{tx('login_title')}</p>
+              <LoginForm credentials={credentials} setCredentials={setCredentials} />
+              <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
+              <ImportButton refreshAccounts={refreshAccounts} />
+              <ScanQRCode />
+            </Card>
+          </>
         )}
-        <Card>
-          <p className='delta-headline'>{tx('login_title')}</p>
-          <LoginForm credentials={credentials} setCredentials={setCredentials} />
-          <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
-          <ImportButton refreshAccounts={refreshAccounts} />
-          <ScanQRCode />
-        </Card>
       </div>
     </div>
   )

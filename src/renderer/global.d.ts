@@ -26,7 +26,7 @@ declare global {
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType
-    __changeScreen: (screen: Screens) => void
-    __isReady: boolean
+    __changeScreen: (screen: Screens) => {}
+    __screen: string
   }
 }

@@ -346,29 +346,56 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogHeader title={"Login process"} />
-      <DeltaDialogBody>
-        <DeltaDialogContent>
-        progress: {progress}
-        error: {error}
-        <pre>{JSON.stringify(credentials)}</pre>
-        </DeltaDialogContent>
-      </DeltaDialogBody>
-      <DeltaDialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p
-          className='delta-button danger bold'
-          onClick={onCancel}
-        >
-          {tx('cancel')}
-        </p>
-      </DeltaDialogFooter>
+      {!error && (
+        <>
+          <div className='bp3-dialog-body-with-padding'>
+            <DeltaDialogContent>
+              <DeltaProgressBar progress={progress} />
+            </DeltaDialogContent>
+          </div>
+          <DeltaDialogFooter
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: '0px',
+              padding: '7px 13px 10px 13px',
+            }}
+          >
+            <p
+              className='delta-button danger bold'
+              onClick={onCancel}
+            >
+              {tx('cancel')}
+            </p>
+          </DeltaDialogFooter>
+        </>
+      )}
+      {error && (
+        <>
+          <div className='bp3-dialog-body-with-padding'>
+            <DeltaDialogContent>
+              Login failed because of: <br/>
+              <p color="red">{error}</p>
+            </DeltaDialogContent>
+          </div>
+          <DeltaDialogFooter
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: '0px',
+              padding: '7px 13px 10px 13px',
+            }}
+          >
+            <p
+            className='delta-button primary bold'
+              onClick={onClose}
+              style={{marginLeft: 'auto'}}
+            >
+              {tx('ok')}
+            </p>
+          </DeltaDialogFooter>
+        </>
+      )}
     </SmallDialog>
   )
 }

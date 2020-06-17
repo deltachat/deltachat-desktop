@@ -35,7 +35,6 @@ export default class ScreenController extends Component {
 
   constructor(
     public props: {
-      logins: DeltaChatAccount[]
       deltachat: AppState['deltachat']
     }
   ) {
@@ -59,6 +58,7 @@ export default class ScreenController extends Component {
     window.__userFeedback = this.userFeedback.bind(this)
     window.__closeDialog = this.closeDialog.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
+    window.__screen = this.state.screen
 
   }
 
@@ -74,6 +74,7 @@ export default class ScreenController extends Component {
   changeScreen(screen: Screens) {
     log.debug('Changing screen to:', screen)
     this.setState({screen})
+    window.__screen = this.state.screen
   }
 
   componentDidMount() {
@@ -128,9 +129,8 @@ export default class ScreenController extends Component {
   }
 
   render() {
-    const { logins, deltachat } = this.props
+    const { deltachat } = this.props
 
-    window.__isReady = deltachat.ready
     return (
       <div>
         {this.state.message && (

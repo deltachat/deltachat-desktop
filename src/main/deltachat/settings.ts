@@ -69,28 +69,29 @@ export default class DCSettings extends SplitOut {
     return result
   }
 
-  /* eslint-disable camelcase */
-  serverFlags({
-    mail_security,
-    send_security,
-  }: {
-    mail_security?: string
-    send_security?: string
-  }) {
-    const flags = []
-    if (mail_security === '' && send_security === '') {
-      return ''
-    }
-    if (mail_security !== '') {
-      flags.push(serverFlagMap['mail_security_' + mail_security])
-    }
+  serverFlags(props:any) { return serverFlags(props)}
+}
 
-    if (send_security !== '') {
-      flags.push(serverFlagMap['send_security_' + send_security])
-    }
-
-    return flags.reduce((flag, acc) => {
-      return acc | flag
-    }, 0)
+export function serverFlags({
+  mail_security,
+  send_security,
+}: {
+  mail_security?: string
+  send_security?: string
+}) {
+  const flags = []
+  if (mail_security === '' && send_security === '') {
+    return ''
   }
+  if (mail_security !== '') {
+    flags.push(serverFlagMap['mail_security_' + mail_security])
+  }
+
+  if (send_security !== '') {
+    flags.push(serverFlagMap['send_security_' + send_security])
+  }
+
+  return flags.reduce((flag, acc) => {
+    return acc | flag
+  }, 0)
 }

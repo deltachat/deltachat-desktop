@@ -2,7 +2,7 @@ import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import { JsonContact, Credentials } from '../../shared/shared-types'
+import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
 import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
@@ -24,6 +24,7 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
+import { LocaleData } from '../../shared/localize'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -59,6 +60,16 @@ export default class DeltaChatController extends EventEmitter {
       this.hintUpdateIfNessesary.bind(this),
       Timespans.ONE_DAY_IN_SECONDS * 1000
     )
+
+
+    this.onAll = this.onAll.bind(this)
+    this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
+    this.onMsgsChanged = this.onMsgsChanged.bind(this)
+    this.onIncomingMsg = this.onIncomingMsg.bind(this)
+    this.onChatModified = this.onChatModified.bind(this)
+    this.onMsgFailed = this.onMsgFailed.bind(this)
+    this.onMsgDelivered = this.onMsgDelivered.bind(this)
+    this.onMsgRead = this.onMsgRead.bind(this)
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -162,112 +173,103 @@ export default class DeltaChatController extends EventEmitter {
     return [this.networkStatus, this.networkStatusMessage]
   }
 
-  registerEventHandler(dc: DeltaChat) {
-    // in debug mode log all core events
-    dc.on('ALL', (_event: any, data1: any, data2: any) => {
-      const event: string = !isNaN(_event)
-        ? eventStrings[_event]
-        : String(_event)
+  onAll (_event: any, data1: any, data2: any) {
+    const event: string = !isNaN(_event)
+      ? eventStrings[_event]
+      : String(_event)
 
-      if (event === 'DC_EVENT_WARNING') {
-        logCoreEvent.warn(event, data1, data2)
-      } else if (event === 'DC_EVENT_INFO') {
-        logCoreEvent.info(event, data1, data2)
-      } else if (event.startsWith('DC_EVENT_ERROR')) {
-        logCoreEvent.error(event, data1, data2)
-      } else if (app.rc['log-debug']) {
-        // in debug mode log all core events
-        logCoreEvent.debug(event, data1, data2)
-      }
-
-      // Network Status
-      if (this.networkStatus !== false && event === 'DC_EVENT_ERROR_NETWORK') {
-        this.networkStatus = false
-        this.networkStatusMessage = data1 + data2
-        this.sendToRenderer('NETWORK_STATUS', [
-          this.networkStatus,
-          this.networkStatusMessage,
-        ])
-      } else if (
-        this.networkStatus === false &&
-        (event === 'DC_EVENT_SMTP_CONNECTED' ||
-          event === 'DC_EVENT_IMAP_CONNECTED' ||
-          event === 'DC_EVENT_INCOMING_MSG' ||
-          event === 'DC_EVENT_MSG_DELIVERED' ||
-          event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
-      ) {
-        this.networkStatus = true
-        this.networkStatusMessage = ''
-        this.sendToRenderer('NETWORK_STATUS', [
-          this.networkStatus,
-          this.networkStatusMessage,
-        ])
-      }
-
-      this.sendToRenderer(event, [data1, data2])
-    })
-
-    dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatListChanged.bind(this))
-
-    // TODO: move event handling to frontend store
-    dc.on('DC_EVENT_MSGS_CHANGED', (chatId: number, msgId: number) => {
-      this.onChatListChanged()
-      this.onChatListItemChanged(chatId)
-      this.chatList.onChatModified(chatId)
-    })
-
-    dc.on('DC_EVENT_INCOMING_MSG', (chatId: number, msgId: number) => {
-      maybeMarkSeen(chatId, msgId)
-      this.onChatListChanged()
-      this.onChatListItemChanged(chatId)
-      this.chatList.onChatModified(chatId)
-    })
-
-    dc.on('DC_EVENT_CHAT_MODIFIED', (chatId: number, msgId: number) => {
-      this.onChatListChanged()
-      this.onChatListItemChanged(chatId)
-      this.chatList.onChatModified(chatId)
-    })
-
-    dc.on('DC_EVENT_MSG_FAILED', (chatId: number, msgId: number) => {
-      this.onChatListItemChanged(chatId)
-    })
-
-    dc.on('DC_EVENT_MSG_DELIVERED', (chatId: number, msgId: number) => {
-      this.onChatListItemChanged(chatId)
-    })
-
-    dc.on('DC_EVENT_MSG_READ', (chatId: number, msgId: number) => {
-      this.onChatListItemChanged(chatId)
-    })
-
-    dc.on('DC_EVENT_CONFIGURE_PROGRESS', (progress: string) => {
-      if (Number(progress) === 0) {
-        // login failed
-        this.onLoginFailure()
-        this.sendToRenderer('DC_EVENT_CONFIGURE_FAILED')
-      }
-    })
-
-    dc.on('DC_EVENT_ERROR_NETWORK', (_first: any, error: any) => {
-      if (this.configuring) {
-        this.onLoginFailure()
-      }
-    })
-  }
-
-  onLoginFailure() {
-    if (this.updating) {
-      // error when updating login credentials when being logged in
-      this.sendToRenderer('DC_EVENT_LOGIN_FAILED')
-      this.configuring = false
-      this.updating = false
-    } else {
-      this.login.logout()
+    if (event === 'DC_EVENT_WARNING') {
+      logCoreEvent.warn(event, data1, data2)
+    } else if (event === 'DC_EVENT_INFO') {
+      logCoreEvent.info(event, data1, data2)
+    } else if (event.startsWith('DC_EVENT_ERROR')) {
+      logCoreEvent.error(event, data1, data2)
+    } else if (app.rc['log-debug']) {
+      // in debug mode log all core events
+      logCoreEvent.debug(event, data1, data2)
     }
+
+    // Network Status
+    if (this.networkStatus !== false && event === 'DC_EVENT_ERROR_NETWORK') {
+      this.networkStatus = false
+      this.networkStatusMessage = data1 + data2
+      this.sendToRenderer('NETWORK_STATUS', [
+        this.networkStatus,
+        this.networkStatusMessage,
+      ])
+    } else if (
+      this.networkStatus === false &&
+      (event === 'DC_EVENT_SMTP_CONNECTED' ||
+        event === 'DC_EVENT_IMAP_CONNECTED' ||
+        event === 'DC_EVENT_INCOMING_MSG' ||
+        event === 'DC_EVENT_MSG_DELIVERED' ||
+        event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
+    ) {
+      this.networkStatus = true
+      this.networkStatusMessage = ''
+      this.sendToRenderer('NETWORK_STATUS', [
+        this.networkStatus,
+        this.networkStatusMessage,
+      ])
+    }
+
+    this.sendToRenderer(event, [data1, data2])
   }
 
-  onChatListChanged() {
+  onMsgsChanged(chatId: number, msgId: number) {
+    this.onChatlistUpdated()
+    this.onChatListItemChanged(chatId)
+    this.chatList.onChatModified(chatId)
+  }
+
+  onIncomingMsg(chatId: number, msgId: number) {
+    maybeMarkSeen(chatId, msgId)
+    this.onChatlistUpdated()
+    this.onChatListItemChanged(chatId)
+    this.chatList.onChatModified(chatId)
+  }
+
+  onChatModified(chatId: number, msgId: number)  {
+    this.onChatlistUpdated()
+    this.onChatListItemChanged(chatId)
+    this.chatList.onChatModified(chatId)
+  }
+
+  onMsgFailed(chatId: number, msgId: number) {
+    this.onChatListItemChanged(chatId)
+  }
+
+  onMsgDelivered(chatId: number, msgId: number) {
+    this.onChatListItemChanged(chatId)
+  }
+
+  onMsgRead(chatId: number, msgId: number) {
+    this.onChatListItemChanged(chatId)
+  }
+
+  registerEventHandler(dc: DeltaChat) {
+    dc.on('ALL', this.onAll)
+    dc.on('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
+    dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
+    dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
+    dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
+    dc.on('DC_EVENT_MSG_FAILED', this.onMsgFailed)
+    dc.on('DC_EVENT_MSG_DELIVERED', this.onMsgDelivered)
+    dc.on('DC_EVENT_MSG_READ', this.onMsgRead)
+  }
+
+  unregisterEventHandler(dc: DeltaChat) {
+    dc.removeListener('ALL', this.onAll)
+    dc.removeListener('DD_EVENT_CHATLIST_UPDATED', this.onChatlistUpdated)
+    dc.removeListener('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
+    dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
+    dc.removeListener('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
+    dc.removeListener('DC_EVENT_MSG_FAILED', this.onMsgFailed)
+    dc.removeListener('DC_EVENT_MSG_DELIVERED', this.onMsgDelivered)
+    dc.removeListener('DC_EVENT_MSG_READ', this.onMsgRead)
+  }
+
+  onChatlistUpdated() {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
   }
 
@@ -285,11 +287,13 @@ export default class DeltaChatController extends EventEmitter {
   /**
    * Returns the state in json format
    */
-  getState() {
+  getState(): AppState {
     return {
-      configuring: this.configuring,
-      credentials: this.credentials,
-      ready: this.ready,
+      saved: app.state.saved,
+      logins: app.state.logins,
+      deltachat : {
+        credentials: this.credentials,
+      }
     }
   }
 

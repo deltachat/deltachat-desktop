@@ -192,7 +192,7 @@ class DeltaRemote {
   call(
     fnName: 'login.loadAccount',
     login: DeltaChatAccount
-  ): Promise<void>
+  ): Promise<boolean>
   call(
     fnName: 'login.logout',
   ): Promise<void>
@@ -200,6 +200,9 @@ class DeltaRemote {
     fnName: 'login.forgetAccount',
     login: DeltaChatAccount
   ): Promise<void>
+  call(
+    fnName: 'login.getLastLoggedInAccount'
+  ): Promise<DeltaChatAccount>
 
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
