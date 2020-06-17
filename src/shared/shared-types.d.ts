@@ -42,20 +42,20 @@ export interface LocalSettings {
 export interface AppState {
   deltachat: {
     credentials: Credentials
-  },
+  }
   saved: {
-    bounds: todo,
-    credentials: any,
-    enterKeySends: boolean,
-    notifications: boolean,
-    showNotificationContent: boolean,
-    locale: string,
-    enableOnDemandLocationStreaming: boolean,
-    chatViewBgImg: string,
-    lastChats: todo,
-    zoomFactor: number,
-    activeTheme: string,
-  },
+    bounds: todo
+    credentials: any
+    enterKeySends: boolean
+    notifications: boolean
+    showNotificationContent: boolean
+    locale: string
+    enableOnDemandLocationStreaming: boolean
+    chatViewBgImg: string
+    lastChats: todo
+    zoomFactor: number
+    activeTheme: string
+  }
   logins: DeltaChatAccount[]
 }
 

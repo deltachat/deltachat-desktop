@@ -19,10 +19,15 @@ import { protocol } from 'electron'
 import { render } from 'react-dom'
 import { DialogProps } from './dialogs/DialogController'
 import { sendToBackend, ipcBackend } from '../ipc'
-import { SmallDialog, DeltaDialogHeader, DeltaDialogBody, DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogHeader,
+  DeltaDialogBody,
+  DeltaDialogContent,
+  DeltaDialogFooter,
+} from './dialogs/DeltaDialog'
 import { title } from 'process'
 import { Credentials } from '../../shared/shared-types'
-
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -79,27 +84,31 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
   }
 }
 
+type LoginProps = React.PropsWithChildren<{
+  credentials: Credentials
+  setCredentials: (credentials: Credentials) => void
+  addrDisabled?: boolean
+}>
 
-type LoginProps = React.PropsWithChildren<
-  {
-    credentials : Credentials
-    setCredentials: (credentials: Credentials) => void
-    addrDisabled? : boolean 
-  }
->
-
-export default function LoginForm({credentials, setCredentials, addrDisabled}:LoginProps) {
-
+export default function LoginForm({
+  credentials,
+  setCredentials,
+  addrDisabled,
+}: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
-  const [providerInfo, setProviderInfo] = useState<ReturnType<typeof DeltaChat.getProviderFromEmail>>(null)
+  const [providerInfo, setProviderInfo] = useState<
+    ReturnType<typeof DeltaChat.getProviderFromEmail>
+  >(null)
 
-  const handleCredentialsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCredentialsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { id, value } = event.target
     let changeCredentials = {}
     if (id === 'certificate_checks') {
       // Change to certificate_checks updates certificate checks configuration
       // for all protocols.
-      
+
       changeCredentials = {
         imap_certificate_checks: value,
         smtp_certificate_checks: value,
@@ -110,7 +119,7 @@ export default function LoginForm({credentials, setCredentials, addrDisabled}:Lo
       }
     }
 
-    const updatedCredentials = {...credentials, ...changeCredentials}
+    const updatedCredentials = { ...credentials, ...changeCredentials }
     setCredentials(updatedCredentials)
   }
 
@@ -142,7 +151,6 @@ export default function LoginForm({credentials, setCredentials, addrDisabled}:Lo
 
   // We assume that smtp_certificate_checks has the same value.
   const certificate_checks = imap_certificate_checks
-
 
   const tx = window.translate
 
@@ -307,35 +315,52 @@ export default function LoginForm({credentials, setCredentials, addrDisabled}:Lo
   )
 }
 
-
-export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess}: DialogProps) {
+export function ConfigureProgressDialog({
+  isOpen,
+  onClose,
+  credentials,
+  onSuccess,
+  mode,
+}: DialogProps) {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
 
-
-  const onConfigureProgress = (_: null, [progress, _data2] : [number, null]) => setProgress(progress)
+  const onConfigureProgress = (_: null, [progress, _data2]: [number, null]) =>
+    setProgress(progress)
 
   const onCancel = (event: any) => {
     console.log('onCancel!')
     DeltaBackend.call('stopOngoingProcess')
-    onClose() 
+    onClose()
   }
 
   const onConfigureSuccessful = () => {
     onClose()
     onSuccess && onSuccess()
   }
-  const onConfigureFailed = (_: null, [data1, data2] : [null, string]) => setError(data2)
+  const onConfigureFailed = (_: null, [data1, data2]: [null, string]) =>
+    setError(data2)
 
   useEffect(() => {
     console.log(credentials)
-    DeltaBackend.call('login.newLogin', credentials)
+    if (mode === 'update') {
+      DeltaBackend.call('login.updateCredentials', credentials)
+    } else {
+      DeltaBackend.call('login.newLogin', credentials)
+    }
+
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureFailed)
     return () => {
-      ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
-      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
+      ipcBackend.removeListener(
+        'DC_EVENT_CONFIGURE_PROGRESS',
+        onConfigureProgress
+      )
+      ipcBackend.removeListener(
+        'DCN_EVENT_CONFIGURE_SUCCESSFUL',
+        onConfigureSuccessful
+      )
       ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureFailed)
     }
   }, [])
@@ -359,10 +384,7 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess
               padding: '7px 13px 10px 13px',
             }}
           >
-            <p
-              className='delta-button danger bold'
-              onClick={onCancel}
-            >
+            <p className='delta-button danger bold' onClick={onCancel}>
               {tx('cancel')}
             </p>
           </DeltaDialogFooter>
@@ -384,9 +406,9 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess
             }}
           >
             <p
-            className='delta-button primary bold'
+              className='delta-button primary bold'
               onClick={onClose}
-              style={{marginLeft: 'auto'}}
+              style={{ marginLeft: 'auto' }}
             >
               {tx('ok')}
             </p>

@@ -48,8 +48,8 @@ export default function ConfirmationDialog(props: todo) {
   }
 
   return (
-  <SmallDialog isOpen={isOpen} onClose={onClose}>
-    <div className='bp3-dialog-body-with-padding'>
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
         <div className={Classes.DIALOG_FOOTER}>
           <div

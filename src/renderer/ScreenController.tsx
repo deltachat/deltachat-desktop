@@ -25,12 +25,12 @@ export interface userFeedback {
 
 export enum Screens {
   Main = 'main',
-  Login = 'login'
+  Login = 'login',
 }
 
 export default class ScreenController extends Component {
   dialogController: React.RefObject<DialogController>
-  state: { message: userFeedback | false, screen: Screens }
+  state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
 
   constructor(
@@ -41,7 +41,7 @@ export default class ScreenController extends Component {
     super(props)
     this.state = {
       message: false,
-      screen: Screens.Login
+      screen: Screens.Login,
     }
 
     this.onError = this.onError.bind(this)
@@ -59,7 +59,6 @@ export default class ScreenController extends Component {
     window.__closeDialog = this.closeDialog.bind(this)
     window.__changeScreen = this.changeScreen.bind(this)
     window.__screen = this.state.screen
-
   }
 
   userFeedback(message: userFeedback | false) {
@@ -73,7 +72,7 @@ export default class ScreenController extends Component {
 
   changeScreen(screen: Screens) {
     log.debug('Changing screen to:', screen)
-    this.setState({screen})
+    this.setState({ screen })
     window.__screen = this.state.screen
   }
 
@@ -99,10 +98,10 @@ export default class ScreenController extends Component {
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
-  onError(_event: any, data1: string | number, data2: string) {
+  onError(_event: any, [data1, data2]: [string | number, string]) {
     if (this.state.screen === Screens.Login) return
     if (data1 === 0) data1 = ''
-    const text = data1 = data2
+    const text = data1 + data2
     this.userFeedback({ type: 'error', text })
   }
 
@@ -154,10 +153,10 @@ export default class ScreenController extends Component {
             closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
-            screen: this.state.screen
+            screen: this.state.screen,
           }}
         >
-          { this.renderScreen() }
+          {this.renderScreen()}
           <DialogController
             ref={this.dialogController}
             deltachat={deltachat}

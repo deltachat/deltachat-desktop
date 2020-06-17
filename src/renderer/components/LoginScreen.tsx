@@ -1,7 +1,10 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { sendToBackend, ipcBackend } from '../ipc'
-import { Credentials } from '../../shared/shared-types' 
-import LoginForm, { defaultCredentials, ConfigureProgressDialog } from './LoginForm'
+import { Credentials } from '../../shared/shared-types'
+import LoginForm, {
+  defaultCredentials,
+  ConfigureProgressDialog,
+} from './LoginForm'
 import {
   Button,
   Classes,
@@ -183,12 +186,13 @@ const ScanQRCode = React.memo(function ScanQRCode(_) {
   )
 })
 
-
 export default function LoginScreen(props: any) {
   const tx = window.translate
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
-  const [credentials, setCredentials] = useState<Credentials>(defaultCredentials())
+  const [credentials, setCredentials] = useState<Credentials>(
+    defaultCredentials()
+  )
   const [logins, setLogins] = useState(null)
 
   const refreshAccounts = async () => {
@@ -201,14 +205,12 @@ export default function LoginScreen(props: any) {
   }, [])
 
   const onClickLogin = () => {
-    console.log('hallo')
-
     const onSuccess = () => changeScreen(Screens.Main)
-    openDialog(ConfigureProgressDialog, {credentials, onSuccess})    
+    openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
 
   const onClickLoadAccount = async (login: DeltaChatAccount) => {
-    if(await DeltaBackend.call('login.loadAccount', login) === true) {
+    if ((await DeltaBackend.call('login.loadAccount', login)) === true) {
       changeScreen(Screens.Main)
     }
   }
@@ -227,8 +229,6 @@ export default function LoginScreen(props: any) {
     })
   }
 
-  if(logins === null) return null
-
   return (
     <div className='login-screen'>
       <div className='navbar-wrapper'>
@@ -239,7 +239,7 @@ export default function LoginScreen(props: any) {
         </Navbar>
       </div>
       <div className='window'>
-        {logins.length > 0 && (
+        {logins !== null && logins.length > 0 && (
           <Card>
             <p className='delta-headline'>
               {tx('login_known_accounts_title_desktop')}
@@ -270,8 +270,15 @@ export default function LoginScreen(props: any) {
         )}
         <Card>
           <p className='delta-headline'>{tx('login_title')}</p>
-          <LoginForm credentials={credentials} setCredentials={setCredentials} />
-          <Button type='submit' text={tx('login_title')} onClick={onClickLogin} />
+          <LoginForm
+            credentials={credentials}
+            setCredentials={setCredentials}
+          />
+          <Button
+            type='submit'
+            text={tx('login_title')}
+            onClick={onClickLogin}
+          />
           <ImportButton refreshAccounts={refreshAccounts} />
           <ScanQRCode />
         </Card>

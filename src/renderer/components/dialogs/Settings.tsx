@@ -211,7 +211,7 @@ export default class Settings extends React.Component {
     const { settings } = this.state
     if (this.state.show === 'main') {
       return (
-        <div>
+        <DeltaDialogBody noFooter>
           <Card elevation={Elevation.ONE}>
             <ProfileImageSelector
               displayName={
@@ -323,7 +323,7 @@ export default class Settings extends React.Component {
           </Card>
           <SettingsManageKeys />
           <SettingsBackup />
-        </div>
+        </DeltaDialogBody>
       )
     } else if (this.state.show === 'login') {
       return (
@@ -361,7 +361,7 @@ export default class Settings extends React.Component {
           title={title}
           onClose={onClose}
         />
-        <DeltaDialogBody noFooter>{this.renderDialogContent()}</DeltaDialogBody>
+        {this.renderDialogContent()}
       </DeltaDialogBase>
     )
   }

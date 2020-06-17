@@ -61,7 +61,6 @@ export default class DeltaChatController extends EventEmitter {
       Timespans.ONE_DAY_IN_SECONDS * 1000
     )
 
-
     this.onAll = this.onAll.bind(this)
     this.onChatlistUpdated = this.onChatlistUpdated.bind(this)
     this.onMsgsChanged = this.onMsgsChanged.bind(this)
@@ -173,10 +172,8 @@ export default class DeltaChatController extends EventEmitter {
     return [this.networkStatus, this.networkStatusMessage]
   }
 
-  onAll (_event: any, data1: any, data2: any) {
-    const event: string = !isNaN(_event)
-      ? eventStrings[_event]
-      : String(_event)
+  onAll(_event: any, data1: any, data2: any) {
+    const event: string = !isNaN(_event) ? eventStrings[_event] : String(_event)
 
     if (event === 'DC_EVENT_WARNING') {
       logCoreEvent.warn(event, data1, data2)
@@ -229,7 +226,7 @@ export default class DeltaChatController extends EventEmitter {
     this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(chatId: number, msgId: number)  {
+  onChatModified(chatId: number, msgId: number) {
     this.onChatlistUpdated()
     this.onChatListItemChanged(chatId)
     this.chatList.onChatModified(chatId)
@@ -291,9 +288,9 @@ export default class DeltaChatController extends EventEmitter {
     return {
       saved: app.state.saved,
       logins: app.state.logins,
-      deltachat : {
+      deltachat: {
         credentials: this.credentials,
-      }
+      },
     }
   }
 

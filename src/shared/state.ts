@@ -24,6 +24,6 @@ export function getDefaultState(): AppState {
       zoomFactor: 1,
       activeTheme: 'system',
     },
-    logins: []
+    logins: [],
   }
 }

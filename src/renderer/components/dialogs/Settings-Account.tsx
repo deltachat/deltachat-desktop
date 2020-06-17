@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Elevation, Button, Spinner } from '@blueprintjs/core'
 import React from 'react'
-import LoginForm from '../LoginForm'
+import LoginForm, { ConfigureProgressDialog } from '../LoginForm'
 import DeltaChat from 'deltachat-node'
 import { CloseDialogFunctionType } from './DialogController'
+import { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
+import { ScreenContext } from '../../contexts'
+import { Screens } from '../../ScreenController'
+import classNames from 'classnames'
 
 const { ipcRenderer } = window.electron_functions
 
@@ -19,9 +23,27 @@ export default function SettingsAccount({
   setShow: (show: string) => void
   onClose: any
 }) {
-  const [accountSettings, setAccountSettings] = useState<{
+  const [initialAccountSettings, setInitialAccountSettings] = useState<{
     [key: string]: string
   }>(null)
+
+  const [accountSettings, _setAccountSettings] = useState<{
+    [key: string]: string
+  }>(null)
+
+  const [disableUpdate, setDisableUpdate] = useState(true)
+
+  const setAccountSettings = (
+    value: React.SetStateAction<{
+      [key: string]: string
+    }>
+  ) => {
+    disableUpdate === true && setDisableUpdate(false)
+    _setAccountSettings(value)
+  }
+
+  const { openDialog, userFeedback } = useContext(ScreenContext)
+  const tx = window.translate
 
   const loadSettings = async () => {
     const accountSettings = await DeltaBackend.call('settings.getConfigFor', [
@@ -44,58 +66,56 @@ export default function SettingsAccount({
       'send_security',
       'smtp_certificate_checks',
     ])
-    setAccountSettings(accountSettings)
+    setInitialAccountSettings(accountSettings)
+    _setAccountSettings(accountSettings)
   }
 
   useEffect(() => {
     loadSettings()
   }, [])
 
-  const onLoginSubmit = (config: todo) => {
-    const onDone = () => {
-      ipcRenderer.removeListener(
-        'DC_EVENT_CONFIGURE_PROGRESS',
-        onConfigureProgress
-      )
-    }
-    const onConfigureProgress = (_: any, [progress]: [number]) => {
-      // Updating account was successfull, reload settings
-      if (progress === 1000) {
-        onDone()
-        loadSettings()
-      }
-    }
-
-    ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
-
-    ipcRenderer.send('updateCredentials', config)
-    ipcRenderer.once('DC_EVENT_CONFIGURE_FAILED', () => {
-      onDone()
-      onClose()
+  const onUpdate = () => {
+    if (disableUpdate) return
+    const onSuccess = () => userFeedback({ type: 'success', text: tx('ok') })
+    openDialog(ConfigureProgressDialog, {
+      credentials: accountSettings,
+      onSuccess,
+      mode: 'update',
     })
   }
 
-  // not yet implemented in core (issue #1159)
-  const onCancelLogin = () => ipcRenderer.send('cancelCredentialsUpdate')
-
-  const tx = window.translate
-
+  if (accountSettings === null) return null
   return (
-    <Card elevation={Elevation.ONE}>
-      {/*accountSettings && (
-        <Login
-          {...accountSettings}
-          mode='update'
-          onSubmit={onLoginSubmit}
-          loading={deltachat.configuring}
-          onClose={onClose}
-          onCancel={onCancelLogin}
-          addrDisabled
+    <>
+      <DeltaDialogBody noFooter>
+        <Card elevation={Elevation.ONE}>
+          {accountSettings && (
+            <LoginForm
+              credentials={accountSettings}
+              setCredentials={setAccountSettings}
+              addrDisabled
+            />
+          )}
+        </Card>
+      </DeltaDialogBody>
+      <DeltaDialogFooter
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '0px',
+          padding: '7px 13px 10px 13px',
+        }}
+      >
+        <p
+          className={classNames('delta-button primary bold', {
+            disabled: disableUpdate,
+          })}
+          onClick={onUpdate}
+          style={{ marginLeft: 'auto' }}
         >
-          <Button type='submit' text={tx('update')} />
-          <Button type='reset' text={tx('cancel')} />
-        </Login>
-      )*/}
-    </Card>
+          {tx('update')}
+        </p>
+      </DeltaDialogFooter>
+    </>
   )
 }

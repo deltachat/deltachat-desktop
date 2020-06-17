@@ -74,7 +74,7 @@ export default async function processOpenQrUrl(
           addr: burnerAccount.email,
           mail_pw: burnerAccount.password,
         }
-        window.__openDialog(ConfigureProgressDialog, {credentials})
+        window.__openDialog(ConfigureProgressDialog, { credentials })
         ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
           // close dialog since now the progress bar is shown
           callback()

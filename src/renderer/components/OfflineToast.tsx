@@ -7,7 +7,6 @@ import { getLogger } from '../../shared/logger'
 const log = getLogger('renderer/components/OfflineToast')
 
 export default function OfflineToast() {
-  
   const [networkStatusMessage, setNetworkStatusMessage] = useState('')
   const [networkStatus, setNetworkStatus] = useState(true)
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)

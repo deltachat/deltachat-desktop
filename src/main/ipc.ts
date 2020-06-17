@@ -112,7 +112,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }, 0)
   }
 
-
   ipcMain.on('backupImport', (e, fileName) =>
     dcController.backup.import(fileName)
   )
@@ -131,7 +130,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: null })
   })
-
 
   const updateDesktopSetting = (
     e: Electron.IpcMainEvent,
@@ -214,7 +212,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
   })
-
 }
 
 export function txCoreStrings() {

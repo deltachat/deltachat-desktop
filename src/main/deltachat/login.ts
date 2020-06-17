@@ -13,7 +13,6 @@ import { ExtendedAppMainProcess } from '../types'
 import { serverFlags } from './settings'
 const log = getLogger('main/deltachat/login')
 
-
 const app = rawApp as ExtendedAppMainProcess
 
 function setCoreStrings(dc: any, strings: { [key: number]: string }) {
@@ -46,7 +45,6 @@ export default class DCLoginController extends SplitOut {
     log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
 
-
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
       throw new Error(this._controller.translate('bad_email_address'))
     }
@@ -73,7 +71,7 @@ export default class DCLoginController extends SplitOut {
 
     this._controller.emit('ready', credentials)
     log.info('dc_get_info', dc.getInfo())
-    
+
     this._controller.accountDir = accountDir
     this._controller._dc = dc
     this._controller.credentials = credentials
@@ -86,10 +84,21 @@ export default class DCLoginController extends SplitOut {
     return true
   }
 
+  async updateCredentials(credentials: Credentials): Promise<boolean> {
+    await this._dc.stopIO()
+    try {
+      await this._dc.configure(addServerFlags(credentials))
+    } catch (err) {
+      await this._dc.startIO()
+      return false
+    }
+    await this._dc.startIO()
+    return true
+  }
+
   logout() {
     this.close()
     this._controller._resetState()
-
 
     app.state.saved.credentials = null
     app.saveState()
@@ -102,10 +111,7 @@ export default class DCLoginController extends SplitOut {
 
   async newLogin(credentials: Credentials) {
     console.log(credentials)
-    await this.login(
-      getNewAccountPath(),
-      credentials,
-    )
+    await this.login(getNewAccountPath(), credentials)
   }
 
   close() {
@@ -146,10 +152,7 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   }
 
   async loadAccount(login: DeltaChatAccount) {
-    return await this.login(
-      login.path,
-      { addr: login.addr },
-    )
+    return await this.login(login.path, { addr: login.addr })
   }
 
   async forgetAccount(login: DeltaChatAccount) {
@@ -158,7 +161,7 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
       this._controller.sendToRenderer('success', 'successfully forgot account')
     } catch (error) {
       this._controller.sendToRenderer('error', error.message)
-    }  
+    }
   }
 
   async getLastLoggedInAccount() {

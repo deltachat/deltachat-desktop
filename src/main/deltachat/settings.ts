@@ -69,7 +69,9 @@ export default class DCSettings extends SplitOut {
     return result
   }
 
-  serverFlags(props:any) { return serverFlags(props)}
+  serverFlags(props: any) {
+    return serverFlags(props)
+  }
 }
 
 export function serverFlags({
