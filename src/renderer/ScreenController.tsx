@@ -24,10 +24,14 @@ export interface userFeedback {
   text: string
 }
 
+export enum Screens {
+  Main = 'main',
+  Login = 'login'
+}
+
 export default class ScreenController extends Component {
   dialogController: React.RefObject<DialogController>
-  state: { message: userFeedback | false }
-  changeScreen: any
+  state: { message: userFeedback | false, screen: Screens }
   onShowAbout: any
 
   constructor(
@@ -39,6 +43,7 @@ export default class ScreenController extends Component {
     super(props)
     this.state = {
       message: false,
+      screen: Screens.Login
     }
 
     this.onError = this.onError.bind(this)
@@ -46,12 +51,16 @@ export default class ScreenController extends Component {
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
     this.openDialog = this.openDialog.bind(this)
-    window.__openDialog = this.openDialog.bind(this)
-    window.__userFeedback = this.userFeedback.bind(this)
-    window.__closeDialog = this.closeDialog.bind(this)
+    this.changeScreen = this.changeScreen.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
     this.onShowAbout = this.showAbout.bind(this, true)
     this.dialogController = createRef()
+
+    window.__openDialog = this.openDialog.bind(this)
+    window.__userFeedback = this.userFeedback.bind(this)
+    window.__closeDialog = this.closeDialog.bind(this)
+    window.__changeScreen = this.changeScreen.bind(this)
+
   }
 
   userFeedback(message: userFeedback | false) {
@@ -63,11 +72,14 @@ export default class ScreenController extends Component {
     this.userFeedback(false)
   }
 
+  changeScreen(screen: Screens) {
+    log.debug('Changing screen to:', screen)
+    this.setState({screen})
+  }
+
   componentDidMount() {
     ipcRenderer.on('error', this.onError)
     ipcRenderer.on('DC_EVENT_ERROR', this.onError)
-    ipcRenderer.on('DC_EVENT_LOGIN_FAILED', this.onError)
-    ipcRenderer.on('DC_EVENT_ERROR_NETWORK', this.onError)
     ipcRenderer.on('success', this.onSuccess)
     ipcRenderer.on('showAboutDialog', this.onShowAbout)
     ipcRenderer.on('open-url', this.onOpenUrl)
@@ -79,16 +91,12 @@ export default class ScreenController extends Component {
     ipcRenderer.removeListener('showAboutDialog', this.onShowAbout)
     ipcRenderer.removeListener('error', this.onError)
     ipcRenderer.removeListener('DC_EVENT_ERROR', this.onError)
-    ipcRenderer.removeListener('DC_EVENT_LOGIN_FAILED', this.onError)
-    ipcRenderer.removeListener('DC_EVENT_ERROR_NETWORK', this.onError)
     ipcRenderer.removeListener('success', this.onSuccess)
     ipcRenderer.removeListener('open-url', this.onOpenUrl)
   }
 
   onError(_event: any, data1: string, data2: string) {
-    if (!data2) data2 = ''
-    const text = data1 + ' ' + data2
-    this.userFeedback({ type: 'error', text })
+    this.userFeedback({ type: 'error', text: data2 })
   }
 
   onSuccess(_event: any, text: string) {
@@ -111,6 +119,15 @@ export default class ScreenController extends Component {
     this.dialogController.current.closeDialog(...args)
   }
 
+  renderScreen() {
+    switch (this.state.screen) {
+      case Screens.Main:
+        return <MainScreen />
+      case Screens.Login:
+        return <LoginScreen deltachat={this.props.deltachat} />
+    }
+  }
+
   render() {
     const { logins, deltachat } = this.props
 
@@ -131,14 +148,10 @@ export default class ScreenController extends Component {
             openDialog: this.openDialog,
             closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
-            changeScreen: this.changeScreen,
+            changeScreen: this.changeScreen
           }}
         >
-          {!deltachat.ready ? (
-            <LoginScreen logins={logins} deltachat={deltachat} />
-          ) : (
-            <MainScreen />
-          )}
+          { this.renderScreen() }
           <DialogController
             ref={this.dialogController}
             deltachat={deltachat}

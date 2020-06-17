@@ -308,7 +308,7 @@ export default function LoginForm({credentials, setCredentials, addrDisabled}:Lo
 }
 
 
-export function ConfigureProgressDialog({isOpen, onClose, credentials}: DialogProps) {
+export function ConfigureProgressDialog({isOpen, onClose, credentials, onSuccess}: DialogProps) {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
 
@@ -322,12 +322,10 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials}: DialogPr
   }
 
   const onConfigureSuccessful = () => {
-
+    onClose()
+    onSuccess && onSuccess()
   }
-
-  const onConfigureFailed = (_: null, [data1, _data2] : [null, string]) => {
-    setError(error)
-  }
+  const onConfigureFailed = (_: null, [data1, data2] : [null, string]) => setError(data2)
 
   useEffect(() => {
     console.log(credentials)
@@ -335,10 +333,12 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials}: DialogPr
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureFailed)
     return () => {
       ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureFailed)
     }
   }, [])
 
@@ -346,7 +346,7 @@ export function ConfigureProgressDialog({isOpen, onClose, credentials}: DialogPr
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      <DeltaDialogHeader title={title} />
+      <DeltaDialogHeader title={"Login process"} />
       <DeltaDialogBody>
         <DeltaDialogContent>
         progress: {progress}

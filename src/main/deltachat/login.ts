@@ -6,9 +6,9 @@ import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
 import DeltaChatController from './controller'
-import { Credentials } from '../../shared/shared-types'
+import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { txCoreStrings } from '../ipc'
-import { getNewAccountPath } from '../logins'
+import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 const log = getLogger('main/deltachat/login')
 
 export default class DCLoginController extends SplitOut {
@@ -145,5 +145,27 @@ export default class DCLoginController extends SplitOut {
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#130---2020-04-30
     ` as any
     )
+  }
+
+  async getLogins() {
+    return await getLogins()
+  }
+
+  async loadAccount(login: DeltaChatAccount) {
+    await this.login(
+      login.path,
+      { addr: login.addr },
+      () => {},
+      txCoreStrings()
+    )
+  }
+
+  async forgetAccount(login: DeltaChatAccount) {
+    try {
+      await removeAccount(login.path)
+      this._controller.sendToRenderer('success', 'successfully forgot account')
+    } catch (error) {
+      this._controller.sendToRenderer('error', error.message)
+    }  
   }
 }

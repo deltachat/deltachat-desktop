@@ -1,7 +1,7 @@
 import React from 'react'
 import { LocalSettings } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
-import { userFeedback } from './ScreenController'
+import ScreenController, { userFeedback, Screens } from './ScreenController'
 import { DialogId } from './components/dialogs/DialogController'
 
 const noop: Function = () => {}
@@ -10,7 +10,7 @@ export const ScreenContext = React.createContext({
   openDialog: (fnc: any, props?: any) => {},
   closeDialog: (name: string) => {},
   userFeedback: (message: false | userFeedback) => {},
-  changeScreen: noop,
+  changeScreen: (screen: Screens) => {},
 })
 
 export const SettingsContext: React.Context<LocalSettings> = React.createContext(

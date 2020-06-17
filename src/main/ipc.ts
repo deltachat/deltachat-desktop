@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
-import { app as rawApp, dialog, ipcMain, shell } from 'electron'
-import { copy, copyFile, emptyDir, ensureDir, pathExists } from 'fs-extra'
-import { extname, join, relative } from 'path'
+import { app as rawApp, dialog, ipcMain } from 'electron'
+import { copyFile, emptyDir, ensureDir } from 'fs-extra'
+import { extname, join } from 'path'
 import { getLogger } from '../shared/logger'
 import {
   AppState,
@@ -12,7 +12,7 @@ import {
 import { getConfigPath, getLogsPath } from './application-constants'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
-import { getLogins, getNewAccountPath, removeAccount } from './logins'
+import { getLogins, getNewAccountPath } from './logins'
 import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
@@ -131,34 +131,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     )
   })
 
-  ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
-    CatchError2Event(() =>
-      dcController.login.login(
-        login.path,
-        { addr: login.addr },
-        sendStateToRenderer,
-        txCoreStrings()
-      )
-    )
-  })
-
-  const updateLogins = async () => {
-    state.logins = await getLogins()
-    sendStateToRenderer()
-  }
-
-  ipcMain.on('forgetLogin', async (_e: any, login: DeltaChatAccount) => {
-    try {
-      await removeAccount(login.path)
-      main.send('success', 'successfully forgot account')
-    } catch (error) {
-      main.send('error', error.message)
-    }
-    updateLogins()
-  })
-
-  ipcMain.on('updateLogins', updateLogins)
-
   ipcMain.on('getMessage', (e, msgId: number) => {
     e.returnValue = dcController.messageList.messageIdToJson(msgId)
   })
@@ -177,8 +149,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dcController.settings.setConfig(key, value)
   })
-
-  ipcMain.on('logout', () => dcController.login.logout())
 
   ipcMain.on('saveFile', (e, source, target) => {
     copyFile(source, target, err => {

@@ -9,6 +9,7 @@ import {
   DCContact,
   MessageSearchResult,
   Credentials,
+  DeltaChatAccount,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -185,6 +186,21 @@ class DeltaRemote {
     fnName: 'login.newLogin',
     credentials: Credentials
   ): Promise<void>
+  call(
+    fnName: 'login.getLogins'
+  ): Promise<any>
+  call(
+    fnName: 'login.loadAccount',
+    login: DeltaChatAccount
+  ): Promise<void>
+  call(
+    fnName: 'login.logout',
+  ): Promise<void>
+  call(
+    fnName: 'login.forgetAccount',
+    login: DeltaChatAccount
+  ): Promise<void>
+
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
   call(
