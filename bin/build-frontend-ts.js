@@ -10,7 +10,7 @@ async function run (command, args, options) {
 
   return new Promise((resolve, reject) => {
     console.log(`- Executing "${command} ${args.join(' ')}"`)
-    const p = child.spawn(command, args, options)
+    const p = child.spawn(command, args, { shell:true, ...options})
     p.stdout.pipe(process.stdout)
     p.stderr.pipe(process.stderr)
     p.on('close', resolve)
