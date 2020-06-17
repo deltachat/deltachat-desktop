@@ -67,7 +67,6 @@ export default function App(props: any) {
       const state = await DeltaBackend.call('getState')
       setState(state)
       const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call('login.getLastLoggedInAccount')
-      return
       if (!lastLoggedInAccount) return
 
       await DeltaBackend.call('login.loadAccount', lastLoggedInAccount)
