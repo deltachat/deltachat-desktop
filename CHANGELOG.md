@@ -26,6 +26,10 @@
 - Fix export backup progress bar missing
 - Fix `dc_get_msg called with special msg_id=0` warnings printed to console
 - Fix window position on first start ([#1711](https://github.com/deltachat/deltachat-desktop/issues/1711))
+- Fix error message on login starting with ',' #1702
+- Fix offline toast displayed before login #1729
+- Fix "Authentication failed" notification does not disappear even after successfull login #1594
+- Fix login button staying disabled on error #1661
 
 ### Changed
 
@@ -43,6 +47,7 @@
 - change account path again - now the account folder name isn't tied to the email address anymore.
 - Update to deltachat-node v1.35.0 (async core)
 - Add open attachment to message context menu and increase clickable area (click to open attachment)
+- Overhauled login/update credentials flow & ui/ux to provide a more stable and clear experience
 
 ### Technical
 
