@@ -1,6 +1,10 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react'
 import { sendToBackend, ipcBackend } from '../ipc'
-import Login, { credentialState } from './Login'
+import { Credentials } from '../../shared/shared-types'
+import LoginForm, {
+  defaultCredentials,
+  ConfigureProgressDialog,
+} from './LoginForm'
 import {
   Button,
   Classes,
@@ -19,6 +23,9 @@ import DeltaDialog from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
+import { DialogProps } from './dialogs/DialogController'
+import { DeltaBackend } from '../delta-remote'
+import { Screens } from '../ScreenController'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -104,7 +111,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
   )
 })
 
-const ImportButton = React.memo(function ImportButton(_) {
+const ImportButton = function ImportButton(props: any) {
   const tx = window.translate
   const [showDialog, setShowDialog] = useState(false)
 
@@ -124,11 +131,11 @@ const ImportButton = React.memo(function ImportButton(_) {
   }
   const onHandleClose = () => {
     setShowDialog(false)
-    sendToBackend('updateLogins')
+    props.refreshAccounts()
   }
 
   return (
-    <Fragment>
+    <>
       <div className='delta-blue-button' onClick={onClickImportBackup}>
         <p>{tx('import_backup_title')}</p>
       </div>
@@ -143,9 +150,9 @@ const ImportButton = React.memo(function ImportButton(_) {
           <ImportDialogContent onClose={onHandleClose} />
         </DeltaDialog>
       )}
-    </Fragment>
+    </>
   )
-})
+}
 
 const ScanQRCode = React.memo(function ScanQRCode(_) {
   const { openDialog } = useContext(ScreenContext)
@@ -178,28 +185,45 @@ const ScanQRCode = React.memo(function ScanQRCode(_) {
   )
 })
 
-export default function LoginScreen(props: {
-  logins: DeltaChatAccount[]
-  deltachat: { configuring: boolean }
-}) {
+export default function LoginScreen(props: any) {
   const tx = window.translate
-  const { openDialog } = useContext(ScreenContext)
+  const { openDialog, changeScreen } = useContext(ScreenContext)
 
-  function onClickLogin(credentials: credentialState) {
-    sendToBackend('login', credentials)
+  const [credentials, setCredentials] = useState<Credentials>(
+    defaultCredentials()
+  )
+  const [logins, setLogins] = useState(null)
+
+  const refreshAccounts = async () => {
+    const logins = await DeltaBackend.call('login.getLogins')
+    setLogins(logins)
   }
 
-  function onClickLoadAccount(login: DeltaChatAccount) {
-    sendToBackend('loadAccount', login)
+  useEffect(() => {
+    refreshAccounts()
+  }, [])
+
+  const onClickLogin = () => {
+    const onSuccess = () => changeScreen(Screens.Main)
+    openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
 
-  function forgetLogin(login: DeltaChatAccount) {
+  const onClickLoadAccount = async (login: DeltaChatAccount) => {
+    if ((await DeltaBackend.call('login.loadAccount', login)) === true) {
+      changeScreen(Screens.Main)
+    }
+  }
+
+  const forgetLogin = (login: DeltaChatAccount) => {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
       confirmLabel: tx('remove_account'),
-      cb: (yes: boolean) => {
-        if (yes) sendToBackend('forgetLogin', login)
+      cb: async (yes: boolean) => {
+        if (yes) {
+          await DeltaBackend.call('login.forgetAccount', login)
+          refreshAccounts()
+        }
       },
     })
   }
@@ -214,13 +238,13 @@ export default function LoginScreen(props: {
         </Navbar>
       </div>
       <div className='window'>
-        {props.logins.length > 0 && (
+        {logins !== null && logins.length > 0 && (
           <Card>
             <p className='delta-headline'>
               {tx('login_known_accounts_title_desktop')}
             </p>
             <ul>
-              {props.logins.map(login => (
+              {logins.map((login: DeltaChatAccount) => (
                 <li className='login-item' key={login.path}>
                   <Button
                     large
@@ -245,12 +269,19 @@ export default function LoginScreen(props: {
         )}
         <Card>
           <p className='delta-headline'>{tx('login_title')}</p>
-          <Login onSubmit={onClickLogin} loading={props.deltachat.configuring}>
-            <br />
-            <Button type='submit' text={tx('login_title')} />
-            <Button text={tx('cancel')} />
-          </Login>
-          <ImportButton />
+          <LoginForm
+            credentials={credentials}
+            setCredentials={setCredentials}
+          />
+          <Button
+            disabled={
+              credentials.addr.length == 0 || credentials.mail_pw.length == 0
+            }
+            type='submit'
+            text={tx('login_title')}
+            onClick={onClickLogin}
+          />
+          <ImportButton refreshAccounts={refreshAccounts} />
           <ScanQRCode />
         </Card>
       </div>

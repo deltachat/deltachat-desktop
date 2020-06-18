@@ -104,7 +104,7 @@ export default function MessageListAndComposer({
     }
   })(chat)
 
-  const settings = useContext(SettingsContext)
+  const settings = useContext(SettingsContext).desktopSettings
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
     gridTemplateRows: `auto ${state.composerSize}px`,

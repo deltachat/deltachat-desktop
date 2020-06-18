@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { SettingsContext } from './contexts'
-import ScreenController from './ScreenController'
+import ScreenController, { Screens } from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState } from '../shared/shared-types'
+import {
+  AppState,
+  DeltaChatAccount,
+  DesktopSettings,
+  Credentials,
+} from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -16,6 +20,7 @@ import { ThemeManager } from './ThemeManager'
 const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
+import { getDefaultState } from '../shared/state'
 
 addLocaleData(enLocaleData)
 
@@ -25,9 +30,8 @@ attachKeybindingsListener()
 export const theme_manager = ThemeManager
 
 export default function App(props: any) {
-  const [state, setState] = useState<AppState>(
-    (remote.app as ExtendedApp).state
-  )
+  const [state, setState] = useState<AppState>(getDefaultState())
+
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
@@ -62,18 +66,23 @@ export default function App(props: any) {
 
   useEffect(() => {
     startBackendLogging()
-    setupLocaleData(state.saved.locale)
+    setupLocaleData('en')
+    ;(async () => {
+      const state = await DeltaBackend.call('getState')
+      setState(state)
+      const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
+        'login.getLastLoggedInAccount'
+      )
+      if (!lastLoggedInAccount) return
+
+      await DeltaBackend.call('login.loadAccount', lastLoggedInAccount)
+      if (typeof window.__changeScreen === 'function') {
+        window.__changeScreen(Screens.Main)
+      } else {
+        throw new Error('window.__changeScreen is not a function')
+      }
+    })()
   }, [])
-  const onRender = (e: any, state: AppState) => {
-    log.debug('onRenderer')
-    setState(state)
-  }
-  useEffect(() => {
-    ipcBackend.on('render', onRender)
-    return () => {
-      ipcBackend.removeListener('render', onRender)
-    }
-  }, [state])
 
   async function setupLocaleData(locale: string) {
     moment.locale(locale)
@@ -100,11 +109,53 @@ export default function App(props: any) {
   if (!localeData) return null
   return (
     <CrashScreen>
-      <SettingsContext.Provider value={state.saved}>
+      <SettingsContextWrapper credentials={state.deltachat.credentials}>
         <IntlProvider locale={localeData.locale}>
-          <ScreenController logins={state.logins} deltachat={state.deltachat} />
+          <ScreenController deltachat={state.deltachat} />
         </IntlProvider>
-      </SettingsContext.Provider>
+      </SettingsContextWrapper>
     </CrashScreen>
+  )
+}
+export function SettingsContextWrapper({
+  credentials,
+  children,
+}: {
+  credentials: Credentials
+  children: React.ReactChild
+}) {
+  const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
+      _setDesktopSettings(desktopSettings)
+    })()
+  }, [])
+
+  const setDesktopSetting = async (
+    key: keyof DesktopSettings,
+    value: string | number | boolean
+  ) => {
+    if (
+      (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
+      true
+    ) {
+      _setDesktopSettings((prevState: DesktopSettings) => {
+        return { ...prevState, [key]: value }
+      })
+    }
+  }
+
+  if (!desktopSettings) return null
+
+  return (
+    <SettingsContext.Provider
+      value={{ desktopSettings, setDesktopSetting, credentials }}
+    >
+      {children}
+    </SettingsContext.Provider>
   )
 }

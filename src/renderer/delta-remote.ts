@@ -8,6 +8,9 @@ import {
   Theme,
   DCContact,
   MessageSearchResult,
+  Credentials,
+  DeltaChatAccount,
+  DesktopSettings,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -179,7 +182,18 @@ class DeltaRemote {
     timestampFrom: number,
     timestampTo: number
   ): Promise<JsonLocations>
-  // loginController ----------------------------------------------------
+  // login ----------------------------------------------------
+  call(fnName: 'login.newLogin', credentials: Credentials): Promise<void>
+  call(fnName: 'login.getLogins'): Promise<any>
+  call(fnName: 'login.loadAccount', login: DeltaChatAccount): Promise<boolean>
+  call(fnName: 'login.logout'): Promise<void>
+  call(fnName: 'login.forgetAccount', login: DeltaChatAccount): Promise<void>
+  call(fnName: 'login.getLastLoggedInAccount'): Promise<DeltaChatAccount>
+  call(
+    fnName: 'login.updateCredentials',
+    credentials: Credentials
+  ): Promise<boolean>
+
   // NOTHING HERE that is called directly from the frontend, yet
   // messageList --------------------------------------------------------
   call(
@@ -266,6 +280,13 @@ class DeltaRemote {
       send_security?: string
     }
   ): Promise<number | ''>
+  call(
+    fnName: 'settings.setDesktopSetting',
+    key: keyof DesktopSettings,
+    value: string | number | boolean
+  ): Promise<boolean>
+  call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
+  call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'
@@ -289,7 +310,7 @@ class DeltaRemote {
   } | null>
   call(fnName: 'extras.setThemeFilePath', address: string): void
   call(fnName: 'extras.getAvailableThemes'): Promise<Theme[]>
-  call(fnName: 'extras.setTheme', address: string): void
+  call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
   call(fnName: string, ...args: any[]): Promise<any> {

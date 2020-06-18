@@ -96,6 +96,15 @@
     &.danger {
       color: var(--colorDanger);
     }
+
+    &.disabled {
+      color: grey;
+      cursor: default;
+      &:hover {
+        cursor: default;
+        background-color: none;
+      }
+    }
   }
 
   .drop-file-dialog-file-list > li {

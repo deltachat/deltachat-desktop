@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import { Icon } from '@blueprintjs/core'
-import { LocalSettings } from '../../../shared/shared-types'
+import { DesktopSettings } from '../../../shared/shared-types'
 import { selectChat } from '../../stores/chat'
 import QrReader from 'react-qr-reader'
 import { Card, Spinner } from '@blueprintjs/core'
@@ -121,7 +121,7 @@ export default function ImportQrCode({
   onClose: () => void
   isOpen: boolean
   qrCode: string
-  deltachat: LocalSettings
+  deltachat: DesktopSettings
 }) {
   const tx = window.translate
   const Dialog = DeltaDialog as any // todo remove this cheat.

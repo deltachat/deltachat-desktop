@@ -1,13 +1,9 @@
 import React, { useContext } from 'react'
-import DeltaDialog, {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './DeltaDialog'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
-import { LocalSettings } from '../../../shared/shared-types'
+import { DesktopSettings } from '../../../shared/shared-types'
 
 export function DeltaDialogQrInner({
   qrCode,
@@ -65,7 +61,7 @@ export default function QrInviteCode({
   onClose: () => void
   isOpen: boolean
   qrCode: string
-  deltachat: LocalSettings
+  deltachat: DesktopSettings
 }) {
   const tx = window.translate
   const Dialog = DeltaDialog as any // todo remove this cheat.

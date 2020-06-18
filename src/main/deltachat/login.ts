@@ -1,19 +1,29 @@
 import { DeltaChat } from 'deltachat-node'
-import { app } from 'electron'
+import { app as rawApp } from 'electron'
 import { getLogger } from '../../shared/logger'
 import { setupMarkseenFix } from '../markseenFix'
 import setupNotifications from '../notifications'
 import setupUnreadBadgeCounter from '../unread-badge'
 import SplitOut from './splitout'
-import DeltaChatController from './controller'
-import { Credentials } from '../../shared/shared-types'
+import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
+import { txCoreStrings } from '../ipc'
+import { getNewAccountPath, getLogins, removeAccount } from '../logins'
+import { ExtendedAppMainProcess } from '../types'
+import { serverFlags } from './settings'
 const log = getLogger('main/deltachat/login')
 
-export interface credential_config extends Credentials {
-  mail_security?: string
-  send_security?: string
-  mail_pw?: string
-  [key: string]: string
+const app = rawApp as ExtendedAppMainProcess
+
+function setCoreStrings(dc: any, strings: { [key: number]: string }) {
+  Object.keys(strings).forEach(key => {
+    dc.setStockTranslation(Number(key), strings[Number(key)])
+  })
+}
+
+function addServerFlags(credentials: any) {
+  return Object.assign({}, credentials, {
+    server_flags: serverFlags(credentials),
+  })
 }
 
 export default class DCLoginController extends SplitOut {
@@ -23,30 +33,16 @@ export default class DCLoginController extends SplitOut {
    */
   setCoreStrings(strings: { [key: number]: string }) {
     if (!this._dc) return
-
-    Object.keys(strings).forEach(key => {
-      this._dc.setStockTranslation(Number(key), strings[Number(key)])
-    })
-
-    this._controller._sendStateToRenderer()
+    setCoreStrings(this._dc, strings)
   }
 
   async login(
     accountDir: string,
-    credentials: credential_config,
-    sendStateToRenderer: typeof DeltaChatController.prototype._sendStateToRenderer,
-    coreStrings: Parameters<
-      typeof DCLoginController.prototype.setCoreStrings
-    >[0],
+    credentials: Credentials,
     updateConfiguration = false
   ) {
-    // Creates a separate DB file for each login
-    this._controller.accountDir = accountDir
     log.info(`Using deltachat instance ${this._controller.accountDir}`)
     const dc = new DeltaChat()
-    this._controller._dc = dc
-    this._controller.credentials = credentials
-    this._controller._sendStateToRenderer = sendStateToRenderer
 
     if (!DeltaChat.maybeValidAddr(credentials.addr)) {
       throw new Error(this._controller.translate('bad_email_address'))
@@ -54,41 +50,59 @@ export default class DCLoginController extends SplitOut {
 
     this._controller.registerEventHandler(dc)
 
-    await this._dc.open(this._controller.accountDir)
+    await dc.open(accountDir)
 
-    this.setCoreStrings(coreStrings)
-    const onReady = async () => {
-      log.info('Ready, starting io...')
-      this._dc.startIO()
-      log.debug('Started IO')
+    setCoreStrings(dc, txCoreStrings())
 
-      this._controller.ready = true
-      this._controller.configuring = false
-      this._controller.emit('ready', this._controller.credentials)
-      log.info('dc_get_info', dc.getInfo())
-      this.updateDeviceChats()
-      sendStateToRenderer()
-    }
-
-    if (!this._dc.isConfigured() || updateConfiguration) {
-      this._controller.configuring = true
+    this._controller._dc = dc
+    if (!dc.isConfigured() || updateConfiguration) {
       try {
-        await this.configure(this.addServerFlags(credentials))
+        await dc.configure(addServerFlags(credentials))
       } catch (err) {
-        // Ignore error, we catch it anyways in frontend
+        this._controller.unregisterEventHandler(dc)
+        await dc.close()
+        this._controller._dc = null
+        return false
       }
     }
 
-    onReady()
+    log.info('Ready, starting io...')
+    await dc.startIO()
+    log.debug('Started IO')
+
+    this._controller.emit('ready', credentials)
+    log.info('dc_get_info', dc.getInfo())
+
+    this._controller.accountDir = accountDir
+    this._controller._dc = dc
+    this._controller.credentials = credentials
+
+    this.updateDeviceChats()
 
     setupNotifications(this._controller, (app as any).state.saved)
     setupUnreadBadgeCounter(this._controller)
     setupMarkseenFix(this._controller)
+    return true
+  }
+
+  async updateCredentials(credentials: Credentials): Promise<boolean> {
+    await this._dc.stopIO()
+    try {
+      await this._dc.configure(addServerFlags(credentials))
+    } catch (err) {
+      await this._dc.startIO()
+      return false
+    }
+    await this._dc.startIO()
+    return true
   }
 
   logout() {
     this.close()
     this._controller._resetState()
+
+    app.state.saved.credentials = null
+    app.saveState()
 
     log.info('Logged out')
     this._controller.emit('logout')
@@ -96,31 +110,16 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  async configure(credentials: any) {
-    this._controller.configuring = true
-    this._controller._sendStateToRenderer()
-
-    try {
-      await this._dc.configure(this.addServerFlags(credentials))
-    } catch (err) {
-      // ignore and handle in frontend
-    }
-
-    this._controller.configuring = false
-    this._controller._sendStateToRenderer()
+  async newLogin(credentials: Credentials) {
+    await this.login(getNewAccountPath(), credentials)
   }
 
   close() {
     if (!this._dc) return
     this._dc.stopIO()
+    this._controller.unregisterEventHandler(this._dc)
     this._dc.close()
     this._controller._dc = null
-  }
-
-  addServerFlags(credentials: any) {
-    return Object.assign({}, credentials, {
-      server_flags: this._controller.settings.serverFlags(credentials),
-    })
   }
 
   updateDeviceChats() {
@@ -146,5 +145,51 @@ export default class DCLoginController extends SplitOut {
 Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#130---2020-04-30
     ` as any
     )
+  }
+
+  async getLogins() {
+    return await getLogins()
+  }
+
+  async loadAccount(login: DeltaChatAccount) {
+    return await this.login(login.path, { addr: login.addr })
+  }
+
+  async forgetAccount(login: DeltaChatAccount) {
+    try {
+      await removeAccount(login.path)
+      this._controller.sendToRenderer('success', 'successfully forgot account')
+    } catch (error) {
+      this._controller.sendToRenderer('error', error.message)
+    }
+  }
+
+  async getLastLoggedInAccount() {
+    // if we find saved credentials we login in with these
+    // which will create a new Deltachat instance which
+    // is bound to a certain account
+    const savedCredentials = app.state.saved.credentials
+    if (
+      savedCredentials &&
+      typeof savedCredentials === 'object' &&
+      Object.keys(savedCredentials).length !== 0
+    ) {
+      const selectedAccount = app.state.logins.find(
+        account => account.addr === savedCredentials.addr
+      )
+
+      if (selectedAccount) {
+        return selectedAccount
+      }
+
+      log.error(
+        'Previous account not found!',
+        app.state.saved.credentials,
+        'is not in the list of found logins:',
+        app.state.logins
+      )
+      return null
+    }
+    return null
   }
 }

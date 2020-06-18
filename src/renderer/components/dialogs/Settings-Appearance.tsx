@@ -5,115 +5,46 @@ import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
-const { ipcRenderer } = window.electron_functions
 
-class BackgroundSelector extends React.Component {
-  fileInput: todo
-  colorInput: todo
-  constructor(
-    public props: {
-      onChange: (value: string) => void
-    }
-  ) {
-    super(props)
-    this.fileInput = React.createRef()
-    this.colorInput = document.getElementById('color-input') // located in index.html outside of react
-    this.colorInput.onchange = (ev: any) => this.onColor.bind(this)(ev)
-  }
+function BackgroundSelector({
+  onChange,
+}: {
+  onChange: (value: string) => void
+}) {
+  const colorInput = document.getElementById('color-input') // located in index.html outside of react
 
-  componentWillUnmount() {
-    this.colorInput.onchange = null
-  }
+  const { setDesktopSetting } = useContext(SettingsContext)
 
-  render() {
-    const tx = window.translate
-    return (
-      <div>
-        <div className={'bg-option-wrap'}>
-          <SettingsContext.Consumer>
-            {(settings: any) => (
-              <div
-                style={{
-                  backgroundImage: settings['chatViewBgImg'],
-                  backgroundSize: 'cover',
-                }}
-                aria-label={tx('a11y_background_preview_label')}
-                className={'background-preview'}
-              />
-            )}
-          </SettingsContext.Consumer>
-          <div className={'background-options'}>
-            <button
-              onClick={this.onButton.bind(this, 'def')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_default')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'def_color')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_default_color')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'image')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_custom_image')}
-            </button>
-            <button
-              onClick={this.onButton.bind(this, 'color')}
-              className={'bp3-button'}
-            >
-              {tx('pref_background_custom_color')}
-            </button>
-          </div>
-        </div>
-        <div className={'background-default-images'}>
-          {[
-            'flower.webp',
-            'bee.webp',
-            'wheat.webp',
-            'mm-1.webp',
-            'mm-2.webp',
-            'lake-tekapo.jpg',
-            'nz-beach.webp',
-            'petito-moreno.webp',
-          ].map(elem => (
-            <div
-              onClick={this.onButton.bind(this, 'pimage')}
-              style={{
-                backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
-              }}
-              key={elem}
-              data-url={elem}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
+  const onColor = (ev: any) => setValue(ev.target.value)
+  colorInput.onchange = (ev: any) => onColor.bind(this)(ev)
+  useEffect(() => {
+    return () => (colorInput.onchange = null)
+  }, [])
 
-  setValue(val: string) {
-    this.props.onChange(val)
-  }
+  const setValue = (val: string) => onChange(val)
 
-  onButton(type: string, ev: any) {
+  const onButton = async (type: string, ev: any) => {
+    let url
     switch (type) {
       case 'def':
-        this.setValue(undefined)
+        setValue(undefined)
         break
       case 'def_color':
-        this.setValue('var(--chatViewBg)')
+        setValue('var(--chatViewBg)')
         break
       case 'image':
-        ipcRenderer.send('selectBackgroundImage')
+        url = await DeltaBackend.call('settings.selectBackgroundImage')
+        if (url) setDesktopSetting('chatViewBgImg', url)
         break
       case 'pimage':
-        ipcRenderer.send('selectBackgroundImage', ev.target.dataset.url)
+        url = await DeltaBackend.call(
+          'settings.selectBackgroundImage',
+          ev.target.dataset.url
+        )
+        if (url) setDesktopSetting('chatViewBgImg', url)
         break
       case 'color':
-        this.colorInput && this.colorInput.click()
+        colorInput && colorInput.click()
         break
       default:
         /* ignore-console-log */
@@ -121,10 +52,69 @@ class BackgroundSelector extends React.Component {
     }
   }
 
-  onColor(ev: any) {
-    // TODO debounce
-    this.setValue(ev.target.value)
-  }
+  const tx = window.translate
+  return (
+    <div>
+      <div className={'bg-option-wrap'}>
+        <SettingsContext.Consumer>
+          {({ desktopSettings }) => (
+            <div
+              style={{
+                backgroundImage: desktopSettings.chatViewBgImg,
+                backgroundSize: 'cover',
+              }}
+              aria-label={tx('a11y_background_preview_label')}
+              className={'background-preview'}
+            />
+          )}
+        </SettingsContext.Consumer>
+        <div className={'background-options'}>
+          <button onClick={onButton.bind(this, 'def')} className={'bp3-button'}>
+            {tx('pref_background_default')}
+          </button>
+          <button
+            onClick={onButton.bind(this, 'def_color')}
+            className={'bp3-button'}
+          >
+            {tx('pref_background_default_color')}
+          </button>
+          <button
+            onClick={onButton.bind(this, 'image')}
+            className={'bp3-button'}
+          >
+            {tx('pref_background_custom_image')}
+          </button>
+          <button
+            onClick={onButton.bind(this, 'color')}
+            className={'bp3-button'}
+          >
+            {tx('pref_background_custom_color')}
+          </button>
+        </div>
+      </div>
+      <div className={'background-default-images'}>
+        {[
+          'flower.webp',
+          'bee.webp',
+          'wheat.webp',
+          'mm-1.webp',
+          'mm-2.webp',
+          'lake-tekapo.jpg',
+          'nz-beach.webp',
+          'petito-moreno.webp',
+        ].map(elem => (
+          <div
+            onClick={onButton.bind(this, 'pimage')}
+            style={{
+              backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
+            }}
+            key={elem}
+            data-url={elem}
+          />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function SettingsAppearance({
@@ -132,7 +122,9 @@ export default function SettingsAppearance({
 }: {
   handleDesktopSettingsChange: todo
 }) {
-  const { activeTheme } = useContext(SettingsContext)
+  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
+  const { activeTheme } = desktopSettings
+
   const { openDialog } = useContext(ScreenContext)
 
   const [availableThemes, setAvailableThemes] = useState<
@@ -148,8 +140,10 @@ export default function SettingsAppearance({
   }, [])
 
   const setTheme = async (theme: string) => {
-    await DeltaBackend.call('extras.setTheme', theme)
-    await ThemeManager.refresh()
+    if (await DeltaBackend.call('extras.setTheme', theme)) {
+      setDesktopSetting('activeTheme', theme)
+      await ThemeManager.refresh()
+    }
   }
 
   const onCancel = async () => setTheme(activeTheme)

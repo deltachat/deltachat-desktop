@@ -5,11 +5,8 @@ export function getDefaultState(): AppState {
     /**
      * Temporary state.
      */
-    logins: [],
     deltachat: {
-      configuring: false,
       credentials: { addr: null },
-      ready: false,
     },
     /**
      * Persisted state. Must be JSON.
@@ -27,5 +24,6 @@ export function getDefaultState(): AppState {
       zoomFactor: 1,
       activeTheme: 'system',
     },
+    logins: [],
   }
 }

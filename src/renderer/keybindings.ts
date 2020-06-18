@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { getLogger } from '../shared/logger'
+import { Screens } from './ScreenController'
 
 const log = getLogger('renderer/keybindings')
 
@@ -112,7 +113,7 @@ ActionEmitter.registerHandler(
 )
 
 ActionEmitter.registerHandler(KeybindAction.Settings_Open, () => {
-  if (window.__isReady) {
+  if (window.__screen === Screens.Main) {
     // only if user is logged in
     // open settings
     if (window.__openDialog) {

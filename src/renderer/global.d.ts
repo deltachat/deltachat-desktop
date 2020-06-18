@@ -6,7 +6,7 @@ import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
-import { userFeedback } from './ScreenController'
+import { userFeedback, Screens } from './ScreenController'
 
 declare global {
   interface Window {
@@ -26,6 +26,7 @@ declare global {
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType
-    __isReady: boolean
+    __changeScreen: (screen: Screens) => {}
+    __screen: Screens
   }
 }

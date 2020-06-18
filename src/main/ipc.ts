@@ -1,19 +1,12 @@
 import { C } from 'deltachat-node'
-import { app as rawApp, dialog, ipcMain, shell } from 'electron'
-import { copy, copyFile, emptyDir, ensureDir, pathExists } from 'fs-extra'
-import { extname, join, relative } from 'path'
+import { app as rawApp, dialog, ipcMain } from 'electron'
+import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
-import {
-  AppState,
-  Credentials,
-  LocalSettings,
-  DeltaChatAccount,
-} from '../shared/shared-types'
-import { getConfigPath, getLogsPath } from './application-constants'
-import { credential_config } from './deltachat/login'
+import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
+import { getLogsPath } from './application-constants'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
-import { getLogins, getNewAccountPath, removeAccount } from './logins'
+import { getLogins } from './logins'
 import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
@@ -54,11 +47,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     app.saveState()
   })
 
-  dcController.on('logout', () => {
-    state.saved.credentials = null
-    app.saveState()
-  })
-
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')
@@ -68,14 +56,11 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     log.debug('Renderer event:', e, ...args)
   })
 
-  // ipcMain.on('setAspectRatio', (e, ...args) => main.setAspectRatio(...args))
-  // ipcMain.on('setBounds', (e, ...args:any[]) => main.setBounds(...args))
-  ipcMain.on('setProgress', (e, progress: number) => main.setProgress(progress))
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
   ipcMain.on('chooseLanguage', (e, locale: string) => {
     loadTranslations(locale)
-    dcController.loginController.setCoreStrings(txCoreStrings())
+    dcController.login.setCoreStrings(txCoreStrings())
     refreshMenu(logHandler)
   })
 
@@ -97,11 +82,19 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     async (e: any, identifier: number, methodName: string, args: any[]) => {
       if (!Array.isArray(args)) args = [args]
       log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-      const returnValue = await dcController.callMethod(e, methodName, args)
-      main.send(
-        `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
-        returnValue
-      )
+
+      try {
+        const returnValue = await dcController.callMethod(e, methodName, args)
+        main.send(
+          `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+          returnValue
+        )
+      } catch (err) {
+        main.send(
+          `EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`,
+          err.toString()
+        )
+      }
     }
   )
 
@@ -121,55 +114,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }, 0)
   }
 
-  ipcMain.on('login', (_e: any, credentials) => {
-    CatchError2Event(() =>
-      dcController.loginController.login(
-        getNewAccountPath(),
-        credentials,
-        sendStateToRenderer,
-        txCoreStrings()
-      )
-    )
-  })
-
-  ipcMain.on('loadAccount', (e, login: DeltaChatAccount) => {
-    CatchError2Event(() =>
-      dcController.loginController.login(
-        login.path,
-        { addr: login.addr },
-        sendStateToRenderer,
-        txCoreStrings()
-      )
-    )
-  })
-
-  const updateLogins = async () => {
-    state.logins = await getLogins()
-    sendStateToRenderer()
-  }
-
-  ipcMain.on('forgetLogin', async (_e: any, login: DeltaChatAccount) => {
-    try {
-      await removeAccount(login.path)
-      main.send('success', 'successfully forgot account')
-    } catch (error) {
-      main.send('error', error.message)
-    }
-    updateLogins()
-  })
-
-  ipcMain.on('updateLogins', updateLogins)
-
-  ipcMain.on('getMessage', (e, msgId: number) => {
-    e.returnValue = dcController.messageList.messageIdToJson(msgId)
-  })
-
-  /* unused
-  ipcMain.on('getChatContacts', (e, chatId) => {
-    e.returnValue = dc.chat.getChatContacts(chatId)
-  })
-  */
-
   ipcMain.on('backupImport', (e, fileName) =>
     dcController.backup.import(fileName)
   )
@@ -178,8 +122,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dcController.settings.setConfig(key, value)
   })
-
-  ipcMain.on('logout', () => dcController.loginController.logout())
 
   ipcMain.on('saveFile', (e, source, target) => {
     copyFile(source, target, err => {
@@ -190,20 +132,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: null })
   })
-
-  ipcMain.on('render', sendStateToRenderer)
-
-  const updateDesktopSetting = (
-    e: Electron.IpcMainEvent,
-    key: keyof LocalSettings,
-    value: string
-  ) => {
-    const { saved } = app.state
-    ;(saved as any)[key] = value
-    app.saveState({ saved })
-    sendStateToRenderer()
-  }
-  ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
   ipcMain.on('saveLastChatId', (e, chatId) => {
     const { lastChats } = app.state.saved
@@ -218,77 +146,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     e.returnValue = lastChats[dcController.credentials.addr]
   })
 
-  ipcMain.on('selectBackgroundImage', (e, file) => {
-    const copyAndSetBg = async (originalfile: string) => {
-      await ensureDir(join(getConfigPath(), 'background/'))
-      await emptyDir(join(getConfigPath(), 'background/'))
-      const newPath = join(
-        getConfigPath(),
-        'background/',
-        `background_${Date.now()}` + extname(originalfile)
-      )
-      copyFile(originalfile, newPath, (err: Error) => {
-        if (err) {
-          log.error('BG-IMG Copy Failed', err)
-          return
-        }
-        updateDesktopSetting(
-          null,
-          'chatViewBgImg',
-          `url("${newPath.replace(/\\/g, '/')}")`
-        )
-      })
-    }
-    if (!file) {
-      dialog.showOpenDialog(
-        undefined,
-        {
-          title: 'Select Background Image',
-          filters: [
-            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-            { name: 'All Files', extensions: ['*'] },
-          ],
-          properties: ['openFile'],
-        },
-        (filenames: string[]) => {
-          if (!filenames) {
-            return
-          }
-          log.info('BG-IMG Selected File:', filenames[0])
-          copyAndSetBg(filenames[0])
-        }
-      )
-    } else {
-      const filepath = join(__dirname, '../../images/backgrounds/', file)
-      copyAndSetBg(filepath)
-    }
-  })
-
-  ipcMain.on('updateCredentials', async (e, credentials) => {
-    if (!credentials.mail_pw) {
-      // this means another setting value was changed
-      credentials.mail_pw = dcController.settings.getConfig('mail_pw')
-    }
-    dcController.configuring = true
-    dcController.updating = true
-    sendStateToRenderer()
-    try {
-      await dcController.loginController.configure(credentials)
-    } catch (err) {
-      // Ignore error & handle it in frontend
-    }
-
-    dcController.configuring = false
-    main.send('success', 'Configuration success!')
-    sendStateToRenderer()
-  })
-
-  ipcMain.on('cancelCredentialsUpdate', () => {
-    dcController.configuring = false
-    const deltachat = dcController.getState()
-    sendState(deltachat)
-  })
-
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)
   })
@@ -300,53 +157,9 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
   })
-
-  function sendStateToRenderer() {
-    log.debug('RENDER')
-    const deltachat = dcController.getState()
-    main.setTitle(deltachat.credentials.addr)
-    sendState(deltachat)
-  }
-
-  function sendState(deltachat: AppState['deltachat']) {
-    Object.assign(state, { deltachat })
-    main.send('render', state)
-  }
-
-  // if we find saved credentials we login in with these
-  // which will create a new Deltachat instance which
-  // is bound to a certain account
-  const savedCredentials = state.saved.credentials
-  if (
-    savedCredentials &&
-    typeof savedCredentials === 'object' &&
-    Object.keys(savedCredentials).length !== 0
-  ) {
-    const selectedAccount = state.logins.find(
-      account => account.addr === savedCredentials.addr
-    )
-
-    if (selectedAccount) {
-      CatchError2Event(() =>
-        dcController.loginController.login(
-          selectedAccount.path,
-          savedCredentials as credential_config,
-          sendStateToRenderer,
-          txCoreStrings()
-        )
-      )
-    } else {
-      log.error(
-        'Previous account not found!',
-        state.saved.credentials,
-        'is not in the list of found logins:',
-        state.logins
-      )
-    }
-  }
 }
 
-function txCoreStrings() {
+export function txCoreStrings() {
   const tx = app.translate
   const strings: { [key: number]: string } = {}
   // TODO: Check if we need the uncommented core translations

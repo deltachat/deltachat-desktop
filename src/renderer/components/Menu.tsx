@@ -15,7 +15,7 @@ import {
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
-const { ipcRenderer } = window.electron_functions
+import { Screens } from '../ScreenController'
 
 export function DeltaMenuItem({
   text,
@@ -59,7 +59,8 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
     }
-    ipcRenderer.send('logout')
+    DeltaBackend.call('login.logout')
+    screenContext.changeScreen(Screens.Login)
   }
 
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {

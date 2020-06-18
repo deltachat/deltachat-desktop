@@ -1,10 +1,23 @@
 type PromiseType<T> = T extends Promise<infer U> ? U : any
 
-export interface Credentials {
-  addr: string
+export type Credentials = {
+  [key: string]: any
+  addr?: string
+  mail_user?: string
+  mail_pw?: string
+  mail_server?: string
+  mail_port?: string
+  mail_security?: 'automatic' | '' | 'ssl' | 'default'
+  imap_certificate_checks?: any
+  send_user?: string
+  send_pw?: string
+  send_server?: string
+  send_port?: string
+  send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain'
+  smtp_certificate_checks?: any
 }
 
-export interface LocalSettings {
+export interface DesktopSettings {
   bounds:
     | {
         height: number
@@ -28,12 +41,22 @@ export interface LocalSettings {
 
 export interface AppState {
   deltachat: {
-    configuring: boolean
     credentials: Credentials
-    ready: boolean
+  }
+  saved: {
+    bounds: todo
+    credentials: any
+    enterKeySends: boolean
+    notifications: boolean
+    showNotificationContent: boolean
+    locale: string
+    enableOnDemandLocationStreaming: boolean
+    chatViewBgImg: string
+    lastChats: todo
+    zoomFactor: number
+    activeTheme: string
   }
   logins: DeltaChatAccount[]
-  saved: LocalSettings
 }
 
 export interface RC_Config {

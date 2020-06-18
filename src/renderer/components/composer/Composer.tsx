@@ -131,10 +131,10 @@ const Composer = forwardRef<
           />
         </div>
         <SettingsContext.Consumer>
-          {({ enterKeySends }) => (
+          {({ desktopSettings }) => (
             <ComposerMessageInput
               ref={messageInputRef}
-              enterKeySends={enterKeySends}
+              enterKeySends={desktopSettings.enterKeySends}
               sendMessage={sendMessage}
               setComposerSize={props.setComposerSize}
               chatId={chatId}
