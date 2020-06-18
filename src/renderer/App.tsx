@@ -3,11 +3,9 @@ import { SettingsContext } from './contexts'
 import ScreenController, { Screens } from './ScreenController'
 import { addLocaleData, IntlProvider } from 'react-intl'
 import enLocaleData from 'react-intl/locale-data/en'
-const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import {
-  ExtendedApp,
   AppState,
   DeltaChatAccount,
   DesktopSettings,

@@ -24,7 +24,6 @@ import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
 import { DialogProps } from './dialogs/DialogController'
-import { any } from 'prop-types'
 import { DeltaBackend } from '../delta-remote'
 import { Screens } from '../ScreenController'
 

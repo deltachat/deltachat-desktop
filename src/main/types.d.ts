@@ -1,4 +1,4 @@
-import { ExtendedApp, AppState, DesktopSettings } from '../shared/shared-types'
+import { ExtendedApp, DesktopSettings } from '../shared/shared-types'
 import { getMessageFunction } from '../shared/localize'
 
 export interface ExtendedAppMainProcess extends ExtendedApp {

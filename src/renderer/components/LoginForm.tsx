@@ -3,30 +3,22 @@
 import { DeltaChat } from 'deltachat-node'
 import { C } from 'deltachat-node/dist/constants'
 import React, { useEffect, useState } from 'react'
-const { ipcRenderer } = window.electron_functions
-import update from 'immutability-helper'
 import {
   DeltaInput,
   DeltaPasswordInput,
   DeltaSelect,
   DeltaProgressBar,
 } from './Login-Styles'
-import { Collapse, Intent } from '@blueprintjs/core'
+import { Collapse } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
 import ClickableLink from './helpers/ClickableLink'
-import { any, string } from 'prop-types'
-import { protocol } from 'electron'
-import { render } from 'react-dom'
 import { DialogProps } from './dialogs/DialogController'
-import { sendToBackend, ipcBackend } from '../ipc'
+import { ipcBackend } from '../ipc'
 import {
   SmallDialog,
-  DeltaDialogHeader,
-  DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogFooter,
 } from './dialogs/DeltaDialog'
-import { title } from 'process'
 import { Credentials } from '../../shared/shared-types'
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {

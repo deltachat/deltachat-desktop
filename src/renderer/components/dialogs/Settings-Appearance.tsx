@@ -5,7 +5,6 @@ import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
-const { ipcRenderer } = window.electron_functions
 
 function BackgroundSelector({
   onChange,
@@ -14,7 +13,7 @@ function BackgroundSelector({
 }) {
   const colorInput = document.getElementById('color-input') // located in index.html outside of react
 
-  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
+  const { setDesktopSetting } = useContext(SettingsContext)
 
   const onColor = (ev: any) => setValue(ev.target.value)
   colorInput.onchange = (ev: any) => onColor.bind(this)(ev)

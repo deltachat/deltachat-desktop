@@ -4,27 +4,19 @@ import { C } from 'deltachat-node/dist/constants'
 import {
   Elevation,
   H5,
-  H6,
   Card,
   Classes,
-  Button,
   Switch,
   Label,
   RadioGroup,
   Radio,
-  HTMLSelect,
-  Callout,
 } from '@blueprintjs/core'
 
-import LoginForm from '../LoginForm'
-import { confirmationDialogLegacy as confirmationDialog } from './ConfirmationDialog'
-import { ThemeManager } from '../../ThemeManager'
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext } from '../../contexts'
 
-import { OpenDialogOptions } from 'electron'
-import { AppState, DesktopSettings } from '../../../shared/shared-types'
+import { DesktopSettings } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import SettingsAutodelete from './Settings-Autodelete'
 import SettingsManageKeys from './Settings-ManageKeys'
