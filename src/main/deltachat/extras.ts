@@ -25,15 +25,18 @@ export default class Extras extends SplitOut {
       return null
     }
   }
-  setTheme(address: string) {
+  async setTheme(address: string) {
     try {
       resolveThemeAddress(address)
       app.state.saved.activeTheme = address
       app.saveState()
+      return true
     } catch (error) {
       log.error('set theme failed: ', error)
+      return false
     }
   }
+  
   async getAvailableThemes() {
     return await getAvailableThemes()
   }

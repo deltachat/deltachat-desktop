@@ -6,7 +6,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState, DeltaChatAccount, DesktopSettings } from '../shared/shared-types'
+import { ExtendedApp, AppState, DeltaChatAccount, DesktopSettings, Credentials } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -107,7 +107,7 @@ export default function App(props: any) {
   if (!localeData) return null
   return (
     <CrashScreen>
-      <SettingsContextWrapper>
+      <SettingsContextWrapper credentials={state.deltachat.credentials}>
         <IntlProvider locale={localeData.locale}>
           <ScreenController deltachat={state.deltachat} />
         </IntlProvider>
@@ -115,7 +115,7 @@ export default function App(props: any) {
     </CrashScreen>
   )
 }
-export function SettingsContextWrapper(props:any) {
+export function SettingsContextWrapper({credentials, children}: {credentials: Credentials, children: React.ReactChild}) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
 
   useEffect(() => {
@@ -136,8 +136,8 @@ export function SettingsContextWrapper(props:any) {
   if (!desktopSettings) return null
 
   return (
-    <SettingsContext.Provider value={{desktopSettings, setDesktopSetting}}>
-      {props.children}
+    <SettingsContext.Provider value={{desktopSettings, setDesktopSetting, credentials}}>
+      {children}
     </SettingsContext.Provider>
   )
 }

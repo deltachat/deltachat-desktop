@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DesktopSettings } from '../shared/shared-types'
+import { DesktopSettings, Credentials } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import ScreenController, { userFeedback, Screens } from './ScreenController'
 import { DialogId } from './components/dialogs/DialogController'
@@ -18,10 +18,12 @@ export const ScreenContext = React.createContext({
 
 export const SettingsContext: React.Context<{
   desktopSettings: DesktopSettings,
-  setDesktopSetting: (key: keyof DesktopSettings, value: string | number | boolean) => {}
+  setDesktopSetting: (key: keyof DesktopSettings, value: string | number | boolean) => {},
+  credentials: Credentials
 }> = React.createContext({
   desktopSettings: null,
   setDesktopSetting: null,
+  credentials: null 
 })
 
 export type unwrapContext<T> = T extends import('react').Context<infer R>

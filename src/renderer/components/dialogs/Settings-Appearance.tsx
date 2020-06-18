@@ -121,7 +121,9 @@ export default function SettingsAppearance({
 }: {
   handleDesktopSettingsChange: todo
 }) {
-  const { activeTheme } = useContext(SettingsContext).desktopSettings
+  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
+  const { activeTheme } = desktopSettings
+
   const { openDialog } = useContext(ScreenContext)
 
   const [availableThemes, setAvailableThemes] = useState<
@@ -137,8 +139,12 @@ export default function SettingsAppearance({
   }, [])
 
   const setTheme = async (theme: string) => {
-    await DeltaBackend.call('extras.setTheme', theme)
-    await ThemeManager.refresh()
+
+    if(await DeltaBackend.call('extras.setTheme', theme)) {
+      setDesktopSetting('activeTheme', theme)
+      await ThemeManager.refresh()
+    }
+    
   }
 
   const onCancel = async () => setTheme(activeTheme)
