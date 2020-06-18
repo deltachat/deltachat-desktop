@@ -36,7 +36,7 @@ export default class Extras extends SplitOut {
       return false
     }
   }
-  
+
   async getAvailableThemes() {
     return await getAvailableThemes()
   }

@@ -17,13 +17,16 @@ export const ScreenContext = React.createContext({
 })
 
 export const SettingsContext: React.Context<{
-  desktopSettings: DesktopSettings,
-  setDesktopSetting: (key: keyof DesktopSettings, value: string | number | boolean) => {},
+  desktopSettings: DesktopSettings
+  setDesktopSetting: (
+    key: keyof DesktopSettings,
+    value: string | number | boolean
+  ) => {}
   credentials: Credentials
 }> = React.createContext({
   desktopSettings: null,
   setDesktopSetting: null,
-  credentials: null 
+  credentials: null,
 })
 
 export type unwrapContext<T> = T extends import('react').Context<infer R>

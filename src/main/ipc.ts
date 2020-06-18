@@ -154,8 +154,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     e.returnValue = lastChats[dcController.credentials.addr]
   })
 
-  
-
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)
   })

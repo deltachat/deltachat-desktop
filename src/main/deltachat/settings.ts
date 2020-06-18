@@ -13,7 +13,6 @@ import { join, extname } from 'path'
 import { getConfigPath } from '../application-constants'
 import { copyFile } from 'fs'
 
-
 const app = rawApp as ExtendedAppMainProcess
 
 const serverFlagMap: { [key: string]: number } = {
@@ -95,7 +94,7 @@ export default class DCSettings extends SplitOut {
     return serverFlags(props)
   }
 
-  selectBackgroundImage(file: string) {  
+  selectBackgroundImage(file: string) {
     return new Promise(async (resolve, reject) => {
       const copyAndSetBg = async (originalfile: string) => {
         await ensureDir(join(getConfigPath(), 'background/'))
@@ -111,11 +110,11 @@ export default class DCSettings extends SplitOut {
             reject(err)
             return
           }
-          const url =  `url("${newPath.replace(/\\/g, '/')}")`
+          const url = `url("${newPath.replace(/\\/g, '/')}")`
           resolve(url)
         })
       }
-  
+
       if (!file) {
         dialog.showOpenDialog(
           undefined,

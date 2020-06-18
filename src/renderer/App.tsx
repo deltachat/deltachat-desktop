@@ -6,7 +6,13 @@ import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState, DeltaChatAccount, DesktopSettings, Credentials } from '../shared/shared-types'
+import {
+  ExtendedApp,
+  AppState,
+  DeltaChatAccount,
+  DesktopSettings,
+  Credentials,
+} from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -80,8 +86,6 @@ export default function App(props: any) {
     })()
   }, [])
 
- 
-
   async function setupLocaleData(locale: string) {
     moment.locale(locale)
     const localeData: LocaleData = await DeltaBackend.call(
@@ -115,20 +119,34 @@ export default function App(props: any) {
     </CrashScreen>
   )
 }
-export function SettingsContextWrapper({credentials, children}: {credentials: Credentials, children: React.ReactChild}) {
+export function SettingsContextWrapper({
+  credentials,
+  children,
+}: {
+  credentials: Credentials
+  children: React.ReactChild
+}) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
 
   useEffect(() => {
     ;(async () => {
-      const desktopSettings = await DeltaBackend.call('settings.getDesktopSettings')
+      const desktopSettings = await DeltaBackend.call(
+        'settings.getDesktopSettings'
+      )
       _setDesktopSettings(desktopSettings)
-    })()  
+    })()
   }, [])
-  
-  const setDesktopSetting = async (key: keyof DesktopSettings, value: string | number | boolean) => {
-    if (await DeltaBackend.call('settings.setDesktopSetting', key, value) === true) {
+
+  const setDesktopSetting = async (
+    key: keyof DesktopSettings,
+    value: string | number | boolean
+  ) => {
+    if (
+      (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
+      true
+    ) {
       _setDesktopSettings((prevState: DesktopSettings) => {
-        return {...prevState, [key]: value}
+        return { ...prevState, [key]: value }
       })
     }
   }
@@ -136,7 +154,9 @@ export function SettingsContextWrapper({credentials, children}: {credentials: Cr
   if (!desktopSettings) return null
 
   return (
-    <SettingsContext.Provider value={{desktopSettings, setDesktopSetting, credentials}}>
+    <SettingsContext.Provider
+      value={{ desktopSettings, setDesktopSetting, credentials }}
+    >
       {children}
     </SettingsContext.Provider>
   )

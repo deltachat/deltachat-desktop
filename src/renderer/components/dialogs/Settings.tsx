@@ -63,10 +63,10 @@ export function SettingsSelector(props: any) {
 
 export default function Settings(props: DialogProps) {
   const [state, _setState] = useState<{
-    showSettingsDialog: boolean,
-    settings: any,
-    show: string,
-    selfContact: todo,
+    showSettingsDialog: boolean
+    settings: any
+    show: string
+    selfContact: todo
   }>({
     showSettingsDialog: false,
     settings: {},
@@ -75,7 +75,7 @@ export default function Settings(props: DialogProps) {
   })
   const setState = (updatedState: any) => {
     _setState((prevState: any) => {
-      return {...prevState, ...updatedState}
+      return { ...prevState, ...updatedState }
     })
   }
 
@@ -83,7 +83,6 @@ export default function Settings(props: DialogProps) {
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
   const tx = window.translate
-
 
   const loadSettings = async () => {
     const settings = await DeltaBackend.call('settings.getConfigFor', [
@@ -110,13 +109,19 @@ export default function Settings(props: DialogProps) {
    * Saves settings for the Deltachat Desktop
    * persisted in ~/.config/DeltaChat/deltachat.json
    */
-  const handleDesktopSettingsChange = async (key: keyof DesktopSettings, value: string | boolean | number) => {
+  const handleDesktopSettingsChange = async (
+    key: keyof DesktopSettings,
+    value: string | boolean | number
+  ) => {
     if (key === 'notifications' && !value) {
       key = 'showNotificationContent'
       value = false
     }
 
-    if (await DeltaBackend.call('settings.setDesktopSetting', key, value) === true) {
+    if (
+      (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
+      true
+    ) {
       setDesktopSetting(key, value)
     }
   }
@@ -132,7 +137,10 @@ export default function Settings(props: DialogProps) {
   /*
    * render switch for Desktop Setings
    */
-  const renderDTSettingSwitch = (configKey: keyof DesktopSettings, label: string) => {
+  const renderDTSettingSwitch = (
+    configKey: keyof DesktopSettings,
+    label: string
+  ) => {
     return (
       <Switch
         checked={desktopSettings[configKey] === true}
@@ -158,10 +166,7 @@ export default function Settings(props: DialogProps) {
         className={configValue === '1' ? 'active' : 'inactive'}
         label={label}
         onChange={() =>
-          handleDeltaSettingsChange(
-            configKey,
-            flipDeltaBoolean(configValue)
-          )
+          handleDeltaSettingsChange(configKey, flipDeltaBoolean(configValue))
         }
         alignIndicator='right'
       />
@@ -176,9 +181,7 @@ export default function Settings(props: DialogProps) {
         <input
           value={configValue}
           className={Classes.INPUT}
-          onChange={ev =>
-            handleDeltaSettingsChange(configKey, ev.target.value)
-          }
+          onChange={ev => handleDeltaSettingsChange(configKey, ev.target.value)}
         />
       </Label>
     )
@@ -193,21 +196,14 @@ export default function Settings(props: DialogProps) {
           <Card elevation={Elevation.ONE}>
             <ProfileImageSelector
               displayName={
-                state.settings['displayname'] ||
-                state.selfContact.address
+                state.settings['displayname'] || state.selfContact.address
               }
               color={state.selfContact.color}
             />
             <H5>{tx('pref_profile_info_headline')}</H5>
             <p>{deltachat.credentials.addr}</p>
-            {renderDeltaInput(
-              'displayname',
-              tx('pref_your_name')
-            )}
-            {renderDeltaInput(
-              'selfstatus',
-              tx('pref_default_status_label')
-            )}
+            {renderDeltaInput('displayname', tx('pref_your_name'))}
+            {renderDeltaInput('selfstatus', tx('pref_default_status_label'))}
             <SettingsButton onClick={() => setState({ show: 'login' })}>
               {tx('pref_password_and_account_settings')}
             </SettingsButton>
@@ -217,10 +213,7 @@ export default function Settings(props: DialogProps) {
             <RadioGroup
               label={tx('pref_show_emails')}
               onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                handleDeltaSettingsChange(
-                  'show_emails',
-                  ev.currentTarget.value
-                )
+                handleDeltaSettingsChange('show_emails', ev.currentTarget.value)
               }
               selectedValue={Number(settings['show_emails'])}
             >
@@ -239,10 +232,7 @@ export default function Settings(props: DialogProps) {
             </RadioGroup>
             <br />
             <H5>{tx('pref_privacy')}</H5>
-            {renderDeltaSwitch(
-              'mdns_enabled',
-              tx('pref_read_receipts')
-            )}
+            {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
             <br />
             <SettingsAutodelete
               {...{
@@ -278,26 +268,11 @@ export default function Settings(props: DialogProps) {
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>
-            {renderDeltaSwitch(
-              'inbox_watch',
-              tx('pref_watch_inbox_folder')
-            )}
-            {renderDeltaSwitch(
-              'sentbox_watch',
-              tx('pref_watch_sent_folder')
-            )}
-            {renderDeltaSwitch(
-              'mvbox_watch',
-              tx('pref_watch_mvbox_folder')
-            )}
-            {renderDeltaSwitch(
-              'bcc_self',
-              tx('pref_send_copy_to_self')
-            )}
-            {renderDeltaSwitch(
-              'mvbox_move',
-              tx('pref_auto_folder_moves')
-            )}
+            {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
+            {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
+            {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
+            {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
+            {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
           </Card>
           <SettingsManageKeys />
           <SettingsBackup />

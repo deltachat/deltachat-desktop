@@ -7,53 +7,58 @@ import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
 const { ipcRenderer } = window.electron_functions
 
-function BackgroundSelector({onChange}:{onChange: (value: string) => void}) {
-    const colorInput = document.getElementById('color-input') // located in index.html outside of react
+function BackgroundSelector({
+  onChange,
+}: {
+  onChange: (value: string) => void
+}) {
+  const colorInput = document.getElementById('color-input') // located in index.html outside of react
 
-    const {desktopSettings, setDesktopSetting} = useContext(SettingsContext)
+  const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
-    const onColor = (ev: any) => setValue(ev.target.value)
-    colorInput.onchange = (ev: any) => onColor.bind(this)(ev)
-    useEffect(() => {
-      return () => colorInput.onchange = null
-    }, [])
+  const onColor = (ev: any) => setValue(ev.target.value)
+  colorInput.onchange = (ev: any) => onColor.bind(this)(ev)
+  useEffect(() => {
+    return () => (colorInput.onchange = null)
+  }, [])
 
-    const setValue = (val: string) => onChange(val)
-  
-    const onButton = async (type: string, ev: any) => {
-      let url
-      switch (type) {
-        case 'def':
-          setValue(undefined)
-          break
-        case 'def_color':
-          setValue('var(--chatViewBg)')
-          break
-        case 'image':
-          url = await DeltaBackend.call('settings.selectBackgroundImage')
-          if(url) setDesktopSetting('chatViewBgImg', url)
-          break
-        case 'pimage':
-          url = await DeltaBackend.call('settings.selectBackgroundImage', ev.target.dataset.url)
-          if(url) setDesktopSetting('chatViewBgImg', url)
-          break
-        case 'color':
-          colorInput && colorInput.click()
-          break
-        default:
-          /* ignore-console-log */
-          console.error("this shouldn't happen")
-      }
+  const setValue = (val: string) => onChange(val)
+
+  const onButton = async (type: string, ev: any) => {
+    let url
+    switch (type) {
+      case 'def':
+        setValue(undefined)
+        break
+      case 'def_color':
+        setValue('var(--chatViewBg)')
+        break
+      case 'image':
+        url = await DeltaBackend.call('settings.selectBackgroundImage')
+        if (url) setDesktopSetting('chatViewBgImg', url)
+        break
+      case 'pimage':
+        url = await DeltaBackend.call(
+          'settings.selectBackgroundImage',
+          ev.target.dataset.url
+        )
+        if (url) setDesktopSetting('chatViewBgImg', url)
+        break
+      case 'color':
+        colorInput && colorInput.click()
+        break
+      default:
+        /* ignore-console-log */
+        console.error("this shouldn't happen")
     }
-  
-
+  }
 
   const tx = window.translate
   return (
     <div>
       <div className={'bg-option-wrap'}>
         <SettingsContext.Consumer>
-          {({desktopSettings}) => (
+          {({ desktopSettings }) => (
             <div
               style={{
                 backgroundImage: desktopSettings.chatViewBgImg,
@@ -65,10 +70,7 @@ function BackgroundSelector({onChange}:{onChange: (value: string) => void}) {
           )}
         </SettingsContext.Consumer>
         <div className={'background-options'}>
-          <button
-            onClick={onButton.bind(this, 'def')}
-            className={'bp3-button'}
-          >
+          <button onClick={onButton.bind(this, 'def')} className={'bp3-button'}>
             {tx('pref_background_default')}
           </button>
           <button
@@ -139,12 +141,10 @@ export default function SettingsAppearance({
   }, [])
 
   const setTheme = async (theme: string) => {
-
-    if(await DeltaBackend.call('extras.setTheme', theme)) {
+    if (await DeltaBackend.call('extras.setTheme', theme)) {
       setDesktopSetting('activeTheme', theme)
       await ThemeManager.refresh()
     }
-    
   }
 
   const onCancel = async () => setTheme(activeTheme)
