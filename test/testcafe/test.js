@@ -32,8 +32,8 @@ test('shows correct headline', async t => {
     .typeText('#addr', 'foo')
     .typeText('#mail_pw', 'bar')
     .click("button[type='submit']")
-    .expect(Selector('.user-feedback').innerText)
-    .eql('Bad email address.')
+    .expect(Selector('.delta-dialog-content > p').innerText)
+    .eql('Error: Bad email address.')
 })
 
 test('login works', async t => {
