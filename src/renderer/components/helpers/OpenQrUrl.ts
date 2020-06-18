@@ -80,7 +80,7 @@ export default async function processOpenQrUrl(
           window.__changeScreen(Screens.Main)
           callback()
         }
-        window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess})
+        window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess })
       } else {
         window.__openDialog('AlertDialog', {
           message: tx('qraccount_qr_code_cannot_be_used'),
