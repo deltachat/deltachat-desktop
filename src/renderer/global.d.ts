@@ -27,6 +27,6 @@ declare global {
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType
     __changeScreen: (screen: Screens) => {}
-    __screen: string
+    __screen: Screens
   }
 }

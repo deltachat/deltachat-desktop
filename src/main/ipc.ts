@@ -1,18 +1,12 @@
 import { C } from 'deltachat-node'
 import { app as rawApp, dialog, ipcMain } from 'electron'
-import { copyFile, emptyDir, ensureDir } from 'fs-extra'
-import { extname, join } from 'path'
+import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
-import {
-  AppState,
-  Credentials,
-  DesktopSettings,
-  DeltaChatAccount,
-} from '../shared/shared-types'
-import { getConfigPath, getLogsPath } from './application-constants'
+import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
+import { getLogsPath } from './application-constants'
 import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
-import { getLogins, getNewAccountPath } from './logins'
+import { getLogins } from './logins'
 import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
@@ -138,16 +132,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: null })
   })
-
-  const updateDesktopSetting = (
-    e: Electron.IpcMainEvent,
-    key: keyof DesktopSettings,
-    value: string
-  ) => {
-    const { saved } = app.state
-    ;(saved as any)[key] = value
-    app.saveState({ saved })
-  }
 
   ipcMain.on('saveLastChatId', (e, chatId) => {
     const { lastChats } = app.state.saved

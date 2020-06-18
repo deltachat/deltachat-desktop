@@ -3,7 +3,6 @@ import { sendToBackend } from '../../ipc'
 import { openMapDialog } from './ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens } from '../../ScreenController'
-const { ipcRenderer } = window.electron_functions
 
 interface QrStates {
   [key: number]: string

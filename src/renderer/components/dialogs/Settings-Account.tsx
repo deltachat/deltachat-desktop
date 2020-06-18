@@ -1,16 +1,12 @@
 import { useEffect, useState, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
-import { Card, Elevation, Button, Spinner } from '@blueprintjs/core'
+import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 import LoginForm, { ConfigureProgressDialog } from '../LoginForm'
-import DeltaChat from 'deltachat-node'
-import { CloseDialogFunctionType } from './DialogController'
+
 import { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
-import { Screens } from '../../ScreenController'
 import classNames from 'classnames'
-
-const { ipcRenderer } = window.electron_functions
 
 export default function SettingsAccount({
   deltachat,

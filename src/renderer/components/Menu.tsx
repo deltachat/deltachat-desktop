@@ -16,7 +16,6 @@ import {
 import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
 import { Screens } from '../ScreenController'
-const { ipcRenderer } = window.electron_functions
 
 export function DeltaMenuItem({
   text,

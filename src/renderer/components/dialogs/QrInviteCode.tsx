@@ -1,9 +1,5 @@
 import React, { useContext } from 'react'
-import DeltaDialog, {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './DeltaDialog'
+import DeltaDialog, { DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
 import qr from 'react-qr-svg'
 import { ScreenContext } from '../../contexts'
 import { Icon } from '@blueprintjs/core'
