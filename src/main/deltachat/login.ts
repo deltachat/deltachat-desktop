@@ -110,7 +110,6 @@ export default class DCLoginController extends SplitOut {
   }
 
   async newLogin(credentials: Credentials) {
-    console.log(credentials)
     await this.login(getNewAccountPath(), credentials)
   }
 

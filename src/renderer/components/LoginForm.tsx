@@ -329,7 +329,6 @@ export function ConfigureProgressDialog({
     setProgress(progress)
 
   const onCancel = (event: any) => {
-    console.log('onCancel!')
     DeltaBackend.call('stopOngoingProcess')
     onClose()
   }
@@ -342,7 +341,6 @@ export function ConfigureProgressDialog({
     setError(data2)
 
   useEffect(() => {
-    console.log(credentials)
     if (mode === 'update') {
       DeltaBackend.call('login.updateCredentials', credentials)
     } else {
