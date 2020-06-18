@@ -68,7 +68,7 @@ export default class DCLoginController extends SplitOut {
     }
 
     log.info('Ready, starting io...')
-    dc.startIO()
+    await dc.startIO()
     log.debug('Started IO')
 
     this._controller.emit('ready', credentials)
