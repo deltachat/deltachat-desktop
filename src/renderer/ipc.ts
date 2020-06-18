@@ -35,7 +35,7 @@ var callDcMethodIdentifier = 0
 function callDcMethod(
   methodName: string,
   args: any[],
-  cb?: (returnValue: any) => void
+  cb?: (err: Error, returnValue: any) => void
 ) {
   const identifier = callDcMethodIdentifier++
   if (identifier >= Number.MAX_SAFE_INTEGER - 1) callDcMethodIdentifier = 0
@@ -46,24 +46,43 @@ function callDcMethod(
 
   if (ignoreReturn) return
 
-  ipcRenderer.once(
-    `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
-    (_ev, returnValue) => {
-      log.debug(
-        `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
-        'Got back return: ',
-        returnValue
-      )
-      cb(returnValue)
-    }
-  )
+  const onError = (_ev: any, err: any) => {
+    log.debug(
+      `EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`,
+      'Got back return: ',
+      err
+    )
+    removeListeners()
+    cb(err, null)
+  }
+
+  const onSuccess = (_ev: any, returnValue: any) => {
+    log.debug(
+      `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+      'Got back return: ',
+      returnValue
+    )
+    removeListeners()
+    cb(null, returnValue)
+  }
+
+  const removeListeners = () => {
+    ipcRenderer.removeAllListeners(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`)
+    ipcRenderer.removeAllListeners(`EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`)
+  }
+
+  ipcRenderer.once(`EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`, onSuccess)
+  ipcRenderer.once(`EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`, onError)
 }
 
 export function _callDcMethodAsync(
   fnName: string,
   ...args: any[]
 ): Promise<any> {
-  return new Promise((resolve, reject) => callDcMethod(fnName, args, resolve))
+  return new Promise((resolve, reject) => callDcMethod(fnName, args, (err:Error, returnValue: any) => {
+    if(err) return reject(err)
+    resolve(returnValue)
+  }))
 }
 
 // move this part to the deltachat backend / deltachatcontroller

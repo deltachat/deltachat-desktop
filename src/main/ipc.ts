@@ -88,11 +88,20 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     async (e: any, identifier: number, methodName: string, args: any[]) => {
       if (!Array.isArray(args)) args = [args]
       log.debug(`EVENT_DC_DISPATCH_CB (${identifier}) : ${methodName} ${args}`)
-      const returnValue = await dcController.callMethod(e, methodName, args)
-      main.send(
-        `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
-        returnValue
-      )
+      
+      try {
+        const returnValue = await dcController.callMethod(e, methodName, args)
+        main.send(
+          `EVENT_DD_DISPATCH_RETURN_${identifier}_${methodName}`,
+          returnValue
+        )
+      } catch(err) {
+        main.send(
+          `EVENT_DD_DISPATCH_RETURN_ERR_${identifier}_${methodName}`,
+          err.toString()
+        )
+      }
+      
     }
   )
 

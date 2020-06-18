@@ -139,6 +139,7 @@ export default class DeltaChatController extends EventEmitter {
       log.error(
         `Error calling ${methodName}(${args.join(', ')}):\n ${err.stack}`
       )
+      throw err
     }
     return returnValue
   }
