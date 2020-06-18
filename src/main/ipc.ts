@@ -6,7 +6,7 @@ import { getLogger } from '../shared/logger'
 import {
   AppState,
   Credentials,
-  LocalSettings,
+  DesktopSettings,
   DeltaChatAccount,
 } from '../shared/shared-types'
 import { getConfigPath, getLogsPath } from './application-constants'
@@ -133,14 +133,13 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   const updateDesktopSetting = (
     e: Electron.IpcMainEvent,
-    key: keyof LocalSettings,
+    key: keyof DesktopSettings,
     value: string
   ) => {
     const { saved } = app.state
     ;(saved as any)[key] = value
     app.saveState({ saved })
   }
-  ipcMain.on('updateDesktopSetting', updateDesktopSetting)
 
   ipcMain.on('saveLastChatId', (e, chatId) => {
     const { lastChats } = app.state.saved
@@ -155,51 +154,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     e.returnValue = lastChats[dcController.credentials.addr]
   })
 
-  ipcMain.on('selectBackgroundImage', (e, file) => {
-    const copyAndSetBg = async (originalfile: string) => {
-      await ensureDir(join(getConfigPath(), 'background/'))
-      await emptyDir(join(getConfigPath(), 'background/'))
-      const newPath = join(
-        getConfigPath(),
-        'background/',
-        `background_${Date.now()}` + extname(originalfile)
-      )
-      copyFile(originalfile, newPath, (err: Error) => {
-        if (err) {
-          log.error('BG-IMG Copy Failed', err)
-          return
-        }
-        updateDesktopSetting(
-          null,
-          'chatViewBgImg',
-          `url("${newPath.replace(/\\/g, '/')}")`
-        )
-      })
-    }
-    if (!file) {
-      dialog.showOpenDialog(
-        undefined,
-        {
-          title: 'Select Background Image',
-          filters: [
-            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-            { name: 'All Files', extensions: ['*'] },
-          ],
-          properties: ['openFile'],
-        },
-        (filenames: string[]) => {
-          if (!filenames) {
-            return
-          }
-          log.info('BG-IMG Selected File:', filenames[0])
-          copyAndSetBg(filenames[0])
-        }
-      )
-    } else {
-      const filepath = join(__dirname, '../../images/backgrounds/', file)
-      copyAndSetBg(filepath)
-    }
-  })
+  
 
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)

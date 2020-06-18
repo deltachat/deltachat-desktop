@@ -10,6 +10,7 @@ import {
   MessageSearchResult,
   Credentials,
   DeltaChatAccount,
+  DesktopSettings,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -279,6 +280,13 @@ class DeltaRemote {
       send_security?: string
     }
   ): Promise<number | ''>
+  call(
+    fnName: 'settings.setDesktopSetting',
+    key: keyof DesktopSettings,
+    value: string | number | boolean
+  ): Promise<boolean>
+  call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
+  call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'

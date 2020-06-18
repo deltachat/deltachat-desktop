@@ -17,7 +17,7 @@ export type Credentials = {
   smtp_certificate_checks?: any
 }
 
-export interface LocalSettings {
+export interface DesktopSettings {
   bounds:
     | {
         height: number

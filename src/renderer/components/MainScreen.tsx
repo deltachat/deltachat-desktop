@@ -176,8 +176,8 @@ export default function MainScreen() {
                   aria-label={tx('media')}
                 />
                 <SettingsContext.Consumer>
-                  {({ enableOnDemandLocationStreaming }) =>
-                    enableOnDemandLocationStreaming && (
+                  {({ desktopSettings }) =>
+                    desktopSettings.enableOnDemandLocationStreaming && (
                       <Button
                         minimal
                         large

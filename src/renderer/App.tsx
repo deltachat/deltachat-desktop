@@ -6,7 +6,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 const { remote } = window.electron_functions
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
-import { ExtendedApp, AppState, DeltaChatAccount } from '../shared/shared-types'
+import { ExtendedApp, AppState, DeltaChatAccount, DesktopSettings } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
 import { getLogger } from '../shared/logger'
@@ -16,6 +16,7 @@ import { ThemeManager } from './ThemeManager'
 const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
+import { getDefaultState } from '../shared/state'
 
 addLocaleData(enLocaleData)
 
@@ -25,7 +26,8 @@ attachKeybindingsListener()
 export const theme_manager = ThemeManager
 
 export default function App(props: any) {
-  const [state, setState] = useState<AppState>(null)
+  const [state, setState] = useState<AppState>(getDefaultState())
+
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useEffect(() => {
@@ -78,16 +80,7 @@ export default function App(props: any) {
     })()
   }, [])
 
-  const onRender = (e: any, state: AppState) => {
-    log.debug('onRenderer')
-    setState(state)
-  }
-  useEffect(() => {
-    ipcBackend.on('render', onRender)
-    return () => {
-      ipcBackend.removeListener('render', onRender)
-    }
-  }, [state])
+ 
 
   async function setupLocaleData(locale: string) {
     moment.locale(locale)
@@ -111,14 +104,40 @@ export default function App(props: any) {
     }
   }, [localeData])
 
-  if (!localeData || !state) return null
+  if (!localeData) return null
   return (
     <CrashScreen>
-      <SettingsContext.Provider value={state.saved}>
+      <SettingsContextWrapper>
         <IntlProvider locale={localeData.locale}>
           <ScreenController deltachat={state.deltachat} />
         </IntlProvider>
-      </SettingsContext.Provider>
+      </SettingsContextWrapper>
     </CrashScreen>
+  )
+}
+export function SettingsContextWrapper(props:any) {
+  const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      const desktopSettings = await DeltaBackend.call('settings.getDesktopSettings')
+      _setDesktopSettings(desktopSettings)
+    })()  
+  }, [])
+  
+  const setDesktopSetting = async (key: keyof DesktopSettings, value: string | number | boolean) => {
+    if (await DeltaBackend.call('settings.setDesktopSetting', key, value) === true) {
+      _setDesktopSettings((prevState: DesktopSettings) => {
+        return {...prevState, [key]: value}
+      })
+    }
+  }
+
+  if (!desktopSettings) return null
+
+  return (
+    <SettingsContext.Provider value={{desktopSettings, setDesktopSetting}}>
+      {props.children}
+    </SettingsContext.Provider>
   )
 }
