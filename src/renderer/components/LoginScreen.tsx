@@ -275,7 +275,9 @@ export default function LoginScreen(props: any) {
             setCredentials={setCredentials}
           />
           <Button
-            disabled={credentials.addr.length == 0 || credentials.mail_pw.length == 0}
+            disabled={
+              credentials.addr.length == 0 || credentials.mail_pw.length == 0
+            }
             type='submit'
             text={tx('login_title')}
             onClick={onClickLogin}

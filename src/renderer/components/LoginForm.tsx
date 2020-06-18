@@ -347,12 +347,12 @@ export function ConfigureProgressDialog({
       } else {
         try {
           await DeltaBackend.call('login.newLogin', credentials)
-        } catch(err) {
+        } catch (err) {
           if (err) onConfigureFailed(null, [null, err])
         }
-      } 
+      }
     })()
-    
+
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureFailed)

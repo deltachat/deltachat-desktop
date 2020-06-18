@@ -94,7 +94,11 @@ export default class DialogController extends React.Component<
     }
 
     if (!additionalProps) additionalProps = {}
-    log.debug('openDialog: ', typeof fnc === 'string' ? fnc : 'Anonymous', additionalProps)
+    log.debug(
+      'openDialog: ',
+      typeof fnc === 'string' ? fnc : 'Anonymous',
+      additionalProps
+    )
 
     let id: number = dialogCounter++
     if (id >= Number.MAX_SAFE_INTEGER - 1) {
