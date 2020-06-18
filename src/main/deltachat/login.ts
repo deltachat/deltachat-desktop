@@ -55,12 +55,14 @@ export default class DCLoginController extends SplitOut {
 
     setCoreStrings(dc, txCoreStrings())
 
+    this._controller._dc = dc
     if (!dc.isConfigured() || updateConfiguration) {
       try {
         await dc.configure(addServerFlags(credentials))
       } catch (err) {
         this._controller.unregisterEventHandler(dc)
         await dc.close()
+        this._controller._dc = null
         return false
       }
     }
