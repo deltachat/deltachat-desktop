@@ -2,6 +2,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { sendToBackend } from '../../ipc'
 import { openMapDialog } from './ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
+import { Screens } from '../../ScreenController'
 const { ipcRenderer } = window.electron_functions
 
 interface QrStates {
@@ -74,11 +75,12 @@ export default async function processOpenQrUrl(
           addr: burnerAccount.email,
           mail_pw: burnerAccount.password,
         }
-        window.__openDialog(ConfigureProgressDialog, { credentials })
-        ipcRenderer.on('DC_EVENT_CONFIGURE_PROGRESS', (evt, progress) => {
-          // close dialog since now the progress bar is shown
+
+        const onSuccess = () => {
+          window.__changeScreen(Screens.Main)
           callback()
-        })
+        }
+        window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess})
       } else {
         window.__openDialog('AlertDialog', {
           message: tx('qraccount_qr_code_cannot_be_used'),
