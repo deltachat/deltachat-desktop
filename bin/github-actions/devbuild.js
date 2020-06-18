@@ -9,7 +9,6 @@ const p = JSON.parse(fs.readFileSync(packageJSON))
 
 p.name = 'deltachat-desktop-dev'
 p.productName = 'DeltaChat-DevBuild'
-p.build.appId = 'chat.delta.desktop.electron.dev'
 p.version = p.version + '-DevBuild'
 
 fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
@@ -24,3 +23,14 @@ const fileContent = fs
   )
 
 fs.writeFileSync(appConfig, fileContent)
+
+const electronBuilderConfig = join(__dirname, '../../electron-builder.js')
+fs.writeFileSync(
+  electronBuilderConfig,
+  fs
+    .readFileSync(electronBuilderConfig, 'utf-8')
+    .replace(
+      "build['appId'] = 'chat.delta.desktop.electron'",
+      "build['appId'] = 'chat.delta.desktop.electron.dev'"
+    )
+)
