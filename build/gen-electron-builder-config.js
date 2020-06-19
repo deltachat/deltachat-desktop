@@ -24,7 +24,7 @@ build['appId'] = 'chat.delta.desktop.electron'
 build['protocols'] = {
   name: 'QR code data',
   role: 'Viewer',
-  schemes: ['openpgp4fpr', 'OPENPGP4FPR'],
+  schemes: ['openpgp4fpr'],
 }
 
 build['files'] = files
