@@ -26,7 +26,7 @@ fs.writeFileSync(appConfig, fileContent)
 
 const electronBuilderConfig = join(
   __dirname,
-  '../../gen-electron-builder-config.js'
+  '../../build/gen-electron-builder-config.js'
 )
 fs.writeFileSync(
   electronBuilderConfig,
