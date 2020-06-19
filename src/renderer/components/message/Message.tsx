@@ -11,6 +11,8 @@ import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
 
+const { openExternal } = window.electron_functions
+
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
 const Avatar = (
@@ -178,14 +180,14 @@ const contextMenu = (
           {tx('menu_copy_selection_to_clipboard')}
         </MenuItem>
       ) : (
-        <MenuItem
-          onClick={_ => {
-            navigator.clipboard.writeText(text)
-          }}
-        >
-          {tx('menu_copy_to_clipboard')}
-        </MenuItem>
-      )}
+          <MenuItem
+            onClick={_ => {
+              navigator.clipboard.writeText(text)
+            }}
+          >
+            {tx('menu_copy_to_clipboard')}
+          </MenuItem>
+        )}
       {attachment ? (
         <MenuItem onClick={onDownload.bind(null, message.msg)}>
           {tx('download_attachment_desktop')}
@@ -311,8 +313,8 @@ const Message = (props: {
             {message.msg.isSetupmessage ? (
               tx('autocrypt_asm_click_body')
             ) : (
-              <MessageBody text={text || ''} />
-            )}
+                <MessageBody text={text || ''} />
+              )}
           </div>
           {longMessage && <button onClick={onShowDetail}>...</button>}
           <MessageMetaData {...props} />
@@ -364,6 +366,8 @@ export const CallMessage = (props: {
   } = props
   const tx = window.translate
 
+  const url = text;
+
   return (
     <div
       className={classNames(
@@ -384,7 +388,7 @@ export const CallMessage = (props: {
           conversationType === 'group' &&
           Author(message.contact, onContactClick)}
         <div
-          className={classNames('msg-body', )}
+          className={classNames('msg-body',)}
         >
           <Attachment
             {...{
@@ -396,13 +400,39 @@ export const CallMessage = (props: {
             }}
           />
 
-          <div dir='auto' className='text' style={{background:'lightgreen'}}>
-            Ein {direction === 'incoming'?'eingehender':'ausgehender'} Anruf
-            {text}
-          </div>
+          {direction === 'incoming' ?
+            <div dir='auto' className='text'>
+              <div className='call-inc-text'><b>Call invitation!</b>
+                <div>
+                  <button className='phone-accept-button' onClick={openCall}><span className='phone-enabled-icon'></span></button>
+                  <button className='phone-deny-button' onClick={denyCall}><span className='phone-disabled-icon'></span></button>
+                </div>
+                <a onClick={() => { openCallExternal(url) }} href="{url}">{url}</a>
+              </div>
+            </div>
+            :
+            <div dir='auto' className='text'>
+              <b>Call invitation send!</b>
+            </div>
+          }
+
           <MessageMetaData {...props} />
         </div>
       </div>
     </div>
   )
+}
+
+const openCall = () => {
+  console.log("JOJOJO")!
+  //
+
+}
+
+const denyCall = () => {
+  console.log("NONO")!
+}
+
+const openCallExternal = (url: string) => {
+  openExternal(url)
 }
