@@ -61,6 +61,10 @@ build['win'] = {
   icon: 'images/deltachat.ico',
 }
 
+build['appx'] = {
+  applicationId: build['appId']
+}
+
 // module.exports = build
 // using this as a js module doesn#t work on windows
 // because electron builder asks windows to open it as file instead of reading it.
