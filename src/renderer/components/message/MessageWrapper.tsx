@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
-import Message from './Message'
+import Message, { CallMessage } from './Message'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
@@ -107,6 +107,10 @@ export const RenderMessage = React.memo(
         >
           <p>{msg.text}</p>
         </div>
+      )
+    if (message.isCall)
+      return (
+        <CallMessage {...props} {...new_props} />
       )
 
     return <Message {...props} {...new_props} />

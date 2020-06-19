@@ -330,3 +330,79 @@ const Message = (props: {
 }
 
 export default Message
+
+
+export const CallMessage = (props: {
+  direction: 'incoming' | 'outgoing'
+  id: number
+  timestamp: number
+  viewType: number
+  conversationType: 'group' | 'direct'
+  message: MessageType
+  text?: string
+  disableMenu?: boolean
+  status: msgStatus
+  attachment: attachment
+  onContactClick: (contact: DCContact) => void
+  onClickMessageBody: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void
+  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  padlock: boolean
+  onDelete: () => void
+  onForward: () => void
+  /* onRetrySend */
+}) => {
+  const {
+    direction,
+    conversationType,
+    message,
+    text,
+    status,
+    attachment,
+    onContactClick,
+  } = props
+  const tx = window.translate
+
+  return (
+    <div
+      className={classNames(
+        'message',
+        direction,
+        { error: status === 'error' },
+        { forwarded: message.msg.isForwarded }
+      )}
+    >
+      {conversationType === 'group' &&
+        direction === 'incoming' &&
+        Avatar(message.contact, onContactClick)}
+      <div className='msg-container'>
+        {message.msg.isForwarded && (
+          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
+        )}
+        {direction === 'incoming' &&
+          conversationType === 'group' &&
+          Author(message.contact, onContactClick)}
+        <div
+          className={classNames('msg-body', )}
+        >
+          <Attachment
+            {...{
+              attachment,
+              text,
+              conversationType,
+              direction,
+              message,
+            }}
+          />
+
+          <div dir='auto' className='text' style={{background:'lightgreen'}}>
+            Ein {direction === 'incoming'?'eingehender':'ausgehender'} Anruf
+            {text}
+          </div>
+          <MessageMetaData {...props} />
+        </div>
+      </div>
+    </div>
+  )
+}
