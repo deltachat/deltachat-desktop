@@ -10,8 +10,8 @@ import Attachment from '../attachment/messageAttachment'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
+import { runtime } from '../../runtime'
 
-//import { openCallWindow } from '../../../main/windows/call'
 
 const { openExternal } = window.electron_functions
 
@@ -366,7 +366,7 @@ export const CallMessage = (props: {
     attachment,
     onContactClick,
   } = props
-  const tx = window.translate
+  const tx = window.static_translate
 
   let url = text.split("::").length > 2 ? text.split("::")[2] : "NA";
 
@@ -406,7 +406,7 @@ export const CallMessage = (props: {
             <div dir='auto' className='text'>
               <div className='call-inc-text'><b>Call invitation!</b>
                 <div>
-                  <button className='phone-accept-button' onClick={openCall}><span className='phone-enabled-icon'></span></button>
+                  <button className='phone-accept-button' onClick={openCall.bind(null, url)}><span className='phone-enabled-icon'></span></button>
                   <button className='phone-deny-button' onClick={denyCall}><span className='phone-disabled-icon'></span></button>
                 </div>
                 <a onClick={() => { openCallExternal(url) }} href="{url}">{url}</a>
@@ -425,10 +425,9 @@ export const CallMessage = (props: {
   )
 }
 
-const openCall = () => {
+const openCall = (callURL:string) => {
   console.log("JOJOJO")!
-  //
-  //openCallWindow()
+  runtime.openCallWindow(callURL)
 }
 
 const denyCall = () => {

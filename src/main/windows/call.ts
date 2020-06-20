@@ -16,7 +16,7 @@ export async function openCallWindow(locale: string, callUrl : string) {
     return
   }
 
-  log.debug('open call', locale)
+  log.debug('open call', callUrl)
   const defaults = {
     bounds: {
       width: 500,

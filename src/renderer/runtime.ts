@@ -18,7 +18,7 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  //openCallWindow(): void
+  openCallWindow(callUrl:string): void
   updateBadge(): void
   /**
    * get the comandline arguments
@@ -32,6 +32,9 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
+  openCallWindow(callUrl: string): void {
+    throw new Error("Method not implemented.")
+  }
   openLink(link: string): void {
     throw new Error('Method not implemented.')
   }
@@ -59,6 +62,9 @@ class Browser implements Runtime {
 }
 
 class Electron implements Runtime {
+  openCallWindow(callUrl: string): void {
+    ipcBackend.send('call', window.localeData.locale, callUrl)
+  }
   openLink(link: string): void {
     openExternal(link)
   }
