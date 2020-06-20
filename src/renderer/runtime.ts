@@ -18,6 +18,7 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
+  //openCallWindow(): void
   updateBadge(): void
   /**
    * get the comandline arguments

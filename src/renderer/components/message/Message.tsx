@@ -11,6 +11,8 @@ import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
 
+//import { openCallWindow } from '../../../main/windows/call'
+
 const { openExternal } = window.electron_functions
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
@@ -366,7 +368,7 @@ export const CallMessage = (props: {
   } = props
   const tx = window.translate
 
-  const url = text;
+  let url = text.split("::").length > 2 ? text.split("::")[2] : "NA";
 
   return (
     <div
@@ -426,7 +428,7 @@ export const CallMessage = (props: {
 const openCall = () => {
   console.log("JOJOJO")!
   //
-
+  //openCallWindow()
 }
 
 const denyCall = () => {
