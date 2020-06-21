@@ -1,0 +1,36 @@
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>WebRTC!</title>
+  <link rel="stylesheet" href="./css/main.css">
+
+</head>
+
+<body>
+  <div style="width: 100%; text-align: center; margin-top: 200px;" id="start">
+    <select id="mediaSelect">
+      <option value="1">Video/Audio</option>
+      <option value="2">Audio only</option>
+    </select>
+    <button id="startBtn">START!</button>
+  </div>
+  <div style="display: none;" id="container">
+    <div id="localMedia"></div>
+    <div id="remoteMedia"></div>
+  </div>
+
+  <script src="js/adapter.js"></script>
+  <script src="js/socket.io-2.3.0.js"></script>
+  <script src="js/jquery-3.1.1.min.js"></script>
+
+  <script src="js/ezWebRTC.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+
+</html>

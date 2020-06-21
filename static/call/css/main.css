@@ -1,0 +1,31 @@
+audio {
+  max-width: 100%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0em;
+  word-break: break-word;
+}
+
+div#container {
+  margin: 0 auto 0 auto;
+  max-width: 40em;
+  padding: 0em 1.5em 1.3em 1.5em;
+}
+
+video {
+  background: #222;
+  width: 100%;
+}
+
+.htext {
+  color: #fff;
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+  position: relative;
+  top: 24px;
+  left: 10px;
+  font-size: 0.9em;
+  z-index: 10;
+}
