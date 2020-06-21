@@ -7,9 +7,9 @@
   cursor: pointer;
   margin-left: 2px;
   @include color-svg(
-      '../images/phone_enabled.svg',
-      var(--messageStatusIconSending)
-    );
+    '../images/phone_enabled.svg',
+    var(--messageStatusIconSending)
+  );
 }
 
 .phone-disabled-icon {
@@ -19,9 +19,9 @@
   cursor: pointer;
   margin-left: 2px;
   @include color-svg(
-      '../images/phone_disabled.svg',
-      var(--messageStatusIconSending)
-    );
+    '../images/phone_disabled.svg',
+    var(--messageStatusIconSending)
+  );
 }
 
 .phone-accept-button {

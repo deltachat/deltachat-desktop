@@ -18,7 +18,7 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  openCallWindow(callUrl:string): void
+  openCallWindow(callUrl: string): void
   updateBadge(): void
   /**
    * get the comandline arguments
@@ -33,7 +33,7 @@ interface Runtime {
 
 class Browser implements Runtime {
   openCallWindow(callUrl: string): void {
-    throw new Error("Method not implemented.")
+    throw new Error('Method not implemented.')
   }
   openLink(link: string): void {
     throw new Error('Method not implemented.')

@@ -5,18 +5,17 @@ import { ExtendedAppMainProcess } from '../types'
 //import { appWindowTitle } from '../../shared/constants'
 
 const log = getLogger('main/call')
-//const app = rawApp as ExtendedAppMainProcess
-
+const app = rawApp as ExtendedAppMainProcess
 
 let win: BrowserWindow | null = null
 
-export async function openCallWindow(locale: string, callUrl : string) {
+export async function openCallWindow(locale: string, roomname: string) {
   if (win) {
     win.focus()
     return
   }
 
-  log.debug('open call', callUrl)
+  log.debug('open call', roomname)
   const defaults = {
     bounds: {
       width: 500,
@@ -27,8 +26,8 @@ export async function openCallWindow(locale: string, callUrl : string) {
     minHeight: 450,
   }
   win = new BrowserWindow({
-    backgroundColor: '#282828',
-    darkTheme: true, // Forces dark theme (GTK+3)
+    backgroundColor: 'white',
+    darkTheme: false, // Forces dark theme (GTK+3)
 
     icon: appIcon(),
     minHeight: defaults.minHeight,
@@ -42,9 +41,11 @@ export async function openCallWindow(locale: string, callUrl : string) {
     },
   })
 
-  log.debug(callUrl)
-
-  win.loadURL(callUrl)
+  log.debug(roomname)
+  const appPath = app.getAppPath()
+  let url = appPath + '/html-dist/call/index.html?roomname=' + roomname
+  console.log(url)
+  win.loadURL(url)
 
   win.once('ready-to-show', () => {
     win.show()
@@ -64,5 +65,4 @@ export async function openCallWindow(locale: string, callUrl : string) {
   })
 
   win.setMenu(Menu.buildFromTemplate([{ role: 'viewMenu' }]))
-
 }

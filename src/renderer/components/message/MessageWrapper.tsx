@@ -108,10 +108,7 @@ export const RenderMessage = React.memo(
           <p>{msg.text}</p>
         </div>
       )
-    if (message.isCall)
-      return (
-        <CallMessage {...props} {...new_props} />
-      )
+    if (message.isCall) return <CallMessage {...props} {...new_props} />
 
     return <Message {...props} {...new_props} />
   },
