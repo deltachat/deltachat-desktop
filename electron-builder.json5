@@ -2,11 +2,7 @@
 // run "pack:generate_config" to re-generate it
 {
   appId: 'chat.delta.desktop.electron',
-  protocols: {
-    name: 'QR code data',
-    role: 'Viewer',
-    schemes: ['openpgp4fpr', 'OPENPGP4FPR'],
-  },
+  protocols: { name: 'QR code data', role: 'Viewer', schemes: ['openpgp4fpr'] },
   files: [
     '!bin/',
     '!jenkins/',
@@ -42,4 +38,5 @@
     },
   },
   win: { icon: 'images/deltachat.ico' },
+  appx: { applicationId: 'chat.delta.desktop.electron' },
 }
