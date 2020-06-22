@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { RadioGroup, Radio, Button, H5 } from '@blueprintjs/core'
 import { ScreenContext, SettingsContext } from '../../contexts'
 import DeltaDialog, {
@@ -35,6 +35,60 @@ function durationToString(configValue: number | string) {
   }
 }
 
+export function AutodeleteConfirmationDialog(
+  {type, autodeleteDuration, isOpen, onClose} :
+  {type: ('device' | 'server'  ), autodeleteDuration: string} & DialogProps
+) {
+
+  const fromServer = type === 'server'
+
+  const [estimateCount, setEstimateCount] = useState(null)
+  useEffect(() => {
+    DeltaBackend.call('settings.get')
+  }, [])
+
+
+  const onOk = () => {
+    //handleDeltaSettingsChange('autodel_device_title', value),
+    //handleDeltaSettingsChange('autodel_device_title', value),
+    //onClose()
+  }
+
+  const tx = window.translate
+
+  if (estimateCount === null) return
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <DeltaDialogHeader title={fromServer ? tx('autodel_server_title') : tx('autodel_device_title')} />
+    <DeltaDialogBody>
+      <DeltaDialogContent>
+      {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [autodeleteDuration, String(estimateCount)])}
+      </DeltaDialogContent>
+    </DeltaDialogBody>
+    <DeltaDialogFooter
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '0px',
+        padding: '7px 13px 10px 13px',
+      }}
+    >
+      <p
+        className='delta-button danger bold'
+        onClick={() => {
+          onClose()
+        }}
+      >
+        {tx('cancel')}
+      </p>
+      <p className='delta-button primary bold' onClick={onOk}>
+        {tx('ok')}
+      </p>
+    </DeltaDialogFooter>
+  </SmallDialog>
+  )
+}
+
 export default function SettingsAutodelete(props: any) {
   const { openDialog } = useContext(ScreenContext)
   const { handleDeltaSettingsChange, settings } = props
@@ -55,7 +109,7 @@ export default function SettingsAutodelete(props: any) {
       selectedValue: settings['delete_device_after'],
       title: tx('autodel_device_title'),
       onSave: (value: string) =>
-        handleDeltaSettingsChange('autodel_device_title', value),
+        openDialog(AutodeleteConfirmationDialog, {type: 'device', autodeleteDuration: value})        
     })
   }
 
@@ -65,7 +119,7 @@ export default function SettingsAutodelete(props: any) {
       selectedValue: settings['delete_server_after'],
       title: tx('autodel_server_title'),
       onSave: (value: string) =>
-        handleDeltaSettingsChange('delete_server_after', value),
+        openDialog(AutodeleteConfirmationDialog, {type: 'device', autodeleteDuration: value})
     })
   }
 

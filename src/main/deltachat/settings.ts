@@ -153,6 +153,10 @@ export default class DCSettings extends SplitOut {
       }
     })
   }
+
+  estimateAutodeleteCount(fromServer: boolean, seconds: number) {
+    return this._dc.
+  }
 }
 
 export function serverFlags({
