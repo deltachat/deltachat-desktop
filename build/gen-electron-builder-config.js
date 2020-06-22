@@ -62,7 +62,9 @@ build['win'] = {
 }
 
 build['appx'] = {
-  applicationId: build['appId']
+  applicationId: build['appId'],
+  publisher: 'eu.merlinux',
+  publisherDisplayName: 'merlinux'
 }
 
 // module.exports = build

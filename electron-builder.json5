@@ -38,5 +38,9 @@
     },
   },
   win: { icon: 'images/deltachat.ico' },
-  appx: { applicationId: 'chat.delta.desktop.electron' },
+  appx: {
+    applicationId: 'chat.delta.desktop.electron',
+    publisher: 'eu.merlinux',
+    publisherDisplayName: 'merlinux',
+  },
 }
