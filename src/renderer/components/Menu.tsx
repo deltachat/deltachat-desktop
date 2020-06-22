@@ -38,6 +38,20 @@ export function DeltaMenuItem({
 }
 
 export default function DeltaMenu(props: { selectedChat: FullChat }) {
+  const sendCallInvitation = (chatId: number) => {
+    const roomname =
+      +new Date() +
+      '' +
+      Math.random()
+        .toString()
+        .replace('.', '')
+    chatStoreDispatch({
+      type: 'SEND_MESSAGE',
+      payload: [chatId, '::CALL::' + roomname, null],
+    })
+    runtime.openCallWindow(roomname)
+  }
+
   const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -101,6 +115,13 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
+      <DeltaMenuItem
+        key='call'
+        text='Invite to call'
+        onClick={() => {
+          sendCallInvitation(selectedChat.id)
+        }}
+      />,
       <DeltaMenuItem
         key='delete'
         text={tx('menu_delete_chat')}

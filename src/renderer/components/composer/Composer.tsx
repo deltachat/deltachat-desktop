@@ -59,19 +59,6 @@ const Composer = forwardRef<
     messageInputRef.current.focus()
   }
 
-  const sendCallInvitation = () => {
-    const roomname =
-      +new Date() +
-      '' +
-      Math.random()
-        .toString()
-        .replace('.', '')
-    chatStoreDispatch({
-      type: 'SEND_MESSAGE',
-      payload: [chatId, '::CALL::' + roomname, null],
-    })
-  }
-
   const addFilename = () => {
     remote.dialog.showOpenDialog(
       { properties: ['openFile'] },

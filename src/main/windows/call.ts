@@ -2,6 +2,7 @@ import { app as rawApp, BrowserWindow, Menu, shell } from 'electron'
 import { appIcon } from '../application-constants'
 import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
+import { join } from 'path'
 //import { appWindowTitle } from '../../shared/constants'
 
 const log = getLogger('main/call')
@@ -43,7 +44,10 @@ export async function openCallWindow(locale: string, roomname: string) {
 
   log.debug(roomname)
   const appPath = app.getAppPath()
-  let url = appPath + '/html-dist/call/index.html?roomname=' + roomname
+  let url =
+    join(__dirname, '../../..//html-dist/call/index.html') +
+    '?roomname=' +
+    roomname
   console.log(url)
   win.loadURL(url)
 

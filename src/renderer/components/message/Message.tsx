@@ -407,25 +407,40 @@ export const CallMessage = (props: {
                     className='phone-accept-button'
                     onClick={openCall.bind(null, roomname)}
                   >
-                    <span className='phone-enabled-icon'></span>
-                  </button>
-                  <button className='phone-deny-button' onClick={denyCall}>
-                    <span className='phone-disabled-icon'></span>
+                    <span className='phone-enabled-icon'></span>{' '}
+                    <span className='call-join-text'>JOIN</span>
                   </button>
                 </div>
-                <a
+                {/* <a
                   onClick={() => {
                     openCallExternal(url)
                   }}
                   href=''
                 >
                   {url}
-                </a>
+                </a> */}
               </div>
             </div>
           ) : (
             <div dir='auto' className='text'>
               <b>Call invitation send!</b>
+              <div className='call-inc-text'>
+                <button
+                  className='phone-accept-button'
+                  onClick={openCall.bind(null, roomname)}
+                >
+                  <span className='phone-enabled-icon'></span>{' '}
+                  <span className='call-join-text'>REJOIN</span>
+                </button>
+              </div>
+              {/* <a
+                  onClick={() => {
+                    openCallExternal(url)
+                  }}
+                  href=''
+                >
+                  {url}
+                </a> */}
             </div>
           )}
 
