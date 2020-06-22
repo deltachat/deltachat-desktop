@@ -121,9 +121,11 @@ export default class DialogController extends React.Component<
   }
 
   closeDialog(id: DialogId) {
-    const { [id]: closedDialog, ...dialogs } = this.state.dialogs
-    log.debug(`Close dialog with id: ${id}`)
-    this.setState({ dialogs })
+    this.setState((prevState: any) => {
+      const { [id]: closedDialog, ...dialogs } = prevState.dialogs
+      log.debug(`Close dialog with id: ${id}`)
+      return { ...prevState, dialogs}
+    })
   }
 
   render() {
