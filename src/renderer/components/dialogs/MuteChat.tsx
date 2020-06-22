@@ -31,11 +31,9 @@ export default function MuteChat({
     [String(MuteDuration.SEVEN_DAYS), tx('mute_for_seven_days')],
     [String(MuteDuration.FOREVER), tx('mute_forever')],
   ]
-  const [muteDuration, setMuteDuration] = useState<MuteDuration>(
-    MuteDuration.OFF
-  )
 
-  const onSave = async () => {
+  const onSave = async (muteDurationString: string) => {
+    let muteDuration = Number(muteDurationString) as MuteDuration
     await DeltaBackend.call('chat.setMuteDuration', chatId, muteDuration)
   }
 
@@ -43,7 +41,7 @@ export default function MuteChat({
     <SmallSelectDialog
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
-      selectedValue={String(muteDuration)}
+      selectedValue={String(MuteDuration.OFF)}
       isOpen={isOpen}
       onSave={onSave}
       onClose={onClose}
