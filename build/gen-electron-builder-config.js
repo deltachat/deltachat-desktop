@@ -64,7 +64,8 @@ build['win'] = {
 build['appx'] = {
   applicationId: build['appId'],
   publisher: 'CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E',
-  publisherDisplayName: 'merlinux'
+  publisherDisplayName: 'merlinux',
+  identityName:'merlinux.DeltaChat'
 }
 
 // module.exports = build
