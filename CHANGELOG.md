@@ -51,6 +51,7 @@
 - Overhauled login/update credentials flow & ui/ux to provide a more stable and clear experience
 - Importing a backup now automatically loads the imported account
 - Save account path instead of account addr for remembering the last selected account
+- We don't scroll down on incoming messages anymore
 
 ### Technical
 
