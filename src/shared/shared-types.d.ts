@@ -45,7 +45,7 @@ export interface AppState {
   }
   saved: {
     bounds: todo
-     /** @deprecated replaced by lastAccount */
+    /** @deprecated replaced by lastAccount */
     credentials: any | undefined
     /** path to last used/selected Account */
     lastAccount: string
