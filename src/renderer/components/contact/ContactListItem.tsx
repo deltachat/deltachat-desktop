@@ -3,9 +3,9 @@ import Contact from './Contact'
 import { Icon } from '@blueprintjs/core'
 import { DCContact } from '../../../shared/shared-types'
 
-const DeltaCheckbox = (props: {
+export const DeltaCheckbox = (props: {
   checked: boolean
-  disabled: boolean
+  disabled?: boolean
   onClick?: (event: React.SyntheticEvent) => void
 }) => {
   const { checked, disabled } = props
@@ -16,10 +16,10 @@ const DeltaCheckbox = (props: {
     typeof _onClick === 'function' && _onClick(event)
   }
   return (
-    <div className='checkbox'>
+    <div className='delta-checkbox'>
       <input
         type='checkbox'
-        disabled={disabled}
+        disabled={disabled === true}
         onChange={onClick}
         checked={checked}
       />

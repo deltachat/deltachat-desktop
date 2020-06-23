@@ -287,6 +287,7 @@ class DeltaRemote {
   ): Promise<boolean>
   call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
   call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
+  call(fnName: 'settings.estimateAutodeleteCount', fromServer: boolean, seconds: number): Promise<number>
   // stickers -----------------------------------------------------------
   call(
     fnName: 'stickers.getStickers'
