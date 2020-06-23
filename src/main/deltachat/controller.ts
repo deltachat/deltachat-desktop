@@ -3,7 +3,6 @@ import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
 import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
-import { integerToHexColor } from '../../shared/util'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -299,10 +298,8 @@ export default class DeltaChatController extends EventEmitter {
     return this._dc.checkQrCode(qrCode)
   }
 
-  joinSecurejoin(qrCode: string) {
-    return new Promise(resolve => {
-      this._dc.joinSecurejoin(qrCode, resolve)
-    })
+  async joinSecurejoin(qrCode: string) {
+    return await this._dc.joinSecurejoin(qrCode)
   }
 
   stopOngoingProcess() {
@@ -312,7 +309,7 @@ export default class DeltaChatController extends EventEmitter {
   // ToDo: Deprecated, use contacts.getContact
   _getContact(id: number) {
     const contact = this._dc.getContact(id).toJson()
-    return { ...contact, color: integerToHexColor(contact.color) }
+    return { ...contact }
   }
 
   // ToDo: move to contacts.
