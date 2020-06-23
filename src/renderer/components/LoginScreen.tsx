@@ -65,7 +65,7 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
       }
     })
   }, [])
-  
+
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card elevation={Elevation.ONE}>
