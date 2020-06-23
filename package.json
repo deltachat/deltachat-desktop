@@ -13,8 +13,6 @@
     "fix-formatting": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",
     "dev": "npm run build && npm run start --",
     "start": "electron . --debug --log-debug --log-to-console --disable-http-cache --translation-watch",
-    "pack": "npm run build && electron-builder --dir",
-    "dist": "npx electron-builder --mac dmg --win nsis portable --linux AppImage deb",
     "clean": "rm -rf ./tsc-dist ./html-dist ./dist",
     "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "build:shared": "npm run build:shared:translations && npm run build:shared:version",
@@ -37,7 +35,13 @@
     "translations-pull": "tx pull -l en && tx pull -f",
     "translations-update": "npm run translations-pull && npm run builder -- --translations",
     "hallmark": "hallmark --fix",
-    "check-types": "tsc"
+    "check-types": "tsc",
+    "pack": "npm run pack:generate_config && npm run pack:all",
+    "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --loglevel silent",
+    "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
+    "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg",
+    "pack:linux": "electron-builder --config ./electron-builder.json5 --linux AppImage deb",
+    "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
   },
   "repository": {
     "type": "git",
@@ -141,66 +145,6 @@
     "ignore": [
       "README.md",
       "UPGRADING.md"
-    ]
-  },
-  "build": {
-    "protocols": {
-      "name": "QR code data",
-      "role": "Viewer",
-      "schemes": [
-        "openpgp4fpr",
-        "OPENPGP4FPR"
-      ]
-    },
-    "mac": {
-      "category": "public.app-category.social-networking"
-    },
-    "dmg": {
-      "contents": [
-        {
-          "x": 220,
-          "y": 200
-        },
-        {
-          "x": 448,
-          "y": 200,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "appId": "chat.delta.desktop.electron",
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "category": "Network;Chat;InstantMessaging;",
-      "desktop": {
-        "comment": "Delta Chat email-based messenger",
-        "keywords": "dc;chat;delta;messaging;messenger;email"
-      }
-    },
-    "win": {
-      "icon": "images/deltachat.ico"
-    },
-    "files": [
-      "!bin/",
-      "!jenkins/",
-      "!README_ASSETS/",
-      "!README.md",
-      "!.*",
-      "!src/",
-      "!scss/",
-      "!static/",
-      "!test/",
-      "!ci_scripts/",
-      "!tsc-dist/renderer/",
-      "!**/*.d.ts",
-      "!**/*.tsbuildinfo",
-      "!**/*.js.map",
-      "!**/*.css.map",
-      "!html-dist/report.html"
     ]
   },
   "standard": {
