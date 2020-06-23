@@ -45,7 +45,10 @@ export interface AppState {
   }
   saved: {
     bounds: todo
-    credentials: any
+    /** @deprecated replaced by lastAccount */
+    credentials: any | undefined
+    /** path to last used/selected Account */
+    lastAccount: string
     enterKeySends: boolean
     notifications: boolean
     showNotificationContent: boolean
