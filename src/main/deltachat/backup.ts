@@ -86,34 +86,21 @@ export default class DCBackup extends SplitOut {
       sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
 
       const newPath = getNewAccountPath()
-      const configFolderExists = await fs.pathExists(newPath)
 
-      if (configFolderExists) {
-        log.debug(`backupImport: ${newPath} already exists`)
-        sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', true)
-        sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
-
-        ipcMain.once('DU_EVENT_BACKUP_IMPORT_OVERWRITE', async () => {
-          log.debug('DU_EVENT_OVERWRITE_IMPORT')
-          await moveImportedConfigFolder(addr, newPath, true)
-          onSuccessfulMove(addr)
-        })
-      } else {
-        log.debug(`backupImport: ${newPath} does not exist, moving...`)
-        sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
-        sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
-        try {
-          // future compatibiliy: remove a symlink if it exists
-          if ((await fs.lstat(newPath)).isSymbolicLink()) {
-            await fs
-              .remove(newPath)
-              .catch(log.error.bind(null, 'symlink removing failed'))
-          }
-        } catch (error) {
-          /* but we don't care about the error of a not found symlink */
+      log.debug(`backupImport: ${newPath} does not exist, moving...`)
+      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
+      sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
+      try {
+        // future compatibiliy: remove a symlink if it exists
+        if ((await fs.lstat(newPath)).isSymbolicLink()) {
+          await fs
+            .remove(newPath)
+            .catch(log.error.bind(null, 'symlink removing failed'))
         }
-        await moveImportedConfigFolder(addr, newPath, false)
+      } catch (error) {
+        /* but we don't care about the error of a not found symlink */
       }
+      await moveImportedConfigFolder(addr, newPath, false)
     }
 
     log.debug(`openend context`)

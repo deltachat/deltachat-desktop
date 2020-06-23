@@ -64,41 +64,13 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
         setImportState(['IMPORT_COMPLETE', {}])
       }
     })
-
-    ipcBackend.on('DD_EVENT_BACKUP_IMPORT_EXISTS', (evt, exists) => {
-      log.debug('DD_EVENT_BACKUP_IMPORT_EXISTS', exists)
-      if (!wasCanceled) {
-        setImportState(['IMPORT_EXISTS', {}])
-      }
-    })
-    return () => {
-      wasCanceled = true
-    }
   }, [])
-
-  function overwriteBackup() {
-    sendToBackend('DU_EVENT_BACKUP_IMPORT_OVERWRITE')
-  }
-
+  
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card elevation={Elevation.ONE}>
         {error && <p>Error: {error}</p>}
         {importState[0] === 'INIT' && <p />}
-        {importState[0] === 'IMPORT_EXISTS' && (
-          <>
-            {`Seems like there's already an existing Account with the ${addr} address.
-            To import this backup you need to overwrite the existing account. Do you want to?`}
-            <br />
-            <Button
-              onClick={overwriteBackup}
-              type='submit'
-              text='Yes!'
-              className='override-backup'
-            />
-            <Button onClick={props.onClose} text={tx('cancel')} />
-          </>
-        )}
         {importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup'}
         {importState[0] !== 'IMPORT_COMPLETE' && (
           <DeltaProgressBar
