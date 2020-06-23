@@ -7,7 +7,6 @@ import {
   JsonContact,
   FullChat,
 } from '../../shared/shared-types'
-import { integerToHexColor } from '../../shared/util'
 import SplitOut from './splitout'
 
 const log = getLogger('main/deltachat/chatlist')
@@ -130,7 +129,7 @@ export default class DCChatList extends SplitOut {
       id: chat.id,
       name,
       avatarPath: chat.profileImage,
-      color: integerToHexColor(chat.color),
+      color: chat.color,
       lastUpdated: lastUpdated,
       summary: {
         text1: summary.text1,
@@ -215,7 +214,7 @@ export default class DCChatList extends SplitOut {
 
       contacts: contacts,
       contactIds,
-      color: integerToHexColor(chat.color),
+      color: chat.color,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
