@@ -49,7 +49,7 @@ export async function openCallWindow(locale: string, roomname: string) {
     '?roomname=' +
     roomname
   console.log(url)
-  win.loadURL(url)
+  win.loadURL('file://' + url)
 
   win.once('ready-to-show', () => {
     win.show()
