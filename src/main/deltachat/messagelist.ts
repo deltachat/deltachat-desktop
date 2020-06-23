@@ -104,9 +104,7 @@ export default class DCMessageList extends SplitOut {
       viewType,
       fromId,
       isMe,
-      contact: (contact
-        ? { ...contact }
-        : {}) as any,
+      contact: (contact ? { ...contact } : {}) as any,
       isInfo: msg.isInfo(),
       setupCodeBegin,
     }

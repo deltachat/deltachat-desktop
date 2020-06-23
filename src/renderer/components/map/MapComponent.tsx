@@ -571,9 +571,7 @@ export default class MapComponent extends React.Component<
           onChange={() => this.toggleContactLayer(contact.id, contact.hidden)}
           checked={contact.hidden}
         />
-        <label style={{ color: contact.color }}>
-          {contact.firstName}{' '}
-        </label>
+        <label style={{ color: contact.color }}>{contact.firstName} </label>
       </div>
     )
   }
