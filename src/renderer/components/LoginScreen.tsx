@@ -26,6 +26,7 @@ import filesizeConverter from 'filesize'
 import { DialogProps } from './dialogs/DialogController'
 import { DeltaBackend } from '../delta-remote'
 import { Screens } from '../ScreenController'
+import { IpcRendererEvent } from 'electron'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -37,33 +38,35 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
   const [error, setError] = useState(null)
   const [importState, setImportState] = useState(['INIT', {}])
 
-  let addr = ''
+
+  const onAll = (eventName:IpcRendererEvent, data1:string, data2:string) => { log.debug('ALL core events: ', eventName, data1, data2) }
+  const onImexProgress = (evt:any, progress:number) => {
+    log.debug('DC_EVENT_IMEX_PROGRESS', progress)
+    setImportProgress(progress)
+  }
+
+  const onError = (data1:any, data2:string) => {
+    setError('DC_EVENT_ERROR: ' + data2)
+  }
+
+  const onBackupImported = () => {
+    setImportProgress(1000)
+    setImportState(['IMPORT_COMPLETE', {}])
+  }
 
   useEffect(() => {
     log.debug('useEffect', ipcBackend)
-    let wasCanceled = false
-    ipcBackend.on('ALL', (eventName, data1, data2) =>
-      log.debug('ALL core events: ', eventName, data1, data2)
-    )
-    ipcBackend.on('DD_EVENT_CHATLIST_UPDATED', () => log.debug('test'))
-    ipcBackend.on('DD_EVENT_IMPORT_PROGRESS', (evt, progress) => {
-      log.debug('DC_EVENT_IMEX_PROGRESS', progress)
-      if (!wasCanceled) {
-        setImportProgress(progress)
-      }
-    })
+    ipcBackend.on('ALL', onAll)
+    ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
+    ipcBackend.on('DC_EVENT_ERROR', onError)
+    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', onBackupImported)
 
-    ipcBackend.on('DC_EVENT_ERROR', (data1, data2) => {
-      setError('DC_EVENT_ERROR: ' + data2)
-    })
-
-    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', (evt, a) => {
-      addr = a
-      if (!wasCanceled) {
-        setImportProgress(1000)
-        setImportState(['IMPORT_COMPLETE', {}])
-      }
-    })
+    return () => {
+      ipcBackend.removeListener('ALL', onAll)
+      ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
+      ipcBackend.removeListener('DC_EVENT_ERROR', onError)
+      ipcBackend.removeListener('DD_EVENT_BACKUP_IMPORTED', onBackupImported)
+    }
   }, [])
 
   return (

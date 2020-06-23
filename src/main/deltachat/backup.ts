@@ -62,34 +62,24 @@ export default class DCBackup extends SplitOut {
         dcnEvent.emit(eventStr, data1, data2)
       }
     )
-
+    
     dcnEvent.on('DC_EVENT_IMEX_PROGRESS', (progress: number) => {
-      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', progress / 2)
+      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', progress)
       if (progress === 0) {
         onError('UNKNOWN_ERROR')
       } else if (progress === 1000) {
         onSuccessfulImport()
       }
     })
-
-    function onSuccessfulMove(addr: string) {
-      sendToRenderer('DD_EVENT_BACKUP_IMPORTED', addr)
-      shutdown()
-    }
-
+    
     async function onSuccessfulImport() {
       const addr = binding.dcn_get_config(dcnContext, 'addr')
 
       log.debug(`backupImport: Closing dc instance...`)
       binding.dcn_context_unref(dcnContext)
 
-      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 600)
-
       const newPath = getNewAccountPath()
 
-      log.debug(`backupImport: ${newPath} does not exist, moving...`)
-      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', 700)
-      sendToRenderer('DD_EVENT_BACKUP_IMPORT_EXISTS', false)
       try {
         // future compatibiliy: remove a symlink if it exists
         if ((await fs.lstat(newPath)).isSymbolicLink()) {
