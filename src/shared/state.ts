@@ -16,7 +16,7 @@ export function getDefaultState(): AppState {
       enterKeySends: false,
       notifications: true,
       showNotificationContent: true,
-      locale: 'en',
+      locale: null, // if this is null, the system chooses the system language electron reports
       credentials: undefined,
       lastAccount: undefined,
       enableOnDemandLocationStreaming: false,
