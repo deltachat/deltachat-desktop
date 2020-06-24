@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Card,
-  Elevation,
-  H5,
-  Intent,
-} from '@blueprintjs/core'
+import { Card, Elevation, H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
-import {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from './DeltaDialog'
+import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DeltaBackend } from '../../delta-remote'
 
@@ -33,7 +24,7 @@ function ExportProgressDialog(props: DialogProps) {
     props.onClose()
   }
 
-  const onImexProgress = (_: any, [progress, _data2] :[number,any]) => {
+  const onImexProgress = (_: any, [progress, _data2]: [number, any]) => {
     console.log(progress)
     setProgress(progress)
   }

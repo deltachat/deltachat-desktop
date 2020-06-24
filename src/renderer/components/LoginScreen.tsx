@@ -30,22 +30,25 @@ import { IpcRendererEvent } from 'electron'
 
 const log = getLogger('renderer/components/LoginScreen')
 
-function ImportBackupProgressDialog({onClose, isOpen, backupFile}: DialogProps) {
-
+function ImportBackupProgressDialog({
+  onClose,
+  isOpen,
+  backupFile,
+}: DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState(null)
 
-
-  const onAll = (eventName:IpcRendererEvent, data1:string, data2:string) => { log.debug('ALL core events: ', eventName, data1, data2) }
-  const onImexProgress = (evt:any, [progress,_data2]:[number,any]) => {
+  const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
+    log.debug('ALL core events: ', eventName, data1, data2)
+  }
+  const onImexProgress = (evt: any, [progress, _data2]: [number, any]) => {
     log.debug('DC_EVENT_IMEX_PROGRESS xxx', progress)
     setImportProgress(progress)
   }
 
-  const onError = (data1:any, data2:string) => {
+  const onError = (data1: any, data2: string) => {
     setError('DC_EVENT_ERROR: ' + data2)
   }
-
 
   useEffect(() => {
     ;(async () => {
@@ -60,7 +63,7 @@ function ImportBackupProgressDialog({onClose, isOpen, backupFile}: DialogProps) 
         window.__changeScreen(Screens.Main)
       }
     })()
-    
+
     ipcBackend.on('ALL', onAll)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     ipcBackend.on('DC_EVENT_ERROR', onError)
@@ -106,7 +109,9 @@ const ImportButton = function ImportButton(props: any) {
       },
       (filenames: string[]) => {
         if (!filenames || !filenames.length) return
-        window.__openDialog(ImportBackupProgressDialog, {backupFile: filenames[0]})
+        window.__openDialog(ImportBackupProgressDialog, {
+          backupFile: filenames[0],
+        })
       }
     )
   }

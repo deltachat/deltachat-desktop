@@ -18,7 +18,7 @@ export default class DCBackup extends SplitOut {
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
   }
 
-  import(file: string) : Promise<DeltaChatAccount> {
+  import(file: string): Promise<DeltaChatAccount> {
     return new Promise((resolve, reject) => {
       async function moveImportedConfigFolder(
         _addr: string,
@@ -33,30 +33,28 @@ export default class DCBackup extends SplitOut {
           `backupImport: ${tmpConfigPath} successfully copied to ${newPath}`
         )
       }
-  
+
       const tmpConfigPath = tempy.directory()
       log.debug(`Creating dummy dc config for importing at ${tmpConfigPath}`)
       const db = path.join(tmpConfigPath, 'db.sqlite')
-  
+
       const dcnContext = binding.dcn_context_new(db)
-  
+
       const shutdown = () => {
         binding.dcn_stop_event_handler(dcnContext)
         binding.dcn_context_unref(dcnContext)
         log.debug(`closed context for backupImport ${file}`)
         reject()
       }
-  
-      
-  
+
       async function onSuccessfulImport() {
         const addr = binding.dcn_get_config(dcnContext, 'addr')
-  
+
         log.debug(`backupImport: Closing dc instance...`)
         binding.dcn_context_unref(dcnContext)
-  
+
         const accountPath = getNewAccountPath()
-  
+
         try {
           // future compatibiliy: remove a symlink if it exists
           if ((await fs.lstat(accountPath)).isSymbolicLink()) {
@@ -70,10 +68,10 @@ export default class DCBackup extends SplitOut {
         await moveImportedConfigFolder(addr, accountPath, false)
         resolve(getAccountInfo(accountPath))
       }
-  
+
       binding.dcn_start_event_handler(
         dcnContext,
-        async ( event: any, data1: any, data2: any) => {
+        async (event: any, data1: any, data2: any) => {
           const eventStr = EventId2EventName[event]
           log.debug('backup event:', eventStr, data1, data2)
           if (eventStr === 'DC_EVENT_IMEX_PROGRESS') {
@@ -87,12 +85,11 @@ export default class DCBackup extends SplitOut {
           this._controller.onAll(event, data1, data2)
         }
       )
-  
+
       log.debug(`openend context`)
       log.debug(`Starting backup import of ${file}`)
-  
+
       binding.dcn_imex(dcnContext, C.DC_IMEX_IMPORT_BACKUP, file, '')
     })
-
   }
 }
