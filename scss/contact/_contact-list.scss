@@ -15,61 +15,6 @@
     padding: 0px 20px;
   }
 
-  .checkbox {
-    margin-right: 10px;
-    input {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      margin-top: calc((64px - 20px) / 2);
-      border: solid;
-      border-radius: 3px;
-      border-width: 2px;
-      border-color: grey;
-      cursor: pointer;
-      &:checked {
-        border-color: var(--loginInputFocusColor);
-        background-color: var(--loginInputFocusColor);
-      }
-      &:disabled {
-        border-color: grey;
-        background-color: grey;
-        cursor: default;
-      }
-    }
-
-    .checkmark {
-      display: block;
-      position: relative;
-      top: -20px;
-      width: 20px;
-      height: 20px;
-      span {
-        display: block;
-        position: relative;
-        background-color: white;
-      }
-      span:nth-child(1) {
-        width: 9px;
-        height: 3px;
-        right: -1px;
-        bottom: -7px;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-      }
-      span:nth-child(2) {
-        height: 3px;
-        width: 14px;
-        top: 1px;
-        right: -6px;
-        -webkit-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-      }
-    }
-  }
-
   &[disabled] {
     input:hover,
     .checkmark:hover {
@@ -91,4 +36,58 @@
 div.create-chat-contact-list-wrapper {
   margin: -20px;
   background-color: var(--bp3DialogBgPrimary);
+}
+
+.delta-checkbox {
+  margin-right: 10px;
+  input {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: calc((64px - 20px) / 2);
+    border: solid;
+    border-radius: 3px;
+    border-width: 2px;
+    border-color: grey;
+    cursor: pointer;
+    &:checked {
+      border-color: var(--loginInputFocusColor);
+      background-color: var(--loginInputFocusColor);
+    }
+    &:disabled {
+      border-color: grey;
+      background-color: grey;
+      cursor: default;
+    }
+  }
+  .checkmark {
+    display: block;
+    position: relative;
+    top: -20px;
+    width: 20px;
+    height: 20px;
+    span {
+      display: block;
+      position: relative;
+      background-color: white;
+    }
+    span:nth-child(1) {
+      width: 9px;
+      height: 3px;
+      right: -1px;
+      bottom: -7px;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    span:nth-child(2) {
+      height: 3px;
+      width: 14px;
+      top: 1px;
+      right: -6px;
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+  }
 }
