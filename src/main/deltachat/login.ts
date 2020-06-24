@@ -70,7 +70,11 @@ export default class DCLoginController extends SplitOut {
     await dc.startIO()
     log.debug('Started IO')
 
-    this._controller.emit('ready', credentials)
+    this._controller.emit('ready')
+    // save last logged in account
+    delete app.state.saved.credentials
+    app.state.saved.lastAccount = accountDir
+
     log.info('dc_get_info', dc.getInfo())
 
     this._controller.accountDir = accountDir
@@ -165,31 +169,43 @@ Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANG
   }
 
   async getLastLoggedInAccount() {
-    // if we find saved credentials we login in with these
-    // which will create a new Deltachat instance which
-    // is bound to a certain account
     const savedCredentials = app.state.saved.credentials
-    if (
+    let selectedAccount: DeltaChatAccount | null = null
+    const lastAccount = app.state.saved.lastAccount
+    if (typeof lastAccount === 'string' && lastAccount.length >= 1) {
+      selectedAccount = app.state.logins.find(
+        account => account.path === lastAccount
+      )
+      if (!selectedAccount) {
+        log.error(
+          'Previous account not found!',
+          app.state.saved.lastAccount,
+          'is not in the list of found logins:',
+          app.state.logins
+        )
+      }
+    } else if (
       savedCredentials &&
       typeof savedCredentials === 'object' &&
       Object.keys(savedCredentials).length !== 0
     ) {
-      const selectedAccount = app.state.logins.find(
+      // (fallback to old system)
+      // if we find saved credentials we login in with these
+      // which will create a new Deltachat instance which
+      // is bound to a certain account
+      selectedAccount = app.state.logins.find(
         account => account.addr === savedCredentials.addr
       )
 
-      if (selectedAccount) {
-        return selectedAccount
+      if (!selectedAccount) {
+        log.warn(
+          'Previous account not found!',
+          app.state.saved.credentials,
+          'is not in the list of found logins:',
+          app.state.logins
+        )
       }
-
-      log.error(
-        'Previous account not found!',
-        app.state.saved.credentials,
-        'is not in the list of found logins:',
-        app.state.logins
-      )
-      return null
     }
-    return null
+    return selectedAccount
   }
 }

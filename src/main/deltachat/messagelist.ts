@@ -2,7 +2,6 @@ import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
-import { integerToHexColor } from '../../shared/util'
 
 import filesizeConverter from 'filesize'
 import mime from 'mime-types'
@@ -105,9 +104,7 @@ export default class DCMessageList extends SplitOut {
       viewType,
       fromId,
       isMe,
-      contact: (contact
-        ? { ...contact, color: integerToHexColor(contact.color) }
-        : {}) as any,
+      contact: (contact ? { ...contact } : {}) as any,
       isInfo: msg.isInfo(),
       setupCodeBegin,
     }
@@ -155,7 +152,7 @@ export default class DCMessageList extends SplitOut {
       id: msgId,
       authorProfileImage: author.getProfileImage(),
       author_name: author.getDisplayName(),
-      author_color: integerToHexColor(author.getColor()),
+      author_color: author.color,
       chat_name: chat.isSingle() ? null : chat.getName(),
       message: message.getText(),
       timestamp: message.getTimestamp(),

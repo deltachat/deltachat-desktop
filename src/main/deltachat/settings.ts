@@ -25,9 +25,22 @@ const serverFlagMap: { [key: string]: number } = {
 }
 
 export default class DCSettings extends SplitOut {
-  setConfig(key: string, value: string) {
+  setConfig(key: string, value: string): boolean {
     log.info(`Setting config ${key}:${value}`)
-    return this._dc.setConfig(key, String(value))
+    const result = this._dc.setConfig(key, String(value)) === 1
+
+    if (
+      (key === 'inbox_watch' ||
+        key === 'sentbox_watch' ||
+        key === 'mvbox_watch') &&
+      this._dc.isIORunning()
+    ) {
+      log.info(`It's a watch config, restarting IO...`)
+      this._dc.stopIO()
+      this._dc.startIO()
+    }
+
+    return result
   }
 
   getConfig(key: string) {

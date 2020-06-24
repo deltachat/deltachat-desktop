@@ -272,7 +272,7 @@ export default class MapComponent extends React.Component<
           mapData.marker.remove()
         }
         mapData.marker = new mapboxgl.Marker({
-          color: '#' + contact.color.toString(16),
+          color: contact.color,
         })
           .setLngLat([lastPoint.longitude, lastPoint.latitude])
           .setPopup(popup)
@@ -571,9 +571,7 @@ export default class MapComponent extends React.Component<
           onChange={() => this.toggleContactLayer(contact.id, contact.hidden)}
           checked={contact.hidden}
         />
-        <label style={{ color: '#' + contact.color.toString(16) }}>
-          {contact.firstName}{' '}
-        </label>
+        <label style={{ color: contact.color }}>{contact.firstName} </label>
       </div>
     )
   }
