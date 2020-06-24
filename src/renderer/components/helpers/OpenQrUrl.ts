@@ -47,9 +47,13 @@ export default async function processOpenQrUrl(
   const tx = window.translate
   let error = false
   const scheme = url.substring(0, url.lastIndexOf(':'))
-  const { ready } = await DeltaBackend.call('getState')
 
-  if (UrlSchemesAccountRequired.includes(scheme.toUpperCase()) && !ready) {
+  const screen = window.__screen
+
+  if (
+    UrlSchemesAccountRequired.includes(scheme.toUpperCase()) &&
+    screen !== Screens.Main
+  ) {
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
       cb: callback,
@@ -57,7 +61,7 @@ export default async function processOpenQrUrl(
     return
   }
   if (url.indexOf(DCACCOUNT_SCHEME) === 0) {
-    if (ready) {
+    if (screen !== Screens.Login) {
       window.__openDialog('AlertDialog', {
         message: tx('Please logout first'),
         cb: callback,
