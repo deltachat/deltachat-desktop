@@ -44,9 +44,14 @@ export async function openCallWindow(locale: string, roomname: string) {
 
   log.debug(roomname)
   const appPath = app.getAppPath()
+  const socketdomain = "aHR0cHM6Ly9jbG91ZDEzLmRl"; //btoa("https://cloud13.de");
+  const subdir = "L3AycC8="; //btoa('/p2p/');
   let url =
-    join(__dirname, '../../..//html-dist/call/index.html') +
-    '?roomname=' +
+    join(__dirname, '../../..//html-dist/call/index.html') + 
+    '?socketdomain='+socketdomain+
+    '&subdir='+subdir+
+    '&base64=true' +
+    '&roomname=' +
     roomname
   console.log(url)
   win.loadURL('file://' + url)

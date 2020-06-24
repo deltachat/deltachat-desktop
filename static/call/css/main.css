@@ -3,10 +3,12 @@ audio {
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0em;
   word-break: break-word;
+  font-family: Monospace;
+  overflow: hidden;
+  background: rgb(43, 42, 42);;
 }
 
 div#container {
@@ -28,4 +30,51 @@ video {
   left: 10px;
   font-size: 0.9em;
   z-index: 10;
+}
+
+.userPlaceholder {
+  width: 150px;
+  height: 140px;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background: #8e8effa1;
+  font-size: 8em;
+  padding-top: 10px;
+  color: #1a1a1a;
+  text-align: center;
+  position: relative;
+  top: 40%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul>li {
+  display: inline-block;
+  margin: 0px;
+  padding: 0;
+}
+
+.callBtn {
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 45px;
+  cursor: pointer;
+}
+
+.callBtn:hover {
+  background: #ababad40;
+}
+
+#cancelCallBtn {
+  color: #710000;
+}
+
+.fa-microphone-alt {
+  color: #044e04;
 }
