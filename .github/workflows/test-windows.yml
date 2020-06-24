@@ -7,7 +7,7 @@ on:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
 
 jobs:
-  upload-preview-linux:
+  test-windows:
     runs-on: windows-2019
     name: Test
     steps:
