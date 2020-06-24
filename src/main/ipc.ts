@@ -34,19 +34,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd)
 
-  dcController.on('ready', async (credentials: Credentials) => {
-    if (!state.logins.find(({ addr }) => addr === credentials.addr)) {
-      state.logins = await getLogins()
-    }
-    // update saved / last account + make sure no passwords are present
-    state.saved.credentials = {
-      ...credentials,
-      mail_pw: undefined,
-      send_pw: undefined,
-    } as Credentials
-    app.saveState()
-  })
-
   ipcMain.once('ipcReady', e => {
     app.ipcReady = true
     app.emit('ipcReady')

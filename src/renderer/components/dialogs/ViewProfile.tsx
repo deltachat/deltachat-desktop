@@ -6,7 +6,6 @@ import {
   DeltaDialogContent,
   DeltaDialogContentTextSeperator,
 } from './DeltaDialog'
-import { integerToHexColor } from '../../../shared/util'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
@@ -59,9 +58,7 @@ const ProfileInfoAvatar = ContactAvatar
 
 function ContactAvatar({ contact }: { contact: JsonContact }) {
   const { displayName, profileImage } = contact
-  const color = Number.isInteger(contact.color)
-    ? integerToHexColor(contact.color)
-    : ((contact.color as unknown) as string)
+  const color = contact.color
   return Avatar({
     avatarPath: profileImage,
     color,

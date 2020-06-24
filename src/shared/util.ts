@@ -1,7 +1,3 @@
-export function integerToHexColor(integerColor: number) {
-  return '#' + integerColor.toString(16)
-}
-
 export function isValidEmail(email: string) {
   // empty string is not allowed
   if (email === '') return false
