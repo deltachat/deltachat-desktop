@@ -7,7 +7,7 @@ const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { DeltaChatAccount } from '../shared/shared-types'
 
-export async function getLogins() {
+export async function getLogins(): Promise<DeltaChatAccount[]> {
   // search for old accounts and convert them
   await migrate(getConfigPath())
 
@@ -37,7 +37,7 @@ async function migrate(dir: string) {
   }
 }
 
-async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
+export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
   try {
     const config = await getConfig(path, ['addr', 'displayname'])
     if (typeof config.addr !== 'string') {

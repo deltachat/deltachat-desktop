@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Card,
-  Elevation,
-  H5,
-  Classes,
-  ProgressBar,
-  Intent,
-  H2,
-} from '@blueprintjs/core'
+import { Card, Elevation, H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
-import DeltaDialog, {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  SmallDialog,
-} from './DeltaDialog'
-import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contextMenu'
+import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
+import { DeltaBackend } from '../../delta-remote'
 
 const { remote } = window.electron_functions
 
@@ -36,7 +24,7 @@ function ExportProgressDialog(props: DialogProps) {
     props.onClose()
   }
 
-  const onImexProgress = (_: any, [progress, data2]: [number, number]) => {
+  const onImexProgress = (_: any, [progress, _data2]: [number, any]) => {
     setProgress(progress)
   }
   useEffect(() => {
@@ -65,13 +53,8 @@ function ExportProgressDialog(props: DialogProps) {
 
 function onBackupExport() {
   const tx = window.translate
-  const userFeedback = window.__userFeedback
-  const closeDialog = window.__closeDialog
   const openDialog = window.__openDialog
 
-  const confirmOpts = {
-    buttons: [tx('cancel'), tx('export_backup_desktop')],
-  }
   openDialog('ConfirmationDialog', {
     message: tx('pref_backup_export_explain'),
     yesIsPrimary: true,
@@ -86,7 +69,7 @@ function onBackupExport() {
       remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
         if (!filenames || !filenames.length) return
         openDialog(ExportProgressDialog)
-        ipcBackend.send('backupExport', filenames[0])
+        DeltaBackend.call('backup.export', filenames[0])
       })
     },
   })

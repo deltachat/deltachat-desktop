@@ -48,6 +48,7 @@
 - Update to deltachat-node v1.39.0 (async core)
 - Add open attachment to message context menu and increase clickable area (click to open attachment)
 - Overhauled login/update credentials flow & ui/ux to provide a more stable and clear experience
+- Importing a backup now automatically loads the imported account
 - Save account path instead of account addr for remembering the last selected account
 
 ### Technical
