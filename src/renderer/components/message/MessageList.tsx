@@ -67,12 +67,22 @@ export default function MessageList({
   useEffect(() => {
     if (scrollToBottomIfClose === false) return
 
+    const {scrollTop, scrollHeight, clientHeight} = messageListRef.current
+    const scrollBottom = scrollTop + clientHeight
+
+    const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
+
     log.debug(
       'scrollToBottomIfClose',
-      messageListRef.current.scrollTop,
-      messageListRef.current.scrollHeight
+      scrollBottom,
+      scrollHeight,
+      shouldScrollToBottom
     )
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+
+    if (shouldScrollToBottom) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    }
+    
     chatStoreDispatch({
       type: 'FINISHED_SCROLL',
       payload: 'SCROLLED_TO_BOTTOM',

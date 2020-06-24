@@ -80,15 +80,16 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       messages: {
         ...state.messages,
         ...payload.messagesIncoming,
-        scrollToBottomIfClose: true
-      }
+        
+      },
+      scrollToBottomIfClose: true
     }
     // type SCROLL_COMPLETE ?
   } else if (type === 'FINISHED_SCROLL') {
     if (payload === 'SCROLLED_TO_LAST_PAGE') {
       return { ...state, scrollToLastPage: false, scrollHeight: 0 }
     } else if (payload === 'SCROLLED_TO_BOTTOM') {
-      return { ...state, scrollToBottom: false }
+      return { ...state, scrollToBottom: false, scrollToBottomIfClose: false }
     }
   } else if (type === 'UI_DELETE_MESSAGE') {
     const msgId = payload
