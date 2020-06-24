@@ -75,7 +75,6 @@ export default class DCBackup extends SplitOut {
           const eventStr = EventId2EventName[event]
           log.debug('backup event:', eventStr, data1, data2)
           if (eventStr === 'DC_EVENT_IMEX_PROGRESS') {
-            console.log('its DC_EVENT_IMEX_')
             if (data1 === 0) {
               shutdown()
             } else if (data1 === 1000) {

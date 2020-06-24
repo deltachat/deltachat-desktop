@@ -25,7 +25,6 @@ function ExportProgressDialog(props: DialogProps) {
   }
 
   const onImexProgress = (_: any, [progress, _data2]: [number, any]) => {
-    console.log(progress)
     setProgress(progress)
   }
   useEffect(() => {
