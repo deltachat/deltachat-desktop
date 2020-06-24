@@ -30,6 +30,7 @@
 - Fix offline toast displayed before login #1729
 - Fix "Authentication failed" notification does not disappear even after successfull login #1594
 - Fix login button staying disabled on error #1661
+- Fix use system language until the user chooses their language #1712
 
 ### Changed
 
