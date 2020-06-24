@@ -9,7 +9,7 @@ on:
 jobs:
   upload-preview-linux:
     runs-on: windows-2019
-    name: Upload Preview
+    name: Build & Test (unit + e2e)
     steps:
     - name: Get Pullrequest ID
       id: prepare
@@ -30,29 +30,18 @@ jobs:
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
-    - name: npm install, build, test
+    - name: npm install
       run: |
         npm install
+    - name: npm build
+      run: |
         npm run build
-    - name: electron builder
-      run: npx electron-builder --windows || true
-    - name: renaming
+    - name: npm test
       run: |
-        cd dist
-        mkdir preview
-        mv *.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.exe
-        dir preview
-        cd ..
-    - name: upload folder
-      if: steps.prepare.outputs.uploadtoserver
+        npm test
+    - name: npm test-integration
       run: |
-        echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
-        chmod 600 __TEMP_INPUT_KEY_FILE
-        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r dist/preview/ "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
-    - name: "Post links to details"
-      if: steps.prepare.outputs.uploadtoserver
-      run: |
-        export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
-        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
-        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
-        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+        npm run test-integration
+      env:
+        DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
+        NODE_ENV: test
