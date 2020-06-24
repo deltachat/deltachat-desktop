@@ -44,12 +44,12 @@ div.group-image-wrapper {
     padding: 4px;
     left: -11px;
     top: -2px;
-    background-color: #173aaf;
+    background-color: var(--colorPrimary);
     border-radius: 50%;
     z-index: 5;
     &:hover {
       cursor: pointer;
-      background-color: #102875;
+      opacity: 0.96;
     }
     div {
       height: 20px;
