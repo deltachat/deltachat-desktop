@@ -1,22 +1,74 @@
 const fs = require('fs-extra')
 const { join } = require('path')
 const files = [
-  '!bin/',
-  '!jenkins/',
+  // default
+  '**/*',
+  '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
+  '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}',
+  '!**/node_modules/*.d.ts',
+  '!**/node_modules/.bin',
+  '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
+  '!.editorconfig',
+  '!**/._*',
+  '!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}',
+  '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
+  '!**/{appveyor.yml,.travis.yml,circle.yml}',
+  '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}',
+  // misc unrelated stuff
   '!README_ASSETS/',
   '!README.md',
-  '!.*',
+  '!bin/',
+  '!.*', // dotfiles like prettier configuration
+  '!test/',
+  '!jenkins/',
+  '!ci_scripts/',
+  '!**/.github/*',
+  '!electron-builder.json5',
+  '!docs/', // docs that are hidden in asar are useless
+  '!dist/', // don't bundle other packages
+  // Source files
   '!src/',
   '!scss/',
   '!static/',
-  '!test/',
-  '!ci_scripts/',
-  '!tsc-dist/renderer/',
+  '!**/*.scss',
+  '!**/*.ts',
   '!**/*.d.ts',
+  '!_locales/*.xml',
+  '!build/',
+  // Build artifacts
+  '!tsc-dist/renderer/',
   '!**/*.tsbuildinfo',
   '!**/*.js.map',
   '!**/*.css.map',
-  '!html-dist/report.html',
+  '!html-dist/report.htm',
+  '!node_modules/typescript/',
+  '!node_modules/@babel/',
+  // remove stuff that was already bundled by parcel
+  '!node_modules/mapbox-gl/',
+  // '!node_modules/@blueprintjs/',
+  '!node_modules/vt-pbf/',
+  // '!node_modules/emoji-mart/',
+  '!node_modules/react-dom/',
+  '!node_modules/styled-components/',
+  '!node_modules/emoji-js-clean/',
+  // '!node_modules/@mapbox/',
+  '!node_modules/react/',
+  '!node_modules/react-contextmenu/',
+  '!node_modules/react-transition-group/',
+  '!node_modules/css-to-react-native',
+  '!node_modules/simple-markdown',
+  '!node_modules/babel-plugin-styled-components',
+  '!node_modules/wolfy87-eventemitter',
+  // re-add needed css stuff -> re-adding doesn't seem to work at this point in time
+  // 'node_modules/normalize.css/normalize.css',
+  // 'node_modules/@blueprintjs/core/lib/css/blueprint.css',
+  // 'node_modules/@blueprintjs/icons/resources/icons/',
+  // 'node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css',
+  // 'node_modules/emoji-mart/css/emoji-mart.css',
+  // 'node_modules/mapbox-gl/dist/mapbox-gl.css',
+  // cleanup deltachat-node
+  //'!node_modules/deltachat-node/deltachat-core-rust/', - todo only exclude what is not needed (if no prebuilds are availible)
+  '!node_modules/deltachat-node/src',
 ]
 
 const build = {}
@@ -28,14 +80,32 @@ build['protocols'] = {
 }
 
 build['files'] = files
+build['asarUnpack'] = ['node_modules/deltachat-node/']
 
 build['afterPack'] = 'build/afterPackHook.js'
+build['afterSign'] = 'build/notarize.js'
 
 // platform specific
+
+const PREBUILD_FILTERS = {
+  NOT_LINUX: '!node_modules/deltachat-node/prebuilds/linux-x64/${/*}',
+  NOT_MAC: '!node_modules/deltachat-node/prebuilds/darwin-x64/${/*}',
+  NOT_WINDOWS: '!node_modules/deltachat-node/prebuilds/win32-x64/${/*}',
+}
+
 build['mac'] = {
   category: 'public.app-category.social-networking',
+  appId: 'chat.delta.desktop.electron',
+  icon: 'resources/icon.icns',
+  hardenedRuntime: true,
+  gatekeeperAssess: false,
+  entitlements: 'build/entitlements.mac.plist',
+  entitlementsInherit: 'build/entitlements.mac.plist',
+  files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
 }
+
 build['dmg'] = {
+  sign: false,
   contents: [
     {
       x: 220,
@@ -56,16 +126,18 @@ build['linux'] = {
     comment: 'Delta Chat email-based messenger',
     keywords: 'dc;chat;delta;messaging;messenger;email',
   },
+  files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
 }
 build['win'] = {
   icon: 'images/deltachat.ico',
+  files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
 }
 
 build['appx'] = {
   applicationId: build['appId'],
   publisher: 'CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E',
   publisherDisplayName: 'merlinux',
-  identityName:'merlinux.DeltaChat'
+  identityName: 'merlinux.DeltaChat',
 }
 
 // module.exports = build
