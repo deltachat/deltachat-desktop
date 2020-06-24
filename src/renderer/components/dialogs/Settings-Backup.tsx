@@ -15,6 +15,7 @@ import {
   SmallDialog,
 } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
+import { DeltaBackend } from '../../delta-remote'
 
 const { remote } = window.electron_functions
 
@@ -62,13 +63,8 @@ function ExportProgressDialog(props: DialogProps) {
 
 function onBackupExport() {
   const tx = window.translate
-  const userFeedback = window.__userFeedback
-  const closeDialog = window.__closeDialog
   const openDialog = window.__openDialog
 
-  const confirmOpts = {
-    buttons: [tx('cancel'), tx('export_backup_desktop')],
-  }
   openDialog('ConfirmationDialog', {
     message: tx('pref_backup_export_explain'),
     yesIsPrimary: true,
@@ -83,7 +79,7 @@ function onBackupExport() {
       remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
         if (!filenames || !filenames.length) return
         openDialog(ExportProgressDialog)
-        ipcBackend.send('backupExport', filenames[0])
+        DeltaBackend.call('backup.export', filenames[0])
       })
     },
   })

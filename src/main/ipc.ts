@@ -114,11 +114,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }, 0)
   }
 
-  ipcMain.on('backupImport', (e, fileName) =>
-    dcController.backup.import(fileName)
-  )
-  ipcMain.on('backupExport', (e, dir) => dcController.backup.export(dir))
-
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dcController.settings.setConfig(key, value)
   })

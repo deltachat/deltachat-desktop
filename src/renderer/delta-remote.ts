@@ -52,7 +52,7 @@ class DeltaRemote {
   ): Promise<number>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
-  call(fnName: 'backup.import', file: string): Promise<void>
+  call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>

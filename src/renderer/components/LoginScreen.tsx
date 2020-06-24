@@ -30,20 +30,16 @@ import { IpcRendererEvent } from 'electron'
 
 const log = getLogger('renderer/components/LoginScreen')
 
-const ImportDialogContent = React.memo(function ImportDialogContent(props: {
-  onClose: (ev: React.SyntheticEvent) => void
-}) {
-  const tx = window.translate
-  const [importProgress, setImportProgress] = useState(0)
+function ImportBackupProgressDialog({onClose, isOpen, backupFile}: DialogProps) {
+
+  const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState(null)
-  const [importState, setImportState] = useState(['INIT', {}])
 
 
   const onAll = (eventName:IpcRendererEvent, data1:string, data2:string) => { log.debug('ALL core events: ', eventName, data1, data2) }
   const onImexProgress = (evt:any, [progress,_data2]:[number,any]) => {
-    log.debug('DC_EVENT_IMEX_PROGRESS', progress)
+    log.debug('DC_EVENT_IMEX_PROGRESS xxx', progress)
     setImportProgress(progress)
-    if (progress === 1000) setImportState(['IMPORT_COMPLETE', {}])
   }
 
   const onError = (data1:any, data2:string) => {
@@ -52,6 +48,19 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
 
 
   useEffect(() => {
+    ;(async () => {
+      let account
+      try {
+        account = await DeltaBackend.call('backup.import', backupFile)
+      } catch (err) {
+        return
+      }
+      onClose()
+      if ((await DeltaBackend.call('login.loadAccount', account)) === true) {
+        window.__changeScreen(Screens.Main)
+      }
+    })()
+    
     ipcBackend.on('ALL', onAll)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     ipcBackend.on('DC_EVENT_ERROR', onError)
@@ -63,26 +72,30 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
     }
   }, [])
 
+  const tx = window.translate
   return (
-    <div className={Classes.DIALOG_BODY}>
-      <Card elevation={Elevation.ONE}>
-        {error && <p>Error: {error}</p>}
-        {importState[0] === 'INIT' && <p />}
-        {importState[0] === 'IMPORT_COMPLETE' && 'Successfully imported backup'}
-        {importState[0] !== 'IMPORT_COMPLETE' && (
+    <DeltaDialog
+      onClose={onClose}
+      title={tx('import_backup_title')}
+      // canOutsideClickClose
+      isOpen={isOpen}
+      style={{ top: '40%' }}
+    >
+      <div className={Classes.DIALOG_BODY}>
+        <Card elevation={Elevation.ONE}>
+          {error && <p>Error: {error}</p>}
           <DeltaProgressBar
             progress={importProgress}
             intent={error === false ? Intent.SUCCESS : Intent.DANGER}
           />
-        )}
-      </Card>
-    </div>
+        </Card>
+      </div>
+    </DeltaDialog>
   )
-})
+}
 
 const ImportButton = function ImportButton(props: any) {
   const tx = window.translate
-  const [showDialog, setShowDialog] = useState(false)
 
   function onClickImportBackup() {
     remote.dialog.showOpenDialog(
@@ -93,14 +106,9 @@ const ImportButton = function ImportButton(props: any) {
       },
       (filenames: string[]) => {
         if (!filenames || !filenames.length) return
-        sendToBackend('backupImport', filenames[0])
-        setShowDialog(true)
+        window.__openDialog(ImportBackupProgressDialog, {backupFile: filenames[0]})
       }
     )
-  }
-  const onHandleClose = () => {
-    setShowDialog(false)
-    props.refreshAccounts()
   }
 
   return (
@@ -108,49 +116,22 @@ const ImportButton = function ImportButton(props: any) {
       <div className='delta-blue-button' onClick={onClickImportBackup}>
         <p>{tx('import_backup_title')}</p>
       </div>
-      {showDialog && (
-        <DeltaDialog
-          onClose={onHandleClose}
-          title={tx('import_backup_title')}
-          // canOutsideClickClose
-          isOpen={showDialog}
-          style={{ top: '40%' }}
-        >
-          <ImportDialogContent onClose={onHandleClose} />
-        </DeltaDialog>
-      )}
     </>
   )
 }
 
-const ScanQRCode = React.memo(function ScanQRCode(_) {
+const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   const { openDialog } = useContext(ScreenContext)
   const tx = window.translate
-  const [showDialog, setShowDialog] = useState(false)
 
-  function onClickScanQr() {
-    openDialog('ImportQrCode')
-  }
-  const onHandleClose = () => {
-    setShowDialog(false)
-  }
+  const onClickScanQr = () => openDialog('ImportQrCode')
 
   return (
-    <Fragment>
+    <>
       <div className='delta-blue-button' onClick={onClickScanQr}>
         <p>{tx('qrscan_title')}</p>
       </div>
-      {showDialog && (
-        <DeltaDialog
-          onClose={onHandleClose}
-          title={tx('qrscan_title')}
-          isOpen={showDialog}
-          style={{ top: '40%' }}
-        >
-          <ImportDialogContent onClose={onHandleClose} />
-        </DeltaDialog>
-      )}
-    </Fragment>
+    </>
   )
 })
 
@@ -251,7 +232,7 @@ export default function LoginScreen(props: any) {
             onClick={onClickLogin}
           />
           <ImportButton refreshAccounts={refreshAccounts} />
-          <ScanQRCode />
+          <ScanQRCodeButton />
         </Card>
       </div>
     </div>
