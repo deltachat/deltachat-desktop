@@ -9,8 +9,8 @@ export const GroupImage = (props: {
   onSetGroupImage: (event: React.SyntheticEvent) => void
   onUnsetGroupImage: (event: React.SyntheticEvent) => void
   style?: React.CSSProperties
-  groupName?: string,
-  isVerified?: boolean,
+  groupName?: string
+  isVerified?: boolean
   color: string
 }) => {
   const tx = window.translate
@@ -21,7 +21,7 @@ export const GroupImage = (props: {
     style,
     groupName,
     isVerified,
-    color
+    color,
   } = props
   const realOpenContextMenu = useRef(null)
 

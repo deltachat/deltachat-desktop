@@ -221,7 +221,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   errorMissingGroupName,
   setErrorMissingGroupName,
   color,
-  isVerified
+  isVerified,
 }: {
   groupImage: string
   onSetGroupImage: (event: React.SyntheticEvent) => void

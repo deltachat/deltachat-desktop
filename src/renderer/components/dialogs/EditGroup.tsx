@@ -201,7 +201,7 @@ function EditGroupInner(props: {
                 errorMissingGroupName,
                 setErrorMissingGroupName,
                 color: chat.color,
-                isVerified: chat.isVerified
+                isVerified: chat.isVerified,
               })}
               <div className='group-seperator'>
                 {tx(
