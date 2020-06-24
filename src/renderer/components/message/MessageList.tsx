@@ -165,14 +165,12 @@ export const MessageListInner = React.memo(
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
-          {messageIds.length < 1 ? (
+          {messageIds.length === 0 && (
             <li>
               <div className='info-message big'>
                 <p>{emptyChatMessage}</p>
               </div>
             </li>
-          ) : (
-            ''
           )}
           {_messageIdsToShow.map((messageId, i) => {
             if (messageId === C.DC_MSG_ID_DAYMARKER) {
