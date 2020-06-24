@@ -8,7 +8,7 @@
 - Theming (some Dark themes and the possibibilty to add even custom ones)
 - Mute Chats
 - Add Search for Contacts and Messages
-- (first half of) autodelete setting
+- Add autodelete settings
 - add Login migration upgrade info
 - add git rev to the version in the about dialog
 - Oportunistic reminder to update after 90days
