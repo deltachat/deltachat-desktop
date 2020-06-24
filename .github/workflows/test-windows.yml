@@ -9,7 +9,7 @@ on:
 jobs:
   upload-preview-linux:
     runs-on: windows-2019
-    name: Build & Test (unit + e2e)
+    name: Test
     steps:
     - name: Get Pullrequest ID
       id: prepare
@@ -30,18 +30,19 @@ jobs:
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
-    - name: npm install
+    - name: npm ci
       run: |
-        npm install
+        npm ci
     - name: npm build
       run: |
         npm run build
     - name: npm test
       run: |
         npm test
-    - name: npm test-integration
-      run: |
-        npm run test-integration
+    - uses: DevExpress/testcafe-action@latest
+      with:
+        version: "1.8.0"
+        args: "--skip-js-errors electron:. ./test/testcafe/test_ci.js"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test

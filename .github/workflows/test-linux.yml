@@ -1,26 +1,27 @@
-name: test-e2e-ci
+name: Linux
 
 on: [push]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
+    name: Test
+    runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: npm install and build
+    - name: npm ci
       run: |
         npm ci
+    - name: npm run build
+      run: |
         npm run build
-      env:
-        CI: true
+    - name: npm test
+      run: |
+        npm test
     - uses: DevExpress/testcafe-action@latest
       with:
         version: "1.8.0"
