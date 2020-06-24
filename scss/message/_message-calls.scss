@@ -27,15 +27,19 @@
 .phone-accept-button {
   border-radius: 50%;
   border: 1px solid gray;
-  background-color: #b4ffb4;
+  background-color: #ffffff;
 }
 
-.phone-deny-button {
-  border-radius: 50%;
-  border: 1px solid gray;
-  background-color: #ff9e9e;
-  margin-left: 5px;
+.phone-accept-button:hover {
+  background-color: #f1f1f1;
 }
+
+// .phone-deny-button {
+//   border-radius: 50%;
+//   border: 1px solid gray;
+//   background-color: #ffffff;
+//   margin-left: 5px;
+// }
 
 .call-inc-text {
   text-align: center;
