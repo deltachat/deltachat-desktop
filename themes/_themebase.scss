@@ -55,6 +55,7 @@ $hover-contrast-change: 2%;
   /* Chat List - search */
   --cli-search-result-divider: #{changeContrast($bgSecondary, 5%)};
   --cli-search-result-divider-border: #{changeContrast($bgSecondary, 10%)};
+  --cli-search-result-divider-border-width: 2px;
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};

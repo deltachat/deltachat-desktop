@@ -10,6 +10,8 @@ export const GroupImage = (props: {
   onUnsetGroupImage: (event: React.SyntheticEvent) => void
   style?: React.CSSProperties
   groupName?: string
+  isVerified?: boolean
+  color: string
 }) => {
   const tx = window.translate
   const {
@@ -18,6 +20,8 @@ export const GroupImage = (props: {
     onUnsetGroupImage,
     style,
     groupName,
+    isVerified,
+    color,
   } = props
   const realOpenContextMenu = useRef(null)
 
@@ -39,6 +43,8 @@ export const GroupImage = (props: {
       <Avatar
         displayName={groupName}
         avatarPath={groupImage}
+        isVerified={isVerified}
+        color={color}
         onClick={showAvatarFullscreen}
         style={{ ...style, cursor: 'pointer' }}
         large
