@@ -15,6 +15,6 @@
     font-weight: 200;
     color: var(--globaltext);
     background: var(--cli-search-result-divider);
-    border-bottom: 2px solid var(--cli-search-result-divider-border);
+    border-bottom: var(--cli-search-result-divider-border-width) solid var(--cli-search-result-divider-border);
   }
 }
