@@ -5,9 +5,7 @@ import binding from 'deltachat-node/binding'
 import { EventId2EventName } from 'deltachat-node/dist/constants'
 import tempy from 'tempy'
 import fs from 'fs-extra'
-import { ipcMain } from 'electron'
 import path from 'path'
-import { EventEmitter } from 'events'
 import { getNewAccountPath } from '../logins'
 
 import { getLogger } from '../../shared/logger'
@@ -20,8 +18,6 @@ export default class DCBackup extends SplitOut {
   }
 
   import(file: string) {
-    const { sendToRenderer } = this._controller
-
     async function moveImportedConfigFolder(
       _addr: string,
       newPath: string,
@@ -48,30 +44,24 @@ export default class DCBackup extends SplitOut {
       log.debug(`closed context for backupImport ${file}`)
     }
 
-    const onError = (err: any) => {
-      sendToRenderer('DD_EVENT_BACKUP_IMPORT_ERROR', err)
-      shutdown()
-    }
-
-    const dcnEvent = new EventEmitter()
     binding.dcn_start_event_handler(
       dcnContext,
-      (event: any, data1: any, data2: any) => {
+      async ( event: any, data1: any, data2: any) => {
         const eventStr = EventId2EventName[event]
         log.debug('backup event:', eventStr, data1, data2)
-        dcnEvent.emit(eventStr, data1, data2)
+        if (eventStr === 'DC_EVENT_IMEX_PROGRESS') {
+          console.log('its DC_EVENT_IMEX_')
+          if (data1 === 0) {
+            shutdown()
+          } else if (data1 === 1000) {
+            console.log('its thousand!')
+            await onSuccessfulImport()
+          }
+        }
+        this._controller.onAll(event, data1, data2)
       }
     )
-    
-    dcnEvent.on('DC_EVENT_IMEX_PROGRESS', (progress: number) => {
-      sendToRenderer('DD_EVENT_IMPORT_PROGRESS', progress)
-      if (progress === 0) {
-        onError('UNKNOWN_ERROR')
-      } else if (progress === 1000) {
-        onSuccessfulImport()
-      }
-    })
-    
+
     async function onSuccessfulImport() {
       const addr = binding.dcn_get_config(dcnContext, 'addr')
 

@@ -3,21 +3,17 @@ import {
   Card,
   Elevation,
   H5,
-  Classes,
-  ProgressBar,
   Intent,
-  H2,
 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
-import DeltaDialog, {
+import {
   DeltaDialogBody,
   DeltaDialogContent,
   SmallDialog,
 } from './DeltaDialog'
-import { isOpen } from '@blueprintjs/core/lib/esm/components/context-menu/contextMenu'
 import { DeltaProgressBar } from '../Login-Styles'
 
 const { remote } = window.electron_functions
@@ -36,7 +32,8 @@ function ExportProgressDialog(props: DialogProps) {
     props.onClose()
   }
 
-  const onImexProgress = (_: any, [progress, data2]: [number, number]) => {
+  const onImexProgress = (_: any, [progress, _data2] :[number,any]) => {
+    console.log(progress)
     setProgress(progress)
   }
   useEffect(() => {

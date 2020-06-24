@@ -40,32 +40,26 @@ const ImportDialogContent = React.memo(function ImportDialogContent(props: {
 
 
   const onAll = (eventName:IpcRendererEvent, data1:string, data2:string) => { log.debug('ALL core events: ', eventName, data1, data2) }
-  const onImexProgress = (evt:any, progress:number) => {
+  const onImexProgress = (evt:any, [progress,_data2]:[number,any]) => {
     log.debug('DC_EVENT_IMEX_PROGRESS', progress)
     setImportProgress(progress)
+    if (progress === 1000) setImportState(['IMPORT_COMPLETE', {}])
   }
 
   const onError = (data1:any, data2:string) => {
     setError('DC_EVENT_ERROR: ' + data2)
   }
 
-  const onBackupImported = () => {
-    setImportProgress(1000)
-    setImportState(['IMPORT_COMPLETE', {}])
-  }
 
   useEffect(() => {
-    log.debug('useEffect', ipcBackend)
     ipcBackend.on('ALL', onAll)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     ipcBackend.on('DC_EVENT_ERROR', onError)
-    ipcBackend.on('DD_EVENT_BACKUP_IMPORTED', onBackupImported)
 
     return () => {
       ipcBackend.removeListener('ALL', onAll)
       ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
       ipcBackend.removeListener('DC_EVENT_ERROR', onError)
-      ipcBackend.removeListener('DD_EVENT_BACKUP_IMPORTED', onBackupImported)
     }
   }, [])
 
