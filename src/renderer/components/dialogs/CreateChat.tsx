@@ -220,6 +220,8 @@ export const GroupSettingsSetNameAndProfileImage = ({
   setGroupName,
   errorMissingGroupName,
   setErrorMissingGroupName,
+  color,
+  isVerified
 }: {
   groupImage: string
   onSetGroupImage: (event: React.SyntheticEvent) => void
@@ -228,6 +230,8 @@ export const GroupSettingsSetNameAndProfileImage = ({
   setGroupName: (newGroupName: string) => void
   errorMissingGroupName: boolean
   setErrorMissingGroupName: React.Dispatch<React.SetStateAction<boolean>>
+  color?: string
+  isVerified?: boolean
 }) => {
   const tx = window.translate
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,6 +246,8 @@ export const GroupSettingsSetNameAndProfileImage = ({
         onSetGroupImage={onSetGroupImage}
         onUnsetGroupImage={onUnsetGroupImage}
         groupName={groupName}
+        color={color}
+        isVerified={isVerified}
       />
       <input
         className='group-name-input'

@@ -44,7 +44,6 @@ export default function EditGroup(props: {
 }
 
 export const useEditGroup = (
-  verified: boolean,
   groupName: string,
   groupImage: string,
   groupMembers: number[],
@@ -125,7 +124,6 @@ function EditGroupInner(props: {
     addRemoveGroupMember,
   ] = useGroupMembers(chat.contacts)
   const [groupId, onUpdateGroup] = useEditGroup(
-    false,
     groupName,
     groupImage,
     groupMembers,
@@ -202,6 +200,8 @@ function EditGroupInner(props: {
                 setGroupName,
                 errorMissingGroupName,
                 setErrorMissingGroupName,
+                color: chat.color,
+                isVerified: chat.isVerified
               })}
               <div className='group-seperator'>
                 {tx(
