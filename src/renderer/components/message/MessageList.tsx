@@ -39,6 +39,7 @@ export default function MessageList({
       messages,
       messageIds,
       scrollToBottom,
+      scrollToBottomIfClose,
       scrollToLastPage,
       scrollHeight,
     },
@@ -62,6 +63,21 @@ export default function MessageList({
       payload: 'SCROLLED_TO_BOTTOM',
     })
   }, [scrollToBottom])
+
+  useEffect(() => {
+    if (scrollToBottomIfClose === false) return
+
+    log.debug(
+      'scrollToBottomIfClose',
+      messageListRef.current.scrollTop,
+      messageListRef.current.scrollHeight
+    )
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    chatStoreDispatch({
+      type: 'FINISHED_SCROLL',
+      payload: 'SCROLLED_TO_BOTTOM',
+    })
+  }, [scrollToBottomIfClose])
 
   useEffect(() => {
     if (scrollToLastPage === false) return

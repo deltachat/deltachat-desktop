@@ -33,6 +33,7 @@ class state implements FullChat {
   messages: { [key: number]: MessageType | { msg: null } } = {}
   oldestFetchedMessageIndex = -1
   scrollToBottom = false // if true the UI will scroll to bottom
+  scrollToBottomIfClose = false
   scrollToLastPage = false // after fetching more messages reset scroll bar to old position
   scrollHeight = 0
   countFetchedMessages = 0
@@ -79,6 +80,7 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       messages: {
         ...state.messages,
         ...payload.messagesIncoming,
+        scrollToBottomIfClose: true
       }
     }
     // type SCROLL_COMPLETE ?
