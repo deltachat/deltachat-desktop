@@ -135,6 +135,7 @@ export default function MainScreen() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
+                  width: '100%'
                 }}
                 onClick={onTitleClick}
               >
