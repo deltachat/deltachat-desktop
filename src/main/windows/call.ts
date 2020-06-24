@@ -52,6 +52,7 @@ export async function openCallWindow(locale: string, roomname: string) {
     socketdomain +
     '&subdir=' +
     subdir +
+    //'&username=INSERT_USERNAME_HERE' + //Add username so we can show it inside the webRtc App
     '&base64=true' +
     '&roomname=' +
     roomname
