@@ -17,9 +17,8 @@
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
-    min-height: 150px;
-    max-height: 300px;
-    max-width: 40vw;
+    height: 200px;
+    max-width: 100%;
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -170,3 +169,4 @@
     }
   }
 }
+
