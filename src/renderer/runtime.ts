@@ -1,6 +1,7 @@
 import { ipcBackend } from './ipc'
 import { RC_Config, ExtendedApp } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
+import { DeltaBackend } from './delta-remote'
 
 const { remote, openExternal, openItem } = window.electron_functions
 
@@ -62,8 +63,9 @@ class Browser implements Runtime {
 }
 
 class Electron implements Runtime {
-  openCallWindow(callUrl: string): void {
-    ipcBackend.send('call', window.localeData.locale, callUrl)
+  async openCallWindow(callUrl: string): Promise<void> {
+    const username = await DeltaBackend.call('settings.getConfig', 'displayname')
+    ipcBackend.send('call', window.localeData.locale, callUrl, username)
   }
   openLink(link: string): void {
     openExternal(link)

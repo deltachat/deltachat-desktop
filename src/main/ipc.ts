@@ -125,8 +125,8 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     await openHelpWindow(locale)
   })
 
-  ipcMain.on('call', async (_ev, locale, callUrl) => {
-    await openCallWindow(locale, callUrl)
+  ipcMain.on('call', async (_ev, locale, callUrl, username) => {
+    await openCallWindow(locale, callUrl, username)
   })
 
   ipcMain.on('reload-main-window', () => {

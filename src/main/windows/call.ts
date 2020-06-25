@@ -10,7 +10,7 @@ const app = rawApp as ExtendedAppMainProcess
 
 let win: BrowserWindow | null = null
 
-export async function openCallWindow(locale: string, roomname: string) {
+export async function openCallWindow(locale: string, roomname: string, username:string) {
   if (win) {
     win.focus()
     return
@@ -52,7 +52,7 @@ export async function openCallWindow(locale: string, roomname: string) {
     socketdomain +
     '&subdir=' +
     subdir +
-    //'&username=INSERT_USERNAME_HERE' + //Add username so we can show it inside the webRtc App
+    `&username=${encodeURIComponent(username)}` + //Add username so we can show it inside the webRtc App
     '&base64=true' +
     '&roomname=' +
     roomname
