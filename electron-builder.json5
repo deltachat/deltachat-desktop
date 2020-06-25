@@ -125,7 +125,7 @@
     gatekeeperAssess: false,
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mac.plist',
-    provisioningProfile: '../embeded.provisionprofile',
+    provisioningProfile: './../embeded.provisionprofile',
   },
   dmg: {
     sign: false,

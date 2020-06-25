@@ -106,7 +106,7 @@ build['mas'] = {
   gatekeeperAssess: false,
   entitlements: 'build/entitlements.mac.plist',
   entitlementsInherit: 'build/entitlements.mac.plist',
-  provisioningProfile: '../embeded.provisionprofile',
+  provisioningProfile: './../embeded.provisionprofile',
   // binaries // Paths of any extra binaries that need to be signed.
 }
 
