@@ -80,9 +80,8 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       messages: {
         ...state.messages,
         ...payload.messagesIncoming,
-        
       },
-      scrollToBottomIfClose: true
+      scrollToBottomIfClose: true,
     }
     // type SCROLL_COMPLETE ?
   } else if (type === 'FINISHED_SCROLL') {
