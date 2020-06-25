@@ -63,10 +63,6 @@
     category: 'public.app-category.social-networking',
     appId: 'chat.delta.desktop.electron',
     icon: 'resources/icon.icns',
-    hardenedRuntime: true,
-    gatekeeperAssess: false,
-    entitlements: 'build/entitlements.mac.plist',
-    entitlementsInherit: 'build/entitlements.mac.plist',
     files: [
       '**/*',
       '!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}',
@@ -122,6 +118,14 @@
       '!node_modules/deltachat-node/prebuilds/linux-x64/${/*}',
       '!node_modules/deltachat-node/prebuilds/win32-x64/${/*}',
     ],
+    darkModeSupport: true,
+  },
+  mas: {
+    hardenedRuntime: true,
+    gatekeeperAssess: false,
+    entitlements: 'build/entitlements.mac.plist',
+    entitlementsInherit: 'build/entitlements.mac.plist',
+    provisioningProfile: '../embeded.provisionprofile',
   },
   dmg: {
     sign: false,

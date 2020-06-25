@@ -97,11 +97,17 @@ build['mac'] = {
   category: 'public.app-category.social-networking',
   appId: 'chat.delta.desktop.electron',
   icon: 'resources/icon.icns',
+  files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
+  darkModeSupport:true
+}
+
+build['mas'] = {
   hardenedRuntime: true,
   gatekeeperAssess: false,
   entitlements: 'build/entitlements.mac.plist',
   entitlementsInherit: 'build/entitlements.mac.plist',
-  files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
+  provisioningProfile: '../embeded.provisionprofile',
+  // binaries // Paths of any extra binaries that need to be signed.
 }
 
 build['dmg'] = {
