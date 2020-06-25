@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "pack": "npm run pack:generate_config && npm run pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --loglevel silent",
     "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
-    "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg",
+    "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg mas",
     "pack:linux": "electron-builder --config ./electron-builder.json5 --linux AppImage deb",
     "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
   },
