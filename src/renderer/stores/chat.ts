@@ -151,6 +151,13 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     const chat = <FullChat>(
       await DeltaBackend.call('chatList.selectChat', chatId)
     )
+    if (chat.id === null) {
+      log.debug(
+        'SELECT CHAT chat does not exsits, id is null. chatId:',
+        chat.id
+      )
+      return
+    }
     const messageIds = <number[]>(
       await DeltaBackend.call('messageList.getMessageIds', chatId)
     )
