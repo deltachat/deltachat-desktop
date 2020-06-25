@@ -83,7 +83,7 @@ build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
 
 build['afterPack'] = 'build/afterPackHook.js'
-build['afterSign'] = 'build/notarize.js'
+build['afterSign'] = 'build/afterSignHook.js'
 
 // platform specific
 
@@ -94,19 +94,26 @@ const PREBUILD_FILTERS = {
 }
 
 build['mac'] = {
-  category: 'public.app-category.social-networking',
   appId: 'chat.delta.desktop.electron',
+  category: 'public.app-category.social-networking',
+  entitlements: 'build/entitlements.mac.plist',
+  entitlementsInherit: 'build/entitlements.mac.plist',
+  extendInfo: {
+    NSCameraUsageDescription: 'For scanning qr codes.',
+    // NSMicrophoneUsageDescription: "For voice messages"
+  },
+  gatekeeperAssess: true,
+  hardenedRuntime: true,
   icon: 'resources/icon.icns',
+  provisioningProfile: './../embedded.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
-  darkModeSupport:true
+  darkModeSupport: true,
 }
 
 build['mas'] = {
-  hardenedRuntime: true,
-  gatekeeperAssess: false,
-  entitlements: 'build/entitlements.mac.plist',
-  entitlementsInherit: 'build/entitlements.mac.plist',
-  provisioningProfile: './../embeded.provisionprofile',
+  hardenedRuntime: false,
+  entitlements: 'build/entitlements.mas.plist',
+  entitlementsInherit: 'build/entitlements.mas.plist',
   // binaries // Paths of any extra binaries that need to be signed.
 }
 
