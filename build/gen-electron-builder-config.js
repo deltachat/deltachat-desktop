@@ -113,7 +113,7 @@ build['mac'] = {
 build['mas'] = {
   hardenedRuntime: false,
   entitlements: 'build/entitlements.mas.plist',
-  entitlementsInherit: 'build/entitlements.mas.plist',
+  entitlementsInherit: 'build/entitlements.mas.inherit.plist',
   // binaries // Paths of any extra binaries that need to be signed.
 }
 

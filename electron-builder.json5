@@ -129,7 +129,7 @@
   mas: {
     hardenedRuntime: false,
     entitlements: 'build/entitlements.mas.plist',
-    entitlementsInherit: 'build/entitlements.mas.plist',
+    entitlementsInherit: 'build/entitlements.mas.inherit.plist',
   },
   dmg: {
     sign: false,

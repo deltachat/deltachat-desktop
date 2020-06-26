@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>com.apple.security.app-sandbox</key>
-<true/>
 <key>com.apple.security.application-groups</key>
 <array>
     <string>8Y86453UA8.chat.delta.desktop.electron</string>
@@ -21,7 +19,9 @@
 <true/>
 <key>com.apple.security.network.server</key>
 <true/>
-<!-- Hardened Runtime -->
+<!-- Sandboxing -->
+<key>com.apple.security.app-sandbox</key>
+<true/>
 <key>com.apple.security.cs.allow-dyld-environment-variables</key>
 <true/>
 <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
