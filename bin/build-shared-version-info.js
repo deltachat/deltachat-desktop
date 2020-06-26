@@ -4,15 +4,17 @@ const { join } = require('path')
 
 async function gatherBuildInfo() {
   const { status, stdout, stderr } = spawnSync('git', ['describe'])
+  let git_ref = "None"
   if (status !== 0) {
     console.log(stderr)
-    throw new Error('getting git commit failed')
+  } else {
+    git_ref = stdout.toString().replace(/\n/g, '')
   }
   const package = await fs.readJSON(join(__dirname, '../package.json'))
   return {
     VERSION: package.version,
     BUILD_TIMESTAMP: Date.now(),
-    GIT_REF: stdout.toString().replace(/\n/g, ''),
+    GIT_REF: git_ref
   }
 }
 
