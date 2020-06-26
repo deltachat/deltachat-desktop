@@ -1,4 +1,3 @@
-console.log('starting')
 console.time('init')
 
 import { ensureDirSync, watchFile } from 'fs-extra'
