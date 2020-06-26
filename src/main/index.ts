@@ -9,7 +9,7 @@ const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
 if (
-  process.platform !== "darwin" &&
+  process.platform !== 'darwin' &&
   rc['multiple-instances'] === false &&
   !app.requestSingleInstanceLock()
 ) {
