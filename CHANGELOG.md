@@ -53,6 +53,8 @@
 - Importing a backup now automatically loads the imported account
 - Save account path instead of account addr for remembering the last selected account
 - We don't scroll down on incoming messages anymore
+- Solved the macOS appstore issue and the macOS notarizing issue.
+- Exclude some unused resources from being bundled with the release.
 
 ### Technical
 
