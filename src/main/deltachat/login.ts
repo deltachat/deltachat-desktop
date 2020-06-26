@@ -133,16 +133,17 @@ export default class DCLoginController extends SplitOut {
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.4.1-3',
+      'changelog-version-1.4.2-2',
       `Changes in v1.4
 
-- Psssst! You can now mute chats and take a break to foucs on things that really matter
-- Looking for a specific message? Our search now supports searching through messages, contacts & chats
-- Don't want to keep old messages on your device or server? Check out the new autodelete setting
-- Besides this, DeltaChat Desktop should look and feel better at various places, including settings & login 
+⚡ We upgraded our core to async, which made it even faster
+🤫 Psssst! You can now mute chats and take a break to foucs on things that really matter
+🔍 Looking for a specific message? Our search now supports searching through messages, contacts & chats
+🔥 Don't want to keep old messages on your device or server? Check out the new autodelete setting
+🌑 We finally added a Darkmode
+💅 Besides this, DeltaChat Desktop should look and feel better at various places, including settings & login
 
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#142---2020-06-25
-    ` as any
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#142---2020-06-26` as any
     )
   }
 
