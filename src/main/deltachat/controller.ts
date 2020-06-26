@@ -44,7 +44,7 @@ export default class DeltaChatController extends EventEmitter {
   accountDir: string
   configuring = false
   updating = false
-  ready = false
+  ready = false // used for the about screen
   credentials: Credentials = { addr: '', mail_pw: '' }
   _selectedChatId: number | null = null
   _showArchivedChats = false
@@ -271,7 +271,9 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   onChatListItemChanged(chatId: number) {
-    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', { chatId })
+    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', {
+      chatId,
+    })
   }
 
   updateBlockedContacts() {
