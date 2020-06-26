@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.4.2] - 2020-06-26
+
 ### Added
 
 - Burner accounts with QR code
@@ -9,7 +11,6 @@
 - Mute Chats
 - Add Search for Contacts and Messages
 - Add autodelete settings
-- add Login migration upgrade info
 - add git rev to the version in the about dialog
 - Oportunistic reminder to update after 90days
 - Add a crash-screen that appears instead of the white-screen on a react crash.
@@ -22,15 +23,15 @@
 - update Readme a bit
 - Fix whitescreen crash on opening the EncryptionInfoDialog
 - Fix drop send multiple files at once ([#1622](https://github.com/deltachat/deltachat-desktop/issues/1622))
-- Fix window bounds are not saved correctly #1705
+- Fix window bounds are not saved correctly [#1705](https://github.com/deltachat/deltachat-desktop/issues/1705)
 - Fix export backup progress bar missing
 - Fix `dc_get_msg called with special msg_id=0` warnings printed to console
 - Fix window position on first start ([#1711](https://github.com/deltachat/deltachat-desktop/issues/1711))
-- Fix error message on login starting with ',' #1702
-- Fix offline toast displayed before login #1729
-- Fix "Authentication failed" notification does not disappear even after successfull login #1594
-- Fix login button staying disabled on error #1661
-- Fix use system language until the user chooses their language #1712
+- Fix error message on login starting with ',' [#1702](https://github.com/deltachat/deltachat-desktop/issues/1702)
+- Fix offline toast displayed before login [#1729](https://github.com/deltachat/deltachat-desktop/issues/1729)
+- Fix "Authentication failed" notification does not disappear even after successfull login [#1594](https://github.com/deltachat/deltachat-desktop/issues/1594)
+- Fix login button staying disabled on error [#1661](https://github.com/deltachat/deltachat-desktop/issues/1661)
+- Fix use system language until the user chooses their language [#1712](https://github.com/deltachat/deltachat-desktop/issues/1712)
 - Fix selecting a non existing chat after restarting DeltaChat
 
 ### Changed
@@ -69,6 +70,7 @@ This section is only relevant to contributors.
 - Split Build script into smaller build scripts.
 - replace `node-sass` with `sass` to remove the native dependency
 - introduce `runtime.ts` as a place to collect electron specific functions (will replace `renderer/ipc.ts`)
+- 1.4.0 and 1.4.1 don't have a tag/release as they were test versions only distributed on the Microsoft App Store
 
 ### Updates
 
@@ -410,7 +412,8 @@ This section is only relevant to contributors.
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
-* Update deltachat-node to 1.0.0-beta.15
+
+- Update deltachat-node to 1.0.0-beta.15
   - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
 ## [0.840.0] - 2019-11-05
@@ -802,7 +805,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.2...HEAD
+
+[1.4.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.4.2
 
 [1.3.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.3...v1.3.4
 
@@ -835,15 +840,27 @@ This section is only relevant to contributors.
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.200.0...v0.201.0
 
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
+
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
+
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
+
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
+
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
+
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
+
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
+
 [0.98.2]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...v0.98.2
+
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
+
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
+
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
+
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
+
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
