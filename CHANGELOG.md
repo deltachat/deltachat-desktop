@@ -11,7 +11,6 @@
 - Mute Chats
 - Add Search for Contacts and Messages
 - Add autodelete settings
-- add Login migration upgrade info
 - add git rev to the version in the about dialog
 - Oportunistic reminder to update after 90days
 - Add a crash-screen that appears instead of the white-screen on a react crash.
