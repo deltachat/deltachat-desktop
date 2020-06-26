@@ -131,24 +131,17 @@ export default class DCLoginController extends SplitOut {
   updateDeviceChats() {
     this._dc.updateDeviceChats()
     this._controller.hintUpdateIfNessesary()
+
     this._dc.addDeviceMessage(
-      'changelog-version-1.3.0-1',
-      `Changes in v1.3.0
+      'changelog-version-1.4.1-3',
+      `Changes in v1.4
 
-- QR codes can now be scanned from desktop as you know it from Android/iOS. Try
-  it out by clicking on Menu -> Scan QR code. Besides using any available webcam,
-  you can also scan a qr code by importing a picture of it. This way we can 
-  finally join verified groups from desktop!
-- Support for openpgp4fpr urls. They allow you to do the same things as with qr
-  codes, but the information is baked into an url. Wanna try it out? Try to
-  login to our support forum (https://support.delta.chat) with DeltaChat and the
-  "Manual link" option :)
-- You can now pin chats. This will make sure they stay on the top of your list
-  of chats.
-- It's now possible to change the name of a contact in the same way as it's with
-  changing the name of a group.
+- Psssst! You can now mute chats and take a break to foucs on things that really matter
+- Looking for a specific message? Our search now supports searching through messages, contacts & chats
+- Don't want to keep old messages on your device or server? Check out the new autodelete setting
+- Besides this, DeltaChat Desktop should look and feel better at various places, including settings & login 
 
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#130---2020-04-30
+Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#142---2020-06-25
     ` as any
     )
   }
