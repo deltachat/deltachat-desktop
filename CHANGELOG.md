@@ -2,6 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- localize full timestamps (when hovering above the short ones) (issue #1732)
+
+### Fixed
+- fix startup with last used language (issue #1765)
+- fix language update did not apply instantly (issue #1637)
+- fix ChatListItem timestamp bug (issue #1720)
+
+### Changed
+
 ### Technical
 - `window.translate` is now `window.static_translate`
  - also introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
