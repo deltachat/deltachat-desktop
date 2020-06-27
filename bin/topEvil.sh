@@ -13,16 +13,6 @@ echo "🤔 Requires in main Process: $( echo "$res" | wc -l )"
 echo "-----------------------------------------------------"
 echo "$res"
 
-res=$( grep -r "require(" src/shared --color=always)
-echo "🤔 Requires in shared: $( echo "$res" | wc -l )"
-echo "-----------------------------------------------------"
-echo "$res"
-
-res=$( grep -r "require(" src/renderer --color=always )
-echo "🤔 Requires in renderer: $( echo "$res" | wc -l )"
-echo "-----------------------------------------------------"
-echo "$res"
-
 res=$( grep -r "'styled-components'" src/renderer --color=always )
 echo "🤔 Use of styled-components: $( echo "$res" | wc -l )"
 echo "-----------------------------------------------------"
