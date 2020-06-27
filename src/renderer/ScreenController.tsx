@@ -72,7 +72,7 @@ export default class ScreenController extends Component {
 
   changeScreen(screen: Screens) {
     log.debug('Changing screen to:', screen)
-    this.setState({screen})
+    this.setState({ screen })
     window.__screen = screen
   }
 
