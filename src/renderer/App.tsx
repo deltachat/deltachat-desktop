@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { SettingsContext } from './contexts'
 import ScreenController, { Screens } from './ScreenController'
-import { addLocaleData, IntlProvider } from 'react-intl'
-import enLocaleData from 'react-intl/locale-data/en'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
 import {
@@ -21,8 +19,6 @@ const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
 import { getDefaultState } from '../shared/state'
-
-addLocaleData(enLocaleData)
 
 attachKeybindingsListener()
 
@@ -111,9 +107,7 @@ export default function App(props: any) {
   return (
     <CrashScreen>
       <SettingsContextWrapper credentials={state.deltachat.credentials}>
-        <IntlProvider locale={localeData.locale}>
           <ScreenController deltachat={state.deltachat} />
-        </IntlProvider>
       </SettingsContextWrapper>
     </CrashScreen>
   )
