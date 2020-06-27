@@ -1,4 +1,5 @@
 import moment from 'moment'
+import "moment/min/locales"
 
 const getExtendedFormats = () => ({
   y: 'lll',

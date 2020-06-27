@@ -93,6 +93,7 @@ export default function App(props: any) {
     window.localeData = localeData
     window.translate = translate(localeData.messages)
     setLocaleData(localeData)
+    moment.locale(locale)
   }
 
   const onChooseLanguage = async (e: any, locale: string) => {
