@@ -44,7 +44,7 @@ class MessageInfo extends React.Component<
 
   render() {
     const { receivedAt, sentAt } = this.props
-    const tx = window.translate
+    const tx = window.static_translate
 
     return (
       <div className='module-message-detail'>
@@ -90,7 +90,7 @@ export default function MessageDetail(props: {
 }) {
   const { message, onClose } = props
   const isOpen = !!message
-  const tx = window.translate
+  const tx = window.static_translate
 
   let body = <div />
   if (isOpen) {

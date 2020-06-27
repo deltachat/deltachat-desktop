@@ -52,7 +52,7 @@ export function SetupMessagePanel({
 
   const onClick = () => continueKeyTransfer(key.join(''))
 
-  const tx = window.translate
+  const tx = window.static_translate
 
   log.debug(`render: key: ${key}`)
 
@@ -95,7 +95,7 @@ export default function EnterAutocryptSetupMessage({
   const isOpen = !!message
   const setupCodeBegin = message && message.setupCodeBegin
 
-  const tx = window.translate
+  const tx = window.static_translate
 
   const continueKeyTransfer = async (key: string) => {
     setLoading(true)

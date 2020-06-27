@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, forwardRef } from 'react'
 import { Button } from '@blueprintjs/core'
 
-import { SettingsContext } from '../../contexts'
+import { SettingsContext, useTranslationFunction } from '../../contexts'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
@@ -107,7 +107,7 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   if (isDisabled) {
     if (disabledReason) {

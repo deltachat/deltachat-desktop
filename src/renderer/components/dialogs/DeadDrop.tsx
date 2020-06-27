@@ -5,6 +5,7 @@ import { useChatStore } from '../../stores/chat'
 import { DialogProps } from './DialogController'
 import { DCContact, MessageType } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
+import { useTranslationFunction } from '../../contexts'
 
 /**
  * handle contact requests
@@ -42,13 +43,12 @@ export default function DeadDrop(props: {
   const isOpen = !!contact
   const nameAndAddr = contact && contact.nameAndAddr
 
-  const tx = window.translate
-  const body = tx('ask_start_chat_with', nameAndAddr)
+  const tx = useTranslationFunction()
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
-        <p>{body}</p>
+        <p>{tx('ask_start_chat_with', nameAndAddr)}</p>
         <div className={Classes.DIALOG_FOOTER}>
           <div
             className={Classes.DIALOG_FOOTER_ACTIONS}

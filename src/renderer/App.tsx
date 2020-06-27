@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SettingsContext } from './contexts'
+import { SettingsContext, i18nContext } from './contexts'
 import ScreenController, { Screens } from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
 import attachKeybindingsListener from './keybindings'
@@ -64,7 +64,7 @@ export default function App(props: any) {
     startBackendLogging()
     ;(async () => {
       const state = await DeltaBackend.call('getState')
-      setupLocaleData(state.saved.locale || "en")
+      await setupLocaleData(state.saved.locale || 'en')
       setState(state)
       const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
         'login.getLastLoggedInAccount'
@@ -87,7 +87,7 @@ export default function App(props: any) {
       locale
     )
     window.localeData = localeData
-    window.translate = translate(localeData.messages)
+    window.static_translate = translate(localeData.messages)
     setLocaleData(localeData)
     moment.locale(locale)
   }
@@ -107,7 +107,9 @@ export default function App(props: any) {
   return (
     <CrashScreen>
       <SettingsContextWrapper credentials={state.deltachat.credentials}>
+        <i18nContext.Provider value={window.static_translate}>
           <ScreenController deltachat={state.deltachat} />
+        </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>
   )

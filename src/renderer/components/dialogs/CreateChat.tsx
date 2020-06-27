@@ -3,7 +3,7 @@ import { Card, Classes } from '@blueprintjs/core'
 import { C } from 'deltachat-node/dist/constants'
 
 import { DeltaBackend } from '../../delta-remote'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { selectChat } from '../../stores/chat'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
@@ -33,7 +33,7 @@ export default function CreateChat(props: {
   onClose: DialogProps['onClose']
 }) {
   const { isOpen, onClose } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
   const [viewMode, setViewMode] = useState('main')
 
@@ -166,7 +166,7 @@ export function useContactSearch(
 
 export function useGroupImage(image?: string) {
   const [groupImage, setGroupImage] = useState(image)
-  const tx = window.translate
+  const tx = window.static_translate
 
   const onSetGroupImage = async () => {
     let { filePaths } = await remote.dialog.showOpenDialog({
@@ -233,7 +233,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   color?: string
   isVerified?: boolean
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.value.length > 0) setErrorMissingGroupName(false)
     setGroupName(target.value)
@@ -286,7 +286,7 @@ export const AddMemberInnerDialog = ({
   groupMembers: number[]
   addRemoveGroupMember: ReturnType<typeof useGroupMembers>[3]
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   return (
     <>
@@ -333,7 +333,7 @@ export const ShowQrCodeInnerDialog = ({
   qrCode: string
   groupName: string
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   return (
     <>
@@ -399,7 +399,7 @@ function CreateGroupInner(props: {
   isVerified: boolean
 }) {
   const { viewMode, setViewMode, onClose, isVerified } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const [groupName, setGroupName] = useState('')
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage()

@@ -9,7 +9,7 @@ import { ipcBackend } from '../../ipc'
 const { remote } = window.electron_functions
 
 function onKeysImport() {
-  const tx = window.translate
+  const tx = window.static_translate
 
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_import_secret_keys'),
@@ -39,10 +39,10 @@ function onKeysImport() {
 function onKeysExport() {
   // TODO: ask for the user's password and check it using
   // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
-  const tx = window.translate
+  const tx = window.static_translate
 
   const opts: OpenDialogOptions = {
-    title: window.translate('pref_managekeys_export_secret_keys'),
+    title: tx('pref_managekeys_export_secret_keys'),
     defaultPath: remote.app.getPath('downloads'),
     properties: ['openDirectory'],
   }
@@ -68,7 +68,7 @@ function onKeysExport() {
 }
 
 export default function SettingsManageKeys() {
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <>
       <Card elevation={Elevation.ONE}>

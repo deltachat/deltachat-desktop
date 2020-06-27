@@ -44,7 +44,7 @@ export default async function processOpenQrUrl(
   url: string,
   callback: any = null
 ) {
-  const tx = window.translate
+  const tx = window.static_translate
   let error = false
   const scheme = url.substring(0, url.lastIndexOf(':'))
 

@@ -9,6 +9,7 @@ import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
+import { useTranslationFunction } from '../../contexts'
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
@@ -94,7 +95,7 @@ const InlineMenu = (
   }
 ) => {
   const { attachment, message, /*onReply,*/ viewType } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   return (
     <div className='message-buttons'>
@@ -152,7 +153,7 @@ const contextMenu = (
     // onRetrySend,
     onShowDetail,
   } = props
-  const tx = window.translate
+  const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
   // let showRetry = status === 'error' && direction === 'outgoing'
 
@@ -241,7 +242,7 @@ const Message = (props: {
     onClickMessageBody,
     onShowDetail,
   } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const authorAddress = message.contact.address
 

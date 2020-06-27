@@ -355,7 +355,9 @@ export default function ChatList(props: {
 }
 
 function translate_n(key: string, quantity: number) {
-  return window.translate(key, String(quantity), { quantity }).toUpperCase()
+  return window
+    .static_translate(key, String(quantity), { quantity })
+    .toUpperCase()
 }
 
 function useLogic(queryStr: string, showArchivedChats: boolean) {

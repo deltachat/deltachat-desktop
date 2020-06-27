@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { RadioGroup, Radio, Button, H5 } from '@blueprintjs/core'
-import { ScreenContext, SettingsContext } from '../../contexts'
+import {
+  ScreenContext,
+  SettingsContext,
+  useTranslationFunction,
+} from '../../contexts'
 import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
@@ -18,7 +22,7 @@ import classNames from 'classnames'
 
 function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
-  const tx = window.translate
+  const tx = window.static_translate
   switch (configValue) {
     case AutodeleteDuration.OFF:
       return tx('off')
@@ -61,7 +65,7 @@ export function AutodeleteConfirmationDialog({
     onClose()
   }
 
-  const tx = window.translate
+  const tx = window.static_translate
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
@@ -117,7 +121,7 @@ export default function SettingsAutodelete(props: any) {
   const { openDialog } = useContext(ScreenContext)
   const { handleDeltaSettingsChange, settings } = props
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
   const AUTODELETE_DURATION_OPTIONS = [
     [String(AutodeleteDuration.OFF), tx('off')],
     [String(AutodeleteDuration.ONE_HOUR), tx('autodel_after_1_hour')],

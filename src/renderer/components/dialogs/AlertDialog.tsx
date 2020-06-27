@@ -5,7 +5,6 @@ export default function AlertDialog(props: todo) {
   const { message, cb } = props
 
   const isOpen = !!message
-  const tx = window.translate
   const onClose = () => {
     props.onClose()
     // eslint-disable-next-line standard/no-callback-literal
@@ -24,7 +23,7 @@ export default function AlertDialog(props: todo) {
           className={`delta-button no-padding bold primary'`}
           onClick={() => onClick()}
         >
-          {tx('ok')}
+          {window.static_translate('ok')}
         </p>
       </div>
     </SmallDialog>

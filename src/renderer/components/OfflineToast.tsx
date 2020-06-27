@@ -3,6 +3,7 @@ import { DeltaBackend } from '../delta-remote'
 import { ipcBackend } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
+import { useTranslationFunction } from '../contexts'
 
 const log = getLogger('renderer/components/OfflineToast')
 
@@ -55,7 +56,7 @@ export default function OfflineToast() {
     setTimeout(() => DeltaBackend.call('context.maybeNetwork'), 100)
   }
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   return (
     networkStatus === false && (

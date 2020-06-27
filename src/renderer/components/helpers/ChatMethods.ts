@@ -33,7 +33,7 @@ export function openLeaveChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   chatId: number
 ) {
-  const tx = window.translate
+  const tx = window.static_translate
   screenContext.openDialog('ConfirmationDialog', {
     message: tx('ask_leave_group'),
     confirmLabel: tx('menu_leave_group'),
@@ -45,7 +45,7 @@ export function openDeleteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   chat: Chat
 ) {
-  const tx = window.translate
+  const tx = window.static_translate
   screenContext.openDialog('ConfirmationDialog', {
     message: tx('ask_delete_chat_desktop', chat.name),
     confirmLabel: tx('delete'),
@@ -58,7 +58,7 @@ export function openBlockContactDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   selectedChat: Chat
 ) {
-  const tx = window.translate
+  const tx = window.static_translate
   if (selectedChat && selectedChat.contactIds.length) {
     screenContext.openDialog('ConfirmationDialog', {
       message: tx('ask_block_contact'),

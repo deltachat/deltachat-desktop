@@ -21,7 +21,7 @@ export default function MuteChat({
   onClose: () => void
   chatId: number
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
 
   const MUTE_DURATION_OPTIONS: [string, string][] = [
     [String(MuteDuration.OFF), tx('off')],

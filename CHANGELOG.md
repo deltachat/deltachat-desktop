@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Technical
+- `window.translate` is now `window.static_translate`
+ - also introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
+
 ## [1.4.2] - 2020-06-26
 
 ### Added

@@ -14,7 +14,7 @@ import {
 
 const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
-import { SettingsContext } from '../../contexts'
+import { SettingsContext, useTranslationFunction } from '../../contexts'
 
 import { DesktopSettings } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
@@ -74,7 +74,7 @@ export default function Settings(props: DialogProps) {
   const setShow = (show: string) => setState({ show })
   const { desktopSettings, setDesktopSetting } = useContext(SettingsContext)
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const loadSettings = async () => {
     const settings = await DeltaBackend.call('settings.getConfigFor', [
@@ -324,7 +324,7 @@ export default function Settings(props: DialogProps) {
 
 function ProfileImageSelector(props: any) {
   const { displayName, color } = props
-  const tx = window.translate
+  const tx = window.static_translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
   useEffect(() => {
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)

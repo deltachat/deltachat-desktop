@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { DesktopSettings, Credentials } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import ScreenController, { userFeedback, Screens } from './ScreenController'
 import { DialogId } from './components/dialogs/DialogController'
 import { any } from 'prop-types'
 import { DeltaBackend } from './delta-remote'
+import { getMessageFunction } from '../shared/localize'
 
 const noop: Function = () => {}
 
@@ -15,6 +16,11 @@ export const ScreenContext = React.createContext({
   changeScreen: (screen: Screens) => {},
   screen: null,
 })
+
+export const i18nContext = React.createContext<getMessageFunction>(
+  key => key as any
+)
+export const useTranslationFunction = () => useContext(i18nContext)
 
 export const SettingsContext: React.Context<{
   desktopSettings: DesktopSettings
