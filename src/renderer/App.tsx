@@ -66,9 +66,9 @@ export default function App(props: any) {
 
   useEffect(() => {
     startBackendLogging()
-    setupLocaleData('en')
     ;(async () => {
       const state = await DeltaBackend.call('getState')
+      setupLocaleData(state.saved.locale || "en")
       setState(state)
       const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
         'login.getLastLoggedInAccount'
