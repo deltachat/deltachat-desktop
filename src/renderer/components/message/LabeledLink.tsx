@@ -60,7 +60,15 @@ export const LabeledLink = ({
         <SmallDialog isOpen={isOpen} onClose={onClose}>
           <div className='bp3-dialog-body-with-padding'>
             <p>{tx('open_url_confirmation')}</p>
-            <p>{sanitizedTarget}</p>
+            <p
+              style={{
+                overflowWrap: 'break-word',
+                overflowY: 'scroll',
+                maxHeight: '50vh',
+              }}
+            >
+              {sanitizedTarget}
+            </p>
             <div style={{ display: 'flex' }}>
               <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
               <div style={{ alignSelf: 'center' }}>
