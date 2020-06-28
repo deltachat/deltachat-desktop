@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+
+### Technical
+- remove `styled-components`
+
 ## [1.4.2] - 2020-06-26
 
 ### Added
