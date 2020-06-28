@@ -143,5 +143,8 @@
   },
   "open_url_confirmation": {
     "message": "Do you want to open this link?"
+  },
+  "open_external_url_trust_domain": {
+    "message": "Don't ask again for"
   }
 }

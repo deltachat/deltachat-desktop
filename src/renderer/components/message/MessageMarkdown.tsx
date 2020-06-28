@@ -1,10 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
-import { Classes } from '@blueprintjs/core'
-import { ScreenContext } from '../../contexts'
-import { SmallDialog } from '../dialogs/DeltaDialog'
-import { OpenDialogFunctionType } from '../dialogs/DialogController'
-import { encode, toASCII } from 'punycode'
+import { LabeledLink } from './LabeledLink'
 const { openExternal } = window.electron_functions
 
 var ignoreCapture = function() {
@@ -116,57 +112,3 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
   },
   previewRules
 )
-
-const LabeledLink = ({ label, target }: { label: string; target: string }) => {
-  const { openDialog } = useContext(ScreenContext)
-  const splittedTarget = String(target).split('/')
-  // encode the punycode to make phishing harder
-  splittedTarget[2] = splittedTarget[2]
-    .split('.')
-    .map(toASCII)
-    .join('.')
-  const sanitizedTarget = splittedTarget.join('/')
-  const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    ev.preventDefault()
-    ev.stopPropagation()
-    ;(openDialog as OpenDialogFunctionType)(({ isOpen, onClose }) => {
-      const tx = window.translate
-
-      return (
-        <SmallDialog isOpen={isOpen} onClose={onClose}>
-          <div className='bp3-dialog-body-with-padding'>
-            <p>{tx('open_url_confirmation')}</p>
-            <p>{sanitizedTarget}</p>
-            <div className={Classes.DIALOG_FOOTER}>
-              <div
-                className={Classes.DIALOG_FOOTER_ACTIONS}
-                style={{ justifyContent: 'space-between', marginTop: '7px' }}
-              >
-                <p
-                  className={`delta-button no-padding bold primary`}
-                  onClick={onClose}
-                >
-                  {tx('no')}
-                </p>
-                <p
-                  className={`delta-button no-padding bold ${'primary'}`}
-                  onClick={() => {
-                    onClose()
-                    openExternal(target)
-                  }}
-                >
-                  {tx('yes')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </SmallDialog>
-      )
-    })
-  }
-  return (
-    <a href={'#' + target} title={sanitizedTarget} onClick={onClick}>
-      {String(label)}
-    </a>
-  )
-}
