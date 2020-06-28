@@ -20,6 +20,15 @@ export const ScreenContext = React.createContext({
 export const i18nContext = React.createContext<getMessageFunction>(
   key => key as any
 )
+
+/** convinence wrapper function for `useContext(i18nContext)`
+ *
+ * This is a react hook, make sure you only use it where you can use reactHooks,
+ * as example in functional components.
+ *
+ * Otherwise use the `<i18nContext.Consumer>` or when you don't need
+ * the dynamic updating functionality use `window.static_translate` directly.
+ */
 export const useTranslationFunction = () => useContext(i18nContext)
 
 export const SettingsContext: React.Context<{
