@@ -98,7 +98,6 @@
     "react-virtualized": "^9.21.2",
     "sass": "^1.26.5",
     "simple-markdown": "^0.7.1",
-    "styled-components": "^4.4.1",
     "tempy": "^0.3.0",
     "use-debounce": "^3.3.0",
     "wolfy87-eventemitter": "^5.2.9"
