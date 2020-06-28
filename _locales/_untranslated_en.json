@@ -140,5 +140,8 @@
   },
   "try_connect_now": {
     "message": "Try to connect now"
+  },
+  "open_url_confirmation": {
+    "message": "Do you want to open this link?"
   }
 }
