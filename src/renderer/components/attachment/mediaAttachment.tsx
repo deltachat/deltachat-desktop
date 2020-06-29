@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { openAttachmentInShell, onDownload } from '../message/messageFunctions'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   isDisplayableByFullscreenMedia,
   isImage,
@@ -23,7 +23,7 @@ export default function MediaAttachment({
   attachment,
   message,
 }: AttachmentProps) {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   if (!attachment) {
     return null
   }

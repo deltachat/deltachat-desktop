@@ -7,6 +7,7 @@ import { gitHubUrl, gitHubLicenseUrl } from '../../../shared/constants'
 import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { DeltaBackend } from '../../delta-remote'
+import { useTranslationFunction } from '../../contexts'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -51,7 +52,7 @@ export function DCInfo(_props: any) {
 
 export default function About(props: { isOpen: boolean; onClose: () => void }) {
   const { isOpen, onClose } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const desktopString = reactStringReplace(
     tx('about_offical_app_desktop'),

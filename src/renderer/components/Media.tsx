@@ -65,7 +65,7 @@ export default class Media extends Component<
 
   render() {
     const { medias, id } = this.state
-    const tx = window.translate
+    const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage =
       id === 'documents'
         ? tx('tab_docs_empty_hint')

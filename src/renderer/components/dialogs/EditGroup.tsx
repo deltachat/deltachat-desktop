@@ -110,7 +110,7 @@ function EditGroupInner(props: {
   chat: FullChat
 }) {
   const { viewMode, setViewMode, onClose, chat } = props
-  const tx = window.translate
+  const tx = window.static_translate
 
   const [groupName, setGroupName] = useState(chat.name)
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)

@@ -13,7 +13,7 @@ export const GroupImage = (props: {
   isVerified?: boolean
   color: string
 }) => {
-  const tx = window.translate
+  const tx = window.static_translate
   const {
     groupImage,
     onSetGroupImage,
@@ -73,7 +73,7 @@ const GroupImageContextMenu = (props: {
   onUnsetGroupImage: (event: React.SyntheticEvent) => void
   getShow: (cb: (event: MouseEvent, chat: ChatListItemType) => void) => void
 }) => {
-  const tx = window.translate
+  const tx = window.static_translate
   const [showEvent, setShowEvent] = useState(null)
   const contextMenu = useRef(null)
 

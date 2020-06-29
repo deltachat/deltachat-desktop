@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import { useTranslationFunction } from '../contexts'
 
 export function ClearButton(props: {
   onChange: (event: { target: { value: '' } }) => void
@@ -30,7 +31,7 @@ export default function SearchInput(props: {
   inputRef?: React.ClassAttributes<HTMLInputElement>['ref']
 }) {
   const { onChange, value, className, id } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <>
       <input

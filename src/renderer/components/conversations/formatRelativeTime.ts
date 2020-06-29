@@ -1,13 +1,14 @@
 import moment from 'moment'
+import 'moment/min/locales'
 
 const getExtendedFormats = () => ({
   y: 'lll',
-  M: `${window.translate('timestamp_format_m_desktop') || 'MMM D'} LT`,
+  M: `${window.static_translate('timestamp_format_m_desktop') || 'MMM D'} LT`,
   d: 'ddd LT',
 })
 const getShortFormats = () => ({
   y: 'll',
-  M: window.translate('timestamp_format_m_desktop') || 'MMM D',
+  M: window.static_translate('timestamp_format_m_desktop') || 'MMM D',
   d: 'ddd',
 })
 
@@ -28,7 +29,7 @@ export default function formatRelativeTime(
   options: { extended: boolean }
 ) {
   const { extended } = options
-  const tx = window.translate
+  const tx = window.static_translate
   const formats = extended ? getExtendedFormats() : getShortFormats()
   const timestamp = moment(rawTimestamp)
   const now = moment()

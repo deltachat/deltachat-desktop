@@ -188,8 +188,6 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
-    const tx = window.translate
-
     return (
       <textarea
         className='message-input-area'
@@ -201,7 +199,7 @@ export default class ComposerMessageInput extends React.Component<
         value={this.state.text}
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
-        placeholder={tx('write_message_desktop')}
+        placeholder={window.static_translate('write_message_desktop')}
       />
     )
   }

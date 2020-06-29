@@ -20,6 +20,7 @@ import {
   DeltaDialogFooter,
 } from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
+import { useTranslationFunction, i18nContext } from '../contexts'
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -144,166 +145,168 @@ export default function LoginForm({
   // We assume that smtp_certificate_checks has the same value.
   const certificate_checks = imap_certificate_checks
 
-  const tx = window.translate
-
   return (
-    <div className='login-form'>
-      <DeltaInput
-        key='addr'
-        id='addr'
-        placeholder={tx('email_address')}
-        disabled={addrDisabled}
-        value={addr}
-        onChange={emailChange.bind(this)}
-      />
+    <i18nContext.Consumer>
+      {tx => (
+        <div className='login-form'>
+          <DeltaInput
+            key='addr'
+            id='addr'
+            placeholder={tx('email_address')}
+            disabled={addrDisabled}
+            value={addr}
+            onChange={emailChange.bind(this)}
+          />
 
-      <DeltaPasswordInput
-        key='mail_pw'
-        id='mail_pw'
-        placeholder={tx('password')}
-        password={mail_pw}
-        onChange={handleCredentialsChange}
-      />
+          <DeltaPasswordInput
+            key='mail_pw'
+            id='mail_pw'
+            placeholder={tx('password')}
+            password={mail_pw}
+            onChange={handleCredentialsChange}
+          />
 
-      {providerInfo?.before_login_hint && (
-        <div
-          className={`before-login-hint ${providerInfo.status ===
-            C.DC_PROVIDER_STATUS_BROKEN && 'broken'}`}
-        >
-          <p>{providerInfo.before_login_hint}</p>
-          <ClickableLink href={providerInfo.overview_page}>
-            {tx('more_info_desktop')}
-          </ClickableLink>
+          {providerInfo?.before_login_hint && (
+            <div
+              className={`before-login-hint ${providerInfo.status ===
+                C.DC_PROVIDER_STATUS_BROKEN && 'broken'}`}
+            >
+              <p>{providerInfo.before_login_hint}</p>
+              <ClickableLink href={providerInfo.overview_page}>
+                {tx('more_info_desktop')}
+              </ClickableLink>
+            </div>
+          )}
+
+          <p className='text'>{tx('login_no_servers_hint')}</p>
+          <div
+            className='advanced'
+            onClick={() => setUiShowAdvanced(!uiShowAdvanced)}
+            id={'show-advanced-button'}
+          >
+            <div className={`advanced-icon ${uiShowAdvanced && 'opened'}`} />
+            <p>{tx('menu_advanced')}</p>
+          </div>
+          <Collapse isOpen={uiShowAdvanced}>
+            <br />
+            <p className='delta-headline'>{tx('login_inbox')}</p>
+
+            <DeltaInput
+              key='mail_user'
+              id='mail_user'
+              placeholder={tx('default_value_as_above')}
+              label={tx('login_imap_login')}
+              type='text'
+              value={mail_user}
+              onChange={handleCredentialsChange}
+            />
+
+            <DeltaInput
+              key='mail_server'
+              id='mail_server'
+              placeholder={tx('default_value_automatic')}
+              label={tx('login_imap_server')}
+              type='text'
+              value={mail_server}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='mail_port'
+              id='mail_port'
+              label={tx('login_imap_port')}
+              placeholder={tx(
+                'default_value',
+                String(getDefaultPort(credentials, 'imap'))
+              )}
+              type='number'
+              min='0'
+              max='65535'
+              value={mail_port}
+              onChange={handleCredentialsChange}
+            />
+
+            <DeltaSelect
+              id='mail_security'
+              label={tx('login_imap_security')}
+              value={mail_security}
+              onChange={handleCredentialsChange as any}
+            >
+              <option value='automatic'>{tx('automatic')}</option>
+              <option value='ssl'>SSL/TLS</option>
+              <option value='starttls'>STARTTLS</option>
+              <option value='plain'>{tx('off')}</option>
+            </DeltaSelect>
+
+            <p className='delta-headline'>{tx('login_outbox')}</p>
+            <DeltaInput
+              key='send_user'
+              id='send_user'
+              placeholder={tx('default_value_as_above')}
+              label={tx('login_smtp_login')}
+              value={send_user}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaPasswordInput
+              key='send_pw'
+              id='send_pw'
+              label={tx('login_smtp_password')}
+              placeholder={tx('default_value_as_above')}
+              password={send_pw}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='send_server'
+              id='send_server'
+              placeholder={tx('default_value_automatic')}
+              label={tx('login_smtp_server')}
+              type='text'
+              value={send_server}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaInput
+              key='send_port'
+              id='send_port'
+              placeholder={tx(
+                'default_value',
+                String(getDefaultPort(credentials, 'smtp'))
+              )}
+              label={tx('login_smtp_port')}
+              type='number'
+              min='0'
+              max='65535'
+              value={send_port}
+              onChange={handleCredentialsChange}
+            />
+            <DeltaSelect
+              id='send_security'
+              label={tx('login_smtp_security')}
+              value={send_security}
+              onChange={handleCredentialsChange as any}
+            >
+              <option value='automatic'>{tx('automatic')}</option>
+              <option value='ssl'>SSL/TLS</option>
+              <option value='starttls'>STARTTLS</option>
+              <option value='plain'>{tx('off')}</option>
+            </DeltaSelect>
+
+            <DeltaSelect
+              id='certificate_checks'
+              label={tx('login_certificate_checks')}
+              value={certificate_checks}
+              onChange={handleCredentialsChange as any}
+            >
+              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>
+                {tx('accept_invalid_certificates')}
+              </option>
+            </DeltaSelect>
+          </Collapse>
+          <br />
+          <p className='text'>{tx('login_subheader')}</p>
         </div>
       )}
-
-      <p className='text'>{tx('login_no_servers_hint')}</p>
-      <div
-        className='advanced'
-        onClick={() => setUiShowAdvanced(!uiShowAdvanced)}
-        id={'show-advanced-button'}
-      >
-        <div className={`advanced-icon ${uiShowAdvanced && 'opened'}`} />
-        <p>{tx('menu_advanced')}</p>
-      </div>
-      <Collapse isOpen={uiShowAdvanced}>
-        <br />
-        <p className='delta-headline'>{tx('login_inbox')}</p>
-
-        <DeltaInput
-          key='mail_user'
-          id='mail_user'
-          placeholder={tx('default_value_as_above')}
-          label={tx('login_imap_login')}
-          type='text'
-          value={mail_user}
-          onChange={handleCredentialsChange}
-        />
-
-        <DeltaInput
-          key='mail_server'
-          id='mail_server'
-          placeholder={tx('default_value_automatic')}
-          label={tx('login_imap_server')}
-          type='text'
-          value={mail_server}
-          onChange={handleCredentialsChange}
-        />
-        <DeltaInput
-          key='mail_port'
-          id='mail_port'
-          label={tx('login_imap_port')}
-          placeholder={tx(
-            'default_value',
-            String(getDefaultPort(credentials, 'imap'))
-          )}
-          type='number'
-          min='0'
-          max='65535'
-          value={mail_port}
-          onChange={handleCredentialsChange}
-        />
-
-        <DeltaSelect
-          id='mail_security'
-          label={tx('login_imap_security')}
-          value={mail_security}
-          onChange={handleCredentialsChange as any}
-        >
-          <option value='automatic'>{tx('automatic')}</option>
-          <option value='ssl'>SSL/TLS</option>
-          <option value='starttls'>STARTTLS</option>
-          <option value='plain'>{tx('off')}</option>
-        </DeltaSelect>
-
-        <p className='delta-headline'>{tx('login_outbox')}</p>
-        <DeltaInput
-          key='send_user'
-          id='send_user'
-          placeholder={tx('default_value_as_above')}
-          label={tx('login_smtp_login')}
-          value={send_user}
-          onChange={handleCredentialsChange}
-        />
-        <DeltaPasswordInput
-          key='send_pw'
-          id='send_pw'
-          label={tx('login_smtp_password')}
-          placeholder={tx('default_value_as_above')}
-          password={send_pw}
-          onChange={handleCredentialsChange}
-        />
-        <DeltaInput
-          key='send_server'
-          id='send_server'
-          placeholder={tx('default_value_automatic')}
-          label={tx('login_smtp_server')}
-          type='text'
-          value={send_server}
-          onChange={handleCredentialsChange}
-        />
-        <DeltaInput
-          key='send_port'
-          id='send_port'
-          placeholder={tx(
-            'default_value',
-            String(getDefaultPort(credentials, 'smtp'))
-          )}
-          label={tx('login_smtp_port')}
-          type='number'
-          min='0'
-          max='65535'
-          value={send_port}
-          onChange={handleCredentialsChange}
-        />
-        <DeltaSelect
-          id='send_security'
-          label={tx('login_smtp_security')}
-          value={send_security}
-          onChange={handleCredentialsChange as any}
-        >
-          <option value='automatic'>{tx('automatic')}</option>
-          <option value='ssl'>SSL/TLS</option>
-          <option value='starttls'>STARTTLS</option>
-          <option value='plain'>{tx('off')}</option>
-        </DeltaSelect>
-
-        <DeltaSelect
-          id='certificate_checks'
-          label={tx('login_certificate_checks')}
-          value={certificate_checks}
-          onChange={handleCredentialsChange as any}
-        >
-          <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
-          <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
-          <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>
-            {tx('accept_invalid_certificates')}
-          </option>
-        </DeltaSelect>
-      </Collapse>
-      <br />
-      <p className='text'>{tx('login_subheader')}</p>
-    </div>
+    </i18nContext.Consumer>
   )
 }
 
@@ -361,7 +364,7 @@ export function ConfigureProgressDialog({
     }
   }, [])
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>

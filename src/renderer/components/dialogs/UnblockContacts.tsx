@@ -38,7 +38,7 @@ export default function UnblockContacts(props: {
     })
   }
 
-  const tx = window.translate
+  const tx = window.static_translate
   if (blockedContacts === null) return null
   return (
     <DeltaDialog

@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
 import { DeltaBackend } from '../delta-remote'
-import { ScreenContext } from '../contexts'
+import { ScreenContext, useTranslationFunction } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
@@ -37,7 +37,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
 

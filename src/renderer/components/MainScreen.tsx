@@ -1,5 +1,9 @@
 import React, { useState, useContext, useRef } from 'react'
-import { ScreenContext, SettingsContext } from '../contexts'
+import {
+  ScreenContext,
+  SettingsContext,
+  useTranslationFunction,
+} from '../contexts'
 
 import Media from './Media'
 import Menu from './Menu'
@@ -65,7 +69,7 @@ export default function MainScreen() {
     }
   }
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const menu = <Menu selectedChat={selectedChat} />
   const MessageListView = selectedChat.id ? (

@@ -12,7 +12,7 @@ export function DeltaDialogQrInner({
   qrCode: string
   description: string
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const { userFeedback } = useContext(ScreenContext)
   return (
     <>
@@ -63,7 +63,7 @@ export default function QrInviteCode({
   qrCode: string
   deltachat: DesktopSettings
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
     <Dialog

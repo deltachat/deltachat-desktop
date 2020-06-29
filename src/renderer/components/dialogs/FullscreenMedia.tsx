@@ -8,7 +8,7 @@ export default function FullscreenMedia(props: {
   msg: MessageType['msg']
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const { msg, onClose } = props
   let elm = <div />
   if (!msg || !msg.attachment) return elm

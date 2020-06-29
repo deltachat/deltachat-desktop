@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, CSSProperties } from 'react'
 import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
+import { useTranslationFunction } from '../../contexts'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -28,7 +29,7 @@ export const PseudoListItemNoSearchResults = ({
 }: {
   queryStr: string
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <PseudoListItem
       id='addmember'
@@ -46,7 +47,7 @@ export const PseudoListItemShowQrCode = ({
 }: {
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <PseudoListItem id='showqrcode' text={tx('qrshow_title')} onClick={onClick}>
       <QRAvatar />
@@ -59,7 +60,7 @@ export const PseudoListItemAddMember = ({
 }: {
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <PseudoListItem
       id='addmember'
@@ -79,7 +80,7 @@ export const PseudoListItemAddContact = ({
   queryStrIsEmail: boolean
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <PseudoListItem
       id='newcontact'
