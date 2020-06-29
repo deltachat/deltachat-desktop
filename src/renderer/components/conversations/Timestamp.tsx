@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
+import { useTranslationFunction } from '../../contexts'
 
 const UPDATE_FREQUENCY = 60 * 1000
 
@@ -40,6 +41,10 @@ const Timestamp = React.memo(function Timestamp(props: TimestampProps) {
   // Update relative time every UPDATE_FREQUENCY ms
   const recalculateRelativeTime = () => setRelativeTime(calculateRelativeTime())
   useInterval(recalculateRelativeTime, UPDATE_FREQUENCY)
+  useEffect(recalculateRelativeTime, [timestamp, window.localeData.locale])
+
+  // trigger a rerender that will be detected as a language change by the useEffect function above (window.localeData.locale)
+  useTranslationFunction()
 
   return (
     <span

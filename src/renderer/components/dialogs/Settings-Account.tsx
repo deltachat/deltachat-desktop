@@ -5,7 +5,7 @@ import React from 'react'
 import LoginForm, { ConfigureProgressDialog } from '../LoginForm'
 
 import { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import classNames from 'classnames'
 
 export default function SettingsAccount({
@@ -39,7 +39,7 @@ export default function SettingsAccount({
   }
 
   const { openDialog, userFeedback } = useContext(ScreenContext)
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const loadSettings = async () => {
     const accountSettings = await DeltaBackend.call('settings.getConfigFor', [

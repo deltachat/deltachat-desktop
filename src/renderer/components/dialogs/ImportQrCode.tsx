@@ -15,7 +15,7 @@ export function DeltaDialogImportQrInner({
   description: string
   onClose: () => void
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const [qrCode, setQrCode] = useState('')
   const [processQrCode, setProcessQrCode] = useState(false)
 
@@ -123,7 +123,7 @@ export default function ImportQrCode({
   qrCode: string
   deltachat: DesktopSettings
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
     <Dialog

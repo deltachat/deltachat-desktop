@@ -2,6 +2,7 @@ import React from 'react'
 import { Classes } from '@blueprintjs/core'
 import { MessageBoxOptions } from 'electron'
 import { SmallDialog } from './DeltaDialog'
+import { useTranslationFunction } from '../../contexts'
 
 const { remote } = window.electron_functions
 
@@ -12,7 +13,7 @@ export function confirmationDialogLegacy(
 ) {
   if (!cb) cb = opts
   if (!opts) opts = {}
-  const tx = window.translate
+  const tx = window.static_translate
   var defaultOpts: MessageBoxOptions = {
     type: 'question',
     message: message,
@@ -35,7 +36,7 @@ export default function ConfirmationDialog(props: todo) {
     typeof props.yesIsPrimary === 'undefined' ? false : props.yesIsPrimary
 
   const isOpen = !!message
-  const tx = window.translate
+  const tx = useTranslationFunction()
   const onClose = () => {
     props.onClose()
     // eslint-disable-next-line standard/no-callback-literal

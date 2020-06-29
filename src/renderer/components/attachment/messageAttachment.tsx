@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import classNames from 'classnames'
 import { openAttachmentInShell } from '../message/messageFunctions'
 import { C } from 'deltachat-node/dist/constants'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   isDisplayableByFullscreenMedia,
   isImage,
@@ -32,7 +32,7 @@ export default function Attachment({
   direction,
   message,
 }: AttachmentProps) {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   if (!attachment) {
     return null
   }

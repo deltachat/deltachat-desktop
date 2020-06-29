@@ -21,7 +21,7 @@ export function KeyViewPanel({
   onClose: DialogProps['onClose']
   autocryptKey: string
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <React.Fragment>
       <div className={Classes.DIALOG_BODY}>
@@ -54,7 +54,7 @@ function KeyLoadingPanel() {
 }
 
 function InitiatePanel({ onClick }: { onClick: todo }) {
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <div className={Classes.DIALOG_BODY}>
       <Card>
@@ -94,7 +94,7 @@ export function SendAutocryptSetupMessage({
     setLoading(false)
   }
 
-  const tx = window.translate
+  const tx = window.static_translate
 
   let body
   if (loading) {
@@ -123,7 +123,7 @@ export default function SettingsEncryptio({
   renderDeltaSwitch: Function
 }) {
   const { openDialog } = useContext(ScreenContext)
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <>
       <Card elevation={Elevation.ONE}>

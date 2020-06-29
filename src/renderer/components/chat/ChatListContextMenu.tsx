@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from 'react'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import {
   openLeaveChatDialog,
@@ -20,7 +20,7 @@ import { DeltaBackend } from '../../delta-remote'
 // const log = getLogger('renderer/ChatListContextMenu')
 
 const ArchiveStateMenu = (chat: ChatListItemType) => {
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const archive = (
     <MenuItem
@@ -141,7 +141,7 @@ const ChatListContextMenu = React.memo<{
       openBlockContactDialog(screenContext, chatListItem)
     const onMuteChat = () => openMuteChatDialog(screenContext, chatListItem.id)
     const onUnmuteChat = () => unMuteChat(chatListItem.id)
-    const tx = window.translate
+    const tx = useTranslationFunction()
 
     const menu = chatListItem
       ? [

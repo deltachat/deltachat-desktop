@@ -7,12 +7,13 @@ import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DeltaBackend } from '../../delta-remote'
+import { useTranslationFunction } from '../../contexts'
 
 const { remote } = window.electron_functions
 
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const [progress, setProgress] = useState(0.0)
 
@@ -52,7 +53,7 @@ function ExportProgressDialog(props: DialogProps) {
 }
 
 function onBackupExport() {
-  const tx = window.translate
+  const tx = window.static_translate
   const openDialog = window.__openDialog
 
   openDialog('ConfirmationDialog', {
@@ -76,7 +77,7 @@ function onBackupExport() {
 }
 
 export default function SettingsBackup() {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <>
       <Card elevation={Elevation.ONE}>

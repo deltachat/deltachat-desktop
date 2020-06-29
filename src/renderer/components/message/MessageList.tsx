@@ -11,6 +11,7 @@ import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
 import { MessageType } from '../../../shared/shared-types'
+import { useTranslationFunction } from '../../contexts'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (
@@ -172,7 +173,7 @@ export const MessageListInner = React.memo(
       oldestFetchedMessageIndex,
       messageIds
     )
-    const tx = window.translate
+    const tx = useTranslationFunction()
 
     let specialMessageIdCounter = 0
 
@@ -237,7 +238,7 @@ export const MessageListInner = React.memo(
 
 export function DayMarker(props: { timestamp: number }) {
   const { timestamp } = props
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <div className='info-message'>
       <p style={{ textTransform: 'capitalize' }}>

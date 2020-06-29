@@ -15,7 +15,7 @@ export default function ForwardMessage(props: {
   message: MessageType
   onClose: DialogProps['onClose']
 }) {
-  const tx = window.translate
+  const tx = window.static_translate
   const { message, onClose } = props
   const { chatListIds, queryStr, setQueryStr } = useChatListIds(
     C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS

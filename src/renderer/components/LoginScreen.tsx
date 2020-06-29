@@ -18,7 +18,7 @@ import {
 } from '@blueprintjs/core'
 import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
-import { ScreenContext } from '../contexts'
+import { ScreenContext, useTranslationFunction } from '../contexts'
 import DeltaDialog from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
@@ -75,7 +75,7 @@ function ImportBackupProgressDialog({
     }
   }, [])
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <DeltaDialog
       onClose={onClose}
@@ -98,7 +98,7 @@ function ImportBackupProgressDialog({
 }
 
 const ImportButton = function ImportButton(props: any) {
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   function onClickImportBackup() {
     remote.dialog.showOpenDialog(
@@ -127,7 +127,7 @@ const ImportButton = function ImportButton(props: any) {
 
 const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   const { openDialog } = useContext(ScreenContext)
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const onClickScanQr = () => openDialog('ImportQrCode')
 
@@ -141,7 +141,7 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
 })
 
 export default function LoginScreen(props: any) {
-  const tx = window.translate
+  const tx = useTranslationFunction()
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
   const [credentials, setCredentials] = useState<Credentials>(

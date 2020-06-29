@@ -283,7 +283,7 @@ export function SmallSelectDialog({
     onClose()
   }
 
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <DeltaDialogHeader title={title} />

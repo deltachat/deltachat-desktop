@@ -1,4 +1,8 @@
-import { SettingsContext, ScreenContext } from '../../contexts'
+import {
+  SettingsContext,
+  ScreenContext,
+  useTranslationFunction,
+} from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
 import { H5, H6, Card, Elevation } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
@@ -52,7 +56,7 @@ function BackgroundSelector({
     }
   }
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <div>
       <div className={'bg-option-wrap'}>
@@ -184,7 +188,7 @@ export default function SettingsAppearance({
     return theme.name
   }
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     <Card elevation={Elevation.ONE}>
       <H5>{tx('pref_appearance')}</H5>

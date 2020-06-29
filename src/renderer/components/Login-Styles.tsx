@@ -6,6 +6,7 @@ import {
   Intent,
   ProgressBar,
 } from '@blueprintjs/core'
+import { useTranslationFunction } from '../contexts'
 
 export const DeltaSelect = React.memo(
   (
@@ -108,7 +109,7 @@ export const DeltaPasswordInput = React.memo(
         ((event: ChangeEvent<HTMLInputElement>) => void)
     }>
   ) => {
-    const tx = window.translate
+    const tx = useTranslationFunction()
 
     const [showPassword, setShowPassword] = useState(false)
 

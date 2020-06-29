@@ -23,7 +23,7 @@ export default function EncryptionInfo({
     ).then(setEncryptionInfo)
   })
 
-  const tx = window.translate
+  const tx = window.static_translate
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>

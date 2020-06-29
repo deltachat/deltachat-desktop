@@ -100,6 +100,26 @@ Example:
 > **Tipp:** run with `--translation-watch` (included in `npm start`) to start in translation
 > watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save
 
+#### Use localized strings in code
+
+There are two methods to use localized strings:
+
+1. Static usage over `window.static_translate`
+2. Dynamic usage over `i18nContext`, where the component that uses this method is automatically rerendered when the user changes the language.
+
+##### Thumb-rule:
+
+- in functions like message functions use static_translate
+- in dialog its generally ok to use static_translate
+- in functional components use the hook/context
+- in classes render functions use `<i18nContext.Consumer>{tx=>( )}</i18nContext.Consumer>`
+- if you are unsure use static_translate.
+
+##### Usage:
+
+for the usage please look at existing code, the types and the doc comments.
+<br>Generally you just need to know that the `<i18nContext.Consumer>`, `useTranslationFunction()` and `window.static_translate` are the same functions.
+
 ### CI <a id="ci"></a>
 
 For Continuous Integration we currently use Travis and Github Actions.

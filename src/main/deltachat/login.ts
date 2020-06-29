@@ -107,6 +107,7 @@ export default class DCLoginController extends SplitOut {
     this._controller._resetState()
 
     app.state.saved.credentials = null
+    app.state.saved.lastAccount = null
     app.saveState()
 
     log.info('Logged out')

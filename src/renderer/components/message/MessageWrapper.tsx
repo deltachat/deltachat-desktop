@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 import Message from './Message'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 import { ChatStoreState, ChatStoreDispatch } from '../../stores/chat'
@@ -32,7 +32,7 @@ export const RenderMessage = React.memo(
     const { message, locationStreamingEnabled, chat, chatStoreDispatch } = props
     const { fromId, id } = message.msg
     const msg = message.msg
-    const tx = window.translate
+    const tx = useTranslationFunction()
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
@@ -63,7 +63,7 @@ export const RenderMessage = React.memo(
       msg.text ===
       '[The message was sent with non-verified encryption.. See "Info" for details.]'
     ) {
-      msg.text = window.translate('message_not_verified')
+      msg.text = tx('message_not_verified')
     }
 
     let new_props = {

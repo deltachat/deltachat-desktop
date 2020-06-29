@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
 import MessageBody from '../message/MessageBody'
 import { C } from 'deltachat-node/dist/constants'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
   ChatListItemType,
   MessageSearchResult,
@@ -18,17 +18,14 @@ const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
 const Header = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
     const { lastUpdated, name, isVerified, pinned, muted } = chatListItem
+    const tx = window.static_translate
     return (
       <div className='header'>
         <div className='name'>
           <span>{name + ' '}</span>
         </div>
-        {muted && (
-          <div className='mute_icon' aria-label={window.translate('mute')} />
-        )}
-        {pinned && (
-          <div className='pin_icon' aria-label={window.translate('pin')} />
-        )}
+        {muted && <div className='mute_icon' aria-label={tx('mute')} />}
+        {pinned && <div className='pin_icon' aria-label={tx('pin')} />}
         <div>
           <Timestamp
             timestamp={lastUpdated}
@@ -62,7 +59,7 @@ const Message = React.memo(
         </div>
         {archived && (
           <div className='archived-label'>
-            {window.translate('chat_archived_label')}
+            {window.static_translate('chat_archived_label')}
           </div>
         )}
         {!archived && summary.status && (
@@ -128,7 +125,7 @@ const ChatListItemDeaddrop = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
     const { openDialog } = useContext(ScreenContext)
     const onClick = () => openDialog('DeadDrop', chatListItem.deaddrop)
-    const tx = window.translate
+    const tx = useTranslationFunction()
     return (
       <div
         role='button'

@@ -81,7 +81,7 @@ export default function ViewProfile(props: {
     chatListIds
   )
 
-  const tx = window.translate
+  const tx = window.static_translate
 
   const onChatClick = (chatId: number) => {
     selectChat(chatId)
