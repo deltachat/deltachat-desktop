@@ -16,8 +16,8 @@
 | **MIntrovrt**           |                                                  |
 | **Floris Bruynooghe**   |                                                  |
 | **B. Petersen**         |                                                  |
-| **Hansal Bachkaniwala** |                                                  |
 | **Tobias Mueller**      |                                                  |
+| **Hansal Bachkaniwala** |                                                  |
 | **jankass**             |                                                  |
 | **Asiel Díaz Benítez**  |                                                  |
 | **Ozancan Karataş**     |                                                  |
@@ -27,6 +27,7 @@
 | **Clemens Tolboom**     |                                                  |
 | **developer**           |                                                  |
 | **Harald H**            |                                                  |
+| **hnrd**                |                                                  |
 | **Hugo**                |                                                  |
 | **NeoRon**              |                                                  |
 | **Noah**                |                                                  |
