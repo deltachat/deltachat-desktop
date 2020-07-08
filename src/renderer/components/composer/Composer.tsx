@@ -7,6 +7,7 @@ import { getLogger } from '../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
+import { replaceColonsSafe } from '../conversations/emoji'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -51,7 +52,7 @@ const Composer = forwardRef<
     }
     chatStoreDispatch({
       type: 'SEND_MESSAGE',
-      payload: [chatId, message, null],
+      payload: [chatId, replaceColonsSafe(message), null],
     })
 
     messageInputRef.current.clearText()

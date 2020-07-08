@@ -1,6 +1,9 @@
 // @ts-ignore
 import EmojiConvertor from 'emoji-js-clean'
+import { getLogger } from '../../../shared/logger'
 // We only really need the emoji data of this module
+
+const log = getLogger('renderer/emoji')
 
 const instance = new EmojiConvertor()
 instance.init_colons()
@@ -37,6 +40,15 @@ export function replaceColons(str: string) {
 
     return m
   })
+}
+
+export function replaceColonsSafe(message: string) {
+  try {
+    return replaceColons(message)
+  } catch (error) {
+    log.warn('replaceColons failed', error)
+    return message
+  }
 }
 
 export function getSizeClass(str: string) {

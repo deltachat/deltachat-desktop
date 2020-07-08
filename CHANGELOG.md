@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- :colon-emoji: support for skin tones (:+1::skin-tone-6:)
+- :colon-emoji:'s are now replaced with the unicode emoji they represent on send
+
 ## Updates
 - update google-noto color emoji font
 
