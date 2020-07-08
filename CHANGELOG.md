@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Updates
+- update google-noto color emoji font
+
 ## [1.4.3] - 2020-06-30
 
 ### Added
