@@ -9,22 +9,30 @@ instance.init_colons()
 const emojiRegEx = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
 
 // taken from (new EmojiConvertor()).rx_colons
-const colonEmojiCodeRegExp =/:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?/g
+const colonEmojiCodeRegExp = /:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?/g
 
 export function getRegex() {
   return emojiRegEx
 }
 
-console.log(instance.map.colons,instance.data)
+console.log(instance.map.colons, instance.data)
 
 export function replaceColons(str: string) {
   return str.replace(colonEmojiCodeRegExp, m => {
     const name = m.split(':')[1]
-    const skintone = m.split(':')[3] // this property is optional
-    const code = instance.map.colons[name]
-    if (code) {
-      // todo include support for skintone
-      return String.fromCodePoint(parseInt(code, 16))
+    const skintoneString = m.split(':')[3] // this property is optional
+    let codePoints = instance.map.colons[name]
+      ?.split('-')
+      .map((c: string) => parseInt(c, 16))
+    if (codePoints) {
+      if (skintoneString) {
+        const skintoneNumber = Number(
+          /^skin-tone-([2-6])$/.exec(skintoneString)[1]
+        )
+        codePoints.push(0x1f3fb + (skintoneNumber - 2))
+      }
+
+      return String.fromCodePoint(...codePoints)
     }
 
     return m
