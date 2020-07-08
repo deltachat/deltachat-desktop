@@ -18,8 +18,6 @@ export function getRegex() {
   return emojiRegEx
 }
 
-console.log(instance.map.colons, instance.data)
-
 export function replaceColons(str: string) {
   return str.replace(colonEmojiCodeRegExp, m => {
     const name = m.split(':')[1]
