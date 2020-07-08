@@ -12,6 +12,7 @@ input.search-input {
   font-size: 18px;
   background-color: transparent;
   caret-color: var(--navBarSearchPlaceholder);
+  color: var(--globalText);
 
   &.wrap {
     margin-left: 40px;
