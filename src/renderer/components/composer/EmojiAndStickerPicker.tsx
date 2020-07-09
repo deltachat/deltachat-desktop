@@ -3,10 +3,12 @@ import React, {
   useEffect,
   forwardRef,
   PropsWithChildren,
+  useRef,
 } from 'react'
 import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 export const useAsyncEffect = (
   asyncEffect: () => {},
@@ -121,6 +123,15 @@ export const EmojiAndStickerPicker = forwardRef<
     setStickers(stickers)
   }, [])
 
+  const emojipicker = useRef(null)
+
+  useEffect(()=>{
+    emojipicker.current?.querySelector(".emoji-mart-search")?.querySelector("input")?.focus()
+    return (()=>{
+      ActionEmitter.emitAction(KeybindAction.Composer_Focus)
+    })
+  }, [])
+
   return (
     <div
       className={classNames('emoji-sticker-picker', {
@@ -144,7 +155,7 @@ export const EmojiAndStickerPicker = forwardRef<
       </div>
       <div className='emoji-sticker-picker__emoji-or-sticker-picker'>
         {!showSticker && (
-          <div className='emoji-sticker-picker__emoji-picker'>
+          <div className='emoji-sticker-picker__emoji-picker' ref={emojipicker}>
             <Picker
               style={{ width: '100%', height: '100%' }}
               native

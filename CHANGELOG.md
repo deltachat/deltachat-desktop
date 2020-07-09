@@ -13,6 +13,9 @@
 ## Fixed
 - fix using the system language if no language is selected
 
+## Changed
+- when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused 
+
 ### Technical
 - removed `styled-components`
 
