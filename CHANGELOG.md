@@ -3,21 +3,27 @@
 ## [Unreleased][unreleased]
 
 ### Technical
-=======
+- introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
+- removed `styled-components`
+
+## [1.4.3] - 2020-06-30
+
 ### Added
-- localize full timestamps (when hovering above the short ones) (issue #1732)
+
+- localize full timestamps (when hovering above the short ones) (issue [#1732](https://github.com/deltachat/deltachat-desktop/issues/1732))
 
 ### Fixed
-- fix startup with last used language (issue #1765)
-- fix language update did not apply instantly (issue #1637)
-- fix ChatListItem timestamp bug (issue #1720)
+
+- fix startup with last used language (issue [#1765](https://github.com/deltachat/deltachat-desktop/issues/1765))
+- fix language update did not apply instantly (issue [#1637](https://github.com/deltachat/deltachat-desktop/issues/1637))
+- fix ChatListItem timestamp bug (issue [#1720](https://github.com/deltachat/deltachat-desktop/issues/1720))
 
 ### Changed
 
 ### Technical
+
 - `window.translate` is now `window.static_translate`
- - also introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
-- remove `styled-components`
+- also introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
 
 ## [1.4.2] - 2020-06-26
 
@@ -822,7 +828,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.3...HEAD
+
+[1.4.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.2...v1.4.3
 
 [1.4.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.4.2
 
