@@ -1,5 +1,4 @@
 import React, { Fragment, useState, PropsWithChildren } from 'react'
-import styled, { css } from 'styled-components'
 import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { DialogProps } from './DialogController'
@@ -38,54 +37,28 @@ export const DeltaDialogBase = React.memo<
   )
 })
 
-export const DeltaDialogButtonMixin = css`
-  .bp3-icon-large {
-    margin-right: 0px;
-  }
-  button:hover {
-    background-color: unset !important;
-  }
-`
-
-export const DeltaDialogCloseButtonWrapper = styled.div`
-  ${DeltaDialogButtonMixin}
-  .bp3-icon-cross::before {
-    margin-right: -14px;
-    font-size: 24px;
-  }
-`
-
-export function DeltaDialogCloseButton(
+function DeltaDialogCloseButton(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>
 ) {
   return (
-    <DeltaDialogCloseButtonWrapper>
+    <div className='header-button-wrapper close-btn'>
       <button
         {...props}
         aria-label='Close'
         className='bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross'
       />
-    </DeltaDialogCloseButtonWrapper>
+    </div>
   )
 }
-export const DeltaDialogBackButtonWrapper = styled.div`
-  ${DeltaDialogButtonMixin}
-  button::before {
-    margin-left: -13px !important;
-    font-size: 20px !important;
-  }
-`
 
-export function DeltaDialogBackButton(
-  props: React.HTMLAttributes<HTMLButtonElement>
-) {
+function DeltaDialogBackButton(props: React.HTMLAttributes<HTMLButtonElement>) {
   return (
-    <DeltaDialogBackButtonWrapper>
+    <div className='header-button-wrapper back-btn'>
       <button
         {...props}
         className='bp3-button bp3-minimal bp3-icon-large bp3-icon-arrow-left'
       />
-    </DeltaDialogBackButtonWrapper>
+    </div>
   )
 }
 

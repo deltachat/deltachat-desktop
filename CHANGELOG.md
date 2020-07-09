@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Technical
+- introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
+- removed `styled-components`
+
 ## [1.4.3] - 2020-06-30
 
 ### Added
