@@ -125,11 +125,14 @@ export const EmojiAndStickerPicker = forwardRef<
 
   const emojipicker = useRef(null)
 
-  useEffect(()=>{
-    emojipicker.current?.querySelector(".emoji-mart-search")?.querySelector("input")?.focus()
-    return (()=>{
+  useEffect(() => {
+    emojipicker.current
+      ?.querySelector('.emoji-mart-search')
+      ?.querySelector('input')
+      ?.focus()
+    return () => {
       ActionEmitter.emitAction(KeybindAction.Composer_Focus)
-    })
+    }
   }, [])
 
   return (
