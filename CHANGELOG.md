@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- :colon-emoji: support for skin tones (:+1::skin-tone-6:)
+- :colon-emoji:'s are now replaced with the unicode emoji they represent on send
+
+## Updated
+- updated google-noto color emoji font
+
 ### Technical
 - introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
 - removed `styled-components`
