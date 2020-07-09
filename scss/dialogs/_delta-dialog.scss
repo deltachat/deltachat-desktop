@@ -111,4 +111,27 @@
     text-overflow: ellipsis;
     white-space: pre;
   }
+
+  .header-button-wrapper {
+    .bp3-icon-large {
+      margin-right: 0px;
+    }
+    button:hover {
+      background-color: unset !important;
+    }
+
+    &.close-btn {
+      .bp3-icon-cross::before {
+        margin-right: -14px;
+        font-size: 24px;
+      }
+    }
+
+    &.back-btn {
+      button::before {
+        margin-left: -13px !important;
+        font-size: 20px !important;
+      }
+    }
+  }
 }

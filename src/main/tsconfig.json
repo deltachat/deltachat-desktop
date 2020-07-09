@@ -6,7 +6,7 @@
     "module": "commonjs",
     "target": "es6",
     "rootDir": ".",
-    "allowJs": true,
+    "allowJs": false,
     "esModuleInterop": true
   },
   "include": ["./**/*.ts", "./**/*.js"],

@@ -49,7 +49,6 @@ const files = [
   '!node_modules/vt-pbf/',
   // '!node_modules/emoji-mart/',
   '!node_modules/react-dom/',
-  '!node_modules/styled-components/',
   '!node_modules/emoji-js-clean/',
   '!node_modules/@mapbox/',
   '!node_modules/react/',
@@ -57,7 +56,6 @@ const files = [
   '!node_modules/react-transition-group/',
   '!node_modules/css-to-react-native',
   '!node_modules/simple-markdown',
-  '!node_modules/babel-plugin-styled-components',
   '!node_modules/wolfy87-eventemitter',
   // re-add needed css stuff -> re-adding doesn't seem to work at this point in time
   // 'node_modules/normalize.css/normalize.css',
