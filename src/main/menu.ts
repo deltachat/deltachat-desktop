@@ -20,13 +20,15 @@ const languages: {
   name: string
 }[] = readJsonSync(join(__dirname, '../../_locales/_languages.json'))
 
-export function init(logHandler: LogHandler) {
+let logHandlerRef: LogHandler = null
+
+export function refresh() {
   log.info(
     `rebuilding menu with locale ${
       (app as ExtendedAppMainProcess).localeData.locale
     }`
   )
-  const template = getMenuTemplate(logHandler)
+  const template = getMenuTemplate(logHandlerRef)
   const menu = Menu.buildFromTemplate(setLabels(template))
   const item = getMenuItem(
     menu,
@@ -41,6 +43,11 @@ export function init(logHandler: LogHandler) {
     return
   }
   mainWindow.window.setMenu(menu)
+}
+
+export function init(logHandler: LogHandler) {
+  logHandlerRef = logHandler
+  refresh()
 }
 
 interface rawMenuItem extends Electron.MenuItemConstructorOptions {

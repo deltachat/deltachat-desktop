@@ -307,6 +307,7 @@ class DeltaRemote {
   ): Promise<{ email: string; password: string }>
   // extras -------------------------------------------------------------
   call(fnName: 'extras.getLocaleData', locale: string): Promise<LocaleData>
+  call(fnName: 'extras.setLocale', locale: string): Promise<void>
   call(
     fnName: 'extras.getActiveTheme'
   ): Promise<{

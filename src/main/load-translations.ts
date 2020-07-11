@@ -6,11 +6,16 @@ const log = getLogger('load-transaltions')
 
 import { app as rawApp } from 'electron'
 import { ExtendedAppMainProcess } from './types'
+import { translate } from '../shared/localize'
 const app = rawApp as ExtendedAppMainProcess
 
-import { translate } from '../shared/localize'
+export default function setLanguage(locale: string) {
+  const localeData = loadTranslations(locale)
+  app.localeData = localeData
+  app.translate = translate(app.localeData.messages)
+}
 
-export default function setup(locale: string) {
+export function loadTranslations(locale: string) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
   let messages
@@ -43,10 +48,7 @@ export default function setup(locale: string) {
   }
 
   log.debug(messages['no_chat_selected_suggestion_desktop'])
-  const localeData = { messages, locale }
-  app.localeData = localeData
-  app.translate = translate(app.localeData.messages)
-  return localeData
+  return { messages, locale }
 }
 
 function retrieveLocaleFile(locale: string) {

@@ -54,7 +54,7 @@ process.on('uncaughtException', err => {
   )
 })
 
-import loadTranslations from './load-translations'
+import setLanguage from './load-translations'
 import { getLogins } from './logins'
 import * as ipc from './ipc'
 import { init as initMenu } from './menu'
@@ -90,7 +90,7 @@ function onReady([logins, _appReady, loadedState]: [
 
   app.saveState = () => State.save({ saved: state.saved })
 
-  loadTranslations(state.saved.locale || app.getLocale())
+  setLanguage(state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
   log.info(`cwd ${cwd}`)

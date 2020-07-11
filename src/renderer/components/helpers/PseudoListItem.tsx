@@ -80,7 +80,7 @@ export const PseudoListItemAddContact = ({
   queryStrIsEmail: boolean
   onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
-  const tx = useTranslationFunction()
+  const tx = window.static_translate // static_translate because the context method produced sometimes an 'Invalid hook call' crash
   return (
     <PseudoListItem
       id='newcontact'

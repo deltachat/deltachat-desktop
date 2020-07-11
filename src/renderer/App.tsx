@@ -64,7 +64,7 @@ export default function App(props: any) {
     startBackendLogging()
     ;(async () => {
       const state = await DeltaBackend.call('getState')
-      await setupLocaleData(state.saved.locale || 'en')
+      await reloadLocaleData(state.saved.locale)
       setState(state)
       const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
         'login.getLastLoggedInAccount'
@@ -80,7 +80,7 @@ export default function App(props: any) {
     })()
   }, [])
 
-  async function setupLocaleData(locale: string) {
+  async function reloadLocaleData(locale: string) {
     moment.locale(locale)
     const localeData: LocaleData = await DeltaBackend.call(
       'extras.getLocaleData',
@@ -93,8 +93,8 @@ export default function App(props: any) {
   }
 
   const onChooseLanguage = async (e: any, locale: string) => {
-    await setupLocaleData(locale)
-    sendToBackend('chooseLanguage', locale)
+    await DeltaBackend.call('extras.setLocale', locale)
+    await reloadLocaleData(locale)
   }
   useEffect(() => {
     ipcBackend.on('chooseLanguage', onChooseLanguage)
