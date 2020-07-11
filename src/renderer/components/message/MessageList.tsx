@@ -12,6 +12,7 @@ import moment from 'moment'
 import { getLogger } from '../../../shared/logger'
 import { MessageType } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
+import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (
@@ -179,7 +180,9 @@ export const MessageListInner = React.memo(
 
     let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
 
-    if (chat.isGroup) {
+    const showAllEmail = useDCConfigOnce('show_emails')
+
+    if (chat.isGroup && !chat.isDeaddrop) {
       emptyChatMessage = chat.isUnpromoted
         ? tx('chat_new_group_hint')
         : tx('chat_no_messages')
@@ -187,6 +190,11 @@ export const MessageListInner = React.memo(
       emptyChatMessage = tx('saved_messages_explain')
     } else if (chat.isDeviceChat) {
       emptyChatMessage = tx('device_talk_explain')
+    } else if (chat.isDeaddrop) {
+      emptyChatMessage =
+        Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
+          ? tx('chat_no_contact_requests')
+          : tx('chat_no_messages')
     }
 
     return (
