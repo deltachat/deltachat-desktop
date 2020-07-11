@@ -3,10 +3,12 @@ import { ExtendedAppMainProcess } from '../types'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
 import { LocaleData } from '../../shared/localize'
-import loadTranslations from '../load-translations'
+import setLanguage, { loadTranslations } from '../load-translations'
 import { loadTheme, getAvailableThemes, resolveThemeAddress } from '../themes'
+import { txCoreStrings } from './login'
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat/extras')
+import { refresh as refreshMenu } from '../menu'
 
 // Extras, mainly Electron functions
 export default class Extras extends SplitOut {
@@ -15,6 +17,11 @@ export default class Extras extends SplitOut {
       loadTranslations(locale)
     }
     return app.localeData
+  }
+  setLocale(locale: string) {
+    setLanguage(locale)
+    this._controller.login.setCoreStrings(txCoreStrings())
+    refreshMenu()
   }
   async getActiveTheme() {
     try {

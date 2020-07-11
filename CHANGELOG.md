@@ -9,8 +9,10 @@
 ## Updated
 - updated google-noto color emoji font
 
+## Fixed
+- fix using the system language if no language is selected
+
 ### Technical
-- introduced `<i18nContext.Consumer>` & `useTranslationFunction()` which trigger a rerender when the language changes
 - removed `styled-components`
 
 ## [1.4.3] - 2020-06-30

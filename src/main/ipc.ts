@@ -4,10 +4,7 @@ import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
 import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
 import { getLogsPath } from './application-constants'
-import loadTranslations from './load-translations'
 import { LogHandler } from './log-handler'
-import { getLogins } from './logins'
-import { init as refreshMenu } from './menu'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
@@ -45,11 +42,6 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
 
   ipcMain.on('show', () => main.show())
   // ipcMain.on('setAllowNav', (e, ...args) => menu.setAllowNav(...args))
-  ipcMain.on('chooseLanguage', (e, locale: string) => {
-    loadTranslations(locale)
-    dcController.login.setCoreStrings(txCoreStrings())
-    refreshMenu(logHandler)
-  })
 
   ipcMain.once('frontendReady', () => app.emit('frontendReady'))
 
@@ -139,47 +131,4 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
   })
-}
-
-export function txCoreStrings() {
-  const tx = app.translate
-  const strings: { [key: number]: string } = {}
-  // TODO: Check if we need the uncommented core translations
-  strings[C.DC_STR_NOMESSAGES] = tx('chat_no_messages')
-  strings[C.DC_STR_SELF] = tx('self')
-  strings[C.DC_STR_DRAFT] = tx('draft')
-  strings[C.DC_STR_VOICEMESSAGE] = tx('voice_message')
-  strings[C.DC_STR_DEADDROP] = tx('login_inbox')
-  strings[C.DC_STR_IMAGE] = tx('image')
-  strings[C.DC_STR_GIF] = tx('gif')
-  strings[C.DC_STR_VIDEO] = tx('video')
-  strings[C.DC_STR_AUDIO] = tx('audio')
-  strings[C.DC_STR_FILE] = tx('file')
-  strings[C.DC_STR_ENCRYPTEDMSG] = tx('encrypted_message')
-  strings[C.DC_STR_STATUSLINE] = tx('pref_default_status_text')
-  strings[C.DC_STR_NEWGROUPDRAFT] = tx('group_hello_draft')
-  strings[C.DC_STR_MSGGRPNAME] = tx('systemmsg_group_name_changed')
-  strings[C.DC_STR_MSGGRPIMGCHANGED] = tx('systemmsg_group_image_changed')
-  strings[C.DC_STR_MSGADDMEMBER] = tx('systemmsg_member_added')
-  strings[C.DC_STR_MSGDELMEMBER] = tx('systemmsg_member_removed')
-  strings[C.DC_STR_MSGGROUPLEFT] = tx('systemmsg_group_left')
-  // strings[C.DC_STR_E2E_AVAILABLE] = tx('DC_STR_E2E_AVAILABLE')
-  // strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
-  // strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')
-  strings[C.DC_STR_FINGERPRINTS] = tx('qrscan_fingerprint_label')
-  strings[C.DC_STR_READRCPT] = tx('systemmsg_read_receipt_subject')
-  strings[C.DC_STR_READRCPT_MAILBODY] = tx('systemmsg_read_receipt_body')
-  strings[C.DC_STR_MSGGRPIMGDELETED] = tx('systemmsg_group_image_deleted')
-  strings[C.DC_STR_E2E_PREFERRED] = tx('autocrypt_prefer_e2ee')
-  strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
-  // strings[C.DC_STR_STARREDMSGS] = tx('DC_STR_STARREDMSGS')
-  strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
-  strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
-  strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
-  strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
-  strings[C.DC_STR_SERVER_RESPONSE] = tx('login_error_server_response')
-  strings[68] = tx('device_talk')
-  strings[69] = tx('saved_messages')
-
-  return strings
 }
