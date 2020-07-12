@@ -9,6 +9,7 @@ import {
 import { RadioGroup, Radio } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { Timespans } from '../../../shared/constants'
+import { useTranslationFunction } from '../../contexts'
 
 enum EphemeralMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -29,7 +30,7 @@ function SelectEphemeralMessageDuration({
   ) => void
   ephemeralMessageDuration: EphemeralMessageDuration
 }) {
-  const tx = window.translate
+  const tx = useTranslationFunction()
 
   const onChange = (ev: React.FormEvent<HTMLInputElement>) => {
     const ephemeralMessageDuration = Number(ev.currentTarget.value)
@@ -114,7 +115,7 @@ export default function EphemeralMessage({
     onClose()
   }
 
-  const tx = window.translate
+  const tx = useTranslationFunction()
   return (
     !loading && (
       <SmallDialog isOpen={isOpen} onClose={onClose}>
