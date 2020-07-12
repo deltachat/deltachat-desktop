@@ -29,6 +29,7 @@ export interface DesktopSettings {
   chatViewBgImg: string
   credentials: Credentials
   enableOnDemandLocationStreaming: boolean
+  enableDisappearingMessages: boolean
   enterKeySends: boolean
   locale: string
   notifications: boolean
@@ -54,6 +55,7 @@ export interface AppState {
     showNotificationContent: boolean
     locale: string
     enableOnDemandLocationStreaming: boolean
+    enableDisappearingMessages: boolean
     chatViewBgImg: string
     lastChats: todo
     zoomFactor: number

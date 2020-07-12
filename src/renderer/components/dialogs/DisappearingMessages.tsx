@@ -13,7 +13,7 @@ import { useTranslationFunction } from '../../contexts'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
-  ONE_SECOND = Timespans.ONE_SECOND,
+  THIRTY_SECONDS = Timespans.THIRTY_SECONDS,
   ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
   ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
   ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
@@ -49,32 +49,32 @@ function SelectDisappearingMessageDuration({
       />
       <Radio
         key={'eph-1'}
-        label={'One second'}
-        value={String(DisappearingMessageDuration.ONE_SECOND)}
+        label={tx('after_30_seconds')}
+        value={String(DisappearingMessageDuration.THIRTY_SECONDS)}
       />
       <Radio
         key={'eph-2'}
-        label={'One minute'}
+        label={tx('after_1_minute')}
         value={String(DisappearingMessageDuration.ONE_MINUTE)}
       />
       <Radio
         key={'eph-3'}
-        label={'One hour'}
+        label={tx('autodel_after_1_hour')}
         value={String(DisappearingMessageDuration.ONE_HOUR)}
       />
       <Radio
         key={'eph-4'}
-        label={'One day'}
+        label={tx('autodel_after_1_day')}
         value={String(DisappearingMessageDuration.ONE_DAY)}
       />
       <Radio
         key={'eph-5'}
-        label={'One week'}
+        label={tx('autodel_after_1_week')}
         value={String(DisappearingMessageDuration.ONE_WEEK)}
       />
       <Radio
         key={'eph-6'}
-        label={'Four weeks'}
+        label={tx('autodel_after_4_weeks')}
         value={String(DisappearingMessageDuration.FOUR_WEEKS)}
       />
     </RadioGroup>
@@ -119,7 +119,7 @@ export default function DisappearingMessage({
   return (
     !loading && (
       <SmallDialog isOpen={isOpen} onClose={onClose}>
-        <DeltaDialogHeader title={'Ephemeral Message'} />
+        <DeltaDialogHeader title={tx('ephemeral_messages')} />
         <DeltaDialogBody>
           <DeltaDialogContent>
             <SelectDisappearingMessageDuration

@@ -258,6 +258,10 @@ export default function Settings(props: DialogProps) {
               'enableOnDemandLocationStreaming',
               tx('pref_on_demand_location_streaming')
             )}
+            {renderDTSettingSwitch(
+              'enableDisappearingMessages',
+              'Enable disappearing messages'
+            )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>
             {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}

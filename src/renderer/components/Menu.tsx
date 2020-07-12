@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
 import { DeltaBackend } from '../delta-remote'
-import { ScreenContext, useTranslationFunction } from '../contexts'
+import { ScreenContext, useTranslationFunction, SettingsContext } from '../contexts'
 import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
@@ -55,8 +55,8 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     screenContext.openDialog('UnblockContacts', {})
   const onContactRequests = () =>
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: C.DC_CHAT_ID_DEADDROP })
-  const onEphemeralMessage = () =>
-    screenContext.openDialog('EphemeralMessage', { chatId: selectedChat.id })
+  const onDisappearingMessages = () =>
+    screenContext.openDialog('DisappearingMessages', { chatId: selectedChat.id })
   const logout = () => {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
@@ -130,11 +130,17 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           text={tx('menu_unmute')}
         />
       ),
-      <DeltaMenuItem
-        key='ephemeral'
-        text={'Ephemeral Message'} // TODO: Translate
-        onClick={onEphemeralMessage}
-      />,
+      <SettingsContext.Consumer>
+        {({ desktopSettings }) =>
+          desktopSettings.enableDisappearingMessages && (
+            <DeltaMenuItem
+              key='disappearing'
+              text={tx('ephemeral_messages')} // TODO: Translate
+              onClick={onDisappearingMessages}
+            />
+          )
+        }
+      </SettingsContext.Consumer>,
       <Menu.Divider key='divider-2' />,
     ]
   } else {
