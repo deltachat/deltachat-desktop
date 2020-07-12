@@ -25,6 +25,7 @@
     <string name="archive">Arkiv</string>
     <string name="unarchive">Avarkivera</string>
     <string name="mute">Tyst</string>
+    <string name="ephemeral_messages">Försvinnande meddelanden</string>
     <string name="save">Spara</string>
     <string name="chat">Chatt</string>
     <string name="media">Media</string>
@@ -219,6 +220,7 @@
         <item quantity="other">Radera %d meddelanden här och på servern?</item>
     </plurals>
     <string name="ask_forward">Vidarebefordra meddelanden till %1$s?</string>
+    <string name="ask_forward_multiple">Vill du vidarebefordra meddelanden till %1$d chattar?</string>
     <string name="ask_export_attachment">Exportera bilagor? Exporterade bilagor tillåter andra appar på din enhet att komma åt dem.\n\nVill du fortsätta?</string>
     <string name="ask_block_contact">Blockera den här kontakten? Du kommer inte att få fler meddelanden från den här kontakten.</string>
     <string name="ask_unblock_contact">Avblockera den här kontakten? Du kommer återigen att kunna ta emot meddelanden från den här kontakten.</string>
@@ -332,6 +334,8 @@
     <string name="login_smtp_port">SMTP port</string>
     <string name="login_smtp_security">SMTP säkerhet</string>
     <string name="login_auth_method">Auktoriseringsmetod</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">Kontrollerar %1$s</string>
     <string name="login_info_oauth2_title">Fortsätta med förenklad installation?</string>
     <string name="login_info_oauth2_text">Den angivna e-postadressen stödjer förenklad inställning (OAuth 2.0).\n\nLåt Delta Chat agera som ditt chatt-över-epost-program, i nästa steg.\n\nDet finns ingen Delta Chat-server, din data stannar på din enhet.</string>
     <string name="login_certificate_checks">Certifikatkontroller</string>
@@ -362,6 +366,8 @@
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Vidarebefordra till...</string>
     <string name="share_multiple_attachments">Vill du skicka %1$d filer till den valda chatten?\n\nFilerna skickas oförändrade i ursprunglig storlek, t.ex. bilder och videor kodas inte om.</string>
+    <string name="share_multiple_attachments_multiple_chats">Vill du skicka %1$d fil(er) till %2$d chattar?\n\nFilerna skickas oförändrade i ursprunglig storlek, t.ex. bilder och videor kodas inte om.</string>
+    <string name="share_text_multiple_chats">Vill du skicka denna text till %1$d chattar?\n\n\"%2$s\"</string>
     <string name="share_abort">Delningen avbröts på grund av saknad behörighet.</string>
 
 
@@ -471,9 +477,11 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Tillförlitlig bakgrundsanslutning</string>
     <string name="pref_reliable_service_explain">Kräver permanent avisering</string>
+    <string name="ephemeral_dialog_title">Ta bort lästa meddelanden</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">Ta bort gamla meddelanden</string>
     <string name="autodel_title">Ta bort meddelanden automatiskt</string>
     <string name="autodel_title_short">Ta bort automatiskt</string>
     <string name="autodel_device_title">Ta bort meddelanden från enheten</string>
@@ -484,6 +492,8 @@
     <string name="autodel_server_ask">Vill du ta bort %1$d meddelanden nu och alla kommande meddelanden \"%2$s\" i framtiden?\n\n• Detta inkluderar all mediafiler.\n\n• Detta tar också bort e-post som påverkas av alternativet \"Visa vanlig e-post\".\n\n• \"Sparade e-postmeddelanden\" kommer även att tas bort från servern.</string>
     <string name="autodel_confirm">Jag förstår! Ta bort alla dessa meddelanden.</string>
     <string name="autodel_at_once">Nu genast</string>
+    <string name="after_30_seconds">Efter 30 sekunder</string>
+    <string name="after_1_minute">Efter 1 minut</string>
     <string name="autodel_after_1_hour">Efter 1 timma</string>
     <string name="autodel_after_1_day">Efter 1 dag</string>
     <string name="autodel_after_1_week">Efter 1 vecka</string>
@@ -522,6 +532,17 @@
     <string name="systemmsg_action_by_me">%1$s av mig.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s av %2$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Okänd avsändare för denna chatt. Se info för fler detaljer.</string>
+    <string name="systemmsg_subject_for_new_contact">Meddelande från %1$s</string>
+    <string name="systemmsg_failed_sending_to">Kunde inte skicka meddelande till %1$s.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">Tiduret för meddelandeborttagning är inaktiverat.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">Tiduret för meddelandeborttagning är satt till %1$s s.</string>
+    <string name="systemmsg_ephemeral_timer_minute">Tiduret för meddelandeborttagning är satt till 1 minut.</string>
+    <string name="systemmsg_ephemeral_timer_hour">Tiduret för meddelandeborttagning är satt till 1 timma.</string>
+    <string name="systemmsg_ephemeral_timer_day">Tiduret för meddelandeborttagning är satt till 1 dag.</string>
+    <string name="systemmsg_ephemeral_timer_week">Tiduret för meddelandeborttagning är satt till 1 vecka.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">Tiduret för meddelandeborttagning är satt till 4 veckor.</string>
 
 
     <!-- screen lock -->
@@ -557,6 +578,7 @@
     <string name="qrshow_join_contact_no_connection_hint">QR-kod-inställning kräver en internetanslutning. Anslut till ett nätverk innan du fortsätter.</string>
     <string name="qrshow_join_contact_no_connection_toast">Ingen internetanslutning, kan inte utföra QR-kod-inställning.</string>
     <string name="qraccount_ask_create_and_login">Skapa ny e-postadress på \"%1$s\" och logga in där?</string>
+    <string name="qraccount_ask_create_and_login_another">Vill du skapa en ny e-postadress på \"%1$s\" och logga in där?\n\nDitt befintliga konto kommer inte att tas bort. Använd \"Byt konto\" för att växla mellan dina konton.</string>
     <string name="qraccount_success_enter_name">Inloggning slutförd. - Din e-postadress är %1$s\n\nOm du vill, kan du nu ange ett namn och en bild som visas för folk du skriver till.</string>
     <string name="qraccount_qr_code_cannot_be_used">Den skannade QR-koden kan inte användas för att konfigurera ett nytt konto.</string>
     <string name="qraccount_use_on_new_install">Den skannade QR-koden är till för att konfigurera ett nytt konto. Du kan skanna QR-koden när du konfigurerar en ny Delta Chat-installation.</string>
@@ -598,6 +620,9 @@
     <string name="perm_enable_bg_reminder_title">Tryck här för att ta emot meddelanden medan Delta Chat är i bakgrunden.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat använder få resurser och försöker att inte dränera ditt batteri.</string>
     <string name="perm_enable_bg_already_done">Du har redan gett Delta Chatt tillstånd att ta emot meddelanden i bakgrunden.\n\nKontrollera dina systeminställningar också, om det fortfarande inte kommer några meddelanden i bakgrunden.</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Rita var som helst för att smeta ut</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Krypterat meddelande</string>
@@ -688,12 +713,10 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat använder dina kontakter för att visa en lista över e-postadresser som du kan skriva till.m Delta Chat har ingen server, dina kontakter skickas inte någonstans.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat använder din mikrofon för att spela in och skicka röstmeddelanden, och filmer med ljud.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat låter dig välja vilka bilder från ditt galleri som du vill skicka.</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat vill spara bilder i ditt fotogalleri.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Du kanske redan har märkt att det finns ett tips, \"Bakgrundsanslutning aktiverad\" som visas av systemet.\n\n👉 Tipset förhindrar normalt att operativsystemet dödar anslutningen mellan Delta Chat och din server.\n\n👉 Om tipset försvinner utan någon åtgärd från din sida, har anslutningen förmodligen dödats ändå.\nOm du tycker att detta är konstigt, är vi helt överens men många tillverkare gör just så. Webbplatsen https://dontkillmyapp.com visar några lösningar.\n\nVi är dock glada att vi kunde förbättra mottagandet av meddelanden i bakgrunden, med denna förändring, och att vi kunde uppfylla önskemålen från många användare. Tack för rapporteringen! 🤗</string>
-    <string name="device_talk_background_connection2_android">Nu kan du aktivera och avaktivera \"Bakgrundsanslutning\" efter behov, i \"Inställningar / Avisering\".</string>
-
+    <string name="update_1_10_android">Nya Delta Chatt 1.10-funktioner i korthet: Snabbare, multikonto, suddiga bilder, nya emojis, omarbetade meddelanden, bättre felrapportering men viktigast av allt... \n\nKlicka på en avatar i profilen och förstora den 🚀</string>
 
 </resources>
