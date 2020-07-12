@@ -15,7 +15,7 @@ import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import ConfirmationDialog from './ConfirmationDialog'
 import UnblockContacts from './UnblockContacts'
-import EphemeralMessage from './EphemeralMessage'
+import DisappearingMessages from './DisappearingMessages'
 
 export const allDialogs = {
   DeadDrop,
@@ -34,7 +34,7 @@ export const allDialogs = {
   ImportQrCode,
   ConfirmationDialog,
   UnblockContacts,
-  EphemeralMessage,
+  DisappearingMessages,
 }
 
 export type DialogId = keyof typeof allDialogs

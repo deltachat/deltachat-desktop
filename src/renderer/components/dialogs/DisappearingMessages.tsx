@@ -11,7 +11,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { Timespans } from '../../../shared/constants'
 import { useTranslationFunction } from '../../contexts'
 
-enum EphemeralMessageDuration {
+enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
   ONE_SECOND = Timespans.ONE_SECOND,
   ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
@@ -21,67 +21,67 @@ enum EphemeralMessageDuration {
   FOUR_WEEKS = Timespans.FOUR_WEEKS_IN_SECONDS,
 }
 
-function SelectEphemeralMessageDuration({
-  onSelectEphemeralMessageDuration,
-  ephemeralMessageDuration,
+function SelectDisappearingMessageDuration({
+  onSelectDisappearingMessageDuration,
+  disappearingMessageDuration,
 }: {
-  onSelectEphemeralMessageDuration: (
-    ephemeralMessageDuration: EphemeralMessageDuration
+  onSelectDisappearingMessageDuration: (
+    disappearingMessageDuration: DisappearingMessageDuration
   ) => void
-  ephemeralMessageDuration: EphemeralMessageDuration
+  disappearingMessageDuration: DisappearingMessageDuration
 }) {
   const tx = useTranslationFunction()
 
   const onChange = (ev: React.FormEvent<HTMLInputElement>) => {
-    const ephemeralMessageDuration = Number(ev.currentTarget.value)
-    onSelectEphemeralMessageDuration(ephemeralMessageDuration)
+    const disappearingMessageDuration = Number(ev.currentTarget.value)
+    onSelectDisappearingMessageDuration(disappearingMessageDuration)
   }
 
   return (
     <RadioGroup
       onChange={onChange}
-      selectedValue={String(ephemeralMessageDuration)}
+      selectedValue={String(disappearingMessageDuration)}
     >
       <Radio
         key={'eph-0'}
         label={tx('off')}
-        value={String(EphemeralMessageDuration.OFF)}
+        value={String(DisappearingMessageDuration.OFF)}
       />
       <Radio
         key={'eph-1'}
         label={'One second'}
-        value={String(EphemeralMessageDuration.ONE_SECOND)}
+        value={String(DisappearingMessageDuration.ONE_SECOND)}
       />
       <Radio
         key={'eph-2'}
         label={'One minute'}
-        value={String(EphemeralMessageDuration.ONE_MINUTE)}
+        value={String(DisappearingMessageDuration.ONE_MINUTE)}
       />
       <Radio
         key={'eph-3'}
         label={'One hour'}
-        value={String(EphemeralMessageDuration.ONE_HOUR)}
+        value={String(DisappearingMessageDuration.ONE_HOUR)}
       />
       <Radio
         key={'eph-4'}
         label={'One day'}
-        value={String(EphemeralMessageDuration.ONE_DAY)}
+        value={String(DisappearingMessageDuration.ONE_DAY)}
       />
       <Radio
         key={'eph-5'}
         label={'One week'}
-        value={String(EphemeralMessageDuration.ONE_WEEK)}
+        value={String(DisappearingMessageDuration.ONE_WEEK)}
       />
       <Radio
         key={'eph-6'}
         label={'Four weeks'}
-        value={String(EphemeralMessageDuration.FOUR_WEEKS)}
+        value={String(DisappearingMessageDuration.FOUR_WEEKS)}
       />
     </RadioGroup>
   )
 }
 
-export default function EphemeralMessage({
+export default function DisappearingMessage({
   isOpen,
   onClose,
   chatId,
@@ -90,9 +90,9 @@ export default function EphemeralMessage({
   onClose: () => void
   chatId: number
 }) {
-  const [ephemeralMessageDuration, setEphemeralMessageDuration] = useState<
-    EphemeralMessageDuration
-  >(EphemeralMessageDuration.OFF)
+  const [disappearingMessageDuration, setDisappearingMessageDuration] = useState<
+    DisappearingMessageDuration
+  >(DisappearingMessageDuration.OFF)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -101,7 +101,7 @@ export default function EphemeralMessage({
         'chat.getChatEphemeralTimer',
         chatId
       )
-      setEphemeralMessageDuration(ephemeralTimer)
+      setDisappearingMessageDuration(ephemeralTimer)
       setLoading(false)
     })()
   }, [])
@@ -110,7 +110,7 @@ export default function EphemeralMessage({
     await DeltaBackend.call(
       'chat.setChatEphemeralTimer',
       chatId,
-      ephemeralMessageDuration
+      disappearingMessageDuration
     )
     onClose()
   }
@@ -122,9 +122,9 @@ export default function EphemeralMessage({
         <DeltaDialogHeader title={'Ephemeral Message'} />
         <DeltaDialogBody>
           <DeltaDialogContent>
-            <SelectEphemeralMessageDuration
-              ephemeralMessageDuration={ephemeralMessageDuration}
-              onSelectEphemeralMessageDuration={setEphemeralMessageDuration}
+            <SelectDisappearingMessageDuration
+              disappearingMessageDuration={disappearingMessageDuration}
+              onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
             />
           </DeltaDialogContent>
         </DeltaDialogBody>
