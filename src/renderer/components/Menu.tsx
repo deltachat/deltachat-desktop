@@ -1,7 +1,11 @@
 import { C } from 'deltachat-node/dist/constants'
 import React, { useContext } from 'react'
 import { DeltaBackend } from '../delta-remote'
-import { ScreenContext, useTranslationFunction, SettingsContext } from '../contexts'
+import {
+  ScreenContext,
+  useTranslationFunction,
+  SettingsContext,
+} from '../contexts'
 import { useChatStore } from '../stores/chat'
 import { Menu } from '@blueprintjs/core'
 import {
@@ -56,7 +60,9 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const onContactRequests = () =>
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: C.DC_CHAT_ID_DEADDROP })
   const onDisappearingMessages = () =>
-    screenContext.openDialog('DisappearingMessages', { chatId: selectedChat.id })
+    screenContext.openDialog('DisappearingMessages', {
+      chatId: selectedChat.id,
+    })
   const logout = () => {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })

@@ -90,9 +90,10 @@ export default function DisappearingMessage({
   onClose: () => void
   chatId: number
 }) {
-  const [disappearingMessageDuration, setDisappearingMessageDuration] = useState<
-    DisappearingMessageDuration
-  >(DisappearingMessageDuration.OFF)
+  const [
+    disappearingMessageDuration,
+    setDisappearingMessageDuration,
+  ] = useState<DisappearingMessageDuration>(DisappearingMessageDuration.OFF)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -124,7 +125,9 @@ export default function DisappearingMessage({
           <DeltaDialogContent>
             <SelectDisappearingMessageDuration
               disappearingMessageDuration={disappearingMessageDuration}
-              onSelectDisappearingMessageDuration={setDisappearingMessageDuration}
+              onSelectDisappearingMessageDuration={
+                setDisappearingMessageDuration
+              }
             />
           </DeltaDialogContent>
         </DeltaDialogBody>
