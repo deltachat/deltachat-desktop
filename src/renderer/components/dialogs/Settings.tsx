@@ -262,6 +262,10 @@ export default function Settings(props: DialogProps) {
               'enableDisappearingMessages',
               'Enable disappearing messages'
             )}
+            {renderDTSettingSwitch(
+              'enableAVCalls',
+              tx('pref_av_calls')
+            )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>
             {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}

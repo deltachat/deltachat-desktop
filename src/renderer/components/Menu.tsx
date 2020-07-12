@@ -58,6 +58,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
+  const settingsContext = useContext(SettingsContext)
 
   let chatMenu: any = <div />
 
@@ -115,7 +116,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      <DeltaMenuItem
+      settingsContext.enableAVCalls && <DeltaMenuItem
         key='call'
         text='Invite to call'
         onClick={() => {

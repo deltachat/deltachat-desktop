@@ -28,6 +28,7 @@ export interface DesktopSettings {
     | {}
   chatViewBgImg: string
   credentials: Credentials
+  enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
   enableDisappearingMessages: boolean
   enterKeySends: boolean
