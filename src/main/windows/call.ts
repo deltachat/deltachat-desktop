@@ -1,4 +1,4 @@
-import { app as rawApp, BrowserWindow, Menu, shell } from 'electron'
+import { app as rawApp, BrowserWindow, Menu, shell, ipcMain } from 'electron'
 import { appIcon } from '../application-constants'
 import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
@@ -43,6 +43,7 @@ export async function openCallWindow(
 
     webPreferences: {
       nodeIntegration: false,
+      preload: join(__dirname, '../../../static/preload-call.js'),
     },
   })
 
@@ -76,7 +77,12 @@ export async function openCallWindow(
     shell.openExternal(url)
   })
 
+  const closeButtonCallback = () => {
+    win.close()
+  }
+  ipcMain.addListener('call-close',closeButtonCallback)
   win.on('close', e => {
+    ipcMain.removeListener('call-close',closeButtonCallback)
     win = null
   })
 
