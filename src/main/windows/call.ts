@@ -3,6 +3,8 @@ import { appIcon } from '../application-constants'
 import { getLogger } from '../../shared/logger'
 import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
+
+var btoa = require('btoa');
 //import { appWindowTitle } from '../../shared/constants'
 
 const log = getLogger('main/call')
@@ -49,8 +51,8 @@ export async function openCallWindow(
 
   log.debug(roomname)
   const appPath = app.getAppPath()
-  const socketdomain = 'aHR0cHM6Ly9jbG91ZDEzLmRl' //btoa("https://cloud13.de");
-  const subdir = 'L3AycC8=' //btoa('/p2p/');
+  const socketdomain = btoa("https://cloud13.de");
+  const subdir = btoa('/p2p/');
   let url =
     join(__dirname, '../../..//html-dist/call/index.html') +
     '?socketdomain=' +

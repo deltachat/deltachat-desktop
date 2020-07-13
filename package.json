@@ -78,6 +78,7 @@
     "@types/emoji-mart": "^2.11.3",
     "application-config": "^1.0.1",
     "array-differ": "^3.0.0",
+    "btoa": "^1.2.1",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
     "deltachat-node": "^1.41.0",
