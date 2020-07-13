@@ -57,7 +57,8 @@ function onKeysExport() {
     )
     confirmationDialog(title, (response: todo) => {
       if (!response || !filenames || !filenames.length) return
-      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
+      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, [_data1, filename]) => {
+        console.log(filename)
         userFeedback({
           type: 'success',
           text: tx('pref_managekeys_secret_keys_exported_to_x', filename),
