@@ -3,7 +3,7 @@ import React, {
   useEffect,
   forwardRef,
   PropsWithChildren,
-  useRef,
+  useLayoutEffect,
 } from 'react'
 import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
@@ -123,7 +123,7 @@ export const EmojiAndStickerPicker = forwardRef<
     setStickers(stickers)
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.querySelector('.emoji-sticker-picker__emoji-picker > .emoji-mart-search')
       ?.querySelector('input')
       ?.focus()
