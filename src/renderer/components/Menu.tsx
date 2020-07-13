@@ -116,13 +116,15 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      settingsContext.enableAVCalls && <DeltaMenuItem
-        key='call'
-        text='Invite to call'
-        onClick={() => {
-          sendCallInvitation(selectedChat.id)
-        }}
-      />,
+      settingsContext.enableAVCalls && (
+        <DeltaMenuItem
+          key='call'
+          text='Invite to call'
+          onClick={() => {
+            sendCallInvitation(selectedChat.id)
+          }}
+        />
+      ),
       <DeltaMenuItem
         key='delete'
         text={tx('menu_delete_chat')}

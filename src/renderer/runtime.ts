@@ -64,7 +64,10 @@ class Browser implements Runtime {
 
 class Electron implements Runtime {
   async openCallWindow(callUrl: string): Promise<void> {
-    const username = await DeltaBackend.call('settings.getConfig', 'displayname')
+    const username = await DeltaBackend.call(
+      'settings.getConfig',
+      'displayname'
+    )
     ipcBackend.send('call', window.localeData.locale, callUrl, username)
   }
   openLink(link: string): void {

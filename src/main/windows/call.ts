@@ -10,7 +10,11 @@ const app = rawApp as ExtendedAppMainProcess
 
 let win: BrowserWindow | null = null
 
-export async function openCallWindow(locale: string, roomname: string, username:string) {
+export async function openCallWindow(
+  locale: string,
+  roomname: string,
+  username: string
+) {
   if (win) {
     win.focus()
     return
