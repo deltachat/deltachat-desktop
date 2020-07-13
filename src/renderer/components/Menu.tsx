@@ -141,7 +141,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           desktopSettings.enableDisappearingMessages && (
             <DeltaMenuItem
               key='disappearing'
-              text={tx('ephemeral_messages')} // TODO: Translate
+              text={tx('ephemeral_messages')}
               onClick={onDisappearingMessages}
             />
           )
