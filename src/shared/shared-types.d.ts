@@ -27,12 +27,15 @@ export interface DesktopSettings {
       }
     | {}
   chatViewBgImg: string
+  /** @deprecated replaced by lastAccount */
   credentials: Credentials
+   /** path to last used/selected Account */
+    lastAccount: string
   enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
   enableDisappearingMessages: boolean
   enterKeySends: boolean
-  locale: string
+  locale: string|null
   notifications: boolean
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
@@ -45,23 +48,7 @@ export interface AppState {
   deltachat: {
     credentials: Credentials
   }
-  saved: {
-    bounds: todo
-    /** @deprecated replaced by lastAccount */
-    credentials: any | undefined
-    /** path to last used/selected Account */
-    lastAccount: string
-    enterKeySends: boolean
-    notifications: boolean
-    showNotificationContent: boolean
-    locale: string
-    enableOnDemandLocationStreaming: boolean
-    enableDisappearingMessages: boolean
-    chatViewBgImg: string
-    lastChats: todo
-    zoomFactor: number
-    activeTheme: string
-  }
+  saved: DesktopSettings
   logins: DeltaChatAccount[]
 }
 

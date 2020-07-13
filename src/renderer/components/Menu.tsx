@@ -116,7 +116,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      settingsContext.enableAVCalls && (
+      settingsContext.desktopSettings.enableAVCalls && (
         <DeltaMenuItem
           key='call'
           text='Invite to call'
