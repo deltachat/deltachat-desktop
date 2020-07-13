@@ -50,75 +50,82 @@ export const LabeledLink = ({
       return
     }
     // not trusted - ask for confimation from user
-    ;(openDialog as OpenDialogFunctionType)(({ isOpen, onClose }) => {
-      const tx = window.translate
-
-      const [isChecked, setIsChecked] = useState(false)
-      const toggleIsChecked = () => setIsChecked(checked => !checked)
-
-      return (
-        <SmallDialog isOpen={isOpen} onClose={onClose}>
-          <div className='bp3-dialog-body-with-padding'>
-            <p>{tx('open_url_confirmation')}</p>
-            <p
-              style={{
-                overflowWrap: 'break-word',
-                overflowY: 'scroll',
-                maxHeight: '50vh',
-              }}
-            >
-              {sanitizedTarget}
-            </p>
-            <div style={{ display: 'flex' }}>
-              <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
-              <div style={{ alignSelf: 'center' }}>
-                {tx('open_external_url_trust_domain') + ' '}
-                <i>{domain}</i>
-              </div>
-            </div>
-            <div className={Classes.DIALOG_FOOTER}>
-              <div
-                className={Classes.DIALOG_FOOTER_ACTIONS}
-                style={{ justifyContent: 'space-between', marginTop: '7px' }}
-              >
-                <p
-                  className={`delta-button no-padding bold primary`}
-                  onClick={onClose}
-                >
-                  {tx('no')}
-                </p>
-                <p
-                  className={`delta-button no-padding bold primary`}
-                  onClick={() => {
-                    onClose()
-                    navigator.clipboard.writeText(target)
-                  }}
-                >
-                  {tx('menu_copy_link_to_clipboard')}
-                </p>
-                <p
-                  className={`delta-button no-padding bold primary`}
-                  onClick={() => {
-                    onClose()
-                    if (isChecked) {
-                      // trust url
-                      trustDomain(domain)
-                    }
-                    openExternal(target)
-                  }}
-                >
-                  {tx('open')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </SmallDialog>
-      )
-    })
+    confirmationDialog(openDialog as OpenDialogFunctionType, sanitizedTarget, domain, target)
   }
   return (
     <a href={'#' + target} title={sanitizedTarget} onClick={onClick}>
       {String(label)}
     </a>
   )
+}
+
+function confirmationDialog(
+  openDialog: OpenDialogFunctionType,
+  sanitizedTarget: string,
+  domain: string,
+  target: string
+) {
+  openDialog(({ isOpen, onClose }) => {
+    const tx = window.translate
+    const [isChecked, setIsChecked] = useState(false)
+    const toggleIsChecked = () => setIsChecked(checked => !checked)
+    return (
+      <SmallDialog isOpen={isOpen} onClose={onClose}>
+        <div className='bp3-dialog-body-with-padding'>
+          <p>{tx('open_url_confirmation')}</p>
+          <p
+            style={{
+              overflowWrap: 'break-word',
+              overflowY: 'scroll',
+              maxHeight: '50vh',
+            }}
+          >
+            {sanitizedTarget}
+          </p>
+          <div style={{ display: 'flex' }}>
+            <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
+            <div style={{ alignSelf: 'center' }}>
+              {tx('open_external_url_trust_domain') + ' '}
+              <i>{domain}</i>
+            </div>
+          </div>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div
+              className={Classes.DIALOG_FOOTER_ACTIONS}
+              style={{ justifyContent: 'space-between', marginTop: '7px' }}
+            >
+              <p
+                className={`delta-button no-padding bold primary`}
+                onClick={onClose}
+              >
+                {tx('no')}
+              </p>
+              <p
+                className={`delta-button no-padding bold primary`}
+                onClick={() => {
+                  onClose()
+                  navigator.clipboard.writeText(target)
+                }}
+              >
+                {tx('menu_copy_link_to_clipboard')}
+              </p>
+              <p
+                className={`delta-button no-padding bold primary`}
+                onClick={() => {
+                  onClose()
+                  if (isChecked) {
+                    // trust url
+                    trustDomain(domain)
+                  }
+                  openExternal(target)
+                }}
+              >
+                {tx('open')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </SmallDialog>
+    )
+  })
 }
