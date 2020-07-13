@@ -103,4 +103,12 @@ export default class DCChat extends SplitOut {
   markNoticedChat(chatId: number) {
     this._dc.markNoticedChat(chatId)
   }
+
+  getChatEphemeralTimer(chatId: number) {
+    return this._dc.getChatEphemeralTimer(chatId)
+  }
+
+  setChatEphemeralTimer(chatId: number, timer: number) {
+    return this._dc.setChatEphemeralTimer(chatId, timer)
+  }
 }
