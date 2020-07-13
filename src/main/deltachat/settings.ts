@@ -76,11 +76,11 @@ export default class DCSettings extends SplitOut {
   }
 
   keysImport(directory: string) {
-    this._dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory, undefined)
+    this._dc.importExport(C.DC_IMEX_IMPORT_SELF_KEYS, directory, '')
   }
 
   keysExport(directory: string) {
-    this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory, undefined)
+    this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory, '')
   }
 
   /**
