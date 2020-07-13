@@ -10,6 +10,7 @@ const { remote } = window.electron_functions
 
 function onKeysImport() {
   const tx = window.static_translate
+  const userFeedback = window.__userFeedback
 
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_import_secret_keys'),
@@ -29,7 +30,7 @@ function onKeysImport() {
       )
       ipcBackend.on('DC_EVENT_IMEX_PROGRESS', (_event, progress) => {
         if (progress !== 1000) return
-        this.props.userFeedback({ type: 'success', text })
+        userFeedback({ type: 'success', text })
       })
       DeltaBackend.call('settings.keysImport', filenames[0])
     })
@@ -40,6 +41,7 @@ function onKeysExport() {
   // TODO: ask for the user's password and check it using
   // var matches = ipcRenderer.sendSync('dispatchSync', 'checkPassword', password)
   const tx = window.static_translate
+  const userFeedback = window.__userFeedback
 
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_export_secret_keys'),
@@ -56,7 +58,7 @@ function onKeysExport() {
     confirmationDialog(title, (response: todo) => {
       if (!response || !filenames || !filenames.length) return
       ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', (_event, filename) => {
-        this.props.userFeedback({
+        userFeedback({
           type: 'success',
           text: tx('pref_managekeys_secret_keys_exported_to_x', filename),
         })
