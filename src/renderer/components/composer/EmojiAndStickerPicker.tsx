@@ -123,11 +123,8 @@ export const EmojiAndStickerPicker = forwardRef<
     setStickers(stickers)
   }, [])
 
-  const emojipicker = useRef(null)
-
   useEffect(() => {
-    emojipicker.current
-      ?.querySelector('.emoji-mart-search')
+    document.querySelector('.emoji-sticker-picker__emoji-picker > .emoji-mart-search')
       ?.querySelector('input')
       ?.focus()
     return () => {
@@ -158,7 +155,7 @@ export const EmojiAndStickerPicker = forwardRef<
       </div>
       <div className='emoji-sticker-picker__emoji-or-sticker-picker'>
         {!showSticker && (
-          <div className='emoji-sticker-picker__emoji-picker' ref={emojipicker}>
+          <div className='emoji-sticker-picker__emoji-picker'>
             <Picker
               style={{ width: '100%', height: '100%' }}
               native
