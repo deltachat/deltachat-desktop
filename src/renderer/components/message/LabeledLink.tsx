@@ -66,7 +66,7 @@ function confirmationDialog(
   target: string
 ) {
   openDialog(({ isOpen, onClose }) => {
-    const tx = window.translate
+    const tx = window.static_translate
     const [isChecked, setIsChecked] = useState(false)
     const toggleIsChecked = () => setIsChecked(checked => !checked)
     return (

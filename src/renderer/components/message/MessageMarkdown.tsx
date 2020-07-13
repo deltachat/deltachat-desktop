@@ -52,7 +52,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     labeled_link: {
       order: 18,
       match: anyScopeRegex(
-        /^\[([^\]]*)\]\((https?:\/\/[^\s<]+[^<>.,:;"')\]\s])\)/
+        /^\[([^\]]*)\]\((https?:\/\/[^\s<]+[^<>.,:;"')\]{3,1000}\s])\)/
       ),
       parse: function(
         capture: RegExpMatchArray,
