@@ -1,5 +1,6 @@
 import React from 'react'
 import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
+import { LabeledLink } from './LabeledLink'
 const { openExternal } = window.electron_functions
 
 var ignoreCapture = function() {
@@ -48,7 +49,33 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     // fence: assign(defaultRules.fence, 11, {
     //   match: blockRegex(/^ *(`{3,}|~{3,})(\S+)? *\n?([\s\S]+?)\s*\1\n*/)
     // }), // uses style of codeBlock
-    link: {
+    labeled_link: {
+      order: 18,
+      match: anyScopeRegex(
+        /^\[([^\]]*)\]\((https?:\/\/[^\s<]+[^<>.,:;"')\]{3,1000}\s])\)/
+      ),
+      parse: function(
+        capture: RegExpMatchArray,
+        recurseParse: any,
+        state: any
+      ) {
+        var link = {
+          label: capture[1],
+          target: capture[2],
+        }
+        return link
+      },
+      react: function(node: any, output: any, state: any) {
+        return (
+          <LabeledLink
+            key={state.key}
+            target={node.target}
+            label={node.label}
+          />
+        )
+      },
+    },
+    normal_link: {
       order: 18,
       match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
       parse: function(capture: any[], recurseParse: any, state: any) {

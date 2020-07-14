@@ -6,6 +6,7 @@
 - :colon-emoji: support for skin tones (:+1::skin-tone-6:)
 - :colon-emoji:'s are now replaced with the unicode emoji they represent on send
 - add explaination if there are no contact requests
+- add support for markdown links `[label](url)` (with a open confirmation dialog to prevent phishing)
 - implement disappearing messages as an experimental feature
 
 ## Updated
