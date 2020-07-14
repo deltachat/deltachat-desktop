@@ -211,6 +211,7 @@
         <item quantity="other">在此处和服务器上删除 %d 条消息？</item>
     </plurals>
     <string name="ask_forward">将消息转发给 %1$s？</string>
+    <string name="ask_forward_multiple">转发消息到 %1$d 个聊天？</string>
     <string name="ask_export_attachment">导出附件？导出附件将允许您设备上的任意应用程序访问它们。\n\n继续？</string>
     <string name="ask_block_contact">屏蔽此联系人？您将不再收到此联系人的消息。</string>
     <string name="ask_unblock_contact">取消屏蔽此联系人？您将再次能收到此联系人的消息。</string>
@@ -321,6 +322,8 @@
     <string name="login_smtp_port">SMTP 端口</string>
     <string name="login_smtp_security">SMTP 安全类型</string>
     <string name="login_auth_method">认证方法</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">检查 %1$s 中</string>
     <string name="login_info_oauth2_title">使用简化设置继续？</string>
     <string name="login_info_oauth2_text">输入的电子邮件地址支持简化设置（OAuth 2.0）。\n\n在下一步中，请允许 Delta Chat 充当您的“通过电子邮件聊天”应用程序。\n\n不存在 Delta Chat 服务器，您的数据保留于您的设备！</string>
     <string name="login_certificate_checks">证书检查</string>
@@ -350,7 +353,9 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">转发给…</string>
-    <string name="share_multiple_attachments">是否将 %1$d 个文件发送到所选聊天？\n\n文件将以未经修改的、保持原大小的方式发送，例如：图像和视频不会被重新编码。</string>
+    <string name="share_multiple_attachments">发送 %1$d 个文件到所选聊天？\n\n文件将以未经修改的、保持原大小的方式发送，例如：图像和视频不会被重新编码。</string>
+    <string name="share_multiple_attachments_multiple_chats">发送 %1$d 个文件到 %2$d 个聊天？\n\n文件将以未经修改的、保持原大小的方式发送，例如：图像和视频不会被重新编码。</string>
+    <string name="share_text_multiple_chats">发送这段文字到 %1$d 个聊天？\n\n\"%2$s“</string>
     <string name="share_abort">由于缺少权限，分享中止。</string>
 
 
@@ -460,9 +465,11 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">可靠后台连接</string>
     <string name="pref_reliable_service_explain">需要一个永久通知</string>
+    <string name="ephemeral_dialog_title">删除已读消息</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">删除旧消息</string>
     <string name="autodel_title">自动删除消息</string>
     <string name="autodel_title_short">自动删除</string>
     <string name="autodel_device_title">从设备删除消息</string>
@@ -473,6 +480,8 @@
     <string name="autodel_server_ask">您要删除目前的 %1$d 条消息以及之后 %2$s 内新收到的消息吗？\n\n• 这包括所有媒体文件\n\n• 这也会删除被“显示传统电子邮件”选项影响的电子邮件\n\n• “保存的消息”也将从服务器中删除</string>
     <string name="autodel_confirm">我了解，将这些消息全部删除</string>
     <string name="autodel_at_once">立刻</string>
+    <string name="after_30_seconds">30 秒后</string>
+    <string name="after_1_minute">1 分钟后</string>
     <string name="autodel_after_1_hour">1 小时后</string>
     <string name="autodel_after_1_day">1 天后</string>
     <string name="autodel_after_1_week">1 周后</string>
@@ -511,7 +520,9 @@
     <string name="systemmsg_action_by_me">我 %1$s。</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%2$s %1$s。</string>
-
+    <string name="systemmsg_unknown_sender_for_chat">此聊天发送者未知。查看“信息”来获取更多详情。</string>
+    <string name="systemmsg_subject_for_new_contact">来自 %1$s 的消息</string>
+    <string name="systemmsg_failed_sending_to">发送消息给 %1$s 失败。</string>
 
     <!-- screen lock -->
     <string name="screenlock_title">屏幕锁定</string>
@@ -546,6 +557,7 @@
     <string name="qrshow_join_contact_no_connection_hint">二维码设置需要互联网连接。 要继续，请先连接到网络。</string>
     <string name="qrshow_join_contact_no_connection_toast">没有互联网连接，无法进行二维码设置。</string>
     <string name="qraccount_ask_create_and_login">在“%1$s”创建新的电子邮件地址并在那登录？</string>
+    <string name="qraccount_ask_create_and_login_another">在“%1$s”创建新的电子邮件地址并在那登录？\n\n您的已存在账户不会被删除。使用“切换账户”来在您的账户之间切换。</string>
     <string name="qraccount_success_enter_name">登录成功——您的电子邮件地址是 %1$s\n\n如果您愿意，您现在可以去设置一个名称和头像。它们将显示给您写信到的人。</string>
     <string name="qraccount_qr_code_cannot_be_used">无法使用扫描到的二维码建立新账户。</string>
     <string name="qraccount_use_on_new_install">扫描到的二维码是用于设置新帐户的。设置新的 Delta Chat 安装时，您可以扫描此二维码。</string>
@@ -587,6 +599,9 @@
     <string name="perm_enable_bg_reminder_title">点击此处以在 Delta Chat 处于后台时接收消息。</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat 仅使用少量的资源并且会注意不去耗尽电池电量。</string>
     <string name="perm_enable_bg_already_done">您已允许 Delta Chat 在后台接收消息。\n\n如果在后台时消息仍没到达，请同时检查系统设置。</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">对任意地方进行模糊</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">加密的消息</string>
@@ -677,12 +692,10 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat 使用您的联系人来显示您可以写信到的电子邮件地址列表。 Delta Chat 没有服务器，您的联系人不会被发送到任何地方。</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat 使用您的麦克风来录制、发送语音消息和带有声音的视频。</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat 将让您选择要从图库中发送哪些照片。</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat 想将图像保存到您的图库。</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">您可能已经注意到了，系统显示了“后台连接已启用”的提示。\n\n👉通常，该提示可防止操作系统终止 Delta Chat 与您的服务器之间的连接。\n\n👉如果您没有采取任何行动而提示消失了，则连接可能已被终止。\n如果您认为这很奇怪，我们完全同意——但许多制造商确实是这么做的。网站 https://dontkillmyapp.com 给出了一些解决办法。\n\n不过，我们很高兴可以通过此更改改善后台的消息接收并能满足许多用户的请求——感谢您的报告🤗</string>
-    <string name="device_talk_background_connection2_android">现在，您可以根据需要在“设置/通知”中启用或禁用“后台连接”。</string>
-
+    <string name="update_1_10_android">Delta Chat 1.10 新功能概览：更快、多帐户、对图像进行模糊、新表情、通知重做、更好的错误报告，以及最重要的：\n\n点击个人资料中的头像并放大🚀</string>
 
 </resources>

@@ -25,6 +25,7 @@
     <string name="archive">Arkivoje</string>
     <string name="unarchive">Çarkivoje</string>
     <string name="mute">Heshtoje</string>
+    <string name="ephemeral_messages">Mesazhe që zhduken</string>
     <string name="save">Ruaje</string>
     <string name="chat">Fjalosje</string>
     <string name="media">Media</string>
@@ -219,6 +220,7 @@
         <item quantity="other">Të fshihen %d mesazhe këtu dhe te shërbyesi?</item>
     </plurals>
     <string name="ask_forward">Të përcillen mesazhet te %1$s?</string>
+    <string name="ask_forward_multiple">Të përcillen mesazhet te %1$d fjalosje?</string>
     <string name="ask_export_attachment">Të eksportohet bashkëngjitja? Eksportimi i bashkëngjitjeve do t\’i lejojë çfarëdo aplikacioni tjetër në pajisjen tuaj t\’i përdorë ato.\n\nTë vazhdohet?</string>
     <string name="ask_block_contact">Të bllokohet ky kontakt? S\’do të merrni më mesazhe prej këtij kontakti.</string>
     <string name="ask_unblock_contact">Të zhbllokohet ky kontakt? Do të jeni sërish në gjendje të merrni mesazhe prej këtij kontakti.</string>
@@ -332,6 +334,8 @@
     <string name="login_smtp_port">Portë SMTP</string>
     <string name="login_smtp_security">Siguri SMTP</string>
     <string name="login_auth_method">Metodë autorizimi</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">Po kontrollohet %1$s</string>
     <string name="login_info_oauth2_title">Të vazhdohet me rregullimin e thjeshtuar?</string>
     <string name="login_info_oauth2_text">Adresa email e dhënë mbulon një ujdisje të thjeshtuar (OAuth2).\n\nNë hapin pasues, ju lutemi, lejojeni Delta Chat-in të veprojë si aplikacioni juaj për Fjalosje Përmes Email-i.\n\nS\’ka shërbyes Delta Chat, të dhënat tuaja rrinë në pajisjen tuaj!</string>
     <string name="login_certificate_checks">Kontrolle dëshmish</string>
@@ -361,7 +365,9 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Përcilljani …</string>
-    <string name="share_multiple_attachments">Doni të dërgohen %1$d kartela te fjalosja e përzgjedhur?\n\nKartelat dërgohen të pandryshuara, në madhësinë e tyre origjinale, p.sh., figura dhe video nuk rikodohen.</string>
+    <string name="share_multiple_attachments">Të dërgohen %1$d kartela te fjalosja e përzgjedhur?\n\nKartelat dërgohen të pandryshuara, në madhësinë e tyre origjinale, p.sh., figurat dhe videot nuk rikodohen.</string>
+    <string name="share_multiple_attachments_multiple_chats">Doni të dërgohet %1$d kartelë(a) te 2 %2$d fjalosje?\n\nKartelat dërgohen të pandryshuara, në madhësinë e tyre origjinale, p.sh., figura dhe video nuk rikodohen.</string>
+    <string name="share_text_multiple_chats">Të dërgohet ky tekst te %1$d fjalosje?\n\n\"%2$s\"</string>
     <string name="share_abort">Ndarja me të tjerë dështoi ngaqë mungojnë leje.</string>
 
 
@@ -470,9 +476,11 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Lidhje e qëndrueshme në prapaskenë</string>
     <string name="pref_reliable_service_explain">Lyp një njoftim permanent</string>
+    <string name="ephemeral_dialog_title">Fshiji mesazhet e lexuar</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">Fshiji mesazhet e vjetër</string>
     <string name="autodel_title">Vetëfshi mesazhe</string>
     <string name="autodel_title_short">Vetëfshi</string>
     <string name="autodel_device_title">Fshini mesazhe prej pajisjes</string>
@@ -483,6 +491,8 @@
     <string name="autodel_server_ask">Doni të fshihen %1$d mesazhe tani dhe krejt mesazhet e prurë rishtazi \"%2$s\" në të ardhmen?\n\n• Kjo përfshin krejt mediat\n\n• Kjo do të fshijë gjithashtu email-e nën mundësinë \"Shfaq email-e klasikë\"\n\n• \"Mesazhet e ruajtur\" do të fshihen gjithashtu nga shërbyesi</string>
     <string name="autodel_confirm">E kuptoj, fshiji krejt këto mesazhe</string>
     <string name="autodel_at_once">Menjëherë</string>
+    <string name="after_30_seconds">Pas 30 sekondash</string>
+    <string name="after_1_minute">Pas 1 minute</string>
     <string name="autodel_after_1_hour">Pas 1 ore</string>
     <string name="autodel_after_1_day">Pas 1 dite</string>
     <string name="autodel_after_1_week">Pas 1 jave</string>
@@ -521,6 +531,17 @@
     <string name="systemmsg_action_by_me">%1$s nga unë.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s nga %2$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Dërgues i panjohur për këtë fjalosje. Për më tepër hollësi, shihni \'info\'.</string>
+    <string name="systemmsg_subject_for_new_contact">Mesazh nga %1$s</string>
+    <string name="systemmsg_failed_sending_to">S’u arrit të dërgohej mesazh te %1$s.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">Kohëmatësi për mesazhe që zhduken është i çaktivizuar.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">Kohëmatësi i zhdukjes së mesazheve është vënë në %1$s s.</string>
+    <string name="systemmsg_ephemeral_timer_minute">Kohëmatësi për mesazhe që zhduken është vënë në 1 minutë.</string>
+    <string name="systemmsg_ephemeral_timer_hour">Kohëmatësi për mesazhe që zhduken është vënë në 1 orë.</string>
+    <string name="systemmsg_ephemeral_timer_day">Kohëmatësi për mesazhe që zhduken është vënë në 1 ditë.</string>
+    <string name="systemmsg_ephemeral_timer_week">Kohëmatësi për mesazhe që zhduken është vënë në 1 javë.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">Kohëmatësi për mesazhe që zhduken është vënë në 4 javë.</string>
 
 
     <!-- screen lock -->
@@ -556,6 +577,7 @@
     <string name="qrshow_join_contact_no_connection_hint">Ujdisja e kodit QR lyp lidhje në internet. Ju lutemi, përpara se të ecni më tej, lidhuni me një rrjet.</string>
     <string name="qrshow_join_contact_no_connection_toast">S\’ka lidhje në internet, s\’bëhet dot ujdisja e kodit QR.</string>
     <string name="qraccount_ask_create_and_login">Të krijohet adresë email e re te \"%1$s\" dhe të bëhet hyrja atje?</string>
+    <string name="qraccount_ask_create_and_login_another">Të krijohet adresë e re email në \"%1$s\" dhe të bëhet hyrja atje?\n\nLlogaria juaj ekzistuese s’do të fshihet. Që të kaloni nga një llogari në tjetrën, përdorni zërin \"Ndërroni llogari\".</string>
     <string name="qraccount_success_enter_name">Hyrje e suksesshme—adresa juaj email është %1$s\n\nNëse doni, tani mund të jepni një emër dhe një figurë avatari që do t’u shfaqet personave që ju shkruajnë.</string>
     <string name="qraccount_qr_code_cannot_be_used">Kodi QR i skanuar s’mund të përdoret për të ujdisur një llogari të re.</string>
     <string name="qraccount_use_on_new_install">Kodi QR i skanuar është për ujdisje të një llogarie të re. Kodin QR mund ta skanoni kur ujdisni një instalim të ri të Delta Chat-it.</string>
@@ -597,6 +619,9 @@
     <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat-i përdor burime minimale dhe kujdeset të mos thajë baterinë.</string>
     <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Që të turbullohet, vizatoni kudo qoftë</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Mesazh i fshehtëzuar</string>
@@ -687,12 +712,10 @@
     <string name="InfoPlist_NSContactsUsageDescription">Lejimi i përdorimi të librit tuaj të adresave kamerës ju bën të mundur të bisedoni me kontakte prej pajisjes tuaj.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Lejimi i përdorimi të mikrofonit ju bën të mundur të bëni incizoni audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Lejimi i përdorimi të fototekës tuaj ju bën të mundur të ngarkoni figura prej saj.</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat dëshiron të ruajë figura në fototekën tuaj.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Mund të keni vënë re tashmë se ka një ndihmëz \"Lidhje në prapaskenë e aktivizuar\" shfaqur nga sistemi.\n\n👉 Normalisht ndihmëza shërben për te penguar sistemin operativ të asgjësojë lidhjen mes Delta Chat-it dhe shërbyesin tuaj.\n\n👉 Nëse ndihmëza zhduket pa ndonjë veprim nga ana juaj, lidhja ka mundësi të jetë asgjësuar.\nNëse kjo ju duket e çuditshme - pajtohemi me ju plotësisht - por prodhuesit e telefonave bëjnë pikërisht këtë. Sajti https://dontkillmyapp.com tregon disa zgjidhje prej halli.\n\nSidoqoftë, jemi të lumtur që me këtë ndryshim mund të përmirësojmë marrjen e mesazheve në prapaskenë dhe mund të plotësojmë kërkesat e mjaft përdoruesve - faleminderit që e keni kërkuar 🤗</string>
-    <string name="device_talk_background_connection2_android">Tanimë mund të aktivizoni dhe çaktivizoni \"Lidhje në prapaskenë\" sipas nevojës, te \"Rregullime / Njoftime\".</string>
-
+    <string name="update_1_10_android">Veçori të reja në Delta Chat 1.10, me një vështrim: më i shpejtë, llogari të shumëfishta, turbullim figurash, emotikone të rinj, njoftime të ripunuara, njoftim më i mirë të metash, por më e rëndësishmja:\n\nKlikoni mbi një avatar profili dhe zmadhojeni 🚀</string>
 
 </resources>

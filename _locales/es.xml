@@ -356,7 +356,6 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Reenviar a ...</string>
-    <string name="share_multiple_attachments">¿Desea enviar %1$d archivos al chat seleccionado?\n\nLos archivos se envían sin modificar en su tamaño original, por ejemplo, las imágenes y videos no son recodificados.</string>
     <string name="share_abort">Intercambio abortado debido a la falta de permisos.</string>
 
 
@@ -495,8 +494,6 @@
     <string name="systemmsg_action_by_me">%1$s por mi.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s por %2$s.</string>
-
-
     <!-- screen lock -->
     <string name="screenlock_title">Bloqueo de pantalla</string>
     <string name="screenlock_explain">Bloquea el acceso con el bloqueo de pantalla de Android o huella; para evitar que aparezca el contenido anterior, habilite también \"Seguridad de pantalla\"</string>
@@ -657,9 +654,4 @@
     <string name="InfoPlist_NSContactsUsageDescription">Al permitir acceder a tu libreta de direcciones podrás chatear con los contactos de tu dispositivo.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Al permitir el acceso al micrófono podrás grabar audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Al permitir el acceso a la galería de fotos podrás subir tus imágenes desde allí.</string>
-
-
-    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Es posible que ya haya notado que el sistema muestra una notificación \"Conexión de fondo habilitada\".\n\n👉 Esta notificación normalmente impide que el sistema operativo corte la conexión entre Delta Chat y su servidor.\n\n👉 Si la notificación desaparece sin ninguna acción de su parte, la conexión probablemente se haya interrumpido de todos modos. Si cree, esto es extraño, estamos totalmente de acuerdo, pero muchos fabricantes hacen exactamente eso. El sitio https://dontkillmyapp.com muestra algunas soluciones.\n\nSin embargo, estamos contentos de poder mejorar la recepción de mensajes en segundo plano con este cambio y satisfacer las solicitudes de muchos usuarios - gracias por reportar 🤗</string>
     </resources>

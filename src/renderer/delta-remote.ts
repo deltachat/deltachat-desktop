@@ -168,6 +168,12 @@ class DeltaRemote {
   ): Promise<void>
   call(fnName: 'chat.getChatContacts', chatId: number): Promise<number[]>
   call(fnName: 'chat.markNoticedChat', chatId: number): Promise<void>
+  call(fnName: 'chat.getChatEphemeralTimer', chatId: number): Promise<number>
+  call(
+    fnName: 'chat.setChatEphemeralTimer',
+    chatId: number,
+    ephemeralTimer: number
+  ): Promise<void>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',

@@ -1,0 +1,30 @@
+.ephermeral-message__select-option {
+  margin: 0px;
+  li {
+    width: 100%;
+
+    line-height: 50px;
+    font-size: 20px;
+    text-align: center;
+    color: var(--contactEmailColor);
+
+    border-color: transparent;
+    border-width: 4px;
+    border-style: solid;
+    border-right-style: unset;
+    border-left-style: unset;
+
+    &:hover {
+      background-color: var(--chatListItemBgHover);
+      cursor: pointer;
+    }
+
+    &.active {
+      border-color: var(--loginInputFocusColor);
+      color: var(--loginInputFocusColor);
+      &:hover {
+        background-color: unset;
+      }
+    }
+  }
+}

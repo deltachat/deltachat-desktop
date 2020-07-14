@@ -361,7 +361,6 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Birbidali honi …</string>
-    <string name="share_multiple_attachments">%1$d fitxategi bidali nahi dituzu hautatutako txatera?\n\nFitxategiak   aldatu gabe eta jatorrizko tamainan bidaltzen dira, adibidez irudiei eta bideoei ez zaie kodeketa aldatzen.</string>
     <string name="share_abort">Partekatzea eten da baimenak falta direlako.</string>
 
 
@@ -471,9 +470,6 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Bigarren planoko konexio egonkorra</string>
     <string name="pref_reliable_service_explain">Etengabeko jakinarazpena eskatzen du</string>
-
-
-    <!-- automatically delete message -->
     <string name="autodel_title">Automatikoki ezabatu mezuak</string>
     <string name="autodel_title_short">Automatikoki ezabatu</string>
     <string name="autodel_device_title">Ezabatu mezuak gailutik</string>
@@ -522,8 +518,6 @@
     <string name="systemmsg_action_by_me">Nik: %1$s</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%2$s(e)k: %1$s</string>
-
-
     <!-- screen lock -->
     <string name="screenlock_title">Pantila-blokeoa</string>
     <string name="screenlock_explain">Blokeatu sarbidea Androideko blokeo-pantailarekin edo hatz-markarekin aurreko edukia agertzea ekiditeko, gaitu ere \"Pantaila-segurtasuna\"</string>
@@ -689,12 +683,4 @@ Kideak beste kide batzuek egiatzen dituzte bigarren faktore batekin eta mezuak b
     <string name="InfoPlist_NSContactsUsageDescription">Kontaktuen liburua atzitzeko baimena emateak zure gailuko kontaktuekin txateatzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Mikrofonoa  atzitzeko baimena emateak audioa grabatzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Argazkien bilduma atzitzeko baimena emateak bertatik argazkiak igotzea ahalbidetzen dizu.</string>
-
-
-    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Agian ikusi duzu, \"Bigarren planoko konexioa gaituta\" erakusten du sistemak.\n\n👉 Jakinarazpenak normalean sistema eragileak Delta Chat eta zure zerbitzariaren arteko konexioa etetea eragozten du.\n\n👉 Zuk ezer egin gabe desagertzen bada jakinarazpena, konexioa eten egin dela esan nahi lezake.\nHau arraroa dela uste baduzu, ados gaude, baina ekoizleek horrelakoak egiten dituzte. https://dontkillmyapp.com guneak konponbide batzuk erakusten dit,\n\nEdonola ere, aldaketa honekin bigarren planoan mezuak jasotzea hobetu izanak pozten gaitu, erabiltzaile askoren eskaerei erantzunez., eskerrik asko berri emateagatik.</string>
-    <string name="device_talk_background_connection2_android">\"Bigarren planoko konexioa\" nahi eran gaitu edo desgaitu dezakezu  \"Ezarpenak / Jakinarazpenak\" atalean.</string>
-
-
-</resources>
+    </resources>
