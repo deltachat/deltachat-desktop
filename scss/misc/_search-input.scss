@@ -29,3 +29,7 @@ input.search-input {
     width: calc(100% - 80px);
   }
 }
+
+input#chat-list-search {
+  color: var(--navBarText);
+}
