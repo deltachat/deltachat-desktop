@@ -14,6 +14,7 @@
 
 ## Fixed
 - fix using the system language if no language is selected
+- fix a bug where the user would end up with multiple contexts after reloading from a frontend crash
 
 ## Changed
 - when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused 
