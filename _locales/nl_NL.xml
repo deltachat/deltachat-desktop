@@ -25,6 +25,7 @@
     <string name="archive">Archiveren</string>
     <string name="unarchive">De-archiveren</string>
     <string name="mute">Dempen</string>
+    <string name="ephemeral_messages">Verdwijnende berichten</string>
     <string name="save">Opslaan</string>
     <string name="chat">Gesprek</string>
     <string name="media">Media</string>
@@ -219,6 +220,7 @@
         <item quantity="other">Wil je %d berichten verwijderen, zowel hier als op de server?</item>
     </plurals>
     <string name="ask_forward">Wil je de berichten doorsturen aan %1$s?</string>
+    <string name="ask_forward_multiple">Wil je de berichten doorsturen naar %1$d gesprekken?</string>
     <string name="ask_export_attachment">Als je de bijlage exporteert, geef je andere apps op je apparaat toegang om hem uit te lezen.\n\nWil je doorgaan?</string>
     <string name="ask_block_contact">Wil je deze contactpersoon blokkeren? Hij/zij kan je geen berichten meer sturen.</string>
     <string name="ask_unblock_contact">Wil je deze contactpersoon deblokkeren? Hij/zij kan je wederom berichten sturen.</string>
@@ -332,6 +334,8 @@
     <string name="login_smtp_port">SMTP-poort</string>
     <string name="login_smtp_security">SMTP-beveiliging</string>
     <string name="login_auth_method">Autorisatiemethode</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">Bezig met controleren van %1$s</string>
     <string name="login_info_oauth2_title">Wil je doorgaan met vereenvoudigd instellen?</string>
     <string name="login_info_oauth2_text">Het ingevoerde e-mailadres ondersteunt vereenvoudigd instellen (OAuth2).\n\nTijdens de volgende stap moet je Delta Chat toestaan te fungeren als je e-mailapp.\n\nDelta Chat heeft geen eigen servers; jóuw gegevens blijven op jóuw apparaat!</string>
     <string name="login_certificate_checks">Certificaatcontrole</string>
@@ -362,6 +366,8 @@
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Doorsturen naar...</string>
     <string name="share_multiple_attachments">Wil je %1$d bestanden delen in het gekozen gesprek?\n\nDe bestanden worden ongewijzigd verstuurd in oorspronkelijke grootte.</string>
+    <string name="share_multiple_attachments_multiple_chats">Wil je %1$d bestand(en) delen in %2$d gesprekken?\n\nDe bestanden worden ongewijzigd verstuurd in oorspronkelijke grootte.</string>
+    <string name="share_text_multiple_chats">Wil je deze tekst versturen naar %1$d gesprekken?\n\n\"%2$s\"</string>
     <string name="share_abort">Kan niet delen wegens ontbrekende machtigingen.</string>
 
 
@@ -471,9 +477,11 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Betrouwbare achtergrondverbinding</string>
     <string name="pref_reliable_service_explain">Vereist een permanente melding</string>
+    <string name="ephemeral_dialog_title">Gelezen berichten verwijderen</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">Oude berichten verwijderen</string>
     <string name="autodel_title">Berichten automatisch verwijderen</string>
     <string name="autodel_title_short">Automatisch verwijderen</string>
     <string name="autodel_device_title">Berichten verwijderen van apparaat</string>
@@ -484,6 +492,8 @@
     <string name="autodel_server_ask">Wil je nu %1$d berichten verwijderen en toekomstige berichten \'%2$s\'?\n\n• Dit omvat alle media\n\n• Berichten worden verwijderd, ongeacht of ze bekeken zijn\n\n• Het gesprek \'Opgeslagen berichten\' wordt eveneens verwijderd van de server</string>
     <string name="autodel_confirm">Ik begrijp het; verwijder alle berichten</string>
     <string name="autodel_at_once">Direct</string>
+    <string name="after_30_seconds">Na 30 seconden</string>
+    <string name="after_1_minute">Na 1 minuut</string>
     <string name="autodel_after_1_hour">Na 1 uur</string>
     <string name="autodel_after_1_day">Na 1 dag</string>
     <string name="autodel_after_1_week">Na 1 week</string>
@@ -522,6 +532,17 @@
     <string name="systemmsg_action_by_me">%1$s door mij.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s door %2$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Onbekende afzender in dit gesprek. Zie \'Informatie\' voor meer informatie.</string>
+    <string name="systemmsg_subject_for_new_contact">Bericht van %1$s</string>
+    <string name="systemmsg_failed_sending_to">Het bericht kan niet worden verstuurd aan %1$s.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">De tijdklok van verdwijnende berichten is uitgeschakeld.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">De tijdklok van verdwijnende berichten is ingesteld op %1$s sec.</string>
+    <string name="systemmsg_ephemeral_timer_minute">De tijdklop van verdwijnende berichten is ingesteld op 1 minuut.</string>
+    <string name="systemmsg_ephemeral_timer_hour">De tijdklok van verdwijnende berichten is ingesteld op 1 uur.</string>
+    <string name="systemmsg_ephemeral_timer_day">De tijdklok van verdwijnende berichten is ingesteld op 1 dag.</string>
+    <string name="systemmsg_ephemeral_timer_week">De tijdklok van verdwijnende berichten is ingesteld op 1 week.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">De tijdklok van verdwijnende berichten is ingesteld op 4 weken.</string>
 
 
     <!-- screen lock -->
@@ -557,6 +578,7 @@
     <string name="qrshow_join_contact_no_connection_hint">Voor het instellen van QR-codes is een internetverbinding vereist. Maak verbinding en probeer het opnieuw.</string>
     <string name="qrshow_join_contact_no_connection_toast">Geen internetverbinding; kan QR-codes niet instellen.</string>
     <string name="qraccount_ask_create_and_login">Wil je een nieuw e-mailadres aanmaken op \'%1$s\' en daarmee inloggen?</string>
+    <string name="qraccount_ask_create_and_login_another">Wil je een nieuw e-mailadres aanmaken op \'%1$s\' en daarmee inloggen?\n\nJe reeds aanwezige account wordt niet verwijderd. Gebruik de knop \'Ander account kiezen\' om tussen accounts te schakelen.</string>
     <string name="qraccount_success_enter_name">Het inloggen is gelukt. Je e-mailadres is \'%1$s\'.\n\nAls je wilt, kun je een naam en profielafbeelding opgeven die worden getoond aan de mensen waarmee je communiceert.</string>
     <string name="qraccount_qr_code_cannot_be_used">De gescande QR-code kan niet worden gebruikt om een nieuw account in te stellen.</string>
     <string name="qraccount_use_on_new_install">De gescande QR-code is voor het instellen van een nieuw account. Je kunt deze direct scannen na het (opnieuw) installeren van Delta Chat.</string>
@@ -598,6 +620,9 @@
     <string name="perm_enable_bg_reminder_title">Druk hier om berichten te ontvangen als Delta Chat niet geopend is.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat\'s accugebruik is laag omdat het slechts een minimaal aantal systeembronnen gebruikt.</string>
     <string name="perm_enable_bg_already_done">Je hebt al toestemming gegeven voor het ophalen van berichten op de achtergrond.\n\nAls het nog steeds niet werkt, controleer dan de systeeminstellingen.</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Teken met je vinger om vervaging toe te passen</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Versleuteld bericht</string>
@@ -688,12 +713,10 @@
     <string name="InfoPlist_NSContactsUsageDescription">Geef Delta Chat toegang tot je adresboek om gesprekken te voeren met contactpersonen. Delta Chat heeft geen servers, dus je contactpersonen worden niet opgestuurd.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Geef Delta Chat toegang tot je microfoon om audio op te nemen voor spraakberichten en in video\'s.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Geef Delta Chat toegang tot je foto\'s om afbeeldingen te versturen.</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat wil afbeeldingen opslaan in je fotogalerij.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Je hebt wellicht al gemerkt dat er een systeemmelding \'Achtergrondverbinding ingeschakeld\' wordt getoond.\n\n👉 Deze melding voorkomt dat het systeem de verbinding tussen Delta Chat en je server verbreekt.\n\n👉 Als de melding zomaar verdwijnt, dan is de verbinding waarschijnlijk verbroken.\nVind je dat vreemd? Wij ook. Maar helaas doen sommige fabrikanten dit. Op de website https://dontkillmyapp.com vind je mogelijke oplossingen hiervoor.\n\nDesalniettemin zijn we blij dat we op deze manier het ophalen van berichten op de achtergrond hebben verbeterd en daarmee een grote gebruikerswens in vervulling hebben laten gaan. Bedankt voor alle steun 🤗</string>
-    <string name="device_talk_background_connection2_android">Je kunt vanaf nu de achtergrondverbinding in- en uitschakelen via \'Instellingen --> Meldingen\'.</string>
-
+    <string name="update_1_10_android">Een klein overzicht van de nieuwe Delta Chat 1.10-functies: sneller, meerdere accounts, afbeeldingen vervagen, nieuwe emoji\'s, verbeterde meldingen, verbeterde foutrapportage, en het allerbelangrijkste:\n\ndruk op een profielafbeelding om deze te vergroten 🚀</string>
 
 </resources>

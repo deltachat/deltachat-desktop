@@ -25,6 +25,7 @@
     <string name="archive">Archivieren</string>
     <string name="unarchive">Dearchivieren</string>
     <string name="mute">Stumm</string>
+    <string name="ephemeral_messages">Verschwindende Nachrichten</string>
     <string name="save">Speichern</string>
     <string name="chat">Chat</string>
     <string name="media">Medien</string>
@@ -219,6 +220,7 @@
         <item quantity="other">%d Nachrichten lokal und vom Server löschen?</item>
     </plurals>
     <string name="ask_forward">Nachricht weiterleiten an %1$s?</string>
+    <string name="ask_forward_multiple">Nachrichten an %1$d Chats weiterleiten?</string>
     <string name="ask_export_attachment">Anlage exportieren? Das Exportieren von Anhängen ermöglicht es allen anderen Anwendungen auf Ihrem Gerät, auf diese zuzugreifen.\n\nFortfahren? </string>
     <string name="ask_block_contact">Diesen Kontakt blockieren? Sie werden keine Nachrichten mehr von diesem Kontakt erhalten.</string>
     <string name="ask_unblock_contact">Diesen Kontakt nicht mehr blockieren? Nachrichten von diesem Kontakt werden dann wieder angezeigt.</string>
@@ -332,6 +334,8 @@
     <string name="login_smtp_port">SMTP-Port</string>
     <string name="login_smtp_security">SMTP-Sicherheit</string>
     <string name="login_auth_method">Autorisierungsmethode</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">Teste %1$s</string>
     <string name="login_info_oauth2_title">Weiter mit vereinfachter Einrichtung?</string>
     <string name="login_info_oauth2_text">Die eingegebene E-Mail-Adresse unterstützt eine vereinfachte Einrichtung (OAuth 2.0).\n\nBitte erlauben Sie Delta Chat im nächsten Schritt, als Chat-über-E-Mail-App zu arbeiten.\n\nEs gibt keine Delta Chat Server! Ihre Daten bleiben auf Ihrem Gerät!</string>
     <string name="login_certificate_checks">Zertifikatsüberprüfung</string>
@@ -363,7 +367,9 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Weiterleiten an ...</string>
-    <string name="share_multiple_attachments">Möchten Sie %1$d Dateien an den ausgewählten Chat senden?\n\nDie Dateien werden unverändert in ihrer Originalgröße gesendet, z.B. werden Bilder und Videos nicht neu codiert.</string>
+    <string name="share_multiple_attachments">%1$d Dateien an den ausgewählten Chat senden?\n\nDie Dateien werden unverändert in ihrer Originalgröße gesendet, z.B. werden Bilder und Videos nicht neu codiert.</string>
+    <string name="share_multiple_attachments_multiple_chats">%1$d Datei(en) an %2$d Chats senden?\n\nDie Dateien werden unverändert in ihrer Originalgröße gesendet, z.B. werden Bilder und Videos nicht neu codiert.</string>
+    <string name="share_text_multiple_chats">Den folgenden Text an %1$d Chats senden?\n\n\"%2$s\"</string>
     <string name="share_abort">Teilen aufgrund fehlender Berechtigungen abgebrochen.</string>
 
 
@@ -473,9 +479,11 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Zuverlässige Hintergrundverbindung</string>
     <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
+    <string name="ephemeral_dialog_title">Gelesene Nachrichten löschen</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">Alte Nachrichten löschen</string>
     <string name="autodel_title">Nachrichten automatisch löschen</string>
     <string name="autodel_title_short">Automatisch löschen</string>
     <string name="autodel_device_title">Nachrichten vom Gerät löschen</string>
@@ -486,6 +494,8 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• E-Mails, die aufgrund von \"Normale E-Mails anzeigen\" angezeigt werden, werden ebenfalls vom Server gelöscht\n\n• \"Gespeicherte Nachrichten\" werden ebenfalls vom Server gelöschet</string>
     <string name="autodel_confirm">Verstanden, löschen all diese Nachrichten</string>
     <string name="autodel_at_once">Sofort</string>
+    <string name="after_30_seconds">Nach 30 Sekunden</string>
+    <string name="after_1_minute">Nach 1 Minute</string>
     <string name="autodel_after_1_hour">Nach 1 Stunde</string>
     <string name="autodel_after_1_day">Nach 1 Tag</string>
     <string name="autodel_after_1_week">Nach 1 Woche</string>
@@ -524,6 +534,17 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_action_by_me">%1$s von mir.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s von %2$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Absender ist für diesen Chat unbekannt. Siehe \"Info\" für weitere Details,</string>
+    <string name="systemmsg_subject_for_new_contact">Nachricht von %1$s</string>
+    <string name="systemmsg_failed_sending_to">Nachricht senden an %1$s fehlgeschlagen.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">Verschwindende Nachrichten deaktiviert.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">Ablaufzeit verschwindender Nachrichten auf %1$s s festgelegt.</string>
+    <string name="systemmsg_ephemeral_timer_minute">Ablaufzeit verschwindender Nachrichten auf 1 Minute festgelegt.</string>
+    <string name="systemmsg_ephemeral_timer_hour">Ablaufzeit verschwindender Nachrichten auf 1 Stunde festgelegt.</string>
+    <string name="systemmsg_ephemeral_timer_day">Ablaufzeit verschwindender Nachrichten auf 1 Tag festgelegt.</string>
+    <string name="systemmsg_ephemeral_timer_week">Ablaufzeit verschwindender Nachrichten auf 1 Woche festgelegt.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">Ablaufzeit verschwindender Nachrichten auf 4 Wochen festgelegt.</string>
 
 
     <!-- screen lock -->
@@ -559,6 +580,9 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="qrshow_join_contact_no_connection_hint">Der Austausch von QR-Codes erfordert eine Verbindung zum Internet. Bitte stellen Sie diese her, bevor Sie fortfahtren.</string>
     <string name="qrshow_join_contact_no_connection_toast">Keine Verbindung zum Internet, Austausch des QR-Codes nicht möglich.</string>
     <string name="qraccount_ask_create_and_login">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?</string>
+    <string name="qraccount_ask_create_and_login_another">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?
+
+Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
     <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und einen Avatar festlegen, der den ChatpartnerInnen angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
@@ -600,6 +624,9 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat verbraucht nur minimale Ressourcen und achtet darauf, den Akku zu schonen.</string>
     <string name="perm_enable_bg_already_done">Sie haben Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfen Sie bitte auch Ihre Systemeinstellungen.</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Zeichne zum Verwischen in beliebige Bereiche</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Verschlüsselte Nachricht</string>
@@ -690,9 +717,10 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat verwendet die Kontakte, um eine Liste von E-Mail-Adressen anzuzeigen, an die Sie schreiben können. Delta Chat hat keine Server; das Adressbuch wird nicht versandt.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat verwendet das Mikrofon, um Sprachnachrichten und Videos mit Sound aufzunehmen und zu versenden.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat verwendet die Fotos, um Ihnen die Möglichkeit zu geben, diese auszuwählen und zu versenden.</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat möchte Bilder in Ihrer Fotobibliothek speichern.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Zum Hinweis \"Hintergrundverbindung aktiviert\" im Systembereich:\n\n👉 Der Hinweis hält das Betriebssystem normalerweise davon ab, die Verbindung zwischen Delta Chat und Ihrem Server zu unterbrechen.\n\n👉 Wenn der Hinweis ohne Ihr Zutun verschwindet wurde die Verbindung vermutlich dennoch unterbrochen. Auch wenn dies seltsam erscheint - viele Handyhersteller tun genau dies - auf der Seite https://dontkillmyapp.com finden Sie herstellerspezifische Hinweise, was Sie dagegen tun können.\n\nWie auch immer - wir freuen uns, dass wir die Hintergrundverbindung grundsätzlich stabiler gestalten konnten und so viele Benutzerwünsche erfüllen könnten 🤗</string>
-    </resources>
+    <string name="update_1_10_android">Die neuen Delta Chat 1.10 Features im Überblick: schneller, Multi-Account, Bildbereiche verwischen, neue Emojis, überarbeitete Benachrichtigungen, Anzeige fehlerhafter Nachrichten. Aber am wichtigsten:\n\nAvatare im Profil vergrößern 🚀</string>
+
+</resources>

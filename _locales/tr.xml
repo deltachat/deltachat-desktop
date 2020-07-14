@@ -25,6 +25,7 @@
     <string name="archive">Arşivle</string>
     <string name="unarchive">Arşivleme</string>
     <string name="mute">Sessize al</string>
+    <string name="ephemeral_messages">Kaybolan iletiler</string>
     <string name="save">Kaydet</string>
     <string name="chat">Sohbet</string>
     <string name="media">Ortam</string>
@@ -219,6 +220,7 @@
         <item quantity="other">%d ileti buradan ve sunucudan silinsin mi?</item>
     </plurals>
     <string name="ask_forward">İletiler %1$s alıcısına iletilsin mi?</string>
+    <string name="ask_forward_multiple">İletiler %1$d sohbete iletilsin mi?</string>
     <string name="ask_export_attachment">İlişik dışa aktarılsın mı? İlişikleri dışa aktarmak, aygıtınızdaki diğer uygulamaların onlara erişmesine izin verir.\n\nSürdürülsün mü?</string>
     <string name="ask_block_contact">Bu kişi engellensin mi? Artık bu kişiden gelen iletileri almayacaksınız.</string>
     <string name="ask_unblock_contact">Bu kişi engellenmesin mi? Bir kez daha bu kişiden gelen iletileri alabileceksiniz.</string>
@@ -332,6 +334,8 @@
     <string name="login_smtp_port">SMTP bağlantı noktası</string>
     <string name="login_smtp_security">SMTP güvenliği</string>
     <string name="login_auth_method">Yetkilendirme yöntemi</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">%1$s denetleniyor</string>
     <string name="login_info_oauth2_title">Basitleştirilen ayarlamayla sürdürülsün mü?</string>
     <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'in E-posta ile Sohbet uygulamanız olarak davranmasına izin verin.\n\nDelta Chat sunucuları yoktur; verileriniz aygıtınızda kalır.</string>
     <string name="login_certificate_checks">Sertifika denetimleri</string>
@@ -361,7 +365,9 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">İlet…</string>
-    <string name="share_multiple_attachments">%1$d dosyayı seçilen sohbete göndermek istiyor musunuz?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; örn. görseller ve videolar yeniden kodlanmaz.</string>
+    <string name="share_multiple_attachments">%1$d dosya seçilen sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; örn. görseller ve videolar yeniden kodlanmaz.</string>
+    <string name="share_multiple_attachments_multiple_chats">%1$d dosya %2$d sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; örn. görseller ve videolar yeniden kodlanmaz.</string>
+    <string name="share_text_multiple_chats">Bu metin %1$d sohbete gönderilsin mi?\n\n\"%2$s\"</string>
     <string name="share_abort">Eksik izinlerden dolayı paylaşımdan vazgeçildi.</string>
 
 
@@ -471,9 +477,11 @@
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="pref_reliable_service">Güvenilir arka plan bağlantısı</string>
     <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
+    <string name="ephemeral_dialog_title">Okunan iletileri sil</string>
 
 
     <!-- automatically delete message -->
+    <string name="delete_old_messages">Eski iletileri sil</string>
     <string name="autodel_title">İletileri otomatik sil</string>
     <string name="autodel_title_short">Otomatik sil</string>
     <string name="autodel_device_title">İletileri aygıttan sil</string>
@@ -484,6 +492,8 @@
     <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• Bu, \"Klasik e-postaları göster\" seçeneği tarafından etkilenen e-postaları da silecek\n\n• \"Kaydedilen iletiler\" sunucudan da silinecek</string>
     <string name="autodel_confirm">Anladım, tüm bu iletileri sil</string>
     <string name="autodel_at_once">Bir kerede</string>
+    <string name="after_30_seconds">30 saniye sonra</string>
+    <string name="after_1_minute">1 dakika sonra</string>
     <string name="autodel_after_1_hour">1 saat sonra</string>
     <string name="autodel_after_1_day">1 gün sonra</string>
     <string name="autodel_after_1_week">1 hafta sonra</string>
@@ -522,6 +532,17 @@
     <string name="systemmsg_action_by_me">Benim tarafımdan %1$s.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%2$s tarafından %1$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Bu sohbet için bilinmeyen gönderen. Daha fazla ayrıntı için \'bilgi\'ye bakın.</string>
+    <string name="systemmsg_subject_for_new_contact">Şundan ileti: %1$s</string>
+    <string name="systemmsg_failed_sending_to">%1$s alıcısına ileti gönderme başarısız.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">Kaybolan iletiler zamanlayıcısı etkisizleştirildi.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">Kaybolan iletiler zamanlayıcısı %1$s s\'ye ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_minute">Kaybolan iletiler zamanlayıcısı 1 dakikaya ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_hour">Kaybolan iletiler zamanlayıcısı 1 saate ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_day">Kaybolan iletiler zamanlayıcısı 1 güne ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_week">Kaybolan iletiler zamanlayıcısı 1 haftaya ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">Kaybolan iletiler zamanlayıcısı 4 haftaya ayarlandı.</string>
 
 
     <!-- screen lock -->
@@ -557,6 +578,7 @@
     <string name="qrshow_join_contact_no_connection_hint">QR kod ayarlaması bir Internet bağlantısı gerektirir. İşlemden önce lütfen bir ağa bağlanın.</string>
     <string name="qrshow_join_contact_no_connection_toast">Internet bağlantısı yok; QR kod ayarlaması gerçekleştirilemiyor.</string>
     <string name="qraccount_ask_create_and_login">\"%1$s\" üzerinde yeni e-posta adresi oluşturulsun ve oturum açılsın mı?</string>
+    <string name="qraccount_ask_create_and_login_another">\"%1$s\" üzerinde yeni e-posta adresi oluşturulsun ve oturum açılsın mı?\n\nVarolan hesabınız silinmeyecek. Hesaplarınız arasında geçiş yapmak için \"Hesap değiştir\" öğesini kullanın.</string>
     <string name="qraccount_success_enter_name">Oturum açma başarılı—e-posta adresiniz %1$s\n\nİsterseniz şimdi yazdığınız insanların görüntüleyeceği bir ad ve bir avatar görseli girebilirsiniz.</string>
     <string name="qraccount_qr_code_cannot_be_used">Taranan QR kod yeni bir hesap ayarlamak için kullanılamıyor.</string>
     <string name="qraccount_use_on_new_install">Taranan QR kod yeni bir hesap ayarlamak içindir. QR kodu yeni bir Delta Chat kurulumunu ayarlarken tarayabilirsiniz.</string>
@@ -598,6 +620,9 @@
     <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
     <string name="perm_enable_bg_reminder_text">Delta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
     <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
+
+    <!-- ImageEditorHud -->
+    <string name="ImageEditorHud_draw_anywhere_to_blur">Bulanıklaştırmak için herhangi bir yere çizin</string>
 
     <!-- dc_str_* resources -->
     <string name="encrypted_message">Şifrelenen ileti</string>
@@ -688,12 +713,10 @@
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz e-posta adreslerinin bir listesini göstermek için kişilerinizi kullanır. Delta Chat\'in sunucusu yoktur; kişileriniz herhangi bir yere gönderilmez.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat, göndermek için kitaplığınızdan fotoğraflar seçmenizi sağlayacak.</string>
+    <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat, görselleri fotoğraf kitaplığınıza kaydetmek istiyor.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <!-- this message is shown in the device chat, starting in version 1.6, it should explain the need for the permanent-notifiation and also use the same wording as used there (see "Background connection enabled") -->
-    <string name="device_talk_background_connection_android">Sistem tarafından gösterilen bir \"Arka plan bağlantısı etkinleştirildi\" ipucu olduğunu zaten fark etmiş olabilirsiniz.\n\n👉 İpucu, normal olarak işletim sisteminin Delta Chat ve sunucunuz arasındaki bağlantıyı öldürmesini önler.\n\n👉 İpucu, tarafınızda herhangi bir eylem olmadan kaybolursa, bağlantı belki de öldürülmüştür.\nBunun olmaması gerektiğini düşünüyorsanız, genelde buna katılırız - ama çoğu üretici tam olarak bunu yapar. https://dontkillmyapp.com sitesi, bazı geçici çözümleri gösterir.\n\nBununla birlikte, bu değişiklikle arka planda iletilerin alınmasını iyileştirebildiğimiz ve çoğu kullanıcının isteklerini yerine getirebildiğimiz için mutluyuz - raporlama için teşekkürler 🤗</string>
-    <string name="device_talk_background_connection2_android">Artık \"Ayarlar / Bildirimler\"den \"Arka plan bağlantısı\"nı gerektiğinde etkinleştirebilir ve etkisizleştirebilirsiniz.</string>
-
+    <string name="update_1_10_android">Bir bakışta yeni Delta Chat 1.10: Daha hızlı, çoklu hesap, bulanık görseller, yeni emojiler, yeniden çalışılmış bildirimler, daha iyi hata raporlama ama en önemlisi:\n\nProfildeki bir avatarı tıklayın ve onu genişletin 🚀</string>
 
 </resources>

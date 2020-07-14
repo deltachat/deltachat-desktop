@@ -20,6 +20,7 @@ export function getDefaultState(): AppState {
       credentials: undefined,
       lastAccount: undefined,
       enableOnDemandLocationStreaming: false,
+      enableDisappearingMessages: false,
       chatViewBgImg: undefined,
       lastChats: {},
       zoomFactor: 1,
