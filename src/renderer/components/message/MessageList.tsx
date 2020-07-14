@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useLayoutEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import {
   useChatStore,
@@ -68,8 +68,8 @@ export default function MessageList({
 
   useEffect(() => {
     if (scrollToBottomIfClose === false) return
-
-    const { scrollTop, scrollHeight, clientHeight } = messageListRef.current
+    const scrollHeight = lastKnownScrollHeight.current
+    const { scrollTop, clientHeight } = messageListRef.current
     const scrollBottom = scrollTop + clientHeight
 
     const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
@@ -122,9 +122,9 @@ export default function MessageList({
   )
 
   const onScroll = (Event: React.UIEvent<HTMLDivElement>) => {
+    lastKnownScrollHeight.current = messageListRef.current.scrollHeight
     if (messageListRef.current.scrollTop !== 0) return
     if (isFetching.current === false) {
-      lastKnownScrollHeight.current = messageListRef.current.scrollHeight
       isFetching.current = true
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
