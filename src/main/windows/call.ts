@@ -55,7 +55,7 @@ export async function openCallWindow(
   const subdir = btoa('/p2p/');
   let url =
     join(__dirname, '../../..//html-dist/call/index.html') +
-    '?socketdomain=' +
+    '#&socketdomain=' +
     socketdomain +
     '&subdir=' +
     subdir +
