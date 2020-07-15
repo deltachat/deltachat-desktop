@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-## [1.5.0] - 2020-07-16
+## [1.10.0] - 2020-07-16
 
 ## Added
 - :colon-emoji: support for skin tones (:+1::skin-tone-6:)
@@ -24,6 +24,7 @@
 
 ### Technical
 - removed `styled-components`
+- increase the version numbering to 1.10 to sync up with ios & android versioning and to avoid troubles with the ancient tags that still linger in the git history.
 
 ## Updated
 
@@ -852,9 +853,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.0...HEAD
 
-[1.5.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.3...v1.5.0
+[1.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.3...v1.10.0
 
 [1.4.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.2...v1.4.3
 
