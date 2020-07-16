@@ -65,60 +65,34 @@ export default class DCChatList extends SplitOut {
     return this._dc.getChatList(...args)
   }
 
-  async getListAndIndexForChatId(chatId: number): Promise<[ChatList, number]> {
-    let list = await this._getChatList(0, '', 0)
-    let i = await findIndexOfChatIdInChatList(list, chatId)
-
-    if (i === -1) {
-      list = await this._getChatList(1, '', 0)
-      i = await findIndexOfChatIdInChatList(list, chatId)
-    }
-    return [list, i]
-  }
-
   async getChatListItemsByIds(chatIds: number[]) {
-    const label = '[BENCH] getChatListItemByIds'
-    console.time(label)
+    // const label = '[BENCH] getChatListItemByIds'
+    // console.time(label)
     const chats: { [key: number]: ChatListItemType } = {}
     let list
     let i = 0
     for (const chatId of chatIds) {
-      if (!list) {
-        ;[list, i] = await this.getListAndIndexForChatId(chatIds[0])
-      } else {
-        i = await findIndexOfChatIdInChatList(list, chatId, i)
-      }
-
-      const chat = await this.getChatListItemById(chatId, list, i)
+      const chat = await this.getChatListItemById(chatId)
       chats[chatId] = chat
     }
-    console.timeEnd(label)
+    // console.timeEnd(label)
     return chats
   }
 
-  async getChatListSummary(list: ChatList, i: number) {
-    return list.getSummary(i).toJson()
-  }
-
   async getChatListItemById(
-    chatId: number,
-    list: ChatList,
-    i: number
+    chatId: number
   ): Promise<ChatListItemType> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
-    if (!list) [list, i] = await this.getListAndIndexForChatId(chatId)
-    if (!chat || i === -1) return null
-
     let deaddrop
-    if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-      const messageId = list.getMessageId(i)
-      deaddrop = await this._controller.messageList.getMessage(messageId)
-    }
+    // if (chat.id === C.DC_CHAT_ID_DEADDROP) {
+    //   const messageId = list.getMessageId(i)
+    //   deaddrop = await this._controller.messageList.getMessage(messageId)
+    // }
 
     // console.log('getChatListItemsByIds', chatId)
-    const summary = await this.getChatListSummary(list, i)
+    const summary = (await this._dc.getChatSummary(this._dc.getChat(chatId))).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     const name = chat.name || summary.text1
@@ -261,27 +235,6 @@ export default class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-async function findIndexOfChatIdInChatList(
-  list: ChatList,
-  chatId: number,
-  startI = 0
-) {
-  let i = -1
-  const listCount = list.getCount()
-  for (let counter = startI; counter < listCount; counter++) {
-    counter = counter % listCount
-    const currentChatId = await chatListGetChatId(list, counter)
-    if (currentChatId === chatId) {
-      i = counter
-      break
-    }
-  }
-  return i
-}
-
-async function chatListGetChatId(list: ChatList, index: number) {
-  return list.getChatId(index)
-}
 
 function mapCoreMsgStatus2String(state: number) {
   switch (state) {
