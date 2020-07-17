@@ -40,8 +40,8 @@ export default class DCLoginController extends SplitOut {
     credentials: Credentials,
     updateConfiguration = false
   ) {
-    if(this._controller._dc) {
-      log.info("already logged in, logging out first")
+    if (this._controller._dc) {
+      log.info('already logged in, logging out first')
       await this.logout()
     }
     log.info(`Using deltachat instance ${this._controller.accountDir}`)

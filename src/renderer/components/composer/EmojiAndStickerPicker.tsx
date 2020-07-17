@@ -124,7 +124,8 @@ export const EmojiAndStickerPicker = forwardRef<
   }, [])
 
   useLayoutEffect(() => {
-    document.querySelector('.emoji-sticker-picker__emoji-picker > .emoji-mart-search')
+    document
+      .querySelector('.emoji-sticker-picker__emoji-picker > .emoji-mart-search')
       ?.querySelector('input')
       ?.focus()
     return () => {

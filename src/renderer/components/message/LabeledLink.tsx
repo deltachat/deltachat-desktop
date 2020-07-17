@@ -50,7 +50,12 @@ export const LabeledLink = ({
       return
     }
     // not trusted - ask for confimation from user
-    confirmationDialog(openDialog as OpenDialogFunctionType, sanitizedTarget, domain, target)
+    confirmationDialog(
+      openDialog as OpenDialogFunctionType,
+      sanitizedTarget,
+      domain,
+      target
+    )
   }
   return (
     <a href={'#' + target} title={sanitizedTarget} onClick={onClick}>
