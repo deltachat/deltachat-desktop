@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Removed
+- disable keycombination for Scroll active chat (`alt + left arrow` because this keyboard shortcut is already used by mac to move over words in input fields)
+
 ## [1.10.0] - 2020-07-16
 
 ## Added
