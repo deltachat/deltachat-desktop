@@ -4,30 +4,27 @@
 
 ## [1.10.0] - 2020-07-16
 
-## Added
+### Added
 - :colon-emoji: support for skin tones (:+1::skin-tone-6:)
 - :colon-emoji:'s are now replaced with the unicode emoji they represent on send
 - add explaination if there are no contact requests
 - add support for markdown links `[label](url)` (with a open confirmation dialog to prevent phishing)
 - implement disappearing messages as an experimental feature
 
-## Updated
-- updated google-noto color emoji font
-
-## Fixed
+### Fixed
 - fix using the system language if no language is selected
 - fix a bug where the user would end up with multiple contexts after reloading from a frontend crash
 - fix Chat-view does not scroll down on incoming message #1783 
 
-## Changed
+### Changed
 - when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused 
 
 ### Technical
 - removed `styled-components`
 - increase the version numbering to 1.10 to sync up with ios & android versioning and to avoid troubles with the ancient tags that still linger in the git history.
 
-## Updated
-
+### Updated
+- updated google-noto color emoji font
 - deltachat-node to `1.40.0`
  - core version `1.40`
 
