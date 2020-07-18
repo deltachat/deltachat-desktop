@@ -6,9 +6,11 @@ import {
   JsonContact,
   FullChat,
   DCContact,
+  BasicWebRTCOptions,
 } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/dist/constants'
+import { runtime } from '../../runtime'
 
 type Chat = ChatListItemType | FullChat
 
@@ -113,4 +115,71 @@ export async function openMuteChatDialog(
 
 export async function unMuteChat(chatId: number) {
   await DeltaBackend.call('chat.setMuteDuration', chatId, MuteDuration.OFF)
+}
+
+export async function sendCallInvitation(chatId: number) {
+  const roomname =
+    Date.now() +
+    '' +
+    Math.random()
+      .toString()
+      .replace('.', '')
+  const signalingServer = await DeltaBackend.call(
+    'settings.getConfig',
+    'basic_web_rtc_instance'
+  )
+  if (!signalingServer || signalingServer.length < 2) {
+    throw new Error('No default signaling server was set')
+  }
+  const callUrl =
+    '::CALL::' + signalingServer + `#roomname=${roomname}&camon=true`
+  chatStore.dispatch({
+    type: 'SEND_MESSAGE',
+    payload: [chatId, callUrl, null],
+  })
+  await joinCall(callUrl)
+}
+
+/**
+ *
+ * @param rawCallURL expects the raw call url like its in the text message '::CALL::https://example.com/p2p#roomname=alpha&camon=true'
+ */
+export async function joinCall(rawCallURL: string) {
+  // decode call url
+  const callURL = rawCallURL.replace('::CALL::', '')
+  const hastagPos = callURL.indexOf('#')
+  const socketdomain = callURL.slice(0, hastagPos)
+  const params = parseVars(callURL.slice(hastagPos + 1))
+
+  // validate if everything is there
+  if (!socketdomain || !params['roomname']) {
+    throw new Error('Socketdomain or roomname missing')
+  }
+
+  const options: BasicWebRTCOptions = {
+    socketdomain: btoa(socketdomain),
+    base64domain: true,
+    roomname: params['roomname'],
+    camon: (params['camon'] && JSON.parse(params['camon'])) || false,
+    username: encodeURIComponent(
+      (await DeltaBackend.call('settings.getConfig', 'displayname')) ||
+        (await DeltaBackend.call('settings.getConfig', 'addr')).split('@')[0]
+    ),
+  }
+
+  runtime.openCallWindow(options)
+}
+
+const parseVars = (str: string) => {
+  if (str.length <= 1) {
+    return {}
+  }
+  const keyValuePairs = str.split('&')
+  const res: { [key: string]: string } = {}
+  for (let i = 0; i < keyValuePairs.length; i++) {
+    const keyValuePair = keyValuePairs[i]
+    const [key, value] = keyValuePair.split('=')
+    res[key] = value
+  }
+  return res
 }

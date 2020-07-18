@@ -1,28 +1,21 @@
-import { app as rawApp, BrowserWindow, Menu, shell, ipcMain } from 'electron'
+import { BrowserWindow, Menu, shell, ipcMain } from 'electron'
 import { appIcon } from '../application-constants'
 import { getLogger } from '../../shared/logger'
-import { ExtendedAppMainProcess } from '../types'
 import { join } from 'path'
 
-var btoa = require('btoa');
 //import { appWindowTitle } from '../../shared/constants'
 
-const log = getLogger('main/call')
-const app = rawApp as ExtendedAppMainProcess
+const log = getLogger('main/videoHangoutWindow')
 
 let win: BrowserWindow | null = null
 
-export async function openCallWindow(
-  locale: string,
-  roomname: string,
-  username: string
-) {
+export async function openCallWindow(locale: string, options: string) {
   if (win) {
     win.focus()
     return
   }
 
-  log.debug('open call', roomname)
+  log.debug('open call', options)
   const defaults = {
     bounds: {
       width: 500,
@@ -49,21 +42,9 @@ export async function openCallWindow(
     },
   })
 
-  log.debug(roomname)
-  const appPath = app.getAppPath()
-  const socketdomain = btoa("https://cloud13.de");
-  const subdir = btoa('/p2p/');
   let url =
-    join(__dirname, '../../..//html-dist/call/index.html') +
-    '#&socketdomain=' +
-    socketdomain +
-    '&subdir=' +
-    subdir +
-    `&username=${encodeURIComponent(username)}` + //Add username so we can show it inside the webRtc App
-    '&base64=true' +
-    '&roomname=' +
-    roomname
-  console.log(url)
+    join(__dirname, '../../..//html-dist/call/index.html') + '#' + options
+  log.debug(url)
   win.loadURL('file://' + url)
 
   win.once('ready-to-show', () => {
@@ -82,9 +63,9 @@ export async function openCallWindow(
   const closeButtonCallback = () => {
     win.close()
   }
-  ipcMain.addListener('call-close',closeButtonCallback)
+  ipcMain.addListener('call-close', closeButtonCallback)
   win.on('close', e => {
-    ipcMain.removeListener('call-close',closeButtonCallback)
+    ipcMain.removeListener('call-close', closeButtonCallback)
     win = null
   })
 

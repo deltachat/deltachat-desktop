@@ -30,7 +30,10 @@
     "message": "Shows sender and first words of message content in notification"
   },
   "pref_av_calls": {
-    "message": "Audio/Video Calls"
+    "message": "Video Hangouts"
+  },
+  "pref_av_calls_signaling_server_address": {
+    "message": "Address of signaling server used for new Video Hangouts"
   },
   "ask_delete_message_desktop": {
     "message": "Are you sure you want to delete this message?"

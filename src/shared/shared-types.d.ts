@@ -29,13 +29,13 @@ export interface DesktopSettings {
   chatViewBgImg: string
   /** @deprecated replaced by lastAccount */
   credentials: Credentials
-   /** path to last used/selected Account */
-    lastAccount: string
+  /** path to last used/selected Account */
+  lastAccount: string
   enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
   enableDisappearingMessages: boolean
   enterKeySends: boolean
-  locale: string|null
+  locale: string | null
   notifications: boolean
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
@@ -197,4 +197,18 @@ export type DeltaChatAccount = {
   displayname: string
   addr: string
   size: number
+}
+
+// for video hangouts
+export type BasicWebRTCOptions = {
+  /** Change your username shown */
+  username: string
+  /** Change the name of the room */
+  roomname: string
+  /** Start session with cam on */
+  camon: boolean
+  /** Change if you want to use a different socketServer */
+  socketdomain: string
+  /** true if socketDomain is given in base64 format */
+  base64domain: boolean
 }

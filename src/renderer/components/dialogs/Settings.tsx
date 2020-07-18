@@ -90,6 +90,7 @@ export default function Settings(props: DialogProps) {
       'bcc_self',
       'delete_device_after',
       'delete_server_after',
+      'basic_web_rtc_instance',
     ])
 
     setState({ settings })
@@ -262,9 +263,10 @@ export default function Settings(props: DialogProps) {
               'enableDisappearingMessages',
               'Enable disappearing messages'
             )}
-            {renderDTSettingSwitch(
-              'enableAVCalls',
-              tx('pref_av_calls')
+            {renderDTSettingSwitch('enableAVCalls', tx('pref_av_calls'))}
+            {renderDeltaInput(
+              'basic_web_rtc_instance',
+              tx('pref_av_calls_signaling_server_address')
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>

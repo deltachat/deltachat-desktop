@@ -10,7 +10,7 @@ import Attachment from '../attachment/messageAttachment'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
-import { runtime } from '../../runtime'
+import { joinCall } from '../helpers/ChatMethods'
 
 const { openExternal } = window.electron_functions
 
@@ -366,8 +366,8 @@ export const CallMessage = (props: {
   } = props
   const tx = window.static_translate
 
-  const roomname = text.split('::').length > 2 ? text.split('::')[2] : 'NA'
-  const url = 'https://cloud13.de/p2p?roomname=' + roomname
+  const callUrl = text.split(' ', 1)[0] // if there is more in the message than the call url
+  const url = callUrl.split('::', 3)[2] // url for opening in a browser
   return (
     <div
       className={classNames(
@@ -405,7 +405,7 @@ export const CallMessage = (props: {
                 <div>
                   <button
                     className='phone-accept-button'
-                    onClick={openCall.bind(null, roomname)}
+                    onClick={openCall.bind(null, callUrl)}
                   >
                     <span className='phone-enabled-icon'></span>{' '}
                     <span className='call-join-text'>JOIN</span>
@@ -427,7 +427,7 @@ export const CallMessage = (props: {
               <div className='call-inc-text'>
                 <button
                   className='phone-accept-button'
-                  onClick={openCall.bind(null, roomname)}
+                  onClick={openCall.bind(null, callUrl)}
                 >
                   <span className='phone-enabled-icon'></span>{' '}
                   <span className='call-join-text'>REJOIN</span>
@@ -451,9 +451,9 @@ export const CallMessage = (props: {
   )
 }
 
-const openCall = (roomname: string) => {
+const openCall = (callUrl: string) => {
   console.log('JOJOJO')!
-  runtime.openCallWindow(roomname)
+  joinCall(callUrl)
 }
 
 const denyCall = () => {

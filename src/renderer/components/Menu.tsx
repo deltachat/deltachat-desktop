@@ -16,6 +16,7 @@ import {
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
+  sendCallInvitation,
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
@@ -38,20 +39,6 @@ export function DeltaMenuItem({
 }
 
 export default function DeltaMenu(props: { selectedChat: FullChat }) {
-  const sendCallInvitation = (chatId: number) => {
-    const roomname =
-      +new Date() +
-      '' +
-      Math.random()
-        .toString()
-        .replace('.', '')
-    chatStoreDispatch({
-      type: 'SEND_MESSAGE',
-      payload: [chatId, '::CALL::' + roomname, null],
-    })
-    runtime.openCallWindow(roomname)
-  }
-
   const { selectedChat } = props
   const chatStoreDispatch = useChatStore()[1]
 
@@ -116,10 +103,10 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      settingsContext.desktopSettings.enableAVCalls && (
+      !isGroup && settingsContext.desktopSettings.enableAVCalls && (
         <DeltaMenuItem
           key='call'
-          text='Invite to call'
+          text='Invite to Video Hangout'
           onClick={() => {
             sendCallInvitation(selectedChat.id)
           }}

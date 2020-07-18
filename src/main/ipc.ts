@@ -2,7 +2,12 @@ import { C } from 'deltachat-node'
 import { app as rawApp, dialog, ipcMain } from 'electron'
 import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
-import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
+import {
+  AppState,
+  Credentials,
+  DesktopSettings,
+  BasicWebRTCOptions,
+} from '../shared/shared-types'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
@@ -125,8 +130,8 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     await openHelpWindow(locale)
   })
 
-  ipcMain.on('call', async (_ev, locale, callUrl, username) => {
-    await openCallWindow(locale, callUrl, username)
+  ipcMain.on('call', async (_ev, locale, options: string) => {
+    await openCallWindow(locale, options)
   })
 
   ipcMain.on('reload-main-window', () => {

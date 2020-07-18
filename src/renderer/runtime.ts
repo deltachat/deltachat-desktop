@@ -1,7 +1,10 @@
 import { ipcBackend } from './ipc'
-import { RC_Config, ExtendedApp } from '../shared/shared-types'
+import {
+  RC_Config,
+  ExtendedApp,
+  BasicWebRTCOptions,
+} from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
-import { DeltaBackend } from './delta-remote'
 
 const { remote, openExternal, openItem } = window.electron_functions
 
@@ -19,7 +22,7 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  openCallWindow(callUrl: string): void
+  openCallWindow(options: BasicWebRTCOptions): void
   updateBadge(): void
   /**
    * get the comandline arguments
@@ -33,7 +36,7 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
-  openCallWindow(callUrl: string): void {
+  openCallWindow(options: BasicWebRTCOptions): void {
     throw new Error('Method not implemented.')
   }
   openLink(link: string): void {
@@ -63,12 +66,11 @@ class Browser implements Runtime {
 }
 
 class Electron implements Runtime {
-  async openCallWindow(callUrl: string): Promise<void> {
-    const username = await DeltaBackend.call(
-      'settings.getConfig',
-      'displayname'
-    )
-    ipcBackend.send('call', window.localeData.locale, callUrl, username)
+  async openCallWindow(options: BasicWebRTCOptions): Promise<void> {
+    const optionString = Object.keys(options)
+      .map((key: keyof BasicWebRTCOptions) => key + '=' + options[key])
+      .join('&')
+    ipcBackend.send('call', window.localeData.locale, optionString)
   }
   openLink(link: string): void {
     openExternal(link)
