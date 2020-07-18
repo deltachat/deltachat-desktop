@@ -263,10 +263,10 @@ export default function Settings(props: DialogProps) {
               'enableDisappearingMessages',
               'Enable disappearing messages'
             )}
-            {renderDTSettingSwitch('enableAVCalls', tx('pref_av_calls'))}
+            {renderDTSettingSwitch('enableAVCalls', tx('pref_video_hangouts'))}
             {renderDeltaInput(
               'basic_web_rtc_instance',
-              tx('pref_av_calls_signaling_server_address')
+              tx('pref_video_hangouts_signaling_server_address')
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>

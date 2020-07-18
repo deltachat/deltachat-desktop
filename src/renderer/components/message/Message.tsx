@@ -397,40 +397,17 @@ export const CallMessage = (props: {
               message,
             }}
           />
-
-          {direction === 'incoming' ? (
-            <div dir='auto' className='text'>
-              <div className='call-inc-text'>
-                <b>Call invitation!</b>
-                <div>
-                  <button
-                    className='phone-accept-button'
-                    onClick={openCall.bind(null, callUrl)}
-                  >
-                    <span className='phone-enabled-icon'></span>{' '}
-                    <span className='call-join-text'>JOIN</span>
-                  </button>
-                </div>
-                {/* <a
-                  onClick={() => {
-                    openCallExternal(url)
-                  }}
-                  href=''
-                >
-                  {url}
-                </a> */}
-              </div>
-            </div>
-          ) : (
-            <div dir='auto' className='text'>
-              <b>Call invitation send!</b>
-              <div className='call-inc-text'>
+          <div dir='auto' className='text'>
+            <div className='call-inc-text'>
+              <b>{tx('video_hangout_invitation')}</b>
+              <div>
                 <button
                   className='phone-accept-button'
                   onClick={openCall.bind(null, callUrl)}
                 >
-                  <span className='phone-enabled-icon'></span>{' '}
-                  <span className='call-join-text'>REJOIN</span>
+                  {direction === 'incoming'
+                    ? tx('join_video_hangout')
+                    : tx('rejoin_video_hangout')}
                 </button>
               </div>
               {/* <a
@@ -442,7 +419,7 @@ export const CallMessage = (props: {
                   {url}
                 </a> */}
             </div>
-          )}
+          </div>
 
           <MessageMetaData {...props} />
         </div>

@@ -29,10 +29,10 @@
   "pref_show_notification_content_explain": {
     "message": "Shows sender and first words of message content in notification"
   },
-  "pref_av_calls": {
+  "pref_video_hangouts": {
     "message": "Video Hangouts"
   },
-  "pref_av_calls_signaling_server_address": {
+  "pref_video_hangouts_signaling_server_address": {
     "message": "Address of signaling server used for new Video Hangouts"
   },
   "ask_delete_message_desktop": {
@@ -152,5 +152,17 @@
   },
   "open_external_url_trust_domain": {
     "message": "Don't ask again for"
+  },
+  "menu_invite_to_video_hangout": {
+    "message": "Invite to Video Hangout"
+  },
+  "video_hangout_invitation": {
+    "message": "Video Hangout Invitation"
+  },
+  "join_video_hangout": {
+    "message": "Join"
+  },
+  "rejoin_video_hangout": {
+    "message": "Rejoin"
   }
 }
