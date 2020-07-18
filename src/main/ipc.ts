@@ -2,12 +2,7 @@ import { C } from 'deltachat-node'
 import { app as rawApp, dialog, ipcMain } from 'electron'
 import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
-import {
-  AppState,
-  Credentials,
-  DesktopSettings,
-  BasicWebRTCOptions,
-} from '../shared/shared-types'
+import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
