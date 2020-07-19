@@ -67,8 +67,9 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
       return KeybindAction.ChatList_SelectNextChat
     } else if (ev.altKey && ev.key === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
-    } else if (ev.altKey && ev.key === 'ArrowLeft') {
-      return KeybindAction.ChatList_ScrollToSelectedChat
+      // } else if (ev.altKey && ev.key === 'ArrowLeft') {
+      // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
+      //   return KeybindAction.ChatList_ScrollToSelectedChat
     } else if (ev.ctrlKey && ev.key === 'k') {
       return KeybindAction.ChatList_FocusAndClearSearchInput
     } else if (ev.ctrlKey && ev.key === 'n') {
