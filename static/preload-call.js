@@ -1,15 +1,14 @@
 // this is not a module
+// this file is used to provide access to specific electron apis to the call window
 
-// make sure to also update src/renderer/global.d.ts
-// when making changes to this file!
-
-(() => {
+;(() => {
   const electron = require('electron')
 
   window.x_extended = {
-    close: ()=> {
+    close: () => {
       electron.ipcRenderer.send('call-close')
-    }
+    },
+    desktopCapturer: electron.desktopCapturer,
   }
   console.log({ global })
 })()
