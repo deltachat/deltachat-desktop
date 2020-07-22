@@ -1,3 +1,3 @@
 [submodule "basicwebrtc"]
 	path = basicwebrtc
-	url = https://github.com/cracker0dks/basicwebrtc.git
+	url = ../../cracker0dks/basicwebrtc.git
