@@ -400,7 +400,7 @@ export const CallMessage = (props: {
                 </button>
               </div>
               {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-                'This video chat will open in your browser'}
+                tx('video_hangout_external_hint')}
               {/* <a
                   onClick={() => {
                     openCallExternal(url)

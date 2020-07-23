@@ -164,5 +164,8 @@
   },
   "rejoin_video_hangout": {
     "message": "Rejoin"
+  },
+  "video_hangout_external_hint": {
+    "message": "This video chat will open in your browser"
   }
 }
