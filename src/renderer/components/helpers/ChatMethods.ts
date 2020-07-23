@@ -118,56 +118,48 @@ export async function unMuteChat(chatId: number) {
 }
 
 export async function sendCallInvitation(chatId: number) {
-  const roomname =
-    Date.now() +
-    '' +
-    Math.random()
-      .toString()
-      .replace('.', '')
-  const signalingServer = await DeltaBackend.call(
-    'settings.getConfig',
-    'basic_web_rtc_instance'
+  const messageId = await DeltaBackend.call(
+    'chat.sendVideoChatInvitation',
+    chatId
   )
-  if (!signalingServer || signalingServer.length < 2) {
-    throw new Error('No default signaling server was set')
-  }
-  const callUrl =
-    '::CALL::' + signalingServer + `#roomname=${roomname}&camon=true`
-  chatStore.dispatch({
-    type: 'SEND_MESSAGE',
-    payload: [chatId, callUrl, null],
-  })
-  await joinCall(callUrl)
+  await joinCall(messageId)
 }
 
-/**
- *
- * @param rawCallURL expects the raw call url like its in the text message '::CALL::https://example.com/p2p#roomname=alpha&camon=true'
- */
-export async function joinCall(rawCallURL: string) {
-  // decode call url
-  const callURL = rawCallURL.replace('::CALL::', '')
-  const hastagPos = callURL.indexOf('#')
-  const socketdomain = callURL.slice(0, hastagPos)
-  const params = parseVars(callURL.slice(hastagPos + 1))
+export async function joinCall(messageId: number) {
+  const message = await DeltaBackend.call('messageList.getMessage', messageId)
 
-  // validate if everything is there
-  if (!socketdomain || !params['roomname']) {
-    throw new Error('Socketdomain or roomname missing')
+  if (message.msg.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    throw new Error('Message is not a video chat invitation')
   }
 
-  const options: BasicWebRTCOptions = {
-    socketdomain: btoa(socketdomain),
-    base64domain: true,
-    roomname: params['roomname'],
-    camon: (params['camon'] && JSON.parse(params['camon'])) || false,
-    username: encodeURIComponent(
-      (await DeltaBackend.call('settings.getConfig', 'displayname')) ||
-        (await DeltaBackend.call('settings.getConfig', 'addr')).split('@')[0]
-    ),
-  }
+  const callURL = message.msg.videochatUrl
 
-  runtime.openCallWindow(options)
+  if (message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN) {
+    return runtime.openLink(callURL)
+  } else if (message.msg.videochatType == C.DC_VIDEOCHATTYPE_BASICWEBRTC) {
+    // decode call url
+    const hastagPos = callURL.indexOf('#')
+    const socketdomain = callURL.slice(0, hastagPos)
+    const params = parseVars(callURL.slice(hastagPos + 1))
+
+    // validate if everything is there
+    if (!socketdomain || !params['roomname']) {
+      throw new Error('Socketdomain or roomname missing')
+    }
+
+    const options: BasicWebRTCOptions = {
+      socketdomain: btoa(socketdomain),
+      base64domain: true,
+      roomname: params['roomname'],
+      camon: (params['camon'] && JSON.parse(params['camon'])) || false,
+      username: encodeURIComponent(
+        (await DeltaBackend.call('settings.getConfig', 'displayname')) ||
+          (await DeltaBackend.call('settings.getConfig', 'addr')).split('@')[0]
+      ),
+    }
+
+    runtime.openCallWindow(options)
+  }
 }
 
 const parseVars = (str: string) => {

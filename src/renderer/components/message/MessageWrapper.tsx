@@ -108,7 +108,8 @@ export const RenderMessage = React.memo(
           <p>{msg.text}</p>
         </div>
       )
-    if (message.isCall) return <CallMessage {...props} {...new_props} />
+    if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION)
+      return <CallMessage {...props} {...new_props} />
 
     return <Message {...props} {...new_props} />
   },

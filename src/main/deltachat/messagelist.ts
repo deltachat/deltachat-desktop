@@ -107,7 +107,6 @@ export default class DCMessageList extends SplitOut {
       contact: (contact ? { ...contact } : {}) as any,
       isInfo: msg.isInfo(),
       setupCodeBegin,
-      isCall: jsonMSG.text.startsWith('::CALL::'),
     }
   }
 

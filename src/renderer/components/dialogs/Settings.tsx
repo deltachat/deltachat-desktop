@@ -90,7 +90,7 @@ export default function Settings(props: DialogProps) {
       'bcc_self',
       'delete_device_after',
       'delete_server_after',
-      'basic_web_rtc_instance',
+      'webrtc_instance',
     ])
 
     setState({ settings })
@@ -265,7 +265,7 @@ export default function Settings(props: DialogProps) {
             )}
             {renderDTSettingSwitch('enableAVCalls', tx('pref_video_hangouts'))}
             {renderDeltaInput(
-              'basic_web_rtc_instance',
+              'webrtc_instance',
               tx('pref_video_hangouts_signaling_server_address')
             )}
             <br />

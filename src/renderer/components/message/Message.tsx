@@ -11,6 +11,7 @@ import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
 import { joinCall } from '../helpers/ChatMethods'
+import { C } from 'deltachat-node/dist/constants'
 
 const { openExternal } = window.electron_functions
 
@@ -359,15 +360,12 @@ export const CallMessage = (props: {
     direction,
     conversationType,
     message,
-    text,
     status,
-    attachment,
     onContactClick,
+    id,
   } = props
   const tx = window.static_translate
 
-  const callUrl = text.split(' ', 1)[0] // if there is more in the message than the call url
-  const url = callUrl.split('::', 3)[2] // url for opening in a browser
   return (
     <div
       className={classNames(
@@ -388,28 +386,21 @@ export const CallMessage = (props: {
           conversationType === 'group' &&
           Author(message.contact, onContactClick)}
         <div className={classNames('msg-body')}>
-          <Attachment
-            {...{
-              attachment,
-              text,
-              conversationType,
-              direction,
-              message,
-            }}
-          />
           <div dir='auto' className='text'>
             <div className='call-inc-text'>
               <b>{tx('video_hangout_invitation')}</b>
               <div>
                 <button
                   className='phone-accept-button'
-                  onClick={openCall.bind(null, callUrl)}
+                  onClick={openCall.bind(null, id)}
                 >
                   {direction === 'incoming'
                     ? tx('join_video_hangout')
                     : tx('rejoin_video_hangout')}
                 </button>
               </div>
+              {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
+                'This video chat will open in your browser'}
               {/* <a
                   onClick={() => {
                     openCallExternal(url)
@@ -428,15 +419,15 @@ export const CallMessage = (props: {
   )
 }
 
-const openCall = (callUrl: string) => {
-  console.log('JOJOJO')!
-  joinCall(callUrl)
+const openCall = (messageId: number) => {
+  joinCall(messageId)
 }
 
 const denyCall = () => {
   console.log('NONO')!
 }
 
-const openCallExternal = (url: string) => {
-  openExternal(url)
+const openCallExternal = (messageId: number) => {
+  // todo
+  //openExternal()
 }

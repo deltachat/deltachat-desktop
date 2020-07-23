@@ -174,6 +174,7 @@ class DeltaRemote {
     chatId: number,
     ephemeralTimer: number
   ): Promise<void>
+  call(fnName: 'chat.sendVideoChatInvitation', chatId: number): Promise<number>
   // locations ----------------------------------------------------------
   call(
     fnName: 'locations.setLocation',
