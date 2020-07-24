@@ -321,13 +321,7 @@ export default function ChatList(props: {
                               msr={messageCache[msrId]}
                               onClick={() => {
                                 openDialog('MessageDetail', {
-                                  message: {
-                                    msg: {
-                                      id: msrId,
-                                      receivedAt: null,
-                                      sentAt: null,
-                                    },
-                                  },
+                                  id: msrId,
                                 })
                               }}
                             />
