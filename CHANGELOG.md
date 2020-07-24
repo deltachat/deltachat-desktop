@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- translate the term "error" in configure dialog
 - fix "Invalid date" in message details on searchresult
 
 ### Removed

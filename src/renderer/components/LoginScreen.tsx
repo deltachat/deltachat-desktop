@@ -86,7 +86,7 @@ function ImportBackupProgressDialog({
     >
       <div className={Classes.DIALOG_BODY}>
         <Card elevation={Elevation.ONE}>
-          {error && <p>Error: {error}</p>}
+          {error && <p>{tx('error')}: {error}</p>}
           <DeltaProgressBar
             progress={importProgress}
             intent={error === false ? Intent.SUCCESS : Intent.DANGER}
