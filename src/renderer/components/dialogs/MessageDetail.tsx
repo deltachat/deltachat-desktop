@@ -9,8 +9,6 @@ import { DialogProps } from './DialogController'
 
 type MessageInfoProps = {
   messageId: number
-  receivedAt: number
-  sentAt: number
 }
 
 class MessageInfo extends React.Component<
@@ -18,6 +16,8 @@ class MessageInfo extends React.Component<
   {
     loading: boolean
     content: string
+    receivedAt: number
+    sentAt: number
   }
 > {
   constructor(props: MessageInfoProps) {
@@ -25,6 +25,8 @@ class MessageInfo extends React.Component<
     this.state = {
       loading: true,
       content: undefined,
+      receivedAt: undefined,
+      sentAt: undefined,
     }
   }
 
@@ -32,24 +34,33 @@ class MessageInfo extends React.Component<
     this.refresh()
   }
 
-  refresh() {
+  async refresh() {
     this.setState({ loading: true })
-    DeltaBackend.call('messageList.getMessageInfo', this.props.messageId).then(
-      info => {
-        this.setState({ loading: false, content: info })
-        this.forceUpdate()
-      }
+    const message = await DeltaBackend.call(
+      'messageList.getMessage',
+      this.props.messageId
     )
+    const info = await DeltaBackend.call(
+      'messageList.getMessageInfo',
+      this.props.messageId
+    )
+    this.setState({
+      loading: false,
+      content: info,
+      sentAt: message?.msg?.sentAt,
+      receivedAt: message?.msg?.receivedAt,
+    })
+    this.forceUpdate()
   }
 
   render() {
-    const { receivedAt, sentAt } = this.props
+    const { receivedAt, sentAt, content } = this.state
     const tx = window.static_translate
 
     return (
       <div className='module-message-detail'>
         <Callout>
-          <p>{this.state.content}</p>
+          <p>{content}</p>
         </Callout>
         <table className='module-message-detail__info'>
           <tbody>
@@ -85,20 +96,19 @@ class MessageInfo extends React.Component<
 }
 
 export default function MessageDetail(props: {
-  message: MessageType
+  id: number
   onClose: DialogProps['onClose']
 }) {
-  const { message, onClose } = props
-  const isOpen = !!message
+  const { id, onClose } = props
+  const isOpen = !!id
   const tx = window.static_translate
 
   let body = <div />
   if (isOpen) {
-    const { id, sentAt, receivedAt } = message.msg
 
     body = (
       <Card>
-        <MessageInfo messageId={id} sentAt={sentAt} receivedAt={receivedAt} />
+        <MessageInfo messageId={id} />
       </Card>
     )
   }
