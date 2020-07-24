@@ -137,17 +137,24 @@ export default class DCLoginController extends SplitOut {
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.4.2-2',
-      `Changes in v1.4
+      'changelog-version-1.10.0-0',
+      `Changes in 1.10
 
-⚡ We upgraded our core to async, which made it even faster
-🤫 Psssst! You can now mute chats and take a break to foucs on things that really matter
-🔍 Looking for a specific message? Our search now supports searching through messages, contacts & chats
-🔥 Don't want to keep old messages on your device or server? Check out the new autodelete setting
-🌑 We finally added a Darkmode
-💅 Besides this, DeltaChat Desktop should look and feel better at various places, including settings & login
+🔥 Disappearing Messages (as experimental feature)
+🔗 add support for markdown links [label](url) (with a open confirmation dialog to prevent phishing)
+🥳 updated google-noto color emoji font to include newer emojis
+⬇️ fix Chat-view does not scroll down on incoming message
 
-Full changelog: https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#142---2020-06-26` as any
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1100---2020-07-16)` as any
+    )
+    this._dc.addDeviceMessage(
+      'changelog-version-1.10.1-0',
+      `Changes in v1.10.1
+
+This release contains bugfixes for 1.10.0:
+⌨️ disable keycombination for Scroll to active chat (\`alt + left arrow\` because this keyboard shortcut is already used by mac to move over words in input fields)
+
+[Full Changelog](TODO insert Link)` as any
     )
   }
 
