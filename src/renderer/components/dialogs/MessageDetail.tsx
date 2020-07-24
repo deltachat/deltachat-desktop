@@ -4,7 +4,6 @@ import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
 import { DeltaBackend } from '../../delta-remote'
 import { Card, Callout } from '@blueprintjs/core'
-import { MessageType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 
 type MessageInfoProps = {
@@ -105,7 +104,6 @@ export default function MessageDetail(props: {
 
   let body = <div />
   if (isOpen) {
-
     body = (
       <Card>
         <MessageInfo messageId={id} />
