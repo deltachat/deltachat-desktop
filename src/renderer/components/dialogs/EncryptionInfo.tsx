@@ -3,7 +3,11 @@ import { Classes } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { SmallDialog, DeltaDialogFooter, DeltaDialogFooterActions } from './DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
 
 export default function EncryptionInfo({
   chatListItem,

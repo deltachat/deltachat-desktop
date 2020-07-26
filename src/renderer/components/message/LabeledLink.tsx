@@ -2,7 +2,11 @@ import React, { useContext, useState } from 'react'
 import { ScreenContext } from '../../contexts'
 import { toASCII } from 'punycode'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
-import { SmallDialog, DeltaDialogFooterActions, DeltaDialogFooter } from '../dialogs/DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogFooterActions,
+  DeltaDialogFooter,
+} from '../dialogs/DeltaDialog'
 import { Classes } from '@blueprintjs/core'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'

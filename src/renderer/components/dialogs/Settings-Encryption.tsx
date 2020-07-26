@@ -11,7 +11,10 @@ import { SettingsButton } from './Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
-import DeltaDialog, { DeltaDialogFooter, DeltaDialogFooterActions } from './DeltaDialog'
+import DeltaDialog, {
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
 import { DeltaBackend } from '../../delta-remote'
 
 export function KeyViewPanel({
