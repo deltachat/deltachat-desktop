@@ -3,7 +3,7 @@ import { Classes } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { FullChat, ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
-import { SmallDialog } from './DeltaDialog'
+import { SmallDialog, DeltaDialogFooter, DeltaDialogFooterActions } from './DeltaDialog'
 
 export default function EncryptionInfo({
   chatListItem,
@@ -31,11 +31,8 @@ export default function EncryptionInfo({
           {!encryptionInfo && 'Fetching...'}
           {encryptionInfo && encryptionInfo}
         </p>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div
-            className={Classes.DIALOG_FOOTER_ACTIONS}
-            style={{ marginTop: '7px' }}
-          >
+        <DeltaDialogFooter>
+          <DeltaDialogFooterActions>
             <p
               className='delta-button bold'
               style={{ float: 'right' }}
@@ -43,8 +40,8 @@ export default function EncryptionInfo({
             >
               {tx('ok')}
             </p>
-          </div>
-        </div>
+          </DeltaDialogFooterActions>
+        </DeltaDialogFooter>
       </div>
     </SmallDialog>
   )

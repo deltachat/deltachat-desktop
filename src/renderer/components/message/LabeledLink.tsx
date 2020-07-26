@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { ScreenContext } from '../../contexts'
 import { toASCII } from 'punycode'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
-import { SmallDialog } from '../dialogs/DeltaDialog'
+import { SmallDialog, DeltaDialogFooterActions, DeltaDialogFooter } from '../dialogs/DeltaDialog'
 import { Classes } from '@blueprintjs/core'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
@@ -94,11 +94,8 @@ function confirmationDialog(
               <i>{domain}</i>
             </div>
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-              style={{ justifyContent: 'space-between', marginTop: '7px' }}
-            >
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
               <p
                 className={`delta-button no-padding bold primary`}
                 onClick={onClose}
@@ -127,8 +124,8 @@ function confirmationDialog(
               >
                 {tx('open')}
               </p>
-            </div>
-          </div>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
         </div>
       </SmallDialog>
     )
