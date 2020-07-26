@@ -323,3 +323,35 @@ export function SmallSelectDialog({
     </SmallDialog>
   )
 }
+
+export function DeltaDialogFooterActions({children, style}: {children: any, style?: any}) {
+  return (
+    <div
+      style={{ justifyContent: 'flex-end', paddingRight: '10px', ...style}}
+      className={Classes.DIALOG_FOOTER_ACTIONS}
+    >
+      {children}
+    </div>
+
+  )
+}
+
+export function DeltaDialogOkCancelFooter({onCancel, onOk} : {onCancel: () => any, onOk: () => any}) {
+  const tx = window.static_translate
+
+  return (
+    <DeltaDialogFooter>
+      <DeltaDialogFooterActions>
+        <p className='delta-button no-padding primary bold' style={{marginRight: '30px'}} onClick={onCancel}>
+          {tx('cancel')}
+        </p>
+        <p
+          className={'delta-button no-padding bold primary'}
+          onClick={onOk}
+        >
+          {tx('ok')}
+        </p>
+      </DeltaDialogFooterActions>
+    </DeltaDialogFooter>
+  )
+}

@@ -7,6 +7,7 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogFooter,
+  DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import {
   useGroupImage,
@@ -157,7 +158,7 @@ function EditGroupInner(props: {
             const qrCode = await DeltaBackend.call('chat.getQrCode', groupId)
             setQrCode(qrCode)
             setViewMode('showQrCode')
-          }}
+          } }
         />
       </>
     )
@@ -166,7 +167,7 @@ function EditGroupInner(props: {
   return (
     <>
       {viewMode === 'addMember' &&
-        AddMemberInnerDialog({
+        <AddMemberInnerDialog {...{
           onClickBack: () => {
             updateSearch('')
             setViewMode('main')
@@ -176,7 +177,9 @@ function EditGroupInner(props: {
           searchContacts,
           groupMembers,
           addRemoveGroupMember,
-        })}
+        }}
+        />
+      }
       {viewMode === 'showQrCode' &&
         ShowQrCodeInnerDialog({
           onClickBack: () => {
@@ -242,22 +245,7 @@ function EditGroupInner(props: {
               </div>
             </Card>
           </div>
-          <DeltaDialogFooter>
-            <div
-              style={{ justifyContent: 'space-between' }}
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-            >
-              <p className='delta-button no-padding bold' onClick={onClose}>
-                {tx('cancel')}
-              </p>
-              <p
-                className='delta-button no-padding primary bold'
-                onClick={onUpdateGroup}
-              >
-                {tx('save_desktop')}
-              </p>
-            </div>
-          </DeltaDialogFooter>
+          <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup}  />
         </>
       )}
     </>

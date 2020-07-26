@@ -18,6 +18,9 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
+  DeltaDialogOkCancelFooter,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
 } from './DeltaDialog'
 
 import { GroupImage } from './Edit-Group-Image'
@@ -281,7 +284,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
   )
 }
 
-export const AddMemberInnerDialog = ({
+export function AddMemberInnerDialog({
   onClickBack,
   onSearchChange,
   queryStr,
@@ -295,8 +298,25 @@ export const AddMemberInnerDialog = ({
   searchContacts: DCContact[]
   groupMembers: number[]
   addRemoveGroupMember: ReturnType<typeof useGroupMembers>[3]
-}) => {
-  const tx = useTranslationFunction()
+}) {
+  const contactsNotInGroup = searchContacts.filter(contact => groupMembers.indexOf(contact.id) === -1)
+
+  const [addMembers, setAddMembers] = useState([])
+
+  const addOrRemoveMember = (contact: DCContact) => {
+    if (addMembers.indexOf(contact.id) === -1) {
+      setAddMembers([...addMembers, contact.id])
+    } else {
+      setAddMembers(addMembers.filter(id => id !== contact.id))
+    }
+  }
+
+  const tx = window.static_translate
+
+  const onOk = () => {
+    addMembers.map(id => addRemoveGroupMember({id}))
+    onClickBack()
+  }
 
   return (
     <>
@@ -316,11 +336,11 @@ export const AddMemberInnerDialog = ({
           />
           <div className='group-member-contact-list-wrapper'>
             <ContactList2
-              contacts={searchContacts}
+              contacts={contactsNotInGroup}
               onClick={() => {}}
               showCheckbox
-              isChecked={({ id }) => groupMembers.indexOf(id) !== -1}
-              onCheckboxClick={addRemoveGroupMember}
+              isChecked={({ id }) => addMembers.indexOf(id) !== -1}
+              onCheckboxClick={addOrRemoveMember}
             />
             {queryStr !== '' &&
               searchContacts.length === 0 &&
@@ -328,6 +348,7 @@ export const AddMemberInnerDialog = ({
           </div>
         </Card>
       </DeltaDialogBody>
+      <DeltaDialogOkCancelFooter onCancel={onClickBack} onOk={onOk} />
     </>
   )
 }
@@ -470,7 +491,7 @@ function CreateGroupInner(props: {
   return (
     <>
       {viewMode.startsWith(viewPrefix + '-addMember') &&
-        AddMemberInnerDialog({
+        <AddMemberInnerDialog {...{
           onClickBack: () => {
             updateSearch('')
             setViewMode(viewPrefix + '-main')
@@ -480,7 +501,8 @@ function CreateGroupInner(props: {
           searchContacts,
           groupMembers,
           addRemoveGroupMember,
-        })}
+        }} />
+      }
       {viewMode.startsWith(viewPrefix + '-showQrCode') &&
         ShowQrCodeInnerDialog({
           onClickBack: () => {
@@ -550,13 +572,10 @@ function CreateGroupInner(props: {
               </div>
             </Card>
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div
-              style={{ justifyContent: 'space-between' }}
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-            >
-              <p className='delta-button no-padding bold' onClick={onClose}>
-                {tx('cancel')}
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p className='delta-button no-padding primary bold' style={{marginRight: '30px'}} onClick={onClose}>
+                  {tx('cancel')}
               </p>
               <p
                 className='delta-button no-padding primary bold'
@@ -570,8 +589,8 @@ function CreateGroupInner(props: {
               >
                 {tx('group_create_button')}
               </p>
-            </div>
-          </div>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
         </>
       )}
     </>
