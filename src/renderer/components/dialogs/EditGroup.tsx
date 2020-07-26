@@ -158,7 +158,7 @@ function EditGroupInner(props: {
             const qrCode = await DeltaBackend.call('chat.getQrCode', groupId)
             setQrCode(qrCode)
             setViewMode('showQrCode')
-          } }
+          }}
         />
       </>
     )
@@ -166,20 +166,21 @@ function EditGroupInner(props: {
 
   return (
     <>
-      {viewMode === 'addMember' &&
-        <AddMemberInnerDialog {...{
-          onClickBack: () => {
-            updateSearch('')
-            setViewMode('main')
-          },
-          onSearchChange,
-          queryStr,
-          searchContacts,
-          groupMembers,
-          addRemoveGroupMember,
-        }}
+      {viewMode === 'addMember' && (
+        <AddMemberInnerDialog
+          {...{
+            onClickBack: () => {
+              updateSearch('')
+              setViewMode('main')
+            },
+            onSearchChange,
+            queryStr,
+            searchContacts,
+            groupMembers,
+            addRemoveGroupMember,
+          }}
         />
-      }
+      )}
       {viewMode === 'showQrCode' &&
         ShowQrCodeInnerDialog({
           onClickBack: () => {
@@ -245,7 +246,7 @@ function EditGroupInner(props: {
               </div>
             </Card>
           </div>
-          <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup}  />
+          <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
         </>
       )}
     </>

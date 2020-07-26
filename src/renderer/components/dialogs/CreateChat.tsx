@@ -299,7 +299,9 @@ export function AddMemberInnerDialog({
   groupMembers: number[]
   addRemoveGroupMember: ReturnType<typeof useGroupMembers>[3]
 }) {
-  const contactsNotInGroup = searchContacts.filter(contact => groupMembers.indexOf(contact.id) === -1)
+  const contactsNotInGroup = searchContacts.filter(
+    contact => groupMembers.indexOf(contact.id) === -1
+  )
 
   const [addMembers, setAddMembers] = useState([])
 
@@ -314,7 +316,7 @@ export function AddMemberInnerDialog({
   const tx = window.static_translate
 
   const onOk = () => {
-    addMembers.map(id => addRemoveGroupMember({id}))
+    addMembers.map(id => addRemoveGroupMember({ id }))
     onClickBack()
   }
 
@@ -490,19 +492,21 @@ function CreateGroupInner(props: {
 
   return (
     <>
-      {viewMode.startsWith(viewPrefix + '-addMember') &&
-        <AddMemberInnerDialog {...{
-          onClickBack: () => {
-            updateSearch('')
-            setViewMode(viewPrefix + '-main')
-          },
-          onSearchChange,
-          queryStr,
-          searchContacts,
-          groupMembers,
-          addRemoveGroupMember,
-        }} />
-      }
+      {viewMode.startsWith(viewPrefix + '-addMember') && (
+        <AddMemberInnerDialog
+          {...{
+            onClickBack: () => {
+              updateSearch('')
+              setViewMode(viewPrefix + '-main')
+            },
+            onSearchChange,
+            queryStr,
+            searchContacts,
+            groupMembers,
+            addRemoveGroupMember,
+          }}
+        />
+      )}
       {viewMode.startsWith(viewPrefix + '-showQrCode') &&
         ShowQrCodeInnerDialog({
           onClickBack: () => {
@@ -574,8 +578,12 @@ function CreateGroupInner(props: {
           </div>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p className='delta-button no-padding primary bold' style={{marginRight: '30px'}} onClick={onClose}>
-                  {tx('cancel')}
+              <p
+                className='delta-button no-padding primary bold'
+                style={{ marginRight: '30px' }}
+                onClick={onClose}
+              >
+                {tx('cancel')}
               </p>
               <p
                 className='delta-button no-padding primary bold'

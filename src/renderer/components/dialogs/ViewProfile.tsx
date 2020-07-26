@@ -18,7 +18,17 @@ import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
 
-const ProfileInfoName = ({ contactId, displayName, setDisplayName, address }: { contactId: Number, displayName: string, setDisplayName: (displayName: string) => void, address: string }) => {
+const ProfileInfoName = ({
+  contactId,
+  displayName,
+  setDisplayName,
+  address,
+}: {
+  contactId: Number
+  displayName: string
+  setDisplayName: (displayName: string) => void
+  address: string
+}) => {
   const [contact, setContact] = useState<{
     displayName: string
     address: string
@@ -68,7 +78,9 @@ export default function ViewProfile(props: {
   const { isOpen, onClose, contact } = props
   const { openDialog } = useContext(ScreenContext)
 
-  const [displayName, setDisplayName] = useState<string>(props.contact.displayName)
+  const [displayName, setDisplayName] = useState<string>(
+    props.contact.displayName
+  )
 
   const { chatListIds } = useChatListIds(0, '', contact.id)
   // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
@@ -86,7 +98,6 @@ export default function ViewProfile(props: {
     const dmChatId = await DeltaBackend.call('contacts.getDMChatId', contact.id)
     onChatClick(dmChatId)
   }
-
 
   const onUpdateContact = async () => {
     await DeltaBackend.call('contacts.changeNickname', contact.id, displayName)
@@ -115,7 +126,12 @@ export default function ViewProfile(props: {
             >
               <ProfileInfoAvatar contact={contact} />
             </div>
-            <ProfileInfoName contactId={contact.id} displayName={displayName} setDisplayName={setDisplayName} address={contact.address} />
+            <ProfileInfoName
+              contactId={contact.id}
+              displayName={displayName}
+              setDisplayName={setDisplayName}
+              address={contact.address}
+            />
           </div>
           <Button
             style={{ marginLeft: '100px', marginBottom: '30px' }}
