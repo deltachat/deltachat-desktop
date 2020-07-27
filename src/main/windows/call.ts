@@ -33,7 +33,7 @@ export async function openCallWindow(locale: string, options: string) {
     minHeight: defaults.minHeight,
     minWidth: defaults.minWidth,
     show: false,
-    title: 'Video Hangout',
+    title: 'Video Chat',
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
