@@ -59,6 +59,19 @@ export default class DCChatList extends SplitOut {
     return chatListIds
   }
 
+  async getChatListEntries(
+    ...args: Parameters<typeof DeltaChat.prototype.getChatList>
+  ) {
+    const chatList = this._dc.getChatList(...args)
+    const chatListJson = []
+    for (let counter = 0; counter < chatList.getCount(); counter++) {
+      const chatId = await chatList.getChatId(counter)
+      const messageId = await chatList.getMessageId(counter)
+      chatListJson.push([chatId, messageId])
+    }
+    return chatListJson as [number, number][]
+  }
+
   async _getChatList(
     ...args: Parameters<typeof DeltaChat.prototype.getChatList>
   ) {
@@ -96,7 +109,67 @@ export default class DCChatList extends SplitOut {
     return chats
   }
 
-  async getChatListSummary(list: ChatList, i: number) {
+  async getChatListItemsByEntries(entries: [number, number][]) {
+    const label = '[BENCH] getChatListItemsByEntries'
+    console.time(label)
+    const chats: { [key: number]: ChatListItemType } = {}
+    for (const entry of entries) {
+      const chat = await this.getChatListItemByEntry(entry)
+      chats[entry[0]] = chat
+    }
+    console.timeEnd(label)
+    return chats
+  }
+
+  async getChatListItemByEntry([chatId, messageId]: [number, number]): Promise<
+    ChatListItemType
+  > {
+    const chat = await this._getChatById(chatId)
+    if (chat === null) return null
+
+    let deaddrop
+    if (chat.id === C.DC_CHAT_ID_DEADDROP) {
+      deaddrop = this._controller.messageList.getMessage(messageId)
+    }
+
+    const summary = this._dc.getChatlistItemSummary(chatId, messageId)
+    const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
+
+    const name = chat.name || summary.text1
+    const isGroup = isGroupChat(chat)
+    const contactIds = await this._getChatContactIds(chatId)
+    /**
+     * This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+     */
+    const chatListItem = {
+      id: chat.id,
+      name,
+      avatarPath: chat.profileImage,
+      color: chat.color,
+      lastUpdated: lastUpdated,
+      summary: {
+        text1: summary.text1,
+        text2: summary.text2,
+        status: mapCoreMsgStatus2String(summary.state),
+      },
+      deaddrop,
+      isVerified: chat.isVerified,
+      isGroup: isGroup,
+      freshMessageCounter: this._dc.getFreshMessageCount(chatId),
+      isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
+      contactIds,
+      isSelfTalk: chat.isSelfTalk,
+      isDeviceTalk: chat.isDeviceTalk,
+      selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
+      archived: chat.archived,
+      pinned: chat.pinned,
+      muted: chat.muted,
+    }
+
+    return chatListItem
+  }
+
+  getChatListSummary(list: ChatList, i: number) {
     return list.getSummary(i).toJson()
   }
 

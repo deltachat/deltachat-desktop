@@ -31,6 +31,21 @@ These functions are highly experimental, use at your own risk.
     }
     log.info(`Imported ${contacts.length - error_count} contacts`)
   }
+
+  async testNewChatlistFunctions(queryStr: string) {
+    const entries = await DeltaBackend.call(
+      'chatList.getChatListEntries',
+      0,
+      queryStr,
+      0
+    )
+    console.log({ entries })
+    const chatlist = await DeltaBackend.call(
+      'chatList.getChatListItemsByEntries',
+      entries
+    )
+    console.log({ chatlist })
+  }
 }
 
 export const exp = new Experimental()
