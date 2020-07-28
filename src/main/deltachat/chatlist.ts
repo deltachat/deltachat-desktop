@@ -132,7 +132,7 @@ export default class DCChatList extends SplitOut {
       deaddrop = this._controller.messageList.getMessage(messageId)
     }
 
-    const summary = this._dc.getChatlistItemSummary(chatId, messageId)
+    const summary = this._dc.getChatlistItemSummary(chatId, messageId).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     const name = chat.name || summary.text1
