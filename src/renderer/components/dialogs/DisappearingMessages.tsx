@@ -129,6 +129,7 @@ export default function DisappearingMessage({
                 setDisappearingMessageDuration
               }
             />
+            <p>{tx("ephemeral_messages_hint")}</p>
           </DeltaDialogContent>
         </DeltaDialogBody>
         <DeltaDialogFooter

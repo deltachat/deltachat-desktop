@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add hint below ephemeral messages options, that explains the feature
+
 ### Fixed
 - translate the term "error" in configure dialog
 - fix "Invalid date" in message details on searchresult
