@@ -26,6 +26,7 @@
     <string name="unarchive">Unarchive</string>
     <string name="mute">Mute</string>
     <string name="ephemeral_messages">Disappearing messages</string>
+    <string name="ephemeral_messages_hint">These settings apply to all participants using Delta Chat. However, they may copy, save and forward messages or use other e-mail clients.</string>
     <string name="save">Save</string>
     <string name="chat">Chat</string>
     <string name="media">Media</string>
@@ -105,7 +106,9 @@
     <string name="camera">Camera</string>
     <string name="location">Location</string>
     <string name="gallery">Gallery</string>
+    <string name="images_and_videos">Images and videos</string>
     <string name="file">File</string>
+    <string name="files">Files</string>
     <string name="unknown">Unknown</string>
 
     <string name="green">Green</string>

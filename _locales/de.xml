@@ -26,6 +26,7 @@
     <string name="unarchive">Dearchivieren</string>
     <string name="mute">Stumm</string>
     <string name="ephemeral_messages">Verschwindende Nachrichten</string>
+    <string name="ephemeral_messages_hint">Diese Einstellungen gelten für alle Delta Chat BenutzerInnen. Nachrichten können jedoch kopiert, gespeichert und weitergeleitet werden oder es können andere E-Mail-Clients verwenden werden.</string>
     <string name="save">Speichern</string>
     <string name="chat">Chat</string>
     <string name="media">Medien</string>
@@ -105,7 +106,9 @@
     <string name="camera">Kamera</string>
     <string name="location">Ort</string>
     <string name="gallery">Galerie</string>
+    <string name="images_and_videos">Bilder und Videos</string>
     <string name="file">Datei</string>
+    <string name="files">Dateien</string>
     <string name="unknown">Unbekannt</string>
 
     <string name="green">Grün</string>
