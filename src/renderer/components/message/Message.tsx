@@ -12,6 +12,9 @@ import { attachment, isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction } from '../../contexts'
 import { joinCall } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/message')
 
 const { openExternal } = window.electron_functions
 
@@ -366,6 +369,18 @@ export const CallMessage = (props: {
   } = props
   const tx = window.static_translate
 
+  const openCall = (messageId: number) => {
+    joinCall(messageId).catch(err => {
+      log.error('failed to join call', err)
+      alert(err.toString())
+    })
+  }
+
+  const openCallExternal = (messageId: number) => {
+    // todo
+    // openExternal()
+  }
+
   return (
     <div
       className={classNames(
@@ -417,17 +432,4 @@ export const CallMessage = (props: {
       </div>
     </div>
   )
-}
-
-const openCall = (messageId: number) => {
-  joinCall(messageId)
-}
-
-const denyCall = () => {
-  console.log('NONO')!
-}
-
-const openCallExternal = (messageId: number) => {
-  // todo
-  //openExternal()
 }

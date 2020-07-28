@@ -11,6 +11,9 @@ import {
 import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/dist/constants'
 import { runtime } from '../../runtime'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/message')
 
 type Chat = ChatListItemType | FullChat
 
@@ -118,11 +121,16 @@ export async function unMuteChat(chatId: number) {
 }
 
 export async function sendCallInvitation(chatId: number) {
-  const messageId = await DeltaBackend.call(
-    'chat.sendVideoChatInvitation',
-    chatId
-  )
-  await joinCall(messageId)
+  try {
+    const messageId = await DeltaBackend.call(
+      'chat.sendVideoChatInvitation',
+      chatId
+    )
+    await joinCall(messageId)
+  } catch (error) {
+    log.error('failed to join call', error)
+    alert(error.toString())
+  }
 }
 
 export async function joinCall(messageId: number) {
