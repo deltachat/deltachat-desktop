@@ -6,6 +6,7 @@
 
 - Fix messagelist being empty when starting chat with contact request
 - Fix messagelist not having a scrollbar sometimes
+- Fix "New contact" in search results
 
 ## [1.10.1] - 2020-07-29
 
