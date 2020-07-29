@@ -114,7 +114,7 @@ export default function CreateChat(props: {
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       {viewMode.startsWith('main') && (
         <>
-          <DeltaDialogHeader onClose={onClose}>
+          <DeltaDialogHeader>
             <input
               className='search-input'
               onChange={onSearchChange}
@@ -123,7 +123,7 @@ export default function CreateChat(props: {
               autoFocus
             />
           </DeltaDialogHeader>
-          <DeltaDialogBody noFooter>
+          <DeltaDialogBody>
             <Card>
               <div className='create-chat-contact-list-wrapper'>
                 {renderAddGroupIfNeeded()}
@@ -132,6 +132,13 @@ export default function CreateChat(props: {
               </div>
             </Card>
           </DeltaDialogBody>
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p className={'delta-button bold primary'} onClick={onClose}>
+                {tx('close')}
+              </p>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
         </>
       )}
       {viewMode.startsWith('createGroup') && (
@@ -324,7 +331,6 @@ export function AddMemberInnerDialog({
     <>
       <DeltaDialogHeader
         title={tx('group_add_members')}
-        onClickBack={onClickBack}
       />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
@@ -372,13 +378,19 @@ export const ShowQrCodeInnerDialog = ({
     <>
       <DeltaDialogHeader
         title={tx('qrshow_title')}
-        onClickBack={onClickBack}
-        onClose={onClose}
       />
       <DeltaDialogQrInner
         qrCode={qrCode}
         description={tx('qrshow_join_group_hint', [groupName])}
       />
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
+          <p className={'delta-button bold primary'} onClick={onClickBack}>
+            {tx('back')}
+          </p>
+        </DeltaDialogFooterActions>  
+      </DeltaDialogFooter>
+      
     </>
   )
 }
@@ -523,7 +535,6 @@ function CreateGroupInner(props: {
             title={
               isVerified ? tx('menu_new_verified_group') : tx('menu_new_group')
             }
-            onClickBack={() => setViewMode('main')}
           />
           <div className={Classes.DIALOG_BODY}>
             <Card>
@@ -579,14 +590,14 @@ function CreateGroupInner(props: {
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
               <p
-                className='delta-button no-padding primary bold'
-                style={{ marginRight: '30px' }}
-                onClick={onClose}
+                className='delta-button primary bold'
+                style={{ marginRight: '10px' }}
+                onClick={() => setViewMode('main')}
               >
                 {tx('cancel')}
               </p>
               <p
-                className='delta-button no-padding primary bold'
+                className='delta-button primary bold'
                 onClick={() => {
                   if (groupName === '') {
                     setErrorMissingGroupName(true)

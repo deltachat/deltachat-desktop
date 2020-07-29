@@ -101,13 +101,13 @@ function confirmationDialog(
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
               <p
-                className={`delta-button no-padding bold primary`}
+                className={`delta-button bold primary`}
                 onClick={onClose}
               >
                 {tx('no')}
               </p>
               <p
-                className={`delta-button no-padding bold primary`}
+                className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
                   navigator.clipboard.writeText(target)
@@ -116,7 +116,7 @@ function confirmationDialog(
                 {tx('menu_copy_link_to_clipboard')}
               </p>
               <p
-                className={`delta-button no-padding bold primary`}
+                className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
                   if (isChecked) {

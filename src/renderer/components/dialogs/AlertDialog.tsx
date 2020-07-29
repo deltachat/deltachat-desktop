@@ -20,7 +20,7 @@ export default function AlertDialog(props: todo) {
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
         <p
-          className={`delta-button no-padding bold primary'`}
+          className={`delta-button bold primary'`}
           onClick={() => onClick()}
         >
           {window.static_translate('ok')}

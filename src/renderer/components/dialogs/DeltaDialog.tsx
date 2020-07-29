@@ -162,7 +162,7 @@ export function DeltaDialogFooter(
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
     <div
-      style={{ display: hide ? 'none' : 'unset', ...props.style }}
+      style={{ display: hide ? 'none' : 'block', ...props.style }}
       className={classNames(
         Classes.DIALOG_FOOTER,
         'bp3-dialog-footer-border-top'
@@ -299,26 +299,21 @@ export function SmallSelectDialog({
           </RadioGroup>
         </DeltaDialogContent>
       </DeltaDialogBody>
-      <DeltaDialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p
-          className='delta-button danger bold'
-          onClick={() => {
-            onCancel && onCancel()
-            onClose()
-          }}
-        >
-          {tx('cancel')}
-        </p>
-        <p className='delta-button primary bold' onClick={saveAndClose}>
-          {tx('save_desktop')}
-        </p>
+      <DeltaDialogFooter style={{ marginTop: '0px',padding: '20px'}}>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button primary bold'
+            onClick={() => {
+              onCancel && onCancel()
+              onClose()
+            }}
+          >
+            {tx('cancel')}
+          </p>
+          <p className='delta-button primary bold' onClick={saveAndClose}>
+            {tx('save_desktop')}
+          </p>
+        </DeltaDialogFooterActions>
       </DeltaDialogFooter>
     </SmallDialog>
   )
@@ -333,7 +328,7 @@ export function DeltaDialogFooterActions({
 }) {
   return (
     <div
-      style={{ justifyContent: 'flex-end', paddingRight: '10px', ...style }}
+      style={{ justifyContent: 'flex-end', ...style }}
       className={Classes.DIALOG_FOOTER_ACTIONS}
     >
       {children}
@@ -354,13 +349,13 @@ export function DeltaDialogOkCancelFooter({
     <DeltaDialogFooter>
       <DeltaDialogFooterActions>
         <p
-          className='delta-button no-padding primary bold'
-          style={{ marginRight: '30px' }}
+          className='delta-button primary bold'
+          style={{ marginRight: '10px' }}
           onClick={onCancel}
         >
           {tx('cancel')}
         </p>
-        <p className={'delta-button no-padding bold primary'} onClick={onOk}>
+        <p className={'delta-button bold primary'} onClick={onOk}>
           {tx('ok')}
         </p>
       </DeltaDialogFooterActions>
