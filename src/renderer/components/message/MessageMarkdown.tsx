@@ -1,5 +1,5 @@
 import React from 'react'
-import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
+import SimpleMarkdown from 'simple-markdown'
 import { LabeledLink } from './LabeledLink'
 const { openExternal } = window.electron_functions
 
@@ -22,13 +22,13 @@ function assign(rule: any, order: any, object = {}) {
 // }
 
 export const previewRules: SimpleMarkdown.ParserRules = {
-  Array: defaultRules.Array,
+  Array: SimpleMarkdown.defaultRules.Array,
   // strong: ignoreScopeAssign(defaultRules.strong, 1), // bold
   // em: ignoreScopeAssign(defaultRules.em, 1), // italics
   // ubold: assign(ignoreScope(defaultRules.u), 2, { react: defaultRules.strong.react }),
   // del: ignoreScopeAssign(defaultRules.del, 3),
   // inlineCode: ignoreScopeAssign(defaultRules.inlineCode, 12),
-  text: assign(defaultRules.text, 100),
+  text: assign(SimpleMarkdown.defaultRules.text, 100),
 }
 export const rules: SimpleMarkdown.ParserRules = Object.assign(
   {
@@ -51,7 +51,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     // }), // uses style of codeBlock
     labeled_link: {
       order: 18,
-      match: anyScopeRegex(
+      match: SimpleMarkdown.anyScopeRegex(
         /^\[([^\]]*)\]\((https?:\/\/[^\s<]+[^<>.,:;"')\]{3,1000}\s])\)/
       ),
       parse: function(
@@ -77,7 +77,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     },
     normal_link: {
       order: 18,
-      match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
+      match: SimpleMarkdown.anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
       parse: function(capture: any[], recurseParse: any, state: any) {
         return { content: capture[1] }
       },
@@ -95,7 +95,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     },
     newlinePlus: {
       order: 19,
-      match: blockRegex(/^(?:\n *){2,}\n/),
+      match: SimpleMarkdown.blockRegex(/^(?:\n *){2,}\n/),
       parse: ignoreCapture,
       react: function(node: any, output: any, state: any) {
         return <div key={state.key} className='double-line-break' />
@@ -103,7 +103,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     },
     newline: {
       order: 20,
-      match: blockRegex(/^(?:\n *)\n/),
+      match: SimpleMarkdown.blockRegex(/^(?:\n *)\n/),
       parse: ignoreCapture,
       react: function(node: any, output: any, state: any) {
         return <div key={state.key} className='line-break' />

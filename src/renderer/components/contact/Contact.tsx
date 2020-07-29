@@ -17,7 +17,7 @@ export function convertContactProps(contact: ContactJSON) {
 export const VerifiedIcon = (props: { style?: CSSProperties }) => (
   <img
     className='verified-icon'
-    src='../images/verified.png'
+    src='images/verified.png'
     style={props.style}
   />
 )

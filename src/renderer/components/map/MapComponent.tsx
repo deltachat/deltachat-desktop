@@ -1,6 +1,5 @@
 import { DeltaBackend } from '../../delta-remote'
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
 import ReactDOM from 'react-dom'
 import debounce from 'debounce'
 import mapboxgl from 'mapbox-gl'
@@ -10,7 +9,7 @@ import moment from 'moment'
 import formatRelativeTime from '../conversations/formatRelativeTime'
 import MapLayerFactory from './MapLayerFactory'
 import { Slider, Button, Collapse } from '@blueprintjs/core'
-import PopupMessage from './PopupMessage'
+import PopupMessage, {PopupMessageString} from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
 import chatStore from '../../stores/chat'
@@ -553,13 +552,8 @@ export default class MapComponent extends React.Component<
     formattedDate: string,
     message: JsonMessage
   ) {
-    return ReactDOMServer.renderToStaticMarkup(
-      <PopupMessage
-        username={contactName}
-        formattedDate={formattedDate}
-        message={message}
-      />
-    )
+    
+    return PopupMessageString(contactName, formattedDate, message)
   }
 
   renderContactCheckbox(contact: Contact) {

@@ -148,7 +148,7 @@ export default class DCSettings extends SplitOut {
           }
         )
       } else {
-        const filepath = join(__dirname, '../../../images/backgrounds/', file)
+        const filepath = join(__dirname, '../../../tsc-dist/frontend/images/backgrounds/', file)
         copyAndSetBg(filepath)
       }
     })

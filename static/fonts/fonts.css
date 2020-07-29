@@ -29,3 +29,12 @@
   font-family: "NotoEmoji";
   src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Icons20";
+  src: url("icons-20.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Icons16";
+  src: url("icons-16.ttf") format("truetype");
+}

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "../../tsc-dist/frontend/js/app",
+        "outDir": "../../tsc-dist/frontend/js/shared",
         "rootDir": ".",
 
         // Compile to be compatible with ESM/snowpack compatible 
@@ -15,13 +15,13 @@
 
         // Enable source maps for debugging  
         "sourceMap": true,
-        "sourceRoot": "../../tsc-dist/frontend/js/app",
+        "sourceRoot": "../../tsc-dist/frontend/js/shared",
         "inlineSources": true,
 
         // Incremental builds
         "composite": true,
         "incremental": true,
-        "tsBuildInfoFile": "../../tsc-dist/frontend/js/app/.tsbuildinfo",
+        "tsBuildInfoFile": "../../tsc-dist/frontend/js/shared/.tsbuildinfo",
 
         "allowJs": true,
         "noImplicitAny": true,
@@ -36,11 +36,5 @@
                 "webModulePath": "/web_modules/"
             }
         ]
-    },
-    "references": [
-        { "path": "../shared/tsconfig.frontend.json" }
-    ]
-
-
+    }
 }
-

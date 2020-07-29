@@ -7,7 +7,7 @@ export function QRAvatar() {
       <div className='content'>
         <img
           className='avatar-qr-code-img sharp-pixel-image'
-          src='../images/qr_icon.png'
+          src='images/qr_icon.png'
         />
       </div>
     </div>
@@ -45,7 +45,7 @@ export function Avatar(props: {
     <div className={classNames('avatar', { large, small })}>
       {content}
       {isVerified && (
-        <img className='verified-icon' src='../images/verified.png' />
+        <img className='verified-icon' src='images/verified.png' />
       )}
     </div>
   )
