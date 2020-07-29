@@ -6,6 +6,11 @@
 
 - Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
 
+### Fixed
+
+- Fix messagelist being empty when starting chat with contact request
+- Fix messagelist not having a scrollbar sometimes
+
 ## [1.10.1] - 2020-07-29
 
 ### Added
@@ -20,6 +25,11 @@
 ### Removed
 
 - disable keycombination for Scroll active chat (`alt + left arrow` because this keyboard shortcut is already used by mac to move over words in input fields)
+
+### Updated
+
+- deltachat-node to 1.41.0
+- core version 1.41
 
 ## [1.10.0] - 2020-07-16
 

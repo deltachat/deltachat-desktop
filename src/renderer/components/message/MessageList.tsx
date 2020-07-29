@@ -64,6 +64,9 @@ export default function MessageList({
       type: 'FINISHED_SCROLL',
       payload: 'SCROLLED_TO_BOTTOM',
     })
+
+    // Try fetching more messages if needed
+    onScroll(null)
   }, [scrollToBottom])
 
   useEffect(() => {
@@ -129,8 +132,8 @@ export default function MessageList({
       log.debug('Scrolled to top, fetching more messsages!')
       fetchMore()
     }
-    Event.preventDefault()
-    Event.stopPropagation()
+    Event?.preventDefault()
+    Event?.stopPropagation()
     return false
   }
 
@@ -217,7 +220,10 @@ export const MessageListInner = React.memo(
               )
             }
             const message = messages[messageId]
-            if (!message || message.msg == null) return
+            if (!message || message.msg == null) {
+              log.debug(`Missing message with id ${messageId}`)
+              return
+            }
             return (
               <MessageWrapper
                 key={messageId}

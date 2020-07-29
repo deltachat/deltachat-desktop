@@ -154,7 +154,7 @@ export default class DCLoginController extends SplitOut {
 This release contains bugfixes for 1.10.0:
 ⌨️ disable keycombination for Scroll to active chat (\`alt + left arrow\` because this keyboard shortcut is already used by mac to move over words in input fields)
 
-[Full Changelog](TODO insert Link)` as any
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1101---2020-07-29)` as any
     )
   }
 
