@@ -197,12 +197,22 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       0
     )
     const lastMessageIndexOnLastPage = state.oldestFetchedMessageIndex
-    if (lastMessageIndexOnLastPage === 0) return
+    if (lastMessageIndexOnLastPage === 0) {
+      log.debug(
+        'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
+      )
+      return
+    }
     const fetchedMessageIds = state.messageIds.slice(
       oldestFetchedMessageIndex,
       lastMessageIndexOnLastPage
     )
-    if (fetchedMessageIds.length === 0) return
+    if (fetchedMessageIds.length === 0) {
+      log.debug(
+        'FETCH_MORE_MESSAGES: fetchedMessageIds.length is zero, returning'
+      )
+      return
+    }
 
     const fetchedMessages = await DeltaBackend.call(
       'messageList.getMessages',
@@ -313,6 +323,8 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       'messageList.getMessageIds',
       chatStore.state.id
     )
+
+    if (id !== chatStore.state.id) return
     chatStore.dispatch({
       type: 'SET_MESSAGE_IDS',
       id: chatStore.state.id,
