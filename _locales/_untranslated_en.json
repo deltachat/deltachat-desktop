@@ -147,9 +147,6 @@
   "open_external_url_trust_domain": {
     "message": "Don't ask again for"
   },
-  "menu_invite_to_video_hangout": {
-    "message": "Invite to Video Hangout"
-  },
   "video_hangout_invitation": {
     "message": "Video Hangout Invitation"
   }

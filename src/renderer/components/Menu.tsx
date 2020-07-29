@@ -106,7 +106,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
       !isGroup && settingsContext.desktopSettings.enableAVCalls && (
         <DeltaMenuItem
           key='call'
-          text={tx('menu_invite_to_video_hangout')}
+          text={tx('videochat')}
           onClick={() => {
             sendCallInvitation(selectedChat.id)
           }}
