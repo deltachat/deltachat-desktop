@@ -2,6 +2,11 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+- Fix messagelist being empty when starting chat with contact request
+- Fix messagelist not having a scrollbar sometimes
+
 ## [1.10.1] - 2020-07-29
 
 ### Added
