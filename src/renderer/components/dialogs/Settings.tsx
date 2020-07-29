@@ -263,10 +263,14 @@ export default function Settings(props: DialogProps) {
               'enableDisappearingMessages',
               'Enable disappearing messages'
             )}
-            {renderDTSettingSwitch('enableAVCalls', tx('pref_video_hangouts'))}
-            {renderDeltaInput(
-              'webrtc_instance',
-              tx('pref_video_hangouts_signaling_server_address')
+            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
+            {desktopSettings['enableAVCalls'] === true && (
+              <>
+                {renderDeltaInput('webrtc_instance', tx('videochat_instance'))}
+                <div className='bp3-callout'>
+                  {tx('videochat_instance_explain')}
+                </div>
+              </>
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>

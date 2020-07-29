@@ -357,7 +357,6 @@ export const CallMessage = (props: {
   padlock: boolean
   onDelete: () => void
   onForward: () => void
-  /* onRetrySend */
 }) => {
   const {
     direction,
@@ -374,11 +373,6 @@ export const CallMessage = (props: {
       log.error('failed to join call', err)
       alert(err.toString())
     })
-  }
-
-  const openCallExternal = (messageId: number) => {
-    // todo
-    // openExternal()
   }
 
   return (
@@ -409,21 +403,11 @@ export const CallMessage = (props: {
                   className='phone-accept-button'
                   onClick={openCall.bind(null, id)}
                 >
-                  {direction === 'incoming'
-                    ? tx('join_video_hangout')
-                    : tx('rejoin_video_hangout')}
+                  {direction === 'incoming' ? tx('join') : tx('rejoin')}
                 </button>
               </div>
               {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-                tx('video_hangout_external_hint')}
-              {/* <a
-                  onClick={() => {
-                    openCallExternal(url)
-                  }}
-                  href=''
-                >
-                  {url}
-                </a> */}
+                tx('videochat_will_open_in_your_browser')}
             </div>
           </div>
 
