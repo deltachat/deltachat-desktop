@@ -34,8 +34,23 @@ export function windowDefaults() {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${join(__dirname, '..', '..', 'tsc-dist', 'frontend', targetFile)}`,
-    preload: join(__dirname, '..', '..', 'tsc-dist', 'frontend', 'js', 'preload.js'),
+    main: `file://${join(
+      __dirname,
+      '..',
+      '..',
+      'tsc-dist',
+      'frontend',
+      targetFile
+    )}`,
+    preload: join(
+      __dirname,
+      '..',
+      '..',
+      'tsc-dist',
+      'frontend',
+      'js',
+      'preload.js'
+    ),
   }
 }
 

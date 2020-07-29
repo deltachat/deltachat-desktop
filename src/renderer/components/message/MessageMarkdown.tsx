@@ -77,7 +77,9 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     },
     normal_link: {
       order: 18,
-      match: SimpleMarkdown.anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
+      match: SimpleMarkdown.anyScopeRegex(
+        /^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/
+      ),
       parse: function(capture: any[], recurseParse: any, state: any) {
         return { content: capture[1] }
       },

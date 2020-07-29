@@ -9,7 +9,7 @@ import moment from 'moment'
 import formatRelativeTime from '../conversations/formatRelativeTime'
 import MapLayerFactory from './MapLayerFactory'
 import { Slider, Button, Collapse } from '@blueprintjs/core'
-import PopupMessage, {PopupMessageString} from './PopupMessage'
+import PopupMessage, { PopupMessageString } from './PopupMessage'
 import * as SessionStorage from '../helpers/SessionStorage'
 import { SettingsContext } from '../../contexts'
 import chatStore from '../../stores/chat'
@@ -552,7 +552,6 @@ export default class MapComponent extends React.Component<
     formattedDate: string,
     message: JsonMessage
   ) {
-    
     return PopupMessageString(contactName, formattedDate, message)
   }
 

@@ -12,7 +12,10 @@ const app = rawApp as ExtendedAppMainProcess
 async function getHelpFileForLang(locale: string) {
   const appPath = app.getAppPath()
 
-  const contentFilePath = join(appPath, `/tsc-dist/frontend/help/${locale}/help.html`)
+  const contentFilePath = join(
+    appPath,
+    `/tsc-dist/frontend/help/${locale}/help.html`
+  )
   if (await pathExists(contentFilePath)) {
     return contentFilePath
   } else {

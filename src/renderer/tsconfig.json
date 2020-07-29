@@ -1,46 +1,40 @@
 {
-    "compilerOptions": {
-        "outDir": "../../tsc-dist/frontend/js/app",
-        "rootDir": ".",
+  "compilerOptions": {
+    "outDir": "../../tsc-dist/frontend/js/app",
+    "rootDir": ".",
 
-        // Compile to be compatible with ESM/snowpack compatible 
-        "target": "es2017",
-        "module": "es2015",
-        "moduleResolution": "node",
+    // Compile to be compatible with ESM/snowpack compatible
+    "target": "es2017",
+    "module": "es2015",
+    "moduleResolution": "node",
 
+    // Enable JSX/Preact support
+    "jsx": "react",
+    "baseUrl": ".",
 
-        // Enable JSX/Preact support
-        "jsx": "react",
-        "baseUrl": ".",
+    // Enable source maps for debugging
+    "sourceMap": true,
+    "sourceRoot": "../../tsc-dist/frontend/js/app",
+    "inlineSources": true,
 
-        // Enable source maps for debugging  
-        "sourceMap": true,
-        "sourceRoot": "../../tsc-dist/frontend/js/app",
-        "inlineSources": true,
+    // Incremental builds
+    "composite": true,
+    "incremental": true,
+    "tsBuildInfoFile": "../../tsc-dist/frontend/js/app/.tsbuildinfo",
 
-        // Incremental builds
-        "composite": true,
-        "incremental": true,
-        "tsBuildInfoFile": "../../tsc-dist/frontend/js/app/.tsbuildinfo",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
 
-        "allowJs": true,
-        "noImplicitAny": true,
-        "esModuleInterop": true,
-
-        // Better integration of snowpack/esm modules
-        "plugins": [
-            {
-                "transform": "@magic-works/ttypescript-browser-like-import-transformer",
-                "after": true,
-                "bareModuleRewrite": "snowpack",
-                "webModulePath": "/web_modules/"
-            }
-        ]
-    },
-    "references": [
-        { "path": "../shared/tsconfig.frontend.json" }
+    // Better integration of snowpack/esm modules
+    "plugins": [
+      {
+        "transform": "@magic-works/ttypescript-browser-like-import-transformer",
+        "after": true,
+        "bareModuleRewrite": "snowpack",
+        "webModulePath": "/web_modules/"
+      }
     ]
-
-
+  },
+  "references": [{ "path": "../shared/tsconfig.frontend.json" }]
 }
-

@@ -1,7 +1,13 @@
 console.time('init')
 
 import { ensureDirSync, watchFile, readFile } from 'fs-extra'
-import { app as rawApp, session, EventEmitter, dialog, protocol } from 'electron'
+import {
+  app as rawApp,
+  session,
+  EventEmitter,
+  dialog,
+  protocol,
+} from 'electron'
 import rc from './rc'
 
 const app = rawApp as ExtendedAppMainProcess
@@ -169,19 +175,17 @@ if (process.env.NODE_ENV === 'test') {
     "default-src 'unsafe-inline' 'self' 'unsafe-eval'; img-src 'self' data:;"
 }
 
-
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'es6', privileges: { standard: true } }
+  { scheme: 'es6', privileges: { standard: true } },
 ])
 
 const ES6_PATH = join(__dirname, '..', 'frontend')
 
 app.once('ready', () => {
-  protocol.registerBufferProtocol( 'es6', ( req, cb ) => {
-    readFile(
-      join( ES6_PATH, req.url.replace( 'es6://', '' ) ),
-      (e, b) => { cb( { mimeType: 'text/javascript', data: b } ) }
-    )
+  protocol.registerBufferProtocol('es6', (req, cb) => {
+    readFile(join(ES6_PATH, req.url.replace('es6://', '')), (e, b) => {
+      cb({ mimeType: 'text/javascript', data: b })
+    })
   })
   devTools.tryInstallReactDevTools()
 })
