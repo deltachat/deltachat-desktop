@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
+
 ## [1.10.1] - 2020-07-29
 
 ### Added
