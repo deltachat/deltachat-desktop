@@ -2,19 +2,25 @@
 
 ## [Unreleased][unreleased]
 
+## [1.10.1] - 2020-07-29
+
 ### Added
+
 - add hint below ephemeral messages options, that explains the feature
 
 ### Fixed
+
 - translate the term "error" in configure dialog
 - fix "Invalid date" in message details on searchresult
 
 ### Removed
+
 - disable keycombination for Scroll active chat (`alt + left arrow` because this keyboard shortcut is already used by mac to move over words in input fields)
 
 ## [1.10.0] - 2020-07-16
 
 ### Added
+
 - :colon-emoji: support for skin tones (:+1::skin-tone-6:)
 - :colon-emoji:'s are now replaced with the unicode emoji they represent on send
 - add explaination if there are no contact requests
@@ -22,21 +28,25 @@
 - implement disappearing messages as an experimental feature
 
 ### Fixed
+
 - fix using the system language if no language is selected
 - fix a bug where the user would end up with multiple contexts after reloading from a frontend crash
-- fix Chat-view does not scroll down on incoming message #1783 
+- fix Chat-view does not scroll down on incoming message [#1783](https://github.com/deltachat/deltachat-desktop/issues/1783) 
 
 ### Changed
+
 - when opening the emoji picker its search bar gets now focused and when closing it the composer gets focused 
 
 ### Technical
+
 - removed `styled-components`
 - increase the version numbering to 1.10 to sync up with ios & android versioning and to avoid troubles with the ancient tags that still linger in the git history.
 
 ### Updated
+
 - updated google-noto color emoji font
 - deltachat-node to `1.40.0`
- - core version `1.40`
+- core version `1.40`
 
 ## [1.4.3] - 2020-06-30
 
@@ -860,7 +870,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...HEAD
+
+[1.10.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.0...v1.10.1
 
 [1.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.3...v1.10.0
 
