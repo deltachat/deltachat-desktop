@@ -212,6 +212,7 @@
 
     <string name="file_saved_to">Datei gespeichert unter \"%1$s\".</string>
 
+    <string name="videochat">Videochat</string>
     <!-- get confirmations -->
     <string name="ask_leave_group">Diese Gruppe verlassen?</string>
     <plurals name="ask_delete_chat">
