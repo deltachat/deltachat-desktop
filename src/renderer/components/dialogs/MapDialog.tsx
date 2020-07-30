@@ -18,7 +18,6 @@ export default function MapDialog(props: {
       isOpen={isOpen}
       title={title}
       onClose={onClose}
-      canEscapeKeyClose
       fixed
       style={{ width: 'calc(100vw - 50px)' }}
     >
