@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.10.3] - 2020-07-30
+
 ### Fixed
 - Fix labeled links (fix the regex, make it dumber)
 
@@ -888,7 +890,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...HEAD
+
+[1.10.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...v1.10.3
 
 [1.10.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...v1.10.2
 
