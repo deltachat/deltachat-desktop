@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix labeled links (fix the regex, make it dumber)
+
 ## [1.10.2] - 2020-07-30
 
 ### Fixed
