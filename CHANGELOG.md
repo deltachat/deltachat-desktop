@@ -6,10 +6,15 @@
 
 - Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
 
+## [1.10.2] - 2020-07-30
+
 ### Fixed
 
 - Fix messagelist being empty when starting chat with contact request
 - Fix messagelist not having a scrollbar sometimes
+- Fix settings dialog not closable with escape key
+- Fix "New contact" in search results
+
 
 ## [1.10.1] - 2020-07-29
 
@@ -884,7 +889,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...HEAD
+
+[1.10.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...v1.10.2
 
 [1.10.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.0...v1.10.1
 

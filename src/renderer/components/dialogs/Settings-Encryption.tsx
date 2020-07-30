@@ -113,7 +113,6 @@ export function SendAutocryptSetupMessage({
       isOpen={isOpen}
       title={tx('autocrypt_key_transfer_desktop')}
       onClose={onClose}
-      canOutsideClickClose={false}
     >
       {body}
     </DeltaDialog>

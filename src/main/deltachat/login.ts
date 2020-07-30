@@ -143,18 +143,8 @@ export default class DCLoginController extends SplitOut {
 🔥 Disappearing Messages (as experimental feature)
 🔗 add support for markdown links [label](url) (with a open confirmation dialog to prevent phishing)
 🥳 updated google-noto color emoji font to include newer emojis
-⬇️ fix Chat-view does not scroll down on incoming message
-
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1100---2020-07-16)` as any
-    )
-    this._dc.addDeviceMessage(
-      'changelog-version-1.10.1-0',
-      `Changes in v1.10.1
-
-This release contains bugfixes for 1.10.0:
-⌨️ disable keycombination for Scroll to active chat (\`alt + left arrow\` because this keyboard shortcut is already used by mac to move over words in input fields)
-
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1101---2020-07-29)` as any
+⬇️  fix various bugs in the message list
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#1102---2020-07-30)` as any
     )
   }
 

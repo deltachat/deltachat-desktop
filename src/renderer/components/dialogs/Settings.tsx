@@ -325,7 +325,10 @@ export default function Settings(props: DialogProps) {
   return (
     <DeltaDialogBase
       isOpen={props.isOpen}
-      onClose={() => setState({ showSettingsDialog: false })}
+      onClose={() => {
+        setState({ showSettingsDialog: false })
+        props.onClose()
+      }}
       className='SettingsDialog'
       fixed
     >
