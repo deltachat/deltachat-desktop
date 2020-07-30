@@ -31,7 +31,7 @@ export const DeltaDialogBase = React.memo<
       >
         {props.children}
       </Dialog>
-  </>
+    </>
   )
 })
 
