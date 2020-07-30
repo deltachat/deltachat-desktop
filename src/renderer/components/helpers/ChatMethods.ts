@@ -38,7 +38,7 @@ export function openLeaveChatDialog(
     message: tx('ask_leave_group'),
     confirmLabel: tx('menu_leave_group'),
     isConfirmDanger: true,
-    noMargin: true, 
+    noMargin: true,
     cb: (yes: boolean) => yes && DeltaBackend.call('chat.leaveGroup', chatId),
   })
 }

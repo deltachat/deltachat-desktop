@@ -299,7 +299,7 @@ export function SmallSelectDialog({
           </RadioGroup>
         </DeltaDialogContent>
       </DeltaDialogBody>
-      <DeltaDialogFooter style={{ marginTop: '0px',padding: '20px'}}>
+      <DeltaDialogFooter style={{ marginTop: '0px', padding: '20px' }}>
         <DeltaDialogFooterActions>
           <p
             className='delta-button primary bold'

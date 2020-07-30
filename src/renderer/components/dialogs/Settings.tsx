@@ -208,7 +208,10 @@ export default function Settings(props: DialogProps) {
               <RadioGroup
                 label={tx('pref_show_emails')}
                 onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                  handleDeltaSettingsChange('show_emails', ev.currentTarget.value)
+                  handleDeltaSettingsChange(
+                    'show_emails',
+                    ev.currentTarget.value
+                  )
                 }
                 selectedValue={Number(settings['show_emails'])}
               >
@@ -326,9 +329,7 @@ export default function Settings(props: DialogProps) {
       className='SettingsDialog'
       fixed
     >
-      <DeltaDialogHeader
-        title={title}
-      />
+      <DeltaDialogHeader title={title} />
       {renderDialogContent()}
     </DeltaDialogBase>
   )

@@ -100,10 +100,7 @@ function confirmationDialog(
           </div>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p
-                className={`delta-button bold primary`}
-                onClick={onClose}
-              >
+              <p className={`delta-button bold primary`} onClick={onClose}>
                 {tx('no')}
               </p>
               <p

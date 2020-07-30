@@ -329,9 +329,7 @@ export function AddMemberInnerDialog({
 
   return (
     <>
-      <DeltaDialogHeader
-        title={tx('group_add_members')}
-      />
+      <DeltaDialogHeader title={tx('group_add_members')} />
       <DeltaDialogBody noFooter>
         <Card style={{ padding: '0px 20px' }}>
           <input
@@ -376,9 +374,7 @@ export const ShowQrCodeInnerDialog = ({
 
   return (
     <>
-      <DeltaDialogHeader
-        title={tx('qrshow_title')}
-      />
+      <DeltaDialogHeader title={tx('qrshow_title')} />
       <DeltaDialogQrInner
         qrCode={qrCode}
         description={tx('qrshow_join_group_hint', [groupName])}
@@ -388,9 +384,8 @@ export const ShowQrCodeInnerDialog = ({
           <p className={'delta-button bold primary'} onClick={onClickBack}>
             {tx('back')}
           </p>
-        </DeltaDialogFooterActions>  
+        </DeltaDialogFooterActions>
       </DeltaDialogFooter>
-      
     </>
   )
 }

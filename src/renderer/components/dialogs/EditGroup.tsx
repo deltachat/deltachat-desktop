@@ -193,7 +193,7 @@ function EditGroupInner(props: {
         })}
       {viewMode === 'main' && (
         <>
-          <DeltaDialogHeader title={tx('menu_edit_group')}/>
+          <DeltaDialogHeader title={tx('menu_edit_group')} />
           <div className={Classes.DIALOG_BODY}>
             <Card>
               {GroupSettingsSetNameAndProfileImage({

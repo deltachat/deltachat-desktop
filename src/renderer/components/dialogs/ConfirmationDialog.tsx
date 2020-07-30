@@ -1,7 +1,11 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
 import { MessageBoxOptions } from 'electron'
-import { SmallDialog, DeltaDialogFooter, DeltaDialogFooterActions } from './DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 
 const { remote } = window.electron_functions
@@ -29,13 +33,21 @@ export function confirmationDialogLegacy(
   )
 }
 
-export default function ConfirmationDialog({message, cancelLabel, confirmLabel, cb, onClose, isConfirmDanger = false, noMargin = false} : {
-  message:string,
-  cancelLabel?: string,
-  confirmLabel?: string,
-  cb: (yes: boolean) => {},
-  onClose: () => {},
-  isConfirmDanger?: boolean,
+export default function ConfirmationDialog({
+  message,
+  cancelLabel,
+  confirmLabel,
+  cb,
+  onClose,
+  isConfirmDanger = false,
+  noMargin = false,
+}: {
+  message: string
+  cancelLabel?: string
+  confirmLabel?: string
+  cb: (yes: boolean) => {}
+  onClose: () => {}
+  isConfirmDanger?: boolean
   noMargin?: boolean
 }) {
   const isOpen = !!message
@@ -53,14 +65,16 @@ export default function ConfirmationDialog({message, cancelLabel, confirmLabel, 
         <DeltaDialogFooter>
           <DeltaDialogFooterActions>
             <p
-              className="delta-button bold primary"
+              className='delta-button bold primary'
               onClick={() => onClick(false)}
-              style={noMargin ? {} : {marginRight: '10px'}}
+              style={noMargin ? {} : { marginRight: '10px' }}
             >
               {cancelLabel || tx('cancel')}
             </p>
             <p
-              className={`delta-button bold primary ${isConfirmDanger ? 'danger' : 'primary'}`}
+              className={`delta-button bold primary ${
+                isConfirmDanger ? 'danger' : 'primary'
+              }`}
               onClick={() => onClick(true)}
             >
               {confirmLabel || tx('yes')}

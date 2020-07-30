@@ -133,7 +133,7 @@ export default function DisappearingMessage({
             <p>{tx('ephemeral_messages_hint')}</p>
           </DeltaDialogContent>
         </DeltaDialogBody>
-        <DeltaDialogFooter style={{padding: '20px'}}>
+        <DeltaDialogFooter style={{ padding: '20px' }}>
           <DeltaDialogFooterActions>
             <p className='delta-button primary bold' onClick={onClose}>
               {tx('cancel')}
@@ -142,7 +142,6 @@ export default function DisappearingMessage({
               {tx('save_desktop')}
             </p>
           </DeltaDialogFooterActions>
-       
         </DeltaDialogFooter>
       </SmallDialog>
     )

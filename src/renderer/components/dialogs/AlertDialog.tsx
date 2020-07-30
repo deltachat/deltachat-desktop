@@ -19,10 +19,7 @@ export default function AlertDialog(props: todo) {
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
-        <p
-          className={`delta-button bold primary'`}
-          onClick={() => onClick()}
-        >
+        <p className={`delta-button bold primary'`} onClick={() => onClick()}>
           {window.static_translate('ok')}
         </p>
       </div>
