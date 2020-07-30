@@ -46,6 +46,7 @@
 - add explaination if there are no contact requests
 - add support for markdown links `[label](url)` (with a open confirmation dialog to prevent phishing)
 - implement disappearing messages as an experimental feature
+- add experimental audio & video calls to DM chats
 
 ### Fixed
 

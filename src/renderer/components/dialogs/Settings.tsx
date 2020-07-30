@@ -90,6 +90,7 @@ export default function Settings(props: DialogProps) {
       'bcc_self',
       'delete_device_after',
       'delete_server_after',
+      'webrtc_instance',
     ])
 
     setState({ settings })
@@ -165,13 +166,18 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaInput = (configKey: string, label: string) => {
+  const renderDeltaInput = (
+    configKey: string,
+    label: string,
+    style?: React.CSSProperties
+  ) => {
     const configValue = state.settings[configKey]
     return (
       <Label>
         {label}
         <input
           value={configValue}
+          style={style}
           className={Classes.INPUT}
           onChange={ev => handleDeltaSettingsChange(configKey, ev.target.value)}
         />
@@ -261,6 +267,17 @@ export default function Settings(props: DialogProps) {
             {renderDTSettingSwitch(
               'enableDisappearingMessages',
               'Enable disappearing messages'
+            )}
+            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
+            {desktopSettings['enableAVCalls'] === true && (
+              <>
+                {renderDeltaInput('webrtc_instance', tx('videochat_instance'), {
+                  width: '100%',
+                })}
+                <div className='bp3-callout'>
+                  {tx('videochat_instance_explain')}
+                </div>
+              </>
             )}
             <br />
             <H5>{tx('pref_imap_folder_handling')}</H5>

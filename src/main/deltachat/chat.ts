@@ -111,4 +111,8 @@ export default class DCChat extends SplitOut {
   setChatEphemeralTimer(chatId: number, timer: number) {
     return this._dc.setChatEphemeralTimer(chatId, timer)
   }
+
+  async sendVideoChatInvitation(chatId: number) {
+    return await this._dc.sendVideochatInvitation(chatId)
+  }
 }

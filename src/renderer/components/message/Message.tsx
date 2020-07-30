@@ -1,5 +1,5 @@
 import { onDownload, openAttachmentInShell } from './messageFunctions'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useContext } from 'react'
 
 import classNames from 'classnames'
 import MessageBody from './MessageBody'
@@ -9,7 +9,14 @@ import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { attachment, isGenericAttachment } from '../attachment/Attachment'
-import { useTranslationFunction } from '../../contexts'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
+import { joinCall } from '../helpers/ChatMethods'
+import { C } from 'deltachat-node/dist/constants'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/message')
+
+const { openExternal } = window.electron_functions
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
@@ -330,3 +337,82 @@ const Message = (props: {
 }
 
 export default Message
+
+export const CallMessage = (props: {
+  direction: 'incoming' | 'outgoing'
+  id: number
+  timestamp: number
+  viewType: number
+  conversationType: 'group' | 'direct'
+  message: MessageType
+  text?: string
+  disableMenu?: boolean
+  status: msgStatus
+  attachment: attachment
+  onContactClick: (contact: DCContact) => void
+  onClickMessageBody: (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void
+  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  padlock: boolean
+  onDelete: () => void
+  onForward: () => void
+}) => {
+  const {
+    direction,
+    conversationType,
+    message,
+    status,
+    onContactClick,
+    id,
+  } = props
+  const tx = window.static_translate
+
+  const screenContext = useContext(ScreenContext)
+
+  const openCall = (messageId: number) => {
+    joinCall(screenContext, messageId)
+  }
+
+  return (
+    <div
+      className={classNames(
+        'message',
+        direction,
+        { error: status === 'error' },
+        { forwarded: message.msg.isForwarded }
+      )}
+    >
+      {conversationType === 'group' &&
+        direction === 'incoming' &&
+        Avatar(message.contact, onContactClick)}
+      <div className='msg-container'>
+        {message.msg.isForwarded && (
+          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
+        )}
+        {direction === 'incoming' &&
+          conversationType === 'group' &&
+          Author(message.contact, onContactClick)}
+        <div className={classNames('msg-body')}>
+          <div dir='auto' className='text'>
+            <div className='call-inc-text'>
+              <b>{tx('video_hangout_invitation')}</b>
+              <div>
+                <button
+                  className='phone-accept-button'
+                  onClick={openCall.bind(null, id)}
+                >
+                  {direction === 'incoming' ? tx('join') : tx('rejoin')}
+                </button>
+              </div>
+              {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
+                tx('videochat_will_open_in_your_browser')}
+            </div>
+          </div>
+
+          <MessageMetaData {...props} />
+        </div>
+      </div>
+    </div>
+  )
+}
