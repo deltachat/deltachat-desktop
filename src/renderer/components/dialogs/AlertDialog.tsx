@@ -11,7 +11,9 @@ export default function AlertDialog(props: todo) {
   }
 
   const onClick = () => {
-    cb()
+    if (cb) {
+      cb()
+    }
     props.onClose()
   }
 

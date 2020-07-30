@@ -108,7 +108,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           key='call'
           text={tx('videochat')}
           onClick={() => {
-            sendCallInvitation(selectedChat.id)
+            sendCallInvitation(screenContext, selectedChat.id)
           }}
         />
       ),
