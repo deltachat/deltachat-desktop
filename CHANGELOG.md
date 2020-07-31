@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.12.0] - 2020-07-31
+
+### Changed
+
+- Updated deltachat-node to v1.42.1
+
 ## [1.10.4] - 2020-07-30
 
 ### Added
