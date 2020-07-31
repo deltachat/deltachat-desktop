@@ -2,6 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+## [1.10.4] - 2020-07-30
+
+### Added
+
+- Implement experimental WebRTC support for 1to1 video chats & audio calls
+
 ## [1.10.3] - 2020-07-30
 
 ### Fixed
