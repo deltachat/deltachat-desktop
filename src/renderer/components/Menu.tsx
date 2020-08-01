@@ -167,6 +167,14 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
       />
       <DeltaMenuItem
         key='qr'
+        text={'QR Code'}
+        onClick={async () => {
+          const qrCode = await DeltaBackend.call('chat.getQrCode', 0)
+          screenContext.openDialog('QrCode', { qrCode })
+        }}
+      />
+      <DeltaMenuItem
+        key='qr'
         text={tx('qrshow_join_contact_title')}
         onClick={async () => {
           const qrCode = await DeltaBackend.call('chat.getQrCode', 0)

@@ -1,0 +1,36 @@
+.qr-code-switch {
+    display: flex;
+    background-color: white;
+
+    p {
+        width: 50%;
+
+        margin: 0;
+        padding: 17px 0px;
+
+        color: var(--colorNone);
+
+        font-size: initial;
+        text-align: center;
+        text-transform: uppercase;
+
+        border-bottom-width: 3px;
+        border-bottom-style: none;
+
+        &.active {
+            color: var(--colorPrimary);
+            border-bottom-style: solid;
+            border-bottom-color: var(--colorPrimary);
+        }
+    }
+}
+
+.scan-qr-description {
+    position: relative;
+    z-index: 10;
+    top: -35px;
+    margin: 0;
+    margin-bottom: -18px;
+    
+    color: white;
+}
