@@ -149,7 +149,7 @@ export function DeltaDialogScanQrInner({
           )}
           {!processQrCode && (
             <div className='import-qr-code-dialog'>
-              <div>
+              <div style={{marginBottom: '-18px'}}>
                 <div>
                   <QrReader
                     delay={300}
