@@ -1,5 +1,5 @@
-import React, { useState, useContext, useRef } from 'react'
-import { DeltaDialogBase, DeltaDialogFooter, DeltaDialogFooterActions, DeltaDialogBody, DeltaDialogContent } from './DeltaDialog'
+import React, { useState, useContext, useRef, useEffect } from 'react'
+import { DeltaDialogBase, DeltaDialogFooter, DeltaDialogFooterActions, DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
@@ -9,6 +9,7 @@ import { Spinner } from '@blueprintjs/core'
 import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { DeltaBackend } from '../../delta-remote'
+import { openMapDialog } from '../helpers/ChatMethods'
 
 export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps) {
     const [showQrCode, setShowQrCode] = useState(true)
@@ -101,28 +102,57 @@ export function DeltaDialogScanQrInner({
 }) {
   const tx = window.static_translate
   const [qrCode, setQrCode] = useState('')
-  const [processQrCode, setProcessQrCode] = useState(false)
+  const { openDialog } = useContext(ScreenContext)
 
-  const handleScanResult = (chatId: number = null) => {
-    setProcessQrCode(false)
-    chatId && selectChat(chatId)
-    onClose()
-  }
+  const [processingQrCode, setProcessingQrCode] = useState(false)
+
 
   const handleResponse = async (scannedQrCode: string) => {
-    setProcessQrCode(true)
-    processOpenQrUrl(scannedQrCode, handleScanResult)
+    setProcessingQrCode(true)
+    openDialog((props: DialogProps) => {
+      const { isOpen} = props
+      const onClose = () => {
+        props.onClose()
+        setProcessingQrCode(false)
+      }
+      const handleScanResult = (chatId: number = null) => {
+        chatId && selectChat(chatId)
+        onClose()    
+      }
+
+      const onCancel = () => {
+        DeltaBackend.call('stopOngoingProcess')
+        onClose()
+      }
+
+      useEffect(() => {
+
+        processOpenQrUrl(scannedQrCode, handleScanResult)
+      }, [])
+      return (
+        <SmallDialog isOpen={isOpen} onClose={onClose}>
+          <DeltaDialogBody>
+            Processing...
+          </DeltaDialogBody>
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p
+                className='delta-button bold primary'
+                onClick={onCancel}
+              >
+                {tx('cancel')}
+              </p>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
+        </SmallDialog>
+      )
+    })
   }
 
   const qrImageReader = useRef<any>()
 
   const handleScan = (data: string) => {
-    data && handleResponse(data)
-  }
-
-  const cancelProcess = () => {
-    DeltaBackend.call('stopOngoingProcess')
-    onClose()
+    data && !processingQrCode && handleResponse(data)
   }
 
   const handleError = (err: string) => {
@@ -138,41 +168,31 @@ export function DeltaDialogScanQrInner({
     <>
       <DeltaDialogBody>
         <DeltaDialogContent noPadding>
-          {processQrCode && (
-            <div>
-              <Spinner />
-              <p />
-              <p className='delta-button danger' onClick={cancelProcess}>
-                {tx('cancel')}
-              </p>
-            </div>
-          )}
-          {!processQrCode && (
-            <div className='import-qr-code-dialog'>
-              <div style={{marginBottom: '-18px'}}>
-                <div>
-                  <QrReader
-                    delay={300}
-                    onError={handleError}
-                    onScan={handleScan}
-                    style={{ width: '100%' }}
-                    facingMode='user'
-                  />
-                </div>
-              </div>
-              <div className='qr-image-loader'>
+          <div className='import-qr-code-dialog'>
+            <div style={{marginBottom: '-18px'}}>
+              <div>
                 <QrReader
                   delay={300}
-                  ref={qrImageReader}
                   onError={handleError}
                   onScan={handleScan}
                   style={{ width: '100%' }}
-                  legacyMode
+                  facingMode='user'
                 />
               </div>
-              <p className='scan-qr-description'>{tx('qrscan_hint')}</p>
             </div>
-          )}
+            <div className='qr-image-loader'>
+              <QrReader
+                delay={300}
+                ref={qrImageReader}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: '100%' }}
+                legacyMode
+              />
+            </div>
+            <div className='scan-qr-red-line' />
+            <p className='scan-qr-description'>{tx('qrscan_hint')}</p>
+          </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
       <DeltaDialogFooter>

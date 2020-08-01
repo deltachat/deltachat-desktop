@@ -31,7 +31,24 @@
     top: -18px;
     margin-top: -18px;
     margin: 0;
-
     color: #fff;
+}
+
+.scan-qr-red-line {
+    position: relative;
+    z-index: 10;
+    top: -250px;
+    margin-top: -250px;
+    margin: 0;
+
+    border-bottom-color: #ff00005c;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
     
+    margin: 0px 50px;
+}
+
+.import-qr-code-dialog > div > div > section > section > div {
+    border: 50px solid rgba(0, 0, 0, 0.2);
+    box-shadow: unset !important;
 }
