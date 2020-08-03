@@ -108,7 +108,6 @@ export default function App(props: any) {
   }, [localeData])
 
   if (!localeData) return null
-  console.log(account)
   return (
     <CrashScreen>
       <SettingsContextWrapper account={account}>
