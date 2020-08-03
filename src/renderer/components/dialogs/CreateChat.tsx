@@ -25,10 +25,10 @@ import {
 
 import { GroupImage } from './Edit-Group-Image'
 
-import { DeltaDialogQrInner } from './QrInviteCode'
 import { JsonContact, DCContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { isValidEmail } from '../../../shared/util'
+import { QrCodeShowQrInner } from './QrCode'
 const { remote } = window.electron_functions
 
 export default function CreateChat(props: {
@@ -359,36 +359,6 @@ export function AddMemberInnerDialog({
   )
 }
 
-export const ShowQrCodeInnerDialog = ({
-  onClickBack,
-  onClose,
-  qrCode,
-  groupName,
-}: {
-  onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
-  onClose: DialogProps['onClose']
-  qrCode: string
-  groupName: string
-}) => {
-  const tx = useTranslationFunction()
-
-  return (
-    <>
-      <DeltaDialogHeader title={tx('qrshow_title')} />
-      <DeltaDialogQrInner
-        qrCode={qrCode}
-        description={tx('qrshow_join_group_hint', [groupName])}
-      />
-      <DeltaDialogFooter>
-        <DeltaDialogFooterActions>
-          <p className={'delta-button bold primary'} onClick={onClickBack}>
-            {tx('back')}
-          </p>
-        </DeltaDialogFooterActions>
-      </DeltaDialogFooter>
-    </>
-  )
-}
 
 const useCreateGroup = (
   verified: boolean,
@@ -515,15 +485,19 @@ function CreateGroupInner(props: {
         />
       )}
       {viewMode.startsWith(viewPrefix + '-showQrCode') &&
-        ShowQrCodeInnerDialog({
-          onClickBack: () => {
-            updateSearch('')
-            setViewMode(viewPrefix + '-main')
-          },
-          onClose,
-          qrCode: qrCode,
-          groupName,
-        })}
+        <>
+          <DeltaDialogHeader title={tx('qrshow_title')} />
+          <QrCodeShowQrInner
+            onBack={() => {
+              updateSearch('')
+              setViewMode(viewPrefix + '-main')
+            }}
+            qrCode={qrCode}
+            description={tx('qrshow_join_group_hint', [groupName])}
+            noPaddingTop={true}
+          />
+        </>
+      }
       {viewMode.startsWith(viewPrefix + '-main') && (
         <>
           <DeltaDialogHeader

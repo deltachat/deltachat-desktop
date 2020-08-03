@@ -11,7 +11,6 @@ import CreateChat from './CreateChat'
 import EditGroup from './EditGroup'
 import ViewProfile from './ViewProfile'
 import MapDialog from './MapDialog'
-import QrInviteCode from './QrInviteCode'
 import ImportQrCode from './ImportQrCode'
 import AlertDialog from './AlertDialog'
 import ConfirmationDialog from './ConfirmationDialog'
@@ -35,7 +34,6 @@ export const allDialogs: { [key: string]: any } = {
   EditGroup,
   ViewProfile,
   MapDialog,
-  QrInviteCode,
   ImportQrCode,
   ConfirmationDialog,
   AlertDialog,

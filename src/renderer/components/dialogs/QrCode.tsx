@@ -26,7 +26,7 @@ export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps
             <p className={classNames({active: ! showQrCode})} onClick={() => setShowQrCode(false)}>{tx('qrscan_title')}</p>
           </div>
           { showQrCode &&
-            <DeltaDialogShowQrInner
+            <QrCodeShowQrInner
               description={tx('qrshow_join_contact_hint', [
                 deltachat.credentials.addr,
               ])}
@@ -42,14 +42,18 @@ export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps
 }
 
 
-export function DeltaDialogShowQrInner({
+export function QrCodeShowQrInner({
   qrCode,
   description,
-  onClose
+  onClose,
+  onBack,
+  noPaddingTop=undefined
 }: {
   qrCode: string
   description: string
-  onClose: todo
+  onClose?: todo
+  onBack?: todo
+  noPaddingTop?: boolean
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
@@ -67,25 +71,28 @@ export function DeltaDialogShowQrInner({
   return (
     <>
       <DeltaDialogBody>
-        <DeltaDialogContent noOverflow noPadding style={{paddingTop: '20px'}}>
+        <DeltaDialogContent noOverflow noPadding style={{paddingTop: noPaddingTop ? '0px' : '20px'}}>
             <qr.QRCode
               bgColor='#FFFFFF'
               fgColor='#000000'
               level='Q'
               value={qrCode}
-              style={{ height: 'calc(500px - 58px)', padding: '0px 20px', backgroundColor: 'white' }}
+              style={{ height: noPaddingTop ? 'auto' : 'calc(500px - 58px)', padding: '0px 20px', backgroundColor: 'white' }}
             />
             <p style={{ textAlign: 'center', marginTop: '10px' }}>{description}</p>
           </DeltaDialogContent>
       </DeltaDialogBody>
         <DeltaDialogFooter>
           <DeltaDialogFooterActions style={{justifyContent: 'space-between'}}>
-              <p className={'delta-button bold primary'} onClick={onCopy}>
-                {tx('global_menu_edit_copy_desktop')}
-              </p>
-            <p className={'delta-button bold primary'} onClick={onClose}>
-              {tx('close')}
+            <p className={'delta-button bold primary'} onClick={onCopy}>
+              {tx('global_menu_edit_copy_desktop')}
             </p>
+            { onClose && <p className={'delta-button bold primary'} onClick={onClose}>
+              {tx('close')}
+            </p> }
+            { onBack && <p className={'delta-button bold primary'} onClick={onBack}>
+              {tx('back')}
+            </p> }
           </DeltaDialogFooterActions>
         </DeltaDialogFooter>
     </>
