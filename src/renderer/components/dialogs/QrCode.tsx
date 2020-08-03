@@ -35,7 +35,7 @@ export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps
             />
           }
           { !showQrCode &&
-            <DeltaDialogScanQrInner description='' onClose={onClose} />
+            <QrCodeScanQrInner onClose={onClose} />
           }
       </DeltaDialogBase>
     )
@@ -100,11 +100,9 @@ export function QrCodeShowQrInner({
 }
 
 
-export function DeltaDialogScanQrInner({
-  description,
+export function QrCodeScanQrInner({
   onClose,
 }: {
-  description: string
   onClose: () => void
 }) {
   const tx = window.static_translate
