@@ -289,10 +289,7 @@ export default class DeltaChatController extends EventEmitter {
   getState(): AppState {
     return {
       saved: app.state.saved,
-      logins: app.state.logins,
-      deltachat: {
-        credentials: this.credentials,
-      },
+      logins: app.state.logins
     }
   }
 

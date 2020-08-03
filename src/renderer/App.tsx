@@ -7,7 +7,6 @@ import {
   AppState,
   DeltaChatAccount,
   DesktopSettings,
-  Credentials,
 } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import {
   DesktopSettings,
-  Credentials,
   DeltaChatAccount,
 } from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
