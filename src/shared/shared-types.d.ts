@@ -41,10 +41,7 @@ export interface DesktopSettings {
 }
 
 export interface AppState {
-  deltachat: {
-    credentials: Credentials
-  }
-  saved: {
+    saved: {
     bounds: todo
     /** @deprecated replaced by lastAccount */
     credentials: any | undefined

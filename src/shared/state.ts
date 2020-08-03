@@ -3,12 +3,6 @@ import { AppState } from './shared-types'
 export function getDefaultState(): AppState {
   return {
     /**
-     * Temporary state.
-     */
-    deltachat: {
-      credentials: { addr: null },
-    },
-    /**
      * Persisted state. Must be JSON.
      */
     saved: {

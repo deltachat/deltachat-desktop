@@ -10,8 +10,9 @@ import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { DeltaBackend } from '../../delta-remote'
 import { openMapDialog } from '../helpers/ChatMethods'
+import { ConfigureProgressDialog } from '../LoginForm'
 
-export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps) {
+export default function QrCode({isOpen, onClose, qrCode, account}: DialogProps) {
     const [showQrCode, setShowQrCode] = useState(true)
  
     const tx = useTranslationFunction()
@@ -28,7 +29,7 @@ export default function QrCode({isOpen, onClose, deltachat, qrCode}: DialogProps
           { showQrCode &&
             <QrCodeShowQrInner
               description={tx('qrshow_join_contact_hint', [
-                deltachat.credentials.addr,
+                account.addr,
               ])}
               qrCode={qrCode}
               onClose={onClose}
