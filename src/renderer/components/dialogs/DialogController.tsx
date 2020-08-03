@@ -40,7 +40,7 @@ export const allDialogs: { [key: string]: any } = {
   UnblockContacts,
   MuteChat,
   DisappearingMessages,
-  QrCode
+  QrCode,
 }
 
 export type DialogId = keyof typeof allDialogs | string

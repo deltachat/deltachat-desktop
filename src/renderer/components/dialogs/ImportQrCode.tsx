@@ -9,11 +9,10 @@ import { DeltaBackend } from '../../delta-remote'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { QrCodeScanQrInner } from './QrCode'
 
-
 export default function ImportQrCode({
   onClose,
   isOpen,
-  qrCode
+  qrCode,
 }: {
   onClose: () => void
   isOpen: boolean
@@ -29,9 +28,7 @@ export default function ImportQrCode({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <QrCodeScanQrInner
-          onClose={onClose}
-       />
+      <QrCodeScanQrInner onClose={onClose} />
     </Dialog>
   )
 }

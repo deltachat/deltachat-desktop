@@ -1,5 +1,9 @@
 import React, { useState, useContext } from 'react'
-import { DesktopSettings, Credentials, DeltaChatAccount } from '../shared/shared-types'
+import {
+  DesktopSettings,
+  Credentials,
+  DeltaChatAccount,
+} from '../shared/shared-types'
 import { getDefaultState } from '../shared/state'
 import ScreenController, { userFeedback, Screens } from './ScreenController'
 import { DialogId } from './components/dialogs/DialogController'

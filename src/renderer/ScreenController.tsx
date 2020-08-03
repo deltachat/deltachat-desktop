@@ -136,7 +136,6 @@ export default class ScreenController extends Component {
   }
 
   render() {
-
     return (
       <div>
         {this.state.message && (

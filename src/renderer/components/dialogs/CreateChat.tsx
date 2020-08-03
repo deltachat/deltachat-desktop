@@ -359,7 +359,6 @@ export function AddMemberInnerDialog({
   )
 }
 
-
 const useCreateGroup = (
   verified: boolean,
   groupName: string,
@@ -484,7 +483,7 @@ function CreateGroupInner(props: {
           }}
         />
       )}
-      {viewMode.startsWith(viewPrefix + '-showQrCode') &&
+      {viewMode.startsWith(viewPrefix + '-showQrCode') && (
         <>
           <DeltaDialogHeader title={tx('qrshow_title')} />
           <QrCodeShowQrInner
@@ -497,7 +496,7 @@ function CreateGroupInner(props: {
             noPaddingTop={true}
           />
         </>
-      }
+      )}
       {viewMode.startsWith(viewPrefix + '-main') && (
         <>
           <DeltaDialogHeader

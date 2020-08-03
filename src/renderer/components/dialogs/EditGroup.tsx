@@ -13,11 +13,9 @@ import {
   useGroupImage,
   useContactSearch,
   GroupSettingsSetNameAndProfileImage,
-  AddMemberInnerDialog
+  AddMemberInnerDialog,
 } from './CreateChat'
-import {
-  QrCodeShowQrInner
-} from './QrCode'
+import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItemNoSearchResults,
@@ -183,7 +181,7 @@ function EditGroupInner(props: {
           }}
         />
       )}
-      {viewMode === 'showQrCode' &&
+      {viewMode === 'showQrCode' && (
         <>
           <DeltaDialogHeader title={tx('qrshow_title')} />
           <QrCodeShowQrInner
@@ -196,7 +194,7 @@ function EditGroupInner(props: {
             noPaddingTop={true}
           />
         </>
-      }
+      )}
       {viewMode === 'main' && (
         <>
           <DeltaDialogHeader title={tx('menu_edit_group')} />

@@ -41,7 +41,7 @@ export interface DesktopSettings {
 }
 
 export interface AppState {
-    saved: {
+  saved: {
     bounds: todo
     /** @deprecated replaced by lastAccount */
     credentials: any | undefined

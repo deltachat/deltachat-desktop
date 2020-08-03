@@ -144,7 +144,7 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   )
 })
 
-export default function LoginScreen({loadAccount}: {loadAccount: todo}) {
+export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
   const tx = useTranslationFunction()
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
@@ -166,7 +166,6 @@ export default function LoginScreen({loadAccount}: {loadAccount: todo}) {
     const onSuccess = () => changeScreen(Screens.Main)
     openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
-
 
   const forgetLogin = (login: DeltaChatAccount) => {
     const message = tx('forget_login_confirmation_desktop')

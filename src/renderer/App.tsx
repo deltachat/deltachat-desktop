@@ -69,7 +69,6 @@ export default function App(props: any) {
     } else {
       throw new Error('window.__changeScreen is not a function')
     }
-
   }
 
   useEffect(() => {
