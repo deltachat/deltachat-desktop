@@ -190,7 +190,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       <DeltaDialogBody>
         <DeltaDialogContent noPadding>
           <div className='import-qr-code-dialog'>
-            <div style={{ marginBottom: '-18px' }}>
+            <div style={{ marginBottom: '-19px' }}>
               <div>
                 <QrReader
                   delay={300}
