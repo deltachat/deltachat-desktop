@@ -563,7 +563,8 @@
     <string name="login_known_accounts_title_desktop">Comptes connus</string>
     <string name="global_menu_preferences_language_desktop">Choisissez la langue...</string>
     <string name="global_menu_file_desktop">Fichier</string>
-    <string name="global_menu_file_quit_desktop">Quittez</string>
+    <string name="global_menu_file_quit_desktop">Quitter</string>
+    <string name="global_menu_file_reduce">Réduire</string>
     <string name="global_menu_edit_desktop">Modifier</string>
     <string name="global_menu_edit_undo_desktop">Annuler</string>
     <string name="global_menu_edit_redo_desktop">Refaire</string>
