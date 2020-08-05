@@ -11,6 +11,9 @@
   "jump_to_message": {
     "message": "Jump to Message"
   },
+  "global_menu_file_reduce": {
+    "message": "Reduce"
+  },
   "import_qr_error": {
     "message": "QR could not be decoded"
   }
