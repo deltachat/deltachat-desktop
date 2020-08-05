@@ -3,12 +3,6 @@ console.time('init')
 import { ensureDirSync, watchFile } from 'fs-extra'
 import { app as rawApp, session, EventEmitter, dialog } from 'electron'
 import rc from './rc'
-import path from 'path'
-
-// Tray
-import { Menu, Tray } from 'electron'
-import { globalShortcut } from 'electron'
-let tray = null
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
@@ -70,6 +64,7 @@ import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { resolveThemeAddress, acceptThemeCLI } from './themes'
+import { updateTrayIcon } from './tray'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -121,58 +116,33 @@ function onReady([logins, _appReady, loadedState]: [
   cleanupLogFolder().catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)
   )
-
-  // Tray
-  tray = new Tray(
-    `${path.join(__dirname, '..', '..', 'images', 'deltachat.ico')}`
-  )
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Réduire',
-      type: 'normal',
-      accelerator: 'Escape',
-      click() {
-        const win = mainWindow.window
-        win.close()
-      },
-    },
-    {
-      label: 'Quitter',
-      type: 'normal',
-      click() {
-        globalShortcut.unregisterAll()
-        if (process.platform !== 'darwin') {
-          app.quit()
-        }
-      },
-    },
-  ])
-  tray.setToolTip('Deltachat')
-  tray.setContextMenu(contextMenu)
-  tray.on('double-click', (event, bounds) => {
-    mainWindow.show()
-  })
 }
 
 ;(app as EventEmitter).once('ipcReady', () => {
+  const IsMac = process.platform === 'darwin'
   console.timeEnd('init')
   if (process.env.NODE_ENV === 'test') {
     mainWindow.window.maximize()
   }
+
+  updateTrayIcon()
+
   mainWindow.window.on('close', e => {
     if (!app.isQuitting) {
       e.preventDefault()
       mainWindow.hide()
-      //quit(e)
+      if (!IsMac && !app.state.saved.minimizeToTray) {
+        quit(e)
+      }
     }
   })
 })
 
-function quit(e: Electron.Event) {
+export function quit(e?: Electron.Event) {
   if (app.isQuitting) return
 
   app.isQuitting = true
-  e.preventDefault()
+  e?.preventDefault()
 
   function doQuit() {
     log.info('Quitting now. Bye.')

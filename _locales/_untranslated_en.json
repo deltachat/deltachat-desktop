@@ -2,6 +2,12 @@
   "pref_notifications": {
     "message": "Enable notifications"
   },
+  "pref_show_minimize_to_tray": {
+    "message": "Minimize to tray"
+  },
+  "pref_show_minimize_to_tray_explain": {
+    "message": "Adds an icon in the tray to minimize Delta Chat without closing it for good."
+  },
   "ask_delete_message_desktop": {
     "message": "Are you sure you want to delete this message?"
   },
@@ -11,7 +17,10 @@
   "jump_to_message": {
     "message": "Jump to Message"
   },
-  "global_menu_file_reduce": {
+  "global_menu_file_open_desktop": {
+    "message": "Open"
+  },
+  "global_menu_file_reduce_desktop": {
     "message": "Reduce"
   },
   "import_qr_error": {
