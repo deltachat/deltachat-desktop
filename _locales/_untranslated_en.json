@@ -105,6 +105,9 @@
   "global_zoom_factor_huge": {
     "message": "huge"
   },
+  "global_menu_file_reduce": {
+    "message": "Reduce"
+  },
   "back_to_top": {
     "message": "Back to Top"
   },
