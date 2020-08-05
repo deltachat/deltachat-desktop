@@ -6,6 +6,23 @@
 
 - Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
 
+## [1.12.0] - 2020-07-31
+
+### Changed
+
+- Updated deltachat-node to v1.42.1
+
+## [1.10.4] - 2020-07-30
+
+### Added
+
+- Implement experimental WebRTC support for 1to1 video chats & audio calls
+
+## [1.10.3] - 2020-07-30
+
+### Fixed
+- Fix labeled links (fix the regex, make it dumber)
+
 ## [1.10.2] - 2020-07-30
 
 ### Fixed
@@ -889,7 +906,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...HEAD
+
+[1.10.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...v1.10.3
 
 [1.10.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...v1.10.2
 
