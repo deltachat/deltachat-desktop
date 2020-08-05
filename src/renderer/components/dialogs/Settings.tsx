@@ -257,6 +257,11 @@ export default function Settings(props: DialogProps) {
               'showNotificationContent',
               tx('pref_show_notification_content_explain')
             )}
+            {renderDTSettingSwitch(
+              'minimizeToTray',
+              tx('pref_show_minimize_to_tray')
+            )}
+            <p>{tx('pref_show_minimize_to_tray_explain')}</p>
           </Card>
           <Card elevation={Elevation.ONE}>
             <H5>{tx('pref_experimental_features')}</H5>
