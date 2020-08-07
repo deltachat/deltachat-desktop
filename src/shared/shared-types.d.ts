@@ -193,6 +193,8 @@ export type DeltaChatAccount = {
   displayname: string
   addr: string
   size: number
+  profileImage: string
+  color: string
 }
 
 // for video hangouts

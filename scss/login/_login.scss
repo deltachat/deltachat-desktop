@@ -52,11 +52,6 @@ p.delta-headline {
   li.login-item {
     display: flex;
     justify-content: space-between;
-    border-right: 1px solid grey;
-    border-left: 1px solid grey;
-    border-bottom: 1px solid grey;
-    min-width: 300px;
-    border-radius: 0;
 
     &:hover {
       button.bp3-intent-danger {
@@ -68,9 +63,6 @@ p.delta-headline {
       display: none;
     }
 
-    &:first-child {
-      border-top: 1px solid grey;
-    }
 
     button.bp3-large {
       width: 90%;

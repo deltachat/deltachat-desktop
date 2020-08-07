@@ -221,30 +221,9 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
                       {tx('login_known_accounts_title_desktop')}
                     </p>
                     <ul>
-
-                      <li className='login-item' key='add-account'>
-                        <PseudoListItemAddContact queryStr='test' queryStrIsEmail={true} onClick={() => setView('login')}/>
-                      </li>
+                      <PseudoAccountItemAddAccount onClick={() => setView('login')} />
                       {logins.map((login: DeltaChatAccount) => (
-                        <li className='login-item' key={login.path}>
-                          <Avatar displayName={login.displayname} />
-                          <Button
-                            large
-                            minimal
-                            onClick={() => onClickLoadAccount(login)}
-                            title={login.path}
-                          >
-                            {login.displayname} {login.addr} [
-                            {filesizeConverter(login.size)}]
-                          </Button>
-                          <Button
-                            intent={Intent.DANGER}
-                            minimal
-                            icon='cross'
-                            onClick={() => forgetLogin(login)}
-                            aria-label={tx('a11y_remove_account_btn_label')}
-                          />
-                        </li>
+                        <AccountItem login={login} onClickLoadAccount={onClickLoadAccount} />
                       ))}
                       </ul>
                   </div>
@@ -261,5 +240,36 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
         </div>              
       </div>
     </div>
+  )
+}
+
+
+export function PseudoAccountItemAddAccount({onClick} : {onClick?: todo}) {
+  const tx = useTranslationFunction()
+  return (
+    <li className='login-item' key='add-account' onClick={onClick}>
+      <div className="contact">
+        <div className="avatar">
+          <div className="content" color="#505050" style={{backgroundColor: 'rgb(80, 80, 80)'}}>+</div>
+        </div>
+        <div className="contact-name">
+          <div className="display-name">{tx('add_account')}</div>
+        </div>
+      </div>
+    </li>
+  )
+}
+
+export function AccountItem({login, onClickLoadAccount} : { login: DeltaChatAccount, onClickLoadAccount: todo}) {
+  
+  return (
+    <li className='login-item' key={login.addr} onClick={() => onClickLoadAccount(login)}>
+      <div className="contact">
+        <Avatar  displayName={login.displayname || login.addr} color={login.color} avatarPath={login.profileImage} />
+        <div className="contact-name">
+          <div className="display-name">{login.displayname || login.addr}</div>
+        </div>
+      </div>
+    </li>
   )
 }
