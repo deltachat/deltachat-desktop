@@ -49,11 +49,6 @@ p.delta-headline {
 }
 
 .login-screen {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: calc(100vh);
-
   li.login-item {
     display: flex;
     justify-content: space-between;
@@ -82,27 +77,27 @@ p.delta-headline {
     }
   }
 
-  .bp3-card {
-    width: 400px;
-    margin-top: 20px;
-    box-shadow: none !important;
-    flex: unset !important;
-  }
 
   .window {
     background-size: cover;
     background-image: url("../images/backgrounds/petito-moreno.webp");
+    height: 100vh;
+    margin-top: 0px;
+    
   }
 
   .pseudo-dialog {
-    height: 100%;
+    position: absolute;
+    height: calc(100% - 40px);
     width: 400px;
 
-    margin: 0 auto;
+    left: calc((100% - 400px) / 2);
+    margin: 20px 0px;
 
     background-color: white;
     border-radius: 5px;
-    
+
+    overflow: scroll;    
   }
 
   div.delta-blue-button {
@@ -222,6 +217,71 @@ div.delta-form-group {
 
     .bp3-button.bp3-minimal.bp3-intent-warning:hover {
       background-color: var(--deltaChatPrimaryFgLight) !important;
+    }
+  }
+}
+
+
+.welcome-deltachat {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+
+  .delta-icon {
+    padding-top: 40px;
+    width: 100px;
+    margin: 0 auto;
+  }
+
+  .f1 {
+    margin-top: 20px;
+    font-size: x-large;
+    color: var(--colorNone);
+  }
+
+  .f2 {
+    margin-top: 10px;
+    padding: 0px 20px;
+    color: var(--colorNone);
+    font-size: larger;
+  }
+
+  .welcome-button {
+    width: fit-content;
+    display: block;
+    padding: 10px;
+
+
+    margin: 0 auto;
+    margin-top: 50px;
+    
+    background-color: var(--colorPrimary);
+    color: white;
+    text-transform: uppercase;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .welcome-footer {
+    .welcome-footer-buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 0px 3px;
+      p {
+        text-transform: uppercase;
+        color: var(--colorPrimary);
+        font-size: 18px;
+        padding: 0px 10px;
+        border-radius: 3px;
+        background-color: transparent;
+        &:hover {
+          cursor: pointer;
+          background-color: var(--colorNone);
+        }
+      }
     }
   }
 }
