@@ -85,13 +85,24 @@ p.delta-headline {
   .bp3-card {
     width: 400px;
     margin-top: 20px;
-    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
-      0 1px 1px rgba(16, 22, 26, 0.2);
+    box-shadow: none !important;
     flex: unset !important;
   }
 
   .window {
-    padding-left: calc((100vw - 400px) / 2);
+    background-size: cover;
+    background-image: url("../images/backgrounds/petito-moreno.webp");
+  }
+
+  .pseudo-dialog {
+    height: 100%;
+    width: 400px;
+
+    margin: 0 auto;
+
+    background-color: white;
+    border-radius: 5px;
+    
   }
 
   div.delta-blue-button {
