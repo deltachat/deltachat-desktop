@@ -19,7 +19,7 @@ import {
 import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
-import DeltaDialog from './dialogs/DeltaDialog'
+import DeltaDialog, { DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
@@ -184,54 +184,77 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
   return (
     <div className='login-screen'>
       <div className='window'>
-        <div className='pseudo-dialog'>
-          {logins !== null && logins.length > 0 && (
-            <div className='logins'>
-              <p className='delta-headline'>
-                {tx('login_known_accounts_title_desktop')}
-              </p>
-              <ul>
-                {logins.map((login: DeltaChatAccount) => (
-                  <li className='login-item' key={login.path}>
-                    <Button
-                      large
-                      minimal
-                      onClick={() => onClickLoadAccount(login)}
-                      title={login.path}
-                    >
-                      {login.displayname} {login.addr} [
-                      {filesizeConverter(login.size)}]
-                    </Button>
-                    <Button
-                      intent={Intent.DANGER}
-                      minimal
-                      icon='cross'
-                      onClick={() => forgetLogin(login)}
-                      aria-label={tx('a11y_remove_account_btn_label')}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <Card>
-            <p className='delta-headline'>{tx('login_title')}</p>
-            <LoginForm
-              credentials={credentials}
-              setCredentials={setCredentials}
-            />
-            <Button
-              disabled={
-                credentials.addr.length == 0 || credentials.mail_pw.length == 0
-              }
-              type='submit'
-              text={tx('login_title')}
-              onClick={onClickLogin}
-            />
-            <ImportButton refreshAccounts={refreshAccounts} />
-            <ScanQRCodeButton />
-          </Card>
-        </div>        
+        <div className='bp3-overlay-backdrop'>
+          <div className='pseudo-dialog'>
+            {/*logins !== null && logins.length > 0 && (
+              <div className='logins'>
+                <p className='delta-headline'>
+                  {tx('login_known_accounts_title_desktop')}
+                </p>
+                <ul>
+                  {logins.map((login: DeltaChatAccount) => (
+                    <li className='login-item' key={login.path}>
+                      <Button
+                        large
+                        minimal
+                        onClick={() => onClickLoadAccount(login)}
+                        title={login.path}
+                      >
+                        {login.displayname} {login.addr} [
+                        {filesizeConverter(login.size)}]
+                      </Button>
+                      <Button
+                        intent={Intent.DANGER}
+                        minimal
+                        icon='cross'
+                        onClick={() => forgetLogin(login)}
+                        aria-label={tx('a11y_remove_account_btn_label')}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )*/}
+            {/*
+            
+            <Card>
+              <p className='delta-headline'>{tx('login_title')}</p>
+              <LoginForm
+                credentials={credentials}
+                setCredentials={setCredentials}
+              />
+              <Button
+                disabled={
+                  credentials.addr.length == 0 || credentials.mail_pw.length == 0
+                }
+                type='submit'
+                text={tx('login_title')}
+                onClick={onClickLogin}
+              />
+              <ImportButton refreshAccounts={refreshAccounts} />
+              <ScanQRCodeButton />
+            </Card>
+            */}
+
+            { //(logins === null || logins.length === 0) && 
+              true &&
+              <>
+                <div className='welcome-deltachat'>
+                  <img className='delta-icon' src='../images/deltachat.png' />
+                  <p className='f1'>{tx('welcome_desktop')}</p>
+                  <p className='f2'>{tx('welcome_intro1_message')}</p>
+                  <div className='welcome-button'>{tx('welcome_start_messaging')}</div>
+                  <div className='welcome-footer'>
+                    <div className='welcome-footer-buttons'>
+                      <p>{tx('qrscan_title')}</p>
+                      <p>{tx('import_backup_title')}</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
+          </div> 
+        </div>              
       </div>
     </div>
   )
