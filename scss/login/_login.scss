@@ -97,7 +97,6 @@ p.delta-headline {
     background-color: white;
     border-radius: 5px;
 
-    overflow: scroll;    
   }
 
   div.delta-blue-button {
@@ -227,6 +226,8 @@ div.delta-form-group {
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  width: 400px;
+  max-height: 500px;
 
   .delta-icon {
     padding-top: 40px;
@@ -264,23 +265,32 @@ div.delta-form-group {
       cursor: pointer;
     }
   }
+}
 
-  .welcome-footer {
-    .welcome-footer-buttons {
-      display: flex;
-      justify-content: space-between;
-      padding: 0px 3px;
-      p {
-        text-transform: uppercase;
-        color: var(--colorPrimary);
-        font-size: 18px;
-        padding: 0px 10px;
-        border-radius: 3px;
-        background-color: transparent;
-        &:hover {
-          cursor: pointer;
-          background-color: var(--colorNone);
-        }
+.login, .accounts {
+  padding: 10px;
+  overflow: scroll;
+}
+
+.footer {
+  .footer-buttons {
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    width: 400px;
+    
+    justify-content: space-between;
+    padding: 0px 3px;
+
+  
+  
+    p {
+      text-transform: uppercase;
+      color: var(--colorPrimary);
+      font-size: 18px;
+      padding: 0px 10px;
+      &:hover {
+        cursor: pointer;
       }
     }
   }
