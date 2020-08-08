@@ -280,9 +280,13 @@ export default function Settings(props: DialogProps) {
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
                 <>
-                  {renderDeltaInput('webrtc_instance', tx('videochat_instance'), {
-                    width: '100%',
-                  })}
+                  {renderDeltaInput(
+                    'webrtc_instance',
+                    tx('videochat_instance'),
+                    {
+                      width: '100%',
+                    }
+                  )}
                   <div className='bp3-callout'>
                     {tx('videochat_instance_explain')}
                   </div>
