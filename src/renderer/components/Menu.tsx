@@ -16,6 +16,7 @@ import {
   setChatVisibility,
   openMuteChatDialog,
   unMuteChat,
+  sendCallInvitation,
 } from './helpers/ChatMethods'
 import { FullChat } from '../../shared/shared-types'
 import { runtime } from '../runtime'
@@ -44,6 +45,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const tx = useTranslationFunction()
 
   const screenContext = useContext(ScreenContext)
+  const settingsContext = useContext(SettingsContext)
 
   let chatMenu: any = <div />
 
@@ -99,6 +101,15 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
               true
             )
           }
+        />
+      ),
+      !isGroup && settingsContext.desktopSettings.enableAVCalls && (
+        <DeltaMenuItem
+          key='call'
+          text={tx('videochat')}
+          onClick={() => {
+            sendCallInvitation(screenContext, selectedChat.id)
+          }}
         />
       ),
       <DeltaMenuItem

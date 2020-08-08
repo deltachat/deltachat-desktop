@@ -27,11 +27,15 @@ export interface DesktopSettings {
       }
     | {}
   chatViewBgImg: string
+  /** @deprecated replaced by lastAccount */
   credentials: Credentials
+  /** path to last used/selected Account */
+  lastAccount: string
+  enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
   enableDisappearingMessages: boolean
   enterKeySends: boolean
-  locale: string
+  locale: string | null
   notifications: boolean
   showNotificationContent: boolean
   lastChats: { [account_addr: string]: number }
@@ -41,23 +45,10 @@ export interface DesktopSettings {
 }
 
 export interface AppState {
-  saved: {
-    bounds: todo
-    /** @deprecated replaced by lastAccount */
-    credentials: any | undefined
-    /** path to last used/selected Account */
-    lastAccount: string
-    enterKeySends: boolean
-    notifications: boolean
-    showNotificationContent: boolean
-    locale: string
-    enableOnDemandLocationStreaming: boolean
-    enableDisappearingMessages: boolean
-    chatViewBgImg: string
-    lastChats: todo
-    zoomFactor: number
-    activeTheme: string
+  deltachat: {
+    credentials: Credentials
   }
+  saved: DesktopSettings
   logins: DeltaChatAccount[]
 }
 
@@ -205,4 +196,18 @@ export type DeltaChatAccount = {
   displayname: string
   addr: string
   size: number
+}
+
+// for video hangouts
+export type BasicWebRTCOptions = {
+  /** Change your username shown */
+  username: string
+  /** Change the name of the room */
+  roomname: string
+  /** Start session with cam on */
+  camon: boolean
+  /** Change if you want to use a different socketServer */
+  socketdomain: string
+  /** true if socketDomain is given in base64 format */
+  base64domain: boolean
 }

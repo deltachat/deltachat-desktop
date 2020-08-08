@@ -143,7 +143,6 @@ export default function EnterAutocryptSetupMessage({
       isOpen={isOpen}
       title={tx('autocrypt_key_transfer_desktop')}
       onClose={onClose}
-      canOutsideClickClose={false}
     >
       {body}
     </DeltaDialog>

@@ -92,6 +92,7 @@ export default function Settings(props: DialogProps) {
       'bcc_self',
       'delete_device_after',
       'delete_server_after',
+      'webrtc_instance',
     ])
 
     setState({ settings })
@@ -167,13 +168,18 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaInput = (configKey: string, label: string) => {
+  const renderDeltaInput = (
+    configKey: string,
+    label: string,
+    style?: React.CSSProperties
+  ) => {
     const configValue = state.settings[configKey]
     return (
       <Label>
         {label}
         <input
           value={configValue}
+          style={style}
           className={Classes.INPUT}
           onChange={ev => handleDeltaSettingsChange(configKey, ev.target.value)}
         />
@@ -242,6 +248,10 @@ export default function Settings(props: DialogProps) {
             <SettingsAppearance
               handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
+            </Card>
+            <SettingsAppearance
+              handleDesktopSettingsChange={handleDesktopSettingsChange}
+            />
             <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_chats_and_media')}</H5>
@@ -268,6 +278,17 @@ export default function Settings(props: DialogProps) {
                 'enableDisappearingMessages',
                 'Enable disappearing messages'
               )}
+              {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
+              {desktopSettings['enableAVCalls'] === true && (
+                <>
+                  {renderDeltaInput('webrtc_instance', tx('videochat_instance'), {
+                    width: '100%',
+                  })}
+                  <div className='bp3-callout'>
+                    {tx('videochat_instance_explain')}
+                  </div>
+                </>
+              )}
               <br />
               <H5>{tx('pref_imap_folder_handling')}</H5>
               {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
@@ -279,13 +300,6 @@ export default function Settings(props: DialogProps) {
             <SettingsManageKeys />
             <SettingsBackup />
           </DeltaDialogBody>
-          <DeltaDialogFooter>
-            <DeltaDialogFooterActions>
-              <p className={'delta-button bold primary'} onClick={onClose}>
-                {tx('close')}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
         </>
       )
     } else if (state.show === 'login') {
@@ -324,7 +338,10 @@ export default function Settings(props: DialogProps) {
   return (
     <DeltaDialogBase
       isOpen={props.isOpen}
-      onClose={() => setState({ showSettingsDialog: false })}
+      onClose={() => {
+        setState({ showSettingsDialog: false })
+        props.onClose()
+      }}
       className='SettingsDialog'
       fixed
     >

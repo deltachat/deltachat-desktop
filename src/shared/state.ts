@@ -13,6 +13,7 @@ export function getDefaultState(): AppState {
       locale: null, // if this is null, the system chooses the system language electron reports
       credentials: undefined,
       lastAccount: undefined,
+      enableAVCalls: false,
       enableOnDemandLocationStreaming: false,
       enableDisappearingMessages: false,
       chatViewBgImg: undefined,

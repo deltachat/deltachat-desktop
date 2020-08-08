@@ -30,6 +30,7 @@ export const i18nContext = React.createContext<getMessageFunction>(
  * the dynamic updating functionality use `window.static_translate` directly.
  */
 export const useTranslationFunction = () => useContext(i18nContext)
+
 export const SettingsContext: React.Context<{
   desktopSettings: DesktopSettings
   setDesktopSetting: (

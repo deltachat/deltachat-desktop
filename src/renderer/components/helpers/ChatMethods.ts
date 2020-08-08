@@ -6,9 +6,15 @@ import {
   JsonContact,
   FullChat,
   DCContact,
+  BasicWebRTCOptions,
 } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/dist/constants'
+import { runtime } from '../../runtime'
+import { getLogger } from '../../../shared/logger'
+import AlertDialog from '../dialogs/AlertDialog'
+
+const log = getLogger('renderer/message')
 
 type Chat = ChatListItemType | FullChat
 
@@ -117,4 +123,81 @@ export async function openMuteChatDialog(
 
 export async function unMuteChat(chatId: number) {
   await DeltaBackend.call('chat.setMuteDuration', chatId, MuteDuration.OFF)
+}
+
+export async function sendCallInvitation(
+  screenContext: unwrapContext<typeof ScreenContext>,
+  chatId: number
+) {
+  try {
+    const messageId = await DeltaBackend.call(
+      'chat.sendVideoChatInvitation',
+      chatId
+    )
+    await joinCall(screenContext, messageId)
+  } catch (error) {
+    log.error('failed send call invitation', error)
+    screenContext.openDialog(AlertDialog, { message: error.toString() })
+  }
+}
+
+export async function joinCall(
+  screenContext: unwrapContext<typeof ScreenContext>,
+  messageId: number
+) {
+  try {
+    const message = await DeltaBackend.call('messageList.getMessage', messageId)
+
+    if (message.msg.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+      throw new Error('Message is not a video chat invitation')
+    }
+
+    const callURL = message.msg.videochatUrl
+
+    if (message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN) {
+      return runtime.openLink(callURL)
+    } else if (message.msg.videochatType == C.DC_VIDEOCHATTYPE_BASICWEBRTC) {
+      // decode call url
+      const hastagPos = callURL.indexOf('#')
+      const socketdomain = callURL.slice(0, hastagPos)
+      const params = parseVars(callURL.slice(hastagPos + 1))
+
+      // validate if everything is there
+      if (!socketdomain || !params['roomname']) {
+        throw new Error('Socketdomain or roomname missing')
+      }
+
+      const options: BasicWebRTCOptions = {
+        socketdomain: btoa(socketdomain),
+        base64domain: true,
+        roomname: params['roomname'],
+        camon: (params['camon'] && JSON.parse(params['camon'])) || false,
+        username: encodeURIComponent(
+          (await DeltaBackend.call('settings.getConfig', 'displayname')) ||
+            (await DeltaBackend.call('settings.getConfig', 'addr')).split(
+              '@'
+            )[0]
+        ),
+      }
+
+      runtime.openCallWindow(options)
+    }
+  } catch (error) {
+    log.error('failed to join call', error)
+    screenContext.openDialog(AlertDialog, { message: error.toString() })
+  }
+}
+
+const parseVars = (str: string) => {
+  if (str.length <= 1) {
+    return {}
+  }
+  const keyValuePairs = str.split('&')
+  const res: { [key: string]: string } = {}
+  for (let i = 0; i < keyValuePairs.length; i++) {
+    const keyValuePair = keyValuePairs[i]
+    const [key, value] = keyValuePair.split('=')
+    res[key] = value
+  }
+  return res
 }
