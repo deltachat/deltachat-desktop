@@ -356,3 +356,17 @@ export function DeltaDialogOkCancelFooter({
     </DeltaDialogFooter>
   )
 }
+
+export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
+  const tx = window.static_translate
+
+  return (
+    <DeltaDialogFooter>
+      <DeltaDialogFooterActions>
+        <p className={'delta-button bold primary'} onClick={onClose}>
+          {tx('close')}
+        </p>
+      </DeltaDialogFooterActions>
+    </DeltaDialogFooter>
+  )
+}
