@@ -5,6 +5,7 @@
 ### Changed
 
 - Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
+- Overhaul QR Code dialog and condense scan/show qr code into one dialog
 
 ## [1.12.0] - 2020-07-31
 

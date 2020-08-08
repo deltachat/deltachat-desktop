@@ -11,14 +11,11 @@ import {
 } from './DeltaDialog'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import classNames from 'classnames'
+import { DeltaChatAccount } from '../../../shared/shared-types'
 
 export default function SettingsAccount({
-  deltachat,
-  show,
   setShow,
-  onClose,
 }: {
-  deltachat: any
   show: string
   setShow: (show: string) => void
   onClose: any

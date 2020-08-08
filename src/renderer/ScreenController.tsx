@@ -35,7 +35,8 @@ export default class ScreenController extends Component {
 
   constructor(
     public props: {
-      deltachat: AppState['deltachat']
+      account: DeltaChatAccount
+      loadAccount: todo
     }
   ) {
     super(props)
@@ -130,13 +131,11 @@ export default class ScreenController extends Component {
       case Screens.Main:
         return <MainScreen />
       case Screens.Login:
-        return <LoginScreen deltachat={this.props.deltachat} />
+        return <LoginScreen loadAccount={this.props.loadAccount} />
     }
   }
 
   render() {
-    const { deltachat } = this.props
-
     return (
       <div>
         {this.state.message && (
@@ -159,7 +158,7 @@ export default class ScreenController extends Component {
           {this.renderScreen()}
           <DialogController
             ref={this.dialogController}
-            deltachat={deltachat}
+            account={this.props.account}
             userFeedback={this.userFeedback}
           />
         </ScreenContext.Provider>

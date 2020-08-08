@@ -188,7 +188,7 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = () => {
-    const { deltachat, openDialog } = props
+    const { account, openDialog } = props
     const { settings } = state
     if (state.show === 'main') {
       return (
@@ -202,7 +202,7 @@ export default function Settings(props: DialogProps) {
                 color={state.selfContact.color}
               />
               <H5>{tx('pref_profile_info_headline')}</H5>
-              <p>{deltachat.credentials.addr}</p>
+              <p>{account.addr}</p>
               {renderDeltaInput('displayname', tx('pref_your_name'))}
               {renderDeltaInput('selfstatus', tx('pref_default_status_label'))}
               <SettingsButton onClick={() => setState({ show: 'login' })}>
@@ -305,7 +305,6 @@ export default function Settings(props: DialogProps) {
     } else if (state.show === 'login') {
       return (
         <SettingsAccount
-          deltachat={deltachat}
           show={state.show}
           setShow={setShow}
           onClose={props.onClose}
