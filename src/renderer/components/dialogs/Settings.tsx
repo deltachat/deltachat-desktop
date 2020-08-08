@@ -248,7 +248,6 @@ export default function Settings(props: DialogProps) {
             <SettingsAppearance
               handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
-            </Card>
             <SettingsAppearance
               handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
