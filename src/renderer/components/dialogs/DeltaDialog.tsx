@@ -357,11 +357,7 @@ export function DeltaDialogOkCancelFooter({
   )
 }
 
-export function DeltaDialogCloseFooter({
-  onClose
-}: {
-  onClose: () => any
-}) {
+export function DeltaDialogCloseFooter({ onClose }: { onClose: () => any }) {
   const tx = window.static_translate
 
   return (

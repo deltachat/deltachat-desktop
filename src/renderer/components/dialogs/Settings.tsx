@@ -305,7 +305,7 @@ export default function Settings(props: DialogProps) {
             <SettingsManageKeys />
             <SettingsBackup />
           </DeltaDialogBody>
-          <DeltaDialogCloseFooter onClose={onClose}/>
+          <DeltaDialogCloseFooter onClose={onClose} />
         </>
       )
     } else if (state.show === 'login') {
