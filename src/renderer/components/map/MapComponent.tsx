@@ -86,7 +86,7 @@ export default class MapComponent extends React.Component<
 
   componentDidMount() {
     const { selectedChat } = this.props
-    this.currentUserAddress = this.context.credentials.addr
+    this.currentUserAddress = this.context.account.addr
     let mapSettings: { zoom: number; center: mapboxgl.LngLatLike } = {
       zoom: 4,
       center: [8, 48],
