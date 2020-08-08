@@ -25,6 +25,8 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
@@ -186,115 +188,123 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = () => {
-    const { deltachat, openDialog } = props
+    const { account, openDialog } = props
     const { settings } = state
     if (state.show === 'main') {
       return (
-        <DeltaDialogBody noFooter>
-          <Card elevation={Elevation.ONE}>
-            <ProfileImageSelector
-              displayName={
-                state.settings['displayname'] || state.selfContact.address
-              }
-              color={state.selfContact.color}
+        <>
+          <DeltaDialogBody>
+            <Card elevation={Elevation.ONE}>
+              <ProfileImageSelector
+                displayName={
+                  state.settings['displayname'] || state.selfContact.address
+                }
+                color={state.selfContact.color}
+              />
+              <H5>{tx('pref_profile_info_headline')}</H5>
+              <p>{account.addr}</p>
+              {renderDeltaInput('displayname', tx('pref_your_name'))}
+              {renderDeltaInput('selfstatus', tx('pref_default_status_label'))}
+              <SettingsButton onClick={() => setState({ show: 'login' })}>
+                {tx('pref_password_and_account_settings')}
+              </SettingsButton>
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_communication')}</H5>
+              <RadioGroup
+                label={tx('pref_show_emails')}
+                onChange={(ev: React.FormEvent<HTMLInputElement>) =>
+                  handleDeltaSettingsChange(
+                    'show_emails',
+                    ev.currentTarget.value
+                  )
+                }
+                selectedValue={Number(settings['show_emails'])}
+              >
+                <Radio
+                  label={tx('pref_show_emails_no')}
+                  value={C.DC_SHOW_EMAILS_OFF}
+                />
+                <Radio
+                  label={tx('pref_show_emails_accepted_contacts')}
+                  value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS}
+                />
+                <Radio
+                  label={tx('pref_show_emails_all')}
+                  value={C.DC_SHOW_EMAILS_ALL}
+                />
+              </RadioGroup>
+              <br />
+              <H5>{tx('pref_privacy')}</H5>
+              {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
+              <br />
+              <SettingsAutodelete
+                {...{
+                  handleDeltaSettingsChange: handleDeltaSettingsChange,
+                  settings,
+                }}
+              />
+            </Card>
+            <SettingsAppearance
+              handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
-            <H5>{tx('pref_profile_info_headline')}</H5>
-            <p>{deltachat.credentials.addr}</p>
-            {renderDeltaInput('displayname', tx('pref_your_name'))}
-            {renderDeltaInput('selfstatus', tx('pref_default_status_label'))}
-            <SettingsButton onClick={() => setState({ show: 'login' })}>
-              {tx('pref_password_and_account_settings')}
-            </SettingsButton>
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_communication')}</H5>
-            <RadioGroup
-              label={tx('pref_show_emails')}
-              onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                handleDeltaSettingsChange('show_emails', ev.currentTarget.value)
-              }
-              selectedValue={Number(settings['show_emails'])}
-            >
-              <Radio
-                label={tx('pref_show_emails_no')}
-                value={C.DC_SHOW_EMAILS_OFF}
-              />
-              <Radio
-                label={tx('pref_show_emails_accepted_contacts')}
-                value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS}
-              />
-              <Radio
-                label={tx('pref_show_emails_all')}
-                value={C.DC_SHOW_EMAILS_ALL}
-              />
-            </RadioGroup>
-            <br />
-            <H5>{tx('pref_privacy')}</H5>
-            {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
-            <br />
-            <SettingsAutodelete
-              {...{
-                handleDeltaSettingsChange: handleDeltaSettingsChange,
-                settings,
-              }}
+            </Card>
+            <SettingsAppearance
+              handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
-          </Card>
-          <SettingsAppearance
-            handleDesktopSettingsChange={handleDesktopSettingsChange}
-          />
-          <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
-          <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_chats_and_media')}</H5>
-            {renderDTSettingSwitch(
-              'enterKeySends',
-              tx('pref_enter_sends_explain')
-            )}
-            {renderDTSettingSwitch(
-              'notifications',
-              tx('pref_notifications_explain')
-            )}
-            {renderDTSettingSwitch(
-              'showNotificationContent',
-              tx('pref_show_notification_content_explain')
-            )}
-          </Card>
-          <Card elevation={Elevation.ONE}>
-            <H5>{tx('pref_experimental_features')}</H5>
-            {renderDTSettingSwitch(
-              'enableOnDemandLocationStreaming',
-              tx('pref_on_demand_location_streaming')
-            )}
-            {renderDTSettingSwitch(
-              'enableDisappearingMessages',
-              'Enable disappearing messages'
-            )}
-            {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
-            {desktopSettings['enableAVCalls'] === true && (
-              <>
-                {renderDeltaInput('webrtc_instance', tx('videochat_instance'), {
-                  width: '100%',
-                })}
-                <div className='bp3-callout'>
-                  {tx('videochat_instance_explain')}
-                </div>
-              </>
-            )}
-            <br />
-            <H5>{tx('pref_imap_folder_handling')}</H5>
-            {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
-            {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
-            {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
-            {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
-            {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
-          </Card>
-          <SettingsManageKeys />
-          <SettingsBackup />
-        </DeltaDialogBody>
+            <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_chats_and_media')}</H5>
+              {renderDTSettingSwitch(
+                'enterKeySends',
+                tx('pref_enter_sends_explain')
+              )}
+              {renderDTSettingSwitch(
+                'notifications',
+                tx('pref_notifications_explain')
+              )}
+              {renderDTSettingSwitch(
+                'showNotificationContent',
+                tx('pref_show_notification_content_explain')
+              )}
+            </Card>
+            <Card elevation={Elevation.ONE}>
+              <H5>{tx('pref_experimental_features')}</H5>
+              {renderDTSettingSwitch(
+                'enableOnDemandLocationStreaming',
+                tx('pref_on_demand_location_streaming')
+              )}
+              {renderDTSettingSwitch(
+                'enableDisappearingMessages',
+                'Enable disappearing messages'
+              )}
+              {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
+              {desktopSettings['enableAVCalls'] === true && (
+                <>
+                  {renderDeltaInput('webrtc_instance', tx('videochat_instance'), {
+                    width: '100%',
+                  })}
+                  <div className='bp3-callout'>
+                    {tx('videochat_instance_explain')}
+                  </div>
+                </>
+              )}
+              <br />
+              <H5>{tx('pref_imap_folder_handling')}</H5>
+              {renderDeltaSwitch('inbox_watch', tx('pref_watch_inbox_folder'))}
+              {renderDeltaSwitch('sentbox_watch', tx('pref_watch_sent_folder'))}
+              {renderDeltaSwitch('mvbox_watch', tx('pref_watch_mvbox_folder'))}
+              {renderDeltaSwitch('bcc_self', tx('pref_send_copy_to_self'))}
+              {renderDeltaSwitch('mvbox_move', tx('pref_auto_folder_moves'))}
+            </Card>
+            <SettingsManageKeys />
+            <SettingsBackup />
+          </DeltaDialogBody>
+        </>
       )
     } else if (state.show === 'login') {
       return (
         <SettingsAccount
-          deltachat={deltachat}
           show={state.show}
           setShow={setShow}
           onClose={props.onClose}
@@ -335,12 +345,7 @@ export default function Settings(props: DialogProps) {
       className='SettingsDialog'
       fixed
     >
-      <DeltaDialogHeader
-        showBackButton={state.show !== 'main'}
-        onClickBack={() => setState({ show: 'main' })}
-        title={title}
-        onClose={onClose}
-      />
+      <DeltaDialogHeader title={title} />
       {renderDialogContent()}
     </DeltaDialogBase>
   )

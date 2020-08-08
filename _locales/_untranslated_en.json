@@ -79,10 +79,10 @@
     "message": "QR code data"
   },
   "a11y_copy_qr_data": {
-    "message": "Copy Qr code data to clipboard"
+    "message": "Copied QR url to clipboard"
   },
   "copy_qr_data_success": {
-    "message": "Copied qr code data to clipboard"
+    "message": "Copied QR url to clipboard"
   },
   "global_menu_view_zoom_factor": {
     "message": "Zoom Factor"

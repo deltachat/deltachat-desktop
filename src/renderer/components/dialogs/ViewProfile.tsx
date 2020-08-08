@@ -5,35 +5,38 @@ import {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogContentTextSeperator,
+  DeltaDialogFooter,
+  DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
 import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
-import { Button } from '@blueprintjs/core'
+import { Button, Classes } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
 
-const ProfileInfoName = ({ contactId }: { contactId: number }) => {
+const ProfileInfoName = ({
+  contactId,
+  displayName,
+  setDisplayName,
+  address,
+}: {
+  contactId: Number
+  displayName: string
+  setDisplayName: (displayName: string) => void
+  address: string
+}) => {
   const [contact, setContact] = useState<{
     displayName: string
     address: string
   }>({ displayName: '', address: '' })
 
-  const loadContact = async (contactId: number) => {
-    setContact(await DeltaBackend.call('contacts.getContact', contactId))
-  }
-
-  useEffect(() => {
-    loadContact(contactId)
-  }, [contactId])
-
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
-    await DeltaBackend.call('contacts.changeNickname', contactId, newName)
-    setContact({ ...contact, displayName: newName })
+    setDisplayName(newName)
   }
 
   return (
@@ -41,15 +44,15 @@ const ProfileInfoName = ({ contactId }: { contactId: number }) => {
       <div>
         <input
           className='group-name-input'
-          placeholder={contact.displayName}
-          value={contact.displayName}
+          placeholder={displayName}
+          value={displayName}
           onChange={onChange}
           disabled={contactId === C.DC_CONTACT_ID_SELF}
           autoFocus
           style={{ marginLeft: '0px', marginBottom: '10px' }}
         />
       </div>
-      <div className='address'>{contact.address}</div>
+      <div className='address'>{address}</div>
     </div>
   )
 }
@@ -75,6 +78,10 @@ export default function ViewProfile(props: {
   const { isOpen, onClose, contact } = props
   const { openDialog } = useContext(ScreenContext)
 
+  const [displayName, setDisplayName] = useState<string>(
+    props.contact.displayName
+  )
+
   const { chatListIds } = useChatListIds(0, '', contact.id)
   // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
   const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
@@ -90,6 +97,11 @@ export default function ViewProfile(props: {
   const onSendMessage = async () => {
     const dmChatId = await DeltaBackend.call('contacts.getDMChatId', contact.id)
     onChatClick(dmChatId)
+  }
+
+  const onUpdateContact = async () => {
+    await DeltaBackend.call('contacts.changeNickname', contact.id, displayName)
+    onClose()
   }
 
   return (
@@ -114,7 +126,12 @@ export default function ViewProfile(props: {
             >
               <ProfileInfoAvatar contact={contact} />
             </div>
-            <ProfileInfoName contactId={contact.id} />
+            <ProfileInfoName
+              contactId={contact.id}
+              displayName={displayName}
+              setDisplayName={setDisplayName}
+              address={contact.address}
+            />
           </div>
           <Button
             style={{ marginLeft: '100px', marginBottom: '30px' }}
@@ -138,6 +155,7 @@ export default function ViewProfile(props: {
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>
+      <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateContact} />
     </DeltaDialogBase>
   )
 }

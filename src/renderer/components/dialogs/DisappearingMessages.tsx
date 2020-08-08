@@ -5,6 +5,7 @@ import {
   DeltaDialogContent,
   SmallDialog,
   DeltaDialogHeader,
+  DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { RadioGroup, Radio } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
@@ -132,20 +133,15 @@ export default function DisappearingMessage({
             <p>{tx('ephemeral_messages_hint')}</p>
           </DeltaDialogContent>
         </DeltaDialogBody>
-        <DeltaDialogFooter
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '0px',
-            padding: '7px 13px 10px 13px',
-          }}
-        >
-          <p className='delta-button danger bold' onClick={onClose}>
-            {tx('cancel')}
-          </p>
-          <p className='delta-button primary bold' onClick={saveAndClose}>
-            {tx('save_desktop')}
-          </p>
+        <DeltaDialogFooter style={{ padding: '20px' }}>
+          <DeltaDialogFooterActions>
+            <p className='delta-button primary bold' onClick={onClose}>
+              {tx('cancel')}
+            </p>
+            <p className='delta-button primary bold' onClick={saveAndClose}>
+              {tx('save_desktop')}
+            </p>
+          </DeltaDialogFooterActions>
         </DeltaDialogFooter>
       </SmallDialog>
     )

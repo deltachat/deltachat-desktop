@@ -7,14 +7,15 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogFooter,
+  DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import {
   useGroupImage,
   useContactSearch,
   GroupSettingsSetNameAndProfileImage,
   AddMemberInnerDialog,
-  ShowQrCodeInnerDialog,
 } from './CreateChat'
+import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
 import {
   PseudoListItemNoSearchResults,
@@ -165,31 +166,38 @@ function EditGroupInner(props: {
 
   return (
     <>
-      {viewMode === 'addMember' &&
-        AddMemberInnerDialog({
-          onClickBack: () => {
-            updateSearch('')
-            setViewMode('main')
-          },
-          onSearchChange,
-          queryStr,
-          searchContacts,
-          groupMembers,
-          addRemoveGroupMember,
-        })}
-      {viewMode === 'showQrCode' &&
-        ShowQrCodeInnerDialog({
-          onClickBack: () => {
-            updateSearch('')
-            setViewMode('main')
-          },
-          onClose,
-          qrCode,
-          groupName,
-        })}
+      {viewMode === 'addMember' && (
+        <AddMemberInnerDialog
+          {...{
+            onClickBack: () => {
+              updateSearch('')
+              setViewMode('main')
+            },
+            onSearchChange,
+            queryStr,
+            searchContacts,
+            groupMembers,
+            addRemoveGroupMember,
+          }}
+        />
+      )}
+      {viewMode === 'showQrCode' && (
+        <>
+          <DeltaDialogHeader title={tx('qrshow_title')} />
+          <QrCodeShowQrInner
+            onBack={() => {
+              updateSearch('')
+              setViewMode('main')
+            }}
+            qrCode={qrCode}
+            description={tx('qrshow_join_group_hint', [groupName])}
+            noPaddingTop={true}
+          />
+        </>
+      )}
       {viewMode === 'main' && (
         <>
-          <DeltaDialogHeader title={tx('menu_edit_group')} onClose={onClose} />
+          <DeltaDialogHeader title={tx('menu_edit_group')} />
           <div className={Classes.DIALOG_BODY}>
             <Card>
               {GroupSettingsSetNameAndProfileImage({
@@ -242,22 +250,7 @@ function EditGroupInner(props: {
               </div>
             </Card>
           </div>
-          <DeltaDialogFooter>
-            <div
-              style={{ justifyContent: 'space-between' }}
-              className={Classes.DIALOG_FOOTER_ACTIONS}
-            >
-              <p className='delta-button no-padding bold' onClick={onClose}>
-                {tx('cancel')}
-              </p>
-              <p
-                className='delta-button no-padding primary bold'
-                onClick={onUpdateGroup}
-              >
-                {tx('save_desktop')}
-              </p>
-            </div>
-          </DeltaDialogFooter>
+          <DeltaDialogOkCancelFooter onCancel={onClose} onOk={onUpdateGroup} />
         </>
       )}
     </>
