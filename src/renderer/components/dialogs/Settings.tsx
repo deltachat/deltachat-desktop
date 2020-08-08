@@ -27,6 +27,8 @@ import {
   DeltaDialogBody,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
+  DeltaDialogOkCancelFooter,
+  DeltaDialogCloseFooter,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
@@ -303,6 +305,7 @@ export default function Settings(props: DialogProps) {
             <SettingsManageKeys />
             <SettingsBackup />
           </DeltaDialogBody>
+          <DeltaDialogCloseFooter onClose={onClose}/>
         </>
       )
     } else if (state.show === 'login') {
