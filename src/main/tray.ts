@@ -27,7 +27,7 @@ export function updateTrayIcon() {
       // Add tray icon
       log.info('add icon tray')
       tray = new Tray(
-        `${path.join(__dirname, '..', '..', 'images', 'deltachat.ico')}`
+        `${path.join(__dirname, '..', '..', 'images', 'deltachat.png')}`
       )
       const win = mainWindow.window
       const contextMenu = Menu.buildFromTemplate([
@@ -60,6 +60,9 @@ export function updateTrayIcon() {
       tray.setToolTip('Delta Chat')
       tray.setContextMenu(contextMenu)
       tray.on('double-click', (event, bounds) => {
+        mainWindow.show()
+      })
+      tray.on('click', (event, bounds) => {
         mainWindow.show()
       })
     }
