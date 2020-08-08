@@ -106,7 +106,7 @@ export default function ViewProfile(props: {
 
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
-      <DeltaDialogHeader title={tx('menu_view_profile')} onClose={onClose} />
+      <DeltaDialogHeader title={tx('menu_view_profile')} />
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
           <div className='profile-info-container'>
