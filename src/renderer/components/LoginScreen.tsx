@@ -28,7 +28,8 @@ import { DeltaBackend } from '../delta-remote'
 import { Screens } from '../ScreenController'
 import { IpcRendererEvent } from 'electron'
 import { Avatar } from './Avatar'
-import { PseudoListItemAddContact } from './helpers/PseudoListItem'
+import { PseudoListItemAddContact, PseudoListItem } from './helpers/PseudoListItem'
+import { ContactListItem } from './contact/ContactListItem'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -163,7 +164,7 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
     openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
 
-  const forgetLogin = (login: DeltaChatAccount) => {
+  const removeAccount = (login: DeltaChatAccount) => {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
@@ -185,7 +186,7 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
             
               { view === 'login' && 
                   <>
-                    <DeltaDialogHeader title={tx('login_title')} />
+                    <DeltaDialogHeader title={tx('add_account')} />
                     <DeltaDialogBody>
                       <DeltaDialogContent>
                         <div className='login'>
@@ -226,9 +227,14 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
                         <DeltaDialogContent noPadding={true}>
                           <div className='accounts'>
                             <ul>
-                              <PseudoAccountItemAddAccount onClick={() => setView('login')} />
+                              <PseudoListItem
+                                id='addaccount'
+                                cutoff='+'
+                                text={tx('add_account')}
+                                onClick={() => setView('login')}
+                              />
                               {logins.map((login: DeltaChatAccount) => (
-                                <AccountItem login={login} loadAccount={loadAccount} />
+                                <AccountItem login={login} loadAccount={loadAccount} removeAccount={removeAccount} />
                               ))}
                               </ul>
                           </div>
@@ -251,27 +257,21 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
   )
 }
 
-
-export function PseudoAccountItemAddAccount({onClick} : {onClick?: todo}) {
-  const tx = useTranslationFunction()
-  return (
-    <li className='login-item' key='add-account' onClick={onClick}>
-      <div className="contact">
-        <div className="avatar">
-          <div className="content" color="#505050" style={{backgroundColor: 'rgb(80, 80, 80)'}}>+</div>
-        </div>
-        <div className="contact-name">
-          <div className="display-name">{tx('add_account')}</div>
-        </div>
-      </div>
-    </li>
-  )
-}
-
-export function AccountItem({login, loadAccount} : { login: DeltaChatAccount, loadAccount: todo}) {
-  
-  return (
-    <li className='login-item' key={login.addr} onClick={() => loadAccount(login)}>
+export function AccountItem({login, loadAccount, removeAccount} : { login: DeltaChatAccount, loadAccount: todo, removeAccount: todo}) {
+  const contact = {
+    address: login.addr,
+    color: login.color,
+    displayName: login.displayname || login.addr,
+    firstName: '',
+    id: 0,
+    name: login.displayname,
+    profileImage: login.profileImage,
+    nameAndAddr: login.displayname,
+    isBlocked: false,
+    isVerified: false
+  }
+  /*
+  <li className='login-item'  onClick=>
       <div className="contact">
         <Avatar  displayName={login.displayname || login.addr} color={login.color} avatarPath={login.profileImage} />
         <div className="contact-name">
@@ -279,5 +279,17 @@ export function AccountItem({login, loadAccount} : { login: DeltaChatAccount, lo
         </div>
       </div>
     </li>
+  */
+  return (
+    <ContactListItem
+      key={login.addr}
+      contact={contact}
+      onClick={() => loadAccount(login)}
+      showCheckbox={false}
+      checked={false}
+      showRemove={true}
+      onRemoveClick={() => removeAccount(login)}
+    />
+    
   )
 }
