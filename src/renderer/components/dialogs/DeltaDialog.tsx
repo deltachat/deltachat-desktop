@@ -128,7 +128,14 @@ export function DeltaDialogHeader(props: {
   showBackButton?: boolean
   isCloseButtonShown?: boolean
 }) {
-  let { onClickBack, title, onClose, children, showBackButton, isCloseButtonShown } = props
+  let {
+    onClickBack,
+    title,
+    onClose,
+    children,
+    showBackButton,
+    isCloseButtonShown,
+  } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
   return (

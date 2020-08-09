@@ -118,10 +118,14 @@ export default function LoginForm({
     setCredentials(updatedCredentials)
   }
 
-  const [debouncedGetProviderInfo] = useDebouncedCallback(async (addr: string) => {
-    const result: any = await DeltaBackend.call('getProviderInfo', addr)
-    setProviderInfo(result || null)
-  }, 300, { trailing: true })
+  const [debouncedGetProviderInfo] = useDebouncedCallback(
+    async (addr: string) => {
+      const result: any = await DeltaBackend.call('getProviderInfo', addr)
+      setProviderInfo(result || null)
+    },
+    300,
+    { trailing: true }
+  )
 
   const onEmailChange = (
     event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>

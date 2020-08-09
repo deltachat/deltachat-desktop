@@ -62,9 +62,8 @@ export default function ConfirmationDialog({
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
-        
       </div>
-      <DeltaDialogFooter style={{padding: '0px 20px 10px'}}>
+      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
           <p
             className='delta-button bold primary'

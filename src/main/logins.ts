@@ -7,7 +7,6 @@ const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { DeltaChatAccount } from '../shared/shared-types'
 
-
 export async function getLogins(): Promise<DeltaChatAccount[]> {
   // search for old accounts and convert them
   await migrate(getConfigPath())
@@ -40,7 +39,12 @@ async function migrate(dir: string) {
 
 export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
   try {
-    const config = await getConfig(path, ['addr', 'displayname', 'profileImage', 'color'])
+    const config = await getConfig(path, [
+      'addr',
+      'displayname',
+      'profileImage',
+      'color',
+    ])
 
     if (typeof config.addr !== 'string') {
       // this can be old temp accounts or accounts that somehow lost their addr, what should we do with them?
@@ -53,7 +57,7 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
       addr: config.addr,
       size: await _getAccountSize(path),
       profileImage: config.profileImage,
-      color: config.color
+      color: config.color,
     }
   } catch (error) {
     log.error(`Account ${path} is inaccessible`, error)
@@ -93,7 +97,9 @@ async function getConfig(
     })
   }
   if (keys.includes('profileImage')) {
-    config['profileImage'] = dc.getContact(C.DC_CONTACT_ID_SELF).getProfileImage()
+    config['profileImage'] = dc
+      .getContact(C.DC_CONTACT_ID_SELF)
+      .getProfileImage()
   }
   if (keys.includes('color')) {
     config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color

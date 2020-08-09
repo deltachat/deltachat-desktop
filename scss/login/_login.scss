@@ -57,19 +57,16 @@
       display: none;
     }
 
-
     button.bp3-large {
       width: 90%;
     }
   }
 
-
   .window {
     background-size: cover;
-    background-image: url("../images/backgrounds/petito-moreno.webp");
+    background-image: url('../images/backgrounds/petito-moreno.webp');
     height: 100vh;
     margin-top: 0px;
-    
   }
 
   div.delta-blue-button {
@@ -193,7 +190,6 @@ div.delta-form-group {
   }
 }
 
-
 .welcome-deltachat {
   display: flex;
   justify-content: center;
@@ -224,10 +220,9 @@ div.delta-form-group {
     display: block;
     padding: 10px;
 
-
     margin: 0 auto;
     margin-top: 50px;
-    
+
     background-color: var(--colorPrimary);
     color: white;
     text-transform: uppercase;
