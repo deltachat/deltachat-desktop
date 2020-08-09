@@ -87,6 +87,11 @@
       font-weight: bold;
     }
 
+    &.light-bold {
+      letter-spacing: 1px;
+      font-weight: 100;
+    }
+
     &.primary {
       color: var(--colorPrimary);
     }
