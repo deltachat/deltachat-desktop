@@ -36,7 +36,7 @@ export default class ScreenController extends Component {
   constructor(
     public props: {
       account: DeltaChatAccount
-      loadAccount: todo
+      loadAccount: (login: DeltaChatAccount) => {}
     }
   ) {
     super(props)

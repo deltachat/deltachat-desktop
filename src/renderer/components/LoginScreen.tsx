@@ -139,7 +139,7 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   )
 })
 
-export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
+export default function LoginScreen({ loadAccount }: { loadAccount: (account: DeltaChatAccount) => {} }) {
   const tx = useTranslationFunction()
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
@@ -223,7 +223,7 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
                     <ul>
                       <PseudoAccountItemAddAccount onClick={() => setView('login')} />
                       {logins.map((login: DeltaChatAccount) => (
-                        <AccountItem login={login} onClickLoadAccount={onClickLoadAccount} />
+                        <AccountItem login={login} loadAccount={loadAccount} />
                       ))}
                       </ul>
                   </div>
@@ -260,10 +260,10 @@ export function PseudoAccountItemAddAccount({onClick} : {onClick?: todo}) {
   )
 }
 
-export function AccountItem({login, onClickLoadAccount} : { login: DeltaChatAccount, onClickLoadAccount: todo}) {
+export function AccountItem({login, loadAccount} : { login: DeltaChatAccount, loadAccount: todo}) {
   
   return (
-    <li className='login-item' key={login.addr} onClick={() => onClickLoadAccount(login)}>
+    <li className='login-item' key={login.addr} onClick={() => loadAccount(login)}>
       <div className="contact">
         <Avatar  displayName={login.displayname || login.addr} color={login.color} avatarPath={login.profileImage} />
         <div className="contact-name">
