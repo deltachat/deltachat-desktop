@@ -226,6 +226,7 @@ export default function LoginScreen({
                       {tx('cancel')}
                     </p>
                     <p
+                      id='action-login'
                       className={'delta-button bold primary'}
                       onClick={onClickLogin}
                     >
