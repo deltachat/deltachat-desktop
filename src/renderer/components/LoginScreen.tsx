@@ -169,6 +169,7 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
     openDialog('ConfirmationDialog', {
       message,
       confirmLabel: tx('remove_account'),
+      isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
           await DeltaBackend.call('login.forgetAccount', login)

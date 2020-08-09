@@ -62,26 +62,27 @@ export default function ConfirmationDialog({
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
-        <DeltaDialogFooter>
-          <DeltaDialogFooterActions>
-            <p
-              className='delta-button bold primary'
-              onClick={() => onClick(false)}
-              style={noMargin ? {} : { marginRight: '10px' }}
-            >
-              {cancelLabel || tx('cancel')}
-            </p>
-            <p
-              className={`delta-button bold primary ${
-                isConfirmDanger ? 'danger' : 'primary'
-              }`}
-              onClick={() => onClick(true)}
-            >
-              {confirmLabel || tx('yes')}
-            </p>
-          </DeltaDialogFooterActions>
-        </DeltaDialogFooter>
+        
       </div>
+      <DeltaDialogFooter style={{padding: '0px 20px 10px'}}>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button bold primary'
+            onClick={() => onClick(false)}
+            style={noMargin ? {} : { marginRight: '10px' }}
+          >
+            {cancelLabel || tx('cancel')}
+          </p>
+          <p
+            className={`delta-button bold primary ${
+              isConfirmDanger ? 'danger' : 'primary'
+            }`}
+            onClick={() => onClick(true)}
+          >
+            {confirmLabel || tx('yes')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </SmallDialog>
   )
 }

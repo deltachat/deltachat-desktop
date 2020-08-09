@@ -134,22 +134,26 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
 
   const [processingQrCode, setProcessingQrCode] = useState(false)
 
+  const onDone = () => {
+    onClose()
+    setProcessingQrCode(false)
+  }
+
   const handleResponse = async (scannedQrCode: string) => {
     setProcessingQrCode(true)
     openDialog((props: DialogProps) => {
       const { isOpen } = props
-      const onClose = () => {
-        props.onClose()
-        setProcessingQrCode(false)
-      }
+      const onCloseProcessDialog = props.onClose
+
       const handleScanResult = (chatId: number = null) => {
         chatId && selectChat(chatId)
-        onClose()
+        onCloseProcessDialog()
+        onDone()
       }
 
       const onCancel = () => {
         DeltaBackend.call('stopOngoingProcess')
-        onClose()
+        onCloseProcessDialog()
       }
 
       useEffect(() => {
@@ -157,7 +161,11 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       }, [])
       return (
         <SmallDialog isOpen={isOpen} onClose={onClose}>
-          <DeltaDialogBody>Processing...</DeltaDialogBody>
+          <DeltaDialogBody>
+            <DeltaDialogContent>
+              <Spinner />
+            </DeltaDialogContent>
+          </DeltaDialogBody>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
               <p className='delta-button bold primary' onClick={onCancel}>
