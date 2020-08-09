@@ -324,16 +324,7 @@ export function AccountItem({
     isBlocked: false,
     isVerified: false,
   }
-  /*
-  <li className='login-item'  onClick=>
-      <div className="contact">
-        <Avatar  displayName={login.displayname || login.addr} color={login.color} avatarPath={login.profileImage} />
-        <div className="contact-name">
-          <div className="display-name">{login.displayname || login.addr}</div>
-        </div>
-      </div>
-    </li>
-  */
+
   return (
     <ContactListItem
       key={login.addr}
