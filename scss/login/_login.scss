@@ -42,12 +42,6 @@
   }
 }
 
-p.delta-headline {
-  color: var(--deltaChatPrimaryFgLight);
-  font-size: 18px;
-  padding: 15px 0 3px;
-}
-
 .login-screen {
   li.login-item {
     display: flex;
@@ -76,19 +70,6 @@ p.delta-headline {
     height: 100vh;
     margin-top: 0px;
     
-  }
-
-  .pseudo-dialog {
-    position: absolute;
-    height: calc(100% - 40px);
-    width: 400px;
-
-    left: calc((100% - 400px) / 2);
-    margin: 20px 0px;
-
-    background-color: white;
-    border-radius: 5px;
-
   }
 
   div.delta-blue-button {
@@ -218,8 +199,6 @@ div.delta-form-group {
   justify-content: center;
   flex-direction: column;
   text-align: center;
-  width: 400px;
-  max-height: 500px;
 
   .delta-icon {
     padding-top: 40px;
@@ -252,6 +231,7 @@ div.delta-form-group {
     background-color: var(--colorPrimary);
     color: white;
     text-transform: uppercase;
+    font-weight: 100;
 
     &:hover {
       cursor: pointer;
@@ -259,31 +239,18 @@ div.delta-form-group {
   }
 }
 
-.login, .accounts {
-  padding: 10px;
-  overflow: scroll;
-}
+.accounts {
+  ul {
+    margin: 0px;
 
-.footer {
-  .footer-buttons {
-    position: absolute;
-    display: flex;
-    bottom: 0;
-    width: 400px;
-    
-    justify-content: space-between;
-    padding: 0px 3px;
-
-  
-  
-    p {
-      text-transform: uppercase;
-      color: var(--colorPrimary);
-      font-size: 18px;
-      padding: 0px 10px;
+    li {
       &:hover {
         cursor: pointer;
+        background-color: var(--chatListItemBgHover);
       }
     }
+  }
+  .avatar {
+    margin-left: 20px;
   }
 }

@@ -19,7 +19,7 @@ import {
 import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
-import DeltaDialog, { DeltaDialogFooter } from './dialogs/DeltaDialog'
+import DeltaDialog, { DeltaDialogFooter, DeltaDialogFooterActions, DeltaDialogBase, DeltaDialogBody, DeltaDialogContent, DeltaDialogHeader } from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
@@ -124,7 +124,7 @@ const ImportButton = function ImportButton(props: any) {
   }
 
   return (
-    <p onClick={onClickImportBackup}>{tx('import_backup_title')}</p>
+    <p className={'delta-button light-bold primary'} onClick={onClickImportBackup}>{tx('import_backup_title')}</p>
   )
 }
 
@@ -135,7 +135,7 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   const onClickScanQr = () => openDialog('ImportQrCode')
 
   return (
-    <p onClick={onClickScanQr}>{tx('qrscan_title')}</p>
+    <p className={'delta-button light-bold primary'} onClick={onClickScanQr}>{tx('qrscan_title')}</p>
   )
 })
 
@@ -181,62 +181,70 @@ export default function LoginScreen({ loadAccount }: { loadAccount: (account: De
     <div className='login-screen'>
       <div className='window'>
         <div className='bp3-overlay-backdrop'>
-          <div className='pseudo-dialog'>
-            {/*logins !== null && logins.length > 0 && (
-              
-            )*/}
-            { view === 'login' && 
-              <>
-                <div className='login'>
-                  <p className='delta-headline'>{tx('login_title')}</p>
-                  <LoginForm
-                    credentials={credentials}
-                    setCredentials={setCredentials}
-                  />
-                </div>
-                <div className='footer'>
-                  <div className='footer-buttons'>
-                    <p onClick={() => setView('main')}>{tx('cancel')}</p>
-                    <p onClick={onClickLogin}>{tx('login_title')}</p>
-                  </div>
-                </div>
-              </>
-            }
-
-            { view === 'main' && 
-              <>
-               { !logins || logins.length === null && 
+          <DeltaDialogBase isOpen={true} onClose={() => {}} fixed={true}>
+            
+              { view === 'login' && 
                   <>
-                    <div className='welcome-deltachat'>
-                      <img className='delta-icon' src='../images/deltachat.png' />
-                      <p className='f1'>{tx('welcome_desktop')}</p>
-                      <p className='f2'>{tx('welcome_intro1_message')}</p>
-                      <div className='welcome-button' onClick={() => setView('login')}>{tx('login_header')}</div>
-                    </div>
+                    <DeltaDialogHeader title={tx('login_title')} />
+                    <DeltaDialogBody>
+                      <DeltaDialogContent>
+                        <div className='login'>
+                          <LoginForm
+                            credentials={credentials}
+                            setCredentials={setCredentials}
+                          />
+                        </div>
+                      </DeltaDialogContent>
+                    </DeltaDialogBody>
+                    <DeltaDialogFooter>
+                      <DeltaDialogFooterActions>
+                        <p className={'delta-button bold primary'} onClick={() => setView('main')}>{tx('cancel')}</p>
+                        <p className={'delta-button bold primary'} onClick={onClickLogin}>{tx('login_title')}</p>
+                      </DeltaDialogFooterActions>
+                    </DeltaDialogFooter>
                   </>
                 }
-                { logins && logins.length > 0 &&
-                  <div className='accounts'>
-                    <p className='delta-headline'>
-                      {tx('login_known_accounts_title_desktop')}
-                    </p>
-                    <ul>
-                      <PseudoAccountItemAddAccount onClick={() => setView('login')} />
-                      {logins.map((login: DeltaChatAccount) => (
-                        <AccountItem login={login} loadAccount={loadAccount} />
-                      ))}
-                      </ul>
-                  </div>
+
+                { view === 'main' && 
+                  <>
+                    { (!logins || logins.length === 0) && 
+                      <DeltaDialogBody>
+                        <DeltaDialogContent>
+                            <div className='welcome-deltachat'>
+                              <img className='delta-icon' src='../images/deltachat.png' />
+                              <p className='f1'>{tx('welcome_desktop')}</p>
+                              <p className='f2'>{tx('welcome_intro1_message')}</p>
+                              <div className='welcome-button' onClick={() => setView('login')}>{tx('login_header')}</div>
+                            </div>
+                          </DeltaDialogContent>
+                      </DeltaDialogBody>
+                    }
+                    { logins && logins.length > 0 &&
+                    <>
+                      <DeltaDialogHeader title={tx('login_known_accounts_title_desktop')}/>
+                      <DeltaDialogBody>
+                        <DeltaDialogContent noPadding={true}>
+                          <div className='accounts'>
+                            <ul>
+                              <PseudoAccountItemAddAccount onClick={() => setView('login')} />
+                              {logins.map((login: DeltaChatAccount) => (
+                                <AccountItem login={login} loadAccount={loadAccount} />
+                              ))}
+                              </ul>
+                          </div>
+                        </DeltaDialogContent>
+                      </DeltaDialogBody>
+                    </>
+                    }
+                    <DeltaDialogFooter style={{padding: '10px'}}>
+                      <DeltaDialogFooterActions style={{justifyContent: 'space-between'}}>
+                          <ScanQRCodeButton/>
+                          <ImportButton/>
+                      </DeltaDialogFooterActions>
+                    </DeltaDialogFooter>
+                  </>
                 }
-                <div className='footer'>
-                  <div className='footer-buttons'>
-                      <ScanQRCodeButton/>
-                      <ImportButton/>
-                  </div>
-                </div>
-              </>             
-            }
-          </div> 
+          </DeltaDialogBase>
         </div>              
       </div>
     </div>
