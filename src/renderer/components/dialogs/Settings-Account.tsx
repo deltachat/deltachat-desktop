@@ -4,17 +4,18 @@ import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 import LoginForm, { ConfigureProgressDialog } from '../LoginForm'
 
-import { DeltaDialogBody, DeltaDialogFooter } from './DeltaDialog'
+import {
+  DeltaDialogBody,
+  DeltaDialogFooter,
+  DeltaDialogOkCancelFooter,
+} from './DeltaDialog'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import classNames from 'classnames'
+import { DeltaChatAccount } from '../../../shared/shared-types'
 
 export default function SettingsAccount({
-  deltachat,
-  show,
   setShow,
-  onClose,
 }: {
-  deltachat: any
   show: string
   setShow: (show: string) => void
   onClose: any
@@ -94,24 +95,10 @@ export default function SettingsAccount({
           )}
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogFooter
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '0px',
-          padding: '7px 13px 10px 13px',
-        }}
-      >
-        <p
-          className={classNames('delta-button primary bold', {
-            disabled: disableUpdate,
-          })}
-          onClick={onUpdate}
-          style={{ marginLeft: 'auto' }}
-        >
-          {tx('update')}
-        </p>
-      </DeltaDialogFooter>
+      <DeltaDialogOkCancelFooter
+        onCancel={() => setShow('main')}
+        onOk={onUpdate}
+      />
     </>
   )
 }

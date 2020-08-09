@@ -7,7 +7,6 @@ import {
   AppState,
   DeltaChatAccount,
   DesktopSettings,
-  Credentials,
 } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
@@ -29,6 +28,7 @@ export default function App(props: any) {
   const [state, setState] = useState<AppState>(getDefaultState())
 
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
+  const [account, setAccount] = useState<DeltaChatAccount>(null)
 
   useEffect(() => {
     sendToBackend('ipcReady')
@@ -60,6 +60,16 @@ export default function App(props: any) {
     })
   }, [])
 
+  const loadAccount = async (account: DeltaChatAccount) => {
+    await DeltaBackend.call('login.loadAccount', account)
+    setAccount(account)
+    if (typeof window.__changeScreen === 'function') {
+      window.__changeScreen(Screens.Main)
+    } else {
+      throw new Error('window.__changeScreen is not a function')
+    }
+  }
+
   useEffect(() => {
     startBackendLogging()
     ;(async () => {
@@ -70,13 +80,7 @@ export default function App(props: any) {
         'login.getLastLoggedInAccount'
       )
       if (!lastLoggedInAccount) return
-
-      await DeltaBackend.call('login.loadAccount', lastLoggedInAccount)
-      if (typeof window.__changeScreen === 'function') {
-        window.__changeScreen(Screens.Main)
-      } else {
-        throw new Error('window.__changeScreen is not a function')
-      }
+      loadAccount(lastLoggedInAccount)
     })()
   }, [])
 
@@ -106,19 +110,19 @@ export default function App(props: any) {
   if (!localeData) return null
   return (
     <CrashScreen>
-      <SettingsContextWrapper credentials={state.deltachat.credentials}>
+      <SettingsContextWrapper account={account}>
         <i18nContext.Provider value={window.static_translate}>
-          <ScreenController deltachat={state.deltachat} />
+          <ScreenController account={account} loadAccount={loadAccount} />
         </i18nContext.Provider>
       </SettingsContextWrapper>
     </CrashScreen>
   )
 }
 export function SettingsContextWrapper({
-  credentials,
+  account,
   children,
 }: {
-  credentials: Credentials
+  account: DeltaChatAccount
   children: React.ReactChild
 }) {
   const [desktopSettings, _setDesktopSettings] = useState<DesktopSettings>(null)
@@ -150,7 +154,7 @@ export function SettingsContextWrapper({
 
   return (
     <SettingsContext.Provider
-      value={{ desktopSettings, setDesktopSetting, credentials }}
+      value={{ desktopSettings, setDesktopSetting, account }}
     >
       {children}
     </SettingsContext.Provider>

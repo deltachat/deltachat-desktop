@@ -45,9 +45,6 @@ export interface DesktopSettings {
 }
 
 export interface AppState {
-  deltachat: {
-    credentials: Credentials
-  }
   saved: DesktopSettings
   logins: DeltaChatAccount[]
 }

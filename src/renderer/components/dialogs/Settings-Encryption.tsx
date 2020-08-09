@@ -11,7 +11,10 @@ import { SettingsButton } from './Settings'
 import { ScreenContext } from '../../contexts'
 import { DialogProps } from './DialogController'
 import InputTransferKey from './AutocryptSetupMessage'
-import DeltaDialog from './DeltaDialog'
+import DeltaDialog, {
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
 import { DeltaBackend } from '../../delta-remote'
 
 export function KeyViewPanel({
@@ -32,13 +35,13 @@ export function KeyViewPanel({
           </div>
         </Card>
       </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+      <DeltaDialogFooter>
+        <DeltaDialogFooterActions>
           <p className='delta-button bold' onClick={onClose}>
             {tx('done')}
           </p>
-        </div>
-      </div>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </React.Fragment>
   )
 }

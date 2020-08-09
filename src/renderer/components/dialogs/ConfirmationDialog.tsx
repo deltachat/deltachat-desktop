@@ -1,7 +1,11 @@
 import React from 'react'
 import { Classes } from '@blueprintjs/core'
 import { MessageBoxOptions } from 'electron'
-import { SmallDialog } from './DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 
 const { remote } = window.electron_functions
@@ -29,22 +33,28 @@ export function confirmationDialogLegacy(
   )
 }
 
-export default function ConfirmationDialog(props: todo) {
-  const { message, cancelLabel, confirmLabel, cb } = props
-
-  const yesisPrimary =
-    typeof props.yesIsPrimary === 'undefined' ? false : props.yesIsPrimary
-
+export default function ConfirmationDialog({
+  message,
+  cancelLabel,
+  confirmLabel,
+  cb,
+  onClose,
+  isConfirmDanger = false,
+  noMargin = false,
+}: {
+  message: string
+  cancelLabel?: string
+  confirmLabel?: string
+  cb: (yes: boolean) => {}
+  onClose: () => {}
+  isConfirmDanger?: boolean
+  noMargin?: boolean
+}) {
   const isOpen = !!message
   const tx = useTranslationFunction()
-  const onClose = () => {
-    props.onClose()
-    // eslint-disable-next-line standard/no-callback-literal
-    cb(false)
-  }
 
   const onClick = (yes: boolean) => {
-    props.onClose()
+    onClose()
     cb(yes)
   }
 
@@ -52,29 +62,25 @@ export default function ConfirmationDialog(props: todo) {
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div
-            className={Classes.DIALOG_FOOTER_ACTIONS}
-            style={{ justifyContent: 'space-between', marginTop: '7px' }}
-          >
+        <DeltaDialogFooter>
+          <DeltaDialogFooterActions>
             <p
-              className={`delta-button no-padding bold ${
-                yesisPrimary ? 'danger' : 'primary'
-              }`}
+              className='delta-button bold primary'
               onClick={() => onClick(false)}
+              style={noMargin ? {} : { marginRight: '10px' }}
             >
               {cancelLabel || tx('cancel')}
             </p>
             <p
-              className={`delta-button no-padding bold ${
-                !yesisPrimary ? 'danger' : 'primary'
+              className={`delta-button bold primary ${
+                isConfirmDanger ? 'danger' : 'primary'
               }`}
               onClick={() => onClick(true)}
             >
               {confirmLabel || tx('yes')}
             </p>
-          </div>
-        </div>
+          </DeltaDialogFooterActions>
+        </DeltaDialogFooter>
       </div>
     </SmallDialog>
   )

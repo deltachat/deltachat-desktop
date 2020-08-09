@@ -2,9 +2,15 @@
 
 ## [Unreleased][unreleased]
 
-###
+### Changed
+
+- Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
+- Overhaul QR Code dialog and condense scan/show qr code into one dialog
+
+### Fixed
 
 - Fix sluggish ui while typing in email address in login form
+
 
 ## [1.12.0] - 2020-07-31
 
@@ -62,7 +68,6 @@
 - add explaination if there are no contact requests
 - add support for markdown links `[label](url)` (with a open confirmation dialog to prevent phishing)
 - implement disappearing messages as an experimental feature
-- add experimental audio & video calls to DM chats
 
 ### Fixed
 
