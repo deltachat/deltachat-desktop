@@ -21,6 +21,8 @@ import {
 } from './dialogs/DeltaDialog'
 import { Credentials } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
+import { useDebouncedCallback } from 'use-debounce/lib'
+import { isValidEmail } from '../../shared/util'
 
 const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const SendSecurityPortMap = {
@@ -116,15 +118,21 @@ export default function LoginForm({
     setCredentials(updatedCredentials)
   }
 
-  const emailChange = async (
+  const [debouncedGetProviderInfo] = useDebouncedCallback(
+    async (addr: string) => {
+      const result: any = await DeltaBackend.call('getProviderInfo', addr)
+      setProviderInfo(result || null)
+    },
+    300,
+    { trailing: true }
+  )
+
+  const onEmailChange = (
     event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>
   ) => {
     handleCredentialsChange(event)
-    const result = (await DeltaBackend.call(
-      'getProviderInfo',
-      event.target.value
-    )) as any
-    setProviderInfo(result || null)
+    const email = event.target.value
+    isValidEmail(email) && debouncedGetProviderInfo(email)
   }
 
   const {
@@ -155,7 +163,7 @@ export default function LoginForm({
             placeholder={tx('email_address')}
             disabled={addrDisabled}
             value={addr}
-            onChange={emailChange.bind(this)}
+            onChange={onEmailChange}
           />
 
           <DeltaPasswordInput
