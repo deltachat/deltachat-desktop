@@ -250,9 +250,6 @@ export default function Settings(props: DialogProps) {
             <SettingsAppearance
               handleDesktopSettingsChange={handleDesktopSettingsChange}
             />
-            <SettingsAppearance
-              handleDesktopSettingsChange={handleDesktopSettingsChange}
-            />
             <SettingsEncryption renderDeltaSwitch={renderDeltaSwitch} />
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_chats_and_media')}</H5>
