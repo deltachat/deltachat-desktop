@@ -162,11 +162,11 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       return (
         <SmallDialog isOpen={isOpen} onClose={onClose}>
           <DeltaDialogBody>
-            <DeltaDialogContent>
+            <DeltaDialogContent style={{height: '80px', padding: '20px'}}>
               <Spinner />
             </DeltaDialogContent>
           </DeltaDialogBody>
-          <DeltaDialogFooter>
+          <DeltaDialogFooter style={{padding: '0px 20px 10px'}}>
             <DeltaDialogFooterActions>
               <p className='delta-button bold primary' onClick={onCancel}>
                 {tx('cancel')}

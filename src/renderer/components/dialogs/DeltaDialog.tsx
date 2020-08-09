@@ -86,6 +86,7 @@ const DeltaDialog = React.memo<
         onClose={props.onClose}
         onClickBack={props.onClickBack}
         showBackButton={props.showBackButton}
+        isCloseButtonShown={props.isCloseButtonShown}
         title={props.title}
       />
       {props.children}
@@ -125,8 +126,9 @@ export function DeltaDialogHeader(props: {
   onClose?: DialogProps['onClose']
   children?: React.ReactNode
   showBackButton?: boolean
+  isCloseButtonShown?: boolean
 }) {
-  let { onClickBack, title, onClose, children, showBackButton } = props
+  let { onClickBack, title, onClose, children, showBackButton, isCloseButtonShown } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
   return (
@@ -139,7 +141,7 @@ export function DeltaDialogHeader(props: {
       {showBackButton && <DeltaDialogBackButton onClick={onClickBack} />}
       {title && <h4 className='bp3-heading'>{title}</h4>}
       {children}
-      {typeof onClose === 'function' && (
+      {typeof onClose === 'function' && isCloseButtonShown !== false && (
         <DeltaDialogCloseButton onClick={onClose} />
       )}
     </div>
