@@ -21,9 +21,7 @@ async function closeDialog () {
 async function loginWithTmpUser () {
   const account = await createTmpUser()
   await t
-    .expect(Selector('.welcome-deltachat > .f1').innerText)
-    .eql(await translate('welcome_desktop'))
-    .click('.welcome-button')
+    .click('#action-go-to-login')
     .typeText('#addr', account.email)
     .typeText('#mail_pw', account.password)
     .click("#action-login")

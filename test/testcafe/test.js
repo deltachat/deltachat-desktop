@@ -43,9 +43,10 @@ test('login works', async t => {
   await logout()
 })
 
-test('login button is shown', async t => {
-  accountButton1 = Selector('.contact-list-item > .contact > .contact-name > .display-name').withText(conf.account1.email)
+test('account is shown on account overview', async t => {
+  accountButton1 = Selector('.display-name').withText(conf.account1.email)
   await t.expect(accountButton1.exists).ok()
+  await t.expect(Selector('.contact-list-item').count).eql(2)
 })
 
 test('second login works', async t => {
@@ -55,16 +56,14 @@ test('second login works', async t => {
 })
 
 test('both login buttons are shown', async t => {
-  accountButton2 = Selector('ul li button').withText(conf.account2.email)
+  accountButton2 = Selector('.display-name').withText(conf.account2.email)
   await t.expect(accountButton2.exists).ok()
-  await t.expect(Selector('ul li').count).eql(2)
+  await t.expect(Selector('.contact-list-item').count).eql(3)
 })
 
 test('create chat', async t => {
   await t
     .click(accountButton1)
-    .expect(Selector('h2', { timeout: waitForLogin }).innerText)
-    .eql(welcomeMessage)
   await clickAppMenuItem(await translate('menu_new_chat'))
   await t.expect(Selector('.FixedDeltaDialog').exists).ok()
   await t.typeText('.FixedDeltaDialog input', conf.account2.email)
@@ -81,6 +80,9 @@ test('create chat', async t => {
 
 test('write message', async t => {
   await t
+    .click(accountButton1)
+  await clickChatByName(t, conf.account2.email)
+  await t
     .typeText('#composer-textarea', testMessage)
     .click("button[aria-label='" + await translate('menu_send') + "']")
     .expect(Selector('#message-list li').count)
@@ -91,9 +93,7 @@ test('write message', async t => {
 test('Contact request and receive message works', async t => {
   await t
     .click(accountButton2)
-    .expect(Selector('h2', { timeout: waitForLogin }).innerText)
-    .eql(welcomeMessage)
-  await t
+    await t
     .expect(
       Selector('.chat-list-item > .content > .header > .name > span').withText(
         await translate('chat_contact_request')
@@ -102,7 +102,7 @@ test('Contact request and receive message works', async t => {
     .ok({ timeout: 15000 })
   await clickChatByName(t, await translate('chat_contact_request'))
   await t
-    .click(Selector('p').withText('YES'))
+    .click(Selector('p').withText((await translate('yes')).toUpperCase()))
     .expect(Selector('#message-list li').count)
     .eql(1)
     .expect(Selector('.text').withText(testMessage).exists)

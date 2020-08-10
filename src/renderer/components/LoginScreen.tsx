@@ -250,6 +250,7 @@ export default function LoginScreen({
                         <p className='f1'>{tx('welcome_desktop')}</p>
                         <p className='f2'>{tx('welcome_intro1_message')}</p>
                         <div
+                          id='action-go-to-login'
                           className='welcome-button'
                           onClick={() => setView('login')}
                         >
@@ -269,7 +270,7 @@ export default function LoginScreen({
                         <div className='accounts'>
                           <ul>
                             <PseudoListItem
-                              id='addaccount'
+                              id='action-go-to-login'
                               cutoff='+'
                               text={tx('add_account')}
                               onClick={() => setView('login')}
