@@ -102,6 +102,7 @@
     "sass": "^1.26.5",
     "simple-markdown": "^0.7.1",
     "tempy": "^0.3.0",
+    "url-parse": "^1.4.7",
     "use-debounce": "^3.3.0",
     "wolfy87-eventemitter": "^5.2.9"
   },
@@ -121,6 +122,7 @@
     "@types/react-dom": "^16.9.4",
     "@types/react-virtualized": "^9.21.10",
     "@types/sass": "^1.16.0",
+    "@types/url-parse": "^1.4.3",
     "depcheck": "^0.8.4",
     "electron": "6.1.9",
     "electron-builder": "^22.6.0",
