@@ -108,4 +108,5 @@ if (process.env.CI !== 'true') {
       .expect(Selector('.text').withText(testMessage).exists)
       .ok()
   })
+
 }
