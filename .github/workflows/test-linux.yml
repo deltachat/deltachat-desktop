@@ -25,7 +25,7 @@ jobs:
     - uses: DevExpress/testcafe-action@latest
       with:
         version: "1.8.0"
-        args: "--skip-js-errors electron:. ./test/testcafe/test_ci.js"
+        args: "--skip-js-errors electron:. ./test/testcafe/test.js"
       env:
         DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
         NODE_ENV: test
