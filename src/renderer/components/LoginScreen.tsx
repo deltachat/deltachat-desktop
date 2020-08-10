@@ -275,8 +275,9 @@ export default function LoginScreen({
                               text={tx('add_account')}
                               onClick={() => setView('login')}
                             />
-                            {logins.map((login: DeltaChatAccount) => (
+                            {logins.map((login: DeltaChatAccount, index: Number) => (
                               <AccountItem
+                                key={`login-${index}`}
                                 login={login}
                                 loadAccount={loadAccount}
                                 removeAccount={removeAccount}
