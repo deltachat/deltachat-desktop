@@ -3,7 +3,7 @@ import { waitForReact } from 'testcafe-react-selectors'
 import { loginWithTmpUser, logout, clickAppMenuItem, translate } from './helpers'
 
 /* global fixture, test */
-
+'.bp3-navbar-heading'
 const waitForLogin = 50000
 const conf = {}
 const testMessage = 'Test message'
@@ -98,7 +98,7 @@ test('Contact request and receive message works', async t => {
         await translate('chat_contact_request')
       ).exists
     )
-    .ok({ timeout: 15000 })
+    .ok({ timeout: 30000 })
   await clickChatByName(t, await translate('chat_contact_request'))
   await t
     .click(Selector('p').withText((await translate('yes')).toUpperCase()))
