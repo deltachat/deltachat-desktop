@@ -89,21 +89,23 @@ test('write message', async t => {
   await logout()
 })
 
-test('Contact request and receive message works', async t => {
-  await t
-    .click(accountButton2)
+if (process.env.CI !== 'true') {
+  test('Contact request and receive message works', async t => {
     await t
-    .expect(
-      Selector('.chat-list-item > .content > .header > .name > span').withText(
-        await translate('chat_contact_request')
-      ).exists
-    )
-    .ok({ timeout: 30000 })
-  await clickChatByName(t, await translate('chat_contact_request'))
-  await t
-    .click(Selector('p').withText((await translate('yes')).toUpperCase()))
-    .expect(Selector('#message-list li').count)
-    .eql(1)
-    .expect(Selector('.text').withText(testMessage).exists)
-    .ok()
-})
+      .click(accountButton2)
+      await t
+      .expect(
+        Selector('.chat-list-item > .content > .header > .name > span').withText(
+          await translate('chat_contact_request')
+        ).exists
+      )
+      .ok({ timeout: 30000 })
+    await clickChatByName(t, await translate('chat_contact_request'))
+    await t
+      .click(Selector('p').withText((await translate('yes')).toUpperCase()))
+      .expect(Selector('#message-list li').count)
+      .eql(1)
+      .expect(Selector('.text').withText(testMessage).exists)
+      .ok()
+  })
+}
