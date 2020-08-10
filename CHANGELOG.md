@@ -10,6 +10,7 @@
 ### Fixed
 
 - Fix sluggish ui while typing in email address in login form
+- Fix url parding in labeled link confirmation dialog
 
 
 ## [1.12.0] - 2020-07-31
