@@ -9,7 +9,7 @@
     "test": "npm run check-formatting && npm run test-log-conventions && npm run test-unit",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
-    "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test_ci.js\"",
+    "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\"",
     "test-e2e": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\"",
     "check-formatting": "prettier --check \"scss/**/*.scss\" && prettier --check \"src/**/*.{js,ts,tsx,json}\" && prettier --check \"**/*.md\"",
     "fix-formatting": "prettier --write \"scss/**/*.scss\" && prettier --write \"src/**/*.{js,ts,tsx,json}\" && prettier --write \"**/*.md\"",

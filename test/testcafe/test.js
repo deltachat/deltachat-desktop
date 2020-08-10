@@ -6,7 +6,6 @@ import { loginWithTmpUser, logout, clickAppMenuItem, translate } from './helpers
 
 const waitForLogin = 50000
 const conf = {}
-const welcomeMessage = 'Select a chat or create a new chat'
 const testMessage = 'Test message'
 let accountButton1 = null
 let accountButton2 = null
