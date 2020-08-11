@@ -4,6 +4,7 @@ import path from 'path'
 import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
+import {appIcon} from "./application-constants";
 
 let tray: Tray = null
 
@@ -27,7 +28,7 @@ export function updateTrayIcon() {
       // Add tray icon
       log.info('add icon tray')
       tray = new Tray(
-        `${path.join(__dirname, '..', '..', 'images', 'deltachat.png')}`
+        appIcon()
       )
       const win = mainWindow.window
       const contextMenu = Menu.buildFromTemplate([
