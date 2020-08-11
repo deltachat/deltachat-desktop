@@ -1,10 +1,11 @@
 import appConfig from './application-config'
-import { dirname, join } from 'path'
+import path, { dirname, join } from 'path'
 import { screen } from 'electron'
 
 export function appIcon() {
-  // TODO Add .ico file for windows
-  return join(__dirname, '..', 'images', 'deltachat.png')
+  const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
+  return `${path.join(__dirname, '..', '..', 'images', 'deltachat'+iconFormat)}`
+
 }
 
 export function windowDefaults() {
