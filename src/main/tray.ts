@@ -4,9 +4,10 @@ import path from 'path'
 import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
-import {appIcon} from "./application-constants";
+import { appIcon } from './application-constants'
 
 let tray: Tray = null
+let contextMenu: Menu = null
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
@@ -27,12 +28,11 @@ export function updateTrayIcon() {
     } else {
       // Add tray icon
       log.info('add icon tray')
-      tray = new Tray(
-        appIcon()
-      )
+      tray = new Tray(appIcon())
       const win = mainWindow.window
-      const contextMenu = Menu.buildFromTemplate([
+      contextMenu = Menu.buildFromTemplate([
         {
+          id: 'open_windows',
           label: tx('global_menu_file_open_desktop'),
           type: 'normal',
           click() {
@@ -40,6 +40,7 @@ export function updateTrayIcon() {
           },
         },
         {
+          id: 'reduce_window',
           label: tx('global_menu_file_reduce_desktop'),
           type: 'normal',
           accelerator: 'Escape',
@@ -48,6 +49,7 @@ export function updateTrayIcon() {
           },
         },
         {
+          id: 'quit_app',
           label: tx('global_menu_file_quit_desktop'),
           type: 'normal',
           click() {
@@ -67,5 +69,18 @@ export function updateTrayIcon() {
         mainWindow.show()
       })
     }
+
+    updateTrayMenu()
+  }
+}
+
+export function updateTrayMenu() {
+  if (contextMenu !== null) {
+    contextMenu.getMenuItemById(
+      'reduce_window'
+    ).enabled = mainWindow.window.isVisible()
+
+    // Called to update menu on Linux
+    tray.setContextMenu(contextMenu)
   }
 }
