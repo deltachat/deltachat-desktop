@@ -64,7 +64,7 @@ import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { resolveThemeAddress, acceptThemeCLI } from './themes'
-import { updateTrayIcon } from './tray'
+import { updateTrayIcon, updateTrayMenu } from './tray'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -131,10 +131,15 @@ function onReady([logins, _appReady, loadedState]: [
     if (!app.isQuitting) {
       e.preventDefault()
       mainWindow.hide()
+      updateTrayMenu()
       if (!IsMac && !app.state.saved.minimizeToTray) {
         quit(e)
       }
     }
+  })
+
+  mainWindow.window.on('focus', () => {
+    updateTrayMenu()
   })
 })
 
