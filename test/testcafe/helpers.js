@@ -1,4 +1,4 @@
-import { Selector, t } from 'testcafe'
+import { Selector, t, ClientFunction  } from 'testcafe'
 import { createTmpUser } from '../integration/fixtures/config'
 
 const waitForLogin = 50000
@@ -11,7 +11,7 @@ async function clickAppMenuItem (label) {
 }
 
 async function logout () {
-  await clickAppMenuItem('Switch account')
+  await clickAppMenuItem(await translate('switch_account'))
 }
 
 async function closeDialog () {
@@ -20,17 +20,22 @@ async function closeDialog () {
 
 async function loginWithTmpUser () {
   const account = await createTmpUser()
-  await t.expect(Selector('.bp3-navbar-heading').innerText).eql('Welcome to Delta Chat')
+  await t
+    .click('#action-go-to-login')
     .typeText('#addr', account.email)
     .typeText('#mail_pw', account.password)
-    .click('button[type=\'submit\']')
-    .expect(Selector('h2', { timeout: waitForLogin }).innerText).eql(welcomeMessage)
+    .click("#action-login")
+    .expect(Selector('h2', { timeout: waitForLogin }).innerText)
+    .eql(await translate('no_chat_selected_suggestion_desktop'))
   return account
 }
+
+const translate = ClientFunction((...args) => window.static_translate(...args))
 
 module.exports = {
   clickAppMenuItem,
   loginWithTmpUser,
   logout,
-  closeDialog
+  closeDialog,
+  translate
 }

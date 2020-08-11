@@ -19,7 +19,14 @@ import {
 import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
-import DeltaDialog from './dialogs/DeltaDialog'
+import DeltaDialog, {
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+  DeltaDialogBase,
+  DeltaDialogBody,
+  DeltaDialogContent,
+  DeltaDialogHeader,
+} from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
 const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
@@ -27,6 +34,12 @@ import { DialogProps } from './dialogs/DialogController'
 import { DeltaBackend } from '../delta-remote'
 import { Screens } from '../ScreenController'
 import { IpcRendererEvent } from 'electron'
+import { Avatar } from './Avatar'
+import {
+  PseudoListItemAddContact,
+  PseudoListItem,
+} from './helpers/PseudoListItem'
+import { ContactListItem } from './contact/ContactListItem'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -121,11 +134,12 @@ const ImportButton = function ImportButton(props: any) {
   }
 
   return (
-    <>
-      <div className='delta-blue-button' onClick={onClickImportBackup}>
-        <p>{tx('import_backup_title')}</p>
-      </div>
-    </>
+    <p
+      className={'delta-button light-bold primary'}
+      onClick={onClickImportBackup}
+    >
+      {tx('import_backup_title')}
+    </p>
   )
 }
 
@@ -136,15 +150,17 @@ const ScanQRCodeButton = React.memo(function ScanQRCode(_) {
   const onClickScanQr = () => openDialog('ImportQrCode')
 
   return (
-    <>
-      <div className='delta-blue-button' onClick={onClickScanQr}>
-        <p>{tx('qrscan_title')}</p>
-      </div>
-    </>
+    <p className={'delta-button light-bold primary'} onClick={onClickScanQr}>
+      {tx('qrscan_title')}
+    </p>
   )
 })
 
-export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
+export default function LoginScreen({
+  loadAccount,
+}: {
+  loadAccount: (account: DeltaChatAccount) => {}
+}) {
   const tx = useTranslationFunction()
   const { openDialog, changeScreen } = useContext(ScreenContext)
 
@@ -152,6 +168,7 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
     defaultCredentials()
   )
   const [logins, setLogins] = useState(null)
+  const [view, setView] = useState('main')
 
   const refreshAccounts = async () => {
     const logins = await DeltaBackend.call('login.getLogins')
@@ -167,11 +184,12 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
     openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
 
-  const forgetLogin = (login: DeltaChatAccount) => {
+  const removeAccount = (login: DeltaChatAccount) => {
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
       confirmLabel: tx('remove_account'),
+      isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
           await DeltaBackend.call('login.forgetAccount', login)
@@ -183,61 +201,144 @@ export default function LoginScreen({ loadAccount }: { loadAccount: todo }) {
 
   return (
     <div className='login-screen'>
-      <div className='navbar-wrapper'>
-        <Navbar fixedToTop>
-          <NavbarGroup align={Alignment.LEFT} style={{ width: 'unset' }}>
-            <NavbarHeading>{tx('welcome_desktop')}</NavbarHeading>
-          </NavbarGroup>
-        </Navbar>
-      </div>
       <div className='window'>
-        {logins !== null && logins.length > 0 && (
-          <Card>
-            <p className='delta-headline'>
-              {tx('login_known_accounts_title_desktop')}
-            </p>
-            <ul>
-              {logins.map((login: DeltaChatAccount) => (
-                <li className='login-item' key={login.path}>
-                  <Button
-                    large
-                    minimal
-                    onClick={() => loadAccount(login)}
-                    title={login.path}
+        <div className='bp3-overlay-backdrop'>
+          <DeltaDialogBase isOpen={true} onClose={() => {}} fixed={true}>
+            {view === 'login' && (
+              <>
+                <DeltaDialogHeader title={tx('add_account')} />
+                <DeltaDialogBody>
+                  <DeltaDialogContent>
+                    <div className='login'>
+                      <LoginForm
+                        credentials={credentials}
+                        setCredentials={setCredentials}
+                      />
+                    </div>
+                  </DeltaDialogContent>
+                </DeltaDialogBody>
+                <DeltaDialogFooter>
+                  <DeltaDialogFooterActions>
+                    <p
+                      className={'delta-button bold primary'}
+                      onClick={() => setView('main')}
+                    >
+                      {tx('cancel')}
+                    </p>
+                    <p
+                      id='action-login'
+                      className={'delta-button bold primary'}
+                      onClick={onClickLogin}
+                    >
+                      {tx('login_title')}
+                    </p>
+                  </DeltaDialogFooterActions>
+                </DeltaDialogFooter>
+              </>
+            )}
+
+            {view === 'main' && (
+              <>
+                {(!logins || logins.length === 0) && (
+                  <DeltaDialogBody>
+                    <DeltaDialogContent>
+                      <div className='welcome-deltachat'>
+                        <img
+                          className='delta-icon'
+                          src='../images/deltachat.png'
+                        />
+                        <p className='f1'>{tx('welcome_desktop')}</p>
+                        <p className='f2'>{tx('welcome_intro1_message')}</p>
+                        <div
+                          id='action-go-to-login'
+                          className='welcome-button'
+                          onClick={() => setView('login')}
+                        >
+                          {tx('login_header')}
+                        </div>
+                      </div>
+                    </DeltaDialogContent>
+                  </DeltaDialogBody>
+                )}
+                {logins && logins.length > 0 && (
+                  <>
+                    <DeltaDialogHeader
+                      title={tx('login_known_accounts_title_desktop')}
+                    />
+                    <DeltaDialogBody>
+                      <DeltaDialogContent noPadding={true}>
+                        <div className='accounts'>
+                          <ul>
+                            <PseudoListItem
+                              id='action-go-to-login'
+                              cutoff='+'
+                              text={tx('add_account')}
+                              onClick={() => setView('login')}
+                            />
+                            {logins.map(
+                              (login: DeltaChatAccount, index: Number) => (
+                                <AccountItem
+                                  key={`login-${index}`}
+                                  login={login}
+                                  loadAccount={loadAccount}
+                                  removeAccount={removeAccount}
+                                />
+                              )
+                            )}
+                          </ul>
+                        </div>
+                      </DeltaDialogContent>
+                    </DeltaDialogBody>
+                  </>
+                )}
+                <DeltaDialogFooter style={{ padding: '10px' }}>
+                  <DeltaDialogFooterActions
+                    style={{ justifyContent: 'space-between' }}
                   >
-                    {login.displayname} {login.addr} [
-                    {filesizeConverter(login.size)}]
-                  </Button>
-                  <Button
-                    intent={Intent.DANGER}
-                    minimal
-                    icon='cross'
-                    onClick={() => forgetLogin(login)}
-                    aria-label={tx('a11y_remove_account_btn_label')}
-                  />
-                </li>
-              ))}
-            </ul>
-          </Card>
-        )}
-        <Card>
-          <p className='delta-headline'>{tx('login_title')}</p>
-          <LoginForm
-            credentials={credentials}
-            setCredentials={setCredentials}
-          />
-          <Button
-            disabled={
-              credentials.addr.length == 0 || credentials.mail_pw.length == 0
-            }
-            type='submit'
-            text={tx('login_title')}
-            onClick={onClickLogin}
-          />
-          <ImportButton refreshAccounts={refreshAccounts} />
-          <ScanQRCodeButton />
-        </Card>
+                    <ScanQRCodeButton />
+                    <ImportButton />
+                  </DeltaDialogFooterActions>
+                </DeltaDialogFooter>
+              </>
+            )}
+          </DeltaDialogBase>
+        </div>
       </div>
     </div>
+  )
+}
+
+export function AccountItem({
+  login,
+  loadAccount,
+  removeAccount,
+}: {
+  login: DeltaChatAccount
+  loadAccount: todo
+  removeAccount: todo
+}) {
+  const contact = {
+    address: login.addr,
+    color: login.color,
+    displayName: login.displayname || login.addr,
+    firstName: '',
+    id: 0,
+    name: login.displayname,
+    profileImage: login.profileImage,
+    nameAndAddr: login.displayname,
+    isBlocked: false,
+    isVerified: false,
+  }
+
+  return (
+    <ContactListItem
+      key={login.addr}
+      contact={contact}
+      onClick={() => loadAccount(login)}
+      showCheckbox={false}
+      checked={false}
+      showRemove={true}
+      onRemoveClick={() => removeAccount(login)}
+    />
   )
 }

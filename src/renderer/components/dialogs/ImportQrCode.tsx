@@ -22,13 +22,14 @@ export default function ImportQrCode({
   const tx = window.static_translate
   const Dialog = DeltaDialog as any // todo remove this cheat.
   return (
-    <Dialog
+    <DeltaDialog
       className='delta-dialog'
       title={tx('qrscan_title')}
       isOpen={isOpen}
       onClose={onClose}
+      isCloseButtonShown={false}
     >
       <QrCodeScanQrInner onClose={onClose} />
-    </Dialog>
+    </DeltaDialog>
   )
 }

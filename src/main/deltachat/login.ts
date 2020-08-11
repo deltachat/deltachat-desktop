@@ -159,7 +159,6 @@ export default class DCLoginController extends SplitOut {
   async forgetAccount(login: DeltaChatAccount) {
     try {
       await removeAccount(login.path)
-      this._controller.sendToRenderer('success', 'successfully forgot account')
     } catch (error) {
       this._controller.sendToRenderer('error', error.message)
     }

@@ -1,7 +1,7 @@
 import { join, basename } from 'path'
 import fs from 'fs-extra'
 //@ts-ignore
-import DeltaChat from 'deltachat-node'
+import DeltaChat, { C } from 'deltachat-node'
 import { getLogger } from '../shared/logger'
 const log = getLogger('main/find_logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
@@ -39,7 +39,13 @@ async function migrate(dir: string) {
 
 export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
   try {
-    const config = await getConfig(path, ['addr', 'displayname'])
+    const config = await getConfig(path, [
+      'addr',
+      'displayname',
+      'profileImage',
+      'color',
+    ])
+
     if (typeof config.addr !== 'string') {
       // this can be old temp accounts or accounts that somehow lost their addr, what should we do with them?
       throw new Error('Account has no address defined')
@@ -50,6 +56,8 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
       displayname: config.displayname,
       addr: config.addr,
       size: await _getAccountSize(path),
+      profileImage: config.profileImage,
+      color: config.color,
     }
   } catch (error) {
     log.error(`Account ${path} is inaccessible`, error)
@@ -88,7 +96,14 @@ async function getConfig(
       config[key] = dc.getConfig(key)
     })
   }
-
+  if (keys.includes('profileImage')) {
+    config['profileImage'] = dc
+      .getContact(C.DC_CONTACT_ID_SELF)
+      .getProfileImage()
+  }
+  if (keys.includes('color')) {
+    config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color
+  }
   return config
 }
 

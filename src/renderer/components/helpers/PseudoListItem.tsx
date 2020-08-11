@@ -16,7 +16,13 @@ export function PseudoListItem(
 ) {
   const { id, cutoff, text, subText, onClick, style } = props
   return (
-    <div className='contact-list-item' key={id} onClick={onClick} style={style}>
+    <div
+      className='contact-list-item'
+      id={id}
+      key={id}
+      onClick={onClick}
+      style={style}
+    >
       <PseudoContact cutoff={cutoff} text={text} subText={subText}>
         {props.children}
       </PseudoContact>

@@ -34,9 +34,9 @@ export function Avatar(props: {
   const { avatarPath, color, displayName, isVerified, large, small } = props
 
   const content = avatarPath ? (
-    <img className='content' src={avatarPath} {...props} />
+    <img className='content' src={avatarPath} />
   ) : (
-    <div className='content' {...props} style={{ backgroundColor: color }}>
+    <div className='content' style={{ backgroundColor: color }}>
       {nameToInitial(displayName)}
     </div>
   )

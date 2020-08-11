@@ -42,26 +42,10 @@
   }
 }
 
-p.delta-headline {
-  color: var(--deltaChatPrimaryFgLight);
-  font-size: 18px;
-  padding: 15px 0 3px;
-}
-
 .login-screen {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  height: calc(100vh);
-
   li.login-item {
     display: flex;
     justify-content: space-between;
-    border-right: 1px solid grey;
-    border-left: 1px solid grey;
-    border-bottom: 1px solid grey;
-    min-width: 300px;
-    border-radius: 0;
 
     &:hover {
       button.bp3-intent-danger {
@@ -73,25 +57,16 @@ p.delta-headline {
       display: none;
     }
 
-    &:first-child {
-      border-top: 1px solid grey;
-    }
-
     button.bp3-large {
       width: 90%;
     }
   }
 
-  .bp3-card {
-    width: 400px;
-    margin-top: 20px;
-    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
-      0 1px 1px rgba(16, 22, 26, 0.2);
-    flex: unset !important;
-  }
-
   .window {
-    padding-left: calc((100vw - 400px) / 2);
+    background-size: cover;
+    background-image: url('../images/backgrounds/petito-moreno.webp');
+    height: 100vh;
+    margin-top: 0px;
   }
 
   div.delta-blue-button {
@@ -211,6 +186,63 @@ div.delta-form-group {
 
     .bp3-button.bp3-minimal.bp3-intent-warning:hover {
       background-color: var(--deltaChatPrimaryFgLight) !important;
+    }
+  }
+}
+
+.welcome-deltachat {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+
+  .delta-icon {
+    padding-top: 40px;
+    width: 100px;
+    margin: 0 auto;
+  }
+
+  .f1 {
+    margin-top: 20px;
+    font-size: x-large;
+    color: var(--colorNone);
+  }
+
+  .f2 {
+    margin-top: 10px;
+    padding: 0px 20px;
+    color: var(--colorNone);
+    font-size: larger;
+  }
+
+  .welcome-button {
+    width: fit-content;
+    display: block;
+    padding: 10px;
+
+    margin: 0 auto;
+    margin-top: 50px;
+
+    background-color: var(--colorPrimary);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 100;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.accounts {
+  ul {
+    margin: 0px;
+
+    li {
+      &:hover {
+        cursor: pointer;
+        background-color: var(--chatListItemBgHover);
+      }
     }
   }
 }
