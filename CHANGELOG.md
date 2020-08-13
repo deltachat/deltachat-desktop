@@ -1,12 +1,13 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## [1.13.0-rc1] - 2020-08-13
 
 ### Changed
 
 - Improve UX of changing/updating group & contact names, add buttons in those dialogs to the dialog footer
 - Overhaul QR Code dialog and condense scan/show qr code into one dialog
 - Implement welcome screen & overhaul login flow & account overview
+- Update deltachat-node to v1.44.0
 
 ### Fixed
 
