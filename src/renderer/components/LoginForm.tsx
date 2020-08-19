@@ -327,9 +327,10 @@ export function ConfigureProgressDialog({
 }: DialogProps) {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
+  const [configureFailed, setConfigureFailed] = useState(false)
 
   const onConfigureProgress = (_: null, [progress, _data2]: [number, null]) =>
-    setProgress(progress)
+    progress !== 0 && setProgress(progress)
 
   const onCancel = (event: any) => {
     DeltaBackend.call('stopOngoingProcess')
@@ -340,8 +341,11 @@ export function ConfigureProgressDialog({
     onClose()
     onSuccess && onSuccess()
   }
-  const onConfigureFailed = (_: null, [data1, data2]: [null, string]) =>
+  const onConfigureError = (_: null, [data1, data2]: [null, string]) =>
     setError(data2)
+
+  const onConfigureFailed = (_: null, [data1, data2]: [null, string]) =>
+    setConfigureFailed(true)
 
   useEffect(() => {
     ;(async () => {
@@ -358,17 +362,15 @@ export function ConfigureProgressDialog({
 
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
-    ipcBackend.on('DC_EVENT_ERROR', onConfigureFailed)
+    ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+    ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
+    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureError)
     return () => {
-      ipcBackend.removeListener(
-        'DC_EVENT_CONFIGURE_PROGRESS',
-        onConfigureProgress
-      )
-      ipcBackend.removeListener(
-        'DCN_EVENT_CONFIGURE_SUCCESSFUL',
-        onConfigureSuccessful
-      )
-      ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureFailed)
+      ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
+      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
+      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
+      ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
+      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureError)
     }
   }, [])
 
@@ -376,7 +378,7 @@ export function ConfigureProgressDialog({
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
-      {!error && (
+      {!configureFailed && (
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
@@ -397,7 +399,7 @@ export function ConfigureProgressDialog({
           </DeltaDialogFooter>
         </>
       )}
-      {error && (
+      {configureFailed && (
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
