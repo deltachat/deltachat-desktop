@@ -355,7 +355,10 @@ export function ConfigureProgressDialog({
         try {
           await DeltaBackend.call('login.newLogin', credentials)
         } catch (err) {
-          if (err) onConfigureFailed(null, [null, err])
+          if (err) {
+            onConfigureError(null, [null, err])
+            onConfigureFailed(null, [null, null])
+          }
         }
       }
     })()
