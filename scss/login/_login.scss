@@ -40,6 +40,24 @@
       }
     }
   }
+
+  .before-login-hint {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9d7d7;
+    color: #c70404;
+    border-radius: 5px;
+
+    p {
+      user-select: text;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
 }
 
 .login-screen {
@@ -89,26 +107,6 @@
     }
   }
 
-  .before-login-hint {
-    padding: 6px 8px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-    background-color: #fdf7b2;
-    color: #101010;
-
-    &.broken {
-      background-color: var(--errorColor);
-      color: white;
-      a {
-        color: white;
-      }
-    }
-
-    a {
-      font-weight: bold;
-      color: #101010;
-    }
-  }
 }
 
 div.delta-form-group {
