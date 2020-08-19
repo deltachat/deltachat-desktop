@@ -366,8 +366,14 @@ export function ConfigureProgressDialog({
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
     ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureError)
     return () => {
-      ipcBackend.removeListener('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
-      ipcBackend.removeListener('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
+      ipcBackend.removeListener(
+        'DC_EVENT_CONFIGURE_PROGRESS',
+        onConfigureProgress
+      )
+      ipcBackend.removeListener(
+        'DCN_EVENT_CONFIGURE_SUCCESSFUL',
+        onConfigureSuccessful
+      )
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
       ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
       ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureError)
