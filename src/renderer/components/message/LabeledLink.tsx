@@ -32,6 +32,23 @@ function isDomainTrusted(domain: string): boolean {
   return getTrustedDomains().includes(domain)
 }
 
+export function punycodeCheck(url: string) {
+  const URL = UrlParser(url)
+  // encode the punycode to make phishing harder
+  URL.set(
+    'hostname',
+    URL.hostname
+      .split('.')
+      .map(toASCII)
+      .join('.')
+  )
+  return {
+    asciiUrl: URL.toString(),
+    hostname: URL.hostname,
+    hasPunycode: URL.toString() != url,
+  }
+}
+
 export const LabeledLink = ({
   label,
   target,
