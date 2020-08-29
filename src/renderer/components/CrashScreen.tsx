@@ -10,7 +10,7 @@ export class CrashScreen extends React.Component {
   }
 
   componentDidCatch(error: any) {
-    log.error("The app encountered an react error", error)
+    log.error('The app encountered an react error', error)
     this.setState({
       hasError: true,
       error: this.errorToText(error),
