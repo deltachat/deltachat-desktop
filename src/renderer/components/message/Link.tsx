@@ -72,7 +72,7 @@ export const LabeledLink = ({
       return
     }
     // not trusted - ask for confimation from user
-    confirmationDialog(
+    labeledLinkConfirmationDialog(
       openDialog as OpenDialogFunctionType,
       url.toString(),
       url.hostname,
@@ -91,7 +91,7 @@ export const LabeledLink = ({
   )
 }
 
-function confirmationDialog(
+function labeledLinkConfirmationDialog(
   openDialog: OpenDialogFunctionType,
   sanitizedTarget: string,
   hostname: string,
@@ -145,6 +145,87 @@ function confirmationDialog(
                     trustDomain(hostname)
                   }
                   openExternal(target)
+                }}
+              >
+                {tx('open')}
+              </p>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
+        </div>
+      </SmallDialog>
+    )
+  })
+}
+
+export const Link = ({ target }: { target: string }) => {
+  const { openDialog } = useContext(ScreenContext)
+
+  const { hostname, hasPunycode, asciiUrl } = punycodeCheck(target)
+
+  const onClick = (ev: any) => {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    if (hasPunycode) {
+      openPunycodeUrlConfirmationDialog(
+        openDialog as OpenDialogFunctionType,
+        hostname,
+        asciiUrl
+      )
+    } else {
+      openExternal(target)
+    }
+  }
+  return (
+    <a
+      href='#'
+      {...{ 'x-target': asciiUrl }}
+      title={asciiUrl}
+      onClick={onClick}
+    >
+      {target}
+    </a>
+  )
+}
+
+function openPunycodeUrlConfirmationDialog(
+  openDialog: OpenDialogFunctionType,
+  hostname: string,
+  asciiUrl: string
+) {
+  openDialog(({ isOpen, onClose }) => {
+    const tx = window.static_translate
+    return (
+      <SmallDialog isOpen={isOpen} onClose={onClose}>
+        <div className='bp3-dialog-body-with-padding'>
+          <div
+            style={{
+              fontSize: '1.5em',
+              fontWeight: 'lighter',
+              marginBottom: '6px',
+            }}
+          >
+            ⚠ Suspicious Link detected
+          </div>
+          <p>
+            Are you sure you want to visit <b>{hostname}</b>?
+          </p>
+          <hr />
+          <p>
+            You clicked on a Link that contains punycode characters, that look
+            like your normal letters, but they are actually other letters. As
+            this is often used for phishing, this link might be harmfull!
+          </p>
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p className={`delta-button bold primary`} onClick={onClose}>
+                {tx('no')}
+              </p>
+              <p
+                className={`delta-button bold primary`}
+                onClick={() => {
+                  onClose()
+                  openExternal(asciiUrl)
                 }}
               >
                 {tx('open')}

@@ -5,10 +5,12 @@
 ### Fixed
 - show right default background for theme in background preview in settings
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
+- Fix copy of labeled links
 
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
+- Add warn dialog for urls containing punycode
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)

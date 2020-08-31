@@ -1,6 +1,6 @@
 import React from 'react'
 import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
-import { LabeledLink, punycodeCheck } from './LabeledLink'
+import { LabeledLink, punycodeCheck, Link } from './Link'
 const { openExternal } = window.electron_functions
 
 const ignoreCapture = function () {
@@ -84,24 +84,8 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       parse: function (capture: any[], _recurseParse: any, _state: any) {
         return { content: capture[1] }
       },
-      react: function (node: any, _output: any, state: any) {
-        const onClick = (ev: any) => {
-          ev.preventDefault()
-          const { hostname, hasPunycode } = punycodeCheck(node.content)
-          if (hasPunycode) {
-            confirm(
-              `You clicked on a Link that contains punycode chars, this link might be harmfull!\n` +
-                `Are you sure you want to visit ${hostname}?`
-            ) && openExternal(node.content)
-          } else {
-            openExternal(node.content)
-          }
-        }
-        return (
-          <a href={node.content} key={state.key} onClick={onClick}>
-            {node.content}
-          </a>
-        )
+      react: function(node: any, output: any, state: any) {
+        return <Link target={node.content} key={state.key} />
       },
     },
     newlinePlus: {
