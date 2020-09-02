@@ -124,8 +124,8 @@ export default class DCLoginController extends SplitOut {
     const newAccountPath = getNewAccountPath()
     await this.login(newAccountPath, credentials)
     const logins = await this.getLogins()
-    
-    return logins.find((account) => account.path === newAccountPath)
+
+    return logins.find(account => account.path === newAccountPath)
   }
 
   close() {

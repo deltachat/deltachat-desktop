@@ -348,7 +348,6 @@ export function ConfigureProgressDialog({
     setConfigureFailed(true)
 
   useEffect(() => {
-    
     ;(async () => {
       if (mode === 'update') {
         DeltaBackend.call('login.updateCredentials', credentials)
@@ -366,7 +365,6 @@ export function ConfigureProgressDialog({
         if (account !== null) onConfigureSuccessful(account)
       }
     })()
-
 
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)

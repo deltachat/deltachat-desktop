@@ -81,7 +81,10 @@ export default async function processOpenQrUrl(
         }
 
         const onSuccess = (account: DeltaChatAccount) => {
-          console.log('Successfully created new account: ', JSON.stringify(account))
+          console.log(
+            'Successfully created new account: ',
+            JSON.stringify(account)
+          )
           window.__loadAccount(account)
           callback()
         }
