@@ -168,7 +168,7 @@ export default function SettingsAutodelete(props: any) {
 
   return (
     <>
-      <H5>{tx('autodel_title')}</H5>
+      <H5>{tx('delete_old_messages')}</H5>
       <SettingsSelector
         onClick={onOpenDialog.bind(this, false)}
         currentValue={durationToString(settings['delete_device_after'])}
