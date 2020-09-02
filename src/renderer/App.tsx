@@ -24,6 +24,7 @@ attachKeybindingsListener()
 // This export is just used to activate the theme manager for now
 export const theme_manager = ThemeManager
 
+
 export default function App(props: any) {
   const [state, setState] = useState<AppState>(getDefaultState())
 

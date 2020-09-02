@@ -120,8 +120,12 @@ export default class DCLoginController extends SplitOut {
       this._controller._sendStateToRenderer()
   }
 
-  async newLogin(credentials: Credentials) {
-    await this.login(getNewAccountPath(), credentials)
+  async newLogin(credentials: Credentials): Promise<DeltaChatAccount> {
+    const newAccountPath = getNewAccountPath()
+    await this.login(newAccountPath, credentials)
+    const logins = await this.getLogins()
+    
+    return logins.find((account) => account.path === newAccountPath)
   }
 
   close() {
