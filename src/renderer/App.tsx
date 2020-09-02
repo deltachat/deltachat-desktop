@@ -25,7 +25,7 @@ attachKeybindingsListener()
 export const theme_manager = ThemeManager
 
 export default function App(props: any) {
-  const [state, setState] = useState<AppState>(getDefaultState())
+  const [state, setState] = useState<AppState>(null)
 
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
   const [account, setAccount] = useState<DeltaChatAccount>(null)
@@ -107,7 +107,7 @@ export default function App(props: any) {
     }
   }, [localeData])
 
-  if (!localeData) return null
+  if (!localeData || !state) return null
   return (
     <CrashScreen>
       <SettingsContextWrapper account={account}>
