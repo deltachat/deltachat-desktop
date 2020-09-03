@@ -104,7 +104,8 @@
     "tempy": "^0.3.0",
     "url-parse": "^1.4.7",
     "use-debounce": "^3.3.0",
-    "wolfy87-eventemitter": "^5.2.9"
+    "wolfy87-eventemitter": "^5.2.9",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -131,7 +132,6 @@
     "electron-react-devtools": "^0.5.3",
     "glob-watcher": "^5.0.1",
     "hallmark": "^2.0.0",
-    "node-fetch": "^2.6.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "pngjs": "^3.3.3",

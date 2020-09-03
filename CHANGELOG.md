@@ -10,7 +10,7 @@
 
 - Fix network errors not shown on failed login
 - Fix crash on settings after first login
-
+- Make sure login screen doesn't flash on slow devices
 
 ## [1.13.0-rc1] - 2020-08-13
 
