@@ -80,7 +80,7 @@ export default function App(props: any) {
       )
 
       if (lastLoggedInAccount) loadAccount(lastLoggedInAccount)
-      
+
       setState(state)
     })()
   }, [])
