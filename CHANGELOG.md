@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Update deltachat-node to v1.45.0
+- run npm audit fix
+
 ## [1.13.0-rc1] - 2020-08-13
 
 ### Changed
