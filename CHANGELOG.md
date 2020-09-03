@@ -7,6 +7,10 @@
 - Update deltachat-node to v1.45.0
 - run npm audit fix
 
+### Fixed
+
+- Make sure login screen doesn't flash on slow devices
+
 ## [1.13.0-rc1] - 2020-08-13
 
 ### Changed
