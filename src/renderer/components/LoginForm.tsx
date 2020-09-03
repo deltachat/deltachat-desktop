@@ -19,7 +19,7 @@ import {
   DeltaDialogContent,
   DeltaDialogFooter,
 } from './dialogs/DeltaDialog'
-import { Credentials } from '../../shared/shared-types'
+import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import { isValidEmail } from '../../shared/util'
@@ -337,9 +337,9 @@ export function ConfigureProgressDialog({
     onClose()
   }
 
-  const onConfigureSuccessful = () => {
+  const onConfigureSuccessful = (account: DeltaChatAccount) => {
     onClose()
-    onSuccess && onSuccess()
+    onSuccess && onSuccess(account)
   }
   const onConfigureError = (_: null, [data1, data2]: [null, string]) =>
     setError(data2)
@@ -352,19 +352,21 @@ export function ConfigureProgressDialog({
       if (mode === 'update') {
         DeltaBackend.call('login.updateCredentials', credentials)
       } else {
+        let account: DeltaChatAccount = null
         try {
-          await DeltaBackend.call('login.newLogin', credentials)
+          account = await DeltaBackend.call('login.newLogin', credentials)
         } catch (err) {
           if (err) {
             onConfigureError(null, [null, err])
             onConfigureFailed(null, [null, null])
           }
+          return
         }
+        if (account !== null) onConfigureSuccessful(account)
       }
     })()
 
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
-    ipcBackend.on('DCN_EVENT_CONFIGURE_SUCCESSFUL', onConfigureSuccessful)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
     ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureError)
@@ -372,10 +374,6 @@ export function ConfigureProgressDialog({
       ipcBackend.removeListener(
         'DC_EVENT_CONFIGURE_PROGRESS',
         onConfigureProgress
-      )
-      ipcBackend.removeListener(
-        'DCN_EVENT_CONFIGURE_SUCCESSFUL',
-        onConfigureSuccessful
       )
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
       ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
