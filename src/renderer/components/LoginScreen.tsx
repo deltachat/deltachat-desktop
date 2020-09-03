@@ -199,6 +199,8 @@ export default function LoginScreen({
     })
   }
 
+  if (logins === null) return null
+
   return (
     <div className='login-screen'>
       <div className='window'>

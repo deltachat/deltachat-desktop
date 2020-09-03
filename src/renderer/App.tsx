@@ -75,12 +75,13 @@ export default function App(props: any) {
     ;(async () => {
       const state = await DeltaBackend.call('getState')
       await reloadLocaleData(state.saved.locale)
-      setState(state)
       const lastLoggedInAccount: DeltaChatAccount = await DeltaBackend.call(
         'login.getLastLoggedInAccount'
       )
-      if (!lastLoggedInAccount) return
-      loadAccount(lastLoggedInAccount)
+
+      if (lastLoggedInAccount) loadAccount(lastLoggedInAccount)
+      
+      setState(state)
     })()
   }, [])
 
