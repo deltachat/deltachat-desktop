@@ -3,6 +3,7 @@ import { sendToBackend } from '../../ipc'
 import { openMapDialog } from './ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens } from '../../ScreenController'
+import { DeltaChatAccount } from '../../../shared/shared-types'
 
 interface QrStates {
   [key: number]: string
@@ -79,8 +80,8 @@ export default async function processOpenQrUrl(
           mail_pw: burnerAccount.password,
         }
 
-        const onSuccess = () => {
-          window.__changeScreen(Screens.Main)
+        const onSuccess = (account: DeltaChatAccount) => {
+          window.__loadAccount(account)
           callback()
         }
         window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess })

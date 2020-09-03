@@ -7,6 +7,7 @@ import {
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
 import { userFeedback, Screens } from './ScreenController'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 declare global {
   interface Window {
@@ -28,6 +29,7 @@ declare global {
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType
     __changeScreen: (screen: Screens) => {}
+    __loadAccount: (account: DeltaChatAccount) => {}
     __screen: Screens
   }
 }
