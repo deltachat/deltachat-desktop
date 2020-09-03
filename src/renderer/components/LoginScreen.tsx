@@ -180,7 +180,9 @@ export default function LoginScreen({
   }, [])
 
   const onClickLogin = () => {
-    const onSuccess = () => changeScreen(Screens.Main)
+    const onSuccess = (account: DeltaChatAccount) => {
+      loadAccount(account)
+    }
     openDialog(ConfigureProgressDialog, { credentials, onSuccess })
   }
 

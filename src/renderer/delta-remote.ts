@@ -190,7 +190,10 @@ class DeltaRemote {
     timestampTo: number
   ): Promise<JsonLocations>
   // login ----------------------------------------------------
-  call(fnName: 'login.newLogin', credentials: Credentials): Promise<void>
+  call(
+    fnName: 'login.newLogin',
+    credentials: Credentials
+  ): Promise<DeltaChatAccount>
   call(fnName: 'login.getLogins'): Promise<any>
   call(fnName: 'login.loadAccount', login: DeltaChatAccount): Promise<boolean>
   call(fnName: 'login.logout'): Promise<void>
