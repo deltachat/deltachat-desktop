@@ -1,6 +1,8 @@
 import React from 'react'
 import { runtime } from '../runtime'
 import { VERSION, GIT_REF } from '../../shared/build-info'
+import { getLogger } from '../../shared/logger'
+const log = getLogger('renderer/react-crashhandler')
 export class CrashScreen extends React.Component {
   state = {
     hasError: false,
@@ -8,6 +10,7 @@ export class CrashScreen extends React.Component {
   }
 
   componentDidCatch(error: any) {
+    log.error('The app encountered an react error', error)
     this.setState({
       hasError: true,
       error: this.errorToText(error),
