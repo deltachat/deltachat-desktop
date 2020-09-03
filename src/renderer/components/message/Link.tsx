@@ -32,9 +32,10 @@ function isDomainTrusted(domain: string): boolean {
   return getTrustedDomains().includes(domain)
 }
 
-export function punycodeCheck(url: string) {
+function punycodeCheck(url: string) {
   const URL = UrlParser(url)
   // encode the punycode to make phishing harder
+  const originalHostname = URL.hostname
   URL.set(
     'hostname',
     URL.hostname
@@ -44,7 +45,8 @@ export function punycodeCheck(url: string) {
   )
   return {
     asciiUrl: URL.toString(),
-    hostname: URL.hostname,
+    originalHostname,
+    asciiHostname: URL.hostname,
     hasPunycode: URL.toString() != url,
   }
 }
@@ -160,7 +162,12 @@ function labeledLinkConfirmationDialog(
 export const Link = ({ target }: { target: string }) => {
   const { openDialog } = useContext(ScreenContext)
 
-  const { hostname, hasPunycode, asciiUrl } = punycodeCheck(target)
+  const {
+    originalHostname,
+    asciiHostname,
+    hasPunycode,
+    asciiUrl,
+  } = punycodeCheck(target)
 
   const onClick = (ev: any) => {
     ev.preventDefault()
@@ -169,7 +176,8 @@ export const Link = ({ target }: { target: string }) => {
     if (hasPunycode) {
       openPunycodeUrlConfirmationDialog(
         openDialog as OpenDialogFunctionType,
-        hostname,
+        originalHostname,
+        asciiHostname,
         asciiUrl
       )
     } else {
@@ -190,7 +198,8 @@ export const Link = ({ target }: { target: string }) => {
 
 function openPunycodeUrlConfirmationDialog(
   openDialog: OpenDialogFunctionType,
-  hostname: string,
+  originalHostname: string,
+  asciiHostname: string,
   asciiUrl: string
 ) {
   openDialog(({ isOpen, onClose }) => {
@@ -208,13 +217,15 @@ function openPunycodeUrlConfirmationDialog(
             ⚠ Suspicious Link detected
           </div>
           <p>
-            Are you sure you want to visit <b>{hostname}</b>?
+            Are you sure you want to visit <b>{asciiHostname}</b>?
           </p>
           <hr />
           <p>
-            You clicked on a Link that contains punycode characters, that look
-            like your normal letters, but they are actually other letters. As
-            this is often used for phishing, this link might be harmfull!
+            You followed a link which could be misrepresenting characters by
+            using similarly looking ones from different alphabets. Following the
+            link labelled <b>{originalHostname}</b> will lead to{' '}
+            <b>{asciiHostname}</b> which is normal for non-Latin characters. If
+            you did not expect such characters this link could be harmful.
           </p>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
