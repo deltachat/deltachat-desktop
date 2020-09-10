@@ -4,39 +4,25 @@ import { openMapDialog } from './ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens } from '../../ScreenController'
 import { DeltaChatAccount } from '../../../shared/shared-types'
+import { C } from 'deltachat-node'
+import { DCInfo } from '../dialogs/About'
 
-interface QrStates {
-  [key: number]: string
+
+export enum QrState {
+  AskVerifyContact = C.DC_QR_ASK_VERIFYCONTACT,
+  AskVerifyGroup = C.DC_QR_ASK_VERIFYGROUP,
+  FprOk = C.DC_QR_FPR_OK,
+  FprMissmatch = C.DC_QR_FPR_MISMATCH,
+  QrFprWithoutAddr = C.DC_QR_FPR_WITHOUT_ADDR,
+  Account = C.DC_QR_ACCOUNT,
+  Addr = C.DC_QR_ADDR,
+  Text = C.DC_QR_TEXT,
+  Url = C.DC_QR_URL,
+  Error = C.DC_QR_ERROR,
 }
-
-export const qrStates: QrStates = {
-  200: 'QrAskVerifyContact', // id = contact
-  202: 'QrAskVerifyGroup', // text1=groupname
-  210: 'QrFprOk', // finger print ok for id=contact
-  220: 'QrFprMissmatch', // finger print not ok for id=contact
-  230: 'QrFprWithoutAddr',
-  250: 'QrAccount', // text1=domain
-  320: 'QrAddr', // id=contact
-  330: 'QrText', // text1=text
-  332: 'QrUrl', // text1=URL
-  400: 'QrError', // text1=error string
-}
-
-const OPENPGP4FPR_SCHEME = 'OPENPGP4FPR' // yes: uppercase
-const DCACCOUNT_SCHEME = 'DCACCOUNT'
-const MAILTO_SCHEME = 'mailto'
-const MATMSG_SCHEME = 'MATMSG'
-const VCARD_SCHEME = 'BEGIN:VCARD'
-const SMTP_SCHEME = 'SMTP'
-const HTTP_SCHEME = 'http'
-const HTTPS_SCHEME = 'https'
-
-const UrlSchemesAccountRequired = [OPENPGP4FPR_SCHEME]
-
-const UrlSchemesLogoutRequired = [DCACCOUNT_SCHEME]
 
 export declare type QrCodeResponse = {
-  state: keyof QrStates
+  state: QrState
   id: number
   text1: string
 }
@@ -46,29 +32,36 @@ export default async function processOpenQrUrl(
   callback: any = null
 ) {
   const tx = window.static_translate
-  let error = false
-  const scheme = url.substring(0, url.lastIndexOf(':'))
 
   const screen = window.__screen
 
-  if (
-    UrlSchemesAccountRequired.includes(scheme.toUpperCase()) &&
-    screen !== Screens.Main
+
+  const checkQr: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
+  console.log(checkQr)
+  if (checkQr === null || checkQr.state === QrState.Error || checkQr.state === QrState.Text) {
+    window.__openDialog('AlertDialog', {
+      message: checkQr.text1 ? checkQr.text1 : tx('import_qr_error'),
+      cb: callback,
+    })
+    return
+  }
+
+  if (checkQr.state !== QrState.Account && screen !== Screens.Main
   ) {
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
       cb: callback,
     })
     return
+  } else if (checkQr.state === QrState.Account && screen !== Screens.Login) {
+    window.__openDialog('AlertDialog', {
+      message: tx('Please logout first'),
+      cb: callback,
+    })
+    return
   }
-  if (url.indexOf(DCACCOUNT_SCHEME) === 0) {
-    if (screen !== Screens.Login) {
-      window.__openDialog('AlertDialog', {
-        message: tx('Please logout first'),
-        cb: callback,
-      })
-      return
-    }
+
+  if (checkQr.state === QrState.Account) {
     try {
       const burnerAccount = await DeltaBackend.call(
         'burnerAccounts.create',
@@ -94,28 +87,14 @@ export default async function processOpenQrUrl(
       }
     } catch (err) {
       window.__openDialog('AlertDialog', {
-        message: tx('import_qr_error'),
+        message: tx('import_qr_error') + ' ' + err,
         cb: callback,
       })
       return
     }
     return
-  }
-  const response: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
-  if (response === null) {
-    error = true
-  }
-  const state = response ? qrStates[response.state] : null
-  if (error || state === 'QrError' || state === 'QrText') {
-    window.__openDialog('AlertDialog', {
-      message: tx('import_qr_error'),
-      cb: callback,
-    })
-    return
-  }
-
-  if (state === 'QrAskVerifyContact') {
-    const contact = await DeltaBackend.call('contacts.getContact', response.id)
+  } else if (checkQr.state ===  QrState.AskVerifyContact) {
+    const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
@@ -125,9 +104,9 @@ export default async function processOpenQrUrl(
         }
       },
     })
-  } else if (state === 'QrAskVerifyGroup') {
+  } else if (checkQr.state === QrState.AskVerifyGroup) {
     window.__openDialog('ConfirmationDialog', {
-      message: tx('qrscan_ask_join_group', response.text1),
+      message: tx('qrscan_ask_join_group', checkQr.text1),
       confirmLabel: tx('ok'),
       cb: (confirmed: boolean) => {
         if (confirmed) {
@@ -136,8 +115,8 @@ export default async function processOpenQrUrl(
         return
       },
     })
-  } else if (state === 'QrFprOk') {
-    const contact = await DeltaBackend.call('contacts.getContact', response.id)
+  } else if (checkQr.state === QrState.FprOk) {
+    const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),

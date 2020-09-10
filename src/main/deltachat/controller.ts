@@ -24,6 +24,8 @@ import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
 import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import { LocaleData } from '../../shared/localize'
+import tempy from 'tempy'
+import path from 'path'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -293,7 +295,17 @@ export default class DeltaChatController extends EventEmitter {
     }
   }
 
-  checkQrCode(qrCode: string) {
+  async checkQrCode(qrCode: string) {
+    if(!this._dc) {
+      const dc = new DeltaChat()
+      this.registerEventHandler(dc)
+      await dc.open(tempy.directory())
+      const state = dc.checkQrCode(qrCode)
+      this.unregisterEventHandler(dc)
+      dc.close()
+      return state
+    }
+    console.log(this._dc)
     return this._dc.checkQrCode(qrCode)
   }
 
