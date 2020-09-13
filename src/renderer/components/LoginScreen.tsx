@@ -190,7 +190,7 @@ export default function LoginScreen({
     const message = tx('forget_login_confirmation_desktop')
     openDialog('ConfirmationDialog', {
       message,
-      confirmLabel: tx('remove_account'),
+      confirmLabel: tx('delete_account'),
       isConfirmDanger: true,
       cb: async (yes: boolean) => {
         if (yes) {
