@@ -14,6 +14,7 @@
 - Fix crash on settings after first login
 - Make sure login screen doesn't flash on slow devices
 - Fix logging of react crashes.
+- Fix scanning qr code and general improvement of the whole process
 
 ## [1.13.0-rc1] - 2020-08-13
 
