@@ -139,49 +139,15 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
     setProcessingQrCode(false)
   }
 
-  const handleResponse = async (scannedQrCode: string) => {
-    setProcessingQrCode(true)
-    openDialog((props: DialogProps) => {
-      const { isOpen } = props
-      const onCloseProcessDialog = props.onClose
-
-      const handleScanResult = (chatId: number = null) => {
-        chatId && selectChat(chatId)
-        onCloseProcessDialog()
-        onDone()
-      }
-
-      const onCancel = () => {
-        DeltaBackend.call('stopOngoingProcess')
-        onCloseProcessDialog()
-      }
-
-      useEffect(() => {
-        processOpenQrUrl(scannedQrCode, handleScanResult)
-      }, [])
-      return (
-        <SmallDialog isOpen={isOpen} onClose={onClose}>
-          <DeltaDialogBody>
-            <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
-              <Spinner />
-            </DeltaDialogContent>
-          </DeltaDialogBody>
-          <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
-            <DeltaDialogFooterActions>
-              <p className='delta-button bold primary' onClick={onCancel}>
-                {tx('cancel')}
-              </p>
-            </DeltaDialogFooterActions>
-          </DeltaDialogFooter>
-        </SmallDialog>
-      )
-    })
+  const handleScanResult = (chatId: number = null) => {
+    chatId && selectChat(chatId)
+    onDone()
   }
 
   const qrImageReader = useRef<any>()
 
   const handleScan = (data: string) => {
-    data && !processingQrCode && handleResponse(data)
+    data && !processingQrCode && processOpenQrUrl(data, handleScanResult)
   }
 
   const handleError = (err: string) => {

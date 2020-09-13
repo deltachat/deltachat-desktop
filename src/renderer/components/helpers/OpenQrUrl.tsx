@@ -1,3 +1,4 @@
+import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { sendToBackend } from '../../ipc'
 import { openMapDialog } from './ChatMethods'
@@ -8,7 +9,44 @@ import { C } from 'deltachat-node'
 import { DCInfo } from '../dialogs/About'
 import { QrState } from '../../../shared/constants'
 import { QrCodeResponse } from '../../../shared/shared-types' 
+import { useTranslationFunction } from '../../contexts'
+import {
+  DeltaDialogBase,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+  DeltaDialogBody,
+  DeltaDialogContent,
+  SmallDialog,
+} from '../dialogs/DeltaDialog'
+import { Spinner } from '@blueprintjs/core'
+import { DialogProps } from '../dialogs/DialogController'
 
+export function ProcessQrCodeDialog({onCancel: _onCancel, onClose, isOpen}: DialogProps) {
+  const tx = useTranslationFunction()
+
+  const onCancel = () => {
+    DeltaBackend.call('stopOngoingProcess')
+    _onCancel && _onCancel()
+    onClose()
+  }
+
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <DeltaDialogBody>
+        <DeltaDialogContent style={{ height: '80px', padding: '20px' }}>
+          <Spinner />
+        </DeltaDialogContent>
+      </DeltaDialogBody>
+      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
+        <DeltaDialogFooterActions>
+          <p className='delta-button bold primary' onClick={onCancel}>
+            {tx('cancel')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </SmallDialog>
+  )
+}
 
 export default async function processOpenQrUrl(
   url: string,
@@ -18,10 +56,14 @@ export default async function processOpenQrUrl(
 
   const screen = window.__screen
 
-
+  const processDialogId = window.__openDialog(ProcessQrCodeDialog)
+  console.log('processDialogId is :', processDialogId)
   const checkQr: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
-  console.log(checkQr)
+
+  const closeProcessDialog = () => window.__closeDialog(processDialogId)
+
   if (checkQr === null || checkQr.state === QrState.Error || checkQr.state === QrState.Text) {
+    closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: checkQr.text1 ? checkQr.text1 : tx('import_qr_error'),
       cb: callback,
@@ -31,12 +73,14 @@ export default async function processOpenQrUrl(
 
   if (checkQr.state !== QrState.Account && screen !== Screens.Main
   ) {
+    closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
       cb: callback,
     })
     return
   } else if (checkQr.state === QrState.Account && screen !== Screens.Login) {
+    closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please logout first'),
       cb: callback,
@@ -60,8 +104,10 @@ export default async function processOpenQrUrl(
           window.__loadAccount(account)
           callback()
         }
+        closeProcessDialog()
         window.__openDialog(ConfigureProgressDialog, { credentials, onSuccess })
       } else {
+        closeProcessDialog()
         window.__openDialog('AlertDialog', {
           message: tx('qraccount_qr_code_cannot_be_used'),
           cb: callback,
@@ -69,6 +115,7 @@ export default async function processOpenQrUrl(
         return
       }
     } catch (err) {
+      closeProcessDialog()
       window.__openDialog('AlertDialog', {
         message: tx('import_qr_error') + ' ' + err,
         cb: callback,
@@ -78,6 +125,7 @@ export default async function processOpenQrUrl(
     return
   } else if (checkQr.state ===  QrState.AskVerifyContact) {
     const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
+    closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: tx('ask_start_chat_with', contact.address),
       confirmLabel: tx('ok'),
@@ -88,6 +136,7 @@ export default async function processOpenQrUrl(
       },
     })
   } else if (checkQr.state === QrState.AskVerifyGroup) {
+    closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: tx('qrscan_ask_join_group', checkQr.text1),
       confirmLabel: tx('ok'),
@@ -100,12 +149,14 @@ export default async function processOpenQrUrl(
     })
   } else if (checkQr.state === QrState.FprOk) {
     const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
+    closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
       message: `The fingerprint of ${contact.displayName} is valid!`,
       confirmLabel: tx('ok'),
       cb: callback,
     })
   } else {
+    closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: "Don't know what to do with this URL :/" + url,
       cb: callback,
