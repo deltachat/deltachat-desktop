@@ -1,3 +1,5 @@
+import { C } from 'deltachat-node'
+
 export const appName = 'DeltaChat'
 export const homePageUrl = 'https://delta.chat'
 export const gitHubUrl = 'https://github.com/deltachat/deltachat-desktop'
@@ -38,3 +40,16 @@ export const enum AutodeleteDuration {
 }
 
 export const DAYS_UNTIL_UPDATE_SUGGESTION = 90
+
+export enum QrState {
+  AskVerifyContact = C.DC_QR_ASK_VERIFYCONTACT,
+  AskVerifyGroup = C.DC_QR_ASK_VERIFYGROUP,
+  FprOk = C.DC_QR_FPR_OK,
+  FprMissmatch = C.DC_QR_FPR_MISMATCH,
+  QrFprWithoutAddr = C.DC_QR_FPR_WITHOUT_ADDR,
+  Account = C.DC_QR_ACCOUNT,
+  Addr = C.DC_QR_ADDR,
+  Text = C.DC_QR_TEXT,
+  Url = C.DC_QR_URL,
+  Error = C.DC_QR_ERROR,
+}

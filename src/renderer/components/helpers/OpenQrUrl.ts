@@ -6,26 +6,9 @@ import { Screens } from '../../ScreenController'
 import { DeltaChatAccount } from '../../../shared/shared-types'
 import { C } from 'deltachat-node'
 import { DCInfo } from '../dialogs/About'
+import { QrState } from '../../../shared/constants'
+import { QrCodeResponse } from '../../../shared/shared-types' 
 
-
-export enum QrState {
-  AskVerifyContact = C.DC_QR_ASK_VERIFYCONTACT,
-  AskVerifyGroup = C.DC_QR_ASK_VERIFYGROUP,
-  FprOk = C.DC_QR_FPR_OK,
-  FprMissmatch = C.DC_QR_FPR_MISMATCH,
-  QrFprWithoutAddr = C.DC_QR_FPR_WITHOUT_ADDR,
-  Account = C.DC_QR_ACCOUNT,
-  Addr = C.DC_QR_ADDR,
-  Text = C.DC_QR_TEXT,
-  Url = C.DC_QR_URL,
-  Error = C.DC_QR_ERROR,
-}
-
-export declare type QrCodeResponse = {
-  state: QrState
-  id: number
-  text1: string
-}
 
 export default async function processOpenQrUrl(
   url: string,
