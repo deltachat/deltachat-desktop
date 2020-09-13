@@ -8,7 +8,7 @@ import { DeltaChatAccount } from '../../../shared/shared-types'
 import { C } from 'deltachat-node'
 import { DCInfo } from '../dialogs/About'
 import { QrState } from '../../../shared/constants'
-import { QrCodeResponse } from '../../../shared/shared-types' 
+import { QrCodeResponse } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import {
   DeltaDialogBase,
@@ -21,7 +21,11 @@ import {
 import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
 
-export function ProcessQrCodeDialog({onCancel: _onCancel, onClose, isOpen}: DialogProps) {
+export function ProcessQrCodeDialog({
+  onCancel: _onCancel,
+  onClose,
+  isOpen,
+}: DialogProps) {
   const tx = useTranslationFunction()
 
   const onCancel = () => {
@@ -62,7 +66,11 @@ export default async function processOpenQrUrl(
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
 
-  if (checkQr === null || checkQr.state === QrState.Error || checkQr.state === QrState.Text) {
+  if (
+    checkQr === null ||
+    checkQr.state === QrState.Error ||
+    checkQr.state === QrState.Text
+  ) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: checkQr.text1 ? checkQr.text1 : tx('import_qr_error'),
@@ -71,8 +79,7 @@ export default async function processOpenQrUrl(
     return
   }
 
-  if (checkQr.state !== QrState.Account && screen !== Screens.Main
-  ) {
+  if (checkQr.state !== QrState.Account && screen !== Screens.Main) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
       message: tx('Please login first'),
@@ -123,7 +130,7 @@ export default async function processOpenQrUrl(
       return
     }
     return
-  } else if (checkQr.state ===  QrState.AskVerifyContact) {
+  } else if (checkQr.state === QrState.AskVerifyContact) {
     const contact = await DeltaBackend.call('contacts.getContact', checkQr.id)
     closeProcessDialog()
     window.__openDialog('ConfirmationDialog', {
