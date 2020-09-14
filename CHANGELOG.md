@@ -7,6 +7,7 @@
 - Update deltachat-node to v1.45.0
 - run npm audit fix
 - Overhaul colors of login hint
+- Change "remove account" translation to "delete account"
 
 ### Fixed
 
@@ -15,6 +16,7 @@
 - Make sure login screen doesn't flash on slow devices
 - Fix logging of react crashes.
 - Fix automatically login to last remembered account
+- Fix avatar initials of the text avatars, of people with no displayname, inside of the messagelist
 
 ## [1.13.0-rc1] - 2020-08-13
 

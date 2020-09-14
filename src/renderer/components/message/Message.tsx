@@ -24,24 +24,27 @@ const Avatar = (
   contact: DCContact,
   onContactClick: (contact: DCContact) => void
 ) => {
-  const { profileImage, color, name, address } = contact
+  const { profileImage, color, displayName } = contact
 
-  const alt = `${name || address}`
   const onClick = () => onContactClick(contact)
 
   if (profileImage) {
     return (
       <div className='author-avatar' onClick={onClick}>
-        <img alt={alt} src={profileImage} />
+        <img alt={displayName} src={profileImage} />
       </div>
     )
   } else {
-    const codepoint = name && name.codePointAt(0)
+    const codepoint = displayName && displayName.codePointAt(0)
     const initial = codepoint
       ? String.fromCodePoint(codepoint).toUpperCase()
       : '#'
     return (
-      <div className='author-avatar default' aria-label={alt} onClick={onClick}>
+      <div
+        className='author-avatar default'
+        aria-label={displayName}
+        onClick={onClick}
+      >
         <div style={{ backgroundColor: color }} className='label'>
           {initial}
         </div>
