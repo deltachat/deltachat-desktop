@@ -61,6 +61,7 @@ export default class ScreenController extends Component {
     window.__changeScreen = this.changeScreen.bind(this)
     window.__loadAccount = this.loadAccount.bind(this)
     window.__screen = this.state.screen
+
   }
 
   loadAccount(account: DeltaChatAccount) {
@@ -92,6 +93,7 @@ export default class ScreenController extends Component {
     ipcRenderer.on('open-url', this.onOpenUrl)
 
     ipcRenderer.send('frontendReady')
+    window.dispatchEvent(new Event('frontendReady'))
   }
 
   componentWillUnmount() {

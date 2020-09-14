@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { SettingsContext, i18nContext } from './contexts'
 import ScreenController, { Screens } from './ScreenController'
 import { sendToBackend, ipcBackend, startBackendLogging } from './ipc'
@@ -18,6 +18,7 @@ const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
 import { getDefaultState } from '../shared/state'
+const { ipcRenderer } = window.electron_functions
 
 attachKeybindingsListener()
 
@@ -66,11 +67,15 @@ export default function App(props: any) {
     if (typeof window.__changeScreen === 'function') {
       window.__changeScreen(Screens.Main)
     } else {
-      throw new Error('window.__changeScreen is not a function')
+      console.log('load account: waiting for frontend ready!')
+      window.addEventListener('frontendReady', () => {
+        console.log('frontend ready!')
+        window.__changeScreen(Screens.Main)
+      })
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     startBackendLogging()
     ;(async () => {
       const state = await DeltaBackend.call('getState')
