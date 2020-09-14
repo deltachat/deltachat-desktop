@@ -61,7 +61,6 @@ export default class ScreenController extends Component {
     window.__changeScreen = this.changeScreen.bind(this)
     window.__loadAccount = this.loadAccount.bind(this)
     window.__screen = this.state.screen
-
   }
 
   loadAccount(account: DeltaChatAccount) {
