@@ -1,30 +1,40 @@
 import React from 'react'
-import { SmallDialog } from './DeltaDialog'
+import {
+  SmallDialog,
+  DeltaDialogFooter,
+  DeltaDialogFooterActions,
+} from './DeltaDialog'
+import { useTranslationFunction } from '../../contexts'
 
-export default function AlertDialog(props: todo) {
-  const { message, cb } = props
-
+export default function AlertDialog({
+  message,
+  onClose,
+  cb,
+}: {
+  cb: () => {}
+  message: string
+  onClose: () => {}
+}) {
+  const tx = useTranslationFunction()
   const isOpen = !!message
-  const onClose = () => {
-    props.onClose()
-    // eslint-disable-next-line standard/no-callback-literal
-  }
 
   const onClick = () => {
-    if (cb) {
-      cb()
-    }
-    props.onClose()
+    cb && cb()
+    onClose()
   }
 
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
         <p>{message}</p>
-        <p className={`delta-button bold primary'`} onClick={() => onClick()}>
-          {window.static_translate('ok')}
-        </p>
       </div>
+      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
+        <DeltaDialogFooterActions>
+          <p className='delta-button bold primary' onClick={() => onClick()}>
+            {tx('ok')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
     </SmallDialog>
   )
 }

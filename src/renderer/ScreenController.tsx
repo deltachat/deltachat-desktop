@@ -124,7 +124,7 @@ export default class ScreenController extends Component {
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
-    this.dialogController.current.openDialog(...args)
+    return this.dialogController.current.openDialog(...args)
   }
 
   closeDialog(...args: Parameters<CloseDialogFunctionType>) {
