@@ -67,9 +67,7 @@ export default function App(props: any) {
     if (typeof window.__changeScreen === 'function') {
       window.__changeScreen(Screens.Main)
     } else {
-      console.log('load account: waiting for frontend ready!')
       window.addEventListener('frontendReady', () => {
-        console.log('frontend ready!')
         window.__changeScreen(Screens.Main)
       })
     }
