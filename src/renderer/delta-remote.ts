@@ -49,7 +49,7 @@ class DeltaRemote {
     fnName: 'autocrypt.continueKeyTransfer',
     messageId: number,
     key: string
-  ): Promise<number>
+  ): Promise<boolean>
   // backup -------------------------------------------------------------
   call(fnName: 'backup.export', dir: string): Promise<void>
   call(fnName: 'backup.import', file: string): Promise<DeltaChatAccount>

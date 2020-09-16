@@ -107,6 +107,8 @@ export default class ScreenController extends Component {
   onError(_event: any, [data1, data2]: [string | number, string]) {
     if (this.state.screen === Screens.Login) return
     if (data1 === 0) data1 = ''
+    console.log(data1, data2)
+    if (data2 === 'dc_continue_key_transfer: "invalid symmetric key algorithm"') return
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
   }
