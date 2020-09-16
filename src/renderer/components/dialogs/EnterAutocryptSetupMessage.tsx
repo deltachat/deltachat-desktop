@@ -129,7 +129,7 @@ export default function EnterAutocryptSetupMessage({
       <div className={Classes.DIALOG_BODY}>
         <Card>
           <Callout>
-            <Spinner />   
+            <Spinner />
           </Callout>
         </Card>
       </div>

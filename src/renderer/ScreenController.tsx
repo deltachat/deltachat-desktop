@@ -108,7 +108,9 @@ export default class ScreenController extends Component {
     if (this.state.screen === Screens.Login) return
     if (data1 === 0) data1 = ''
     console.log(data1, data2)
-    if (data2 === 'dc_continue_key_transfer: "invalid symmetric key algorithm"') return
+    // Can get removed as soon as we use a rust core including this fix: https://github.com/deltachat/deltachat-core-rust/pull/1911
+    if (data2 === 'dc_continue_key_transfer: "invalid symmetric key algorithm"')
+      return
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
   }
