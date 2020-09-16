@@ -61,7 +61,6 @@ export default async function processOpenQrUrl(
   const screen = window.__screen
 
   const processDialogId = window.__openDialog(ProcessQrCodeDialog)
-  console.log('processDialogId is :', processDialogId)
   const checkQr: QrCodeResponse = await DeltaBackend.call('checkQrCode', url)
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
