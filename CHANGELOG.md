@@ -16,6 +16,7 @@
 - Make sure login screen doesn't flash on slow devices
 - Fix logging of react crashes.
 - Fix automatically login to last remembered account
+- Fix scanning qr code and general improvement of the whole process
 - Fix avatar initials of the text avatars, of people with no displayname, inside of the messagelist
 
 ## [1.13.0-rc1] - 2020-08-13
