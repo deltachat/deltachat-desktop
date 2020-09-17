@@ -183,12 +183,9 @@ export default function ChatList(props: {
     scrollSelectedChatIntoView()
   }, [selectedChatId])
   // follow chat after loading or when it's position in the chatlist changes
-  const findChatIndexFunction = function(entry: [number, number]) {
-    return entry && entry[0] === selectedChatId
-  }
-
-  console.log(chatListIds, findChatIndexFunction, selectedChatId)
-  const selectedChatIndex = chatListIds.findIndex(findChatIndexFunction)
+  const selectedChatIndex = chatListIds.findIndex(
+    ([chatId, _messageId]) => chatId === selectedChatId
+  )
   useEffect(() => {
     !isSearchActive && scrollSelectedChatIntoView()
   }, [selectedChatIndex])
@@ -200,21 +197,27 @@ export default function ChatList(props: {
     scrollSelectedChatIntoView()
   )
 
-  // useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
-  //   if (selectedChatId === null) return selectFirstChat()
-  //   const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
-  //   if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-  //     selectChat(newChatId)
-  //   }
-  // })
+  useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
+    if (selectedChatId === null) return selectFirstChat()
+    const selectedChatIndex = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
+    const [newChatId, _] = chatListIds[selectedChatIndex + 1] || []
+    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+      selectChat(newChatId)
+    }
+  })
 
-  // useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
-  //   if (selectedChatId === null) return selectFirstChat()
-  //   const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) - 1]
-  //   if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-  //     selectChat(newChatId)
-  //   }
-  // })
+  useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
+    if (selectedChatId === null) return selectFirstChat()
+    const selectedChatIndex = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
+    const [newChatId, _] = chatListIds[selectedChatIndex - 1] || []
+    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+      selectChat(newChatId)
+    }
+  })
 
   useKeyBindingAction(KeybindAction.ChatList_SelectFirstChat, () =>
     selectFirstChat()
