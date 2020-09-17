@@ -105,7 +105,6 @@ export default function EnterAutocryptSetupMessage({
       message.msg.id,
       key
     )
-    console.log(result)
     setLoading(false)
 
     if (result === false) {
