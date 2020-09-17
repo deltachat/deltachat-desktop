@@ -63,13 +63,13 @@ export default class DCChatList extends SplitOut {
     ...args: Parameters<typeof DeltaChat.prototype.getChatList>
   ) {
     const chatList = this._dc.getChatList(...args)
-    const chatListJson = []
+    const chatListJson:[number, number][] = []
     for (let counter = 0; counter < chatList.getCount(); counter++) {
       const chatId = await chatList.getChatId(counter)
       const messageId = await chatList.getMessageId(counter)
       chatListJson.push([chatId, messageId])
     }
-    return chatListJson as [number, number][]
+    return chatListJson
   }
 
   async _getChatList(
@@ -78,6 +78,7 @@ export default class DCChatList extends SplitOut {
     return this._dc.getChatList(...args)
   }
 
+  /** @deprecated */
   async getListAndIndexForChatId(chatId: number): Promise<[ChatList, number]> {
     let list = await this._getChatList(0, '', 0)
     let i = await findIndexOfChatIdInChatList(list, chatId)
@@ -89,6 +90,7 @@ export default class DCChatList extends SplitOut {
     return [list, i]
   }
 
+  /** @deprecated */
   async getChatListItemsByIds(chatIds: number[]) {
     const label = '[BENCH] getChatListItemByIds'
     console.time(label)

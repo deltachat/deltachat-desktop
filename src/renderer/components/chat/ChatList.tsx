@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import { useChatListIds, useMessageResults } from './ChatListHelpers'
+import { useMessageResults, useChatList } from './ChatListHelpers'
 import ChatListItem, {
   ChatListItemMessageResult,
   PlaceholderChatListItem,
@@ -170,7 +170,9 @@ export default function ChatList(props: {
   const [scrollToChatIndex, setScrollToChatIndex] = useState<number>(-1)
 
   const scrollSelectedChatIntoView = () => {
-    const index = chatListIds.indexOf(selectedChatId)
+    const index = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
     if (index !== -1) {
       setScrollToChatIndex(index)
       setTimeout(() => setScrollToChatIndex(-1), 0)
@@ -181,32 +183,38 @@ export default function ChatList(props: {
     scrollSelectedChatIntoView()
   }, [selectedChatId])
   // follow chat after loading or when it's position in the chatlist changes
+  const findChatIndexFunction = function(entry: [number, number]) {
+    return entry && entry[0] === selectedChatId
+  }
+
+  console.log(chatListIds, findChatIndexFunction, selectedChatId)
+  const selectedChatIndex = chatListIds.findIndex(findChatIndexFunction)
   useEffect(() => {
     !isSearchActive && scrollSelectedChatIntoView()
-  }, [chatListIds.indexOf(selectedChatId)])
+  }, [selectedChatIndex])
 
-  const selectFirstChat = () => selectChat(chatListIds[0])
+  const selectFirstChat = () => selectChat(chatListIds[0][0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
     scrollSelectedChatIntoView()
   )
 
-  useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
-    if (selectedChatId === null) return selectFirstChat()
-    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
-    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(newChatId)
-    }
-  })
+  // useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
+  //   if (selectedChatId === null) return selectFirstChat()
+  //   const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
+  //   if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+  //     selectChat(newChatId)
+  //   }
+  // })
 
-  useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
-    if (selectedChatId === null) return selectFirstChat()
-    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) - 1]
-    if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
-      selectChat(newChatId)
-    }
-  })
+  // useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
+  //   if (selectedChatId === null) return selectFirstChat()
+  //   const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) - 1]
+  //   if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
+  //     selectChat(newChatId)
+  //   }
+  // })
 
   useKeyBindingAction(KeybindAction.ChatList_SelectFirstChat, () =>
     selectFirstChat()
@@ -233,7 +241,7 @@ export default function ChatList(props: {
                 scrollToIndex={scrollToChatIndex}
               >
                 {({ index, key, style }) => {
-                  const chatId = chatListIds[index]
+                  const [chatId] = chatListIds[index]
                   return (
                     <div style={style} key={key}>
                       <ChatListItem
@@ -358,7 +366,7 @@ function translate_n(key: string, quantity: number) {
 }
 
 function useLogic(queryStr: string, showArchivedChats: boolean) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
+  const { chatListIds, setQueryStr, setListFlags } = useChatList()
   const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
   const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
 
@@ -371,23 +379,25 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
   }>({})
 
   const isChatLoaded: (params: Index) => boolean = ({ index }) =>
-    !!chatLoadState[chatListIds[index]]
+    !!chatLoadState[chatListIds[index][0]]
   const loadChats: (params: IndexRange) => Promise<void> = async ({
     startIndex,
     stopIndex,
   }) => {
-    const chatIds = chatListIds.slice(startIndex, stopIndex + 1)
+    const entries = chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
-      chatIds.forEach(id => (state[id] = LoadStatus.FETCHING))
+      entries.forEach(
+        ([chatId, _msgId]) => (state[chatId] = LoadStatus.FETCHING)
+      )
       return state
     })
     const chats = await DeltaBackend.call(
-      'chatList.getChatListItemsByIds',
-      chatIds
+      'chatList.getChatListItemsByEntries',
+      entries
     )
     setChatCache(cache => ({ ...cache, ...chats }))
     setChatLoading(state => {
-      chatIds.forEach(id => (state[id] = LoadStatus.LOADED))
+      entries.forEach(([chatId, _msgId]) => (state[chatId] = LoadStatus.LOADED))
       return state
     })
   }
@@ -400,18 +410,20 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
       // setChatLoading({})
       // setChatCache({})
     } else {
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.FETCHING,
-      }))
-      const chats = await DeltaBackend.call('chatList.getChatListItemsByIds', [
-        chatId,
-      ])
-      setChatCache(cache => ({ ...cache, ...chats }))
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.LOADED,
-      }))
+      // setChatLoading(state => ({
+      //   ...state,
+      //   [chatId]: LoadStatus.FETCHING,
+      // }))
+      // // TODO: BUG - I don't have the current message here
+      // const chats = await DeltaBackend.call(
+      //   'chatList.getChatListItemsByEntries',
+      //   [chatId]
+      // )
+      // setChatCache(cache => ({ ...cache, ...chats }))
+      // setChatLoading(state => ({
+      //   ...state,
+      //   [chatId]: LoadStatus.LOADED,
+      // }))
     }
   }
   useEffect(() => {

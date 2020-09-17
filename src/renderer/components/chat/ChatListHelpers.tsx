@@ -11,6 +11,7 @@ import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/helpers/ChatList')
 
+/** @deprecated */
 const debouncedGetChatListIds = debounce(
   (
     listFlags: number,
@@ -28,6 +29,7 @@ const debouncedGetChatListIds = debounce(
   200
 )
 
+/** @deprecated */
 export function useChatListIds(
   _listFlags?: number,
   _queryStr?: string,
@@ -90,6 +92,7 @@ export function useChatListIds(
  * - in view
  * - not already loaded
  */
+/** @deprecated */
 export const useLazyChatListItems = (chatListIds: number[]) => {
   const scrollRef = useRef(null)
   const fetching = useRef([])
@@ -273,4 +276,86 @@ export function useMessageResults(queryStr: string, chatId: number = 0) {
   }, [])
 
   return [ids, updateContacts] as [number[], typeof updateContacts]
+}
+
+/// New
+
+const debouncedGetChatListEntries = debounce(
+  (
+    listFlags: number,
+    queryStr: string,
+    queryContactId: number,
+    cb: (...args: any) => void
+  ) => {
+    DeltaBackend.call(
+      'chatList.getChatListEntries',
+      listFlags,
+      queryStr,
+      queryContactId
+    ).then(cb)
+  },
+  200
+)
+
+export function useChatList(
+  _listFlags?: number,
+  _queryStr?: string,
+  _queryContactId?: number
+) {
+  if (!_queryStr) _queryStr = ''
+
+  const [listFlags, setListFlags] = useState(_listFlags)
+  const [queryStr, setQueryStr] = useState(_queryStr)
+  const [queryContactId, setQueryContactId] = useState(_queryContactId)
+  const [chatListEntries, setChatListEntries] = useState<[number, number][]>([])
+
+  const getAndSetChatListEntries = (immediatly: boolean = false) => {
+    if (immediatly === true) {
+      DeltaBackend.call(
+        'chatList.getChatListEntries',
+        listFlags,
+        queryStr,
+        queryContactId
+      ).then(setChatListEntries)
+      return
+    }
+    debouncedGetChatListEntries(
+      listFlags,
+      queryStr,
+      queryContactId,
+      setChatListEntries
+    )
+  }
+
+  const refetchChatlist = () => {
+    log.debug('useChatList: refetchingChatlist')
+    getAndSetChatListEntries()
+  }
+
+  useEffect(() => {
+    log.debug('useChatList: onComponentDidMount')
+    ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+    return () => {
+      ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+    }
+  }, [listFlags, queryStr, queryContactId])
+
+  useEffect(() => {
+    log.debug(
+      'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
+    )
+    getAndSetChatListEntries()
+  }, [listFlags, queryStr, queryContactId])
+
+  console.log('chatListEntries', chatListEntries)
+
+  return {
+    chatListIds: chatListEntries,
+    listFlags,
+    setListFlags,
+    queryStr,
+    setQueryStr,
+    queryContactId,
+    setQueryContactId,
+  }
 }
