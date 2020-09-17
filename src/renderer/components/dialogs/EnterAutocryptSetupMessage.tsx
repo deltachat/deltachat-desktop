@@ -107,7 +107,7 @@ export default function EnterAutocryptSetupMessage({
     )
     setLoading(false)
 
-    if (result === 0) {
+    if (result === false) {
       userFeedback({
         type: 'error',
         text: tx('autocrypt_incorrect_desktop'),
@@ -126,7 +126,11 @@ export default function EnterAutocryptSetupMessage({
   if (loading) {
     body = (
       <div className={Classes.DIALOG_BODY}>
-        <Spinner />
+        <Card>
+          <Callout>
+            <Spinner />
+          </Callout>
+        </Card>
       </div>
     )
   } else {
