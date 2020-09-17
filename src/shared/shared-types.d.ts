@@ -62,6 +62,7 @@ export interface RC_Config {
 
 import { App } from 'electron'
 import { LocaleData } from '../shared/localize'
+import { QrState } from '../shared/constants'
 
 export interface ExtendedApp extends App {
   rc: RC_Config
@@ -209,4 +210,10 @@ export type BasicWebRTCOptions = {
   socketdomain: string
   /** true if socketDomain is given in base64 format */
   base64domain: boolean
+}
+
+export declare type QrCodeResponse = {
+  state: QrState
+  id: number
+  text1: string
 }

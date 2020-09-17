@@ -120,6 +120,7 @@ export default class DialogController extends React.Component<
         },
       }
     })
+    return id
   }
 
   closeDialog(id: DialogId) {

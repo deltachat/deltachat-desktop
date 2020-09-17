@@ -92,6 +92,7 @@ export default class ScreenController extends Component {
     ipcRenderer.on('open-url', this.onOpenUrl)
 
     ipcRenderer.send('frontendReady')
+    window.dispatchEvent(new Event('frontendReady'))
   }
 
   componentWillUnmount() {
@@ -127,7 +128,7 @@ export default class ScreenController extends Component {
   }
 
   openDialog(...args: Parameters<OpenDialogFunctionType>) {
-    this.dialogController.current.openDialog(...args)
+    return this.dialogController.current.openDialog(...args)
   }
 
   closeDialog(...args: Parameters<CloseDialogFunctionType>) {
