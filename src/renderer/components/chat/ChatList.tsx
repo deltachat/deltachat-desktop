@@ -96,7 +96,6 @@ export default function ChatList(props: {
   const realOpenContextMenu = useRef(null)
 
   const {
-    chatListIds,
     contactIds,
     messageResultIds,
     isMessageLoaded,
@@ -105,10 +104,12 @@ export default function ChatList(props: {
     isContactLoaded,
     loadContact,
     contactCache,
-    isChatLoaded,
-    loadChats,
-    chatCache,
-  } = useLogic(queryStr, showArchivedChats)
+  } = useContactAndMessageLogic(queryStr)
+
+  const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
+    queryStr,
+    showArchivedChats
+  )
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
@@ -368,12 +369,9 @@ function translate_n(key: string, quantity: number) {
     .toUpperCase()
 }
 
-function useLogic(queryStr: string, showArchivedChats: boolean) {
+/** functions for the chat virtual list */
+function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
   const { chatListIds, setQueryStr, setListFlags } = useChatList()
-  const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
-  const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
-
-  // Chat --------------------
   const [chatCache, setChatCache] = useState<{
     [id: number]: ChatListItemType
   }>({})
@@ -454,6 +452,31 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
     }
   }, [])
 
+  // effects
+  useEffect(() => {
+    setQueryStr(queryStr)
+  }, [queryStr])
+
+  useEffect(() => {
+    // force refresh of inital data
+    loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
+  }, [chatListIds])
+
+  useEffect(
+    () =>
+      showArchivedChats
+        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
+        : setListFlags(0),
+    [showArchivedChats]
+  )
+
+  return { chatListIds, isChatLoaded, loadChats, chatCache }
+}
+
+function useContactAndMessageLogic(queryStr: string) {
+  const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
+  const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
+
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
     [id: number]: DCContact
@@ -515,41 +538,29 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
 
   // effects
   useEffect(() => {
-    setQueryStr(queryStr)
     updateContactSearch(queryStr)
     updateMessageResult(queryStr)
   }, [queryStr])
 
   useEffect(() => {
     // force refresh of inital data
-    loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
     loadContact({ startIndex: 0, stopIndex: Math.min(contactIds.length, 10) })
     loadMessages({
       startIndex: 0,
       stopIndex: Math.min(messageResultIds.length, 10),
     })
-  }, [chatListIds, contactIds, messageResultIds])
-
-  useEffect(
-    () =>
-      showArchivedChats
-        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
-        : setListFlags(0),
-    [showArchivedChats]
-  )
+  }, [contactIds, messageResultIds])
 
   return {
-    chatListIds,
+    // contacts
     contactIds,
+    isContactLoaded,
+    loadContact,
+    contactCache,
+    // messages
     messageResultIds,
     isMessageLoaded,
     loadMessages,
     messageCache,
-    isContactLoaded,
-    loadContact,
-    contactCache,
-    isChatLoaded,
-    loadChats,
-    chatCache,
   }
 }
