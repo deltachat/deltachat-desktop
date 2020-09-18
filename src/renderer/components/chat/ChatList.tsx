@@ -29,6 +29,9 @@ import {
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/chatlist')
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -413,7 +416,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       if (messageId === 0) {
         // TODO: if no message id is provided it takes the old one?
         // But how do I get the current state of the ChatCache in this hook-called function?
-        console.warn(
+        log.warn(
           'onChatListItemChanged triggered, but no message id was provided'
         )
       } else {
