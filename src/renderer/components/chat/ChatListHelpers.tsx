@@ -239,13 +239,7 @@ export const useLazyChatListItems = (chatListIds: number[]) => {
       'useLazyChatListItems: chatListIds changed, updating chats in view'
     )
     fetchChatsInView(0)
-    ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
-    return () => {
-      ipcBackend.removeListener(
-        'DD_EVENT_CHATLIST_ITEM_CHANGED',
-        onChatListItemChanged
-      )
-    }
+    return () => {}
   }, [chatListIds, chatItems, scrollRef])
 
   useEffect(() => {
@@ -346,8 +340,6 @@ export function useChatList(
     )
     getAndSetChatListEntries()
   }, [listFlags, queryStr, queryContactId])
-
-  console.log('chatListEntries', chatListEntries)
 
   return {
     chatListIds: chatListEntries,

@@ -407,38 +407,52 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
 
   const onChatListItemChanged = async (
     _event: any,
-    { chatId }: { chatId: number }
+    [chatId, messageId]: [number, number]
   ) => {
     if (chatId === 0) {
       // setChatLoading({})
       // setChatCache({})
     } else {
-      // setChatLoading(state => ({
-      //   ...state,
-      //   [chatId]: LoadStatus.FETCHING,
-      // }))
-      // // TODO: BUG - I don't have the current message here
-      // const chats = await DeltaBackend.call(
-      //   'chatList.getChatListItemsByEntries',
-      //   [chatId]
-      // )
-      // setChatCache(cache => ({ ...cache, ...chats }))
-      // setChatLoading(state => ({
-      //   ...state,
-      //   [chatId]: LoadStatus.LOADED,
-      // }))
+      if (messageId === 0) {
+        // TODO: if no message id is provided it takes the old one?
+        // But how do I get the current state of the ChatCache in this hook-called function?
+        console.warn(
+          'onChatListItemChanged triggered, but no message id was provided'
+        )
+      } else {
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.FETCHING,
+        }))
+        const chats = await DeltaBackend.call(
+          'chatList.getChatListItemsByEntries',
+          [[chatId, messageId]]
+        )
+        setChatCache(cache => ({ ...cache, ...chats }))
+        setChatLoading(state => ({
+          ...state,
+          [chatId]: LoadStatus.LOADED,
+        }))
+      }
     }
   }
   useEffect(() => {
-    ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_READ', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_FAILED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
+
     return () => {
-      ipcBackend.removeListener(
-        'DD_EVENT_CHATLIST_ITEM_CHANGED',
-        onChatListItemChanged
-      )
+      ipcBackend.removeListener('DC_EVENT_MSG_READ', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSG_FAILED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
     }
   }, [])
-  // todo fix archived chat link
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{

@@ -76,9 +76,6 @@ export default class DeltaChatController extends EventEmitter {
     this.onMsgsChanged = this.onMsgsChanged.bind(this)
     this.onIncomingMsg = this.onIncomingMsg.bind(this)
     this.onChatModified = this.onChatModified.bind(this)
-    this.onMsgFailed = this.onMsgFailed.bind(this)
-    this.onMsgDelivered = this.onMsgDelivered.bind(this)
-    this.onMsgRead = this.onMsgRead.bind(this)
   }
 
   readonly autocrypt = new DCAutocrypt(this)
@@ -226,33 +223,21 @@ export default class DeltaChatController extends EventEmitter {
 
   onMsgsChanged(chatId: number, msgId: number) {
     this.onChatlistUpdated()
-    this.onChatListItemChanged(chatId)
+    // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
   onIncomingMsg(chatId: number, msgId: number) {
     maybeMarkSeen(chatId, msgId)
     this.onChatlistUpdated()
-    this.onChatListItemChanged(chatId)
+    // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
   }
 
   onChatModified(chatId: number, msgId: number) {
     this.onChatlistUpdated()
-    this.onChatListItemChanged(chatId)
+    // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
-  }
-
-  onMsgFailed(chatId: number, msgId: number) {
-    this.onChatListItemChanged(chatId)
-  }
-
-  onMsgDelivered(chatId: number, msgId: number) {
-    this.onChatListItemChanged(chatId)
-  }
-
-  onMsgRead(chatId: number, msgId: number) {
-    this.onChatListItemChanged(chatId)
   }
 
   registerEventHandler(dc: DeltaChat) {
@@ -261,9 +246,6 @@ export default class DeltaChatController extends EventEmitter {
     dc.on('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.on('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
     dc.on('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
-    dc.on('DC_EVENT_MSG_FAILED', this.onMsgFailed)
-    dc.on('DC_EVENT_MSG_DELIVERED', this.onMsgDelivered)
-    dc.on('DC_EVENT_MSG_READ', this.onMsgRead)
   }
 
   unregisterEventHandler(dc: DeltaChat) {
@@ -272,19 +254,10 @@ export default class DeltaChatController extends EventEmitter {
     dc.removeListener('DC_EVENT_MSGS_CHANGED', this.onMsgsChanged)
     dc.removeListener('DC_EVENT_INCOMING_MSG', this.onIncomingMsg)
     dc.removeListener('DC_EVENT_CHAT_MODIFIED', this.onChatModified)
-    dc.removeListener('DC_EVENT_MSG_FAILED', this.onMsgFailed)
-    dc.removeListener('DC_EVENT_MSG_DELIVERED', this.onMsgDelivered)
-    dc.removeListener('DC_EVENT_MSG_READ', this.onMsgRead)
   }
 
   onChatlistUpdated() {
     this.sendToRenderer('DD_EVENT_CHATLIST_CHANGED', {})
-  }
-
-  onChatListItemChanged(chatId: number) {
-    this.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', {
-      chatId,
-    })
   }
 
   updateBlockedContacts() {
