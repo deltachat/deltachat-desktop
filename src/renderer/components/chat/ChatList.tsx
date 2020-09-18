@@ -38,7 +38,7 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
-function ChatListPart({
+export function ChatListPart({
   isRowLoaded,
   loadMoreRows,
   rowCount,
@@ -370,8 +370,7 @@ function translate_n(key: string, quantity: number) {
 }
 
 /** functions for the chat virtual list */
-function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   const [chatCache, setChatCache] = useState<{
     [id: number]: ChatListItemType
   }>({})
@@ -453,14 +452,25 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
   }, [])
 
   // effects
-  useEffect(() => {
-    setQueryStr(queryStr)
-  }, [queryStr])
 
   useEffect(() => {
     // force refresh of inital data
     loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
   }, [chatListIds])
+
+  return { isChatLoaded, loadChats, chatCache }
+}
+
+function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
+  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
+    chatListIds
+  )
+
+  // effects
+  useEffect(() => {
+    setQueryStr(queryStr)
+  }, [queryStr])
 
   useEffect(
     () =>
