@@ -405,34 +405,50 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     })
   }
 
-  const onChatListItemChanged = async (
+  const onChatListItemChanged = (
     _event: any,
     [chatId, messageId]: [number, number]
   ) => {
+    const updateChatListItem = async (chatId: number, messageId: number) => {
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.FETCHING,
+      }))
+      const chats = await DeltaBackend.call(
+        'chatList.getChatListItemsByEntries',
+        [[chatId, messageId]]
+      )
+      setChatCache(cache => ({ ...cache, ...chats }))
+      setChatLoading(state => ({
+        ...state,
+        [chatId]: LoadStatus.LOADED,
+      }))
+    }
     if (chatId === 0) {
       // setChatLoading({})
       // setChatCache({})
     } else {
       if (messageId === 0) {
-        // TODO: if no message id is provided it takes the old one?
-        // But how do I get the current state of the ChatCache in this hook-called function?
-        log.warn(
-          'onChatListItemChanged triggered, but no message id was provided'
+        // if no message id is provided it tries to take the old one
+        // workaround to get msgId
+        let currentCache
+        setChatCache(cache => {
+          currentCache = cache
+          return cache
+        })
+        const cachedChat = chatListIds?.find(
+          ([cId, _messageId]) => cId === chatId
         )
+        // check if workaround worked
+        if (cachedChat) {
+          updateChatListItem(chatId, cachedChat[1])
+        } else {
+          log.warn(
+            'onChatListItemChanged triggered, but no message id was provided nor found in the cache'
+          )
+        }
       } else {
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.FETCHING,
-        }))
-        const chats = await DeltaBackend.call(
-          'chatList.getChatListItemsByEntries',
-          [[chatId, messageId]]
-        )
-        setChatCache(cache => ({ ...cache, ...chats }))
-        setChatLoading(state => ({
-          ...state,
-          [chatId]: LoadStatus.LOADED,
-        }))
+        updateChatListItem(chatId, messageId)
       }
     }
   }
