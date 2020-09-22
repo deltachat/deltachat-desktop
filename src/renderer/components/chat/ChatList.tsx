@@ -374,6 +374,14 @@ function translate_n(key: string, quantity: number) {
 
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(chatListIds: [number, number][]) {
+  // workaround to save a current reference of chatListIds
+  const chatListIdsRef = useRef(chatListIds)
+  if (chatListIdsRef.current !== chatListIds) {
+    // this is simmilar to a use hook doing this, but probably less expensive
+    chatListIdsRef.current = chatListIds
+  }
+  // end workaround
+
   const [chatCache, setChatCache] = useState<{
     [id: number]: ChatListItemType
   }>({})
@@ -431,12 +439,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       if (messageId === 0) {
         // if no message id is provided it tries to take the old one
         // workaround to get msgId
-        let currentCache
-        setChatCache(cache => {
-          currentCache = cache
-          return cache
-        })
-        const cachedChat = chatListIds?.find(
+        const cachedChat = chatListIdsRef.current?.find(
           ([cId, _messageId]) => cId === chatId
         )
         // check if workaround worked
