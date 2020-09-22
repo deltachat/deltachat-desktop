@@ -61,12 +61,6 @@ class DeltaRemote {
     queryContactId: number
   ): Promise<[number, number][]>
   call(
-    fnName: 'chatList.getChatListItemsByIds',
-    chatIds: number[]
-  ): Promise<{
-    [key: number]: ChatListItemType
-  }>
-  call(
     fnName: 'chatList.getChatListItemsByEntries',
     entries: [number, number][]
   ): Promise<{
