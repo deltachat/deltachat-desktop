@@ -143,6 +143,7 @@ export interface FullChat {
   draft: string
   selfInGroup: boolean
   muted: boolean
+  ephemeralTimer: number
 }
 
 type todo = any

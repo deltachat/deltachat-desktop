@@ -38,6 +38,7 @@ class state implements FullChat {
   scrollHeight = 0
   countFetchedMessages = 0
   muted = false
+  ephemeralTimer = 0
 }
 
 export { state as ChatStoreState }
