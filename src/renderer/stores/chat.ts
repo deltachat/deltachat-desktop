@@ -270,6 +270,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup,
       muted: chat.muted,
+      ephemeralTimer: chat.ephemeralTimer,
     },
   })
 })
