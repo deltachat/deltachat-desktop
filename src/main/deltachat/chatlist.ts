@@ -73,14 +73,14 @@ export default class DCChatList extends SplitOut {
   }
 
   async getChatListItemsByEntries(entries: [number, number][]) {
-    const label = '[BENCH] getChatListItemsByEntries'
-    console.time(label)
+    // const label = '[BENCH] getChatListItemsByEntries'
+    // console.time(label)
     const chats: { [key: number]: ChatListItemType } = {}
     for (const entry of entries) {
       const chat = await this.getChatListItemByEntry(entry)
       chats[entry[0]] = chat
     }
-    console.timeEnd(label)
+    // console.timeEnd(label)
     return chats
   }
 
