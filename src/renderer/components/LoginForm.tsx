@@ -239,10 +239,10 @@ export default function LoginForm({
               value={mail_security}
               onChange={handleCredentialsChange as any}
             >
-              <option value='automatic'>{tx('automatic')}</option>
-              <option value='ssl'>SSL/TLS</option>
-              <option value='starttls'>STARTTLS</option>
-              <option value='plain'>{tx('off')}</option>
+              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
+              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
+              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <p className='delta-headline'>{tx('login_outbox')}</p>
@@ -291,10 +291,10 @@ export default function LoginForm({
               value={send_security}
               onChange={handleCredentialsChange as any}
             >
-              <option value='automatic'>{tx('automatic')}</option>
-              <option value='ssl'>SSL/TLS</option>
-              <option value='starttls'>STARTTLS</option>
-              <option value='plain'>{tx('off')}</option>
+              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
+              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
+              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <DeltaSelect
@@ -356,6 +356,7 @@ export function ConfigureProgressDialog({
         try {
           account = await DeltaBackend.call('login.newLogin', credentials)
         } catch (err) {
+          console.log('fooooo', err)
           if (err) {
             onConfigureError(null, [null, err])
             onConfigureFailed(null, [null, null])

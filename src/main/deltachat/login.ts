@@ -8,7 +8,6 @@ import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
-import { serverFlags } from './settings'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -19,11 +18,6 @@ function setCoreStrings(dc: any, strings: { [key: number]: string }) {
   })
 }
 
-function addServerFlags(credentials: any) {
-  return Object.assign({}, credentials, {
-    server_flags: serverFlags(credentials),
-  })
-}
 
 export default class DCLoginController extends SplitOut {
   /**
@@ -60,12 +54,12 @@ export default class DCLoginController extends SplitOut {
     this._controller._dc = dc
     if (!dc.isConfigured() || updateConfiguration) {
       try {
-        await dc.configure(addServerFlags(credentials))
+        await dc.configure(credentials)
       } catch (err) {
         this._controller.unregisterEventHandler(dc)
         await dc.close()
         this._controller._dc = null
-        return false
+        throw err
       }
     }
 
@@ -96,7 +90,7 @@ export default class DCLoginController extends SplitOut {
   async updateCredentials(credentials: Credentials): Promise<boolean> {
     await this._dc.stopIO()
     try {
-      await this._dc.configure(addServerFlags(credentials))
+      await this._dc.configure(credentials)
     } catch (err) {
       await this._dc.startIO()
       return false
