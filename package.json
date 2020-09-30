@@ -80,7 +80,7 @@
     "array-differ": "^3.0.0",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
-    "deltachat-node": "^1.45.0",
+    "deltachat-node": "git+https://github.com/deltachat/deltachat-node.git#upate_core",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^2.11.1",
     "error-stack-parser": "^2.0.4",
