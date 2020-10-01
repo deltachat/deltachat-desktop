@@ -153,7 +153,15 @@ export default function MainScreen() {
                   />
                 )}
                 <div style={{ marginLeft: '7px' }}>
-                  <div className='navbar-chat-name'>{selectedChat.name}</div>
+                  <div className='navbar-chat-name'>
+                    {selectedChat.name}
+                    {selectedChat.ephemeralTimer !== 0 && (
+                      <div
+                        className={'disapearing-messages-icon'}
+                        aria-label={tx(`a11y_disappearing_messages_activated`)}
+                      />
+                    )}
+                  </div>
                   <div className='navbar-chat-subtile'>
                     {selectedChat.subtitle}
                   </div>

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added indicator icon if disappearing messages are enabled in a chat/group
+
 ### Changed
 
 - Update deltachat-node to v1.45.0

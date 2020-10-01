@@ -198,6 +198,7 @@ export default class DCChatList extends SplitOut {
     const contacts = await this._getChatContacts(contactIds)
     const draft = await this._getDraft(chatId)
     const muted = await this.isChatMuted(chatId)
+    const ephemeralTimer = this._dc.getChatEphemeralTimer(chatId)
 
     // This object is NOT created with object assign to promote consistency and to be easier to understand
     return {
@@ -222,6 +223,7 @@ export default class DCChatList extends SplitOut {
       draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
       muted,
+      ephemeralTimer,
     }
   }
 
