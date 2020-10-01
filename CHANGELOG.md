@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [1.13.0] - 2020-10-1
 
 ### Fixed
 
