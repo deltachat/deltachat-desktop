@@ -68,7 +68,7 @@ export default class DCContacts extends SplitOut {
     const chatId = this._dc.createChatByContactId(contactId)
     log.debug(`created chat ${chatId} with contact' ${contactId}`)
     const chat = this._dc.getChat(chatId)
-    if (chat && chat.getVisibility() === C.DC_CHAT_VISIBILITY_ARCHIVED ) {
+    if (chat && chat.getVisibility() === C.DC_CHAT_VISIBILITY_ARCHIVED) {
       log.debug('chat was archived, unarchiving it')
       this._dc.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL)
     }
