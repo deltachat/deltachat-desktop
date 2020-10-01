@@ -43,7 +43,7 @@ export default class DCChatList extends SplitOut {
     this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
-  async _chatListGetChatId(list: ChatList, index: number) {
+  _chatListGetChatId(list: ChatList, index: number) {
     return list.getChatId(index)
   }
 
@@ -59,72 +59,51 @@ export default class DCChatList extends SplitOut {
     return chatListIds
   }
 
-  async _getChatList(
+  async getChatListEntries(
     ...args: Parameters<typeof DeltaChat.prototype.getChatList>
   ) {
-    return this._dc.getChatList(...args)
-  }
-
-  async getListAndIndexForChatId(chatId: number): Promise<[ChatList, number]> {
-    let list = await this._getChatList(0, '', 0)
-    let i = await findIndexOfChatIdInChatList(list, chatId)
-
-    if (i === -1) {
-      list = await this._getChatList(1, '', 0)
-      i = await findIndexOfChatIdInChatList(list, chatId)
+    const chatList = this._dc.getChatList(...args)
+    const chatListJson: [number, number][] = []
+    for (let counter = 0; counter < chatList.getCount(); counter++) {
+      const chatId = await chatList.getChatId(counter)
+      const messageId = await chatList.getMessageId(counter)
+      chatListJson.push([chatId, messageId])
     }
-    return [list, i]
+    return chatListJson
   }
 
-  async getChatListItemsByIds(chatIds: number[]) {
-    const label = '[BENCH] getChatListItemByIds'
-    console.time(label)
+  async getChatListItemsByEntries(entries: [number, number][]) {
+    // const label = '[BENCH] getChatListItemsByEntries'
+    // console.time(label)
     const chats: { [key: number]: ChatListItemType } = {}
-    let list
-    let i = 0
-    for (const chatId of chatIds) {
-      if (!list) {
-        ;[list, i] = await this.getListAndIndexForChatId(chatIds[0])
-      } else {
-        i = await findIndexOfChatIdInChatList(list, chatId, i)
-      }
-
-      const chat = await this.getChatListItemById(chatId, list, i)
-      chats[chatId] = chat
+    for (const entry of entries) {
+      const chat = await this.getChatListItemByEntry(entry)
+      chats[entry[0]] = chat
     }
-    console.timeEnd(label)
+    // console.timeEnd(label)
     return chats
   }
 
-  async getChatListSummary(list: ChatList, i: number) {
-    return list.getSummary(i).toJson()
-  }
-
-  async getChatListItemById(
-    chatId: number,
-    list: ChatList,
-    i: number
-  ): Promise<ChatListItemType> {
+  async getChatListItemByEntry([chatId, messageId]: [number, number]): Promise<
+    ChatListItemType
+  > {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
-    if (!list) [list, i] = await this.getListAndIndexForChatId(chatId)
-    if (!chat || i === -1) return null
-
     let deaddrop
     if (chat.id === C.DC_CHAT_ID_DEADDROP) {
-      const messageId = list.getMessageId(i)
-      deaddrop = await this._controller.messageList.getMessage(messageId)
+      deaddrop = this._controller.messageList.getMessage(messageId)
     }
 
-    // console.log('getChatListItemsByIds', chatId)
-    const summary = await this.getChatListSummary(list, i)
+    const summary = this._dc.getChatlistItemSummary(chatId, messageId).toJson()
     const lastUpdated = summary.timestamp ? summary.timestamp * 1000 : null
 
     const name = chat.name || summary.text1
     const isGroup = isGroupChat(chat)
     const contactIds = await this._getChatContactIds(chatId)
-    // This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+    /**
+     * This is NOT the Chat Oject, it's a smaller version for use as ChatListItem in the ChatList
+     */
     const chatListItem = {
       id: chat.id,
       name,
@@ -263,27 +242,6 @@ export default class DCChatList extends SplitOut {
   }
 }
 // section: Internal functions
-async function findIndexOfChatIdInChatList(
-  list: ChatList,
-  chatId: number,
-  startI = 0
-) {
-  let i = -1
-  const listCount = list.getCount()
-  for (let counter = startI; counter < listCount; counter++) {
-    counter = counter % listCount
-    const currentChatId = await chatListGetChatId(list, counter)
-    if (currentChatId === chatId) {
-      i = counter
-      break
-    }
-  }
-  return i
-}
-
-async function chatListGetChatId(list: ChatList, index: number) {
-  return list.getChatId(index)
-}
 
 function mapCoreMsgStatus2String(state: number) {
   switch (state) {

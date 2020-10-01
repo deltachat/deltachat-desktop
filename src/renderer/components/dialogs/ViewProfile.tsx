@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogContentTextSeperator,
-  DeltaDialogFooter,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import ChatListItem from '../chat/ChatListItem'
-import { useChatListIds, useLazyChatListItems } from '../chat/ChatListHelpers'
+import { useChatList } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
-import { Button, Classes } from '@blueprintjs/core'
+import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
 import { Avatar } from '../Avatar'
+import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
+import { AutoSizer } from 'react-virtualized'
 
 const ProfileInfoName = ({
   contactId,
@@ -82,12 +83,10 @@ export default function ViewProfile(props: {
     props.contact.displayName
   )
 
-  const { chatListIds } = useChatListIds(0, '', contact.id)
-  // const [ chatItems, onChatListScroll, scrollRef ] = [ {}, () => {}, null ]
-  const { chatItems, onChatListScroll, scrollRef } = useLazyChatListItems(
+  const { chatListIds } = useChatList(0, '', contact.id)
+  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
     chatListIds
   )
-
   const tx = window.static_translate
 
   const onChatClick = (chatId: number) => {
@@ -109,49 +108,71 @@ export default function ViewProfile(props: {
       <DeltaDialogHeader title={tx('menu_view_profile')} />
       <DeltaDialogBody noFooter>
         <DeltaDialogContent noPadding>
-          <div className='profile-info-container'>
-            <div
-              onClick={() => {
-                openDialog('FullscreenMedia', {
-                  msg: {
-                    attachment: {
-                      url: contact.profileImage,
-                      contentType: 'image/x',
-                    },
-                    file: contact.profileImage,
-                  },
-                })
-              }}
-              style={{ cursor: contact.profileImage ? 'pointer' : 'default' }}
-            >
-              <ProfileInfoAvatar contact={contact} />
-            </div>
-            <ProfileInfoName
-              contactId={contact.id}
-              displayName={displayName}
-              setDisplayName={setDisplayName}
-              address={contact.address}
-            />
-          </div>
-          <Button
-            style={{ marginLeft: '100px', marginBottom: '30px' }}
-            onClick={onSendMessage}
-          >
-            {tx('send_message')}
-          </Button>
-          <DeltaDialogContentTextSeperator text={tx('profile_shared_chats')} />
           <div
-            className='mutual-chats'
-            ref={scrollRef}
-            onScroll={onChatListScroll}
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            {chatListIds.map(chatId => (
-              <ChatListItem
-                key={chatId}
-                chatListItem={chatItems[chatId]}
-                onClick={onChatClick.bind(null, chatId)}
+            <div>
+              <div className='profile-info-container'>
+                <div
+                  onClick={() => {
+                    openDialog('FullscreenMedia', {
+                      msg: {
+                        attachment: {
+                          url: contact.profileImage,
+                          contentType: 'image/x',
+                        },
+                        file: contact.profileImage,
+                      },
+                    })
+                  }}
+                  style={{
+                    cursor: contact.profileImage ? 'pointer' : 'default',
+                  }}
+                >
+                  <ProfileInfoAvatar contact={contact} />
+                </div>
+                <ProfileInfoName
+                  contactId={contact.id}
+                  displayName={displayName}
+                  setDisplayName={setDisplayName}
+                  address={contact.address}
+                />
+              </div>
+              <Button
+                style={{ marginLeft: '100px', marginBottom: '30px' }}
+                onClick={onSendMessage}
+              >
+                {tx('send_message')}
+              </Button>
+              <DeltaDialogContentTextSeperator
+                text={tx('profile_shared_chats')}
               />
-            ))}
+            </div>
+            <div className='mutual-chats' style={{ flexGrow: 1 }}>
+              <AutoSizer>
+                {({ width, height }) => (
+                  <ChatListPart
+                    isRowLoaded={isChatLoaded}
+                    loadMoreRows={loadChats}
+                    rowCount={chatListIds.length}
+                    width={width}
+                    height={height}
+                  >
+                    {({ index, key, style }) => {
+                      const [chatId] = chatListIds[index]
+                      return (
+                        <div style={style} key={key}>
+                          <ChatListItem
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                          />
+                        </div>
+                      )
+                    }}
+                  </ChatListPart>
+                )}
+              </AutoSizer>
+            </div>
           </div>
         </DeltaDialogContent>
       </DeltaDialogBody>

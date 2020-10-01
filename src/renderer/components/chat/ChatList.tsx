@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
 import ChatListContextMenu from './ChatListContextMenu'
-import { useChatListIds, useMessageResults } from './ChatListHelpers'
+import { useMessageResults, useChatList } from './ChatListHelpers'
 import ChatListItem, {
   ChatListItemMessageResult,
   PlaceholderChatListItem,
@@ -29,6 +29,9 @@ import {
 import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/chatlist')
 
 const CHATLISTITEM_HEIGHT = 64
 const DIVIDER_HEIGHT = 40
@@ -38,7 +41,7 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
-function ChatListPart({
+export function ChatListPart({
   isRowLoaded,
   loadMoreRows,
   rowCount,
@@ -96,7 +99,6 @@ export default function ChatList(props: {
   const realOpenContextMenu = useRef(null)
 
   const {
-    chatListIds,
     contactIds,
     messageResultIds,
     isMessageLoaded,
@@ -105,10 +107,12 @@ export default function ChatList(props: {
     isContactLoaded,
     loadContact,
     contactCache,
-    isChatLoaded,
-    loadChats,
-    chatCache,
-  } = useLogic(queryStr, showArchivedChats)
+  } = useContactAndMessageLogic(queryStr)
+
+  const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
+    queryStr,
+    showArchivedChats
+  )
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
@@ -170,7 +174,9 @@ export default function ChatList(props: {
   const [scrollToChatIndex, setScrollToChatIndex] = useState<number>(-1)
 
   const scrollSelectedChatIntoView = () => {
-    const index = chatListIds.indexOf(selectedChatId)
+    const index = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
     if (index !== -1) {
       setScrollToChatIndex(index)
       setTimeout(() => setScrollToChatIndex(-1), 0)
@@ -181,11 +187,14 @@ export default function ChatList(props: {
     scrollSelectedChatIntoView()
   }, [selectedChatId])
   // follow chat after loading or when it's position in the chatlist changes
+  const selectedChatIndex = chatListIds.findIndex(
+    ([chatId, _messageId]) => chatId === selectedChatId
+  )
   useEffect(() => {
     !isSearchActive && scrollSelectedChatIntoView()
-  }, [chatListIds.indexOf(selectedChatId)])
+  }, [selectedChatIndex])
 
-  const selectFirstChat = () => selectChat(chatListIds[0])
+  const selectFirstChat = () => selectChat(chatListIds[0][0])
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
@@ -194,7 +203,10 @@ export default function ChatList(props: {
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) + 1]
+    const selectedChatIndex = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
+    const [newChatId, _] = chatListIds[selectedChatIndex + 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -202,7 +214,10 @@ export default function ChatList(props: {
 
   useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const newChatId = chatListIds[chatListIds.indexOf(selectedChatId) - 1]
+    const selectedChatIndex = chatListIds.findIndex(
+      ([chatId, _messageId]) => chatId === selectedChatId
+    )
+    const [newChatId, _] = chatListIds[selectedChatIndex - 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -233,7 +248,7 @@ export default function ChatList(props: {
                 scrollToIndex={scrollToChatIndex}
               >
                 {({ index, key, style }) => {
-                  const chatId = chatListIds[index]
+                  const [chatId] = chatListIds[index]
                   return (
                     <div style={style} key={key}>
                       <ChatListItem
@@ -357,12 +372,16 @@ function translate_n(key: string, quantity: number) {
     .toUpperCase()
 }
 
-function useLogic(queryStr: string, showArchivedChats: boolean) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatListIds()
-  const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
-  const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
+/** functions for the chat virtual list */
+export function useLogicVirtualChatList(chatListIds: [number, number][]) {
+  // workaround to save a current reference of chatListIds
+  const chatListIdsRef = useRef(chatListIds)
+  if (chatListIdsRef.current !== chatListIds) {
+    // this is simmilar to a use hook doing this, but probably less expensive
+    chatListIdsRef.current = chatListIds
+  }
+  // end workaround
 
-  // Chat --------------------
   const [chatCache, setChatCache] = useState<{
     [id: number]: ChatListItemType
   }>({})
@@ -371,59 +390,124 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
   }>({})
 
   const isChatLoaded: (params: Index) => boolean = ({ index }) =>
-    !!chatLoadState[chatListIds[index]]
+    !!chatLoadState[chatListIds[index][0]]
   const loadChats: (params: IndexRange) => Promise<void> = async ({
     startIndex,
     stopIndex,
   }) => {
-    const chatIds = chatListIds.slice(startIndex, stopIndex + 1)
+    const entries = chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
-      chatIds.forEach(id => (state[id] = LoadStatus.FETCHING))
+      entries.forEach(
+        ([chatId, _msgId]) => (state[chatId] = LoadStatus.FETCHING)
+      )
       return state
     })
     const chats = await DeltaBackend.call(
-      'chatList.getChatListItemsByIds',
-      chatIds
+      'chatList.getChatListItemsByEntries',
+      entries
     )
     setChatCache(cache => ({ ...cache, ...chats }))
     setChatLoading(state => {
-      chatIds.forEach(id => (state[id] = LoadStatus.LOADED))
+      entries.forEach(([chatId, _msgId]) => (state[chatId] = LoadStatus.LOADED))
       return state
     })
   }
 
-  const onChatListItemChanged = async (
+  const onChatListItemChanged = (
     _event: any,
-    { chatId }: { chatId: number }
+    [chatId, messageId]: [number, number]
   ) => {
-    if (chatId === 0) {
-      // setChatLoading({})
-      // setChatCache({})
-    } else {
+    const updateChatListItem = async (chatId: number, messageId: number) => {
       setChatLoading(state => ({
         ...state,
         [chatId]: LoadStatus.FETCHING,
       }))
-      const chats = await DeltaBackend.call('chatList.getChatListItemsByIds', [
-        chatId,
-      ])
+      const chats = await DeltaBackend.call(
+        'chatList.getChatListItemsByEntries',
+        [[chatId, messageId]]
+      )
       setChatCache(cache => ({ ...cache, ...chats }))
       setChatLoading(state => ({
         ...state,
         [chatId]: LoadStatus.LOADED,
       }))
     }
+    if (chatId === 0) {
+      // setChatLoading({})
+      // setChatCache({})
+    } else {
+      if (messageId === 0) {
+        // if no message id is provided it tries to take the old one
+        // workaround to get msgId
+        const cachedChat = chatListIdsRef.current?.find(
+          ([cId, _messageId]) => cId === chatId
+        )
+        // check if workaround worked
+        if (cachedChat) {
+          updateChatListItem(chatId, cachedChat[1])
+        } else {
+          log.warn(
+            'onChatListItemChanged triggered, but no message id was provided nor found in the cache'
+          )
+        }
+      } else {
+        updateChatListItem(chatId, messageId)
+      }
+    }
   }
   useEffect(() => {
-    ipcBackend.on('DD_EVENT_CHATLIST_ITEM_CHANGED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_READ', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSG_FAILED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
+
     return () => {
-      ipcBackend.removeListener(
-        'DD_EVENT_CHATLIST_ITEM_CHANGED',
-        onChatListItemChanged
-      )
+      ipcBackend.removeListener('DC_EVENT_MSG_READ', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSG_FAILED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
     }
   }, [])
-  // todo fix archived chat link
+
+  // effects
+
+  useEffect(() => {
+    // force refresh of inital data
+    loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
+  }, [chatListIds])
+
+  return { isChatLoaded, loadChats, chatCache }
+}
+
+function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
+  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
+    chatListIds
+  )
+
+  // effects
+  useEffect(() => {
+    setQueryStr(queryStr)
+  }, [queryStr])
+
+  useEffect(
+    () =>
+      showArchivedChats
+        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
+        : setListFlags(0),
+    [showArchivedChats]
+  )
+
+  return { chatListIds, isChatLoaded, loadChats, chatCache }
+}
+
+function useContactAndMessageLogic(queryStr: string) {
+  const [contactIds, updateContactSearch] = useContactIds(0, queryStr)
+  const [messageResultIds, updateMessageResult] = useMessageResults(queryStr, 0)
 
   // Contacts ----------------
   const [contactCache, setContactCache] = useState<{
@@ -486,41 +570,29 @@ function useLogic(queryStr: string, showArchivedChats: boolean) {
 
   // effects
   useEffect(() => {
-    setQueryStr(queryStr)
     updateContactSearch(queryStr)
     updateMessageResult(queryStr)
   }, [queryStr])
 
   useEffect(() => {
     // force refresh of inital data
-    loadChats({ startIndex: 0, stopIndex: Math.min(chatListIds.length, 10) })
     loadContact({ startIndex: 0, stopIndex: Math.min(contactIds.length, 10) })
     loadMessages({
       startIndex: 0,
       stopIndex: Math.min(messageResultIds.length, 10),
     })
-  }, [chatListIds, contactIds, messageResultIds])
-
-  useEffect(
-    () =>
-      showArchivedChats
-        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
-        : setListFlags(0),
-    [showArchivedChats]
-  )
+  }, [contactIds, messageResultIds])
 
   return {
-    chatListIds,
+    // contacts
     contactIds,
+    isContactLoaded,
+    loadContact,
+    contactCache,
+    // messages
     messageResultIds,
     isMessageLoaded,
     loadMessages,
     messageCache,
-    isContactLoaded,
-    loadContact,
-    contactCache,
-    isChatLoaded,
-    loadChats,
-    chatCache,
   }
 }

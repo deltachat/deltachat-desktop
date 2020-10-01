@@ -29,10 +29,8 @@ export default class DCContacts extends SplitOut {
     // trigger interface updates
     const chatId = this.getChatIdByContactId(contactId)
     this._controller.chatList.onChatModified(chatId)
-    this._controller.sendToRenderer('DD_EVENT_CHATLIST_ITEM_CHANGED', {
-      chatId,
-    })
 
+    // TODO implement chat changed event in the core on name change
     return result
   }
 
