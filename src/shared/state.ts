@@ -15,7 +15,6 @@ export function getDefaultState(): AppState {
       lastAccount: undefined,
       enableAVCalls: false,
       enableOnDemandLocationStreaming: false,
-      enableDisappearingMessages: false,
       chatViewBgImg: undefined,
       lastChats: {},
       zoomFactor: 1,

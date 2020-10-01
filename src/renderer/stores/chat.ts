@@ -38,6 +38,7 @@ class state implements FullChat {
   scrollHeight = 0
   countFetchedMessages = 0
   muted = false
+  ephemeralTimer = 0
 }
 
 export { state as ChatStoreState }
@@ -269,6 +270,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
       contacts: chat.contacts,
       selfInGroup: chat.selfInGroup,
       muted: chat.muted,
+      ephemeralTimer: chat.ephemeralTimer,
     },
   })
 })
@@ -324,7 +326,6 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       chatStore.state.id
     )
 
-    if (id !== chatStore.state.id) return
     chatStore.dispatch({
       type: 'SET_MESSAGE_IDS',
       id: chatStore.state.id,

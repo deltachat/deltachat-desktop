@@ -33,7 +33,6 @@ export interface DesktopSettings {
   lastAccount: string
   enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
-  enableDisappearingMessages: boolean
   enterKeySends: boolean
   locale: string | null
   notifications: boolean
@@ -143,6 +142,7 @@ export interface FullChat {
   draft: string
   selfInGroup: boolean
   muted: boolean
+  ephemeralTimer: number
 }
 
 type todo = any

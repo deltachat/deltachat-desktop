@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## [1.13.0-rc4] - 2020-10-1
+
+### Added
+
+- Added indicator icon if disappearing messages are enabled in a chat/group
 
 ### Changed
 
@@ -8,6 +12,7 @@
 - run npm audit fix
 - Overhaul colors of login hint
 - Change "remove account" translation to "delete account"
+- Disappearing messages are now enabled by default and not experimental anymore
 
 ### Fixed
 
@@ -20,6 +25,7 @@
 - Fix scanning qr code and general improvement of the whole process
 - Fix avatar initials of the text avatars, of people with no displayname, inside of the messagelist
 - Fix search shows placeholders
+- Fix refreshing message list when disappearing message timed out
 
 ## [1.13.0-rc1] - 2020-08-13
 
@@ -34,7 +40,6 @@
 
 - Fix sluggish ui while typing in email address in login form
 - Fix url parsing in labeled link confirmation dialog
-
 
 ## [1.12.0] - 2020-07-31
 
@@ -51,6 +56,7 @@
 ## [1.10.3] - 2020-07-30
 
 ### Fixed
+
 - Fix labeled links (fix the regex, make it dumber)
 
 ## [1.10.2] - 2020-07-30
@@ -61,7 +67,6 @@
 - Fix messagelist not having a scrollbar sometimes
 - Fix settings dialog not closable with escape key
 - Fix "New contact" in search results
-
 
 ## [1.10.1] - 2020-07-29
 
@@ -937,6 +942,14 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...HEAD
+
+[1.13.0-rc4]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0-rc1...v1.13.0-rc4
+
+[1.13.0-rc1]: https://github.com/deltachat/deltachat-desktop/compare/v1.12.0...v1.13.0-rc1
+
+[1.12.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.4...v1.12.0
+
+[1.10.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...v1.10.4
 
 [1.10.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...v1.10.3
 
