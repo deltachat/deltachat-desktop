@@ -147,17 +147,11 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           text={tx('menu_unmute')}
         />
       ),
-      <SettingsContext.Consumer>
-        {({ desktopSettings }) =>
-          desktopSettings.enableDisappearingMessages && (
-            <DeltaMenuItem
-              key='disappearing'
-              text={tx('ephemeral_messages')}
-              onClick={onDisappearingMessages}
-            />
-          )
-        }
-      </SettingsContext.Consumer>,
+      <DeltaMenuItem
+        key='disappearing'
+        text={tx('ephemeral_messages')}
+        onClick={onDisappearingMessages}
+      />,
       <Menu.Divider key='divider-2' />,
     ]
   } else {

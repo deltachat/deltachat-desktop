@@ -7,6 +7,7 @@
 - Update deltachat-node to v1.46.0
 - run npm audit fix
 - Overhaul colors of login hint
+- Disappearing messages is not experimental anymore
 
 ### Fixed
 
