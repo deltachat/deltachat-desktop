@@ -15,6 +15,7 @@
 - Make sure login screen doesn't flash on slow devices
 - Fix logging of react crashes.
 - Fix confusing error message on wrong autocrypt setup message code
+- Fix refreshing message list if disappearing message timed out
 
 ## [1.13.0-rc1] - 2020-08-13
 
