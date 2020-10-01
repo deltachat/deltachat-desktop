@@ -33,7 +33,6 @@ export interface DesktopSettings {
   lastAccount: string
   enableAVCalls: boolean
   enableOnDemandLocationStreaming: boolean
-  enableDisappearingMessages: boolean
   enterKeySends: boolean
   locale: string | null
   notifications: boolean
