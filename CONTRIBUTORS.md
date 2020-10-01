@@ -13,6 +13,7 @@
 | **Emil Lefherz**        |                                                  |
 | **maris**               |                                                  |
 | **pabzm**               |                                                  |
+| **raphael**             |                                                  |
 | **MIntrovrt**           |                                                  |
 | **Floris Bruynooghe**   |                                                  |
 | **B. Petersen**         |                                                  |
