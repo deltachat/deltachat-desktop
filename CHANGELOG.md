@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Fix search shows placeholders
+
 ## [1.13.0-rc4] - 2020-10-1
 
 ### Added
@@ -24,7 +30,6 @@
 - Fix automatically login to last remembered account
 - Fix scanning qr code and general improvement of the whole process
 - Fix avatar initials of the text avatars, of people with no displayname, inside of the messagelist
-- Fix search shows placeholders
 - Fix refreshing message list when disappearing message timed out
 
 ## [1.13.0-rc1] - 2020-08-13
