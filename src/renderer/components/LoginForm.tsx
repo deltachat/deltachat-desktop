@@ -39,9 +39,9 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const { mail_security, send_security } = credentials
   if (protocol === 'imap') {
     if (
-      mail_security === 'automatic' ||
+      mail_security === C.DC_SOCKET_AUTO.toString() ||
       mail_security === '' ||
-      mail_security === 'ssl'
+      mail_security === C.DC_SOCKET_SSL.toString()
     ) {
       return SendSecurityPortMap.imap['ssl']
     } else {
@@ -49,13 +49,17 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
     }
   } else {
     if (
-      send_security === 'automatic' ||
+      send_security === C.DC_SOCKET_AUTO.toString() ||
       send_security === '' ||
-      send_security === 'ssl'
+      send_security === C.DC_SOCKET_SSL.toString()
     ) {
       return SendSecurityPortMap.smtp['ssl']
+    } else if (send_security === C.DC_SOCKET_STARTTLS.toString()) {
+      return SendSecurityPortMap.smtp['starttls']
+    } else if (send_security === C.DC_SOCKET_PLAIN.toString()) {
+      return SendSecurityPortMap.smtp['plain']
     } else {
-      return SendSecurityPortMap.smtp[send_security]
+      return SendSecurityPortMap.smtp['ssl']
     }
   }
 }
@@ -356,7 +360,6 @@ export function ConfigureProgressDialog({
         try {
           account = await DeltaBackend.call('login.newLogin', credentials)
         } catch (err) {
-          console.log('fooooo', err)
           if (err) {
             onConfigureError(null, [null, err])
             onConfigureFailed(null, [null, null])
