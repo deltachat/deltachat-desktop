@@ -326,7 +326,6 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
       chatStore.state.id
     )
 
-    if (id !== chatStore.state.id) return
     chatStore.dispatch({
       type: 'SET_MESSAGE_IDS',
       id: chatStore.state.id,
