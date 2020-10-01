@@ -18,7 +18,6 @@ function setCoreStrings(dc: any, strings: { [key: number]: string }) {
   })
 }
 
-
 export default class DCLoginController extends SplitOut {
   /**
    * Called when this controller is created and when current

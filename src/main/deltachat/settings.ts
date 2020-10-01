@@ -69,8 +69,6 @@ export default class DCSettings extends SplitOut {
     this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory, undefined)
   }
 
-
-
   selectBackgroundImage(file: string) {
     return new Promise(async (resolve, reject) => {
       const copyAndSetBg = async (originalfile: string) => {
@@ -122,4 +120,3 @@ export default class DCSettings extends SplitOut {
     return this._dc.estimateDeletionCount(fromServer, seconds)
   }
 }
-
