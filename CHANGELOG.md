@@ -12,6 +12,7 @@
 - run npm audit fix
 - Overhaul colors of login hint
 - Change "remove account" translation to "delete account"
+- Disappearing messages are now enabled by default and not experimental anymore
 
 ### Fixed
 
