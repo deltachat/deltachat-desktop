@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fix search shows placeholders
+- Fix ok button not being a primary button in EncryptionInfo dialog
 
 ## [1.13.0-rc4] - 2020-10-1
 
