@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fix search shows placeholders
+- Fix handling of QrReader errors with own logger instead of console.error
 
 ## [1.13.0-rc4] - 2020-10-1
 
