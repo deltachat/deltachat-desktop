@@ -29,7 +29,7 @@ export function updateTrayIcon() {
     updateTrayMenu()
     return
   }
-  
+
   // Add tray icon
   log.info('add icon tray')
   tray = new Tray(appIcon())
@@ -66,11 +66,18 @@ export function updateTrayIcon() {
   ])
   tray.setToolTip('Delta Chat')
   tray.setContextMenu(contextMenu)
+  const hideOrShow = () => {
+    const isVisible = mainWindow.window.isVisible() || mainWindow.window.isFocused()
+    isVisible === true ?
+      mainWindow.hide() : 
+      mainWindow.show()
+      
+  }
   tray.on('double-click', (event, bounds) => {
-    mainWindow.show()
+    hideOrShow()
   })
   tray.on('click', (event, bounds) => {
-    mainWindow.show()
+    hideOrShow()
   })
 
   updateTrayMenu()
