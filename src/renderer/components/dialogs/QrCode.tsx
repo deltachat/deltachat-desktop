@@ -18,6 +18,9 @@ import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { DeltaBackend } from '../../delta-remote'
 import { openMapDialog } from '../helpers/ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/dialogs/QrCode')
 
 export default function QrCode({
   isOpen,
@@ -151,8 +154,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
   }
 
   const handleError = (err: string) => {
-    /* ignore-console-log */
-    console.error(err)
+    log.error('QrReader error: ' + err)
   }
 
   const openImageDialog = () => {
