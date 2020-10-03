@@ -321,14 +321,15 @@ ipcBackend.on('DC_EVENT_MSG_READ', (evt, [id, msgId]) => {
 ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   log.debug('DC_EVENT_MSGS_CHANGED', id, messageId)
   if (id === 0 && messageId === 0) {
+    const chatId = chatStore.state.id
     const messageIds = await DeltaBackend.call(
       'messageList.getMessageIds',
-      chatStore.state.id
+      chatId
     )
 
     chatStore.dispatch({
       type: 'SET_MESSAGE_IDS',
-      id: chatStore.state.id,
+      id: chatId,
       payload: messageIds,
     })
     return

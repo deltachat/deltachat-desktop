@@ -1,11 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Fix a bug where we render an empty message list
+
 ## [1.13.0] - 2020-10-1
 
 ### Fixed
 
 - Fix search shows placeholders
 - Fix ok button not being a primary button in EncryptionInfo dialog
+- Fix handling of QrReader errors with own logger instead of console.error
 
 ## [1.13.0-rc4] - 2020-10-1
 
