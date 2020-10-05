@@ -1,0 +1,45 @@
+.dc-context-menu-layer {
+  // Variables that are used by the code, you may modify them in media queries
+  // only use absolute "px" values here
+  --local-menu-width: 180px;
+  --local-menu-item-Line-height: 20px;
+  --local-menu-item-vertical-padding: 5px;
+  /** the margin that the context menu should have to the windo border */
+  --local-border-clearance: 7px;
+
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 9999;
+  background: transparent;
+  pointer-events: none;
+
+  &.active {
+    // todo make the backdrop a real backdrop color not red
+    background-color: rgba(255, 0, 0, 0.2);
+    pointer-events: auto;
+  }
+}
+
+.dc-context-menu {
+  // position and sizes are determined in code, you can use the vars above to controll the behaviour
+  position: fixed;
+  background-color: var(--bp3MenuBg);
+  color: var(--bp3MenuText);
+  width: var(--local-menu-width);
+
+  border-radius: 3px;
+
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2);
+
+  .item {
+    line-height: var(--local-menu-item-Line-height);
+    padding: var(--local-menu-item-vertical-padding) 12px;
+
+    &:focus,
+    &:hover {
+      background-color: var(--chatListItemBgHover);
+    }
+  }
+}
