@@ -17,21 +17,23 @@ export function updateTrayIcon() {
 
   // User doesn't want tray icon => destroy it
   if (app.state.saved.minimizeToTray !== true) {
-    if (tray != null) {
-      log.info('destroy icon tray')
-      tray.destroy()
-    }
-    updateTrayMenu()
+    if (tray != null) destroyTrayIcon()
     return
   }
 
   renderTrayIcon()
 }
 
+export function destroyTrayIcon() {
+  log.info('destroy icon tray')
+  tray.destroy()
+  tray = null
+}
+
 export function renderTrayIcon() {
   if (tray != null) {
     log.warn('Tray icon not destroyed before render?')
-    tray.destroy()
+    destroyTrayIcon()
   }
 
   const tx = app.translate
