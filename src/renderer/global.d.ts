@@ -31,6 +31,6 @@ declare global {
     __changeScreen: (screen: Screens) => {}
     __loadAccount: (account: DeltaChatAccount) => {}
     __screen: Screens
-    __contextMenuActive:boolean
+    __contextMenuActive: boolean
   }
 }

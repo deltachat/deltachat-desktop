@@ -64,7 +64,7 @@ export function useKeyBindingAction(
 }
 
 function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
-  if(window.__contextMenuActive){
+  if (window.__contextMenuActive) {
     return
   }
   if (!ev.repeat) {
