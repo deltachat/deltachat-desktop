@@ -7,6 +7,7 @@ type ContextMenuItem = { label: string; action: () => void }
 export function ContextMenuLayer(props: any) {
   const layerRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
+  const [isDemo, setDemo] = useState(false)
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
   const [position, setPosition] = useState<{ top: number; left: number }>({
     top: 0,
@@ -82,29 +83,23 @@ export function ContextMenuLayer(props: any) {
     let top = 0,
       left = 0
 
-    
     // Right or Left
-    if (
-        x + menu.width + BorderMargin <= space.width
-    ) {
-        // Right
-        left = x
+    if (x + menu.width + BorderMargin <= space.width) {
+      // Right
+      left = x
     } else {
-        // Left
-        left = x - menu.width
+      // Left
+      left = x - menu.width
     }
 
     // Bottom or Top
-    if (
-        y + menu.height + BorderMargin <= space.height
-    ) {
-        // Bottom
-        top = y
+    if (y + menu.height + BorderMargin <= space.height) {
+      // Bottom
+      top = y
     } else {
-        // Top
-        top = y - menu.height
+      // Top
+      top = y - menu.height
     }
-
 
     // Displaying Menu
     setPosition({ top, left })
@@ -116,26 +111,35 @@ export function ContextMenuLayer(props: any) {
     console.log('Close context menu')
     setActive(false)
     setCurrentItems([])
+    setDemo(false)
   }
 
   useKeyBindingAction(KeybindAction.DebugAction_ContextMenu, () => {
+    setDemo(true)
     setActive(true)
   })
-  console.log(active)
 
   return (
     <div
       ref={layerRef}
       className={`dc-context-menu-layer ${active ? 'active' : ''}`}
+      style={
+        isDemo
+          ? {
+              backgroundColor: 'rgba(255, 0, 0, 0.2)',
+              border: 'var(--local-border-clearance) solid red',
+            }
+          : {}
+      }
       onClick={cancel}
-      onContextMenu={dummyShow}
+      onContextMenu={ev => isDemo && dummyShow(ev)}
     >
       {active && currentItems.length > 0 && (
         <ContextMenu
           top={position.top}
           left={position.left}
           items={currentItems}
-          closeCallback={close}
+          closeCallback={cancel}
         />
       )}
     </div>
@@ -160,7 +164,7 @@ export function ContextMenu(props: {
         <div
           className='item'
           onClick={() => {
-            close()
+            props.closeCallback()
             item.action()
           }}
         >
@@ -174,7 +178,6 @@ export function ContextMenu(props: {
 // TODO:
 // - [X] find out in which direction it should open
 // - [X] open a context menu
-// - [] find out what crashes the demo actions
 // - [] provide a screen context function to open it
 // - [] Block other keybindings when ContextMenu is active
 // - [] controllable via keybindings (up, down, escape, enter)
