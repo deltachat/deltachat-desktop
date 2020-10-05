@@ -20,9 +20,8 @@ export enum KeybindAction {
   ChatList_ExitSearch = 'chatlist:exit-search',
   ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
-
   // Debug
-  DebugAction_ContextMenu = 'debugaction:context-menu'
+  DebugAction_ContextMenu = 'debugaction:context-menu',
 }
 
 export namespace ActionEmitter {
@@ -91,7 +90,7 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat
     }
-    if (ev.key == 'ContextMenu'){
+    if (ev.key == 'ContextMenu') {
       return KeybindAction.DebugAction_ContextMenu
     }
   } else {
