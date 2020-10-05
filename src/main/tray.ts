@@ -1,6 +1,5 @@
-import { app as rawApp, ipcMain, Menu, Tray } from 'electron'
+import { app as rawApp, Menu, Tray } from 'electron'
 import { globalShortcut } from 'electron'
-import path from 'path'
 import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
@@ -12,11 +11,7 @@ let contextMenu: Menu = null
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
 
-ipcMain.on('updateTrayIcon', updateTrayIcon)
-
 export function updateTrayIcon() {
-  const tx = app.translate
-
   // Don't show a tray icon for mac
   if (process.platform === 'darwin') return
 
@@ -30,6 +25,17 @@ export function updateTrayIcon() {
     return
   }
 
+  renderTrayIcon()
+}
+
+export function renderTrayIcon() {
+  if (tray != null) {
+    log.warn('Tray icon not destroyed before render?')
+    tray.destroy()
+  }
+
+  const tx = app.translate
+  
   // Add tray icon
   log.info('add icon tray')
   tray = new Tray(appIcon())
@@ -79,6 +85,7 @@ export function updateTrayIcon() {
   tray.on('click', (event, bounds) => {
     hideOrShow()
   })
+
 
   updateTrayMenu()
 }

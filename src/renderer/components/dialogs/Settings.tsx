@@ -33,7 +33,6 @@ import {
 import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
 import SettingsAppearance from './Settings-Appearance'
-import { ipcBackend } from '../../ipc'
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -132,9 +131,6 @@ export default function Settings(props: DialogProps) {
       (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
       true
     ) {
-      if (key === 'minimizeToTray') {
-        ipcBackend.send('updateTrayIcon')
-      }
       setDesktopSetting(key, value)
     }
   }
