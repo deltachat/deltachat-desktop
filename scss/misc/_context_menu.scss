@@ -37,9 +37,11 @@
     line-height: var(--local-menu-item-Line-height);
     padding: var(--local-menu-item-vertical-padding) 12px;
 
-    &:focus,
     &:hover {
       background-color: var(--chatListItemBgHover);
+    }
+    &:focus {
+      background-color: rgba(125, 125, 125, 0.4);
     }
   }
 }

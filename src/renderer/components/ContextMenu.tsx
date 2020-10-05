@@ -1,4 +1,4 @@
-import React, { useState, PropsWithChildren } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { useRef } from 'react'
 
@@ -104,11 +104,13 @@ export function ContextMenuLayer(props: any) {
     // Displaying Menu
     setPosition({ top, left })
     setCurrentItems(items)
+    window.__contextMenuActive = true
     setActive(true)
   }
 
   function cancel() {
     console.log('Close context menu')
+    window.__contextMenuActive = false
     setActive(false)
     setCurrentItems([])
     setDemo(false)
@@ -152,6 +154,47 @@ export function ContextMenu(props: {
   items: ContextMenuItem[]
   closeCallback: () => void
 }) {
+  useLayoutEffect(() => {
+    document.querySelector<HTMLDivElement>('div.dc-context-menu')?.focus()
+  })
+
+  useEffect(() => {
+    const onKeyDown = (ev: KeyboardEvent) => {
+      const parent = document.querySelector<HTMLDivElement>(
+        'div.dc-context-menu'
+      )
+      const current = parent?.querySelector(':focus')
+
+      if (ev.key == 'ArrowDown') {
+        if (current && current.nextElementSibling) {
+          ;(current.nextElementSibling as HTMLDivElement)?.focus()
+        } else {
+          ;(parent?.firstElementChild as HTMLDivElement).focus()
+        }
+      }
+      if (ev.key == 'ArrowUp') {
+        if (current && current.previousElementSibling) {
+          ;(current.previousElementSibling as HTMLDivElement)?.focus()
+        } else {
+          ;(parent?.lastElementChild as HTMLDivElement).focus()
+        }
+      }
+
+      if (ev.key == 'Enter') {
+        if (current) {
+          ;(current as HTMLDivElement)?.click()
+        }
+      }
+
+      if (ev.key == 'Escape') {
+        props.closeCallback()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  })
+
   return (
     <div
       className='dc-context-menu'
@@ -159,14 +202,19 @@ export function ContextMenu(props: {
         top: `${props.top}px`,
         left: `${props.left}px`,
       }}
+      role='menu'
+      tabIndex={-1}
     >
-      {props.items.map(item => (
+      {props.items.map((item, index) => (
         <div
           className='item'
           onClick={() => {
             props.closeCallback()
             item.action()
           }}
+          tabIndex={-1}
+          role='menuitem'
+          key={index}
         >
           {item.label}
         </div>
@@ -178,12 +226,13 @@ export function ContextMenu(props: {
 // TODO:
 // - [X] find out in which direction it should open
 // - [X] open a context menu
+// - [X] Block other keybindings when ContextMenu is active
+// - [X] controllable via keybindings (up, down, escape, enter)
+
 // - [] provide a screen context function to open it
-// - [] Block other keybindings when ContextMenu is active
-// - [] controllable via keybindings (up, down, escape, enter)
+// - [] replace all ocurrences of the other context menu
 // - [] remove the remaining debug dummy code
 
 // - [] what do we do about too long text? maybe do a line break?
 //      then the calculations will be off... maybe still better expected buggy behaviour that unexpected glitchy behaviour
-
-// - [] replace all ocurrences of the other context menu
+// - [] look a bit on the accessibility side of things??

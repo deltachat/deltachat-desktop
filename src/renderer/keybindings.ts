@@ -64,6 +64,9 @@ export function useKeyBindingAction(
 }
 
 function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
+  if(window.__contextMenuActive){
+    return
+  }
   if (!ev.repeat) {
     // fire only on first press
     if (ev.altKey && ev.key === 'ArrowDown') {
