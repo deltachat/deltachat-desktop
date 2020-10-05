@@ -67,9 +67,9 @@ export function updateTrayIcon() {
   tray.setToolTip('Delta Chat')
   tray.setContextMenu(contextMenu)
   const hideOrShow = () => {
-    const isVisible = mainWindow.window.isVisible() || mainWindow.window.isFocused()
-    isVisible === true ?
-      mainWindow.hide() : 
+    const isVisibleAndFocused = (mainWindow.window.isVisible() && mainWindow.window.isFocused())
+    isVisibleAndFocused === true ?
+      mainWindow.window.minimize() :
       mainWindow.show()
       
   }
