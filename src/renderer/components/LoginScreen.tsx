@@ -1,20 +1,15 @@
-import React, { useState, useEffect, Fragment, useContext } from 'react'
-import { sendToBackend, ipcBackend } from '../ipc'
+import React, { useState, useEffect, useContext } from 'react'
+import { ipcBackend } from '../ipc'
 import { Credentials } from '../../shared/shared-types'
 import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from './LoginForm'
 import {
-  Button,
   Classes,
   Elevation,
   Intent,
   Card,
-  Alignment,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
   Icon,
 } from '@blueprintjs/core'
 import { DeltaProgressBar } from './Login-Styles'
@@ -413,6 +408,6 @@ function AccountItem({
 // TODO
 
 // [] - show properties somewhere (size, path) -> find a good way, I'm not satisfied with the title-hover-popover
-// [] - remove not needed imports
+// [X] - remove not needed imports
 
 // [X] - show account name in remove dialog?
