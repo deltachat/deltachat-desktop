@@ -292,8 +292,10 @@ function AccountSelection({
   const { openDialog } = useContext(ScreenContext)
 
   const removeAccount = (login: DeltaChatAccount) => {
-    const message = tx('forget_login_confirmation_desktop')
+    const header = tx("delete_account_confirmation_header_desktop", login.addr)
+    const message = tx('delete_account_confirmation_desktop', login.addr)
     openDialog('ConfirmationDialog', {
+      header,
       message,
       confirmLabel: tx('delete_account'),
       isConfirmDanger: true,
@@ -410,10 +412,7 @@ function AccountItem({
 
 // TODO
 
-// [X] - hover effect for remove icon
 // [] - show properties somewhere (size, path) -> find a good way, I'm not satisfied with the title-hover-popover
-// [X] - keyboard navigation (arrow keys, tab, enter)
-// [] - keyboard navigation for dialog buttons
 // [] - remove not needed imports
 
-// [] - show account name in remove dialog?
+// [X] - show account name in remove dialog?
