@@ -76,6 +76,8 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   if (selectedChat && selectedChat.id && !selectedChat.isDeaddrop) {
     const { isGroup, selfInGroup, isSelfTalk, isDeviceChat } = selectedChat
 
+    const isReadOnlyChat = (isGroup && !selfInGroup) || isDeviceChat // setting this as var because we plan to have more readonly chats in the future
+
     chatMenu = [
       <Menu.Divider key='divider1' />,
       selectedChat.archived ? (
@@ -103,15 +105,17 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           }
         />
       ),
-      !isGroup && settingsContext.desktopSettings.enableAVCalls && (
-        <DeltaMenuItem
-          key='call'
-          text={tx('videochat')}
-          onClick={() => {
-            sendCallInvitation(screenContext, selectedChat.id)
-          }}
-        />
-      ),
+      !isGroup &&
+        settingsContext.desktopSettings.enableAVCalls &&
+        !isReadOnlyChat && (
+          <DeltaMenuItem
+            key='call'
+            text={tx('videochat')}
+            onClick={() => {
+              sendCallInvitation(screenContext, selectedChat.id)
+            }}
+          />
+        ),
       <DeltaMenuItem
         key='delete'
         text={tx('menu_delete_chat')}
@@ -147,11 +151,13 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           text={tx('menu_unmute')}
         />
       ),
-      <DeltaMenuItem
-        key='disappearing'
-        text={tx('ephemeral_messages')}
-        onClick={onDisappearingMessages}
-      />,
+      !isReadOnlyChat && (
+        <DeltaMenuItem
+          key='disappearing'
+          text={tx('ephemeral_messages')}
+          onClick={onDisappearingMessages}
+        />
+      ),
       <Menu.Divider key='divider-2' />,
     ]
   } else {
