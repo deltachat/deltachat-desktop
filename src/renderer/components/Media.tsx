@@ -4,6 +4,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../delta-remote'
 import { ScreenContext } from '../contexts'
 import MediaAttachment from './attachment/mediaAttachment'
+import { MessageType } from '../../shared/shared-types'
 
 type MediaTabKey = 'images' | 'video' | 'audio' | 'documents'
 
@@ -28,11 +29,9 @@ const MediaTabs: Readonly<
 
 type mediaProps = { chat: any }
 
-type message = any //Todo import that from somewhere
-
 export default class Media extends Component<
   mediaProps,
-  { id: MediaTabKey; msgTypes: number[]; medias: any }
+  { id: MediaTabKey; msgTypes: number[]; medias: MessageType[] }
 > {
   constructor(props: mediaProps) {
     super(props)
@@ -95,22 +94,26 @@ export default class Media extends Component<
               ) : (
                 ''
               )}
-              {medias.map((message: message) => {
-                var msg = message.msg
-                return (
-                  <div className='item' key={msg.id}>
-                    <MediaAttachment
-                      {...{
-                        direction: msg.direction,
-                        attachment: msg.attachment,
-                        conversationType: 'direct',
-                        message,
-                        isInMediaView: true,
-                      }}
-                    />
-                  </div>
+              {medias
+                .sort(
+                  ({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp
                 )
-              })}
+                .map((message, index) => {
+                  var msg = message.msg
+                  return (
+                    <div className='item' key={msg.id}>
+                      <MediaAttachment
+                        {...{
+                          direction: msg.direction,
+                          attachment: msg.attachment,
+                          conversationType: 'direct',
+                          message,
+                          isInMediaView: true,
+                        }}
+                      />
+                    </div>
+                  )
+                })}
             </div>
           </div>
         </div>
