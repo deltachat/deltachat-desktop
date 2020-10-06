@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- order media in gallery after sortTimestamp, newer ones up
+
 ### Fixed
 
 - Fix a bug where we render an empty message list
