@@ -148,7 +148,7 @@ export default function LoginScreen({
   loadAccount: (account: DeltaChatAccount) => {}
 }) {
   const tx = useTranslationFunction()
-  const { openDialog, changeScreen } = useContext(ScreenContext)
+  const { openDialog } = useContext(ScreenContext)
 
   const [credentials, setCredentials] = useState<Credentials>(
     defaultCredentials()
@@ -275,7 +275,7 @@ function AccountSelection({
   refreshAccounts: () => Promise<void>
   setView: React.Dispatch<React.SetStateAction<string>>
   logins: any
-  loadAccount: (account: DeltaChatAccount) => {}
+  loadAccount: (account: DeltaChatAccount) => void
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useContext(ScreenContext)
@@ -354,8 +354,8 @@ function AccountItem({
   removeAccount,
 }: {
   login: DeltaChatAccount
-  loadAccount: todo
-  removeAccount: todo
+  loadAccount: (account: DeltaChatAccount) => void
+  removeAccount: (account: DeltaChatAccount) => void
 }) {
   const removeAction = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     ev?.stopPropagation()
