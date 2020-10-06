@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## [Unreleased][unreleased]
+
+## [1.13.1] - 2020-10-06
 
 ### Changed
+
 - order media in gallery after sortTimestamp, newer ones up
 
 ### Fixed
@@ -10,7 +13,7 @@
 - Fix a bug where we render an empty message list
 - Hide invalid options in menu (example: send video invitation in device chat)
 
-## [1.13.0] - 2020-10-1
+## [1.13.0] - 2020-10-01
 
 ### Fixed
 
@@ -18,7 +21,7 @@
 - Fix ok button not being a primary button in EncryptionInfo dialog
 - Fix handling of QrReader errors with own logger instead of console.error
 
-## [1.13.0-rc4] - 2020-10-1
+## [1.13.0-rc4] - 2020-10-01
 
 ### Added
 
@@ -958,7 +961,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.1...HEAD
+
+[1.13.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0...v1.13.1
+
+[1.13.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0-rc4...v1.13.0
 
 [1.13.0-rc4]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0-rc1...v1.13.0-rc4
 
