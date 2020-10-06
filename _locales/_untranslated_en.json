@@ -197,5 +197,8 @@
   },
   "forget_login_confirmation_desktop": {
     "message": "DEPRECATED - PLEASE DELETE THIS STRING"
+  },
+  "account_info_hover_tooltip_desktop":{
+    "message": "email: %s\nsize: %s\npath: %s"
   }
 }

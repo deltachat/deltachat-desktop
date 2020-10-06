@@ -41,7 +41,7 @@ export default function ConfirmationDialog({
   onClose,
   isConfirmDanger = false,
   noMargin = false,
-  header
+  header,
 }: {
   message: string
   cancelLabel?: string
@@ -50,7 +50,7 @@ export default function ConfirmationDialog({
   onClose: () => {}
   isConfirmDanger?: boolean
   noMargin?: boolean
-  header?:string
+  header?: string
 }) {
   const isOpen = !!message
   const tx = useTranslationFunction()

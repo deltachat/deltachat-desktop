@@ -5,13 +5,7 @@ import LoginForm, {
   defaultCredentials,
   ConfigureProgressDialog,
 } from './LoginForm'
-import {
-  Classes,
-  Elevation,
-  Intent,
-  Card,
-  Icon,
-} from '@blueprintjs/core'
+import { Classes, Elevation, Intent, Card, Icon } from '@blueprintjs/core'
 import { DeltaProgressBar } from './Login-Styles'
 import { getLogger } from '../../shared/logger'
 import { ScreenContext, useTranslationFunction } from '../contexts'
@@ -287,7 +281,7 @@ function AccountSelection({
   const { openDialog } = useContext(ScreenContext)
 
   const removeAccount = (login: DeltaChatAccount) => {
-    const header = tx("delete_account_confirmation_header_desktop", login.addr)
+    const header = tx('delete_account_confirmation_header_desktop', login.addr)
     const message = tx('delete_account_confirmation_desktop', login.addr)
     openDialog('ConfirmationDialog', {
       header,
@@ -368,15 +362,16 @@ function AccountItem({
     removeAccount(login)
   }
 
+  const title = window.static_translate('account_info_hover_tooltip_desktop', [
+    login.addr,
+    filesizeConverter(login.size),
+    'accounts' + login.path.split('accounts')[1],
+  ])
+
   return (
     <div
       role='menu-item'
       className='contact-list-item'
-      title={
-        filesizeConverter(login.size) +
-        '\n' +
-        ('accounts' + login.path.split('accounts')[1])
-      }
       onClick={() => loadAccount(login)}
       tabIndex={0}
     >
@@ -390,7 +385,13 @@ function AccountItem({
         />
         <div className='contact-name'>
           <div className='display-name'>{login.displayname || login.addr}</div>
-          <div className='email'>{login.addr}</div>
+          <div
+            className='email'
+            style={{ display: 'inline-block' }}
+            title={title}
+          >
+            {login.addr}
+          </div>
         </div>
       </div>
       <div
@@ -404,10 +405,3 @@ function AccountItem({
     </div>
   )
 }
-
-// TODO
-
-// [] - show properties somewhere (size, path) -> find a good way, I'm not satisfied with the title-hover-popover
-// [X] - remove not needed imports
-
-// [X] - show account name in remove dialog?
