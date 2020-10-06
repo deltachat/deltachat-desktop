@@ -228,7 +228,7 @@ export const MessageListInner = React.memo(
 
 function EmptyChatMessage({ chat: chatStoreState }: { chat: ChatStoreState }) {
   const tx = useTranslationFunction()
-  
+
   const [chat, setChat] = useState<FullChat>(chatStoreState)
   useEffect(() => {
     const refresh = (_ev: any, chatId: number) => {

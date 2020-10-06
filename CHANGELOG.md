@@ -28,6 +28,7 @@
 - Fix broken enlargen group image #1924
 - Fix opening of multiple setting windows via keybinding
 - Fix two issues with the labeled link (see  #1893)
+- Fix refresh of "empty chat" info meassage on chat changes
 
 ## [1.13.1] - 2020-10-06
 
@@ -39,6 +40,7 @@
 
 - Fix a bug where we render an empty message list
 - Hide invalid options in menu (example: send video invitation in device chat)
+
 
 ## [1.13.0] - 2020-10-01
 
