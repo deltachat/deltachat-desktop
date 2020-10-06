@@ -232,6 +232,19 @@ div.delta-form-group {
 }
 
 .accounts {
+  .contact-list-item {
+    .contact {
+      width: 100%;
+    }
 
-  
+    .remove-icon:hover {
+      .bp3-icon {
+        background-color: rgba(125, 125, 125, 0.2);
+        border-radius: 4px;
+        & > svg {
+          fill: #bf0000;
+        }
+      }
+    }
+  }
 }

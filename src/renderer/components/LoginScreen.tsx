@@ -383,25 +383,25 @@ function AccountItem({
       onClick={() => loadAccount(login)}
       tabIndex={0}
     >
-      <div style={{ width: '100%' }}>
-        <div className='contact'>
-          <Avatar
-            {...{
-              avatarPath: login.profileImage,
-              color: login.color,
-              displayName: login.displayname,
-            }}
-          />
-          <div className='contact-name'>
-            <div className='display-name'>
-              {login.displayname || login.addr}
-            </div>
-            <div className='email'>{login.addr}</div>
-          </div>
+      <div className='contact'>
+        <Avatar
+          {...{
+            avatarPath: login.profileImage,
+            color: login.color,
+            displayName: login.displayname,
+          }}
+        />
+        <div className='contact-name'>
+          <div className='display-name'>{login.displayname || login.addr}</div>
+          <div className='email'>{login.addr}</div>
         </div>
       </div>
-
-      <div className='remove-icon' onClick={removeAction}>
+      <div
+        role='button'
+        aria-label={window.static_translate('delete_account')}
+        className='remove-icon'
+        onClick={removeAction}
+      >
         <Icon icon='cross' />
       </div>
     </div>
@@ -410,7 +410,7 @@ function AccountItem({
 
 // TODO
 
-// [] - hover effect for remove icon
+// [X] - hover effect for remove icon
 // [] - show properties somewhere (size, path) -> find a good way, I'm not satisfied with the title-hover-popover
 // [X] - keyboard navigation (arrow keys, tab, enter)
 // [] - keyboard navigation for dialog buttons
