@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useLayoutEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import {
   useChatStore,
@@ -10,9 +10,11 @@ import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType } from '../../../shared/shared-types'
+import { MessageType, FullChat } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
+import { ipcBackend } from '../../ipc'
+import { DeltaBackend } from '../../delta-remote'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (
@@ -177,39 +179,13 @@ export const MessageListInner = React.memo(
       oldestFetchedMessageIndex,
       messageIds
     )
-    const tx = useTranslationFunction()
 
     let specialMessageIdCounter = 0
-
-    let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
-
-    const showAllEmail = useDCConfigOnce('show_emails')
-
-    if (chat.isGroup && !chat.isDeaddrop) {
-      emptyChatMessage = chat.isUnpromoted
-        ? tx('chat_new_group_hint')
-        : tx('chat_no_messages')
-    } else if (chat.isSelfTalk) {
-      emptyChatMessage = tx('saved_messages_explain')
-    } else if (chat.isDeviceChat) {
-      emptyChatMessage = tx('device_talk_explain')
-    } else if (chat.isDeaddrop) {
-      emptyChatMessage =
-        Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
-          ? tx('chat_no_contact_requests')
-          : tx('chat_no_messages')
-    }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
-          {messageIds.length === 0 && (
-            <li>
-              <div className='info-message big'>
-                <p>{emptyChatMessage}</p>
-              </div>
-            </li>
-          )}
+          {messageIds.length === 0 && <EmptyChatMessage chat={chat} />}
           {_messageIdsToShow.map((messageId, i) => {
             if (messageId === C.DC_MSG_ID_DAYMARKER) {
               const key = 'magic' + messageId + '_' + specialMessageIdCounter++
@@ -249,6 +225,52 @@ export const MessageListInner = React.memo(
     return areEqual
   }
 )
+
+function EmptyChatMessage({ chat: chatStoreState }: { chat: ChatStoreState }) {
+  const tx = useTranslationFunction()
+  
+  const [chat, setChat] = useState<FullChat>(chatStoreState)
+  useEffect(() => {
+    const refresh = (_ev: any, chatId: number) => {
+      if (chatId == chat.id) {
+        DeltaBackend.call('chatList.getFullChatById', chat.id).then(
+          fullChat => {
+            setChat(fullChat)
+          }
+        )
+      }
+    }
+    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', refresh)
+    return () => ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', refresh)
+  })
+
+  let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
+
+  const showAllEmail = useDCConfigOnce('show_emails')
+
+  if (chat.isGroup && !chat.isDeaddrop) {
+    emptyChatMessage = chat.isUnpromoted
+      ? tx('chat_new_group_hint')
+      : tx('chat_no_messages')
+  } else if (chat.isSelfTalk) {
+    emptyChatMessage = tx('saved_messages_explain')
+  } else if (chat.isDeviceChat) {
+    emptyChatMessage = tx('device_talk_explain')
+  } else if (chat.isDeaddrop) {
+    emptyChatMessage =
+      Number(showAllEmail) !== C.DC_SHOW_EMAILS_ALL
+        ? tx('chat_no_contact_requests')
+        : tx('chat_no_messages')
+  }
+
+  return (
+    <li>
+      <div className='info-message big'>
+        <p>{emptyChatMessage}</p>
+      </div>
+    </li>
+  )
+}
 
 export function DayMarker(props: { timestamp: number }) {
   const { timestamp } = props
