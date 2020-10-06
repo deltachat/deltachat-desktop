@@ -95,7 +95,9 @@ export default class Media extends Component<
                 ''
               )}
               {medias
-                .sort(({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp)
+                .sort(
+                  ({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp
+                )
                 .map((message, index) => {
                   var msg = message.msg
                   return (
