@@ -4,41 +4,7 @@ img.verified-icon {
   margin-right: 2px;
 }
 
-div.contact-name {
-  display: inline-block;
-  width: calc(100% - 64px);
-  // height: 54px;
-  margin-left: 10px;
-  .chat-list & {
-    width: calc(100% - 84px);
-  }
-  .display-name {
-    font-weight: bold;
-    margin-bottom: 0px;
-    margin-top: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .email {
-    color: var(--contactEmailColor);
-    margin-bottom: 3px;
-    margin-top: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .pseudo-contact-text {
-    font-weight: bold;
-    margin-bottom: 0px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: medium;
-  }
-}
-
-div.contact {
+div.contact-list-item div.contact {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -46,5 +12,39 @@ div.contact {
   .chat-list & {
     width: 30vw;
     padding: 0px 10px;
+  }
+
+  div.contact-name {
+    display: inline-block;
+    width: calc(100% - 64px);
+    // height: 54px;
+    margin-left: 10px;
+    .chat-list & {
+      width: calc(100% - 84px);
+    }
+    .display-name {
+      font-weight: bold;
+      margin-bottom: 0px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .email {
+      color: var(--contactEmailColor);
+      margin-bottom: 3px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pseudo-contact-text {
+      font-weight: bold;
+      margin-bottom: 0px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: medium;
+    }
   }
 }
