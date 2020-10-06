@@ -4,6 +4,8 @@
 
 # Added
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
+- Add Keyboard navigation between accounts in account selection screen
+- Add the account name to the account deletion-confirmation dialog
 
 ### Changed
 - Change "More info" translation to "Message Details"
