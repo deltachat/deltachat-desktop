@@ -3,7 +3,11 @@
   padding-left: 20px;
   padding-right: 20px;
   &:hover {
-    background-color: var(--chatListItemBgHover);
+    background-color: var(--contactListItemBgHover);
+  }
+
+  &:focus {
+    background-color: var(--contactListItemBgFocus);
   }
 
   .chat-list & {

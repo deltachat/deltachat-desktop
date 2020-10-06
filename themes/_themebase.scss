@@ -56,6 +56,9 @@ $hover-contrast-change: 2%;
   --cli-search-result-divider: #{changeContrast($bgSecondary, 5%)};
   --cli-search-result-divider-border: #{changeContrast($bgSecondary, 10%)};
   --cli-search-result-divider-border-width: 2px;
+  /* ContactList / AccountList */
+  --contactListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
+  --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
@@ -145,9 +148,7 @@ $hover-contrast-change: 2%;
   --brokenMediaText: #070c14;
   --brokenMediaBg: #ffffff;
   --unreadCountBg: #{$accentColor};
-  --unreadCountLabel: #ffffff; // Manual value: This will not get generated in the future
-  --contactListItemBg: #62656a;
-  --contactListInitalColor: #{$textSecondary};
+  --unreadCountLabel: #ffffff; // Manual value: This will not get generated in the future;
   --contactEmailColor: #{$textSecondary};
   --errorColor: #f44336;
   --globalLinkColor: #2090ea; // Manual value: This will not get generated in the future
