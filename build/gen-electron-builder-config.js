@@ -138,6 +138,7 @@ build['linux'] = {
     keywords: 'dc;chat;delta;messaging;messenger;email',
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
+  icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
 }
 build['win'] = {
   icon: 'images/deltachat.ico',
