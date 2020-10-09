@@ -416,7 +416,7 @@ export function ConfigureProgressDialog({
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
-              <p>{error}</p>
+              <p style={{userSelect:"auto"}}>{error}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
