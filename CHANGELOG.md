@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Change "More info" translation to "Message Details"
+
 ## [1.13.1] - 2020-10-06
 
 ### Changed
