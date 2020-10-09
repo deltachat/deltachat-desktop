@@ -9,16 +9,12 @@ import {
   DeltaSelect,
   DeltaProgressBar,
 } from './Login-Styles'
-import { Collapse } from '@blueprintjs/core'
+import { Collapse, Dialog } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
 import { ipcBackend } from '../ipc'
-import {
-  SmallDialog,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './dialogs/DeltaDialog'
+import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
@@ -388,7 +384,13 @@ export function ConfigureProgressDialog({
   const tx = useTranslationFunction()
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog
+      isOpen={isOpen}
+      onClose={onClose}
+      className='delta-dialog small-dialog'
+      canEscapeKeyClose={false}
+      canOutsideClickClose={false}
+    >
       {!configureFailed && (
         <>
           <div className='bp3-dialog-body-with-padding'>
@@ -435,6 +437,6 @@ export function ConfigureProgressDialog({
           </DeltaDialogFooter>
         </>
       )}
-    </SmallDialog>
+    </Dialog>
   )
 }
