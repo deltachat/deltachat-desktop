@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+- Update deltachat-node to v1.46.0
+
 ## [1.13.1] - 2020-10-06
 
 ### Changed
@@ -29,7 +33,6 @@
 
 ### Changed
 
-- Update deltachat-node to v1.46.0
 - run npm audit fix
 - Overhaul colors of login hint
 - Change "remove account" translation to "delete account"
