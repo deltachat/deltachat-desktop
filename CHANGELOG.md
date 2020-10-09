@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+## Fixed
+
+- Fixed missing application icon for linux
+
 ## [1.13.1] - 2020-10-06
 
 ### Changed

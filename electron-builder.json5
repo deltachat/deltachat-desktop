@@ -194,6 +194,7 @@
       '!node_modules/deltachat-node/prebuilds/darwin-x64/${/*}',
       '!node_modules/deltachat-node/prebuilds/win32-x64/${/*}',
     ],
+    icon: 'build/icon.icns',
   },
   win: {
     icon: 'images/deltachat.ico',
