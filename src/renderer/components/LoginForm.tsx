@@ -330,7 +330,10 @@ export function ConfigureProgressDialog({
   const [error, setError] = useState('')
   const [configureFailed, setConfigureFailed] = useState(false)
 
-  const onConfigureProgress = (_: null, [progress, comment]: [number, null]) => {
+  const onConfigureProgress = (
+    _: null,
+    [progress, comment]: [number, null]
+  ) => {
     progress !== 0 && setProgress(progress)
     setProgressComment(comment)
   }
@@ -397,7 +400,7 @@ export function ConfigureProgressDialog({
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
               <DeltaProgressBar progress={progress} />
-              <p style={{userSelect:"auto"}}>{progressComment}</p>
+              <p style={{ userSelect: 'auto' }}>{progressComment}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
@@ -418,7 +421,7 @@ export function ConfigureProgressDialog({
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
-              <p style={{userSelect:"auto"}}>{error}</p>
+              <p style={{ userSelect: 'auto' }}>{error}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
