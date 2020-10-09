@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- Change "More info" translation to "Message Details"
+
 ## Fixed
 
 - Fixed missing application icon for linux

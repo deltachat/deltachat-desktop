@@ -207,7 +207,7 @@ const contextMenu = (
       </MenuItem>
        */}
       <MenuItem onClick={onForward}>{tx('menu_forward')}</MenuItem>
-      <MenuItem onClick={onShowDetail}>{tx('more_info_desktop')}</MenuItem>
+      <MenuItem onClick={onShowDetail}>{tx('menu_message_details')}</MenuItem>
       {/* {showRetry ? (
         <MenuItem onClick={onRetrySend}>{tx('retry_send')}</MenuItem>
       ) : null} */}
