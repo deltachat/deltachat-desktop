@@ -326,11 +326,14 @@ export function ConfigureProgressDialog({
   mode,
 }: DialogProps) {
   const [progress, setProgress] = useState(0)
+  const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
   const [configureFailed, setConfigureFailed] = useState(false)
 
-  const onConfigureProgress = (_: null, [progress, _data2]: [number, null]) =>
+  const onConfigureProgress = (_: null, [progress, comment]: [number, null]) => {
     progress !== 0 && setProgress(progress)
+    setProgressComment(comment)
+  }
 
   const onCancel = (event: any) => {
     DeltaBackend.call('stopOngoingProcess')
@@ -369,7 +372,6 @@ export function ConfigureProgressDialog({
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
-    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureError)
     return () => {
       ipcBackend.removeListener(
         'DC_EVENT_CONFIGURE_PROGRESS',
@@ -377,7 +379,6 @@ export function ConfigureProgressDialog({
       )
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
       ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
-      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureError)
     }
   }, [])
 
@@ -396,6 +397,7 @@ export function ConfigureProgressDialog({
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
               <DeltaProgressBar progress={progress} />
+              <p style={{userSelect:"auto"}}>{progressComment}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
