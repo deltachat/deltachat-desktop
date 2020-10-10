@@ -37,7 +37,7 @@ export function renderTrayIcon() {
   }
 
   const tx = app.translate
-  
+
   // Add tray icon
   log.info('add icon tray')
   tray = new Tray(appIcon())
@@ -75,11 +75,11 @@ export function renderTrayIcon() {
   tray.setToolTip('Delta Chat')
   tray.setContextMenu(contextMenu)
   const hideOrShow = () => {
-    const isVisibleAndFocused = (mainWindow.window.isVisible() && mainWindow.window.isFocused())
-    isVisibleAndFocused === true ?
-      mainWindow.window.minimize() :
-      mainWindow.show()
-      
+    const isVisibleAndFocused =
+      mainWindow.window.isVisible() && mainWindow.window.isFocused()
+    isVisibleAndFocused === true
+      ? mainWindow.window.minimize()
+      : mainWindow.show()
   }
   tray.on('double-click', (event, bounds) => {
     hideOrShow()
@@ -87,7 +87,6 @@ export function renderTrayIcon() {
   tray.on('click', (event, bounds) => {
     hideOrShow()
   })
-
 
   updateTrayMenu()
 }
