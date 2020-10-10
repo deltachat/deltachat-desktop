@@ -2,8 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+# Added
+- Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
+
 ### Changed
 - Change "More info" translation to "Message Details"
+- Through the emoji mart update, frequent emojis are now not sorted immediately, fixes #1177
 
 ## Fixed
 
