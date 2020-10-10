@@ -225,8 +225,6 @@ export default class DCChatList extends SplitOut {
       switch (chat.id) {
         case C.DC_CHAT_ID_DEADDROP:
           return tx('menu_deaddrop_subtitle')
-        // case C.DC_CHAT_ID_STARRED:
-        //   return 'stared'
       }
     }
     return 'ErrTitle'
