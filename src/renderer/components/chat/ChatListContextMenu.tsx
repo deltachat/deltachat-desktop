@@ -80,7 +80,13 @@ const ArchiveStateMenu = (chat: ChatListItemType) => {
 
 const ChatListContextMenu = React.memo<{
   showArchivedChats: boolean
-  getShow: (cb: (event: MouseEvent, chat: ChatListItemType, selectedChatItem: number) => void) => void
+  getShow: (
+    cb: (
+      event: MouseEvent,
+      chat: ChatListItemType,
+      selectedChatItem: number
+    ) => void
+  ) => void
 }>(
   props => {
     const screenContext = useContext(ScreenContext)
@@ -90,7 +96,11 @@ const ChatListContextMenu = React.memo<{
     const [selectedChatId, setSelectedChatId] = useState(null)
     const contextMenu = useRef(null)
 
-    const show = (event: MouseEvent, chat: ChatListItemType, selectedChatId: number) => {
+    const show = (
+      event: MouseEvent,
+      chat: ChatListItemType,
+      selectedChatId: number
+    ) => {
       // no log.debug, because passing the event object to through ipc freezes the application
       // console.debug('ChatListContextMenu.show', chat, event) // also commented out because it's not needed
 
@@ -121,7 +131,8 @@ const ChatListContextMenu = React.memo<{
       setSelectedChatId(null)
     }
 
-    const onDeleteChat = () => openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
+    const onDeleteChat = () =>
+      openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
     const onEncrInfo = () =>
       openEncryptionInfoDialog(screenContext, chatListItem)
     const onEditGroup = async () => {

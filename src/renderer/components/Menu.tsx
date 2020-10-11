@@ -54,7 +54,8 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
   const onLeaveGroup = () => openLeaveChatDialog(screenContext, selectedChat.id)
   const onBlockContact = () =>
     openBlockContactDialog(screenContext, selectedChat)
-  const onDeleteChat = () => openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
+  const onDeleteChat = () =>
+    openDeleteChatDialog(screenContext, selectedChat, selectedChat.id)
   const onMuteChat = () => openMuteChatDialog(screenContext, selectedChat.id)
   const onUnmuteChat = () => unMuteChat(selectedChat.id)
   const onUnblockContacts = () =>
