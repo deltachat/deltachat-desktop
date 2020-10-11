@@ -28,7 +28,6 @@ export function Avatar(props: {
   large?: boolean
   small?: boolean
   isVerified?: boolean
-  onClick?: htmlDivProps['onClick']
   style?: htmlDivProps['style']
 }) {
   const { avatarPath, color, displayName, isVerified, large, small } = props
