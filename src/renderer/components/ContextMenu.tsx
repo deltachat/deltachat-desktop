@@ -139,6 +139,7 @@ export function ContextMenuLayer({
           ? {
               backgroundColor: 'rgba(255, 0, 0, 0.2)',
               border: 'var(--local-border-clearance) solid red',
+              pointerEvents: 'auto',
             }
           : {}
       }
@@ -200,8 +201,32 @@ export function ContextMenu(props: {
       }
     }
 
+    const onOutsideClick = (ev: MouseEvent) => {
+      const parent = document.querySelector('div.dc-context-menu')
+      if (!parent) {
+        return
+      }
+
+      let isOnMenu = ev.target === parent
+      for (let child of parent.children) {
+        if (ev.target === child) {
+          isOnMenu = true
+        }
+      }
+
+      if (!isOnMenu) {
+        props.closeCallback()
+      }
+    }
+
     document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+    document.addEventListener('mousedown', onOutsideClick)
+    document.addEventListener('touchstart', onOutsideClick)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.removeEventListener('mousedown', onOutsideClick)
+      document.removeEventListener('touchstart', onOutsideClick)
+    }
   })
 
   return (

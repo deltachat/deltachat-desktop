@@ -14,16 +14,15 @@
   background-color: transparent;
   pointer-events: none;
 
-  &.active {
-    // todo make the backdrop a real backdrop color not red
-    background-color: rgba(0, 0, 0, 0.3);
-    pointer-events: auto;
-  }
+  // &.active {
+  //   background-color: rgba(0, 0, 0, 0.3);
+  // }
 }
 
 .dc-context-menu {
   // position and sizes are determined in code, you can use the vars above to controll the behaviour
   position: fixed;
+  pointer-events: auto;
   background-color: var(--bp3MenuBg);
   color: var(--bp3MenuText);
   width: var(--local-menu-width);
