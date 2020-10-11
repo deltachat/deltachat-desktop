@@ -93,7 +93,6 @@
     "punycode": "^2.1.1",
     "rc": "^1.2.8",
     "react": "^16.12.0",
-    "react-contextmenu": "^2.13.0",
     "react-dom": "^16.12.0",
     "react-qr-reader": "^2.2.1",
     "react-qr-svg": "^2.1.0",
