@@ -257,20 +257,6 @@ export function ContextMenu(props: {
   )
 }
 
-// TODO:
-// - [X] find out in which direction it should open
-// - [X] open a context menu
-// - [X] Block other keybindings when ContextMenu is active
-// - [X] controllable via keybindings (up, down, escape, enter)
-
-// - [X] provide a screen context function to open it
-// - [] replace all ocurrences of the other context menu
-// - [] remove the remaining debug dummy code
-
-// - [] what do we do about too long text? maybe do a line break?
-//      then the calculations will be off... maybe still better expected buggy behaviour that unexpected glitchy behaviour
-// - [] look a bit on the accessibility side of things??
-
 export function makeContextMenu(
   items: ContextMenuItem[],
   screenContext: unwrapContext<typeof ScreenContext>
