@@ -50,14 +50,14 @@ export function ContextMenuLayer({
     })
   }
 
-  function show({ cursorX, cursorY, items:rawItems }: showFnArguments) {
+  function show({ cursorX, cursorY, items: rawItems }: showFnArguments) {
     if (!layerRef.current) {
       throw new Error('Somehow the ContextMenuLayer went missing')
     }
     // Filter out empty null items
     // (can happen when constructing the array with inline conditions,
     // look at the chatlistitem context menu for an example)
-    const items = rawItems.filter(item=>!!item)
+    const items = rawItems.filter(item => !!item)
     // Get required information
     var style = window.getComputedStyle(layerRef.current)
 

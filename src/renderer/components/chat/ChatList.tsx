@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
-import {useChatListContextMenu} from './ChatListContextMenu'
+import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
 import ChatListItem, {
   ChatListItemMessageResult,
