@@ -119,7 +119,7 @@ export default function ChatList(props: {
     props.onChatClick(chatId)
   }
 
-  const openContextMenu = useChatListContextMenu(showArchivedChats)
+  const openContextMenu = useChatListContextMenu()
 
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return

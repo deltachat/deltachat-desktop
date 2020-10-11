@@ -59,7 +59,7 @@ function archiveStateMenu(
   }
 }
 
-export function useChatListContextMenu(showArchivedChats: boolean) {
+export function useChatListContextMenu() {
   const screenContext = useContext(ScreenContext)
   const tx = useTranslationFunction()
 
