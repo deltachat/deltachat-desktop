@@ -8,6 +8,7 @@
 ## Fixed
 
 - Fixed missing application icon for linux
+- Fixed unselecting current chat after deleting another chat
 
 ## [1.13.1] - 2020-10-06
 
