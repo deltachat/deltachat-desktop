@@ -171,20 +171,21 @@ export function ContextMenuLayer({
 
 /**
  * line Overflow detection
- * 
+ *
  * detect if labels overflow the lines and estimate the overflow
  *  */
 function estimateOverflowingLines(items: ContextMenuItem[]) {
   let overflowingLines = 0
   for (let { label } of items) {
     if (label.length > overFlowLineCharacterCount) {
-      let words = label.split(' '), currentLength = 0, overSize = 0
+      let words = label.split(' '),
+        currentLength = 0,
+        overSize = 0
       for (let word of words) {
         if (currentLength + word.length > overFlowLineCharacterCount) {
           overSize++
           currentLength = word.length
-        }
-        else {
+        } else {
           currentLength += word.length
         }
         if (currentLength >= overFlowLineCharacterCount) {
