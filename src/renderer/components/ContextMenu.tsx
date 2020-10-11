@@ -1,10 +1,23 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { useRef } from 'react'
+import { ScreenContext, unwrapContext } from '../contexts'
 
-type ContextMenuItem = { label: string; action: () => void }
+export type ContextMenuItem = { label: string; action: () => void }
 
-export function ContextMenuLayer(props: any) {
+type showFnArguments = {
+  cursorX: number
+  cursorY: number
+  items: ContextMenuItem[]
+}
+
+export type showFnType = (args: showFnArguments) => void
+
+export function ContextMenuLayer({
+  setShowFunction,
+}: {
+  setShowFunction: (showFn: showFnType) => void
+}) {
   const layerRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
   const [isDemo, setDemo] = useState(false)
@@ -23,35 +36,28 @@ export function ContextMenuLayer(props: any) {
       items: [
         {
           label: 'DemoOption1',
-          action: () => console.log('clicked demo option 1'),
+          action: () => console.debug('clicked demo option 1'),
         },
         {
           label: 'DemoOption2',
-          action: () => console.log('clicked demo option 2'),
+          action: () => console.debug('clicked demo option 2'),
         },
         {
           label: 'DemoOption3',
-          action: () => console.log('clicked demo option 3'),
+          action: () => console.debug('clicked demo option 3'),
         },
       ],
     })
   }
 
-  function show({
-    cursorX,
-    cursorY,
-    items,
-  }: {
-    cursorX: number
-    cursorY: number
-    items: ContextMenuItem[]
-  }) {
-    console.log('Open context menu')
-    console.log(layerRef.current)
+  function show({ cursorX, cursorY, items:rawItems }: showFnArguments) {
     if (!layerRef.current) {
       throw new Error('Somehow the ContextMenuLayer went missing')
     }
-
+    // Filter out empty null items
+    // (can happen when constructing the array with inline conditions,
+    // look at the chatlistitem context menu for an example)
+    const items = rawItems.filter(item=>!!item)
     // Get required information
     var style = window.getComputedStyle(layerRef.current)
 
@@ -109,7 +115,6 @@ export function ContextMenuLayer(props: any) {
   }
 
   function cancel() {
-    console.log('Close context menu')
     window.__contextMenuActive = false
     setActive(false)
     setCurrentItems([])
@@ -120,6 +125,10 @@ export function ContextMenuLayer(props: any) {
     setDemo(true)
     setActive(true)
   })
+
+  useEffect(() => {
+    if (typeof setShowFunction === 'function') setShowFunction(show)
+  }, [setShowFunction])
 
   return (
     <div
@@ -229,10 +238,30 @@ export function ContextMenu(props: {
 // - [X] Block other keybindings when ContextMenu is active
 // - [X] controllable via keybindings (up, down, escape, enter)
 
-// - [] provide a screen context function to open it
+// - [X] provide a screen context function to open it
 // - [] replace all ocurrences of the other context menu
 // - [] remove the remaining debug dummy code
 
 // - [] what do we do about too long text? maybe do a line break?
 //      then the calculations will be off... maybe still better expected buggy behaviour that unexpected glitchy behaviour
 // - [] look a bit on the accessibility side of things??
+
+export function makeContextMenu(
+  items: ContextMenuItem[],
+  screenContext: unwrapContext<typeof ScreenContext>
+) {
+  return (ev: React.MouseEvent<any, MouseEvent>) => {
+    const [cursorX, cursorY] = [ev.clientX, ev.clientY]
+
+    screenContext.openContextMenu({
+      cursorX,
+      cursorY,
+      items,
+    })
+  }
+}
+
+export function useContextMenu(items: ContextMenuItem[]) {
+  const screenContext = useContext(ScreenContext)
+  return makeContextMenu(items, screenContext)
+}

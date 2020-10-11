@@ -18,7 +18,6 @@ const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
 import { getDefaultState } from '../shared/state'
-import { ContextMenuLayer } from './components/ContextMenu'
 const { ipcRenderer } = window.electron_functions
 
 attachKeybindingsListener()
@@ -115,7 +114,6 @@ export default function App(props: any) {
   if (!localeData || !state) return null
   return (
     <CrashScreen>
-      <ContextMenuLayer />
       <SettingsContextWrapper account={account}>
         <i18nContext.Provider value={window.static_translate}>
           <ScreenController account={account} loadAccount={loadAccount} />

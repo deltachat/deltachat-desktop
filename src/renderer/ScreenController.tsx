@@ -15,6 +15,7 @@ import DialogController, {
 import processOpenQrUrl from './components/helpers/OpenQrUrl'
 
 import { getLogger } from '../shared/logger'
+import { ContextMenuLayer, showFnType } from './components/ContextMenu'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -30,6 +31,7 @@ export enum Screens {
 
 export default class ScreenController extends Component {
   dialogController: React.RefObject<DialogController>
+  contextMenuShowFn: showFnType = null
   state: { message: userFeedback | false; screen: Screens }
   onShowAbout: any
 
@@ -49,6 +51,7 @@ export default class ScreenController extends Component {
     this.onSuccess = this.onSuccess.bind(this)
     this.userFeedback = this.userFeedback.bind(this)
     this.userFeedbackClick = this.userFeedbackClick.bind(this)
+    this.openContextMenu = this.openContextMenu.bind(this)
     this.openDialog = this.openDialog.bind(this)
     this.changeScreen = this.changeScreen.bind(this)
     this.closeDialog = this.closeDialog.bind(this)
@@ -135,6 +138,13 @@ export default class ScreenController extends Component {
     this.dialogController.current.closeDialog(...args)
   }
 
+  openContextMenu(...args: Parameters<showFnType>) {
+    if (!this.contextMenuShowFn) {
+      throw new Error('Context Menu Controller not availible')
+    }
+    this.contextMenuShowFn(...args)
+  }
+
   renderScreen() {
     switch (this.state.screen) {
       case Screens.Main:
@@ -147,6 +157,11 @@ export default class ScreenController extends Component {
   render() {
     return (
       <div>
+        <ContextMenuLayer
+          setShowFunction={showFn => {
+            this.contextMenuShowFn = showFn
+          }}
+        />
         {this.state.message && (
           <div
             onClick={this.userFeedbackClick}
@@ -158,6 +173,7 @@ export default class ScreenController extends Component {
         <ScreenContext.Provider
           value={{
             openDialog: this.openDialog,
+            openContextMenu: this.openContextMenu,
             closeDialog: this.closeDialog,
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
