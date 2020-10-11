@@ -13,6 +13,12 @@ type showFnArguments = {
 
 export type showFnType = (args: showFnArguments) => void
 
+/**
+ * character count that is considdered to fill a line, used to estimate linebreaks
+ * might depend on fontsize and font-family
+ * */
+const overFlowLineCharacterCount = 19
+
 export function ContextMenuLayer({
   setShowFunction,
 }: {
@@ -35,11 +41,11 @@ export function ContextMenuLayer({
       cursorY,
       items: [
         {
-          label: 'DemoOption1',
+          label: 'DemoOption2 DemoOption2 DemoOption2',
           action: () => console.debug('clicked demo option 1'),
         },
         {
-          label: 'DemoOption2',
+          label: 'DemoOption2 DemoOption2 DemoOption2 DemoOption2 DemoOption2',
           action: () => console.debug('clicked demo option 2'),
         },
         {
@@ -80,8 +86,13 @@ export function ContextMenuLayer({
       width: getValue('width'),
     }
     const [x, y] = [cursorX, cursorY]
+
+    let overflowingLines = estimateOverflowingLines(items)
+
     const menu = {
-      height: items.length * ContextMenuItemHeight,
+      height:
+        items.length * ContextMenuItemHeight +
+        overflowingLines * ContextMenuItemLineHeight,
       width: ContextMenuWidth,
     }
 
@@ -156,6 +167,35 @@ export function ContextMenuLayer({
       )}
     </div>
   )
+}
+
+/**
+ * line Overflow detection
+ * 
+ * detect if labels overflow the lines and estimate the overflow
+ *  */
+function estimateOverflowingLines(items: ContextMenuItem[]) {
+  let overflowingLines = 0
+  for (let { label } of items) {
+    if (label.length > overFlowLineCharacterCount) {
+      let words = label.split(' '), currentLength = 0, overSize = 0
+      for (let word of words) {
+        if (currentLength + word.length > overFlowLineCharacterCount) {
+          overSize++
+          currentLength = word.length
+        }
+        else {
+          currentLength += word.length
+        }
+        if (currentLength >= overFlowLineCharacterCount) {
+          currentLength -= overFlowLineCharacterCount
+          overSize++
+        }
+      }
+      overflowingLines += overSize
+    }
+  }
+  return overflowingLines
 }
 
 export function ContextMenu(props: {
