@@ -1,6 +1,6 @@
 {
   "menu_copy_selection_to_clipboard": {
-    "message": "Copy Selection"
+    "message": "Copy selection"
   },
   "menu_copy_link_to_clipboard": {
     "message": "Copy link"
@@ -155,5 +155,38 @@
   },
   "attachment_failed_to_load":{
     "message": "attachment failed to load"
+  },
+  "emoji_search_results": {
+    "message": "Search results"
+  },
+  "emoji_not_found": {
+    "message": "No emoji found"
+  },
+  "emoji_recent": {
+    "message": "Recently Used"
+  },
+  "emoji_people": {
+    "message": "People & Body"
+  },
+  "emoji_nature": {
+    "message": "Animals & Nature"
+  },
+  "emoji_foods": {
+    "message": "Food & Drink"
+  },
+  "emoji_activity": {
+    "message": "Activity"
+  },
+  "emoji_places": {
+    "message": "Travel & Places"
+  },
+  "emoji_objects": {
+    "message": "Objects"
+  },
+  "emoji_symbols": {
+    "message": "Symbols"
+  },
+  "emoji_flags": {
+    "message": "Flags"
   }
 }
