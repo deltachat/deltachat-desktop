@@ -4,6 +4,8 @@
 
 ### Changed
 - Change "More info" translation to "Message Details"
+- gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
+- minor gallery style adjustments 
 
 ## Fixed
 
