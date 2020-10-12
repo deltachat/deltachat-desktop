@@ -8,7 +8,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { useDebouncedCallback } from 'use-debounce'
 import { ChatStoreState } from '../../stores/chat'
 
-const { DC_CHAT_ID_DEADDROP, DC_CHAT_ID_STARRED } = C
+const { DC_CHAT_ID_DEADDROP } = C
 
 const log = getLogger('renderer/messageListAndComposer')
 
@@ -95,8 +95,6 @@ export default function MessageListAndComposer({
       return [true, 'messaging_disabled_deaddrop']
     } else if (chat.isDeviceChat === true) {
       return [true, 'messaging_disabled_device_chat']
-    } else if (id === DC_CHAT_ID_STARRED) {
-      return [true, '']
     } else if (isGroup && !selfInGroup) {
       return [true, 'messaging_disabled_not_in_group']
     } else {
