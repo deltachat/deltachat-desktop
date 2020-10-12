@@ -15,6 +15,8 @@
 
 - Fixed missing application icon for linux
 - Fixed unselecting current chat after deleting another chat
+- Fix hover color on emoji picker for light theme
+- Fix missing translations in emoji picker
 
 ## [1.13.1] - 2020-10-06
 
