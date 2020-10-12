@@ -7,8 +7,12 @@ import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, DCContact } from '../../../shared/shared-types'
-import { attachment, isGenericAttachment } from '../attachment/Attachment'
+import {
+  MessageType,
+  DCContact,
+  MessageTypeAttachment,
+} from '../../../shared/shared-types'
+import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
@@ -98,7 +102,7 @@ const InlineMenu = (
   showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
   triggerId: string,
   props: {
-    attachment: attachment
+    attachment: MessageTypeAttachment
     message: MessageType | { msg: null }
     // onReply
     viewType: number
@@ -136,7 +140,7 @@ const InlineMenu = (
 
 const contextMenu = (
   props: {
-    attachment: attachment
+    attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus
     onDelete: Function
@@ -226,7 +230,7 @@ const Message = (props: {
   text?: string
   disableMenu?: boolean
   status: msgStatus
-  attachment: attachment
+  attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -351,7 +355,7 @@ export const CallMessage = (props: {
   text?: string
   disableMenu?: boolean
   status: msgStatus
-  attachment: attachment
+  attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>

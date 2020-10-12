@@ -156,6 +156,8 @@ $hover-contrast-change: 2%;
   --mapOverlayBg: #{$bgPrimary};
   --videoPlayBtnIcon: #{$accentColor};
   --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
+  --videoPlayBtnBorder: #eaeaea;
+  --videoPlayBtnBgHover: #eeeeee;
 
   @if lightness($bgPrimary) < 50 {
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};

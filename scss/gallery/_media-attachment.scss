@@ -28,7 +28,12 @@
     width: 48px;
     height: 48px;
     background-color: var(--videoPlayBtnBg);
+    border: 2px solid var(--videoPlayBtnBorder);
     border-radius: 24px;
+
+    &:hover {
+      background-color: var(--videoPlayBtnBgHover);
+    }
 
     & > .video-play-btn-icon {
       position: absolute;
@@ -43,15 +48,12 @@
   }
 }
 
-.media-attachment-broken-media {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
-
+.media-attachment-media.broken > .attachment-content {
+  font-size: 22px;
   padding: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--brokenMediaBg);
+  color: var(--colorDanger);
+  background-color: lightgrey;
+  margin-bottom: 0;
 }
 
 .media-attachment-audio {
@@ -74,7 +76,7 @@
 .media-attachment-generic {
   display: flex;
   flex-direction: row;
-  width: 400px;
+  width: 300px;
   margin: 5px 3px;
 
   & > .file-icon {
