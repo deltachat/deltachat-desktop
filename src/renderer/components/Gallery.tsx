@@ -29,7 +29,7 @@ const MediaTabs: Readonly<
 
 type mediaProps = { chat: any }
 
-export default class Media extends Component<
+export default class Gallery extends Component<
   mediaProps,
   { id: MediaTabKey; msgTypes: number[]; medias: MessageType[] }
 > {
@@ -98,19 +98,10 @@ export default class Media extends Component<
                 .sort(
                   ({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp
                 )
-                .map((message, index) => {
-                  var msg = message.msg
+                .map(message => {
                   return (
-                    <div className='item' key={msg.id}>
-                      <MediaAttachment
-                        {...{
-                          direction: msg.direction,
-                          attachment: msg.attachment,
-                          conversationType: 'direct',
-                          message,
-                          isInMediaView: true,
-                        }}
-                      />
+                    <div className='item' key={message.msg.id}>
+                      <MediaAttachment message={message} />
                     </div>
                   )
                 })}
@@ -122,4 +113,4 @@ export default class Media extends Component<
   }
 }
 
-Media.contextType = ScreenContext
+Gallery.contextType = ScreenContext

@@ -121,14 +121,16 @@ export default function ChatList(props: {
 
   const openContextMenu = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    chatId: number
+    chatId: number,
+    selectedChatId: number
   ) => {
     if (realOpenContextMenu.current === null)
       throw new Error(
         'Tried to open ChatListContextMenu before we recieved open method'
       )
+
     const chat = chatCache[chatId]
-    realOpenContextMenu.current(event, chat)
+    realOpenContextMenu.current(event, chat, selectedChatId)
   }
 
   const addContactOnClick = async () => {
@@ -256,7 +258,7 @@ export default function ChatList(props: {
                         chatListItem={chatCache[chatId] || undefined}
                         onClick={onChatClick.bind(null, chatId)}
                         onContextMenu={event => {
-                          openContextMenu(event, chatId)
+                          openContextMenu(event, chatId, selectedChatId)
                         }}
                       />
                     </div>

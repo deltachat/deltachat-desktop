@@ -9,9 +9,9 @@ import mime from 'mime-types'
 import SplitOut from './splitout'
 import { Message } from 'deltachat-node'
 import {
-  JsonMessage,
   MessageType,
   MessageSearchResult,
+  MessageTypeAttachment,
 } from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(
@@ -78,7 +78,7 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG = msg.toJson()
 
-    let attachment = jsonMSG.file && {
+    let attachment: MessageTypeAttachment = jsonMSG.file && {
       url: jsonMSG.file,
       contentType: convertContentType({
         filemime,

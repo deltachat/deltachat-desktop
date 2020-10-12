@@ -51,7 +51,8 @@ export function openLeaveChatDialog(
 
 export function openDeleteChatDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
-  chat: Chat
+  chat: Chat,
+  selectedChatId: number
 ) {
   const tx = window.static_translate
   screenContext.openDialog('ConfirmationDialog', {
@@ -59,7 +60,12 @@ export function openDeleteChatDialog(
     confirmLabel: tx('delete'),
     isConfirmDanger: true,
     cb: (yes: boolean) =>
-      yes && DeltaBackend.call('chat.delete', chat.id).then(unselectChat),
+      yes &&
+      DeltaBackend.call('chat.delete', chat.id).then(() => {
+        if (selectedChatId === chat.id) {
+          unselectChat()
+        }
+      }),
   })
 }
 

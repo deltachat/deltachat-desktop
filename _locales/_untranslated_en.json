@@ -149,5 +149,11 @@
   },
   "a11y_disappearing_messages_activated": {
     "message": "Disapearing messages are active for this chat"
+  },
+  "can_not_display_unsuported_file_type":{
+    "message": "Can not display this file type: %s"
+  },
+  "attachment_failed_to_load":{
+    "message": "attachment failed to load"
   }
 }

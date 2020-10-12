@@ -5,7 +5,7 @@ import {
   useTranslationFunction,
 } from '../contexts'
 
-import Media from './Media'
+import Gallery from './Gallery'
 import Menu from './Menu'
 import ChatList from './chat/ChatList'
 import MessageListAndComposer from './message/MessageListAndComposer'
@@ -74,7 +74,7 @@ export default function MainScreen() {
   const menu = <Menu selectedChat={selectedChat} />
   const MessageListView = selectedChat.id ? (
     media ? (
-      <Media chat={selectedChat} />
+      <Gallery chat={selectedChat} />
     ) : (
       <MessageListAndComposer chat={selectedChat} />
     )

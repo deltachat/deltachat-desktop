@@ -8,10 +8,13 @@
 ### Changed
 - Change "More info" translation to "Message Details"
 - Through the emoji mart update, frequent emojis are now not sorted immediately, fixes #1177
+- gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
+- minor gallery style adjustments 
 
 ## Fixed
 
 - Fixed missing application icon for linux
+- Fixed unselecting current chat after deleting another chat
 
 ## [1.13.1] - 2020-10-06
 
