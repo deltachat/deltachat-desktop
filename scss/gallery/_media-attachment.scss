@@ -43,15 +43,12 @@
   }
 }
 
-.media-attachment-broken-media {
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: 0.3px;
-
+.media-attachment-media.broken > .attachment-content {
+  font-size: 22px;
   padding: 10px;
-  text-align: center;
-  text-transform: uppercase;
-  color: var(--brokenMediaBg);
+  color: var(--colorDanger);
+  background-color: lightgrey;
+  margin-bottom: 0;
 }
 
 .media-attachment-audio {

@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import Timestamp from '../conversations/Timestamp'
-import { isImage, isVideo, hasImage } from '../attachment/Attachment'
+import { isImage, isVideo, hasAttachment } from '../attachment/Attachment'
 import { i18nContext } from '../../contexts'
 import { MessageTypeAttachment } from '../../../shared/shared-types'
 
@@ -29,7 +29,8 @@ export default class MessageMetaData extends React.Component<{
 
     const withImageNoCaption = Boolean(
       !text &&
-        ((isImage(attachment) && hasImage(attachment)) || isVideo(attachment))
+        ((isImage(attachment) && hasAttachment(attachment)) ||
+          isVideo(attachment))
     )
     const showError = status === 'error' && direction === 'outgoing'
 

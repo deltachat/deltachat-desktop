@@ -98,16 +98,10 @@ export default class Gallery extends Component<
                 .sort(
                   ({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp
                 )
-                .map((message) => {
-                  var msg = message.msg
+                .map(message => {
                   return (
-                    <div className='item' key={msg.id}>
-                      <MediaAttachment
-                        {...{
-                          attachment: msg.attachment,
-                          message
-                        }}
-                      />
+                    <div className='item' key={message.msg.id}>
+                      <MediaAttachment message={message} />
                     </div>
                   )
                 })}

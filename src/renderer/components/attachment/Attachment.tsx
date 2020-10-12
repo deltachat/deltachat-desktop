@@ -41,7 +41,7 @@ export function isImage(attachment: MessageTypeAttachment) {
   )
 }
 
-export function hasImage(attachment: MessageTypeAttachment) {
+export function hasAttachment(attachment: MessageTypeAttachment) {
   return attachment && attachment.url
 }
 

@@ -78,7 +78,7 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG = msg.toJson()
 
-    let attachment:MessageTypeAttachment = jsonMSG.file && {
+    let attachment: MessageTypeAttachment = jsonMSG.file && {
       url: jsonMSG.file,
       contentType: convertContentType({
         filemime,

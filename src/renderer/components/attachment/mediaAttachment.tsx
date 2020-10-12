@@ -10,15 +10,14 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import { MessageType, MessageTypeAttachment } from '../../../shared/shared-types'
+import {
+  MessageType,
+  MessageTypeAttachment,
+} from '../../../shared/shared-types'
+import { C } from 'deltachat-node/dist/constants'
 
-export default function MediaAttachment({
-  attachment,
-  message,
-}: {
-  attachment: MessageTypeAttachment
-  message: MessageType
-}) {
+export default function MediaAttachment({ message }: { message: MessageType }) {
+  const attachment = message.msg.attachment
   if (!attachment) {
     return null
   }
@@ -35,24 +34,29 @@ export default function MediaAttachment({
       openAttachmentInShell(msg)
     }
   }
-  if (isImage(attachment)) {
-    return (
-      <ImageAttachment
-        attachment={attachment}
-        onClickAttachment={onClickAttachment}
-      />
-    )
-  } else if (isVideo(attachment)) {
-    return (
-      <VideoAttachment
-        attachment={attachment}
-        onClickAttachment={onClickAttachment}
-      />
-    )
-  } else if (isAudio(attachment)) {
-    return <AudioAttachment attachment={attachment} message={message} />
-  } else {
-    return <FileAttachment attachment={attachment} message={message} />
+
+  switch (message.msg.viewType) {
+    case C.DC_MSG_GIF:
+    case C.DC_MSG_IMAGE:
+      return (
+        <ImageAttachment
+          attachment={attachment}
+          onClickAttachment={onClickAttachment}
+        />
+      )
+    case C.DC_MSG_VIDEO:
+      return (
+        <VideoAttachment
+          attachment={attachment}
+          onClickAttachment={onClickAttachment}
+        />
+      )
+    case C.DC_MSG_AUDIO:
+    case C.DC_MSG_VOICE:
+      return <AudioAttachment attachment={attachment} message={message} />
+    case C.DC_MSG_FILE:
+    default:
+      return <FileAttachment attachment={attachment} message={message} />
   }
 }
 
@@ -67,10 +71,18 @@ function ImageAttachment({
   attachment: MessageTypeAttachment
   onClickAttachment: onClickFunction
 }) {
-  if (!attachment.url) {
+  const hasSupportedFormat = isImage(attachment)
+  if (!attachment.url || !hasSupportedFormat) {
     return (
-      <div className='media-attachment-broken-media'>
-        {window.static_translate('imageFailedToLoad')}
+      <div className='media-attachment-media broken'>
+        <div className='attachment-content'>
+          {hasSupportedFormat
+            ? window.static_translate('attachment_failed_to_load')
+            : window.static_translate(
+                'can_not_display_unsuported_file_type',
+                attachment.contentType
+              )}
+        </div>
       </div>
     )
   }
@@ -92,10 +104,18 @@ function VideoAttachment({
   attachment: MessageTypeAttachment
   onClickAttachment: onClickFunction
 }) {
-  if (!attachment.url) {
+  const hasSupportedFormat = isVideo(attachment)
+  if (!attachment.url || !hasSupportedFormat) {
     return (
-      <div role='button' className='media-attachment-broken-media'>
-        {window.static_translate('videoScreenshotFailedToLoad')}
+      <div className='media-attachment-media broken'>
+        <div className='attachment-content'>
+          {hasSupportedFormat
+            ? window.static_translate('attachment_failed_to_load')
+            : window.static_translate(
+                'can_not_display_unsuported_file_type',
+                attachment.contentType
+              )}
+        </div>
       </div>
     )
   }
@@ -124,6 +144,7 @@ function AudioAttachment({
   attachment: MessageTypeAttachment
   message: MessageType
 }) {
+  const hasSupportedFormat = isAudio(attachment)
   return (
     <div className='media-attachment-audio'>
       <div className='heading'>
@@ -134,9 +155,18 @@ function AudioAttachment({
           module='date'
         />
       </div>
-      <audio controls>
-        <source src={attachment.url} />
-      </audio>
+      {hasSupportedFormat ? (
+        <audio controls>
+          <source src={attachment.url} />
+        </audio>
+      ) : (
+        <div>
+          {window.static_translate(
+            'can_not_display_unsuported_file_type',
+            attachment.contentType
+          )}
+        </div>
+      )}
     </div>
   )
 }

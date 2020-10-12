@@ -11,7 +11,10 @@ import {
   getExtension,
   dragAttachmentOut,
 } from './Attachment'
-import { MessageType, MessageTypeAttachment } from '../../../shared/shared-types'
+import {
+  MessageType,
+  MessageTypeAttachment,
+} from '../../../shared/shared-types'
 
 const MINIMUM_IMG_HEIGHT = 150
 const MAXIMUM_IMG_HEIGHT = 300
@@ -61,7 +64,7 @@ export default function Attachment({
         <div
           className={classNames('message-attachment-broken-media', direction)}
         >
-          {tx('imageFailedToLoad')}
+          {tx('attachment_failed_to_load')}
         </div>
       )
     }
@@ -87,7 +90,7 @@ export default function Attachment({
           style={{ cursor: 'pointer' }}
           className={classNames('message-attachment-broken-media', direction)}
         >
-          {tx('videoScreenshotFailedToLoad')}
+          {tx('attachment_failed_to_load')}
         </div>
       )
     }

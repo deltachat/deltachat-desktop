@@ -7,7 +7,11 @@ import MessageMetaData from './MessageMetaData'
 
 import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu'
 import Attachment from '../attachment/messageAttachment'
-import { MessageType, DCContact, MessageTypeAttachment } from '../../../shared/shared-types'
+import {
+  MessageType,
+  DCContact,
+  MessageTypeAttachment,
+} from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall } from '../helpers/ChatMethods'
