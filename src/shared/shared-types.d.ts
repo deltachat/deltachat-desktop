@@ -146,6 +146,14 @@ export interface FullChat {
 }
 
 type todo = any
+
+export interface MessageTypeAttachment {
+  url: string
+  contentType: string
+  fileName: string
+  fileSize: string
+}
+
 export interface MessageType {
   id: number
   msg: JsonMessage & {
@@ -153,12 +161,7 @@ export interface MessageType {
     receivedAt: number
     direction: 'outgoing' | 'incoming'
     status: todo
-    attachment?: {
-      url: string
-      contentType: string
-      fileName: string
-      fileSize: string
-    }
+    attachment?: MessageTypeAttachment
   }
   filemime: string
   filename: string
