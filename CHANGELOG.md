@@ -2,8 +2,12 @@
 
 ## [Unreleased][unreleased]
 
+# Added
+- Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
+
 ### Changed
 - Change "More info" translation to "Message Details"
+- Through the emoji mart update, frequent emojis are now not sorted immediately, fixes #1177
 - gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
 - minor gallery style adjustments 
 
