@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { openAttachmentInShell, onDownload } from '../message/messageFunctions'
 import { ScreenContext } from '../../contexts'
 import {
-  isDisplayableByFullscreenMedia,
   isImage,
   isVideo,
   isAudio,
@@ -10,71 +9,38 @@ import {
   dragAttachmentOut,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
-import {
-  MessageType,
-  MessageTypeAttachment,
-} from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 
 export default function MediaAttachment({ message }: { message: MessageType }) {
-  const attachment = message.msg.attachment
-  if (!attachment) {
+  if (!message.msg.attachment) {
     return null
   }
-  const { openDialog } = useContext(ScreenContext)
-
-  const onClickAttachment = (
-    ev: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    ev.stopPropagation()
-    const { msg } = message
-    if (isDisplayableByFullscreenMedia(msg.attachment)) {
-      openDialog('FullscreenMedia', { msg })
-    } else {
-      openAttachmentInShell(msg)
-    }
-  }
-
   switch (message.msg.viewType) {
     case C.DC_MSG_GIF:
     case C.DC_MSG_IMAGE:
-      return (
-        <ImageAttachment
-          attachment={attachment}
-          onClickAttachment={onClickAttachment}
-        />
-      )
+      return <ImageAttachment message={message} />
     case C.DC_MSG_VIDEO:
-      return (
-        <VideoAttachment
-          attachment={attachment}
-          onClickAttachment={onClickAttachment}
-        />
-      )
+      return <VideoAttachment message={message} />
     case C.DC_MSG_AUDIO:
     case C.DC_MSG_VOICE:
-      return <AudioAttachment attachment={attachment} message={message} />
+      return <AudioAttachment message={message} />
     case C.DC_MSG_FILE:
     default:
-      return <FileAttachment attachment={attachment} message={message} />
+      return <FileAttachment message={message} />
   }
 }
 
-type onClickFunction = (
-  ev: React.MouseEvent<HTMLDivElement, MouseEvent>
-) => void
-
-function ImageAttachment({
-  attachment,
-  onClickAttachment,
-}: {
-  attachment: MessageTypeAttachment
-  onClickAttachment: onClickFunction
-}) {
+function ImageAttachment({ message }: { message: MessageType }) {
+  const { openDialog } = useContext(ScreenContext)
+  const { attachment } = message.msg
   const hasSupportedFormat = isImage(attachment)
   if (!attachment.url || !hasSupportedFormat) {
     return (
-      <div className='media-attachment-media broken'>
+      <div
+        className='media-attachment-media broken'
+        onClick={() => openAttachmentInShell(message.msg)}
+      >
         <div className='attachment-content'>
           {hasSupportedFormat
             ? window.static_translate('attachment_failed_to_load')
@@ -88,7 +54,7 @@ function ImageAttachment({
   }
   return (
     <div
-      onClick={onClickAttachment}
+      onClick={() => openDialog('FullscreenMedia', { msg: message.msg })}
       role='button'
       className='media-attachment-media'
     >
@@ -97,17 +63,16 @@ function ImageAttachment({
   )
 }
 
-function VideoAttachment({
-  attachment,
-  onClickAttachment,
-}: {
-  attachment: MessageTypeAttachment
-  onClickAttachment: onClickFunction
-}) {
+function VideoAttachment({ message }: { message: MessageType }) {
+  const { openDialog } = useContext(ScreenContext)
+  const { attachment } = message.msg
   const hasSupportedFormat = isVideo(attachment)
   if (!attachment.url || !hasSupportedFormat) {
     return (
-      <div className='media-attachment-media broken'>
+      <div
+        className='media-attachment-media broken'
+        onClick={() => openAttachmentInShell(message.msg)}
+      >
         <div className='attachment-content'>
           {hasSupportedFormat
             ? window.static_translate('attachment_failed_to_load')
@@ -121,7 +86,7 @@ function VideoAttachment({
   }
   return (
     <div
-      onClick={onClickAttachment}
+      onClick={() => openDialog('FullscreenMedia', { msg: message.msg })}
       role='button'
       className='media-attachment-media'
     >
@@ -137,13 +102,8 @@ function VideoAttachment({
   )
 }
 
-function AudioAttachment({
-  attachment,
-  message,
-}: {
-  attachment: MessageTypeAttachment
-  message: MessageType
-}) {
+function AudioAttachment({ message }: { message: MessageType }) {
+  const { attachment } = message.msg
   const hasSupportedFormat = isAudio(attachment)
   return (
     <div className='media-attachment-audio'>
@@ -171,13 +131,8 @@ function AudioAttachment({
   )
 }
 
-function FileAttachment({
-  attachment,
-  message,
-}: {
-  attachment: MessageTypeAttachment
-  message: MessageType
-}) {
+function FileAttachment({ message }: { message: MessageType }) {
+  const { attachment } = message.msg
   const { fileName, fileSize, contentType } = attachment
   const extension = getExtension(attachment)
   return (
