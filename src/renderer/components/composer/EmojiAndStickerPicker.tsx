@@ -175,7 +175,7 @@ export const EmojiAndStickerPicker = forwardRef<
                   objects: tx('emoji_objects'),
                   symbols: tx('emoji_symbols'),
                   flags: tx('emoji_flags'),
-                }
+                },
               }}
               native
               onSelect={onEmojiSelect}
