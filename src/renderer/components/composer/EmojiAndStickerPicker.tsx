@@ -9,6 +9,7 @@ import { Picker, EmojiData } from 'emoji-mart'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { useTranslationFunction } from '../../contexts'
 
 export const useAsyncEffect = (
   asyncEffect: () => {},
@@ -112,6 +113,7 @@ export const EmojiAndStickerPicker = forwardRef<
   }
 >((props, ref) => {
   const { onEmojiSelect, chatId, setShowEmojiPicker } = props
+  const tx = useTranslationFunction()
 
   const [showSticker, setShowSticker] = useState(false)
   const [stickers, setStickers] = useState(null)
@@ -159,11 +161,27 @@ export const EmojiAndStickerPicker = forwardRef<
           <div className='emoji-sticker-picker__emoji-picker'>
             <Picker
               style={{ width: '100%', height: '100%' }}
+              i18n={{
+                search: tx('search'),
+                notfound: tx('emoji_not_found'),
+                categories: {
+                  search: tx('emoji_search_results'),
+                  recent: tx('emoji_recent'),
+                  people: tx('emoji_people'),
+                  nature: tx('emoji_nature'),
+                  foods: tx('emoji_foods'),
+                  activity: tx('emoji_activity'),
+                  places: tx('emoji_places'),
+                  objects: tx('emoji_objects'),
+                  symbols: tx('emoji_symbols'),
+                  flags: tx('emoji_flags'),
+                },
+              }}
               native
               onSelect={onEmojiSelect}
               showPreview={false}
               showSkinTones={false}
-              emojiTooltip={false}
+              emojiTooltip={true}
             />
           </div>
         )}
