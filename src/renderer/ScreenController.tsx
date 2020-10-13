@@ -140,7 +140,7 @@ export default class ScreenController extends Component {
 
   openContextMenu(...args: Parameters<showFnType>) {
     if (!this.contextMenuShowFn) {
-      throw new Error('Context Menu Controller not availible')
+      throw new Error('Context Menu Controller not available')
     }
     this.contextMenuShowFn(...args)
   }
