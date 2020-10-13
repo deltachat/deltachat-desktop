@@ -222,13 +222,17 @@ export function ContextMenu(props: {
       }
     }
 
+    const onResize = (_ev: UIEvent) => props.closeCallback()
+
     document.addEventListener('keydown', onKeyDown)
     document.addEventListener('mousedown', onOutsideClick)
     document.addEventListener('touchstart', onOutsideClick)
+    window.addEventListener('resize', onResize)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('mousedown', onOutsideClick)
       document.removeEventListener('touchstart', onOutsideClick)
+      window.removeEventListener('resize', onResize)
     }
   })
 
