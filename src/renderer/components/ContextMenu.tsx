@@ -26,35 +26,11 @@ export function ContextMenuLayer({
 }) {
   const layerRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
-  const [isDemo, setDemo] = useState(false)
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
   const [position, setPosition] = useState<{ top: number; left: number }>({
     top: 0,
     left: 0,
   })
-
-  function dummyShow(ev: React.MouseEvent<any, MouseEvent>) {
-    const [cursorX, cursorY] = [ev.clientX, ev.clientY]
-
-    show({
-      cursorX,
-      cursorY,
-      items: [
-        {
-          label: 'DemoOption2 DemoOption2 DemoOption2',
-          action: () => console.debug('clicked demo option 1'),
-        },
-        {
-          label: 'DemoOption2 DemoOption2 DemoOption2 DemoOption2 DemoOption2',
-          action: () => console.debug('clicked demo option 2'),
-        },
-        {
-          label: 'DemoOption3',
-          action: () => console.debug('clicked demo option 3'),
-        },
-      ],
-    })
-  }
 
   function show({ cursorX, cursorY, items: rawItems }: showFnArguments) {
     if (!layerRef.current) {
@@ -129,13 +105,7 @@ export function ContextMenuLayer({
     window.__contextMenuActive = false
     setActive(false)
     setCurrentItems([])
-    setDemo(false)
   }
-
-  useKeyBindingAction(KeybindAction.DebugAction_ContextMenu, () => {
-    setDemo(true)
-    setActive(true)
-  })
 
   useEffect(() => {
     if (typeof setShowFunction === 'function') setShowFunction(show)
@@ -145,17 +115,7 @@ export function ContextMenuLayer({
     <div
       ref={layerRef}
       className={`dc-context-menu-layer ${active ? 'active' : ''}`}
-      style={
-        isDemo
-          ? {
-              backgroundColor: 'rgba(255, 0, 0, 0.2)',
-              border: 'var(--local-border-clearance) solid red',
-              pointerEvents: 'auto',
-            }
-          : {}
-      }
       onClick={cancel}
-      onContextMenu={ev => isDemo && dummyShow(ev)}
     >
       {active && currentItems.length > 0 && (
         <ContextMenu

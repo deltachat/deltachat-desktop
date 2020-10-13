@@ -21,7 +21,6 @@ export enum KeybindAction {
   ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
   // Debug
-  DebugAction_ContextMenu = 'debugaction:context-menu',
 }
 
 export namespace ActionEmitter {
@@ -92,9 +91,6 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat
-    }
-    if (ev.key == 'ContextMenu') {
-      return KeybindAction.DebugAction_ContextMenu
     }
   } else {
     // fire continuesly as long as button is pressed
