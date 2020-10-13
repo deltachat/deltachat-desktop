@@ -281,6 +281,10 @@ export default function Settings(props: DialogProps) {
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_experimental_features')}</H5>
               {renderDTSettingSwitch(
+                'trustAllLabeledLinks',
+                tx('pref_trust_all_labeled_links')
+              )}
+              {renderDTSettingSwitch(
                 'enableOnDemandLocationStreaming',
                 tx('pref_on_demand_location_streaming')
               )}

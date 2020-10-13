@@ -200,5 +200,8 @@
   },
   "account_info_hover_tooltip_desktop":{
     "message": "E-Mail: %s\nSize: %s\nPath: %s"
+  },
+  "pref_trust_all_labeled_links":{
+    "message": "Trust all Labeled Links"
   }
 }

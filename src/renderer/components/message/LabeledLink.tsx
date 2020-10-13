@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { ScreenContext } from '../../contexts'
+import { ScreenContext, SettingsContext } from '../../contexts'
 import { toASCII } from 'punycode'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
 import {
@@ -39,6 +39,7 @@ export const LabeledLink = ({
   target: string
 }) => {
   const { openDialog } = useContext(ScreenContext)
+  const { desktopSettings } = useContext(SettingsContext)
 
   const url = UrlParser(target)
   // encode the punycode to make phishing harder
@@ -54,7 +55,10 @@ export const LabeledLink = ({
     ev.preventDefault()
     ev.stopPropagation()
     //check if domain is trusted
-    if (isDomainTrusted(url.hostname)) {
+    if (
+      isDomainTrusted(url.hostname) ||
+      desktopSettings['trustAllLabeledLinks']
+    ) {
       openExternal(target)
       return
     }
@@ -111,7 +115,7 @@ function confirmationDialog(
                   onClose()
                   navigator.clipboard.writeText(target)
                 }}
-                style={{marginRight:'auto'}}
+                style={{ marginRight: 'auto' }}
               >
                 {tx('menu_copy_link_to_clipboard')}
               </p>
