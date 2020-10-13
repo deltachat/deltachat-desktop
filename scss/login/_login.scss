@@ -232,13 +232,18 @@ div.delta-form-group {
 }
 
 .accounts {
-  ul {
-    margin: 0px;
+  .contact-list-item {
+    .contact {
+      width: 100%;
+    }
 
-    li {
-      &:hover {
-        cursor: pointer;
-        background-color: var(--chatListItemBgHover);
+    .remove-icon:hover {
+      .bp3-icon {
+        background-color: rgba(125, 125, 125, 0.2);
+        border-radius: 4px;
+        & > svg {
+          fill: #bf0000;
+        }
       }
     }
   }

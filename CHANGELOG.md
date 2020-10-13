@@ -4,6 +4,10 @@
 
 # Added
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
+- Add Keyboard navigation between accounts in account selection screen
+- Add the account name to the account deletion-confirmation dialog
+- Add a hover tool-tip with account path and size when hovering over the email address of an account
+  (this is useful when importing a backup of an account you already have and can't distinguish which is the old account and which is the imported one)
 
 ### Changed
 - Change "More info" translation to "Message Details"

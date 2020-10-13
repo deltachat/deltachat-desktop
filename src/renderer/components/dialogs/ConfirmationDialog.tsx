@@ -41,6 +41,7 @@ export default function ConfirmationDialog({
   onClose,
   isConfirmDanger = false,
   noMargin = false,
+  header,
 }: {
   message: string
   cancelLabel?: string
@@ -49,6 +50,7 @@ export default function ConfirmationDialog({
   onClose: () => {}
   isConfirmDanger?: boolean
   noMargin?: boolean
+  header?: string
 }) {
   const isOpen = !!message
   const tx = useTranslationFunction()
@@ -61,6 +63,17 @@ export default function ConfirmationDialog({
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
+        {header && (
+          <div
+            style={{
+              fontSize: '1.5em',
+              fontWeight: 'lighter',
+              marginBottom: '6px',
+            }}
+          >
+            {header}
+          </div>
+        )}
         <p>{message}</p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>

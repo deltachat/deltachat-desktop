@@ -188,5 +188,17 @@
   },
   "emoji_flags": {
     "message": "Flags"
+  },
+  "delete_account_confirmation_header_desktop":{
+    "message": "Delete %s?"
+  },
+  "delete_account_confirmation_desktop":{
+    "message": "All account data of \"%s\" on this device will be deleted, including your end-to-end setup, contacts, chats, messages and media. This action cannot be undone."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "DEPRECATED - PLEASE DELETE THIS STRING"
+  },
+  "account_info_hover_tooltip_desktop":{
+    "message": "E-Mail: %s\nSize: %s\nPath: %s"
   }
 }
