@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react'
-import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { useRef } from 'react'
 import { ScreenContext, unwrapContext } from '../contexts'
 
