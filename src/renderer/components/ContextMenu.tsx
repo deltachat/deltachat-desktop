@@ -19,6 +19,8 @@ export type showFnType = (args: showFnArguments) => void
  * */
 const overFlowLineCharacterCount = 19
 
+const ScrollKeysToBlock = ['Space', 'PageUp', 'PageDown', 'End', 'Home']
+
 export function ContextMenuLayer({
   setShowFunction,
 }: {
@@ -182,23 +184,23 @@ export function ContextMenu(props: {
         } else {
           ;(parent?.firstElementChild as HTMLDivElement).focus()
         }
-      }
-      if (ev.key == 'ArrowUp') {
+      } else if (ev.key == 'ArrowUp') {
         if (current && current.previousElementSibling) {
           ;(current.previousElementSibling as HTMLDivElement)?.focus()
         } else {
           ;(parent?.lastElementChild as HTMLDivElement).focus()
         }
-      }
-
-      if (ev.key == 'Enter') {
+      } else if (ev.key == 'Enter') {
         if (current) {
           ;(current as HTMLDivElement)?.click()
         }
-      }
-
-      if (ev.key == 'Escape') {
+      } else if (ev.key == 'Escape') {
         props.closeCallback()
+      }
+      // preventDefaultForScrollKeys
+      else if (ScrollKeysToBlock.includes(ev.code)) {
+        ev.preventDefault()
+        return false
       }
     }
 
@@ -277,3 +279,20 @@ export function useContextMenu(items: ContextMenuItem[]) {
   const screenContext = useContext(ScreenContext)
   return makeContextMenu(items, screenContext)
 }
+
+/**
+ * disables scrolling on the app as long as the component is mounted
+ * inspired by https://stackoverflow.com/a/4770179
+ *
+ * this is outside of an use function because
+ * for some reason removing the listeners doesn't work for those
+ */
+function preventDefault(e: Event) {
+  if (window.__contextMenuActive) {
+    e.preventDefault()
+  }
+}
+const wheelEvent: 'wheel' | 'mousewheel' =
+  'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel'
+document.addEventListener(wheelEvent, preventDefault, { passive: false })
+document.addEventListener('touchmove', preventDefault, { passive: false })
