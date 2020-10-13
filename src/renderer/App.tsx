@@ -122,7 +122,7 @@ export default function App(props: any) {
     </CrashScreen>
   )
 }
-export function SettingsContextWrapper({
+function SettingsContextWrapper({
   account,
   children,
 }: {
