@@ -105,17 +105,18 @@ function confirmationDialog(
           </div>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p className={`delta-button bold primary`} onClick={onClose}>
-                {tx('no')}
-              </p>
               <p
                 className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
                   navigator.clipboard.writeText(target)
                 }}
+                style={{marginRight:'auto'}}
               >
                 {tx('menu_copy_link_to_clipboard')}
+              </p>
+              <p className={`delta-button bold primary`} onClick={onClose}>
+                {tx('cancel')}
               </p>
               <p
                 className={`delta-button bold primary`}
