@@ -121,8 +121,8 @@ ActionEmitter.registerHandler(
 ActionEmitter.registerHandler(KeybindAction.Settings_Open, () => {
   if (window.__screen === Screens.Main) {
     // only if user is logged in
-    // open settings
-    if (window.__openDialog) {
+    // open settings if not already opened
+    if (!window.__settingsOpened && window.__openDialog) {
       window.__openDialog('Settings')
     }
   }
