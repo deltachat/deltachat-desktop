@@ -52,7 +52,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     labeled_link: {
       order: 18,
       match: anyScopeRegex(
-        /^\[([^\]]*)\]\((\w+:\/\/[^\s<]+[^<>,;"')\]\s]{3,1000})\)(:?\s|$)/
+        /^\[([^\]]*)\]\((\w+:\/\/[^<>,;"'\[\]\)\s]{3,1000})\)/
       ),
       parse: function(
         capture: RegExpMatchArray,
@@ -67,11 +67,13 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       },
       react: function(node: any, output: any, state: any) {
         return (
-          <LabeledLink
-            key={state.key}
-            target={node.target}
-            label={node.label}
-          />
+          <>
+            <LabeledLink
+              key={state.key}
+              target={node.target}
+              label={node.label}
+            />{' '}
+          </>
         )
       },
     },
