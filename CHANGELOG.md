@@ -20,6 +20,7 @@
 - Fix missing translations in emoji picker
 - Fix broken enlargen group image #1924
 - Fix opening of multiple setting windows via keybinding
+- Fix two issues with the labeled link (see  #1893)
 
 ## [1.13.1] - 2020-10-06
 
