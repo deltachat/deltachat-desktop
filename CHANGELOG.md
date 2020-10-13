@@ -19,6 +19,7 @@
 - Fix hover color on emoji picker for light theme
 - Fix missing translations in emoji picker
 - Fix broken enlargen group image #1924
+- Fix opening of multiple setting windows via keybinding
 
 ## [1.13.1] - 2020-10-06
 
