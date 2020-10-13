@@ -199,6 +199,6 @@
     "message": "DEPRECATED - PLEASE DELETE THIS STRING"
   },
   "account_info_hover_tooltip_desktop":{
-    "message": "email: %s\nsize: %s\npath: %s"
+    "message": "E-Mail: %s\nSize: %s\nPath: %s"
   }
 }
