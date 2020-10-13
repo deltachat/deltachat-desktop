@@ -75,7 +75,7 @@ export function ContextMenuLayer({
     const ContextMenuItemVerticalMargin = getValue(
       '--local-menu-item-vertical-padding'
     )
-    /** the margin that the context menu should have to the windo border */
+    // the margin that the context menu should have to the window border
     const BorderMargin = getValue('--local-border-clearance')
 
     const ContextMenuItemHeight =
