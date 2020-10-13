@@ -6,11 +6,13 @@ import { DialogId } from './components/dialogs/DialogController'
 import { any } from 'prop-types'
 import { DeltaBackend } from './delta-remote'
 import { getMessageFunction } from '../shared/localize'
+import { showFnType } from './components/ContextMenu'
 
 const noop: Function = () => {}
 
 export const ScreenContext = React.createContext({
   openDialog: (fnc: any, props?: any) => {},
+  openContextMenu: (...args: Parameters<showFnType>) => {},
   closeDialog: (name: string) => {},
   userFeedback: (message: false | userFeedback) => {},
   changeScreen: (screen: Screens) => {},

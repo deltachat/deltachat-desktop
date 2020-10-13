@@ -234,8 +234,8 @@ export const GroupSettingsSetNameAndProfileImage = ({
   isVerified,
 }: {
   groupImage: string
-  onSetGroupImage: (event: React.SyntheticEvent) => void
-  onUnsetGroupImage: (event: React.SyntheticEvent) => void
+  onSetGroupImage: () => void
+  onUnsetGroupImage: () => void
   groupName: string
   setGroupName: (newGroupName: string) => void
   errorMissingGroupName: boolean

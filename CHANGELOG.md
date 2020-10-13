@@ -10,6 +10,7 @@
 - Through the emoji mart update, frequent emojis are now not sorted immediately, fixes #1177
 - gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
 - minor gallery style adjustments 
+- Own Context Menu Implementation that makes development easier
 
 ## Fixed
 
@@ -17,6 +18,7 @@
 - Fixed unselecting current chat after deleting another chat
 - Fix hover color on emoji picker for light theme
 - Fix missing translations in emoji picker
+- Fix broken enlargen group image #1924
 
 ## [1.13.1] - 2020-10-06
 

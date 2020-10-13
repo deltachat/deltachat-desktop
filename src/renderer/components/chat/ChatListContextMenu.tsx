@@ -1,6 +1,5 @@
-import React, { useState, useRef, useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import { ContextMenu, MenuItem } from 'react-contextmenu'
 import {
   openLeaveChatDialog,
   openDeleteChatDialog,
@@ -16,50 +15,32 @@ import {
 import { ChatListItemType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { DeltaBackend } from '../../delta-remote'
+import { ContextMenuItem } from '../ContextMenu'
 
 // const log = getLogger('renderer/ChatListContextMenu')
 
-const ArchiveStateMenu = (chat: ChatListItemType) => {
-  const tx = useTranslationFunction()
-
-  const archive = (
-    <MenuItem
-      onClick={() =>
-        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_ARCHIVED, true)
-      }
-      key='import'
-    >
-      {tx('menu_archive_chat')}
-    </MenuItem>
-  )
-  const unArchive = (
-    <MenuItem
-      onClick={() =>
-        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL, true)
-      }
-      key='export'
-    >
-      {tx('menu_unarchive_chat')}
-    </MenuItem>
-  )
-  const pin = (
-    <MenuItem
-      onClick={() =>
-        setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.archived)
-      }
-      key='pinChat'
-    >
-      {tx('pin_chat')}
-    </MenuItem>
-  )
-  const unPin = (
-    <MenuItem
-      onClick={() => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL)}
-      key='pinChat'
-    >
-      {tx('unpin_chat')}
-    </MenuItem>
-  )
+function archiveStateMenu(
+  chat: ChatListItemType,
+  tx: ReturnType<typeof useTranslationFunction>
+): ContextMenuItem[] {
+  const archive: ContextMenuItem = {
+    label: tx('menu_archive_chat'),
+    action: () =>
+      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_ARCHIVED, true),
+  }
+  const unArchive: ContextMenuItem = {
+    label: tx('menu_unarchive_chat'),
+    action: () => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL, true),
+  }
+  const pin: ContextMenuItem = {
+    label: tx('pin_chat'),
+    action: () =>
+      setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_PINNED, chat.archived),
+  }
+  const unPin: ContextMenuItem = {
+    label: tx('unpin_chat'),
+    action: () => setChatVisibility(chat.id, C.DC_CHAT_VISIBILITY_NORMAL),
+  }
 
   /*
             Archive	UnArchive	Pin	UnPin
@@ -78,59 +59,15 @@ const ArchiveStateMenu = (chat: ChatListItemType) => {
   }
 }
 
-const ChatListContextMenu = React.memo<{
-  showArchivedChats: boolean
-  getShow: (
-    cb: (
-      event: MouseEvent,
-      chat: ChatListItemType,
-      selectedChatItem: number
-    ) => void
-  ) => void
-}>(
-  props => {
-    const screenContext = useContext(ScreenContext)
-    const { showArchivedChats } = props // not in use?
-    const [chatListItem, setChat] = useState<ChatListItemType | null>(null)
-    const [showEvent, setShowEvent] = useState(null)
-    const [selectedChatId, setSelectedChatId] = useState(null)
-    const contextMenu = useRef(null)
+export function useChatListContextMenu() {
+  const screenContext = useContext(ScreenContext)
+  const tx = useTranslationFunction()
 
-    const show = (
-      event: MouseEvent,
-      chat: ChatListItemType,
-      selectedChatId: number
-    ) => {
-      // no log.debug, because passing the event object to through ipc freezes the application
-      // console.debug('ChatListContextMenu.show', chat, event) // also commented out because it's not needed
-
-      /*
-     This is a workaround because react-contextmenu
-     has no official programatic way of opening the menu yet
-     https://github.com/vkbansal/react-contextmenu/issues/259
-    */
-      event.preventDefault()
-      event.stopPropagation()
-      const position = { x: event.clientX, y: event.clientY }
-      const ev = { detail: { id: 'chat-options', position } }
-      setChat(chat)
-      setShowEvent(ev)
-      setSelectedChatId(selectedChatId)
-    }
-
-    useEffect(() => {
-      props.getShow(show)
-    }, [])
-    useEffect(() => {
-      if (showEvent) contextMenu.current.handleShow(showEvent)
-    })
-
-    const reset = () => {
-      setShowEvent(null)
-      setChat(null)
-      setSelectedChatId(null)
-    }
-
+  return (
+    event: React.MouseEvent<any, MouseEvent>,
+    chatListItem: ChatListItemType,
+    selectedChatId: number
+  ) => {
     const onDeleteChat = () =>
       openDeleteChatDialog(screenContext, chatListItem, selectedChatId)
     const onEncrInfo = () =>
@@ -155,63 +92,55 @@ const ChatListContextMenu = React.memo<{
       openBlockContactDialog(screenContext, chatListItem)
     const onMuteChat = () => openMuteChatDialog(screenContext, chatListItem.id)
     const onUnmuteChat = () => unMuteChat(chatListItem.id)
-    const tx = useTranslationFunction()
 
-    const menu = chatListItem
+    const menu: ContextMenuItem[] = chatListItem
       ? [
-          ...ArchiveStateMenu(chatListItem),
-          <MenuItem onClick={onDeleteChat} key='delete'>
-            {tx('menu_delete_chat')}
-          </MenuItem>,
-          !chatListItem.isGroup && !chatListItem.isDeviceTalk && (
-            <MenuItem onClick={onEncrInfo} key='info'>
-              {tx('encryption_info_desktop')}
-            </MenuItem>
-          ),
-          chatListItem.isGroup && chatListItem.selfInGroup && (
-            <>
-              <MenuItem onClick={onEditGroup} key='edit'>
-                {tx('menu_edit_group')}
-              </MenuItem>
-              <MenuItem onClick={onLeaveGroup} key='leave'>
-                {tx('menu_leave_group')}
-              </MenuItem>
-            </>
-          ),
-          !chatListItem.isGroup && (
-            <MenuItem onClick={onViewProfile} key='view'>
-              {tx('menu_view_profile')}
-            </MenuItem>
-          ),
+          ...archiveStateMenu(chatListItem, tx),
+          {
+            label: tx('menu_delete_chat'),
+            action: onDeleteChat,
+          },
           !chatListItem.isGroup &&
-            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && (
-              <MenuItem onClick={onBlockContact} key='block'>
-                {tx('menu_block_contact')}
-              </MenuItem>
-            ),
-          !chatListItem.muted ? (
-            <MenuItem onClick={onMuteChat} key='mute'>
-              {tx('menu_mute')}
-            </MenuItem>
-          ) : (
-            <MenuItem onClick={onUnmuteChat} key='unmute'>
-              {tx('menu_unmute')}
-            </MenuItem>
-          ),
+            !chatListItem.isDeviceTalk && {
+              label: tx('encryption_info_desktop'),
+              action: onEncrInfo,
+            },
+          chatListItem.isGroup &&
+            chatListItem.selfInGroup && {
+              label: tx('menu_edit_group'),
+              action: onEditGroup,
+            },
+          chatListItem.isGroup &&
+            chatListItem.selfInGroup && {
+              label: tx('menu_leave_group'),
+              action: onLeaveGroup,
+            },
+          !chatListItem.isGroup && {
+            label: tx('menu_view_profile'),
+            action: onViewProfile,
+          },
+          !chatListItem.isGroup &&
+            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
+              label: tx('menu_block_contact'),
+              action: onBlockContact,
+            },
+          !chatListItem.muted
+            ? {
+                label: tx('menu_mute'),
+                action: onMuteChat,
+              }
+            : {
+                label: tx('menu_unmute'),
+                action: onUnmuteChat,
+              },
         ]
       : []
 
-    return (
-      <ContextMenu id='chat-options' ref={contextMenu} onHide={reset}>
-        {menu}
-      </ContextMenu>
-    )
-  },
-  (prevProps, nextProps) => {
-    const shouldRerender =
-      prevProps.showArchivedChats !== nextProps.showArchivedChats
-    return !shouldRerender
+    const [cursorX, cursorY] = [event.clientX, event.clientY]
+    screenContext.openContextMenu({
+      cursorX,
+      cursorY,
+      items: menu,
+    })
   }
-)
-
-export default ChatListContextMenu
+}

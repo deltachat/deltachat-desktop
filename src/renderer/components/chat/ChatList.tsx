@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
-import ChatListContextMenu from './ChatListContextMenu'
+import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
 import ChatListItem, {
   ChatListItemMessageResult,
@@ -119,19 +119,7 @@ export default function ChatList(props: {
     props.onChatClick(chatId)
   }
 
-  const openContextMenu = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    chatId: number,
-    selectedChatId: number
-  ) => {
-    if (realOpenContextMenu.current === null)
-      throw new Error(
-        'Tried to open ChatListContextMenu before we recieved open method'
-      )
-
-    const chat = chatCache[chatId]
-    realOpenContextMenu.current(event, chat, selectedChatId)
-  }
+  const openContextMenu = useChatListContextMenu()
 
   const addContactOnClick = async () => {
     if (!queryStrIsEmail) return
@@ -258,7 +246,8 @@ export default function ChatList(props: {
                         chatListItem={chatCache[chatId] || undefined}
                         onClick={onChatClick.bind(null, chatId)}
                         onContextMenu={event => {
-                          openContextMenu(event, chatId, selectedChatId)
+                          const chat = chatCache[chatId]
+                          openContextMenu(event, chat, selectedChatId)
                         }}
                       />
                     </div>
@@ -358,12 +347,6 @@ export default function ChatList(props: {
           )}
         </AutoSizer>
       </div>
-      <ChatListContextMenu
-        showArchivedChats={showArchivedChats}
-        getShow={show => {
-          realOpenContextMenu.current = show
-        }}
-      />
     </>
   )
 }
