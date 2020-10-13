@@ -58,6 +58,18 @@ export function SettingsSelector(props: any) {
 }
 
 export default function Settings(props: DialogProps) {
+  useEffect(() => {
+    if (window.__settingsOpened) {
+      throw new Error(
+        'Settings window was already open - this should not happen, please file a bug'
+      )
+    }
+    window.__settingsOpened = true
+    return () => {
+      window.__settingsOpened = false
+    }
+  })
+
   const [state, _setState] = useState<{
     showSettingsDialog: boolean
     settings: any
