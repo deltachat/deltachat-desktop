@@ -6,6 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="select">Select</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="def">Default</string>
@@ -58,8 +59,6 @@
     <string name="now">Now</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Danger</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d min</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="this_week">This week</string>
@@ -174,8 +173,6 @@
     <string name="menu_select_all">Select all</string>
     <string name="menu_expand">Expand</string>
     <string name="menu_edit_name">Edit name</string>
-    <string name="menu_edit_group_name">Edit group name</string>
-    <string name="menu_edit_group_image">Edit group image</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_advanced">Advanced</string>
     <string name="menu_deaddrop">Contact requests</string>
@@ -215,6 +212,8 @@
     <string name="file_saved_to">File saved to \"%1$s\".</string>
 
     <string name="videochat">Video chat</string>
+    <string name="videochat_invite_user_to_videochat">Invite %1$s to a video chat?</string>
+    <string name="videochat_invite_user_hint">This requires a compatible app or a compatible browser on both ends.</string>
     <string name="videochat_contact_invited_hint">%1$s invited to a video chat.</string>
     <string name="videochat_you_invited_hint">You invited to a video chat.</string>
     <string name="videochat_will_open_in_your_browser">This video chat will open in your browser.</string>
@@ -222,7 +221,10 @@
     <string name="videochat_tap_to_open">Tap to open</string>
     <string name="videochat_instance">Video chat instance</string>
     <string name="videochat_instance_placeholder">Your video chat instance</string>
-    <string name="videochat_instance_explain">If a video chat instance is defined, you can start a video chat from each one-to-one chat (groups will probably come a bit later). Video chats require a compatible app or a compatible browser on both ends.\n\nExamples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_explain">If a video chat instance is defined, you can start a video chat from each one-to-one chat. Video chats require a compatible app or a compatible browser on both ends.\n\nExamples: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">Use \"%1$s\" to invite others to video chats?\n\nOnce set, you can start a video chat from each one-to-one chat. This will replace the previous setting for video chats, if any.</string>
+    <string name="videochat_invitation">Video chat invitation</string>
+    <string name="videochat_invitation_body">You are invited to a video chat, click %1$s to join.</string>
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Are you sure you want to leave this group?</string>
@@ -245,10 +247,6 @@
     <string name="ask_start_chat_with">Chat with %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Remove %1$s from group?</string>
-    <string name="info_outdated_app_title">Your app version is outdated</string>
-    <string name="info_outdated_app_text">It seems that you installed Delta Chat from a source without auto updates (e.g. GitHub). Please switch to a store version to receive the latest features and bug fixes.</string>
-    <string name="info_outdated_app_dialog_title">Update sources</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat is available on:</string>
 
 
     <!-- contact list -->
@@ -289,6 +287,8 @@
     <string name="chat_self_talk_subtitle">Messages I sent to myself</string>
     <string name="saved_messages">Saved messages</string>
     <string name="saved_messages_explain">• Forward messages here for easy access\n\n• Take notes or voice memos\n\n• Attach media to save them</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Saved</string>
     <string name="chat_contact_request">Contact request</string>
     <string name="chat_no_contact_requests">No contact requests.\n\nIf you want classic emails to appear here as contact requests, you can change the corresponding setting in the app settings.</string>
     <string name="retry_send">Retry to send message</string>
@@ -331,7 +331,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">The messenger with the broadest audience in the world. Free and independent.</string>
-    <string name="welcome_start_messaging">Start messaging</string>
     <string name="login_title">Log in</string>
     <string name="login_header">Log in to your server</string>
     <string name="login_explain">Log in with an existing email account</string>
@@ -364,18 +363,17 @@
     <!-- Translators: %1$s will be replaced by the email address -->
     <string name="login_error_cannot_login">Cannot login as \"%1$s\". Please check if the email address and the password are correct.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
-    <string name="login_error_server_response">Response from %1$s: %2$s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.</string>
-
+    <string name="login_error_server_response">Response from %1$s: %2$s\n\nSome providers may email you additional information about this problem; you should be able to check your inbox using your regular email app or web site. Consult your provider or friends if you run into problems.</string>
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Accept invalid hostnames</string>
     <string name="accept_invalid_certificates">Accept invalid certificates</string>
-
     <string name="used_settings">Used settings:</string>
     <string name="switch_account">Switch account</string>
     <string name="add_account">Add account</string>
     <string name="delete_account">Delete account</string>
     <string name="delete_account_ask">Are you sure you want to delete your account data?</string>
     <string name="switching_account">Switching account…</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Configuration failed. Error: %1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -393,9 +391,7 @@
     <string name="pref_profile_photo">Profile picture</string>
     <string name="pref_blocked_contacts">Blocked contacts</string>
     <string name="pref_profile_photo_remove_ask">Remove profile photo?</string>
-    <string name="pref_help_url">https://delta.chat/help</string>
     <string name="pref_password_and_account_settings">Password and account</string>
-    <string name="pref_who_can_see_this_information">Who can see this?</string>
     <string name="pref_who_can_see_profile_explain">Your profile picture and name will be shown alongside your messages when communicating with other users. Already sent information can not be deleted or removed.</string>
     <string name="pref_your_name">Your name</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -408,7 +404,6 @@
     <string name="pref_outgoing_balanced">Balanced</string>
     <string name="pref_outgoing_worse">Worse quality, small size</string>
     <string name="pref_vibrate">Vibrate</string>
-    <string name="pref_chat_settings">Chat settings</string>
     <string name="pref_change_secret">Change secret</string>
     <string name="pref_change_secret_explain">Change your PIN / pattern / fingerprint via system settings</string>
     <string name="pref_screen_security">Screen security</string>
@@ -419,7 +414,6 @@
     <string name="pref_notifications_show">Show</string>
     <string name="pref_notifications_priority">Priority</string>
     <string name="pref_led_color">LED color</string>
-    <string name="pref_led_pattern">LED blink pattern</string>
     <string name="pref_sound">Sound</string>
     <string name="pref_silent">Silent</string>
     <string name="pref_privacy">Privacy</string>
@@ -441,7 +435,6 @@
     <string name="pref_app_access">App access</string>
     <string name="pref_communication">Communication</string>
     <string name="pref_chats">Chats</string>
-    <string name="pref_messages">Messages</string>
     <string name="pref_in_chat_sounds">In-chat sounds</string>
     <string name="pref_message_text_size">Message font size</string>
     <string name="pref_view_log">View log</string>
@@ -455,7 +448,6 @@
     <string name="pref_backup_export_start_button">Start backup</string>
     <string name="pref_backup_written_to_x">Backup written successfully to \"%1$s\".</string>
     <string name="pref_managekeys_menu_title">Manage keys</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat needs access to your files to import/export keys.</string>
     <string name="pref_managekeys_export_secret_keys">Export secret keys</string>
     <string name="pref_managekeys_export_explain">Export secret keys to \"%1$s\"?</string>
     <string name="pref_managekeys_import_secret_keys">Import secret keys</string>
@@ -473,32 +465,22 @@
     <string name="pref_send_copy_to_self">Send copy to self</string>
     <string name="pref_auto_folder_moves">Automatic moves to DeltaChat folder</string>
     <string name="pref_auto_folder_moves_explain">Chat conversations are moved to avoid cluttering the Inbox</string>
-    <string name="pref_email_interaction_title">Email interaction</string>
     <string name="pref_show_emails">Show classic emails</string>
     <string name="pref_show_emails_no">No, chats only</string>
     <string name="pref_show_emails_accepted_contacts">For accepted contacts</string>
     <string name="pref_show_emails_all">All</string>
-    <string name="pref_empty_server_title">Delete emails from server</string>
-    <string name="pref_empty_server_msg">This function helps free up space on your IMAP server by deleting all emails, including chat messages, in the given folders. Messages on this device will not be deleted. The deletion cannot be undone!</string>
-    <string name="pref_empty_server_inbox">Delete all emails in \"Inbox\" folder</string>
-    <string name="pref_empty_server_mvbox">Delete all emails in \"DeltaChat\" folder</string>
-    <string name="pref_empty_server_do_button">Delete emails</string>
     <string name="pref_experimental_features">Experimental features</string>
     <string name="pref_on_demand_location_streaming">On-demand location streaming</string>
     <string name="pref_background_default">Default background</string>
     <string name="pref_background_default_color">Default color</string>
     <string name="pref_background_custom_image">Custom image</string>
     <string name="pref_background_custom_color">Custom color</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Reliable background connection</string>
-    <string name="pref_reliable_service_explain">Requires a permanent notification</string>
-    <string name="ephemeral_dialog_title">Delete read messages</string>
-
+    <string name="export_aborted">Export aborted.</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Delete old messages</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">Auto-delete messages</string>
-    <string name="autodel_title_short">Auto-delete</string>
     <string name="autodel_device_title">Delete messages from device</string>
     <string name="autodel_server_title">Delete messages from server</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -606,11 +588,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d new messages in %2$d chats</string>
-    <string name="notify_most_recent_from">Most recent from: %1$s</string>
-    <string name="notify_media_message_with_text">Media message: %s</string>
-    <string name="notify_mark_all_read">Mark all as read</string>
     <string name="notify_mark_read">Mark read</string>
-    <string name="notify_media_message">Media message</string>
     <string name="notify_reply_button">Reply</string>
     <string name="notify_new_message">New message</string>
     <string name="notify_background_connection_enabled">Background connection enabled</string>
@@ -624,17 +602,10 @@
     <!-- permissions -->
     <string name="perm_required_title">Permission required</string>
     <string name="perm_continue">Continue</string>
-    <string name="perm_explain_need_for_camera_access">To capture photos and videos, allow Delta Chat to access the camera.</string>
-    <string name="perm_explain_need_for_mic_access">To send audio messages, allow Delta Chat to access the microphone.</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat needs access to your files in order to export files or to create backups.</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat needs access to your files to share them.</string>
     <string name="perm_explain_access_to_camera_denied">To take photos or capture videos, go to the app settings, select \"Permissions\", and enable \"Camera\".</string>
     <string name="perm_explain_access_to_mic_denied">To send audio messages, go to the app settings, select \"Permissions\", and enable \"Microphone\".</string>
     <string name="perm_explain_access_to_storage_denied">To recieve or send files, go to the app settings, select \"Permissions\", and enable \"Storage\".</string>
     <string name="perm_explain_access_to_location_denied">To attach a location, go to the app settings, select \"Permissions\", and enable \"Location\".</string>
-    <string name="perm_enable_bg_reminder_title">Tap here to receive messages while Delta Chat is in the background.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat uses few resources and takes care not to drain your battery.</string>
-    <string name="perm_enable_bg_already_done">You already allowed Delta Chat to receive messages in the background.\n\nIf messages still do not arrive in background, please also check your system settings.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Draw anywhere to blur</string>
@@ -672,8 +643,6 @@
     <string name="more_info_desktop">More info</string>
     <string name="logout_desktop">Logout</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">No archived chats</string>
-    <string name="no_chats_desktop">No chats</string>
     <string name="encryption_info_desktop">Show encryption info</string>
     <string name="verified_desktop">verified</string>
     <string name="remove_desktop">Remove</string>
@@ -719,9 +688,9 @@
     <string name="a11y_delivery_status_delivered">Delivery status: Delivered</string>
     <string name="a11y_delivery_status_read">Delivery status: Read</string>
     <string name="a11y_delivery_status_invalid">Invalid delivery status</string>
-    <string name="a11y_remove_account_btn_label">Remove account</string>
     <string name="a11y_message_context_menu_btn_label">Message actions</string>
     <string name="a11y_background_preview_label">Background preview</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat uses your camera to take and send photos and videos and to scan QR codes.</string>
@@ -732,6 +701,13 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">New Delta Chat 1.10 features at a glance: faster, multi-account, blur images, new emojis, reworked notifications, better error-reporting but most importantly:\n\nClick an avatar in profile and enlarge it 🚀</string>
+    <string name="pref_background_notifications">Background notifications</string>
+    <string name="pref_background_notifications_explain">Uses a background connection to your server and requires ignored battery optimizations.</string>
+    <string name="pref_background_notifications_rationale">To maintain connection to your email server and receive messages in the background, ignore battery optimizations in the next step.\n\nDelta Chat uses few resources and takes care not to drain your battery.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Reliable background connection</string>
+    <string name="pref_reliable_service_explain">Requires a permanent notification</string>
+    <string name="perm_enable_bg_reminder_title">Tap here to receive messages while Delta Chat is in the background.</string>
+    <string name="perm_enable_bg_already_done">You already allowed Delta Chat to receive messages in the background.\n\nIf messages still do not arrive in background, please also check your system settings.</string>
 
 </resources>

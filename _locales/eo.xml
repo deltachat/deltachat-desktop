@@ -54,8 +54,6 @@
     <string name="now">Nun</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Danĝero</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d min</string>
     <string name="today">Hodiaŭ</string>
     <string name="yesterday">Hieraŭ</string>
     <string name="this_week">Ĉi-semajne</string>
@@ -168,8 +166,6 @@
     <string name="menu_select_all">Elekti ĉion</string>
     <string name="menu_expand">Etendi</string>
     <string name="menu_edit_name">Redakti nomon</string>
-    <string name="menu_edit_group_name">Redakti grup-nomon</string>
-    <string name="menu_edit_group_image">Redakti grup-bildon</string>
     <string name="menu_settings">Agordoj</string>
     <string name="menu_advanced">Speciala</string>
     <string name="menu_deaddrop">Kontakt-petoj</string>
@@ -223,10 +219,6 @@
     <string name="ask_start_chat_with">Babili kun %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Forigi %1$sel la grupo?</string>
-    <string name="info_outdated_app_title">La versio de via aplikaĵo estas malnova.</string>
-    <string name="info_outdated_app_text">Ŝajnas ke vi instalis Delta Chat-on el fonto sen aŭtomataj ĝisdatigoj (t.e. GitHub). Bonvolu ŝanĝi al butika versio por ricevi la plej novajn eblecojn kaj cimoriparojn.</string>
-    <string name="info_outdated_app_dialog_title">Ĝisdatigi fontojn</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat estas atingebla je:</string>
 
 
     <!-- contact list -->
@@ -299,7 +291,6 @@
     <string name="send_message">Sendi mesaĝon</string>
 
 
-    <string name="welcome_start_messaging">Komenci mesaĝadon</string>
     <string name="login_title">Ensaluti</string>
     <string name="login_header">Ensaluti al via servilo</string>
     <string name="login_inbox">Ricevujo</string>
@@ -322,9 +313,7 @@
     <string name="login_error_required_fields">Bonvolu enigi validan retadreson kaj pasvorton</string>
     <string name="import_backup_title">Importi savkopion</string>
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Akcepti nevalidajn hostnomojn</string>
     <string name="accept_invalid_certificates">Akcepti nevalidajn atestilojn</string>
-
     <string name="used_settings">Uzitaj agordoj:</string>
     <string name="delete_account">Forigi konton</string>
     <string name="delete_account_ask">Ĉu vi certas, ke vi volas forigi ĉiujn datumojn de vi konto?</string>
@@ -337,16 +326,13 @@
     <string name="pref_profile_photo">Profilbildo</string>
     <string name="pref_blocked_contacts">Blokitaj kontaktoj</string>
     <string name="pref_profile_photo_remove_ask">Ĉu forigi profilbildon?</string>
-    <string name="pref_help_url">https://delta.chat/help</string>
     <string name="pref_password_and_account_settings">Pasvorto kaj konto</string>
-    <string name="pref_who_can_see_this_information">Kiu povas vidi ĉi tion?</string>
     <string name="pref_your_name">Via nomo</string>
     <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_default_status_text">Sendita per mia Delta Chat mesaĝilo: https://delta.chat</string>
     <string name="pref_enter_sends">La Eniga klavo kaŭzas sendon</string>
     <string name="pref_enter_sends_explain">Premado de la Eniga klavo sendos mesaĝojn</string>
     <string name="pref_vibrate">Vibrado</string>
-    <string name="pref_chat_settings">Babilaj agordoj</string>
     <string name="pref_change_secret">Ŝanĝi sekreton</string>
     <string name="pref_screen_security">Ekrana sekureco</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
@@ -355,7 +341,6 @@
     <string name="pref_notifications_show">Montri</string>
     <string name="pref_notifications_priority">Prioritato</string>
     <string name="pref_led_color">LED-a koloro</string>
-    <string name="pref_led_pattern">LED-a pulsa modelo</string>
     <string name="pref_sound">Sono</string>
     <string name="pref_silent">Silenta</string>
     <string name="pref_privacy">Privateco</string>
@@ -377,7 +362,6 @@
     <string name="pref_app_access">Aliro al aplikaĵo</string>
     <string name="pref_communication">Komunikado</string>
     <string name="pref_chats">Interparoloj</string>
-    <string name="pref_messages">Mesaĝoj</string>
     <string name="pref_in_chat_sounds">Sonoj dum interparolado</string>
     <string name="pref_message_text_size">Mesaĝa tipargrando</string>
     <string name="pref_view_log">Vidi protokolon</string>
@@ -390,7 +374,6 @@
     <string name="pref_backup_export_start_button">Komenci savkopiadon</string>
     <string name="pref_backup_written_to_x">Savkopio sukcese konservita al \"%1$s\".</string>
     <string name="pref_managekeys_menu_title">Administri ŝlosilojn</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat bezonas permeson atingi viajn dosierojn por importi/eksporti ŝlosilojn.</string>
     <string name="pref_managekeys_export_secret_keys">Eksporti sekretajn ŝlosilojn</string>
     <string name="pref_managekeys_export_explain">Ĉu eksporti sekretajn ŝlosilojn al \"%1$s\"?</string>
     <string name="pref_managekeys_import_secret_keys">Importi sekretajn ŝlosilojn</string>
@@ -409,9 +392,7 @@
     <string name="screenlock_explain">Lock Delta Chat access with Android screen lock or fingerprint</string>
     <string name="screenlock_unlock_title">Malŝlosi Delta Chat-on</string>
     <string name="screenlock_inactivity_timeout_explain">Aŭtomate ŝlosi Signal-on post specifa templimo de neaktiveco</string>
-    <string name="notify_mark_all_read">Marki ĉiujn legitaj</string>
     <string name="notify_mark_read">Marki legita</string>
-    <string name="notify_media_message">Aŭdvida mesaĝo</string>
     <string name="notify_reply_button">Respondi</string>
     <string name="notify_new_message">Nova mesaĝo</string>
     <string name="notify_priority_high">Alta</string>
@@ -433,7 +414,6 @@
     <string name="global_menu_help_desktop">Helpo</string>
     <string name="more_info_desktop">Plia informo</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_chats_desktop">Neniu babilo nun</string>
     <string name="remove_desktop">Forviŝi</string>
     <string name="save_desktop">Konservi</string>
     <string name="me_desktop">mi</string>

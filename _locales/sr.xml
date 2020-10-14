@@ -52,8 +52,6 @@
     <string name="now">Сада</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Опасност</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%dмин</string>
     <string name="today">Данас</string>
     <string name="yesterday">Јуче</string>
     <string name="this_week">Ове недеље</string>
@@ -166,8 +164,6 @@
     <string name="menu_help">Помоћ</string>
     <string name="menu_select_all">Изабери све</string>
     <string name="menu_edit_name">Уреди назив</string>
-    <string name="menu_edit_group_name">уреди назив групе</string>
-    <string name="menu_edit_group_image">уреди слику групе</string>
     <string name="menu_settings">Поставке</string>
     <string name="menu_advanced">Напредно</string>
     <string name="menu_deaddrop">Захтеви за контакт</string>
@@ -194,6 +190,8 @@
     <string name="ask_start_chat_with">Ћаскати са %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Уклонити %1$s из групе?</string>
+
+
     <!-- contact list -->
     <string name="contacts_title">Контакти</string>
     <string name="contacts_empty_hint">Још нема контаката.</string>
@@ -234,7 +232,6 @@
     <string name="tab_gallery">Галерија</string>
     <string name="tab_docs">Документи</string>
     <string name="media_preview">Преглед медијума</string>
-    <string name="welcome_start_messaging">Почните ћаскање</string>
     <string name="login_subheader">За познате пружаоце услуге е-поште, додатне поставке се одређују аутоматски. Каткад, морате омогућити ИМАП у поставкама на веб сучељу ваше е-поште.\n\nПосаветујте се са пружаоцем услуге е-поште или пријатељима ако наиђете на проблеме.</string>
     <string name="login_no_servers_hint">Не постоји сервер Делта ћаскања. Апликација користи само сервер ваше е-поште.</string>
     <string name="login_inbox">Пријем</string>
@@ -257,19 +254,16 @@
     <string name="login_error_cannot_login">Не могу да се пријавим као %1$s. Проверите да ли су е-адреса и лозинка тачни.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Одговор од %1$s: %2$s\n\nНеки пружаоци услуга остављају додатне информације у ваше пријемно сандуче; можете да проверите ово нпр. користећи веб сучеље ваше е-поште. Посаветујте се са пружаоцем услуге или пријатељима ако налетите на проблеме.</string>
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Проследи за…</string>
     <string name="pref_profile_info_headline">Подаци вашег профила</string>
     <string name="pref_blocked_contacts">Блокирани контакти</string>
-    <string name="pref_who_can_see_this_information">Ко може да види ове податке?</string>
     <string name="pref_your_name">Ваше име</string>
     <!-- Translators: The URL should not be localized, it is not clear which language the receiver prefers and the language will be detected on the server -->
     <string name="pref_default_status_text">Послато Делта ћаскањем: https://delta.chat</string>
     <string name="pref_enter_sends">Шаљи ЕНТЕР тастером</string>
     <string name="pref_vibrate">Вибрирање</string>
-    <string name="pref_chat_settings">Поставке ћаскања</string>
     <string name="pref_screen_security">Безбедност екрана</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">Блокирање снимка екрана у списку недавних апликација и унутар апликације</string>
@@ -277,7 +271,6 @@
     <string name="pref_notifications_show">Прикажи</string>
     <string name="pref_notifications_priority">Приоритет</string>
     <string name="pref_led_color">Боја ЛЕД светла</string>
-    <string name="pref_led_pattern">Трептање ЛЕД светла</string>
     <string name="pref_sound">Звук</string>
     <string name="pref_silent">Без звука</string>
     <string name="pref_privacy">Приватност</string>
@@ -297,7 +290,6 @@
     <string name="pref_app_access">Приступ апликацији</string>
     <string name="pref_communication">Комуникација</string>
     <string name="pref_chats">Ћаскања</string>
-    <string name="pref_messages">Поруке</string>
     <string name="pref_in_chat_sounds">Звуци ћаскања</string>
     <string name="pref_message_text_size">Величина фонта поруке</string>
     <string name="pref_other">Остало</string>
@@ -349,9 +341,7 @@
     <string name="qrshow_join_group_title">Бар-кôд за потврду</string>
     <string name="qrshow_join_contact_title">Бар-кôд за потврду</string>
     <string name="contact_verified">%1$s потврђен.</string>
-    <string name="notify_mark_all_read">Означи све прочитаним</string>
     <string name="notify_mark_read">Означи прочитаним</string>
-    <string name="notify_media_message">Мултимедијална порука</string>
     <string name="notify_reply_button">Одговори</string>
     <string name="notify_new_message">Нова порука</string>
     <string name="notify_priority_high">Висок</string>
@@ -374,7 +364,6 @@
     <string name="global_menu_help_desktop">Помоћ</string>
     <string name="contact_request_title_desktop">Захтеви за контакт</string>
     <string name="more_info_desktop">Више података</string>
-    <string name="no_chats_desktop">Још нема ћаскања.</string>
     <string name="remove_desktop">Уклони</string>
     <string name="save_desktop">Сачувај</string>
     <string name="add_contact_desktop">Нови контакт</string>

@@ -6,6 +6,7 @@
     <string name="cancel">Abbruch</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="select">Auswählen</string>
     <string name="on">An</string>
     <string name="off">Aus</string>
     <string name="def">Standard</string>
@@ -14,6 +15,8 @@
     <string name="automatic">Automatisch</string>
     <string name="strict">Strikt</string>
     <string name="open">Öffnen</string>
+    <string name="join">Teilnehmen</string>
+    <string name="rejoin">Öffnen</string>
     <string name="delete">Löschen</string>
     <string name="info">Info</string>
     <string name="update">Aktualisieren</string>
@@ -26,7 +29,7 @@
     <string name="unarchive">Dearchivieren</string>
     <string name="mute">Stumm</string>
     <string name="ephemeral_messages">Verschwindende Nachrichten</string>
-    <string name="ephemeral_messages_hint">Diese Einstellungen gelten für alle Delta Chat BenutzerInnen. Nachrichten können jedoch kopiert, gespeichert und weitergeleitet werden oder es können andere E-Mail-Clients verwenden werden.</string>
+    <string name="ephemeral_messages_hint">Diese Einstellungen gelten für alle Gruppenmitglieder, die Delta Chat verwenden. Nachrichten können jedoch kopiert, gespeichert und weitergeleitet werden oder es können andere E-Mail-Clients verwenden werden.</string>
     <string name="save">Speichern</string>
     <string name="chat">Chat</string>
     <string name="media">Medien</string>
@@ -56,8 +59,6 @@
     <string name="now">Jetzt</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Achtung</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d Min.</string>
     <string name="today">Heute</string>
     <string name="yesterday">Gestern</string>
     <string name="this_week">Diese Woche</string>
@@ -172,8 +173,6 @@
     <string name="menu_select_all">Alles auswählen</string>
     <string name="menu_expand">Erweitern</string>
     <string name="menu_edit_name">Name bearbeiten</string>
-    <string name="menu_edit_group_name">Gruppenname</string>
-    <string name="menu_edit_group_image">Gruppenbild</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_advanced">Erweitert</string>
     <string name="menu_deaddrop">Kontaktanfragen</string>
@@ -213,6 +212,20 @@
     <string name="file_saved_to">Datei gespeichert unter \"%1$s\".</string>
 
     <string name="videochat">Videochat</string>
+    <string name="videochat_invite_user_to_videochat">%1$s zu einem Videochat einladen?</string>
+    <string name="videochat_invite_user_hint">Dies erfordert eine kompatible App oder einen kompatiblen Browser auf beiden Seiten.</string>
+    <string name="videochat_contact_invited_hint">%1$s hat Sie zu einem Videochat eingeladen.</string>
+    <string name="videochat_you_invited_hint">Sie haben zu einem Videochat eingeladen.</string>
+    <string name="videochat_will_open_in_your_browser">Dieser Videochat wird im Browser geöffnet.</string>
+    <string name="videochat_tap_to_join">Teilnehmen</string>
+    <string name="videochat_tap_to_open">Öffnen</string>
+    <string name="videochat_instance">Videochat-Instanz</string>
+    <string name="videochat_instance_placeholder">Videochat-Instanz</string>
+    <string name="videochat_instance_explain">Wenn eine Videochat-Instanz definiert ist, können SIe einen Videochat von jedem Direktchat aus starten. Videochats erfordern beidseitig eine kompatible App oder einen kompatiblen Browser.\n\nBeispiele: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">\"%1$s\" verwenden, um andere zu Videochats einzuladen?\n\nWenn Sie diese Einstellung vornehmen, können Sie von jedem Direktchat aus einen Videochat starten. Dies überschreibt, falls vorhanden, die bisherige Einstellung zu Videochats.</string>
+    <string name="videochat_invitation">Videochat-Einladung</string>
+    <string name="videochat_invitation_body">Sie sind zu einem Videochat eingeladen, klicken Sie auf %1$s , um teilzunehmen.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Diese Gruppe verlassen?</string>
     <plurals name="ask_delete_chat">
@@ -234,10 +247,6 @@
     <string name="ask_start_chat_with">Chat mit %1$s starten?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">%1$s aus der Gruppe löschen?</string>
-    <string name="info_outdated_app_title">Ihre App-Version ist veraltet.</string>
-    <string name="info_outdated_app_text">Anscheinend haben Sie Delta Chat von einer Quelle ohne automatische Updates (z. B. GitHub) installiert. Bitte wechseln Sie zu einer Store-Version, um die neuesten Funktionen und Fehlerbehebungen zu erhalten.</string>
-    <string name="info_outdated_app_dialog_title">Quellen updaten</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat ist verfügbar bei:</string>
 
 
     <!-- contact list -->
@@ -278,6 +287,8 @@
     <string name="chat_self_talk_subtitle">Nachrichten, die ich mir selber geschickt habe</string>
     <string name="saved_messages">Gespeicherte Nachrichten</string>
     <string name="saved_messages_explain">• Nachrichten zum Merken hierher weiterleiten\n\n• Notizen oder Sprachmemos machen\n\n• Medien zum Speichern einfügen</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Gespeichert</string>
     <string name="chat_contact_request">Kontaktanfrage</string>
     <string name="chat_no_contact_requests">Keine Kontaktanfragen.\n\nWenn normale E-Mails hier erscheinen sollen, müssen Sie die entsprechende erweiterte Einstellung ändern.</string>
     <string name="retry_send">Nachricht erneut senden</string>
@@ -296,8 +307,8 @@
 
 
     <!-- create/edit groups, contact/group profile -->
-    <string name="group_name">Gruppen-Name</string>
-    <string name="group_avatar">Gruppen-Avatar</string>
+    <string name="group_name">Gruppenname</string>
+    <string name="group_avatar">Gruppenbild</string>
     <string name="group_create_button">Gruppe erstellen</string>
     <string name="group_please_enter_group_name">Bitte einen Gruppennamen eingeben.</string>
     <string name="group_add_members">Mitglied hinzufügen</string>
@@ -320,7 +331,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Der Messenger mit der größten Reichweite der Welt. Frei und unabhängig.</string>
-    <string name="welcome_start_messaging">Jetzt beginnen</string>
     <string name="login_title">Login</string>
     <string name="login_header">Bei Ihrem Server anmelden</string>
     <string name="login_explain">Mit existierendem E-Mail-Konto einloggen</string>
@@ -356,17 +366,16 @@
     <string name="login_error_server_response">Antwort von %1$s: %2$s
 
 Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.B. im Web-Frontend abrufen können. Bitten Sie Ihren Anbieter oder FreundInnen um Rat, wenn es Probleme gibt.</string>
-
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Ungültige Hostnamen akzeptieren</string>
     <string name="accept_invalid_certificates">Ungültige Zertifikate akzeptieren</string>
-
     <string name="used_settings">Verwendete Einstellungen:</string>
     <string name="switch_account">E-Mail-Konto wechseln</string>
     <string name="add_account">E-Mail-Konto hinzufügen</string>
     <string name="delete_account">E-Mail-Konto löschen</string>
     <string name="delete_account_ask">Möchten Sie das E-Mail-Konto und alle Daten wirklich von diesem Gerät löschen?</string>
     <string name="switching_account">E-Mail-Konto wechseln…</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Konfiguration fehlgeschlagen. Fehler: %1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -384,9 +393,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_profile_photo">Profilbild</string>
     <string name="pref_blocked_contacts">Blockierte Kontakte</string>
     <string name="pref_profile_photo_remove_ask">Profilbild entfernen?</string>
-    <string name="pref_help_url">https://delta.chat/de/help</string>
     <string name="pref_password_and_account_settings">Passwort und E-Mail-Konto</string>
-    <string name="pref_who_can_see_this_information">Wer kann diese Informationen sehen?</string>
     <string name="pref_who_can_see_profile_explain">Das Profilbild und der Name werden neben gesendeten Nachrichten angezeigt. Bereits gesendete Informationen können nicht mehr gelöscht oder entfernt werden.</string>
     <string name="pref_your_name">Mein Name</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -399,7 +406,6 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_outgoing_balanced">Ausgewogen</string>
     <string name="pref_outgoing_worse">Schlechte Qualität, kleine Dateien</string>
     <string name="pref_vibrate">Vibrieren</string>
-    <string name="pref_chat_settings">Chat-Einstellungen</string>
     <string name="pref_change_secret">Sicherheitseinstellungen ändern</string>
     <string name="pref_change_secret_explain">Ändern von PIN / Muster / Fingerabdruck über die Systemeinstellungen</string>
     <string name="pref_screen_security">Bildschirmsicherheit</string>
@@ -410,7 +416,6 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_notifications_show">Anzeigen</string>
     <string name="pref_notifications_priority">Priorität</string>
     <string name="pref_led_color">LED-Farbe</string>
-    <string name="pref_led_pattern">LED-Blinkgeschwindigkeit</string>
     <string name="pref_sound">Ton</string>
     <string name="pref_silent">Leise</string>
     <string name="pref_privacy">Datenschutz</string>
@@ -432,7 +437,6 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_app_access">App-Zugriff</string>
     <string name="pref_communication">Kommunikation</string>
     <string name="pref_chats">Chats</string>
-    <string name="pref_messages">Nachrichten</string>
     <string name="pref_in_chat_sounds">In-Chat Klänge</string>
     <string name="pref_message_text_size">Schriftgröße</string>
     <string name="pref_view_log">Protokoll anzeigen</string>
@@ -446,7 +450,6 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_backup_export_start_button">Backup starten</string>
     <string name="pref_backup_written_to_x">Backup nach %1$s erfolgreich</string>
     <string name="pref_managekeys_menu_title">Schlüssel verwalten</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat benötigt Zugriff auf das Dateisystem, um die Schlüssel zu importieren/exportieren.</string>
     <string name="pref_managekeys_export_secret_keys">Exportiere geheime Schlüssel</string>
     <string name="pref_managekeys_export_explain">Geheime Schlüssel nach \"%1$s\" exportieren?</string>
     <string name="pref_managekeys_import_secret_keys">Importiere geheime Schlüssel</string>
@@ -464,32 +467,22 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="pref_send_copy_to_self">Kopie an mich selbst senden</string>
     <string name="pref_auto_folder_moves">Autom. Verschieben in den DeltaChat-Ordner</string>
     <string name="pref_auto_folder_moves_explain">Konversationen verschieben für einen übersichtlichen Posteingang</string>
-    <string name="pref_email_interaction_title">E-Mail-Zusammenspiel</string>
     <string name="pref_show_emails">Normale E-Mails anzeigen</string>
     <string name="pref_show_emails_no">Nein, nur Chats</string>
     <string name="pref_show_emails_accepted_contacts">Akzeptierte Kontakte</string>
     <string name="pref_show_emails_all">Alle</string>
-    <string name="pref_empty_server_title">E-Mails vom Server löschen</string>
-    <string name="pref_empty_server_msg">Mit dieser Funktion können Sie Speicherplatz auf Ihrem IMAP-Server freigeben, indem Sie ALLE E-Mails, einschließlich Chat-Nachrichten, in den angegebenen Ordnern löschen. Nachrichten auf diesem Gerät werden nicht gelöscht. Die Löschung kann nicht rückgängig gemacht werden!</string>
-    <string name="pref_empty_server_inbox">Löschen ALLER E-Mails im Nachrichteneingangsordner (Inbox)</string>
-    <string name="pref_empty_server_mvbox">Löschen ALLER E-Mails im DeltaChat Ordner.</string>
-    <string name="pref_empty_server_do_button">E-Mails löschen</string>
     <string name="pref_experimental_features">Experimentelle Features</string>
     <string name="pref_on_demand_location_streaming">Standortübertragung nach Bedarf</string>
     <string name="pref_background_default">Voreingestellter Hintergrund</string>
     <string name="pref_background_default_color">Voreingestellte Farbe</string>
     <string name="pref_background_custom_image">Benutzerdefiniertes Hintergrundbild</string>
     <string name="pref_background_custom_color">Benutzerdefinierte Farbe</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Zuverlässige Hintergrundverbindung</string>
-    <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
-    <string name="ephemeral_dialog_title">Gelesene Nachrichten löschen</string>
-
+    <string name="export_aborted">Export abgebrochen.</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Alte Nachrichten löschen</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">Nachrichten automatisch löschen</string>
-    <string name="autodel_title_short">Automatisch löschen</string>
     <string name="autodel_device_title">Nachrichten vom Gerät löschen</string>
     <string name="autodel_server_title">Nachrichten vom Server löschen</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -587,7 +580,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="qraccount_ask_create_and_login_another">E-Mail-Konto auf \"%1$s\" erzeugen und dort anmelden?
 
 Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Option \"E-Mail-Konto wechseln\" jederzeit zwischen den Konten hin- und herschalten.</string>
-    <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und einen Avatar festlegen, der den ChatpartnerInnen angezeigt wird.</string>
+    <string name="qraccount_success_enter_name">Anmeldung erfolgreich — Ihre E-Mail-Adresse ist %1$s\n\nWenn Sie mögen, können Sie nun einen Namen und ein Profilbild festlegen, der den ChatpartnerInnen angezeigt wird.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues E-Mail-Konto zu erzeugen.</string>
     <string name="qraccount_use_on_new_install">Der gescannte QR-Code ist zum Erstellen eines neuen E-Mail-Kontos. Sie können den QR-Code nur bei einer neuen Delta Chat Installation verwenden.</string>
     <string name="contact_verified">%1$s verifiziert.</string>
@@ -599,11 +592,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d neue Nachrichten in %2$d Chats</string>
-    <string name="notify_most_recent_from">Letzter Stand von: %1$s</string>
-    <string name="notify_media_message_with_text">Medienmitteilung: %s</string>
-    <string name="notify_mark_all_read">Alle als gelesen markieren</string>
     <string name="notify_mark_read">Als gelesen markieren</string>
-    <string name="notify_media_message">Medienmitteilung</string>
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
     <string name="notify_background_connection_enabled">Hintergrundverbindung aktiviert</string>
@@ -617,17 +606,10 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <!-- permissions -->
     <string name="perm_required_title">Berechtigung erforderlich</string>
     <string name="perm_continue">Weiter</string>
-    <string name="perm_explain_need_for_camera_access">Delta Chat den Zugriff auf die Kamera erlauben, um Fotos und Videos aufzunehmen.</string>
-    <string name="perm_explain_need_for_mic_access">Delta Chat den Zugriff auf das Mikrofon erlauben, um Audionachrichten aufzunehmen.</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat benötigt Zugriff auf das Dateisystem, um Dateien zu exportieren oder Backups zu erstellen.</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat benötigt Zugriff auf das Dateisystem, um die ausgewählten Dateien zu teilen.</string>
     <string name="perm_explain_access_to_camera_denied">Um Fotos oder Videos aufzunehmen, bitte in den System-Einstellungen DeltaChat den Zugriff auf die Kamera erlauben. </string>
     <string name="perm_explain_access_to_mic_denied">Um Audio-Nachrichten zu senden, bitte in den System-Einstellungen DeltaChat den Zugriff auf das Mikrophon erlauben.</string>
     <string name="perm_explain_access_to_storage_denied">Um Dateien zu empfangen oder zu versenden, bitte in den System-Einstellungen Delta Chat den Zugriff auf den Speicher erlauben.</string>
     <string name="perm_explain_access_to_location_denied">Um einen Standort anzuhängen, bitte in den Systemeinstellungen DeltaChat den Zugriff auf \"Standort\" erlauben.</string>
-    <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat verbraucht nur minimale Ressourcen und achtet darauf, den Akku zu schonen.</string>
-    <string name="perm_enable_bg_already_done">Sie haben Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfen Sie bitte auch Ihre Systemeinstellungen.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Zeichne zum Verwischen in beliebige Bereiche</string>
@@ -665,8 +647,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="more_info_desktop">Mehr Informationen</string>
     <string name="logout_desktop">Abmelden</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">Keine archivierten Chats</string>
-    <string name="no_chats_desktop">Keine Chats</string>
     <string name="encryption_info_desktop">Zeige Verschlüsselungsinfo</string>
     <string name="verified_desktop">Verifiziert</string>
     <string name="remove_desktop">Entfernen</string>
@@ -712,9 +692,9 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="a11y_delivery_status_delivered">Übertragungsstatus: Versendet</string>
     <string name="a11y_delivery_status_read">Übertragungsstatus: Gelesen</string>
     <string name="a11y_delivery_status_invalid">Übertragungsstatus: Ungültig</string>
-    <string name="a11y_remove_account_btn_label">E-Mail-Konto löschen</string>
     <string name="a11y_message_context_menu_btn_label">Nachrichtaktionen</string>
     <string name="a11y_background_preview_label">Vorschau für Hintergrundbild</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat verwendet die Kamera, um Fotos aufzunehmen und zu versenden und um QR-Codes zu scannen.</string>
@@ -725,6 +705,13 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Die neuen Delta Chat 1.10 Features im Überblick: schneller, Multi-Account, Bildbereiche verwischen, neue Emojis, überarbeitete Benachrichtigungen, Anzeige fehlerhafter Nachrichten. Aber am wichtigsten:\n\nAvatare im Profil vergrößern 🚀</string>
+    <string name="pref_background_notifications">Hintergrundbenachrichtigungen</string>
+    <string name="pref_background_notifications_explain">Verwendet eine Hintergrundverbindung zu Ihrem Server und erfordert das Ausschalten der Akku-Optimierung</string>
+    <string name="pref_background_notifications_rationale">Um die Verbindung zu Ihrem E-Mail-Server aufrechtzuerhalten und Nachrichten im Hintergrund zu empfangen, Ignorieren Sie im nächsten Schritt die \"Akku-Optimierungen\".\n\nDelta Chat verbraucht nur minimale Ressourcen und achtet darauf, den Akku zu schonen.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Zuverlässige Hintergrundverbindung</string>
+    <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
+    <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
+    <string name="perm_enable_bg_already_done">Sie haben Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfen Sie bitte auch Ihre Systemeinstellungen.</string>
 
 </resources>
