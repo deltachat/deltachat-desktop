@@ -9,8 +9,6 @@ import { MessageType, DCContact } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/messageWrapper')
 
-const GROUP_TYPES = [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP]
-
 type RenderMessageProps = {
   message: MessageType
   locationStreamingEnabled: boolean
@@ -36,7 +34,7 @@ export const RenderMessage = React.memo(
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
-    const conversationType: 'group' | 'direct' = GROUP_TYPES.includes(chat.type)
+    const conversationType: 'group' | 'direct' = chat.type === C.DC_CHAT_TYPE_GROUP
       ? 'group'
       : 'direct'
     const onShowDetail = () => openDialog('MessageDetail', { id: message.id })

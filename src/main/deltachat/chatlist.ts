@@ -260,8 +260,6 @@ function mapCoreMsgStatus2String(state: number) {
   }
 }
 function isGroupChat(chat: JsonChat) {
-  return [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP].includes(
-    chat && chat.type
-  )
+  return chat && chat.type === C.DC_CHAT_TYPE_GROUP
 }
 // end section Internal functions
