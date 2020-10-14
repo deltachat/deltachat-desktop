@@ -1,5 +1,9 @@
 [
   {
+    "locale": "ar",
+    "name": "العربية"
+  },
+  {
     "locale": "az",
     "name": "Azeri"
   },
@@ -20,12 +24,12 @@
     "name": "English"
   },
   {
-    "locale": "es",
-    "name": "Español"
-  },
-  {
     "locale": "eo",
     "name": "Esperanto"
+  },
+  {
+    "locale": "es",
+    "name": "Español"
   },
   {
     "locale": "eu",
@@ -36,16 +40,12 @@
     "name": "Français"
   },
   {
-    "locale": "gl",
-    "name": "Galego"
-  },
-  {
-    "locale": "gl",
-    "name": "Galego"
-  },
-  {
     "locale": "hr",
     "name": "Hrvatski"
+  },
+  {
+    "locale": "hu",
+    "name": "Magyar nyelv"
   },
   {
     "locale": "id",
@@ -56,20 +56,28 @@
     "name": "Italiano"
   },
   {
+    "locale": "gl",
+    "name": "Galego"
+  },
+  {
+    "locale": "gl",
+    "name": "Galego"
+  },
+  {
+    "locale": "ja_JP",
+    "name": "日本語"
+  },
+  {
+    "locale": "ko",
+    "name": "한국어"
+  },
+  {
     "locale": "lt",
     "name": "Lietuvių kalba"
   },
   {
-    "locale": "hu",
-    "name": "Magyar nyelv"
-  },
-  {
-    "locale": "nl",
+    "locale": "nl_NL",
     "name": "Nederlands"
-  },
-  {
-    "locale": "nb",
-    "name": "Norsk Bokmål"
   },
   {
     "locale": "pl",
@@ -84,28 +92,32 @@
     "name": "Português do Brasil"
   },
   {
-    "locale": "sc",
-    "name": "Sardu"
+    "locale": "ru",
+    "name": "Pусский"
   },
   {
     "locale": "sq",
     "name": "Shqip"
   },
   {
+    "locale": "sr",
+    "name": "Српски"
+  },
+  {
     "locale": "sv",
     "name": "Svenska"
+  },
+  {
+    "locale": "ta",
+    "name": "தமிழ்"
   },
   {
     "locale": "tr",
     "name": "Türkçe"
   },
   {
-    "locale": "ru",
-    "name": "Pусский"
-  },
-  {
-    "locale": "sr",
-    "name": "Српски"
+    "locale": "te",
+    "name": "తెలుగు"
   },
   {
     "locale": "uk",
@@ -116,27 +128,11 @@
     "name": "عربى"
   },
   {
-    "locale": "ja",
-    "name": "日本語"
-  },
-  {
-    "locale": "ko",
-    "name": "한국어"
-  },
-  {
     "locale": "zh_CN",
     "name": "简体中文"
   },
   {
     "locale": "zh_TW",
     "name": "繁體中文"
-  },
-  {
-    "locale": "ta",
-    "name": "தமிழ்"
-  },
-  {
-    "locale": "te",
-    "name": "తెలుగు"
   }
 ]
