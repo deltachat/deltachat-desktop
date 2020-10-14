@@ -399,7 +399,7 @@ export const CallMessage = (props: {
         <div className={classNames('msg-body')}>
           <div dir='auto' className='text'>
             <div className='call-inc-text'>
-              <b>{tx('video_hangout_invitation')}</b>
+              <b>{tx('videochat_invitation')}</b>
               <div>
                 <button
                   className='phone-accept-button'

@@ -144,9 +144,6 @@
   "open_external_url_trust_domain": {
     "message": "Don't ask again for"
   },
-  "video_hangout_invitation": {
-    "message": "Video Hangout Invitation"
-  },
   "a11y_disappearing_messages_activated": {
     "message": "Disapearing messages are active for this chat"
   },
