@@ -263,14 +263,26 @@ export function ContextMenu(props: {
   )
 }
 
+type ItemsFactoryFn = () => ContextMenuItem[]
+
+/**
+ *
+ * @param itemsOrItemsFactoryFn menu items or a function that generates the items at the time the menu opens
+ * @param openContextMenu reference to the ScreenContext's openContextMenu function
+ */
 export function makeContextMenu(
-  items: ContextMenuItem[],
-  screenContext: unwrapContext<typeof ScreenContext>
+  itemsOrItemsFactoryFn: ContextMenuItem[] | ItemsFactoryFn,
+  openContextMenu: unwrapContext<typeof ScreenContext>['openContextMenu']
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
     const [cursorX, cursorY] = [ev.clientX, ev.clientY]
 
-    screenContext.openContextMenu({
+    let items =
+      typeof itemsOrItemsFactoryFn === 'function'
+        ? itemsOrItemsFactoryFn()
+        : itemsOrItemsFactoryFn
+
+    openContextMenu({
       cursorX,
       cursorY,
       items,
@@ -278,9 +290,15 @@ export function makeContextMenu(
   }
 }
 
-export function useContextMenu(items: ContextMenuItem[]) {
-  const screenContext = useContext(ScreenContext)
-  return makeContextMenu(items, screenContext)
+/**
+ *
+ * @param itemsOrItemsFactoryFn menu items or a function that generates the items at the time the menu opens
+ */
+export function useContextMenu(
+  itemsOrItemsFactoryFn: Parameters<typeof makeContextMenu>[0]
+) {
+  const { openContextMenu } = useContext(ScreenContext)
+  return makeContextMenu(itemsOrItemsFactoryFn, openContextMenu)
 }
 
 /**
