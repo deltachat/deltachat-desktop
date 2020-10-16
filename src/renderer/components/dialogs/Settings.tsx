@@ -379,7 +379,7 @@ function ProfileImageSelector(props: any) {
   const openSelectionDialog = () => {
     remote.dialog.showOpenDialog(
       {
-        title: tx('select_profile_image_desktop'),
+        title: tx('select_your_new_profile_image'),
         filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
         properties: ['openFile'],
       },
@@ -400,14 +400,14 @@ function ProfileImageSelector(props: any) {
     <div className='profile-image-selector'>
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
       {profileImagePreview ? (
-        <img src={profileImagePreview} alt={tx('a11y_profile_image_label')} />
+        <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
       ) : (
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
       <div>
         {/* TODO: replace the text by icons that get described by aria-label */}
         <button
-          aria-label={tx('a11y_profile_image_select')}
+          aria-label={tx('profile_image_select')}
           onClick={openSelectionDialog}
           className={'bp3-button'}
         >
@@ -415,7 +415,7 @@ function ProfileImageSelector(props: any) {
         </button>
         {profileImagePreview && (
           <button
-            aria-label={tx('a11y_profile_image_remove')}
+            aria-label={tx('profile_image_delete')}
             onClick={changeProfilePicture.bind(null, '')}
             className={'bp3-button'}
           >

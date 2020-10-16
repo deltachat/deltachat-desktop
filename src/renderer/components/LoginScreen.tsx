@@ -281,8 +281,8 @@ function AccountSelection({
   const { openDialog } = useContext(ScreenContext)
 
   const removeAccount = (login: DeltaChatAccount) => {
-    const header = tx('delete_account_confirmation_header_desktop', login.addr)
-    const message = tx('delete_account_confirmation_desktop', login.addr)
+    const header = tx('ask_delete_value', login.addr)
+    const message = tx('delete_account_explain_with_name', login.addr)
     openDialog('ConfirmationDialog', {
       header,
       message,

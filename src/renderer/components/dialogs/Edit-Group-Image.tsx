@@ -37,9 +37,9 @@ export const GroupImage = (props: {
     })
 
   const openContextMenu = useContextMenu([
-    { label: tx('set_group_avatar'), action: onSetGroupImage },
+    { label: tx('select_group_image_desktop'), action: onSetGroupImage },
     groupImage && {
-      label: tx('remove_group_avatar'),
+      label: tx('remove_group_image'),
       action: onUnsetGroupImage,
     },
   ])
@@ -59,7 +59,7 @@ export const GroupImage = (props: {
       <div
         className='group-image-edit-button'
         onClick={openContextMenu}
-        aria-label={tx('a11y_change_group_image')}
+        aria-label={tx('change_group_image')}
       >
         <div />
       </div>

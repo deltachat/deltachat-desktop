@@ -172,7 +172,7 @@ function buildContextMenu(
   return [
     attachment &&
       isGenericAttachment(attachment) && {
-        label: tx('open_attachment_desktop'),
+        label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message.msg),
       },
     link !== '' && {
