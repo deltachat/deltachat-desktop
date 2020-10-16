@@ -63,18 +63,6 @@
   "default_value_automatic": {
     "message": "Automatic"
   },
-  "help_page_title": {
-    "message": "Frequently Answered Questions"
-  },
-  "help_page_local_copy_hint": {
-    "message": "This content is a local copy of [LINK:the FAQ page] on our website."
-  },
-  "profile_action_direct_message": {
-    "message": "Open Chat"
-  },
-  "a11y_qr_data": {
-    "message": "QR code data"
-  },
   "a11y_copy_qr_data": {
     "message": "Copied QR url to clipboard"
   },
@@ -113,12 +101,6 @@
   },
   "paste_from_clipboard": {
     "message": "Click to paste from clip board"
-  },
-  "pref_theming": {
-    "message": "Theming"
-  },
-  "pref_system_theme": {
-    "message": "Auto select theme (light/dark) based on your system settings"
   },
   "set_group_avatar": {
     "message": "Set Group Avatar"
