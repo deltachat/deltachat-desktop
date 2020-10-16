@@ -197,5 +197,8 @@
   },
   "account_info_hover_tooltip_desktop":{
     "message": "E-Mail: %s\nSize: %s\nPath: %s"
+  },
+  "jump_to_message": {
+    "message": "Jump to Message"
   }
 }

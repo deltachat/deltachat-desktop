@@ -7,10 +7,13 @@ import {
   isAudio,
   getExtension,
   dragAttachmentOut,
+  isDisplayableByFullscreenMedia,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { MessageType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
+import { makeContextMenu } from '../ContextMenu'
+import { OpenDialogFunctionType } from '../dialogs/DialogController'
 
 export default function MediaAttachment({ message }: { message: MessageType }) {
   if (!message.msg.attachment) {
@@ -31,82 +34,130 @@ export default function MediaAttachment({ message }: { message: MessageType }) {
   }
 }
 
+const hideOpenInShellTypes = [
+  C.DC_MSG_GIF,
+  C.DC_MSG_IMAGE,
+  C.DC_MSG_VIDEO,
+  C.DC_MSG_AUDIO,
+  C.DC_MSG_VOICE,
+]
+
+const contextMenuFactory = (
+  message: MessageType,
+  openDialog: OpenDialogFunctionType
+) => {
+  const tx = window.static_translate
+  const { id: msgId, viewType } = message.msg
+  return [
+    !hideOpenInShellTypes.includes(viewType) && {
+      label: tx('open'),
+      action: openAttachmentInShell.bind(null, message.msg),
+    },
+    {
+      label: tx('save'),
+      action: onDownload.bind(null, message.msg),
+    },
+    // {
+    //   label: tx('jump_to_message'),
+    //   action: ()=>alert('not implemented yet')
+    // },
+    {
+      label: tx('menu_message_details'),
+      action: openDialog.bind(null, 'MessageDetail', { id: msgId }),
+    },
+  ]
+}
+
+/** provides a quick link to comonly used functions to save a few duplicated lines  */
+const useMediaActions = (message: MessageType) => {
+  const { openDialog, openContextMenu } = useContext(ScreenContext)
+  const { msg } = message
+  return {
+    openContextMenu: makeContextMenu(
+      contextMenuFactory.bind(null, message, openDialog),
+      openContextMenu
+    ),
+    openFullscreenMedia: openDialog.bind(null, 'FullscreenMedia', {
+      msg,
+    }),
+    downloadMedia: onDownload.bind(null, msg),
+    openInShell: openAttachmentInShell.bind(null, msg),
+  }
+}
+
+function squareBrokenMediaContent(
+  hasSupportedFormat: boolean,
+  contentType: string
+) {
+  const tx = window.static_translate
+  return (
+    <div className='attachment-content'>
+      {hasSupportedFormat
+        ? tx('attachment_failed_to_load')
+        : tx('can_not_display_unsuported_file_type', contentType)}
+    </div>
+  )
+}
+
 function ImageAttachment({ message }: { message: MessageType }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
+    message
+  )
   const { attachment } = message.msg
   const hasSupportedFormat = isImage(attachment)
-  if (!attachment.url || !hasSupportedFormat) {
-    return (
-      <div
-        className='media-attachment-media broken'
-        onClick={() => openAttachmentInShell(message.msg)}
-      >
-        <div className='attachment-content'>
-          {hasSupportedFormat
-            ? window.static_translate('attachment_failed_to_load')
-            : window.static_translate(
-                'can_not_display_unsuported_file_type',
-                attachment.contentType
-              )}
-        </div>
-      </div>
-    )
-  }
+  const isBroken = !attachment.url || !hasSupportedFormat
   return (
     <div
-      onClick={() => openDialog('FullscreenMedia', { msg: message.msg })}
-      role='button'
-      className='media-attachment-media'
+      className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+      onClick={isBroken ? openInShell : openFullscreenMedia}
+      onContextMenu={openContextMenu}
     >
-      <img className='attachment-content' src={attachment.url} />
+      {isBroken ? (
+        squareBrokenMediaContent(hasSupportedFormat, attachment.contentType)
+      ) : (
+        <img className='attachment-content' src={attachment.url} />
+      )}
     </div>
   )
 }
 
 function VideoAttachment({ message }: { message: MessageType }) {
-  const { openDialog } = useContext(ScreenContext)
+  const { openContextMenu, openFullscreenMedia, openInShell } = useMediaActions(
+    message
+  )
   const { attachment } = message.msg
   const hasSupportedFormat = isVideo(attachment)
-  if (!attachment.url || !hasSupportedFormat) {
-    return (
-      <div
-        className='media-attachment-media broken'
-        onClick={() => openAttachmentInShell(message.msg)}
-      >
-        <div className='attachment-content'>
-          {hasSupportedFormat
-            ? window.static_translate('attachment_failed_to_load')
-            : window.static_translate(
-                'can_not_display_unsuported_file_type',
-                attachment.contentType
-              )}
-        </div>
-      </div>
-    )
-  }
+  const isBroken = !attachment.url || !hasSupportedFormat
   return (
     <div
-      onClick={() => openDialog('FullscreenMedia', { msg: message.msg })}
-      role='button'
-      className='media-attachment-media'
+      className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+      onClick={isBroken ? openInShell : openFullscreenMedia}
+      onContextMenu={openContextMenu}
     >
-      <video
-        className='attachment-content'
-        src={attachment.url}
-        controls={false}
-      />
-      <div className='video-play-btn'>
-        <div className='video-play-btn-icon' />
-      </div>
+      {isBroken ? (
+        squareBrokenMediaContent(hasSupportedFormat, attachment.contentType)
+      ) : (
+        <>
+          <video
+            className='attachment-content'
+            src={attachment.url}
+            controls={false}
+          />
+          <div className='video-play-btn'>
+            <div className='video-play-btn-icon' />
+          </div>
+        </>
+      )}
     </div>
   )
 }
 
 function AudioAttachment({ message }: { message: MessageType }) {
+  const { openContextMenu } = useMediaActions(message)
   const { attachment } = message.msg
   const hasSupportedFormat = isAudio(attachment)
   return (
-    <div className='media-attachment-audio'>
+    <div className='media-attachment-audio' onContextMenu={openContextMenu}>
       <div className='heading'>
         <div className='name'>{message?.contact.displayName}</div>
         <Timestamp
@@ -132,6 +183,9 @@ function AudioAttachment({ message }: { message: MessageType }) {
 }
 
 function FileAttachment({ message }: { message: MessageType }) {
+  const { openContextMenu, downloadMedia, openInShell } = useMediaActions(
+    message
+  )
   const { attachment } = message.msg
   const { fileName, fileSize, contentType } = attachment
   const extension = getExtension(attachment)
@@ -139,16 +193,15 @@ function FileAttachment({ message }: { message: MessageType }) {
     <div
       className='media-attachment-generic'
       role='button'
-      onClick={ev => {
-        onDownload(message.msg)
-      }}
+      onClick={downloadMedia}
+      onContextMenu={openContextMenu}
     >
       <div
         className='file-icon'
         draggable='true'
         onClick={ev => {
           ev.stopPropagation()
-          openAttachmentInShell(message.msg)
+          openInShell()
         }}
         onDragStart={dragAttachmentOut.bind(null, attachment)}
         title={contentType}
