@@ -117,12 +117,8 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   return zoomFactors.map(({ key, scale }) => {
     return {
       label: !(scale === 1 && key === 'custom')
-        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(
-            key
-          )}`
-        : (app as ExtendedAppMainProcess).translate(
-            'custom'
-          ),
+        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(key)}`
+        : (app as ExtendedAppMainProcess).translate('custom'),
       type: 'radio',
       checked:
         scale === (app as ExtendedAppMainProcess).state.saved.zoomFactor &&
