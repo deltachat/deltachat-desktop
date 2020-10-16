@@ -158,7 +158,7 @@ export default function MainScreen() {
                     {selectedChat.ephemeralTimer !== 0 && (
                       <div
                         className={'disapearing-messages-icon'}
-                        aria-label={tx(`a11y_disappearing_messages_activated`)}
+                        aria-label={tx('a11y_disappearing_messages_activated')}
                       />
                     )}
                   </div>
