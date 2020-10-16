@@ -6,6 +6,7 @@
     <string name="cancel">Avbryt</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
+    <string name="select">Välj</string>
     <string name="on">På</string>
     <string name="off">Av</string>
     <string name="def">Standard</string>
@@ -14,6 +15,8 @@
     <string name="automatic">Automatiskt</string>
     <string name="strict">Sträng</string>
     <string name="open">Öppna</string>
+    <string name="join">Anslut</string>
+    <string name="rejoin">Återanslut</string>
     <string name="delete">Ta bort</string>
     <string name="info">Info</string>
     <string name="update">Uppdatera</string>
@@ -56,8 +59,6 @@
     <string name="now">Nu</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Fara</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d min</string>
     <string name="today">Idag</string>
     <string name="yesterday">Igår</string>
     <string name="this_week">Denna vecka</string>
@@ -172,8 +173,6 @@
     <string name="menu_select_all">Markera alla</string>
     <string name="menu_expand">Expandera</string>
     <string name="menu_edit_name">Redigera namn</string>
-    <string name="menu_edit_group_name">Redigera gruppnamn</string>
-    <string name="menu_edit_group_image">Redigera gruppbild</string>
     <string name="menu_settings">Inställningar</string>
     <string name="menu_advanced">Avancerat</string>
     <string name="menu_deaddrop">Kontaktförfrågningar</string>
@@ -212,6 +211,21 @@
 
     <string name="file_saved_to">Filen är sparad i \"%1$s\".</string>
 
+    <string name="videochat">Videochatt</string>
+    <string name="videochat_invite_user_to_videochat">Vill du bjuda in %1$s till en videochatt?</string>
+    <string name="videochat_invite_user_hint">Detta kräver ett kompatibelt program eller en kompatibel webbläsare i bägge ändar.</string>
+    <string name="videochat_contact_invited_hint">%1$s bjöd in till en videochatt</string>
+    <string name="videochat_you_invited_hint">Du bjöd in till en videochatt</string>
+    <string name="videochat_will_open_in_your_browser">Denna videochatt öppnas i din webbläsare.</string>
+    <string name="videochat_tap_to_join">Tryck för att ansluta</string>
+    <string name="videochat_tap_to_open">Tryck för att öppna</string>
+    <string name="videochat_instance">Videochattinstans</string>
+    <string name="videochat_instance_placeholder">Din videochattinstans</string>
+    <string name="videochat_instance_explain">Om en videochattinstans har definierats kan du starta en videochatt från varje en-till-en-chatt. Videochattar kräver en kompatibel app eller en kompatibel webbläsare i båda ändar.\n\nExempel: https://meet.jit.si/$ROOM or basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">Vill du använda \"%1$s\" för att bjuda in andra till videochattar?\n\nNär det väl är inställt kan du starta en videochatt från vilken en-till-en-chatt som helst. Detta ersätter den tidigare inställningen för eventuella videochattar.</string>
+    <string name="videochat_invitation">Videochattinbjudan</string>
+    <string name="videochat_invitation_body">Du är inbjuden till en videochatt, klicka på %1$s för att ansluta.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Är du säker på att du vill lämna den här gruppen?</string>
     <plurals name="ask_delete_chat">
@@ -233,10 +247,6 @@
     <string name="ask_start_chat_with">Chatta med %1$s ?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Ta bort %1$s från gruppen?</string>
-    <string name="info_outdated_app_title">Din appversion är för gammal.</string>
-    <string name="info_outdated_app_text">Det verkar som att du installerade Delta Chat från en källa som inte har automatiska uppdateringar (t.ex. GitHub). Vänligen använd en butiksversion för att komma åt de senaste funktionerna och buggfixar.</string>
-    <string name="info_outdated_app_dialog_title">Uppdatera källan</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat är tillgänglig för:</string>
 
 
     <!-- contact list -->
@@ -319,7 +329,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Chattappen med den bredaste publiken i världen. Fri och oberoende.</string>
-    <string name="welcome_start_messaging">Börja chatta</string>
     <string name="login_title">Logga in</string>
     <string name="login_header">Logga in på din server</string>
     <string name="login_explain">Logga in med ett befintligt e-postkonto</string>
@@ -353,18 +362,14 @@
     <string name="login_error_cannot_login">Kan inte logga in som \"%1$s\". Kontrollera om e-postadressen och lösenordet är korrekt.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Svar från %1$s: %2$s\n\nVissa e-postleverantörer placerar tilläggsinformation i din inkorg. Du kan kontrollera dem i t.ex. webbgränssnittet. Kontakta din e-postleverantör eller vänner om du stöter på problem.</string>
-
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Acceptera ogiltiga värdnamn</string>
     <string name="accept_invalid_certificates">Acceptera ogiltiga certifikat</string>
-
     <string name="used_settings">Använda inställningar:</string>
     <string name="switch_account">Byt konto</string>
     <string name="add_account">Lägg till konto</string>
     <string name="delete_account">Ta bort konto</string>
     <string name="delete_account_ask">Är du säker på att du vill ta bort din kontodata?</string>
     <string name="switching_account">Byter konto...</string>
-
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Vidarebefordra till...</string>
@@ -381,9 +386,7 @@
     <string name="pref_profile_photo">Profilbild</string>
     <string name="pref_blocked_contacts">Blockerade kontakter</string>
     <string name="pref_profile_photo_remove_ask">Ta bort profilfotot?</string>
-    <string name="pref_help_url">https://delta.chat/help</string>
     <string name="pref_password_and_account_settings">Lösenord och konto</string>
-    <string name="pref_who_can_see_this_information">Vem kan se detta?</string>
     <string name="pref_who_can_see_profile_explain">Din profilbild och ditt namn visas tillsammans med dina meddelanden när du kommunicerar med andra användare. Information som redan skickats kan inte tas bort eller flyttas.</string>
     <string name="pref_your_name">Ditt namn</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -396,7 +399,6 @@
     <string name="pref_outgoing_balanced">Balanserad</string>
     <string name="pref_outgoing_worse">Sämre kvalitet, mindre storlek</string>
     <string name="pref_vibrate">Vibrera</string>
-    <string name="pref_chat_settings">Konversationsinställningar</string>
     <string name="pref_change_secret">Ändra hemlighet</string>
     <string name="pref_change_secret_explain">Ändra ditt PIN/mönster/fingeravtryck via systeminställningarna</string>
     <string name="pref_screen_security">Skärmsäkerhet</string>
@@ -407,7 +409,6 @@
     <string name="pref_notifications_show">Visa</string>
     <string name="pref_notifications_priority">Prioritet</string>
     <string name="pref_led_color">Färg på ljusindikator</string>
-    <string name="pref_led_pattern">Blinkmönster på ljusindikator</string>
     <string name="pref_sound">Ljud</string>
     <string name="pref_silent">Tyst</string>
     <string name="pref_privacy">Integritet</string>
@@ -429,7 +430,6 @@
     <string name="pref_app_access">Programåtkomst</string>
     <string name="pref_communication">Kommunikation</string>
     <string name="pref_chats">Chattar</string>
-    <string name="pref_messages">Meddelanden</string>
     <string name="pref_in_chat_sounds">Ljud i konversationer</string>
     <string name="pref_message_text_size">Teckenstorlek för meddelanden</string>
     <string name="pref_view_log">Visa logg</string>
@@ -443,7 +443,6 @@
     <string name="pref_backup_export_start_button">Starta säkerhetskopiering</string>
     <string name="pref_backup_written_to_x">Säkerhetskopia korrekt skriven till \"%1$s\".</string>
     <string name="pref_managekeys_menu_title">Hantera nycklar</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat behöver åtkomst till dina filer, för att importera/exportera nycklar.</string>
     <string name="pref_managekeys_export_secret_keys">Exportera säkerhetsnycklar</string>
     <string name="pref_managekeys_export_explain">Exportera säkerhetsnycklar till \"%1$s\"?</string>
     <string name="pref_managekeys_import_secret_keys">Importera säkerhetsnycklar</string>
@@ -461,32 +460,22 @@
     <string name="pref_send_copy_to_self">Skicka kopia till mig själv</string>
     <string name="pref_auto_folder_moves">Flyttas automatiskt till DeltaChat-mappen</string>
     <string name="pref_auto_folder_moves_explain">Chattkonversationer flyttas automatiskt för att undvika att inkorgen belamras</string>
-    <string name="pref_email_interaction_title">E-postinteraktion</string>
     <string name="pref_show_emails">Visa vanliga e-postmeddelanden</string>
     <string name="pref_show_emails_no">Nej, bara cattar</string>
     <string name="pref_show_emails_accepted_contacts">För godkända kontakter</string>
     <string name="pref_show_emails_all">Alla</string>
-    <string name="pref_empty_server_title">Ta bort e-postmeddelanden från servern</string>
-    <string name="pref_empty_server_msg">Den här funktionen hjälper till att frigöra utrymme på din IMAP-server genom att ta bort alla e-postmeddelanden, inklusive chattmeddelanden, i de angivna mapparna. Meddelanden på den här enheten tas inte bort. Borttagningen kan inte ångras!</string>
-    <string name="pref_empty_server_inbox">Ta bort alla e-postmeddelanden i mappen \"Inkorg\"</string>
-    <string name="pref_empty_server_mvbox">Ta bort alla e-postmeddelanden i mappen \"DeltaChat\"</string>
-    <string name="pref_empty_server_do_button">Ta bort e-postmeddelanden</string>
     <string name="pref_experimental_features">Experimentella funktioner</string>
     <string name="pref_on_demand_location_streaming">På-begäran platsströmning</string>
     <string name="pref_background_default">Standardbakgrund</string>
     <string name="pref_background_default_color">Standardfärg</string>
     <string name="pref_background_custom_image">Anpassad bild</string>
     <string name="pref_background_custom_color">Anpassad färg</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Tillförlitlig bakgrundsanslutning</string>
-    <string name="pref_reliable_service_explain">Kräver permanent avisering</string>
-    <string name="ephemeral_dialog_title">Ta bort lästa meddelanden</string>
-
+    <string name="export_aborted">Exporten avbruten</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Ta bort gamla meddelanden</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">Ta bort meddelanden automatiskt</string>
-    <string name="autodel_title_short">Ta bort automatiskt</string>
     <string name="autodel_device_title">Ta bort meddelanden från enheten</string>
     <string name="autodel_server_title">Ta bort meddelanden från servern</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -594,11 +583,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d nya meddelanden i %2$d chattar</string>
-    <string name="notify_most_recent_from">Senast från: %1$s</string>
-    <string name="notify_media_message_with_text">Mediameddelande: %s</string>
-    <string name="notify_mark_all_read">Markera alla som lästa</string>
     <string name="notify_mark_read">Läst</string>
-    <string name="notify_media_message">Multimediameddelande</string>
     <string name="notify_reply_button">Svara</string>
     <string name="notify_new_message">Nytt meddelande</string>
     <string name="notify_background_connection_enabled">Bakgrundsanslutning aktiverad</string>
@@ -612,17 +597,10 @@
     <!-- permissions -->
     <string name="perm_required_title">Behörighet krävs</string>
     <string name="perm_continue">Fortsätt</string>
-    <string name="perm_explain_need_for_camera_access">Ge Delta Chat tillgång till kameran, för att ta bilder och filma.</string>
-    <string name="perm_explain_need_for_mic_access">Ge Delta Chat tillgång till mikrofonen, för att ta skicka röstmeddelanden.</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat behöver tillgång till dina filer, för att kunna exportera filer och för att skapa säkerhetskopior.</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat behöver åtkomst till dina filer, för att dela dem.</string>
     <string name="perm_explain_access_to_camera_denied">Gå till programinställningarna och aktivera \"Kamera\" under \"Behörighet\", för att ta foton eller filma.</string>
     <string name="perm_explain_access_to_mic_denied">Gå till programinställningarna och aktivera \"Mikrofon\" under \"Behörighet\", för att skicka röstmeddelanden.</string>
     <string name="perm_explain_access_to_storage_denied">Gå till programinställningarna och aktivera \"Lagring\" under \"Behörighet\", för att ta emot eller skicka filer.</string>
     <string name="perm_explain_access_to_location_denied">Gå till programinställningarna och aktivera \"Plats\" under \"Behörighet\", för att bifoga en plats.</string>
-    <string name="perm_enable_bg_reminder_title">Tryck här för att ta emot meddelanden medan Delta Chat är i bakgrunden.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat använder få resurser och försöker att inte dränera ditt batteri.</string>
-    <string name="perm_enable_bg_already_done">Du har redan gett Delta Chatt tillstånd att ta emot meddelanden i bakgrunden.\n\nKontrollera dina systeminställningar också, om det fortfarande inte kommer några meddelanden i bakgrunden.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Rita var som helst för att smeta ut</string>
@@ -660,8 +638,6 @@
     <string name="more_info_desktop">Mer information</string>
     <string name="logout_desktop">Logga ut</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">Inga arkiverade chattar</string>
-    <string name="no_chats_desktop">Inga chattar</string>
     <string name="encryption_info_desktop">Visa krypteringsinfo</string>
     <string name="verified_desktop">verifierad</string>
     <string name="remove_desktop">Ta bort</string>
@@ -707,9 +683,9 @@
     <string name="a11y_delivery_status_delivered">Leveransstatus: Levererat</string>
     <string name="a11y_delivery_status_read">Leveransstatus: Läst</string>
     <string name="a11y_delivery_status_invalid">Ogiltig leveransstatus</string>
-    <string name="a11y_remove_account_btn_label">Ta bort konto</string>
     <string name="a11y_message_context_menu_btn_label">Meddelandeåtgärder</string>
     <string name="a11y_background_preview_label">Förhandsvisning i bakgrunden</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat använder din kamera för att ta och skicka foton och filmer, och för att skanna QR-koder.</string>
@@ -720,6 +696,13 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Nya Delta Chatt 1.10-funktioner i korthet: Snabbare, multikonto, suddiga bilder, nya emojis, omarbetade meddelanden, bättre felrapportering men viktigast av allt... \n\nKlicka på en avatar i profilen och förstora den 🚀</string>
+    <string name="pref_background_notifications">Bakgrundsaviseringar</string>
+    <string name="pref_background_notifications_explain">Använder en bakgrundsanslutning till din server och kräver undantagna batterioptimeringar.</string>
+    <string name="pref_background_notifications_rationale">För att behålla anslutningen till din e-postserver och fortsätta ta emot meddelanden i bakgrunden, behöver du skippa batterioptimeringen i nästa steg.\n\nDelta Chat använder små resurser och ser till att inte dra ur ditt batteri.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Tillförlitlig bakgrundsanslutning</string>
+    <string name="pref_reliable_service_explain">Kräver permanent avisering</string>
+    <string name="perm_enable_bg_reminder_title">Tryck här för att ta emot meddelanden medan Delta Chat är i bakgrunden.</string>
+    <string name="perm_enable_bg_already_done">Du har redan gett Delta Chatt tillstånd att ta emot meddelanden i bakgrunden.\n\nKontrollera dina systeminställningar också, om det fortfarande inte kommer några meddelanden i bakgrunden.</string>
 
 </resources>

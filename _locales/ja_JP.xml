@@ -34,8 +34,6 @@
     <string name="email_address">ﾒｰﾙｱﾄﾞﾚｽ</string>
     <string name="password">ﾊﾟｽﾜｰﾄﾞ</string>
     <string name="now">現在</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d分</string>
     <string name="today">今日</string>
     <string name="yesterday">昨日</string>
     <string name="this_week">今週</string>
@@ -132,8 +130,6 @@
     <string name="menu_help">ﾍﾙﾌﾟ</string>
     <string name="menu_select_all">全選択</string>
     <string name="menu_edit_name">名前の編集</string>
-    <string name="menu_edit_group_name">ｸﾞﾙｰﾌﾟ名の編集</string>
-    <string name="menu_edit_group_image">ｸﾞﾙｰﾌﾟ画像の編集</string>
     <string name="menu_settings">設定</string>
     <string name="menu_advanced">追加設定</string>
     <string name="menu_deaddrop">連絡先追加</string>
@@ -161,6 +157,8 @@
     <string name="ask_start_chat_with">%1$sとﾁｬｯﾄしますか</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">%1$sをｸﾞﾙｰﾌﾟから排除しますか</string>
+
+
     <!-- contact list -->
     <string name="contacts_title">連絡先一覧</string>
     <string name="contacts_enter_name_or_email">名前かﾒｰﾙｱﾄﾞﾚｽを入力</string>
@@ -191,7 +189,6 @@
     <string name="tab_links">ﾘﾝｸ</string>
     <string name="tab_map">地図</string>
     <string name="media_preview">メディアのプレビュー</string>
-    <string name="welcome_start_messaging">開始する</string>
     <string name="login_title">ﾛｸﾞｲﾝ</string>
     <string name="login_header">自分のﾒｰﾙｻｰﾊﾞｰにﾛｸﾞｲﾝする</string>
     <string name="login_subheader">有名なﾒｰﾙｻｰﾊﾞｰは自動で設定されます｡一般にIMAPはｻｰﾊﾞｰ側で有効に設定する必要が有ります｡ｻｰﾊﾞｰ提供者や詳しい人に確認しましょう｡</string>
@@ -207,7 +204,6 @@
     <string name="login_smtp_server">SMTPｻｰﾊﾞｰ</string>
     <string name="login_smtp_port">SMTPﾎﾟｰﾄ</string>
     <string name="login_smtp_security">SMTP暗号方式</string>
-    <string name="pref_who_can_see_this_information">誰がこの情報を見れるようになるのですか？</string>
     <string name="pref_your_name">あなたの名前</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
     <string name="pref_default_status_label">署名</string>
@@ -217,7 +213,6 @@ https://delta.chat</string>
     <string name="pref_enter_sends">エンターキーで送信</string>
     <string name="pref_enter_sends_explain">エンターキーを押すとテキストメッセージが送信されます</string>
     <string name="pref_vibrate">振動</string>
-    <string name="pref_chat_settings">ﾁｬｯﾄ設定</string>
     <string name="pref_screen_security">画面セキュリティ</string>
     <!-- Translators: The wording must indicate that we can't guarantee that, its a System flag that we set. But the System in question must honor it. -->
     <string name="pref_screen_security_explain">アプリ内や「最近使ったアプリ」でスクリーンショットを表示しない</string>
@@ -225,7 +220,6 @@ https://delta.chat</string>
     <string name="pref_notifications_show">表示</string>
     <string name="pref_notifications_priority">優先度</string>
     <string name="pref_led_color">LED色</string>
-    <string name="pref_led_pattern">LED点滅パターン</string>
     <string name="pref_sound">通知音</string>
     <string name="pref_silent">無音</string>
     <string name="pref_privacy">機密保護</string>
@@ -246,7 +240,6 @@ https://delta.chat</string>
     <string name="pref_app_access">アプリのアクセス</string>
     <string name="pref_communication">通信</string>
     <string name="pref_chats">ﾁｬｯﾄ</string>
-    <string name="pref_messages">ﾒｯｾｰｼﾞ</string>
     <string name="pref_in_chat_sounds">着信音</string>
     <string name="pref_message_text_size">文字の大きさ</string>
     <string name="pref_other">その他</string>
@@ -272,9 +265,7 @@ https://delta.chat</string>
     <string name="qrshow_x_joining">%1$sが参加しました</string>
     <string name="qrshow_join_group_title">自分のQRｺｰﾄﾞ</string>
     <string name="qrshow_join_contact_title">自分のQRｺｰﾄﾞ</string>
-    <string name="notify_mark_all_read">全て閲覧済</string>
     <string name="notify_mark_read">閲覧済</string>
-    <string name="notify_media_message">マルチメディアメッセージ</string>
     <string name="notify_reply_button">返信</string>
     <string name="notify_new_message">新規ﾒｯｾｰｼﾞ</string>
     <string name="notify_priority_high">高</string>
@@ -307,7 +298,6 @@ https://delta.chat</string>
     <string name="global_menu_help_report_desktop">問題を報告する</string>
     <string name="contact_detail_title_desktop">連絡先の詳細</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_chats_desktop">ﾁｬｯﾄ無し</string>
     <string name="remove_desktop">削除</string>
     <string name="add_contact_desktop">連絡先を追加</string>
     <string name="login_required_desktop">>保存</string>

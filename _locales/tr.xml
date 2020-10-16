@@ -6,6 +6,7 @@
     <string name="cancel">Vazgeç</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
+    <string name="select">Seç</string>
     <string name="on">Açık</string>
     <string name="off">Kapalı</string>
     <string name="def">Varsayılan</string>
@@ -14,6 +15,8 @@
     <string name="automatic">Otomatik</string>
     <string name="strict">Katı</string>
     <string name="open">Aç</string>
+    <string name="join">Katıl</string>
+    <string name="rejoin">Yeniden katıl</string>
     <string name="delete">Sil</string>
     <string name="info">Bilgi</string>
     <string name="update">Güncelleştir</string>
@@ -26,7 +29,7 @@
     <string name="unarchive">Arşivleme</string>
     <string name="mute">Sessize al</string>
     <string name="ephemeral_messages">Kaybolan iletiler</string>
-    <string name="ephemeral_messages_hint">Bu ayarlar, Delta Chat\'i kullanan tüm katılımcılara uygulanır. Ancak onlar, iletileri kopyalayabilir, kaydedebilir ve iletebilir ya da diğer e-posta istemcilerinde kullanabilir.</string>
+    <string name="ephemeral_messages_hint">Bu ayarlar, Delta Chat\'i kullanan tüm katılımcılara uygulanır. Ancak, onlar iletileri kopyalayabilir, kaydedebilir ve iletebilir ya da diğer e-posta istemcilerinde kullanabilir.</string>
     <string name="save">Kaydet</string>
     <string name="chat">Sohbet</string>
     <string name="media">Ortam</string>
@@ -56,8 +59,6 @@
     <string name="now">Şimdi</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Tehlikeli</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d dk</string>
     <string name="today">Bugün</string>
     <string name="yesterday">Dün</string>
     <string name="this_week">Bu hafta</string>
@@ -172,8 +173,6 @@
     <string name="menu_select_all">Tümünü seç</string>
     <string name="menu_expand">Genişlet</string>
     <string name="menu_edit_name">Adı düzenle</string>
-    <string name="menu_edit_group_name">Grup adını düzenle</string>
-    <string name="menu_edit_group_image">Grup görselini düzenle</string>
     <string name="menu_settings">Ayarlar</string>
     <string name="menu_advanced">Gelişmiş</string>
     <string name="menu_deaddrop">İletişim istekleri</string>
@@ -212,6 +211,21 @@
 
     <string name="file_saved_to">Dosya \"%1$s\" üzerine kaydedildi.</string>
 
+    <string name="videochat">Video sohbeti</string>
+    <string name="videochat_invite_user_to_videochat">%1$s bir video sohbetine davet edilsin mi?</string>
+    <string name="videochat_invite_user_hint">Bu, her iki uçta da uyumlu bir uygulama ya da uyumlu bir tarayıcı gerektirir.</string>
+    <string name="videochat_contact_invited_hint">%1$s video sohbetine davet etti.</string>
+    <string name="videochat_you_invited_hint">Video sohbetine davet ettiniz.</string>
+    <string name="videochat_will_open_in_your_browser">Bu video sohbeti tarayıcınızda açılacak.</string>
+    <string name="videochat_tap_to_join">Katılmak için dokunun</string>
+    <string name="videochat_tap_to_open">Açmak için dokunun</string>
+    <string name="videochat_instance">Video sohbeti örneği</string>
+    <string name="videochat_instance_placeholder">Video sohbeti örneğiniz</string>
+    <string name="videochat_instance_explain">Bir video sohbeti örneği tanımlanırsa, her bire bir sohbetten video sohbeti başlatabilirsiniz. Video sohbetleri, her iki uçta da uyumlu bir uygulama ya da uyumlu bir tarayıcı gerektirir.\n\nÖrnekler: https://meet.jit.si/$ROOM ya da basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">\"%1$s\" diğerlerini video sohbetine davet etmek için kullanılsın mı?\n\nBir kez ayarlandığında, her bire bir sohbetten video sohbeti başlatabilirsiniz. Varsa bu, video sohbetleri için önceki ayarla değiştirilir.</string>
+    <string name="videochat_invitation">Video sohbeti daveti</string>
+    <string name="videochat_invitation_body">Bir video sohbetine davet edildiniz, katılmak için %1$s öğesini tıklayın.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Bu gruptan ayrılmak istediğinizden emin misiniz?</string>
     <plurals name="ask_delete_chat">
@@ -233,10 +247,6 @@
     <string name="ask_start_chat_with">%1$s ile sohbet edilsin mi?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">%1$s gruptan kaldırılsın mı?</string>
-    <string name="info_outdated_app_title">Uygulama sürümünüz eski</string>
-    <string name="info_outdated_app_text">Delta Chat\'i otomatik güncelleştirmeler olmayan bir kaynaktan (örn. GitHub) kurdunuz. En son özellikleri ve hata düzeltmelerini almak için lütfen bir mağaza sürümüne geçin.</string>
-    <string name="info_outdated_app_dialog_title">Güncelleştirme kaynakları</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat şurada kullanılabilir:</string>
 
 
     <!-- contact list -->
@@ -277,6 +287,8 @@
     <string name="chat_self_talk_subtitle">Kendime gönderdiğim iletiler</string>
     <string name="saved_messages">Kaydedilen iletiler</string>
     <string name="saved_messages_explain">• Kolay erişim için iletileri buraya iletin\n\n• Notlar ya da sesli notlar alın\n\n• Onları kaydetmek için ortamlar iliştirin</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Kaydedilen</string>
     <string name="chat_contact_request">İletişim isteği</string>
     <string name="chat_no_contact_requests">İletişim isteği yok.\n\nKlasik e-postaları burada iletişim isteği olarak görmek istiyorsanız, ilgili ayarı uygulama ayarlarında değiştirebilirsiniz.</string>
     <string name="retry_send">İletiyi göndermeyi yeniden dene</string>
@@ -319,7 +331,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Dünyanın en geniş kitleli ulağı. Özgür ve bağımsız.</string>
-    <string name="welcome_start_messaging">İletileşmeye başla</string>
     <string name="login_title">Oturum aç</string>
     <string name="login_header">Sunucunuzda oturum açın</string>
     <string name="login_explain">Varolan bir e-posta hesabıyla oturum açın</string>
@@ -352,18 +363,17 @@
     <!-- Translators: %1$s will be replaced by the email address -->
     <string name="login_error_cannot_login">\"%1$s\" olarak oturum açılamıyor. Lütfen e-posta adresinin ve parolanın doğru olup olmadığını denetleyin.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
-    <string name="login_error_server_response">%1$s yanıtı: %2$s\n\nBazı sağlayıcılar gelen kutunuza ek bilgiler yerleştirir; onları örn. web ön ucundan denetleyebilirsiniz. Sorun yaşarsanız sağlayıcınıza ya da arkadaşlarınıza danışın.</string>
-
+    <string name="login_error_server_response">%1$s yanıtı: %2$s\n\nBazı sağlayıcılar size bu sorun hakkında e-posta gönderebilir; ilgili uygulamanızdan ya da web sitesinden gelen kutunuzu denetleyebiliyor olmalısınız. Sorun yaşarsanız sağlayıcınıza ya da arkadaşlarınıza danışın.</string>
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Geçersiz ana bilgisayar adlarını kabul et</string>
     <string name="accept_invalid_certificates">Geçersiz sertifikaları kabul et</string>
-
     <string name="used_settings">Kullanılan ayarlar:</string>
     <string name="switch_account">Hesap değiştir</string>
     <string name="add_account">Hesap ekle</string>
     <string name="delete_account">Hesabı sil</string>
     <string name="delete_account_ask">Hesap verilerinizi silmek istediğinizden emin misiniz?</string>
     <string name="switching_account">Hesap değiştiriliyor…</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Yapılandırma başarısız. Hata: %1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -381,10 +391,8 @@
     <string name="pref_profile_photo">Profil resmi</string>
     <string name="pref_blocked_contacts">Engellenen kişiler</string>
     <string name="pref_profile_photo_remove_ask">Profil fotoğrafı kaldırılsın mı?</string>
-    <string name="pref_help_url">https://delta.chat/help</string>
     <string name="pref_password_and_account_settings">Parola ve hesap</string>
-    <string name="pref_who_can_see_this_information">Bunu kim görebilir?</string>
-    <string name="pref_who_can_see_profile_explain">Profil resminiz ve adınız, diğer kullanıcılarla iletişim kurarken iletilerinizin yanında gösterilir. Zaten gönderilen bilgiler silinemeyebilir ya da kaldırılamayabilir.</string>
+    <string name="pref_who_can_see_profile_explain">Diğer kullanıcılarla iletişim kurarken, profil resminiz ve adınız iletilerinizin yanında gösterilir. Zaten gönderilen bilgiler silinemeyebilir ya da kaldırılamayabilir.</string>
     <string name="pref_your_name">Adınız</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
     <string name="pref_default_status_label">İmza metni</string>
@@ -396,7 +404,6 @@
     <string name="pref_outgoing_balanced">Dengeli</string>
     <string name="pref_outgoing_worse">Daha kötü kalite, küçük boyut</string>
     <string name="pref_vibrate">Titret</string>
-    <string name="pref_chat_settings">Sohbet ayarları</string>
     <string name="pref_change_secret">Sırrı değiştir</string>
     <string name="pref_change_secret_explain">PIN / desen / parmak izinizi sistem ayarları üzerinden değiştirin</string>
     <string name="pref_screen_security">Ekran güvenliği</string>
@@ -407,7 +414,6 @@
     <string name="pref_notifications_show">Göster</string>
     <string name="pref_notifications_priority">Öncelik</string>
     <string name="pref_led_color">LED rengi</string>
-    <string name="pref_led_pattern">LED yanıp sönme deseni</string>
     <string name="pref_sound">Ses</string>
     <string name="pref_silent">Sessiz</string>
     <string name="pref_privacy">Gizlilik</string>
@@ -429,7 +435,6 @@
     <string name="pref_app_access">Uygulama erişimi</string>
     <string name="pref_communication">İletişim</string>
     <string name="pref_chats">Sohbetler</string>
-    <string name="pref_messages">İletiler</string>
     <string name="pref_in_chat_sounds">Sohbet içi sesler</string>
     <string name="pref_message_text_size">İleti yazı tipi boyutu</string>
     <string name="pref_view_log">Günlüğü görüntüle</string>
@@ -443,7 +448,6 @@
     <string name="pref_backup_export_start_button">Yedeklemeye başla</string>
     <string name="pref_backup_written_to_x">Yedek \"%1$s\" üzerine başarıyla yazıldı.</string>
     <string name="pref_managekeys_menu_title">Anahtarları yönet</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat\'in anahtarları içe/dışa aktarmak için dosyalarınıza erişmesi gerekir.</string>
     <string name="pref_managekeys_export_secret_keys">Sır anahtarları dışa aktar</string>
     <string name="pref_managekeys_export_explain">Sır anahtarlar \"%1$s\" üzerinde dışa aktarılsın mı?</string>
     <string name="pref_managekeys_import_secret_keys">Sır anahtarları içe aktar</string>
@@ -461,32 +465,22 @@
     <string name="pref_send_copy_to_self">Kendime kopya gönder</string>
     <string name="pref_auto_folder_moves">DeltaChat klasörüne otomatik taşınsın</string>
     <string name="pref_auto_folder_moves_explain">Sohbet görüşmeleri, Gelen Kutusu\'ndaki dağınıklığı önlemek için taşınır</string>
-    <string name="pref_email_interaction_title">E-posta etkileşimi</string>
     <string name="pref_show_emails">Klasik e-postaları göster</string>
     <string name="pref_show_emails_no">Hayır, yalnızca sohbetler</string>
     <string name="pref_show_emails_accepted_contacts">Kabul edilen kişiler için</string>
     <string name="pref_show_emails_all">Tümü</string>
-    <string name="pref_empty_server_title">E-postaları sunucudan sil</string>
-    <string name="pref_empty_server_msg">Bu işlev, verilen klasörlerdeki sohbet iletilerini kapsayıp tüm e-postaları silerek IMAP sunucunuzda boş alan açmanıza yardım eder. Bu aygıttaki iletiler silinmeyecek. Silme geri alınamaz!</string>
-    <string name="pref_empty_server_inbox">\"Gelen Kutusu\" klasöründeki tüm e-postaları sil</string>
-    <string name="pref_empty_server_mvbox">\"DeltaChat\" klasöründeki tüm e-postaları sil</string>
-    <string name="pref_empty_server_do_button">E-postaları sil</string>
     <string name="pref_experimental_features">Deneysel özellikler</string>
     <string name="pref_on_demand_location_streaming">İsteğe bağlı konum akışı</string>
     <string name="pref_background_default">Varsayılan arka plan</string>
     <string name="pref_background_default_color">Varsayılan renk</string>
     <string name="pref_background_custom_image">Özel görsel</string>
     <string name="pref_background_custom_color">Özel renk</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Güvenilir arka plan bağlantısı</string>
-    <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
-    <string name="ephemeral_dialog_title">Okunan iletileri sil</string>
-
+    <string name="export_aborted">Dışa aktarmadan vazgeçildi.</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Eski iletileri sil</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">İletileri otomatik sil</string>
-    <string name="autodel_title_short">Otomatik sil</string>
     <string name="autodel_device_title">İletileri aygıttan sil</string>
     <string name="autodel_server_title">İletileri sunucudan sil</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -594,11 +588,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%2$d sohbette %1$d yeni ileti</string>
-    <string name="notify_most_recent_from">Şundan en yeni: %1$s</string>
-    <string name="notify_media_message_with_text">Ortam iletisi: %s</string>
-    <string name="notify_mark_all_read">Tümünü okundu olarak imle</string>
     <string name="notify_mark_read">Okundu imi</string>
-    <string name="notify_media_message">Ortam iletisi</string>
     <string name="notify_reply_button">Yanıtla</string>
     <string name="notify_new_message">Yeni ileti</string>
     <string name="notify_background_connection_enabled">Arka plan bağlantısı etkinleştirildi</string>
@@ -612,17 +602,10 @@
     <!-- permissions -->
     <string name="perm_required_title">İzin gerekli</string>
     <string name="perm_continue">Sürdür</string>
-    <string name="perm_explain_need_for_camera_access">Fotoğraflar ve videolar yakalamak için Delta Chat\'in kameraya erişmesine izin verin.</string>
-    <string name="perm_explain_need_for_mic_access">Sesli iletiler göndermek için Delta Chat\'in mikrofona erişmesine izin verin.</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat\'in dosyaları dışa aktarmak ya da yedekler oluşturmak için dosyalarınıza erişmesi gerekir.</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat\'in paylaşmak için dosyalarınıza erişmesi gerekir.</string>
     <string name="perm_explain_access_to_camera_denied">Fotoğraflar çekmek ya da videolar yakalamak için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Kamera\"yı etkinleştirin.</string>
     <string name="perm_explain_access_to_mic_denied">Sesli iletiler göndermek için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Mikrofon\"u etkinleştirin.</string>
     <string name="perm_explain_access_to_storage_denied">Dosyaları almak ya da göndermek için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Depolama\"yı etkinleştirin.</string>
     <string name="perm_explain_access_to_location_denied">Bir konum iliştirmek için uygulama ayarlarına gidin, \"İzinler\"i seçin ve \"Konum\"u etkinleştirin.</string>
-    <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
-    <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Bulanıklaştırmak için herhangi bir yere çizin</string>
@@ -660,8 +643,6 @@
     <string name="more_info_desktop">Daha fazla bilgi</string>
     <string name="logout_desktop">Oturumu kapat</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">Arşivlenen sohbet yok</string>
-    <string name="no_chats_desktop">Sohbet yok</string>
     <string name="encryption_info_desktop">Şifreleme bilgisini göster</string>
     <string name="verified_desktop">doğrulanan</string>
     <string name="remove_desktop">Kaldır</string>
@@ -707,9 +688,9 @@
     <string name="a11y_delivery_status_delivered">Teslimat durumu: Teslim edildi</string>
     <string name="a11y_delivery_status_read">Teslimat durumu: Okundu</string>
     <string name="a11y_delivery_status_invalid">Geçersiz teslimat durumu</string>
-    <string name="a11y_remove_account_btn_label">Hesabı kaldır</string>
     <string name="a11y_message_context_menu_btn_label">İleti eylemleri</string>
     <string name="a11y_background_preview_label">Arka plan önizlemesi</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat, fotoğraflar ve videolar çekmek ve göndermek için ve QR kodları taramak için kameranızı kullanır.</string>
@@ -720,6 +701,13 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Bir bakışta yeni Delta Chat 1.10: Daha hızlı, çoklu hesap, bulanık görseller, yeni emojiler, yeniden çalışılmış bildirimler, daha iyi hata raporlama ama en önemlisi:\n\nProfildeki bir avatarı tıklayın ve onu genişletin 🚀</string>
+    <string name="pref_background_notifications">Arka plan bildirimleri</string>
+    <string name="pref_background_notifications_explain">Sunucunuza bir arka plan bağlantısı kullanır ve pil iyileştirmelerinin yoksayılmasını gerektirir.</string>
+    <string name="pref_background_notifications_rationale">E-posta sunucunuza bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yoksayın.\n\nDelta Chat, kaynakların en azını kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Güvenilir arka plan bağlantısı</string>
+    <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
+    <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
+    <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
 
 </resources>

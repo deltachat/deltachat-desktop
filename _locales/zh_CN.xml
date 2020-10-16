@@ -6,6 +6,7 @@
     <string name="cancel">取消</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="select">选择</string>
     <string name="on">开</string>
     <string name="off">关</string>
     <string name="def">默认</string>
@@ -14,6 +15,8 @@
     <string name="automatic">自动</string>
     <string name="strict">严格</string>
     <string name="open">打开</string>
+    <string name="join">加入</string>
+    <string name="rejoin">重新加入</string>
     <string name="delete">删除</string>
     <string name="info">信息</string>
     <string name="update">更新</string>
@@ -25,7 +28,7 @@
     <string name="archive">归档</string>
     <string name="unarchive">解档</string>
     <string name="mute">静音</string>
-    <string name="ephemeral_messages">阅后即焚</string>
+    <string name="ephemeral_messages">阅后即焚消息</string>
     <string name="ephemeral_messages_hint">这些设置适用于所有使用 Delta Chat 的参与者。 但是，他们可能会复制、保存和转发消息或者使用其他的电子邮件客户端。</string>
     <string name="save">保存</string>
     <string name="chat">聊天</string>
@@ -56,8 +59,6 @@
     <string name="now">现在</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">危险</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d 分钟前</string>
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     <string name="this_week">本周</string>
@@ -100,7 +101,7 @@
     <string name="camera">相机</string>
     <string name="location">位置</string>
     <string name="gallery">图库</string>
-    <string name="images_and_videos">图片和视频</string>
+    <string name="images_and_videos">图像和视频</string>
     <string name="file">文件</string>
     <string name="files">文件</string>
     <string name="unknown">未知</string>
@@ -166,8 +167,6 @@
     <string name="menu_select_all">全选</string>
     <string name="menu_expand">展开</string>
     <string name="menu_edit_name">编辑名称</string>
-    <string name="menu_edit_group_name">编辑群组名称</string>
-    <string name="menu_edit_group_image">编辑群组图像</string>
     <string name="menu_settings">设置</string>
     <string name="menu_advanced">高级</string>
     <string name="menu_deaddrop">联系人请求</string>
@@ -206,6 +205,21 @@
 
     <string name="file_saved_to">文件已保存到 “%1$s”。</string>
 
+    <string name="videochat">视频聊天</string>
+    <string name="videochat_invite_user_to_videochat">邀请 %1$s 进行视频聊天？</string>
+    <string name="videochat_invite_user_hint">这需要两端都具有兼容的应用或兼容的浏览器。</string>
+    <string name="videochat_contact_invited_hint">%1$s 被邀请参加视频聊天。</string>
+    <string name="videochat_you_invited_hint">您被邀请参加视频聊天。</string>
+    <string name="videochat_will_open_in_your_browser">该视频聊天将在您的浏览器中打开。</string>
+    <string name="videochat_tap_to_join">点击来加入</string>
+    <string name="videochat_tap_to_open">点击来打开</string>
+    <string name="videochat_instance">视频聊天实例</string>
+    <string name="videochat_instance_placeholder">您的视频聊天实例</string>
+    <string name="videochat_instance_explain">定义了视频聊天实例之后，您可以从一对一聊天中启动视频聊天。视频聊天的两端都需要有兼容的应用或兼容的浏览器。\n\n示例: https://meet.jit.si/$ROOM 或 basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">使用“%1$s”邀请其他人加入视频聊天吗？\n\n设置好后，您可以从每个一对一聊天中开始视频聊天。 这会取代之前的视频聊天设置（如果有的话）。</string>
+    <string name="videochat_invitation">视频聊天邀请</string>
+    <string name="videochat_invitation_body">您被邀请参加视频聊天，点击 %1$s 来加入。</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">您确定要离开此群组吗？</string>
     <plurals name="ask_delete_chat">
@@ -225,10 +239,6 @@
     <string name="ask_start_chat_with">与 %1$s 聊天？</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">将 %1$s 从群组中移除？</string>
-    <string name="info_outdated_app_title">您的应用程序版本过时了</string>
-    <string name="info_outdated_app_text">您似乎是从没有自动更新的源（例如 GitHub）安装的 Delta Chat。请切换到应用商店版本来接收最新功能和错误修复。</string>
-    <string name="info_outdated_app_dialog_title">更新源</string>
-    <string name="info_outdated_app_dialog_text">可以从这些地方获取 Delta Chat:</string>
 
 
     <!-- contact list -->
@@ -266,6 +276,8 @@
     <string name="chat_self_talk_subtitle">发给自己的消息</string>
     <string name="saved_messages">保存的消息</string>
     <string name="saved_messages_explain">• 转发消息于此以便于访问\n\n• 做笔记或语音备忘录\n\n• 附加媒体以保存它们</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">已保存</string>
     <string name="chat_contact_request">联系人请求</string>
     <string name="chat_no_contact_requests">没有联系人请求。\n\n如果您希望传统的电子邮件作为联系人请求出现在这里，则可以更改本应用相关设置。</string>
     <string name="retry_send">重试发送消息</string>
@@ -308,7 +320,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">本通讯软件有着世界上最广泛的受众。自由且自主。</string>
-    <string name="welcome_start_messaging">开始发送消息</string>
     <string name="login_title">登录</string>
     <string name="login_header">登录至您的服务器</string>
     <string name="login_explain">使用现有电子邮件帐户登录</string>
@@ -342,17 +353,16 @@
     <string name="login_error_cannot_login">无法作为“%1$s”登录。请检查电子邮件地址和密码是否正确。</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">来自 %1$s 的回应： %2$s\n\n某些提供商会在您的收件箱中放置额外信息; 您可以在 Web 端等处等查看它。 如遇到问题，请咨询您的提供商或朋友。</string>
-
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">接受无效的主机名</string>
     <string name="accept_invalid_certificates">接受无效的证书</string>
-
     <string name="used_settings">已使用设置：</string>
     <string name="switch_account">切换账户 </string>
     <string name="add_account">添加账户</string>
     <string name="delete_account">删除账户</string>
     <string name="delete_account_ask">您确定要删除您的账户数据吗？</string>
     <string name="switching_account">切换账户 …</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">配置失败。错误：%1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -370,9 +380,7 @@
     <string name="pref_profile_photo">个人资料图片</string>
     <string name="pref_blocked_contacts">已屏蔽联系人</string>
     <string name="pref_profile_photo_remove_ask">移除个人资料照片？</string>
-    <string name="pref_help_url">https://delta.chat/help</string>
     <string name="pref_password_and_account_settings">密码和账户</string>
-    <string name="pref_who_can_see_this_information">谁能看到这个？</string>
     <string name="pref_who_can_see_profile_explain">在与其他用户交流时，您的个人资料图片和名称将与您的消息一起显示。 已经发送的信息不能被删除或者移除。</string>
     <string name="pref_your_name">您的名称</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -385,7 +393,6 @@
     <string name="pref_outgoing_balanced">平衡</string>
     <string name="pref_outgoing_worse">体积小，但质量更差</string>
     <string name="pref_vibrate">振动</string>
-    <string name="pref_chat_settings">聊天设置</string>
     <string name="pref_change_secret">更改密码</string>
     <string name="pref_change_secret_explain">通过系统设置来更改您的 PIN 码 / 图案 / 指纹</string>
     <string name="pref_screen_security">屏幕安全</string>
@@ -396,7 +403,6 @@
     <string name="pref_notifications_show">显示</string>
     <string name="pref_notifications_priority">优先级</string>
     <string name="pref_led_color">LED 颜色</string>
-    <string name="pref_led_pattern">LED 闪烁模式</string>
     <string name="pref_sound">声音</string>
     <string name="pref_silent">无声</string>
     <string name="pref_privacy">隐私</string>
@@ -418,7 +424,6 @@
     <string name="pref_app_access">应用程序访问</string>
     <string name="pref_communication">通讯</string>
     <string name="pref_chats">聊天</string>
-    <string name="pref_messages">消息</string>
     <string name="pref_in_chat_sounds">聊天音</string>
     <string name="pref_message_text_size">消息字体大小</string>
     <string name="pref_view_log">查看日志</string>
@@ -432,7 +437,6 @@
     <string name="pref_backup_export_start_button">开始备份</string>
     <string name="pref_backup_written_to_x">备份已成功写入到“%1$s”。</string>
     <string name="pref_managekeys_menu_title">管理密钥</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat 需要访问您的文件来导入 / 导出密钥。</string>
     <string name="pref_managekeys_export_secret_keys">导出密钥</string>
     <string name="pref_managekeys_export_explain">导出密钥到“%1$s”？</string>
     <string name="pref_managekeys_import_secret_keys">导入密钥</string>
@@ -450,32 +454,22 @@
     <string name="pref_send_copy_to_self">给自己发送副本</string>
     <string name="pref_auto_folder_moves">自动移动至 DeltaChat 文件夹</string>
     <string name="pref_auto_folder_moves_explain">移动聊天对话以免弄乱收件箱</string>
-    <string name="pref_email_interaction_title">电子邮件交互</string>
     <string name="pref_show_emails">显示传统电子邮件</string>
     <string name="pref_show_emails_no">不显示，仅聊天</string>
     <string name="pref_show_emails_accepted_contacts">已接受的联系人</string>
     <string name="pref_show_emails_all">全部</string>
-    <string name="pref_empty_server_title">从服务器上删除电子邮件</string>
-    <string name="pref_empty_server_msg">此功能通过删除给定文件夹中包括聊天消息在内的所有电子邮件来释放您 IMAP 服务器上的空间。 此设备上的消息不会被删除。 此删除无法撤消！</string>
-    <string name="pref_empty_server_inbox">删除“收件箱”文件夹中所有电子邮件</string>
-    <string name="pref_empty_server_mvbox">删除“DeltaChat”文件夹中所有电子邮件</string>
-    <string name="pref_empty_server_do_button">删除电子邮件</string>
     <string name="pref_experimental_features">实验性功能</string>
     <string name="pref_on_demand_location_streaming">按需位置流</string>
     <string name="pref_background_default">默认背景</string>
     <string name="pref_background_default_color">默认颜色</string>
     <string name="pref_background_custom_image">自定义图像</string>
     <string name="pref_background_custom_color">自定义颜色</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">可靠后台连接</string>
-    <string name="pref_reliable_service_explain">需要一个永久通知</string>
-    <string name="ephemeral_dialog_title">删除已读消息</string>
-
+    <string name="export_aborted">导出已中止。</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">删除旧消息</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">自动删除消息</string>
-    <string name="autodel_title_short">自动删除</string>
     <string name="autodel_device_title">从设备删除消息</string>
     <string name="autodel_server_title">从服务器删除消息</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -528,13 +522,13 @@
     <string name="systemmsg_subject_for_new_contact">来自 %1$s 的消息</string>
     <string name="systemmsg_failed_sending_to">发送消息给 %1$s 失败。</string>
 
-    <string name="systemmsg_ephemeral_timer_disabled">已禁用消息消失定时器</string>
-    <string name="systemmsg_ephemeral_timer_enabled">消息将在%1$s秒后消失</string>
-    <string name="systemmsg_ephemeral_timer_minute">消息将在1分钟后消失</string>
-    <string name="systemmsg_ephemeral_timer_hour">消息将在1小时后消失</string>
-    <string name="systemmsg_ephemeral_timer_day">消息将在1天后消失</string>
-    <string name="systemmsg_ephemeral_timer_week">消息将在1周后消失</string>
-    <string name="systemmsg_ephemeral_timer_four_weeks">消息将在4周后消失</string>
+    <string name="systemmsg_ephemeral_timer_disabled">已禁用阅后即焚消息定时器</string>
+    <string name="systemmsg_ephemeral_timer_enabled">设置阅后即焚消息定时器为 %1$s 秒</string>
+    <string name="systemmsg_ephemeral_timer_minute">设置阅后即焚消息定时器为 1 分钟</string>
+    <string name="systemmsg_ephemeral_timer_hour">设置阅后即焚消息定时器为 1 小时</string>
+    <string name="systemmsg_ephemeral_timer_day">设置阅后即焚消息定时器为 1 天</string>
+    <string name="systemmsg_ephemeral_timer_week">设置阅后即焚消息定时器为 1 周</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">设置阅后即焚消息定时器为 4 周</string>
 
 
     <!-- screen lock -->
@@ -583,11 +577,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%2$d 个聊天中有 %1$d 条新消息</string>
-    <string name="notify_most_recent_from">最新来自： %1$s</string>
-    <string name="notify_media_message_with_text">媒体消息： %s</string>
-    <string name="notify_mark_all_read">将所有标记为已读</string>
     <string name="notify_mark_read">标记为已读</string>
-    <string name="notify_media_message">媒体消息</string>
     <string name="notify_reply_button">回复</string>
     <string name="notify_new_message">新消息</string>
     <string name="notify_background_connection_enabled">后台连接已启用</string>
@@ -601,17 +591,10 @@
     <!-- permissions -->
     <string name="perm_required_title">需要权限</string>
     <string name="perm_continue">继续</string>
-    <string name="perm_explain_need_for_camera_access">要拍照和录像，请允许 Delta Chat 访问相机。</string>
-    <string name="perm_explain_need_for_mic_access">要发送音频消息，请允许 Delta Chat 访问麦克风。</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat 需要访问您的文件来导出文件或创建备份。</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat 需要访问您的文件来分享它们。</string>
     <string name="perm_explain_access_to_camera_denied">要拍照或录像，请转至应用设置，选择“权限”，然后启用“相机”。</string>
     <string name="perm_explain_access_to_mic_denied">要发送音频消息，请转至应用设置，选择“权限”，然后启用“麦克风”。</string>
     <string name="perm_explain_access_to_storage_denied">要发送或接收文件，请转至应用设置，选择“权限”，然后启用“存储”。</string>
     <string name="perm_explain_access_to_location_denied">要附加位置，请转至应用设置，选择“权限”，然后启用“位置”。</string>
-    <string name="perm_enable_bg_reminder_title">点击此处以在 Delta Chat 处于后台时接收消息。</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat 仅使用少量的资源并且会注意不去耗尽电池电量。</string>
-    <string name="perm_enable_bg_already_done">您已允许 Delta Chat 在后台接收消息。\n\n如果在后台时消息仍没到达，请同时检查系统设置。</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">对任意地方进行模糊</string>
@@ -649,8 +632,6 @@
     <string name="more_info_desktop">更多信息</string>
     <string name="logout_desktop">登出</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">没有已归档聊天</string>
-    <string name="no_chats_desktop">没有聊天</string>
     <string name="encryption_info_desktop">显示加密信息</string>
     <string name="verified_desktop">已验证</string>
     <string name="remove_desktop">移除</string>
@@ -696,9 +677,9 @@
     <string name="a11y_delivery_status_delivered">发送状态：已投递</string>
     <string name="a11y_delivery_status_read">发送状态：已读</string>
     <string name="a11y_delivery_status_invalid">无效的发送状态</string>
-    <string name="a11y_remove_account_btn_label">移除账户</string>
     <string name="a11y_message_context_menu_btn_label">消息操作</string>
     <string name="a11y_background_preview_label">背景预览</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat 使用您的相机来拍摄、发送照片和视频以及扫描二维码。</string>
@@ -709,6 +690,13 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Delta Chat 1.10 新功能概览：更快、多帐户、对图像进行模糊、新表情、通知重做、更好的错误报告，以及最重要的：\n\n点击个人资料中的头像并放大🚀</string>
+    <string name="pref_background_notifications">后台通知</string>
+    <string name="pref_background_notifications_explain">使用与服务器的后台连接，并且需要忽略电池优化。</string>
+    <string name="pref_background_notifications_rationale">要保持与您的电子邮件服务器的连接并在后台接收消息，请在下一步中忽略电池优化。\n\nDelta Chat 仅使用少量的资源并且会注意不去耗尽电池电量。</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">可靠后台连接</string>
+    <string name="pref_reliable_service_explain">需要一个永久通知</string>
+    <string name="perm_enable_bg_reminder_title">点击此处以在 Delta Chat 处于后台时接收消息。</string>
+    <string name="perm_enable_bg_already_done">您已允许 Delta Chat 在后台接收消息。\n\n如果在后台时消息仍没到达，请同时检查系统设置。</string>
 
 </resources>

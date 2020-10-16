@@ -6,6 +6,7 @@
     <string name="cancel">Отмена</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="select">Выбрать</string>
     <string name="on">Вкл.</string>
     <string name="off">Выкл.</string>
     <string name="def">По умолчанию</string>
@@ -14,6 +15,8 @@
     <string name="automatic">Автоматически</string>
     <string name="strict">Строгий</string>
     <string name="open">Открыть</string>
+    <string name="join">Зайти</string>
+    <string name="rejoin">Перезайти</string>
     <string name="delete">Удалить</string>
     <string name="info">Информация</string>
     <string name="update">Обновить</string>
@@ -26,6 +29,7 @@
     <string name="unarchive">Из архива</string>
     <string name="mute">Отключить уведомления</string>
     <string name="ephemeral_messages">Исчезающие сообщения</string>
+    <string name="ephemeral_messages_hint">Эти настройки применяются ко всем участникам, использующим Delta Chat. Тем не менее, они могут копировать, сохранять и делиться сообщениями или использовать другие почтовые клиенты.</string>
     <string name="save">Сохранить</string>
     <string name="chat">Чат</string>
     <string name="media">Медиафайлы</string>
@@ -55,8 +59,6 @@
     <string name="now">Сейчас</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Опасность</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d мин</string>
     <string name="today">Сегодня</string>
     <string name="yesterday">Вчера</string>
     <string name="this_week">На этой неделе</string>
@@ -117,7 +119,9 @@
     <string name="camera">Камера</string>
     <string name="location">Местоположение</string>
     <string name="gallery">Галерея</string>
+    <string name="images_and_videos">Изображения и видео</string>
     <string name="file">Файл</string>
+    <string name="files">Файлы</string>
     <string name="unknown">Неизвестно</string>
 
     <string name="green">Зелёный</string>
@@ -181,8 +185,6 @@
     <string name="menu_select_all">Выбрать всё</string>
     <string name="menu_expand">Расширить</string>
     <string name="menu_edit_name">Изменить имя</string>
-    <string name="menu_edit_group_name">Редактировать название группы</string>
-    <string name="menu_edit_group_image">Редактировать изображение группы</string>
     <string name="menu_settings">Настройки</string>
     <string name="menu_advanced">Дополнительные параметры</string>
     <string name="menu_deaddrop">Запросы контактов</string>
@@ -221,6 +223,23 @@
 
     <string name="file_saved_to">Файл сохранён в «%1$s».</string>
 
+    <string name="videochat">Видеочат</string>
+    <string name="videochat_invite_user_to_videochat">Пригласить %1$s в видеочат?</string>
+    <string name="videochat_invite_user_hint">Это требует совместимого приложения или совместимого браузера на обоих концах.</string>
+    <string name="videochat_contact_invited_hint">%1$s приглашает вас в видеочат.</string>
+    <string name="videochat_you_invited_hint">Вас пригласили в видеочат.</string>
+    <string name="videochat_will_open_in_your_browser">Этот видеочат будет открываться в браузере</string>
+    <string name="videochat_tap_to_join">Нажмите, чтобы зайти.</string>
+    <string name="videochat_tap_to_open">Нажмите, чтобы открыть.</string>
+    <string name="videochat_instance">Узел видеочатов</string>
+    <string name="videochat_instance_placeholder">Ваш узел видеочатов</string>
+    <string name="videochat_instance_explain">Если узел видеочатов определён, вы можете начинать видеочаты из чатов с одним контактом. Видеочаты требуют совместимого приложения или совместимого браузера на обоих концах.
+
+Примеры: https://meet.jit.si/$ROOM или basicwebrtc:https://ваш-сервер</string>
+    <string name="videochat_instance_from_qr">Использовать «%1$s», чтобы приглашать других в видеочаты?\n\nКогда установлено, вы можете начинать видеочаты из чатов с одним контактом. Это заменит предыдущие настройки видеочатов, если они были.</string>
+    <string name="videochat_invitation">Приглашение в видеочат</string>
+    <string name="videochat_invitation_body">Вы приглашены в видеочат, нажмите %1$s, чтобы зайти.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Вы уверены, что хотите покинуть эту группу?</string>
     <plurals name="ask_delete_chat">
@@ -246,10 +265,6 @@
     <string name="ask_start_chat_with">Создать чат с %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Удалить %1$s из группы?</string>
-    <string name="info_outdated_app_title">Версия вашего приложения устарела.</string>
-    <string name="info_outdated_app_text">Похоже что Delta Chat установлен из исходников не имеющих возможности обновляться автоматически (напр. GitHub). Подключитесь к источнику из магазина приложений для того чтобы получать своевременные обновления и исправления ошибок.</string>
-    <string name="info_outdated_app_dialog_title">Источник обновлений</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat доступен на:</string>
 
 
     <!-- contact list -->
@@ -296,6 +311,8 @@
     <string name="chat_self_talk_subtitle">Сообщения отправленные себе</string>
     <string name="saved_messages">Сохранённые сообщения</string>
     <string name="saved_messages_explain">• Пересылайте сообщения сюда для быстрого доступа\n\n• Делайте текстовые или голосовые заметки\n\n• Прикрепляйте медиафайлы, чтобы сохранить их</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Сохранено</string>
     <string name="chat_contact_request">Запрос контакта</string>
     <string name="chat_no_contact_requests">Нет запросов контактов.\n\nЕсли Вы хотите, чтобы обычная почта появлялась здесь как запросы контактов, вы можете изменить соответствующий параметр в настройках приложения.</string>
     <string name="retry_send">Повторить отправку сообщения</string>
@@ -338,7 +355,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Мессенджер с самой широкой аудиторией в мире. Бесплатный и независимый.</string>
-    <string name="welcome_start_messaging">Начать общение</string>
     <string name="login_title">Логин</string>
     <string name="login_header">Войдите на ваш сервер</string>
     <string name="login_explain">Войти с существующим аккаунтом эл.почты</string>
@@ -371,18 +387,17 @@
     <!-- Translators: %1$s will be replaced by the email address -->
     <string name="login_error_cannot_login">Не удалось выполнить вход с логином \"%1$s\". Убедитесь, что адрес эл. почты и пароль указаны верно.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
-    <string name="login_error_server_response">Ответ сервера %1$s: %2$s\n\nНекоторые серверы электронной почты помещают дополнительную информацию во входящие; вы можете проверить это, к примеру, через веб-интерфейс. В случае возникновения проблем, проконсультируйте с провайдером вашей эл. почты или знакомым специалистом.</string>
-
+    <string name="login_error_server_response">Ответ сервера %1$s: %2$s\n\nНекоторые серверы электронной почты помещают дополнительную информацию во входящие; вы можете проверить это, к примеру, через веб-интерфейс. В случае возникновения проблем проконсультируйтесь с провайдером вашей эл. почты или знакомым специалистом.</string>
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Принимать сертификаты с недействительным именем хоста</string>
     <string name="accept_invalid_certificates">Принимать недействительные сертификаты</string>
-
     <string name="used_settings">Используемые настройки:</string>
     <string name="switch_account">Сменить аккаунт</string>
     <string name="add_account">Добавить аккаунт</string>
     <string name="delete_account">Удалить аккаунт</string>
     <string name="delete_account_ask">Вы уверены, что хотите удалить данные учётной записи?</string>
     <string name="switching_account">Меняем аккаунт...</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Настройка не удалась. Ошибка: %1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -400,9 +415,7 @@
     <string name="pref_profile_photo">Фото профиля</string>
     <string name="pref_blocked_contacts">Заблокированные контакты</string>
     <string name="pref_profile_photo_remove_ask">Удалить фото профиля?</string>
-    <string name="pref_help_url">https://delta.chat/ru/help</string>
     <string name="pref_password_and_account_settings">Пароль и аккаунт</string>
-    <string name="pref_who_can_see_this_information">Кто может видеть эту информацию?</string>
     <string name="pref_who_can_see_profile_explain">Изображение профиля и имя будут отображаться при общении с другими пользователями. Уже отправленная информация не может быть удалена или отозвана.</string>
     <string name="pref_your_name">Ваше имя</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -415,7 +428,6 @@
     <string name="pref_outgoing_balanced">Сбалансированное</string>
     <string name="pref_outgoing_worse">Низкого качества, с меньшим размером</string>
     <string name="pref_vibrate">Вибрация</string>
-    <string name="pref_chat_settings">Настройки чата</string>
     <string name="pref_change_secret">Изменение метода блокировки</string>
     <string name="pref_change_secret_explain">Смените ваш ПИН-код / графический ключ / отпечаток пальца с помощью системных настроек</string>
     <string name="pref_screen_security">Безопасность экрана</string>
@@ -426,7 +438,6 @@
     <string name="pref_notifications_show">Показывать</string>
     <string name="pref_notifications_priority">Приоритет</string>
     <string name="pref_led_color">Цвет светодиода </string>
-    <string name="pref_led_pattern">Режим мерцания светодиода</string>
     <string name="pref_sound">Звук</string>
     <string name="pref_silent">Беззвучный</string>
     <string name="pref_privacy">Конфиденциальность</string>
@@ -448,7 +459,6 @@
     <string name="pref_app_access">Доступ приложения</string>
     <string name="pref_communication">Связь</string>
     <string name="pref_chats">Чаты</string>
-    <string name="pref_messages">Сообщения</string>
     <string name="pref_in_chat_sounds">Звуки в чате</string>
     <string name="pref_message_text_size">Размер шрифта сообщения</string>
     <string name="pref_view_log">Открыть журнал</string>
@@ -462,7 +472,6 @@
     <string name="pref_backup_export_start_button">Начать резервное копирование</string>
     <string name="pref_backup_written_to_x">Резервная копия успешно записана на %1$s</string>
     <string name="pref_managekeys_menu_title">Управление ключами</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Приложению необходим доступ к файлам для импорта/экспорта ключей</string>
     <string name="pref_managekeys_export_secret_keys">Экспортировать секретные ключи</string>
     <string name="pref_managekeys_export_explain">Экспортировать секретные ключи в папку «%1$s»?</string>
     <string name="pref_managekeys_import_secret_keys">Импортировать секретные ключи</string>
@@ -480,32 +489,22 @@
     <string name="pref_send_copy_to_self">Отправлять копию себе</string>
     <string name="pref_auto_folder_moves">Автоматически Перемещать в папку DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Сообщения чатов переносятся, чтобы избежать путаницы в папке «Входящие»</string>
-    <string name="pref_email_interaction_title">Взаимодействие с электронной почтой</string>
     <string name="pref_show_emails">Показывать обычную почту</string>
     <string name="pref_show_emails_no">Нет, только чаты</string>
     <string name="pref_show_emails_accepted_contacts">Для принятых контактов</string>
     <string name="pref_show_emails_all">Все</string>
-    <string name="pref_empty_server_title">Удалить электронную почту с сервера</string>
-    <string name="pref_empty_server_msg">Эта функция помогает освободить место на сервере IMAP, удаляя ВСЕ сообщения электронной почты, включая чат-сообщения, в указанных папках. Сообщения на этом устройстве не удалятся. Удаление не может быть отменено!</string>
-    <string name="pref_empty_server_inbox">Удалить все сообщения электронной почты в папке Входящие</string>
-    <string name="pref_empty_server_mvbox">Удалить все сообщения электронной почты в папке DeltaChat</string>
-    <string name="pref_empty_server_do_button">Удаление электронной почты</string>
     <string name="pref_experimental_features">Экспериментальные функции</string>
     <string name="pref_on_demand_location_streaming">Трансляция местоположения по запросу</string>
     <string name="pref_background_default">Фон по умолчанию</string>
     <string name="pref_background_default_color">Цвет по умолчанию</string>
     <string name="pref_background_custom_image">Пользовательское изображение</string>
     <string name="pref_background_custom_color">Пользовательский цвет</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Надёжное фоновое соединение</string>
-    <string name="pref_reliable_service_explain">Требует постоянного уведомления</string>
-    <string name="ephemeral_dialog_title">Удалять прочитанные сообщения</string>
-
+    <string name="export_aborted">Экспорт прекращен.</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Удалять старые сообщения</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">Автоматическое удаление сообщений</string>
-    <string name="autodel_title_short">Автоматическое удаление</string>
     <string name="autodel_device_title">Удалять сообщения с устройства</string>
     <string name="autodel_server_title">Удалять сообщения с сервера</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -558,7 +557,7 @@
     <string name="systemmsg_subject_for_new_contact">Сообщение от %1$s</string>
     <string name="systemmsg_failed_sending_to">Не удалось отправить сообщение %1$s.</string>
 
-    <string name="systemmsg_ephemeral_timer_disabled">Таймер исчезающих сообщений отключен.</string>
+    <string name="systemmsg_ephemeral_timer_disabled">Таймер исчезающих сообщений отключён.</string>
     <string name="systemmsg_ephemeral_timer_enabled">Таймер исчезающих сообщений установлен на %1$s с.</string>
     <string name="systemmsg_ephemeral_timer_minute">Таймер исчезающих сообщений установлен на 1 минуту.</string>
     <string name="systemmsg_ephemeral_timer_hour">Таймер исчезающих сообщений установлен на 1 час.</string>
@@ -613,11 +612,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d новых сообщений в %2$d чатах.</string>
-    <string name="notify_most_recent_from">Последнее от: %1$s</string>
-    <string name="notify_media_message_with_text">Медиа-сообщение: %s</string>
-    <string name="notify_mark_all_read">Отметить всё как прочитанное</string>
     <string name="notify_mark_read">Отметить как прочитанное</string>
-    <string name="notify_media_message">Медиа-сообщение</string>
     <string name="notify_reply_button">Ответить</string>
     <string name="notify_new_message">Новое сообщение</string>
     <string name="notify_background_connection_enabled">Соединение в фоновом режиме включено</string>
@@ -631,18 +626,10 @@
     <!-- permissions -->
     <string name="perm_required_title">Требуется разрешение</string>
     <string name="perm_continue">Продолжить</string>
-    <string name="perm_explain_need_for_camera_access">Для захвата фото и видео разрешите Delta Chat доступ к камере.</string>
-    <string name="perm_explain_need_for_mic_access">Для отправки звуковых сообщений разрешите Delta Chat доступ к микрофону</string>
-    <string name="perm_explain_need_for_storage_access">Приложению Delta Chat необходим доступ к файлам для экспорта или резервного копирования.</string>
-    <string name="perm_explain_need_for_storage_access_share">Delta Chat необходим доступ к вашим файлам, чтобы поделиться выбранными файлами.</string>
     <string name="perm_explain_access_to_camera_denied">Для съемки фотографий или видео приложению Delta Chat требуется разрешение использовать Камеру, но сейчас она заблокирована. Перейдите в меню настроек приложения, выберите \"Разрешения приложений\" и включите \"Камера\".</string>
     <string name="perm_explain_access_to_mic_denied">Для отправки аудио сообщений приложению Delta Chat нужно разрешение использовать микрофон, но сейчас микрофон заблокирован. Перейдите в меню настроек приложения, выберите \"Разрешения приложений\" и включите \"Микрофон\".</string>
     <string name="perm_explain_access_to_storage_denied">Для вложения или экспорта фотографий, видео или аудио файлов в Delta Chat требуется доступ к памяти устройства, однако в этом разрешении было отказано навсегда. Перейдите в меню настроек приложения, выберите \"Разрешения приложений\" и включите \"Память\".</string>
     <string name="perm_explain_access_to_location_denied">Чтобы передать местоположение приложению Delta Chat нужно разрешить доступ к нему, но сейчас он заблокирован. Перейдите в меню настроек приложения, выберите \"Разрешения приложений\" и включите \"Местоположение\".</string>
-    <string name="perm_enable_bg_reminder_title">Нажмите здесь, чтобы получать сообщения, когда Delta Chat находится в фоновом режиме.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat использует минимальные ресурсы и старается не разряжать батарею.</string>
-    <string name="perm_enable_bg_already_done"> 
-Вы уже разрешили Delta Chat получать сообщения в фоне.\n\nЕсли сообщения всё ещё не приходят в фоне, пожалуйста, проверьте также системные настройки.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Рисуйте, чтобы размывать</string>
@@ -680,8 +667,6 @@
     <string name="more_info_desktop">Больше информации</string>
     <string name="logout_desktop">Выйти</string>
     <string name="timestamp_format_m_desktop">МММ Д</string>
-    <string name="no_archived_chats_desktop">Нет архивированных чатов</string>
-    <string name="no_chats_desktop">Нет чатов</string>
     <string name="encryption_info_desktop">Показать информацию о шифровании</string>
     <string name="verified_desktop">Проверенный</string>
     <string name="remove_desktop">Удалить</string>
@@ -727,9 +712,9 @@
     <string name="a11y_delivery_status_delivered">Статус доставки: Доставлено</string>
     <string name="a11y_delivery_status_read">Статус доставки: Прочитано</string>
     <string name="a11y_delivery_status_invalid">Недопустимый статус доставки</string>
-    <string name="a11y_remove_account_btn_label">Удалить аккаунт</string>
     <string name="a11y_message_context_menu_btn_label">Действия с сообщением</string>
     <string name="a11y_background_preview_label">Предпросмотр фона</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat использует вашу камеру для фото и видео съёмки и сканирования QR кодов.</string>
@@ -740,6 +725,14 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Новое в Delta Chat 1.10: скорость, поддержка нескольких аккаунтов, размытие изображений, новые эмодзи, обновленные уведомления, улучшенные сообщения об ошибках, но самое главное:\n\nНажмите на аватар в профиле, чтобы увеличить его 🚀</string>
+    <string name="pref_background_notifications">Фоновые уведомления</string>
+    <string name="pref_background_notifications_explain">Использует фоновое соединение с вашим сервером и требует игнорирования оптимизаций батареи.</string>
+    <string name="pref_background_notifications_rationale">Чтобы поддерживать соединение с вашим сервером и получать уведомления в фоне, отключите оптимизации батареи на следующем шаге.\n\nDelta Chat использует мало ресурсов и старается не расходовать вашу батарею.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Надёжное фоновое соединение</string>
+    <string name="pref_reliable_service_explain">Требует постоянного уведомления</string>
+    <string name="perm_enable_bg_reminder_title">Нажмите здесь, чтобы получать сообщения, когда Delta Chat находится в фоновом режиме.</string>
+    <string name="perm_enable_bg_already_done"> 
+Вы уже разрешили Delta Chat получать сообщения в фоне.\n\nЕсли сообщения всё ещё не приходят в фоне, пожалуйста, проверьте также системные настройки.</string>
 
 </resources>

@@ -6,6 +6,7 @@
     <string name="cancel">Anuloje</string>
     <string name="yes">Po</string>
     <string name="no">Jo</string>
+    <string name="select">Përzgjidhni</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="def">Parazgjedhje</string>
@@ -14,6 +15,8 @@
     <string name="automatic">Automatike</string>
     <string name="strict">Strikt</string>
     <string name="open">Hap</string>
+    <string name="join">Hyni</string>
+    <string name="rejoin">Rihyni</string>
     <string name="delete">Fshije</string>
     <string name="info">Të dhëna</string>
     <string name="update">Përditësoje</string>
@@ -56,8 +59,6 @@
     <string name="now">Tani</string>
     <!-- Translators: used as a headline in sections with actions that cannot be undone. could also be "Caution" or "Cave" or so. -->
     <string name="danger">Rrezik</string>
-    <!-- n_min_ago is deprecated, use n_minutes instead -->
-    <string name="n_min_ago">%d min.</string>
     <string name="today">Sot</string>
     <string name="yesterday">Dje</string>
     <string name="this_week">Këtë javë</string>
@@ -172,8 +173,6 @@
     <string name="menu_select_all">Përzgjidhi krejt</string>
     <string name="menu_expand">Zgjeroje</string>
     <string name="menu_edit_name">Përpunoni emrin</string>
-    <string name="menu_edit_group_name">Përpunoni emër grupi</string>
-    <string name="menu_edit_group_image">Përpunoni figurë grupi</string>
     <string name="menu_settings">Rregullime</string>
     <string name="menu_advanced">Të mëtejshme</string>
     <string name="menu_deaddrop">Kërkesa kontakti</string>
@@ -212,6 +211,21 @@
 
     <string name="file_saved_to">Kartela u ruajt te \"%1$s\".</string>
 
+    <string name="videochat">Fjalosje me video</string>
+    <string name="videochat_invite_user_to_videochat">Të ftohet %1$s te një thirrje me video?</string>
+    <string name="videochat_invite_user_hint">Kjo lyp në të dy anët një aplikacion të përputhshëm ose një shfletues të përputhshëm</string>
+    <string name="videochat_contact_invited_hint">%1$s ftoi te një fjalosje me video.</string>
+    <string name="videochat_you_invited_hint">Ftuat te një fjalosje me video.</string>
+    <string name="videochat_will_open_in_your_browser">Kjo fjalosje me video do të hapet në shfletuesin tuaj.</string>
+    <string name="videochat_tap_to_join">Prekeni që të hyni</string>
+    <string name="videochat_tap_to_open">Prekeni që të hapet</string>
+    <string name="videochat_instance">Instancë fjalosjeje me video</string>
+    <string name="videochat_instance_placeholder">Instanca juaj e fjalosjes me video</string>
+    <string name="videochat_instance_explain">Nëse është përkufizuar një instancë fjalosjeje me video, mund të nisni një fjalosje me video prej secilës anë të fjalosjes tek-për-tek. Fjalosjet me video kanë të domosdoshëm në të dy skajet një aplikacion të përputhshëm ose një shfletues të përputhshëm.\n\nShembuj: https://meet.jit.si/$ROOM ose basicwebrtc:https://your-server</string>
+    <string name="videochat_instance_from_qr">Të përdoret \"%1$s\" për të ftuar të tjerë në fjalosje me video?\n\nPasi të ujdiset kjo, mund të filloni një fjalosje me video që prej një fjalosjeje tek-për-tek. Kështu do të zëvendësohet rregullimi i mëparshëm për fjalosje video, në pastë.</string>
+    <string name="videochat_invitation">Ftesë për fjalosje me video</string>
+    <string name="videochat_invitation_body">Jeni ftuar në një fjalosje video, klikoni mbi %1$s që të hyni në të.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Jeni i sigurt se doni ta braktisni këtë grup?</string>
     <plurals name="ask_delete_chat">
@@ -233,10 +247,6 @@
     <string name="ask_start_chat_with">Të bisedohet me %1$s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Të hiqet %1$s nga grupi?</string>
-    <string name="info_outdated_app_title">Versioni juaj i aplikacionit është i vjetruar.</string>
-    <string name="info_outdated_app_text">Duket se e instaluat Delta Chat-in prej një burimi pa vetëpërditësim (p.sh. GitHub). Ju lutemi, që të merrni veçoritë më të reja dhe ndreqje të metash, hidhuni te një version shitoreje.</string>
-    <string name="info_outdated_app_dialog_title">Përditëso burime</string>
-    <string name="info_outdated_app_dialog_text">Delta Chat është i gatshëm për:</string>
 
 
     <!-- contact list -->
@@ -277,6 +287,8 @@
     <string name="chat_self_talk_subtitle">Mesazhe që i kam dërguar vetes</string>
     <string name="saved_messages">Mesazhe të ruajtur</string>
     <string name="saved_messages_explain">• Përcillini mesazhet këtu për përdorim të lehtë\n\n• Mbani shënime ose kujtesa zanore\n\n• Bashkëngjitni media për t’i ruajtur</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Të ruajtur</string>
     <string name="chat_contact_request">Kërkesë kontakti</string>
     <string name="chat_no_contact_requests">S\’ka kërkesa kontakti.\n\nNëse doni që email-e klasikë të shfaqen këtu si kërkesa kontakti, mund të ndryshoni rregullimin përkatës te rregullimet e aplikacionit.</string>
     <string name="retry_send">Riprovo të dërgosh mesazhin</string>
@@ -319,7 +331,6 @@
 
     <!-- welcome and login -->
     <string name="welcome_intro1_message">Shkëmbyesi i mesazheve me publikun më të gjerë në botë. I lirë dhe i pavarur.</string>
-    <string name="welcome_start_messaging">Filloni të Shkëmbeni Mesazhe</string>
     <string name="login_title">Hyrje</string>
     <string name="login_header">Hyrje te shërbyesi juaj</string>
     <string name="login_explain">Hyrje me një llogari email ekzistuese.</string>
@@ -353,17 +364,16 @@
     <string name="login_error_cannot_login">S\’bëhet dot hyrja si %1$s. Ju lutemi, shihni nëse adresa email dhe fjalëkalimi janë të saktë.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Përgjigje nga %1$s: %2$s\n\nDisa shërbime vendosin të dhëna shtesë te kutia juaj e mesazheve të marrë; mund t\’i shihni, për shembull, te pjesa e dukshme web. Nëse hasni probleme, këshillohuni me shërbimin tuaj ose shokë.</string>
-
     <!-- TLS certificate checks -->
-    <string name="accept_invalid_hostnames">Prano strehëemra të pavlefshëm</string>
     <string name="accept_invalid_certificates">Prano dëshmi të pavlefshme</string>
-
     <string name="used_settings">Rregullime të përdorura</string>
     <string name="switch_account">Ndërroni llogari</string>
     <string name="add_account">Shtoni llogari</string>
     <string name="delete_account">Fshije llogarinë</string>
     <string name="delete_account_ask">Jeni i sigurt se doni të fshihen të dhënat e llogarisë tuaj?</string>
     <string name="switching_account">Po ndërrohet llogari…</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Formësimi dështoi. Gabim: %1$s</string>
 
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
@@ -381,9 +391,7 @@
     <string name="pref_profile_photo">Foto profili</string>
     <string name="pref_blocked_contacts">Kontakte të bllokuar</string>
     <string name="pref_profile_photo_remove_ask">Të hiqet fotoja e profilit?</string>
-    <string name="pref_help_url">https://delta.chat/en/help</string>
     <string name="pref_password_and_account_settings">Fjalëkalim dhe llogari</string>
-    <string name="pref_who_can_see_this_information">Kush mund ta shohë këtë informacion?</string>
     <string name="pref_who_can_see_profile_explain">Fotoja dhe emri juaj i profilit do të shfaqen tok me mesazhet, kur komunikoni me përdorues të tjerë. Informacioni i dërguar tashmë s\’mund të fshihet apo të hiqet.</string>
     <string name="pref_your_name">Emri juaj</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -396,7 +404,6 @@
     <string name="pref_outgoing_balanced">E baraspeshuar</string>
     <string name="pref_outgoing_worse">Cilësia më e ulët, madhësi e vogël</string>
     <string name="pref_vibrate">Dridhu</string>
-    <string name="pref_chat_settings">Rregullime fjalosjeje</string>
     <string name="pref_change_secret">Ndryshoni të fshehtën</string>
     <string name="pref_change_secret_explain">Ndryshojeni pin-in / rregullsinë / shenjat tuaja të gishtave përmes rregullimeve të sistemit</string>
     <string name="pref_screen_security">Siguri ekrani</string>
@@ -407,7 +414,6 @@
     <string name="pref_notifications_show">Shfaqi</string>
     <string name="pref_notifications_priority">Përparësi</string>
     <string name="pref_led_color">Ngjyrë LED-i</string>
-    <string name="pref_led_pattern">Rregullsi xixëllimi LED-i</string>
     <string name="pref_sound">Tingull</string>
     <string name="pref_silent">Heshtazi</string>
     <string name="pref_privacy">Privatësi</string>
@@ -429,7 +435,6 @@
     <string name="pref_app_access">Hyrje aplikacioni</string>
     <string name="pref_communication">Komunikim</string>
     <string name="pref_chats">Fjalosje</string>
-    <string name="pref_messages">Mesazhe</string>
     <string name="pref_in_chat_sounds">Tinguj brenda fjalosjeje</string>
     <string name="pref_message_text_size">Madhësi shkronjash mesazhi</string>
     <string name="pref_view_log">Shihni regjistrin</string>
@@ -443,7 +448,6 @@
     <string name="pref_backup_export_start_button">Fillo kopjeruajtjen</string>
     <string name="pref_backup_written_to_x">Kopjeruajtje e shkruar me sukses te %1$s</string>
     <string name="pref_managekeys_menu_title">Administroni kyçe</string>
-    <string name="pref_managekeys_ask_for_storage_permission">Delta Chat lyp hyrje në kartelat tuaja që të importojë/eksportojë kyçe.</string>
     <string name="pref_managekeys_export_secret_keys">Eksportoni kyçe të fshehtë</string>
     <string name="pref_managekeys_export_explain">Të eksportohen kyçet e fshehtë te \"%1$s\"?</string>
     <string name="pref_managekeys_import_secret_keys">Importoni kyçe të fshehtë</string>
@@ -461,31 +465,21 @@
     <string name="pref_send_copy_to_self">Dërgojini kopje vetes</string>
     <string name="pref_auto_folder_moves">Lëvizje të Vetvetishme te dosja DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Bisedat zhvendosen, që të shmanget rrëmuja te dosja Të marrë</string>
-    <string name="pref_email_interaction_title">Ndërveprim me email</string>
     <string name="pref_show_emails">Shfaq email-e klasikë</string>
     <string name="pref_show_emails_no">Jo, vetëm fjalosje</string>
     <string name="pref_show_emails_accepted_contacts">Për kontakte të pranuar</string>
     <string name="pref_show_emails_all">Krejt</string>
-    <string name="pref_empty_server_title">Fshini email-e që nga shërbyesi</string>
-    <string name="pref_empty_server_msg">Ky funksion ndihmon të lironi hapësirë te shërbyesi juaj IMAP përmes fshirjes së KREJT email-eve, përfshi mesazhe bisedash, te dosjet e dhëna. Mesazhet në këtë pajisje s’do të fshihen.  Fshirja s’mund të zhbëhet!</string>
-    <string name="pref_empty_server_inbox">Fshiji KREJT email-et te dosja e të Marrëve</string>
-    <string name="pref_empty_server_mvbox">Fshiji KREJT email-et te dosja DeltaChat</string>
-    <string name="pref_empty_server_do_button">Fshiji email-et</string>
     <string name="pref_experimental_features">Veçori eksperimentale</string>
     <string name="pref_background_default">Sfond parazgjedhje</string>
     <string name="pref_background_default_color">Ngjyrë parazgjedhje</string>
     <string name="pref_background_custom_image">Figurë vetjake</string>
     <string name="pref_background_custom_color">Ngjyrë vetjake</string>
-    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
-    <string name="pref_reliable_service">Lidhje e qëndrueshme në prapaskenë</string>
-    <string name="pref_reliable_service_explain">Lyp një njoftim permanent</string>
-    <string name="ephemeral_dialog_title">Fshiji mesazhet e lexuar</string>
-
+    <string name="export_aborted">Eksportimi dështoi.</string>
 
     <!-- automatically delete message -->
     <string name="delete_old_messages">Fshiji mesazhet e vjetër</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
     <string name="autodel_title">Vetëfshi mesazhe</string>
-    <string name="autodel_title_short">Vetëfshi</string>
     <string name="autodel_device_title">Fshini mesazhe prej pajisjes</string>
     <string name="autodel_server_title">Fshini mesazhe prej shërbyesi</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -593,11 +587,7 @@
 
     <!-- notifications  -->
     <string name="notify_n_messages_in_m_chats">%1$d mesazhe të rinj në %2$d fjalosje</string>
-    <string name="notify_most_recent_from">Më të rejat nga: %1$s</string>
-    <string name="notify_media_message_with_text">Mesazh media: %s</string>
-    <string name="notify_mark_all_read">Vëru shenjë të tërave si të lexuar</string>
     <string name="notify_mark_read">Vëri shenjë si i lexuar</string>
-    <string name="notify_media_message">Mesazh media</string>
     <string name="notify_reply_button">Përgjigju</string>
     <string name="notify_new_message">Mesazh i ri</string>
     <string name="notify_background_connection_enabled">U vendos lidhje në prapaskenë</string>
@@ -611,17 +601,10 @@
     <!-- permissions -->
     <string name="perm_required_title">Lypset leje</string>
     <string name="perm_continue">Vazhdo</string>
-    <string name="perm_explain_need_for_camera_access">Që të bëhen foto dhe video, lejojeni Delta Chat-in të përdorë kamerën.</string>
-    <string name="perm_explain_need_for_mic_access">Që të dërgoni mesazhe audio, lejojeni Delta Chat-in të përdorë mikrofonin tuaj.</string>
-    <string name="perm_explain_need_for_storage_access">Delta Chat-i lyp hyrje në kartelat tuaja që të mund të eksportojë të tilla apo të krijojë kopjeruajtje.</string>
-    <string name="perm_explain_need_for_storage_access_share">Që të mund të ndajë me të tjerët kartelat e përzgjedhura, Delta Chat lyp hyrje në kartelat tuaja.</string>
     <string name="perm_explain_access_to_camera_denied">Delta Chat lyp leje mbi Kamerën që të mund të bëjë foto apo video, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Kamerën\".</string>
     <string name="perm_explain_access_to_mic_denied">Delta Chat lyp leje mbi Mikrofonin që të mund të dërgojë mesazhe audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Mikrofonin\".</string>
     <string name="perm_explain_access_to_storage_denied">Delta Chat lyp leje mbi Depozitimin që të mund të bashkëngjisë apo eksportojë foto, video ose audio, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Depozitimin\".</string>
     <string name="perm_explain_access_to_location_denied">Delta Chat lyp leje mbi Vendndodhjen që të mund të bashkëngjisë një vendndodhje, por kjo i është mohuar. Ju lutemi, vazhdoni te menuja e rregullimeve të aplikacionit, përzgjidhni \"Leje\", dhe aktivizojini për \"Vendndodhjen\".</string>
-    <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
-    <string name="perm_enable_bg_reminder_text">Delta Chat-i përdor burime minimale dhe kujdeset të mos thajë baterinë.</string>
-    <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
 
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Që të turbullohet, vizatoni kudo qoftë</string>
@@ -659,8 +642,6 @@
     <string name="more_info_desktop">Më tepër të dhëna</string>
     <string name="logout_desktop">Dalje</string>
     <string name="timestamp_format_m_desktop">MMM D</string>
-    <string name="no_archived_chats_desktop">S\’ka fjalosje të arkivuara</string>
-    <string name="no_chats_desktop">S\’ka fjalosje</string>
     <string name="encryption_info_desktop">Shfaq të dhëna fshehtëzimi</string>
     <string name="verified_desktop">e verifikuar</string>
     <string name="remove_desktop">Hiqe</string>
@@ -706,9 +687,9 @@
     <string name="a11y_delivery_status_delivered">Gjendje dërgimi: I dërguar</string>
     <string name="a11y_delivery_status_read">Gjendje dërgimi: I lexuar</string>
     <string name="a11y_delivery_status_invalid">Gjendje dërgimi e pavlefshme</string>
-    <string name="a11y_remove_account_btn_label">Hiqe llogarinë</string>
     <string name="a11y_message_context_menu_btn_label">Veprime mesazhesh</string>
     <string name="a11y_background_preview_label">Paraparje sfondi</string>
+
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Lejimi i përdorimi të kamerës ju bën të mundur të bëni foto dhe video.</string>
@@ -719,6 +700,13 @@
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
-    <string name="update_1_10_android">Veçori të reja në Delta Chat 1.10, me një vështrim: më i shpejtë, llogari të shumëfishta, turbullim figurash, emotikone të rinj, njoftime të ripunuara, njoftim më i mirë të metash, por më e rëndësishmja:\n\nKlikoni mbi një avatar profili dhe zmadhojeni 🚀</string>
+    <string name="pref_background_notifications">Njoftime në prapaskenë</string>
+    <string name="pref_background_notifications_explain">Përdor një lidhje në prapaskenë me shërbyesin tuaj dhe lyp shpërfillje optimizimesh baterie.</string>
+    <string name="pref_background_notifications_rationale">Që të ruhet lidhja me shërbyesin tuaj të email-eve dhe të merren mesazhe në prapaskenë, në hapin pasues shpërfillini optimizimet për baterinë.\n\nDelta Chat-i përdor pak burime dhe kujdeset të mos e shterojë baterinë tuaj.</string>
+    <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
+    <string name="pref_reliable_service">Lidhje e qëndrueshme në prapaskenë</string>
+    <string name="pref_reliable_service_explain">Lyp një njoftim permanent</string>
+    <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
+    <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
 
 </resources>
