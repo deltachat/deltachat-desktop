@@ -13,6 +13,7 @@
 - Added context menu for info messages
 - Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
+- Implement tray icon (huge thanks to @pepea28 for contributing & pushing this)
 
 ### Changed
 - Change "More info" translation to "Message Details"
