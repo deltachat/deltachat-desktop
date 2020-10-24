@@ -16,6 +16,7 @@
 - gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
 - minor gallery style adjustments 
 - Own Context Menu Implementation that makes development easier
+- Update translations
 
 ## Fixed
 

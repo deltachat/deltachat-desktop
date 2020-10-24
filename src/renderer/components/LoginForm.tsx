@@ -212,7 +212,7 @@ export default function LoginForm({
             <DeltaInput
               key='mail_server'
               id='mail_server'
-              placeholder={tx('default_value_automatic')}
+              placeholder={tx('automatic')}
               label={tx('login_imap_server')}
               type='text'
               value={mail_server}
@@ -265,7 +265,7 @@ export default function LoginForm({
             <DeltaInput
               key='send_server'
               id='send_server'
-              placeholder={tx('default_value_automatic')}
+              placeholder={tx('automatic')}
               label={tx('login_smtp_server')}
               type='text'
               value={send_server}

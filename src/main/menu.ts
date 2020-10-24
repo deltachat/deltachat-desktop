@@ -97,11 +97,11 @@ function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
 function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   // for now this solution is electron specific
   const zoomFactors = [
-    { scale: 0.6, key: 'micro' },
+    { scale: 0.6, key: 'extra_small' },
     { scale: 0.8, key: 'small' },
-    { scale: 1.0, key: 'default' },
+    { scale: 1.0, key: 'normal' },
     { scale: 1.2, key: 'large' },
-    { scale: 1.4, key: 'huge' },
+    { scale: 1.4, key: 'extra_large' },
   ]
 
   if (
@@ -117,12 +117,8 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   return zoomFactors.map(({ key, scale }) => {
     return {
       label: !(scale === 1 && key === 'custom')
-        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(
-            'global_zoom_factor_' + key
-          )}`
-        : (app as ExtendedAppMainProcess).translate(
-            'global_zoom_factor_custom'
-          ),
+        ? `${scale}x ${(app as ExtendedAppMainProcess).translate(key)}`
+        : (app as ExtendedAppMainProcess).translate('custom'),
       type: 'radio',
       checked:
         scale === (app as ExtendedAppMainProcess).state.saved.zoomFactor &&
@@ -222,7 +218,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
           click: () => mainWindow.toggleAlwaysOnTop(),
         },
         {
-          translate: 'global_menu_view_zoom_factor',
+          translate: 'zoom',
           submenu: getZoomFactors(),
         },
         {

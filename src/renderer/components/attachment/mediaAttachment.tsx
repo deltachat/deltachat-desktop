@@ -94,7 +94,7 @@ function squareBrokenMediaContent(
     <div className='attachment-content'>
       {hasSupportedFormat
         ? tx('attachment_failed_to_load')
-        : tx('can_not_display_unsuported_file_type', contentType)}
+        : tx('cannot_display_unsuported_file_type', contentType)}
     </div>
   )
 }
@@ -173,7 +173,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
       ) : (
         <div>
           {window.static_translate(
-            'can_not_display_unsuported_file_type',
+            'cannot_display_unsuported_file_type',
             attachment.contentType
           )}
         </div>

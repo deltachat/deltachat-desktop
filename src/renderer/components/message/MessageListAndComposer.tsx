@@ -59,7 +59,7 @@ export default function MessageListAndComposer({
       message: (
         <>
           {tx(
-            'ask_send_file_desktop',
+            'ask_send_following_n_files_to',
             fileCount > 1 ? [String(fileCount), chat.name] : [chat.name],
             {
               quantity: fileCount,

@@ -56,7 +56,7 @@ export function openDeleteChatDialog(
 ) {
   const tx = window.static_translate
   screenContext.openDialog('ConfirmationDialog', {
-    message: tx('ask_delete_chat_desktop', chat.name),
+    message: tx('ask_delete_named_chat', chat.name),
     confirmLabel: tx('delete'),
     isConfirmDanger: true,
     cb: (yes: boolean) =>

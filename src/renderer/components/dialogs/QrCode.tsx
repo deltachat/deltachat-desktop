@@ -80,7 +80,7 @@ export function QrCodeShowQrInner({
     navigator.clipboard.writeText(qrCode).then(_ =>
       userFeedback({
         type: 'success',
-        text: tx('a11y_copy_qr_data'),
+        text: tx('copy_qr_data_success'),
       })
     )
   }
