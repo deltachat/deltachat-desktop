@@ -14,6 +14,7 @@
   - [Translations](#translations)
     - [Add experimental language strings](#translations-experimental-strings)
   - [CI](#ci)
+  - [Packaging](#packaging)
   - [Release Workflow](#release)
   - [Code Structure](#code-structure)
 - [Tips for specific subjects](#specific-tipps)
@@ -124,7 +125,7 @@ for the usage please look at existing code, the types and the doc comments.
 
 For Continuous Integration we currently use Travis and Github Actions.
 
-### Packaging
+### Packaging <a id="packaging"></a>
 
 #### 1. Generate Electron-Builder Configuration
 
