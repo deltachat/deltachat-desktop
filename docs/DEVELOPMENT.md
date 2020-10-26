@@ -127,24 +127,25 @@ For Continuous Integration we currently use Travis and Github Actions.
 ### Packaging
 
 #### 1. Generate Electron-Builder Configuration
+
 Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
 
 Possible options for `npm run pack:generate_config`:
 
 | Enviroment var | Effect                          |
-|----------------|---------------------------------|
-|`NO_ASAR=true`  | Disable asar, used for flatpack |
+| -------------- | ------------------------------- |
+| `NO_ASAR=true` | Disable asar, used for flatpack |
 
 #### 2. Run Electron-Builder
 
 If you haven't done so run `npm run build` now.
 
 Start electron builder:
-| Command            | Description                                    |
+| Command | Description |
 |--------------------|------------------------------------------------|
-| `npm run pack:win` | Build for windows (`nsis` & `portable` target) | 
-| `npm run pack:mac` | Build for MacOS (`dmg` & `mas` target)         |
-| `npm run pack:linux`     | Build for Linux (`AppImage` & `deb` target) |
+| `npm run pack:win` | Build for windows (`nsis` & `portable` target) |
+| `npm run pack:mac` | Build for MacOS (`dmg` & `mas` target) |
+| `npm run pack:linux` | Build for Linux (`AppImage` & `deb` target) |
 | `npm run pack:linux:dir` | Build for Linux, but just the folder, no package. This is used for Flatpak. |
 
 For more info look at the `scripts` section in `package.json`.
