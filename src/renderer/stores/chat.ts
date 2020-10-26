@@ -12,7 +12,7 @@ class state implements FullChat {
   selfInGroup: boolean
   id: number | null = null
   name = ''
-  isVerified = false
+  isProtected = false
   profileImage: string = null
 
   archived = false

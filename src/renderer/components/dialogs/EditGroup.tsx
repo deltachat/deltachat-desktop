@@ -133,7 +133,7 @@ function EditGroupInner(props: {
   )
 
   const [qrCode, setQrCode] = useState('')
-  const listFlags = chat.isVerified
+  const listFlags = chat.isProtected
     ? C.DC_GCL_VERIFIED_ONLY | C.DC_GCL_ADD_SELF
     : C.DC_GCL_ADD_SELF
 
@@ -209,7 +209,7 @@ function EditGroupInner(props: {
                 errorMissingGroupName,
                 setErrorMissingGroupName,
                 color: chat.color,
-                isVerified: chat.isVerified,
+                isVerified: chat.isProtected,
               })}
               <div className='group-seperator'>
                 {tx(

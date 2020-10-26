@@ -130,7 +130,6 @@ export default class DCLoginController extends SplitOut {
   }
 
   updateDeviceChats() {
-    this._dc.updateDeviceChats()
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(

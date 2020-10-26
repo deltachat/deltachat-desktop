@@ -63,12 +63,11 @@ export default class DCChat extends SplitOut {
     return this._dc.setChatProfileImage(chatId, newImage)
   }
 
+  /**
+   * @returns id of the created chat
+   */
   createGroupChat(verified: boolean, name: string) {
-    const chatId =
-      verified === true
-        ? this._dc.createVerifiedGroupChat(name)
-        : this._dc.createUnverifiedGroupChat(name)
-    return chatId
+    return this._dc.createGroupChat(name, verified)
   }
 
   delete(chatId: number) {

@@ -116,7 +116,7 @@ export default class DCChatList extends SplitOut {
         status: mapCoreMsgStatus2String(summary.state),
       },
       deaddrop,
-      isVerified: chat.isVerified,
+      isProtected: chat.isProtected,
       isGroup: isGroup,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
@@ -183,7 +183,7 @@ export default class DCChatList extends SplitOut {
     return {
       id: chat.id,
       name: chat.name,
-      isVerified: chat.isVerified,
+      isProtected: chat.isProtected,
       profileImage: chat.profileImage,
 
       archived: chat.archived,
