@@ -41,7 +41,6 @@
 - Fix a bug where we render an empty message list
 - Hide invalid options in menu (example: send video invitation in device chat)
 
-
 ## [1.13.0] - 2020-10-01
 
 ### Fixed
