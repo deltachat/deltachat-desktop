@@ -9,16 +9,12 @@ import {
   DeltaSelect,
   DeltaProgressBar,
 } from './Login-Styles'
-import { Collapse } from '@blueprintjs/core'
+import { Collapse, Dialog } from '@blueprintjs/core'
 import { DeltaBackend } from '../delta-remote'
 import ClickableLink from './helpers/ClickableLink'
 import { DialogProps } from './dialogs/DialogController'
 import { ipcBackend } from '../ipc'
-import {
-  SmallDialog,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-} from './dialogs/DeltaDialog'
+import { DeltaDialogContent, DeltaDialogFooter } from './dialogs/DeltaDialog'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { useTranslationFunction, i18nContext } from '../contexts'
 import { useDebouncedCallback } from 'use-debounce/lib'
@@ -39,9 +35,9 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
   const { mail_security, send_security } = credentials
   if (protocol === 'imap') {
     if (
-      mail_security === 'automatic' ||
+      mail_security === C.DC_SOCKET_AUTO.toString() ||
       mail_security === '' ||
-      mail_security === 'ssl'
+      mail_security === C.DC_SOCKET_SSL.toString()
     ) {
       return SendSecurityPortMap.imap['ssl']
     } else {
@@ -49,13 +45,17 @@ const getDefaultPort = (credentials: Credentials, protocol: string) => {
     }
   } else {
     if (
-      send_security === 'automatic' ||
+      send_security === C.DC_SOCKET_AUTO.toString() ||
       send_security === '' ||
-      send_security === 'ssl'
+      send_security === C.DC_SOCKET_SSL.toString()
     ) {
       return SendSecurityPortMap.smtp['ssl']
+    } else if (send_security === C.DC_SOCKET_STARTTLS.toString()) {
+      return SendSecurityPortMap.smtp['starttls']
+    } else if (send_security === C.DC_SOCKET_PLAIN.toString()) {
+      return SendSecurityPortMap.smtp['plain']
     } else {
-      return SendSecurityPortMap.smtp[send_security]
+      return SendSecurityPortMap.smtp['ssl']
     }
   }
 }
@@ -239,10 +239,10 @@ export default function LoginForm({
               value={mail_security}
               onChange={handleCredentialsChange as any}
             >
-              <option value='automatic'>{tx('automatic')}</option>
-              <option value='ssl'>SSL/TLS</option>
-              <option value='starttls'>STARTTLS</option>
-              <option value='plain'>{tx('off')}</option>
+              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
+              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
+              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <p className='delta-headline'>{tx('login_outbox')}</p>
@@ -291,10 +291,10 @@ export default function LoginForm({
               value={send_security}
               onChange={handleCredentialsChange as any}
             >
-              <option value='automatic'>{tx('automatic')}</option>
-              <option value='ssl'>SSL/TLS</option>
-              <option value='starttls'>STARTTLS</option>
-              <option value='plain'>{tx('off')}</option>
+              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
+              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
+              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
+              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <DeltaSelect
@@ -326,11 +326,17 @@ export function ConfigureProgressDialog({
   mode,
 }: DialogProps) {
   const [progress, setProgress] = useState(0)
+  const [progressComment, setProgressComment] = useState('')
   const [error, setError] = useState('')
   const [configureFailed, setConfigureFailed] = useState(false)
 
-  const onConfigureProgress = (_: null, [progress, _data2]: [number, null]) =>
+  const onConfigureProgress = (
+    _: null,
+    [progress, comment]: [number, null]
+  ) => {
     progress !== 0 && setProgress(progress)
+    setProgressComment(comment)
+  }
 
   const onCancel = (event: any) => {
     DeltaBackend.call('stopOngoingProcess')
@@ -369,7 +375,6 @@ export function ConfigureProgressDialog({
     ipcBackend.on('DC_EVENT_CONFIGURE_PROGRESS', onConfigureProgress)
     ipcBackend.on('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
     ipcBackend.on('DC_EVENT_ERROR', onConfigureError)
-    ipcBackend.on('DC_EVENT_ERROR_NETWORK', onConfigureError)
     return () => {
       ipcBackend.removeListener(
         'DC_EVENT_CONFIGURE_PROGRESS',
@@ -377,19 +382,25 @@ export function ConfigureProgressDialog({
       )
       ipcBackend.removeListener('DCN_EVENT_CONFIGURE_FAILED', onConfigureFailed)
       ipcBackend.removeListener('DC_EVENT_ERROR', onConfigureError)
-      ipcBackend.removeListener('DC_EVENT_ERROR_NETWORK', onConfigureError)
     }
   }, [])
 
   const tx = useTranslationFunction()
 
   return (
-    <SmallDialog isOpen={isOpen} onClose={onClose}>
+    <Dialog
+      isOpen={isOpen}
+      onClose={onClose}
+      className='delta-dialog small-dialog'
+      canEscapeKeyClose={false}
+      canOutsideClickClose={false}
+    >
       {!configureFailed && (
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
               <DeltaProgressBar progress={progress} />
+              <p style={{ userSelect: 'auto' }}>{progressComment}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
@@ -410,7 +421,11 @@ export function ConfigureProgressDialog({
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
-              <p>{error}</p>
+              <p>
+                An error occured, please check your credentials and if it still
+                doesn't work also fill out the advanced options.
+              </p>
+              <p style={{ userSelect: 'auto' }}>{error}</p>
             </DeltaDialogContent>
           </div>
           <DeltaDialogFooter
@@ -431,6 +446,6 @@ export function ConfigureProgressDialog({
           </DeltaDialogFooter>
         </>
       )}
-    </SmallDialog>
+    </Dialog>
   )
 }

@@ -8,7 +8,6 @@ import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
-import { serverFlags } from './settings'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -16,12 +15,6 @@ const app = rawApp as ExtendedAppMainProcess
 function setCoreStrings(dc: any, strings: { [key: number]: string }) {
   Object.keys(strings).forEach(key => {
     dc.setStockTranslation(Number(key), strings[Number(key)])
-  })
-}
-
-function addServerFlags(credentials: any) {
-  return Object.assign({}, credentials, {
-    server_flags: serverFlags(credentials),
   })
 }
 
@@ -60,12 +53,12 @@ export default class DCLoginController extends SplitOut {
     this._controller._dc = dc
     if (!dc.isConfigured() || updateConfiguration) {
       try {
-        await dc.configure(addServerFlags(credentials))
+        await dc.configure(credentials)
       } catch (err) {
         this._controller.unregisterEventHandler(dc)
         await dc.close()
         this._controller._dc = null
-        return false
+        throw err
       }
     }
 
@@ -96,7 +89,7 @@ export default class DCLoginController extends SplitOut {
   async updateCredentials(credentials: Credentials): Promise<boolean> {
     await this._dc.stopIO()
     try {
-      await this._dc.configure(addServerFlags(credentials))
+      await this._dc.configure(credentials)
     } catch (err) {
       await this._dc.startIO()
       return false
@@ -137,7 +130,6 @@ export default class DCLoginController extends SplitOut {
   }
 
   updateDeviceChats() {
-    this._dc.updateDeviceChats()
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
@@ -243,14 +235,14 @@ export function txCoreStrings() {
   strings[C.DC_STR_MSGGRPIMGDELETED] = tx('systemmsg_group_image_deleted')
   strings[C.DC_STR_E2E_PREFERRED] = tx('autocrypt_prefer_e2ee')
   strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
-  // strings[C.DC_STR_STARREDMSGS] = tx('DC_STR_STARREDMSGS')
   strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
   strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
   strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_SERVER_RESPONSE] = tx('login_error_server_response')
-  strings[68] = tx('device_talk')
-  strings[69] = tx('saved_messages')
+  strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
+  strings[C.DC_STR_SAVED_MESSAGES] = tx('saved_messages')
+  // todo add new strings
 
   return strings
 }

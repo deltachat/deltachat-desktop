@@ -88,7 +88,7 @@ export interface ChatListItemType {
       }
     | undefined
   deaddrop: any
-  isVerified: boolean
+  isProtected: boolean
   isGroup: boolean
   freshMessageCounter: number
   isArchiveLink: boolean
@@ -125,7 +125,7 @@ export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
 export interface FullChat {
   id: number
   name: string
-  isVerified: boolean
+  isProtected: boolean
   profileImage: string
   archived: boolean
   subtitle: any

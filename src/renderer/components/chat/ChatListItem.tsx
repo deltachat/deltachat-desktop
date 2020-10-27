@@ -17,7 +17,7 @@ const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
 
 const Header = React.memo(
   ({ chatListItem }: { chatListItem: ChatListItemType }) => {
-    const { lastUpdated, name, isVerified, pinned, muted } = chatListItem
+    const { lastUpdated, name, pinned, muted } = chatListItem
     const tx = window.static_translate
     return (
       <div className='header'>
@@ -110,7 +110,7 @@ const ChatListItemNormal = React.memo<ChatListItemProps>(props => {
           displayName: chatListItem.name,
           avatarPath: chatListItem.avatarPath,
           color: chatListItem.color,
-          isVerified: chatListItem.isVerified,
+          isVerified: chatListItem.isProtected,
         }}
       />
       <div className='content'>

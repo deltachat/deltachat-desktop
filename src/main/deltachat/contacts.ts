@@ -1,4 +1,4 @@
-import DeltaChat from 'deltachat-node'
+import DeltaChat, { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 import SplitOut from './splitout'
@@ -68,9 +68,9 @@ export default class DCContacts extends SplitOut {
     const chatId = this._dc.createChatByContactId(contactId)
     log.debug(`created chat ${chatId} with contact' ${contactId}`)
     const chat = this._dc.getChat(chatId)
-    if (chat && chat.getArchived()) {
+    if (chat && chat.getVisibility() === C.DC_CHAT_VISIBILITY_ARCHIVED) {
       log.debug('chat was archived, unarchiving it')
-      this._dc.archiveChat(chatId, false)
+      this._dc.setChatVisibility(chatId, C.DC_CHAT_VISIBILITY_NORMAL)
     }
     this._controller.chatList.updateChatList()
     this._controller.chatList.selectChat(chatId)

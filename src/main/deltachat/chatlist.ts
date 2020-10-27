@@ -116,7 +116,7 @@ export default class DCChatList extends SplitOut {
         status: mapCoreMsgStatus2String(summary.state),
       },
       deaddrop,
-      isVerified: chat.isVerified,
+      isProtected: chat.isProtected,
       isGroup: isGroup,
       freshMessageCounter: this._dc.getFreshMessageCount(chatId),
       isArchiveLink: chat.id === C.DC_CHAT_ID_ARCHIVED_LINK,
@@ -183,7 +183,7 @@ export default class DCChatList extends SplitOut {
     return {
       id: chat.id,
       name: chat.name,
-      isVerified: chat.isVerified,
+      isProtected: chat.isProtected,
       profileImage: chat.profileImage,
 
       archived: chat.archived,
@@ -225,8 +225,6 @@ export default class DCChatList extends SplitOut {
       switch (chat.id) {
         case C.DC_CHAT_ID_DEADDROP:
           return tx('menu_deaddrop_subtitle')
-        // case C.DC_CHAT_ID_STARRED:
-        //   return 'stared'
       }
     }
     return 'ErrTitle'
@@ -262,8 +260,6 @@ function mapCoreMsgStatus2String(state: number) {
   }
 }
 function isGroupChat(chat: JsonChat) {
-  return [C.DC_CHAT_TYPE_GROUP, C.DC_CHAT_TYPE_VERIFIED_GROUP].includes(
-    chat && chat.type
-  )
+  return chat && chat.type === C.DC_CHAT_TYPE_GROUP
 }
 // end section Internal functions

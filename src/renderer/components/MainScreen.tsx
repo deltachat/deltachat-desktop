@@ -147,7 +147,7 @@ export default function MainScreen() {
                   <Avatar
                     displayName={selectedChat.name}
                     color={selectedChat.color}
-                    isVerified={selectedChat.isVerified}
+                    isVerified={selectedChat.isProtected}
                     avatarPath={selectedChat.profileImage}
                     small
                   />

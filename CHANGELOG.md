@@ -17,6 +17,7 @@
 - minor gallery style adjustments 
 - Own Context Menu Implementation that makes development easier
 - Update translations
+- Update deltachat-node to v1.47.0
 
 ## Fixed
 
