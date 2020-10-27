@@ -185,7 +185,7 @@ export const MessageListInner = React.memo(
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
-          {messageIds.length === 0 && <EmptyChatMessage chat={chat} />}
+          {messageIds.length === 0 && <EmptyChatMessage />}
           {_messageIdsToShow.map((messageId, i) => {
             if (messageId === C.DC_MSG_ID_DAYMARKER) {
               const key = 'magic' + messageId + '_' + specialMessageIdCounter++
@@ -226,23 +226,9 @@ export const MessageListInner = React.memo(
   }
 )
 
-function EmptyChatMessage({ chat: chatStoreState }: { chat: ChatStoreState }) {
+function EmptyChatMessage() {
   const tx = useTranslationFunction()
-
-  const [chat, setChat] = useState<FullChat>(chatStoreState)
-  useEffect(() => {
-    const refresh = (_ev: any, chatId: number) => {
-      if (chatId == chat.id) {
-        DeltaBackend.call('chatList.getFullChatById', chat.id).then(
-          fullChat => {
-            setChat(fullChat)
-          }
-        )
-      }
-    }
-    ipcBackend.on('DC_EVENT_CHAT_MODIFIED', refresh)
-    return () => ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', refresh)
-  })
+  const [chat] = useChatStore()
 
   let emptyChatMessage = tx('chat_no_messages_hint', [chat.name, chat.name])
 
