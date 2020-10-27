@@ -34,9 +34,8 @@ export const RenderMessage = React.memo(
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
-    const conversationType: 'group' | 'direct' = chat.type === C.DC_CHAT_TYPE_GROUP
-      ? 'group'
-      : 'direct'
+    const conversationType: 'group' | 'direct' =
+      chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
     const onShowDetail = () => openDialog('MessageDetail', { id: message.id })
     const onDelete = () =>
       openDialog('ConfirmationDialog', {
