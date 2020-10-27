@@ -56,7 +56,7 @@
 
 ### Changed
 
-- Update deltachat-node to v1.46.0
+- Update deltachat-node to v1.45.0
 - run npm audit fix
 - Overhaul colors of login hint
 - Change "remove account" translation to "delete account"
