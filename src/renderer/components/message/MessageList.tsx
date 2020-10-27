@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
 import {
   useChatStore,
@@ -10,11 +10,9 @@ import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
-import { MessageType, FullChat } from '../../../shared/shared-types'
+import { MessageType } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import { useDCConfigOnce } from '../helpers/useDCConfigOnce'
-import { ipcBackend } from '../../ipc'
-import { DeltaBackend } from '../../delta-remote'
 const log = getLogger('render/msgList')
 
 const messageIdsToShow = (
