@@ -53,7 +53,7 @@ export function renderTrayIcon() {
     },
     {
       id: 'reduce_window',
-      label: tx('global_menu_file_reduce_desktop'),
+      label: tx('global_menu_minimize_to_tray'),
       type: 'normal',
       accelerator: 'Escape',
       click() {

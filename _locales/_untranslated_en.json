@@ -20,8 +20,8 @@
   "global_menu_file_open_desktop": {
     "message": "Open DeltaChat"
   },
-  "global_menu_file_reduce_desktop": {
-    "message": "Reduce"
+  "global_menu_minimize_to_tray": {
+    "message": "Minimize to tray"
   },
   "import_qr_error": {
     "message": "QR could not be decoded"
