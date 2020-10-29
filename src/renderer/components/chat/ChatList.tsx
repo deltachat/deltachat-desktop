@@ -463,7 +463,6 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       const toBeRefreshed = chatListItems.filter(
         ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
       )
-      console.log({ chatListItems, toBeRefreshed })
       const chats = await DeltaBackend.call(
         'chatList.getChatListItemsByEntries',
         toBeRefreshed
