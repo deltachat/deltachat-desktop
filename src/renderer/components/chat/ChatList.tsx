@@ -447,6 +447,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     ipcBackend.on('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
     ipcBackend.on('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
     ipcBackend.on('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
 
     return () => {
       ipcBackend.removeListener('DC_EVENT_MSG_READ', onChatListItemChanged)
@@ -455,6 +456,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       ipcBackend.removeListener('DC_EVENT_CHAT_MODIFIED', onChatListItemChanged)
       ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
       ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
     }
   }, [])
 
