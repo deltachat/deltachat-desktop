@@ -68,7 +68,6 @@ export const RenderMessage = React.memo(
       id,
       conversationType,
       // onReply: message.onReply,
-      onForward: () => openDialog('ForwardMessage', { message }),
       onDelete,
       onShowDetail,
       onContactClick,

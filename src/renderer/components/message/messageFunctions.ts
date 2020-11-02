@@ -3,6 +3,7 @@ const { openItem } = window.electron_functions
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import { Message } from 'deltachat-node'
+import { MessageType } from '../../../shared/shared-types'
 /**
  * json representation of the message object we get from the backend
  */
@@ -18,4 +19,8 @@ export function openAttachmentInShell(msg: MsgObject) {
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )
   }
+}
+
+export function forwardMessage(message:MessageType){
+  window.__openDialog('ForwardMessage', { message })
 }

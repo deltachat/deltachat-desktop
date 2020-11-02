@@ -1,4 +1,4 @@
-import { onDownload, openAttachmentInShell } from './messageFunctions'
+import { onDownload, openAttachmentInShell, forwardMessage } from './messageFunctions'
 import React, { useRef, useContext } from 'react'
 
 import classNames from 'classnames'
@@ -18,8 +18,6 @@ import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/message')
-
-const { openExternal } = window.electron_functions
 
 type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
@@ -97,9 +95,7 @@ const Author = (
 }
 
 const InlineMenu = (
-  MenuRef: todo,
   showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-  triggerId: string,
   props: {
     attachment: MessageTypeAttachment
     message: MessageType | { msg: null }
@@ -146,7 +142,6 @@ function buildContextMenu(
     message,
     text,
     // onReply,
-    onForward,
     // onRetrySend,
     onShowDetail,
   }: {
@@ -157,7 +152,6 @@ function buildContextMenu(
     message: MessageType | { msg: null }
     text?: string
     // onReply:Function
-    onForward: Function
     // onRetrySend: Function
     onShowDetail: Function
   },
@@ -202,7 +196,7 @@ function buildContextMenu(
     // },
     {
       label: tx('menu_forward'),
-      action: onForward,
+      action: forwardMessage.bind(null, message),
     },
     {
       label: tx('menu_message_details'),
@@ -237,13 +231,10 @@ const Message = (props: {
   onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
   onDelete: () => void
-  onForward: () => void
   /* onRetrySend */
 }) => {
   const {
     direction,
-    id,
-    timestamp,
     viewType,
     conversationType,
     message,
@@ -256,14 +247,6 @@ const Message = (props: {
     onShowDetail,
   } = props
   const tx = useTranslationFunction()
-
-  const authorAddress = message.contact.address
-
-  // This id is what connects our triple-dot click with our associated pop-up menu.
-  //   It needs to be unique.
-  const triggerId = String(id || `${authorAddress}-${timestamp}`)
-
-  const MenuRef = useRef(null)
 
   const { openContextMenu } = useContext(ScreenContext)
 
@@ -281,7 +264,7 @@ const Message = (props: {
     })
   }
 
-  const menu = !disableMenu && InlineMenu(MenuRef, showMenu, triggerId, props)
+  const menu = !disableMenu && InlineMenu(showMenu, props)
 
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
@@ -359,7 +342,6 @@ export const CallMessage = (props: {
   onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
   onDelete: () => void
-  onForward: () => void
 }) => {
   const {
     direction,
