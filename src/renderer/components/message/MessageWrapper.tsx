@@ -4,7 +4,7 @@ import Message, { CallMessage } from './Message'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
-import { ChatStoreState, ChatStoreDispatch } from '../../stores/chat'
+import { ChatStoreState } from '../../stores/chat'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 
 const log = getLogger('renderer/messageWrapper')
@@ -13,7 +13,6 @@ type RenderMessageProps = {
   message: MessageType
   locationStreamingEnabled: boolean
   chat: ChatStoreState
-  chatStoreDispatch: ChatStoreDispatch
   disableMenu?: boolean
 }
 
@@ -27,7 +26,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
-    const { message, locationStreamingEnabled, chat, chatStoreDispatch } = props
+    const { message, locationStreamingEnabled, chat } = props
     const { fromId, id } = message.msg
     const msg = message.msg
     const tx = useTranslationFunction()
@@ -37,14 +36,6 @@ export const RenderMessage = React.memo(
     const conversationType: 'group' | 'direct' =
       chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
     const onShowDetail = () => openDialog('MessageDetail', { id: message.id })
-    const onDelete = () =>
-      openDialog('ConfirmationDialog', {
-        message: tx('ask_delete_message_desktop'),
-        confirmLabel: tx('delete'),
-        cb: (yes: boolean) =>
-          yes &&
-          chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id }),
-      })
     const onContactClick = async (contact: DCContact) => {
       openViewProfileDialog(screenContext, contact.id)
     }
@@ -68,7 +59,6 @@ export const RenderMessage = React.memo(
       id,
       conversationType,
       // onReply: message.onReply,
-      onDelete,
       onShowDetail,
       onContactClick,
       contact,

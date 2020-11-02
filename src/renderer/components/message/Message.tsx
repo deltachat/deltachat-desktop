@@ -1,4 +1,9 @@
-import { onDownload, openAttachmentInShell, forwardMessage } from './messageFunctions'
+import {
+  onDownload,
+  openAttachmentInShell,
+  forwardMessage,
+  deleteMessage,
+} from './messageFunctions'
 import React, { useRef, useContext } from 'react'
 
 import classNames from 'classnames'
@@ -16,6 +21,7 @@ import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
+import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 
 const log = getLogger('renderer/message')
 
@@ -138,7 +144,6 @@ function buildContextMenu(
     attachment,
     direction,
     status,
-    onDelete,
     message,
     text,
     // onReply,
@@ -148,14 +153,14 @@ function buildContextMenu(
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus
-    onDelete: Function
     message: MessageType | { msg: null }
     text?: string
     // onReply:Function
     // onRetrySend: Function
     onShowDetail: Function
   },
-  link: string
+  link: string,
+  chatStoreDispatch: ChatStoreDispatch
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
@@ -208,7 +213,7 @@ function buildContextMenu(
     // },
     {
       label: tx('delete_message_desktop'),
-      action: onDelete,
+      action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
     },
   ]
 }
@@ -230,7 +235,6 @@ const Message = (props: {
   ) => void
   onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
-  onDelete: () => void
   /* onRetrySend */
 }) => {
   const {
@@ -249,12 +253,13 @@ const Message = (props: {
   const tx = useTranslationFunction()
 
   const { openContextMenu } = useContext(ScreenContext)
+  const { chatStoreDispatch } = useChatStore2()
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
     const link: string = (event.target as any).href || ''
-    const items = buildContextMenu(props, link)
+    const items = buildContextMenu(props, link, chatStoreDispatch)
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
@@ -341,7 +346,6 @@ export const CallMessage = (props: {
   ) => void
   onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
-  onDelete: () => void
 }) => {
   const {
     direction,

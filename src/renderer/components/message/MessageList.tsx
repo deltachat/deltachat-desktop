@@ -146,7 +146,6 @@ export default function MessageList({
       messageListRef={messageListRef}
       locationStreamingEnabled={locationStreamingEnabled}
       chat={chat}
-      chatStoreDispatch={chatStoreDispatch}
     />
   )
 }
@@ -160,7 +159,6 @@ export const MessageListInner = React.memo(
     messageListRef: todo
     locationStreamingEnabled: boolean
     chat: ChatStoreState
-    chatStoreDispatch: ChatStoreDispatch
   }) => {
     const {
       onScroll,
@@ -170,7 +168,6 @@ export const MessageListInner = React.memo(
       messageListRef,
       locationStreamingEnabled,
       chat,
-      chatStoreDispatch,
     } = props
 
     const _messageIdsToShow = messageIdsToShow(
@@ -204,7 +201,6 @@ export const MessageListInner = React.memo(
                 message={message as MessageType}
                 locationStreamingEnabled={locationStreamingEnabled}
                 chat={chat}
-                chatStoreDispatch={chatStoreDispatch}
               />
             )
           })}
