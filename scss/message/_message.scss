@@ -113,7 +113,7 @@
     }
 
     .msg-body {
-      &.msg-body--clickable {
+      &.msg-body--clickable > .text {
         cursor: pointer;
       }
 
