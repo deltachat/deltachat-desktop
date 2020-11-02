@@ -19,6 +19,7 @@
 - Own Context Menu Implementation that makes development easier
 - Update translations
 - Update deltachat-node to v1.47.0
+- hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 
 ## Fixed
 

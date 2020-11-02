@@ -12,7 +12,6 @@ const log = getLogger('renderer/messageWrapper')
 
 type RenderMessageProps = {
   message: MessageType
-  locationStreamingEnabled: boolean
   chat: ChatStoreState
 }
 
@@ -26,7 +25,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
-    const { message, locationStreamingEnabled, chat } = props
+    const { message, chat } = props
     const msg = message.msg
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
@@ -42,7 +41,6 @@ export const RenderMessage = React.memo(
       // onReply: message.onReply,
       onContactClick,
       message,
-      hasLocation: msg.hasLocation && locationStreamingEnabled,
       attachment: msg.attachment && !msg.isSetupmessage && msg.attachment,
       onClickMessageBody: null as () => void,
     }

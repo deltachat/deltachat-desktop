@@ -1,10 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
-import {
-  useChatStore,
-  ChatStoreState,
-  ChatStoreDispatch,
-} from '../../stores/chat'
+import { useChatStore, ChatStoreState } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
@@ -29,11 +25,9 @@ const messageIdsToShow = (
 export default function MessageList({
   chat,
   refComposer,
-  locationStreamingEnabled,
 }: {
   chat: ChatStoreState
   refComposer: todo
-  locationStreamingEnabled: boolean
 }) {
   const [
     {
@@ -144,7 +138,6 @@ export default function MessageList({
       messageIds={messageIds}
       messages={messages}
       messageListRef={messageListRef}
-      locationStreamingEnabled={locationStreamingEnabled}
       chat={chat}
     />
   )
@@ -157,7 +150,6 @@ export const MessageListInner = React.memo(
     messageIds: number[]
     messages: ChatStoreState['messages']
     messageListRef: todo
-    locationStreamingEnabled: boolean
     chat: ChatStoreState
   }) => {
     const {
@@ -166,7 +158,7 @@ export const MessageListInner = React.memo(
       messageIds,
       messages,
       messageListRef,
-      locationStreamingEnabled,
+
       chat,
     } = props
 
@@ -199,7 +191,6 @@ export const MessageListInner = React.memo(
               <MessageWrapper
                 key={messageId}
                 message={message as MessageType}
-                locationStreamingEnabled={locationStreamingEnabled}
                 chat={chat}
               />
             )
@@ -213,8 +204,7 @@ export const MessageListInner = React.memo(
       prevProps.messageIds === nextProps.messageIds &&
       prevProps.messages === nextProps.messages &&
       prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
+        nextProps.oldestFetchedMessageIndex
 
     return areEqual
   }

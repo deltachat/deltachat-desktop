@@ -131,7 +131,6 @@ export default function MessageListAndComposer({
         <MessageList
           chat={chat}
           refComposer={refComposer}
-          locationStreamingEnabled={settings.enableOnDemandLocationStreaming}
         />
       </div>
       <Composer
