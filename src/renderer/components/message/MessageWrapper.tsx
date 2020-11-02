@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { C } from 'deltachat-node/dist/constants'
 import Message, { CallMessage } from './Message'
-import { ScreenContext, useTranslationFunction } from '../../contexts'
+import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 import { ChatStoreState } from '../../stores/chat'
@@ -28,7 +28,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
     const { message, locationStreamingEnabled, chat } = props
-    const { fromId, id } = message.msg
+    const { id } = message.msg
     const msg = message.msg
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
@@ -39,20 +39,12 @@ export const RenderMessage = React.memo(
       openViewProfileDialog(screenContext, contact.id)
     }
 
-    const contact = {
-      onSendMessage: () => log.debug(`send a message to ${fromId}`),
-      onClick: () => {
-        log.debug('click contact')
-      },
-    }
-
     let new_props = {
       padlock: msg.showPadlock,
       id,
       conversationType,
       // onReply: message.onReply,
       onContactClick,
-      contact,
       status: msg.status,
       text: msg.text,
       direction: msg.direction,
