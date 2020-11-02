@@ -24,7 +24,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
-    const { message, conversationType } = props
+    const { message } = props
     const msg = message.msg
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
@@ -34,11 +34,8 @@ export const RenderMessage = React.memo(
     }
 
     let new_props = {
-      conversationType,
       // onReply: message.onReply,
       onContactClick,
-      message,
-      attachment: msg.attachment && !msg.isSetupmessage && msg.attachment,
       onClickMessageBody: null as () => void,
     }
 

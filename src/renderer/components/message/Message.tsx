@@ -111,7 +111,7 @@ const InlineMenu = (
 
   return (
     <div className='message-buttons'>
-      {attachment && viewType !== 23 && (
+      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
         <div
           onClick={onDownload.bind(null, message.msg)}
           role='button'
@@ -159,12 +159,13 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  let showRetry = status === 'error' && direction === 'outgoing'
+  const showRetry = status === 'error' && direction === 'outgoing'
+  const showAttachmentOptions = attachment && !message.msg.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
 
   return [
-    attachment &&
+    showAttachmentOptions &&
       isGenericAttachment(attachment) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message.msg),
@@ -186,7 +187,7 @@ function buildContextMenu(
             navigator.clipboard.writeText(text)
           },
         },
-    attachment && {
+    showAttachmentOptions && {
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
@@ -216,7 +217,6 @@ function buildContextMenu(
 const Message = (props: {
   conversationType: 'group' | 'direct'
   message: MessageType
-  attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -226,11 +226,18 @@ const Message = (props: {
   const {
     conversationType,
     message,
-    attachment,
     onContactClick,
     onClickMessageBody,
   } = props
-  const { direction, status, viewType, text, hasLocation } = message.msg
+  const {
+    direction,
+    status,
+    viewType,
+    text,
+    hasLocation,
+    attachment,
+    isSetupmessage,
+  } = message.msg
   const tx = useTranslationFunction()
 
   const { openContextMenu } = useContext(ScreenContext)
@@ -293,15 +300,17 @@ const Message = (props: {
           })}
           onClick={props.onClickMessageBody}
         >
-          <Attachment
-            {...{
-              attachment,
-              text,
-              conversationType,
-              direction,
-              message,
-            }}
-          />
+          {attachment && !isSetupmessage && (
+            <Attachment
+              {...{
+                attachment,
+                text,
+                conversationType,
+                direction,
+                message,
+              }}
+            />
+          )}
 
           <div dir='auto' className='text'>
             {message.msg.isSetupmessage ? (
@@ -314,7 +323,7 @@ const Message = (props: {
             <button onClick={openMessageInfo.bind(null, message)}>...</button>
           )}
           <MessageMetaData
-            attachment={attachment}
+            attachment={!isSetupmessage && attachment}
             direction={direction}
             status={status}
             text={text}
@@ -334,13 +343,12 @@ export const CallMessage = (props: {
   conversationType: 'group' | 'direct'
   message: MessageType
   disableMenu?: boolean
-  attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void
 }) => {
-  const { conversationType, message, onContactClick, attachment } = props
+  const { conversationType, message, onContactClick } = props
   const { id, direction, status, text, hasLocation } = message.msg
 
   const tx = window.static_translate
@@ -387,7 +395,6 @@ export const CallMessage = (props: {
             </div>
           </div>
           <MessageMetaData
-            attachment={attachment}
             direction={direction}
             status={status}
             text={text}
