@@ -169,6 +169,9 @@ export const MessageListInner = React.memo(
 
     let specialMessageIdCounter = 0
 
+    const conversationType: 'group' | 'direct' =
+      chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
+
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
         <ul>
@@ -191,7 +194,7 @@ export const MessageListInner = React.memo(
               <MessageWrapper
                 key={messageId}
                 message={message as MessageType}
-                chat={chat}
+                conversationType={conversationType}
               />
             )
           })}

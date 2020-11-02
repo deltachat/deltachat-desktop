@@ -4,7 +4,6 @@ import Message, { CallMessage } from './Message'
 import { ScreenContext } from '../../contexts'
 import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
-import { ChatStoreState } from '../../stores/chat'
 import { MessageType, DCContact } from '../../../shared/shared-types'
 import { openMessageInfo } from './messageFunctions'
 
@@ -12,7 +11,7 @@ const log = getLogger('renderer/messageWrapper')
 
 type RenderMessageProps = {
   message: MessageType
-  chat: ChatStoreState
+  conversationType: 'group' | 'direct'
 }
 
 export const MessageWrapper = (props: RenderMessageProps) => {
@@ -25,13 +24,11 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
-    const { message, chat } = props
+    const { message, conversationType } = props
     const msg = message.msg
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
-    const conversationType: 'group' | 'direct' =
-      chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
     const onContactClick = async (contact: DCContact) => {
       openViewProfileDialog(screenContext, contact.id)
     }
