@@ -16,6 +16,7 @@ import {
   MessageType,
   DCContact,
   MessageTypeAttachment,
+  msgStatus,
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
@@ -25,8 +26,6 @@ import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 
 const log = getLogger('renderer/message')
-
-type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
 const Avatar = (
   contact: DCContact,
@@ -103,14 +102,11 @@ const Author = (
 
 const InlineMenu = (
   showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-  props: {
-    attachment: MessageTypeAttachment
-    message: MessageType | { msg: null }
-    // onReply
-    viewType: number
-  }
+  attachment: MessageTypeAttachment,
+  message: MessageType | { msg: null },
+  // onReply
+  viewType: number
 ) => {
-  const { attachment, message, /*onReply,*/ viewType } = props
   const tx = useTranslationFunction()
 
   return (
@@ -218,35 +214,23 @@ function buildContextMenu(
 }
 
 const Message = (props: {
-  direction: 'incoming' | 'outgoing'
-  id: number
-  timestamp: number
-  viewType: number
   conversationType: 'group' | 'direct'
   message: MessageType
-  text?: string
-  disableMenu?: boolean
-  status: msgStatus
   attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void
-  padlock: boolean
   /* onRetrySend */
 }) => {
   const {
-    direction,
-    viewType,
     conversationType,
     message,
-    text,
-    disableMenu,
-    status,
     attachment,
     onContactClick,
     onClickMessageBody,
   } = props
+  const { direction, status, viewType, text, hasLocation } = message.msg
   const tx = useTranslationFunction()
 
   const { openContextMenu } = useContext(ScreenContext)
@@ -256,7 +240,17 @@ const Message = (props: {
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
     const link: string = (event.target as any).href || ''
-    const items = buildContextMenu(props, link, chatStoreDispatch)
+    const items = buildContextMenu(
+      {
+        attachment,
+        direction,
+        status,
+        message,
+        text,
+      },
+      link,
+      chatStoreDispatch
+    )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
@@ -266,7 +260,7 @@ const Message = (props: {
     })
   }
 
-  const menu = !disableMenu && InlineMenu(showMenu, props)
+  const menu = InlineMenu(showMenu, attachment, message, viewType)
 
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
@@ -319,7 +313,15 @@ const Message = (props: {
           {longMessage && (
             <button onClick={openMessageInfo.bind(null, message)}>...</button>
           )}
-          <MessageMetaData {...props} />
+          <MessageMetaData
+            attachment={attachment}
+            direction={direction}
+            status={status}
+            text={text}
+            hasLocation={hasLocation}
+            timestamp={message.msg.sentAt}
+            padlock={message.msg.showPadlock}
+          />
         </div>
       </div>
     </div>
@@ -329,30 +331,18 @@ const Message = (props: {
 export default Message
 
 export const CallMessage = (props: {
-  direction: 'incoming' | 'outgoing'
-  id: number
-  timestamp: number
-  viewType: number
   conversationType: 'group' | 'direct'
   message: MessageType
-  text?: string
   disableMenu?: boolean
-  status: msgStatus
   attachment: MessageTypeAttachment
   onContactClick: (contact: DCContact) => void
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void
-  padlock: boolean
 }) => {
-  const {
-    direction,
-    conversationType,
-    message,
-    status,
-    onContactClick,
-    id,
-  } = props
+  const { conversationType, message, onContactClick, attachment } = props
+  const { id, direction, status, text, hasLocation } = message.msg
+
   const tx = window.static_translate
 
   const screenContext = useContext(ScreenContext)
@@ -396,8 +386,15 @@ export const CallMessage = (props: {
                 tx('videochat_will_open_in_your_browser')}
             </div>
           </div>
-
-          <MessageMetaData {...props} />
+          <MessageMetaData
+            attachment={attachment}
+            direction={direction}
+            status={status}
+            text={text}
+            hasLocation={hasLocation}
+            timestamp={message.msg.sentAt}
+            padlock={message.msg.showPadlock}
+          />
         </div>
       </div>
     </div>

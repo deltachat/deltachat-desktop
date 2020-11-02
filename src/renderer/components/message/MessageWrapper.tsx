@@ -14,7 +14,6 @@ type RenderMessageProps = {
   message: MessageType
   locationStreamingEnabled: boolean
   chat: ChatStoreState
-  disableMenu?: boolean
 }
 
 export const MessageWrapper = (props: RenderMessageProps) => {
@@ -28,7 +27,6 @@ export const MessageWrapper = (props: RenderMessageProps) => {
 export const RenderMessage = React.memo(
   (props: RenderMessageProps) => {
     const { message, locationStreamingEnabled, chat } = props
-    const { id } = message.msg
     const msg = message.msg
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
@@ -40,16 +38,9 @@ export const RenderMessage = React.memo(
     }
 
     let new_props = {
-      padlock: msg.showPadlock,
-      id,
       conversationType,
       // onReply: message.onReply,
       onContactClick,
-      status: msg.status,
-      text: msg.text,
-      direction: msg.direction,
-      timestamp: msg.sentAt,
-      viewType: msg.viewType,
       message,
       hasLocation: msg.hasLocation && locationStreamingEnabled,
       attachment: msg.attachment && !msg.isSetupmessage && msg.attachment,

@@ -154,13 +154,15 @@ export interface MessageTypeAttachment {
   fileSize: string
 }
 
+export type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
+
 export interface MessageType {
   id: number
   msg: JsonMessage & {
     sentAt: number
     receivedAt: number
     direction: 'outgoing' | 'incoming'
-    status: todo
+    status: msgStatus
     attachment?: MessageTypeAttachment
   }
   filemime: string
