@@ -30,7 +30,6 @@ export const RenderMessage = React.memo(
     const { message, locationStreamingEnabled, chat } = props
     const { fromId, id } = message.msg
     const msg = message.msg
-    const tx = useTranslationFunction()
     const screenContext = useContext(ScreenContext)
     const { openDialog } = screenContext
 
@@ -45,13 +44,6 @@ export const RenderMessage = React.memo(
       onClick: () => {
         log.debug('click contact')
       },
-    }
-
-    if (
-      msg.text ===
-      '[The message was sent with non-verified encryption.. See "Info" for details.]'
-    ) {
-      msg.text = tx('message_not_verified')
     }
 
     let new_props = {
