@@ -388,11 +388,6 @@
     color: var(--infoMessageBubbleText);
   }
 
-  &[custom-selectable] {
-    user-select: auto;
-    user-select: all;
-  }
-
   &.big > p {
     max-width: 550px;
     font-size: 1rem;

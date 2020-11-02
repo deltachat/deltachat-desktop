@@ -154,7 +154,13 @@ export interface MessageTypeAttachment {
   fileSize: string
 }
 
-export type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
+export type msgStatus =
+  | 'error'
+  | 'sending'
+  | 'draft'
+  | 'delivered'
+  | 'read'
+  | ''
 
 export interface MessageType {
   id: number

@@ -2,7 +2,6 @@ import React from 'react'
 import Message from './Message'
 import { getLogger } from '../../../shared/logger'
 import { MessageType } from '../../../shared/shared-types'
-import { openMessageInfo } from './messageFunctions'
 
 const log = getLogger('renderer/messageWrapper')
 
@@ -19,26 +18,7 @@ export const MessageWrapper = (props: RenderMessageProps) => {
   )
 }
 
-export const RenderMessage = React.memo(
-  (props: RenderMessageProps) => {
-    const { message } = props
-    const msg = message.msg
-
-    if (message.isInfo)
-      return (
-        <div
-          className='info-message'
-          onContextMenu={openMessageInfo.bind(null, message)}
-          custom-selectable='true'
-        >
-          <p>{msg.text}</p>
-        </div>
-      )
-
-    return <Message {...props} />
-  },
-  (prevProps, nextProps) => {
-    const areEqual = prevProps.message === nextProps.message
-    return areEqual
-  }
-)
+export const RenderMessage = React.memo(Message, (prevProps, nextProps) => {
+  const areEqual = prevProps.message === nextProps.message
+  return areEqual
+})

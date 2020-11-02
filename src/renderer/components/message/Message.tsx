@@ -260,6 +260,15 @@ const Message = (props: {
     })
   }
 
+  // Info Message
+  if (message.isInfo)
+    return (
+      <div className='info-message' onContextMenu={showMenu}>
+        <p>{text}</p>
+      </div>
+    )
+
+  // Normal Message
   const onContactClick = async (contact: DCContact) => {
     openViewProfileDialog(screenContext, contact.id)
   }
