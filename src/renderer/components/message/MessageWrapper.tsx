@@ -6,6 +6,7 @@ import { getLogger } from '../../../shared/logger'
 import { openViewProfileDialog } from '../helpers/ChatMethods'
 import { ChatStoreState } from '../../stores/chat'
 import { MessageType, DCContact } from '../../../shared/shared-types'
+import { openMessageInfo } from './messageFunctions'
 
 const log = getLogger('renderer/messageWrapper')
 
@@ -35,7 +36,6 @@ export const RenderMessage = React.memo(
 
     const conversationType: 'group' | 'direct' =
       chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
-    const onShowDetail = () => openDialog('MessageDetail', { id: message.id })
     const onContactClick = async (contact: DCContact) => {
       openViewProfileDialog(screenContext, contact.id)
     }
@@ -59,7 +59,6 @@ export const RenderMessage = React.memo(
       id,
       conversationType,
       // onReply: message.onReply,
-      onShowDetail,
       onContactClick,
       contact,
       status: msg.status,
@@ -88,7 +87,7 @@ export const RenderMessage = React.memo(
       return (
         <div
           className='info-message'
-          onContextMenu={onShowDetail}
+          onContextMenu={openMessageInfo.bind(null, message)}
           custom-selectable='true'
         >
           <p>{msg.text}</p>

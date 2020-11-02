@@ -3,6 +3,7 @@ import {
   openAttachmentInShell,
   forwardMessage,
   deleteMessage,
+  openMessageInfo,
 } from './messageFunctions'
 import React, { useRef, useContext } from 'react'
 
@@ -145,10 +146,9 @@ function buildContextMenu(
     direction,
     status,
     message,
-    text,
     // onReply,
     // onRetrySend,
-    onShowDetail,
+    text,
   }: {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
@@ -157,7 +157,6 @@ function buildContextMenu(
     text?: string
     // onReply:Function
     // onRetrySend: Function
-    onShowDetail: Function
   },
   link: string,
   chatStoreDispatch: ChatStoreDispatch
@@ -205,7 +204,7 @@ function buildContextMenu(
     },
     {
       label: tx('menu_message_details'),
-      action: onShowDetail,
+      action: openMessageInfo.bind(null, message),
     },
     // showRetry && {
     //   label:tx('retry_send'),
@@ -233,7 +232,6 @@ const Message = (props: {
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void
-  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
   /* onRetrySend */
 }) => {
@@ -248,7 +246,6 @@ const Message = (props: {
     attachment,
     onContactClick,
     onClickMessageBody,
-    onShowDetail,
   } = props
   const tx = useTranslationFunction()
 
@@ -319,7 +316,9 @@ const Message = (props: {
               <MessageBody text={text || ''} />
             )}
           </div>
-          {longMessage && <button onClick={onShowDetail}>...</button>}
+          {longMessage && (
+            <button onClick={openMessageInfo.bind(null, message)}>...</button>
+          )}
           <MessageMetaData {...props} />
         </div>
       </div>
@@ -344,7 +343,6 @@ export const CallMessage = (props: {
   onClickMessageBody: (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void
-  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   padlock: boolean
 }) => {
   const {

@@ -38,3 +38,7 @@ export function deleteMessage(
       yes && chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id }),
   })
 }
+
+export function openMessageInfo(message: MessageType) {
+  window.__openDialog('MessageDetail', { id: message.id })
+}
