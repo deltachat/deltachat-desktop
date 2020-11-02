@@ -20,7 +20,7 @@ import {
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { joinCall } from '../helpers/ChatMethods'
+import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
@@ -217,19 +217,11 @@ function buildContextMenu(
 const Message = (props: {
   conversationType: 'group' | 'direct'
   message: MessageType
-  onContactClick: (contact: DCContact) => void
-  onClickMessageBody: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void
   /* onRetrySend */
 }) => {
+  const { conversationType, message } = props
   const {
-    conversationType,
-    message,
-    onContactClick,
-    onClickMessageBody,
-  } = props
-  const {
+    id,
     direction,
     status,
     viewType,
@@ -240,7 +232,8 @@ const Message = (props: {
   } = message.msg
   const tx = useTranslationFunction()
 
-  const { openContextMenu } = useContext(ScreenContext)
+  const screenContext = useContext(ScreenContext)
+  const { openContextMenu, openDialog } = screenContext
   const { chatStoreDispatch } = useChatStore2()
 
   const showMenu: (
@@ -267,7 +260,53 @@ const Message = (props: {
     })
   }
 
+  const onContactClick = async (contact: DCContact) => {
+    openViewProfileDialog(screenContext, contact.id)
+  }
+
+  let onClickMessageBody
+  const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
+  if (isSetupmessage) {
+    onClickMessageBody = () =>
+      openDialog('EnterAutocryptSetupMessage', { message })
+  } else if (isDeadDrop) {
+    onClickMessageBody = () => {
+      openDialog('DeadDrop', message)
+    }
+  }
+
   const menu = InlineMenu(showMenu, attachment, message, viewType)
+
+  let content
+  if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
+    content = (
+      <div dir='auto' className='text'>
+        <div className='call-inc-text'>
+          <b>{tx('videochat_invitation')}</b>
+          <div>
+            <button
+              className='phone-accept-button'
+              onClick={joinCall.bind(null, screenContext, id)}
+            >
+              {direction === 'incoming' ? tx('join') : tx('rejoin')}
+            </button>
+          </div>
+          {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
+            tx('videochat_will_open_in_your_browser')}
+        </div>
+      </div>
+    )
+  } else {
+    content = (
+      <div dir='auto' className='text'>
+        {message.msg.isSetupmessage ? (
+          tx('autocrypt_asm_click_body')
+        ) : (
+          <MessageBody text={text || ''} />
+        )}
+      </div>
+    )
+  }
 
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
@@ -298,7 +337,7 @@ const Message = (props: {
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
           })}
-          onClick={props.onClickMessageBody}
+          onClick={onClickMessageBody}
         >
           {attachment && !isSetupmessage && (
             <Attachment
@@ -311,14 +350,7 @@ const Message = (props: {
               }}
             />
           )}
-
-          <div dir='auto' className='text'>
-            {message.msg.isSetupmessage ? (
-              tx('autocrypt_asm_click_body')
-            ) : (
-              <MessageBody text={text || ''} />
-            )}
-          </div>
+          {content}
           {longMessage && (
             <button onClick={openMessageInfo.bind(null, message)}>...</button>
           )}
@@ -338,72 +370,3 @@ const Message = (props: {
 }
 
 export default Message
-
-export const CallMessage = (props: {
-  conversationType: 'group' | 'direct'
-  message: MessageType
-  disableMenu?: boolean
-  onContactClick: (contact: DCContact) => void
-  onClickMessageBody: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void
-}) => {
-  const { conversationType, message, onContactClick } = props
-  const { id, direction, status, text, hasLocation } = message.msg
-
-  const tx = window.static_translate
-
-  const screenContext = useContext(ScreenContext)
-
-  const openCall = (messageId: number) => {
-    joinCall(screenContext, messageId)
-  }
-
-  return (
-    <div
-      className={classNames(
-        'message',
-        direction,
-        { error: status === 'error' },
-        { forwarded: message.msg.isForwarded }
-      )}
-    >
-      {conversationType === 'group' &&
-        direction === 'incoming' &&
-        Avatar(message.contact, onContactClick)}
-      <div className='msg-container'>
-        {message.msg.isForwarded && (
-          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
-        )}
-        {direction === 'incoming' &&
-          conversationType === 'group' &&
-          Author(message.contact, onContactClick)}
-        <div className={classNames('msg-body')}>
-          <div dir='auto' className='text'>
-            <div className='call-inc-text'>
-              <b>{tx('videochat_invitation')}</b>
-              <div>
-                <button
-                  className='phone-accept-button'
-                  onClick={openCall.bind(null, id)}
-                >
-                  {direction === 'incoming' ? tx('join') : tx('rejoin')}
-                </button>
-              </div>
-              {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-                tx('videochat_will_open_in_your_browser')}
-            </div>
-          </div>
-          <MessageMetaData
-            direction={direction}
-            status={status}
-            text={text}
-            hasLocation={hasLocation}
-            timestamp={message.msg.sentAt}
-            padlock={message.msg.showPadlock}
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
