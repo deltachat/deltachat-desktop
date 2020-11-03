@@ -149,6 +149,38 @@
         }
       }
     }
+
+    .qoute {
+      border-left: 4px gray solid;
+      padding: 4px 4px;
+      margin: 2px 0 5px 0;
+      background: rgba(0, 0, 0, 0.06);
+
+      &.has-message:hover {
+        background: rgba(0, 0, 0, 0.07);
+      }
+
+      .qoute-author {
+        font-size: 13px;
+        line-height: 13px;
+      }
+
+      p {
+        font-size: 12px;
+        line-height: 12px;
+        margin: 0;
+        max-height: 40px;
+        overflow: hidden;
+        line-clamp: 3;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        // see https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp
+        // and yes using this property is a bit hacky and depends on browser support
+        // but atleast its simpler than estimating size with js
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
   }
 
   .metadata {

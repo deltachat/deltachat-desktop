@@ -169,7 +169,7 @@ export default class DCMessageList extends SplitOut {
   }
 }
 
-function convertMessageStatus(s: number):msgStatus {
+function convertMessageStatus(s: number): msgStatus {
   switch (s) {
     case C.DC_STATE_IN_FRESH:
       return 'sent'

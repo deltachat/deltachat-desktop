@@ -5,7 +5,7 @@ import {
   deleteMessage,
   openMessageInfo,
 } from './messageFunctions'
-import React, { useRef, useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 
 import classNames from 'classnames'
 import MessageBody from './MessageBody'
@@ -24,6 +24,7 @@ import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/message')
 
@@ -320,6 +321,8 @@ const Message = (props: {
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
 
+  const hasQoute = message.msg.quotedText !== null
+
   return (
     <div
       onContextMenu={showMenu}
@@ -348,6 +351,12 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
+          {hasQoute && (
+            <Qoute
+              quotedText={message.msg.quotedText}
+              quotedMessageId={message.msg.quotedMessageId}
+            />
+          )}
           {attachment && !isSetupmessage && (
             <Attachment
               {...{
@@ -379,3 +388,43 @@ const Message = (props: {
 }
 
 export default Message
+
+const Qoute = ({
+  quotedText,
+  quotedMessageId,
+}: {
+  quotedText: string | null
+  quotedMessageId: number
+}) => {
+  const [message, setMessage] = useState<MessageType>(null)
+
+  useEffect(() => {
+    if (quotedMessageId) {
+      DeltaBackend.call('messageList.getMessage', quotedMessageId).then(msg => {
+        if (msg.msg !== null) {
+          setMessage(msg as MessageType)
+        }
+      })
+    }
+  }, [quotedMessageId])
+
+  if (quotedMessageId !== 0 && message) {
+    return (
+      <div
+        className='qoute has-message'
+        style={{ borderLeftColor: message.contact.color }}
+      >
+        <div className='qoute-author' style={{ color: message.contact.color }}>
+          {message.contact.displayName}
+        </div>
+        <p>{quotedText}</p>
+      </div>
+    )
+  } else {
+    return (
+      <div className='qoute'>
+        <p>{quotedText}</p>
+      </div>
+    )
+  }
+}
