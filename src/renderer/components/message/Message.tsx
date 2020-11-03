@@ -265,7 +265,16 @@ const Message = (props: {
   if (message.isInfo)
     return (
       <div className='info-message' onContextMenu={showMenu}>
-        <p>{text}</p>
+        <p>
+          {text}
+          {direction === 'outgoing' &&
+            (status === 'sending' || status === 'error') && (
+              <div
+                className={classNames('status-icon', status)}
+                aria-label={tx(`a11y_delivery_status_${status}`)}
+              />
+            )}
+        </p>
       </div>
     )
 

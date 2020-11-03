@@ -12,6 +12,7 @@
 - Option for packagers to disable asar (`NO_ASAR=true npm run pack:generate_config`).
 - Added context menu for info messages
 - Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
+- Show sending indicator for outgoing info messages #1867
 
 ### Changed
 - Change "More info" translation to "Message Details"

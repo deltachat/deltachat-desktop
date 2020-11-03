@@ -428,4 +428,8 @@
     white-space: pre-wrap;
     text-align: left;
   }
+
+  .status-icon.sending {
+    background-color: var(--infoMessageBubbleText);
+  }
 }
