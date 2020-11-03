@@ -160,6 +160,7 @@ export type msgStatus =
   | 'draft'
   | 'delivered'
   | 'read'
+  | 'sent'
   | ''
 
 export interface MessageType {
