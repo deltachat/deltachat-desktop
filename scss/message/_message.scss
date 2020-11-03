@@ -153,16 +153,18 @@
     .qoute {
       border-left: 4px gray solid;
       padding: 4px 4px;
+      padding-left: 6px;
       margin: 2px 0 5px 0;
-      background: rgba(0, 0, 0, 0.06);
 
-      &.has-message:hover {
-        background: rgba(0, 0, 0, 0.07);
-      }
+      // &.has-message:hover {
+      //   background: rgba(0, 0, 0, 0.07);
+      // }
 
       .qoute-author {
         font-size: 13px;
         line-height: 13px;
+        margin-bottom: 2px;
+        font-weight: 300;
       }
 
       p {
@@ -179,6 +181,7 @@
         // but atleast its simpler than estimating size with js
         -webkit-box-orient: vertical;
         overflow: hidden;
+        color: var(--messageQuotedText);
       }
     }
   }

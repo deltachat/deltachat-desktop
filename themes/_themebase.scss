@@ -62,6 +62,7 @@ $hover-contrast-change: 2%;
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
+  --messageQuotedText: #{changeContrast($textPrimary, 45%)};
   /* same as message text */
   --setupMessageText: #ed824e;
   --infoMessageBubbleBg: #0000008c;
