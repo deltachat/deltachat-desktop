@@ -4,17 +4,18 @@ import debounce from 'debounce'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 type ComposerMessageInputProps = {
-  draft: string
   chatId: number
   setComposerSize: (size: number) => void
   sendMessage: () => void
   enterKeySends: boolean
+  updateDraftText: (text: string, InputChatId: number) => void
 }
 
 type ComposerMessageInputState = {
   text: string
   chatId: number
   // error?:boolean|Error
+  loadingDraft: boolean
 }
 
 export default class ComposerMessageInput extends React.Component<
@@ -28,8 +29,9 @@ export default class ComposerMessageInput extends React.Component<
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
-      text: props.draft ? props.draft : '',
+      text: '',
       chatId: props.chatId,
+      loadingDraft: true,
     }
 
     this.composerSize = 48
@@ -43,7 +45,7 @@ export default class ComposerMessageInput extends React.Component<
 
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
-      DeltaBackend.call('messageList.setDraft', chatId, {text})
+      this.props.updateDraftText(text, chatId)
     }, 500)
 
     this.textareaRef = React.createRef()
@@ -63,9 +65,14 @@ export default class ComposerMessageInput extends React.Component<
     currentState: ComposerMessageInputState
   ) {
     if (currentState.chatId !== props.chatId) {
-      return { chatId: props.chatId, text: props.draft ? props.draft : '' }
+      return { chatId: props.chatId, text: '', loadingDraft: true }
     }
     return null
+  }
+
+  setText(text: string) {
+    this.setState({ text })
+    this.setState({ loadingDraft: false })
   }
 
   setComposerSize(size: number) {
@@ -102,14 +109,18 @@ export default class ComposerMessageInput extends React.Component<
     if (prevState.chatId === this.state.chatId) {
       this.resizeTextareaAndComposer()
       if (prevState.text !== this.state.text) {
-        this.saveDraft()
+        if (!this.state.loadingDraft) {
+          this.saveDraft()
+        }
       }
     }
   }
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({ text: e.target.value /*error: false*/ })
-    this.saveDraft()
+    if (!this.state.loadingDraft) {
+      this.saveDraft()
+    }
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -200,6 +211,7 @@ export default class ComposerMessageInput extends React.Component<
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
         placeholder={window.static_translate('write_message_desktop')}
+        disabled={this.state.loadingDraft}
       />
     )
   }

@@ -9,6 +9,8 @@ import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { JsonMessage } from '../../../shared/shared-types'
+import { Qoute } from '../message/Message'
+import { DeltaBackend } from '../../delta-remote'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -33,17 +35,18 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     chatId: number
-    draft: JsonMessage | null
     setComposerSize: (size: number) => void
   }
 >((props, ref) => {
-  const { isDisabled, disabledReason, chatId, draft } = props
+  const { isDisabled, disabledReason, chatId } = props
   const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const messageInputRef = useRef<ComposerMessageInput>()
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
+
+  const { draftState, updateDraftText } = useDraft(chatId, messageInputRef)
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
@@ -75,14 +78,12 @@ const Composer = forwardRef<
   }
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
-
   const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
     messageInputRef.current.insertStringAtCursorPosition(
       (emoji as BaseEmoji).native
     )
   }
-
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = ({
@@ -126,10 +127,10 @@ const Composer = forwardRef<
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
           <div className='quote-section'>
-            {hasQoute && (
+            {draftState.quotedText !== null && (
               <Qoute
-                quotedText={message.msg.quotedText}
-                quotedMessageId={message.msg.quotedMessageId}
+                quotedText={draftState.quotedText}
+                quotedMessageId={draftState.quotedMessageId}
               />
             )}
             <button>X</button>
@@ -153,7 +154,7 @@ const Composer = forwardRef<
                 sendMessage={sendMessage}
                 setComposerSize={props.setComposerSize}
                 chatId={chatId}
-                draft={draft?.text || ''}
+                updateDraftText={updateDraftText}
               />
             )}
           </SettingsContext.Consumer>
@@ -183,3 +184,88 @@ const Composer = forwardRef<
 })
 
 export default Composer
+
+type draftObject = { chatId: number } & Pick<
+  JsonMessage,
+  'text' | 'file' | 'quotedMessageId' | 'quotedText'
+>
+
+function useDraft(
+  chatId: number,
+  inputRef: React.MutableRefObject<ComposerMessageInput>
+) {
+  const [startingText, setStartingText] = useState('')
+  const [draftState, setDraft] = useState<draftObject>({
+    chatId,
+    text: '',
+    file: null,
+    quotedMessageId: 0,
+    quotedText: null,
+  })
+  const draftRef = useRef<draftObject>()
+  draftRef.current = draftState
+
+  useEffect(() => {
+    log.debug('reloading chat because id changed', chatId)
+    //load
+    DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
+      if (!newDraft) {
+        log.debug('no draft')
+        setDraft(_ => ({
+          chatId,
+          text: '',
+          file: null,
+          quotedMessageId: 0,
+          quotedText: null,
+        }))
+        inputRef.current?.setText('')
+      } else {
+        setDraft(old => ({
+          ...old,
+          text: newDraft.text,
+          file: newDraft.file,
+          quotedMessageId: newDraft.quotedMessageId,
+          quotedText: newDraft.quotedText,
+        }))
+        inputRef.current?.setText(newDraft.text)
+      }
+    })
+  }, [chatId])
+
+  const saveDraft = async () => {
+    const draft = draftRef.current
+    const oldChatId = chatId
+    await DeltaBackend.call('messageList.setDraft', chatId, {
+      text: draft.text,
+      filename: draft.file,
+      qouteMessageId: draft.quotedMessageId,
+    })
+
+    if (oldChatId !== chatId) {
+      log.debug('switched chat no reloading of draft required')
+      return
+    }
+    const newDraft = await DeltaBackend.call('messageList.getDraft', chatId)
+    if (newDraft) {
+      setDraft(old => ({
+        ...old,
+        file: newDraft.file,
+        quotedMessageId: newDraft.quotedMessageId,
+        quotedText: newDraft.quotedText,
+      }))
+      // don't load text to prevent bugging back
+    }
+  }
+
+  const updateDraftText = (text: string, InputChatId: number) => {
+    if (chatId !== InputChatId) {
+      log.warn("chat Id and InputChatId don't match, do nothing")
+    } else {
+      draftRef.current.text = text
+      // setDraft(state => ({ ...state, text }))
+      saveDraft()
+    }
+  }
+
+  return { draftState, startingText, updateDraftText }
+}

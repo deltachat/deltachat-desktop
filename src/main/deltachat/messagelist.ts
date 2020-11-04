@@ -13,6 +13,7 @@ import {
   MessageSearchResult,
   MessageTypeAttachment,
   msgStatus,
+  JsonMessage,
 } from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(
@@ -72,6 +73,11 @@ export default class DCMessageList extends SplitOut {
 
   getMessageInfo(msgId: number) {
     return this._dc.getMessageInfo(msgId)
+  }
+
+  async getDraft(chatId: number): Promise<JsonMessage | null> {
+    const draft = this._dc.getDraft(chatId)
+    return draft ? draft.toJson() : null
   }
 
   setDraft(

@@ -1,6 +1,11 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
 import { Store, useStore, Action } from './store'
-import { JsonContact, FullChat, MessageType, JsonMessage } from '../../shared/shared-types'
+import {
+  JsonContact,
+  FullChat,
+  MessageType,
+  JsonMessage,
+} from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
 
@@ -27,7 +32,6 @@ class state implements FullChat {
   freshMessageCounter = 0
   isGroup = false
   isDeaddrop = false
-  draft: JsonMessage | null = null
 
   messageIds: number[] = []
   messages: { [key: number]: MessageType | { msg: null } } = {}
@@ -236,8 +240,8 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       payload[0],
       {
         text: payload[1],
-        filename:payload[2],
-        location: payload[3]
+        filename: payload[2],
+        location: payload[3],
       }
     )
     chatStore.dispatch({

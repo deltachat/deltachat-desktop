@@ -12,6 +12,7 @@ import {
   DeltaChatAccount,
   DesktopSettings,
   QrCodeResponse,
+  JsonMessage,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -241,6 +242,10 @@ class DeltaRemote {
     messageIds: number[]
   ): Promise<{ [key: number]: MessageType | { msg: null } }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
+  call(
+    fnName: 'messageList.getDraft',
+    chatId: number
+  ): Promise<JsonMessage | null>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,

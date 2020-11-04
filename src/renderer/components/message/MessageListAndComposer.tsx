@@ -76,7 +76,9 @@ export default function MessageListAndComposer({
       cb: (yes: boolean) =>
         yes &&
         sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chat.id, {filename: path})
+          DeltaBackend.call('messageList.sendMessage', chat.id, {
+            filename: path,
+          })
         ),
     })
   }
@@ -132,7 +134,6 @@ export default function MessageListAndComposer({
       <Composer
         ref={refComposer}
         chatId={chat.id}
-        draft={chat.draft}
         setComposerSize={setComposerSize.bind(this)}
         isDisabled={disabled}
         disabledReason={disabledReason}
