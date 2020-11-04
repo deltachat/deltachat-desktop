@@ -55,6 +55,9 @@ export default function MessageListAndComposer({
     }
     const tx = window.static_translate
     const fileCount = sanitizedFileList.length
+    if(fileCount === 0){
+      return
+    }
     openDialog('ConfirmationDialog', {
       message: (
         <>
