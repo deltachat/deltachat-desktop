@@ -21,6 +21,10 @@
         margin: 4px;
       }
     }
+
+    & > .attachment-section {
+      display: flex;
+    }
   }
 
   .lower-bar {

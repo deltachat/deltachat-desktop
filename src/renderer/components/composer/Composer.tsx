@@ -10,7 +10,7 @@ import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { JsonMessage } from '../../../shared/shared-types'
 import { Qoute } from '../message/Message'
-import { DeltaBackend } from '../../delta-remote'
+import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -46,24 +46,36 @@ const Composer = forwardRef<
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
 
-  const { draftState, updateDraftText, removeQuote } = useDraft(
-    chatId,
-    messageInputRef
-  )
+  const {
+    draftState,
+    updateDraftText,
+    removeQuote,
+    addFileToDraft,
+    removeFile,
+    clearDraft,
+  } = useDraft(chatId, messageInputRef)
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
-    if (message.match(/^\s*$/)) {
+    if (message.match(/^\s*$/) && !draftState.file) {
       log.debug(`Empty message: don't send it...`)
       return
     }
     chatStoreDispatch({
       type: 'SEND_MESSAGE',
-      payload: [chatId, replaceColonsSafe(message), null],
+      payload: [
+        chatId,
+        {
+          text: replaceColonsSafe(message),
+          filename: draftState.file,
+          qouteMessageId: draftState.quotedMessageId,
+        } as sendMessageParams,
+      ],
     })
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()
+    clearDraft()
   }
 
   const addFilename = () => {
@@ -71,10 +83,7 @@ const Composer = forwardRef<
       { properties: ['openFile'] },
       (filenames: string[]) => {
         if (filenames && filenames[0]) {
-          chatStoreDispatch({
-            type: 'SEND_MESSAGE',
-            payload: [chatId, '', filenames[0]],
-          })
+          addFileToDraft(filenames[0])
         }
       }
     )
@@ -138,7 +147,13 @@ const Composer = forwardRef<
               <button onClick={removeQuote}>X</button>
             </div>
           )}
-          {/* TODO draft image/video/attachment */}
+          {draftState.file && (
+            <div className='attachment-section'>
+              {/* TODO make this pretty: draft image/video/attachment */}
+              <p>file: {draftState.file}</p>
+              <button onClick={removeFile}>X</button>
+            </div>
+          )}
         </div>
         <div className='lower-bar'>
           <div className='attachment-button'>
@@ -213,13 +228,7 @@ function useDraft(
     DeltaBackend.call('messageList.getDraft', chatId).then(newDraft => {
       if (!newDraft) {
         log.debug('no draft')
-        setDraft(_ => ({
-          chatId,
-          text: '',
-          file: null,
-          quotedMessageId: 0,
-          quotedText: null,
-        }))
+        clearDraft()
         inputRef.current?.setText('')
       } else {
         setDraft(old => ({
@@ -270,9 +279,39 @@ function useDraft(
   }
 
   const removeQuote = () => {
-    setDraft(state => ({ ...state, quotedMessageId: null }))
+    draftRef.current.quotedMessageId = null
+    // setDraft(state => ({ ...state, quotedMessageId: null }))
     saveDraft()
   }
 
-  return { draftState, removeQuote, updateDraftText }
+  const removeFile = () => {
+    draftRef.current.file = null
+    // not sure why the state change does not work...
+    // setDraft(state => ({ ...state, file: null }))
+    saveDraft()
+  }
+
+  const addFileToDraft = (file: string) => {
+    setDraft(state => ({ ...state, file }))
+    saveDraft()
+  }
+
+  const clearDraft = () => {
+    setDraft(_ => ({
+      chatId,
+      text: '',
+      file: null,
+      quotedMessageId: 0,
+      quotedText: null,
+    }))
+  }
+
+  return {
+    draftState,
+    removeQuote,
+    updateDraftText,
+    addFileToDraft,
+    removeFile,
+    clearDraft,
+  }
 }

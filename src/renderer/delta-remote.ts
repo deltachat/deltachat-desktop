@@ -17,6 +17,16 @@ import {
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
 
+export type sendMessageParams = {
+  text?: string | null
+  filename?: string
+  location?: {
+    lat: number
+    lng: number
+  }
+  qouteMessageId?: number
+}
+
 class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'updateBlockedContacts'): Promise<void>
@@ -207,15 +217,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.sendMessage',
     chatId: number,
-    params: {
-      text?: string | null
-      filename?: string
-      location?: {
-        lat: number
-        lng: number
-      }
-      qouteMessageId?: number
-    }
+    params: sendMessageParams
   ): Promise<
     [
       number,
