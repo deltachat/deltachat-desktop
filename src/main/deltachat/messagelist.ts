@@ -12,6 +12,7 @@ import {
   MessageType,
   MessageSearchResult,
   MessageTypeAttachment,
+  msgStatus,
 } from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(
@@ -168,7 +169,7 @@ export default class DCMessageList extends SplitOut {
   }
 }
 
-function convertMessageStatus(s: number) {
+function convertMessageStatus(s: number): msgStatus {
   switch (s) {
     case C.DC_STATE_IN_FRESH:
       return 'sent'

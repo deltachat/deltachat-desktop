@@ -1,10 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { MessageWrapper } from './MessageWrapper'
-import {
-  useChatStore,
-  ChatStoreState,
-  ChatStoreDispatch,
-} from '../../stores/chat'
+import { useChatStore, ChatStoreState } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
 import moment from 'moment'
@@ -29,11 +25,9 @@ const messageIdsToShow = (
 export default function MessageList({
   chat,
   refComposer,
-  locationStreamingEnabled,
 }: {
   chat: ChatStoreState
   refComposer: todo
-  locationStreamingEnabled: boolean
 }) {
   const [
     {
@@ -144,9 +138,7 @@ export default function MessageList({
       messageIds={messageIds}
       messages={messages}
       messageListRef={messageListRef}
-      locationStreamingEnabled={locationStreamingEnabled}
       chat={chat}
-      chatStoreDispatch={chatStoreDispatch}
     />
   )
 }
@@ -158,9 +150,7 @@ export const MessageListInner = React.memo(
     messageIds: number[]
     messages: ChatStoreState['messages']
     messageListRef: todo
-    locationStreamingEnabled: boolean
     chat: ChatStoreState
-    chatStoreDispatch: ChatStoreDispatch
   }) => {
     const {
       onScroll,
@@ -168,9 +158,8 @@ export const MessageListInner = React.memo(
       messageIds,
       messages,
       messageListRef,
-      locationStreamingEnabled,
+
       chat,
-      chatStoreDispatch,
     } = props
 
     const _messageIdsToShow = messageIdsToShow(
@@ -179,6 +168,9 @@ export const MessageListInner = React.memo(
     )
 
     let specialMessageIdCounter = 0
+
+    const conversationType: 'group' | 'direct' =
+      chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -202,9 +194,7 @@ export const MessageListInner = React.memo(
               <MessageWrapper
                 key={messageId}
                 message={message as MessageType}
-                locationStreamingEnabled={locationStreamingEnabled}
-                chat={chat}
-                chatStoreDispatch={chatStoreDispatch}
+                conversationType={conversationType}
               />
             )
           })}
@@ -217,8 +207,7 @@ export const MessageListInner = React.memo(
       prevProps.messageIds === nextProps.messageIds &&
       prevProps.messages === nextProps.messages &&
       prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.locationStreamingEnabled === nextProps.locationStreamingEnabled
+        nextProps.oldestFetchedMessageIndex
 
     return areEqual
   }

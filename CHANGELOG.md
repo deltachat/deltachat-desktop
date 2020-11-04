@@ -10,6 +10,9 @@
   (this is useful when importing a backup of an account you already have and can't distinguish which is the old account and which is the imported one)
 - Add context menu to gallery
 - Option for packagers to disable asar (`NO_ASAR=true npm run pack:generate_config`).
+- Added context menu for info messages
+- Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
+- Show sending indicator for outgoing info messages #1867
 
 ### Changed
 - Change "More info" translation to "Message Details"
@@ -19,6 +22,7 @@
 - Own Context Menu Implementation that makes development easier
 - Update translations
 - Update deltachat-node to v1.47.0
+- hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 
 ## Fixed
 

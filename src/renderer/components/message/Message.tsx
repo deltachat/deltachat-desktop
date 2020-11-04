@@ -1,5 +1,11 @@
-import { onDownload, openAttachmentInShell } from './messageFunctions'
-import React, { useRef, useContext } from 'react'
+import {
+  onDownload,
+  openAttachmentInShell,
+  forwardMessage,
+  deleteMessage,
+  openMessageInfo,
+} from './messageFunctions'
+import React, { useContext, useState, useEffect } from 'react'
 
 import classNames from 'classnames'
 import MessageBody from './MessageBody'
@@ -10,18 +16,17 @@ import {
   MessageType,
   DCContact,
   MessageTypeAttachment,
+  msgStatus,
 } from '../../../shared/shared-types'
 import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
-import { joinCall } from '../helpers/ChatMethods'
+import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
+import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
+import { DeltaBackend } from '../../delta-remote'
 
 const log = getLogger('renderer/message')
-
-const { openExternal } = window.electron_functions
-
-type msgStatus = 'error' | 'sending' | 'draft' | 'delivered' | 'read' | ''
 
 const Avatar = (
   contact: DCContact,
@@ -97,22 +102,17 @@ const Author = (
 }
 
 const InlineMenu = (
-  MenuRef: todo,
   showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-  triggerId: string,
-  props: {
-    attachment: MessageTypeAttachment
-    message: MessageType | { msg: null }
-    // onReply
-    viewType: number
-  }
+  attachment: MessageTypeAttachment,
+  message: MessageType | { msg: null },
+  // onReply
+  viewType: number
 ) => {
-  const { attachment, message, /*onReply,*/ viewType } = props
   const tx = useTranslationFunction()
 
   return (
     <div className='message-buttons'>
-      {attachment && viewType !== 23 && (
+      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
         <div
           onClick={onDownload.bind(null, message.msg)}
           role='button'
@@ -142,35 +142,31 @@ function buildContextMenu(
     attachment,
     direction,
     status,
-    onDelete,
     message,
-    text,
     // onReply,
-    onForward,
     // onRetrySend,
-    onShowDetail,
+    text,
   }: {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus
-    onDelete: Function
     message: MessageType | { msg: null }
     text?: string
     // onReply:Function
-    onForward: Function
     // onRetrySend: Function
-    onShowDetail: Function
   },
-  link: string
+  link: string,
+  chatStoreDispatch: ChatStoreDispatch
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  let showRetry = status === 'error' && direction === 'outgoing'
+  const showRetry = status === 'error' && direction === 'outgoing'
+  const showAttachmentOptions = attachment && !message.msg.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
 
   return [
-    attachment &&
+    showAttachmentOptions &&
       isGenericAttachment(attachment) && {
         label: tx('open_attachment'),
         action: openAttachmentInShell.bind(null, message.msg),
@@ -192,7 +188,7 @@ function buildContextMenu(
             navigator.clipboard.writeText(text)
           },
         },
-    attachment && {
+    showAttachmentOptions && {
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
@@ -202,11 +198,11 @@ function buildContextMenu(
     // },
     {
       label: tx('menu_forward'),
-      action: onForward,
+      action: forwardMessage.bind(null, message),
     },
     {
       label: tx('menu_message_details'),
-      action: onShowDetail,
+      action: openMessageInfo.bind(null, message),
     },
     // showRetry && {
     //   label:tx('retry_send'),
@@ -214,64 +210,48 @@ function buildContextMenu(
     // },
     {
       label: tx('delete_message_desktop'),
-      action: onDelete,
+      action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
     },
   ]
 }
 
 const Message = (props: {
-  direction: 'incoming' | 'outgoing'
-  id: number
-  timestamp: number
-  viewType: number
   conversationType: 'group' | 'direct'
   message: MessageType
-  text?: string
-  disableMenu?: boolean
-  status: msgStatus
-  attachment: MessageTypeAttachment
-  onContactClick: (contact: DCContact) => void
-  onClickMessageBody: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void
-  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-  padlock: boolean
-  onDelete: () => void
-  onForward: () => void
   /* onRetrySend */
 }) => {
+  const { conversationType, message } = props
   const {
-    direction,
     id,
-    timestamp,
-    viewType,
-    conversationType,
-    message,
-    text,
-    disableMenu,
+    direction,
     status,
+    viewType,
+    text,
+    hasLocation,
     attachment,
-    onContactClick,
-    onClickMessageBody,
-    onShowDetail,
-  } = props
+    isSetupmessage,
+  } = message.msg
   const tx = useTranslationFunction()
 
-  const authorAddress = message.contact.address
-
-  // This id is what connects our triple-dot click with our associated pop-up menu.
-  //   It needs to be unique.
-  const triggerId = String(id || `${authorAddress}-${timestamp}`)
-
-  const MenuRef = useRef(null)
-
-  const { openContextMenu } = useContext(ScreenContext)
+  const screenContext = useContext(ScreenContext)
+  const { openContextMenu, openDialog } = screenContext
+  const { chatStoreDispatch } = useChatStore2()
 
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
     const link: string = (event.target as any).href || ''
-    const items = buildContextMenu(props, link)
+    const items = buildContextMenu(
+      {
+        attachment,
+        direction,
+        status,
+        message,
+        text,
+      },
+      link,
+      chatStoreDispatch
+    )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
@@ -281,10 +261,76 @@ const Message = (props: {
     })
   }
 
-  const menu = !disableMenu && InlineMenu(MenuRef, showMenu, triggerId, props)
+  // Info Message
+  if (message.isInfo)
+    return (
+      <div className='info-message' onContextMenu={showMenu}>
+        <p>
+          {text}
+          {direction === 'outgoing' &&
+            (status === 'sending' || status === 'error') && (
+              <div
+                className={classNames('status-icon', status)}
+                aria-label={tx(`a11y_delivery_status_${status}`)}
+              />
+            )}
+        </p>
+      </div>
+    )
+
+  // Normal Message
+  const onContactClick = async (contact: DCContact) => {
+    openViewProfileDialog(screenContext, contact.id)
+  }
+
+  let onClickMessageBody
+  const isDeadDrop = message.msg.chatId === C.DC_CHAT_ID_DEADDROP
+  if (isSetupmessage) {
+    onClickMessageBody = () =>
+      openDialog('EnterAutocryptSetupMessage', { message })
+  } else if (isDeadDrop) {
+    onClickMessageBody = () => {
+      openDialog('DeadDrop', message)
+    }
+  }
+
+  const menu = InlineMenu(showMenu, attachment, message, viewType)
+
+  let content
+  if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
+    content = (
+      <div dir='auto' className='text'>
+        <div className='call-inc-text'>
+          <b>{tx('videochat_invitation')}</b>
+          <div>
+            <button
+              className='phone-accept-button'
+              onClick={joinCall.bind(null, screenContext, id)}
+            >
+              {direction === 'incoming' ? tx('join') : tx('rejoin')}
+            </button>
+          </div>
+          {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
+            tx('videochat_will_open_in_your_browser')}
+        </div>
+      </div>
+    )
+  } else {
+    content = (
+      <div dir='auto' className='text'>
+        {message.msg.isSetupmessage ? (
+          tx('autocrypt_asm_click_body')
+        ) : (
+          <MessageBody text={text || ''} />
+        )}
+      </div>
+    )
+  }
 
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
+
+  const hasQoute = message.msg.quotedText !== null
 
   return (
     <div
@@ -312,27 +358,38 @@ const Message = (props: {
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
           })}
-          onClick={props.onClickMessageBody}
+          onClick={onClickMessageBody}
         >
-          <Attachment
-            {...{
-              attachment,
-              text,
-              conversationType,
-              direction,
-              message,
-            }}
+          {hasQoute && (
+            <Qoute
+              quotedText={message.msg.quotedText}
+              quotedMessageId={message.msg.quotedMessageId}
+            />
+          )}
+          {attachment && !isSetupmessage && (
+            <Attachment
+              {...{
+                attachment,
+                text,
+                conversationType,
+                direction,
+                message,
+              }}
+            />
+          )}
+          {content}
+          {longMessage && (
+            <button onClick={openMessageInfo.bind(null, message)}>...</button>
+          )}
+          <MessageMetaData
+            attachment={!isSetupmessage && attachment}
+            direction={direction}
+            status={status}
+            text={text}
+            hasLocation={hasLocation}
+            timestamp={message.msg.sentAt}
+            padlock={message.msg.showPadlock}
           />
-
-          <div dir='auto' className='text'>
-            {message.msg.isSetupmessage ? (
-              tx('autocrypt_asm_click_body')
-            ) : (
-              <MessageBody text={text || ''} />
-            )}
-          </div>
-          {longMessage && <button onClick={onShowDetail}>...</button>}
-          <MessageMetaData {...props} />
         </div>
       </div>
     </div>
@@ -341,81 +398,42 @@ const Message = (props: {
 
 export default Message
 
-export const CallMessage = (props: {
-  direction: 'incoming' | 'outgoing'
-  id: number
-  timestamp: number
-  viewType: number
-  conversationType: 'group' | 'direct'
-  message: MessageType
-  text?: string
-  disableMenu?: boolean
-  status: msgStatus
-  attachment: MessageTypeAttachment
-  onContactClick: (contact: DCContact) => void
-  onClickMessageBody: (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void
-  onShowDetail: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-  padlock: boolean
-  onDelete: () => void
-  onForward: () => void
+const Qoute = ({
+  quotedText,
+  quotedMessageId,
+}: {
+  quotedText: string | null
+  quotedMessageId: number
 }) => {
-  const {
-    direction,
-    conversationType,
-    message,
-    status,
-    onContactClick,
-    id,
-  } = props
-  const tx = window.static_translate
+  const [message, setMessage] = useState<MessageType>(null)
 
-  const screenContext = useContext(ScreenContext)
+  useEffect(() => {
+    if (quotedMessageId) {
+      DeltaBackend.call('messageList.getMessage', quotedMessageId).then(msg => {
+        if (msg.msg !== null) {
+          setMessage(msg as MessageType)
+        }
+      })
+    }
+  }, [quotedMessageId])
 
-  const openCall = (messageId: number) => {
-    joinCall(screenContext, messageId)
-  }
-
-  return (
-    <div
-      className={classNames(
-        'message',
-        direction,
-        { error: status === 'error' },
-        { forwarded: message.msg.isForwarded }
-      )}
-    >
-      {conversationType === 'group' &&
-        direction === 'incoming' &&
-        Avatar(message.contact, onContactClick)}
-      <div className='msg-container'>
-        {message.msg.isForwarded && (
-          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
-        )}
-        {direction === 'incoming' &&
-          conversationType === 'group' &&
-          Author(message.contact, onContactClick)}
-        <div className={classNames('msg-body')}>
-          <div dir='auto' className='text'>
-            <div className='call-inc-text'>
-              <b>{tx('videochat_invitation')}</b>
-              <div>
-                <button
-                  className='phone-accept-button'
-                  onClick={openCall.bind(null, id)}
-                >
-                  {direction === 'incoming' ? tx('join') : tx('rejoin')}
-                </button>
-              </div>
-              {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-                tx('videochat_will_open_in_your_browser')}
-            </div>
-          </div>
-
-          <MessageMetaData {...props} />
+  if (quotedMessageId !== 0 && message) {
+    return (
+      <div
+        className='qoute has-message'
+        style={{ borderLeftColor: message.contact.color }}
+      >
+        <div className='qoute-author' style={{ color: message.contact.color }}>
+          {message.contact.displayName}
         </div>
+        <p>{quotedText}</p>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div className='qoute'>
+        <p>{quotedText}</p>
+      </div>
+    )
+  }
 }
