@@ -13,10 +13,10 @@
   }
 
   .upper-bar {
-    &>.quote-section {
+    & > .quote-section {
       display: flex;
 
-      &>.qoute {
+      & > .qoute {
         // this is just overwrites for the qoute styles defined in _message.scss
         margin: 4px;
       }
@@ -32,7 +32,7 @@
       .bp3-button.bp3-minimal {
         width: 40px;
         height: 40px;
-    
+
         &:hover {
           background: none;
           cursor: pointer;
@@ -52,7 +52,7 @@
       &:hover {
         cursor: pointer;
       }
-    
+
       span {
         display: block;
         width: 25px;
@@ -72,11 +72,11 @@
       background-color: var(--composerSendButton);
       border-radius: 180px;
       cursor: pointer;
-    
+
       &:focus {
         outline: none;
       }
-    
+
       button {
         height: 24px;
         width: 24px;
@@ -88,7 +88,7 @@
         background-position: 3px 1px;
         background-size: contain;
         vertical-align: middle;
-    
+
         &:focus {
           outline: none;
         }
@@ -107,24 +107,18 @@
       overflow-y: hidden;
       background-color: var(--composerBg);
       color: var(--composerText);
-    
+
       &::placeholder {
         color: var(--composerPlaceholderText);
       }
-    
+
       &:focus {
         outline: none;
       }
-    
+
       &.scroll {
         overflow-y: scroll;
       }
     }
-    
-
   }
 }
-
-
-
-
