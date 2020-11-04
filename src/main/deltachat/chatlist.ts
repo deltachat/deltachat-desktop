@@ -6,6 +6,7 @@ import {
   JsonChat,
   JsonContact,
   FullChat,
+  JsonMessage,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
 
@@ -139,9 +140,9 @@ export default class DCChatList extends SplitOut {
     return rawChat.toJson()
   }
 
-  async _getDraft(chatId: number) {
+  async _getDraft(chatId: number):Promise<JsonMessage|null> {
     const draft = this._dc.getDraft(chatId)
-    return draft ? draft.getText() : ''
+    return draft ? draft.toJson() : null
   }
 
   async _getChatContactIds(chatId: number) {

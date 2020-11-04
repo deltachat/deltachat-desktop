@@ -401,7 +401,7 @@ const Message = (props: {
 
 export default Message
 
-const Qoute = ({
+export const Qoute = ({
   quotedText,
   quotedMessageId,
 }: {

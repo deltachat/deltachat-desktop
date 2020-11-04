@@ -8,6 +8,7 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
+import { JsonMessage } from '../../../shared/shared-types'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -32,7 +33,7 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     chatId: number
-    draft: string
+    draft: JsonMessage | null
     setComposerSize: (size: number) => void
   }
 >((props, ref) => {
@@ -125,24 +126,12 @@ const Composer = forwardRef<
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
           <div className='quote-section'>
-            <div
-              className='qoute has-message'
-              style={{ borderLeftColor: 'rgb(96, 200, 77)' }}
-            >
-              <div
-                className='qoute-author'
-                style={{ color: 'rgb(96, 200, 77)' }}
-              >
-                holger
-              </div>
-              <p>
-                Curabitur et erat leo. Cras a elit suscipit, dictum ligula non,
-                accumsan purus. Ut eu diam velit. Nullam convallis interdum
-                pellentesque. Suspendisse vitae odio mollis, convallis ex ut,
-                efficitur nisl. In porttitor dui eget justo finibus, ut
-                malesuada odio gravida. Integer nisi felis, fermentum id est in,
-              </p>
-            </div>
+            {hasQoute && (
+              <Qoute
+                quotedText={message.msg.quotedText}
+                quotedMessageId={message.msg.quotedMessageId}
+              />
+            )}
             <button>X</button>
           </div>
           {/* TODO draft image/video/attachment */}
@@ -164,7 +153,7 @@ const Composer = forwardRef<
                 sendMessage={sendMessage}
                 setComposerSize={props.setComposerSize}
                 chatId={chatId}
-                draft={draft}
+                draft={draft?.text || ''}
               />
             )}
           </SettingsContext.Consumer>

@@ -17,15 +17,39 @@ import {
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
-    text: string,
-    filename: string,
-    location: { lat: number; lng: number }
+    {
+      text,
+      filename,
+      location,
+      qouteMessageId,
+    }: {
+      text?: string
+      filename?: string
+      location?: { lat: number; lng: number }
+      qouteMessageId?: number
+    }
   ): [number, MessageType | { msg: null }] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
+
+    if (qouteMessageId) {
+      const qoutedMessage = this._dc.getMessage(qouteMessageId)
+      if (!qoutedMessage) {
+        log.error('sendMessage: Message to qoute not found')
+      } else {
+        msg.setQuote(qoutedMessage)
+      }
+    }
+
+    console.log('TTTT', {
+      filename,
+      nfilename: msg.getFile(),
+      msg: msg.toJson(),
+    })
+
     const messageId = this._dc.sendMessage(chatId, msg)
     return [messageId, this.getMessage(messageId)]
   }
@@ -50,11 +74,28 @@ export default class DCMessageList extends SplitOut {
     return this._dc.getMessageInfo(msgId)
   }
 
-  setDraft(chatId: number, msgText: string) {
-    const msg = this._dc.messageNew()
-    msg.setText(msgText)
+  setDraft(
+    chatId: number,
+    {
+      text,
+      filename,
+      qouteMessageId,
+    }: { text?: string; filename?: string; qouteMessageId?: number }
+  ) {
+    const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
+    const draft = this._dc.messageNew(viewType)
+    if (filename) draft.setFile(filename, undefined)
+    if (text) draft.setText(text)
+    if (qouteMessageId) {
+      const qoutedMessage = this._dc.getMessage(qouteMessageId)
+      if (!qoutedMessage) {
+        log.error('setDraftQoute: Message to qoute not found')
+      } else {
+        draft.setQuote(qoutedMessage)
+      }
+    }
 
-    this._dc.setDraft(chatId, msg)
+    this._dc.setDraft(chatId, draft)
   }
 
   messageIdToJson(id: number) {

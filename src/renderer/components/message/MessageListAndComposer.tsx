@@ -76,7 +76,7 @@ export default function MessageListAndComposer({
       cb: (yes: boolean) =>
         yes &&
         sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chat.id, null, path)
+          DeltaBackend.call('messageList.sendMessage', chat.id, {filename: path})
         ),
     })
   }

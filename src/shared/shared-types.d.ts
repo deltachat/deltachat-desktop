@@ -139,7 +139,7 @@ export interface FullChat {
   isGroup: boolean
   isDeaddrop: boolean
   isDeviceChat: boolean
-  draft: string
+  draft: JsonMessage | null
   selfInGroup: boolean
   muted: boolean
   ephemeralTimer: number

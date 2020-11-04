@@ -206,11 +206,14 @@ class DeltaRemote {
   call(
     fnName: 'messageList.sendMessage',
     chatId: number,
-    text: string | null,
-    filename?: string,
-    location?: {
-      lat: number
-      lng: number
+    params: {
+      text?: string | null
+      filename?: string
+      location?: {
+        lat: number
+        lng: number
+      }
+      qouteMessageId?: number
     }
   ): Promise<
     [
@@ -241,7 +244,11 @@ class DeltaRemote {
   call(
     fnName: 'messageList.setDraft',
     chatId: number,
-    msgText: string
+    {
+      text,
+      filename,
+      qouteMessageId,
+    }: { text?: string; filename?: string; qouteMessageId?: number }
   ): Promise<void>
   call(
     fnName: 'messageList.messageIdToJson',
