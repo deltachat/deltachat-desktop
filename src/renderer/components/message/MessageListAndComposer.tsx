@@ -105,7 +105,6 @@ export default function MessageListAndComposer({
   const settings = useContext(SettingsContext).desktopSettings
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
-    gridTemplateRows: `auto ${state.composerSize}px`,
   }
   if (settings['chatViewBgImg']) {
     if (

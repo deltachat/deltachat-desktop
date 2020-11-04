@@ -160,13 +160,13 @@ const Composer = forwardRef<
           </div>
         </div>
         {showEmojiPicker && (
-            <EmojiAndStickerPicker
-              chatId={chatId}
-              ref={emojiAndStickerRef}
-              onEmojiSelect={onEmojiSelect}
-              setShowEmojiPicker={setShowEmojiPicker}
-            />
-          )}
+          <EmojiAndStickerPicker
+            chatId={chatId}
+            ref={emojiAndStickerRef}
+            onEmojiSelect={onEmojiSelect}
+            setShowEmojiPicker={setShowEmojiPicker}
+          />
+        )}
       </div>
     )
   }
