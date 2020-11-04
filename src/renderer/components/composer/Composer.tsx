@@ -46,7 +46,10 @@ const Composer = forwardRef<
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
 
-  const { draftState, updateDraftText } = useDraft(chatId, messageInputRef)
+  const { draftState, updateDraftText, removeQuote } = useDraft(
+    chatId,
+    messageInputRef
+  )
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
@@ -126,15 +129,15 @@ const Composer = forwardRef<
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
-          <div className='quote-section'>
-            {draftState.quotedText !== null && (
+          {draftState.quotedText !== null && (
+            <div className='quote-section'>
               <Qoute
                 quotedText={draftState.quotedText}
                 quotedMessageId={draftState.quotedMessageId}
               />
-            )}
-            <button>X</button>
-          </div>
+              <button onClick={removeQuote}>X</button>
+            </div>
+          )}
           {/* TODO draft image/video/attachment */}
         </div>
         <div className='lower-bar'>
@@ -194,7 +197,6 @@ function useDraft(
   chatId: number,
   inputRef: React.MutableRefObject<ComposerMessageInput>
 ) {
-  const [startingText, setStartingText] = useState('')
   const [draftState, setDraft] = useState<draftObject>({
     chatId,
     text: '',
@@ -267,5 +269,10 @@ function useDraft(
     }
   }
 
-  return { draftState, startingText, updateDraftText }
+  const removeQuote = () => {
+    setDraft(state => ({ ...state, quotedMessageId: null }))
+    saveDraft()
+  }
+
+  return { draftState, removeQuote, updateDraftText }
 }
