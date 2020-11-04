@@ -124,7 +124,28 @@ const Composer = forwardRef<
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
-          
+          <div className='quote-section'>
+            <div
+              className='qoute has-message'
+              style={{ borderLeftColor: 'rgb(96, 200, 77)' }}
+            >
+              <div
+                className='qoute-author'
+                style={{ color: 'rgb(96, 200, 77)' }}
+              >
+                holger
+              </div>
+              <p>
+                Curabitur et erat leo. Cras a elit suscipit, dictum ligula non,
+                accumsan purus. Ut eu diam velit. Nullam convallis interdum
+                pellentesque. Suspendisse vitae odio mollis, convallis ex ut,
+                efficitur nisl. In porttitor dui eget justo finibus, ut
+                malesuada odio gravida. Integer nisi felis, fermentum id est in,
+              </p>
+            </div>
+            <button>X</button>
+          </div>
+          {/* TODO draft image/video/attachment */}
         </div>
         <div className='lower-bar'>
           <div className='attachment-button'>

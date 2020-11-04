@@ -13,10 +13,13 @@
   }
 
   .upper-bar {
-    display: none;
-    .qoute {
-      // this is just overwrites for the qoute styles defined in _message.scss
-      margin: 4px;
+    &>.quote-section {
+      display: flex;
+
+      &>.qoute {
+        // this is just overwrites for the qoute styles defined in _message.scss
+        margin: 4px;
+      }
     }
   }
 
