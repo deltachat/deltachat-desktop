@@ -123,45 +123,50 @@ const Composer = forwardRef<
   } else {
     return (
       <div className='composer' ref={ref}>
-        <div className='composer__attachment-button'>
-          <Button
-            minimal
-            icon='paperclip'
-            onClick={addFilename.bind(this)}
-            aria-label={tx('attachment')}
-          />
+        <div className='upper-bar'>
+          
         </div>
-        <SettingsContext.Consumer>
-          {({ desktopSettings }) => (
-            <ComposerMessageInput
-              ref={messageInputRef}
-              enterKeySends={desktopSettings.enterKeySends}
-              sendMessage={sendMessage}
-              setComposerSize={props.setComposerSize}
-              chatId={chatId}
-              draft={draft}
+        <div className='lower-bar'>
+          <div className='attachment-button'>
+            <Button
+              minimal
+              icon='paperclip'
+              onClick={addFilename.bind(this)}
+              aria-label={tx('attachment')}
             />
-          )}
-        </SettingsContext.Consumer>
-        <div
-          className='composer__emoji-button'
-          ref={pickerButtonRef}
-          onClick={onEmojiIconClick}
-          aria-label={tx('emoji')}
-        >
-          <span />
+          </div>
+          <SettingsContext.Consumer>
+            {({ desktopSettings }) => (
+              <ComposerMessageInput
+                ref={messageInputRef}
+                enterKeySends={desktopSettings.enterKeySends}
+                sendMessage={sendMessage}
+                setComposerSize={props.setComposerSize}
+                chatId={chatId}
+                draft={draft}
+              />
+            )}
+          </SettingsContext.Consumer>
+          <div
+            className='emoji-button'
+            ref={pickerButtonRef}
+            onClick={onEmojiIconClick}
+            aria-label={tx('emoji')}
+          >
+            <span />
+          </div>
+          <div className='send-button-wrapper' onClick={sendMessage}>
+            <button aria-label={tx('menu_send')} />
+          </div>
         </div>
         {showEmojiPicker && (
-          <EmojiAndStickerPicker
-            chatId={chatId}
-            ref={emojiAndStickerRef}
-            onEmojiSelect={onEmojiSelect}
-            setShowEmojiPicker={setShowEmojiPicker}
-          />
-        )}
-        <div className='composer__send-button-wrapper' onClick={sendMessage}>
-          <button aria-label={tx('menu_send')} />
-        </div>
+            <EmojiAndStickerPicker
+              chatId={chatId}
+              ref={emojiAndStickerRef}
+              onEmojiSelect={onEmojiSelect}
+              setShowEmojiPicker={setShowEmojiPicker}
+            />
+          )}
       </div>
     )
   }
