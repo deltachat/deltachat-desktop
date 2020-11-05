@@ -212,7 +212,7 @@ function useDraft(
   chatId: number,
   inputRef: React.MutableRefObject<ComposerMessageInput>
 ) {
-  const [draftState, setDraft] = useState<draftObject>({
+  const [draftState, _setDraft] = useState<draftObject>({
     chatId,
     text: '',
     file: null,
@@ -231,7 +231,7 @@ function useDraft(
         clearDraft()
         inputRef.current?.setText('')
       } else {
-        setDraft(old => ({
+        _setDraft(old => ({
           ...old,
           text: newDraft.text,
           file: newDraft.file,
@@ -258,7 +258,7 @@ function useDraft(
     }
     const newDraft = await DeltaBackend.call('messageList.getDraft', chatId)
     if (newDraft) {
-      setDraft(old => ({
+      _setDraft(old => ({
         ...old,
         file: newDraft.file,
         quotedMessageId: newDraft.quotedMessageId,
@@ -281,25 +281,21 @@ function useDraft(
 
   const removeQuote = () => {
     draftRef.current.quotedMessageId = null
-    // not sure why the state change does not work...
-    // setDraft(state => ({ ...state, quotedMessageId: null }))
     saveDraft()
   }
 
   const removeFile = () => {
     draftRef.current.file = null
-    // not sure why the state change does not work...
-    // setDraft(state => ({ ...state, file: null }))
     saveDraft()
   }
 
   const addFileToDraft = (file: string) => {
-    setDraft(state => ({ ...state, file }))
+    draftRef.current.file = file
     saveDraft()
   }
 
   const clearDraft = () => {
-    setDraft(_ => ({
+    _setDraft(_ => ({
       chatId,
       text: '',
       file: null,
@@ -311,7 +307,6 @@ function useDraft(
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
       draftRef.current.quotedMessageId = messageId
-      //setDraft(state => ({ ...state, quotedMessageId: messageId }))
       saveDraft()
     }
     return () => {

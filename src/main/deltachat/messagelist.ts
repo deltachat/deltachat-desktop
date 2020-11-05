@@ -45,12 +45,6 @@ export default class DCMessageList extends SplitOut {
       }
     }
 
-    console.log('TTTT', {
-      filename,
-      nfilename: msg.getFile(),
-      msg: msg.toJson(),
-    })
-
     const messageId = this._dc.sendMessage(chatId, msg)
     return [messageId, this.getMessage(messageId)]
   }
