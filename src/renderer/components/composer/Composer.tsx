@@ -248,8 +248,8 @@ function useDraft(
     const oldChatId = chatId
     await DeltaBackend.call('messageList.setDraft', chatId, {
       text: draft.text,
-      filename: draft.file,
-      qouteMessageId: draft.quotedMessageId,
+      file: draft.file,
+      quotedMessageId: draft.quotedMessageId,
     })
 
     if (oldChatId !== chatId) {
@@ -272,14 +272,14 @@ function useDraft(
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      draftRef.current.text = text
-      // setDraft(state => ({ ...state, text }))
+      draftRef.current.text = text // don't need to rerender on text change
       saveDraft()
     }
   }
 
   const removeQuote = () => {
     draftRef.current.quotedMessageId = null
+    // not sure why the state change does not work...
     // setDraft(state => ({ ...state, quotedMessageId: null }))
     saveDraft()
   }
@@ -305,6 +305,17 @@ function useDraft(
       quotedText: null,
     }))
   }
+
+  useEffect(() => {
+    window.__setQuoteInDraft = (messageId: number) => {
+      draftRef.current.quotedMessageId = messageId
+      //setDraft(state => ({ ...state, quotedMessageId: messageId }))
+      saveDraft()
+    }
+    return () => {
+      window.__setQuoteInDraft = null
+    }
+  })
 
   return {
     draftState,

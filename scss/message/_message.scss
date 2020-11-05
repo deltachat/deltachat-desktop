@@ -72,7 +72,6 @@
       }
 
       &.reply {
-        display: none;
         /* not used currently */
         @include color-svg('../images/reply.svg', var(--messageButtons));
         user-select: none;

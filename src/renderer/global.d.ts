@@ -33,5 +33,6 @@ declare global {
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
+    __setQuoteInDraft: (msgId: number) => void | null
   }
 }

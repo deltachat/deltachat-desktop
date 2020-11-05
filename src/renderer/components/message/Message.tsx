@@ -4,6 +4,7 @@ import {
   forwardMessage,
   deleteMessage,
   openMessageInfo,
+  setQuoteInDraft,
 } from './messageFunctions'
 import React, { useContext, useState, useEffect } from 'react'
 
@@ -110,23 +111,25 @@ const InlineMenu = (
 ) => {
   const tx = useTranslationFunction()
 
+  if (!message.msg) {
+    return
+  }
+
   return (
     <div className='message-buttons'>
-      {attachment &&
-        viewType !== C.DC_MSG_STICKER &&
-        !message.msg.isSetupmessage && (
-          <div
-            onClick={onDownload.bind(null, message.msg)}
-            role='button'
-            className='msg-button download hide-on-small'
-            aria-label={tx('save')}
-          />
-        )}
-      {/* <div
-        onClick={onReply}
+      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
+        <div
+          onClick={onDownload.bind(null, message.msg)}
+          role='button'
+          className='msg-button download hide-on-small'
+          aria-label={tx('save')}
+        />
+      )}
+      <div
+        onClick={setQuoteInDraft.bind(null, message.msg.id)}
         role='button'
         className='msg-button reply hide-on-small'
-      /> */}
+      />
       <div className='msg-button-wrapper'>
         <div
           role='button'
@@ -145,7 +148,6 @@ function buildContextMenu(
     direction,
     status,
     message,
-    // onReply,
     // onRetrySend,
     text,
   }: {
@@ -154,7 +156,6 @@ function buildContextMenu(
     status: msgStatus
     message: MessageType | { msg: null }
     text?: string
-    // onReply:Function
     // onRetrySend: Function
   },
   link: string,
@@ -195,10 +196,10 @@ function buildContextMenu(
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
-    // {
-    //   label: tx('reply_to_message_desktop'),
-    //   action: onReply
-    // },
+    {
+      label: tx('reply_to_message_desktop'),
+      action: setQuoteInDraft.bind(null, message.msg.id),
+    },
     {
       label: tx('menu_forward'),
       action: forwardMessage.bind(null, message),

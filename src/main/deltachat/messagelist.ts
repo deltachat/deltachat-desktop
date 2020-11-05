@@ -84,16 +84,16 @@ export default class DCMessageList extends SplitOut {
     chatId: number,
     {
       text,
-      filename,
-      qouteMessageId,
-    }: { text?: string; filename?: string; qouteMessageId?: number }
+      file,
+      quotedMessageId,
+    }: { text?: string; file?: string; quotedMessageId?: number }
   ) {
-    const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
+    const viewType = file ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const draft = this._dc.messageNew(viewType)
-    if (filename) draft.setFile(filename, undefined)
+    if (file) draft.setFile(file, undefined)
     if (text) draft.setText(text)
-    if (qouteMessageId) {
-      const qoutedMessage = this._dc.getMessage(qouteMessageId)
+    if (quotedMessageId) {
+      const qoutedMessage = this._dc.getMessage(quotedMessageId)
       if (!qoutedMessage) {
         log.error('setDraftQoute: Message to qoute not found')
       } else {

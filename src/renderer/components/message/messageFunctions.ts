@@ -42,3 +42,11 @@ export function deleteMessage(
 export function openMessageInfo(message: MessageType) {
   window.__openDialog('MessageDetail', { id: message.id })
 }
+
+export function setQuoteInDraft(messageId: number) {
+  if (window.__setQuoteInDraft) {
+    window.__setQuoteInDraft(messageId)
+  } else {
+    throw new Error('window.__setQuoteInDraft undefined')
+  }
+}

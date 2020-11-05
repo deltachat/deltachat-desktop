@@ -253,9 +253,9 @@ class DeltaRemote {
     chatId: number,
     {
       text,
-      filename,
-      qouteMessageId,
-    }: { text?: string; filename?: string; qouteMessageId?: number }
+      file,
+      quotedMessageId,
+    }: { text?: string; file?: string; quotedMessageId?: number }
   ): Promise<void>
   call(
     fnName: 'messageList.messageIdToJson',

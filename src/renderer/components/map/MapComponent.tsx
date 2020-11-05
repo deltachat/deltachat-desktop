@@ -428,7 +428,10 @@ export default class MapComponent extends React.Component<
     const latLng = Object.assign({}, this.poiLocation)
     chatStore.dispatch({
       type: 'SEND_MESSAGE',
-      payload: [selectedChat.id, { text: message, location: latLng } as sendMessageParams],
+      payload: [
+        selectedChat.id,
+        { text: message, location: latLng } as sendMessageParams,
+      ],
     })
 
     if (this.contextMenuPopup) {
