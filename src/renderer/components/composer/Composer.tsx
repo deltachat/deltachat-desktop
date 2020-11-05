@@ -265,6 +265,8 @@ function useDraft(
         quotedText: newDraft.quotedText,
       }))
       // don't load text to prevent bugging back
+    } else {
+      clearDraft()
     }
   }
 
