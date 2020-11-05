@@ -247,7 +247,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getDraft',
     chatId: number
-  ): Promise<JsonMessage | null>
+  ): Promise<MessageType | null>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,

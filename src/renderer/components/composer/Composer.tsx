@@ -8,9 +8,10 @@ import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
 import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
-import { JsonMessage } from '../../../shared/shared-types'
+import { JsonMessage, MessageType } from '../../../shared/shared-types'
 import { Qoute } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
+import { DraftAttachment } from '../attachment/messageAttachment'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -150,7 +151,10 @@ const Composer = forwardRef<
           {draftState.file && (
             <div className='attachment-section'>
               {/* TODO make this pretty: draft image/video/attachment */}
-              <p>file: {draftState.file}</p>
+              {/* <p>file: {draftState.file}</p> */}
+              <div style={{ flexGrow: 1 }}>
+                <DraftAttachment attachment={draftState.attachment} />
+              </div>
               <button onClick={removeFile}>X</button>
             </div>
           )}
@@ -206,7 +210,8 @@ export default Composer
 type draftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
->
+> &
+  Pick<MessageType['msg'], 'attachment'>
 
 function useDraft(
   chatId: number,
@@ -216,6 +221,7 @@ function useDraft(
     chatId,
     text: '',
     file: null,
+    attachment: null,
     quotedMessageId: 0,
     quotedText: null,
   })
@@ -233,12 +239,13 @@ function useDraft(
       } else {
         _setDraft(old => ({
           ...old,
-          text: newDraft.text,
-          file: newDraft.file,
-          quotedMessageId: newDraft.quotedMessageId,
-          quotedText: newDraft.quotedText,
+          text: newDraft.msg.text,
+          file: newDraft.msg.file,
+          attachment: newDraft.msg.attachment,
+          quotedMessageId: newDraft.msg.quotedMessageId,
+          quotedText: newDraft.msg.quotedText,
         }))
-        inputRef.current?.setText(newDraft.text)
+        inputRef.current?.setText(newDraft.msg.text)
       }
     })
   }, [chatId])
@@ -260,9 +267,10 @@ function useDraft(
     if (newDraft) {
       _setDraft(old => ({
         ...old,
-        file: newDraft.file,
-        quotedMessageId: newDraft.quotedMessageId,
-        quotedText: newDraft.quotedText,
+        file: newDraft.msg.file,
+        attachment: newDraft.msg.attachment,
+        quotedMessageId: newDraft.msg.quotedMessageId,
+        quotedText: newDraft.msg.quotedText,
       }))
       // don't load text to prevent bugging back
     } else {

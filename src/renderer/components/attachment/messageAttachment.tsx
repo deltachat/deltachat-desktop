@@ -154,3 +154,51 @@ export default function Attachment({
     )
   }
 }
+
+export function DraftAttachment({ attachment }: {attachment:MessageTypeAttachment}) {
+  if (!attachment) {
+    return null
+  }
+  if (isImage(attachment)) {
+    return (
+      <div className={classNames('message-attachment-media')}>
+        <img className='attachment-content' src={attachment.url} />
+      </div>
+    )
+  } else if (isVideo(attachment)) {
+    return (
+      <div className={classNames('message-attachment-media')}>
+        <video className='attachment-content' src={attachment.url} controls />
+      </div>
+    )
+  } else if (isAudio(attachment)) {
+    return (
+      <audio controls className={classNames('message-attachment-audio')}>
+        <source src={attachment.url} />
+      </audio>
+    )
+  } else {
+    const { fileName, fileSize, contentType } = attachment
+    const extension = getExtension(attachment)
+    return (
+      <div className={classNames('message-attachment-generic')}>
+        <div
+          className='file-icon'
+          draggable='true'
+          onDragStart={dragAttachmentOut.bind(null, attachment)}
+          title={contentType}
+        >
+          {extension ? (
+            <div className='file-extension'>
+              {contentType === 'application/octet-stream' ? '' : extension}
+            </div>
+          ) : null}
+        </div>
+        <div className='text-part'>
+          <div className='name'>{fileName}</div>
+          <div className='size'>{fileSize}</div>
+        </div>
+      </div>
+    )
+  }
+}

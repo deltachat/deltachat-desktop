@@ -69,9 +69,9 @@ export default class DCMessageList extends SplitOut {
     return this._dc.getMessageInfo(msgId)
   }
 
-  async getDraft(chatId: number): Promise<JsonMessage | null> {
+  async getDraft(chatId: number): Promise<MessageType | null> {
     const draft = this._dc.getDraft(chatId)
-    return draft ? draft.toJson() : null
+    return draft ? this._messageToJson(draft) : null
   }
 
   setDraft(
