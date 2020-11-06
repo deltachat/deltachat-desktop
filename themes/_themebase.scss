@@ -71,8 +71,6 @@ $hover-contrast-change: 2%;
   --messageIncommingDate: #{$textPrimary};
   --messageOutgoingBg: #{$bgMessageBubbleOutgoing};
   --messageOutgoingStatusColor: #4caf50; // Message Bubble - Buttons
-  --messageButtons: #8b8e91;
-  --messageButtonsHover: #070c14;
   /* Message Bubble - Metadata */
   --messageStatusIcon: #4caf50;
   --messageStatusIconSending: #62656a;
@@ -81,6 +79,10 @@ $hover-contrast-change: 2%;
   --messageMetadataDate: #62656a;
   --messageMetadataIncomming: rgba(#ffffff, 0.7);
   --messageAuthor: #ffffff;
+  --messageReplyBtn: whitesmoke;
+  --messageReplyBtnHover: white;
+  --messageReplyBtnBg: rgba(0, 0, 0, 0.23);
+  --messageReplyBtnBgHover: rgba(0, 0, 0, 0.33);
   /* Message Bubble - Attachments */
   --messageAttachmentIconExtentionColor: #070c14;
   /* Manual value: This will not get generated in the future */
@@ -160,15 +162,18 @@ $hover-contrast-change: 2%;
   --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
   --videoPlayBtnBorder: #eaeaea;
   --videoPlayBtnBgHover: #eeeeee;
+  --fullScreenMediaButtons: #8b8e91;
 
   @if lightness($bgPrimary) < 50 {
+    // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
-  } @else {
-    --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
-  }
-  @if lightness($bgPrimary) < 50 {
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
+
+    --messageReplyBtnBg: rgba(255, 255, 255, 0.13);
+    --messageReplyBtnBgHover: rgba(255, 255, 255, 0.23);
   } @else {
+    // light theme
+    --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
   }
 }

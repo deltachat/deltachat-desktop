@@ -102,41 +102,22 @@ const Author = (
   )
 }
 
-const InlineMenu = (
-  showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-  attachment: MessageTypeAttachment,
+const FloatingReplyButton = (
   message: MessageType | { msg: null },
-  // onReply
-  viewType: number
+  direction: MessageType['msg']['direction']
 ) => {
-  const tx = useTranslationFunction()
-
   if (!message.msg) {
     return
   }
 
   return (
-    <div className='message-buttons'>
-      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
-        <div
-          onClick={onDownload.bind(null, message.msg)}
-          role='button'
-          className='msg-button download hide-on-small'
-          aria-label={tx('save')}
-        />
-      )}
+    <div className={`reply-button-wrapper ${direction}`}>
       <div
         onClick={setQuoteInDraft.bind(null, message.msg.id)}
         role='button'
-        className='msg-button reply hide-on-small'
-      />
-      <div className='msg-button-wrapper'>
-        <div
-          role='button'
-          onClick={showMenu}
-          className='msg-button menu'
-          aria-label={tx('a11y_message_context_menu_btn_label')}
-        />
+        className='reply'
+      >
+        <div className='reply-icon' />
       </div>
     </div>
   )
@@ -298,8 +279,6 @@ const Message = (props: {
     }
   }
 
-  const menu = InlineMenu(showMenu, attachment, message, viewType)
-
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
     content = (
@@ -350,7 +329,7 @@ const Message = (props: {
       {conversationType === 'group' &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
-      {menu}
+      {FloatingReplyButton(message, direction)}
       <div onContextMenu={showMenu} className='msg-container'>
         {message.msg.isForwarded && (
           <div className='forwarded-indicator'>{tx('forwarded_message')}</div>

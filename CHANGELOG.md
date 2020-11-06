@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-# Added
+### Added
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
 - Add Keyboard navigation between accounts in account selection screen
 - Add the account name to the account deletion-confirmation dialog
@@ -14,6 +14,9 @@
 - Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
 - Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
+- Add draft/staging area
+  - add a description to the files you send
+  - reply to other messages
 
 ### Changed
 - Change "More info" translation to "Message Details"
@@ -27,7 +30,10 @@
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 - localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
 
-## Fixed
+### Removed
+- removed inline message buttons (3dot menu button and download button)
+
+### Fixed
 
 - Fixed missing application icon for linux
 - Fixed unselecting current chat after deleting another chat

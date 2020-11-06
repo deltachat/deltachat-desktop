@@ -5,8 +5,8 @@
   flex-direction: row;
   align-items: stretch;
 
-  &:hover {
-    .message-buttons {
+  li:hover > & {
+    .reply-button-wrapper {
       opacity: 1;
     }
   }
@@ -46,43 +46,44 @@
     }
   }
 
-  .message-buttons {
-    position: absolute;
-    top: 5px;
-    right: -4px;
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
+  .reply-button-wrapper {
     opacity: 0;
-    z-index: 10;
-    user-select: text;
+    position: absolute;
 
-    .msg-button {
-      height: 24px;
-      width: 24px;
-      display: inline-block;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    bottom: 0;
+    z-index: 10;
+
+    &.incoming {
+      right: -52px;
+    }
+
+    &.outgoing {
+      left: -52px;
+      transform: scale(-1, 1);
+    }
+
+    div.reply {
+      padding: 4px;
+      border-radius: 100%;
       cursor: pointer;
+      background-color: var(--messageReplyBtnBg);
 
       &:hover {
-        background-color: var(--messageButtons);
+        background-color: var(--messageReplyBtnBgHover);
+        & > div.reply-icon {
+          background-color: var(--messageReplyBtnHover);
+        }
       }
 
-      &.download {
-        @include color-svg('../images/download.svg', var(--messageButtons));
-      }
-
-      &.reply {
+      div.reply-icon {
+        height: 24px;
+        width: 24px;
+        display: block;
         /* not used currently */
-        @include color-svg('../images/reply.svg', var(--messageButtons));
-        user-select: none;
-      }
-
-      &.menu {
-        @include color-svg-rotated(
-          '../images/ellipsis.svg',
-          var(--messageButtons)
-        );
-        -webkit-mask-position-y: 4px;
+        @include color-svg('../images/reply.svg', var(--messageReplyBtn));
         user-select: none;
       }
     }
@@ -285,17 +286,6 @@
   .status-icon.delivered {
     background-color: white;
   }
-
-  &:hover {
-    .msg-button.menu {
-      background-color: white;
-    }
-
-    .msg-button-wrapper {
-      background-color: #2525258f;
-      border-radius: 4px;
-    }
-  }
 }
 
 .message.error.incoming {
@@ -323,20 +313,6 @@
     .text {
       color: var(--setupMessageText);
     }
-  }
-}
-
-// Media queries (responsiveness)
-// All media query widths have 300px added to account for the left pane
-// And have been tweaked for smoother transitions
-.hide-on-small {
-  display: initial;
-}
-
-@media (max-width: 800px) {
-  // To hide in small breakpoints
-  .hide-on-small {
-    display: none;
   }
 }
 
