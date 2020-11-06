@@ -76,6 +76,13 @@ const Composer = forwardRef<
 
     messageInputRef.current.clearText()
     messageInputRef.current.focus()
+    /* clear it here to make sure the draft is cleared */
+    DeltaBackend.call('messageList.setDraft', chatId, {
+      text: '',
+      file: null,
+      quotedMessageId: null,
+    })
+    /* update the state to reflect the removed draft */
     clearDraft()
   }
 
