@@ -72,11 +72,13 @@ sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ### Mac OS <a id="mac"></a>
 
 ### Homebrew
+
 ```
 brew cask install deltachat
 ```
 
 ### DMG
+
 Simply install the `.dmg` file as you do it with all other software on mac.
 
 If you are getting an openssl error message at the first start up you need to install openssl.
