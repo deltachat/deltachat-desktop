@@ -15,11 +15,11 @@ export async function getLogins(): Promise<DeltaChatAccount[]> {
   var accounts = await readDeltaAccounts(getAccountsPath())
   log.debug('Found following accounts:', accounts)
 
-  const orphantAccounts = await findInvalidDeltaAccounts()
-  if (orphantAccounts.length > 0) {
+  const orphanedAccounts = await findInvalidDeltaAccounts()
+  if (orphanedAccounts.length > 0) {
     log.info(
-      'unconfigured, likely orphant accounts, you may delete them',
-      orphantAccounts
+      'unconfigured, likely orphaned accounts, you may delete them',
+      orphanedAccounts
     )
   }
   return accounts
@@ -56,7 +56,7 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
 
     if (!config) {
       throw new Error(
-        'Account is not configured, it is likely an orphant account (artifact of a failed login in older versions)'
+        'Account is not configured, it is likely an orphaned account (artifact of a failed login in older versions)'
       )
     }
 
