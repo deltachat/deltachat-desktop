@@ -11,9 +11,12 @@ $tab-height: 46px;
     overflow: scroll;
     height: calc(100vh - #{$tab-height} - #{$nav-bar-height});
 
-    & > .item {
-      float: left;
-      padding: 5px 5px 5px 5px;
+    & > .item-container {
+      display: flex;
+      flex-wrap: wrap;
+      & > .item {
+        padding: 5px 5px 5px 5px;
+      }
     }
   }
   .no-media-message {

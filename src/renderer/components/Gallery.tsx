@@ -89,22 +89,25 @@ export default class Gallery extends Component<
           </ul>
           <div className='bp3-tab-panel' role='tabpanel'>
             <div className='gallery'>
-              {medias.length < 1 ? (
-                <p className='no-media-message'>{emptyTabMessage}</p>
-              ) : (
-                ''
-              )}
-              {medias
-                .sort(
-                  ({ msg: a }, { msg: b }) => b.sortTimestamp - a.sortTimestamp
-                )
-                .map(message => {
-                  return (
-                    <div className='item' key={message.msg.id}>
-                      <MediaAttachment message={message} />
-                    </div>
+              <div className='item-container'>
+                {medias.length < 1 ? (
+                  <p className='no-media-message'>{emptyTabMessage}</p>
+                ) : (
+                  ''
+                )}
+                {medias
+                  .sort(
+                    ({ msg: a }, { msg: b }) =>
+                      b.sortTimestamp - a.sortTimestamp
                   )
-                })}
+                  .map(message => {
+                    return (
+                      <div className='item' key={message.msg.id}>
+                        <MediaAttachment message={message} />
+                      </div>
+                    )
+                  })}
+              </div>
             </div>
           </div>
         </div>
