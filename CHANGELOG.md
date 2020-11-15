@@ -13,6 +13,7 @@
 - Added context menu for info messages
 - Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
+- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
 
 ### Changed
 - Change "More info" translation to "Message Details"
