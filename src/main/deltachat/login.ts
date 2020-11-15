@@ -8,6 +8,7 @@ import SplitOut from './splitout'
 import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
+import { remove } from 'fs-extra'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -115,7 +116,13 @@ export default class DCLoginController extends SplitOut {
 
   async newLogin(credentials: Credentials): Promise<DeltaChatAccount> {
     const newAccountPath = getNewAccountPath()
-    await this.login(newAccountPath, credentials)
+    try {
+      await this.login(newAccountPath, credentials)
+    } catch (error) {
+      log.debug("Detected account creation error, deleting unfinished account", newAccountPath)
+      await remove(newAccountPath)
+      throw error
+    }
     const logins = await this.getLogins()
 
     return logins.find(account => account.path === newAccountPath)

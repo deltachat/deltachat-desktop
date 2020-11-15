@@ -35,6 +35,7 @@
 - Fix opening of multiple setting windows via keybinding
 - Fix two issues with the labeled link (see  #1893)
 - Fix refresh of "empty chat" info meassage on chat changes
+- Fix removing incompleted account (see #1952)
 
 ## [1.13.1] - 2020-10-06
 
