@@ -421,10 +421,6 @@ export function ConfigureProgressDialog({
         <>
           <div className='bp3-dialog-body-with-padding'>
             <DeltaDialogContent>
-              <p>
-                An error occured, please check your credentials and if it still
-                doesn't work also fill out the advanced options.
-              </p>
               <p style={{ userSelect: 'auto' }}>{error}</p>
             </DeltaDialogContent>
           </div>
