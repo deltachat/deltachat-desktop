@@ -3,8 +3,9 @@ const { openItem } = window.electron_functions
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import { Message } from 'deltachat-node'
-import { MessageType } from '../../../shared/shared-types'
-import { ChatStoreDispatch } from '../../stores/chat'
+import { MessageType, JsonMessage } from '../../../shared/shared-types'
+import { ChatStoreDispatch, selectChat } from '../../stores/chat'
+import { DeltaBackend } from '../../delta-remote'
 /**
  * json representation of the message object we get from the backend
  */
@@ -49,4 +50,22 @@ export function setQuoteInDraft(messageId: number) {
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
   }
+}
+
+export async function privateReply(msg: JsonMessage) {
+  const quotedMessageId = msg.id
+  const contactId = msg.fromId
+  const chatId = await DeltaBackend.call('contacts.getDMChatId', contactId) // getDMChatId creates the dm chat if it doesn't exist
+
+  // retrieve existing draft to append the quotedMessageId
+  const oldDraft = await DeltaBackend.call('messageList.getDraft', chatId)
+
+  await DeltaBackend.call('messageList.setDraft', chatId, {
+    text: oldDraft?.msg.text,
+    file: oldDraft?.msg.file,
+    quotedMessageId,
+  })
+
+  // select chat
+  selectChat(chatId)
 }

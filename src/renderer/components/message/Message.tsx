@@ -5,6 +5,7 @@ import {
   deleteMessage,
   openMessageInfo,
   setQuoteInDraft,
+  privateReply,
 } from './messageFunctions'
 import React, { useContext, useState, useEffect } from 'react'
 
@@ -129,14 +130,16 @@ function buildContextMenu(
     direction,
     status,
     message,
-    // onRetrySend,
     text,
+    conversationType,
+    // onRetrySend,
   }: {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus
     message: MessageType | { msg: null }
     text?: string
+    conversationType: 'group' | 'direct'
     // onRetrySend: Function
   },
   link: string,
@@ -181,6 +184,12 @@ function buildContextMenu(
       label: tx('reply_to_message_desktop'),
       action: setQuoteInDraft.bind(null, message.msg.id),
     },
+    // privateReply -> only show in groups, don't show on info messages or outgoing messages
+    conversationType === 'group' &&
+      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+        label: tx('reply_privately'),
+        action: privateReply.bind(null, message.msg),
+      },
     {
       label: tx('menu_forward'),
       action: forwardMessage.bind(null, message),
@@ -233,6 +242,7 @@ const Message = (props: {
         status,
         message,
         text,
+        conversationType,
       },
       link,
       chatStoreDispatch
