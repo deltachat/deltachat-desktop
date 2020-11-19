@@ -12,7 +12,10 @@ on:
 
 jobs:
   upload-preview:
-    runs-on: [ubuntu-18.04, macos-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, macos-latest, windows-latest]
     name: Upload Preview
     steps:
     # Preperation
@@ -33,6 +36,7 @@ jobs:
       run: |
         npm install
         npm run build
+        npm run pack:generate_config
     # Packaging and processing
     - name: LINUX electron builder
       if: runner.os == 'Linux'
@@ -59,6 +63,18 @@ jobs:
         mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg
         cd ..
         ls dist/preview
+    - name: WINDOWS electron builder
+      if: runner.os == 'Windows'
+      run: electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
+    - name: WINDOWS renaming / upload Preperation
+      if: runner.os == 'Windows'
+      run: |
+        cd dist
+        dir
+        mkdir preview
+        move deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
+        dir preview
+        cd ..
     # Upload Step
     - name: upload folder
       id: upload

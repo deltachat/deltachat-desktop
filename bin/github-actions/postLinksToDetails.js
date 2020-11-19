@@ -17,7 +17,7 @@ if (process.platform === 'darwin') {
     platform_status["target_url"] = base_url + prId + '.dmg'
 } else if (process.platform === 'win32') {
     platform_status["context"] = 'Windows Preview Build (portable)'
-    platform_status["target_url"] = base_url + prId + '.exe'
+    platform_status["target_url"] = base_url + prId + '.portable.exe'
 } else if (process.platform === 'linux') {
     platform_status["context"] = 'Linux Preview Build'
     platform_status["target_url"] = base_url + prId + '.AppImage'
