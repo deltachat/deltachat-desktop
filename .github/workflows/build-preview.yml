@@ -78,15 +78,12 @@ jobs:
         cd ..
     # Upload Step
     - name: upload folder
-      id: upload
-      uses: horochx/deploy-via-scp@v1.0.1
-      with:
-        user: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        host: "download.delta.chat"
-        port: 22
-        local: "dist/preview/*"
-        remote: "/var/www/html/download/desktop/preview/"
+      shell: bash
+      if: steps.prepare.outputs.uploadtoserver
+      run: |
+        echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
+        chmod 600 __TEMP_INPUT_KEY_FILE
+        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r dist/preview/ "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
       continue-on-error: true
     - name: "Post links to details"
       if: steps.upload.outcome == 'success'
