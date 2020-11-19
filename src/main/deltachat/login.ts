@@ -119,7 +119,10 @@ export default class DCLoginController extends SplitOut {
     try {
       await this.login(newAccountPath, credentials)
     } catch (error) {
-      log.debug("Detected account creation error, deleting unfinished account", newAccountPath)
+      log.debug(
+        'Detected account creation error, deleting unfinished account',
+        newAccountPath
+      )
       await remove(newAccountPath)
       throw error
     }
