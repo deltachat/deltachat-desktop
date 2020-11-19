@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Upload Preview
     steps:
+    # Preperation
     - uses: actions/checkout@v1
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
@@ -23,19 +24,22 @@ jobs:
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
+    # Building JS
     - name: npm install, build, test
       run: |
         npm install
         npm run build
-    - name: electron builder
-      run: npx electron-builder --publish never --linux
-    - name: renaming
+    # Packaging and processing
+    - name: LINUX electron builder
+      run: npx electron-builder --publish never --linux AppImage
+    - name: LINUX renaming / upload Preperation
       run: |
         cd dist
         mkdir preview
         mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
         ls preview
         cd ..
+    # Upload Step
     - name: upload folder
       id: upload
       uses: horochx/deploy-via-scp@v1.0.1
