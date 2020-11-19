@@ -14,14 +14,14 @@ const GITHUB_TOKEN = process.env['GITHUB_TOKEN']
 let platform_status = {}
 
 if (process.platform === 'darwin') {
-  platform_status['context'] = ':package: MacOS Preview Build'
+  platform_status['context'] = '> MacOS Preview Build'
   // platform_status['target_url'] = base_url + prId + '.dmg'
   platform_status['target_url'] = base_url + 'mas-' + prId + '.zip'
 } else if (process.platform === 'win32') {
-  platform_status['context'] = ':package: Windows Preview Build (portable)'
+  platform_status['context'] = '> Windows Preview Build (portable)'
   platform_status['target_url'] = base_url + prId + '.portable.exe'
 } else if (process.platform === 'linux') {
-  platform_status['context'] = ':package: Linux Preview Build'
+  platform_status['context'] = '> Linux Preview Build'
   platform_status['target_url'] = base_url + prId + '.AppImage'
 } else {
   throw new Error('Unsuported platform: ' + process.platform)
@@ -29,7 +29,7 @@ if (process.platform === 'darwin') {
 
 const STATUS_DATA = {
   state: 'success',
-  description: 'Click on "Details" to download →',
+  description: '📦 Click on "Details" to download →',
   context: platform_status.context,
   target_url: platform_status.target_url,
 }
