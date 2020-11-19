@@ -1,5 +1,4 @@
-const GITHUB_EVENT_PATH = process.env['GITHUB_EVENT_PATH']
-const sha = JSON.parse(GITHUB_EVENT_PATH).pull_request.head.sha
+const sha = process.env["GITHUB_SHA"]
 
 const base_url =
   'https://download.delta.chat/desktop/preview/deltachat-desktop-'
