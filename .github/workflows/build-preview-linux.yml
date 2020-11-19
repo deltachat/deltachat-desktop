@@ -50,13 +50,13 @@ jobs:
         remote: "/var/www/html/download/desktop/preview/"
       continue-on-error: true
     - name: "Post links to details"
-      if: ${{ steps.upload.outcome == "success" }}
+      if: steps.upload.outcome == success
       run: node ./bin/github-actions/postLinksToDetails.js ${{ steps.prepare.outputs.prid }} ${{ secrets.GITHUB_TOKEN }}
     - name: "zip result"
-      if: ${{ steps.upload.outcome == "failure" }}
+      if: steps.upload.outcome == failure
       run: zip -r dist/preview.zip dist/preview/
     - name: Upload result to artifacts
-      if: ${{ steps.upload.outcome == "failure" }}
+      if: steps.upload.outcome == failure
       uses: actions/upload-artifact@master
       with:
         name: Files
