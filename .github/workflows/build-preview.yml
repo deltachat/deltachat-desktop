@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-16.04, macos-latest, windows-latest]
+      fail-fast: false
     name: Upload Preview
     steps:
     # Preperation
@@ -65,7 +66,7 @@ jobs:
         ls dist/preview
     - name: WINDOWS electron builder
       if: runner.os == 'Windows'
-      run: electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
+      run: npx electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
     - name: WINDOWS renaming / upload Preperation
       if: runner.os == 'Windows'
       run: |
