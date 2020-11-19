@@ -54,14 +54,14 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         export CSC_IDENTITY_AUTO_DISCOVERY=false
-        npx electron-builder --publish never --mac mas -c.mac.identity=null
+        npx electron-builder --publish never --mac mas -c.mac.identity=null --config.afterSign="" --config.mas.sign=false
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
         mkdir dist/preview
         zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
         cd dist
-        # mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg
+        mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg
         cd ..
         ls dist/preview
     - name: WINDOWS electron builder
