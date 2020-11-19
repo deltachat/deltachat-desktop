@@ -31,7 +31,7 @@ jobs:
         npm run build
     # Packaging and processing
     - name: MAC electron builder
-      run: npx electron-builder --publish never --mac mas
+      run: npx electron-builder --publish never --mac mas -c.mac.identity=null
     - name: MAC renaming / upload Preperation
       run: |
         mkdir dist/preview
