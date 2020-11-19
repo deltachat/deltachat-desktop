@@ -79,7 +79,6 @@ jobs:
     # Upload Step
     - name: upload folder
       shell: bash
-      if: steps.prepare.outputs.uploadtoserver
       run: |
         echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
         chmod 600 __TEMP_INPUT_KEY_FILE
