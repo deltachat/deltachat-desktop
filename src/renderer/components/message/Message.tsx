@@ -132,8 +132,8 @@ function buildContextMenu(
     message,
     text,
     conversationType,
-    // onRetrySend,
-  }: {
+  }: // onRetrySend,
+  {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus

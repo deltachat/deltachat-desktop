@@ -41,7 +41,10 @@
       width: 32px;
       display: inline-block;
       vertical-align: text-bottom;
-      @include color-svg('../images/download.svg', var(--fullScreenMediaButtons));
+      @include color-svg(
+        '../images/download.svg',
+        var(--fullScreenMediaButtons)
+      );
 
       &:hover {
         background-color: var(--fullScreenMediaButtons);

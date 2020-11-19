@@ -155,7 +155,11 @@ export default function Attachment({
   }
 }
 
-export function DraftAttachment({ attachment }: {attachment:MessageTypeAttachment}) {
+export function DraftAttachment({
+  attachment,
+}: {
+  attachment: MessageTypeAttachment
+}) {
   if (!attachment) {
     return null
   }

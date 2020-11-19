@@ -158,15 +158,15 @@ const Composer = forwardRef<
           )}
           {draftState.file && (
             <div>
-            <div className='attachment-section'>
-              {/* TODO make this pretty: draft image/video/attachment */}
-              {/* <p>file: {draftState.file}</p> */}
-              <div style={{ flexGrow: 1 }}>
-                <DraftAttachment attachment={draftState.attachment} />
+              <div className='attachment-section'>
+                {/* TODO make this pretty: draft image/video/attachment */}
+                {/* <p>file: {draftState.file}</p> */}
+                <div style={{ flexGrow: 1 }}>
+                  <DraftAttachment attachment={draftState.attachment} />
+                </div>
+                <button onClick={removeFile}>X</button>
               </div>
-              <button onClick={removeFile}>X</button>
-            </div>
-            <div>{`draftState.viewType ->${draftState.viewType}`}</div>
+              <div>{`draftState.viewType ->${draftState.viewType}`}</div>
             </div>
           )}
         </div>
@@ -222,7 +222,7 @@ type draftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  Pick<MessageType['msg'], 'attachment'|'viewType'>
+  Pick<MessageType['msg'], 'attachment' | 'viewType'>
 
 function useDraft(
   chatId: number,
