@@ -8,8 +8,8 @@
     "rootDir": ".",
     "allowJs": false,
     "esModuleInterop": true,
-    "noUnusedLocals" : true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["./**/*.ts", "./**/*.js"],
   "references": [

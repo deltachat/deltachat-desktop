@@ -1,9 +1,5 @@
 import debounce from 'debounce'
-import electron, {
-  BrowserWindow,
-  Rectangle,
-  EventEmitter,
-} from 'electron'
+import electron, { BrowserWindow, Rectangle, EventEmitter } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
