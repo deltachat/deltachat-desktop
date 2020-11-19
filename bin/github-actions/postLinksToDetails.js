@@ -6,8 +6,8 @@ const base_url =
 const GITHUB_API_URL =
   'https://api.github.com/repos/deltachat/deltachat-desktop/statuses/' + sha
 
-const prId = process.argv[2]
-const GITHUB_TOKEN = process.argv[3]
+const prId = process.env["PR_ID"]
+const GITHUB_TOKEN = process.env["GITHUB_TOKEN"]
 
 
 let platform_status = {}
@@ -16,8 +16,8 @@ if (process.platform === 'darwin') {
     platform_status["context"] = 'MacOS Preview Build'
     platform_status["target_url"] = base_url + prId + '.dmg'
 } else if (process.platform === 'win32') {
-    //TODO
-    
+    platform_status["context"] = 'Windows Preview Build (portable)'
+    platform_status["target_url"] = base_url + prId + '.exe'
 } else if (process.platform === 'linux') {
     platform_status["context"] = 'Linux Preview Build'
     platform_status["target_url"] = base_url + prId + '.AppImage'
