@@ -1,14 +1,18 @@
 # documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
-name: Linux
+name: Preview Builds
 
 on: 
   pull_request:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'README_ASSETS/**'
+      - 'test/**'
+      - '*.md'
+      - '.prettierrc.yml'
 
 jobs:
-  upload-preview-linux:
-    runs-on: ubuntu-18.04
+  upload-preview:
+    runs-on: [ubuntu-18.04, macos-latest]
     name: Upload Preview
     steps:
     # Preperation
@@ -31,14 +35,30 @@ jobs:
         npm run build
     # Packaging and processing
     - name: LINUX electron builder
+      if: runner.os == 'Linux'
       run: npx electron-builder --publish never --linux AppImage
     - name: LINUX renaming / upload Preperation
+      if: runner.os == 'Linux'
       run: |
         cd dist
         mkdir preview
         mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
         ls preview
         cd ..
+    - name: MAC electron builder
+      if: runner.os == 'macOS'
+      run: |
+        export CSC_IDENTITY_AUTO_DISCOVERY=false
+        npx electron-builder --publish never --mac mas dmg -c.mac.identity=null
+    - name: MAC renaming / upload Preperation
+      if: runner.os == 'macOS'
+      run: |
+        mkdir dist/preview
+        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
+        cd dist
+        mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg
+        cd ..
+        ls dist/preview
     # Upload Step
     - name: upload folder
       id: upload
