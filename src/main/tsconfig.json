@@ -7,7 +7,9 @@
     "target": "es6",
     "rootDir": ".",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noUnusedLocals" : true,
+    "noUnusedParameters": true,
   },
   "include": ["./**/*.ts", "./**/*.js"],
   "references": [

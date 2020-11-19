@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
-import { getLogger } from '../../shared/logger'
-const log = getLogger('main/deltachat/burner')
+// import { getLogger } from '../../shared/logger'
+// const log = getLogger('main/deltachat/burner')
 
 import SplitOut from './splitout'
 export default class DCBurnerAccounts extends SplitOut {

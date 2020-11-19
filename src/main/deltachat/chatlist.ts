@@ -1,4 +1,4 @@
-import DeltaChat, { C, Chat, ChatList } from 'deltachat-node'
+import DeltaChat, { C, ChatList } from 'deltachat-node'
 import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
 import {
