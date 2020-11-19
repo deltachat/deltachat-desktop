@@ -94,12 +94,9 @@ jobs:
       env:
        PR_ID: ${{ steps.prepare.outputs.prid }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: "zip result"
-      if: steps.upload.outcome == 'failure'
-      run: zip -r dist/preview.zip dist/preview/
     - name: Upload result to artifacts
       if: steps.upload.outcome == 'failure'
       uses: actions/upload-artifact@master
       with:
-        name: Files
-        path: dist/preview.zip
+        name: ${{ matrix.os }} output
+        path: dist/preview/
