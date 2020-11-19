@@ -24,6 +24,7 @@
 - Update deltachat-node to v1.49.0
 - Update inAppHelp
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
+- localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
 
 ## Fixed
 
