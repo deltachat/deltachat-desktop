@@ -15,7 +15,8 @@ let platform_status = {}
 
 if (process.platform === 'darwin') {
   platform_status['context'] = '📦 MacOS Preview Build'
-  platform_status['target_url'] = base_url + prId + '.dmg'
+  // platform_status['target_url'] = base_url + prId + '.dmg'
+  platform_status['target_url'] = base_url + 'mas-' + prId + '.zip'
 } else if (process.platform === 'win32') {
   platform_status['context'] = '📦 Windows Preview Build (portable)'
   platform_status['target_url'] = base_url + prId + '.portable.exe'
