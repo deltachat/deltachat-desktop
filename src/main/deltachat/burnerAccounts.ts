@@ -11,13 +11,15 @@ export default class DCBurnerAccounts extends SplitOut {
       // mode: 'cors', // no-cors, *cors, same-origin
       // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       // credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'cache-control': 'no-cache',
-      },
+      headers: { 'cache-control': 'no-cache' },
       // referrerPolicy: 'no-referrer', // no-referrer, *client
       // commented out options are due to not being implemented in node-fetch see https://github.com/node-fetch/node-fetch#class-request
     })
-    return response.json() // parses JSON response into native JavaScript objects
+    if (response.ok) {
+      return response.json() // parses JSON response into native JavaScript objects
+    } else {
+      throw await response.text()
+    }
   }
 
   async create(url: string) {

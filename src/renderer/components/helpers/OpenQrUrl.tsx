@@ -123,7 +123,7 @@ export default async function processOpenQrUrl(
     } catch (err) {
       closeProcessDialog()
       window.__openDialog('AlertDialog', {
-        message: tx('import_qr_error') + ' ' + err,
+        message: tx('import_qr_error') + ': ' + err,
         cb: callback,
       })
       return
