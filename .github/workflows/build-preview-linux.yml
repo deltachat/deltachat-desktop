@@ -15,6 +15,8 @@ jobs:
       id: prepare
       run: |
         echo ::set-output name=prid::$(echo "${{ github.ref }}" | cut -d '/' -f3)
+        echo "${{ github.ref }}"
+        echo $(echo "${{ github.ref }}" | cut -d '/' -f3)
     - uses: actions/checkout@v1
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
@@ -37,7 +39,7 @@ jobs:
         ls preview
         cd ..
     - name: upload folder
-      if: ${{ secrets.USERNAME }} # if secret is there upload to server
+      id: upload
       uses: horochx/deploy-via-scp@v1.0.1
       with:
         user: ${{ secrets.USERNAME }}
@@ -46,14 +48,15 @@ jobs:
         port: 22
         local: "dist/preview/*"
         remote: "/var/www/html/download/desktop/preview/"
+      continue-on-error: true
     - name: "Post links to details"
-      if: ${{ secrets.USERNAME }} # if secret is there upload to server
+      if: steps.upload.outcome == "success"
       run: node ./bin/github-actions/postLinksToDetails.js ${{ steps.prepare.outputs.prid }} ${{ secrets.GITHUB_TOKEN }}
     - name: "zip result"
-      if: ${{ !secrets.USERNAME }} # if secret is not there upload to artifact
+      if: steps.upload.outcome == "failure"
       run: zip -r dist/preview.zip dist/preview/
     - name: Upload result to artifacts
-      if: ${{ !secrets.USERNAME }} # if secret is not there upload to artifact
+      if: steps.upload.outcome == "failure"
       uses: actions/upload-artifact@master
       with:
         name: Files
