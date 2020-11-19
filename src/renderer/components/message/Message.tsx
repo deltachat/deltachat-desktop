@@ -112,7 +112,7 @@ const InlineMenu = (
 
   return (
     <div className='message-buttons'>
-      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
+      {attachment && viewType !== C.DC_MSG_STICKER && !message.msg.isSetupmessage && (
         <div
           onClick={onDownload.bind(null, message.msg)}
           role='button'
@@ -338,7 +338,7 @@ const Message = (props: {
       className={classNames(
         'message',
         direction,
-        { 'type-sticker': viewType === 23 },
+        { 'type-sticker': viewType === C.DC_MSG_STICKER },
         { error: status === 'error' },
         { forwarded: message.msg.isForwarded }
       )}
