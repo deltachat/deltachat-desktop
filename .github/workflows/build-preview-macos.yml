@@ -14,13 +14,8 @@ jobs:
     - name: Get Pullrequest ID
       id: prepare
       run: |
-        export PULLREQUEST_ID=$(echo "${{ github.ref }}" | cut -d '/' -f3)
-        export SHA=$(jq .pull_request.head.sha < $GITHUB_EVENT_PATH)
-        export BASE_URL="https://download.delta.chat/desktop/preview/deltachat-desktop-"
-        echo ::set-output name=uploadtoserver::true
-        echo ::set-output name=sha::$SHA
-        echo ::set-output name=base-url::$BASE_URL
-        echo ::set-output name=prid::$PULLREQUEST_ID
+        if [ $(expr length "${{ secrets.USERNAME }}") -gt "1" ]; then echo ::set-output name=uploadtoserver::true ;fi
+        echo ::set-output name=prid::$(echo "${{ github.ref }}" | cut -d '/' -f3)
     - uses: actions/checkout@v1
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
@@ -34,7 +29,7 @@ jobs:
         npm install
         npm run build
     - name: electron builder
-      run: npx electron-builder --mac mas || true
+      run: npx electron-builder --mac mas
     - name: renaming
       run: |
         cd dist
@@ -45,14 +40,14 @@ jobs:
       run: zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas
     - name: upload folder
       if: steps.prepare.outputs.uploadtoserver
-      run: |
-        echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
-        chmod 600 __TEMP_INPUT_KEY_FILE
-        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r dist/preview/ "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "dist/preview/*"
+        remote: "/var/www/html/download/desktop/preview/"
     - name: "Post links to details"
       if: steps.prepare.outputs.uploadtoserver
-      run: |
-        export GITHUB_API_URL=https://api.github.com/repos/deltachat/deltachat-desktop/statuses/${{ steps.prepare.outputs.sha }}
-        export MAS_URL="${{ steps.prepare.outputs.base-url }}mas-${{ steps.prepare.outputs.prid }}.zip"
-        export STATUS_DATA="{\"state\": \"success\", \"description\": \"Download it here:\", \"context\": \"MacOS Preview Build\", \"target_url\": \"${MAS_URL}\"}"
-        curl -f -s -X POST --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --url "$GITHUB_API_URL" --header "content-type: application/json" --data "$STATUS_DATA"
+      run: node ./bin/github-actions/postLinksToDetails.js ${{ steps.prepare.outputs.prid }} ${{ secrets.GITHUB_TOKEN }}
