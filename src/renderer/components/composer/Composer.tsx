@@ -12,6 +12,7 @@ import { JsonMessage, MessageType } from '../../../shared/shared-types'
 import { Qoute } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
+import { C } from 'deltachat-node'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -156,6 +157,7 @@ const Composer = forwardRef<
             </div>
           )}
           {draftState.file && (
+            <div>
             <div className='attachment-section'>
               {/* TODO make this pretty: draft image/video/attachment */}
               {/* <p>file: {draftState.file}</p> */}
@@ -163,6 +165,8 @@ const Composer = forwardRef<
                 <DraftAttachment attachment={draftState.attachment} />
               </div>
               <button onClick={removeFile}>X</button>
+            </div>
+            <div>{`draftState.viewType ->${draftState.viewType}`}</div>
             </div>
           )}
         </div>
@@ -218,7 +222,7 @@ type draftObject = { chatId: number } & Pick<
   JsonMessage,
   'text' | 'file' | 'quotedMessageId' | 'quotedText'
 > &
-  Pick<MessageType['msg'], 'attachment'>
+  Pick<MessageType['msg'], 'attachment'|'viewType'>
 
 function useDraft(
   chatId: number,
@@ -229,6 +233,7 @@ function useDraft(
     text: '',
     file: null,
     attachment: null,
+    viewType: null,
     quotedMessageId: 0,
     quotedText: null,
   })
@@ -249,6 +254,7 @@ function useDraft(
           text: newDraft.msg.text,
           file: newDraft.msg.file,
           attachment: newDraft.msg.attachment,
+          viewType: newDraft.msg.viewType,
           quotedMessageId: newDraft.msg.quotedMessageId,
           quotedText: newDraft.msg.quotedText,
         }))
@@ -276,6 +282,7 @@ function useDraft(
         ...old,
         file: newDraft.msg.file,
         attachment: newDraft.msg.attachment,
+        viewType: newDraft.msg.viewType,
         quotedMessageId: newDraft.msg.quotedMessageId,
         quotedText: newDraft.msg.quotedText,
       }))
@@ -314,6 +321,8 @@ function useDraft(
       chatId,
       text: '',
       file: null,
+      attachment: null,
+      viewType: null,
       quotedMessageId: 0,
       quotedText: null,
     }))
