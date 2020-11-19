@@ -54,7 +54,7 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         export CSC_IDENTITY_AUTO_DISCOVERY=false
-        npx electron-builder --publish never --mac mas -c.mac.identity=null --config.afterSign="" || true
+        npx electron-builder --publish never --mac mas -c.mac.identity=null --config.afterSign=false || true
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
