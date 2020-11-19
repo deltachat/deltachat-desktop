@@ -1,11 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { RadioGroup, Radio, Button, H5 } from '@blueprintjs/core'
+import React, { useContext, useState } from 'react'
+import { H5 } from '@blueprintjs/core'
+import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
-  ScreenContext,
-  SettingsContext,
-  useTranslationFunction,
-} from '../../contexts'
-import DeltaDialog, {
   DeltaDialogBody,
   DeltaDialogContent,
   DeltaDialogFooter,
@@ -15,7 +11,7 @@ import DeltaDialog, {
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import { DeltaBackend } from '../../delta-remote'
-import { SettingsButton, SettingsSelector } from './Settings'
+import { SettingsSelector } from './Settings'
 import { AutodeleteDuration } from '../../../shared/constants'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import classNames from 'classnames'

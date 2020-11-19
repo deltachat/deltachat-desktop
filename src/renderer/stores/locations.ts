@@ -1,6 +1,6 @@
 import { JsonLocations } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
-import { Store, Action } from './store'
+import { Store } from './store'
 
 const { ipcRenderer } = window.electron_functions
 
@@ -27,14 +27,14 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
   locationStore.setState({ ...locationStore.getState(), locations })
 }
 
-const onLocationChange = (evt: any, [chatId]: [number]) => {
+const onLocationChange = (_evt: any, [chatId]: [number]) => {
   const { selectedChat, mapSettings } = locationStore.getState()
   if (selectedChat && chatId === selectedChat.id) {
     getLocations(chatId, mapSettings)
   }
 }
 
-ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (evt, contactId) => {
+ipcRenderer.on('DC_EVENT_LOCATION_CHANGED', (_evt, contactId) => {
   const { selectedChat, mapSettings } = locationStore.getState()
   if (contactId === 0) {
     // this means all locations were deleted

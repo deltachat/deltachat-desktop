@@ -16,8 +16,8 @@ import {
   MessageTypeAttachment,
 } from '../../../shared/shared-types'
 
-const MINIMUM_IMG_HEIGHT = 150
-const MAXIMUM_IMG_HEIGHT = 300
+// const MINIMUM_IMG_HEIGHT = 150
+// const MAXIMUM_IMG_HEIGHT = 300
 
 type AttachmentProps = {
   attachment: MessageTypeAttachment
@@ -54,11 +54,10 @@ export default function Attachment({
   const withContentBelow = withCaption
   const withContentAbove =
     conversationType === 'group' && direction === 'incoming'
-  const dimensions = message.msg.dimensions || {}
+  // const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
-  const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
+  // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
   if (isImage(attachment)) {
-    const isSticker = message.msg.viewType === C.DC_MSG_STICKER
     if (!attachment.url) {
       return (
         <div

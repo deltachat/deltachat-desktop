@@ -86,7 +86,7 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   componentDidUpdate(
-    prevProps: ComposerMessageInputProps,
+    _prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState
   ) {
     if (this.setCursorPosition) {

@@ -1,17 +1,12 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
-import { sendToBackend } from '../../ipc'
-import { openMapDialog } from './ChatMethods'
 import { ConfigureProgressDialog } from '../LoginForm'
 import { Screens } from '../../ScreenController'
 import { DeltaChatAccount } from '../../../shared/shared-types'
-import { C } from 'deltachat-node'
-import { DCInfo } from '../dialogs/About'
 import { QrState } from '../../../shared/constants'
 import { QrCodeResponse } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 import {
-  DeltaDialogBase,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
   DeltaDialogBody,

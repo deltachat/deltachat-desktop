@@ -40,12 +40,12 @@ function ImportBackupProgressDialog({
   const onAll = (eventName: IpcRendererEvent, data1: string, data2: string) => {
     log.debug('ALL core events: ', eventName, data1, data2)
   }
-  const onImexProgress = (evt: any, [progress, _data2]: [number, any]) => {
+  const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
     log.debug('DC_EVENT_IMEX_PROGRESS xxx', progress)
     setImportProgress(progress)
   }
 
-  const onError = (data1: any, data2: string) => {
+  const onError = (_data1: any, data2: string) => {
     setError('DC_EVENT_ERROR: ' + data2)
   }
 
@@ -100,7 +100,7 @@ function ImportBackupProgressDialog({
   )
 }
 
-const ImportButton = function ImportButton(props: any) {
+const ImportButton = function ImportButton(_props: any) {
   const tx = useTranslationFunction()
 
   function onClickImportBackup() {

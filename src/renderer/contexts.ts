@@ -1,21 +1,15 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { DesktopSettings, DeltaChatAccount } from '../shared/shared-types'
-import { getDefaultState } from '../shared/state'
-import ScreenController, { userFeedback, Screens } from './ScreenController'
-import { DialogId } from './components/dialogs/DialogController'
-import { any } from 'prop-types'
-import { DeltaBackend } from './delta-remote'
+import { userFeedback, Screens } from './ScreenController'
 import { getMessageFunction } from '../shared/localize'
 import { showFnType } from './components/ContextMenu'
 
-const noop: Function = () => {}
-
 export const ScreenContext = React.createContext({
-  openDialog: (fnc: any, props?: any) => {},
-  openContextMenu: (...args: Parameters<showFnType>) => {},
-  closeDialog: (name: string) => {},
-  userFeedback: (message: false | userFeedback) => {},
-  changeScreen: (screen: Screens) => {},
+  openDialog: (_fnc: any, _props?: any) => {},
+  openContextMenu: (..._args: Parameters<showFnType>) => {},
+  closeDialog: (_name: string) => {},
+  userFeedback: (_message: false | userFeedback) => {},
+  changeScreen: (_screen: Screens) => {},
   screen: null,
 })
 

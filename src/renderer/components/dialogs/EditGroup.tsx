@@ -6,7 +6,6 @@ import { Card, Classes } from '@blueprintjs/core'
 import {
   DeltaDialogBase,
   DeltaDialogHeader,
-  DeltaDialogFooter,
   DeltaDialogOkCancelFooter,
 } from './DeltaDialog'
 import {
@@ -23,11 +22,7 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import {
-  ChatListItemType,
-  FullChat,
-  JsonContact,
-} from '../../../shared/shared-types'
+import { FullChat, JsonContact } from '../../../shared/shared-types'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']

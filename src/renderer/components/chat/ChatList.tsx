@@ -96,7 +96,6 @@ export default function ChatList(props: {
   } = props
   const isSearchActive = queryStr !== ''
   const queryStrIsEmail = isValidEmail(queryStr)
-  const realOpenContextMenu = useRef(null)
 
   const {
     contactIds,
@@ -196,7 +195,7 @@ export default function ChatList(props: {
     const selectedChatIndex = chatListIds.findIndex(
       ([chatId, _messageId]) => chatId === selectedChatId
     )
-    const [newChatId, _] = chatListIds[selectedChatIndex + 1] || []
+    const [newChatId] = chatListIds[selectedChatIndex + 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -207,7 +206,7 @@ export default function ChatList(props: {
     const selectedChatIndex = chatListIds.findIndex(
       ([chatId, _messageId]) => chatId === selectedChatId
     )
-    const [newChatId, _] = chatListIds[selectedChatIndex - 1] || []
+    const [newChatId] = chatListIds[selectedChatIndex - 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }

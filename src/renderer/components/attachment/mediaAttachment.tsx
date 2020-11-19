@@ -7,7 +7,6 @@ import {
   isAudio,
   getExtension,
   dragAttachmentOut,
-  isDisplayableByFullscreenMedia,
 } from './Attachment'
 import Timestamp from '../conversations/Timestamp'
 import { MessageType } from '../../../shared/shared-types'

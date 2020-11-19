@@ -36,10 +36,10 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
-  openCallWindow(options: BasicWebRTCOptions): void {
+  openCallWindow(_options: BasicWebRTCOptions): void {
     throw new Error('Method not implemented.')
   }
-  openLink(link: string): void {
+  openLink(_link: string): void {
     throw new Error('Method not implemented.')
   }
   initialize(): void {
