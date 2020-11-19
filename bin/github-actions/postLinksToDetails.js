@@ -14,7 +14,7 @@ let platform_status = {}
 
 if (process.platform === 'darwin') {
     platform_status["context"] = 'MacOS Preview Build'
-    platform_status["target_url"] = base_url + 'mas-' + prId + '.zip'
+    platform_status["target_url"] = base_url + prId + '.dmg'
 } else if (process.platform === 'win32') {
     //TODO
     
@@ -38,6 +38,7 @@ var options = {
   "method": "POST",
   "headers": {
     "Content-Type": "application/json",
+    "User-Agent": "github-action ci for deltachat deskop",
     "authorization": "Bearer " + GITHUB_TOKEN
   }
 };
