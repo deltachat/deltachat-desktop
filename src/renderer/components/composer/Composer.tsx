@@ -31,12 +31,12 @@ const insideBoundingRect = (
   )
 }
 
-const QuoteOrDraftRemoveButton = ({onClick} : {onClick: () => void}) => {
+const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       onClick={onClick}
-      aria-label="Clear"
-       className="clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button"
+      aria-label='Clear'
+      className='clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button'
     />
   )
 }
@@ -57,25 +57,23 @@ const Composer = forwardRef<
     clearDraft: () => void
   }
 >((props, ref) => {
-  const { 
+  const {
     isDisabled,
     disabledReason,
     chatId,
     messageInputRef,
-    draftState, 
+    draftState,
     removeQuote,
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraft
+    clearDraft,
   } = props
   const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
-
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()

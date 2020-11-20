@@ -31,7 +31,6 @@ export default function MessageListAndComposer({
     25
   )
 
-
   const messageInputRef = useRef<ComposerMessageInput>()
   const {
     draftState,
