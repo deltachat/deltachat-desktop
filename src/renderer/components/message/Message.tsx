@@ -103,27 +103,6 @@ const Author = (
   )
 }
 
-const FloatingReplyButton = (
-  message: MessageType | { msg: null },
-  direction: MessageType['msg']['direction']
-) => {
-  if (!message.msg) {
-    return
-  }
-
-  return (
-    <div className={`reply-button-wrapper ${direction}`}>
-      <div
-        onClick={setQuoteInDraft.bind(null, message.msg.id)}
-        role='button'
-        className='reply'
-      >
-        <div className='reply-icon' />
-      </div>
-    </div>
-  )
-}
-
 function buildContextMenu(
   {
     attachment,
@@ -325,6 +304,12 @@ const Message = (props: {
 
   const hasQuote = message.msg.quotedText !== null
 
+  const onMessageDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    setQuoteInDraft(message.msg.id)
+    window.getSelection().empty()
+  }
+
   return (
     <div
       onContextMenu={showMenu}
@@ -335,11 +320,11 @@ const Message = (props: {
         { error: status === 'error' },
         { forwarded: message.msg.isForwarded }
       )}
+      onDoubleClick={onMessageDoubleClick}
     >
       {conversationType === 'group' &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
-      {FloatingReplyButton(message, direction)}
       <div onContextMenu={showMenu} className='msg-container'>
         {message.msg.isForwarded && (
           <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
