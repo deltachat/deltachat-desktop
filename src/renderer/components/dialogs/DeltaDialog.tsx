@@ -1,4 +1,4 @@
-import React, { Fragment, useState, PropsWithChildren } from 'react'
+import React, { useState, PropsWithChildren } from 'react'
 import { Dialog, Classes, RadioGroup, Radio } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { DialogProps } from './DialogController'

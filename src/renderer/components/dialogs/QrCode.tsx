@@ -1,23 +1,18 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import {
   DeltaDialogBase,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
   DeltaDialogBody,
   DeltaDialogContent,
-  SmallDialog,
 } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import classNames from 'classnames'
 import qr from 'react-qr-svg'
 import QrReader from 'react-qr-reader'
-import { Spinner } from '@blueprintjs/core'
 import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
-import { DeltaBackend } from '../../delta-remote'
-import { openMapDialog } from '../helpers/ChatMethods'
-import { ConfigureProgressDialog } from '../LoginForm'
 import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/dialogs/QrCode')
@@ -132,8 +127,6 @@ export function QrCodeShowQrInner({
 
 export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
   const tx = window.static_translate
-  const [qrCode, setQrCode] = useState('')
-  const { openDialog } = useContext(ScreenContext)
 
   const [processingQrCode, setProcessingQrCode] = useState(false)
 

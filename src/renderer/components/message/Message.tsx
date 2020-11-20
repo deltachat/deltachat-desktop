@@ -22,11 +22,11 @@ import { isGenericAttachment } from '../attachment/Attachment'
 import { useTranslationFunction, ScreenContext } from '../../contexts'
 import { joinCall, openViewProfileDialog } from '../helpers/ChatMethods'
 import { C } from 'deltachat-node/dist/constants'
-import { getLogger } from '../../../shared/logger'
+// import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 
-const log = getLogger('renderer/message')
+// const log = getLogger('renderer/message')
 
 const Avatar = (
   contact: DCContact,
@@ -112,14 +112,16 @@ const InlineMenu = (
 
   return (
     <div className='message-buttons'>
-      {attachment && viewType !== 23 && !message.msg.isSetupmessage && (
-        <div
-          onClick={onDownload.bind(null, message.msg)}
-          role='button'
-          className='msg-button download hide-on-small'
-          aria-label={tx('save')}
-        />
-      )}
+      {attachment &&
+        viewType !== C.DC_MSG_STICKER &&
+        !message.msg.isSetupmessage && (
+          <div
+            onClick={onDownload.bind(null, message.msg)}
+            role='button'
+            className='msg-button download hide-on-small'
+            aria-label={tx('save')}
+          />
+        )}
       {/* <div
         onClick={onReply}
         role='button'
@@ -160,6 +162,7 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
+  // @ts-ignore
   const showRetry = status === 'error' && direction === 'outgoing'
   const showAttachmentOptions = attachment && !message.msg.isSetupmessage
 
@@ -338,7 +341,7 @@ const Message = (props: {
       className={classNames(
         'message',
         direction,
-        { 'type-sticker': viewType === 23 },
+        { 'type-sticker': viewType === C.DC_MSG_STICKER },
         { error: status === 'error' },
         { forwarded: message.msg.isForwarded }
       )}

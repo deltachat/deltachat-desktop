@@ -9,7 +9,9 @@
     "jsx": "react",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "references": [
     {

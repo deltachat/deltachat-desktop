@@ -4,14 +4,8 @@ import { Card, Elevation } from '@blueprintjs/core'
 import React from 'react'
 import LoginForm, { ConfigureProgressDialog } from '../LoginForm'
 
-import {
-  DeltaDialogBody,
-  DeltaDialogFooter,
-  DeltaDialogOkCancelFooter,
-} from './DeltaDialog'
+import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import classNames from 'classnames'
-import { DeltaChatAccount } from '../../../shared/shared-types'
 
 export default function SettingsAccount({
   setShow,
@@ -20,7 +14,7 @@ export default function SettingsAccount({
   setShow: (show: string) => void
   onClose: any
 }) {
-  const [initialAccountSettings, setInitialAccountSettings] = useState<{
+  const [, setInitialAccountSettings] = useState<{
     [key: string]: string
   }>(null)
 

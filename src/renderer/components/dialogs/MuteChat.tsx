@@ -1,14 +1,5 @@
-import { DialogProps } from './DialogController'
-import {
-  SmallDialog,
-  DeltaDialogHeader,
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-  SmallSelectDialog,
-} from './DeltaDialog'
-import React, { useState } from 'react'
-import { RadioGroup, Radio } from '@blueprintjs/core'
+import { SmallSelectDialog } from './DeltaDialog'
+import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { MuteDuration } from '../../../shared/constants'
 

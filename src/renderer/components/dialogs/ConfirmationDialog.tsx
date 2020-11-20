@@ -1,5 +1,4 @@
 import React from 'react'
-import { Classes } from '@blueprintjs/core'
 import { MessageBoxOptions } from 'electron'
 import {
   SmallDialog,

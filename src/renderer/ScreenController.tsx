@@ -1,4 +1,4 @@
-import { AppState, DeltaChatAccount } from '../shared/shared-types'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 import React from 'react'
 import { Component, createRef } from 'react'
@@ -8,7 +8,6 @@ import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
 import DialogController, {
-  DialogId,
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
@@ -111,9 +110,6 @@ export default class ScreenController extends Component {
   onError(_event: any, [data1, data2]: [string | number, string]) {
     if (this.state.screen === Screens.Login) return
     if (data1 === 0) data1 = ''
-    // Can get removed as soon as we use a rust core including this fix: https://github.com/deltachat/deltachat-core-rust/pull/1911
-    if (data2 === 'dc_continue_key_transfer: "invalid symmetric key algorithm"')
-      return
     const text = data1 + data2
     this.userFeedback({ type: 'error', text })
   }

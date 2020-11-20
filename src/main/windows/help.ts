@@ -76,7 +76,7 @@ export async function openHelpWindow(locale: string) {
     shell.openExternal(url)
   })
 
-  win.on('close', e => {
+  win.on('close', _e => {
     win = null
   })
 

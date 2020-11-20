@@ -65,13 +65,14 @@ import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { resolveThemeAddress, acceptThemeCLI } from './themes'
 import { updateTrayIcon, updateTrayMenu } from './tray'
+import { acceptThemeCLI } from './themes'
 
 app.ipcReady = false
 app.isQuitting = false
 
 Promise.all([
   getLogins(),
-  new Promise((resolve, reject) => app.on('ready', resolve)),
+  new Promise((resolve, _reject) => app.on('ready', resolve)),
   State.load(),
 ])
   .then(onReady)
@@ -95,7 +96,7 @@ function onReady([logins, _appReady, loadedState]: [
 
   const cwd = getConfigPath()
   log.info(`cwd ${cwd}`)
-  ipc.init(cwd, state, logHandler)
+  ipc.init(cwd, logHandler)
 
   mainWindow.init(app, { hidden: false })
   initMenu(logHandler)
@@ -165,11 +166,11 @@ export function quit(e?: Electron.Event) {
 app.on('before-quit', e => quit(e))
 app.on('window-all-closed', (e: Electron.Event) => quit(e))
 
-app.on('web-contents-created', (e, contents) => {
-  contents.on('will-navigate', (e, navigationUrl) => {
+app.on('web-contents-created', (_e, contents) => {
+  contents.on('will-navigate', (e, _navigationUrl) => {
     e.preventDefault()
   })
-  contents.on('new-window', (e, navigationUrl) => {
+  contents.on('new-window', (e, _navigationUrl) => {
     e.preventDefault()
   })
 })

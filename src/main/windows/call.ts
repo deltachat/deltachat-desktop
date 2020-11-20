@@ -9,7 +9,7 @@ const log = getLogger('main/videoHangoutWindow')
 
 let win: BrowserWindow | null = null
 
-export async function openCallWindow(locale: string, options: string) {
+export async function openCallWindow(_locale: string, options: string) {
   if (win) {
     win.focus()
     return
@@ -64,7 +64,7 @@ export async function openCallWindow(locale: string, options: string) {
     win.close()
   }
   ipcMain.addListener('call-close', closeButtonCallback)
-  win.on('close', e => {
+  win.on('close', _e => {
     ipcMain.removeListener('call-close', closeButtonCallback)
     win = null
   })

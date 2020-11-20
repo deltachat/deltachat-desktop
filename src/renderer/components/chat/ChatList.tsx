@@ -96,7 +96,6 @@ export default function ChatList(props: {
   } = props
   const isSearchActive = queryStr !== ''
   const queryStrIsEmail = isValidEmail(queryStr)
-  const realOpenContextMenu = useRef(null)
 
   const {
     contactIds,
@@ -196,7 +195,7 @@ export default function ChatList(props: {
     const selectedChatIndex = chatListIds.findIndex(
       ([chatId, _messageId]) => chatId === selectedChatId
     )
-    const [newChatId, _] = chatListIds[selectedChatIndex + 1] || []
+    const [newChatId] = chatListIds[selectedChatIndex + 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -207,7 +206,7 @@ export default function ChatList(props: {
     const selectedChatIndex = chatListIds.findIndex(
       ([chatId, _messageId]) => chatId === selectedChatId
     )
-    const [newChatId, _] = chatListIds[selectedChatIndex - 1] || []
+    const [newChatId] = chatListIds[selectedChatIndex - 1] || []
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(newChatId)
     }
@@ -370,6 +369,10 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
   const [chatCache, setChatCache] = useState<{
     [id: number]: ChatListItemType
   }>({})
+  /** referrence to newest chat cache for use in useEffect functions that listen for events */
+  const chatCacheRef = useRef<typeof chatCache>()
+  chatCacheRef.current = chatCache
+
   const [chatLoadState, setChatLoading] = useState<{
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
   }>({})
@@ -440,6 +443,33 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       }
     }
   }
+
+  /**
+   * refresh chats a specific contact is in if that contac changed.
+   * Currently used for updating nickname changes in the summary of chatlistitems.
+   */
+  const onContactChanged = async (_ev: any, [contactId]: [number]) => {
+    if (contactId !== 0) {
+      const chatListItems = await DeltaBackend.call(
+        'chatList.getChatListEntries',
+        null,
+        '',
+        contactId
+      )
+      const inCurrentCache = Object.keys(chatCacheRef.current).map(v =>
+        Number(v)
+      )
+      const toBeRefreshed = chatListItems.filter(
+        ([chatId]) => inCurrentCache.indexOf(chatId) !== -1
+      )
+      const chats = await DeltaBackend.call(
+        'chatList.getChatListItemsByEntries',
+        toBeRefreshed
+      )
+      setChatCache(cache => ({ ...cache, ...chats }))
+    }
+  }
+
   useEffect(() => {
     ipcBackend.on('DC_EVENT_MSG_READ', onChatListItemChanged)
     ipcBackend.on('DC_EVENT_MSG_DELIVERED', onChatListItemChanged)
@@ -448,6 +478,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
     ipcBackend.on('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
     ipcBackend.on('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
     ipcBackend.on('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
+    ipcBackend.on('DC_EVENT_CONTACTS_CHANGED', onContactChanged)
 
     return () => {
       ipcBackend.removeListener('DC_EVENT_MSG_READ', onChatListItemChanged)
@@ -457,6 +488,7 @@ export function useLogicVirtualChatList(chatListIds: [number, number][]) {
       ipcBackend.removeListener('DC_EVENT_INCOMING_MSG', onChatListItemChanged)
       ipcBackend.removeListener('DC_EVENT_MSGS_CHANGED', onChatListItemChanged)
       ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onChatListItemChanged)
+      ipcBackend.removeListener('DC_EVENT_CONTACTS_CHANGED', onContactChanged)
     }
   }, [])
 

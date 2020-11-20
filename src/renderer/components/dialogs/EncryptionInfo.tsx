@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Classes } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
-import { FullChat, ChatListItemType } from '../../../shared/shared-types'
+import { ChatListItemType } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import {
   SmallDialog,

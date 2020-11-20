@@ -14,6 +14,7 @@
 - Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
 - Implement tray icon (huge thanks to @pepea28 for contributing & pushing this)
+- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
 
 ### Changed
 - Change "More info" translation to "Message Details"
@@ -25,6 +26,7 @@
 - Update deltachat-node to v1.49.0
 - Update inAppHelp
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
+- localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
 
 ## Fixed
 
@@ -36,6 +38,7 @@
 - Fix opening of multiple setting windows via keybinding
 - Fix two issues with the labeled link (see  #1893)
 - Fix refresh of "empty chat" info meassage on chat changes
+- Fix removing incompleted account (see #1952)
 
 ## [1.13.1] - 2020-10-06
 

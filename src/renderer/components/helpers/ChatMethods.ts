@@ -3,9 +3,7 @@ import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import {
   ChatListItemType,
-  JsonContact,
   FullChat,
-  DCContact,
   BasicWebRTCOptions,
 } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
