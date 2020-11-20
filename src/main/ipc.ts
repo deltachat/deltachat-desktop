@@ -1,8 +1,6 @@
-import { C } from 'deltachat-node'
 import { app as rawApp, dialog, ipcMain } from 'electron'
 import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
-import { AppState, Credentials, DesktopSettings } from '../shared/shared-types'
 import { getLogsPath } from './application-constants'
 import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
@@ -28,11 +26,11 @@ const DeltaChatController: typeof import('./deltachat/controller').default = (()
 
 const app = rawApp as ExtendedAppMainProcess
 
-export function init(cwd: string, state: AppState, logHandler: LogHandler) {
+export function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd)
 
-  ipcMain.once('ipcReady', e => {
+  ipcMain.once('ipcReady', _e => {
     app.ipcReady = true
     app.emit('ipcReady')
   })
@@ -49,7 +47,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
   /* dispatch a method on DC core */
   ipcMain.on(
     'EVENT_DC_DISPATCH',
-    (e: any, identifier: number, methodName: string, args: any[]) => {
+    (e: any, _identifier: number, methodName: string, args: any[]) => {
       if (!Array.isArray(args)) args = [args]
       log.debug('EVENT_DC_DISPATCH: ', methodName, args)
       dcController.callMethod(e, methodName, args)
@@ -78,27 +76,15 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.on('handleLogMessage', (e, channel, level, stacktrace, ...args) =>
+  ipcMain.on('handleLogMessage', (_e, channel, level, stacktrace, ...args) =>
     logHandler.log(channel, level, stacktrace, ...args)
   )
-
-  /** catches an Error of an async function and sends it to the frontend as event */
-  const CatchError2Event = (func: Function) => {
-    setTimeout(async () => {
-      try {
-        await func()
-      } catch (error) {
-        log.error(error)
-        main.send('error', error.message || error)
-      }
-    }, 0)
-  }
 
   ipcMain.on('setConfig', (e, key, value) => {
     e.returnValue = dcController.settings.setConfig(key, value)
   })
 
-  ipcMain.on('saveFile', (e, source, target) => {
+  ipcMain.on('saveFile', (_e, source, target) => {
     copyFile(source, target, err => {
       if (err) main.send('error', err.message)
     })
@@ -108,7 +94,7 @@ export function init(cwd: string, state: AppState, logHandler: LogHandler) {
     event.sender.startDrag({ file: filePath, icon: null })
   })
 
-  ipcMain.on('saveLastChatId', (e, chatId) => {
+  ipcMain.on('saveLastChatId', (_e, chatId) => {
     const { lastChats } = app.state.saved
     lastChats[dcController.credentials.addr] = chatId
     // don't save to disk, because this is already done on close and it might block

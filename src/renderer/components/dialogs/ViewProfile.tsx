@@ -30,11 +30,6 @@ const ProfileInfoName = ({
   setDisplayName: (displayName: string) => void
   address: string
 }) => {
-  const [contact, setContact] = useState<{
-    displayName: string
-    address: string
-  }>({ displayName: '', address: '' })
-
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
     setDisplayName(newName)

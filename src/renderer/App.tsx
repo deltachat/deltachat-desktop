@@ -10,22 +10,20 @@ import {
 } from '../shared/shared-types'
 
 import { translate, LocaleData } from '../shared/localize'
-import { getLogger } from '../shared/logger'
+// import { getLogger } from '../shared/logger'
+// const log = getLogger('renderer/App')
 import { DeltaBackend } from './delta-remote'
 import { ThemeManager } from './ThemeManager'
 
-const log = getLogger('renderer/App')
 import moment from 'moment'
 import { CrashScreen } from './components/CrashScreen'
-import { getDefaultState } from '../shared/state'
-const { ipcRenderer } = window.electron_functions
 
 attachKeybindingsListener()
 
 // This export is just used to activate the theme manager for now
 export const theme_manager = ThemeManager
 
-export default function App(props: any) {
+export default function App(_props: any) {
   const [state, setState] = useState<AppState>(null)
 
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
@@ -100,7 +98,7 @@ export default function App(props: any) {
     moment.locale(locale)
   }
 
-  const onChooseLanguage = async (e: any, locale: string) => {
+  const onChooseLanguage = async (_e: any, locale: string) => {
     await DeltaBackend.call('extras.setLocale', locale)
     await reloadLocaleData(locale)
   }

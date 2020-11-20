@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Elevation, H5, Button } from '@blueprintjs/core'
+import { Card, Elevation, H5 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
 import { OpenDialogOptions } from 'electron'
 import { DeltaBackend } from '../../delta-remote'

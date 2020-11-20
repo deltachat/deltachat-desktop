@@ -18,7 +18,7 @@ import UnblockContacts from './UnblockContacts'
 import MuteChat from './MuteChat'
 import QrCode from './QrCode'
 import DisappearingMessages from './DisappearingMessages'
-import { AppState, DeltaChatAccount } from '../../../shared/shared-types'
+import { DeltaChatAccount } from '../../../shared/shared-types'
 import { getLogger } from '../../../shared/logger'
 
 export const allDialogs: { [key: string]: any } = {

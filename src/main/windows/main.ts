@@ -1,10 +1,5 @@
 import debounce from 'debounce'
-import electron, {
-  BrowserWindow,
-  Rectangle,
-  ipcMain,
-  EventEmitter,
-} from 'electron'
+import electron, { BrowserWindow, Rectangle, EventEmitter } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
@@ -94,7 +89,7 @@ export function init(
 
   openUrlFromArgv(process.argv)
 
-  app.on('second-instance', (event: Event, argv: string[]) => {
+  app.on('second-instance', (_event: Event, argv: string[]) => {
     log.debug('Someone tried to run a second instance')
     openUrlFromArgv(argv)
     if (window) {

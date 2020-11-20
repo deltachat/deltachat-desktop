@@ -1,5 +1,5 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
-import { Store, useStore, Action } from './store'
+import { Store, useStore } from './store'
 import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
@@ -255,7 +255,7 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
   }
 })
 
-ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
+ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (_evt, payload) => {
   const { chatId, chat } = payload
   const state = chatStore.getState()
   if (state.id !== chatId) {
@@ -275,7 +275,7 @@ ipcBackend.on('DD_EVENT_CHAT_MODIFIED', (evt, payload) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
+ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
   chatStore.dispatch({
     type: 'MESSAGE_DELIVERED',
     id,
@@ -283,7 +283,7 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
+ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, _messageId]) => {
   if (chatId !== chatStore.state.id) {
     log.debug(
       `DC_EVENT_INCOMING_MSG chatId of event (${chatId}) doesn't match id of selected chat (${chatStore.state.id}). Skipping.`
@@ -310,7 +310,7 @@ ipcBackend.on('DC_EVENT_INCOMING_MSG', async (_, [chatId, messageId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSG_READ', (evt, [id, msgId]) => {
+ipcBackend.on('DC_EVENT_MSG_READ', (_evt, [id, msgId]) => {
   chatStore.dispatch({
     type: 'MESSAGE_READ',
     id,
@@ -376,7 +376,7 @@ ipcBackend.on('DC_EVENT_MSGS_CHANGED', async (_, [id, messageId]) => {
   }
 })
 
-ipcBackend.on('ClickOnNotification', (ev, { chatId }) => {
+ipcBackend.on('ClickOnNotification', (_ev, { chatId }) => {
   selectChat(chatId)
 })
 

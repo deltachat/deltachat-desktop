@@ -1,13 +1,8 @@
-import DeltaChat, { C, DeltaChat as DeltaChatNode, Lot } from 'deltachat-node'
+import DeltaChat, { C, DeltaChat as DeltaChatNode } from 'deltachat-node'
 import { app as rawApp } from 'electron'
 import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger'
-import {
-  JsonContact,
-  Credentials,
-  AppState,
-  QrCodeResponse,
-} from '../../shared/shared-types'
+import { JsonContact, Credentials, AppState } from '../../shared/shared-types'
 import { maybeMarkSeen } from '../markseenFix'
 import * as mainWindow from '../windows/main'
 import DCAutocrypt from './autocrypt'
@@ -27,14 +22,8 @@ import Extras from './extras'
 import { EventId2EventName as eventStrings } from 'deltachat-node/dist/constants'
 
 import { VERSION, BUILD_TIMESTAMP } from '../../shared/build-info'
-import {
-  Timespans,
-  DAYS_UNTIL_UPDATE_SUGGESTION,
-  QrState,
-} from '../../shared/constants'
-import { LocaleData } from '../../shared/localize'
+import { Timespans, DAYS_UNTIL_UPDATE_SUGGESTION } from '../../shared/constants'
 import tempy from 'tempy'
-import path from 'path'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -221,7 +210,7 @@ export default class DeltaChatController extends EventEmitter {
     this.sendToRenderer(event, [data1, data2])
   }
 
-  onMsgsChanged(chatId: number, msgId: number) {
+  onMsgsChanged(chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)
@@ -234,7 +223,7 @@ export default class DeltaChatController extends EventEmitter {
     this.chatList.onChatModified(chatId)
   }
 
-  onChatModified(chatId: number, msgId: number) {
+  onChatModified(chatId: number, _msgId: number) {
     this.onChatlistUpdated()
     // chatListItem listens to this in the frontend
     this.chatList.onChatModified(chatId)

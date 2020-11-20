@@ -1,8 +1,6 @@
 import SplitOut from './splitout'
-import { getLogger } from '../../shared/logger'
-import DeltaChat from 'deltachat-node'
-
-const log = getLogger('main/deltachat/autocrypt')
+// import { getLogger } from '../../shared/logger'
+// const log = getLogger('main/deltachat/autocrypt')
 
 export default class DCAutocrypt extends SplitOut {
   initiateKeyTransfer(): Promise<string> {

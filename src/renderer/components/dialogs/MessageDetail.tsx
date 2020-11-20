@@ -1,5 +1,4 @@
 import React from 'react'
-import { convertContactProps } from '../contact/Contact'
 import DeltaDialog, { DeltaDialogBody } from './DeltaDialog'
 import moment from 'moment'
 import { DeltaBackend } from '../../delta-remote'

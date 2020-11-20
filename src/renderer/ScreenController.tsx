@@ -1,4 +1,4 @@
-import { AppState, DeltaChatAccount } from '../shared/shared-types'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 import React from 'react'
 import { Component, createRef } from 'react'
@@ -8,7 +8,6 @@ import { ScreenContext } from './contexts'
 import LoginScreen from './components/LoginScreen'
 import MainScreen from './components/MainScreen'
 import DialogController, {
-  DialogId,
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'

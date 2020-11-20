@@ -25,9 +25,6 @@ import {
   DeltaDialogBase,
   DeltaDialogHeader,
   DeltaDialogBody,
-  DeltaDialogFooter,
-  DeltaDialogFooterActions,
-  DeltaDialogOkCancelFooter,
   DeltaDialogCloseFooter,
 } from './DeltaDialog'
 import SettingsBackup from './Settings-Backup'
@@ -111,8 +108,6 @@ export default function Settings(props: DialogProps) {
 
     setState({ settings })
   }
-
-  const onKeyTransferComplete = () => setState({ keyTransfer: false })
 
   /*
    * Saves settings for the Deltachat Desktop
@@ -202,7 +197,7 @@ export default function Settings(props: DialogProps) {
   }
 
   const renderDialogContent = () => {
-    const { account, openDialog } = props
+    const { account } = props
     const { settings } = state
     if (state.show === 'main') {
       return (

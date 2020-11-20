@@ -1,4 +1,4 @@
-import { DeltaChat, ChatList, C } from 'deltachat-node'
+import { C } from 'deltachat-node'
 import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
@@ -326,7 +326,7 @@ class DeltaRemote {
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
-  call(fnName: string, ...args: any[]): Promise<any> {
+  call(fnName: string, ..._args: any[]): Promise<any> {
     return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
   }
 }

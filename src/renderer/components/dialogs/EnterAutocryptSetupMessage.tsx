@@ -3,7 +3,6 @@ import { Card, Callout, Spinner, Classes } from '@blueprintjs/core'
 import InputTransferKey from './AutocryptSetupMessage'
 import DeltaDialog from './DeltaDialog'
 import { ScreenContext } from '../../contexts'
-import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { getLogger } from '../../../shared/logger'
@@ -76,11 +75,6 @@ export function SetupMessagePanel({
     </>
   )
 }
-
-type EnterAutocryptSetupMessageProps = Readonly<{
-  onClose: DialogProps['onClose']
-  message: MessageType
-}>
 
 export default function EnterAutocryptSetupMessage({
   onClose,

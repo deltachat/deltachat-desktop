@@ -338,7 +338,7 @@ export function ConfigureProgressDialog({
     setProgressComment(comment)
   }
 
-  const onCancel = (event: any) => {
+  const onCancel = (_event: any) => {
     DeltaBackend.call('stopOngoingProcess')
     onClose()
   }
@@ -347,10 +347,10 @@ export function ConfigureProgressDialog({
     onClose()
     onSuccess && onSuccess(account)
   }
-  const onConfigureError = (_: null, [data1, data2]: [null, string]) =>
+  const onConfigureError = (_: null, [_data1, data2]: [null, string]) =>
     setError(data2)
 
-  const onConfigureFailed = (_: null, [data1, data2]: [null, string]) =>
+  const onConfigureFailed = (_: null, [_data1, _data2]: [null, string]) =>
     setConfigureFailed(true)
 
   useEffect(() => {
