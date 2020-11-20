@@ -9,7 +9,7 @@ import { useChatStore } from '../../stores/chat'
 import { EmojiData, BaseEmoji } from 'emoji-mart'
 import { replaceColonsSafe } from '../conversations/emoji'
 import { JsonMessage, MessageType } from '../../../shared/shared-types'
-import { Qoute } from '../message/Message'
+import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { C } from 'deltachat-node'
@@ -31,6 +31,16 @@ const insideBoundingRect = (
   )
 }
 
+const QuoteOrDraftRemoveButton = ({onClick} : {onClick: () => void}) => {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Clear"
+       className="clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button"
+    />
+  )
+}
+
 const Composer = forwardRef<
   any,
   {
@@ -38,24 +48,34 @@ const Composer = forwardRef<
     disabledReason: string
     chatId: number
     setComposerSize: (size: number) => void
+    messageInputRef: React.MutableRefObject<ComposerMessageInput>
+    draftState: draftObject
+    removeQuote: () => void
+    updateDraftText: (text: string, InputChatId: number) => void
+    addFileToDraft: (file: string) => void
+    removeFile: () => void
+    clearDraft: () => void
   }
 >((props, ref) => {
-  const { isDisabled, disabledReason, chatId } = props
+  const { 
+    isDisabled,
+    disabledReason,
+    chatId,
+    messageInputRef,
+    draftState, 
+    removeQuote,
+    updateDraftText,
+    addFileToDraft,
+    removeFile,
+    clearDraft
+  } = props
   const chatStoreDispatch = useChatStore()[1]
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  const messageInputRef = useRef<ComposerMessageInput>()
+  
   const emojiAndStickerRef = useRef<HTMLDivElement>()
   const pickerButtonRef = useRef()
 
-  const {
-    draftState,
-    updateDraftText,
-    removeQuote,
-    addFileToDraft,
-    removeFile,
-    clearDraft,
-  } = useDraft(chatId, messageInputRef)
 
   const sendMessage = () => {
     const message = messageInputRef.current.getText()
@@ -70,7 +90,7 @@ const Composer = forwardRef<
         {
           text: replaceColonsSafe(message),
           filename: draftState.file,
-          qouteMessageId: draftState.quotedMessageId,
+          quoteMessageId: draftState.quotedMessageId,
         } as sendMessageParams,
       ],
     })
@@ -148,25 +168,20 @@ const Composer = forwardRef<
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
           {draftState.quotedText !== null && (
-            <div className='quote-section'>
-              <Qoute
+            <div className='attachment-quote-section is-quote'>
+              <Quote
                 quotedText={draftState.quotedText}
                 quotedMessageId={draftState.quotedMessageId}
               />
-	      <button onClick={removeQuote} aria-label="Clear" className="clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button"/>
+              <QuoteOrDraftRemoveButton onClick={removeQuote} />
             </div>
           )}
           {draftState.file && (
-            <div>
-              <div className='attachment-section'>
-                {/* TODO make this pretty: draft image/video/attachment */}
-                {/* <p>file: {draftState.file}</p> */}
-                <div style={{ flexGrow: 1 }}>
-                  <DraftAttachment attachment={draftState.attachment} />
-                </div>
-                <button onClick={removeFile}>X</button>
-              </div>
-              <div>{`draftState.viewType ->${draftState.viewType}`}</div>
+            <div className='attachment-quote-section is-attachment'>
+              {/* TODO make this pretty: draft image/video/attachment */}
+              {/* <p>file: {draftState.file}</p> */}
+              <DraftAttachment attachment={draftState.attachment} />
+              <QuoteOrDraftRemoveButton onClick={removeFile} />
             </div>
           )}
         </div>
@@ -224,10 +239,17 @@ type draftObject = { chatId: number } & Pick<
 > &
   Pick<MessageType['msg'], 'attachment' | 'viewType'>
 
-function useDraft(
+export function useDraft(
   chatId: number,
   inputRef: React.MutableRefObject<ComposerMessageInput>
-) {
+): {
+  draftState: draftObject
+  removeQuote: () => void
+  updateDraftText: (text: string, InputChatId: number) => void
+  addFileToDraft: (file: string) => void
+  removeFile: () => void
+  clearDraft: () => void
+} {
   const [draftState, _setDraft] = useState<draftObject>({
     chatId,
     text: '',

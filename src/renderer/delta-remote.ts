@@ -24,7 +24,7 @@ export type sendMessageParams = {
     lat: number
     lng: number
   }
-  qouteMessageId?: number
+  quoteMessageId?: number
 }
 
 class DeltaRemote {

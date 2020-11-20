@@ -22,12 +22,12 @@ export default class DCMessageList extends SplitOut {
       text,
       filename,
       location,
-      qouteMessageId,
+      quoteMessageId,
     }: {
       text?: string
       filename?: string
       location?: { lat: number; lng: number }
-      qouteMessageId?: number
+      quoteMessageId?: number
     }
   ): [number, MessageType | { msg: null }] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
@@ -36,12 +36,12 @@ export default class DCMessageList extends SplitOut {
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
 
-    if (qouteMessageId) {
-      const qoutedMessage = this._dc.getMessage(qouteMessageId)
-      if (!qoutedMessage) {
-        log.error('sendMessage: Message to qoute not found')
+    if (quoteMessageId) {
+      const quotedMessage = this._dc.getMessage(quoteMessageId)
+      if (!quotedMessage) {
+        log.error('sendMessage: Message to quote not found')
       } else {
-        msg.setQuote(qoutedMessage)
+        msg.setQuote(quotedMessage)
       }
     }
 
@@ -87,11 +87,11 @@ export default class DCMessageList extends SplitOut {
     if (file) draft.setFile(file, undefined)
     if (text) draft.setText(text)
     if (quotedMessageId) {
-      const qoutedMessage = this._dc.getMessage(quotedMessageId)
-      if (!qoutedMessage) {
-        log.error('setDraftQoute: Message to qoute not found')
+      const quotedMessage = this._dc.getMessage(quotedMessageId)
+      if (!quotedMessage) {
+        log.error('setDraftquote: Message to quote not found')
       } else {
-        draft.setQuote(qoutedMessage)
+        draft.setQuote(quotedMessage)
       }
     }
 

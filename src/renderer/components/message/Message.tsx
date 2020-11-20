@@ -323,7 +323,7 @@ const Message = (props: {
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
 
-  const hasQoute = message.msg.quotedText !== null
+  const hasquote = message.msg.quotedText !== null
 
   return (
     <div
@@ -353,8 +353,8 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasQoute && (
-            <Qoute
+          {hasquote && (
+            <Quote
               quotedText={message.msg.quotedText}
               quotedMessageId={message.msg.quotedMessageId}
             />
@@ -391,7 +391,7 @@ const Message = (props: {
 
 export default Message
 
-export const Qoute = ({
+export const Quote = ({
   quotedText,
   quotedMessageId,
 }: {
@@ -413,10 +413,10 @@ export const Qoute = ({
   if (quotedMessageId !== 0 && message) {
     return (
       <div
-        className='qoute has-message'
+        className='quote has-message'
         style={{ borderLeftColor: message.contact.color }}
       >
-        <div className='qoute-author' style={{ color: message.contact.color }}>
+        <div className='quote-author' style={{ color: message.contact.color }}>
           {message.contact.displayName}
         </div>
         <p>{quotedText}</p>
@@ -424,7 +424,7 @@ export const Qoute = ({
     )
   } else {
     return (
-      <div className='qoute'>
+      <div className='quote'>
         <p>{quotedText}</p>
       </div>
     )
