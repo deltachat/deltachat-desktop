@@ -367,7 +367,7 @@ const Message = (props: {
                 conversationType,
                 direction,
                 message,
-                hasQuote
+                hasQuote,
               }}
             />
           )}

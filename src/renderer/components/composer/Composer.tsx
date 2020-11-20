@@ -193,7 +193,6 @@ const Composer = forwardRef<
           <SettingsContext.Consumer>
             {({ desktopSettings }) => (
               <ComposerMessageInput
-
                 ref={messageInputRef}
                 enterKeySends={desktopSettings.enterKeySends}
                 sendMessage={sendMessage}
