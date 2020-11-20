@@ -212,7 +212,7 @@ export function txCoreStrings() {
   strings[C.DC_STR_SELF] = tx('self')
   strings[C.DC_STR_DRAFT] = tx('draft')
   strings[C.DC_STR_VOICEMESSAGE] = tx('voice_message')
-  strings[C.DC_STR_DEADDROP] = tx('login_inbox')
+  strings[C.DC_STR_DEADDROP] = tx('chat_contact_request')
   strings[C.DC_STR_IMAGE] = tx('image')
   strings[C.DC_STR_GIF] = tx('gif')
   strings[C.DC_STR_VIDEO] = tx('video')
@@ -230,6 +230,7 @@ export function txCoreStrings() {
   // strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
   // strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')
   strings[C.DC_STR_FINGERPRINTS] = tx('qrscan_fingerprint_label')
+  strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_READRCPT] = tx('systemmsg_read_receipt_subject')
   strings[C.DC_STR_READRCPT_MAILBODY] = tx('systemmsg_read_receipt_body')
   strings[C.DC_STR_MSGGRPIMGDELETED] = tx('systemmsg_group_image_deleted')
@@ -237,12 +238,43 @@ export function txCoreStrings() {
   strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
   strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
   strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
-  strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_SERVER_RESPONSE] = tx('login_error_server_response')
   strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
   strings[C.DC_STR_SAVED_MESSAGES] = tx('saved_messages')
-  // todo add new strings
+  strings[C.DC_STR_CONTACT_VERIFIED] = tx('contact_verified')
+  strings[C.DC_STR_CONTACT_NOT_VERIFIED] = tx('contact_not_verified')
+  strings[C.DC_STR_CONTACT_SETUP_CHANGED] = tx('contact_setup_changed')
+  strings[C.DC_STR_MSGACTIONBYUSER] = tx('systemmsg_action_by_user')
+  strings[C.DC_STR_MSGACTIONBYME] = tx('systemmsg_action_by_me')
+  strings[C.DC_STR_DEVICE_MESSAGES_HINT] = tx('device_talk_explain')
+  strings[C.DC_STR_WELCOME_MESSAGE] = tx('device_talk_welcome_message')
+  strings[C.DC_STR_UNKNOWN_SENDER_FOR_CHAT] = tx(
+    'systemmsg_unknown_sender_for_chat'
+  )
+  strings[C.DC_STR_SUBJECT_FOR_NEW_CONTACT] = tx(
+    'systemmsg_subject_for_new_contact'
+  )
+  strings[C.DC_STR_FAILED_SENDING_TO] = tx('systemmsg_failed_sending_to')
+  strings[C.DC_STR_EPHEMERAL_DISABLED] = tx(
+    'systemmsg_ephemeral_timer_disabled'
+  )
+  strings[C.DC_STR_EPHEMERAL_SECONDS] = tx('systemmsg_ephemeral_timer_enabled')
+  strings[C.DC_STR_EPHEMERAL_MINUTE] = tx('systemmsg_ephemeral_timer_minute')
+  strings[C.DC_STR_EPHEMERAL_HOUR] = tx('systemmsg_ephemeral_timer_hour')
+  strings[C.DC_STR_EPHEMERAL_DAY] = tx('systemmsg_ephemeral_timer_day')
+  strings[C.DC_STR_EPHEMERAL_WEEK] = tx('systemmsg_ephemeral_timer_week')
+  strings[C.DC_STR_EPHEMERAL_FOUR_WEEKS] = tx(
+    'systemmsg_ephemeral_timer_four_weeks'
+  )
+  strings[C.DC_STR_VIDEOCHAT_INVITATION] = tx('videochat_invitation')
+  strings[C.DC_STR_VIDEOCHAT_INVITE_MSG_BODY] = tx('videochat_invitation_body')
+  strings[C.DC_STR_CONFIGURATION_FAILED] = tx('configuration_failed_with_error')
+  strings[C.DC_STR_PROTECTION_ENABLED] = tx('systemmsg_chat_protection_enabled')
+  strings[C.DC_STR_PROTECTION_DISABLED] = tx(
+    'systemmsg_chat_protection_disabled'
+  )
+  strings[C.DC_STR_REPLY_NOUN] = tx('reply_noun')
 
   return strings
 }
