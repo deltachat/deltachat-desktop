@@ -14,6 +14,14 @@ export async function getLogins(): Promise<DeltaChatAccount[]> {
   // list new accounts
   var accounts = await readDeltaAccounts(getAccountsPath())
   log.debug('Found following accounts:', accounts)
+
+  const orphanedAccounts = await findInvalidDeltaAccounts()
+  if (orphanedAccounts.length > 0) {
+    log.info(
+      'unconfigured, likely orphaned accounts, you may delete them',
+      orphanedAccounts
+    )
+  }
   return accounts
 }
 
@@ -45,6 +53,12 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
       'profileImage',
       'color',
     ])
+
+    if (!config) {
+      throw new Error(
+        'Account is not configured, it is likely an orphaned account (artifact of a failed login in older versions)'
+      )
+    }
 
     if (typeof config.addr !== 'string') {
       // this can be old temp accounts or accounts that somehow lost their addr, what should we do with them?
@@ -82,6 +96,30 @@ async function readDeltaAccounts(accountFolderPath: string) {
   )
 }
 
+async function findInvalidDeltaAccounts() {
+  const paths = (await fs.readdir(getAccountsPath())).map(filename =>
+    join(getAccountsPath(), filename)
+  )
+  const accountFolders = paths.filter(path => {
+    // isDeltaAccountFolder
+    return (
+      fs.existsSync(join(path, 'db.sqlite')) &&
+      !fs.lstatSync(path).isSymbolicLink()
+    )
+  })
+
+  const isConfigured = async (dir: string) => {
+    const dc = new DeltaChat()
+    await dc.open(dir)
+    const isConfigured = dc.isConfigured()
+    return { isConfigured, path: dir }
+  }
+
+  return (await Promise.all(accountFolders.map(isConfigured)))
+    .filter(({ isConfigured }) => !isConfigured)
+    .map(({ path }) => path)
+}
+
 async function getConfig(
   dir: string,
   keys: string[]
@@ -95,14 +133,14 @@ async function getConfig(
     keys.forEach((key: string) => {
       config[key] = dc.getConfig(key)
     })
-  }
-  if (keys.includes('profileImage')) {
-    config['profileImage'] = dc
-      .getContact(C.DC_CONTACT_ID_SELF)
-      .getProfileImage()
-  }
-  if (keys.includes('color')) {
-    config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color
+    if (keys.includes('profileImage')) {
+      config['profileImage'] = dc
+        .getContact(C.DC_CONTACT_ID_SELF)
+        .getProfileImage()
+    }
+    if (keys.includes('color')) {
+      config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color
+    }
   }
   return config
 }
