@@ -15,10 +15,19 @@
   .upper-bar {
     & > .quote-section {
       display: flex;
+      justify-content: space-between;
 
       & > .qoute {
         // this is just overwrites for the qoute styles defined in _message.scss
         margin: 4px;
+      }
+
+      & > .clear-quote-icon {
+        margin-right: 5px;
+        min-width: 32px;
+        &::before {
+	  color: var(--chat-list-item-summary-text);
+	}
       }
     }
 

@@ -153,7 +153,7 @@ const Composer = forwardRef<
                 quotedText={draftState.quotedText}
                 quotedMessageId={draftState.quotedMessageId}
               />
-              <button onClick={removeQuote}>X</button>
+	      <button onClick={removeQuote} aria-label="Clear" className="clear-quote-icon bp3-dialog-close-button bp3-button bp3-minimal bp3-icon-large bp3-icon-cross clear-button"/>
             </div>
           )}
           {draftState.file && (
