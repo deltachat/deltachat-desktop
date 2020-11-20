@@ -380,7 +380,7 @@ function ProfileImageSelector(props: any) {
     remote.dialog.showOpenDialog(
       {
         title: tx('select_your_new_profile_image'),
-        filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+        filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
         properties: ['openFile'],
       },
       async (files: string[]) => {
@@ -411,7 +411,7 @@ function ProfileImageSelector(props: any) {
           onClick={openSelectionDialog}
           className={'bp3-button'}
         >
-          Select
+          {tx('select')}
         </button>
         {profileImagePreview && (
           <button
@@ -419,7 +419,7 @@ function ProfileImageSelector(props: any) {
             onClick={changeProfilePicture.bind(null, '')}
             className={'bp3-button'}
           >
-            Remove
+            {tx('remove_desktop')}
           </button>
         )}
       </div>
