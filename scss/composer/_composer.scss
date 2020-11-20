@@ -13,26 +13,36 @@
   }
 
   .upper-bar {
-    & > .quote-section {
+    & > .attachment-quote-section {
       display: flex;
       justify-content: space-between;
 
-      & > .qoute {
-        // this is just overwrites for the qoute styles defined in _message.scss
+      .quote {
+        // this is just overwrites for the quote styles defined in _message.scss
         margin: 4px;
       }
 
-      & > .clear-quote-icon {
+      .message-attachment-media {
+        flex-grow: 1;
+        margin: 4px;
+        border-radius: 0px;
+        cursor: unset;
+        img {
+          cursor: unset;
+        }
+      }
+
+      .message-attachment-generic {
+        margin: 4px;
+      }
+
+      .clear-quote-icon {
         margin-right: 5px;
         min-width: 32px;
         &::before {
-	  color: var(--chat-list-item-summary-text);
-	}
+          color: var(--chat-list-item-summary-text);
+        }
       }
-    }
-
-    & > .attachment-section {
-      display: flex;
     }
   }
 

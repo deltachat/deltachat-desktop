@@ -11,7 +11,7 @@
 - Add context menu to gallery
 - Option for packagers to disable asar (`NO_ASAR=true npm run pack:generate_config`).
 - Added context menu for info messages
-- Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
+- Add simple support for displaying quotes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
 - Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
 - Add draft/staging area
