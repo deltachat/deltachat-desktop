@@ -1,10 +1,9 @@
 import { ipcBackend, saveLastChatId } from '../ipc'
-import { Store, useStore, Action } from './store'
+import { Store, useStore } from './store'
 import {
   JsonContact,
   FullChat,
   MessageType,
-  JsonMessage,
 } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'

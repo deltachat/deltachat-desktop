@@ -1,11 +1,10 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
-import { useDebouncedCallback } from 'use-debounce'
 import { ChatStoreState } from '../../stores/chat'
 import ComposerMessageInput from '../composer/ComposerMessageInput'
 
@@ -18,18 +17,9 @@ export default function MessageListAndComposer({
 }: {
   chat: ChatStoreState
 }) {
-  const [state, setState] = useState({
-    //error: false,
-    composerSize: 40,
-  })
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
-
-  const [setComposerSize] = useDebouncedCallback(
-    (size: number) => setState({ composerSize: size }),
-    25
-  )
 
   const messageInputRef = useRef<ComposerMessageInput>()
   const {
@@ -153,7 +143,6 @@ export default function MessageListAndComposer({
       <Composer
         ref={refComposer}
         chatId={chat.id}
-        setComposerSize={setComposerSize.bind(this)}
         isDisabled={disabled}
         disabledReason={disabledReason}
         messageInputRef={messageInputRef}

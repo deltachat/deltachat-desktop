@@ -6,7 +6,6 @@ import {
   JsonChat,
   JsonContact,
   FullChat,
-  JsonMessage,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
 

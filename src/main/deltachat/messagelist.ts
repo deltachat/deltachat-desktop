@@ -13,7 +13,6 @@ import {
   MessageSearchResult,
   MessageTypeAttachment,
   msgStatus,
-  JsonMessage,
 } from '../../shared/shared-types'
 export default class DCMessageList extends SplitOut {
   sendMessage(

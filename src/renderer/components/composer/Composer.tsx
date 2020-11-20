@@ -12,7 +12,6 @@ import { JsonMessage, MessageType } from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
-import { C } from 'deltachat-node'
 const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
@@ -47,7 +46,6 @@ const Composer = forwardRef<
     isDisabled: boolean
     disabledReason: string
     chatId: number
-    setComposerSize: (size: number) => void
     messageInputRef: React.MutableRefObject<ComposerMessageInput>
     draftState: draftObject
     removeQuote: () => void
@@ -195,10 +193,10 @@ const Composer = forwardRef<
           <SettingsContext.Consumer>
             {({ desktopSettings }) => (
               <ComposerMessageInput
+
                 ref={messageInputRef}
                 enterKeySends={desktopSettings.enterKeySends}
                 sendMessage={sendMessage}
-                setComposerSize={props.setComposerSize}
                 chatId={chatId}
                 updateDraftText={updateDraftText}
               />

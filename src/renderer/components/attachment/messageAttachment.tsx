@@ -24,7 +24,8 @@ type AttachmentProps = {
   text?: string
   conversationType: 'group' | 'direct'
   direction: MessageType['msg']['direction']
-  message: MessageType
+  message: MessageType,
+  hasQuote: boolean
 }
 
 export default function Attachment({
@@ -33,6 +34,7 @@ export default function Attachment({
   conversationType,
   direction,
   message,
+  hasQuote
 }: AttachmentProps) {
   const tx = useTranslationFunction()
   if (!attachment) {
@@ -52,8 +54,7 @@ export default function Attachment({
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
-  const withContentAbove =
-    conversationType === 'group' && direction === 'incoming'
+  const withContentAbove = hasQuote || (conversationType === 'group' && direction === 'incoming')
   // const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
   // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)

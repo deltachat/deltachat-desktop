@@ -1,11 +1,9 @@
 import React from 'react'
-import { DeltaBackend } from '../../delta-remote'
 import debounce from 'debounce'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 type ComposerMessageInputProps = {
   chatId: number
-  setComposerSize: (size: number) => void
   sendMessage: () => void
   enterKeySends: boolean
   updateDraftText: (text: string, InputChatId: number) => void
@@ -77,7 +75,6 @@ export default class ComposerMessageInput extends React.Component<
 
   setComposerSize(size: number) {
     this.composerSize = size
-    this.props.setComposerSize(size)
   }
 
   focus() {

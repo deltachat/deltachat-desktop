@@ -323,7 +323,7 @@ const Message = (props: {
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
 
-  const hasquote = message.msg.quotedText !== null
+  const hasQuote = message.msg.quotedText !== null
 
   return (
     <div
@@ -353,7 +353,7 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasquote && (
+          {hasQuote && (
             <Quote
               quotedText={message.msg.quotedText}
               quotedMessageId={message.msg.quotedMessageId}
@@ -367,6 +367,7 @@ const Message = (props: {
                 conversationType,
                 direction,
                 message,
+                hasQuote
               }}
             />
           )}
