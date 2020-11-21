@@ -5,6 +5,7 @@ import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
+import { DeltaInput } from '../Login-Styles'
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { SettingsButton } from './Settings'
 
@@ -117,6 +118,7 @@ export function ProfileImageSelector(props: any) {
 
 export function SettingsEditProfile({
   setShow,
+  account,
   state
 }: {
   show: string
@@ -125,12 +127,17 @@ export function SettingsEditProfile({
   account: DeltaChatAccount,
   state: any
 }) {
+  const tx = useTranslationFunction()
+  const [displayname, setDisplayname] = useState(account.displayname)
+  console.log(state)
+  const [selfstatus, setSelfstatus] = useState(state.settings.selfstatus)
+  console.log('asd', displayname, selfstatus)
   const onUpdate = () => {}
   return (
     <>
       <DeltaDialogBody noFooter>
         <Card elevation={Elevation.ONE}>
-          <div className='profile-image-username center'>
+          <div className='profile-image-username center' style={{marginBottom: '50px'}}>
             <ProfileImageSelector
               displayName={
                 state.settings['displayname'] || state.selfContact.address
@@ -138,6 +145,20 @@ export function SettingsEditProfile({
               color={state.selfContact.color}
             />
           </div>
+          <DeltaInput
+            key='displayname'
+            id='displayname'
+            placeholder={tx('pref_your_name')}
+            value={displayname}
+            onChange={(event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) => { setDisplayname(event.target.value)}}
+          />
+          <DeltaInput
+            key='status'
+            id='status'
+            placeholder={tx('pref_default_status_label')}
+            value={selfstatus}
+            onChange={(event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) => { setSelfstatus(event.target.value)}}
+          />
         </Card>
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter
