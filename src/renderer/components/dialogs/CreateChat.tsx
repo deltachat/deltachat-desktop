@@ -197,28 +197,33 @@ export function useGroupImage(image?: string) {
   ]
 }
 
-function useGroupMembers() {
-  const [groupMembers, setGroupMembers] = useState([1])
+export function useGroupMembers(initialMemebers: number[]) {
+  const [groupMembers, setGroupMembers] = useState(initialMemebers)
 
   const removeGroupMember = ({ id }: JsonContact | { id: number }) =>
-    id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
+    id !== 1 &&
+    setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
   const addGroupMember = ({ id }: JsonContact | { id: number }) =>
-    setGroupMembers([...groupMembers, id])
+    setGroupMembers(prevMembers => [...prevMembers, id])
   const addRemoveGroupMember = ({ id }: JsonContact | { id: number }) => {
     groupMembers.indexOf(id) !== -1
       ? removeGroupMember({ id })
       : addGroupMember({ id })
   }
+  const addGroupMembers = (ids: number[]) =>
+    setGroupMembers(prevMembers => [...prevMembers, ...ids])
   return [
     groupMembers,
     removeGroupMember,
     addGroupMember,
     addRemoveGroupMember,
+    addGroupMembers,
   ] as [
     number[],
     typeof removeGroupMember,
     typeof addGroupMember,
-    typeof addRemoveGroupMember
+    typeof addRemoveGroupMember,
+    typeof addGroupMembers
   ]
 }
 
@@ -297,14 +302,14 @@ export function AddMemberInnerDialog({
   queryStr,
   searchContacts,
   groupMembers,
-  addRemoveGroupMember,
+  addGroupMembers,
 }: {
   onClickBack: Parameters<typeof DeltaDialogHeader>[0]['onClickBack']
   onSearchChange: ReturnType<typeof useContactSearch>[1]
   queryStr: string
   searchContacts: DCContact[]
   groupMembers: number[]
-  addRemoveGroupMember: ReturnType<typeof useGroupMembers>[3]
+  addGroupMembers: ReturnType<typeof useGroupMembers>[4]
 }) {
   const contactsNotInGroup = searchContacts.filter(
     contact => groupMembers.indexOf(contact.id) === -1
@@ -323,7 +328,7 @@ export function AddMemberInnerDialog({
   const tx = window.static_translate
 
   const onOk = () => {
-    addMembers.map(id => addRemoveGroupMember({ id }))
+    addGroupMembers(addMembers)
     onClickBack()
   }
 
@@ -417,7 +422,8 @@ function CreateGroupInner(props: {
     removeGroupMember,
     addGroupMember,
     addRemoveGroupMember,
-  ] = useGroupMembers()
+    addGroupMembers,
+  ] = useGroupMembers([1])
   const [
     groupId,
     lazilyCreateOrUpdateGroup,
@@ -480,6 +486,7 @@ function CreateGroupInner(props: {
             searchContacts,
             groupMembers,
             addRemoveGroupMember,
+            addGroupMembers,
           }}
         />
       )}
