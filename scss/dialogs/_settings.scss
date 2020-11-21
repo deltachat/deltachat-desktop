@@ -51,55 +51,49 @@
     flex-direction: column;
   }
   .profile-image-selector {
-    width: 100px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 
 
-    & > img,
-    & > span {
+    img, span {
       width: 100px;
       height: 100px;
       border-radius: 100%;
       user-select: none;
       pointer-events: none;
     }
-    & > span {
+    span {
       line-height: 100px;
       font-size: 64px;
       color: white;
       text-align: center;
     }
-    
-    .part-circle {
-      top: -20px;
-      position: relative;
-      height: 40px;
-      overflow: hidden;
-      visibility: hidden;
-      margin-bottom: -40px;
-      &.visible {
-        visibility: visible;
-      }
-      .circle {
-        position: relative;
-        top: -80px;
-        width: 100px;
-        height: 100px;
-        overflow: hidden;
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 100%;
-        border-radius: 100%;
-        /* border-bottom-right-radius: 1000px; */
-        background-color: #d3d3d3ab;
-        .camera-icon {
-          &::before {
-            content: 'x'
-          }
+
+    button {
+      margin-top: 10px;
+      background-color: var(--bp3-input-focused);
+      box-shadow: none;
+      background-clip: unset;
+      background-image: none;
+      border-radius: 30px;
+      padding: 10px 15px;
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+
+      &:hover {
+        background-color: var(--bp3-input-focused);
+        box-shadow: none;
+        background-clip: unset;
+        &:disabled {
+          background-color: rgba(206, 217, 224, 0.5);
+          background-image: none;
+          cursor: not-allowed;
+          color: rgba(92, 112, 128, 0.6);
         }
       }
     }
-    
   }
   .profile-displayname-addr {
     display: flex;

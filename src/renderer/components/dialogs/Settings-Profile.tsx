@@ -1,5 +1,4 @@
-import { Card, Elevation, H5 } from '@blueprintjs/core'
-import classNames from 'classnames'
+import { Card, Elevation } from '@blueprintjs/core'
 import React, { useEffect, useState } from 'react'
 import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
@@ -22,25 +21,34 @@ export default function SettingsProfile({
   account: DeltaChatAccount,
   state: any
 }) {
+  const [profileImagePreview, setProfileImagePreview] = useState('')
+
+  const codepoint = account.displayname && account.displayname.codePointAt(0)
+  const initial = codepoint
+    ? String.fromCodePoint(codepoint).toUpperCase()
+    : '#'
+  useEffect(() => {
+    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
+    // return nothing because reacts wants it like that
+  }, [profileImagePreview])
   const tx = useTranslationFunction()
   return (
     <>
       <Card elevation={Elevation.ONE} style={{paddingTop: '0px'}}>
-        <div className='profile-image-username'>
-          <ProfileImageSelector
-            displayName={
-              state.settings['displayname'] || state.selfContact.address
-            }
-            color={state.selfContact.color}
-          />
+        <div className='profile-image-username' style={{marginBottom: '10px'}}>
+          <div className='profile-image-selector'>
+            {/* TODO: show anything else when there is no profile image, like the letter avatar */}
+            {profileImagePreview ? (
+              <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
+            ) : (
+              <span style={{ backgroundColor: state.selfContact.color }}>{initial}</span>
+            )}
+          </div>
           <div className='profile-displayname-addr'>
             <div className='displayname'>{account.displayname}</div>
             <div className='addr'>{account.addr}</div>
           </div>
         </div>
-      </Card>
-      <Card elevation={Elevation.ONE}>
-        <H5>{tx('pref_profile_info_headline')}</H5>
         <SettingsButton onClick={() => setShow('edit-profile')}>
           {tx('pref_edit_profile')}
         </SettingsButton>
@@ -56,7 +64,6 @@ export function ProfileImageSelector(props: any) {
   const { displayName, color } = props
   const tx = window.static_translate
   const [profileImagePreview, setProfileImagePreview] = useState('')
-  const [showPartCircle, setShowPartCircle] = useState(false)
   useEffect(() => {
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     // return nothing because reacts wants it like that
@@ -88,7 +95,7 @@ export function ProfileImageSelector(props: any) {
     : '#'
 
   return (
-    <div className='profile-image-selector' onMouseOver={() => { setShowPartCircle(true)}} onMouseOut={() => { setShowPartCircle(false)}}>
+    <div className='profile-image-selector'>
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
       {profileImagePreview ? (
         <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
@@ -96,21 +103,21 @@ export function ProfileImageSelector(props: any) {
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
       <>
-        {/* TODO: replace the text by icons that get described by aria-label */}
-        <div className={classNames('part-circle', { 'visible': showPartCircle})} aria-label={tx('profile_image_delete')} onClick={openSelectionDialog}>
-          <div className='circle'>
-            <div className='camera-icon' />
-          </div>
-        </div>
-        {profileImagePreview && (
-          <button
-            aria-label={tx('profile_image_delete')}
-            onClick={changeProfilePicture.bind(null, '')}
-            className={'bp3-button'}
-          >
-            {tx('remove_desktop')}
-          </button>
-        )}
+        <button
+          aria-label={tx('pref_set_profile_photo')}
+          onClick={openSelectionDialog}
+          className={'bp3-button'}
+        >
+          {tx('pref_set_profile_photo')}
+        </button>
+        <button
+          aria-label={tx('pref_remove_profile_photo')}
+          onClick={changeProfilePicture.bind(null, '')}
+          className={'bp3-button'}
+          disabled={!profileImagePreview}
+        >
+          {tx('pref_remove_profile_photo')}
+        </button>
       </>
     </div>
   )
@@ -137,7 +144,7 @@ export function SettingsEditProfile({
     <>
       <DeltaDialogBody noFooter>
         <Card elevation={Elevation.ONE}>
-          <div className='profile-image-username center' style={{marginBottom: '50px'}}>
+          <div className='profile-image-username center' style={{marginBottom: '30px'}}>
             <ProfileImageSelector
               displayName={
                 state.settings['displayname'] || state.selfContact.address
