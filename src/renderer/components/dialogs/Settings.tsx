@@ -30,6 +30,9 @@ import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
 import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/dialogs/Settings')
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -131,11 +134,23 @@ export default function Settings(props: DialogProps) {
   }
 
   /** Saves settings to deltachat core */
-  const handleDeltaSettingsChange = (key: string, value: string | boolean) => {
-    ipcRenderer.sendSync('setConfig', key, value)
-    const settings = state.settings
-    settings[key] = String(value)
-    setState({ settings })
+  const handleDeltaSettingsChange = async (
+    key: string,
+    value: string | boolean
+  ) => {
+    if ((await DeltaBackend.call('settings.setConfig', key, value)) === true) {
+      _setState((settings: any) => {
+        return {
+          ...settings,
+          settings: {
+            ...settings.settings,
+            [key]: String(value),
+          },
+        }
+      })
+      return
+    }
+    log.warn('settings.setConfig returned false for: ', key, value)
   }
 
   /*
@@ -203,7 +218,7 @@ export default function Settings(props: DialogProps) {
       return (
         <>
           <DeltaDialogBody>
-            <SettingsProfile 
+            <SettingsProfile
               show={state.show}
               setShow={setShow}
               onClose={props.onClose}
@@ -306,7 +321,6 @@ export default function Settings(props: DialogProps) {
           show={state.show}
           setShow={setShow}
           onClose={props.onClose}
-          account={account}
           state={state}
           handleDeltaSettingsChange={handleDeltaSettingsChange}
         />
@@ -361,4 +375,3 @@ export default function Settings(props: DialogProps) {
     </DeltaDialogBase>
   )
 }
-

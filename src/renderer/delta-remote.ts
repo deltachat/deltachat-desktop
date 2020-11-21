@@ -293,6 +293,11 @@ class DeltaRemote {
     value: string | number | boolean
   ): Promise<boolean>
   call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
+  call(
+    fnName: 'settings.setConfig',
+    key: string,
+    value: string | boolean
+  ): Promise<boolean>
   call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
   call(
     fnName: 'settings.estimateAutodeleteCount',

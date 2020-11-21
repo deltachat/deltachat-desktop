@@ -13,12 +13,12 @@ const { remote } = window.electron_functions
 export default function SettingsProfile({
   setShow,
   account,
-  state
+  state,
 }: {
   show: string
   setShow: (show: string) => void
-  onClose: any,
-  account: DeltaChatAccount,
+  onClose: any
+  account: DeltaChatAccount
   state: any
 }) {
   const [profileImagePreview, setProfileImagePreview] = useState('')
@@ -34,18 +34,23 @@ export default function SettingsProfile({
   const tx = useTranslationFunction()
   return (
     <>
-      <Card elevation={Elevation.ONE} style={{paddingTop: '0px'}}>
-        <div className='profile-image-username' style={{marginBottom: '10px'}}>
+      <Card elevation={Elevation.ONE} style={{ paddingTop: '0px' }}>
+        <div
+          className='profile-image-username'
+          style={{ marginBottom: '10px' }}
+        >
           <div className='profile-image-selector'>
             {/* TODO: show anything else when there is no profile image, like the letter avatar */}
             {profileImagePreview ? (
               <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
             ) : (
-              <span style={{ backgroundColor: state.selfContact.color }}>{initial}</span>
+              <span style={{ backgroundColor: state.selfContact.color }}>
+                {initial}
+              </span>
             )}
           </div>
           <div className='profile-displayname-addr'>
-            <div className='displayname'>{account.displayname}</div>
+            <div className='displayname'>{state.settings.displayname}</div>
             <div className='addr'>{account.addr}</div>
           </div>
         </div>
@@ -64,16 +69,14 @@ export function ProfileImageSelector({
   displayName,
   color,
   profilePicture,
-  setProfilePicture
-} : {
-  displayName: string,
-  color: string,
-  profilePicture: string,
+  setProfilePicture,
+}: {
+  displayName: string
+  color: string
+  profilePicture: string
   setProfilePicture: (path: string) => void
-
 }) {
   const tx = window.static_translate
-  
 
   const onClickSelectPicture = () => {
     remote.dialog.showOpenDialog(
@@ -128,23 +131,23 @@ export function ProfileImageSelector({
 
 export function SettingsEditProfile({
   setShow,
-  account,
   state,
-  handleDeltaSettingsChange
+  handleDeltaSettingsChange,
 }: {
   show: string
   setShow: (show: string) => void
-  onClose: any,
-  account: DeltaChatAccount,
-  state: any,
+  onClose: any
+  state: any
   handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
   const tx = useTranslationFunction()
-  const [displayname, setDisplayname] = useState(account.displayname)
+  const [displayname, setDisplayname] = useState(state.settings.displayname)
   const [selfstatus, setSelfstatus] = useState(state.settings.selfstatus)
 
   const [profilePicture, setProfilePicture] = useState('')
-  useEffect(() => {DeltaBackend.call('getProfilePicture').then(setProfilePicture)}, [])
+  useEffect(() => {
+    DeltaBackend.call('getProfilePicture').then(setProfilePicture)
+  }, [])
 
   const onCancel = () => setShow('main')
   const onOk = async () => {
@@ -157,7 +160,10 @@ export function SettingsEditProfile({
     <>
       <DeltaDialogBody noFooter>
         <Card elevation={Elevation.ONE}>
-          <div className='profile-image-username center' style={{marginBottom: '30px'}}>
+          <div
+            className='profile-image-username center'
+            style={{ marginBottom: '30px' }}
+          >
             <ProfileImageSelector
               displayName={
                 state.settings['displayname'] || state.selfContact.address
@@ -172,21 +178,28 @@ export function SettingsEditProfile({
             id='displayname'
             placeholder={tx('pref_your_name')}
             value={displayname}
-            onChange={(event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) => { setDisplayname(event.target.value)}}
+            onChange={(
+              event: React.FormEvent<HTMLElement> &
+                React.ChangeEvent<HTMLInputElement>
+            ) => {
+              setDisplayname(event.target.value)
+            }}
           />
           <DeltaInput
             key='status'
             id='status'
             placeholder={tx('pref_default_status_label')}
             value={selfstatus}
-            onChange={(event: React.FormEvent<HTMLElement> & React.ChangeEvent<HTMLInputElement>) => { setSelfstatus(event.target.value)}}
+            onChange={(
+              event: React.FormEvent<HTMLElement> &
+                React.ChangeEvent<HTMLInputElement>
+            ) => {
+              setSelfstatus(event.target.value)
+            }}
           />
         </Card>
       </DeltaDialogBody>
-      <DeltaDialogOkCancelFooter
-        onCancel={onCancel}
-        onOk={onOk}
-      />
+      <DeltaDialogOkCancelFooter onCancel={onCancel} onOk={onOk} />
     </>
   )
 }

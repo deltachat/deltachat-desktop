@@ -42,7 +42,6 @@
   cursor: pointer;
 }
 
-
 .profile-image-username {
   display: flex;
   flex-direction: row;
@@ -55,8 +54,8 @@
     flex-direction: column;
     align-items: center;
 
-
-    img, span {
+    img,
+    span {
       width: 100px;
       height: 100px;
       border-radius: 100%;
@@ -112,7 +111,6 @@
     }
   }
 }
-
 
 .theme-meta {
   background-color: #80808082;
