@@ -308,6 +308,7 @@ export default function Settings(props: DialogProps) {
           onClose={props.onClose}
           account={account}
           state={state}
+          handleDeltaSettingsChange={handleDeltaSettingsChange}
         />
       )
     } else if (state.show === 'login') {

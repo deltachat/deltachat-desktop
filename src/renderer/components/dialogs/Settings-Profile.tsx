@@ -60,21 +60,22 @@ export default function SettingsProfile({
   )
 }
 
-export function ProfileImageSelector(props: any) {
-  const { displayName, color } = props
+export function ProfileImageSelector({
+  displayName,
+  color,
+  profilePicture,
+  setProfilePicture
+} : {
+  displayName: string,
+  color: string,
+  profilePicture: string,
+  setProfilePicture: (path: string) => void
+
+}) {
   const tx = window.static_translate
-  const [profileImagePreview, setProfileImagePreview] = useState('')
-  useEffect(() => {
-    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-    // return nothing because reacts wants it like that
-  }, [profileImagePreview])
+  
 
-  const changeProfilePicture = async (picture: string) => {
-    await DeltaBackend.call('setProfilePicture', picture)
-    setProfileImagePreview(await DeltaBackend.call('getProfilePicture'))
-  }
-
-  const openSelectionDialog = () => {
+  const onClickSelectPicture = () => {
     remote.dialog.showOpenDialog(
       {
         title: tx('select_your_new_profile_image'),
@@ -83,11 +84,13 @@ export function ProfileImageSelector(props: any) {
       },
       async (files: string[]) => {
         if (Array.isArray(files) && files.length > 0) {
-          changeProfilePicture(files[0])
+          setProfilePicture(files[0])
         }
       }
     )
   }
+
+  const onClickRemovePicture = () => setProfilePicture('')
 
   const codepoint = displayName && displayName.codePointAt(0)
   const initial = codepoint
@@ -97,24 +100,24 @@ export function ProfileImageSelector(props: any) {
   return (
     <div className='profile-image-selector'>
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-      {profileImagePreview ? (
-        <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
+      {profilePicture ? (
+        <img src={profilePicture} alt={tx('pref_profile_photo')} />
       ) : (
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
       <>
         <button
           aria-label={tx('pref_set_profile_photo')}
-          onClick={openSelectionDialog}
+          onClick={onClickSelectPicture}
           className={'bp3-button'}
         >
           {tx('pref_set_profile_photo')}
         </button>
         <button
           aria-label={tx('pref_remove_profile_photo')}
-          onClick={changeProfilePicture.bind(null, '')}
+          onClick={onClickRemovePicture}
           className={'bp3-button'}
-          disabled={!profileImagePreview}
+          disabled={!profilePicture}
         >
           {tx('pref_remove_profile_photo')}
         </button>
@@ -126,20 +129,30 @@ export function ProfileImageSelector(props: any) {
 export function SettingsEditProfile({
   setShow,
   account,
-  state
+  state,
+  handleDeltaSettingsChange
 }: {
   show: string
   setShow: (show: string) => void
   onClose: any,
   account: DeltaChatAccount,
-  state: any
+  state: any,
+  handleDeltaSettingsChange: (key: string, value: string) => void
 }) {
   const tx = useTranslationFunction()
   const [displayname, setDisplayname] = useState(account.displayname)
-  console.log(state)
   const [selfstatus, setSelfstatus] = useState(state.settings.selfstatus)
-  console.log('asd', displayname, selfstatus)
-  const onUpdate = () => {}
+
+  const [profilePicture, setProfilePicture] = useState('')
+  useEffect(() => {DeltaBackend.call('getProfilePicture').then(setProfilePicture)}, [])
+
+  const onCancel = () => setShow('main')
+  const onOk = async () => {
+    await DeltaBackend.call('setProfilePicture', profilePicture)
+    handleDeltaSettingsChange('displayname', displayname)
+    handleDeltaSettingsChange('selfstatus', selfstatus)
+    setShow('main')
+  }
   return (
     <>
       <DeltaDialogBody noFooter>
@@ -150,6 +163,8 @@ export function SettingsEditProfile({
                 state.settings['displayname'] || state.selfContact.address
               }
               color={state.selfContact.color}
+              profilePicture={profilePicture}
+              setProfilePicture={setProfilePicture}
             />
           </div>
           <DeltaInput
@@ -169,8 +184,8 @@ export function SettingsEditProfile({
         </Card>
       </DeltaDialogBody>
       <DeltaDialogOkCancelFooter
-        onCancel={() => setShow('main')}
-        onOk={onUpdate}
+        onCancel={onCancel}
+        onOk={onOk}
       />
     </>
   )
