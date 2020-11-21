@@ -26,6 +26,7 @@
 - Update inAppHelp
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 - localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
+- Overhauled look and feel of the profile editing section in settings
 
 ## Fixed
 
