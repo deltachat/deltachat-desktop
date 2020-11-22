@@ -12,6 +12,7 @@ import { useTranslationFunction } from '../../contexts'
 const log = getLogger('renderer/dialogs/About')
 
 export function DCInfo(_props: any) {
+  const tx = useTranslationFunction()
   const [content, setContent] = useState(undefined)
 
   useEffect(function fetchContent() {
@@ -43,9 +44,11 @@ export function DCInfo(_props: any) {
           </tbody>
         </table>
       </div>
-      <button style={{ float: 'right' }} onClick={copy2Clipboard}>
-        Copy JSON
-      </button>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <button className='delta-button-round' onClick={copy2Clipboard}>
+          {tx('copy_json')}
+        </button>
+      </div>      
     </>
   )
 }

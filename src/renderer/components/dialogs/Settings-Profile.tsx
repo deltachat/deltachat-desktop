@@ -111,14 +111,14 @@ export function ProfileImageSelector({
         <button
           aria-label={tx('pref_set_profile_photo')}
           onClick={onClickSelectPicture}
-          className={'bp3-button'}
+          className={'delta-button-round'}
         >
           {tx('pref_set_profile_photo')}
         </button>
         <button
           aria-label={tx('pref_remove_profile_photo')}
           onClick={onClickRemovePicture}
-          className={'bp3-button'}
+          className={'delta-button-round'}
           disabled={!profilePicture}
         >
           {tx('pref_remove_profile_photo')}
