@@ -45,6 +45,7 @@
 - Fix refresh of "empty chat" info meassage on chat changes
 - Fix removing incompleted account (see #1952)
 - Fix that drag n' drop selection message text resulted in an "send following dropped files" dialog
+- Fix adding of multiple members to a group via add member with searches in between (see #1964)
 
 ## [1.13.1] - 2020-10-06
 
