@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 // import { getLogger } from '../../shared/logger'
 // const log = getLogger('main/deltachat/burner')
 
