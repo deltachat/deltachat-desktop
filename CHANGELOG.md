@@ -30,6 +30,7 @@
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 - localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
 - Overhauled look and feel of the profile editing section in settings
+- Overhauled look and feel of about dialog
 
 ### Removed
 - removed inline message buttons (3dot menu button and download button)

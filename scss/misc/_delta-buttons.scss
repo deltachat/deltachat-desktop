@@ -1,0 +1,26 @@
+button.delta-button-round {
+  margin-top: 10px;
+  background-color: var(--bp3-input-focused);
+  box-shadow: none;
+  background-clip: unset;
+  background-image: none;
+  border-radius: 30px;
+  border-color: var(--bp3-input-focused);
+  border-style: solid !important;
+  padding: 10px 15px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &:hover {
+    background-color: var(--bp3-input-focused);
+    box-shadow: none;
+    background-clip: unset;
+    &:disabled {
+      background-color: rgba(206, 217, 224, 0.5);
+      background-image: none;
+      cursor: not-allowed;
+      color: rgba(92, 112, 128, 0.6);
+    }
+  }
+}
