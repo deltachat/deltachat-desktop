@@ -40,7 +40,6 @@ export default function SettingsProfile({
           style={{ marginBottom: '10px' }}
         >
           <div className='profile-image-selector'>
-            {/* TODO: show anything else when there is no profile image, like the letter avatar */}
             {profileImagePreview ? (
               <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
             ) : (
