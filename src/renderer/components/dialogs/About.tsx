@@ -44,11 +44,11 @@ export function DCInfo(_props: any) {
           </tbody>
         </table>
       </div>
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button className='delta-button-round' onClick={copy2Clipboard}>
           {tx('copy_json')}
         </button>
-      </div>      
+      </div>
     </>
   )
 }
