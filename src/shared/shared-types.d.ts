@@ -139,7 +139,6 @@ export interface FullChat {
   isGroup: boolean
   isDeaddrop: boolean
   isDeviceChat: boolean
-  draft: string
   selfInGroup: boolean
   muted: boolean
   ephemeralTimer: number

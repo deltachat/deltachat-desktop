@@ -41,10 +41,13 @@
       width: 32px;
       display: inline-block;
       vertical-align: text-bottom;
-      @include color-svg('../images/download.svg', var(--messageButtons));
+      @include color-svg(
+        '../images/download.svg',
+        var(--fullScreenMediaButtons)
+      );
 
       &:hover {
-        background-color: var(--messageButtons);
+        background-color: var(--fullScreenMediaButtons);
       }
       cursor: pointer;
       margin-right: 5px;

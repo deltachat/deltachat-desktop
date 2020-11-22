@@ -4,6 +4,8 @@ import {
   forwardMessage,
   deleteMessage,
   openMessageInfo,
+  setQuoteInDraft,
+  privateReply,
 } from './messageFunctions'
 import React, { useContext, useState, useEffect } from 'react'
 
@@ -101,60 +103,22 @@ const Author = (
   )
 }
 
-const InlineMenu = (
-  showMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
-  attachment: MessageTypeAttachment,
-  message: MessageType | { msg: null },
-  // onReply
-  viewType: number
-) => {
-  const tx = useTranslationFunction()
-
-  return (
-    <div className='message-buttons'>
-      {attachment &&
-        viewType !== C.DC_MSG_STICKER &&
-        !message.msg.isSetupmessage && (
-          <div
-            onClick={onDownload.bind(null, message.msg)}
-            role='button'
-            className='msg-button download hide-on-small'
-            aria-label={tx('save')}
-          />
-        )}
-      {/* <div
-        onClick={onReply}
-        role='button'
-        className='msg-button reply hide-on-small'
-      /> */}
-      <div className='msg-button-wrapper'>
-        <div
-          role='button'
-          onClick={showMenu}
-          className='msg-button menu'
-          aria-label={tx('a11y_message_context_menu_btn_label')}
-        />
-      </div>
-    </div>
-  )
-}
-
 function buildContextMenu(
   {
     attachment,
     direction,
     status,
     message,
-    // onReply,
-    // onRetrySend,
     text,
-  }: {
+    conversationType,
+  }: // onRetrySend,
+  {
     attachment: MessageTypeAttachment
     direction: 'incoming' | 'outgoing'
     status: msgStatus
     message: MessageType | { msg: null }
     text?: string
-    // onReply:Function
+    conversationType: 'group' | 'direct'
     // onRetrySend: Function
   },
   link: string,
@@ -195,10 +159,16 @@ function buildContextMenu(
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
-    // {
-    //   label: tx('reply_to_message_desktop'),
-    //   action: onReply
-    // },
+    {
+      label: tx('reply_to_message_desktop'),
+      action: setQuoteInDraft.bind(null, message.msg.id),
+    },
+    // privateReply -> only show in groups, don't show on info messages or outgoing messages
+    conversationType === 'group' &&
+      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+        label: tx('reply_privately'),
+        action: privateReply.bind(null, message.msg),
+      },
     {
       label: tx('menu_forward'),
       action: forwardMessage.bind(null, message),
@@ -251,6 +221,7 @@ const Message = (props: {
         status,
         message,
         text,
+        conversationType,
       },
       link,
       chatStoreDispatch
@@ -297,8 +268,6 @@ const Message = (props: {
     }
   }
 
-  const menu = InlineMenu(showMenu, attachment, message, viewType)
-
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
     content = (
@@ -333,7 +302,13 @@ const Message = (props: {
   // TODO another check - don't check it only over string
   const longMessage = /\[.{3}\]$/.test(text)
 
-  const hasQoute = message.msg.quotedText !== null
+  const hasQuote = message.msg.quotedText !== null
+
+  const onMessageDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    setQuoteInDraft(message.msg.id)
+    window.getSelection().empty()
+  }
 
   return (
     <div
@@ -345,11 +320,11 @@ const Message = (props: {
         { error: status === 'error' },
         { forwarded: message.msg.isForwarded }
       )}
+      onDoubleClick={onMessageDoubleClick}
     >
       {conversationType === 'group' &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
-      {menu}
       <div onContextMenu={showMenu} className='msg-container'>
         {message.msg.isForwarded && (
           <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
@@ -363,8 +338,8 @@ const Message = (props: {
           })}
           onClick={onClickMessageBody}
         >
-          {hasQoute && (
-            <Qoute
+          {hasQuote && (
+            <Quote
               quotedText={message.msg.quotedText}
               quotedMessageId={message.msg.quotedMessageId}
             />
@@ -377,6 +352,7 @@ const Message = (props: {
                 conversationType,
                 direction,
                 message,
+                hasQuote,
               }}
             />
           )}
@@ -401,7 +377,7 @@ const Message = (props: {
 
 export default Message
 
-const Qoute = ({
+export const Quote = ({
   quotedText,
   quotedMessageId,
 }: {
@@ -423,10 +399,10 @@ const Qoute = ({
   if (quotedMessageId !== 0 && message) {
     return (
       <div
-        className='qoute has-message'
+        className='quote has-message'
         style={{ borderLeftColor: message.contact.color }}
       >
-        <div className='qoute-author' style={{ color: message.contact.color }}>
+        <div className='quote-author' style={{ color: message.contact.color }}>
           {message.contact.displayName}
         </div>
         <p>{quotedText}</p>
@@ -434,7 +410,7 @@ const Qoute = ({
     )
   } else {
     return (
-      <div className='qoute'>
+      <div className='quote'>
         <p>{quotedText}</p>
       </div>
     )

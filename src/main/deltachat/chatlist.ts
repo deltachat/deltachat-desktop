@@ -139,11 +139,6 @@ export default class DCChatList extends SplitOut {
     return rawChat.toJson()
   }
 
-  async _getDraft(chatId: number) {
-    const draft = this._dc.getDraft(chatId)
-    return draft ? draft.getText() : ''
-  }
-
   async _getChatContactIds(chatId: number) {
     return this._dc.getChatContacts(chatId)
   }
@@ -175,7 +170,6 @@ export default class DCChatList extends SplitOut {
     const contactIds = await this._getChatContactIds(chatId)
 
     const contacts = await this._getChatContacts(contactIds)
-    const draft = await this._getDraft(chatId)
     const muted = await this.isChatMuted(chatId)
     const ephemeralTimer = this._dc.getChatEphemeralTimer(chatId)
 
@@ -199,7 +193,6 @@ export default class DCChatList extends SplitOut {
       isGroup: isGroup,
       isDeaddrop: chatId === C.DC_CHAT_ID_DEADDROP,
       isDeviceChat: chat.isDeviceTalk,
-      draft,
       selfInGroup: isGroup && contactIds.indexOf(C.DC_CONTACT_ID_SELF) !== -1,
       muted,
       ephemeralTimer,

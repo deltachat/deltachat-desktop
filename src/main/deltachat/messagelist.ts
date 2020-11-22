@@ -17,15 +17,33 @@ import {
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
-    text: string,
-    filename: string,
-    location: { lat: number; lng: number }
+    {
+      text,
+      filename,
+      location,
+      quoteMessageId,
+    }: {
+      text?: string
+      filename?: string
+      location?: { lat: number; lng: number }
+      quoteMessageId?: number
+    }
   ): [number, MessageType | { msg: null }] {
     const viewType = filename ? C.DC_MSG_FILE : C.DC_MSG_TEXT
     const msg = this._dc.messageNew(viewType)
     if (filename) msg.setFile(filename, undefined)
     if (text) msg.setText(text)
     if (location) msg.setLocation(location.lat, location.lng)
+
+    if (quoteMessageId) {
+      const quotedMessage = this._dc.getMessage(quoteMessageId)
+      if (!quotedMessage) {
+        log.error('sendMessage: Message to quote not found')
+      } else {
+        msg.setQuote(quotedMessage)
+      }
+    }
+
     const messageId = this._dc.sendMessage(chatId, msg)
     return [messageId, this.getMessage(messageId)]
   }
@@ -50,11 +68,33 @@ export default class DCMessageList extends SplitOut {
     return this._dc.getMessageInfo(msgId)
   }
 
-  setDraft(chatId: number, msgText: string) {
-    const msg = this._dc.messageNew()
-    msg.setText(msgText)
+  async getDraft(chatId: number): Promise<MessageType | null> {
+    const draft = this._dc.getDraft(chatId)
+    return draft ? this._messageToJson(draft) : null
+  }
 
-    this._dc.setDraft(chatId, msg)
+  setDraft(
+    chatId: number,
+    {
+      text,
+      file,
+      quotedMessageId,
+    }: { text?: string; file?: string; quotedMessageId?: number }
+  ) {
+    const viewType = file ? C.DC_MSG_FILE : C.DC_MSG_TEXT
+    const draft = this._dc.messageNew(viewType)
+    if (file) draft.setFile(file, undefined)
+    if (text) draft.setText(text)
+    if (quotedMessageId) {
+      const quotedMessage = this._dc.getMessage(quotedMessageId)
+      if (!quotedMessage) {
+        log.error('setDraftquote: Message to quote not found')
+      } else {
+        draft.setQuote(quotedMessage)
+      }
+    }
+
+    this._dc.setDraft(chatId, draft)
   }
 
   messageIdToJson(id: number) {
