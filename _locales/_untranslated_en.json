@@ -13,5 +13,14 @@
   },
   "import_qr_error": {
     "message": "QR could not be decoded"
+  },
+  "pref_edit_profile": {
+    "message": "Edit profile"
+  },
+  "pref_set_profile_photo": {
+    "message": "Set profile photo"
+  },
+  "pref_remove_profile_photo": {
+    "message": "Remove profile photo"
   }
 }

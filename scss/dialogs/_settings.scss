@@ -42,39 +42,72 @@
   cursor: pointer;
 }
 
-.profile-image-selector {
-  float: right;
-  width: 150px;
+.profile-image-username {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  & > img,
-  & > span {
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-    margin: 5px;
-    user-select: none;
-    pointer-events: none;
+  flex-direction: row;
+  &.center {
+    align-items: center;
+    flex-direction: column;
   }
-  & > span {
-    line-height: 100px;
-    font-size: 64px;
-    color: white;
-    text-align: center;
+  .profile-image-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img,
+    span {
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      user-select: none;
+      pointer-events: none;
+    }
+    span {
+      line-height: 100px;
+      font-size: 64px;
+      color: white;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: var(--bp3-input-focused);
+      box-shadow: none;
+      background-clip: unset;
+      background-image: none;
+      border-radius: 30px;
+      padding: 10px 15px;
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+
+      &:hover {
+        background-color: var(--bp3-input-focused);
+        box-shadow: none;
+        background-clip: unset;
+        &:disabled {
+          background-color: rgba(206, 217, 224, 0.5);
+          background-image: none;
+          cursor: not-allowed;
+          color: rgba(92, 112, 128, 0.6);
+        }
+      }
+    }
   }
-  & > div {
-    // the button container
-    & > button {
-      &:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-right: none;
-      }
-      &:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
+  .profile-displayname-addr {
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    justify-content: center;
+
+    .displayname {
+      font-size: large;
+      font-weight: 200;
+    }
+
+    .addr {
+      color: #969696;
+      margin-top: 5px;
     }
   }
 }

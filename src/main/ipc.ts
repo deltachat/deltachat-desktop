@@ -80,10 +80,6 @@ export function init(cwd: string, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
-  ipcMain.on('setConfig', (e, key, value) => {
-    e.returnValue = dcController.settings.setConfig(key, value)
-  })
-
   ipcMain.on('saveFile', (_e, source, target) => {
     copyFile(source, target, err => {
       if (err) main.send('error', err.message)
