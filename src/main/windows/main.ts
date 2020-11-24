@@ -3,6 +3,7 @@ import electron, { BrowserWindow, Rectangle, EventEmitter } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
+import { showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
 const log = getLogger('main/mainWindow')
 
@@ -93,8 +94,7 @@ export function init(
     log.debug('Someone tried to run a second instance')
     openUrlFromArgv(argv)
     if (window) {
-      if (window.isMinimized()) window.show()
-      window.focus()
+      showDeltaChat()
     }
   })
 
