@@ -175,5 +175,5 @@ export function updateTrayMenu() {
   }
 
   // Called to update menu on Linux
-  tray.setContextMenu(contextMenu)
+  if (tray !== null) tray.setContextMenu(contextMenu)
 }
