@@ -36,6 +36,7 @@
     <string name="save">Save</string>
     <string name="chat">Chat</string>
     <string name="media">Media</string>
+    <string name="profile">Profile</string>
     <string name="main_menu">Main menu</string>
     <string name="start_chat">Start chat</string>
     <string name="show_password">Show password</string>
@@ -160,6 +161,7 @@
     <string name="ask_delete_named_chat">Are you sure you want to delete \"%1$s\"?</string>
     <string name="menu_delete_messages">Delete messages</string>
     <string name="menu_delete_image">Delete image</string>
+    <string name="delete_contact">Delete contact</string>
     <string name="menu_delete_locations">Delete all locations?</string>
     <string name="menu_delete_location">Delete this location?</string>
     <string name="menu_message_details">Message details</string>
@@ -174,6 +176,8 @@
     <string name="menu_unmute">Unmute</string>
     <string name="menu_export_attachment">Export attachment</string>
     <string name="menu_all_media">All media</string>
+    <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
+    <string name="show_in_chat">Show in chat</string>
     <string name="menu_share">Share</string>
     <string name="menu_block_contact">Block contact</string>
     <string name="menu_unblock_contact">Unblock contact</string>
@@ -207,6 +211,8 @@
     <string name="pin">Pin</string>
     <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
     <string name="unpin">Unpin</string>
+    <string name="ConversationFragment_quoted_message_not_found">Original message not found</string>
+    <string name="reply_privately">Reply privately</string>
 
     <string name="mute_for_one_hour">Mute for 1 hour</string>
     <string name="mute_for_two_hours">Mute for 2 hours</string>
@@ -536,7 +542,9 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">Do you want to delete %1$d messages now and all newly fetched messages \"%2$s\" in the future?\n\n• This includes all media\n\n• Messages will be deleted whether they were seen or not\n\n• \"Saved messages\" will be skipped from local deletion</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">Do you want to delete %1$d messages now and all newly fetched messages \"%2$s\" in the future?\n\n• This includes all media\n\n• This will also delete emails affected by the \"Show classic emails\" option\n\n• \"Saved messages\" will be deleted from the server as well</string>
+    <string name="autodel_server_ask">Do you want to delete %1$d messages now and all newly fetched messages \"%2$s\" in the future?\n\n⚠️ This includes emails, media and \"Saved messages\" in all server folders\n\n⚠️ Do not use this function if you want to keep data on the server\n\n⚠️ Do not use this function if you are using other email clients besides Delta Chat</string>
+    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
+    <string name="autodel_server_enabled_hint">This includes emails, media and \"Saved messages\" in all server folders. Do not use this function if you want to keep data on the server or if you are using other email clients besides Delta Chat.</string>
     <string name="autodel_confirm">I understand, delete all these messages</string>
     <string name="autodel_at_once">At once</string>
     <string name="after_30_seconds">After 30 seconds</string>
@@ -591,6 +599,9 @@
     <string name="systemmsg_ephemeral_timer_week">Disappearing messages timer set to 1 week.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Disappearing messages timer set to 4 weeks.</string>
 
+    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <string name="systemmsg_chat_protection_disabled">Chat protection disabled.</string>
+    <string name="systemmsg_chat_protection_enabled">Chat protection enabled.</string>
 
     <!-- screen lock -->
     <string name="screenlock_title">Screen lock</string>
@@ -723,7 +734,7 @@
     <string name="ask_delete_chat_desktop">Delete this chat?</string>
     <string name="email_validation_failed_desktop">Email address required.</string>
     <string name="forget_login_confirmation_desktop">Delete this login? Everything will be deleted, including your end-to-end setup, contacts, chats, messages and media. This action cannot be undone.</string>
-    <string name="account_info_hover_tooltip_desktop">E-Mail: %s\nSize: %s\nPath: %s</string>
+    <string name="account_info_hover_tooltip_desktop">E-Mail: %1$s\nSize: %2$s\nPath: %3$s</string>
     <string name="me_desktop">me</string>
     <string name="in_this_group_desktop">Group members</string>
     <string name="not_in_this_group_desktop">Potential group members (not in group)</string>
@@ -765,7 +776,6 @@
     <string name="pref_reliable_service_explain">Requires a permanent notification</string>
     <string name="perm_enable_bg_reminder_title">Tap here to receive messages while Delta Chat is in the background.</string>
     <string name="perm_enable_bg_already_done">You already allowed Delta Chat to receive messages in the background.\n\nIf messages still do not arrive in background, please also check your system settings.</string>
-	<string name="ConversationFragment_quoted_message_not_found">Original message not found</string>
-	<string name="reply_privately">Reply privately</string>
+    <string name="update_1_14_android">Some highlights of the 1.14 update:\n\n🧹 Swipe to reply: To answer a concrete message, just swipe it right (not here! you cannot answer here 😛) You\'ll see a quote above the compose line and can continue writing your message as usual.\n\n🔥 Disappearing messages ­- the time has come 😀. Any chat can now be configured to delete sent and received messages after some time. Just select \"Disappearing messages\" from the chat\'s menu (again: not here)\n\n👆 Chats open at first unseen message\n\n💾 Forward things to \"Saved messages\" directly and faster (this can be tried here: long-tap this message and then the arrow top-right)\n\n🎃 Finally, we\'ve again frightened many bugs! Lots were so scared, they won\'t come back.</string>
 
 </resources>
