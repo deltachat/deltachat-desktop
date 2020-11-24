@@ -36,6 +36,7 @@
     <string name="save">保存</string>
     <string name="chat">聊天</string>
     <string name="media">媒体</string>
+    <string name="profile">概要</string>
     <string name="main_menu">主菜单</string>
     <string name="start_chat">开始聊天</string>
     <string name="show_password">显示密码</string>
@@ -154,6 +155,7 @@
     <string name="ask_delete_named_chat">您确定要删除“%1$s”吗？</string>
     <string name="menu_delete_messages">删除消息</string>
     <string name="menu_delete_image">删除图像</string>
+    <string name="delete_contact">删除联系人</string>
     <string name="menu_delete_locations">删除所有位置？</string>
     <string name="menu_delete_location">删除此位置？</string>
     <string name="menu_message_details">消息详情</string>
@@ -168,6 +170,8 @@
     <string name="menu_unmute">取消静音</string>
     <string name="menu_export_attachment">导出附件</string>
     <string name="menu_all_media">所有媒体</string>
+    <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
+    <string name="show_in_chat">在聊天中显示</string>
     <string name="menu_share">分享</string>
     <string name="menu_block_contact">屏蔽联系人</string>
     <string name="menu_unblock_contact">取消屏蔽联系人</string>
@@ -201,6 +205,8 @@
     <string name="pin">固定</string>
     <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
     <string name="unpin">取消固定</string>
+    <string name="ConversationFragment_quoted_message_not_found">原消息未找到</string>
+    <string name="reply_privately">私下回复</string>
 
     <string name="mute_for_one_hour">静音 1 小时</string>
     <string name="mute_for_two_hours">静音 2 小时</string>
@@ -480,7 +486,7 @@
     <string name="pref_imap_folder_handling">IMAP 文件夹处理</string>
     <string name="pref_imap_folder_warn_disable_defaults">如果禁用了此选项，请确保您的服务器和其他客户端已进行了相应的设置。\n\n否则可能无法正常工作。</string>
     <string name="pref_watch_inbox_folder">监视收件箱文件夹</string>
-    <string name="pref_watch_sent_folder">监视发送文件夹</string>
+    <string name="pref_watch_sent_folder">监视已发送文件夹</string>
     <string name="pref_watch_mvbox_folder">监视 DeltaChat 文件夹</string>
     <string name="pref_send_copy_to_self">给自己发送副本</string>
     <string name="pref_auto_folder_moves">自动移动至 DeltaChat 文件夹</string>
@@ -505,11 +511,11 @@
     <string name="emoji_search_results">搜索结果</string>
     <string name="emoji_not_found">未找到 emoji</string>
     <string name="emoji_recent">最近使用</string>
-    <string name="emoji_people">人物 &amp; 身体</string>
-    <string name="emoji_nature">动物 &amp; 自然</string>
-    <string name="emoji_foods">食品 &amp; 饮料</string>
+    <string name="emoji_people">人物与身体</string>
+    <string name="emoji_nature">动物与自然</string>
+    <string name="emoji_foods">食品与饮料</string>
     <string name="emoji_activity">活动</string>
-    <string name="emoji_places">出行 &amp; 地点</string>
+    <string name="emoji_places">出行与地点</string>
     <string name="emoji_objects">物品</string>
     <string name="emoji_symbols">符号</string>
     <string name="emoji_flags">旗帜</string>
@@ -524,7 +530,9 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">您要删除目前的 %1$d 条消息以及之后 %2$s 内新收到的消息吗？\n\n• 这包括所有媒体文件\n\n• 无论消息是否被浏览过，它们都将会被删除\n\n• 在本地删除中，“保存的消息”将被跳过</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">您要删除目前的 %1$d 条消息以及之后 %2$s 内新收到的消息吗？\n\n• 这包括所有媒体文件\n\n• 这也会删除被“显示传统电子邮件”选项影响的电子邮件\n\n• “保存的消息”也将从服务器中删除</string>
+    <string name="autodel_server_ask">你想要现在删除%1$d条消息及所有未来“%2$s”之内获取的新消息吗？\n\n⚠️这包括所有服务器文件夹中的电子邮件、媒体和“保存的信息”\n\n⚠️ 如果您想在服务器上保存数据，请不要使用此功能n\n⚠️ 不要使用此功能，如果你正在使用其他Delta Chat之外的电子邮件客户端。</string>
+    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
+    <string name="autodel_server_enabled_hint">这包括所有服务器文件夹中的电子邮件、媒体和\"保存的信息\"。如果您想在服务器上保存数据，或者您正在使用除Delta Chat之外的其他电子邮件客户端，请不要使用此功能。</string>
     <string name="autodel_confirm">我了解，将这些消息全部删除</string>
     <string name="autodel_at_once">立刻</string>
     <string name="after_30_seconds">30 秒后</string>
@@ -579,6 +587,9 @@
     <string name="systemmsg_ephemeral_timer_week">设置阅后即焚消息定时器为 1 周</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">设置阅后即焚消息定时器为 4 周</string>
 
+    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <string name="systemmsg_chat_protection_disabled">聊天保护已禁用</string>
+    <string name="systemmsg_chat_protection_enabled">聊天保护已启用</string>
 
     <!-- screen lock -->
     <string name="screenlock_title">屏幕锁定</string>
@@ -711,7 +722,7 @@
     <string name="ask_delete_chat_desktop">删除此聊天？</string>
     <string name="email_validation_failed_desktop">需要电子邮件地址。</string>
     <string name="forget_login_confirmation_desktop">删除此登录？ 一切都将被删除，包括您的端到端设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
-    <string name="account_info_hover_tooltip_desktop">电子邮件：%s\n大小：%s\n路径：%s</string>
+    <string name="account_info_hover_tooltip_desktop">电子邮件：%1$s\n大小：%2$s\n路径：%3$s</string>
     <string name="me_desktop">我</string>
     <string name="in_this_group_desktop">群组成员</string>
     <string name="not_in_this_group_desktop">潜在的群组成员（不在群组中）</string>
@@ -753,7 +764,6 @@
     <string name="pref_reliable_service_explain">需要一个永久通知</string>
     <string name="perm_enable_bg_reminder_title">点击此处以在 Delta Chat 处于后台时接收消息。</string>
     <string name="perm_enable_bg_already_done">您已允许 Delta Chat 在后台接收消息。\n\n如果在后台时消息仍没到达，请同时检查系统设置。</string>
-	<string name="ConversationFragment_quoted_message_not_found">原消息未找到</string>
-	<string name="reply_privately">私下回复</string>
+    <string name="update_1_14_android">1.14 更新亮点：\n\n🧹 轻扫以回复：要回复某一具体消息，只需将其向右轻扫（不是这里！这里您不能回复😛）您会在撰写行上方看到一个引用，之后可以照常编写消息。\n\n🔥 阅后即焚消息 ­—— 时辰已到😀。任意聊天均可被配置为在一段时间后删除已发送与已接收的消息。从聊天菜单中选择“阅后即焚消息”（重复：不是这里）\n\n👆 于第一条未查看的消息处打开聊天\n\n💾 将东西直接、快速地转发到“保存的消息”（这个可以在这里尝试：长按此消息，然后右上角箭头）\n\n🎃 最后，我们再次恐吓了许多bug！它们大多数都被吓坏了，应该不会再回来了。</string>
 
 </resources>

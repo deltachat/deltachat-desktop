@@ -36,6 +36,7 @@
     <string name="save">Kaydet</string>
     <string name="chat">Sohbet</string>
     <string name="media">Ortam</string>
+    <string name="profile">Profil</string>
     <string name="main_menu">Ana menü</string>
     <string name="start_chat">Sohbete başla</string>
     <string name="show_password">Parolayı göster</string>
@@ -160,6 +161,7 @@
     <string name="ask_delete_named_chat">\"%1$s\" sohbetini silmek istediğinizden emin misiniz?</string>
     <string name="menu_delete_messages">İletileri sil</string>
     <string name="menu_delete_image">Görseli sil</string>
+    <string name="delete_contact">Kişiyi sil</string>
     <string name="menu_delete_locations">Tüm konumlar silinsin mi?</string>
     <string name="menu_delete_location">Bu konum silinsin mi?</string>
     <string name="menu_message_details">İleti ayrıntıları</string>
@@ -174,6 +176,8 @@
     <string name="menu_unmute">Sesini aç</string>
     <string name="menu_export_attachment">İlişiği dışa aktar</string>
     <string name="menu_all_media">Tüm ortamlar</string>
+    <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
+    <string name="show_in_chat">Sohbette göster</string>
     <string name="menu_share">Paylaş</string>
     <string name="menu_block_contact">Kişiyi engelle</string>
     <string name="menu_unblock_contact">Kişiyi engelleme</string>
@@ -207,6 +211,8 @@
     <string name="pin">Sabitle</string>
     <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
     <string name="unpin">Sabitleme</string>
+    <string name="ConversationFragment_quoted_message_not_found">Özgün ileti bulunamadı</string>
+    <string name="reply_privately">Özel olarak yanıtla</string>
 
     <string name="mute_for_one_hour">1 saatliğine sessize al</string>
     <string name="mute_for_two_hours">2 saatliğine sessize al</string>
@@ -536,7 +542,9 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• İletiler görülse de görülmese de silinecek\n\n• \"Kaydedilen iletiler\" yerel silmeden atlanacak</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• Bu, \"Klasik e-postaları göster\" seçeneği tarafından etkilenen e-postaları da silecek\n\n• \"Kaydedilen iletiler\" sunucudan da silinecek</string>
+    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri \"%2$s\" silmek istiyor musunuz?\n\n⚠️ Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve \"Kaydedilen iletileri\" kapsar\n\n⚠️ Verileri sunucuda tutmak istiyorsanız bu işlevi kullanmayın\n\n⚠️ Delta Chat\'in dışında diğer e-posta istemcileri kullanıyorsanız bu işlevi kullanmayın</string>
+    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
+    <string name="autodel_server_enabled_hint">Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve \"Kaydedilen iletileri\" kapsar. Verileri sunucuda tutmak istiyorsanız ya da Delta Chat\'in dışında diğer e-posta istemcileri kullanıyorsanız bu işlevi kullanmayın.</string>
     <string name="autodel_confirm">Anladım, tüm bu iletileri sil</string>
     <string name="autodel_at_once">Bir kerede</string>
     <string name="after_30_seconds">30 saniye sonra</string>
@@ -591,6 +599,9 @@
     <string name="systemmsg_ephemeral_timer_week">Kaybolan iletiler zamanlayıcısı 1 haftaya ayarlandı.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Kaybolan iletiler zamanlayıcısı 4 haftaya ayarlandı.</string>
 
+    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <string name="systemmsg_chat_protection_disabled">Sohbet koruması etkisizleştirildi.</string>
+    <string name="systemmsg_chat_protection_enabled">Sohbet koruması etkinleştirildi.</string>
 
     <!-- screen lock -->
     <string name="screenlock_title">Ekran kilidi</string>
@@ -723,7 +734,7 @@
     <string name="ask_delete_chat_desktop">Bu sohbet silinsin mi?</string>
     <string name="email_validation_failed_desktop">E-posta adresi gerekli.</string>
     <string name="forget_login_confirmation_desktop">Bu oturum silinsin mi? Uçtan uca ayarlamanızı, kişilerinizi, sohbetlerinizi, iletilerinizi ve ortamlarınızı kapsayarak her şey silinecek. Bu eylem geri alınamaz.</string>
-    <string name="account_info_hover_tooltip_desktop">E-posta: %s\nBoyut: %s\nYol: %s</string>
+    <string name="account_info_hover_tooltip_desktop">E-posta: %1$s\nBoyut: %2$s\nYol: %3$s</string>
     <string name="me_desktop">ben</string>
     <string name="in_this_group_desktop">Grup üyeleri</string>
     <string name="not_in_this_group_desktop">Olası grup üyeleri (grupta değil)</string>
@@ -765,7 +776,6 @@
     <string name="pref_reliable_service_explain">Kalıcı bir bildirim gerektirir</string>
     <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
     <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>
-	<string name="ConversationFragment_quoted_message_not_found">Özgün ileti bulunamadı</string>
-	<string name="reply_privately">Özel olarak yanıtla</string>
+    <string name="update_1_14_android">1.14 güncelleştirmesinin bazı öne çıkanları:\n\n🧹 Yanıtlamak için kaydırın: Somut bir iletiyi yanıtlamak için yalnızca onu sağa kaydırın (burada değil! buraya yanıt veremezsiniz 😛) Oluşturma satırının yukarısında bir tırnak göreceksiniz ve iletinizi her zaman olduğu gibi yazabileceksiniz.\n\n🔥 Kaybolan iletiler ­- zamanı geldi 😀. Artık herhangi bir sohbet, alınan ve gönderilen iletileri bir süre sonra silmek için yapılandırılabilir. Yalnızca sohbetin menüsündeki \"Kaybolan iletiler\"i seçin (yeniden: burada değil)\n\n👆 Sohbet, ilk görülmeyen iletide açılır\n\n💾 Öğeleri doğrudan ve hızlıca \"Kaydedilen iletiler\"e kaydedin (bu, burada denenebilir: bu iletiye uzun dokunun ve sonra sağ üste atın)\n\n🎃 Son olarak, çoğu hatayı yine ürküttük! Çoğu o kadar korktu ki geri dönmeyecek.</string>
 
 </resources>

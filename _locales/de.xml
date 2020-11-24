@@ -36,6 +36,7 @@
     <string name="save">Speichern</string>
     <string name="chat">Chat</string>
     <string name="media">Medien</string>
+    <string name="profile">Profil</string>
     <string name="main_menu">Hauptmenü</string>
     <string name="start_chat">Chat starten</string>
     <string name="show_password">Passwort anzeigen</string>
@@ -160,6 +161,7 @@
     <string name="ask_delete_named_chat">Sind Sie sicher, dass Sie \"%1$s\" löschen möchten?</string>
     <string name="menu_delete_messages">Nachrichten löschen</string>
     <string name="menu_delete_image">Bild löschen</string>
+    <string name="delete_contact">Kontakt löschen</string>
     <string name="menu_delete_locations">Alle Standorte löschen?</string>
     <string name="menu_delete_location">Diesen Standort löschen?</string>
     <string name="menu_message_details">Nachrichtendetails</string>
@@ -174,6 +176,8 @@
     <string name="menu_unmute">Stumm aus</string>
     <string name="menu_export_attachment">Datei exportieren</string>
     <string name="menu_all_media">Alle Medien</string>
+    <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
+    <string name="show_in_chat">Im Chat zeigen</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_block_contact">Kontakt blockieren</string>
     <string name="menu_unblock_contact">Kontakt nicht mehr blockieren</string>
@@ -207,6 +211,8 @@
     <string name="pin">Anheften</string>
     <!-- Translators: this is the opposite of "Pin", removing the sticky-state from sth. -->
     <string name="unpin">Loslösen</string>
+    <string name="ConversationFragment_quoted_message_not_found">Originalnachricht nicht gefunden</string>
+    <string name="reply_privately">Privat antworten</string>
 
     <string name="mute_for_one_hour">Stumm für 1 Stunde</string>
     <string name="mute_for_two_hours">Stumm für 2 Stunden</string>
@@ -361,7 +367,7 @@
     <string name="login_title">Login</string>
     <string name="login_header">Bei Ihrem Server anmelden</string>
     <string name="login_explain">Mit existierendem E-Mail-Konto einloggen</string>
-    <string name="login_subheader">Für bekannte E-Mail-Anbieter werden zusätzliche Einstellungen automatisch vorgenommen. Manchmal muss IMAP in der Weboberfläche aktiviert werden. Bitten Sie Ihren Anbieter oder Freunde um Rat, wenn es Probleme gibt.</string>
+    <string name="login_subheader">Für bekannte E-Mail-Anbieter werden zusätzliche Einstellungen automatisch vorgenommen. Manchmal muss IMAP in der Weboberfläche eingeschaltet werden. Bitten Sie Ihren Anbieter oder Freunde um Rat, wenn es Probleme gibt.</string>
     <string name="login_no_servers_hint">Es gibt keine Delta Chat Server! Ihre Daten bleiben auf Ihrem Gerät!</string>
     <string name="login_inbox">Posteingang</string>
     <string name="login_imap_login">IMAP-Anmeldename</string>
@@ -462,7 +468,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <!-- Translators: Keep in mind that this is a Request - it must be clear in the wording that this cannot be enforced. -->
     <string name="pref_incognito_keyboard_explain">Deaktivierung des personalisierten Lernens der Tastatur anfordern.</string>
     <string name="pref_read_receipts">Lesebestätigungen</string>
-    <string name="pref_read_receipts_explain">Wenn Lesebestätigungen deaktiviert sind, werden auch keine Lesebestätigungen von anderen angezeigt. </string>
+    <string name="pref_read_receipts_explain">Wenn Lesebestätigungen ausgeschaltet sind, werden auch keine Lesebestätigungen von anderen angezeigt. </string>
     <string name="pref_manage_keys">Schlüssel verwalten</string>
     <string name="pref_use_system_emoji">System-Emoji benutzen</string>
     <string name="pref_use_system_emoji_explain">Eingebaute Emoji-Unterstützung von Delta Chat deaktivieren</string>
@@ -538,8 +544,10 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• Nachrichten werden gelöscht, auch wenn sie nicht angesehen wurden\n\n• \"Gespeicherte Nachrichten\" werden nicht gelöscht</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• E-Mails, die aufgrund von \"Normale E-Mails anzeigen\" angezeigt werden, werden ebenfalls vom Server gelöscht\n\n• \"Gespeicherte Nachrichten\" werden ebenfalls vom Server gelöschet</string>
-    <string name="autodel_confirm">Verstanden, löschen all diese Nachrichten</string>
+    <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n⚠️ Dies schließt E-Mails, Medien und \"Gespeicherte Nachrichten\" aus allen Server-Ordnern mit ein\n\n⚠️ Verwenden Sie diese Funktion nicht, wenn Sie Daten auf dem Server behalten möchten\n\n⚠️ Verwenden Sie diese Funktion nicht, wenn Sie neben Delta Chat noch andere E-Mail-Clients verwenden</string>
+    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
+    <string name="autodel_server_enabled_hint">Dies schließt E-Mails, Medien und \"Gespeicherte Nachrichten\" aus allen Server-Ordnern mit ein. Verwenden Sie diese Funktion nicht, wenn Sie Daten auf dem Server behalten möchten oder wenn Sie neben Delta Chat noch andere E-Mail-Clients verwenden.</string>
+    <string name="autodel_confirm">Verstanden, all diese Nachrichten löschen</string>
     <string name="autodel_at_once">Sofort</string>
     <string name="after_30_seconds">Nach 30 Sekunden</string>
     <string name="after_1_minute">Nach 1 Minute</string>
@@ -575,7 +583,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_member_removed">%1$s entfernt.</string>
     <string name="systemmsg_group_left">Gruppe verlassen.</string>
     <string name="systemmsg_read_receipt_subject">Empfangsbestätigung</string>
-    <string name="systemmsg_read_receipt_body">Ihre Nachricht \"%1$s\" wurde auf dem Empfangsgerät angezeigt.\n\Das ist keine Garantie dafür, dass sie auch gelesen wurde.</string>
+    <string name="systemmsg_read_receipt_body">Ihre Nachricht \"%1$s\" wurde auf dem Empfangsgerät angezeigt.\n\nDas ist keine Garantie dafür, dass sie auch gelesen wurde.</string>
     <string name="systemmsg_cannot_decrypt">Diese Nachricht kann nicht entschlüsselt werden.\n\n• Es könnte bereits helfen, einfach auf diese Nachricht zu antworten und die/den AbsenderIn zu bitten, die Nachricht erneut zu senden.\n\n• Falls Delta Chat oder ein anderes E-Mail-Programm auf diesem oder einem anderen Gerät neu installiert wurde, kann von dort aus eine Autocrypt Setup-Nachricht gesendet werden.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). -->
     <string name="systemmsg_action_by_me">%1$s von mir.</string>
@@ -585,7 +593,7 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_subject_for_new_contact">Nachricht von %1$s</string>
     <string name="systemmsg_failed_sending_to">Nachricht senden an %1$s fehlgeschlagen.</string>
 
-    <string name="systemmsg_ephemeral_timer_disabled">Verschwindende Nachrichten deaktiviert.</string>
+    <string name="systemmsg_ephemeral_timer_disabled">Verschwindende Nachrichten ausgeschaltet.</string>
     <string name="systemmsg_ephemeral_timer_enabled">Ablaufzeit verschwindender Nachrichten auf %1$s s festgelegt.</string>
     <string name="systemmsg_ephemeral_timer_minute">Ablaufzeit verschwindender Nachrichten auf 1 Minute festgelegt.</string>
     <string name="systemmsg_ephemeral_timer_hour">Ablaufzeit verschwindender Nachrichten auf 1 Stunde festgelegt.</string>
@@ -593,6 +601,9 @@ Einige Anbieter platzieren zusätzliche Informationen im Posteingang, die Sie z.
     <string name="systemmsg_ephemeral_timer_week">Ablaufzeit verschwindender Nachrichten auf 1 Woche festgelegt.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Ablaufzeit verschwindender Nachrichten auf 4 Wochen festgelegt.</string>
 
+    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <string name="systemmsg_chat_protection_disabled">Chat-Absicherung ausgeschaltet.</string>
+    <string name="systemmsg_chat_protection_enabled">Chat-Absicherung eingeschaltet.</string>
 
     <!-- screen lock -->
     <string name="screenlock_title">Bildschirmsperre</string>
@@ -727,7 +738,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="ask_delete_chat_desktop">Chat wirklich löschen?</string>
     <string name="email_validation_failed_desktop">E-Mail-Adresse benötigt.</string>
     <string name="forget_login_confirmation_desktop">Dieses Login löschen? Alles wird gelöscht, einschließlich des Ende-zu-Ende-Setups, der Kontakte, Chats, Nachrichten und Medien. Diese Aktion ist endgültig und kann nicht rückgängig gemacht werden.</string>
-    <string name="account_info_hover_tooltip_desktop">E-Mail: %s\nGröße: %s\nPfad: %s</string>
+    <string name="account_info_hover_tooltip_desktop">E-Mail: %1$s\nGröße: %2$s\nPfad: %3$s</string>
     <string name="me_desktop">ich</string>
     <string name="in_this_group_desktop">Gruppenmitglieder</string>
     <string name="not_in_this_group_desktop">Potenzielle Gruppenmitglieder (nicht in der Gruppe)</string>
@@ -749,7 +760,7 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="a11y_delivery_status_invalid">Übertragungsstatus: Ungültig</string>
     <string name="a11y_message_context_menu_btn_label">Nachrichtaktionen</string>
     <string name="a11y_background_preview_label">Vorschau für Hintergrundbild</string>
-    <string name="a11y_disappearing_messages_activated">Verschwindende Nachrichten aktiviert</string>
+    <string name="a11y_disappearing_messages_activated">Verschwindende Nachrichten eingeschaltet</string>
 
 
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
@@ -769,7 +780,6 @@ Ihr bisheriges E-Mail-Konto wird dabei nicht gelöscht. Sie können mit der Opti
     <string name="pref_reliable_service_explain">Erfordert immer sichtbaren Hinweis</string>
     <string name="perm_enable_bg_reminder_title">Tippen Sie hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
     <string name="perm_enable_bg_already_done">Sie haben Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfen Sie bitte auch Ihre Systemeinstellungen.</string>
-	<string name="ConversationFragment_quoted_message_not_found">Originalnachricht nicht gefunden</string>
-	<string name="reply_privately">Privat antworten</string>
+    <string name="update_1_14_android">Neues im 1.14 Update:\n\n🧹 Wischen zum Antworten: Um eine konkrete Nachricht zu beantworten, wischen Sie diese einfach nach rechts (nicht hier! hier kann man nicht antworten 😛) Die Antwort selbst erstellen Sie dann wie gewohnt.\n\n🔥 Verschwindende Nachrichten: Chats können jetzt so konfiguriert werden, dass gesendete und empfangene Nachrichten nach einiger Zeit gelöscht werden. Wählen Sie einfach \"Verschwindende Nachrichten\" aus dem Chat-Menü (wieder: nicht hier)\n\n👆 Chats öffnen sich bei der ersten ungelesenen Nachricht.\n\n💾 Legen Sie Dinge direkt und schnell in den \"Gespeicherte Nachrichten\" ab (dies kann hier versucht werden: Tippen Sie lange auf diese Nachricht und dann auf den Pfeil oben rechts)\n\n🎃 Ausserdem haben wir viele Bugs verschreckt! Die meisten werden kaum zurückkommen.</string>
 
 </resources>
