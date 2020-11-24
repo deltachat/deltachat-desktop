@@ -63,7 +63,12 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
-import { updateTrayIcon, updateTrayMenu, hideDeltaChat, showDeltaChat } from './tray'
+import {
+  updateTrayIcon,
+  updateTrayMenu,
+  hideDeltaChat,
+  showDeltaChat,
+} from './tray'
 import { acceptThemeCLI } from './themes'
 
 app.ipcReady = false
@@ -127,21 +132,22 @@ function onReady([logins, _appReady, loadedState]: [
   updateTrayIcon()
 
   mainWindow.window.on('close', e => {
-    log.debug('mainWindow.window.on(\'close\')')
+    log.debug("mainWindow.window.on('close')")
     if (!app.isQuitting) {
       e.preventDefault()
       if (app.state.saved.minimizeToTray) {
-        log.debug('mainWindow.window.on(\'close\') Hiding main window')
+        log.debug("mainWindow.window.on('close') Hiding main window")
         hideDeltaChat()
       } else {
         if (process.platform === 'darwin') {
-          log.debug('mainWindow.window.on(\'close\') We are on mac, so lets hide the main window')
+          log.debug(
+            "mainWindow.window.on('close') We are on mac, so lets hide the main window"
+          )
           hideDeltaChat()
         } else {
-          log.debug('mainWindow.window.on(\'close\') Quitting deltachat')
+          log.debug("mainWindow.window.on('close') Quitting deltachat")
           quit(e)
         }
-
       }
     }
   })
@@ -157,7 +163,7 @@ export function quit(e?: Electron.Event) {
   app.isQuitting = true
   e?.preventDefault()
 
-  function doQuit() { 
+  function doQuit() {
     log.info('Quitting now. Bye.')
     app.quit()
   }
@@ -171,12 +177,12 @@ export function quit(e?: Electron.Event) {
 }
 app.on('activate', () => {
   console.log('test')
-  log.debug('app.on(\'activate\')')
+  log.debug("app.on('activate')")
   if (mainWindow.window.isVisible() === false) {
-    log.debug('app.on(\'activate\') showing main window')
+    log.debug("app.on('activate') showing main window")
     showDeltaChat()
   } else {
-    log.debug('app.on(\'activate\') mainWindow is visibile, no need to show it')
+    log.debug("app.on('activate') mainWindow is visibile, no need to show it")
   }
 })
 app.on('before-quit', e => quit(e))

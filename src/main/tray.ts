@@ -57,23 +57,23 @@ export function setTrayMenu() {
   const tx = app.translate
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
-      mainWindowIsVisibleAndFocused() ?
-        {
-          id: 'reduce_window',
-          label: tx('hide'),
-          type: 'normal',
-          click() {
-            hideDeltaChat()
+      mainWindowIsVisibleAndFocused()
+        ? {
+            id: 'reduce_window',
+            label: tx('hide'),
+            type: 'normal',
+            click() {
+              hideDeltaChat()
+            },
+          }
+        : {
+            id: 'open_windows',
+            label: tx('activate'),
+            type: 'normal',
+            click() {
+              showDeltaChat()
+            },
           },
-        } :
-        {
-          id: 'open_windows',
-          label: tx('activate'),
-          type: 'normal',
-          click() {
-            showDeltaChat()
-          },
-        },
 
       {
         id: 'quit_app',
@@ -113,14 +113,18 @@ export function setTrayMenu() {
       },
     ])
   }
- 
+
   tray.setContextMenu(contextMenu)
 }
 
 export function TrayIcon() {
-  let tray 
+  let tray
   if (process.platform === 'darwin') {
-    let image = nativeImage.createFromPath(join(__dirname, '..', '..', 'images', 'trayIconTemplate.png')).resize({width: 24})
+    let image = nativeImage
+      .createFromPath(
+        join(__dirname, '..', '..', 'images', 'trayIconTemplate.png')
+      )
+      .resize({ width: 24 })
     image.setTemplateImage(true)
     tray = new Tray(image)
   } else {
@@ -135,7 +139,6 @@ export function renderTrayIcon() {
     log.warn('Tray icon not destroyed before render?')
     destroyTrayIcon()
   }
-
 
   // Add tray icon
   log.info('add icon tray')
@@ -157,7 +160,7 @@ export function renderTrayIcon() {
   tray.on('click', () => {
     hideOrShow()
   })
-  if(process.platform === 'darwin') {
+  if (process.platform === 'darwin') {
     tray.on('right-click', () => tray.popUpContextMenu())
   }
 
@@ -166,9 +169,7 @@ export function renderTrayIcon() {
 
 export function updateTrayMenu() {
   if (contextMenu === null) return
-  const reduceWindowItem = contextMenu.getMenuItemById(
-    'reduce_window'
-  )
+  const reduceWindowItem = contextMenu.getMenuItemById('reduce_window')
   if (reduceWindowItem) {
     reduceWindowItem.enabled = mainWindow.window.isVisible()
   }
