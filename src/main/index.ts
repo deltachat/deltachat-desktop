@@ -176,7 +176,6 @@ export function quit(e?: Electron.Event) {
   }, 4000)
 }
 app.on('activate', () => {
-  console.log('test')
   log.debug("app.on('activate')")
   if (mainWindow.window.isVisible() === false) {
     log.debug("app.on('activate') showing main window")
