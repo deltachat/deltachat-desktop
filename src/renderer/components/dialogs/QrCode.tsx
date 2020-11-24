@@ -14,6 +14,7 @@ import QrReader from 'react-qr-reader'
 import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
+import { useContextMenu } from '../ContextMenu'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -154,6 +155,34 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
     qrImageReader.current.openImageDialog()
   }
 
+  const { userFeedback } = useContext(ScreenContext)
+
+  const openMenu = useContextMenu([
+    {
+      label: tx('load_qr_code_as_image'),
+      action: openImageDialog,
+    },
+    {
+      label: tx('paste_from_clipboard'),
+      action: async () => {
+        try {
+          const data = await navigator.clipboard.readText()
+          if (data) {
+            handleScan(data)
+          } else {
+            throw 'not data in clipboard'
+          }
+        } catch (error) {
+          log.error('Reading qrcodedata from clipboard failed: ', error)
+          userFeedback({
+            type: 'error',
+            text: 'Reading qrcodedata from clipboard failed: ' + error,
+          })
+        }
+      },
+    },
+  ])
+
   return (
     <>
       <DeltaDialogBody>
@@ -187,8 +216,8 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       </DeltaDialogBody>
       <DeltaDialogFooter>
         <DeltaDialogFooterActions style={{ justifyContent: 'space-between' }}>
-          <p className={'delta-button bold primary'} onClick={openImageDialog}>
-            {tx('load_qr_code_as_image')}
+          <p className={'delta-button bold primary'} onClick={openMenu}>
+            {tx('more_options')}
           </p>
           <p className={'delta-button bold primary'} onClick={onClose}>
             {tx('close')}

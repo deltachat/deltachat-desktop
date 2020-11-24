@@ -18,6 +18,7 @@
 - Add draft/staging area
   - add a description to the files you send
   - reply to other messages
+- Re-add pasting in of qrcode data
 
 ### Changed
 - Change "More info" translation to "Message Details"
