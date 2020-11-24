@@ -63,7 +63,7 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
-import { updateTrayIcon, updateTrayMenu } from './tray'
+import { updateTrayIcon, updateTrayMenu, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
 
 app.ipcReady = false
@@ -119,7 +119,6 @@ function onReady([logins, _appReady, loadedState]: [
 }
 
 ;(app as EventEmitter).once('ipcReady', () => {
-  const IsMac = process.platform === 'darwin'
   console.timeEnd('init')
   if (process.env.NODE_ENV === 'test') {
     mainWindow.window.maximize()
@@ -128,11 +127,14 @@ function onReady([logins, _appReady, loadedState]: [
   updateTrayIcon()
 
   mainWindow.window.on('close', e => {
+    log.debug('mainWindow.window.on(\'close\')')
     if (!app.isQuitting) {
       e.preventDefault()
-      mainWindow.hide()
-      updateTrayMenu()
-      if (!IsMac && !app.state.saved.minimizeToTray) {
+      if (app.state.saved.minimizeToTray) {
+        log.debug('mainWindow.window.on(\'close\') Hiding main window')
+        hideDeltaChat()
+      } else {
+        log.debug('mainWindow.window.on(\'close\') Quitting deltachat')
         quit(e)
       }
     }
@@ -149,7 +151,7 @@ export function quit(e?: Electron.Event) {
   app.isQuitting = true
   e?.preventDefault()
 
-  function doQuit() {
+  function doQuit() { 
     log.info('Quitting now. Bye.')
     app.quit()
   }
@@ -161,7 +163,16 @@ export function quit(e?: Electron.Event) {
     doQuit()
   }, 4000)
 }
-
+app.on('activate', () => {
+  console.log('test')
+  log.debug('app.on(\'activate\')')
+  if (mainWindow.window.isVisible() === false) {
+    log.debug('app.on(\'activate\') showing main window')
+    showDeltaChat()
+  } else {
+    log.debug('app.on(\'activate\') mainWindow is visibile, no need to show it')
+  }
+})
 app.on('before-quit', e => quit(e))
 app.on('window-all-closed', (e: Electron.Event) => quit(e))
 

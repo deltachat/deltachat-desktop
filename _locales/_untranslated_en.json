@@ -22,5 +22,11 @@
   },
   "import_qr_error": {
     "message": "QR could not be decoded"
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "activate": {
+    "message": "Activate"
   }
 }
