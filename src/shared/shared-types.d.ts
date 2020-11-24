@@ -41,6 +41,7 @@ export interface DesktopSettings {
   zoomFactor: number
   /** adress to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
+  minimizeToTray: boolean
 }
 
 export interface AppState {

@@ -12,6 +12,7 @@ import { ensureDir, emptyDir } from 'fs-extra'
 import { join, extname } from 'path'
 import { getConfigPath } from '../application-constants'
 import { copyFile } from 'fs'
+import { updateTrayIcon } from '../tray'
 
 const app = rawApp as ExtendedAppMainProcess
 
@@ -54,6 +55,9 @@ export default class DCSettings extends SplitOut {
     const { saved } = app.state
     ;(saved as any)[key] = value
     app.saveState({ saved })
+
+    if (key === 'minimizeToTray') updateTrayIcon()
+
     return true
   }
 

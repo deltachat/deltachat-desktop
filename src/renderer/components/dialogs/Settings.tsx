@@ -286,6 +286,10 @@ export default function Settings(props: DialogProps) {
                 'enableOnDemandLocationStreaming',
                 tx('pref_on_demand_location_streaming')
               )}
+              {renderDTSettingSwitch(
+                'minimizeToTray',
+                tx('pref_show_tray_icon')
+              )}
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
                 <>
