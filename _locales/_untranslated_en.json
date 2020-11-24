@@ -28,6 +28,7 @@
   },
   "activate": {
     "message": "Activate"
+  },
   "pref_edit_profile": {
     "message": "Edit profile"
   },
