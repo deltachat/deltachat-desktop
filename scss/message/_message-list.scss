@@ -1,8 +1,8 @@
 .message-list-and-composer {
   width: 70%;
   float: right;
-  display: grid;
-  grid-template-columns: auto;
+  display: flex;
+  flex-direction: column;
   height: $content-height;
   margin-top: $nav-bar-height;
   background-image: var(--chatViewBgImgPath);
@@ -13,6 +13,7 @@
 
 .message-list-and-composer__message-list {
   position: relative;
+  flex-grow: 1;
 
   #message-list {
     position: absolute;

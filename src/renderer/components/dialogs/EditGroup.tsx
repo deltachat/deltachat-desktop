@@ -13,6 +13,7 @@ import {
   useContactSearch,
   GroupSettingsSetNameAndProfileImage,
   AddMemberInnerDialog,
+  useGroupMembers,
 } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useContacts, ContactList2 } from '../contact/ContactList'
@@ -22,7 +23,7 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import { DialogProps } from './DialogController'
-import { FullChat, JsonContact } from '../../../shared/shared-types'
+import { FullChat } from '../../../shared/shared-types'
 
 export default function EditGroup(props: {
   isOpen: DialogProps['isOpen']
@@ -71,34 +72,6 @@ export const useEditGroup = (
   ]
 }
 
-export function useGroupMembers(initialMembers: JsonContact[]) {
-  const [groupMembers, setGroupMembers] = useState(
-    initialMembers.map(member => member.id)
-  )
-
-  const removeGroupMember = ({ id }: JsonContact | { id: number }) =>
-    id !== 1 && setGroupMembers(groupMembers.filter(gId => gId !== id))
-  const addGroupMember = ({ id }: JsonContact | { id: number }) =>
-    setGroupMembers([...groupMembers, id])
-  const addRemoveGroupMember = ({ id }: JsonContact | { id: number }) => {
-    groupMembers.indexOf(id) !== -1
-      ? removeGroupMember({ id })
-      : addGroupMember({ id })
-  }
-
-  return [
-    groupMembers,
-    removeGroupMember,
-    addGroupMember,
-    addRemoveGroupMember,
-  ] as [
-    number[],
-    typeof removeGroupMember,
-    typeof addGroupMember,
-    typeof addRemoveGroupMember
-  ]
-}
-
 function EditGroupInner(props: {
   viewMode: string
   setViewMode: (newViewMode: string) => void
@@ -118,7 +91,8 @@ function EditGroupInner(props: {
     removeGroupMember,
     addGroupMember,
     addRemoveGroupMember,
-  ] = useGroupMembers(chat.contacts)
+    addGroupMembers,
+  ] = useGroupMembers(chat.contacts.map(({ id }) => id))
   const [groupId, onUpdateGroup] = useEditGroup(
     groupName,
     groupImage,
@@ -173,6 +147,7 @@ function EditGroupInner(props: {
             searchContacts,
             groupMembers,
             addRemoveGroupMember,
+            addGroupMembers,
           }}
         />
       )}

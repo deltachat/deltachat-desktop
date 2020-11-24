@@ -27,7 +27,6 @@ class state implements FullChat {
   freshMessageCounter = 0
   isGroup = false
   isDeaddrop = false
-  draft: string | null = null
 
   messageIds: number[] = []
   messages: { [key: number]: MessageType | { msg: null } } = {}
@@ -233,12 +232,8 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
     if (payload[0] !== chatStore.state.id) return
     const messageObj = await DeltaBackend.call(
       'messageList.sendMessage',
-      ...(payload as [
-        number,
-        string,
-        string,
-        any
-      ]) /* [chatId, text, filename, location]*/
+      payload[0],
+      payload[1]
     )
     chatStore.dispatch({
       type: 'MESSAGE_SENT',

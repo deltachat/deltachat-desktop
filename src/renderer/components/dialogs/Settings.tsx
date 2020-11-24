@@ -12,7 +12,6 @@ import {
   Radio,
 } from '@blueprintjs/core'
 
-const { remote } = window.electron_functions
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
 
@@ -30,6 +29,10 @@ import {
 import SettingsBackup from './Settings-Backup'
 import SettingsAccount from './Settings-Account'
 import SettingsAppearance from './Settings-Appearance'
+import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/dialogs/Settings')
 
 function flipDeltaBoolean(value: string) {
   return value === '1' ? '0' : '1'
@@ -131,11 +134,23 @@ export default function Settings(props: DialogProps) {
   }
 
   /** Saves settings to deltachat core */
-  const handleDeltaSettingsChange = (key: string, value: string | boolean) => {
-    ipcRenderer.sendSync('setConfig', key, value)
-    const settings = state.settings
-    settings[key] = String(value)
-    setState({ settings })
+  const handleDeltaSettingsChange = async (
+    key: string,
+    value: string | boolean
+  ) => {
+    if ((await DeltaBackend.call('settings.setConfig', key, value)) === true) {
+      _setState((settings: any) => {
+        return {
+          ...settings,
+          settings: {
+            ...settings.settings,
+            [key]: String(value),
+          },
+        }
+      })
+      return
+    }
+    log.warn('settings.setConfig returned false for: ', key, value)
   }
 
   /*
@@ -203,21 +218,13 @@ export default function Settings(props: DialogProps) {
       return (
         <>
           <DeltaDialogBody>
-            <Card elevation={Elevation.ONE}>
-              <ProfileImageSelector
-                displayName={
-                  state.settings['displayname'] || state.selfContact.address
-                }
-                color={state.selfContact.color}
-              />
-              <H5>{tx('pref_profile_info_headline')}</H5>
-              <p>{account.addr}</p>
-              {renderDeltaInput('displayname', tx('pref_your_name'))}
-              {renderDeltaInput('selfstatus', tx('pref_default_status_label'))}
-              <SettingsButton onClick={() => setState({ show: 'login' })}>
-                {tx('pref_password_and_account_settings')}
-              </SettingsButton>
-            </Card>
+            <SettingsProfile
+              show={state.show}
+              setShow={setShow}
+              onClose={props.onClose}
+              account={account}
+              state={state}
+            />
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_communication')}</H5>
               <RadioGroup
@@ -312,6 +319,16 @@ export default function Settings(props: DialogProps) {
           <DeltaDialogCloseFooter onClose={onClose} />
         </>
       )
+    } else if (state.show === 'edit-profile') {
+      return (
+        <SettingsEditProfile
+          show={state.show}
+          setShow={setShow}
+          onClose={props.onClose}
+          state={state}
+          handleDeltaSettingsChange={handleDeltaSettingsChange}
+        />
+      )
     } else if (state.show === 'login') {
       return (
         <SettingsAccount
@@ -343,6 +360,8 @@ export default function Settings(props: DialogProps) {
     title = tx('menu_settings')
   } else if (state.show === 'login') {
     title = tx('pref_password_and_account_settings')
+  } else if (state.show === 'edit-profile') {
+    title = tx('pref_edit_profile')
   }
 
   return (
@@ -358,70 +377,5 @@ export default function Settings(props: DialogProps) {
       <DeltaDialogHeader title={title} />
       {renderDialogContent()}
     </DeltaDialogBase>
-  )
-}
-
-function ProfileImageSelector(props: any) {
-  const { displayName, color } = props
-  const tx = window.static_translate
-  const [profileImagePreview, setProfileImagePreview] = useState('')
-  useEffect(() => {
-    DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
-    // return nothing because reacts wants it like that
-  }, [profileImagePreview])
-
-  const changeProfilePicture = async (picture: string) => {
-    await DeltaBackend.call('setProfilePicture', picture)
-    setProfileImagePreview(await DeltaBackend.call('getProfilePicture'))
-  }
-
-  const openSelectionDialog = () => {
-    remote.dialog.showOpenDialog(
-      {
-        title: tx('select_your_new_profile_image'),
-        filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
-        properties: ['openFile'],
-      },
-      async (files: string[]) => {
-        if (Array.isArray(files) && files.length > 0) {
-          changeProfilePicture(files[0])
-        }
-      }
-    )
-  }
-
-  const codepoint = displayName && displayName.codePointAt(0)
-  const initial = codepoint
-    ? String.fromCodePoint(codepoint).toUpperCase()
-    : '#'
-
-  return (
-    <div className='profile-image-selector'>
-      {/* TODO: show anything else when there is no profile image, like the letter avatar */}
-      {profileImagePreview ? (
-        <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
-      ) : (
-        <span style={{ backgroundColor: color }}>{initial}</span>
-      )}
-      <div>
-        {/* TODO: replace the text by icons that get described by aria-label */}
-        <button
-          aria-label={tx('profile_image_select')}
-          onClick={openSelectionDialog}
-          className={'bp3-button'}
-        >
-          {tx('select')}
-        </button>
-        {profileImagePreview && (
-          <button
-            aria-label={tx('profile_image_delete')}
-            onClick={changeProfilePicture.bind(null, '')}
-            className={'bp3-button'}
-          >
-            {tx('remove_desktop')}
-          </button>
-        )}
-      </div>
-    </div>
   )
 }

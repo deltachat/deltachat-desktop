@@ -16,6 +16,16 @@ import {
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
 
+export type sendMessageParams = {
+  text?: string | null
+  filename?: string
+  location?: {
+    lat: number
+    lng: number
+  }
+  quoteMessageId?: number
+}
+
 class DeltaRemote {
   // root ---------------------------------------------------------------
   call(fnName: 'updateBlockedContacts'): Promise<void>
@@ -206,12 +216,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.sendMessage',
     chatId: number,
-    text: string | null,
-    filename?: string,
-    location?: {
-      lat: number
-      lng: number
-    }
+    params: sendMessageParams
   ): Promise<
     [
       number,
@@ -239,9 +244,17 @@ class DeltaRemote {
   ): Promise<{ [key: number]: MessageType | { msg: null } }>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
   call(
+    fnName: 'messageList.getDraft',
+    chatId: number
+  ): Promise<MessageType | null>
+  call(
     fnName: 'messageList.setDraft',
     chatId: number,
-    msgText: string
+    {
+      text,
+      file,
+      quotedMessageId,
+    }: { text?: string; file?: string; quotedMessageId?: number }
   ): Promise<void>
   call(
     fnName: 'messageList.messageIdToJson',
@@ -293,6 +306,11 @@ class DeltaRemote {
     value: string | number | boolean
   ): Promise<boolean>
   call(fnName: 'settings.getDesktopSettings'): Promise<DesktopSettings>
+  call(
+    fnName: 'settings.setConfig',
+    key: string,
+    value: string | boolean
+  ): Promise<boolean>
   call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
   call(
     fnName: 'settings.estimateAutodeleteCount',

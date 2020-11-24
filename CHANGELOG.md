@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-# Added
+### Added
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
 - Add Keyboard navigation between accounts in account selection screen
 - Add the account name to the account deletion-confirmation dialog
@@ -11,10 +11,13 @@
 - Add context menu to gallery
 - Option for packagers to disable asar (`NO_ASAR=true npm run pack:generate_config`).
 - Added context menu for info messages
-- Add simple support for displaying qoutes (no attachment preview nor jump to message yet)
+- Add simple support for displaying quotes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
 - Implement tray icon (huge thanks to @pepea28 for contributing & pushing this)
 - Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
+- Add draft/staging area
+  - add a description to the files you send
+  - reply to other messages
 
 ### Changed
 - Change "More info" translation to "Message Details"
@@ -23,12 +26,17 @@
 - minor gallery style adjustments 
 - Own Context Menu Implementation that makes development easier
 - Update translations
-- Update deltachat-node to v1.49.0
+- Update deltachat-node to v1.50.0
 - Update inAppHelp
 - hasLocation indicator on messages is now always shown even when the experimental Location streaming feature is not turned on
 - localize some unlocalized strings in settings ("select" and "remove" buttons beneath the profile image)
+- Overhauled look and feel of the profile editing section in settings
+- Overhauled look and feel of about dialog
 
-## Fixed
+### Removed
+- removed inline message buttons (3dot menu button and download button)
+
+### Fixed
 
 - Fixed missing application icon for linux
 - Fixed unselecting current chat after deleting another chat
@@ -39,6 +47,8 @@
 - Fix two issues with the labeled link (see  #1893)
 - Fix refresh of "empty chat" info meassage on chat changes
 - Fix removing incompleted account (see #1952)
+- Fix that drag n' drop selection message text resulted in an "send following dropped files" dialog
+- Fix adding of multiple members to a group via add member with searches in between (see #1964)
 
 ## [1.13.1] - 2020-10-06
 

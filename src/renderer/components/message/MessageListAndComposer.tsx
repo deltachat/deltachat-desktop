@@ -1,12 +1,12 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
-import Composer from '../composer/Composer'
+import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
 import MessageList from './MessageList'
 import { SettingsContext, ScreenContext } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
-import { useDebouncedCallback } from 'use-debounce'
 import { ChatStoreState } from '../../stores/chat'
+import ComposerMessageInput from '../composer/ComposerMessageInput'
 
 const { DC_CHAT_ID_DEADDROP } = C
 
@@ -17,18 +17,19 @@ export default function MessageListAndComposer({
 }: {
   chat: ChatStoreState
 }) {
-  const [state, setState] = useState({
-    //error: false,
-    composerSize: 40,
-  })
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const [setComposerSize] = useDebouncedCallback(
-    (size: number) => setState({ composerSize: size }),
-    25
-  )
+  const messageInputRef = useRef<ComposerMessageInput>()
+  const {
+    draftState,
+    updateDraftText,
+    removeQuote,
+    addFileToDraft,
+    removeFile,
+    clearDraft,
+  } = useDraft(chat.id, messageInputRef)
 
   const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()
@@ -55,6 +56,14 @@ export default function MessageListAndComposer({
     }
     const tx = window.static_translate
     const fileCount = sanitizedFileList.length
+    if (fileCount === 0) {
+      return
+    }
+    if (fileCount === 1) {
+      addFileToDraft(sanitizedFileList[0].path)
+      return
+    }
+    // This is a desktop specific "hack" to support sending multiple attachments at once.
     openDialog('ConfirmationDialog', {
       message: (
         <>
@@ -76,7 +85,9 @@ export default function MessageListAndComposer({
       cb: (yes: boolean) =>
         yes &&
         sanitizedFileList.forEach(({ path }) =>
-          DeltaBackend.call('messageList.sendMessage', chat.id, null, path)
+          DeltaBackend.call('messageList.sendMessage', chat.id, {
+            filename: path,
+          })
         ),
     })
   }
@@ -105,7 +116,6 @@ export default function MessageListAndComposer({
   const settings = useContext(SettingsContext).desktopSettings
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
-    gridTemplateRows: `auto ${state.composerSize}px`,
   }
   if (settings['chatViewBgImg']) {
     if (
@@ -133,10 +143,15 @@ export default function MessageListAndComposer({
       <Composer
         ref={refComposer}
         chatId={chat.id}
-        draft={chat.draft}
-        setComposerSize={setComposerSize.bind(this)}
         isDisabled={disabled}
         disabledReason={disabledReason}
+        messageInputRef={messageInputRef}
+        draftState={draftState}
+        updateDraftText={updateDraftText}
+        removeQuote={removeQuote}
+        addFileToDraft={addFileToDraft}
+        removeFile={removeFile}
+        clearDraft={clearDraft}
       />
     </div>
   )
