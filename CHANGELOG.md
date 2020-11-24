@@ -13,6 +13,7 @@
 - Added context menu for info messages
 - Add simple support for displaying quotes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages #1867
+- Implement tray icon (huge thanks to @pepea28 for contributing & pushing this)
 - Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
 - Add draft/staging area
   - add a description to the files you send
