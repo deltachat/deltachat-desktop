@@ -127,7 +127,7 @@ export function TrayIcon() {
       .resize({ width: 24 })
     image.setTemplateImage(true)
     tray = new Tray(image)
-  }  else {
+  } else {
     tray = new Tray(appIcon())
   }
 
