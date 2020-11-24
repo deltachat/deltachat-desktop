@@ -53,7 +53,7 @@ export function destroyTrayIcon() {
 }
 
 export function setTrayMenu() {
-
+  if (tray === null) return
   const tx = app.translate
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([

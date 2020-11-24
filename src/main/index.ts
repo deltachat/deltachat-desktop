@@ -134,8 +134,14 @@ function onReady([logins, _appReady, loadedState]: [
         log.debug('mainWindow.window.on(\'close\') Hiding main window')
         hideDeltaChat()
       } else {
-        log.debug('mainWindow.window.on(\'close\') Quitting deltachat')
-        quit(e)
+        if (process.platform === 'darwin') {
+          log.debug('mainWindow.window.on(\'close\') We are on mac, so lets hide the main window')
+          hideDeltaChat()
+        } else {
+          log.debug('mainWindow.window.on(\'close\') Quitting deltachat')
+          quit(e)
+        }
+
       }
     }
   })
