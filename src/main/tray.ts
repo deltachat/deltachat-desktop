@@ -55,7 +55,6 @@ export function renderTrayIcon() {
       id: 'reduce_window',
       label: tx('global_menu_minimize_to_tray'),
       type: 'normal',
-      accelerator: 'Escape',
       click() {
         win.close()
       },
@@ -81,10 +80,10 @@ export function renderTrayIcon() {
       ? mainWindow.window.minimize()
       : mainWindow.show()
   }
-  tray.on('double-click', (event, bounds) => {
+  tray.on('double-click', () => {
     hideOrShow()
   })
-  tray.on('click', (event, bounds) => {
+  tray.on('click', () => {
     hideOrShow()
   })
 

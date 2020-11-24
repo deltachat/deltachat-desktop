@@ -63,7 +63,6 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
-import { resolveThemeAddress, acceptThemeCLI } from './themes'
 import { updateTrayIcon, updateTrayMenu } from './tray'
 import { acceptThemeCLI } from './themes'
 

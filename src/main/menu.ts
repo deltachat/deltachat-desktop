@@ -168,14 +168,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
               {
                 translate: 'global_menu_file_quit_desktop',
                 role: 'quit',
-              },
-              {
-                translate: 'global_menu_minimize_to_tray',
-                accelerator: 'Escape',
-                click: () => {
-                  mainWindow.window.close()
-                },
-              },
+              }
             ],
           },
         ]

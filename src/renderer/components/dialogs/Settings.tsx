@@ -272,17 +272,16 @@ export default function Settings(props: DialogProps) {
                 'showNotificationContent',
                 tx('pref_show_notification_content_explain')
               )}
-              {renderDTSettingSwitch(
-                'minimizeToTray',
-                tx('pref_show_minimize_to_tray')
-              )}
-              <p>{tx('pref_show_minimize_to_tray_explain')}</p>
             </Card>
             <Card elevation={Elevation.ONE}>
               <H5>{tx('pref_experimental_features')}</H5>
               {renderDTSettingSwitch(
                 'enableOnDemandLocationStreaming',
                 tx('pref_on_demand_location_streaming')
+              )}
+              {renderDTSettingSwitch(
+                'minimizeToTray',
+                tx('pref_show_tray_icon')
               )}
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
