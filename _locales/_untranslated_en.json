@@ -22,5 +22,8 @@
   },
   "pref_remove_profile_photo": {
     "message": "Remove profile photo"
+  },
+  "more_options": {
+    "message": "More Options"
   }
 }

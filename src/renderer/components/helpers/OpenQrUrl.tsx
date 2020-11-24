@@ -67,7 +67,9 @@ export default async function processOpenQrUrl(
   ) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
-      message: checkQr.text1 ? checkQr.text1 : tx('import_qr_error'),
+      message: checkQr.text1
+        ? tx('qrscan_contains_text', checkQr.text1)
+        : tx('import_qr_error'),
       cb: callback,
     })
     return
