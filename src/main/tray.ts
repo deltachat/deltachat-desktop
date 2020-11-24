@@ -4,6 +4,7 @@ import * as mainWindow from './windows/main'
 import { ExtendedAppMainProcess } from './types'
 import { getLogger } from '../shared/logger'
 import { appIcon } from './application-constants'
+import { join } from 'path'
 
 let tray: Tray = null
 let contextMenu: Menu = null
@@ -119,7 +120,9 @@ export function setTrayMenu() {
 export function TrayIcon() {
   let tray 
   if (process.platform === 'darwin') {
-    tray = new Tray(nativeImage.createFromPath(appIcon()).resize({width: 20}))
+    let image = nativeImage.createFromPath(join(__dirname, '..', '..', 'images', 'trayIconTemplate.png')).resize({width: 24})
+    image.setTemplateImage(true)
+    tray = new Tray(image)
   } else {
     tray = new Tray(appIcon())
   }
