@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.14.0] - 2020-11-24
+
 ### Added
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
 - Add Keyboard navigation between accounts in account selection screen
@@ -1010,7 +1012,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...HEAD
+
+[1.14.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.1...v1.14.0
 
 [1.13.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0...v1.13.1
 

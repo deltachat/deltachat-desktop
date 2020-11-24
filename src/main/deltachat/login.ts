@@ -143,16 +143,16 @@ export default class DCLoginController extends SplitOut {
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.13.0-4',
-      `Changes in 1.13
+      'changelog-version-1.14.0-0',
+      `Changes in 1.14
 
-🔥 Disappearing messages are now stable 
-📷 Overhaul QR scanning dialog
-👫 Overhaul account overview and welcome screen
-👀 You now find the close dialog button in the dialog footer for a more consistent experience
-👻 Fixed a bug where some chats were not loaded besides many other improvements and bug fixes!
+🦾 Add support for new emojis
+✨ Various UI improvements
+↪️ Add Quotes - You can now reply to messages
+🗕 Minimize to Tray
+👻 Many Bugfixes and stability improvements
 
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11300---2020-10-01)` as any
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11400---2020-11-24)` as any
     )
   }
 
