@@ -11,6 +11,7 @@ import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
 
 import UrlParser from 'url-parse'
+import chatStore from '../../stores/chat'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -53,8 +54,9 @@ export const LabeledLink = ({
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
+    const { isDeviceChat } = chatStore.getState()
     //check if domain is trusted
-    if (isDomainTrusted(url.hostname)) {
+    if (isDeviceChat || isDomainTrusted(url.hostname)) {
       openExternal(target)
       return
     }
@@ -67,7 +69,12 @@ export const LabeledLink = ({
     )
   }
   return (
-    <a href={'#' + target} title={url.toString()} onClick={onClick}>
+    <a
+      href={'#' + target}
+      x-custom-url={target}
+      title={url.toString()}
+      onClick={onClick}
+    >
       {String(label)}
     </a>
   )
@@ -105,17 +112,18 @@ function confirmationDialog(
           </div>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
-              <p className={`delta-button bold primary`} onClick={onClose}>
-                {tx('no')}
-              </p>
               <p
                 className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
                   navigator.clipboard.writeText(target)
                 }}
+                style={{ marginRight: 'auto' }}
               >
-                {tx('menu_copy_link_to_clipboard')}
+                {tx('copy')}
+              </p>
+              <p className={`delta-button bold primary`} onClick={onClose}>
+                {tx('cancel')}
               </p>
               <p
                 className={`delta-button bold primary`}

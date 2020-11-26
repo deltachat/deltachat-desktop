@@ -213,7 +213,9 @@ const Message = (props: {
   const showMenu: (
     event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
   ) => void = event => {
-    const link: string = (event.target as any).href || ''
+    const target = event.target as HTMLAnchorElement
+    const link: string =
+      target?.getAttribute('x-custom-url') || target?.href || ''
     const items = buildContextMenu(
       {
         attachment,
