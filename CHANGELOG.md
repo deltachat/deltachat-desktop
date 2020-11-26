@@ -4,6 +4,7 @@
 
 ## Changed
 - trust all labeled links from device chat
+- Adjust order of buttons at labeled link dialog
 
 ## Fixed
 - Fix exception when opening second instance of deltachat and tray icon is disabled
