@@ -195,6 +195,7 @@ export const MessageListInner = React.memo(
                 key={messageId}
                 message={message as MessageType}
                 conversationType={conversationType}
+                isDeviceChat={chat.isDeviceChat}
               />
             )
           })}

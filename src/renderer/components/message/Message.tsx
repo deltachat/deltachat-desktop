@@ -111,6 +111,7 @@ function buildContextMenu(
     message,
     text,
     conversationType,
+    isDeviceChat,
   }: // onRetrySend,
   {
     attachment: MessageTypeAttachment
@@ -119,6 +120,7 @@ function buildContextMenu(
     message: MessageType | { msg: null }
     text?: string
     conversationType: 'group' | 'direct'
+    isDeviceChat: boolean
     // onRetrySend: Function
   },
   link: string,
@@ -159,7 +161,7 @@ function buildContextMenu(
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
-    {
+    !isDeviceChat && {
       label: tx('reply_to_message_desktop'),
       action: setQuoteInDraft.bind(null, message.msg.id),
     },
@@ -189,11 +191,12 @@ function buildContextMenu(
 }
 
 const Message = (props: {
-  conversationType: 'group' | 'direct'
   message: MessageType
+  conversationType: 'group' | 'direct'
+  isDeviceChat: boolean
   /* onRetrySend */
 }) => {
-  const { conversationType, message } = props
+  const { message, conversationType, isDeviceChat } = props
   const {
     id,
     direction,
@@ -222,6 +225,7 @@ const Message = (props: {
         message,
         text,
         conversationType,
+        isDeviceChat,
       },
       link,
       chatStoreDispatch

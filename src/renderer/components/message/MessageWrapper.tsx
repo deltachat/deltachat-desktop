@@ -5,6 +5,7 @@ import { MessageType } from '../../../shared/shared-types'
 type RenderMessageProps = {
   message: MessageType
   conversationType: 'group' | 'direct'
+  isDeviceChat: boolean
 }
 
 export const MessageWrapper = (props: RenderMessageProps) => {
