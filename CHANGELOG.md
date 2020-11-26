@@ -7,6 +7,7 @@
 - Adjust order of buttons at labeled link dialog
 
 ## Fixed
+- Fix "copy link" context menu option for labeled links
 - Fix exception when opening second instance of deltachat and tray icon is disabled
 - Fix showing/focusing deltachat on second instance
 

@@ -69,7 +69,12 @@ export const LabeledLink = ({
     )
   }
   return (
-    <a href={'#' + target} title={url.toString()} onClick={onClick}>
+    <a
+      href={'#' + target}
+      x-custom-url={target}
+      title={url.toString()}
+      onClick={onClick}
+    >
       {String(label)}
     </a>
   )
