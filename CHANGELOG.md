@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- trust all labeled links from device chat
+
 ## Fixed
 - Fix exception when opening second instance of deltachat and tray icon is disabled
 - Fix showing/focusing deltachat on second instance

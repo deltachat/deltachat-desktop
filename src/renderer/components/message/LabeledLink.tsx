@@ -11,6 +11,7 @@ import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../shared/logger'
 
 import UrlParser from 'url-parse'
+import chatStore from '../../stores/chat'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -53,8 +54,9 @@ export const LabeledLink = ({
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()
     ev.stopPropagation()
+    const { isDeviceChat } = chatStore.getState()
     //check if domain is trusted
-    if (isDomainTrusted(url.hostname)) {
+    if (isDeviceChat || isDomainTrusted(url.hostname)) {
       openExternal(target)
       return
     }
