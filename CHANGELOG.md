@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- Show linebreaks in quotes
+
 ## Fixed
 - Fix exception when opening second instance of deltachat and tray icon is disabled
 - Fix showing/focusing deltachat on second instance
