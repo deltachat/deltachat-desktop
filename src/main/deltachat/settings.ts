@@ -1,7 +1,7 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
-import { app as rawApp, dialog } from 'electron'
+import { app as rawApp } from 'electron'
 
 const log = getLogger('main/deltachat/settings')
 
@@ -12,7 +12,6 @@ import { ensureDir, emptyDir, copyFile } from 'fs-extra'
 import { join, extname } from 'path'
 import { getConfigPath } from '../application-constants'
 import { updateTrayIcon } from '../tray'
-import { window } from '../windows/main'
 
 const app = rawApp as ExtendedAppMainProcess
 
@@ -73,52 +72,25 @@ export default class DCSettings extends SplitOut {
     this._dc.importExport(C.DC_IMEX_EXPORT_SELF_KEYS, directory, undefined)
   }
 
-  async selectBackgroundImage(file: string) {
-    const copyAndSetBg = async (originalfile: string) => {
-      await ensureDir(join(getConfigPath(), 'background/'))
-      await emptyDir(join(getConfigPath(), 'background/'))
-      const newPath = join(
-        getConfigPath(),
-        'background/',
-        `background_${Date.now()}` + extname(originalfile)
-      )
-      try {
-        await copyFile(originalfile, newPath)
-      } catch (error) {
-        log.error('BG-IMG Copy Failed', error)
-        throw error
-      }
-      const url = `url("${newPath.replace(/\\/g, '/')}")`
-      return url
-    }
+  async saveBackgroundImage(file: string, isDefaultPicture: boolean) {
+    const originalFilePath = !isDefaultPicture
+      ? file
+      : join(__dirname, '../../../images/backgrounds/', file)
 
-    if (!file) {
-      const electronFileChooser = () => {
-        return <Promise<string[]>>new Promise((resolve, _reject) => {
-          dialog.showOpenDialog(
-            window,
-            {
-              title: 'Select Background Image',
-              filters: [
-                { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-                { name: 'All Files', extensions: ['*'] },
-              ],
-              properties: ['openFile'],
-            },
-            (filenames: string[]) => resolve(filenames)
-          )
-        })
-      }
-      const filenames = await electronFileChooser()
-      if (!filenames) {
-        return
-      }
-      log.info('BG-IMG Selected File:', filenames[0])
-      return await copyAndSetBg(filenames[0])
-    } else {
-      const filepath = join(__dirname, '../../../images/backgrounds/', file)
-      return await copyAndSetBg(filepath)
+    await ensureDir(join(getConfigPath(), 'background/'))
+    await emptyDir(join(getConfigPath(), 'background/'))
+    const newPath = join(
+      getConfigPath(),
+      'background/',
+      `background_${Date.now()}` + extname(originalFilePath)
+    )
+    try {
+      await copyFile(originalFilePath, newPath)
+    } catch (error) {
+      log.error('BG-IMG Copy Failed', error)
+      throw error
     }
+    return `url("${newPath.replace(/\\/g, '/')}")`
   }
 
   estimateAutodeleteCount(fromServer: boolean, seconds: number) {

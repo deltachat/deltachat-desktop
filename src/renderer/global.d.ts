@@ -1,6 +1,6 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
-import Electron from 'electron'
+import Electron, { OpenDialogOptions } from 'electron'
 import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
@@ -23,6 +23,10 @@ declare global {
     }
     preload_functions: {
       downloadFile: (file: string) => void
+      fileChooser: (
+        options: OpenDialogOptions,
+        callback: (filenames: string[]) => void
+      ) => void
     }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}

@@ -22,6 +22,17 @@
       }, (filename) => {
         if (filename) electron.ipcRenderer.send('saveFile', file, filename)
       })
+    },
+    /**
+     * @param {import('electron').OpenDialogOptions} options
+     * @param {(filenames:string[])=>void} callback 
+     */
+    fileChooser: (options, callback) => {
+      electron.remote.dialog.showOpenDialog(
+        electron.remote.getCurrentWindow(),
+        options,
+        callback
+      )
     }
   }
 

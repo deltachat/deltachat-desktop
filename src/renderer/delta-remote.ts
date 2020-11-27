@@ -311,7 +311,11 @@ class DeltaRemote {
     key: string,
     value: string | boolean
   ): Promise<boolean>
-  call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
+  call(
+    fnName: 'settings.saveBackgroundImage',
+    file: string,
+    isDefaultPicture: boolean
+  ): Promise<string>
   call(
     fnName: 'settings.estimateAutodeleteCount',
     fromServer: boolean,
