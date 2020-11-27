@@ -169,8 +169,10 @@ export default function LoginScreen({
         setLogins(logins)
       }
     })()
-    
-    return () => { mounted = false}
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
   const onClickLogin = () => {
