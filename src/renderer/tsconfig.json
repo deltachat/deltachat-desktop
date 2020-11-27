@@ -10,8 +10,6 @@
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
   },
   "references": [
     {

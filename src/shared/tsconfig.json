@@ -8,8 +8,6 @@
     "module": "commonjs",
     "target": "es6",
     "allowJs": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

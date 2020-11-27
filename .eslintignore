@@ -1,0 +1,27 @@
+# don't ever lint node_modules
+node_modules
+# don't lint build output (make sure it's set to your correct build folder name)
+dist
+
+.cache
+.github
+.test
+.tx
+.vscode
+bin
+build
+docs
+html-dist
+images
+README_ASSETS
+tsc-dist
+
+static
+
+# ignore tests for now
+test
+
+index.js
+.eslintrc.js
+
+basicwebrtc
