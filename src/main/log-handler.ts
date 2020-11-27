@@ -67,7 +67,7 @@ export async function cleanupLogFolder() {
     }))
   )
 
-  let sortedFiles = filesWithDates.sort((a, b) => a.mtime - b.mtime)
+  const sortedFiles = filesWithDates.sort((a, b) => a.mtime - b.mtime)
 
   if (sortedFiles.length > 10) {
     // remove latest 10 logs from list

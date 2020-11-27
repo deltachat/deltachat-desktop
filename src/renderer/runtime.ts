@@ -7,6 +7,7 @@ import {
 import { setLogHandler } from '../shared/logger'
 
 const { remote, openExternal, openItem } = window.electron_functions
+const { fileChooser } = window.preload_functions
 
 /**
  * Offers an abstaction Layer to make it easier to make browser client in the future
@@ -33,9 +34,17 @@ interface Runtime {
    * @param link
    */
   openLink(link: string): void
+  showOpenFileDialog(
+    options: Electron.OpenDialogOptions
+  ): Promise<string | null>
 }
 
 class Browser implements Runtime {
+  async showOpenFileDialog(
+    _options: Electron.OpenDialogOptions
+  ): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   openCallWindow(_options: BasicWebRTCOptions): void {
     throw new Error('Method not implemented.')
   }
@@ -66,6 +75,13 @@ class Browser implements Runtime {
 }
 
 class Electron implements Runtime {
+  showOpenFileDialog(options: Electron.OpenDialogOptions): Promise<string> {
+    return new Promise((resolve, _reject) => {
+      fileChooser(options, filenames => {
+        resolve(filenames ? filenames[0] : null)
+      })
+    })
+  }
   async openCallWindow(options: BasicWebRTCOptions): Promise<void> {
     const optionString = Object.keys(options)
       .map((key: keyof BasicWebRTCOptions) => key + '=' + options[key])
@@ -102,7 +118,7 @@ class Electron implements Runtime {
   }
 }
 
-export const runtime: Runtime = true /* is electron */
-  ? new Electron()
-  : new Browser()
+const IS_ELECTRON = true
+
+export const runtime: Runtime = IS_ELECTRON ? new Electron() : new Browser()
 ;(window as any).r = runtime

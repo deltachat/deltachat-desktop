@@ -65,7 +65,7 @@ export type DialogProps = {
   [key: string]: any
 }
 
-var dialogCounter = 1
+let dialogCounter = 1
 
 export type OpenDialogFunctionType = typeof DialogController.prototype.openDialog
 export type CloseDialogFunctionType = typeof DialogController.prototype.closeDialog
@@ -125,6 +125,7 @@ export default class DialogController extends React.Component<
 
   closeDialog(id: DialogId) {
     this.setState((prevState: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [id]: closedDialog, ...dialogs } = prevState.dialogs
       log.debug(`Close dialog with id: ${id}`)
       return { ...prevState, dialogs }

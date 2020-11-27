@@ -34,9 +34,9 @@ export default function MessageListAndComposer({
   const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()
     e.stopPropagation()
-    let sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
+    const sanitizedFileList: Pick<File, 'name' | 'path'>[] = []
     {
-      let fileList: FileList = (e.target as any).files || e.dataTransfer.files
+      const fileList: FileList = (e.target as any).files || e.dataTransfer.files
       // TODO maybe add a clause here for windows because that uses backslash instead of slash
       const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
       for (let i = 0; i < fileList.length; i++) {

@@ -279,7 +279,7 @@ export default function ChatList(props: {
                               checked={false}
                               showRemove={false}
                               onClick={async _ => {
-                                let chatId = await DeltaBackend.call(
+                                const chatId = await DeltaBackend.call(
                                   'contacts.getDMChatId',
                                   contactId
                                 )

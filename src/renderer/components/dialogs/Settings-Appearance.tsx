@@ -9,6 +9,7 @@ import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
 import { SmallSelectDialog } from './DeltaDialog'
+import { runtime } from '../../runtime'
 
 function BackgroundSelector({
   onChange,
@@ -37,15 +38,31 @@ function BackgroundSelector({
         setValue('var(--chatViewBg)')
         break
       case 'image':
-        url = await DeltaBackend.call('settings.selectBackgroundImage')
-        if (url) setDesktopSetting('chatViewBgImg', url)
+        url = await runtime.showOpenFileDialog({
+          title: 'Select Background Image',
+          filters: [
+            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+            { name: 'All Files', extensions: ['*'] },
+          ],
+          properties: ['openFile'],
+        })
+        if (!url) {
+          break
+        }
+        setDesktopSetting(
+          'chatViewBgImg',
+          await DeltaBackend.call('settings.saveBackgroundImage', url, false)
+        )
         break
       case 'pimage':
-        url = await DeltaBackend.call(
-          'settings.selectBackgroundImage',
-          ev.target.dataset.url
+        setDesktopSetting(
+          'chatViewBgImg',
+          await DeltaBackend.call(
+            'settings.saveBackgroundImage',
+            ev.target.dataset.url,
+            true
+          )
         )
-        if (url) setDesktopSetting('chatViewBgImg', url)
         break
       case 'color':
         colorInput && colorInput.click()
@@ -154,7 +171,7 @@ export default function SettingsAppearance({
   const onSelect = setTheme
 
   const onOpenSelectThemeDialog = async () => {
-    let values = [
+    const values = [
       ['system', tx('automatic')],
       ...availableThemes.map(
         ({ address, name }: { address: string; name: string }) => {

@@ -20,7 +20,7 @@ function parseThemeMetaData(
 
   const regex = /--(\w*): ?['"]([^]*?)['"];?/gi
 
-  let meta: { [key: string]: string } = {}
+  const meta: { [key: string]: string } = {}
 
   let last_result: any = true
 
@@ -42,7 +42,7 @@ function parseThemeMetaData(
 }
 
 async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
-  let files = await readdir(path)
+  const files = await readdir(path)
   return Promise.all(
     files
       .filter(f => f.includes('.css') && f.charAt(0) !== '_')
@@ -74,10 +74,9 @@ export async function loadTheme(
   const effective_path = resolveThemeAddress(theme_address)
   log.debug('load theme file', theme_address, effective_path)
   const themedata = await readFile(effective_path, 'utf-8')
-  let theme_meta: ReturnType<typeof parseThemeMetaData>
 
   log.debug('render theme data')
-  theme_meta = parseThemeMetaData(themedata)
+  const theme_meta = parseThemeMetaData(themedata)
   log.debug('render theme data for theme:', theme_meta)
   return {
     theme: {
@@ -100,7 +99,7 @@ function systemDefault() {
 export function resolveThemeAddress(address: string): string {
   const addressParts =
     address != 'system' ? address.split(':') : systemDefault()
-  var realPath = ''
+  let realPath = ''
   if (addressParts.length != 2)
     throw 'not an theme address, must have the format [location]:[themename]'
   if (addressParts[0] == 'dc') {

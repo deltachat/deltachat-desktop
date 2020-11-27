@@ -128,7 +128,7 @@ function buildContextMenu(
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
 
-  // @ts-ignore
+  // eslint-disable-next-line
   const showRetry = status === 'error' && direction === 'outgoing'
   const showAttachmentOptions = attachment && !message.msg.isSetupmessage
 

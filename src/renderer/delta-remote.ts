@@ -311,7 +311,11 @@ class DeltaRemote {
     key: string,
     value: string | boolean
   ): Promise<boolean>
-  call(fnName: 'settings.selectBackgroundImage', file: string): Promise<string>
+  call(
+    fnName: 'settings.saveBackgroundImage',
+    file: string,
+    isDefaultPicture: boolean
+  ): Promise<string>
   call(
     fnName: 'settings.estimateAutodeleteCount',
     fromServer: boolean,
@@ -344,8 +348,8 @@ class DeltaRemote {
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
-  call(fnName: string, ..._args: any[]): Promise<any> {
-    return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
+  call(fnName: string, ...args: any[]): Promise<any> {
+    return _callDcMethodAsync(fnName, ...args)
   }
 }
 

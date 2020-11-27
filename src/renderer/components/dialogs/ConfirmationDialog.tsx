@@ -17,7 +17,7 @@ export function confirmationDialogLegacy(
   if (!cb) cb = opts
   if (!opts) opts = {}
   const tx = window.static_translate
-  var defaultOpts: MessageBoxOptions = {
+  const defaultOpts: MessageBoxOptions = {
     type: 'question',
     message: message,
     buttons: [tx('no'), tx('yes')],

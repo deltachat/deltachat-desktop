@@ -1,8 +1,7 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
-import Electron from 'electron'
+import Electron, { OpenDialogOptions } from 'electron'
 import {
-  DialogId,
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
@@ -24,6 +23,10 @@ declare global {
     }
     preload_functions: {
       downloadFile: (file: string) => void
+      fileChooser: (
+        options: OpenDialogOptions,
+        callback: (filenames: string[]) => void
+      ) => void
     }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}
@@ -33,6 +36,6 @@ declare global {
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
-    __setQuoteInDraft: (msgId: number) => void | null
+    __setQuoteInDraft: ((msgId: number) => void) | null
   }
 }

@@ -99,7 +99,7 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
 
 export default function attachKeybindingsListener() {
   document.addEventListener('keydown', function(ev) {
-    let action = keyDownEvent2Action(ev)
+    const action = keyDownEvent2Action(ev)
     if (action) {
       ev.stopImmediatePropagation()
       ev.preventDefault()

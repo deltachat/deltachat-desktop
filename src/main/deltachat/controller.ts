@@ -162,8 +162,8 @@ export default class DeltaChatController extends EventEmitter {
   // checkPassword(password: string) {
   //   return password === this.settings.getConfig('mail_pw')
   // }
-  networkStatus: boolean = false
-  networkStatusMessage: string = ''
+  networkStatus = false
+  networkStatusMessage = ''
 
   getNetworkStatus(): [boolean, string] {
     return [this.networkStatus, this.networkStatusMessage]

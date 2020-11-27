@@ -128,14 +128,8 @@ export function DeltaDialogHeader(props: {
   showBackButton?: boolean
   isCloseButtonShown?: boolean
 }) {
-  let {
-    onClickBack,
-    title,
-    onClose,
-    children,
-    showBackButton,
-    isCloseButtonShown,
-  } = props
+  const { onClickBack, title, onClose, children, isCloseButtonShown } = props
+  let { showBackButton } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
   return (
@@ -161,7 +155,8 @@ export function DeltaDialogFooter(
     style?: React.CSSProperties
   }>
 ) {
-  let { hide, children } = props
+  const { children } = props
+  let { hide } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
     <div
@@ -179,7 +174,7 @@ export function DeltaDialogFooter(
 export function DeltaDialogBody(
   props: React.PropsWithChildren<{ noFooter?: boolean; ref?: todo }>
 ) {
-  let { noFooter, children } = props
+  const { noFooter, children } = props
   return (
     <div
       ref={props.ref}
@@ -277,7 +272,7 @@ export function SmallSelectDialog({
   )
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const actualSelectedValue: string = String(event.currentTarget.value)
+    const actualSelectedValue = String(event.currentTarget.value)
     setActualSelectedValue(actualSelectedValue)
     onSelect && onSelect(actualSelectedValue)
   }

@@ -9,6 +9,9 @@
 - [Quick Tipps](#quick-tipps)
 - [How to Contribute](#how-to-contribute)
   - [Run the Code](#run-the-code)
+  - [Code Style](#code-style)
+    - [Linting](#linting)
+    - [Code Formatting](#code-formatting)
   - [Tests](#tests)
     - [E2E testing](#tests-e2e)
   - [Translations](#translations)
@@ -52,10 +55,50 @@ After making your changes go in the deltachat/electron Dev-console and press `F5
 
 > **Note:** this only applies to the frontend code in src/renderer. To build the main process you still need to use `npm run build` and then restart the deltachat-desktop process. (`npm run start`)
 
+### Code Style <a id="code-style"></a>
+
+#### Linting <a id="linting"></a>
+
+We use [eslint](https://eslint.org) with typescript rules to catch common bad-practices.
+
+Commands:
+
+```sh
+# Run to test
+npm run lint
+# fix autofixable problems and fix formatting
+npm run lint:fix-format
+```
+
+Ignore a line:
+
+```js
+// eslint-disable-next-line
+var unused_var = 'This line would normally trigger some linting errors'
+```
+
+When using vscode run the `npm: lint` task -> that makes vscode display the found problems.
+
+We setup the linting using this guide: https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+
+#### Code Formatting <a id="code-formatting"></a>
+
+We use [prettier.io](https://prettier.io/) for formatting with some rules that were inspired by [standardjs](https://standardjs.com/).
+
+Commands:
+
+```sh
+# check formatting
+npm run check-formatting
+# fix formatting
+npm run fix-formatting
+```
+
 ### Tests <a id="tests"></a>
 
 Running `npm test` does the following:
 
+- runs `eslint`
 - runs `prettier` to check the code formatting
 - runs the unit tests
 - checks for illegal use of console.log()

@@ -11,6 +11,7 @@ import { openCallWindow } from './windows/call'
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('./deltachat/controller').default
   } catch (error) {
     log.critical(

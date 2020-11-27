@@ -24,8 +24,8 @@ const State = Object.assign(new EventEmitter(), {
 export default State
 
 async function load() {
-  var state = getDefaultState()
-  var saved = {}
+  const state = getDefaultState()
+  let saved = {}
   try {
     saved = await promisify(cb => appConfig.read(cb))()
   } catch (error) {

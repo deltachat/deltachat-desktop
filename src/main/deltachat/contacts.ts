@@ -114,7 +114,7 @@ export default class DCContacts extends SplitOut {
 
   getContacts(ids: number[]) {
     const result: { [id: number]: DCContact } = {}
-    for (let id of ids) {
+    for (const id of ids) {
       result[id] = this._getDCContact(id)
     }
     return result

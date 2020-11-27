@@ -77,7 +77,7 @@ export function init(
   // Iterate over arguments and look out for uris
   const openUrlFromArgv = (argv: string[]) => {
     for (let i = 1; i < argv.length; i++) {
-      let arg = argv[i]
+      const arg = argv[i]
       if (!arg.startsWith('OPENPGP4FPR:') && !arg.startsWith('openpgp4fpr:')) {
         log.debug("open-url: URI doesn't start with OPENPGP4FPR:", arg)
         continue
