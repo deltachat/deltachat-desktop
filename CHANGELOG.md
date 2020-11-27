@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Changed
+- Show linebreaks in quotes
 - trust all labeled links from device chat
 - Adjust order of buttons at labeled link dialog
 

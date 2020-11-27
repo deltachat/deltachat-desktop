@@ -412,5 +412,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     color: var(--messageQuotedText);
+    white-space: pre-line;
   }
 }
