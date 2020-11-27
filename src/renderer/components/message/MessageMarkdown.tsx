@@ -52,6 +52,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     labeled_link: {
       order: 18,
       match: anyScopeRegex(
+        // eslint-disable-next-line no-useless-escape
         /^\[([^\]]*)\]\((\w+:\/\/[^<>,;"'\[\]\)\s]{3,1000})\)/
       ),
       parse: function(

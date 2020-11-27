@@ -74,10 +74,9 @@ export async function loadTheme(
   const effective_path = resolveThemeAddress(theme_address)
   log.debug('load theme file', theme_address, effective_path)
   const themedata = await readFile(effective_path, 'utf-8')
-  let theme_meta: ReturnType<typeof parseThemeMetaData>
 
   log.debug('render theme data')
-  theme_meta = parseThemeMetaData(themedata)
+  const theme_meta = parseThemeMetaData(themedata)
   log.debug('render theme data for theme:', theme_meta)
   return {
     theme: {

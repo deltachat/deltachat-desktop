@@ -2,7 +2,6 @@ import { getMessageFunction, LocaleData } from '../shared/localize'
 
 import Electron from 'electron'
 import {
-  DialogId,
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
@@ -33,6 +32,6 @@ declare global {
     __screen: Screens
     __contextMenuActive: boolean
     __settingsOpened: boolean
-    __setQuoteInDraft: (msgId: number) => void | null
+    __setQuoteInDraft: ((msgId: number) => void) | null
   }
 }

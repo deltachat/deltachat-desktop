@@ -344,8 +344,8 @@ class DeltaRemote {
   call(fnName: 'extras.setTheme', address: string): Promise<boolean>
   // catchall: ----------------------------------------------------------
   call(fnName: string): Promise<any>
-  call(fnName: string, ..._args: any[]): Promise<any> {
-    return _callDcMethodAsync(fnName, ...[...arguments].slice(1))
+  call(fnName: string, ...args: any[]): Promise<any> {
+    return _callDcMethodAsync(fnName, ...args)
   }
 }
 

@@ -248,9 +248,7 @@ function convertContentType({
     case C.DC_MSG_VOICE:
       return 'audio/ogg'
     case C.DC_MSG_FILE:
-      const type = mime.lookup(file)
-      if (type) return type
-      else return 'application/octet-stream'
+      return mime.lookup(file) || 'application/octet-stream'
     default:
       return 'application/octet-stream'
   }

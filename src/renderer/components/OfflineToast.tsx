@@ -17,7 +17,7 @@ export default function OfflineToast() {
     [networkStatus, networkStatusMessage]: [boolean, string]
   ) => {
     log.debug(
-      `network status changed, we\'re ${
+      `network status changed, we're ${
         networkStatus ? 'online' : 'offline'
       }. The message is "${networkStatusMessage}"`
     )

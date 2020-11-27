@@ -139,8 +139,8 @@ function estimateOverflowingLines(items: ContextMenuItem[]) {
   let overflowingLines = 0
   for (const { label } of items) {
     if (label.length > overFlowLineCharacterCount) {
-      let words = label.split(' '),
-        currentLength = 0,
+      const words = label.split(' ')
+      let currentLength = 0,
         overSize = 0
       for (const word of words) {
         if (currentLength + word.length > overFlowLineCharacterCount) {

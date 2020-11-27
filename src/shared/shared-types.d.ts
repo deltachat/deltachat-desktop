@@ -72,7 +72,7 @@ export interface ExtendedApp extends App {
   state?: AppState
 }
 
-import DeltaChat, { Contact } from 'deltachat-node'
+import { Contact } from 'deltachat-node'
 
 export type ContactJSON = ReturnType<typeof Contact.prototype.toJson>
 export interface ChatListItemType {
@@ -103,7 +103,6 @@ export interface ChatListItemType {
 }
 
 import { Chat, Message } from 'deltachat-node'
-import { type } from 'os'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
