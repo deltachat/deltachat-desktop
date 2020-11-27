@@ -43,5 +43,8 @@
   },
   "copy_json": {
     "message": "Copy JSON"
+  },
+  "copy_text": {
+    "message": "Copy text"
   }
 }

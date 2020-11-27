@@ -184,6 +184,9 @@ $bp3-dialog-radius: 2px;
 
 .bp3-menu-item {
   padding: 5px 12px;
+  & > .bp3-fill {
+    text-transform: capitalize;
+  }
 }
 
 .bp3-menu-item:hover,
