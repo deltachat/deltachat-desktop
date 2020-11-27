@@ -10,12 +10,16 @@ const UPDATE_FREQUENCY = 60 * 1000
 // care of clearing the interval on component unmount.
 export function useInterval(callback: () => void, delay: number) {
   useEffect(() => {
+    let mounted = true
     if (delay === null || callback === null) return
 
     const interval = setInterval(() => {
-      callback()
+      if (mounted === true) callback()
     }, delay)
-    return () => clearInterval(interval)
+    return () => {
+      mounted = false
+      clearInterval(interval)
+    }
   }, [callback, delay])
 }
 
