@@ -65,7 +65,7 @@ export type DialogProps = {
   [key: string]: any
 }
 
-var dialogCounter = 1
+let dialogCounter = 1
 
 export type OpenDialogFunctionType = typeof DialogController.prototype.openDialog
 export type CloseDialogFunctionType = typeof DialogController.prototype.closeDialog

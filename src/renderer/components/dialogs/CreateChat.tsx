@@ -179,7 +179,7 @@ export function useGroupImage(image?: string) {
   const tx = window.static_translate
 
   const onSetGroupImage = async () => {
-    let { filePaths } = await remote.dialog.showOpenDialog({
+    const { filePaths } = await remote.dialog.showOpenDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile'],

@@ -119,7 +119,7 @@ export default class DCMessageList extends SplitOut {
 
     const jsonMSG = msg.toJson()
 
-    let attachment: MessageTypeAttachment = jsonMSG.file && {
+    const attachment: MessageTypeAttachment = jsonMSG.file && {
       url: jsonMSG.file,
       contentType: convertContentType({
         filemime,
@@ -180,7 +180,7 @@ export default class DCMessageList extends SplitOut {
     this._dc.markSeenMessages(messageIds)
   }
 
-  searchMessages(query: string, chatId: number = 0): number[] {
+  searchMessages(query: string, chatId = 0): number[] {
     return this._dc.searchMessages(chatId, query)
   }
 
@@ -202,7 +202,7 @@ export default class DCMessageList extends SplitOut {
 
   msgIds2SearchResultItems(ids: number[]) {
     const result: { [id: number]: MessageSearchResult } = {}
-    for (let id of ids) {
+    for (const id of ids) {
       result[id] = this._msgId2SearchResultItem(id)
     }
     return result

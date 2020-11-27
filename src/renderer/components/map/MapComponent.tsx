@@ -207,7 +207,7 @@ export default class MapComponent extends React.Component<
       if (poiWithMarker.length) {
         const poiMarker: mapboxgl.Marker[] = []
         poiWithMarker.map(location => {
-          var el = document.createElement('div')
+          const el = document.createElement('div')
           el.className = 'marker-icon'
           el.innerHTML = location.marker
           // make a marker for each feature and add to the map

@@ -33,8 +33,8 @@ export default function ForwardMessage(props: {
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
-  var isOpen = !!message
-  let noResults = chatListIds.length === 0 && queryStr !== ''
+  const isOpen = !!message
+  const noResults = chatListIds.length === 0 && queryStr !== ''
   return (
     <DeltaDialogBase isOpen={isOpen} onClose={onClose} fixed>
       <DeltaDialogHeader onClose={onClose}>

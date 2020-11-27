@@ -24,7 +24,7 @@ export default function MuteChat({
   ]
 
   const onSave = async (muteDurationString: string) => {
-    let muteDuration = Number(muteDurationString) as MuteDuration
+    const muteDuration = Number(muteDurationString) as MuteDuration
     await DeltaBackend.call('chat.setMuteDuration', chatId, muteDuration)
   }
 

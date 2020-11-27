@@ -3,7 +3,7 @@ import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
 import { LabeledLink } from './LabeledLink'
 const { openExternal } = window.electron_functions
 
-var ignoreCapture = function() {
+const ignoreCapture = function() {
   return {}
 }
 
@@ -59,7 +59,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
         _recurseParse: any,
         _state: any
       ) {
-        var link = {
+        const link = {
           label: capture[1],
           target: capture[2],
         }

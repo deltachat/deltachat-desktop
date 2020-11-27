@@ -62,6 +62,7 @@ After making your changes go in the deltachat/electron Dev-console and press `F5
 We use `eslint` with typescript rules to catch common bad-practices.
 
 Commands:
+
 ```sh
 # Run to test
 npm run lint
@@ -70,9 +71,10 @@ npm run lint:fix-format
 ```
 
 Ignore a line:
+
 ```js
 // eslint-disable-next-line
-var unused_var = "This line would normally trigger some linting errors"
+var unused_var = 'This line would normally trigger some linting errors'
 ```
 
 #### Code Formatting <a id="code-formatting"></a>
@@ -80,6 +82,7 @@ var unused_var = "This line would normally trigger some linting errors"
 We use [prettier.io](https://prettier.io/) for formatting with some rules that were inspired by [standardjs](https://standardjs.com/).
 
 Commands:
+
 ```sh
 # check formatting
 npm run check-formatting

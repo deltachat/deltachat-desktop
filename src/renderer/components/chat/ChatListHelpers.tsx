@@ -13,10 +13,10 @@ const debouncedSearchMessages = debounce(
   200
 )
 
-export function useMessageResults(queryStr: string, chatId: number = 0) {
+export function useMessageResults(queryStr: string, chatId = 0) {
   const [ids, setIds] = useState<number[]>([])
 
-  const updateContacts = (queryStr: string, chatId: number = 0) =>
+  const updateContacts = (queryStr: string, chatId = 0) =>
     debouncedSearchMessages(queryStr, chatId, setIds)
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function useChatList(
   const [queryContactId, setQueryContactId] = useState(_queryContactId)
   const [chatListEntries, setChatListEntries] = useState<[number, number][]>([])
 
-  const getAndSetChatListEntries = (immediatly: boolean = false) => {
+  const getAndSetChatListEntries = (immediatly = false) => {
     if (immediatly === true) {
       DeltaBackend.call(
         'chatList.getChatListEntries',

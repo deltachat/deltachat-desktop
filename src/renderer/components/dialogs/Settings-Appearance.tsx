@@ -154,7 +154,7 @@ export default function SettingsAppearance({
   const onSelect = setTheme
 
   const onOpenSelectThemeDialog = async () => {
-    let values = [
+    const values = [
       ['system', tx('automatic')],
       ...availableThemes.map(
         ({ address, name }: { address: string; name: string }) => {

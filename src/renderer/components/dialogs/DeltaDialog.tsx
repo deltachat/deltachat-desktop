@@ -179,7 +179,7 @@ export function DeltaDialogFooter(
 export function DeltaDialogBody(
   props: React.PropsWithChildren<{ noFooter?: boolean; ref?: todo }>
 ) {
-  let { noFooter, children } = props
+  const { noFooter, children } = props
   return (
     <div
       ref={props.ref}
@@ -277,7 +277,7 @@ export function SmallSelectDialog({
   )
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const actualSelectedValue: string = String(event.currentTarget.value)
+    const actualSelectedValue = String(event.currentTarget.value)
     setActualSelectedValue(actualSelectedValue)
     onSelect && onSelect(actualSelectedValue)
   }

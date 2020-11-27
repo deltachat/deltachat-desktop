@@ -10,7 +10,7 @@ const log = getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
 
-var backendLoggingStarted = false
+let backendLoggingStarted = false
 export function startBackendLogging() {
   if (backendLoggingStarted === true)
     return log.error('Backend logging is already started!')
@@ -30,7 +30,7 @@ export function sendToBackend(event: string, ...args: any[]) {
 
 // Call a dc method without blocking the renderer process. Return value
 // of the dc method is the first argument to cb
-var callDcMethodIdentifier = 0
+let callDcMethodIdentifier = 0
 // private function, please use `DeltaBackend.call` instead
 function callDcMethod(
   methodName: string,

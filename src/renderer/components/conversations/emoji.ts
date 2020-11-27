@@ -22,7 +22,7 @@ export function replaceColons(str: string) {
   return str.replace(colonEmojiCodeRegExp, m => {
     const name = m.split(':')[1]
     const skintoneString = m.split(':')[3] // this property is optional
-    let codePoints = instance.map.colons[name]
+    const codePoints = instance.map.colons[name]
       ?.split('-')
       .map((c: string) => parseInt(c, 16))
     if (codePoints) {

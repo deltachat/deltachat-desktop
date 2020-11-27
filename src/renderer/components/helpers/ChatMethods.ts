@@ -26,7 +26,7 @@ export async function setChatVisibility(
     | C.DC_CHAT_VISIBILITY_NORMAL
     | C.DC_CHAT_VISIBILITY_ARCHIVED
     | C.DC_CHAT_VISIBILITY_PINNED,
-  shouldUnselectChat: boolean = false
+  shouldUnselectChat = false
 ) {
   await DeltaBackend.call('chat.setVisibility', chatId, visibility)
   if (shouldUnselectChat || visibility === C.DC_CHAT_VISIBILITY_ARCHIVED)

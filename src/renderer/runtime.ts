@@ -102,7 +102,7 @@ class Electron implements Runtime {
   }
 }
 
-export const runtime: Runtime = true /* is electron */
-  ? new Electron()
-  : new Browser()
+const IS_ELECTRON = true
+
+export const runtime: Runtime = IS_ELECTRON ? new Electron() : new Browser()
 ;(window as any).r = runtime

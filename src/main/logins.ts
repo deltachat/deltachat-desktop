@@ -12,7 +12,7 @@ export async function getLogins(): Promise<DeltaChatAccount[]> {
   await migrate(getConfigPath())
 
   // list new accounts
-  var accounts = await readDeltaAccounts(getAccountsPath())
+  const accounts = await readDeltaAccounts(getAccountsPath())
   log.debug('Found following accounts:', accounts)
 
   const orphanedAccounts = await findInvalidDeltaAccounts()

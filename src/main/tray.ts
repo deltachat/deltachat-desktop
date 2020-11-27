@@ -120,7 +120,7 @@ export function setTrayMenu() {
 export function TrayIcon() {
   let tray
   if (process.platform === 'darwin') {
-    let image = nativeImage
+    const image = nativeImage
       .createFromPath(
         join(__dirname, '..', '..', 'images', 'trayIconTemplate.png')
       )

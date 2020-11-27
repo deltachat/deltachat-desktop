@@ -42,7 +42,7 @@ export async function openCallWindow(_locale: string, options: string) {
     },
   })
 
-  let url =
+  const url =
     join(__dirname, '../../..//html-dist/call/index.html') + '#' + options
   log.debug(url)
   win.loadURL('file://' + url)

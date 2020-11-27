@@ -42,7 +42,7 @@ export function ContextMenuLayer({
     // look at the chatlistitem context menu for an example)
     const items = rawItems.filter(item => !!item)
     // Get required information
-    var style = window.getComputedStyle(layerRef.current)
+    const style = window.getComputedStyle(layerRef.current)
 
     const getValue = (key: string) =>
       Number(style.getPropertyValue(key).replace('px', ''))
@@ -64,7 +64,7 @@ export function ContextMenuLayer({
     }
     const [x, y] = [cursorX, cursorY]
 
-    let overflowingLines = estimateOverflowingLines(items)
+    const overflowingLines = estimateOverflowingLines(items)
 
     const menu = {
       height:
@@ -137,12 +137,12 @@ export function ContextMenuLayer({
  *  */
 function estimateOverflowingLines(items: ContextMenuItem[]) {
   let overflowingLines = 0
-  for (let { label } of items) {
+  for (const { label } of items) {
     if (label.length > overFlowLineCharacterCount) {
       let words = label.split(' '),
         currentLength = 0,
         overSize = 0
-      for (let word of words) {
+      for (const word of words) {
         if (currentLength + word.length > overFlowLineCharacterCount) {
           overSize++
           currentLength = word.length
@@ -210,7 +210,7 @@ export function ContextMenu(props: {
       }
 
       let isOnMenu = ev.target === parent
-      for (let child of parent.children) {
+      for (const child of parent.children) {
         if (ev.target === child) {
           isOnMenu = true
         }
@@ -277,7 +277,7 @@ export function makeContextMenu(
   return (ev: React.MouseEvent<any, MouseEvent>) => {
     const [cursorX, cursorY] = [ev.clientX, ev.clientY]
 
-    let items =
+    const items =
       typeof itemsOrItemsFactoryFn === 'function'
         ? itemsOrItemsFactoryFn()
         : itemsOrItemsFactoryFn
