@@ -128,14 +128,8 @@ export function DeltaDialogHeader(props: {
   showBackButton?: boolean
   isCloseButtonShown?: boolean
 }) {
-  const {
-    onClickBack,
-    title,
-    onClose,
-    children,
-    isCloseButtonShown,
-  } = props
-  let {showBackButton} = props
+  const { onClickBack, title, onClose, children, isCloseButtonShown } = props
+  let { showBackButton } = props
   if (typeof showBackButton === 'undefined')
     showBackButton = typeof onClickBack === 'function'
   return (
@@ -161,8 +155,8 @@ export function DeltaDialogFooter(
     style?: React.CSSProperties
   }>
 ) {
-  const {children}= props
-  let { hide,  } = props
+  const { children } = props
+  let { hide } = props
   if (typeof hide === 'undefined') hide = typeof children === 'undefined'
   return (
     <div
