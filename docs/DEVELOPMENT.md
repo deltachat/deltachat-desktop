@@ -77,6 +77,8 @@ Ignore a line:
 var unused_var = 'This line would normally trigger some linting errors'
 ```
 
+When using vscode run the `npm: lint` task -> that makes vscode display the found problems.
+
 #### Code Formatting <a id="code-formatting"></a>
 
 We use [prettier.io](https://prettier.io/) for formatting with some rules that were inspired by [standardjs](https://standardjs.com/).
