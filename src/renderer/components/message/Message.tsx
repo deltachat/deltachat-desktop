@@ -402,23 +402,18 @@ export const Quote = ({
     }
   }, [quotedMessageId])
 
-  if (quotedMessageId !== 0 && message) {
-    return (
+  return (
+    <div
+      className='quote has-message'
+      style={{ borderLeftColor: message && message.contact.color }}
+    >
       <div
-        className='quote has-message'
-        style={{ borderLeftColor: message.contact.color }}
+        className='quote-author'
+        style={{ color: message && message.contact.color }}
       >
-        <div className='quote-author' style={{ color: message.contact.color }}>
-          {message.contact.displayName}
-        </div>
-        <p>{quotedText}</p>
+        {message && message.contact.displayName}
       </div>
-    )
-  } else {
-    return (
-      <div className='quote'>
-        <p>{quotedText}</p>
-      </div>
-    )
-  }
+      <p>{quotedText}</p>
+    </div>
+  )
 }
