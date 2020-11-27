@@ -12,6 +12,7 @@
 - Fix exception when opening second instance of deltachat and tray icon is disabled
 - Fix showing/focusing deltachat on second instance
 - Hide reply context menu option in device chat 
+- Fix state update on unmounted components in Timestamp and LoginScreen
 
 ## [1.14.0] - 2020-11-24
 

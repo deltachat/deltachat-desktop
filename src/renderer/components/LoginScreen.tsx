@@ -162,7 +162,17 @@ export default function LoginScreen({
   }
 
   useEffect(() => {
-    refreshAccounts()
+    let mounted = true
+    ;(async () => {
+      const logins = await DeltaBackend.call('login.getLogins')
+      if (mounted === true) {
+        setLogins(logins)
+      }
+    })()
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
   const onClickLogin = () => {
