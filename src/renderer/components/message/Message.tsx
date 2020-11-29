@@ -146,6 +146,11 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message.msg),
       },
+    // Forward message
+    {
+      label: tx('menu_forward'),
+      action: forwardMessage.bind(null, message),
+    },
     // Copy [selection] to clipboard
     textSelected
       ? {
@@ -155,7 +160,7 @@ function buildContextMenu(
           },
         }
       : {
-          label: tx('copy_text'),
+          label: tx('global_menu_edit_copy_desktop'),
           action: () => {
             navigator.clipboard.writeText(text)
           },
@@ -176,20 +181,15 @@ function buildContextMenu(
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
-    // Forward message
+    // Message details
     {
-      label: tx('menu_forward'),
-      action: forwardMessage.bind(null, message),
+      label: tx('menu_message_details'),
+      action: openMessageInfo.bind(null, message),
     },
     // Delete message
     {
       label: tx('delete_message_desktop'),
       action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
-    },
-    // Message details
-    {
-      label: tx('menu_message_details'),
-      action: openMessageInfo.bind(null, message),
     },
     // showRetry && {
     //   label:tx('retry_send'),

@@ -35,7 +35,6 @@
   .item {
     line-height: var(--local-menu-item-Line-height);
     padding: var(--local-menu-item-vertical-padding) 12px;
-    text-transform: capitalize;
 
     &:hover {
       background-color: var(--chatListItemBgHover);
