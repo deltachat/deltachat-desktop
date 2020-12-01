@@ -10,7 +10,7 @@ const log = getLogger('renderer/emoji')
 const instance = new EmojiConvertor()
 instance.init_colons()
 
-export const emojiRegEx:RegExp = emojiRegexRGI()
+export const emojiRegEx: RegExp = emojiRegexRGI()
 
 // taken from (new EmojiConvertor()).rx_colons
 const colonEmojiCodeRegExp = /:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?/g
