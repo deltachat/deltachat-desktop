@@ -84,6 +84,7 @@
     "deltachat-node": "^1.50.0",
     "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^3.0.0",
+    "emoji-regex": "^9.2.0",
     "error-stack-parser": "^2.0.4",
     "filesize": "^6.1.0",
     "fs-extra": "^8.1.0",

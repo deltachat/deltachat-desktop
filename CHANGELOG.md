@@ -15,6 +15,7 @@
 - Fix messages sometimes overflowing
 - Fix resizing of quote after fetching author 
 - Fix state update on unmounted components in Timestamp and LoginScreen
+- Fix non emojis getting displayed big (see #1989)
 
 ## [1.14.0] - 2020-11-24
 
