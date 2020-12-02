@@ -16,6 +16,7 @@
 - Fix resizing of quote after fetching author 
 - Fix state update on unmounted components in Timestamp and LoginScreen
 - Fix non emojis getting displayed big (see #1989)
+- Fix selecting a chat focus composer input (see #1986)
 
 ## [1.14.0] - 2020-11-24
 
