@@ -16,6 +16,8 @@
     & > .attachment-quote-section {
       display: flex;
       justify-content: space-between;
+      padding: 3px 0;
+
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
