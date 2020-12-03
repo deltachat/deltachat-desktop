@@ -95,35 +95,9 @@ export function useChatListContextMenu() {
 
     const menu: ContextMenuItem[] = chatListItem
       ? [
+          // Archive & Pin
           ...archiveStateMenu(chatListItem, tx),
-          {
-            label: tx('menu_delete_chat'),
-            action: onDeleteChat,
-          },
-          !chatListItem.isGroup &&
-            !chatListItem.isDeviceTalk && {
-              label: tx('encryption_info_desktop'),
-              action: onEncrInfo,
-            },
-          chatListItem.isGroup &&
-            chatListItem.selfInGroup && {
-              label: tx('menu_edit_group'),
-              action: onEditGroup,
-            },
-          chatListItem.isGroup &&
-            chatListItem.selfInGroup && {
-              label: tx('menu_leave_group'),
-              action: onLeaveGroup,
-            },
-          !chatListItem.isGroup && {
-            label: tx('menu_view_profile'),
-            action: onViewProfile,
-          },
-          !chatListItem.isGroup &&
-            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
-              label: tx('menu_block_contact'),
-              action: onBlockContact,
-            },
+          // Mute
           !chatListItem.muted
             ? {
                 label: tx('menu_mute'),
@@ -133,6 +107,40 @@ export function useChatListContextMenu() {
                 label: tx('menu_unmute'),
                 action: onUnmuteChat,
               },
+          // Edit Group
+          chatListItem.isGroup &&
+            chatListItem.selfInGroup && {
+              label: tx('menu_edit_group'),
+              action: onEditGroup,
+            },
+          // View Profile
+          !chatListItem.isGroup && {
+            label: tx('menu_view_profile'),
+            action: onViewProfile,
+          },
+          // Encryption Info
+          !chatListItem.isGroup &&
+            !chatListItem.isDeviceTalk && {
+              label: tx('encryption_info_desktop'),
+              action: onEncrInfo,
+            },
+          // Leave group
+          chatListItem.isGroup &&
+            chatListItem.selfInGroup && {
+              label: tx('menu_leave_group'),
+              action: onLeaveGroup,
+            },
+          // Block contact
+          !chatListItem.isGroup &&
+            !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
+              label: tx('menu_block_contact'),
+              action: onBlockContact,
+            },
+          // Delete
+          {
+            label: tx('menu_delete_chat'),
+            action: onDeleteChat,
+          },
         ]
       : []
 

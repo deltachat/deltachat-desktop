@@ -135,15 +135,19 @@ function buildContextMenu(
   const textSelected: boolean = window.getSelection().toString() !== ''
 
   return [
-    showAttachmentOptions &&
-      isGenericAttachment(attachment) && {
-        label: tx('open_attachment'),
-        action: openAttachmentInShell.bind(null, message.msg),
-      },
-    link !== '' && {
-      label: tx('menu_copy_link_to_clipboard'),
-      action: () => navigator.clipboard.writeText(link),
+    // Reply
+    !isDeviceChat && {
+      label: tx('reply_noun'),
+      action: setQuoteInDraft.bind(null, message.msg.id),
     },
+    // Reply privately -> only show in groups, don't show on info messages or outgoing messages
+    conversationType === 'group' &&
+      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+        label: tx('reply_privately'),
+        action: privateReply.bind(null, message.msg),
+      },
+
+    // Copy [selection] to clipboard
     textSelected
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
@@ -152,41 +156,46 @@ function buildContextMenu(
           },
         }
       : {
-          label: tx('menu_copy_to_clipboard'),
+          label: tx('global_menu_edit_copy_desktop'),
           action: () => {
             navigator.clipboard.writeText(text)
           },
         },
+    // Copy link to clipboard
+    link !== '' && {
+      label: tx('menu_copy_link_to_clipboard'),
+      action: () => navigator.clipboard.writeText(link),
+    },
+    // Open Attachment
+    showAttachmentOptions &&
+      isGenericAttachment(attachment) && {
+        label: tx('open_attachment'),
+        action: openAttachmentInShell.bind(null, message.msg),
+      },
+    // Download attachment
     showAttachmentOptions && {
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
     },
-    !isDeviceChat && {
-      label: tx('reply_to_message_desktop'),
-      action: setQuoteInDraft.bind(null, message.msg.id),
-    },
-    // privateReply -> only show in groups, don't show on info messages or outgoing messages
-    conversationType === 'group' &&
-      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
-        label: tx('reply_privately'),
-        action: privateReply.bind(null, message.msg),
-      },
+    // Forward message
     {
       label: tx('menu_forward'),
       action: forwardMessage.bind(null, message),
     },
+    // Message details
     {
       label: tx('menu_message_details'),
       action: openMessageInfo.bind(null, message),
+    },
+    // Delete message
+    {
+      label: tx('delete_message_desktop'),
+      action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
     },
     // showRetry && {
     //   label:tx('retry_send'),
     //   action: onRetrySend
     // },
-    {
-      label: tx('delete_message_desktop'),
-      action: deleteMessage.bind(null, message.msg, chatStoreDispatch),
-    },
   ]
 }
 
