@@ -1,22 +1,19 @@
 // @ts-ignore
+// We only really need the emoji data of this module
 import EmojiConvertor from 'emoji-js-clean'
 import { getLogger } from '../../../shared/logger'
-// We only really need the emoji data of this module
+// @ts-ignore
+import emojiRegexRGI from 'emoji-regex/RGI_Emoji'
 
 const log = getLogger('renderer/emoji')
 
 const instance = new EmojiConvertor()
 instance.init_colons()
 
-// emoji regex taken fram https://www.regextester.com/106421
-const emojiRegEx = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g
+export const emojiRegEx: RegExp = emojiRegexRGI()
 
 // taken from (new EmojiConvertor()).rx_colons
 const colonEmojiCodeRegExp = /:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?/g
-
-export function getRegex() {
-  return emojiRegEx
-}
 
 export function replaceColons(str: string) {
   return str.replace(colonEmojiCodeRegExp, m => {

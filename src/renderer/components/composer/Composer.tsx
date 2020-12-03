@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, forwardRef } from 'react'
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  forwardRef,
+  useLayoutEffect,
+} from 'react'
 import { Button } from '@blueprintjs/core'
 
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -148,6 +154,11 @@ const Composer = forwardRef<
   }, [showEmojiPicker, emojiAndStickerRef])
 
   const tx = useTranslationFunction()
+
+  useLayoutEffect(() => {
+    // focus composer on chat change
+    setTimeout(() => messageInputRef.current?.focus(), 0)
+  }, [chatId])
 
   if (isDisabled) {
     if (disabledReason) {

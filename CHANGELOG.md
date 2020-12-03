@@ -7,6 +7,7 @@
 - trust all labeled links from device chat
 - Adjust order of buttons at labeled link dialog
 - Change order and ux of context menus, especially for messages
+- Increase padding of draft/reply area
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
@@ -16,6 +17,8 @@
 - Fix messages sometimes overflowing
 - Fix resizing of quote after fetching author 
 - Fix state update on unmounted components in Timestamp and LoginScreen
+- Fix non emojis getting displayed big (see #1989)
+- Fix selecting a chat focus composer input (see #1986)
 
 ## [1.14.0] - 2020-11-24
 

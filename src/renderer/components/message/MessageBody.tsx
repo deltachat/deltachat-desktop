@@ -1,10 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
-import { getSizeClass, getRegex, replaceColons } from '../conversations/emoji'
+import { getSizeClass, emojiRegEx, replaceColons } from '../conversations/emoji'
 import { rules } from './MessageMarkdown'
 import SimpleMarkdown from 'simple-markdown'
 
-const emojiRegex = getRegex()
 const parser = SimpleMarkdown.parserFor(rules)
 const ast2react = (SimpleMarkdown.outputFor as any)(rules, 'react')
 
@@ -19,7 +18,7 @@ export default function MessageBody(props: {
   if (
     emojifiedText.length < 50 &&
     !disableJumbomoji &&
-    emojifiedText.replace(emojiRegex, '') === ''
+    emojifiedText.replace(emojiRegEx, '') === ''
   ) {
     const sizeClass = disableJumbomoji ? '' : getSizeClass(emojifiedText)
     return (
