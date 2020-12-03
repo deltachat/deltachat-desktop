@@ -1,4 +1,3 @@
-import { array } from 'prop-types'
 import { getLogger } from '../shared/logger'
 
 /**

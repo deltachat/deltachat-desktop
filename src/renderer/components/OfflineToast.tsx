@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { DeltaBackend } from '../delta-remote'
-import { ipcBackend, onDCEvent } from '../ipc'
+import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
 import { useTranslationFunction } from '../contexts'
-import { bool } from 'prop-types'
-import { SetStateAction } from 'react'
-import { Dispatch } from 'react'
 
 const log = getLogger('renderer/components/OfflineToast')
 
@@ -68,7 +65,7 @@ export default function OfflineToast() {
     setNetworkState(() => [false, data1 + data2])
   }
 
-  const onDeltaNetworkSuccess = (data1: string, data2: string) => {
+  const onDeltaNetworkSuccess = () => {
     setNetworkState(() => [true, ''])
   }
 
