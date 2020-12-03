@@ -146,11 +146,7 @@ function buildContextMenu(
         label: tx('reply_privately'),
         action: privateReply.bind(null, message.msg),
       },
-    // Forward message
-    {
-      label: tx('menu_forward'),
-      action: forwardMessage.bind(null, message),
-    },
+
     // Copy [selection] to clipboard
     textSelected
       ? {
@@ -180,6 +176,11 @@ function buildContextMenu(
     showAttachmentOptions && {
       label: tx('download_attachment_desktop'),
       action: onDownload.bind(null, message.msg),
+    },
+    // Forward message
+    {
+      label: tx('menu_forward'),
+      action: forwardMessage.bind(null, message),
     },
     // Message details
     {
