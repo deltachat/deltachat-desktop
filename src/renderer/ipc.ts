@@ -11,7 +11,6 @@ const log = getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
 
-
 // Listen to DC/Backend events in a conventient way. Returns a callback to remove the
 // event listener. You can bind the same event listener to multiple events by passing them
 // as an array of strings.
