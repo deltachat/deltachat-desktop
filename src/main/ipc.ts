@@ -1,4 +1,4 @@
-import { app as rawApp, dialog, ipcMain } from 'electron'
+import { app as rawApp, dialog, ipcMain, powerMonitor } from 'electron'
 import { copyFile } from 'fs-extra'
 import { getLogger } from '../shared/logger'
 import { getLogsPath } from './application-constants'
@@ -30,6 +30,14 @@ const app = rawApp as ExtendedAppMainProcess
 export function init(cwd: string, logHandler: LogHandler) {
   const main = mainWindow
   const dcController = new DeltaChatController(cwd)
+
+  if (process.platform !== 'linux') {
+    // does only work mac and windows see:
+    // https://www.electronjs.org/docs/api/power-monitor#event-resume-macos-windows
+    powerMonitor.on('resume', () => {
+      dcController.callMethod(null, 'context.maybeNetwork')
+    })
+  }
 
   ipcMain.once('ipcReady', _e => {
     app.ipcReady = true
