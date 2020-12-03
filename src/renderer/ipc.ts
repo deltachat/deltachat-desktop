@@ -1,3 +1,4 @@
+import { array } from 'prop-types'
 import { getLogger } from '../shared/logger'
 
 /**
@@ -9,6 +10,22 @@ const { ipcRenderer } = window.electron_functions
 const log = getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
+
+export function onDCEvent(
+  event: string | string[],
+  cb: (data1: string, data2: string) => void
+) {
+  const wrapperCb = (_: any, [data1, data2]: [string, string]) => {
+    cb(data1, data2)
+  }
+  if (Array.isArray(event)) {
+    event.forEach(e => ipcBackend.on(e, wrapperCb))
+    return () => event.forEach(e => ipcBackend.removeListener(e, wrapperCb))
+  } else {
+    ipcBackend.on(event, wrapperCb)
+    return () => ipcBackend.removeListener(event, wrapperCb)
+  }
+}
 
 let backendLoggingStarted = false
 export function startBackendLogging() {
