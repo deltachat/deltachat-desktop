@@ -10,6 +10,25 @@ const log = getLogger('renderer/ipc')
 
 export const ipcBackend = ipcRenderer
 
+// Listen to DC/Backend events in a conventient way. Returns a callback to remove the
+// event listener. You can bind the same event listener to multiple events by passing them
+// as an array of strings.
+export function onDCEvent(
+  event: string | string[],
+  cb: (data1: string, data2: string) => void
+) {
+  const wrapperCb = (_: any, [data1, data2]: [string, string]) => {
+    cb(data1, data2)
+  }
+  if (Array.isArray(event)) {
+    event.forEach(e => ipcBackend.on(e, wrapperCb))
+    return () => event.forEach(e => ipcBackend.removeListener(e, wrapperCb))
+  } else {
+    ipcBackend.on(event, wrapperCb)
+    return () => ipcBackend.removeListener(event, wrapperCb)
+  }
+}
+
 let backendLoggingStarted = false
 export function startBackendLogging() {
   if (backendLoggingStarted === true)

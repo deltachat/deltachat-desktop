@@ -20,6 +20,7 @@
 - Fix non emojis getting displayed big (see #1989)
 - Fix selecting a chat focus composer input (see #1986)
 - Fix processing qr code again while another is still getting processed
+- Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
 
 ## [1.14.0] - 2020-11-24
 

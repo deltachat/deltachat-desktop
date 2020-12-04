@@ -1,52 +1,94 @@
 import React, { useEffect, useState } from 'react'
 import { DeltaBackend } from '../delta-remote'
-import { ipcBackend } from '../ipc'
+import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
 import { useTranslationFunction } from '../contexts'
 
 const log = getLogger('renderer/components/OfflineToast')
 
+// Array holding all events on which we know that we have some online connectivity
+const DC_NETWORK_SUCCESS_EVENTS = [
+  'DC_EVENT_SMTP_CONNECTED',
+  'DC_EVENT_IMAP_CONNECTED',
+  'DC_EVENT_INCOMING_MSG',
+  'DC_EVENT_MSG_DELIVERED',
+  'DC_EVENT_IMAP_MESSAGE_MOVED',
+  'DC_EVENT_IMAP_MESSAGE_DELETED',
+]
+
 export default function OfflineToast() {
-  const [networkStatusMessage, setNetworkStatusMessage] = useState('')
-  const [networkStatus, setNetworkStatus] = useState(true)
+  const [networkState, setNetworkState]: [[boolean, string], todo] = useState([
+    true,
+    '',
+  ])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
-  const onNetworkStatus = (
-    _: any,
-    [networkStatus, networkStatusMessage]: [boolean, string]
-  ) => {
-    log.debug(
-      `network status changed, we're ${
-        networkStatus ? 'online' : 'offline'
-      }. The message is "${networkStatusMessage}"`
-    )
-    setNetworkStatus(networkStatus)
-    setNetworkStatusMessage(networkStatusMessage)
-  }
   const onBrowserOffline = () => {
-    log.debug("Browser thinks we're offline, telling rust core")
-    DeltaBackend.call('context.maybeNetwork')
+    log.debug("Browser knows we're offline")
+    setNetworkState(() => [false, "Browser knows we're offline"])
+  }
+
+  const tryMaybeNetworkIfOfflineAfterXms = (ms: number) => {
+    setTimeout(() => {
+      // This is a hack to get the current network state by abusing the setNetworkState function.
+      // Not pretty but works.
+      setNetworkState(([online, error]: [boolean, string]) => {
+        if (!online) {
+          log.debug(
+            `We are still not online after ${ms}  milli seconds, try maybeNetwork again`
+          )
+          DeltaBackend.call('context.maybeNetwork')
+        } else if (ms < 30000) {
+          tryMaybeNetworkIfOfflineAfterXms(2 * ms)
+        } else {
+          log.debug(
+            `We tried reconnecting with waiting for more then 30 seconds, now stop`
+          )
+        }
+
+        // Keep state unchanged
+        return [online, error]
+      })
+    }, ms)
   }
 
   const onBrowserOnline = () => {
     log.debug("Browser thinks we're back online, telling rust core")
+    setNetworkState(() => [true, "Browser thinks we're online"])
     DeltaBackend.call('context.maybeNetwork')
+
+    tryMaybeNetworkIfOfflineAfterXms(150)
+  }
+
+  const onDeltaNetworkError = (data1: string, data2: string) => {
+    setNetworkState(() => [false, data1 + data2])
+  }
+
+  const onDeltaNetworkSuccess = () => {
+    setNetworkState(() => [true, ''])
   }
 
   useEffect(() => {
-    ;(async () => {
-      const networkStatusReturn = await DeltaBackend.call('getNetworkStatus')
-      onNetworkStatus(null, networkStatusReturn)
-    })()
-    window.addEventListener('online', onBrowserOffline)
-    window.addEventListener('offline', onBrowserOnline)
-    ipcBackend.on('NETWORK_STATUS', onNetworkStatus)
+    if (navigator.onLine === false) onBrowserOffline()
+
+    window.addEventListener('online', onBrowserOnline)
+    window.addEventListener('offline', onBrowserOffline)
+    const removeEventListenerDCNetworkError = onDCEvent(
+      'DC_EVENT_ERROR_NETWORK',
+      onDeltaNetworkError
+    )
+    const removeEventListenerDCNetworkSuccess = onDCEvent(
+      DC_NETWORK_SUCCESS_EVENTS,
+      onDeltaNetworkSuccess
+    )
 
     return () => {
       window.removeEventListener('online', onBrowserOffline)
       window.removeEventListener('offline', onBrowserOnline)
-      ipcBackend.removeListener('NETWORK_STATUS', onNetworkStatus)
+
+      removeEventListenerDCNetworkError()
+      removeEventListenerDCNetworkSuccess()
     }
   }, [])
 
@@ -59,9 +101,9 @@ export default function OfflineToast() {
   const tx = useTranslationFunction()
 
   return (
-    networkStatus === false && (
+    networkState[0] === false && (
       <div className='OfflineToast'>
-        <a title={networkStatusMessage}>{tx('offline')}</a>
+        <a title={networkState[1]}>{tx('offline')}</a>
         <div
           className={tryConnectCooldown ? '' : 'disabled'}
           onClick={onTryReconnectClick}
