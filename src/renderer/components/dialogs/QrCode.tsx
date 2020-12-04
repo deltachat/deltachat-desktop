@@ -129,11 +129,11 @@ export function QrCodeShowQrInner({
 export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
   const tx = window.static_translate
 
-  const [processingQrCode, setProcessingQrCode] = useState(false)
+  const processingQrCode = useRef(false)
 
   const onDone = () => {
     onClose()
-    setProcessingQrCode(false)
+    processingQrCode.current = false
   }
 
   const handleScanResult = (chatId: number = null) => {
@@ -144,7 +144,10 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
   const qrImageReader = useRef<any>()
 
   const handleScan = (data: string) => {
-    data && !processingQrCode && processOpenQrUrl(data, handleScanResult)
+    if (data && processingQrCode.current === false) {
+      processingQrCode.current = true
+      processOpenQrUrl(data, handleScanResult)
+    }
   }
 
   const handleError = (err: string) => {
