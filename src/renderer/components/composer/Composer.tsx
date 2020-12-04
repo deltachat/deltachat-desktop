@@ -22,7 +22,7 @@ const { remote } = window.electron_functions
 
 const log = getLogger('renderer/composer')
 
-const insideBoundingRect = (
+export const insideBoundingRect = (
   mouseX: number,
   mouseY: number,
   boundingRect: DOMRect,
@@ -157,7 +157,7 @@ const Composer = forwardRef<
 
   useLayoutEffect(() => {
     // focus composer on chat change
-    setTimeout(() => messageInputRef.current?.focus(), 0)
+    messageInputRef.current?.focus()
   }, [chatId])
 
   if (isDisabled) {
@@ -354,12 +354,14 @@ export function useDraft(
       quotedMessageId: 0,
       quotedText: null,
     }))
+    inputRef.current.focus()
   }
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
       draftRef.current.quotedMessageId = messageId
       saveDraft()
+      inputRef.current.focus()
     }
     return () => {
       window.__setQuoteInDraft = null

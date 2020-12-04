@@ -1,6 +1,10 @@
 import React from 'react'
 import debounce from 'debounce'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { insideBoundingRect } from './Composer'
+import { getLogger } from '../../../shared/logger'
+
+const log = getLogger('renderer/composer/ComposerMessageInput')
 
 type ComposerMessageInputProps = {
   chatId: number
@@ -78,7 +82,8 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   focus() {
-    this.textareaRef.current.focus()
+    log.debug('Focus composer message input')
+    setTimeout(() => this.textareaRef.current.focus())
   }
 
   getText() {
