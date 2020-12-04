@@ -105,7 +105,7 @@ export default function MainScreen() {
       <div className='navbar-wrapper'>
         <Navbar fixedToTop>
           <NavbarGroup align={Alignment.LEFT}>
-            {showArchivedChats && (
+            {queryStr.length === 0 && showArchivedChats && (
               <>
                 <div className='archived-chats-title'>
                   {tx('chat_archived_chats_title')}
@@ -122,7 +122,7 @@ export default function MainScreen() {
                 />
               </>
             )}
-            {showArchivedChats || (
+            {(showArchivedChats && queryStr.length === 0) || (
               <SearchInput
                 id='chat-list-search'
                 onChange={handleSearchChange}
