@@ -4,6 +4,7 @@ import { DeltaChatAccount } from '../../../shared/shared-types'
 import { useTranslationFunction } from '../../contexts'
 
 import { DeltaBackend } from '../../delta-remote'
+import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { SettingsButton } from './Settings'
@@ -23,10 +24,7 @@ export default function SettingsProfile({
 }) {
   const [profileImagePreview, setProfileImagePreview] = useState('')
 
-  const codepoint = account.displayname && account.displayname.codePointAt(0)
-  const initial = codepoint
-    ? String.fromCodePoint(codepoint).toUpperCase()
-    : '#'
+  const initial = avatarInitial(account.displayname, account.addr )
   useEffect(() => {
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     // return nothing because reacts wants it like that
@@ -66,11 +64,13 @@ export default function SettingsProfile({
 
 export function ProfileImageSelector({
   displayName,
+  addr,
   color,
   profilePicture,
   setProfilePicture,
 }: {
   displayName: string
+  addr: string
   color: string
   profilePicture: string
   setProfilePicture: (path: string) => void
@@ -94,10 +94,7 @@ export function ProfileImageSelector({
 
   const onClickRemovePicture = () => setProfilePicture('')
 
-  const codepoint = displayName && displayName.codePointAt(0)
-  const initial = codepoint
-    ? String.fromCodePoint(codepoint).toUpperCase()
-    : '#'
+  const initial = avatarInitial(displayName, addr)
 
   return (
     <div className='profile-image-selector'>
@@ -164,9 +161,8 @@ export function SettingsEditProfile({
             style={{ marginBottom: '30px' }}
           >
             <ProfileImageSelector
-              displayName={
-                state.settings['displayname'] || state.selfContact.address
-              }
+              displayName={state.settings['displayname']}
+              addr={state.selfContact.address}
               color={state.selfContact.color}
               profilePicture={profilePicture}
               setProfilePicture={setProfilePicture}

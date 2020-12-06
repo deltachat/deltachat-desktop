@@ -391,6 +391,7 @@ function AccountItem({
             avatarPath: login.profileImage,
             color: login.color,
             displayName: login.displayname,
+            addr: login.addr
           }}
         />
         <div className='contact-name'>

@@ -56,7 +56,7 @@ export default function Contact(props: {
   } = props.contact
   return (
     <div className='contact'>
-      <Avatar {...{ avatarPath: profileImage, color, displayName }} />
+      <Avatar {...{ avatarPath: profileImage, color, displayName, addr: address }} />
       {ContactName(displayName, address, isVerified)}
     </div>
   )
