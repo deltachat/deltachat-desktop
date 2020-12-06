@@ -14,7 +14,6 @@ export function QRAvatar() {
   )
 }
 
-
 export function avatarInitial(name: string, addr?: string) {
   const nameOrAddr = name || addr
   const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
@@ -33,7 +32,15 @@ export function Avatar(props: {
   isVerified?: boolean
   style?: htmlDivProps['style']
 }) {
-  const { avatarPath, color, displayName, addr, isVerified, large, small } = props
+  const {
+    avatarPath,
+    color,
+    displayName,
+    addr,
+    isVerified,
+    large,
+    small,
+  } = props
 
   const content = avatarPath ? (
     <img className='content' src={avatarPath} />

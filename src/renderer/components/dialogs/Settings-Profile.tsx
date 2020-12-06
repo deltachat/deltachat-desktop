@@ -24,7 +24,7 @@ export default function SettingsProfile({
 }) {
   const [profileImagePreview, setProfileImagePreview] = useState('')
 
-  const initial = avatarInitial(account.displayname, account.addr )
+  const initial = avatarInitial(account.displayname, account.addr)
   useEffect(() => {
     DeltaBackend.call('getProfilePicture').then(setProfileImagePreview)
     // return nothing because reacts wants it like that
