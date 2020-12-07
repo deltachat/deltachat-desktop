@@ -108,7 +108,7 @@ const ImportButton = function ImportButton(_props: any) {
       {
         title: tx('import_backup_title'),
         properties: ['openFile'],
-        filters: [{ name: 'DeltaChat .bak', extensions: ['bak'] }],
+        filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
       },
       (filenames: string[]) => {
         if (!filenames || !filenames.length) return
