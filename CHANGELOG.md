@@ -8,6 +8,7 @@
 - Adjust order of buttons at labeled link dialog
 - Change order and ux of context menus, especially for messages
 - Increase padding of draft/reply area
+- All import of .tar backup
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
