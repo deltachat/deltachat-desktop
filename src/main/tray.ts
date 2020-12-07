@@ -18,17 +18,17 @@ export function mainWindowIsVisibleAndFocused() {
 
 export function closeDeltaChat() {
   mainWindow.window.close()
-  setTrayMenu()
 }
 
-export function hideDeltaChat() {
+export function hideDeltaChat(minimize?: boolean) {
+  if (minimize === true) {
+    mainWindow.window.minimize()
+  }
   mainWindow.window.hide()
-  setTrayMenu()
 }
 
 export function showDeltaChat() {
   mainWindow.window.show()
-  setTrayMenu()
 }
 
 export function quitDeltaChat() {
@@ -52,7 +52,7 @@ export function destroyTrayIcon() {
   tray = null
 }
 
-export function setTrayMenu() {
+export function getTrayMenu() {
   if (tray === null) return
   const tx = app.translate
   if (process.platform === 'darwin') {
@@ -114,7 +114,7 @@ export function setTrayMenu() {
     ])
   }
 
-  tray.setContextMenu(contextMenu)
+  return contextMenu
 }
 
 export function TrayIcon() {
@@ -144,8 +144,6 @@ export function renderTrayIcon() {
   log.info('add icon tray')
   tray = TrayIcon()
 
-  setTrayMenu()
-
   tray.setToolTip('Delta Chat')
   const hideOrShow = () => {
     const isVisibleAndFocused =
@@ -154,26 +152,17 @@ export function renderTrayIcon() {
       ? mainWindow.window.minimize()
       : mainWindow.show()
   }
-  tray.on('double-click', () => {
-    hideOrShow()
-  })
-  tray.on('click', () => {
-    hideOrShow()
-  })
-  if (process.platform === 'darwin') {
-    tray.on('right-click', () => tray.popUpContextMenu())
+
+  if (process.platform !== 'darwin') {
+    tray.on('click', () => {
+      hideOrShow()
+    })
+    tray.on('double-click', () => {
+      hideOrShow()
+    })
+  } else {
+    tray.on('click', () => tray.popUpContextMenu(getTrayMenu()))
   }
 
-  updateTrayMenu()
-}
-
-export function updateTrayMenu() {
-  if (contextMenu === null) return
-  const reduceWindowItem = contextMenu.getMenuItemById('reduce_window')
-  if (reduceWindowItem) {
-    reduceWindowItem.enabled = mainWindow.window.isVisible()
-  }
-
-  // Called to update menu on Linux
-  if (tray !== null) tray.setContextMenu(contextMenu)
+  tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
 }
