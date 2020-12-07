@@ -14,8 +14,9 @@ export function QRAvatar() {
   )
 }
 
-function nameToInitial(name: string) {
-  const codepoint = name && name.codePointAt(0)
+export function avatarInitial(name: string, addr?: string) {
+  const nameOrAddr = name || addr
+  const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
   return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : '#'
 }
 
@@ -25,18 +26,27 @@ export function Avatar(props: {
   avatarPath?: string
   color?: string
   displayName: string
+  addr?: string
   large?: boolean
   small?: boolean
   isVerified?: boolean
   style?: htmlDivProps['style']
 }) {
-  const { avatarPath, color, displayName, isVerified, large, small } = props
+  const {
+    avatarPath,
+    color,
+    displayName,
+    addr,
+    isVerified,
+    large,
+    small,
+  } = props
 
   const content = avatarPath ? (
     <img className='content' src={avatarPath} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
-      {nameToInitial(displayName)}
+      {avatarInitial(displayName, addr)}
     </div>
   )
 
