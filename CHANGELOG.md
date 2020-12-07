@@ -8,6 +8,7 @@
 - Adjust order of buttons at labeled link dialog
 - Change order and ux of context menus, especially for messages
 - Increase padding of draft/reply area
+- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links

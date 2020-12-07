@@ -115,6 +115,10 @@ export default function ChatList(props: {
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
+    const chat = chatCache[chatId]
+    if (chat.archived === true) {
+      onShowArchivedChats()
+    }
     props.onChatClick(chatId)
   }
 
@@ -515,10 +519,10 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
 
   useEffect(
     () =>
-      showArchivedChats
+      showArchivedChats && queryStr.length === 0
         ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
         : setListFlags(0),
-    [showArchivedChats]
+    [showArchivedChats, queryStr]
   )
 
   return { chatListIds, isChatLoaded, loadChats, chatCache }
