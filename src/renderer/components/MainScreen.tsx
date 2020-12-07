@@ -31,15 +31,24 @@ import { getLastSelectedChatId } from '../ipc'
 import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { Avatar } from './Avatar'
 import OfflineToast from './OfflineToast'
+import { C } from 'deltachat-node/dist/constants'
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
+  useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
+    setShowArchivedChats(true)
+  )
+  useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, () =>
+    setShowArchivedChats(false)
+  )
+
   const screenContext = useContext(ScreenContext)
   const [selectedChat, chatStoreDispatch] = useChatStore()
 
   const onChatClick = (chatId: number) => {
+    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
     // avoid double clicks
     if (chatId === selectedChat.id) return
 
@@ -226,7 +235,6 @@ export default function MainScreen() {
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
-          onShowArchivedChats={() => setShowArchivedChats(true)}
           onChatClick={onChatClick}
           selectedChatId={selectedChat ? selectedChat.id : null}
         />

@@ -3,6 +3,7 @@ import { Store, useStore } from './store'
 import { JsonContact, FullChat, MessageType } from '../../shared/shared-types'
 import { DeltaBackend } from '../delta-remote'
 import { runtime } from '../runtime'
+import { ActionEmitter, KeybindAction } from '../keybindings'
 
 export const PAGE_SIZE = 10
 
@@ -186,6 +187,11 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
         scrollToBottom: true,
       },
     })
+    ActionEmitter.emitAction(
+      chat.archived
+        ? KeybindAction.ChatList_SwitchToArchiveView
+        : KeybindAction.ChatList_SwitchToNormalView
+    )
     runtime.updateBadge()
     saveLastChatId(chatId)
   } else if (type === 'UI_DELETE_MESSAGE') {

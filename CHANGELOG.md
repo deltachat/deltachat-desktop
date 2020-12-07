@@ -10,6 +10,7 @@
 - Increase padding of draft/reply area
 - All import of .tar backup
 - Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
+- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
