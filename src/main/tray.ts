@@ -12,7 +12,10 @@ let contextMenu: Menu = null
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
 
-export function mainWindowIsVisibleAndFocused() {
+export function mainWindowIsVisible() {
+  if (process.env.platform === 'darwin') {
+    return mainWindow.window.isVisible()
+  }
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
 }
 
@@ -57,7 +60,7 @@ export function getTrayMenu() {
   const tx = app.translate
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
-      mainWindowIsVisibleAndFocused()
+      mainWindowIsVisible()
         ? {
             id: 'reduce_window',
             label: tx('hide'),
@@ -146,11 +149,7 @@ export function renderTrayIcon() {
 
   tray.setToolTip('Delta Chat')
   const hideOrShow = () => {
-    const isVisibleAndFocused =
-      mainWindow.window.isVisible() && mainWindow.window.isFocused()
-    isVisibleAndFocused === true
-      ? mainWindow.window.minimize()
-      : mainWindow.show()
+    mainWindowIsVisible() ? mainWindow.window.minimize() : mainWindow.show()
   }
 
   if (process.platform !== 'darwin') {
