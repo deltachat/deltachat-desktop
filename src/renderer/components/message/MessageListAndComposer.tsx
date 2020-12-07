@@ -100,15 +100,10 @@ export default function MessageListAndComposer({
   }
 
   const onMouseUp = (e: MouseEvent) => {
-    console.log('onMouseUp')
-    console.log(event)
     const selection = window.getSelection()
 
-    console.log(selection.rangeCount, selection.focusOffset, selection.type)
     if (selection.type === 'Range' && selection.rangeCount > 0) return
     const targetTagName = ((e.target as unknown) as any)?.tagName
-
-    console.log(targetTagName)
 
     if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
       return
@@ -120,10 +115,8 @@ export default function MessageListAndComposer({
   }
 
   const onSelectionChange = () => {
-    console.log('onSelectionChange')
     const selection = window.getSelection()
 
-    console.log(selection.rangeCount, selection.focusOffset, selection.type)
     if (
       selection.type === 'Caret' ||
       (selection.type === 'Range' && selection.rangeCount > 0)
