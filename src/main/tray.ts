@@ -28,6 +28,7 @@ export function hideDeltaChat(minimize?: boolean) {
     mainWindow.window.minimize()
   }
   mainWindow.window.hide()
+  if (process.platform === 'linux') tray.setContextMenu(getTrayMenu())
 }
 
 export function showDeltaChat() {
@@ -168,5 +169,4 @@ export function renderTrayIcon() {
     mainWindow.window.on('blur', () => tray.setContextMenu(getTrayMenu()))
     mainWindow.window.on('focus', () => tray.setContextMenu(getTrayMenu()))
   }
-
 }
