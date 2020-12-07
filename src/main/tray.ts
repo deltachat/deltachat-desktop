@@ -102,6 +102,7 @@ export function getTrayMenu() {
         id: 'reduce_window',
         label: tx('global_menu_minimize_to_tray'),
         type: 'normal',
+        enabled: mainWindowIsVisible(),
         click() {
           hideDeltaChat()
         },
@@ -152,16 +153,20 @@ export function renderTrayIcon() {
     mainWindowIsVisible() ? mainWindow.window.minimize() : mainWindow.show()
   }
 
-  if (process.platform !== 'darwin') {
-    tray.on('click', () => {
-      hideOrShow()
-    })
-    tray.on('double-click', () => {
-      hideOrShow()
-    })
-  } else {
+  if (process.platform === 'darwin') {
     tray.on('click', () => tray.popUpContextMenu(getTrayMenu()))
+    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+  } else if (process.platform === 'win32') {
+    tray.on('click', () => hideOrShow())
+    tray.on('double-click', () => hideOrShow())
+    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+  } else {
+    tray.on('click', () => hideOrShow())
+    tray.on('double-click', () => hideOrShow())
+
+    tray.setContextMenu(getTrayMenu())
+    mainWindow.window.on('blur', () => tray.setContextMenu(getTrayMenu()))
+    mainWindow.window.on('focus', () => tray.setContextMenu(getTrayMenu()))
   }
 
-  tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
 }
