@@ -23,6 +23,7 @@
 - Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
 - Fix using first letter of email address on avatars if there is no username or profile image set
 - Fix styling of disabled "remove profile image" button
+- Fix bug in tray menu showing hide when the window was visible or vice-versa
 
 ## [1.14.0] - 2020-11-24
 
