@@ -49,7 +49,7 @@ export default function UnblockContacts(props: {
     >
       <DeltaDialogBody>
         <DeltaDialogContent>
-          {blockedContacts.length === 0 && <p>{tx('none_blocked_desktop')}</p>}
+          {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
           {blockedContacts.length > 0 && (
             <div
               style={{
