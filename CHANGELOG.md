@@ -9,6 +9,7 @@
 - Change order and ux of context menus, especially for messages
 - Increase padding of draft/reply area
 - All import of .tar backup
+- open profile view instead of chat on click on contact
 - Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
 
 ## Fixed
