@@ -37,9 +37,9 @@ export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
   const [media, setMedia] = useState(false)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
-    // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
-    // ViewProfile when selecting a shared chat/group)
-    useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
+  // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
+  // ViewProfile when selecting a shared chat/group)
+  useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
     setShowArchivedChats(true)
   )
   useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, () =>
