@@ -15,6 +15,10 @@ export enum KeybindAction {
   Composer_Focus = 'composer:focus',
   Settings_Open = 'settings:open',
 
+  // Actions that are not necessarily triggered by keybindings
+  ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
+  ChatList_SwitchToNormalView = 'chatlist:switch-to-normal-view',
+
   // Composite Actions (actions that trigger other actions)
   ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
   ChatList_ExitSearch = 'chatlist:exit-search',

@@ -85,16 +85,10 @@ export function ChatListPart({
 export default function ChatList(props: {
   selectedChatId: number
   showArchivedChats: boolean
-  onShowArchivedChats: () => void
   queryStr?: string
   onChatClick: (chatId: number) => void
 }) {
-  const {
-    selectedChatId,
-    showArchivedChats,
-    onShowArchivedChats,
-    queryStr,
-  } = props
+  const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
   const isSearchActive = queryStr !== ''
   const queryStrIsEmail = isValidEmail(queryStr)
 
@@ -113,15 +107,6 @@ export default function ChatList(props: {
     queryStr,
     showArchivedChats
   )
-
-  const onChatClick = (chatId: number) => {
-    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
-    const chat = chatCache[chatId]
-    if (chat.archived === true) {
-      onShowArchivedChats()
-    }
-    props.onChatClick(chatId)
-  }
 
   const openContextMenu = useChatListContextMenu()
 

@@ -11,6 +11,7 @@
 - All import of .tar backup
 - open profile view instead of chat on click on contact
 - Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
+- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
 - Update Translations
 
 ## Fixed
