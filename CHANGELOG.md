@@ -9,8 +9,10 @@
 - Change order and ux of context menus, especially for messages
 - Increase padding of draft/reply area
 - All import of .tar backup
+- open profile view instead of chat on click on contact
 - Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
 - Switch to archived/normal view accordingly when selecting an archived/unarchived chat
+- Update Translations
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
@@ -26,6 +28,7 @@
 - Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
 - Fix using first letter of email address on avatars if there is no username or profile image set
 - Fix styling of disabled "remove profile image" button
+- Fix copy text selection from context menu
 
 ## [1.14.0] - 2020-11-24
 

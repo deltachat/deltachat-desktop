@@ -30,6 +30,7 @@ import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
+import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/chatlist')
 
@@ -268,11 +269,7 @@ export default function ChatList(props: {
                               checked={false}
                               showRemove={false}
                               onClick={async _ => {
-                                const chatId = await DeltaBackend.call(
-                                  'contacts.getDMChatId',
-                                  contactId
-                                )
-                                onChatClick(chatId)
+                                openViewProfileDialog(screenContext, contactId)
                               }}
                             />
                           ) : (
