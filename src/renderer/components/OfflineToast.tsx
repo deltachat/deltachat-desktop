@@ -4,6 +4,7 @@ import { onDCEvent } from '../ipc'
 
 import { getLogger } from '../../shared/logger'
 import { useTranslationFunction } from '../contexts'
+import { useKeyBindingAction, KeybindAction } from '../keybindings'
 
 const log = getLogger('renderer/components/OfflineToast')
 
@@ -68,6 +69,12 @@ export default function OfflineToast() {
   const onDeltaNetworkSuccess = () => {
     setNetworkState(() => [true, ''])
   }
+
+  const maybeNetwork = () => {
+    DeltaBackend.call('context.maybeNetwork')
+  }
+
+  useKeyBindingAction(KeybindAction.Debug_MaybeNetwork, maybeNetwork)
 
   useEffect(() => {
     if (navigator.onLine === false) onBrowserOffline()

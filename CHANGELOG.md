@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Add Press F5 to call dcMaybeNetwork
+
 ## Changed
 - Show linebreaks in quotes
 - trust all labeled links from device chat
