@@ -33,6 +33,7 @@
 - Fix using first letter of email address on avatars if there is no username or profile image set
 - Fix styling of disabled "remove profile image" button
 - Fix copy text selection from context menu
+- Fix Contact Requests (ui was not properly updating)
 
 ## [1.14.0] - 2020-11-24
 
