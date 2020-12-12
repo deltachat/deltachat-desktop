@@ -9,3 +9,5 @@ Search contact list: `ctrl + k`
 Focus message composer: `ctrl + n`
 
 Open settings: `cmd + ,` or `ctrl + ,`
+
+Call MaybeNetwork (can help if deltachat doesn't detect that it is online again after resuming standby): `F5`

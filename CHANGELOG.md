@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Add Press F5 to call dcMaybeNetwork
+
 ## Changed
 - Show linebreaks in quotes
 - trust all labeled links from device chat
@@ -13,6 +16,7 @@
 - Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
 - Switch to archived/normal view accordingly when selecting an archived/unarchived chat
 - Update Translations
+- call maybe_network on window focus
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
