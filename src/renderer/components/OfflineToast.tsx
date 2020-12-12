@@ -81,6 +81,7 @@ export default function OfflineToast() {
 
     window.addEventListener('online', onBrowserOnline)
     window.addEventListener('offline', onBrowserOffline)
+    window.addEventListener('focus', maybeNetwork)
     const removeEventListenerDCNetworkError = onDCEvent(
       'DC_EVENT_ERROR_NETWORK',
       onDeltaNetworkError
@@ -93,6 +94,7 @@ export default function OfflineToast() {
     return () => {
       window.removeEventListener('online', onBrowserOffline)
       window.removeEventListener('offline', onBrowserOnline)
+      window.removeEventListener('focus', maybeNetwork)
 
       removeEventListenerDCNetworkError()
       removeEventListenerDCNetworkSuccess()
