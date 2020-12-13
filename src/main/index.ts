@@ -63,12 +63,7 @@ import * as mainWindow from './windows/main'
 import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
-import {
-  updateTrayIcon,
-  updateTrayMenu,
-  hideDeltaChat,
-  showDeltaChat,
-} from './tray'
+import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
 
 app.ipcReady = false
@@ -150,10 +145,6 @@ function onReady([logins, _appReady, loadedState]: [
         }
       }
     }
-  })
-
-  mainWindow.window.on('focus', () => {
-    updateTrayMenu()
   })
 })
 
