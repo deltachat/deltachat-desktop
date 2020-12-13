@@ -2,12 +2,21 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Add Press F5 to call dcMaybeNetwork
+
 ## Changed
 - Show linebreaks in quotes
 - trust all labeled links from device chat
 - Adjust order of buttons at labeled link dialog
 - Change order and ux of context menus, especially for messages
 - Increase padding of draft/reply area
+- All import of .tar backup
+- open profile view instead of chat on click on contact
+- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
+- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
+- Update Translations
+- call maybe_network on window focus
 
 ## Fixed
 - Fix "copy link" context menu option for labeled links
@@ -24,6 +33,8 @@
 - Fix using first letter of email address on avatars if there is no username or profile image set
 - Fix styling of disabled "remove profile image" button
 - Fix bug in tray menu showing hide when the window was visible or vice-versa
+- Fix copy text selection from context menu
+- Fix Contact Requests (ui was not properly updating)
 
 ## [1.14.0] - 2020-11-24
 

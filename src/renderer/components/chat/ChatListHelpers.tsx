@@ -3,6 +3,7 @@ import { ipcBackend } from '../../ipc'
 import debounce from 'debounce'
 import { getLogger } from '../../../shared/logger'
 import { DeltaBackend } from '../../delta-remote'
+import { C } from 'deltachat-node/dist/constants'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -82,9 +83,17 @@ export function useChatList(
 
   useEffect(() => {
     log.debug('useChatList: onComponentDidMount')
+    const onMsgNotice = (_event: any, [chatId]: [number, number]) => {
+      if (chatId === C.DC_CHAT_ID_DEADDROP) {
+        refetchChatlist()
+      }
+    }
+
     ipcBackend.on('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+    ipcBackend.on('DC_EVENT_MSGS_NOTICED', onMsgNotice)
     return () => {
       ipcBackend.removeListener('DD_EVENT_CHATLIST_CHANGED', refetchChatlist)
+      ipcBackend.removeListener('DC_EVENT_MSGS_NOTICED', onMsgNotice)
     }
   }, [listFlags, queryStr, queryContactId])
 

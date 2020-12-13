@@ -30,6 +30,7 @@ import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
+import { openViewProfileDialog } from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/chatlist')
 
@@ -84,16 +85,10 @@ export function ChatListPart({
 export default function ChatList(props: {
   selectedChatId: number
   showArchivedChats: boolean
-  onShowArchivedChats: () => void
   queryStr?: string
   onChatClick: (chatId: number) => void
 }) {
-  const {
-    selectedChatId,
-    showArchivedChats,
-    onShowArchivedChats,
-    queryStr,
-  } = props
+  const { selectedChatId, showArchivedChats, onChatClick, queryStr } = props
   const isSearchActive = queryStr !== ''
   const queryStrIsEmail = isValidEmail(queryStr)
 
@@ -112,11 +107,6 @@ export default function ChatList(props: {
     queryStr,
     showArchivedChats
   )
-
-  const onChatClick = (chatId: number) => {
-    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return onShowArchivedChats()
-    props.onChatClick(chatId)
-  }
 
   const openContextMenu = useChatListContextMenu()
 
@@ -279,11 +269,7 @@ export default function ChatList(props: {
                               checked={false}
                               showRemove={false}
                               onClick={async _ => {
-                                const chatId = await DeltaBackend.call(
-                                  'contacts.getDMChatId',
-                                  contactId
-                                )
-                                onChatClick(chatId)
+                                openViewProfileDialog(screenContext, contactId)
                               }}
                             />
                           ) : (
@@ -515,10 +501,10 @@ function useLogicChatPart(queryStr: string, showArchivedChats: boolean) {
 
   useEffect(
     () =>
-      showArchivedChats
+      showArchivedChats && queryStr.length === 0
         ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
         : setListFlags(0),
-    [showArchivedChats]
+    [showArchivedChats, queryStr]
   )
 
   return { chatListIds, isChatLoaded, loadChats, chatCache }
