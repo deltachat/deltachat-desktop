@@ -133,6 +133,8 @@ function buildContextMenu(
   const showAttachmentOptions = attachment && !message.msg.isSetupmessage
 
   const textSelected: boolean = window.getSelection().toString() !== ''
+  // grab selected text before clicking, otherwise the selection might be already gone
+  const selectedText = window.getSelection()?.toString()
 
   return [
     // Reply
@@ -152,7 +154,7 @@ function buildContextMenu(
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
           action: () => {
-            navigator.clipboard.writeText(window.getSelection().toString())
+            navigator.clipboard.writeText(selectedText)
           },
         }
       : {
