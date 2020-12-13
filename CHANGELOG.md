@@ -25,6 +25,7 @@
 - Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
 - Fix using first letter of email address on avatars if there is no username or profile image set
 - Fix styling of disabled "remove profile image" button
+- Hopefully fixed rare bug of draft area not getting cleared
 
 ## [1.14.0] - 2020-11-24
 
