@@ -4,6 +4,44 @@
 
 ## [1.14.1] - 2020-12-15
 
+### Added
+
+- Add Press F5 to call dcMaybeNetwork
+
+### Changed
+
+- Show linebreaks in quotes
+- trust all labeled links from device chat
+- Adjust order of buttons at labeled link dialog
+- Change order and ux of context menus, especially for messages
+- Increase padding of draft/reply area
+- All import of .tar backup
+- open profile view instead of chat on click on contact
+- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
+- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
+- Update Translations
+- call maybe_network on window focus
+
+### Fixed
+
+- Fix "copy link" context menu option for labeled links
+- Fix exception when opening second instance of deltachat and tray icon is disabled
+- Fix showing/focusing deltachat on second instance
+- Hide reply context menu option in device chat 
+- Fix messages sometimes overflowing
+- Fix resizing of quote after fetching author 
+- Fix state update on unmounted components in Timestamp and LoginScreen
+- Fix non emojis getting displayed big (see [#1989](https://github.com/deltachat/deltachat-desktop/issues/1989))
+- Fix selecting a chat focus composer input (see [#1986](https://github.com/deltachat/deltachat-desktop/issues/1986))
+- Fix processing qr code again while another is still getting processed
+- Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
+- Fix using first letter of email address on avatars if there is no username or profile image set
+- Fix styling of disabled "remove profile image" button
+- Fix bug in tray menu showing hide when the window was visible or vice-versa
+- Hopefully fixed rare bug of draft area not getting cleared
+- Fix copy text selection from context menu
+- Fix Contact Requests (ui was not properly updating)
+
 ## [1.14.0] - 2020-11-24
 
 ### Added
@@ -1017,44 +1055,6 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-## [Added] - YYYY-MM-DD
-
-- Add Press F5 to call dcMaybeNetwork
-
-## [Changed] - YYYY-MM-DD
-
-- Show linebreaks in quotes
-- trust all labeled links from device chat
-- Adjust order of buttons at labeled link dialog
-- Change order and ux of context menus, especially for messages
-- Increase padding of draft/reply area
-- All import of .tar backup
-- open profile view instead of chat on click on contact
-- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
-- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
-- Update Translations
-- call maybe_network on window focus
-
-## Fixed
-
-- Fix "copy link" context menu option for labeled links
-- Fix exception when opening second instance of deltachat and tray icon is disabled
-- Fix showing/focusing deltachat on second instance
-- Hide reply context menu option in device chat 
-- Fix messages sometimes overflowing
-- Fix resizing of quote after fetching author 
-- Fix state update on unmounted components in Timestamp and LoginScreen
-- Fix non emojis getting displayed big (see [#1989](https://github.com/deltachat/deltachat-desktop/issues/1989))
-- Fix selecting a chat focus composer input (see [#1986](https://github.com/deltachat/deltachat-desktop/issues/1986))
-- Fix processing qr code again while another is still getting processed
-- Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
-- Fix using first letter of email address on avatars if there is no username or profile image set
-- Fix styling of disabled "remove profile image" button
-- Fix bug in tray menu showing hide when the window was visible or vice-versa
-- Hopefully fixed rare bug of draft area not getting cleared
-- Fix copy text selection from context menu
-- Fix Contact Requests (ui was not properly updating)
-
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...HEAD
 
 [1.14.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...v1.14.1
@@ -1139,8 +1139,4 @@ This section is only relevant to contributors.
 
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
 
-[0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/vAdded...v0.90.1
-
-[added]: https://github.com/deltachat/deltachat-desktop/compare/vChanged...vAdded
-
-[changed]: https://github.com/deltachat/deltachat-desktop/compare/vFixed...vChanged
+[0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
