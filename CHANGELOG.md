@@ -2,44 +2,12 @@
 
 ## [Unreleased][unreleased]
 
-## Added
-- Add Press F5 to call dcMaybeNetwork
-
-## Changed
-- Show linebreaks in quotes
-- trust all labeled links from device chat
-- Adjust order of buttons at labeled link dialog
-- Change order and ux of context menus, especially for messages
-- Increase padding of draft/reply area
-- All import of .tar backup
-- open profile view instead of chat on click on contact
-- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
-- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
-- Update Translations
-- call maybe_network on window focus
-
-## Fixed
-- Fix "copy link" context menu option for labeled links
-- Fix exception when opening second instance of deltachat and tray icon is disabled
-- Fix showing/focusing deltachat on second instance
-- Hide reply context menu option in device chat 
-- Fix messages sometimes overflowing
-- Fix resizing of quote after fetching author 
-- Fix state update on unmounted components in Timestamp and LoginScreen
-- Fix non emojis getting displayed big (see #1989)
-- Fix selecting a chat focus composer input (see #1986)
-- Fix processing qr code again while another is still getting processed
-- Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
-- Fix using first letter of email address on avatars if there is no username or profile image set
-- Fix styling of disabled "remove profile image" button
-- Fix bug in tray menu showing hide when the window was visible or vice-versa
-- Hopefully fixed rare bug of draft area not getting cleared
-- Fix copy text selection from context menu
-- Fix Contact Requests (ui was not properly updating)
+## [1.14.1] - 2020-12-15
 
 ## [1.14.0] - 2020-11-24
 
 ### Added
+
 - Upgrade Emoji Picker(Emoji 12.1) and emojifont(Unicode 13.1) for new emoji support 🦾
 - Add Keyboard navigation between accounts in account selection screen
 - Add the account name to the account deletion-confirmation dialog
@@ -49,17 +17,18 @@
 - Option for packagers to disable asar (`NO_ASAR=true npm run pack:generate_config`).
 - Added context menu for info messages
 - Add simple support for displaying quotes (no attachment preview nor jump to message yet)
-- Show sending indicator for outgoing info messages #1867
-- Implement tray icon (huge thanks to @pepea28 for contributing & pushing this)
-- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see #1952)
+- Show sending indicator for outgoing info messages [#1867](https://github.com/deltachat/deltachat-desktop/issues/1867)
+- Implement tray icon (huge thanks to [**@pepea28**](https://github.com/pepea28) for contributing & pushing this)
+- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see [#1952](https://github.com/deltachat/deltachat-desktop/issues/1952))
 - Add draft/staging area
   - add a description to the files you send
   - reply to other messages
 - Re-add pasting in of qrcode data
 
 ### Changed
+
 - Change "More info" translation to "Message Details"
-- Through the emoji mart update, frequent emojis are now not sorted immediately, fixes #1177
+- Through the emoji mart update, frequent emojis are now not sorted immediately, fixes [#1177](https://github.com/deltachat/deltachat-desktop/issues/1177)
 - gallery media display type is chosen via viewType now and if the mime type is not displayable by the browser an error is shown
 - minor gallery style adjustments 
 - Own Context Menu Implementation that makes development easier
@@ -72,6 +41,7 @@
 - Overhauled look and feel of about dialog
 
 ### Removed
+
 - removed inline message buttons (3dot menu button and download button)
 
 ### Fixed
@@ -80,13 +50,13 @@
 - Fixed unselecting current chat after deleting another chat
 - Fix hover color on emoji picker for light theme
 - Fix missing translations in emoji picker
-- Fix broken enlargen group image #1924
+- Fix broken enlargen group image [#1924](https://github.com/deltachat/deltachat-desktop/issues/1924)
 - Fix opening of multiple setting windows via keybinding
-- Fix two issues with the labeled link (see  #1893)
+- Fix two issues with the labeled link (see  [#1893](https://github.com/deltachat/deltachat-desktop/issues/1893))
 - Fix refresh of "empty chat" info meassage on chat changes
-- Fix removing incompleted account (see #1952)
+- Fix removing incompleted account (see [#1952](https://github.com/deltachat/deltachat-desktop/issues/1952))
 - Fix that drag n' drop selection message text resulted in an "send following dropped files" dialog
-- Fix adding of multiple members to a group via add member with searches in between (see #1964)
+- Fix adding of multiple members to a group via add member with searches in between (see [#1964](https://github.com/deltachat/deltachat-desktop/issues/1964))
 
 ## [1.13.1] - 2020-10-06
 
@@ -1047,7 +1017,47 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...HEAD
+## [Added] - YYYY-MM-DD
+
+- Add Press F5 to call dcMaybeNetwork
+
+## [Changed] - YYYY-MM-DD
+
+- Show linebreaks in quotes
+- trust all labeled links from device chat
+- Adjust order of buttons at labeled link dialog
+- Change order and ux of context menus, especially for messages
+- Increase padding of draft/reply area
+- All import of .tar backup
+- open profile view instead of chat on click on contact
+- Switch to showing archived chats when selecting an archived chat in the chat search and emptying the search
+- Switch to archived/normal view accordingly when selecting an archived/unarchived chat
+- Update Translations
+- call maybe_network on window focus
+
+## Fixed
+
+- Fix "copy link" context menu option for labeled links
+- Fix exception when opening second instance of deltachat and tray icon is disabled
+- Fix showing/focusing deltachat on second instance
+- Hide reply context menu option in device chat 
+- Fix messages sometimes overflowing
+- Fix resizing of quote after fetching author 
+- Fix state update on unmounted components in Timestamp and LoginScreen
+- Fix non emojis getting displayed big (see [#1989](https://github.com/deltachat/deltachat-desktop/issues/1989))
+- Fix selecting a chat focus composer input (see [#1986](https://github.com/deltachat/deltachat-desktop/issues/1986))
+- Fix processing qr code again while another is still getting processed
+- Fix reconnecting logic on suspend/resume or disconnecting/connecting to a network
+- Fix using first letter of email address on avatars if there is no username or profile image set
+- Fix styling of disabled "remove profile image" button
+- Fix bug in tray menu showing hide when the window was visible or vice-versa
+- Hopefully fixed rare bug of draft area not getting cleared
+- Fix copy text selection from context menu
+- Fix Contact Requests (ui was not properly updating)
+
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...HEAD
+
+[1.14.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...v1.14.1
 
 [1.14.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.1...v1.14.0
 
@@ -1129,4 +1139,8 @@ This section is only relevant to contributors.
 
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
 
-[0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1
+[0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/vAdded...v0.90.1
+
+[added]: https://github.com/deltachat/deltachat-desktop/compare/vChanged...vAdded
+
+[changed]: https://github.com/deltachat/deltachat-desktop/compare/vFixed...vChanged
