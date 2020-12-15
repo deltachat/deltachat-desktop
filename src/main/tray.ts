@@ -13,7 +13,7 @@ const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
 
 export function mainWindowIsVisible() {
-  if (process.env.platform === 'darwin') {
+  if (process.platform === 'darwin' || process.platform === 'win32') {
     return mainWindow.window.isVisible()
   }
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
@@ -33,6 +33,10 @@ export function hideDeltaChat(minimize?: boolean) {
 
 export function showDeltaChat() {
   mainWindow.window.show()
+}
+
+export function hideOrShowDeltaChat() {
+  mainWindowIsVisible() ? hideDeltaChat(true) : showDeltaChat()
 }
 
 export function quitDeltaChat() {
@@ -59,6 +63,7 @@ export function destroyTrayIcon() {
 export function getTrayMenu() {
   if (tray === null) return
   const tx = app.translate
+  console.log(mainWindowIsVisible())
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
       mainWindowIsVisible()
@@ -150,20 +155,16 @@ export function renderTrayIcon() {
   tray = TrayIcon()
 
   tray.setToolTip('Delta Chat')
-  const hideOrShow = () => {
-    mainWindowIsVisible() ? mainWindow.window.minimize() : mainWindow.show()
-  }
 
   if (process.platform === 'darwin') {
     tray.on('click', () => tray.popUpContextMenu(getTrayMenu()))
     tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
   } else if (process.platform === 'win32') {
-    tray.on('click', () => hideOrShow())
-    tray.on('double-click', () => hideOrShow())
+    tray.on('click', hideOrShowDeltaChat)
     tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
   } else {
-    tray.on('click', () => hideOrShow())
-    tray.on('double-click', () => hideOrShow())
+    tray.on('click', hideOrShowDeltaChat)
+    tray.on('double-click', hideOrShowDeltaChat)
 
     tray.setContextMenu(getTrayMenu())
     mainWindow.window.on('blur', () => tray.setContextMenu(getTrayMenu()))
