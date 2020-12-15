@@ -63,7 +63,6 @@ export function destroyTrayIcon() {
 export function getTrayMenu() {
   if (tray === null) return
   const tx = app.translate
-  console.log(mainWindowIsVisible())
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
       mainWindowIsVisible()
