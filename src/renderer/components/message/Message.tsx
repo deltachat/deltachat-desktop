@@ -385,6 +385,7 @@ const Message = (props: {
             hasLocation={hasLocation}
             timestamp={message.msg.sentAt}
             padlock={message.msg.showPadlock}
+            onClickError={openMessageInfo.bind(null, message)}
           />
         </div>
       </div>

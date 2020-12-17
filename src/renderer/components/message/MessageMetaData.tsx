@@ -14,6 +14,7 @@ export default class MessageMetaData extends React.Component<{
   text?: string
   timestamp: number
   hasLocation?: boolean
+  onClickError?: () => void
 }> {
   render() {
     const {
@@ -25,6 +26,7 @@ export default class MessageMetaData extends React.Component<{
       text,
       timestamp,
       hasLocation,
+      onClickError,
     } = this.props
 
     const withImageNoCaption = Boolean(
@@ -32,7 +34,6 @@ export default class MessageMetaData extends React.Component<{
         ((isImage(attachment) && hasAttachment(attachment)) ||
           isVideo(attachment))
     )
-    const showError = status === 'error' && direction === 'outgoing'
 
     return (
       <i18nContext.Consumer>
@@ -45,30 +46,25 @@ export default class MessageMetaData extends React.Component<{
             {username !== undefined ? (
               <div className='username'>{username}</div>
             ) : null}
-            {padlock === true && status !== 'error' ? (
+            {padlock === true ? (
               <div
                 aria-label={tx('a11y_encryption_padlock')}
                 className={'padlock-icon'}
               />
             ) : null}
             {hasLocation ? <span className={'location-icon'} /> : null}
-            {showError ? (
-              <span className='date' style={{ color: 'red' }}>
-                {tx('send_failed')}
-              </span>
-            ) : (
-              <Timestamp
-                timestamp={timestamp}
-                extended
-                direction={direction}
-                module='date'
-              />
-            )}
+            <Timestamp
+              timestamp={timestamp}
+              extended
+              direction={direction}
+              module='date'
+            />
             <span className='spacer' />
             {direction === 'outgoing' ? (
               <div
                 className={classNames('status-icon', status)}
                 aria-label={tx(`a11y_delivery_status_${status}`)}
+                onClick={status === 'error' && onClickError}
               />
             ) : null}
           </div>
