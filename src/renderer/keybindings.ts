@@ -15,12 +15,17 @@ export enum KeybindAction {
   Composer_Focus = 'composer:focus',
   Settings_Open = 'settings:open',
 
+  // Actions that are not necessarily triggered by keybindings
+  ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
+  ChatList_SwitchToNormalView = 'chatlist:switch-to-normal-view',
+
   // Composite Actions (actions that trigger other actions)
   ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
   ChatList_ExitSearch = 'chatlist:exit-search',
   ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
   // Debug
+  Debug_MaybeNetwork = 'debug:maybe_network',
 }
 
 export namespace ActionEmitter {
@@ -91,6 +96,8 @@ function keyDownEvent2Action(ev: KeyboardEvent): KeybindAction {
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat
+    } else if (ev.key === 'F5') {
+      return KeybindAction.Debug_MaybeNetwork
     }
   } else {
     // fire continuesly as long as button is pressed

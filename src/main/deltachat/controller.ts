@@ -159,16 +159,6 @@ export default class DeltaChatController extends EventEmitter {
     return (app as any).translate(...args)
   }
 
-  // checkPassword(password: string) {
-  //   return password === this.settings.getConfig('mail_pw')
-  // }
-  networkStatus = false
-  networkStatusMessage = ''
-
-  getNetworkStatus(): [boolean, string] {
-    return [this.networkStatus, this.networkStatusMessage]
-  }
-
   onAll(_event: any, data1: any, data2: any) {
     const event: string = !isNaN(_event) ? eventStrings[_event] : String(_event)
 
@@ -181,30 +171,6 @@ export default class DeltaChatController extends EventEmitter {
     } else if (app.rc['log-debug']) {
       // in debug mode log all core events
       logCoreEvent.debug(event, data1, data2)
-    }
-
-    // Network Status
-    if (this.networkStatus !== false && event === 'DC_EVENT_ERROR_NETWORK') {
-      this.networkStatus = false
-      this.networkStatusMessage = data1 + data2
-      this.sendToRenderer('NETWORK_STATUS', [
-        this.networkStatus,
-        this.networkStatusMessage,
-      ])
-    } else if (
-      this.networkStatus === false &&
-      (event === 'DC_EVENT_SMTP_CONNECTED' ||
-        event === 'DC_EVENT_IMAP_CONNECTED' ||
-        event === 'DC_EVENT_INCOMING_MSG' ||
-        event === 'DC_EVENT_MSG_DELIVERED' ||
-        event === 'DC_EVENT_IMAP_MESSAGE_MOVED')
-    ) {
-      this.networkStatus = true
-      this.networkStatusMessage = ''
-      this.sendToRenderer('NETWORK_STATUS', [
-        this.networkStatus,
-        this.networkStatusMessage,
-      ])
     }
 
     this.sendToRenderer(event, [data1, data2])

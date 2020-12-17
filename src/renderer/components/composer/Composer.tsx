@@ -80,33 +80,41 @@ const Composer = forwardRef<
   const pickerButtonRef = useRef()
 
   const sendMessage = () => {
-    const message = messageInputRef.current.getText()
-    if (message.match(/^\s*$/) && !draftState.file) {
-      log.debug(`Empty message: don't send it...`)
-      return
-    }
-    chatStoreDispatch({
-      type: 'SEND_MESSAGE',
-      payload: [
-        chatId,
-        {
-          text: replaceColonsSafe(message),
-          filename: draftState.file,
-          quoteMessageId: draftState.quotedMessageId,
-        } as sendMessageParams,
-      ],
-    })
+    const textareaRef = messageInputRef.current.textareaRef.current
+    textareaRef.disabled = true
+    try {
+      const message = messageInputRef.current.getText()
+      if (message.match(/^\s*$/) && !draftState.file) {
+        log.debug(`Empty message: don't send it...`)
+        return
+      }
+      chatStoreDispatch({
+        type: 'SEND_MESSAGE',
+        payload: [
+          chatId,
+          {
+            text: replaceColonsSafe(message),
+            filename: draftState.file,
+            quoteMessageId: draftState.quotedMessageId,
+          } as sendMessageParams,
+        ],
+      })
 
-    messageInputRef.current.clearText()
-    messageInputRef.current.focus()
-    /* clear it here to make sure the draft is cleared */
-    DeltaBackend.call('messageList.setDraft', chatId, {
-      text: '',
-      file: null,
-      quotedMessageId: null,
-    })
-    /* update the state to reflect the removed draft */
-    clearDraft()
+      /* clear it here to make sure the draft is cleared */
+      DeltaBackend.call('messageList.setDraft', chatId, {
+        text: '',
+        file: null,
+        quotedMessageId: null,
+      })
+      /* update the state to reflect the removed draft */
+      clearDraft()
+      messageInputRef.current.clearText()
+    } catch (error) {
+      log.error(error)
+    } finally {
+      textareaRef.disabled = false
+      messageInputRef.current.focus()
+    }
   }
 
   const addFilename = () => {

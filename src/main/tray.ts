@@ -12,23 +12,31 @@ let contextMenu: Menu = null
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/tray')
 
-export function mainWindowIsVisibleAndFocused() {
+export function mainWindowIsVisible() {
+  if (process.platform === 'darwin' || process.platform === 'win32') {
+    return mainWindow.window.isVisible()
+  }
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
 }
 
 export function closeDeltaChat() {
   mainWindow.window.close()
-  setTrayMenu()
 }
 
-export function hideDeltaChat() {
+export function hideDeltaChat(minimize?: boolean) {
+  if (minimize === true) {
+    mainWindow.window.minimize()
+  }
   mainWindow.window.hide()
-  setTrayMenu()
+  if (process.platform === 'linux') tray.setContextMenu(getTrayMenu())
 }
 
 export function showDeltaChat() {
   mainWindow.window.show()
-  setTrayMenu()
+}
+
+export function hideOrShowDeltaChat() {
+  mainWindowIsVisible() ? hideDeltaChat(true) : showDeltaChat()
 }
 
 export function quitDeltaChat() {
@@ -52,12 +60,12 @@ export function destroyTrayIcon() {
   tray = null
 }
 
-export function setTrayMenu() {
+export function getTrayMenu() {
   if (tray === null) return
   const tx = app.translate
   if (process.platform === 'darwin') {
     contextMenu = Menu.buildFromTemplate([
-      mainWindowIsVisibleAndFocused()
+      mainWindowIsVisible()
         ? {
             id: 'reduce_window',
             label: tx('hide'),
@@ -99,6 +107,7 @@ export function setTrayMenu() {
         id: 'reduce_window',
         label: tx('global_menu_minimize_to_tray'),
         type: 'normal',
+        enabled: mainWindowIsVisible(),
         click() {
           hideDeltaChat()
         },
@@ -114,7 +123,7 @@ export function setTrayMenu() {
     ])
   }
 
-  tray.setContextMenu(contextMenu)
+  return contextMenu
 }
 
 export function TrayIcon() {
@@ -144,36 +153,20 @@ export function renderTrayIcon() {
   log.info('add icon tray')
   tray = TrayIcon()
 
-  setTrayMenu()
-
   tray.setToolTip('Delta Chat')
-  const hideOrShow = () => {
-    const isVisibleAndFocused =
-      mainWindow.window.isVisible() && mainWindow.window.isFocused()
-    isVisibleAndFocused === true
-      ? mainWindow.window.minimize()
-      : mainWindow.show()
-  }
-  tray.on('double-click', () => {
-    hideOrShow()
-  })
-  tray.on('click', () => {
-    hideOrShow()
-  })
+
   if (process.platform === 'darwin') {
-    tray.on('right-click', () => tray.popUpContextMenu())
+    tray.on('click', () => tray.popUpContextMenu(getTrayMenu()))
+    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+  } else if (process.platform === 'win32') {
+    tray.on('click', hideOrShowDeltaChat)
+    tray.on('right-click', () => tray.popUpContextMenu(getTrayMenu()))
+  } else {
+    tray.on('click', hideOrShowDeltaChat)
+    tray.on('double-click', hideOrShowDeltaChat)
+
+    tray.setContextMenu(getTrayMenu())
+    mainWindow.window.on('blur', () => tray.setContextMenu(getTrayMenu()))
+    mainWindow.window.on('focus', () => tray.setContextMenu(getTrayMenu()))
   }
-
-  updateTrayMenu()
-}
-
-export function updateTrayMenu() {
-  if (contextMenu === null) return
-  const reduceWindowItem = contextMenu.getMenuItemById('reduce_window')
-  if (reduceWindowItem) {
-    reduceWindowItem.enabled = mainWindow.window.isVisible()
-  }
-
-  // Called to update menu on Linux
-  if (tray !== null) tray.setContextMenu(contextMenu)
 }

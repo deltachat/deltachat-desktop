@@ -18,7 +18,7 @@
     "message": "Open DeltaChat"
   },
   "global_menu_minimize_to_tray": {
-    "message": "Minimize to tray"
+    "message": "Minimize"
   },
   "import_qr_error": {
     "message": "QR could not be decoded"

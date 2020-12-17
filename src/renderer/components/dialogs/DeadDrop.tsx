@@ -20,6 +20,7 @@ export default function DeadDrop(props: {
 
   const never = () => {
     DeltaBackend.call('contacts.blockContact', contact.id)
+    chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
     onClose()
   }
 

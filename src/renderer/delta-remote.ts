@@ -43,7 +43,6 @@ class DeltaRemote {
   call(fnName: 'joinSecurejoin', qrCode: string): Promise<number>
   call(fnName: 'stopOngoingProcess'): Promise<number>
   call(fnName: 'checkQrCode', qrCode: string): Promise<QrCodeResponse>
-  call(fnName: 'getNetworkStatus'): Promise<[boolean, string]>
   // autocrypt ----------------------------------------------------------
   call(fnName: 'autocrypt.initiateKeyTransfer'): Promise<string>
   call(
