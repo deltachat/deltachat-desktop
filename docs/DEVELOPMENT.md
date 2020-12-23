@@ -207,7 +207,7 @@ Some important folders and files:
 ```powershell
 ├── _locales/                 # translation files in xml and json
 │   ├── _untranslated_en.json # can contain experimental language strings
-│   └── languages.json        # central file which keeps the human readable language
+│   └── languages.json        # central file which defines the visible languages and their native names for the users to choose
 ├── .gihub/workflows          # source of our github actions
 ├── bin/                      # various helper scripts
 │   └── build/                # Build scripts

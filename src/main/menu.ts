@@ -18,7 +18,19 @@ const log = getLogger('main/menu')
 const languages: {
   locale: string
   name: string
-}[] = readJsonSync(join(__dirname, '../../_locales/_languages.json'))
+}[] = (() => {
+  const rawLanguageList: { [locale: string]: string } = readJsonSync(
+    join(__dirname, '../../_locales/_languages.json')
+  )
+
+  return Object.keys(rawLanguageList)
+    .map(locale => ({
+      locale: locale,
+      name: rawLanguageList[locale],
+    }))
+    .filter(({ name }) => name.indexOf('*') === -1)
+    .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1))
+})()
 
 let logHandlerRef: LogHandler = null
 
@@ -77,21 +89,18 @@ function setLabels(menu: rawMenuItem[]): Electron.MenuItemConstructorOptions[] {
 }
 
 function getAvailableLanguages(): Electron.MenuItemConstructorOptions[] {
-  return languages
-    .filter(({ name }) => name.indexOf('*') === -1)
-    .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1))
-    .map(({ locale, name }) => {
-      return {
-        label: name,
-        type: 'radio',
-        checked: locale === (app as ExtendedAppMainProcess).localeData.locale,
-        click: () => {
-          ;(app as ExtendedAppMainProcess).state.saved.locale = locale
-          ;(app as ExtendedAppMainProcess).saveState()
-          mainWindow.chooseLanguage(locale)
-        },
-      }
-    })
+  return languages.map(({ locale, name }) => {
+    return {
+      label: name,
+      type: 'radio',
+      checked: locale === (app as ExtendedAppMainProcess).localeData.locale,
+      click: () => {
+        ;(app as ExtendedAppMainProcess).state.saved.locale = locale
+        ;(app as ExtendedAppMainProcess).saveState()
+        mainWindow.chooseLanguage(locale)
+      },
+    }
+  })
 }
 
 function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
