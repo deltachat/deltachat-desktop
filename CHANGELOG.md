@@ -7,6 +7,8 @@
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
+- update translations (mid dezember 2020)
+    - add Farsi translation
 
 ## [1.14.1] - 2020-12-15
 
