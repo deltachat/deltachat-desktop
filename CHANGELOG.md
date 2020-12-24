@@ -2,12 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- open message info when clicking on the error status icon of a message
+
+### Changed
+- always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
+
 ## [1.14.1] - 2020-12-15
 
 ### Added
 
 - Add Press F5 to call dcMaybeNetwork
-- open message info when clicking on the error status icon of a message
 
 ### Changed
 
@@ -22,7 +27,6 @@
 - Switch to archived/normal view accordingly when selecting an archived/unarchived chat
 - Update Translations
 - call maybe_network on window focus
-- always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
 
 ### Fixed
 
