@@ -243,7 +243,11 @@
     <string name="videochat_tap_to_open">Clique para abrir</string>
     <string name="videochat_instance">Instância de conversa de vídeo</string>
     <string name="videochat_instance_placeholder">Sua instância de conversa de vídeo</string>
+    <string name="videochat_instance_explain">Se uma instância de chat de vídeo for definida, você pode iniciar um chat de vídeo para cada conversa individual. Os chats de vídeo requerem um aplicativo ou navegador compatível para os dois interlocutores.\n \nExemplos: https://meet.jit.si/$ROOM ou basicwebrtc:https://seu-servidor</string>
+    <string name="videochat_instance_from_qr">Use \"%1$s\" para convidar outros para a conversas de vídeo?\n\nUma vez configurado, você pode iniciar uma conversa de vídeo para cada conversa um-para-um. Isto irá substituir os ajustes prévios para conversas de vídeo, caso existam.</string>
     <string name="videochat_invitation">Convite para conversa de vídeo</string>
+    <string name="videochat_invitation_body">Você foi convidado para uma conversa de vídeo, clique %1$s para ingressar.</string>
+
     <!-- get confirmations -->
     <string name="ask_leave_group">Quer mesmo sair do grupo?</string>
     <plurals name="ask_delete_chat">
@@ -263,8 +267,12 @@
     <string name="ask_delete_contact">Apagar permanentemente contato %1$s?\n\nContatos com conversas em andamento e contatos da lista de contatos do sistema não podem ser apagados permanentemente.</string>
     <string name="cannot_delete_contacts_in_use">Impossível apagar contatos com conversas em curso.</string>
     <string name="ask_start_chat_with">Conversar com %1$s?</string>
+    <string name="ask_delete_value">Apagar %s?</string>
     <!-- Translators: %1$s will be replaces by a comma separated list of names -->
     <string name="ask_remove_members">Remover %1$s do grupo?</string>
+    <string name="open_url_confirmation">Você quer abrir este link?</string>
+
+
     <!-- contact list -->
     <string name="contacts_title">Contatos</string>
     <string name="contacts_enter_name_or_email">Insira um nome ou e-mail</string>
@@ -302,8 +310,21 @@
     <string name="chat_no_messages">Sem mensagens.</string>
     <string name="chat_self_talk_subtitle">Mensagens para mim mesmo</string>
     <string name="saved_messages">Mensagens salvas</string>
+    <string name="saved_messages_explain">• Encaminhe mensagens aqui para fácil acesso\n\n• Faça anotações ou gravações de voz\n\n• Anexe mídia para salvá-las</string>
+    <!-- this "Saved" should match the "Saved" from "Saved messages" -->
+    <string name="saved">Salvo</string>
     <string name="chat_contact_request">Pedido de contato</string>
     <string name="chat_no_contact_requests">Sem pedidos de contato.\n\nSe você quiser, e-mails normais podem ser exibidos como pedidos de contato. Basta habilitar nas configurações.</string>
+    <string name="retry_send">Tentar enviar mensagem novamente</string>
+    <string name="send_failed">Não foi possível enviar mensagem</string>
+    <!-- reasons for a disabled message composer -->
+    <string name="messaging_disabled_not_in_group">Você não pode escrever porque não está neste grupo. Para entrar, peça a outro membro.</string>
+    <string name="messaging_disabled_device_chat">Esta conversa contém mensagens geradas localmente. Portanto, você não pode escrever nenhuma mensagem.</string>
+    <string name="messaging_disabled_deaddrop">Clique em uma mensagem para aceitar ou negar a solicitação de contato</string>
+    <string name="cannot_display_unsuported_file_type">Não é possível exibir este tipo de arquivo: %s</string>
+    <string name="attachment_failed_to_load">Falha ao carregar anexo</string>
+
+
     <!-- map -->
     <string name="filter_map_on_time">Exibir localização no tempo.</string>
     <string name="show_location_traces">Exibir pegadas</string>
@@ -319,6 +340,8 @@
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Nome do grupo</string>
     <string name="group_avatar">Avatar do grupo</string>
+    <string name="remove_group_image">Remover imagem do grupo</string>
+    <string name="change_group_image">Mudar imagem do grupo</string>
     <string name="group_create_button">Criar grupo</string>
     <string name="group_please_enter_group_name">Por favor, dê um nome ao grupo.</string>
     <string name="group_add_members">Adicionar participantes</string>
@@ -336,10 +359,14 @@
     <string name="tab_gallery_empty_hint">Imagens e vídeos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="tab_docs_empty_hint">Documentos, músicas e outros arquivos compartilhados nesta conversa serão mostrados aqui.</string>
     <string name="media_preview">Pré-visualização.</string>
+    <string name="send_message">Enviar mensagem</string>
+
+
     <!-- welcome and login -->
     <string name="welcome_intro1_message">O aplicativo com a maior base de usuários do mundo. Livre e independente.</string>
     <string name="login_title">Login</string>
     <string name="login_header">Acesse seu servidor</string>
+    <string name="login_explain">Acesse com uma conta de email existente</string>
     <string name="login_subheader">Para os provedores de e-mail mais conhecidos as configurações adicionais são detectadas automaticamente. Por vezes, o IMAP precisa estar ativado nas configurações do servidor. Consulte seu provedor de e-mail ou amigos para obter ajuda.</string>
     <string name="login_no_servers_hint">O Delta Chat não tem servidores. Seus dados ficam no seu aparelho!</string>
     <string name="login_inbox">Caixa de entrada</string>
@@ -354,8 +381,11 @@
     <string name="login_smtp_port">Porta SMTP</string>
     <string name="login_smtp_security">Segurança SMTP</string>
     <string name="login_auth_method">Método de autorização</string>
+    <!-- Translators: %1$s will be replaced by an email address -->
+    <string name="login_oauth2_checking_addr">Verificando %1$s</string>
     <string name="login_info_oauth2_title">Prosseguir pela configuração simplificada?</string>
-    <string name="login_info_oauth2_text">Seu servidor de e-mail aceita o método de configuração simplificada (OAuth2).\n\n No próximo passo, por favor, permita que o Delta Chat seja seu aplicativo de e-mail.\n\nNão há servidor do Delta Chat. Seus dados ficam no seu aparelho!</string>
+    <string name="login_info_oauth2_text">Seu servidor de e-mail aceita o método de configuração simplificada (OAuth 2.0).\n\n No próximo passo, por favor, permita que o Delta Chat seja seu aplicativo de e-mail.\n\nNão há servidor do Delta Chat. Seus dados ficam no seu aparelho.</string>
+    <string name="login_certificate_checks">Verificações de certificado</string>
     <string name="login_error_mail">Por favor, insira um e-mail válido</string>
     <string name="login_error_server">Por favor, insira um servidor ou IP válido</string>
     <string name="login_error_port">Por favor, insira uma porta válida (1-65535)</string>
@@ -367,9 +397,25 @@
     <string name="login_error_cannot_login">Impossível acessar \"%1$s\". Por favor, verifique o e-mail e senha.</string>
     <!-- Translators: %1$s will be replaced by the server name (eg. imap.somewhere.org) and %2$s will be replaced by the human-readable response from the server. this response may be a single word or some sentences and may or may not be localized. -->
     <string name="login_error_server_response">Resposta de %1$s: %2$s\n\nAlguns provedores colocam informações adicionais na sua caixa de entrada; verifique-as, por exemplo, na interface web. Consulte o seu provedor ou amigos se você tiver problemas.</string>
+    <!-- TLS certificate checks -->
+    <string name="accept_invalid_certificates">Aceitar certificados inválidos</string>
+    <string name="used_settings">Configurações utilizadadas:</string>
+    <string name="switch_account">Mudar de conta</string>
+    <string name="add_account">Adicionar conta</string>
+    <string name="delete_account">Apagar conta</string>
+    <string name="delete_account_ask">Tem certeza de que deseja excluir os dados da sua conta?</string>
+    <string name="delete_account_explain_with_name">Todos os dados da conta de \"%s\" neste dispositivo serão excluídos, incluindo sua configuração de criptografia de ponta a ponta, contatos, bate-papos, mensagens e mídia. Essa ação não pode ser desfeita.</string>
+    <string name="switching_account">Mudando de conta...</string>
+    <string name="try_connect_now">Tentando conectar agora</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">Falha na configuração. Erro: %1$s</string>
+
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">Encaminhar para...</string>
+    <string name="share_multiple_attachments">Enviar %1$d arquivos para a conversa selecionada?\n\nOs arquivos são enviados sem modificações em seu tamanho original, ex. imagens e vídeos não são gravados.</string>
+    <string name="share_multiple_attachments_multiple_chats">Enviar %1$d arquivo(s) para %2$d conversas?\n\nOs arquivos são enviados sem modificações em seu tamanho original, ex. imagens e vídeos não são gravados.</string>
+    <string name="share_text_multiple_chats">Enviar este texto para %1$d conversas?\n\n\"%2$s\"</string>
     <string name="share_abort">Compartilhamento abortado devido a falta de permissões.</string>
 
 
@@ -379,7 +425,9 @@
     <string name="pref_profile_info_headline">Informações do seu perfil</string>
     <string name="pref_profile_photo">Foto do perfil</string>
     <string name="pref_blocked_contacts">Contatos bloqueados</string>
+    <string name="blocked_empty_hint">Se você bloquear contatos, eles serão mostrados aqui.</string>
     <string name="pref_profile_photo_remove_ask">Remover foto de perfil?</string>
+    <string name="pref_password_and_account_settings">Senha e conta</string>
     <string name="pref_who_can_see_profile_explain">Sua foto de perfil e nome serão exibidos com suas mensagens a outros usuários. Informações já enviadas não podem ser apagas ou removidas.</string>
     <string name="pref_your_name">Seu nome</string>
     <!-- Translators: The value entered here is visible only to recipients who DO NOT use Deltachat, so its not a "Status" but the last line in the E-Mail. -->
@@ -401,11 +449,15 @@
     <string name="pref_notifications">Notificações</string>
     <string name="pref_notifications_show">Exibir</string>
     <string name="pref_notifications_priority">Prioridade</string>
+    <string name="pref_notifications_explain">Ativar notificações do sistema para novas mensagens</string>
+    <string name="pref_show_notification_content">Mostrar o conteúdo da mensagem na notificação</string>
+    <string name="pref_show_notification_content_explain">Mostra o remetente e as primeiras palavras da mensagem nas notificações</string>
     <string name="pref_led_color">Cor do LED</string>
     <string name="pref_sound">Som</string>
     <string name="pref_silent">Silêncio</string>
     <string name="pref_privacy">Privacidade</string>
     <string name="pref_chats_and_media">Conversas e mídia</string>
+    <string name="pref_system_default">Padrão do sistema</string>
     <!-- Translators: "light" in the meaning "opposite of dark" -->
     <string name="pref_light_theme">Claro</string>
     <string name="pref_dark_theme">Escuro</string>
@@ -450,12 +502,61 @@
     <string name="pref_watch_inbox_folder">Verificar a caixa de entrada</string>
     <string name="pref_watch_sent_folder">Verificar a caixa de saída</string>
     <string name="pref_watch_mvbox_folder">Verificar a pasta DeltaChat</string>
+    <string name="pref_send_copy_to_self">Enviar cópia para mim</string>
     <string name="pref_auto_folder_moves">Mover automaticamente para a pasta DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Conversas serão movidas para evitar desordem na caixa de entrada</string>
     <string name="pref_show_emails">Exibir e-mails normais</string>
     <string name="pref_show_emails_no">Não, somente conversas</string>
     <string name="pref_show_emails_accepted_contacts">Para contatos aceitos</string>
     <string name="pref_show_emails_all">Todos</string>
+    <string name="pref_experimental_features">Recursos experimentais</string>
+    <string name="pref_on_demand_location_streaming">Streaming de localização sob demanda</string>
+    <string name="pref_background_default">Fundo padrão</string>
+    <string name="pref_background_default_color">Cor padrão</string>
+    <string name="pref_background_custom_image">Imagem personalizada</string>
+    <string name="pref_background_custom_color">Cor personalizada</string>
+    <string name="export_aborted">Exportação abortada.</string>
+    <string name="profile_image_select">Selecione a imagem do perfil</string>
+    <string name="select_your_new_profile_image">Selecione sua nova imagem do perfil</string>
+    <string name="profile_image_delete">Excluir imagem do perfil</string>
+
+
+    <!-- Emoji picker and categories -->
+    <string name="emoji_search_results">Resultados da busca</string>
+    <string name="emoji_not_found">Nenhum emoji encontrado</string>
+    <string name="emoji_recent">Usado recentemente</string>
+    <string name="emoji_people">Pessoas &amp; Corpo</string>
+    <string name="emoji_nature">Animais &amp; Natureza</string>
+    <string name="emoji_foods">Comida &amp; Bebida</string>
+    <string name="emoji_activity">Atividade</string>
+    <string name="emoji_places">Viagem &amp; Lugares</string>
+    <string name="emoji_objects">Objetos</string>
+    <string name="emoji_symbols">Símbolos</string>
+    <string name="emoji_flags">Bandeiras</string>
+
+
+    <!-- automatically delete message -->
+    <string name="delete_old_messages">Apagar mensagens antigas</string>
+    <!-- devs: autodel_title is deprecated, use delete_old_messages instead -->
+    <string name="autodel_title">Apagar mensagens automaticamente</string>
+    <string name="autodel_device_title">Apagar mensagens do dispositivo</string>
+    <string name="autodel_server_title">Apagar mensagens do servidor</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_device_ask">Você quer apagar %1$d mensagens agora e todas as mensagens recém-obtidas \"%2$s\" no futuro?\n\n• Isso inclui todas as mídias\n\n• As mensagens serão excluídas independentemente de serem sido vistas ou não\n\n• \"Mensagens salvas\" serão ignoradas da exclusão local</string>
+    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
+    <string name="autodel_server_ask">Você quer apagar %1$d  mensagens agora e todas as mensagens recém-obtidas \"%2$s\" no futuro?\n\n⚠️ Isso inclui e-mails, mídia e \"Mensagens salvas\" em todas as pastas do servidor\n\n⚠️ Não use esta função se quiser manter os dados no servidor\n\n⚠️ Não use esta função se estiver usando outros clientes de e-mail além do Delta Chat</string>
+    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
+    <string name="autodel_server_enabled_hint">Isso inclui e-mails, mídia e \"Mensagens salvas\" em todas as pastas do servidor. Não use esta função se quiser manter os dados no servidor ou se estiver usando outros clientes de e-mail além do Delta Chat.</string>
+    <string name="autodel_confirm">Eu entendo, apague todas essas mensagens</string>
+    <string name="autodel_at_once">De uma vez só</string>
+    <string name="after_30_seconds">Após 30 segundos</string>
+    <string name="after_1_minute">Após 1 minuto</string>
+    <string name="autodel_after_1_hour">Após 1 hora</string>
+    <string name="autodel_after_1_day">Após 1 dia</string>
+    <string name="autodel_after_1_week">Após 1 semana</string>
+    <string name="autodel_after_4_weeks">Após 4 semanas</string>
+    <string name="autodel_after_1_year">Após 1 ano</string>
+
     <!-- autocrypt -->
     <string name="autocrypt">Autocrypt</string>
     <string name="autocrypt_explain">A criptografia automática (Autocrypt) é um padrão novo e aberto para criptografia de e-mail de ponta a ponta. \n\n A sua configuração é feita automaticamente conforme necessário e pode ser compartilhada entre dispositivos diferentes com \"mensagens de configuração do Autocrypt\".</string>
@@ -488,6 +589,22 @@
     <string name="systemmsg_action_by_me">%1$s por mim.</string>
     <!-- Translators: %1$s will be replaced by sth. as "member xy added" (trailing full-stop removed). %2$s will be replaced by the name/addr of the person who did this action. -->
     <string name="systemmsg_action_by_user">%1$s por %2$s.</string>
+    <string name="systemmsg_unknown_sender_for_chat">Remetente desconhecido para esta conversa. Veja \'informações\' para mais detalhes.</string>
+    <string name="systemmsg_subject_for_new_contact">Mensagem de %1$s</string>
+    <string name="systemmsg_failed_sending_to">Falha ao enviar mensagem para %1$s.</string>
+
+    <string name="systemmsg_ephemeral_timer_disabled">Temporizador de desaparecimento de mensagens desativado.</string>
+    <string name="systemmsg_ephemeral_timer_enabled">Temporizador de desaparecimento de mensagens definido para %1$s s.</string>
+    <string name="systemmsg_ephemeral_timer_minute">Temporizador de desaparecimento de mensagens definido para 1 minuto.</string>
+    <string name="systemmsg_ephemeral_timer_hour">Temporizador de desaparecimento de mensagens definido para 1 hora.</string>
+    <string name="systemmsg_ephemeral_timer_day">Temporizador de desaparecimento de mensagens definido para 1 dia.</string>
+    <string name="systemmsg_ephemeral_timer_week">Temporizador de desaparecimento de mensagens definido para 1 semana.</string>
+    <string name="systemmsg_ephemeral_timer_four_weeks">Temporizador de desaparecimento de mensagens definido para 4 semanas.</string>
+
+    <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
+    <string name="systemmsg_chat_protection_disabled">Proteção da conversa desligada.</string>
+    <string name="systemmsg_chat_protection_enabled">Proteção da conversa ligada.</string>
+
     <!-- screen lock -->
     <string name="screenlock_title">Bloqueio de tela</string>
     <string name="screenlock_explain">Tranque o acesso com o bloqueio de tela do Android ou com sua digital; para evitar que o conteúdo prévio seja exibido habilite também a \"segurança de tela\".</string>
@@ -499,8 +616,12 @@
     <string name="screenlock_inactivity_timeout_interval">Limite de inatividade</string>
 
 
+    <!-- qr code stuff -->
+    <string name="qr_code">QR code</string>
+    <string name="load_qr_code_as_image">Carregar \"QR code\" como imagem</string>
     <string name="qrscan_title">Escanear código QR</string>
     <string name="qrscan_hint">Aponte sua câmera para o código QR</string>
+    <string name="qrscan_failed">\"QR code\" não pôde ser decodificado</string>
     <string name="qrscan_ask_join_group">Você quer ingressar no grupo \"%1$s\"?</string>
     <string name="qrscan_fingerprint_mismatch">Esta digital não confere com a última vista em %1$s</string>
     <string name="qrscan_no_addr_found">Este código QR tem uma impressão, mas não tem e-mail.\n\nPara uma verificação por dois canais, primeiro estabeleça uma conexão criptografada com o destinatário.</string>
@@ -518,6 +639,8 @@
     <string name="qrshow_join_contact_hint">Escanear para estabelecer contato com %1$s</string>
     <string name="qrshow_join_contact_no_connection_hint">A configuração por código QR necessita de uma conexão à rede. Por favor conecte-se à uma rede antes de continuar.</string>
     <string name="qrshow_join_contact_no_connection_toast">Sem conexão à rede não é possível realizar configuração por código QR.</string>
+    <string name="qraccount_ask_create_and_login">Criar novo endereço de e-mail em \"%1$s\" e entrar nele?</string>
+    <string name="qraccount_ask_create_and_login_another">Criar novo endereço de e-mail em \"%1$s\"  e entrar nele?\n\n nSua conta existente não será excluída. Use o item \"Trocar conta\" para alternar entre suas contas.</string>
     <string name="contact_verified">%1$s verificado.</string>
     <string name="contact_not_verified">Impossível verificar %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
