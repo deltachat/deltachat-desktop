@@ -107,6 +107,11 @@ export default function MessageList({
     composerTextarea && composerTextarea.focus()
   }, [chat.id])
 
+  useEffect(() => {
+    const composerTextarea = refComposer.current.childNodes[1]
+    composerTextarea && composerTextarea.focus()
+  }, [])
+
   const [fetchMore] = useDebouncedCallback(
     () => {
       chatStoreDispatch({

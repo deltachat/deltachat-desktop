@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react'
+import React, { useRef, useContext, useEffect } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../shared/logger'
@@ -10,7 +10,7 @@ import ComposerMessageInput from '../composer/ComposerMessageInput'
 
 const { DC_CHAT_ID_DEADDROP } = C
 
-const log = getLogger('renderer/messageListAndComposer')
+const log = getLogger('renderer/MessageListAndComposer')
 
 export default function MessageListAndComposer({
   chat,
@@ -21,7 +21,9 @@ export default function MessageListAndComposer({
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const messageInputRef = useRef<ComposerMessageInput>()
+  const messageInputRef: React.MutableRefObject<ComposerMessageInput> = useRef<
+    ComposerMessageInput
+  >()
   const {
     draftState,
     updateDraftText,
@@ -96,6 +98,43 @@ export default function MessageListAndComposer({
     e.preventDefault()
     e.stopPropagation()
   }
+
+  const onMouseUp = (e: MouseEvent) => {
+    const selection = window.getSelection()
+
+    if (selection.type === 'Range' && selection.rangeCount > 0) return
+    const targetTagName = ((e.target as unknown) as any)?.tagName
+
+    if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
+      return
+    }
+    e.preventDefault()
+    e.stopPropagation()
+    messageInputRef?.current.focus()
+    return false
+  }
+
+  const onSelectionChange = () => {
+    const selection = window.getSelection()
+
+    if (
+      selection.type === 'Caret' ||
+      (selection.type === 'Range' && selection.rangeCount > 0)
+    )
+      return
+
+    messageInputRef?.current.focus()
+  }
+
+  useEffect(() => {
+    window.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('selectionchange', onSelectionChange)
+    messageInputRef?.current.focus()
+    return () => {
+      window.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('selectionchange', onSelectionChange)
+    }
+  })
 
   const [disabled, disabledReason] = (({
     id,
