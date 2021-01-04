@@ -3,6 +3,7 @@ console.time('init')
 import { ensureDirSync, watchFile } from 'fs-extra'
 import { app as rawApp, session, EventEmitter, dialog } from 'electron'
 import rc from './rc'
+import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
@@ -36,6 +37,7 @@ const logHandler = createLogHandler()
 import { getLogger, setLogHandler } from '../shared/logger'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
+log.info(`Deltachat Version ${VERSION} ${GIT_REF} ${BUILD_TIMESTAMP}`)
 process.on('exit', logHandler.end)
 
 // Report uncaught exceptions
