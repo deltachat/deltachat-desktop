@@ -110,7 +110,7 @@ export default function MessageListAndComposer({
     }
     e.preventDefault()
     e.stopPropagation()
-    messageInputRef?.current.focus()
+    messageInputRef?.current?.focus()
     return false
   }
 
@@ -123,13 +123,13 @@ export default function MessageListAndComposer({
     )
       return
 
-    messageInputRef?.current.focus()
+    messageInputRef?.current?.focus()
   }
 
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
     document.addEventListener('selectionchange', onSelectionChange)
-    messageInputRef?.current.focus()
+    messageInputRef?.current?.focus()
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('selectionchange', onSelectionChange)
