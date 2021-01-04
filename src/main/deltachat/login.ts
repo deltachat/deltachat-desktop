@@ -9,6 +9,7 @@ import { Credentials, DeltaChatAccount } from '../../shared/shared-types'
 import { getNewAccountPath, getLogins, removeAccount } from '../logins'
 import { ExtendedAppMainProcess } from '../types'
 import { remove } from 'fs-extra'
+import { basename } from 'path'
 const log = getLogger('main/deltachat/login')
 
 const app = rawApp as ExtendedAppMainProcess
@@ -70,7 +71,7 @@ export default class DCLoginController extends SplitOut {
     this._controller.emit('ready')
     // save last logged in account
     delete app.state.saved.credentials
-    app.state.saved.lastAccount = accountDir
+    app.state.saved.lastAccount = basename(accountDir)
 
     log.info('dc_get_info', dc.getInfo())
 
@@ -178,7 +179,7 @@ export default class DCLoginController extends SplitOut {
     const lastAccount = app.state.saved.lastAccount
     if (typeof lastAccount === 'string' && lastAccount.length >= 1) {
       selectedAccount = app.state.logins.find(
-        account => account.path === lastAccount
+        account => account.path.indexOf(lastAccount) !== -1
       )
       if (!selectedAccount) {
         log.error(
