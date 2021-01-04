@@ -26,6 +26,9 @@ async function run(command, args, options, listener = undefined) {
         reject('ERR CODE ' + code)
       }
     })
+    process.on('beforeExit', () => {
+      p.kill('SIGKILL')
+    })
   })
 }
 
