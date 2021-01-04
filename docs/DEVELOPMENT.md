@@ -170,6 +170,12 @@ For Continuous Integration we currently use Travis and Github Actions.
 
 ### Packaging <a id="packaging"></a>
 
+Build in production mode (development tools disabled and minified frontend code)
+```sh
+NODE_ENV=production npm run build
+```
+(for building on windows you need an other command to set the enviroment variable)
+
 #### 1. Generate Electron-Builder Configuration
 
 Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
