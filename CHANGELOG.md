@@ -11,6 +11,7 @@
 - update translations (mid dezember 2020)
 - add Farsi translation
 - Try to always focus composer textarea
+- Store relative instead of absolute path to last Account #2028
 
 
 ## [1.14.1] - 2020-12-15
