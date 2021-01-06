@@ -13,6 +13,8 @@
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
 
+### Fixed
+- correctly display RTL text inside of the message input field (see #2036)
 
 ## [1.14.1] - 2020-12-15
 
