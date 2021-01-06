@@ -140,7 +140,7 @@ export const DeltaPasswordInput = React.memo(
   }
 )
 
-export const DeltaProgressBar = function(
+export const DeltaProgressBar = function (
   props: React.PropsWithChildren<{
     progress: number
     intent?: Intent

@@ -5,7 +5,7 @@ import { appIcon } from './application-constants'
 import DeltaChatController from './deltachat/controller'
 import { ExtendedAppMainProcess } from './types'
 
-export default function(dc: DeltaChatController, settings: any) {
+export default function (dc: DeltaChatController, settings: any) {
   if (!Notification.isSupported()) return
 
   let notify: Notification

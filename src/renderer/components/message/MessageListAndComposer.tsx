@@ -21,9 +21,7 @@ export default function MessageListAndComposer({
   const refComposer = useRef(null)
   const { openDialog } = useContext(ScreenContext)
 
-  const messageInputRef: React.MutableRefObject<ComposerMessageInput> = useRef<
-    ComposerMessageInput
-  >()
+  const messageInputRef: React.MutableRefObject<ComposerMessageInput> = useRef<ComposerMessageInput>()
   const {
     draftState,
     updateDraftText,

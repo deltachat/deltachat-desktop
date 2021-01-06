@@ -52,7 +52,7 @@ export function init(
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
 
-  app.on('open-url', function(event: Event, url: string) {
+  app.on('open-url', function (event: Event, url: string) {
     if (event) event.preventDefault()
     const sendOpenUrlEvent = () => {
       log.info('open-url: Sending url to frontend.')

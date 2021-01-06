@@ -5,3 +5,4 @@ semi: false
 singleQuote: true
 jsxSingleQuote: true
 endOfLine: auto
+arrowParens: avoid
