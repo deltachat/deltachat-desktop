@@ -125,4 +125,7 @@ async function main(watch_ = false, production_, minify_ = false) {
 const watch = process.argv.indexOf('-w') !== -1
 const minify = process.argv.indexOf('-m') !== -1
 
-main(watch, process.env['NODE_ENV'] === 'production', minify)
+main(watch, process.env['NODE_ENV'] === 'production', minify).catch(err => {
+  console.error(err)
+  process.exitCode = 1
+})
