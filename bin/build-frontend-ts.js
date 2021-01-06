@@ -1,5 +1,6 @@
 //@ts-check
 const child = require('child_process')
+const { readFile, writeFile } = require('fs-extra')
 /**
  *
  * @param {string[]} args arguments for the command
@@ -33,6 +34,12 @@ async function run(command, args, options, listener = undefined) {
 }
 
 async function bundle(production) {
+  //--- Workaround for broken "react-virtualized" import (patch file)
+  const fpath = "node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js"
+  const content = await readFile(fpath, "utf-8")
+  await writeFile(fpath, content.replace(/^(import { bpfrpt_proptype_WindowScroller })/m, "// $1"))
+  //---
+
   const bundleArgs = [
     'esbuild',
     'tsc-dist/renderer/main.js',
