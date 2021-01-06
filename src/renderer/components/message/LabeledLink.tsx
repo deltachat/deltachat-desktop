@@ -43,13 +43,7 @@ export const LabeledLink = ({
 
   const url = UrlParser(target)
   // encode the punycode to make phishing harder
-  url.set(
-    'hostname',
-    url.hostname
-      .split('.')
-      .map(toASCII)
-      .join('.')
-  )
+  url.set('hostname', url.hostname.split('.').map(toASCII).join('.'))
 
   const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     ev.preventDefault()

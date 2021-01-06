@@ -31,7 +31,7 @@ export default function App(_props: any) {
 
   useEffect(() => {
     sendToBackend('ipcReady')
-    window.addEventListener('keydown', function(ev: KeyboardEvent) {
+    window.addEventListener('keydown', function (ev: KeyboardEvent) {
       if (ev.code === 'KeyA' && (ev.metaKey || ev.ctrlKey)) {
         let stop = true
         if (

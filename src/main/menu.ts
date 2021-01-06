@@ -305,7 +305,7 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
 
 function getMenuItem(menu: Menu, label: string) {
   for (let i = 0; i < menu.items.length; i++) {
-    const menuItem = menu.items[i].submenu.items.find(function(item) {
+    const menuItem = menu.items[i].submenu.items.find(function (item) {
       return item.label === label
     })
     if (menuItem) return menuItem

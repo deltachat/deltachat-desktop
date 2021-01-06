@@ -3,7 +3,7 @@ import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
 import { LabeledLink } from './LabeledLink'
 const { openExternal } = window.electron_functions
 
-const ignoreCapture = function() {
+const ignoreCapture = function () {
   return {}
 }
 
@@ -55,7 +55,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
         // eslint-disable-next-line no-useless-escape
         /^\[([^\]]*)\]\((\w+:\/\/[^<>,;"'\[\]\)\s]{3,1000})\)/
       ),
-      parse: function(
+      parse: function (
         capture: RegExpMatchArray,
         _recurseParse: any,
         _state: any
@@ -66,7 +66,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
         }
         return link
       },
-      react: function(node: any, _output: any, state: any) {
+      react: function (node: any, _output: any, state: any) {
         return (
           <>
             <LabeledLink
@@ -81,10 +81,10 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
     normal_link: {
       order: 18,
       match: anyScopeRegex(/^(https?:\/\/[^\s<]+[^<>.,:;"')\]\s])/),
-      parse: function(capture: any[], _recurseParse: any, _state: any) {
+      parse: function (capture: any[], _recurseParse: any, _state: any) {
         return { content: capture[1] }
       },
-      react: function(node: any, _output: any, state: any) {
+      react: function (node: any, _output: any, state: any) {
         const onClick = (ev: any) => {
           ev.preventDefault()
           openExternal(node.content)
@@ -100,7 +100,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       order: 19,
       match: blockRegex(/^(?:\n *){2,}\n/),
       parse: ignoreCapture,
-      react: function(_node: any, _output: any, state: any) {
+      react: function (_node: any, _output: any, state: any) {
         return <div key={state.key} className='double-line-break' />
       },
     },
@@ -108,7 +108,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       order: 20,
       match: blockRegex(/^(?:\n *)\n/),
       parse: ignoreCapture,
-      react: function(_node: any, _output: any, state: any) {
+      react: function (_node: any, _output: any, state: any) {
         return <div key={state.key} className='line-break' />
       },
     },

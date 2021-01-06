@@ -84,9 +84,10 @@ export default class DCChatList extends SplitOut {
     return chats
   }
 
-  async getChatListItemByEntry([chatId, messageId]: [number, number]): Promise<
-    ChatListItemType
-  > {
+  async getChatListItemByEntry([chatId, messageId]: [
+    number,
+    number
+  ]): Promise<ChatListItemType> {
     const chat = await this._getChatById(chatId)
     if (chat === null) return null
 
