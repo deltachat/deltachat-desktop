@@ -2,7 +2,7 @@ const { openItem } = window.electron_functions
 
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
-import { Message } from 'deltachat-node'
+import type { Message } from 'deltachat-node'
 import { MessageType, JsonMessage } from '../../../shared/shared-types'
 import { ChatStoreDispatch, selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
