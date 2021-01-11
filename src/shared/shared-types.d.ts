@@ -32,6 +32,7 @@ export interface DesktopSettings {
   /** path to last used/selected Account */
   lastAccount: string
   enableAVCalls: boolean
+  enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
   enterKeySends: boolean
   locale: string | null
