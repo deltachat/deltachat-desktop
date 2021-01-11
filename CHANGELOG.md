@@ -15,6 +15,7 @@
 - add missing Czech translation #2218
 - add Mailinglist support
 - add support for overwritten sender name (also sometimes referred to as impersonation)
+- add audit log to chats (view where only info/system messages are shown such as member added/removed)
 
 ## Fixed
 - Fix source-mapped stack trace on crash screen in bundled production builds

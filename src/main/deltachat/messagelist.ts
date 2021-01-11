@@ -163,12 +163,8 @@ export default class DCMessageList extends SplitOut {
     this._controller.chatList.selectChat(chatId)
   }
 
-  getMessageIds(chatId: number) {
-    const messageIds = this._dc.getChatMessages(
-      chatId,
-      C.DC_GCM_ADDDAYMARKER,
-      0
-    )
+  getMessageIds(chatId: number, flags: number = C.DC_GCM_ADDDAYMARKER) {
+    const messageIds = this._dc.getChatMessages(chatId, flags, 0)
     return messageIds
   }
 
