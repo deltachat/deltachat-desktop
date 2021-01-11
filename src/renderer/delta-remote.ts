@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,

@@ -12,6 +12,7 @@
 - add Farsi translation
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
+- replace parcel bunder with esbuild bundler (faster bundle speed)
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
