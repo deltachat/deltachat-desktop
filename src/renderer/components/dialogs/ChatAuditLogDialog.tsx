@@ -1,14 +1,58 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { DeltaDialogBase, DeltaDialogCloseButton } from './DeltaDialog'
 import { DialogProps } from './DialogController'
 import type { FullChat, MessageType } from '../../../shared/shared-types'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import { getLogger } from '../../../shared/logger'
-import { useTranslationFunction } from '../../contexts'
+import { useTranslationFunction, ScreenContext } from '../../contexts'
 import moment from 'moment'
+import {
+  openMessageInfo,
+  setQuoteInDraft,
+  privateReply,
+} from '../message/messageFunctions'
 
 const log = getLogger('render/ChatAuditLog')
+
+function buildContextMenu(
+  message: MessageType | { msg: null },
+  isGroup: boolean,
+  closeDialogCallback: DialogProps['onClose']
+) {
+  const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
+  return [
+    // Reply
+    {
+      label: tx('reply_noun'),
+      action: () => {
+        setQuoteInDraft(message.msg.id)
+        closeDialogCallback()
+      },
+    },
+    // Reply privately -> only show in groups, don't show on info messages or outgoing messages
+    isGroup &&
+      message.msg.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
+        label: tx('reply_privately'),
+        action: () => {
+          privateReply(message.msg)
+          closeDialogCallback()
+        },
+      },
+    // Copy to clipboard
+    {
+      label: tx('global_menu_edit_copy_desktop'),
+      action: () => {
+        navigator.clipboard.writeText(message.msg.text)
+      },
+    },
+    // Message details
+    {
+      label: tx('menu_message_details'),
+      action: openMessageInfo.bind(null, message),
+    },
+  ]
+}
 
 export default function ChatAuditLogDialog(props: {
   selectedChat: FullChat
@@ -28,6 +72,21 @@ export default function ChatAuditLogDialog(props: {
   }>({})
 
   const listView = useRef<HTMLDivElement>()
+
+  const { openContextMenu } = useContext(ScreenContext)
+  const showMenu = (
+    message: MessageType,
+    event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement, MouseEvent>
+  ) => {
+    const items = buildContextMenu(message, selectedChat.isGroup, onClose)
+    const [cursorX, cursorY] = [event.clientX, event.clientY]
+
+    openContextMenu({
+      cursorX,
+      cursorY,
+      items,
+    })
+  }
 
   async function refresh() {
     setLoading(true)
@@ -112,7 +171,12 @@ export default function ChatAuditLogDialog(props: {
                 timestamp,
               } = (message as MessageType).msg
               return (
-                <li key={id} className='info' onContextMenu={() => {}}>
+                <li
+                  key={id}
+                  className='info'
+                  onClick={openMessageInfo.bind(null, message)}
+                  onContextMenu={showMenu.bind(null, message)}
+                >
                   <p>
                     <div className='timestamp'>
                       {moment.unix(timestamp).format('LT')}

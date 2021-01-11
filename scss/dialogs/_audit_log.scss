@@ -63,17 +63,20 @@
         display: inline-block;
         margin-right: 4px;
         font-size: 15px;
-        background-color: var(--infoMessageBubbleBg);
+        background-color: #385e6b;
         border-radius: 10px;
         opacity: 0.76;
         color: var(--infoMessageBubbleText);
         padding: 7px 14px;
       }
-      font-size: 14px;
 
       &:hover {
-        background: rgba($color: grey, $alpha: 0.3);
+        background: rgba($color: grey, $alpha: 0.25);
         border-radius: 10px 0 0 10px;
+        div.timestamp {
+          border-radius: 10px 0 0 10px;
+          transition: ease-in 0.05s;
+        }
       }
     }
   }
