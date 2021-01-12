@@ -157,3 +157,10 @@ $borderColor: #ecececaf;
 .chat-list-item.selected .archived-label, .chat-list-item.selected>.content>.chat-list-item-message>.text {
   color: var(--chat-list-item-summary-text);
 }
+
+.info-message p {
+  font-style: unset;
+  font-weight: unset;
+  background-color: unset; 
+  color: black;
+}
