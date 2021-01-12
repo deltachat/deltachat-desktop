@@ -187,7 +187,7 @@ export default function LoginScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <div className='bp3-overlay-backdrop'>
+        <div className='test' style={{backdropFilter: 'none', backgroundColor: 'transparent'}}>
           <DeltaDialogBase isOpen={true} onClose={() => {}} fixed={true}>
             {view === 'login' && (
               <>

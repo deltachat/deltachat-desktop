@@ -5,7 +5,10 @@ $tab-height: 46px;
   background-color: var(--galleryBg);
   float: right;
   padding-left: 10px;
-  margin-top: $nav-bar-height;
+  margin-top: $nav-bar-height; 
+  max-height: calc(100vh - 50px);
+  overflow: hidden;
+
 
   & .gallery {
     overflow: scroll;
