@@ -129,17 +129,6 @@ $borderColor: #ecececaf;
   margin-right: 10px;
 }
 
-.clear-button {
-  position: absolute;
-  z-index: 10;
-  left: 345px;
-  &:before {
-    color: $textNavBar !important;
-    font-weight: normal !important;
-    font-size: medium !important;
-  }
-}
-
 #main-menu-button {
   width: 40px;
   height: 40px;
@@ -163,4 +152,34 @@ $borderColor: #ecececaf;
   font-weight: unset;
   background-color: unset; 
   color: black;
+}
+
+.attachment-overlay .attachment-view {
+  background-color: rgba(255, 255, 255, 0.96);
+}
+.attachment-overlay .btn-wrapper {
+  top: 9px;
+  background-color: unset;
+  padding: 0px;
+}
+.attachment-overlay .btn-wrapper .download-btn {
+  background-color: rgb(160, 160, 160);
+  &:hover {
+    background-color: rgb(160, 160, 160);
+  }
+}
+.attachment-overlay .bp3-icon > svg {
+  fill: rgb(160, 160, 160);
+}
+
+.message-attachment-media {
+  border-radius: 0px;
+}
+
+.message.incoming .msg-container, .message.incoming .msg-container .message-attachment-media {
+  border-bottom-left-radius: 0px;
+}
+
+.metadata.with-image-no-caption {
+  border-radius: 0px;
 }
