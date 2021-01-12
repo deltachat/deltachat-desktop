@@ -88,13 +88,13 @@ function onReady([logins, _appReady, loadedState]: [
   any,
   AppState
 ]) {
-  // can fail due to user error so running it first is better (cli argument)
-  acceptThemeCLI()
-
   const state = (app.state = loadedState)
   state.logins = logins
 
   app.saveState = () => State.save({ saved: state.saved })
+
+  // can fail due to user error so running it first is better (cli argument)
+  acceptThemeCLI()
 
   setLanguage(state.saved.locale || app.getLocale())
 
