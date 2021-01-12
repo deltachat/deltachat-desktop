@@ -88,6 +88,9 @@ function onReady([logins, _appReady, loadedState]: [
   any,
   AppState
 ]) {
+  // can fail due to user error so running it first is better (cli argument)
+  acceptThemeCLI()
+
   const state = (app.state = loadedState)
   state.logins = logins
 
@@ -113,7 +116,6 @@ function onReady([logins, _appReady, loadedState]: [
       }
     })
   }
-  acceptThemeCLI()
 
   cleanupLogFolder().catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)
