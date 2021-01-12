@@ -9,7 +9,7 @@
   width: 45%;
   height: 142px;
   border-radius: 5pt;
-  background-image: url(../images/background_light.svg);
+  background-image: var(--chatViewBgImgPath);
   background-color: var(--chatViewBg);
   background-size: cover;
 }
