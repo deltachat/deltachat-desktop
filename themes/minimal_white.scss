@@ -1,0 +1,159 @@
+.theme-meta {
+  --name: 'Minimal White';
+  --description: 'A minimalistic theme';
+}
+
+$navbarBgLight: rgba(210, 210, 210, 0.3);
+
+/* Set theme variables used for theme Generation */
+$outlineColor: #b9b9b9;
+$accentColor: #2090ea;
+$bgChatView: #e6dcd4;
+$bgImage: url('../images/background_light.svg');
+$bgMessageBubbleIncoming: $navbarBgLight;
+$bgMessageBubbleOutgoing: #efffde;
+$bgNavBar: #fff;
+$bgPrimary: #fff;
+$bgSecondary: #f5f5f5;
+$colorDanger: #f96856;
+$colorNone: #a0a0a0;
+$colorPrimary: #42a5f5;
+$ovalButtonBg: #415e6b;
+$ovalButtonText: #fff;
+$textPrimary: #010101;
+$textSecondary: #62656a;
+$textNavBar: $textPrimary;
+
+$scrollbarTransparency: 0.5;
+
+/* Derive the themedata from the theme variables */
+@import '_themebase.scss';
+
+/* overwrite themedata */
+:root {
+  --scrollbarThumb: #666666;
+  --scrollbarThumbHover: #606060;
+  --bp3DialogBgSecondary: #ececec;
+  --chatListItemBgHover: rgb(242, 242, 242);
+  --cli-search-result-divider: var(--delta-dialog-seperator);
+  --cli-search-result-divider-border-width: 0px;
+  --emojiMartSelect: var(--chatListItemBgHover);
+
+  --chatListItemBgPinned: var(--bgPrimary);
+  --chatListItemBgPinnedHover: var(--chatListItemBgHover);
+  --chatListItemSelectedBg: var(--chatListItemBgHover);
+  --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
+  --chatListItemSelectedText: var(--globalText);
+  --composerSendButton: var(--scrollbarThumb);
+}
+
+/* overwrite css */
+
+
+.navbar-wrapper span.views .bp3-button {
+  margin: 0px;
+  position: relative;
+  height: 50px;
+  border-radius: 0px; 
+}
+
+input#chat-list-search {
+  color: var(--navBarText);
+  background-color: transparent;
+  border-radius: 3px;
+  text-indent: 0px;
+  font-size: 20px;
+}
+
+.bp3-button.bp3-minimal:active, .bp3-button.bp3-minimal.bp3-active, .bp3-button.bp3-minimal:hover {
+  background: $navbarBgLight;
+}
+.bp3-button.bp3-minimal:hover {
+  font-weight: normal;
+}
+
+.main-screen .navbar-chat-name {
+  font-weight: normal;
+}
+
+.main-screen .navbar-chat-subtile {
+  font-weight: normal;
+}
+
+
+
+$borderColor: #ecececaf;
+
+.navbar-wrapper .bp3-align-left {
+  border-right: solid 1px $borderColor;
+}
+
+.navbar-wrapper .bp3-icon>svg:not([fill]) {
+  fill: rgb(160, 160, 160);
+}
+
+.chat-list {
+  border-right: solid 1px $borderColor;
+  box-shadow: none;
+}
+
+.bp3-navbar {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.bp3-navbar .avatar.small {
+  display: none;
+}
+
+.navbar-wrapper .bp3-align-right {
+  border-bottom: solid 1px $borderColor;
+}
+
+.composer {
+  border-left: unset;
+  border-top: 1px solid $borderColor;
+}
+
+.bp3-overlay-backdrop {
+  backdrop-filter: blur(0.7px) grayscale(1);
+  background-color: transparent;
+}
+
+.bp3-dialog {
+  box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 4px 8px rgba(16,22,26,.2), 0 0 30px 0px rgba(16,22,26,.2);
+  transition: none;
+}
+
+.navbar-wrapper span.views {
+  margin-right: 10px;
+}
+
+.clear-button {
+  position: absolute;
+  z-index: 10;
+  left: 345px;
+  &:before {
+    color: $textNavBar !important;
+    font-weight: normal !important;
+    font-size: medium !important;
+  }
+}
+
+#main-menu-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+}
+
+.message .msg-container {
+  border-radius: 0px;
+}
+
+.info-message p {
+  border-radius: 0px;
+}
+
+.chat-list-item.selected .archived-label, .chat-list-item.selected>.content>.chat-list-item-message>.text {
+  color: var(--chat-list-item-summary-text);
+}

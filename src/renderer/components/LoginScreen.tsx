@@ -187,90 +187,88 @@ export default function LoginScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <div className='test' style={{backdropFilter: 'none', backgroundColor: 'transparent'}}>
-          <DeltaDialogBase isOpen={true} onClose={() => {}} fixed={true}>
-            {view === 'login' && (
-              <>
-                <DeltaDialogHeader title={tx('add_account')} />
+        <DeltaDialogBase isOpen={true} backdropProps={{className: 'no-backdrop'}} onClose={() => {}} fixed={true}>
+          {view === 'login' && (
+            <>
+              <DeltaDialogHeader title={tx('add_account')} />
+              <DeltaDialogBody>
+                <DeltaDialogContent>
+                  <div className='login'>
+                    <LoginForm
+                      credentials={credentials}
+                      setCredentials={setCredentials}
+                    />
+                  </div>
+                </DeltaDialogContent>
+              </DeltaDialogBody>
+              <DeltaDialogFooter>
+                <DeltaDialogFooterActions>
+                  <p
+                    className={'delta-button bold primary'}
+                    onClick={() => setView('main')}
+                  >
+                    {tx('cancel')}
+                  </p>
+                  <p
+                    id='action-login'
+                    className={'delta-button bold primary'}
+                    onClick={onClickLogin}
+                  >
+                    {tx('login_title')}
+                  </p>
+                </DeltaDialogFooterActions>
+              </DeltaDialogFooter>
+            </>
+          )}
+
+          {view === 'main' && (
+            <>
+              {(!logins || logins.length === 0) && (
                 <DeltaDialogBody>
                   <DeltaDialogContent>
-                    <div className='login'>
-                      <LoginForm
-                        credentials={credentials}
-                        setCredentials={setCredentials}
+                    <div className='welcome-deltachat'>
+                      <img
+                        className='delta-icon'
+                        src='../images/deltachat.png'
                       />
+                      <p className='f1'>{tx('welcome_desktop')}</p>
+                      <p className='f2'>{tx('welcome_intro1_message')}</p>
+                      <div
+                        id='action-go-to-login'
+                        className='welcome-button'
+                        onClick={() => setView('login')}
+                      >
+                        {tx('login_header')}
+                      </div>
                     </div>
                   </DeltaDialogContent>
                 </DeltaDialogBody>
-                <DeltaDialogFooter>
-                  <DeltaDialogFooterActions>
-                    <p
-                      className={'delta-button bold primary'}
-                      onClick={() => setView('main')}
-                    >
-                      {tx('cancel')}
-                    </p>
-                    <p
-                      id='action-login'
-                      className={'delta-button bold primary'}
-                      onClick={onClickLogin}
-                    >
-                      {tx('login_title')}
-                    </p>
-                  </DeltaDialogFooterActions>
-                </DeltaDialogFooter>
-              </>
-            )}
-
-            {view === 'main' && (
-              <>
-                {(!logins || logins.length === 0) && (
+              )}
+              {logins && logins.length > 0 && (
+                <>
+                  <DeltaDialogHeader
+                    title={tx('login_known_accounts_title_desktop')}
+                  />
                   <DeltaDialogBody>
-                    <DeltaDialogContent>
-                      <div className='welcome-deltachat'>
-                        <img
-                          className='delta-icon'
-                          src='../images/deltachat.png'
-                        />
-                        <p className='f1'>{tx('welcome_desktop')}</p>
-                        <p className='f2'>{tx('welcome_intro1_message')}</p>
-                        <div
-                          id='action-go-to-login'
-                          className='welcome-button'
-                          onClick={() => setView('login')}
-                        >
-                          {tx('login_header')}
-                        </div>
-                      </div>
+                    <DeltaDialogContent noPadding={true}>
+                      <AccountSelection
+                        {...{ refreshAccounts, setView, logins, loadAccount }}
+                      />
                     </DeltaDialogContent>
                   </DeltaDialogBody>
-                )}
-                {logins && logins.length > 0 && (
-                  <>
-                    <DeltaDialogHeader
-                      title={tx('login_known_accounts_title_desktop')}
-                    />
-                    <DeltaDialogBody>
-                      <DeltaDialogContent noPadding={true}>
-                        <AccountSelection
-                          {...{ refreshAccounts, setView, logins, loadAccount }}
-                        />
-                      </DeltaDialogContent>
-                    </DeltaDialogBody>
-                  </>
-                )}
-                <DeltaDialogFooter style={{ padding: '10px' }}>
-                  <DeltaDialogFooterActions
-                    style={{ justifyContent: 'space-between' }}
-                  >
-                    <ScanQRCodeButton />
-                    <ImportButton />
-                  </DeltaDialogFooterActions>
-                </DeltaDialogFooter>
-              </>
-            )}
-          </DeltaDialogBase>
-        </div>
+                </>
+              )}
+              <DeltaDialogFooter style={{ padding: '10px' }}>
+                <DeltaDialogFooterActions
+                  style={{ justifyContent: 'space-between' }}
+                >
+                  <ScanQRCodeButton />
+                  <ImportButton />
+                </DeltaDialogFooterActions>
+              </DeltaDialogFooter>
+            </>
+          )}
+        </DeltaDialogBase>
       </div>
     </div>
   )
