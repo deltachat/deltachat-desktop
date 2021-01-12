@@ -50,24 +50,10 @@ $scrollbarTransparency: 0.5;
 /* overwrite css */
 
 
-.navbar-wrapper span.views .bp3-button {
-  margin: 0px;
-  position: relative;
-  height: 50px;
-  border-radius: 0px; 
-}
-
-input#chat-list-search {
-  color: var(--navBarText);
-  background-color: transparent;
-  border-radius: 3px;
-  text-indent: 0px;
-  font-size: 20px;
-}
-
 .bp3-button.bp3-minimal:active, .bp3-button.bp3-minimal.bp3-active, .bp3-button.bp3-minimal:hover {
   background: $navbarBgLight;
 }
+
 .bp3-button.bp3-minimal:hover {
   font-weight: normal;
 }
@@ -123,16 +109,6 @@ $borderColor: #ecececaf;
 .bp3-dialog {
   box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 4px 8px rgba(16,22,26,.2), 0 0 30px 0px rgba(16,22,26,.2);
   transition: none;
-}
-
-.navbar-wrapper span.views {
-  margin-right: 10px;
-}
-
-#main-menu-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 100%;
 }
 
 .message .msg-container {
