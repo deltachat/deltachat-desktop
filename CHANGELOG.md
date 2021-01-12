@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- show right default background for theme in background preview in settings
+- handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
+
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
@@ -13,6 +17,7 @@
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
 - replace parcel bunder with esbuild bundler (faster bundle speed)
+- turn "theme not found" error from the `--theme` cli option from process exit into normal init fail with a user readable error message in an dialog.
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
