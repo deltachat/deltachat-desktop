@@ -4,7 +4,7 @@ const { join } = require('path')
 
 function gatherProcessStdout(cmd, args) {
   const { status, stdout, stderr } = spawnSync(cmd, args)
-  if (status !== 0) throw new Err(stderr)
+  if (status !== 0) throw new Error(stderr)
   return stdout.toString().replace(/\n/g, '')
 }
 
