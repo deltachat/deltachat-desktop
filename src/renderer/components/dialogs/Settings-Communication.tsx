@@ -8,7 +8,6 @@ import { C } from 'deltachat-node/dist/constants'
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
-  console.log(configValue)
   switch (configValue) {
     case C.DC_SHOW_EMAILS_OFF:
       return tx('pref_show_emails_no')
