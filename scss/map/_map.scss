@@ -73,13 +73,13 @@ div.context-menu {
 
 .map-overlay {
   font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  position: absolute;
+  position: fixed;
   width: 160px;
   top: 80px;
-  left: 20px;
+  right: 20px;
   padding: 10px;
   background-color: $color-map-overlay-bg;
-  z-index: 500;
+  z-index: 1;
   border-radius: 5px;
 }
 
@@ -135,4 +135,12 @@ div.context-menu {
 
 .map-popup {
   font-family: $roboto; // fix that emojis get displayed right in the popups
+}
+
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl {
+  margin: 0;
+  position: fixed;
+  float: right;
+  right: 20px;
+  bottom: 40px;
 }
