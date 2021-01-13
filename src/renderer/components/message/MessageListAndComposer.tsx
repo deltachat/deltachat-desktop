@@ -124,15 +124,23 @@ export default function MessageListAndComposer({
     messageInputRef?.current?.focus()
   }
 
+  const onEscapeKeyUp = (ev: KeyboardEvent) => {
+    if (ev.key === 'Escape') {
+      messageInputRef?.current?.focus()
+    }
+  }
+
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
     document.addEventListener('selectionchange', onSelectionChange)
+    window.addEventListener('keyup', onEscapeKeyUp)
     messageInputRef?.current?.focus()
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('selectionchange', onSelectionChange)
+      window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  })
+  }, [])
 
   const [disabled, disabledReason] = (({
     id,
