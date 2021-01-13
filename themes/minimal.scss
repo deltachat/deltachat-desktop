@@ -191,7 +191,8 @@ $borderColor: #ecececaf;
   float: left
 }
 
-.message-attachment-media {
+.attachment-overlay .attachment-view img, .attachment-overlay .attachment-view video {
+  max-width: calc(100vw - 200px);
 }
 
 .message-attachment-media>.attachment-content {
@@ -228,7 +229,12 @@ $borderColor: #ecececaf;
 .message .msg-container .msg-body>.text {
   margin-right: 0px;
 }
+.message.forwarded .forwarded-indicator {
+  font-weight: 100;
+  color: var(--messagePadlockIncomming);
+  opacity: 1;
+}
 
-.author-wrapper .can-hide {
+.author-wrapper.can-hide {
   display: unset !important;
 }

@@ -17,6 +17,7 @@ $tab-height: 46px;
     & > .item-container {
       display: flex;
       flex-wrap: wrap;
+      padding: 10px 0px;
       & > .item {
         padding: 5px 5px 5px 5px;
       }
