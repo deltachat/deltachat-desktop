@@ -10,6 +10,7 @@ import { C } from 'deltachat-node/dist/constants'
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
+  console.log(configValue)
   switch (configValue) {
     case C.DC_SHOW_EMAILS_OFF:
       return tx('pref_show_emails_no')
@@ -37,13 +38,15 @@ export default function SettingsCommunication(props: any) {
   const onOpenDialog = async () => {
     openDialog(SmallSelectDialog, {
       values: AUTODELETE_DURATION_OPTIONS,
-      selectedValue: settings['delete_server_after'],
+      selectedValue: String(settings['show_emails']),
       title: tx('autodel_server_title'),
       onSave: async (show: string) => {
           handleDeltaSettingsChange('show_emails', show)
       },
     })
   }
+    
+  if (!settings['show_emails']) return null
 
   return (
     <>
@@ -52,7 +55,7 @@ export default function SettingsCommunication(props: any) {
         onClick={onOpenDialog.bind(this, false)}
         currentValue={showToString(settings['show_emails'])}
       >
-        {tx('autodel_device_title')}
+        {tx('pref_show_emails')}
       </SettingsSelector>
     </>
   )
