@@ -39,7 +39,7 @@ export default function SettingsCommunication(props: any) {
     openDialog(SmallSelectDialog, {
       values: AUTODELETE_DURATION_OPTIONS,
       selectedValue: String(settings['show_emails']),
-      title: tx('autodel_server_title'),
+      title: tx('pref_show_emails'),
       onSave: async (show: string) => {
         handleDeltaSettingsChange('show_emails', show)
       },
