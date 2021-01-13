@@ -32,10 +32,17 @@ import { useKeyBindingAction, KeybindAction } from '../keybindings'
 import { Avatar } from './Avatar'
 import OfflineToast from './OfflineToast'
 import { C } from 'deltachat-node/dist/constants'
+import MapComponent from './map/MapComponent'
+
+enum View {
+  MessageList,
+  Media,
+  Map
+}
 
 export default function MainScreen() {
   const [queryStr, setQueryStr] = useState('')
-  const [media, setMedia] = useState(false)
+  const [view, setView] = useState(View.MessageList)
   const [showArchivedChats, setShowArchivedChats] = useState(null)
   // Small hack/misuse of keyBindingAction to setShowArchivedChats from other components (especially
   // ViewProfile when selecting a shared chat/group)
@@ -55,7 +62,7 @@ export default function MainScreen() {
     if (chatId === selectedChat.id) return
 
     chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
-    setMedia(false)
+    setView(View.MessageList)
   }
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
   const handleSearchChange = (event: { target: { value: '' } }) =>
@@ -83,17 +90,23 @@ export default function MainScreen() {
   const tx = useTranslationFunction()
 
   const menu = <Menu selectedChat={selectedChat} />
-  const MessageListView = selectedChat.id ? (
-    media ? (
-      <Gallery chat={selectedChat} />
-    ) : (
-      <MessageListAndComposer chat={selectedChat} />
-    )
-  ) : (
-    <div className='no-chat-selected-screen'>
-      <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-    </div>
-  )
+  let MessageListView;
+  switch(view) {
+    case View.Media:
+      MessageListView = <Gallery chat={selectedChat} />
+      break      
+    case View.MessageList:
+      MessageListView = <MessageListAndComposer chat={selectedChat} />
+      break      
+    case View.Map:
+      MessageListView = <MapComponent selectedChat={selectedChat} />
+      break
+    default:
+      MessageListView = (<div className='no-chat-selected-screen'>
+        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+      </div>)
+      break      
+  }
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -182,22 +195,22 @@ export default function MainScreen() {
             {selectedChat && selectedChat.id && (
               <span className='views'>
                 <Button
-                  onClick={() => setMedia(false)}
+                  onClick={() => setView(View.MessageList)}
                   minimal
                   large
-                  active={!media}
-                  // aria-selected={!media}
+                  active={view === View.MessageList}
+                  // aria-selected={!view}
                   icon={'chat'}
                   aria-label={tx('chat')}
                 />
                 <Button
-                  onClick={() => setMedia(true)}
+                  onClick={() => setView(View.Media)}
                   minimal
                   large
-                  active={media}
-                  // aria-selected={media}
+                  active={view === View.Media}
+                  // aria-selected={view}
                   icon={'media'}
-                  aria-label={tx('media')}
+                  aria-label={tx('view')}
                 />
                 <SettingsContext.Consumer>
                   {({ desktopSettings }) =>
@@ -206,8 +219,8 @@ export default function MainScreen() {
                         minimal
                         large
                         icon='map'
-                        style={{ marginLeft: 0 }}
-                        onClick={onMapIconClick}
+                        onClick={() => setView(View.Map)}
+                        active={view === View.Map}
                         aria-label={tx('tab_map')}
                       />
                     )

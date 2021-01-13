@@ -2,16 +2,15 @@
 
 $color-map-overlay-bg: var(--mapOverlayBg);
 
-#map {
-  margin-top: 71px;
-  height: auto;
+.map-wrapper {
+  margin-left: 30vw;
+  position: absolute; 
 }
 
-.mapboxgl-map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
+#map {
+  margin-top: 50px;
+  height: calc(100vh - 50px);
+  width: 70vw;
 }
 
 .mapboxgl-canvas {

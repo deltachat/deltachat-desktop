@@ -10,7 +10,6 @@ import EncryptionInfo from './EncryptionInfo'
 import CreateChat from './CreateChat'
 import EditGroup from './EditGroup'
 import ViewProfile from './ViewProfile'
-import MapDialog from './MapDialog'
 import ImportQrCode from './ImportQrCode'
 import AlertDialog from './AlertDialog'
 import ConfirmationDialog from './ConfirmationDialog'
@@ -33,7 +32,6 @@ export const allDialogs: { [key: string]: any } = {
   CreateChat,
   EditGroup,
   ViewProfile,
-  MapDialog,
   ImportQrCode,
   ConfirmationDialog,
   AlertDialog,
