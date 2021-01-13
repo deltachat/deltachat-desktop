@@ -144,6 +144,9 @@ build['linux'] = {
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
 }
+build['deb'] = {
+  depends: ['gconf2', 'gconf-service', 'libnotify4', 'libayatana-appindicator', 'libxtst6', 'libnss3']
+}
 build['win'] = {
   icon: 'images/deltachat.ico',
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
