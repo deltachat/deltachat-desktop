@@ -1,9 +1,7 @@
 import React, { useContext } from 'react'
 import { H5 } from '@blueprintjs/core'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
-import {
-  SmallSelectDialog,
-} from './DeltaDialog'
+import { SmallSelectDialog } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
 import { C } from 'deltachat-node/dist/constants'
 
@@ -23,7 +21,6 @@ function showToString(configValue: number | string) {
   }
 }
 
-
 export default function SettingsCommunication(props: any) {
   const { openDialog } = useContext(ScreenContext)
   const { handleDeltaSettingsChange, settings } = props
@@ -31,8 +28,11 @@ export default function SettingsCommunication(props: any) {
   const tx = useTranslationFunction()
   const AUTODELETE_DURATION_OPTIONS = [
     [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
-    [String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS), tx('pref_show_emails_accepted_contacts')],
-    [String(C.DC_SHOW_EMAILS_ALL), tx('pref_show_emails_all')]
+    [
+      String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS),
+      tx('pref_show_emails_accepted_contacts'),
+    ],
+    [String(C.DC_SHOW_EMAILS_ALL), tx('pref_show_emails_all')],
   ]
 
   const onOpenDialog = async () => {
@@ -41,11 +41,11 @@ export default function SettingsCommunication(props: any) {
       selectedValue: String(settings['show_emails']),
       title: tx('autodel_server_title'),
       onSave: async (show: string) => {
-          handleDeltaSettingsChange('show_emails', show)
+        handleDeltaSettingsChange('show_emails', show)
       },
     })
   }
-    
+
   if (!settings['show_emails']) return null
 
   return (

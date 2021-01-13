@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import {
-  Elevation,
-  H5,
-  Card,
-  Classes,
-  Switch,
-  Label,
-} from '@blueprintjs/core'
+import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -230,7 +223,7 @@ export default function Settings(props: DialogProps) {
                   handleDeltaSettingsChange: handleDeltaSettingsChange,
                   settings,
                 }}
-               />
+              />
               <br />
               <H5>{tx('pref_privacy')}</H5>
               {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
