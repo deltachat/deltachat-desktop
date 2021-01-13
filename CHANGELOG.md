@@ -13,6 +13,7 @@
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
 - replace parcel bunder with esbuild bundler (faster bundle speed)
+- loghandler: warn on non-writable stream
 - move error toast to top in order to free the view onto the message input field.
 
 ### Fixed
