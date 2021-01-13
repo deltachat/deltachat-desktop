@@ -5,7 +5,7 @@ import {
   SmallSelectDialog,
 } from './DeltaDialog'
 import { SettingsSelector } from './Settings'
-import { C } from 'deltachat-node'
+import { C } from 'deltachat-node/dist/constants'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
