@@ -346,7 +346,7 @@ const Message = (props: {
         {message.msg.isForwarded && (
           <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
         )}
-        <div className={classNames("author-wrapper", { "can-hide":(direction === 'incoming' && conversationType === 'group')})} >
+        <div className={classNames("author-wrapper", { "can-hide": true })} >
           {Author(message.contact, onContactClick)}
         </div>
         <div
