@@ -78,13 +78,12 @@ export default class DCContacts extends SplitOut {
   }
 
   getContact(contactId: number) {
-    let contact = this._dc.getContact(contactId).toJson()
+    const contact = this._dc.getContact(contactId).toJson()
     if (contactId === C.DC_CONTACT_ID_SELF) {
       contact.firstName = contact.name = contact.displayName = this._dc.getConfig(
         'displayname'
       )
     }
-    console.log('getContact', contactId, contact)
     return contact
   }
 

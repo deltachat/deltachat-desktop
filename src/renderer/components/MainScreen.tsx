@@ -13,7 +13,6 @@ import SearchInput from './SearchInput'
 import { useChatStore } from '../stores/chat'
 import {
   openEditGroupDialog,
-  openMapDialog,
   openViewProfileDialog,
 } from './helpers/ChatMethods'
 
@@ -67,7 +66,6 @@ export default function MainScreen() {
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
   const handleSearchChange = (event: { target: { value: '' } }) =>
     searchChats(event.target.value)
-  const onMapIconClick = () => openMapDialog(screenContext, selectedChat)
   const onTitleClick = () => {
     if (!selectedChat) return
 
@@ -212,7 +210,7 @@ export default function MainScreen() {
                   active={view === View.Media}
                   // aria-selected={view}
                   icon={'media'}
-                  aria-label={tx('view')}
+                  aria-label={tx('media')}
                 />
                 <SettingsContext.Consumer>
                   {({ desktopSettings }) =>
