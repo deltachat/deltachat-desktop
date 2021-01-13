@@ -93,6 +93,9 @@ function onReady([logins, _appReady, loadedState]: [
 
   app.saveState = () => State.save({ saved: state.saved })
 
+  // can fail due to user error so running it first is better (cli argument)
+  acceptThemeCLI()
+
   setLanguage(state.saved.locale || app.getLocale())
 
   const cwd = getConfigPath()
@@ -113,7 +116,6 @@ function onReady([logins, _appReady, loadedState]: [
       }
     })
   }
-  acceptThemeCLI()
 
   cleanupLogFolder().catch(err =>
     log.error('Cleanup of old logfiles failed: ', err)

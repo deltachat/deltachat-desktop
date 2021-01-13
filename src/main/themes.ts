@@ -16,7 +16,8 @@ const dc_theme_dir = join(__dirname, '../../themes')
 function parseThemeMetaData(
   rawTheme: string
 ): { name: string; description: string } {
-  const meta_data_block = /.theme-meta ?{([^]*)}/gm.exec(rawTheme)[1].trim()
+  const meta_data_block =
+    /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || ''
 
   const regex = /--(\w*): ?['"]([^]*?)['"];?/gi
 
@@ -45,15 +46,24 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
   const files = await readdir(path)
   return Promise.all(
     files
-      .filter(f => f.includes('.css') && f.charAt(0) !== '_')
+      .filter(f => f.endsWith('.css') && f.charAt(0) !== '_')
       .map(async f => {
-        const theme_meta = parseThemeMetaData(
-          await readFile(join(path, f), 'utf-8')
-        )
-        return {
-          name: theme_meta.name,
-          description: theme_meta.description,
-          address: prefix + ':' + basename(f, '.css'),
+        const address = prefix + ':' + basename(f, '.css')
+        const file_content = await readFile(join(path, f), 'utf-8')
+        try {
+          const theme_meta = parseThemeMetaData(file_content)
+          return {
+            name: theme_meta.name,
+            description: theme_meta.description,
+            address,
+          }
+        } catch (error) {
+          log.error('Error while parsing theme ${address}: ', error)
+          return {
+            name: address + ' [Invalid Meta]',
+            description: '[missing description]',
+            address: prefix + ':' + basename(f, '.css'),
+          }
         }
       })
   )
@@ -127,8 +137,16 @@ export function acceptThemeCLI() {
     try {
       resolveThemeAddress(app.rc['theme'])
     } catch (error) {
-      log.error('theme not found', { error, path: app.rc['theme'] })
-      process.exit() // user specied a theme via cli argument so we should fail if this fails
+      log.error('THEME NOT FOUND', { error, path: app.rc['theme'] })
+      throw new Error(
+        `THEME "${app.rc['theme']}" NOT FOUND,
+this is fatal because the user specified it via cli argument.
+If you did not specify this, ask the person which installed deltachat for you to remove the cli argument again.
+
+If they are not available find the shortcut/.desktop file yourself and edit it to not contain the "--theme" argument.
+Using --theme is for developers and theme creators ONLY and should not be used by normal users
+If you have question or need help, feel free to ask in our forum https://support.delta.chat.`
+      )
     }
     app.state.saved.activeTheme = app.rc['theme']
     log.info(`set theme`)
