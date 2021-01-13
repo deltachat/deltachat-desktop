@@ -12,6 +12,7 @@ import { getLogger } from '../../../shared/logger'
 
 import UrlParser from 'url-parse'
 import chatStore from '../../stores/chat'
+import reactStringReplace from 'react-string-replace'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -36,13 +37,7 @@ function punycodeCheck(url: string) {
   const URL = UrlParser(url)
   // encode the punycode to make phishing harder
   const originalHostname = URL.hostname
-  URL.set(
-    'hostname',
-    URL.hostname
-      .split('.')
-      .map(toASCII)
-      .join('.')
-  )
+  URL.set('hostname', URL.hostname.split('.').map(toASCII).join('.'))
   return {
     asciiUrl: URL.toString(),
     originalHostname,
@@ -214,18 +209,30 @@ function openPunycodeUrlConfirmationDialog(
               marginBottom: '6px',
             }}
           >
-            ⚠ Suspicious Link detected
+            {tx('puny_code_warning_header')}
           </div>
           <p>
-            Are you sure you want to visit <b>{asciiHostname}</b>?
+            {reactStringReplace(
+              tx('puny_code_warning_question'),
+              '$$asciiHostname$$',
+              () => (
+                <b>{asciiHostname}</b>
+              )
+            )}
           </p>
           <hr />
           <p>
-            You followed a link which could be misrepresenting characters by
-            using similarly looking ones from different alphabets. Following the
-            link labelled <b>{originalHostname}</b> will lead to{' '}
-            <b>{asciiHostname}</b> which is normal for non-Latin characters. If
-            you did not expect such characters this link could be harmful.
+            {reactStringReplace(
+              reactStringReplace(
+                tx('puny_code_warning_description'),
+                '$$originalHostname$$',
+                () => <b>{originalHostname}</b>
+              ),
+              '$$asciiHostname$$',
+              () => (
+                <b>{asciiHostname}</b>
+              )
+            )}
           </p>
           <DeltaDialogFooter>
             <DeltaDialogFooterActions>
