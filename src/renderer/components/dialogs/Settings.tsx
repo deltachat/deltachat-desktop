@@ -8,8 +8,6 @@ import {
   Classes,
   Switch,
   Label,
-  RadioGroup,
-  Radio,
 } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions

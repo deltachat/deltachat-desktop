@@ -1,20 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { H5 } from '@blueprintjs/core'
 import { ScreenContext, useTranslationFunction } from '../../contexts'
 import {
-  DeltaDialogBody,
-  DeltaDialogContent,
-  DeltaDialogFooter,
-  DeltaDialogHeader,
-  SmallDialog,
   SmallSelectDialog,
 } from './DeltaDialog'
-import { DialogProps } from './DialogController'
-import { DeltaBackend } from '../../delta-remote'
 import { SettingsSelector } from './Settings'
-import { AutodeleteDuration } from '../../../shared/constants'
-import { DeltaCheckbox } from '../contact/ContactListItem'
-import classNames from 'classnames'
 import { C } from 'deltachat-node'
 
 function showToString(configValue: number | string) {
@@ -44,7 +34,7 @@ export default function SettingsCommunication(props: any) {
     [String(C.DC_SHOW_EMAILS_ALL), tx('pref_show_emails_all')]
   ]
 
-  const onOpenDialog = async (fromServer: boolean) => {
+  const onOpenDialog = async () => {
     openDialog(SmallSelectDialog, {
       values: AUTODELETE_DURATION_OPTIONS,
       selectedValue: settings['delete_server_after'],
