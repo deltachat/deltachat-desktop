@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
 import {
@@ -54,6 +54,50 @@ export function SettingsSelector(props: any) {
       <button {...otherProps}>{children}</button>
       <div className='CurrentValue'>{currentValue}</div>
     </div>
+  )
+}
+
+function DeltaInput({
+  configKey,
+  label,
+  style,
+}: {
+  configKey: string
+  label: string
+  style?: React.CSSProperties
+}) {
+  const input = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (input.current) {
+      input.current.disabled = true
+    }
+    DeltaBackend.call('settings.getConfigFor', [configKey]).then(res => {
+      input.current.value = res[configKey]
+      input.current.disabled = false
+    })
+  }, [configKey])
+
+  return (
+    <Label>
+      {label}
+      <input
+        ref={input}
+        style={style}
+        className={Classes.INPUT}
+        onChange={ev => {
+          const value = ev.target.value
+          DeltaBackend.call('settings.setConfig', configKey, value).catch(
+            log.warn.bind(
+              null,
+              'settings.setConfig returned false for:',
+              configKey,
+              value
+            )
+          )
+        }}
+      />
+    </Label>
   )
 }
 
@@ -192,25 +236,6 @@ export default function Settings(props: DialogProps) {
     )
   }
 
-  const renderDeltaInput = (
-    configKey: string,
-    label: string,
-    style?: React.CSSProperties
-  ) => {
-    const configValue = state.settings[configKey]
-    return (
-      <Label>
-        {label}
-        <input
-          value={configValue}
-          style={style}
-          className={Classes.INPUT}
-          onChange={ev => handleDeltaSettingsChange(configKey, ev.target.value)}
-        />
-      </Label>
-    )
-  }
-
   const renderDialogContent = () => {
     const { account } = props
     const { settings } = state
@@ -293,13 +318,11 @@ export default function Settings(props: DialogProps) {
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
                 <>
-                  {renderDeltaInput(
-                    'webrtc_instance',
-                    tx('videochat_instance'),
-                    {
-                      width: '100%',
-                    }
-                  )}
+                  <DeltaInput
+                    configKey='webrtc_instance'
+                    label={tx('videochat_instance')}
+                    style={{ width: '100%' }}
+                  />
                   <div className='bp3-callout'>
                     {tx('videochat_instance_explain')}
                   </div>

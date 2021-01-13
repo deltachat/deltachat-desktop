@@ -5,6 +5,7 @@
 ### Fixed
 - show right default background for theme in background preview in settings
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
+- Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
 
 ### Added
 - open message info when clicking on the error status icon of a message
