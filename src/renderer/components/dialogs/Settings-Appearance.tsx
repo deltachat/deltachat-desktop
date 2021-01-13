@@ -4,7 +4,7 @@ import {
   useTranslationFunction,
 } from '../../contexts'
 import React, { useContext, useEffect, useState } from 'react'
-import { H5, H6, Card, Elevation } from '@blueprintjs/core'
+import { H5, H6, Card, Elevation, Icon } from '@blueprintjs/core'
 import { DeltaBackend } from '../../delta-remote'
 import { ThemeManager } from '../../ThemeManager'
 import { SettingsSelector } from './Settings'
@@ -90,27 +90,30 @@ function BackgroundSelector({
           )}
         </SettingsContext.Consumer>
         <div className={'background-options'}>
-          <button onClick={onButton.bind(this, 'def')} className={'bp3-button'}>
-            {tx('pref_background_default')}
-          </button>
-          <button
+          <div
+            onClick={onButton.bind(this, 'def')}
+            style={{backgroundImage: 'var(--chatViewBgImgPath)', backgroundColor: 'var(--chatViewBg)', backgroundSize: '400%'}}
+            aria-label={tx('pref_background_default')}
+          />
+          <div
             onClick={onButton.bind(this, 'def_color')}
-            className={'bp3-button'}
-          >
-            {tx('pref_background_default_color')}
-          </button>
-          <button
+            style={{backgroundColor: 'var(--chatViewBg)'}}
+            aria-label={tx('pref_background_default_color')}
+          />
+          <div
             onClick={onButton.bind(this, 'image')}
-            className={'bp3-button'}
+            className='custom-image'
+            aria-label={tx('pref_background_custom_image')}
           >
-            {tx('pref_background_custom_image')}
-          </button>
-          <button
+            <Icon icon="media" iconSize={30} />
+          </div>
+          <div
             onClick={onButton.bind(this, 'color')}
-            className={'bp3-button'}
+            className='custom-color'
+            aria-label={tx('pref_background_custom_color')}
           >
-            {tx('pref_background_custom_color')}
-          </button>
+            <Icon icon="tint" iconSize={30} />
+          </div>
         </div>
       </div>
       <div className={'background-default-images'}>
