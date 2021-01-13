@@ -98,20 +98,28 @@
     padding-left: 12px;
     padding-top: 10px;
     padding-bottom: 10px;
+    
+    & > .author-wrapper {
 
-    & > .author {
-      display: inline-block;
-      max-width: 40vw;
-      font-size: 13px;
-      font-weight: 300;
-      line-height: 18px;
-      height: 18px;
-      overflow-x: hidden;
-      overflow-y: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      cursor: pointer;
+      .can-hide {
+        display: none;
+      }
+
+      & > .author {
+        display: inline-block;
+        max-width: 40vw;
+        font-size: 13px;
+        font-weight: 300;
+        line-height: 18px;
+        height: 18px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
     }
+
 
     .msg-body {
       &.msg-body--clickable > .text {

@@ -45,6 +45,8 @@ $scrollbarTransparency: 0.5;
   --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
   --chatListItemSelectedText: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
+
+  --messageOutgoingBg: var(--messagePadlockOutgoing);
 }
 
 /* overwrite css */
@@ -150,6 +152,8 @@ $borderColor: #ecececaf;
 
 .message-attachment-media {
   border-radius: 0px;
+  text-align: unset;
+  margin: 0;
 }
 
 .message.incoming .msg-container, .message.incoming .msg-container .message-attachment-media {
@@ -158,4 +162,73 @@ $borderColor: #ecececaf;
 
 .metadata.with-image-no-caption {
   border-radius: 0px;
+}
+
+.message {
+  width: 100%;
+  max-width: 100%;
+}
+
+.message.incoming .msg-container {
+  background-color: unset;
+  border-left: 3px solid var(--messageIncommingBg);
+}
+
+.message.outgoing .msg-container {
+  background-color: unset;
+  border-left: 3px solid var(--messageOutgoingBg);
+}
+
+.message.outgoing {
+  float: none;
+}
+
+.msg-container {
+  width: 100%;
+}
+
+.message .metadata {
+  float: left
+}
+
+.message-attachment-media {
+}
+
+.message-attachment-media>.attachment-content {
+  object-fit: unset;
+  object-position: unset;
+}
+
+.metadata.with-image-no-caption {
+  border-radius: 0px;
+  background-color: unset;
+  position: unset;
+  padding: unset;
+  margin-top: 10px;
+  margin-bottom: -7px;
+  font-weight: unset;
+}
+.message.outgoing .metadata>.status-icon.read, .message.outgoing .metadata>.status-icon.delivered, .message.outgoing .metadata>.padlock-icon, .metadata.with-image-no-caption>.padlock-icon {
+  background-color: var(--messagePadlockIncomming);
+}
+
+.message.outgoing .metadata>.date, .metadata.with-image-no-caption>.date {
+  color: var(--messageMetadataIncomming);
+}
+.metadata.with-image-no-caption>.padlock-icon {
+  -webkit-mask: url(../images/padlock.svg) no-repeat center;
+  -webkit-mask-size: 125%;
+  background-color: var(--messagePadlockIncomming);
+}
+
+
+.message>.author-avatar {
+  display: none;
+}
+.message .msg-container .msg-body>.text {
+  margin-right: 0px;
+}
+
+.author-wrapper .can-hide {
+  display: unset !important;
 }
