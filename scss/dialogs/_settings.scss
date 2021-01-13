@@ -22,7 +22,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-content: space-between;
-  
+
   .bp3-button {
     width: 75px;
     height: 75px;
@@ -39,7 +39,8 @@
   margin-top: 13px;
 }
 
-.custom-image, .custom-color {
+.custom-image,
+.custom-color {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -47,7 +48,8 @@
   color: #545454;
 }
 
-.background-options > div, .background-default-images > div {
+.background-options > div,
+.background-default-images > div {
   flex-wrap: wrap;
   width: 75px;
   height: 75px;

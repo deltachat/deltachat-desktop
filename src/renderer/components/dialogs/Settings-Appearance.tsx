@@ -92,12 +92,16 @@ function BackgroundSelector({
         <div className={'background-options'}>
           <div
             onClick={onButton.bind(this, 'def')}
-            style={{backgroundImage: 'var(--chatViewBgImgPath)', backgroundColor: 'var(--chatViewBg)', backgroundSize: '400%'}}
+            style={{
+              backgroundImage: 'var(--chatViewBgImgPath)',
+              backgroundColor: 'var(--chatViewBg)',
+              backgroundSize: '400%',
+            }}
             aria-label={tx('pref_background_default')}
           />
           <div
             onClick={onButton.bind(this, 'def_color')}
-            style={{backgroundColor: 'var(--chatViewBg)'}}
+            style={{ backgroundColor: 'var(--chatViewBg)' }}
             aria-label={tx('pref_background_default_color')}
           />
           <div
@@ -105,14 +109,14 @@ function BackgroundSelector({
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
-            <Icon icon="media" iconSize={30} />
+            <Icon icon='media' iconSize={30} />
           </div>
           <div
             onClick={onButton.bind(this, 'color')}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
-            <Icon icon="tint" iconSize={30} />
+            <Icon icon='tint' iconSize={30} />
           </div>
         </div>
       </div>
