@@ -187,7 +187,12 @@ export default function LoginScreen({
   return (
     <div className='login-screen'>
       <div className='window'>
-        <DeltaDialogBase isOpen={true} backdropProps={{className: 'no-backdrop'}} onClose={() => {}} fixed={true}>
+        <DeltaDialogBase
+          isOpen={true}
+          backdropProps={{ className: 'no-backdrop' }}
+          onClose={() => {}}
+          fixed={true}
+        >
           {view === 'login' && (
             <>
               <DeltaDialogHeader title={tx('add_account')} />

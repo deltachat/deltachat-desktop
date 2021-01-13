@@ -342,11 +342,19 @@ const Message = (props: {
       {conversationType === 'group' &&
         direction === 'incoming' &&
         Avatar(message.contact, onContactClick)}
-      <div onContextMenu={showMenu} className='msg-container' style={{borderColor: message.contact.color}}>
+      <div
+        onContextMenu={showMenu}
+        className='msg-container'
+        style={{ borderColor: message.contact.color }}
+      >
         {message.msg.isForwarded && (
           <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
         )}
-        <div className={classNames("author-wrapper", { "can-hide": direction === 'outgoing'})} >
+        <div
+          className={classNames('author-wrapper', {
+            'can-hide': direction === 'outgoing',
+          })}
+        >
           {Author(message.contact, onContactClick)}
         </div>
         <div

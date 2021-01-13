@@ -37,7 +37,7 @@ import MapComponent from './map/MapComponent'
 enum View {
   MessageList,
   Media,
-  Map
+  Map,
 }
 
 export default function MainScreen() {
@@ -90,22 +90,24 @@ export default function MainScreen() {
   const tx = useTranslationFunction()
 
   const menu = <Menu selectedChat={selectedChat} />
-  let MessageListView;
-  switch(view) {
+  let MessageListView
+  switch (view) {
     case View.Media:
       MessageListView = <Gallery chat={selectedChat} />
-      break      
+      break
     case View.MessageList:
       MessageListView = <MessageListAndComposer chat={selectedChat} />
-      break      
+      break
     case View.Map:
       MessageListView = <MapComponent selectedChat={selectedChat} />
       break
     default:
-      MessageListView = (<div className='no-chat-selected-screen'>
-        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-      </div>)
-      break      
+      MessageListView = (
+        <div className='no-chat-selected-screen'>
+          <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+        </div>
+      )
+      break
   }
 
   const searchRef = useRef<HTMLInputElement>(null)
