@@ -1,5 +1,5 @@
 .theme-meta {
-  --name: 'Minimal White';
+  --name: 'Minimal';
   --description: 'A minimalistic theme';
 }
 
@@ -237,4 +237,9 @@ $borderColor: #ecececaf;
 
 .author-wrapper.can-hide {
   display: unset !important;
+}
+
+.message-list-and-composer {
+  background-color: white !important;
+  background-image: unset !important;
 }
