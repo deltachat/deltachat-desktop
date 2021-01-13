@@ -19,7 +19,7 @@ export default class ContextMenu extends React.Component<ContextMenuProps> {
 
   render() {
     return (
-      <div className={'context-menu'}>
+      <div className={'context-menu'} style={{display: 'none'}}>
         <div className={'send-button-wrapper'}>
           <button title={'Send POI'} onClick={this.onClick} />
         </div>
