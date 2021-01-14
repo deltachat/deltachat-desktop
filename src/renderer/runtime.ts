@@ -37,7 +37,7 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
-  transformBlobURL(blob: string): string {
+  transformBlobURL(_blob: string): string {
     throw new Error('Method not implemented.')
   }
   async showOpenFileDialog(

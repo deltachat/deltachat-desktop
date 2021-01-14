@@ -1,5 +1,4 @@
 import React from 'react'
-import { MessageBoxOptions } from 'electron'
 import {
   SmallDialog,
   DeltaDialogFooter,

@@ -1,12 +1,12 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
-import Electron, { OpenDialogOptions } from 'electron'
+import Electron from 'electron'
 import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
 import { userFeedback, Screens } from './ScreenController'
-import { DeltaChatAccount, RC_Config } from '../shared/shared-types'
+import { DeltaChatAccount } from '../shared/shared-types'
 
 declare global {
   interface Window {
