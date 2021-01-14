@@ -74,6 +74,7 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  private rc_config: RC_Config = null
   transformBlobURL(blob: string): string {
     return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)
   }
@@ -95,13 +96,28 @@ class Electron implements Runtime {
     openExternal(link)
   }
   getRC_Config(): RC_Config {
-    return ipcBackend.sendSync('get-rc-config')
+    if (!this.rc_config) {
+      this.rc_config = ipcBackend.sendSync('get-rc-config')
+    }
+    return this.rc_config
   }
   initialize() {
-    setLogHandler(
-      (...args: any[]) => ipcBackend.send('handleLogMessage', ...args),
-      this.getRC_Config()
-    )
+    setLogHandler((...args: any[]) => {
+      ipcBackend.send(
+        'handleLogMessage',
+        ...args.map(arg => {
+          // filter args to be make sure electron doesn't give an object clone error (Error: An object could not be cloned)
+          if (typeof arg === 'object') {
+            // make sure objects are clean of unsupported types
+            return JSON.parse(JSON.stringify(arg))
+          } else if (typeof arg === 'function') {
+            return arg.toString()
+          } else {
+            return arg
+          }
+        })
+      )
+    }, this.getRC_Config())
     ipcBackend.on('showHelpDialog', this.openHelpWindow)
   }
   openHelpWindow(): void {

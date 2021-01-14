@@ -62,8 +62,7 @@ export function setLogHandler(
   rcObject: RC_Config
 ) {
   handler = LogHandler
-  // get a clean, non-remote object that has just the values
-  rc = JSON.parse(JSON.stringify(rcObject))
+  rc = rcObject
 }
 
 function log(
