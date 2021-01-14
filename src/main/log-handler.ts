@@ -44,7 +44,17 @@ export function createLogHandler() {
       line = line.concat(
         [stacktrace, ...args].map(value => JSON.stringify(value))
       )
-      stream.write(`${line.join('\t')}\n`)
+      if (stream.writable) {
+        stream.write(`${line.join('\t')}\n`)
+      } else {
+        /* ignore-console-log */
+        console.warn('tried to log something after logger shut down', {
+          channel,
+          level,
+          args,
+          stacktrace,
+        })
+      }
     },
     end: () => stream.end(),
     logFilePath: () => fileName,

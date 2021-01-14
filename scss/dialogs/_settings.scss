@@ -6,19 +6,27 @@
 }
 
 .background-preview {
-  width: 45%;
-  height: 142px;
+  width: calc(50% - 10px);
+  height: auto;
   border-radius: 5pt;
-  background-image: url(../images/background_light.svg);
+  background-image: var(--chatViewBgImgPath);
   background-color: var(--chatViewBg);
   background-size: cover;
 }
 
 .background-options {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  width: 50%;
+  width: calc(50% - 10px);
+  height: 170px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+
+  .bp3-button {
+    width: 75px;
+    height: 75px;
+  }
 }
 
 .background-default-images {
@@ -31,9 +39,18 @@
   margin-top: 13px;
 }
 
+.custom-image,
+.custom-color {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background-color: #d6d6d6 !important;
+  color: #545454;
+}
+
+.background-options > div,
 .background-default-images > div {
   flex-wrap: wrap;
-  margin: 2px;
   width: 75px;
   height: 75px;
   border-radius: 3pt;
