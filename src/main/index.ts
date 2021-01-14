@@ -69,7 +69,8 @@ import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
-import { join, normalize, sep } from 'path'
+import { join, normalize, sep, extname } from 'path'
+import { lookup } from 'mime-types'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -256,7 +257,10 @@ app.once('ready', () => {
         log.warn('error while fetching resource', file, e)
         cb({ statusCode: 404 })
       } else {
-        cb(b)
+        cb({
+          mimeType: lookup(extname(file.replace(/:$/, ''))) || undefined,
+          data: b,
+        })
       }
     })
   })
