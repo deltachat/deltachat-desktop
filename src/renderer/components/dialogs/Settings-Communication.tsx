@@ -25,7 +25,7 @@ export default function SettingsCommunication(props: any) {
   const { handleDeltaSettingsChange, settings } = props
 
   const tx = useTranslationFunction()
-  const AUTODELETE_DURATION_OPTIONS = [
+  const SHOW_EMAIL_OPTIONS = [
     [String(C.DC_SHOW_EMAILS_OFF), tx('pref_show_emails_no')],
     [
       String(C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS),
@@ -36,7 +36,7 @@ export default function SettingsCommunication(props: any) {
 
   const onOpenDialog = async () => {
     openDialog(SmallSelectDialog, {
-      values: AUTODELETE_DURATION_OPTIONS,
+      values: SHOW_EMAIL_OPTIONS,
       selectedValue: String(settings['show_emails']),
       title: tx('pref_show_emails'),
       onSave: async (show: string) => {
