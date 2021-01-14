@@ -1,10 +1,11 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle, EventEmitter } from 'electron'
+import electron, { BrowserWindow, Rectangle } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
 import { showDeltaChat } from '../tray'
 import { ExtendedAppMainProcess } from '../types'
+import type { EventEmitter } from 'events'
 const log = getLogger('main/mainWindow')
 
 export let window: (BrowserWindow & { hidden?: boolean }) | null = null
@@ -40,7 +41,7 @@ export function init(
     },
   })
 
-  window.loadURL(defaults.main)
+  window.loadURL('dc://deltachat/' + defaults.main)
 
   let frontend_ready = false
   ;(app as EventEmitter).once('frontendReady', () => {

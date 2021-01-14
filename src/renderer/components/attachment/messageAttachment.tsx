@@ -15,6 +15,7 @@ import {
   MessageType,
   MessageTypeAttachment,
 } from '../../../shared/shared-types'
+import { runtime } from '../../runtime'
 
 // const MINIMUM_IMG_HEIGHT = 150
 // const MAXIMUM_IMG_HEIGHT = 300
@@ -79,7 +80,10 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <img className='attachment-content' src={attachment.url} />
+        <img
+          className='attachment-content'
+          src={runtime.transformBlobURL(attachment.url)}
+        />
       </div>
     )
   } else if (isVideo(attachment)) {
@@ -106,7 +110,7 @@ export default function Attachment({
       >
         <video
           className='attachment-content'
-          src={attachment.url}
+          src={runtime.transformBlobURL(attachment.url)}
           controls={true}
         />
       </div>
@@ -121,7 +125,7 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <source src={attachment.url} />
+        <source src={runtime.transformBlobURL(attachment.url)} />
       </audio>
     )
   } else {
@@ -168,19 +172,26 @@ export function DraftAttachment({
   if (isImage(attachment)) {
     return (
       <div className={classNames('message-attachment-media')}>
-        <img className='attachment-content' src={attachment.url} />
+        <img
+          className='attachment-content'
+          src={runtime.transformBlobURL(attachment.url)}
+        />
       </div>
     )
   } else if (isVideo(attachment)) {
     return (
       <div className={classNames('message-attachment-media')}>
-        <video className='attachment-content' src={attachment.url} controls />
+        <video
+          className='attachment-content'
+          src={runtime.transformBlobURL(attachment.url)}
+          controls
+        />
       </div>
     )
   } else if (isAudio(attachment)) {
     return (
       <audio controls className={classNames('message-attachment-audio')}>
-        <source src={attachment.url} />
+        <source src={runtime.transformBlobURL(attachment.url)} />
       </audio>
     )
   } else {

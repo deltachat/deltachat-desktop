@@ -8,8 +8,7 @@ import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
 import { DeltaDialogBody, DeltaDialogOkCancelFooter } from './DeltaDialog'
 import { SettingsButton } from './Settings'
-
-const { remote } = window.electron_functions
+import { runtime } from '../../runtime'
 
 export default function SettingsProfile({
   setShow,
@@ -39,7 +38,10 @@ export default function SettingsProfile({
         >
           <div className='profile-image-selector'>
             {profileImagePreview ? (
-              <img src={profileImagePreview} alt={tx('pref_profile_photo')} />
+              <img
+                src={runtime.transformBlobURL(profileImagePreview)}
+                alt={tx('pref_profile_photo')}
+              />
             ) : (
               <span style={{ backgroundColor: state.selfContact.color }}>
                 {initial}
@@ -77,19 +79,13 @@ export function ProfileImageSelector({
 }) {
   const tx = window.static_translate
 
-  const onClickSelectPicture = () => {
-    remote.dialog.showOpenDialog(
-      {
-        title: tx('select_your_new_profile_image'),
-        filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
-        properties: ['openFile'],
-      },
-      async (files: string[]) => {
-        if (Array.isArray(files) && files.length > 0) {
-          setProfilePicture(files[0])
-        }
-      }
-    )
+  const onClickSelectPicture = async () => {
+    const file = await runtime.showOpenFileDialog({
+      title: tx('select_your_new_profile_image'),
+      filters: [{ name: tx('images'), extensions: ['jpg', 'png', 'gif'] }],
+      properties: ['openFile'],
+    })
+    if (file) setProfilePicture(file)
   }
 
   const onClickRemovePicture = () => setProfilePicture('')
@@ -100,7 +96,10 @@ export function ProfileImageSelector({
     <div className='profile-image-selector'>
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
       {profilePicture ? (
-        <img src={profilePicture} alt={tx('pref_profile_photo')} />
+        <img
+          src={runtime.transformBlobURL(profilePicture)}
+          alt={tx('pref_profile_photo')}
+        />
       ) : (
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}

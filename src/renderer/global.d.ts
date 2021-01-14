@@ -6,7 +6,7 @@ import {
   CloseDialogFunctionType,
 } from './components/dialogs/DialogController'
 import { userFeedback, Screens } from './ScreenController'
-import { DeltaChatAccount } from '../shared/shared-types'
+import { DeltaChatAccount, RC_Config } from '../shared/shared-types'
 
 declare global {
   interface Window {
@@ -17,16 +17,12 @@ declare global {
     electron_functions: {
       // see static/preload.js
       ipcRenderer: import('electron').IpcRenderer
-      remote: import('electron').Remote
       openExternal: typeof Electron.shell.openExternal
-      openItem: typeof Electron.shell.openItem
+      openPath: typeof Electron.shell.openPath
+      app_getPath: typeof Electron.app.getPath
     }
     preload_functions: {
       downloadFile: (file: string) => void
-      fileChooser: (
-        options: OpenDialogOptions,
-        callback: (filenames: string[]) => void
-      ) => void
     }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}

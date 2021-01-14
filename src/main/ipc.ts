@@ -119,4 +119,16 @@ export function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
   })
+
+  ipcMain.on('get-rc-config', ev => {
+    ev.returnValue = app.rc
+  })
+
+  ipcMain.on('app-get-path', (ev, arg) => {
+    ev.returnValue = app.getPath(arg)
+  })
+
+  ipcMain.handle('fileChooser', (_ev, options) => {
+    return dialog.showOpenDialog(mainWindow.window, options)
+  })
 }

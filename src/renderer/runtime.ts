@@ -1,13 +1,9 @@
 import { ipcBackend } from './ipc'
-import {
-  RC_Config,
-  ExtendedApp,
-  BasicWebRTCOptions,
-} from '../shared/shared-types'
+import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
+import type { dialog } from 'electron'
 
-const { remote, openExternal, openItem } = window.electron_functions
-const { fileChooser } = window.preload_functions
+const { openExternal, openPath } = window.electron_functions
 
 /**
  * Offers an abstaction Layer to make it easier to make browser client in the future
@@ -37,9 +33,13 @@ interface Runtime {
   showOpenFileDialog(
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
+  transformBlobURL(blob: string): string
 }
 
 class Browser implements Runtime {
+  transformBlobURL(blob: string): string {
+    throw new Error('Method not implemented.')
+  }
   async showOpenFileDialog(
     _options: Electron.OpenDialogOptions
   ): Promise<string> {
@@ -73,14 +73,17 @@ class Browser implements Runtime {
     window.location.reload()
   }
 }
-
 class Electron implements Runtime {
-  showOpenFileDialog(options: Electron.OpenDialogOptions): Promise<string> {
-    return new Promise((resolve, _reject) => {
-      fileChooser(options, filenames => {
-        resolve(filenames ? filenames[0] : null)
-      })
-    })
+  transformBlobURL(blob: string): string {
+    return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)
+  }
+  async showOpenFileDialog(
+    options: Electron.OpenDialogOptions
+  ): Promise<string> {
+    const { filePaths } = await (<ReturnType<typeof dialog.showOpenDialog>>(
+      ipcBackend.invoke('fileChooser', options)
+    ))
+    return filePaths && filePaths[0]
   }
   async openCallWindow(options: BasicWebRTCOptions): Promise<void> {
     const optionString = Object.keys(options)
@@ -92,7 +95,7 @@ class Electron implements Runtime {
     openExternal(link)
   }
   getRC_Config(): RC_Config {
-    return (remote.app as ExtendedApp).rc
+    return ipcBackend.sendSync('get-rc-config')
   }
   initialize() {
     setLogHandler(
@@ -105,7 +108,7 @@ class Electron implements Runtime {
     ipcBackend.send('help', window.localeData.locale)
   }
   openLogFile(): void {
-    openItem(this.getCurrentLogLocation())
+    openPath(this.getCurrentLogLocation())
   }
   getCurrentLogLocation(): string {
     return ipcBackend.sendSync('get-log-path')

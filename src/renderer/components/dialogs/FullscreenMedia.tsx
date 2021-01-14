@@ -3,6 +3,7 @@ import React from 'react'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { DialogProps } from './DialogController'
 import { MessageType } from '../../../shared/shared-types'
+import { runtime } from '../../runtime'
 
 export default function FullscreenMedia(props: {
   msg: MessageType['msg']
@@ -20,15 +21,15 @@ export default function FullscreenMedia(props: {
     case 'image':
       elm = (
         <div className='image-container'>
-          <img src={url} />
+          <img src={runtime.transformBlobURL(url)} />
         </div>
       )
       break
     case 'audio':
-      elm = <audio src={url} controls />
+      elm = <audio src={runtime.transformBlobURL(url)} controls />
       break
     case 'video':
-      elm = <video src={url} controls autoPlay />
+      elm = <video src={runtime.transformBlobURL(url)} controls autoPlay />
       break
     default:
       elm = null

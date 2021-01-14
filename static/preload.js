@@ -2,37 +2,31 @@
 
 // make sure to also update src/renderer/global.d.ts
 // when making changes to this file!
-
+// @ts-check
 (() => {
   const electron = require('electron')
   const { basename, join } = require('path')
 
+  console.log(electron.app, electron.remote,electron)
+
+  //@ts-ignore
   window.electron_functions = {
     ipcRenderer: electron.ipcRenderer,
-    remote: electron.remote,
     openExternal: electron.shell.openExternal,
-    openItem: electron.shell.openItem
+    openPath: electron.shell.openPath,
+    app_getPath: (p) => electron.ipcRenderer.sendSync('app-get-path', p)
   }
 
+  //@ts-ignore
   window.preload_functions = {
-    downloadFile: (file) => {
+    downloadFile: (file) => {//TODO
       const defaultPath = join(electron.remote.app.getPath('downloads'), basename(file))
-      electron.remote.dialog.showSaveDialog({
+      electron.remote.dialog.showSaveDialog(
+        electron.remote.getCurrentWindow(),{
         defaultPath
       }, (filename) => {
         if (filename) electron.ipcRenderer.send('saveFile', file, filename)
       })
-    },
-    /**
-     * @param {import('electron').OpenDialogOptions} options
-     * @param {(filenames:string[])=>void} callback 
-     */
-    fileChooser: (options, callback) => {
-      electron.remote.dialog.showOpenDialog(
-        electron.remote.getCurrentWindow(),
-        options,
-        callback
-      )
     }
   }
 

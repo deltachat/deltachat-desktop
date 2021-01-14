@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import { runtime } from '../runtime'
 
 export function QRAvatar() {
   return (
@@ -43,7 +44,7 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={avatarPath} />
+    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
       {avatarInitial(displayName, addr)}

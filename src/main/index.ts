@@ -1,9 +1,10 @@
 console.time('init')
 
-import { ensureDirSync, watchFile } from 'fs-extra'
-import { app as rawApp, session, EventEmitter, dialog } from 'electron'
+import { ensureDirSync, watchFile, readFile } from 'fs-extra'
+import { app as rawApp, dialog, protocol } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
+import type { EventEmitter } from 'events'
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
@@ -25,6 +26,7 @@ import {
   getLogsPath,
   getAccountsPath,
   getCustomThemesPath,
+  htmlDistDir,
 } from './application-constants'
 ensureDirSync(getConfigPath())
 ensureDirSync(getLogsPath())
@@ -67,6 +69,7 @@ import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
+import { join, normalize, sep } from 'path'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -191,20 +194,70 @@ app.on('web-contents-created', (_e, contents) => {
   })
 })
 
-let contentSecurity = "default-src ' 'none'"
-if (process.env.NODE_ENV === 'test') {
-  contentSecurity =
-    "default-src 'unsafe-inline' 'self' 'unsafe-eval'; img-src 'self' data:;"
-}
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'dc', privileges: { standard: true } },
+  { scheme: 'dc-blob', privileges: { standard: true } },
+])
+
+// folders the renderer need to load resources from
+const ALLOWED_RESOURCE_FOLDERS = ['images', 'node_modules']
+// folders the renderer wants to load source files from (when using the devtools)
+const ALLOWED_SOURCE_FOLDERS = ['src', 'scss', 'node_modules']
+const ALLOWED_FOLDERS = [...ALLOWED_RESOURCE_FOLDERS, ...ALLOWED_SOURCE_FOLDERS]
+const BASE_DIR = join(htmlDistDir(), '../')
+const HTML_DIST_DIR = htmlDistDir()
+
+const ACCOUNTS_DIR = getAccountsPath()
 
 app.once('ready', () => {
-  devTools.tryInstallReactDevTools()
-  session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
-    fun({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurity],
-      },
+  // devTools.tryInstallReactDevTools()
+  protocol.registerBufferProtocol('dc-blob', (req, cb) => {
+    // check for path escape attempts
+    const file = normalize(req.url.replace('dc-blob://', ''))
+    if (file.indexOf('..') !== -1) {
+      log.warn('path escape prevented', req.url, file)
+      cb({ statusCode: 400 })
+    }
+
+    // Fetch Blobfile - make sure its really in a blob dir
+    if (!file.split(sep).includes('db.sqlite-blobs')) {
+      log.warn(
+        'error while fetching blob file - id not inside the blobs directory',
+        file
+      )
+      cb({ statusCode: 400 })
+    } else {
+      readFile(join(ACCOUNTS_DIR, file.replace('p40', 'P40')), (e, b) => {
+        if (e) {
+          log.warn('error while fetching blob file', file, e)
+          cb({ statusCode: 404 })
+        } else {
+          cb(b)
+        }
+      })
+    }
+  })
+  protocol.registerBufferProtocol('dc', (req, cb) => {
+    // check for path escape attempts
+    const file = normalize(req.url.replace('dc://deltachat/', ''))
+    if (file.indexOf('..') !== -1) {
+      log.warn('path escape prevented', req.url, file)
+      cb({ statusCode: 400 })
+    }
+
+    const otherFolder = ALLOWED_FOLDERS.find(folder =>
+      file.startsWith(folder + '/')
+    )
+    const prefix = otherFolder ? BASE_DIR : HTML_DIST_DIR
+
+    // Fetch resource or source
+    readFile(join(prefix, file.replace(/:$/, '')), (e, b) => {
+      if (e) {
+        log.warn('error while fetching resource', file, e)
+        cb({ statusCode: 404 })
+      } else {
+        cb(b)
+      }
     })
   })
 })
