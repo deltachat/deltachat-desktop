@@ -1,16 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { C } from 'deltachat-node/dist/constants'
-import {
-  Elevation,
-  H5,
-  Card,
-  Classes,
-  Switch,
-  Label,
-  RadioGroup,
-  Radio,
-} from '@blueprintjs/core'
+import { Elevation, H5, Card, Classes, Switch, Label } from '@blueprintjs/core'
 
 const { ipcRenderer } = window.electron_functions
 import { SettingsContext, useTranslationFunction } from '../../contexts'
@@ -31,6 +22,7 @@ import SettingsAccount from './Settings-Account'
 import SettingsAppearance from './Settings-Appearance'
 import SettingsProfile, { SettingsEditProfile } from './Settings-Profile'
 import { getLogger } from '../../../shared/logger'
+import SettingsCommunication from './Settings-Communication'
 
 const log = getLogger('renderer/dialogs/Settings')
 
@@ -226,30 +218,12 @@ export default function Settings(props: DialogProps) {
               state={state}
             />
             <Card elevation={Elevation.ONE}>
-              <H5>{tx('pref_communication')}</H5>
-              <RadioGroup
-                label={tx('pref_show_emails')}
-                onChange={(ev: React.FormEvent<HTMLInputElement>) =>
-                  handleDeltaSettingsChange(
-                    'show_emails',
-                    ev.currentTarget.value
-                  )
-                }
-                selectedValue={Number(settings['show_emails'])}
-              >
-                <Radio
-                  label={tx('pref_show_emails_no')}
-                  value={C.DC_SHOW_EMAILS_OFF}
-                />
-                <Radio
-                  label={tx('pref_show_emails_accepted_contacts')}
-                  value={C.DC_SHOW_EMAILS_ACCEPTED_CONTACTS}
-                />
-                <Radio
-                  label={tx('pref_show_emails_all')}
-                  value={C.DC_SHOW_EMAILS_ALL}
-                />
-              </RadioGroup>
+              <SettingsCommunication
+                {...{
+                  handleDeltaSettingsChange: handleDeltaSettingsChange,
+                  settings,
+                }}
+              />
               <br />
               <H5>{tx('pref_privacy')}</H5>
               {renderDeltaSwitch('mdns_enabled', tx('pref_read_receipts'))}
