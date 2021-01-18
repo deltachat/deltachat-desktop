@@ -644,7 +644,9 @@ export default class MapComponent extends React.Component<
           </Collapse>
         </nav>
         <div id='map' />
+        <div style={{ display: 'none' }}>
           <ContextMenu ref={this.contextMenu} onSetPoi={this.sendPoiMessage} />
+        </div>
       </div>
     )
   }
