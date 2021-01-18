@@ -53,7 +53,8 @@ export async function openHelpWindow(locale: string) {
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
-      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true
     },
   })
 
@@ -61,7 +62,7 @@ export async function openHelpWindow(locale: string) {
 
   log.debug(url)
 
-  win.loadURL('file://' + url)
+  win.loadURL(url)
 
   win.once('ready-to-show', () => {
     win.show()
