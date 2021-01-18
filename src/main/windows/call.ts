@@ -39,12 +39,13 @@ export async function openCallWindow(_locale: string, options: string) {
     webPreferences: {
       nodeIntegration: false,
       preload: join(__dirname, '../../../static/preload-call.js'),
+      contextIsolation: true,
     },
   })
 
   const url = 'dc://deltachat/call/index.html' + '#' + options
   log.debug(url)
-  win.loadURL('file://' + url)
+  win.loadURL(url)
 
   win.once('ready-to-show', () => {
     win.show()

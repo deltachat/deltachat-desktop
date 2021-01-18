@@ -242,7 +242,11 @@ app.once('ready', () => {
   })
   protocol.registerBufferProtocol('dc', (req, cb) => {
     // check for path escape attempts
-    const file = normalize(req.url.replace('dc://deltachat/', ''))
+    let file = normalize(req.url.replace('dc://deltachat/', ''))
+    const hashtagIndex = file.indexOf('#')
+    if(hashtagIndex !== -1){
+      file = file.slice(0, hashtagIndex)
+    }
     if (file.indexOf('..') !== -1) {
       log.warn('path escape prevented', req.url, file)
       cb({ statusCode: 400 })
