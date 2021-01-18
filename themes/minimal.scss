@@ -3,7 +3,9 @@
   --description: 'A minimalistic theme';
 }
 
-$navbarBgLight: rgba(210, 210, 210, 0.3);
+$borderColor: #ecececaf;
+
+$navbarBgLight: $borderColor;
 
 /* Set theme variables used for theme Generation */
 $outlineColor: #b9b9b9;
@@ -34,7 +36,7 @@ $scrollbarTransparency: 0.5;
   --scrollbarThumb: #666666;
   --scrollbarThumbHover: #606060;
   --bp3DialogBgSecondary: #ececec;
-  --chatListItemBgHover: rgb(242, 242, 242);
+  --chatListItemBgHover: var(--bp3DialogBgSecondary);
   --cli-search-result-divider: var(--delta-dialog-seperator);
   --cli-search-result-divider-border-width: 0px;
   --emojiMartSelect: var(--chatListItemBgHover);
@@ -44,9 +46,17 @@ $scrollbarTransparency: 0.5;
   --chatListItemSelectedBg: var(--chatListItemBgHover);
   --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
   --chatListItemSelectedText: var(--globalText);
+  --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
+  --navBarText: var(--globalText);
+  --navBarSearchPlaceholder: var(--navBarText);
+  --navBarGroupSubtitle: var(--globalText);
+  --messageStatusIcon: var(--globalText);
+  --messageMetadataIncomming: var(--globalText);
+  --messagePadlockIncomming: var(--globalText);
 
   --messageOutgoingBg: var(--messagePadlockOutgoing);
+  --messageQuotedText: var(--globalText);
 }
 
 /* overwrite css */
@@ -70,14 +80,13 @@ $scrollbarTransparency: 0.5;
 
 
 
-$borderColor: #ecececaf;
 
 .navbar-wrapper .bp3-align-left {
   border-right: solid 1px $borderColor;
 }
 
 .navbar-wrapper .bp3-icon>svg:not([fill]) {
-  fill: rgb(160, 160, 160);
+  fill: var(--globalText);
 }
 
 .chat-list {
@@ -187,10 +196,6 @@ $borderColor: #ecececaf;
   width: 100%;
 }
 
-.message .metadata {
-  float: left
-}
-
 .attachment-overlay .attachment-view img, .attachment-overlay .attachment-view video {
   max-width: calc(100vw - 200px);
 }
@@ -242,4 +247,28 @@ $borderColor: #ecececaf;
 .message-list-and-composer {
   background-color: white !important;
   background-image: unset !important;
+}
+
+
+.composer .lower-bar .send-button-wrapper button {
+    background-blend-mode: difference;
+    background-repeat: no-repeat;
+    background-color: white;
+}
+
+
+.composer .lower-bar .send-button-wrapper {
+  background-color: transparent;
+}
+
+.bp3-button .bp3-icon, .bp3-button .bp3-icon-standard, .bp3-button .bp3-icon-large {
+    color: var(--globalText);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: unset;
+  border-right: 3px solid;
+  &:hover {
+    background-color: unset;
+  }
 }
