@@ -81,12 +81,6 @@ export function init(cwd: string, logHandler: LogHandler) {
     logHandler.log(channel, level, stacktrace, ...args)
   )
 
-  ipcMain.on('saveFile', (_e, source, target) => {
-    copyFile(source, target, err => {
-      if (err) main.send('error', err.message)
-    })
-  })
-
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({ file: filePath, icon: null })
   })
@@ -130,5 +124,12 @@ export function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.handle('fileChooser', (_ev, options) => {
     return dialog.showOpenDialog(mainWindow.window, options)
+  })
+  
+  ipcMain.handle('saveFile', async (_ev, source, options) => {
+    const {canceled, filePath} = await dialog.showSaveDialog(mainWindow.window, options)
+    if (!canceled && filePath) {
+      await copyFile(source, filePath)
+    }
   })
 }

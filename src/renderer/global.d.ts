@@ -23,9 +23,6 @@ declare global {
       write_clipboard_text: typeof Electron.clipboard.writeText
       read_clipboard_text: typeof Electron.clipboard.readText
     }
-    preload_functions: {
-      downloadFile: (file: string) => void
-    }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}
     __closeDialog: CloseDialogFunctionType

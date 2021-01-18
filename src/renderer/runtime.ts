@@ -2,12 +2,14 @@ import { ipcBackend } from './ipc'
 import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type { dialog } from 'electron'
+import { basename, join } from 'path'
 
 const {
   openExternal,
   openPath,
   write_clipboard_text,
   read_clipboard_text,
+  app_getPath,
 } = window.electron_functions
 
 /**
@@ -38,12 +40,16 @@ interface Runtime {
   showOpenFileDialog(
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
+  downloadFile(pathToFile: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
 }
 
 class Browser implements Runtime {
+  downloadFile(pathToFile: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
   async readClipboardText(): Promise<string> {
     // return await navigator.clipboard.readText
     throw new Error('Method not implemented.')
@@ -89,6 +95,11 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  async downloadFile(pathToFile: string): Promise<void> {
+    await ipcBackend.invoke('saveFile', pathToFile, {
+      defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
+    })
+  }
   readClipboardText(): Promise<string> {
     return Promise.resolve(read_clipboard_text())
   }

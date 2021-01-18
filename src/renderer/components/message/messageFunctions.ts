@@ -6,13 +6,14 @@ import type { Message } from 'deltachat-node'
 import { MessageType, JsonMessage } from '../../../shared/shared-types'
 import { ChatStoreDispatch, selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
+import { runtime } from '../../runtime'
 /**
  * json representation of the message object we get from the backend
  */
 type MsgObject = ReturnType<typeof Message.prototype.toJson>
 
 export function onDownload(msg: MsgObject) {
-  window.preload_functions.downloadFile(msg.file)
+  runtime.downloadFile(msg.file)
 }
 
 export function openAttachmentInShell(msg: MsgObject) {
