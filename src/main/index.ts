@@ -64,7 +64,7 @@ import * as ipc from './ipc'
 import { init as initMenu } from './menu'
 import State from './state'
 import * as mainWindow from './windows/main'
-import * as _devTools from './devtools'
+import * as devTools from './devtools'
 import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
@@ -109,7 +109,10 @@ function onReady([logins, _appReady, loadedState]: [
   mainWindow.init(app, { hidden: false })
   initMenu(logHandler)
 
-  if (rc.debug) mainWindow.toggleDevTools()
+  if (rc.debug) {
+    devTools.tryInstallReactDevTools()
+    mainWindow.toggleDevTools()
+  }
 
   if (app.rc['translation-watch']) {
     watchFile('_locales/_untranslated_en.json', (curr, prev) => {
@@ -211,7 +214,6 @@ const HTML_DIST_DIR = htmlDistDir()
 const ACCOUNTS_DIR = getAccountsPath()
 
 app.once('ready', () => {
-  // devTools.tryInstallReactDevTools()
   protocol.registerBufferProtocol('dc-blob', (req, cb) => {
     // check for path escape attempts
     const file = normalize(req.url.replace('dc-blob://', ''))

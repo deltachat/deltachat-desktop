@@ -5,6 +5,7 @@ const log = getLogger('main/dev')
  * Only works when it's installed (aka when its a dev enviroment)
  */
 export async function tryInstallReactDevTools() {
+  return
   try {
     const {
       default: installExtension,
