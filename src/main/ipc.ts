@@ -125,9 +125,12 @@ export function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('fileChooser', (_ev, options) => {
     return dialog.showOpenDialog(mainWindow.window, options)
   })
-  
+
   ipcMain.handle('saveFile', async (_ev, source, options) => {
-    const {canceled, filePath} = await dialog.showSaveDialog(mainWindow.window, options)
+    const { canceled, filePath } = await dialog.showSaveDialog(
+      mainWindow.window,
+      options
+    )
     if (!canceled && filePath) {
       await copyFile(source, filePath)
     }

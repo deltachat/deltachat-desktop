@@ -47,14 +47,14 @@ interface Runtime {
 }
 
 class Browser implements Runtime {
-  downloadFile(pathToFile: string): Promise<void> {
+  downloadFile(_pathToFile: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
   async readClipboardText(): Promise<string> {
     // return await navigator.clipboard.readText
     throw new Error('Method not implemented.')
   }
-  writeClipboardText(text: string): Promise<void> {
+  writeClipboardText(_text: string): Promise<void> {
     // navigator.clipboard.writeText(text)
     throw new Error('Method not implemented.')
   }
