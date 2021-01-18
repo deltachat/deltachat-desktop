@@ -57,7 +57,7 @@ export function SettingsSelector(props: any) {
   )
 }
 
-function DeltaInput({
+function DeltaSettingsInput({
   configKey,
   label,
   style,
@@ -318,7 +318,7 @@ export default function Settings(props: DialogProps) {
               {renderDTSettingSwitch('enableAVCalls', tx('videochat'))}
               {desktopSettings['enableAVCalls'] === true && (
                 <>
-                  <DeltaInput
+                  <DeltaSettingsInput
                     configKey='webrtc_instance'
                     label={tx('videochat_instance')}
                     style={{ width: '100%' }}
