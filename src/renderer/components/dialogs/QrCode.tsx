@@ -15,6 +15,7 @@ import { selectChat } from '../../stores/chat'
 import processOpenQrUrl from '../helpers/OpenQrUrl'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenu } from '../ContextMenu'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -73,7 +74,7 @@ export function QrCodeShowQrInner({
   const tx = useTranslationFunction()
 
   const onCopy = () => {
-    navigator.clipboard.writeText(qrCode).then(_ =>
+    runtime.writeClipboardText(qrCode).then(_ =>
       userFeedback({
         type: 'success',
         text: tx('copy_qr_data_success'),
@@ -169,7 +170,7 @@ export function QrCodeScanQrInner({ onClose }: { onClose: () => void }) {
       label: tx('paste_from_clipboard'),
       action: async () => {
         try {
-          const data = await navigator.clipboard.readText()
+          const data = await runtime.readClipboardText()
           if (data) {
             handleScan(data)
           } else {

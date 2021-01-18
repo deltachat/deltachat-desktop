@@ -3,7 +3,12 @@ import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type { dialog } from 'electron'
 
-const { openExternal, openPath } = window.electron_functions
+const {
+  openExternal,
+  openPath,
+  write_clipboard_text,
+  read_clipboard_text,
+} = window.electron_functions
 
 /**
  * Offers an abstaction Layer to make it easier to make browser client in the future
@@ -34,9 +39,19 @@ interface Runtime {
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
   transformBlobURL(blob: string): string
+  readClipboardText(): Promise<string>
+  writeClipboardText(text: string): Promise<void>
 }
 
 class Browser implements Runtime {
+  async readClipboardText(): Promise<string> {
+    // return await navigator.clipboard.readText
+    throw new Error('Method not implemented.')
+  }
+  writeClipboardText(text: string): Promise<void> {
+    // navigator.clipboard.writeText(text)
+    throw new Error('Method not implemented.')
+  }
   transformBlobURL(_blob: string): string {
     throw new Error('Method not implemented.')
   }
@@ -74,6 +89,12 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  readClipboardText(): Promise<string> {
+    return Promise.resolve(read_clipboard_text())
+  }
+  writeClipboardText(text: string): Promise<void> {
+    return Promise.resolve(write_clipboard_text(text))
+  }
   private rc_config: RC_Config = null
   transformBlobURL(blob: string): string {
     return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)

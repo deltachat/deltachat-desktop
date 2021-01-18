@@ -13,6 +13,7 @@ import { getLogger } from '../../../shared/logger'
 import UrlParser from 'url-parse'
 import chatStore from '../../stores/chat'
 import reactStringReplace from 'react-string-replace'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -123,8 +124,7 @@ function labeledLinkConfirmationDialog(
               <p
                 className={`delta-button bold primary`}
                 onClick={() => {
-                  onClose()
-                  navigator.clipboard.writeText(target)
+                  runtime.writeClipboardText(target).then(() => onClose())
                 }}
                 style={{ marginRight: 'auto' }}
               >

@@ -155,19 +155,19 @@ function buildContextMenu(
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
           action: () => {
-            navigator.clipboard.writeText(selectedText)
+            runtime.writeClipboardText(selectedText)
           },
         }
       : {
           label: tx('global_menu_edit_copy_desktop'),
           action: () => {
-            navigator.clipboard.writeText(text)
+            runtime.writeClipboardText(text)
           },
         },
     // Copy link to clipboard
     link !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
-      action: () => navigator.clipboard.writeText(link),
+      action: () => runtime.writeClipboardText(link),
     },
     // Open Attachment
     showAttachmentOptions &&

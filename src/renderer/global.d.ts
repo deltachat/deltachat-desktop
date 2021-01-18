@@ -20,6 +20,8 @@ declare global {
       openExternal: typeof Electron.shell.openExternal
       openPath: typeof Electron.shell.openPath
       app_getPath: typeof Electron.app.getPath
+      write_clipboard_text: typeof Electron.clipboard.writeText
+      read_clipboard_text: typeof Electron.clipboard.readText
     }
     preload_functions: {
       downloadFile: (file: string) => void
