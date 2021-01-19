@@ -41,7 +41,7 @@ async function migrate(dir: string) {
         continue
       }
     }
-    log.info(`moved ${oldAccounts} accounts to accounts folder`)
+    log.info(`moved ${oldAccounts.length} accounts to accounts folder`)
   }
 }
 
@@ -74,7 +74,7 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
       color: config.color,
     }
   } catch (error) {
-    log.error(`Account ${path} is inaccessible`, error)
+    log.error(`Account ${path} is inaccessible`, error?.message, error)
     return null
   }
 }
@@ -112,6 +112,7 @@ async function findInvalidDeltaAccounts() {
     const dc = new DeltaChat()
     await dc.open(dir)
     const isConfigured = dc.isConfigured()
+    dc.close()
     return { isConfigured, path: dir }
   }
 
@@ -142,6 +143,7 @@ async function getConfig(
       config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color
     }
   }
+  dc.close()
   return config
 }
 
