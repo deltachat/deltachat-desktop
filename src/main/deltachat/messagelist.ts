@@ -115,7 +115,7 @@ export default class DCMessageList extends SplitOut {
     const fromId = msg.getFromId()
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
-    const contact = fromId && this._dc.getContact(fromId).toJson()
+    const contact = fromId && this._controller.contacts.getContact(fromId)
 
     const jsonMSG = msg.toJson()
 

@@ -32,4 +32,21 @@ input.search-input {
 
 input#chat-list-search {
   color: var(--navBarText);
+  background-color: transparent;
+  border-radius: 3px;
+  text-indent: 0px;
+  font-size: 20px;
+  margin: 0;
+  margin-right: 20px;
+}
+
+.bp3-navbar-group > .clear-button {
+  position: absolute;
+  z-index: 10;
+  left: calc(30vw - 25px);
+  &:before {
+    color: var(--textNavBar) !important;
+    font-weight: normal !important;
+    font-size: medium !important;
+  }
 }

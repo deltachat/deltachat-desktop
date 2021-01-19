@@ -1,0 +1,274 @@
+.theme-meta {
+  --name: 'Minimal';
+  --description: 'A minimalistic theme';
+}
+
+$borderColor: #ecececaf;
+
+$navbarBgLight: $borderColor;
+
+/* Set theme variables used for theme Generation */
+$outlineColor: #b9b9b9;
+$accentColor: #2090ea;
+$bgChatView: #e6dcd4;
+$bgImage: url('../images/background_light.svg');
+$bgMessageBubbleIncoming: $navbarBgLight;
+$bgMessageBubbleOutgoing: #efffde;
+$bgNavBar: #fff;
+$bgPrimary: #fff;
+$bgSecondary: #f5f5f5;
+$colorDanger: #f96856;
+$colorNone: #a0a0a0;
+$colorPrimary: #42a5f5;
+$ovalButtonBg: #415e6b;
+$ovalButtonText: #fff;
+$textPrimary: #010101;
+$textSecondary: #62656a;
+$textNavBar: $textPrimary;
+
+$scrollbarTransparency: 0.5;
+
+/* Derive the themedata from the theme variables */
+@import '_themebase.scss';
+
+/* overwrite themedata */
+:root {
+  --scrollbarThumb: #666666;
+  --scrollbarThumbHover: #606060;
+  --bp3DialogBgSecondary: #ececec;
+  --chatListItemBgHover: var(--bp3DialogBgSecondary);
+  --cli-search-result-divider: var(--delta-dialog-seperator);
+  --cli-search-result-divider-border-width: 0px;
+  --emojiMartSelect: var(--chatListItemBgHover);
+
+  --chatListItemBgPinned: var(--bgPrimary);
+  --chatListItemBgPinnedHover: var(--chatListItemBgHover);
+  --chatListItemSelectedBg: var(--chatListItemBgHover);
+  --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
+  --chatListItemSelectedText: var(--globalText);
+  --chat-list-item-summary-text: var(--globalText);
+  --composerSendButton: var(--scrollbarThumb);
+  --navBarText: var(--globalText);
+  --navBarSearchPlaceholder: var(--navBarText);
+  --navBarGroupSubtitle: var(--globalText);
+  --messageStatusIcon: var(--globalText);
+  --messageMetadataIncomming: var(--globalText);
+  --messagePadlockIncomming: var(--globalText);
+
+  --messageOutgoingBg: var(--messagePadlockOutgoing);
+  --messageQuotedText: var(--globalText);
+}
+
+/* overwrite css */
+
+
+.bp3-button.bp3-minimal:active, .bp3-button.bp3-minimal.bp3-active, .bp3-button.bp3-minimal:hover {
+  background: $navbarBgLight;
+}
+
+.bp3-button.bp3-minimal:hover {
+  font-weight: normal;
+}
+
+.main-screen .navbar-chat-name {
+  font-weight: normal;
+}
+
+.main-screen .navbar-chat-subtile {
+  font-weight: normal;
+}
+
+
+
+
+.navbar-wrapper .bp3-align-left {
+  border-right: solid 1px $borderColor;
+}
+
+.navbar-wrapper .bp3-icon>svg:not([fill]) {
+  fill: var(--globalText);
+}
+
+.chat-list {
+  border-right: solid 1px $borderColor;
+  box-shadow: none;
+}
+
+.bp3-navbar {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.bp3-navbar .avatar.small {
+  display: none;
+}
+
+.navbar-wrapper .bp3-align-right {
+  border-bottom: solid 1px $borderColor;
+}
+
+.composer {
+  border-left: unset;
+  border-top: 1px solid $borderColor;
+}
+
+.bp3-overlay-backdrop {
+  backdrop-filter: blur(0.7px) grayscale(1);
+  background-color: transparent;
+}
+
+.bp3-dialog {
+  box-shadow: 0 0 0 1px rgba(16,22,26,.1), 0 4px 8px rgba(16,22,26,.2), 0 0 30px 0px rgba(16,22,26,.2);
+  transition: none;
+}
+
+.message .msg-container {
+  border-radius: 0px;
+}
+
+.info-message p {
+  border-radius: 0px;
+}
+
+.chat-list-item.selected .archived-label, .chat-list-item.selected>.content>.chat-list-item-message>.text {
+  color: var(--chat-list-item-summary-text);
+}
+
+.info-message p {
+  font-style: unset;
+  font-weight: unset;
+  background-color: unset; 
+  color: black;
+}
+
+.attachment-overlay .attachment-view {
+  background-color: rgba(255, 255, 255, 0.96);
+}
+.attachment-overlay .btn-wrapper {
+  top: 9px;
+  background-color: unset;
+  padding: 0px;
+}
+.attachment-overlay .btn-wrapper .download-btn {
+  background-color: rgb(160, 160, 160);
+  &:hover {
+    background-color: rgb(160, 160, 160);
+  }
+}
+.attachment-overlay .bp3-icon > svg {
+  fill: rgb(160, 160, 160);
+}
+
+.message-attachment-media {
+  border-radius: 0px;
+  text-align: unset;
+  margin: 0;
+}
+
+.message.incoming .msg-container, .message.incoming .msg-container .message-attachment-media {
+  border-bottom-left-radius: 0px;
+}
+
+.metadata.with-image-no-caption {
+  border-radius: 0px;
+}
+
+.message {
+  width: 100%;
+  max-width: 100%;
+}
+
+.message.incoming .msg-container {
+  background-color: unset;
+  border-left: 3px solid var(--messageIncommingBg);
+}
+
+.message.outgoing .msg-container {
+  background-color: unset;
+  border-left: 3px solid var(--messageOutgoingBg);
+}
+
+.message.outgoing {
+  float: none;
+}
+
+.msg-container {
+  width: 100%;
+}
+
+.attachment-overlay .attachment-view img, .attachment-overlay .attachment-view video {
+  max-width: calc(100vw - 200px);
+}
+
+.message-attachment-media>.attachment-content {
+  object-fit: unset;
+  object-position: unset;
+}
+
+.metadata.with-image-no-caption {
+  border-radius: 0px;
+  background-color: unset;
+  position: unset;
+  padding: unset;
+  margin-top: 10px;
+  margin-bottom: -7px;
+  font-weight: unset;
+}
+.message.outgoing .metadata>.status-icon.read, .message.outgoing .metadata>.status-icon.delivered, .message.outgoing .metadata>.padlock-icon, .metadata.with-image-no-caption>.padlock-icon {
+  background-color: var(--messagePadlockIncomming);
+}
+
+.message.outgoing .metadata>.date, .metadata.with-image-no-caption>.date {
+  color: var(--messageMetadataIncomming);
+}
+.metadata.with-image-no-caption>.padlock-icon {
+  -webkit-mask: url(../images/padlock.svg) no-repeat center;
+  -webkit-mask-size: 125%;
+  background-color: var(--messagePadlockIncomming);
+}
+
+
+.message>.author-avatar {
+  display: none;
+}
+.message .msg-container .msg-body>.text {
+  margin-right: 0px;
+}
+.message.forwarded .forwarded-indicator {
+  font-weight: 100;
+  color: var(--messagePadlockIncomming);
+  opacity: 1;
+}
+
+.author-wrapper.can-hide {
+  display: unset !important;
+}
+
+.message-list-and-composer {
+  background-color: white !important;
+  background-image: unset !important;
+}
+
+
+.composer .lower-bar .send-button-wrapper button {
+    background-blend-mode: difference;
+    background-repeat: no-repeat;
+    background-color: white;
+}
+
+
+.composer .lower-bar .send-button-wrapper {
+  background-color: transparent;
+}
+
+.bp3-button .bp3-icon, .bp3-button .bp3-icon-standard, .bp3-button .bp3-icon-large {
+    color: var(--globalText);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: unset;
+  border-right: 3px solid;
+  &:hover {
+    background-color: unset;
+  }
+}

@@ -10,6 +10,7 @@
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
+- add a minimalistic theme featuring an irc like message view
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
@@ -22,6 +23,9 @@
 - loghandler: warn on non-writable stream
 - move error toast to top in order to free the view onto the message input field.
 - overhaul ui of email settings
+- overhaul ui of switching between media/message list and map
+- overhaul ui of "context" menu button
+- ui: integrate map dialog into the main screen
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
