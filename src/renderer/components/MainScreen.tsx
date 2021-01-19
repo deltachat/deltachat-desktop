@@ -89,23 +89,24 @@ export default function MainScreen() {
 
   const menu = <Menu selectedChat={selectedChat} />
   let MessageListView
-  switch (view) {
-    case View.Media:
-      MessageListView = <Gallery chat={selectedChat} />
-      break
-    case View.MessageList:
-      MessageListView = <MessageListAndComposer chat={selectedChat} />
-      break
-    case View.Map:
-      MessageListView = <MapComponent selectedChat={selectedChat} />
-      break
-    default:
-      MessageListView = (
-        <div className='no-chat-selected-screen'>
-          <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-        </div>
-      )
-      break
+  if (selectedChat.id !== null) {
+    switch (view) {
+      case View.Media:
+        MessageListView = <Gallery chat={selectedChat} />
+        break
+      case View.Map:
+        MessageListView = <MapComponent selectedChat={selectedChat} />
+        break
+      case View.MessageList:
+      default:
+        MessageListView = <MessageListAndComposer chat={selectedChat} />
+    }
+  } else {
+    MessageListView = (
+      <div className='no-chat-selected-screen'>
+        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+      </div>
+    )
   }
 
   const searchRef = useRef<HTMLInputElement>(null)
