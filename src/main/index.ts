@@ -200,7 +200,7 @@ app.on('web-contents-created', (_e, contents) => {
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'dc', privileges: { standard: true } },
-  { scheme: 'dc-blob', privileges: { standard: true } },
+  { scheme: 'dc-blob', privileges: { standard: true, stream:true } },
 ])
 
 // folders the renderer need to load resources from
