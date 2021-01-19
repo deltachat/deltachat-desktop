@@ -43,5 +43,14 @@
   },
   "copy_json": {
     "message": "Copy JSON"
+  },
+  "puny_code_warning_header": {
+    "message": "Suspicious Link detected"
+  },
+  "puny_code_warning_question":{
+    "message": "Are you sure you want to visit $$asciiHostname$$?"
+  },
+  "puny_code_warning_description": {
+    "message": "You followed a link which could be misrepresenting characters by using similarly looking ones from different alphabets. Following the link labelled $$originalHostname$$ will lead to $$asciiHostname$$ which is normal for non-Latin characters. If you did not expect such characters this link could be harmful."
   }
 }

@@ -12,6 +12,7 @@ import { getLogger } from '../../../shared/logger'
 
 import UrlParser from 'url-parse'
 import chatStore from '../../stores/chat'
+import reactStringReplace from 'react-string-replace'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -30,6 +31,19 @@ function trustDomain(domain: string) {
 
 function isDomainTrusted(domain: string): boolean {
   return getTrustedDomains().includes(domain)
+}
+
+function punycodeCheck(url: string) {
+  const URL = UrlParser(url)
+  // encode the punycode to make phishing harder
+  const originalHostname = URL.hostname
+  URL.set('hostname', URL.hostname.split('.').map(toASCII).join('.'))
+  return {
+    asciiUrl: URL.toString(),
+    originalHostname,
+    asciiHostname: URL.hostname,
+    hasPunycode: URL.toString() != url,
+  }
 }
 
 export const LabeledLink = ({
@@ -55,7 +69,7 @@ export const LabeledLink = ({
       return
     }
     // not trusted - ask for confimation from user
-    confirmationDialog(
+    labeledLinkConfirmationDialog(
       openDialog as OpenDialogFunctionType,
       url.toString(),
       url.hostname,
@@ -74,7 +88,7 @@ export const LabeledLink = ({
   )
 }
 
-function confirmationDialog(
+function labeledLinkConfirmationDialog(
   openDialog: OpenDialogFunctionType,
   sanitizedTarget: string,
   hostname: string,
@@ -128,6 +142,108 @@ function confirmationDialog(
                     trustDomain(hostname)
                   }
                   openExternal(target)
+                }}
+              >
+                {tx('open')}
+              </p>
+            </DeltaDialogFooterActions>
+          </DeltaDialogFooter>
+        </div>
+      </SmallDialog>
+    )
+  })
+}
+
+export const Link = ({ target }: { target: string }) => {
+  const { openDialog } = useContext(ScreenContext)
+
+  const {
+    originalHostname,
+    asciiHostname,
+    hasPunycode,
+    asciiUrl,
+  } = punycodeCheck(target)
+
+  const onClick = (ev: any) => {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    if (hasPunycode) {
+      openPunycodeUrlConfirmationDialog(
+        openDialog as OpenDialogFunctionType,
+        originalHostname,
+        asciiHostname,
+        asciiUrl
+      )
+    } else {
+      openExternal(target)
+    }
+  }
+  return (
+    <a
+      href='#'
+      {...{ 'x-target': asciiUrl }}
+      title={asciiUrl}
+      onClick={onClick}
+    >
+      {target}
+    </a>
+  )
+}
+
+function openPunycodeUrlConfirmationDialog(
+  openDialog: OpenDialogFunctionType,
+  originalHostname: string,
+  asciiHostname: string,
+  asciiUrl: string
+) {
+  openDialog(({ isOpen, onClose }) => {
+    const tx = window.static_translate
+    return (
+      <SmallDialog isOpen={isOpen} onClose={onClose}>
+        <div className='bp3-dialog-body-with-padding'>
+          <div
+            style={{
+              fontSize: '1.5em',
+              fontWeight: 'lighter',
+              marginBottom: '6px',
+            }}
+          >
+            {tx('puny_code_warning_header')}
+          </div>
+          <p>
+            {reactStringReplace(
+              tx('puny_code_warning_question'),
+              '$$asciiHostname$$',
+              () => (
+                <b>{asciiHostname}</b>
+              )
+            )}
+          </p>
+          <hr />
+          <p>
+            {reactStringReplace(
+              reactStringReplace(
+                tx('puny_code_warning_description'),
+                '$$originalHostname$$',
+                () => <b>{originalHostname}</b>
+              ),
+              '$$asciiHostname$$',
+              () => (
+                <b>{asciiHostname}</b>
+              )
+            )}
+          </p>
+          <DeltaDialogFooter>
+            <DeltaDialogFooterActions>
+              <p className={`delta-button bold primary`} onClick={onClose}>
+                {tx('no')}
+              </p>
+              <p
+                className={`delta-button bold primary`}
+                onClick={() => {
+                  onClose()
+                  openExternal(asciiUrl)
                 }}
               >
                 {tx('open')}

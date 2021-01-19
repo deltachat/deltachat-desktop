@@ -1,7 +1,6 @@
 import React from 'react'
 import { defaultRules, blockRegex, anyScopeRegex } from 'simple-markdown'
-import { LabeledLink } from './LabeledLink'
-const { openExternal } = window.electron_functions
+import { LabeledLink, Link } from './Link'
 
 const ignoreCapture = function () {
   return {}
@@ -84,16 +83,8 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       parse: function (capture: any[], _recurseParse: any, _state: any) {
         return { content: capture[1] }
       },
-      react: function (node: any, _output: any, state: any) {
-        const onClick = (ev: any) => {
-          ev.preventDefault()
-          openExternal(node.content)
-        }
-        return (
-          <a href={node.content} key={state.key} onClick={onClick}>
-            {node.content}
-          </a>
-        )
+      react: function(node: any, output: any, state: any) {
+        return <Link target={node.content} key={state.key} />
       },
     },
     newlinePlus: {
