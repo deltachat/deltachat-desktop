@@ -24,7 +24,8 @@ jobs:
         # create empty file to copy it over the outdated deliverable on download.delta.chat
         echo "This preview build is outdated and has been removed." > empty
         cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
-        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.exe
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.portable.exe
+        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.dmg
         cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
         cd ..
     - name: Replace builds with dummy files
