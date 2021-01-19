@@ -101,13 +101,6 @@ export function openEditGroupDialog(
   screenContext.openDialog('EditGroup', { chat: selectedChat })
 }
 
-export function openMapDialog(
-  screenContext: unwrapContext<typeof ScreenContext>,
-  selectedChat: Chat
-) {
-  screenContext.openDialog('MapDialog', { selectedChat })
-}
-
 export async function openViewProfileDialog(
   screenContext: unwrapContext<typeof ScreenContext>,
   contact_id: number

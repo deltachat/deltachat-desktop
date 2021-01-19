@@ -11,6 +11,7 @@ export const DeltaDialogBase = React.memo<
     fixed?: boolean
     className?: string
     style?: React.CSSProperties
+    backdropProps?: any
   }>
 >(props => {
   const isFixed = props.fixed
@@ -22,6 +23,7 @@ export const DeltaDialogBase = React.memo<
         canOutsideClickClose={true}
         isCloseButtonShown={props.isCloseButtonShown}
         canEscapeKeyClose={true}
+        backdropProps={props.backdropProps}
         className={classNames(
           'delta-dialog',
           isFixed === true ? 'FixedDeltaDialog' : 'DeltaDialog',

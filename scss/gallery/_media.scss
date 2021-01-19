@@ -6,6 +6,8 @@ $tab-height: 46px;
   float: right;
   padding-left: 10px;
   margin-top: $nav-bar-height;
+  max-height: calc(100vh - 50px);
+  overflow: hidden;
 
   & .gallery {
     overflow: scroll;
@@ -14,6 +16,7 @@ $tab-height: 46px;
     & > .item-container {
       display: flex;
       flex-wrap: wrap;
+      padding: 10px 0px;
       & > .item {
         padding: 5px 5px 5px 5px;
       }

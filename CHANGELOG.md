@@ -6,11 +6,13 @@
 - show right default background for theme in background preview in settings
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
 - Fix copy of labeled links
+- Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
 
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
 - Add warn dialog for urls containing punycode
+- add a minimalistic theme featuring an irc like message view
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
@@ -22,6 +24,10 @@
 - turn "theme not found" error from the `--theme` cli option from process exit into normal init fail with a user readable error message in an dialog.
 - loghandler: warn on non-writable stream
 - move error toast to top in order to free the view onto the message input field.
+- overhaul ui of email settings
+- overhaul ui of switching between media/message list and map
+- overhaul ui of "context" menu button
+- ui: integrate map dialog into the main screen
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
@@ -45,6 +51,7 @@
 - Switch to archived/normal view accordingly when selecting an archived/unarchived chat
 - Update Translations
 - call maybe_network on window focus
+- Overhaul ui of chat background settings
 
 ### Fixed
 

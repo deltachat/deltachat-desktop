@@ -2,16 +2,15 @@
 
 $color-map-overlay-bg: var(--mapOverlayBg);
 
-#map {
-  margin-top: 71px;
-  height: auto;
+.map-wrapper {
+  margin-left: 30vw;
+  position: absolute;
 }
 
-.mapboxgl-map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
+#map {
+  margin-top: 50px;
+  height: calc(100vh - 50px);
+  width: 70vw;
 }
 
 .mapboxgl-canvas {
@@ -74,13 +73,13 @@ div.context-menu {
 
 .map-overlay {
   font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  position: absolute;
+  position: fixed;
   width: 160px;
   top: 80px;
-  left: 20px;
+  right: 20px;
   padding: 10px;
   background-color: $color-map-overlay-bg;
-  z-index: 500;
+  z-index: 1;
   border-radius: 5px;
 }
 
@@ -136,4 +135,12 @@ div.context-menu {
 
 .map-popup {
   font-family: $roboto; // fix that emojis get displayed right in the popups
+}
+
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl {
+  margin: 0;
+  position: fixed;
+  float: right;
+  right: 20px;
+  bottom: 40px;
 }
