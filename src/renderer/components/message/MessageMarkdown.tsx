@@ -83,7 +83,7 @@ export const rules: SimpleMarkdown.ParserRules = Object.assign(
       parse: function (capture: any[], _recurseParse: any, _state: any) {
         return { content: capture[1] }
       },
-      react: function(node: any, output: any, state: any) {
+      react: function (node: any, output: any, state: any) {
         return <Link target={node.content} key={state.key} />
       },
     },
