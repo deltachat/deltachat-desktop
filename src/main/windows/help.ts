@@ -54,7 +54,7 @@ export async function openHelpWindow(locale: string) {
 
     webPreferences: {
       contextIsolation: true,
-      sandbox: true
+      sandbox: true,
     },
   })
 

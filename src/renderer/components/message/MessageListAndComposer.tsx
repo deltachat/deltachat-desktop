@@ -162,14 +162,15 @@ export default function MessageListAndComposer({
   const style: React.CSSProperties = {
     backgroundSize: 'cover',
   }
-  if (settings['chatViewBgImg']) {
-    if (
-      settings['chatViewBgImg'] &&
-      settings['chatViewBgImg'].indexOf('url') !== -1
-    ) {
-      style.backgroundImage = settings['chatViewBgImg']
+  const bgImg = settings['chatViewBgImg']
+  if (bgImg) {
+    if (bgImg && bgImg.indexOf('url') !== -1) {
+      style.backgroundImage = `url("misc://background/${bgImg.slice(
+        5,
+        bgImg.length - 2
+      )}")`
     } else {
-      style.backgroundColor = settings['chatViewBgImg']
+      style.backgroundColor = bgImg
       style.backgroundImage = 'none'
     }
   }

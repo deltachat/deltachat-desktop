@@ -69,7 +69,7 @@ import { AppState, DeltaChatAccount } from '../shared/shared-types'
 import { ExtendedAppMainProcess } from './types'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray'
 import { acceptThemeCLI } from './themes'
-import { join, normalize, sep, extname } from 'path'
+import { join, normalize, sep, extname, basename } from 'path'
 import { lookup } from 'mime-types'
 
 app.ipcReady = false
@@ -201,6 +201,7 @@ app.on('web-contents-created', (_e, contents) => {
 protocol.registerSchemesAsPrivileged([
   { scheme: 'dc', privileges: { standard: true } },
   { scheme: 'dc-blob', privileges: { stream: true } },
+  { scheme: 'misc', privileges: { stream: true } },
 ])
 
 // folders the renderer need to load resources from
@@ -214,6 +215,21 @@ const HTML_DIST_DIR = htmlDistDir()
 const ACCOUNTS_DIR = getAccountsPath()
 
 app.once('ready', () => {
+  protocol.registerBufferProtocol('misc', async (req, cb) => {
+    if (req.url.startsWith('misc://background/')) {
+      const filename = basename(req.url.replace('misc://background/', ''))
+      readFile(join(getConfigPath(), 'background/', filename), (e, b) => {
+        if (e) {
+          log.warn('error while fetching background image', filename, e)
+          cb({ statusCode: 404 })
+        } else {
+          cb(b)
+        }
+      })
+    } else {
+      cb({ statusCode: 400 })
+    }
+  })
   protocol.registerBufferProtocol('dc-blob', (req, cb) => {
     // check for path escape attempts
     const file = normalize(req.url.replace('dc-blob://', ''))
