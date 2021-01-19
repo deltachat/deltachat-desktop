@@ -200,7 +200,7 @@ app.on('web-contents-created', (_e, contents) => {
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'dc', privileges: { standard: true } },
-  { scheme: 'dc-blob', privileges: { standard: true, stream:true } },
+  { scheme: 'dc-blob', privileges: { stream: true } },
 ])
 
 // folders the renderer need to load resources from
@@ -219,7 +219,7 @@ app.once('ready', () => {
     const file = normalize(req.url.replace('dc-blob://', ''))
     if (file.indexOf('..') !== -1) {
       log.warn('path escape prevented', req.url, file)
-      cb({ statusCode: 400 })
+      return cb({ statusCode: 400 })
     }
 
     // Fetch Blobfile - make sure its really in a blob dir
@@ -244,12 +244,12 @@ app.once('ready', () => {
     // check for path escape attempts
     let file = normalize(req.url.replace('dc://deltachat/', ''))
     const hashtagIndex = file.indexOf('#')
-    if(hashtagIndex !== -1){
+    if (hashtagIndex !== -1) {
       file = file.slice(0, hashtagIndex)
     }
     if (file.indexOf('..') !== -1) {
       log.warn('path escape prevented', req.url, file)
-      cb({ statusCode: 400 })
+      return cb({ statusCode: 400 })
     }
 
     const otherFolder = ALLOWED_FOLDERS.find(folder =>
