@@ -18,7 +18,7 @@ jobs:
         npm ci
     - name: Check Typescript Types
       run: |
-        npm run check-type
+        npm run check-types
     - name: Run ESLint
       run: |
         npm run lint
