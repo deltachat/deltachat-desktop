@@ -29,9 +29,11 @@
 - overhaul ui of "context" menu button
 - ui: integrate map dialog into the main screen
 - Upgrade electron to version 11
+- use only esbuild for frontend builds (skip typescript build & validation, typescript can now be checked with `npm run test` or `npm run check-types`)
 
 ### Removed
 - Disable React Devtools as they are broken in the newer electron versions
+- remove terser minification, the minfication of eslint is sufficient and faster
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)

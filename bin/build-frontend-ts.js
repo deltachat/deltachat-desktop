@@ -33,7 +33,7 @@ async function run(command, args, options, listener = undefined) {
   })
 }
 
-async function bundle(production) {
+async function bundle(production, minify=false) {
   //--- Workaround for broken "react-virtualized" import (patch file)
   const fpath = "node_modules/react-virtualized/dist/es/WindowScroller/utils/onScroll.js"
   const content = await readFile(fpath, "utf-8")
@@ -42,8 +42,9 @@ async function bundle(production) {
 
   const bundleArgs = [
     'esbuild',
-    'tsc-dist/renderer/main.js',
+    'src/renderer/main.tsx',
     '--bundle',
+    ...(minify?['--minify']:[]),
     '--sourcemap',
     '--sources-content=false',
     '--outfile=html-dist/bundle.js',
@@ -63,26 +64,11 @@ async function main(watch_ = false, production_, minify_ = false) {
   const minify = (!watch && minify_) || production
 
   watch && console.log('- First Compile...')
-  !watch && console.log('- Compile ts ...')
-  await run('npx', 'tsc -b src/renderer --pretty'.split(' '))
   !watch && console.log('- Compile esbuild ...')
-  await bundle(production)
-
-  if (minify) {
-    console.log('- Minify with terser...')
-    await run('npx', [
-      'terser',
-      '--compress',
-      '--mangle',
-      '--source-map',
-      '"content=\'html-dist/bundle.js.map\'"',
-      'html-dist/bundle.js',
-      '--output',
-      'html-dist/bundle.js',
-    ])
-  }
+  await bundle(production, minify)
 
   if (watch) {
+    // TODO remove typescript watch and watch files directly
     let isBundling = false
     let isScheduled = false
 

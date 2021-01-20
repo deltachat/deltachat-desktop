@@ -1,0 +1,30 @@
+name: Basic Code Checks
+
+on: [push]
+
+jobs:
+  test:
+    name: Code Validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: npm ci
+      run: |
+        npm ci
+    - name: Check Typescript Types
+      run: |
+        npm run check-type
+    - name: Run ESLint
+      run: |
+        npm run lint
+    - name: Check Formatting
+      run: |
+        npm run check-formatting
+    - name: Check for misplaced console.log statements
+      run: |
+        npm run test-log-conventions
