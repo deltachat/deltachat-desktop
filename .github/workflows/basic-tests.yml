@@ -16,6 +16,9 @@ jobs:
     - name: npm ci
       run: |
         npm ci
+    - name: preperation (generate code)
+      run: |
+        npm run build:shared:version
     - name: Check Typescript Types
       run: |
         npm run check-types

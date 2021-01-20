@@ -1,15 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "files": [],
+  "compilerOptions": {
+    "noEmit": true
+  },
   "references": [
     {
       "path": "main/tsconfig.json"
     },
     {
       "path": "renderer/tsconfig.json"
-    },
-    {
-      "path": "shared/tsconfig.json"
     }
   ]
 }
