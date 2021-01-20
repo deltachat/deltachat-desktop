@@ -1,5 +1,5 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle } from 'electron'
+import electron, { BrowserWindow, Rectangle, session } from 'electron'
 import { appWindowTitle } from '../../shared/constants'
 import { getLogger } from '../../shared/logger'
 import { appIcon, windowDefaults } from '../application-constants'
@@ -40,6 +40,11 @@ export function init(
       preload: defaults.preload,
     },
   })
+
+  // disable nework request to fetch dictionary
+  // issue: https://github.com/electron/electron/issues/22995
+  // feature request for local dictionary: https://github.com/electron/electron/issues/22995
+  session.defaultSession.setSpellCheckerDictionaryDownloadURL('https://00.00/')
 
   window.loadURL('dc://deltachat/' + defaults.main)
 
