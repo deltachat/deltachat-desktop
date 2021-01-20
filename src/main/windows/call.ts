@@ -40,6 +40,7 @@ export async function openCallWindow(_locale: string, options: string) {
       nodeIntegration: false,
       preload: join(__dirname, '../../../static/preload-call.js'),
       contextIsolation: true,
+      spellcheck: false,
     },
   })
 
