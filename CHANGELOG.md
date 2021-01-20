@@ -28,6 +28,10 @@
 - overhaul ui of switching between media/message list and map
 - overhaul ui of "context" menu button
 - ui: integrate map dialog into the main screen
+- Upgrade electron to version 11
+
+### Removed
+- Disable React Devtools as they are broken in the newer electron versions
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
