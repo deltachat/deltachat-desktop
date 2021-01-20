@@ -21,6 +21,7 @@ const ALLOWED_RESOURCE_FOLDERS = ['images', 'node_modules']
 // folders the renderer wants to load source files from (when using the devtools)
 const ALLOWED_SOURCE_FOLDERS = ['src', 'scss', 'node_modules']
 const ALLOWED_FOLDERS = [...ALLOWED_RESOURCE_FOLDERS, ...ALLOWED_SOURCE_FOLDERS]
+const ALLOWED_BLOB_FOLDERS = ['db.sqlite-blobs', 'stickers']
 const BASE_DIR = join(htmlDistDir(), '../')
 const HTML_DIST_DIR = htmlDistDir()
 
@@ -50,8 +51,13 @@ app.once('ready', () => {
       return cb({ statusCode: 400 })
     }
 
+    const fileParts = file.split(sep)
     // Fetch Blobfile - make sure its really in a blob dir
-    if (!file.split(sep).includes('db.sqlite-blobs')) {
+    if (
+      !fileParts
+        .map(p => ALLOWED_BLOB_FOLDERS.includes(p))
+        .find(p => p === true)
+    ) {
       log.warn(
         'error while fetching blob file - id not inside the blobs directory',
         file
