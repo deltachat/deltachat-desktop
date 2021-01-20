@@ -45,8 +45,8 @@ async function bundle(production, minify=false) {
     'src/renderer/main.tsx',
     '--bundle',
     ...(minify?['--minify']:[]),
-    '--sourcemap',
-    '--sources-content=false',
+    '--sourcemap=inline',
+    '--sources-content=true',
     '--outfile=html-dist/bundle.js',
     production
       ? '--define:process.env.NODE_ENV=\\"production\\"'
