@@ -97,7 +97,9 @@ export default class MapComponent extends React.Component<
     )
     if (savedData !== undefined) {
       const { savedMapSettings, savedState } = savedData
-      mapSettings = savedMapSettings
+      if (savedMapSettings) {
+        mapSettings = savedMapSettings
+      }
       this.setState(savedState)
       this.stateFromSession = true
     }
@@ -131,7 +133,7 @@ export default class MapComponent extends React.Component<
       this.currentUserAddress,
       `${selectedChat.id}_map`,
       {
-        savedMapSettings: {
+        savedMapSettings: this.map && {
           zoom: this.map.getZoom(),
           center: this.map.getCenter(),
         },
