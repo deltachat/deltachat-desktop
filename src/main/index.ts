@@ -1,9 +1,10 @@
 console.time('init')
 
 import { ensureDirSync, watchFile } from 'fs-extra'
-import { app as rawApp, session, EventEmitter, dialog } from 'electron'
+import { app as rawApp, dialog } from 'electron'
 import rc from './rc'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info'
+import type { EventEmitter } from 'events'
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
@@ -105,7 +106,10 @@ function onReady([logins, _appReady, loadedState]: [
   mainWindow.init(app, { hidden: false })
   initMenu(logHandler)
 
-  if (rc.debug) mainWindow.toggleDevTools()
+  if (rc.debug) {
+    devTools.tryInstallReactDevTools()
+    mainWindow.toggleDevTools()
+  }
 
   if (app.rc['translation-watch']) {
     watchFile('_locales/_untranslated_en.json', (curr, prev) => {
@@ -191,20 +195,4 @@ app.on('web-contents-created', (_e, contents) => {
   })
 })
 
-let contentSecurity = "default-src ' 'none'"
-if (process.env.NODE_ENV === 'test') {
-  contentSecurity =
-    "default-src 'unsafe-inline' 'self' 'unsafe-eval'; img-src 'self' data:;"
-}
-
-app.once('ready', () => {
-  devTools.tryInstallReactDevTools()
-  session.defaultSession.webRequest.onHeadersReceived((details, fun) => {
-    fun({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurity],
-      },
-    })
-  })
-})
+import('./internal-app-schemes')

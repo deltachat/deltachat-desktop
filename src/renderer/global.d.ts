@@ -1,6 +1,6 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
-import Electron, { OpenDialogOptions } from 'electron'
+import Electron from 'electron'
 import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
@@ -17,16 +17,11 @@ declare global {
     electron_functions: {
       // see static/preload.js
       ipcRenderer: import('electron').IpcRenderer
-      remote: import('electron').Remote
       openExternal: typeof Electron.shell.openExternal
-      openItem: typeof Electron.shell.openItem
-    }
-    preload_functions: {
-      downloadFile: (file: string) => void
-      fileChooser: (
-        options: OpenDialogOptions,
-        callback: (filenames: string[]) => void
-      ) => void
+      openPath: typeof Electron.shell.openPath
+      app_getPath: typeof Electron.app.getPath
+      write_clipboard_text: typeof Electron.clipboard.writeText
+      read_clipboard_text: typeof Electron.clipboard.readText
     }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}

@@ -8,8 +8,9 @@ import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
 import { DeltaProgressBar } from '../Login-Styles'
 import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
+import { runtime } from '../../runtime'
 
-const { remote } = window.electron_functions
+const { app_getPath } = window.electron_functions
 
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
@@ -60,18 +61,21 @@ function onBackupExport() {
     message: tx('pref_backup_export_explain'),
     yesIsPrimary: true,
     confirmLabel: tx('ok'),
-    cb: (yes: boolean) => {
-      if (!yes) return
+    cb: async (yes: boolean) => {
+      if (!yes) {
+        return
+      }
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
-        defaultPath: remote.app.getPath('downloads'),
+        defaultPath: app_getPath('downloads'),
         properties: ['openDirectory'],
       }
-      remote.dialog.showOpenDialog(opts, (filenames: string[]) => {
-        if (!filenames || !filenames.length) return
-        openDialog(ExportProgressDialog)
-        DeltaBackend.call('backup.export', filenames[0])
-      })
+      const destination = await runtime.showOpenFileDialog(opts)
+      if (!destination) {
+        return
+      }
+      openDialog(ExportProgressDialog)
+      DeltaBackend.call('backup.export', destination)
     },
   })
 }

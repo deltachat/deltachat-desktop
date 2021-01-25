@@ -27,6 +27,7 @@ import { C } from 'deltachat-node/dist/constants'
 // import { getLogger } from '../../../shared/logger'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
+import { runtime } from '../../runtime'
 
 // const log = getLogger('renderer/message')
 
@@ -41,7 +42,7 @@ const Avatar = (
   if (profileImage) {
     return (
       <div className='author-avatar' onClick={onClick}>
-        <img alt={displayName} src={profileImage} />
+        <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
       </div>
     )
   } else {
@@ -154,19 +155,19 @@ function buildContextMenu(
       ? {
           label: tx('menu_copy_selection_to_clipboard'),
           action: () => {
-            navigator.clipboard.writeText(selectedText)
+            runtime.writeClipboardText(selectedText)
           },
         }
       : {
           label: tx('global_menu_edit_copy_desktop'),
           action: () => {
-            navigator.clipboard.writeText(text)
+            runtime.writeClipboardText(text)
           },
         },
     // Copy link to clipboard
     link !== '' && {
       label: tx('menu_copy_link_to_clipboard'),
-      action: () => navigator.clipboard.writeText(link),
+      action: () => runtime.writeClipboardText(link),
     },
     // Open Attachment
     showAttachmentOptions &&

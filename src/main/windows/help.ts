@@ -14,12 +14,12 @@ async function getHelpFileForLang(locale: string) {
 
   const contentFilePath = join(appPath, `/html-dist/help/${locale}/help.html`)
   if (await pathExists(contentFilePath)) {
-    return contentFilePath
+    return `dc://deltachat/help/${locale}/help.html`
   } else {
     log.warn(
       `Did not found help file for language ${locale}, falling back to english`
     )
-    return join(appPath, `/html-dist/help/en/help.html`)
+    return 'dc://deltachat/help/en/help.html'
   }
 }
 
@@ -53,7 +53,9 @@ export async function openHelpWindow(locale: string) {
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
-      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      spellcheck: false,
     },
   })
 
@@ -61,7 +63,7 @@ export async function openHelpWindow(locale: string) {
 
   log.debug(url)
 
-  win.loadURL('file://' + url)
+  win.loadURL(url)
 
   win.once('ready-to-show', () => {
     win.show()

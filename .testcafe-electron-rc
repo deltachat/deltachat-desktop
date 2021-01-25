@@ -1,5 +1,5 @@
 {
-    "mainWindowUrl": "./html-dist/test.html",
+    "mainWindowUrl": "dc://deltachat/test.html",
     "appPath": ".",
     "openDevTools": true,
     "selectorTimeout": 50000,

@@ -1,13 +1,16 @@
 import { ipcBackend } from './ipc'
-import {
-  RC_Config,
-  ExtendedApp,
-  BasicWebRTCOptions,
-} from '../shared/shared-types'
+import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
+import type { dialog } from 'electron'
+import { basename, join } from 'path'
 
-const { remote, openExternal, openItem } = window.electron_functions
-const { fileChooser } = window.preload_functions
+const {
+  openExternal,
+  openPath,
+  write_clipboard_text,
+  read_clipboard_text,
+  app_getPath,
+} = window.electron_functions
 
 /**
  * Offers an abstaction Layer to make it easier to make browser client in the future
@@ -37,9 +40,27 @@ interface Runtime {
   showOpenFileDialog(
     options: Electron.OpenDialogOptions
   ): Promise<string | null>
+  downloadFile(pathToFile: string): Promise<void>
+  transformBlobURL(blob: string): string
+  readClipboardText(): Promise<string>
+  writeClipboardText(text: string): Promise<void>
 }
 
 class Browser implements Runtime {
+  downloadFile(_pathToFile: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+  async readClipboardText(): Promise<string> {
+    // return await navigator.clipboard.readText
+    throw new Error('Method not implemented.')
+  }
+  writeClipboardText(_text: string): Promise<void> {
+    // navigator.clipboard.writeText(text)
+    throw new Error('Method not implemented.')
+  }
+  transformBlobURL(_blob: string): string {
+    throw new Error('Method not implemented.')
+  }
   async showOpenFileDialog(
     _options: Electron.OpenDialogOptions
   ): Promise<string> {
@@ -73,14 +94,29 @@ class Browser implements Runtime {
     window.location.reload()
   }
 }
-
 class Electron implements Runtime {
-  showOpenFileDialog(options: Electron.OpenDialogOptions): Promise<string> {
-    return new Promise((resolve, _reject) => {
-      fileChooser(options, filenames => {
-        resolve(filenames ? filenames[0] : null)
-      })
+  async downloadFile(pathToFile: string): Promise<void> {
+    await ipcBackend.invoke('saveFile', pathToFile, {
+      defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
     })
+  }
+  readClipboardText(): Promise<string> {
+    return Promise.resolve(read_clipboard_text())
+  }
+  writeClipboardText(text: string): Promise<void> {
+    return Promise.resolve(write_clipboard_text(text))
+  }
+  private rc_config: RC_Config = null
+  transformBlobURL(blob: string): string {
+    return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)
+  }
+  async showOpenFileDialog(
+    options: Electron.OpenDialogOptions
+  ): Promise<string> {
+    const { filePaths } = await (<ReturnType<typeof dialog.showOpenDialog>>(
+      ipcBackend.invoke('fileChooser', options)
+    ))
+    return filePaths && filePaths[0]
   }
   async openCallWindow(options: BasicWebRTCOptions): Promise<void> {
     const optionString = Object.keys(options)
@@ -92,20 +128,35 @@ class Electron implements Runtime {
     openExternal(link)
   }
   getRC_Config(): RC_Config {
-    return (remote.app as ExtendedApp).rc
+    if (!this.rc_config) {
+      this.rc_config = ipcBackend.sendSync('get-rc-config')
+    }
+    return this.rc_config
   }
   initialize() {
-    setLogHandler(
-      (...args: any[]) => ipcBackend.send('handleLogMessage', ...args),
-      this.getRC_Config()
-    )
+    setLogHandler((...args: any[]) => {
+      ipcBackend.send(
+        'handleLogMessage',
+        ...args.map(arg => {
+          // filter args to be make sure electron doesn't give an object clone error (Error: An object could not be cloned)
+          if (typeof arg === 'object') {
+            // make sure objects are clean of unsupported types
+            return JSON.parse(JSON.stringify(arg))
+          } else if (typeof arg === 'function') {
+            return arg.toString()
+          } else {
+            return arg
+          }
+        })
+      )
+    }, this.getRC_Config())
     ipcBackend.on('showHelpDialog', this.openHelpWindow)
   }
   openHelpWindow(): void {
     ipcBackend.send('help', window.localeData.locale)
   }
   openLogFile(): void {
-    openItem(this.getCurrentLogLocation())
+    openPath(this.getCurrentLogLocation())
   }
   getCurrentLogLocation(): string {
     return ipcBackend.sendSync('get-log-path')

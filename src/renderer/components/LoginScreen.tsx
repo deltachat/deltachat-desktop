@@ -18,7 +18,6 @@ import DeltaDialog, {
   DeltaDialogHeader,
 } from './dialogs/DeltaDialog'
 import { DeltaChatAccount } from '../../shared/shared-types'
-const { remote } = window.electron_functions
 import filesizeConverter from 'filesize'
 import { DialogProps } from './dialogs/DialogController'
 import { DeltaBackend } from '../delta-remote'
@@ -26,6 +25,7 @@ import { Screens } from '../ScreenController'
 import { IpcRendererEvent } from 'electron'
 import { Avatar } from './Avatar'
 import { PseudoContact } from './contact/Contact'
+import { runtime } from '../runtime'
 
 const log = getLogger('renderer/components/LoginScreen')
 
@@ -103,20 +103,17 @@ function ImportBackupProgressDialog({
 const ImportButton = function ImportButton(_props: any) {
   const tx = useTranslationFunction()
 
-  function onClickImportBackup() {
-    remote.dialog.showOpenDialog(
-      {
-        title: tx('import_backup_title'),
-        properties: ['openFile'],
-        filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
-      },
-      (filenames: string[]) => {
-        if (!filenames || !filenames.length) return
-        window.__openDialog(ImportBackupProgressDialog, {
-          backupFile: filenames[0],
-        })
-      }
-    )
+  async function onClickImportBackup() {
+    const file = await runtime.showOpenFileDialog({
+      title: tx('import_backup_title'),
+      properties: ['openFile'],
+      filters: [{ name: '.tar or .bak', extensions: ['tar', 'bak'] }],
+    })
+    if (file) {
+      window.__openDialog(ImportBackupProgressDialog, {
+        backupFile: file,
+      })
+    }
   }
 
   return (

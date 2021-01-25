@@ -1,36 +1,10 @@
 import React from 'react'
-import { MessageBoxOptions } from 'electron'
 import {
   SmallDialog,
   DeltaDialogFooter,
   DeltaDialogFooterActions,
 } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
-
-const { remote } = window.electron_functions
-
-export function confirmationDialogLegacy(
-  message: string,
-  opts?: any,
-  cb?: any
-) {
-  if (!cb) cb = opts
-  if (!opts) opts = {}
-  const tx = window.static_translate
-  const defaultOpts: MessageBoxOptions = {
-    type: 'question',
-    message: message,
-    buttons: [tx('no'), tx('yes')],
-  }
-
-  remote.dialog.showMessageBox(
-    Object.assign(defaultOpts, opts),
-    //@ts-ignore
-    (response: number) => {
-      cb(response === 1) // eslint-disable-line
-    }
-  )
-}
 
 export default function ConfirmationDialog({
   message,

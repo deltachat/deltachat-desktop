@@ -81,7 +81,14 @@ function BackgroundSelector({
           {({ desktopSettings }) => (
             <div
               style={{
-                backgroundImage: desktopSettings.chatViewBgImg,
+                backgroundImage: desktopSettings?.chatViewBgImg.startsWith(
+                  'url('
+                )
+                  ? `url("misc://background/${desktopSettings.chatViewBgImg.slice(
+                      5,
+                      desktopSettings.chatViewBgImg.length - 2
+                    )}")`
+                  : desktopSettings.chatViewBgImg,
                 backgroundSize: 'cover',
               }}
               aria-label={tx('a11y_background_preview_label')}

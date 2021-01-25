@@ -1,3 +1,4 @@
+//@ts-check
 import { Selector } from 'testcafe'
 import { waitForReact } from 'testcafe-react-selectors'
 import { loginWithTmpUser, logout, clickAppMenuItem, translate } from './helpers'
@@ -39,6 +40,7 @@ test('shows correct headline', async t => {
 test('login works', async t => {
   conf.account1 = await loginWithTmpUser()
   console.log(conf.account1)
+  await t.expect(conf.account1).notEql(undefined)
   await logout()
 })
 
@@ -51,6 +53,7 @@ test('account is shown on account overview', async t => {
 test('second login works', async t => {
   conf.account2 = await loginWithTmpUser()
   console.log(conf.account2)
+  await t.expect(conf.account2).notEql(undefined)
   await logout()
 })
 

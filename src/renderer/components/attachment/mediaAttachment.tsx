@@ -13,6 +13,7 @@ import { MessageType } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { makeContextMenu } from '../ContextMenu'
 import { OpenDialogFunctionType } from '../dialogs/DialogController'
+import { runtime } from '../../runtime'
 
 export default function MediaAttachment({ message }: { message: MessageType }) {
   if (!message.msg.attachment) {
@@ -114,7 +115,10 @@ function ImageAttachment({ message }: { message: MessageType }) {
       {isBroken ? (
         squareBrokenMediaContent(hasSupportedFormat, attachment.contentType)
       ) : (
-        <img className='attachment-content' src={attachment.url} />
+        <img
+          className='attachment-content'
+          src={runtime.transformBlobURL(attachment.url)}
+        />
       )}
     </div>
   )
@@ -139,7 +143,7 @@ function VideoAttachment({ message }: { message: MessageType }) {
         <>
           <video
             className='attachment-content'
-            src={attachment.url}
+            src={runtime.transformBlobURL(attachment.url)}
             controls={false}
           />
           <div className='video-play-btn'>
@@ -167,7 +171,7 @@ function AudioAttachment({ message }: { message: MessageType }) {
       </div>
       {hasSupportedFormat ? (
         <audio controls>
-          <source src={attachment.url} />
+          <source src={runtime.transformBlobURL(attachment.url)} />
         </audio>
       ) : (
         <div>

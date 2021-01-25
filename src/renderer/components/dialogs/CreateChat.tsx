@@ -29,7 +29,7 @@ import { JsonContact, DCContact } from '../../../shared/shared-types'
 import { DialogProps } from './DialogController'
 import { isValidEmail } from '../../../shared/util'
 import { QrCodeShowQrInner } from './QrCode'
-const { remote } = window.electron_functions
+import { runtime } from '../../runtime'
 
 export default function CreateChat(props: {
   isOpen: DialogProps['isOpen']
@@ -179,13 +179,13 @@ export function useGroupImage(image?: string) {
   const tx = window.static_translate
 
   const onSetGroupImage = async () => {
-    const { filePaths } = await remote.dialog.showOpenDialog({
+    const file = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
       properties: ['openFile'],
     })
-    if (Array.isArray(filePaths) && filePaths.length > 0) {
-      setGroupImage(filePaths[0])
+    if (file) {
+      setGroupImage(file)
     }
   }
   const onUnsetGroupImage = () => setGroupImage('')

@@ -18,7 +18,7 @@ import { JsonMessage, MessageType } from '../../../shared/shared-types'
 import { Quote } from '../message/Message'
 import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import { DraftAttachment } from '../attachment/messageAttachment'
-const { remote } = window.electron_functions
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/composer')
 
@@ -117,15 +117,11 @@ const Composer = forwardRef<
     }
   }
 
-  const addFilename = () => {
-    remote.dialog.showOpenDialog(
-      { properties: ['openFile'] },
-      (filenames: string[]) => {
-        if (filenames && filenames[0]) {
-          addFileToDraft(filenames[0])
-        }
-      }
-    )
+  const addFilename = async () => {
+    const file = await runtime.showOpenFileDialog({ properties: ['openFile'] })
+    if (file) {
+      addFileToDraft(file)
+    }
   }
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)

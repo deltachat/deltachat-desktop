@@ -250,11 +250,11 @@ function getMenuTemplate(logHandler: LogHandler): rawMenuItem[] {
             },
             {
               translate: 'menu.view.developer.open.log.folder',
-              click: () => shell.openItem(getLogsPath()),
+              click: () => shell.openPath(getLogsPath()),
             },
             {
               translate: 'menu.view.developer.open.current.log.file',
-              click: () => shell.openItem(logHandler.logFilePath()),
+              click: () => shell.openPath(logHandler.logFilePath()),
             },
           ],
         },

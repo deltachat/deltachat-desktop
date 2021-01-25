@@ -8,6 +8,7 @@ import { VERSION, GIT_REF } from '../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
+import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/dialogs/About')
 
@@ -23,7 +24,7 @@ export function DCInfo(_props: any) {
   }, [])
 
   const copy2Clipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(content, null, 4))
+    runtime.writeClipboardText(JSON.stringify(content, null, 4))
   }
 
   const keys = content && Object.keys(content)

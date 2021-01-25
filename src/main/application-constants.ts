@@ -7,6 +7,10 @@ export function appIcon() {
   return `${join(__dirname, '..', '..', 'images', 'deltachat' + iconFormat)}`
 }
 
+export function htmlDistDir() {
+  return join(__dirname, '..', '..', 'html-dist')
+}
+
 export function windowDefaults() {
   let targetFile = 'main.html'
   let defaultWidth = 1000
@@ -34,7 +38,7 @@ export function windowDefaults() {
     headerHeight,
     minWidth: 450,
     minHeight: 450,
-    main: `file://${join(__dirname, '..', '..', 'html-dist', targetFile)}`,
+    main: targetFile,
     preload: join(__dirname, '..', '..', 'html-dist', 'preload.js'),
   }
 }
