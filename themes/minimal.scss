@@ -9,7 +9,7 @@ $navbarBgLight: $borderColor;
 
 /* Set theme variables used for theme Generation */
 $outlineColor: #b9b9b9;
-$accentColor: #2090ea;
+$accentColor: #000000;
 $bgChatView: #e6dcd4;
 $bgImage: url('../images/background_light.svg');
 $bgMessageBubbleIncoming: $navbarBgLight;
@@ -19,7 +19,7 @@ $bgPrimary: #fff;
 $bgSecondary: #f5f5f5;
 $colorDanger: #f96856;
 $colorNone: #a0a0a0;
-$colorPrimary: #42a5f5;
+$colorPrimary: #000000;
 $ovalButtonBg: #415e6b;
 $ovalButtonText: #fff;
 $textPrimary: #010101;
@@ -36,16 +36,16 @@ $scrollbarTransparency: 0.5;
   --scrollbarThumb: #666666;
   --scrollbarThumbHover: #606060;
   --bp3DialogBgSecondary: #ececec;
-  --chatListItemBgHover: var(--bp3DialogBgSecondary);
+  --chatListItemBgHover: #ececec;
   --cli-search-result-divider: var(--delta-dialog-seperator);
   --cli-search-result-divider-border-width: 0px;
   --emojiMartSelect: var(--chatListItemBgHover);
 
   --chatListItemBgPinned: var(--bgPrimary);
   --chatListItemBgPinnedHover: var(--chatListItemBgHover);
-  --chatListItemSelectedBg: black;
-  --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
-  --chatListItemSelectedText: white;
+  --chatListItemSelectedBg: transparent;
+  --chatListItemSelectedBgHover: transparent;
+  --chatListItemSelectedText: black;
   --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
   --navBarText: var(--globalText);
@@ -135,6 +135,9 @@ $scrollbarTransparency: 0.5;
   transition: none;
 }
 
+.bp3-dialog-header, .bp3-dialog-footer {
+  border-radius: 0px;
+}
 .message .msg-container {
   border-radius: 0px;
   padding: 0px;
@@ -300,4 +303,14 @@ $scrollbarTransparency: 0.5;
 
 .status-icon.draft {
   background-color: transparent;
+}
+
+.chat-list-item, .pseudo-chat-list-item {
+  border-left: 3px solid transparent;
+  &.selected {
+    border-left-color: black;
+  }
+}
+.chat-list-item.pinned:hover, .chat-list-item.selected:hover, .chat-list-item:hover, .pseudo-chat-list-item:hover {
+  background-color: unset;
 }
