@@ -45,9 +45,13 @@ interface Runtime {
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
+  openPath (path: string): Promise<string>
 }
 
 class Browser implements Runtime {
+  openPath(path: string): Promise<string> {
+    throw new Error("Method not implemented.")
+  }
   getAppPath(name: string): string {
     throw new Error("Method not implemented.")
   }
@@ -99,6 +103,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  openPath(path: string): Promise<string> {
+    return openPath(path)
+  }
   getAppPath(name: Parameters<Runtime["getAppPath"]>[0]): string {
     return app_getPath(name)
   }
