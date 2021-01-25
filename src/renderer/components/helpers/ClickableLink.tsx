@@ -1,12 +1,12 @@
 import React, { PropsWithChildren } from 'react'
-const { openExternal } = window.electron_functions
+import { runtime } from '../../runtime'
 
 export default class ClickableLink extends React.Component<
   PropsWithChildren<{ href: string; onClick?: (ev: MouseEvent) => void }>
 > {
   onClick(event: MouseEvent) {
     event.preventDefault()
-    openExternal(this.props.href)
+    runtime.openLink(this.props.href)
   }
 
   render() {
