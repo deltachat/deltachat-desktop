@@ -43,9 +43,9 @@ $scrollbarTransparency: 0.5;
 
   --chatListItemBgPinned: var(--bgPrimary);
   --chatListItemBgPinnedHover: var(--chatListItemBgHover);
-  --chatListItemSelectedBg: var(--chatListItemBgHover);
+  --chatListItemSelectedBg: black;
   --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
-  --chatListItemSelectedText: var(--globalText);
+  --chatListItemSelectedText: white;
   --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
   --navBarText: var(--globalText);
@@ -79,19 +79,32 @@ $scrollbarTransparency: 0.5;
 }
 
 
+.navbar-wrapper {
+  .bp3-icon>svg:not([fill]) {
+    fill: var(--globalText);
+  }
+  .bp3-align-left {  
+    border-right: solid 1px $borderColor;
+  }
 
-
-.navbar-wrapper .bp3-align-left {
-  border-right: solid 1px $borderColor;
-}
-
-.navbar-wrapper .bp3-icon>svg:not([fill]) {
-  fill: var(--globalText);
+  span.views {
+    .bp3-button {
+      background: unset;
+      border-bottom: 3px solid transparent;
+      padding-top: 10px;
+      &.bp3-active {
+        border-bottom-color: black;
+      }
+    }
+  }
 }
 
 .chat-list {
   border-right: solid 1px $borderColor;
   box-shadow: none;
+  & > div {
+    width: calc(100% - 4px); 
+  }
 }
 
 .bp3-navbar {
@@ -124,14 +137,11 @@ $scrollbarTransparency: 0.5;
 
 .message .msg-container {
   border-radius: 0px;
+  padding: 0px;
 }
 
 .info-message p {
   border-radius: 0px;
-}
-
-.chat-list-item.selected .archived-label, .chat-list-item.selected>.content>.chat-list-item-message>.text {
-  color: var(--chat-list-item-summary-text);
 }
 
 .info-message p {
@@ -180,12 +190,10 @@ $scrollbarTransparency: 0.5;
 
 .message.incoming .msg-container {
   background-color: unset;
-  border-left: 3px solid var(--messageIncommingBg);
 }
 
 .message.outgoing .msg-container {
   background-color: unset;
-  border-left: 3px solid var(--messageOutgoingBg);
 }
 
 .message.outgoing {
@@ -271,4 +279,25 @@ $scrollbarTransparency: 0.5;
   &:hover {
     background-color: unset;
   }
+}
+
+.selected .status-icon {
+  background-color: var( --chatListItemSelectedText);
+}
+
+.bp3-tab[aria-selected=true] {
+  box-shadow: inset 0 -3px 0 black;
+}
+
+.bp3-tab:not([aria-disabled=true]):hover, .bp3-tab[aria-selected=true] {
+  color: black;
+}
+
+.avatar div.content, .avatar img.content {
+  border-radius: unset;
+  color: transparent;
+}
+
+.status-icon.draft {
+  background-color: transparent;
 }
