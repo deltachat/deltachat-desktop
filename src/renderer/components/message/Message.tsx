@@ -353,7 +353,8 @@ const Message = (props: {
         )}
         <div
           className={classNames('author-wrapper', {
-            'can-hide': direction === 'outgoing' || conversationType === 'direct',
+            'can-hide':
+              direction === 'outgoing' || conversationType === 'direct',
           })}
         >
           {Author(message.contact, onContactClick)}
