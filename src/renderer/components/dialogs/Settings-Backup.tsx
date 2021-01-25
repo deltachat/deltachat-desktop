@@ -10,8 +10,6 @@ import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
 
-const { app_getPath } = window.electron_functions
-
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
   const tx = useTranslationFunction()
@@ -67,7 +65,7 @@ function onBackupExport() {
       }
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
-        defaultPath: app_getPath('downloads'),
+        defaultPath: runtime.getAppPath('downloads'),
         properties: ['openDirectory'],
       }
       const destination = await runtime.showOpenFileDialog(opts)

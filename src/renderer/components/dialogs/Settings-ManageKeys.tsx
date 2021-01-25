@@ -6,14 +6,12 @@ import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'
 
-const { app_getPath } = window.electron_functions
-
 async function onKeysImport() {
   const tx = window.static_translate
 
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_import_secret_keys'),
-    defaultPath: app_getPath('downloads'),
+    defaultPath: runtime.getAppPath('downloads'),
     properties: ['openDirectory'],
   }
 
@@ -49,7 +47,7 @@ async function onKeysExport() {
 
   const opts: OpenDialogOptions = {
     title: tx('pref_managekeys_export_secret_keys'),
-    defaultPath: app_getPath('downloads'),
+    defaultPath: runtime.getAppPath('downloads'),
     properties: ['openDirectory'],
   }
 

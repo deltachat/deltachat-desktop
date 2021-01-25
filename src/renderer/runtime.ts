@@ -1,7 +1,7 @@
 import { ipcBackend } from './ipc'
 import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
-import type { dialog } from 'electron'
+import type { dialog, app } from 'electron'
 import { basename, join } from 'path'
 
 const {
@@ -44,9 +44,13 @@ interface Runtime {
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
+  getAppPath(name: Parameters<typeof app.getPath>[0]): string
 }
 
 class Browser implements Runtime {
+  getAppPath(name: string): string {
+    throw new Error("Method not implemented.")
+  }
   downloadFile(_pathToFile: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
@@ -95,6 +99,9 @@ class Browser implements Runtime {
   }
 }
 class Electron implements Runtime {
+  getAppPath(name: Parameters<Runtime["getAppPath"]>[0]): string {
+    return app_getPath(name)
+  }
   async downloadFile(pathToFile: string): Promise<void> {
     await ipcBackend.invoke('saveFile', pathToFile, {
       defaultPath: join(app_getPath('downloads'), basename(pathToFile)),
