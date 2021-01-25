@@ -1,7 +1,7 @@
 import { ipcBackend } from './ipc'
 import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
-import type { dialog, app } from 'electron'
+import type { dialog, app, shell, clipboard } from 'electron'
 import { basename, join } from 'path'
 
 const {
@@ -10,7 +10,15 @@ const {
   write_clipboard_text,
   read_clipboard_text,
   app_getPath,
-} = window.electron_functions
+} = (window as any).electron_functions as {
+  // see static/preload.js
+  ipcRenderer: import('electron').IpcRenderer
+  openExternal: typeof shell.openExternal
+  openPath: typeof shell.openPath
+  app_getPath: typeof app.getPath
+  write_clipboard_text: typeof clipboard.writeText
+  read_clipboard_text: typeof clipboard.readText
+}
 
 /**
  * Offers an abstaction Layer to make it easier to make browser client in the future
@@ -45,15 +53,15 @@ interface Runtime {
   readClipboardText(): Promise<string>
   writeClipboardText(text: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
-  openPath (path: string): Promise<string>
+  openPath(path: string): Promise<string>
 }
 
 class Browser implements Runtime {
-  openPath(path: string): Promise<string> {
-    throw new Error("Method not implemented.")
+  openPath(_path: string): Promise<string> {
+    throw new Error('Method not implemented.')
   }
-  getAppPath(name: string): string {
-    throw new Error("Method not implemented.")
+  getAppPath(_name: string): string {
+    throw new Error('Method not implemented.')
   }
   downloadFile(_pathToFile: string): Promise<void> {
     throw new Error('Method not implemented.')
@@ -106,7 +114,7 @@ class Electron implements Runtime {
   openPath(path: string): Promise<string> {
     return openPath(path)
   }
-  getAppPath(name: Parameters<Runtime["getAppPath"]>[0]): string {
+  getAppPath(name: Parameters<Runtime['getAppPath']>[0]): string {
     return app_getPath(name)
   }
   async downloadFile(pathToFile: string): Promise<void> {
