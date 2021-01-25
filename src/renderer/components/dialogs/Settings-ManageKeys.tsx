@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Elevation, H5 } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
-import { OpenDialogOptions } from 'electron'
+import type { OpenDialogOptions } from 'electron'
 import { DeltaBackend } from '../../delta-remote'
 import { ipcBackend } from '../../ipc'
 import { runtime } from '../../runtime'

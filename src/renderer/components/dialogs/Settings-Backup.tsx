@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Elevation, H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
-import { OpenDialogOptions } from 'electron'
+import type { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
