@@ -17,8 +17,6 @@ import { runtime } from '../../runtime'
 
 const log = getLogger('renderer/LabeledLink')
 
-const { openExternal } = window.electron_functions
-
 function getTrustedDomains(): string[] {
   return JSON.parse(localStorage.getItem('trustedDomains') || '[]')
 }
@@ -66,7 +64,7 @@ export const LabeledLink = ({
     const { isDeviceChat } = chatStore.getState()
     //check if domain is trusted
     if (isDeviceChat || isDomainTrusted(url.hostname)) {
-      openExternal(target)
+      runtime.openLink(target)
       return
     }
     // not trusted - ask for confimation from user
@@ -141,7 +139,7 @@ function labeledLinkConfirmationDialog(
                     // trust url
                     trustDomain(hostname)
                   }
-                  openExternal(target)
+                  runtime.openLink(target)
                 }}
               >
                 {tx('open')}
@@ -176,7 +174,7 @@ export const Link = ({ target }: { target: string }) => {
         asciiUrl
       )
     } else {
-      openExternal(target)
+      runtime.openLink(target)
     }
   }
   return (
@@ -243,7 +241,7 @@ function openPunycodeUrlConfirmationDialog(
                 className={`delta-button bold primary`}
                 onClick={() => {
                   onClose()
-                  openExternal(asciiUrl)
+                  runtime.openLink(asciiUrl)
                 }}
               >
                 {tx('open')}

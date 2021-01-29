@@ -1,6 +1,5 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 
-import Electron from 'electron'
 import {
   OpenDialogFunctionType,
   CloseDialogFunctionType,
@@ -15,13 +14,10 @@ declare global {
     static_translate: getMessageFunction
     exp: todo
     electron_functions: {
-      // see static/preload.js
+      // see static/preload.js,
+      // but when importing other things, please do it in runtime.ts
+      // we will move the ipcRenderer there too eventually
       ipcRenderer: import('electron').IpcRenderer
-      openExternal: typeof Electron.shell.openExternal
-      openPath: typeof Electron.shell.openPath
-      app_getPath: typeof Electron.app.getPath
-      write_clipboard_text: typeof Electron.clipboard.writeText
-      read_clipboard_text: typeof Electron.clipboard.readText
     }
     __openDialog: OpenDialogFunctionType
     __userFeedback: (message: userFeedback | false) => {}

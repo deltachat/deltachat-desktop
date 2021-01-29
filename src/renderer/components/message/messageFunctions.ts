@@ -1,5 +1,3 @@
-const { openPath } = window.electron_functions
-
 import { getLogger } from '../../../shared/logger'
 const log = getLogger('render/msgFunctions')
 import type { Message } from 'deltachat-node'
@@ -17,7 +15,7 @@ export function onDownload(msg: MsgObject) {
 }
 
 export function openAttachmentInShell(msg: MsgObject) {
-  if (!openPath(msg.file)) {
+  if (!runtime.openPath(msg.file)) {
     log.info(
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )
