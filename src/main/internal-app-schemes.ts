@@ -88,8 +88,15 @@ app.once('ready', () => {
     }
 
     const otherFolder = ALLOWED_FOLDERS.findIndex(folder => {
-      console.log(process.platform, file, folder + '\\', file.startsWith(folder + '\\'))
-      return process.platform === 'win32' ? file.startsWith(folder + '\\') : file.startsWith(folder + '/')
+      console.log(
+        process.platform,
+        file,
+        folder + '\\',
+        file.startsWith(folder + '\\')
+      )
+      return process.platform === 'win32'
+        ? file.startsWith(folder + '\\')
+        : file.startsWith(folder + '/')
     })
 
     console.log(otherFolder, otherFolder === 0)
