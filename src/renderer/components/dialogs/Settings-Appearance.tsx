@@ -81,7 +81,7 @@ function BackgroundSelector({
           {({ desktopSettings }) => (
             <div
               style={{
-                backgroundImage: desktopSettings?.chatViewBgImg.startsWith(
+                backgroundImage: desktopSettings.chatViewBgImg?.startsWith(
                   'url('
                 )
                   ? `url("misc://background/${desktopSettings.chatViewBgImg.slice(
