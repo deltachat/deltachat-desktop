@@ -75,6 +75,7 @@ app.once('ready', () => {
     }
   })
   protocol.registerBufferProtocol('dc', (req, cb) => {
+    console.log(req)
     // check for path escape attempts
     let file = normalize(req.url.replace('dc://deltachat/', ''))
     const hashtagIndex = file.indexOf('#')
@@ -86,10 +87,16 @@ app.once('ready', () => {
       return cb({ statusCode: 400 })
     }
 
-    const otherFolder = ALLOWED_FOLDERS.find(folder =>
-      file.startsWith(folder + '/')
-    )
-    const prefix = otherFolder ? BASE_DIR : HTML_DIST_DIR
+    const otherFolder = ALLOWED_FOLDERS.findIndex(folder => {
+      console.log(process.platform, file, folder + '\\', file.startsWith(folder + '\\'))
+      return process.platform === 'win32' ? file.startsWith(folder + '\\') : file.startsWith(folder + '/')
+    })
+
+    console.log(otherFolder, otherFolder === 0)
+
+    const prefix = otherFolder === -1 ? HTML_DIST_DIR : BASE_DIR
+
+    console.log(prefix)
 
     // Fetch resource or source
     readFile(join(prefix, file.replace(/:$/, '')), (e, b) => {
