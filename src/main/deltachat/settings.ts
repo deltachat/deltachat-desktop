@@ -21,10 +21,9 @@ export default class DCSettings extends SplitOut {
     const result = this._dc.setConfig(key, String(value)) === 1
 
     if (
-      (key === 'inbox_watch' ||
-        key === 'sentbox_watch' ||
-        key === 'mvbox_watch') &&
-      this._dc.isIORunning()
+      key === 'inbox_watch' ||
+      key === 'sentbox_watch' ||
+      key === 'mvbox_watch'
     ) {
       log.info(`It's a watch config, restarting IO...`)
       this._dc.stopIO()
