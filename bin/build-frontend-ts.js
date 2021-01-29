@@ -46,7 +46,6 @@ async function bundle(production, minify=false) {
     '--bundle',
     ...(minify?['--minify']:[]),
     '--sourcemap=inline',
-    '--sources-content=true',
     '--outfile=html-dist/bundle.js',
     production
       ? '--define:process.env.NODE_ENV=\\"production\\"'
