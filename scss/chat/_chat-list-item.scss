@@ -187,6 +187,10 @@
   .mute_icon {
     background-color: var(--chatListItemSelectedText);
   }
+  
+  .status-icon.sending {
+    background-color: white;
+  }
 }
 
 // Pseudo chats
