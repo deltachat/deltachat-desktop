@@ -85,6 +85,7 @@ $scrollbarTransparency: 0.5;
   }
   .bp3-align-left {  
     border-right: solid 1px $borderColor;
+    border-bottom: solid 1px $borderColor;
   }
 
   span.views {
@@ -306,6 +307,14 @@ div.group-image-wrapper div.group-image-edit-button {
 
 .contact-list-item#addmember > .contact > .avatar >.content, .contact-list-item#action-go-to-login > .contact > .avatar >.content {
   color: white;
+}
+
+.chat-list .search-result-divider {
+  background: transparent;
+  border-bottom: unset;
+  &:not(:first-child) {
+    border-top: 1px solid #ececec;
+  }
 }
 
 
