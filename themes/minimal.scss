@@ -9,7 +9,7 @@ $navbarBgLight: $borderColor;
 
 /* Set theme variables used for theme Generation */
 $outlineColor: #b9b9b9;
-$accentColor: #2090ea;
+$accentColor: #000000;
 $bgChatView: #e6dcd4;
 $bgImage: url('../images/background_light.svg');
 $bgMessageBubbleIncoming: $navbarBgLight;
@@ -19,7 +19,7 @@ $bgPrimary: #fff;
 $bgSecondary: #f5f5f5;
 $colorDanger: #f96856;
 $colorNone: #a0a0a0;
-$colorPrimary: #42a5f5;
+$colorPrimary: #000000;
 $ovalButtonBg: #415e6b;
 $ovalButtonText: #fff;
 $textPrimary: #010101;
@@ -33,19 +33,19 @@ $scrollbarTransparency: 0.5;
 
 /* overwrite themedata */
 :root {
-  --scrollbarThumb: #666666;
-  --scrollbarThumbHover: #606060;
+  --scrollbarThumb: black;
+  --scrollbarThumbHover: black;
   --bp3DialogBgSecondary: #ececec;
-  --chatListItemBgHover: var(--bp3DialogBgSecondary);
+  --chatListItemBgHover: transparent;
   --cli-search-result-divider: var(--delta-dialog-seperator);
   --cli-search-result-divider-border-width: 0px;
   --emojiMartSelect: var(--chatListItemBgHover);
 
   --chatListItemBgPinned: var(--bgPrimary);
-  --chatListItemBgPinnedHover: var(--chatListItemBgHover);
-  --chatListItemSelectedBg: var(--chatListItemBgHover);
+  --chatListItemBgPinnedHover: transparent;
+  --chatListItemSelectedBg: black;
   --chatListItemSelectedBgHover: var(--chatListItemSelectedBg);
-  --chatListItemSelectedText: var(--globalText);
+  --chatListItemSelectedText: white;
   --chat-list-item-summary-text: var(--globalText);
   --composerSendButton: var(--scrollbarThumb);
   --navBarText: var(--globalText);
@@ -79,19 +79,34 @@ $scrollbarTransparency: 0.5;
 }
 
 
+.navbar-wrapper {
+  .bp3-icon>svg:not([fill]) {
+    fill: var(--globalText);
+  }
+  .bp3-align-left {  
+    border-right: solid 1px $borderColor;
+    border-bottom: solid 1px $borderColor;
+  }
 
-
-.navbar-wrapper .bp3-align-left {
-  border-right: solid 1px $borderColor;
-}
-
-.navbar-wrapper .bp3-icon>svg:not([fill]) {
-  fill: var(--globalText);
+  span.views {
+    .bp3-button {
+      background: unset;
+      border-bottom: 3px solid transparent;
+      padding-top: 10px;
+      &.bp3-active {
+        border-bottom-color: black;
+      }
+    }
+  }
 }
 
 .chat-list {
   border-right: solid 1px $borderColor;
   box-shadow: none;
+  overflow-x: hidden;
+  & > div {
+    width: calc(100% - 4px); 
+  }
 }
 
 .bp3-navbar {
@@ -122,16 +137,16 @@ $scrollbarTransparency: 0.5;
   transition: none;
 }
 
+.bp3-dialog-header, .bp3-dialog-footer {
+  border-radius: 0px;
+}
 .message .msg-container {
   border-radius: 0px;
+  padding: 0px;
 }
 
 .info-message p {
   border-radius: 0px;
-}
-
-.chat-list-item.selected .archived-label, .chat-list-item.selected>.content>.chat-list-item-message>.text {
-  color: var(--chat-list-item-summary-text);
 }
 
 .info-message p {
@@ -180,12 +195,10 @@ $scrollbarTransparency: 0.5;
 
 .message.incoming .msg-container {
   background-color: unset;
-  border-left: 3px solid var(--messageIncommingBg);
 }
 
 .message.outgoing .msg-container {
   background-color: unset;
-  border-left: 3px solid var(--messageOutgoingBg);
 }
 
 .message.outgoing {
@@ -264,6 +277,46 @@ $scrollbarTransparency: 0.5;
 .bp3-button .bp3-icon, .bp3-button .bp3-icon-standard, .bp3-button .bp3-icon-large {
     color: var(--globalText);
 }
+
+
+.selected .status-icon {
+  background-color: var( --chatListItemSelectedText);
+}
+
+.bp3-tab[aria-selected=true] {
+  box-shadow: inset 0 -3px 0 black;
+}
+
+.bp3-tab:not([aria-disabled=true]):hover, .bp3-tab[aria-selected=true] {
+  color: black;
+}
+
+.avatar div.content, .avatar img.content {
+  border-radius: unset;
+  color: transparent;
+}
+
+.status-icon.draft {
+  background-color: transparent;
+}
+
+div.group-image-wrapper div.group-image-edit-button {
+  left: -14px;
+  top: -4px;
+}
+
+.contact-list-item#addmember > .contact > .avatar >.content, .contact-list-item#action-go-to-login > .contact > .avatar >.content {
+  color: white;
+}
+
+.chat-list .search-result-divider {
+  background: transparent;
+  border-bottom: unset;
+  &:not(:first-child) {
+    border-top: 1px solid #ececec;
+  }
+}
+
 
 ::-webkit-scrollbar-thumb {
   background-color: unset;

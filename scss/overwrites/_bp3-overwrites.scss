@@ -244,6 +244,7 @@ input[type='text']:focus {
   font-size: 19px;
   padding: 0.5rem;
   color: var(--globalText);
+  user-select: none;
 }
 
 .bp3-tab:not([aria-disabled='true']):hover,
