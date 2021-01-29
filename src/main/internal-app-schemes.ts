@@ -86,11 +86,7 @@ app.once('ready', () => {
       return cb({ statusCode: 400 })
     }
 
-    const otherFolder = ALLOWED_FOLDERS.findIndex(folder => {
-      return process.platform === 'win32'
-        ? file.startsWith(folder + '\\')
-        : file.startsWith(folder + '/')
-    })
+    const otherFolder = ALLOWED_FOLDERS.findIndex(folder => file.startsWith(folder + sep))
 
     const prefix = otherFolder === -1 ? HTML_DIST_DIR : BASE_DIR
 
