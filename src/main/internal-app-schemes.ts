@@ -90,18 +90,14 @@ app.once('ready', () => {
       file.startsWith(folder + '/')
     )
     const prefix = otherFolder ? BASE_DIR : HTML_DIST_DIR
-    
-  
     const path = join(prefix, file.replace(/:$/, ''))
-    
-    console.log('xxx', path)
+
     // Fetch resource or source
     readFile(path, (err, content) => {
       if (err) {
         log.warn('error while fetching resource', file, err)
         cb({ statusCode: 404 })
       } else {
-        if (path.endsWith('.map')) console.log(path, content)
         cb({
           mimeType: lookup(extname(file.replace(/:$/, ''))) || undefined,
           data: content,
