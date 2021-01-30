@@ -11,7 +11,7 @@ import { getLogger } from '../shared/logger'
 const log = getLogger('main/internalAppSchemes')
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'dc', privileges: { standard: true } },
+  { scheme: 'dc', privileges: { standard: true, secure: true } },
   { scheme: 'dc-blob', privileges: { stream: true } },
   { scheme: 'misc', privileges: { stream: true } },
 ])
@@ -74,6 +74,7 @@ app.once('ready', () => {
       })
     }
   })
+
   protocol.registerBufferProtocol('dc', (req, cb) => {
     // check for path escape attempts
     let file = normalize(req.url.replace('dc://deltachat/', ''))
