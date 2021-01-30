@@ -28,6 +28,11 @@ const HTML_DIST_DIR = htmlDistDir()
 const ACCOUNTS_DIR = getAccountsPath()
 
 app.once('ready', () => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file://', ''))
+    callback(pathname)
+  })
+
   protocol.registerBufferProtocol('misc', async (req, cb) => {
     if (req.url.startsWith('misc://background/')) {
       const filename = basename(req.url.replace('misc://background/', ''))

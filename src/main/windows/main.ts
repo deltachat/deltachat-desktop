@@ -38,6 +38,7 @@ export function init(
     webPreferences: {
       nodeIntegration: false,
       preload: defaults.preload,
+      webSecurity: false,
     },
   })
 

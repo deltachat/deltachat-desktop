@@ -44,7 +44,7 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
+    <img className='content' src={'file://' + avatarPath} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
       {avatarInitial(displayName, addr)}
