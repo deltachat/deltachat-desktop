@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import { runtime } from '../runtime'
 
 export function QRAvatar() {
   return (
