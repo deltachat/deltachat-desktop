@@ -288,7 +288,6 @@ const Message = (props: {
 
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
-    console.log('xxx', message.msg.direction, message.contact.displayName)
     return (
       <div className='videochat-invitation'>
         <div className='videochat-icon'>
