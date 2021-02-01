@@ -31,6 +31,7 @@
 - ui: integrate map dialog into the main screen
 - Upgrade electron to version 11
 - use only esbuild for frontend builds (skip typescript build & validation, typescript can now be checked with `npm run test` or `npm run check-types`)
+- ui: make videochat invite messages look like on android
 - ui: overhaul send message button
 
 ### Removed

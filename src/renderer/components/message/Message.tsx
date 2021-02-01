@@ -28,7 +28,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
-
+import { AvatarFromContact } from '../Avatar'
 // const log = getLogger('renderer/message')
 
 const Avatar = (
@@ -288,20 +288,25 @@ const Message = (props: {
 
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
-    content = (
-      <div dir='auto' className='text'>
-        <div className='call-inc-text'>
-          <b>{tx('videochat_invitation')}</b>
-          <div>
-            <button
-              className='phone-accept-button'
-              onClick={joinCall.bind(null, screenContext, id)}
-            >
-              {direction === 'incoming' ? tx('join') : tx('rejoin')}
-            </button>
+    return (
+      <div className='videochat-invitation'>
+        <div className='videochat-icon'>
+          <span className='icon videocamera' />
+        </div>
+        <AvatarFromContact contact={message.contact} onClick={onContactClick} />
+        <div className='break' />
+        <div
+          className='info-button'
+          onClick={joinCall.bind(null, screenContext, id)}
+        >
+          {direction === 'incoming'
+            ? tx('videochat_contact_invited_hint', message.contact.displayName)
+            : tx('videochat_you_invited_hint')}
+          <div className='join-button'>
+            {direction === 'incoming'
+              ? tx('videochat_tap_to_join')
+              : tx('rejoin')}
           </div>
-          {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-            tx('videochat_will_open_in_your_browser')}
         </div>
       </div>
     )

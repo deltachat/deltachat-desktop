@@ -422,3 +422,43 @@
     cursor: pointer;
   }
 }
+.videochat-invitation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .videochat-icon {
+    height: 48px;
+    width: 48px;
+    background-color: var(--infoMessageBubbleBg);
+    border-radius: 100%;
+    margin: 8px 0px;
+    margin-right: 10px;
+  }
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .info-button {
+    display: flex;
+
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 7px 14px;
+
+    background-color: var(--infoMessageBubbleBg);
+    opacity: 0.9;
+    color: white;
+    border-radius: 10px;
+
+    cursor: pointer;
+  }
+
+  .join-button {
+    font-weight: 100;
+    margin-top: 5px;
+  }
+}
