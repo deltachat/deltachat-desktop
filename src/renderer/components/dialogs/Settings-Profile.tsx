@@ -96,7 +96,7 @@ export function ProfileImageSelector({
     <div className='profile-image-selector'>
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
       {profilePicture ? (
-        <img src={'file://' + profilePicture} alt={tx('pref_profile_photo')} />
+        <img src={'dc-file://' + profilePicture} alt={tx('pref_profile_photo')} />
       ) : (
         <span style={{ backgroundColor: color }}>{initial}</span>
       )}
