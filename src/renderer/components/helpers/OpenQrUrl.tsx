@@ -15,6 +15,7 @@ import {
 } from '../dialogs/DeltaDialog'
 import { Spinner } from '@blueprintjs/core'
 import { DialogProps } from '../dialogs/DialogController'
+import { runtime } from '../../runtime'
 
 export function ProcessQrCodeDialog({
   onCancel: _onCancel,
@@ -60,16 +61,10 @@ export default async function processOpenQrUrl(
 
   const closeProcessDialog = () => window.__closeDialog(processDialogId)
 
-  if (
-    checkQr === null ||
-    checkQr.state === QrState.Error ||
-    checkQr.state === QrState.Text
-  ) {
+  if (checkQr === null || checkQr.state === QrState.Error) {
     closeProcessDialog()
     window.__openDialog('AlertDialog', {
-      message: checkQr.text1
-        ? tx('qrscan_contains_text', checkQr.text1)
-        : tx('import_qr_error'),
+      message: tx('import_qr_error'),
       cb: callback,
     })
     return
@@ -160,9 +155,51 @@ export default async function processOpenQrUrl(
     })
   } else {
     closeProcessDialog()
-    window.__openDialog('AlertDialog', {
-      message: "Don't know what to do with this URL :/" + url,
+    window.__openDialog(copyContentAlertDialog, {
+      message:
+        checkQr.state === QrState.Url
+          ? tx('qrscan_contains_url', url)
+          : tx('qrscan_contains_text', url),
+      content: url,
       cb: callback,
     })
   }
+}
+
+function copyContentAlertDialog({
+  isOpen,
+  onClose,
+  message,
+  content,
+  cb,
+}: DialogProps & { message: string; content: string; cb: () => void }) {
+  const tx = window.static_translate
+  return (
+    <SmallDialog isOpen={isOpen} onClose={onClose}>
+      <div className='bp3-dialog-body-with-padding'>
+        <p>{message}</p>
+      </div>
+      <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
+        <DeltaDialogFooterActions>
+          <p
+            className='delta-button bold primary'
+            onClick={() => {
+              runtime.writeClipboardText(content).then(onClose)
+            }}
+          >
+            {tx('global_menu_edit_copy_desktop')}
+          </p>
+          <p
+            className='delta-button bold primary'
+            onClick={() => {
+              cb && cb()
+              onClose()
+            }}
+          >
+            {tx('ok')}
+          </p>
+        </DeltaDialogFooterActions>
+      </DeltaDialogFooter>
+    </SmallDialog>
+  )
 }
