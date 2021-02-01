@@ -1,4 +1,4 @@
-import { C } from 'deltachat-node'
+import { C, MessageViewType } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
@@ -122,6 +122,9 @@ export default class DCMessageList extends SplitOut {
     const isMe = fromId === C.DC_CONTACT_ID_SELF
     const setupCodeBegin = msg.getSetupcodebegin()
     const contact = fromId && this._controller.contacts.getContact(fromId)
+    const direction = (isMe ? 'outgoing' : 'incoming') as
+      | 'outgoing'
+      | 'incoming'
 
     const jsonMSG = msg.toJson()
 
@@ -141,7 +144,7 @@ export default class DCMessageList extends SplitOut {
       msg: Object.assign(jsonMSG, {
         sentAt: jsonMSG.timestamp * 1000,
         receivedAt: jsonMSG.receivedTimestamp * 1000,
-        direction: (isMe ? 'outgoing' : 'incoming') as 'outgoing' | 'incoming',
+        direction,
         status: convertMessageStatus(jsonMSG.state),
         attachment,
       }),

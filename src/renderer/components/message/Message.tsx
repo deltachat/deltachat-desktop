@@ -288,22 +288,25 @@ const Message = (props: {
 
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
+    console.log('xxx', message.msg.direction, message.contact.displayName)
     return (
       <div className='videochat-invitation'>
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
-        <AvatarFromContact
-          contact={message.contact}
-          onClick={onContactClick}
-        />
+        <AvatarFromContact contact={message.contact} onClick={onContactClick} />
         <div className='break' />
-        <div className='info-button' onClick={joinCall.bind(null, screenContext, id)}>
-          {tx('videochat_contact_invited_hint', message.contact.displayName)}
-          <div
-            className='join-button'
-          >
-            {direction === 'incoming' ? tx('videochat_tap_to_join') : tx('rejoin')}
+        <div
+          className='info-button'
+          onClick={joinCall.bind(null, screenContext, id)}
+        >
+          {direction === 'incoming'
+            ? tx('videochat_contact_invited_hint', message.contact.displayName)
+            : tx('videochat_you_invited_hint')}
+          <div className='join-button'>
+            {direction === 'incoming'
+              ? tx('videochat_tap_to_join')
+              : tx('rejoin')}
           </div>
         </div>
       </div>

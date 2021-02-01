@@ -43,7 +43,7 @@ export function Avatar(props: {
     isVerified,
     large,
     small,
-    onClick
+    onClick,
   } = props
 
   const content = avatarPath ? (
@@ -64,8 +64,12 @@ export function Avatar(props: {
   )
 }
 
-export function AvatarFromContact(props: {contact: DCContact, onClick?: (contact: DCContact) => void}, large?: boolean, small?: boolean) {
-  const {contact, onClick} = props
+export function AvatarFromContact(
+  props: { contact: DCContact; onClick?: (contact: DCContact) => void },
+  large?: boolean,
+  small?: boolean
+) {
+  const { contact, onClick } = props
   return (
     <Avatar
       avatarPath={contact.profileImage}
@@ -75,7 +79,7 @@ export function AvatarFromContact(props: {contact: DCContact, onClick?: (contact
       isVerified={contact.isVerified}
       large={large === true}
       small={small === true}
-      onClick={() => onClick && onClick(contact) }
+      onClick={() => onClick && onClick(contact)}
     />
   )
 }

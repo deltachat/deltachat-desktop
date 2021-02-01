@@ -1,13 +1,12 @@
 .icon {
-	display: block;
-	width: 48px;
-	height: 48px;
+  display: block;
+  width: 48px;
+  height: 48px;
 
-	&.videocamera {
-		background-image: url("../images/videocamera.svg");
-		background-repeat: no-repeat;
-		margin: 5px;
-		background-size: 38px;
-	}
+  &.videocamera {
+    background-image: url('../images/videocamera.svg');
+    background-repeat: no-repeat;
+    margin: 5px;
+    background-size: 38px;
+  }
 }
-
