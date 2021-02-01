@@ -289,20 +289,21 @@ const Message = (props: {
   let content
   if (message.msg.viewType === C.DC_MSG_VIDEOCHAT_INVITATION) {
     content = (
-      <div dir='auto' className='text'>
-        <div className='call-inc-text'>
-          <b>{tx('videochat_invitation')}</b>
-          <div>
-            <button
-              className='phone-accept-button'
-              onClick={joinCall.bind(null, screenContext, id)}
-            >
-              {direction === 'incoming' ? tx('join') : tx('rejoin')}
-            </button>
-          </div>
-          {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
-            tx('videochat_will_open_in_your_browser')}
+      <div className='videochat-invitation'>
+        <div className='videochat-icon'>
         </div>
+        {Avatar(message.contact, onContactClick)}
+        <b>{tx('videochat_invitation')}</b>
+        <div>
+          <button
+            className='phone-accept-button'
+            onClick={joinCall.bind(null, screenContext, id)}
+          >
+            {direction === 'incoming' ? tx('join') : tx('rejoin')}
+          </button>
+        </div>
+        {message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN &&
+          tx('videochat_will_open_in_your_browser')}
       </div>
     )
   } else {
