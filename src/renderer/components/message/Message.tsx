@@ -28,7 +28,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
-import { Avatar as Avatar2 } from '../Avatar'
+import { Avatar as Avatar2, AvatarFromContact } from '../Avatar'
 // const log = getLogger('renderer/message')
 
 const Avatar = (
@@ -291,8 +291,12 @@ const Message = (props: {
     return (
       <div className='videochat-invitation'>
         <div className='videochat-icon'>
+          <span className='icon videocamera' />
         </div>
-        {Avatar2(message.contact, () => onContactClick(message.contact))}
+        <AvatarFromContact
+          contact={message.contact}
+          onClick={onContactClick}
+        />
         <div className='break' />
         <div className='info-button' onClick={joinCall.bind(null, screenContext, id)}>
           {tx('videochat_contact_invited_hint', message.contact.displayName)}

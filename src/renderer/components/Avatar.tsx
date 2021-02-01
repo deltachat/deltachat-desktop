@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { runtime } from '../runtime'
+import { DCContact } from '../../shared/shared-types'
 
 export function QRAvatar() {
   return (
@@ -32,6 +33,7 @@ export function Avatar(props: {
   small?: boolean
   isVerified?: boolean
   style?: htmlDivProps['style']
+  onClick?: () => void
 }) {
   const {
     avatarPath,
@@ -41,6 +43,7 @@ export function Avatar(props: {
     isVerified,
     large,
     small,
+    onClick
   } = props
 
   const content = avatarPath ? (
@@ -52,11 +55,27 @@ export function Avatar(props: {
   )
 
   return (
-    <div className={classNames('avatar', { large, small })}>
+    <div className={classNames('avatar', { large, small })} onClick={onClick}>
       {content}
       {isVerified && (
         <img className='verified-icon' src='../images/verified.png' />
       )}
     </div>
+  )
+}
+
+export function AvatarFromContact(props: {contact: DCContact, onClick?: (contact: DCContact) => void}, large?: boolean, small?: boolean) {
+  const {contact, onClick} = props
+  return (
+    <Avatar
+      avatarPath={contact.profileImage}
+      color={contact.color}
+      displayName={contact.displayName}
+      addr={contact.address}
+      isVerified={contact.isVerified}
+      large={large === true}
+      small={small === true}
+      onClick={() => onClick && onClick(contact) }
+    />
   )
 }
