@@ -26,9 +26,27 @@ function BackgroundSelector({
     return () => (colorInput.onchange = null)
   }, [])
 
+  const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // opens the color input and sets its offset so it lines up with the button
+    if (colorInput) {
+      const y =
+        (ev.clientY || 0) -
+        (Number(window.getComputedStyle(colorInput).height.replace('px', '')) ||
+          0)
+      colorInput.setAttribute(
+        'style',
+        `position:absolute;top:${y}px;left:${ev.clientX}px;`
+      )
+      setTimeout(() => colorInput.click(), 0)
+    }
+  }
+
   const setValue = (val: string) => onChange(val)
 
-  const onButton = async (type: string, ev: any) => {
+  const onButton = async (
+    type: string,
+    ev: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     let url
     switch (type) {
       case 'def':
@@ -59,13 +77,13 @@ function BackgroundSelector({
           'chatViewBgImg',
           await DeltaBackend.call(
             'settings.saveBackgroundImage',
-            ev.target.dataset.url,
+            (ev.target as any).dataset.url,
             true
           )
         )
         break
       case 'color':
-        colorInput && colorInput.click()
+        openColorInput(ev)
         break
       default:
         /* ignore-console-log */
