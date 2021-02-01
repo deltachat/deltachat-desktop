@@ -141,7 +141,8 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   sendToRenderer(eventType: string, payload?: any) {
-    log.debug('sendToRenderer: ' + eventType, payload)
+    log.debug('sendToRenderer eventType: ' + eventType)
+    //log.debug('sendToRenderer: ' + eventType, payload)
     mainWindow.send('ALL', eventType, payload)
     if (!eventType) {
       log.error(
