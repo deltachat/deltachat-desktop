@@ -28,7 +28,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { useChatStore2, ChatStoreDispatch } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { runtime } from '../../runtime'
-import { Avatar as Avatar2, AvatarFromContact } from '../Avatar'
+import { AvatarFromContact } from '../Avatar'
 // const log = getLogger('renderer/message')
 
 const Avatar = (

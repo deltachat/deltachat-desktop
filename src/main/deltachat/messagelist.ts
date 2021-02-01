@@ -1,4 +1,4 @@
-import { C, MessageViewType } from 'deltachat-node'
+import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 
 const log = getLogger('main/deltachat/messagelist')
