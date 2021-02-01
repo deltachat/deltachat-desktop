@@ -91,16 +91,17 @@ app.once('ready', () => {
     )
 
     const prefix = otherFolder === -1 ? HTML_DIST_DIR : BASE_DIR
+    const path = join(prefix, file.replace(/:$/, ''))
 
     // Fetch resource or source
-    readFile(join(prefix, file.replace(/:$/, '')), (e, b) => {
-      if (e) {
-        log.warn('error while fetching resource', file, e)
+    readFile(path, (err, content) => {
+      if (err) {
+        log.warn('error while fetching resource', file, err)
         cb({ statusCode: 404 })
       } else {
         cb({
           mimeType: lookup(extname(file.replace(/:$/, ''))) || undefined,
-          data: b,
+          data: content,
         })
       }
     })

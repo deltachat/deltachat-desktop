@@ -92,6 +92,41 @@ test('write message', async t => {
   await logout()
 })
 
+test('open settings dialog and close with escape', async t => {
+
+  const SettingsShouldBeOpen = async ()=>{
+    await t
+    .expect(
+      Selector(
+        '.bp3-dialog-header.bp3-dialog-header-border-bottom > .bp3-heading'
+      ).innerText
+    )
+    .eql(await translate('menu_settings'))
+  }
+  const SettingsShouldBeClosed = async ()=>{
+    await t.expect(
+      Selector(
+        '.bp3-dialog-header.bp3-dialog-header-border-bottom > .bp3-heading'
+      ).exists
+    ).notOk()
+  }
+
+  await t.click(accountButton1)
+  // check open via menu
+  await clickAppMenuItem(await translate('menu_settings'))
+  await SettingsShouldBeOpen()
+  // check close via keycombination
+  await t.pressKey('esc')
+  await SettingsShouldBeClosed()
+  // check open via keycombination
+  await t.pressKey('Ctrl+,')
+  await SettingsShouldBeOpen()
+  // check close via close button
+  await t.click(Selector(".SettingsDialog .bp3-dialog-footer-actions > .delta-button").withText((await translate("close")).toUpperCase()))
+  await SettingsShouldBeClosed()
+  await logout()
+})
+
 if (process.env.CI !== 'true') {
   test('Contact request and receive message works', async t => {
     await t

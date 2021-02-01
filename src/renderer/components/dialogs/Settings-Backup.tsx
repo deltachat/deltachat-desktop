@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, Elevation, H5, Intent } from '@blueprintjs/core'
 import { SettingsButton } from './Settings'
-import { OpenDialogOptions } from 'electron'
+import type { OpenDialogOptions } from 'electron'
 import { ipcBackend } from '../../ipc'
 import { DialogProps } from './DialogController'
 import { DeltaDialogBody, DeltaDialogContent, SmallDialog } from './DeltaDialog'
@@ -9,8 +9,6 @@ import { DeltaProgressBar } from '../Login-Styles'
 import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
-
-const { app_getPath } = window.electron_functions
 
 function ExportProgressDialog(props: DialogProps) {
   const userFeedback = window.__userFeedback
@@ -67,7 +65,7 @@ function onBackupExport() {
       }
       const opts: OpenDialogOptions = {
         title: tx('export_backup_desktop'),
-        defaultPath: app_getPath('downloads'),
+        defaultPath: runtime.getAppPath('downloads'),
         properties: ['openDirectory'],
       }
       const destination = await runtime.showOpenFileDialog(opts)
