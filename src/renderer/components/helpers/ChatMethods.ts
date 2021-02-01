@@ -1,11 +1,7 @@
 import { DeltaBackend } from '../../delta-remote'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
-import {
-  ChatListItemType,
-  FullChat,
-  BasicWebRTCOptions,
-} from '../../../shared/shared-types'
+import { ChatListItemType, FullChat } from '../../../shared/shared-types'
 import { MuteDuration } from '../../../shared/constants'
 import { C } from 'deltachat-node/dist/constants'
 import { runtime } from '../../runtime'
@@ -149,52 +145,9 @@ export async function joinCall(
       throw new Error('Message is not a video chat invitation')
     }
 
-    const callURL = message.msg.videochatUrl
-
-    if (message.msg.videochatType === C.DC_VIDEOCHATTYPE_UNKNOWN) {
-      return runtime.openLink(callURL)
-    } else if (message.msg.videochatType == C.DC_VIDEOCHATTYPE_BASICWEBRTC) {
-      // decode call url
-      const hastagPos = callURL.indexOf('#')
-      const socketdomain = callURL.slice(0, hastagPos)
-      const params = parseVars(callURL.slice(hastagPos + 1))
-
-      // validate if everything is there
-      if (!socketdomain || !params['roomname']) {
-        throw new Error('Socketdomain or roomname missing')
-      }
-
-      const options: BasicWebRTCOptions = {
-        socketdomain: btoa(socketdomain),
-        base64domain: true,
-        roomname: params['roomname'],
-        camon: (params['camon'] && JSON.parse(params['camon'])) || false,
-        username: encodeURIComponent(
-          (await DeltaBackend.call('settings.getConfig', 'displayname')) ||
-            (await DeltaBackend.call('settings.getConfig', 'addr')).split(
-              '@'
-            )[0]
-        ),
-      }
-
-      runtime.openCallWindow(options)
-    }
+    return runtime.openLink(message.msg.videochatUrl)
   } catch (error) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })
   }
-}
-
-const parseVars = (str: string) => {
-  if (str.length <= 1) {
-    return {}
-  }
-  const keyValuePairs = str.split('&')
-  const res: { [key: string]: string } = {}
-  for (let i = 0; i < keyValuePairs.length; i++) {
-    const keyValuePair = keyValuePairs[i]
-    const [key, value] = keyValuePair.split('=')
-    res[key] = value
-  }
-  return res
 }

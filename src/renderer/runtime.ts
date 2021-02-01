@@ -1,5 +1,5 @@
 import { ipcBackend } from './ipc'
-import { RC_Config, BasicWebRTCOptions } from '../shared/shared-types'
+import { RC_Config } from '../shared/shared-types'
 import { setLogHandler } from '../shared/logger'
 import type { dialog, app, shell, clipboard } from 'electron'
 import { basename, join } from 'path'
@@ -34,7 +34,6 @@ interface Runtime {
   openLogFile(): void
   getCurrentLogLocation(): string
   openHelpWindow(): void
-  openCallWindow(options: BasicWebRTCOptions): void
   updateBadge(): void
   /**
    * get the comandline arguments
@@ -80,9 +79,6 @@ class Browser implements Runtime {
   async showOpenFileDialog(
     _options: Electron.OpenDialogOptions
   ): Promise<string> {
-    throw new Error('Method not implemented.')
-  }
-  openCallWindow(_options: BasicWebRTCOptions): void {
     throw new Error('Method not implemented.')
   }
   openLink(_link: string): void {
@@ -139,12 +135,6 @@ class Electron implements Runtime {
       ipcBackend.invoke('fileChooser', options)
     ))
     return filePaths && filePaths[0]
-  }
-  async openCallWindow(options: BasicWebRTCOptions): Promise<void> {
-    const optionString = Object.keys(options)
-      .map((key: keyof BasicWebRTCOptions) => key + '=' + options[key])
-      .join('&')
-    ipcBackend.send('call', window.localeData.locale, optionString)
   }
   openLink(link: string): void {
     openExternal(link)

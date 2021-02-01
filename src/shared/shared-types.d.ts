@@ -209,20 +209,6 @@ export type DeltaChatAccount = {
   color: string
 }
 
-// for video hangouts
-export type BasicWebRTCOptions = {
-  /** Change your username shown */
-  username: string
-  /** Change the name of the room */
-  roomname: string
-  /** Start session with cam on */
-  camon: boolean
-  /** Change if you want to use a different socketServer */
-  socketdomain: string
-  /** true if socketDomain is given in base64 format */
-  base64domain: boolean
-}
-
 export declare type QrCodeResponse = {
   state: QrState
   id: number
