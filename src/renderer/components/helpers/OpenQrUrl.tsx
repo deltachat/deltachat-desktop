@@ -177,7 +177,7 @@ function copyContentAlertDialog({
   return (
     <SmallDialog isOpen={isOpen} onClose={onClose}>
       <div className='bp3-dialog-body-with-padding'>
-        <p>{message}</p>
+        <p style={{ wordBreak: 'break-word' }}>{message}</p>
       </div>
       <DeltaDialogFooter style={{ padding: '0px 20px 10px' }}>
         <DeltaDialogFooterActions>
