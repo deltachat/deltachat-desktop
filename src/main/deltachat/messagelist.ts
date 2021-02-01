@@ -175,10 +175,29 @@ export default class DCMessageList extends SplitOut {
     const messages: {
       [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
     } = {}
+    let markMessagesRead: number[] = []
     messageIds.forEach(messageId => {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
-      messages[messageId] = this.messageIdToJson(messageId)
+      const message = this.messageIdToJson(messageId)
+      if (message.msg.direction === 'incoming' && message.msg.state !== C.DC_STATE_IN_SEEN) {
+        markMessagesRead.push(messageId)
+      }
+      messages[messageId] = message 
     })
+    
+    console.log(markMessagesRead)
+    if (markMessagesRead.length > 0) {
+      const chatId = messages[markMessagesRead[0]].msg.chatId
+
+      //chat.freshMessageCounter = 0
+      log.debug(
+        `markMessagesRead ${markMessagesRead.length} messages for chat ${chatId}`
+      )
+      // TODO: move mark seen logic to frontend
+      setTimeout(() => this._dc.markSeenMessages(markMessagesRead))
+      //app.setBadgeCount(this.getGeneralFreshMessageCounter())
+
+    }
     return messages
   }
 
