@@ -7,6 +7,7 @@
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
 - Fix copy of labeled links
 - Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
+- Add missing options (at once, one minute...) for autodelete from server
 
 ### Added
 - open message info when clicking on the error status icon of a message
@@ -31,6 +32,7 @@
 - Upgrade electron to version 11
 - use only esbuild for frontend builds (skip typescript build & validation, typescript can now be checked with `npm run test` or `npm run check-types`)
 - ui: make videochat invite messages look like on android
+- ui: overhaul send message button
 
 ### Removed
 - Disable React Devtools as they are broken in the newer electron versions

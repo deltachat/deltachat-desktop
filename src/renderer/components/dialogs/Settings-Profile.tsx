@@ -97,7 +97,7 @@ export function ProfileImageSelector({
       {/* TODO: show anything else when there is no profile image, like the letter avatar */}
       {profilePicture ? (
         <img
-          src={runtime.transformBlobURL(profilePicture)}
+          src={'dc-file://' + profilePicture}
           alt={tx('pref_profile_photo')}
         />
       ) : (

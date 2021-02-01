@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import { runtime } from '../runtime'
 import { DCContact } from '../../shared/shared-types'
 
 export function QRAvatar() {
@@ -47,7 +46,7 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
+    <img className='content' src={'dc-file://' + avatarPath} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
       {avatarInitial(displayName, addr)}

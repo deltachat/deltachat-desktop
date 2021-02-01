@@ -20,8 +20,14 @@ function durationToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
   switch (configValue) {
-    case AutodeleteDuration.OFF:
-      return tx('off')
+    case AutodeleteDuration.NEVER:
+      return tx('never')
+    case AutodeleteDuration.AT_ONCE:
+      return tx('autodel_at_once')
+    case AutodeleteDuration.THIRTY_SECONDS:
+      return tx('after_30_seconds')
+    case AutodeleteDuration.ONE_MINUTE:
+      return tx('after_1_minute')
     case AutodeleteDuration.ONE_HOUR:
       return tx('autodel_after_1_hour')
     case AutodeleteDuration.ONE_DAY:
@@ -118,18 +124,33 @@ export default function SettingsAutodelete(props: any) {
   const { handleDeltaSettingsChange, settings } = props
 
   const tx = useTranslationFunction()
-  const AUTODELETE_DURATION_OPTIONS = [
-    [String(AutodeleteDuration.OFF), tx('off')],
-    [String(AutodeleteDuration.ONE_HOUR), tx('autodel_after_1_hour')],
-    [String(AutodeleteDuration.ONE_DAY), tx('autodel_after_1_day')],
-    [String(AutodeleteDuration.ONE_WEEK), tx('autodel_after_1_week')],
-    [String(AutodeleteDuration.FOUR_WEEKS), tx('autodel_after_4_weeks')],
-    [String(AutodeleteDuration.ONE_YEAR), tx('autodel_after_1_year')],
-  ]
+
+  const AUTODELETE_DURATION_OPTIONS_SERVER = [
+    AutodeleteDuration.NEVER,
+    AutodeleteDuration.AT_ONCE,
+    AutodeleteDuration.THIRTY_SECONDS,
+    AutodeleteDuration.ONE_MINUTE,
+    AutodeleteDuration.ONE_HOUR,
+    AutodeleteDuration.ONE_DAY,
+    AutodeleteDuration.ONE_WEEK,
+    AutodeleteDuration.FOUR_WEEKS,
+    AutodeleteDuration.ONE_YEAR,
+  ].map(value => [String(value), durationToString(value)])
+
+  const AUTODELETE_DURATION_OPTIONS_DEVICE = [
+    AutodeleteDuration.NEVER,
+    AutodeleteDuration.ONE_HOUR,
+    AutodeleteDuration.ONE_DAY,
+    AutodeleteDuration.ONE_WEEK,
+    AutodeleteDuration.FOUR_WEEKS,
+    AutodeleteDuration.ONE_YEAR,
+  ].map(value => [String(value), durationToString(value)])
 
   const onOpenDialog = async (fromServer: boolean) => {
     openDialog(SmallSelectDialog, {
-      values: AUTODELETE_DURATION_OPTIONS,
+      values: fromServer
+        ? AUTODELETE_DURATION_OPTIONS_SERVER
+        : AUTODELETE_DURATION_OPTIONS_DEVICE,
       selectedValue: fromServer
         ? settings['delete_server_after']
         : settings['delete_device_after'],
