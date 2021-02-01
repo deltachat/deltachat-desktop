@@ -86,10 +86,11 @@ app.once('ready', () => {
       return cb({ statusCode: 400 })
     }
 
-    const otherFolder = ALLOWED_FOLDERS.find(folder =>
-      file.startsWith(folder + '/')
+    const otherFolder = ALLOWED_FOLDERS.findIndex(folder =>
+      file.startsWith(folder + sep)
     )
-    const prefix = otherFolder ? BASE_DIR : HTML_DIST_DIR
+
+    const prefix = otherFolder === -1 ? HTML_DIST_DIR : BASE_DIR
     const path = join(prefix, file.replace(/:$/, ''))
 
     // Fetch resource or source
