@@ -11,7 +11,6 @@ import ChatListItem from '../chat/ChatListItem'
 import { useChatList } from '../chat/ChatListHelpers'
 import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
-import { Button } from '@blueprintjs/core'
 import { JsonContact } from '../../../shared/shared-types'
 import { C } from 'deltachat-node/dist/constants'
 import { ScreenContext } from '../../contexts'
@@ -133,12 +132,22 @@ export default function ViewProfile(props: {
                   address={contact.address}
                 />
               </div>
-              <Button
-                style={{ marginLeft: '100px', marginBottom: '30px' }}
-                onClick={onSendMessage}
+              <div
+                style={{
+                  display: 'flex',
+                  margin: '20px 0px',
+                  justifyContent: 'center',
+                }}
               >
-                {tx('send_message')}
-              </Button>
+                <button
+                  aria-label={tx('send_message')}
+                  onClick={onSendMessage}
+                  className={'delta-button-round'}
+                  style={{ marginTop: '0px' }}
+                >
+                  {tx('send_message')}
+                </button>
+              </div>
               <DeltaDialogContentTextSeperator
                 text={tx('profile_shared_chats')}
               />
