@@ -31,7 +31,10 @@ export const enum MuteDuration {
 }
 
 export const enum AutodeleteDuration {
-  OFF = Timespans.ZERO_SECONDS,
+  NEVER = Timespans.ZERO_SECONDS,
+  AT_ONCE = Timespans.ONE_SECOND,
+  THIRTY_SECONDS = Timespans.THIRTY_SECONDS,
+  ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
   ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
   ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
   ONE_WEEK = Timespans.ONE_WEEK_IN_SECONDS,

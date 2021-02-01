@@ -7,6 +7,7 @@
 - handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
 - Fix copy of labeled links
 - Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
+- Add missing options (at once, one minute...) for autodelete from server
 
 ### Added
 - open message info when clicking on the error status icon of a message
