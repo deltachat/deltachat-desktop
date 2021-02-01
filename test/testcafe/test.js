@@ -104,7 +104,7 @@ test('open settings dialog and close with escape', async t => {
     .eql(await translate('menu_settings'))
   }
   const SettingsShouldBeClosed = async ()=>{
-    await t.expect(
+    await t.wait(1000).expect(
       Selector(
         '.bp3-dialog-header.bp3-dialog-header-border-bottom > .bp3-heading'
       ).exists
