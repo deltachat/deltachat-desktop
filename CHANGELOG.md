@@ -35,6 +35,7 @@
 - ui: overhaul send message button
 
 ### Removed
+- Remove intergrated BasicWebRTC, because it was broken and we currently lack the resources to fix and maintain it
 - Disable React Devtools as they are broken in the newer electron versions
 - remove terser minification, the minfication of eslint is sufficient and faster
 
