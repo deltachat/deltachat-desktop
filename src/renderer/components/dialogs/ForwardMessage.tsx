@@ -44,6 +44,7 @@ export default function ForwardMessage(props: {
           value={queryStr}
           placeholder={tx('contacts_enter_name_or_email')}
           autoFocus
+          spellCheck={false}
         />
       </DeltaDialogHeader>
       <div

@@ -214,6 +214,7 @@ export default class ComposerMessageInput extends React.Component<
         placeholder={window.static_translate('write_message_desktop')}
         disabled={this.state.loadingDraft}
         dir='auto'
+        spellCheck={true}
       />
     )
   }
