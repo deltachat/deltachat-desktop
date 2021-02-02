@@ -20,11 +20,11 @@ export default class DCChatList extends SplitOut {
       return null
     }
     if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
-        this._dc.markNoticedChat(chat.id)
-        chat.freshMessageCounter = 0
-        app.setBadgeCount(this.getGeneralFreshMessageCounter())
+      this._dc.markNoticedChat(chat.id)
+      chat.freshMessageCounter = 0
+      app.setBadgeCount(this.getGeneralFreshMessageCounter())
     }
-      
+
     return chat
   }
 
