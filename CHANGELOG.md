@@ -37,6 +37,7 @@
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
+- performance: only mark messages read on the currently fetched page instead of all when selecting a chat
 
 ## [1.14.1] - 2020-12-15
 
