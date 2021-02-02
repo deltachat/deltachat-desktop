@@ -14,6 +14,7 @@
 - add deltachat desktop version & build info to the logfiles
 - Add warn dialog for urls containing punycode
 - add a minimalistic theme featuring an irc like message view
+- Add copy button to qrcode text/url result dialog
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)

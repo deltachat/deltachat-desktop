@@ -84,16 +84,15 @@ export default class DialogController extends React.Component<
     this.closeDialog = this.closeDialog.bind(this)
   }
 
-  openDialog(
-    fnc: DialogId | ((props: DialogProps) => React.ReactElement),
-    additionalProps?: DialogAdditionProps /* infer from component */
+  openDialog<T extends { [key: string]: any }>(
+    fnc: DialogId | ((props: DialogProps & T) => React.ReactElement),
+    additionalProps?: T /* infer from component */
   ) {
     if (typeof fnc === 'string') {
       fnc = allDialogs[fnc]
       if (!fnc) throw new Error(`Dialog with name ${name} does not exist`)
     }
 
-    if (!additionalProps) additionalProps = {}
     log.debug(
       'openDialog: ',
       typeof fnc === 'string' ? fnc : 'Anonymous',
@@ -113,7 +112,7 @@ export default class DialogController extends React.Component<
           [id]: {
             id,
             fnc,
-            additionalProps,
+            additionalProps: additionalProps || {},
           },
         },
       }
