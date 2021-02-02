@@ -38,7 +38,7 @@ export function init(
     webPreferences: {
       nodeIntegration: false,
       preload: defaults.preload,
-      spellcheck: false // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
+      spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
     },
   })
 

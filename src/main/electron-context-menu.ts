@@ -55,7 +55,7 @@ const removeUnusedMenuItems = (
 }
 
 const create = (win: BrowserWindow) => {
-  const enableSpellChecking: boolean = false
+  const enableSpellChecking = false
   const handleContextMenu = (_event: Event, props: todo) => {
     const tx: getMessageFunction = (electron.app as ExtendedAppMainProcess)
       .translate
