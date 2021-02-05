@@ -22,14 +22,9 @@ export default class DCChatList extends SplitOut {
     if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
       this._dc.markNoticedChat(chat.id)
       chat.freshMessageCounter = 0
-      const messagIds = this._controller.messageList.getMessageIds(chatId)
-      log.debug(
-        `markSeenMessages ${messagIds.length} messages for chat ${chatId}`
-      )
-      // TODO: move mark seen logic to frontend
-      setTimeout(() => this._dc.markSeenMessages(messagIds))
       app.setBadgeCount(this.getGeneralFreshMessageCounter())
     }
+
     return chat
   }
 
