@@ -196,3 +196,7 @@ app.on('web-contents-created', (_e, contents) => {
 })
 
 import('./internal-app-schemes')
+
+import contextMenu from './electron-context-menu'
+
+contextMenu()

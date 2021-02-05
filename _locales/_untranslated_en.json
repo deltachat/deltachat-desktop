@@ -52,5 +52,14 @@
   },
   "puny_code_warning_description": {
     "message": "You followed a link which could be misrepresenting characters by using similarly looking ones from different alphabets. Following the link labelled $$originalHostname$$ will lead to $$asciiHostname$$ which is normal for non-Latin characters. If you did not expect such characters this link could be harmful."
+  },
+  "menu_learn_spelling":{
+    "message": "Learn Spelling"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Copy Image"
+  },
+  "no_spellcheck_suggestions_found":{
+    "message": "No Spelling Suggestions found"
   }
 }

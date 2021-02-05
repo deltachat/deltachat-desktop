@@ -194,6 +194,7 @@ function EditGroupInner(props: {
                   onChange={onSearchChange}
                   value={queryStr}
                   placeholder={tx('search')}
+                  spellCheck={false}
                 />
                 {renderAddMemberIfNeeded()}
                 <ContactList2

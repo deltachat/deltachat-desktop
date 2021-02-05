@@ -14,6 +14,7 @@
 - add deltachat desktop version & build info to the logfiles
 - Add warn dialog for urls containing punycode
 - add a minimalistic theme featuring an irc like message view
+- add a context menu for electron (adds copy/paste options to composer #1997, #2047)
 - Add copy button to qrcode text/url result dialog
 
 ### Changed

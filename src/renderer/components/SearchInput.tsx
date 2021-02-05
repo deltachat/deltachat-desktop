@@ -42,6 +42,7 @@ export default function SearchInput(props: {
         value={value}
         className={'search-input ' + className}
         ref={props.inputRef}
+        spellCheck={false}
       />
       <ClearButton value={value} onChange={onChange} />
     </>

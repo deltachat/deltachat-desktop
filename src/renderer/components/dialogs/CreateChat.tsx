@@ -121,6 +121,7 @@ export default function CreateChat(props: {
               value={queryStr}
               placeholder={tx('contacts_enter_name_or_email')}
               autoFocus
+              spellCheck={false}
             />
           </DeltaDialogHeader>
           <DeltaDialogBody>
@@ -277,6 +278,7 @@ export const GroupSettingsSetNameAndProfileImage = ({
             top: '-7px',
             position: 'relative',
           }}
+          spellCheck={false}
         />
       </div>
       {errorMissingGroupName && (
@@ -344,6 +346,7 @@ export function AddMemberInnerDialog({
             value={queryStr}
             placeholder={tx('search')}
             autoFocus
+            spellCheck={false}
           />
           <div className='group-member-contact-list-wrapper'>
             <ContactList2
@@ -535,6 +538,7 @@ function CreateGroupInner(props: {
                   onChange={onSearchChange}
                   value={queryStr}
                   placeholder={tx('search')}
+                  spellCheck={false}
                 />
                 {renderAddMemberIfNeeded()}
                 <ContactList2
