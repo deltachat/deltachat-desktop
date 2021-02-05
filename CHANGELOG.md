@@ -2,19 +2,13 @@
 
 ## [Unreleased][unreleased]
 
-### Fixed
-- show right default background for theme in background preview in settings
-- handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
-- Fix copy of labeled links
-- Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
-- Add missing options (at once, one minute...) for autodelete from server
-
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
 - Add warn dialog for urls containing punycode
 - add a minimalistic theme featuring an irc like message view
 - Add copy button to qrcode text/url result dialog
+- Add a confirmation dialog when starting a new videochat
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
@@ -43,6 +37,11 @@
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
 - performance: only mark messages read on the currently fetched page instead of all when selecting a chat
+- show right default background for theme in background preview in settings
+- handle invalid theme metadata better (don't display no themes anymore when one has invalid metadata)
+- Fix copy of labeled links
+- Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
+- Add missing options (at once, one minute...) for autodelete from server
 
 ## [1.14.1] - 2020-12-15
 
