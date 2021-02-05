@@ -6,7 +6,6 @@ import { LogHandler } from './log-handler'
 import { ExtendedAppMainProcess } from './types'
 import * as mainWindow from './windows/main'
 import { openHelpWindow } from './windows/help'
-import { openCallWindow } from './windows/call'
 
 const log = getLogger('main/ipc')
 const DeltaChatController: typeof import('./deltachat/controller').default = (() => {
@@ -100,10 +99,6 @@ export function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('help', async (_ev, locale) => {
     await openHelpWindow(locale)
-  })
-
-  ipcMain.on('call', async (_ev, locale, options: string) => {
-    await openCallWindow(locale, options)
   })
 
   ipcMain.on('reload-main-window', () => {

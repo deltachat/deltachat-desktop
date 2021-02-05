@@ -230,7 +230,7 @@ const Message = (props: {
   ) => void = event => {
     const target = event.target as HTMLAnchorElement
     const link: string =
-      target?.getAttribute('x-custom-url') || target?.href || ''
+      target?.getAttribute('x-target-url') || target?.href || ''
     const items = buildContextMenu(
       {
         attachment,

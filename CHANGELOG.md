@@ -15,6 +15,7 @@
 - Add warn dialog for urls containing punycode
 - add a minimalistic theme featuring an irc like message view
 - add a context menu for electron (adds copy/paste options to composer #1997, #2047)
+- Add copy button to qrcode text/url result dialog
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
@@ -36,6 +37,7 @@
 - ui: overhaul send message button
 
 ### Removed
+- Remove intergrated BasicWebRTC, because it was broken and we currently lack the resources to fix and maintain it
 - Disable React Devtools as they are broken in the newer electron versions
 - remove terser minification, the minfication of eslint is sufficient and faster
 
