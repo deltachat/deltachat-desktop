@@ -78,7 +78,7 @@ export const LabeledLink = ({
   return (
     <a
       href={'#' + target}
-      x-custom-url={target}
+      x-target-url={target}
       title={url.toString()}
       onClick={onClick}
     >
@@ -180,7 +180,7 @@ export const Link = ({ target }: { target: string }) => {
   return (
     <a
       href='#'
-      {...{ 'x-target': asciiUrl }}
+      {...{ 'x-target-url': asciiUrl }}
       title={asciiUrl}
       onClick={onClick}
     >
