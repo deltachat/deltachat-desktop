@@ -178,7 +178,7 @@ export default class DCMessageList extends SplitOut {
     const messages: {
       [key: number]: ReturnType<typeof DCMessageList.prototype.messageIdToJson>
     } = {}
-    let markMessagesRead: number[] = []
+    const markMessagesRead: number[] = []
     messageIds.forEach(messageId => {
       if (messageId <= C.DC_MSG_ID_LAST_SPECIAL) return
       const message = this.messageIdToJson(messageId)
