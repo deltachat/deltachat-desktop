@@ -1,6 +1,7 @@
 .delta-dialog {
   &.small-dialog {
-    width: 350px !important;
+    min-width: 350px !important;
+    max-width: 70vw;
     padding-bottom: 0px !important;
     background-color: var(--bp3DialogBgPrimary) !important;
     .bp3-dialog-footer {

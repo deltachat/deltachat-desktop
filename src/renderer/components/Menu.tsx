@@ -66,6 +66,21 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
     screenContext.openDialog('DisappearingMessages', {
       chatId: selectedChat.id,
     })
+  const onVideoChat = () => {
+    screenContext.openDialog('ConfirmationDialog', {
+      header: tx(
+        'videochat_invite_user_to_videochat',
+        selectedChat.contacts[0]?.displayName
+      ),
+      message: tx('videochat_invite_user_hint'),
+      confirmLabel: tx('ok'),
+      cb: (yes: boolean) => {
+        if (yes) {
+          sendCallInvitation(screenContext, selectedChat.id)
+        }
+      },
+    })
+  }
   const logout = () => {
     if (selectedChat) {
       chatStoreDispatch({ type: 'UI_UNSELECT_CHAT' })
@@ -112,9 +127,7 @@ export default function DeltaMenu(props: { selectedChat: FullChat }) {
           <DeltaMenuItem
             key='call'
             text={tx('videochat')}
-            onClick={() => {
-              sendCallInvitation(screenContext, selectedChat.id)
-            }}
+            onClick={onVideoChat}
           />
         ),
       <DeltaMenuItem
