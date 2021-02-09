@@ -253,6 +253,10 @@ chatStore.attachEffect(async ({ type, payload }, state) => {
       payload[0],
       payload[1]
     )
+
+    // Workaround for failed messages
+    if (messageObj[0] === 0) return
+    console.log('xxx', messageObj)
     chatStore.dispatch({
       type: 'MESSAGE_SENT',
       payload: messageObj,
@@ -296,7 +300,22 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
   })
 })
 
-ipcBackend.on('DC_EVENT_MSG_FAILED', (_evt, [chatId, msgId]) => {
+ipcBackend.on('DC_EVENT_MSG_FAILED', async (_evt, [chatId, msgId]) => {
+  const state = chatStore.getState()
+  if (state.id !== chatId) return
+  if (!state.messageIds.includes(msgId)) {
+    // Hacking around https://github.com/deltachat/deltachat-desktop/issues/1361#issuecomment-776291299
+    const messageObj = [msgId, await DeltaBackend.call(
+      'messageList.getMessage',
+      msgId
+    )]
+    chatStore.dispatch({
+      type: 'MESSAGE_SENT',
+      payload: messageObj,
+      id: chatId,
+    })
+
+  }
   chatStore.dispatch({
     type: 'MESSAGE_FAILED',
     id: chatId,
