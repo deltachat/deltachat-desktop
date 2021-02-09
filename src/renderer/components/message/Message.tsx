@@ -104,6 +104,29 @@ const Author = (
   )
 }
 
+const ForwardedTitle = (
+  contact: DCContact,
+  onContactClick: (contact: DCContact) => void,
+  direction: string,
+  conversationType: string
+) => {
+  const tx = useTranslationFunction()
+
+  return (
+    <div
+      className={classNames('forwarded-indicator', {
+        'forwarded-by': direction !== 'outoing',
+      })}
+      style={{ color: direction !== 'outgoing' ? contact.color : '' }}
+      onClick={() => direction !== 'outgoing' && onContactClick(contact)}
+    >
+      {conversationType === 'group' && direction !== 'outgoing'
+        ? tx('forwared_by', contact.displayName)
+        : tx('forwarded_message')}
+    </div>
+  )
+}
+
 function buildContextMenu(
   {
     attachment,
@@ -353,17 +376,23 @@ const Message = (props: {
         className='msg-container'
         style={{ borderColor: message.contact.color }}
       >
-        {message.msg.isForwarded && (
-          <div className='forwarded-indicator'>{tx('forwarded_message')}</div>
+        {message.msg.isForwarded &&
+          ForwardedTitle(
+            message.contact,
+            onContactClick,
+            direction,
+            conversationType
+          )}
+        {!message.msg.isForwarded && (
+          <div
+            className={classNames('author-wrapper', {
+              'can-hide':
+                direction === 'outgoing' || conversationType === 'direct',
+            })}
+          >
+            {Author(message.contact, onContactClick)}
+          </div>
         )}
-        <div
-          className={classNames('author-wrapper', {
-            'can-hide':
-              direction === 'outgoing' || conversationType === 'direct',
-          })}
-        >
-          {Author(message.contact, onContactClick)}
-        </div>
         <div
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,

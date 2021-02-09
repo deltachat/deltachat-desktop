@@ -61,5 +61,8 @@
   },
   "no_spellcheck_suggestions_found":{
     "message": "No Spelling Suggestions found"
+  },
+  "forwared_by": {
+    "message": "Forwarded by %1$s"
   }
 }
