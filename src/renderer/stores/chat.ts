@@ -300,7 +300,7 @@ ipcBackend.on('DC_EVENT_MSG_FAILED', (_evt, [chatId, msgId]) => {
   chatStore.dispatch({
     type: 'MESSAGE_FAILED',
     id: chatId,
-    payload: msgId
+    payload: msgId,
   })
 })
 
