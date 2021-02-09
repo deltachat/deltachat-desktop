@@ -128,6 +128,18 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
       },
     }
     return { ...state, messages }
+  } else if (type === 'MESSAGE_FAILED') {
+    const messages = {
+      ...state.messages,
+      [payload]: {
+        ...state.messages[payload],
+        msg: {
+          ...state.messages[payload].msg,
+          status: 'error',
+        },
+      },
+    }
+    return { ...state, messages }
   } else if (type === 'MESSAGE_READ') {
     const messages = {
       ...state.messages,
@@ -281,6 +293,14 @@ ipcBackend.on('DC_EVENT_MSG_DELIVERED', (_evt, [id, msgId]) => {
     type: 'MESSAGE_DELIVERED',
     id,
     payload: msgId,
+  })
+})
+
+ipcBackend.on('DC_EVENT_MSG_FAILED', (_evt, [chatId, msgId]) => {
+  chatStore.dispatch({
+    type: 'MESSAGE_FAILED',
+    id: chatId,
+    payload: msgId
   })
 })
 
