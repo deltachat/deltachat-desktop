@@ -39,6 +39,12 @@
     <string name="profile">Profil</string>
     <string name="main_menu">Ana menü</string>
     <string name="start_chat">Sohbete başla</string>
+    <string name="show_full_message">Tam iletiyi göster…</string>
+    <string name="load_remote_content">Uzak görselleri yükle</string>
+    <!-- possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">Uzak görseller sizi izlemek için kullanılabilir.\n\nAyar, yazı tiplerinin ve diğer içeriğin de yüklenmesine izin verir. Etkisizleştirildiyse bile katıştırılan ya da önbelleklenen görselleri hâlâ görebilirsiniz.\n\nUzak görseller yüklensin mi?</string>
+    <string name="always">Her zaman</string>
+    <string name="once">Bir kez</string>
     <string name="show_password">Parolayı göster</string>
     <string name="hide_password">Parolayı gizle</string>
     <string name="not_now">Şimdi değil</string>
@@ -187,6 +193,7 @@
     <string name="menu_scroll_to_top">Üste kaydır</string>
     <string name="menu_help">Yardım</string>
     <string name="menu_select_all">Tümünü seç</string>
+    <string name="select_more">Daha fazlasını seç</string>
     <string name="menu_expand">Genişlet</string>
     <string name="menu_edit_name">Adı düzenle</string>
     <string name="menu_settings">Ayarlar</string>
@@ -413,8 +420,8 @@
     <!-- share and forward messages -->
     <!-- Translators: Title shown above a chat/contact list; the user selects the recipient of the messages he wants to forward to -->
     <string name="forward_to">İlet…</string>
-    <string name="share_multiple_attachments">%1$d dosya seçilen sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; örn. görseller ve videolar yeniden kodlanmaz.</string>
-    <string name="share_multiple_attachments_multiple_chats">%1$d dosya %2$d sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; örn. görseller ve videolar yeniden kodlanmaz.</string>
+    <string name="share_multiple_attachments">%1$d dosya seçilen sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; ör. görseller ve videolar yeniden kodlanmaz.</string>
+    <string name="share_multiple_attachments_multiple_chats">%1$d dosya %2$d sohbete gönderilsin mi?\n\nDosyalar, değiştirilmeden özgün boyutlarında gönderilir; ör. görseller ve videolar yeniden kodlanmaz.</string>
     <string name="share_text_multiple_chats">Bu metin %1$d sohbete gönderilsin mi?\n\n\"%2$s\"</string>
     <string name="share_abort">Eksik izinlerden dolayı paylaşımdan vazgeçildi.</string>
 
@@ -551,10 +558,13 @@
     <string name="autodel_at_once">Bir kerede</string>
     <string name="after_30_seconds">30 saniye sonra</string>
     <string name="after_1_minute">1 dakika sonra</string>
+    <string name="after_5_minutes">5 dakika sonra</string>
+    <string name="after_30_minutes">30 dakika sonra</string>
     <string name="autodel_after_1_hour">1 saat sonra</string>
     <string name="autodel_after_1_day">1 gün sonra</string>
     <string name="autodel_after_1_week">1 hafta sonra</string>
     <string name="autodel_after_4_weeks">4 hafta sonra</string>
+    <string name="after_5_weeks">5 hafta sonra</string>
     <string name="autodel_after_1_year">1 yıl sonra</string>
 
     <!-- autocrypt -->
@@ -600,6 +610,10 @@
     <string name="systemmsg_ephemeral_timer_day">Kaybolan iletiler zamanlayıcısı 1 güne ayarlandı.</string>
     <string name="systemmsg_ephemeral_timer_week">Kaybolan iletiler zamanlayıcısı 1 haftaya ayarlandı.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Kaybolan iletiler zamanlayıcısı 4 haftaya ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_minutes">Kaybolan iletiler zamanlayıcısı %1$s dakikaya ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_hours">Kaybolan iletiler zamanlayıcısı %1$s saate ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_days">Kaybolan iletiler zamanlayıcısı %1$s güne ayarlandı.</string>
+    <string name="systemmsg_ephemeral_timer_weeks">Kaybolan iletiler zamanlayıcısı %1$s haftaya ayarlandı.</string>
 
     <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
     <string name="systemmsg_chat_protection_disabled">Sohbet koruması etkisizleştirildi.</string>
