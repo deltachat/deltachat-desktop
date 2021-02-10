@@ -12,7 +12,8 @@ async function gatherBuildInfo() {
   let git_describe, git_branch;
   try {
     git_describe = gatherProcessStdout('git', ['describe'])
-    git_branch = gatherProcessStdout('git', ['symbolic-ref', 'HEAD']).split('/').pop()
+    console.log(process.env.GITHUB_REF)
+    git_branch = (process.env.GITHUB_REF ? process.env.GITHUB_REF : gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])).split('/').pop()
     
   } catch (err) {
     console.log(err)
