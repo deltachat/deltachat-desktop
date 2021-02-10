@@ -45,6 +45,7 @@
 - Fix hard to alter text in the middle of "Video chat instance" input field (see #2016)
 - Add missing options (at once, one minute...) for autodelete from server
 - Update failed messages also in messagelist
+- Fix crash on upgrading from v1.12 or earlier
 
 ## [1.14.1] - 2020-12-15
 
