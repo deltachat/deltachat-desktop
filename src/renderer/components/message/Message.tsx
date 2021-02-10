@@ -114,11 +114,8 @@ const ForwardedTitle = (
 
   return (
     <div
-      className={classNames('forwarded-indicator', {
-        'forwarded-by': direction !== 'outoing',
-      })}
-      style={{ color: direction !== 'outgoing' ? contact.color : '' }}
-      onClick={() => direction !== 'outgoing' && onContactClick(contact)}
+      className='forwarded-indicator'
+      onClick={() => onContactClick(contact)}
     >
       {conversationType === 'group' && direction !== 'outgoing'
         ? tx('forwared_by', contact.displayName)
