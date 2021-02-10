@@ -154,12 +154,15 @@ async function _getAccountSize(path: string) {
   if (blob_files.length > 0) {
     const blob_file_sizes = await Promise.all(
       blob_files.map(
-        async blob_file => (await fs.stat(join(path, 'db.sqlite-blobs', blob_file))).size
+        async blob_file =>
+          (await fs.stat(join(path, 'db.sqlite-blobs', blob_file))).size
       )
     )
-    blob_size = blob_file_sizes.reduce((totalSize, currentBlobSize) => totalSize + currentBlobSize)
+    blob_size = blob_file_sizes.reduce(
+      (totalSize, currentBlobSize) => totalSize + currentBlobSize
+    )
   }
-  
+
   return db_size + blob_size
 }
 
