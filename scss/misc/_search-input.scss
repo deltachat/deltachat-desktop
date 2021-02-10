@@ -45,7 +45,6 @@ input#chat-list-search {
   z-index: 10;
   left: calc(30vw - 25px);
   &:before {
-    color: var(--textNavBar) !important;
     font-weight: normal !important;
     font-size: medium !important;
   }

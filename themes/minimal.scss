@@ -325,3 +325,8 @@ div.group-image-wrapper div.group-image-edit-button {
     background-color: unset;
   }
 }
+
+
+.bp3-navbar-group > .clear-button:before {
+  color: var(--textNavBar) !important;
+}
