@@ -13,7 +13,7 @@
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
-- update translations (mid dezember 2020)
+- update translations (10.02.2020)
 - add Farsi translation
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
