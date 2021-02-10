@@ -555,6 +555,7 @@
     <string name="autodel_after_1_day">Après 1 jour</string>
     <string name="autodel_after_1_week">Après 1 semaine</string>
     <string name="autodel_after_4_weeks">Après 4 semaines</string>
+    <string name="after_5_weeks">Après 5 semaines</string>
     <string name="autodel_after_1_year">Après 1 année</string>
 
     <!-- autocrypt -->
@@ -600,7 +601,6 @@
     <string name="systemmsg_ephemeral_timer_day">Temporisation des messages éphémères réglée à 1 journée.</string>
     <string name="systemmsg_ephemeral_timer_week">Temporisation des messages éphémères réglée à 1 semaine.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Temporisation des messages éphémères réglée à 4 semaines.</string>
-
     <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
     <string name="systemmsg_chat_protection_disabled">Protection de la discussion désactivée.</string>
     <string name="systemmsg_chat_protection_enabled">Protection de la discussion activée.</string>

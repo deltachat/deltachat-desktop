@@ -39,6 +39,12 @@
     <string name="profile">Profile</string>
     <string name="main_menu">Main menu</string>
     <string name="start_chat">Start chat</string>
+    <string name="show_full_message">Show full message…</string>
+    <string name="load_remote_content">Load remote images</string>
+    <!-- possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">Remote images can be used to track you.\n\nThe setting also allows loading fonts and other content. Even if it is disabled, you may still see embedded or cached images.\n\nLoad remote images?</string>
+    <string name="always">Always</string>
+    <string name="once">Once</string>
     <string name="show_password">Show password</string>
     <string name="hide_password">Hide password</string>
     <string name="not_now">Not now</string>
@@ -179,6 +185,8 @@
     <!-- menu entry that opens eg. a gallery image or a document in the chat at the correct position -->
     <string name="show_in_chat">Show in chat</string>
     <string name="menu_share">Share</string>
+    <!-- this is the action "to block sth." usually a mailing list or a contact. this is NOT "a large solid piece of hard material" :) -->
+    <string name="block">Block</string>
     <string name="menu_block_contact">Block contact</string>
     <string name="menu_unblock_contact">Unblock contact</string>
     <string name="menu_play">Play</string>
@@ -187,6 +195,7 @@
     <string name="menu_scroll_to_top">Scroll to the top</string>
     <string name="menu_help">Help</string>
     <string name="menu_select_all">Select all</string>
+    <string name="select_more">Select more</string>
     <string name="menu_expand">Expand</string>
     <string name="menu_edit_name">Edit name</string>
     <string name="menu_settings">Settings</string>
@@ -323,6 +332,11 @@
     <string name="messaging_disabled_deaddrop">Click on a message to accept or deny the contact request</string>
     <string name="cannot_display_unsuported_file_type">Cannot display this file type: %s</string>
     <string name="attachment_failed_to_load">Failed to load attachment</string>
+
+
+    <!-- mailing lists -->
+    <string name="mailing_list">Mailing list</string>
+    <string name="ask_show_mailing_list">Show mailing list \"%1$s\"?</string>
 
 
     <!-- map -->
@@ -551,10 +565,13 @@
     <string name="autodel_at_once">At once</string>
     <string name="after_30_seconds">After 30 seconds</string>
     <string name="after_1_minute">After 1 minute</string>
+    <string name="after_5_minutes">After 5 minutes</string>
+    <string name="after_30_minutes">After 30 minutes</string>
     <string name="autodel_after_1_hour">After 1 hour</string>
     <string name="autodel_after_1_day">After 1 day</string>
     <string name="autodel_after_1_week">After 1 week</string>
     <string name="autodel_after_4_weeks">After 4 weeks</string>
+    <string name="after_5_weeks">After 5 weeks</string>
     <string name="autodel_after_1_year">After 1 year</string>
 
     <!-- autocrypt -->
@@ -600,6 +617,10 @@
     <string name="systemmsg_ephemeral_timer_day">Disappearing messages timer set to 1 day.</string>
     <string name="systemmsg_ephemeral_timer_week">Disappearing messages timer set to 1 week.</string>
     <string name="systemmsg_ephemeral_timer_four_weeks">Disappearing messages timer set to 4 weeks.</string>
+    <string name="systemmsg_ephemeral_timer_minutes">Disappearing messages timer set to %1$s minutes.</string>
+    <string name="systemmsg_ephemeral_timer_hours">Disappearing messages timer set to %1$s hours.</string>
+    <string name="systemmsg_ephemeral_timer_days">Disappearing messages timer set to %1$s days.</string>
+    <string name="systemmsg_ephemeral_timer_weeks">Disappearing messages timer set to %1$s weeks.</string>
 
     <!-- Translators: Protection disabled/enabled messages may be displayed together with a "big shield" and may be suffixed by systemmsg_action_by_user or systemmsg_action_by_me -->
     <string name="systemmsg_chat_protection_disabled">Chat protection disabled.</string>

@@ -13,7 +13,7 @@
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
-- update translations (mid dezember 2020)
+- update translations (10.02.2020)
 - add Farsi translation
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
@@ -29,6 +29,7 @@
 - use only esbuild for frontend builds (skip typescript build & validation, typescript can now be checked with `npm run test` or `npm run check-types`)
 - ui: make videochat invite messages look like on android
 - ui: overhaul send message button
+- ux: indicate who forwarded the message in groups
 
 ### Removed
 - Remove intergrated BasicWebRTC, because it was broken and we currently lack the resources to fix and maintain it
