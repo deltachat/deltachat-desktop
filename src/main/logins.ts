@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 //@ts-ignore
 import DeltaChat, { C } from 'deltachat-node'
 import { getLogger } from '../shared/logger'
-const log = getLogger('main/find_logins')
+const log = getLogger('main/logins')
 import { getAccountsPath, getConfigPath } from './application-constants'
 import { DeltaChatAccount } from '../shared/shared-types'
 
@@ -41,7 +41,7 @@ async function migrate(dir: string) {
         continue
       }
     }
-    log.info(`moved ${oldAccounts} accounts to accounts folder`)
+    log.info(`moved ${oldAccounts.length} accounts to accounts folder`)
   }
 }
 
@@ -74,7 +74,7 @@ export async function getAccountInfo(path: string): Promise<DeltaChatAccount> {
       color: config.color,
     }
   } catch (error) {
-    log.error(`Account ${path} is inaccessible`, error)
+    log.error(`Account ${path} is inaccessible`, error?.message, error)
     return null
   }
 }
@@ -112,6 +112,7 @@ async function findInvalidDeltaAccounts() {
     const dc = new DeltaChat()
     await dc.open(dir)
     const isConfigured = dc.isConfigured()
+    dc.close()
     return { isConfigured, path: dir }
   }
 
@@ -142,19 +143,27 @@ async function getConfig(
       config['color'] = dc.getContact(C.DC_CONTACT_ID_SELF).color
     }
   }
+  dc.close()
   return config
 }
 
 async function _getAccountSize(path: string) {
   const db_size = (await fs.stat(join(path, 'db.sqlite'))).size
-  const blobs = await fs.readdir(join(path, 'db.sqlite-blobs'))
-  const sizes = await Promise.all(
-    blobs.map(
-      async blob => (await fs.stat(join(path, 'db.sqlite-blobs', blob))).size
+  const blob_files = await fs.readdir(join(path, 'db.sqlite-blobs'))
+  let blob_size = 0
+  if (blob_files.length > 0) {
+    const blob_file_sizes = await Promise.all(
+      blob_files.map(
+        async blob_file =>
+          (await fs.stat(join(path, 'db.sqlite-blobs', blob_file))).size
+      )
     )
-  )
+    blob_size = blob_file_sizes.reduce(
+      (totalSize, currentBlobSize) => totalSize + currentBlobSize
+    )
+  }
 
-  return db_size + sizes.reduce((a, b) => a + b)
+  return db_size + blob_size
 }
 
 export async function removeAccount(accountPath: string) {
