@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.15.0] - 2021-02-11
+
 ### Added
 - open message info when clicking on the error status icon of a message
 - add deltachat desktop version & build info to the logfiles
@@ -34,7 +36,7 @@
 ### Removed
 - Remove intergrated BasicWebRTC, because it was broken and we currently lack the resources to fix and maintain it
 - Disable React Devtools as they are broken in the newer electron versions
-- remove terser minification, the minfication of eslint is sufficient and faster
+- remove terser minification, the minfication of esbuild is sufficient and faster
 
 ### Fixed
 - correctly display RTL text inside of the message input field (see #2036)
@@ -1101,7 +1103,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.0...HEAD
+
+[1.15.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...v1.15.0
 
 [1.14.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...v1.14.1
 

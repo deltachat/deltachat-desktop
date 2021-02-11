@@ -144,16 +144,16 @@ export default class DCLoginController extends SplitOut {
     this._controller.hintUpdateIfNessesary()
 
     this._dc.addDeviceMessage(
-      'changelog-version-1.14.0-0',
-      `Changes in 1.14
+      'changelog-version-1.15.0-12',
+      `Changes in 1.15
 
-🦾 Add support for new emojis
-✨ Various UI improvements
-↪️ Add Quotes - You can now reply to messages
-🗕 Minimize to Tray
-👻 Many Bugfixes and stability improvements
+🐭 Message bar is now focused automagically. This saves you time and probably lots of mouse kilometers ;)
+👁️ You're looking for a less distracting experience? Give the new “Minimal“ theme a try
+🦋 Support for languages written from right to left, added translations for فارسی (Farsi) 
+✨ We polished the UI, fixed bugs and improved performance 
 
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11400---2020-11-24)` as any
+
+[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/master/CHANGELOG.md#11500---2020-02-11)` as any
     )
   }
 
