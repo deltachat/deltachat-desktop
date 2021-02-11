@@ -74,7 +74,7 @@ sudo pacman -U deltachat-desktop-git-<version>.tar.xz
 ### Homebrew
 
 ```
-brew cask install deltachat
+$ brew install --cask deltachat
 ```
 
 ### DMG
