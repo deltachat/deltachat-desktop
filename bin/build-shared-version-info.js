@@ -14,7 +14,7 @@ async function gatherBuildInfo() {
     git_describe = gatherProcessStdout('git', ['describe'])
 
 
-    git_symbolic_ref = process.env.GITHUB_REF ? process.env.GITHUB_REF : gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
+    git_symbolic_ref = process.env.GITHUB_HEAD_REF ? process.env.GITHUB_HEAD_REF : gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
     git_branch = git_symbolic_ref.split('/').pop()	
     console.log(git_symbolic_ref, git_branch)
     
