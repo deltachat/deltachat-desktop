@@ -155,6 +155,8 @@ chatStore.attachReducer(({ type, payload, id }, state) => {
   } else if (type === 'SET_MESSAGE_IDS') {
     const messageIds = payload
     return { ...state, messageIds }
+  } else if (type === 'SHOW_MESSAGE_LIST') {
+    return { ...state, scrollToBottom: true }
   }
   return state
 })
