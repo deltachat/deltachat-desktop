@@ -2,14 +2,28 @@ const { spawnSync } = require('child_process')
 const fs = require('fs-extra')
 const { join } = require('path')
 
+function gatherProcessStdout(cmd, args) {
+  const { status, stdout, stderr } = spawnSync(cmd, args)
+  if (status !== 0) throw new Error(stderr)
+  return stdout.toString().replace(/\n/g, '')
+}
+
 async function gatherBuildInfo() {
-  const { status, stdout, stderr } = spawnSync('git', ['describe'])
-  let git_ref = "None"
-  if (status !== 0) {
-    console.log(stderr)
-  } else {
-    git_ref = stdout.toString().replace(/\n/g, '')
+  let git_describe, git_branch;
+  try {
+    git_describe = gatherProcessStdout('git', ['describe'])
+
+    git_symbolic_ref = process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF || gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
+    git_branch = git_symbolic_ref.split('/').pop()
+    console.log(git_symbolic_ref, git_branch)
+    
+  } catch (err) {
+    console.log(err)
+    process.exit(1)
   }
+
+  const git_ref = git_describe + (git_branch === 'master' ? '' : '-' + git_branch)
+
   const package = await fs.readJSON(join(__dirname, '../package.json'))
   return {
     VERSION: package.version,
