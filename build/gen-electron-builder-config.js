@@ -80,8 +80,8 @@ build['protocols'] = {
 build['files'] = files
 build['asarUnpack'] = ['node_modules/deltachat-node/']
 
-build['afterPack'] = 'build/afterPackHook.js'
-build['afterSign'] = 'build/afterSignHook.js'
+build['afterPack'] = './build/afterPackHook.js'
+build['afterSign'] = './build/afterSignHook.js'
 
 if(typeof env.NO_ASAR !== "undefined" && env.NO_ASAR != "false") {
   build['asar'] = false
