@@ -54,8 +54,8 @@
     '!node_modules/deltachat-node/src',
   ],
   asarUnpack: ['node_modules/deltachat-node/'],
-  afterPack: 'build/afterPackHook.js',
-  afterSign: 'build/afterSignHook.js',
+  afterPack: './build/afterPackHook.js',
+  afterSign: './build/afterSignHook.js',
   mac: {
     appId: 'chat.delta.desktop.electron',
     category: 'public.app-category.social-networking',
