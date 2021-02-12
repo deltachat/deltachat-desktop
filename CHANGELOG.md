@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Package Problems
+
+### Changed
+- Update `electron-builder` to `22.9.1`
+- Update `electron-notarize` to `1.0.0`
+
 ## [1.15.0] - 2021-02-11
 
 ### Added
