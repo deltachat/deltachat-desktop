@@ -135,6 +135,18 @@ export default function ViewProfile(props: {
                   address={contact.address}
                 />
               </div>
+              {contact.status != '' && (
+                <div
+                  style={{
+                    display: 'flex',
+                    margin: '20px 0px',
+                    justifyContent: 'center',
+                    color: 'grey',
+                  }}
+                >
+                  <p>{contact.status}</p>
+                </div>
+              )}
               <div
                 style={{
                   display: 'flex',
