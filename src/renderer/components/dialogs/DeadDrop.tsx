@@ -6,6 +6,7 @@ import { DialogProps } from './DialogController'
 import { DCContact, MessageType } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
+import { C } from 'deltachat-node/dist/constants'
 
 /**
  * handle contact requests
@@ -18,26 +19,30 @@ export default function DeadDrop(props: {
   const { contact, msg, onClose } = props
   const chatStoreDispatch = useChatStore()[1]
 
-  const never = () => {
-    DeltaBackend.call('contacts.blockContact', contact.id)
-    chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
-    onClose()
-  }
-
-  const notNow = async () => {
-    const contactId = contact.id
-    await DeltaBackend.call('contacts.markNoticedContact', contactId)
-    onClose()
-  }
-
-  const yes = async () => {
-    const messageId = msg.id
-    const contactId = contact.id
-    const chatId = await DeltaBackend.call('contacts.acceptContactRequest', {
-      messageId,
-      contactId,
-    })
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
+  const decide = async (
+    action:
+      | C.DC_DECISION_START_CHAT
+      | C.DC_DECISION_NOT_NOW
+      | C.DC_DECISION_BLOCK
+  ) => {
+    const chatId = await DeltaBackend.call(
+      'chat.decideOnContactRequest',
+      msg.id,
+      action
+    )
+    // do additional update events so the ui behaves as expected
+    switch (action) {
+      case C.DC_DECISION_START_CHAT:
+        // setTimeOut 0 to render on next iteration of the js event loop
+        // this should prevent the new chatlistitem from being in placeholder mode.
+        setTimeout(() => chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId }), 0)
+        break
+      case C.DC_DECISION_NOT_NOW:
+        break
+      case C.DC_DECISION_BLOCK:
+        chatStoreDispatch({ type: 'UI_DELETE_MESSAGE', payload: msg.id })
+        break
+    }
     onClose()
   }
 
@@ -55,13 +60,22 @@ export default function DeadDrop(props: {
             className={Classes.DIALOG_FOOTER_ACTIONS}
             style={{ justifyContent: 'space-between', marginTop: '7px' }}
           >
-            <p className='delta-button danger' onClick={never}>
+            <p
+              className='delta-button danger'
+              onClick={decide.bind(null, C.DC_DECISION_BLOCK)}
+            >
               {tx('never').toUpperCase()}
             </p>
-            <p className='delta-button' onClick={notNow}>
+            <p
+              className='delta-button'
+              onClick={decide.bind(null, C.DC_DECISION_NOT_NOW)}
+            >
               {tx('not_now').toUpperCase()}
             </p>
-            <p className='delta-button primary' onClick={yes}>
+            <p
+              className='delta-button primary'
+              onClick={decide.bind(null, C.DC_DECISION_START_CHAT)}
+            >
               {tx('yes').toUpperCase()}
             </p>
           </div>
