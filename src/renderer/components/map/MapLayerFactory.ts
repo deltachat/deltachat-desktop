@@ -72,7 +72,7 @@ export default class MapLayerFactory {
           features.push({
             type: 'Feature',
             properties: {
-              contact: contact.firstName,
+              contact: contact.displayName,
               reported: location.timestamp,
               isPoi: location.isIndependent,
               msgId: location.msgId,
