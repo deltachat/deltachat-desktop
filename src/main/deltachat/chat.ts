@@ -116,7 +116,13 @@ export default class DCChat extends SplitOut {
     return await this._dc.sendVideochatInvitation(chatId)
   }
 
-  decideOnContactRequest(messageId: number, decision: C.DC_DECISION_START_CHAT | C.DC_DECISION_NOT_NOW | C.DC_DECISION_BLOCK){
+  decideOnContactRequest(
+    messageId: number,
+    decision:
+      | C.DC_DECISION_START_CHAT
+      | C.DC_DECISION_NOT_NOW
+      | C.DC_DECISION_BLOCK
+  ) {
     return this._dc.decideOnContactRequest(messageId, decision)
   }
 }

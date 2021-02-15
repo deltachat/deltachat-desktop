@@ -35,7 +35,10 @@ export default function DeadDrop(props: {
       case C.DC_DECISION_START_CHAT:
         // setTimeOut 0 to render on next iteration of the js event loop
         // this should prevent the new chatlistitem from being in placeholder mode.
-        setTimeout(() => chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId }), 0)
+        setTimeout(
+          () => chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId }),
+          0
+        )
         break
       case C.DC_DECISION_NOT_NOW:
         break

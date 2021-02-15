@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- use new `decideOnContactRequest` api
+
 ### Added
 - add option to open message html in browser
 - encryption info for groups
