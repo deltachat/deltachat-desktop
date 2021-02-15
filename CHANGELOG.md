@@ -7,7 +7,7 @@
 - encryption info for groups
 
 ## Fixed
-- hide show encrytion info for saved messages (resulted in error)
+- hide show encryption info for saved messages (resulted in error)
 
 ## [1.15.5] - 2021-03-27
 
