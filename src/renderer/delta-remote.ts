@@ -86,16 +86,6 @@ class DeltaRemote {
     name: string
   ): Promise<number>
   call(
-    fnName: 'contacts.acceptContactRequest',
-    {
-      messageId,
-      contactId,
-    }: {
-      messageId: number
-      contactId: number
-    }
-  ): Promise<number>
-  call(
     fnName: 'contacts.createContact',
     email: string,
     name?: string
@@ -119,7 +109,6 @@ class DeltaRemote {
     listFlags: number,
     queryStr: string
   ): Promise<DCContact[]>
-  call(fnName: 'contacts.markNoticedContact', contactId: number): Promise<void>
   call(
     fnName: 'contacts.getChatIdByContactId',
     contactId: number
