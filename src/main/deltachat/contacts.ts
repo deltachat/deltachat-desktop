@@ -119,4 +119,8 @@ export default class DCContacts extends SplitOut {
     }
     return result
   }
+
+  getEncryptionInfo(contactId: number) {
+    return this._dc.getContactEncryptionInfo(contactId)
+  }
 }

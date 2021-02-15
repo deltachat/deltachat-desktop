@@ -20,9 +20,12 @@ export default function EncryptionInfo({
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
     if (!chatListItem) return
-    DeltaBackend.call(
-      'chat.getEncryptionInfo',
-      chatListItem.contactIds[0]
+    ;(!chatListItem.isGroup /*check should rather be isDirectMessage*/
+      ? DeltaBackend.call(
+          'contacts.getEncryptionInfo',
+          chatListItem.contactIds[0]
+        )
+      : DeltaBackend.call('chat.getEncryptionInfo', chatListItem.id)
     ).then(setEncryptionInfo)
   })
 

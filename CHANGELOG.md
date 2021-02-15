@@ -4,6 +4,10 @@
 
 ### Added
 - add option to open message html in browser
+- encryption info for groups
+
+## Fixed
+- hide show encrytion info for saved messages (resulted in error)
 
 ## [1.15.5] - 2021-03-27
 

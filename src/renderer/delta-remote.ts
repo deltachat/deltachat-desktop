@@ -125,13 +125,14 @@ class DeltaRemote {
     contactId: number
   ): Promise<number>
   call(fnName: 'contacts.getDMChatId', contactId: number): Promise<number>
+  call(fnName: 'contacts.getEncryptionInfo', contactId: number): Promise<string>
   // chat ---------------------------------------------------------------
   call(
     fnName: 'chat.getChatMedia',
     msgType1: number,
     msgType2: number
   ): Promise<MessageType[]>
-  call(fnName: 'chat.getEncryptionInfo', contactId: number): Promise<string>
+  call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
   call(fnName: 'chat.setName', chatId: number, name: string): Promise<boolean>

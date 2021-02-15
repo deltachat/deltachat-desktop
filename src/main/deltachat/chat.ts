@@ -20,8 +20,8 @@ export default class DCChat extends SplitOut {
     )
   }
 
-  getEncryptionInfo(contactId: number) {
-    return this._dc.getContactEncryptionInfo(contactId)
+  getEncryptionInfo(chatId: number) {
+    return this._dc.getChatEncrytionInfo(chatId)
   }
 
   getQrCode(chatId = 0) {
