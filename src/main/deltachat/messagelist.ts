@@ -15,6 +15,8 @@ import {
   msgStatus,
 } from '../../shared/shared-types'
 
+import { writeFile } from 'fs-extra'
+import tempy from 'tempy'
 export default class DCMessageList extends SplitOut {
   sendMessage(
     chatId: number,
@@ -228,6 +230,14 @@ export default class DCMessageList extends SplitOut {
       result[id] = this._msgId2SearchResultItem(id)
     }
     return result
+  }
+
+  /** @returns file path to html file */
+  async saveMessageHTML2Disk(messageId: number): Promise<string> {
+    const message_html_content = this._dc.getMessageHTML(messageId)
+    const pathToFile = tempy.file({ extension: 'html' })
+    await writeFile(pathToFile, message_html_content, { encoding: 'utf-8' })
+    return pathToFile
   }
 }
 

@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add option to open message html in browser
+
 ## [1.15.5] - 2021-03-27
 
 ### Added

@@ -6,6 +6,7 @@ import {
   openMessageInfo,
   setQuoteInDraft,
   privateReply,
+  openMessageHTML,
 } from './messageFunctions'
 import React, { useContext, useState, useEffect } from 'react'
 
@@ -238,6 +239,7 @@ const Message = (props: {
     hasLocation,
     attachment,
     isSetupmessage,
+    hasHTML,
   } = message.msg
   const tx = useTranslationFunction()
 
@@ -343,9 +345,6 @@ const Message = (props: {
     )
   }
 
-  // TODO another check - don't check it only over string
-  const longMessage = /\[.{3}\]$/.test(text)
-
   const hasQuote = message.msg.quotedText !== null
 
   const onMessageDoubleClick = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -416,8 +415,10 @@ const Message = (props: {
             />
           )}
           {content}
-          {longMessage && (
-            <button onClick={openMessageInfo.bind(null, message)}>...</button>
+          {hasHTML && (
+            <button onClick={openMessageHTML.bind(null, message.id)}>
+              {tx('show_full_message')}
+            </button>
           )}
           <MessageMetaData
             attachment={!isSetupmessage && attachment}
