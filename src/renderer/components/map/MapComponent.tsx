@@ -267,7 +267,7 @@ export default class MapComponent extends React.Component<
           extended: true,
         })
         const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-          this.renderPopupMessage(contact.firstName, lastDate, null)
+          this.renderPopupMessage(contact.displayName, lastDate, null)
         )
         if (mapData.marker) {
           // remove old marker
@@ -576,7 +576,7 @@ export default class MapComponent extends React.Component<
           onChange={() => this.toggleContactLayer(contact.id, contact.hidden)}
           checked={contact.hidden}
         />
-        <label style={{ color: contact.color }}>{contact.firstName} </label>
+        <label style={{ color: contact.color }}>{contact.displayName} </label>
       </div>
     )
   }
