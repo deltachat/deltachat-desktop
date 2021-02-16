@@ -1,11 +1,11 @@
 import React from 'react'
 import Message from './Message'
 import { MessageType } from '../../../shared/shared-types'
+import { ConversationType } from './MessageList'
 
 type RenderMessageProps = {
   message: MessageType
-  conversationType: 'group' | 'direct'
-  isDeviceChat: boolean
+  conversationType: ConversationType
 }
 
 export const MessageWrapper = (props: RenderMessageProps) => {

@@ -16,6 +16,7 @@ import {
   MessageTypeAttachment,
 } from '../../../shared/shared-types'
 import { runtime } from '../../runtime'
+import { ConversationType } from '../message/MessageList'
 
 // const MINIMUM_IMG_HEIGHT = 150
 // const MAXIMUM_IMG_HEIGHT = 300
@@ -23,7 +24,7 @@ import { runtime } from '../../runtime'
 type AttachmentProps = {
   attachment: MessageTypeAttachment
   text?: string
-  conversationType: 'group' | 'direct'
+  conversationType: ConversationType
   direction: MessageType['msg']['direction']
   message: MessageType
   hasQuote: boolean
@@ -56,7 +57,8 @@ export default function Attachment({
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
   const withContentAbove =
-    hasQuote || (conversationType === 'group' && direction === 'incoming')
+    hasQuote ||
+    (conversationType.hasMultipleParticipants && direction === 'incoming')
   // const dimensions = message.msg.dimensions || {}
   // Calculating height to prevent reflow when image loads
   // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)

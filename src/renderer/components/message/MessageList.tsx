@@ -3,6 +3,7 @@ import { MessageWrapper } from './MessageWrapper'
 import { useChatStore, ChatStoreState } from '../../stores/chat'
 import { useDebouncedCallback } from 'use-debounce'
 import { C } from 'deltachat-node/dist/constants'
+import type { ChatTypes } from 'deltachat-node'
 import moment from 'moment'
 
 import { getLogger } from '../../../shared/logger'
@@ -149,6 +150,14 @@ export default function MessageList({
   )
 }
 
+/** Object holding type information about a chat for messages in that chat */
+export type ConversationType = {
+  /* whether this chat has multiple participants */
+  hasMultipleParticipants: boolean
+  isDeviceChat: boolean
+  chatType: ChatTypes
+}
+
 export const MessageListInner = React.memo(
   (props: {
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
@@ -175,8 +184,13 @@ export const MessageListInner = React.memo(
 
     let specialMessageIdCounter = 0
 
-    const conversationType: 'group' | 'direct' =
-      chat.type === C.DC_CHAT_TYPE_GROUP ? 'group' : 'direct'
+    const conversationType: ConversationType = {
+      hasMultipleParticipants:
+        chat.type === C.DC_CHAT_TYPE_GROUP ||
+        chat.type === C.DC_CHAT_TYPE_MAILINGLIST,
+      isDeviceChat: chat.isDeviceChat,
+      chatType: chat.type,
+    }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll}>
@@ -201,7 +215,6 @@ export const MessageListInner = React.memo(
                 key={messageId}
                 message={message as MessageType}
                 conversationType={conversationType}
-                isDeviceChat={chat.isDeviceChat}
               />
             )
           })}
