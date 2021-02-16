@@ -417,7 +417,7 @@ const Message = (props: {
           {content}
           {hasHTML && (
             <button onClick={openMessageHTML.bind(null, message.id)}>
-              {tx('show_full_message')}
+              {tx('show_full_message_in_browser')}
             </button>
           )}
           <MessageMetaData
