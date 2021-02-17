@@ -205,7 +205,7 @@ export default class DCChatList extends SplitOut {
         })
       } else if (chat.type === C.DC_CHAT_TYPE_MAILINGLIST) {
         return tx('mailing_list')
-      }else if (contacts.length >= 1) {
+      } else if (contacts.length >= 1) {
         if (chat.isSelfTalk) {
           return tx('chat_self_talk_subtitle')
         } else if (chat.isDeviceTalk) {
