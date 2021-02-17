@@ -67,41 +67,21 @@ const Avatar = (
   }
 }
 
-const ContactName = (props: {
-  name: string
-  profileName?: string
-  color: string
-  onClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
-}) => {
-  const { name, profileName, color, onClick } = props
-
-  const title = name
-  const shouldShowProfile = Boolean(profileName && !name)
-  const profileElement = shouldShowProfile ? (
-    <span style={{ color: color }}>~{profileName || ''}</span>
-  ) : null
-
-  return (
-    <span className='author' style={{ color: color }} onClick={onClick}>
-      {title}
-      {shouldShowProfile ? ' ' : null}
-      {profileElement}
-    </span>
-  )
-}
-
-const Author = (
+const AuthorName = (
   contact: DCContact,
-  onContactClick: (contact: DCContact) => void
+  onContactClick: (contact: DCContact) => void,
+  overrideSenderName?: string
 ) => {
   const { color, displayName } = contact
 
   return (
-    <ContactName
-      name={displayName}
-      color={color}
+    <span
+      className='author'
+      style={{ color: color }}
       onClick={() => onContactClick(contact)}
-    />
+    >
+      {overrideSenderName ? `~${overrideSenderName}` : displayName}
+    </span>
   )
 }
 
@@ -384,7 +364,11 @@ const Message = (props: {
                 !conversationType.hasMultipleParticipants,
             })}
           >
-            {Author(message.contact, onContactClick)}
+            {AuthorName(
+              message.contact,
+              onContactClick,
+              message?.msg.overrideSenderName
+            )}
           </div>
         )}
         <div
@@ -462,11 +446,9 @@ export const Quote = ({
       className='quote has-message'
       style={{ borderLeftColor: message && message.contact.color }}
     >
-      <div
-        className='quote-author'
-        style={{ color: message && message.contact.color }}
-      >
-        {message && message.contact.displayName}
+      <div className='quote-author'>
+        {message &&
+          AuthorName(message.contact, () => {}, message.msg.overrideSenderName)}
       </div>
       <div className='quoted-text'>
         <MessageBody text={quotedText} />
