@@ -75,7 +75,10 @@ app.once('ready', () => {
           log.warn('error while fetching blob file', file, e)
           cb({ statusCode: 404 })
         } else {
-          cb(b)
+          cb({
+            mimeType: lookup(extname(file.replace(/:$/, ''))) || undefined,
+            data: b,
+          })
         }
       })
     }
