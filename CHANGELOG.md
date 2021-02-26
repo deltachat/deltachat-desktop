@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix right click on image mesage opens both context menus #2122
+
 ## [1.15.1] - 2021-02-13
 
 ### Fixed

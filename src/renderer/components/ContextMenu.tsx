@@ -275,6 +275,7 @@ export function makeContextMenu(
   openContextMenu: unwrapContext<typeof ScreenContext>['openContextMenu']
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
+    ev.preventDefault() // prevent default runtime context menu from opening
     const [cursorX, cursorY] = [ev.clientX, ev.clientY]
 
     const items =

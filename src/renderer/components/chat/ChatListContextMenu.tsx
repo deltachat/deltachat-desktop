@@ -145,6 +145,7 @@ export function useChatListContextMenu() {
       : []
 
     const [cursorX, cursorY] = [event.clientX, event.clientY]
+    event.preventDefault() // prevent default runtime context menu from opening
     screenContext.openContextMenu({
       cursorX,
       cursorY,
