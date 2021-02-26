@@ -266,6 +266,7 @@ const Message = (props: {
     )
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
+    event.preventDefault() // prevent default runtime context menu from opening
     openContextMenu({
       cursorX,
       cursorY,
