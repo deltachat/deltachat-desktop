@@ -13,6 +13,12 @@ p.version = p.version + '-DevBuild'
 
 fs.writeFileSync(packageJSON, JSON.stringify(p, null, 1))
 
+const packageLockJSON = join(__dirname, '../../package-lock.json')
+
+const pLock = JSON.parse(fs.readFileSync(packageLockJSON))
+pLock.version = p.version
+fs.writeFileSync(packageLockJSON, JSON.stringify(pLock, null, 1))
+
 const appConfig = join(__dirname, '../../src/main/application-config.ts')
 
 const fileContent = fs
