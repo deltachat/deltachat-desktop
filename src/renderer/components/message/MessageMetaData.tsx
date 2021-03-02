@@ -64,7 +64,7 @@ export default class MessageMetaData extends React.Component<{
               <div
                 className={classNames('status-icon', status)}
                 aria-label={tx(`a11y_delivery_status_${status}`)}
-                onClick={status === 'error' && onClickError}
+                onClick={status === 'error' ? onClickError : undefined}
               />
             ) : null}
           </div>
