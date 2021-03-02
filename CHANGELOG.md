@@ -5,6 +5,7 @@
 ### Fixed
 - fix right click on image mesage opens both context menus #2122
 - Fix Attachment sometimes not being displayed (#2144)
+- Fix possible backup corruption (pause io while doing a backup) (#2148)
 
 ### Changed
 - update translations (02.03.2021)

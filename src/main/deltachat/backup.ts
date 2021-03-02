@@ -15,7 +15,12 @@ import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 export default class DCBackup extends SplitOut {
   export(dir: string) {
+    this._dc.stopIO()
     this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
+    // look to when it is done
+    this._dc.once('DC_EVENT_IMEX_FILE_WRITTEN', () => {
+      this._dc.startIO()
+    })
   }
 
   import(file: string): Promise<DeltaChatAccount> {
