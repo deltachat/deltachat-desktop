@@ -7,7 +7,7 @@ import { showFnType } from './components/ContextMenu'
 export const ScreenContext = React.createContext({
   openDialog: (_fnc: any, _props?: any) => {},
   openContextMenu: (..._args: Parameters<showFnType>) => {},
-  closeDialog: (_name: string) => {},
+  closeDialog: (_id: number) => {},
   userFeedback: (_message: false | userFeedback) => {},
   changeScreen: (_screen: Screens) => {},
   screen: null,

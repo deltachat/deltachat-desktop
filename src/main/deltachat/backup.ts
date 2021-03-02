@@ -14,12 +14,28 @@ const log = getLogger('main/deltachat/backup')
 import SplitOut from './splitout'
 import { DeltaChatAccount } from '../../shared/shared-types'
 export default class DCBackup extends SplitOut {
-  export(dir: string) {
+  async export(dir: string) {
     this._dc.stopIO()
-    this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
-    // look to when it is done
-    this._dc.once('DC_EVENT_IMEX_FILE_WRITTEN', () => {
+    try {
+      await this._internal_export(dir)
+    } catch (err) {
       this._dc.startIO()
+      throw err
+    } finally {
+      this._dc.startIO()
+    }
+  }
+
+  private async _internal_export(dir: string) {
+    return new Promise((resolve, reject) => {
+      this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
+      this._dc.on('DC_EVENT_IMEX_PROGRESS', (data1: number) => {
+        if (data1 === 0) {
+          reject('Backup export failed (progress==0)')
+        } else if (data1 === 1000) {
+          resolve()
+        }
+      })
     })
   }
 
