@@ -358,7 +358,7 @@ export function useDraft(
       quotedMessageId: 0,
       quotedText: null,
     }))
-    inputRef.current.focus()
+    inputRef.current?.focus()
   }
 
   useEffect(() => {
