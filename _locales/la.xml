@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">Amen</string>
+    <string name="cancel">Aborta</string>
+    <string name="yes">Ita est</string>
+    <string name="no">Non ita est</string>
+    <string name="on">In</string>
+    <string name="off">Occludere</string>
+    <string name="def">Regula</string>
+    <string name="custom">Singularis</string>
+    <string name="none">Nemo</string>
+    <string name="automatic">Autonomus</string>
+    <string name="strict">Stricte</string>
+    <string name="open">Patentibus</string>
+    <string name="delete">Exstinguere</string>
+    <string name="info">Notitia</string>
+    <string name="update">Supplementum</string>
+    <string name="emoji">Symbolum picture</string>
+    <string name="attachment">Appendix</string>
+    <string name="back">Rursus</string>
+    <string name="close">Claudere</string>
+    <string name="forward">Ante</string>
+    <string name="archive">Conservare</string>
+    <string name="mute">Mutus</string>
+    <string name="save">Salvare</string>
+    <string name="chat">Colloquium</string>
+    <string name="media">Media</string>
+    <string name="main_menu">Selectio</string>
+    <string name="start_chat">Initium colloquium</string>
+    <string name="never">Numquam</string>
+    </resources>

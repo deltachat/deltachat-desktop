@@ -5,6 +5,12 @@
 ### Fixed
 - fix right click on image mesage opens both context menus #2122
 
+### Changed
+- update translations (02.03.2021)
+
+### Added
+- translations for Khmer, Kurdish, Sardu, Slovak and Norwegian
+
 ## [1.15.1] - 2021-02-13
 
 ### Fixed
@@ -27,7 +33,7 @@
 
 ### Changed
 - always show timestamp and padlock/nopadlock on messages (previously padlock and timestamp were hidden on error)
-- update translations (10.02.2020)
+- update translations (10.02.2021)
 - add Farsi translation
 - Try to always focus composer textarea
 - Store relative instead of absolute path to last Account #2028
