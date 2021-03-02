@@ -6,7 +6,8 @@
   "scripts": {
     "install": "npm run install:submodules",
     "install:submodules": "git submodule update --recursive --init",
-    "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit",
+    "test": "npm run check-types && npm run lint && npm run check-formatting && npm run test-log-conventions && npm run test-unit && npm run test-misc",
+    "test-misc": "node ./bin/test_package_lock_version",
     "test-log-conventions": "node ./bin/log-conventions",
     "test-unit": "node test/unit",
     "test-e2e-ci": "env NODE_ENV=test testcafe --skip-js-errors \"electron:./\" \"./test/testcafe/test.js\"",
