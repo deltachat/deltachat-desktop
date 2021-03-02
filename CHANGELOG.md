@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- Fix disable contact name edit field on device message
 - fix right click on image mesage opens both context menus #2122
 - Fix Attachment sometimes not being displayed (#2144)
 
