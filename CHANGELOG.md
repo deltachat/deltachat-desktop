@@ -12,6 +12,7 @@
 
 ### Changed
 - update translations (02.03.2021)
+- change "Download attachment" to "Export attachment"
 
 ### Added
 - translations for Khmer, Kurdish, Sardu, Slovak and Norwegian
