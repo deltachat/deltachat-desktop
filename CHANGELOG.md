@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+## [1.15.1] - 2021-03-03
+
 ### Fixed
 - Fix disable contact name edit field on device message
 - Fix right click on image mesage opens both context menus #2122
