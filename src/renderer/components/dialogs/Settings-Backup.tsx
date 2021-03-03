@@ -9,30 +9,20 @@ import { DeltaProgressBar } from '../Login-Styles'
 import { DeltaBackend } from '../../delta-remote'
 import { useTranslationFunction } from '../../contexts'
 import { runtime } from '../../runtime'
+import { getLogger } from '../../../shared/logger'
+const log = getLogger('renderer/Settings/Backup')
 
 function ExportProgressDialog(props: DialogProps) {
-  const userFeedback = window.__userFeedback
   const tx = useTranslationFunction()
-
   const [progress, setProgress] = useState(0.0)
-
-  const onFileWritten = (_event: any, [_, filename]: [any, string]) => {
-    userFeedback({
-      type: 'success',
-      text: tx('pref_backup_written_to_x', filename),
-    })
-    props.onClose()
-  }
 
   const onImexProgress = (_: any, [progress, _data2]: [number, any]) => {
     setProgress(progress)
   }
   useEffect(() => {
-    ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', onFileWritten)
     ipcBackend.on('DC_EVENT_IMEX_PROGRESS', onImexProgress)
 
     return () => {
-      ipcBackend.removeListener('DC_EVENT_IMEX_FILE_WRITTEN', onFileWritten)
       ipcBackend.removeListener('DC_EVENT_IMEX_PROGRESS', onImexProgress)
     }
   }, [])
@@ -55,6 +45,9 @@ function onBackupExport() {
   const tx = window.static_translate
   const openDialog = window.__openDialog
 
+  const closeDialog = window.__closeDialog
+  const userFeedback = window.__userFeedback
+
   openDialog('ConfirmationDialog', {
     message: tx('pref_backup_export_explain'),
     yesIsPrimary: true,
@@ -72,8 +65,31 @@ function onBackupExport() {
       if (!destination) {
         return
       }
-      openDialog(ExportProgressDialog)
-      DeltaBackend.call('backup.export', destination)
+
+      const listenForOutputFile = (
+        _event: any,
+        [_, filename]: [any, string]
+      ) => {
+        userFeedback({
+          type: 'success',
+          text: tx('pref_backup_written_to_x', filename),
+        })
+      }
+      ipcBackend.once('DC_EVENT_IMEX_FILE_WRITTEN', listenForOutputFile)
+
+      const dialog_number = openDialog(ExportProgressDialog)
+      try {
+        await DeltaBackend.call('backup.export', destination)
+      } catch (error) {
+        // TODO/QUESTION - how are errors shown to user?
+        log.error('backup-export failed:', error)
+      } finally {
+        ipcBackend.removeListener(
+          'DC_EVENT_IMEX_FILE_WRITTEN',
+          listenForOutputFile
+        )
+        closeDialog(dialog_number)
+      }
     },
   })
 }
