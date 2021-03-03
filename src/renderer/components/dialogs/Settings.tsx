@@ -226,6 +226,11 @@ export default function Settings(props: DialogProps) {
   const renderDialogContent = () => {
     const { account } = props
     const { settings } = state
+
+    if (Object.keys(settings).length === 0) {
+      return null
+    }
+
     if (state.show === 'main') {
       return (
         <>

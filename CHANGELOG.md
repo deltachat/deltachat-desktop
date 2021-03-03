@@ -7,6 +7,7 @@
 - Fix right click on image mesage opens both context menus #2122
 - Fix Attachment sometimes not being displayed (#2144)
 - Fix some react warnings (#2152)
+- Fix crash in settings
 - Fix enabling/disabling notifications
 
 ### Changed
