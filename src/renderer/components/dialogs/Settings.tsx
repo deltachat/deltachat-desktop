@@ -156,11 +156,6 @@ export default function Settings(props: DialogProps) {
     key: keyof DesktopSettings,
     value: string | boolean | number
   ) => {
-    if (key === 'notifications' && !value) {
-      key = 'showNotificationContent'
-      value = false
-    }
-
     if (
       (await DeltaBackend.call('settings.setDesktopSetting', key, value)) ===
       true

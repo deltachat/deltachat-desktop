@@ -1,8 +1,10 @@
 import { ipcBackend } from './ipc'
 import { RC_Config } from '../shared/shared-types'
-import { setLogHandler } from '../shared/logger'
+import { getLogger, setLogHandler } from '../shared/logger'
 import type { dialog, app, shell, clipboard } from 'electron'
 import { basename, join } from 'path'
+
+const log = getLogger('renderer/runtime')
 
 const {
   openExternal,
@@ -126,6 +128,10 @@ class Electron implements Runtime {
   }
   private rc_config: RC_Config = null
   transformBlobURL(blob: string): string {
+    if (!blob) {
+      log.warn('transformBlobURL: received a null/undefined blob string ')
+      return null
+    }
     return 'dc-blob://' + blob.substring(blob.indexOf('accounts') + 9)
   }
   async showOpenFileDialog(

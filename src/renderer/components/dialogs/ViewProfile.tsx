@@ -19,15 +19,15 @@ import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import { AutoSizer } from 'react-virtualized'
 
 const ProfileInfoName = ({
-  contactId,
   displayName,
   setDisplayName,
   address,
+  disabled,
 }: {
-  contactId: Number
   displayName: string
   setDisplayName: (displayName: string) => void
   address: string
+  disabled: boolean
 }) => {
   const onChange = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newName = ev.target.value
@@ -42,7 +42,7 @@ const ProfileInfoName = ({
           placeholder={displayName}
           value={displayName}
           onChange={onChange}
-          disabled={contactId === C.DC_CONTACT_ID_SELF}
+          disabled={disabled}
           autoFocus
           style={{ marginLeft: '0px', marginBottom: '10px' }}
         />
@@ -126,7 +126,10 @@ export default function ViewProfile(props: {
                   <ProfileInfoAvatar contact={contact} />
                 </div>
                 <ProfileInfoName
-                  contactId={contact.id}
+                  disabled={
+                    contact.id === C.DC_CONTACT_ID_SELF ||
+                    contact.id === C.DC_CONTACT_ID_DEVICE
+                  }
                   displayName={displayName}
                   setDisplayName={setDisplayName}
                   address={contact.address}
@@ -139,14 +142,16 @@ export default function ViewProfile(props: {
                   justifyContent: 'center',
                 }}
               >
-                <button
-                  aria-label={tx('send_message')}
-                  onClick={onSendMessage}
-                  className={'delta-button-round'}
-                  style={{ marginTop: '0px' }}
-                >
-                  {tx('send_message')}
-                </button>
+                {contact.id !== C.DC_CONTACT_ID_DEVICE && (
+                  <button
+                    aria-label={tx('send_message')}
+                    onClick={onSendMessage}
+                    className={'delta-button-round'}
+                    style={{ marginTop: '0px' }}
+                  >
+                    {tx('send_message')}
+                  </button>
+                )}
               </div>
               <DeltaDialogContentTextSeperator
                 text={tx('profile_shared_chats')}
