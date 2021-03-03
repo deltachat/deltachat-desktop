@@ -21,21 +21,24 @@ export default class DCBackup extends SplitOut {
     } catch (err) {
       this._dc.startIO()
       throw err
-    } finally {
-      this._dc.startIO()
-    }
+    } 
+    this._dc.startIO()
   }
 
   private async _internal_export(dir: string) {
     return new Promise((resolve, reject) => {
       this._dc.importExport(C.DC_IMEX_EXPORT_BACKUP, dir, undefined)
-      this._dc.on('DC_EVENT_IMEX_PROGRESS', (data1: number) => {
+      const onEventImexProgress = (data1: number) => {
         if (data1 === 0) {
+          this._dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           reject('Backup export failed (progress==0)')
         } else if (data1 === 1000) {
+          this._dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           resolve()
         }
-      })
+      } 
+
+      this._dc.on('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
     })
   }
 
