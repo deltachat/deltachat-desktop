@@ -3,7 +3,7 @@ import { _callDcMethodAsync } from './ipc'
 import {
   FullChat,
   ChatListItemType,
-  MessageType,
+  Message,
   JsonLocations,
   Theme,
   DCContact,
@@ -12,6 +12,8 @@ import {
   DeltaChatAccount,
   DesktopSettings,
   QrCodeResponse,
+  MessageType,
+  MarkerOneParams,
 } from '../shared/shared-types'
 import { MuteDuration } from '../shared/constants'
 import { LocaleData } from '../shared/localize'
@@ -56,7 +58,6 @@ class DeltaRemote {
   // chatList -----------------------------------------------------------
   call(fnName: 'chatList.selectChat', chatId: number): Promise<FullChat>
   call(fnName: 'chatList.getSelectedChatId'): Promise<number>
-  call(fnName: 'chatList.onChatModified', chatId: number): Promise<void>
   call(
     fnName: 'chatList.getChatListIds',
     listFlags: number,
@@ -121,7 +122,7 @@ class DeltaRemote {
     fnName: 'chat.getChatMedia',
     msgType1: number,
     msgType2: number
-  ): Promise<MessageType[]>
+  ): Promise<Message[]>
   call(fnName: 'chat.getEncryptionInfo', chatId: number): Promise<string>
   call(fnName: 'chat.getQrCode', chatId?: number): Promise<string>
   call(fnName: 'chat.leaveGroup', chatId: number): Promise<void>
@@ -215,36 +216,23 @@ class DeltaRemote {
     fnName: 'messageList.sendMessage',
     chatId: number,
     params: sendMessageParams
-  ): Promise<
-    [
-      number,
-      (
-        | MessageType
-        | {
-            msg: null
-          }
-      )
-    ]
-  >
+  ): Promise<[number, MessageType]>
   call(
     fnName: 'messageList.sendSticker',
     chatId: number,
     stickerPath: string
   ): Promise<void>
   call(fnName: 'messageList.deleteMessage', id: number): Promise<void>
-  call(
-    fnName: 'messageList.getMessage',
-    msgId: number
-  ): Promise<{ msg: null } | MessageType>
+  call(fnName: 'messageList.getMessage', msgId: number): Promise<Message>
   call(
     fnName: 'messageList.getMessages',
-    messageIds: number[]
-  ): Promise<{ [key: number]: MessageType | { msg: null } }>
+    chatId: number,
+    indexStart: number,
+    indexEnd: number,
+    marker1Before?: MarkerOneParams
+  ): Promise<MessageType[]>
   call(fnName: 'messageList.getMessageInfo', msgId: number): Promise<string>
-  call(
-    fnName: 'messageList.getDraft',
-    chatId: number
-  ): Promise<MessageType | null>
+  call(fnName: 'messageList.getDraft', chatId: number): Promise<Message>
   call(
     fnName: 'messageList.setDraft',
     chatId: number,
@@ -261,7 +249,7 @@ class DeltaRemote {
   call(
     fnName: 'messageList.getMessageIds',
     chatid: number,
-    flags?: number
+    marker1Before?: MarkerOneParams
   ): Promise<number[]>
   call(
     fnName: 'messageList.forwardMessage',
@@ -281,6 +269,18 @@ class DeltaRemote {
     fnName: 'messageList.saveMessageHTML2Disk',
     messageId: number
   ): Promise<string>
+  call(
+    fnName: 'messageList.getFirstUnreadMessageId',
+    chatId: number
+  ): Promise<number>
+  call(
+    fnName: 'messageList.getUnreadMessageIds',
+    chatId: number
+  ): Promise<number[]>
+  call(
+    fnName: 'messageList.markSeenMessages',
+    messageIds: number[]
+  ): Promise<void>
   // settings -----------------------------------------------------------
   call(
     fnName: 'settings.setConfig',

@@ -1,5 +1,3 @@
-type PromiseType<T> = T extends Promise<infer U> ? U : any
-
 export type Credentials = {
   [key: string]: any
   addr?: string
@@ -65,6 +63,7 @@ export interface RC_Config {
 import { App } from 'electron'
 import { LocaleData } from '../shared/localize'
 import { QrState } from '../shared/constants'
+import { C } from 'deltachat-node/dist/constants'
 
 export interface ExtendedApp extends App {
   rc: RC_Config
@@ -88,7 +87,7 @@ export interface ChatListItemType {
     | {
         text1: any
         text2: any
-        status: string
+        state: MessageState
       }
     | undefined
   deaddrop: any
@@ -105,7 +104,7 @@ export interface ChatListItemType {
   muted: boolean
 }
 
-import type { Chat, Message } from 'deltachat-node'
+import type { Chat } from 'deltachat-node'
 
 export type JsonChat = ReturnType<typeof Chat.prototype.toJson>
 
@@ -122,8 +121,6 @@ export type JsonLocations = {
   isIndependent: boolean
   marker: string
 }[] // ReturnType<typeof DeltaChat.prototype.getLocations>
-
-export type JsonMessage = ReturnType<typeof Message.prototype.toJson>
 
 export interface FullChat {
   id: number
@@ -147,45 +144,110 @@ export interface FullChat {
   ephemeralTimer: number
 }
 
-type todo = any
+export type todo = any
 
-export interface MessageTypeAttachment {
+export interface MessageAttachment {
   url: string
   contentType: string
   fileName: string
   fileSize: string
 }
 
-export type msgStatus =
+export const enum MessageState {
+  IN_FRESH = C.DC_STATE_IN_FRESH,
+  IN_NOTICED = C.DC_STATE_IN_NOTICED,
+  OUT_DELIVERED = C.DC_STATE_OUT_DELIVERED,
+  OUT_DRAFT = C.DC_STATE_OUT_DRAFT,
+  OUT_FAILED = C.DC_STATE_OUT_FAILED,
+  OUT_MDN_RCVD = C.DC_STATE_OUT_MDN_RCVD,
+  OUT_PENDING = C.DC_STATE_OUT_PENDING,
+  OUT_PREPARING = C.DC_STATE_OUT_PREPARING,
+}
+
+export type MessageStateString =
   | 'error'
   | 'sending'
   | 'draft'
   | 'delivered'
   | 'read'
-  | 'sent'
   | ''
 
-export interface MessageType {
+export type MessageQuote = {
+  messageId: number
+  text: string
+  displayName: string
+  displayColor: string
+} | null
+
+export interface Message {
+  type: MessageTypeIs.Message
   id: number
-  msg: JsonMessage & {
-    sentAt: number
-    receivedAt: number
-    direction: 'outgoing' | 'incoming'
-    status: msgStatus
-    attachment?: MessageTypeAttachment
+  chatId: number
+  duration: number
+  file: string
+  fromId: number
+  quote: MessageQuote
+  receivedTimestamp: number
+  sortTimestamp: number
+  text: string
+  timestamp: number
+  hasLocation: boolean
+  viewType: any
+  hasDeviatingTimestamp: any
+  showPadlock: boolean
+  summary: {
+    state: number
+    text1: string
+    text1Meaning: string
+    text2: string
+    timestamp: number
   }
+  isSetupmessage: boolean
+  isInfo: boolean
+  isForwarded: boolean
+  dimensions: {
+    height: number
+    width: number
+  }
+  videochatType: number
+  videochatUrl: string
+  sentAt: number
+  receivedAt: number
+  direction: 'outgoing' | 'incoming'
+  state: MessageState
+  attachment?: MessageAttachment
   filemime: string
   filename: string
   filesize: todo
-  viewType: todo
-  fromId: number
   isMe: boolean
   contact: DCContact
-  isInfo: boolean
   setupCodeBegin?: string
+  hasHTML: boolean
 }
 
-export type DCContact = JsonContact
+export enum MessageTypeIs {
+  MarkerOne = 0,
+  DayMarker = 1,
+  Message = 2,
+}
+
+export type MessageDayMarker = {
+  type: MessageTypeIs.DayMarker
+  timestamp: number
+}
+
+export type MessageMarkerOne = {
+  type: MessageTypeIs.MarkerOne
+  count: number
+}
+
+export type MarkerOneParams = {
+  [key: number]: number
+}
+
+export type MessageType = MessageMarkerOne | MessageDayMarker | Message | null
+
+export type DCContact = Omit<JsonContact, 'color'> & { color: string }
 
 export type Theme = {
   name: string

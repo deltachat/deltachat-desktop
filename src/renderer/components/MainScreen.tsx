@@ -14,6 +14,7 @@ import { useChatStore } from '../stores/chat'
 import {
   openEditGroupDialog,
   openViewProfileDialog,
+  selectChat,
 } from './helpers/ChatMethods'
 
 import {
@@ -54,16 +55,17 @@ export default function MainScreen() {
   )
 
   const screenContext = useContext(ScreenContext)
-  const [selectedChat, chatStoreDispatch] = useChatStore()
+  const [selectedChat, _chatStoreDispatch] = useChatStore()
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) return setShowArchivedChats(true)
     // avoid double clicks
     if (chatId === selectedChat.id) return
 
-    chatStoreDispatch({ type: 'SELECT_CHAT', payload: chatId })
-    setView(View.MessageList)
+    selectChat(chatId)
+    if (view !== View.MessageList) setView(View.MessageList)
   }
+
   const searchChats = (queryStr: string) => setQueryStr(queryStr)
   const handleSearchChange = (event: { target: { value: '' } }) =>
     searchChats(event.target.value)
@@ -86,33 +88,13 @@ export default function MainScreen() {
     setFirstLoad(false)
     const lastChatId = getLastSelectedChatId()
     if (lastChatId) {
-      chatStoreDispatch({ type: 'SELECT_CHAT', payload: lastChatId })
+      selectChat(lastChatId)
     }
   }
 
   const tx = useTranslationFunction()
 
   const menu = <Menu selectedChat={selectedChat} />
-  let MessageListView
-  if (selectedChat.id !== null) {
-    switch (view) {
-      case View.Media:
-        MessageListView = <Gallery chat={selectedChat} />
-        break
-      case View.Map:
-        MessageListView = <MapComponent selectedChat={selectedChat} />
-        break
-      case View.MessageList:
-      default:
-        MessageListView = <MessageListAndComposer chat={selectedChat} />
-    }
-  } else {
-    MessageListView = (
-      <div className='no-chat-selected-screen'>
-        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
-      </div>
-    )
-  }
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -259,9 +241,36 @@ export default function MainScreen() {
           onChatClick={onChatClick}
           selectedChatId={selectedChat ? selectedChat.id : null}
         />
-        {MessageListView}
+        <MessageListView view={view} selectedChat={selectedChat} />
       </div>
       <OfflineToast />
     </div>
+  )
+}
+
+function MessageListView({
+  selectedChat,
+  view,
+}: {
+  selectedChat: any
+  view: View
+}) {
+  const tx = useTranslationFunction()
+
+  if (selectedChat.id === null) {
+    return (
+      <div className='no-chat-selected-screen'>
+        <h2>{tx('no_chat_selected_suggestion_desktop')}</h2>
+      </div>
+    )
+  }
+  return (
+    <>
+      {view === View.Media && <Gallery chat={selectedChat} />}
+      {view === View.Map && <MapComponent selectedChat={selectedChat} />}
+      {view === View.MessageList && (
+        <MessageListAndComposer chat={selectedChat} />
+      )}
+    </>
   )
 }

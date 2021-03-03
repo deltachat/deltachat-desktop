@@ -1,11 +1,11 @@
 import DeltaChat, { C, ChatList } from 'deltachat-node'
-import { app } from 'electron'
 import { getLogger } from '../../shared/logger'
 import {
   ChatListItemType,
   JsonChat,
   JsonContact,
   FullChat,
+  MessageState,
 } from '../../shared/shared-types'
 import SplitOut from './splitout'
 
@@ -19,24 +19,12 @@ export default class DCChatList extends SplitOut {
       log.debug(`Error: selected chat not found: ${chatId}`)
       return null
     }
-    if (chat.id !== C.DC_CHAT_ID_DEADDROP && chat.freshMessageCounter > 0) {
-      this._dc.markNoticedChat(chat.id)
-      this._controller.emit('DESKTOP_CLEAR_NOTIFICATIONS_FOR_CHAT', chat.id)
-      chat.freshMessageCounter = 0
-      app.setBadgeCount(this.getGeneralFreshMessageCounter())
-    }
 
     return chat
   }
 
   getSelectedChatId() {
     return this._controller._selectedChatId
-  }
-
-  async onChatModified(chatId: number) {
-    // TODO: move event handling to store
-    const chat = await this.getFullChatById(chatId)
-    this._controller.sendToRenderer('DD_EVENT_CHAT_MODIFIED', { chatId, chat })
   }
 
   _chatListGetChatId(list: ChatList, index: number) {
@@ -110,7 +98,7 @@ export default class DCChatList extends SplitOut {
       summary: {
         text1: summary.text1,
         text2: summary.text2,
-        status: mapCoreMsgStatus2String(summary.state),
+        state: summary.state as MessageState,
       },
       deaddrop,
       isProtected: chat.isProtected,
@@ -230,26 +218,7 @@ export default class DCChatList extends SplitOut {
     this._controller.sendToRenderer('DD_EVENT_CHATLIST_UPDATED')
   }
 }
-// section: Internal functions
 
-function mapCoreMsgStatus2String(state: number) {
-  switch (state) {
-    case C.DC_STATE_OUT_FAILED:
-      return 'error'
-    case C.DC_STATE_OUT_PENDING:
-      return 'sending'
-    case C.DC_STATE_OUT_PREPARING:
-      return 'sending'
-    case C.DC_STATE_OUT_DRAFT:
-      return 'draft'
-    case C.DC_STATE_OUT_DELIVERED:
-      return 'delivered'
-    case C.DC_STATE_OUT_MDN_RCVD:
-      return 'read'
-    default:
-      return '' // to display no icon on unknown state
-  }
-}
 function isGroupChat(chat: JsonChat) {
   return chat && chat.type === C.DC_CHAT_TYPE_GROUP
 }

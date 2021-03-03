@@ -7,7 +7,6 @@ import ChatListItem, {
 } from './ChatListItem'
 import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
 import { C } from 'deltachat-node/dist/constants'
-import { selectChat } from '../../stores/chat'
 import { DeltaBackend } from '../../delta-remote'
 import { isValidEmail } from '../../../shared/util'
 import { ContactListItem } from '../contact/ContactListItem'
@@ -30,7 +29,11 @@ import { ipcBackend } from '../../ipc'
 import { ScreenContext } from '../../contexts'
 import { KeybindAction, useKeyBindingAction } from '../../keybindings'
 import { getLogger } from '../../../shared/logger'
-import { openViewProfileDialog } from '../helpers/ChatMethods'
+import {
+  jumpToMessage,
+  openViewProfileDialog,
+  selectChat,
+} from '../helpers/ChatMethods'
 
 const log = getLogger('renderer/chatlist')
 
@@ -124,7 +127,6 @@ export default function ChatList(props: {
     selectChat(chatId)
   }
   const screenContext = useContext(ScreenContext)
-  const { openDialog } = screenContext
 
   // divider height ------------
 
@@ -307,16 +309,15 @@ export default function ChatList(props: {
                   >
                     {({ index, key, style }) => {
                       const msrId = messageResultIds[index]
+
                       return (
                         <div style={style} key={key}>
                           {messageCache[msrId] ? (
                             <ChatListItemMessageResult
                               queryStr={queryStr}
                               msr={messageCache[msrId]}
-                              onClick={() => {
-                                openDialog('MessageDetail', {
-                                  id: msrId,
-                                })
+                              onClick={async () => {
+                                jumpToMessage(messageCache[msrId].id)
                               }}
                             />
                           ) : (

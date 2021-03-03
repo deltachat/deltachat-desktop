@@ -7,9 +7,11 @@ import { useTranslationFunction } from '../../contexts'
 import {
   ChatListItemType,
   MessageSearchResult,
+  MessageState,
 } from '../../../shared/shared-types'
 import { Avatar } from '../Avatar'
 import { openDeadDropDecisionDialog } from '../dialogs/DeadDrop'
+import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 
 const FreshMessageCounter = React.memo(({ counter }: { counter: number }) => {
   if (counter === 0) return null
@@ -50,7 +52,7 @@ const Message = React.memo(
           {summary.text1 !== null && (
             <div
               className={classNames('summary', {
-                draft: summary.status === 'draft',
+                draft: summary.state === MessageState.OUT_DRAFT,
               })}
             >
               {summary.text1 + ': '}
@@ -63,8 +65,13 @@ const Message = React.memo(
             {window.static_translate('chat_archived_label')}
           </div>
         )}
-        {!archived && summary.status && (
-          <div className={classNames('status-icon', summary.status)} />
+        {!archived && summary.state && (
+          <div
+            className={classNames(
+              'status-icon',
+              mapCoreMsgStatus2String(summary.state)
+            )}
+          />
         )}
         <FreshMessageCounter counter={freshMessageCounter} />
       </div>

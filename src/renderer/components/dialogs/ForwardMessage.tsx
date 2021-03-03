@@ -6,7 +6,7 @@ import { PseudoListItemNoSearchResults } from '../helpers/PseudoListItem'
 import classNames from 'classnames'
 import { DeltaBackend } from '../../delta-remote'
 import { DialogProps } from './DialogController'
-import { MessageType } from '../../../shared/shared-types'
+import { Message } from '../../../shared/shared-types'
 
 import { C } from 'deltachat-node/dist/constants'
 import { ChatListPart, useLogicVirtualChatList } from '../chat/ChatList'
@@ -14,7 +14,7 @@ import { AutoSizer } from 'react-virtualized'
 import { useChatList } from '../chat/ChatListHelpers'
 
 export default function ForwardMessage(props: {
-  message: MessageType
+  message: Message
   onClose: DialogProps['onClose']
 }) {
   const tx = window.static_translate
@@ -27,7 +27,7 @@ export default function ForwardMessage(props: {
   )
 
   const onChatClick = (chatid: number) => {
-    DeltaBackend.call('messageList.forwardMessage', message.msg.id, chatid)
+    DeltaBackend.call('messageList.forwardMessage', message.id, chatid)
     onClose()
   }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>

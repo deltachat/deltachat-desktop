@@ -1,11 +1,11 @@
 import { C } from 'deltachat-node'
 import { getLogger } from '../../shared/logger'
 import SplitOut from './splitout'
-import { MessageType } from '../../shared/shared-types'
+import { Message } from '../../shared/shared-types'
 
 const log = getLogger('main/deltachat/chat')
 export default class DCChat extends SplitOut {
-  getChatMedia(msgType1: number, msgType2: number): MessageType[] {
+  getChatMedia(msgType1: number, msgType2: number): Message[] {
     if (!this._controller._selectedChatId) return
     const mediaMessages = this._dc.getChatMedia(
       this._controller._selectedChatId,

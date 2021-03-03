@@ -26,10 +26,6 @@ export default class DCContacts extends SplitOut {
     const address = contact.getAddress()
     const result = this._dc.createContact(name, address)
 
-    // trigger interface updates
-    const chatId = this.getChatIdByContactId(contactId)
-    this._controller.chatList.onChatModified(chatId)
-
     // TODO implement chat changed event in the core on name change
     return result
   }

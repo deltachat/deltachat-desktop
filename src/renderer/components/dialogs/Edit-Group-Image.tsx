@@ -27,7 +27,7 @@ export const GroupImage = (props: {
 
   const showAvatarFullscreen = () =>
     openDialog('FullscreenMedia', {
-      msg: {
+      message: {
         attachment: {
           url: groupImage,
           contentType: 'image/x',

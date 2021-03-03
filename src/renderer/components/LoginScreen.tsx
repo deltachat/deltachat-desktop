@@ -41,7 +41,7 @@ function ImportBackupProgressDialog({
     log.debug('ALL core events: ', eventName, data1, data2)
   }
   const onImexProgress = (_evt: any, [progress, _data2]: [number, any]) => {
-    log.debug('DC_EVENT_IMEX_PROGRESS xxx', progress)
+    log.debug('DC_EVENT_IMEX_PROGRESS', progress)
     setImportProgress(progress)
   }
 

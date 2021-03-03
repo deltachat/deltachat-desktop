@@ -1,4 +1,4 @@
-import { DeltaBackend } from '../../delta-remote'
+import { DeltaBackend, sendMessageParams } from '../../delta-remote'
 import chatStore from '../../stores/chat'
 import { ScreenContext, unwrapContext } from '../../contexts'
 import { ChatListItemType, FullChat } from '../../../shared/shared-types'
@@ -7,6 +7,7 @@ import { C } from 'deltachat-node/dist/constants'
 import { runtime } from '../../runtime'
 import { getLogger } from '../../../shared/logger'
 import AlertDialog from '../dialogs/AlertDialog'
+import MessageListStore from '../../stores/MessageListStore'
 
 const log = getLogger('renderer/message')
 
@@ -141,13 +142,37 @@ export async function joinCall(
   try {
     const message = await DeltaBackend.call('messageList.getMessage', messageId)
 
-    if (message.msg.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
+    if (message.viewType !== C.DC_MSG_VIDEOCHAT_INVITATION) {
       throw new Error('Message is not a video chat invitation')
     }
 
-    return runtime.openLink(message.msg.videochatUrl)
+    return runtime.openLink(message.videochatUrl)
   } catch (error) {
     log.error('failed to join call', error)
     screenContext.openDialog(AlertDialog, { message: error.toString() })
   }
+}
+
+export const selectChat = (chatId: number) => {
+  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+  MessageListStore.selectChat(chatId)
+}
+
+export const jumpToMessage = async (messageId: number) => {
+  const message = await DeltaBackend.call('messageList.getMessage', messageId)
+  const chatId = message.chatId
+  log.debug(`jumpToMessage: chatId: ${chatId} messageId: ${messageId}`)
+  MessageListStore.jumpToMessage(chatId, messageId)
+  chatStore.dispatch({ type: 'SELECT_CHAT', payload: chatId })
+}
+
+export const sendMessage = async (
+  chatId: number,
+  messageParams: sendMessageParams
+) => {
+  await MessageListStore.sendMessage(chatId, messageParams)
+}
+
+export const deleteMessage = async (messageId: number) => {
+  await MessageListStore.deleteMessage(messageId)
 }

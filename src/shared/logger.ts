@@ -164,3 +164,7 @@ export class Logger {
 export function getLogger(channel: string) {
   return new Logger(channel)
 }
+
+export function getSubLogger(logger: Logger, subChannel: string) {
+  return new Logger(logger.channel + ' #' + subChannel)
+}

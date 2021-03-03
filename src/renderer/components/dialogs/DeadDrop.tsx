@@ -1,20 +1,20 @@
 import React from 'react'
 import { DeltaBackend } from '../../delta-remote'
 import { Classes } from '@blueprintjs/core'
-import { useChatStore } from '../../stores/chat'
 import { DialogProps } from './DialogController'
 import { DCContact, MessageType, FullChat } from '../../../shared/shared-types'
 import { SmallDialog } from './DeltaDialog'
 import { useTranslationFunction } from '../../contexts'
 import { C } from 'deltachat-node/dist/constants'
+import { deleteMessage, selectChat } from '../helpers/ChatMethods'
 
 /**
  * handle contact requests
  */
 export default function DeadDrop(props: {
   contact: DCContact
-  msg: MessageType['msg']
   chat: FullChat
+  message: Message
   onClose: DialogProps['onClose']
 }) {
   const { contact, msg, chat, onClose } = props
@@ -47,6 +47,26 @@ export default function DeadDrop(props: {
         // do not delete the message, even if we want that in the future, the core should handle it.
         break
     }
+  const never = () => {
+    DeltaBackend.call('contacts.blockContact', contact.id)
+    deleteMessage(message.id)
+    onClose()
+  }
+
+  const notNow = async () => {
+    const contactId = contact.id
+    await DeltaBackend.call('contacts.markNoticedContact', contactId)
+    onClose()
+  }
+
+  const yes = async () => {
+    const messageId = message.id
+    const contactId = contact.id
+    const chatId = await DeltaBackend.call('contacts.acceptContactRequest', {
+      messageId,
+      contactId,
+    })
+    selectChat(chatId)
     onClose()
   }
 

@@ -4,7 +4,7 @@ const blue = colorize(1, 34)
 const red = colorize(1, 31)
 const yellow = colorize(1, 33)
 const grey = colorize(0, 37)
-const green = colorize(1, 37)
+const green = colorize(1, 32)
 const cyan = colorize(1, 36)
 const bgGreen = colorize(42, 1)
 const bgRed = colorize(41, 1)
@@ -15,9 +15,9 @@ function formattedOutput(location, lines) {
 
 ${lines}
 
-Consider using our logger (log.debug) or add this line ${green(
-      '/* ignore-console-log */'
-    )} above to add an exception
+Consider using our logger (log.debug) or add this line
+${green(`/* ignore-console-log */`)}
+above to add an exception
 ${blue('------------------------------------------------')}`
   )
 }
