@@ -2,7 +2,7 @@
 
 ## [Unreleased][unreleased]
 
-## [1.15.1] - 2021-03-03
+## [1.15.2] - 2021-03-03
 
 ### Fixed
 - Fix disable contact name edit field on device message
