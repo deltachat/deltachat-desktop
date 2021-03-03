@@ -21,7 +21,7 @@ export default class DCBackup extends SplitOut {
     } catch (err) {
       this._dc.startIO()
       throw err
-    } 
+    }
     this._dc.startIO()
   }
 
@@ -36,7 +36,7 @@ export default class DCBackup extends SplitOut {
           this._dc.removeListener('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
           resolve()
         }
-      } 
+      }
 
       this._dc.on('DC_EVENT_IMEX_PROGRESS', onEventImexProgress)
     })
