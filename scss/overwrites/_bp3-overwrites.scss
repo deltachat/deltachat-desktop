@@ -189,6 +189,7 @@ $bp3-dialog-radius: 2px;
 .bp3-menu-item:hover,
 .bp3-submenu .bp3-popover-target.bp3-popover-open > .bp3-menu-item {
   background-color: var(--chatListItemBgHover);
+  cursor: default;
 }
 
 .bp3-popover .bp3-popover-content {
